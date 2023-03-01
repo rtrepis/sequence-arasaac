@@ -26,7 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
-    "test-coverage": "react-scripts test --coverage --watchAll=false",
+    "test-coverage": "react-scripts test --coverage --watchAll=false  --passWithNoTests",
     "prepare": "husky install"
   },
   "eslintConfig": {
