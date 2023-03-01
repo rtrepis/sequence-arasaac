@@ -5,6 +5,9 @@ import { store } from "./app/store";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material";
+import theme from "./materiaUi/theme";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -12,7 +15,10 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ThemeProvider theme={theme}>
+        <CssBaseline enableColorScheme />
+        <App />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );
