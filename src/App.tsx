@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 
 const App = () => {
-  return <div className="App">Sequence - AraSaac</div>;
+  return <h1 className="App">Sequence - AraSaac</h1>;
 };
 
 export default App;
