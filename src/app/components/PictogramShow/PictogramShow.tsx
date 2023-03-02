@@ -18,6 +18,7 @@ const PictogramShow = ({
 }: PictogramShowProps): JSX.Element => {
   return (
     <Card
+      data-testid="card-pictogram"
       sx={{
         maxWidth: 225,
         textAlign: "center",
