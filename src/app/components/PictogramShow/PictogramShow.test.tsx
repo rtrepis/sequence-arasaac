@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { borderPict } from "../../types/pictograms";
 import PictogramShow from "./PictogramShow";
 
 describe("Give a PictogramShow component", () => {
@@ -79,6 +80,49 @@ describe("Give a PictogramShow component", () => {
       Object.values(pictogramShow).forEach((expectIn) =>
         expect(expectIn).toBeInTheDocument()
       );
+    });
+  });
+
+  describe("When it's rendered with borders props", () => {
+    test("Then should show a pictogram with this borders", () => {
+      const pictogram = {
+        card: "card-pictogram",
+        altImage: "Pictogram",
+      };
+      const expectBorder: borderPict = {
+        size: 5,
+        radius: 5,
+      };
+
+      render(
+        <PictogramShow
+          index={1}
+          view={"complete"}
+          borderIn={expectBorder}
+          borderOut={expectBorder}
+        />
+      );
+      const pictogramShowBorder = {
+        card: screen.getByTestId(pictogram.card),
+        image: screen.getByRole("img", {
+          name: pictogram.altImage,
+        }),
+      };
+      const pictogramCSS = {
+        card: window.getComputedStyle(pictogramShowBorder.card),
+        image: window.getComputedStyle(pictogramShowBorder.image),
+      };
+
+      Object.values(pictogramCSS).forEach((expectProperty) => {
+        expect(expectProperty).toHaveProperty(
+          "border",
+          `${expectBorder.size}px solid`
+        );
+        expect(expectProperty).toHaveProperty(
+          "border-radius",
+          `${expectBorder.radius}px`
+        );
+      });
     });
   });
 });
