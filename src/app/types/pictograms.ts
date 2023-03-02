@@ -1,4 +1,4 @@
-export interface borderPict {
+export interface BorderPictI {
   radius: number;
   size: number;
 }

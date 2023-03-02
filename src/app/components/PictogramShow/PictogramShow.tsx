@@ -1,11 +1,11 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { borderPict } from "../../types/pictograms";
+import { BorderPictogramI } from "../../types/pictograms";
 
 interface PictogramShowProps {
   index: number;
   view: "complete" | "header" | "footer" | "none";
-  borderIn?: borderPict;
-  borderOut?: borderPict;
+  borderIn?: BorderPictogramI;
+  borderOut?: BorderPictogramI;
   variant?: "plane";
 }
 
