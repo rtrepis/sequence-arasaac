@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { BorderPictogramI } from "../../types/pictograms";
+import { BorderPictI } from "../../types/pictograms";
 import PictogramShow from "./PictogramShow";
 
 describe("Give a PictogramShow component", () => {
@@ -89,7 +89,7 @@ describe("Give a PictogramShow component", () => {
         card: "card-pictogram",
         altImage: "Pictogram",
       };
-      const expectBorder: BorderPictogramI = {
+      const expectBorder: BorderPictI = {
         size: 5,
         radius: 5,
       };
@@ -123,6 +123,26 @@ describe("Give a PictogramShow component", () => {
           `${expectBorder.radius}px`
         );
       });
+    });
+  });
+
+  describe("When it's rendered with variant 'plane'", () => {
+    test("Then should show a pictogram without shadow", () => {
+      const pictogram = {
+        card: "card-pictogram",
+      };
+      const variant = "plane";
+      const expectStyle = "0px 0px 0px 0px #fff";
+
+      render(<PictogramShow index={1} view={"complete"} variant={variant} />);
+      const pictogramShowBorder = {
+        card: screen.getByTestId(pictogram.card),
+      };
+      const pictogramCSS = {
+        card: window.getComputedStyle(pictogramShowBorder.card),
+      };
+
+      expect(pictogramCSS.card).toHaveProperty("box-shadow", expectStyle);
     });
   });
 });
