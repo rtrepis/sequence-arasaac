@@ -15,6 +15,9 @@ const theme = createTheme({
       contrastText: "#252525",
     },
   },
+  typography: {
+    body1: { fontSize: "1.175rem", fontWeight: "bold" },
+  },
 });
 
 export default theme;
