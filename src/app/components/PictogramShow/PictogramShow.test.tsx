@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { borderPict } from "../../types/pictograms";
+import { BorderPictogramI } from "../../types/pictograms";
 import PictogramShow from "./PictogramShow";
 
 describe("Give a PictogramShow component", () => {
@@ -89,7 +89,7 @@ describe("Give a PictogramShow component", () => {
         card: "card-pictogram",
         altImage: "Pictogram",
       };
-      const expectBorder: borderPict = {
+      const expectBorder: BorderPictogramI = {
         size: 5,
         radius: 5,
       };
