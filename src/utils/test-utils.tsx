@@ -1,7 +1,6 @@
 import { render as rtlRender } from "@testing-library/react";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { store } from "../app/store";
 import { sequenceReducer } from "../app/slice/sequenceSlice";
 import { act } from "react-dom/test-utils";
 import { ThemeProvider } from "@mui/system";
@@ -42,18 +41,5 @@ const render = (
   });
 };
 
-const Wrapper = ({ children }: WrapperProps): JSX.Element => {
-  return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline enableColorScheme />
-        {children}
-      </ThemeProvider>
-    </Provider>
-  );
-};
-
-export default Wrapper;
-
 export * from "@testing-library/react";
-export { render, Wrapper, rtlRender };
+export { render, rtlRender };
