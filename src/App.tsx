@@ -1,17 +1,25 @@
 import React from "react";
 import "./App.css";
-import PictogramShow from "./app/components/PictogramShow/PictogramShow";
+import PictogramCardList from "./app/components/PictogramCardList/PictogramCardList";
+import { SequenceI } from "./app/types/sequence";
+
+const sequence: SequenceI = [
+  { index: 0, number: 2333, border: "none" },
+  { index: 1, number: 2333, border: "none" },
+  { index: 2, number: 2333, border: "none" },
+  { index: 3, number: 2333, border: "none" },
+  { index: 4, number: 2333, border: "none" },
+  { index: 5, number: 2333, border: "none" },
+  { index: 6, number: 2333, border: "none" },
+  { index: 7, number: 2333, border: "none" },
+  { index: 8, number: 2333, border: "none" },
+];
 
 const App = () => {
   return (
     <>
       <h1 className="App">Sequence - AraSaac</h1>
-      <PictogramShow
-        index={1}
-        view={"complete"}
-        borderOut={{ size: 0, radius: 20 }}
-        borderIn={{ size: 2, radius: 20 }}
-      />
+      <PictogramCardList sequence={sequence} />
     </>
   );
 };
