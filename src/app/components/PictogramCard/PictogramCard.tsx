@@ -1,7 +1,7 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { BorderPictI } from "../../types/pictograms";
+import { BorderPictI } from "../../types/sequence";
 
-interface PictogramShowProps {
+interface PictogramCardProps {
   index: number;
   view: "complete" | "header" | "footer" | "none";
   borderIn?: BorderPictI;
@@ -9,18 +9,18 @@ interface PictogramShowProps {
   variant?: "plane";
 }
 
-const PictogramShow = ({
+const PictogramCard = ({
   index,
   view,
   borderIn,
   borderOut,
   variant,
-}: PictogramShowProps): JSX.Element => {
+}: PictogramCardProps): JSX.Element => {
   return (
     <Card
       data-testid="card-pictogram"
       sx={{
-        maxWidth: 225,
+        maxWidth: 200,
         textAlign: "center",
         paddingInline: 1.5,
         border: `${borderOut === undefined ? 2 : borderOut.size}px solid`,
@@ -33,28 +33,31 @@ const PictogramShow = ({
       }}
     >
       {(view === "complete" || view === "header") && (
-        <CardContent sx={{ paddingBlock: 1 }}>
+        <CardContent>
           <Typography variant="body1" component="h3">
             {index}
           </Typography>
         </CardContent>
       )}
-
-      <CardMedia
-        component="img"
-        image={`https://api.arasaac.org/api/pictograms/2484`}
-        alt="Pictogram"
-        sx={{
-          marginTop: `${view === "complete" ? 0 : 2}`,
-          height: 175,
-          border: `${borderIn === undefined ? 2 : borderIn.size}px solid`,
-          borderColor: "primary.main",
-          borderRadius: `${borderIn === undefined ? 20 : borderIn.radius}px`,
-        }}
-      />
+      <CardContent
+        sx={{ display: "flex", padding: 0, justifyContent: "center" }}
+      >
+        <CardMedia
+          component="img"
+          image={`https://api.arasaac.org/api/pictograms/2484`}
+          alt="Pictogram"
+          sx={{
+            marginTop: `${view === "complete" ? 0 : 2}`,
+            width: 150,
+            border: `${borderIn === undefined ? 2 : borderIn.size}px solid`,
+            borderColor: "primary.main",
+            borderRadius: `${borderIn === undefined ? 20 : borderIn.radius}px`,
+          }}
+        />
+      </CardContent>
 
       {(view === "complete" || view === "footer") && (
-        <CardContent sx={{ paddingBlock: 1 }}>
+        <CardContent>
           <Typography variant="body1" component="h3">
             Pictogram Word
           </Typography>
@@ -64,4 +67,4 @@ const PictogramShow = ({
   );
 };
 
-export default PictogramShow;
+export default PictogramCard;
