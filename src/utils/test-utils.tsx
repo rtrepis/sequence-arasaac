@@ -6,7 +6,6 @@ import { act } from "react-dom/test-utils";
 import { ThemeProvider } from "@mui/system";
 import theme from "../materiaUi/theme";
 import { CssBaseline } from "@mui/material";
-import { store } from "../app/store";
 
 interface WrapperProps {
   children: JSX.Element | JSX.Element[];
@@ -42,18 +41,5 @@ const render = (
   });
 };
 
-const Wrapper = ({ children }: WrapperProps): JSX.Element => {
-  return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline enableColorScheme />
-        {children}
-      </ThemeProvider>
-    </Provider>
-  );
-};
-
-export default Wrapper;
-
 export * from "@testing-library/react";
-export { render, rtlRender, Wrapper };
+export { render, rtlRender };
