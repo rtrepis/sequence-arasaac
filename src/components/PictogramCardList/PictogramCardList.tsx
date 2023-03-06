@@ -17,16 +17,16 @@ const PictogramCardList = ({
       alignContent={"center"}
       sx={{ margin: 2 }}
     >
-      {sequence.map(({ index }) => (
+      {sequence.map((pictogram) => (
         <Grid
           item
           xs={false}
           display={"flex"}
           justifyContent={"flex-start"}
           alignItems={"center"}
-          key={`pict${index}`}
+          key={`pict${pictogram.index}`}
         >
-          <PictogramCard index={index} view={"complete"} />
+          <PictogramCard view={"complete"} pictogram={pictogram} />
         </Grid>
       ))}
     </Grid>
