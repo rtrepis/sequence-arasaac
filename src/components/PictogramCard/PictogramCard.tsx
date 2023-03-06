@@ -1,19 +1,15 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { BorderPictI } from "../../types/sequence";
+import { PictogramI } from "../../types/sequence";
 
 interface PictogramCardProps {
-  index: number;
+  pictogram: PictogramI;
   view: "complete" | "header" | "footer" | "none";
-  borderIn?: BorderPictI;
-  borderOut?: BorderPictI;
   variant?: "plane";
 }
 
 const PictogramCard = ({
-  index,
+  pictogram: { index, number, border, skin },
   view,
-  borderIn,
-  borderOut,
   variant,
 }: PictogramCardProps): JSX.Element => {
   return (
@@ -23,9 +19,11 @@ const PictogramCard = ({
         maxWidth: 200,
         textAlign: "center",
         paddingInline: 1.5,
-        border: `${borderOut === undefined ? 2 : borderOut.size}px solid`,
-        borderColor: "primary.main",
-        borderRadius: `${borderOut === undefined ? 20 : borderOut.radius}px`,
+        border: `${border?.out === undefined ? 2 : border.out.size}px solid`,
+        borderColor: border?.out?.color,
+        borderRadius: `${
+          border?.out === undefined ? 20 : border?.out.radius
+        }px`,
         boxShadow: `${variant === undefined ? "" : "0px 0px 0px 0px #fff"}`,
         "&:hover": {
           boxShadow: "0px 0px 10px 3px #A6A6A6",
@@ -44,14 +42,16 @@ const PictogramCard = ({
       >
         <CardMedia
           component="img"
-          image={`https://api.arasaac.org/api/pictograms/2484`}
+          image={`https://api.arasaac.org/api/pictograms/${number}`}
           alt="Pictogram"
           sx={{
             marginTop: `${view === "complete" ? 0 : 2}`,
             width: 150,
-            border: `${borderIn === undefined ? 2 : borderIn.size}px solid`,
-            borderColor: "primary.main",
-            borderRadius: `${borderIn === undefined ? 20 : borderIn.radius}px`,
+            border: `${border?.in === undefined ? 2 : border?.in.size}px solid`,
+            borderColor: border?.in?.color,
+            borderRadius: `${
+              border?.in === undefined ? 20 : border?.in.radius
+            }px`,
           }}
         />
       </CardContent>

@@ -20,7 +20,16 @@ const render = (
         sequence: sequenceReducer,
       },
       preloadedState: {
-        sequence: [{ index: 0, number: 0, border: "none" }],
+        sequence: [
+          {
+            index: 0,
+            number: 26527,
+            border: {
+              in: { color: "blue", radius: 20, size: 2 },
+              out: { color: "green", radius: 20, size: 2 },
+            },
+          },
+        ],
       },
     }),
     ...renderOptions

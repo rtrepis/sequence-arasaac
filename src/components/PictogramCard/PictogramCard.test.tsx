@@ -1,17 +1,27 @@
 import { render, screen } from "@testing-library/react";
-import { BorderPictI } from "../../types/sequence";
+import { BorderPictI, PictogramI } from "../../types/sequence";
 import PictogramCard from "./PictogramCard";
+
+const pictogramEmpty: PictogramI = {
+  index: 1,
+  number: 26527,
+  border: {
+    in: { color: "blue", radius: 20, size: 2 },
+    out: { color: "green", radius: 20, size: 2 },
+  },
+};
 
 describe("Give a PictogramShow component", () => {
   describe("When it's rendered with view 'complete' and index '1'", () => {
     test("Then should show a pictogram, index, text pictogram", () => {
       const expectPictogram = {
         index: "1",
+        number: 2222,
         altImage: "Pictogram",
         textPictogram: "Pictogram Word",
       };
 
-      render(<PictogramCard index={1} view={"complete"} />);
+      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
       const pictogramShow = {
         header: screen.getByRole("heading", { name: expectPictogram.index }),
         image: screen.getByRole("img", { name: expectPictogram.altImage }),
@@ -30,10 +40,11 @@ describe("Give a PictogramShow component", () => {
     test("Then should show a pictogram and index", () => {
       const expectPictogram = {
         index: "1",
+        number: 2222,
         altImage: "Pictogram",
       };
 
-      render(<PictogramCard index={1} view={"header"} />);
+      render(<PictogramCard view={"header"} pictogram={pictogramEmpty} />);
       const pictogramShow = {
         header: screen.getByRole("heading", { name: expectPictogram.index }),
         image: screen.getByRole("img", { name: expectPictogram.altImage }),
@@ -48,11 +59,12 @@ describe("Give a PictogramShow component", () => {
   describe("When it's rendered with view 'footer' and index '1'", () => {
     test("Then should show a pictogram and text pictogram", () => {
       const expectPictogram = {
+        number: 2222,
         altImage: "Pictogram",
         textPictogram: "Pictogram Word",
       };
 
-      render(<PictogramCard index={1} view={"complete"} />);
+      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
       const pictogramShow = {
         image: screen.getByRole("img", { name: expectPictogram.altImage }),
         footer: screen.getByRole("heading", {
@@ -69,10 +81,11 @@ describe("Give a PictogramShow component", () => {
   describe("When it's rendered with view 'none' and index '1'", () => {
     test("Then should show a pictogram", () => {
       const expectPictogram = {
+        number: 2222,
         altImage: "Pictogram",
       };
 
-      render(<PictogramCard index={1} view={"complete"} />);
+      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
       const pictogramShow = {
         image: screen.getByRole("img", { name: expectPictogram.altImage }),
       };
@@ -90,18 +103,12 @@ describe("Give a PictogramShow component", () => {
         altImage: "Pictogram",
       };
       const expectBorder: BorderPictI = {
-        size: 5,
-        radius: 5,
+        color: "blue",
+        size: 2,
+        radius: 20,
       };
 
-      render(
-        <PictogramCard
-          index={1}
-          view={"complete"}
-          borderIn={expectBorder}
-          borderOut={expectBorder}
-        />
-      );
+      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
       const pictogramShowBorder = {
         card: screen.getByTestId(pictogram.card),
         image: screen.getByRole("img", {
@@ -134,7 +141,13 @@ describe("Give a PictogramShow component", () => {
       const variant = "plane";
       const expectStyle = "0px 0px 0px 0px #fff";
 
-      render(<PictogramCard index={1} view={"complete"} variant={variant} />);
+      render(
+        <PictogramCard
+          view={"complete"}
+          variant={variant}
+          pictogram={pictogramEmpty}
+        />
+      );
       const pictogramShowBorder = {
         card: screen.getByTestId(pictogram.card),
       };
