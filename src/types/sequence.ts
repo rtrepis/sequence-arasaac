@@ -1,10 +1,14 @@
 export interface PictogramI {
   index: number;
   number: number;
-  border: "color" | "none";
+  border?: {
+    in?: BorderPictI;
+    out?: BorderPictI;
+  };
   skin?: skin;
 }
 export interface BorderPictI {
+  color: string;
   radius: number;
   size: number;
 }

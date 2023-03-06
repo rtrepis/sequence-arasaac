@@ -23,8 +23,11 @@ const PictogramAmount = (): JSX.Element => {
 
   const pictogramEmpty: PictogramI = {
     index: amountPict + 1,
-    number: 2652,
-    border: "none",
+    number: 26527,
+    border: {
+      in: { color: "blue", radius: 20, size: 2 },
+      out: { color: "green", radius: 20, size: 2 },
+    },
   };
   const handleChangesAmount = (operator: number) => {
     setAmountPict(amountPict + operator);
