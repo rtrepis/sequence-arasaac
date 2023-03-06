@@ -34,6 +34,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
     },
   },
   "& .Mui-selected": {
+    backgroundColor: "rgba(50,150,50,0.2)",
     border: `1.75px solid green`,
     borderRadius: `20px`,
     boxShadow: "0px 0px 10px 1px #A6A6A6",
@@ -102,11 +103,11 @@ const SettingItem = ({ itemKey, items }: SettingItemProps): JSX.Element => {
           maxHeight: 40,
           borderRadius: "20px",
           textTransform: "capitalize",
+          fontWeight: "bold",
+          lineHeight: 1.25,
         }}
       >
-        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-          Apply all
-        </Typography>
+        Apply all
       </Button>
     </Stack>
   );
