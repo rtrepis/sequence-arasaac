@@ -2,10 +2,11 @@ import { render as rtlRender } from "@testing-library/react";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { sequenceReducer } from "../app/slice/sequenceSlice";
-import { act } from "react-dom/test-utils";
 import { ThemeProvider } from "@mui/system";
 import theme from "../materiaUi/theme";
 import { CssBaseline } from "@mui/material";
+import { IntlProvider } from "react-intl";
+import messages from "../languages/en.json";
 
 interface WrapperProps {
   children: JSX.Element | JSX.Element[];
@@ -40,14 +41,14 @@ const render = (
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
-          {children}
+          <IntlProvider locale={"en"} defaultLocale="en" messages={messages}>
+            {children}
+          </IntlProvider>
         </ThemeProvider>
       </Provider>
     );
   };
-  return act(() => {
-    rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
-  });
+  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 };
 
 export * from "@testing-library/react";
