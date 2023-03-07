@@ -1,0 +1,14 @@
+{
+  "components.pictogramAmount.helperText": [
+    {
+      "type": 0,
+      "value": "Enter the number of pictograms in the sequence"
+    }
+  ],
+  "components.pictogramAmount.label": [
+    {
+      "type": 0,
+      "value": "Pictograms:"
+    }
+  ]
+}

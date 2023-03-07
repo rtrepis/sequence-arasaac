@@ -1,0 +1,14 @@
+{
+  "components.pictogramAmount.helperText": [
+    {
+      "type": 0,
+      "value": "Introdueix el número de pictogrames de la seqüència"
+    }
+  ],
+  "components.pictogramAmount.label": [
+    {
+      "type": 0,
+      "value": "Pictogrames:"
+    }
+  ]
+}
