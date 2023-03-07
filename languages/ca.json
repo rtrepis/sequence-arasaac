@@ -1,10 +1,10 @@
 {
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Entra el número de pictogramas de la secuencia",
+    "defaultMessage": "Entra el nombre de pictogrames de la seqüència",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramAmount.label": {
-    "defaultMessage": "Pictogramas:",
+    "defaultMessage": "Pictogrames:",
     "description": "Amount Pictogram"
   }
 }
