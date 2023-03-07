@@ -9,7 +9,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material";
 import theme from "./materiaUi/theme";
 import { IntlProvider } from "react-intl";
-import loadLocalMessages from "./lang/loadLocaleMessages";
+import loadLocalMessages from "./languages/loadLocaleMessages";
 
 const locale = navigator.language;
 

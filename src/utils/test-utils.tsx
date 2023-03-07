@@ -6,7 +6,7 @@ import { ThemeProvider } from "@mui/system";
 import theme from "../materiaUi/theme";
 import { CssBaseline } from "@mui/material";
 import { IntlProvider } from "react-intl";
-import messages from "../lang/en.json";
+import messages from "../languages/en.json";
 
 interface WrapperProps {
   children: JSX.Element | JSX.Element[];
