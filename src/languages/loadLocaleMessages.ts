@@ -1,10 +1,10 @@
 const loadLocalMessages = (locale: string) => {
   switch (locale) {
     case "ca-ES":
-      return import("../lang/ca.json");
+      return import("./ca.json");
 
     default:
-      return import("../lang/en.json");
+      return import("./en.json");
   }
 };
 
