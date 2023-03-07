@@ -14,6 +14,7 @@ import {
 import { PictogramI } from "../../types/sequence";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { Stack } from "@mui/system";
+import { FormattedMessage } from "react-intl";
 
 const PictogramAmount = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -39,7 +40,13 @@ const PictogramAmount = (): JSX.Element => {
   return (
     <FormControl>
       <Stack direction={"row"} alignItems={"center"}>
-        <FormLabel htmlFor="amount">Pictograms:</FormLabel>
+        <FormLabel htmlFor="amount">
+          <FormattedMessage
+            id={"components.pictogramAmount.label"}
+            defaultMessage={"Pictograms:"}
+            description={"Amount Pictogram"}
+          />
+        </FormLabel>
         <IconButton
           color="primary"
           aria-label="Add amount pictogram"
@@ -64,7 +71,11 @@ const PictogramAmount = (): JSX.Element => {
         </IconButton>
       </Stack>
       <FormHelperText sx={{ margin: "0" }}>
-        enter the number of pictograms in the sequence
+        <FormattedMessage
+          id="components.pictogramAmount.helperText"
+          defaultMessage={"Enter the number of pictograms in the sequence"}
+          description="Helper text amount pictograms"
+        />
       </FormHelperText>
     </FormControl>
   );
