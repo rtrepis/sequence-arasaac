@@ -26,7 +26,7 @@ describe("Give a component Setting Item", () => {
 
   describe("When rendered", () => {
     test("Then should show 'apply all' and 'default' buttons", () => {
-      const expectButtons = ["Apply all", "Default"];
+      const expectButtons = ["Apply All", "Default"];
 
       render(<SettingItem item={Settings.skins} />);
 
