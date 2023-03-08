@@ -14,7 +14,7 @@ const App = () => {
   return (
     <Stack alignItems={"center"}>
       <h1 className="App">Sequence - AraSaac</h1>
-      <SettingItem items={Settings.skins} itemKey={"skin"} />
+      <SettingItem item={Settings.skins} />
       <PictogramAmount />
       <PictogramCardList sequence={sequence} />
     </Stack>
