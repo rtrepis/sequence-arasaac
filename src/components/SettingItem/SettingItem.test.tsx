@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, fireEvent, screen } from "../../utils/test-utils";
+import Settings from "../../model/Settings";
 import toCapitalize from "../../utils/toCapitalize";
 import SettingItem from "./SettingItem";
 
@@ -8,7 +9,7 @@ describe("Give a component Setting Item", () => {
       const pathExpect = "/img/settings/skin/";
       const skins = ["asian", "aztec", "black", "mulatto", "white"];
 
-      render(<SettingItem itemKey="skin" items={skins} />);
+      render(<SettingItem item={Settings.skins} />);
 
       skins.forEach((skin) => {
         const buttonsSkin = screen.getByRole("button", { name: skin });
@@ -25,10 +26,9 @@ describe("Give a component Setting Item", () => {
 
   describe("When rendered", () => {
     test("Then should show 'apply all' and 'default' buttons", () => {
-      const skins = ["asian", "aztec", "black", "mulatto", "white"];
-      const expectButtons = ["Apply all", "Default"];
+      const expectButtons = ["Apply All", "Default"];
 
-      render(<SettingItem itemKey="skin" items={skins} />);
+      render(<SettingItem item={Settings.skins} />);
 
       expectButtons.forEach((expectButton) => {
         const button = screen.getByRole("button", { name: expectButton });
