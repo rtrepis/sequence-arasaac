@@ -2,13 +2,61 @@
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
-      "value": "Introdueix el número de pictogrames de la seqüència"
+      "value": "Entra el nombre de pictogrames de la seqüència"
     }
   ],
   "components.pictogramAmount.label": [
     {
       "type": 0,
       "value": "Pictogrames:"
+    }
+  ],
+  "components.settingItem.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Aplica-ho tot"
+    }
+  ],
+  "components.settingItem.default.label": [
+    {
+      "type": 0,
+      "value": "Per defecte"
+    }
+  ],
+  "settings.skins.asian": [
+    {
+      "type": 0,
+      "value": "Asiàtic"
+    }
+  ],
+  "settings.skins.aztec>": [
+    {
+      "type": 0,
+      "value": "Asteca"
+    }
+  ],
+  "settings.skins.black": [
+    {
+      "type": 0,
+      "value": "Negre"
+    }
+  ],
+  "settings.skins.label": [
+    {
+      "type": 0,
+      "value": "Pell"
+    }
+  ],
+  "settings.skins.mulatto": [
+    {
+      "type": 0,
+      "value": "Mulat"
+    }
+  ],
+  "settings.skins.white": [
+    {
+      "type": 0,
+      "value": "Blanc"
     }
   ]
 }
