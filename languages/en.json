@@ -6,5 +6,37 @@
   "components.pictogramAmount.label": {
     "defaultMessage": "Pictograms:",
     "description": "Amount Pictogram"
+  },
+  "components.settingItem.applyAll.label": {
+    "defaultMessage": "Apply All",
+    "description": "apply to all pictograms"
+  },
+  "components.settingItem.default.label": {
+    "defaultMessage": "Default",
+    "description": "Type setting item"
+  },
+  "settings.skins.asian": {
+    "defaultMessage": "Asian",
+    "description": "Type of setting skin"
+  },
+  "settings.skins.aztec": {
+    "defaultMessage": "Aztec",
+    "description": "Type of setting skin"
+  },
+  "settings.skins.black": {
+    "defaultMessage": "Black",
+    "description": "Type of setting skin"
+  },
+  "settings.skins.label": {
+    "defaultMessage": "Skin",
+    "description": "Setting skin label"
+  },
+  "settings.skins.mulatto": {
+    "defaultMessage": "Mulatto",
+    "description": "Type of setting skin"
+  },
+  "settings.skins.white": {
+    "defaultMessage": "White",
+    "description": "Type of setting skin"
   }
 }

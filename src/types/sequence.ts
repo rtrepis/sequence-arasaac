@@ -5,7 +5,7 @@ export interface PictogramI {
     in?: BorderPictI;
     out?: BorderPictI;
   };
-  skin?: skin;
+  skin?: SkinsI;
 }
 export interface BorderPictI {
   color: string;
@@ -13,6 +13,26 @@ export interface BorderPictI {
   size: number;
 }
 
-export type skin = "asian" | "aztec" | "black" | "mulatto" | "white";
+export type SkinsI = "asian" | "aztec" | "black" | "mulatto" | "white";
 
+export interface MessageI {
+  id: string;
+  description?: string;
+  defaultMessage: string;
+}
+
+export interface SettingItemTypeI {
+  name: SkinsI;
+  message: MessageI;
+}
+
+export interface SettingItemI {
+  name: string;
+  types: SettingItemTypeI[];
+  message: MessageI;
+}
 export type SequenceI = PictogramI[];
+
+export interface SettingsI {
+  skins: SettingItemI;
+}
