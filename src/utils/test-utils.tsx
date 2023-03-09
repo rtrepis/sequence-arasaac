@@ -3,7 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { sequenceReducer } from "../app/slice/sequenceSlice";
 import { ThemeProvider } from "@mui/system";
-import theme from "../materiaUi/theme";
+import theme from "../style/themeMui";
 import { CssBaseline } from "@mui/material";
 import { IntlProvider } from "react-intl";
 import messages from "../languages/en.json";
