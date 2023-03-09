@@ -1,5 +1,32 @@
 import { defineMessage } from "react-intl";
-import { SettingsI } from "../types/sequence";
+import { SettingsI, SkinsI } from "../types/sequence";
+
+export const skins: SkinsI[] = ["asian", "aztec", "black", "mulatto", "white"];
+
+/*
+const Settings: SettingsI = {
+  skins: {
+    name: "skin",
+    message: defineMessage({
+      id: "settings.skins.label",
+      defaultMessage: "Skin",
+      description: "Setting skin label",
+    }),
+    types: [],
+  },
+};
+
+ skins.forEach((item, index) => {
+  const newItem = {
+    name: item,
+    message: defineMessage({
+      defaultMessage: toCapitalize(item),
+      description: `Type of settings ${item}`,
+    }),
+  };
+  Settings.skins.types.push(newItem);
+});
+ */
 
 const Settings: SettingsI = {
   skins: {

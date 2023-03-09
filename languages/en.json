@@ -1,4 +1,8 @@
 {
+  "components.pictogramAmount.add.label": {
+    "defaultMessage": "Add pictogram",
+    "description": "Add a pictogram to the amounts"
+  },
   "components.pictogramAmount.helperText": {
     "defaultMessage": "Enter the number of pictograms in the sequence",
     "description": "Helper text amount pictograms"
@@ -6,6 +10,10 @@
   "components.pictogramAmount.label": {
     "defaultMessage": "Pictograms:",
     "description": "Amount Pictogram"
+  },
+  "components.pictogramAmount.subtract.label": {
+    "defaultMessage": "Subtract pictogram",
+    "description": "Subtract a pictogram from the amounts"
   },
   "components.settingItem.applyAll.label": {
     "defaultMessage": "Apply All",

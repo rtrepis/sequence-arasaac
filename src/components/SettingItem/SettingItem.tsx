@@ -76,6 +76,7 @@ const SettingItem = ({
       <Typography variant="body1" sx={{ fontWeight: "bold" }}>
         <FormattedMessage {...messageItem} />
       </Typography>
+
       <Divider variant="inset" />
 
       <StyledToggleButtonGroup
@@ -111,7 +112,9 @@ const SettingItem = ({
           </Tooltip>
         </ToggleButton>
       </StyledToggleButtonGroup>
+
       <Divider variant="inset" />
+
       <Button
         variant="contained"
         sx={{
