@@ -1,6 +1,6 @@
 {
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Add pictogram",
+    "defaultMessage": "Afegir pictogrames",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
@@ -12,39 +12,39 @@
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.subtract.label": {
-    "defaultMessage": "Subtract pictogram",
+    "defaultMessage": "Restar pictogrames",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.settingItem.applyAll.label": {
-    "defaultMessage": "Apply All",
+    "defaultMessage": "Aplica-ho tot",
     "description": "apply to all pictograms"
   },
   "components.settingItem.default.label": {
-    "defaultMessage": "Default",
+    "defaultMessage": "Per defecte",
     "description": "Type setting item"
   },
   "settings.skins.asian": {
-    "defaultMessage": "Asian",
+    "defaultMessage": "Asiàtic",
     "description": "Type of setting skin"
   },
   "settings.skins.aztec": {
-    "defaultMessage": "Aztec",
+    "defaultMessage": "Asteca",
     "description": "Type of setting skin"
   },
   "settings.skins.black": {
-    "defaultMessage": "Black",
+    "defaultMessage": "Negre",
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Skin",
+    "defaultMessage": "Pell",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
-    "defaultMessage": "Mulatto",
+    "defaultMessage": "Mulat",
     "description": "Type of setting skin"
   },
   "settings.skins.white": {
-    "defaultMessage": "White",
+    "defaultMessage": "Blanc",
     "description": "Type of setting skin"
   }
 }
