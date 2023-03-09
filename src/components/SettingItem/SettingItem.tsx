@@ -10,7 +10,10 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { applyAllSettingItemActionCreator } from "../../app/slice/sequenceSlice";
 import { SettingItemI } from "../../types/sequence";
+import { UiSkinsI } from "../../types/ui";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
   "& .MuiToggleButtonGroup-grouped": {
@@ -47,11 +50,15 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
 
 interface SettingItemProps {
   item: SettingItemI;
+  action: (item: UiSkinsI) => void;
 }
 
 const SettingItem = ({
   item: { types, message: messageItem, name: nameItem },
+  action,
 }: SettingItemProps): JSX.Element => {
+  const uiSetting = useAppSelector((state) => state.ui.setting[nameItem]);
+  const dispatch = useAppDispatch();
   const [itemSelect, setItemSelect] = useState<string | null>("default");
 
   const handleItem = (
@@ -61,6 +68,11 @@ const SettingItem = ({
     setItemSelect(newItem);
   };
 
+  const handleApplyAll = () => {
+    dispatch(
+      applyAllSettingItemActionCreator({ item: nameItem, value: uiSetting })
+    );
+  };
   const intl = useIntl();
 
   const message = defineMessages({
@@ -83,10 +95,15 @@ const SettingItem = ({
         value={itemSelect}
         exclusive
         onChange={handleItem}
-        aria-label={`${intl.formatMessage({ ...messageItem })} settings`}
+        aria-label={`${intl.formatMessage({ ...messageItem })}`}
       >
         {types.map(({ name, message }) => (
-          <ToggleButton value={name} aria-label={name} key={name}>
+          <ToggleButton
+            value={name}
+            aria-label={intl.formatMessage({ ...message })}
+            key={name}
+            onClick={() => action(name)}
+          >
             <Tooltip title={intl.formatMessage({ ...message })} arrow>
               <img
                 src={`/img/settings/${nameItem}/${name}.png`}
@@ -99,7 +116,7 @@ const SettingItem = ({
             </Tooltip>
           </ToggleButton>
         ))}
-        <ToggleButton value={"default"}>
+        <ToggleButton value={"default"} onClick={() => action("default")}>
           <Tooltip title={intl.formatMessage({ ...message.default })}>
             <img
               src={`/img/settings/x.png`}
@@ -125,6 +142,7 @@ const SettingItem = ({
           fontWeight: "bold",
           lineHeight: 1.25,
         }}
+        onClick={handleApplyAll}
       >
         <FormattedMessage
           id="components.settingItem.applyAll.label"
