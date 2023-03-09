@@ -5,8 +5,6 @@ import {
   IconButton,
   Input,
 } from "@mui/material";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   addPictogramActionCreator,
   subtractPictogramActionCreator,
@@ -15,10 +13,13 @@ import { PictogramI } from "../../types/sequence";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 const PictogramAmount = (): JSX.Element => {
   const intl = useIntl();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const skin = useAppSelector((state) => state.ui.setting.skin);
 
   const initialAmountPict = 0;
   const [amountPict, setAmountPict] = useState(initialAmountPict);
@@ -30,6 +31,7 @@ const PictogramAmount = (): JSX.Element => {
       in: { color: "blue", radius: 20, size: 2 },
       out: { color: "green", radius: 20, size: 2 },
     },
+    skin: skin,
   };
   const handleChangesAmount = (operator: number) => {
     setAmountPict(amountPict + operator);

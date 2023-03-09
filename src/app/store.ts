@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { sequenceReducer } from "./slice/sequenceSlice";
+import { uiReducer } from "./slice/uiSlice";
 
 export const store = configureStore({
   reducer: {
     sequence: sequenceReducer,
+    ui: uiReducer,
   },
 });
 
