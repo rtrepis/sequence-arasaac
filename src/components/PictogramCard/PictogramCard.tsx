@@ -42,7 +42,9 @@ const PictogramCard = ({
       >
         <CardMedia
           component="img"
-          image={`https://api.arasaac.org/api/pictograms/${number}`}
+          image={`https://api.arasaac.org/api/pictograms/${number}?${
+            skin !== "default" && `skin=${skin === "asian" ? "assian" : skin}` // asin corrected api arasaac
+          }`}
           alt="Pictogram"
           sx={{
             marginTop: `${view === "complete" ? 0 : 2}`,

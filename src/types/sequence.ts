@@ -1,3 +1,5 @@
+import { SettingItemsI, UiSkinsI } from "./ui";
+
 export interface PictogramI {
   index: number;
   number: number;
@@ -5,7 +7,7 @@ export interface PictogramI {
     in?: BorderPictI;
     out?: BorderPictI;
   };
-  skin?: SkinsI;
+  skin?: UiSkinsI;
 }
 export interface BorderPictI {
   color: string;
@@ -23,13 +25,13 @@ export interface MessageI {
 
 export interface SettingItemTypeI {
   name: SkinsI;
-  message: MessageI;
+  message?: MessageI;
 }
 
 export interface SettingItemI {
-  name: string;
+  name: SettingItemsI;
   types: SettingItemTypeI[];
-  message: MessageI;
+  message?: MessageI;
 }
 export type SequenceI = PictogramI[];
 

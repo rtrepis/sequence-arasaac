@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { BorderPictI, PictogramI } from "../../types/sequence";
 import PictogramCard from "./PictogramCard";
 
-const pictogramEmpty: PictogramI = {
+let pictogramEmpty: PictogramI = {
   index: 1,
   number: 26527,
   border: {
@@ -156,6 +156,20 @@ describe("Give a PictogramShow component", () => {
       };
 
       expect(pictogramCSS.card).toHaveProperty("box-shadow", expectStyle);
+    });
+  });
+
+  describe("When it's rendered with skin corner case 'asian'", () => {
+    test("Then should image path change to 'assian'", () => {
+      pictogramEmpty = { ...pictogramEmpty, skin: "asian" };
+      const expectedPath =
+        "https://api.arasaac.org/api/pictograms/26527?skin=assian";
+
+      render(<PictogramCard pictogram={pictogramEmpty} view={"none"} />);
+      const image = screen.getByRole("img", { name: "Pictogram" });
+      const pathImage = image.getAttribute("src");
+
+      expect(pathImage).toStrictEqual(expectedPath);
     });
   });
 });
