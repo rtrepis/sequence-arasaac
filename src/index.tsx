@@ -7,7 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material";
-import theme from "./materiaUi/theme";
+import theme from "./style/themeMui";
 import { IntlProvider } from "react-intl";
 import loadLocalMessages from "./languages/loadLocaleMessages";
 
