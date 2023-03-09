@@ -1,4 +1,10 @@
 {
+  "components.pictogramAmount.add.label": [
+    {
+      "type": 0,
+      "value": "Afegir pictogrames"
+    }
+  ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
@@ -9,6 +15,12 @@
     {
       "type": 0,
       "value": "Pictogrames:"
+    }
+  ],
+  "components.pictogramAmount.subtract.label": [
+    {
+      "type": 0,
+      "value": "Restar pictogrames"
     }
   ],
   "components.settingItem.applyAll.label": [
@@ -29,7 +41,7 @@
       "value": "Asiàtic"
     }
   ],
-  "settings.skins.aztec>": [
+  "settings.skins.aztec": [
     {
       "type": 0,
       "value": "Asteca"
