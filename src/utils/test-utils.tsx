@@ -7,6 +7,7 @@ import theme from "../materiaUi/theme";
 import { CssBaseline } from "@mui/material";
 import { IntlProvider } from "react-intl";
 import messages from "../languages/en.json";
+import { uiReducer } from "../app/slice/uiSlice";
 
 interface WrapperProps {
   children: JSX.Element | JSX.Element[];
@@ -19,6 +20,7 @@ const render = (
     store = configureStore({
       reducer: {
         sequence: sequenceReducer,
+        ui: uiReducer,
       },
       preloadedState: {
         sequence: [
@@ -31,6 +33,7 @@ const render = (
             },
           },
         ],
+        ui: { setting: { skin: "default" } },
       },
     }),
     ...renderOptions
