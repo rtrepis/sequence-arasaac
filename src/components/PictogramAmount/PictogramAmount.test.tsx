@@ -6,8 +6,8 @@ describe("Give a component PictogramAmount", () => {
     test("Then should show it's all elements", () => {
       const expectElements = {
         label: "Pictograms:",
-        add: "Add amount pictogram",
-        subtract: "Subtract amount pictogram",
+        add: "Add pictogram",
+        subtract: "Subtract pictogram",
       };
 
       render(<PictogramAmount />);
@@ -24,8 +24,8 @@ describe("Give a component PictogramAmount", () => {
   describe("When user click buttons '+' and '-'", () => {
     test("Then should show amount change a unit", () => {
       const ButtonsClick = {
-        "+": "Add amount pictogram",
-        "-": "Subtract amount pictogram",
+        "+": "Add pictogram",
+        "-": "Subtract pictogram",
       };
       const amount = "Pictograms:";
 

@@ -14,9 +14,10 @@ import {
 import { PictogramI } from "../../types/sequence";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { Stack } from "@mui/system";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 
 const PictogramAmount = (): JSX.Element => {
+  const intl = useIntl();
   const dispatch = useDispatch();
 
   const initialAmountPict = 0;
@@ -24,7 +25,7 @@ const PictogramAmount = (): JSX.Element => {
 
   const pictogramEmpty: PictogramI = {
     index: amountPict + 1,
-    number: 26527,
+    number: 2484, //26527
     border: {
       in: { color: "blue", radius: 20, size: 2 },
       out: { color: "green", radius: 20, size: 2 },
@@ -47,14 +48,20 @@ const PictogramAmount = (): JSX.Element => {
             description={"Amount Pictogram"}
           />
         </FormLabel>
+
         <IconButton
           color="primary"
-          aria-label="Add amount pictogram"
+          aria-label={intl.formatMessage({
+            id: "components.pictogramAmount.add.label",
+            defaultMessage: "Add pictogram",
+            description: "Add a pictogram to the amounts",
+          })}
           onClick={() => handleChangesAmount(-1)}
           disabled={amountPict <= 0 ? true : false}
         >
           <AiFillMinusCircle />
         </IconButton>
+
         <Input
           id={"amount"}
           color="primary"
@@ -62,14 +69,20 @@ const PictogramAmount = (): JSX.Element => {
           disabled
           sx={{ width: 50, input: { textAlign: "center" } }}
         ></Input>
+
         <IconButton
           color="primary"
-          aria-label="Subtract amount pictogram"
+          aria-label={intl.formatMessage({
+            id: "components.pictogramAmount.subtract.label",
+            defaultMessage: "Subtract pictogram",
+            description: "Subtract a pictogram from the amounts",
+          })}
           onClick={() => handleChangesAmount(+1)}
         >
           <AiFillPlusCircle />
         </IconButton>
       </Stack>
+
       <FormHelperText sx={{ margin: "0" }}>
         <FormattedMessage
           id="components.pictogramAmount.helperText"

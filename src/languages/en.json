@@ -1,4 +1,10 @@
 {
+  "components.pictogramAmount.add.label": [
+    {
+      "type": 0,
+      "value": "Add pictogram"
+    }
+  ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
@@ -9,6 +15,12 @@
     {
       "type": 0,
       "value": "Pictograms:"
+    }
+  ],
+  "components.pictogramAmount.subtract.label": [
+    {
+      "type": 0,
+      "value": "Subtract pictogram"
     }
   ],
   "components.settingItem.applyAll.label": [
