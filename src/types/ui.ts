@@ -1,16 +1,20 @@
-import { SkinsI } from "./sequence";
-
-export type UiSkinsI = SkinsI | "default";
-
-export type SettingItemsI = "skin";
+import { SettingItemsI, SkinsI } from "./sequence";
 
 export interface UiI {
   setting: {
-    skin: UiSkinsI;
+    skin: SkinsI;
   };
+  modal: {
+    pictEdit: PictEditI;
+  };
+}
+
+export interface PictEditI {
+  isOpen: boolean;
+  indexPict: number;
 }
 
 export interface SettingItemPayloadI {
   item: SettingItemsI;
-  value: UiSkinsI;
+  value: SkinsI;
 }

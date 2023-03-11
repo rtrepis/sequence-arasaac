@@ -20,7 +20,10 @@ describe("Give a component Setting Item", () => {
 
         expect(buttonsSkin).toBeInTheDocument();
         expect(pathImage).toBe(`${pathExpect + skin.toLocaleLowerCase()}.png`);
-        expect(mockAction).toBeCalledWith(skin.toLocaleLowerCase());
+        expect(mockAction).toBeCalledWith({
+          item: "skin",
+          value: skin.toLocaleLowerCase(),
+        });
       });
     });
   });

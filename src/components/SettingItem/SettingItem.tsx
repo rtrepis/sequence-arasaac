@@ -1,6 +1,5 @@
 import {
   Button,
-  Divider,
   Stack,
   styled,
   ToggleButton,
@@ -12,8 +11,8 @@ import { useState } from "react";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { applyAllSettingItemActionCreator } from "../../app/slice/sequenceSlice";
-import { SettingItemI } from "../../types/sequence";
-import { UiSkinsI } from "../../types/ui";
+import { SettingItemI, UpdateSettingItemI } from "../../types/sequence";
+import { PictEditI } from "../../types/ui";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
   "& .MuiToggleButtonGroup-grouped": {
@@ -50,14 +49,20 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
 
 interface SettingItemProps {
   item: SettingItemI;
-  action: (item: UiSkinsI) => void;
+  action: (toUpdate: UpdateSettingItemI) => void;
+  indexPict?: number;
 }
 
 const SettingItem = ({
   item: { types, message: messageItem, name: nameItem },
   action,
+  indexPict,
 }: SettingItemProps): JSX.Element => {
-  const uiSetting = useAppSelector((state) => state.ui.setting[nameItem]);
+  const settingItemValue = useAppSelector((state) =>
+    indexPict === undefined
+      ? state.ui.setting[nameItem]
+      : state.sequence[indexPict][nameItem]
+  );
   const dispatch = useAppDispatch();
   const [itemSelect, setItemSelect] = useState<string | null>("default");
 
@@ -70,9 +75,18 @@ const SettingItem = ({
 
   const handleApplyAll = () => {
     dispatch(
-      applyAllSettingItemActionCreator({ item: nameItem, value: uiSetting })
+      applyAllSettingItemActionCreator({
+        item: nameItem,
+        value: settingItemValue!,
+      })
     );
   };
+
+  const payload: UpdateSettingItemI =
+    indexPict === undefined
+      ? { item: nameItem, value: "default" }
+      : { index: indexPict, item: nameItem, value: "default" };
+
   const intl = useIntl();
 
   const message = defineMessages({
@@ -84,12 +98,10 @@ const SettingItem = ({
   });
 
   return (
-    <Stack direction={"row"} alignItems="center">
-      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+    <Stack direction={"row"} alignItems="center" flexWrap={"wrap"}>
+      <Typography variant="body1" sx={{ fontWeight: "bold" }} component="h4">
         <FormattedMessage {...messageItem} />
       </Typography>
-
-      <Divider variant="inset" />
 
       <StyledToggleButtonGroup
         value={itemSelect}
@@ -102,7 +114,13 @@ const SettingItem = ({
             value={name}
             aria-label={intl.formatMessage({ ...message })}
             key={name}
-            onClick={() => action(name)}
+            onClick={() =>
+              action(
+                indexPict === undefined
+                  ? { item: nameItem, value: name }
+                  : { index: indexPict, item: nameItem, value: name }
+              )
+            }
           >
             <Tooltip title={intl.formatMessage({ ...message })} arrow>
               <img
@@ -116,7 +134,8 @@ const SettingItem = ({
             </Tooltip>
           </ToggleButton>
         ))}
-        <ToggleButton value={"default"} onClick={() => action("default")}>
+
+        <ToggleButton value={"default"} onClick={() => action(payload)}>
           <Tooltip title={intl.formatMessage({ ...message.default })}>
             <img
               src={`/img/settings/x.png`}
@@ -129,8 +148,6 @@ const SettingItem = ({
           </Tooltip>
         </ToggleButton>
       </StyledToggleButtonGroup>
-
-      <Divider variant="inset" />
 
       <Button
         variant="contained"
