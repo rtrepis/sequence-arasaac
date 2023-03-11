@@ -1,6 +1,18 @@
 {
+  "components.modal.pictogramEdit.describe": {
+    "defaultMessage": "You can edit pictograms",
+    "description": "Description modal"
+  },
+  "components.modal.pictogramEdit.description": {
+    "defaultMessage": "You can edit pictograms",
+    "description": "Description modal"
+  },
+  "components.modal.pictogramEdit.label": {
+    "defaultMessage": "Edit Pictogram",
+    "description": "Title modal"
+  },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Afegir pictogrames",
+    "defaultMessage": "Add pictogram",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
@@ -12,39 +24,39 @@
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.subtract.label": {
-    "defaultMessage": "Restar pictogrames",
+    "defaultMessage": "Subtract pictogram",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.settingItem.applyAll.label": {
-    "defaultMessage": "Aplica-ho tot",
+    "defaultMessage": "Apply All",
     "description": "apply to all pictograms"
   },
   "components.settingItem.default.label": {
-    "defaultMessage": "Per defecte",
+    "defaultMessage": "Default",
     "description": "Type setting item"
   },
   "settings.skins.asian": {
-    "defaultMessage": "Asiàtic",
+    "defaultMessage": "Asian",
     "description": "Type of setting skin"
   },
   "settings.skins.aztec": {
-    "defaultMessage": "Asteca",
+    "defaultMessage": "Aztec",
     "description": "Type of setting skin"
   },
   "settings.skins.black": {
-    "defaultMessage": "Negre",
+    "defaultMessage": "Black",
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Pell",
+    "defaultMessage": "Skin",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
-    "defaultMessage": "Mulat",
+    "defaultMessage": "Mulatto",
     "description": "Type of setting skin"
   },
   "settings.skins.white": {
-    "defaultMessage": "Blanc",
+    "defaultMessage": "White",
     "description": "Type of setting skin"
   }
 }
