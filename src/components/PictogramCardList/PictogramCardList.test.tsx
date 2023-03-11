@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import { SequenceI } from "../../types/sequence";
+import { render, screen } from "../../utils/test-utils";
 import PictogramCardList from "./PictogramCardList";
 
 describe("Give a component PictogramCardList", () => {

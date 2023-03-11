@@ -8,15 +8,16 @@ import { RootState } from "./app/store";
 import PictogramAmount from "./components/PictogramAmount/PictogramAmount";
 import PictogramCardList from "./components/PictogramCardList/PictogramCardList";
 import SettingItem from "./components/SettingItem/SettingItem";
+import PictEditModal from "./components/modals/PictEditModal";
 import Settings from "./model/Settings";
-import { UiSkinsI } from "./types/ui";
+import { UpdateSettingItemI } from "./types/sequence";
 
 const App = () => {
   const dispatch = useAppDispatch();
   const sequence = useSelector((state: RootState) => state.sequence);
 
-  const handleUpDateSkin = (item: UiSkinsI) => {
-    dispatch(updateSkinActionCreator(item));
+  const handleUpDateSkin = (toUpdate: UpdateSettingItemI) => {
+    dispatch(updateSkinActionCreator(toUpdate));
   };
 
   return (
@@ -25,6 +26,7 @@ const App = () => {
       <SettingItem item={Settings.skins} action={handleUpDateSkin} />
       <PictogramAmount />
       <PictogramCardList sequence={sequence} />
+      <PictEditModal />
     </Stack>
   );
 };

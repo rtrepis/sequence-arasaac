@@ -1,4 +1,16 @@
 {
+  "components.modal.pictogramEdit.describe": {
+    "defaultMessage": "You can edit pictograms",
+    "description": "Description modal"
+  },
+  "components.modal.pictogramEdit.description": {
+    "defaultMessage": "You can edit pictograms",
+    "description": "Description modal"
+  },
+  "components.modal.pictogramEdit.label": {
+    "defaultMessage": "Edit Pictogram",
+    "description": "Title modal"
+  },
   "components.pictogramAmount.add.label": {
     "defaultMessage": "Add pictogram",
     "description": "Add a pictogram to the amounts"

@@ -1,5 +1,8 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { pictEditModalActionCreator } from "../../app/slice/uiSlice";
 import { PictogramI } from "../../types/sequence";
+import { PictEditI } from "../../types/ui";
 
 interface PictogramCardProps {
   pictogram: PictogramI;
@@ -12,9 +15,17 @@ const PictogramCard = ({
   view,
   variant,
 }: PictogramCardProps): JSX.Element => {
+  const { isOpen } = useAppSelector((state) => state.ui.modal.pictEdit);
+  const dispatch = useAppDispatch();
+
+  const openPictEdit: PictEditI = { isOpen: !isOpen, indexPict: index - 1 };
+  const handlePictEdit = () =>
+    dispatch(pictEditModalActionCreator(openPictEdit));
+
   return (
     <Card
       data-testid="card-pictogram"
+      onClick={handlePictEdit}
       sx={{
         maxWidth: 200,
         textAlign: "center",
@@ -43,7 +54,7 @@ const PictogramCard = ({
         <CardMedia
           component="img"
           image={`https://api.arasaac.org/api/pictograms/${number}?${
-            skin !== "default" && `skin=${skin === "asian" ? "assian" : skin}` // asin corrected api arasaac
+            skin !== "default" && `skin=${skin === "asian" ? "assian" : skin}` // asia n corrected api arasaac
           }`}
           alt="Pictogram"
           sx={{

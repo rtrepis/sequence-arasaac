@@ -1,4 +1,22 @@
 {
+  "components.modal.pictogramEdit.describe": [
+    {
+      "type": 0,
+      "value": "You can edit pictograms"
+    }
+  ],
+  "components.modal.pictogramEdit.description": [
+    {
+      "type": 0,
+      "value": "You can edit pictograms"
+    }
+  ],
+  "components.modal.pictogramEdit.label": [
+    {
+      "type": 0,
+      "value": "Edit Pictogram"
+    }
+  ],
   "components.pictogramAmount.add.label": [
     {
       "type": 0,

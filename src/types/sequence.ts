@@ -1,21 +1,30 @@
-import { SettingItemsI, UiSkinsI } from "./ui";
-
-export interface PictogramI {
+export interface ProtoPictogramI {
   index: number;
   number: number;
-  border?: {
-    in?: BorderPictI;
-    out?: BorderPictI;
-  };
-  skin?: UiSkinsI;
 }
+
+export type SkinsI =
+  | "asian"
+  | "aztec"
+  | "black"
+  | "mulatto"
+  | "white"
+  | "default";
+
 export interface BorderPictI {
   color: string;
   radius: number;
   size: number;
 }
+export interface PictogramI extends ProtoPictogramI {
+  border?: {
+    in?: BorderPictI;
+    out?: BorderPictI;
+  };
+  skin?: SkinsI;
+}
 
-export type SkinsI = "asian" | "aztec" | "black" | "mulatto" | "white";
+export type SettingItemsI = "skin";
 
 export interface MessageI {
   id: string;
@@ -37,4 +46,10 @@ export type SequenceI = PictogramI[];
 
 export interface SettingsI {
   skins: SettingItemI;
+}
+
+export interface UpdateSettingItemI {
+  index?: number;
+  item: SettingItemsI;
+  value: SkinsI;
 }
