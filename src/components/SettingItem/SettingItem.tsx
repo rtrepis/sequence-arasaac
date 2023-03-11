@@ -12,6 +12,7 @@ import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { applyAllSettingItemActionCreator } from "../../app/slice/sequenceSlice";
 import { SettingItemI, UpdateSettingItemI } from "../../types/sequence";
+import { PictEditI } from "../../types/ui";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
   "& .MuiToggleButtonGroup-grouped": {
@@ -57,7 +58,11 @@ const SettingItem = ({
   action,
   indexPict,
 }: SettingItemProps): JSX.Element => {
-  const uiSetting = useAppSelector((state) => state.ui.setting[nameItem]);
+  const settingItemValue = useAppSelector((state) =>
+    indexPict === undefined
+      ? state.ui.setting[nameItem]
+      : state.sequence[indexPict][nameItem]
+  );
   const dispatch = useAppDispatch();
   const [itemSelect, setItemSelect] = useState<string | null>("default");
 
@@ -70,9 +75,18 @@ const SettingItem = ({
 
   const handleApplyAll = () => {
     dispatch(
-      applyAllSettingItemActionCreator({ item: nameItem, value: uiSetting })
+      applyAllSettingItemActionCreator({
+        item: nameItem,
+        value: settingItemValue!,
+      })
     );
   };
+
+  const payload: UpdateSettingItemI =
+    indexPict === undefined
+      ? { item: nameItem, value: "default" }
+      : { index: indexPict, item: nameItem, value: "default" };
+
   const intl = useIntl();
 
   const message = defineMessages({
@@ -121,10 +135,7 @@ const SettingItem = ({
           </ToggleButton>
         ))}
 
-        <ToggleButton
-          value={"default"}
-          onClick={() => action({ item: nameItem, value: "default" })}
-        >
+        <ToggleButton value={"default"} onClick={() => action(payload)}>
           <Tooltip title={intl.formatMessage({ ...message.default })}>
             <img
               src={`/img/settings/x.png`}

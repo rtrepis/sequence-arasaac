@@ -59,7 +59,7 @@ describe("Give a component PictEditModal", () => {
 
   describe("When user click on buttons setting skin type", () => {
     test("Then called dispatch action", () => {
-      const skins = ["Asian", "Aztec", "Black", "Mulatto", "White"];
+      const skins = ["Asian", "Aztec", "Black", "Mulatto", "White", "Default"];
 
       render(<PictEditModal />, { preloadedState: preloadedStateMock });
       skins.forEach((skin) => {

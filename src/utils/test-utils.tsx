@@ -8,8 +8,6 @@ import { CssBaseline } from "@mui/material";
 import { IntlProvider } from "react-intl";
 import messages from "../languages/en.json";
 import { uiReducer } from "../app/slice/uiSlice";
-import { UiI } from "../types/ui";
-import { SequenceI } from "../types/sequence";
 
 interface WrapperProps {
   children: JSX.Element | JSX.Element[];
