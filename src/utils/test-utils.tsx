@@ -13,6 +13,23 @@ interface WrapperProps {
   children: JSX.Element | JSX.Element[];
 }
 
+const preloadedState = {
+  sequence: [
+    {
+      index: 0,
+      number: 26527,
+      border: {
+        in: { color: "blue", radius: 20, size: 2 },
+        out: { color: "green", radius: 20, size: 2 },
+      },
+    },
+  ],
+  ui: {
+    setting: { skin: "default" },
+    modal: { pictEdit: { isOpen: false, indexPict: NaN } },
+  },
+};
+
 const render = (
   ui: JSX.Element,
   {
@@ -22,19 +39,7 @@ const render = (
         sequence: sequenceReducer,
         ui: uiReducer,
       },
-      preloadedState: {
-        sequence: [
-          {
-            index: 0,
-            number: 26527,
-            border: {
-              in: { color: "blue", radius: 20, size: 2 },
-              out: { color: "green", radius: 20, size: 2 },
-            },
-          },
-        ],
-        ui: { setting: { skin: "default" } },
-      },
+      preloadedState: preloadedState,
     }),
     ...renderOptions
   }: { preloadedState?: any; store?: any } = {}
@@ -55,4 +60,4 @@ const render = (
 };
 
 export * from "@testing-library/react";
-export { render, rtlRender };
+export { render, rtlRender, preloadedState };

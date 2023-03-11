@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import { BorderPictI, PictogramI } from "../../types/sequence";
+import { fireEvent, render, screen } from "../../utils/test-utils";
 import PictogramCard from "./PictogramCard";
 
 let pictogramEmpty: PictogramI = {
@@ -10,6 +10,14 @@ let pictogramEmpty: PictogramI = {
     out: { color: "green", radius: 20, size: 2 },
   },
 };
+
+const mockDispatch = jest.fn();
+jest.mock("react-redux", () => ({
+  ...jest.requireActual("react-redux"),
+  useDispatch: () => mockDispatch,
+}));
+
+beforeEach(() => jest.clearAllMocks());
 
 describe("Give a PictogramShow component", () => {
   describe("When it's rendered with view 'complete' and index '1'", () => {
@@ -170,6 +178,29 @@ describe("Give a PictogramShow component", () => {
       const pathImage = image.getAttribute("src");
 
       expect(pathImage).toStrictEqual(expectedPath);
+    });
+  });
+
+  describe("When user is click on card", () => {
+    test("Then should dispatch action with payload open pictEditModel", () => {
+      const cardClick = "card-pictogram";
+      const expectAction = {
+        payload: { indexPict: 0, isOpen: true },
+        type: "uiState/pictEditModal",
+      };
+
+      render(
+        <PictogramCard
+          pictogram={pictogramEmpty}
+          view="complete"
+          variant="plane"
+        />
+      );
+      const card = screen.getByTestId(cardClick);
+
+      fireEvent.click(card);
+
+      expect(mockDispatch).toBeCalledWith(expectAction);
     });
   });
 });
