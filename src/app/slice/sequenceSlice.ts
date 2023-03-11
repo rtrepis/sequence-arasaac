@@ -29,11 +29,11 @@ const sequenceSlice = createSlice({
       previousSequence,
       action: PayloadAction<UpdateSettingItemI>
     ) => {
-      previousSequence.forEach((pictogram, index) => {
-        if (index === action.payload.index) {
-          return (pictogram[action.payload.item] = action.payload.value);
-        }
-      });
+      previousSequence.forEach(
+        (pictogram, index) =>
+          index === action.payload.index &&
+          (pictogram[action.payload.item] = action.payload.value)
+      );
     },
   },
 });

@@ -60,9 +60,15 @@ describe("Given the reducer sequenceSlice", () => {
         item: "skin",
         value: "asian",
       };
-      previousSequence = [{ index: 0, number: 0, skin: "default" }];
+      previousSequence = [
+        { index: 0, number: 0, skin: "default" },
+        { index: 1, number: 0, skin: "black" },
+      ];
 
-      const expectState = [{ index: 0, number: 0, skin: "asian" }];
+      const expectState = [
+        { index: 0, number: 0, skin: "asian" },
+        { index: 1, number: 0, skin: "black" },
+      ];
 
       const actionCreator = upDateSettingItemActionCreator(
         upDatePictogramSetting
