@@ -8,6 +8,10 @@ jest.mock("react-redux", () => ({
   useDispatch: () => mockDispatch,
 }));
 
+jest.mock("../../hooks/useAraSaac", () => () => ({
+  getSearchPictogram: jest.fn(),
+}));
+
 let preloadedStateMock = {
   sequence: [
     {
