@@ -10,8 +10,12 @@ import Settings from "../../model/Settings";
 import { pictEditModalActionCreator } from "../../app/slice/uiSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { PictEditI } from "../../types/ui";
-import { upDateSettingItemActionCreator } from "../../app/slice/sequenceSlice";
-import { UpdateSettingItemI } from "../../types/sequence";
+import {
+  upDatePictNumberActionCreator,
+  upDateSettingItemActionCreator,
+} from "../../app/slice/sequenceSlice";
+import { ProtoPictogramI, UpdateSettingItemI } from "../../types/sequence";
+import PictogramSearch from "../PictogramSearch/PictogramSearch";
 
 const ModalStyle = {
   position: "absolute" as "absolute",
@@ -37,6 +41,14 @@ const PictEditModal = (): JSX.Element => {
 
   const closePictEdit: PictEditI = { isOpen: false, indexPict: NaN };
   const handleClose = () => dispatch(pictEditModalActionCreator(closePictEdit));
+
+  const handleUpDatePictNumber = (upDateNumber: number) => {
+    const upDatePict: ProtoPictogramI = {
+      index: indexPict,
+      number: upDateNumber,
+    };
+    dispatch(upDatePictNumberActionCreator(upDatePict));
+  };
 
   const handleUpDateSettingItem = (toUpdate: UpdateSettingItemI) => {
     dispatch(upDateSettingItemActionCreator(toUpdate));
@@ -66,7 +78,9 @@ const PictEditModal = (): JSX.Element => {
               description: "Title modal",
             })}
           </Typography>
+
           <Divider variant="inset" />
+
           <Typography
             variant="h4"
             component="h2"
@@ -81,19 +95,25 @@ const PictEditModal = (): JSX.Element => {
             {indexPict + 1}
           </Typography>
         </Stack>
+
         <Divider sx={{ marginBottom: 1 }} />
+
         <Stack alignItems={"center"}>
           <PictogramCard
             pictogram={pictogramToEdit}
             variant="plane"
             view="complete"
           />
+
+          <PictogramSearch action={handleUpDatePictNumber} />
+
           <SettingItem
             item={Settings.skins}
             action={handleUpDateSettingItem}
             indexPict={indexPict}
           />
         </Stack>
+
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
           <FormattedMessage
             id={"components.modal.pictogramEdit.describe"}

@@ -1,5 +1,6 @@
 import {
   PictogramI,
+  ProtoPictogramI,
   SequenceI,
   UpdateSettingItemI,
 } from "../../types/sequence";
@@ -10,6 +11,7 @@ import {
   subtractPictogramActionCreator,
   applyAllSettingItemActionCreator,
   upDateSettingItemActionCreator,
+  upDatePictNumberActionCreator,
 } from "./sequenceSlice";
 
 describe("Given the reducer sequenceSlice", () => {
@@ -31,6 +33,25 @@ describe("Given the reducer sequenceSlice", () => {
       const expectState = [...previousSequence].slice(0, -1);
 
       const actionCreator = subtractPictogramActionCreator();
+      const newState = sequenceReducer(previousSequence, actionCreator);
+
+      expect(newState).toStrictEqual(expectState);
+    });
+  });
+
+  describe("When called 'upDatePictogram' with ProtoPictogramI", () => {
+    test("Then should new state with update PictogramSetting", () => {
+      const upDatePictogramNumber: ProtoPictogramI = {
+        index: 0,
+        number: 1254,
+      };
+      previousSequence = [{ index: 0, number: 0 }];
+
+      const expectState = [{ index: 0, number: 1254 }];
+
+      const actionCreator = upDatePictNumberActionCreator(
+        upDatePictogramNumber
+      );
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);

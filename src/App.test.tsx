@@ -1,6 +1,10 @@
 import App from "./App";
 import { render, screen } from "./utils/test-utils";
 
+jest.mock("./hooks/useAraSaac", () => () => ({
+  getSearchPictogram: jest.fn(),
+}));
+
 describe("Give a App", () => {
   describe("When it's rendered with title", () => {
     test("Then should show this title", () => {

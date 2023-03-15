@@ -1,9 +1,7 @@
 import {
   Button,
   Stack,
-  styled,
   ToggleButton,
-  ToggleButtonGroup,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -11,41 +9,8 @@ import { useState } from "react";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { applyAllSettingItemActionCreator } from "../../app/slice/sequenceSlice";
+import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
 import { SettingItemI, UpdateSettingItemI } from "../../types/sequence";
-import { PictEditI } from "../../types/ui";
-
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
-  "& .MuiToggleButtonGroup-grouped": {
-    height: 55,
-    width: 55,
-    margin: 1,
-    border: 1.75,
-    "&.Mui-disabled": {
-      border: 1.75,
-    },
-    "&:not(:first-of-type)": {
-      borderRadius: 20,
-    },
-    "&:first-of-type": {
-      borderRadius: 20,
-    },
-    "&:hover": {
-      border: `1.75px solid`,
-      borderColor: `green`,
-      borderRadius: `20px`,
-      boxShadow: "0px 0px 10px 1px #A6A6A6",
-    },
-  },
-  "& .Mui-selected": {
-    backgroundColor: "rgba(50,150,50,0.2)",
-    border: `1.75px solid green`,
-    borderRadius: `20px`,
-    boxShadow: "0px 0px 10px 1px #A6A6A6",
-    "&:not(:first-of-type)": {
-      borderLeft: `1.75px solid green`,
-    },
-  },
-}));
 
 interface SettingItemProps {
   item: SettingItemI;
