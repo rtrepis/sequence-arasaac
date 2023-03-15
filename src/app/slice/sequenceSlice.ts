@@ -3,6 +3,7 @@ import {
   PictogramI,
   SequenceI,
   UpdateSettingItemI,
+  ProtoPictogramI,
 } from "../../types/sequence";
 import { SettingItemPayloadI } from "../../types/ui";
 
@@ -16,7 +17,20 @@ const sequenceSlice = createSlice({
       ...previousSequence,
       action.payload,
     ],
+
     subtractPictogram: (previousSequence) => [...previousSequence.slice(0, -1)],
+
+    upDatePictNumber: (
+      previousSequence,
+      action: PayloadAction<ProtoPictogramI>
+    ) => {
+      previousSequence.forEach(
+        (pictogram, index) =>
+          index === action.payload.index &&
+          (pictogram.number = action.payload.number)
+      );
+    },
+
     applyAllSettingItem: (
       previousSequence,
       action: PayloadAction<SettingItemPayloadI>
@@ -25,6 +39,7 @@ const sequenceSlice = createSlice({
         pictogram[action.payload.item] = action.payload.value;
       });
     },
+
     upDateSettingItem: (
       previousSequence,
       action: PayloadAction<UpdateSettingItemI>
@@ -43,6 +58,7 @@ export const sequenceReducer = sequenceSlice.reducer;
 export const {
   addPictogram: addPictogramActionCreator,
   subtractPictogram: subtractPictogramActionCreator,
+  upDatePictNumber: upDatePictNumberActionCreator,
   applyAllSettingItem: applyAllSettingItemActionCreator,
   upDateSettingItem: upDateSettingItemActionCreator,
 } = sequenceSlice.actions;
