@@ -9,7 +9,6 @@ import {
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";

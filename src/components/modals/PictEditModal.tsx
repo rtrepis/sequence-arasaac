@@ -27,7 +27,6 @@ import {
   UpdateSettingItemI,
 } from "../../types/sequence";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
-import { useEffect, useRef } from "react";
 import { AiOutlineSetting } from "react-icons/ai";
 
 const PictEditModal = (): JSX.Element => {
