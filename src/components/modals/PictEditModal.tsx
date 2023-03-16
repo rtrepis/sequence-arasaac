@@ -1,8 +1,15 @@
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import { FormattedMessage, useIntl } from "react-intl";
-import { Divider } from "@mui/material";
+import { useIntl } from "react-intl";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import SettingItem from "../SettingItem/SettingItem";
@@ -16,20 +23,8 @@ import {
 } from "../../app/slice/sequenceSlice";
 import { ProtoPictogramI, UpdateSettingItemI } from "../../types/sequence";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
-
-const ModalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  maxWidth: 640,
-  bgcolor: "background.paper",
-  border: "5px solid",
-  borderColor: "primary.dark",
-  borderRadius: 5,
-  boxShadow: 24,
-  p: 2,
-};
+import { useEffect, useRef } from "react";
+import { AiOutlineSetting } from "react-icons/ai";
 
 const PictEditModal = (): JSX.Element => {
   const { isOpen, indexPict } = useAppSelector(
@@ -39,8 +34,10 @@ const PictEditModal = (): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const closePictEdit: PictEditI = { isOpen: false, indexPict: NaN };
-  const handleClose = () => dispatch(pictEditModalActionCreator(closePictEdit));
+  const closePictEdit: PictEditI = { isOpen: false, indexPict: indexPict };
+  const handleClose = () => {
+    dispatch(pictEditModalActionCreator(closePictEdit));
+  };
 
   const handleUpDatePictNumber = (upDateNumber: number) => {
     const upDatePict: ProtoPictogramI = {
@@ -54,8 +51,20 @@ const PictEditModal = (): JSX.Element => {
     dispatch(upDateSettingItemActionCreator(toUpdate));
   };
 
+  const descriptionElementRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      const { current: descriptionElement } = descriptionElementRef;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+        console.log(descriptionElement);
+      }
+    }
+  }, [isOpen]);
+
   return (
-    <Modal
+    <Dialog
       open={isOpen}
       onClose={handleClose}
       aria-labelledby={intl.formatMessage({
@@ -68,37 +77,45 @@ const PictEditModal = (): JSX.Element => {
         defaultMessage: "You can edit pictograms",
         description: "Description modal",
       })}
+      maxWidth={"xl"}
+      sx={{ ".MuiDialog-paperScrollPaper": { borderRadius: 5 } }}
     >
-      <Box sx={ModalStyle}>
-        <Stack direction={"row"} marginBottom={1} alignItems="center">
-          <Typography variant="h5" component="h2">
-            {intl.formatMessage({
-              id: "components.modal.pictogramEdit.label",
-              defaultMessage: "Edit Pictogram",
-              description: "Title modal",
-            })}
-          </Typography>
+      <Stack
+        display="flex"
+        flexDirection={"row"}
+        justifyContent={"space-around"}
+        alignItems={"center"}
+        padding={1.5}
+      >
+        <Typography variant="h5" component="h2">
+          {intl.formatMessage({
+            id: "components.modal.pictogramEdit.label",
+            defaultMessage: "Edit Pictogram",
+            description: "Title modal",
+          })}
+        </Typography>
 
-          <Divider variant="inset" />
-
-          <Typography
-            variant="h4"
-            component="h2"
-            sx={{
-              backgroundColor: "primary.main",
-              borderRadius: "50%",
-              color: "primary.contrastText",
-              minWidth: "2.75rem",
-              textAlign: "center",
-            }}
-          >
-            {indexPict + 1}
-          </Typography>
-        </Stack>
-
-        <Divider sx={{ marginBottom: 1 }} />
-
-        <Stack alignItems={"center"}>
+        <Typography
+          variant="h4"
+          component="h2"
+          sx={{
+            backgroundColor: "primary.main",
+            borderRadius: "50%",
+            color: "primary.contrastText",
+            minWidth: "2.75rem",
+            textAlign: "center",
+          }}
+        >
+          {indexPict + 1}
+        </Typography>
+      </Stack>
+      <DialogContent dividers={true}>
+        <Stack
+          display={"flex"}
+          flexWrap={"wrap"}
+          flexDirection={"row"}
+          justifyContent={"space-around"}
+        >
           <PictogramCard
             pictogram={pictogramToEdit}
             variant="plane"
@@ -106,23 +123,37 @@ const PictEditModal = (): JSX.Element => {
           />
 
           <PictogramSearch action={handleUpDatePictNumber} />
-
-          <SettingItem
-            item={Settings.skins}
-            action={handleUpDateSettingItem}
-            indexPict={indexPict}
-          />
         </Stack>
 
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          <FormattedMessage
-            id={"components.modal.pictogramEdit.describe"}
-            defaultMessage={"You can edit pictograms"}
-            description={"Description modal"}
-          />
-        </Typography>
-      </Box>
-    </Modal>
+        <Accordion sx={{ marginBlock: 2 }}>
+          <AccordionSummary
+            aria-label="Settings"
+            sx={{
+              ".MuiAccordionSummary-content": {
+                fontSize: "2rem",
+                margin: 0,
+                justifyContent: "center",
+              },
+            }}
+          >
+            <AiOutlineSetting />
+          </AccordionSummary>
+          <AccordionDetails>
+            <SettingItem
+              item={Settings.skins}
+              action={handleUpDateSettingItem}
+              indexPict={indexPict}
+            />
+          </AccordionDetails>
+        </Accordion>
+      </DialogContent>
+
+      <DialogActions sx={{ justifyContent: "center" }}>
+        <Button onClick={handleClose} variant="contained">
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

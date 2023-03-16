@@ -2,6 +2,7 @@ import {
   Alert,
   ButtonBase,
   InputAdornment,
+  Stack,
   TextField,
   ToggleButton,
 } from "@mui/material";
@@ -39,7 +40,13 @@ const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
   };
 
   return (
-    <>
+    <Stack
+      sx={{
+        maxWidth: 310,
+        paddingInlineStart: 2,
+        paddingBlockStart: 2,
+      }}
+    >
       <form onSubmit={handleSubmit}>
         <TextField
           label={intl.formatMessage({
@@ -90,11 +97,11 @@ const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
           ))}
       </StyledToggleButtonGroup>
       {findPict[0] === -1 && (
-        <Alert severity="info">
+        <Alert severity="info" sx={{ maxWidth: 270 }}>
           No pictogram found with this word - Try another word!
         </Alert>
       )}
-    </>
+    </Stack>
   );
 };
 

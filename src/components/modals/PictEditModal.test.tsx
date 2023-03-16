@@ -38,7 +38,7 @@ describe("Give a component PictEditModal", () => {
         title: "Edit Pictogram",
         indexPict: "1",
         pictogram: "Pictogram",
-        settings: ["Skin"],
+        settings: "Settings",
       };
 
       render(<PictEditModal />, { preloadedState: preloadedStateMock });
@@ -53,19 +53,25 @@ describe("Give a component PictEditModal", () => {
       AreInModal[2] = screen.getByRole("img", {
         name: expectInModal.pictogram,
       });
-      AreInModal[3] = screen.getByRole("heading", {
-        name: expectInModal.settings[0],
+      AreInModal[3] = screen.getByRole("button", {
+        name: expectInModal.settings,
       });
 
       AreInModal.forEach((isInModal) => expect(isInModal).toBeInTheDocument());
     });
   });
 
-  describe("When user click on buttons setting skin type", () => {
+  describe("When user click on Settings and buttons setting skin type", () => {
     test("Then called dispatch action", () => {
+      const expectSettings = "Settings";
       const skins = ["Asian", "Aztec", "Black", "Mulatto", "White", "Default"];
 
       render(<PictEditModal />, { preloadedState: preloadedStateMock });
+      const buttonSetting = screen.getByRole("button", {
+        name: expectSettings,
+      });
+      fireEvent.click(buttonSetting);
+
       skins.forEach((skin) => {
         const expectAction = {
           payload: { index: 0, item: "skin", value: skin.toLowerCase() },
@@ -84,7 +90,7 @@ describe("Give a component PictEditModal", () => {
   describe("When user type escape", () => {
     test("Then called dispatch action close", async () => {
       const expectAction = {
-        payload: { indexPict: NaN, isOpen: false },
+        payload: { indexPict: 0, isOpen: false },
         type: "uiState/pictEditModal",
       };
 
