@@ -76,6 +76,7 @@ const SettingItem = ({
       >
         {types.map(({ name, message }) => (
           <ToggleButton
+            selected={settingItemValue === name}
             value={name}
             aria-label={intl.formatMessage({ ...message })}
             key={name}
@@ -100,7 +101,11 @@ const SettingItem = ({
           </ToggleButton>
         ))}
 
-        <ToggleButton value={"default"} onClick={() => action(payload)}>
+        <ToggleButton
+          value={"default"}
+          onClick={() => action(payload)}
+          selected={settingItemValue === "default"}
+        >
           <Tooltip title={intl.formatMessage({ ...message.default })}>
             <img
               src={`/img/settings/x.png`}

@@ -8,7 +8,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import PictogramCard from "../PictogramCard/PictogramCard";
@@ -19,11 +18,15 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { PictEditI } from "../../types/ui";
 import {
   upDatePictNumberActionCreator,
+  upDatePictWordActionCreator,
   upDateSettingItemActionCreator,
 } from "../../app/slice/sequenceSlice";
-import { ProtoPictogramI, UpdateSettingItemI } from "../../types/sequence";
+import {
+  ProtoPictogramI,
+  UpdatePictWordI,
+  UpdateSettingItemI,
+} from "../../types/sequence";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
-import { useEffect, useRef } from "react";
 import { AiOutlineSetting } from "react-icons/ai";
 
 const PictEditModal = (): JSX.Element => {
@@ -39,29 +42,23 @@ const PictEditModal = (): JSX.Element => {
     dispatch(pictEditModalActionCreator(closePictEdit));
   };
 
-  const handleUpDatePictNumber = (upDateNumber: number) => {
-    const upDatePict: ProtoPictogramI = {
+  const handleUpDatePictNumber = (upDateNumber: number, word: string) => {
+    const upDatePictNum: ProtoPictogramI = {
       index: indexPict,
       number: upDateNumber,
     };
-    dispatch(upDatePictNumberActionCreator(upDatePict));
+    dispatch(upDatePictNumberActionCreator(upDatePictNum));
+
+    const upDatePictWord: UpdatePictWordI = {
+      indexPict: indexPict,
+      word: { keyWord: word },
+    };
+    dispatch(upDatePictWordActionCreator(upDatePictWord));
   };
 
   const handleUpDateSettingItem = (toUpdate: UpdateSettingItemI) => {
     dispatch(upDateSettingItemActionCreator(toUpdate));
   };
-
-  const descriptionElementRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      const { current: descriptionElement } = descriptionElementRef;
-      if (descriptionElement !== null) {
-        descriptionElement.focus();
-        console.log(descriptionElement);
-      }
-    }
-  }, [isOpen]);
 
   return (
     <Dialog

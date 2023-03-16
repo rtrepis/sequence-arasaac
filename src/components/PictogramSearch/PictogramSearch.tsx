@@ -9,14 +9,17 @@ import {
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useIntl } from "react-intl";
+import { useAppSelector } from "../../app/hooks";
 import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
 
 interface PropsPictogramSearch {
-  action: (upDatePictNumber: number) => void;
+  action: (upDatePictNumber: number, word: string) => void;
 }
 
 const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
+  const { skin } = useAppSelector((state) => state.ui.setting);
+
   const intl = useIntl();
   const { getSearchPictogram } = useAraSaac();
 
@@ -42,7 +45,7 @@ const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
   return (
     <Stack
       sx={{
-        maxWidth: 310,
+        maxWidth: 300,
         paddingInlineStart: 2,
         paddingBlockStart: 2,
       }}
@@ -76,6 +79,7 @@ const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
           autoComplete={"off"}
           value={word}
           onChange={handleChange}
+          sx={{ width: 290 }}
         />
       </form>
       <StyledToggleButtonGroup>
@@ -85,10 +89,13 @@ const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
               value={pictogram}
               aria-label={`pictogram`}
               key={pictogram + index}
-              onClick={() => action(pictogram)}
+              onClick={() => action(pictogram, word)}
             >
               <img
-                src={`https://static.arasaac.org/pictograms/${pictogram}/${pictogram}_300.png`}
+                src={`https://api.arasaac.org/api/pictograms/${pictogram}?${
+                  skin !== "default" &&
+                  `skin=${skin === "asian" ? "assian" : skin}` // asia n corrected api arasaac
+                }`}
                 alt={`pictogram`}
                 width={40}
                 height={40}
@@ -97,7 +104,7 @@ const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
           ))}
       </StyledToggleButtonGroup>
       {findPict[0] === -1 && (
-        <Alert severity="info" sx={{ maxWidth: 270 }}>
+        <Alert severity="info" sx={{ maxWidth: 280 }}>
           No pictogram found with this word - Try another word!
         </Alert>
       )}
