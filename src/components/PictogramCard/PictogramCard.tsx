@@ -27,6 +27,7 @@ const PictogramCard = ({
       data-testid="card-pictogram"
       onClick={handlePictEdit}
       sx={{
+        minWidth: 200,
         maxWidth: 200,
         textAlign: "center",
         paddingInline: 1.5,
