@@ -16,7 +16,17 @@ export interface BorderPictI {
   radius: number;
   size: number;
 }
+
+export interface WordI {
+  keyWord: string;
+}
+
+export interface UpdatePictWordI {
+  indexPict: number;
+  word: WordI;
+}
 export interface PictogramI extends ProtoPictogramI {
+  word: WordI;
   border?: {
     in?: BorderPictI;
     out?: BorderPictI;

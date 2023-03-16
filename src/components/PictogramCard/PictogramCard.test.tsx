@@ -9,6 +9,7 @@ let pictogramEmpty: PictogramI = {
     in: { color: "blue", radius: 20, size: 2 },
     out: { color: "green", radius: 20, size: 2 },
   },
+  word: { keyWord: "Empty" },
 };
 
 const mockDispatch = jest.fn();
@@ -26,7 +27,7 @@ describe("Give a PictogramShow component", () => {
         index: "1",
         number: 2222,
         altImage: "Pictogram",
-        textPictogram: "Pictogram Word",
+        textPictogram: "Empty",
       };
 
       render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
@@ -69,7 +70,7 @@ describe("Give a PictogramShow component", () => {
       const expectPictogram = {
         number: 2222,
         altImage: "Pictogram",
-        textPictogram: "Pictogram Word",
+        textPictogram: "Empty",
       };
 
       render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);

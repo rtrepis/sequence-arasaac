@@ -2,7 +2,7 @@ import { render, screen, act, fireEvent } from "../../utils/test-utils";
 import PictogramSearch from "./PictogramSearch";
 import { useState } from "react";
 
-const mockAction = jest.fn();
+let mockAction = jest.fn();
 
 jest.mock("../../hooks/useAraSaac", () => () => ({
   getSearchPictogram: mockAction,
@@ -30,7 +30,7 @@ describe("Give component PictogramSearch", () => {
     });
   });
 
-  describe("When user typed word and enter in input", () => {
+  describe("When user typed word and click search", () => {
     test("Then should it's called mockAction", () => {
       const expectInput = "Search";
       const expertButton = "toSearch";

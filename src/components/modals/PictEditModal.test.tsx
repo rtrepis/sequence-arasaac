@@ -21,6 +21,7 @@ let preloadedStateMock = {
         in: { color: "blue", radius: 20, size: 2 },
         out: { color: "green", radius: 20, size: 2 },
       },
+      word: { keyWord: "Empty" },
     },
   ],
   ui: {
