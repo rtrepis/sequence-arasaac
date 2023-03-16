@@ -32,6 +32,7 @@ const PictogramAmount = (): JSX.Element => {
       out: { color: "green", radius: 20, size: 2 },
     },
     skin: skin,
+    word: { keyWord: "Empty" },
   };
   const handleChangesAmount = (operator: number) => {
     setAmountPict(amountPict + operator);

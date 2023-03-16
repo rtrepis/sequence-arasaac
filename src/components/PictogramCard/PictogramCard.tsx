@@ -11,7 +11,7 @@ interface PictogramCardProps {
 }
 
 const PictogramCard = ({
-  pictogram: { index, number, border, skin },
+  pictogram: { index, number, border, skin, word },
   view,
   variant,
 }: PictogramCardProps): JSX.Element => {
@@ -73,7 +73,7 @@ const PictogramCard = ({
       {(view === "complete" || view === "footer") && (
         <CardContent>
           <Typography variant="body1" component="h3">
-            Pictogram Word
+            {word.keyWord}
           </Typography>
         </CardContent>
       )}
