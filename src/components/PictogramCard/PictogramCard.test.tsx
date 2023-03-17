@@ -1,5 +1,5 @@
 import { BorderPictI, PictogramI } from "../../types/sequence";
-import { fireEvent, render, screen } from "../../utils/test-utils";
+import { render, screen } from "../../utils/test-utils";
 import PictogramCard from "./PictogramCard";
 
 let pictogramEmpty: PictogramI = {
