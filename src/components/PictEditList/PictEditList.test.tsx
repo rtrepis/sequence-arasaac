@@ -1,6 +1,6 @@
 import { SequenceI } from "../../types/sequence";
 import { render, screen } from "../../utils/test-utils";
-import PictogramCardList from "./PictogramCardList";
+import PictEditList from "./PictEditList";
 
 describe("Give a component PictogramCardList", () => {
   describe("When a rendered with sequence array", () => {
@@ -11,7 +11,7 @@ describe("Give a component PictogramCardList", () => {
         { index: 2, number: 2333, word: { keyWord: "" } },
       ];
 
-      render(<PictogramCardList sequence={sequence} />);
+      render(<PictEditList sequence={sequence} />);
       const images = screen.getAllByRole("img");
 
       expect(images).toHaveLength(sequence.length);

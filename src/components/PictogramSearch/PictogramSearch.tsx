@@ -9,17 +9,23 @@ import {
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useIntl } from "react-intl";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  upDatePictNumberActionCreator,
+  upDatePictWordActionCreator,
+} from "../../app/slice/sequenceSlice";
 import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
+import { ProtoPictogramI, UpdatePictWordI } from "../../types/sequence";
+import toUrlPathApiAraSaac from "../../utils/toUrlPathApiAraSaac";
 
 interface PropsPictogramSearch {
-  action: (upDatePictNumber: number, word: string) => void;
+  indexPict: number;
 }
 
-const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
+const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
   const { skin } = useAppSelector((state) => state.ui.setting);
-
+  const dispatch = useAppDispatch();
   const intl = useIntl();
   const { getSearchPictogram } = useAraSaac();
 
@@ -31,6 +37,20 @@ const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWord(event.target.value);
+  };
+
+  const handleUpDatePictNumber = (upDateNumber: number) => {
+    const upDatePictNum: ProtoPictogramI = {
+      index: indexPict,
+      number: upDateNumber,
+    };
+    dispatch(upDatePictNumberActionCreator(upDatePictNum));
+
+    const upDatePictWord: UpdatePictWordI = {
+      indexPict: indexPict,
+      word: { keyWord: word },
+    };
+    dispatch(upDatePictWordActionCreator(upDatePictWord));
   };
 
   const handleSubmit = async (event: SyntheticEvent) => {
@@ -89,13 +109,10 @@ const PictogramSearch = ({ action }: PropsPictogramSearch): JSX.Element => {
               value={pictogram}
               aria-label={`pictogram`}
               key={pictogram + index}
-              onClick={() => action(pictogram, word)}
+              onClick={() => handleUpDatePictNumber(pictogram)}
             >
               <img
-                src={`https://api.arasaac.org/api/pictograms/${pictogram}?${
-                  skin !== "default" &&
-                  `skin=${skin === "asian" ? "assian" : skin}` // asia n corrected api arasaac
-                }`}
+                src={toUrlPathApiAraSaac(pictogram, skin)}
                 alt={`pictogram`}
                 width={40}
                 height={40}

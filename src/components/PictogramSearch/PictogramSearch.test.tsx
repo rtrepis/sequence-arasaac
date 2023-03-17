@@ -3,6 +3,7 @@ import PictogramSearch from "./PictogramSearch";
 import { useState } from "react";
 
 let mockAction = jest.fn();
+const mockDispatch = jest.fn();
 
 jest.mock("../../hooks/useAraSaac", () => () => ({
   getSearchPictogram: mockAction,
@@ -11,7 +12,10 @@ jest.mock("../../hooks/useAraSaac", () => () => ({
 jest.mock("react", () => ({
   ...jest.requireActual("react"),
   useState: jest.fn(),
+  useDispatch: () => mockDispatch,
 }));
+
+beforeEach(() => jest.clearAllMocks());
 
 describe("Give component PictogramSearch", () => {
   beforeEach(() => {
@@ -23,7 +27,7 @@ describe("Give component PictogramSearch", () => {
     test("Then should show text search in input", () => {
       const expectText = "Search";
 
-      render(<PictogramSearch action={mockAction} />);
+      render(<PictogramSearch indexPict={0} />);
       const input = screen.getByRole("textbox", { name: expectText });
 
       expect(input).toBeInTheDocument();
@@ -36,7 +40,7 @@ describe("Give component PictogramSearch", () => {
       const expertButton = "toSearch";
       const typeWordSearch = "boy";
 
-      render(<PictogramSearch action={mockAction} />);
+      render(<PictogramSearch indexPict={0} />);
 
       const input = screen.getByRole("textbox", { name: expectInput });
       const button = screen.getByRole("button", { name: expertButton });
@@ -54,7 +58,7 @@ describe("Give component PictogramSearch", () => {
   });
 
   describe("When state findPict is length 2", () => {
-    test("Then should it's same length to image", () => {
+    test("Then should it's same length to image and click", () => {
       const expectFindPict = [324, 234];
       const expectLabelImage = "pictogram";
       const mockSetFindPict = jest.fn();
@@ -64,21 +68,25 @@ describe("Give component PictogramSearch", () => {
         mockSetFindPict,
       ]);
 
-      render(<PictogramSearch action={mockAction} />);
+      render(<PictogramSearch indexPict={0} />);
 
       const images = screen.getAllByRole("img", { name: expectLabelImage });
+      const buttons = screen.getAllByRole("button", { name: "pictogram" });
+
+      fireEvent.click(buttons[0]);
+      fireEvent.click(buttons[1]);
 
       expect(images).toHaveLength(expectFindPict.length);
     });
   });
 
   describe("When state findPict is length 1 with -1", () => {
-    test("Then should show alert to not found", () => {
+    test("Then should show alert to not found", async () => {
       const mockSetFindPict = jest.fn();
 
       (useState as jest.Mock).mockImplementation(() => [[-1], mockSetFindPict]);
 
-      render(<PictogramSearch action={mockAction} />);
+      render(<PictogramSearch indexPict={0} />);
 
       const alert = screen.getByRole("alert", { name: "" });
 
