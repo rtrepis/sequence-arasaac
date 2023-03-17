@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from "../../utils/test-utils";
 import PictogramCard from "./PictogramCard";
 
 let pictogramEmpty: PictogramI = {
-  index: 1,
+  index: 0,
   number: 26527,
   border: {
     in: { color: "blue", radius: 20, size: 2 },
@@ -21,10 +21,10 @@ jest.mock("react-redux", () => ({
 beforeEach(() => jest.clearAllMocks());
 
 describe("Give a PictogramShow component", () => {
-  describe("When it's rendered with view 'complete' and index '1'", () => {
+  describe("When it's rendered with view 'complete' and pictogramEmpty", () => {
     test("Then should show a pictogram, index, text pictogram", () => {
       const expectPictogram = {
-        index: "1",
+        indexTitle: "1",
         number: 2222,
         altImage: "Pictogram",
         textPictogram: "Empty",
@@ -32,7 +32,9 @@ describe("Give a PictogramShow component", () => {
 
       render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
       const pictogramShow = {
-        header: screen.getByRole("heading", { name: expectPictogram.index }),
+        header: screen.getByRole("heading", {
+          name: expectPictogram.indexTitle,
+        }),
         image: screen.getByRole("img", { name: expectPictogram.altImage }),
         footer: screen.getByRole("heading", {
           name: expectPictogram.textPictogram,
@@ -45,7 +47,7 @@ describe("Give a PictogramShow component", () => {
     });
   });
 
-  describe("When it's rendered with view 'header' and index '1'", () => {
+  describe("When it's rendered with view 'header' and pictogramEmpty", () => {
     test("Then should show a pictogram and index", () => {
       const expectPictogram = {
         index: "1",
@@ -148,7 +150,7 @@ describe("Give a PictogramShow component", () => {
         card: "card-pictogram",
       };
       const variant = "plane";
-      const expectStyle = "0px 0px 0px 0px #fff";
+      const expectStyle = "none";
 
       render(
         <PictogramCard
@@ -179,29 +181,6 @@ describe("Give a PictogramShow component", () => {
       const pathImage = image.getAttribute("src");
 
       expect(pathImage).toStrictEqual(expectedPath);
-    });
-  });
-
-  describe("When user is click on card", () => {
-    test("Then should dispatch action with payload open pictEditModel", () => {
-      const cardClick = "card-pictogram";
-      const expectAction = {
-        payload: { indexPict: 0, isOpen: true },
-        type: "uiState/pictEditModal",
-      };
-
-      render(
-        <PictogramCard
-          pictogram={pictogramEmpty}
-          view="complete"
-          variant="plane"
-        />
-      );
-      const card = screen.getByTestId(cardClick);
-
-      fireEvent.click(card);
-
-      expect(mockDispatch).toBeCalledWith(expectAction);
     });
   });
 });

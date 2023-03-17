@@ -22,11 +22,11 @@ const preloadedState = {
         in: { color: "blue", radius: 20, size: 2 },
         out: { color: "green", radius: 20, size: 2 },
       },
+      skin: "black",
     },
   ],
   ui: {
     setting: { skin: "default" },
-    modal: { pictEdit: { isOpen: false, indexPict: NaN } },
   },
 };
 
