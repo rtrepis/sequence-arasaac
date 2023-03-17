@@ -8,13 +8,7 @@ interface PictEditModalProps {
 
 const PictEditList = ({ sequence }: PictEditModalProps): JSX.Element => {
   return (
-    <Grid
-      container
-      spacing={2}
-      rowSpacing={1}
-      alignContent={"center"}
-      sx={{ marginBlockStart: 2 }}
-    >
+    <Grid container alignContent={"center"} sx={{ marginBlockStart: 2 }}>
       {sequence.map((pictogram, index) => (
         <Grid
           item
