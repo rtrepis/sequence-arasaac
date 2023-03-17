@@ -1,5 +1,6 @@
 import {
   Button,
+  Divider,
   Stack,
   ToggleButton,
   Tooltip,
@@ -12,17 +13,17 @@ import { applyAllSettingItemActionCreator } from "../../app/slice/sequenceSlice"
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
 import { SettingItemI, UpdateSettingItemI } from "../../types/sequence";
 
-interface SettingItemProps {
+interface SettingCardProps {
   item: SettingItemI;
   action: (toUpdate: UpdateSettingItemI) => void;
   indexPict?: number;
 }
 
-const SettingItem = ({
+const SettingCard = ({
   item: { types, message: messageItem, name: nameItem },
   action,
   indexPict,
-}: SettingItemProps): JSX.Element => {
+}: SettingCardProps): JSX.Element => {
   const settingItemValue = useAppSelector((state) =>
     indexPict === undefined
       ? state.ui.setting[nameItem]
@@ -63,10 +64,16 @@ const SettingItem = ({
   });
 
   return (
-    <Stack direction={"row"} alignItems="center" flexWrap={"wrap"}>
+    <Stack
+      display={"flex"}
+      flexDirection={"row"}
+      justifyContent={"space-between"}
+      alignItems={"center"}
+    >
       <Typography variant="body1" sx={{ fontWeight: "bold" }} component="h4">
         <FormattedMessage {...messageItem} />
       </Typography>
+      <Divider />
 
       <StyledToggleButtonGroup
         value={itemSelect}
@@ -119,6 +126,8 @@ const SettingItem = ({
         </ToggleButton>
       </StyledToggleButtonGroup>
 
+      <Divider />
+
       <Button
         variant="contained"
         sx={{
@@ -141,4 +150,4 @@ const SettingItem = ({
   );
 };
 
-export default SettingItem;
+export default SettingCard;
