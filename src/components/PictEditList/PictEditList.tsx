@@ -1,23 +1,21 @@
 import { Grid } from "@mui/material";
 import { SequenceI } from "../../types/sequence";
-import PictogramCard from "../PictogramCard/PictogramCard";
+import PictEdit from "../PictEdit/PictEdit";
 
-interface PictogramShowListProps {
+interface PictEditModalProps {
   sequence: SequenceI;
 }
 
-const PictogramCardList = ({
-  sequence,
-}: PictogramShowListProps): JSX.Element => {
+const PictEditList = ({ sequence }: PictEditModalProps): JSX.Element => {
   return (
     <Grid
       container
       spacing={2}
       rowSpacing={1}
       alignContent={"center"}
-      sx={{ margin: 2 }}
+      sx={{ marginBlockStart: 2 }}
     >
-      {sequence.map((pictogram) => (
+      {sequence.map((pictogram, index) => (
         <Grid
           item
           xs={false}
@@ -26,11 +24,11 @@ const PictogramCardList = ({
           alignItems={"center"}
           key={`pict${pictogram.index}`}
         >
-          <PictogramCard view={"complete"} pictogram={pictogram} />
+          <PictEdit pictogram={pictogram} />
         </Grid>
       ))}
     </Grid>
   );
 };
 
-export default PictogramCardList;
+export default PictEditList;

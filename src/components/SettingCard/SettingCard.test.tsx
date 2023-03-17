@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from "../../utils/test-utils";
 import Settings from "../../model/Settings";
-import SettingItem from "./SettingItem";
+import SettingCard from "./SettingCard";
 
 describe("Give a component Setting Item", () => {
   describe("When rendered whit 'skins' array", () => {
@@ -9,7 +9,7 @@ describe("Give a component Setting Item", () => {
       const skins = ["Asian", "Aztec", "Black", "Mulatto", "White"];
       const mockAction = jest.fn();
 
-      render(<SettingItem item={Settings.skins} action={mockAction} />);
+      render(<SettingCard item={Settings.skins} action={mockAction} />);
 
       skins.forEach((skin) => {
         const buttonsSkin = screen.getByRole("button", { name: skin });
@@ -33,7 +33,7 @@ describe("Give a component Setting Item", () => {
       const expectButtons = ["Apply All", "Default"];
       const mockAction = jest.fn();
 
-      render(<SettingItem item={Settings.skins} action={mockAction} />);
+      render(<SettingCard item={Settings.skins} action={mockAction} />);
 
       expectButtons.forEach((expectButton) => {
         const button = screen.getByRole("button", { name: expectButton });

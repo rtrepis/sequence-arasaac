@@ -25,7 +25,7 @@ const PictogramAmount = (): JSX.Element => {
   const [amountPict, setAmountPict] = useState(initialAmountPict);
 
   const pictogramEmpty: PictogramI = {
-    index: amountPict + 1,
+    index: amountPict,
     number: 26527,
     border: {
       in: { color: "blue", radius: 20, size: 2 },
