@@ -1,42 +1,98 @@
 {
-  "components.pictogramAmount.helperText": {
-    "defaultMessage": "Entra el nombre de pictogrames de la seqüència",
-    "description": "Helper text amount pictograms"
+  "components.barNavigation.title": {
+    "defaultMessage": "Secuencia - AraSaac",
+    "description": "App title translate Sequence"
   },
-  "components.pictogramAmount.label": {
-    "defaultMessage": "Pictogrames:",
+  "components.pictEdit.modal.description": {
+    "defaultMessage": "Puedes editar el pictograma",
+    "description": "Description modal"
+  },
+  "components.pictEdit.modal.label": {
+    "defaultMessage": "Editar Pictograma",
+    "description": "Title modal"
+  },
+  "components.pictogramAmount": {
+    "defaultMessage": "Pictogramas:",
     "description": "Amount Pictogram"
   },
-  "components.settingItem.applyAll.label": {
-    "defaultMessage": "Aplica-ho tot",
+  "components.pictogramAmount.Subtract.label": {
+    "defaultMessage": "Restar pictograma",
+    "description": "Subtract a pictogram from the amounts"
+  },
+  "components.pictogramAmount.add.label": {
+    "defaultMessage": "Añadir pictograma",
+    "description": "Add a pictogram to the amounts"
+  },
+  "components.pictogramAmount.helperText": {
+    "defaultMessage": "Introduzca el número de pictogramas en la secuencia",
+    "description": "Helper text amount pictograms"
+  },
+  "components.pictogramCard.pictogram": {
+    "defaultMessage": "Imagen de pictograma",
+    "description": "Pictogram image"
+  },
+  "components.pictogramSearch.alert": {
+    "defaultMessage": "No se encontró ningún pictograma con esta palabra - ¡Prueba otra palabra!",
+    "description": "Search pictogram not founded results"
+  },
+  "components.pictogramSearch.helperText": {
+    "defaultMessage": "Motor de búsqueda de Pictogramas",
+    "description": "helper text"
+  },
+  "components.pictogramSearch.label": {
+    "defaultMessage": "Buscar",
+    "description": "search pictograms"
+  },
+  "components.pictogramSearch.pictogram": {
+    "defaultMessage": "Pictograma",
+    "description": "Pictogram"
+  },
+  "components.settingCard.applyAll.label": {
+    "defaultMessage": "Aplicar a todos",
     "description": "apply to all pictograms"
   },
+  "components.settingCard.default.label": {
+    "defaultMessage": "Por defecto",
+    "description": "Not type setting "
+  },
+  "components.settingDefaultCardList.close": {
+    "defaultMessage": "cerrar",
+    "description": "close Settings Default "
+  },
+  "components.settingDefaultCardList.settings.title": {
+    "defaultMessage": "Configuraciones por defecto",
+    "description": "Settings Default "
+  },
   "components.settingItem.default.label": {
-    "defaultMessage": "Per defecte",
+    "defaultMessage": "Por defecto",
     "description": "Type setting item"
   },
+  "components.settingPictCardList.settings.label": {
+    "defaultMessage": "Configuraciones de Pictograma",
+    "description": "Settings Pictogram "
+  },
   "settings.skins.asian": {
-    "defaultMessage": "Asiàtic",
+    "defaultMessage": "Asiático",
     "description": "Type of setting skin"
   },
-  "settings.skins.aztec>": {
-    "defaultMessage": "Asteca",
+  "settings.skins.aztec": {
+    "defaultMessage": "Azteca",
     "description": "Type of setting skin"
   },
   "settings.skins.black": {
-    "defaultMessage": "Negre",
+    "defaultMessage": "Negro",
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Pell",
+    "defaultMessage": "Aspecto",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
-    "defaultMessage": "Mulat",
+    "defaultMessage": "Mulato",
     "description": "Type of setting skin"
   },
   "settings.skins.white": {
-    "defaultMessage": "Blanc",
+    "defaultMessage": "Blanco",
     "description": "Type of setting skin"
   }
 }

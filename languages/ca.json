@@ -1,27 +1,75 @@
 {
-  "components.pictogramAmount.add.label": {
-    "defaultMessage": "Afegir pictogrames",
-    "description": "Add a pictogram to the amounts"
+  "components.barNavigation.title": {
+    "defaultMessage": "Seqüències - AraSaac",
+    "description": "App title translate Sequence"
   },
-  "components.pictogramAmount.helperText": {
-    "defaultMessage": "Entra el nombre de pictogrames de la seqüència",
-    "description": "Helper text amount pictograms"
+  "components.pictEdit.modal.description": {
+    "defaultMessage": "Tu pots editar els pictogrames",
+    "description": "Description modal"
   },
-  "components.pictogramAmount.label": {
+  "components.pictEdit.modal.label": {
+    "defaultMessage": "Editar Pictograma",
+    "description": "Title modal"
+  },
+  "components.pictogramAmount": {
     "defaultMessage": "Pictogrames:",
     "description": "Amount Pictogram"
   },
-  "components.pictogramAmount.subtract.label": {
-    "defaultMessage": "Restar pictogrames",
+  "components.pictogramAmount.Subtract.label": {
+    "defaultMessage": "Restar pictograma",
     "description": "Subtract a pictogram from the amounts"
   },
-  "components.settingItem.applyAll.label": {
-    "defaultMessage": "Aplica-ho tot",
+  "components.pictogramAmount.add.label": {
+    "defaultMessage": "Afegir pictograma",
+    "description": "Add a pictogram to the amounts"
+  },
+  "components.pictogramAmount.helperText": {
+    "defaultMessage": "Introdueix el nombre de pictogrames de la seqüència",
+    "description": "Helper text amount pictograms"
+  },
+  "components.pictogramCard.pictogram": {
+    "defaultMessage": "Imatge pictograma",
+    "description": "Pictogram image"
+  },
+  "components.pictogramSearch.alert": {
+    "defaultMessage": "No s'ha trobat cap pictograma, amb aquesta paraula - Intenta-ho amb una altra paraula!",
+    "description": "Search pictogram not founded results"
+  },
+  "components.pictogramSearch.helperText": {
+    "defaultMessage": "Cercador de Pictogrames",
+    "description": "helper text"
+  },
+  "components.pictogramSearch.label": {
+    "defaultMessage": "Cercar",
+    "description": "search pictograms"
+  },
+  "components.pictogramSearch.pictogram": {
+    "defaultMessage": "Pictograma",
+    "description": "Pictogram"
+  },
+  "components.settingCard.applyAll.label": {
+    "defaultMessage": "Aplicar-ho a tots",
     "description": "apply to all pictograms"
+  },
+  "components.settingCard.default.label": {
+    "defaultMessage": "Per defecte",
+    "description": "Not type setting "
+  },
+  "components.settingDefaultCardList.close": {
+    "defaultMessage": "tancar",
+    "description": "close Settings Default "
+  },
+  "components.settingDefaultCardList.settings.title": {
+    "defaultMessage": "Configuracions per defecte",
+    "description": "Settings Default "
   },
   "components.settingItem.default.label": {
     "defaultMessage": "Per defecte",
     "description": "Type setting item"
+  },
+  "components.settingPictCardList.settings.label": {
+    "defaultMessage": "Configuracions del Pictograma",
+    "description": "Settings Pictogram "
   },
   "settings.skins.asian": {
     "defaultMessage": "Asiàtic",
@@ -48,3 +96,4 @@
     "description": "Type of setting skin"
   }
 }
+
