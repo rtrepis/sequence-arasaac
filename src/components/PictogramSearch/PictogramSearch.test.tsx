@@ -25,9 +25,21 @@ describe("Give component PictogramSearch", () => {
   describe("When rendered with word pictogram empty", () => {
     test("Then should show text search in input", () => {
       const expectText = "Search";
+      const mockState = {
+        ...preloadedState,
+        sequence: [
+          {
+            ...preloadedState.sequence[0],
+            word: {
+              ...preloadedState.sequence[0].word,
+              keyWord: "Empty",
+            },
+          },
+        ],
+      };
 
       render(<PictogramSearch indexPict={0} />, {
-        preloadedState: preloadedState,
+        preloadedState: mockState,
       });
       const input = screen.getByRole("textbox", { name: expectText });
 
