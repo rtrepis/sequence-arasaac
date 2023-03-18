@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UpdateSettingItemI } from "../../types/sequence";
+import { UpdateSettingI } from "../../types/sequence";
 import { UiI } from "../../types/ui";
 
 const uiInitialState: UiI = {
@@ -12,7 +12,7 @@ const uiSlice = createSlice({
   name: "uiState",
   initialState: uiInitialState,
   reducers: {
-    updateSkin: (previousUi, action: PayloadAction<UpdateSettingItemI>) => ({
+    updateSkin: (previousUi, action: PayloadAction<UpdateSettingI>) => ({
       ...previousUi,
       setting: { ...previousUi.setting, skin: action.payload.value },
     }),

@@ -30,7 +30,7 @@ describe("Give a component PictEdit", () => {
   };
   describe("When it's rendered with pictogram", () => {
     test("Then should show button, and click open Modal", () => {
-      const expectButton = `${pictogram.index + 1} Pictogram ${
+      const expectButton = `${pictogram.index + 1} Pictogram image ${
         pictogram.word.keyWord
       }`;
 
@@ -54,7 +54,7 @@ describe("Give a component PictEdit", () => {
     jest.useFakeTimers();
     test("Then should show button Close, and click close Modal", () => {
       const expectButton = "Close";
-      const openButton = `${pictogram.index + 1} Pictogram ${
+      const openButton = `${pictogram.index + 1} Pictogram image ${
         pictogram.word.keyWord
       }`;
 

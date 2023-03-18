@@ -3,7 +3,7 @@ export interface ProtoPictogramI {
   number: number;
 }
 
-export type SkinsI =
+export type SkinsT =
   | "asian"
   | "aztec"
   | "black"
@@ -31,10 +31,10 @@ export interface PictogramI extends ProtoPictogramI {
     in?: BorderPictI;
     out?: BorderPictI;
   };
-  skin?: SkinsI;
+  skin?: SkinsT;
 }
 
-export type SettingItemsI = "skin";
+export type SettingsT = "skin";
 
 export interface MessageI {
   id: string;
@@ -42,24 +42,24 @@ export interface MessageI {
   defaultMessage: string;
 }
 
-export interface SettingItemTypeI {
-  name: SkinsI;
+export interface TypesLangI {
+  name: SkinsT;
   message?: MessageI;
 }
 
-export interface SettingItemI {
-  name: SettingItemsI;
-  types: SettingItemTypeI[];
+export interface SettingLangI {
+  name: SettingsT;
+  types: TypesLangI[];
   message?: MessageI;
 }
 export type SequenceI = PictogramI[];
 
-export interface SettingsI {
-  skins: SettingItemI;
+export interface SettingsLangI {
+  skins: SettingLangI;
 }
 
-export interface UpdateSettingItemI {
+export interface UpdateSettingI {
   index?: number;
-  item: SettingItemsI;
-  value: SkinsI;
+  setting: SettingsT;
+  value: SkinsT;
 }

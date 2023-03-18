@@ -12,7 +12,7 @@ beforeEach(() => jest.clearAllMocks());
 describe("Give a component Setting default card list", () => {
   describe("When it's rendered", () => {
     test("Then should show button to open defaults and close click", () => {
-      const expectOpen = "setting default";
+      const expectOpen = "Settings default";
       const expectClose = "close";
 
       render(<SettingsDefaultCardList />);
@@ -31,13 +31,13 @@ describe("Give a component Setting default card list", () => {
     test("Then should call dispatch with action update setting", () => {
       const expectButton = "Black";
       const actionCreator = {
-        payload: { item: "skin", value: "black" },
+        payload: { setting: "skin", value: "black" },
         type: "uiState/updateSkin",
       };
 
       render(<SettingsDefaultCardList />);
       const buttonOpen = screen.getByRole("button", {
-        name: "setting default",
+        name: "Settings default",
       });
       fireEvent.click(buttonOpen);
 

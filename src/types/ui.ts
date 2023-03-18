@@ -1,11 +1,11 @@
-import { SettingItemsI, SkinsI } from "./sequence";
+import { SettingsT, SkinsT } from "./sequence";
 
 export interface UiI {
   setting: {
-    skin: SkinsI;
+    skin: SkinsT;
   };
 }
-export interface SettingItemPayloadI {
-  item: SettingItemsI;
-  value: SkinsI;
+export interface SettingPayloadI {
+  setting: SettingsT;
+  value: SkinsT;
 }
