@@ -11,7 +11,8 @@ import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { applyAllSettingActionCreator } from "../../app/slice/sequenceSlice";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
-import { SettingLangI, UpdateSettingI } from "../../types/sequence";
+import { UpdateSettingI } from "../../types/sequence";
+import { SettingLangI } from "../../types/sequence.lang";
 import { messages } from "./SettingCard.lang";
 import { button__ApplyAll } from "./SettingCard.styled";
 

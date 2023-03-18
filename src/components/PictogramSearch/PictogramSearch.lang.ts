@@ -21,6 +21,11 @@ const messages = defineMessages({
     defaultMessage: "No pictogram found with this word - Try another word!",
     description: "Search pictogram not founded results",
   },
+  empty: {
+    id: "components.pictogramSearch.empty",
+    defaultMessage: "Empty",
+    description: "Empty pictogram",
+  },
 });
 
 export default messages;

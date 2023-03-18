@@ -33,7 +33,7 @@ const PictogramAmount = (): JSX.Element => {
       out: { color: "green", radius: 20, size: 2 },
     },
     skin: skin,
-    word: { keyWord: "Empty" },
+    word: { keyWord: `${intl.formatMessage(messages.empty)}`, pictograms: [] },
   };
 
   const handleChangesAmount = (operator: number) => {
