@@ -1,98 +1,98 @@
 {
   "components.barNavigation.title": {
-    "defaultMessage": "Sequence - AraSaac",
+    "defaultMessage": "Secuencia - AraSaac",
     "description": "App title translate Sequence"
   },
   "components.pictEdit.modal.description": {
-    "defaultMessage": "You can edit pictogram",
+    "defaultMessage": "Puedes editar el pictograma",
     "description": "Description modal"
   },
   "components.pictEdit.modal.label": {
-    "defaultMessage": "Edit Pictogram",
+    "defaultMessage": "Editar Pictograma",
     "description": "Title modal"
   },
   "components.pictogramAmount": {
-    "defaultMessage": "Pictograms:",
+    "defaultMessage": "Pictogramas:",
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.Subtract.label": {
-    "defaultMessage": "Subtract pictogram",
+    "defaultMessage": "Restar pictograma",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Add pictogram",
+    "defaultMessage": "Añadir pictograma",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Entra el nombre de pictogrames de la seqüència",
+    "defaultMessage": "Introduzca el número de pictogramas en la secuencia",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
-    "defaultMessage": "Pictogram image",
+    "defaultMessage": "Imagen de pictograma",
     "description": "Pictogram image"
   },
   "components.pictogramSearch.alert": {
-    "defaultMessage": "No pictogram found with this word - Try another word!",
+    "defaultMessage": "No se encontró ningún pictograma con esta palabra - ¡Prueba otra palabra!",
     "description": "Search pictogram not founded results"
   },
   "components.pictogramSearch.helperText": {
-    "defaultMessage": "Pictogram search engine",
+    "defaultMessage": "Motor de búsqueda de Pictogramas",
     "description": "helper text"
   },
   "components.pictogramSearch.label": {
-    "defaultMessage": "Search",
+    "defaultMessage": "Buscar",
     "description": "search pictograms"
   },
   "components.pictogramSearch.pictogram": {
-    "defaultMessage": "Pictogram",
+    "defaultMessage": "Pictograma",
     "description": "Pictogram"
   },
   "components.settingCard.applyAll.label": {
-    "defaultMessage": "Apply All",
+    "defaultMessage": "Aplicar a todos",
     "description": "apply to all pictograms"
   },
   "components.settingCard.default.label": {
-    "defaultMessage": "Default",
+    "defaultMessage": "Por defecto",
     "description": "Not type setting "
   },
   "components.settingDefaultCardList.close": {
-    "defaultMessage": "close",
+    "defaultMessage": "cerrar",
     "description": "close Settings Default "
   },
   "components.settingDefaultCardList.settings.title": {
-    "defaultMessage": "Settings default",
+    "defaultMessage": "Configuraciones por defecto",
     "description": "Settings Default "
   },
   "components.settingItem.default.label": {
-    "defaultMessage": "Per defecte",
+    "defaultMessage": "Por defecto",
     "description": "Type setting item"
   },
   "components.settingPictCardList.settings.label": {
-    "defaultMessage": "Settings Pictogram",
+    "defaultMessage": "Configuraciones de Pictograma",
     "description": "Settings Pictogram "
   },
   "settings.skins.asian": {
-    "defaultMessage": "Asiàtic",
+    "defaultMessage": "Asiático",
     "description": "Type of setting skin"
   },
   "settings.skins.aztec": {
-    "defaultMessage": "Aztec",
+    "defaultMessage": "Azteca",
     "description": "Type of setting skin"
   },
   "settings.skins.black": {
-    "defaultMessage": "Negre",
+    "defaultMessage": "Negro",
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Pell",
+    "defaultMessage": "Aspecto",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
-    "defaultMessage": "Mulat",
+    "defaultMessage": "Mulato",
     "description": "Type of setting skin"
   },
   "settings.skins.white": {
-    "defaultMessage": "Blanc",
+    "defaultMessage": "Blanco",
     "description": "Type of setting skin"
   }
 }
