@@ -1,5 +1,5 @@
 import { defineMessage, defineMessages } from "react-intl";
-import { SettingsLangI } from "../../types/sequence";
+import { SettingsLangI } from "../../types/sequence.lang";
 
 export const Settings: SettingsLangI = {
   skins: {

@@ -8,12 +8,19 @@ import { CssBaseline } from "@mui/material";
 import { IntlProvider } from "react-intl";
 import messages from "../languages/en.json";
 import { uiReducer } from "../app/slice/uiSlice";
+import { SequenceI } from "../types/sequence";
+import { UiI } from "../types/ui";
 
 interface WrapperProps {
   children: JSX.Element | JSX.Element[];
 }
 
-const preloadedState = {
+interface StateI {
+  sequence: SequenceI;
+  ui: UiI;
+}
+
+const preloadedState: StateI = {
   sequence: [
     {
       index: 0,
@@ -23,6 +30,11 @@ const preloadedState = {
         out: { color: "green", radius: 20, size: 2 },
       },
       skin: "black",
+      word: {
+        keyWord: "test",
+        pictograms: [11, 22, 33],
+        userText: "UserTextTest",
+      },
     },
   ],
   ui: {

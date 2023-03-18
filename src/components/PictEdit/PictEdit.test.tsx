@@ -1,22 +1,12 @@
-import { fireEvent, render, screen } from "../../utils/test-utils";
+import {
+  fireEvent,
+  preloadedState,
+  render,
+  screen,
+} from "../../utils/test-utils";
 import PictEdit from "./PictEdit";
 
-let preloadedStateMock = {
-  sequence: [
-    {
-      index: 0,
-      number: 26527,
-      border: {
-        in: { color: "blue", radius: 20, size: 2 },
-        out: { color: "green", radius: 20, size: 2 },
-      },
-      word: { keyWord: "Empty" },
-    },
-  ],
-  ui: {
-    setting: { skin: "default" },
-  },
-};
+const mockSequence = preloadedState.sequence[0];
 
 describe("Give a component PictEdit", () => {
   const pictogram = {
@@ -26,7 +16,7 @@ describe("Give a component PictEdit", () => {
       in: { color: "blue", radius: 20, size: 2 },
       out: { color: "green", radius: 20, size: 2 },
     },
-    word: { keyWord: "Empty" },
+    word: { ...mockSequence.word, keyWord: "Empty" },
   };
   describe("When it's rendered with pictogram", () => {
     test("Then should show button, and click open Modal", () => {
@@ -35,7 +25,7 @@ describe("Give a component PictEdit", () => {
       }`;
 
       render(<PictEdit pictogram={pictogram} />, {
-        preloadedState: preloadedStateMock,
+        preloadedState: preloadedState,
       });
 
       const button = screen.getByRole("button", { name: expectButton });
@@ -59,7 +49,7 @@ describe("Give a component PictEdit", () => {
       }`;
 
       render(<PictEdit pictogram={pictogram} />, {
-        preloadedState: preloadedStateMock,
+        preloadedState: preloadedState,
       });
 
       const button = screen.getByRole("button", { name: openButton });

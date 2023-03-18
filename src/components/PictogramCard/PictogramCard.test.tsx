@@ -9,7 +9,7 @@ let pictogramEmpty: PictogramI = {
     in: { color: "blue", radius: 20, size: 2 },
     out: { color: "green", radius: 20, size: 2 },
   },
-  word: { keyWord: "Empty" },
+  word: { keyWord: "Empty", pictograms: [26527] },
 };
 
 const mockDispatch = jest.fn();
