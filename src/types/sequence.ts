@@ -19,6 +19,8 @@ export interface BorderPictI {
 
 export interface WordI {
   keyWord: string;
+  userText?: string;
+  pictograms: number[];
 }
 
 export interface UpdatePictWordI {
@@ -36,27 +38,7 @@ export interface PictogramI extends ProtoPictogramI {
 
 export type SettingsT = "skin";
 
-export interface MessageI {
-  id: string;
-  description?: string;
-  defaultMessage: string;
-}
-
-export interface TypesLangI {
-  name: SkinsT;
-  message?: MessageI;
-}
-
-export interface SettingLangI {
-  name: SettingsT;
-  types: TypesLangI[];
-  message?: MessageI;
-}
 export type SequenceI = PictogramI[];
-
-export interface SettingsLangI {
-  skins: SettingLangI;
-}
 
 export interface UpdateSettingI {
   index?: number;

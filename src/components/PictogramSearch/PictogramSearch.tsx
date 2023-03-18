@@ -10,31 +10,28 @@ import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-  upDatePictNumberActionCreator,
-  upDatePictWordActionCreator,
-} from "../../app/slice/sequenceSlice";
+import { upDatePictNumberActionCreator } from "../../app/slice/sequenceSlice";
 import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
-import { ProtoPictogramI, UpdatePictWordI } from "../../types/sequence";
+import { ProtoPictogramI } from "../../types/sequence";
 import toUrlPathApiAraSaac from "../../utils/toUrlPathApiAraSaac";
 import messages from "./PictogramSearch.lang";
-
 interface PropsPictogramSearch {
   indexPict: number;
 }
 
 const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
   const { skin } = useAppSelector((state) => state.ui.setting);
+  const { keyWord, pictograms } = useAppSelector(
+    (state) => state.sequence[indexPict].word
+  );
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const { getSearchPictogram } = useAraSaac();
 
-  const initialWord = "";
+  const initialWord =
+    keyWord === `${intl.formatMessage({ ...messages.empty })}` ? "" : keyWord;
   const [word, setWord] = useState(initialWord);
-
-  const initialFindPict: number[] = [];
-  const [findPict, setFindPict] = useState(initialFindPict);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWord(event.target.value);
@@ -46,21 +43,11 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
       number: upDateNumber,
     };
     dispatch(upDatePictNumberActionCreator(upDatePictNum));
-
-    const upDatePictWord: UpdatePictWordI = {
-      indexPict: indexPict,
-      word: { keyWord: word },
-    };
-    dispatch(upDatePictWordActionCreator(upDatePictWord));
   };
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
-    const getPromise = await getSearchPictogram(word);
-
-    getPromise === "Error 404, not found"
-      ? setFindPict([-1])
-      : setFindPict(getPromise);
+    await getSearchPictogram(word, indexPict);
   };
 
   return (
@@ -96,8 +83,8 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
         />
       </form>
       <StyledToggleButtonGroup>
-        {findPict[0] !== -1 &&
-          findPict.map((pictogram, index) => (
+        {pictograms[0] !== -1 &&
+          pictograms.map((pictogram, index) => (
             <ToggleButton
               value={pictogram}
               aria-label={`${intl.formatMessage({
@@ -115,7 +102,7 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
             </ToggleButton>
           ))}
       </StyledToggleButtonGroup>
-      {findPict[0] === -1 && (
+      {pictograms[0] === -1 && (
         <Alert severity="info" sx={{ maxWidth: 280 }}>
           <FormattedMessage {...messages.alert} />
         </Alert>

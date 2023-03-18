@@ -1,6 +1,11 @@
-import { render, screen, act, fireEvent } from "../../utils/test-utils";
+import {
+  render,
+  screen,
+  act,
+  fireEvent,
+  preloadedState,
+} from "../../utils/test-utils";
 import PictogramSearch from "./PictogramSearch";
-import { useState } from "react";
 
 let mockAction = jest.fn();
 const mockDispatch = jest.fn();
@@ -11,23 +16,19 @@ jest.mock("../../hooks/useAraSaac", () => () => ({
 
 jest.mock("react", () => ({
   ...jest.requireActual("react"),
-  useState: jest.fn(),
   useDispatch: () => mockDispatch,
 }));
 
 beforeEach(() => jest.clearAllMocks());
 
 describe("Give component PictogramSearch", () => {
-  beforeEach(() => {
-    (useState as jest.Mock).mockImplementation(
-      jest.requireActual("react").useState
-    );
-  });
-  describe("When rendered with array findPictogram empty", () => {
+  describe("When rendered with word pictogram empty", () => {
     test("Then should show text search in input", () => {
       const expectText = "Search";
 
-      render(<PictogramSearch indexPict={0} />);
+      render(<PictogramSearch indexPict={0} />, {
+        preloadedState: preloadedState,
+      });
       const input = screen.getByRole("textbox", { name: expectText });
 
       expect(input).toBeInTheDocument();
@@ -35,12 +36,15 @@ describe("Give component PictogramSearch", () => {
   });
 
   describe("When user typed word and click search", () => {
-    test("Then should it's called mockAction", () => {
+    test("Then should it's called mockAction with typed and indexPict", () => {
       const expectInput = "Search";
       const expertButton = "toSearch";
       const typeWordSearch = "boy";
+      const indexPict = 0;
 
-      render(<PictogramSearch indexPict={0} />);
+      render(<PictogramSearch indexPict={indexPict} />, {
+        preloadedState: preloadedState,
+      });
 
       const input = screen.getByRole("textbox", { name: expectInput });
       const button = screen.getByRole("button", { name: expertButton });
@@ -53,25 +57,33 @@ describe("Give component PictogramSearch", () => {
         fireEvent.click(button);
       });
 
-      expect(mockAction).toBeCalledWith(typeWordSearch);
+      expect(mockAction).toHaveBeenCalledWith(typeWordSearch, indexPict);
     });
   });
 
   describe("When state findPict is length 2", () => {
     test("Then should it's same length to image and click", () => {
       const expectFindPict = [324, 234];
-      const expectLabelImage = "Pictogram";
-      const mockSetFindPict = jest.fn();
+      const expectLabelImage = "Pictogram test";
+      const mockState = {
+        ...preloadedState,
+        sequence: [
+          {
+            ...preloadedState.sequence[0],
+            word: {
+              ...preloadedState.sequence[0].word,
+              pictograms: expectFindPict,
+            },
+          },
+        ],
+      };
 
-      (useState as jest.Mock).mockImplementation(() => [
-        [324, 234],
-        mockSetFindPict,
-      ]);
-
-      render(<PictogramSearch indexPict={0} />);
+      render(<PictogramSearch indexPict={0} />, {
+        preloadedState: mockState,
+      });
 
       const images = screen.getAllByRole("img", {
-        name: `${expectLabelImage} ${expectFindPict}`,
+        name: `${expectLabelImage}`,
       });
       const buttons = screen.getAllByRole("button", {
         name: `Pictogram`,
@@ -86,11 +98,23 @@ describe("Give component PictogramSearch", () => {
 
   describe("When state findPict is length 1 with -1", () => {
     test("Then should show alert to not found", async () => {
-      const mockSetFindPict = jest.fn();
+      const expectFindPict = [-1];
+      const mockState = {
+        ...preloadedState,
+        sequence: [
+          {
+            ...preloadedState.sequence[0],
+            word: {
+              ...preloadedState.sequence[0].word,
+              pictograms: expectFindPict,
+            },
+          },
+        ],
+      };
 
-      (useState as jest.Mock).mockImplementation(() => [[-1], mockSetFindPict]);
-
-      render(<PictogramSearch indexPict={0} />);
+      render(<PictogramSearch indexPict={0} />, {
+        preloadedState: mockState,
+      });
 
       const alert = screen.getByRole("alert", { name: "" });
 
