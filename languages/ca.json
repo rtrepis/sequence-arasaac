@@ -16,15 +16,15 @@
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.Subtract.label": {
-    "defaultMessage": "Restar un pictograma",
+    "defaultMessage": "Restar pictograma",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Afegir pictogrames",
+    "defaultMessage": "Afegir pictograma",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Entra el nombre de pictogrames de la seqüència",
+    "defaultMessage": "Introdueix el nombre de pictogrames de la seqüència",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
@@ -56,11 +56,11 @@
     "description": "Not type setting "
   },
   "components.settingDefaultCardList.close": {
-    "defaultMessage": "tanca",
+    "defaultMessage": "tancar",
     "description": "close Settings Default "
   },
   "components.settingDefaultCardList.settings.title": {
-    "defaultMessage": "Configuració per defecte",
+    "defaultMessage": "Configuracions per defecte",
     "description": "Settings Default "
   },
   "components.settingItem.default.label": {
@@ -68,7 +68,7 @@
     "description": "Type setting item"
   },
   "components.settingPictCardList.settings.label": {
-    "defaultMessage": "Configuració del Pictograma",
+    "defaultMessage": "Configuracions del Pictograma",
     "description": "Settings Pictogram "
   },
   "settings.skins.asian": {
