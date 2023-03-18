@@ -1,7 +1,7 @@
-import { defineMessage } from "react-intl";
-import { SettingsI } from "../types/sequence";
+import { defineMessage, defineMessages } from "react-intl";
+import { SettingsLangI } from "../../types/sequence";
 
-const Settings: SettingsI = {
+export const Settings: SettingsLangI = {
   skins: {
     name: "skin",
     message: defineMessage({
@@ -54,4 +54,15 @@ const Settings: SettingsI = {
   },
 };
 
-export default Settings;
+export const messages = defineMessages({
+  default: {
+    id: "components.settingCard.default.label",
+    defaultMessage: "Default",
+    description: "Not type setting ",
+  },
+  applyAll: {
+    id: "components.settingCard.applyAll.label",
+    defaultMessage: "Apply All",
+    description: "apply to all pictograms",
+  },
+});

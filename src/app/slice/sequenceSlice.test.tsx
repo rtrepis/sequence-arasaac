@@ -3,15 +3,15 @@ import {
   ProtoPictogramI,
   SequenceI,
   UpdatePictWordI,
-  UpdateSettingItemI,
+  UpdateSettingI,
 } from "../../types/sequence";
-import { SettingItemPayloadI } from "../../types/ui";
+import { SettingPayloadI } from "../../types/ui";
 import {
   addPictogramActionCreator,
   sequenceReducer,
   subtractPictogramActionCreator,
-  applyAllSettingItemActionCreator,
-  upDateSettingItemActionCreator,
+  applyAllSettingActionCreator,
+  upDateSettingActionCreator,
   upDatePictNumberActionCreator,
   upDatePictWordActionCreator,
 } from "./sequenceSlice";
@@ -85,31 +85,31 @@ describe("Given the reducer sequenceSlice", () => {
     });
   });
 
-  describe("When called 'applyAllSettingItem' with applyAllPayload", () => {
+  describe("When called 'applyAllsetting' with applyAllPayload", () => {
     test("Then should new state change all property of pictogram", () => {
       previousSequence = [
         { index: 0, number: 0, skin: "default", word: { keyWord: "" } },
       ];
-      const applyAllPayload: SettingItemPayloadI = {
-        item: "skin",
+      const applyAllPayload: SettingPayloadI = {
+        setting: "skin",
         value: "black",
       };
       const expectState = [
         { ...previousSequence[0], index: 0, number: 0, skin: "black" },
       ];
 
-      const actionCreator = applyAllSettingItemActionCreator(applyAllPayload);
+      const actionCreator = applyAllSettingActionCreator(applyAllPayload);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);
     });
   });
 
-  describe("When called 'upDateSettingItem' with UpdateSettingItem", () => {
+  describe("When called 'upDateSetting' with UpdateSetting", () => {
     test("Then should new state with update PictogramSetting", () => {
-      const upDatePictogramSetting: UpdateSettingItemI = {
+      const upDatePictogramSetting: UpdateSettingI = {
         index: 0,
-        item: "skin",
+        setting: "skin",
         value: "asian",
       };
       previousSequence = [
@@ -122,9 +122,7 @@ describe("Given the reducer sequenceSlice", () => {
         { ...previousSequence[1], index: 1, number: 0, skin: "black" },
       ];
 
-      const actionCreator = upDateSettingItemActionCreator(
-        upDatePictogramSetting
-      );
+      const actionCreator = upDateSettingActionCreator(upDatePictogramSetting);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);

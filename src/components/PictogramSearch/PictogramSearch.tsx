@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   upDatePictNumberActionCreator,
@@ -18,6 +18,7 @@ import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
 import { ProtoPictogramI, UpdatePictWordI } from "../../types/sequence";
 import toUrlPathApiAraSaac from "../../utils/toUrlPathApiAraSaac";
+import messages from "./PictogramSearch.lang";
 
 interface PropsPictogramSearch {
   indexPict: number;
@@ -72,18 +73,10 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
     >
       <form onSubmit={handleSubmit}>
         <TextField
-          label={intl.formatMessage({
-            id: "components.pictogramSearch.label",
-            defaultMessage: "Search",
-            description: "search pictograms",
-          })}
+          label={intl.formatMessage({ ...messages.search })}
           id={"search"}
           variant="outlined"
-          helperText={intl.formatMessage({
-            id: "components.pictogramSearch.helperText",
-            defaultMessage: "Pictogram search engine",
-            description: "helper text",
-          })}
+          helperText={intl.formatMessage({ ...messages.helperText })}
           InputProps={{
             endAdornment: (
               <InputAdornment
@@ -107,13 +100,15 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
           findPict.map((pictogram, index) => (
             <ToggleButton
               value={pictogram}
-              aria-label={`pictogram`}
+              aria-label={`${intl.formatMessage({
+                ...messages.pictogram,
+              })}`}
               key={pictogram + index}
               onClick={() => handleUpDatePictNumber(pictogram)}
             >
               <img
                 src={toUrlPathApiAraSaac(pictogram, skin)}
-                alt={`pictogram`}
+                alt={`${intl.formatMessage({ ...messages.pictogram })} ${word}`}
                 width={40}
                 height={40}
               />
@@ -122,7 +117,7 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
       </StyledToggleButtonGroup>
       {findPict[0] === -1 && (
         <Alert severity="info" sx={{ maxWidth: 280 }}>
-          No pictogram found with this word - Try another word!
+          <FormattedMessage {...messages.alert} />
         </Alert>
       )}
     </Stack>
