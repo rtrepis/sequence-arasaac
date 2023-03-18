@@ -1,5 +1,6 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { PictogramI } from "../../types/sequence";
+import toUrlPathApiAraSaac from "../../utils/toUrlPathApiAraSaac";
 
 interface PictogramCardProps {
   pictogram: PictogramI;
@@ -8,7 +9,7 @@ interface PictogramCardProps {
 }
 
 const PictogramCard = ({
-  pictogram: { index, number, border, skin },
+  pictogram: { index, number, border, skin, word },
   view,
   variant,
 }: PictogramCardProps): JSX.Element => {
@@ -16,6 +17,7 @@ const PictogramCard = ({
     <Card
       data-testid="card-pictogram"
       sx={{
+        minWidth: 200,
         maxWidth: 200,
         textAlign: "center",
         paddingInline: 1.5,
@@ -24,16 +26,18 @@ const PictogramCard = ({
         borderRadius: `${
           border?.out === undefined ? 20 : border?.out.radius
         }px`,
-        boxShadow: `${variant === undefined ? "" : "0px 0px 0px 0px #fff"}`,
+        boxShadow: `${variant === undefined ? "" : "none"}`,
         "&:hover": {
-          boxShadow: "0px 0px 10px 3px #A6A6A6",
+          boxShadow: `${
+            variant === undefined ? "0px 0px 10px 3px #A6A6A6" : "none"
+          }`,
         },
       }}
     >
       {(view === "complete" || view === "header") && (
         <CardContent>
           <Typography variant="body1" component="h3">
-            {index}
+            {index + 1}
           </Typography>
         </CardContent>
       )}
@@ -42,7 +46,7 @@ const PictogramCard = ({
       >
         <CardMedia
           component="img"
-          image={`https://api.arasaac.org/api/pictograms/${number}`}
+          image={toUrlPathApiAraSaac(number, skin)}
           alt="Pictogram"
           sx={{
             marginTop: `${view === "complete" ? 0 : 2}`,
@@ -59,7 +63,7 @@ const PictogramCard = ({
       {(view === "complete" || view === "footer") && (
         <CardContent>
           <Typography variant="body1" component="h3">
-            Pictogram Word
+            {word.keyWord}
           </Typography>
         </CardContent>
       )}

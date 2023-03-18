@@ -4,20 +4,25 @@ import { useSelector } from "react-redux";
 import "./App.css";
 import { RootState } from "./app/store";
 import PictogramAmount from "./components/PictogramAmount/PictogramAmount";
-import PictogramCardList from "./components/PictogramCardList/PictogramCardList";
-import SettingItem from "./components/SettingItem/SettingItem";
-import Settings from "./model/Settings";
+import BarNavigation from "./components/BarNavigation/BarNavigation";
+import PictEditList from "./components/PictEditList/PictEditList";
 
 const App = () => {
   const sequence = useSelector((state: RootState) => state.sequence);
 
   return (
-    <Stack alignItems={"center"}>
-      <h1 className="App">Sequence - AraSaac</h1>
-      <SettingItem item={Settings.skins} />
-      <PictogramAmount />
-      <PictogramCardList sequence={sequence} />
-    </Stack>
+    <>
+      <BarNavigation>
+        <>
+          <Stack direction={"column"} marginTop={2}>
+            <PictogramAmount />
+          </Stack>
+          <Stack alignItems={"center"}>
+            <PictEditList sequence={sequence} />
+          </Stack>
+        </>
+      </BarNavigation>
+    </>
   );
 };
 
