@@ -24,7 +24,7 @@
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Introduzca el número de pictogramas en la secuencia",
+    "defaultMessage": "Entra el nombre de pictogrames de la seqüència",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
@@ -64,7 +64,7 @@
     "description": "Settings Default "
   },
   "components.settingItem.default.label": {
-    "defaultMessage": "Por defecto",
+    "defaultMessage": "Per defecte",
     "description": "Type setting item"
   },
   "components.settingPictCardList.settings.label": {
@@ -72,7 +72,7 @@
     "description": "Settings Pictogram "
   },
   "settings.skins.asian": {
-    "defaultMessage": "Asiático",
+    "defaultMessage": "Asiàtic",
     "description": "Type of setting skin"
   },
   "settings.skins.aztec": {
@@ -80,19 +80,19 @@
     "description": "Type of setting skin"
   },
   "settings.skins.black": {
-    "defaultMessage": "Negro",
+    "defaultMessage": "Negre",
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Aspecto",
+    "defaultMessage": "Pell",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
-    "defaultMessage": "Mulato",
+    "defaultMessage": "Mulat",
     "description": "Type of setting skin"
   },
   "settings.skins.white": {
-    "defaultMessage": "Blanco",
+    "defaultMessage": "Blanc",
     "description": "Type of setting skin"
   }
 }
