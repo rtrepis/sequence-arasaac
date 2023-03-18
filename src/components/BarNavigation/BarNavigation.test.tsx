@@ -5,8 +5,8 @@ import BarNavigation from "./BarNavigation";
 describe("Give a component barNavigation", () => {
   describe("When rendered", () => {
     test("Then should show title app and expectButton", () => {
-      const titleApp = "Sequences - AraSaac";
-      const expectButton = "setting default";
+      const titleApp = "Sequence - AraSaac";
+      const expectButton = "Settings default";
       render(
         <BarNavigation>
           <Typography defaultValue={"lala"} />

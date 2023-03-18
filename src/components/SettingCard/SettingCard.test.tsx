@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from "../../utils/test-utils";
-import Settings from "../../model/Settings";
 import SettingCard from "./SettingCard";
+import { Settings } from "./SettingCard.lang";
 
 describe("Give a component Setting Item", () => {
   describe("When rendered whit 'skins' array", () => {
@@ -9,7 +9,7 @@ describe("Give a component Setting Item", () => {
       const skins = ["Asian", "Aztec", "Black", "Mulatto", "White"];
       const mockAction = jest.fn();
 
-      render(<SettingCard item={Settings.skins} action={mockAction} />);
+      render(<SettingCard setting={Settings.skins} action={mockAction} />);
 
       skins.forEach((skin) => {
         const buttonsSkin = screen.getByRole("button", { name: skin });
@@ -21,7 +21,7 @@ describe("Give a component Setting Item", () => {
         expect(buttonsSkin).toBeInTheDocument();
         expect(pathImage).toBe(`${pathExpect + skin.toLocaleLowerCase()}.png`);
         expect(mockAction).toBeCalledWith({
-          item: "skin",
+          setting: "skin",
           value: skin.toLocaleLowerCase(),
         });
       });
@@ -33,7 +33,7 @@ describe("Give a component Setting Item", () => {
       const expectButtons = ["Apply All", "Default"];
       const mockAction = jest.fn();
 
-      render(<SettingCard item={Settings.skins} action={mockAction} />);
+      render(<SettingCard setting={Settings.skins} action={mockAction} />);
 
       expectButtons.forEach((expectButton) => {
         const button = screen.getByRole("button", { name: expectButton });

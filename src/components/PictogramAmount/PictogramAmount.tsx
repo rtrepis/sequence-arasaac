@@ -15,6 +15,7 @@ import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import messages from "./PictogramAmount.lang";
 
 const PictogramAmount = (): JSX.Element => {
   const intl = useIntl();
@@ -34,6 +35,7 @@ const PictogramAmount = (): JSX.Element => {
     skin: skin,
     word: { keyWord: "Empty" },
   };
+
   const handleChangesAmount = (operator: number) => {
     setAmountPict(amountPict + operator);
     operator > 0
@@ -45,20 +47,12 @@ const PictogramAmount = (): JSX.Element => {
     <FormControl>
       <Stack direction={"row"} alignItems={"center"}>
         <FormLabel htmlFor="amount">
-          <FormattedMessage
-            id={"components.pictogramAmount.label"}
-            defaultMessage={"Pictograms:"}
-            description={"Amount Pictogram"}
-          />
+          <FormattedMessage {...messages.amount} />
         </FormLabel>
 
         <IconButton
           color="primary"
-          aria-label={intl.formatMessage({
-            id: "components.pictogramAmount.add.label",
-            defaultMessage: "Add pictogram",
-            description: "Add a pictogram to the amounts",
-          })}
+          aria-label={intl.formatMessage({ ...messages.add })}
           onClick={() => handleChangesAmount(-1)}
           disabled={amountPict <= 0 ? true : false}
         >
@@ -76,9 +70,7 @@ const PictogramAmount = (): JSX.Element => {
         <IconButton
           color="primary"
           aria-label={intl.formatMessage({
-            id: "components.pictogramAmount.subtract.label",
-            defaultMessage: "Subtract pictogram",
-            description: "Subtract a pictogram from the amounts",
+            ...messages.subtract,
           })}
           onClick={() => handleChangesAmount(+1)}
         >
@@ -87,11 +79,7 @@ const PictogramAmount = (): JSX.Element => {
       </Stack>
 
       <FormHelperText sx={{ margin: "0" }}>
-        <FormattedMessage
-          id="components.pictogramAmount.helperText"
-          defaultMessage={"Enter the number of pictograms in the sequence"}
-          description="Helper text amount pictograms"
-        />
+        <FormattedMessage {...messages.helperText} />
       </FormHelperText>
     </FormControl>
   );

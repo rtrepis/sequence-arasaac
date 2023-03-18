@@ -2,145 +2,145 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "Sequence - AraSaac"
+      "value": "Secuencia - AraSaac"
     }
   ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
-      "value": "You can edit pictogram"
+      "value": "Puedes editar el pictograma"
     }
   ],
   "components.pictEdit.modal.label": [
     {
       "type": 0,
-      "value": "Edit Pictogram"
+      "value": "Editar Pictograma"
     }
   ],
   "components.pictogramAmount": [
     {
       "type": 0,
-      "value": "Pictograms:"
+      "value": "Pictogramas:"
     }
   ],
   "components.pictogramAmount.Subtract.label": [
     {
       "type": 0,
-      "value": "Subtract pictogram"
+      "value": "Restar pictograma"
     }
   ],
   "components.pictogramAmount.add.label": [
     {
       "type": 0,
-      "value": "Add pictogram"
+      "value": "Añadir pictograma"
     }
   ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
-      "value": "Enter the number of pictograms in the sequence"
+      "value": "Introduzca el número de pictogramas en la secuencia"
     }
   ],
   "components.pictogramCard.pictogram": [
     {
       "type": 0,
-      "value": "Pictogram image"
+      "value": "Imagen de pictograma"
     }
   ],
   "components.pictogramSearch.alert": [
     {
       "type": 0,
-      "value": "No pictogram found with this word - Try another word!"
+      "value": "No se encontró ningún pictograma con esta palabra - ¡Prueba otra palabra!"
     }
   ],
   "components.pictogramSearch.helperText": [
     {
       "type": 0,
-      "value": "Pictogram search engine"
+      "value": "Motor de búsqueda de Pictogramas"
     }
   ],
   "components.pictogramSearch.label": [
     {
       "type": 0,
-      "value": "Search"
+      "value": "Buscar"
     }
   ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
-      "value": "Pictogram"
+      "value": "Pictograma"
     }
   ],
   "components.settingCard.applyAll.label": [
     {
       "type": 0,
-      "value": "Apply All"
+      "value": "Aplicar a todos"
     }
   ],
   "components.settingCard.default.label": [
     {
       "type": 0,
-      "value": "Default"
+      "value": "Por defecto"
     }
   ],
   "components.settingDefaultCardList.close": [
     {
       "type": 0,
-      "value": "close"
+      "value": "cerrar"
     }
   ],
   "components.settingDefaultCardList.settings.title": [
     {
       "type": 0,
-      "value": "Settings default"
+      "value": "Configuraciones por defecto"
     }
   ],
   "components.settingItem.default.label": [
     {
       "type": 0,
-      "value": "Default"
+      "value": "Por defecto"
     }
   ],
   "components.settingPictCardList.settings.label": [
     {
       "type": 0,
-      "value": "Settings Pictogram"
+      "value": "Configuraciones de Pictograma"
     }
   ],
   "settings.skins.asian": [
     {
       "type": 0,
-      "value": "Asian"
+      "value": "Asiático"
     }
   ],
   "settings.skins.aztec": [
     {
       "type": 0,
-      "value": "Aztec"
+      "value": "Azteca"
     }
   ],
   "settings.skins.black": [
     {
       "type": 0,
-      "value": "Black"
+      "value": "Negro"
     }
   ],
   "settings.skins.label": [
     {
       "type": 0,
-      "value": "Skin"
+      "value": "Aspecto"
     }
   ],
   "settings.skins.mulatto": [
     {
       "type": 0,
-      "value": "Mulatto"
+      "value": "Mulato"
     }
   ],
   "settings.skins.white": [
     {
       "type": 0,
-      "value": "White"
+      "value": "Blanco"
     }
   ]
 }

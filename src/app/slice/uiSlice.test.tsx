@@ -1,4 +1,4 @@
-import { UpdateSettingItemI } from "../../types/sequence";
+import { UpdateSettingI } from "../../types/sequence";
 import { UiI } from "../../types/ui";
 import { preloadedState } from "../../utils/test-utils";
 import { uiReducer, updateSkinActionCreator } from "./uiSlice";
@@ -10,7 +10,7 @@ describe("Given the reducer uiSlice", () => {
   };
   describe("When called `upDateSkin` with SkinPayload", () => {
     test("Then it should changed the property to the new state", () => {
-      const newProperty: UpdateSettingItemI = { item: "skin", value: "asian" };
+      const newProperty: UpdateSettingI = { setting: "skin", value: "asian" };
       const expectState: UiI = {
         ...previousUiSlice,
         setting: { skin: "asian" },

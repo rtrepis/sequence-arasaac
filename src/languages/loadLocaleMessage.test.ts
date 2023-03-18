@@ -8,9 +8,7 @@ describe("Give a function 'loadLocalMessage", () => {
 
       const message = await loadLocalMessages(locale);
 
-      expect(message["components.pictogramAmount.label"]).toStrictEqual(
-        expectText
-      );
+      expect(message["components.pictogramAmount"]).toStrictEqual(expectText);
     });
   });
 
@@ -21,9 +19,7 @@ describe("Give a function 'loadLocalMessage", () => {
 
       const message = await loadLocalMessages(locale);
 
-      expect(message["components.pictogramAmount.label"]).toStrictEqual(
-        expectText
-      );
+      expect(message["components.pictogramAmount"]).toStrictEqual(expectText);
     });
   });
 });
