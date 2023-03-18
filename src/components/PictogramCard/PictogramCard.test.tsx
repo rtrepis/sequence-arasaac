@@ -1,29 +1,40 @@
-import { render, screen } from "@testing-library/react";
 import { BorderPictI, PictogramI } from "../../types/sequence";
+import { render, screen } from "../../utils/test-utils";
 import PictogramCard from "./PictogramCard";
 
-const pictogramEmpty: PictogramI = {
-  index: 1,
+let pictogramEmpty: PictogramI = {
+  index: 0,
   number: 26527,
   border: {
     in: { color: "blue", radius: 20, size: 2 },
     out: { color: "green", radius: 20, size: 2 },
   },
+  word: { keyWord: "Empty" },
 };
 
+const mockDispatch = jest.fn();
+jest.mock("react-redux", () => ({
+  ...jest.requireActual("react-redux"),
+  useDispatch: () => mockDispatch,
+}));
+
+beforeEach(() => jest.clearAllMocks());
+
 describe("Give a PictogramShow component", () => {
-  describe("When it's rendered with view 'complete' and index '1'", () => {
+  describe("When it's rendered with view 'complete' and pictogramEmpty", () => {
     test("Then should show a pictogram, index, text pictogram", () => {
       const expectPictogram = {
-        index: "1",
+        indexTitle: "1",
         number: 2222,
         altImage: "Pictogram",
-        textPictogram: "Pictogram Word",
+        textPictogram: "Empty",
       };
 
       render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
       const pictogramShow = {
-        header: screen.getByRole("heading", { name: expectPictogram.index }),
+        header: screen.getByRole("heading", {
+          name: expectPictogram.indexTitle,
+        }),
         image: screen.getByRole("img", { name: expectPictogram.altImage }),
         footer: screen.getByRole("heading", {
           name: expectPictogram.textPictogram,
@@ -36,7 +47,7 @@ describe("Give a PictogramShow component", () => {
     });
   });
 
-  describe("When it's rendered with view 'header' and index '1'", () => {
+  describe("When it's rendered with view 'header' and pictogramEmpty", () => {
     test("Then should show a pictogram and index", () => {
       const expectPictogram = {
         index: "1",
@@ -61,7 +72,7 @@ describe("Give a PictogramShow component", () => {
       const expectPictogram = {
         number: 2222,
         altImage: "Pictogram",
-        textPictogram: "Pictogram Word",
+        textPictogram: "Empty",
       };
 
       render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
@@ -139,7 +150,7 @@ describe("Give a PictogramShow component", () => {
         card: "card-pictogram",
       };
       const variant = "plane";
-      const expectStyle = "0px 0px 0px 0px #fff";
+      const expectStyle = "none";
 
       render(
         <PictogramCard
@@ -156,6 +167,20 @@ describe("Give a PictogramShow component", () => {
       };
 
       expect(pictogramCSS.card).toHaveProperty("box-shadow", expectStyle);
+    });
+  });
+
+  describe("When it's rendered with skin corner case 'asian'", () => {
+    test("Then should image path change to 'assian'", () => {
+      pictogramEmpty = { ...pictogramEmpty, skin: "asian" };
+      const expectedPath =
+        "https://api.arasaac.org/api/pictograms/26527?skin=assian";
+
+      render(<PictogramCard pictogram={pictogramEmpty} view={"none"} />);
+      const image = screen.getByRole("img", { name: "Pictogram" });
+      const pathImage = image.getAttribute("src");
+
+      expect(pathImage).toStrictEqual(expectedPath);
     });
   });
 });

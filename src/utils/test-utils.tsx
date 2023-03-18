@@ -3,14 +3,32 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { sequenceReducer } from "../app/slice/sequenceSlice";
 import { ThemeProvider } from "@mui/system";
-import theme from "../materiaUi/theme";
+import theme from "../style/themeMui";
 import { CssBaseline } from "@mui/material";
 import { IntlProvider } from "react-intl";
 import messages from "../languages/en.json";
+import { uiReducer } from "../app/slice/uiSlice";
 
 interface WrapperProps {
   children: JSX.Element | JSX.Element[];
 }
+
+const preloadedState = {
+  sequence: [
+    {
+      index: 0,
+      number: 26527,
+      border: {
+        in: { color: "blue", radius: 20, size: 2 },
+        out: { color: "green", radius: 20, size: 2 },
+      },
+      skin: "black",
+    },
+  ],
+  ui: {
+    setting: { skin: "default" },
+  },
+};
 
 const render = (
   ui: JSX.Element,
@@ -19,19 +37,9 @@ const render = (
     store = configureStore({
       reducer: {
         sequence: sequenceReducer,
+        ui: uiReducer,
       },
-      preloadedState: {
-        sequence: [
-          {
-            index: 0,
-            number: 26527,
-            border: {
-              in: { color: "blue", radius: 20, size: 2 },
-              out: { color: "green", radius: 20, size: 2 },
-            },
-          },
-        ],
-      },
+      preloadedState: preloadedState,
     }),
     ...renderOptions
   }: { preloadedState?: any; store?: any } = {}
@@ -52,4 +60,4 @@ const render = (
 };
 
 export * from "@testing-library/react";
-export { render, rtlRender };
+export { render, rtlRender, preloadedState };

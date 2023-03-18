@@ -1,19 +1,75 @@
 {
+  "components.barNavigation.title": {
+    "defaultMessage": "Sequence - AraSaac",
+    "description": "App title translate Sequence"
+  },
+  "components.pictEdit.modal.description": {
+    "defaultMessage": "You can edit pictogram",
+    "description": "Description modal"
+  },
+  "components.pictEdit.modal.label": {
+    "defaultMessage": "Edit Pictogram",
+    "description": "Title modal"
+  },
+  "components.pictogramAmount": {
+    "defaultMessage": "Pictograms:",
+    "description": "Amount Pictogram"
+  },
+  "components.pictogramAmount.Subtract.label": {
+    "defaultMessage": "Subtract pictogram",
+    "description": "Subtract a pictogram from the amounts"
+  },
+  "components.pictogramAmount.add.label": {
+    "defaultMessage": "Add pictogram",
+    "description": "Add a pictogram to the amounts"
+  },
   "components.pictogramAmount.helperText": {
     "defaultMessage": "Enter the number of pictograms in the sequence",
     "description": "Helper text amount pictograms"
   },
-  "components.pictogramAmount.label": {
-    "defaultMessage": "Pictograms:",
-    "description": "Amount Pictogram"
+  "components.pictogramCard.pictogram": {
+    "defaultMessage": "Pictogram image",
+    "description": "Pictogram image"
   },
-  "components.settingItem.applyAll.label": {
+  "components.pictogramSearch.alert": {
+    "defaultMessage": "No pictogram found with this word - Try another word!",
+    "description": "Search pictogram not founded results"
+  },
+  "components.pictogramSearch.helperText": {
+    "defaultMessage": "Pictogram search engine",
+    "description": "helper text"
+  },
+  "components.pictogramSearch.label": {
+    "defaultMessage": "Search",
+    "description": "search pictograms"
+  },
+  "components.pictogramSearch.pictogram": {
+    "defaultMessage": "Pictogram",
+    "description": "Pictogram"
+  },
+  "components.settingCard.applyAll.label": {
     "defaultMessage": "Apply All",
     "description": "apply to all pictograms"
+  },
+  "components.settingCard.default.label": {
+    "defaultMessage": "Default",
+    "description": "Not type setting "
+  },
+  "components.settingDefaultCardList.close": {
+    "defaultMessage": "close",
+    "description": "close Settings Default "
+  },
+  "components.settingDefaultCardList.settings.title": {
+    "defaultMessage": "Settings default",
+    "description": "Settings Default "
   },
   "components.settingItem.default.label": {
     "defaultMessage": "Default",
     "description": "Type setting item"
+  },
+  "components.settingPictCardList.settings.label": {
+    "defaultMessage": "Settings Pictogram",
+    "description": "Settings Pictogram "
   },
   "settings.skins.asian": {
     "defaultMessage": "Asian",

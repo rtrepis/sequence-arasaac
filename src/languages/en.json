@@ -1,4 +1,28 @@
 {
+  "components.modal.pictogramEdit.describe": [
+    {
+      "type": 0,
+      "value": "You can edit pictograms"
+    }
+  ],
+  "components.modal.pictogramEdit.description": [
+    {
+      "type": 0,
+      "value": "You can edit pictograms"
+    }
+  ],
+  "components.modal.pictogramEdit.label": [
+    {
+      "type": 0,
+      "value": "Edit Pictogram"
+    }
+  ],
+  "components.pictogramAmount.add.label": [
+    {
+      "type": 0,
+      "value": "Add pictogram"
+    }
+  ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
@@ -9,6 +33,12 @@
     {
       "type": 0,
       "value": "Pictograms:"
+    }
+  ],
+  "components.pictogramAmount.subtract.label": [
+    {
+      "type": 0,
+      "value": "Subtract pictogram"
     }
   ],
   "components.settingItem.applyAll.label": [
