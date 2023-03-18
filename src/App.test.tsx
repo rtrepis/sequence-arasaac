@@ -8,7 +8,7 @@ jest.mock("./hooks/useAraSaac", () => () => ({
 describe("Give a App", () => {
   describe("When it's rendered with title", () => {
     test("Then should show this title", () => {
-      const expectTitle = "Sequences - AraSaac";
+      const expectTitle = "Sequence - AraSaac";
 
       render(<App />);
       const title = screen.getByRole("heading", {

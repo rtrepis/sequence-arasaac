@@ -26,7 +26,7 @@ describe("Give a PictogramShow component", () => {
       const expectPictogram = {
         indexTitle: "1",
         number: 2222,
-        altImage: "Pictogram",
+        altImage: "Pictogram image",
         textPictogram: "Empty",
       };
 
@@ -52,7 +52,7 @@ describe("Give a PictogramShow component", () => {
       const expectPictogram = {
         index: "1",
         number: 2222,
-        altImage: "Pictogram",
+        altImage: "Pictogram image",
       };
 
       render(<PictogramCard view={"header"} pictogram={pictogramEmpty} />);
@@ -71,7 +71,7 @@ describe("Give a PictogramShow component", () => {
     test("Then should show a pictogram and text pictogram", () => {
       const expectPictogram = {
         number: 2222,
-        altImage: "Pictogram",
+        altImage: "Pictogram image",
         textPictogram: "Empty",
       };
 
@@ -93,7 +93,7 @@ describe("Give a PictogramShow component", () => {
     test("Then should show a pictogram", () => {
       const expectPictogram = {
         number: 2222,
-        altImage: "Pictogram",
+        altImage: "Pictogram image",
       };
 
       render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
@@ -111,7 +111,7 @@ describe("Give a PictogramShow component", () => {
     test("Then should show a pictogram with this borders", () => {
       const pictogram = {
         card: "card-pictogram",
-        altImage: "Pictogram",
+        altImage: "Pictogram image",
       };
       const expectBorder: BorderPictI = {
         color: "blue",
@@ -177,7 +177,7 @@ describe("Give a PictogramShow component", () => {
         "https://api.arasaac.org/api/pictograms/26527?skin=assian";
 
       render(<PictogramCard pictogram={pictogramEmpty} view={"none"} />);
-      const image = screen.getByRole("img", { name: "Pictogram" });
+      const image = screen.getByRole("img", { name: "Pictogram image" });
       const pathImage = image.getAttribute("src");
 
       expect(pathImage).toStrictEqual(expectedPath);

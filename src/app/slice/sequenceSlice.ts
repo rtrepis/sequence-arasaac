@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   PictogramI,
   SequenceI,
-  UpdateSettingItemI,
+  UpdateSettingI,
   ProtoPictogramI,
   UpdatePictWordI,
 } from "../../types/sequence";
-import { SettingItemPayloadI } from "../../types/ui";
+import { SettingPayloadI } from "../../types/ui";
 
 const sequenceInitialState: SequenceI = [];
 
@@ -32,12 +32,12 @@ const sequenceSlice = createSlice({
       );
     },
 
-    applyAllSettingItem: (
+    applyAllSetting: (
       previousSequence,
-      action: PayloadAction<SettingItemPayloadI>
+      action: PayloadAction<SettingPayloadI>
     ) => {
       previousSequence.forEach((pictogram) => {
-        pictogram[action.payload.item] = action.payload.value;
+        pictogram[action.payload.setting] = action.payload.value;
       });
     },
 
@@ -52,14 +52,14 @@ const sequenceSlice = createSlice({
       );
     },
 
-    upDateSettingItem: (
+    upDateSetting: (
       previousSequence,
-      action: PayloadAction<UpdateSettingItemI>
+      action: PayloadAction<UpdateSettingI>
     ) => {
       previousSequence.forEach(
         (pictogram, index) =>
           index === action.payload.index &&
-          (pictogram[action.payload.item] = action.payload.value)
+          (pictogram[action.payload.setting] = action.payload.value)
       );
     },
   },
@@ -72,6 +72,6 @@ export const {
   subtractPictogram: subtractPictogramActionCreator,
   upDatePictNumber: upDatePictNumberActionCreator,
   upDatePictWord: upDatePictWordActionCreator,
-  applyAllSettingItem: applyAllSettingItemActionCreator,
-  upDateSettingItem: upDateSettingItemActionCreator,
+  applyAllSetting: applyAllSettingActionCreator,
+  upDateSetting: upDateSettingActionCreator,
 } = sequenceSlice.actions;

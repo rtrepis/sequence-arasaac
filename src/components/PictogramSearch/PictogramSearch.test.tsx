@@ -60,7 +60,7 @@ describe("Give component PictogramSearch", () => {
   describe("When state findPict is length 2", () => {
     test("Then should it's same length to image and click", () => {
       const expectFindPict = [324, 234];
-      const expectLabelImage = "pictogram";
+      const expectLabelImage = "Pictogram";
       const mockSetFindPict = jest.fn();
 
       (useState as jest.Mock).mockImplementation(() => [
@@ -70,8 +70,12 @@ describe("Give component PictogramSearch", () => {
 
       render(<PictogramSearch indexPict={0} />);
 
-      const images = screen.getAllByRole("img", { name: expectLabelImage });
-      const buttons = screen.getAllByRole("button", { name: "pictogram" });
+      const images = screen.getAllByRole("img", {
+        name: `${expectLabelImage} ${expectFindPict}`,
+      });
+      const buttons = screen.getAllByRole("button", {
+        name: `Pictogram`,
+      });
 
       fireEvent.click(buttons[0]);
       fireEvent.click(buttons[1]);

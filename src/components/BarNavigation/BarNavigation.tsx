@@ -6,6 +6,8 @@ import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Container from "@mui/material/Container";
 import Slide from "@mui/material/Slide";
 import SettingsDefaultCardList from "../SettingDefaultCardList/SettingDefaultCardList";
+import { FormattedMessage } from "react-intl";
+import messages from "./BarNavigation.lang";
 
 interface Props {
   children: React.ReactElement;
@@ -35,7 +37,7 @@ const BarNavigation = (props: Props) => {
             sx={{ fontSize: "1.75rem", justifyContent: "space-between" }}
           >
             <Typography variant="h6" component="h1">
-              Sequences - AraSaac
+              <FormattedMessage {...messages.title} />
             </Typography>
             <SettingsDefaultCardList />
           </Toolbar>
