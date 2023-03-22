@@ -1,5 +1,4 @@
 import {
-  Button,
   Divider,
   Stack,
   ToggleButton,
@@ -10,11 +9,12 @@ import { useState } from "react";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { applyAllSettingActionCreator } from "../../app/slice/sequenceSlice";
+import StyledButton from "../../style/StyledButton";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
 import { UpdateSettingI } from "../../types/sequence";
 import { SettingLangI } from "../../types/sequence.lang";
 import { messages } from "./SettingCard.lang";
-import { button__ApplyAll } from "./SettingCard.styled";
+import { applyAll } from "./SettingCard.styled";
 
 interface SettingCardProps {
   setting: SettingLangI;
@@ -131,13 +131,9 @@ const SettingCard = ({
 
       <Divider />
 
-      <Button
-        variant="contained"
-        sx={button__ApplyAll}
-        onClick={handleApplyAll}
-      >
+      <StyledButton variant="outlined" sx={applyAll} onClick={handleApplyAll}>
         <FormattedMessage {...messages.applyAll} />
-      </Button>
+      </StyledButton>
     </Stack>
   );
 };

@@ -1,10 +1,17 @@
 import { renderHook } from "@testing-library/react";
+//import { useIntl } from "react-intl";
 import useAraSaac from "./useAraSaac";
 
 const mockDispatch = jest.fn();
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
   useDispatch: () => mockDispatch,
+}));
+
+const mockLanguage = { locale: "en" };
+jest.mock("react-intl", () => ({
+  ...jest.requireActual("react-intl"),
+  useIntl: () => mockLanguage,
 }));
 
 beforeEach(() => jest.clearAllMocks());
