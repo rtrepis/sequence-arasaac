@@ -3,8 +3,8 @@ name: Languages extract compile
 on: push
 
 jobs:
-  test:
-    name: Test passes
+  format-js:
+    name: FormatJS
     runs-on: ubuntu-latest
 
     steps:
