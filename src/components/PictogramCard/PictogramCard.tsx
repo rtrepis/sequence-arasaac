@@ -36,6 +36,8 @@ const PictogramCard = ({
         <CardMedia
           component="img"
           image={toUrlPathApiAraSaac(number, skin)}
+          height={150}
+          width={150}
           alt={intl.formatMessage({ ...messages.pictogram })}
           sx={() => pictogram__media(border, view)}
         />

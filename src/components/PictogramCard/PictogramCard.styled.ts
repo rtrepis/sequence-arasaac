@@ -1,7 +1,7 @@
 export const pictogram__card = (border: any, variant: any) => {
   const sx = {
-    minWidth: 200,
-    maxWidth: 200,
+    minWidth: 195,
+    maxWidth: 195,
     textAlign: "center",
     paddingInline: 1.5,
     border: `${border?.out === undefined ? 2 : border.out.size}px solid`,

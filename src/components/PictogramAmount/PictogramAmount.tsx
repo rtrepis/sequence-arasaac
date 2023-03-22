@@ -13,7 +13,7 @@ import { PictogramI } from "../../types/sequence";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import messages from "./PictogramAmount.lang";
 
@@ -21,6 +21,7 @@ const PictogramAmount = (): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const skin = useAppSelector((state) => state.ui.setting.skin);
+  const amountSequence = useAppSelector((state) => state.sequence.length);
 
   const initialAmountPict = 0;
   const [amountPict, setAmountPict] = useState(initialAmountPict);
@@ -43,8 +44,10 @@ const PictogramAmount = (): JSX.Element => {
       : dispatch(subtractPictogramActionCreator());
   };
 
+  useEffect(() => setAmountPict(amountSequence), [amountSequence]);
+
   return (
-    <FormControl>
+    <FormControl sx={{ minWidth: 240 }}>
       <Stack direction={"row"} alignItems={"center"}>
         <FormLabel htmlFor="amount">
           <FormattedMessage {...messages.amount} />
