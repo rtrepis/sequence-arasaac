@@ -29,16 +29,16 @@ const sequenceSlice = createSlice({
       action.payload,
 
     renumberSequence: (previousSequence) =>
-      previousSequence.map(
-        (pictogram, indexArray) =>
-          (pictogram = { ...pictogram, index: indexArray })
-      ),
+      previousSequence.map((pictogram, indexArray) => ({
+        ...pictogram,
+        index: indexArray,
+      })),
 
     upDatePictNumber: (
       previousSequence,
       action: PayloadAction<ProtoPictogramI>
     ) => {
-      previousSequence.forEach(
+      previousSequence.map(
         (pictogram, index) =>
           index === action.payload.index &&
           (pictogram.number = action.payload.number)
@@ -49,7 +49,7 @@ const sequenceSlice = createSlice({
       previousSequence,
       action: PayloadAction<UpdatePictWordI>
     ) => {
-      previousSequence.forEach(
+      previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexPict &&
           (pictogram.word = action.payload.word)
@@ -60,7 +60,7 @@ const sequenceSlice = createSlice({
       previousSequence,
       action: PayloadAction<UpdateSettingI>
     ) => {
-      previousSequence.forEach(
+      previousSequence.map(
         (pictogram, index) =>
           index === action.payload.index &&
           (pictogram[action.payload.setting] = action.payload.value)
@@ -71,9 +71,10 @@ const sequenceSlice = createSlice({
       previousSequence,
       action: PayloadAction<SettingPayloadI>
     ) => {
-      previousSequence.forEach((pictogram) => {
-        pictogram[action.payload.setting] = action.payload.value;
-      });
+      previousSequence.map(
+        (pictogram) =>
+          (pictogram[action.payload.setting] = action.payload.value)
+      );
     },
   },
 });
