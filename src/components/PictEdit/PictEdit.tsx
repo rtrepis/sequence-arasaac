@@ -9,6 +9,7 @@ import SettingsPictCardList from "../SettingPictCardList/SettingPictCardList";
 import { useState } from "react";
 import messages from "./PictEdti.lang";
 import { circlePictogramNumber } from "./PictEdit.styled";
+import StyledButton from "../../style/StyledButton";
 
 interface PictEditProps {
   pictogram: PictogramI;
@@ -80,9 +81,9 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
         </DialogContent>
 
         <DialogActions sx={{ justifyContent: "center" }}>
-          <Button onClick={handleClose} variant="contained">
+          <StyledButton onClick={handleClose} variant={"outlined"}>
             Close
-          </Button>
+          </StyledButton>
         </DialogActions>
       </Dialog>
     </>
