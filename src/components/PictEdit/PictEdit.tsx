@@ -9,12 +9,19 @@ import SettingsPictCardList from "../SettingPictCardList/SettingPictCardList";
 import { useState } from "react";
 import messages from "./PictEdti.lang";
 import { circlePictogramNumber } from "./PictEdit.styled";
+import StyledButton from "../../style/StyledButton";
+import { useAppDispatch } from "../../app/hooks";
+import {
+  renumberSequenceActionCreator,
+  subtractPictogramActionCreator,
+} from "../../app/slice/sequenceSlice";
 
 interface PictEditProps {
   pictogram: PictogramI;
 }
 
 const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
+  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const [open, setOpen] = useState(false);
@@ -25,6 +32,12 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleDelete = () => {
+    setOpen(false);
+    dispatch(subtractPictogramActionCreator(pictogram.index));
+    dispatch(renumberSequenceActionCreator());
   };
 
   return (
@@ -79,10 +92,19 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
           <SettingsPictCardList indexPict={pictogram.index} />
         </DialogContent>
 
-        <DialogActions sx={{ justifyContent: "center" }}>
-          <Button onClick={handleClose} variant="contained">
-            Close
-          </Button>
+        <DialogActions
+          sx={{ justifyContent: "space-between", paddingInline: 3 }}
+        >
+          <StyledButton
+            onClick={handleDelete}
+            variant={"outlined"}
+            color={"error"}
+          >
+            <FormattedMessage {...messages.delete} />
+          </StyledButton>
+          <StyledButton onClick={handleClose} variant={"contained"}>
+            <FormattedMessage {...messages.close} />
+          </StyledButton>
         </DialogActions>
       </Dialog>
     </>

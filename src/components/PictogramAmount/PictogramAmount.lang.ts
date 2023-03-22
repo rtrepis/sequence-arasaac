@@ -18,7 +18,7 @@ const messages = defineMessages({
   },
   helperText: {
     id: "components.pictogramAmount.helperText",
-    defaultMessage: "Enter the number of pictograms in the sequence",
+    defaultMessage: "Enter the number of pictograms in the sequence.",
     description: "Helper text amount pictograms",
   },
   empty: {
