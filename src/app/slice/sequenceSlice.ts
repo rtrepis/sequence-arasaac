@@ -21,6 +21,9 @@ const sequenceSlice = createSlice({
 
     subtractPictogram: (previousSequence) => [...previousSequence.slice(0, -1)],
 
+    addPhrase: (previousSequence, action: PayloadAction<SequenceI>) =>
+      action.payload,
+
     upDatePictNumber: (
       previousSequence,
       action: PayloadAction<ProtoPictogramI>
@@ -70,6 +73,7 @@ export const sequenceReducer = sequenceSlice.reducer;
 export const {
   addPictogram: addPictogramActionCreator,
   subtractPictogram: subtractPictogramActionCreator,
+  addPhrase: addPhraseActionCreator,
   upDatePictNumber: upDatePictNumberActionCreator,
   upDatePictWord: upDatePictWordActionCreator,
   applyAllSetting: applyAllSettingActionCreator,
