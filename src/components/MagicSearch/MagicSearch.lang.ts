@@ -9,7 +9,7 @@ const messages = defineMessages({
   helperText: {
     id: "components.magicSearch.helperText.",
     defaultMessage:
-      "Type the words in the sequence between spaces and press Enter or click the magnifying glass when you're done",
+      "Type the words in the sequence between spaces and press Enter or click the magnifying glass when you're done.",
     description: "Helper text field",
   },
   button: {
