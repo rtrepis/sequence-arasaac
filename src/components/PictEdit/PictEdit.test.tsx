@@ -8,6 +8,12 @@ import PictEdit from "./PictEdit";
 
 const mockSequence = preloadedState.sequence[0];
 
+const mockDispatch = jest.fn();
+jest.mock("react-redux", () => ({
+  ...jest.requireActual("react-redux"),
+  useDispatch: () => mockDispatch,
+}));
+
 describe("Give a component PictEdit", () => {
   const pictogram = {
     index: 0,
@@ -41,7 +47,6 @@ describe("Give a component PictEdit", () => {
   });
 
   describe("When it's open modal user cant close", () => {
-    jest.useFakeTimers();
     test("Then should show button Close, and click close Modal", () => {
       const expectButton = "Close";
       const openButton = `${pictogram.index + 1} Pictogram image ${
@@ -59,6 +64,32 @@ describe("Give a component PictEdit", () => {
       fireEvent.click(buttonClose);
 
       expect(buttonClose).toBeInTheDocument();
+    });
+  });
+
+  describe("When user click delete", () => {
+    test("Then should called dispatch subtrac and renumber", () => {
+      const DeleteButton = "Delete";
+      const openButton = `${pictogram.index + 1} Pictogram image ${
+        pictogram.word.keyWord
+      }`;
+      const expectActions = [
+        { payload: 0, type: "sequence/subtractPictogram" },
+        { payload: undefined, type: "sequence/renumberSequence" },
+      ];
+
+      render(<PictEdit pictogram={pictogram} />, {
+        preloadedState: preloadedState,
+      });
+
+      const buttonOpen = screen.getByRole("button", { name: openButton });
+      fireEvent.click(buttonOpen);
+
+      const button = screen.getByRole("button", { name: DeleteButton });
+      fireEvent.click(button);
+
+      expect(mockDispatch).toHaveBeenCalledWith(expectActions[0]);
+      expect(mockDispatch).toHaveBeenCalledWith(expectActions[1]);
     });
   });
 });

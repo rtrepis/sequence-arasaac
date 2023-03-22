@@ -11,6 +11,16 @@ const messages = defineMessages({
     defaultMessage: "You can edit pictogram",
     description: "Description modal",
   },
+  close: {
+    id: "components.pictEdit.close",
+    defaultMessage: "Close",
+    description: "Close modal, edit pictogram",
+  },
+  delete: {
+    id: "components.pictEdit.delete",
+    defaultMessage: "Delete",
+    description: "Delete modal, edit pictogram",
+  },
 });
 
 export default messages;
