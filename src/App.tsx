@@ -7,7 +7,6 @@ import PictogramAmount from "./components/PictogramAmount/PictogramAmount";
 import BarNavigation from "./components/BarNavigation/BarNavigation";
 import PictEditList from "./components/PictEditList/PictEditList";
 import MagicSearch from "./components/MagicSearch/MagicSearch";
-import { Container } from "@mui/material";
 
 const App = () => {
   const sequence = useSelector((state: RootState) => state.sequence);

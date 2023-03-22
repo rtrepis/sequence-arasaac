@@ -1,4 +1,4 @@
-import { Container, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { SequenceI } from "../../types/sequence";
 import PictEdit from "../PictEdit/PictEdit";
 

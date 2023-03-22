@@ -3,6 +3,18 @@
     "defaultMessage": "Sequence - AraSaac",
     "description": "App title translate Sequence"
   },
+  "components.magicSearch.button.": {
+    "defaultMessage": "To search",
+    "description": "label button field"
+  },
+  "components.magicSearch.helperText.": {
+    "defaultMessage": "Type the words in the sequence between spaces and press Enter or click the magnifying glass when you're done",
+    "description": "Helper text field"
+  },
+  "components.magicSearch.label": {
+    "defaultMessage": "Magic Search",
+    "description": "label text field"
+  },
   "components.pictEdit.modal.description": {
     "defaultMessage": "You can edit pictogram",
     "description": "Description modal"
@@ -23,6 +35,10 @@
     "defaultMessage": "Add pictogram",
     "description": "Add a pictogram to the amounts"
   },
+  "components.pictogramAmount.empty": {
+    "defaultMessage": "Empty",
+    "description": "Empty pictogram"
+  },
   "components.pictogramAmount.helperText": {
     "defaultMessage": "Enter the number of pictograms in the sequence",
     "description": "Helper text amount pictograms"
@@ -34,6 +50,10 @@
   "components.pictogramSearch.alert": {
     "defaultMessage": "No pictogram found with this word - Try another word!",
     "description": "Search pictogram not founded results"
+  },
+  "components.pictogramSearch.empty": {
+    "defaultMessage": "Empty",
+    "description": "Empty pictogram"
   },
   "components.pictogramSearch.helperText": {
     "defaultMessage": "Pictogram search engine",
