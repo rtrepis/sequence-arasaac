@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import {
   addPictogramActionCreator,
-  subtractPictogramActionCreator,
+  subtractLastPictActionCreator,
 } from "../../app/slice/sequenceSlice";
 import { PictogramI } from "../../types/sequence";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
@@ -41,7 +41,7 @@ const PictogramAmount = (): JSX.Element => {
     setAmountPict(amountPict + operator);
     operator > 0
       ? dispatch(addPictogramActionCreator(pictogramEmpty))
-      : dispatch(subtractPictogramActionCreator());
+      : dispatch(subtractLastPictActionCreator());
   };
 
   useEffect(() => setAmountPict(amountSequence), [amountSequence]);
