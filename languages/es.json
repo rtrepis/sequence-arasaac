@@ -8,12 +8,20 @@
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "108 / 5.000\nEscriba las palabras en la secuencia entre espacios y presione Entrar o haga clic en la lupa cuando haya terminado.",
+    "defaultMessage": "Escriba las palabras de la secuencia entre espacios y presione Enter o haga clic en la lupa cuando haya terminado.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
     "defaultMessage": "Búsqueda Mágica",
     "description": "label text field"
+  },
+  "components.pictEdit.close": {
+    "defaultMessage": "Cerrar",
+    "description": "Close modal, edit pictogram"
+  },
+  "components.pictEdit.delete": {
+    "defaultMessage": "Eliminar",
+    "description": "Delete modal, edit pictogram"
   },
   "components.pictEdit.modal.description": {
     "defaultMessage": "Puedes editar el pictograma",
@@ -40,7 +48,7 @@
     "description": "Empty pictogram"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Entra el nombre de pictogrames de la seqüència.",
+    "defaultMessage": "Introduzca el número de pictogramas en la secuencia.",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
