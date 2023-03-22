@@ -5,6 +5,24 @@
       "value": "Seqüències - AraSaac"
     }
   ],
+  "components.magicSearch.button.": [
+    {
+      "type": 0,
+      "value": "A cercar"
+    }
+  ],
+  "components.magicSearch.helperText.": [
+    {
+      "type": 0,
+      "value": "Escriviu les paraules en la seqüència entre espais i premeu Intro o feu clic a la lupa quan hàgiu acabat."
+    }
+  ],
+  "components.magicSearch.label": [
+    {
+      "type": 0,
+      "value": "Cerca màgica"
+    }
+  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -32,13 +50,19 @@
   "components.pictogramAmount.add.label": [
     {
       "type": 0,
-      "value": "Afegir pictograma"
+      "value": "Afegir pictogrames"
+    }
+  ],
+  "components.pictogramAmount.empty": [
+    {
+      "type": 0,
+      "value": "Buit"
     }
   ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
-      "value": "Introdueix el nombre de pictogrames de la seqüència"
+      "value": "Entra el nombre de pictogrames de la seqüència."
     }
   ],
   "components.pictogramCard.pictogram": [
@@ -51,6 +75,12 @@
     {
       "type": 0,
       "value": "No s'ha trobat cap pictograma, amb aquesta paraula - Intenta-ho amb una altra paraula!"
+    }
+  ],
+  "components.pictogramSearch.empty": [
+    {
+      "type": 0,
+      "value": "Buit"
     }
   ],
   "components.pictogramSearch.helperText": [
