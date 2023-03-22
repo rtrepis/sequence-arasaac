@@ -8,7 +8,7 @@
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "Type the words in the sequence between spaces and press Enter or click the magnifying glass when you're done.",
+    "defaultMessage": "Escriba las palabras de la secuencia entre espacios y presione Enter o haga clic en la lupa cuando haya terminado.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
@@ -16,11 +16,11 @@
     "description": "label text field"
   },
   "components.pictEdit.close": {
-    "defaultMessage": "Close",
+    "defaultMessage": "Cerrar",
     "description": "Close modal, edit pictogram"
   },
   "components.pictEdit.delete": {
-    "defaultMessage": "Delete",
+    "defaultMessage": "Eliminar",
     "description": "Delete modal, edit pictogram"
   },
   "components.pictEdit.modal.description": {
@@ -48,7 +48,7 @@
     "description": "Empty pictogram"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Enter the number of pictograms in the sequence.",
+    "defaultMessage": "Introduzca el número de pictogramas en la secuencia.",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
