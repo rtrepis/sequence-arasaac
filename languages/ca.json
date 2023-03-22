@@ -3,6 +3,18 @@
     "defaultMessage": "Seqüències - AraSaac",
     "description": "App title translate Sequence"
   },
+  "components.magicSearch.button.": {
+    "defaultMessage": "A cercar",
+    "description": "label button field"
+  },
+  "components.magicSearch.helperText.": {
+    "defaultMessage": "Escriviu les paraules en la seqüència entre espais i premeu Intro o feu clic a la lupa quan hàgiu acabat.",
+    "description": "Helper text field"
+  },
+  "components.magicSearch.label": {
+    "defaultMessage": "Cerca màgica",
+    "description": "label text field"
+  },
   "components.pictEdit.modal.description": {
     "defaultMessage": "Tu pots editar els pictogrames",
     "description": "Description modal"
@@ -20,11 +32,15 @@
     "description": "Subtract a pictogram from the amounts"
   },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Afegir pictograma",
+    "defaultMessage": "Afegir pictogrames",
     "description": "Add a pictogram to the amounts"
   },
+  "components.pictogramAmount.empty": {
+    "defaultMessage": "Buit",
+    "description": "Empty pictogram"
+  },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Introdueix el nombre de pictogrames de la seqüència",
+    "defaultMessage": "Entra el nombre de pictogrames de la seqüència",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
@@ -34,6 +50,10 @@
   "components.pictogramSearch.alert": {
     "defaultMessage": "No s'ha trobat cap pictograma, amb aquesta paraula - Intenta-ho amb una altra paraula!",
     "description": "Search pictogram not founded results"
+  },
+  "components.pictogramSearch.empty": {
+    "defaultMessage": "Buit",
+    "description": "Empty pictogram"
   },
   "components.pictogramSearch.helperText": {
     "defaultMessage": "Cercador de Pictogrames",
