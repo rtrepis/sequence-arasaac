@@ -21,7 +21,6 @@ describe("Give a App", () => {
         name: expectTitle,
         level: 1,
       });
-      screen.debug();
 
       expect(title).toBeInTheDocument();
     });
