@@ -19,10 +19,20 @@ const sequenceSlice = createSlice({
       action.payload,
     ],
 
-    subtractPictogram: (previousSequence) => [...previousSequence.slice(0, -1)],
+    subtractPictogram: (previousSequence, action: PayloadAction<number>) =>
+      previousSequence.filter(
+        (pictogram) => pictogram.index !== action.payload
+      ),
+    subtractLastPict: (previousSequence) => [...previousSequence.slice(0, -1)],
 
-    addPhrase: (previousSequence, action: PayloadAction<SequenceI>) =>
+    addSequence: (previousSequence, action: PayloadAction<SequenceI>) =>
       action.payload,
+
+    renumberSequence: (previousSequence) =>
+      previousSequence.map(
+        (pictogram, indexArray) =>
+          (pictogram = { ...pictogram, index: indexArray })
+      ),
 
     upDatePictNumber: (
       previousSequence,
@@ -33,15 +43,6 @@ const sequenceSlice = createSlice({
           index === action.payload.index &&
           (pictogram.number = action.payload.number)
       );
-    },
-
-    applyAllSetting: (
-      previousSequence,
-      action: PayloadAction<SettingPayloadI>
-    ) => {
-      previousSequence.forEach((pictogram) => {
-        pictogram[action.payload.setting] = action.payload.value;
-      });
     },
 
     upDatePictWord: (
@@ -65,6 +66,15 @@ const sequenceSlice = createSlice({
           (pictogram[action.payload.setting] = action.payload.value)
       );
     },
+
+    applyAllSetting: (
+      previousSequence,
+      action: PayloadAction<SettingPayloadI>
+    ) => {
+      previousSequence.forEach((pictogram) => {
+        pictogram[action.payload.setting] = action.payload.value;
+      });
+    },
   },
 });
 
@@ -73,7 +83,9 @@ export const sequenceReducer = sequenceSlice.reducer;
 export const {
   addPictogram: addPictogramActionCreator,
   subtractPictogram: subtractPictogramActionCreator,
-  addPhrase: addPhraseActionCreator,
+  subtractLastPict: subtractLastPictActionCreator,
+  addSequence: addSequenceActionCreator,
+  renumberSequence: renumberSequenceActionCreator,
   upDatePictNumber: upDatePictNumberActionCreator,
   upDatePictWord: upDatePictWordActionCreator,
   applyAllSetting: applyAllSettingActionCreator,
