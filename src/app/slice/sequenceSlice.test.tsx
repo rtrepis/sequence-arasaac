@@ -15,6 +15,7 @@ import {
   upDateSettingActionCreator,
   upDatePictNumberActionCreator,
   upDatePictWordActionCreator,
+  addPhraseActionCreator,
 } from "./sequenceSlice";
 
 const mockSequences = preloadedState.sequence[0];
@@ -44,6 +45,24 @@ describe("Given the reducer sequenceSlice", () => {
       const expectState = [...previousSequence].slice(0, -1);
 
       const actionCreator = subtractPictogramActionCreator();
+      const newState = sequenceReducer(previousSequence, actionCreator);
+
+      expect(newState).toStrictEqual(expectState);
+    });
+  });
+
+  describe("When call 'addPhrase' with sequence payload", () => {
+    test("Then should new state is same sequence payload", () => {
+      const sequence: SequenceI = [
+        {
+          index: 1,
+          number: 2220,
+          word: { ...mockSequences.word, keyWord: "" },
+        },
+      ];
+      const expectState = [...sequence];
+
+      const actionCreator = addPhraseActionCreator(sequence);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);
@@ -96,7 +115,7 @@ describe("Given the reducer sequenceSlice", () => {
     });
   });
 
-  describe("When called 'applyAllsetting' with applyAllPayload", () => {
+  describe("When called 'applyAllSetting' with applyAllPayload", () => {
     test("Then should new state change all property of pictogram", () => {
       previousSequence = [
         {

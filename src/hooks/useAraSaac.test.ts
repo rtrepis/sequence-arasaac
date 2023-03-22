@@ -49,4 +49,21 @@ describe("Given a useAraSacc hook", () => {
       expect(mockDispatch).toHaveBeenCalledWith(expectAction);
     });
   });
+
+  describe("When getSearchPictogram it's called with search wordMock and indexPict and upDateNumber true", () => {
+    test("Then should called dispatch with action creator", async () => {
+      const indexPict = 0;
+      const wordSearchMock = "girl";
+      const expectAction = {
+        payload: { index: 0, number: 234 },
+        type: "sequence/upDatePictNumber",
+      };
+
+      const { result } = renderHook(() => useAraSaac());
+
+      await result.current.getSearchPictogram(wordSearchMock, indexPict, true);
+
+      expect(mockDispatch).toHaveBeenCalledWith(expectAction);
+    });
+  });
 });
