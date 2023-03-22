@@ -8,12 +8,20 @@
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "Escriviu les paraules en la seqüència entre espais i premeu Intro o feu clic a la lupa quan hàgiu acabat.",
+    "defaultMessage": "Escriviu les paraules de la seqüència entre espais i premeu Intro o feu clic a la lupa quan hàgiu acabat.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
     "defaultMessage": "Cerca màgica",
     "description": "label text field"
+  },
+  "components.pictEdit.close": {
+    "defaultMessage": "Tancar",
+    "description": "Close modal, edit pictogram"
+  },
+  "components.pictEdit.delete": {
+    "defaultMessage": "Eliminar",
+    "description": "Delete modal, edit pictogram"
   },
   "components.pictEdit.modal.description": {
     "defaultMessage": "Tu pots editar els pictogrames",
