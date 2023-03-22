@@ -3,6 +3,18 @@
     "defaultMessage": "Seqüències - AraSaac",
     "description": "App title translate Sequence"
   },
+  "components.magicSearch.button.": {
+    "defaultMessage": "To search",
+    "description": "label button field"
+  },
+  "components.magicSearch.helperText.": {
+    "defaultMessage": "Type the words in the sequence between spaces and press Enter or click the magnifying glass when you're done",
+    "description": "Helper text field"
+  },
+  "components.magicSearch.label": {
+    "defaultMessage": "Magic Search",
+    "description": "label text field"
+  },
   "components.pictEdit.modal.description": {
     "defaultMessage": "Tu pots editar els pictogrames",
     "description": "Description modal"
@@ -23,6 +35,10 @@
     "defaultMessage": "Afegir pictogrames",
     "description": "Add a pictogram to the amounts"
   },
+  "components.pictogramAmount.empty": {
+    "defaultMessage": "Empty",
+    "description": "Empty pictogram"
+  },
   "components.pictogramAmount.helperText": {
     "defaultMessage": "Entra el nombre de pictogrames de la seqüència",
     "description": "Helper text amount pictograms"
@@ -34,6 +50,10 @@
   "components.pictogramSearch.alert": {
     "defaultMessage": "No s'ha trobat cap pictograma, amb aquesta paraula - Intenta-ho amb una altra paraula!",
     "description": "Search pictogram not founded results"
+  },
+  "components.pictogramSearch.empty": {
+    "defaultMessage": "Empty",
+    "description": "Empty pictogram"
   },
   "components.pictogramSearch.helperText": {
     "defaultMessage": "Cercador de Pictogrames",
