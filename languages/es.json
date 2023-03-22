@@ -3,6 +3,18 @@
     "defaultMessage": "Secuencia - AraSaac",
     "description": "App title translate Sequence"
   },
+  "components.magicSearch.button.": {
+    "defaultMessage": "A buscar",
+    "description": "label button field"
+  },
+  "components.magicSearch.helperText.": {
+    "defaultMessage": "108 / 5.000\nEscriba las palabras en la secuencia entre espacios y presione Entrar o haga clic en la lupa cuando haya terminado.",
+    "description": "Helper text field"
+  },
+  "components.magicSearch.label": {
+    "defaultMessage": "Búsqueda Mágica",
+    "description": "label text field"
+  },
   "components.pictEdit.modal.description": {
     "defaultMessage": "Puedes editar el pictograma",
     "description": "Description modal"
@@ -23,8 +35,12 @@
     "defaultMessage": "Añadir pictograma",
     "description": "Add a pictogram to the amounts"
   },
+  "components.pictogramAmount.empty": {
+    "defaultMessage": "Vacío",
+    "description": "Empty pictogram"
+  },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Introduzca el número de pictogramas en la secuencia",
+    "defaultMessage": "Entra el nombre de pictogrames de la seqüència",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
@@ -34,6 +50,10 @@
   "components.pictogramSearch.alert": {
     "defaultMessage": "No se encontró ningún pictograma con esta palabra - ¡Prueba otra palabra!",
     "description": "Search pictogram not founded results"
+  },
+  "components.pictogramSearch.empty": {
+    "defaultMessage": "Vacío",
+    "description": "Empty pictogram"
   },
   "components.pictogramSearch.helperText": {
     "defaultMessage": "Motor de búsqueda de Pictogramas",
@@ -64,7 +84,7 @@
     "description": "Settings Default "
   },
   "components.settingItem.default.label": {
-    "defaultMessage": "Por defecto",
+    "defaultMessage": "Per defecte",
     "description": "Type setting item"
   },
   "components.settingPictCardList.settings.label": {
@@ -72,7 +92,7 @@
     "description": "Settings Pictogram "
   },
   "settings.skins.asian": {
-    "defaultMessage": "Asiático",
+    "defaultMessage": "Asiàtic",
     "description": "Type of setting skin"
   },
   "settings.skins.aztec": {
@@ -80,19 +100,19 @@
     "description": "Type of setting skin"
   },
   "settings.skins.black": {
-    "defaultMessage": "Negro",
+    "defaultMessage": "Negre",
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Aspecto",
+    "defaultMessage": "Pell",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
-    "defaultMessage": "Mulato",
+    "defaultMessage": "Mulat",
     "description": "Type of setting skin"
   },
   "settings.skins.white": {
-    "defaultMessage": "Blanco",
+    "defaultMessage": "Blanc",
     "description": "Type of setting skin"
   }
 }
