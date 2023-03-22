@@ -22,4 +22,26 @@ describe("Give a function 'loadLocalMessage", () => {
       expect(message["components.pictogramAmount"]).toStrictEqual(expectText);
     });
   });
+
+  describe("When it's called with string locale 'ES'", () => {
+    test("Then should return expect message 'Pictogramas:'", async () => {
+      const locale = "ES";
+      const expectText = [{ type: 0, value: "Pictogramas:" }];
+
+      const message = await loadLocalMessages(locale);
+
+      expect(message["components.pictogramAmount"]).toStrictEqual(expectText);
+    });
+  });
+
+  describe("When it's called with string locale 'en-GB'", () => {
+    test("Then should return expect message 'Pictograms:'", async () => {
+      const locale = "en-GB";
+      const expectText = [{ type: 0, value: "Pictograms:" }];
+
+      const message = await loadLocalMessages(locale);
+
+      expect(message["components.pictogramAmount"]).toStrictEqual(expectText);
+    });
+  });
 });
