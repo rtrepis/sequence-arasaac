@@ -8,7 +8,7 @@
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "108 / 5.000\nEscriba las palabras en la secuencia entre espacios y presione Entrar o haga clic en la lupa cuando haya terminado.",
+    "defaultMessage": "Escriba las palabras en la secuencia entre espacios y presione Entrar o haga clic en la lupa cuando haya terminado.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
