@@ -10,12 +10,14 @@ import { preloadedState } from "../../utils/test-utils";
 import {
   addPictogramActionCreator,
   sequenceReducer,
-  subtractPictogramActionCreator,
+  subtractLastPictActionCreator,
   applyAllSettingActionCreator,
   upDateSettingActionCreator,
   upDatePictNumberActionCreator,
   upDatePictWordActionCreator,
-  addPhraseActionCreator,
+  addSequenceActionCreator,
+  subtractPictogramActionCreator,
+  renumberSequenceActionCreator,
 } from "./sequenceSlice";
 
 const mockSequences = preloadedState.sequence[0];
@@ -41,10 +43,24 @@ describe("Given the reducer sequenceSlice", () => {
   });
 
   describe("When call `subtractPictogram'", () => {
+    test("Then should new state is same previous subtract index pictogram", () => {
+      const subtractIndexPictogram = 0;
+      const expectState: SequenceI = [];
+
+      const actionCreator = subtractPictogramActionCreator(
+        subtractIndexPictogram
+      );
+      const newState = sequenceReducer(previousSequence, actionCreator);
+
+      expect(newState).toStrictEqual(expectState);
+    });
+  });
+
+  describe("When call `subtractLasPict'", () => {
     test("Then should new state is same previous subtract last pictogram", () => {
       const expectState = [...previousSequence].slice(0, -1);
 
-      const actionCreator = subtractPictogramActionCreator();
+      const actionCreator = subtractLastPictActionCreator();
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);
@@ -62,8 +78,31 @@ describe("Given the reducer sequenceSlice", () => {
       ];
       const expectState = [...sequence];
 
-      const actionCreator = addPhraseActionCreator(sequence);
+      const actionCreator = addSequenceActionCreator(sequence);
       const newState = sequenceReducer(previousSequence, actionCreator);
+
+      expect(newState).toStrictEqual(expectState);
+    });
+  });
+
+  describe("When call 'renumberSequence' with sequence payload", () => {
+    test("Then should new state is same sequence payload", () => {
+      const previousTest: SequenceI = [
+        {
+          index: 1,
+          number: 2220,
+          word: { ...mockSequences.word, keyWord: "" },
+        },
+      ];
+      const expectState = [
+        {
+          index: 0,
+          number: 2220,
+          word: { ...mockSequences.word, keyWord: "" },
+        },
+      ];
+      const actionCreator = renumberSequenceActionCreator();
+      const newState = sequenceReducer(previousTest, actionCreator);
 
       expect(newState).toStrictEqual(expectState);
     });

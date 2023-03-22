@@ -65,7 +65,8 @@
       "!src/reportWebVitals.ts",
       "!src/react-app-env.d.ts",
       "!src/setupTests.ts",
-      "!src/**/*.test.tsx"
+      "!src/**/*.test.tsx",
+      "!src/app/store.ts"
     ],
     "moduleNameMapper": {
       "axios": "axios/dist/node/axios.cjs"
