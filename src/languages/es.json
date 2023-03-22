@@ -5,6 +5,24 @@
       "value": "Secuencia - AraSaac"
     }
   ],
+  "components.magicSearch.button.": [
+    {
+      "type": 0,
+      "value": "A buscar"
+    }
+  ],
+  "components.magicSearch.helperText.": [
+    {
+      "type": 0,
+      "value": "Escriba las palabras en la secuencia entre espacios y presione Entrar o haga clic en la lupa cuando haya terminado."
+    }
+  ],
+  "components.magicSearch.label": [
+    {
+      "type": 0,
+      "value": "Búsqueda Mágica"
+    }
+  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -35,10 +53,16 @@
       "value": "Añadir pictograma"
     }
   ],
+  "components.pictogramAmount.empty": [
+    {
+      "type": 0,
+      "value": "Vacío"
+    }
+  ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
-      "value": "Introduzca el número de pictogramas en la secuencia"
+      "value": "Entra el nombre de pictogrames de la seqüència."
     }
   ],
   "components.pictogramCard.pictogram": [
@@ -51,6 +75,12 @@
     {
       "type": 0,
       "value": "No se encontró ningún pictograma con esta palabra - ¡Prueba otra palabra!"
+    }
+  ],
+  "components.pictogramSearch.empty": [
+    {
+      "type": 0,
+      "value": "Vacío"
     }
   ],
   "components.pictogramSearch.helperText": [
@@ -98,7 +128,7 @@
   "components.settingItem.default.label": [
     {
       "type": 0,
-      "value": "Por defecto"
+      "value": "Per defecte"
     }
   ],
   "components.settingPictCardList.settings.label": [
@@ -110,7 +140,7 @@
   "settings.skins.asian": [
     {
       "type": 0,
-      "value": "Asiático"
+      "value": "Asiàtic"
     }
   ],
   "settings.skins.aztec": [
@@ -122,25 +152,25 @@
   "settings.skins.black": [
     {
       "type": 0,
-      "value": "Negro"
+      "value": "Negre"
     }
   ],
   "settings.skins.label": [
     {
       "type": 0,
-      "value": "Aspecto"
+      "value": "Pell"
     }
   ],
   "settings.skins.mulatto": [
     {
       "type": 0,
-      "value": "Mulato"
+      "value": "Mulat"
     }
   ],
   "settings.skins.white": [
     {
       "type": 0,
-      "value": "Blanco"
+      "value": "Blanc"
     }
   ]
 }
