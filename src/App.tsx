@@ -6,6 +6,8 @@ import { RootState } from "./app/store";
 import PictogramAmount from "./components/PictogramAmount/PictogramAmount";
 import BarNavigation from "./components/BarNavigation/BarNavigation";
 import PictEditList from "./components/PictEditList/PictEditList";
+import MagicSearch from "./components/MagicSearch/MagicSearch";
+import { Container } from "@mui/material";
 
 const App = () => {
   const sequence = useSelector((state: RootState) => state.sequence);
@@ -14,8 +16,14 @@ const App = () => {
     <>
       <BarNavigation>
         <>
-          <Stack direction={"column"} marginTop={2}>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+            marginTop={2}
+            justifyContent={"space-around"}
+          >
             <PictogramAmount />
+            <MagicSearch />
           </Stack>
           <Stack alignItems={"center"}>
             <PictEditList sequence={sequence} />
