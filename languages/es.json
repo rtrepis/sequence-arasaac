@@ -4,15 +4,15 @@
     "description": "App title translate Sequence"
   },
   "components.magicSearch.button.": {
-    "defaultMessage": "To search",
+    "defaultMessage": "A buscar",
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "Type the words in the sequence between spaces and press Enter or click the magnifying glass when you're done",
+    "defaultMessage": "108 / 5.000\nEscriba las palabras en la secuencia entre espacios y presione Entrar o haga clic en la lupa cuando haya terminado.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
-    "defaultMessage": "Magic Search",
+    "defaultMessage": "Búsqueda Mágica",
     "description": "label text field"
   },
   "components.pictEdit.modal.description": {
@@ -36,7 +36,7 @@
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.empty": {
-    "defaultMessage": "Empty",
+    "defaultMessage": "Vacío",
     "description": "Empty pictogram"
   },
   "components.pictogramAmount.helperText": {
@@ -52,7 +52,7 @@
     "description": "Search pictogram not founded results"
   },
   "components.pictogramSearch.empty": {
-    "defaultMessage": "Empty",
+    "defaultMessage": "Vacío",
     "description": "Empty pictogram"
   },
   "components.pictogramSearch.helperText": {
