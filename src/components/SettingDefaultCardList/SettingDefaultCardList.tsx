@@ -80,7 +80,11 @@ const SettingsDefaultCardList = (): JSX.Element => {
         <Container>
           <List>
             <ListItem>
-              <SettingCard setting={Settings.skins} action={handleUpDateSkin} />
+              <SettingCard
+                setting={Settings.skins}
+                action={handleUpDateSkin}
+                isSettingDefault={true}
+              />
             </ListItem>
             <Divider />
           </List>

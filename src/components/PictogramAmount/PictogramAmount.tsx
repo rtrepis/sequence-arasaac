@@ -20,7 +20,6 @@ import messages from "./PictogramAmount.lang";
 const PictogramAmount = (): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const skin = useAppSelector((state) => state.ui.setting.skin);
   const amountSequence = useAppSelector((state) => state.sequence.length);
 
   const initialAmountPict = 0;
@@ -33,7 +32,7 @@ const PictogramAmount = (): JSX.Element => {
       in: { color: "blue", radius: 20, size: 2 },
       out: { color: "green", radius: 20, size: 2 },
     },
-    skin: skin,
+    skin: "default",
     word: { keyWord: `${intl.formatMessage(messages.empty)}`, pictograms: [] },
   };
 
