@@ -14,13 +14,25 @@
   "components.magicSearch.helperText.": [
     {
       "type": 0,
-      "value": "Escriba las palabras en la secuencia entre espacios y presione Entrar o haga clic en la lupa cuando haya terminado."
+      "value": "Escriba las palabras de la secuencia entre espacios y presione Enter o haga clic en la lupa cuando haya terminado."
     }
   ],
   "components.magicSearch.label": [
     {
       "type": 0,
       "value": "Búsqueda Mágica"
+    }
+  ],
+  "components.pictEdit.close": [
+    {
+      "type": 0,
+      "value": "Cerrar"
+    }
+  ],
+  "components.pictEdit.delete": [
+    {
+      "type": 0,
+      "value": "Eliminar"
     }
   ],
   "components.pictEdit.modal.description": [
@@ -62,7 +74,7 @@
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
-      "value": "Entra el nombre de pictogrames de la seqüència."
+      "value": "Introduzca el número de pictogramas en la secuencia."
     }
   ],
   "components.pictogramCard.pictogram": [
