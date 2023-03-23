@@ -14,20 +14,19 @@ import { upDatePictNumberActionCreator } from "../../app/slice/sequenceSlice";
 import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
 import { ProtoPictogramI } from "../../types/sequence";
-import toUrlPathApiAraSaac from "../../utils/toUrlPathApiAraSaac";
 import messages from "./PictogramSearch.lang";
 interface PropsPictogramSearch {
   indexPict: number;
 }
 
 const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
-  const { skin } = useAppSelector((state) => state.ui.setting);
-  const { keyWord, pictograms } = useAppSelector(
-    (state) => state.sequence[indexPict].word
-  );
+  const {
+    skin,
+    word: { keyWord, pictograms },
+  } = useAppSelector((state) => state.sequence[indexPict]);
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const { getSearchPictogram } = useAraSaac();
+  const { getSearchPictogram, toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
 
   const initialWord =
     keyWord === `${intl.formatMessage({ ...messages.empty })}` ? "" : keyWord;

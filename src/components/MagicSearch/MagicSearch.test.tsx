@@ -24,6 +24,7 @@ describe("Give a component MagicSearch", () => {
           payload: {
             index: 0,
             number: 0,
+            skin: "default",
             word: { keyWord: "Hello", pictograms: [0] },
           },
           type: "sequence/addPictogram",
@@ -32,6 +33,7 @@ describe("Give a component MagicSearch", () => {
           payload: {
             index: 1,
             number: 0,
+            skin: "default",
             word: { keyWord: "word", pictograms: [0] },
           },
           type: "sequence/addPictogram",
