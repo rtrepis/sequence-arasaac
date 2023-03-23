@@ -27,6 +27,7 @@ const MagicSearch = (): JSX.Element => {
         index: newIndex,
         number: 0,
         word: { keyWord: word, pictograms: [0] },
+        skin: "default",
       };
       dispatch(addPictogramActionCreator(newPict));
       getSearchPictogram(word, newIndex, true);

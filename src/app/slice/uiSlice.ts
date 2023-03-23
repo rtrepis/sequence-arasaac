@@ -4,7 +4,7 @@ import { UiI } from "../../types/ui";
 
 const uiInitialState: UiI = {
   setting: {
-    skin: "default",
+    skin: "white",
   },
 };
 

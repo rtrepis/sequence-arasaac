@@ -38,7 +38,7 @@ const preloadedState: StateI = {
     },
   ],
   ui: {
-    setting: { skin: "default" },
+    setting: { skin: "white" },
   },
 };
 
