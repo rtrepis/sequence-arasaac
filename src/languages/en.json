@@ -14,13 +14,25 @@
   "components.magicSearch.helperText.": [
     {
       "type": 0,
-      "value": "Type the words in the sequence between spaces and press Enter or click the magnifying glass when you're done"
+      "value": "Type the words in the sequence between spaces and press Enter or click the magnifying glass when you're done."
     }
   ],
   "components.magicSearch.label": [
     {
       "type": 0,
       "value": "Magic Search"
+    }
+  ],
+  "components.pictEdit.close": [
+    {
+      "type": 0,
+      "value": "Close"
+    }
+  ],
+  "components.pictEdit.delete": [
+    {
+      "type": 0,
+      "value": "Delete"
     }
   ],
   "components.pictEdit.modal.description": [
@@ -62,7 +74,7 @@
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
-      "value": "Enter the number of pictograms in the sequence"
+      "value": "Enter the number of pictograms in the sequence."
     }
   ],
   "components.pictogramCard.pictogram": [
