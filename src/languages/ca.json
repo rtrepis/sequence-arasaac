@@ -14,13 +14,25 @@
   "components.magicSearch.helperText.": [
     {
       "type": 0,
-      "value": "Escriviu les paraules en la seqüència entre espais i premeu Intro o feu clic a la lupa quan hàgiu acabat."
+      "value": "Escriviu les paraules de la seqüència entre espais i premeu Intro o feu clic a la lupa quan hàgiu acabat."
     }
   ],
   "components.magicSearch.label": [
     {
       "type": 0,
       "value": "Cerca màgica"
+    }
+  ],
+  "components.pictEdit.close": [
+    {
+      "type": 0,
+      "value": "Tancar"
+    }
+  ],
+  "components.pictEdit.delete": [
+    {
+      "type": 0,
+      "value": "Eliminar"
     }
   ],
   "components.pictEdit.modal.description": [
