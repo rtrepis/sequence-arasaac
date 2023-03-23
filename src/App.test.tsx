@@ -4,7 +4,7 @@ import { preloadedState, render, screen } from "./utils/test-utils";
 const mockAction = jest.fn();
 jest.mock("./hooks/useAraSaac", () => () => ({
   getSearchPictogram: mockAction,
-  toUrlPathApiAraSaac: mockAction,
+  toUrlPath: mockAction,
 }));
 
 const mockDispatch = jest.fn();

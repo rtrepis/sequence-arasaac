@@ -10,7 +10,7 @@ import PictogramSearch from "./PictogramSearch";
 let mockAction = jest.fn();
 jest.mock("../../hooks/useAraSaac", () => () => ({
   getSearchPictogram: mockAction,
-  toUrlPathApiAraSaac: mockAction,
+  toUrlPath: mockAction,
 }));
 
 const mockDispatch = jest.fn();
