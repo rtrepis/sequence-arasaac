@@ -1,11 +1,13 @@
 import { renderHook } from "@testing-library/react";
-//import { useIntl } from "react-intl";
+import { SkinsT } from "../types/sequence";
 import useAraSaac from "./useAraSaac";
 
 const mockDispatch = jest.fn();
+let mockSelector = { skin: "white" };
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
   useDispatch: () => mockDispatch,
+  useSelector: () => mockSelector,
 }));
 
 const mockLanguage = { locale: "en" };
@@ -71,6 +73,48 @@ describe("Given a useAraSacc hook", () => {
       await result.current.getSearchPictogram(wordSearchMock, indexPict, true);
 
       expect(mockDispatch).toHaveBeenCalledWith(expectAction);
+    });
+  });
+
+  describe("When toUrlPath it's called with pictogram number and skin asian", () => {
+    test("Then return path with query", async () => {
+      const expectPath =
+        "https://api.arasaac.org/api/pictograms/233?skin=assian";
+      const pictogramNumber = 233;
+      const skin: SkinsT = "asian";
+
+      const { result } = renderHook(() => useAraSaac());
+      const path = await result.current.toUrlPath(pictogramNumber, skin);
+
+      expect(path).toStrictEqual(expectPath);
+    });
+  });
+
+  describe("When toUrlPath it's called with skin default ui setting is white", () => {
+    test("Then return path with query", async () => {
+      const expectPath = "https://api.arasaac.org/api/pictograms/233";
+      const pictogramNumber = 233;
+      const skin: SkinsT = "default";
+
+      const { result } = renderHook(() => useAraSaac());
+      const path = await result.current.toUrlPath(pictogramNumber, skin);
+
+      expect(path).toStrictEqual(expectPath);
+    });
+  });
+
+  describe("When toUrlPath it's called with skin default ui setting not white", () => {
+    test("Then return path with query", async () => {
+      const expectPath =
+        "https://api.arasaac.org/api/pictograms/233?skin=black";
+      const pictogramNumber = 233;
+      mockSelector = { skin: "black" };
+      const skin: SkinsT = "default";
+
+      const { result } = renderHook(() => useAraSaac());
+      const path = await result.current.toUrlPath(pictogramNumber, skin);
+
+      expect(path).toStrictEqual(expectPath);
     });
   });
 });

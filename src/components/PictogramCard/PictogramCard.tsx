@@ -1,7 +1,7 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
+import useAraSaac from "../../hooks/useAraSaac";
 import { PictogramI } from "../../types/sequence";
-import toUrlPathApiAraSaac from "../../utils/toUrlPathApiAraSaac";
 import { pictogram__card, pictogram__media } from "./PictogramCard.styled";
 import messages from "./PictogramCart.lang";
 
@@ -16,6 +16,7 @@ const PictogramCard = ({
   view,
   variant,
 }: PictogramCardProps): JSX.Element => {
+  const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
   const intl = useIntl();
 
   return (
