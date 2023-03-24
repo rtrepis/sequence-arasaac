@@ -1,10 +1,4 @@
-import {
-  Divider,
-  Stack,
-  ToggleButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Stack, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -14,7 +8,7 @@ import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
 import { UpdateSettingI, SkinsT } from "../../types/sequence";
 import { SettingLangI } from "../../types/sequence.lang";
 import { messages } from "./SettingCard.lang";
-import { applyAll } from "./SettingCard.styled";
+import { cardAction, card, cardContent, cardTitle } from "./SettingCard.styled";
 
 interface SettingCardProps {
   setting: SettingLangI;
@@ -70,20 +64,22 @@ const SettingCard = ({
   return (
     <Stack
       display={"flex"}
-      flexDirection={"row"}
       justifyContent={"space-between"}
       alignItems={"center"}
+      justifyItems={"center"}
+      direction={{ xs: "column", sm: "row" }}
+      sx={card}
     >
-      <Typography variant="body1" sx={{ fontWeight: "bold" }} component="h4">
+      <Typography variant="body1" sx={cardTitle} component="h4">
         <FormattedMessage {...messageSetting} />
       </Typography>
-      <Divider />
 
       <StyledToggleButtonGroup
         value={type}
         exclusive
         onChange={handleChangeType}
         aria-label={`${intl.formatMessage({ ...messageSetting })}`}
+        sx={cardContent}
       >
         {types
           .filter(({ name }) =>
@@ -136,10 +132,12 @@ const SettingCard = ({
         )}
       </StyledToggleButtonGroup>
 
-      <Divider />
-
       {!isSettingDefault && (
-        <StyledButton variant="outlined" sx={applyAll} onClick={handleApplyAll}>
+        <StyledButton
+          variant="outlined"
+          sx={cardAction}
+          onClick={handleApplyAll}
+        >
           <FormattedMessage {...messages.applyAll} />
         </StyledButton>
       )}
