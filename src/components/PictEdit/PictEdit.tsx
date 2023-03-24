@@ -55,7 +55,8 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
         onClose={handleClose}
         aria-labelledby={intl.formatMessage({ ...messages.modal })}
         aria-describedby={intl.formatMessage({ ...messages.description })}
-        maxWidth={"xl"}
+        maxWidth={"sm"}
+        fullWidth
         sx={{ ".MuiDialog-paperScrollPaper": { borderRadius: 5 } }}
       >
         <Stack
@@ -73,12 +74,13 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
             {pictogram.index + 1}
           </Typography>
         </Stack>
-        <DialogContent dividers={true}>
+        <DialogContent dividers={true} sx={{ padding: 2 }}>
           <Stack
             display={"flex"}
-            flexWrap={"wrap"}
-            flexDirection={"row"}
-            justifyContent={"space-around"}
+            justifyContent={"space-between"}
+            alignItems={"start"}
+            direction={{ xs: "column", sm: "row" }}
+            spacing={{ xs: 3, sm: 2 }}
           >
             <PictogramCard
               pictogram={pictogram}

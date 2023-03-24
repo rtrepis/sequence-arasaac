@@ -2,8 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  List,
-  ListItem,
+  IconButton,
 } from "@mui/material";
 import { AiOutlineSetting } from "react-icons/ai";
 import { useIntl } from "react-intl";
@@ -13,7 +12,12 @@ import { UpdateSettingI } from "../../types/sequence";
 import SettingCard from "../SettingCard/SettingCard";
 import { Settings } from "../SettingCard/SettingCard.lang";
 import messages from "./SettingPictCardList.lang";
-import { button__setting } from "./SettingPictCardList.styled";
+import {
+  cardList,
+  cardListContent,
+  cardListTitle,
+  cardListTitleContent,
+} from "./SettingPictCardList.styled";
 
 interface SettingsPictogramProps {
   indexPict: number;
@@ -30,23 +34,21 @@ const SettingsPictCardList = ({
   };
 
   return (
-    <Accordion sx={{ marginBlock: 2 }}>
+    <Accordion variant="outlined" sx={cardList}>
       <AccordionSummary
         aria-label={`${intl.formatMessage({ ...messages.settings })}`}
-        sx={button__setting}
+        sx={cardListTitle}
       >
-        <AiOutlineSetting />
+        <IconButton sx={cardListTitleContent}>
+          <AiOutlineSetting />
+        </IconButton>
       </AccordionSummary>
-      <AccordionDetails>
-        <List>
-          <ListItem>
-            <SettingCard
-              setting={Settings.skins}
-              action={handleUpDateSetting}
-              indexPict={indexPict}
-            />
-          </ListItem>
-        </List>
+      <AccordionDetails sx={cardListContent}>
+        <SettingCard
+          setting={Settings.skins}
+          action={handleUpDateSetting}
+          indexPict={indexPict}
+        />
       </AccordionDetails>
     </Accordion>
   );

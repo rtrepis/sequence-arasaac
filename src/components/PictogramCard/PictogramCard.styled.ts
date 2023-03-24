@@ -1,5 +1,6 @@
 export const pictogram__card = (border: any, variant: any) => {
   const sx = {
+    alignSelf: "center",
     minWidth: 195,
     maxWidth: 195,
     textAlign: "center",

@@ -50,13 +50,7 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
   };
 
   return (
-    <Stack
-      sx={{
-        maxWidth: 300,
-        paddingInlineStart: 2,
-        paddingBlockStart: 2,
-      }}
-    >
+    <Stack flex={1} sx={{ width: "-webkit-fill-available" }}>
       <form onSubmit={handleSubmit}>
         <TextField
           label={intl.formatMessage({ ...messages.search })}
@@ -78,7 +72,8 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
           autoComplete={"off"}
           value={word}
           onChange={handleChange}
-          sx={{ width: 290 }}
+          fullWidth
+          sx={{ width: "100%" }}
         />
       </form>
       <StyledToggleButtonGroup>
@@ -102,7 +97,7 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
           ))}
       </StyledToggleButtonGroup>
       {pictograms[0] === -1 && (
-        <Alert severity="info" sx={{ maxWidth: 280 }}>
+        <Alert severity="info">
           <FormattedMessage {...messages.alert} />
         </Alert>
       )}
