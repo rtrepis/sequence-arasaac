@@ -5,7 +5,7 @@ import { Stack } from "@mui/system";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import { PictogramI } from "../../types/sequence";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
-import SettingsPictCardList from "../SettingPictCardList/SettingPictCardList";
+import SettingsPictCardList from "../PictSettingCardList/PictSettingCardList";
 import { useState } from "react";
 import messages from "./PictEdti.lang";
 import { circlePictogramNumber } from "./PictEdit.styled";

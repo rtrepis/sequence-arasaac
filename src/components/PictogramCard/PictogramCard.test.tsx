@@ -1,8 +1,9 @@
 import { BorderPictI, PictogramI } from "../../types/sequence";
-import { render, screen } from "../../utils/test-utils";
+import { preloadedState, render, screen } from "../../utils/test-utils";
 import PictogramCard from "./PictogramCard";
 
 let pictogramEmpty: PictogramI = {
+  ...preloadedState.sequence[0],
   index: 0,
   number: 26527,
   border: {

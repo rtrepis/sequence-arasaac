@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Container from "@mui/material/Container";
 import Slide from "@mui/material/Slide";
-import SettingsDefaultCardList from "../SettingDefaultCardList/SettingDefaultCardList";
+import SettingsDefaultCardList from "../DefaultSettingCardList/DefaultSettingCardList";
 import { FormattedMessage } from "react-intl";
 import messages from "./BarNavigation.lang";
 

@@ -10,7 +10,13 @@ describe("Give a component Setting Item", () => {
       const mockAction = jest.fn();
       const uiSettingDefaultType = "White";
 
-      render(<SettingCard setting={Settings.skins} action={mockAction} />);
+      render(
+        <SettingCard
+          setting={Settings.skins}
+          action={mockAction}
+          selected={"aztec"}
+        />
+      );
 
       skins
         .filter((skin) => skin !== uiSettingDefaultType)
@@ -38,7 +44,13 @@ describe("Give a component Setting Item", () => {
       const expectButtons = ["Apply All", "Default"];
       const mockAction = jest.fn();
 
-      render(<SettingCard setting={Settings.skins} action={mockAction} />);
+      render(
+        <SettingCard
+          setting={Settings.skins}
+          action={mockAction}
+          selected={"aztec"}
+        />
+      );
 
       expectButtons.forEach((expectButton) => {
         const button = screen.getByRole("button", { name: expectButton });

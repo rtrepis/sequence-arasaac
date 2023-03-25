@@ -24,11 +24,17 @@ const mockSequences = preloadedState.sequence[0];
 
 describe("Given the reducer sequenceSlice", () => {
   let previousSequence: SequenceI = [
-    { index: 0, number: 0, word: { ...mockSequences.word, keyWord: "" } },
+    {
+      ...preloadedState.sequence[0],
+      index: 0,
+      number: 0,
+      word: { ...mockSequences.word, keyWord: "" },
+    },
   ];
   describe("When call 'addPictogram' with pictogram payload", () => {
     test("Then should new state is same previous add new pictogram", () => {
       const pictogram: PictogramI = {
+        ...preloadedState.sequence[0],
         index: 1,
         number: 2220,
         word: { ...mockSequences.word, keyWord: "" },
@@ -71,6 +77,7 @@ describe("Given the reducer sequenceSlice", () => {
     test("Then should new state is same sequence payload", () => {
       const sequence: SequenceI = [
         {
+          ...preloadedState.sequence[0],
           index: 1,
           number: 2220,
           word: { ...mockSequences.word, keyWord: "" },
@@ -89,16 +96,14 @@ describe("Given the reducer sequenceSlice", () => {
     test("Then should new state is same sequence payload", () => {
       const previousTest: SequenceI = [
         {
+          ...preloadedState.sequence[0],
           index: 1,
-          number: 2220,
-          word: { ...mockSequences.word, keyWord: "" },
         },
       ];
       const expectState = [
         {
+          ...preloadedState.sequence[0],
           index: 0,
-          number: 2220,
-          word: { ...mockSequences.word, keyWord: "" },
         },
       ];
       const actionCreator = renumberSequenceActionCreator();
@@ -115,7 +120,12 @@ describe("Given the reducer sequenceSlice", () => {
         number: 1254,
       };
       previousSequence = [
-        { index: 0, number: 0, word: { ...mockSequences.word, keyWord: "" } },
+        {
+          ...preloadedState.sequence[0],
+          index: 0,
+          number: 0,
+          word: { ...mockSequences.word, keyWord: "" },
+        },
       ];
 
       const expectState = [{ ...previousSequence[0], index: 0, number: 1254 }];
@@ -136,7 +146,12 @@ describe("Given the reducer sequenceSlice", () => {
         word: { keyWord: "testWord", pictograms: [99, 66] },
       };
       previousSequence = [
-        { index: 0, number: 0, word: { ...mockSequences.word, keyWord: "" } },
+        {
+          ...preloadedState.sequence[0],
+          index: 0,
+          number: 0,
+          word: { ...mockSequences.word, keyWord: "" },
+        },
       ];
 
       const expectState = [
