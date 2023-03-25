@@ -10,11 +10,11 @@ import { AiOutlineClose, AiOutlineSetting } from "react-icons/ai";
 import { forwardRef, useState } from "react";
 import { Divider, List, ListItem } from "@mui/material";
 import SettingCard from "../SettingCard/SettingCard";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { UpdateSettingI } from "../../types/sequence";
 import { updateSkinActionCreator } from "../../app/slice/uiSlice";
 import { FormattedMessage, useIntl } from "react-intl";
-import messages from "./SettingDefaultCardList.lang";
+import messages from "./DefaultSettingCardList.lang";
 import { Settings } from "../SettingCard/SettingCard.lang";
 import { Container } from "@mui/system";
 
@@ -28,6 +28,7 @@ const Transition = forwardRef(function Transition(
 });
 
 const SettingsDefaultCardList = (): JSX.Element => {
+  const defaultSetting = useAppSelector((state) => state.ui.setting);
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -84,6 +85,7 @@ const SettingsDefaultCardList = (): JSX.Element => {
                 setting={Settings.skins}
                 action={handleUpDateSkin}
                 isSettingDefault={true}
+                selected={defaultSetting.skin}
               />
             </ListItem>
             <Divider />
