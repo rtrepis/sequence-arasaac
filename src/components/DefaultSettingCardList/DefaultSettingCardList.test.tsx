@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "../../utils/test-utils";
-import SettingsDefaultCardList from "./SettingDefaultCardList";
+import SettingsDefaultCardList from "./DefaultSettingCardList";
 
 const mockDispatch = jest.fn();
 jest.mock("react-redux", () => ({

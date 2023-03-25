@@ -16,6 +16,7 @@ jest.mock("react-redux", () => ({
 
 describe("Give a component PictEdit", () => {
   const pictogram = {
+    ...preloadedState.sequence[0],
     index: 0,
     number: 26527,
     border: {

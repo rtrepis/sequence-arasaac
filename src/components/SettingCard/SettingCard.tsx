@@ -13,25 +13,20 @@ import { cardAction, card, cardContent, cardTitle } from "./SettingCard.styled";
 interface SettingCardProps {
   setting: SettingLangI;
   action: (toUpdate: UpdateSettingI) => void;
-  indexPict?: number;
   isSettingDefault?: boolean | false;
+  selected: SkinsT;
 }
 
 const SettingCard = ({
-  setting: { types, message: messageSetting, name: nameSetting },
+  setting: { types, message: messageSetting, name: setting },
   action,
-  indexPict,
   isSettingDefault,
+  selected,
 }: SettingCardProps): JSX.Element => {
-  const pictSettingType = useAppSelector((state) =>
-    indexPict === undefined
-      ? state.ui.setting[nameSetting]
-      : state.sequence[indexPict][nameSetting]
-  );
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const uiDefaultSettingType = useAppSelector(
-    (state) => state.ui.setting[nameSetting]
+    (state) => state.ui.setting[setting]
   );
   const [type, setType] = useState<string | null>("default");
 
@@ -43,22 +38,20 @@ const SettingCard = ({
   };
 
   const handleApplyAll = () => {
-    dispatch(
-      applyAllSettingActionCreator({
-        setting: nameSetting,
-        value: pictSettingType!,
-      })
-    );
+    selected !== undefined &&
+      dispatch(
+        applyAllSettingActionCreator({
+          setting: setting,
+          value: selected,
+        })
+      );
   };
 
   const handleClickSettingType = (value: SkinsT) => {
-    indexPict === undefined
-      ? action({ setting: nameSetting, value: value })
-      : action({
-          index: indexPict,
-          setting: nameSetting,
-          value: value,
-        });
+    action({
+      setting: setting,
+      value: value,
+    });
   };
 
   return (
@@ -83,7 +76,7 @@ const SettingCard = ({
       >
         {types
           .filter(({ name }) =>
-            isSettingDefault || pictSettingType === uiDefaultSettingType
+            isSettingDefault || selected === uiDefaultSettingType
               ? name
               : name !== uiDefaultSettingType
           )
@@ -92,16 +85,12 @@ const SettingCard = ({
               value={name}
               aria-label={intl.formatMessage({ ...message })}
               key={name}
-              selected={
-                isSettingDefault
-                  ? uiDefaultSettingType === name
-                  : pictSettingType === name
-              }
+              selected={selected === name}
               onClick={() => handleClickSettingType(name)}
             >
               <Tooltip title={intl.formatMessage({ ...message })} arrow>
                 <img
-                  src={`/img/settings/${nameSetting}/${name}.png`}
+                  src={`/img/settings/${setting}/${name}.png`}
                   alt={`${intl.formatMessage({
                     ...messageSetting,
                   })} ${intl.formatMessage({ ...message })}`}
@@ -116,7 +105,7 @@ const SettingCard = ({
           <ToggleButton
             value={"default"}
             onClick={() => handleClickSettingType("default")}
-            selected={pictSettingType === "default"}
+            selected={selected === "default"}
           >
             <Tooltip title={intl.formatMessage({ ...messages.default })}>
               <img
