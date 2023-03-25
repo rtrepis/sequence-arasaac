@@ -8,9 +8,24 @@ describe("Give a component PictogramCardList", () => {
   describe("When a rendered with sequence array", () => {
     test("Then should show all results of array", () => {
       const sequence: SequenceI = [
-        { index: 0, number: 2333, word: { ...mockSequence.word, keyWord: "" } },
-        { index: 1, number: 2333, word: { ...mockSequence.word, keyWord: "" } },
-        { index: 2, number: 2333, word: { ...mockSequence.word, keyWord: "" } },
+        {
+          ...preloadedState.sequence[0],
+          index: 0,
+          number: 2333,
+          word: { ...mockSequence.word, keyWord: "" },
+        },
+        {
+          ...preloadedState.sequence[0],
+          index: 1,
+          number: 2333,
+          word: { ...mockSequence.word, keyWord: "" },
+        },
+        {
+          ...preloadedState.sequence[0],
+          index: 2,
+          number: 2333,
+          word: { ...mockSequence.word, keyWord: "" },
+        },
       ];
 
       render(<PictEditList sequence={sequence} />);

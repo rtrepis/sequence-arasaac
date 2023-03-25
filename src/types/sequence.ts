@@ -33,7 +33,7 @@ export interface PictogramI extends ProtoPictogramI {
     in?: BorderPictI;
     out?: BorderPictI;
   };
-  skin?: SkinsT;
+  skin: SkinsT;
 }
 
 export type SettingsT = "skin";

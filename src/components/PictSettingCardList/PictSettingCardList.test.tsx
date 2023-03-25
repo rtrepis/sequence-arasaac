@@ -4,7 +4,7 @@ import {
   render,
   screen,
 } from "../../utils/test-utils";
-import SettingsPictCardList from "./SettingPictCardList";
+import SettingsPictCardList from "./PictSettingCardList";
 
 const mockDispatch = jest.fn();
 jest.mock("react-redux", () => ({
