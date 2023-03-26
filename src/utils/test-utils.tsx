@@ -8,37 +8,39 @@ import { CssBaseline } from "@mui/material";
 import { IntlProvider } from "react-intl";
 import messages from "../languages/en.json";
 import { uiReducer } from "../app/slice/uiSlice";
-import { SequenceI } from "../types/sequence";
-import { UiI } from "../types/ui";
+import { Sequence } from "../types/sequence";
+import { Ui } from "../types/ui";
 
 interface WrapperProps {
   children: JSX.Element | JSX.Element[];
 }
 
-interface StateI {
-  sequence: SequenceI;
-  ui: UiI;
+export interface State {
+  sequence: Sequence;
+  ui: Ui;
 }
 
-const preloadedState: StateI = {
+const preloadedState: State = {
   sequence: [
     {
-      index: 0,
-      number: 26527,
-      border: {
-        in: { color: "blue", radius: 20, size: 2 },
-        out: { color: "green", radius: 20, size: 2 },
+      indexSequence: 0,
+      img: {
+        searched: { word: "test", bestIdPicts: [11, 22, 33] },
+        selectedId: 26527,
+        settings: { skin: "black" },
       },
-      skin: "black",
-      word: {
-        keyWord: "test",
-        pictograms: [11, 22, 33],
-        userText: "UserTextTest",
+      text: "test",
+      settings: {
+        textPosition: "bottom",
+        border: {
+          in: { color: "blue", radius: 20, size: 2 },
+          out: { color: "green", radius: 20, size: 2 },
+        },
       },
     },
   ],
   ui: {
-    setting: { skin: "white" },
+    defaultSettings: { PictApiAra: { skin: "white" } },
   },
 };
 

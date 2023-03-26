@@ -1,79 +1,81 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  PictogramI,
-  SequenceI,
-  UpdateSettingI,
-  ProtoPictogramI,
-  UpdatePictWordI,
+  PictSequence,
+  Sequence,
+  UpdateSelectedId,
+  UpdateSearched,
+  SettingToUpdate,
+  UpdateAllSetting,
 } from "../../types/sequence";
-import { SettingPayloadI } from "../../types/ui";
 
-const sequenceInitialState: SequenceI = [];
+const sequenceInitialState: Sequence = [];
 
 const sequenceSlice = createSlice({
   name: "sequence",
   initialState: sequenceInitialState,
   reducers: {
-    addPictogram: (previousSequence, action: PayloadAction<PictogramI>) => [
+    addPictogram: (previousSequence, action: PayloadAction<PictSequence>) => [
       ...previousSequence,
       action.payload,
     ],
 
     subtractPictogram: (previousSequence, action: PayloadAction<number>) =>
       previousSequence.filter(
-        (pictogram) => pictogram.index !== action.payload
+        (pictogram) => pictogram.indexSequence !== action.payload
       ),
     subtractLastPict: (previousSequence) => [...previousSequence.slice(0, -1)],
 
-    addSequence: (previousSequence, action: PayloadAction<SequenceI>) =>
+    addSequence: (previousSequence, action: PayloadAction<Sequence>) =>
       action.payload,
 
     renumberSequence: (previousSequence) =>
-      previousSequence.map((pictogram, indexArray) => ({
+      previousSequence.map((pictogram, index) => ({
         ...pictogram,
-        index: indexArray,
+        indexSequence: index,
       })),
 
-    upDatePictNumber: (
+    upDatePictSelectedId: (
       previousSequence,
-      action: PayloadAction<ProtoPictogramI>
+      action: PayloadAction<UpdateSelectedId>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
-          index === action.payload.index &&
-          (pictogram.number = action.payload.number)
+          index === action.payload.indexSequence &&
+          (pictogram.img.selectedId = action.payload.selectedId)
       );
     },
 
-    upDatePictWord: (
+    upDatePictSearched: (
       previousSequence,
-      action: PayloadAction<UpdatePictWordI>
+      action: PayloadAction<UpdateSearched>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
-          index === action.payload.indexPict &&
-          (pictogram.word = action.payload.word)
+          index === action.payload.indexSequence &&
+          (pictogram.img.searched = action.payload.searched)
       );
     },
 
     upDateSetting: (
       previousSequence,
-      action: PayloadAction<UpdateSettingI>
+      action: PayloadAction<SettingToUpdate>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
-          index === action.payload.index &&
-          (pictogram[action.payload.setting] = action.payload.value)
+          index === action.payload.indexSequence &&
+          (pictogram.img.settings[action.payload.setting] =
+            action.payload.value)
       );
     },
 
     applyAllSetting: (
       previousSequence,
-      action: PayloadAction<SettingPayloadI>
+      action: PayloadAction<UpdateAllSetting>
     ) => {
       previousSequence.map(
         (pictogram) =>
-          (pictogram[action.payload.setting] = action.payload.value)
+          (pictogram.img.settings[action.payload.setting] =
+            action.payload.value)
       );
     },
   },
@@ -87,8 +89,8 @@ export const {
   subtractLastPict: subtractLastPictActionCreator,
   addSequence: addSequenceActionCreator,
   renumberSequence: renumberSequenceActionCreator,
-  upDatePictNumber: upDatePictNumberActionCreator,
-  upDatePictWord: upDatePictWordActionCreator,
+  upDatePictSelectedId: upDatePictSelectedIdActionCreator,
+  upDatePictSearched: upDatePictSearchedActionCreator,
   applyAllSetting: applyAllSettingActionCreator,
   upDateSetting: upDateSettingActionCreator,
 } = sequenceSlice.actions;

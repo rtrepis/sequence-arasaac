@@ -8,7 +8,7 @@ import { AiOutlineSetting } from "react-icons/ai";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { upDateSettingActionCreator } from "../../app/slice/sequenceSlice";
-import { UpdateSettingI } from "../../types/sequence";
+import { SettingToUpdate } from "../../types/sequence";
 import SettingCard from "../SettingCard/SettingCard";
 import { Settings } from "../SettingCard/SettingCard.lang";
 import messages from "./PictSettingCardList.lang";
@@ -26,12 +26,16 @@ interface SettingsPictogramProps {
 const SettingsPictCardList = ({
   indexPict,
 }: SettingsPictogramProps): JSX.Element => {
-  const pictSetting = useAppSelector((state) => state.sequence[indexPict]);
+  const pictSetting = useAppSelector(
+    (state) => state.sequence[indexPict].img.settings
+  );
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const handleUpDateSetting = (toUpdate: UpdateSettingI) => {
-    dispatch(upDateSettingActionCreator({ index: indexPict, ...toUpdate }));
+  const handleUpDateSetting = (toUpdate: SettingToUpdate) => {
+    dispatch(
+      upDateSettingActionCreator({ indexSequence: indexPict, ...toUpdate })
+    );
   };
 
   return (

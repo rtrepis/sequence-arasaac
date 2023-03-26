@@ -1,11 +1,11 @@
 import {
-  PictogramI,
-  ProtoPictogramI,
-  SequenceI,
-  UpdatePictWordI,
-  UpdateSettingI,
+  PictSequence,
+  UpdateSelectedId,
+  Sequence,
+  UpdateSearched,
+  UpdateAllSetting,
+  SettingToUpdate,
 } from "../../types/sequence";
-import { SettingPayloadI } from "../../types/ui";
 import { preloadedState } from "../../utils/test-utils";
 import {
   addPictogramActionCreator,
@@ -13,8 +13,8 @@ import {
   subtractLastPictActionCreator,
   applyAllSettingActionCreator,
   upDateSettingActionCreator,
-  upDatePictNumberActionCreator,
-  upDatePictWordActionCreator,
+  upDatePictSelectedIdActionCreator,
+  upDatePictSearchedActionCreator,
   addSequenceActionCreator,
   subtractPictogramActionCreator,
   renumberSequenceActionCreator,
@@ -23,22 +23,36 @@ import {
 const mockSequences = preloadedState.sequence[0];
 
 describe("Given the reducer sequenceSlice", () => {
-  let previousSequence: SequenceI = [
+  let previousSequence: Sequence = [
     {
       ...preloadedState.sequence[0],
-      index: 0,
-      number: 0,
-      word: { ...mockSequences.word, keyWord: "" },
+      indexSequence: 0,
+      img: {
+        ...preloadedState.sequence[0].img,
+        selectedId: 0,
+        searched: {
+          ...preloadedState.sequence[0].img.searched,
+          word: "",
+        },
+      },
     },
   ];
+
   describe("When call 'addPictogram' with pictogram payload", () => {
     test("Then should new state is same previous add new pictogram", () => {
-      const pictogram: PictogramI = {
+      const pictogram: PictSequence = {
         ...preloadedState.sequence[0],
-        index: 1,
-        number: 2220,
-        word: { ...mockSequences.word, keyWord: "" },
+        indexSequence: 1,
+        img: {
+          ...preloadedState.sequence[0].img,
+          selectedId: 2220,
+          searched: {
+            ...preloadedState.sequence[0].img.searched,
+            word: "",
+          },
+        },
       };
+
       const expectState = [...previousSequence, pictogram];
 
       const actionCreator = addPictogramActionCreator(pictogram);
@@ -51,7 +65,7 @@ describe("Given the reducer sequenceSlice", () => {
   describe("When call `subtractPictogram'", () => {
     test("Then should new state is same previous subtract index pictogram", () => {
       const subtractIndexPictogram = 0;
-      const expectState: SequenceI = [];
+      const expectState: Sequence = [];
 
       const actionCreator = subtractPictogramActionCreator(
         subtractIndexPictogram
@@ -75,12 +89,18 @@ describe("Given the reducer sequenceSlice", () => {
 
   describe("When call 'addPhrase' with sequence payload", () => {
     test("Then should new state is same sequence payload", () => {
-      const sequence: SequenceI = [
+      const sequence: Sequence = [
         {
           ...preloadedState.sequence[0],
-          index: 1,
-          number: 2220,
-          word: { ...mockSequences.word, keyWord: "" },
+          indexSequence: 1,
+          img: {
+            ...preloadedState.sequence[0].img,
+            selectedId: 2220,
+            searched: {
+              ...preloadedState.sequence[0].img.searched,
+              word: "",
+            },
+          },
         },
       ];
       const expectState = [...sequence];
@@ -94,16 +114,16 @@ describe("Given the reducer sequenceSlice", () => {
 
   describe("When call 'renumberSequence' with sequence payload", () => {
     test("Then should new state is same sequence payload", () => {
-      const previousTest: SequenceI = [
+      const previousTest: Sequence = [
         {
           ...preloadedState.sequence[0],
-          index: 1,
+          indexSequence: 1,
         },
       ];
       const expectState = [
         {
           ...preloadedState.sequence[0],
-          index: 0,
+          indexSequence: 0,
         },
       ];
       const actionCreator = renumberSequenceActionCreator();
@@ -113,24 +133,35 @@ describe("Given the reducer sequenceSlice", () => {
     });
   });
 
-  describe("When called 'upDatePictNumber' with ProtoPictogramI", () => {
+  describe("When called 'upDatePictSelectedId' with ProtoPictSequence", () => {
     test("Then should new state with update pictogram of sequence", () => {
-      const upDatePictogramNumber: ProtoPictogramI = {
-        index: 0,
-        number: 1254,
+      const upDatePictogramNumber: UpdateSelectedId = {
+        indexSequence: 0,
+        selectedId: 1254,
       };
       previousSequence = [
         {
           ...preloadedState.sequence[0],
-          index: 0,
-          number: 0,
-          word: { ...mockSequences.word, keyWord: "" },
+          indexSequence: 0,
+          img: {
+            ...preloadedState.sequence[0].img,
+            searched: {
+              ...preloadedState.sequence[0].img.searched,
+              word: "",
+            },
+          },
         },
       ];
 
-      const expectState = [{ ...previousSequence[0], index: 0, number: 1254 }];
+      const expectState: PictSequence[] = [
+        {
+          ...previousSequence[0],
+          indexSequence: 0,
+          img: { ...previousSequence[0].img, selectedId: 1254 },
+        },
+      ];
 
-      const actionCreator = upDatePictNumberActionCreator(
+      const actionCreator = upDatePictSelectedIdActionCreator(
         upDatePictogramNumber
       );
       const newState = sequenceReducer(previousSequence, actionCreator);
@@ -139,30 +170,40 @@ describe("Given the reducer sequenceSlice", () => {
     });
   });
 
-  describe("When called 'upDatePictWord' with upDatePictWordI", () => {
+  describe("When called 'upDatePictSearched' with upDatePictWordI", () => {
     test("Then should new state with update pictogram of sequence", () => {
-      const upDatePictogramWord: UpdatePictWordI = {
-        indexPict: 0,
-        word: { keyWord: "testWord", pictograms: [99, 66] },
+      const upDatePictogramWord: UpdateSearched = {
+        indexSequence: 0,
+        searched: { word: "testWord", bestIdPicts: [99, 66] },
       };
       previousSequence = [
         {
           ...preloadedState.sequence[0],
-          index: 0,
-          number: 0,
-          word: { ...mockSequences.word, keyWord: "" },
+          indexSequence: 0,
+          img: {
+            ...preloadedState.sequence[0].img,
+            selectedId: 0,
+            searched: {
+              ...preloadedState.sequence[0].img.searched,
+              word: "",
+            },
+          },
         },
       ];
 
-      const expectState = [
+      const expectState: PictSequence[] = [
         {
           ...previousSequence[0],
-          index: 0,
-          word: { ...upDatePictogramWord.word },
+          indexSequence: 0,
+          img: {
+            ...previousSequence[0].img,
+            searched: { ...upDatePictogramWord.searched },
+          },
         },
       ];
 
-      const actionCreator = upDatePictWordActionCreator(upDatePictogramWord);
+      const actionCreator =
+        upDatePictSearchedActionCreator(upDatePictogramWord);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);
@@ -173,18 +214,29 @@ describe("Given the reducer sequenceSlice", () => {
     test("Then should new state change all property of pictogram", () => {
       previousSequence = [
         {
-          index: 0,
-          number: 0,
-          skin: "default",
-          word: { ...mockSequences.word, keyWord: "" },
+          ...preloadedState.sequence[0],
+          indexSequence: 0,
+          img: {
+            selectedId: 0,
+            searched: { ...mockSequences.img.searched, word: "" },
+            settings: { skin: "default" },
+          },
         },
       ];
-      const applyAllPayload: SettingPayloadI = {
+      const applyAllPayload: UpdateAllSetting = {
         setting: "skin",
         value: "black",
       };
-      const expectState = [
-        { ...previousSequence[0], index: 0, number: 0, skin: "black" },
+      const expectState: PictSequence[] = [
+        {
+          ...previousSequence[0],
+          indexSequence: 0,
+          img: {
+            ...previousSequence[0].img,
+            selectedId: 0,
+            settings: { skin: "black" },
+          },
+        },
       ];
 
       const actionCreator = applyAllSettingActionCreator(applyAllPayload);
@@ -196,29 +248,43 @@ describe("Given the reducer sequenceSlice", () => {
 
   describe("When called 'upDateSetting' with UpdateSetting", () => {
     test("Then should new state with update PictogramSetting", () => {
-      const upDatePictogramSetting: UpdateSettingI = {
-        index: 0,
+      const upDatePictogramSetting: SettingToUpdate = {
+        indexSequence: 0,
         setting: "skin",
         value: "asian",
       };
       previousSequence = [
         {
-          index: 0,
-          number: 0,
-          skin: "default",
-          word: { ...mockSequences.word, keyWord: "" },
+          ...preloadedState.sequence[0],
+          indexSequence: 0,
+          img: {
+            selectedId: 0,
+            searched: { ...mockSequences.img.searched, word: "" },
+            settings: { skin: "default" },
+          },
         },
         {
-          index: 1,
-          number: 0,
-          skin: "black",
-          word: { ...mockSequences.word, keyWord: "" },
+          ...preloadedState.sequence[0],
+          indexSequence: 1,
+          img: {
+            selectedId: 0,
+            searched: { ...mockSequences.img.searched, word: "" },
+            settings: { skin: "black" },
+          },
         },
       ];
 
-      const expectState = [
-        { ...previousSequence[0], index: 0, number: 0, skin: "asian" },
-        { ...previousSequence[1], index: 1, number: 0, skin: "black" },
+      const expectState: PictSequence[] = [
+        {
+          ...previousSequence[0],
+          indexSequence: 0,
+          img: { ...previousSequence[0].img, settings: { skin: "asian" } },
+        },
+        {
+          ...previousSequence[0],
+          indexSequence: 1,
+          img: { ...previousSequence[0].img, settings: { skin: "black" } },
+        },
       ];
 
       const actionCreator = upDateSettingActionCreator(upDatePictogramSetting);

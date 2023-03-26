@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { SkinsT } from "../types/sequence";
+import { Skins } from "../types/sequence";
 import useAraSaac from "./useAraSaac";
 
 const mockDispatch = jest.fn();
@@ -25,10 +25,10 @@ describe("Given a useAraSacc hook", () => {
       const wordSearchMock = "girl";
       const expectAction = {
         payload: {
-          indexPict: 0,
-          word: { keyWord: "girl", pictograms: [234, 234] },
+          indexSequence: 0,
+          searched: { bestIdPicts: [234, 234], word: "girl" },
         },
-        type: "sequence/upDatePictWord",
+        type: "sequence/upDatePictSearched",
       };
 
       const { result } = renderHook(() => useAraSaac());
@@ -45,10 +45,10 @@ describe("Given a useAraSacc hook", () => {
       const wordSearchMock = "asdfas";
       const expectAction = {
         payload: {
-          indexPict: 0,
-          word: { keyWord: "asdfas", pictograms: [-1] },
+          indexSequence: 0,
+          searched: { bestIdPicts: [-1], word: "asdfas" },
         },
-        type: "sequence/upDatePictWord",
+        type: "sequence/upDatePictSearched",
       };
 
       const { result } = renderHook(() => useAraSaac());
@@ -64,8 +64,8 @@ describe("Given a useAraSacc hook", () => {
       const indexPict = 0;
       const wordSearchMock = "girl";
       const expectAction = {
-        payload: { index: 0, number: 234 },
-        type: "sequence/upDatePictNumber",
+        payload: { indexSequence: 0, selectedId: 234 },
+        type: "sequence/upDatePictSelectedId",
       };
 
       const { result } = renderHook(() => useAraSaac());
@@ -81,7 +81,7 @@ describe("Given a useAraSacc hook", () => {
       const expectPath =
         "https://api.arasaac.org/api/pictograms/233?skin=assian";
       const pictogramNumber = 233;
-      const skin: SkinsT = "asian";
+      const skin: Skins = "asian";
 
       const { result } = renderHook(() => useAraSaac());
       const path = await result.current.toUrlPath(pictogramNumber, skin);
@@ -94,7 +94,7 @@ describe("Given a useAraSacc hook", () => {
     test("Then return path with query", async () => {
       const expectPath = "https://api.arasaac.org/api/pictograms/233";
       const pictogramNumber = 233;
-      const skin: SkinsT = "default";
+      const skin: Skins = "default";
 
       const { result } = renderHook(() => useAraSaac());
       const path = await result.current.toUrlPath(pictogramNumber, skin);
@@ -109,7 +109,7 @@ describe("Given a useAraSacc hook", () => {
         "https://api.arasaac.org/api/pictograms/233?skin=black";
       const pictogramNumber = 233;
       mockSelector = { skin: "black" };
-      const skin: SkinsT = "default";
+      const skin: Skins = "default";
 
       const { result } = renderHook(() => useAraSaac());
       const path = await result.current.toUrlPath(pictogramNumber, skin);

@@ -1,18 +1,26 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
 import useAraSaac from "../../hooks/useAraSaac";
-import { PictogramI } from "../../types/sequence";
+import { PictSequence } from "../../types/sequence";
 import { pictogram__card, pictogram__media } from "./PictogramCard.styled";
 import messages from "./PictogramCart.lang";
 
 interface PictogramCardProps {
-  pictogram: PictogramI;
+  pictogram: PictSequence;
   view: "complete" | "header" | "footer" | "none";
   variant?: "plane";
 }
 
 const PictogramCard = ({
-  pictogram: { index, number, border, skin, word },
+  pictogram: {
+    indexSequence,
+    img: {
+      selectedId,
+      settings: { skin },
+      searched: { word },
+    },
+    settings: { border },
+  },
   view,
   variant,
 }: PictogramCardProps): JSX.Element => {
@@ -27,7 +35,7 @@ const PictogramCard = ({
       {(view === "complete" || view === "header") && (
         <CardContent>
           <Typography variant="body1" component="h3">
-            {index + 1}
+            {indexSequence + 1}
           </Typography>
         </CardContent>
       )}
@@ -36,7 +44,7 @@ const PictogramCard = ({
       >
         <CardMedia
           component="img"
-          image={toUrlPathApiAraSaac(number, skin)}
+          image={toUrlPathApiAraSaac(selectedId, skin)}
           height={150}
           width={150}
           alt={intl.formatMessage({ ...messages.pictogram })}
@@ -47,7 +55,7 @@ const PictogramCard = ({
       {(view === "complete" || view === "footer") && (
         <CardContent>
           <Typography variant="body1" component="h3">
-            {word.keyWord}
+            {word}
           </Typography>
         </CardContent>
       )}

@@ -1,9 +1,37 @@
-export interface ProtoPictogramI {
-  index: number;
-  number: number;
+export type Sequence = PictSequence[];
+
+export interface PictSequence {
+  indexSequence: number;
+  img: PictApiAra;
+  text?: string;
+  settings: PictSequenceSettings;
+}
+export interface PictSequenceSettings {
+  textPosition?: "top" | "bottom";
+  border?: {
+    out?: Border;
+    in?: Border;
+  };
+}
+export interface Border {
+  color: string;
+  radius: number;
+  size: number;
+}
+interface PictApiAra {
+  searched: Word;
+  selectedId: number;
+  settings: PictApiAraSettings;
 }
 
-export type SkinsT =
+export interface Word {
+  word: string;
+  bestIdPicts: number[];
+  keyWords?: string[];
+  IdPicts?: number[];
+}
+
+export type Skins =
   | "asian"
   | "aztec"
   | "black"
@@ -11,37 +39,31 @@ export type SkinsT =
   | "white"
   | "default";
 
-export interface BorderPictI {
-  color: string;
-  radius: number;
-  size: number;
+export interface UpdateSelectedId {
+  indexSequence: number;
+  selectedId: number;
 }
 
-export interface WordI {
-  keyWord: string;
-  userText?: string;
-  pictograms: number[];
+export interface UpdateSearched {
+  indexSequence: number;
+  searched: Word;
 }
 
-export interface UpdatePictWordI {
-  indexPict: number;
-  word: WordI;
+export interface PictApiAraSettings {
+  skin: Skins;
 }
-export interface PictogramI extends ProtoPictogramI {
-  word: WordI;
-  border?: {
-    in?: BorderPictI;
-    out?: BorderPictI;
-  };
-  skin: SkinsT;
+export interface UpdateSetting<S extends ApiAraPictSettings> {
+  indexSequence?: number;
+  setting: S;
+  value: S extends "skin" ? Skins : never;
+}
+export type SettingToUpdate = SkinToUpdate;
+
+export type SkinToUpdate = UpdateSetting<"skin">;
+
+export interface UpdateAllSetting {
+  setting: ApiAraPictSettings;
+  value: Skins;
 }
 
-export type SettingsT = "skin";
-
-export type SequenceI = PictogramI[];
-
-export interface UpdateSettingI {
-  index?: number;
-  setting: SettingsT;
-  value: SkinsT;
-}
+export type ApiAraPictSettings = "skin";

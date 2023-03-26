@@ -1,16 +1,21 @@
-import { BorderPictI, PictogramI } from "../../types/sequence";
+import { Border, PictSequence } from "../../types/sequence";
 import { preloadedState, render, screen } from "../../utils/test-utils";
 import PictogramCard from "./PictogramCard";
 
-let pictogramEmpty: PictogramI = {
+let pictogramEmpty: PictSequence = {
   ...preloadedState.sequence[0],
-  index: 0,
-  number: 26527,
-  border: {
-    in: { color: "blue", radius: 20, size: 2 },
-    out: { color: "green", radius: 20, size: 2 },
+  indexSequence: 0,
+  img: {
+    ...preloadedState.sequence[0].img,
+    searched: { word: "Empty", bestIdPicts: [26527] },
+    selectedId: 26527,
   },
-  word: { keyWord: "Empty", pictograms: [26527] },
+  settings: {
+    border: {
+      in: { color: "blue", radius: 20, size: 2 },
+      out: { color: "green", radius: 20, size: 2 },
+    },
+  },
 };
 
 const mockDispatch = jest.fn();
@@ -114,7 +119,7 @@ describe("Give a PictogramShow component", () => {
         card: "card-pictogram",
         altImage: "Pictogram image",
       };
-      const expectBorder: BorderPictI = {
+      const expectBorder: Border = {
         color: "blue",
         size: 2,
         radius: 20,
@@ -173,7 +178,10 @@ describe("Give a PictogramShow component", () => {
 
   describe("When it's rendered with skin corner case 'asian'", () => {
     test("Then should image path change to 'assian'", () => {
-      pictogramEmpty = { ...pictogramEmpty, skin: "asian" };
+      pictogramEmpty = {
+        ...pictogramEmpty,
+        img: { ...pictogramEmpty.img, settings: { skin: "asian" } },
+      };
       const expectedPath =
         "https://api.arasaac.org/api/pictograms/26527?skin=assian";
 
