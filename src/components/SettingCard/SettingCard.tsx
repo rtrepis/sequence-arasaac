@@ -5,16 +5,16 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { applyAllSettingActionCreator } from "../../app/slice/sequenceSlice";
 import StyledButton from "../../style/StyledButton";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
-import { UpdateSettingI, SkinsT } from "../../types/sequence";
+import { Skins, SettingToUpdate } from "../../types/sequence";
 import { SettingLangI } from "../../types/sequence.lang";
 import { messages } from "./SettingCard.lang";
 import { cardAction, card, cardContent, cardTitle } from "./SettingCard.styled";
 
 interface SettingCardProps {
   setting: SettingLangI;
-  action: (toUpdate: UpdateSettingI) => void;
+  action: (toUpdate: SettingToUpdate) => void;
   isSettingDefault?: boolean | false;
-  selected: SkinsT;
+  selected: Skins;
 }
 
 const SettingCard = ({
@@ -26,7 +26,7 @@ const SettingCard = ({
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const uiDefaultSettingType = useAppSelector(
-    (state) => state.ui.setting[setting]
+    (state) => state.ui.defaultSettings.PictApiAra[setting]
   );
   const [type, setType] = useState<string | null>("default");
 
@@ -47,7 +47,7 @@ const SettingCard = ({
       );
   };
 
-  const handleClickSettingType = (value: SkinsT) => {
+  const handleClickSettingType = (value: Skins) => {
     action({
       setting: setting,
       value: value,

@@ -3,7 +3,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { Stack } from "@mui/system";
 import PictogramCard from "../PictogramCard/PictogramCard";
-import { PictogramI } from "../../types/sequence";
+import { PictSequence } from "../../types/sequence";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import SettingsPictCardList from "../PictSettingCardList/PictSettingCardList";
 import { useState } from "react";
@@ -17,7 +17,7 @@ import {
 } from "../../app/slice/sequenceSlice";
 
 interface PictEditProps {
-  pictogram: PictogramI;
+  pictogram: PictSequence;
 }
 
 const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
@@ -36,7 +36,7 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
 
   const handleDelete = () => {
     setOpen(false);
-    dispatch(subtractPictogramActionCreator(pictogram.index));
+    dispatch(subtractPictogramActionCreator(pictogram.indexSequence));
     dispatch(renumberSequenceActionCreator());
   };
 
@@ -71,7 +71,7 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
           </Typography>
 
           <Typography variant="h4" component="h2" sx={circlePictogramNumber}>
-            {pictogram.index + 1}
+            {pictogram.indexSequence + 1}
           </Typography>
         </Stack>
         <DialogContent dividers={true} sx={{ padding: 2 }}>
@@ -88,10 +88,10 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
               view="complete"
             />
 
-            <PictogramSearch indexPict={pictogram.index} />
+            <PictogramSearch indexPict={pictogram.indexSequence} />
           </Stack>
 
-          <SettingsPictCardList indexPict={pictogram.index} />
+          <SettingsPictCardList indexPict={pictogram.indexSequence} />
         </DialogContent>
 
         <DialogActions

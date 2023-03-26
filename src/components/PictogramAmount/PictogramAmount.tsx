@@ -9,41 +9,44 @@ import {
   addPictogramActionCreator,
   subtractLastPictActionCreator,
 } from "../../app/slice/sequenceSlice";
-import { PictogramI } from "../../types/sequence";
+import { PictSequence } from "../../types/sequence";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import messages from "./PictogramAmount.lang";
+import { preloadedState } from "../../utils/test-utils";
 
 const PictogramAmount = (): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const amountSequence = useAppSelector((state) => state.sequence.length);
 
-  const initialAmountPict = 0;
-  const [amountPict, setAmountPict] = useState(initialAmountPict);
-
-  const pictogramEmpty: PictogramI = {
-    index: amountPict,
-    number: 26527,
-    border: {
-      in: { color: "blue", radius: 20, size: 2 },
-      out: { color: "green", radius: 20, size: 2 },
+  let pictogramEmpty: PictSequence = {
+    ...preloadedState.sequence[0],
+    indexSequence: amountSequence,
+    img: {
+      ...preloadedState.sequence[0].img,
+      searched: {
+        word: `${intl.formatMessage(messages.empty)}`,
+        bestIdPicts: [],
+      },
+      selectedId: 26527,
+      settings: { skin: "default" },
     },
-    skin: "default",
-    word: { keyWord: `${intl.formatMessage(messages.empty)}`, pictograms: [] },
+    settings: {
+      border: {
+        in: { color: "blue", radius: 20, size: 2 },
+        out: { color: "green", radius: 20, size: 2 },
+      },
+    },
   };
 
   const handleChangesAmount = (operator: number) => {
-    setAmountPict(amountPict + operator);
     operator > 0
       ? dispatch(addPictogramActionCreator(pictogramEmpty))
       : dispatch(subtractLastPictActionCreator());
   };
-
-  useEffect(() => setAmountPict(amountSequence), [amountSequence]);
 
   return (
     <FormControl sx={{ minWidth: 240 }}>
@@ -56,7 +59,7 @@ const PictogramAmount = (): JSX.Element => {
           color="primary"
           aria-label={intl.formatMessage({ ...messages.add })}
           onClick={() => handleChangesAmount(-1)}
-          disabled={amountPict <= 0 ? true : false}
+          disabled={amountSequence <= 0 ? true : false}
         >
           <AiFillMinusCircle />
         </IconButton>
@@ -64,7 +67,7 @@ const PictogramAmount = (): JSX.Element => {
         <Input
           id={"amount"}
           color="primary"
-          value={amountPict.toString()}
+          value={amountSequence.toString()}
           disabled
           sx={{ width: 50, input: { textAlign: "center" } }}
         ></Input>

@@ -1,9 +1,9 @@
 import { Grid } from "@mui/material";
-import { SequenceI } from "../../types/sequence";
+import { Sequence } from "../../types/sequence";
 import PictEdit from "../PictEdit/PictEdit";
 
 interface PictEditModalProps {
-  sequence: SequenceI;
+  sequence: Sequence;
 }
 
 const PictEditList = ({ sequence }: PictEditModalProps): JSX.Element => {
@@ -16,7 +16,7 @@ const PictEditList = ({ sequence }: PictEditModalProps): JSX.Element => {
           display={"flex"}
           justifyContent={"flex-start"}
           alignItems={"center"}
-          key={`pict${pictogram.index}`}
+          key={`pict${pictogram.indexSequence}`}
         >
           <PictEdit pictogram={pictogram} />
         </Grid>

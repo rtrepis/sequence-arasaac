@@ -11,12 +11,12 @@ import { forwardRef, useState } from "react";
 import { Divider, List, ListItem } from "@mui/material";
 import SettingCard from "../SettingCard/SettingCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { UpdateSettingI } from "../../types/sequence";
 import { updateSkinActionCreator } from "../../app/slice/uiSlice";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettingCardList.lang";
 import { Settings } from "../SettingCard/SettingCard.lang";
 import { Container } from "@mui/system";
+import { SettingToUpdate } from "../../types/sequence";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -28,7 +28,9 @@ const Transition = forwardRef(function Transition(
 });
 
 const SettingsDefaultCardList = (): JSX.Element => {
-  const defaultSetting = useAppSelector((state) => state.ui.setting);
+  const defaultSetting = useAppSelector(
+    (state) => state.ui.defaultSettings.PictApiAra
+  );
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -41,7 +43,7 @@ const SettingsDefaultCardList = (): JSX.Element => {
     setOpen(false);
   };
 
-  const handleUpDateSkin = (toUpdate: UpdateSettingI) => {
+  const handleUpDateSkin = (toUpdate: SettingToUpdate) => {
     dispatch(updateSkinActionCreator(toUpdate));
   };
 

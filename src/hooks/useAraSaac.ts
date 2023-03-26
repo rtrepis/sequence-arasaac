@@ -3,15 +3,17 @@ import { useCallback } from "react";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
-  upDatePictNumberActionCreator,
-  upDatePictWordActionCreator,
+  upDatePictSelectedIdActionCreator,
+  upDatePictSearchedActionCreator,
 } from "../app/slice/sequenceSlice";
-import { UpdatePictWordI } from "../types/sequence";
+import { UpdateSearched } from "../types/sequence";
 
 const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
 
 const useAraSaac = () => {
-  const uiSettings = useAppSelector((state) => state.ui.setting);
+  const uiSettings = useAppSelector(
+    (state) => state.ui.defaultSettings.PictApiAra
+  );
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -27,24 +29,27 @@ const useAraSaac = () => {
 
         data.map((pictogram: any) => findPict.push(pictogram._id));
 
-        const toPictUpdate: UpdatePictWordI = {
-          indexPict: index,
-          word: { keyWord: word, pictograms: findPict },
+        const toPictUpdate: UpdateSearched = {
+          indexSequence: index,
+          searched: { word: word, bestIdPicts: findPict },
         };
 
-        dispatch(upDatePictWordActionCreator(toPictUpdate));
+        dispatch(upDatePictSearchedActionCreator(toPictUpdate));
         upDateNumber &&
           dispatch(
-            upDatePictNumberActionCreator({ index: index, number: findPict[0] })
+            upDatePictSelectedIdActionCreator({
+              indexSequence: index,
+              selectedId: findPict[0],
+            })
           );
 
         return findPict;
       } catch {
-        const toPictNotFound: UpdatePictWordI = {
-          indexPict: index,
-          word: { keyWord: word, pictograms: [-1] },
+        const toPictNotFound: UpdateSearched = {
+          indexSequence: index,
+          searched: { word: word, bestIdPicts: [-1] },
         };
-        dispatch(upDatePictWordActionCreator(toPictNotFound));
+        dispatch(upDatePictSearchedActionCreator(toPictNotFound));
       }
     },
     [dispatch, locale]

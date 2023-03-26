@@ -4,6 +4,7 @@ import {
   act,
   fireEvent,
   preloadedState,
+  State,
 } from "../../utils/test-utils";
 import PictogramSearch from "./PictogramSearch";
 
@@ -30,9 +31,12 @@ describe("Give component PictogramSearch", () => {
         sequence: [
           {
             ...preloadedState.sequence[0],
-            word: {
-              ...preloadedState.sequence[0].word,
-              keyWord: "Empty",
+            pictogram: {
+              ...preloadedState.sequence[0].img,
+              searched: {
+                ...preloadedState.sequence[0].img.searched,
+                word: "Empty",
+              },
             },
           },
         ],
@@ -77,14 +81,17 @@ describe("Give component PictogramSearch", () => {
     test("Then should it's same length to image and click", () => {
       const expectFindPict = [324, 234];
       const expectLabelImage = "Pictogram test";
-      const mockState = {
+      const mockState: State = {
         ...preloadedState,
         sequence: [
           {
             ...preloadedState.sequence[0],
-            word: {
-              ...preloadedState.sequence[0].word,
-              pictograms: expectFindPict,
+            img: {
+              ...preloadedState.sequence[0].img,
+              searched: {
+                ...preloadedState.sequence[0].img.searched,
+                bestIdPicts: expectFindPict,
+              },
             },
           },
         ],
@@ -111,14 +118,17 @@ describe("Give component PictogramSearch", () => {
   describe("When state findPict is length 1 with -1", () => {
     test("Then should show alert to not found", async () => {
       const expectFindPict = [-1];
-      const mockState = {
+      const mockState: State = {
         ...preloadedState,
         sequence: [
           {
             ...preloadedState.sequence[0],
-            word: {
-              ...preloadedState.sequence[0].word,
-              pictograms: expectFindPict,
+            img: {
+              ...preloadedState.sequence[0].img,
+              searched: {
+                ...preloadedState.sequence[0].img.searched,
+                bestIdPicts: expectFindPict,
+              },
             },
           },
         ],
