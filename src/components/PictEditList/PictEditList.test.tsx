@@ -1,4 +1,4 @@
-import { SequenceI } from "../../types/sequence";
+import { Sequence } from "../../types/sequence";
 import { preloadedState, render, screen } from "../../utils/test-utils";
 import PictEditList from "./PictEditList";
 
@@ -7,24 +7,30 @@ const mockSequence = preloadedState.sequence[0];
 describe("Give a component PictogramCardList", () => {
   describe("When a rendered with sequence array", () => {
     test("Then should show all results of array", () => {
-      const sequence: SequenceI = [
+      const sequence: Sequence = [
         {
           ...preloadedState.sequence[0],
-          index: 0,
-          number: 2333,
-          word: { ...mockSequence.word, keyWord: "" },
+          indexSequence: 0,
+          img: {
+            ...preloadedState.sequence[0].img,
+            selectedId: 2333,
+          },
         },
         {
           ...preloadedState.sequence[0],
-          index: 1,
-          number: 2333,
-          word: { ...mockSequence.word, keyWord: "" },
+          indexSequence: 1,
+          img: {
+            ...preloadedState.sequence[0].img,
+            selectedId: 2333,
+          },
         },
         {
           ...preloadedState.sequence[0],
-          index: 2,
-          number: 2333,
-          word: { ...mockSequence.word, keyWord: "" },
+          indexSequence: 2,
+          img: {
+            ...preloadedState.sequence[0].img,
+            selectedId: 2333,
+          },
         },
       ];
 

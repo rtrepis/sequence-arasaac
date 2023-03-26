@@ -5,7 +5,7 @@ import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addPictogramActionCreator } from "../../app/slice/sequenceSlice";
 import useAraSaac from "../../hooks/useAraSaac";
-import { PictogramI } from "../../types/sequence";
+import { PictSequence } from "../../types/sequence";
 import messages from "./MagicSearch.lang";
 
 const MagicSearch = (): JSX.Element => {
@@ -23,11 +23,14 @@ const MagicSearch = (): JSX.Element => {
 
     words.forEach((word, index) => {
       const newIndex = index + pictograms.length;
-      const newPict: PictogramI = {
-        index: newIndex,
-        number: 0,
-        word: { keyWord: word, pictograms: [0] },
-        skin: "default",
+      const newPict: PictSequence = {
+        indexSequence: newIndex,
+        img: {
+          selectedId: 0,
+          searched: { word: word, bestIdPicts: [0] },
+          settings: { skin: "default" },
+        },
+        settings: {},
       };
       dispatch(addPictogramActionCreator(newPict));
       getSearchPictogram(word, newIndex, true);

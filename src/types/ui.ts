@@ -1,11 +1,9 @@
-import { SettingsT, SkinsT } from "./sequence";
+import { PictApiAraSettings, PictSequenceSettings } from "./sequence";
 
-export interface UiI {
-  setting: {
-    skin: SkinsT;
+export interface Ui {
+  locale?: string;
+  defaultSettings: {
+    pictSequence?: PictSequenceSettings;
+    PictApiAra: PictApiAraSettings;
   };
-}
-export interface SettingPayloadI {
-  setting: SettingsT;
-  value: SkinsT;
 }

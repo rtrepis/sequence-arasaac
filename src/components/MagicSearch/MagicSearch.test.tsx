@@ -22,19 +22,25 @@ describe("Give a component MagicSearch", () => {
       const expectActions = [
         {
           payload: {
-            index: 0,
-            number: 0,
-            skin: "default",
-            word: { keyWord: "Hello", pictograms: [0] },
+            img: {
+              searched: { bestIdPicts: [0], word: "Hello" },
+              selectedId: 0,
+              settings: { skin: "default" },
+            },
+            indexSequence: 0,
+            settings: {},
           },
           type: "sequence/addPictogram",
         },
         {
           payload: {
-            index: 1,
-            number: 0,
-            skin: "default",
-            word: { keyWord: "word", pictograms: [0] },
+            img: {
+              searched: { bestIdPicts: [0], word: "word" },
+              selectedId: 0,
+              settings: { skin: "default" },
+            },
+            indexSequence: 1,
+            settings: {},
           },
           type: "sequence/addPictogram",
         },
