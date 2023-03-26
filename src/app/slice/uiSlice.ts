@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UpdateSettingI } from "../../types/sequence";
-import { UiI } from "../../types/ui";
+import { SettingToUpdate } from "../../types/sequence";
+import { Ui } from "../../types/ui";
 
-const uiInitialState: UiI = {
-  setting: {
-    skin: "white",
-  },
+const uiInitialState: Ui = {
+  defaultSettings: { PictApiAra: { skin: "white" } },
 };
 
 const uiSlice = createSlice({
   name: "uiState",
   initialState: uiInitialState,
   reducers: {
-    updateSkin: (previousUi, action: PayloadAction<UpdateSettingI>) => ({
+    updateSkin: (previousUi, action: PayloadAction<SettingToUpdate>) => ({
       ...previousUi,
-      setting: { ...previousUi.setting, skin: action.payload.value },
+      defaultSettings: {
+        PictApiAra: { [action.payload.setting]: action.payload.value },
+      },
     }),
   },
 });

@@ -1,3 +1,4 @@
+import { PictSequence } from "../../types/sequence";
 import {
   fireEvent,
   preloadedState,
@@ -15,23 +16,28 @@ jest.mock("react-redux", () => ({
 }));
 
 describe("Give a component PictEdit", () => {
-  const pictogram = {
+  const mockPict: PictSequence = {
     ...preloadedState.sequence[0],
-    index: 0,
-    number: 26527,
-    border: {
-      in: { color: "blue", radius: 20, size: 2 },
-      out: { color: "green", radius: 20, size: 2 },
+    indexSequence: 0,
+    img: {
+      ...mockSequence.img,
+      selectedId: 26527,
+      searched: { ...mockSequence.img.searched, word: "Empty" },
     },
-    word: { ...mockSequence.word, keyWord: "Empty" },
+    settings: {
+      border: {
+        in: { color: "blue", radius: 20, size: 2 },
+        out: { color: "green", radius: 20, size: 2 },
+      },
+    },
   };
   describe("When it's rendered with pictogram", () => {
     test("Then should show button, and click open Modal", () => {
-      const expectButton = `${pictogram.index + 1} Pictogram image ${
-        pictogram.word.keyWord
+      const expectButton = `${mockPict.indexSequence + 1} Pictogram image ${
+        mockPict.img.searched.word
       }`;
 
-      render(<PictEdit pictogram={pictogram} />, {
+      render(<PictEdit pictogram={mockPict} />, {
         preloadedState: preloadedState,
       });
 
@@ -50,11 +56,11 @@ describe("Give a component PictEdit", () => {
   describe("When it's open modal user cant close", () => {
     test("Then should show button Close, and click close Modal", () => {
       const expectButton = "Close";
-      const openButton = `${pictogram.index + 1} Pictogram image ${
-        pictogram.word.keyWord
+      const openButton = `${mockPict.indexSequence + 1} Pictogram image ${
+        mockPict.img.searched.word
       }`;
 
-      render(<PictEdit pictogram={pictogram} />, {
+      render(<PictEdit pictogram={mockPict} />, {
         preloadedState: preloadedState,
       });
 
@@ -71,15 +77,15 @@ describe("Give a component PictEdit", () => {
   describe("When user click delete", () => {
     test("Then should called dispatch subtrac and renumber", () => {
       const DeleteButton = "Delete";
-      const openButton = `${pictogram.index + 1} Pictogram image ${
-        pictogram.word.keyWord
+      const openButton = `${mockPict.indexSequence + 1} Pictogram image ${
+        mockPict.img.searched.word
       }`;
       const expectActions = [
         { payload: 0, type: "sequence/subtractPictogram" },
         { payload: undefined, type: "sequence/renumberSequence" },
       ];
 
-      render(<PictEdit pictogram={pictogram} />, {
+      render(<PictEdit pictogram={mockPict} />, {
         preloadedState: preloadedState,
       });
 

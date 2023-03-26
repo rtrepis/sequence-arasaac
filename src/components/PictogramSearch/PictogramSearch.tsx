@@ -10,10 +10,10 @@ import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { upDatePictNumberActionCreator } from "../../app/slice/sequenceSlice";
+import { upDatePictSelectedIdActionCreator } from "../../app/slice/sequenceSlice";
 import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
-import { ProtoPictogramI } from "../../types/sequence";
+import { UpdateSelectedId } from "../../types/sequence";
 import messages from "./PictogramSearch.lang";
 interface PropsPictogramSearch {
   indexPict: number;
@@ -21,32 +21,32 @@ interface PropsPictogramSearch {
 
 const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
   const {
-    skin,
-    word: { keyWord, pictograms },
-  } = useAppSelector((state) => state.sequence[indexPict]);
+    settings: { skin },
+    searched: { word, bestIdPicts },
+  } = useAppSelector((state) => state.sequence[indexPict].img);
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const { getSearchPictogram, toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
 
   const initialWord =
-    keyWord === `${intl.formatMessage({ ...messages.empty })}` ? "" : keyWord;
-  const [word, setWord] = useState(initialWord);
+    word === `${intl.formatMessage({ ...messages.empty })}` ? "" : word;
+  const [newWord, setNewWord] = useState(initialWord);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setWord(event.target.value);
+    setNewWord(event.target.value);
   };
 
   const handleUpDatePictNumber = (upDateNumber: number) => {
-    const upDatePictNum: ProtoPictogramI = {
-      index: indexPict,
-      number: upDateNumber,
+    const upDatePictNum: UpdateSelectedId = {
+      indexSequence: indexPict,
+      selectedId: upDateNumber,
     };
-    dispatch(upDatePictNumberActionCreator(upDatePictNum));
+    dispatch(upDatePictSelectedIdActionCreator(upDatePictNum));
   };
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
-    await getSearchPictogram(word, indexPict);
+    await getSearchPictogram(newWord, indexPict);
   };
 
   return (
@@ -70,15 +70,15 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
             ),
           }}
           autoComplete={"off"}
-          value={word}
+          value={newWord}
           onChange={handleChange}
           fullWidth
           sx={{ width: "100%" }}
         />
       </form>
       <StyledToggleButtonGroup>
-        {pictograms[0] !== -1 &&
-          pictograms.map((pictogram, index) => (
+        {bestIdPicts[0] !== -1 &&
+          bestIdPicts.map((pictogram, index) => (
             <ToggleButton
               value={pictogram}
               aria-label={`${intl.formatMessage({
@@ -89,14 +89,16 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
             >
               <img
                 src={toUrlPathApiAraSaac(pictogram, skin)}
-                alt={`${intl.formatMessage({ ...messages.pictogram })} ${word}`}
+                alt={`${intl.formatMessage({
+                  ...messages.pictogram,
+                })} ${newWord}`}
                 width={40}
                 height={40}
               />
             </ToggleButton>
           ))}
       </StyledToggleButtonGroup>
-      {pictograms[0] === -1 && (
+      {bestIdPicts[0] === -1 && (
         <Alert severity="info">
           <FormattedMessage {...messages.alert} />
         </Alert>

@@ -1,4 +1,4 @@
-import { SettingsT, SkinsT } from "./sequence";
+import { ApiAraPictSettings, Skins } from "./sequence";
 
 export interface SettingsLangI {
   skins: SettingLangI;
@@ -11,12 +11,12 @@ export interface MessageI {
 }
 
 export interface TypesLangI {
-  name: SkinsT;
+  name: Skins;
   message?: MessageI;
 }
 
 export interface SettingLangI {
-  name: SettingsT;
+  name: ApiAraPictSettings;
   types: TypesLangI[];
   message?: MessageI;
 }
