@@ -1,9 +1,9 @@
-import { renderHook } from "@testing-library/react";
+import { renderHook } from "../utils/test-utils";
 import { Skins } from "../types/sequence";
 import useAraSaac from "./useAraSaac";
 
 const mockDispatch = jest.fn();
-let mockSelector = { skin: "white" };
+let mockSelector: any = { skin: "white" };
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
   useDispatch: () => mockDispatch,
@@ -33,7 +33,7 @@ describe("Given a useAraSacc hook", () => {
 
       const { result } = renderHook(() => useAraSaac());
 
-      await result.current.getSearchPictogram(wordSearchMock, indexPict);
+      await result.current.getSearchPictogram(wordSearchMock, indexPict, true);
 
       expect(mockDispatch).toHaveBeenCalledWith(expectAction);
     });
@@ -53,24 +53,61 @@ describe("Given a useAraSacc hook", () => {
 
       const { result } = renderHook(() => useAraSaac());
 
-      await result.current.getSearchPictogram(wordSearchMock, indexPict);
+      await result.current.getSearchPictogram(wordSearchMock, indexPict, true);
 
       expect(mockDispatch).toHaveBeenCalledWith(expectAction);
     });
   });
 
-  describe("When getSearchPictogram it's called with search wordMock and indexPict and upDateNumber true", () => {
+  describe("When getSearchPictogram it's called with search wordMock and not update", () => {
     test("Then should called dispatch with action creator", async () => {
-      const indexPict = 0;
+      mockSelector = 1;
+
       const wordSearchMock = "girl";
       const expectAction = {
-        payload: { indexSequence: 0, selectedId: 234 },
-        type: "sequence/upDatePictSelectedId",
+        payload: {
+          img: {
+            searched: { bestIdPicts: [234, 234], word: "girl" },
+            selectedId: 234,
+            settings: { skin: "default" },
+          },
+          indexSequence: 2,
+          settings: {},
+          text: "girl",
+        },
+        type: "sequence/addPictogram",
       };
 
       const { result } = renderHook(() => useAraSaac());
 
-      await result.current.getSearchPictogram(wordSearchMock, indexPict, true);
+      await result.current.getSearchPictogram(wordSearchMock, 1, false);
+
+      expect(mockDispatch).toHaveBeenCalledWith(expectAction);
+    });
+  });
+
+  describe("When getSearchPictogram it's called with search invalid wordMock not update", () => {
+    test("Then should called dispatch with action creator", async () => {
+      mockSelector = 1;
+
+      const wordSearchMock = "asdfas";
+      const expectAction = {
+        payload: {
+          img: {
+            searched: { bestIdPicts: [3418], word: "asdfas" },
+            selectedId: 3418,
+            settings: { skin: "default" },
+          },
+          indexSequence: 2,
+          settings: {},
+          text: "asdfas",
+        },
+        type: "sequence/addPictogram",
+      };
+
+      const { result } = renderHook(() => useAraSaac());
+
+      await result.current.getSearchPictogram(wordSearchMock, 1, false);
 
       expect(mockDispatch).toHaveBeenCalledWith(expectAction);
     });
@@ -78,6 +115,7 @@ describe("Given a useAraSacc hook", () => {
 
   describe("When toUrlPath it's called with pictogram number and skin asian", () => {
     test("Then return path with query", async () => {
+      mockSelector = { skin: "white" };
       const expectPath =
         "https://api.arasaac.org/api/pictograms/233?skin=assian";
       const pictogramNumber = 233;
@@ -92,6 +130,7 @@ describe("Given a useAraSacc hook", () => {
 
   describe("When toUrlPath it's called with skin default ui setting is white", () => {
     test("Then return path with query", async () => {
+      mockSelector = { skin: "white" };
       const expectPath = "https://api.arasaac.org/api/pictograms/233";
       const pictogramNumber = 233;
       const skin: Skins = "default";
@@ -105,10 +144,10 @@ describe("Given a useAraSacc hook", () => {
 
   describe("When toUrlPath it's called with skin default ui setting not white", () => {
     test("Then return path with query", async () => {
+      mockSelector = { skin: "black" };
       const expectPath =
         "https://api.arasaac.org/api/pictograms/233?skin=black";
       const pictogramNumber = 233;
-      mockSelector = { skin: "black" };
       const skin: Skins = "default";
 
       const { result } = renderHook(() => useAraSaac());
