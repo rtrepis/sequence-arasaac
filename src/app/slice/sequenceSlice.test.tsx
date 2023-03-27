@@ -18,6 +18,7 @@ import {
   addSequenceActionCreator,
   subtractPictogramActionCreator,
   renumberSequenceActionCreator,
+  sortSequenceActionCreator,
 } from "./sequenceSlice";
 
 const mockSequences = preloadedState.sequence[0];
@@ -288,6 +289,36 @@ describe("Given the reducer sequenceSlice", () => {
       ];
 
       const actionCreator = upDateSettingActionCreator(upDatePictogramSetting);
+      const newState = sequenceReducer(previousSequence, actionCreator);
+
+      expect(newState).toStrictEqual(expectState);
+    });
+  });
+
+  describe("When called 'sortSequence'", () => {
+    test("Then should new state orderly for indexSequence", () => {
+      previousSequence = [
+        {
+          ...preloadedState.sequence[0],
+          indexSequence: 1,
+        },
+        {
+          ...preloadedState.sequence[0],
+          indexSequence: 0,
+        },
+      ];
+      const expectState: PictSequence[] = [
+        {
+          ...previousSequence[0],
+          indexSequence: 0,
+        },
+        {
+          ...previousSequence[0],
+          indexSequence: 1,
+        },
+      ];
+
+      const actionCreator = sortSequenceActionCreator();
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);

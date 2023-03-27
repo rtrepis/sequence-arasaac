@@ -73,7 +73,7 @@ describe("Give component PictogramSearch", () => {
         fireEvent.click(button);
       });
 
-      expect(mockAction).toHaveBeenCalledWith(typeWordSearch, indexPict);
+      expect(mockAction).toHaveBeenCalledWith(typeWordSearch, indexPict, true);
     });
   });
 

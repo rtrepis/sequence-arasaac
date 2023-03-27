@@ -46,7 +46,7 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
-    await getSearchPictogram(newWord, indexPict);
+    await getSearchPictogram(newWord, indexPict, true);
   };
 
   return (
