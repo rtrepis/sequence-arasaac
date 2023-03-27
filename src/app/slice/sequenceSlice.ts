@@ -34,6 +34,9 @@ const sequenceSlice = createSlice({
         indexSequence: index,
       })),
 
+    sortSequence: (previousSequence) =>
+      previousSequence.sort((a, b) => a.indexSequence - b.indexSequence),
+
     upDatePictSelectedId: (
       previousSequence,
       action: PayloadAction<UpdateSelectedId>
@@ -89,6 +92,7 @@ export const {
   subtractLastPict: subtractLastPictActionCreator,
   addSequence: addSequenceActionCreator,
   renumberSequence: renumberSequenceActionCreator,
+  sortSequence: sortSequenceActionCreator,
   upDatePictSelectedId: upDatePictSelectedIdActionCreator,
   upDatePictSearched: upDatePictSearchedActionCreator,
   applyAllSetting: applyAllSettingActionCreator,
