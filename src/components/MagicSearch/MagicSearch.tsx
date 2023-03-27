@@ -2,40 +2,23 @@ import { ButtonBase, InputAdornment, TextField } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useIntl } from "react-intl";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { addPictogramActionCreator } from "../../app/slice/sequenceSlice";
 import useAraSaac from "../../hooks/useAraSaac";
-import { PictSequence } from "../../types/sequence";
 import messages from "./MagicSearch.lang";
 
 const MagicSearch = (): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const pictograms = useAppSelector((state) => state.sequence);
   const intl = useIntl();
   const { getSearchPictogram } = useAraSaac();
 
   const initialPhrase = "";
   const [phrase, setPhrase] = useState(initialPhrase);
 
-  const magicEngine = (event: SyntheticEvent) => {
+  const SubmitMagicEngine = (event: SyntheticEvent) => {
     event.preventDefault();
-    const words = phrase.trim().split(" ", 60);
 
-    words.forEach((word, index) => {
-      const newIndex = index + pictograms.length;
-      const newPict: PictSequence = {
-        indexSequence: newIndex,
-        img: {
-          selectedId: 0,
-          searched: { word: word, bestIdPicts: [0] },
-          settings: { skin: "default" },
-        },
-        settings: {},
-      };
-      dispatch(addPictogramActionCreator(newPict));
-      getSearchPictogram(word, newIndex, true);
-      setPhrase("");
-    });
+    const words = phrase.split(" ", 60);
+    words.map(
+      async (word, index) => await getSearchPictogram(word, index, false)
+    );
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +27,7 @@ const MagicSearch = (): JSX.Element => {
   };
 
   return (
-    <form onSubmit={magicEngine}>
+    <form onSubmit={SubmitMagicEngine}>
       <TextField
         label={intl.formatMessage({ ...messages.field })}
         id={"search"}
@@ -59,7 +42,7 @@ const MagicSearch = (): JSX.Element => {
             <InputAdornment
               position="end"
               component={ButtonBase}
-              onClick={magicEngine}
+              onClick={SubmitMagicEngine}
               aria-label={intl.formatMessage({ ...messages.button })}
             >
               <AiOutlineSearch fontSize={"large"} />
