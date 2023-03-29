@@ -50,7 +50,7 @@ export interface UpdateSearched {
 }
 
 export interface PictApiAraSettings {
-  skin: Skins;
+  skin?: Skins;
 }
 export interface UpdateSetting<S extends ApiAraPictSettings> {
   indexSequence?: number;
@@ -64,6 +64,11 @@ export type SkinToUpdate = UpdateSetting<"skin">;
 export interface UpdateAllSetting {
   setting: ApiAraPictSettings;
   value: Skins;
+}
+
+export interface UpDateSettingsPictApiAra {
+  indexSequence: number;
+  settings: PictApiAraSettings;
 }
 
 export type ApiAraPictSettings = "skin";

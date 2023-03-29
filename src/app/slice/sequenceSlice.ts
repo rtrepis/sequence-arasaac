@@ -6,6 +6,7 @@ import {
   UpdateSearched,
   SettingToUpdate,
   UpdateAllSetting,
+  UpDateSettingsPictApiAra,
 } from "../../types/sequence";
 
 const sequenceInitialState: Sequence = [];
@@ -71,6 +72,17 @@ const sequenceSlice = createSlice({
       );
     },
 
+    upDateSettingsPictApiAra: (
+      previousSequence,
+      action: PayloadAction<UpDateSettingsPictApiAra>
+    ) => {
+      previousSequence.map(
+        (pictogram, index) =>
+          index === action.payload.indexSequence &&
+          (pictogram.img.settings = action.payload.settings)
+      );
+    },
+
     applyAllSetting: (
       previousSequence,
       action: PayloadAction<UpdateAllSetting>
@@ -97,4 +109,5 @@ export const {
   upDatePictSearched: upDatePictSearchedActionCreator,
   applyAllSetting: applyAllSettingActionCreator,
   upDateSetting: upDateSettingActionCreator,
+  upDateSettingsPictApiAra: upDateSettingsPictApiAraActionCreator,
 } = sequenceSlice.actions;

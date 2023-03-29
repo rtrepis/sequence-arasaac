@@ -13,7 +13,7 @@ import {
 } from "./SettingAccordion.styled";
 
 interface SettingAccordionProps {
-  children: JSX.Element | JSX.Element[];
+  children: JSX.Element | JSX.Element[] | undefined;
   title: string;
 }
 
