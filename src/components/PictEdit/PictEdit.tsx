@@ -5,7 +5,7 @@ import { Stack } from "@mui/system";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import { PictSequence } from "../../types/sequence";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
-import SettingsPictCardList from "../PictSettingCardList/PictSettingCardList";
+import PictEditSettings from "../PictEditSettings/PictEditSettings";
 import { useState } from "react";
 import messages from "./PictEdti.lang";
 import { circlePictogramNumber } from "./PictEdit.styled";
@@ -91,7 +91,7 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
             <PictogramSearch indexPict={pictogram.indexSequence} />
           </Stack>
 
-          <SettingsPictCardList indexPict={pictogram.indexSequence} />
+          <PictEditSettings indexPict={pictogram.indexSequence} />
         </DialogContent>
 
         <DialogActions

@@ -13,7 +13,7 @@ import SettingCard from "../SettingCard/SettingCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updateSkinActionCreator } from "../../app/slice/uiSlice";
 import { FormattedMessage, useIntl } from "react-intl";
-import messages from "./DefaultSettingCardList.lang";
+import messages from "./DefaultSettings.lang";
 import { Settings } from "../SettingCard/SettingCard.lang";
 import { Container } from "@mui/system";
 import { SettingToUpdate } from "../../types/sequence";
@@ -27,7 +27,7 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
-const SettingsDefaultCardList = (): JSX.Element => {
+const DefaultSettings = (): JSX.Element => {
   const defaultSetting = useAppSelector(
     (state) => state.ui.defaultSettings.PictApiAra
   );
@@ -98,4 +98,4 @@ const SettingsDefaultCardList = (): JSX.Element => {
   );
 };
 
-export default SettingsDefaultCardList;
+export default DefaultSettings;
