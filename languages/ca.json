@@ -4,11 +4,11 @@
     "description": "App title translate Sequence"
   },
   "components.defaultSettings.close": {
-    "defaultMessage": "close",
+    "defaultMessage": "tancar",
     "description": "close Settings Default "
   },
   "components.defaultSettings.settings.title": {
-    "defaultMessage": "Settings default",
+    "defaultMessage": "Configuracions per defecte",
     "description": "Settings Default "
   },
   "components.magicSearch.button.": {
@@ -40,7 +40,7 @@
     "description": "Title modal"
   },
   "components.pictEditSettings.settings.label": {
-    "defaultMessage": "Settings Pictogram",
+    "defaultMessage": "Configuracions del Pictograma",
     "description": "Title section Pictogram Edit "
   },
   "components.pictogramAmount": {
