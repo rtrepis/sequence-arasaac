@@ -1,10 +1,10 @@
 import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
-  settings: {
-    id: "components.settingPictCardList.settings.label",
+  title: {
+    id: "components.pictEditSettings.settings.label",
     defaultMessage: "Settings Pictogram",
-    description: "Settings Pictogram ",
+    description: "Title section Pictogram Edit ",
   },
 });
 

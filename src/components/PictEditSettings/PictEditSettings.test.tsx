@@ -4,7 +4,7 @@ import {
   render,
   screen,
 } from "../../utils/test-utils";
-import SettingsPictCardList from "./PictSettingCardList";
+import PictEditSettings from "./PictEditSettings";
 
 const mockDispatch = jest.fn();
 jest.mock("react-redux", () => ({
@@ -25,7 +25,7 @@ describe("Give a component Setting Pictograms list", () => {
         type: "sequence/upDateSetting",
       };
 
-      render(<SettingsPictCardList indexPict={indexPictogram} />, {
+      render(<PictEditSettings indexPict={indexPictogram} />, {
         preloadedState: preloadedState,
       });
       const button = screen.getByRole("button", { name: buttonOpenSettings });
