@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "../../utils/test-utils";
-import SettingsDefaultCardList from "./DefaultSettingCardList";
+import DefaultSettings from "./DefaultSettings";
 
 const mockDispatch = jest.fn();
 jest.mock("react-redux", () => ({
@@ -15,7 +15,7 @@ describe("Give a component Setting default card list", () => {
       const expectOpen = "Settings default";
       const expectClose = "close";
 
-      render(<SettingsDefaultCardList />);
+      render(<DefaultSettings />);
       const buttonOpen = screen.getByRole("button", { name: expectOpen });
       fireEvent.click(buttonOpen);
 
@@ -35,7 +35,7 @@ describe("Give a component Setting default card list", () => {
         type: "uiState/updateSkin",
       };
 
-      render(<SettingsDefaultCardList />);
+      render(<DefaultSettings />);
       const buttonOpen = screen.getByRole("button", {
         name: "Settings default",
       });
