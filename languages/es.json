@@ -3,6 +3,14 @@
     "defaultMessage": "Secuencia - AraSaac",
     "description": "App title translate Sequence"
   },
+  "components.defaultSettings.close": {
+    "defaultMessage": "close",
+    "description": "close Settings Default "
+  },
+  "components.defaultSettings.settings.title": {
+    "defaultMessage": "Settings default",
+    "description": "Settings Default "
+  },
   "components.magicSearch.button.": {
     "defaultMessage": "A buscar",
     "description": "label button field"
@@ -30,6 +38,10 @@
   "components.pictEdit.modal.label": {
     "defaultMessage": "Editar Pictograma",
     "description": "Title modal"
+  },
+  "components.pictEditSettings.settings.label": {
+    "defaultMessage": "Settings Pictogram",
+    "description": "Title section Pictogram Edit "
   },
   "components.pictogramAmount": {
     "defaultMessage": "Pictogramas:",
@@ -83,22 +95,6 @@
     "defaultMessage": "Por defecto",
     "description": "Not type setting "
   },
-  "components.settingDefaultCardList.close": {
-    "defaultMessage": "cerrar",
-    "description": "close Settings Default "
-  },
-  "components.settingDefaultCardList.settings.title": {
-    "defaultMessage": "Configuraciones por defecto",
-    "description": "Settings Default "
-  },
-  "components.settingItem.default.label": {
-    "defaultMessage": "Per defecte",
-    "description": "Type setting item"
-  },
-  "components.settingPictCardList.settings.label": {
-    "defaultMessage": "Configuraciones de Pictograma",
-    "description": "Settings Pictogram "
-  },
   "settings.skins.asian": {
     "defaultMessage": "Asiàtic",
     "description": "Type of setting skin"
@@ -124,3 +120,4 @@
     "description": "Type of setting skin"
   }
 }
+
