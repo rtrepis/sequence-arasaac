@@ -91,7 +91,11 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
             <PictogramSearch indexPict={pictogram.indexSequence} />
           </Stack>
 
-          <PictEditSettings indexPict={pictogram.indexSequence} />
+          <PictEditSettings
+            indexPict={pictogram.indexSequence}
+            pictSequenceSettings={pictogram.settings}
+            pictApiAraSettings={pictogram.img.settings}
+          />
         </DialogContent>
 
         <DialogActions

@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from "../../utils/test-utils";
 import SettingCard from "./SettingCard";
-import { Settings } from "./SettingCard.lang";
+import { settingsPictApiAra } from "./SettingCard.lang";
 
 describe("Give a component Setting Item", () => {
   describe("When rendered whit 'skins' array", () => {
@@ -12,7 +12,7 @@ describe("Give a component Setting Item", () => {
 
       render(
         <SettingCard
-          setting={Settings.skins}
+          setting={settingsPictApiAra.skin}
           action={mockAction}
           selected={"aztec"}
         />
@@ -46,7 +46,7 @@ describe("Give a component Setting Item", () => {
 
       render(
         <SettingCard
-          setting={Settings.skins}
+          setting={settingsPictApiAra.skin}
           action={mockAction}
           selected={"aztec"}
         />

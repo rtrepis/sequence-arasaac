@@ -69,7 +69,7 @@ describe("Given a useAraSacc hook", () => {
           img: {
             searched: { bestIdPicts: [234, 234], word: "girl" },
             selectedId: 234,
-            settings: { skin: "default" },
+            settings: {},
           },
           indexSequence: 2,
           settings: {},
@@ -154,6 +154,23 @@ describe("Given a useAraSacc hook", () => {
       const path = await result.current.toUrlPath(pictogramNumber, skin);
 
       expect(path).toStrictEqual(expectPath);
+    });
+  });
+
+  describe("When getSettingsPictId it's called with pictogramID and indexSequence", () => {
+    test("Then called dispatch expect action creator", async () => {
+      mockSelector = { skin: "white" };
+
+      const expectAction = {
+        payload: { indexSequence: 0, settings: { skin: "white" } },
+        type: "sequence/upDateSettingsPictApiAra",
+      };
+
+      const { result } = renderHook(() => useAraSaac());
+
+      await result.current.getSettingsPictId(555, 0);
+
+      expect(mockDispatch).toHaveBeenCalledWith(expectAction);
     });
   });
 });
