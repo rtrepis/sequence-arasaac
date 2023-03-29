@@ -6,8 +6,13 @@ import {
   upDatePictSearchedActionCreator,
   addPictogramActionCreator,
   sortSequenceActionCreator,
+  upDateSettingsPictApiAraActionCreator,
 } from "../app/slice/sequenceSlice";
-import { PictSequence, UpdateSearched } from "../types/sequence";
+import {
+  PictApiAraSettings,
+  PictSequence,
+  UpdateSearched,
+} from "../types/sequence";
 
 const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
 
@@ -16,10 +21,47 @@ const useAraSaac = () => {
     (state) => state.ui.defaultSettings.PictApiAra
   );
   const amountSequence = useAppSelector((state) => state.sequence.length);
+  const defaultSettingsPictApiAra = useAppSelector(
+    (state) => state.ui.defaultSettings.PictApiAra
+  );
+
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const locale = intl.locale.slice(0, 2).toLocaleLowerCase();
+
+  const makeSettingsProperty = useCallback(
+    async (data: any) => {
+      const settingsProperty: PictApiAraSettings = {};
+
+      if (data.skin) settingsProperty.skin = defaultSettingsPictApiAra.skin;
+
+      return { ...settingsProperty };
+    },
+    [defaultSettingsPictApiAra.skin]
+  );
+
+  const getSettingsPictId = useCallback(
+    async (pictogramId: number, indexSequence: number) => {
+      try {
+        const { data } = await axios.get(
+          `${araSaacURL}pictograms/${locale}/${pictogramId}`
+        );
+
+        const findSettings: PictApiAraSettings = await makeSettingsProperty(
+          data
+        );
+
+        dispatch(
+          upDateSettingsPictApiAraActionCreator({
+            indexSequence: indexSequence,
+            settings: findSettings,
+          })
+        );
+      } catch {}
+    },
+    [locale, dispatch, makeSettingsProperty]
+  );
 
   const getSearchPictogram = useCallback(
     async (word: string, indexSequence: number, isUpdate: boolean) => {
@@ -46,7 +88,7 @@ const useAraSaac = () => {
             img: {
               searched: { word: word, bestIdPicts: findBestPict },
               selectedId: findBestPict[0],
-              settings: { skin: "default" },
+              settings: await makeSettingsProperty(data[0]),
             },
             settings: {},
             text: word,
@@ -80,21 +122,23 @@ const useAraSaac = () => {
         }
       }
     },
-    [dispatch, locale, amountSequence]
+    [dispatch, locale, amountSequence, makeSettingsProperty]
   );
 
-  const toUrlPath = (pictogram: number, skin: string | undefined) => {
-    let path = `${araSaacURL}pictograms/${pictogram}`;
+  const toUrlPath = (pictogramId: number, skin: string | undefined) => {
+    let path = `${araSaacURL}pictograms/${pictogramId}`;
 
-    const urlSkin = skin !== "default" ? skin : uiSettings.skin;
+    if (skin) {
+      const urlSkin = skin !== "default" ? skin : uiSettings.skin;
 
-    urlSkin !== "white" &&
-      (path += `?skin=${urlSkin === "asian" ? "assian" : urlSkin}`);
+      urlSkin !== "white" &&
+        (path += `?skin=${urlSkin === "asian" ? "assian" : urlSkin}`);
+    }
 
     return path;
   };
 
-  return { getSearchPictogram, toUrlPath };
+  return { getSearchPictogram, toUrlPath, getSettingsPictId };
 };
 
 export default useAraSaac;

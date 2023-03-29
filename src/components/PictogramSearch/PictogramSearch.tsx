@@ -26,7 +26,11 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
   } = useAppSelector((state) => state.sequence[indexPict].img);
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const { getSearchPictogram, toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
+  const {
+    getSearchPictogram,
+    toUrlPath: toUrlPathApiAraSaac,
+    getSettingsPictId,
+  } = useAraSaac();
 
   const initialWord =
     word === `${intl.formatMessage({ ...messages.empty })}` ? "" : word;
@@ -36,12 +40,14 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
     setNewWord(event.target.value);
   };
 
-  const handleUpDatePictNumber = (upDateNumber: number) => {
+  const handleUpDatePictNumber = (upDatePictNumber: number) => {
     const upDatePictNum: UpdateSelectedId = {
       indexSequence: indexPict,
-      selectedId: upDateNumber,
+      selectedId: upDatePictNumber,
     };
     dispatch(upDatePictSelectedIdActionCreator(upDatePictNum));
+
+    getSettingsPictId(upDatePictNumber, indexPict);
   };
 
   const handleSubmit = async (event: SyntheticEvent) => {

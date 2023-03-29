@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updateSkinActionCreator } from "../../app/slice/uiSlice";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettings.lang";
-import { Settings } from "../SettingCard/SettingCard.lang";
+import { settingsPictApiAra } from "../SettingCard/SettingCard.lang";
 import { Container } from "@mui/system";
 import { SettingToUpdate } from "../../types/sequence";
 
@@ -84,10 +84,10 @@ const DefaultSettings = (): JSX.Element => {
           <List>
             <ListItem>
               <SettingCard
-                setting={Settings.skins}
+                setting={settingsPictApiAra.skin}
                 action={handleUpDateSkin}
                 isSettingDefault={true}
-                selected={defaultSetting.skin}
+                selected={defaultSetting.skin!}
               />
             </ListItem>
             <Divider />
