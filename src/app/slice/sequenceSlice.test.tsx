@@ -5,6 +5,7 @@ import {
   UpdateSearched,
   UpdateAllSetting,
   SettingToUpdate,
+  UpDateSettingsPictApiAra,
 } from "../../types/sequence";
 import { preloadedState } from "../../utils/test-utils";
 import {
@@ -19,6 +20,7 @@ import {
   subtractPictogramActionCreator,
   renumberSequenceActionCreator,
   sortSequenceActionCreator,
+  upDateSettingsPictApiAraActionCreator,
 } from "./sequenceSlice";
 
 const mockSequences = preloadedState.sequence[0];
@@ -319,6 +321,39 @@ describe("Given the reducer sequenceSlice", () => {
       ];
 
       const actionCreator = sortSequenceActionCreator();
+      const newState = sequenceReducer(previousSequence, actionCreator);
+
+      expect(newState).toStrictEqual(expectState);
+    });
+  });
+
+  describe("When called 'upDateSettingsPictApiAra' with UpdateSettingsPictApiAra", () => {
+    test("Then should new state with update PictSettingPictApiAra", () => {
+      const toUpDatePictSettings: UpDateSettingsPictApiAra = {
+        indexSequence: 0,
+        settings: { skin: "black" },
+      };
+      previousSequence = [
+        {
+          ...preloadedState.sequence[0],
+          indexSequence: 0,
+          img: {
+            ...preloadedState.sequence[0].img,
+            settings: { skin: "white" },
+          },
+        },
+      ];
+
+      const expectState: PictSequence[] = [
+        {
+          ...previousSequence[0],
+          indexSequence: 0,
+          img: { ...previousSequence[0].img, settings: { skin: "black" } },
+        },
+      ];
+
+      const actionCreator =
+        upDateSettingsPictApiAraActionCreator(toUpDatePictSettings);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);

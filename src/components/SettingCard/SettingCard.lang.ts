@@ -1,8 +1,8 @@
 import { defineMessage, defineMessages } from "react-intl";
 import { SettingsLangI } from "../../types/sequence.lang";
 
-export const Settings: SettingsLangI = {
-  skins: {
+export const settingsPictApiAra: SettingsLangI = {
+  skin: {
     name: "skin",
     message: defineMessage({
       id: "settings.skins.label",

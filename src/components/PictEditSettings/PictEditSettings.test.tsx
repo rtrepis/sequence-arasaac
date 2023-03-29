@@ -1,3 +1,4 @@
+import { PictSequence } from "../../types/sequence";
 import {
   fireEvent,
   preloadedState,
@@ -17,7 +18,16 @@ beforeEach(() => jest.clearAllMocks());
 describe("Give a component Setting Pictograms list", () => {
   describe("When rendered with index pictogram and user click type setting", () => {
     test("Then should call dispatch with action update", () => {
-      const indexPictogram = 0;
+      const mockPictogram: PictSequence = {
+        indexSequence: 0,
+        img: {
+          searched: { word: "", bestIdPicts: [0] },
+          selectedId: 0,
+          settings: { skin: "asian" },
+        },
+        settings: {},
+      };
+
       const buttonOpenSettings = "Settings Pictogram";
       const expectTypeSetting = "Asian";
       const actionCreator = {
@@ -25,9 +35,16 @@ describe("Give a component Setting Pictograms list", () => {
         type: "sequence/upDateSetting",
       };
 
-      render(<PictEditSettings indexPict={indexPictogram} />, {
-        preloadedState: preloadedState,
-      });
+      render(
+        <PictEditSettings
+          indexPict={mockPictogram.indexSequence}
+          pictApiAraSettings={mockPictogram.img.settings}
+          pictSequenceSettings={mockPictogram.settings}
+        />,
+        {
+          preloadedState: preloadedState,
+        }
+      );
       const button = screen.getByRole("button", { name: buttonOpenSettings });
       fireEvent.click(button);
 

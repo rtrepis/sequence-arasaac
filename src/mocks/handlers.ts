@@ -10,6 +10,7 @@ export const handlers = [
       return res(ctx.status(200), ctx.json(mockFindPict));
     }
   ),
+
   rest.get(
     `${araSaacURL}pictograms/en/bestsearch/asdfas`,
     async (req, res, ctx) => {
@@ -17,4 +18,9 @@ export const handlers = [
       return res(ctx.status(404), ctx.json(mockFindPict));
     }
   ),
+
+  rest.get(`${araSaacURL}pictograms/en/555`, async (req, res, ctx) => {
+    const mockFindPict: {} = { skin: true };
+    return res(ctx.status(200), ctx.json(mockFindPict));
+  }),
 ];

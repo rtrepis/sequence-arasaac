@@ -1,7 +1,7 @@
 import { ApiAraPictSettings, Skins } from "./sequence";
 
 export interface SettingsLangI {
-  skins: SettingLangI;
+  skin: SettingLangI;
 }
 
 export interface MessageI {
