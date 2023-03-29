@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Container from "@mui/material/Container";
 import Slide from "@mui/material/Slide";
-import SettingsDefaultCardList from "../DefaultSettingCardList/DefaultSettingCardList";
+import DefaultSettings from "../DefaultSettings/DefaultSettings";
 import { FormattedMessage } from "react-intl";
 import messages from "./BarNavigation.lang";
 
@@ -39,7 +39,7 @@ const BarNavigation = (props: Props) => {
             <Typography variant="h6" component="h1">
               <FormattedMessage {...messages.title} />
             </Typography>
-            <SettingsDefaultCardList />
+            <DefaultSettings />
           </Toolbar>
         </AppBar>
       </HideOnScroll>
