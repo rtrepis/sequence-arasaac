@@ -5,6 +5,18 @@
       "value": "Secuencia - AraSaac"
     }
   ],
+  "components.defaultSettings.close": [
+    {
+      "type": 0,
+      "value": "close"
+    }
+  ],
+  "components.defaultSettings.settings.title": [
+    {
+      "type": 0,
+      "value": "Settings default"
+    }
+  ],
   "components.magicSearch.button.": [
     {
       "type": 0,
@@ -45,6 +57,12 @@
     {
       "type": 0,
       "value": "Editar Pictograma"
+    }
+  ],
+  "components.pictEditSettings.settings.label": [
+    {
+      "type": 0,
+      "value": "Settings Pictogram"
     }
   ],
   "components.pictogramAmount": [
@@ -123,30 +141,6 @@
     {
       "type": 0,
       "value": "Por defecto"
-    }
-  ],
-  "components.settingDefaultCardList.close": [
-    {
-      "type": 0,
-      "value": "cerrar"
-    }
-  ],
-  "components.settingDefaultCardList.settings.title": [
-    {
-      "type": 0,
-      "value": "Configuraciones por defecto"
-    }
-  ],
-  "components.settingItem.default.label": [
-    {
-      "type": 0,
-      "value": "Per defecte"
-    }
-  ],
-  "components.settingPictCardList.settings.label": [
-    {
-      "type": 0,
-      "value": "Configuraciones de Pictograma"
     }
   ],
   "settings.skins.asian": [
