@@ -25,7 +25,7 @@ describe("Give a component Setting Pictograms list", () => {
           selectedId: 0,
           settings: { skin: "asian" },
         },
-        settings: {},
+        settings: { ...preloadedState.sequence[0].settings },
       };
 
       const buttonOpenSettings = "Settings Pictogram";
