@@ -21,6 +21,9 @@ const PictogramAmount = (): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const amountSequence = useAppSelector((state) => state.sequence.length);
+  const pictSequenceDefault = useAppSelector(
+    (state) => state.ui.defaultSettings.pictSequence
+  );
 
   let pictogramEmpty: PictSequence = {
     ...preloadedState.sequence[0],
@@ -32,9 +35,10 @@ const PictogramAmount = (): JSX.Element => {
         bestIdPicts: [],
       },
       selectedId: 26527,
-      settings: { skin: "default" },
+      settings: {},
     },
     settings: {
+      ...pictSequenceDefault,
       border: {
         in: { color: "blue", radius: 20, size: 2 },
         out: { color: "green", radius: 20, size: 2 },

@@ -11,12 +11,14 @@ import { forwardRef, useState } from "react";
 import { Divider, List, ListItem } from "@mui/material";
 import SettingCard from "../SettingCard/SettingCard";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { updateSkinActionCreator } from "../../app/slice/uiSlice";
+import {
+  updateDefaultSettingPictApiAraActionCreator,
+  updateDefaultSettingPictSequenceActionCreator,
+} from "../../app/slice/uiSlice";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettings.lang";
-import { settingsPictApiAra } from "../SettingCard/SettingCard.lang";
 import { Container } from "@mui/system";
-import { SettingToUpdate } from "../../types/sequence";
+import { PictApiAraSettings, PictSequenceSettings } from "../../types/sequence";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -28,9 +30,7 @@ const Transition = forwardRef(function Transition(
 });
 
 const DefaultSettings = (): JSX.Element => {
-  const defaultSetting = useAppSelector(
-    (state) => state.ui.defaultSettings.PictApiAra
-  );
+  const defaultSetting = useAppSelector((state) => state.ui.defaultSettings);
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -43,8 +43,16 @@ const DefaultSettings = (): JSX.Element => {
     setOpen(false);
   };
 
-  const handleUpDateSkin = (toUpdate: SettingToUpdate) => {
-    dispatch(updateSkinActionCreator(toUpdate));
+  const handleUpDatePictApiAra = (toUpdate: PictApiAraSettings) => {
+    dispatch(
+      updateDefaultSettingPictApiAraActionCreator({ settings: toUpdate })
+    );
+  };
+
+  const handleUpDatePictSequence = (toUpdate: PictSequenceSettings) => {
+    dispatch(
+      updateDefaultSettingPictSequenceActionCreator({ settings: toUpdate })
+    );
   };
 
   return (
@@ -84,10 +92,16 @@ const DefaultSettings = (): JSX.Element => {
           <List>
             <ListItem>
               <SettingCard
-                setting={settingsPictApiAra.skin}
-                action={handleUpDateSkin}
-                isSettingDefault={true}
-                selected={defaultSetting.skin!}
+                setting={"textPosition"}
+                actionSelected={handleUpDatePictSequence}
+                selected={defaultSetting.pictSequence.textPosition}
+              />
+            </ListItem>
+            <ListItem>
+              <SettingCard
+                setting={"skin"}
+                actionSelected={handleUpDatePictApiAra}
+                selected={defaultSetting.pictApiAra.skin!}
               />
             </ListItem>
             <Divider />

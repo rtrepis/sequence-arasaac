@@ -4,9 +4,8 @@ import {
   Sequence,
   UpdateSelectedId,
   UpdateSearched,
-  SettingToUpdate,
-  UpdateAllSetting,
   UpDateSettingsPictApiAra,
+  upDateSettingsPictSequence,
 } from "../../types/sequence";
 
 const sequenceInitialState: Sequence = [];
@@ -60,18 +59,6 @@ const sequenceSlice = createSlice({
       );
     },
 
-    upDateSetting: (
-      previousSequence,
-      action: PayloadAction<SettingToUpdate>
-    ) => {
-      previousSequence.map(
-        (pictogram, index) =>
-          index === action.payload.indexSequence &&
-          (pictogram.img.settings[action.payload.setting] =
-            action.payload.value)
-      );
-    },
-
     upDateSettingsPictApiAra: (
       previousSequence,
       action: PayloadAction<UpDateSettingsPictApiAra>
@@ -83,14 +70,32 @@ const sequenceSlice = createSlice({
       );
     },
 
-    applyAllSetting: (
+    upDateSettingsPictSequence: (
       previousSequence,
-      action: PayloadAction<UpdateAllSetting>
+      action: PayloadAction<upDateSettingsPictSequence>
     ) => {
       previousSequence.map(
-        (pictogram) =>
-          (pictogram.img.settings[action.payload.setting] =
-            action.payload.value)
+        (pictogram, index) =>
+          index === action.payload.indexSequence &&
+          (pictogram.settings = action.payload.settings)
+      );
+    },
+
+    applyAllSettingPictApiAra: (
+      previousSequence,
+      action: PayloadAction<UpDateSettingsPictApiAra>
+    ) => {
+      previousSequence.map(
+        (pictogram) => (pictogram.img.settings = action.payload.settings)
+      );
+    },
+
+    applyAllSettingPictSequence: (
+      previousSequence,
+      action: PayloadAction<upDateSettingsPictSequence>
+    ) => {
+      previousSequence.map(
+        (pictogram) => (pictogram.settings = action.payload.settings)
       );
     },
   },
@@ -107,7 +112,8 @@ export const {
   sortSequence: sortSequenceActionCreator,
   upDatePictSelectedId: upDatePictSelectedIdActionCreator,
   upDatePictSearched: upDatePictSearchedActionCreator,
-  applyAllSetting: applyAllSettingActionCreator,
-  upDateSetting: upDateSettingActionCreator,
+  applyAllSettingPictApiAra: applyAllSettingPictApiAraActionCreator,
+  applyAllSettingPictSequence: applyAllSettingPictSequenceActionCreator,
   upDateSettingsPictApiAra: upDateSettingsPictApiAraActionCreator,
+  upDateSettingsPictSequence: upDateSettingsPictSequenceActionCreator,
 } = sequenceSlice.actions;

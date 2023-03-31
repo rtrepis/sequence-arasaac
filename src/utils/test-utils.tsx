@@ -40,7 +40,10 @@ const preloadedState: State = {
     },
   ],
   ui: {
-    defaultSettings: { PictApiAra: { skin: "white" } },
+    defaultSettings: {
+      pictApiAra: { skin: "white" },
+      pictSequence: { textPosition: "bottom" },
+    },
   },
 };
 

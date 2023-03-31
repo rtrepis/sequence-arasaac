@@ -17,12 +17,12 @@ import {
 const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
 
 const useAraSaac = () => {
-  const uiSettings = useAppSelector(
-    (state) => state.ui.defaultSettings.PictApiAra
+  const defaultSettingsPictSequence = useAppSelector(
+    (state) => state.ui.defaultSettings.pictSequence
   );
   const amountSequence = useAppSelector((state) => state.sequence.length);
   const defaultSettingsPictApiAra = useAppSelector(
-    (state) => state.ui.defaultSettings.PictApiAra
+    (state) => state.ui.defaultSettings.pictApiAra
   );
 
   const dispatch = useAppDispatch();
@@ -90,7 +90,7 @@ const useAraSaac = () => {
               selectedId: findBestPict[0],
               settings: await makeSettingsProperty(data[0]),
             },
-            settings: {},
+            settings: defaultSettingsPictSequence,
             text: word,
           };
 
@@ -112,9 +112,9 @@ const useAraSaac = () => {
             img: {
               searched: { word: word, bestIdPicts: [3418] },
               selectedId: 3418,
-              settings: { skin: "default" },
+              settings: { skin: "white" },
             },
-            settings: {},
+            settings: defaultSettingsPictSequence,
             text: word,
           };
           dispatch(addPictogramActionCreator(toPictNotFound));
@@ -122,14 +122,21 @@ const useAraSaac = () => {
         }
       }
     },
-    [dispatch, locale, amountSequence, makeSettingsProperty]
+    [
+      dispatch,
+      locale,
+      amountSequence,
+      makeSettingsProperty,
+      defaultSettingsPictSequence,
+    ]
   );
 
   const toUrlPath = (pictogramId: number, skin: string | undefined) => {
     let path = `${araSaacURL}pictograms/${pictogramId}`;
 
     if (skin) {
-      const urlSkin = skin !== "default" ? skin : uiSettings.skin;
+      const urlSkin =
+        skin !== "default" ? skin : defaultSettingsPictApiAra.skin;
 
       urlSkin !== "white" &&
         (path += `?skin=${urlSkin === "asian" ? "assian" : urlSkin}`);

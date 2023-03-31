@@ -25,6 +25,7 @@ describe("Give a component PictEdit", () => {
       searched: { ...mockSequence.img.searched, word: "Empty" },
     },
     settings: {
+      ...preloadedState.sequence[0].settings,
       border: {
         in: { color: "blue", radius: 20, size: 2 },
         out: { color: "green", radius: 20, size: 2 },
