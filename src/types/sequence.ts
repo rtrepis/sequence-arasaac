@@ -7,12 +7,14 @@ export interface PictSequence {
   settings: PictSequenceSettings;
 }
 export interface PictSequenceSettings {
-  textPosition?: "top" | "bottom";
+  textPosition: "top" | "bottom";
   border?: {
     out?: Border;
     in?: Border;
   };
 }
+
+export type TextPosition = "top" | "bottom";
 export interface Border {
   color: string;
   radius: number;
@@ -31,13 +33,7 @@ export interface Word {
   IdPicts?: number[];
 }
 
-export type Skins =
-  | "asian"
-  | "aztec"
-  | "black"
-  | "mulatto"
-  | "white"
-  | "default";
+export type Skins = "asian" | "aztec" | "black" | "mulatto" | "white";
 
 export interface UpdateSelectedId {
   indexSequence: number;
@@ -52,23 +48,25 @@ export interface UpdateSearched {
 export interface PictApiAraSettings {
   skin?: Skins;
 }
-export interface UpdateSetting<S extends ApiAraPictSettings> {
-  indexSequence?: number;
-  setting: S;
-  value: S extends "skin" ? Skins : never;
-}
-export type SettingToUpdate = SkinToUpdate;
-
-export type SkinToUpdate = UpdateSetting<"skin">;
-
-export interface UpdateAllSetting {
-  setting: ApiAraPictSettings;
-  value: Skins;
-}
 
 export interface UpDateSettingsPictApiAra {
-  indexSequence: number;
+  indexSequence?: number;
   settings: PictApiAraSettings;
 }
 
-export type ApiAraPictSettings = "skin";
+export interface upDateSettingsPictSequence {
+  indexSequence?: number;
+  settings: PictSequenceSettings;
+}
+
+export interface upDateSettingsTry {
+  indexSequence?: number;
+  settings: PictSequenceSettings & PictApiAraSettings;
+}
+
+export type PictAllSettings = {
+  skin: Skins;
+  textPosition: TextPosition;
+};
+
+//export type PictAllSettings = PictSequenceSettings & PictApiAraSettings;

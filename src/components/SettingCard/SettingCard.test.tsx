@@ -1,6 +1,5 @@
 import { render, fireEvent, screen } from "../../utils/test-utils";
 import SettingCard from "./SettingCard";
-import { settingsPictApiAra } from "./SettingCard.lang";
 
 describe("Give a component Setting Item", () => {
   describe("When rendered whit 'skins' array", () => {
@@ -12,9 +11,10 @@ describe("Give a component Setting Item", () => {
 
       render(
         <SettingCard
-          setting={settingsPictApiAra.skin}
-          action={mockAction}
+          setting="skin"
+          actionSelected={mockAction}
           selected={"aztec"}
+          defaultSetting={uiSettingDefaultType}
         />
       );
 
@@ -31,10 +31,7 @@ describe("Give a component Setting Item", () => {
           expect(pathImage).toBe(
             `${pathExpect + skin.toLocaleLowerCase()}.png`
           );
-          expect(mockAction).toBeCalledWith({
-            setting: "skin",
-            value: skin.toLocaleLowerCase(),
-          });
+          expect(mockAction).toBeCalledWith({ skin: skin.toLowerCase() });
         });
     });
   });
@@ -46,9 +43,11 @@ describe("Give a component Setting Item", () => {
 
       render(
         <SettingCard
-          setting={settingsPictApiAra.skin}
-          action={mockAction}
+          setting="skin"
+          actionSelected={mockAction}
           selected={"aztec"}
+          applyAll={mockAction}
+          defaultSetting={"white"}
         />
       );
 
