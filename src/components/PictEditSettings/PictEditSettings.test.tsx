@@ -31,8 +31,8 @@ describe("Give a component Setting Pictograms list", () => {
       const buttonOpenSettings = "Settings Pictogram";
       const expectTypeSetting = "Asian";
       const actionCreator = {
-        payload: { indexSequence: 0, setting: "skin", value: "asian" },
-        type: "sequence/upDateSetting",
+        payload: { indexSequence: 0, settings: { skin: "asian" } },
+        type: "sequence/upDateSettingsPictApiAra",
       };
 
       render(

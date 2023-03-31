@@ -17,9 +17,9 @@ const PictogramCard = ({
     img: {
       selectedId,
       settings: { skin },
-      searched: { word },
+      searched: { word: text },
     },
-    settings: { border },
+    settings: { textPosition, border },
   },
   view,
   variant,
@@ -35,7 +35,8 @@ const PictogramCard = ({
       {(view === "complete" || view === "header") && (
         <CardContent>
           <Typography variant="body1" component="h3">
-            {indexSequence + 1}
+            {textPosition === "bottom" && indexSequence + 1}
+            {textPosition === "top" && text}
           </Typography>
         </CardContent>
       )}
@@ -55,7 +56,8 @@ const PictogramCard = ({
       {(view === "complete" || view === "footer") && (
         <CardContent>
           <Typography variant="body1" component="h3">
-            {word}
+            {textPosition === "bottom" && text}
+            {textPosition === "top" && indexSequence + 1}
           </Typography>
         </CardContent>
       )}

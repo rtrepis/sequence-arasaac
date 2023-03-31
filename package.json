@@ -26,7 +26,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "test-coverage": "react-scripts test --coverage --watchAll=false",
     "prepare": "npm run compile -- languages/en.json --ast --out-file src/languages/en.json && npm run compile -- languages/ca.json --ast --out-file src/languages/ca.json && npm run compile -- languages/es.json --ast --out-file src/languages/es.json",

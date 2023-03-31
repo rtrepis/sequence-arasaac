@@ -1,57 +1,41 @@
 import { Stack, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { applyAllSettingActionCreator } from "../../app/slice/sequenceSlice";
 import StyledButton from "../../style/StyledButton";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
-import { Skins, SettingToUpdate } from "../../types/sequence";
-import { SettingLangI } from "../../types/sequence.lang";
-import { messages } from "./SettingCard.lang";
+import { PictAllSettings } from "../../types/sequence";
+import { messages, settingsCardLang } from "./SettingCard.lang";
 import { cardAction, card, cardContent, cardTitle } from "./SettingCard.styled";
 
 interface SettingCardProps {
-  setting: SettingLangI;
-  action: (toUpdate: SettingToUpdate) => void;
-  isSettingDefault?: boolean | false;
-  selected: Skins;
+  setting: "skin" | "textPosition";
+  actionSelected: (toUpdate: PictAllSettings) => void;
+  defaultSetting?: string;
+  selected: string;
+  applyAll?: (toUpdate: PictAllSettings) => void;
 }
 
 const SettingCard = ({
-  setting: { types, message: messageSetting, name: setting },
-  action,
-  isSettingDefault,
+  setting,
+  actionSelected: action,
+  defaultSetting,
   selected,
+  applyAll,
 }: SettingCardProps): JSX.Element => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
-  const uiDefaultSettingType = useAppSelector(
-    (state) => state.ui.defaultSettings.PictApiAra[setting]
-  );
+
   const [type, setType] = useState<string | null>("default");
+
+  const settingCard = {
+    message: settingsCardLang.messages[setting],
+    types: Object.entries(settingsCardLang[setting]),
+  };
 
   const handleChangeType = (
     event: React.MouseEvent<HTMLElement>,
     newType: string | null
   ) => {
     setType(newType);
-  };
-
-  const handleApplyAll = () => {
-    selected !== undefined &&
-      dispatch(
-        applyAllSettingActionCreator({
-          setting: setting,
-          value: selected,
-        })
-      );
-  };
-
-  const handleClickSettingType = (value: Skins) => {
-    action({
-      setting: setting,
-      value: value,
-    });
   };
 
   return (
@@ -64,36 +48,32 @@ const SettingCard = ({
       sx={card}
     >
       <Typography variant="body1" sx={cardTitle} component="h4">
-        <FormattedMessage {...messageSetting} />
+        <FormattedMessage {...settingCard.message} />
       </Typography>
 
       <StyledToggleButtonGroup
         value={type}
         exclusive
         onChange={handleChangeType}
-        aria-label={`${intl.formatMessage({ ...messageSetting })}`}
+        aria-label={`${intl.formatMessage(settingCard.message)}`}
         sx={cardContent}
       >
-        {types
-          .filter(({ name }) =>
-            isSettingDefault || selected === uiDefaultSettingType
-              ? name
-              : name !== uiDefaultSettingType
-          )
-          .map(({ name, message }) => (
+        {settingCard.types
+          .filter(([type, values]) => type !== defaultSetting)
+          .map(([key, value]) => (
             <ToggleButton
-              value={name}
-              aria-label={intl.formatMessage({ ...message })}
-              key={name}
-              selected={selected === name}
-              onClick={() => handleClickSettingType(name)}
+              value={key}
+              aria-label={intl.formatMessage(value.message)}
+              key={key}
+              selected={selected === key}
+              onClick={() => action({ [setting]: key } as PictAllSettings)}
             >
-              <Tooltip title={intl.formatMessage({ ...message })} arrow>
+              <Tooltip title={intl.formatMessage(value.message)} arrow>
                 <img
-                  src={`/img/settings/${setting}/${name}.png`}
+                  src={`/img/settings/${setting}/${key}.png`}
                   alt={`${intl.formatMessage({
-                    ...messageSetting,
-                  })} ${intl.formatMessage({ ...message })}`}
+                    ...settingCard.message,
+                  })} ${intl.formatMessage(value.message)}`}
                   width={40}
                   height={40}
                 />
@@ -101,17 +81,19 @@ const SettingCard = ({
             </ToggleButton>
           ))}
 
-        {!isSettingDefault && (
+        {defaultSetting !== undefined && (
           <ToggleButton
             value={"default"}
-            onClick={() => handleClickSettingType("default")}
-            selected={selected === "default"}
+            onClick={() =>
+              action({ [setting]: defaultSetting } as PictAllSettings)
+            }
+            selected={selected === defaultSetting}
           >
             <Tooltip title={intl.formatMessage({ ...messages.default })}>
               <img
                 src={`/img/settings/x.png`}
                 alt={`${intl.formatMessage({
-                  ...messageSetting,
+                  ...settingCard.message,
                 })} ${intl.formatMessage({ ...messages.default })}`}
                 width={40}
                 height={40}
@@ -121,11 +103,11 @@ const SettingCard = ({
         )}
       </StyledToggleButtonGroup>
 
-      {!isSettingDefault && (
+      {applyAll !== undefined && (
         <StyledButton
           variant="outlined"
           sx={cardAction}
-          onClick={handleApplyAll}
+          onClick={() => applyAll({ [setting]: selected } as PictAllSettings)}
         >
           <FormattedMessage {...messages.applyAll} />
         </StyledButton>
