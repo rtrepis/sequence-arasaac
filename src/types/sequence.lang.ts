@@ -1,22 +1,20 @@
-import { ApiAraPictSettings, Skins } from "./sequence";
+import { Skins, TextPosition } from "./sequence";
 
-export interface SettingsLangI {
-  skin: SettingLangI;
+export interface SettingsCardLang {
+  messages: {
+    skin: Message;
+    textPosition: Message;
+  };
+  skin: {
+    [K in Skins]: { message: Message };
+  };
+  textPosition: {
+    [K in TextPosition]: { message: Message };
+  };
 }
 
-export interface MessageI {
+export interface Message {
   id: string;
   description?: string;
   defaultMessage: string;
-}
-
-export interface TypesLangI {
-  name: Skins;
-  message?: MessageI;
-}
-
-export interface SettingLangI {
-  name: ApiAraPictSettings;
-  types: TypesLangI[];
-  message?: MessageI;
 }

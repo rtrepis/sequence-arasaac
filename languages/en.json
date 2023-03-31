@@ -118,5 +118,17 @@
   "settings.skins.white": {
     "defaultMessage": "White",
     "description": "Type of setting skin"
+  },
+  "settings.textPosition.bottom": {
+    "defaultMessage": "Bottom",
+    "description": "Type of setting text position"
+  },
+  "settings.textPosition.label": {
+    "defaultMessage": "Text Position",
+    "description": "Setting Text Position label"
+  },
+  "settings.textPosition.top": {
+    "defaultMessage": "Top",
+    "description": "Type of setting text position"
   }
 }

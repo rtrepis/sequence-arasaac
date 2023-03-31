@@ -1,19 +1,45 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SettingToUpdate } from "../../types/sequence";
+import {
+  UpDateSettingsPictApiAra,
+  upDateSettingsPictSequence,
+} from "../../types/sequence";
 import { Ui } from "../../types/ui";
 
 const uiInitialState: Ui = {
-  defaultSettings: { PictApiAra: { skin: "white" } },
+  defaultSettings: {
+    pictApiAra: { skin: "white" },
+    pictSequence: { textPosition: "bottom" },
+  },
 };
 
 const uiSlice = createSlice({
   name: "uiState",
   initialState: uiInitialState,
   reducers: {
-    updateSkin: (previousUi, action: PayloadAction<SettingToUpdate>) => ({
+    updateDefaultSettingPictApiAra: (
+      previousUi,
+      action: PayloadAction<UpDateSettingsPictApiAra>
+    ) => ({
       ...previousUi,
       defaultSettings: {
-        PictApiAra: { [action.payload.setting]: action.payload.value },
+        ...previousUi.defaultSettings,
+        pictApiAra: {
+          ...previousUi.defaultSettings.pictApiAra,
+          ...action.payload.settings,
+        },
+      },
+    }),
+    updateDefaultSettingPictSequence: (
+      previousUi,
+      action: PayloadAction<upDateSettingsPictSequence>
+    ) => ({
+      ...previousUi,
+      defaultSettings: {
+        ...previousUi.defaultSettings,
+        pictSequence: {
+          ...previousUi.defaultSettings.pictSequence,
+          ...action.payload.settings,
+        },
       },
     }),
   },
@@ -21,4 +47,8 @@ const uiSlice = createSlice({
 
 export const uiReducer = uiSlice.reducer;
 
-export const { updateSkin: updateSkinActionCreator } = uiSlice.actions;
+export const {
+  updateDefaultSettingPictApiAra: updateDefaultSettingPictApiAraActionCreator,
+  updateDefaultSettingPictSequence:
+    updateDefaultSettingPictSequenceActionCreator,
+} = uiSlice.actions;

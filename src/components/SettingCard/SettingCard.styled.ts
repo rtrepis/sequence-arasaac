@@ -21,4 +21,5 @@ export const cardAction: SxProps = {
   lineHeight: 1.25,
   alignSelf: { xs: "end", sm: "inherit" },
   marginTop: { xs: 1, sm: 0 },
+  marginBottom: { xs: 1, sm: 0 },
 };

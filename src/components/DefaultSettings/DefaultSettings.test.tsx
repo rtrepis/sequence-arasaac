@@ -31,11 +31,12 @@ describe("Give a component Setting default card list", () => {
     test("Then should call dispatch with action update setting", () => {
       const expectButton = "Black";
       const actionCreator = {
-        payload: { setting: "skin", value: "black" },
+        payload: { settings: { skin: "black" } },
         type: "uiState/updateSkin",
       };
 
       render(<DefaultSettings />);
+
       const buttonOpen = screen.getByRole("button", {
         name: "Settings default",
       });

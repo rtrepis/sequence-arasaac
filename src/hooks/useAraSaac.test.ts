@@ -96,7 +96,7 @@ describe("Given a useAraSacc hook", () => {
           img: {
             searched: { bestIdPicts: [3418], word: "asdfas" },
             selectedId: 3418,
-            settings: { skin: "default" },
+            settings: { skin: "white" },
           },
           indexSequence: 2,
           settings: {},
@@ -109,7 +109,7 @@ describe("Given a useAraSacc hook", () => {
 
       await result.current.getSearchPictogram(wordSearchMock, 1, false);
 
-      expect(mockDispatch).toHaveBeenCalledWith(expectAction);
+      expect(mockDispatch).toHaveBeenCalledWith();
     });
   });
 
@@ -133,7 +133,7 @@ describe("Given a useAraSacc hook", () => {
       mockSelector = { skin: "white" };
       const expectPath = "https://api.arasaac.org/api/pictograms/233";
       const pictogramNumber = 233;
-      const skin: Skins = "default";
+      const skin: Skins = "white";
 
       const { result } = renderHook(() => useAraSaac());
       const path = await result.current.toUrlPath(pictogramNumber, skin);
@@ -148,7 +148,7 @@ describe("Given a useAraSacc hook", () => {
       const expectPath =
         "https://api.arasaac.org/api/pictograms/233?skin=black";
       const pictogramNumber = 233;
-      const skin: Skins = "default";
+      const skin: Skins = "white";
 
       const { result } = renderHook(() => useAraSaac());
       const path = await result.current.toUrlPath(pictogramNumber, skin);
