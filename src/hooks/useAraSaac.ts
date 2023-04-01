@@ -3,15 +3,15 @@ import { useCallback } from "react";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
-  upDatePictSearchedActionCreator,
+  searchedActionCreator,
   addPictogramActionCreator,
   sortSequenceActionCreator,
-  upDateSettingsPictApiAraActionCreator,
+  settingsPictApiAraActionCreator,
 } from "../app/slice/sequenceSlice";
 import {
+  PictApiAraForEdit,
   PictApiAraSettings,
   PictSequence,
-  UpdateSearched,
 } from "../types/sequence";
 
 const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
@@ -34,6 +34,15 @@ const useAraSaac = () => {
     async (data: any) => {
       const settingsProperty: PictApiAraSettings = {};
 
+      if (data.tags.slice(0, 3).includes("person"))
+        settingsProperty.fitzgerald = "#DD8800";
+      if (data.tags.slice(0, 3).includes("verb"))
+        settingsProperty.fitzgerald = "#229900";
+      if (data.tags.slice(0, 3).includes("adjective"))
+        settingsProperty.fitzgerald = "#0088CC";
+      if (data.tags.slice(0, 3).includes("expression"))
+        settingsProperty.fitzgerald = "#CC00BB";
+
       if (data.skin) settingsProperty.skin = defaultSettingsPictApiAra.skin;
 
       return { ...settingsProperty };
@@ -53,7 +62,7 @@ const useAraSaac = () => {
         );
 
         dispatch(
-          upDateSettingsPictApiAraActionCreator({
+          settingsPictApiAraActionCreator({
             indexSequence: indexSequence,
             settings: findSettings,
           })
@@ -74,12 +83,12 @@ const useAraSaac = () => {
         data.map((pictogram: any) => findBestPict.push(pictogram._id));
 
         if (isUpdate) {
-          const toPictUpdate: UpdateSearched = {
+          const toPictUpdate: PictApiAraForEdit = {
             indexSequence: indexSequence,
             searched: { word: word, bestIdPicts: findBestPict },
           };
 
-          dispatch(upDatePictSearchedActionCreator(toPictUpdate));
+          dispatch(searchedActionCreator(toPictUpdate));
         }
 
         if (!isUpdate) {
@@ -99,20 +108,20 @@ const useAraSaac = () => {
         }
       } catch {
         if (isUpdate) {
-          const toPictNotFound: UpdateSearched = {
+          const toPictNotFound: PictApiAraForEdit = {
             indexSequence: indexSequence,
             searched: { word: word, bestIdPicts: [-1] },
           };
-          dispatch(upDatePictSearchedActionCreator(toPictNotFound));
+          dispatch(searchedActionCreator(toPictNotFound));
         }
 
         if (!isUpdate) {
           const toPictNotFound: PictSequence = {
-            indexSequence: amountSequence + 1,
+            indexSequence: amountSequence,
             img: {
               searched: { word: word, bestIdPicts: [3418] },
               selectedId: 3418,
-              settings: { skin: "white" },
+              settings: { fitzgerald: "#666" },
             },
             settings: defaultSettingsPictSequence,
             text: word,
@@ -134,13 +143,9 @@ const useAraSaac = () => {
   const toUrlPath = (pictogramId: number, skin: string | undefined) => {
     let path = `${araSaacURL}pictograms/${pictogramId}`;
 
-    if (skin) {
-      const urlSkin =
-        skin !== "default" ? skin : defaultSettingsPictApiAra.skin;
-
-      urlSkin !== "white" &&
-        (path += `?skin=${urlSkin === "asian" ? "assian" : urlSkin}`);
-    }
+    skin &&
+      skin !== "white" &&
+      (path += `?skin=${skin === "asian" ? "assian" : skin}`);
 
     return path;
   };

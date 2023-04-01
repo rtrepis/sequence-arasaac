@@ -10,15 +10,11 @@ import { AiOutlineClose, AiOutlineSetting } from "react-icons/ai";
 import { forwardRef, useState } from "react";
 import { Divider, List, ListItem } from "@mui/material";
 import SettingCard from "../SettingCard/SettingCard";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-  updateDefaultSettingPictApiAraActionCreator,
-  updateDefaultSettingPictSequenceActionCreator,
-} from "../../app/slice/uiSlice";
+import { useAppSelector } from "../../app/hooks";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettings.lang";
 import { Container } from "@mui/system";
-import { PictApiAraSettings, PictSequenceSettings } from "../../types/sequence";
+import SettingCardBorder from "../SettingCardBorder/SettingCardBorder";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -32,7 +28,6 @@ const Transition = forwardRef(function Transition(
 const DefaultSettings = (): JSX.Element => {
   const defaultSetting = useAppSelector((state) => state.ui.defaultSettings);
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState(false);
 
@@ -41,18 +36,6 @@ const DefaultSettings = (): JSX.Element => {
   };
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleUpDatePictApiAra = (toUpdate: PictApiAraSettings) => {
-    dispatch(
-      updateDefaultSettingPictApiAraActionCreator({ settings: toUpdate })
-    );
-  };
-
-  const handleUpDatePictSequence = (toUpdate: PictSequenceSettings) => {
-    dispatch(
-      updateDefaultSettingPictSequenceActionCreator({ settings: toUpdate })
-    );
   };
 
   return (
@@ -93,14 +76,24 @@ const DefaultSettings = (): JSX.Element => {
             <ListItem>
               <SettingCard
                 setting={"textPosition"}
-                actionSelected={handleUpDatePictSequence}
                 selected={defaultSetting.pictSequence.textPosition}
+              />
+            </ListItem>
+            <ListItem>
+              <SettingCardBorder
+                border="borderOut"
+                selected={defaultSetting.pictSequence.borderOut!}
+              />
+            </ListItem>
+            <ListItem>
+              <SettingCardBorder
+                border="borderIn"
+                selected={defaultSetting.pictSequence.borderIn!}
               />
             </ListItem>
             <ListItem>
               <SettingCard
                 setting={"skin"}
-                actionSelected={handleUpDatePictApiAra}
                 selected={defaultSetting.pictApiAra.skin!}
               />
             </ListItem>

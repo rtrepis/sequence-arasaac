@@ -1,25 +1,22 @@
 import {
+  PictApiAraSettings,
   PictSequence,
-  UpdateSelectedId,
   Sequence,
-  UpdateSearched,
-  UpDateSettingsPictApiAra,
-  upDateSettingsPictSequence,
+  SequenceForEdit,
 } from "../../types/sequence";
 import { preloadedState } from "../../utils/test-utils";
 import {
   addPictogramActionCreator,
   sequenceReducer,
   subtractLastPictActionCreator,
-  upDateSettingsPictApiAraActionCreator,
-  upDatePictSelectedIdActionCreator,
-  upDatePictSearchedActionCreator,
+  selectedIdActionCreator,
+  searchedActionCreator,
   addSequenceActionCreator,
   subtractPictogramActionCreator,
   renumberSequenceActionCreator,
   sortSequenceActionCreator,
-  upDateSettingsPictSequenceActionCreator,
-  applyAllSettingPictApiAraActionCreator,
+  settingsPictSequenceActionCreator,
+  skinApplyAllActionCreator,
 } from "./sequenceSlice";
 
 const mockSequences = preloadedState.sequence[0];
@@ -89,7 +86,7 @@ describe("Given the reducer sequenceSlice", () => {
     });
   });
 
-  describe("When call 'addPhrase' with sequence payload", () => {
+  describe("When call 'addSequence' with sequence payload", () => {
     test("Then should new state is same sequence payload", () => {
       const sequence: Sequence = [
         {
@@ -135,9 +132,9 @@ describe("Given the reducer sequenceSlice", () => {
     });
   });
 
-  describe("When called 'upDatePictSelectedId' with ProtoPictSequence", () => {
+  describe("When called 'PictApiAraSelectedId' with ProtoPictSequence", () => {
     test("Then should new state with update pictogram of sequence", () => {
-      const upDatePictogramNumber: UpdateSelectedId = {
+      const upDatePictogramNumber = {
         indexSequence: 0,
         selectedId: 1254,
       };
@@ -163,9 +160,7 @@ describe("Given the reducer sequenceSlice", () => {
         },
       ];
 
-      const actionCreator = upDatePictSelectedIdActionCreator(
-        upDatePictogramNumber
-      );
+      const actionCreator = selectedIdActionCreator(upDatePictogramNumber);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);
@@ -174,7 +169,7 @@ describe("Given the reducer sequenceSlice", () => {
 
   describe("When called 'upDatePictSearched' with upDatePictWordI", () => {
     test("Then should new state with update pictogram of sequence", () => {
-      const upDatePictogramWord: UpdateSearched = {
+      const upDatePictogramWord = {
         indexSequence: 0,
         searched: { word: "testWord", bestIdPicts: [99, 66] },
       };
@@ -204,8 +199,7 @@ describe("Given the reducer sequenceSlice", () => {
         },
       ];
 
-      const actionCreator =
-        upDatePictSearchedActionCreator(upDatePictogramWord);
+      const actionCreator = searchedActionCreator(upDatePictogramWord);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);
@@ -221,12 +215,12 @@ describe("Given the reducer sequenceSlice", () => {
           img: {
             selectedId: 0,
             searched: { ...mockSequences.img.searched, word: "" },
-            settings: { skin: "white" },
+            settings: { skin: "white", fitzgerald: "#22f" },
           },
         },
       ];
-      const applyAllPayload: UpDateSettingsPictApiAra = {
-        settings: { skin: "black" },
+      const applyAllPayload: PictApiAraSettings = {
+        skin: "black",
       };
 
       const expectState: PictSequence[] = [
@@ -236,62 +230,12 @@ describe("Given the reducer sequenceSlice", () => {
           img: {
             ...previousSequence[0].img,
             selectedId: 0,
-            settings: { skin: "black" },
+            settings: { skin: "black", fitzgerald: "#22f" },
           },
         },
       ];
 
-      const actionCreator =
-        applyAllSettingPictApiAraActionCreator(applyAllPayload);
-      const newState = sequenceReducer(previousSequence, actionCreator);
-
-      expect(newState).toStrictEqual(expectState);
-    });
-  });
-
-  describe("When called 'upDateSetting' with UpdateSetting", () => {
-    test("Then should new state with update PictogramSetting", () => {
-      const upDatePictogramSetting: UpDateSettingsPictApiAra = {
-        indexSequence: 0,
-        settings: { skin: "asian" },
-      };
-      previousSequence = [
-        {
-          ...preloadedState.sequence[0],
-          indexSequence: 0,
-          img: {
-            selectedId: 0,
-            searched: { ...mockSequences.img.searched, word: "" },
-            settings: { skin: "white" },
-          },
-        },
-        {
-          ...preloadedState.sequence[0],
-          indexSequence: 1,
-          img: {
-            selectedId: 0,
-            searched: { ...mockSequences.img.searched, word: "" },
-            settings: { skin: "black" },
-          },
-        },
-      ];
-
-      const expectState: PictSequence[] = [
-        {
-          ...previousSequence[0],
-          indexSequence: 0,
-          img: { ...previousSequence[0].img, settings: { skin: "asian" } },
-        },
-        {
-          ...previousSequence[0],
-          indexSequence: 1,
-          img: { ...previousSequence[0].img, settings: { skin: "black" } },
-        },
-      ];
-
-      const actionCreator = upDateSettingsPictApiAraActionCreator(
-        upDatePictogramSetting
-      );
+      const actionCreator = skinApplyAllActionCreator(applyAllPayload);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);
@@ -330,15 +274,21 @@ describe("Given the reducer sequenceSlice", () => {
 
   describe("When called 'upDateSettingsPictApiAra' with UpdateSettingsPictSequence", () => {
     test("Then should new state with update PictSettingPictApiAra", () => {
-      const toUpDatePictSettings: upDateSettingsPictSequence = {
+      const toUpDatePictSettings: SequenceForEdit = {
         indexSequence: 0,
-        settings: { textPosition: "top" },
+        settings: {
+          ...preloadedState.sequence[0].settings,
+          textPosition: "top",
+        },
       };
       previousSequence = [
         {
           ...preloadedState.sequence[0],
           indexSequence: 0,
-          settings: { textPosition: "bottom" },
+          settings: {
+            ...preloadedState.sequence[0].settings,
+            textPosition: "bottom",
+          },
         },
       ];
 
@@ -346,12 +296,15 @@ describe("Given the reducer sequenceSlice", () => {
         {
           ...previousSequence[0],
           indexSequence: 0,
-          settings: { textPosition: "top" },
+          settings: {
+            ...preloadedState.sequence[0].settings,
+            textPosition: "top",
+          },
         },
       ];
 
       const actionCreator =
-        upDateSettingsPictSequenceActionCreator(toUpDatePictSettings);
+        settingsPictSequenceActionCreator(toUpDatePictSettings);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);

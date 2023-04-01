@@ -28,7 +28,7 @@ describe("Given a useAraSacc hook", () => {
           indexSequence: 0,
           searched: { bestIdPicts: [234, 234], word: "girl" },
         },
-        type: "sequence/upDatePictSearched",
+        type: "sequence/searched",
       };
 
       const { result } = renderHook(() => useAraSaac());
@@ -48,7 +48,7 @@ describe("Given a useAraSacc hook", () => {
           indexSequence: 0,
           searched: { bestIdPicts: [-1], word: "asdfas" },
         },
-        type: "sequence/upDatePictSearched",
+        type: "sequence/searched",
       };
 
       const { result } = renderHook(() => useAraSaac());
@@ -67,12 +67,12 @@ describe("Given a useAraSacc hook", () => {
       const expectAction = {
         payload: {
           img: {
-            searched: { bestIdPicts: [234, 234], word: "girl" },
-            selectedId: 234,
-            settings: {},
+            searched: { bestIdPicts: [3418], word: "girl" },
+            selectedId: 3418,
+            settings: { fitzgerald: "#666" },
           },
-          indexSequence: 2,
-          settings: {},
+          indexSequence: 1,
+          settings: 1,
           text: "girl",
         },
         type: "sequence/addPictogram",
@@ -96,10 +96,10 @@ describe("Given a useAraSacc hook", () => {
           img: {
             searched: { bestIdPicts: [3418], word: "asdfas" },
             selectedId: 3418,
-            settings: { skin: "white" },
+            settings: { fitzgerald: "#666" },
           },
-          indexSequence: 2,
-          settings: {},
+          indexSequence: 1,
+          settings: 1,
           text: "asdfas",
         },
         type: "sequence/addPictogram",
@@ -109,7 +109,7 @@ describe("Given a useAraSacc hook", () => {
 
       await result.current.getSearchPictogram(wordSearchMock, 1, false);
 
-      expect(mockDispatch).toHaveBeenCalledWith();
+      expect(mockDispatch).toHaveBeenCalledWith(expectAction);
     });
   });
 
@@ -144,11 +144,10 @@ describe("Given a useAraSacc hook", () => {
 
   describe("When toUrlPath it's called with skin default ui setting not white", () => {
     test("Then return path with query", async () => {
-      mockSelector = { skin: "black" };
       const expectPath =
-        "https://api.arasaac.org/api/pictograms/233?skin=black";
+        "https://api.arasaac.org/api/pictograms/233?skin=assian";
       const pictogramNumber = 233;
-      const skin: Skins = "white";
+      const skin: Skins = "asian";
 
       const { result } = renderHook(() => useAraSaac());
       const path = await result.current.toUrlPath(pictogramNumber, skin);
@@ -162,8 +161,11 @@ describe("Given a useAraSacc hook", () => {
       mockSelector = { skin: "white" };
 
       const expectAction = {
-        payload: { indexSequence: 0, settings: { skin: "white" } },
-        type: "sequence/upDateSettingsPictApiAra",
+        payload: {
+          indexSequence: 0,
+          settings: { skin: "white", fitzgerald: "#229900" },
+        },
+        type: "sequence/settingsPictApiAra",
       };
 
       const { result } = renderHook(() => useAraSaac());

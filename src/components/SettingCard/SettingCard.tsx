@@ -1,41 +1,93 @@
 import { Stack, ToggleButton, Tooltip, Typography } from "@mui/material";
-import { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useAppDispatch } from "../../app/hooks";
+import {
+  skinActionCreator,
+  skinApplyAllActionCreator,
+  textPositionActionCreator,
+  textPositionApplyAllActionCreator,
+} from "../../app/slice/sequenceSlice";
+import {
+  updateDefaultSettingPictApiAraActionCreator,
+  updateDefaultSettingPictSequenceActionCreator,
+} from "../../app/slice/uiSlice";
 import StyledButton from "../../style/StyledButton";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
-import { PictAllSettings } from "../../types/sequence";
+import { Skins, TextPosition } from "../../types/sequence";
 import { messages, settingsCardLang } from "./SettingCard.lang";
 import { cardAction, card, cardContent, cardTitle } from "./SettingCard.styled";
 
 interface SettingCardProps {
+  indexPict?: number;
   setting: "skin" | "textPosition";
-  actionSelected: (toUpdate: PictAllSettings) => void;
   defaultSetting?: string;
   selected: string;
-  applyAll?: (toUpdate: PictAllSettings) => void;
 }
 
 const SettingCard = ({
+  indexPict,
   setting,
-  actionSelected: action,
   defaultSetting,
   selected,
-  applyAll,
 }: SettingCardProps): JSX.Element => {
   const intl = useIntl();
-
-  const [type, setType] = useState<string | null>("default");
+  const dispatch = useAppDispatch();
 
   const settingCard = {
     message: settingsCardLang.messages[setting],
     types: Object.entries(settingsCardLang[setting]),
   };
 
-  const handleChangeType = (
-    event: React.MouseEvent<HTMLElement>,
-    newType: string | null
-  ) => {
-    setType(newType);
+  const handleSelected = (toUpdate: string) => {
+    if (indexPict !== undefined) {
+      setting === "textPosition" &&
+        dispatch(
+          textPositionActionCreator({
+            indexSequence: indexPict,
+            textPosition: toUpdate as TextPosition,
+          })
+        );
+
+      setting === "skin" &&
+        dispatch(
+          skinActionCreator({
+            indexSequence: indexPict,
+            settings: { skin: toUpdate as Skins },
+          })
+        );
+    }
+
+    if (indexPict === undefined) {
+      setting === "textPosition" &&
+        dispatch(
+          updateDefaultSettingPictSequenceActionCreator({
+            textPosition: toUpdate as TextPosition,
+          })
+        );
+
+      setting === "skin" &&
+        dispatch(
+          updateDefaultSettingPictApiAraActionCreator({
+            skin: toUpdate as Skins,
+          })
+        );
+    }
+  };
+
+  const handleApplyAll = (toUpdate: string) => {
+    setting === "textPosition" &&
+      dispatch(
+        textPositionApplyAllActionCreator({
+          textPosition: toUpdate as TextPosition,
+        })
+      );
+
+    setting === "skin" &&
+      dispatch(
+        skinApplyAllActionCreator({
+          skin: toUpdate as Skins,
+        })
+      );
   };
 
   return (
@@ -52,9 +104,7 @@ const SettingCard = ({
       </Typography>
 
       <StyledToggleButtonGroup
-        value={type}
         exclusive
-        onChange={handleChangeType}
         aria-label={`${intl.formatMessage(settingCard.message)}`}
         sx={cardContent}
       >
@@ -66,7 +116,7 @@ const SettingCard = ({
               aria-label={intl.formatMessage(value.message)}
               key={key}
               selected={selected === key}
-              onClick={() => action({ [setting]: key } as PictAllSettings)}
+              onClick={() => handleSelected(key)}
             >
               <Tooltip title={intl.formatMessage(value.message)} arrow>
                 <img
@@ -84,9 +134,7 @@ const SettingCard = ({
         {defaultSetting !== undefined && (
           <ToggleButton
             value={"default"}
-            onClick={() =>
-              action({ [setting]: defaultSetting } as PictAllSettings)
-            }
+            onClick={() => handleSelected(defaultSetting)}
             selected={selected === defaultSetting}
           >
             <Tooltip title={intl.formatMessage({ ...messages.default })}>
@@ -103,15 +151,13 @@ const SettingCard = ({
         )}
       </StyledToggleButtonGroup>
 
-      {applyAll !== undefined && (
-        <StyledButton
-          variant="outlined"
-          sx={cardAction}
-          onClick={() => applyAll({ [setting]: selected } as PictAllSettings)}
-        >
-          <FormattedMessage {...messages.applyAll} />
-        </StyledButton>
-      )}
+      <StyledButton
+        variant="outlined"
+        sx={cardAction}
+        onClick={() => handleApplyAll(selected)}
+      >
+        <FormattedMessage {...messages.applyAll} />
+      </StyledButton>
     </Stack>
   );
 };
