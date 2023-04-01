@@ -1,4 +1,10 @@
 {
+  "component.settingCardBorder.in.title": {
+    "defaultMessage": "Border in"
+  },
+  "component.settingCardBorder.out.title": {
+    "defaultMessage": "Border out"
+  },
   "components.barNavigation.title": {
     "defaultMessage": "Seqüències - AraSaac",
     "description": "App title translate Sequence"
@@ -93,6 +99,14 @@
   },
   "components.settingCard.default.label": {
     "defaultMessage": "Per defecte",
+    "description": "Not type setting "
+  },
+  "components.settingCardBorder.applyAll.label": {
+    "defaultMessage": "Apply All",
+    "description": "apply to all pictograms"
+  },
+  "components.settingCardBorder.default.label": {
+    "defaultMessage": "Default",
     "description": "Not type setting "
   },
   "settings.skins.asian": {
