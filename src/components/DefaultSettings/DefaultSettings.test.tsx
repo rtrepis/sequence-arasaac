@@ -31,8 +31,8 @@ describe("Give a component Setting default card list", () => {
     test("Then should call dispatch with action update setting", () => {
       const expectButton = "Black";
       const actionCreator = {
-        payload: { settings: { skin: "black" } },
-        type: "uiState/updateSkin",
+        payload: { skin: "black" },
+        type: "uiState/updateDefaultSettingPictApiAra",
       };
 
       render(<DefaultSettings />);

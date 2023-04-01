@@ -1,14 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  UpDateSettingsPictApiAra,
-  upDateSettingsPictSequence,
-} from "../../types/sequence";
-import { Ui } from "../../types/ui";
+  DefaultSettingsPictApiAraForEdit,
+  DefaultSettingsPictSequenceForEdit,
+  Ui,
+} from "../../types/ui";
 
 const uiInitialState: Ui = {
   defaultSettings: {
-    pictApiAra: { skin: "white" },
-    pictSequence: { textPosition: "bottom" },
+    pictApiAra: { skin: "white", fitzgerald: "#666666" },
+    pictSequence: {
+      textPosition: "bottom",
+      borderIn: { color: "fitzgerald", radius: 20, size: 2 },
+      borderOut: { color: "#999", radius: 20, size: 2 },
+    },
   },
 };
 
@@ -18,27 +22,27 @@ const uiSlice = createSlice({
   reducers: {
     updateDefaultSettingPictApiAra: (
       previousUi,
-      action: PayloadAction<UpDateSettingsPictApiAra>
+      action: PayloadAction<DefaultSettingsPictApiAraForEdit>
     ) => ({
       ...previousUi,
       defaultSettings: {
         ...previousUi.defaultSettings,
         pictApiAra: {
           ...previousUi.defaultSettings.pictApiAra,
-          ...action.payload.settings,
+          ...action.payload,
         },
       },
     }),
     updateDefaultSettingPictSequence: (
       previousUi,
-      action: PayloadAction<upDateSettingsPictSequence>
+      action: PayloadAction<DefaultSettingsPictSequenceForEdit>
     ) => ({
       ...previousUi,
       defaultSettings: {
         ...previousUi.defaultSettings,
         pictSequence: {
           ...previousUi.defaultSettings.pictSequence,
-          ...action.payload.settings,
+          ...action.payload,
         },
       },
     }),

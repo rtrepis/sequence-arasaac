@@ -16,10 +16,10 @@ const PictogramCard = ({
     indexSequence,
     img: {
       selectedId,
-      settings: { skin },
+      settings: { skin, fitzgerald },
       searched: { word: text },
     },
-    settings: { textPosition, border },
+    settings: { textPosition, borderIn, borderOut },
   },
   view,
   variant,
@@ -30,7 +30,7 @@ const PictogramCard = ({
   return (
     <Card
       data-testid="card-pictogram"
-      sx={() => pictogram__card(border, variant)}
+      sx={() => pictogram__card(borderOut, variant, fitzgerald)}
     >
       {(view === "complete" || view === "header") && (
         <CardContent>
@@ -49,7 +49,7 @@ const PictogramCard = ({
           height={150}
           width={150}
           alt={intl.formatMessage({ ...messages.pictogram })}
-          sx={() => pictogram__media(border, view)}
+          sx={() => pictogram__media(borderIn, view, fitzgerald)}
         />
       </CardContent>
 
