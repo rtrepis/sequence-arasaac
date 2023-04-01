@@ -1,9 +1,9 @@
 {
   "component.settingCardBorder.in.title": {
-    "defaultMessage": "Border in"
+    "defaultMessage": "Border interior"
   },
   "component.settingCardBorder.out.title": {
-    "defaultMessage": "Border out"
+    "defaultMessage": "Border exterior"
   },
   "components.barNavigation.title": {
     "defaultMessage": "Seqüències - AraSaac",
@@ -94,7 +94,7 @@
     "description": "Pictogram"
   },
   "components.settingCard.applyAll.label": {
-    "defaultMessage": "Aplicar-ho a tots",
+    "defaultMessage": "Aplicar tots",
     "description": "apply to all pictograms"
   },
   "components.settingCard.default.label": {
@@ -102,11 +102,11 @@
     "description": "Not type setting "
   },
   "components.settingCardBorder.applyAll.label": {
-    "defaultMessage": "Apply All",
+    "defaultMessage": "Aplicar tots",
     "description": "apply to all pictograms"
   },
   "components.settingCardBorder.default.label": {
-    "defaultMessage": "Default",
+    "defaultMessage": "Per defecte",
     "description": "Not type setting "
   },
   "settings.skins.asian": {
@@ -134,15 +134,15 @@
     "description": "Type of setting skin"
   },
   "settings.textPosition.bottom": {
-    "defaultMessage": "Bottom",
+    "defaultMessage": "Sota",
     "description": "Type of setting text position"
   },
   "settings.textPosition.label": {
-    "defaultMessage": "Text Position",
+    "defaultMessage": "Posició text",
     "description": "Setting Text Position label"
   },
   "settings.textPosition.top": {
-    "defaultMessage": "Top",
+    "defaultMessage": "Dalt",
     "description": "Type of setting text position"
   }
 }
