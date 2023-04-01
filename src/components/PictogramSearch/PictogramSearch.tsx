@@ -10,10 +10,10 @@ import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { upDatePictSelectedIdActionCreator } from "../../app/slice/sequenceSlice";
+import { selectedIdActionCreator } from "../../app/slice/sequenceSlice";
 import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
-import { UpdateSelectedId } from "../../types/sequence";
+import { PictApiAraForEdit } from "../../types/sequence";
 import messages from "./PictogramSearch.lang";
 interface PropsPictogramSearch {
   indexPict: number;
@@ -41,11 +41,11 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
   };
 
   const handleUpDatePictNumber = (upDatePictNumber: number) => {
-    const upDatePictNum: UpdateSelectedId = {
+    const upDatePictNum: PictApiAraForEdit = {
       indexSequence: indexPict,
       selectedId: upDatePictNumber,
     };
-    dispatch(upDatePictSelectedIdActionCreator(upDatePictNum));
+    dispatch(selectedIdActionCreator(upDatePictNum));
 
     getSettingsPictId(upDatePictNumber, indexPict);
   };

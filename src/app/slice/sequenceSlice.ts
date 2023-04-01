@@ -2,10 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   PictSequence,
   Sequence,
-  UpdateSelectedId,
-  UpdateSearched,
-  UpDateSettingsPictApiAra,
-  upDateSettingsPictSequence,
+  PictSequenceApplyAll,
+  SequenceForEdit,
+  PictSequenceForEdit,
+  PictApiAraForEdit,
+  PictApiAraSettingsApplyAll,
 } from "../../types/sequence";
 
 const sequenceInitialState: Sequence = [];
@@ -37,65 +38,124 @@ const sequenceSlice = createSlice({
     sortSequence: (previousSequence) =>
       previousSequence.sort((a, b) => a.indexSequence - b.indexSequence),
 
-    upDatePictSelectedId: (
+    selectedId: (
       previousSequence,
-      action: PayloadAction<UpdateSelectedId>
+      action: PayloadAction<PictApiAraForEdit>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          (pictogram.img.selectedId = action.payload.selectedId)
+          (pictogram.img.selectedId = action.payload.selectedId!)
       );
     },
 
-    upDatePictSearched: (
+    searched: (previousSequence, action: PayloadAction<PictApiAraForEdit>) => {
+      previousSequence.map(
+        (pictogram, index) =>
+          index === action.payload.indexSequence &&
+          (pictogram.img.searched = action.payload.searched!)
+      );
+    },
+
+    settingsPictApiAra: (
       previousSequence,
-      action: PayloadAction<UpdateSearched>
+      action: PayloadAction<PictApiAraForEdit>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          (pictogram.img.searched = action.payload.searched)
+          (pictogram.img.settings = action.payload.settings!)
       );
     },
 
-    upDateSettingsPictApiAra: (
+    settingsPictSequence: (
       previousSequence,
-      action: PayloadAction<UpDateSettingsPictApiAra>
+      action: PayloadAction<SequenceForEdit>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          (pictogram.img.settings = action.payload.settings)
+          (pictogram.settings = action.payload.settings!)
       );
     },
 
-    upDateSettingsPictSequence: (
+    textPosition: (
       previousSequence,
-      action: PayloadAction<upDateSettingsPictSequence>
+      action: PayloadAction<PictSequenceForEdit>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          (pictogram.settings = action.payload.settings)
+          action.payload.textPosition &&
+          (pictogram.settings.textPosition = action.payload.textPosition)
       );
     },
 
-    applyAllSettingPictApiAra: (
+    borderIn: (
       previousSequence,
-      action: PayloadAction<UpDateSettingsPictApiAra>
+      action: PayloadAction<PictSequenceForEdit>
     ) => {
       previousSequence.map(
-        (pictogram) => (pictogram.img.settings = action.payload.settings)
+        (pictogram, index) =>
+          index === action.payload.indexSequence &&
+          (pictogram.settings.borderIn = action.payload.borderIn!)
       );
     },
 
-    applyAllSettingPictSequence: (
+    borderOut: (
       previousSequence,
-      action: PayloadAction<upDateSettingsPictSequence>
+      action: PayloadAction<PictSequenceForEdit>
     ) => {
       previousSequence.map(
-        (pictogram) => (pictogram.settings = action.payload.settings)
+        (pictogram, index) =>
+          index === action.payload.indexSequence &&
+          (pictogram.settings.borderOut = action.payload.borderOut!)
+      );
+    },
+
+    skin: (previousSequence, action: PayloadAction<PictApiAraForEdit>) => {
+      previousSequence.map(
+        (pictogram, index) =>
+          index === action.payload.indexSequence &&
+          (pictogram.img.settings.skin = action.payload.settings?.skin!)
+      );
+    },
+
+    skinApplyAll: (
+      previousSequence,
+      action: PayloadAction<PictApiAraSettingsApplyAll>
+    ) => {
+      previousSequence.map(
+        (pictogram) => (pictogram.img.settings.skin = action.payload.skin!)
+      );
+    },
+
+    textPositionApplyAll: (
+      previousSequence,
+      action: PayloadAction<PictSequenceApplyAll>
+    ) => {
+      previousSequence.map(
+        (pictogram) =>
+          (pictogram.settings.textPosition = action.payload.textPosition!)
+      );
+    },
+
+    borderInApplyAll: (
+      previousSequence,
+      action: PayloadAction<PictSequenceApplyAll>
+    ) => {
+      previousSequence.map(
+        (pictogram) => (pictogram.settings.borderIn = action.payload.borderIn!)
+      );
+    },
+
+    borderOutApplyAll: (
+      previousSequence,
+      action: PayloadAction<PictSequenceApplyAll>
+    ) => {
+      previousSequence.map(
+        (pictogram) =>
+          (pictogram.settings.borderOut = action.payload.borderOut!)
       );
     },
   },
@@ -110,10 +170,16 @@ export const {
   addSequence: addSequenceActionCreator,
   renumberSequence: renumberSequenceActionCreator,
   sortSequence: sortSequenceActionCreator,
-  upDatePictSelectedId: upDatePictSelectedIdActionCreator,
-  upDatePictSearched: upDatePictSearchedActionCreator,
-  applyAllSettingPictApiAra: applyAllSettingPictApiAraActionCreator,
-  applyAllSettingPictSequence: applyAllSettingPictSequenceActionCreator,
-  upDateSettingsPictApiAra: upDateSettingsPictApiAraActionCreator,
-  upDateSettingsPictSequence: upDateSettingsPictSequenceActionCreator,
+  selectedId: selectedIdActionCreator,
+  searched: searchedActionCreator,
+  textPosition: textPositionActionCreator,
+  borderIn: borderInActionCreator,
+  borderOut: borderOutActionCreator,
+  skin: skinActionCreator,
+  skinApplyAll: skinApplyAllActionCreator,
+  textPositionApplyAll: textPositionApplyAllActionCreator,
+  borderInApplyAll: borderInApplyAllActionCreator,
+  borderOutApplyAll: borderOutApplyAllActionCreator,
+  settingsPictApiAra: settingsPictApiAraActionCreator,
+  settingsPictSequence: settingsPictSequenceActionCreator,
 } = sequenceSlice.actions;

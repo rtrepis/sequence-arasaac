@@ -7,19 +7,38 @@ export interface PictSequence {
   settings: PictSequenceSettings;
 }
 export interface PictSequenceSettings {
-  textPosition: "top" | "bottom";
-  border?: {
-    out?: Border;
-    in?: Border;
-  };
+  textPosition: TextPosition;
+  borderOut: Border;
+  borderIn: Border;
 }
+
+type MyPartialForEdit<Type> = {
+  [Property in keyof Type]?: Type[Property];
+} & { indexSequence: number };
+
+type MyPartialApplyAll<Type> = {
+  [Property in keyof Type]?: Type[Property];
+};
+
+export type SequenceForEdit = MyPartialForEdit<PictSequence>;
+
+export type PictSequenceApplyAll = MyPartialApplyAll<PictSequenceSettings>;
+
+export type PictApiAraApplyAll = MyPartialApplyAll<PictApiAra>;
+
+export type PictApiAraSettingsApplyAll = MyPartialApplyAll<PictApiAraSettings>;
+
+export type PictSequenceForEdit = MyPartialForEdit<PictSequenceSettings>;
+
+export type PictApiAraForEdit = MyPartialForEdit<PictApiAra>;
 
 export type TextPosition = "top" | "bottom";
 export interface Border {
-  color: string;
+  color: "fitzgerald" | string;
   radius: number;
   size: number;
 }
+
 interface PictApiAra {
   searched: Word;
   selectedId: number;
@@ -35,38 +54,7 @@ export interface Word {
 
 export type Skins = "asian" | "aztec" | "black" | "mulatto" | "white";
 
-export interface UpdateSelectedId {
-  indexSequence: number;
-  selectedId: number;
-}
-
-export interface UpdateSearched {
-  indexSequence: number;
-  searched: Word;
-}
-
 export interface PictApiAraSettings {
   skin?: Skins;
+  fitzgerald?: string;
 }
-
-export interface UpDateSettingsPictApiAra {
-  indexSequence?: number;
-  settings: PictApiAraSettings;
-}
-
-export interface upDateSettingsPictSequence {
-  indexSequence?: number;
-  settings: PictSequenceSettings;
-}
-
-export interface upDateSettingsTry {
-  indexSequence?: number;
-  settings: PictSequenceSettings & PictApiAraSettings;
-}
-
-export type PictAllSettings = {
-  skin: Skins;
-  textPosition: TextPosition;
-};
-
-//export type PictAllSettings = PictSequenceSettings & PictApiAraSettings;

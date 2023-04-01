@@ -32,17 +32,19 @@ const preloadedState: State = {
       text: "test",
       settings: {
         textPosition: "bottom",
-        border: {
-          in: { color: "blue", radius: 20, size: 2 },
-          out: { color: "green", radius: 20, size: 2 },
-        },
+        borderIn: { color: "blue", radius: 20, size: 2 },
+        borderOut: { color: "green", radius: 20, size: 2 },
       },
     },
   ],
   ui: {
     defaultSettings: {
-      pictApiAra: { skin: "white" },
-      pictSequence: { textPosition: "bottom" },
+      pictApiAra: { skin: "white", fitzgerald: "#998800" },
+      pictSequence: {
+        textPosition: "bottom",
+        borderIn: { color: "fitzgerald", radius: 20, size: 2 },
+        borderOut: { color: "#999999", radius: 20, size: 2 },
+      },
     },
   },
 };

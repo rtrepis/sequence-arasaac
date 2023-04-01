@@ -26,12 +26,11 @@ describe("Give a component PictEdit", () => {
     },
     settings: {
       ...preloadedState.sequence[0].settings,
-      border: {
-        in: { color: "blue", radius: 20, size: 2 },
-        out: { color: "green", radius: 20, size: 2 },
-      },
+      borderIn: { color: "blue", radius: 20, size: 2 },
+      borderOut: { color: "green", radius: 20, size: 2 },
     },
   };
+
   describe("When it's rendered with pictogram", () => {
     test("Then should show button, and click open Modal", () => {
       const expectButton = `${mockPict.indexSequence + 1} Pictogram image ${
