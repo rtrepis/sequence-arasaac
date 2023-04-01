@@ -15,6 +15,7 @@ export const cardTitle: SxProps = {
 export const cardContent: SxProps = {
   flexWrap: { xs: "wrap", sm: "nowrap" },
   alignSelf: { xs: "start" },
+  ".MuiButtonBase-root": { marginInLine: 1 },
 };
 
 export const cardAction: SxProps = {
@@ -23,4 +24,17 @@ export const cardAction: SxProps = {
   alignSelf: { xs: "end", sm: "inherit" },
   marginTop: { xs: 1, sm: 0 },
   marginBottom: { xs: 1, sm: 0 },
+};
+
+export const cardColor: SxProps = {
+  minWidth: 90,
+  maxHeight: 80,
+  lineHeight: 1.25,
+  alignSelf: { xs: "end", sm: "inherit" },
+  marginTop: { xs: 1, sm: 0 },
+  marginBottom: { xs: 1, sm: 0 },
+  borderRadius: "20px",
+  textTransform: "none",
+  fontWeight: "bold",
+  flexDirection: "column",
 };

@@ -1,13 +1,22 @@
-export const pictogram__card = (border: any, variant: any) => {
-  const sx = {
+import { Border } from "../../types/sequence";
+
+export const pictogram__card = (
+  borderOut: Border,
+  variant: any,
+  fitzgerald: string | undefined
+) => {
+  const card = {
     alignSelf: "center",
     minWidth: 195,
     maxWidth: 195,
     textAlign: "center",
     paddingInline: 1.5,
-    border: `${border?.out === undefined ? 2 : border.out.size}px solid`,
-    borderColor: border?.out?.color,
-    borderRadius: `${border?.out === undefined ? 20 : border?.out.radius}px`,
+    border: `${borderOut === undefined ? 2 : borderOut.size}px solid`,
+    borderColor:
+      borderOut.color === "fitzgerald" && fitzgerald !== undefined
+        ? fitzgerald
+        : borderOut.color,
+    borderRadius: `${borderOut === undefined ? 20 : borderOut.radius}px`,
     boxShadow: `${variant === undefined ? "" : "none"}`,
     "&:hover": {
       boxShadow: `${
@@ -16,16 +25,23 @@ export const pictogram__card = (border: any, variant: any) => {
     },
   };
 
-  return sx;
+  return card;
 };
 
-export const pictogram__media = (border: any, view: any) => {
+export const pictogram__media = (
+  borderIn: Border,
+  view: any,
+  fitzgerald: string | undefined
+) => {
   const sx = {
     marginTop: `${view === "complete" ? 0 : 2}`,
     width: 150,
-    border: `${border?.in === undefined ? 2 : border?.in.size}px solid`,
-    borderColor: border?.in?.color,
-    borderRadius: `${border?.in === undefined ? 20 : border?.in.radius}px`,
+    border: `${borderIn === undefined ? 2 : borderIn.size}px solid`,
+    borderColor:
+      borderIn.color === "fitzgerald" && fitzgerald !== undefined
+        ? fitzgerald
+        : borderIn.color,
+    borderRadius: `${borderIn === undefined ? 20 : borderIn.radius}px`,
   };
 
   return sx;

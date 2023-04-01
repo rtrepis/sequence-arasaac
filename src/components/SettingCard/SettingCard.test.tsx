@@ -1,18 +1,23 @@
 import { render, fireEvent, screen } from "../../utils/test-utils";
 import SettingCard from "./SettingCard";
 
+const mockDispatch = jest.fn();
+jest.mock("react-redux", () => ({
+  ...jest.requireActual("react-redux"),
+  useDispatch: () => mockDispatch,
+}));
+
 describe("Give a component Setting Item", () => {
   describe("When rendered whit 'skins' array", () => {
     test("Then should show button and image all skins subtract uiSettingDefaultType", () => {
       const pathExpect = "/img/settings/skin/";
       const skins = ["Asian", "Aztec", "Black", "Mulatto", "White"];
-      const mockAction = jest.fn();
       const uiSettingDefaultType = "White";
 
       render(
         <SettingCard
+          indexPict={0}
           setting="skin"
-          actionSelected={mockAction}
           selected={"aztec"}
           defaultSetting={uiSettingDefaultType}
         />
@@ -31,7 +36,7 @@ describe("Give a component Setting Item", () => {
           expect(pathImage).toBe(
             `${pathExpect + skin.toLocaleLowerCase()}.png`
           );
-          expect(mockAction).toBeCalledWith({ skin: skin.toLowerCase() });
+          expect(mockDispatch).toBeCalled();
         });
     });
   });
@@ -39,14 +44,12 @@ describe("Give a component Setting Item", () => {
   describe("When rendered", () => {
     test("Then should show 'apply all' and 'default' buttons", () => {
       const expectButtons = ["Apply All", "Default"];
-      const mockAction = jest.fn();
 
       render(
         <SettingCard
+          indexPict={0}
           setting="skin"
-          actionSelected={mockAction}
           selected={"aztec"}
-          applyAll={mockAction}
           defaultSetting={"white"}
         />
       );

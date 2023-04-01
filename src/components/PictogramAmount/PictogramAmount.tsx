@@ -35,13 +35,19 @@ const PictogramAmount = (): JSX.Element => {
         bestIdPicts: [],
       },
       selectedId: 26527,
-      settings: {},
+      settings: { fitzgerald: "#22f" },
     },
     settings: {
-      ...pictSequenceDefault,
-      border: {
-        in: { color: "blue", radius: 20, size: 2 },
-        out: { color: "green", radius: 20, size: 2 },
+      textPosition: pictSequenceDefault.textPosition,
+      borderIn: {
+        color: pictSequenceDefault.borderIn!.color,
+        radius: 20,
+        size: pictSequenceDefault.borderIn!.size,
+      },
+      borderOut: {
+        color: pictSequenceDefault.borderOut!.color,
+        radius: 20,
+        size: pictSequenceDefault.borderIn!.size,
       },
     },
   };

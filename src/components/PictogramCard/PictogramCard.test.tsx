@@ -12,10 +12,8 @@ let pictogramEmpty: PictSequence = {
   },
   settings: {
     ...preloadedState.sequence[0].settings,
-    border: {
-      in: { color: "blue", radius: 20, size: 2 },
-      out: { color: "green", radius: 20, size: 2 },
-    },
+    borderIn: { color: "blue", radius: 20, size: 2 },
+    borderOut: { color: "green", radius: 20, size: 2 },
   },
 };
 

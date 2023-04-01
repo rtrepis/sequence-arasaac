@@ -1,15 +1,10 @@
 import { List } from "@mui/material";
 import { useIntl } from "react-intl";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-  applyAllSettingPictApiAraActionCreator,
-  applyAllSettingPictSequenceActionCreator,
-  upDateSettingsPictApiAraActionCreator,
-  upDateSettingsPictSequenceActionCreator,
-} from "../../app/slice/sequenceSlice";
+import { useAppSelector } from "../../app/hooks";
 import { PictApiAraSettings, PictSequenceSettings } from "../../types/sequence";
 import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import SettingCard from "../SettingCard/SettingCard";
+import SettingCardBorder from "../SettingCardBorder/SettingCardBorder";
 import messages from "./PictEditSettings.lang";
 
 interface PictEditSettingsProps {
@@ -24,45 +19,7 @@ const PictEditSettings = ({
   pictApiAraSettings,
 }: PictEditSettingsProps): JSX.Element => {
   const defaultSettings = useAppSelector((state) => state.ui.defaultSettings);
-  const dispatch = useAppDispatch();
   const intl = useIntl();
-
-  const handleUpDateSettingPictApiAra = (toUpdate: PictApiAraSettings) => {
-    const toUpdatePict = {
-      indexSequence: indexPict,
-      settings: { ...pictApiAraSettings, ...toUpdate },
-    };
-
-    dispatch(upDateSettingsPictApiAraActionCreator(toUpdatePict));
-  };
-
-  const handleApplyAllPictAraApi = (toUpdate: PictApiAraSettings) => {
-    const toUpdatePict = {
-      settings: {
-        ...pictApiAraSettings,
-        ...toUpdate,
-      },
-    };
-
-    dispatch(applyAllSettingPictApiAraActionCreator(toUpdatePict));
-  };
-
-  const handleUpDateSettingPictSequence = (toUpdate: PictSequenceSettings) => {
-    const toUpdatePict = {
-      indexSequence: indexPict,
-      settings: { ...pictSequenceSettings, ...toUpdate },
-    };
-
-    dispatch(upDateSettingsPictSequenceActionCreator(toUpdatePict));
-  };
-
-  const handleApplyAllPictSequence = (toUpdate: PictSequenceSettings) => {
-    const toUpdatePict = {
-      settings: { ...pictApiAraSettings, ...toUpdate },
-    };
-
-    dispatch(applyAllSettingPictSequenceActionCreator(toUpdatePict));
-  };
 
   return (
     <SettingAccordion title={`${intl.formatMessage({ ...messages.title })}`}>
@@ -70,11 +27,30 @@ const PictEditSettings = ({
         {pictSequenceSettings.textPosition && (
           <li>
             <SettingCard
+              indexPict={indexPict}
               setting="textPosition"
-              actionSelected={handleUpDateSettingPictSequence}
               selected={pictSequenceSettings.textPosition}
-              defaultSetting={defaultSettings.pictSequence?.textPosition}
-              applyAll={handleApplyAllPictSequence}
+              defaultSetting={defaultSettings.pictSequence.textPosition}
+            />
+          </li>
+        )}
+        {pictSequenceSettings.borderOut && (
+          <li>
+            <SettingCardBorder
+              border="borderOut"
+              indexPict={indexPict}
+              selected={pictSequenceSettings.borderOut!}
+              defaultSetting={defaultSettings.pictSequence}
+            />
+          </li>
+        )}
+        {pictSequenceSettings.borderIn && (
+          <li>
+            <SettingCardBorder
+              border="borderIn"
+              indexPict={indexPict}
+              selected={pictSequenceSettings.borderIn!}
+              defaultSetting={defaultSettings.pictSequence}
             />
           </li>
         )}
@@ -82,10 +58,9 @@ const PictEditSettings = ({
           <li>
             <SettingCard
               setting="skin"
-              actionSelected={handleUpDateSettingPictApiAra}
+              indexPict={indexPict}
               selected={pictApiAraSettings.skin}
               defaultSetting={defaultSettings.pictApiAra.skin}
-              applyAll={handleApplyAllPictAraApi}
             />
           </li>
         )}

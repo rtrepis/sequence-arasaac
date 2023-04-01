@@ -74,6 +74,7 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
             {pictogram.indexSequence + 1}
           </Typography>
         </Stack>
+
         <DialogContent dividers={true} sx={{ padding: 2 }}>
           <Stack
             display={"flex"}

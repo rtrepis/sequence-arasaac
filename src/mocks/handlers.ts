@@ -20,7 +20,7 @@ export const handlers = [
   ),
 
   rest.get(`${araSaacURL}pictograms/en/555`, async (req, res, ctx) => {
-    const mockFindPict: {} = { skin: true };
+    const mockFindPict: {} = { skin: true, tags: ["verb"] };
     return res(ctx.status(200), ctx.json(mockFindPict));
   }),
 ];
