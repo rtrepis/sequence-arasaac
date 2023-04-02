@@ -117,7 +117,7 @@ const useAraSaac = () => {
 
         if (!isUpdate) {
           const toPictNotFound: PictSequence = {
-            indexSequence: amountSequence,
+            indexSequence: amountSequence + indexSequence,
             img: {
               searched: { word: word, bestIdPicts: [3418] },
               selectedId: 3418,
