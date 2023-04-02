@@ -15,10 +15,32 @@ const MagicSearch = (): JSX.Element => {
   const SubmitMagicEngine = (event: SyntheticEvent) => {
     event.preventDefault();
 
-    const words = phrase.split(" ", 60);
-    words.map(
-      async (word, index) => await getSearchPictogram(word, index, false)
-    );
+    const words = stringToWords(phrase);
+
+    delayWords(words);
+  };
+
+  const stringToWords = (string: string) => {
+    let words = string.split(" ", 60);
+    words = words.filter((word) => word !== " ");
+    words = words.filter((word) => word !== "");
+    return words;
+  };
+
+  const delayWords = (words: string[]) => {
+    let index = 0;
+
+    const print = () => {
+      getSearchPictogram(words[index], index, false);
+
+      index++;
+
+      if (index === words.length || words.length === 0) {
+        clearInterval(intervalWord);
+        setPhrase("");
+      }
+    };
+    const intervalWord = setInterval(print, 10);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
