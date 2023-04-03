@@ -5,6 +5,7 @@ const StyledButton = styled(Button)(() => ({
   borderRadius: "20px",
   textTransform: "none",
   fontWeight: "bold",
+  maxWidth: "130px",
 }));
 
 export default StyledButton;

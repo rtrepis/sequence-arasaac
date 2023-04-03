@@ -1,9 +1,11 @@
 {
-  "component.settingCardBorder.in.title": {
-    "defaultMessage": "Border in"
+  "component.settingCardBorder.borderIn.title": {
+    "defaultMessage": "Border in",
+    "description": "setting title "
   },
-  "component.settingCardBorder.out.title": {
-    "defaultMessage": "Border out"
+  "component.settingCardBorder.borderOut.title": {
+    "defaultMessage": "Border out",
+    "description": "type title"
   },
   "components.barNavigation.title": {
     "defaultMessage": "Sequence - AraSaac",
@@ -105,9 +107,17 @@
     "defaultMessage": "Apply All",
     "description": "apply to all pictograms"
   },
-  "components.settingCardBorder.default.label": {
-    "defaultMessage": "Default",
-    "description": "Not type setting "
+  "components.settingCardBorder.fitzgeraldKey.label": {
+    "defaultMessage": "Fitzgerald Key",
+    "description": "type setting "
+  },
+  "components.settingCardBorder.selected.label": {
+    "defaultMessage": "Selected",
+    "description": "type setting "
+  },
+  "components.settingCardBorder.withoutBorder.label": {
+    "defaultMessage": "Without border",
+    "description": "type setting "
   },
   "settings.skins.asian": {
     "defaultMessage": "Asian",
