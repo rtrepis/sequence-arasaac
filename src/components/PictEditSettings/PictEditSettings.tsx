@@ -1,6 +1,5 @@
 import { List } from "@mui/material";
 import { useIntl } from "react-intl";
-import { useAppSelector } from "../../app/hooks";
 import { PictApiAraSettings, PictSequenceSettings } from "../../types/sequence";
 import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import SettingCard from "../SettingCard/SettingCard";
@@ -18,7 +17,6 @@ const PictEditSettings = ({
   pictSequenceSettings,
   pictApiAraSettings,
 }: PictEditSettingsProps): JSX.Element => {
-  const defaultSettings = useAppSelector((state) => state.ui.defaultSettings);
   const intl = useIntl();
 
   return (
@@ -30,7 +28,6 @@ const PictEditSettings = ({
               indexPict={indexPict}
               setting="textPosition"
               selected={pictSequenceSettings.textPosition}
-              defaultSetting={defaultSettings.pictSequence.textPosition}
             />
           </li>
         )}
@@ -40,7 +37,6 @@ const PictEditSettings = ({
               border="borderOut"
               indexPict={indexPict}
               selected={pictSequenceSettings.borderOut!}
-              defaultSetting={defaultSettings.pictSequence}
             />
           </li>
         )}
@@ -50,7 +46,6 @@ const PictEditSettings = ({
               border="borderIn"
               indexPict={indexPict}
               selected={pictSequenceSettings.borderIn!}
-              defaultSetting={defaultSettings.pictSequence}
             />
           </li>
         )}
@@ -60,7 +55,6 @@ const PictEditSettings = ({
               setting="skin"
               indexPict={indexPict}
               selected={pictApiAraSettings.skin}
-              defaultSetting={defaultSettings.pictApiAra.skin}
             />
           </li>
         )}

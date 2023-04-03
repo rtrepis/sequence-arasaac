@@ -20,14 +20,12 @@ import { cardAction, card, cardContent, cardTitle } from "./SettingCard.styled";
 interface SettingCardProps {
   indexPict?: number;
   setting: "skin" | "textPosition";
-  defaultSetting?: string;
   selected: string;
 }
 
 const SettingCard = ({
   indexPict,
   setting,
-  defaultSetting,
   selected,
 }: SettingCardProps): JSX.Element => {
   const intl = useIntl();
@@ -94,23 +92,20 @@ const SettingCard = ({
     <Stack
       display={"flex"}
       justifyContent={"space-between"}
-      alignItems={"center"}
-      justifyItems={"center"}
       direction={{ xs: "column", sm: "row" }}
       sx={card}
     >
-      <Typography variant="body1" sx={cardTitle} component="h4">
-        <FormattedMessage {...settingCard.message} />
-      </Typography>
+      <Stack display={"flex"} direction={{ xs: "column", sm: "row" }}>
+        <Typography variant="body1" sx={cardTitle} component="h2">
+          <FormattedMessage {...settingCard.message} />
+        </Typography>
 
-      <StyledToggleButtonGroup
-        exclusive
-        aria-label={`${intl.formatMessage(settingCard.message)}`}
-        sx={cardContent}
-      >
-        {settingCard.types
-          .filter(([type, values]) => type !== defaultSetting)
-          .map(([key, value]) => (
+        <StyledToggleButtonGroup
+          exclusive
+          aria-label={`${intl.formatMessage(settingCard.message)}`}
+          sx={cardContent}
+        >
+          {settingCard.types.map(([key, value]) => (
             <ToggleButton
               value={key}
               aria-label={intl.formatMessage(value.message)}
@@ -130,26 +125,8 @@ const SettingCard = ({
               </Tooltip>
             </ToggleButton>
           ))}
-
-        {defaultSetting !== undefined && (
-          <ToggleButton
-            value={"default"}
-            onClick={() => handleSelected(defaultSetting)}
-            selected={selected === defaultSetting}
-          >
-            <Tooltip title={intl.formatMessage({ ...messages.default })}>
-              <img
-                src={`/img/settings/x.png`}
-                alt={`${intl.formatMessage({
-                  ...settingCard.message,
-                })} ${intl.formatMessage({ ...messages.default })}`}
-                width={40}
-                height={40}
-              />
-            </Tooltip>
-          </ToggleButton>
-        )}
-      </StyledToggleButtonGroup>
+        </StyledToggleButtonGroup>
+      </Stack>
 
       <StyledButton
         variant="outlined"

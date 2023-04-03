@@ -8,7 +8,7 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { AiOutlineClose, AiOutlineSetting } from "react-icons/ai";
 import { forwardRef, useState } from "react";
-import { Divider, List, ListItem } from "@mui/material";
+import { Grid } from "@mui/material";
 import SettingCard from "../SettingCard/SettingCard";
 import { useAppSelector } from "../../app/hooks";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -71,34 +71,33 @@ const DefaultSettings = (): JSX.Element => {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Container>
-          <List>
-            <ListItem>
+        <Container maxWidth={"xl"}>
+          <Grid container rowSpacing={0} columnSpacing={3}>
+            <Grid item xs={12} md={6}>
               <SettingCard
                 setting={"textPosition"}
                 selected={defaultSetting.pictSequence.textPosition}
               />
-            </ListItem>
-            <ListItem>
+            </Grid>
+            <Grid item xs={12} md={6}>
               <SettingCardBorder
                 border="borderOut"
                 selected={defaultSetting.pictSequence.borderOut!}
               />
-            </ListItem>
-            <ListItem>
+            </Grid>
+            <Grid item xs={12} md={6}>
               <SettingCardBorder
                 border="borderIn"
                 selected={defaultSetting.pictSequence.borderIn!}
               />
-            </ListItem>
-            <ListItem>
+            </Grid>
+            <Grid item xs={12} md={6}>
               <SettingCard
                 setting={"skin"}
                 selected={defaultSetting.pictApiAra.skin!}
               />
-            </ListItem>
-            <Divider />
-          </List>
+            </Grid>
+          </Grid>
         </Container>
       </Dialog>
     </>

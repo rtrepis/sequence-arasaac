@@ -1,4 +1,16 @@
 {
+  "component.settingCardBorder.in.title": [
+    {
+      "type": 0,
+      "value": "Border in"
+    }
+  ],
+  "component.settingCardBorder.out.title": [
+    {
+      "type": 0,
+      "value": "Border out"
+    }
+  ],
   "components.barNavigation.title": [
     {
       "type": 0,
@@ -143,6 +155,18 @@
       "value": "Default"
     }
   ],
+  "components.settingCardBorder.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Apply All"
+    }
+  ],
+  "components.settingCardBorder.default.label": [
+    {
+      "type": 0,
+      "value": "Default"
+    }
+  ],
   "settings.skins.asian": [
     {
       "type": 0,
@@ -177,6 +201,24 @@
     {
       "type": 0,
       "value": "White"
+    }
+  ],
+  "settings.textPosition.bottom": [
+    {
+      "type": 0,
+      "value": "Bottom"
+    }
+  ],
+  "settings.textPosition.label": [
+    {
+      "type": 0,
+      "value": "Text Position"
+    }
+  ],
+  "settings.textPosition.top": [
+    {
+      "type": 0,
+      "value": "Top"
     }
   ]
 }
