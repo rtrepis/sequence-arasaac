@@ -1,8 +1,8 @@
 import { ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
-import { Border, PictSequenceSettings } from "../../types/sequence";
+import { Border } from "../../types/sequence";
 import {
   card,
   cardAction,
@@ -27,16 +27,15 @@ interface SettingCardBorderProps {
   indexPict?: number;
   border: "borderIn" | "borderOut";
   selected: Border;
-  defaultSetting?: PictSequenceSettings;
 }
 
 const SettingCardBorder = ({
   indexPict,
   border,
   selected,
-  defaultSetting,
 }: SettingCardBorderProps): JSX.Element => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
 
   const handlerUpdate = (toUpdateColor?: string, toUpDateSize?: boolean) => {
     const newBorder: Border = {
@@ -97,67 +96,60 @@ const SettingCardBorder = ({
     <Stack
       display={"flex"}
       justifyContent={"space-between"}
-      alignItems={"center"}
-      justifyItems={"center"}
       direction={{ xs: "column", sm: "row" }}
       sx={card}
     >
-      <Typography variant="body1" sx={cardTitle} component="h4">
-        {border === "borderIn" && (
-          <FormattedMessage
-            id="component.settingCardBorder.in.title"
-            defaultMessage={"Border in"}
-          />
-        )}
+      <Stack display={"flex"} direction={{ xs: "column", sm: "row" }}>
+        <Typography variant="body1" sx={cardTitle} component="h4">
+          <FormattedMessage {...messages[`${border}`]} />
+        </Typography>
 
-        {border === "borderOut" && (
-          <FormattedMessage
-            id="component.settingCardBorder.out.title"
-            defaultMessage={"Border out"}
-          />
-        )}
-      </Typography>
-
-      <StyledToggleButtonGroup exclusive aria-label={"Border"} sx={cardContent}>
-        <ToggleButton
-          value={"Fitzgerald Key"}
-          sx={cardColor}
-          selected={selected.color === "fitzgerald" && selected.size > 0}
-          onClick={() => handlerUpdate("fitzgerald")}
+        <StyledToggleButtonGroup
+          exclusive
+          aria-label={`${intl.formatMessage(messages[`${border}`])}`}
+          sx={cardContent}
         >
-          Fitzgerald Key
-        </ToggleButton>
+          <ToggleButton
+            value={"Fitzgerald Key"}
+            sx={cardColor}
+            selected={selected.color === "fitzgerald" && selected.size > 0}
+            onClick={() => handlerUpdate("fitzgerald")}
+          >
+            <FormattedMessage {...messages.fitzgeraldKey} />
+          </ToggleButton>
 
-        <ToggleButton
-          value={"Selected Color"}
-          selected={selected.color !== "fitzgerald" && selected.size > 0}
-        >
-          <input
-            id="colorPick"
-            type="color"
-            className={"colorInput"}
-            value={color}
-            onChange={handleChanges}
-            onFocus={() => handlerUpdate(color)}
-            onBlur={() => handlerUpdate(color)}
-          />
-        </ToggleButton>
-
-        <ToggleButton
-          value={"whitOutBorder"}
-          onClick={() => handlerUpdate(undefined, true)}
-          selected={selected.size === 0}
-        >
-          <Tooltip title={"without border"}>
-            <img
-              src={`/img/settings/x.png`}
-              alt={`without border`}
-              width={40}
-              height={40}
-            />
+          <Tooltip title={intl.formatMessage(messages.selected)}>
+            <ToggleButton
+              value={"Selected Color"}
+              selected={selected.color !== "fitzgerald" && selected.size > 0}
+            >
+              <input
+                id="colorPick"
+                type="color"
+                className={"colorInput"}
+                value={color}
+                onChange={handleChanges}
+                onFocus={() => handlerUpdate(color)}
+                onBlur={() => handlerUpdate(color)}
+              />
+            </ToggleButton>
           </Tooltip>
-        </ToggleButton>
-      </StyledToggleButtonGroup>
+          <ToggleButton
+            value={"whitOutBorder"}
+            onClick={() => handlerUpdate(undefined, true)}
+            selected={selected.size === 0}
+          >
+            <Tooltip title={intl.formatMessage(messages.withoutBorder)}>
+              <img
+                src={`/img/settings/x.png`}
+                alt={intl.formatMessage(messages.withoutBorder)}
+                width={40}
+                height={40}
+              />
+            </Tooltip>
+          </ToggleButton>
+        </StyledToggleButtonGroup>
+      </Stack>
 
       <StyledButton
         variant="outlined"

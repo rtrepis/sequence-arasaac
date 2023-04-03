@@ -1,4 +1,16 @@
 {
+  "component.settingCardBorder.in.title": [
+    {
+      "type": 0,
+      "value": "Border interior"
+    }
+  ],
+  "component.settingCardBorder.out.title": [
+    {
+      "type": 0,
+      "value": "Border exterior"
+    }
+  ],
   "components.barNavigation.title": [
     {
       "type": 0,
@@ -8,13 +20,13 @@
   "components.defaultSettings.close": [
     {
       "type": 0,
-      "value": "close"
+      "value": "tancar"
     }
   ],
   "components.defaultSettings.settings.title": [
     {
       "type": 0,
-      "value": "Settings default"
+      "value": "Configuracions per defecte"
     }
   ],
   "components.magicSearch.button.": [
@@ -62,7 +74,7 @@
   "components.pictEditSettings.settings.label": [
     {
       "type": 0,
-      "value": "Settings Pictogram"
+      "value": "Configuracions del Pictograma"
     }
   ],
   "components.pictogramAmount": [
@@ -134,10 +146,22 @@
   "components.settingCard.applyAll.label": [
     {
       "type": 0,
-      "value": "Aplicar-ho a tots"
+      "value": "Aplicar tots"
     }
   ],
   "components.settingCard.default.label": [
+    {
+      "type": 0,
+      "value": "Per defecte"
+    }
+  ],
+  "components.settingCardBorder.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Aplicar tots"
+    }
+  ],
+  "components.settingCardBorder.default.label": [
     {
       "type": 0,
       "value": "Per defecte"
@@ -177,6 +201,24 @@
     {
       "type": 0,
       "value": "Blanc"
+    }
+  ],
+  "settings.textPosition.bottom": [
+    {
+      "type": 0,
+      "value": "Sota"
+    }
+  ],
+  "settings.textPosition.label": [
+    {
+      "type": 0,
+      "value": "Posició text"
+    }
+  ],
+  "settings.textPosition.top": [
+    {
+      "type": 0,
+      "value": "Dalt"
     }
   ]
 }
