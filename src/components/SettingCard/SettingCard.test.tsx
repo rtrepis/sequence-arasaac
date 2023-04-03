@@ -14,14 +14,7 @@ describe("Give a component Setting Item", () => {
       const skins = ["Asian", "Aztec", "Black", "Mulatto", "White"];
       const uiSettingDefaultType = "White";
 
-      render(
-        <SettingCard
-          indexPict={0}
-          setting="skin"
-          selected={"aztec"}
-          defaultSetting={uiSettingDefaultType}
-        />
-      );
+      render(<SettingCard indexPict={0} setting="skin" selected={"aztec"} />);
 
       skins
         .filter((skin) => skin !== uiSettingDefaultType)
@@ -43,16 +36,9 @@ describe("Give a component Setting Item", () => {
 
   describe("When rendered", () => {
     test("Then should show 'apply all' and 'default' buttons", () => {
-      const expectButtons = ["Apply All", "Default"];
+      const expectButtons = ["Apply All"];
 
-      render(
-        <SettingCard
-          indexPict={0}
-          setting="skin"
-          selected={"aztec"}
-          defaultSetting={"white"}
-        />
-      );
+      render(<SettingCard indexPict={0} setting="skin" selected={"aztec"} />);
 
       expectButtons.forEach((expectButton) => {
         const button = screen.getByRole("button", { name: expectButton });
