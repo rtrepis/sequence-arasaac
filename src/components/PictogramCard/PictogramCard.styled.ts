@@ -1,3 +1,4 @@
+import { SxProps } from "@mui/material";
 import { Border } from "../../types/sequence";
 
 export const pictogram__card = (
@@ -5,12 +6,10 @@ export const pictogram__card = (
   variant: any,
   fitzgerald: string | undefined
 ) => {
-  const card = {
+  const card: SxProps = {
     alignSelf: "center",
-    minWidth: 195,
-    maxWidth: 195,
     textAlign: "center",
-    paddingInline: 1.5,
+    paddingInline: borderOut.size === 0 ? 0 : 1.5,
     border: `${borderOut === undefined ? 2 : borderOut.size}px solid`,
     borderColor:
       borderOut.color === "fitzgerald" && fitzgerald !== undefined
@@ -33,9 +32,9 @@ export const pictogram__media = (
   view: any,
   fitzgerald: string | undefined
 ) => {
-  const sx = {
+  const sx: SxProps = {
     marginTop: `${view === "complete" ? 0 : 2}`,
-    width: 150,
+    padding: 0,
     border: `${borderIn === undefined ? 2 : borderIn.size}px solid`,
     borderColor:
       borderIn.color === "fitzgerald" && fitzgerald !== undefined

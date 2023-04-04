@@ -39,6 +39,7 @@ const preloadedState: State = {
     },
   ],
   ui: {
+    view: false,
     defaultSettings: {
       pictApiAra: { skin: "white", fitzgerald: "#998800" },
       pictSequence: {
