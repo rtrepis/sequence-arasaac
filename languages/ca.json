@@ -1,9 +1,11 @@
 {
-  "component.settingCardBorder.in.title": {
-    "defaultMessage": "Border interior"
+  "component.settingCardBorder.borderIn.title": {
+    "defaultMessage": "Border in",
+    "description": "setting title "
   },
-  "component.settingCardBorder.out.title": {
-    "defaultMessage": "Border exterior"
+  "component.settingCardBorder.borderOut.title": {
+    "defaultMessage": "Border out",
+    "description": "type title"
   },
   "components.barNavigation.title": {
     "defaultMessage": "Seqüències - AraSaac",
@@ -105,9 +107,17 @@
     "defaultMessage": "Aplicar tots",
     "description": "apply to all pictograms"
   },
-  "components.settingCardBorder.default.label": {
-    "defaultMessage": "Per defecte",
-    "description": "Not type setting "
+  "components.settingCardBorder.fitzgeraldKey.label": {
+    "defaultMessage": "Fitzgerald Key",
+    "description": "type setting "
+  },
+  "components.settingCardBorder.selected.label": {
+    "defaultMessage": "Selected",
+    "description": "type setting "
+  },
+  "components.settingCardBorder.withoutBorder.label": {
+    "defaultMessage": "Without border",
+    "description": "type setting "
   },
   "settings.skins.asian": {
     "defaultMessage": "Asiàtic",
