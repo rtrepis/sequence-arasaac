@@ -58,8 +58,8 @@ const SettingCardBorder = ({
   const handlerUpdate = (toUpdateColor?: string, toUpDateSize?: boolean) => {
     const newBorder: Border = {
       color: toUpdateColor ? toUpdateColor : selected.color,
-      radius: radius,
-      size: toUpDateSize ? 0 : size,
+      radius: toUpDateSize ? 0 : 20,
+      size: toUpDateSize ? 0 : 2,
     };
 
     if (indexPict !== undefined) {

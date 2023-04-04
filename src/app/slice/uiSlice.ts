@@ -6,6 +6,7 @@ import {
 } from "../../types/ui";
 
 const uiInitialState: Ui = {
+  view: false,
   defaultSettings: {
     pictApiAra: { skin: "white", fitzgerald: "#666666" },
     pictSequence: {
@@ -21,6 +22,11 @@ const uiSlice = createSlice({
   name: "uiState",
   initialState: uiInitialState,
   reducers: {
+    viewPage: (previousUi, action: PayloadAction<boolean>) => ({
+      ...previousUi,
+      view: action.payload,
+    }),
+
     updateDefaultSettingPictApiAra: (
       previousUi,
       action: PayloadAction<DefaultSettingsPictApiAraForEdit>
@@ -53,6 +59,7 @@ const uiSlice = createSlice({
 export const uiReducer = uiSlice.reducer;
 
 export const {
+  viewPage: viewPageActionCreator,
   updateDefaultSettingPictApiAra: updateDefaultSettingPictApiAraActionCreator,
   updateDefaultSettingPictSequence:
     updateDefaultSettingPictSequenceActionCreator,

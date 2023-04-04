@@ -1,7 +1,8 @@
-import { Border, PictSequenceSettings, Skins, TextPosition } from "./sequence";
+import { Border, Skins, TextPosition } from "./sequence";
 
 export interface Ui {
   locale?: string;
+  view: boolean;
   defaultSettings: DefaultSettings;
 }
 
