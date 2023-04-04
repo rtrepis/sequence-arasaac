@@ -9,6 +9,7 @@ const uiInitialState: Ui = {
   defaultSettings: {
     pictApiAra: { skin: "white", fitzgerald: "#666666" },
     pictSequence: {
+      numbered: false,
       textPosition: "bottom",
       borderIn: { color: "fitzgerald", radius: 20, size: 2 },
       borderOut: { color: "#999", radius: 20, size: 2 },

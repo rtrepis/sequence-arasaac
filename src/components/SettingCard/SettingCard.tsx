@@ -91,42 +91,41 @@ const SettingCard = ({
   return (
     <Stack
       display={"flex"}
-      justifyContent={"space-between"}
-      direction={{ xs: "column", sm: "row" }}
+      direction={"row"}
+      flexWrap={"wrap"}
+      spacing={2}
       sx={card}
     >
-      <Stack display={"flex"} direction={{ xs: "column", sm: "row" }}>
-        <Typography variant="body1" sx={cardTitle} component="h2">
-          <FormattedMessage {...settingCard.message} />
-        </Typography>
+      <Typography variant="body1" sx={cardTitle} component="h2">
+        <FormattedMessage {...settingCard.message} />
+      </Typography>
 
-        <StyledToggleButtonGroup
-          exclusive
-          aria-label={`${intl.formatMessage(settingCard.message)}`}
-          sx={cardContent}
-        >
-          {settingCard.types.map(([key, value]) => (
-            <ToggleButton
-              value={key}
-              aria-label={intl.formatMessage(value.message)}
-              key={key}
-              selected={selected === key}
-              onClick={() => handleSelected(key)}
-            >
-              <Tooltip title={intl.formatMessage(value.message)} arrow>
-                <img
-                  src={`/img/settings/${setting}/${key}.png`}
-                  alt={`${intl.formatMessage({
-                    ...settingCard.message,
-                  })} ${intl.formatMessage(value.message)}`}
-                  width={40}
-                  height={40}
-                />
-              </Tooltip>
-            </ToggleButton>
-          ))}
-        </StyledToggleButtonGroup>
-      </Stack>
+      <StyledToggleButtonGroup
+        exclusive
+        aria-label={`${intl.formatMessage(settingCard.message)}`}
+        sx={cardContent}
+      >
+        {settingCard.types.map(([key, value]) => (
+          <ToggleButton
+            value={key}
+            aria-label={intl.formatMessage(value.message)}
+            key={key}
+            selected={selected === key}
+            onClick={() => handleSelected(key)}
+          >
+            <Tooltip title={intl.formatMessage(value.message)} arrow>
+              <img
+                src={`/img/settings/${setting}/${key}.png`}
+                alt={`${intl.formatMessage({
+                  ...settingCard.message,
+                })} ${intl.formatMessage(value.message)}`}
+                width={40}
+                height={40}
+              />
+            </Tooltip>
+          </ToggleButton>
+        ))}
+      </StyledToggleButtonGroup>
 
       <StyledButton
         variant="outlined"

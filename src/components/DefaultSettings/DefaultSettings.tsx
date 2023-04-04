@@ -8,13 +8,14 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { AiOutlineClose, AiOutlineSetting } from "react-icons/ai";
 import { forwardRef, useState } from "react";
-import { Grid } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 import SettingCard from "../SettingCard/SettingCard";
 import { useAppSelector } from "../../app/hooks";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettings.lang";
 import { Container } from "@mui/system";
 import SettingCardBorder from "../SettingCardBorder/SettingCardBorder";
+import SettingCardBoolean from "../SettingCardBoolean/SettingCardBoolean";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -72,31 +73,36 @@ const DefaultSettings = (): JSX.Element => {
           </Toolbar>
         </AppBar>
         <Container maxWidth={"xl"}>
-          <Grid container rowSpacing={0} columnSpacing={3}>
-            <Grid item xs={12} md={6}>
+          <Grid>
+            <Stack
+              display={"flex"}
+              direction={"row"}
+              flexWrap={"wrap"}
+              marginTop={1}
+              rowGap={2}
+              columnGap={2}
+            >
+              <SettingCardBoolean
+                setting={"numbered"}
+                selected={defaultSetting.pictSequence.numbered}
+              />
               <SettingCard
                 setting={"textPosition"}
                 selected={defaultSetting.pictSequence.textPosition}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
               <SettingCardBorder
                 border="borderOut"
-                selected={defaultSetting.pictSequence.borderOut!}
+                selected={defaultSetting.pictSequence.borderOut}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
               <SettingCardBorder
                 border="borderIn"
-                selected={defaultSetting.pictSequence.borderIn!}
+                selected={defaultSetting.pictSequence.borderIn}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
               <SettingCard
                 setting={"skin"}
-                selected={defaultSetting.pictApiAra.skin!}
+                selected={defaultSetting.pictApiAra.skin}
               />
-            </Grid>
+            </Stack>
           </Grid>
         </Container>
       </Dialog>
