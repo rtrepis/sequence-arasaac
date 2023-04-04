@@ -1,5 +1,6 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
+import { useAppSelector } from "../../app/hooks";
 import useAraSaac from "../../hooks/useAraSaac";
 import { PictSequence } from "../../types/sequence";
 import { pictogram__card, pictogram__media } from "./PictogramCard.styled";
@@ -19,11 +20,14 @@ const PictogramCard = ({
       settings: { skin, fitzgerald },
       searched: { word: text },
     },
-    settings: { textPosition, borderIn, borderOut },
+    settings: { textPosition },
   },
   view,
   variant,
 }: PictogramCardProps): JSX.Element => {
+  const { borderIn, borderOut, numbered } = useAppSelector(
+    (state) => state.ui.defaultSettings.pictSequence
+  );
   const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
   const intl = useIntl();
 
@@ -35,7 +39,7 @@ const PictogramCard = ({
       {(view === "complete" || view === "header") && (
         <CardContent>
           <Typography variant="body1" component="h3">
-            {textPosition === "bottom" && indexSequence + 1}
+            {textPosition === "bottom" && numbered && indexSequence + 1}
             {textPosition === "top" && text}
           </Typography>
         </CardContent>
@@ -57,7 +61,7 @@ const PictogramCard = ({
         <CardContent>
           <Typography variant="body1" component="h3">
             {textPosition === "bottom" && text}
-            {textPosition === "top" && indexSequence + 1}
+            {textPosition === "top" && numbered && indexSequence + 1}
           </Typography>
         </CardContent>
       )}

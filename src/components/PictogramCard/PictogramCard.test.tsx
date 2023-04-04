@@ -12,6 +12,7 @@ let pictogramEmpty: PictSequence = {
   },
   settings: {
     ...preloadedState.sequence[0].settings,
+    textPosition: "bottom",
     borderIn: { color: "blue", radius: 20, size: 2 },
     borderOut: { color: "green", radius: 20, size: 2 },
   },
@@ -35,7 +36,9 @@ describe("Give a PictogramShow component", () => {
         textPictogram: "Empty",
       };
 
-      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
+      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />, {
+        preloadedState: preloadedState,
+      });
       const pictogramShow = {
         header: screen.getByRole("heading", {
           name: expectPictogram.indexTitle,
@@ -60,7 +63,9 @@ describe("Give a PictogramShow component", () => {
         altImage: "Pictogram image",
       };
 
-      render(<PictogramCard view={"header"} pictogram={pictogramEmpty} />);
+      render(<PictogramCard view={"header"} pictogram={pictogramEmpty} />, {
+        preloadedState: preloadedState,
+      });
       const pictogramShow = {
         header: screen.getByRole("heading", { name: expectPictogram.index }),
         image: screen.getByRole("img", { name: expectPictogram.altImage }),

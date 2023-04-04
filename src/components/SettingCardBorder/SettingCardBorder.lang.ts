@@ -26,6 +26,16 @@ export const messages = defineMessages({
     defaultMessage: "Without border",
     description: "type setting ",
   },
+  size: {
+    id: "components.settingCard.Size.title",
+    defaultMessage: "Size",
+    description: "Setting title",
+  },
+  radius: {
+    id: "components.settingCard.Radius.title",
+    defaultMessage: "Radius",
+    description: "Setting title",
+  },
   applyAll: {
     id: "components.settingCardBorder.applyAll.label",
     defaultMessage: "Apply All",

@@ -7,9 +7,10 @@ export interface PictSequence {
   settings: PictSequenceSettings;
 }
 export interface PictSequenceSettings {
-  textPosition: TextPosition;
-  borderOut: Border;
-  borderIn: Border;
+  numbered?: boolean;
+  textPosition?: TextPosition;
+  borderOut?: Border;
+  borderIn?: Border;
 }
 
 type MyPartialForEdit<Type> = {
@@ -32,7 +33,7 @@ export type PictSequenceForEdit = MyPartialForEdit<PictSequenceSettings>;
 
 export type PictApiAraForEdit = MyPartialForEdit<PictApiAra>;
 
-export type TextPosition = "top" | "bottom";
+export type TextPosition = "top" | "bottom" | "none";
 export interface Border {
   color: "fitzgerald" | string;
   radius: number;

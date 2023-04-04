@@ -1,11 +1,16 @@
-import { ToggleButton, Tooltip, Typography } from "@mui/material";
+import {
+  FormLabel,
+  Slider,
+  ToggleButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
 import { Border } from "../../types/sequence";
 import {
   card,
-  cardAction,
   cardColor,
   cardContent,
   cardTitle,
@@ -16,11 +21,8 @@ import { updateDefaultSettingPictSequenceActionCreator } from "../../app/slice/u
 import { useState } from "react";
 import {
   borderInActionCreator,
-  borderInApplyAllActionCreator,
   borderOutActionCreator,
-  borderOutApplyAllActionCreator,
 } from "../../app/slice/sequenceSlice";
-import StyledButton from "../../style/StyledButton";
 import { messages } from "./SettingCardBorder.lang";
 
 interface SettingCardBorderProps {
@@ -37,11 +39,27 @@ const SettingCardBorder = ({
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
+  const initialColor = selected.color ? selected.color : "#999999";
+
+  const [color, setColor] = useState(initialColor);
+  const [size, setSize] = useState(selected.size);
+  const [radius, setRadius] = useState(selected.radius);
+
+  const handleChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setColor(event.target.value);
+  };
+  const handleChangesSize = (event: Event, newValue: number | number[]) => {
+    setSize(newValue as number);
+  };
+  const handleChangesRadius = (event: Event, newValue: number | number[]) => {
+    setRadius(newValue as number);
+  };
+
   const handlerUpdate = (toUpdateColor?: string, toUpDateSize?: boolean) => {
     const newBorder: Border = {
       color: toUpdateColor ? toUpdateColor : selected.color,
-      radius: selected.radius,
-      size: toUpDateSize ? 0 : 2,
+      radius: radius,
+      size: toUpDateSize ? 0 : size,
     };
 
     if (indexPict !== undefined) {
@@ -65,7 +83,9 @@ const SettingCardBorder = ({
     if (indexPict === undefined) {
       border === "borderIn" &&
         dispatch(
-          updateDefaultSettingPictSequenceActionCreator({ borderIn: newBorder })
+          updateDefaultSettingPictSequenceActionCreator({
+            borderIn: newBorder,
+          })
         );
       border === "borderOut" &&
         dispatch(
@@ -76,37 +96,38 @@ const SettingCardBorder = ({
     }
   };
 
-  const handleApplyAll = (toUpdate: Border) => {
-    border === "borderIn" &&
-      dispatch(borderInApplyAllActionCreator({ borderIn: toUpdate }));
+  const handleBlur = () => {
+    const newBorder: Border = {
+      color: color,
+      radius: radius,
+      size: size,
+    };
 
-    border === "borderOut" &&
-      dispatch(borderOutApplyAllActionCreator({ borderOut: toUpdate }));
-  };
-
-  const initialColor = selected.color ? selected.color : "#999";
-
-  const [color, setColor] = useState(initialColor);
-
-  const handleChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setColor(event.target.value);
+    if (indexPict === undefined) {
+      dispatch(
+        updateDefaultSettingPictSequenceActionCreator({
+          [border]: newBorder,
+        })
+      );
+    }
   };
 
   return (
-    <Stack
-      display={"flex"}
-      justifyContent={"space-between"}
-      direction={{ xs: "column", sm: "row" }}
-      sx={card}
-    >
-      <Stack display={"flex"} direction={{ xs: "column", sm: "row" }}>
+    <>
+      <Stack
+        display={"flex"}
+        direction={"row"}
+        flexWrap={"wrap"}
+        spacing={2}
+        sx={card}
+      >
         <Typography variant="body1" sx={cardTitle} component="h4">
-          <FormattedMessage {...messages[`${border}`]} />
+          <FormattedMessage {...messages[border]} />
         </Typography>
 
         <StyledToggleButtonGroup
           exclusive
-          aria-label={`${intl.formatMessage(messages[`${border}`])}`}
+          aria-label={`${intl.formatMessage(messages[border])}`}
           sx={cardContent}
         >
           <ToggleButton
@@ -134,6 +155,7 @@ const SettingCardBorder = ({
               />
             </ToggleButton>
           </Tooltip>
+
           <ToggleButton
             value={"whitOutBorder"}
             onClick={() => handlerUpdate(undefined, true)}
@@ -149,16 +171,40 @@ const SettingCardBorder = ({
             </Tooltip>
           </ToggleButton>
         </StyledToggleButtonGroup>
-      </Stack>
 
-      <StyledButton
-        variant="outlined"
-        sx={cardAction}
-        onClick={() => handleApplyAll(selected)}
-      >
-        <FormattedMessage {...messages.applyAll} />
-      </StyledButton>
-    </Stack>
+        <Stack direction={"row"} spacing={2}>
+          <FormLabel>Size</FormLabel>
+          <Slider
+            defaultValue={selected.size}
+            aria-label={`${intl.formatMessage(messages.size)}`}
+            valueLabelDisplay="auto"
+            max={10}
+            min={1}
+            value={size}
+            onChange={handleChangesSize}
+            onBlur={handleBlur}
+            sx={{ width: 100 }}
+            disabled={selected.size === 0}
+          />
+        </Stack>
+
+        <Stack direction={"row"} spacing={2}>
+          <FormLabel>Radius</FormLabel>
+          <Slider
+            defaultValue={selected.radius}
+            aria-label={`${intl.formatMessage(messages.radius)}`}
+            valueLabelDisplay="auto"
+            max={70}
+            min={1}
+            value={radius}
+            onChange={handleChangesRadius}
+            onBlur={handleBlur}
+            sx={{ width: 100 }}
+            disabled={selected.size === 0}
+          />
+        </Stack>
+      </Stack>
+    </>
   );
 };
 
