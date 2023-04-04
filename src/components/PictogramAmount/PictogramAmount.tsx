@@ -39,16 +39,6 @@ const PictogramAmount = (): JSX.Element => {
     },
     settings: {
       textPosition: pictSequenceDefault.textPosition,
-      borderIn: {
-        color: pictSequenceDefault.borderIn!.color,
-        radius: 20,
-        size: pictSequenceDefault.borderIn!.size,
-      },
-      borderOut: {
-        color: pictSequenceDefault.borderOut!.color,
-        radius: 20,
-        size: pictSequenceDefault.borderIn!.size,
-      },
     },
   };
 

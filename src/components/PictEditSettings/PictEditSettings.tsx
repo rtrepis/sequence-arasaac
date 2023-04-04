@@ -3,7 +3,6 @@ import { useIntl } from "react-intl";
 import { PictApiAraSettings, PictSequenceSettings } from "../../types/sequence";
 import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import SettingCard from "../SettingCard/SettingCard";
-import SettingCardBorder from "../SettingCardBorder/SettingCardBorder";
 import messages from "./PictEditSettings.lang";
 
 interface PictEditSettingsProps {
@@ -25,27 +24,9 @@ const PictEditSettings = ({
         {pictSequenceSettings.textPosition && (
           <li>
             <SettingCard
-              indexPict={indexPict}
               setting="textPosition"
+              indexPict={indexPict}
               selected={pictSequenceSettings.textPosition}
-            />
-          </li>
-        )}
-        {pictSequenceSettings.borderOut && (
-          <li>
-            <SettingCardBorder
-              border="borderOut"
-              indexPict={indexPict}
-              selected={pictSequenceSettings.borderOut!}
-            />
-          </li>
-        )}
-        {pictSequenceSettings.borderIn && (
-          <li>
-            <SettingCardBorder
-              border="borderIn"
-              indexPict={indexPict}
-              selected={pictSequenceSettings.borderIn!}
             />
           </li>
         )}

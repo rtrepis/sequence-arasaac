@@ -67,6 +67,13 @@ export const settingsCardLang: SettingsCardLang = {
         description: "Type of setting text position",
       }),
     },
+    none: {
+      message: defineMessage({
+        id: "settings.textPosition.none",
+        defaultMessage: "None",
+        description: "Type of setting text position",
+      }),
+    },
   },
 };
 

@@ -14,12 +14,13 @@ export const cardTitle: SxProps = {
 export const cardContent: SxProps = {
   marginBlockStart: { xs: 0.1 },
   paddingInlineStart: 1,
+  flexWrap: { xs: "wrap", sm: "nowrap" },
 };
 
 export const cardAction: SxProps = {
   maxHeight: 40,
   lineHeight: 1.25,
   alignSelf: { xs: "end" },
-  marginTop: { xs: 0.1, sm: 0.2 },
+  marginTop: { xs: 0, sm: 0 },
   marginBottom: { xs: 0.1 },
 };
