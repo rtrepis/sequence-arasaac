@@ -31,6 +31,7 @@ const preloadedState: State = {
       },
       text: "test",
       settings: {
+        numbered: true,
         textPosition: "bottom",
         borderIn: { color: "blue", radius: 20, size: 2 },
         borderOut: { color: "green", radius: 20, size: 2 },
@@ -41,6 +42,7 @@ const preloadedState: State = {
     defaultSettings: {
       pictApiAra: { skin: "white", fitzgerald: "#998800" },
       pictSequence: {
+        numbered: true,
         textPosition: "bottom",
         borderIn: { color: "fitzgerald", radius: 20, size: 2 },
         borderOut: { color: "#999999", radius: 20, size: 2 },
