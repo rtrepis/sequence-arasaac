@@ -1,13 +1,23 @@
 {
-  "component.settingCardBorder.in.title": {
-    "defaultMessage": "Borde interior"
+  "component.settingCardBorder.borderIn.title": {
+    "defaultMessage": "Marco interior",
+    "description": "setting title "
   },
-  "component.settingCardBorder.out.title": {
-    "defaultMessage": "Borde exterior"
+  "component.settingCardBorder.borderOut.title": {
+    "defaultMessage": "Marco exterior",
+    "description": "type title"
+  },
+  "components.barNavigation.edit.title": {
+    "defaultMessage": "Editar",
+    "description": "Title Page"
   },
   "components.barNavigation.title": {
     "defaultMessage": "Secuencia - AraSaac",
     "description": "App title translate Sequence"
+  },
+  "components.barNavigation.view.title": {
+    "defaultMessage": "Vista",
+    "description": "Title Page"
   },
   "components.defaultSettings.close": {
     "defaultMessage": "cerrar",
@@ -93,6 +103,14 @@
     "defaultMessage": "Pictograma",
     "description": "Pictogram"
   },
+  "components.settingCard.Radius.title": {
+    "defaultMessage": "Radio",
+    "description": "Setting title"
+  },
+  "components.settingCard.Size.title": {
+    "defaultMessage": "Tamaño",
+    "description": "Setting title"
+  },
   "components.settingCard.applyAll.label": {
     "defaultMessage": "Aplicar todo",
     "description": "apply to all pictograms"
@@ -101,13 +119,37 @@
     "defaultMessage": "Por defecto",
     "description": "Not type setting "
   },
+  "components.settingCard.numbered.title": {
+    "defaultMessage": "Numeración",
+    "description": "Setting title"
+  },
   "components.settingCardBorder.applyAll.label": {
     "defaultMessage": "Aplicar todo",
     "description": "apply to all pictograms"
   },
-  "components.settingCardBorder.default.label": {
-    "defaultMessage": "Por defecto",
-    "description": "Not type setting "
+  "components.settingCardBorder.fitzgeraldKey.label": {
+    "defaultMessage": "Llave Fitzgerald",
+    "description": "type setting "
+  },
+  "components.settingCardBorder.selected.label": {
+    "defaultMessage": "Selección",
+    "description": "type setting "
+  },
+  "components.settingCardBorder.withoutBorder.label": {
+    "defaultMessage": "Sin marco",
+    "description": "type setting "
+  },
+  "pages.viewSequence.columnGap.label": {
+    "defaultMessage": "Espacio Columna",
+    "description": "Label form"
+  },
+  "pages.viewSequence.rowGap.label": {
+    "defaultMessage": "Espacio Fila",
+    "description": "Label form"
+  },
+  "pages.viewSequence.size.label": {
+    "defaultMessage": "Tamaño",
+    "description": "Label form"
   },
   "settings.skins.asian": {
     "defaultMessage": "Asiàtic",
@@ -140,6 +182,10 @@
   "settings.textPosition.label": {
     "defaultMessage": "Posición texto",
     "description": "Setting Text Position label"
+  },
+  "settings.textPosition.none": {
+    "defaultMessage": "Sin",
+    "description": "Type of setting text position"
   },
   "settings.textPosition.top": {
     "defaultMessage": "Arriba",
