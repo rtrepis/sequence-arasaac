@@ -9,7 +9,7 @@ import { FormattedMessage } from "react-intl";
 import messages from "./BarNavigation.lang";
 import { Button, Stack } from "@mui/material";
 import NotPrint from "../NotPrint/NotPrint";
-import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { viewPageActionCreator } from "../../app/slice/uiSlice";
 import { useState } from "react";
@@ -55,25 +55,37 @@ const BarNavigation = (props: Props) => {
               </Typography>
               {view && (
                 <Typography variant={"h5"} component="h2">
-                  View
+                  <FormattedMessage {...messages.view} />
                 </Typography>
               )}
               {!view && (
                 <Typography variant={"h5"} component="h2">
-                  Edit
+                  <FormattedMessage {...messages.edit} />
                 </Typography>
               )}
               <Stack direction={"row"}>
-                <Button
-                  aria-label={"view"}
-                  variant="text"
-                  color="secondary"
-                  size="large"
-                  sx={{ fontSize: "2rem" }}
-                  onClick={handlerView}
-                >
-                  <AiOutlineEye />
-                </Button>
+                {!view && (
+                  <Button
+                    aria-label={"view"}
+                    variant="text"
+                    color="secondary"
+                    sx={{ fontSize: "2rem" }}
+                    onClick={handlerView}
+                  >
+                    <AiOutlineEye />
+                  </Button>
+                )}
+                {view && (
+                  <Button
+                    aria-label={"edit"}
+                    variant="text"
+                    color="secondary"
+                    sx={{ fontSize: "2rem" }}
+                    onClick={handlerView}
+                  >
+                    <AiOutlineEdit />
+                  </Button>
+                )}
                 <DefaultSettings />
               </Stack>
             </Toolbar>

@@ -7,9 +7,17 @@
     "defaultMessage": "Border out",
     "description": "type title"
   },
+  "components.barNavigation.edit.title": {
+    "defaultMessage": "Edit",
+    "description": "Title Page"
+  },
   "components.barNavigation.title": {
     "defaultMessage": "Sequence - AraSaac",
     "description": "App title translate Sequence"
+  },
+  "components.barNavigation.view.title": {
+    "defaultMessage": "View",
+    "description": "Title Page"
   },
   "components.defaultSettings.close": {
     "defaultMessage": "close",
@@ -95,6 +103,14 @@
     "defaultMessage": "Pictogram",
     "description": "Pictogram"
   },
+  "components.settingCard.Radius.title": {
+    "defaultMessage": "Radius",
+    "description": "Setting title"
+  },
+  "components.settingCard.Size.title": {
+    "defaultMessage": "Size",
+    "description": "Setting title"
+  },
   "components.settingCard.applyAll.label": {
     "defaultMessage": "Apply All",
     "description": "apply to all pictograms"
@@ -102,6 +118,10 @@
   "components.settingCard.default.label": {
     "defaultMessage": "Default",
     "description": "Not type setting "
+  },
+  "components.settingCard.numbered.title": {
+    "defaultMessage": "Numbered",
+    "description": "Setting title"
   },
   "components.settingCardBorder.applyAll.label": {
     "defaultMessage": "Apply All",
@@ -118,6 +138,18 @@
   "components.settingCardBorder.withoutBorder.label": {
     "defaultMessage": "Without border",
     "description": "type setting "
+  },
+  "pages.viewSequence.columnGap.label": {
+    "defaultMessage": "Column Space",
+    "description": "Label form"
+  },
+  "pages.viewSequence.rowGap.label": {
+    "defaultMessage": "Row Space",
+    "description": "Label form"
+  },
+  "pages.viewSequence.size.label": {
+    "defaultMessage": "Size",
+    "description": "Label form"
   },
   "settings.skins.asian": {
     "defaultMessage": "Asian",
@@ -150,6 +182,10 @@
   "settings.textPosition.label": {
     "defaultMessage": "Text Position",
     "description": "Setting Text Position label"
+  },
+  "settings.textPosition.none": {
+    "defaultMessage": "None",
+    "description": "Type of setting text position"
   },
   "settings.textPosition.top": {
     "defaultMessage": "Top",
