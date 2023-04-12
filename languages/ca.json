@@ -1,14 +1,14 @@
 {
   "component.settingCardBorder.borderIn.title": {
-    "defaultMessage": "Border in",
+    "defaultMessage": "Marc interior",
     "description": "setting title "
   },
   "component.settingCardBorder.borderOut.title": {
-    "defaultMessage": "Border out",
+    "defaultMessage": "Marc exterior",
     "description": "type title"
   },
   "components.barNavigation.edit.title": {
-    "defaultMessage": "Edit",
+    "defaultMessage": "Editar",
     "description": "Title Page"
   },
   "components.barNavigation.title": {
@@ -16,7 +16,7 @@
     "description": "App title translate Sequence"
   },
   "components.barNavigation.view.title": {
-    "defaultMessage": "View",
+    "defaultMessage": "Vista",
     "description": "Title Page"
   },
   "components.defaultSettings.close": {
@@ -104,11 +104,11 @@
     "description": "Pictogram"
   },
   "components.settingCard.Radius.title": {
-    "defaultMessage": "Radius",
+    "defaultMessage": "Radi",
     "description": "Setting title"
   },
   "components.settingCard.Size.title": {
-    "defaultMessage": "Size",
+    "defaultMessage": "Mida",
     "description": "Setting title"
   },
   "components.settingCard.applyAll.label": {
@@ -120,7 +120,7 @@
     "description": "Not type setting "
   },
   "components.settingCard.numbered.title": {
-    "defaultMessage": "Numbered",
+    "defaultMessage": "Numeració",
     "description": "Setting title"
   },
   "components.settingCardBorder.applyAll.label": {
@@ -128,27 +128,27 @@
     "description": "apply to all pictograms"
   },
   "components.settingCardBorder.fitzgeraldKey.label": {
-    "defaultMessage": "Fitzgerald Key",
+    "defaultMessage": "Clau Fitzgerald",
     "description": "type setting "
   },
   "components.settingCardBorder.selected.label": {
-    "defaultMessage": "Selected",
+    "defaultMessage": "Selecció",
     "description": "type setting "
   },
   "components.settingCardBorder.withoutBorder.label": {
-    "defaultMessage": "Without border",
+    "defaultMessage": "Sense línia",
     "description": "type setting "
   },
   "pages.viewSequence.columnGap.label": {
-    "defaultMessage": "Column Space",
+    "defaultMessage": "Espai Columna",
     "description": "Label form"
   },
   "pages.viewSequence.rowGap.label": {
-    "defaultMessage": "Row Space",
+    "defaultMessage": "Espai Fila",
     "description": "Label form"
   },
   "pages.viewSequence.size.label": {
-    "defaultMessage": "Size",
+    "defaultMessage": "Mida",
     "description": "Label form"
   },
   "settings.skins.asian": {
@@ -184,7 +184,7 @@
     "description": "Setting Text Position label"
   },
   "settings.textPosition.none": {
-    "defaultMessage": "None",
+    "defaultMessage": "Sense",
     "description": "Type of setting text position"
   },
   "settings.textPosition.top": {
