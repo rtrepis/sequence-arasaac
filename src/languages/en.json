@@ -1,20 +1,32 @@
 {
-  "component.settingCardBorder.in.title": [
+  "component.settingCardBorder.borderIn.title": [
     {
       "type": 0,
       "value": "Border in"
     }
   ],
-  "component.settingCardBorder.out.title": [
+  "component.settingCardBorder.borderOut.title": [
     {
       "type": 0,
       "value": "Border out"
+    }
+  ],
+  "components.barNavigation.edit.title": [
+    {
+      "type": 0,
+      "value": "Edit"
     }
   ],
   "components.barNavigation.title": [
     {
       "type": 0,
       "value": "Sequence - AraSaac"
+    }
+  ],
+  "components.barNavigation.view.title": [
+    {
+      "type": 0,
+      "value": "View"
     }
   ],
   "components.defaultSettings.close": [
@@ -143,6 +155,18 @@
       "value": "Pictogram"
     }
   ],
+  "components.settingCard.Radius.title": [
+    {
+      "type": 0,
+      "value": "Radius"
+    }
+  ],
+  "components.settingCard.Size.title": [
+    {
+      "type": 0,
+      "value": "Size"
+    }
+  ],
   "components.settingCard.applyAll.label": [
     {
       "type": 0,
@@ -155,16 +179,52 @@
       "value": "Default"
     }
   ],
+  "components.settingCard.numbered.title": [
+    {
+      "type": 0,
+      "value": "Numbered"
+    }
+  ],
   "components.settingCardBorder.applyAll.label": [
     {
       "type": 0,
       "value": "Apply All"
     }
   ],
-  "components.settingCardBorder.default.label": [
+  "components.settingCardBorder.fitzgeraldKey.label": [
     {
       "type": 0,
-      "value": "Default"
+      "value": "Fitzgerald Key"
+    }
+  ],
+  "components.settingCardBorder.selected.label": [
+    {
+      "type": 0,
+      "value": "Selected"
+    }
+  ],
+  "components.settingCardBorder.withoutBorder.label": [
+    {
+      "type": 0,
+      "value": "Without border"
+    }
+  ],
+  "pages.viewSequence.columnGap.label": [
+    {
+      "type": 0,
+      "value": "Column Space"
+    }
+  ],
+  "pages.viewSequence.rowGap.label": [
+    {
+      "type": 0,
+      "value": "Row Space"
+    }
+  ],
+  "pages.viewSequence.size.label": [
+    {
+      "type": 0,
+      "value": "Size"
     }
   ],
   "settings.skins.asian": [
@@ -213,6 +273,12 @@
     {
       "type": 0,
       "value": "Text Position"
+    }
+  ],
+  "settings.textPosition.none": [
+    {
+      "type": 0,
+      "value": "None"
     }
   ],
   "settings.textPosition.top": [
