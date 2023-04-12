@@ -2,8 +2,15 @@ import { Border, Skins, TextPosition } from "./sequence";
 
 export interface Ui {
   locale?: string;
-  view: boolean;
+  viewPage: boolean;
+  viewSettings: ViewSettings;
   defaultSettings: DefaultSettings;
+}
+
+export interface ViewSettings {
+  sizePict: number;
+  columnGap: number;
+  rowGap: number;
 }
 
 interface DefaultSettings {

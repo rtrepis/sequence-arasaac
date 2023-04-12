@@ -1,72 +1,158 @@
-import { Divider, Input, Stack, TextField } from "@mui/material";
-import { useAppSelector } from "../../app/hooks";
+import {
+  Box,
+  Button,
+  Divider,
+  FormGroup,
+  FormLabel,
+  Slider,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { useState } from "react";
 import NotPrint from "../../components/NotPrint/NotPrint";
+import { AiFillPrinter } from "react-icons/ai";
+import { ViewSettings } from "../../types/ui";
+import { viewSettingsActionCreator } from "../../app/slice/uiSlice";
+import { FormattedMessage } from "react-intl";
+import messages from "./ViewSequencePage.lang";
 
 const ViewSequencePage = (): JSX.Element => {
-  const sequence = useAppSelector((state) => state.sequence);
+  const {
+    sequence,
+    ui: { viewSettings },
+  } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
 
-  const [size, setSize] = useState(1);
-  const [columnGap, setColumnGap] = useState(1);
-  const [rowGap, setRowGap] = useState(1);
+  const initialState: ViewSettings = {
+    sizePict: viewSettings.sizePict,
+    columnGap: viewSettings.columnGap,
+    rowGap: viewSettings.rowGap,
+  };
+  const [view, setView] = useState(initialState);
+
+  const handlerView = (event: any, value: number | number[]) => {
+    const newView: ViewSettings = {
+      ...view,
+      [event.target.name]: value,
+    };
+
+    console.log(view);
+    console.log(" useState");
+
+    setView(newView);
+  };
+
+  const handlerBlur = () => {
+    const newViewSettings: ViewSettings = {
+      sizePict: view.sizePict,
+      columnGap: view.columnGap,
+      rowGap: view.rowGap,
+    };
+
+    console.log(view);
+    console.log(" useDispatch");
+
+    dispatch(viewSettingsActionCreator(newViewSettings));
+    setView(newViewSettings);
+  };
 
   return (
     <>
       <NotPrint>
-        <Stack spacing={2} direction={"row"} marginTop={2}>
-          <TextField
-            type="number"
-            color="primary"
-            label="Size"
-            fullWidth
-            InputProps={{
-              componentsProps: { input: { step: 0.05, min: 0.1, max: 2 } },
-            }}
-            value={size}
-            onChange={(event) => setSize(Number(event.target.value))}
-          />
-          <Input value={150 * size} sx={{ display: "none" }} />
-          <TextField
-            type="number"
-            color="primary"
-            label="Space Column"
-            fullWidth
-            InputProps={{
-              componentsProps: { input: { step: 0.5, min: 0, max: 10 } },
-            }}
-            value={columnGap}
-            onChange={(event) => setColumnGap(Number(event.target.value))}
-          />
-          <TextField
-            type="number"
-            color="primary"
-            label="Space Row"
-            fullWidth
-            InputProps={{
-              componentsProps: { input: { step: 0.5, min: 0, max: 10 } },
-            }}
-            value={rowGap}
-            onChange={(event) => setRowGap(Number(event.target.value))}
-          />
-        </Stack>
+        <form onBlur={handlerBlur}>
+          <Stack spacing={2} direction={"row"} marginTop={2}>
+            <FormGroup sx={{ width: 200 }}>
+              <FormLabel>
+                <FormattedMessage {...messages.size} />
+                <Slider
+                  defaultValue={view.sizePict}
+                  name="sizePict"
+                  step={0.05}
+                  min={0.5}
+                  max={2}
+                  value={view.sizePict}
+                  onChange={handlerView}
+                />
+              </FormLabel>
+            </FormGroup>
+            <FormGroup sx={{ width: 200 }}>
+              <FormLabel>
+                <FormattedMessage {...messages.columnGap} />
+                <Slider
+                  name="columnGap"
+                  step={0.5}
+                  min={0}
+                  max={10}
+                  value={view.columnGap}
+                  onChange={handlerView}
+                />
+              </FormLabel>
+            </FormGroup>
+            <FormGroup sx={{ width: 200 }}>
+              <FormLabel>
+                <FormattedMessage {...messages.rowGap} />
+                <Slider
+                  name="rowGap"
+                  step={0.5}
+                  min={0}
+                  max={10}
+                  value={view.rowGap}
+                  onChange={handlerView}
+                />
+              </FormLabel>
+            </FormGroup>
+            <Button
+              aria-label={"view"}
+              variant="text"
+              color="primary"
+              sx={{ fontSize: "2rem" }}
+              onClick={() => window.print()}
+            >
+              <AiFillPrinter />
+            </Button>
+          </Stack>
+        </form>
         <Divider
           variant="inset"
           sx={{ marginBlock: 2, marginInlineStart: 0 }}
         />
+        <Box
+          sx={{
+            display: "flex",
+            width: 100,
+            height: 40,
+            backgroundColor: "green",
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography color={"primary.contrastText"}>A4</Typography>
+        </Box>
       </NotPrint>
       <Stack
         direction={"row"}
         flexWrap={"wrap"}
         alignContent={"start"}
-        columnGap={columnGap}
-        rowGap={rowGap}
+        columnGap={view.columnGap}
+        rowGap={view.rowGap}
         maxWidth={1080}
         height={750}
         overflow={"hidden"}
         sx={{
-          border: "1px solid red",
-          "@media print": { "@page": { size: "A4 landscape", margin: 1 } },
+          border: "2px solid green",
+          maxWidth: 1000,
+          width: "100vw",
+          height: "100vh",
+          padding: 2,
+          "@media print": {
+            "@page": { size: "A4 landscape" },
+            border: "none",
+          },
         }}
       >
         {sequence.map((pictogram) => (
@@ -74,7 +160,7 @@ const ViewSequencePage = (): JSX.Element => {
             pictogram={pictogram}
             view={"complete"}
             variant="plane"
-            size={size}
+            size={view.sizePict}
           />
         ))}
       </Stack>

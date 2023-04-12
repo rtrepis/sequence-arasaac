@@ -39,7 +39,12 @@ const preloadedState: State = {
     },
   ],
   ui: {
-    view: false,
+    viewPage: false,
+    viewSettings: {
+      sizePict: 1,
+      columnGap: 1,
+      rowGap: 1,
+    },
     defaultSettings: {
       pictApiAra: { skin: "white", fitzgerald: "#998800" },
       pictSequence: {
