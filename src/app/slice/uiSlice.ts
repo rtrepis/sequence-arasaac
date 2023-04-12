@@ -3,10 +3,16 @@ import {
   DefaultSettingsPictApiAraForEdit,
   DefaultSettingsPictSequenceForEdit,
   Ui,
+  ViewSettings,
 } from "../../types/ui";
 
 const uiInitialState: Ui = {
-  view: false,
+  viewPage: false,
+  viewSettings: {
+    sizePict: 1,
+    columnGap: 1,
+    rowGap: 1,
+  },
   defaultSettings: {
     pictApiAra: { skin: "white", fitzgerald: "#666666" },
     pictSequence: {
@@ -24,7 +30,11 @@ const uiSlice = createSlice({
   reducers: {
     viewPage: (previousUi, action: PayloadAction<boolean>) => ({
       ...previousUi,
-      view: action.payload,
+      viewPage: action.payload,
+    }),
+    viewSettings: (previousUi, action: PayloadAction<ViewSettings>) => ({
+      ...previousUi,
+      viewSettings: action.payload,
     }),
 
     updateDefaultSettingPictApiAra: (
@@ -60,6 +70,8 @@ export const uiReducer = uiSlice.reducer;
 
 export const {
   viewPage: viewPageActionCreator,
+  viewSettings: viewSettingsActionCreator,
+
   updateDefaultSettingPictApiAra: updateDefaultSettingPictApiAraActionCreator,
   updateDefaultSettingPictSequence:
     updateDefaultSettingPictSequenceActionCreator,
