@@ -55,7 +55,9 @@ const SettingCardOptions = ({
           sx={{ width: 150 }}
         >
           {settingCard.types.map(([key, value]) => (
-            <MenuItem value={key}>{intl.formatMessage(value.message)}</MenuItem>
+            <MenuItem value={key} key={key}>
+              {intl.formatMessage(value.message)}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>
