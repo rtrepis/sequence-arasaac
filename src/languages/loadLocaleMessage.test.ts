@@ -25,7 +25,7 @@ describe("Give a function 'loadLocalMessage", () => {
 
   describe("When it's called with string locale 'ES'", () => {
     test("Then should return expect message 'Pictogramas:'", async () => {
-      const locale = "ES";
+      const locale = "es-ES";
       const expectText = [{ type: 0, value: "Pictogramas:" }];
 
       const message = await loadLocalMessages(locale);
