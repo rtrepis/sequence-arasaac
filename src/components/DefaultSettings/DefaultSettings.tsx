@@ -16,6 +16,7 @@ import messages from "./DefaultSettings.lang";
 import { Container } from "@mui/system";
 import SettingCardBorder from "../SettingCardBorder/SettingCardBorder";
 import SettingCardBoolean from "../SettingCardBoolean/SettingCardBoolean";
+import SettingCardOptions from "../SettingCardOptions/SettingCardOptions";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -82,6 +83,8 @@ const DefaultSettings = (): JSX.Element => {
               rowGap={2}
               columnGap={2}
             >
+              <SettingCardOptions setting="languages" selected="ca" />
+
               <SettingCardBoolean
                 setting={"numbered"}
                 selected={defaultSetting.pictSequence.numbered}

@@ -1,7 +1,6 @@
 import { Border, Skins, TextPosition } from "./sequence";
 
 export interface Ui {
-  locale?: string;
   viewPage: boolean;
   viewSettings: ViewSettings;
   defaultSettings: DefaultSettings;

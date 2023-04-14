@@ -1,4 +1,4 @@
-import { Skins, TextPosition } from "./sequence";
+import { Languages, Skins, TextPosition } from "./sequence";
 
 export interface SettingsCardLang {
   messages: {
@@ -10,6 +10,15 @@ export interface SettingsCardLang {
   };
   textPosition: {
     [K in TextPosition]: { message: Message };
+  };
+}
+
+export interface SettingsCardOptionsLang {
+  messages: {
+    languages: Message;
+  };
+  languages: {
+    [K in Languages]: { message: Message };
   };
 }
 

@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# languages compliled
+/src/languages/*.json
+
 # testing
 /coverage
 

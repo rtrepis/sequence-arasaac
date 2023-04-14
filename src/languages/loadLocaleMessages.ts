@@ -1,6 +1,6 @@
-const loadLocalMessages = (locale: string) => {
+const useLoadLocalMessages = (locale: string) => {
   switch (locale) {
-    case "ES":
+    case "es-ES":
       return import("./es.json");
     case "en-GB":
       return import("./en.json");
@@ -11,4 +11,4 @@ const loadLocalMessages = (locale: string) => {
   }
 };
 
-export default loadLocalMessages;
+export default useLoadLocalMessages;
