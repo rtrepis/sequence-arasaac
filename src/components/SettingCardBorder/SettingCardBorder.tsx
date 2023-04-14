@@ -173,7 +173,9 @@ const SettingCardBorder = ({
         </StyledToggleButtonGroup>
 
         <Stack direction={"row"} spacing={2}>
-          <FormLabel>Size</FormLabel>
+          <FormLabel>
+            <FormattedMessage {...messages.size} />
+          </FormLabel>
           <Slider
             defaultValue={selected.size}
             aria-label={`${intl.formatMessage(messages.size)}`}
@@ -189,7 +191,9 @@ const SettingCardBorder = ({
         </Stack>
 
         <Stack direction={"row"} spacing={2}>
-          <FormLabel>Radius</FormLabel>
+          <FormLabel>
+            <FormattedMessage {...messages.radius} />
+          </FormLabel>
           <Slider
             defaultValue={selected.radius}
             aria-label={`${intl.formatMessage(messages.radius)}`}

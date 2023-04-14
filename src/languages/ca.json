@@ -1,20 +1,32 @@
 {
-  "component.settingCardBorder.in.title": [
+  "component.settingCardBorder.borderIn.title": [
     {
       "type": 0,
-      "value": "Border interior"
+      "value": "Marc interior"
     }
   ],
-  "component.settingCardBorder.out.title": [
+  "component.settingCardBorder.borderOut.title": [
     {
       "type": 0,
-      "value": "Border exterior"
+      "value": "Marc exterior"
+    }
+  ],
+  "components.barNavigation.edit.title": [
+    {
+      "type": 0,
+      "value": "Editar"
     }
   ],
   "components.barNavigation.title": [
     {
       "type": 0,
       "value": "Seqüències - AraSaac"
+    }
+  ],
+  "components.barNavigation.view.title": [
+    {
+      "type": 0,
+      "value": "Vista"
     }
   ],
   "components.defaultSettings.close": [
@@ -143,6 +155,18 @@
       "value": "Pictograma"
     }
   ],
+  "components.settingCard.Radius.title": [
+    {
+      "type": 0,
+      "value": "Radi"
+    }
+  ],
+  "components.settingCard.Size.title": [
+    {
+      "type": 0,
+      "value": "Mida"
+    }
+  ],
   "components.settingCard.applyAll.label": [
     {
       "type": 0,
@@ -155,16 +179,52 @@
       "value": "Per defecte"
     }
   ],
+  "components.settingCard.numbered.title": [
+    {
+      "type": 0,
+      "value": "Numeració"
+    }
+  ],
   "components.settingCardBorder.applyAll.label": [
     {
       "type": 0,
       "value": "Aplicar tots"
     }
   ],
-  "components.settingCardBorder.default.label": [
+  "components.settingCardBorder.fitzgeraldKey.label": [
     {
       "type": 0,
-      "value": "Per defecte"
+      "value": "Clau Fitzgerald"
+    }
+  ],
+  "components.settingCardBorder.selected.label": [
+    {
+      "type": 0,
+      "value": "Selecció"
+    }
+  ],
+  "components.settingCardBorder.withoutBorder.label": [
+    {
+      "type": 0,
+      "value": "Sense línia"
+    }
+  ],
+  "pages.viewSequence.columnGap.label": [
+    {
+      "type": 0,
+      "value": "Espai Columna"
+    }
+  ],
+  "pages.viewSequence.rowGap.label": [
+    {
+      "type": 0,
+      "value": "Espai Fila"
+    }
+  ],
+  "pages.viewSequence.size.label": [
+    {
+      "type": 0,
+      "value": "Mida"
     }
   ],
   "settings.skins.asian": [
@@ -213,6 +273,12 @@
     {
       "type": 0,
       "value": "Posició text"
+    }
+  ],
+  "settings.textPosition.none": [
+    {
+      "type": 0,
+      "value": "Sense"
     }
   ],
   "settings.textPosition.top": [

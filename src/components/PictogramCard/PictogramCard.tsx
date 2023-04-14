@@ -41,7 +41,7 @@ const PictogramCard = ({
       {(view === "complete" || view === "header") && (
         <CardContent
           sx={{
-            ":first-child": {
+            ":first-of-type": {
               paddingBlock:
                 textPosition !== "top" && !numbered && borderOut.size === 0
                   ? 0

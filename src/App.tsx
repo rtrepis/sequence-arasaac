@@ -4,18 +4,16 @@ import BarNavigation from "./components/BarNavigation/BarNavigation";
 import EditSequencesPages from "./pages/EditSequencesPages/EditSequencesPages";
 import ViewSequencePage from "./pages/ViewSequencePages/ViewSequencePage";
 
-const App = () => {
+const App = (): JSX.Element => {
   const { viewPage } = useAppSelector((state) => state.ui);
 
   return (
-    <>
-      <BarNavigation>
-        <>
-          {!viewPage && <EditSequencesPages />}
-          {viewPage && <ViewSequencePage />}
-        </>
-      </BarNavigation>
-    </>
+    <BarNavigation>
+      <>
+        {!viewPage && <EditSequencesPages />}
+        {viewPage && <ViewSequencePage />}
+      </>
+    </BarNavigation>
   );
 };
 
