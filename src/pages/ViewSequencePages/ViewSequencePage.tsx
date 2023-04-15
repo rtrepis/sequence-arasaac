@@ -38,9 +38,6 @@ const ViewSequencePage = (): JSX.Element => {
       [event.target.name]: value,
     };
 
-    console.log(view);
-    console.log(" useState");
-
     setView(newView);
   };
 
@@ -50,9 +47,6 @@ const ViewSequencePage = (): JSX.Element => {
       columnGap: view.columnGap,
       rowGap: view.rowGap,
     };
-
-    console.log(view);
-    console.log(" useDispatch");
 
     dispatch(viewSettingsActionCreator(newViewSettings));
     setView(newViewSettings);
@@ -140,15 +134,13 @@ const ViewSequencePage = (): JSX.Element => {
         alignContent={"start"}
         columnGap={view.columnGap}
         rowGap={view.rowGap}
-        maxWidth={1080}
+        width={1080}
         height={750}
         overflow={"hidden"}
         sx={{
           border: "2px solid green",
-          maxWidth: 1000,
-          width: "100vw",
-          height: "100vh",
           padding: 2,
+          marginBottom: 3,
           "@media print": {
             "@page": { size: "A4 landscape" },
             border: "none",

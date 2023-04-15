@@ -59,3 +59,5 @@ export interface PictApiAraSettings {
   skin?: Skins;
   fitzgerald?: string;
 }
+
+export type Languages = "ca" | "es" | "en";
