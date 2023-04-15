@@ -1,20 +1,32 @@
 {
-  "component.settingCardBorder.in.title": [
+  "component.settingCardBorder.borderIn.title": [
     {
       "type": 0,
-      "value": "Borde interior"
+      "value": "Marco interior"
     }
   ],
-  "component.settingCardBorder.out.title": [
+  "component.settingCardBorder.borderOut.title": [
     {
       "type": 0,
-      "value": "Borde exterior"
+      "value": "Marco exterior"
+    }
+  ],
+  "components.barNavigation.edit.title": [
+    {
+      "type": 0,
+      "value": "Editar"
     }
   ],
   "components.barNavigation.title": [
     {
       "type": 0,
       "value": "Secuencia - AraSaac"
+    }
+  ],
+  "components.barNavigation.view.title": [
+    {
+      "type": 0,
+      "value": "Vista"
     }
   ],
   "components.defaultSettings.close": [
@@ -143,6 +155,18 @@
       "value": "Pictograma"
     }
   ],
+  "components.settingCard.Radius.title": [
+    {
+      "type": 0,
+      "value": "Radio"
+    }
+  ],
+  "components.settingCard.Size.title": [
+    {
+      "type": 0,
+      "value": "Tamaño"
+    }
+  ],
   "components.settingCard.applyAll.label": [
     {
       "type": 0,
@@ -155,16 +179,52 @@
       "value": "Por defecto"
     }
   ],
+  "components.settingCard.numbered.title": [
+    {
+      "type": 0,
+      "value": "Numeración"
+    }
+  ],
   "components.settingCardBorder.applyAll.label": [
     {
       "type": 0,
       "value": "Aplicar todo"
     }
   ],
-  "components.settingCardBorder.default.label": [
+  "components.settingCardBorder.fitzgeraldKey.label": [
     {
       "type": 0,
-      "value": "Por defecto"
+      "value": "Llave Fitzgerald"
+    }
+  ],
+  "components.settingCardBorder.selected.label": [
+    {
+      "type": 0,
+      "value": "Selección"
+    }
+  ],
+  "components.settingCardBorder.withoutBorder.label": [
+    {
+      "type": 0,
+      "value": "Sin marco"
+    }
+  ],
+  "pages.viewSequence.columnGap.label": [
+    {
+      "type": 0,
+      "value": "Espacio Columna"
+    }
+  ],
+  "pages.viewSequence.rowGap.label": [
+    {
+      "type": 0,
+      "value": "Espacio Fila"
+    }
+  ],
+  "pages.viewSequence.size.label": [
+    {
+      "type": 0,
+      "value": "Tamaño"
     }
   ],
   "settings.skins.asian": [
@@ -213,6 +273,12 @@
     {
       "type": 0,
       "value": "Posición texto"
+    }
+  ],
+  "settings.textPosition.none": [
+    {
+      "type": 0,
+      "value": "Sin"
     }
   ],
   "settings.textPosition.top": [
