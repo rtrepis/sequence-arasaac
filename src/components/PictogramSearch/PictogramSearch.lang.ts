@@ -26,6 +26,16 @@ const messages = defineMessages({
     defaultMessage: "Empty",
     description: "Empty pictogram",
   },
+  plus: {
+    id: "components.pictogramSearch.plus",
+    defaultMessage: "Plus pictograms",
+    description: "Plus pictograms",
+  },
+  minus: {
+    id: "components.pictogramSearch.minus",
+    defaultMessage: "Minus pictograms",
+    description: "Minus pictograms",
+  },
 });
 
 export default messages;

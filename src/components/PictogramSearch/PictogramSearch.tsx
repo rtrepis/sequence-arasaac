@@ -55,6 +55,13 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
     await getSearchPictogram(newWord, indexPict, true);
   };
 
+  const [isPlus, setIsPlus] = useState(false);
+
+  const handelPlusAction = async (plus: boolean) => {
+    await getSearchPictogram(newWord, indexPict, true, plus);
+    setIsPlus(!isPlus);
+  };
+
   return (
     <Stack flex={1} sx={{ width: "-webkit-fill-available" }}>
       <form onSubmit={handleSubmit}>
@@ -103,6 +110,46 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
               />
             </ToggleButton>
           ))}
+        {!isPlus && (
+          <ToggleButton
+            value={"plus"}
+            aria-label={`${intl.formatMessage({
+              ...messages.plus,
+            })}`}
+            key={`plus`}
+            onClick={() => handelPlusAction(true)}
+            sx={{ width: 30, height: 30 }}
+          >
+            <img
+              src={"../img/settings/+.png"}
+              alt={`${intl.formatMessage({
+                ...messages.plus,
+              })}`}
+              width={25}
+              height={25}
+            />
+          </ToggleButton>
+        )}
+        {isPlus && (
+          <ToggleButton
+            value={"minus"}
+            aria-label={`${intl.formatMessage({
+              ...messages.minus,
+            })}`}
+            key={`minus`}
+            onClick={() => handelPlusAction(false)}
+            sx={{ width: 30, height: 30 }}
+          >
+            <img
+              src={"../img/settings/-.png"}
+              alt={`${intl.formatMessage({
+                ...messages.minus,
+              })}`}
+              width={25}
+              height={25}
+            />
+          </ToggleButton>
+        )}
       </StyledToggleButtonGroup>
       {bestIdPicts[0] === -1 && (
         <Alert severity="info">
