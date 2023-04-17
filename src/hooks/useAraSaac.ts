@@ -71,10 +71,17 @@ const useAraSaac = () => {
   );
 
   const getSearchPictogram = useCallback(
-    async (word: string, indexSequence: number, isUpdate: boolean) => {
+    async (
+      word: string,
+      indexSequence: number,
+      isUpdate: boolean,
+      isExtends?: boolean
+    ) => {
+      const search = isExtends ? "search" : "bestsearch";
+
       try {
         const { data } = await axios.get(
-          `${araSaacURL}pictograms/${locale}/bestsearch/${word.toLocaleLowerCase()}`
+          `${araSaacURL}pictograms/${locale}/${search}/${word.toLocaleLowerCase()}`
         );
         const findBestPict: number[] = [];
 
