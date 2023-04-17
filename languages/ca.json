@@ -151,6 +151,22 @@
     "defaultMessage": "Mida",
     "description": "Label form"
   },
+  "setting.lang.ca.label": {
+    "defaultMessage": "Catalan",
+    "description": "Type setting"
+  },
+  "setting.lang.en.label": {
+    "defaultMessage": "English",
+    "description": "Type setting"
+  },
+  "setting.lang.es.label": {
+    "defaultMessage": "Spanish",
+    "description": "Type setting"
+  },
+  "setting.lang.title": {
+    "defaultMessage": "Language",
+    "description": "Title setting"
+  },
   "settings.skins.asian": {
     "defaultMessage": "Asiàtic",
     "description": "Type of setting skin"
