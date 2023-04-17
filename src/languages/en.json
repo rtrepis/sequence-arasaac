@@ -50,7 +50,7 @@
   "components.magicSearch.helperText.": [
     {
       "type": 0,
-      "value": "Type the words in the sequence between spaces and press Enter or click the magnifying glass when you're done."
+      "value": "Type the words in the sequence between the commas and press Return or click the magnifying glass when you're done. Example: boy, put, seat belt."
     }
   ],
   "components.magicSearch.label": [
@@ -225,6 +225,30 @@
     {
       "type": 0,
       "value": "Size"
+    }
+  ],
+  "setting.lang.ca.label": [
+    {
+      "type": 0,
+      "value": "Catalan"
+    }
+  ],
+  "setting.lang.en.label": [
+    {
+      "type": 0,
+      "value": "English"
+    }
+  ],
+  "setting.lang.es.label": [
+    {
+      "type": 0,
+      "value": "Spanish"
+    }
+  ],
+  "setting.lang.title": [
+    {
+      "type": 0,
+      "value": "Language"
     }
   ],
   "settings.skins.asian": [

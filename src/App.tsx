@@ -15,11 +15,7 @@ const App = (): JSX.Element => {
         <Route path="create-sequence" element={<EditSequencesPages />} />
         <Route path="view-sequence" element={<ViewSequencePage />} />
       </Routes>
-      <IntlProvider
-        locale={navigator.language}
-        defaultLocale="en"
-        messages={messages_en}
-      >
+      <IntlProvider locale={"en"} defaultLocale="en" messages={messages_en}>
         <Routes>
           <Route path="/en">
             <>
@@ -29,11 +25,7 @@ const App = (): JSX.Element => {
           </Route>
         </Routes>
       </IntlProvider>
-      <IntlProvider
-        locale={navigator.language}
-        defaultLocale="en"
-        messages={messages_es}
-      >
+      <IntlProvider locale={"es"} defaultLocale="es" messages={messages_es}>
         <Routes>
           <Route path="/es">
             <>
@@ -43,11 +35,7 @@ const App = (): JSX.Element => {
           </Route>
         </Routes>
       </IntlProvider>
-      <IntlProvider
-        locale={navigator.language}
-        defaultLocale="en"
-        messages={messages_ca}
-      >
+      <IntlProvider locale={"ca"} defaultLocale="ca" messages={messages_ca}>
         <Routes>
           <Route path="/ca">
             <>

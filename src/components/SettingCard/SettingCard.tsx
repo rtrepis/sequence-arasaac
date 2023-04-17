@@ -1,4 +1,4 @@
-import { Stack, ToggleButton, Tooltip, Typography } from "@mui/material";
+import { Stack, ToggleButton, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch } from "../../app/hooks";
 import {
