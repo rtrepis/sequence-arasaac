@@ -12,7 +12,7 @@ import { IntlProvider } from "react-intl";
 import loadLocalMessages from "./languages/loadLocaleMessages";
 import { BrowserRouter } from "react-router-dom";
 
-const locale = navigator.language;
+const locale = navigator.language.slice(0, 2);
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);

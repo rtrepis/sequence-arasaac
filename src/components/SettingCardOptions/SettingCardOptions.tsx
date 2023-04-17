@@ -12,6 +12,7 @@ import { settingCardOptions } from "./SettingCardOptions.lang";
 import { card } from "./SettingCardOptions.styled";
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import useUserLocation from "../../hooks/useUserLocation";
 
 interface SettingCardProps {
   setting: "languages";
@@ -24,13 +25,7 @@ const SettingCardOptions = ({
 }: SettingCardProps): JSX.Element => {
   const intl = useIntl();
 
-  const pathLocation = window.location.pathname.slice(0, 4);
-  const regexp = new RegExp(/^([/][A-Za-z]{2}[/])/g);
-  const isPathLocation = regexp.test(pathLocation);
-
-  const locale = intl.locale.slice(0, 2).toLocaleLowerCase();
-
-  const initialLang = isPathLocation ? pathLocation.slice(1, 3) : locale;
+  const initialLang = useUserLocation();
   const [lang, setLang] = useState(initialLang);
 
   const settingCard = {
