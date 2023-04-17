@@ -13,6 +13,7 @@ import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { useState } from "react";
 import NotPrint from "../../components/NotPrint/NotPrint";
 import { AiFillPrinter } from "react-icons/ai";
+import { MdScreenRotation } from "react-icons/md";
 import { ViewSettings } from "../../types/ui";
 import { viewSettingsActionCreator } from "../../app/slice/uiSlice";
 import { FormattedMessage } from "react-intl";
@@ -25,12 +26,14 @@ const ViewSequencesSettings = (): JSX.Element => {
   } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
-  const initialState: ViewSettings = {
+  const initialViewState: ViewSettings = {
     sizePict: viewSettings.sizePict,
     columnGap: viewSettings.columnGap,
     rowGap: viewSettings.rowGap,
   };
-  const [view, setView] = useState(initialState);
+  const [view, setView] = useState(initialViewState);
+
+  const [isLandscape, setIsLandscape] = useState(true);
 
   const handlerView = (event: any, value: number | number[]) => {
     const newView: ViewSettings = {
@@ -102,6 +105,15 @@ const ViewSequencesSettings = (): JSX.Element => {
               variant="text"
               color="primary"
               sx={{ fontSize: "2rem" }}
+              onClick={() => setIsLandscape(!isLandscape)}
+            >
+              <MdScreenRotation />
+            </Button>
+            <Button
+              aria-label={"view"}
+              variant="text"
+              color="primary"
+              sx={{ fontSize: "2rem" }}
               onClick={() => window.print()}
             >
               <AiFillPrinter />
@@ -135,15 +147,15 @@ const ViewSequencesSettings = (): JSX.Element => {
         alignItems={"start"}
         columnGap={view.columnGap}
         rowGap={view.rowGap}
-        width={1080}
-        height={750}
+        width={isLandscape ? 1080 : 750}
+        height={isLandscape ? 750 : 1080}
         overflow={"hidden"}
         sx={{
           border: "2px solid green",
           padding: 2,
           marginBottom: 3,
           "@media print": {
-            "@page": { size: "A4 landscape" },
+            "@page": { size: `A4 ${isLandscape ? "landscape" : "portrait"}` },
             border: "none",
           },
         }}
