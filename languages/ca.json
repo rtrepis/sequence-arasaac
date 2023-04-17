@@ -32,7 +32,7 @@
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "Escriviu les paraules de la seqüència entre espais i premeu Intro o feu clic a la lupa quan hàgiu acabat.",
+    "defaultMessage": "Type the words in the sequence between the commas and press Return or click the magnifying glass when you're done. Example: boy, put, seat belt.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
