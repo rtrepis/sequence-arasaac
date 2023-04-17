@@ -7,7 +7,6 @@ import {
 } from "../../types/ui";
 
 const uiInitialState: Ui = {
-  viewPage: false,
   viewSettings: {
     sizePict: 1,
     columnGap: 1,
