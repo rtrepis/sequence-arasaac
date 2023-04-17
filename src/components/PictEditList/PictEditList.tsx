@@ -15,7 +15,7 @@ const PictEditList = ({ sequence }: PictEditModalProps): JSX.Element => {
           xs={false}
           display={"flex"}
           justifyContent={"flex-start"}
-          alignItems={"center"}
+          alignItems={"start"}
           key={`pict${pictogram.indexSequence}`}
         >
           <PictEdit pictogram={pictogram} />

@@ -22,7 +22,7 @@ const MagicSearch = (): JSX.Element => {
 
   const stringToWords = (string: string) => {
     let words = string.split(",", 60);
-    words.map((word, index, words) => words.splice(index, 1, word.trim()));
+    words.forEach((word, index, words) => words.splice(index, 1, word.trim()));
     words = words.filter((word) => word !== " ");
     words = words.filter((word) => word !== "");
     return words;
@@ -33,7 +33,6 @@ const MagicSearch = (): JSX.Element => {
 
     const print = () => {
       getSearchPictogram(words[index], index, false);
-      console.log(words[index]);
 
       index++;
 
