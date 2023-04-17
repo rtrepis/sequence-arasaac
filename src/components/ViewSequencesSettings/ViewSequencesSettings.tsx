@@ -9,9 +9,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import PictogramCard from "../PictogramCard/PictogramCard";
+import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { useState } from "react";
-import NotPrint from "../NotPrint/NotPrint";
+import NotPrint from "../../components/NotPrint/NotPrint";
 import { AiFillPrinter } from "react-icons/ai";
 import { ViewSettings } from "../../types/ui";
 import { viewSettingsActionCreator } from "../../app/slice/uiSlice";
@@ -132,6 +132,7 @@ const ViewSequencesSettings = (): JSX.Element => {
         direction={"row"}
         flexWrap={"wrap"}
         alignContent={"start"}
+        alignItems={"start"}
         columnGap={view.columnGap}
         rowGap={view.rowGap}
         width={1080}
