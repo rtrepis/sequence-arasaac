@@ -6,7 +6,7 @@
 .pnp.js
 
 # languages compliled
-/src/languages/*.json
+src/languages
 
 # testing
 /coverage
