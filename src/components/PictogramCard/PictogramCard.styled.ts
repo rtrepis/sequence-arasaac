@@ -7,7 +7,6 @@ export const pictogram__card = (
   fitzgerald: string | undefined
 ) => {
   const card: SxProps = {
-    alignSelf: "center",
     textAlign: "center",
     paddingInline: borderOut.size === 0 ? 0 : 1.5,
     border: `${borderOut === undefined ? 2 : borderOut.size}px solid`,
