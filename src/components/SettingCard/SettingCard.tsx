@@ -113,16 +113,14 @@ const SettingCard = ({
             selected={selected === key}
             onClick={() => handleSelected(key)}
           >
-            <Tooltip title={intl.formatMessage(value.message)} arrow>
-              <img
-                src={`/img/settings/${setting}/${key}.png`}
-                alt={`${intl.formatMessage({
-                  ...settingCard.message,
-                })} ${intl.formatMessage(value.message)}`}
-                width={40}
-                height={40}
-              />
-            </Tooltip>
+            <img
+              src={`/img/settings/${setting}/${key}.png`}
+              alt={`${intl.formatMessage({
+                ...settingCard.message,
+              })} ${intl.formatMessage(value.message)}`}
+              width={40}
+              height={40}
+            />
           </ToggleButton>
         ))}
       </StyledToggleButtonGroup>
