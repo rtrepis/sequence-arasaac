@@ -7,11 +7,13 @@ describe("Give a component barNavigation", () => {
     test("Then should show title app and expectButton", () => {
       const titleApp = "Sequence - AraSaac";
       const expectButton = "Settings default";
+
       render(
-        <BarNavigation>
+        <BarNavigation title="edit">
           <Typography defaultValue={"lala"} />
         </BarNavigation>
       );
+
       const title = screen.getByRole("heading", { name: titleApp });
       const button = screen.getByRole("button", { name: expectButton });
 

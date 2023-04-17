@@ -1,7 +1,9 @@
 import { Border, Skins, TextPosition } from "./sequence";
 
+export type Langs = "ca" | "en" | "es";
+
 export interface Ui {
-  viewPage: boolean;
+  lang?: Langs;
   viewSettings: ViewSettings;
   defaultSettings: DefaultSettings;
 }

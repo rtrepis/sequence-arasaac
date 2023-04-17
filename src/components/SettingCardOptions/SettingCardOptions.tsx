@@ -1,6 +1,7 @@
 import {
   FormControl,
   InputLabel,
+  Link,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -10,6 +11,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { settingCardOptions } from "./SettingCardOptions.lang";
 import { card } from "./SettingCardOptions.styled";
 import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 interface SettingCardProps {
   setting: "languages";
@@ -22,8 +24,14 @@ const SettingCardOptions = ({
 }: SettingCardProps): JSX.Element => {
   const intl = useIntl();
 
+  const pathLocation = window.location.pathname.slice(0, 4);
+  const regexp = new RegExp(/^([/][A-Za-z]{2}[/])/g);
+  const isPathLocation = regexp.test(pathLocation);
+
   const locale = intl.locale.slice(0, 2).toLocaleLowerCase();
-  const [lang, setLang] = useState(locale);
+
+  const initialLang = isPathLocation ? pathLocation.slice(1, 3) : locale;
+  const [lang, setLang] = useState(initialLang);
 
   const settingCard = {
     messages: settingCardOptions.messages[setting],
@@ -56,7 +64,14 @@ const SettingCardOptions = ({
         >
           {settingCard.types.map(([key, value]) => (
             <MenuItem value={key} key={key}>
-              {intl.formatMessage(value.message)}
+              <Link
+                component={RouterLink}
+                to={`../../${key}/create-sequence`}
+                underline="none"
+                color={"MenuText"}
+              >
+                {intl.formatMessage(value.message)}
+              </Link>
             </MenuItem>
           ))}
         </Select>

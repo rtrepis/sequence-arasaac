@@ -10,6 +10,7 @@ import messages from "../languages/en.json";
 import { uiReducer } from "../app/slice/uiSlice";
 import { Sequence } from "../types/sequence";
 import { Ui } from "../types/ui";
+import { BrowserRouter } from "react-router-dom";
 
 interface WrapperProps {
   children: JSX.Element | JSX.Element[];
@@ -39,7 +40,6 @@ const preloadedState: State = {
     },
   ],
   ui: {
-    viewPage: false,
     viewSettings: {
       sizePict: 1,
       columnGap: 1,
@@ -76,9 +76,11 @@ const render = (
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
-          <IntlProvider locale={"en"} defaultLocale="en" messages={messages}>
-            {children}
-          </IntlProvider>
+          <BrowserRouter>
+            <IntlProvider locale={"en"} defaultLocale="en" messages={messages}>
+              {children}
+            </IntlProvider>
+          </BrowserRouter>
         </ThemeProvider>
       </Provider>
     );
