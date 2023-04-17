@@ -10,15 +10,14 @@ import messages from "./BarNavigation.lang";
 import { Button, Stack } from "@mui/material";
 import NotPrint from "../NotPrint/NotPrint";
 import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
-import { useDispatch } from "react-redux";
-import { viewPageActionCreator } from "../../app/slice/uiSlice";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 
-interface Props {
+interface BarProps {
   children: React.ReactElement;
+  title: "view" | "edit";
 }
 
-const HideOnScroll = (props: Props) => {
+const HideOnScroll = (props: BarProps) => {
   const { children } = props;
 
   const trigger = useScrollTrigger({
@@ -32,16 +31,7 @@ const HideOnScroll = (props: Props) => {
   );
 };
 
-const BarNavigation = (props: Props) => {
-  const dispatch = useDispatch();
-
-  const [view, setView] = useState(false);
-
-  const handlerView = () => {
-    dispatch(viewPageActionCreator(!view));
-    setView(!view);
-  };
-
+const BarNavigation = (props: BarProps) => {
   return (
     <>
       <NotPrint>
@@ -53,38 +43,33 @@ const BarNavigation = (props: Props) => {
               <Typography variant={"h6"} component="h1">
                 <FormattedMessage {...messages.title} />
               </Typography>
-              {view && (
-                <Typography variant={"h5"} component="h2">
-                  <FormattedMessage {...messages.view} />
-                </Typography>
-              )}
-              {!view && (
-                <Typography variant={"h5"} component="h2">
-                  <FormattedMessage {...messages.edit} />
-                </Typography>
-              )}
+              <Typography variant={"h5"} component="h2">
+                <FormattedMessage {...messages[props.title]} />
+              </Typography>
               <Stack direction={"row"}>
-                {!view && (
-                  <Button
-                    aria-label={"view"}
-                    variant="text"
-                    color="secondary"
-                    sx={{ fontSize: "2rem" }}
-                    onClick={handlerView}
-                  >
-                    <AiOutlineEye />
-                  </Button>
+                {props.title === "edit" && (
+                  <Link to={"../view-sequence"}>
+                    <Button
+                      aria-label={"view"}
+                      variant="text"
+                      color="secondary"
+                      sx={{ fontSize: "2rem" }}
+                    >
+                      <AiOutlineEye />
+                    </Button>
+                  </Link>
                 )}
-                {view && (
-                  <Button
-                    aria-label={"edit"}
-                    variant="text"
-                    color="secondary"
-                    sx={{ fontSize: "2rem" }}
-                    onClick={handlerView}
-                  >
-                    <AiOutlineEdit />
-                  </Button>
+                {props.title === "view" && (
+                  <Link to={"../create-sequence"}>
+                    <Button
+                      aria-label={"edit"}
+                      variant="text"
+                      color="secondary"
+                      sx={{ fontSize: "2rem" }}
+                    >
+                      <AiOutlineEdit />
+                    </Button>
+                  </Link>
                 )}
                 <DefaultSettings />
               </Stack>

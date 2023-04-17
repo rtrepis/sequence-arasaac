@@ -10,6 +10,7 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./style/themeMui";
 import { IntlProvider } from "react-intl";
 import loadLocalMessages from "./languages/loadLocaleMessages";
+import { BrowserRouter } from "react-router-dom";
 
 const locale = navigator.language;
 
@@ -24,9 +25,15 @@ const languages = async (locale: string) => {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
-          <IntlProvider locale={locale} defaultLocale="en" messages={messages}>
-            <App />
-          </IntlProvider>
+          <BrowserRouter>
+            <IntlProvider
+              locale={locale}
+              defaultLocale="en"
+              messages={messages}
+            >
+              <App />
+            </IntlProvider>
+          </BrowserRouter>
         </ThemeProvider>
       </Provider>
     </React.StrictMode>
