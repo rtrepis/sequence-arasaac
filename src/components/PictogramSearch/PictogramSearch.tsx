@@ -90,7 +90,7 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
               aria-label={`${intl.formatMessage({
                 ...messages.pictogram,
               })}`}
-              key={pictogram + index}
+              key={`p_${pictogram}_i_${index}`}
               onClick={() => handleUpDatePictNumber(pictogram)}
             >
               <img

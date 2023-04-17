@@ -79,7 +79,7 @@ const PictogramCard = ({
         >
           <Typography variant="body1" component="h3">
             {textPosition === "bottom" && text}
-            {textPosition !== "bottom" && numbered && indexSequence + 1}
+            {textPosition === "top" && numbered && indexSequence + 1}
           </Typography>
         </CardContent>
       )}

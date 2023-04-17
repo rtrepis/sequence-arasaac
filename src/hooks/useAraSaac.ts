@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useCallback } from "react";
-import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   searchedActionCreator,
@@ -13,6 +12,7 @@ import {
   PictApiAraSettings,
   PictSequence,
 } from "../types/sequence";
+import useUserLocation from "./useUserLocation";
 
 const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
 
@@ -26,9 +26,7 @@ const useAraSaac = () => {
   );
 
   const dispatch = useAppDispatch();
-  const intl = useIntl();
-
-  const locale = intl.locale.slice(0, 2).toLocaleLowerCase();
+  const locale = useUserLocation();
 
   const makeSettingsProperty = useCallback(
     async (data: any) => {
