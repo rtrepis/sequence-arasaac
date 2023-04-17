@@ -20,7 +20,7 @@ describe("Give a component Setting Item", () => {
         .filter((skin) => skin !== uiSettingDefaultType)
         .forEach((skin) => {
           const buttonsSkin = screen.getByRole("button", { name: skin });
-          const imageSkin = screen.getByRole("img", { name: skin });
+          const imageSkin = screen.getByRole("img", { name: `Skin ${skin}` });
           const pathImage = imageSkin.getAttribute("src");
 
           fireEvent.click(buttonsSkin);
