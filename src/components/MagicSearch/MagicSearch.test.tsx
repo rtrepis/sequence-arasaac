@@ -12,7 +12,7 @@ describe("Give a component MagicSearch", () => {
       jest.useFakeTimers();
       const expectInput = "Magic Search";
       const expectButton = "To search";
-      const userTyped = "Hello word";
+      const userTyped = "Hello, word";
 
       const expectActions_1 = "Hello";
       const expectActions_2 = "word";
