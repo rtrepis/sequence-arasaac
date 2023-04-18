@@ -5,7 +5,11 @@ import { useIntl } from "react-intl";
 import useAraSaac from "../../hooks/useAraSaac";
 import messages from "./MagicSearch.lang";
 
-const MagicSearch = (): JSX.Element => {
+interface MagicSearchProps {
+  variant?: "navBar";
+}
+
+const MagicSearch = ({ variant }: MagicSearchProps): JSX.Element => {
   const intl = useIntl();
   const { getSearchPictogram } = useAraSaac();
 
@@ -55,7 +59,9 @@ const MagicSearch = (): JSX.Element => {
         label={intl.formatMessage({ ...messages.field })}
         id={"search"}
         variant="outlined"
-        helperText={intl.formatMessage({ ...messages.helperText })}
+        helperText={
+          variant !== "navBar" && intl.formatMessage({ ...messages.helperText })
+        }
         autoComplete={"off"}
         size="small"
         value={phrase}

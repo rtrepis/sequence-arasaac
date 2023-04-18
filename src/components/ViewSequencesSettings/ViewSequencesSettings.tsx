@@ -8,8 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import PictogramCard from "../../components/PictogramCard/PictogramCard";
+import { useAppDispatch } from "../../app/hooks";
 import { useState } from "react";
 import NotPrint from "../../components/NotPrint/NotPrint";
 import { AiFillPrinter } from "react-icons/ai";
@@ -19,19 +18,18 @@ import { viewSettingsActionCreator } from "../../app/slice/uiSlice";
 import { FormattedMessage } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 
-const ViewSequencesSettings = (): JSX.Element => {
-  const {
-    sequence,
-    ui: { viewSettings },
-  } = useAppSelector((state) => state);
-  const dispatch = useAppDispatch();
+interface ViewSequencesSettingsProps {
+  children: JSX.Element | JSX.Element[];
+  view: ViewSettings;
+  setView: React.Dispatch<React.SetStateAction<ViewSettings>>;
+}
 
-  const initialViewState: ViewSettings = {
-    sizePict: viewSettings.sizePict,
-    columnGap: viewSettings.columnGap,
-    rowGap: viewSettings.rowGap,
-  };
-  const [view, setView] = useState(initialViewState);
+const ViewSequencesSettings = ({
+  children,
+  view,
+  setView,
+}: ViewSequencesSettingsProps): JSX.Element => {
+  const dispatch = useAppDispatch();
 
   const [isLandscape, setIsLandscape] = useState(true);
 
@@ -160,14 +158,7 @@ const ViewSequencesSettings = (): JSX.Element => {
           },
         }}
       >
-        {sequence.map((pictogram) => (
-          <PictogramCard
-            pictogram={pictogram}
-            view={"complete"}
-            variant="plane"
-            size={view.sizePict}
-          />
-        ))}
+        {children}
       </Stack>
     </>
   );

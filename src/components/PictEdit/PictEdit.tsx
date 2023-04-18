@@ -18,9 +18,10 @@ import {
 
 interface PictEditProps {
   pictogram: PictSequence;
+  size?: number;
 }
 
-const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
+const PictEdit = ({ pictogram, size }: PictEditProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -47,7 +48,7 @@ const PictEdit = ({ pictogram }: PictEditProps): JSX.Element => {
         onClick={handleClickOpen}
         sx={{ textTransform: "none" }}
       >
-        <PictogramCard view={"complete"} pictogram={pictogram} />
+        <PictogramCard view={"complete"} pictogram={pictogram} size={size} />
       </Button>
 
       <Dialog
