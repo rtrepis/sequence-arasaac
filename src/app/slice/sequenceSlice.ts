@@ -91,6 +91,18 @@ const sequenceSlice = createSlice({
       );
     },
 
+    fontSize: (
+      previousSequence,
+      action: PayloadAction<PictSequenceForEdit>
+    ) => {
+      previousSequence.map(
+        (pictogram, index) =>
+          index === action.payload.indexSequence &&
+          action.payload.fontSize &&
+          (pictogram.settings.fontSize = action.payload.fontSize)
+      );
+    },
+
     borderIn: (
       previousSequence,
       action: PayloadAction<PictSequenceForEdit>
@@ -158,6 +170,15 @@ const sequenceSlice = createSlice({
           (pictogram.settings.borderOut = action.payload.borderOut!)
       );
     },
+
+    fontSizeApplyAll: (
+      previousSequence,
+      action: PayloadAction<PictSequenceApplyAll>
+    ) => {
+      previousSequence.map(
+        (pictogram) => (pictogram.settings.fontSize = action.payload.fontSize!)
+      );
+    },
   },
 });
 
@@ -173,6 +194,7 @@ export const {
   selectedId: selectedIdActionCreator,
   searched: searchedActionCreator,
   textPosition: textPositionActionCreator,
+  fontSize: fontSizeActionCreator,
   borderIn: borderInActionCreator,
   borderOut: borderOutActionCreator,
   skin: skinActionCreator,
@@ -180,6 +202,7 @@ export const {
   textPositionApplyAll: textPositionApplyAllActionCreator,
   borderInApplyAll: borderInApplyAllActionCreator,
   borderOutApplyAll: borderOutApplyAllActionCreator,
+  fontSizeApplyAll: fontSizeApplyAllActionCreator,
   settingsPictApiAra: settingsPictApiAraActionCreator,
   settingsPictSequence: settingsPictSequenceActionCreator,
 } = sequenceSlice.actions;

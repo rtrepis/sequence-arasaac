@@ -26,6 +26,7 @@ interface DefaultSettingsPictAra {
 export interface DefaultSettingsPictSequence {
   numbered: boolean;
   textPosition: TextPosition;
+  fontSize: number;
   borderOut: Border;
   borderIn: Border;
 }
