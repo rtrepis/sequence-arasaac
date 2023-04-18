@@ -7,14 +7,15 @@ import Slide from "@mui/material/Slide";
 import DefaultSettings from "../DefaultSettings/DefaultSettings";
 import { FormattedMessage } from "react-intl";
 import messages from "./BarNavigation.lang";
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import NotPrint from "../NotPrint/NotPrint";
-import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import ToggleButtonEditViewPages from "../ToggleButtonEditViewPages/ToggleButtonEditViewPages";
+import PictogramAmount from "../PictogramAmount/PictogramAmount";
+import MagicSearch from "../MagicSearch/MagicSearch";
 
 interface BarProps {
   children: React.ReactElement;
-  title: "view" | "edit";
+  title?: "view" | "edit";
 }
 
 const HideOnScroll = (props: BarProps) => {
@@ -31,7 +32,7 @@ const HideOnScroll = (props: BarProps) => {
   );
 };
 
-const BarNavigation = (props: BarProps) => {
+const BarNavigation = (props: BarProps): JSX.Element => {
   return (
     <>
       <NotPrint>
@@ -44,32 +45,17 @@ const BarNavigation = (props: BarProps) => {
                 <FormattedMessage {...messages.title} />
               </Typography>
               <Typography variant={"h5"} component="h2">
-                <FormattedMessage {...messages[props.title]} />
+                {props.title && <FormattedMessage {...messages[props.title]} />}
               </Typography>
               <Stack direction={"row"}>
-                {props.title === "edit" && (
-                  <Link to={"../view-sequence"}>
-                    <Button
-                      aria-label={"view"}
-                      variant="text"
-                      color="secondary"
-                      sx={{ fontSize: "2rem" }}
-                    >
-                      <AiOutlineEye />
-                    </Button>
-                  </Link>
+                {props.title && (
+                  <ToggleButtonEditViewPages pageTitle={props.title} />
                 )}
-                {props.title === "view" && (
-                  <Link to={"../create-sequence"}>
-                    <Button
-                      aria-label={"edit"}
-                      variant="text"
-                      color="secondary"
-                      sx={{ fontSize: "2rem" }}
-                    >
-                      <AiOutlineEdit />
-                    </Button>
-                  </Link>
+                {!props.title && (
+                  <Stack display={{ xs: "none", lg: "flex" }} direction={"row"}>
+                    <PictogramAmount variant="navBar" />
+                    <MagicSearch variant="navBar" />
+                  </Stack>
                 )}
                 <DefaultSettings />
               </Stack>
