@@ -9,6 +9,7 @@ export interface PictSequence {
 export interface PictSequenceSettings {
   numbered?: boolean;
   textPosition?: TextPosition;
+  fontSize?: number;
   borderOut?: Border;
   borderIn?: Border;
 }

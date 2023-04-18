@@ -44,6 +44,7 @@ const PictogramAmount = ({ variant }: PictogramAmountProps): JSX.Element => {
     },
     settings: {
       textPosition: pictSequenceDefault.textPosition,
+      fontSize: pictSequenceDefault.fontSize,
     },
   };
 

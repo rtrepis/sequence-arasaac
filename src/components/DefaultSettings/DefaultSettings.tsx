@@ -17,6 +17,7 @@ import { Container } from "@mui/system";
 import SettingCardBorder from "../SettingCardBorder/SettingCardBorder";
 import SettingCardBoolean from "../SettingCardBoolean/SettingCardBoolean";
 import SettingCardOptions from "../SettingCardOptions/SettingCardOptions";
+import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -92,6 +93,10 @@ const DefaultSettings = (): JSX.Element => {
               <SettingCard
                 setting={"textPosition"}
                 selected={defaultSetting.pictSequence.textPosition}
+              />
+              <SettingCardNumber
+                setting="fontSize"
+                selected={defaultSetting.pictSequence.fontSize}
               />
               <SettingCardBorder
                 border="borderOut"

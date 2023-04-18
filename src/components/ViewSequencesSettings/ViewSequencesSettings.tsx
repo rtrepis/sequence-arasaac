@@ -78,7 +78,7 @@ const ViewSequencesSettings = ({
                 <Slider
                   name="columnGap"
                   step={0.5}
-                  min={0}
+                  min={-2}
                   max={10}
                   value={view.columnGap}
                   onChange={handlerView}

@@ -21,7 +21,7 @@ const PictogramCard = ({
       settings: { skin, fitzgerald },
       searched: { word: text },
     },
-    settings: { textPosition },
+    settings: { textPosition, fontSize },
   },
   view,
   variant,
@@ -32,6 +32,8 @@ const PictogramCard = ({
   );
   const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
   const intl = useIntl();
+
+  const textFontSize = size ? size * 20 * fontSize! : 20 * fontSize!;
 
   return (
     <Card
@@ -49,7 +51,7 @@ const PictogramCard = ({
             },
           }}
         >
-          <Typography variant="body1" component="h3">
+          <Typography fontSize={textFontSize} component="h3">
             {textPosition !== "top" && numbered && indexSequence + 1}
             {textPosition === "top" && text}
           </Typography>
@@ -78,7 +80,7 @@ const PictogramCard = ({
             },
           }}
         >
-          <Typography variant="body1" component="h3">
+          <Typography fontSize={textFontSize} component="h3">
             {textPosition === "bottom" && text}
             {textPosition === "top" && numbered && indexSequence + 1}
           </Typography>
