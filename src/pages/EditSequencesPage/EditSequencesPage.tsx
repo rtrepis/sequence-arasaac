@@ -5,7 +5,7 @@ import PictEditList from "../../components/PictEditList/PictEditList";
 import { useAppSelector } from "../../app/hooks";
 import BarNavigation from "../../components/BarNavigation/BarNavigation";
 
-const EditSequencesPages = (): JSX.Element => {
+const EditSequencesPage = (): JSX.Element => {
   const sequence = useAppSelector((state) => state.sequence);
 
   return (
@@ -26,4 +26,4 @@ const EditSequencesPages = (): JSX.Element => {
   );
 };
 
-export default EditSequencesPages;
+export default EditSequencesPage;

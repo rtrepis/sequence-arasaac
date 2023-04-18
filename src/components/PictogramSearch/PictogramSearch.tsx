@@ -110,7 +110,7 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
               />
             </ToggleButton>
           ))}
-        {!isPlus && (
+        {!isPlus && bestIdPicts.length > 0 && (
           <ToggleButton
             value={"plus"}
             aria-label={`${intl.formatMessage({
@@ -118,7 +118,6 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
             })}`}
             key={`plus`}
             onClick={() => handelPlusAction(true)}
-            sx={{ width: 30, height: 30 }}
           >
             <img
               src={"../img/settings/+.png"}

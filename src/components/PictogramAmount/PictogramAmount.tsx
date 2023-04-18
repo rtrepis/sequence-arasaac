@@ -4,6 +4,7 @@ import {
   FormLabel,
   IconButton,
   Input,
+  Typography,
 } from "@mui/material";
 import {
   addPictogramActionCreator,
@@ -17,7 +18,11 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import messages from "./PictogramAmount.lang";
 import { preloadedState } from "../../utils/test-utils";
 
-const PictogramAmount = (): JSX.Element => {
+interface PictogramAmountProps {
+  variant?: "navBar";
+}
+
+const PictogramAmount = ({ variant }: PictogramAmountProps): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const amountSequence = useAppSelector((state) => state.sequence.length);
@@ -52,11 +57,13 @@ const PictogramAmount = (): JSX.Element => {
     <FormControl sx={{ minWidth: 240 }}>
       <Stack direction={"row"} alignItems={"center"}>
         <FormLabel htmlFor="amount">
-          <FormattedMessage {...messages.amount} />
+          <Typography color={variant && "primary.contrastText"}>
+            <FormattedMessage {...messages.amount} />
+          </Typography>
         </FormLabel>
 
         <IconButton
-          color="primary"
+          color={variant ? "secondary" : "primary"}
           aria-label={intl.formatMessage({ ...messages.add })}
           onClick={() => handleChangesAmount(-1)}
           disabled={amountSequence <= 0 ? true : false}
@@ -66,14 +73,15 @@ const PictogramAmount = (): JSX.Element => {
 
         <Input
           id={"amount"}
-          color="primary"
           value={amountSequence.toString()}
           disabled
-          sx={{ width: 50, input: { textAlign: "center" } }}
-        ></Input>
-
+          sx={{
+            width: 50,
+            input: { textAlign: "center" },
+          }}
+        />
         <IconButton
-          color="primary"
+          color={variant ? "secondary" : "primary"}
           aria-label={intl.formatMessage({
             ...messages.subtract,
           })}
@@ -83,9 +91,11 @@ const PictogramAmount = (): JSX.Element => {
         </IconButton>
       </Stack>
 
-      <FormHelperText sx={{ margin: "0" }}>
-        <FormattedMessage {...messages.helperText} />
-      </FormHelperText>
+      {variant !== "navBar" && (
+        <FormHelperText sx={{ margin: "0" }}>
+          <FormattedMessage {...messages.helperText} />
+        </FormHelperText>
+      )}
     </FormControl>
   );
 };
