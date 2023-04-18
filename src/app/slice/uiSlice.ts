@@ -17,6 +17,7 @@ const uiInitialState: Ui = {
     pictSequence: {
       numbered: false,
       textPosition: "bottom",
+      fontSize: 1,
       borderIn: { color: "fitzgerald", radius: 20, size: 2 },
       borderOut: { color: "#999", radius: 20, size: 2 },
     },

@@ -4,6 +4,7 @@ import { PictApiAraSettings, PictSequenceSettings } from "../../types/sequence";
 import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import SettingCard from "../SettingCard/SettingCard";
 import messages from "./PictEditSettings.lang";
+import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
 
 interface PictEditSettingsProps {
   indexPict: number;
@@ -27,6 +28,15 @@ const PictEditSettings = ({
               setting="textPosition"
               indexPict={indexPict}
               selected={pictSequenceSettings.textPosition}
+            />
+          </li>
+        )}
+        {pictSequenceSettings.fontSize && (
+          <li>
+            <SettingCardNumber
+              setting="fontSize"
+              indexPict={indexPict}
+              selected={pictSequenceSettings.fontSize}
             />
           </li>
         )}
