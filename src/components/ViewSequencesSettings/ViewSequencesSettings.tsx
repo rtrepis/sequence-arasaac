@@ -17,6 +17,7 @@ import { ViewSettings } from "../../types/ui";
 import { viewSettingsActionCreator } from "../../app/slice/uiSlice";
 import { FormattedMessage } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
+import { tab } from "./ViewSequenceSettings.styled";
 
 interface ViewSequencesSettingsProps {
   children: JSX.Element | JSX.Element[];
@@ -122,19 +123,7 @@ const ViewSequencesSettings = ({
           variant="inset"
           sx={{ marginBlock: 2, marginInlineStart: 0 }}
         />
-        <Box
-          sx={{
-            display: "flex",
-            width: 100,
-            height: 40,
-            backgroundColor: "green",
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <Box sx={tab}>
           <Typography color={"primary.contrastText"}>A4</Typography>
         </Box>
       </NotPrint>
