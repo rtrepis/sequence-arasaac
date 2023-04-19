@@ -11,12 +11,6 @@ export const cardTitle: SxProps = {
   fontWeight: "bold",
 };
 
-export const cardContent: SxProps = {
-  marginBlockStart: { xs: 0.1 },
-  paddingInlineStart: 1,
-  flexWrap: { xs: "wrap", sm: "nowrap" },
-};
-
 export const cardAction: SxProps = {
   maxHeight: 40,
   lineHeight: 1.25,
