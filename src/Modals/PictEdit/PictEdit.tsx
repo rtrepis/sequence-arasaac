@@ -2,10 +2,8 @@ import Typography from "@mui/material/Typography";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { Stack } from "@mui/system";
-import PictogramCard from "../PictogramCard/PictogramCard";
+import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { PictSequence } from "../../types/sequence";
-import PictogramSearch from "../PictogramSearch/PictogramSearch";
-import PictEditSettings from "../PictEditSettings/PictEditSettings";
 import { useState } from "react";
 import messages from "./PictEdti.lang";
 import { circlePictogramNumber } from "./PictEdit.styled";
@@ -15,6 +13,7 @@ import {
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
 } from "../../app/slice/sequenceSlice";
+import PictEditForm from "../../components/PictEditFrom/PictEditForm";
 
 interface PictEditProps {
   pictogram: PictSequence;
@@ -77,27 +76,7 @@ const PictEdit = ({ pictogram, size }: PictEditProps): JSX.Element => {
         </Stack>
 
         <DialogContent dividers={true} sx={{ padding: 2 }}>
-          <Stack
-            display={"flex"}
-            justifyContent={"space-between"}
-            alignItems={"start"}
-            direction={{ xs: "column", sm: "row" }}
-            spacing={{ xs: 3, sm: 2 }}
-          >
-            <PictogramCard
-              pictogram={pictogram}
-              variant="plane"
-              view="complete"
-            />
-
-            <PictogramSearch indexPict={pictogram.indexSequence} />
-          </Stack>
-
-          <PictEditSettings
-            indexPict={pictogram.indexSequence}
-            pictSequenceSettings={pictogram.settings}
-            pictApiAraSettings={pictogram.img.settings}
-          />
+          <PictEditForm pictogram={pictogram} />
         </DialogContent>
 
         <DialogActions
