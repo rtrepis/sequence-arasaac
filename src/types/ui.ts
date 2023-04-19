@@ -14,7 +14,7 @@ export interface ViewSettings {
   rowGap: number;
 }
 
-interface DefaultSettings {
+export interface DefaultSettings {
   pictSequence: DefaultSettingsPictSequence;
   pictApiAra: DefaultSettingsPictAra;
 }

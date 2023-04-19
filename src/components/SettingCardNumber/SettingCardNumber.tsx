@@ -3,13 +3,8 @@ import { useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
 import { updateDefaultSettingPictSequenceActionCreator } from "../../app/slice/uiSlice";
 import StyledButton from "../../style/StyledButton";
-import { FormattedMessage, useIntl } from "react-intl";
-import {
-  cardAction,
-  card,
-  cardContent,
-  cardTitle,
-} from "./SettingCardNumber.styled";
+import { FormattedMessage } from "react-intl";
+import { cardAction, card, cardTitle } from "./SettingCardNumber.styled";
 import {
   fontSizeActionCreator,
   fontSizeApplyAllActionCreator,
@@ -69,7 +64,7 @@ const SettingCardNumber = ({
       sx={card}
     >
       <Typography variant="body1" sx={cardTitle} component="h2">
-        {setting}
+        <FormattedMessage {...messages.fontSize} />
       </Typography>
       <Slider
         defaultValue={selected}
@@ -81,7 +76,7 @@ const SettingCardNumber = ({
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
-        sx={{ width: 50 }}
+        sx={{ width: 100 }}
       />
       <StyledButton
         variant="outlined"

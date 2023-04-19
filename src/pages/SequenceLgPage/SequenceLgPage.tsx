@@ -3,7 +3,7 @@ import { useAppSelector } from "../../app/hooks";
 import BarNavigation from "../../components/BarNavigation/BarNavigation";
 import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSequencesSettings";
 import { ViewSettings } from "../../types/ui";
-import PictEdit from "../../components/PictEdit/PictEdit";
+import PictEdit from "../../Modals/PictEdit/PictEdit";
 
 const SequenceLgPages = (): JSX.Element => {
   const {

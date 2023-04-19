@@ -72,6 +72,7 @@ const PictogramCard = ({
         <CardContent
           sx={{
             width: size ? size * 150 : 150,
+            paddingInline: 0,
             ":last-child": {
               paddingBlock:
                 textPosition !== "bottom" && !numbered && borderOut.size === 0
