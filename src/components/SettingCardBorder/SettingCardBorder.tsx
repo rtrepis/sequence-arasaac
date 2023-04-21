@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
-import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
+import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import { Border } from "../../types/sequence";
 import {
   card,
