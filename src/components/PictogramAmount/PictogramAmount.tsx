@@ -40,7 +40,7 @@ const PictogramAmount = ({ variant }: PictogramAmountProps): JSX.Element => {
         bestIdPicts: [],
       },
       selectedId: 26527,
-      settings: { fitzgerald: "#22f" },
+      settings: { fitzgerald: "#2222ff" },
     },
     settings: {
       textPosition: pictSequenceDefault.textPosition,

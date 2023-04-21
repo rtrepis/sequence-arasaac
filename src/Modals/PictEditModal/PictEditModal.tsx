@@ -6,7 +6,7 @@ import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { PictSequence } from "../../types/sequence";
 import { useState } from "react";
 import messages from "./PictEdti.lang";
-import { circlePictogramNumber } from "./PictEdit.styled";
+import { circlePictogramNumber } from "./PictEditModal.styled";
 import StyledButton from "../../style/StyledButton";
 import { useAppDispatch } from "../../app/hooks";
 import {
@@ -20,7 +20,7 @@ interface PictEditProps {
   size?: number;
 }
 
-const PictEdit = ({ pictogram, size }: PictEditProps): JSX.Element => {
+const PictEditModal = ({ pictogram, size }: PictEditProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -76,7 +76,7 @@ const PictEdit = ({ pictogram, size }: PictEditProps): JSX.Element => {
         </Stack>
 
         <DialogContent dividers={true} sx={{ padding: 2 }}>
-          <PictEditForm pictogram={pictogram} />
+          <PictEditForm pictogram={pictogram} submit={open} />
         </DialogContent>
 
         <DialogActions
@@ -98,4 +98,4 @@ const PictEdit = ({ pictogram, size }: PictEditProps): JSX.Element => {
   );
 };
 
-export default PictEdit;
+export default PictEditModal;

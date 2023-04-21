@@ -5,7 +5,7 @@ import {
   render,
   screen,
 } from "../../utils/test-utils";
-import PictEdit from "./PictEdit";
+import PictEditModal from "./PictEditModal";
 
 const mockSequence = preloadedState.sequence[0];
 
@@ -37,7 +37,7 @@ describe("Give a component PictEdit", () => {
         mockPict.img.searched.word
       }`;
 
-      render(<PictEdit pictogram={mockPict} />, {
+      render(<PictEditModal pictogram={mockPict} />, {
         preloadedState: preloadedState,
       });
 
@@ -60,7 +60,7 @@ describe("Give a component PictEdit", () => {
         mockPict.img.searched.word
       }`;
 
-      render(<PictEdit pictogram={mockPict} />, {
+      render(<PictEditModal pictogram={mockPict} />, {
         preloadedState: preloadedState,
       });
 
@@ -85,7 +85,7 @@ describe("Give a component PictEdit", () => {
         { payload: undefined, type: "sequence/renumberSequence" },
       ];
 
-      render(<PictEdit pictogram={mockPict} />, {
+      render(<PictEditModal pictogram={mockPict} />, {
         preloadedState: preloadedState,
       });
 

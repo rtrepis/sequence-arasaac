@@ -1,12 +1,12 @@
 import { Grid } from "@mui/material";
 import { Sequence } from "../../types/sequence";
-import PictEdit from "../PictEdit/PictEdit";
+import PictEditModal from "../PictEditModal/PictEditModal";
 
 interface PictEditModalProps {
   sequence: Sequence;
 }
 
-const PictEditList = ({ sequence }: PictEditModalProps): JSX.Element => {
+const PictEditModalList = ({ sequence }: PictEditModalProps): JSX.Element => {
   return (
     <Grid container sx={{ marginBlockStart: 2 }}>
       {sequence.map((pictogram, index) => (
@@ -18,11 +18,11 @@ const PictEditList = ({ sequence }: PictEditModalProps): JSX.Element => {
           alignItems={"start"}
           key={`pict${pictogram.indexSequence}`}
         >
-          <PictEdit pictogram={pictogram} />
+          <PictEditModal pictogram={pictogram} />
         </Grid>
       ))}
     </Grid>
   );
 };
 
-export default PictEditList;
+export default PictEditModalList;

@@ -3,7 +3,7 @@ import { useAppSelector } from "../../app/hooks";
 import BarNavigation from "../../components/BarNavigation/BarNavigation";
 import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSequencesSettings";
 import { ViewSettings } from "../../types/ui";
-import PictEdit from "../../Modals/PictEdit/PictEdit";
+import PictEditModal from "../../Modals/PictEditModal/PictEditModal";
 
 const SequenceLgPages = (): JSX.Element => {
   const {
@@ -22,7 +22,7 @@ const SequenceLgPages = (): JSX.Element => {
     <BarNavigation>
       <ViewSequencesSettings view={view} setView={setView}>
         {sequence.map((pictogram) => (
-          <PictEdit pictogram={pictogram} size={view.sizePict} />
+          <PictEditModal pictogram={pictogram} size={view.sizePict} />
         ))}
       </ViewSequencesSettings>
     </BarNavigation>
