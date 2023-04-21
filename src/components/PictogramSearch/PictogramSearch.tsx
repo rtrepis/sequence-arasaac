@@ -9,22 +9,25 @@ import {
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectedIdActionCreator } from "../../app/slice/sequenceSlice";
 import useAraSaac from "../../hooks/useAraSaac";
-import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
-import { PictApiAraForEdit } from "../../types/sequence";
+import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import messages from "./PictogramSearch.lang";
+import { useAppSelector } from "../../app/hooks";
 interface PropsPictogramSearch {
   indexPict: number;
+  state: number;
+  setState: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
+const PictogramSearch = ({
+  indexPict,
+  state,
+  setState,
+}: PropsPictogramSearch): JSX.Element => {
   const {
     settings: { skin },
     searched: { word, bestIdPicts },
   } = useAppSelector((state) => state.sequence[indexPict].img);
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const {
     getSearchPictogram,
@@ -41,12 +44,7 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
   };
 
   const handleUpDatePictNumber = (upDatePictNumber: number) => {
-    const upDatePictNum: PictApiAraForEdit = {
-      indexSequence: indexPict,
-      selectedId: upDatePictNumber,
-    };
-    dispatch(selectedIdActionCreator(upDatePictNum));
-
+    setState(upDatePictNumber);
     getSettingsPictId(upDatePictNumber, indexPict);
   };
 
@@ -99,6 +97,7 @@ const PictogramSearch = ({ indexPict }: PropsPictogramSearch): JSX.Element => {
               })}`}
               key={`p_${pictogram}_i_${index}`}
               onClick={() => handleUpDatePictNumber(pictogram)}
+              selected={pictogram === state}
             >
               <img
                 src={toUrlPathApiAraSaac(pictogram, skin)}
