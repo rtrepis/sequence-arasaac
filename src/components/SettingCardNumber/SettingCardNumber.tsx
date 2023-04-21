@@ -1,46 +1,26 @@
 import { Slider, Stack, Typography } from "@mui/material";
-import { useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
-import { updateDefaultSettingPictSequenceActionCreator } from "../../app/slice/uiSlice";
 import StyledButton from "../../style/StyledButton";
 import { FormattedMessage } from "react-intl";
 import { cardAction, card, cardTitle } from "./SettingCardNumber.styled";
-import {
-  fontSizeActionCreator,
-  fontSizeApplyAllActionCreator,
-} from "../../app/slice/sequenceSlice";
+import { fontSizeApplyAllActionCreator } from "../../app/slice/sequenceSlice";
 import { messages } from "./SettingCardNumber.lang";
 
 interface SettingCardProps {
-  indexPict?: number;
   setting: "fontSize";
-  selected: number;
   state: number;
   setState: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const SettingCardNumber = ({
-  indexPict,
   setting,
-  selected,
   state,
   setState,
 }: SettingCardProps): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  const initialValue: number = selected;
-  const [value, setValue] = useState(initialValue);
-
   const handleChange = (event: any, value: number | number[]) => {
     setState(value as number);
-  };
-
-  const handleBlur = () => {
-    if (indexPict === undefined) {
-      dispatch(
-        updateDefaultSettingPictSequenceActionCreator({ fontSize: value })
-      );
-    }
   };
 
   const handleApplyAll = (toUpdate: number) => {
@@ -61,10 +41,10 @@ const SettingCardNumber = ({
       sx={card}
     >
       <Typography variant="body1" sx={cardTitle} component="h2">
-        <FormattedMessage {...messages.fontSize} />
+        <FormattedMessage {...messages[setting]} />
       </Typography>
       <Slider
-        defaultValue={selected}
+        defaultValue={state}
         aria-label={"labelName"}
         valueLabelDisplay="auto"
         max={2}
@@ -77,7 +57,7 @@ const SettingCardNumber = ({
       <StyledButton
         variant="outlined"
         sx={cardAction}
-        onClick={() => handleApplyAll(value)}
+        onClick={() => handleApplyAll(state)}
       >
         <FormattedMessage {...messages.applyAll} />
       </StyledButton>

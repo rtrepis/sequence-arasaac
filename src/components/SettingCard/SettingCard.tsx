@@ -2,15 +2,9 @@ import { Stack, ToggleButton, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch } from "../../app/hooks";
 import {
-  skinActionCreator,
   skinApplyAllActionCreator,
-  textPositionActionCreator,
   textPositionApplyAllActionCreator,
 } from "../../app/slice/sequenceSlice";
-import {
-  updateDefaultSettingPictApiAraActionCreator,
-  updateDefaultSettingPictSequenceActionCreator,
-} from "../../app/slice/uiSlice";
 import StyledButton from "../../style/StyledButton";
 import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
 import { Skins, TextPosition } from "../../types/sequence";
@@ -18,15 +12,15 @@ import { messages, settingsCardLang } from "./SettingCard.lang";
 import { cardAction, card, cardContent, cardTitle } from "./SettingCard.styled";
 
 interface SettingCardProps {
-  indexPict?: number;
   setting: "skin" | "textPosition";
-  selected: string;
+  state: string;
+  setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const SettingCard = ({
-  indexPict,
   setting,
-  selected,
+  setState,
+  state,
 }: SettingCardProps): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -37,39 +31,7 @@ const SettingCard = ({
   };
 
   const handleSelected = (toUpdate: string) => {
-    if (indexPict !== undefined) {
-      setting === "textPosition" &&
-        dispatch(
-          textPositionActionCreator({
-            indexSequence: indexPict,
-            textPosition: toUpdate as TextPosition,
-          })
-        );
-
-      setting === "skin" &&
-        dispatch(
-          skinActionCreator({
-            indexSequence: indexPict,
-            settings: { skin: toUpdate as Skins },
-          })
-        );
-    }
-
-    if (indexPict === undefined) {
-      setting === "textPosition" &&
-        dispatch(
-          updateDefaultSettingPictSequenceActionCreator({
-            textPosition: toUpdate as TextPosition,
-          })
-        );
-
-      setting === "skin" &&
-        dispatch(
-          updateDefaultSettingPictApiAraActionCreator({
-            skin: toUpdate as Skins,
-          })
-        );
-    }
+    setState(toUpdate);
   };
 
   const handleApplyAll = (toUpdate: string) => {
@@ -110,7 +72,7 @@ const SettingCard = ({
             value={key}
             aria-label={intl.formatMessage(value.message)}
             key={key}
-            selected={selected === key}
+            selected={state === key}
             onClick={() => handleSelected(key)}
           >
             <img
@@ -128,7 +90,7 @@ const SettingCard = ({
       <StyledButton
         variant="outlined"
         sx={cardAction}
-        onClick={() => handleApplyAll(selected)}
+        onClick={() => handleApplyAll(state)}
       >
         <FormattedMessage {...messages.applyAll} />
       </StyledButton>
