@@ -26,26 +26,4 @@ describe("Give a component Setting default card list", () => {
       expect(buttonClose).toBeInTheDocument();
     });
   });
-
-  describe("When open settings and user click type setting", () => {
-    test("Then should call dispatch with action update setting", () => {
-      const expectButton = "Black";
-      const actionCreator = {
-        payload: { skin: "black" },
-        type: "uiState/updateDefaultSettingPictApiAra",
-      };
-
-      render(<DefaultSettings />);
-
-      const buttonOpen = screen.getByRole("button", {
-        name: "Settings default",
-      });
-      fireEvent.click(buttonOpen);
-
-      const button = screen.getByRole("button", { name: expectButton });
-      fireEvent.click(button);
-
-      expect(mockDispatch).toBeCalledWith(actionCreator);
-    });
-  });
 });

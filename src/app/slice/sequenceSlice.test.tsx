@@ -271,42 +271,4 @@ describe("Given the reducer sequenceSlice", () => {
       expect(newState).toStrictEqual(expectState);
     });
   });
-
-  describe("When called 'upDateSettingsPictApiAra' with UpdateSettingsPictSequence", () => {
-    test("Then should new state with update PictSettingPictApiAra", () => {
-      const toUpDatePictSettings: SequenceForEdit = {
-        indexSequence: 0,
-        settings: {
-          textPosition: "top",
-        },
-      };
-      previousSequence = [
-        {
-          ...preloadedState.sequence[0],
-          indexSequence: 0,
-          settings: {
-            ...preloadedState.sequence[0].settings,
-            textPosition: "bottom",
-          },
-        },
-      ];
-
-      const expectState: PictSequence[] = [
-        {
-          ...previousSequence[0],
-          indexSequence: 0,
-          settings: {
-            ...preloadedState.sequence[0].settings,
-            textPosition: "top",
-          },
-        },
-      ];
-
-      const actionCreator =
-        settingsPictSequenceActionCreator(toUpDatePictSettings);
-      const newState = sequenceReducer(previousSequence, actionCreator);
-
-      expect(newState).toStrictEqual(expectState);
-    });
-  });
 });
