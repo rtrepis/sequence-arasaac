@@ -14,12 +14,12 @@ const uiInitialState: Ui = {
     rowGap: 1,
   },
   defaultSettings: {
-    pictApiAra: { skin: "white", fitzgerald: "#666666" },
+    pictApiAra: { skin: "white", fitzgerald: "#666666", hair: "brown" },
     pictSequence: {
       numbered: false,
       textPosition: "bottom",
       fontSize: 1,
-      borderIn: { color: "#999999", radius: 20, size: 2 },
+      borderIn: { color: "fitzgerald", radius: 20, size: 2 },
       borderOut: { color: "#999999", radius: 20, size: 2 },
     },
   },

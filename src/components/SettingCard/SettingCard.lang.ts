@@ -13,6 +13,11 @@ export const settingsCardLang: SettingsCardLang = {
       defaultMessage: "Text Position",
       description: "Setting Text Position label",
     }),
+    hair: defineMessage({
+      id: "settings.hair.label",
+      defaultMessage: "Hair",
+      description: "Setting Hair label",
+    }),
   },
   skin: {
     asian: {
@@ -75,8 +80,58 @@ export const settingsCardLang: SettingsCardLang = {
       }),
     },
   },
+  hair: {
+    black: {
+      message: defineMessage({
+        id: "settings.hair.black",
+        defaultMessage: "Black",
+        description: "Type of setting text position",
+      }),
+    },
+    blonde: {
+      message: defineMessage({
+        id: "settings.hair.blonde",
+        defaultMessage: "Blonde",
+        description: "Type of setting text position",
+      }),
+    },
+    brown: {
+      message: defineMessage({
+        id: "settings.hair.brown",
+        defaultMessage: "Brown",
+        description: "Type of setting text position",
+      }),
+    },
+    darkBrown: {
+      message: defineMessage({
+        id: "settings.hair.darkBrown",
+        defaultMessage: "Dark Brown",
+        description: "Type of setting text position",
+      }),
+    },
+    darkGray: {
+      message: defineMessage({
+        id: "settings.hair.darkGray",
+        defaultMessage: "Dark Gray",
+        description: "Type of setting text position",
+      }),
+    },
+    gray: {
+      message: defineMessage({
+        id: "settings.hair.gray",
+        defaultMessage: "Gray",
+        description: "Type of setting text position",
+      }),
+    },
+    red: {
+      message: defineMessage({
+        id: "settings.hair.red",
+        defaultMessage: "Red",
+        description: "Type of setting text position",
+      }),
+    },
+  },
 };
-
 export const messages = defineMessages({
   default: {
     id: "components.settingCard.default.label",
