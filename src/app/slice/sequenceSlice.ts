@@ -3,8 +3,7 @@ import {
   PictSequence,
   Sequence,
   PictSequenceApplyAll,
-  SequenceForEdit,
-  PictSequenceForEdit,
+  PictSequenceSettingsForEdit,
   PictApiAraForEdit,
   PictApiAraSettingsApplyAll,
 } from "../../types/sequence";
@@ -24,6 +23,7 @@ const sequenceSlice = createSlice({
       previousSequence.filter(
         (pictogram) => pictogram.indexSequence !== action.payload
       ),
+
     subtractLastPict: (previousSequence) => [...previousSequence.slice(0, -1)],
 
     addSequence: (previousSequence, action: PayloadAction<Sequence>) =>
@@ -57,6 +57,15 @@ const sequenceSlice = createSlice({
       );
     },
 
+    updatePictSequence: (
+      previousSequence,
+      action: PayloadAction<PictSequence>
+    ) => {
+      return previousSequence.map((pictogram, index) =>
+        index === action.payload.indexSequence ? action.payload : pictogram
+      );
+    },
+
     settingsPictApiAra: (
       previousSequence,
       action: PayloadAction<PictApiAraForEdit>
@@ -70,42 +79,40 @@ const sequenceSlice = createSlice({
 
     settingsPictSequence: (
       previousSequence,
-      action: PayloadAction<SequenceForEdit>
+      action: PayloadAction<PictSequenceSettingsForEdit>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          (pictogram.settings = action.payload.settings!)
+          (pictogram.settings = action.payload)
       );
     },
 
     textPosition: (
       previousSequence,
-      action: PayloadAction<PictSequenceForEdit>
+      action: PayloadAction<PictSequenceSettingsForEdit>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          action.payload.textPosition &&
           (pictogram.settings.textPosition = action.payload.textPosition)
       );
     },
 
     fontSize: (
       previousSequence,
-      action: PayloadAction<PictSequenceForEdit>
+      action: PayloadAction<PictSequenceSettingsForEdit>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          action.payload.fontSize &&
           (pictogram.settings.fontSize = action.payload.fontSize)
       );
     },
 
     borderIn: (
       previousSequence,
-      action: PayloadAction<PictSequenceForEdit>
+      action: PayloadAction<PictSequenceSettingsForEdit>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
@@ -116,7 +123,7 @@ const sequenceSlice = createSlice({
 
     borderOut: (
       previousSequence,
-      action: PayloadAction<PictSequenceForEdit>
+      action: PayloadAction<PictSequenceSettingsForEdit>
     ) => {
       previousSequence.map(
         (pictogram, index) =>
@@ -191,6 +198,7 @@ export const {
   addSequence: addSequenceActionCreator,
   renumberSequence: renumberSequenceActionCreator,
   sortSequence: sortSequenceActionCreator,
+  updatePictSequence: updatePictSequenceActionCreator,
   selectedId: selectedIdActionCreator,
   searched: searchedActionCreator,
   textPosition: textPositionActionCreator,

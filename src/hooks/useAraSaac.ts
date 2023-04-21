@@ -116,6 +116,7 @@ const useAraSaac = () => {
           const toPictNotFound: PictApiAraForEdit = {
             indexSequence: indexSequence,
             searched: { word: word, bestIdPicts: [-1] },
+            settings: {},
           };
           dispatch(searchedActionCreator(toPictNotFound));
         }

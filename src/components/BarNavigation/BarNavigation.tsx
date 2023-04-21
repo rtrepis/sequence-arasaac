@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Container from "@mui/material/Container";
 import Slide from "@mui/material/Slide";
-import DefaultSettings from "../../Modals/DefaultSettings/DefaultSettings";
+import DefaultSettings from "../../Modals/DefaultSettingsModal/DefaultSettingsModal";
 import { FormattedMessage } from "react-intl";
 import messages from "./BarNavigation.lang";
 import { Stack } from "@mui/material";

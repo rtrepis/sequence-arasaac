@@ -5,6 +5,7 @@ import {
   Ui,
   ViewSettings,
 } from "../../types/ui";
+import { DefaultSettings } from "../../types/ui";
 
 const uiInitialState: Ui = {
   viewSettings: {
@@ -28,13 +29,17 @@ const uiSlice = createSlice({
   name: "uiState",
   initialState: uiInitialState,
   reducers: {
-    viewPage: (previousUi, action: PayloadAction<boolean>) => ({
-      ...previousUi,
-      viewPage: action.payload,
-    }),
     viewSettings: (previousUi, action: PayloadAction<ViewSettings>) => ({
       ...previousUi,
       viewSettings: action.payload,
+    }),
+
+    updateDefaultSettings: (
+      previousUi,
+      action: PayloadAction<DefaultSettings>
+    ) => ({
+      ...previousUi,
+      defaultSettings: action.payload,
     }),
 
     updateDefaultSettingPictApiAra: (
@@ -50,6 +55,7 @@ const uiSlice = createSlice({
         },
       },
     }),
+
     updateDefaultSettingPictSequence: (
       previousUi,
       action: PayloadAction<DefaultSettingsPictSequenceForEdit>
@@ -69,9 +75,8 @@ const uiSlice = createSlice({
 export const uiReducer = uiSlice.reducer;
 
 export const {
-  viewPage: viewPageActionCreator,
   viewSettings: viewSettingsActionCreator,
-
+  updateDefaultSettings: updateDefaultSettingsActionCreator,
   updateDefaultSettingPictApiAra: updateDefaultSettingPictApiAraActionCreator,
   updateDefaultSettingPictSequence:
     updateDefaultSettingPictSequenceActionCreator,

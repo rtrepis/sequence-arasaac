@@ -47,6 +47,7 @@ describe("Given a useAraSacc hook", () => {
         payload: {
           indexSequence: 0,
           searched: { bestIdPicts: [-1], word: "asdfas" },
+          settings: {},
         },
         type: "sequence/searched",
       };

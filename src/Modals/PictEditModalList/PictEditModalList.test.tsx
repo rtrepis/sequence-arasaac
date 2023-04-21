@@ -1,6 +1,6 @@
 import { Sequence } from "../../types/sequence";
 import { preloadedState, render, screen } from "../../utils/test-utils";
-import PictEditList from "./PictEditList";
+import PictEditModalList from "./PictEditModalList";
 
 const mockSequence = preloadedState.sequence[0];
 
@@ -34,7 +34,7 @@ describe("Give a component PictogramCardList", () => {
         },
       ];
 
-      render(<PictEditList sequence={sequence} />);
+      render(<PictEditModalList sequence={sequence} />);
       const images = screen.getAllByRole("img");
 
       expect(images).toHaveLength(sequence.length);

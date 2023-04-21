@@ -3,7 +3,7 @@ import PictogramAmount from "../../components/PictogramAmount/PictogramAmount";
 import MagicSearch from "../../components/MagicSearch/MagicSearch";
 import { useAppSelector } from "../../app/hooks";
 import BarNavigation from "../../components/BarNavigation/BarNavigation";
-import PictEditList from "../../Modals/PictEditList/PictEditList";
+import PictEditModalList from "../../Modals/PictEditModalList/PictEditModalList";
 
 const EditSequencesPage = (): JSX.Element => {
   const sequence = useAppSelector((state) => state.sequence);
@@ -20,7 +20,7 @@ const EditSequencesPage = (): JSX.Element => {
           <PictogramAmount />
           <MagicSearch />
         </Stack>
-        <PictEditList sequence={sequence} />
+        <PictEditModalList sequence={sequence} />
       </>
     </BarNavigation>
   );

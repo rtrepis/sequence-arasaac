@@ -9,19 +9,34 @@ import { PictSequence } from "../../types/sequence";
 import { preloadedState } from "../../utils/test-utils";
 import { useIntl } from "react-intl";
 import messages from "./DefaultForm.lang";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useCallback, useEffect, useState } from "react";
 import { DefaultSettings } from "../../types/ui";
-import { useAppSelector } from "../../app/hooks";
-import { useState } from "react";
+import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
 
-const DefaultForm = (): JSX.Element => {
+interface props {
+  submit: boolean;
+}
+
+const DefaultForm = (props: props) => {
   const intl = useIntl();
+  const dispatch = useAppDispatch();
+
   const {
     lang,
     defaultSettings: {
       pictApiAra: { fitzgerald, skin },
-      pictSequence: { borderIn, borderOut, fontSize, numbered, textPosition },
+      pictSequence: {
+        borderIn,
+        borderOut,
+        fontSize: DSfontSize,
+        numbered,
+        textPosition,
+      },
     },
   } = useAppSelector((state) => state.ui);
+
+  const [fontSize, setFontSize] = useState(DSfontSize);
 
   const pictogramGuide: PictSequence = {
     ...preloadedState.sequence[0],
@@ -47,17 +62,45 @@ const DefaultForm = (): JSX.Element => {
     },
   };
 
+  const handlerSubmit = useCallback(() => {
+    const newDefaultSettings: DefaultSettings = {
+      pictApiAra: { fitzgerald, skin },
+      pictSequence: {
+        borderIn,
+        borderOut,
+        fontSize,
+        numbered,
+        textPosition,
+      },
+    };
+
+    dispatch(updateDefaultSettingsActionCreator(newDefaultSettings));
+  }, [
+    fitzgerald,
+    skin,
+    borderIn,
+    borderOut,
+    fontSize,
+    numbered,
+    textPosition,
+    dispatch,
+  ]);
+
+  useEffect(() => {
+    !props.submit && handlerSubmit();
+  }, [props.submit, handlerSubmit]);
+
   return (
-    <form>
-      <Stack
-        display={"flex"}
-        direction={"row"}
-        flexWrap={"wrap"}
-        marginTop={1}
-        rowGap={2}
-        columnGap={2}
-      >
-        <List>
+    <form onSubmit={handlerSubmit}>
+      <List>
+        <Stack
+          display={"flex"}
+          direction={"row"}
+          flexWrap={"wrap"}
+          marginTop={1}
+          rowGap={2}
+          columnGap={2}
+        >
           <li>
             <PictogramCard pictogram={pictogramGuide} view="complete" />
           </li>
@@ -74,7 +117,12 @@ const DefaultForm = (): JSX.Element => {
             <SettingCard setting={"textPosition"} selected={textPosition} />
           </li>
           <li>
-            <SettingCardNumber setting="fontSize" selected={fontSize} />
+            <SettingCardNumber
+              setting="fontSize"
+              selected={DSfontSize}
+              state={fontSize}
+              setState={setFontSize}
+            />
           </li>
           <li>
             <SettingCardBorder border="borderOut" selected={borderOut} />
@@ -85,8 +133,8 @@ const DefaultForm = (): JSX.Element => {
           <li>
             <SettingCard setting={"skin"} selected={skin} />
           </li>
-        </List>
-      </Stack>
+        </Stack>
+      </List>
     </form>
   );
 };
