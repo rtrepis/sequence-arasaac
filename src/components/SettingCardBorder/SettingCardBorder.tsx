@@ -16,100 +16,75 @@ import {
   cardTitle,
 } from "./SettingCardBorder.styled";
 import "./SettingCardBorder.css";
-import { useAppDispatch } from "../../app/hooks";
-import { updateDefaultSettingPictSequenceActionCreator } from "../../app/slice/uiSlice";
-import { useState } from "react";
-import {
-  borderInActionCreator,
-  borderOutActionCreator,
-} from "../../app/slice/sequenceSlice";
 import { messages } from "./SettingCardBorder.lang";
+import { useState } from "react";
 
 interface SettingCardBorderProps {
-  indexPict?: number;
   border: "borderIn" | "borderOut";
-  selected: Border;
+  state: Border;
+  setState: React.Dispatch<React.SetStateAction<Border>>;
+  indexPict?: number;
 }
 
 const SettingCardBorder = ({
-  indexPict,
   border,
-  selected,
+  state: { color, size, radius },
+  setState,
+  indexPict,
 }: SettingCardBorderProps): JSX.Element => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const initialColor = selected.color ? selected.color : "#999999";
+  const initialColorSelect = color === "fitzgerald" ? "#999999" : color;
 
-  const [color, setColor] = useState(initialColor);
-  const [size, setSize] = useState(selected.size);
-  const [radius, setRadius] = useState(selected.radius);
+  const [colorSelect, setColorSelect] = useState(initialColorSelect);
 
-  const handleChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setColor(event.target.value);
-  };
-  const handleChangesSize = (event: Event, newValue: number | number[]) => {
-    setSize(newValue as number);
-  };
-  const handleChangesRadius = (event: Event, newValue: number | number[]) => {
-    setRadius(newValue as number);
+  const handleChangesColorSelect = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setColorSelect(event.target.value);
   };
 
-  const handlerUpdate = (toUpdateColor?: string, toUpDateSize?: boolean) => {
-    const newBorder: Border = {
-      color: toUpdateColor ? toUpdateColor : selected.color,
-      radius: toUpDateSize ? 0 : 20,
-      size: toUpDateSize ? 0 : 2,
-    };
-
-    if (indexPict !== undefined) {
-      border === "borderIn" &&
-        dispatch(
-          borderInActionCreator({
-            indexSequence: indexPict,
-            borderIn: newBorder,
-          })
-        );
-
-      border === "borderOut" &&
-        dispatch(
-          borderOutActionCreator({
-            indexSequence: indexPict,
-            borderOut: newBorder,
-          })
-        );
-    }
-
-    if (indexPict === undefined) {
-      border === "borderIn" &&
-        dispatch(
-          updateDefaultSettingPictSequenceActionCreator({
-            borderIn: newBorder,
-          })
-        );
-      border === "borderOut" &&
-        dispatch(
-          updateDefaultSettingPictSequenceActionCreator({
-            borderOut: newBorder,
-          })
-        );
-    }
-  };
-
-  const handleBlur = () => {
-    const newBorder: Border = {
-      color: color,
+  const handlerBlurColor = () => {
+    const border: Border = {
+      color: colorSelect,
       radius: radius,
       size: size,
     };
 
-    if (indexPict === undefined) {
-      dispatch(
-        updateDefaultSettingPictSequenceActionCreator({
-          [border]: newBorder,
-        })
-      );
-    }
+    setState(border);
+  };
+
+  const handleChangesSize = (event: Event, newValue: number | number[]) => {
+    const border: Border = {
+      color: color,
+      radius: radius,
+      size: newValue as number,
+    };
+
+    setState(border);
+  };
+
+  const handleChangesRadius = (event: Event, newValue: number | number[]) => {
+    const border: Border = {
+      color: color,
+      radius: newValue as number,
+      size: size,
+    };
+
+    setState(border);
+  };
+
+  const handlerUpdateColor = (
+    toUpdateColor?: string,
+    toUpDateSize?: boolean
+  ) => {
+    const newBorder: Border = {
+      color: toUpdateColor ? toUpdateColor : colorSelect,
+      radius: toUpDateSize ? 0 : 20,
+      size: toUpDateSize ? 0 : 2,
+    };
+
+    setState(newBorder);
   };
 
   return (
@@ -133,8 +108,8 @@ const SettingCardBorder = ({
           <ToggleButton
             value={"Fitzgerald Key"}
             sx={cardColor}
-            selected={selected.color === "fitzgerald" && selected.size > 0}
-            onClick={() => handlerUpdate("fitzgerald")}
+            selected={color === "fitzgerald" && size > 0}
+            onClick={() => handlerUpdateColor("fitzgerald")}
           >
             <FormattedMessage {...messages.fitzgeraldKey} />
           </ToggleButton>
@@ -142,24 +117,23 @@ const SettingCardBorder = ({
           <Tooltip title={intl.formatMessage(messages.selected)}>
             <ToggleButton
               value={"Selected Color"}
-              selected={selected.color !== "fitzgerald" && selected.size > 0}
+              selected={color !== "fitzgerald" && size > 0}
             >
               <input
                 id="colorPick"
                 type="color"
                 className={"colorInput"}
-                value={color}
-                onChange={handleChanges}
-                onFocus={() => handlerUpdate(color)}
-                onBlur={() => handlerUpdate(color)}
+                value={colorSelect}
+                onChange={handleChangesColorSelect}
+                onBlur={handlerBlurColor}
               />
             </ToggleButton>
           </Tooltip>
 
           <ToggleButton
             value={"whitOutBorder"}
-            onClick={() => handlerUpdate(undefined, true)}
-            selected={selected.size === 0}
+            onClick={() => handlerUpdateColor(undefined, true)}
+            selected={size === 0}
           >
             <Tooltip title={intl.formatMessage(messages.withoutBorder)}>
               <img
@@ -177,16 +151,15 @@ const SettingCardBorder = ({
             <FormattedMessage {...messages.size} />
           </FormLabel>
           <Slider
-            defaultValue={selected.size}
+            defaultValue={size}
             aria-label={`${intl.formatMessage(messages.size)}`}
             valueLabelDisplay="auto"
             max={10}
             min={1}
             value={size}
             onChange={handleChangesSize}
-            onBlur={handleBlur}
             sx={{ width: 100 }}
-            disabled={selected.size === 0}
+            disabled={size === 0}
           />
         </Stack>
 
@@ -195,16 +168,15 @@ const SettingCardBorder = ({
             <FormattedMessage {...messages.radius} />
           </FormLabel>
           <Slider
-            defaultValue={selected.radius}
+            defaultValue={radius}
             aria-label={`${intl.formatMessage(messages.radius)}`}
             valueLabelDisplay="auto"
             max={70}
             min={1}
             value={radius}
             onChange={handleChangesRadius}
-            onBlur={handleBlur}
             sx={{ width: 100 }}
-            disabled={selected.size === 0}
+            disabled={size === 0}
           />
         </Stack>
       </Stack>
