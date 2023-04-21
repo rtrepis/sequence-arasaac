@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "../../utils/test-utils";
-import DefaultSettings from "./DefaultSettings";
+import DefaultSettings from "./DefaultSettingsModal";
 
 const mockDispatch = jest.fn();
 jest.mock("react-redux", () => ({
