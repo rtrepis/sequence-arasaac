@@ -55,10 +55,20 @@ export interface Word {
   IdPicts?: number[];
 }
 
-export type Skins = "asian" | "aztec" | "black" | "mulatto" | "white";
+export type Skin = "asian" | "aztec" | "black" | "mulatto" | "white";
+
+export type Hair =
+  | "black"
+  | "blonde"
+  | "brown"
+  | "darkBrown"
+  | "gray"
+  | "darkGray"
+  | "red";
 
 export interface PictApiAraSettings {
-  skin?: Skins;
+  hair?: Hair;
+  skin?: Skin;
   fitzgerald?: string;
 }
 

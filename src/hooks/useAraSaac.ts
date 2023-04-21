@@ -8,9 +8,11 @@ import {
   settingsPictApiAraActionCreator,
 } from "../app/slice/sequenceSlice";
 import {
+  Hair,
   PictApiAraForEdit,
   PictApiAraSettings,
   PictSequence,
+  Skin,
 } from "../types/sequence";
 import useUserLocation from "./useUserLocation";
 
@@ -43,9 +45,11 @@ const useAraSaac = () => {
 
       if (data.skin) settingsProperty.skin = defaultSettingsPictApiAra.skin;
 
+      if (data.hair) settingsProperty.hair = defaultSettingsPictApiAra.hair;
+
       return { ...settingsProperty };
     },
-    [defaultSettingsPictApiAra.skin]
+    [defaultSettingsPictApiAra.hair, defaultSettingsPictApiAra.skin]
   );
 
   const getSettingsPictId = useCallback(
@@ -146,12 +150,21 @@ const useAraSaac = () => {
     ]
   );
 
-  const toUrlPath = (pictogramId: number, skin: string | undefined) => {
+  const toUrlPath = (
+    pictogramId: number,
+    skin: Skin | undefined,
+    hair: Hair | undefined
+  ) => {
     let path = `${araSaacURL}pictograms/${pictogramId}`;
 
     skin &&
       skin !== "white" &&
       (path += `?skin=${skin === "asian" ? "assian" : skin}`);
+
+    hair &&
+      (skin === undefined || skin === "white"
+        ? (path += `?hair=${hair}`)
+        : (path += `&hair=${hair}`));
 
     return path;
   };
