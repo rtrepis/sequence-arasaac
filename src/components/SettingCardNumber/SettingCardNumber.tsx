@@ -15,27 +15,24 @@ interface SettingCardProps {
   indexPict?: number;
   setting: "fontSize";
   selected: number;
+  state: number;
+  setState: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const SettingCardNumber = ({
   indexPict,
   setting,
   selected,
+  state,
+  setState,
 }: SettingCardProps): JSX.Element => {
   const dispatch = useAppDispatch();
 
   const initialValue: number = selected;
   const [value, setValue] = useState(initialValue);
 
-  const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number);
-    indexPict !== undefined &&
-      dispatch(
-        fontSizeActionCreator({
-          indexSequence: indexPict,
-          fontSize: newValue as number,
-        })
-      );
+  const handleChange = (event: any, value: number | number[]) => {
+    setState(value as number);
   };
 
   const handleBlur = () => {
@@ -73,9 +70,8 @@ const SettingCardNumber = ({
         max={2}
         min={0.5}
         step={0.1}
-        value={value}
+        value={state}
         onChange={handleChange}
-        onBlur={handleBlur}
         sx={{ width: 100 }}
       />
       <StyledButton

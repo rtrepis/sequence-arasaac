@@ -30,7 +30,8 @@ export type PictApiAraApplyAll = MyPartialApplyAll<PictApiAra>;
 
 export type PictApiAraSettingsApplyAll = MyPartialApplyAll<PictApiAraSettings>;
 
-export type PictSequenceForEdit = MyPartialForEdit<PictSequenceSettings>;
+export type PictSequenceSettingsForEdit =
+  MyPartialForEdit<PictSequenceSettings>;
 
 export type PictApiAraForEdit = MyPartialForEdit<PictApiAra>;
 
@@ -41,7 +42,7 @@ export interface Border {
   size: number;
 }
 
-interface PictApiAra {
+export interface PictApiAra {
   searched: Word;
   selectedId: number;
   settings: PictApiAraSettings;

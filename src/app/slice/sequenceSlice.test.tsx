@@ -277,7 +277,6 @@ describe("Given the reducer sequenceSlice", () => {
       const toUpDatePictSettings: SequenceForEdit = {
         indexSequence: 0,
         settings: {
-          ...preloadedState.sequence[0].settings,
           textPosition: "top",
         },
       };
