@@ -6,7 +6,7 @@ import {
   textPositionApplyAllActionCreator,
 } from "../../app/slice/sequenceSlice";
 import StyledButton from "../../style/StyledButton";
-import StyledToggleButtonGroup from "../../style/StyledToogleButtonGroup";
+import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import { Skins, TextPosition } from "../../types/sequence";
 import { messages, settingsCardLang } from "./SettingCard.lang";
 import { cardAction, card, cardContent, cardTitle } from "./SettingCard.styled";

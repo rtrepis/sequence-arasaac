@@ -43,9 +43,12 @@ describe("Give component PictogramSearch", () => {
         ],
       };
 
-      render(<PictogramSearch indexPict={0} />, {
-        preloadedState: mockState,
-      });
+      render(
+        <PictogramSearch indexPict={0} state={2234} setState={mockDispatch} />,
+        {
+          preloadedState: mockState,
+        }
+      );
       const input = screen.getByRole("textbox", { name: expectText });
 
       expect(input).toBeInTheDocument();
@@ -59,9 +62,16 @@ describe("Give component PictogramSearch", () => {
       const typeWordSearch = "boy";
       const indexPict = 0;
 
-      render(<PictogramSearch indexPict={indexPict} />, {
-        preloadedState: preloadedState,
-      });
+      render(
+        <PictogramSearch
+          indexPict={indexPict}
+          state={2234}
+          setState={mockDispatch}
+        />,
+        {
+          preloadedState: preloadedState,
+        }
+      );
 
       const input = screen.getByRole("textbox", { name: expectInput });
       const button = screen.getByRole("button", { name: expertButton });
@@ -98,9 +108,12 @@ describe("Give component PictogramSearch", () => {
         ],
       };
 
-      render(<PictogramSearch indexPict={0} />, {
-        preloadedState: mockState,
-      });
+      render(
+        <PictogramSearch indexPict={0} state={2234} setState={mockDispatch} />,
+        {
+          preloadedState: mockState,
+        }
+      );
 
       const images = screen.getAllByRole("img", {
         name: `${expectLabelImage}`,
@@ -135,9 +148,12 @@ describe("Give component PictogramSearch", () => {
         ],
       };
 
-      render(<PictogramSearch indexPict={0} />, {
-        preloadedState: mockState,
-      });
+      render(
+        <PictogramSearch indexPict={0} state={2234} setState={mockDispatch} />,
+        {
+          preloadedState: mockState,
+        }
+      );
 
       const alert = screen.getByRole("alert", { name: "" });
 

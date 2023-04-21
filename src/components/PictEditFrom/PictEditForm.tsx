@@ -28,23 +28,24 @@ const PictEditForm = ({
     pictogram.settings.textPosition!
   );
   const [skin, setSkin] = useState(pictogram.img.settings.skin!);
+  const [selectedId, setSelectId] = useState(pictogram.img.selectedId);
 
   const pictogramGuide: PictSequence = {
     ...pictogram,
-    img: { ...pictogram.img, settings: { skin } },
+    img: { ...pictogram.img, selectedId, settings: { skin } },
     settings: { ...pictogram.settings, fontSize, textPosition },
   };
 
   const handlerSubmit = useCallback(() => {
     const newPictogram: PictSequence = {
       ...pictogram,
-      img: { ...pictogram.img, settings: { skin } },
+      img: { ...pictogram.img, selectedId, settings: { skin } },
       settings: { ...pictogram.settings, fontSize, textPosition },
     };
 
     dispatch(updatePictSequenceActionCreator(newPictogram));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, fontSize, textPosition, skin]);
+  }, [dispatch, fontSize, textPosition, skin, selectedId]);
 
   useEffect(() => {
     if (submit === false) handlerSubmit();
@@ -64,7 +65,11 @@ const PictEditForm = ({
           view="complete"
         />
 
-        <PictogramSearch indexPict={pictogram.indexSequence} />
+        <PictogramSearch
+          indexPict={pictogram.indexSequence}
+          state={selectedId}
+          setState={setSelectId}
+        />
       </Stack>
 
       <SettingAccordion title={`${intl.formatMessage({ ...messages.title })}`}>
