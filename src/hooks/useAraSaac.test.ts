@@ -1,5 +1,5 @@
 import { renderHook } from "../utils/test-utils";
-import { Skins } from "../types/sequence";
+import { Hair, Skin } from "../types/sequence";
 import useAraSaac from "./useAraSaac";
 
 const mockDispatch = jest.fn();
@@ -118,12 +118,13 @@ describe("Given a useAraSacc hook", () => {
     test("Then return path with query", async () => {
       mockSelector = { skin: "white" };
       const expectPath =
-        "https://api.arasaac.org/api/pictograms/233?skin=assian";
+        "https://api.arasaac.org/api/pictograms/233?skin=assian&hair=blonde";
       const pictogramNumber = 233;
-      const skin: Skins = "asian";
+      const skin: Skin = "asian";
+      const hair: Hair = "blonde";
 
       const { result } = renderHook(() => useAraSaac());
-      const path = await result.current.toUrlPath(pictogramNumber, skin);
+      const path = await result.current.toUrlPath(pictogramNumber, skin, hair);
 
       expect(path).toStrictEqual(expectPath);
     });
@@ -132,12 +133,14 @@ describe("Given a useAraSacc hook", () => {
   describe("When toUrlPath it's called with skin default ui setting is white", () => {
     test("Then return path with query", async () => {
       mockSelector = { skin: "white" };
-      const expectPath = "https://api.arasaac.org/api/pictograms/233";
+      const expectPath =
+        "https://api.arasaac.org/api/pictograms/233?hair=blonde";
       const pictogramNumber = 233;
-      const skin: Skins = "white";
+      const skin: Skin = "white";
+      const hair: Hair = "blonde";
 
       const { result } = renderHook(() => useAraSaac());
-      const path = await result.current.toUrlPath(pictogramNumber, skin);
+      const path = await result.current.toUrlPath(pictogramNumber, skin, hair);
 
       expect(path).toStrictEqual(expectPath);
     });
@@ -146,12 +149,13 @@ describe("Given a useAraSacc hook", () => {
   describe("When toUrlPath it's called with skin default ui setting not white", () => {
     test("Then return path with query", async () => {
       const expectPath =
-        "https://api.arasaac.org/api/pictograms/233?skin=assian";
+        "https://api.arasaac.org/api/pictograms/233?skin=assian&hair=blonde";
       const pictogramNumber = 233;
-      const skin: Skins = "asian";
+      const skin: Skin = "asian";
+      const hair: Hair = "blonde";
 
       const { result } = renderHook(() => useAraSaac());
-      const path = await result.current.toUrlPath(pictogramNumber, skin);
+      const path = await result.current.toUrlPath(pictogramNumber, skin, hair);
 
       expect(path).toStrictEqual(expectPath);
     });

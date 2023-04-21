@@ -1,15 +1,19 @@
-import { Languages, Skins, TextPosition } from "./sequence";
+import { Languages, Skin, TextPosition, Hair } from "./sequence";
 
 export interface SettingsCardLang {
   messages: {
     skin: Message;
     textPosition: Message;
+    hair: Message;
   };
   skin: {
-    [K in Skins]: { message: Message };
+    [K in Skin]: { message: Message };
   };
   textPosition: {
     [K in TextPosition]: { message: Message };
+  };
+  hair: {
+    [K in Hair]: { message: Message };
   };
 }
 

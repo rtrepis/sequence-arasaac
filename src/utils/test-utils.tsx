@@ -46,7 +46,7 @@ const preloadedState: State = {
       rowGap: 1,
     },
     defaultSettings: {
-      pictApiAra: { skin: "white", fitzgerald: "#998800" },
+      pictApiAra: { skin: "white", fitzgerald: "#998800", hair: "black" },
       pictSequence: {
         numbered: true,
         textPosition: "bottom",
