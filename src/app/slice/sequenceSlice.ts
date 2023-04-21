@@ -183,7 +183,7 @@ const sequenceSlice = createSlice({
       action: PayloadAction<PictSequenceApplyAll>
     ) => {
       previousSequence.map(
-        (pictogram) => (pictogram.settings.fontSize = action.payload.fontSize!)
+        (pictogram) => (pictogram.settings.fontSize = action.payload.fontSize)
       );
     },
   },

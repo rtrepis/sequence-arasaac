@@ -1,4 +1,4 @@
-import { Button, List, Stack } from "@mui/material";
+import { List, Stack } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import { PictSequence } from "../../types/sequence";
@@ -9,9 +9,7 @@ import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
 import { useIntl } from "react-intl";
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
-import {
-  updatePictSequenceActionCreator,
-} from "../../app/slice/sequenceSlice";
+import { updatePictSequenceActionCreator } from "../../app/slice/sequenceSlice";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
@@ -26,21 +24,27 @@ const PictEditForm = ({
   const dispatch = useAppDispatch();
 
   const [fontSize, setFontSize] = useState(pictogram.settings.fontSize!);
+  const [textPosition, setTextPosition] = useState(
+    pictogram.settings.textPosition!
+  );
+  const [skin, setSkin] = useState(pictogram.img.settings.skin!);
 
-  const pictogramGuide2: PictSequence = {
+  const pictogramGuide: PictSequence = {
     ...pictogram,
-    settings: { ...pictogram.settings, fontSize },
+    img: { ...pictogram.img, settings: { skin } },
+    settings: { ...pictogram.settings, fontSize, textPosition },
   };
 
   const handlerSubmit = useCallback(() => {
     const newPictogram: PictSequence = {
       ...pictogram,
-      settings: { ...pictogram.settings, fontSize },
+      img: { ...pictogram.img, settings: { skin } },
+      settings: { ...pictogram.settings, fontSize, textPosition },
     };
 
     dispatch(updatePictSequenceActionCreator(newPictogram));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, fontSize]);
+  }, [dispatch, fontSize, textPosition, skin]);
 
   useEffect(() => {
     if (submit === false) handlerSubmit();
@@ -55,14 +59,13 @@ const PictEditForm = ({
         spacing={{ xs: 3, sm: 2 }}
       >
         <PictogramCard
-          pictogram={pictogramGuide2}
+          pictogram={pictogramGuide}
           variant="plane"
           view="complete"
         />
 
         <PictogramSearch indexPict={pictogram.indexSequence} />
       </Stack>
-      <Button onClick={handlerSubmit}>Update</Button>
 
       <SettingAccordion title={`${intl.formatMessage({ ...messages.title })}`}>
         <List>
@@ -70,8 +73,8 @@ const PictEditForm = ({
             <li>
               <SettingCard
                 setting="textPosition"
-                indexPict={pictogram.indexSequence}
-                selected={pictogram.settings.textPosition}
+                state={textPosition}
+                setState={setTextPosition}
               />
             </li>
           )}
@@ -79,8 +82,6 @@ const PictEditForm = ({
             <li>
               <SettingCardNumber
                 setting="fontSize"
-                indexPict={pictogram.indexSequence}
-                selected={pictogram.settings.fontSize}
                 state={fontSize}
                 setState={setFontSize}
               />
@@ -88,11 +89,7 @@ const PictEditForm = ({
           )}
           {pictogram.img.settings.skin && (
             <li>
-              <SettingCard
-                setting="skin"
-                indexPict={pictogram.indexSequence}
-                selected={pictogram.img.settings.skin}
-              />
+              <SettingCard setting="skin" state={skin} setState={setSkin} />
             </li>
           )}
         </List>

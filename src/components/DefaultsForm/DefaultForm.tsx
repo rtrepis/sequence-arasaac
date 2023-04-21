@@ -6,7 +6,6 @@ import SettingCard from "../SettingCard/SettingCard";
 import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
 import SettingCardBorder from "../SettingCardBorder/SettingCardBorder";
 import { PictSequence } from "../../types/sequence";
-import { preloadedState } from "../../utils/test-utils";
 import { useIntl } from "react-intl";
 import messages from "./DefaultForm.lang";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -25,24 +24,24 @@ const DefaultForm = (props: props) => {
   const {
     lang,
     defaultSettings: {
-      pictApiAra: { fitzgerald, skin },
+      pictApiAra: { fitzgerald, skin: initialSkin },
       pictSequence: {
         borderIn,
         borderOut,
-        fontSize: DSfontSize,
+        fontSize: initialFontSize,
         numbered,
-        textPosition,
+        textPosition: initialTextPosition,
       },
     },
   } = useAppSelector((state) => state.ui);
 
-  const [fontSize, setFontSize] = useState(DSfontSize);
+  const [fontSize, setFontSize] = useState(initialFontSize);
+  const [textPosition, setTextPosition] = useState(initialTextPosition);
+  const [skin, setSkin] = useState(initialSkin);
 
   const pictogramGuide: PictSequence = {
-    ...preloadedState.sequence[0],
     indexSequence: 0,
     img: {
-      ...preloadedState.sequence[0].img,
       searched: {
         word: `${intl.formatMessage(messages.pictGuide)}`,
         bestIdPicts: [],
@@ -114,12 +113,15 @@ const DefaultForm = (props: props) => {
             <SettingCardBoolean setting={"numbered"} selected={numbered} />
           </li>
           <li>
-            <SettingCard setting={"textPosition"} selected={textPosition} />
+            <SettingCard
+              setting={"textPosition"}
+              state={textPosition}
+              setState={setTextPosition}
+            />
           </li>
           <li>
             <SettingCardNumber
               setting="fontSize"
-              selected={DSfontSize}
               state={fontSize}
               setState={setFontSize}
             />
@@ -131,7 +133,7 @@ const DefaultForm = (props: props) => {
             <SettingCardBorder border="borderIn" selected={borderIn} />
           </li>
           <li>
-            <SettingCard setting={"skin"} selected={skin} />
+            <SettingCard setting={"skin"} state={skin} setState={setSkin} />
           </li>
         </Stack>
       </List>
