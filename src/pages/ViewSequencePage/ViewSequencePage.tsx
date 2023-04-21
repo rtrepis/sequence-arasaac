@@ -1,4 +1,4 @@
- import { useState } from "react";
+import { useState } from "react";
 import { useAppSelector } from "../../app/hooks";
 import BarNavigation from "../../components/BarNavigation/BarNavigation";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
