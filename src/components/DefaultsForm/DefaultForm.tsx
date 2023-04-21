@@ -26,8 +26,8 @@ const DefaultForm = (props: props) => {
     defaultSettings: {
       pictApiAra: { fitzgerald, skin: initialSkin },
       pictSequence: {
-        borderIn,
-        borderOut,
+        borderIn: initialBorderIn,
+        borderOut: initialBorderOut,
         fontSize: initialFontSize,
         numbered,
         textPosition: initialTextPosition,
@@ -38,6 +38,8 @@ const DefaultForm = (props: props) => {
   const [fontSize, setFontSize] = useState(initialFontSize);
   const [textPosition, setTextPosition] = useState(initialTextPosition);
   const [skin, setSkin] = useState(initialSkin);
+  const [borderIn, setBorderIn] = useState(initialBorderIn);
+  const [borderOut, setBorderOut] = useState(initialBorderOut);
 
   const pictogramGuide: PictSequence = {
     indexSequence: 0,
@@ -87,7 +89,7 @@ const DefaultForm = (props: props) => {
 
   useEffect(() => {
     !props.submit && handlerSubmit();
-  }, [props.submit, handlerSubmit]);
+  }, [props.submit, handlerSubmit, borderIn]);
 
   return (
     <form onSubmit={handlerSubmit}>
@@ -101,7 +103,11 @@ const DefaultForm = (props: props) => {
           columnGap={2}
         >
           <li>
-            <PictogramCard pictogram={pictogramGuide} view="complete" />
+            <PictogramCard
+              pictogram={pictogramGuide}
+              view="complete"
+              variant="plane"
+            />
           </li>
           <li>
             <SettingCardOptions
@@ -127,10 +133,18 @@ const DefaultForm = (props: props) => {
             />
           </li>
           <li>
-            <SettingCardBorder border="borderOut" selected={borderOut} />
+            <SettingCardBorder
+              border="borderOut"
+              state={borderOut}
+              setState={setBorderOut}
+            />
           </li>
           <li>
-            <SettingCardBorder border="borderIn" selected={borderIn} />
+            <SettingCardBorder
+              border="borderIn"
+              state={borderIn}
+              setState={setBorderIn}
+            />
           </li>
           <li>
             <SettingCard setting={"skin"} state={skin} setState={setSkin} />

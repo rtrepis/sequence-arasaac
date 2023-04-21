@@ -21,17 +21,27 @@ const PictogramCard = ({
       settings: { skin, fitzgerald },
       searched: { word: text },
     },
-    settings: { textPosition, fontSize },
+    settings: {
+      textPosition,
+      fontSize,
+      borderIn: pictBorderIn,
+      borderOut: pictBorderOut,
+    },
   },
   view,
   variant,
   size,
 }: PictogramCardProps): JSX.Element => {
-  const { borderIn, borderOut, numbered } = useAppSelector(
-    (state) => state.ui.defaultSettings.pictSequence
-  );
+  const {
+    borderIn: DefaultBorderIn,
+    borderOut: DefaultBorderOut,
+    numbered,
+  } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
   const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
   const intl = useIntl();
+
+  const borderIn = pictBorderIn ? pictBorderIn : DefaultBorderIn;
+  const borderOut = pictBorderOut ? pictBorderOut : DefaultBorderOut;
 
   const textFontSize = size ? size * 20 * fontSize! : 20 * fontSize!;
 
@@ -64,7 +74,7 @@ const PictogramCard = ({
           height={size ? size * 150 : 150}
           width={size ? size * 150 : 150}
           alt={intl.formatMessage({ ...messages.pictogram })}
-          sx={() => pictogram__media(borderIn, view, fitzgerald)}
+          sx={() => pictogram__media(borderIn!, view, fitzgerald)}
         />
       </CardContent>
 
@@ -75,7 +85,7 @@ const PictogramCard = ({
             paddingInline: 0,
             ":last-child": {
               paddingBlock:
-                textPosition !== "bottom" && !numbered && borderOut.size === 0
+                textPosition !== "bottom" && !numbered && borderOut!.size === 0
                   ? 0
                   : 1,
             },
