@@ -25,7 +25,7 @@ const PictogramSearch = ({
   setState,
 }: PropsPictogramSearch): JSX.Element => {
   const {
-    settings: { skin },
+    settings: { skin, hair },
     searched: { word, bestIdPicts },
   } = useAppSelector((state) => state.sequence[indexPict].img);
   const intl = useIntl();
@@ -100,7 +100,7 @@ const PictogramSearch = ({
               selected={pictogram === state}
             >
               <img
-                src={toUrlPathApiAraSaac(pictogram, skin)}
+                src={toUrlPathApiAraSaac(pictogram, skin, hair)}
                 alt={`${intl.formatMessage({
                   ...messages.pictogram,
                 })} ${newWord}`}

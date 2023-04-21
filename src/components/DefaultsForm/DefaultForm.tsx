@@ -24,7 +24,7 @@ const DefaultForm = (props: props) => {
   const {
     lang,
     defaultSettings: {
-      pictApiAra: { fitzgerald, skin: initialSkin },
+      pictApiAra: { fitzgerald, skin: initialSkin, hair: initialHair },
       pictSequence: {
         borderIn: initialBorderIn,
         borderOut: initialBorderOut,
@@ -40,6 +40,7 @@ const DefaultForm = (props: props) => {
   const [skin, setSkin] = useState(initialSkin);
   const [borderIn, setBorderIn] = useState(initialBorderIn);
   const [borderOut, setBorderOut] = useState(initialBorderOut);
+  const [hair, setHair] = useState(initialHair);
 
   const pictogramGuide: PictSequence = {
     indexSequence: 0,
@@ -50,8 +51,9 @@ const DefaultForm = (props: props) => {
       },
       selectedId: 6009,
       settings: {
-        fitzgerald: fitzgerald,
+        fitzgerald: "#CC00BB",
         skin: skin,
+        hair: hair,
       },
     },
     settings: {
@@ -65,7 +67,7 @@ const DefaultForm = (props: props) => {
 
   const handlerSubmit = useCallback(() => {
     const newDefaultSettings: DefaultSettings = {
-      pictApiAra: { fitzgerald, skin },
+      pictApiAra: { fitzgerald, skin, hair },
       pictSequence: {
         borderIn,
         borderOut,
@@ -79,6 +81,7 @@ const DefaultForm = (props: props) => {
   }, [
     fitzgerald,
     skin,
+    hair,
     borderIn,
     borderOut,
     fontSize,
@@ -148,6 +151,9 @@ const DefaultForm = (props: props) => {
           </li>
           <li>
             <SettingCard setting={"skin"} state={skin} setState={setSkin} />
+          </li>
+          <li>
+            <SettingCard setting={"hair"} state={hair} setState={setHair} />
           </li>
         </Stack>
       </List>

@@ -1,4 +1,4 @@
-import { Border, Skins, TextPosition } from "./sequence";
+import { Border, Hair, Skin, TextPosition } from "./sequence";
 
 export type Langs = "ca" | "en" | "es";
 
@@ -20,7 +20,8 @@ export interface DefaultSettings {
 }
 
 interface DefaultSettingsPictAra {
-  skin: Skins;
+  hair: Hair;
+  skin: Skin;
   fitzgerald: string;
 }
 export interface DefaultSettingsPictSequence {

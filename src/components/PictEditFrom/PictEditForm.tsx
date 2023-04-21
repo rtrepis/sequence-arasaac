@@ -29,23 +29,24 @@ const PictEditForm = ({
   );
   const [skin, setSkin] = useState(pictogram.img.settings.skin!);
   const [selectedId, setSelectId] = useState(pictogram.img.selectedId);
+  const [hair, setHair] = useState(pictogram.img.settings.hair!);
 
   const pictogramGuide: PictSequence = {
     ...pictogram,
-    img: { ...pictogram.img, selectedId, settings: { skin } },
+    img: { ...pictogram.img, selectedId, settings: { skin, hair } },
     settings: { ...pictogram.settings, fontSize, textPosition },
   };
 
   const handlerSubmit = useCallback(() => {
     const newPictogram: PictSequence = {
       ...pictogram,
-      img: { ...pictogram.img, selectedId, settings: { skin } },
+      img: { ...pictogram.img, selectedId, settings: { skin, hair } },
       settings: { ...pictogram.settings, fontSize, textPosition },
     };
 
     dispatch(updatePictSequenceActionCreator(newPictogram));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, fontSize, textPosition, skin, selectedId]);
+  }, [dispatch, fontSize, textPosition, skin, selectedId, hair]);
 
   useEffect(() => {
     if (submit === false) handlerSubmit();
@@ -95,6 +96,11 @@ const PictEditForm = ({
           {pictogram.img.settings.skin && (
             <li>
               <SettingCard setting="skin" state={skin} setState={setSkin} />
+            </li>
+          )}
+          {pictogram.img.settings.hair && (
+            <li>
+              <SettingCard setting="hair" state={hair} setState={setHair} />
             </li>
           )}
         </List>
