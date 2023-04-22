@@ -28,6 +28,7 @@ const ViewSequencePage = (): JSX.Element => {
               view={"complete"}
               variant="plane"
               size={view.sizePict}
+              key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
             />
           ))}
         </ViewSequencesSettings>

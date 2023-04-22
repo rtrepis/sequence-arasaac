@@ -19,14 +19,15 @@ const SettingCardBoolean = ({
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const handleSelected = (toUpdate: boolean) => {
-    if (indexPict === undefined) {
-      dispatch(
-        updateDefaultSettingPictSequenceActionCreator({
-          [setting]: toUpdate,
-        })
-      );
-    }
+  const handleSelected = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    dispatch(
+      updateDefaultSettingPictSequenceActionCreator({
+        [setting]: checked,
+      })
+    );
   };
 
   return (
@@ -43,8 +44,8 @@ const SettingCardBoolean = ({
 
       <Switch
         aria-label={`${intl.formatMessage(messages[setting])}`}
-        defaultChecked={selected}
-        onClick={() => handleSelected(!selected)}
+        checked={selected}
+        onChange={handleSelected}
       />
     </Stack>
   );

@@ -100,7 +100,7 @@ const ViewSequencesSettings = ({
               </FormLabel>
             </FormGroup>
             <Button
-              aria-label={"view"}
+              aria-label={"page orientation"}
               variant="text"
               color="primary"
               sx={{ fontSize: "2rem" }}
