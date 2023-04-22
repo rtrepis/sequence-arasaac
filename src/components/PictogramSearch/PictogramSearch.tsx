@@ -15,8 +15,16 @@ import messages from "./PictogramSearch.lang";
 import { useAppSelector } from "../../app/hooks";
 interface PropsPictogramSearch {
   indexPict: number;
-  state: number;
-  setState: React.Dispatch<React.SetStateAction<number>>;
+  state: {
+    selectedId: number;
+    fitzgerald: string | undefined;
+  };
+  setState: React.Dispatch<
+    React.SetStateAction<{
+      selectedId: number;
+      fitzgerald: string | undefined;
+    }>
+  >;
 }
 
 const PictogramSearch = ({
@@ -43,9 +51,21 @@ const PictogramSearch = ({
     setNewWord(event.target.value);
   };
 
-  const handleUpDatePictNumber = (upDatePictNumber: number) => {
-    setState(upDatePictNumber);
-    getSettingsPictId(upDatePictNumber, indexPict);
+  const handleUpDatePictNumber = async (upDatePictNumber: number) => {
+    const pictApiAraSettings = await getSettingsPictId(
+      upDatePictNumber,
+      indexPict
+    );
+
+    let fitzgerald;
+    pictApiAraSettings
+      ? (fitzgerald = pictApiAraSettings.fitzgerald)
+      : (fitzgerald = "#999999");
+
+    setState({
+      selectedId: upDatePictNumber,
+      fitzgerald: fitzgerald,
+    });
   };
 
   const handleSubmit = async (event: SyntheticEvent) => {
@@ -97,7 +117,7 @@ const PictogramSearch = ({
               })}`}
               key={`p_${pictogram}_i_${index}`}
               onClick={() => handleUpDatePictNumber(pictogram)}
-              selected={pictogram === state}
+              selected={pictogram === state.selectedId}
             >
               <img
                 src={toUrlPathApiAraSaac(pictogram, skin, hair)}

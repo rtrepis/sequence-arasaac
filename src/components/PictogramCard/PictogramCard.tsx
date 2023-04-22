@@ -2,7 +2,7 @@ import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
 import { useAppSelector } from "../../app/hooks";
 import useAraSaac from "../../hooks/useAraSaac";
-import { PictSequence } from "../../types/sequence";
+import { Border, PictSequence } from "../../types/sequence";
 import { pictogram__card, pictogram__media } from "./PictogramCard.styled";
 import messages from "./PictogramCart.lang";
 
@@ -33,22 +33,55 @@ const PictogramCard = ({
   size,
 }: PictogramCardProps): JSX.Element => {
   const {
-    borderIn: DefaultBorderIn,
-    borderOut: DefaultBorderOut,
+    borderIn: {
+      color: defaultSettingsBorderInColor,
+      radius: defaultSettingsBorderInRadius,
+      size: defaultSettingsBorderInSize,
+    },
+    borderOut: {
+      color: defaultSettingsBorderOutColor,
+      radius: defaultSettingsBorderOutRadius,
+      size: defaultSettingsBorderOutSize,
+    },
     numbered,
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
   const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
   const intl = useIntl();
 
-  const borderIn = pictBorderIn ? pictBorderIn : DefaultBorderIn;
-  const borderOut = pictBorderOut ? pictBorderOut : DefaultBorderOut;
+  const colorInFitzgerald = fitzgerald ? fitzgerald : "#067c3d";
+  const colorOutFitzgerald = fitzgerald ? fitzgerald : "#999999";
+
+  const colorBorderIn =
+    defaultSettingsBorderInColor === "fitzgerald"
+      ? colorInFitzgerald
+      : defaultSettingsBorderInColor;
+  const colorBorderOut =
+    defaultSettingsBorderOutColor === "fitzgerald"
+      ? colorOutFitzgerald
+      : defaultSettingsBorderOutColor;
+
+  const borderIn: Border = pictBorderIn
+    ? pictBorderIn
+    : {
+        color: colorBorderIn,
+        size: defaultSettingsBorderInSize,
+        radius: defaultSettingsBorderInRadius,
+      };
+
+  const borderOut: Border = pictBorderOut
+    ? pictBorderOut
+    : {
+        color: colorBorderOut,
+        size: defaultSettingsBorderOutSize,
+        radius: defaultSettingsBorderOutRadius,
+      };
 
   const textFontSize = size ? size * 20 * fontSize! : 20 * fontSize!;
 
   return (
     <Card
       data-testid="card-pictogram"
-      sx={() => pictogram__card(borderOut, variant, fitzgerald)}
+      sx={() => pictogram__card(borderOut, variant)}
     >
       {(view === "complete" || view === "header") && (
         <CardContent
@@ -74,7 +107,7 @@ const PictogramCard = ({
           height={size ? size * 150 : 150}
           width={size ? size * 150 : 150}
           alt={intl.formatMessage({ ...messages.pictogram })}
-          sx={() => pictogram__media(borderIn!, view, fitzgerald)}
+          sx={() => pictogram__media(borderIn, view)}
         />
       </CardContent>
 

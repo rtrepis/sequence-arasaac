@@ -28,25 +28,39 @@ const PictEditForm = ({
     pictogram.settings.textPosition!
   );
   const [skin, setSkin] = useState(pictogram.img.settings.skin!);
-  const [selectedId, setSelectId] = useState(pictogram.img.selectedId);
   const [hair, setHair] = useState(pictogram.img.settings.hair!);
+
+  const initialSearch = {
+    selectedId: pictogram.img.selectedId,
+    fitzgerald: pictogram.img.settings.fitzgerald,
+  };
+  const [search, setSearch] = useState(initialSearch);
+  const { fitzgerald, selectedId } = search;
 
   const pictogramGuide: PictSequence = {
     ...pictogram,
-    img: { ...pictogram.img, selectedId, settings: { skin, hair } },
+    img: {
+      ...pictogram.img,
+      selectedId,
+      settings: { fitzgerald, skin, hair },
+    },
     settings: { ...pictogram.settings, fontSize, textPosition },
   };
 
   const handlerSubmit = useCallback(() => {
     const newPictogram: PictSequence = {
       ...pictogram,
-      img: { ...pictogram.img, selectedId, settings: { skin, hair } },
-      settings: { ...pictogram.settings, fontSize, textPosition },
+      img: {
+        ...pictogram.img,
+        selectedId,
+        settings: { fitzgerald, skin, hair },
+      },
+      settings: { fontSize, textPosition },
     };
 
     dispatch(updatePictSequenceActionCreator(newPictogram));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, fontSize, textPosition, skin, selectedId, hair]);
+  }, [dispatch, fontSize, textPosition, skin, selectedId, hair, fitzgerald]);
 
   useEffect(() => {
     if (submit === false) handlerSubmit();
@@ -68,8 +82,8 @@ const PictEditForm = ({
 
         <PictogramSearch
           indexPict={pictogram.indexSequence}
-          state={selectedId}
-          setState={setSelectId}
+          state={search}
+          setState={setSearch}
         />
       </Stack>
 
