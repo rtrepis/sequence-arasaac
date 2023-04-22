@@ -44,7 +44,11 @@ describe("Give component PictogramSearch", () => {
       };
 
       render(
-        <PictogramSearch indexPict={0} state={2234} setState={mockDispatch} />,
+        <PictogramSearch
+          indexPict={0}
+          state={{ selectedId: 2234, fitzgerald: "#334433" }}
+          setState={mockDispatch}
+        />,
         {
           preloadedState: mockState,
         }
@@ -65,7 +69,7 @@ describe("Give component PictogramSearch", () => {
       render(
         <PictogramSearch
           indexPict={indexPict}
-          state={2234}
+          state={{ selectedId: 2234, fitzgerald: "#334433" }}
           setState={mockDispatch}
         />,
         {
@@ -109,7 +113,11 @@ describe("Give component PictogramSearch", () => {
       };
 
       render(
-        <PictogramSearch indexPict={0} state={2234} setState={mockDispatch} />,
+        <PictogramSearch
+          indexPict={0}
+          state={{ selectedId: 2234, fitzgerald: "#334433" }}
+          setState={mockDispatch}
+        />,
         {
           preloadedState: mockState,
         }
@@ -149,7 +157,11 @@ describe("Give component PictogramSearch", () => {
       };
 
       render(
-        <PictogramSearch indexPict={0} state={2234} setState={mockDispatch} />,
+        <PictogramSearch
+          indexPict={0}
+          state={{ selectedId: 2234, fitzgerald: "#334433" }}
+          setState={mockDispatch}
+        />,
         {
           preloadedState: mockState,
         }
