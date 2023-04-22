@@ -19,7 +19,7 @@ import useUserLocation from "./useUserLocation";
 const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
 
 const useAraSaac = () => {
-  const defaultSettingsPictSequence = useAppSelector(
+  const { fontSize, textPosition } = useAppSelector(
     (state) => state.ui.defaultSettings.pictSequence
   );
   const amountSequence = useAppSelector((state) => state.sequence.length);
@@ -69,6 +69,7 @@ const useAraSaac = () => {
             settings: findSettings,
           })
         );
+        return findSettings;
       } catch {}
     },
     [locale, dispatch, makeSettingsProperty]
@@ -108,7 +109,7 @@ const useAraSaac = () => {
               selectedId: findBestPict[0],
               settings: await makeSettingsProperty(data[0]),
             },
-            settings: defaultSettingsPictSequence,
+            settings: { fontSize, textPosition },
             text: word,
           };
 
@@ -133,7 +134,7 @@ const useAraSaac = () => {
               selectedId: 3418,
               settings: { fitzgerald: "#666" },
             },
-            settings: defaultSettingsPictSequence,
+            settings: { textPosition, fontSize },
             text: word,
           };
           dispatch(addPictogramActionCreator(toPictNotFound));
@@ -142,11 +143,12 @@ const useAraSaac = () => {
       }
     },
     [
-      dispatch,
       locale,
+      dispatch,
       amountSequence,
       makeSettingsProperty,
-      defaultSettingsPictSequence,
+      fontSize,
+      textPosition,
     ]
   );
 
