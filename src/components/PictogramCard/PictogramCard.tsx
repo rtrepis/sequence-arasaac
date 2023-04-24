@@ -24,7 +24,7 @@ const PictogramCard = ({
     img: {
       selectedId,
       settings: { skin, fitzgerald, hair },
-      searched: { word: text },
+      searched: { word },
     },
     settings: {
       textPosition,
@@ -32,6 +32,7 @@ const PictogramCard = ({
       borderIn: pictBorderIn,
       borderOut: pictBorderOut,
     },
+    text: customText,
   },
   view,
   variant,
@@ -44,6 +45,8 @@ const PictogramCard = ({
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
   const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
   const intl = useIntl();
+
+  const text = customText ? customText : word;
 
   const borderIn: Border = pictBorderIn
     ? fitzgeraldToBorder(fitzgerald, pictBorderIn)
