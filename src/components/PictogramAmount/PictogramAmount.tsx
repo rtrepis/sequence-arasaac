@@ -31,10 +31,8 @@ const PictogramAmount = ({ variant }: PictogramAmountProps): JSX.Element => {
   );
 
   let pictogramEmpty: PictSequence = {
-    ...preloadedState.sequence[0],
     indexSequence: amountSequence,
     img: {
-      ...preloadedState.sequence[0].img,
       searched: {
         word: `${intl.formatMessage(messages.empty)}`,
         bestIdPicts: [],
