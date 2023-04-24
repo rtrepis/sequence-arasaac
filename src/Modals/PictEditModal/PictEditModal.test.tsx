@@ -34,7 +34,7 @@ describe("Give a component PictEdit", () => {
   describe("When it's rendered with pictogram", () => {
     test("Then should show button, and click open Modal", () => {
       const expectButton = `${mockPict.indexSequence + 1} Pictogram image ${
-        mockPict.img.searched.word
+        mockPict.text
       }`;
 
       render(<PictEditModal pictogram={mockPict} />, {
@@ -57,7 +57,7 @@ describe("Give a component PictEdit", () => {
     test("Then should show button Close, and click close Modal", () => {
       const expectButton = "Close";
       const openButton = `${mockPict.indexSequence + 1} Pictogram image ${
-        mockPict.img.searched.word
+        mockPict.text
       }`;
 
       render(<PictEditModal pictogram={mockPict} />, {
@@ -78,7 +78,7 @@ describe("Give a component PictEdit", () => {
     test("Then should called dispatch subtrac and renumber", () => {
       const DeleteButton = "Delete";
       const openButton = `${mockPict.indexSequence + 1} Pictogram image ${
-        mockPict.img.searched.word
+        mockPict.text
       }`;
       const expectActions = [
         { payload: 0, type: "sequence/subtractPictogram" },
