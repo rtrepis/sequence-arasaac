@@ -16,6 +16,7 @@ let pictogramEmpty: PictSequence = {
     borderIn: { color: "blue", radius: 20, size: 2 },
     borderOut: { color: "green", radius: 20, size: 2 },
   },
+  text: "CustomText",
 };
 
 const mockDispatch = jest.fn();
@@ -33,7 +34,7 @@ describe("Give a PictogramShow component", () => {
         indexTitle: "1",
         number: 2222,
         altImage: "Pictogram image",
-        textPictogram: "Empty",
+        textPictogram: "CustomText",
       };
 
       render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />, {
@@ -82,7 +83,7 @@ describe("Give a PictogramShow component", () => {
       const expectPictogram = {
         number: 2222,
         altImage: "Pictogram image",
-        textPictogram: "Empty",
+        textPictogram: "CustomText",
       };
 
       render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
