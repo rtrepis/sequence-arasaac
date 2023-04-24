@@ -16,7 +16,6 @@ import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import messages from "./PictogramAmount.lang";
-import { preloadedState } from "../../utils/test-utils";
 
 interface PictogramAmountProps {
   variant?: "navBar";
