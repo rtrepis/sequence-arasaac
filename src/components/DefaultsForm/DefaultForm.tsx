@@ -61,7 +61,6 @@ const DefaultForm = (props: props) => {
       fontSize: fontSize,
       borderIn: borderIn,
       borderOut: borderOut,
-      numbered: numbered,
     },
   };
 
@@ -96,67 +95,105 @@ const DefaultForm = (props: props) => {
 
   return (
     <form onSubmit={handlerSubmit}>
-      <List>
-        <Stack
-          display={"flex"}
-          direction={"row"}
-          flexWrap={"wrap"}
-          marginTop={1}
-          rowGap={2}
-          columnGap={2}
-        >
-          <li>
-            <PictogramCard
-              pictogram={pictogramGuide}
-              view="complete"
-              variant="plane"
-            />
-          </li>
-          <li>
-            <SettingCardOptions
-              setting="languages"
-              selected={lang ? lang : "en"}
-            />
-          </li>
-          <li>
-            <SettingCardBoolean setting={"numbered"} selected={numbered} />
-          </li>
-          <li>
-            <SettingCard
-              setting={"textPosition"}
-              state={textPosition}
-              setState={setTextPosition}
-            />
-          </li>
-          <li>
-            <SettingCardNumber
-              setting="fontSize"
-              state={fontSize}
-              setState={setFontSize}
-            />
-          </li>
-          <li>
-            <SettingCardBorder
-              border="borderOut"
-              state={borderOut}
-              setState={setBorderOut}
-            />
-          </li>
-          <li>
-            <SettingCardBorder
-              border="borderIn"
-              state={borderIn}
-              setState={setBorderIn}
-            />
-          </li>
-          <li>
-            <SettingCard setting={"skin"} state={skin} setState={setSkin} />
-          </li>
-          <li>
-            <SettingCard setting={"hair"} state={hair} setState={setHair} />
-          </li>
+      <Stack
+        display={"flex"}
+        direction={"row"}
+        marginTop={1}
+        rowGap={2}
+        columnGap={2}
+      >
+        <Stack>
+          <PictogramCard
+            pictogram={pictogramGuide}
+            view="complete"
+            variant="plane"
+          />
         </Stack>
-      </List>
+        <List>
+          <Stack
+            display={"flex"}
+            direction={"row"}
+            flexWrap={"wrap"}
+            marginTop={1}
+            rowGap={2}
+            columnGap={2}
+          >
+            <li>
+              <SettingCardOptions
+                setting="languages"
+                selected={lang ? lang : "en"}
+              />
+            </li>
+
+            <Stack
+              display={"flex"}
+              direction={"row"}
+              flexWrap={"wrap"}
+              marginTop={1}
+              rowGap={2}
+              columnGap={2}
+            >
+              <li>
+                <SettingCardBoolean setting={"numbered"} selected={numbered} />
+              </li>
+              <li>
+                <SettingCard
+                  setting={"textPosition"}
+                  state={textPosition}
+                  setState={setTextPosition}
+                />
+              </li>
+              <li>
+                <SettingCardNumber
+                  setting="fontSize"
+                  state={fontSize}
+                  setState={setFontSize}
+                />
+              </li>
+            </Stack>
+
+            <Stack
+              display={"flex"}
+              direction={"row"}
+              flexWrap={"wrap"}
+              marginTop={1}
+              rowGap={2}
+              columnGap={2}
+            >
+              <li>
+                <SettingCardBorder
+                  border="borderOut"
+                  state={borderOut}
+                  setState={setBorderOut}
+                />
+              </li>
+              <li>
+                <SettingCardBorder
+                  border="borderIn"
+                  state={borderIn}
+                  setState={setBorderIn}
+                />
+              </li>
+            </Stack>
+
+            <Stack
+              display={"flex"}
+              direction={"row"}
+              flexWrap={"wrap"}
+              marginTop={1}
+              rowGap={2}
+              columnGap={2}
+            >
+              <li>
+                <SettingCard setting={"skin"} state={skin} setState={setSkin} />
+              </li>
+              <li>
+                <SettingCard setting={"hair"} state={hair} setState={setHair} />
+              </li>
+            </Stack>
+          </Stack>
+        </List>
+      </Stack>
     </form>
   );
 };
