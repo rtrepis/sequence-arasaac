@@ -1,4 +1,4 @@
-import { List, Stack } from "@mui/material";
+import { List, Stack, TextField } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import { PictSequence } from "../../types/sequence";
@@ -27,6 +27,8 @@ const PictEditForm = ({
   const [textPosition, setTextPosition] = useState(
     pictogram.settings.textPosition!
   );
+  const [text, setText] = useState(pictogram.text);
+
   const [skin, setSkin] = useState(pictogram.img.settings.skin!);
   const [hair, setHair] = useState(pictogram.img.settings.hair!);
 
@@ -45,6 +47,7 @@ const PictEditForm = ({
       settings: { fitzgerald, skin, hair },
     },
     settings: { ...pictogram.settings, fontSize, textPosition },
+    text,
   };
 
   const handlerSubmit = useCallback(() => {
@@ -56,11 +59,21 @@ const PictEditForm = ({
         settings: { fitzgerald, skin, hair },
       },
       settings: { fontSize, textPosition },
+      text,
     };
 
     dispatch(updatePictSequenceActionCreator(newPictogram));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, fontSize, textPosition, skin, selectedId, hair, fitzgerald]);
+  }, [
+    dispatch,
+    fontSize,
+    textPosition,
+    skin,
+    selectedId,
+    hair,
+    fitzgerald,
+    text,
+  ]);
 
   useEffect(() => {
     if (submit === false) handlerSubmit();
@@ -98,15 +111,25 @@ const PictEditForm = ({
               />
             </li>
           )}
-          {pictogram.settings.fontSize && (
+          <Stack direction={"row"}>
             <li>
-              <SettingCardNumber
-                setting="fontSize"
-                state={fontSize}
-                setState={setFontSize}
+              <TextField
+                value={text}
+                onChange={(event) => setText(event.target.value)}
+                helperText={"Custom Text"}
+                variant="filled"
               />
             </li>
-          )}
+            {pictogram.settings.fontSize && (
+              <li>
+                <SettingCardNumber
+                  setting="fontSize"
+                  state={fontSize}
+                  setState={setFontSize}
+                />
+              </li>
+            )}
+          </Stack>
           {pictogram.img.settings.skin && (
             <li>
               <SettingCard setting="skin" state={skin} setState={setSkin} />
