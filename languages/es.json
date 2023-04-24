@@ -32,7 +32,7 @@
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "Type the words in the sequence between the commas and press Return or click the magnifying glass when you're done. Example: boy, put, seat belt.",
+    "defaultMessage": "Escribe las palabras en la secuencia entre comas y presiona Retorno o haz clic en la lupa cuando hayas terminado. Ejemplo: chico, poner, cinturón de seguridad.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
@@ -152,19 +152,19 @@
     "description": "Label form"
   },
   "setting.lang.ca.label": {
-    "defaultMessage": "Catalan",
+    "defaultMessage": "Catalán",
     "description": "Type setting"
   },
   "setting.lang.en.label": {
-    "defaultMessage": "English",
+    "defaultMessage": "Inglés",
     "description": "Type setting"
   },
   "setting.lang.es.label": {
-    "defaultMessage": "Spanish",
+    "defaultMessage": "Español",
     "description": "Type setting"
   },
   "setting.lang.title": {
-    "defaultMessage": "Language",
+    "defaultMessage": "Idioma",
     "description": "Title setting"
   },
   "settings.skins.asian": {
