@@ -15,6 +15,7 @@ import {
   Skin,
 } from "../types/sequence";
 import useUserLocation from "./useUserLocation";
+import fitzgeraldColors from "../data/fitzgeraldColors";
 
 const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
 
@@ -35,13 +36,13 @@ const useAraSaac = () => {
       const settingsProperty: PictApiAraSettings = {};
 
       if (data.tags.slice(0, 3).includes("person"))
-        settingsProperty.fitzgerald = "#DD8800";
+        settingsProperty.fitzgerald = fitzgeraldColors.person;
       if (data.tags.slice(0, 3).includes("verb"))
-        settingsProperty.fitzgerald = "#229900";
+        settingsProperty.fitzgerald = fitzgeraldColors.verb;
       if (data.tags.slice(0, 3).includes("adjective"))
-        settingsProperty.fitzgerald = "#0088CC";
+        settingsProperty.fitzgerald = fitzgeraldColors.adjective;
       if (data.tags.slice(0, 3).includes("expression"))
-        settingsProperty.fitzgerald = "#CC00BB";
+        settingsProperty.fitzgerald = fitzgeraldColors.expression;
 
       if (data.skin) settingsProperty.skin = defaultSettingsPictApiAra.skin;
 
