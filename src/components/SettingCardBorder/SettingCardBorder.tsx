@@ -34,9 +34,9 @@ const SettingCardBorder = ({
 }: SettingCardBorderProps): JSX.Element => {
   const intl = useIntl();
 
-  const initialColorSelect = color === "fitzgerald" ? "#CC00BB" : color;
+  //const initialColorSelect = color === "fitzgerald" ? "#CC00BB" : color;
 
-  const [colorSelect, setColorSelect] = useState(initialColorSelect);
+  const [colorSelect, setColorSelect] = useState(color);
 
   const handleChangesColorSelect = (
     event: React.ChangeEvent<HTMLInputElement>
