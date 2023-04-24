@@ -1,5 +1,5 @@
 import { SxProps } from "@mui/material";
-import { Border } from "../../types/sequence";
+import { Border, TextPosition } from "../../types/sequence";
 
 export const pictogram__card = (borderOut: Border, variant: any) => {
   const card: SxProps = {
@@ -26,5 +26,26 @@ export const pictogram__media = (borderIn: Border, view: any) => {
     borderRadius: `${borderIn ? borderIn.radius : 20}px`,
   };
 
+  return sx;
+};
+
+export const textContent = (
+  size: number | undefined,
+  textPosition: TextPosition | undefined,
+  numbered: boolean,
+  borderSize: number
+) => {
+  const sx: SxProps = {
+    width: size ? size * 150 : 150,
+    paddingInline: 0,
+    ":first-of-type": {
+      paddingBlock:
+        textPosition !== "top" && !numbered && borderSize === 0 ? 0 : 1,
+    },
+    ":last-child": {
+      paddingBlock:
+        textPosition !== "bottom" && !numbered && borderSize === 0 ? 0 : 1,
+    },
+  };
   return sx;
 };
