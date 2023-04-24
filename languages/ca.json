@@ -32,7 +32,7 @@
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "Escriviu les paraules de la seqüència entre espais i premeu Intro o feu clic a la lupa quan hàgiu acabat.",
+    "defaultMessage": "Escriviu les paraules en la seqüència entre comes i premeu Retorn o feu clic a la lupa quan hàgiu acabat. Exemple: noi, posar, cinturó de seguretat.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
@@ -150,6 +150,22 @@
   "pages.viewSequence.size.label": {
     "defaultMessage": "Mida",
     "description": "Label form"
+  },
+  "setting.lang.ca.label": {
+    "defaultMessage": "Català",
+    "description": "Type setting"
+  },
+  "setting.lang.en.label": {
+    "defaultMessage": "Anglès",
+    "description": "Type setting"
+  },
+  "setting.lang.es.label": {
+    "defaultMessage": "Espanyol",
+    "description": "Type setting"
+  },
+  "setting.lang.title": {
+    "defaultMessage": "Idioma",
+    "description": "Title setting"
   },
   "settings.skins.asian": {
     "defaultMessage": "Asiàtic",
