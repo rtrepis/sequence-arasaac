@@ -12,6 +12,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
 import { Container } from "@mui/system";
 import DefaultForm from "../../components/DefaultsForm/DefaultForm";
+import { Stack } from "@mui/material";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -53,7 +54,7 @@ const DefaultSettingsModal = (): JSX.Element => {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: "relative" }}>
+        <AppBar sx={{ position: { xs: "fixed", md: "relative" } }}>
           <Toolbar>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               <FormattedMessage {...messages.settings} />
@@ -69,6 +70,7 @@ const DefaultSettingsModal = (): JSX.Element => {
           </Toolbar>
         </AppBar>
         <Container maxWidth={"xl"}>
+          <Stack sx={{ height: 65, display: { md: "none" } }} />
           <DefaultForm submit={open} />
         </Container>
       </Dialog>
