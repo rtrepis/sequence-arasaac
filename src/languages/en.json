@@ -20,7 +20,7 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "Sequence - AraSaac"
+      "value": "SAS"
     }
   ],
   "components.barNavigation.view.title": [
@@ -33,6 +33,12 @@
     {
       "type": 0,
       "value": "close"
+    }
+  ],
+  "components.defaultSettings.pictGuide": [
+    {
+      "type": 0,
+      "value": "Pictogram guide"
     }
   ],
   "components.defaultSettings.settings.title": [
@@ -149,10 +155,22 @@
       "value": "Search"
     }
   ],
+  "components.pictogramSearch.minus": [
+    {
+      "type": 0,
+      "value": "Minus pictograms"
+    }
+  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
       "value": "Pictogram"
+    }
+  ],
+  "components.pictogramSearch.plus": [
+    {
+      "type": 0,
+      "value": "Plus pictograms"
     }
   ],
   "components.settingCard.Radius.title": [
@@ -173,22 +191,16 @@
       "value": "Apply All"
     }
   ],
-  "components.settingCard.default.label": [
+  "components.settingCard.fontSize.label": [
     {
       "type": 0,
-      "value": "Default"
+      "value": "Font Size"
     }
   ],
   "components.settingCard.numbered.title": [
     {
       "type": 0,
       "value": "Numbered"
-    }
-  ],
-  "components.settingCardBorder.applyAll.label": [
-    {
-      "type": 0,
-      "value": "Apply All"
     }
   ],
   "components.settingCardBorder.fitzgeraldKey.label": [
@@ -249,6 +261,54 @@
     {
       "type": 0,
       "value": "Language"
+    }
+  ],
+  "settings.hair.black": [
+    {
+      "type": 0,
+      "value": "Black"
+    }
+  ],
+  "settings.hair.blonde": [
+    {
+      "type": 0,
+      "value": "Blonde"
+    }
+  ],
+  "settings.hair.brown": [
+    {
+      "type": 0,
+      "value": "Brown"
+    }
+  ],
+  "settings.hair.darkBrown": [
+    {
+      "type": 0,
+      "value": "Dark Brown"
+    }
+  ],
+  "settings.hair.darkGray": [
+    {
+      "type": 0,
+      "value": "Dark Gray"
+    }
+  ],
+  "settings.hair.gray": [
+    {
+      "type": 0,
+      "value": "Gray"
+    }
+  ],
+  "settings.hair.label": [
+    {
+      "type": 0,
+      "value": "Hair"
+    }
+  ],
+  "settings.hair.red": [
+    {
+      "type": 0,
+      "value": "Red"
     }
   ],
   "settings.skins.asian": [

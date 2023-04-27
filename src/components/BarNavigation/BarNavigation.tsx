@@ -1,57 +1,41 @@
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Container from "@mui/material/Container";
-import Slide from "@mui/material/Slide";
 import DefaultSettings from "../../Modals/DefaultSettingsModal/DefaultSettingsModal";
 import { FormattedMessage } from "react-intl";
 import messages from "./BarNavigation.lang";
 import { Stack } from "@mui/material";
-import NotPrint from "../NotPrint/NotPrint";
+import NotPrint from "../utils/NotPrint/NotPrint";
 import ToggleButtonEditViewPages from "../ToggleButtonEditViewPages/ToggleButtonEditViewPages";
 import PictogramAmount from "../PictogramAmount/PictogramAmount";
 import MagicSearch from "../MagicSearch/MagicSearch";
+import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
 
 interface BarProps {
   children: React.ReactElement;
   title?: "view" | "edit";
 }
 
-const HideOnScroll = (props: BarProps) => {
-  const { children } = props;
-
-  const trigger = useScrollTrigger({
-    target: undefined,
-  });
-
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  );
-};
-
-const BarNavigation = (props: BarProps): JSX.Element => {
+const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
   return (
     <>
       <NotPrint>
-        <HideOnScroll {...props}>
+        <HideOnScroll {...children}>
           <AppBar>
             <Toolbar
               sx={{ fontSize: "1.75rem", justifyContent: "space-between" }}
             >
-              <Typography variant={"h6"} component="h1">
+              <Typography variant={"h5"} component="h1" fontWeight={800}>
                 <FormattedMessage {...messages.title} />
               </Typography>
-              <Typography variant={"h5"} component="h2">
-                {props.title && <FormattedMessage {...messages[props.title]} />}
+              <Typography variant={"h6"} component="h2">
+                {title && <FormattedMessage {...messages[title]} />}
               </Typography>
+
               <Stack direction={"row"}>
-                {props.title && (
-                  <ToggleButtonEditViewPages pageTitle={props.title} />
-                )}
-                {!props.title && (
+                {title && <ToggleButtonEditViewPages pageTitle={title} />}
+                {!title && (
                   <Stack display={{ xs: "none", lg: "flex" }} direction={"row"}>
                     <PictogramAmount variant="navBar" />
                     <MagicSearch variant="navBar" />
@@ -64,7 +48,7 @@ const BarNavigation = (props: BarProps): JSX.Element => {
         </HideOnScroll>
         <Toolbar />
       </NotPrint>
-      <Container maxWidth={"xl"}>{props.children}</Container>
+      <Container maxWidth={"xl"}>{children}</Container>
     </>
   );
 };
