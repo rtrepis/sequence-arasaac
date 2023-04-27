@@ -61,7 +61,6 @@ const SettingCard = ({
       direction={"row"}
       flexWrap={"wrap"}
       columnGap={2}
-      last-child={{ alignItems: "end" }}
       sx={card}
     >
       <Typography variant="body1" sx={cardTitle} component="h2">

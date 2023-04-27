@@ -1,4 +1,4 @@
-import { List, Stack } from "@mui/material";
+import { Box, List, Stack } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import SettingCardOptions from "../SettingsCards/SettingCardOptions/SettingCardOptions";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
@@ -13,11 +13,11 @@ import { useCallback, useEffect, useState } from "react";
 import { DefaultSettings } from "../../types/ui";
 import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
 
-interface props {
+interface DefaultFormProps {
   submit: boolean;
 }
 
-const DefaultForm = ({ submit }: props) => {
+const DefaultForm = ({ submit }: DefaultFormProps) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -97,18 +97,19 @@ const DefaultForm = ({ submit }: props) => {
     <form onSubmit={handlerSubmit}>
       <Stack
         display={"flex"}
-        direction={"row"}
+        direction={{ xs: "column", md: "row" }}
         marginTop={1}
         rowGap={2}
         columnGap={2}
       >
-        <Stack>
+        <Box width={180}>
           <PictogramCard
             pictogram={pictogramGuide}
             view="complete"
             variant="plane"
           />
-        </Stack>
+        </Box>
+
         <List>
           <Stack
             display={"flex"}
@@ -124,7 +125,9 @@ const DefaultForm = ({ submit }: props) => {
                 selected={lang ? lang : "en"}
               />
             </li>
-
+            <li>
+              <SettingCardBoolean setting={"numbered"} selected={numbered} />
+            </li>
             <Stack
               display={"flex"}
               direction={"row"}
@@ -133,9 +136,6 @@ const DefaultForm = ({ submit }: props) => {
               rowGap={2}
               columnGap={2}
             >
-              <li>
-                <SettingCardBoolean setting={"numbered"} selected={numbered} />
-              </li>
               <li>
                 <SettingCard
                   setting={"textPosition"}
