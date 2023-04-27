@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useAppDispatch } from "../../app/hooks";
 import { useState } from "react";
-import NotPrint from "../../components/NotPrint/NotPrint";
+import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdScreenRotation } from "react-icons/md";
 import { ViewSettings } from "../../types/ui";

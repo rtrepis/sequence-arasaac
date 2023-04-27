@@ -17,7 +17,7 @@ interface props {
   submit: boolean;
 }
 
-const DefaultForm = (props: props) => {
+const DefaultForm = ({ submit }: props) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -90,8 +90,8 @@ const DefaultForm = (props: props) => {
   ]);
 
   useEffect(() => {
-    !props.submit && handlerSubmit();
-  }, [props.submit, handlerSubmit, borderIn]);
+    !submit && handlerSubmit();
+  }, [submit, handlerSubmit, borderIn]);
 
   return (
     <form onSubmit={handlerSubmit}>
