@@ -5,16 +5,16 @@ import {
   skinApplyAllActionCreator,
   textPositionApplyAllActionCreator,
 } from "../../../app/slice/sequenceSlice";
-import StyledButton from "../../../style/StyledButton";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import { Skin, TextPosition } from "../../../types/sequence";
-import { messages, settingsCardLang } from "./SettingCard.lang";
+import { settingsCardLang } from "./SettingCard.lang";
 import {
   cardAction,
   card,
   cardContent,
   cardTitle,
 } from "../SettingsCards.styled";
+import ApplyAll from "../ApplyAll/ApplyAll";
 
 interface SettingCardProps {
   setting: "skin" | "textPosition" | "hair";
@@ -93,13 +93,7 @@ const SettingCard = ({
         ))}
       </StyledToggleButtonGroup>
 
-      <StyledButton
-        variant="outlined"
-        sx={cardAction}
-        onClick={() => handleApplyAll(state)}
-      >
-        <FormattedMessage {...messages.applyAll} />
-      </StyledButton>
+      <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
     </Stack>
   );
 };

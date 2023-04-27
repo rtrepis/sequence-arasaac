@@ -36,9 +36,4 @@ export const messages = defineMessages({
     defaultMessage: "Radius",
     description: "Setting title",
   },
-  applyAll: {
-    id: "components.settingCardBorder.applyAll.label",
-    defaultMessage: "Apply All",
-    description: "apply to all pictograms",
-  },
 });
