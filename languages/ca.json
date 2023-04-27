@@ -24,7 +24,7 @@
     "description": "close Settings Default "
   },
   "components.defaultSettings.pictGuide": {
-    "defaultMessage": "Pictogram guide",
+    "defaultMessage": "Pictograma de guia",
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.settings.title": {
@@ -104,7 +104,7 @@
     "description": "search pictograms"
   },
   "components.pictogramSearch.minus": {
-    "defaultMessage": "Minus pictograms",
+    "defaultMessage": "Treure pictograma",
     "description": "Minus pictograms"
   },
   "components.pictogramSearch.pictogram": {
@@ -112,7 +112,7 @@
     "description": "Pictogram"
   },
   "components.pictogramSearch.plus": {
-    "defaultMessage": "Plus pictograms",
+    "defaultMessage": "Inserir pictograma",
     "description": "Plus pictograms"
   },
   "components.settingCard.Radius.title": {
@@ -128,7 +128,7 @@
     "description": "apply to all pictograms"
   },
   "components.settingCard.fontSize.label": {
-    "defaultMessage": "Font Size",
+    "defaultMessage": "Mida lletra",
     "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
@@ -176,35 +176,35 @@
     "description": "Title setting"
   },
   "settings.hair.black": {
-    "defaultMessage": "Black",
+    "defaultMessage": "Negre",
     "description": "Type of setting text position"
   },
   "settings.hair.blonde": {
-    "defaultMessage": "Blonde",
+    "defaultMessage": "Ros",
     "description": "Type of setting text position"
   },
   "settings.hair.brown": {
-    "defaultMessage": "Brown",
+    "defaultMessage": "Marró",
     "description": "Type of setting text position"
   },
   "settings.hair.darkBrown": {
-    "defaultMessage": "Dark Brown",
+    "defaultMessage": "Marró fosc",
     "description": "Type of setting text position"
   },
   "settings.hair.darkGray": {
-    "defaultMessage": "Dark Gray",
+    "defaultMessage": "Gris fosc",
     "description": "Type of setting text position"
   },
   "settings.hair.gray": {
-    "defaultMessage": "Gray",
+    "defaultMessage": "Gris",
     "description": "Type of setting text position"
   },
   "settings.hair.label": {
-    "defaultMessage": "Hair",
+    "defaultMessage": "Cabell",
     "description": "Setting Hair label"
   },
   "settings.hair.red": {
-    "defaultMessage": "Red",
+    "defaultMessage": "Pèl-roig",
     "description": "Type of setting text position"
   },
   "settings.skins.asian": {
