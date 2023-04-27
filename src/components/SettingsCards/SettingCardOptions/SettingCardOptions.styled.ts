@@ -5,16 +5,25 @@ export const card: SxProps = {
   paddingBlockEnd: 1,
   borderBottom: 1,
   borderBottomColor: "secondary.light",
+  ":last-child": {
+    justifyContent: "end",
+  },
 };
 
 export const cardTitle: SxProps = {
   fontWeight: "bold",
 };
 
+export const cardContent: SxProps = {
+  marginBlockStart: { xs: 0.1 },
+  paddingInlineStart: 1,
+};
+
 export const cardAction: SxProps = {
   maxHeight: 40,
   lineHeight: 1.25,
-  alignSelf: { xs: "end" },
-  marginTop: { xs: 0, sm: 0 },
+  alignSelf: "end",
+  justifySelf: "end",
+  marginTop: { xs: 0.1, sm: 0.2 },
   marginBottom: { xs: 0.1 },
 };
