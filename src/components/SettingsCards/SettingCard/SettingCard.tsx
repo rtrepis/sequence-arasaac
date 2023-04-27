@@ -1,15 +1,20 @@
 import { Stack, ToggleButton, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch } from "../../../app/hooks";
 import {
   skinApplyAllActionCreator,
   textPositionApplyAllActionCreator,
-} from "../../app/slice/sequenceSlice";
-import StyledButton from "../../style/StyledButton";
-import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
-import { Skin, TextPosition } from "../../types/sequence";
+} from "../../../app/slice/sequenceSlice";
+import StyledButton from "../../../style/StyledButton";
+import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
+import { Skin, TextPosition } from "../../../types/sequence";
 import { messages, settingsCardLang } from "./SettingCard.lang";
-import { cardAction, card, cardContent, cardTitle } from "./SettingCard.styled";
+import {
+  cardAction,
+  card,
+  cardContent,
+  cardTitle,
+} from "../SettingsCards.styled";
 
 interface SettingCardProps {
   setting: "skin" | "textPosition" | "hair";
@@ -55,7 +60,8 @@ const SettingCard = ({
       display={"flex"}
       direction={"row"}
       flexWrap={"wrap"}
-      spacing={2}
+      columnGap={2}
+      last-child={{ alignItems: "end" }}
       sx={card}
     >
       <Typography variant="body1" sx={cardTitle} component="h2">

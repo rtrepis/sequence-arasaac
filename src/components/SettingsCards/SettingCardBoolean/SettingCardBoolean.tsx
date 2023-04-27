@@ -1,9 +1,9 @@
 import { Stack, Switch, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useAppDispatch } from "../../app/hooks";
-import { updateDefaultSettingPictSequenceActionCreator } from "../../app/slice/uiSlice";
+import { useAppDispatch } from "../../../app/hooks";
+import { updateDefaultSettingPictSequenceActionCreator } from "../../../app/slice/uiSlice";
 import { messages } from "./SettingCardBoolean.lang";
-import { card, cardTitle } from "./SettingCardBoolean.styled";
+import { card, cardTitle } from "../SettingsCards.styled";
 
 interface SettingCardProps {
   indexPict?: number;
@@ -35,7 +35,7 @@ const SettingCardBoolean = ({
       display={"flex"}
       direction={"row"}
       flexWrap={"wrap"}
-      spacing={2}
+      columnGap={2}
       sx={card}
     >
       <Typography variant="body1" sx={cardTitle} component="h2">
