@@ -23,6 +23,10 @@
     "defaultMessage": "tancar",
     "description": "close Settings Default "
   },
+  "components.defaultSettings.pictGuide": {
+    "defaultMessage": "Pictograma de guia",
+    "description": "Pictogram pictogram for default settings"
+  },
   "components.defaultSettings.settings.title": {
     "defaultMessage": "Configuracions per defecte",
     "description": "Settings Default "
@@ -99,9 +103,17 @@
     "defaultMessage": "Cercar",
     "description": "search pictograms"
   },
+  "components.pictogramSearch.minus": {
+    "defaultMessage": "Treure pictograma",
+    "description": "Minus pictograms"
+  },
   "components.pictogramSearch.pictogram": {
     "defaultMessage": "Pictograma",
     "description": "Pictogram"
+  },
+  "components.pictogramSearch.plus": {
+    "defaultMessage": "Inserir pictograma",
+    "description": "Plus pictograms"
   },
   "components.settingCard.Radius.title": {
     "defaultMessage": "Radi",
@@ -115,17 +127,13 @@
     "defaultMessage": "Aplicar tots",
     "description": "apply to all pictograms"
   },
-  "components.settingCard.default.label": {
-    "defaultMessage": "Per defecte",
-    "description": "Not type setting "
+  "components.settingCard.fontSize.label": {
+    "defaultMessage": "Mida lletra",
+    "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
     "defaultMessage": "Numeració",
     "description": "Setting title"
-  },
-  "components.settingCardBorder.applyAll.label": {
-    "defaultMessage": "Aplicar tots",
-    "description": "apply to all pictograms"
   },
   "components.settingCardBorder.fitzgeraldKey.label": {
     "defaultMessage": "Clau Fitzgerald",
@@ -166,6 +174,38 @@
   "setting.lang.title": {
     "defaultMessage": "Idioma",
     "description": "Title setting"
+  },
+  "settings.hair.black": {
+    "defaultMessage": "Negre",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.blonde": {
+    "defaultMessage": "Ros",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.brown": {
+    "defaultMessage": "Marró",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.darkBrown": {
+    "defaultMessage": "Marró fosc",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.darkGray": {
+    "defaultMessage": "Gris fosc",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.gray": {
+    "defaultMessage": "Gris",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.label": {
+    "defaultMessage": "Cabell",
+    "description": "Setting Hair label"
+  },
+  "settings.hair.red": {
+    "defaultMessage": "Pèl-roig",
+    "description": "Type of setting text position"
   },
   "settings.skins.asian": {
     "defaultMessage": "Asiàtic",
