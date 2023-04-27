@@ -7,14 +7,14 @@ import {
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
-import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
-import { Border } from "../../types/sequence";
+import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
+import { Border } from "../../../types/sequence";
 import {
   card,
   cardColor,
   cardContent,
   cardTitle,
-} from "./SettingCardBorder.styled";
+} from "../SettingsCards.styled";
 import "./SettingCardBorder.css";
 import { messages } from "./SettingCardBorder.lang";
 import { useState } from "react";
@@ -30,11 +30,8 @@ const SettingCardBorder = ({
   border,
   state: { color, size, radius },
   setState,
-  indexPict,
 }: SettingCardBorderProps): JSX.Element => {
   const intl = useIntl();
-
-  //const initialColorSelect = color === "fitzgerald" ? "#CC00BB" : color;
 
   const [colorSelect, setColorSelect] = useState(color);
 
@@ -93,7 +90,7 @@ const SettingCardBorder = ({
         display={"flex"}
         direction={"row"}
         flexWrap={"wrap"}
-        spacing={2}
+        columnGap={2}
         sx={card}
       >
         <Typography variant="body1" sx={cardTitle} component="h4">

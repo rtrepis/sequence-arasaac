@@ -1,9 +1,9 @@
 import { Slider, Stack, Typography } from "@mui/material";
-import { useAppDispatch } from "../../app/hooks";
-import StyledButton from "../../style/StyledButton";
+import { useAppDispatch } from "../../../app/hooks";
+import StyledButton from "../../../style/StyledButton";
 import { FormattedMessage } from "react-intl";
-import { cardAction, card, cardTitle } from "./SettingCardNumber.styled";
-import { fontSizeApplyAllActionCreator } from "../../app/slice/sequenceSlice";
+import { cardAction, card, cardTitle } from "../SettingsCards.styled";
+import { fontSizeApplyAllActionCreator } from "../../../app/slice/sequenceSlice";
 import { messages } from "./SettingCardNumber.lang";
 
 interface SettingCardProps {
@@ -37,7 +37,7 @@ const SettingCardNumber = ({
       display={"flex"}
       direction={"row"}
       flexWrap={"wrap"}
-      spacing={2}
+      columnGap={2}
       sx={card}
     >
       <Typography variant="body1" sx={cardTitle} component="h2">

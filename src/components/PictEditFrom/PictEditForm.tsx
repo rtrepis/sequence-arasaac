@@ -4,8 +4,8 @@ import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import { PictSequence } from "../../types/sequence";
 import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import messages from "./PictEditForm.lang";
-import SettingCard from "../SettingCard/SettingCard";
-import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
+import SettingCard from "../SettingsCards/SettingCard/SettingCard";
+import SettingCardNumber from "../SettingsCards/SettingCardNumber/SettingCardNumber";
 import { useIntl } from "react-intl";
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
@@ -111,25 +111,22 @@ const PictEditForm = ({
               />
             </li>
           )}
-          <Stack direction={"row"}>
+          <TextField
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+            helperText={"Custom Text"}
+            variant="filled"
+            fullWidth
+          />
+          {pictogram.settings.fontSize && (
             <li>
-              <TextField
-                value={text}
-                onChange={(event) => setText(event.target.value)}
-                helperText={"Custom Text"}
-                variant="filled"
+              <SettingCardNumber
+                setting="fontSize"
+                state={fontSize}
+                setState={setFontSize}
               />
             </li>
-            {pictogram.settings.fontSize && (
-              <li>
-                <SettingCardNumber
-                  setting="fontSize"
-                  state={fontSize}
-                  setState={setFontSize}
-                />
-              </li>
-            )}
-          </Stack>
+          )}
           {pictogram.img.settings.skin && (
             <li>
               <SettingCard setting="skin" state={skin} setState={setSkin} />
