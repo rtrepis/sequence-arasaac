@@ -12,7 +12,7 @@
     "description": "Title Page"
   },
   "components.barNavigation.title": {
-    "defaultMessage": "Sequence - AraSaac",
+    "defaultMessage": "SAS",
     "description": "App title translate Sequence"
   },
   "components.barNavigation.view.title": {

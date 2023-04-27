@@ -20,7 +20,7 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "Seqüències - AraSaac"
+      "value": "SAS"
     }
   ],
   "components.barNavigation.view.title": [
@@ -33,6 +33,12 @@
     {
       "type": 0,
       "value": "tancar"
+    }
+  ],
+  "components.defaultSettings.pictGuide": [
+    {
+      "type": 0,
+      "value": "Pictograma de guia"
     }
   ],
   "components.defaultSettings.settings.title": [
@@ -50,7 +56,7 @@
   "components.magicSearch.helperText.": [
     {
       "type": 0,
-      "value": "Escriviu les paraules de la seqüència entre espais i premeu Intro o feu clic a la lupa quan hàgiu acabat."
+      "value": "Escriviu les paraules en la seqüència entre comes i premeu Retorn o feu clic a la lupa quan hàgiu acabat. Exemple: noi, posar, cinturó de seguretat."
     }
   ],
   "components.magicSearch.label": [
@@ -149,10 +155,22 @@
       "value": "Cercar"
     }
   ],
+  "components.pictogramSearch.minus": [
+    {
+      "type": 0,
+      "value": "Treure pictograma"
+    }
+  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
       "value": "Pictograma"
+    }
+  ],
+  "components.pictogramSearch.plus": [
+    {
+      "type": 0,
+      "value": "Inserir pictograma"
     }
   ],
   "components.settingCard.Radius.title": [
@@ -173,22 +191,16 @@
       "value": "Aplicar tots"
     }
   ],
-  "components.settingCard.default.label": [
+  "components.settingCard.fontSize.label": [
     {
       "type": 0,
-      "value": "Per defecte"
+      "value": "Mida lletra"
     }
   ],
   "components.settingCard.numbered.title": [
     {
       "type": 0,
       "value": "Numeració"
-    }
-  ],
-  "components.settingCardBorder.applyAll.label": [
-    {
-      "type": 0,
-      "value": "Aplicar tots"
     }
   ],
   "components.settingCardBorder.fitzgeraldKey.label": [
@@ -225,6 +237,78 @@
     {
       "type": 0,
       "value": "Mida"
+    }
+  ],
+  "setting.lang.ca.label": [
+    {
+      "type": 0,
+      "value": "Català"
+    }
+  ],
+  "setting.lang.en.label": [
+    {
+      "type": 0,
+      "value": "Anglès"
+    }
+  ],
+  "setting.lang.es.label": [
+    {
+      "type": 0,
+      "value": "Espanyol"
+    }
+  ],
+  "setting.lang.title": [
+    {
+      "type": 0,
+      "value": "Idioma"
+    }
+  ],
+  "settings.hair.black": [
+    {
+      "type": 0,
+      "value": "Negre"
+    }
+  ],
+  "settings.hair.blonde": [
+    {
+      "type": 0,
+      "value": "Ros"
+    }
+  ],
+  "settings.hair.brown": [
+    {
+      "type": 0,
+      "value": "Marró"
+    }
+  ],
+  "settings.hair.darkBrown": [
+    {
+      "type": 0,
+      "value": "Marró fosc"
+    }
+  ],
+  "settings.hair.darkGray": [
+    {
+      "type": 0,
+      "value": "Gris fosc"
+    }
+  ],
+  "settings.hair.gray": [
+    {
+      "type": 0,
+      "value": "Gris"
+    }
+  ],
+  "settings.hair.label": [
+    {
+      "type": 0,
+      "value": "Cabell"
+    }
+  ],
+  "settings.hair.red": [
+    {
+      "type": 0,
+      "value": "Pèl-roig"
     }
   ],
   "settings.skins.asian": [

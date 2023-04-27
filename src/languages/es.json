@@ -20,7 +20,7 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "Secuencia - AraSaac"
+      "value": "SAS"
     }
   ],
   "components.barNavigation.view.title": [
@@ -33,6 +33,12 @@
     {
       "type": 0,
       "value": "cerrar"
+    }
+  ],
+  "components.defaultSettings.pictGuide": [
+    {
+      "type": 0,
+      "value": "Pictograma de guía"
     }
   ],
   "components.defaultSettings.settings.title": [
@@ -50,7 +56,7 @@
   "components.magicSearch.helperText.": [
     {
       "type": 0,
-      "value": "Escriba las palabras de la secuencia entre espacios y presione Enter o haga clic en la lupa cuando haya terminado."
+      "value": "Escribe las palabras en la secuencia entre comas y presiona Retorno o haz clic en la lupa cuando hayas terminado. Ejemplo: chico, poner, cinturón de seguridad."
     }
   ],
   "components.magicSearch.label": [
@@ -149,10 +155,22 @@
       "value": "Buscar"
     }
   ],
+  "components.pictogramSearch.minus": [
+    {
+      "type": 0,
+      "value": "Sacar pictograma"
+    }
+  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
       "value": "Pictograma"
+    }
+  ],
+  "components.pictogramSearch.plus": [
+    {
+      "type": 0,
+      "value": "Añadir pictograma"
     }
   ],
   "components.settingCard.Radius.title": [
@@ -173,22 +191,16 @@
       "value": "Aplicar todo"
     }
   ],
-  "components.settingCard.default.label": [
+  "components.settingCard.fontSize.label": [
     {
       "type": 0,
-      "value": "Por defecto"
+      "value": "Tamaño de letra"
     }
   ],
   "components.settingCard.numbered.title": [
     {
       "type": 0,
       "value": "Numeración"
-    }
-  ],
-  "components.settingCardBorder.applyAll.label": [
-    {
-      "type": 0,
-      "value": "Aplicar todo"
     }
   ],
   "components.settingCardBorder.fitzgeraldKey.label": [
@@ -225,6 +237,78 @@
     {
       "type": 0,
       "value": "Tamaño"
+    }
+  ],
+  "setting.lang.ca.label": [
+    {
+      "type": 0,
+      "value": "Catalán"
+    }
+  ],
+  "setting.lang.en.label": [
+    {
+      "type": 0,
+      "value": "Inglés"
+    }
+  ],
+  "setting.lang.es.label": [
+    {
+      "type": 0,
+      "value": "Español"
+    }
+  ],
+  "setting.lang.title": [
+    {
+      "type": 0,
+      "value": "Idioma"
+    }
+  ],
+  "settings.hair.black": [
+    {
+      "type": 0,
+      "value": "Negro"
+    }
+  ],
+  "settings.hair.blonde": [
+    {
+      "type": 0,
+      "value": "Rubio"
+    }
+  ],
+  "settings.hair.brown": [
+    {
+      "type": 0,
+      "value": "Marrón"
+    }
+  ],
+  "settings.hair.darkBrown": [
+    {
+      "type": 0,
+      "value": "Marrón Oscuro"
+    }
+  ],
+  "settings.hair.darkGray": [
+    {
+      "type": 0,
+      "value": "Gris Oscuro"
+    }
+  ],
+  "settings.hair.gray": [
+    {
+      "type": 0,
+      "value": "Gris"
+    }
+  ],
+  "settings.hair.label": [
+    {
+      "type": 0,
+      "value": "Cabello"
+    }
+  ],
+  "settings.hair.red": [
+    {
+      "type": 0,
+      "value": "Pelirrojo"
     }
   ],
   "settings.skins.asian": [
