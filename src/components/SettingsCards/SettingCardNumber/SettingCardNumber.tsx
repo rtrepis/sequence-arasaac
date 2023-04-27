@@ -1,10 +1,10 @@
 import { Slider, Stack, Typography } from "@mui/material";
 import { useAppDispatch } from "../../../app/hooks";
-import StyledButton from "../../../style/StyledButton";
 import { FormattedMessage } from "react-intl";
 import { cardAction, card, cardTitle } from "../SettingsCards.styled";
 import { fontSizeApplyAllActionCreator } from "../../../app/slice/sequenceSlice";
 import { messages } from "./SettingCardNumber.lang";
+import ApplyAll from "../ApplyAll/ApplyAll";
 
 interface SettingCardProps {
   setting: "fontSize";
@@ -54,13 +54,7 @@ const SettingCardNumber = ({
         onChange={handleChange}
         sx={{ width: 100 }}
       />
-      <StyledButton
-        variant="outlined"
-        sx={cardAction}
-        onClick={() => handleApplyAll(state)}
-      >
-        <FormattedMessage {...messages.applyAll} />
-      </StyledButton>
+      <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
     </Stack>
   );
 };
