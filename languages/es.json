@@ -23,6 +23,10 @@
     "defaultMessage": "cerrar",
     "description": "close Settings Default "
   },
+  "components.defaultSettings.pictGuide": {
+    "defaultMessage": "Pictograma de guía",
+    "description": "Pictogram pictogram for default settings"
+  },
   "components.defaultSettings.settings.title": {
     "defaultMessage": "Configuraciones por defecto",
     "description": "Settings Default "
@@ -99,9 +103,17 @@
     "defaultMessage": "Buscar",
     "description": "search pictograms"
   },
+  "components.pictogramSearch.minus": {
+    "defaultMessage": "Sacar pictograma",
+    "description": "Minus pictograms"
+  },
   "components.pictogramSearch.pictogram": {
     "defaultMessage": "Pictograma",
     "description": "Pictogram"
+  },
+  "components.pictogramSearch.plus": {
+    "defaultMessage": "Añadir pictograma",
+    "description": "Plus pictograms"
   },
   "components.settingCard.Radius.title": {
     "defaultMessage": "Radio",
@@ -115,17 +127,13 @@
     "defaultMessage": "Aplicar todo",
     "description": "apply to all pictograms"
   },
-  "components.settingCard.default.label": {
-    "defaultMessage": "Por defecto",
-    "description": "Not type setting "
+  "components.settingCard.fontSize.label": {
+    "defaultMessage": "Tamaño de letra",
+    "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
     "defaultMessage": "Numeración",
     "description": "Setting title"
-  },
-  "components.settingCardBorder.applyAll.label": {
-    "defaultMessage": "Aplicar todo",
-    "description": "apply to all pictograms"
   },
   "components.settingCardBorder.fitzgeraldKey.label": {
     "defaultMessage": "Llave Fitzgerald",
@@ -166,6 +174,38 @@
   "setting.lang.title": {
     "defaultMessage": "Idioma",
     "description": "Title setting"
+  },
+  "settings.hair.black": {
+    "defaultMessage": "Negro",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.blonde": {
+    "defaultMessage": "Rubio",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.brown": {
+    "defaultMessage": "Marrón",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.darkBrown": {
+    "defaultMessage": "Marrón Oscuro",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.darkGray": {
+    "defaultMessage": "Gris Oscuro",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.gray": {
+    "defaultMessage": "Gris",
+    "description": "Type of setting text position"
+  },
+  "settings.hair.label": {
+    "defaultMessage": "Cabello",
+    "description": "Setting Hair label"
+  },
+  "settings.hair.red": {
+    "defaultMessage": "Pelirrojo",
+    "description": "Type of setting text position"
   },
   "settings.skins.asian": {
     "defaultMessage": "Asiàtic",
