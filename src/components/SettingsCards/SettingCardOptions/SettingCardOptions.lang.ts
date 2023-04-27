@@ -1,5 +1,5 @@
 import { defineMessage, defineMessages } from "react-intl";
-import { SettingsCardOptionsLang } from "../../types/sequence.lang";
+import { SettingsCardOptionsLang } from "../../../types/sequence.lang";
 
 export const settingCardOptions: SettingsCardOptionsLang = {
   messages: {

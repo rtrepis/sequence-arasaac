@@ -9,10 +9,10 @@ import {
 } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { settingCardOptions } from "./SettingCardOptions.lang";
-import { card } from "./SettingCardOptions.styled";
+import { card } from "../SettingsCards.styled";
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import useUserLocation from "../../hooks/useUserLocation";
+import useUserLocation from "../../../hooks/useUserLocation";
 
 interface SettingCardProps {
   setting: "languages";
@@ -42,7 +42,7 @@ const SettingCardOptions = ({
       display={"flex"}
       direction={"row"}
       flexWrap={"wrap"}
-      spacing={2}
+      columnGap={2}
       sx={card}
     >
       <FormControl fullWidth>

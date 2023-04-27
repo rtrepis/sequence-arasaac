@@ -1,4 +1,4 @@
-import { render, fireEvent, screen } from "../../utils/test-utils";
+import { render, fireEvent, screen } from "../../../utils/test-utils";
 import SettingCard from "./SettingCard";
 
 const mockDispatch = jest.fn();

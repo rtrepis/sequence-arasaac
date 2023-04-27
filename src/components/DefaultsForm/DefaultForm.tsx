@@ -1,10 +1,10 @@
 import { List, Stack } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
-import SettingCardOptions from "../SettingCardOptions/SettingCardOptions";
-import SettingCardBoolean from "../SettingCardBoolean/SettingCardBoolean";
-import SettingCard from "../SettingCard/SettingCard";
-import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
-import SettingCardBorder from "../SettingCardBorder/SettingCardBorder";
+import SettingCardOptions from "../SettingsCards/SettingCardOptions/SettingCardOptions";
+import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
+import SettingCard from "../SettingsCards/SettingCard/SettingCard";
+import SettingCardNumber from "../SettingsCards/SettingCardNumber/SettingCardNumber";
+import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
 import { PictSequence } from "../../types/sequence";
 import { useIntl } from "react-intl";
 import messages from "./DefaultForm.lang";
