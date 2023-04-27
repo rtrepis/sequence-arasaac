@@ -1,4 +1,4 @@
-import { defineMessage, defineMessages } from "react-intl";
+import { defineMessage } from "react-intl";
 import { SettingsCardOptionsLang } from "../../../types/sequence.lang";
 
 export const settingCardOptions: SettingsCardOptionsLang = {
@@ -33,16 +33,3 @@ export const settingCardOptions: SettingsCardOptionsLang = {
     },
   },
 };
-
-export const messages = defineMessages({
-  default: {
-    id: "components.settingCard.default.label",
-    defaultMessage: "Default",
-    description: "Not type setting ",
-  },
-  applyAll: {
-    id: "components.settingCard.applyAll.label",
-    defaultMessage: "Apply All",
-    description: "apply to all pictograms",
-  },
-});

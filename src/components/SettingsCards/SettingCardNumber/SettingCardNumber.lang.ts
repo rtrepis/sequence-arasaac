@@ -6,9 +6,4 @@ export const messages = defineMessages({
     defaultMessage: "Font Size",
     description: "Relative font size pictogram text",
   },
-  applyAll: {
-    id: "components.settingCard.applyAll.label",
-    defaultMessage: "Apply All",
-    description: "apply to all pictograms",
-  },
 });

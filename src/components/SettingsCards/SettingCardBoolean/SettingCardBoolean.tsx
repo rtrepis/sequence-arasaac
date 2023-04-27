@@ -12,7 +12,6 @@ interface SettingCardProps {
 }
 
 const SettingCardBoolean = ({
-  indexPict,
   setting,
   selected,
 }: SettingCardProps): JSX.Element => {
