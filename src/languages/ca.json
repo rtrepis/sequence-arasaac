@@ -113,12 +113,6 @@
       "value": "Afegir pictogrames"
     }
   ],
-  "components.pictogramAmount.empty": [
-    {
-      "type": 0,
-      "value": "Buit"
-    }
-  ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
@@ -237,6 +231,12 @@
     {
       "type": 0,
       "value": "Mida"
+    }
+  ],
+  "pictogram.empty": [
+    {
+      "type": 0,
+      "value": "Buit"
     }
   ],
   "setting.lang.ca.label": [
