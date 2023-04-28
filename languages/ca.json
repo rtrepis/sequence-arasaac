@@ -12,7 +12,7 @@
     "description": "Title Page"
   },
   "components.barNavigation.title": {
-    "defaultMessage": "Seqüències - AraSaac",
+    "defaultMessage": "SAS",
     "description": "App title translate Sequence"
   },
   "components.barNavigation.view.title": {
@@ -74,10 +74,6 @@
   "components.pictogramAmount.add.label": {
     "defaultMessage": "Afegir pictogrames",
     "description": "Add a pictogram to the amounts"
-  },
-  "components.pictogramAmount.empty": {
-    "defaultMessage": "Buit",
-    "description": "Empty pictogram"
   },
   "components.pictogramAmount.helperText": {
     "defaultMessage": "Entra el nombre de pictogrames de la seqüència.",
@@ -158,6 +154,10 @@
   "pages.viewSequence.size.label": {
     "defaultMessage": "Mida",
     "description": "Label form"
+  },
+  "pictogram.empty": {
+    "defaultMessage": "Buit",
+    "description": "Empty pictogram"
   },
   "setting.lang.ca.label": {
     "defaultMessage": "Català",
