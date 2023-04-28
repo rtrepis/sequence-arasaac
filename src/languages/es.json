@@ -116,7 +116,7 @@
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
-      "value": "Introduzca el número de pictogramas en la secuencia."
+      "value": "Insertar o extraer un pictograma al final de la secuencia. Encontrará más funciones con el botón derecho del ratón o pulsación larga en móviles."
     }
   ],
   "components.pictogramCard.pictogram": [
