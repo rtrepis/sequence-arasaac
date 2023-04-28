@@ -52,7 +52,6 @@ export interface Word {
   word: string;
   bestIdPicts: number[];
   keyWords?: string[];
-  IdPicts?: number[];
 }
 
 export type Skin = "asian" | "aztec" | "black" | "mulatto" | "white";

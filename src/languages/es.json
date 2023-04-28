@@ -113,12 +113,6 @@
       "value": "Añadir pictograma"
     }
   ],
-  "components.pictogramAmount.empty": [
-    {
-      "type": 0,
-      "value": "Vacío"
-    }
-  ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
@@ -237,6 +231,12 @@
     {
       "type": 0,
       "value": "Tamaño"
+    }
+  ],
+  "pictogram.empty": [
+    {
+      "type": 0,
+      "value": "Vacío"
     }
   ],
   "setting.lang.ca.label": [
