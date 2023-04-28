@@ -19,6 +19,13 @@ const sequenceSlice = createSlice({
       action.payload,
     ],
 
+    insertPictogram: (
+      previousSequence,
+      action: PayloadAction<PictSequence>
+    ) => {
+      previousSequence.splice(action.payload.indexSequence, 0, action.payload);
+    },
+
     subtractPictogram: (previousSequence, action: PayloadAction<number>) =>
       previousSequence.filter(
         (pictogram) => pictogram.indexSequence !== action.payload
@@ -88,58 +95,6 @@ const sequenceSlice = createSlice({
       );
     },
 
-    textPosition: (
-      previousSequence,
-      action: PayloadAction<PictSequenceSettingsForEdit>
-    ) => {
-      previousSequence.map(
-        (pictogram, index) =>
-          index === action.payload.indexSequence &&
-          (pictogram.settings.textPosition = action.payload.textPosition)
-      );
-    },
-
-    fontSize: (
-      previousSequence,
-      action: PayloadAction<PictSequenceSettingsForEdit>
-    ) => {
-      previousSequence.map(
-        (pictogram, index) =>
-          index === action.payload.indexSequence &&
-          (pictogram.settings.fontSize = action.payload.fontSize)
-      );
-    },
-
-    borderIn: (
-      previousSequence,
-      action: PayloadAction<PictSequenceSettingsForEdit>
-    ) => {
-      previousSequence.map(
-        (pictogram, index) =>
-          index === action.payload.indexSequence &&
-          (pictogram.settings.borderIn = action.payload.borderIn!)
-      );
-    },
-
-    borderOut: (
-      previousSequence,
-      action: PayloadAction<PictSequenceSettingsForEdit>
-    ) => {
-      previousSequence.map(
-        (pictogram, index) =>
-          index === action.payload.indexSequence &&
-          (pictogram.settings.borderOut = action.payload.borderOut!)
-      );
-    },
-
-    skin: (previousSequence, action: PayloadAction<PictApiAraForEdit>) => {
-      previousSequence.map(
-        (pictogram, index) =>
-          index === action.payload.indexSequence &&
-          (pictogram.img.settings.skin = action.payload.settings?.skin!)
-      );
-    },
-
     skinApplyAll: (
       previousSequence,
       action: PayloadAction<PictApiAraSettingsApplyAll>
@@ -193,6 +148,7 @@ export const sequenceReducer = sequenceSlice.reducer;
 
 export const {
   addPictogram: addPictogramActionCreator,
+  insertPictogram: insertPictogramActionCreator,
   subtractPictogram: subtractPictogramActionCreator,
   subtractLastPict: subtractLastPictActionCreator,
   addSequence: addSequenceActionCreator,
@@ -201,11 +157,6 @@ export const {
   updatePictSequence: updatePictSequenceActionCreator,
   selectedId: selectedIdActionCreator,
   searched: searchedActionCreator,
-  textPosition: textPositionActionCreator,
-  fontSize: fontSizeActionCreator,
-  borderIn: borderInActionCreator,
-  borderOut: borderOutActionCreator,
-  skin: skinActionCreator,
   skinApplyAll: skinApplyAllActionCreator,
   textPositionApplyAll: textPositionApplyAllActionCreator,
   borderInApplyAll: borderInApplyAllActionCreator,
