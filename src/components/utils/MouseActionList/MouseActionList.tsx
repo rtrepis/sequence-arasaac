@@ -19,26 +19,48 @@ import {
   subtractPictogramActionCreator,
 } from "../../../app/slice/sequenceSlice";
 import useNewPictogram from "../../../hooks/useNewPictogram";
+import { PictSequence } from "../../../types/sequence";
+import { updatePictSequenceActionCreator } from "../../../app/slice/sequenceSlice";
 
 interface MouseActionListProps {
-  indexPict: number;
+  pictogram: PictSequence;
   editAction: () => void;
   closeAction: () => void;
+  copyAction: React.Dispatch<React.SetStateAction<PictSequence>> | undefined;
+  pasteObject: PictSequence | undefined;
 }
 
 const MouseActionList = ({
-  indexPict,
+  pictogram,
   editAction,
   closeAction,
+  copyAction,
+  pasteObject,
 }: MouseActionListProps): JSX.Element => {
   const dispatch = useDispatch();
   const { getPictogramEmptyWithDefaultSettings: pictogramEmpty } =
     useNewPictogram();
 
-  const handlerInset = () => {
+  const handlerInset = (newPictogram: PictSequence) => {
     closeAction();
-    dispatch(insertPictogramActionCreator(pictogramEmpty(indexPict + 1)));
+    dispatch(insertPictogramActionCreator(newPictogram));
     dispatch(renumberSequenceActionCreator());
+  };
+
+  const handlerCopy = () => {
+    closeAction();
+    copyAction && copyAction(pictogram);
+  };
+
+  const handlerPaste = () => {
+    closeAction();
+    pasteObject &&
+      dispatch(
+        updatePictSequenceActionCreator({
+          ...pasteObject,
+          indexSequence: pictogram.indexSequence,
+        })
+      );
   };
 
   return (
@@ -47,18 +69,25 @@ const MouseActionList = ({
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Pictogram {indexPict + 1}
+        <ListSubheader
+          component="span"
+          id="nested-list-subheader"
+          color="primary"
+        >
+          Pictogram {pictogram.indexSequence + 1}
         </ListSubheader>
       }
     >
-      <ListItemButton disabled>
+      <ListItemButton onClick={handlerCopy}>
         <ListItemIcon>
           <AiOutlineCopy />
         </ListItemIcon>
         <ListItemText primary="Copy" />
       </ListItemButton>
-      <ListItemButton disabled>
+      <ListItemButton
+        disabled={pasteObject ? false : true}
+        onClick={handlerPaste}
+      >
         <ListItemIcon>
           <AiOutlinePaperClip />
         </ListItemIcon>
@@ -71,24 +100,37 @@ const MouseActionList = ({
         <ListItemText primary="Edit" />
       </ListItemButton>
       <ListItemButton
-        onClick={() => dispatch(subtractPictogramActionCreator(indexPict))}
+        onClick={() =>
+          dispatch(subtractPictogramActionCreator(pictogram.indexSequence))
+        }
       >
         <ListItemIcon>
           <AiOutlineDelete />
         </ListItemIcon>
         <ListItemText primary="Delete" />
       </ListItemButton>
-      <ListItemButton disabled>
-        <ListItemIcon>
-          <AiOutlineCopy />
-        </ListItemIcon>
-        <ListItemText primary="Duplicate" />
-      </ListItemButton>
-      <ListItemButton onClick={handlerInset}>
+      <ListItemButton
+        onClick={() =>
+          handlerInset(pictogramEmpty(pictogram.indexSequence + 1))
+        }
+      >
         <ListItemIcon>
           <TbColumnInsertRight />
         </ListItemIcon>
         <ListItemText primary="Insert" />
+      </ListItemButton>
+      <ListItemButton
+        onClick={() =>
+          handlerInset({
+            ...pictogram,
+            indexSequence: pictogram.indexSequence + 1,
+          })
+        }
+      >
+        <ListItemIcon>
+          <AiOutlineCopy />
+        </ListItemIcon>
+        <ListItemText primary="Duplicate" />
       </ListItemButton>
     </List>
   );
