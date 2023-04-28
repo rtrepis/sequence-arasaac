@@ -8,7 +8,7 @@ import SettingCard from "../SettingsCards/SettingCard/SettingCard";
 import SettingCardNumber from "../SettingsCards/SettingCardNumber/SettingCardNumber";
 import { useIntl } from "react-intl";
 import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updatePictSequenceActionCreator } from "../../app/slice/sequenceSlice";
 
 interface PictEditFormProps {
@@ -22,15 +22,36 @@ const PictEditForm = ({
 }: PictEditFormProps): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const {
+    pictSequence: {
+      fontSize: defaultFontSize,
+      textPosition: defaultTextPosition,
+    },
+    pictApiAra: { hair: defaultHair, skin: defaultSkin },
+  } = useAppSelector((state) => state.ui.defaultSettings);
 
-  const [fontSize, setFontSize] = useState(pictogram.settings.fontSize!);
-  const [textPosition, setTextPosition] = useState(
-    pictogram.settings.textPosition!
-  );
+  const initialFontSize = pictogram.settings.fontSize
+    ? pictogram.settings.fontSize
+    : defaultFontSize;
+  const [fontSize, setFontSize] = useState(initialFontSize);
+
+  const initialTextPosition = pictogram.settings.textPosition
+    ? pictogram.settings.textPosition
+    : defaultTextPosition;
+  const [textPosition, setTextPosition] = useState(initialTextPosition);
+
   const [text, setText] = useState(pictogram.text);
 
-  const [skin, setSkin] = useState(pictogram.img.settings.skin!);
-  const [hair, setHair] = useState(pictogram.img.settings.hair!);
+  const initialSkin = pictogram.img.settings.skin
+    ? pictogram.img.settings.skin
+    : defaultSkin;
+
+  const [skin, setSkin] = useState(initialSkin);
+
+  const initialHair = pictogram.img.settings.hair
+    ? pictogram.img.settings.hair
+    : defaultHair;
+  const [hair, setHair] = useState(initialHair);
 
   const initialSearch = {
     selectedId: pictogram.img.selectedId,
