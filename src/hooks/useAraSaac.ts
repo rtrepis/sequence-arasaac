@@ -89,8 +89,8 @@ const useAraSaac = () => {
         const { data } = await axios.get(
           `${araSaacURL}pictograms/${locale}/${search}/${word.toLocaleLowerCase()}`
         );
-        const findBestPict: number[] = [];
 
+        const findBestPict: number[] = [];
         data.map((pictogram: any) => findBestPict.push(pictogram._id));
 
         if (isUpdate) {

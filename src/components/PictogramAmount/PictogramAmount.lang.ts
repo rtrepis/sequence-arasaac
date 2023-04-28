@@ -18,7 +18,8 @@ const messages = defineMessages({
   },
   helperText: {
     id: "components.pictogramAmount.helperText",
-    defaultMessage: "Enter the number of pictograms in the sequence.",
+    defaultMessage:
+      "Insert or extract a pictogram at the end of the sequence. You will find more functions with the right mouse button or long press on mobiles.",
     description: "Helper text amount pictograms",
   },
 });

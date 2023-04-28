@@ -113,12 +113,6 @@
       "value": "Add pictogram"
     }
   ],
-  "components.pictogramAmount.empty": [
-    {
-      "type": 0,
-      "value": "Empty"
-    }
-  ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
@@ -237,6 +231,12 @@
     {
       "type": 0,
       "value": "Size"
+    }
+  ],
+  "pictogram.empty": [
+    {
+      "type": 0,
+      "value": "Empty"
     }
   ],
   "setting.lang.ca.label": [
