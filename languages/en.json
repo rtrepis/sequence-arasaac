@@ -75,10 +75,6 @@
     "defaultMessage": "Add pictogram",
     "description": "Add a pictogram to the amounts"
   },
-  "components.pictogramAmount.empty": {
-    "defaultMessage": "Empty",
-    "description": "Empty pictogram"
-  },
   "components.pictogramAmount.helperText": {
     "defaultMessage": "Enter the number of pictograms in the sequence.",
     "description": "Helper text amount pictograms"
@@ -158,6 +154,10 @@
   "pages.viewSequence.size.label": {
     "defaultMessage": "Size",
     "description": "Label form"
+  },
+  "pictogram.empty": {
+    "defaultMessage": "Empty",
+    "description": "Empty pictogram"
   },
   "setting.lang.ca.label": {
     "defaultMessage": "Catalan",

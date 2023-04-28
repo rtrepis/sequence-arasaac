@@ -18,8 +18,7 @@ import {
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
 } from "../../../app/slice/sequenceSlice";
-import { useAppSelector } from "../../../app/hooks";
-import { PictSequence } from "../../../types/sequence";
+import useNewPictogram from "../../../hooks/useNewPictogram";
 
 interface MouseActionListProps {
   indexPict: number;
@@ -33,29 +32,12 @@ const MouseActionList = ({
   closeAction,
 }: MouseActionListProps): JSX.Element => {
   const dispatch = useDispatch();
-  const pictSequenceDefault = useAppSelector(
-    (state) => state.ui.defaultSettings.pictSequence
-  );
-
-  let pictogramEmpty: PictSequence = {
-    indexSequence: indexPict + 1,
-    img: {
-      searched: {
-        word: `empty`,
-        bestIdPicts: [],
-      },
-      selectedId: 26527,
-      settings: { fitzgerald: "#2222ff" },
-    },
-    settings: {
-      textPosition: pictSequenceDefault.textPosition,
-      fontSize: pictSequenceDefault.fontSize,
-    },
-  };
+  const { getPictogramEmptyWithDefaultSettings: pictogramEmpty } =
+    useNewPictogram();
 
   const handlerInset = () => {
     closeAction();
-    dispatch(insertPictogramActionCreator(pictogramEmpty));
+    dispatch(insertPictogramActionCreator(pictogramEmpty(indexPict + 1)));
     dispatch(renumberSequenceActionCreator());
   };
 
