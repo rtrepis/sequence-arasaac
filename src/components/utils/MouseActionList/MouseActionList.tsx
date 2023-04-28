@@ -63,6 +63,12 @@ const MouseActionList = ({
       );
   };
 
+  const handlerDelete = () => {
+    dispatch(subtractPictogramActionCreator(pictogram.indexSequence));
+    dispatch(renumberSequenceActionCreator());
+    closeAction();
+  };
+
   return (
     <List
       sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
@@ -99,11 +105,7 @@ const MouseActionList = ({
         </ListItemIcon>
         <ListItemText primary="Edit" />
       </ListItemButton>
-      <ListItemButton
-        onClick={() =>
-          dispatch(subtractPictogramActionCreator(pictogram.indexSequence))
-        }
-      >
+      <ListItemButton onClick={handlerDelete}>
         <ListItemIcon>
           <AiOutlineDelete />
         </ListItemIcon>
