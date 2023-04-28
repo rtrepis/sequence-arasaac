@@ -76,7 +76,7 @@
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Entra el nombre de pictogrames de la seqüència.",
+    "defaultMessage": "Inseriu o extreu un pictograma al final de la seqüència. Trobareu més funcions amb el botó dret del ratolí o premeu llargament als mòbils.",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
