@@ -25,9 +25,16 @@ import MouseActionList from "../../components/utils/MouseActionList/MouseActionL
 interface PictEditProps {
   pictogram: PictSequence;
   size?: number;
+  copy?: PictSequence;
+  setCopy?: React.Dispatch<React.SetStateAction<PictSequence>>;
 }
 
-const PictEditModal = ({ pictogram, size }: PictEditProps): JSX.Element => {
+const PictEditModal = ({
+  pictogram,
+  size,
+  copy,
+  setCopy,
+}: PictEditProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -80,11 +87,14 @@ const PictEditModal = ({ pictogram, size }: PictEditProps): JSX.Element => {
           vertical: "top",
           horizontal: "left",
         }}
+        sx={{ textAlign: "center" }}
       >
         <MouseActionList
-          indexPict={pictogram.indexSequence}
+          pictogram={pictogram}
           editAction={handlerClickOpen}
           closeAction={handlerClosePopover}
+          copyAction={setCopy}
+          pasteObject={copy}
         />
         <Button onClick={() => setOpenPopover(false)}>Close</Button>
       </Popover>
