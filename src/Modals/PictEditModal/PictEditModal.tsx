@@ -1,6 +1,12 @@
 import Typography from "@mui/material/Typography";
 import { FormattedMessage, useIntl } from "react-intl";
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Popover,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { PictSequence } from "../../types/sequence";
@@ -14,6 +20,7 @@ import {
   subtractPictogramActionCreator,
 } from "../../app/slice/sequenceSlice";
 import PictEditForm from "../../components/PictEditFrom/PictEditForm";
+import MouseActionList from "../../components/utils/MouseActionList/MouseActionList";
 
 interface PictEditProps {
   pictogram: PictSequence;
@@ -25,11 +32,23 @@ const PictEditModal = ({ pictogram, size }: PictEditProps): JSX.Element => {
   const intl = useIntl();
 
   const [open, setOpen] = useState(false);
+  const [openPopover, setOpenPopover] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const handleClickOpen = () => {
+  const handlerClickOpen = () => {
+    setOpenPopover(false);
     setOpen(true);
   };
 
+  const handlerClosePopover = () => {
+    setOpenPopover(false);
+  };
+
+  const handlerContextMenu = (event: any) => {
+    event.preventDefault();
+    setMousePosition({ x: event.clientX, y: event.clientY });
+    setOpenPopover(true);
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -44,11 +63,31 @@ const PictEditModal = ({ pictogram, size }: PictEditProps): JSX.Element => {
     <>
       <Button
         variant="text"
-        onClick={handleClickOpen}
+        onClick={handlerClickOpen}
+        onContextMenu={handlerContextMenu}
         sx={{ textTransform: "none" }}
       >
         <PictogramCard view={"complete"} pictogram={pictogram} size={size} />
       </Button>
+      <Popover
+        open={openPopover}
+        anchorOrigin={{
+          vertical: mousePosition.y,
+          horizontal: mousePosition.x,
+        }}
+        anchorEl={undefined}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        <MouseActionList
+          indexPict={pictogram.indexSequence}
+          editAction={handlerClickOpen}
+          closeAction={handlerClosePopover}
+        />
+        <Button onClick={() => setOpenPopover(false)}>Close</Button>
+      </Popover>
 
       <Dialog
         open={open}
@@ -65,6 +104,7 @@ const PictEditModal = ({ pictogram, size }: PictEditProps): JSX.Element => {
           justifyContent={"space-around"}
           alignItems={"center"}
           padding={1.5}
+          onClick={() => setOpenPopover(false)}
         >
           <Typography variant="h5" component="h2">
             <FormattedMessage {...messages.modal} />
