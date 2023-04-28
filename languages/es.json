@@ -76,7 +76,7 @@
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Insert or extract a pictogram at the end of the sequence. You will find more functions with the right mouse button or long press on mobiles.",
+    "defaultMessage": "Insertar o extraer un pictograma al final de la secuencia. Encontrará más funciones con el botón derecho del ratón o pulsación larga en móviles.",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
