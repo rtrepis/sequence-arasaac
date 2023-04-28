@@ -10,12 +10,12 @@ import {
   addPictogramActionCreator,
   subtractLastPictActionCreator,
 } from "../../app/slice/sequenceSlice";
-import { PictSequence } from "../../types/sequence";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import messages from "./PictogramAmount.lang";
+import useNewPictogram from "../../hooks/useNewPictogram";
 
 interface PictogramAmountProps {
   variant?: "navBar";
@@ -24,30 +24,13 @@ interface PictogramAmountProps {
 const PictogramAmount = ({ variant }: PictogramAmountProps): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const { getPictogramEmptyWithDefaultSettings: pictogramEmpty } =
+    useNewPictogram();
   const amountSequence = useAppSelector((state) => state.sequence.length);
-  const pictSequenceDefault = useAppSelector(
-    (state) => state.ui.defaultSettings.pictSequence
-  );
-
-  let pictogramEmpty: PictSequence = {
-    indexSequence: amountSequence,
-    img: {
-      searched: {
-        word: `${intl.formatMessage(messages.empty)}`,
-        bestIdPicts: [],
-      },
-      selectedId: 26527,
-      settings: { fitzgerald: "#2222ff" },
-    },
-    settings: {
-      textPosition: pictSequenceDefault.textPosition,
-      fontSize: pictSequenceDefault.fontSize,
-    },
-  };
 
   const handleChangesAmount = (operator: number) => {
     operator > 0
-      ? dispatch(addPictogramActionCreator(pictogramEmpty))
+      ? dispatch(addPictogramActionCreator(pictogramEmpty(amountSequence)))
       : dispatch(subtractLastPictActionCreator());
   };
 

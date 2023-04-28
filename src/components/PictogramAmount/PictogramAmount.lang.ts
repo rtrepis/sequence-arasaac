@@ -21,11 +21,6 @@ const messages = defineMessages({
     defaultMessage: "Enter the number of pictograms in the sequence.",
     description: "Helper text amount pictograms",
   },
-  empty: {
-    id: "components.pictogramAmount.empty",
-    defaultMessage: "Empty",
-    description: "Empty pictogram",
-  },
 });
 
 export default messages;
