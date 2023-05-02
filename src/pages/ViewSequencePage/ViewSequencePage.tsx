@@ -11,6 +11,20 @@ const ViewSequencePage = (): JSX.Element => {
     ui: { viewSettings },
   } = useAppSelector((state) => state);
 
+  const screen = {
+    height: window.screen.availHeight,
+    width: window.screen.availWidth,
+  };
+
+  let screenRatioForViewPrintPage: number = 1;
+
+  if (screen.height < screen.width) {
+    screenRatioForViewPrintPage = (screen.height / 750) * 0.5;
+  }
+  if (screen.width < screen.height) {
+    screenRatioForViewPrintPage = (screen.width / 1020) * 0.9;
+  }
+
   const initialViewState: ViewSettings = {
     sizePict: viewSettings.sizePict,
     columnGap: viewSettings.columnGap,
@@ -21,13 +35,20 @@ const ViewSequencePage = (): JSX.Element => {
   return (
     <BarNavigation title="view">
       <>
-        <ViewSequencesSettings view={view} setView={setView}>
+        <ViewSequencesSettings
+          view={view}
+          setView={setView}
+          printPageRatio={screenRatioForViewPrintPage}
+        >
           {sequence.map((pictogram) => (
             <PictogramCard
               pictogram={pictogram}
               view={"complete"}
               variant="plane"
-              size={view.sizePict}
+              size={{
+                pictSize: view.sizePict,
+                printPageRatio: screenRatioForViewPrintPage,
+              }}
               key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
             />
           ))}

@@ -74,7 +74,7 @@ const PictEditModal = ({
         onContextMenu={handlerContextMenu}
         sx={{ textTransform: "none" }}
       >
-        <PictogramCard view={"complete"} pictogram={pictogram} size={size} />
+        <PictogramCard view={"complete"} pictogram={pictogram} />
       </Button>
       <Popover
         open={openPopover}
