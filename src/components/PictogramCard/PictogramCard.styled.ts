@@ -9,6 +9,7 @@ export const pictogram__card = (
 ) => {
   const card: SxProps = {
     textAlign: "center",
+    width: borderOut.size === 0 ? 150 : 180 + borderOut.size,
     paddingInline: borderOut.size === 0 ? 0 : 1.5 * printPageRatio * pictSize,
     border: `${borderOut.size * pictSize * printPageRatio}px solid`,
     borderColor: borderOut.color,
