@@ -41,11 +41,11 @@ const SettingCardBorder = ({
     setColorSelect(event.target.value);
   };
 
-  const handlerBlurColor = () => {
+  const handlerClickColor = () => {
     const border: Border = {
       color: colorSelect,
-      radius: radius,
-      size: size,
+      radius: radius === 0 ? 20 : radius,
+      size: size === 0 ? 2 : size,
     };
 
     setState(border);
@@ -77,8 +77,8 @@ const SettingCardBorder = ({
   ) => {
     const newBorder: Border = {
       color: toUpdateColor ? toUpdateColor : colorSelect,
-      radius: toUpDateSize ? 0 : 20,
-      size: toUpDateSize ? 0 : 2,
+      radius: toUpDateSize ? 0 : radius === 0 ? 20 : radius,
+      size: toUpDateSize ? 0 : size === 0 ? 2 : size,
     };
 
     setState(newBorder);
@@ -115,6 +115,7 @@ const SettingCardBorder = ({
             <ToggleButton
               value={"Selected Color"}
               selected={color !== "fitzgerald" && size > 0}
+              onClick={handlerClickColor}
             >
               <input
                 id="colorPick"
@@ -122,7 +123,7 @@ const SettingCardBorder = ({
                 className={"colorInput"}
                 value={colorSelect}
                 onChange={handleChangesColorSelect}
-                onBlur={handlerBlurColor}
+                onBlur={handlerClickColor}
               />
             </ToggleButton>
           </Tooltip>
