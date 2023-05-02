@@ -102,7 +102,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
         rowGap={2}
         columnGap={2}
       >
-        <Box width={180}>
+        <Box minWidth={200}>
           <PictogramCard
             pictogram={pictogramGuide}
             view="complete"
