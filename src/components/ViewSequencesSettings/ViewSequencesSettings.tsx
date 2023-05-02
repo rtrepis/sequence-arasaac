@@ -23,12 +23,14 @@ interface ViewSequencesSettingsProps {
   children: JSX.Element | JSX.Element[];
   view: ViewSettings;
   setView: React.Dispatch<React.SetStateAction<ViewSettings>>;
+  printPageRatio?: number;
 }
 
 const ViewSequencesSettings = ({
   children,
   view,
   setView,
+  printPageRatio,
 }: ViewSequencesSettingsProps): JSX.Element => {
   const dispatch = useAppDispatch();
 
@@ -54,101 +56,132 @@ const ViewSequencesSettings = ({
     setView(newViewSettings);
   };
 
+  const ratioPrint = printPageRatio ? printPageRatio : 1;
+
   return (
     <>
-      <NotPrint>
-        <form onBlur={handlerBlur}>
-          <Stack spacing={2} direction={"row"} marginTop={2}>
-            <FormGroup sx={{ width: 200 }}>
-              <FormLabel>
-                <FormattedMessage {...messages.size} />
-                <Slider
-                  defaultValue={view.sizePict}
-                  name="sizePict"
-                  step={0.05}
-                  min={0.5}
-                  max={2}
-                  value={view.sizePict}
-                  onChange={handlerView}
-                />
-              </FormLabel>
-            </FormGroup>
-            <FormGroup sx={{ width: 200 }}>
-              <FormLabel>
-                <FormattedMessage {...messages.columnGap} />
-                <Slider
-                  name="columnGap"
-                  step={0.5}
-                  min={-2}
-                  max={10}
-                  value={view.columnGap}
-                  onChange={handlerView}
-                />
-              </FormLabel>
-            </FormGroup>
-            <FormGroup sx={{ width: 200 }}>
-              <FormLabel>
-                <FormattedMessage {...messages.rowGap} />
-                <Slider
-                  name="rowGap"
-                  step={0.5}
-                  min={0}
-                  max={10}
-                  value={view.rowGap}
-                  onChange={handlerView}
-                />
-              </FormLabel>
-            </FormGroup>
-            <Button
-              aria-label={"page orientation"}
-              variant="text"
-              color="primary"
-              sx={{ fontSize: "2rem" }}
-              onClick={() => setIsLandscape(!isLandscape)}
-            >
-              <MdScreenRotation />
-            </Button>
-            <Button
-              aria-label={"view"}
-              variant="text"
-              color="primary"
-              sx={{ fontSize: "2rem" }}
-              onClick={() => window.print()}
-            >
-              <AiFillPrinter />
-            </Button>
+      <form onBlur={handlerBlur}>
+        <NotPrint>
+          <Stack
+            direction={"row"}
+            justifyContent={"space-between"}
+            alignItems={"end"}
+            paddingTop={2}
+          >
+            <Box sx={tab}>
+              <Typography color={"primary.contrastText"}>A4</Typography>
+            </Box>
+            <Stack direction={"row"}>
+              <Button
+                aria-label={"page orientation"}
+                variant="text"
+                color="primary"
+                sx={{ fontSize: "2rem" }}
+                onClick={() => setIsLandscape(!isLandscape)}
+              >
+                <MdScreenRotation />
+              </Button>
+              <Button
+                aria-label={"view"}
+                variant="text"
+                color="primary"
+                sx={{ fontSize: "2rem" }}
+                onClick={() => window.print()}
+              >
+                <AiFillPrinter />
+              </Button>
+            </Stack>
           </Stack>
-        </form>
-        <Divider
-          variant="inset"
-          sx={{ marginBlock: 2, marginInlineStart: 0 }}
-        />
-        <Box sx={tab}>
-          <Typography color={"primary.contrastText"}>A4</Typography>
-        </Box>
-      </NotPrint>
-      <Stack
-        direction={"row"}
-        flexWrap={"wrap"}
-        alignContent={"start"}
-        alignItems={"start"}
-        columnGap={view.columnGap}
-        rowGap={view.rowGap}
-        width={isLandscape ? 1080 : 750}
-        height={isLandscape ? 750 : 1080}
-        overflow={"hidden"}
-        sx={{
-          border: "2px solid green",
-          padding: 2,
-          marginBottom: 3,
-          "@media print": {
-            "@page": { size: `A4 ${isLandscape ? "landscape" : "portrait"}` },
-            border: "none",
-          },
-        }}
-      >
-        {children}
-      </Stack>
+        </NotPrint>
+        <Stack direction={{ xs: "column", sm: "row" }} columnGap={3}>
+          <Stack
+            direction={"row"}
+            flexWrap={"wrap"}
+            alignContent={"start"}
+            alignItems={"start"}
+            columnGap={view.columnGap * ratioPrint}
+            rowGap={view.rowGap * ratioPrint}
+            width={isLandscape ? 1060 * ratioPrint : 750 * ratioPrint}
+            height={isLandscape ? 750 * ratioPrint : 1060 * ratioPrint}
+            overflow={"hidden"}
+            sx={{
+              border: "2px solid green",
+              padding: 2,
+              marginBottom: 3,
+              "@media print": {
+                "@page": {
+                  size: `A4 ${isLandscape ? "landscape" : "portrait"}`,
+                },
+                border: "none",
+                padding: 0,
+                marginBottom: 0,
+                width: `${isLandscape ? 1069 : 720}px`,
+                height: `${isLandscape ? 720 : 1060}px`,
+                columnGap: view.columnGap,
+                rowGap: view.rowGap,
+              },
+            }}
+          >
+            {children}
+          </Stack>
+          <NotPrint>
+            <Divider orientation="vertical" />
+          </NotPrint>
+          <NotPrint>
+            <Stack
+              direction={"row"}
+              justifyContent={"space-between"}
+              alignItems={"start"}
+              paddingTop={2}
+            >
+              <Stack columnGap={2}>
+                <FormGroup sx={{ width: 200 }}>
+                  <FormLabel>
+                    <FormattedMessage {...messages.size} />
+                    <Slider
+                      defaultValue={view.sizePict}
+                      name="sizePict"
+                      step={0.05}
+                      min={0.5}
+                      max={2}
+                      value={view.sizePict}
+                      onChange={handlerView}
+                    />
+                  </FormLabel>
+                </FormGroup>
+                <FormGroup sx={{ width: 200 }}>
+                  <FormLabel>
+                    <FormattedMessage {...messages.columnGap} />
+                    <Slider
+                      name="columnGap"
+                      step={0.5}
+                      min={-2}
+                      max={10}
+                      value={view.columnGap}
+                      onChange={handlerView}
+                    />
+                  </FormLabel>
+                </FormGroup>
+                <FormGroup
+                  sx={{ direction: { xs: "row", sm: "column" }, width: 200 }}
+                >
+                  <FormLabel>
+                    <FormattedMessage {...messages.rowGap} />
+                    <Slider
+                      name="rowGap"
+                      step={0.5}
+                      min={0}
+                      max={10}
+                      value={view.rowGap}
+                      onChange={handlerView}
+                    />
+                  </FormLabel>
+                </FormGroup>
+              </Stack>
+            </Stack>
+          </NotPrint>
+        </Stack>
+      </form>
     </>
   );
 };

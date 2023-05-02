@@ -15,7 +15,7 @@ interface PictogramCardProps {
   pictogram: PictSequence;
   view: "complete" | "header" | "footer" | "none";
   variant?: "plane";
-  size?: number;
+  size?: { pictSize: number; printPageRatio: number };
 }
 
 const PictogramCard = ({
@@ -56,18 +56,35 @@ const PictogramCard = ({
     ? fitzgeraldToBorder(fitzgerald, pictBorderOut)
     : fitzgeraldToBorder(fitzgerald, borderOutDefaultSetting);
 
-  const textFontSize = size ? size * 20 * fontSize! : 20 * fontSize!;
+  const pictSize = size?.pictSize ? size.pictSize : 1;
+  const printPageRatio = size?.printPageRatio ? size?.printPageRatio : 1;
+
+  const textFontSize = 20 * fontSize! * printPageRatio * pictSize;
+
+  console.log(textFontSize);
 
   return (
     <Card
       data-testid="card-pictogram"
-      sx={() => pictogram__card(borderOut, variant)}
+      sx={() => pictogram__card(borderOut, variant, pictSize, printPageRatio)}
     >
       {(view === "complete" || view === "header") && (
         <CardContent
-          sx={() => textContent(size, textPosition, numbered, borderOut.size)}
+          sx={() =>
+            textContent(
+              textPosition,
+              numbered,
+              borderOut.size,
+              pictSize,
+              printPageRatio
+            )
+          }
         >
-          <Typography fontSize={textFontSize} component="h3">
+          <Typography
+            fontSize={textFontSize}
+            component="h3"
+            sx={{ "@media print": { fontSize: 20 * pictSize } }}
+          >
             {textPosition !== "top" && numbered && indexSequence + 1}
             {textPosition === "top" && text}
           </Typography>
@@ -77,18 +94,30 @@ const PictogramCard = ({
         <CardMedia
           component="img"
           image={toUrlPathApiAraSaac(selectedId, skin, hair)}
-          height={size ? size * 150 : 150}
-          width={size ? size * 150 : 150}
+          height={150 * pictSize * printPageRatio}
+          width={150 * pictSize * printPageRatio}
           alt={intl.formatMessage({ ...messages.pictogram })}
-          sx={() => pictogram__media(borderIn, view)}
+          sx={() => pictogram__media(borderIn, view, pictSize, printPageRatio)}
         />
       </CardContent>
 
       {(view === "complete" || view === "footer") && (
         <CardContent
-          sx={() => textContent(size, textPosition, numbered, borderIn.size)}
+          sx={() =>
+            textContent(
+              textPosition,
+              numbered,
+              borderIn.size,
+              pictSize,
+              printPageRatio
+            )
+          }
         >
-          <Typography fontSize={textFontSize} component="h3">
+          <Typography
+            fontSize={textFontSize}
+            component="h3"
+            sx={{ "@media print": { fontSize: 20 * pictSize } }}
+          >
             {textPosition === "bottom" && text}
             {textPosition === "top" && numbered && indexSequence + 1}
           </Typography>
