@@ -15,7 +15,7 @@ interface PictogramCardProps {
   pictogram: PictSequence;
   view: "complete" | "header" | "footer" | "none";
   variant?: "plane";
-  size?: { pictSize: number; printPageRatio: number };
+  size?: { pictSize?: number; printPageRatio?: number };
 }
 
 const PictogramCard = ({
