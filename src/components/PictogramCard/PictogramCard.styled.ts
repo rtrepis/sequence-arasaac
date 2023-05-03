@@ -23,6 +23,7 @@ export const pictogram__card = (
     },
 
     "@media print": {
+      width: (borderOut.size === 0 ? 150 : 180 + borderOut.size) * pictSize,
       paddingInline: borderOut.size === 0 ? 0 : 1.5 * pictSize,
       border: `${borderOut.size * pictSize}px solid`,
       borderColor: borderOut.color,
