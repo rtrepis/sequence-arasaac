@@ -11,7 +11,7 @@ import { Stack } from "@mui/system";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { PictSequence } from "../../types/sequence";
 import { useState } from "react";
-import messages from "./PictEdti.lang";
+import messages from "./PictEdit.lang";
 import { circlePictogramNumber } from "./PictEditModal.styled";
 import StyledButton from "../../style/StyledButton";
 import { useAppDispatch } from "../../app/hooks";
@@ -41,6 +41,7 @@ const PictEditModal = ({
   const [open, setOpen] = useState(false);
   const [openPopover, setOpenPopover] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [submit, setSubmit] = useState(false);
 
   const handlerClickOpen = () => {
     setOpenPopover(false);
@@ -57,6 +58,7 @@ const PictEditModal = ({
     setOpenPopover(true);
   };
   const handleClose = () => {
+    setSubmit(true);
     setOpen(false);
   };
 
@@ -130,7 +132,7 @@ const PictEditModal = ({
         </Stack>
 
         <DialogContent dividers={true} sx={{ padding: 2 }}>
-          <PictEditForm pictogram={pictogram} submit={open} />
+          <PictEditForm pictogram={pictogram} submit={submit} />
         </DialogContent>
 
         <DialogActions
