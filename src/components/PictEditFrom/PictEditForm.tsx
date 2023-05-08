@@ -73,9 +73,9 @@ const PictEditForm = ({
 
   const handlerSubmit = useCallback(() => {
     const newPictogram: PictSequence = {
-      ...pictogram,
+      indexSequence: pictogram.indexSequence,
       img: {
-        ...pictogram.img,
+        searched: pictogram.img.searched,
         selectedId,
         settings: { fitzgerald, skin, hair },
       },
@@ -84,20 +84,21 @@ const PictEditForm = ({
     };
 
     dispatch(updatePictSequenceActionCreator(newPictogram));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    dispatch,
+    pictogram.indexSequence,
+    pictogram.img.searched,
+    selectedId,
+    fitzgerald,
+    skin,
+    hair,
     fontSize,
     textPosition,
-    skin,
-    selectedId,
-    hair,
-    fitzgerald,
     text,
+    dispatch,
   ]);
 
   useEffect(() => {
-    if (submit === false) handlerSubmit();
+    if (submit) handlerSubmit();
   }, [submit, handlerSubmit]);
   return (
     <>
@@ -123,6 +124,13 @@ const PictEditForm = ({
 
       <SettingAccordion title={`${intl.formatMessage({ ...messages.title })}`}>
         <List>
+          <TextField
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+            helperText={"Custom Text"}
+            variant="filled"
+            fullWidth
+          />
           {pictogram.settings.textPosition && (
             <li>
               <SettingCard
@@ -132,13 +140,6 @@ const PictEditForm = ({
               />
             </li>
           )}
-          <TextField
-            value={text}
-            onChange={(event) => setText(event.target.value)}
-            helperText={"Custom Text"}
-            variant="filled"
-            fullWidth
-          />
           {pictogram.settings.fontSize && (
             <li>
               <SettingCardNumber
