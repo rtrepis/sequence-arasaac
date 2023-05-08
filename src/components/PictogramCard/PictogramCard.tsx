@@ -61,8 +61,6 @@ const PictogramCard = ({
 
   const textFontSize = 20 * fontSize! * printPageRatio * pictSize;
 
-  console.log(textFontSize);
-
   return (
     <Card
       data-testid="card-pictogram"
