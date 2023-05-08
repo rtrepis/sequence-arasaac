@@ -208,7 +208,7 @@
     "description": "Type of setting text position"
   },
   "settings.skins.asian": {
-    "defaultMessage": "Asiàtic",
+    "defaultMessage": "Asiático",
     "description": "Type of setting skin"
   },
   "settings.skins.aztec": {
@@ -220,7 +220,7 @@
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Pell",
+    "defaultMessage": "Piel",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
