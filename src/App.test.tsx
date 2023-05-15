@@ -16,7 +16,7 @@ jest.mock("react-redux", () => ({
 describe("Give a App", () => {
   describe("When it's rendered with title", () => {
     test("Then should show this title", () => {
-      const expectTitle = "SAS";
+      const expectTitle = "SequenceSAAC";
 
       render(<App />, { preloadedState: { ...preloadedState } });
       const title = screen.getByRole("heading", {
