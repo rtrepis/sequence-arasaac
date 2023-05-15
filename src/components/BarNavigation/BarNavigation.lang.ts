@@ -3,7 +3,7 @@ import { defineMessages } from "react-intl";
 const messages = defineMessages({
   title: {
     id: "components.barNavigation.title",
-    defaultMessage: "SAS",
+    defaultMessage: "SequenceSAAC",
     description: "App title translate Sequence",
   },
   view: {
