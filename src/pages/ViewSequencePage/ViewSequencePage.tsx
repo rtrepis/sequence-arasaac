@@ -4,6 +4,7 @@ import BarNavigation from "../../components/BarNavigation/BarNavigation";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSequencesSettings";
 import { ViewSettings } from "../../types/ui";
+import CopyRight from "../../components/CopyRight/CopyRight";
 
 const ViewSequencePage = (): JSX.Element => {
   const {
@@ -53,6 +54,7 @@ const ViewSequencePage = (): JSX.Element => {
             />
           ))}
         </ViewSequencesSettings>
+        <CopyRight />
       </>
     </BarNavigation>
   );

@@ -12,12 +12,16 @@
     "description": "Title Page"
   },
   "components.barNavigation.title": {
-    "defaultMessage": "SAS",
+    "defaultMessage": "SequenceSAAC",
     "description": "App title translate Sequence"
   },
   "components.barNavigation.view.title": {
     "defaultMessage": "View",
     "description": "Title Page"
+  },
+  "components.copyRight": {
+    "defaultMessage": "Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Govern d'Aragó (Espanya)",
+    "description": "License to use the pictograms"
   },
   "components.defaultSettings.close": {
     "defaultMessage": "close",
