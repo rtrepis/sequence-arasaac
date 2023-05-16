@@ -111,7 +111,6 @@ const useAraSaac = () => {
               settings: await makeSettingsProperty(data[0]),
             },
             settings: { fontSize, textPosition },
-            text: word,
           };
 
           dispatch(addPictogramActionCreator(newPict));
