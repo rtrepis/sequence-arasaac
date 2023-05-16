@@ -16,7 +16,7 @@ const CopyRight = (): JSX.Element => {
       <FormattedMessage
         id="components.copyRight"
         defaultMessage="
-      Author of the pictograms: Sergio Palao. Origen: ARASAAC
+      Author of the pictograms: Sergio Palao. Origen: SequenceSAAC - ARASAAC
       (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Govern d'Aragó
       (Espanya)"
         description={"License to use the pictograms"}
