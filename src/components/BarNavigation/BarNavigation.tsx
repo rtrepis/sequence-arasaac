@@ -5,7 +5,7 @@ import Container from "@mui/material/Container";
 import DefaultSettings from "../../Modals/DefaultSettingsModal/DefaultSettingsModal";
 import { FormattedMessage } from "react-intl";
 import messages from "./BarNavigation.lang";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import ToggleButtonEditViewPages from "../ToggleButtonEditViewPages/ToggleButtonEditViewPages";
 import PictogramAmount from "../PictogramAmount/PictogramAmount";
@@ -26,9 +26,25 @@ const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
             <Toolbar
               sx={{ fontSize: "1.75rem", justifyContent: "space-between" }}
             >
-              <Typography variant={"h5"} component="h1" fontWeight={800}>
-                <FormattedMessage {...messages.title} />
-              </Typography>
+              <Stack direction={"row"} spacing={2}>
+                <Box sx={{ display: { xs: "block", sm: "none", md: "block" } }}>
+                  <img
+                    src="../favicon.png"
+                    alt="logo"
+                    height={25}
+                    width={34.16}
+                  />
+                </Box>
+                <Typography
+                  variant={"h5"}
+                  component="h1"
+                  fontWeight={800}
+                  sx={{ display: { xs: "none", sm: "block" } }}
+                >
+                  <FormattedMessage {...messages.title} />
+                </Typography>
+              </Stack>
+
               <Typography variant={"h6"} component="h2">
                 {title && <FormattedMessage {...messages[title]} />}
               </Typography>
