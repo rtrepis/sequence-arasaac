@@ -6,7 +6,7 @@ import {
   TextField,
   ToggleButton,
 } from "@mui/material";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
 import useAraSaac from "../../hooks/useAraSaac";
@@ -79,6 +79,15 @@ const PictogramSearch = ({
     await getSearchPictogram(newWord, indexPict, true, plus);
     setIsPlus(!isPlus);
   };
+
+  const [isAlert, setIsAlert] = useState(false);
+
+  useEffect(() => {
+    if (bestIdPicts[0] === -1) {
+      setIsAlert(true);
+    }
+    setTimeout(() => setIsAlert(false), 3000);
+  }, [bestIdPicts]);
 
   return (
     <Stack flex={1} sx={{ width: "-webkit-fill-available" }}>
@@ -169,7 +178,7 @@ const PictogramSearch = ({
           </ToggleButton>
         )}
       </StyledToggleButtonGroup>
-      {bestIdPicts[0] === -1 && (
+      {isAlert && (
         <Alert severity="info">
           <FormattedMessage {...messages.alert} />
         </Alert>
