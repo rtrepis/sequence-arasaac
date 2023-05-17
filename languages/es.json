@@ -127,10 +127,6 @@
     "defaultMessage": "Aplicar todo",
     "description": "apply to all pictograms"
   },
-  "components.settingCard.author.label": {
-    "defaultMessage": "Produced by",
-    "description": "Name by sequence produced"
-  },
   "components.settingCard.customText.label": {
     "defaultMessage": "Custom Text",
     "description": "Personalize text pictogram"
