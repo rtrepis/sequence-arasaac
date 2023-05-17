@@ -1,4 +1,4 @@
-import { List, Stack, TextField } from "@mui/material";
+import { List, Stack } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import { PictSequence } from "../../types/sequence";
@@ -10,6 +10,7 @@ import { useIntl } from "react-intl";
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updatePictSequenceActionCreator } from "../../app/slice/sequenceSlice";
+import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCardTextFiled";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
@@ -124,13 +125,13 @@ const PictEditForm = ({
 
       <SettingAccordion title={`${intl.formatMessage({ ...messages.title })}`}>
         <List>
-          <TextField
-            value={text}
-            onChange={(event) => setText(event.target.value)}
-            helperText={"Custom Text"}
-            variant="filled"
-            fullWidth
-          />
+          <li>
+            <SettingCadTextFiled
+              setting="customText"
+              state={text}
+              setState={setText}
+            />
+          </li>
           {pictogram.settings.textPosition && (
             <li>
               <SettingCard
