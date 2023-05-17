@@ -6,9 +6,4 @@ export const messages = defineMessages({
     defaultMessage: "Custom Text",
     description: "Personalize text pictogram",
   },
-  author: {
-    id: "components.settingCard.author.label",
-    defaultMessage: "Produced by",
-    description: "Name by sequence produced",
-  },
 });

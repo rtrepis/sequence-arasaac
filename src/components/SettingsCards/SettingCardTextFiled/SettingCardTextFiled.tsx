@@ -4,7 +4,7 @@ import { FormattedMessage } from "react-intl";
 import { messages } from "./SettingCardTextFiled.lang";
 
 interface SettingCardTextFiledProps {
-  setting: "customText" | "author";
+  setting: "customText";
   state: string | undefined;
   setState: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
