@@ -32,7 +32,7 @@
   "components.copyRight": [
     {
       "type": 0,
-      "value": "Author of the pictograms: Sergio Palao. Origen: SequenceSAAC - ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Govern d'Aragó (Espanya)"
+      "value": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). produced by:"
     }
   ],
   "components.defaultSettings.close": [
@@ -191,6 +191,12 @@
       "value": "Apply All"
     }
   ],
+  "components.settingCard.customText.label": [
+    {
+      "type": 0,
+      "value": "Custom Text"
+    }
+  ],
   "components.settingCard.fontSize.label": [
     {
       "type": 0,
@@ -201,6 +207,12 @@
     {
       "type": 0,
       "value": "Numbered"
+    }
+  ],
+  "components.settingCard.producedBy.label": [
+    {
+      "type": 0,
+      "value": "Produced by"
     }
   ],
   "components.settingCardBorder.fitzgeraldKey.label": [
