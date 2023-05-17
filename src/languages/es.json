@@ -20,13 +20,19 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "SAS"
+      "value": "SequenceSAAC"
     }
   ],
   "components.barNavigation.view.title": [
     {
       "type": 0,
       "value": "Vista"
+    }
+  ],
+  "components.copyRight": [
+    {
+      "type": 0,
+      "value": "Autor de los pictogramas: Sergio Palao. Origen: SequenceSAAC - ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA). Propietario: Govern d'Aragoç (España)"
     }
   ],
   "components.defaultSettings.close": [
@@ -314,7 +320,7 @@
   "settings.skins.asian": [
     {
       "type": 0,
-      "value": "Asiàtic"
+      "value": "Asiático"
     }
   ],
   "settings.skins.aztec": [
@@ -332,7 +338,7 @@
   "settings.skins.label": [
     {
       "type": 0,
-      "value": "Pell"
+      "value": "Piel"
     }
   ],
   "settings.skins.mulatto": [
