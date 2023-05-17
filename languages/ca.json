@@ -20,7 +20,7 @@
     "description": "Title Page"
   },
   "components.copyRight": {
-    "defaultMessage": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Sequence author:",
+    "defaultMessage": "Fet amb: SequenceSaac - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA). Autor de la seqüència:",
     "description": "License to use the pictograms"
   },
   "components.defaultSettings.close": {
@@ -152,11 +152,11 @@
     "description": "type setting "
   },
   "pages.viewSequence.authSequence.helperText": {
-    "defaultMessage": "Mark authorship",
+    "defaultMessage": "Marcar l'autoria",
     "description": "Helper text form"
   },
   "pages.viewSequence.authSequence.label": {
-    "defaultMessage": "Sequence author",
+    "defaultMessage": "Autor de la seqüència",
     "description": "Label form"
   },
   "pages.viewSequence.columnGap.label": {
