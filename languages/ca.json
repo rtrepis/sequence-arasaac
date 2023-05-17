@@ -127,10 +127,6 @@
     "defaultMessage": "Aplicar tots",
     "description": "apply to all pictograms"
   },
-  "components.settingCard.author.label": {
-    "defaultMessage": "Produced by",
-    "description": "Name by sequence produced"
-  },
   "components.settingCard.customText.label": {
     "defaultMessage": "Text personalitzat",
     "description": "Personalize text pictogram"
