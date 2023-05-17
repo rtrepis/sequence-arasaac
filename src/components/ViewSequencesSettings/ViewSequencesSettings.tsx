@@ -16,7 +16,7 @@ import { AiFillPrinter } from "react-icons/ai";
 import { MdScreenRotation } from "react-icons/md";
 import { ViewSettings } from "../../types/ui";
 import { viewSettingsActionCreator } from "../../app/slice/uiSlice";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 import { tab } from "./ViewSequenceSettings.styled";
 
@@ -25,8 +25,8 @@ interface ViewSequencesSettingsProps {
   view: ViewSettings;
   setView: React.Dispatch<React.SetStateAction<ViewSettings>>;
   printPageRatio?: number;
-  producedBy?: string;
-  setProducedBy?: React.Dispatch<React.SetStateAction<string>>;
+  author?: string;
+  setauthor?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ViewSequencesSettings = ({
@@ -34,9 +34,10 @@ const ViewSequencesSettings = ({
   view,
   setView,
   printPageRatio,
-  producedBy,
-  setProducedBy,
+  author,
+  setauthor,
 }: ViewSequencesSettingsProps): JSX.Element => {
+  const intl = useIntl();
   const dispatch = useAppDispatch();
 
   const [isLandscape, setIsLandscape] = useState(true);
@@ -174,16 +175,18 @@ const ViewSequencesSettings = ({
                   />
                 </FormLabel>
               </FormGroup>
-              {setProducedBy && (
+              {setauthor && (
                 <FormGroup>
                   <FormLabel>
-                    Produced by:
+                    <FormattedMessage {...messages.authSequence} />
                     <TextField
-                      value={producedBy}
-                      onChange={(event) => setProducedBy(event.target.value)}
+                      value={author}
+                      onChange={(event) => setauthor(event.target.value)}
                       variant="filled"
                       fullWidth
-                      helperText={"Mark authorship"}
+                      helperText={intl.formatMessage({
+                        ...messages.authHelperText,
+                      })}
                       sx={{
                         ".MuiInputBase-input": { paddingTop: 2 },
                       }}

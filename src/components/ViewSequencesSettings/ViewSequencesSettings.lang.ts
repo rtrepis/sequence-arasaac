@@ -16,6 +16,16 @@ const messages = defineMessages({
     defaultMessage: "Row Space",
     description: "Label form",
   },
+  authSequence: {
+    id: "pages.viewSequence.authSequence.label",
+    defaultMessage: "Sequence author",
+    description: "Label form",
+  },
+  authHelperText: {
+    id: "pages.viewSequence.authSequence.helperText",
+    defaultMessage: "Mark authorship",
+    description: "Helper text form",
+  },
 });
 
 export default messages;
