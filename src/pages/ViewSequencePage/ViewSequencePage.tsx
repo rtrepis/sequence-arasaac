@@ -33,8 +33,8 @@ const ViewSequencePage = (): JSX.Element => {
   };
   const [view, setView] = useState(initialViewState);
 
-  const initialProducedBy: string = "";
-  const [producedBy, setProducedBy] = useState(initialProducedBy);
+  const initialauthor: string = "";
+  const [author, setauthor] = useState(initialauthor);
 
   return (
     <BarNavigation title="view">
@@ -43,8 +43,8 @@ const ViewSequencePage = (): JSX.Element => {
           view={view}
           setView={setView}
           printPageRatio={screenRatioForViewPrintPage}
-          producedBy={producedBy}
-          setProducedBy={setProducedBy}
+          author={author}
+          setauthor={setauthor}
         >
           {sequence.map((pictogram) => (
             <PictogramCard
@@ -59,7 +59,7 @@ const ViewSequencePage = (): JSX.Element => {
             />
           ))}
         </ViewSequencesSettings>
-        <CopyRight producedBy={producedBy} />
+        <CopyRight author={author} />
       </>
     </BarNavigation>
   );

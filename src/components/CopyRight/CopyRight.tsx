@@ -2,10 +2,10 @@ import { Typography } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 
 interface CopyRightProps {
-  producedBy: string;
+  author: string;
 }
 
-const CopyRight = ({ producedBy }: CopyRightProps): JSX.Element => {
+const CopyRight = ({ author }: CopyRightProps): JSX.Element => {
   return (
     <Typography
       component={"p"}
@@ -20,10 +20,10 @@ const CopyRight = ({ producedBy }: CopyRightProps): JSX.Element => {
       <FormattedMessage
         id="components.copyRight"
         defaultMessage="Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC
-      (http://www.arasaac.org). License: CC (BY-NC-SA). produced by:"
+      (http://www.arasaac.org). License: CC (BY-NC-SA). Sequence author:"
         description={"License to use the pictograms"}
       />
-      {producedBy}
+      {author}
     </Typography>
   );
 };
