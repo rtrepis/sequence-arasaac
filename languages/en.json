@@ -127,6 +127,10 @@
     "defaultMessage": "Apply All",
     "description": "apply to all pictograms"
   },
+  "components.settingCard.customText.label": {
+    "defaultMessage": "Custom Text",
+    "description": "Personalize text pictogram"
+  },
   "components.settingCard.fontSize.label": {
     "defaultMessage": "Font Size",
     "description": "Relative font size pictogram text"

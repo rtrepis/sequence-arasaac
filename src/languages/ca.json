@@ -20,13 +20,19 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "SAS"
+      "value": "SequenceSAAC"
     }
   ],
   "components.barNavigation.view.title": [
     {
       "type": 0,
       "value": "Vista"
+    }
+  ],
+  "components.copyRight": [
+    {
+      "type": 0,
+      "value": "Autor de los pictogramas: Sergio Palao. Origen: Secuencia SAAC - ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA). Titular: Govern d'Aragó (Espanya)"
     }
   ],
   "components.defaultSettings.close": [
