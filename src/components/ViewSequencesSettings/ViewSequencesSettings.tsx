@@ -6,6 +6,7 @@ import {
   FormLabel,
   Slider,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useAppDispatch } from "../../app/hooks";
@@ -24,6 +25,8 @@ interface ViewSequencesSettingsProps {
   view: ViewSettings;
   setView: React.Dispatch<React.SetStateAction<ViewSettings>>;
   printPageRatio?: number;
+  producedBy?: string;
+  setProducedBy?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ViewSequencesSettings = ({
@@ -31,6 +34,8 @@ const ViewSequencesSettings = ({
   view,
   setView,
   printPageRatio,
+  producedBy,
+  setProducedBy,
 }: ViewSequencesSettingsProps): JSX.Element => {
   const dispatch = useAppDispatch();
 
@@ -60,7 +65,7 @@ const ViewSequencesSettings = ({
 
   return (
     <>
-      <form onBlur={handlerBlur}>
+      <form onBlur={handlerBlur} onSubmit={(event) => event.preventDefault()}>
         <NotPrint>
           <Stack
             direction={"row"}
@@ -93,7 +98,7 @@ const ViewSequencesSettings = ({
             </Stack>
           </Stack>
         </NotPrint>
-        <Stack direction={{ xs: "column", sm: "row" }} columnGap={3}>
+        <Stack direction={{ xs: "column", md: "row" }} columnGap={3}>
           <Stack
             direction={"row"}
             flexWrap={"wrap"}
@@ -128,56 +133,64 @@ const ViewSequencesSettings = ({
             <Divider orientation="vertical" />
           </NotPrint>
           <NotPrint>
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"start"}
-              paddingTop={2}
-            >
-              <Stack columnGap={2}>
-                <FormGroup sx={{ width: 200 }}>
+            <Stack columnGap={2} maxWidth={300} paddingLeft={2}>
+              <FormGroup>
+                <FormLabel>
+                  <FormattedMessage {...messages.size} />
+                  <Slider
+                    defaultValue={view.sizePict}
+                    name="sizePict"
+                    step={0.05}
+                    min={0.5}
+                    max={2}
+                    value={view.sizePict}
+                    onChange={handlerView}
+                  />
+                </FormLabel>
+              </FormGroup>
+              <FormGroup>
+                <FormLabel>
+                  <FormattedMessage {...messages.columnGap} />
+                  <Slider
+                    name="columnGap"
+                    step={0.5}
+                    min={-2}
+                    max={10}
+                    value={view.columnGap}
+                    onChange={handlerView}
+                  />
+                </FormLabel>
+              </FormGroup>
+              <FormGroup>
+                <FormLabel>
+                  <FormattedMessage {...messages.rowGap} />
+                  <Slider
+                    name="rowGap"
+                    step={0.5}
+                    min={0}
+                    max={10}
+                    value={view.rowGap}
+                    onChange={handlerView}
+                  />
+                </FormLabel>
+              </FormGroup>
+              {setProducedBy && (
+                <FormGroup>
                   <FormLabel>
-                    <FormattedMessage {...messages.size} />
-                    <Slider
-                      defaultValue={view.sizePict}
-                      name="sizePict"
-                      step={0.05}
-                      min={0.5}
-                      max={2}
-                      value={view.sizePict}
-                      onChange={handlerView}
+                    Produced by:
+                    <TextField
+                      value={producedBy}
+                      onChange={(event) => setProducedBy(event.target.value)}
+                      variant="filled"
+                      fullWidth
+                      helperText={"Mark authorship"}
+                      sx={{
+                        ".MuiInputBase-input": { paddingTop: 2 },
+                      }}
                     />
                   </FormLabel>
                 </FormGroup>
-                <FormGroup sx={{ width: 200 }}>
-                  <FormLabel>
-                    <FormattedMessage {...messages.columnGap} />
-                    <Slider
-                      name="columnGap"
-                      step={0.5}
-                      min={-2}
-                      max={10}
-                      value={view.columnGap}
-                      onChange={handlerView}
-                    />
-                  </FormLabel>
-                </FormGroup>
-                <FormGroup
-                  sx={{ direction: { xs: "row", sm: "column" }, width: 200 }}
-                >
-                  <FormLabel>
-                    <FormattedMessage {...messages.rowGap} />
-                    <Slider
-                      name="rowGap"
-                      step={0.5}
-                      min={0}
-                      max={10}
-                      value={view.rowGap}
-                      onChange={handlerView}
-                    />
-                  </FormLabel>
-                </FormGroup>
-              </Stack>
+              )}
             </Stack>
           </NotPrint>
         </Stack>

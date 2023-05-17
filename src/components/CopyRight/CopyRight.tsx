@@ -1,7 +1,11 @@
 import { Typography } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 
-const CopyRight = (): JSX.Element => {
+interface CopyRightProps {
+  producedBy: string;
+}
+
+const CopyRight = ({ producedBy }: CopyRightProps): JSX.Element => {
   return (
     <Typography
       component={"p"}
@@ -15,12 +19,11 @@ const CopyRight = (): JSX.Element => {
     >
       <FormattedMessage
         id="components.copyRight"
-        defaultMessage="
-      Author of the pictograms: Sergio Palao. Origen: SequenceSAAC - ARASAAC
-      (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Govern d'Aragó
-      (Espanya)"
+        defaultMessage="Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC
+      (http://www.arasaac.org). License: CC (BY-NC-SA). produced by:"
         description={"License to use the pictograms"}
       />
+      {producedBy}
     </Typography>
   );
 };
