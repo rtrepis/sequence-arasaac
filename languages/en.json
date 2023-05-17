@@ -20,7 +20,7 @@
     "description": "Title Page"
   },
   "components.copyRight": {
-    "defaultMessage": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). produced by:",
+    "defaultMessage": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Sequence author:",
     "description": "License to use the pictograms"
   },
   "components.defaultSettings.close": {
@@ -127,6 +127,10 @@
     "defaultMessage": "Apply All",
     "description": "apply to all pictograms"
   },
+  "components.settingCard.author.label": {
+    "defaultMessage": "Produced by",
+    "description": "Name by sequence produced"
+  },
   "components.settingCard.customText.label": {
     "defaultMessage": "Custom Text",
     "description": "Personalize text pictogram"
@@ -139,10 +143,6 @@
     "defaultMessage": "Numbered",
     "description": "Setting title"
   },
-  "components.settingCard.producedBy.label": {
-    "defaultMessage": "Produced by",
-    "description": "Name by sequence produced"
-  },
   "components.settingCardBorder.fitzgeraldKey.label": {
     "defaultMessage": "Fitzgerald Key",
     "description": "type setting "
@@ -154,6 +154,14 @@
   "components.settingCardBorder.withoutBorder.label": {
     "defaultMessage": "Without border",
     "description": "type setting "
+  },
+  "pages.viewSequence.authSequence.helperText": {
+    "defaultMessage": "Mark authorship",
+    "description": "Helper text form"
+  },
+  "pages.viewSequence.authSequence.label": {
+    "defaultMessage": "Sequence author",
+    "description": "Label form"
   },
   "pages.viewSequence.columnGap.label": {
     "defaultMessage": "Column Space",
