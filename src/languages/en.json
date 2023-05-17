@@ -29,6 +29,12 @@
       "value": "View"
     }
   ],
+  "components.copyRight": [
+    {
+      "type": 0,
+      "value": "Author of the pictograms: Sergio Palao. Origen: SequenceSAAC - ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Govern d'Aragó (Espanya)"
+    }
+  ],
   "components.defaultSettings.close": [
     {
       "type": 0,

@@ -27,7 +27,11 @@ const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
               sx={{ fontSize: "1.75rem", justifyContent: "space-between" }}
             >
               <Stack direction={"row"} spacing={2}>
-                <Box sx={{ display: { xs: "block", sm: "none", md: "block" } }}>
+                <Box
+                  sx={{
+                    display: { xs: "block", sm: "none", md: "block" },
+                  }}
+                >
                   <img
                     src="../favicon.png"
                     alt="logo"
