@@ -20,7 +20,7 @@
     "description": "Title Page"
   },
   "components.copyRight": {
-    "defaultMessage": "Autor de los pictogramas: Sergio Palao. Origen: Secuencia SAAC - ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA). Titular: Govern d'Aragó (Espanya)",
+    "defaultMessage": "Fet amb: SequenceSaac - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA). Autor de la seqüència:",
     "description": "License to use the pictograms"
   },
   "components.defaultSettings.close": {
@@ -127,6 +127,10 @@
     "defaultMessage": "Aplicar tots",
     "description": "apply to all pictograms"
   },
+  "components.settingCard.customText.label": {
+    "defaultMessage": "Text personalitzat",
+    "description": "Personalize text pictogram"
+  },
   "components.settingCard.fontSize.label": {
     "defaultMessage": "Mida lletra",
     "description": "Relative font size pictogram text"
@@ -146,6 +150,14 @@
   "components.settingCardBorder.withoutBorder.label": {
     "defaultMessage": "Sense línia",
     "description": "type setting "
+  },
+  "pages.viewSequence.authSequence.helperText": {
+    "defaultMessage": "Marcar l'autoria",
+    "description": "Helper text form"
+  },
+  "pages.viewSequence.authSequence.label": {
+    "defaultMessage": "Autor de la seqüència",
+    "description": "Label form"
   },
   "pages.viewSequence.columnGap.label": {
     "defaultMessage": "Espai Columna",
