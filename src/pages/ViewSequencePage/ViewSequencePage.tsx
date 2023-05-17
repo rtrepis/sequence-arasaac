@@ -20,10 +20,10 @@ const ViewSequencePage = (): JSX.Element => {
   let screenRatioForViewPrintPage: number = 1;
 
   if (screen.height < screen.width) {
-    screenRatioForViewPrintPage = (screen.height / 750) * 0.5;
+    screenRatioForViewPrintPage = (screen.height / 750) * 0.4;
   }
   if (screen.width < screen.height) {
-    screenRatioForViewPrintPage = (screen.width / 1020) * 0.9;
+    screenRatioForViewPrintPage = (screen.width / 1020) * 0.8;
   }
 
   const initialViewState: ViewSettings = {
@@ -33,6 +33,9 @@ const ViewSequencePage = (): JSX.Element => {
   };
   const [view, setView] = useState(initialViewState);
 
+  const initialProducedBy: string = "";
+  const [producedBy, setProducedBy] = useState(initialProducedBy);
+
   return (
     <BarNavigation title="view">
       <>
@@ -40,6 +43,8 @@ const ViewSequencePage = (): JSX.Element => {
           view={view}
           setView={setView}
           printPageRatio={screenRatioForViewPrintPage}
+          producedBy={producedBy}
+          setProducedBy={setProducedBy}
         >
           {sequence.map((pictogram) => (
             <PictogramCard
@@ -54,7 +59,7 @@ const ViewSequencePage = (): JSX.Element => {
             />
           ))}
         </ViewSequencesSettings>
-        <CopyRight />
+        <CopyRight producedBy={producedBy} />
       </>
     </BarNavigation>
   );
