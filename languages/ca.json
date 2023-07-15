@@ -127,6 +127,10 @@
     "defaultMessage": "Aplicar tots",
     "description": "apply to all pictograms"
   },
+  "components.settingCard.corss.title": {
+    "defaultMessage": "Taxat",
+    "description": "Setting title"
+  },
   "components.settingCard.customText.label": {
     "defaultMessage": "Text personalitzat",
     "description": "Personalize text pictogram"
