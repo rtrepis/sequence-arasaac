@@ -18,7 +18,7 @@ import ApplyAll from "../ApplyAll/ApplyAll";
 
 interface SettingCardProps {
   setting: "skin" | "textPosition" | "hair";
-  state: string;
+  state: string | undefined;
   setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
@@ -92,7 +92,9 @@ const SettingCard = ({
         ))}
       </StyledToggleButtonGroup>
 
-      <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
+      {state && (
+        <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
+      )}
     </Stack>
   );
 };

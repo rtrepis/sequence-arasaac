@@ -1,4 +1,4 @@
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
 import { useAppSelector } from "../../app/hooks";
 import useAraSaac from "../../hooks/useAraSaac";
@@ -33,6 +33,7 @@ const PictogramCard = ({
       borderOut: pictBorderOut,
     },
     text: customText,
+    cross,
   },
   view,
   variant,
@@ -88,15 +89,43 @@ const PictogramCard = ({
           </Typography>
         </CardContent>
       )}
-      <CardContent sx={{ padding: 0 }}>
+      <CardContent sx={{ padding: 0, position: "relative" }}>
         <CardMedia
           component="img"
           image={toUrlPathApiAraSaac(selectedId, skin, hair)}
           height={150 * pictSize * printPageRatio}
           width={150 * pictSize * printPageRatio}
           alt={intl.formatMessage({ ...messages.pictogram })}
-          sx={() => pictogram__media(borderIn, view, pictSize, printPageRatio)}
+          sx={() =>
+            pictogram__media(borderIn, view, pictSize, printPageRatio, cross)
+          }
         />
+        {cross && (
+          <>
+            <Box
+              sx={{
+                background: "red",
+                position: "absolute",
+                height: `${10 * pictSize * printPageRatio}px`,
+                width: `${175 * pictSize * printPageRatio}px`,
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%) rotate(45deg)",
+              }}
+            ></Box>
+            <Box
+              sx={{
+                background: "red",
+                position: "absolute",
+                height: `${10 * pictSize * printPageRatio}px`,
+                width: `${175 * pictSize * printPageRatio}px`,
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%) rotate(-45deg)",
+              }}
+            ></Box>
+          </>
+        )}
       </CardContent>
 
       {(view === "complete" || view === "footer") && (

@@ -4,6 +4,7 @@ export interface PictSequence {
   indexSequence: number;
   img: PictApiAra;
   text?: string;
+  cross: boolean;
   settings: PictSequenceSettings;
 }
 export interface PictSequenceSettings {

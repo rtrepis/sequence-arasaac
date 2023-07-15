@@ -6,4 +6,9 @@ export const messages = defineMessages({
     defaultMessage: "Numbered",
     description: "Setting title",
   },
+  corss: {
+    id: "components.settingCard.corss.title",
+    defaultMessage: "Cross",
+    description: "Setting title",
+  },
 });
