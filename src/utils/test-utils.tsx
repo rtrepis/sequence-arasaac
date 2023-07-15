@@ -37,6 +37,7 @@ const preloadedState: State = {
         borderIn: { color: "blue", radius: 20, size: 2 },
         borderOut: { color: "green", radius: 20, size: 2 },
       },
+      cross: false,
     },
   ],
   ui: {

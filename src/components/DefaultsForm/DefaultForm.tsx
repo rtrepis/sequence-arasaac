@@ -62,6 +62,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
       borderIn: borderIn,
       borderOut: borderOut,
     },
+    cross: false,
   };
 
   const handlerSubmit = useCallback(() => {
@@ -126,7 +127,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
               />
             </li>
             <li>
-              <SettingCardBoolean setting={"numbered"} selected={numbered} />
+              <SettingCardBoolean setting={"numbered"} state={numbered} />
             </li>
             <Stack
               display={"flex"}
