@@ -127,6 +127,10 @@
     "defaultMessage": "Apply All",
     "description": "apply to all pictograms"
   },
+  "components.settingCard.corss.title": {
+    "defaultMessage": "Cross",
+    "description": "Setting title"
+  },
   "components.settingCard.customText.label": {
     "defaultMessage": "Custom Text",
     "description": "Personalize text pictogram"

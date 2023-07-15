@@ -111,6 +111,7 @@ const useAraSaac = () => {
               settings: await makeSettingsProperty(data[0]),
             },
             settings: { fontSize, textPosition },
+            cross: false,
           };
 
           dispatch(addPictogramActionCreator(newPict));
@@ -136,6 +137,7 @@ const useAraSaac = () => {
             },
             settings: { textPosition, fontSize },
             text: word,
+            cross: false,
           };
           dispatch(addPictogramActionCreator(toPictNotFound));
           dispatch(sortSequenceActionCreator());

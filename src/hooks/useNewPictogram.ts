@@ -24,6 +24,7 @@ const useNewPictogram = () => {
         textPosition: pictSequenceDefault.textPosition,
         fontSize: pictSequenceDefault.fontSize,
       },
+      cross: false,
     };
 
     return pictogramEmpty;
