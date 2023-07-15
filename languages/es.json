@@ -128,7 +128,7 @@
     "description": "apply to all pictograms"
   },
   "components.settingCard.corss.title": {
-    "defaultMessage": "Cross",
+    "defaultMessage": "Tachado",
     "description": "Setting title"
   },
   "components.settingCard.customText.label": {
