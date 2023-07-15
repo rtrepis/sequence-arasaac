@@ -104,7 +104,7 @@ const PictogramCard = ({
           <>
             <Box
               sx={{
-                background: "red",
+                background: "#ff4d4d",
                 position: "absolute",
                 height: `${10 * pictSize * printPageRatio}px`,
                 width: `${175 * pictSize * printPageRatio}px`,
@@ -115,7 +115,7 @@ const PictogramCard = ({
             ></Box>
             <Box
               sx={{
-                background: "red",
+                background: "#ff4d4d",
                 position: "absolute",
                 height: `${10 * pictSize * printPageRatio}px`,
                 width: `${175 * pictSize * printPageRatio}px`,
