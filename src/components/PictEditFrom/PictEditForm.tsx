@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updatePictSequenceActionCreator } from "../../app/slice/sequenceSlice";
 import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCardTextFiled";
+import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
@@ -40,18 +41,16 @@ const PictEditForm = ({
     ? pictogram.settings.textPosition
     : defaultTextPosition;
   const [textPosition, setTextPosition] = useState(initialTextPosition);
-
   const [text, setText] = useState(pictogram.text);
 
   const initialSkin = pictogram.img.settings.skin
     ? pictogram.img.settings.skin
-    : defaultSkin;
-
+    : undefined;
   const [skin, setSkin] = useState(initialSkin);
 
   const initialHair = pictogram.img.settings.hair
     ? pictogram.img.settings.hair
-    : defaultHair;
+    : undefined;
   const [hair, setHair] = useState(initialHair);
 
   const initialSearch = {
@@ -60,6 +59,8 @@ const PictEditForm = ({
   };
   const [search, setSearch] = useState(initialSearch);
   const { fitzgerald, selectedId } = search;
+
+  const [cross, setCross] = useState(pictogram.cross);
 
   const pictogramGuide: PictSequence = {
     ...pictogram,
@@ -70,6 +71,7 @@ const PictEditForm = ({
     },
     settings: { ...pictogram.settings, fontSize, textPosition },
     text,
+    cross,
   };
 
   const handlerSubmit = useCallback(() => {
@@ -82,6 +84,7 @@ const PictEditForm = ({
       },
       settings: { fontSize, textPosition },
       text,
+      cross,
     };
 
     dispatch(updatePictSequenceActionCreator(newPictogram));
@@ -96,6 +99,7 @@ const PictEditForm = ({
     textPosition,
     text,
     dispatch,
+    cross,
   ]);
 
   useEffect(() => {
@@ -150,6 +154,13 @@ const PictEditForm = ({
               />
             </li>
           )}
+          <li>
+            <SettingCardBoolean
+              setting="corss"
+              state={cross}
+              setState={setCross}
+            />
+          </li>
           {pictogram.img.settings.skin && (
             <li>
               <SettingCard setting="skin" state={skin} setState={setSkin} />

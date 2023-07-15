@@ -7,13 +7,15 @@ import { card, cardTitle } from "../SettingsCards.styled";
 
 interface SettingCardProps {
   indexPict?: number;
-  setting: "numbered";
-  selected: boolean;
+  setting: "numbered" | "corss";
+  state: boolean;
+  setState?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SettingCardBoolean = ({
   setting,
-  selected,
+  state,
+  setState,
 }: SettingCardProps): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -22,11 +24,17 @@ const SettingCardBoolean = ({
     event: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
-    dispatch(
-      updateDefaultSettingPictSequenceActionCreator({
-        [setting]: checked,
-      })
-    );
+    if (setting === "numbered") {
+      dispatch(
+        updateDefaultSettingPictSequenceActionCreator({
+          [setting]: checked,
+        })
+      );
+    }
+
+    if (setState && setting === "corss") {
+      setState(!state);
+    }
   };
 
   return (
@@ -43,7 +51,7 @@ const SettingCardBoolean = ({
 
       <Switch
         aria-label={`${intl.formatMessage(messages[setting])}`}
-        checked={selected}
+        checked={state}
         onChange={handleSelected}
       />
     </Stack>

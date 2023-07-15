@@ -38,7 +38,8 @@ export const pictogram__media = (
   borderIn: Border,
   view: any,
   pictSize: number,
-  printPageRatio: number
+  printPageRatio: number,
+  cross: boolean
 ) => {
   const sx: SxProps = {
     marginTop: `${view === "complete" ? 0 : 2 * pictSize * printPageRatio}`,
