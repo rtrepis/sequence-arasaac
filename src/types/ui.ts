@@ -23,6 +23,7 @@ interface DefaultSettingsPictAra {
   hair: Hair;
   skin: Skin;
   fitzgerald: string;
+  color: boolean;
 }
 export interface DefaultSettingsPictSequence {
   numbered: boolean;

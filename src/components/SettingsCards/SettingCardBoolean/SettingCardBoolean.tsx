@@ -7,7 +7,7 @@ import { card, cardTitle } from "../SettingsCards.styled";
 
 interface SettingCardProps {
   indexPict?: number;
-  setting: "numbered" | "corss";
+  setting: "numbered" | "corss" | "color";
   state: boolean;
   setState?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -32,7 +32,7 @@ const SettingCardBoolean = ({
       );
     }
 
-    if (setState && setting === "corss") {
+    if (setState) {
       setState(!state);
     }
   };

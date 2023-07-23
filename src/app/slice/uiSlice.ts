@@ -14,7 +14,12 @@ const uiInitialState: Ui = {
     rowGap: 1,
   },
   defaultSettings: {
-    pictApiAra: { skin: "white", fitzgerald: "#666666", hair: "brown" },
+    pictApiAra: {
+      skin: "white",
+      fitzgerald: "#666666",
+      hair: "brown",
+      color: true,
+    },
     pictSequence: {
       numbered: false,
       textPosition: "bottom",
