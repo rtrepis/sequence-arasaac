@@ -48,9 +48,15 @@ const useAraSaac = () => {
 
       if (data.hair) settingsProperty.hair = defaultSettingsPictApiAra.hair;
 
+      settingsProperty.color = defaultSettingsPictApiAra.color;
+
       return { ...settingsProperty };
     },
-    [defaultSettingsPictApiAra.hair, defaultSettingsPictApiAra.skin]
+    [
+      defaultSettingsPictApiAra.hair,
+      defaultSettingsPictApiAra.skin,
+      defaultSettingsPictApiAra.color,
+    ]
   );
 
   const getSettingsPictId = useCallback(
@@ -156,8 +162,9 @@ const useAraSaac = () => {
 
   const toUrlPath = (
     pictogramId: number,
-    skin: Skin | undefined,
-    hair: Hair | undefined
+    skin?: Skin | undefined,
+    hair?: Hair | undefined,
+    color?: boolean
   ) => {
     let path = `${araSaacURL}pictograms/${pictogramId}`;
 
@@ -169,6 +176,11 @@ const useAraSaac = () => {
       (skin === undefined || skin === "white"
         ? (path += `?hair=${hair}`)
         : (path += `&hair=${hair}`));
+
+    color === false &&
+      (skin === undefined && hair === undefined
+        ? (path += `?color=${color}`)
+        : (path += `&color=${color}`));
 
     return path;
   };

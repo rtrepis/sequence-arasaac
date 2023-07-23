@@ -11,4 +11,9 @@ export const messages = defineMessages({
     defaultMessage: "Cross",
     description: "Setting title",
   },
+  color: {
+    id: "components.settingCard.color.title",
+    defaultMessage: "Color",
+    description: "Setting title",
+  },
 });
