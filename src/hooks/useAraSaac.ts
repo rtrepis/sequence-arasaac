@@ -142,7 +142,6 @@ const useAraSaac = () => {
               settings: { fitzgerald: "#666" },
             },
             settings: { textPosition, fontSize },
-            text: word,
             cross: false,
           };
           dispatch(addPictogramActionCreator(toPictNotFound));
