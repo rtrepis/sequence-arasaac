@@ -24,7 +24,12 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
   const {
     lang,
     defaultSettings: {
-      pictApiAra: { fitzgerald, skin: initialSkin, hair: initialHair },
+      pictApiAra: {
+        fitzgerald,
+        skin: initialSkin,
+        hair: initialHair,
+        color: initialColor,
+      },
       pictSequence: {
         borderIn: initialBorderIn,
         borderOut: initialBorderOut,
@@ -41,6 +46,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
   const [borderIn, setBorderIn] = useState(initialBorderIn);
   const [borderOut, setBorderOut] = useState(initialBorderOut);
   const [hair, setHair] = useState(initialHair);
+  const [color, setColor] = useState(initialColor);
 
   const pictogramGuide: PictSequence = {
     indexSequence: 0,
@@ -54,6 +60,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
         fitzgerald: "#CC00BB",
         skin: skin,
         hair: hair,
+        color: color,
       },
     },
     settings: {
@@ -67,7 +74,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
 
   const handlerSubmit = useCallback(() => {
     const newDefaultSettings: DefaultSettings = {
-      pictApiAra: { fitzgerald, skin, hair },
+      pictApiAra: { fitzgerald, skin, hair, color },
       pictSequence: {
         borderIn,
         borderOut,
@@ -88,6 +95,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
     numbered,
     textPosition,
     dispatch,
+    color,
   ]);
 
   useEffect(() => {
@@ -128,6 +136,13 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
             </li>
             <li>
               <SettingCardBoolean setting={"numbered"} state={numbered} />
+            </li>
+            <li>
+              <SettingCardBoolean
+                setting="color"
+                state={color}
+                setState={setColor}
+              />
             </li>
             <Stack
               display={"flex"}
@@ -184,14 +199,33 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
               marginTop={1}
               rowGap={2}
               columnGap={2}
-            >
-              <li>
-                <SettingCard setting={"skin"} state={skin} setState={setSkin} />
-              </li>
-              <li>
-                <SettingCard setting={"hair"} state={hair} setState={setHair} />
-              </li>
-            </Stack>
+            ></Stack>
+
+            {color && (
+              <Stack
+                display={"flex"}
+                direction={"row"}
+                flexWrap={"wrap"}
+                marginTop={1}
+                rowGap={2}
+                columnGap={2}
+              >
+                <li>
+                  <SettingCard
+                    setting={"skin"}
+                    state={skin}
+                    setState={setSkin}
+                  />
+                </li>
+                <li>
+                  <SettingCard
+                    setting={"hair"}
+                    state={hair}
+                    setState={setHair}
+                  />
+                </li>
+              </Stack>
+            )}
           </Stack>
         </List>
       </Stack>

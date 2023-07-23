@@ -70,6 +70,7 @@ export interface PictApiAraSettings {
   hair?: Hair;
   skin?: Skin;
   fitzgerald?: string;
+  color?: boolean;
 }
 
 export type Languages = "ca" | "es" | "en";

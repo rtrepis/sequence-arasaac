@@ -29,7 +29,7 @@ const PictEditForm = ({
       fontSize: defaultFontSize,
       textPosition: defaultTextPosition,
     },
-    pictApiAra: { hair: defaultHair, skin: defaultSkin },
+    pictApiAra: { color: defaultColor },
   } = useAppSelector((state) => state.ui.defaultSettings);
 
   const initialFontSize = pictogram.settings.fontSize
@@ -62,12 +62,20 @@ const PictEditForm = ({
 
   const [cross, setCross] = useState(pictogram.cross);
 
+  const initialColor = pictogram.img.settings.color
+    ? pictogram.img.settings.color
+    : defaultColor;
+  const [color, setColor] = useState(initialColor);
+
+  console.log(hair);
+  console.log(skin);
+
   const pictogramGuide: PictSequence = {
     ...pictogram,
     img: {
       ...pictogram.img,
       selectedId,
-      settings: { fitzgerald, skin, hair },
+      settings: { fitzgerald, skin, hair, color },
     },
     settings: { ...pictogram.settings, fontSize, textPosition },
     text,
@@ -80,7 +88,7 @@ const PictEditForm = ({
       img: {
         searched: pictogram.img.searched,
         selectedId,
-        settings: { fitzgerald, skin, hair },
+        settings: { fitzgerald, skin, hair, color },
       },
       settings: { fontSize, textPosition },
       text,
@@ -100,6 +108,7 @@ const PictEditForm = ({
     text,
     dispatch,
     cross,
+    color,
   ]);
 
   useEffect(() => {
@@ -154,19 +163,36 @@ const PictEditForm = ({
               />
             </li>
           )}
-          <li>
-            <SettingCardBoolean
-              setting="corss"
-              state={cross}
-              setState={setCross}
-            />
-          </li>
-          {pictogram.img.settings.skin && (
+          <Stack
+            display={"flex"}
+            direction={"row"}
+            flexWrap={"wrap"}
+            marginTop={1}
+            rowGap={2}
+            columnGap={2}
+          >
+            <li>
+              <SettingCardBoolean
+                setting="corss"
+                state={cross}
+                setState={setCross}
+              />
+            </li>
+
+            <li>
+              <SettingCardBoolean
+                setting="color"
+                state={color}
+                setState={setColor}
+              />
+            </li>
+          </Stack>
+          {pictogram.img.settings.color && pictogram.img.settings.skin && (
             <li>
               <SettingCard setting="skin" state={skin} setState={setSkin} />
             </li>
           )}
-          {pictogram.img.settings.hair && (
+          {pictogram.img.settings.hair && pictogram.img.settings.color && (
             <li>
               <SettingCard setting="hair" state={hair} setState={setHair} />
             </li>

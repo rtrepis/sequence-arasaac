@@ -23,7 +23,7 @@ const PictogramCard = ({
     indexSequence,
     img: {
       selectedId,
-      settings: { skin, fitzgerald, hair },
+      settings: { skin, fitzgerald, hair, color },
       searched: { word },
     },
     settings: {
@@ -92,7 +92,7 @@ const PictogramCard = ({
       <CardContent sx={{ padding: 0, position: "relative" }}>
         <CardMedia
           component="img"
-          image={toUrlPathApiAraSaac(selectedId, skin, hair)}
+          image={toUrlPathApiAraSaac(selectedId, skin, hair, color)}
           height={150 * pictSize * printPageRatio}
           width={150 * pictSize * printPageRatio}
           alt={intl.formatMessage({ ...messages.pictogram })}
