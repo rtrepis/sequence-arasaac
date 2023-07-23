@@ -29,7 +29,7 @@ const PictEditForm = ({
       fontSize: defaultFontSize,
       textPosition: defaultTextPosition,
     },
-    pictApiAra: { color: defaultColor },
+    pictApiAra: { skin: defaultSkin, hair: defaultHair, color: defaultColor },
   } = useAppSelector((state) => state.ui.defaultSettings);
 
   const initialFontSize = pictogram.settings.fontSize
@@ -45,12 +45,12 @@ const PictEditForm = ({
 
   const initialSkin = pictogram.img.settings.skin
     ? pictogram.img.settings.skin
-    : undefined;
+    : defaultSkin;
   const [skin, setSkin] = useState(initialSkin);
 
   const initialHair = pictogram.img.settings.hair
     ? pictogram.img.settings.hair
-    : undefined;
+    : defaultHair;
   const [hair, setHair] = useState(initialHair);
 
   const initialSearch = {
@@ -66,9 +66,6 @@ const PictEditForm = ({
     ? pictogram.img.settings.color
     : defaultColor;
   const [color, setColor] = useState(initialColor);
-
-  console.log(hair);
-  console.log(skin);
 
   const pictogramGuide: PictSequence = {
     ...pictogram,
