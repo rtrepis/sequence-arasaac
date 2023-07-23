@@ -127,6 +127,10 @@
     "defaultMessage": "Aplicar tots",
     "description": "apply to all pictograms"
   },
+  "components.settingCard.color.title": {
+    "defaultMessage": "Color",
+    "description": "Setting title"
+  },
   "components.settingCard.corss.title": {
     "defaultMessage": "Taxat",
     "description": "Setting title"
