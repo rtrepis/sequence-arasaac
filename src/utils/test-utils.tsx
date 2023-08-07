@@ -57,6 +57,7 @@ const preloadedState: State = {
         numbered: true,
         textPosition: "bottom",
         fontSize: 12,
+        fontFamily: "Roboto",
         borderIn: { color: "fitzgerald", radius: 20, size: 2 },
         borderOut: { color: "#999999", radius: 20, size: 2 },
       },

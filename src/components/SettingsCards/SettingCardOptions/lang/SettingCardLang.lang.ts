@@ -1,5 +1,5 @@
 import { defineMessage } from "react-intl";
-import { SettingsCardOptionsLang } from "../../../types/sequence.lang";
+import { SettingsCardOptionsLang } from "../../../../types/sequence.lang";
 
 export const settingCardOptions: SettingsCardOptionsLang = {
   messages: {
@@ -9,6 +9,7 @@ export const settingCardOptions: SettingsCardOptionsLang = {
       description: "Title setting",
     }),
   },
+
   languages: {
     en: {
       message: defineMessage({

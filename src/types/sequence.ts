@@ -1,3 +1,5 @@
+import { FontFamily } from "./FontFamily";
+
 export type Sequence = PictSequence[];
 
 export interface PictSequence {
@@ -11,6 +13,7 @@ export interface PictSequenceSettings {
   numbered?: boolean;
   textPosition?: TextPosition;
   fontSize?: number;
+  fontFamily?: FontFamily;
   borderOut?: Border;
   borderIn?: Border;
 }
