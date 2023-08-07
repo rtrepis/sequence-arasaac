@@ -81,6 +81,8 @@ const PictogramCard = ({
         >
           <Typography
             fontSize={textFontSize}
+            fontFamily={"Dancing Script"}
+            fontWeight={400}
             component="h3"
             sx={{ "@media print": { fontSize: 20 * pictSize } }}
           >
@@ -142,6 +144,7 @@ const PictogramCard = ({
         >
           <Typography
             fontSize={textFontSize}
+            fontFamily={"Arial"}
             component="h3"
             sx={{ "@media print": { fontSize: 20 * pictSize } }}
           >

@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  DefaultSettings,
   DefaultSettingsPictApiAraForEdit,
   DefaultSettingsPictSequenceForEdit,
   Ui,
   ViewSettings,
 } from "../../types/ui";
-import { DefaultSettings } from "../../types/ui";
 
 const uiInitialState: Ui = {
   viewSettings: {
@@ -24,6 +24,7 @@ const uiInitialState: Ui = {
       numbered: false,
       textPosition: "bottom",
       fontSize: 1,
+      fontFamily: "Arial",
       borderIn: { color: "fitzgerald", radius: 20, size: 2 },
       borderOut: { color: "#999999", radius: 20, size: 2 },
     },

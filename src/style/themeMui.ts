@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material";
+import "../style/fonts.css";
 
 const theme = createTheme({
   palette: {
@@ -17,6 +18,7 @@ const theme = createTheme({
   },
   typography: {
     body1: { fontSize: "1.175rem", fontWeight: "bold" },
+    fontFamily: ["Roboto"].join(","),
   },
 });
 
