@@ -8,21 +8,17 @@ import {
   Stack,
 } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
-import { settingCardOptions } from "./SettingCardOptions.lang";
-import { card } from "../SettingsCards.styled";
+import { card } from "../../SettingsCards.styled";
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import useUserLocation from "../../../hooks/useUserLocation";
+import { settingCardOptions } from "./SettingCardLang.lang";
+import useUserLocation from "../../../../hooks/useUserLocation";
 
 interface SettingCardProps {
   setting: "languages";
-  selected: string;
 }
 
-const SettingCardOptions = ({
-  setting,
-  selected,
-}: SettingCardProps): JSX.Element => {
+const SettingCardLang = ({ setting }: SettingCardProps): JSX.Element => {
   const intl = useIntl();
 
   const initialLang = useUserLocation();
@@ -75,4 +71,4 @@ const SettingCardOptions = ({
   );
 };
 
-export default SettingCardOptions;
+export default SettingCardLang;

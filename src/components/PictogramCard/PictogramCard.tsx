@@ -10,6 +10,7 @@ import {
 } from "./PictogramCard.styled";
 import messages from "./PictogramCart.lang";
 import fitzgeraldToBorder from "../../utils/fitzgeraldToBorder";
+import { FontFamily } from "../../types/FontFamily";
 
 interface PictogramCardProps {
   pictogram: PictSequence;
@@ -31,6 +32,7 @@ const PictogramCard = ({
       fontSize,
       borderIn: pictBorderIn,
       borderOut: pictBorderOut,
+      fontFamily: pictFontFamily,
     },
     text: customText,
     cross,
@@ -43,6 +45,7 @@ const PictogramCard = ({
     borderIn: borderInDefaultSetting,
     borderOut: borderOutDefaultSetting,
     numbered,
+    fontFamily: fontFamilyDefaultSetting,
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
   const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
   const intl = useIntl();
@@ -61,6 +64,8 @@ const PictogramCard = ({
   const printPageRatio = size?.printPageRatio ? size?.printPageRatio : 1;
 
   const textFontSize = 20 * fontSize! * printPageRatio * pictSize;
+
+  const fontFamily: FontFamily = pictFontFamily ?? fontFamilyDefaultSetting;
 
   return (
     <Card
@@ -81,6 +86,8 @@ const PictogramCard = ({
         >
           <Typography
             fontSize={textFontSize}
+            fontFamily={fontFamily}
+            fontWeight={400}
             component="h3"
             sx={{ "@media print": { fontSize: 20 * pictSize } }}
           >
@@ -142,6 +149,7 @@ const PictogramCard = ({
         >
           <Typography
             fontSize={textFontSize}
+            fontFamily={fontFamily}
             component="h3"
             sx={{ "@media print": { fontSize: 20 * pictSize } }}
           >
