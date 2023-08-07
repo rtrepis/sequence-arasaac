@@ -26,6 +26,12 @@ export interface SettingsCardOptionsLang {
   };
 }
 
+export interface SettingsCardOptionsFont {
+  messages: {
+    fontFamily: Message;
+  };
+}
+
 export interface Message {
   id: string;
   description?: string;

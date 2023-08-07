@@ -1,3 +1,4 @@
+import { FontFamily } from "./FontFamily";
 import { Border, Hair, Skin, TextPosition } from "./sequence";
 
 export type Langs = "ca" | "en" | "es";
@@ -29,6 +30,7 @@ export interface DefaultSettingsPictSequence {
   numbered: boolean;
   textPosition: TextPosition;
   fontSize: number;
+  fontFamily: FontFamily;
   borderOut: Border;
   borderIn: Border;
 }
