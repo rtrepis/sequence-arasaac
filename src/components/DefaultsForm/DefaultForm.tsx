@@ -70,6 +70,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
       fontSize: fontSize,
       borderIn: borderIn,
       borderOut: borderOut,
+      fontFamily: fontFamily,
     },
     cross: false,
   };

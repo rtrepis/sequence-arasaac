@@ -24,7 +24,7 @@ const uiInitialState: Ui = {
       numbered: false,
       textPosition: "bottom",
       fontSize: 1,
-      fontFamily: "Arial",
+      fontFamily: "Roboto",
       borderIn: { color: "fitzgerald", radius: 20, size: 2 },
       borderOut: { color: "#999999", radius: 20, size: 2 },
     },
