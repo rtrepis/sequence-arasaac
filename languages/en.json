@@ -183,6 +183,10 @@
     "defaultMessage": "Empty",
     "description": "Empty pictogram"
   },
+  "setting.font-family.title": {
+    "defaultMessage": "Font Family",
+    "description": "Title setting"
+  },
   "setting.lang.ca.label": {
     "defaultMessage": "Catalan",
     "description": "Type setting"

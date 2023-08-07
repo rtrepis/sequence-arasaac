@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { card } from "../SettingCardOptions.styled";
 import { settingCardOptions } from "./SettingCardFont.lang";
 import { fontList } from "../../../../data/fontlist";
@@ -23,8 +23,6 @@ const SettingCardFont = ({
   state,
   setState,
 }: SettingCardProps): JSX.Element => {
-  const intl = useIntl();
-
   const settingCard = {
     messages: settingCardOptions.messages[setting],
   };
@@ -42,16 +40,16 @@ const SettingCardFont = ({
       sx={card}
     >
       <FormControl fullWidth>
-        <InputLabel id="language">
+        <InputLabel id="fontFamily">
           <FormattedMessage {...settingCard.messages} />
         </InputLabel>
         <Select
-          labelId="language"
+          labelId="fontFamily"
           id="language-selected"
           value={state}
-          label="language"
+          label="fontFamily"
           onChange={handleChange}
-          sx={{ width: 150 }}
+          sx={{ width: 200 }}
         >
           {fontList.map((font) => (
             <MenuItem value={font} key={font}>
