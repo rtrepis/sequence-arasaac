@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updatePictSequenceActionCreator } from "../../app/slice/sequenceSlice";
 import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCardTextFiled";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
+import SettingCardFont from "../SettingsCards/SettingCardOptions/font/SettingCardFont";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
@@ -27,30 +28,24 @@ const PictEditForm = ({
   const {
     pictSequence: {
       fontSize: defaultFontSize,
+      fontFamily: defaultFontFamily,
       textPosition: defaultTextPosition,
     },
     pictApiAra: { skin: defaultSkin, hair: defaultHair, color: defaultColor },
   } = useAppSelector((state) => state.ui.defaultSettings);
 
-  const initialFontSize = pictogram.settings.fontSize
-    ? pictogram.settings.fontSize
-    : defaultFontSize;
+  const initialFontSize = pictogram.settings.fontSize ?? defaultFontSize;
   const [fontSize, setFontSize] = useState(initialFontSize);
 
-  const initialTextPosition = pictogram.settings.textPosition
-    ? pictogram.settings.textPosition
-    : defaultTextPosition;
+  const initialTextPosition =
+    pictogram.settings.textPosition ?? defaultTextPosition;
   const [textPosition, setTextPosition] = useState(initialTextPosition);
   const [text, setText] = useState(pictogram.text);
 
-  const initialSkin = pictogram.img.settings.skin
-    ? pictogram.img.settings.skin
-    : defaultSkin;
+  const initialSkin = pictogram.img.settings.skin ?? defaultSkin;
   const [skin, setSkin] = useState(initialSkin);
 
-  const initialHair = pictogram.img.settings.hair
-    ? pictogram.img.settings.hair
-    : defaultHair;
+  const initialHair = pictogram.img.settings.hair ?? defaultHair;
   const [hair, setHair] = useState(initialHair);
 
   const initialSearch = {
@@ -62,10 +57,11 @@ const PictEditForm = ({
 
   const [cross, setCross] = useState(pictogram.cross);
 
-  const initialColor = pictogram.img.settings.color
-    ? pictogram.img.settings.color
-    : defaultColor;
+  const initialColor = pictogram.img.settings.color ?? defaultColor;
   const [color, setColor] = useState(initialColor);
+
+  const initialFontFamily = pictogram.settings.fontFamily ?? defaultFontFamily;
+  const [fontFamily, setFontFamily] = useState(initialFontFamily);
 
   const pictogramGuide: PictSequence = {
     ...pictogram,
@@ -87,7 +83,7 @@ const PictEditForm = ({
         selectedId,
         settings: { fitzgerald, skin, hair, color },
       },
-      settings: { fontSize, textPosition },
+      settings: { fontSize, textPosition, fontFamily },
       text,
       cross,
     };
@@ -106,6 +102,7 @@ const PictEditForm = ({
     dispatch,
     cross,
     color,
+    fontFamily,
   ]);
 
   useEffect(() => {
@@ -157,6 +154,15 @@ const PictEditForm = ({
                 setting="fontSize"
                 state={fontSize}
                 setState={setFontSize}
+              />
+            </li>
+          )}
+          {pictogram.settings.fontFamily && (
+            <li>
+              <SettingCardFont
+                setting="fontFamily"
+                state={fontFamily}
+                setState={setFontFamily}
               />
             </li>
           )}
