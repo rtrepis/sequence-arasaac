@@ -3,7 +3,6 @@ import PictogramCard from "../PictogramCard/PictogramCard";
 import SettingCardLang from "../SettingsCards/SettingCardOptions/lang/SettingCardLang";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
-import SettingCardNumber from "../SettingsCards/SettingCardNumber/SettingCardNumber";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
 import { PictSequence } from "../../types/sequence";
 import { useIntl } from "react-intl";
@@ -12,7 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useCallback, useEffect, useState } from "react";
 import { DefaultSettings } from "../../types/ui";
 import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
-import SettingCardFont from "../SettingsCards/SettingCardOptions/font/SettingCardFont";
+import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup";
 
 interface DefaultFormProps {
   submit: boolean;
@@ -33,16 +32,14 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
       pictSequence: {
         borderIn: initialBorderIn,
         borderOut: initialBorderOut,
-        fontSize: initialFontSize,
-        fontFamily: initialFontFamily,
+        font: initialFont,
         numbered,
         textPosition: initialTextPosition,
       },
     },
   } = useAppSelector((state) => state.ui);
 
-  const [fontSize, setFontSize] = useState(initialFontSize);
-  const [fontFamily, setFontFamily] = useState(initialFontFamily);
+  const [font, setFont] = useState(initialFont);
   const [textPosition, setTextPosition] = useState(initialTextPosition);
   const [skin, setSkin] = useState(initialSkin);
   const [borderIn, setBorderIn] = useState(initialBorderIn);
@@ -67,10 +64,9 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
     },
     settings: {
       textPosition: textPosition,
-      fontSize: fontSize,
+      font: font,
       borderIn: borderIn,
       borderOut: borderOut,
-      fontFamily: fontFamily,
     },
     cross: false,
   };
@@ -81,8 +77,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
       pictSequence: {
         borderIn,
         borderOut,
-        fontSize,
-        fontFamily,
+        font,
         numbered,
         textPosition,
       },
@@ -95,12 +90,11 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
     hair,
     borderIn,
     borderOut,
-    fontSize,
-    fontFamily,
     numbered,
     textPosition,
     dispatch,
     color,
+    font,
   ]);
 
   useEffect(() => {
@@ -162,30 +156,9 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                 />
               </li>
             </Stack>
-            <Stack
-              display={"flex"}
-              direction={"row"}
-              flexWrap={"wrap"}
-              marginTop={1}
-              rowGap={2}
-              columnGap={2}
-            >
-              <li>
-                <SettingCardNumber
-                  setting="fontSize"
-                  state={fontSize}
-                  setState={setFontSize}
-                />
-              </li>
-              <li>
-                <SettingCardFont
-                  setting="fontFamily"
-                  state={fontFamily}
-                  setState={setFontFamily}
-                />
-              </li>
-            </Stack>
-
+            <li>
+              <SettingCardFontGroup state={font} setState={setFont} />
+            </li>
             <Stack
               display={"flex"}
               direction={"row"}

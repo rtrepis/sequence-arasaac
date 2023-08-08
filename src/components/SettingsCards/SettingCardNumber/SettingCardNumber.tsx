@@ -10,12 +10,14 @@ interface SettingCardProps {
   setting: "fontSize";
   state: number;
   setState: React.Dispatch<React.SetStateAction<number>>;
+  apply?: boolean;
 }
 
 const SettingCardNumber = ({
   setting,
   state,
   setState,
+  apply = false,
 }: SettingCardProps): JSX.Element => {
   const dispatch = useAppDispatch();
 
@@ -54,7 +56,10 @@ const SettingCardNumber = ({
         onChange={handleChange}
         sx={{ width: 100 }}
       />
-      <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
+
+      {apply && (
+        <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
+      )}
     </Stack>
   );
 };

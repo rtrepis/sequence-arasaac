@@ -12,6 +12,7 @@ export interface PictSequence {
 export interface PictSequenceSettings {
   numbered?: boolean;
   textPosition?: TextPosition;
+  font?: Font;
   fontSize?: number;
   fontFamily?: FontFamily;
   borderOut?: Border;
@@ -46,6 +47,11 @@ export interface Border {
   size: number;
 }
 
+export interface Font {
+  family: FontFamily;
+  color: string;
+  size: number;
+}
 export interface PictApiAra {
   searched: Word;
   selectedId: number;

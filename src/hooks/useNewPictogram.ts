@@ -22,7 +22,7 @@ const useNewPictogram = () => {
       },
       settings: {
         textPosition: pictSequenceDefault.textPosition,
-        fontSize: pictSequenceDefault.fontSize,
+        font: pictSequenceDefault.font,
       },
       cross: false,
     };

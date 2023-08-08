@@ -1,5 +1,5 @@
 import { FontFamily } from "./FontFamily";
-import { Border, Hair, Skin, TextPosition } from "./sequence";
+import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 
 export type Langs = "ca" | "en" | "es";
 
@@ -29,8 +29,7 @@ interface DefaultSettingsPictAra {
 export interface DefaultSettingsPictSequence {
   numbered: boolean;
   textPosition: TextPosition;
-  fontSize: number;
-  fontFamily: FontFamily;
+  font: Font;
   borderOut: Border;
   borderIn: Border;
 }
