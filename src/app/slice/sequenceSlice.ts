@@ -95,23 +95,34 @@ const sequenceSlice = createSlice({
       );
     },
 
-    skinApplyAll: (
+    pictAraSettingsApplyAll: (
       previousSequence,
       action: PayloadAction<PictApiAraSettingsApplyAll>
     ) => {
-      previousSequence.map(
-        (pictogram) => (pictogram.img.settings.skin = action.payload.skin!)
-      );
+      if (action.payload.skin)
+        previousSequence.map(
+          (pictogram) => (pictogram.img.settings.skin = action.payload.skin)
+        );
+      if (action.payload.hair)
+        previousSequence.map(
+          (pictogram) => (pictogram.img.settings.hair = action.payload.hair)
+        );
     },
 
-    textPositionApplyAll: (
+    pictSequenceApplyAll: (
       previousSequence,
       action: PayloadAction<PictSequenceApplyAll>
     ) => {
-      previousSequence.map(
-        (pictogram) =>
-          (pictogram.settings.textPosition = action.payload.textPosition!)
-      );
+      if (action.payload.textPosition)
+        previousSequence.map(
+          (pictogram) =>
+            (pictogram.settings.textPosition = action.payload.textPosition)
+        );
+      if (action.payload.fontFamily)
+        previousSequence.map(
+          (pictogram) =>
+            (pictogram.settings.fontFamily = action.payload.fontFamily)
+        );
     },
 
     borderInApplyAll: (
@@ -157,8 +168,8 @@ export const {
   updatePictSequence: updatePictSequenceActionCreator,
   selectedId: selectedIdActionCreator,
   searched: searchedActionCreator,
-  skinApplyAll: skinApplyAllActionCreator,
-  textPositionApplyAll: textPositionApplyAllActionCreator,
+  pictAraSettingsApplyAll: pictAraSettingsApplyAllActionCreator,
+  pictSequenceApplyAll: pictSequenceApplyAllActionCreator,
   borderInApplyAll: borderInApplyAllActionCreator,
   borderOutApplyAll: borderOutApplyAllActionCreator,
   fontSizeApplyAll: fontSizeApplyAllActionCreator,
