@@ -8,40 +8,31 @@ import {
   Typography,
 } from "@mui/material";
 import { FormattedMessage } from "react-intl";
-import { card, cardAction } from "../SettingCardOptions.styled";
+import { card } from "../SettingCardOptions.styled";
 import { settingCardOptions } from "./SettingCardFont.lang";
 import { fontList } from "../../../../data/fontlist";
-import ApplyAll from "../../ApplyAll/ApplyAll";
 import { FontFamily } from "../../../../types/FontFamily";
-import { pictSequenceApplyAllActionCreator } from "../../../../app/slice/sequenceSlice";
 import { useDispatch } from "react-redux";
 
 interface SettingCardProps {
   setting: "fontFamily";
   state: string;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<FontFamily>>;
+  object?: {};
 }
 
 const SettingCardFont = ({
   setting,
   state,
   setState,
+  object,
 }: SettingCardProps): JSX.Element => {
-  const dispatch = useDispatch();
   const settingCard = {
     messages: settingCardOptions.messages[setting],
   };
 
   const handleChange = (event: SelectChangeEvent) => {
-    setState(event.target.value as string);
-  };
-
-  const handleApplyAll = (toUpdate: string) => {
-    dispatch(
-      pictSequenceApplyAllActionCreator({
-        fontFamily: toUpdate as FontFamily,
-      })
-    );
+    setState(event.target.value as FontFamily);
   };
 
   return (
@@ -71,9 +62,6 @@ const SettingCardFont = ({
           ))}
         </Select>
       </FormControl>
-      {state && (
-        <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
-      )}
     </Stack>
   );
 };
