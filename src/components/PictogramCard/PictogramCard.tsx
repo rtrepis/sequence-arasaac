@@ -103,15 +103,13 @@ const PictogramCard = ({
           height={150 * pictSize * printPageRatio}
           width={150 * pictSize * printPageRatio}
           alt={intl.formatMessage({ ...messages.pictogram })}
-          sx={() =>
-            pictogram__media(borderIn, view, pictSize, printPageRatio, cross)
-          }
+          sx={() => pictogram__media(borderIn, view, pictSize, printPageRatio)}
         />
         {cross && (
           <>
             <Box
               sx={{
-                background: "#ff4d4d",
+                background: "#ff4d4dbd",
                 position: "absolute",
                 height: `${10 * pictSize * printPageRatio}px`,
                 width: `${175 * pictSize * printPageRatio}px`,
@@ -122,7 +120,7 @@ const PictogramCard = ({
             ></Box>
             <Box
               sx={{
-                background: "#ff4d4d",
+                background: "#ff4d4dca",
                 position: "absolute",
                 height: `${10 * pictSize * printPageRatio}px`,
                 width: `${175 * pictSize * printPageRatio}px`,
