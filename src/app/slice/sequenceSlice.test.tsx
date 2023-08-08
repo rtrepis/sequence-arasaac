@@ -16,7 +16,7 @@ import {
   renumberSequenceActionCreator,
   sortSequenceActionCreator,
   settingsPictSequenceActionCreator,
-  skinApplyAllActionCreator,
+  pictAraSettingsApplyAllActionCreator,
 } from "./sequenceSlice";
 
 const mockSequences = preloadedState.sequence[0];
@@ -235,7 +235,8 @@ describe("Given the reducer sequenceSlice", () => {
         },
       ];
 
-      const actionCreator = skinApplyAllActionCreator(applyAllPayload);
+      const actionCreator =
+        pictAraSettingsApplyAllActionCreator(applyAllPayload);
       const newState = sequenceReducer(previousSequence, actionCreator);
 
       expect(newState).toStrictEqual(expectState);
