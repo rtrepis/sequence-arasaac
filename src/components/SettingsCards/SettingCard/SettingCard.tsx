@@ -2,11 +2,11 @@ import { Stack, ToggleButton, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch } from "../../../app/hooks";
 import {
-  skinApplyAllActionCreator,
-  textPositionApplyAllActionCreator,
+  pictAraSettingsApplyAllActionCreator,
+  pictSequenceApplyAllActionCreator,
 } from "../../../app/slice/sequenceSlice";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
-import { Skin, TextPosition } from "../../../types/sequence";
+import { Hair, Skin, TextPosition } from "../../../types/sequence";
 import { settingsCardLang } from "./SettingCard.lang";
 import {
   cardAction,
@@ -42,15 +42,22 @@ const SettingCard = ({
   const handleApplyAll = (toUpdate: string) => {
     setting === "textPosition" &&
       dispatch(
-        textPositionApplyAllActionCreator({
+        pictSequenceApplyAllActionCreator({
           textPosition: toUpdate as TextPosition,
         })
       );
 
     setting === "skin" &&
       dispatch(
-        skinApplyAllActionCreator({
+        pictAraSettingsApplyAllActionCreator({
           skin: toUpdate as Skin,
+        })
+      );
+
+    setting === "hair" &&
+      dispatch(
+        pictAraSettingsApplyAllActionCreator({
+          hair: toUpdate as Hair,
         })
       );
   };

@@ -157,15 +157,15 @@ const PictEditForm = ({
               />
             </li>
           )}
-          {pictogram.settings.fontFamily && (
-            <li>
-              <SettingCardFont
-                setting="fontFamily"
-                state={fontFamily}
-                setState={setFontFamily}
-              />
-            </li>
-          )}
+
+          <li>
+            <SettingCardFont
+              setting="fontFamily"
+              state={fontFamily}
+              setState={setFontFamily}
+            />
+          </li>
+
           <Stack
             display={"flex"}
             direction={"row"}
