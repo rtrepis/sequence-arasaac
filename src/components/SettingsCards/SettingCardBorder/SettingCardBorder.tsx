@@ -120,7 +120,7 @@ const SettingCardBorder = ({
               <input
                 id="colorPick"
                 type="color"
-                className={"colorInput"}
+                className={"colorInput-border"}
                 value={colorSelect}
                 onChange={handleChangesColorSelect}
                 onBlur={handlerClickColor}

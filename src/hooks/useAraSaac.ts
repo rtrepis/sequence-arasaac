@@ -20,9 +20,10 @@ import fitzgeraldColors from "../data/fitzgeraldColors";
 const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
 
 const useAraSaac = () => {
-  const { fontSize, textPosition } = useAppSelector(
-    (state) => state.ui.defaultSettings.pictSequence
-  );
+  const {
+    font: { size: fontSize },
+    textPosition,
+  } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
   const amountSequence = useAppSelector((state) => state.sequence.length);
   const defaultSettingsPictApiAra = useAppSelector(
     (state) => state.ui.defaultSettings.pictApiAra

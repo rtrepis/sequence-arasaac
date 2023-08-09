@@ -56,8 +56,11 @@ const preloadedState: State = {
       pictSequence: {
         numbered: true,
         textPosition: "bottom",
-        fontSize: 12,
-        fontFamily: "Roboto",
+        font: {
+          color: "#998800",
+          size: 12,
+          family: "Roboto",
+        },
         borderIn: { color: "fitzgerald", radius: 20, size: 2 },
         borderOut: { color: "#999999", radius: 20, size: 2 },
       },
