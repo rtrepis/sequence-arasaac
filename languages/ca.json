@@ -183,6 +183,10 @@
     "defaultMessage": "Buit",
     "description": "Empty pictogram"
   },
+  "setting.font-family.title": {
+    "defaultMessage": "Tipus",
+    "description": "Title setting"
+  },
   "setting.lang.ca.label": {
     "defaultMessage": "Català",
     "description": "Type setting"
