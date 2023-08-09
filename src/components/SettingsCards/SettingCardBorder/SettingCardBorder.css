@@ -1,7 +1,16 @@
-.colorInput {
-  border-radius: 20px;
-  border: 0px;
+.colorInput-border {
+  appearance: none;
   background-color: transparent;
-  width: 100%;
-  margin: 0;
+  height: 40px;
+  aspect-ratio: 1;
+  border: none;
+  cursor: pointer;
+}
+.colorInput-border::-webkit-color-swatch {
+  border-radius: 50%;
+  border: none;
+}
+.colorInput-border::-moz-color-swatch {
+  border-radius: 50%;
+  border: none;
 }

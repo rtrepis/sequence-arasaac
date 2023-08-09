@@ -5,7 +5,7 @@ export const settingCardOptions: SettingsCardOptionsFont = {
   messages: {
     fontFamily: defineMessage({
       id: "setting.font-family.title",
-      defaultMessage: "Font Family",
+      defaultMessage: "Family",
       description: "Title setting",
     }),
   },

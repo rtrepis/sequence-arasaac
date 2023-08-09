@@ -1,7 +1,7 @@
-import { Slider, Stack, Typography } from "@mui/material";
+import { FormLabel, Slider, Stack } from "@mui/material";
 import { useAppDispatch } from "../../../app/hooks";
 import { FormattedMessage } from "react-intl";
-import { cardAction, card, cardTitle } from "../SettingsCards.styled";
+import { cardAction } from "../SettingsCards.styled";
 import { fontSizeApplyAllActionCreator } from "../../../app/slice/sequenceSlice";
 import { messages } from "./SettingCardNumber.lang";
 import ApplyAll from "../ApplyAll/ApplyAll";
@@ -10,12 +10,14 @@ interface SettingCardProps {
   setting: "fontSize";
   state: number;
   setState: React.Dispatch<React.SetStateAction<number>>;
+  apply?: boolean;
 }
 
 const SettingCardNumber = ({
   setting,
   state,
   setState,
+  apply = false,
 }: SettingCardProps): JSX.Element => {
   const dispatch = useAppDispatch();
 
@@ -33,16 +35,10 @@ const SettingCardNumber = ({
   };
 
   return (
-    <Stack
-      display={"flex"}
-      direction={"row"}
-      flexWrap={"wrap"}
-      columnGap={2}
-      sx={card}
-    >
-      <Typography variant="body1" sx={cardTitle} component="h2">
+    <Stack direction={"row"} spacing={2}>
+      <FormLabel>
         <FormattedMessage {...messages[setting]} />
-      </Typography>
+      </FormLabel>
       <Slider
         defaultValue={state}
         aria-label={"labelName"}
@@ -54,7 +50,10 @@ const SettingCardNumber = ({
         onChange={handleChange}
         sx={{ width: 100 }}
       />
-      <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
+
+      {apply && (
+        <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
+      )}
     </Stack>
   );
 };
