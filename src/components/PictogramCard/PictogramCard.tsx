@@ -29,10 +29,8 @@ const PictogramCard = ({
     settings: {
       font: pictFont,
       textPosition,
-      //fontSize,
       borderIn: pictBorderIn,
       borderOut: pictBorderOut,
-      //fontFamily: pictFontFamily,
     },
     text: customText,
     cross,
@@ -45,7 +43,6 @@ const PictogramCard = ({
     borderIn: borderInDefaultSetting,
     borderOut: borderOutDefaultSetting,
     numbered,
-    //fontFamily: fontFamilyDefaultSetting,
     font: fontDefaultSetting,
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
   const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
@@ -88,7 +85,6 @@ const PictogramCard = ({
             fontSize={textFontSize}
             fontFamily={font.family}
             color={font.color}
-            fontWeight={400}
             component="h3"
             sx={{ "@media print": { fontSize: 20 * pictSize } }}
           >

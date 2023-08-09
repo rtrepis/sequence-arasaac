@@ -8,24 +8,20 @@ import {
   Typography,
 } from "@mui/material";
 import { FormattedMessage } from "react-intl";
-import { card } from "../SettingCardOptions.styled";
 import { settingCardOptions } from "./SettingCardFont.lang";
 import { fontList } from "../../../../data/fontlist";
 import { FontFamily } from "../../../../types/FontFamily";
-import { useDispatch } from "react-redux";
 
 interface SettingCardProps {
   setting: "fontFamily";
   state: string;
   setState: React.Dispatch<React.SetStateAction<FontFamily>>;
-  object?: {};
 }
 
 const SettingCardFont = ({
   setting,
   state,
   setState,
-  object,
 }: SettingCardProps): JSX.Element => {
   const settingCard = {
     messages: settingCardOptions.messages[setting],
@@ -36,13 +32,7 @@ const SettingCardFont = ({
   };
 
   return (
-    <Stack
-      display={"flex"}
-      direction={"row"}
-      flexWrap={"wrap"}
-      columnGap={2}
-      sx={card}
-    >
+    <Stack direction={"row"}>
       <FormControl fullWidth>
         <InputLabel id="fontFamily">
           <FormattedMessage {...settingCard.messages} />

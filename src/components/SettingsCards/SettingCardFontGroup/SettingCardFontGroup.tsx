@@ -1,11 +1,11 @@
-import { Stack, Typography } from "@mui/material";
+import { FormLabel, Stack, Typography } from "@mui/material";
 import { Font } from "../../../types/sequence";
 import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
 import SettingCardFont from "../SettingCardOptions/font/SettingCardFont";
 import { useEffect, useState } from "react";
 import "./SettingCardFontGroup.css";
 import { FormattedMessage } from "react-intl";
-import { cardTitle } from "../SettingsCards.styled";
+import { card, cardTitle } from "../SettingsCards.styled";
 import { messages } from "./SettingCardFontGroup.lang";
 
 interface SettingCardFontGroupProps {
@@ -36,30 +36,33 @@ const SettingCardFontGroup = ({
       display={"flex"}
       direction={"row"}
       flexWrap={"wrap"}
-      marginTop={1}
-      rowGap={2}
       columnGap={2}
+      sx={card}
     >
+      <Typography variant="body1" sx={cardTitle} component="h4">
+        <FormattedMessage {...messages.font} />
+      </Typography>
+
       <SettingCardFont
         setting="fontFamily"
         state={family}
         setState={setFamily}
-        object={state}
       />
 
       <SettingCardNumber setting="fontSize" state={size} setState={setSize} />
 
-      <Typography variant="body1" sx={cardTitle} component="h4">
-        <FormattedMessage {...messages.fontColor} />
-      </Typography>
-
-      <input
-        id="colorPick"
-        type="color"
-        className={"colorInput-font"}
-        value={color}
-        onChange={handleChangesColorSelect}
-      />
+      <Stack direction={"row"} spacing={2}>
+        <FormLabel>
+          <FormattedMessage {...messages.color} />
+        </FormLabel>
+        <input
+          id="colorPick"
+          type="color"
+          className={"colorInput-font"}
+          value={color}
+          onChange={handleChangesColorSelect}
+        />
+      </Stack>
     </Stack>
   );
 };

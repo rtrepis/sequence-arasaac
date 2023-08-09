@@ -1,8 +1,16 @@
 .colorInput-font {
-  border-radius: 20px;
-  border: 0px;
+  appearance: none;
   background-color: transparent;
   width: 50px;
   height: 50px;
-  margin: 0;
+  border: none;
+  cursor: pointer;
+}
+.colorInput-font::-webkit-color-swatch {
+  border-radius: 50%;
+  border: 4px solid #1b7d20;
+}
+.colorInput-font::-moz-color-swatch {
+  border-radius: 50%;
+  border: 4px solid #1b7d20;
 }
