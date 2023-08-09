@@ -7,6 +7,14 @@
     "defaultMessage": "Border out",
     "description": "type title"
   },
+  "component.settingCardFontGroup.color.title": {
+    "defaultMessage": "Color",
+    "description": "type title"
+  },
+  "component.settingCardFontGroup.font.title": {
+    "defaultMessage": "Font",
+    "description": "type title"
+  },
   "components.barNavigation.edit.title": {
     "defaultMessage": "Edit",
     "description": "Title Page"
@@ -140,7 +148,7 @@
     "description": "Personalize text pictogram"
   },
   "components.settingCard.fontSize.label": {
-    "defaultMessage": "Font Size",
+    "defaultMessage": "Size",
     "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
@@ -184,7 +192,7 @@
     "description": "Empty pictogram"
   },
   "setting.font-family.title": {
-    "defaultMessage": "Font Family",
+    "defaultMessage": "Family",
     "description": "Title setting"
   },
   "setting.lang.ca.label": {

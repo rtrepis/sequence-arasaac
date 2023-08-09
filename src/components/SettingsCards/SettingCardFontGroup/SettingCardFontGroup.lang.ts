@@ -1,9 +1,14 @@
 import { defineMessages } from "react-intl";
 
 export const messages = defineMessages({
-  fontColor: {
-    id: "component.settingCardFontGroup.fontColor.title",
-    defaultMessage: "Font Color",
+  font: {
+    id: "component.settingCardFontGroup.font.title",
+    defaultMessage: "Font",
+    description: "type title",
+  },
+  color: {
+    id: "component.settingCardFontGroup.color.title",
+    defaultMessage: "Color",
     description: "type title",
   },
 });
