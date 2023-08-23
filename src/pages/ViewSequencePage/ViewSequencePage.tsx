@@ -12,20 +12,6 @@ const ViewSequencePage = (): JSX.Element => {
     ui: { viewSettings },
   } = useAppSelector((state) => state);
 
-  const screen = {
-    height: window.screen.availHeight,
-    width: window.screen.availWidth,
-  };
-
-  let screenRatioForViewPrintPage: number = 1;
-
-  if (screen.height < screen.width) {
-    screenRatioForViewPrintPage = (screen.height / 750) * 0.4;
-  }
-  if (screen.width < screen.height) {
-    screenRatioForViewPrintPage = (screen.width / 1020) * 0.8;
-  }
-
   const initialViewState: ViewSettings = {
     sizePict: viewSettings.sizePict,
     columnGap: viewSettings.columnGap,
@@ -33,8 +19,11 @@ const ViewSequencePage = (): JSX.Element => {
   };
   const [view, setView] = useState(initialViewState);
 
-  const initialauthor: string = "";
-  const [author, setauthor] = useState(initialauthor);
+  const initialAuthor: string = "";
+  const [author, setAuthor] = useState(initialAuthor);
+
+  const initialScale = 1;
+  const [scale, setScale] = useState(initialScale);
 
   return (
     <BarNavigation title="view">
@@ -42,9 +31,10 @@ const ViewSequencePage = (): JSX.Element => {
         <ViewSequencesSettings
           view={view}
           setView={setView}
-          printPageRatio={screenRatioForViewPrintPage}
           author={author}
-          setauthor={setauthor}
+          setAuthor={setAuthor}
+          scale={scale}
+          setScale={setScale}
         >
           {sequence.map((pictogram) => (
             <PictogramCard
@@ -53,7 +43,7 @@ const ViewSequencePage = (): JSX.Element => {
               variant="plane"
               size={{
                 pictSize: view.sizePict,
-                printPageRatio: screenRatioForViewPrintPage,
+                scale: scale,
               }}
               key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
             />
