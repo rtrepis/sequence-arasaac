@@ -15,7 +15,7 @@ interface PictogramCardProps {
   pictogram: PictSequence;
   view: "complete" | "header" | "footer" | "none";
   variant?: "plane";
-  size?: { pictSize?: number; printPageRatio?: number };
+  size?: { pictSize?: number; scale?: number };
 }
 
 const PictogramCard = ({
@@ -59,7 +59,7 @@ const PictogramCard = ({
     : fitzgeraldToBorder(fitzgerald, borderOutDefaultSetting);
 
   const pictSize = size?.pictSize ?? 1;
-  const printPageRatio = size?.printPageRatio ?? 1;
+  const printPageRatio = size?.scale ?? 1;
   const font = pictFont ?? fontDefaultSetting;
 
   const textFontSize = 20 * font.size * printPageRatio * pictSize;
