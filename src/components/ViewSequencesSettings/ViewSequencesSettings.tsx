@@ -128,7 +128,7 @@ const ViewSequencesSettings = ({
 
     if (sizePage < 2) {
       setScale(maxDisplay()[0] / (printWH[0] + 24));
-    } else setScale(1 / 1.89);
+    }
   }, [
     heightLandScape,
     isLandscape,
