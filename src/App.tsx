@@ -6,7 +6,6 @@ import messages_en from "./languages/en.json";
 import messages_es from "./languages/es.json";
 import messages_ca from "./languages/ca.json";
 import EditSequencesPage from "./pages/EditSequencesPage/EditSequencesPage";
-import SequenceLgPages from "./pages/SequenceLgPage/SequenceLgPage";
 
 const App = (): JSX.Element => {
   return (
@@ -15,7 +14,6 @@ const App = (): JSX.Element => {
         <Route path="/" element={<Navigate to={"create-sequence"} />} />
         <Route path="create-sequence" element={<EditSequencesPage />} />
         <Route path="view-sequence" element={<ViewSequencePage />} />
-        <Route path="test" element={<SequenceLgPages />} />
       </Routes>
       <IntlProvider locale={"en"} defaultLocale="en" messages={messages_en}>
         <Routes>
