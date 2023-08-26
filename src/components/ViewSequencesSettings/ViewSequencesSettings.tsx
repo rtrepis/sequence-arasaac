@@ -111,10 +111,13 @@ const ViewSequencesSettings = ({
     setSizePage(newValue);
   };
 
-  const fullScreen = () => {
-    const display = document.querySelector(".display");
+  const [displayFullScreen, setDisplayFullScreen] = useState(false);
+  const fullScreen = async () => {
+    const display = document.querySelector(".displayFullScreen");
+    await display?.setAttribute("style", `display: flex`);
 
-    display?.requestFullscreen();
+    await display?.requestFullscreen();
+    setDisplayFullScreen(true);
   };
 
   useEffect(() => {
@@ -126,10 +129,21 @@ const ViewSequencesSettings = ({
       setPrintWD([heightLandScape[sizePage], widthLandScape[sizePage]]);
     }
 
-    if (sizePage < 2) {
+    const display = document.querySelector(".displayFullScreen");
+
+    if (document.fullscreenElement === null) {
       setScale(maxDisplay()[0] / (printWH[0] + 24));
+
+      if (displayFullScreen) {
+        display?.setAttribute("style", "display: none");
+        setDisplayFullScreen(false);
+      }
+    }
+    if (document.fullscreenElement === display) {
+      setScale(0.82);
     }
   }, [
+    displayFullScreen,
     heightLandScape,
     isLandscape,
     maxDisplay,
@@ -137,6 +151,7 @@ const ViewSequencesSettings = ({
     setScale,
     sizePage,
     widthLandScape,
+    setDisplayFullScreen,
   ]);
 
   return (
@@ -156,27 +171,30 @@ const ViewSequencesSettings = ({
             >
               <Tab label="A4" sx={{ fontWeight: "700" }} />
               <Tab label="A3" sx={{ fontWeight: "700" }} />
+              <Tab label="Full Screen" sx={{ fontWeight: "700" }} />
             </Tabs>
             <Stack direction={"row"}>
-              <Button
-                aria-label={"page orientation"}
-                variant="text"
-                color="primary"
-                sx={{ fontSize: "2rem" }}
-                onClick={() => setIsLandscape(!isLandscape)}
-              >
-                <MdScreenRotation />
-              </Button>
               {sizePage < 2 ? (
-                <Button
-                  aria-label={"view"}
-                  variant="text"
-                  color="primary"
-                  sx={{ fontSize: "2rem" }}
-                  onClick={() => window.print()}
-                >
-                  <AiFillPrinter />
-                </Button>
+                <>
+                  <Button
+                    aria-label={"page orientation"}
+                    variant="text"
+                    color="primary"
+                    sx={{ fontSize: "2rem" }}
+                    onClick={() => setIsLandscape(!isLandscape)}
+                  >
+                    <MdScreenRotation />
+                  </Button>
+                  <Button
+                    aria-label={"view"}
+                    variant="text"
+                    color="primary"
+                    sx={{ fontSize: "2rem" }}
+                    onClick={() => window.print()}
+                  >
+                    <AiFillPrinter />
+                  </Button>
+                </>
               ) : (
                 <Button
                   aria-label={"fullScreen"}
@@ -193,7 +211,6 @@ const ViewSequencesSettings = ({
         </NotPrint>
         <Stack direction={{ xs: "column", md: "row" }} columnGap={3}>
           <Stack
-            className="display"
             direction={"row"}
             flexWrap={"wrap"}
             alignContent={"start"}
@@ -298,14 +315,28 @@ const ViewSequencesSettings = ({
           {isLandscape ? "true" : "false"}-------
           {`${sizePage === 0 ? "A4" : "A3"}
         ${isLandscape ? "landscape" : "portrait"}`}{" "}
-          {`${(printWH[0] + 24) / maxDisplay()[0]}`} -----{" "}
-          {`${printWH[1] / maxDisplay()[1]}`}
+          {`${maxDisplay()[0] / (printWH[0] + 24)}`} -----{" "}
+          {`${(printWH[1] + 24) / maxDisplay()[1]}`}
         </Stack>
         <Stack sx={{ display: "none" }}>
           size:{sizePage}---- height:{widthLandScape[2]},--- width:
           {heightLandScape[2]}
         </Stack>
       </form>
+      <Stack
+        className="displayFullScreen"
+        direction={"row"}
+        flexWrap={"wrap"}
+        alignContent={"start"}
+        alignItems={"start"}
+        columnGap={view.columnGap}
+        rowGap={view.rowGap}
+        overflow={"hidden"}
+        padding={2}
+        display={"none"}
+      >
+        {children}
+      </Stack>
     </>
   );
 };
