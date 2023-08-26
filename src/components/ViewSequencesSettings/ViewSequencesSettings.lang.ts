@@ -26,6 +26,11 @@ const messages = defineMessages({
     defaultMessage: "Mark authorship",
     description: "Helper text form",
   },
+  fullScreen: {
+    id: "pages.viewSequence.fullScreen.label",
+    defaultMessage: "Full Screen",
+    description: "Setting property",
+  },
 });
 
 export default messages;
