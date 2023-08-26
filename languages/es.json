@@ -7,6 +7,14 @@
     "defaultMessage": "Marco exterior",
     "description": "type title"
   },
+  "component.settingCardFontGroup.color.title": {
+    "defaultMessage": "Color",
+    "description": "type title"
+  },
+  "component.settingCardFontGroup.font.title": {
+    "defaultMessage": "Font",
+    "description": "type title"
+  },
   "components.barNavigation.edit.title": {
     "defaultMessage": "Editar",
     "description": "Title Page"
@@ -20,7 +28,7 @@
     "description": "Title Page"
   },
   "components.copyRight": {
-    "defaultMessage": "Hecho con: SequenceSaac - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA). Autor de la secuencia:",
+    "defaultMessage": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
   },
   "components.defaultSettings.close": {
@@ -115,6 +123,10 @@
     "defaultMessage": "Añadir pictograma",
     "description": "Plus pictograms"
   },
+  "components.sequenceAuthor": {
+    "defaultMessage": "Sequence author:",
+    "description": "License to use the pictograms"
+  },
   "components.settingCard.Radius.title": {
     "defaultMessage": "Radio",
     "description": "Setting title"
@@ -140,7 +152,7 @@
     "description": "Personalize text pictogram"
   },
   "components.settingCard.fontSize.label": {
-    "defaultMessage": "Tamaño de letra",
+    "defaultMessage": "Size",
     "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
@@ -171,6 +183,10 @@
     "defaultMessage": "Espacio Columna",
     "description": "Label form"
   },
+  "pages.viewSequence.fullScreen.label": {
+    "defaultMessage": "Full Screen",
+    "description": "Setting property"
+  },
   "pages.viewSequence.rowGap.label": {
     "defaultMessage": "Espacio Fila",
     "description": "Label form"
@@ -184,7 +200,7 @@
     "description": "Empty pictogram"
   },
   "setting.font-family.title": {
-    "defaultMessage": "Tipo",
+    "defaultMessage": "Family",
     "description": "Title setting"
   },
   "setting.lang.ca.label": {
