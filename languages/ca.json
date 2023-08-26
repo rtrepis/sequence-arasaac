@@ -28,7 +28,7 @@
     "description": "Title Page"
   },
   "components.copyRight": {
-    "defaultMessage": "Fet amb: SequenceSaac - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA). Autor de la seqüència:",
+    "defaultMessage": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
   },
   "components.defaultSettings.close": {
@@ -123,6 +123,10 @@
     "defaultMessage": "Inserir pictograma",
     "description": "Plus pictograms"
   },
+  "components.sequenceAuthor": {
+    "defaultMessage": "Sequence author:",
+    "description": "License to use the pictograms"
+  },
   "components.settingCard.Radius.title": {
     "defaultMessage": "Radi",
     "description": "Setting title"
@@ -178,6 +182,10 @@
   "pages.viewSequence.columnGap.label": {
     "defaultMessage": "Espai Columna",
     "description": "Label form"
+  },
+  "pages.viewSequence.fullScreen.label": {
+    "defaultMessage": "Full Screen",
+    "description": "Setting property"
   },
   "pages.viewSequence.rowGap.label": {
     "defaultMessage": "Espai Fila",
