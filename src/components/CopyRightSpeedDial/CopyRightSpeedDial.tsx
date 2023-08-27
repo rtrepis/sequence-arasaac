@@ -12,6 +12,7 @@ const CopyRightSpeedDial = (): JSX.Element => {
           position: "absolute",
           bottom: 16,
           right: 16,
+          ".MuiSpeedDial-fab": { width: 36, height: 36 },
         }}
       >
         <SpeedDialAction
