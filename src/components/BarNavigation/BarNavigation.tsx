@@ -11,6 +11,7 @@ import ToggleButtonEditViewPages from "../ToggleButtonEditViewPages/ToggleButton
 import PictogramAmount from "../PictogramAmount/PictogramAmount";
 import MagicSearch from "../MagicSearch/MagicSearch";
 import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
+import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
 
 interface BarProps {
   children: React.ReactElement;
@@ -24,12 +25,16 @@ const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
         <HideOnScroll {...children}>
           <AppBar>
             <Toolbar
-              sx={{ fontSize: "1.75rem", justifyContent: "space-between" }}
+              sx={{
+                fontSize: "1.75rem",
+                justifyContent: "space-between",
+              }}
+              variant="dense"
             >
               <Stack direction={"row"} spacing={2}>
                 <Box
                   sx={{
-                    display: { xs: "block", sm: "none", md: "block" },
+                    display: { xs: "block", sm: "block", md: "block" },
                   }}
                 >
                   <img
@@ -67,6 +72,7 @@ const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
           </AppBar>
         </HideOnScroll>
         <Toolbar />
+        <CopyRightSpeedDial />
       </NotPrint>
       <Container maxWidth={"xl"}>{children}</Container>
     </>

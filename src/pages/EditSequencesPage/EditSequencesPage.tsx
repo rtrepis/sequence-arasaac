@@ -14,7 +14,6 @@ const EditSequencesPage = (): JSX.Element => {
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={2}
-          marginTop={2}
           justifyContent={"space-around"}
         >
           <PictogramAmount />

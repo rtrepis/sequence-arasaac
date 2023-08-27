@@ -77,7 +77,7 @@ const ViewSequencesSettings = ({
         configsView.heightLandScape[sizePage];
     }
 
-    const spaceToFoot = 100;
+    const spaceToFoot = 150;
     if (height + spaceToFoot > screenHeight)
       if (isLandscape) {
         height = screenHeight - spaceToFoot;
@@ -85,10 +85,10 @@ const ViewSequencesSettings = ({
           (configsView.widthLandScape[sizePage] * height) /
           configsView.heightLandScape[sizePage];
       } else {
-        height = screenHeight - spaceToFoot;
-        width =
-          (configsView.heightLandScape[sizePage] * height) /
-          configsView.widthLandScape[sizePage];
+        width = screenWidth - configsView.marginAndScrollBar[sizeMD];
+        height =
+          (configsView.widthLandScape[sizePage] * width) /
+          configsView.heightLandScape[sizePage];
       }
 
     return [width, height];
@@ -188,7 +188,6 @@ const ViewSequencesSettings = ({
             direction={"row"}
             justifyContent={"space-between"}
             alignItems={"end"}
-            paddingTop={2}
           >
             <Tabs
               value={sizePage}
@@ -279,7 +278,7 @@ const ViewSequencesSettings = ({
                   <Slider
                     defaultValue={view.sizePict}
                     name="sizePict"
-                    step={0.05}
+                    step={0.01}
                     min={0.5}
                     max={2}
                     value={view.sizePict}
