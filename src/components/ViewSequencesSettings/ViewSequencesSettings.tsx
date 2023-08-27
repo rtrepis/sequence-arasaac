@@ -10,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useAppDispatch } from "../../app/hooks";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { MdScreenRotation } from "react-icons/md";
@@ -46,41 +46,61 @@ const ViewSequencesSettings = ({
   const [isLandscape, setIsLandscape] = useState(true);
   const [sizePage, setSizePage] = useState(0);
 
-  const marginAndScrollBar = [65, 380];
   const [fullScreenWidth, fullScreenHeight] = [
     window.screen.width,
     window.screen.height,
   ];
 
-  const widthLandScape = [975, 1450, fullScreenWidth];
-  const heightLandScape = [689, 1025, fullScreenHeight];
+  const initialStateConfigs = {
+    marginAndScrollBar: [65, 380],
+    widthLandScape: [975, 1450, fullScreenWidth],
+    heightLandScape: [689, 1025, fullScreenHeight],
+  };
 
-  const maxDisplay = () => {
+  const [configsView, setConfigs] = useState(initialStateConfigs);
+
+  const maxDisplay = useCallback(() => {
     const sizeMD = screenWidth > 900 ? 1 : 0;
 
     let width;
     let height;
 
     if (isLandscape) {
-      width = screenWidth - marginAndScrollBar[sizeMD];
-      height = (heightLandScape[sizePage] * width) / widthLandScape[sizePage];
+      width = screenWidth - configsView.marginAndScrollBar[sizeMD];
+      height =
+        (configsView.heightLandScape[sizePage] * width) /
+        configsView.widthLandScape[sizePage];
     } else {
-      width = screenHeight - marginAndScrollBar[sizeMD];
-      height = (widthLandScape[sizePage] * width) / heightLandScape[sizePage];
+      width = screenHeight - configsView.marginAndScrollBar[sizeMD];
+      height =
+        (configsView.widthLandScape[sizePage] * width) /
+        configsView.heightLandScape[sizePage];
     }
 
     const spaceToFoot = 100;
     if (height + spaceToFoot > screenHeight)
       if (isLandscape) {
         height = screenHeight - spaceToFoot;
-        width = (widthLandScape[sizePage] * height) / heightLandScape[sizePage];
+        width =
+          (configsView.widthLandScape[sizePage] * height) /
+          configsView.heightLandScape[sizePage];
       } else {
         height = screenHeight - spaceToFoot;
-        width = (heightLandScape[sizePage] * height) / widthLandScape[sizePage];
+        width =
+          (configsView.heightLandScape[sizePage] * height) /
+          configsView.widthLandScape[sizePage];
       }
 
     return [width, height];
-  };
+  }, [
+    configsView.heightLandScape,
+    configsView.marginAndScrollBar,
+    configsView.widthLandScape,
+    isLandscape,
+    screenHeight,
+    screenWidth,
+    sizePage,
+  ]);
 
   const handlerView = (event: any, value: number | number[]) => {
     const newView: ViewSettings = {
@@ -103,8 +123,8 @@ const ViewSequencesSettings = ({
   };
 
   const [printWH, setPrintWD] = useState([
-    widthLandScape[sizePage],
-    heightLandScape[sizePage],
+    configsView.widthLandScape[sizePage],
+    configsView.heightLandScape[sizePage],
   ]);
 
   const handlerChange = (event: SyntheticEvent, newValue: number) => {
@@ -122,11 +142,17 @@ const ViewSequencesSettings = ({
 
   useEffect(() => {
     if (isLandscape) {
-      setPrintWD([widthLandScape[sizePage], heightLandScape[sizePage]]);
+      setPrintWD([
+        configsView.widthLandScape[sizePage],
+        configsView.heightLandScape[sizePage],
+      ]);
     }
 
     if (!isLandscape) {
-      setPrintWD([heightLandScape[sizePage], widthLandScape[sizePage]]);
+      setPrintWD([
+        configsView.heightLandScape[sizePage],
+        configsView.widthLandScape[sizePage],
+      ]);
     }
 
     const display = document.querySelector(".displayFullScreen");
@@ -144,14 +170,14 @@ const ViewSequencesSettings = ({
     }
   }, [
     displayFullScreen,
-    heightLandScape,
     isLandscape,
     maxDisplay,
     printWH,
     setScale,
     sizePage,
-    widthLandScape,
     setDisplayFullScreen,
+    configsView.widthLandScape,
+    configsView.heightLandScape,
   ]);
 
   return (
@@ -319,8 +345,8 @@ const ViewSequencesSettings = ({
           {`${(printWH[1] + 24) / maxDisplay()[1]}`}
         </Stack>
         <Stack sx={{ display: "none" }}>
-          size:{sizePage}---- height:{widthLandScape[2]},--- width:
-          {heightLandScape[2]}
+          size:{sizePage}---- height:{configsView.widthLandScape[2]},--- width:
+          {configsView.heightLandScape[2]}
         </Stack>
       </form>
       <Stack
