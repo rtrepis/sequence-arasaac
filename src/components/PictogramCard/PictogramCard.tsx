@@ -103,30 +103,18 @@ const PictogramCard = ({
           sx={() => pictogram__media(borderIn, view, pictSize, printPageRatio)}
         />
         {cross && (
-          <>
-            <Box
-              sx={{
-                background: "#ff4d4dbd",
-                position: "absolute",
-                height: `${10 * pictSize * printPageRatio}px`,
-                width: `${175 * pictSize * printPageRatio}px`,
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%) rotate(45deg)",
-              }}
-            ></Box>
-            <Box
-              sx={{
-                background: "#ff4d4dca",
-                position: "absolute",
-                height: `${10 * pictSize * printPageRatio}px`,
-                width: `${175 * pictSize * printPageRatio}px`,
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%) rotate(-45deg)",
-              }}
-            ></Box>
-          </>
+          <Box
+            sx={{
+              backgroundImage: `url(${"img/settings/tachado_rojo.svg"})`,
+              backgroundRepeat: "no-repeat",
+              position: "absolute",
+              height: `${300 * pictSize * printPageRatio}px`,
+              width: `${210 * pictSize * printPageRatio}px`,
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -34%)",
+            }}
+          ></Box>
         )}
       </CardContent>
 
