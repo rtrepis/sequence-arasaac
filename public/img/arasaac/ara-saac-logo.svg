@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="linear-gradient" x1="25.3" y1="34.15" x2="89" y2="34.15" gradientTransform="matrix(1, 0, 0, -1, 0, 118.72)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.14" stop-color="#fff8cf" stop-opacity="0.14"/>
+      <stop offset="0.38" stop-color="#ffee86" stop-opacity="0.38"/>
+      <stop offset="0.59" stop-color="#ffe74d" stop-opacity="0.59"/>
+      <stop offset="0.77" stop-color="#ffe123" stop-opacity="0.77"/>
+      <stop offset="0.92" stop-color="#ffdd09" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#ffdc00"/>
+    </linearGradient>
+  </defs>
+  <title>logo-arasaac</title>
+  <g id="Fondo" transform="matrix(1, 0, 0, 1, 260.756439, 202.899994)">
+    <path d="M0-197.28Z" transform="translate(-10 -5.62)"/>
+    <path d="M500-197.28Z" transform="translate(-10 -5.62)"/>
+    <path d="M0,302.72Z" transform="translate(-10 -5.62)"/>
+    <path d="M500,302.72Z" transform="translate(-10 -5.62)"/>
+  </g>
+  <g id="relleno" transform="matrix(6.273824, 0, 0, 6.273824, -54.206482, -44.525875)" style="">
+    <path class="cls-1" d="M70.9,77.52h4.3c6.7.4,8.9,2.6,13.8,5v3c-.9-.1-2.7-1.1-4.5-1.1-9.8,0-21.4,3.9-31.2,5.5-4.1.7-7.8,1.6-12,1.7H40.2c-6.1-.2-10.8-3.2-14.9-5.4v-2.9c1.3.1,2.5,1.3,4.8,1.3a24.89,24.89,0,0,0,6.1-.8c5.2-1.1,10.4-2.1,15.6-2.9C57.4,79.92,64.5,77.92,70.9,77.52Z" transform="translate(-10 -5.62)" style="fill: rgb(255, 255, 255);"/>
+    <path class="cls-2" d="M60.2,79.22H82.5c1,.5,2,1,3,1.6H53.1C55.3,80.32,57.7,79.72,60.2,79.22Z" transform="translate(-10 -5.62)" style="fill: rgb(212, 19, 24);"/>
+    <path class="cls-2" d="M44.7,82.22H88.4a3.33,3.33,0,0,1,.6.3v1.3H36.8C39.4,83.22,42,82.72,44.7,82.22Zm-18,1.6H25.3v-.4A3.71,3.71,0,0,1,26.7,83.82Z" transform="translate(-10 -5.62)" style="fill: rgb(212, 19, 24);"/>
+    <path class="cls-2" d="M25.2,85.32H75.5c-3.2.6-4.8.9-7.8,1.6H26.3a10.91,10.91,0,0,1-1.1-.6Zm62.8,0h1v.3A6.21,6.21,0,0,0,88,85.32Z" transform="translate(-10 -5.62)" style="fill: rgb(212, 19, 24);"/>
+    <path class="cls-2" d="M29.2,88.32H61.3c-2.6.6-5.2,1.1-7.6,1.5H32.5A16.58,16.58,0,0,1,29.2,88.32Z" transform="translate(-10 -5.62)" style="fill: rgb(212, 19, 24);"/>
+    <path class="cls-3" d="M70.9,77.52h4.3c6.7.4,8.9,2.6,13.8,5v3c-.9-.1-2.7-1.1-4.5-1.1-9.8,0-21.4,3.9-31.2,5.5-4.1.7-7.8,1.6-12,1.7H40.2c-6.1-.2-10.8-3.2-14.9-5.4v-2.9c1.3.1,2.5,1.3,4.8,1.3a24.89,24.89,0,0,0,6.1-.8c5.2-1.1,10.4-2.1,15.6-2.9C57.4,79.92,64.5,77.92,70.9,77.52Z" transform="translate(-10 -5.62)" style="fill: url('#linear-gradient');"/>
+  </g>
+  <g id="contorno" transform="matrix(6.273824, 0, 0, 6.273824, -54.206482, -44.525875)" style="">
+    <path class="cls-4" d="M75.8,39.62a11,11,0,0,1-7.8,3.6c-6.6,0-11.9-6.4-11.9-14.5" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <path class="cls-4" d="M72.9,41.82s-.7,3,.3,3.3a30,30,0,0,1,7.8,4.8c.9.9,2.9,6.2,3.6,10,0,.2-1,.2-.9.3.3,6.7.9,13.3.9,13.3V75" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <line class="cls-4" x1="67.8" y1="50.8" x2="69.2" y2="69.2" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <path class="cls-4" d="M63.7,42c-.3,3.7-3.2,3.4-3.2,3.4a26.89,26.89,0,0,0-8.5,4.5,31.25,31.25,0,0,0-3,3.2c-.3.3.5.7.2.9-2.3,2.5-5.2,5.4-5.2,5.4l-5.7-6.3s1.5-5.6,1.3-8c-1.3-2.1-2.9,3.1-2.9,3.1a38.75,38.75,0,0,0-1.1-5.9,3.88,3.88,0,0,0-.9-1.5c-.9-.6-.2,6-.2,6A42.55,42.55,0,0,0,31.3,42s-1-.9-1.1-.2c-.2,1.1,2.7,6.6,2.7,6.6s-3.2-4.1-4.2-4.5-1.2.6-.6,1.4,2.9,4.5,2.9,4.5-2.8-2-3.6-1.3,6.1,6.1,7.1,6.2c2.5,4.5,7.2,12.9,9.9,12.5,4.2-2.3,9.6-7.7,9.6-7.7l3.3-3-1.9,18.6" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <path class="cls-4" d="M25.1,44.72A9.9,9.9,0,0,1,34.2,38" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <path class="cls-4" d="M25.7,39.12a7.63,7.63,0,0,1,5.9-2.7" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <path class="cls-4" d="M60.9,45.42s3,7.1,6.3,7.1,6.3-3.8,7.4-6.5" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <path class="cls-4" d="M49.2,53.92a55.06,55.06,0,0,1,4,6" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <line class="cls-4" x1="73.3" y1="54.9" x2="68.1" y2="55.7" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <path class="cls-4" d="M56.5,28.82c3.6-.1,5.6-3.8,8.3-5.9,0,0,6,5.1,9.8,3.9A5.77,5.77,0,0,1,72.2,23s5.4,3.7,7.3,2.9" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <path class="cls-4" d="M72.8,42.42l1.5,2.3a13.56,13.56,0,0,0,.8-3.3c1.2,2.7.3,3,.3,3s2.8-2.8,3-5.2a18.69,18.69,0,0,1,.8,2.6s1.2-8.5.9-12.3c1.4.2.7-1.6.7-1.6a31.85,31.85,0,0,0-.9-4.6s-2.7-8.4-10.5-9.5h-.6a11.55,11.55,0,0,0-7.9,1.7c-3.3,2.2-6.6,8.4-7,15.6.6-.7,2.1-2.1,2.1-2.1s-.8,9.7-.4,11.7a14,14,0,0,1,1.7-2.4s1.3,4.8.5,5.2c1.2.6,2.2-.8,3-1.8.3.3.9,2.9,1.2,3.1a3.32,3.32,0,0,0,1.5-2.7c-3-1.9-7.1-4-7.2-13.3,2.5.3,4.4-2.3,5.2-3s3-2.7,3-2.7,5.1,4.5,9.9,3.8a4,4,0,0,1-2.3-3.6s4.3,2.9,6.3,2.6c.7,3.5,1.1,8.3-1.1,11.9A16.61,16.61,0,0,1,72.7,42Z" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.85px;"/>
+    <path class="cls-5" d="M73.2,36.42c-3.1,2.7-6.2,2.8-9.3.6" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.68px;"/>
+    <path class="cls-6" d="M67.1,34.52a1.79,1.79,0,0,0,2.2,0" transform="translate(-10 -5.62)" style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 3.86; stroke-width: 0.51px;"/>
+    <path d="M73.2,29.72a1.49,1.49,0,0,0-.6.1c-.2.1-.3.2-.5.3a1.1,1.1,0,0,0-.3.9,1.4,1.4,0,0,0,.3.9,1.1,1.1,0,0,0,.9.3,1.4,1.4,0,0,0,.9-.3,1.1,1.1,0,0,0,.3-.9,1.4,1.4,0,0,0-.3-.9A.84.84,0,0,0,73.2,29.72Z" transform="translate(-10 -5.62)"/>
+    <path d="M63.5,32.32a1.56,1.56,0,0,0,.8-.6,1,1,0,0,0,.2-.9,1.56,1.56,0,0,0-.6-.8,1,1,0,0,0-.9-.1,1.56,1.56,0,0,0-.8.6,1.23,1.23,0,0,0-.2,1,1.56,1.56,0,0,0,.6.8A2.64,2.64,0,0,0,63.5,32.32Z" transform="translate(-10 -5.62)"/>
+    <path class="cls-7" d="M75.7,72.22H72.2l-1.4-3.6H64.7l-1.3,3.6H60l6.1-15.6h3.3Zm-5.8-6.1-2.2-5.7-2.1,5.7Z" transform="translate(-10 -5.62)" style="fill: rgb(139, 179, 63); stroke: rgb(139, 179, 63); stroke-miterlimit: 10; stroke-width: 0.34px;"/>
+  </g>
+</svg>

@@ -99,7 +99,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
 
   useEffect(() => {
     !submit && handlerSubmit();
-  }, [submit, handlerSubmit, borderIn]);
+  }, [submit, handlerSubmit]);
 
   return (
     <form onSubmit={handlerSubmit}>
