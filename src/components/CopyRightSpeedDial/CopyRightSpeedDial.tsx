@@ -1,7 +1,11 @@
 import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
 import { FaCopyright } from "react-icons/fa";
+import { useIntl } from "react-intl";
+import messages from "./CopyRightSpeedDial.lang";
 
 const CopyRightSpeedDial = (): JSX.Element => {
+  const intl = useIntl();
+
   return (
     <Box position={"fixed"} height={2} width={"100%"} bottom={0} zIndex={1}>
       <SpeedDial
@@ -18,10 +22,10 @@ const CopyRightSpeedDial = (): JSX.Element => {
         <SpeedDialAction
           key={"arasaac"}
           icon={<img src="/img/arasaac/ara-saac-logo.svg" alt="araSaac" />}
-          tooltipTitle={
-            "Author of the pictograms: Sergio Palao.\n Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA)."
+          tooltipTitle={intl.formatMessage(messages.license)}
+          onClick={() =>
+            window.location.replace("https://www.arasaac.org/terms-of-use")
           }
-          onClick={() => window.location.replace("https://www.arasaac.org")}
           tooltipOpen
           sx={{
             ".MuiSpeedDialAction-staticTooltipLabel": {
@@ -33,7 +37,7 @@ const CopyRightSpeedDial = (): JSX.Element => {
         <SpeedDialAction
           key={"SeqSaac"}
           icon={<img src="/img/logo.svg" alt="SeqSaac" height={20} />}
-          tooltipTitle={`All right reserved: seqsaac@gmail.com,\n Ramon Trepat`}
+          tooltipTitle={intl.formatMessage(messages.auth)}
           tooltipOpen
           sx={{
             ".MuiSpeedDialAction-staticTooltipLabel": {
