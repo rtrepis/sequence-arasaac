@@ -31,6 +31,14 @@
     "defaultMessage": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
   },
+  "components.copyRightDial.auth.label": {
+    "defaultMessage": "Design & all right reserved: Ramon Trepat & AraSaac. seqsaac@gmail.com",
+    "description": "Page auth"
+  },
+  "components.copyRightDial.license.label": {
+    "defaultMessage": "Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA).",
+    "description": "license "
+  },
   "components.defaultSettings.close": {
     "defaultMessage": "tancar",
     "description": "close Settings Default "
