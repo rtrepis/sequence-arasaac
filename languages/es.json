@@ -12,7 +12,7 @@
     "description": "type title"
   },
   "component.settingCardFontGroup.font.title": {
-    "defaultMessage": "Font",
+    "defaultMessage": "Fuente",
     "description": "type title"
   },
   "components.barNavigation.edit.title": {
@@ -28,15 +28,15 @@
     "description": "Title Page"
   },
   "components.copyRight": {
-    "defaultMessage": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA).",
+    "defaultMessage": "Hecho con: SequenceSaac - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
   },
   "components.copyRightDial.auth.label": {
-    "defaultMessage": "Design & all right reserved: Ramon Trepat & AraSaac. seqsaac@gmail.com",
+    "defaultMessage": "Diseño y todos los derechos reservados: Ramon Trepat & ARASAAC. seqsaac@gmail.com",
     "description": "Page auth"
   },
   "components.copyRightDial.license.label": {
-    "defaultMessage": "Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA).",
+    "defaultMessage": "Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA).",
     "description": "license "
   },
   "components.defaultSettings.close": {
@@ -132,7 +132,7 @@
     "description": "Plus pictograms"
   },
   "components.sequenceAuthor": {
-    "defaultMessage": "Sequence author:",
+    "defaultMessage": "Autor de la secuencia:",
     "description": "License to use the pictograms"
   },
   "components.settingCard.Radius.title": {
@@ -160,7 +160,7 @@
     "description": "Personalize text pictogram"
   },
   "components.settingCard.fontSize.label": {
-    "defaultMessage": "Size",
+    "defaultMessage": "Tamaño",
     "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
@@ -192,7 +192,7 @@
     "description": "Label form"
   },
   "pages.viewSequence.fullScreen.label": {
-    "defaultMessage": "Full Screen",
+    "defaultMessage": "Pantalla completa",
     "description": "Setting property"
   },
   "pages.viewSequence.rowGap.label": {
@@ -208,7 +208,7 @@
     "description": "Empty pictogram"
   },
   "setting.font-family.title": {
-    "defaultMessage": "Family",
+    "defaultMessage": "Familia",
     "description": "Title setting"
   },
   "setting.lang.ca.label": {
