@@ -25,6 +25,7 @@ export const fontList: FontFamily[] = [
   "Dancing Script",
   "Dosis",
   "EB Garamond",
+  "Escolar",
   "Exo 2",
   "Fira Sans",
   "Fira Sans Condensed",
