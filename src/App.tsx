@@ -6,8 +6,21 @@ import messages_en from "./languages/en.json";
 import messages_es from "./languages/es.json";
 import messages_ca from "./languages/ca.json";
 import EditSequencesPage from "./pages/EditSequencesPage/EditSequencesPage";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
 
 const App = (): JSX.Element => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const isPictDefaultSettings = localStorage.getItem("pictDefaultSettings");
+    if (isPictDefaultSettings != null) {
+      const userDefaultSettings = JSON.parse(isPictDefaultSettings);
+      dispatch(updateDefaultSettingsActionCreator(userDefaultSettings));
+    }
+  }, [dispatch]);
+
   return (
     <>
       <Routes>

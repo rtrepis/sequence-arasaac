@@ -84,6 +84,12 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
     };
 
     dispatch(updateDefaultSettingsActionCreator(newDefaultSettings));
+
+    localStorage.setItem(
+      "pictDefaultSettings",
+      JSON.stringify(newDefaultSettings)
+    );
+    
   }, [
     fitzgerald,
     skin,
