@@ -1,3 +1,19 @@
+/*  Custom fonts */
+
+@font-face {
+  font-family: "Escolar";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/Escolar_G.TTF") format("truetype");
+}
+@font-face {
+  font-family: "Escolar";
+  font-style: bold;
+  font-weight: 700;
+  src: url("./fonts/Escolar_N.TTF") format("truetype");
+}
+
+/*  50 most use In google */
 @import url("https://fonts.googleapis.com/css2?family=Abel:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Abril+Fatface:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Anton:wght@400;700&display=swap");
