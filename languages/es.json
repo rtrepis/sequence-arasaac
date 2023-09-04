@@ -7,6 +7,14 @@
     "defaultMessage": "Marco exterior",
     "description": "type title"
   },
+  "component.settingCardFontGroup.color.title": {
+    "defaultMessage": "Color",
+    "description": "type title"
+  },
+  "component.settingCardFontGroup.font.title": {
+    "defaultMessage": "Fuente",
+    "description": "type title"
+  },
   "components.barNavigation.edit.title": {
     "defaultMessage": "Editar",
     "description": "Title Page"
@@ -20,8 +28,16 @@
     "description": "Title Page"
   },
   "components.copyRight": {
-    "defaultMessage": "Hecho con: SequenceSaac - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA). Autor de la secuencia:",
+    "defaultMessage": "Hecho con: SequenceSaac - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
+  },
+  "components.copyRightDial.auth.label": {
+    "defaultMessage": "Diseño y todos los derechos reservados: Ramon Trepat & ARASAAC. seqsaac@gmail.com",
+    "description": "Page auth"
+  },
+  "components.copyRightDial.license.label": {
+    "defaultMessage": "Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA).",
+    "description": "license "
   },
   "components.defaultSettings.close": {
     "defaultMessage": "cerrar",
@@ -115,6 +131,10 @@
     "defaultMessage": "Añadir pictograma",
     "description": "Plus pictograms"
   },
+  "components.sequenceAuthor": {
+    "defaultMessage": "Autor de la secuencia:",
+    "description": "License to use the pictograms"
+  },
   "components.settingCard.Radius.title": {
     "defaultMessage": "Radio",
     "description": "Setting title"
@@ -140,7 +160,7 @@
     "description": "Personalize text pictogram"
   },
   "components.settingCard.fontSize.label": {
-    "defaultMessage": "Tamaño de letra",
+    "defaultMessage": "Tamaño",
     "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
@@ -171,6 +191,10 @@
     "defaultMessage": "Espacio Columna",
     "description": "Label form"
   },
+  "pages.viewSequence.fullScreen.label": {
+    "defaultMessage": "Pantalla completa",
+    "description": "Setting property"
+  },
   "pages.viewSequence.rowGap.label": {
     "defaultMessage": "Espacio Fila",
     "description": "Label form"
@@ -184,7 +208,7 @@
     "description": "Empty pictogram"
   },
   "setting.font-family.title": {
-    "defaultMessage": "Tipo",
+    "defaultMessage": "Familia",
     "description": "Title setting"
   },
   "setting.lang.ca.label": {
