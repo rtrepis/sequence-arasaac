@@ -6,7 +6,6 @@ import messages_en from "./languages/en.json";
 import messages_es from "./languages/es.json";
 import messages_ca from "./languages/ca.json";
 import EditSequencesPage from "./pages/EditSequencesPage/EditSequencesPage";
-import TryPage from "./pages/TryPage/TryPage";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
@@ -28,7 +27,6 @@ const App = (): JSX.Element => {
         <Route path="/" element={<Navigate to={"create-sequence"} />} />
         <Route path="create-sequence" element={<EditSequencesPage />} />
         <Route path="view-sequence" element={<ViewSequencePage />} />
-        <Route path="try" element={<TryPage />} />
       </Routes>
       <IntlProvider locale={"en"} defaultLocale="en" messages={messages_en}>
         <Routes>
