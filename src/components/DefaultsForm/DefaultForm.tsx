@@ -89,7 +89,6 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
       "pictDefaultSettings",
       JSON.stringify(newDefaultSettings)
     );
-    
   }, [
     fitzgerald,
     skin,
