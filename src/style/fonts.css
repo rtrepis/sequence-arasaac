@@ -1,4 +1,5 @@
 /*  Custom fonts */
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap");
 
 @font-face {
   font-family: "Escolar";
@@ -11,6 +12,36 @@
   font-style: bold;
   font-weight: 700;
   src: url("./fonts/Escolar_N.TTF") format("truetype");
+}
+@font-face {
+  font-family: "Massallera";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/massallera.TTF") format("truetype");
+}
+@font-face {
+  font-family: "Memima";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/Memima.ttf") format("truetype");
+}
+@font-face {
+  font-family: "OpenDyslexic";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/OpenDyslexic-Regular.otf") format("truetype");
+}
+@font-face {
+  font-family: "OpenDyslexic";
+  font-style: bold;
+  font-weight: 700;
+  src: url("./fonts/OpenDyslexic-Bold.otf") format("truetype");
+}
+@font-face {
+  font-family: "Pipomayu";
+  font-style: regular;
+  font-weight: 400;
+  src: url("./fonts/pipomayu.TTF") format("truetype");
 }
 
 /*  50 most use In google */
