@@ -5,10 +5,7 @@ import { updateDefaultSettingPictSequenceActionCreator } from "../../../app/slic
 import { messages } from "./SettingCardBoolean.lang";
 import { card, cardAction, cardTitle } from "../SettingsCards.styled";
 import ApplyAll from "../ApplyAll/ApplyAll";
-import {
-  pictAraSettingsApplyAllActionCreator,
-  pictSequenceApplyAllActionCreator,
-} from "../../../app/slice/sequenceSlice";
+import { pictAraSettingsApplyAllActionCreator } from "../../../app/slice/sequenceSlice";
 
 interface SettingCardProps {
   indexPict?: number;
