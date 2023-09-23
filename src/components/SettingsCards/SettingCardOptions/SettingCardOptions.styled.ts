@@ -4,7 +4,8 @@ export const card: SxProps = {
   marginBlockStart: 1,
   paddingBlockEnd: 1,
   borderBottom: 1,
-  borderBottomColor: "secondary.light",
+  borderBottomColor: "primary.light",
+  borderRadius: 1,
   ":last-child": {
     justifyContent: "end",
   },

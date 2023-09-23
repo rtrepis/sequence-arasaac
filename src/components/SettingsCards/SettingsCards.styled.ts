@@ -4,8 +4,9 @@ export const card: SxProps = {
   minHeight: 70,
   marginBlockStart: 1,
   paddingBlockEnd: 1,
-  borderBottom: 1,
-  borderBottomColor: "secondary.light",
+  borderBottom: 4,
+  borderBottomColor: "primary.light",
+  borderRadius: 1,
 };
 
 export const cardTitle: SxProps = {
