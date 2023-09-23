@@ -1,6 +1,15 @@
 import { FontFamily } from "../types/FontFamily";
 
 export const fontList: FontFamily[] = [
+  // custom Fonts
+  "Atkinson-Hyperlegible",
+  "Escolar",
+  "Massallera",
+  "Memima",
+  "OpenDyslexic",
+  "Pipomayu",
+
+  // 50 Most google fonts use
   "Abel",
   "Abril Fatface",
   "Anton",
@@ -25,7 +34,6 @@ export const fontList: FontFamily[] = [
   "Dancing Script",
   "Dosis",
   "EB Garamond",
-  "Escolar",
   "Exo 2",
   "Fira Sans",
   "Fira Sans Condensed",
