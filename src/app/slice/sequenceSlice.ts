@@ -107,6 +107,10 @@ const sequenceSlice = createSlice({
         previousSequence.map(
           (pictogram) => (pictogram.img.settings.hair = action.payload.hair)
         );
+      if (action.payload.color)
+        previousSequence.map(
+          (pictogram) => (pictogram.img.settings.color = action.payload.color)
+        );
     },
 
     pictSequenceApplyAll: (

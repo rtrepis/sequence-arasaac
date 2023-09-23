@@ -3,7 +3,12 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch } from "../../../app/hooks";
 import { updateDefaultSettingPictSequenceActionCreator } from "../../../app/slice/uiSlice";
 import { messages } from "./SettingCardBoolean.lang";
-import { card, cardTitle } from "../SettingsCards.styled";
+import { card, cardAction, cardTitle } from "../SettingsCards.styled";
+import ApplyAll from "../ApplyAll/ApplyAll";
+import {
+  pictAraSettingsApplyAllActionCreator,
+  pictSequenceApplyAllActionCreator,
+} from "../../../app/slice/sequenceSlice";
 
 interface SettingCardProps {
   indexPict?: number;
@@ -37,6 +42,11 @@ const SettingCardBoolean = ({
     }
   };
 
+  const handlerApplyAll = (toUpdate: boolean) => {
+    setting === "color" &&
+      dispatch(pictAraSettingsApplyAllActionCreator({ color: toUpdate }));
+  };
+
   return (
     <Stack
       display={"flex"}
@@ -54,6 +64,13 @@ const SettingCardBoolean = ({
         checked={state}
         onChange={handleSelected}
       />
+
+      {setting === "color" && (
+        <ApplyAll
+          onClick={() => handlerApplyAll(state)}
+          sx={cardAction}
+        ></ApplyAll>
+      )}
     </Stack>
   );
 };
