@@ -7,6 +7,7 @@ import "./SettingCardFontGroup.css";
 import { FormattedMessage } from "react-intl";
 import { card, cardTitle } from "../SettingsCards.styled";
 import { messages } from "./SettingCardFontGroup.lang";
+import InputColor from "../InputColor/InputColor";
 
 interface SettingCardFontGroupProps {
   state: Font;
@@ -20,12 +21,6 @@ const SettingCardFontGroup = ({
   const [family, setFamily] = useState(state.family);
   const [size, setSize] = useState(state.size);
   const [color, setColor] = useState(state.color);
-
-  const handleChangesColorSelect = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setColor(event.target.value);
-  };
 
   useEffect(() => {
     setState({ color: color, family: family, size: size });
@@ -55,12 +50,11 @@ const SettingCardFontGroup = ({
         <FormLabel>
           <FormattedMessage {...messages.color} />
         </FormLabel>
-        <input
-          id="colorPick"
-          type="color"
-          className={"colorInput-font"}
-          value={color}
-          onChange={handleChangesColorSelect}
+        <InputColor
+          inputBorder={4}
+          inputSize={45}
+          color={color}
+          setColor={setColor}
         />
       </Stack>
     </Stack>
