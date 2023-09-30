@@ -20,7 +20,7 @@
     "description": "Title Page"
   },
   "components.barNavigation.title": {
-    "defaultMessage": "SequenceSAAC",
+    "defaultMessage": "SequenciAAC",
     "description": "App title translate Sequence"
   },
   "components.barNavigation.view.title": {
