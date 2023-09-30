@@ -18,6 +18,7 @@ import {
 import "./SettingCardBorder.css";
 import { messages } from "./SettingCardBorder.lang";
 import { useState } from "react";
+import InputColor from "../InputColor/InputColor";
 
 interface SettingCardBorderProps {
   border: "borderIn" | "borderOut";
@@ -35,11 +36,11 @@ const SettingCardBorder = ({
 
   const [colorSelect, setColorSelect] = useState(color);
 
-  const handleChangesColorSelect = (
+  /*  const handleChangesColorSelect = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setColorSelect(event.target.value);
-  };
+  }; */
 
   const handlerClickColor = () => {
     const border: Border = {
@@ -115,15 +116,13 @@ const SettingCardBorder = ({
             <ToggleButton
               value={"Selected Color"}
               selected={color !== "fitzgerald" && size > 0}
-              onClick={handlerClickColor}
+              onBlur={handlerClickColor}
             >
-              <input
-                id="colorPick"
-                type="color"
-                className={"colorInput-border"}
-                value={colorSelect}
-                onChange={handleChangesColorSelect}
-                onBlur={handlerClickColor}
+              <InputColor
+                color={colorSelect}
+                setColor={setColorSelect}
+                inputBorder={1}
+                inputSize={35}
               />
             </ToggleButton>
           </Tooltip>
