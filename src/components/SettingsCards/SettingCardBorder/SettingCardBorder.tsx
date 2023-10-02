@@ -36,12 +36,6 @@ const SettingCardBorder = ({
 
   const [colorSelect, setColorSelect] = useState(color);
 
-  /*  const handleChangesColorSelect = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setColorSelect(event.target.value);
-  }; */
-
   const handlerClickColor = () => {
     const border: Border = {
       color: colorSelect,
