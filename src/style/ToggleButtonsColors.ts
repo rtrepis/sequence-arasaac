@@ -5,12 +5,13 @@ const ToggleButtonColor = styled(ToggleButtonGroup)(() => ({
   flexWrap: "wrap",
   scale: "revert-layer",
   background: "whitesmoke",
-  width: "140px",
+  width: "150px",
+  margin: 1.5,
 
   "& .MuiToggleButtonGroup-grouped": {
     height: 35,
     width: 35,
-    margin: 0.1,
+    margin: 1,
     padding: 0.25,
     border: 1.75,
 
