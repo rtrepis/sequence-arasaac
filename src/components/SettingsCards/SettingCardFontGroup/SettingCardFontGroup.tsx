@@ -3,7 +3,6 @@ import { Font } from "../../../types/sequence";
 import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
 import SettingCardFont from "../SettingCardOptions/font/SettingCardFont";
 import { useEffect, useState } from "react";
-import "./SettingCardFontGroup.css";
 import { FormattedMessage } from "react-intl";
 import { card, cardTitle } from "../SettingsCards.styled";
 import { messages } from "./SettingCardFontGroup.lang";
