@@ -3,7 +3,7 @@
 
 local_branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
-valid_branch_regex='^((hotfix|bugfix|feature)\/[a-zA-Z0-9\-]+)$'
+valid_branch_regex='^((develop|hotfix|bugfix|feature)\/[a-zA-Z0-9\-]+)$'
 
 message="Please check your branch name."
 
