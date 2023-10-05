@@ -19,7 +19,7 @@ const CopyRight = ({ author }: CopyRightProps): JSX.Element => {
     >
       <FormattedMessage
         id="components.copyRight"
-        defaultMessage="Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC
+        defaultMessage="Made with: SequenciAAC - Author of the pictograms: Sergio Palao. Origen: ARASAAC
       (http://www.arasaac.org). License: CC (BY-NC-SA)."
         description="License to use the pictograms"
       />{" "}
