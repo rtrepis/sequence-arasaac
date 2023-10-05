@@ -5,7 +5,7 @@ import BarNavigation from "./BarNavigation";
 describe("Give a component barNavigation", () => {
   describe("When rendered", () => {
     test("Then should show title app and expectButton", () => {
-      const titleApp = "SequenceSAAC";
+      const titleApp = "SequenciAAC";
       const expectButton = "Settings default";
 
       render(
