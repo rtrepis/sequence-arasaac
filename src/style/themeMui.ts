@@ -5,9 +5,9 @@ import { fontList } from "../data/fontlist";
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#E3EFDB",
-      main: "#1B7D20",
-      dark: "#175C1A",
+      light: "#adf25e",
+      main: "#8ac34a",
+      dark: "#496628",
       contrastText: "#F3F3F3",
     },
     secondary: {
