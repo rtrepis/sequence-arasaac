@@ -20,7 +20,7 @@
     "description": "Title Page"
   },
   "components.barNavigation.title": {
-    "defaultMessage": "SecuenciAAC",
+    "defaultMessage": "SequenciAAC",
     "description": "App title translate Sequence"
   },
   "components.barNavigation.view.title": {
@@ -28,7 +28,7 @@
     "description": "Title Page"
   },
   "components.copyRight": {
-    "defaultMessage": "Hecho con: SequenceSaac - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA).",
+    "defaultMessage": "Made with: SequenciAAC - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
   },
   "components.copyRightDial.auth.label": {
