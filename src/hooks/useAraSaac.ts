@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
+import removeDiacritics from "../utils/removeDiacritics";
 import {
   searchedActionCreator,
   addPictogramActionCreator,
@@ -94,7 +95,9 @@ const useAraSaac = () => {
 
       try {
         const { data } = await axios.get(
-          `${araSaacURL}pictograms/${locale}/${search}/${word.toLocaleLowerCase()}`
+          `${araSaacURL}pictograms/${locale}/${search}/${removeDiacritics(
+            word.toLocaleLowerCase()
+          )}`
         );
 
         const findBestPict: number[] = [];
