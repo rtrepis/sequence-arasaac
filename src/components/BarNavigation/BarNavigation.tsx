@@ -23,13 +23,12 @@ const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
     <>
       <NotPrint>
         <HideOnScroll {...children}>
-          <AppBar>
+          <AppBar elevation={0}>
             <Toolbar
               sx={{
                 fontSize: "1.75rem",
                 justifyContent: "space-between",
               }}
-              variant="dense"
             >
               <Stack direction={"row"} spacing={2}>
                 <Box
@@ -48,13 +47,13 @@ const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
                   variant={"h5"}
                   component="h1"
                   fontWeight={800}
-                  sx={{ display: { xs: "none", sm: "block" } }}
+                  sx={{ display: { xs: "none", sm: "block", color: "white" } }}
                 >
                   <FormattedMessage {...messages.title} />
                 </Typography>
               </Stack>
 
-              <Typography variant={"h6"} component="h2">
+              <Typography variant={"h6"} component="h2" sx={{ color: "white" }}>
                 {title && <FormattedMessage {...messages[title]} />}
               </Typography>
 
