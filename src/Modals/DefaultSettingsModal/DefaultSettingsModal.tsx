@@ -56,7 +56,7 @@ const DefaultSettingsModal = (): JSX.Element => {
       >
         <AppBar
           sx={{ position: { xs: "fixed", md: "relative" } }}
-          elevation={0}
+          elevation={1}
         >
           <Toolbar>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
@@ -72,7 +72,7 @@ const DefaultSettingsModal = (): JSX.Element => {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Container maxWidth={"xl"}>
+        <Container sx={{ marginTop: 2 }}>
           <Stack sx={{ height: 65, display: { md: "none" } }} />
           <DefaultForm submit={open} />
         </Container>
