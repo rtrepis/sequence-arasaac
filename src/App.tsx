@@ -28,7 +28,6 @@ const App = (): JSX.Element => {
         <Route path="/" element={<WelcomePage />} />
         <Route path="create-sequence" element={<EditSequencesPage />} />
         <Route path="view-sequence" element={<ViewSequencePage />} />
-        <Route path="try" element={<TryPage></TryPage>} />
       </Routes>
       <IntlProvider locale={"en"} defaultLocale="en" messages={messages_en}>
         <Routes>
