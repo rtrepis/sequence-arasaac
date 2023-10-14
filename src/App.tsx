@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import ViewSequencePage from "./pages/ViewSequencePage/ViewSequencePage";
 import { IntlProvider } from "react-intl";
@@ -9,6 +9,7 @@ import EditSequencesPage from "./pages/EditSequencesPage/EditSequencesPage";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
+import WelcomePage from "./pages/WelcomePage/WelcomePage";
 
 const App = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const App = (): JSX.Element => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to={"create-sequence"} />} />
+        <Route path="/" element={<WelcomePage />} />
         <Route path="create-sequence" element={<EditSequencesPage />} />
         <Route path="view-sequence" element={<ViewSequencePage />} />
       </Routes>
