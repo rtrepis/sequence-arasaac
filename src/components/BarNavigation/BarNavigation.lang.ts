@@ -16,6 +16,11 @@ const messages = defineMessages({
     defaultMessage: "Edit",
     description: "Title Page",
   },
+  welcome: {
+    id: "components.barNavigation.welcome.title",
+    defaultMessage: "Welcome",
+    description: "Title Page",
+  },
 });
 
 export default messages;
