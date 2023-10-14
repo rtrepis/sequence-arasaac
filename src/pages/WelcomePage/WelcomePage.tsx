@@ -46,7 +46,7 @@ const WelcomePage = (): JSX.Element => {
         gap={2}
       >
         <Typography component="h3">
-          <FormattedMessage {...messages.start} />
+          <FormattedMessage {...messages.learning} />
         </Typography>
         <CardMedia
           title="SequenciAAC"
