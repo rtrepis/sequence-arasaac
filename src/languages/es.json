@@ -11,6 +11,18 @@
       "value": "Marco exterior"
     }
   ],
+  "component.settingCardFontGroup.color.title": [
+    {
+      "type": 0,
+      "value": "Color"
+    }
+  ],
+  "component.settingCardFontGroup.font.title": [
+    {
+      "type": 0,
+      "value": "Fuente"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
@@ -20,7 +32,7 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "SequenceSAAC"
+      "value": "SequenciAAC"
     }
   ],
   "components.barNavigation.view.title": [
@@ -32,7 +44,19 @@
   "components.copyRight": [
     {
       "type": 0,
-      "value": "Hecho con: SequenceSaac - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA). Autor de la secuencia:"
+      "value": "Hecho con: SequenciAAC - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA)."
+    }
+  ],
+  "components.copyRightDial.auth.label": [
+    {
+      "type": 0,
+      "value": "Diseño y todos los derechos reservados: Ramon Trepat & ARASAAC. seqsaac@gmail.com"
+    }
+  ],
+  "components.copyRightDial.license.label": [
+    {
+      "type": 0,
+      "value": "Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA)."
     }
   ],
   "components.defaultSettings.close": [
@@ -173,6 +197,12 @@
       "value": "Añadir pictograma"
     }
   ],
+  "components.sequenceAuthor": [
+    {
+      "type": 0,
+      "value": "Autor de la secuencia:"
+    }
+  ],
   "components.settingCard.Radius.title": [
     {
       "type": 0,
@@ -212,7 +242,7 @@
   "components.settingCard.fontSize.label": [
     {
       "type": 0,
-      "value": "Tamaño de letra"
+      "value": "Tamaño"
     }
   ],
   "components.settingCard.numbered.title": [
@@ -257,6 +287,12 @@
       "value": "Espacio Columna"
     }
   ],
+  "pages.viewSequence.fullScreen.label": [
+    {
+      "type": 0,
+      "value": "Pantalla completa"
+    }
+  ],
   "pages.viewSequence.rowGap.label": [
     {
       "type": 0,
@@ -278,7 +314,7 @@
   "setting.font-family.title": [
     {
       "type": 0,
-      "value": "Tipo"
+      "value": "Familia"
     }
   ],
   "setting.lang.ca.label": [

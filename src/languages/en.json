@@ -32,7 +32,7 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "SequenceSAAC"
+      "value": "SequenciAAC"
     }
   ],
   "components.barNavigation.view.title": [
@@ -41,10 +41,16 @@
       "value": "View"
     }
   ],
+  "components.barNavigation.welcome.title": [
+    {
+      "type": 0,
+      "value": "Welcome"
+    }
+  ],
   "components.copyRight": [
     {
       "type": 0,
-      "value": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA)."
+      "value": "Made with: SequenciAAC - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA)."
     }
   ],
   "components.copyRightDial.auth.label": [
@@ -447,6 +453,24 @@
     {
       "type": 0,
       "value": "Top"
+    }
+  ],
+  "view.welcome.learning.tip": [
+    {
+      "type": 0,
+      "value": "Learning to use..."
+    }
+  ],
+  "view.welcome.liveMotive.title": [
+    {
+      "type": 0,
+      "value": "Create and print or view your sequence page."
+    }
+  ],
+  "view.welcome.start.button": [
+    {
+      "type": 0,
+      "value": "Start"
     }
   ]
 }
