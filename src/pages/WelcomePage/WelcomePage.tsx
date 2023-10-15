@@ -4,6 +4,12 @@ import { messages } from "./WelcomePage.lang";
 import { Link } from "react-router-dom";
 
 const WelcomePage = (): JSX.Element => {
+  const isLandScape = window.screen.orientation.type === "landscape-primary";
+
+  const linkArcadeGuide = isLandScape
+    ? "https://demo.arcade.software/9vxagdROFoEVIV7fYgdC?embed"
+    : "https://demo.arcade.software/UwL1a1HrJ0olTvKdVHlG?embed";
+
   return (
     <>
       <Box bgcolor={"primary.main"} height={"1em"} width={"100wv"}></Box>
@@ -55,7 +61,7 @@ const WelcomePage = (): JSX.Element => {
         </Typography>
         <CardMedia
           title="SequenciAAC"
-          src="https://demo.arcade.software/9vxagdROFoEVIV7fYgdC?embed"
+          src={linkArcadeGuide}
           component={"iframe"}
           sx={{
             width: "80%",
