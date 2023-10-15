@@ -32,7 +32,7 @@
   "components.copyRight": [
     {
       "type": 0,
-      "value": "Autor de los pictogramas: Sergio Palao. Origen: Secuencia SAAC - ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA). Titular: Govern d'Aragó (Espanya)"
+      "value": "Fet amb: SequenceSaac - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA). Autor de la seqüència:"
     }
   ],
   "components.defaultSettings.close": [
@@ -191,6 +191,24 @@
       "value": "Aplicar tots"
     }
   ],
+  "components.settingCard.color.title": [
+    {
+      "type": 0,
+      "value": "Color"
+    }
+  ],
+  "components.settingCard.corss.title": [
+    {
+      "type": 0,
+      "value": "Taxat"
+    }
+  ],
+  "components.settingCard.customText.label": [
+    {
+      "type": 0,
+      "value": "Text personalitzat"
+    }
+  ],
   "components.settingCard.fontSize.label": [
     {
       "type": 0,
@@ -221,6 +239,18 @@
       "value": "Sense línia"
     }
   ],
+  "pages.viewSequence.authSequence.helperText": [
+    {
+      "type": 0,
+      "value": "Marcar l'autoria"
+    }
+  ],
+  "pages.viewSequence.authSequence.label": [
+    {
+      "type": 0,
+      "value": "Autor de la seqüència"
+    }
+  ],
   "pages.viewSequence.columnGap.label": [
     {
       "type": 0,
@@ -243,6 +273,12 @@
     {
       "type": 0,
       "value": "Buit"
+    }
+  ],
+  "setting.font-family.title": [
+    {
+      "type": 0,
+      "value": "Tipus"
     }
   ],
   "setting.lang.ca.label": [
