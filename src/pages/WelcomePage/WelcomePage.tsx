@@ -16,13 +16,18 @@ const WelcomePage = (): JSX.Element => {
         width={"100vw"}
         gap={2}
       >
-        <Stack display={"flex"} flexDirection={"row"} gap={2}>
+        <Stack
+          display={"flex"}
+          alignItems={"center"}
+          flexDirection={{ xs: "column", sm: "row" }}
+          gap={2}
+        >
           <img src="../favicon.png" alt="logo" height={50} width={70} />
-          <Typography component="h1" variant={"h2"} fontWeight={800}>
+          <Typography component={"h1"} variant={"h3"} fontWeight={800}>
             SequenciAAC
           </Typography>
         </Stack>
-        <Typography component="h2" fontWeight={800}>
+        <Typography component="h2" fontWeight={800} textAlign={"center"}>
           <FormattedMessage {...messages.liveMotive} />
         </Typography>
         <Link to={"../create-sequence"}>
