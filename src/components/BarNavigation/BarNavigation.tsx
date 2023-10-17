@@ -15,7 +15,7 @@ import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
 
 interface BarProps {
   children: React.ReactElement;
-  title?: "view" | "edit";
+  title?: "view" | "edit" | "welcome";
 }
 
 const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
@@ -23,7 +23,7 @@ const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
     <>
       <NotPrint>
         <HideOnScroll {...children}>
-          <AppBar elevation={0}>
+          <AppBar elevation={1}>
             <Toolbar
               sx={{
                 fontSize: "1.75rem",
@@ -53,27 +53,39 @@ const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
                 </Typography>
               </Stack>
 
-              <Typography variant={"h6"} component="h2" sx={{ color: "white" }}>
-                {title && <FormattedMessage {...messages[title]} />}
-              </Typography>
-
-              <Stack direction={"row"}>
-                {title && <ToggleButtonEditViewPages pageTitle={title} />}
-                {!title && (
-                  <Stack display={{ xs: "none", lg: "flex" }} direction={"row"}>
-                    <PictogramAmount variant="navBar" />
-                    <MagicSearch variant="navBar" />
+              {title !== "welcome" && (
+                <>
+                  <Typography
+                    variant={"h6"}
+                    component="h2"
+                    sx={{ color: "white" }}
+                  >
+                    {title && <FormattedMessage {...messages[title]} />}
+                  </Typography>
+                  <Stack direction={"row"}>
+                    {title && <ToggleButtonEditViewPages pageTitle={title} />}
+                    {!title && (
+                      <Stack
+                        display={{ xs: "none", lg: "flex" }}
+                        direction={"row"}
+                      >
+                        <PictogramAmount variant="navBar" />
+                        <MagicSearch variant="navBar" />
+                      </Stack>
+                    )}
+                    <DefaultSettings />
                   </Stack>
-                )}
-                <DefaultSettings />
-              </Stack>
+                </>
+              )}
             </Toolbar>
           </AppBar>
         </HideOnScroll>
         <Toolbar />
         <CopyRightSpeedDial />
       </NotPrint>
-      <Container maxWidth={"xl"}>{children}</Container>
+      <Container maxWidth={"xl"} sx={{ marginTop: 2 }}>
+        {children}
+      </Container>
     </>
   );
 };
