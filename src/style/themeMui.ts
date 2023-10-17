@@ -5,14 +5,14 @@ import { fontList } from "../data/fontlist";
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#adf25e",
+    light: "#adf25e",
       main: "#8ac34a",
       dark: "#496628",
-      contrastText: "#F3F3F3",
+      contrastText: "#F3F3F3"
     },
     secondary: {
       light: "#CCCCCC",
-      main: "#FFFFFF",
+      main: "#D9D9D9",
       dark: "#A6A6A6",
       contrastText: "#252525",
     },
