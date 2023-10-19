@@ -27,6 +27,10 @@
     "defaultMessage": "Vista",
     "description": "Title Page"
   },
+  "components.barNavigation.welcome.title": {
+    "defaultMessage": "Benvingut",
+    "description": "Title Page"
+  },
   "components.copyRight": {
     "defaultMessage": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
@@ -298,6 +302,18 @@
   "settings.textPosition.top": {
     "defaultMessage": "Dalt",
     "description": "Type of setting text position"
+  },
+  "view.welcome.learning": {
+    "defaultMessage": "Aprèn l'ús...",
+    "description": "Start button"
+  },
+  "view.welcome.liveMotive.title": {
+    "defaultMessage": "Crea i imprimeix o visualitza la teva pàgina de seqüències.",
+    "description": "Welcome live motive"
+  },
+  "view.welcome.start.button": {
+    "defaultMessage": "Inicia",
+    "description": "Start button"
   }
 }
 
