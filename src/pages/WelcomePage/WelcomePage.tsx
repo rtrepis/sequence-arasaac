@@ -1,9 +1,10 @@
 import { Box, Button, CardMedia, Stack, Typography } from "@mui/material";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { messages } from "./WelcomePage.lang";
 import { Link } from "react-router-dom";
 
 const WelcomePage = (): JSX.Element => {
+  const intl = useIntl();
   const isLandScape = window.screen.orientation.type === "landscape-primary";
 
   const linkArcadeGuide = isLandScape
@@ -39,7 +40,7 @@ const WelcomePage = (): JSX.Element => {
         <Link to={"../create-sequence"}>
           <Button
             variant="contained"
-            aria-label={"start"}
+            aria-label={intl.formatMessage(messages.start)}
             color="primary"
             sx={{ marginTop: 3, fontWeight: 700 }}
           >
