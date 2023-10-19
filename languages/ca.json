@@ -1,10 +1,10 @@
 {
   "component.settingCardBorder.borderIn.title": {
-    "defaultMessage": "Border in",
+    "defaultMessage": "Marc interior",
     "description": "setting title "
   },
   "component.settingCardBorder.borderOut.title": {
-    "defaultMessage": "Border out",
+    "defaultMessage": "Marc exterior",
     "description": "type title"
   },
   "component.settingCardFontGroup.color.title": {
@@ -12,11 +12,11 @@
     "description": "type title"
   },
   "component.settingCardFontGroup.font.title": {
-    "defaultMessage": "Font",
+    "defaultMessage": "Tipografia",
     "description": "type title"
   },
   "components.barNavigation.edit.title": {
-    "defaultMessage": "Edit",
+    "defaultMessage": "Editar",
     "description": "Title Page"
   },
   "components.barNavigation.title": {
@@ -24,7 +24,7 @@
     "description": "App title translate Sequence"
   },
   "components.barNavigation.view.title": {
-    "defaultMessage": "View",
+    "defaultMessage": "Vista",
     "description": "Title Page"
   },
   "components.barNavigation.welcome.title": {
@@ -32,123 +32,123 @@
     "description": "Title Page"
   },
   "components.copyRight": {
-    "defaultMessage": "Made with: SequenciAAC - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA).",
+    "defaultMessage": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
   },
   "components.copyRightDial.auth.label": {
-    "defaultMessage": "Design & all right reserved: Ramon Trepat & AraSaac. seqsaac@gmail.com",
+    "defaultMessage": "Disseny i drets reservats: Ramon Trepat i AraSaac: seqsaac@gmail.com",
     "description": "Page auth"
   },
   "components.copyRightDial.license.label": {
-    "defaultMessage": "Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA).",
+    "defaultMessage": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA).",
     "description": "license "
   },
   "components.defaultSettings.close": {
-    "defaultMessage": "close",
+    "defaultMessage": "tancar",
     "description": "close Settings Default "
   },
   "components.defaultSettings.pictGuide": {
-    "defaultMessage": "Pictogram guide",
+    "defaultMessage": "Pictograma de guia",
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.settings.title": {
-    "defaultMessage": "Settings default",
+    "defaultMessage": "Configuracions per defecte",
     "description": "Settings Default "
   },
   "components.magicSearch.button.": {
-    "defaultMessage": "To search",
+    "defaultMessage": "A cercar",
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "Type the words in the sequence between the commas and press Return or click the magnifying glass when you're done. Example: boy, put, seat belt.",
+    "defaultMessage": "Escriviu les paraules en la seqüència entre comes i premeu Retorn o feu clic a la lupa quan hàgiu acabat. Exemple: noi, posar, cinturó de seguretat.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
-    "defaultMessage": "Magic Search",
+    "defaultMessage": "Cerca màgica",
     "description": "label text field"
   },
   "components.pictEdit.close": {
-    "defaultMessage": "Close",
+    "defaultMessage": "Tancar",
     "description": "Close modal, edit pictogram"
   },
   "components.pictEdit.delete": {
-    "defaultMessage": "Delete",
+    "defaultMessage": "Eliminar",
     "description": "Delete modal, edit pictogram"
   },
   "components.pictEdit.modal.description": {
-    "defaultMessage": "You can edit pictogram",
+    "defaultMessage": "Tu pots editar els pictogrames",
     "description": "Description modal"
   },
   "components.pictEdit.modal.label": {
-    "defaultMessage": "Edit Pictogram",
+    "defaultMessage": "Editar Pictograma",
     "description": "Title modal"
   },
   "components.pictEditSettings.settings.label": {
-    "defaultMessage": "Settings Pictogram",
+    "defaultMessage": "Configuracions del Pictograma",
     "description": "Title section Pictogram Edit "
   },
   "components.pictogramAmount": {
-    "defaultMessage": "Pictograms:",
+    "defaultMessage": "Pictogrames:",
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.Subtract.label": {
-    "defaultMessage": "Subtract pictogram",
+    "defaultMessage": "Restar pictograma",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Add pictogram",
+    "defaultMessage": "Afegir pictogrames",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Insert or extract a pictogram at the end of the sequence. You will find more functions with the right mouse button or long press on mobiles.",
+    "defaultMessage": "Inseriu o extreu un pictograma al final de la seqüència. Trobareu més funcions amb el botó dret del ratolí o premeu llargament als mòbils.",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramCard.pictogram": {
-    "defaultMessage": "Pictogram image",
+    "defaultMessage": "Imatge pictograma",
     "description": "Pictogram image"
   },
   "components.pictogramSearch.alert": {
-    "defaultMessage": "No pictogram found with this word - Try another word!",
+    "defaultMessage": "No s'ha trobat cap pictograma, amb aquesta paraula - Intenta-ho amb una altra paraula!",
     "description": "Search pictogram not founded results"
   },
   "components.pictogramSearch.empty": {
-    "defaultMessage": "Empty",
+    "defaultMessage": "Buit",
     "description": "Empty pictogram"
   },
   "components.pictogramSearch.helperText": {
-    "defaultMessage": "Pictogram search engine",
+    "defaultMessage": "Cercador de Pictogrames",
     "description": "helper text"
   },
   "components.pictogramSearch.label": {
-    "defaultMessage": "Search",
+    "defaultMessage": "Cercar",
     "description": "search pictograms"
   },
   "components.pictogramSearch.minus": {
-    "defaultMessage": "Minus pictograms",
+    "defaultMessage": "Treure pictograma",
     "description": "Minus pictograms"
   },
   "components.pictogramSearch.pictogram": {
-    "defaultMessage": "Pictogram",
+    "defaultMessage": "Pictograma",
     "description": "Pictogram"
   },
   "components.pictogramSearch.plus": {
-    "defaultMessage": "Plus pictograms",
+    "defaultMessage": "Inserir pictograma",
     "description": "Plus pictograms"
   },
   "components.sequenceAuthor": {
-    "defaultMessage": "Sequence author:",
+    "defaultMessage": "Autor de la seqüència:",
     "description": "License to use the pictograms"
   },
   "components.settingCard.Radius.title": {
-    "defaultMessage": "Radius",
+    "defaultMessage": "Radi",
     "description": "Setting title"
   },
   "components.settingCard.Size.title": {
-    "defaultMessage": "Size",
+    "defaultMessage": "Mida",
     "description": "Setting title"
   },
   "components.settingCard.applyAll.label": {
-    "defaultMessage": "Apply All",
+    "defaultMessage": "Aplicar tots",
     "description": "apply to all pictograms"
   },
   "components.settingCard.color.title": {
@@ -156,151 +156,151 @@
     "description": "Setting title"
   },
   "components.settingCard.corss.title": {
-    "defaultMessage": "Cross",
+    "defaultMessage": "Taxat",
     "description": "Setting title"
   },
   "components.settingCard.customText.label": {
-    "defaultMessage": "Custom Text",
+    "defaultMessage": "Text personalitzat",
     "description": "Personalize text pictogram"
   },
   "components.settingCard.fontSize.label": {
-    "defaultMessage": "Size",
+    "defaultMessage": "Mida",
     "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
-    "defaultMessage": "Numbered",
+    "defaultMessage": "Numeració",
     "description": "Setting title"
   },
   "components.settingCardBorder.fitzgeraldKey.label": {
-    "defaultMessage": "Fitzgerald Key",
+    "defaultMessage": "Clau Fitzgerald",
     "description": "type setting "
   },
   "components.settingCardBorder.selected.label": {
-    "defaultMessage": "Selected",
+    "defaultMessage": "Selecció",
     "description": "type setting "
   },
   "components.settingCardBorder.withoutBorder.label": {
-    "defaultMessage": "Without border",
+    "defaultMessage": "Sense línia",
     "description": "type setting "
   },
   "pages.viewSequence.authSequence.helperText": {
-    "defaultMessage": "Mark authorship",
+    "defaultMessage": "Marcar l'autoria",
     "description": "Helper text form"
   },
   "pages.viewSequence.authSequence.label": {
-    "defaultMessage": "Sequence author",
+    "defaultMessage": "Autor de la seqüència",
     "description": "Label form"
   },
   "pages.viewSequence.columnGap.label": {
-    "defaultMessage": "Column Space",
+    "defaultMessage": "Espai Columna",
     "description": "Label form"
   },
   "pages.viewSequence.fullScreen.label": {
-    "defaultMessage": "Full Screen",
+    "defaultMessage": "Pantalla sencera",
     "description": "Setting property"
   },
   "pages.viewSequence.rowGap.label": {
-    "defaultMessage": "Row Space",
+    "defaultMessage": "Espai Fila",
     "description": "Label form"
   },
   "pages.viewSequence.size.label": {
-    "defaultMessage": "Size",
+    "defaultMessage": "Mida",
     "description": "Label form"
   },
   "pictogram.empty": {
-    "defaultMessage": "Empty",
+    "defaultMessage": "Buit",
     "description": "Empty pictogram"
   },
   "setting.font-family.title": {
-    "defaultMessage": "Family",
+    "defaultMessage": "Família",
     "description": "Title setting"
   },
   "setting.lang.ca.label": {
-    "defaultMessage": "Catalan",
+    "defaultMessage": "Català",
     "description": "Type setting"
   },
   "setting.lang.en.label": {
-    "defaultMessage": "English",
+    "defaultMessage": "Anglès",
     "description": "Type setting"
   },
   "setting.lang.es.label": {
-    "defaultMessage": "Spanish",
+    "defaultMessage": "Espanyol",
     "description": "Type setting"
   },
   "setting.lang.title": {
-    "defaultMessage": "Language",
+    "defaultMessage": "Idioma",
     "description": "Title setting"
   },
   "settings.hair.black": {
-    "defaultMessage": "Black",
+    "defaultMessage": "Negre",
     "description": "Type of setting text position"
   },
   "settings.hair.blonde": {
-    "defaultMessage": "Blonde",
+    "defaultMessage": "Ros",
     "description": "Type of setting text position"
   },
   "settings.hair.brown": {
-    "defaultMessage": "Brown",
+    "defaultMessage": "Marró",
     "description": "Type of setting text position"
   },
   "settings.hair.darkBrown": {
-    "defaultMessage": "Dark Brown",
+    "defaultMessage": "Marró fosc",
     "description": "Type of setting text position"
   },
   "settings.hair.darkGray": {
-    "defaultMessage": "Dark Gray",
+    "defaultMessage": "Gris fosc",
     "description": "Type of setting text position"
   },
   "settings.hair.gray": {
-    "defaultMessage": "Gray",
+    "defaultMessage": "Gris",
     "description": "Type of setting text position"
   },
   "settings.hair.label": {
-    "defaultMessage": "Hair",
+    "defaultMessage": "Cabell",
     "description": "Setting Hair label"
   },
   "settings.hair.red": {
-    "defaultMessage": "Red",
+    "defaultMessage": "Pèl-roig",
     "description": "Type of setting text position"
   },
   "settings.skins.asian": {
-    "defaultMessage": "Asian",
+    "defaultMessage": "Asiàtic",
     "description": "Type of setting skin"
   },
   "settings.skins.aztec": {
-    "defaultMessage": "Aztec",
+    "defaultMessage": "Asteca",
     "description": "Type of setting skin"
   },
   "settings.skins.black": {
-    "defaultMessage": "Black",
+    "defaultMessage": "Negre",
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Skin",
+    "defaultMessage": "Pell",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
-    "defaultMessage": "Mulatto",
+    "defaultMessage": "Mulat",
     "description": "Type of setting skin"
   },
   "settings.skins.white": {
-    "defaultMessage": "White",
+    "defaultMessage": "Blanc",
     "description": "Type of setting skin"
   },
   "settings.textPosition.bottom": {
-    "defaultMessage": "Bottom",
+    "defaultMessage": "Sota",
     "description": "Type of setting text position"
   },
   "settings.textPosition.label": {
-    "defaultMessage": "Text Position",
+    "defaultMessage": "Posició text",
     "description": "Setting Text Position label"
   },
   "settings.textPosition.none": {
-    "defaultMessage": "None",
+    "defaultMessage": "Sense",
     "description": "Type of setting text position"
   },
   "settings.textPosition.top": {
-    "defaultMessage": "Top",
+    "defaultMessage": "Dalt",
     "description": "Type of setting text position"
   },
   "view.welcome.learning": {
