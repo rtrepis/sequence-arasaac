@@ -12,7 +12,7 @@ export const messages = defineMessages({
     description: "Start button",
   },
   learning: {
-    id: "view.welcome.learning.tip",
+    id: "view.welcome.learning",
     defaultMessage: "Learning to use...",
     description: "Start button",
   },
