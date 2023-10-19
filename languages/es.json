@@ -28,7 +28,7 @@
     "description": "Title Page"
   },
   "components.barNavigation.welcome.title": {
-    "defaultMessage": "Welcome",
+    "defaultMessage": "Bienvenido",
     "description": "Title Page"
   },
   "components.copyRight": {
@@ -304,15 +304,15 @@
     "description": "Type of setting text position"
   },
   "view.welcome.learning": {
-    "defaultMessage": "Learning to use...",
+    "defaultMessage": "Aprendiendo a utilizar...",
     "description": "Start button"
   },
   "view.welcome.liveMotive.title": {
-    "defaultMessage": "Create and print or view your sequence page.",
+    "defaultMessage": "Crea e imprime o ve tu página de secuencia.",
     "description": "Welcome live motive"
   },
   "view.welcome.start.button": {
-    "defaultMessage": "Start",
+    "defaultMessage": "Iniciar",
     "description": "Start button"
   }
 }
