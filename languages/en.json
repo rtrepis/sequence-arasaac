@@ -303,7 +303,7 @@
     "defaultMessage": "Top",
     "description": "Type of setting text position"
   },
-  "view.welcome.learning.tip": {
+  "view.welcome.learning": {
     "defaultMessage": "Learning to use...",
     "description": "Start button"
   },
