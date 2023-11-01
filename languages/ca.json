@@ -303,6 +303,9 @@
     "defaultMessage": "Dalt",
     "description": "Type of setting text position"
   },
+  "view.welcome.arcadeLink": {
+    "defaultMessage": "https://app.arcade.software/share/oTarQPTesgFaBcLzXTFd"
+  },
   "view.welcome.learning": {
     "defaultMessage": "Aprèn l'ús...",
     "description": "Start button"
