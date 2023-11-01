@@ -27,6 +27,10 @@
     "defaultMessage": "Vista",
     "description": "Title Page"
   },
+  "components.barNavigation.welcome.title": {
+    "defaultMessage": "Bienvenido",
+    "description": "Title Page"
+  },
   "components.copyRight": {
     "defaultMessage": "Hecho con: SequenciAAC - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
@@ -298,6 +302,20 @@
   "settings.textPosition.top": {
     "defaultMessage": "Arriba",
     "description": "Type of setting text position"
+  },
+  "view.welcome.learning": {
+    "defaultMessage": "Aprendiendo a utilizar...",
+    "description": "Start button"
+  },
+  "view.welcome.liveMotive.title": {
+    "defaultMessage": "Crea e imprime o ve tu página de secuencia.",
+    "description": "Welcome live motive"
+  },
+  "view.welcome.start.button": {
+    "defaultMessage": "Iniciar",
+    "description": "Start button"
+  },
+  "view.welcome.arcadeLink": {
+    "defaultMessage": "https://demo.arcade.software/Ce5zpwWFaNQWmefG0kuO?embed"
   }
 }
-
