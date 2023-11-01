@@ -303,6 +303,9 @@
     "defaultMessage": "Top",
     "description": "Type of setting text position"
   },
+  "view.welcome.arcadeLink": {
+    "defaultMessage": "https://app.arcade.software/share/oTarQPTesgFaBcLzXTFd"
+  },
   "view.welcome.learning": {
     "defaultMessage": "Learning to use...",
     "description": "Start button"

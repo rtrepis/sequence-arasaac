@@ -8,7 +8,7 @@ const WelcomePage = (): JSX.Element => {
   const isLandScape = window.screen.orientation.type === "landscape-primary";
 
   const linkArcadeGuide = isLandScape
-    ? "https://demo.arcade.software/9vxagdROFoEVIV7fYgdC?embed"
+    ? intl.formatMessage({ ...messages.arcadeLink })
     : "https://demo.arcade.software/UwL1a1HrJ0olTvKdVHlG?embed";
 
   return (
