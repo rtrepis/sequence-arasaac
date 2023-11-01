@@ -303,6 +303,9 @@
     "defaultMessage": "Arriba",
     "description": "Type of setting text position"
   },
+  "view.welcome.arcadeLink": {
+    "defaultMessage": "https://app.arcade.software/share/oTarQPTesgFaBcLzXTFd"
+  },
   "view.welcome.learning": {
     "defaultMessage": "Aprendiendo a utilizar...",
     "description": "Start button"
@@ -314,8 +317,6 @@
   "view.welcome.start.button": {
     "defaultMessage": "Iniciar",
     "description": "Start button"
-  },
-  "view.welcome.arcadeLink": {
-    "defaultMessage": "https://demo.arcade.software/Ce5zpwWFaNQWmefG0kuO?embed"
   }
 }
+
