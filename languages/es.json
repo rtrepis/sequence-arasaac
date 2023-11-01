@@ -314,6 +314,8 @@
   "view.welcome.start.button": {
     "defaultMessage": "Iniciar",
     "description": "Start button"
+  },
+  "view.welcome.arcadeLink": {
+    "defaultMessage": "https://demo.arcade.software/Ce5zpwWFaNQWmefG0kuO?embed"
   }
 }
-

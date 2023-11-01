@@ -16,4 +16,8 @@ export const messages = defineMessages({
     defaultMessage: "Learning to use...",
     description: "Start button",
   },
+  arcadeLink: {
+    id: "view.welcome.arcadeLink",
+    defaultMessage: "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed",
+  },
 });
