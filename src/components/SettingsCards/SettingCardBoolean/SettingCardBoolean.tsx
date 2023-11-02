@@ -12,12 +12,14 @@ interface SettingCardProps {
   setting: "numbered" | "corss" | "color";
   state: boolean;
   setState?: React.Dispatch<React.SetStateAction<boolean>>;
+  applyAll?: "none";
 }
 
 const SettingCardBoolean = ({
   setting,
   state,
   setState,
+  applyAll,
 }: SettingCardProps): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -40,8 +42,10 @@ const SettingCardBoolean = ({
   };
 
   const handlerApplyAll = (toUpdate: boolean) => {
-    setting === "color" &&
-      dispatch(pictAraSettingsApplyAllActionCreator({ color: toUpdate }));
+    if (setting === "color") {
+      console.log(state);
+      dispatch(pictAraSettingsApplyAllActionCreator({ color: !state }));
+    }
   };
 
   return (
@@ -62,7 +66,7 @@ const SettingCardBoolean = ({
         onChange={handleSelected}
       />
 
-      {setting === "color" && (
+      {setting === "color" && applyAll !== "none" && (
         <ApplyAll
           onClick={() => handlerApplyAll(state)}
           sx={cardAction}
