@@ -156,6 +156,7 @@ const PictEditForm = ({
                 setting="color"
                 state={color}
                 setState={setColor}
+                applyAll={"none"}
               />
             </li>
           </Stack>
