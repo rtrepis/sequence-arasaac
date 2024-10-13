@@ -94,6 +94,7 @@ const PictEditForm = ({
   useEffect(() => {
     if (submit) handlerSubmit();
   }, [submit, handlerSubmit]);
+
   return (
     <>
       <Stack
@@ -151,25 +152,31 @@ const PictEditForm = ({
               />
             </li>
 
-            <li>
-              <SettingCardBoolean
-                setting="color"
-                state={color}
-                setState={setColor}
-                applyAll={"none"}
-              />
-            </li>
+            {pictogram.img.selectedId !== 0 && (
+              <li>
+                <SettingCardBoolean
+                  setting="color"
+                  state={color}
+                  setState={setColor}
+                  applyAll={"none"}
+                />
+              </li>
+            )}
           </Stack>
-          {pictogram.img.settings.color && pictogram.img.settings.skin && (
-            <li>
-              <SettingCard setting="skin" state={skin} setState={setSkin} />
-            </li>
-          )}
-          {pictogram.img.settings.hair && pictogram.img.settings.color && (
-            <li>
-              <SettingCard setting="hair" state={hair} setState={setHair} />
-            </li>
-          )}
+          {pictogram.img.selectedId !== 0 &&
+            pictogram.img.settings.color &&
+            pictogram.img.settings.skin && (
+              <li>
+                <SettingCard setting="skin" state={skin} setState={setSkin} />
+              </li>
+            )}
+          {pictogram.img.selectedId !== 0 &&
+            pictogram.img.settings.hair &&
+            pictogram.img.settings.color && (
+              <li>
+                <SettingCard setting="hair" state={hair} setState={setHair} />
+              </li>
+            )}
         </List>
       </SettingAccordion>
     </>
