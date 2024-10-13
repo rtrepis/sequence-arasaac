@@ -138,8 +138,8 @@ const useAraSaac = () => {
           const toPictNotFound: PictSequence = {
             indexSequence: amountSequence + indexSequence,
             img: {
-              searched: { word: word, bestIdPicts: [3418] },
-              selectedId: 3418,
+              searched: { word: word, bestIdPicts: [0] },
+              selectedId: 0,
               settings: { fitzgerald: "#666" },
             },
             settings: { textPosition, fontSize },
@@ -166,6 +166,7 @@ const useAraSaac = () => {
     hair?: Hair | undefined,
     color?: boolean
   ) => {
+    if (pictogramId === 0) return "img/settings//white.svg";
     let path = `${araSaacURL}pictograms/${pictogramId}`;
 
     skin &&

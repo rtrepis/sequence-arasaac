@@ -1,10 +1,7 @@
-import { useIntl } from "react-intl";
 import { useAppSelector } from "../app/hooks";
 import { PictSequence } from "../types/sequence";
-import messages from "./newPictogram.lang";
 
 const useNewPictogram = () => {
-  const intl = useIntl();
   const pictSequenceDefault = useAppSelector(
     (state) => state.ui.defaultSettings.pictSequence
   );
@@ -14,15 +11,14 @@ const useNewPictogram = () => {
       indexSequence: indexSequence,
       img: {
         searched: {
-          word: `${intl.formatMessage(messages.empty)}`,
+          word: "",
           bestIdPicts: [],
         },
-        selectedId: 26527,
+        selectedId: 0,
         settings: { fitzgerald: "#2222ff" },
       },
       settings: {
         textPosition: pictSequenceDefault.textPosition,
-        //font: pictSequenceDefault.font,
       },
       cross: false,
     };

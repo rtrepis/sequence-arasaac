@@ -38,25 +38,25 @@ const PictEditModal = ({
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
-  const [openPopover, setOpenPopover] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [submit, setSubmit] = useState(false);
 
   const handlerClickOpen = () => {
-    setOpenPopover(false);
     setOpen(true);
   };
 
   const handlerClosePopover = () => {
-    setOpenPopover(false);
+    setAnchorEl(null);
   };
 
   const handlerContextMenu = (event: any) => {
     event.preventDefault();
     setMousePosition({ x: event.clientX, y: event.clientY });
-    setOpenPopover(true);
+    setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setSubmit(true);
     setOpen(false);
@@ -68,9 +68,14 @@ const PictEditModal = ({
     dispatch(renumberSequenceActionCreator());
   };
 
+  const openPopover = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
   return (
     <>
       <Button
+        aria-describedby={id}
+        id={id}
         variant="text"
         onClick={handlerClickOpen}
         onContextMenu={handlerContextMenu}
@@ -83,17 +88,19 @@ const PictEditModal = ({
         />
       </Button>
       <Popover
+        id={id}
         open={openPopover}
         anchorOrigin={{
           vertical: mousePosition.y,
           horizontal: mousePosition.x,
         }}
-        anchorEl={undefined}
+        anchorEl={anchorEl}
         transformOrigin={{
           vertical: "top",
           horizontal: "left",
         }}
         sx={{ textAlign: "center" }}
+        onClose={() => setAnchorEl(null)}
       >
         <MouseActionList
           pictogram={pictogram}
@@ -102,7 +109,6 @@ const PictEditModal = ({
           copyAction={setCopy}
           pasteObject={copy}
         />
-        <Button onClick={() => setOpenPopover(false)}>Close</Button>
       </Popover>
 
       <Dialog
@@ -120,7 +126,6 @@ const PictEditModal = ({
           justifyContent={"space-around"}
           alignItems={"center"}
           padding={1.5}
-          onClick={() => setOpenPopover(false)}
         >
           <Typography variant="h5" component="h2">
             <FormattedMessage {...messages.modal} />
