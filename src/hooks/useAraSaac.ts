@@ -17,7 +17,7 @@ import {
 import useUserLocation from "./useUserLocation";
 import fitzgeraldColors from "../data/fitzgeraldColors";
 
-const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
+const araSaacURL = import.meta.env.VITE_APP_API_ARASAAC_URL;
 
 const useAraSaac = () => {
   const {
