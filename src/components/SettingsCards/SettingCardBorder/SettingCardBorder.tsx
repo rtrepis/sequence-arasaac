@@ -128,7 +128,7 @@ const SettingCardBorder = ({
           >
             <Tooltip title={intl.formatMessage(messages.withoutBorder)}>
               <img
-                src={`/img/settings/x.png`}
+                src={`../img/settings/x.png`}
                 alt={intl.formatMessage(messages.withoutBorder)}
                 width={40}
                 height={40}

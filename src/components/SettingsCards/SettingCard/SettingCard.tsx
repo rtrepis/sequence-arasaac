@@ -88,7 +88,7 @@ const SettingCard = ({
             onClick={() => handleSelected(key)}
           >
             <img
-              src={`/img/settings/${setting}/${key}.png`}
+              src={`../img/settings/${setting}/${key}.png`}
               alt={`${intl.formatMessage({
                 ...settingCard.message,
               })} ${intl.formatMessage(value.message)}`}
