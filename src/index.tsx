@@ -28,7 +28,7 @@ const languages = async (locale: string) => {
           <BrowserRouter>
             <IntlProvider
               locale={locale}
-              defaultLocale="en"
+              defaultLocale="ca"
               messages={messages}
             >
               <App />

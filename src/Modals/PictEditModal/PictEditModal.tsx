@@ -53,7 +53,7 @@ const PictEditModal = ({
 
   const handlerContextMenu = (event: any) => {
     event.preventDefault();
-    setMousePosition({ x: event.clientX, y: event.clientY });
+    // setMousePosition({ x: event.clientX, y: event.clientY });
     setAnchorEl(event.currentTarget);
   };
 
@@ -90,15 +90,7 @@ const PictEditModal = ({
       <Popover
         id={id}
         open={openPopover}
-        anchorOrigin={{
-          vertical: mousePosition.y,
-          horizontal: mousePosition.x,
-        }}
         anchorEl={anchorEl}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
         sx={{ textAlign: "center" }}
         onClose={() => setAnchorEl(null)}
       >
