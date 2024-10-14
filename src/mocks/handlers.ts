@@ -1,9 +1,9 @@
-import { rest } from "msw";
+import { RequestHandler } from "msw";
 
 const araSaacURL = process.env.REACT_APP_API_ARASAAC_URL;
 
 export const handlers = [
-  rest.get(
+  RequestHandler(
     `${araSaacURL}pictograms/en/bestsearch/girl`,
     async (req, res, ctx) => {
       const mockFindPict = [{ _id: 234 }, { _id: 234 }];

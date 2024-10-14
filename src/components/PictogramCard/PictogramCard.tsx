@@ -105,7 +105,7 @@ const PictogramCard = ({
         {cross && (
           <Box
             sx={{
-              backgroundImage: `url(${"img/settings/tachado_rojo.svg"})`,
+              backgroundImage: `url(${"../img/settings/tachado_rojo.svg"})`,
               backgroundRepeat: "no-repeat",
               position: "absolute",
               height: `${300 * pictSize * printPageRatio}px`,

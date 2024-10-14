@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
 
-const App = (): JSX.Element => {
+const App = (): React.ReactElement => {
   const dispatch = useDispatch();
 
   useEffect(() => {

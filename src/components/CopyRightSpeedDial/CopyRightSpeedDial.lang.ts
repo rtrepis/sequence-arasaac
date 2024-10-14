@@ -9,7 +9,7 @@ const messages = defineMessages({
   },
   auth: {
     id: "components.copyRightDial.auth.label",
-    defaultMessage: `Design & all right reserved: Ramon Trepat & AraSaac. seqsaac@gmail.com`,
+    defaultMessage: `Design & all right reserved: Ramon Trepat & AraSaac. r.trepis@gmail.com`,
     description: "Page auth",
   },
 });

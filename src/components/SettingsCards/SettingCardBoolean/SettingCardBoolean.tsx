@@ -43,7 +43,6 @@ const SettingCardBoolean = ({
 
   const handlerApplyAll = (toUpdate: boolean) => {
     if (setting === "color") {
-      console.log(state);
       dispatch(pictAraSettingsApplyAllActionCreator({ color: !state }));
     }
   };

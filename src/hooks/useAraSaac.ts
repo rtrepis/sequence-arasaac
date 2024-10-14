@@ -166,7 +166,7 @@ const useAraSaac = () => {
     hair?: Hair | undefined,
     color?: boolean
   ) => {
-    if (pictogramId === 0) return "img/settings//white.svg";
+    if (pictogramId === 0) return "../img/settings/white.svg";
     let path = `${araSaacURL}pictograms/${pictogramId}`;
 
     skin &&
