@@ -45,7 +45,7 @@ describe("Give a component PictEdit", () => {
 
       fireEvent.click(button);
 
-      let modal = screen.getByRole("heading", {
+      const modal = screen.getByRole("heading", {
         name: "Edit Pictogram",
       });
 
