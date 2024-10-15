@@ -11,6 +11,18 @@
       "value": "Border out"
     }
   ],
+  "component.settingCardFontGroup.color.title": [
+    {
+      "type": 0,
+      "value": "Color"
+    }
+  ],
+  "component.settingCardFontGroup.font.title": [
+    {
+      "type": 0,
+      "value": "Font"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
@@ -20,7 +32,7 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "SequenceSAAC"
+      "value": "SequenciAAC"
     }
   ],
   "components.barNavigation.view.title": [
@@ -29,10 +41,28 @@
       "value": "View"
     }
   ],
+  "components.barNavigation.welcome.title": [
+    {
+      "type": 0,
+      "value": "Welcome"
+    }
+  ],
   "components.copyRight": [
     {
       "type": 0,
-      "value": "Made with: SequenceSaac - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). produced by:"
+      "value": "Made with: SequenciAAC - Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA)."
+    }
+  ],
+  "components.copyRightDial.auth.label": [
+    {
+      "type": 0,
+      "value": "Design & all right reserved: Ramon Trepat & AraSaac. seqsaac@gmail.com"
+    }
+  ],
+  "components.copyRightDial.license.label": [
+    {
+      "type": 0,
+      "value": "Author of the pictograms: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA)."
     }
   ],
   "components.defaultSettings.close": [
@@ -173,6 +203,12 @@
       "value": "Plus pictograms"
     }
   ],
+  "components.sequenceAuthor": [
+    {
+      "type": 0,
+      "value": "Sequence author:"
+    }
+  ],
   "components.settingCard.Radius.title": [
     {
       "type": 0,
@@ -191,6 +227,18 @@
       "value": "Apply All"
     }
   ],
+  "components.settingCard.color.title": [
+    {
+      "type": 0,
+      "value": "Color"
+    }
+  ],
+  "components.settingCard.corss.title": [
+    {
+      "type": 0,
+      "value": "Cross"
+    }
+  ],
   "components.settingCard.customText.label": [
     {
       "type": 0,
@@ -200,19 +248,13 @@
   "components.settingCard.fontSize.label": [
     {
       "type": 0,
-      "value": "Font Size"
+      "value": "Size"
     }
   ],
   "components.settingCard.numbered.title": [
     {
       "type": 0,
       "value": "Numbered"
-    }
-  ],
-  "components.settingCard.producedBy.label": [
-    {
-      "type": 0,
-      "value": "Produced by"
     }
   ],
   "components.settingCardBorder.fitzgeraldKey.label": [
@@ -233,10 +275,28 @@
       "value": "Without border"
     }
   ],
+  "pages.viewSequence.authSequence.helperText": [
+    {
+      "type": 0,
+      "value": "Mark authorship"
+    }
+  ],
+  "pages.viewSequence.authSequence.label": [
+    {
+      "type": 0,
+      "value": "Sequence author"
+    }
+  ],
   "pages.viewSequence.columnGap.label": [
     {
       "type": 0,
       "value": "Column Space"
+    }
+  ],
+  "pages.viewSequence.fullScreen.label": [
+    {
+      "type": 0,
+      "value": "Full Screen"
     }
   ],
   "pages.viewSequence.rowGap.label": [
@@ -255,6 +315,12 @@
     {
       "type": 0,
       "value": "Empty"
+    }
+  ],
+  "setting.font-family.title": [
+    {
+      "type": 0,
+      "value": "Family"
     }
   ],
   "setting.lang.ca.label": [
@@ -387,6 +453,30 @@
     {
       "type": 0,
       "value": "Top"
+    }
+  ],
+  "view.welcome.arcadeLink": [
+    {
+      "type": 0,
+      "value": "https://app.arcade.software/share/oTarQPTesgFaBcLzXTFd"
+    }
+  ],
+  "view.welcome.learning": [
+    {
+      "type": 0,
+      "value": "Learning to use..."
+    }
+  ],
+  "view.welcome.liveMotive.title": [
+    {
+      "type": 0,
+      "value": "Create and print or view your sequence page."
+    }
+  ],
+  "view.welcome.start.button": [
+    {
+      "type": 0,
+      "value": "Start"
     }
   ]
 }
