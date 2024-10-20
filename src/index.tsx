@@ -8,8 +8,6 @@ import "./index.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material";
 import theme from "./style/themeMui";
-import { IntlProvider } from "react-intl";
-import loadLocalMessages from "./languages/loadLocaleMessages";
 import { BrowserRouter } from "react-router-dom";
 
 const locale = navigator.language.slice(0, 2);
@@ -18,21 +16,13 @@ const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 const languages = async (locale: string) => {
-  const messages = (await loadLocalMessages(locale)) as unknown;
-
   root.render(
     <React.StrictMode>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
           <BrowserRouter>
-            <IntlProvider
-              locale={locale}
-              defaultLocale="ca"
-              messages={messages}
-            >
-              <App />
-            </IntlProvider>
+            <App locale={locale} />
           </BrowserRouter>
         </ThemeProvider>
       </Provider>
