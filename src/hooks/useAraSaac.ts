@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -26,7 +28,7 @@ const useAraSaac = () => {
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
   const amountSequence = useAppSelector((state) => state.sequence.length);
   const defaultSettingsPictApiAra = useAppSelector(
-    (state) => state.ui.defaultSettings.pictApiAra
+    (state) => state.ui.defaultSettings.pictApiAra,
   );
 
   const dispatch = useAppDispatch();
@@ -57,30 +59,31 @@ const useAraSaac = () => {
       defaultSettingsPictApiAra.hair,
       defaultSettingsPictApiAra.skin,
       defaultSettingsPictApiAra.color,
-    ]
+    ],
   );
 
   const getSettingsPictId = useCallback(
     async (pictogramId: number, indexSequence: number) => {
       try {
         const { data } = await axios.get(
-          `${araSaacURL}pictograms/${locale}/${pictogramId}`
+          `${araSaacURL}pictograms/${locale}/${pictogramId}`,
         );
 
-        const findSettings: PictApiAraSettings = await makeSettingsProperty(
-          data
-        );
+        const findSettings: PictApiAraSettings =
+          await makeSettingsProperty(data);
 
         dispatch(
           settingsPictApiAraActionCreator({
             indexSequence: indexSequence,
             settings: findSettings,
-          })
+          }),
         );
         return findSettings;
-      } catch {}
+      } catch {
+        console.error("getSettingsPictId ");
+      }
     },
-    [locale, dispatch, makeSettingsProperty]
+    [locale, dispatch, makeSettingsProperty],
   );
 
   const getSearchPictogram = useCallback(
@@ -88,13 +91,13 @@ const useAraSaac = () => {
       word: string,
       indexSequence: number,
       isUpdate: boolean,
-      isExtends?: boolean
+      isExtends?: boolean,
     ) => {
       const search = isExtends ? "search" : "bestsearch";
 
       try {
         const { data } = await axios.get(
-          `${araSaacURL}pictograms/${locale}/${search}/${word.toLocaleLowerCase()}`
+          `${araSaacURL}pictograms/${locale}/${search}/${word.toLocaleLowerCase()}`,
         );
 
         const findBestPict: number[] = [];
@@ -157,14 +160,14 @@ const useAraSaac = () => {
       makeSettingsProperty,
       fontSize,
       textPosition,
-    ]
+    ],
   );
 
   const toUrlPath = (
     pictogramId: number,
     skin?: Skin | undefined,
     hair?: Hair | undefined,
-    color?: boolean
+    color?: boolean,
   ) => {
     if (pictogramId === 0) return "../img/settings/white.svg";
     let path = `${araSaacURL}pictograms/${pictogramId}`;
