@@ -19,9 +19,10 @@ import { viewSettingsActionCreator } from "../../app/slice/uiSlice";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 import useWindowResize from "../../hooks/useWindowResize";
+import React from "react";
 
 interface ViewSequencesSettingsProps {
-  children: JSX.Element | JSX.Element[];
+  children: React.ReactElement | React.ReactElement[];
   view: ViewSettings;
   setView: React.Dispatch<React.SetStateAction<ViewSettings>>;
   author?: string;
@@ -38,7 +39,7 @@ const ViewSequencesSettings = ({
   setScale,
   author,
   setAuthor,
-}: ViewSequencesSettingsProps): JSX.Element => {
+}: ViewSequencesSettingsProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -57,7 +58,7 @@ const ViewSequencesSettings = ({
     heightLandScape: [689, 1025, fullScreenHeight],
   };
 
-  const [configsView, setConfigs] = useState(initialStateConfigs);
+  const [configsView] = useState(initialStateConfigs);
 
   const maxDisplay = useCallback(() => {
     const sizeMD = screenWidth > 900 ? 1 : 0;
@@ -102,13 +103,18 @@ const ViewSequencesSettings = ({
     sizePage,
   ]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlerView = (event: any, value: number | number[]) => {
-    const newView: ViewSettings = {
-      ...view,
-      [event.target.name]: value,
-    };
+    const target = event.target;
 
-    setView(newView);
+    if (target !== null) {
+      const newView: ViewSettings = {
+        ...view,
+        [target.name]: value,
+      };
+
+      setView(newView);
+    }
   };
 
   const handlerBlur = () => {

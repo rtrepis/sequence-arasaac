@@ -12,13 +12,14 @@ import PictogramAmount from "../PictogramAmount/PictogramAmount";
 import MagicSearch from "../MagicSearch/MagicSearch";
 import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
 import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
+import React from "react";
 
 interface BarProps {
   children: React.ReactElement;
   title?: "view" | "edit" | "welcome";
 }
 
-const BarNavigation = ({ children, title }: BarProps): JSX.Element => {
+const BarNavigation = ({ children, title }: BarProps): React.ReactElement => {
   return (
     <>
       <NotPrint>

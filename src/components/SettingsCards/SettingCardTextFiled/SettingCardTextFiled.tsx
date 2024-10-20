@@ -2,6 +2,7 @@ import { Stack, TextField, Typography } from "@mui/material";
 import { cardTitle } from "../SettingsCards.styled";
 import { FormattedMessage } from "react-intl";
 import { messages } from "./SettingCardTextFiled.lang";
+import React from "react";
 
 interface SettingCardTextFiledProps {
   setting: "customText";
@@ -13,7 +14,7 @@ const SettingCadTextFiled = ({
   setting,
   state,
   setState,
-}: SettingCardTextFiledProps): JSX.Element => {
+}: SettingCardTextFiledProps): React.ReactElement => {
   return (
     <Stack direction={"row"} spacing={1}>
       <Typography variant="body1" component="h2" minWidth={120} sx={cardTitle}>

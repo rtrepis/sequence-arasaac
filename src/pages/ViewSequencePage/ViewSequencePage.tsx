@@ -5,8 +5,9 @@ import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSequencesSettings";
 import { ViewSettings } from "../../types/ui";
 import CopyRight from "../../components/CopyRight/CopyRight";
+import React from "react";
 
-const ViewSequencePage = (): JSX.Element => {
+const ViewSequencePage = (): React.ReactElement => {
   const {
     sequence,
     ui: { viewSettings },
