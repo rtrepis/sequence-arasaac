@@ -2,8 +2,9 @@ import { Box, Button, CardMedia, Stack, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { messages } from "./WelcomePage.lang";
 import { Link } from "react-router-dom";
+import React from "react";
 
-const WelcomePage = (): JSX.Element => {
+const WelcomePage = (): React.ReactElement => {
   const intl = useIntl();
   const isLandScape = window.screen.orientation.type === "landscape-primary";
 

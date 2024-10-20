@@ -1,4 +1,5 @@
 import { Slide, useScrollTrigger } from "@mui/material";
+import React from "react";
 
 interface HideOnScrollProps {
   children: React.ReactElement;

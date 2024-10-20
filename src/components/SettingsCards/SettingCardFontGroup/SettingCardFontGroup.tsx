@@ -7,6 +7,7 @@ import { FormattedMessage } from "react-intl";
 import { card, cardTitle } from "../SettingsCards.styled";
 import { messages } from "./SettingCardFontGroup.lang";
 import InputColor from "../InputColor/InputColor";
+import React from "react";
 
 interface SettingCardFontGroupProps {
   state: Font;
@@ -16,7 +17,7 @@ interface SettingCardFontGroupProps {
 const SettingCardFontGroup = ({
   state,
   setState,
-}: SettingCardFontGroupProps): JSX.Element => {
+}: SettingCardFontGroupProps): React.ReactElement => {
   const [family, setFamily] = useState(state.family);
   const [size, setSize] = useState(state.size);
   const [color, setColor] = useState(state.color);

@@ -4,12 +4,13 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { useIntl } from "react-intl";
 import useAraSaac from "../../hooks/useAraSaac";
 import messages from "./MagicSearch.lang";
+import React from "react";
 
 interface MagicSearchProps {
   variant?: "navBar";
 }
 
-const MagicSearch = ({ variant }: MagicSearchProps): JSX.Element => {
+const MagicSearch = ({ variant }: MagicSearchProps): React.ReactElement => {
   const intl = useIntl();
   const { getSearchPictogram } = useAraSaac();
 

@@ -11,6 +11,18 @@
       "value": "Marco exterior"
     }
   ],
+  "component.settingCardFontGroup.color.title": [
+    {
+      "type": 0,
+      "value": "Color"
+    }
+  ],
+  "component.settingCardFontGroup.font.title": [
+    {
+      "type": 0,
+      "value": "Fuente"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
@@ -20,7 +32,7 @@
   "components.barNavigation.title": [
     {
       "type": 0,
-      "value": "SequenceSAAC"
+      "value": "SequenciAAC"
     }
   ],
   "components.barNavigation.view.title": [
@@ -29,10 +41,28 @@
       "value": "Vista"
     }
   ],
+  "components.barNavigation.welcome.title": [
+    {
+      "type": 0,
+      "value": "Bienvenido"
+    }
+  ],
   "components.copyRight": [
     {
       "type": 0,
-      "value": "Autor de los pictogramas: Sergio Palao. Origen: SequenceSAAC - ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA). Propietario: Govern d'Aragoç (España)"
+      "value": "Hecho con: SequenciAAC - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA)."
+    }
+  ],
+  "components.copyRightDial.auth.label": [
+    {
+      "type": 0,
+      "value": "Diseño y todos los derechos reservados: Ramon Trepat & ARASAAC. seqsaac@gmail.com"
+    }
+  ],
+  "components.copyRightDial.license.label": [
+    {
+      "type": 0,
+      "value": "Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA)."
     }
   ],
   "components.defaultSettings.close": [
@@ -173,6 +203,12 @@
       "value": "Añadir pictograma"
     }
   ],
+  "components.sequenceAuthor": [
+    {
+      "type": 0,
+      "value": "Autor de la secuencia:"
+    }
+  ],
   "components.settingCard.Radius.title": [
     {
       "type": 0,
@@ -191,10 +227,28 @@
       "value": "Aplicar todo"
     }
   ],
+  "components.settingCard.color.title": [
+    {
+      "type": 0,
+      "value": "Color"
+    }
+  ],
+  "components.settingCard.corss.title": [
+    {
+      "type": 0,
+      "value": "Tachado"
+    }
+  ],
+  "components.settingCard.customText.label": [
+    {
+      "type": 0,
+      "value": "Texto personalizado"
+    }
+  ],
   "components.settingCard.fontSize.label": [
     {
       "type": 0,
-      "value": "Tamaño de letra"
+      "value": "Tamaño"
     }
   ],
   "components.settingCard.numbered.title": [
@@ -221,10 +275,28 @@
       "value": "Sin marco"
     }
   ],
+  "pages.viewSequence.authSequence.helperText": [
+    {
+      "type": 0,
+      "value": "Marcar autoría"
+    }
+  ],
+  "pages.viewSequence.authSequence.label": [
+    {
+      "type": 0,
+      "value": "Autor de la secuencia"
+    }
+  ],
   "pages.viewSequence.columnGap.label": [
     {
       "type": 0,
       "value": "Espacio Columna"
+    }
+  ],
+  "pages.viewSequence.fullScreen.label": [
+    {
+      "type": 0,
+      "value": "Pantalla completa"
     }
   ],
   "pages.viewSequence.rowGap.label": [
@@ -243,6 +315,12 @@
     {
       "type": 0,
       "value": "Vacío"
+    }
+  ],
+  "setting.font-family.title": [
+    {
+      "type": 0,
+      "value": "Familia"
     }
   ],
   "setting.lang.ca.label": [
@@ -375,6 +453,30 @@
     {
       "type": 0,
       "value": "Arriba"
+    }
+  ],
+  "view.welcome.arcadeLink": [
+    {
+      "type": 0,
+      "value": "https://app.arcade.software/share/oTarQPTesgFaBcLzXTFd"
+    }
+  ],
+  "view.welcome.learning": [
+    {
+      "type": 0,
+      "value": "Aprendiendo a utilizar..."
+    }
+  ],
+  "view.welcome.liveMotive.title": [
+    {
+      "type": 0,
+      "value": "Crea e imprime o ve tu página de secuencia."
+    }
+  ],
+  "view.welcome.start.button": [
+    {
+      "type": 0,
+      "value": "Iniciar"
     }
   ]
 }

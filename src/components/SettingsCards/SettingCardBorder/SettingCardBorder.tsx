@@ -19,6 +19,7 @@ import "./SettingCardBorder.css";
 import { messages } from "./SettingCardBorder.lang";
 import { useState } from "react";
 import InputColor from "../InputColor/InputColor";
+import React from "react";
 
 interface SettingCardBorderProps {
   border: "borderIn" | "borderOut";
@@ -31,7 +32,7 @@ const SettingCardBorder = ({
   border,
   state: { color, size, radius },
   setState,
-}: SettingCardBorderProps): JSX.Element => {
+}: SettingCardBorderProps): React.ReactElement => {
   const intl = useIntl();
 
   const [colorSelect, setColorSelect] = useState(color);
@@ -68,7 +69,7 @@ const SettingCardBorder = ({
 
   const handlerUpdateColor = (
     toUpdateColor?: string,
-    toUpDateSize?: boolean
+    toUpDateSize?: boolean,
   ) => {
     const newBorder: Border = {
       color: toUpdateColor ? toUpdateColor : colorSelect,
@@ -128,7 +129,7 @@ const SettingCardBorder = ({
           >
             <Tooltip title={intl.formatMessage(messages.withoutBorder)}>
               <img
-                src={`/img/settings/x.png`}
+                src={`../img/settings/x.png`}
                 alt={intl.formatMessage(messages.withoutBorder)}
                 width={40}
                 height={40}

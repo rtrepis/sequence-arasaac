@@ -6,6 +6,7 @@ import { messages } from "./SettingCardBoolean.lang";
 import { card, cardAction, cardTitle } from "../SettingsCards.styled";
 import ApplyAll from "../ApplyAll/ApplyAll";
 import { pictAraSettingsApplyAllActionCreator } from "../../../app/slice/sequenceSlice";
+import React from "react";
 
 interface SettingCardProps {
   indexPict?: number;
@@ -20,19 +21,19 @@ const SettingCardBoolean = ({
   state,
   setState,
   applyAll,
-}: SettingCardProps): JSX.Element => {
+}: SettingCardProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
   const handleSelected = (
     event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
+    checked: boolean,
   ) => {
     if (setting === "numbered") {
       dispatch(
         updateDefaultSettingPictSequenceActionCreator({
           [setting]: checked,
-        })
+        }),
       );
     }
 
@@ -41,9 +42,8 @@ const SettingCardBoolean = ({
     }
   };
 
-  const handlerApplyAll = (toUpdate: boolean) => {
+  const handlerApplyAll = () => {
     if (setting === "color") {
-      console.log(state);
       dispatch(pictAraSettingsApplyAllActionCreator({ color: !state }));
     }
   };
@@ -67,10 +67,7 @@ const SettingCardBoolean = ({
       />
 
       {setting === "color" && applyAll !== "none" && (
-        <ApplyAll
-          onClick={() => handlerApplyAll(state)}
-          sx={cardAction}
-        ></ApplyAll>
+        <ApplyAll onClick={() => handlerApplyAll()} sx={cardAction}></ApplyAll>
       )}
     </Stack>
   );

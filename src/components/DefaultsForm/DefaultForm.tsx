@@ -12,6 +12,7 @@ import { useCallback, useEffect, useState } from "react";
 import { DefaultSettings } from "../../types/ui";
 import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
 import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup";
+import React from "react";
 
 interface DefaultFormProps {
   submit: boolean;
@@ -87,7 +88,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
 
     localStorage.setItem(
       "pictDefaultSettings",
-      JSON.stringify(newDefaultSettings)
+      JSON.stringify(newDefaultSettings),
     );
   }, [
     fitzgerald,
@@ -103,7 +104,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
   ]);
 
   useEffect(() => {
-    !submit && handlerSubmit();
+    if (!submit) handlerSubmit();
   }, [submit, handlerSubmit]);
 
   return (

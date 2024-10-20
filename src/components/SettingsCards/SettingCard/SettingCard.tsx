@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { Stack, ToggleButton, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch } from "../../../app/hooks";
@@ -15,10 +16,12 @@ import {
   cardTitle,
 } from "../SettingsCards.styled";
 import ApplyAll from "../ApplyAll/ApplyAll";
+import React from "react";
 
 interface SettingCardProps {
   setting: "skin" | "textPosition" | "hair";
   state: string | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
@@ -26,7 +29,7 @@ const SettingCard = ({
   setting,
   setState,
   state,
-}: SettingCardProps): JSX.Element => {
+}: SettingCardProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -44,21 +47,21 @@ const SettingCard = ({
       dispatch(
         pictSequenceApplyAllActionCreator({
           textPosition: toUpdate as TextPosition,
-        })
+        }),
       );
 
     setting === "skin" &&
       dispatch(
         pictAraSettingsApplyAllActionCreator({
           skin: toUpdate as Skin,
-        })
+        }),
       );
 
     setting === "hair" &&
       dispatch(
         pictAraSettingsApplyAllActionCreator({
           hair: toUpdate as Hair,
-        })
+        }),
       );
   };
 
@@ -88,7 +91,7 @@ const SettingCard = ({
             onClick={() => handleSelected(key)}
           >
             <img
-              src={`/img/settings/${setting}/${key}.png`}
+              src={`../img/settings/${setting}/${key}.png`}
               alt={`${intl.formatMessage({
                 ...settingCard.message,
               })} ${intl.formatMessage(value.message)}`}

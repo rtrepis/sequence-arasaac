@@ -3,12 +3,15 @@ import { PictSequence, Sequence } from "../../types/sequence";
 import PictEditModal from "../PictEditModal/PictEditModal";
 import { useState } from "react";
 import useNewPictogram from "../../hooks/useNewPictogram";
+import React from "react";
 
 interface PictEditModalProps {
   sequence: Sequence;
 }
 
-const PictEditModalList = ({ sequence }: PictEditModalProps): JSX.Element => {
+const PictEditModalList = ({
+  sequence,
+}: PictEditModalProps): React.ReactElement => {
   const { getPictogramEmptyWithDefaultSettings: pictogramEmpty } =
     useNewPictogram();
 
@@ -17,7 +20,7 @@ const PictEditModalList = ({ sequence }: PictEditModalProps): JSX.Element => {
 
   return (
     <Grid container sx={{ marginBlockStart: 2 }}>
-      {sequence.map((pictogram, index) => (
+      {sequence.map((pictogram) => (
         <Grid
           item
           xs={false}

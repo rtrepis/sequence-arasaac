@@ -16,12 +16,15 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import messages from "./PictogramAmount.lang";
 import useNewPictogram from "../../hooks/useNewPictogram";
+import React from "react";
 
 interface PictogramAmountProps {
   variant?: "navBar";
 }
 
-const PictogramAmount = ({ variant }: PictogramAmountProps): JSX.Element => {
+const PictogramAmount = ({
+  variant,
+}: PictogramAmountProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { getPictogramEmptyWithDefaultSettings: pictogramEmpty } =
@@ -29,9 +32,9 @@ const PictogramAmount = ({ variant }: PictogramAmountProps): JSX.Element => {
   const amountSequence = useAppSelector((state) => state.sequence.length);
 
   const handleChangesAmount = (operator: number) => {
-    operator > 0
-      ? dispatch(addPictogramActionCreator(pictogramEmpty(amountSequence)))
-      : dispatch(subtractLastPictActionCreator());
+    if (operator > 0)
+      dispatch(addPictogramActionCreator(pictogramEmpty(amountSequence)));
+    if (operator < 0) dispatch(subtractLastPictActionCreator());
   };
 
   return (

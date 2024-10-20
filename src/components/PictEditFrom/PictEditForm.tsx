@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updatePictSequenceActionCreator } from "../../app/slice/sequenceSlice";
 import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCardTextFiled";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
+import React from "react";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
@@ -20,7 +21,7 @@ interface PictEditFormProps {
 const PictEditForm = ({
   pictogram,
   submit,
-}: PictEditFormProps): JSX.Element => {
+}: PictEditFormProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const {

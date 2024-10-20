@@ -1,4 +1,3 @@
-import { FontFamily } from "./FontFamily";
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 
 export type Langs = "ca" | "en" | "es";

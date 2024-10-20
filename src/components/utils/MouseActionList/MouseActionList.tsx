@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import {
   List,
   ListItemButton,
@@ -21,6 +22,7 @@ import {
 import useNewPictogram from "../../../hooks/useNewPictogram";
 import { PictSequence } from "../../../types/sequence";
 import { updatePictSequenceActionCreator } from "../../../app/slice/sequenceSlice";
+import React from "react";
 
 interface MouseActionListProps {
   pictogram: PictSequence;
@@ -36,7 +38,7 @@ const MouseActionList = ({
   closeAction,
   copyAction,
   pasteObject,
-}: MouseActionListProps): JSX.Element => {
+}: MouseActionListProps): React.ReactElement => {
   const dispatch = useDispatch();
   const { getPictogramEmptyWithDefaultSettings: pictogramEmpty } =
     useNewPictogram();
@@ -59,7 +61,7 @@ const MouseActionList = ({
         updatePictSequenceActionCreator({
           ...pasteObject,
           indexSequence: pictogram.indexSequence,
-        })
+        }),
       );
   };
 
