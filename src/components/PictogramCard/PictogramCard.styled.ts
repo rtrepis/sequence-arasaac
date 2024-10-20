@@ -3,9 +3,9 @@ import { Border, TextPosition } from "../../types/sequence";
 
 export const pictogram__card = (
   borderOut: Border,
-  variant: any,
+  variant: unknown,
   pictSize: number,
-  printPageRatio: number
+  printPageRatio: number,
 ) => {
   const card: SxProps = {
     textAlign: "center",
@@ -36,9 +36,9 @@ export const pictogram__card = (
 
 export const pictogram__media = (
   borderIn: Border,
-  view: any,
+  view: unknown,
   pictSize: number,
-  printPageRatio: number
+  printPageRatio: number,
 ) => {
   const sx: SxProps = {
     marginTop: `${view === "complete" ? 0 : 2 * pictSize * printPageRatio}`,
@@ -67,7 +67,7 @@ export const textContent = (
   numbered: boolean,
   borderSize: number,
   pictSize: number,
-  printPageRatio: number
+  printPageRatio: number,
 ) => {
   const sx: SxProps = {
     width: 150 * pictSize * printPageRatio,

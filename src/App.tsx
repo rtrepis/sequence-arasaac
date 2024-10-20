@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
+import React from "react";
 
 const App = (): React.ReactElement => {
   const dispatch = useDispatch();

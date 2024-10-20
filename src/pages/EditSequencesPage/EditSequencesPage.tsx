@@ -4,8 +4,9 @@ import MagicSearch from "../../components/MagicSearch/MagicSearch";
 import { useAppSelector } from "../../app/hooks";
 import BarNavigation from "../../components/BarNavigation/BarNavigation";
 import PictEditModalList from "../../Modals/PictEditModalList/PictEditModalList";
+import React from "react";
 
-const EditSequencesPage = (): JSX.Element => {
+const EditSequencesPage = (): React.ReactElement => {
   const sequence = useAppSelector((state) => state.sequence);
 
   return (

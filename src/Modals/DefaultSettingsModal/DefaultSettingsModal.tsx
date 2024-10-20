@@ -13,17 +13,18 @@ import messages from "./DefaultSettingsModal.lang";
 import { Container } from "@mui/system";
 import DefaultForm from "../../components/DefaultsForm/DefaultForm";
 import { Stack } from "@mui/material";
+import React from "react";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
   },
-  ref: React.Ref<unknown>
+  ref: React.Ref<unknown>,
 ) {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
-const DefaultSettingsModal = (): JSX.Element => {
+const DefaultSettingsModal = (): React.ReactElement => {
   const intl = useIntl();
 
   const [open, setOpen] = useState(false);
@@ -32,7 +33,7 @@ const DefaultSettingsModal = (): JSX.Element => {
     setOpen(true);
   };
 
-  const handleClose = (event: any) => {
+  const handleClose = () => {
     setOpen(false);
   };
 

@@ -13,6 +13,7 @@ import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import messages from "./PictogramSearch.lang";
 import { useAppSelector } from "../../app/hooks";
+import React from "react";
 interface PropsPictogramSearch {
   indexPict: number;
   state: {
@@ -31,7 +32,7 @@ const PictogramSearch = ({
   indexPict,
   state,
   setState,
-}: PropsPictogramSearch): JSX.Element => {
+}: PropsPictogramSearch): React.ReactElement => {
   const {
     settings: { skin, hair },
     searched: { word, bestIdPicts },
@@ -54,13 +55,12 @@ const PictogramSearch = ({
   const handleUpDatePictNumber = async (upDatePictNumber: number) => {
     const pictApiAraSettings = await getSettingsPictId(
       upDatePictNumber,
-      indexPict
+      indexPict,
     );
 
-    let fitzgerald;
-    pictApiAraSettings
-      ? (fitzgerald = pictApiAraSettings.fitzgerald)
-      : (fitzgerald = "#999999");
+    const fitzgerald = pictApiAraSettings
+      ? pictApiAraSettings.fitzgerald
+      : "#999999";
 
     setState({
       selectedId: upDatePictNumber,

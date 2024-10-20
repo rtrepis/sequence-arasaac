@@ -4,6 +4,8 @@ import ToggleButtonColor from "../../../style/ToggleButtonsColors";
 import inputColorList from "../../../data/inputColorList";
 import { IoIosColorPalette } from "react-icons/io";
 import "./InputColor.css";
+import React from "react";
+
 interface InputColorProps {
   inputSize: number;
   inputBorder: number;
@@ -16,7 +18,7 @@ const InputColor = ({
   inputSize,
   color,
   setColor,
-}: InputColorProps): JSX.Element => {
+}: InputColorProps): React.ReactElement => {
   const circleSize = {
     height: "2em",
     width: "2em",
@@ -32,7 +34,7 @@ const InputColor = ({
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
-    newColor: string
+    newColor: string,
   ) => {
     setColorPalette(false);
     setColor(newColor);
@@ -54,7 +56,7 @@ const InputColor = ({
   };
 
   const handleChangesColorSelect = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setColor(event.target.value);
   };

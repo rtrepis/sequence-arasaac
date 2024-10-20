@@ -5,6 +5,7 @@ import { cardAction } from "../SettingsCards.styled";
 import { fontSizeApplyAllActionCreator } from "../../../app/slice/sequenceSlice";
 import { messages } from "./SettingCardNumber.lang";
 import ApplyAll from "../ApplyAll/ApplyAll";
+import React from "react";
 
 interface SettingCardProps {
   setting: "fontSize";
@@ -18,19 +19,19 @@ const SettingCardNumber = ({
   state,
   setState,
   apply = false,
-}: SettingCardProps): JSX.Element => {
+}: SettingCardProps): React.ReactElement => {
   const dispatch = useAppDispatch();
 
-  const handleChange = (event: any, value: number | number[]) => {
+  const handleChange = (event: Event, value: number | number[]) => {
     setState(value as number);
   };
 
   const handleApplyAll = (toUpdate: number) => {
-    setting === "fontSize" &&
+    if (setting === "fontSize")
       dispatch(
         fontSizeApplyAllActionCreator({
           fontSize: toUpdate,
-        })
+        }),
       );
   };
 

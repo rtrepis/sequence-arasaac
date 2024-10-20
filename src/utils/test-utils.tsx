@@ -80,7 +80,7 @@ const render = (
       preloadedState: preloadedState,
     }),
     ...renderOptions
-  }: { preloadedState?: any; store?: any } = {}
+  }: { preloadedState?: any; store?: any } = {},
 ) => {
   const Wrapper = ({ children }: WrapperProps): JSX.Element => {
     return (

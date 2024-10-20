@@ -18,7 +18,7 @@ const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 const languages = async (locale: string) => {
-  const messages = (await loadLocalMessages(locale)) as any;
+  const messages = (await loadLocalMessages(locale)) as unknown;
 
   root.render(
     <React.StrictMode>
@@ -36,7 +36,7 @@ const languages = async (locale: string) => {
           </BrowserRouter>
         </ThemeProvider>
       </Provider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 };
 

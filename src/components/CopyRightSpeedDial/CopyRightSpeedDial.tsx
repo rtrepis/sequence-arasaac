@@ -2,8 +2,9 @@ import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
 import { FaCopyright } from "react-icons/fa";
 import { useIntl } from "react-intl";
 import messages from "./CopyRightSpeedDial.lang";
+import React from "react";
 
-const CopyRightSpeedDial = (): JSX.Element => {
+const CopyRightSpeedDial = (): React.ReactElement => {
   const intl = useIntl();
 
   return (

@@ -1,11 +1,12 @@
 import { Typography } from "@mui/material";
 import { FormattedMessage } from "react-intl";
+import React from "react";
 
 interface CopyRightProps {
   author: string;
 }
 
-const CopyRight = ({ author }: CopyRightProps): JSX.Element => {
+const CopyRight = ({ author }: CopyRightProps): React.ReactElement => {
   return (
     <Typography
       component={"p"}
