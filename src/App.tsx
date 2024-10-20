@@ -12,8 +12,14 @@ import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
 import React from "react";
 
-const App = (): React.ReactElement => {
+const App = ({ locale }: { locale: string }): React.ReactElement => {
   const dispatch = useDispatch();
+
+  const messageLocale = {
+    ca: messages_ca,
+    es: messages_es,
+    en: messages_en,
+  };
 
   useEffect(() => {
     const isPictDefaultSettings = localStorage.getItem("pictDefaultSettings");
@@ -25,11 +31,17 @@ const App = (): React.ReactElement => {
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="create-sequence" element={<EditSequencesPage />} />
-        <Route path="view-sequence" element={<ViewSequencePage />} />
-      </Routes>
+      <IntlProvider
+        locale={locale}
+        defaultLocale="ca"
+        messages={messageLocale[locale]}
+      >
+        <Routes>
+          <Route path="/" element={<WelcomePage />} />
+          <Route path="create-sequence" element={<EditSequencesPage />} />
+          <Route path="view-sequence" element={<ViewSequencePage />} />
+        </Routes>
+      </IntlProvider>
       <IntlProvider locale={"en"} defaultLocale="en" messages={messages_en}>
         <Routes>
           <Route path="en">
