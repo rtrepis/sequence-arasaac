@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { card } from "../../SettingsCards.styled";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { settingCardOptions } from "./SettingCardLang.lang";
 import useUserLocation from "../../../../hooks/useUserLocation";
@@ -18,7 +18,7 @@ interface SettingCardProps {
   setting: "languages";
 }
 
-const SettingCardLang = ({ setting }: SettingCardProps): JSX.Element => {
+const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
   const intl = useIntl();
 
   const initialLang = useUserLocation();

@@ -11,16 +11,17 @@ import {
   settingsListTitle,
   settingsListTitleContent,
 } from "./SettingAccordion.styled";
+import React from "react";
 
 interface SettingAccordionProps {
-  children: JSX.Element | JSX.Element[] | undefined;
+  children: React.ReactElement | React.ReactElement[] | undefined;
   title: string;
 }
 
 const SettingAccordion = ({
   children,
   title,
-}: SettingAccordionProps): JSX.Element => {
+}: SettingAccordionProps): React.ReactElement => {
   return (
     <Accordion variant="outlined" sx={settingsList}>
       <AccordionSummary aria-label={`${title}`} sx={settingsListTitle}>

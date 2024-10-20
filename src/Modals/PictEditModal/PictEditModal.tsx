@@ -21,6 +21,7 @@ import {
 } from "../../app/slice/sequenceSlice";
 import PictEditForm from "../../components/PictEditFrom/PictEditForm";
 import MouseActionList from "../../components/utils/MouseActionList/MouseActionList";
+import React from "react";
 
 interface PictEditProps {
   pictogram: PictSequence;
@@ -31,16 +32,14 @@ interface PictEditProps {
 
 const PictEditModal = ({
   pictogram,
-  size,
   copy,
   setCopy,
-}: PictEditProps): JSX.Element => {
+}: PictEditProps): React.ReactElement => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [submit, setSubmit] = useState(false);
 
   const handlerClickOpen = () => {
@@ -51,9 +50,8 @@ const PictEditModal = ({
     setAnchorEl(null);
   };
 
-  const handlerContextMenu = (event: any) => {
+  const handlerContextMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setMousePosition({ x: event.clientX, y: event.clientY });
     setAnchorEl(event.currentTarget);
   };
 
@@ -90,15 +88,7 @@ const PictEditModal = ({
       <Popover
         id={id}
         open={openPopover}
-        anchorOrigin={{
-          vertical: mousePosition.y,
-          horizontal: mousePosition.x,
-        }}
         anchorEl={anchorEl}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
         sx={{ textAlign: "center" }}
         onClose={() => setAnchorEl(null)}
       >

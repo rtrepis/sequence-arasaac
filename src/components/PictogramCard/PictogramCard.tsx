@@ -10,6 +10,7 @@ import {
 } from "./PictogramCard.styled";
 import messages from "./PictogramCart.lang";
 import fitzgeraldToBorder from "../../utils/fitzgeraldToBorder";
+import React from "react";
 
 interface PictogramCardProps {
   pictogram: PictSequence;
@@ -38,7 +39,7 @@ const PictogramCard = ({
   view,
   variant,
   size,
-}: PictogramCardProps): JSX.Element => {
+}: PictogramCardProps): React.ReactElement => {
   const {
     borderIn: borderInDefaultSetting,
     borderOut: borderOutDefaultSetting,
@@ -77,7 +78,7 @@ const PictogramCard = ({
               numbered,
               borderOut.size,
               pictSize,
-              printPageRatio
+              printPageRatio,
             )
           }
         >
@@ -105,7 +106,7 @@ const PictogramCard = ({
         {cross && (
           <Box
             sx={{
-              backgroundImage: `url(${"img/settings/tachado_rojo.svg"})`,
+              backgroundImage: `url(${"../img/settings/tachado_rojo.svg"})`,
               backgroundRepeat: "no-repeat",
               position: "absolute",
               height: `${300 * pictSize * printPageRatio}px`,
@@ -126,7 +127,7 @@ const PictogramCard = ({
               numbered,
               borderIn.size,
               pictSize,
-              printPageRatio
+              printPageRatio,
             )
           }
         >

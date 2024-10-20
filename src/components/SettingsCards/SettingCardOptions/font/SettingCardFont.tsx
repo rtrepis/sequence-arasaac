@@ -11,6 +11,7 @@ import { FormattedMessage } from "react-intl";
 import { settingCardOptions } from "./SettingCardFont.lang";
 import { fontList } from "../../../../data/fontlist";
 import { FontFamily } from "../../../../types/FontFamily";
+import React from "react";
 
 interface SettingCardProps {
   setting: "fontFamily";
@@ -22,7 +23,7 @@ const SettingCardFont = ({
   setting,
   state,
   setState,
-}: SettingCardProps): JSX.Element => {
+}: SettingCardProps): React.ReactElement => {
   const settingCard = {
     messages: settingCardOptions.messages[setting],
   };

@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import React from "react";
 
 interface ToggleButtonEditViewPagesProps {
   pageTitle: "edit" | "view";
@@ -8,7 +9,7 @@ interface ToggleButtonEditViewPagesProps {
 
 const ToggleButtonEditViewPages = ({
   pageTitle,
-}: ToggleButtonEditViewPagesProps): JSX.Element => {
+}: ToggleButtonEditViewPagesProps): React.ReactElement => {
   return (
     <>
       {pageTitle === "edit" && (
