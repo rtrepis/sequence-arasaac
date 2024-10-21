@@ -21,7 +21,7 @@
     "start": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "eslint .",
+    "lint": "eslint ./src",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "test-coverage": "react-scripts test --coverage --watchAll=false  --passWithNoTests",
