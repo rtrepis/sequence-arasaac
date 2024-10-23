@@ -43,9 +43,10 @@ const PictEditForm = ({
   const initialSearch = {
     selectedId: pictogram.img.selectedId,
     fitzgerald: pictogram.img.settings.fitzgerald,
+    url: pictogram.img.url,
   };
   const [search, setSearch] = useState(initialSearch);
-  const { fitzgerald, selectedId } = search;
+  const { fitzgerald, selectedId, url } = search;
 
   const [cross, setCross] = useState(pictogram.cross);
 
@@ -56,6 +57,7 @@ const PictEditForm = ({
     ...pictogram,
     img: {
       ...pictogram.img,
+      url,
       selectedId,
       settings: { fitzgerald, skin, hair, color },
     },
@@ -69,6 +71,7 @@ const PictEditForm = ({
       indexSequence: pictogram.indexSequence,
       img: {
         searched: pictogram.img.searched,
+        url,
         selectedId,
         settings: { fitzgerald, skin, hair, color },
       },

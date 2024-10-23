@@ -21,14 +21,14 @@ const sequenceSlice = createSlice({
 
     insertPictogram: (
       previousSequence,
-      action: PayloadAction<PictSequence>
+      action: PayloadAction<PictSequence>,
     ) => {
       previousSequence.splice(action.payload.indexSequence, 0, action.payload);
     },
 
     subtractPictogram: (previousSequence, action: PayloadAction<number>) =>
       previousSequence.filter(
-        (pictogram) => pictogram.indexSequence !== action.payload
+        (pictogram) => pictogram.indexSequence !== action.payload,
       ),
 
     subtractLastPict: (previousSequence) => [...previousSequence.slice(0, -1)],
@@ -47,12 +47,12 @@ const sequenceSlice = createSlice({
 
     selectedId: (
       previousSequence,
-      action: PayloadAction<PictApiAraForEdit>
+      action: PayloadAction<PictApiAraForEdit>,
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          (pictogram.img.selectedId = action.payload.selectedId!)
+          (pictogram.img.selectedId = action.payload.selectedId!),
       );
     },
 
@@ -60,100 +60,100 @@ const sequenceSlice = createSlice({
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          (pictogram.img.searched = action.payload.searched!)
+          (pictogram.img.searched = action.payload.searched!),
       );
     },
 
     updatePictSequence: (
       previousSequence,
-      action: PayloadAction<PictSequence>
+      action: PayloadAction<PictSequence>,
     ) => {
       return previousSequence.map((pictogram, index) =>
-        index === action.payload.indexSequence ? action.payload : pictogram
+        index === action.payload.indexSequence ? action.payload : pictogram,
       );
     },
 
     settingsPictApiAra: (
       previousSequence,
-      action: PayloadAction<PictApiAraForEdit>
+      action: PayloadAction<PictApiAraForEdit>,
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          (pictogram.img.settings = action.payload.settings!)
+          (pictogram.img.settings = action.payload.settings!),
       );
     },
 
     settingsPictSequence: (
       previousSequence,
-      action: PayloadAction<PictSequenceSettingsForEdit>
+      action: PayloadAction<PictSequenceSettingsForEdit>,
     ) => {
       previousSequence.map(
         (pictogram, index) =>
           index === action.payload.indexSequence &&
-          (pictogram.settings = action.payload)
+          (pictogram.settings = action.payload),
       );
     },
 
     pictAraSettingsApplyAll: (
       previousSequence,
-      action: PayloadAction<PictApiAraSettingsApplyAll>
+      action: PayloadAction<PictApiAraSettingsApplyAll>,
     ) => {
       if (action.payload.skin)
         previousSequence.map(
-          (pictogram) => (pictogram.img.settings.skin = action.payload.skin)
+          (pictogram) => (pictogram.img.settings.skin = action.payload.skin),
         );
       if (action.payload.hair)
         previousSequence.map(
-          (pictogram) => (pictogram.img.settings.hair = action.payload.hair)
+          (pictogram) => (pictogram.img.settings.hair = action.payload.hair),
         );
       if (action.payload.color)
         previousSequence.map(
-          (pictogram) => (pictogram.img.settings.color = action.payload.color)
+          (pictogram) => (pictogram.img.settings.color = action.payload.color),
         );
     },
 
     pictSequenceApplyAll: (
       previousSequence,
-      action: PayloadAction<PictSequenceApplyAll>
+      action: PayloadAction<PictSequenceApplyAll>,
     ) => {
       if (action.payload.textPosition)
         previousSequence.map(
           (pictogram) =>
-            (pictogram.settings.textPosition = action.payload.textPosition)
+            (pictogram.settings.textPosition = action.payload.textPosition),
         );
       if (action.payload.fontFamily)
         previousSequence.map(
           (pictogram) =>
-            (pictogram.settings.fontFamily = action.payload.fontFamily)
+            (pictogram.settings.fontFamily = action.payload.fontFamily),
         );
     },
 
     borderInApplyAll: (
       previousSequence,
-      action: PayloadAction<PictSequenceApplyAll>
+      action: PayloadAction<PictSequenceApplyAll>,
     ) => {
       previousSequence.map(
-        (pictogram) => (pictogram.settings.borderIn = action.payload.borderIn!)
+        (pictogram) => (pictogram.settings.borderIn = action.payload.borderIn!),
       );
     },
 
     borderOutApplyAll: (
       previousSequence,
-      action: PayloadAction<PictSequenceApplyAll>
+      action: PayloadAction<PictSequenceApplyAll>,
     ) => {
       previousSequence.map(
         (pictogram) =>
-          (pictogram.settings.borderOut = action.payload.borderOut!)
+          (pictogram.settings.borderOut = action.payload.borderOut!),
       );
     },
 
     fontSizeApplyAll: (
       previousSequence,
-      action: PayloadAction<PictSequenceApplyAll>
+      action: PayloadAction<PictSequenceApplyAll>,
     ) => {
       previousSequence.map(
-        (pictogram) => (pictogram.settings.fontSize = action.payload.fontSize)
+        (pictogram) => (pictogram.settings.fontSize = action.payload.fontSize),
       );
     },
   },
