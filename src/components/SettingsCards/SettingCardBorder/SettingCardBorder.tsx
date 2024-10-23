@@ -11,6 +11,7 @@ import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import { Border } from "../../../types/sequence";
 import {
   card,
+  cardAction,
   cardColor,
   cardContent,
   cardTitle,
@@ -20,6 +21,12 @@ import { messages } from "./SettingCardBorder.lang";
 import { useState } from "react";
 import InputColor from "../InputColor/InputColor";
 import React from "react";
+import ApplyAll from "../ApplyAll/ApplyAll";
+import { useAppDispatch } from "/src/app/hooks";
+import {
+  borderInApplyAllActionCreator,
+  borderOutApplyAllActionCreator,
+} from "/src/app/slice/sequenceSlice";
 
 interface SettingCardBorderProps {
   border: "borderIn" | "borderOut";
@@ -33,6 +40,7 @@ const SettingCardBorder = ({
   state: { color, size, radius },
   setState,
 }: SettingCardBorderProps): React.ReactElement => {
+  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const [colorSelect, setColorSelect] = useState(color);
@@ -72,7 +80,7 @@ const SettingCardBorder = ({
     toUpDateSize?: boolean,
   ) => {
     const newBorder: Border = {
-      color: toUpdateColor ? toUpdateColor : colorSelect,
+      color: toUpdateColor ?? colorSelect,
       radius: toUpDateSize ? 0 : radius === 0 ? 20 : radius,
       size: toUpDateSize ? 0 : size === 0 ? 2 : size,
     };
@@ -80,100 +88,113 @@ const SettingCardBorder = ({
     setState(newBorder);
   };
 
+  const handlerApplyAll = (border: "borderIn" | "borderOut") => {
+    if (border === "borderIn")
+      dispatch(
+        borderInApplyAllActionCreator({ borderIn: { color, radius, size } }),
+      );
+
+    if (border === "borderOut")
+      dispatch(
+        borderOutApplyAllActionCreator({ borderOut: { color, radius, size } }),
+      );
+  };
+
   return (
-    <>
-      <Stack
-        display={"flex"}
-        direction={"row"}
-        flexWrap={"wrap"}
-        columnGap={2}
-        sx={card}
+    <Stack
+      display={"flex"}
+      direction={"row"}
+      flexWrap={"wrap"}
+      columnGap={2}
+      sx={card}
+    >
+      <Typography variant="body1" sx={cardTitle} component="h4">
+        <FormattedMessage {...messages[border]} />
+      </Typography>
+
+      <StyledToggleButtonGroup
+        exclusive
+        aria-label={`${intl.formatMessage(messages[border])}`}
+        sx={cardContent}
       >
-        <Typography variant="body1" sx={cardTitle} component="h4">
-          <FormattedMessage {...messages[border]} />
-        </Typography>
-
-        <StyledToggleButtonGroup
-          exclusive
-          aria-label={`${intl.formatMessage(messages[border])}`}
-          sx={cardContent}
+        <ToggleButton
+          value={"Fitzgerald Key"}
+          sx={cardColor}
+          selected={color === "fitzgerald" && size > 0}
+          onClick={() => handlerUpdateColor("fitzgerald")}
         >
-          <ToggleButton
-            value={"Fitzgerald Key"}
-            sx={cardColor}
-            selected={color === "fitzgerald" && size > 0}
-            onClick={() => handlerUpdateColor("fitzgerald")}
-          >
-            <FormattedMessage {...messages.fitzgeraldKey} />
-          </ToggleButton>
+          <FormattedMessage {...messages.fitzgeraldKey} />
+        </ToggleButton>
 
-          <Tooltip title={intl.formatMessage(messages.selected)}>
-            <ToggleButton
-              value={"Selected Color"}
-              selected={color !== "fitzgerald" && size > 0}
-              onBlur={handlerClickColor}
-            >
-              <InputColor
-                color={colorSelect}
-                setColor={setColorSelect}
-                inputBorder={1}
-                inputSize={35}
-              />
-            </ToggleButton>
+        <Tooltip title={intl.formatMessage(messages.selected)}>
+          <ToggleButton
+            value={"Selected Color"}
+            selected={color !== "fitzgerald" && size > 0}
+            onBlur={handlerClickColor}
+          >
+            <InputColor
+              color={colorSelect}
+              setColor={setColorSelect}
+              inputBorder={1}
+              inputSize={35}
+            />
+          </ToggleButton>
+        </Tooltip>
+
+        <ToggleButton
+          value={"whitOutBorder"}
+          onClick={() => handlerUpdateColor(undefined, true)}
+          selected={size === 0}
+        >
+          <Tooltip title={intl.formatMessage(messages.withoutBorder)}>
+            <img
+              src={`../img/settings/x.png`}
+              alt={intl.formatMessage(messages.withoutBorder)}
+              width={40}
+              height={40}
+            />
           </Tooltip>
+        </ToggleButton>
+      </StyledToggleButtonGroup>
 
-          <ToggleButton
-            value={"whitOutBorder"}
-            onClick={() => handlerUpdateColor(undefined, true)}
-            selected={size === 0}
-          >
-            <Tooltip title={intl.formatMessage(messages.withoutBorder)}>
-              <img
-                src={`../img/settings/x.png`}
-                alt={intl.formatMessage(messages.withoutBorder)}
-                width={40}
-                height={40}
-              />
-            </Tooltip>
-          </ToggleButton>
-        </StyledToggleButtonGroup>
-
-        <Stack direction={"row"} spacing={2}>
-          <FormLabel>
-            <FormattedMessage {...messages.size} />
-          </FormLabel>
-          <Slider
-            defaultValue={size}
-            aria-label={`${intl.formatMessage(messages.size)}`}
-            valueLabelDisplay="auto"
-            max={10}
-            min={1}
-            value={size}
-            onChange={handleChangesSize}
-            sx={{ width: 100 }}
-            disabled={size === 0}
-          />
-        </Stack>
-
-        <Stack direction={"row"} spacing={2}>
-          <FormLabel>
-            <FormattedMessage {...messages.radius} />
-          </FormLabel>
-          <Slider
-            defaultValue={radius}
-            aria-label={`${intl.formatMessage(messages.radius)}`}
-            valueLabelDisplay="auto"
-            max={70}
-            min={1}
-            value={radius}
-            onChange={handleChangesRadius}
-            sx={{ width: 100 }}
-            disabled={size === 0}
-          />
-        </Stack>
+      <Stack direction={"row"} spacing={2}>
+        <FormLabel>
+          <FormattedMessage {...messages.size} />
+        </FormLabel>
+        <Slider
+          defaultValue={size}
+          aria-label={`${intl.formatMessage(messages.size)}`}
+          valueLabelDisplay="auto"
+          max={10}
+          min={1}
+          value={size}
+          onChange={handleChangesSize}
+          sx={{ width: 100 }}
+          disabled={size === 0}
+        />
       </Stack>
-    </>
+
+      <Stack direction={"row"} spacing={2}>
+        <FormLabel>
+          <FormattedMessage {...messages.radius} />
+        </FormLabel>
+        <Slider
+          defaultValue={radius}
+          aria-label={`${intl.formatMessage(messages.radius)}`}
+          valueLabelDisplay="auto"
+          max={70}
+          min={1}
+          value={radius}
+          onChange={handleChangesRadius}
+          sx={{ width: 100 }}
+          disabled={size === 0}
+        />
+      </Stack>
+      {color && (
+        <ApplyAll sx={cardAction} onClick={() => handlerApplyAll(border)} />
+      )}
+    </Stack>
   );
 };
-
+// [ ] ara que es pot modificar cada pictograma hauria d'haver un aplicar a tots
 export default SettingCardBorder;
