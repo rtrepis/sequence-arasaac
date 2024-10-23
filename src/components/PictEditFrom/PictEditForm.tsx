@@ -12,6 +12,7 @@ import { updatePictSequenceActionCreator } from "../../app/slice/sequenceSlice";
 import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCardTextFiled";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import React from "react";
+import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
@@ -25,7 +26,11 @@ const PictEditForm = ({
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const {
-    pictSequence: { textPosition: defaultTextPosition },
+    pictSequence: {
+      textPosition: defaultTextPosition,
+      borderIn: defaultBorderIn,
+      borderOut: defaultBorderOut,
+    },
     pictApiAra: { skin: defaultSkin, hair: defaultHair, color: defaultColor },
   } = useAppSelector((state) => state.ui.defaultSettings);
 
@@ -53,6 +58,12 @@ const PictEditForm = ({
   const initialColor = pictogram.img.settings.color ?? defaultColor;
   const [color, setColor] = useState(initialColor);
 
+  const initialBorderIn = pictogram.settings.borderIn ?? defaultBorderIn;
+  const [borderIn, setBorderIn] = useState(initialBorderIn);
+
+  const initialBorderOut = pictogram.settings.borderOut ?? defaultBorderOut;
+  const [borderOut, setBorderOut] = useState(initialBorderOut);
+
   const pictogramGuide: PictSequence = {
     ...pictogram,
     img: {
@@ -61,7 +72,7 @@ const PictEditForm = ({
       selectedId,
       settings: { fitzgerald, skin, hair, color },
     },
-    settings: { ...pictogram.settings, textPosition },
+    settings: { ...pictogram.settings, textPosition, borderIn, borderOut },
     text,
     cross,
   };
@@ -75,7 +86,7 @@ const PictEditForm = ({
         selectedId,
         settings: { fitzgerald, skin, hair, color },
       },
-      settings: { textPosition },
+      settings: { textPosition, borderIn, borderOut },
       text,
       cross,
     };
@@ -93,6 +104,9 @@ const PictEditForm = ({
     text,
     cross,
     dispatch,
+    url,
+    borderIn,
+    borderOut,
   ]);
 
   useEffect(() => {
@@ -148,14 +162,6 @@ const PictEditForm = ({
             rowGap={2}
             columnGap={2}
           >
-            <li>
-              <SettingCardBoolean
-                setting="corss"
-                state={cross}
-                setState={setCross}
-              />
-            </li>
-
             {pictogram.img.selectedId !== 0 && (
               <li>
                 <SettingCardBoolean
@@ -181,6 +187,27 @@ const PictEditForm = ({
                 <SettingCard setting="hair" state={hair} setState={setHair} />
               </li>
             )}
+          <li>
+            <SettingCardBoolean
+              setting="corss"
+              state={cross}
+              setState={setCross}
+            />
+          </li>
+          <li>
+            <SettingCardBorder
+              border="borderIn"
+              state={borderIn}
+              setState={setBorderIn}
+            />
+          </li>
+          <li>
+            <SettingCardBorder
+              border="borderOut"
+              state={borderOut}
+              setState={setBorderOut}
+            />
+          </li>
         </List>
       </SettingAccordion>
     </>
