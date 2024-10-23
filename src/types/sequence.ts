@@ -9,6 +9,10 @@ export interface PictSequence {
   cross: boolean;
   settings: PictSequenceSettings;
 }
+
+export interface PictImg {
+  url: string;
+}
 export interface PictSequenceSettings {
   numbered?: boolean;
   textPosition?: TextPosition;
@@ -56,6 +60,7 @@ export interface PictApiAra {
   searched: Word;
   selectedId: number;
   settings: PictApiAraSettings;
+  url?: string;
 }
 
 export interface Word {
