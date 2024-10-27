@@ -159,6 +159,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                   setting={"textPosition"}
                   state={textPosition}
                   setState={setTextPosition}
+                  applyAll
                 />
               </li>
             </Stack>
@@ -178,6 +179,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                   border="borderOut"
                   state={borderOut}
                   setState={setBorderOut}
+                  applyAll
                 />
               </li>
               <li>
@@ -185,6 +187,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                   border="borderIn"
                   state={borderIn}
                   setState={setBorderIn}
+                  applyAll
                 />
               </li>
             </Stack>
@@ -212,6 +215,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                     setting={"skin"}
                     state={skin}
                     setState={setSkin}
+                    applyAll
                   />
                 </li>
                 <li>
@@ -219,6 +223,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                     setting={"hair"}
                     state={hair}
                     setState={setHair}
+                    applyAll
                   />
                 </li>
               </Stack>
