@@ -16,7 +16,12 @@ const SettingCadTextFiled = ({
   setState,
 }: SettingCardTextFiledProps): React.ReactElement => {
   return (
-    <Stack direction={"row"} spacing={1}>
+    <Stack
+      display={"grid"}
+      gridTemplateColumns={"0.5fr 1.5fr"}
+      direction={"row"}
+      columnGap={2}
+    >
       <Typography variant="body1" component="h2" minWidth={120} sx={cardTitle}>
         <FormattedMessage {...messages[setting]} />
       </Typography>
