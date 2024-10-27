@@ -49,6 +49,9 @@ const PictEditForm = ({
     selectedId: pictogram.img.selectedId,
     fitzgerald: pictogram.img.settings.fitzgerald,
     url: pictogram.img.url,
+    color: pictogram.img.settings.color,
+    hair: pictogram.img.settings.hair,
+    skin: pictogram.img.settings.skin,
   };
   const [search, setSearch] = useState(initialSearch);
   const { fitzgerald, selectedId, url } = search;
@@ -144,7 +147,8 @@ const PictEditForm = ({
               setState={setText}
             />
           </li>
-          {pictogram.settings.textPosition && (
+
+          {search.color && pictogram.settings.textPosition && (
             <li>
               <SettingCard
                 setting="textPosition"
@@ -162,38 +166,46 @@ const PictEditForm = ({
             rowGap={2}
             columnGap={2}
           >
-            {pictogram.img.selectedId !== 0 && (
+            {!search.color && pictogram.settings.textPosition && (
               <li>
-                <SettingCardBoolean
-                  setting="color"
-                  state={color}
-                  setState={setColor}
-                  applyAll={"none"}
+                <SettingCard
+                  setting="textPosition"
+                  state={textPosition}
+                  setState={setTextPosition}
                 />
               </li>
             )}
+
+            {search.color && (
+              <>
+                <li>
+                  <SettingCardBoolean
+                    setting="color"
+                    state={color}
+                    setState={setColor}
+                    applyAll={"none"}
+                  />
+                </li>
+                <li>
+                  <SettingCardBoolean
+                    setting="corss"
+                    state={cross}
+                    setState={setCross}
+                  />
+                </li>
+              </>
+            )}
           </Stack>
-          {pictogram.img.selectedId !== 0 &&
-            pictogram.img.settings.color &&
-            pictogram.img.settings.skin && (
-              <li>
-                <SettingCard setting="skin" state={skin} setState={setSkin} />
-              </li>
-            )}
-          {pictogram.img.selectedId !== 0 &&
-            pictogram.img.settings.hair &&
-            pictogram.img.settings.color && (
-              <li>
-                <SettingCard setting="hair" state={hair} setState={setHair} />
-              </li>
-            )}
-          <li>
-            <SettingCardBoolean
-              setting="corss"
-              state={cross}
-              setState={setCross}
-            />
-          </li>
+          {search.color && search.skin && (
+            <li>
+              <SettingCard setting="skin" state={skin} setState={setSkin} />
+            </li>
+          )}
+          {search.color && search.hair && (
+            <li>
+              <SettingCard setting="hair" state={hair} setState={setHair} />
+            </li>
+          )}
           <li>
             <SettingCardBorder
               border="borderIn"

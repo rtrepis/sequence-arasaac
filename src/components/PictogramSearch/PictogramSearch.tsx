@@ -15,6 +15,7 @@ import messages from "./PictogramSearch.lang";
 import { useAppSelector } from "../../app/hooks";
 import React from "react";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
+import { Hair, Skin } from "/src/types/sequence";
 
 interface PropsPictogramSearch {
   indexPict: number;
@@ -25,6 +26,9 @@ interface PropsPictogramSearch {
   };
   setState: React.Dispatch<
     React.SetStateAction<{
+      color: boolean | undefined;
+      hair: Hair | undefined;
+      skin: Skin | undefined;
       selectedId: number;
       fitzgerald: string | undefined;
       url: string | undefined;
@@ -68,6 +72,9 @@ const PictogramSearch = ({
       : "#999999";
 
     setState({
+      color: pictApiAraSettings?.color,
+      hair: pictApiAraSettings?.hair,
+      skin: pictApiAraSettings?.skin,
       selectedId: upDatePictNumber,
       fitzgerald: fitzgerald,
       url: undefined,
@@ -91,7 +98,14 @@ const PictogramSearch = ({
     if (file) {
       const imageURL = URL.createObjectURL(file);
 
-      setState({ selectedId: 0, fitzgerald: undefined, url: imageURL });
+      setState({
+        selectedId: 0,
+        fitzgerald: undefined,
+        url: imageURL,
+        color: undefined,
+        hair: undefined,
+        skin: undefined,
+      });
     }
   };
 

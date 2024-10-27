@@ -15,7 +15,7 @@ export const cardTitle: SxProps = {
 
 export const cardContent: SxProps = {
   marginBlockStart: { xs: 0.1 },
-  paddingInlineStart: 1,
+  //paddingInlineStart: 1,
   flexWrap: { xs: "wrap", sm: "nowrap" },
   ".MuiButtonBase-root": { marginInLine: 1 },
 };
