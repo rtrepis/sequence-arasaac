@@ -23,12 +23,14 @@ interface SettingCardProps {
   state: string | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setState: React.Dispatch<React.SetStateAction<any>>;
+  applyAll?: boolean;
 }
 
 const SettingCard = ({
   setting,
   setState,
   state,
+  applyAll = false,
 }: SettingCardProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -102,7 +104,7 @@ const SettingCard = ({
         ))}
       </StyledToggleButtonGroup>
 
-      {state && (
+      {applyAll && state && (
         <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
       )}
     </Stack>
