@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import React from "react";
@@ -14,26 +14,17 @@ const ToggleButtonEditViewPages = ({
     <>
       {pageTitle === "edit" && (
         <Link to={"../view-sequence"}>
-          <Button
-            aria-label={"view"}
-            variant="text"
-            color="secondary"
-            sx={{ fontSize: "2rem" }}
-          >
+          <IconButton aria-label={"view"} color="secondary">
             <AiOutlineEye />
-          </Button>
+          </IconButton>
         </Link>
       )}
+
       {pageTitle === "view" && (
         <Link to={"../create-sequence"}>
-          <Button
-            aria-label={"edit"}
-            variant="text"
-            color="secondary"
-            sx={{ fontSize: "2rem" }}
-          >
+          <IconButton aria-label={"edit"} color="secondary">
             <AiOutlineEdit />
-          </Button>
+          </IconButton>
         </Link>
       )}
     </>

@@ -1,0 +1,64 @@
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import { AiOutlineCloudUpload } from "react-icons/ai";
+import { IconButton } from "@mui/material";
+import { ChangeEvent } from "react";
+import { useAppDispatch } from "/src/app/hooks";
+import { addSequenceActionCreator } from "/src/app/slice/sequenceSlice";
+import { updateDefaultSettingsActionCreator } from "/src/app/slice/uiSlice";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
+
+const ButtonWithFileLoad = (): React.ReactElement => {
+  const dispatch = useAppDispatch();
+
+  const loadFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const parsedJson = JSON.parse(e.target?.result as string);
+
+            if ("sequence" in parsedJson)
+              dispatch(addSequenceActionCreator(parsedJson.sequence));
+
+            if ("defaultSettings" in parsedJson)
+              dispatch(
+                updateDefaultSettingsActionCreator(parsedJson.defaultSettings),
+              );
+          } catch (error) {
+            console.error(error);
+          }
+        };
+        reader.readAsText(file);
+      }
+    }
+  };
+
+  return (
+    <IconButton color="secondary" component="label">
+      <AiOutlineCloudUpload />
+      <VisuallyHiddenInput
+        type="file"
+        onChange={loadFile}
+        accept="text/plain,.saac,.json"
+      />
+    </IconButton>
+  );
+};
+
+export default ButtonWithFileLoad;

@@ -13,6 +13,8 @@ import MagicSearch from "../MagicSearch/MagicSearch";
 import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
 import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
 import React from "react";
+import ButtonWithModalDownload from "../ButtonWithModalDownload/ButtonWithModalDownload";
+import ButtonWithFileLoad from "../ButtonWithFileLoad/ButtonWithFileLoad";
 
 interface BarProps {
   children: React.ReactElement;
@@ -60,11 +62,17 @@ const BarNavigation = ({ children, title }: BarProps): React.ReactElement => {
                     variant={"h6"}
                     component="h2"
                     sx={{ color: "white" }}
+                    fontFamily={"SF.NS"}
                   >
                     {title && <FormattedMessage {...messages[title]} />}
                   </Typography>
+
                   <Stack direction={"row"}>
                     {title && <ToggleButtonEditViewPages pageTitle={title} />}
+
+                    <ButtonWithModalDownload />
+                    <ButtonWithFileLoad />
+
                     {!title && (
                       <Stack
                         display={{ xs: "none", lg: "flex" }}

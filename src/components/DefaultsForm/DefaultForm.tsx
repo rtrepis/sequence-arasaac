@@ -15,7 +15,7 @@ import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingC
 import React from "react";
 
 interface DefaultFormProps {
-  submit: boolean;
+  submit: boolean | "save";
 }
 
 const DefaultForm = ({ submit }: DefaultFormProps) => {
@@ -105,6 +105,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
 
   useEffect(() => {
     if (!submit) handlerSubmit();
+    if (submit === "save") handlerSubmit();
   }, [submit, handlerSubmit]);
 
   return (
