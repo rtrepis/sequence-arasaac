@@ -49,8 +49,6 @@ const ButtonWithModalDownload = (): React.ReactElement => {
 
   const onSaveFile = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-
-    console.log(event);
     const isoString = new Date().toISOString();
 
     const fileElement = document.createElement("a");
@@ -87,10 +85,7 @@ const ButtonWithModalDownload = (): React.ReactElement => {
           <FormHelperText>Save you sequence and load it later</FormHelperText>
         </DialogTitle>
         <DialogContent>
-          <form
-            name="download-form"
-            onSubmit={(e) => console.log("formsubmit", e)}
-          >
+          <form name="download-form">
             <FormGroup>
               {sequence.length > 0 && (
                 <FormControlLabel

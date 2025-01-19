@@ -72,8 +72,6 @@ const useAraSaac = () => {
         const findSettings: PictApiAraSettings =
           await makeSettingsProperty(data);
 
-        console.log(findSettings);
-
         dispatch(
           settingsPictApiAraActionCreator({
             indexSequence: indexSequence,
