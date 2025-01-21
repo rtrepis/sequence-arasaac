@@ -40,7 +40,7 @@ const BarNavigation = ({ children, title }: BarProps): React.ReactElement => {
                   }}
                 >
                   <img
-                    src="../favicon.png"
+                    src="/favicon.png"
                     alt="logo"
                     height={25}
                     width={34.16}

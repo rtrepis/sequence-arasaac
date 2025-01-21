@@ -22,7 +22,7 @@ const CopyRightSpeedDial = (): React.ReactElement => {
       >
         <SpeedDialAction
           key={"arasaac"}
-          icon={<img src="../img/arasaac/ara-saac-logo.svg" alt="araSaac" />}
+          icon={<img src="/img/arasaac/ara-saac-logo.svg" alt="araSaac" />}
           tooltipTitle={intl.formatMessage(messages.license)}
           onClick={() =>
             window.location.replace("https://www.arasaac.org/terms-of-use")
@@ -37,7 +37,7 @@ const CopyRightSpeedDial = (): React.ReactElement => {
         />
         <SpeedDialAction
           key={"SeqSaac"}
-          icon={<img src="../img/logo.svg" alt="SeqSaac" height={20} />}
+          icon={<img src="/img/logo.svg" alt="SeqSaac" height={20} />}
           tooltipTitle={intl.formatMessage(messages.auth)}
           tooltipOpen
           sx={{
