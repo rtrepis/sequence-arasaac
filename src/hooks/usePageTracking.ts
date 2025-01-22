@@ -1,13 +1,18 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+type GTagConfig = {
+  page_path?: string;
+  page_location?: string;
+  [key: string]: string | undefined;
+};
+
+type GTagCommand = "config" | "event" | "js" | "set";
 
 declare global {
   interface Window {
-    gtag: (
-      command: 'config' | 'event',
-      targetId: string,
-      config?: Record<string, any>
-    ) => void;
+    dataLayer: Array<Record<string, unknown>>;
+    gtag: (command: GTagCommand, targetId: string, config?: GTagConfig) => void;
   }
 }
 
@@ -15,9 +20,16 @@ export const usePageTracking = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('config', import.meta.env.VITE_GOOGLE_ANALYTICS_ID, {
-        page_path: location.pathname + location.search
+    const measurementId = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
+    if (!measurementId) {
+      console.warn("Google Analytics Measurement ID is not defined");
+      return;
+    }
+
+    if (typeof window.gtag !== "undefined") {
+      window.gtag("config", measurementId, {
+        page_path: location.pathname + location.search,
+        page_location: window.location.href,
       });
     }
   }, [location]);
