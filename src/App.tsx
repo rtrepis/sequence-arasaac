@@ -11,8 +11,10 @@ import { useEffect } from "react";
 import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
 import React from "react";
+import { usePageTracking } from "./hooks/usePageTracking";
 
 const App = ({ locale }: { locale: string }): React.ReactElement => {
+  usePageTracking();
   const dispatch = useDispatch();
 
   const messageLocale = {
