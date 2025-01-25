@@ -11,7 +11,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
 import { Container } from "@mui/system";
 import DefaultForm from "../../components/DefaultsForm/DefaultForm";
-import { Stack } from "@mui/material";
+import { Stack, Tooltip } from "@mui/material";
 import React from "react";
 
 const Transition = forwardRef(function Transition(
@@ -38,14 +38,16 @@ const DefaultSettingsModal = (): React.ReactElement => {
 
   return (
     <>
-      <IconButton
-        color="secondary"
-        component="label"
-        aria-label={`${intl.formatMessage({ ...messages.settings })}`}
-        onClick={handleClickOpen}
-      >
-        <AiOutlineSetting />
-      </IconButton>
+      <Tooltip title={intl.formatMessage(messages.settings)}>
+        <IconButton
+          color="secondary"
+          component="label"
+          aria-label={`${intl.formatMessage({ ...messages.settings })}`}
+          onClick={handleClickOpen}
+        >
+          <AiOutlineSetting />
+        </IconButton>
+      </Tooltip>
       <Dialog
         fullScreen
         open={open}

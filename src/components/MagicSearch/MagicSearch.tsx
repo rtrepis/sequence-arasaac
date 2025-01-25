@@ -8,9 +8,10 @@ import React from "react";
 
 interface MagicSearchProps {
   variant?: "navBar";
+  info: { value: boolean; setInfoValue?: (value: boolean) => void };
 }
 
-const MagicSearch = ({ variant }: MagicSearchProps): React.ReactElement => {
+const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
   const intl = useIntl();
   const { getSearchPictogram } = useAraSaac();
 
@@ -55,31 +56,35 @@ const MagicSearch = ({ variant }: MagicSearchProps): React.ReactElement => {
   };
 
   return (
-    <form onSubmit={SubmitMagicEngine}>
+    <form onSubmit={SubmitMagicEngine} style={{ flexGrow: 1, width: "100%" }}>
       <TextField
         label={intl.formatMessage({ ...messages.field })}
         id={"search"}
         variant="outlined"
         helperText={
-          variant !== "navBar" && intl.formatMessage({ ...messages.helperText })
+          info.value
+            ? intl.formatMessage({ ...messages.helperText })
+            : intl.formatMessage({ ...messages.sample })
         }
         autoComplete={"off"}
         size="small"
         value={phrase}
         onChange={handleChange}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment
-              position="end"
-              component={ButtonBase}
-              onClick={SubmitMagicEngine}
-              aria-label={intl.formatMessage({ ...messages.button })}
-            >
-              <AiOutlineSearch fontSize={"large"} />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment
+                position="end"
+                component={ButtonBase}
+                onClick={SubmitMagicEngine}
+                aria-label={intl.formatMessage({ ...messages.button })}
+              >
+                <AiOutlineSearch fontSize={"large"} />
+              </InputAdornment>
+            ),
+          },
         }}
-        sx={{ minWidth: 300 }}
+        sx={{ width: "100%" }}
       />
     </form>
   );

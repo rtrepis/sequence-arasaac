@@ -12,18 +12,23 @@ import {
   Input,
   InputLabel,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import React, { BaseSyntheticEvent, useState } from "react";
 import { AiOutlineCloudDownload } from "react-icons/ai";
 import { useAppSelector } from "/src/app/hooks";
 import { Sequence } from "/src/types/sequence";
 import { DefaultSettings } from "/src/types/ui";
+import { FormattedMessage, useIntl } from "react-intl";
+import messages from "./ButtonWithModalDonwload.lang";
 
 const ButtonWithModalDownload = (): React.ReactElement => {
   const {
     sequence,
     ui: { defaultSettings },
   } = useAppSelector((state) => state);
+  const intl = useIntl();
+
   const [openModal, setOpenModal] = useState(false);
   const [fileName, setFileName] = useState("");
   const [save, setSave] = useState({
@@ -72,43 +77,56 @@ const ButtonWithModalDownload = (): React.ReactElement => {
 
   return (
     <>
-      <IconButton
-        color="secondary"
-        onClick={onClick}
-        // aria-label={intl.formatMessage({ ...messages.download })}
-      >
-        <AiOutlineCloudDownload />
-      </IconButton>
+      <Tooltip title={intl.formatMessage(messages.download)}>
+        <IconButton
+          color="secondary"
+          onClick={onClick}
+          aria-label={intl.formatMessage(messages.download)}
+        >
+          <AiOutlineCloudDownload />
+        </IconButton>
+      </Tooltip>
+
       <Dialog open={openModal} onClose={() => setOpenModal(false)}>
         <DialogTitle>
-          Save...
-          <FormHelperText>Save you sequence and load it later</FormHelperText>
+          <FormattedMessage {...messages.save} />
+          ...
+          <FormHelperText>
+            <FormattedMessage {...messages.saveHelper} />
+          </FormHelperText>
         </DialogTitle>
+
         <DialogContent>
           <form name="download-form">
             <FormGroup>
               {sequence.length > 0 && (
                 <FormControlLabel
                   control={<Checkbox defaultChecked />}
-                  label={"Sequence"}
+                  label={intl.formatMessage(messages.sequence)}
                   onChange={onChangeCheckbox}
                   name="sequence"
                 />
               )}
+
               <FormControlLabel
                 control={<Checkbox />}
-                label={"Default Settings"}
+                label={intl.formatMessage(messages.defaultSettings)}
                 onChange={onChangeCheckbox}
                 name="defaultSettings"
               />
             </FormGroup>
+
             <FormControl sx={{ marginTop: 2 }}>
-              <InputLabel>FileName</InputLabel>
+              <InputLabel>
+                <FormattedMessage {...messages.filename} />
+              </InputLabel>
               <Input onChange={onChangeFileName} value={fileName} />
             </FormControl>
+
             <Stack marginTop={2} alignItems={"flex-end"}>
               <Button type="submit" onClick={onSaveFile}>
-                Save & Download
+                <FormattedMessage {...messages.save} /> &{" "}
+                <FormattedMessage {...messages.download} />
               </Button>
             </Stack>
           </form>
