@@ -7,19 +7,21 @@ import { useEffect } from "react";
 import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
 import React from "react";
 import LanguageLayout from "./pages/LanguagesLayout/LanguagesLayaut";
+import WelcomeLayout from "./pages/WelcomePage/WelcomeLayout";
 
 import messages_en from "./languages/en.json";
 import messages_es from "./languages/es.json";
 import messages_ca from "./languages/ca.json";
-import WelcomeLayout from "./pages/WelcomePage/WelcomeLayout";
 
 export const messageLocale = {
   ca: messages_ca,
   es: messages_es,
   en: messages_en,
 };
+import { usePageTracking } from "./hooks/usePageTracking";
 
 const App = ({ locale }: { locale: string }): React.ReactElement => {
+  usePageTracking();
   const dispatch = useDispatch();
 
   useEffect(() => {
