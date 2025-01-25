@@ -32,31 +32,31 @@
     "description": "Title Page"
   },
   "components.buttonWithFileLoad.load.label": {
-    "defaultMessage": "Load",
+    "defaultMessage": "Carregar",
     "description": "helper text"
   },
   "components.buttonWithModalDownload.defaultSettings.label": {
-    "defaultMessage": "Default settings",
+    "defaultMessage": "Configuració predeterminada",
     "description": "Type save checkbox"
   },
   "components.buttonWithModalDownload.download.label": {
-    "defaultMessage": "Download",
+    "defaultMessage": "Descarregar",
     "description": "helper text"
   },
   "components.buttonWithModalDownload.filename.label": {
-    "defaultMessage": "File name",
+    "defaultMessage": "Nom del fitxer",
     "description": "Type save checkbox"
   },
   "components.buttonWithModalDownload.save.title": {
-    "defaultMessage": "Save",
+    "defaultMessage": "Desa",
     "description": "Modal tittle"
   },
   "components.buttonWithModalDownload.saveHelper.label": {
-    "defaultMessage": "Save the sequence and/or default settings, and load them later",
+    "defaultMessage": "Desa la seqüència i/o la configuració per defecte, i carrega-les més tard.",
     "description": "Helper save modal"
   },
   "components.buttonWithModalDownload.sequence.label": {
-    "defaultMessage": "Sequence",
+    "defaultMessage": "Seqüència",
     "description": "Type save checkbox"
   },
   "components.copyRight": {
@@ -64,7 +64,7 @@
     "description": "License to use the pictograms"
   },
   "components.copyRightDial.auth.label": {
-    "defaultMessage": "Design & all right reserved: Ramon Trepat & AraSaac. r.trepis@gmail.com",
+    "defaultMessage": "Disseny i drets reservats: Ramon Trepat i AraSaac. seqsaac@gmail.com",
     "description": "Page auth"
   },
   "components.copyRightDial.license.label": {
@@ -76,7 +76,7 @@
     "description": "close Settings Default "
   },
   "components.defaultSettings.download": {
-    "defaultMessage": "Save settings to local file",
+    "defaultMessage": "Desa la configuració en un fitxer local",
     "description": "Save settings to local file"
   },
   "components.defaultSettings.pictGuide": {
@@ -88,7 +88,7 @@
     "description": "Settings Default "
   },
   "components.defaultSettings.upload": {
-    "defaultMessage": "Load settings from local file",
+    "defaultMessage": "Carrega la configuració des d'un fitxer local",
     "description": "Load settings from local file"
   },
   "components.magicSearch.button.": {
@@ -104,7 +104,7 @@
     "description": "label text field"
   },
   "components.magicSearch.sample.": {
-    "defaultMessage": "Example: boy, put, seat belt.",
+    "defaultMessage": "Exemple: Nen, posa, el cinturó de seguretat.",
     "description": "Helper text field"
   },
   "components.pictEdit.close": {
@@ -132,11 +132,11 @@
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.Subtract.label": {
-    "defaultMessage": "Subtract pictogram empty",
+    "defaultMessage": "Treure pictograma",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Add pictogram empty",
+    "defaultMessage": "Afegir pictograma buit",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
@@ -144,7 +144,7 @@
     "description": "Helper text amount pictograms"
   },
   "components.pictogramAmount.info": {
-    "defaultMessage": "View more info",
+    "defaultMessage": "Veure més informació",
     "description": "Toggle view or not more info"
   },
   "components.pictogramCard.pictogram": {
