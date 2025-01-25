@@ -14,16 +14,24 @@ import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import messages from "./PictogramSearch.lang";
 import { useAppSelector } from "../../app/hooks";
 import React from "react";
+import { MdOutlineDriveFolderUpload } from "react-icons/md";
+import { Hair, Skin } from "/src/types/sequence";
+
 interface PropsPictogramSearch {
   indexPict: number;
   state: {
     selectedId: number;
     fitzgerald: string | undefined;
+    url: string | undefined;
   };
   setState: React.Dispatch<
     React.SetStateAction<{
+      color: boolean | undefined;
+      hair: Hair | undefined;
+      skin: Skin | undefined;
       selectedId: number;
       fitzgerald: string | undefined;
+      url: string | undefined;
     }>
   >;
 }
@@ -37,6 +45,7 @@ const PictogramSearch = ({
     settings: { skin, hair },
     searched: { word, bestIdPicts },
   } = useAppSelector((state) => state.sequence[indexPict].img);
+
   const intl = useIntl();
   const {
     getSearchPictogram,
@@ -63,8 +72,12 @@ const PictogramSearch = ({
       : "#999999";
 
     setState({
+      color: pictApiAraSettings?.color,
+      hair: pictApiAraSettings?.hair,
+      skin: pictApiAraSettings?.skin,
       selectedId: upDatePictNumber,
       fitzgerald: fitzgerald,
+      url: undefined,
     });
   };
 
@@ -78,6 +91,22 @@ const PictogramSearch = ({
   const handelPlusAction = async (plus: boolean) => {
     await getSearchPictogram(newWord, indexPict, true, plus);
     setIsPlus(!isPlus);
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+
+      setState({
+        selectedId: 0,
+        fitzgerald: undefined,
+        url: imageURL,
+        color: undefined,
+        hair: undefined,
+        skin: undefined,
+      });
+    }
   };
 
   const [isAlert, setIsAlert] = useState(false);
@@ -138,7 +167,7 @@ const PictogramSearch = ({
               />
             </ToggleButton>
           ))}
-        {!isPlus && bestIdPicts.length > 0 && (
+        {!isPlus && bestIdPicts.length > 0 && bestIdPicts[0] !== 0 && (
           <ToggleButton
             value={"plus"}
             aria-label={`${intl.formatMessage({
@@ -157,6 +186,7 @@ const PictogramSearch = ({
             />
           </ToggleButton>
         )}
+
         {isPlus && (
           <ToggleButton
             value={"minus"}
@@ -177,6 +207,27 @@ const PictogramSearch = ({
             />
           </ToggleButton>
         )}
+
+        <ToggleButton
+          value={"plus"}
+          aria-label={`${intl.formatMessage({
+            ...messages.plus,
+          })}`}
+          key={"upload"}
+          onClick={() => {
+            const imageUpload = document.getElementById("select-image");
+            if (imageUpload) imageUpload.click();
+          }}
+        >
+          <MdOutlineDriveFolderUpload size={80} />
+          <input
+            id="select-image"
+            type="file"
+            onChange={handleImageChange}
+            accept="image/*"
+            hidden
+          />
+        </ToggleButton>
       </StyledToggleButtonGroup>
       {isAlert && (
         <Alert severity="info">

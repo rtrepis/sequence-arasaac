@@ -178,7 +178,6 @@ const ViewSequencesSettings = ({
     displayFullScreen,
     isLandscape,
     maxDisplay,
-    printWH,
     setScale,
     sizePage,
     setDisplayFullScreen,

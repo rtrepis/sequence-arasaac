@@ -16,7 +16,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "types": ["jest", "@testing-library/jest-dom", "vite/client"]
+    "types": ["jest", "@testing-library/jest-dom", "vite/client"],
+    "paths": {
+      "/*": ["./*", "./public/*"]
+    }
   },
   "include": ["src", ".private/mocks"],
   "exclude": [

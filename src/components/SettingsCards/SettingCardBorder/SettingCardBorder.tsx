@@ -11,6 +11,7 @@ import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import { Border } from "../../../types/sequence";
 import {
   card,
+  cardAction,
   cardColor,
   cardContent,
   cardTitle,
@@ -20,19 +21,28 @@ import { messages } from "./SettingCardBorder.lang";
 import { useState } from "react";
 import InputColor from "../InputColor/InputColor";
 import React from "react";
+import ApplyAll from "../ApplyAll/ApplyAll";
+import { useAppDispatch } from "/src/app/hooks";
+import {
+  borderInApplyAllActionCreator,
+  borderOutApplyAllActionCreator,
+} from "/src/app/slice/sequenceSlice";
 
 interface SettingCardBorderProps {
   border: "borderIn" | "borderOut";
   state: Border;
   setState: React.Dispatch<React.SetStateAction<Border>>;
   indexPict?: number;
+  applyAll?: boolean;
 }
 
 const SettingCardBorder = ({
   border,
   state: { color, size, radius },
   setState,
+  applyAll = false,
 }: SettingCardBorderProps): React.ReactElement => {
+  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const [colorSelect, setColorSelect] = useState(color);
@@ -72,7 +82,7 @@ const SettingCardBorder = ({
     toUpDateSize?: boolean,
   ) => {
     const newBorder: Border = {
-      color: toUpdateColor ? toUpdateColor : colorSelect,
+      color: toUpdateColor ?? colorSelect,
       radius: toUpDateSize ? 0 : radius === 0 ? 20 : radius,
       size: toUpDateSize ? 0 : size === 0 ? 2 : size,
     };
@@ -80,19 +90,31 @@ const SettingCardBorder = ({
     setState(newBorder);
   };
 
-  return (
-    <>
-      <Stack
-        display={"flex"}
-        direction={"row"}
-        flexWrap={"wrap"}
-        columnGap={2}
-        sx={card}
-      >
-        <Typography variant="body1" sx={cardTitle} component="h4">
-          <FormattedMessage {...messages[border]} />
-        </Typography>
+  const handlerApplyAll = (border: "borderIn" | "borderOut") => {
+    if (border === "borderIn")
+      dispatch(
+        borderInApplyAllActionCreator({ borderIn: { color, radius, size } }),
+      );
 
+    if (border === "borderOut")
+      dispatch(
+        borderOutApplyAllActionCreator({ borderOut: { color, radius, size } }),
+      );
+  };
+
+  return (
+    <Stack
+      display={"felx"}
+      direction={"row"}
+      flexWrap={"wrap"}
+      columnGap={2}
+      sx={card}
+    >
+      <Typography variant="body1" sx={cardTitle} component="h4">
+        <FormattedMessage {...messages[border]} />
+      </Typography>
+
+      <Stack display={"flex"} direction={"row"} flexWrap={"wrap"} columnGap={2}>
         <StyledToggleButtonGroup
           exclusive
           aria-label={`${intl.formatMessage(messages[border])}`}
@@ -172,8 +194,11 @@ const SettingCardBorder = ({
           />
         </Stack>
       </Stack>
-    </>
+
+      {applyAll && (
+        <ApplyAll sx={cardAction} onClick={() => handlerApplyAll(border)} />
+      )}
+    </Stack>
   );
 };
-
 export default SettingCardBorder;

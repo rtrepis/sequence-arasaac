@@ -1,12 +1,12 @@
 {
   "name": "sequence-arasaac",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "type": "module",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@mui/material": "^5.13.7",
+    "@mui/material": "^6.4.1",
     "@reduxjs/toolkit": "^1.9.3",
     "openai": "^4.67.1",
     "react": "^18.2.0",
@@ -21,6 +21,7 @@
     "start": "vite",
     "build": "vite build",
     "serve": "vite preview",
+    "lint": "eslint ./src",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "test-coverage": "react-scripts test --coverage --watchAll=false  --passWithNoTests",
