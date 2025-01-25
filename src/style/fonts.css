@@ -1,4 +1,5 @@
 /*  50 most use In google */
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Abel:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Abril+Fatface:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Anton:wght@400;700&display=swap");
@@ -103,6 +104,7 @@
 /*  Custom fonts */
 @import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap");
 
+/* Local font declarations */
 @font-face {
   font-family: "Escolar";
   font-style: normal;
