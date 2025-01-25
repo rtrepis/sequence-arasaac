@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid2 } from "@mui/material";
 import { PictSequence, Sequence } from "../../types/sequence";
 import PictEditModal from "../PictEditModal/PictEditModal";
 import { useState } from "react";
@@ -19,11 +19,9 @@ const PictEditModalList = ({
   const [copyPictogram, setPictogram] = useState(initialCopyPictogram);
 
   return (
-    <Grid container sx={{ marginBlockStart: 2 }}>
+    <Grid2 container marginTop={0}>
       {sequence.map((pictogram) => (
-        <Grid
-          item
-          xs={false}
+        <Grid2
           display={"flex"}
           justifyContent={"flex-start"}
           alignItems={"start"}
@@ -36,9 +34,9 @@ const PictEditModalList = ({
             }
             setCopy={setPictogram}
           />
-        </Grid>
+        </Grid2>
       ))}
-    </Grid>
+    </Grid2>
   );
 };
 

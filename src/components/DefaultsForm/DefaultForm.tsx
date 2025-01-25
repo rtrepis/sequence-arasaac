@@ -86,6 +86,10 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
 
     dispatch(updateDefaultSettingsActionCreator(newDefaultSettings));
 
+    sessionStorage.setItem(
+      "pictDefaultSettings",
+      JSON.stringify(newDefaultSettings),
+    );
     localStorage.setItem(
       "pictDefaultSettings",
       JSON.stringify(newDefaultSettings),

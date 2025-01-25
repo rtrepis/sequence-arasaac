@@ -1,11 +1,13 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { ChangeEvent } from "react";
 import { useAppDispatch } from "/src/app/hooks";
 import { addSequenceActionCreator } from "/src/app/slice/sequenceSlice";
 import { updateDefaultSettingsActionCreator } from "/src/app/slice/uiSlice";
+import { useIntl } from "react-intl";
+import messages from "./ButtonWithFileLoad.lang";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -20,6 +22,7 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 const ButtonWithFileLoad = (): React.ReactElement => {
+  const intl = useIntl();
   const dispatch = useAppDispatch();
 
   const loadFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -50,14 +53,16 @@ const ButtonWithFileLoad = (): React.ReactElement => {
   };
 
   return (
-    <IconButton color="secondary" component="label">
-      <AiOutlineCloudUpload />
-      <VisuallyHiddenInput
-        type="file"
-        onChange={loadFile}
-        accept="text/plain,.saac,.json"
-      />
-    </IconButton>
+    <Tooltip title={intl.formatMessage(messages.load)}>
+      <IconButton color="secondary" component="label">
+        <AiOutlineCloudUpload />
+        <VisuallyHiddenInput
+          type="file"
+          onChange={loadFile}
+          accept="text/plain,.saac,application/json"
+        />
+      </IconButton>
+    </Tooltip>
   );
 };
 
