@@ -32,31 +32,31 @@
     "description": "Title Page"
   },
   "components.buttonWithFileLoad.load.label": {
-    "defaultMessage": "Load",
+    "defaultMessage": "Cargar",
     "description": "helper text"
   },
   "components.buttonWithModalDownload.defaultSettings.label": {
-    "defaultMessage": "Default settings",
+    "defaultMessage": "Configuración por defecto",
     "description": "Type save checkbox"
   },
   "components.buttonWithModalDownload.download.label": {
-    "defaultMessage": "Download",
+    "defaultMessage": "Descargar",
     "description": "helper text"
   },
   "components.buttonWithModalDownload.filename.label": {
-    "defaultMessage": "File name",
+    "defaultMessage": "Nombre del archivo",
     "description": "Type save checkbox"
   },
   "components.buttonWithModalDownload.save.title": {
-    "defaultMessage": "Save",
+    "defaultMessage": "Guardar",
     "description": "Modal tittle"
   },
   "components.buttonWithModalDownload.saveHelper.label": {
-    "defaultMessage": "Save the sequence and/or default settings, and load them later",
+    "defaultMessage": "Guardar la secuencia y/o configuración predeterminada, y cargarlos más adelante",
     "description": "Helper save modal"
   },
   "components.buttonWithModalDownload.sequence.label": {
-    "defaultMessage": "Sequence",
+    "defaultMessage": "Secuencia",
     "description": "Type save checkbox"
   },
   "components.copyRight": {
@@ -64,7 +64,7 @@
     "description": "License to use the pictograms"
   },
   "components.copyRightDial.auth.label": {
-    "defaultMessage": "Design & all right reserved: Ramon Trepat & AraSaac. r.trepis@gmail.com",
+    "defaultMessage": "Diseño y todos los derechos reservados: Ramon Trepat & AraSaac. seqsaac@gmail.com",
     "description": "Page auth"
   },
   "components.copyRightDial.license.label": {
@@ -76,7 +76,7 @@
     "description": "close Settings Default "
   },
   "components.defaultSettings.download": {
-    "defaultMessage": "Save settings to local file",
+    "defaultMessage": "Guardar configuración en archivo local",
     "description": "Save settings to local file"
   },
   "components.defaultSettings.pictGuide": {
@@ -88,7 +88,7 @@
     "description": "Settings Default "
   },
   "components.defaultSettings.upload": {
-    "defaultMessage": "Load settings from local file",
+    "defaultMessage": "Cargar configuración desde archivo local",
     "description": "Load settings from local file"
   },
   "components.magicSearch.button.": {
@@ -104,7 +104,7 @@
     "description": "label text field"
   },
   "components.magicSearch.sample.": {
-    "defaultMessage": "Example: boy, put, seat belt.",
+    "defaultMessage": "Ejemplo: niño, poner, cinturón de seguridad.",
     "description": "Helper text field"
   },
   "components.pictEdit.close": {
@@ -132,11 +132,11 @@
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.Subtract.label": {
-    "defaultMessage": "Subtract pictogram empty",
+    "defaultMessage": "Restar pictograma",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Add pictogram empty",
+    "defaultMessage": "Añadir pictograma vacío",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
@@ -144,7 +144,7 @@
     "description": "Helper text amount pictograms"
   },
   "components.pictogramAmount.info": {
-    "defaultMessage": "View more info",
+    "defaultMessage": "Ver más información",
     "description": "Toggle view or not more info"
   },
   "components.pictogramCard.pictogram": {
