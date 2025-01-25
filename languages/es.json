@@ -31,12 +31,40 @@
     "defaultMessage": "Bienvenido",
     "description": "Title Page"
   },
+  "components.buttonWithFileLoad.load.label": {
+    "defaultMessage": "Load",
+    "description": "helper text"
+  },
+  "components.buttonWithModalDownload.defaultSettings.label": {
+    "defaultMessage": "Default settings",
+    "description": "Type save checkbox"
+  },
+  "components.buttonWithModalDownload.download.label": {
+    "defaultMessage": "Download",
+    "description": "helper text"
+  },
+  "components.buttonWithModalDownload.filename.label": {
+    "defaultMessage": "File name",
+    "description": "Type save checkbox"
+  },
+  "components.buttonWithModalDownload.save.title": {
+    "defaultMessage": "Save",
+    "description": "Modal tittle"
+  },
+  "components.buttonWithModalDownload.saveHelper.label": {
+    "defaultMessage": "Save the sequence and/or default settings, and load them later",
+    "description": "Helper save modal"
+  },
+  "components.buttonWithModalDownload.sequence.label": {
+    "defaultMessage": "Sequence",
+    "description": "Type save checkbox"
+  },
   "components.copyRight": {
     "defaultMessage": "Hecho con: SequenciAAC - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
   },
   "components.copyRightDial.auth.label": {
-    "defaultMessage": "Diseño y todos los derechos reservados: Ramon Trepat & ARASAAC. seqsaac@gmail.com",
+    "defaultMessage": "Design & all right reserved: Ramon Trepat & AraSaac. r.trepis@gmail.com",
     "description": "Page auth"
   },
   "components.copyRightDial.license.label": {
@@ -47,6 +75,10 @@
     "defaultMessage": "cerrar",
     "description": "close Settings Default "
   },
+  "components.defaultSettings.download": {
+    "defaultMessage": "Save settings to local file",
+    "description": "Save settings to local file"
+  },
   "components.defaultSettings.pictGuide": {
     "defaultMessage": "Pictograma de guía",
     "description": "Pictogram pictogram for default settings"
@@ -54,6 +86,10 @@
   "components.defaultSettings.settings.title": {
     "defaultMessage": "Configuraciones por defecto",
     "description": "Settings Default "
+  },
+  "components.defaultSettings.upload": {
+    "defaultMessage": "Load settings from local file",
+    "description": "Load settings from local file"
   },
   "components.magicSearch.button.": {
     "defaultMessage": "A buscar",
@@ -66,6 +102,10 @@
   "components.magicSearch.label": {
     "defaultMessage": "Búsqueda Mágica",
     "description": "label text field"
+  },
+  "components.magicSearch.sample.": {
+    "defaultMessage": "Example: boy, put, seat belt.",
+    "description": "Helper text field"
   },
   "components.pictEdit.close": {
     "defaultMessage": "Cerrar",
@@ -92,16 +132,20 @@
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.Subtract.label": {
-    "defaultMessage": "Restar pictograma",
+    "defaultMessage": "Subtract pictogram empty",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Añadir pictograma",
+    "defaultMessage": "Add pictogram empty",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
     "defaultMessage": "Insertar o extraer un pictograma al final de la secuencia. Encontrará más funciones con el botón derecho del ratón o pulsación larga en móviles.",
     "description": "Helper text amount pictograms"
+  },
+  "components.pictogramAmount.info": {
+    "defaultMessage": "View more info",
+    "description": "Toggle view or not more info"
   },
   "components.pictogramCard.pictogram": {
     "defaultMessage": "Imagen de pictograma",
@@ -182,6 +226,14 @@
   "components.settingCardBorder.withoutBorder.label": {
     "defaultMessage": "Sin marco",
     "description": "type setting "
+  },
+  "components.toggleButtonEditViewPages.edit.title": {
+    "defaultMessage": "Editar",
+    "description": "Title Page"
+  },
+  "components.toggleButtonEditViewPages.view.title": {
+    "defaultMessage": "Vista",
+    "description": "Title Page"
   },
   "pages.viewSequence.authSequence.helperText": {
     "defaultMessage": "Marcar autoría",
@@ -304,7 +356,7 @@
     "description": "Type of setting text position"
   },
   "view.welcome.arcadeLink": {
-    "defaultMessage": "https://app.arcade.software/share/oTarQPTesgFaBcLzXTFd"
+    "defaultMessage": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
   },
   "view.welcome.learning": {
     "defaultMessage": "Aprendiendo a utilizar...",
