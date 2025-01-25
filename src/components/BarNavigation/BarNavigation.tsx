@@ -7,40 +7,44 @@ import { FormattedMessage } from "react-intl";
 import messages from "./BarNavigation.lang";
 import { Box, Stack } from "@mui/material";
 import NotPrint from "../utils/NotPrint/NotPrint";
-import ToggleButtonEditViewPages from "../ToggleButtonEditViewPages/ToggleButtonEditViewPages";
-import PictogramAmount from "../PictogramAmount/PictogramAmount";
-import MagicSearch from "../MagicSearch/MagicSearch";
 import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
 import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
 import React from "react";
 import ButtonWithModalDownload from "../ButtonWithModalDownload/ButtonWithModalDownload";
 import ButtonWithFileLoad from "../ButtonWithFileLoad/ButtonWithFileLoad";
+import TabsEditView from "../TabsEditView/TabsEditView";
 
 interface BarProps {
   children: React.ReactElement;
-  title?: "view" | "edit" | "welcome";
 }
 
-const BarNavigation = ({ children, title }: BarProps): React.ReactElement => {
+const BarNavigation = ({ children }: BarProps): React.ReactElement => {
   return (
     <>
       <NotPrint>
         <HideOnScroll {...children}>
-          <AppBar elevation={1}>
+          <AppBar elevation={1} sx={{ height: "42px" }}>
             <Toolbar
+              style={{ minHeight: "50px" }}
               sx={{
                 fontSize: "1.75rem",
                 justifyContent: "space-between",
+                minHeight: "50px",
               }}
             >
-              <Stack direction={"row"} spacing={2}>
+              <Stack
+                direction={"row"}
+                spacing={2}
+                alignItems={"center"}
+                height={"50px"}
+              >
                 <Box
                   sx={{
                     display: { xs: "block", sm: "block", md: "block" },
                   }}
                 >
                   <img
-                    src="../favicon.png"
+                    src="/favicon.png"
                     alt="logo"
                     height={25}
                     width={34.16}
@@ -50,51 +54,28 @@ const BarNavigation = ({ children, title }: BarProps): React.ReactElement => {
                   variant={"h5"}
                   component="h1"
                   fontWeight={800}
-                  sx={{ display: { xs: "none", sm: "block", color: "white" } }}
+                  sx={{
+                    display: { xs: "none", sm: "block", color: "whitesmoke" },
+                    lineHeight: 0,
+                  }}
                 >
                   <FormattedMessage {...messages.title} />
                 </Typography>
+                <TabsEditView />
               </Stack>
 
-              {title !== "welcome" && (
-                <>
-                  <Typography
-                    variant={"h6"}
-                    component="h2"
-                    sx={{ color: "white" }}
-                    fontFamily={"SF.NS"}
-                  >
-                    {title && <FormattedMessage {...messages[title]} />}
-                  </Typography>
-
-                  <Stack direction={"row"}>
-                    {title && <ToggleButtonEditViewPages pageTitle={title} />}
-
-                    <ButtonWithModalDownload />
-                    <ButtonWithFileLoad />
-
-                    {!title && (
-                      <Stack
-                        display={{ xs: "none", lg: "flex" }}
-                        direction={"row"}
-                      >
-                        <PictogramAmount variant="navBar" />
-                        <MagicSearch variant="navBar" />
-                      </Stack>
-                    )}
-                    <DefaultSettings />
-                  </Stack>
-                </>
-              )}
+              <Stack direction={"row"} alignItems={"center"}>
+                <ButtonWithModalDownload />
+                <ButtonWithFileLoad />
+                <DefaultSettings />
+              </Stack>
             </Toolbar>
           </AppBar>
         </HideOnScroll>
         <Toolbar />
         <CopyRightSpeedDial />
       </NotPrint>
-      <Container maxWidth={"xl"} sx={{ marginTop: 2 }}>
-        {children}
-      </Container>
+      <Container maxWidth={"xl"}>{children}</Container>
     </>
   );
 };

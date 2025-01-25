@@ -12,6 +12,11 @@ const messages = defineMessages({
       "Type the words in the sequence between the commas and press Return or click the magnifying glass when you're done. Example: boy, put, seat belt.",
     description: "Helper text field",
   },
+  sample: {
+    id: "components.magicSearch.sample.",
+    defaultMessage: "Example: boy, put, seat belt.",
+    description: "Helper text field",
+  },
   button: {
     id: "components.magicSearch.button.",
     defaultMessage: "To search",
