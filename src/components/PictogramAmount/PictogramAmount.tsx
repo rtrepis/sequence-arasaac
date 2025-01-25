@@ -4,6 +4,7 @@ import {
   FormLabel,
   IconButton,
   Input,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import {
@@ -11,6 +12,7 @@ import {
   subtractLastPictActionCreator,
 } from "../../app/slice/sequenceSlice";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
+import { BsInfoCircle } from "react-icons/bs";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -20,10 +22,12 @@ import React from "react";
 
 interface PictogramAmountProps {
   variant?: "navBar";
+  info: { value: boolean; toggleValue?: () => void };
 }
 
 const PictogramAmount = ({
   variant,
+  info,
 }: PictogramAmountProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -32,13 +36,18 @@ const PictogramAmount = ({
   const amountSequence = useAppSelector((state) => state.sequence.length);
 
   const handleChangesAmount = (operator: number) => {
-    if (operator > 0)
+    if (operator > 0 && amountSequence < 60)
       dispatch(addPictogramActionCreator(pictogramEmpty(amountSequence)));
     if (operator < 0) dispatch(subtractLastPictActionCreator());
   };
 
   return (
-    <FormControl sx={{ minWidth: 240 }}>
+    <FormControl
+      sx={{
+        minWidth: 260,
+        transition: "all 1s ease",
+      }}
+    >
       <Stack direction={"row"} alignItems={"center"}>
         <FormLabel htmlFor="amount">
           <Typography color={variant && "primary.contrastText"}>
@@ -46,14 +55,16 @@ const PictogramAmount = ({
           </Typography>
         </FormLabel>
 
-        <IconButton
-          color={variant ? "secondary" : "primary"}
-          aria-label={intl.formatMessage({ ...messages.add })}
-          onClick={() => handleChangesAmount(-1)}
-          disabled={amountSequence <= 0 ? true : false}
-        >
-          <AiFillMinusCircle />
-        </IconButton>
+        <Tooltip title={intl.formatMessage(messages.subtract)}>
+          <IconButton
+            color={variant ? "primary" : "secondary"}
+            aria-label={intl.formatMessage({ ...messages.subtract })}
+            onClick={() => handleChangesAmount(-1)}
+            disabled={amountSequence <= 0}
+          >
+            <AiFillMinusCircle />
+          </IconButton>
+        </Tooltip>
 
         <Input
           id={"amount"}
@@ -64,18 +75,35 @@ const PictogramAmount = ({
             input: { textAlign: "center" },
           }}
         />
-        <IconButton
-          color={variant ? "secondary" : "primary"}
-          aria-label={intl.formatMessage({
-            ...messages.subtract,
-          })}
-          onClick={() => handleChangesAmount(+1)}
-        >
-          <AiFillPlusCircle />
-        </IconButton>
+
+        <Tooltip title={intl.formatMessage(messages.add)}>
+          <span>
+            <IconButton
+              color={variant ? "primary" : "secondary"}
+              aria-label={intl.formatMessage({
+                ...messages.add,
+              })}
+              disabled={amountSequence > 59}
+              onClick={() => handleChangesAmount(+1)}
+            >
+              <AiFillPlusCircle />
+            </IconButton>
+          </span>
+        </Tooltip>
+
+        <Tooltip title={intl.formatMessage(messages.info)}>
+          <IconButton
+            sx={{ alingSlef: "start" }}
+            onClick={() => info.toggleValue?.()}
+          >
+            <Typography variant="body2" color={"primary"}>
+              <BsInfoCircle />
+            </Typography>
+          </IconButton>
+        </Tooltip>
       </Stack>
 
-      {variant !== "navBar" && (
+      {info.value && (
         <FormHelperText sx={{ margin: "0" }}>
           <FormattedMessage {...messages.helperText} />
         </FormHelperText>
