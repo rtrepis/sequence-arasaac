@@ -47,6 +47,48 @@
       "value": "Benvingut"
     }
   ],
+  "components.buttonWithFileLoad.load.label": [
+    {
+      "type": 0,
+      "value": "Carregar"
+    }
+  ],
+  "components.buttonWithModalDownload.defaultSettings.label": [
+    {
+      "type": 0,
+      "value": "Configuració predeterminada"
+    }
+  ],
+  "components.buttonWithModalDownload.download.label": [
+    {
+      "type": 0,
+      "value": "Descarregar"
+    }
+  ],
+  "components.buttonWithModalDownload.filename.label": [
+    {
+      "type": 0,
+      "value": "Nom del fitxer"
+    }
+  ],
+  "components.buttonWithModalDownload.save.title": [
+    {
+      "type": 0,
+      "value": "Desa"
+    }
+  ],
+  "components.buttonWithModalDownload.saveHelper.label": [
+    {
+      "type": 0,
+      "value": "Desa la seqüència i/o la configuració per defecte, i carrega-les més tard."
+    }
+  ],
+  "components.buttonWithModalDownload.sequence.label": [
+    {
+      "type": 0,
+      "value": "Seqüència"
+    }
+  ],
   "components.copyRight": [
     {
       "type": 0,
@@ -56,7 +98,7 @@
   "components.copyRightDial.auth.label": [
     {
       "type": 0,
-      "value": "Disseny i drets reservats: Ramon Trepat i AraSaac: seqsaac@gmail.com"
+      "value": "Disseny i drets reservats: Ramon Trepat i AraSaac. seqsaac@gmail.com"
     }
   ],
   "components.copyRightDial.license.label": [
@@ -71,6 +113,12 @@
       "value": "tancar"
     }
   ],
+  "components.defaultSettings.download": [
+    {
+      "type": 0,
+      "value": "Desa la configuració en un fitxer local"
+    }
+  ],
   "components.defaultSettings.pictGuide": [
     {
       "type": 0,
@@ -81,6 +129,12 @@
     {
       "type": 0,
       "value": "Configuracions per defecte"
+    }
+  ],
+  "components.defaultSettings.upload": [
+    {
+      "type": 0,
+      "value": "Carrega la configuració des d'un fitxer local"
     }
   ],
   "components.magicSearch.button.": [
@@ -99,6 +153,12 @@
     {
       "type": 0,
       "value": "Cerca màgica"
+    }
+  ],
+  "components.magicSearch.sample.": [
+    {
+      "type": 0,
+      "value": "Exemple: Nen, posa, el cinturó de seguretat."
     }
   ],
   "components.pictEdit.close": [
@@ -140,19 +200,25 @@
   "components.pictogramAmount.Subtract.label": [
     {
       "type": 0,
-      "value": "Restar pictograma"
+      "value": "Treure pictograma"
     }
   ],
   "components.pictogramAmount.add.label": [
     {
       "type": 0,
-      "value": "Afegir pictogrames"
+      "value": "Afegir pictograma buit"
     }
   ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
       "value": "Inseriu o extreu un pictograma al final de la seqüència. Trobareu més funcions amb el botó dret del ratolí o premeu llargament als mòbils."
+    }
+  ],
+  "components.pictogramAmount.info": [
+    {
+      "type": 0,
+      "value": "Veure més informació"
     }
   ],
   "components.pictogramCard.pictogram": [
@@ -236,7 +302,7 @@
   "components.settingCard.corss.title": [
     {
       "type": 0,
-      "value": "Taxat"
+      "value": "Creu/X"
     }
   ],
   "components.settingCard.customText.label": [
@@ -273,6 +339,18 @@
     {
       "type": 0,
       "value": "Sense línia"
+    }
+  ],
+  "components.toggleButtonEditViewPages.edit.title": [
+    {
+      "type": 0,
+      "value": "Editar"
+    }
+  ],
+  "components.toggleButtonEditViewPages.view.title": [
+    {
+      "type": 0,
+      "value": "Vista"
     }
   ],
   "pages.viewSequence.authSequence.helperText": [
@@ -458,7 +536,7 @@
   "view.welcome.arcadeLink": [
     {
       "type": 0,
-      "value": "https://app.arcade.software/share/oTarQPTesgFaBcLzXTFd"
+      "value": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
     }
   ],
   "view.welcome.learning": [
