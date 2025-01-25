@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,7 +11,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
 import { Container } from "@mui/system";
 import DefaultForm from "../../components/DefaultsForm/DefaultForm";
-import { Stack } from "@mui/material";
+import { Stack, Tooltip } from "@mui/material";
 import React from "react";
 
 const Transition = forwardRef(function Transition(
@@ -39,16 +38,16 @@ const DefaultSettingsModal = (): React.ReactElement => {
 
   return (
     <>
-      <Button
-        aria-label={`${intl.formatMessage({ ...messages.settings })}`}
-        variant="text"
-        color="secondary"
-        size="large"
-        onClick={handleClickOpen}
-        sx={{ fontSize: "1.75rem" }}
-      >
-        <AiOutlineSetting />
-      </Button>
+      <Tooltip title={intl.formatMessage(messages.settings)}>
+        <IconButton
+          color="secondary"
+          component="label"
+          aria-label={`${intl.formatMessage({ ...messages.settings })}`}
+          onClick={handleClickOpen}
+        >
+          <AiOutlineSetting />
+        </IconButton>
+      </Tooltip>
       <Dialog
         fullScreen
         open={open}
@@ -63,6 +62,7 @@ const DefaultSettingsModal = (): React.ReactElement => {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               <FormattedMessage {...messages.settings} />
             </Typography>
+
             <IconButton
               edge="start"
               color="secondary"

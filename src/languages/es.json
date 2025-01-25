@@ -47,6 +47,48 @@
       "value": "Bienvenido"
     }
   ],
+  "components.buttonWithFileLoad.load.label": [
+    {
+      "type": 0,
+      "value": "Cargar"
+    }
+  ],
+  "components.buttonWithModalDownload.defaultSettings.label": [
+    {
+      "type": 0,
+      "value": "Configuración por defecto"
+    }
+  ],
+  "components.buttonWithModalDownload.download.label": [
+    {
+      "type": 0,
+      "value": "Descargar"
+    }
+  ],
+  "components.buttonWithModalDownload.filename.label": [
+    {
+      "type": 0,
+      "value": "Nombre del archivo"
+    }
+  ],
+  "components.buttonWithModalDownload.save.title": [
+    {
+      "type": 0,
+      "value": "Guardar"
+    }
+  ],
+  "components.buttonWithModalDownload.saveHelper.label": [
+    {
+      "type": 0,
+      "value": "Guardar la secuencia y/o configuración predeterminada, y cargarlos más adelante"
+    }
+  ],
+  "components.buttonWithModalDownload.sequence.label": [
+    {
+      "type": 0,
+      "value": "Secuencia"
+    }
+  ],
   "components.copyRight": [
     {
       "type": 0,
@@ -56,7 +98,7 @@
   "components.copyRightDial.auth.label": [
     {
       "type": 0,
-      "value": "Diseño y todos los derechos reservados: Ramon Trepat & ARASAAC. seqsaac@gmail.com"
+      "value": "Diseño y todos los derechos reservados: Ramon Trepat & AraSaac. seqsaac@gmail.com"
     }
   ],
   "components.copyRightDial.license.label": [
@@ -71,6 +113,12 @@
       "value": "cerrar"
     }
   ],
+  "components.defaultSettings.download": [
+    {
+      "type": 0,
+      "value": "Guardar configuración en archivo local"
+    }
+  ],
   "components.defaultSettings.pictGuide": [
     {
       "type": 0,
@@ -81,6 +129,12 @@
     {
       "type": 0,
       "value": "Configuraciones por defecto"
+    }
+  ],
+  "components.defaultSettings.upload": [
+    {
+      "type": 0,
+      "value": "Cargar configuración desde archivo local"
     }
   ],
   "components.magicSearch.button.": [
@@ -99,6 +153,12 @@
     {
       "type": 0,
       "value": "Búsqueda Mágica"
+    }
+  ],
+  "components.magicSearch.sample.": [
+    {
+      "type": 0,
+      "value": "Ejemplo: niño, poner, cinturón de seguridad."
     }
   ],
   "components.pictEdit.close": [
@@ -146,13 +206,19 @@
   "components.pictogramAmount.add.label": [
     {
       "type": 0,
-      "value": "Añadir pictograma"
+      "value": "Añadir pictograma vacío"
     }
   ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
       "value": "Insertar o extraer un pictograma al final de la secuencia. Encontrará más funciones con el botón derecho del ratón o pulsación larga en móviles."
+    }
+  ],
+  "components.pictogramAmount.info": [
+    {
+      "type": 0,
+      "value": "Ver más información"
     }
   ],
   "components.pictogramCard.pictogram": [
@@ -273,6 +339,18 @@
     {
       "type": 0,
       "value": "Sin marco"
+    }
+  ],
+  "components.toggleButtonEditViewPages.edit.title": [
+    {
+      "type": 0,
+      "value": "Editar"
+    }
+  ],
+  "components.toggleButtonEditViewPages.view.title": [
+    {
+      "type": 0,
+      "value": "Vista"
     }
   ],
   "pages.viewSequence.authSequence.helperText": [
@@ -458,7 +536,7 @@
   "view.welcome.arcadeLink": [
     {
       "type": 0,
-      "value": "https://app.arcade.software/share/oTarQPTesgFaBcLzXTFd"
+      "value": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
     }
   ],
   "view.welcome.learning": [

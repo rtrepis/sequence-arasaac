@@ -13,6 +13,7 @@ src/languages
 
 # production
 /build
+/dist
 
 # personal code
 /.private

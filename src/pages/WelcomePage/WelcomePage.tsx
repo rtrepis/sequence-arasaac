@@ -30,7 +30,7 @@ const WelcomePage = (): React.ReactElement => {
           flexDirection={{ xs: "column", sm: "row" }}
           gap={2}
         >
-          <img src="../favicon.png" alt="logo" height={50} width={70} />
+          <img src="/favicon.png" alt="logo" height={50} width={70} />
           <Typography component={"h1"} variant={"h3"} fontWeight={800}>
             SequenciAAC
           </Typography>
