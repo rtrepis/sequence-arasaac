@@ -38,7 +38,7 @@ const WelcomePage = (): React.ReactElement => {
         <Typography component="h2" fontWeight={800} textAlign={"center"}>
           <FormattedMessage {...messages.liveMotive} />
         </Typography>
-        <Link to={"../create-sequence"}>
+        <Link to={"create-sequence"}>
           <Button
             variant="contained"
             aria-label={intl.formatMessage(messages.start)}
