@@ -44,11 +44,11 @@ const App = ({ locale }: { locale: string }): React.ReactElement => {
       />
       <Route
         path="create-sequence"
-        element={<Navigate to="/ca/create-sequence" replace />}
+        element={<Navigate to={`../${locale}/create-sequence`} replace />}
       />
       <Route
         path="view-sequence"
-        element={<Navigate to="/ca/view-sequence" replace />}
+        element={<Navigate to={`../${locale}/create-sequence`} replace />}
       />
 
       <Route path=":locale" element={<LanguageLayout localeBrowser={locale} />}>
