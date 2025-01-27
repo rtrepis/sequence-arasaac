@@ -10,7 +10,7 @@ const WelcomeLayout = ({ localeBrowser }: { localeBrowser: string }) => {
   return (
     <IntlProvider
       locale={locale ?? localeBrowser}
-      defaultLocale="ca"
+      defaultLocale="es"
       messages={messageLocale[locale ?? localeBrowser]}
     >
       <WelcomePage />

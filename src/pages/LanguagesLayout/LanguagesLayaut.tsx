@@ -8,14 +8,14 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
   const { locale } = useParams<{ locale: string }>();
 
   if (!["ca", "es", "en"].includes(locale || "")) {
-    return <Navigate to="/ca" replace />;
+    return <Navigate to="/es/create-sequence" replace />;
   }
 
   return (
     <IntlProvider
-      locale={locale || localeBrowser}
-      defaultLocale="ca"
-      messages={messageLocale[locale || localeBrowser]}
+      locale={locale ?? localeBrowser}
+      defaultLocale="es"
+      messages={messageLocale[locale ?? localeBrowser]}
     >
       <BarNavigation>
         <Outlet />
