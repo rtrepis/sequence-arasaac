@@ -139,7 +139,10 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
             columnGap={2}
           >
             <li>
-              <SettingCardLang setting="languages" />
+              <SettingCardLang setting="languagesApp" />
+            </li>
+            <li>
+              <SettingCardLang setting="languagesSearch" />
             </li>
             <li>
               <SettingCardBoolean setting={"numbered"} state={numbered} />

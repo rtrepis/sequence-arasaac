@@ -1,3 +1,4 @@
+import { langTranslateSearch } from "../configs/languagesConfigs";
 import { FontFamily } from "./FontFamily";
 
 export type Sequence = PictSequence[];
@@ -87,4 +88,4 @@ export interface PictApiAraSettings {
   color?: boolean;
 }
 
-export type Languages = "ca" | "es" | "en";
+export type Languages = (typeof langTranslateSearch)[number];

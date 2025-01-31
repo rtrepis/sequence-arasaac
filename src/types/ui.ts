@@ -1,9 +1,9 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 
-export type Langs = "ca" | "en" | "es";
+export type LangsApp = "ca" | "en" | "es";
 
 export interface Ui {
-  lang?: Langs;
+  lang: { app: LangsApp; search: string };
   viewSettings: ViewSettings;
   defaultSettings: DefaultSettings;
 }

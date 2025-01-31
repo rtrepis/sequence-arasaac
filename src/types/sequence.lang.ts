@@ -19,7 +19,8 @@ export interface SettingsCardLang {
 
 export interface SettingsCardOptionsLang {
   messages: {
-    languages: Message;
+    languagesApp: Message;
+    languagesSearch: Message;
   };
   languages: {
     [K in Languages]: { message: Message };
