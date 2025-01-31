@@ -268,7 +268,7 @@
     "description": "Title setting"
   },
   "setting.lang.an.label": {
-    "defaultMessage": "Armenian",
+    "defaultMessage": "Armeni",
     "description": "Type setting"
   },
   "setting.lang.app.title": {
@@ -276,15 +276,15 @@
     "description": "Title setting"
   },
   "setting.lang.ar.label": {
-    "defaultMessage": "Arabic",
+    "defaultMessage": "Àrab",
     "description": "Type setting"
   },
   "setting.lang.bg.label": {
-    "defaultMessage": "Bulgarian",
+    "defaultMessage": "Búlgar",
     "description": "Type setting"
   },
   "setting.lang.br.label": {
-    "defaultMessage": "Breton",
+    "defaultMessage": "Bretó",
     "description": "Type setting"
   },
   "setting.lang.ca.label": {
@@ -292,19 +292,19 @@
     "description": "Type setting"
   },
   "setting.lang.cs.label": {
-    "defaultMessage": "Czech",
+    "defaultMessage": "Txec",
     "description": "Type setting"
   },
   "setting.lang.da.label": {
-    "defaultMessage": "Danish",
+    "defaultMessage": "Danès",
     "description": "Type setting"
   },
   "setting.lang.de.label": {
-    "defaultMessage": "German",
+    "defaultMessage": "Alemany",
     "description": "Type setting"
   },
   "setting.lang.el.label": {
-    "defaultMessage": "Greek",
+    "defaultMessage": "Grec",
     "description": "Type setting"
   },
   "setting.lang.en.label": {
@@ -316,79 +316,79 @@
     "description": "Type setting"
   },
   "setting.lang.et.label": {
-    "defaultMessage": "Estonian",
+    "defaultMessage": "Estonià",
     "description": "Type setting"
   },
   "setting.lang.eu.label": {
-    "defaultMessage": "Basque",
+    "defaultMessage": "Euskera",
     "description": "Type setting"
   },
   "setting.lang.fa.label": {
-    "defaultMessage": "Persian",
+    "defaultMessage": "Persa",
     "description": "Type setting"
   },
   "setting.lang.fr.label": {
-    "defaultMessage": "French",
+    "defaultMessage": "Francès",
     "description": "Type setting"
   },
   "setting.lang.gl.label": {
-    "defaultMessage": "Galician",
+    "defaultMessage": "Gallec",
     "description": "Type setting"
   },
   "setting.lang.he.label": {
-    "defaultMessage": "Hebrew",
+    "defaultMessage": "Hebreu",
     "description": "Type setting"
   },
   "setting.lang.hr.label": {
-    "defaultMessage": "Croatian",
+    "defaultMessage": "Croat",
     "description": "Type setting"
   },
   "setting.lang.hu.label": {
-    "defaultMessage": "Hungarian",
+    "defaultMessage": "Hongarès",
     "description": "Type setting"
   },
   "setting.lang.it.label": {
-    "defaultMessage": "Italian",
+    "defaultMessage": "Italià",
     "description": "Type setting"
   },
   "setting.lang.ko.label": {
-    "defaultMessage": "Korean",
+    "defaultMessage": "Coreà",
     "description": "Type setting"
   },
   "setting.lang.lt.label": {
-    "defaultMessage": "Lithuanian",
+    "defaultMessage": "Lituà",
     "description": "Type setting"
   },
   "setting.lang.lv.label": {
-    "defaultMessage": "Latvian",
+    "defaultMessage": "Letó",
     "description": "Type setting"
   },
   "setting.lang.mk.label": {
-    "defaultMessage": "Macedonian",
+    "defaultMessage": "Macedoni",
     "description": "Type setting"
   },
   "setting.lang.nb.label": {
-    "defaultMessage": "Norwegian Bokmål",
+    "defaultMessage": "Noruec Bokmål",
     "description": "Type setting"
   },
   "setting.lang.nl.label": {
-    "defaultMessage": "Dutch",
+    "defaultMessage": "Holandés",
     "description": "Type setting"
   },
   "setting.lang.pl.label": {
-    "defaultMessage": "Polish",
+    "defaultMessage": "Polonès",
     "description": "Type setting"
   },
   "setting.lang.pt.label": {
-    "defaultMessage": "Portuguese",
+    "defaultMessage": "Portuguès",
     "description": "Type setting"
   },
   "setting.lang.ro.label": {
-    "defaultMessage": "Romanian",
+    "defaultMessage": "Romanès",
     "description": "Type setting"
   },
   "setting.lang.ru.label": {
-    "defaultMessage": "Russian",
+    "defaultMessage": "Rus",
     "description": "Type setting"
   },
   "setting.lang.search.title": {
@@ -396,31 +396,31 @@
     "description": "Title setting"
   },
   "setting.lang.sk.label": {
-    "defaultMessage": "Slovak",
+    "defaultMessage": "Eslovac",
     "description": "Type setting"
   },
   "setting.lang.sq.label": {
-    "defaultMessage": "Albanian",
+    "defaultMessage": "Albanès",
     "description": "Type setting"
   },
   "setting.lang.sr.label": {
-    "defaultMessage": "Serbian",
+    "defaultMessage": "Sèrbi",
     "description": "Type setting"
   },
   "setting.lang.sv.label": {
-    "defaultMessage": "Swedish",
+    "defaultMessage": "Suec",
     "description": "Type setting"
   },
   "setting.lang.uk.label": {
-    "defaultMessage": "Ukrainian",
+    "defaultMessage": "Ucraïnès",
     "description": "Type setting"
   },
   "setting.lang.val.label": {
-    "defaultMessage": "Valencian",
+    "defaultMessage": "Valencià",
     "description": "Type setting"
   },
   "setting.lang.zh.label": {
-    "defaultMessage": "Chinese",
+    "defaultMessage": "Xinès",
     "description": "Type setting"
   },
   "settings.hair.black": {
