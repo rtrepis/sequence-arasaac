@@ -5,6 +5,8 @@ import { useIntl } from "react-intl";
 import useAraSaac from "../../hooks/useAraSaac";
 import messages from "./MagicSearch.lang";
 import React from "react";
+import { useAppSelector } from "/src/app/hooks";
+import { settingCardOptions } from "../SettingsCards/SettingCardOptions/lang/SettingCardLang.lang";
 
 interface MagicSearchProps {
   variant?: "navBar";
@@ -13,6 +15,9 @@ interface MagicSearchProps {
 
 const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
   const intl = useIntl();
+  const { app: appLang, search: searchLang } = useAppSelector(
+    (state) => state.ui.lang,
+  );
   const { getSearchPictogram } = useAraSaac();
 
   const initialPhrase = "";
@@ -55,10 +60,15 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
     setPhrase(value);
   };
 
+  const languagesSearchTitle =
+    appLang !== searchLang
+      ? ` (${intl.formatMessage(settingCardOptions.languages[searchLang].message)})`
+      : "";
+
   return (
     <form onSubmit={SubmitMagicEngine} style={{ flexGrow: 1, width: "100%" }}>
       <TextField
-        label={intl.formatMessage({ ...messages.field })}
+        label={`${intl.formatMessage({ ...messages.field })}${languagesSearchTitle}`}
         id={"search"}
         variant="outlined"
         helperText={
