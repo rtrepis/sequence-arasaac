@@ -16,7 +16,6 @@ import {
   PictSequence,
   Skin,
 } from "../types/sequence";
-import useUserLocation from "./useUserLocation";
 import fitzgeraldColors from "../data/fitzgeraldColors";
 
 const araSaacURL = import.meta.env.VITE_APP_API_ARASAAC_URL;
@@ -32,7 +31,9 @@ const useAraSaac = () => {
   );
 
   const dispatch = useAppDispatch();
-  const locale = useUserLocation();
+  const locale = useAppSelector((state) => state.ui.lang.search);
+
+  console.log(locale);
 
   const makeSettingsProperty = useCallback(
     async (data: any) => {
