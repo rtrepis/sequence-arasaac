@@ -23,7 +23,7 @@ export interface SettingsCardOptionsLang {
     languagesSearch: Message;
   };
   languages: {
-    [K in Languages]: { message: Message };
+    [K in Languages]: string;
   };
 }
 

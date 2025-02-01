@@ -33,8 +33,6 @@ const useAraSaac = () => {
   const dispatch = useAppDispatch();
   const locale = useAppSelector((state) => state.ui.lang.search);
 
-  console.log(locale);
-
   const makeSettingsProperty = useCallback(
     async (data: any) => {
       const settingsProperty: PictApiAraSettings = {};

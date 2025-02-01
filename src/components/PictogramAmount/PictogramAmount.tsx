@@ -56,14 +56,16 @@ const PictogramAmount = ({
         </FormLabel>
 
         <Tooltip title={intl.formatMessage(messages.subtract)}>
-          <IconButton
-            color={variant ? "primary" : "secondary"}
-            aria-label={intl.formatMessage({ ...messages.subtract })}
-            onClick={() => handleChangesAmount(-1)}
-            disabled={amountSequence <= 0}
-          >
-            <AiFillMinusCircle />
-          </IconButton>
+          <span>
+            <IconButton
+              color={variant ? "primary" : "secondary"}
+              aria-label={intl.formatMessage({ ...messages.subtract })}
+              onClick={() => handleChangesAmount(-1)}
+              disabled={amountSequence <= 0}
+            >
+              <AiFillMinusCircle />
+            </IconButton>
+          </span>
         </Tooltip>
 
         <Input
