@@ -62,7 +62,7 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
 
   const languagesSearchTitle =
     appLang !== searchLang
-      ? ` (${intl.formatMessage(settingCardOptions.languages[searchLang].message)})`
+      ? ` (${settingCardOptions.languages[searchLang]})`
       : "";
 
   return (

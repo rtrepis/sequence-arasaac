@@ -401,10 +401,64 @@
       "value": "Familia"
     }
   ],
+  "setting.lang.an.label": [
+    {
+      "type": 0,
+      "value": "Armenio"
+    }
+  ],
+  "setting.lang.app.title": [
+    {
+      "type": 0,
+      "value": "App"
+    }
+  ],
+  "setting.lang.ar.label": [
+    {
+      "type": 0,
+      "value": "Árabe"
+    }
+  ],
+  "setting.lang.bg.label": [
+    {
+      "type": 0,
+      "value": "Búlgaro"
+    }
+  ],
+  "setting.lang.br.label": [
+    {
+      "type": 0,
+      "value": "Bretón"
+    }
+  ],
   "setting.lang.ca.label": [
     {
       "type": 0,
       "value": "Catalán"
+    }
+  ],
+  "setting.lang.cs.label": [
+    {
+      "type": 0,
+      "value": "Checo"
+    }
+  ],
+  "setting.lang.da.label": [
+    {
+      "type": 0,
+      "value": "Danés"
+    }
+  ],
+  "setting.lang.de.label": [
+    {
+      "type": 0,
+      "value": "Alemán"
+    }
+  ],
+  "setting.lang.el.label": [
+    {
+      "type": 0,
+      "value": "Griego"
     }
   ],
   "setting.lang.en.label": [
@@ -419,10 +473,166 @@
       "value": "Español"
     }
   ],
-  "setting.lang.title": [
+  "setting.lang.et.label": [
     {
       "type": 0,
-      "value": "Idioma"
+      "value": "Estonian"
+    }
+  ],
+  "setting.lang.eu.label": [
+    {
+      "type": 0,
+      "value": "Euskera"
+    }
+  ],
+  "setting.lang.fa.label": [
+    {
+      "type": 0,
+      "value": "Persa"
+    }
+  ],
+  "setting.lang.fr.label": [
+    {
+      "type": 0,
+      "value": "Francés"
+    }
+  ],
+  "setting.lang.gl.label": [
+    {
+      "type": 0,
+      "value": "Gallego"
+    }
+  ],
+  "setting.lang.he.label": [
+    {
+      "type": 0,
+      "value": "Hebreo"
+    }
+  ],
+  "setting.lang.hr.label": [
+    {
+      "type": 0,
+      "value": "Croata"
+    }
+  ],
+  "setting.lang.hu.label": [
+    {
+      "type": 0,
+      "value": "Húngaro"
+    }
+  ],
+  "setting.lang.it.label": [
+    {
+      "type": 0,
+      "value": "Italiano"
+    }
+  ],
+  "setting.lang.ko.label": [
+    {
+      "type": 0,
+      "value": "Coreano"
+    }
+  ],
+  "setting.lang.lt.label": [
+    {
+      "type": 0,
+      "value": "Lituano"
+    }
+  ],
+  "setting.lang.lv.label": [
+    {
+      "type": 0,
+      "value": "Letón"
+    }
+  ],
+  "setting.lang.mk.label": [
+    {
+      "type": 0,
+      "value": "Macedonio"
+    }
+  ],
+  "setting.lang.nb.label": [
+    {
+      "type": 0,
+      "value": "Noruego Bokmål"
+    }
+  ],
+  "setting.lang.nl.label": [
+    {
+      "type": 0,
+      "value": "Holandés"
+    }
+  ],
+  "setting.lang.pl.label": [
+    {
+      "type": 0,
+      "value": "Polaco"
+    }
+  ],
+  "setting.lang.pt.label": [
+    {
+      "type": 0,
+      "value": "Portugués"
+    }
+  ],
+  "setting.lang.ro.label": [
+    {
+      "type": 0,
+      "value": "Rumano"
+    }
+  ],
+  "setting.lang.ru.label": [
+    {
+      "type": 0,
+      "value": "Ruso"
+    }
+  ],
+  "setting.lang.search.title": [
+    {
+      "type": 0,
+      "value": "Buscar"
+    }
+  ],
+  "setting.lang.sk.label": [
+    {
+      "type": 0,
+      "value": "Eslovaco"
+    }
+  ],
+  "setting.lang.sq.label": [
+    {
+      "type": 0,
+      "value": "Albano"
+    }
+  ],
+  "setting.lang.sr.label": [
+    {
+      "type": 0,
+      "value": "Serbio"
+    }
+  ],
+  "setting.lang.sv.label": [
+    {
+      "type": 0,
+      "value": "Sueco"
+    }
+  ],
+  "setting.lang.uk.label": [
+    {
+      "type": 0,
+      "value": "Ucraniano"
+    }
+  ],
+  "setting.lang.val.label": [
+    {
+      "type": 0,
+      "value": "Valenciano"
+    }
+  ],
+  "setting.lang.zh.label": [
+    {
+      "type": 0,
+      "value": "Chino"
     }
   ],
   "settings.hair.black": [
