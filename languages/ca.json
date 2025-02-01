@@ -267,8 +267,44 @@
     "defaultMessage": "Família",
     "description": "Title setting"
   },
+  "setting.lang.an.label": {
+    "defaultMessage": "Armeni",
+    "description": "Type setting"
+  },
+  "setting.lang.app.title": {
+    "defaultMessage": "App",
+    "description": "Title setting"
+  },
+  "setting.lang.ar.label": {
+    "defaultMessage": "Àrab",
+    "description": "Type setting"
+  },
+  "setting.lang.bg.label": {
+    "defaultMessage": "Búlgar",
+    "description": "Type setting"
+  },
+  "setting.lang.br.label": {
+    "defaultMessage": "Bretó",
+    "description": "Type setting"
+  },
   "setting.lang.ca.label": {
     "defaultMessage": "Català",
+    "description": "Type setting"
+  },
+  "setting.lang.cs.label": {
+    "defaultMessage": "Txec",
+    "description": "Type setting"
+  },
+  "setting.lang.da.label": {
+    "defaultMessage": "Danès",
+    "description": "Type setting"
+  },
+  "setting.lang.de.label": {
+    "defaultMessage": "Alemany",
+    "description": "Type setting"
+  },
+  "setting.lang.el.label": {
+    "defaultMessage": "Grec",
     "description": "Type setting"
   },
   "setting.lang.en.label": {
@@ -279,9 +315,113 @@
     "defaultMessage": "Espanyol",
     "description": "Type setting"
   },
-  "setting.lang.title": {
-    "defaultMessage": "Idioma",
+  "setting.lang.et.label": {
+    "defaultMessage": "Estonià",
+    "description": "Type setting"
+  },
+  "setting.lang.eu.label": {
+    "defaultMessage": "Euskera",
+    "description": "Type setting"
+  },
+  "setting.lang.fa.label": {
+    "defaultMessage": "Persa",
+    "description": "Type setting"
+  },
+  "setting.lang.fr.label": {
+    "defaultMessage": "Francès",
+    "description": "Type setting"
+  },
+  "setting.lang.gl.label": {
+    "defaultMessage": "Gallec",
+    "description": "Type setting"
+  },
+  "setting.lang.he.label": {
+    "defaultMessage": "Hebreu",
+    "description": "Type setting"
+  },
+  "setting.lang.hr.label": {
+    "defaultMessage": "Croat",
+    "description": "Type setting"
+  },
+  "setting.lang.hu.label": {
+    "defaultMessage": "Hongarès",
+    "description": "Type setting"
+  },
+  "setting.lang.it.label": {
+    "defaultMessage": "Italià",
+    "description": "Type setting"
+  },
+  "setting.lang.ko.label": {
+    "defaultMessage": "Coreà",
+    "description": "Type setting"
+  },
+  "setting.lang.lt.label": {
+    "defaultMessage": "Lituà",
+    "description": "Type setting"
+  },
+  "setting.lang.lv.label": {
+    "defaultMessage": "Letó",
+    "description": "Type setting"
+  },
+  "setting.lang.mk.label": {
+    "defaultMessage": "Macedoni",
+    "description": "Type setting"
+  },
+  "setting.lang.nb.label": {
+    "defaultMessage": "Noruec Bokmål",
+    "description": "Type setting"
+  },
+  "setting.lang.nl.label": {
+    "defaultMessage": "Holandés",
+    "description": "Type setting"
+  },
+  "setting.lang.pl.label": {
+    "defaultMessage": "Polonès",
+    "description": "Type setting"
+  },
+  "setting.lang.pt.label": {
+    "defaultMessage": "Portuguès",
+    "description": "Type setting"
+  },
+  "setting.lang.ro.label": {
+    "defaultMessage": "Romanès",
+    "description": "Type setting"
+  },
+  "setting.lang.ru.label": {
+    "defaultMessage": "Rus",
+    "description": "Type setting"
+  },
+  "setting.lang.search.title": {
+    "defaultMessage": "Cercar",
     "description": "Title setting"
+  },
+  "setting.lang.sk.label": {
+    "defaultMessage": "Eslovac",
+    "description": "Type setting"
+  },
+  "setting.lang.sq.label": {
+    "defaultMessage": "Albanès",
+    "description": "Type setting"
+  },
+  "setting.lang.sr.label": {
+    "defaultMessage": "Sèrbi",
+    "description": "Type setting"
+  },
+  "setting.lang.sv.label": {
+    "defaultMessage": "Suec",
+    "description": "Type setting"
+  },
+  "setting.lang.uk.label": {
+    "defaultMessage": "Ucraïnès",
+    "description": "Type setting"
+  },
+  "setting.lang.val.label": {
+    "defaultMessage": "Valencià",
+    "description": "Type setting"
+  },
+  "setting.lang.zh.label": {
+    "defaultMessage": "Xinès",
+    "description": "Type setting"
   },
   "settings.hair.black": {
     "defaultMessage": "Negre",
