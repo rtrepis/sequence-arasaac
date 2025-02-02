@@ -7,30 +7,44 @@ import {
   SelectChangeEvent,
   Stack,
 } from "@mui/material";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { card } from "../../SettingsCards.styled";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { settingCardOptions } from "./SettingCardLang.lang";
-import useUserLocation from "../../../../hooks/useUserLocation";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import {
+  langTranslateApp as langTranslateApp,
+  langTranslateSearch as langTranslateSearch,
+} from "../../../../configs/languagesConfigs";
+import { updateLangSettingsActionCreator } from "../../../../app/slice/uiSlice";
+import { Ui } from "../../../../types/ui";
 
 interface SettingCardProps {
-  setting: "languages";
+  setting: "languagesApp" | "languagesSearch";
 }
 
 const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
-  const intl = useIntl();
+  const { app: appLang, search: searchLang } = useAppSelector(
+    (store) => store.ui.lang,
+  );
+  const dispatch = useAppDispatch();
 
-  const initialLang = useUserLocation();
+  const initialLang = setting === "languagesApp" ? appLang : searchLang;
   const [lang, setLang] = useState(initialLang);
 
-  const settingCard = {
-    messages: settingCardOptions.messages[setting],
-    types: Object.entries(settingCardOptions[setting]),
-  };
-
   const handleChange = (event: SelectChangeEvent) => {
-    setLang(event.target.value as string);
+    const value = event.target.value;
+    setLang(value);
+
+    const newLangValue = {
+      app: setting === "languagesApp" ? value : appLang,
+      search: setting === "languagesSearch" ? value : searchLang,
+    };
+
+    dispatch(updateLangSettingsActionCreator(newLangValue as Ui["lang"]));
+    sessionStorage.setItem("langSettings", JSON.stringify(newLangValue));
+    localStorage.setItem("langSettings", JSON.stringify(newLangValue));
   };
 
   return (
@@ -40,31 +54,42 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
       flexWrap={"wrap"}
       columnGap={2}
       sx={card}
+      key={`${setting}-stack`}
     >
-      <FormControl fullWidth>
+      <FormControl fullWidth key={`${setting}-form`}>
         <InputLabel id="language">
-          <FormattedMessage {...settingCard.messages} />
+          <FormattedMessage {...settingCardOptions.messages[setting]} />
         </InputLabel>
         <Select
-          labelId="language"
-          id="language-selected"
+          defaultValue={"es"}
+          labelId={setting}
+          id={setting}
           value={lang}
           label="language"
           onChange={handleChange}
           sx={{ width: 150 }}
+          key={`${setting}-selector`}
         >
-          {settingCard.types.map(([key, value]) => (
-            <MenuItem value={key} key={key}>
-              <Link
-                component={RouterLink}
-                to={`../../${key}/create-sequence`}
-                underline="none"
-                color={"MenuText"}
-              >
-                {intl.formatMessage(value.message)}
-              </Link>
-            </MenuItem>
-          ))}
+          {setting === "languagesSearch" &&
+            langTranslateSearch.map((item) => (
+              <MenuItem value={item} key={item}>
+                {settingCardOptions.languages[item]}
+              </MenuItem>
+            ))}
+
+          {setting === "languagesApp" &&
+            langTranslateApp.map((item) => (
+              <MenuItem value={item} key={item}>
+                <Link
+                  component={RouterLink}
+                  to={`../../${item}/create-sequence`}
+                  underline="none"
+                  color={"MenuText"}
+                >
+                  {settingCardOptions.languages[item]}
+                </Link>
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
     </Stack>

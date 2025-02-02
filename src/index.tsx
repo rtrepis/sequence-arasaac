@@ -10,27 +10,21 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./style/themeMui";
 import { BrowserRouter } from "react-router-dom";
 
-const locale = navigator.language.slice(0, 2);
-
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
-const languages = async (locale: string) => {
-  root.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline enableColorScheme />
-          <BrowserRouter>
-            <App locale={locale} />
-          </BrowserRouter>
-        </ThemeProvider>
-      </Provider>
-    </React.StrictMode>,
-  );
-};
-
-languages(locale);
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline enable-color-scheme />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
+  </React.StrictMode>,
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

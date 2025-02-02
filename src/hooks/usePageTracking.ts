@@ -7,6 +7,12 @@ type GTagConfig = {
   [key: string]: string | undefined;
 };
 
+type GTagEvent = {
+  event: string;
+  event_category?: string;
+  event_label?: string;
+  value?: string;
+};
 type GTagCommand = "config" | "event" | "js" | "set";
 
 declare global {
@@ -33,4 +39,21 @@ export const usePageTracking = () => {
       });
     }
   }, [location]);
+};
+
+export const trackEvent = ({
+  event,
+  event_category,
+  event_label,
+  value,
+}: GTagEvent) => {
+  if (typeof window.gtag !== "undefined") {
+    window.gtag("event", event, {
+      event_category,
+      event_label,
+      value,
+    });
+  } else {
+    console.warn("Google Analytics no està carregat");
+  }
 };

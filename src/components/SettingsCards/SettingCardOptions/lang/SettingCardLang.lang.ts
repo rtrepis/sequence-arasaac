@@ -3,34 +3,55 @@ import { SettingsCardOptionsLang } from "../../../../types/sequence.lang";
 
 export const settingCardOptions: SettingsCardOptionsLang = {
   messages: {
-    languages: defineMessage({
-      id: "setting.lang.title",
-      defaultMessage: "Language",
+    languagesApp: defineMessage({
+      id: "setting.lang.app.title",
+      defaultMessage: "App",
+      description: "Title setting",
+    }),
+    languagesSearch: defineMessage({
+      id: "setting.lang.search.title",
+      defaultMessage: "Search",
       description: "Title setting",
     }),
   },
 
   languages: {
-    en: {
-      message: defineMessage({
-        id: "setting.lang.en.label",
-        defaultMessage: "English",
-        description: "Type setting",
-      }),
-    },
-    ca: {
-      message: defineMessage({
-        id: "setting.lang.ca.label",
-        defaultMessage: "Catalan",
-        description: "Type setting",
-      }),
-    },
-    es: {
-      message: defineMessage({
-        id: "setting.lang.es.label",
-        defaultMessage: "Spanish",
-        description: "Type setting",
-      }),
-    },
+    an: "Aragonés",
+    ar: "العربية",
+    bg: "Български",
+    br: "Brezhoneg",
+    ca: "Català",
+    cs: "Čeština",
+    da: "Dansk",
+    de: "Deutsch",
+    el: "Ελληνικά",
+    en: "English",
+    es: "Español",
+    et: "Eesti",
+    eu: "Euskara",
+    fa: "فارسی",
+    fr: "Français",
+    gl: "Galego",
+    he: "עברית",
+    hr: "Hrvatski",
+    hu: "Magyar",
+    it: "Italiano",
+    ko: "한국어",
+    lt: "Lietuvių",
+    lv: "Latviešu",
+    mk: "Македонски",
+    nb: "Norsk Bokmål",
+    nl: "Nederlands",
+    pl: "Polski",
+    pt: "Português",
+    ro: "Română",
+    ru: "Русский",
+    sk: "Slovenčina",
+    sq: "Shqip",
+    sv: "Svenska",
+    sr: "Српски",
+    val: "Valencià",
+    uk: "Українська",
+    zh: "中文",
   },
 };
