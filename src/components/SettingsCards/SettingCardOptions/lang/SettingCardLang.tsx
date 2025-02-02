@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
   Stack,
 } from "@mui/material";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { card } from "../../SettingsCards.styled";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
@@ -29,16 +29,12 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
     (store) => store.ui.lang,
   );
   const dispatch = useAppDispatch();
-  const intl = useIntl();
 
   const initialLang = setting === "languagesApp" ? appLang : searchLang;
   const [lang, setLang] = useState(initialLang);
 
   const handleChange = (event: SelectChangeEvent) => {
-    const value = event.target.value as string;
-
-    console.log("value", value);
-
+    const value = event.target.value;
     setLang(value);
 
     const newLangValue = {
@@ -77,7 +73,7 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
           {setting === "languagesSearch" &&
             langTranslateSearch.map((item) => (
               <MenuItem value={item} key={item}>
-                {intl.formatMessage(settingCardOptions.languages[item].message)}
+                {settingCardOptions.languages[item]}
               </MenuItem>
             ))}
 
@@ -90,9 +86,7 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
                   underline="none"
                   color={"MenuText"}
                 >
-                  {intl.formatMessage(
-                    settingCardOptions.languages[item].message,
-                  )}
+                  {settingCardOptions.languages[item]}
                 </Link>
               </MenuItem>
             ))}
