@@ -2,7 +2,7 @@ import { ButtonBase, InputAdornment, TextField } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useIntl } from "react-intl";
-import useAraSaac from "../../hooks/useAraSaac";
+import useAraSaac, { Ai } from "../../hooks/useAraSaac";
 import messages from "./MagicSearch.lang";
 import React from "react";
 import { useAppSelector } from "/src/app/hooks";
@@ -26,7 +26,15 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
   const SubmitMagicEngine = (event: SyntheticEvent) => {
     event.preventDefault();
 
-    const words = stringToWords(phrase);
+    let words: (Ai | string)[] = [""];
+    try {
+      const iaParse = JSON.parse(phrase);
+      if (iaParse !== null && "ia" in iaParse) {
+        words = iaParse.ia;
+      }
+    } catch {
+      words = stringToWords(phrase);
+    }
 
     delayWords(words);
   };
@@ -39,7 +47,7 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
     return words;
   };
 
-  const delayWords = (words: string[]) => {
+  const delayWords = (words: (Ai | string)[]) => {
     let index = 0;
 
     const print = () => {

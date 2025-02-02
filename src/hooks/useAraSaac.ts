@@ -20,6 +20,11 @@ import fitzgeraldColors from "../data/fitzgeraldColors";
 
 const araSaacURL = import.meta.env.VITE_APP_API_ARASAAC_URL;
 
+export interface Ai {
+  word: string;
+  text: string;
+}
+
 const useAraSaac = () => {
   const {
     font: { size: fontSize },
@@ -87,16 +92,18 @@ const useAraSaac = () => {
 
   const getSearchPictogram = useCallback(
     async (
-      word: string,
+      word: string | Ai,
       indexSequence: number,
       isUpdate: boolean,
       isExtends?: boolean,
     ) => {
       const search = isExtends ? "search" : "bestsearch";
 
+      const wordAraSaac = typeof word === "string" ? word : word.word;
+
       try {
         const { data } = await axios.get(
-          `${araSaacURL}pictograms/${locale}/${search}/${word.toLocaleLowerCase()}`,
+          `${araSaacURL}pictograms/${locale}/${search}/${wordAraSaac.toLocaleLowerCase()}`,
         );
 
         const findBestPict: number[] = [];
@@ -105,7 +112,7 @@ const useAraSaac = () => {
         if (isUpdate) {
           const toPictUpdate: PictApiAraForEdit = {
             indexSequence: indexSequence,
-            searched: { word: word, bestIdPicts: findBestPict },
+            searched: { word: wordAraSaac, bestIdPicts: findBestPict },
           };
 
           dispatch(searchedActionCreator(toPictUpdate));
@@ -115,11 +122,12 @@ const useAraSaac = () => {
           const newPict: PictSequence = {
             indexSequence: amountSequence + indexSequence,
             img: {
-              searched: { word: word, bestIdPicts: findBestPict },
+              searched: { word: wordAraSaac, bestIdPicts: findBestPict },
               selectedId: findBestPict[0],
               settings: await makeSettingsProperty(data[0]),
             },
             settings: { fontSize, textPosition },
+            ...(typeof word === "object" && { text: word.text }),
             cross: false,
           };
 
@@ -130,7 +138,7 @@ const useAraSaac = () => {
         if (isUpdate) {
           const toPictNotFound: PictApiAraForEdit = {
             indexSequence: indexSequence,
-            searched: { word: word, bestIdPicts: [-1] },
+            searched: { word: wordAraSaac, bestIdPicts: [-1] },
             settings: {},
           };
           dispatch(searchedActionCreator(toPictNotFound));
@@ -140,11 +148,12 @@ const useAraSaac = () => {
           const toPictNotFound: PictSequence = {
             indexSequence: amountSequence + indexSequence,
             img: {
-              searched: { word: word, bestIdPicts: [0] },
+              searched: { word: wordAraSaac, bestIdPicts: [0] },
               selectedId: 0,
               settings: { fitzgerald: "#666" },
             },
             settings: { textPosition, fontSize },
+            ...(typeof word === "object" && { text: word.text }),
             cross: false,
           };
           dispatch(addPictogramActionCreator(toPictNotFound));
