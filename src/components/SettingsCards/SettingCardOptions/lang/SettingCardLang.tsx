@@ -34,10 +34,7 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
   const [lang, setLang] = useState(initialLang);
 
   const handleChange = (event: SelectChangeEvent) => {
-    const value = event.target.value as string;
-
-    console.log("value", value);
-
+    const value = event.target.value;
     setLang(value);
 
     const newLangValue = {
