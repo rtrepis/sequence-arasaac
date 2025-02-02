@@ -7,6 +7,7 @@ import messages from "./MagicSearch.lang";
 import React from "react";
 import { useAppSelector } from "/src/app/hooks";
 import { settingCardOptions } from "../SettingsCards/SettingCardOptions/lang/SettingCardLang.lang";
+import { trackEvent } from "/src/hooks/usePageTracking";
 
 interface MagicSearchProps {
   variant?: "navBar";
@@ -31,9 +32,21 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
       const iaParse = JSON.parse(phrase);
       if (iaParse !== null && "ia" in iaParse) {
         words = iaParse.ia;
+
+        trackEvent({
+          event: "ia-magic-search",
+          event_category: "Search API",
+          event_label: "IA Search API",
+        });
       }
     } catch {
       words = stringToWords(phrase);
+
+      trackEvent({
+        event: "magic-search",
+        event_category: "Search API",
+        event_label: "Search API",
+      });
     }
 
     delayWords(words);

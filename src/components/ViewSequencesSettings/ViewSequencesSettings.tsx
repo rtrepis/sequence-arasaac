@@ -20,6 +20,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 import useWindowResize from "../../hooks/useWindowResize";
 import React from "react";
+import { trackEvent } from "/src/hooks/usePageTracking";
 
 interface ViewSequencesSettingsProps {
   children: React.ReactElement | React.ReactElement[];
@@ -144,6 +145,12 @@ const ViewSequencesSettings = ({
 
     await display?.requestFullscreen();
     setDisplayFullScreen(true);
+
+    trackEvent({
+      event: "full-screen-view",
+      event_category: "View",
+      event_label: "Full Screen",
+    });
   };
 
   useEffect(() => {
@@ -220,7 +227,15 @@ const ViewSequencesSettings = ({
                     variant="text"
                     color="primary"
                     sx={{ fontSize: "2rem" }}
-                    onClick={() => window.print()}
+                    onClick={() => {
+                      window.print();
+
+                      trackEvent({
+                        event: "click-print-view",
+                        event_category: "View",
+                        event_label: "Print view",
+                      });
+                    }}
                   >
                     <AiFillPrinter />
                   </Button>
