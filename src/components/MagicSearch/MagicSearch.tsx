@@ -2,11 +2,12 @@ import { ButtonBase, InputAdornment, TextField } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useIntl } from "react-intl";
-import useAraSaac from "../../hooks/useAraSaac";
+import useAraSaac, { Ai } from "../../hooks/useAraSaac";
 import messages from "./MagicSearch.lang";
 import React from "react";
 import { useAppSelector } from "/src/app/hooks";
 import { settingCardOptions } from "../SettingsCards/SettingCardOptions/lang/SettingCardLang.lang";
+import { trackEvent } from "/src/hooks/usePageTracking";
 
 interface MagicSearchProps {
   variant?: "navBar";
@@ -26,7 +27,27 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
   const SubmitMagicEngine = (event: SyntheticEvent) => {
     event.preventDefault();
 
-    const words = stringToWords(phrase);
+    let words: (Ai | string)[] = [""];
+    try {
+      const iaParse = JSON.parse(phrase);
+      if (iaParse !== null && "ia" in iaParse) {
+        words = iaParse.ia;
+
+        trackEvent({
+          event: "ia-magic-search",
+          event_category: "Search API",
+          event_label: "IA Search API",
+        });
+      }
+    } catch {
+      words = stringToWords(phrase);
+
+      trackEvent({
+        event: "magic-search",
+        event_category: "Search API",
+        event_label: "Search API",
+      });
+    }
 
     delayWords(words);
   };
@@ -39,7 +60,7 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
     return words;
   };
 
-  const delayWords = (words: string[]) => {
+  const delayWords = (words: (Ai | string)[]) => {
     let index = 0;
 
     const print = () => {
@@ -62,7 +83,7 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
 
   const languagesSearchTitle =
     appLang !== searchLang
-      ? ` (${intl.formatMessage(settingCardOptions.languages[searchLang].message)})`
+      ? ` (${settingCardOptions.languages[searchLang]})`
       : "";
 
   return (
