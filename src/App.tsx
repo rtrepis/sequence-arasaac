@@ -19,18 +19,20 @@ export const messageLocale = {
   en: messages_en,
 };
 import { usePageTracking } from "./hooks/usePageTracking";
+import { useAppSelector } from "./app/hooks";
 
-const App = ({ locale }: { locale: string }): React.ReactElement => {
+const App = (): React.ReactElement => {
   usePageTracking();
   const dispatch = useDispatch();
+  const { app: appLang } = useAppSelector((state) => state.ui.lang);
 
   useEffect(() => {
-    const isPictDefaultSettings =
+    const pictDefaultSettings =
       sessionStorage.getItem("pictDefaultSettings") ??
       localStorage.getItem("pictDefaultSettings");
 
-    if (isPictDefaultSettings != null) {
-      const userDefaultSettings = JSON.parse(isPictDefaultSettings);
+    if (pictDefaultSettings != null) {
+      const userDefaultSettings = JSON.parse(pictDefaultSettings);
       dispatch(updateDefaultSettingsActionCreator(userDefaultSettings));
     }
   }, [dispatch]);
@@ -40,23 +42,26 @@ const App = ({ locale }: { locale: string }): React.ReactElement => {
       <Route
         path="/"
         index
-        element={<WelcomeLayout localeBrowser={locale} />}
+        element={<WelcomeLayout localeBrowser={appLang} />}
       />
       <Route
         path="create-sequence"
-        element={<Navigate to={`../${locale}/create-sequence`} replace />}
+        element={<Navigate to={`../${appLang}/create-sequence`} replace />}
       />
       <Route
         path="view-sequence"
-        element={<Navigate to={`../${locale}/create-sequence`} replace />}
+        element={<Navigate to={`../${appLang}/create-sequence`} replace />}
       />
 
-      <Route path=":locale" element={<LanguageLayout localeBrowser={locale} />}>
+      <Route
+        path=":locale"
+        element={<LanguageLayout localeBrowser={appLang} />}
+      >
         <Route path="create-sequence" element={<EditSequencesPage />} />
         <Route path="view-sequence" element={<ViewSequencePage />} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/ca" replace />} />
+      <Route path="*" element={<Navigate to={"/"} replace />} />
     </Routes>
   );
 };

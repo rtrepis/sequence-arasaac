@@ -267,8 +267,44 @@
     "defaultMessage": "Familia",
     "description": "Title setting"
   },
+  "setting.lang.an.label": {
+    "defaultMessage": "Armenio",
+    "description": "Type setting"
+  },
+  "setting.lang.app.title": {
+    "defaultMessage": "App",
+    "description": "Title setting"
+  },
+  "setting.lang.ar.label": {
+    "defaultMessage": "Árabe",
+    "description": "Type setting"
+  },
+  "setting.lang.bg.label": {
+    "defaultMessage": "Búlgaro",
+    "description": "Type setting"
+  },
+  "setting.lang.br.label": {
+    "defaultMessage": "Bretón",
+    "description": "Type setting"
+  },
   "setting.lang.ca.label": {
     "defaultMessage": "Catalán",
+    "description": "Type setting"
+  },
+  "setting.lang.cs.label": {
+    "defaultMessage": "Checo",
+    "description": "Type setting"
+  },
+  "setting.lang.da.label": {
+    "defaultMessage": "Danés",
+    "description": "Type setting"
+  },
+  "setting.lang.de.label": {
+    "defaultMessage": "Alemán",
+    "description": "Type setting"
+  },
+  "setting.lang.el.label": {
+    "defaultMessage": "Griego",
     "description": "Type setting"
   },
   "setting.lang.en.label": {
@@ -279,9 +315,113 @@
     "defaultMessage": "Español",
     "description": "Type setting"
   },
-  "setting.lang.title": {
-    "defaultMessage": "Idioma",
+  "setting.lang.et.label": {
+    "defaultMessage": "Estonian",
+    "description": "Type setting"
+  },
+  "setting.lang.eu.label": {
+    "defaultMessage": "Euskera",
+    "description": "Type setting"
+  },
+  "setting.lang.fa.label": {
+    "defaultMessage": "Persa",
+    "description": "Type setting"
+  },
+  "setting.lang.fr.label": {
+    "defaultMessage": "Francés",
+    "description": "Type setting"
+  },
+  "setting.lang.gl.label": {
+    "defaultMessage": "Gallego",
+    "description": "Type setting"
+  },
+  "setting.lang.he.label": {
+    "defaultMessage": "Hebreo",
+    "description": "Type setting"
+  },
+  "setting.lang.hr.label": {
+    "defaultMessage": "Croata",
+    "description": "Type setting"
+  },
+  "setting.lang.hu.label": {
+    "defaultMessage": "Húngaro",
+    "description": "Type setting"
+  },
+  "setting.lang.it.label": {
+    "defaultMessage": "Italiano",
+    "description": "Type setting"
+  },
+  "setting.lang.ko.label": {
+    "defaultMessage": "Coreano",
+    "description": "Type setting"
+  },
+  "setting.lang.lt.label": {
+    "defaultMessage": "Lituano",
+    "description": "Type setting"
+  },
+  "setting.lang.lv.label": {
+    "defaultMessage": "Letón",
+    "description": "Type setting"
+  },
+  "setting.lang.mk.label": {
+    "defaultMessage": "Macedonio",
+    "description": "Type setting"
+  },
+  "setting.lang.nb.label": {
+    "defaultMessage": "Noruego Bokmål",
+    "description": "Type setting"
+  },
+  "setting.lang.nl.label": {
+    "defaultMessage": "Holandés",
+    "description": "Type setting"
+  },
+  "setting.lang.pl.label": {
+    "defaultMessage": "Polaco",
+    "description": "Type setting"
+  },
+  "setting.lang.pt.label": {
+    "defaultMessage": "Portugués",
+    "description": "Type setting"
+  },
+  "setting.lang.ro.label": {
+    "defaultMessage": "Rumano",
+    "description": "Type setting"
+  },
+  "setting.lang.ru.label": {
+    "defaultMessage": "Ruso",
+    "description": "Type setting"
+  },
+  "setting.lang.search.title": {
+    "defaultMessage": "Buscar",
     "description": "Title setting"
+  },
+  "setting.lang.sk.label": {
+    "defaultMessage": "Eslovaco",
+    "description": "Type setting"
+  },
+  "setting.lang.sq.label": {
+    "defaultMessage": "Albano",
+    "description": "Type setting"
+  },
+  "setting.lang.sr.label": {
+    "defaultMessage": "Serbio",
+    "description": "Type setting"
+  },
+  "setting.lang.sv.label": {
+    "defaultMessage": "Sueco",
+    "description": "Type setting"
+  },
+  "setting.lang.uk.label": {
+    "defaultMessage": "Ucraniano",
+    "description": "Type setting"
+  },
+  "setting.lang.val.label": {
+    "defaultMessage": "Valenciano",
+    "description": "Type setting"
+  },
+  "setting.lang.zh.label": {
+    "defaultMessage": "Chino",
+    "description": "Type setting"
   },
   "settings.hair.black": {
     "defaultMessage": "Negro",
