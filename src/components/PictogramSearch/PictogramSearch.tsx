@@ -1,13 +1,11 @@
 import {
   Alert,
-  ButtonBase,
-  InputAdornment,
+  Autocomplete,
   Stack,
   TextField,
   ToggleButton,
 } from "@mui/material";
 import { SyntheticEvent, useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
 import useAraSaac from "../../hooks/useAraSaac";
 import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
@@ -16,6 +14,12 @@ import { useAppSelector } from "../../app/hooks";
 import React from "react";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { Hair, Skin } from "/src/types/sequence";
+import { createFilterOptions } from "@mui/material/Autocomplete";
+
+const filterOptions = createFilterOptions<string>({
+  matchFrom: "start",
+  limit: 100,
+});
 
 interface PropsPictogramSearch {
   indexPict: number;
@@ -45,6 +49,7 @@ const PictogramSearch = ({
     settings: { skin, hair },
     searched: { word, bestIdPicts },
   } = useAppSelector((state) => state.sequence[indexPict].img);
+  const { keywords } = useAppSelector((state) => state.ui.lang);
 
   const intl = useIntl();
   const {
@@ -57,8 +62,21 @@ const PictogramSearch = ({
     word === `${intl.formatMessage({ ...messages.empty })}` ? "" : word;
   const [newWord, setNewWord] = useState(initialWord);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewWord(event.target.value);
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value.length >= 3) setIsAutoComplete(true);
+    if (value.length < 3) setIsAutoComplete(false);
+  };
+
+  const handleChangeAutocomplete = (
+    event: React.SyntheticEvent,
+    value: string | null,
+  ) => {
+    if (value !== null) {
+      setNewWord(value);
+      setIsAutoComplete(false);
+      handleSubmit(event, value);
+    }
   };
 
   const handleUpDatePictNumber = async (upDatePictNumber: number) => {
@@ -81,12 +99,14 @@ const PictogramSearch = ({
     });
   };
 
-  const handleSubmit = async (event: SyntheticEvent) => {
+  const handleSubmit = async (event: SyntheticEvent, value: string) => {
     event.preventDefault();
-    await getSearchPictogram(newWord, indexPict, true);
+    setIsPlus(false);
+    await getSearchPictogram(value, indexPict, true);
   };
 
   const [isPlus, setIsPlus] = useState(false);
+  const [isAutoComplete, setIsAutoComplete] = useState(false);
 
   const handelPlusAction = async (plus: boolean) => {
     await getSearchPictogram(newWord, indexPict, true, plus);
@@ -120,31 +140,21 @@ const PictogramSearch = ({
 
   return (
     <Stack flex={1} sx={{ width: "-webkit-fill-available" }}>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label={intl.formatMessage({ ...messages.search })}
-          id={"search"}
-          variant="outlined"
-          helperText={intl.formatMessage({ ...messages.helperText })}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment
-                position="end"
-                component={ButtonBase}
-                onClick={handleSubmit}
-                aria-label={"toSearch"}
-              >
-                <AiOutlineSearch fontSize={"large"} />
-              </InputAdornment>
-            ),
-          }}
-          autoComplete={"off"}
-          value={newWord}
-          onChange={handleChange}
-          fullWidth
-          sx={{ width: "100%" }}
-        />
-      </form>
+      <Autocomplete
+        options={keywords}
+        filterOptions={filterOptions}
+        onChange={handleChangeAutocomplete}
+        open={isAutoComplete}
+        sx={{ width: "100%" }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={intl.formatMessage({ ...messages.search })}
+            onChange={handleChangeInput}
+            helperText={intl.formatMessage({ ...messages.helperText })}
+          />
+        )}
+      />
       <StyledToggleButtonGroup>
         {bestIdPicts[0] !== -1 &&
           bestIdPicts.map((pictogram, index) => (

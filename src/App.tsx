@@ -20,11 +20,15 @@ export const messageLocale = {
 };
 import { usePageTracking } from "./hooks/usePageTracking";
 import { useAppSelector } from "./app/hooks";
+import useAraSaac from "./hooks/useAraSaac";
 
 const App = (): React.ReactElement => {
   usePageTracking();
   const dispatch = useDispatch();
-  const { app: appLang } = useAppSelector((state) => state.ui.lang);
+  const {
+    lang: { app: appLang, keywords },
+  } = useAppSelector((state) => state.ui);
+  const { getAllKeyWordsForLanguages } = useAraSaac();
 
   useEffect(() => {
     const pictDefaultSettings =
@@ -35,6 +39,8 @@ const App = (): React.ReactElement => {
       const userDefaultSettings = JSON.parse(pictDefaultSettings);
       dispatch(updateDefaultSettingsActionCreator(userDefaultSettings));
     }
+
+    if (keywords.length === 0) getAllKeyWordsForLanguages();
   }, [dispatch]);
 
   return (

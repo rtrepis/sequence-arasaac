@@ -26,19 +26,19 @@ if (langSettings !== null) {
 const localeAPP = (
   userLangSettings?.app
     ? userLangSettings.app
-    : langTranslateApp.includes(localeBrowser)
+    : langTranslateApp.includes(localeBrowser as LangsApp)
       ? localeBrowser
       : "en"
 ) as LangsApp;
 
 const localeSearch = userLangSettings?.search
   ? userLangSettings.search
-  : langTranslateSearch.includes(localeBrowser)
+  : langTranslateSearch.includes(localeBrowser as LangsApp)
     ? localeBrowser
     : "en";
 
 const uiInitialState: Ui = {
-  lang: { app: localeAPP, search: localeSearch },
+  lang: { app: localeAPP, search: localeSearch, keywords: [] },
   viewSettings: {
     sizePict: 1,
     columnGap: 1,
@@ -114,6 +114,11 @@ const uiSlice = createSlice({
         },
       },
     }),
+
+    updateKeywords: (previousUi, action: PayloadAction<string[]>) => ({
+      ...previousUi,
+      lang: { ...previousUi.lang, keywords: [...action.payload] },
+    }),
   },
 });
 
@@ -126,4 +131,5 @@ export const {
   updateDefaultSettingPictApiAra: updateDefaultSettingPictApiAraActionCreator,
   updateDefaultSettingPictSequence:
     updateDefaultSettingPictSequenceActionCreator,
+  updateKeywords: updateKeywordsActionCreator,
 } = uiSlice.actions;
