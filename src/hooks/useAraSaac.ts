@@ -201,15 +201,20 @@ const useAraSaac = () => {
     return path;
   };
 
-  const getAllKeyWordsForLanguages = useCallback(async () => {
-    try {
-      const { data } = await axios.get(`${araSaacURL}keywords/${locale}`);
+  const getAllKeyWordsForLanguages = useCallback(
+    async (value?: string) => {
+      try {
+        const { data } = await axios.get(
+          `${araSaacURL}keywords/${value ?? locale}`,
+        );
 
-      dispatch(updateKeywordsActionCreator(data.words));
-    } catch {
-      console.info("failed fetch keywords ");
-    }
-  }, [dispatch, locale]);
+        dispatch(updateKeywordsActionCreator(data.words));
+      } catch {
+        console.info("failed fetch keywords ");
+      }
+    },
+    [dispatch, locale],
+  );
 
   return {
     getSearchPictogram,
