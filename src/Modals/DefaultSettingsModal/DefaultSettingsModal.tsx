@@ -52,7 +52,7 @@ const DefaultSettingsModal = (): React.ReactElement => {
         fullScreen
         open={open}
         onClose={handleClose}
-        TransitionComponent={Transition}
+        slots={{ transition: Transition }}
       >
         <AppBar
           sx={{ position: { xs: "fixed", md: "relative" } }}

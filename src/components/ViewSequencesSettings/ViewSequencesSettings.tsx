@@ -150,6 +150,7 @@ const ViewSequencesSettings = ({
       event: "full-screen-view",
       event_category: "View",
       event_label: "Full Screen",
+      value: `sizePict_${view.sizePict}`,
     });
   };
 
@@ -234,6 +235,7 @@ const ViewSequencesSettings = ({
                         event: "click-print-view",
                         event_category: "View",
                         event_label: "Print view",
+                        value: `${"size_" + view.sizePict}`,
                       });
                     }}
                   >

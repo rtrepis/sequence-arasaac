@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -17,6 +15,7 @@ import {
   Skin,
 } from "../types/sequence";
 import fitzgeraldColors from "../data/fitzgeraldColors";
+import { updateKeywordsActionCreator } from "../app/slice/uiSlice";
 
 const araSaacURL = import.meta.env.VITE_APP_API_ARASAAC_URL;
 
@@ -39,6 +38,7 @@ const useAraSaac = () => {
   const locale = useAppSelector((state) => state.ui.lang.search);
 
   const makeSettingsProperty = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (data: any) => {
       const settingsProperty: PictApiAraSettings = {};
 
@@ -107,6 +107,7 @@ const useAraSaac = () => {
         );
 
         const findBestPict: number[] = [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data.map((pictogram: any) => findBestPict.push(pictogram._id));
 
         if (isUpdate) {
@@ -180,15 +181,18 @@ const useAraSaac = () => {
     if (pictogramId === 0) return "../img/settings/white.svg";
     let path = `${araSaacURL}pictograms/${pictogramId}`;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     skin &&
       skin !== "white" &&
       (path += `?skin=${skin === "asian" ? "assian" : skin}`);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     hair &&
       (skin === undefined || skin === "white"
         ? (path += `?hair=${hair}`)
         : (path += `&hair=${hair}`));
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     color === false &&
       (skin === undefined && hair === undefined
         ? (path += `?color=${color}`)
@@ -197,7 +201,27 @@ const useAraSaac = () => {
     return path;
   };
 
-  return { getSearchPictogram, toUrlPath, getSettingsPictId };
+  const getAllKeyWordsForLanguages = useCallback(
+    async (value?: string) => {
+      try {
+        const { data } = await axios.get(
+          `${araSaacURL}keywords/${value ?? locale}`,
+        );
+
+        dispatch(updateKeywordsActionCreator(data.words));
+      } catch {
+        console.info("failed fetch keywords ");
+      }
+    },
+    [dispatch, locale],
+  );
+
+  return {
+    getSearchPictogram,
+    toUrlPath,
+    getSettingsPictId,
+    getAllKeyWordsForLanguages,
+  };
 };
 
 export default useAraSaac;
