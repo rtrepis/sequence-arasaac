@@ -14,11 +14,12 @@ import { Link as RouterLink } from "react-router-dom";
 import { settingCardOptions } from "./SettingCardLang.lang";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import {
-  langTranslateApp as langTranslateApp,
-  langTranslateSearch as langTranslateSearch,
+  langTranslateApp,
+  langTranslateSearch,
 } from "../../../../configs/languagesConfigs";
 import { updateLangSettingsActionCreator } from "../../../../app/slice/uiSlice";
 import { Ui } from "../../../../types/ui";
+import useAraSaac from "/src/hooks/useAraSaac";
 
 interface SettingCardProps {
   setting: "languagesApp" | "languagesSearch";
@@ -29,6 +30,7 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
     (store) => store.ui.lang,
   );
   const dispatch = useAppDispatch();
+  const { getAllKeyWordsForLanguages } = useAraSaac();
 
   const initialLang = setting === "languagesApp" ? appLang : searchLang;
   const [lang, setLang] = useState(initialLang);
@@ -45,6 +47,8 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
     dispatch(updateLangSettingsActionCreator(newLangValue as Ui["lang"]));
     sessionStorage.setItem("langSettings", JSON.stringify(newLangValue));
     localStorage.setItem("langSettings", JSON.stringify(newLangValue));
+
+    getAllKeyWordsForLanguages(value);
   };
 
   return (
