@@ -21,6 +21,7 @@ import { Sequence } from "/src/types/sequence";
 import { DefaultSettings } from "/src/types/ui";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ButtonWithModalDonwload.lang";
+import { trackEvent } from "/src/hooks/usePageTracking";
 
 const ButtonWithModalDownload = (): React.ReactElement => {
   const {
@@ -54,6 +55,7 @@ const ButtonWithModalDownload = (): React.ReactElement => {
 
   const onSaveFile = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    const valueEventsTrace: string[] = [];
     const isoString = new Date().toISOString();
 
     const fileElement = document.createElement("a");
@@ -61,8 +63,14 @@ const ButtonWithModalDownload = (): React.ReactElement => {
       sequence?: Sequence;
       defaultSettings?: DefaultSettings;
     } = {};
-    if (save.defaultSettings) downloadObject.sequence = sequence;
-    if (save.sequence) downloadObject.defaultSettings = defaultSettings;
+    if (save.defaultSettings) {
+      downloadObject.defaultSettings = defaultSettings;
+      valueEventsTrace.push("defaultSettings");
+    }
+    if (save.sequence) {
+      downloadObject.sequence = sequence;
+      valueEventsTrace.push("sequence");
+    }
 
     const file = new Blob([JSON.stringify(downloadObject)], {
       type: "text/plain",
@@ -73,6 +81,13 @@ const ButtonWithModalDownload = (): React.ReactElement => {
         ? `${fileName}.saac`
         : `SequenciAAC_${isoString.slice(0, -5)}.saac`;
     fileElement.click();
+
+    trackEvent({
+      event: "safe-event",
+      event_category: "file",
+      event_label: "safe:",
+      value: valueEventsTrace.join(" "),
+    });
   };
 
   return (

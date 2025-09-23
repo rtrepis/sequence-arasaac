@@ -8,6 +8,7 @@ import { addSequenceActionCreator } from "/src/app/slice/sequenceSlice";
 import { updateDefaultSettingsActionCreator } from "/src/app/slice/uiSlice";
 import { useIntl } from "react-intl";
 import messages from "./ButtonWithFileLoad.lang";
+import { trackEvent } from "/src/hooks/usePageTracking";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -26,6 +27,7 @@ const ButtonWithFileLoad = (): React.ReactElement => {
   const dispatch = useAppDispatch();
 
   const loadFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const valueTrackEvent: string[] = [];
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
@@ -36,13 +38,17 @@ const ButtonWithFileLoad = (): React.ReactElement => {
           try {
             const parsedJson = JSON.parse(e.target?.result as string);
 
-            if ("sequence" in parsedJson)
+            if ("sequence" in parsedJson) {
               dispatch(addSequenceActionCreator(parsedJson.sequence));
+              valueTrackEvent.push("sequence");
+            }
 
-            if ("defaultSettings" in parsedJson)
+            if ("defaultSettings" in parsedJson) {
               dispatch(
                 updateDefaultSettingsActionCreator(parsedJson.defaultSettings),
               );
+              valueTrackEvent.push("defaultSettings");
+            }
           } catch (error) {
             console.error(error);
           }
@@ -50,6 +56,13 @@ const ButtonWithFileLoad = (): React.ReactElement => {
         reader.readAsText(file);
       }
     }
+
+    trackEvent({
+      event: "load-event",
+      event_category: "file",
+      event_label: "load",
+      value: valueTrackEvent.join(" "),
+    });
   };
 
   return (
