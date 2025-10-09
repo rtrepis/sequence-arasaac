@@ -10,9 +10,9 @@ import NotPrint from "../utils/NotPrint/NotPrint";
 import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
 import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
 import React from "react";
-import ButtonWithModalDownload from "../ButtonWithModalDownload/ButtonWithModalDownload";
 import ButtonWithFileLoad from "../ButtonWithFileLoad/ButtonWithFileLoad";
 import TabsEditView from "../TabsEditView/TabsEditView";
+import ButtonWithModalDownload from "../ButtonWithModalDownload/ButtonWithModalDonwload";
 
 interface BarProps {
   children: React.ReactElement;
