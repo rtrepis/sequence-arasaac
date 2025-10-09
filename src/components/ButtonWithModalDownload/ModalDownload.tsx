@@ -8,14 +8,11 @@ import {
   FormControlLabel,
   FormGroup,
   FormHelperText,
-  IconButton,
   Input,
   InputLabel,
   Stack,
-  Tooltip,
 } from "@mui/material";
 import React, { BaseSyntheticEvent, useState } from "react";
-import { AiOutlineCloudDownload } from "react-icons/ai";
 import { useAppSelector } from "/src/app/hooks";
 import { Sequence } from "/src/types/sequence";
 import { DefaultSettings } from "/src/types/ui";
@@ -23,26 +20,31 @@ import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ButtonWithModalDonwload.lang";
 import { trackEvent } from "/src/hooks/usePageTracking";
 
-const ButtonWithModalDownload = (): React.ReactElement => {
+interface ModalDownloadProps {
+  open: boolean;
+  onClose: VoidFunction;
+}
+
+const ModalDownload = ({
+  open,
+  onClose,
+}: ModalDownloadProps): React.ReactElement => {
   const {
     sequence,
     ui: { defaultSettings },
   } = useAppSelector((state) => state);
   const intl = useIntl();
 
-  const [openModal, setOpenModal] = useState(false);
   const [fileName, setFileName] = useState("");
+
   const [save, setSave] = useState({
     sequence: sequence.length > 0,
     defaultSettings: sequence.length === 0,
   });
 
-  const onClick = () => {
-    setOpenModal(true);
-  };
-
   const onChangeCheckbox = (event: BaseSyntheticEvent, checked: boolean) => {
     const name = event.target.name;
+
     setSave((previous) => {
       return { ...previous, [name]: checked };
     });
@@ -63,10 +65,12 @@ const ButtonWithModalDownload = (): React.ReactElement => {
       sequence?: Sequence;
       defaultSettings?: DefaultSettings;
     } = {};
+
     if (save.defaultSettings) {
       downloadObject.defaultSettings = defaultSettings;
       valueEventsTrace.push("defaultSettings");
     }
+
     if (save.sequence) {
       downloadObject.sequence = sequence;
       valueEventsTrace.push("sequence");
@@ -88,67 +92,57 @@ const ButtonWithModalDownload = (): React.ReactElement => {
       event_label: "safe:",
       value: valueEventsTrace.join(" "),
     });
+
+    onClose();
   };
 
   return (
-    <>
-      <Tooltip title={intl.formatMessage(messages.download)}>
-        <IconButton
-          color="secondary"
-          onClick={onClick}
-          aria-label={intl.formatMessage(messages.download)}
-        >
-          <AiOutlineCloudDownload />
-        </IconButton>
-      </Tooltip>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>
+        <FormattedMessage {...messages.save} />
+        ...
+        <FormHelperText>
+          <FormattedMessage {...messages.saveHelper} />
+        </FormHelperText>
+      </DialogTitle>
 
-      <Dialog open={openModal} onClose={() => setOpenModal(false)}>
-        <DialogTitle>
-          <FormattedMessage {...messages.save} />
-          ...
-          <FormHelperText>
-            <FormattedMessage {...messages.saveHelper} />
-          </FormHelperText>
-        </DialogTitle>
-
-        <DialogContent>
-          <form name="download-form">
-            <FormGroup>
-              {sequence.length > 0 && (
-                <FormControlLabel
-                  control={<Checkbox defaultChecked />}
-                  label={intl.formatMessage(messages.sequence)}
-                  onChange={onChangeCheckbox}
-                  name="sequence"
-                />
-              )}
-
+      <DialogContent>
+        <form name="download-form">
+          <FormGroup>
+            {sequence.length > 0 && (
               <FormControlLabel
-                control={<Checkbox />}
-                label={intl.formatMessage(messages.defaultSettings)}
+                control={<Checkbox defaultChecked />}
+                label={intl.formatMessage(messages.sequence)}
                 onChange={onChangeCheckbox}
-                name="defaultSettings"
+                name="sequence"
               />
-            </FormGroup>
+            )}
 
-            <FormControl sx={{ marginTop: 2 }}>
-              <InputLabel>
-                <FormattedMessage {...messages.filename} />
-              </InputLabel>
-              <Input onChange={onChangeFileName} value={fileName} />
-            </FormControl>
+            <FormControlLabel
+              control={<Checkbox />}
+              label={intl.formatMessage(messages.defaultSettings)}
+              onChange={onChangeCheckbox}
+              name="defaultSettings"
+            />
+          </FormGroup>
 
-            <Stack marginTop={2} alignItems={"flex-end"}>
-              <Button type="submit" onClick={onSaveFile}>
-                <FormattedMessage {...messages.save} /> &{" "}
-                <FormattedMessage {...messages.download} />
-              </Button>
-            </Stack>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </>
+          <FormControl sx={{ marginTop: 2 }}>
+            <InputLabel>
+              <FormattedMessage {...messages.filename} />
+            </InputLabel>
+            <Input onChange={onChangeFileName} value={fileName} />
+          </FormControl>
+
+          <Stack marginTop={2} alignItems={"flex-end"}>
+            <Button type="submit" onClick={onSaveFile}>
+              <FormattedMessage {...messages.save} /> &{" "}
+              <FormattedMessage {...messages.download} />
+            </Button>
+          </Stack>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default ButtonWithModalDownload;
+export default ModalDownload;
