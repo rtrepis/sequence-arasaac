@@ -4,6 +4,7 @@ import MagicSearch from "../../components/MagicSearch/MagicSearch";
 import { useAppSelector } from "../../app/hooks";
 import PictEditModalList from "../../Modals/PictEditModalList/PictEditModalList";
 import React, { useState } from "react";
+import TabsSequences from "../../components/TabsSequences/TabsSequences";
 
 const EditSequencesPage = (): React.ReactElement => {
   const sequence = useAppSelector((state) => state.sequence);
@@ -24,6 +25,7 @@ const EditSequencesPage = (): React.ReactElement => {
         <MagicSearch info={{ value: info }} />
       </Stack>
       <PictEditModalList sequence={sequence} />
+      <TabsSequences />
     </>
   );
 };
