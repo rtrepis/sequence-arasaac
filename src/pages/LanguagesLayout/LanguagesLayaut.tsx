@@ -1,8 +1,8 @@
 import React from "react";
 import { IntlProvider } from "react-intl";
 import { Navigate, Outlet, useParams } from "react-router-dom";
-import BarNavigation from "/src/components/BarNavigation/BarNavigation";
-import { messageLocale } from "/src/App";
+import BarNavigation from "@/components/BarNavigation/BarNavigation";
+import { messageLocale } from "@/App";
 
 const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
   const { locale } = useParams<{ locale: string }>();

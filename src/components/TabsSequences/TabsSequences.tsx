@@ -39,28 +39,17 @@ const TabsSequences = (): React.ReactElement => {
         ))}
 
         {/* 🔥 Botó "+" sense IconButton dins d’un Tab */}
-        <Tab
-          label={
-            <Tooltip title="Afegir seqüència">
-              <span
-                onClick={handleAddSequence}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                }}
-              >
-                <AiFillPlusCircle size={24} color="#888" />
-              </span>
-            </Tooltip>
-          }
-          id="vertical-tab-add"
-        />
+        <Tooltip title="Afegir seqüència">
+          <Tab
+            icon={<AiFillPlusCircle size={24} color="#888" />}
+            id="vertical-tab-add"
+            onClick={handleAddSequence}
+          />
+        </Tooltip>
       </Tabs>
 
       {/* Panel */}
-      <TabPanelSequence index={value} isActive={true} />
+      <TabPanelSequence index={value} />
     </div>
   );
 };

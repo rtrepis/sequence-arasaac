@@ -20,7 +20,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 import useWindowResize from "../../hooks/useWindowResize";
 import React from "react";
-import { trackEvent } from "/src/hooks/usePageTracking";
+import { trackEvent } from "@/hooks/usePageTracking";
 
 interface ViewSequencesSettingsProps {
   children: React.ReactElement | React.ReactElement[];
@@ -87,10 +87,10 @@ const ViewSequencesSettings = ({
           (configsView.widthLandScape[sizePage] * height) /
           configsView.heightLandScape[sizePage];
       } else {
-        width = screenWidth - configsView.marginAndScrollBar[sizeMD];
-        height =
-          (configsView.widthLandScape[sizePage] * width) /
-          configsView.heightLandScape[sizePage];
+        height = screenHeight - spaceToFoot;
+        width =
+          (configsView.heightLandScape[sizePage] * height) /
+          configsView.widthLandScape[sizePage];
       }
 
     return [width, height];
@@ -182,6 +182,7 @@ const ViewSequencesSettings = ({
     if (document.fullscreenElement === display) {
       setScale(0.82);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     displayFullScreen,
     isLandscape,
@@ -372,12 +373,9 @@ const ViewSequencesSettings = ({
       </form>
       <Stack
         className="displayFullScreen"
-        direction={"row"}
-        flexWrap={"wrap"}
+        direction={"column"}
         alignContent={"start"}
         alignItems={"start"}
-        columnGap={view.columnGap}
-        rowGap={view.rowGap}
         overflow={"hidden"}
         padding={2}
         display={"none"}

@@ -5,10 +5,11 @@ import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSe
 import { ViewSettings } from "../../types/ui";
 import CopyRight from "../../components/CopyRight/CopyRight";
 import React from "react";
+import { Box } from "@mui/material";
 
 const ViewSequencePage = (): React.ReactElement => {
   const {
-    sequenceActive: sequence,
+    document,
     ui: { viewSettings },
   } = useAppSelector((state) => state);
 
@@ -35,17 +36,34 @@ const ViewSequencePage = (): React.ReactElement => {
         scale={scale}
         setScale={setScale}
       >
-        {sequence.map((pictogram) => (
-          <PictogramCard
-            pictogram={pictogram}
-            view={"complete"}
-            variant="plane"
-            size={{
-              pictSize: view.sizePict,
-              scale: scale,
+        {Object.entries(document.content).map(([key, sequence]) => (
+          <Box
+            key={`sequence-${key}`}
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              alignContent: "start",
+              alignItems: "start",
+              columnGap: view.columnGap * scale,
+              rowGap: view.rowGap * scale,
+              width: "100%",
+              marginBottom: 2,
             }}
-            key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
-          />
+          >
+            {sequence.map((pictogram) => (
+              <PictogramCard
+                pictogram={pictogram}
+                view={"complete"}
+                variant="plane"
+                size={{
+                  pictSize: view.sizePict,
+                  scale: scale,
+                }}
+                key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
+              />
+            ))}
+          </Box>
         ))}
       </ViewSequencesSettings>
       <CopyRight author={author} />

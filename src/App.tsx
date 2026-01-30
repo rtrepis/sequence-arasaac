@@ -3,9 +3,8 @@ import "./App.css";
 import ViewSequencePage from "./pages/ViewSequencePage/ViewSequencePage";
 import EditSequencesPage from "./pages/EditSequencesPage/EditSequencesPage";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { ReactElement, useEffect } from "react";
 import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
-import React from "react";
 import LanguageLayout from "./pages/LanguagesLayout/LanguagesLayaut";
 import WelcomeLayout from "./pages/WelcomePage/WelcomeLayout";
 
@@ -22,7 +21,7 @@ import { usePageTracking } from "./hooks/usePageTracking";
 import { useAppSelector } from "./app/hooks";
 import useAraSaac from "./hooks/useAraSaac";
 
-const App = (): React.ReactElement => {
+const App = (): ReactElement => {
   usePageTracking();
   const dispatch = useDispatch();
   const {
