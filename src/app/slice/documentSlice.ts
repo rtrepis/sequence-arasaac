@@ -8,7 +8,6 @@ import {
   PictApiAraSettingsApplyAll,
 } from "../../types/sequence";
 import { DocumentSAAC } from "@/types/document";
-import { useActionData } from "react-router-dom";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);

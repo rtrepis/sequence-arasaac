@@ -19,7 +19,7 @@ root.render(
       <ThemeProvider theme={theme}>
         <CssBaseline enable-color-scheme />
         <BrowserRouter
-          future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+          future={{ v7_relativeSplatPath: true, v7_startTransition: false }}
         >
           <App />
         </BrowserRouter>
