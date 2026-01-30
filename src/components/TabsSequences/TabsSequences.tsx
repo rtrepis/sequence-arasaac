@@ -1,14 +1,21 @@
-import { Tab, Tabs } from "@mui/material";
-import React from "react";
-import { useState } from "react";
+import { Tab, Tabs, Tooltip } from "@mui/material";
+import React, { SyntheticEvent, useState } from "react";
 import TabPanelSequence from "../TabPanelSecuence/TabPanelSecuence";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { changeActiveSAACActionCreator } from "@/app/slice/documentSlice";
+import { AiFillPlusCircle } from "react-icons/ai";
 
 const TabsSequences = (): React.ReactElement => {
-  const [amount, setAmount] = useState(0);
-  const [value, setValue] = useState(0);
+  const dispatch = useAppDispatch();
+  const value = useAppSelector((state) => state.document.activeSAAC);
+  const [amount, setAmount] = useState(1);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (event: SyntheticEvent, newValue: number) => {
+    dispatch(changeActiveSAACActionCreator(newValue));
+  };
+
+  const handleAddSequence = () => {
+    setAmount((prev) => prev + 1);
   };
 
   return (
@@ -21,19 +28,39 @@ const TabsSequences = (): React.ReactElement => {
         aria-label="Vertical tabs example"
         sx={{ borderRight: 1, borderColor: "divider" }}
       >
+        {/* 🔥 Generació automàtica dels Tabs segons “amount” */}
+        {[...Array(amount)].map((_, index) => (
+          <Tab
+            key={`tab-${index}`}
+            label={`${index + 1}`}
+            id={`vertical-tab-${index}`}
+            aria-controls={`vertical-tabpanel-${index}`}
+          />
+        ))}
+
+        {/* 🔥 Botó "+" sense IconButton dins d’un Tab */}
         <Tab
-          label="1"
-          id={`vertical-tab-${1}`}
-          aria-controls={`vertical-tabpanel-${1}`}
-        />
-        <Tab
-          label="2"
-          id={`vertical-tab-${2}`}
-          aria-controls={`vertical-tabpanel-${2}`}
+          label={
+            <Tooltip title="Afegir seqüència">
+              <span
+                onClick={handleAddSequence}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <AiFillPlusCircle size={24} color="#888" />
+              </span>
+            </Tooltip>
+          }
+          id="vertical-tab-add"
         />
       </Tabs>
-      <TabPanelSequence index={0} isActive={value === 0} />
-      <TabPanelSequence index={1} isActive={value === 1} />
+
+      {/* Panel */}
+      <TabPanelSequence index={value} isActive={true} />
     </div>
   );
 };

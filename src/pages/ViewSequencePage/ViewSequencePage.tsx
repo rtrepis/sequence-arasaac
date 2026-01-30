@@ -8,7 +8,7 @@ import React from "react";
 
 const ViewSequencePage = (): React.ReactElement => {
   const {
-    sequence,
+    sequenceActive: sequence,
     ui: { viewSettings },
   } = useAppSelector((state) => state);
 

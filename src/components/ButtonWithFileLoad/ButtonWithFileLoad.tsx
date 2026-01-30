@@ -3,12 +3,15 @@ import { styled } from "@mui/material/styles";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { IconButton, Tooltip } from "@mui/material";
 import { ChangeEvent } from "react";
-import { useAppDispatch } from "/src/app/hooks";
-import { addSequenceActionCreator } from "/src/app/slice/sequenceSlice";
-import { updateDefaultSettingsActionCreator } from "/src/app/slice/uiSlice";
 import { useIntl } from "react-intl";
 import messages from "./ButtonWithFileLoad.lang";
-import { trackEvent } from "/src/hooks/usePageTracking";
+import { useAppDispatch } from "@/app/hooks";
+import {
+  addSequenceActionCreator,
+  loadDocumentSaacActionCreator,
+} from "@/app/slice/documentSlice";
+import { updateDefaultSettingsActionCreator } from "@/app/slice/uiSlice";
+import { trackEvent } from "@/hooks/usePageTracking";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -38,9 +41,15 @@ const ButtonWithFileLoad = (): React.ReactElement => {
           try {
             const parsedJson = JSON.parse(e.target?.result as string);
 
+            // Es manter per no trencar amb els usuaris que van guardar el objecte {sequence: {}, defaults...}
             if ("sequence" in parsedJson) {
               dispatch(addSequenceActionCreator(parsedJson.sequence));
               valueTrackEvent.push("sequence");
+            }
+
+            if ("documentState" in parsedJson) {
+              dispatch(loadDocumentSaacActionCreator);
+              valueTrackEvent.push("defaultSettings");
             }
 
             if ("defaultSettings" in parsedJson) {

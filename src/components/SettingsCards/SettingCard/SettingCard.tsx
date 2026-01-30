@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../../app/hooks";
 import {
   pictAraSettingsApplyAllActionCreator,
   pictSequenceApplyAllActionCreator,
-} from "../../../app/slice/sequenceSlice";
+} from "../../../app/slice/documentSlice";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import { Hair, Skin, TextPosition } from "../../../types/sequence";
 import { settingsCardLang } from "./SettingCard.lang";

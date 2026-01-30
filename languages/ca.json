@@ -104,7 +104,7 @@
     "description": "label text field"
   },
   "components.magicSearch.sample.": {
-    "defaultMessage": "Exemple: Nen, posa, el cinturó de seguretat.",
+    "defaultMessage": "Exemple: Nen, posar, el cinturó de seguretat.",
     "description": "Helper text field"
   },
   "components.pictEdit.close": {
@@ -511,4 +511,3 @@
     "description": "Start button"
   }
 }
-

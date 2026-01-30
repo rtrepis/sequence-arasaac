@@ -16,6 +16,7 @@
     "react-intl": "^6.8.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.10.0",
+    "typescript-eslint": "^8.53.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
