@@ -13,8 +13,8 @@ import messages from "./PictogramSearch.lang";
 import { useAppSelector } from "../../app/hooks";
 import React from "react";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
-import { Hair, Skin } from "/src/types/sequence";
 import { createFilterOptions } from "@mui/material/Autocomplete";
+import { Hair, Skin } from "@/types/sequence";
 
 const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
@@ -45,10 +45,12 @@ const PictogramSearch = ({
   state,
   setState,
 }: PropsPictogramSearch): React.ReactElement => {
+  const getActiveSAACPictImg = (state) =>
+    state.document.content[state.document.activeSAAC][indexPict].img;
   const {
     settings: { skin, hair },
     searched: { word, bestIdPicts },
-  } = useAppSelector((state) => state.sequence[indexPict].img);
+  } = useAppSelector(getActiveSAACPictImg);
   const { keywords } = useAppSelector((state) => state.ui.lang);
 
   const intl = useIntl();

@@ -13,16 +13,16 @@ import {
   Stack,
 } from "@mui/material";
 import React, { BaseSyntheticEvent, useState } from "react";
-import { useAppSelector } from "/src/app/hooks";
-import { Sequence } from "/src/types/sequence";
-import { DefaultSettings } from "/src/types/ui";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ButtonWithModalDonwload.lang";
-import { trackEvent } from "/src/hooks/usePageTracking";
+import { useAppSelector } from "@/app/hooks";
+import { trackEvent } from "@/hooks/usePageTracking";
+import { DefaultSettings } from "@/types/ui";
+import { DocumentSAAC } from "@/types/document";
 
 interface ModalDownloadProps {
   open: boolean;
-  onClose: VoidFunction;
+  onClose: () => void;
 }
 
 const ModalDownload = ({
@@ -30,16 +30,17 @@ const ModalDownload = ({
   onClose,
 }: ModalDownloadProps): React.ReactElement => {
   const {
-    sequence,
+    document: documentSaac,
     ui: { defaultSettings },
   } = useAppSelector((state) => state);
   const intl = useIntl();
 
   const [fileName, setFileName] = useState("");
 
+  const documentSaacIsNotEmpty = documentSaac.content[0].length > 0;
   const [save, setSave] = useState({
-    sequence: sequence.length > 0,
-    defaultSettings: sequence.length === 0,
+    documentState: documentSaacIsNotEmpty,
+    defaultSettings: documentSaacIsNotEmpty,
   });
 
   const onChangeCheckbox = (event: BaseSyntheticEvent, checked: boolean) => {
@@ -60,9 +61,9 @@ const ModalDownload = ({
     const valueEventsTrace: string[] = [];
     const isoString = new Date().toISOString();
 
-    const fileElement = document.createElement("a");
+    const fileElement = window.document.createElement("a");
     const downloadObject: {
-      sequence?: Sequence;
+      documentState?: DocumentSAAC;
       defaultSettings?: DefaultSettings;
     } = {};
 
@@ -71,9 +72,9 @@ const ModalDownload = ({
       valueEventsTrace.push("defaultSettings");
     }
 
-    if (save.sequence) {
-      downloadObject.sequence = sequence;
-      valueEventsTrace.push("sequence");
+    if (save.documentState) {
+      downloadObject.documentState = documentSaac;
+      valueEventsTrace.push("documentState");
     }
 
     const file = new Blob([JSON.stringify(downloadObject)], {
@@ -109,12 +110,12 @@ const ModalDownload = ({
       <DialogContent>
         <form name="download-form">
           <FormGroup>
-            {sequence.length > 0 && (
+            {documentSaacIsNotEmpty && (
               <FormControlLabel
                 control={<Checkbox defaultChecked />}
                 label={intl.formatMessage(messages.sequence)}
                 onChange={onChangeCheckbox}
-                name="sequence"
+                name="documentState"
               />
             )}
 

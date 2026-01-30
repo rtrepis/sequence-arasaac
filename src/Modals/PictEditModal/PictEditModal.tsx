@@ -18,7 +18,7 @@ import { useAppDispatch } from "../../app/hooks";
 import {
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
-} from "../../app/slice/sequenceSlice";
+} from "../../app/slice/documentSlice";
 import PictEditForm from "../../components/PictEditFrom/PictEditForm";
 import MouseActionList from "../../components/utils/MouseActionList/MouseActionList";
 import React from "react";

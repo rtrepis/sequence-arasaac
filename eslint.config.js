@@ -1,15 +1,14 @@
 import js from "@eslint/js";
 import globals from "globals";
-import tseslint from "typescript-eslint";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRedux from "eslint-plugin-react-redux";
 import prettier from "eslint-plugin-prettier";
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
 
 export default [
-  // 🔹 Fitxers a lintar
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
     ignores: [
       "dist/**",
       "node_modules/**",
@@ -20,14 +19,10 @@ export default [
     ],
   },
 
-  // 🔹 Config base JS
   js.configs.recommended,
 
-  // 🔹 TypeScript (Flat, oficial)
-  ...tseslint.configs.recommended,
-
-  // 🔹 Entorn
   {
+    files: ["**/*.{js,jsx,ts,tsx}"],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -36,63 +31,65 @@ export default [
     },
   },
 
-  // 🔹 React
+  // React
   react.configs.flat.recommended,
   {
     settings: {
-      react: {
-        version: "detect",
-      },
+      react: { version: "detect" },
     },
   },
 
-  // 🔹 React Hooks (molt important)
+  // React Hooks
   {
-    plugins: {
-      "react-hooks": reactHooks,
-    },
+    plugins: { "react-hooks": reactHooks },
     rules: reactHooks.configs.recommended.rules,
   },
 
-  // 🔹 React Redux (bones pràctiques)
+  // React Redux
   {
-    plugins: {
-      "react-redux": reactRedux,
-    },
+    plugins: { "react-redux": reactRedux },
     rules: {
       "react-redux/useSelector-prefer-selectors": "warn",
-      "react-redux/useSelector-prefer-shallow-equal": "warn",
     },
   },
 
-  // 🔹 Prettier (només errors de format)
+  // TypeScript (ÚNIC lloc amb @typescript-eslint)
   {
-    plugins: {
-      prettier,
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
     },
+    plugins: {
+      "@typescript-eslint": tseslint,
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" },
+      ],
+      "@typescript-eslint/no-unused-expressions": "warn",
+    },
+  },
+
+  // Prettier
+  {
+    plugins: { prettier },
     rules: {
       "prettier/prettier": "warn",
     },
   },
 
-  // 🔹 Ajustos pràctics (sense soroll)
+  // Ajustos globals sense plugins
   {
     rules: {
-      // React 17+ JSX transform
       "react/react-in-jsx-scope": "off",
-
-      // TS ja ho fa millor
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_" },
-      ],
-
-      // expressions tipus: condition && fn()
       "no-unused-expressions": "off",
-      "@typescript-eslint/no-unused-expressions": "warn",
-
-      // qualitat
       "no-console": "warn",
     },
   },
