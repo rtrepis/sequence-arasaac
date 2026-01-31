@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAppSelector } from "../../app/hooks";
-import PictogramCard from "../../components/PictogramCard/PictogramCard";
-import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSequencesSettings";
-import { ViewSettings } from "../../types/ui";
-import CopyRight from "../../components/CopyRight/CopyRight";
+import { useAppSelector } from "@/app/hooks";
+import PictogramCard from "@/components/PictogramCard/PictogramCard";
+import ViewSequencesSettings from "@/components/ViewSequencesSettings/ViewSquenceSettings.refactor";
+import { ViewSettings } from "@/types/ui";
+import CopyRight from "@/components/CopyRight/CopyRight";
 import React from "react";
 import { Box } from "@mui/material";
 
@@ -28,14 +28,7 @@ const ViewSequencePage = (): React.ReactElement => {
 
   return (
     <>
-      <ViewSequencesSettings
-        view={view}
-        setView={setView}
-        author={author}
-        setAuthor={setAuthor}
-        scale={scale}
-        setScale={setScale}
-      >
+      <ViewSequencesSettings>
         {Object.entries(document.content).map(([key, sequence]) => (
           <Box
             key={`sequence-${key}`}
