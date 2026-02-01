@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Divider,
   FormGroup,
@@ -216,25 +217,45 @@ const ViewSequencesSettings = ({
         </NotPrint>
 
         <Stack direction={{ xs: "column", md: "row" }} columnGap={3}>
-          <Stack
-            direction={"row"}
-            flexWrap={"wrap"}
-            alignContent={"start"}
-            alignItems={"start"}
-            columnGap={viewSettings.columnGap * activeScale}
-            rowGap={viewSettings.rowGap * activeScale}
-            width={displayWidth}
-            height={displayHeight}
-            overflow={"hidden"}
+          {/* Contenidor exterior: dimensions visuals de pantalla */}
+          <Box
             className="preview-container"
             sx={{
+              width: displayWidth,
+              height: displayHeight,
+              overflow: "hidden",
               border: "2px solid green",
-              padding: 2,
-              marginBottom: 3,
+              marginBottom: 1,
             }}
           >
-            {children({ viewSettings, scale: activeScale, author })}
-          </Stack>
+            {/* Contenidor interior: dimensions reals amb transform per visualització */}
+            <Box
+              className="preview-content"
+              sx={{
+                width: pageFormat.dimensions.width,
+                height: pageFormat.dimensions.height,
+                transform: `scale(${calculatedScale})`,
+                transformOrigin: "top left",
+              }}
+            >
+              <Stack
+                direction={"row"}
+                flexWrap={"wrap"}
+                alignContent={"start"}
+                alignItems={"start"}
+                columnGap={viewSettings.columnGap}
+                rowGap={viewSettings.rowGap}
+                width="100%"
+                height="100%"
+                sx={{
+                  padding: 2,
+                  paddingInline: 1.5,
+                }}
+              >
+                {children({ viewSettings, scale: 1, author })}
+              </Stack>
+            </Box>
+          </Box>
 
           <NotPrint>
             <Divider orientation="vertical" />

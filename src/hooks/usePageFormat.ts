@@ -1,10 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import {
   PageSize,
   PageOrientation,
   PageFormat,
   createPageFormat,
 } from "@/types/PageFormat";
+import { useScreenDPI } from "@/features/print-refactor/components/dpiDetector";
 
 /**
  * Índex de pàgina per a compatibilitat amb el codi existent
@@ -54,7 +55,7 @@ export interface PageFormatState {
 }
 
 /**
- * Hook custom per gestionar el format de pàgina
+ * Hook custom per gestionar el format de pàgina amb detecció de DPI
  * Segueix el principi de Single Responsibility
  *
  * @param config - Configuració inicial
@@ -67,7 +68,14 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
   const [orientation, setOrientationState] =
     useState<PageOrientation>(initialOrientation);
 
-  const pageFormat = createPageFormat(pageSize, orientation);
+  // Detectar DPI per recalcular dimensions quan canvia zoom/monitor
+  const screenInfo = useScreenDPI();
+
+  // Recalcular pageFormat quan canvia DPI, size o orientation
+  const pageFormat = useMemo(() => {
+    return createPageFormat(pageSize, orientation);
+  }, [pageSize, orientation, screenInfo.dpi]);
+
   const pageSizeIndex = PAGE_INDEX_MAP[pageSize];
   const isLandscape = orientation === "landscape";
   const isFullscreen = pageSize === "FULLSCREEN";

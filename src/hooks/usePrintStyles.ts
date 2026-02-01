@@ -38,6 +38,7 @@ export function usePrintStyles(pageFormat: PageFormat) {
           border: none !important;
           padding: 0 !important;
           margin: 0 !important;
+          overflow: visible !important;
           width: ${pageFormat.dimensions.width}px !important;
           height: ${pageFormat.dimensions.height}px !important;
         }
