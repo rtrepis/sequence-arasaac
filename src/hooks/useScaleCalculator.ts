@@ -60,7 +60,7 @@ export function calculateDisplayDimensions(
   }
 
   // Calcular escala basant-se en l'amplada
-  const scale = availableWidth / (dimensions.width + 24); // 24 = PRINT_CONTAINER_PADDING
+  const scale = availableWidth / dimensions.width; // 24 = PRINT_CONTAINER_PADDING
 
   return {
     displayWidth: availableWidth,
