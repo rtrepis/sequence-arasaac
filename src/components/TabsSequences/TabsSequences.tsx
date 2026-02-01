@@ -1,21 +1,28 @@
 import { Tab, Tabs, Tooltip } from "@mui/material";
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent } from "react";
 import TabPanelSequence from "../TabPanelSecuence/TabPanelSecuence";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { changeActiveSAACActionCreator } from "@/app/slice/documentSlice";
+import {
+  changeActiveSAACActionCreator,
+  addNewSequenceActionCreator,
+} from "@/app/slice/documentSlice";
 import { AiFillPlusCircle } from "react-icons/ai";
 
 const TabsSequences = (): React.ReactElement => {
   const dispatch = useAppDispatch();
   const value = useAppSelector((state) => state.document.activeSAAC);
-  const [amount, setAmount] = useState(1);
+  // Nombre de tabs derivat de les claus de content (estat persistat en Redux)
+  const amount = useAppSelector(
+    (state) => Object.keys(state.document.content).length,
+  );
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     dispatch(changeActiveSAACActionCreator(newValue));
   };
 
   const handleAddSequence = () => {
-    setAmount((prev) => prev + 1);
+    dispatch(addNewSequenceActionCreator(amount));
+    dispatch(changeActiveSAACActionCreator(amount));
   };
 
   return (
