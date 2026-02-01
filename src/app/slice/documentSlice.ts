@@ -40,6 +40,11 @@ const documentSlice = createSlice({
       return previousDocument;
     },
 
+    // Crea una nova seqüència buida amb la clau indicada sense canviar l'actiu
+    addNewSequence: (previousDocument, action: PayloadAction<number>) => {
+      previousDocument.content[action.payload] = [];
+    },
+
     addPictogram: (previousDocument, action: PayloadAction<PictSequence>) => {
       previousDocument.content[previousDocument.activeSAAC] = [
         ...previousDocument.content[previousDocument.activeSAAC],
@@ -223,6 +228,7 @@ export const documentReducer = documentSlice.reducer;
 export const {
   loadDocumentSaac: loadDocumentSaacActionCreator,
   changeActiveSAAC: changeActiveSAACActionCreator,
+  addNewSequence: addNewSequenceActionCreator,
   addPictogram: addPictogramActionCreator,
   insertPictogram: insertPictogramActionCreator,
   subtractPictogram: subtractPictogramActionCreator,
