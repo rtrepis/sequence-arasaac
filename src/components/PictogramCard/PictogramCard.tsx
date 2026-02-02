@@ -116,7 +116,12 @@ const PictogramCard = ({
       <CardContent sx={{ padding: 0, position: "relative" }}>
         <CardMedia
           component="img"
-          image={url ? url : toUrlPathApiAraSaac(selectedId, skin, hair, color)}
+          image={
+            // Ignorem URLs blob (temporals) perquè no són vàlides després de recarregar
+            url && !url.startsWith("blob:")
+              ? url
+              : toUrlPathApiAraSaac(selectedId, skin, hair, color)
+          }
           height={150 * pictSize * printPageRatio}
           width={150 * pictSize * printPageRatio}
           alt={intl.formatMessage({ ...messages.pictogram })}
