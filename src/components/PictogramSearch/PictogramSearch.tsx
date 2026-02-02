@@ -15,6 +15,7 @@ import React from "react";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { Hair, Skin } from "@/types/sequence";
+import { fileToBase64 } from "@/utils/imageToBase64";
 
 const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
@@ -115,19 +116,26 @@ const PictogramSearch = ({
     setIsPlus(!isPlus);
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      // Convertim la imatge a base64 (amb compressió automàtica si supera 2MB)
+      const base64Url = await fileToBase64(file);
 
       setState({
         selectedId: 0,
         fitzgerald: undefined,
-        url: imageURL,
+        url: base64Url,
         color: undefined,
         hair: undefined,
         skin: undefined,
       });
+    } catch (error) {
+      console.error("Error carregant imatge:", error);
     }
   };
 
