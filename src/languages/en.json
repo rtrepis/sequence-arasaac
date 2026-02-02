@@ -23,6 +23,12 @@
       "value": "Font"
     }
   ],
+  "component.settingCardFontGroup.numberFont.title": [
+    {
+      "type": 0,
+      "value": "Number font"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,

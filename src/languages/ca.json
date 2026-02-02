@@ -23,6 +23,12 @@
       "value": "Tipografia"
     }
   ],
+  "component.settingCardFontGroup.numberFont.title": [
+    {
+      "type": 0,
+      "value": "Tipografia dels números"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,

@@ -12,11 +12,13 @@ import React from "react";
 interface SettingCardFontGroupProps {
   state: Font;
   setState: React.Dispatch<React.SetStateAction<Font>>;
+  title?: React.ReactNode;
 }
 
 const SettingCardFontGroup = ({
   state,
   setState,
+  title,
 }: SettingCardFontGroupProps): React.ReactElement => {
   const [family, setFamily] = useState(state.family);
   const [size, setSize] = useState(state.size);
@@ -35,7 +37,7 @@ const SettingCardFontGroup = ({
       sx={card}
     >
       <Typography variant="body1" sx={cardTitle} component="h4">
-        <FormattedMessage {...messages.font} />
+        {title ?? <FormattedMessage {...messages.font} />}
       </Typography>
 
       <SettingCardFont

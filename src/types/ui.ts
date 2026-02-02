@@ -29,6 +29,7 @@ export interface DefaultSettingsPictSequence {
   numbered: boolean;
   textPosition: TextPosition;
   font: Font;
+  numberFont: Font;
   borderOut: Border;
   borderIn: Border;
 }
