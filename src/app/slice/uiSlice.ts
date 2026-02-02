@@ -59,6 +59,11 @@ const uiInitialState: Ui = {
         family: "Roboto",
         size: 1,
       },
+      numberFont: {
+        color: "#000000",
+        family: "Roboto",
+        size: 1,
+      },
       borderIn: { color: "fitzgerald", radius: 20, size: 2 },
       borderOut: { color: "#999999", radius: 20, size: 2 },
     },

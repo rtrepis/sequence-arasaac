@@ -30,6 +30,7 @@ const PictogramCard = ({
     },
     settings: {
       font: pictFont,
+      numberFont: pictNumberFont,
       textPosition,
       borderIn: pictBorderIn,
       borderOut: pictBorderOut,
@@ -46,6 +47,7 @@ const PictogramCard = ({
     borderOut: borderOutDefaultSetting,
     numbered,
     font: fontDefaultSetting,
+    numberFont: numberFontDefaultSetting,
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
   const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
   const intl = useIntl();
@@ -63,8 +65,12 @@ const PictogramCard = ({
   const pictSize = size?.pictSize ?? 1;
   const printPageRatio = size?.scale ?? 1;
   const font = pictFont ?? fontDefaultSetting;
+  // Tipografia dels números: per-pictograma → per defecte → tipografia del text
+  const numberFont =
+    pictNumberFont ?? numberFontDefaultSetting ?? fontDefaultSetting;
 
   const textFontSize = 20 * font.size * printPageRatio * pictSize;
+  const numberFontSize = 20 * numberFont.size * printPageRatio * pictSize;
 
   return (
     <Card
@@ -83,16 +89,28 @@ const PictogramCard = ({
             )
           }
         >
-          <Typography
-            fontSize={textFontSize}
-            fontFamily={font.family}
-            color={font.color}
-            component="h3"
-            sx={{ "@media print": { fontSize: 20 * pictSize } }}
-          >
-            {textPosition !== "top" && numbered && indexSequence + 1}
-            {textPosition === "top" && text}
-          </Typography>
+          {textPosition !== "top" && numbered && (
+            <Typography
+              fontSize={numberFontSize}
+              fontFamily={numberFont.family}
+              color={numberFont.color}
+              component="h3"
+              sx={{ "@media print": { fontSize: 20 * pictSize } }}
+            >
+              {indexSequence + 1}
+            </Typography>
+          )}
+          {textPosition === "top" && (
+            <Typography
+              fontSize={textFontSize}
+              fontFamily={font.family}
+              color={font.color}
+              component="h3"
+              sx={{ "@media print": { fontSize: 20 * pictSize } }}
+            >
+              {text}
+            </Typography>
+          )}
         </CardContent>
       )}
       <CardContent sx={{ padding: 0, position: "relative" }}>
@@ -132,16 +150,28 @@ const PictogramCard = ({
             )
           }
         >
-          <Typography
-            fontSize={textFontSize}
-            fontFamily={font.family}
-            color={font.color}
-            component="h3"
-            sx={{ "@media print": { fontSize: 20 * pictSize } }}
-          >
-            {textPosition === "bottom" && text}
-            {textPosition === "top" && numbered && indexSequence + 1}
-          </Typography>
+          {textPosition === "bottom" && (
+            <Typography
+              fontSize={textFontSize}
+              fontFamily={font.family}
+              color={font.color}
+              component="h3"
+              sx={{ "@media print": { fontSize: 20 * pictSize } }}
+            >
+              {text}
+            </Typography>
+          )}
+          {textPosition === "top" && numbered && (
+            <Typography
+              fontSize={numberFontSize}
+              fontFamily={numberFont.family}
+              color={numberFont.color}
+              component="h3"
+              sx={{ "@media print": { fontSize: 20 * pictSize } }}
+            >
+              {indexSequence + 1}
+            </Typography>
+          )}
         </CardContent>
       )}
     </Card>

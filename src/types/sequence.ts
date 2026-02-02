@@ -18,6 +18,7 @@ export interface PictSequenceSettings {
   numbered?: boolean;
   textPosition?: TextPosition;
   font?: Font;
+  numberFont?: Font;
   fontSize?: number;
   fontFamily?: FontFamily;
   borderOut?: Border;

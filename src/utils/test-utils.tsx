@@ -61,6 +61,11 @@ const preloadedState: State = {
           size: 12,
           family: "Roboto",
         },
+        numberFont: {
+          color: "#998800",
+          size: 12,
+          family: "Roboto",
+        },
         borderIn: { color: "fitzgerald", radius: 20, size: 2 },
         borderOut: { color: "#999999", radius: 20, size: 2 },
       },

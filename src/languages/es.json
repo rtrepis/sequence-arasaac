@@ -23,6 +23,12 @@
       "value": "Fuente"
     }
   ],
+  "component.settingCardFontGroup.numberFont.title": [
+    {
+      "type": 0,
+      "value": "Fuente de los números"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,

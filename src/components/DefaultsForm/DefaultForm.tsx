@@ -5,13 +5,14 @@ import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardB
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
 import { PictSequence } from "../../types/sequence";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultForm.lang";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useCallback, useEffect, useState } from "react";
 import { DefaultSettings } from "../../types/ui";
 import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
 import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup";
+import { messages as fontGroupMessages } from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup.lang";
 import React from "react";
 
 interface DefaultFormProps {
@@ -34,6 +35,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
         borderIn: initialBorderIn,
         borderOut: initialBorderOut,
         font: initialFont,
+        numberFont: initialNumberFont,
         numbered,
         textPosition: initialTextPosition,
       },
@@ -41,6 +43,8 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
   } = useAppSelector((state) => state.ui);
 
   const [font, setFont] = useState(initialFont);
+  // Si no hi ha numberFont guardat (dades antigues), usa el font del text com a base
+  const [numberFont, setNumberFont] = useState(initialNumberFont ?? initialFont);
   const [textPosition, setTextPosition] = useState(initialTextPosition);
   const [skin, setSkin] = useState(initialSkin);
   const [borderIn, setBorderIn] = useState(initialBorderIn);
@@ -66,6 +70,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
     settings: {
       textPosition: textPosition,
       font: font,
+      numberFont: numberFont,
       borderIn: borderIn,
       borderOut: borderOut,
     },
@@ -79,6 +84,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
         borderIn,
         borderOut,
         font,
+        numberFont,
         numbered,
         textPosition,
       },
@@ -101,6 +107,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
     borderIn,
     borderOut,
     numbered,
+    numberFont,
     textPosition,
     dispatch,
     color,
@@ -174,6 +181,17 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
             <li>
               <SettingCardFontGroup state={font} setState={setFont} />
             </li>
+            {numbered && (
+              <li>
+                <SettingCardFontGroup
+                  state={numberFont}
+                  setState={setNumberFont}
+                  title={
+                    <FormattedMessage {...fontGroupMessages.numberFont} />
+                  }
+                />
+              </li>
+            )}
             <Stack
               display={"flex"}
               direction={"row"}
