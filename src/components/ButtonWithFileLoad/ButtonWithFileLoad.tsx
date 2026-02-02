@@ -48,8 +48,8 @@ const ButtonWithFileLoad = (): React.ReactElement => {
             }
 
             if ("documentState" in parsedJson) {
-              dispatch(loadDocumentSaacActionCreator);
-              valueTrackEvent.push("defaultSettings");
+              dispatch(loadDocumentSaacActionCreator(parsedJson.documentState));
+              valueTrackEvent.push("documentState");
             }
 
             if ("defaultSettings" in parsedJson) {
