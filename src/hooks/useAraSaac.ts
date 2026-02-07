@@ -42,14 +42,14 @@ const useAraSaac = () => {
     async (data: any) => {
       const settingsProperty: PictApiAraSettings = {};
 
-      if (data.tags.slice(0, 3).includes("person"))
+      /*  if (data.tags.slice(0, 3).includes("person"))
         settingsProperty.fitzgerald = fitzgeraldColors.person;
       if (data.tags.slice(0, 3).includes("verb"))
         settingsProperty.fitzgerald = fitzgeraldColors.verb;
       if (data.tags.slice(0, 3).includes("adjective"))
         settingsProperty.fitzgerald = fitzgeraldColors.adjective;
-      if (data.tags.slice(0, 3).includes("expression"))
-        settingsProperty.fitzgerald = fitzgeraldColors.expression;
+      if (data.tags.slice(0, 3).includes("expression")) */
+      settingsProperty.fitzgerald = fitzgeraldColors[data.keywords[0].type];
 
       if (data.skin) settingsProperty.skin = defaultSettingsPictApiAra.skin;
 
