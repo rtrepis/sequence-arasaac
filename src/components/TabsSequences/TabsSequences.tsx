@@ -32,8 +32,8 @@ const TabsSequences = (): React.ReactElement => {
         variant="scrollable"
         value={value}
         onChange={handleChange}
-        aria-label="Vertical tabs example"
-        sx={{ borderRight: 1, borderColor: "divider" }}
+        aria-label="sequence number"
+        sx={{ borderRight: 1, borderColor: "divider", width: 100 }}
       >
         {/* 🔥 Generació automàtica dels Tabs segons “amount” */}
         {[...Array(amount)].map((_, index) => (

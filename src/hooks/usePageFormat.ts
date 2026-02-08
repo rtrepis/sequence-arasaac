@@ -58,6 +58,9 @@ export interface PageFormatState {
  * Hook custom per gestionar el format de pàgina amb detecció de DPI
  * Segueix el principi de Single Responsibility
  *
+ * Manté dues orientacions independents: una per A4/A3 i una per Full Screen
+ * Això permet que el Full Screen tingui una orientació independent dels formats de paper
+ *
  * @param config - Configuració inicial
  * @returns Estat i funcions per gestionar el format de pàgina
  */
@@ -65,11 +68,18 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
   const { initialSize = "A4", initialOrientation = "landscape" } = config;
 
   const [pageSize, setPageSizeState] = useState<PageSize>(initialSize);
-  const [orientation, setOrientationState] =
+  // Mantenir orientacions independents per A4/A3 vs Full Screen
+  const [orientationA4A3, setOrientationA4A3] =
     useState<PageOrientation>(initialOrientation);
+  const [orientationFullscreen, setOrientationFullscreen] =
+    useState<PageOrientation>("landscape");
 
   // Detectar DPI per recalcular dimensions quan canvia zoom/monitor
   const screenInfo = useScreenDPI();
+
+  // Seleccionar l'orientació correcta segons la mida de pàgina
+  const orientation =
+    pageSize === "FULLSCREEN" ? orientationFullscreen : orientationA4A3;
 
   // Recalcular pageFormat quan canvia DPI, size o orientation
   const pageFormat = useMemo(() => {
@@ -97,19 +107,34 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
 
   /**
    * Canvia l'orientació de la pàgina
+   * Actualitza l'orientació correcta segons la mida actual
    */
-  const setOrientation = useCallback((newOrientation: PageOrientation) => {
-    setOrientationState(newOrientation);
-  }, []);
+  const setOrientation = useCallback(
+    (newOrientation: PageOrientation) => {
+      if (pageSize === "FULLSCREEN") {
+        setOrientationFullscreen(newOrientation);
+      } else {
+        setOrientationA4A3(newOrientation);
+      }
+    },
+    [pageSize],
+  );
 
   /**
    * Alterna entre landscape i portrait
+   * Alterna l'orientació correcta segons la mida actual
    */
   const toggleOrientation = useCallback(() => {
-    setOrientationState((prev) =>
-      prev === "landscape" ? "portrait" : "landscape",
-    );
-  }, []);
+    if (pageSize === "FULLSCREEN") {
+      setOrientationFullscreen((prev) =>
+        prev === "landscape" ? "portrait" : "landscape",
+      );
+    } else {
+      setOrientationA4A3((prev) =>
+        prev === "landscape" ? "portrait" : "landscape",
+      );
+    }
+  }, [pageSize]);
 
   return {
     pageFormat,

@@ -202,15 +202,17 @@ const ViewSequencesSettings = ({
                   </Button>
                 </>
               ) : (
-                <Button
-                  aria-label={"fullScreen"}
-                  variant="text"
-                  color="primary"
-                  sx={{ fontSize: "2rem" }}
-                  onClick={enterFullscreen}
-                >
-                  <AiOutlineFullscreen />
-                </Button>
+                !isInFullscreen && (
+                  <Button
+                    aria-label={"fullScreen"}
+                    variant="text"
+                    color="primary"
+                    sx={{ fontSize: "2rem" }}
+                    onClick={enterFullscreen}
+                  >
+                    <AiOutlineFullscreen />
+                  </Button>
+                )
               )}
             </Stack>
           </Stack>

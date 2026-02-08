@@ -19,7 +19,7 @@ const PictEditModalList = ({
   const [copyPictogram, setPictogram] = useState(initialCopyPictogram);
 
   return (
-    <Grid2 container marginTop={0}>
+    <Grid2 container marginTop={0} flex={1}>
       {sequence.map((pictogram) => (
         <Grid2
           display={"flex"}
