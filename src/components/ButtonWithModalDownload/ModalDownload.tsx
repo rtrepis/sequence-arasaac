@@ -19,6 +19,8 @@ import { useAppSelector } from "@/app/hooks";
 import { trackEvent } from "@/hooks/usePageTracking";
 import { DefaultSettings } from "@/types/ui";
 import { DocumentSAAC } from "@/types/document";
+import { useFeedback } from "@/context/FeedbackContext";
+import feedbackMessages from "@/context/FeedbackContext/FeedbackContext.lang";
 
 interface ModalDownloadProps {
   open: boolean;
@@ -34,6 +36,7 @@ const ModalDownload = ({
     ui: { defaultSettings },
   } = useAppSelector((state) => state);
   const intl = useIntl();
+  const { showSnackbar } = useFeedback();
 
   const [fileName, setFileName] = useState("");
 
@@ -92,6 +95,12 @@ const ModalDownload = ({
       event_category: "file",
       event_label: "safe:",
       value: valueEventsTrace.join(" "),
+    });
+
+    // Mostrem el snackbar de confirmació
+    showSnackbar({
+      message: intl.formatMessage(feedbackMessages.saveSuccess),
+      severity: "success",
     });
 
     onClose();

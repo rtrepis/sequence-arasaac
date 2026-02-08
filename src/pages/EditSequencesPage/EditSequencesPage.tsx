@@ -3,6 +3,7 @@ import PictogramAmount from "../../components/PictogramAmount/PictogramAmount";
 import MagicSearch from "../../components/MagicSearch/MagicSearch";
 import React, { useState } from "react";
 import TabsSequences from "../../components/TabsSequences/TabsSequences";
+import { FeedbackProgress } from "@/context/FeedbackContext";
 
 const EditSequencesPage = (): React.ReactElement => {
   const [info, setInfo] = useState(false);
@@ -21,6 +22,7 @@ const EditSequencesPage = (): React.ReactElement => {
         <PictogramAmount info={{ value: info, toggleValue: toggleValue }} />
         <MagicSearch info={{ value: info }} />
       </Stack>
+      <FeedbackProgress />
       <TabsSequences />
     </>
   );
