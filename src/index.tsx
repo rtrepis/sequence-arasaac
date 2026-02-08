@@ -9,6 +9,12 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material";
 import theme from "./style/themeMui";
 import { BrowserRouter } from "react-router-dom";
+import {
+  FeedbackProvider,
+  FeedbackSnackbar,
+  FeedbackProgress,
+  FeedbackBackdrop,
+} from "./context/FeedbackContext";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -18,11 +24,15 @@ root.render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline enable-color-scheme />
-        <BrowserRouter
-          future={{ v7_relativeSplatPath: true, v7_startTransition: false }}
-        >
-          <App />
-        </BrowserRouter>
+        <FeedbackProvider>
+          <BrowserRouter
+            future={{ v7_relativeSplatPath: true, v7_startTransition: false }}
+          >
+            <App />
+          </BrowserRouter>
+          <FeedbackSnackbar />
+          <FeedbackBackdrop />
+        </FeedbackProvider>
       </ThemeProvider>
     </Provider>
   </React.StrictMode>,

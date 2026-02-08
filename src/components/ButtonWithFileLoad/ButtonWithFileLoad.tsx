@@ -12,6 +12,8 @@ import {
 } from "@/app/slice/documentSlice";
 import { updateDefaultSettingsActionCreator } from "@/app/slice/uiSlice";
 import { trackEvent } from "@/hooks/usePageTracking";
+import { useFeedback } from "@/context/FeedbackContext";
+import feedbackMessages from "@/context/FeedbackContext/FeedbackContext.lang";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -28,6 +30,7 @@ const VisuallyHiddenInput = styled("input")({
 const ButtonWithFileLoad = (): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
 
   const loadFile = (event: ChangeEvent<HTMLInputElement>) => {
     const valueTrackEvent: string[] = [];
@@ -36,6 +39,11 @@ const ButtonWithFileLoad = (): React.ReactElement => {
       const file = input.files[0];
 
       if (file) {
+        // Mostrem el backdrop mentre carreguem
+        showBackdrop({
+          message: intl.formatMessage(feedbackMessages.loading),
+        });
+
         const reader = new FileReader();
         reader.onload = (e) => {
           try {
@@ -58,8 +66,21 @@ const ButtonWithFileLoad = (): React.ReactElement => {
               );
               valueTrackEvent.push("defaultSettings");
             }
+
+            // Amaguem el backdrop i mostrem el snackbar d'èxit
+            hideBackdrop();
+            showSnackbar({
+              message: intl.formatMessage(feedbackMessages.loadSuccess),
+              severity: "success",
+            });
           } catch (error) {
             console.error(error);
+            // Amaguem el backdrop i mostrem el snackbar d'error
+            hideBackdrop();
+            showSnackbar({
+              message: intl.formatMessage(feedbackMessages.loadError),
+              severity: "error",
+            });
           }
         };
         reader.readAsText(file);

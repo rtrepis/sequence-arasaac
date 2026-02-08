@@ -772,5 +772,43 @@
       "type": 0,
       "value": "Iniciar"
     }
+  ],
+  "context.feedback.search.loading": [
+    {
+      "type": 0,
+      "value": "Buscando pictogramas..."
+    }
+  ],
+  "context.feedback.search.complete": "{count} pictogramas añadidos",
+  "context.feedback.search.error": [
+    {
+      "type": 0,
+      "value": "Error buscando pictogramas"
+    }
+  ],
+  "context.feedback.applyAll.success": "Aplicado a {count} pictogramas",
+  "context.feedback.save.success": [
+    {
+      "type": 0,
+      "value": "Archivo guardado correctamente"
+    }
+  ],
+  "context.feedback.load.success": [
+    {
+      "type": 0,
+      "value": "Archivo cargado correctamente"
+    }
+  ],
+  "context.feedback.load.error": [
+    {
+      "type": 0,
+      "value": "Error cargando el archivo"
+    }
+  ],
+  "context.feedback.loading": [
+    {
+      "type": 0,
+      "value": "Cargando..."
+    }
   ]
 }
