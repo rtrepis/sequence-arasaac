@@ -12,7 +12,7 @@ const theme = createTheme({
     },
     secondary: {
       light: "#CCCCCC",
-      main: "#D9D9D9",
+      main: "#DDD9D9",
       dark: "#A6A6A6",
       contrastText: "#252525",
     },
@@ -28,7 +28,14 @@ const theme = createTheme({
       },
     },
     MuiToolbar: { styleOverrides: { root: { minHeight: "50px" } } },
-    MuiIconButton: { styleOverrides: { root: { color: "primary" } } },
+    MuiIconButton: {
+      styleOverrides: {
+        root: { color: "primary" },
+        disabled: {
+          opacity: 0.35,
+        },
+      },
+    },
   },
 });
 

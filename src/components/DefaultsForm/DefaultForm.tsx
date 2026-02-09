@@ -44,7 +44,9 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
 
   const [font, setFont] = useState(initialFont);
   // Si no hi ha numberFont guardat (dades antigues), usa el font del text com a base
-  const [numberFont, setNumberFont] = useState(initialNumberFont ?? initialFont);
+  const [numberFont, setNumberFont] = useState(
+    initialNumberFont ?? initialFont,
+  );
   const [textPosition, setTextPosition] = useState(initialTextPosition);
   const [skin, setSkin] = useState(initialSkin);
   const [borderIn, setBorderIn] = useState(initialBorderIn);
@@ -127,8 +129,17 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
         marginTop={1}
         rowGap={2}
         columnGap={2}
+        sx={{ alignItems: "flex-start" }}
       >
-        <Box minWidth={200}>
+        <Box
+          minWidth={200}
+          sx={{
+            position: { xs: "sticky", md: "static" },
+            top: { xs: 0, md: "auto" },
+            zIndex: { xs: 10, md: "auto" },
+            width: { xs: "100%", md: "auto" },
+          }}
+        >
           <PictogramCard
             pictogram={pictogramGuide}
             view="complete"
@@ -136,7 +147,14 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
           />
         </Box>
 
-        <List>
+        <List
+          sx={{
+            width: { xs: "100%", md: "auto" },
+            overflowY: { xs: "auto", md: "visible" },
+            maxHeight: { xs: "60vh", md: "none" },
+            pr: 1,
+          }}
+        >
           <Stack
             display={"flex"}
             direction={"row"}
@@ -186,9 +204,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                 <SettingCardFontGroup
                   state={numberFont}
                   setState={setNumberFont}
-                  title={
-                    <FormattedMessage {...fontGroupMessages.numberFont} />
-                  }
+                  title={<FormattedMessage {...fontGroupMessages.numberFont} />}
                 />
               </li>
             )}

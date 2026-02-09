@@ -220,6 +220,22 @@ const documentSlice = createSlice({
         (p) => (p.settings.fontSize = action.payload.fontSize),
       );
     },
+
+    // Elimina la darrera seqüència
+    deleteLastSequence: (previousDocument) => {
+      const keys = Object.keys(previousDocument.content);
+      if (keys.length > 1) {
+        const lastKey = keys[keys.length - 1];
+        delete previousDocument.content[Number(lastKey)];
+
+        // Si la seqüència activa és la que s'ha eliminat, canviar a la penúltima
+        if (previousDocument.activeSAAC === Number(lastKey)) {
+          const remainingKeys = Object.keys(previousDocument.content);
+          const lastRemainingKey = remainingKeys[remainingKeys.length - 1];
+          previousDocument.activeSAAC = Number(lastRemainingKey);
+        }
+      }
+    },
   },
 });
 
@@ -246,4 +262,5 @@ export const {
   fontSizeApplyAll: fontSizeApplyAllActionCreator,
   settingsPictApiAra: settingsPictApiAraActionCreator,
   settingsPictSequence: settingsPictSequenceActionCreator,
+  deleteLastSequence: deleteLastSequenceActionCreator,
 } = documentSlice.actions;

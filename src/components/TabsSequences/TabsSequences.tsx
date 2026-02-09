@@ -1,12 +1,13 @@
-import { Tab, Tabs, Tooltip } from "@mui/material";
+import { Tab, Tabs, Tooltip, IconButton } from "@mui/material";
 import React, { SyntheticEvent } from "react";
 import TabPanelSequence from "../TabPanelSecuence/TabPanelSecuence";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import {
   changeActiveSAACActionCreator,
   addNewSequenceActionCreator,
+  deleteLastSequenceActionCreator,
 } from "@/app/slice/documentSlice";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 
 const TabsSequences = (): React.ReactElement => {
   const dispatch = useAppDispatch();
@@ -25,35 +26,70 @@ const TabsSequences = (): React.ReactElement => {
     dispatch(changeActiveSAACActionCreator(amount));
   };
 
+  const handleDeleteLastSequence = () => {
+    dispatch(deleteLastSequenceActionCreator());
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="sequence number"
-        sx={{ borderRight: 1, borderColor: "divider", width: 100 }}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
       >
-        {/* 🔥 Generació automàtica dels Tabs segons “amount” */}
-        {[...Array(amount)].map((_, index) => (
-          <Tab
-            key={`tab-${index}`}
-            label={`${index + 1}`}
-            id={`vertical-tab-${index}`}
-            aria-controls={`vertical-tabpanel-${index}`}
-          />
-        ))}
-
-        {/* 🔥 Botó "+" sense IconButton dins d’un Tab */}
-        <Tooltip title="Afegir seqüència">
-          <Tab
-            icon={<AiFillPlusCircle size={24} color="#888" />}
-            id="vertical-tab-add"
-            onClick={handleAddSequence}
-          />
+        {/* 🔥 Botó "-" a la part superior */}
+        <Tooltip title="Eliminar última seqüència">
+          <span>
+            <IconButton
+              color="secondary"
+              onClick={handleDeleteLastSequence}
+              disabled={amount <= 1}
+              size="small"
+            >
+              <AiFillMinusCircle
+                size={24}
+                style={{
+                  visibility: amount > 1 ? "visible" : "hidden",
+                }}
+              />
+            </IconButton>
+          </span>
         </Tooltip>
-      </Tabs>
+
+        <Tabs
+          orientation="vertical"
+          variant="scrollable"
+          value={value}
+          onChange={handleChange}
+          aria-label="sequence number"
+          sx={{ borderRight: 1, borderColor: "divider", width: 100 }}
+        >
+          {/* 🔥 Generació automàtica dels Tabs segons "amount" */}
+          {[...Array(amount)].map((_, index) => (
+            <Tab
+              key={`tab-${index}`}
+              label={`${index + 1}`}
+              id={`vertical-tab-${index}`}
+              aria-controls={`vertical-tabpanel-${index}`}
+            />
+          ))}
+        </Tabs>
+
+        {/* 🔥 Botó "+" a la part inferior */}
+        <Tooltip title="Afegir seqüència">
+          <span>
+            <IconButton
+              color="secondary"
+              onClick={handleAddSequence}
+              size="small"
+            >
+              <AiFillPlusCircle size={24} />
+            </IconButton>
+          </span>
+        </Tooltip>
+      </div>
 
       {/* Panel */}
       <TabPanelSequence index={value} />

@@ -74,7 +74,7 @@ const DefaultSettingsModal = (): React.ReactElement => {
           </Toolbar>
         </AppBar>
         <Container sx={{ marginTop: 2 }}>
-          <Stack sx={{ height: 65, display: { md: "none" } }} />
+          <Stack sx={{ height: 40, display: { md: "none" } }} />
           <DefaultForm submit={open} />
         </Container>
       </Dialog>

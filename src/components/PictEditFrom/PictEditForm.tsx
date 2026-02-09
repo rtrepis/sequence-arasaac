@@ -124,6 +124,7 @@ const PictEditForm = ({
         alignItems={"start"}
         direction={{ xs: "column", sm: "row" }}
         spacing={{ xs: 3, sm: 2 }}
+        sx={{ flexShrink: 0 }}
       >
         <PictogramCard
           pictogram={pictogramGuide}
