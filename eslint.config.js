@@ -72,7 +72,6 @@ export default [
         "warn",
         { argsIgnorePattern: "^_" },
       ],
-      "@typescript-eslint/no-unused-expressions": "warn",
     },
   },
 

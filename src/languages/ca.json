@@ -23,12 +23,6 @@
       "value": "Tipografia"
     }
   ],
-  "component.settingCardFontGroup.numberFont.title": [
-    {
-      "type": 0,
-      "value": "Tipografia dels números"
-    }
-  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
@@ -164,7 +158,7 @@
   "components.magicSearch.sample.": [
     {
       "type": 0,
-      "value": "Exemple: Nen, posa, el cinturó de seguretat."
+      "value": "Exemple: Nen, posar, el cinturó de seguretat."
     }
   ],
   "components.pictEdit.close": [
@@ -771,44 +765,6 @@
     {
       "type": 0,
       "value": "Inicia"
-    }
-  ],
-  "context.feedback.search.loading": [
-    {
-      "type": 0,
-      "value": "Cercant pictogrames..."
-    }
-  ],
-  "context.feedback.search.complete": "{count} pictogrames afegits",
-  "context.feedback.search.error": [
-    {
-      "type": 0,
-      "value": "Error cercant pictogrames"
-    }
-  ],
-  "context.feedback.applyAll.success": "Aplicat a {count} pictogrames",
-  "context.feedback.save.success": [
-    {
-      "type": 0,
-      "value": "Fitxer desat correctament"
-    }
-  ],
-  "context.feedback.load.success": [
-    {
-      "type": 0,
-      "value": "Fitxer carregat correctament"
-    }
-  ],
-  "context.feedback.load.error": [
-    {
-      "type": 0,
-      "value": "Error carregant el fitxer"
-    }
-  ],
-  "context.feedback.loading": [
-    {
-      "type": 0,
-      "value": "Carregant..."
     }
   ]
 }

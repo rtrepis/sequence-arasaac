@@ -34,7 +34,7 @@ const PictogramAmount = ({
 
   const getActiveSaacAmountPict = (state) =>
     state.document.content[state.document.activeSAAC].length;
-  const amountSequence = useAppSelector(getActiveSaacAmountPict);
+  const amountSequence: number = useAppSelector(getActiveSaacAmountPict);
 
   const handleChangesAmount = (operator: number) => {
     if (operator > 0 && amountSequence < 60)
@@ -64,7 +64,11 @@ const PictogramAmount = ({
               onClick={() => handleChangesAmount(-1)}
               disabled={amountSequence <= 0}
             >
-              <AiFillMinusCircle />
+              <AiFillMinusCircle
+                style={{
+                  visibility: amountSequence > 0 ? "visible" : "hidden",
+                }}
+              />
             </IconButton>
           </span>
         </Tooltip>

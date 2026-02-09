@@ -23,12 +23,6 @@
       "value": "Font"
     }
   ],
-  "component.settingCardFontGroup.numberFont.title": [
-    {
-      "type": 0,
-      "value": "Number font"
-    }
-  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
@@ -771,44 +765,6 @@
     {
       "type": 0,
       "value": "Start"
-    }
-  ],
-  "context.feedback.search.loading": [
-    {
-      "type": 0,
-      "value": "Searching pictograms..."
-    }
-  ],
-  "context.feedback.search.complete": "{count} pictograms added",
-  "context.feedback.search.error": [
-    {
-      "type": 0,
-      "value": "Error searching pictograms"
-    }
-  ],
-  "context.feedback.applyAll.success": "Applied to {count} pictograms",
-  "context.feedback.save.success": [
-    {
-      "type": 0,
-      "value": "File saved successfully"
-    }
-  ],
-  "context.feedback.load.success": [
-    {
-      "type": 0,
-      "value": "File loaded successfully"
-    }
-  ],
-  "context.feedback.load.error": [
-    {
-      "type": 0,
-      "value": "Error loading file"
-    }
-  ],
-  "context.feedback.loading": [
-    {
-      "type": 0,
-      "value": "Loading..."
     }
   ]
 }
