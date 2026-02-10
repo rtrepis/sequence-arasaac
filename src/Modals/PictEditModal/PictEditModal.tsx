@@ -108,7 +108,10 @@ const PictEditModal = ({
         aria-describedby={intl.formatMessage({ ...messages.description })}
         maxWidth={"sm"}
         fullWidth
-        sx={{ ".MuiDialog-paperScrollPaper": { borderRadius: 5 } }}
+        sx={{
+          ".MuiDialog-paperScrollPaper": { borderRadius: 5 },
+          ".MuiDialogContent-root": { paddingInline: 1, paddingBlock: 0 },
+        }}
       >
         <Stack
           display="flex"
@@ -126,7 +129,7 @@ const PictEditModal = ({
           </Typography>
         </Stack>
 
-        <DialogContent dividers={true} sx={{ padding: 2 }}>
+        <DialogContent dividers={true} sx={{ padding: 2, overflowX: "hidden" }}>
           <PictEditForm pictogram={pictogram} submit={submit} />
         </DialogContent>
 
