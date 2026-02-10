@@ -1,4 +1,4 @@
-import { List, Stack } from "@mui/material";
+import { List, Stack, Box } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import { PictSequence } from "../../types/sequence";
@@ -117,57 +117,53 @@ const PictEditForm = ({
   }, [submit, handlerSubmit]);
 
   return (
-    <>
-      <Stack
-        display={"flex"}
-        justifyContent={"space-between"}
-        alignItems={"start"}
-        direction={{ xs: "column", sm: "row" }}
-        spacing={{ xs: 3, sm: 2 }}
-        sx={{ flexShrink: 0 }}
+    <Box
+      display="grid"
+      gridTemplateColumns={{ xs: "1fr", md: "auto 1fr" }}
+      gap={{ xs: 3, sm: 2 }}
+      sx={{ minHeight: 0 }}
+    >
+      <Box
+        sx={{
+          alignSelf: "start",
+          justifyItems: "center",
+          width: { xs: "100%", md: "auto" },
+          position: "sticky",
+          top: 0,
+          zIndex: 5,
+          backgroundColor: "white",
+          paddingBlock: { xs: 1 },
+        }}
       >
         <PictogramCard
           pictogram={pictogramGuide}
           variant="plane"
           view="complete"
+          size={{ scale: 0.8 }}
         />
-
+      </Box>
+      <Box paddingBlock={1} sx={{ minHeight: 0 }}>
         <PictogramSearch
           indexPict={pictogram.indexSequence}
           state={search}
           setState={setSearch}
         />
-      </Stack>
+      </Box>
 
-      <SettingAccordion title={`${intl.formatMessage({ ...messages.title })}`}>
-        <List>
-          <li>
-            <SettingCadTextFiled
-              setting="customText"
-              state={text}
-              setState={setText}
-            />
-          </li>
-
-          {search.color && pictogram.settings.textPosition && (
+      <Box gridColumn={{ xs: "1", md: "1 / -1" }} sx={{ minHeight: 0 }}>
+        <SettingAccordion
+          title={`${intl.formatMessage({ ...messages.title })}`}
+        >
+          <List>
             <li>
-              <SettingCard
-                setting="textPosition"
-                state={textPosition}
-                setState={setTextPosition}
+              <SettingCadTextFiled
+                setting="customText"
+                state={text}
+                setState={setText}
               />
             </li>
-          )}
 
-          <Stack
-            display={"flex"}
-            direction={"row"}
-            flexWrap={"wrap"}
-            marginTop={1}
-            rowGap={2}
-            columnGap={2}
-          >
-            {!search.color && pictogram.settings.textPosition && (
+            {search.color && pictogram.settings.textPosition && (
               <li>
                 <SettingCard
                   setting="textPosition"
@@ -177,53 +173,72 @@ const PictEditForm = ({
               </li>
             )}
 
-            {search.color && (
-              <>
+            <Stack
+              display={"flex"}
+              direction={"row"}
+              flexWrap={"wrap"}
+              marginTop={1}
+              rowGap={2}
+              columnGap={2}
+            >
+              {!search.color && pictogram.settings.textPosition && (
                 <li>
-                  <SettingCardBoolean
-                    setting="color"
-                    state={color}
-                    setState={setColor}
-                    applyAll={"none"}
+                  <SettingCard
+                    setting="textPosition"
+                    state={textPosition}
+                    setState={setTextPosition}
                   />
                 </li>
-                <li>
-                  <SettingCardBoolean
-                    setting="corss"
-                    state={cross}
-                    setState={setCross}
-                  />
-                </li>
-              </>
+              )}
+
+              {search.color && (
+                <>
+                  <li>
+                    <SettingCardBoolean
+                      setting="color"
+                      state={color}
+                      setState={setColor}
+                      applyAll={"none"}
+                    />
+                  </li>
+                  <li>
+                    <SettingCardBoolean
+                      setting="corss"
+                      state={cross}
+                      setState={setCross}
+                    />
+                  </li>
+                </>
+              )}
+            </Stack>
+            {search.color && search.skin && (
+              <li>
+                <SettingCard setting="skin" state={skin} setState={setSkin} />
+              </li>
             )}
-          </Stack>
-          {search.color && search.skin && (
+            {search.color && search.hair && (
+              <li>
+                <SettingCard setting="hair" state={hair} setState={setHair} />
+              </li>
+            )}
             <li>
-              <SettingCard setting="skin" state={skin} setState={setSkin} />
+              <SettingCardBorder
+                border="borderIn"
+                state={borderIn}
+                setState={setBorderIn}
+              />
             </li>
-          )}
-          {search.color && search.hair && (
             <li>
-              <SettingCard setting="hair" state={hair} setState={setHair} />
+              <SettingCardBorder
+                border="borderOut"
+                state={borderOut}
+                setState={setBorderOut}
+              />
             </li>
-          )}
-          <li>
-            <SettingCardBorder
-              border="borderIn"
-              state={borderIn}
-              setState={setBorderIn}
-            />
-          </li>
-          <li>
-            <SettingCardBorder
-              border="borderOut"
-              state={borderOut}
-              setState={setBorderOut}
-            />
-          </li>
-        </List>
-      </SettingAccordion>
-    </>
+          </List>
+        </SettingAccordion>
+      </Box>
+    </Box>
   );
 };
 
