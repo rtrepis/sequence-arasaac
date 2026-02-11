@@ -1,6 +1,11 @@
 import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
+  pageSize: {
+    id: "pages.viewSequence.pageSize.label",
+    defaultMessage: "Page Size",
+    description: "Label form",
+  },
   size: {
     id: "pages.viewSequence.size.label",
     defaultMessage: "Size",

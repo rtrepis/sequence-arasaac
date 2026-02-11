@@ -4,13 +4,14 @@ import {
   Divider,
   FormGroup,
   FormLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Slider,
   Stack,
-  Tab,
-  Tabs,
   TextField,
 } from "@mui/material";
-import { SyntheticEvent, useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { MdScreenRotation } from "react-icons/md";
@@ -139,11 +140,11 @@ const ViewSequencesSettings = ({
   }, [persistViewSettings]);
 
   /**
-   * Handler per canviar la mida de pàgina
+   * Handler per canviar la mida de pàgina via Select
    */
   const handlePageSizeChange = useCallback(
-    (event: SyntheticEvent, newValue: number) => {
-      setPageSizeByIndex(newValue as 0 | 1 | 2);
+    (event: SelectChangeEvent<number>) => {
+      setPageSizeByIndex(Number(event.target.value) as 0 | 1 | 2);
     },
     [setPageSizeByIndex],
   );
@@ -167,18 +168,9 @@ const ViewSequencesSettings = ({
         <NotPrint>
           <Stack
             direction={"row"}
-            justifyContent={"space-between"}
+            justifyContent={"end"}
             alignItems={"end"}
           >
-            <Tabs
-              value={pageSizeIndex}
-              onChange={handlePageSizeChange}
-              aria-label="pageSize"
-            >
-              <Tab label="A4" sx={{ fontWeight: "700" }} />
-              <Tab label="A3" sx={{ fontWeight: "700" }} />
-              <Tab label="Full Screen" sx={{ fontWeight: "700" }} />
-            </Tabs>
             <Stack direction={"row"}>
               {!isFullscreen ? (
                 <>
@@ -265,6 +257,22 @@ const ViewSequencesSettings = ({
 
           <NotPrint>
             <Stack columnGap={2} maxWidth={300} paddingLeft={2}>
+              <FormGroup>
+                <FormLabel>
+                  <FormattedMessage {...messages.pageSize} />
+                </FormLabel>
+                <Select<number>
+                  value={pageSizeIndex}
+                  onChange={handlePageSizeChange}
+                  size="small"
+                >
+                  <MenuItem value={0}>A4</MenuItem>
+                  <MenuItem value={1}>A3</MenuItem>
+                  <MenuItem value={2}>
+                    <FormattedMessage {...messages.fullScreen} />
+                  </MenuItem>
+                </Select>
+              </FormGroup>
               <FormGroup>
                 <FormLabel>
                   <FormattedMessage {...messages.size} />

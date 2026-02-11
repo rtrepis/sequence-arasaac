@@ -383,6 +383,12 @@
       "value": "Row Space"
     }
   ],
+  "pages.viewSequence.pageSize.label": [
+    {
+      "type": 0,
+      "value": "Page Size"
+    }
+  ],
   "pages.viewSequence.size.label": [
     {
       "type": 0,
