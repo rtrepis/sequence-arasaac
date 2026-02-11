@@ -383,6 +383,12 @@
       "value": "Espai Fila"
     }
   ],
+  "pages.viewSequence.pageSize.label": [
+    {
+      "type": 0,
+      "value": "Mida de pàgina"
+    }
+  ],
   "pages.viewSequence.size.label": [
     {
       "type": 0,
