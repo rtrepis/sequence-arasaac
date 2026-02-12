@@ -7,7 +7,7 @@ import {
   PictApiAraForEdit,
   PictApiAraSettingsApplyAll,
 } from "../../types/sequence";
-import { DocumentSAAC } from "@/types/document";
+import { DocumentSAAC, SequenceViewSettings } from "@/types/document";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);
@@ -16,10 +16,17 @@ const getUniqueId = () => {
   return uniqueId;
 };
 
+const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
+  sizePict: 1,
+  pictSpaceBetween: 1,
+  alignment: "left",
+};
+
 const documentInitialState: DocumentSAAC = {
   id: getUniqueId(),
   title: undefined,
   content: { 0: [] },
+  viewSettings: { 0: { ...DEFAULT_SEQUENCE_VIEW } },
   activeSAAC: 0,
   order: undefined,
   defaultSettings: undefined,
@@ -28,8 +35,20 @@ const documentSlice = createSlice({
   name: "document",
   initialState: documentInitialState,
   reducers: {
-    loadDocumentSaac: (previousDocument, action: PayloadAction<DocumentSAAC>) =>
-      action.payload,
+    // Compatibilitat amb fitxers antics: si no tenen viewSettings, crear-ne per cada seqüència
+    loadDocumentSaac: (
+      previousDocument,
+      action: PayloadAction<DocumentSAAC>,
+    ) => {
+      const doc = action.payload;
+      if (!doc.viewSettings) {
+        doc.viewSettings = {};
+        Object.keys(doc.content).forEach((key) => {
+          doc.viewSettings[Number(key)] = { ...DEFAULT_SEQUENCE_VIEW };
+        });
+      }
+      return doc;
+    },
 
     changeActiveSAAC: (previousDocument, action: PayloadAction<number>) => {
       previousDocument.activeSAAC = action.payload;
@@ -37,12 +56,20 @@ const documentSlice = createSlice({
       if (previousDocument.content[action.payload] === undefined)
         previousDocument.content[action.payload] = [];
 
+      if (previousDocument.viewSettings[action.payload] === undefined)
+        previousDocument.viewSettings[action.payload] = {
+          ...DEFAULT_SEQUENCE_VIEW,
+        };
+
       return previousDocument;
     },
 
     // Crea una nova seqüència buida amb la clau indicada sense canviar l'actiu
     addNewSequence: (previousDocument, action: PayloadAction<number>) => {
       previousDocument.content[action.payload] = [];
+      previousDocument.viewSettings[action.payload] = {
+        ...DEFAULT_SEQUENCE_VIEW,
+      };
     },
 
     addPictogram: (previousDocument, action: PayloadAction<PictSequence>) => {
@@ -221,12 +248,40 @@ const documentSlice = createSlice({
       );
     },
 
+    // Actualitza viewSettings d'una seqüència concreta
+    updateSequenceViewSettings: (
+      previousDocument,
+      action: PayloadAction<{
+        key: number;
+        settings: Partial<SequenceViewSettings>;
+      }>,
+    ) => {
+      const { key, settings } = action.payload;
+      const current =
+        previousDocument.viewSettings[key] ?? DEFAULT_SEQUENCE_VIEW;
+      previousDocument.viewSettings[key] = { ...current, ...settings };
+    },
+
+    // Aplica viewSettings a totes les seqüències
+    applyViewSettingsToAll: (
+      previousDocument,
+      action: PayloadAction<Partial<SequenceViewSettings>>,
+    ) => {
+      const keys = Object.keys(previousDocument.content).map(Number);
+      keys.forEach((key) => {
+        const current =
+          previousDocument.viewSettings[key] ?? DEFAULT_SEQUENCE_VIEW;
+        previousDocument.viewSettings[key] = { ...current, ...action.payload };
+      });
+    },
+
     // Elimina la darrera seqüència
     deleteLastSequence: (previousDocument) => {
       const keys = Object.keys(previousDocument.content);
       if (keys.length > 1) {
         const lastKey = keys[keys.length - 1];
         delete previousDocument.content[Number(lastKey)];
+        delete previousDocument.viewSettings[Number(lastKey)];
 
         // Si la seqüència activa és la que s'ha eliminat, canviar a la penúltima
         if (previousDocument.activeSAAC === Number(lastKey)) {
@@ -262,5 +317,7 @@ export const {
   fontSizeApplyAll: fontSizeApplyAllActionCreator,
   settingsPictApiAra: settingsPictApiAraActionCreator,
   settingsPictSequence: settingsPictSequenceActionCreator,
+  updateSequenceViewSettings: updateSequenceViewSettingsActionCreator,
+  applyViewSettingsToAll: applyViewSettingsToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
 } = documentSlice.actions;

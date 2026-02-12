@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
-import ViewSequencePage from "./pages/ViewSequencePage/ViewSequencePage.refactor";
+import ViewSequencePage from "./pages/ViewSequencePage/ViewSequencePage";
 import EditSequencesPage from "./pages/EditSequencesPage/EditSequencesPage";
 import { useDispatch } from "react-redux";
 import { ReactElement, useEffect } from "react";

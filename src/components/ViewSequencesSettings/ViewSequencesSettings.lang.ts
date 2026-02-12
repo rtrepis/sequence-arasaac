@@ -11,14 +11,14 @@ const messages = defineMessages({
     defaultMessage: "Size",
     description: "Label form",
   },
-  columnGap: {
-    id: "pages.viewSequence.columnGap.label",
-    defaultMessage: "Column Space",
+  pictSpaceBetween: {
+    id: "pages.viewSequence.pictSpaceBetween.label",
+    defaultMessage: "Pictogram Space",
     description: "Label form",
   },
-  rowGap: {
-    id: "pages.viewSequence.rowGap.label",
-    defaultMessage: "Row Space",
+  sequenceSpaceBetween: {
+    id: "pages.viewSequence.sequenceSpaceBetween.label",
+    defaultMessage: "Sequence Space",
     description: "Label form",
   },
   authSequence: {
@@ -35,6 +35,26 @@ const messages = defineMessages({
     id: "pages.viewSequence.fullScreen.label",
     defaultMessage: "Full Screen",
     description: "Setting property",
+  },
+  applyAll: {
+    id: "pages.viewSequence.applyAll.label",
+    defaultMessage: "Apply to all",
+    description: "Toggle to apply settings to all sequences",
+  },
+  sequence: {
+    id: "pages.viewSequence.sequence.label",
+    defaultMessage: "Sequence",
+    description: "Label for sequence selector",
+  },
+  alignment: {
+    id: "pages.viewSequence.alignment.label",
+    defaultMessage: "Alignment",
+    description: "Label for alignment setting",
+  },
+  direction: {
+    id: "pages.viewSequence.direction.label",
+    defaultMessage: "Direction",
+    description: "Label for direction setting",
   },
 });
 
