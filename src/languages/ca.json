@@ -395,6 +395,30 @@
       "value": "Mida"
     }
   ],
+  "pages.viewSequence.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Aplicar a totes"
+    }
+  ],
+  "pages.viewSequence.sequence.label": [
+    {
+      "type": 0,
+      "value": "Seqüència"
+    }
+  ],
+  "pages.viewSequence.alignment.label": [
+    {
+      "type": 0,
+      "value": "Alineació"
+    }
+  ],
+  "pages.viewSequence.direction.label": [
+    {
+      "type": 0,
+      "value": "Direcció"
+    }
+  ],
   "pictogram.empty": [
     {
       "type": 0,

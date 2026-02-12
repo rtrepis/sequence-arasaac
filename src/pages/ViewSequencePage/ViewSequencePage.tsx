@@ -1,66 +1,70 @@
-import { useState } from "react";
-import { useAppSelector } from "@/app/hooks";
-import PictogramCard from "@/components/PictogramCard/PictogramCard";
-import ViewSequencesSettings from "@/components/ViewSequencesSettings/ViewSquenceSettings.refactor";
-import { ViewSettings } from "@/types/ui";
-import CopyRight from "@/components/CopyRight/CopyRight";
 import React from "react";
 import { Box } from "@mui/material";
+import { useAppSelector } from "../../app/hooks";
+import PictogramCard from "../../components/PictogramCard/PictogramCard";
+import ViewSequencesSettings, {
+  ALIGNMENT_TO_JUSTIFY,
+} from "../../components/ViewSequencesSettings/ViewSquenceSettings";
+import CopyRight from "../../components/CopyRight/CopyRight";
 
+/**
+ * Pàgina de visualització de seqüències refactoritzada
+ * sizePict, pictSpaceBetween i alignment són per seqüència; sequenceSpaceBetween és global
+ */
 const ViewSequencePage = (): React.ReactElement => {
-  const {
-    document,
-    ui: { viewSettings },
-  } = useAppSelector((state) => state);
-
-  const initialViewState: ViewSettings = {
-    sizePict: viewSettings.sizePict,
-    columnGap: viewSettings.columnGap,
-    rowGap: viewSettings.rowGap,
-  };
-  const [view, setView] = useState(initialViewState);
-
-  const initialAuthor: string = "";
-  const [author, setAuthor] = useState(initialAuthor);
-
-  const initialScale = 1;
-  const [scale, setScale] = useState(initialScale);
+  const { document } = useAppSelector((state) => state);
 
   return (
-    <>
-      <ViewSequencesSettings>
-        {Object.entries(document.content).map(([key, sequence]) => (
-          <Box
-            key={`sequence-${key}`}
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              alignContent: "start",
-              alignItems: "start",
-              columnGap: view.columnGap * scale,
-              rowGap: view.rowGap * scale,
-              width: "100%",
-              marginBottom: 2,
-            }}
-          >
-            {sequence.map((pictogram) => (
-              <PictogramCard
-                pictogram={pictogram}
-                view={"complete"}
-                variant="plane"
-                size={{
-                  pictSize: view.sizePict,
-                  scale: scale,
+    <ViewSequencesSettings>
+      {({ viewSettings, sequenceViewSettings, scale, author }) => (
+        <>
+          {Object.entries(document.content).map(([key, sequence]) => {
+            const seqKey = Number(key);
+            const seqView = sequenceViewSettings[seqKey] ?? {
+              sizePict: 1,
+              pictSpaceBetween: 1,
+              alignment: "left" as const,
+            };
+
+            return (
+              <Box
+                key={`sequence-${key}`}
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  flexDirection:
+                    viewSettings.direction === "column" ? "row" : "column",
+                  alignContent: "start",
+                  alignItems: "start",
+                  justifyContent:
+                    ALIGNMENT_TO_JUSTIFY[seqView.alignment] ?? "flex-start",
+                  columnGap:
+                    viewSettings.direction === "column"
+                      ? seqView.pictSpaceBetween * scale
+                      : 0,
+                  rowGap: seqView.pictSpaceBetween * scale,
+                  height: viewSettings.direction === "column" ? "auto" : "100%",
                 }}
-                key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
-              />
-            ))}
-          </Box>
-        ))}
-      </ViewSequencesSettings>
-      <CopyRight author={author} />
-    </>
+              >
+                {sequence.map((pictogram) => (
+                  <PictogramCard
+                    pictogram={pictogram}
+                    view={"complete"}
+                    variant="plane"
+                    size={{
+                      pictSize: seqView.sizePict,
+                      scale: scale,
+                    }}
+                    key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
+                  />
+                ))}
+              </Box>
+            );
+          })}
+          <CopyRight author={author} />
+        </>
+      )}
+    </ViewSequencesSettings>
   );
 };
 

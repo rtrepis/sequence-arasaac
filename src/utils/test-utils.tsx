@@ -43,8 +43,9 @@ const preloadedState: State = {
   ui: {
     viewSettings: {
       sizePict: 1,
-      columnGap: 1,
-      rowGap: 1,
+      pictSpaceBetween: 1,
+      sequenceSpaceBetween: 1,
+      direction: "column",
     },
     defaultSettings: {
       pictApiAra: {

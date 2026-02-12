@@ -395,6 +395,30 @@
       "value": "Tamaño"
     }
   ],
+  "pages.viewSequence.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Aplicar a todas"
+    }
+  ],
+  "pages.viewSequence.sequence.label": [
+    {
+      "type": 0,
+      "value": "Secuencia"
+    }
+  ],
+  "pages.viewSequence.alignment.label": [
+    {
+      "type": 0,
+      "value": "Alineación"
+    }
+  ],
+  "pages.viewSequence.direction.label": [
+    {
+      "type": 0,
+      "value": "Dirección"
+    }
+  ],
   "pictogram.empty": [
     {
       "type": 0,

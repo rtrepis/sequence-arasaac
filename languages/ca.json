@@ -243,16 +243,16 @@
     "defaultMessage": "Autor de la seqüència",
     "description": "Label form"
   },
-  "pages.viewSequence.columnGap.label": {
-    "defaultMessage": "Espai Columna",
+  "pages.viewSequence.pictSpaceBetween.label": {
+    "defaultMessage": "Espai de pictogrames",
     "description": "Label form"
   },
   "pages.viewSequence.fullScreen.label": {
     "defaultMessage": "Pantalla sencera",
     "description": "Setting property"
   },
-  "pages.viewSequence.rowGap.label": {
-    "defaultMessage": "Espai Fila",
+  "pages.viewSequence.sequenceSpaceBetween.label": {
+    "defaultMessage": "Espai de seqüències",
     "description": "Label form"
   },
   "pages.viewSequence.size.label": {

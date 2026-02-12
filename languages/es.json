@@ -243,16 +243,16 @@
     "defaultMessage": "Autor de la secuencia",
     "description": "Label form"
   },
-  "pages.viewSequence.columnGap.label": {
-    "defaultMessage": "Espacio Columna",
+  "pages.viewSequence.pictSpaceBetween.label": {
+    "defaultMessage": "Espacio de pictogramas",
     "description": "Label form"
   },
   "pages.viewSequence.fullScreen.label": {
     "defaultMessage": "Pantalla completa",
     "description": "Setting property"
   },
-  "pages.viewSequence.rowGap.label": {
-    "defaultMessage": "Espacio Fila",
+  "pages.viewSequence.sequenceSpaceBetween.label": {
+    "defaultMessage": "Espacio de secuencias",
     "description": "Label form"
   },
   "pages.viewSequence.size.label": {

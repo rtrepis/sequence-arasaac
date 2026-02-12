@@ -8,10 +8,13 @@ export interface Ui {
   defaultSettings: DefaultSettings;
 }
 
+export type SequenceDirection = "row" | "column";
+
 export interface ViewSettings {
   sizePict: number;
-  columnGap: number;
-  rowGap: number;
+  pictSpaceBetween: number;
+  sequenceSpaceBetween: number;
+  direction: SequenceDirection;
 }
 
 export interface DefaultSettings {
