@@ -49,7 +49,7 @@ export const PRINT_MARGIN_MM = 10;
  * Configuració de marges per a diferents mides de pantalla
  */
 export const SCREEN_MARGINS: ScreenMargins = {
-  small: 65,
+  small: 48,
   medium: 380,
 };
 

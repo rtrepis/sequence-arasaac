@@ -27,6 +27,9 @@ import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
   MdFormatAlignRight,
+  MdVerticalAlignTop,
+  MdVerticalAlignCenter,
+  MdVerticalAlignBottom,
   MdScreenRotation,
   MdTableRows,
   MdViewColumn,
@@ -44,7 +47,6 @@ import {
 import { useFullscreen } from "@/hooks/useFullScreen";
 import { useViewManager, useAuthorManager } from "@/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
-import { PRINT_CONTAINER_PADDING } from "@/types/PageFormat";
 import { usePrintStyles, printWithOrientation } from "@/hooks/usePrintStyles";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import { SequenceViewSettings, SequenceAlignment } from "@/types/document";
@@ -96,9 +98,9 @@ const ViewSequencesSettings = ({
 
   // Estat local: mode aplicar a totes vs individual
   const [applyAll, setApplyAll] = useState(true);
-  // Acordions expandits: per defecte només el primer
-  const [expandedAccordions, setExpandedAccordions] = useState<Set<number>>(
-    () => new Set([sequenceKeys[0] ?? 0]),
+  // Acordió expandit: només un a la vegada (null = tots tancats)
+  const [expandedAccordion, setExpandedAccordion] = useState<number | null>(
+    sequenceKeys[0] ?? 0,
   );
 
   // Gestió del format de pàgina
@@ -157,19 +159,11 @@ const ViewSequencesSettings = ({
   const activeScale = isInFullscreen ? currentScale : calculatedScale;
 
   /**
-   * Handler per expandir/col·lapsar un acordió
+   * Handler per expandir/col·lapsar un acordió (només un obert a la vegada)
    */
   const handleAccordionToggle = useCallback(
     (key: number) => (_: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpandedAccordions((prev) => {
-        const next = new Set(prev);
-        if (isExpanded) {
-          next.add(key);
-        } else {
-          next.delete(key);
-        }
-        return next;
-      });
+      setExpandedAccordion(isExpanded ? key : null);
     },
     [],
   );
@@ -182,13 +176,8 @@ const ViewSequencesSettings = ({
   const handleApplyAllChange = useCallback(
     (_: React.SyntheticEvent, checked: boolean) => {
       setApplyAll(checked);
-      if (!checked) {
-        // Obrir tots els acordions
-        setExpandedAccordions(new Set(sequenceKeys));
-      } else {
-        // Només el primer obert
-        setExpandedAccordions(new Set([sequenceKeys[0] ?? 0]));
-      }
+      // Obrir el primer acordió en ambdós casos
+      setExpandedAccordion(sequenceKeys[0] ?? 0);
     },
     [sequenceKeys],
   );
@@ -316,6 +305,9 @@ const ViewSequencesSettings = ({
       alignment: "left" as SequenceAlignment,
     };
 
+    // Mostrar icones d'alineació diferents segons la direcció global
+    const isColumn = viewSettings.direction === "column";
+
     return (
       <Stack spacing={1}>
         <FormGroup>
@@ -355,13 +347,13 @@ const ViewSequencesSettings = ({
             size="small"
           >
             <ToggleButton value="left" aria-label="left">
-              <MdFormatAlignLeft />
+              {isColumn ? <MdVerticalAlignTop /> : <MdFormatAlignLeft />}
             </ToggleButton>
             <ToggleButton value="center" aria-label="center">
-              <MdFormatAlignCenter />
+              {isColumn ? <MdVerticalAlignCenter /> : <MdFormatAlignCenter />}
             </ToggleButton>
             <ToggleButton value="right" aria-label="right">
-              <MdFormatAlignRight />
+              {isColumn ? <MdVerticalAlignBottom /> : <MdFormatAlignRight />}
             </ToggleButton>
           </ToggleButtonGroup>
         </FormGroup>
@@ -413,7 +405,7 @@ const ViewSequencesSettings = ({
           </Stack>
         </NotPrint>
 
-        <Stack direction={{ xs: "column", md: "row" }} columnGap={3}>
+        <Stack direction={{ xs: "column", md: "row" }} columnGap={{ md: 3 }}>
           {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
           <Box
             className="preview-container"
@@ -421,7 +413,7 @@ const ViewSequencesSettings = ({
               width: displayWidth,
               height: displayHeight,
               overflow: "hidden",
-              border: "2px solid green",
+              outline: "2px solid green",
               marginBottom: 1,
               position: { xs: "sticky", md: "static" },
               top: { xs: 0 },
@@ -446,12 +438,12 @@ const ViewSequencesSettings = ({
                 alignContent={"start"}
                 alignItems={"start"}
                 columnGap={
-                  viewSettings.direction === "row"
+                  viewSettings.direction === "column"
                     ? viewSettings.sequenceSpaceBetween
                     : 0
                 }
                 rowGap={
-                  viewSettings.direction === "column"
+                  viewSettings.direction === "row"
                     ? viewSettings.sequenceSpaceBetween
                     : 0
                 }
@@ -477,7 +469,11 @@ const ViewSequencesSettings = ({
           </NotPrint>
 
           <NotPrint>
-            <Stack maxWidth={300} paddingLeft={2} spacing={1}>
+            <Stack
+              maxWidth={{ md: 300 }}
+              width={{ xs: "100%", md: "auto" }}
+              spacing={1}
+            >
               <FormGroup>
                 <FormLabel>
                   <FormattedMessage {...messages.pageSize} />
@@ -513,7 +509,7 @@ const ViewSequencesSettings = ({
               {sequenceKeys.map((seqKey) => (
                 <Accordion
                   key={seqKey}
-                  expanded={expandedAccordions.has(seqKey)}
+                  expanded={expandedAccordion === seqKey}
                   onChange={handleAccordionToggle(seqKey)}
                   disableGutters
                   sx={{
@@ -561,10 +557,10 @@ const ViewSequencesSettings = ({
                   onChange={handleDirectionChange}
                   size="small"
                 >
-                  <ToggleButton value="column" aria-label="column">
+                  <ToggleButton value="row" aria-label="row">
                     <MdTableRows />
                   </ToggleButton>
-                  <ToggleButton value="row" aria-label="row">
+                  <ToggleButton value="column" aria-label="column">
                     <MdViewColumn />
                   </ToggleButton>
                 </ToggleButtonGroup>

@@ -33,17 +33,15 @@ const ViewSequencePage = (): React.ReactElement => {
                   display: "flex",
                   flexWrap: "wrap",
                   flexDirection:
-                    viewSettings.direction === "column" ? "row" : "column",
+                    viewSettings.direction === "row" ? "row" : "column",
                   alignContent: "start",
                   alignItems: "start",
                   justifyContent:
                     ALIGNMENT_TO_JUSTIFY[seqView.alignment] ?? "flex-start",
-                  columnGap:
-                    viewSettings.direction === "column"
-                      ? seqView.pictSpaceBetween * scale
-                      : 0,
+                  columnGap: seqView.pictSpaceBetween * scale,
                   rowGap: seqView.pictSpaceBetween * scale,
-                  height: viewSettings.direction === "column" ? "auto" : "100%",
+                  height: viewSettings.direction === "column" ? "100%" : "auto",
+                  width: viewSettings.direction === "row" ? "100%" : "auto",
                 }}
               >
                 {sequence.map((pictogram) => (
