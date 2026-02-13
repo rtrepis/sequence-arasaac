@@ -1,4 +1,13 @@
-import { Tab, Tabs, Tooltip, IconButton } from "@mui/material";
+import {
+  Tab,
+  Tabs,
+  Tooltip,
+  IconButton,
+  Stack,
+  Box,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import React, { SyntheticEvent } from "react";
 import TabPanelSequence from "../TabPanelSecuence/TabPanelSecuence";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
@@ -11,6 +20,8 @@ import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 
 const TabsSequences = (): React.ReactElement => {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const value = useAppSelector((state) => state.document.activeSAAC);
   // Nombre de tabs derivat de les claus de content (estat persistat en Redux)
   const amount = useAppSelector(
@@ -30,6 +41,75 @@ const TabsSequences = (): React.ReactElement => {
     dispatch(deleteLastSequenceActionCreator());
   };
 
+  const tabs = [...Array(amount)].map((_, index) => (
+    <Tab
+      key={`tab-${index}`}
+      label={`${index + 1}`}
+      id={`vertical-tab-${index}`}
+      aria-controls={`vertical-tabpanel-${index}`}
+      sx={isMobile ? { minHeight: 36, minWidth: 40 } : undefined}
+    />
+  ));
+
+  const removeButton = (
+    <Tooltip title="Eliminar última seqüència">
+      <span>
+        <IconButton
+          color="secondary"
+          onClick={handleDeleteLastSequence}
+          disabled={amount <= 1}
+          size="small"
+        >
+          <AiFillMinusCircle
+            size={isMobile ? 20 : 24}
+            style={{ visibility: amount > 1 ? "visible" : "hidden" }}
+          />
+        </IconButton>
+      </span>
+    </Tooltip>
+  );
+
+  const addButton = (
+    <Tooltip title="Afegir seqüència">
+      <span>
+        <IconButton
+          color="secondary"
+          onClick={handleAddSequence}
+          size="small"
+        >
+          <AiFillPlusCircle size={isMobile ? 20 : 24} />
+        </IconButton>
+      </span>
+    </Tooltip>
+  );
+
+  // Mòbil: tabs horitzontals + panel a sota (fragment per integrar amb el pare)
+  if (isMobile) {
+    return (
+      <>
+        <Stack direction="row" alignItems="center">
+          {removeButton}
+          <Tabs
+            orientation="horizontal"
+            variant="scrollable"
+            scrollButtons="auto"
+            value={value}
+            onChange={handleChange}
+            aria-label="sequence number"
+            sx={{ minHeight: 36 }}
+          >
+            {tabs}
+          </Tabs>
+          {addButton}
+        </Stack>
+        <Box sx={{ width: "100%" }}>
+          <TabPanelSequence index={value} />
+        </Box>
+      </>
+    );
+  }
+
+  // Desktop: tabs verticals a l'esquerra + panel a la dreta
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
       <div
@@ -39,25 +119,7 @@ const TabsSequences = (): React.ReactElement => {
           alignItems: "center",
         }}
       >
-        {/* 🔥 Botó "-" a la part superior */}
-        <Tooltip title="Eliminar última seqüència">
-          <span>
-            <IconButton
-              color="secondary"
-              onClick={handleDeleteLastSequence}
-              disabled={amount <= 1}
-              size="small"
-            >
-              <AiFillMinusCircle
-                size={24}
-                style={{
-                  visibility: amount > 1 ? "visible" : "hidden",
-                }}
-              />
-            </IconButton>
-          </span>
-        </Tooltip>
-
+        {removeButton}
         <Tabs
           orientation="vertical"
           variant="scrollable"
@@ -66,32 +128,10 @@ const TabsSequences = (): React.ReactElement => {
           aria-label="sequence number"
           sx={{ borderRight: 1, borderColor: "divider", width: 100 }}
         >
-          {/* 🔥 Generació automàtica dels Tabs segons "amount" */}
-          {[...Array(amount)].map((_, index) => (
-            <Tab
-              key={`tab-${index}`}
-              label={`${index + 1}`}
-              id={`vertical-tab-${index}`}
-              aria-controls={`vertical-tabpanel-${index}`}
-            />
-          ))}
+          {tabs}
         </Tabs>
-
-        {/* 🔥 Botó "+" a la part inferior */}
-        <Tooltip title="Afegir seqüència">
-          <span>
-            <IconButton
-              color="secondary"
-              onClick={handleAddSequence}
-              size="small"
-            >
-              <AiFillPlusCircle size={24} />
-            </IconButton>
-          </span>
-        </Tooltip>
+        {addButton}
       </div>
-
-      {/* Panel */}
       <TabPanelSequence index={value} />
     </div>
   );

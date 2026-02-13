@@ -24,11 +24,20 @@ const EditSequencesPage = (): React.ReactElement => {
         <MagicSearch info={{ value: info }} />
       </Stack>
       <Divider />
-      <div>
-        <Typography color={"primary"}>Seqüencies</Typography>
-        <FeedbackProgress />
-      </div>
-      <TabsSequences />
+      <FeedbackProgress />
+      <Stack
+        direction={{ xs: "row", md: "column" }}
+        alignItems={{ xs: "center", md: "stretch" }}
+        flexWrap="wrap"
+      >
+        <Typography
+          color="primary"
+          sx={{ whiteSpace: "nowrap", mr: { xs: 1, md: 0 } }}
+        >
+          Seqüencies
+        </Typography>
+        <TabsSequences />
+      </Stack>
     </>
   );
 };
