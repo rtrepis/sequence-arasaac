@@ -5,14 +5,13 @@ import Container from "@mui/material/Container";
 import DefaultSettings from "../../Modals/DefaultSettingsModal/DefaultSettingsModal";
 import { FormattedMessage } from "react-intl";
 import messages from "./BarNavigation.lang";
-import { Box, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
 import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
 import React from "react";
-import ButtonWithFileLoad from "../ButtonWithFileLoad/ButtonWithFileLoad";
 import TabsEditView from "../TabsEditView/TabsEditView";
-import ButtonWithModalDownload from "../ButtonWithModalDownload/ButtonWithModalDonwload";
+import LogoMenu from "../LogoMenu/LogoMenu";
 
 interface BarProps {
   children: React.ReactElement;
@@ -38,18 +37,7 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
                 alignItems={"center"}
                 height={"50px"}
               >
-                <Box
-                  sx={{
-                    display: { xs: "block", sm: "block", md: "block" },
-                  }}
-                >
-                  <img
-                    src="/favicon.png"
-                    alt="logo"
-                    height={25}
-                    width={34.16}
-                  />
-                </Box>
+                <LogoMenu />
                 <Typography
                   variant={"h5"}
                   component="h1"
@@ -65,8 +53,6 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
               </Stack>
 
               <Stack direction={"row"} alignItems={"center"}>
-                <ButtonWithModalDownload />
-                <ButtonWithFileLoad />
                 <DefaultSettings />
               </Stack>
             </Toolbar>

@@ -796,5 +796,41 @@
       "type": 0,
       "value": "Iniciar"
     }
+  ],
+  "components.logoMenu.editView": [
+    {
+      "type": 0,
+      "value": "Editar"
+    }
+  ],
+  "components.logoMenu.previewView": [
+    {
+      "type": 0,
+      "value": "Vista previa"
+    }
+  ],
+  "components.logoMenu.settings": [
+    {
+      "type": 0,
+      "value": "Configuración"
+    }
+  ],
+  "components.logoMenu.download": [
+    {
+      "type": 0,
+      "value": "Descargar"
+    }
+  ],
+  "components.logoMenu.load": [
+    {
+      "type": 0,
+      "value": "Cargar"
+    }
+  ],
+  "components.logoMenu.menuAriaLabel": [
+    {
+      "type": 0,
+      "value": "Menú principal"
+    }
   ]
 }
