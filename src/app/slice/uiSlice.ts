@@ -11,6 +11,12 @@ import {
   langTranslateApp,
   langTranslateSearch,
 } from "/src/configs/languagesConfigs";
+import {
+  VIEW_DEFAULT_SIZE_PICT,
+  VIEW_DEFAULT_PICT_SPACE,
+  VIEW_DEFAULT_SEQ_SPACE,
+  VIEW_DEFAULT_DIRECTION,
+} from "@/configs/viewSettingsConfig";
 
 const localeBrowser = navigator.language.slice(0, 2);
 
@@ -40,10 +46,10 @@ const localeSearch = userLangSettings?.search
 const uiInitialState: Ui = {
   lang: { app: localeAPP, search: localeSearch, keywords: [] },
   viewSettings: {
-    sizePict: 1,
-    pictSpaceBetween: 1,
-    sequenceSpaceBetween: 1,
-    direction: "row",
+    sizePict: VIEW_DEFAULT_SIZE_PICT,
+    pictSpaceBetween: VIEW_DEFAULT_PICT_SPACE,
+    sequenceSpaceBetween: VIEW_DEFAULT_SEQ_SPACE,
+    direction: VIEW_DEFAULT_DIRECTION,
   },
   defaultSettings: {
     pictApiAra: {

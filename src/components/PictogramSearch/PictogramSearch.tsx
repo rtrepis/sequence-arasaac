@@ -5,6 +5,7 @@ import {
   TextField,
   ToggleButton,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import useAraSaac from "../../hooks/useAraSaac";
@@ -16,6 +17,19 @@ import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { Hair, Skin } from "@/types/sequence";
 import { fileToBase64 } from "@/utils/imageToBase64";
+
+// Input visualment ocult però accessible per a lectors de pantalla (diferent de hidden)
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
@@ -228,24 +242,19 @@ const PictogramSearch = ({
           </ToggleButton>
         )}
 
+        {/* Botó d'upload: usa component="label" perquè el clic activi l'input de forma accessible */}
         <ToggleButton
-          value={"plus"}
-          aria-label={`${intl.formatMessage({
-            ...messages.plus,
-          })}`}
+          value={"upload"}
+          aria-label={`${intl.formatMessage({ ...messages.uploadImage })}`}
           key={"upload"}
-          onClick={() => {
-            const imageUpload = document.getElementById("select-image");
-            if (imageUpload) imageUpload.click();
-          }}
+          component="label"
         >
           <MdOutlineDriveFolderUpload size={80} />
-          <input
-            id="select-image"
+          {/* VisuallyHiddenInput manté l'input accessible als lectors de pantalla */}
+          <VisuallyHiddenInput
             type="file"
             onChange={handleImageChange}
             accept="image/*"
-            hidden
           />
         </ToggleButton>
       </StyledToggleButtonGroup>
