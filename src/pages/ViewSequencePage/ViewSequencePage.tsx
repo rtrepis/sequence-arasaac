@@ -21,7 +21,7 @@ const ViewSequencePage = (): React.ReactElement => {
           {Object.entries(document.content).map(([key, sequence]) => {
             const seqKey = Number(key);
             const seqView = sequenceViewSettings[seqKey] ?? {
-              sizePict: 1,
+              sizePict: 0.9,
               pictSpaceBetween: 1,
               alignment: "left" as const,
             };

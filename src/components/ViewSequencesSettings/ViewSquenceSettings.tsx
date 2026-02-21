@@ -17,6 +17,7 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useCallback, useState } from "react";
@@ -300,7 +301,7 @@ const ViewSequencesSettings = ({
    */
   const renderSequenceControls = (seqKey: number) => {
     const seqView = sequenceViewSettings[seqKey] ?? {
-      sizePict: 1,
+      sizePict: 0.9,
       pictSpaceBetween: 1,
       alignment: "left" as SequenceAlignment,
     };
@@ -315,10 +316,11 @@ const ViewSequencesSettings = ({
             <FormattedMessage {...messages.size} />
             <Slider
               name="sizePict"
-              step={0.01}
-              min={0.5}
-              max={2}
+              step={0.05}
+              min={0.4}
+              max={6}
               value={seqView.sizePict}
+              valueLabelDisplay="auto"
               onChange={handleSequenceSliderChange(seqKey)}
             />
           </FormLabel>
@@ -332,6 +334,7 @@ const ViewSequencesSettings = ({
               min={-2}
               max={10}
               value={seqView.pictSpaceBetween}
+              valueLabelDisplay="auto"
               onChange={handleSequenceSliderChange(seqKey)}
             />
           </FormLabel>
@@ -346,15 +349,21 @@ const ViewSequencesSettings = ({
             onChange={handleAlignmentChange(seqKey)}
             size="small"
           >
-            <ToggleButton value="left" aria-label="left">
-              {isColumn ? <MdVerticalAlignTop /> : <MdFormatAlignLeft />}
-            </ToggleButton>
-            <ToggleButton value="center" aria-label="center">
-              {isColumn ? <MdVerticalAlignCenter /> : <MdFormatAlignCenter />}
-            </ToggleButton>
-            <ToggleButton value="right" aria-label="right">
-              {isColumn ? <MdVerticalAlignBottom /> : <MdFormatAlignRight />}
-            </ToggleButton>
+            <Tooltip title={intl.formatMessage(messages.tooltipAlignLeft)}>
+              <ToggleButton value="left" aria-label="left">
+                {isColumn ? <MdVerticalAlignTop /> : <MdFormatAlignLeft />}
+              </ToggleButton>
+            </Tooltip>
+            <Tooltip title={intl.formatMessage(messages.tooltipAlignCenter)}>
+              <ToggleButton value="center" aria-label="center">
+                {isColumn ? <MdVerticalAlignCenter /> : <MdFormatAlignCenter />}
+              </ToggleButton>
+            </Tooltip>
+            <Tooltip title={intl.formatMessage(messages.tooltipAlignRight)}>
+              <ToggleButton value="right" aria-label="right">
+                {isColumn ? <MdVerticalAlignBottom /> : <MdFormatAlignRight />}
+              </ToggleButton>
+            </Tooltip>
           </ToggleButtonGroup>
         </FormGroup>
       </Stack>
@@ -369,49 +378,60 @@ const ViewSequencesSettings = ({
             <Stack direction={"row"}>
               {!isFullscreen ? (
                 <>
-                  <Button
-                    aria-label={"page orientation"}
-                    variant="text"
-                    color="primary"
-                    sx={{ fontSize: "2rem" }}
-                    onClick={toggleOrientation}
-                  >
-                    <MdScreenRotation />
-                  </Button>
-                  <Button
-                    aria-label={"view"}
-                    variant="text"
-                    color="primary"
-                    sx={{ fontSize: "2rem" }}
-                    onClick={handlePrint}
-                  >
-                    <AiFillPrinter />
-                  </Button>
+                  <Tooltip title={intl.formatMessage(messages.tooltipOrientation)}>
+                    <Button
+                      aria-label={"page orientation"}
+                      variant="text"
+                      color="primary"
+                      sx={{ fontSize: "2rem" }}
+                      onClick={toggleOrientation}
+                    >
+                      <MdScreenRotation />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
+                    <Button
+                      aria-label={"view"}
+                      variant="text"
+                      color="primary"
+                      sx={{ fontSize: "2rem" }}
+                      onClick={handlePrint}
+                    >
+                      <AiFillPrinter />
+                    </Button>
+                  </Tooltip>
                 </>
               ) : (
                 !isInFullscreen && (
-                  <Button
-                    aria-label={"fullScreen"}
-                    variant="text"
-                    color="primary"
-                    sx={{ fontSize: "2rem" }}
-                    onClick={enterFullscreen}
-                  >
-                    <AiOutlineFullscreen />
-                  </Button>
+                  <Tooltip title={intl.formatMessage(messages.tooltipFullscreen)}>
+                    <Button
+                      aria-label={"fullScreen"}
+                      variant="text"
+                      color="primary"
+                      sx={{ fontSize: "2rem" }}
+                      onClick={enterFullscreen}
+                    >
+                      <AiOutlineFullscreen />
+                    </Button>
+                  </Tooltip>
                 )
               )}
             </Stack>
           </Stack>
         </NotPrint>
 
-        <Stack direction={{ xs: "column", md: "row" }} columnGap={{ md: 3 }}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          columnGap={{ md: 3 }}
+          flexWrap={{ xs: "wrap", md: "nowrap" }}
+        >
           {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
           <Box
             className="preview-container"
             sx={{
               width: displayWidth,
               height: displayHeight,
+              minWidth: 0,
               overflow: "hidden",
               outline: "2px solid green",
               marginBottom: 1,
@@ -472,6 +492,7 @@ const ViewSequencesSettings = ({
             <Stack
               maxWidth={{ md: 300 }}
               width={{ xs: "100%", md: "auto" }}
+              flexShrink={0}
               spacing={1}
             >
               <FormGroup>
@@ -491,19 +512,23 @@ const ViewSequencesSettings = ({
                 </Select>
               </FormGroup>
 
-              {/* Switch aplicar a totes */}
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={applyAll}
-                      onChange={handleApplyAllChange}
-                      size="small"
+              {/* Switch aplicar a totes: només visible quan hi ha més d'una seqüència */}
+              {sequenceKeys.length > 1 && (
+                <FormGroup>
+                  <Tooltip title={intl.formatMessage(messages.tooltipApplyAll)}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={applyAll}
+                          onChange={handleApplyAllChange}
+                          size="small"
+                        />
+                      }
+                      label={intl.formatMessage(messages.applyAll)}
                     />
-                  }
-                  label={intl.formatMessage(messages.applyAll)}
-                />
-              </FormGroup>
+                  </Tooltip>
+                </FormGroup>
+              )}
 
               {/* Acordions per cada seqüència */}
               {sequenceKeys.map((seqKey) => (
@@ -542,6 +567,7 @@ const ViewSequencesSettings = ({
                     min={0}
                     max={10}
                     value={viewSettings.sequenceSpaceBetween}
+                    valueLabelDisplay="auto"
                     onChange={handleSequenceSpaceChange}
                   />
                 </FormLabel>
@@ -557,12 +583,16 @@ const ViewSequencesSettings = ({
                   onChange={handleDirectionChange}
                   size="small"
                 >
-                  <ToggleButton value="row" aria-label="row">
-                    <MdTableRows />
-                  </ToggleButton>
-                  <ToggleButton value="column" aria-label="column">
-                    <MdViewColumn />
-                  </ToggleButton>
+                  <Tooltip title={intl.formatMessage(messages.tooltipDirectionRow)}>
+                    <ToggleButton value="row" aria-label="row">
+                      <MdTableRows />
+                    </ToggleButton>
+                  </Tooltip>
+                  <Tooltip title={intl.formatMessage(messages.tooltipDirectionColumn)}>
+                    <ToggleButton value="column" aria-label="column">
+                      <MdViewColumn />
+                    </ToggleButton>
+                  </Tooltip>
                 </ToggleButtonGroup>
               </FormGroup>
 

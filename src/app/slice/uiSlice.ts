@@ -43,7 +43,7 @@ const uiInitialState: Ui = {
     sizePict: 1,
     pictSpaceBetween: 1,
     sequenceSpaceBetween: 1,
-    direction: "column",
+    direction: "row",
   },
   defaultSettings: {
     pictApiAra: {
