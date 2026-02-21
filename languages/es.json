@@ -509,6 +509,130 @@
   "view.welcome.start.button": {
     "defaultMessage": "Iniciar",
     "description": "Start button"
+  },
+  "news.section.title": {
+    "defaultMessage": "Novedades",
+    "description": "Títol secció novetats"
+  },
+  "news.moreInfo.button": {
+    "defaultMessage": "Más info",
+    "description": "Botó més info notícia"
+  },
+  "news.back.button": {
+    "defaultMessage": "Volver",
+    "description": "Botó tornar de detall notícia"
+  },
+  "news.multiple-sequences.title": {
+    "defaultMessage": "Múltiples secuencias",
+    "description": "Títol notícia múltiples seqüències"
+  },
+  "news.multiple-sequences.summary": {
+    "defaultMessage": "Ahora puedes crear y gestionar varias secuencias a la vez con pestañas.",
+    "description": "Resum notícia múltiples seqüències"
+  },
+  "news.multiple-sequences.content": {
+    "defaultMessage": "¡Crea tantas secuencias como necesites! Utiliza las pestañas para añadir nuevas secuencias o eliminar las que ya no necesitas. Cada secuencia es independiente y puedes cambiar entre ellas fácilmente.",
+    "description": "Contingut notícia múltiples seqüències"
+  },
+  "news.multiple-sequences.img1.alt": {
+    "defaultMessage": "Pestañas de secuencia",
+    "description": "Alt imatge 1 múltiples seqüències"
+  },
+  "news.multiple-sequences.img2.alt": {
+    "defaultMessage": "Añadir y eliminar secuencias",
+    "description": "Alt imatge 2 múltiples seqüències"
+  },
+  "news.multiple-sequences.step1.alt": {
+    "defaultMessage": "Secuencia 1 con pictogramas y botón para añadir nueva secuencia",
+    "description": "Alt imatge pas 1 múltiples seqüències"
+  },
+  "news.multiple-sequences.step1.description": {
+    "defaultMessage": "En la página de edición, busca palabras en el buscador (separadas por comas) y los pictogramas aparecerán automáticamente en la secuencia activa. Haz clic en el botón + para crear una nueva secuencia.",
+    "description": "Descripció pas 1 múltiples seqüències"
+  },
+  "news.multiple-sequences.step2.alt": {
+    "defaultMessage": "Dos pestañas de secuencia visibles, secuencia 2 activa",
+    "description": "Alt imatge pas 2 múltiples seqüències"
+  },
+  "news.multiple-sequences.step2.description": {
+    "defaultMessage": "Haz clic en cualquier pestaña para cambiar de secuencia activa. Cada secuencia tiene su propio contenido independiente. Busca nuevas palabras para rellenar la secuencia 2.",
+    "description": "Descripció pas 2 múltiples seqüències"
+  },
+  "news.multiple-sequences.step3.alt": {
+    "defaultMessage": "Vista de las dos secuencias con tamaño aumentado globalmente",
+    "description": "Alt imatge pas 3 múltiples seqüències"
+  },
+  "news.multiple-sequences.step3.description": {
+    "defaultMessage": "En la Vista, el interruptor \"Aplicar a todas\" permite ajustar el tamaño y el espacio de todas las secuencias a la vez. Mueve el control de tamaño para ver el cambio aplicado globalmente.",
+    "description": "Descripció pas 3 múltiples seqüències"
+  },
+  "news.multiple-sequences.step4.alt": {
+    "defaultMessage": "Vista con la secuencia 2 ajustada individualmente a tamaño diferente",
+    "description": "Alt imatge pas 4 múltiples seqüències"
+  },
+  "news.multiple-sequences.step4.description": {
+    "defaultMessage": "Desactiva \"Aplicar a todas\" para configurar cada secuencia de forma independiente. Despliega el acordeón de la secuencia que quieres ajustar y modifica su tamaño o espaciado sin afectar a las demás.",
+    "description": "Descripció pas 4 múltiples seqüències"
+  },
+  "news.print-preview.title": {
+    "defaultMessage": "Vista previa de impresión",
+    "description": "Títol notícia vista prèvia"
+  },
+  "news.print-preview.summary": {
+    "defaultMessage": "Previsualiza exactamente cómo quedará tu página antes de imprimir.",
+    "description": "Resum notícia vista prèvia"
+  },
+  "news.print-preview.content": {
+    "defaultMessage": "La vista previa te muestra exactamente cómo quedará la página impresa. Puedes controlar el tamaño de los pictogramas, el espacio entre filas y columnas, y la alineación. ¡Todo se ve en tiempo real!",
+    "description": "Contingut notícia vista prèvia"
+  },
+  "news.print-preview.img1.alt": {
+    "defaultMessage": "Vista previa de la página",
+    "description": "Alt imatge 1 vista prèvia"
+  },
+  "news.print-preview.img2.alt": {
+    "defaultMessage": "Controles de tamaño y espacio",
+    "description": "Alt imatge 2 vista prèvia"
+  },
+  "news.sequence-settings.title": {
+    "defaultMessage": "Nuevas configuraciones por secuencia",
+    "description": "Títol notícia configuracions"
+  },
+  "news.sequence-settings.summary": {
+    "defaultMessage": "Personaliza cada secuencia con alineación, tipografía de los números y más opciones.",
+    "description": "Resum notícia configuracions"
+  },
+  "news.sequence-settings.content": {
+    "defaultMessage": "Ahora puedes personalizar cada secuencia de manera independiente. Cambia la alineación de los pictogramas (izquierda, centro o derecha), configura la tipografía y el color de los números de forma independiente al texto, y descubre más opciones de formato para adaptar las secuencias a tus necesidades.",
+    "description": "Contingut notícia configuracions"
+  },
+  "news.sequence-settings.img1.alt": {
+    "defaultMessage": "Opciones de alineación",
+    "description": "Alt imatge 1 configuracions"
+  },
+  "news.sequence-settings.img2.alt": {
+    "defaultMessage": "Configuración de tipografía de los números",
+    "description": "Alt imatge 2 configuracions"
+  },
+  "news.save-load.title": {
+    "defaultMessage": "Guarda y recupera",
+    "description": "Títol notícia guardar i carregar"
+  },
+  "news.save-load.summary": {
+    "defaultMessage": "Descarga tus secuencias con las imágenes y cárgalas cuando quieras.",
+    "description": "Resum notícia guardar i carregar"
+  },
+  "news.save-load.content": {
+    "defaultMessage": "Encontrarás las opciones de guardar y cargar en el menú del logo de SequenciAAC. Al guardar, se descarga un archivo con todas las secuencias y las imágenes de los pictogramas incluidas. ¡Así puedes recuperar tu trabajo en cualquier momento!",
+    "description": "Contingut notícia guardar i carregar"
+  },
+  "news.save-load.img1.alt": {
+    "defaultMessage": "Menú con opción de guardar",
+    "description": "Alt imatge 1 guardar i carregar"
+  },
+  "news.save-load.img2.alt": {
+    "defaultMessage": "Cargar archivo guardado",
+    "description": "Alt imatge 2 guardar i carregar"
   }
 }
 

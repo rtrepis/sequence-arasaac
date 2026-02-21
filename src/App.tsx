@@ -7,6 +7,7 @@ import { ReactElement, useEffect } from "react";
 import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
 import LanguageLayout from "./pages/LanguagesLayout/LanguagesLayaut";
 import WelcomeLayout from "./pages/WelcomePage/WelcomeLayout";
+import NewsDetailLayout from "./pages/NewsDetailPage/NewsDetailLayout";
 
 import messages_en from "./languages/en.json";
 import messages_es from "./languages/es.json";
@@ -48,6 +49,10 @@ const App = (): ReactElement => {
         path="/"
         index
         element={<WelcomeLayout localeBrowser={appLang} />}
+      />
+      <Route
+        path="news/:slug"
+        element={<NewsDetailLayout localeBrowser={appLang} />}
       />
       <Route
         path="create-sequence"
