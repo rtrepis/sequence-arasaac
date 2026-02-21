@@ -8,6 +8,11 @@ import {
   PictApiAraSettingsApplyAll,
 } from "../../types/sequence";
 import { DocumentSAAC, SequenceViewSettings } from "@/types/document";
+import {
+  SEQ_VIEW_DEFAULT_SIZE_PICT,
+  SEQ_VIEW_DEFAULT_PICT_SPACE,
+  SEQ_VIEW_DEFAULT_ALIGNMENT,
+} from "@/configs/viewSettingsConfig";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);
@@ -17,9 +22,9 @@ const getUniqueId = () => {
 };
 
 const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
-  sizePict: 0.9,
-  pictSpaceBetween: 1,
-  alignment: "left",
+  sizePict: SEQ_VIEW_DEFAULT_SIZE_PICT,
+  pictSpaceBetween: SEQ_VIEW_DEFAULT_PICT_SPACE,
+  alignment: SEQ_VIEW_DEFAULT_ALIGNMENT,
 };
 
 const documentInitialState: DocumentSAAC = {

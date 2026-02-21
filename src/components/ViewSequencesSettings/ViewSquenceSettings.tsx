@@ -55,6 +55,20 @@ import {
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
 } from "@/app/slice/documentSlice";
+import {
+  SEQ_VIEW_DEFAULT_SIZE_PICT,
+  SEQ_VIEW_DEFAULT_PICT_SPACE,
+  SEQ_VIEW_DEFAULT_ALIGNMENT,
+  SIZE_PICT_MIN,
+  SIZE_PICT_MAX,
+  SIZE_PICT_STEP,
+  PICT_SPACE_MIN,
+  PICT_SPACE_MAX,
+  PICT_SPACE_STEP,
+  SEQ_SPACE_MIN,
+  SEQ_SPACE_MAX,
+  SEQ_SPACE_STEP,
+} from "@/configs/viewSettingsConfig";
 
 interface ViewSequencesSettingsChildrenProps {
   viewSettings: ViewSettings;
@@ -301,9 +315,9 @@ const ViewSequencesSettings = ({
    */
   const renderSequenceControls = (seqKey: number) => {
     const seqView = sequenceViewSettings[seqKey] ?? {
-      sizePict: 0.9,
-      pictSpaceBetween: 1,
-      alignment: "left" as SequenceAlignment,
+      sizePict: SEQ_VIEW_DEFAULT_SIZE_PICT,
+      pictSpaceBetween: SEQ_VIEW_DEFAULT_PICT_SPACE,
+      alignment: SEQ_VIEW_DEFAULT_ALIGNMENT as SequenceAlignment,
     };
 
     // Mostrar icones d'alineació diferents segons la direcció global
@@ -316,9 +330,9 @@ const ViewSequencesSettings = ({
             <FormattedMessage {...messages.size} />
             <Slider
               name="sizePict"
-              step={0.05}
-              min={0.4}
-              max={6}
+              step={SIZE_PICT_STEP}
+              min={SIZE_PICT_MIN}
+              max={SIZE_PICT_MAX}
               value={seqView.sizePict}
               valueLabelDisplay="auto"
               onChange={handleSequenceSliderChange(seqKey)}
@@ -330,9 +344,9 @@ const ViewSequencesSettings = ({
             <FormattedMessage {...messages.pictSpaceBetween} />
             <Slider
               name="pictSpaceBetween"
-              step={0.5}
-              min={-2}
-              max={10}
+              step={PICT_SPACE_STEP}
+              min={PICT_SPACE_MIN}
+              max={PICT_SPACE_MAX}
               value={seqView.pictSpaceBetween}
               valueLabelDisplay="auto"
               onChange={handleSequenceSliderChange(seqKey)}
@@ -350,17 +364,17 @@ const ViewSequencesSettings = ({
             size="small"
           >
             <Tooltip title={intl.formatMessage(messages.tooltipAlignLeft)}>
-              <ToggleButton value="left" aria-label="left">
+              <ToggleButton value="left" aria-label={intl.formatMessage(messages.tooltipAlignLeft)}>
                 {isColumn ? <MdVerticalAlignTop /> : <MdFormatAlignLeft />}
               </ToggleButton>
             </Tooltip>
             <Tooltip title={intl.formatMessage(messages.tooltipAlignCenter)}>
-              <ToggleButton value="center" aria-label="center">
+              <ToggleButton value="center" aria-label={intl.formatMessage(messages.tooltipAlignCenter)}>
                 {isColumn ? <MdVerticalAlignCenter /> : <MdFormatAlignCenter />}
               </ToggleButton>
             </Tooltip>
             <Tooltip title={intl.formatMessage(messages.tooltipAlignRight)}>
-              <ToggleButton value="right" aria-label="right">
+              <ToggleButton value="right" aria-label={intl.formatMessage(messages.tooltipAlignRight)}>
                 {isColumn ? <MdVerticalAlignBottom /> : <MdFormatAlignRight />}
               </ToggleButton>
             </Tooltip>
@@ -380,7 +394,7 @@ const ViewSequencesSettings = ({
                 <>
                   <Tooltip title={intl.formatMessage(messages.tooltipOrientation)}>
                     <Button
-                      aria-label={"page orientation"}
+                      aria-label={intl.formatMessage(messages.tooltipOrientation)}
                       variant="text"
                       color="primary"
                       sx={{ fontSize: "2rem" }}
@@ -391,7 +405,7 @@ const ViewSequencesSettings = ({
                   </Tooltip>
                   <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
                     <Button
-                      aria-label={"view"}
+                      aria-label={intl.formatMessage(messages.tooltipPrint)}
                       variant="text"
                       color="primary"
                       sx={{ fontSize: "2rem" }}
@@ -405,7 +419,7 @@ const ViewSequencesSettings = ({
                 !isInFullscreen && (
                   <Tooltip title={intl.formatMessage(messages.tooltipFullscreen)}>
                     <Button
-                      aria-label={"fullScreen"}
+                      aria-label={intl.formatMessage(messages.tooltipFullscreen)}
                       variant="text"
                       color="primary"
                       sx={{ fontSize: "2rem" }}
@@ -563,9 +577,9 @@ const ViewSequencesSettings = ({
                   <FormattedMessage {...messages.sequenceSpaceBetween} />
                   <Slider
                     name="sequenceSpaceBetween"
-                    step={0.5}
-                    min={0}
-                    max={10}
+                    step={SEQ_SPACE_STEP}
+                    min={SEQ_SPACE_MIN}
+                    max={SEQ_SPACE_MAX}
                     value={viewSettings.sequenceSpaceBetween}
                     valueLabelDisplay="auto"
                     onChange={handleSequenceSpaceChange}
@@ -584,12 +598,12 @@ const ViewSequencesSettings = ({
                   size="small"
                 >
                   <Tooltip title={intl.formatMessage(messages.tooltipDirectionRow)}>
-                    <ToggleButton value="row" aria-label="row">
+                    <ToggleButton value="row" aria-label={intl.formatMessage(messages.tooltipDirectionRow)}>
                       <MdTableRows />
                     </ToggleButton>
                   </Tooltip>
                   <Tooltip title={intl.formatMessage(messages.tooltipDirectionColumn)}>
-                    <ToggleButton value="column" aria-label="column">
+                    <ToggleButton value="column" aria-label={intl.formatMessage(messages.tooltipDirectionColumn)}>
                       <MdViewColumn />
                     </ToggleButton>
                   </Tooltip>

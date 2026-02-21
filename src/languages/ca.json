@@ -47,6 +47,18 @@
       "value": "Benvingut"
     }
   ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Salta al contingut principal"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegació principal"
+    }
+  ],
   "components.buttonWithFileLoad.load.label": [
     {
       "type": 0,
@@ -255,6 +267,12 @@
     {
       "type": 0,
       "value": "Treure pictograma"
+    }
+  ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Pujar imatge des del dispositiu"
     }
   ],
   "components.pictogramSearch.pictogram": [

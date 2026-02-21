@@ -2,12 +2,17 @@ import { Box, Button, CardMedia, Stack, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { messages } from "./WelcomePage.lang";
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import NewsCarousel from "../../components/NewsCarousel/NewsCarousel";
 
 const WelcomePage = (): React.ReactElement => {
   const intl = useIntl();
   const isLandScape = window.screen.orientation.type === "landscape-primary";
+
+  // Estableix el títol del document per a lectors de pantalla i barra del navegador
+  useEffect(() => {
+    document.title = "SequenciAAC";
+  }, []);
 
   const linkArcadeGuide = isLandScape
     ? intl.formatMessage({ ...messages.arcadeLink })
@@ -16,6 +21,7 @@ const WelcomePage = (): React.ReactElement => {
   return (
     <>
       <Box bgcolor={"primary.main"} height={"1em"} width={"100wv"}></Box>
+      <Box component="main" id="main-content">
       <Stack
         display={"flex"}
         flexDirection={"column"}
@@ -77,6 +83,7 @@ const WelcomePage = (): React.ReactElement => {
           }}
         ></CardMedia>
       </Stack>
+      </Box>
     </>
   );
 };

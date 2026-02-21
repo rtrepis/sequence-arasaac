@@ -5,3 +5,32 @@ a.App {
   align-items: center;
   justify-content: center;
 }
+
+/* Skip link per a navegació amb teclat i lectors de pantalla */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto;
+  overflow: visible;
+  z-index: 9999;
+  padding: 8px 24px;
+  background: #ffffff;
+  border: 2px solid #252525;
+  border-radius: 4px;
+  color: #252525;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+}

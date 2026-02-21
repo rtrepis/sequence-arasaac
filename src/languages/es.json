@@ -47,6 +47,18 @@
       "value": "Bienvenido"
     }
   ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Saltar al contenido principal"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegación principal"
+    }
+  ],
   "components.buttonWithFileLoad.load.label": [
     {
       "type": 0,
@@ -255,6 +267,12 @@
     {
       "type": 0,
       "value": "Sacar pictograma"
+    }
+  ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Subir imagen desde el dispositivo"
     }
   ],
   "components.pictogramSearch.pictogram": [

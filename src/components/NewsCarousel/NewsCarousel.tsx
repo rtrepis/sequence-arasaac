@@ -9,15 +9,23 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { newsItems } from "../../data/newsItems";
 import messages from "./NewsCarousel.lang";
 
 const NewsCarousel = (): React.ReactElement => {
+  const intl = useIntl();
+
+  // component="section" + aria-labelledby per a navegació amb lectors de pantalla
   return (
-    <Box sx={{ width: "80%", mx: "auto", py: 4 }}>
+    <Box
+      component="section"
+      aria-labelledby="news-section-title"
+      sx={{ width: "80%", mx: "auto", py: 4 }}
+    >
       <Typography
+        id="news-section-title"
         variant="h5"
         component="h2"
         fontWeight={700}
@@ -49,11 +57,12 @@ const NewsCarousel = (): React.ReactElement => {
               flexDirection: "column",
             }}
           >
+            {/* Alt text descriptiu: usa el títol de la notícia en comptes de buit */}
             <CardMedia
               component="img"
               height="140"
               image={item.coverImage}
-              alt=""
+              alt={intl.formatMessage({ id: item.titleId })}
               sx={{ objectFit: "cover", bgcolor: "grey.200" }}
             />
             <CardContent sx={{ flexGrow: 1 }}>

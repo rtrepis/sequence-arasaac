@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Box, Button, Container, Divider, Stack, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -21,13 +21,20 @@ const NewsDetailPage = (): React.ReactElement => {
   // Buscar la notícia pel slug
   const newsItem = newsItems.find((item) => item.slug === slug);
 
+  // Estableix el títol del document quan es carrega la notícia
+  useEffect(() => {
+    if (newsItem) {
+      document.title = `${intl.formatMessage({ id: newsItem.titleId })} — SequenciAAC`;
+    }
+  }, [newsItem, intl]);
+
   // Si no es troba, redirigir a la pàgina principal
   if (!newsItem) {
     return <Navigate to="/" replace />;
   }
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container component="main" id="main-content" maxWidth="md" sx={{ py: 4 }}>
       <Stack spacing={3} alignItems="center">
         <Typography variant="h4" component="h1" fontWeight={700}>
           <FormattedMessage id={newsItem.titleId} />
