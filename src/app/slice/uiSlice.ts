@@ -17,6 +17,21 @@ import {
   VIEW_DEFAULT_SEQ_SPACE,
   VIEW_DEFAULT_DIRECTION,
 } from "@/configs/viewSettingsConfig";
+import {
+  DEFAULT_SKIN,
+  DEFAULT_HAIR,
+  DEFAULT_FITZGERALD,
+  DEFAULT_COLOR,
+  DEFAULT_FONT_FAMILY,
+  DEFAULT_FONT_SIZE,
+  DEFAULT_FONT_COLOR,
+  DEFAULT_BORDER_IN_COLOR,
+  DEFAULT_BORDER_IN_RADIUS,
+  DEFAULT_BORDER_IN_SIZE,
+  DEFAULT_BORDER_OUT_COLOR,
+  DEFAULT_BORDER_OUT_RADIUS,
+  DEFAULT_BORDER_OUT_SIZE,
+} from "@/configs/defaultSettingsConfig";
 
 const localeBrowser = navigator.language.slice(0, 2);
 
@@ -53,26 +68,34 @@ const uiInitialState: Ui = {
   },
   defaultSettings: {
     pictApiAra: {
-      skin: "white",
-      fitzgerald: "#666666",
-      hair: "brown",
-      color: true,
+      skin: DEFAULT_SKIN,
+      fitzgerald: DEFAULT_FITZGERALD,
+      hair: DEFAULT_HAIR,
+      color: DEFAULT_COLOR,
     },
     pictSequence: {
       numbered: false,
       textPosition: "bottom",
       font: {
-        color: "#000000",
-        family: "Roboto",
-        size: 1,
+        color: DEFAULT_FONT_COLOR,
+        family: DEFAULT_FONT_FAMILY,
+        size: DEFAULT_FONT_SIZE,
       },
       numberFont: {
-        color: "#000000",
-        family: "Roboto",
-        size: 1,
+        color: DEFAULT_FONT_COLOR,
+        family: DEFAULT_FONT_FAMILY,
+        size: DEFAULT_FONT_SIZE,
       },
-      borderIn: { color: "fitzgerald", radius: 20, size: 2 },
-      borderOut: { color: "#999999", radius: 20, size: 2 },
+      borderIn: {
+        color: DEFAULT_BORDER_IN_COLOR,
+        radius: DEFAULT_BORDER_IN_RADIUS,
+        size: DEFAULT_BORDER_IN_SIZE,
+      },
+      borderOut: {
+        color: DEFAULT_BORDER_OUT_COLOR,
+        radius: DEFAULT_BORDER_OUT_RADIUS,
+        size: DEFAULT_BORDER_OUT_SIZE,
+      },
     },
   },
 };

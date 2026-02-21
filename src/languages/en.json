@@ -1054,5 +1054,41 @@
       "type": 0,
       "value": "Start"
     }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "What's new"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "New"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Improvement"
+    }
+  ],
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Fix"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Read more"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "See all updates"
+    }
   ]
 }

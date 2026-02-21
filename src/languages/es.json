@@ -1054,5 +1054,41 @@
       "type": 0,
       "value": "Iniciar"
     }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "Novedades"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "Nueva"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Mejora"
+    }
+  ],
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Corrección"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Leer más"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "Ver todas las novedades"
+    }
   ]
 }

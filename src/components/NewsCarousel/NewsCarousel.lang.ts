@@ -11,6 +11,11 @@ const messages = defineMessages({
     defaultMessage: "Més info",
     description: "Botó per veure detall de la notícia",
   },
+  seeAll: {
+    id: "news.seeAll",
+    defaultMessage: "Veure totes les novetats",
+    description: "Botó per anar al changelog complet",
+  },
 });
 
 export default messages;

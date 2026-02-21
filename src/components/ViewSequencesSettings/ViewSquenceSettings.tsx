@@ -330,9 +330,9 @@ const ViewSequencesSettings = ({
             <FormattedMessage {...messages.size} />
             <Slider
               name="sizePict"
-              step={SIZE_PICT_STEP}
-              min={SIZE_PICT_MIN}
-              max={SIZE_PICT_MAX}
+              step={0.05}
+              min={0.4}
+              max={6}
               value={seqView.sizePict}
               valueLabelDisplay="auto"
               onChange={handleSequenceSliderChange(seqKey)}
@@ -344,9 +344,9 @@ const ViewSequencesSettings = ({
             <FormattedMessage {...messages.pictSpaceBetween} />
             <Slider
               name="pictSpaceBetween"
-              step={PICT_SPACE_STEP}
-              min={PICT_SPACE_MIN}
-              max={PICT_SPACE_MAX}
+              step={0.5}
+              min={-2}
+              max={10}
               value={seqView.pictSpaceBetween}
               valueLabelDisplay="auto"
               onChange={handleSequenceSliderChange(seqKey)}
@@ -364,17 +364,17 @@ const ViewSequencesSettings = ({
             size="small"
           >
             <Tooltip title={intl.formatMessage(messages.tooltipAlignLeft)}>
-              <ToggleButton value="left" aria-label={intl.formatMessage(messages.tooltipAlignLeft)}>
+              <ToggleButton value="left" aria-label="left">
                 {isColumn ? <MdVerticalAlignTop /> : <MdFormatAlignLeft />}
               </ToggleButton>
             </Tooltip>
             <Tooltip title={intl.formatMessage(messages.tooltipAlignCenter)}>
-              <ToggleButton value="center" aria-label={intl.formatMessage(messages.tooltipAlignCenter)}>
+              <ToggleButton value="center" aria-label="center">
                 {isColumn ? <MdVerticalAlignCenter /> : <MdFormatAlignCenter />}
               </ToggleButton>
             </Tooltip>
             <Tooltip title={intl.formatMessage(messages.tooltipAlignRight)}>
-              <ToggleButton value="right" aria-label={intl.formatMessage(messages.tooltipAlignRight)}>
+              <ToggleButton value="right" aria-label="right">
                 {isColumn ? <MdVerticalAlignBottom /> : <MdFormatAlignRight />}
               </ToggleButton>
             </Tooltip>
@@ -392,9 +392,11 @@ const ViewSequencesSettings = ({
             <Stack direction={"row"}>
               {!isFullscreen ? (
                 <>
-                  <Tooltip title={intl.formatMessage(messages.tooltipOrientation)}>
+                  <Tooltip
+                    title={intl.formatMessage(messages.tooltipOrientation)}
+                  >
                     <Button
-                      aria-label={intl.formatMessage(messages.tooltipOrientation)}
+                      aria-label={"page orientation"}
                       variant="text"
                       color="primary"
                       sx={{ fontSize: "2rem" }}
@@ -405,7 +407,7 @@ const ViewSequencesSettings = ({
                   </Tooltip>
                   <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
                     <Button
-                      aria-label={intl.formatMessage(messages.tooltipPrint)}
+                      aria-label={"view"}
                       variant="text"
                       color="primary"
                       sx={{ fontSize: "2rem" }}
@@ -417,9 +419,11 @@ const ViewSequencesSettings = ({
                 </>
               ) : (
                 !isInFullscreen && (
-                  <Tooltip title={intl.formatMessage(messages.tooltipFullscreen)}>
+                  <Tooltip
+                    title={intl.formatMessage(messages.tooltipFullscreen)}
+                  >
                     <Button
-                      aria-label={intl.formatMessage(messages.tooltipFullscreen)}
+                      aria-label={"fullScreen"}
                       variant="text"
                       color="primary"
                       sx={{ fontSize: "2rem" }}
@@ -436,7 +440,6 @@ const ViewSequencesSettings = ({
 
         <Stack
           direction={{ xs: "column", md: "row" }}
-          columnGap={{ md: 3 }}
           flexWrap={{ xs: "wrap", md: "nowrap" }}
         >
           {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
@@ -498,6 +501,15 @@ const ViewSequencesSettings = ({
             </Box>
           </Box>
 
+          {/* Grup divider + settings: empès sempre a la vora dreta en desktop */}
+          <Box
+            sx={{
+              marginLeft: { md: "auto" },
+              display: { md: "flex" },
+              gap: { md: 3 },
+              alignItems: "stretch",
+            }}
+          >
           <NotPrint>
             <Divider orientation="vertical" />
           </NotPrint>
@@ -577,9 +589,9 @@ const ViewSequencesSettings = ({
                   <FormattedMessage {...messages.sequenceSpaceBetween} />
                   <Slider
                     name="sequenceSpaceBetween"
-                    step={SEQ_SPACE_STEP}
-                    min={SEQ_SPACE_MIN}
-                    max={SEQ_SPACE_MAX}
+                    step={0.5}
+                    min={0}
+                    max={10}
                     value={viewSettings.sequenceSpaceBetween}
                     valueLabelDisplay="auto"
                     onChange={handleSequenceSpaceChange}
@@ -597,13 +609,17 @@ const ViewSequencesSettings = ({
                   onChange={handleDirectionChange}
                   size="small"
                 >
-                  <Tooltip title={intl.formatMessage(messages.tooltipDirectionRow)}>
-                    <ToggleButton value="row" aria-label={intl.formatMessage(messages.tooltipDirectionRow)}>
+                  <Tooltip
+                    title={intl.formatMessage(messages.tooltipDirectionRow)}
+                  >
+                    <ToggleButton value="row" aria-label="row">
                       <MdTableRows />
                     </ToggleButton>
                   </Tooltip>
-                  <Tooltip title={intl.formatMessage(messages.tooltipDirectionColumn)}>
-                    <ToggleButton value="column" aria-label={intl.formatMessage(messages.tooltipDirectionColumn)}>
+                  <Tooltip
+                    title={intl.formatMessage(messages.tooltipDirectionColumn)}
+                  >
+                    <ToggleButton value="column" aria-label="column">
                       <MdViewColumn />
                     </ToggleButton>
                   </Tooltip>
@@ -629,6 +645,7 @@ const ViewSequencesSettings = ({
               </FormGroup>
             </Stack>
           </NotPrint>
+          </Box>
         </Stack>
       </form>
 
