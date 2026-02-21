@@ -17,7 +17,7 @@ const getUniqueId = () => {
 };
 
 const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
-  sizePict: 1,
+  sizePict: 0.9,
   pictSpaceBetween: 1,
   alignment: "left",
 };

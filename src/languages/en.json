@@ -539,6 +539,18 @@
       "value": "New per-sequence settings"
     }
   ],
+  "pages.viewSequence.alignment.label": [
+    {
+      "type": 0,
+      "value": "Alignment"
+    }
+  ],
+  "pages.viewSequence.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Apply to all"
+    }
+  ],
   "pages.viewSequence.authSequence.helperText": [
     {
       "type": 0,
@@ -551,16 +563,34 @@
       "value": "Sequence author"
     }
   ],
+  "pages.viewSequence.direction.label": [
+    {
+      "type": 0,
+      "value": "Direction"
+    }
+  ],
   "pages.viewSequence.fullScreen.label": [
     {
       "type": 0,
       "value": "Full Screen"
     }
   ],
+  "pages.viewSequence.pageSize.label": [
+    {
+      "type": 0,
+      "value": "Page Size"
+    }
+  ],
   "pages.viewSequence.pictSpaceBetween.label": [
     {
       "type": 0,
       "value": "Pictogram Space"
+    }
+  ],
+  "pages.viewSequence.sequence.label": [
+    {
+      "type": 0,
+      "value": "Sequence"
     }
   ],
   "pages.viewSequence.sequenceSpaceBetween.label": [
@@ -573,6 +603,60 @@
     {
       "type": 0,
       "value": "Size"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignCenter": [
+    {
+      "type": 0,
+      "value": "Align center"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignLeft": [
+    {
+      "type": 0,
+      "value": "Align left"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignRight": [
+    {
+      "type": 0,
+      "value": "Align right"
+    }
+  ],
+  "pages.viewSequence.tooltip.applyAll": [
+    {
+      "type": 0,
+      "value": "Apply to all sequences"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionColumn": [
+    {
+      "type": 0,
+      "value": "Vertical"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionRow": [
+    {
+      "type": 0,
+      "value": "Horizontal"
+    }
+  ],
+  "pages.viewSequence.tooltip.fullscreen": [
+    {
+      "type": 0,
+      "value": "Full screen"
+    }
+  ],
+  "pages.viewSequence.tooltip.orientation": [
+    {
+      "type": 0,
+      "value": "Page orientation"
+    }
+  ],
+  "pages.viewSequence.tooltip.print": [
+    {
+      "type": 0,
+      "value": "Print"
     }
   ],
   "pictogram.empty": [
