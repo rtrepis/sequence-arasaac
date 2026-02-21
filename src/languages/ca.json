@@ -1054,5 +1054,41 @@
       "type": 0,
       "value": "Inicia"
     }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "Novetats"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "Nova"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Millora"
+    }
+  ],
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Correcció"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Llegir més"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "Veure totes les novetats"
+    }
   ]
 }

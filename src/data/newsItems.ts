@@ -1,5 +1,7 @@
 // Dades de les novetats per mostrar al carousel de la pàgina principal
 
+export type NewsCategory = "nova" | "millora" | "correccio";
+
 export interface NewsImage {
   src: string;
   altId: string;
@@ -20,6 +22,7 @@ export interface NewsItem {
   images: NewsImage[];
   steps?: NewsStep[];
   date: string;
+  category: NewsCategory;
 }
 
 export const newsItems: NewsItem[] = [
@@ -70,6 +73,7 @@ export const newsItems: NewsItem[] = [
       },
     ],
     date: "2025-01-15",
+    category: "nova",
   },
   {
     slug: "print-preview",
@@ -88,6 +92,7 @@ export const newsItems: NewsItem[] = [
       },
     ],
     date: "2025-01-15",
+    category: "nova",
   },
   {
     slug: "sequence-settings",
@@ -106,6 +111,7 @@ export const newsItems: NewsItem[] = [
       },
     ],
     date: "2025-01-15",
+    category: "millora",
   },
   {
     slug: "save-load",
@@ -124,5 +130,6 @@ export const newsItems: NewsItem[] = [
       },
     ],
     date: "2025-01-15",
+    category: "nova",
   },
 ];

@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router-dom";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import { newsItems } from "../../data/newsItems";
 import messages from "./NewsCarousel.lang";
 
@@ -85,6 +86,19 @@ const NewsCarousel = (): React.ReactElement => {
           </Card>
         ))}
       </Stack>
+
+      {/* Link per accedir al changelog complet */}
+      <Box sx={{ textAlign: "center", mt: 3 }}>
+        <Button
+          component={Link}
+          to="/changelog"
+          endIcon={<AiOutlineArrowRight />}
+          variant="text"
+          size="small"
+        >
+          <FormattedMessage {...messages.seeAll} />
+        </Button>
+      </Box>
     </Box>
   );
 };
