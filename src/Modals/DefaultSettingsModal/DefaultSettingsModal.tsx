@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { AiOutlineClose, AiOutlineSetting } from "react-icons/ai";
-import { forwardRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
 import { Container } from "@mui/system";
@@ -27,6 +27,8 @@ const DefaultSettingsModal = (): React.ReactElement => {
   const intl = useIntl();
 
   const [open, setOpen] = useState(false);
+  // Ref per restaurar el focus al botó d'obertura quan el modal es tanca
+  const triggerRef = useRef<HTMLElement | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -34,12 +36,15 @@ const DefaultSettingsModal = (): React.ReactElement => {
 
   const handleClose = () => {
     setOpen(false);
+    // Retorna el focus al botó que va obrir el modal
+    triggerRef.current?.focus();
   };
 
   return (
     <>
       <Tooltip title={intl.formatMessage(messages.settings)}>
         <IconButton
+          ref={(el) => { triggerRef.current = el; }}
           color="secondary"
           component="label"
           aria-label={`${intl.formatMessage({ ...messages.settings })}`}
@@ -74,7 +79,7 @@ const DefaultSettingsModal = (): React.ReactElement => {
           </Toolbar>
         </AppBar>
         <Container sx={{ marginTop: 2 }}>
-          <Stack sx={{ height: 65, display: { md: "none" } }} />
+          <Stack sx={{ height: 40, display: { md: "none" } }} />
           <DefaultForm submit={open} />
         </Container>
       </Dialog>

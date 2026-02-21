@@ -1,10 +1,10 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import { sequenceReducer } from "./slice/sequenceSlice";
 import { uiReducer } from "./slice/uiSlice";
+import { documentReducer } from "./slice/documentSlice";
 
 export const store = configureStore({
   reducer: {
-    sequence: sequenceReducer,
+    document: documentReducer,
     ui: uiReducer,
   },
 });

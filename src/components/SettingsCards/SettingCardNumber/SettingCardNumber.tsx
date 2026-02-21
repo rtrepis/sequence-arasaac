@@ -2,7 +2,7 @@ import { FormLabel, Slider, Stack } from "@mui/material";
 import { useAppDispatch } from "../../../app/hooks";
 import { FormattedMessage } from "react-intl";
 import { cardAction } from "../SettingsCards.styled";
-import { fontSizeApplyAllActionCreator } from "../../../app/slice/sequenceSlice";
+import { fontSizeApplyAllActionCreator } from "../../../app/slice/documentSlice";
 import { messages } from "./SettingCardNumber.lang";
 import ApplyAll from "../ApplyAll/ApplyAll";
 import React from "react";

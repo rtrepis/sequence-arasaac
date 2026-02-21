@@ -5,6 +5,7 @@ import {
   TextField,
   ToggleButton,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import useAraSaac from "../../hooks/useAraSaac";
@@ -13,8 +14,22 @@ import messages from "./PictogramSearch.lang";
 import { useAppSelector } from "../../app/hooks";
 import React from "react";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
-import { Hair, Skin } from "/src/types/sequence";
 import { createFilterOptions } from "@mui/material/Autocomplete";
+import { Hair, Skin } from "@/types/sequence";
+import { fileToBase64 } from "@/utils/imageToBase64";
+
+// Input visualment ocult però accessible per a lectors de pantalla (diferent de hidden)
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
@@ -45,10 +60,12 @@ const PictogramSearch = ({
   state,
   setState,
 }: PropsPictogramSearch): React.ReactElement => {
+  const getActiveSAACPictImg = (state) =>
+    state.document.content[state.document.activeSAAC][indexPict].img;
   const {
     settings: { skin, hair },
     searched: { word, bestIdPicts },
-  } = useAppSelector((state) => state.sequence[indexPict].img);
+  } = useAppSelector(getActiveSAACPictImg);
   const { keywords } = useAppSelector((state) => state.ui.lang);
 
   const intl = useIntl();
@@ -113,19 +130,26 @@ const PictogramSearch = ({
     setIsPlus(!isPlus);
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      // Convertim la imatge a base64 (amb compressió automàtica si supera 2MB)
+      const base64Url = await fileToBase64(file);
 
       setState({
         selectedId: 0,
         fitzgerald: undefined,
-        url: imageURL,
+        url: base64Url,
         color: undefined,
         hair: undefined,
         skin: undefined,
       });
+    } catch (error) {
+      console.error("Error carregant imatge:", error);
     }
   };
 
@@ -218,24 +242,19 @@ const PictogramSearch = ({
           </ToggleButton>
         )}
 
+        {/* Botó d'upload: usa component="label" perquè el clic activi l'input de forma accessible */}
         <ToggleButton
-          value={"plus"}
-          aria-label={`${intl.formatMessage({
-            ...messages.plus,
-          })}`}
+          value={"upload"}
+          aria-label={`${intl.formatMessage({ ...messages.uploadImage })}`}
           key={"upload"}
-          onClick={() => {
-            const imageUpload = document.getElementById("select-image");
-            if (imageUpload) imageUpload.click();
-          }}
+          component="label"
         >
           <MdOutlineDriveFolderUpload size={80} />
-          <input
-            id="select-image"
+          {/* VisuallyHiddenInput manté l'input accessible als lectors de pantalla */}
+          <VisuallyHiddenInput
             type="file"
             onChange={handleImageChange}
             accept="image/*"
-            hidden
           />
         </ToggleButton>
       </StyledToggleButtonGroup>

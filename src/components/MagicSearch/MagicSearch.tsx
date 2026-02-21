@@ -5,9 +5,11 @@ import { useIntl } from "react-intl";
 import useAraSaac, { Ai } from "../../hooks/useAraSaac";
 import messages from "./MagicSearch.lang";
 import React from "react";
-import { useAppSelector } from "/src/app/hooks";
+import { useAppSelector } from "@/app/hooks";
 import { settingCardOptions } from "../SettingsCards/SettingCardOptions/lang/SettingCardLang.lang";
-import { trackEvent } from "/src/hooks/usePageTracking";
+import { trackEvent } from "@/hooks/usePageTracking";
+import { useFeedback } from "@/context/FeedbackContext";
+import feedbackMessages from "@/context/FeedbackContext/FeedbackContext.lang";
 
 interface MagicSearchProps {
   variant?: "navBar";
@@ -20,6 +22,8 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
     (state) => state.ui.lang,
   );
   const { getSearchPictogram } = useAraSaac();
+  const { showProgress, updateProgress, hideProgress, showSnackbar } =
+    useFeedback();
 
   const initialPhrase = "";
   const [phrase, setPhrase] = useState(initialPhrase);
@@ -61,16 +65,41 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
   };
 
   const delayWords = (words: (Ai | string)[]) => {
+    // Si no hi ha paraules, no fem res
+    if (words.length === 0 || (words.length === 1 && words[0] === "")) {
+      return;
+    }
+
     let index = 0;
+    const total = words.length;
+
+    // Mostrem la barra de progrés
+    showProgress({
+      current: 0,
+      total,
+      message: intl.formatMessage(feedbackMessages.searchLoading),
+    });
 
     const print = () => {
       getSearchPictogram(words[index], index, false);
 
       index++;
+      updateProgress(index);
 
-      if (index === words.length || words.length === 0) {
+      if (index === total) {
         clearInterval(intervalWord);
         setPhrase("");
+
+        // Amaguem el progrés i mostrem el snackbar de confirmació
+        setTimeout(() => {
+          hideProgress();
+          showSnackbar({
+            message: intl.formatMessage(feedbackMessages.searchComplete, {
+              count: total,
+            }),
+            severity: "success",
+          });
+        }, 300);
       }
     };
     const intervalWord = setInterval(print, 10);

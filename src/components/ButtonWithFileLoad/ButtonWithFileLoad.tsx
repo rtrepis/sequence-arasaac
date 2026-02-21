@@ -3,12 +3,17 @@ import { styled } from "@mui/material/styles";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { IconButton, Tooltip } from "@mui/material";
 import { ChangeEvent } from "react";
-import { useAppDispatch } from "/src/app/hooks";
-import { addSequenceActionCreator } from "/src/app/slice/sequenceSlice";
-import { updateDefaultSettingsActionCreator } from "/src/app/slice/uiSlice";
 import { useIntl } from "react-intl";
 import messages from "./ButtonWithFileLoad.lang";
-import { trackEvent } from "/src/hooks/usePageTracking";
+import { useAppDispatch } from "@/app/hooks";
+import {
+  addSequenceActionCreator,
+  loadDocumentSaacActionCreator,
+} from "@/app/slice/documentSlice";
+import { updateDefaultSettingsActionCreator } from "@/app/slice/uiSlice";
+import { trackEvent } from "@/hooks/usePageTracking";
+import { useFeedback } from "@/context/FeedbackContext";
+import feedbackMessages from "@/context/FeedbackContext/FeedbackContext.lang";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -25,6 +30,7 @@ const VisuallyHiddenInput = styled("input")({
 const ButtonWithFileLoad = (): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
 
   const loadFile = (event: ChangeEvent<HTMLInputElement>) => {
     const valueTrackEvent: string[] = [];
@@ -33,14 +39,25 @@ const ButtonWithFileLoad = (): React.ReactElement => {
       const file = input.files[0];
 
       if (file) {
+        // Mostrem el backdrop mentre carreguem
+        showBackdrop({
+          message: intl.formatMessage(feedbackMessages.loading),
+        });
+
         const reader = new FileReader();
         reader.onload = (e) => {
           try {
             const parsedJson = JSON.parse(e.target?.result as string);
 
+            // Es manter per no trencar amb els usuaris que van guardar el objecte {sequence: {}, defaults...}
             if ("sequence" in parsedJson) {
               dispatch(addSequenceActionCreator(parsedJson.sequence));
               valueTrackEvent.push("sequence");
+            }
+
+            if ("documentState" in parsedJson) {
+              dispatch(loadDocumentSaacActionCreator(parsedJson.documentState));
+              valueTrackEvent.push("documentState");
             }
 
             if ("defaultSettings" in parsedJson) {
@@ -49,8 +66,21 @@ const ButtonWithFileLoad = (): React.ReactElement => {
               );
               valueTrackEvent.push("defaultSettings");
             }
+
+            // Amaguem el backdrop i mostrem el snackbar d'èxit
+            hideBackdrop();
+            showSnackbar({
+              message: intl.formatMessage(feedbackMessages.loadSuccess),
+              severity: "success",
+            });
           } catch (error) {
             console.error(error);
+            // Amaguem el backdrop i mostrem el snackbar d'error
+            hideBackdrop();
+            showSnackbar({
+              message: intl.formatMessage(feedbackMessages.loadError),
+              severity: "error",
+            });
           }
         };
         reader.readAsText(file);

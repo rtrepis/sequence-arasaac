@@ -243,16 +243,16 @@
     "defaultMessage": "Sequence author",
     "description": "Label form"
   },
-  "pages.viewSequence.columnGap.label": {
-    "defaultMessage": "Column Space",
+  "pages.viewSequence.pictSpaceBetween.label": {
+    "defaultMessage": "Pictogram Space",
     "description": "Label form"
   },
   "pages.viewSequence.fullScreen.label": {
     "defaultMessage": "Full Screen",
     "description": "Setting property"
   },
-  "pages.viewSequence.rowGap.label": {
-    "defaultMessage": "Row Space",
+  "pages.viewSequence.sequenceSpaceBetween.label": {
+    "defaultMessage": "Sequence Space",
     "description": "Label form"
   },
   "pages.viewSequence.size.label": {
@@ -509,5 +509,129 @@
   "view.welcome.start.button": {
     "defaultMessage": "Start",
     "description": "Start button"
+  },
+  "news.section.title": {
+    "defaultMessage": "What's new",
+    "description": "Títol secció novetats"
+  },
+  "news.moreInfo.button": {
+    "defaultMessage": "More info",
+    "description": "Botó més info notícia"
+  },
+  "news.back.button": {
+    "defaultMessage": "Back",
+    "description": "Botó tornar de detall notícia"
+  },
+  "news.multiple-sequences.title": {
+    "defaultMessage": "Multiple sequences",
+    "description": "Títol notícia múltiples seqüències"
+  },
+  "news.multiple-sequences.summary": {
+    "defaultMessage": "You can now create and manage multiple sequences at once with tabs.",
+    "description": "Resum notícia múltiples seqüències"
+  },
+  "news.multiple-sequences.content": {
+    "defaultMessage": "Create as many sequences as you need! Use tabs to add new sequences or remove the ones you no longer need. Each sequence is independent and you can switch between them easily.",
+    "description": "Contingut notícia múltiples seqüències"
+  },
+  "news.multiple-sequences.img1.alt": {
+    "defaultMessage": "Sequence tabs",
+    "description": "Alt imatge 1 múltiples seqüències"
+  },
+  "news.multiple-sequences.img2.alt": {
+    "defaultMessage": "Add and remove sequences",
+    "description": "Alt imatge 2 múltiples seqüències"
+  },
+  "news.multiple-sequences.step1.alt": {
+    "defaultMessage": "Sequence 1 with pictograms and button to add a new sequence",
+    "description": "Alt imatge pas 1 múltiples seqüències"
+  },
+  "news.multiple-sequences.step1.description": {
+    "defaultMessage": "On the edit page, search for words in the search box (separated by commas) and pictograms will appear automatically in the active sequence. Click the + button to create a new sequence.",
+    "description": "Descripció pas 1 múltiples seqüències"
+  },
+  "news.multiple-sequences.step2.alt": {
+    "defaultMessage": "Two sequence tabs visible, sequence 2 active",
+    "description": "Alt imatge pas 2 múltiples seqüències"
+  },
+  "news.multiple-sequences.step2.description": {
+    "defaultMessage": "Click any tab to switch to a different active sequence. Each sequence has its own independent content. Search for new words to fill sequence 2.",
+    "description": "Descripció pas 2 múltiples seqüències"
+  },
+  "news.multiple-sequences.step3.alt": {
+    "defaultMessage": "View of both sequences with size increased globally",
+    "description": "Alt imatge pas 3 múltiples seqüències"
+  },
+  "news.multiple-sequences.step3.description": {
+    "defaultMessage": "In the View page, the \"Apply to all\" toggle lets you adjust the size and spacing of all sequences at once. Move the size control to see the change applied globally.",
+    "description": "Descripció pas 3 múltiples seqüències"
+  },
+  "news.multiple-sequences.step4.alt": {
+    "defaultMessage": "View with sequence 2 individually adjusted to a different size",
+    "description": "Alt imatge pas 4 múltiples seqüències"
+  },
+  "news.multiple-sequences.step4.description": {
+    "defaultMessage": "Disable \"Apply to all\" to configure each sequence independently. Expand the accordion for the sequence you want to adjust and change its size or spacing without affecting the others.",
+    "description": "Descripció pas 4 múltiples seqüències"
+  },
+  "news.print-preview.title": {
+    "defaultMessage": "Print preview",
+    "description": "Títol notícia vista prèvia"
+  },
+  "news.print-preview.summary": {
+    "defaultMessage": "Preview exactly how your page will look before printing.",
+    "description": "Resum notícia vista prèvia"
+  },
+  "news.print-preview.content": {
+    "defaultMessage": "The print preview shows you exactly how the printed page will look. You can control the pictogram size, row and column spacing, and alignment. Everything updates in real time!",
+    "description": "Contingut notícia vista prèvia"
+  },
+  "news.print-preview.img1.alt": {
+    "defaultMessage": "Page preview",
+    "description": "Alt imatge 1 vista prèvia"
+  },
+  "news.print-preview.img2.alt": {
+    "defaultMessage": "Size and spacing controls",
+    "description": "Alt imatge 2 vista prèvia"
+  },
+  "news.sequence-settings.title": {
+    "defaultMessage": "New per-sequence settings",
+    "description": "Títol notícia configuracions"
+  },
+  "news.sequence-settings.summary": {
+    "defaultMessage": "Customize each sequence with alignment, number typography and more options.",
+    "description": "Resum notícia configuracions"
+  },
+  "news.sequence-settings.content": {
+    "defaultMessage": "You can now customize each sequence independently. Change the pictogram alignment (left, center or right), configure the number typography and color independently from the text, and discover more formatting options to adapt sequences to your needs.",
+    "description": "Contingut notícia configuracions"
+  },
+  "news.sequence-settings.img1.alt": {
+    "defaultMessage": "Alignment options",
+    "description": "Alt imatge 1 configuracions"
+  },
+  "news.sequence-settings.img2.alt": {
+    "defaultMessage": "Number typography settings",
+    "description": "Alt imatge 2 configuracions"
+  },
+  "news.save-load.title": {
+    "defaultMessage": "Save and restore",
+    "description": "Títol notícia guardar i carregar"
+  },
+  "news.save-load.summary": {
+    "defaultMessage": "Download your sequences with images and load them whenever you want.",
+    "description": "Resum notícia guardar i carregar"
+  },
+  "news.save-load.content": {
+    "defaultMessage": "You'll find the save and load options in the SequenciAAC logo menu. When saving, a file is downloaded with all sequences and pictogram images included. This way you can restore your work at any time!",
+    "description": "Contingut notícia guardar i carregar"
+  },
+  "news.save-load.img1.alt": {
+    "defaultMessage": "Menu with save option",
+    "description": "Alt imatge 1 guardar i carregar"
+  },
+  "news.save-load.img2.alt": {
+    "defaultMessage": "Load saved file",
+    "description": "Alt imatge 2 guardar i carregar"
   }
 }

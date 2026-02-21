@@ -1,12 +1,12 @@
-import { Stack } from "@mui/material";
+import { Divider, Stack, Typography } from "@mui/material";
 import PictogramAmount from "../../components/PictogramAmount/PictogramAmount";
 import MagicSearch from "../../components/MagicSearch/MagicSearch";
-import { useAppSelector } from "../../app/hooks";
-import PictEditModalList from "../../Modals/PictEditModalList/PictEditModalList";
 import React, { useState } from "react";
+import TabsSequences from "../../components/TabsSequences/TabsSequences";
+import { FeedbackProgress } from "@/context/FeedbackContext";
+import { FormattedMessage } from "react-intl";
 
 const EditSequencesPage = (): React.ReactElement => {
-  const sequence = useAppSelector((state) => state.sequence);
   const [info, setInfo] = useState(false);
 
   const toggleValue = () => {
@@ -23,7 +23,21 @@ const EditSequencesPage = (): React.ReactElement => {
         <PictogramAmount info={{ value: info, toggleValue: toggleValue }} />
         <MagicSearch info={{ value: info }} />
       </Stack>
-      <PictEditModalList sequence={sequence} />
+      <Divider />
+      <FeedbackProgress />
+      <Stack
+        direction={{ xs: "row", md: "column" }}
+        alignItems={{ xs: "center", md: "stretch" }}
+        flexWrap="wrap"
+      >
+        <Typography
+          color="primary"
+          sx={{ whiteSpace: "nowrap", mr: { xs: 1, md: 0 } }}
+        >
+          Seqüencies
+        </Typography>
+        <TabsSequences />
+      </Stack>
     </>
   );
 };
