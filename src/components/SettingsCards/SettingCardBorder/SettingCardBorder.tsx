@@ -22,11 +22,11 @@ import { useState } from "react";
 import InputColor from "../InputColor/InputColor";
 import React from "react";
 import ApplyAll from "../ApplyAll/ApplyAll";
-import { useAppDispatch } from "/src/app/hooks";
+import { useAppDispatch } from "@/app/hooks";
 import {
   borderInApplyAllActionCreator,
   borderOutApplyAllActionCreator,
-} from "/src/app/slice/sequenceSlice";
+} from "@/app/slice/documentSlice";
 
 interface SettingCardBorderProps {
   border: "borderIn" | "borderOut";

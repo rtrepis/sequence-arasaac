@@ -10,7 +10,7 @@ import {
 import { Stack } from "@mui/system";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { PictSequence } from "../../types/sequence";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import messages from "./PictEdit.lang";
 import { circlePictogramNumber } from "./PictEditModal.styled";
 import StyledButton from "../../style/StyledButton";
@@ -18,7 +18,7 @@ import { useAppDispatch } from "../../app/hooks";
 import {
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
-} from "../../app/slice/sequenceSlice";
+} from "../../app/slice/documentSlice";
 import PictEditForm from "../../components/PictEditFrom/PictEditForm";
 import MouseActionList from "../../components/utils/MouseActionList/MouseActionList";
 import React from "react";
@@ -41,6 +41,8 @@ const PictEditModal = ({
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
   const [submit, setSubmit] = useState(false);
+  // Ref per restaurar el focus al botó trigger quan el dialog es tanca
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   const handlerClickOpen = () => {
     setOpen(true);
@@ -58,10 +60,14 @@ const PictEditModal = ({
   const handleClose = () => {
     setSubmit(true);
     setOpen(false);
+    // Retorna el focus al botó que va obrir el dialog
+    triggerRef.current?.focus();
   };
 
   const handleDelete = () => {
     setOpen(false);
+    // Retorna el focus al botó trigger fins i tot en cas d'esborrat
+    triggerRef.current?.focus();
     dispatch(subtractPictogramActionCreator(pictogram.indexSequence));
     dispatch(renumberSequenceActionCreator());
   };
@@ -72,6 +78,7 @@ const PictEditModal = ({
   return (
     <>
       <Button
+        ref={triggerRef}
         aria-describedby={id}
         id={id}
         variant="text"
@@ -104,11 +111,13 @@ const PictEditModal = ({
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby={intl.formatMessage({ ...messages.modal })}
-        aria-describedby={intl.formatMessage({ ...messages.description })}
+        aria-labelledby="pict-edit-dialog-title"
         maxWidth={"sm"}
         fullWidth
-        sx={{ ".MuiDialog-paperScrollPaper": { borderRadius: 5 } }}
+        sx={{
+          ".MuiDialog-paperScrollPaper": { borderRadius: 5 },
+          ".MuiDialogContent-root": { paddingInline: 1, paddingBlock: 0 },
+        }}
       >
         <Stack
           display="flex"
@@ -117,7 +126,7 @@ const PictEditModal = ({
           alignItems={"center"}
           padding={1.5}
         >
-          <Typography variant="h5" component="h2">
+          <Typography id="pict-edit-dialog-title" variant="h5" component="h2">
             <FormattedMessage {...messages.modal} />
           </Typography>
 
@@ -126,7 +135,7 @@ const PictEditModal = ({
           </Typography>
         </Stack>
 
-        <DialogContent dividers={true} sx={{ padding: 2 }}>
+        <DialogContent dividers={true} sx={{ padding: 2, overflowX: "hidden" }}>
           <PictEditForm pictogram={pictogram} submit={submit} />
         </DialogContent>
 

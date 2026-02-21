@@ -47,6 +47,18 @@
       "value": "Welcome"
     }
   ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Skip to main content"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Main navigation"
+    }
+  ],
   "components.buttonWithFileLoad.load.label": [
     {
       "type": 0,
@@ -257,6 +269,12 @@
       "value": "Minus pictograms"
     }
   ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Upload image from device"
+    }
+  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
@@ -353,6 +371,204 @@
       "value": "View"
     }
   ],
+  "news.back.button": [
+    {
+      "type": 0,
+      "value": "Back"
+    }
+  ],
+  "news.moreInfo.button": [
+    {
+      "type": 0,
+      "value": "More info"
+    }
+  ],
+  "news.multiple-sequences.content": [
+    {
+      "type": 0,
+      "value": "Create as many sequences as you need! Use tabs to add new sequences or remove the ones you no longer need. Each sequence is independent and you can switch between them easily."
+    }
+  ],
+  "news.multiple-sequences.img1.alt": [
+    {
+      "type": 0,
+      "value": "Sequence tabs"
+    }
+  ],
+  "news.multiple-sequences.img2.alt": [
+    {
+      "type": 0,
+      "value": "Add and remove sequences"
+    }
+  ],
+  "news.multiple-sequences.step1.alt": [
+    {
+      "type": 0,
+      "value": "Sequence 1 with pictograms and button to add a new sequence"
+    }
+  ],
+  "news.multiple-sequences.step1.description": [
+    {
+      "type": 0,
+      "value": "On the edit page, search for words in the search box (separated by commas) and pictograms will appear automatically in the active sequence. Click the + button to create a new sequence."
+    }
+  ],
+  "news.multiple-sequences.step2.alt": [
+    {
+      "type": 0,
+      "value": "Two sequence tabs visible, sequence 2 active"
+    }
+  ],
+  "news.multiple-sequences.step2.description": [
+    {
+      "type": 0,
+      "value": "Click any tab to switch to a different active sequence. Each sequence has its own independent content. Search for new words to fill sequence 2."
+    }
+  ],
+  "news.multiple-sequences.step3.alt": [
+    {
+      "type": 0,
+      "value": "View of both sequences with size increased globally"
+    }
+  ],
+  "news.multiple-sequences.step3.description": [
+    {
+      "type": 0,
+      "value": "In the View page, the \"Apply to all\" toggle lets you adjust the size and spacing of all sequences at once. Move the size control to see the change applied globally."
+    }
+  ],
+  "news.multiple-sequences.step4.alt": [
+    {
+      "type": 0,
+      "value": "View with sequence 2 individually adjusted to a different size"
+    }
+  ],
+  "news.multiple-sequences.step4.description": [
+    {
+      "type": 0,
+      "value": "Disable \"Apply to all\" to configure each sequence independently. Expand the accordion for the sequence you want to adjust and change its size or spacing without affecting the others."
+    }
+  ],
+  "news.multiple-sequences.summary": [
+    {
+      "type": 0,
+      "value": "You can now create and manage multiple sequences at once with tabs."
+    }
+  ],
+  "news.multiple-sequences.title": [
+    {
+      "type": 0,
+      "value": "Multiple sequences"
+    }
+  ],
+  "news.print-preview.content": [
+    {
+      "type": 0,
+      "value": "The print preview shows you exactly how the printed page will look. You can control the pictogram size, row and column spacing, and alignment. Everything updates in real time!"
+    }
+  ],
+  "news.print-preview.img1.alt": [
+    {
+      "type": 0,
+      "value": "Page preview"
+    }
+  ],
+  "news.print-preview.img2.alt": [
+    {
+      "type": 0,
+      "value": "Size and spacing controls"
+    }
+  ],
+  "news.print-preview.summary": [
+    {
+      "type": 0,
+      "value": "Preview exactly how your page will look before printing."
+    }
+  ],
+  "news.print-preview.title": [
+    {
+      "type": 0,
+      "value": "Print preview"
+    }
+  ],
+  "news.save-load.content": [
+    {
+      "type": 0,
+      "value": "You'll find the save and load options in the SequenciAAC logo menu. When saving, a file is downloaded with all sequences and pictogram images included. This way you can restore your work at any time!"
+    }
+  ],
+  "news.save-load.img1.alt": [
+    {
+      "type": 0,
+      "value": "Menu with save option"
+    }
+  ],
+  "news.save-load.img2.alt": [
+    {
+      "type": 0,
+      "value": "Load saved file"
+    }
+  ],
+  "news.save-load.summary": [
+    {
+      "type": 0,
+      "value": "Download your sequences with images and load them whenever you want."
+    }
+  ],
+  "news.save-load.title": [
+    {
+      "type": 0,
+      "value": "Save and restore"
+    }
+  ],
+  "news.section.title": [
+    {
+      "type": 0,
+      "value": "What's new"
+    }
+  ],
+  "news.sequence-settings.content": [
+    {
+      "type": 0,
+      "value": "You can now customize each sequence independently. Change the pictogram alignment (left, center or right), configure the number typography and color independently from the text, and discover more formatting options to adapt sequences to your needs."
+    }
+  ],
+  "news.sequence-settings.img1.alt": [
+    {
+      "type": 0,
+      "value": "Alignment options"
+    }
+  ],
+  "news.sequence-settings.img2.alt": [
+    {
+      "type": 0,
+      "value": "Number typography settings"
+    }
+  ],
+  "news.sequence-settings.summary": [
+    {
+      "type": 0,
+      "value": "Customize each sequence with alignment, number typography and more options."
+    }
+  ],
+  "news.sequence-settings.title": [
+    {
+      "type": 0,
+      "value": "New per-sequence settings"
+    }
+  ],
+  "pages.viewSequence.alignment.label": [
+    {
+      "type": 0,
+      "value": "Alignment"
+    }
+  ],
+  "pages.viewSequence.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Apply to all"
+    }
+  ],
   "pages.viewSequence.authSequence.helperText": [
     {
       "type": 0,
@@ -365,10 +581,10 @@
       "value": "Sequence author"
     }
   ],
-  "pages.viewSequence.columnGap.label": [
+  "pages.viewSequence.direction.label": [
     {
       "type": 0,
-      "value": "Column Space"
+      "value": "Direction"
     }
   ],
   "pages.viewSequence.fullScreen.label": [
@@ -377,16 +593,88 @@
       "value": "Full Screen"
     }
   ],
-  "pages.viewSequence.rowGap.label": [
+  "pages.viewSequence.pageSize.label": [
     {
       "type": 0,
-      "value": "Row Space"
+      "value": "Page Size"
+    }
+  ],
+  "pages.viewSequence.pictSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Pictogram Space"
+    }
+  ],
+  "pages.viewSequence.sequence.label": [
+    {
+      "type": 0,
+      "value": "Sequence"
+    }
+  ],
+  "pages.viewSequence.sequenceSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Sequence Space"
     }
   ],
   "pages.viewSequence.size.label": [
     {
       "type": 0,
       "value": "Size"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignCenter": [
+    {
+      "type": 0,
+      "value": "Align center"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignLeft": [
+    {
+      "type": 0,
+      "value": "Align left"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignRight": [
+    {
+      "type": 0,
+      "value": "Align right"
+    }
+  ],
+  "pages.viewSequence.tooltip.applyAll": [
+    {
+      "type": 0,
+      "value": "Apply to all sequences"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionColumn": [
+    {
+      "type": 0,
+      "value": "Vertical"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionRow": [
+    {
+      "type": 0,
+      "value": "Horizontal"
+    }
+  ],
+  "pages.viewSequence.tooltip.fullscreen": [
+    {
+      "type": 0,
+      "value": "Full screen"
+    }
+  ],
+  "pages.viewSequence.tooltip.orientation": [
+    {
+      "type": 0,
+      "value": "Page orientation"
+    }
+  ],
+  "pages.viewSequence.tooltip.print": [
+    {
+      "type": 0,
+      "value": "Print"
     }
   ],
   "pictogram.empty": [
@@ -765,6 +1053,42 @@
     {
       "type": 0,
       "value": "Start"
+    }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "What's new"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "New"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Improvement"
+    }
+  ],
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Fix"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Read more"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "See all updates"
     }
   ]
 }

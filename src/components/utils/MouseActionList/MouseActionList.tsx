@@ -15,14 +15,14 @@ import {
 import { TbColumnInsertRight } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import {
-  insertPictogramActionCreator,
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
-} from "../../../app/slice/sequenceSlice";
+  updatePictSequenceActionCreator,
+} from "../../../app/slice/documentSlice";
 import useNewPictogram from "../../../hooks/useNewPictogram";
 import { PictSequence } from "../../../types/sequence";
-import { updatePictSequenceActionCreator } from "../../../app/slice/sequenceSlice";
 import React from "react";
+import { insertPictogramActionCreator } from "@/app/slice/documentSlice";
 
 interface MouseActionListProps {
   pictogram: PictSequence;

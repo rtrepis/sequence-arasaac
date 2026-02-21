@@ -47,6 +47,18 @@
       "value": "Benvingut"
     }
   ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Salta al contingut principal"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegació principal"
+    }
+  ],
   "components.buttonWithFileLoad.load.label": [
     {
       "type": 0,
@@ -158,7 +170,7 @@
   "components.magicSearch.sample.": [
     {
       "type": 0,
-      "value": "Exemple: Nen, posa, el cinturó de seguretat."
+      "value": "Exemple: Nen, posar, el cinturó de seguretat."
     }
   ],
   "components.pictEdit.close": [
@@ -257,6 +269,12 @@
       "value": "Treure pictograma"
     }
   ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Pujar imatge des del dispositiu"
+    }
+  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
@@ -353,6 +371,204 @@
       "value": "Vista"
     }
   ],
+  "news.back.button": [
+    {
+      "type": 0,
+      "value": "Tornar"
+    }
+  ],
+  "news.moreInfo.button": [
+    {
+      "type": 0,
+      "value": "Més info"
+    }
+  ],
+  "news.multiple-sequences.content": [
+    {
+      "type": 0,
+      "value": "Crea tantes seqüències com necessitis! Utilitza les pestanyes per afegir noves seqüències o eliminar les que ja no necessites. Cada seqüència és independent i pots canviar entre elles fàcilment."
+    }
+  ],
+  "news.multiple-sequences.img1.alt": [
+    {
+      "type": 0,
+      "value": "Pestanyes de seqüència"
+    }
+  ],
+  "news.multiple-sequences.img2.alt": [
+    {
+      "type": 0,
+      "value": "Afegir i eliminar seqüències"
+    }
+  ],
+  "news.multiple-sequences.step1.alt": [
+    {
+      "type": 0,
+      "value": "Seqüència 1 amb pictogrames i botó per afegir nova seqüència"
+    }
+  ],
+  "news.multiple-sequences.step1.description": [
+    {
+      "type": 0,
+      "value": "A la pàgina d'edició, busca paraules al cercador (separades per comes) i els pictogrames apareixeran automàticament a la seqüència activa. Fes clic al botó + per crear una nova seqüència."
+    }
+  ],
+  "news.multiple-sequences.step2.alt": [
+    {
+      "type": 0,
+      "value": "Dues pestanyes de seqüència visibles, seqüència 2 activa"
+    }
+  ],
+  "news.multiple-sequences.step2.description": [
+    {
+      "type": 0,
+      "value": "Fes clic a qualsevol pestanya per canviar de seqüència activa. Cada seqüència té el seu propi contingut independent. Busca noves paraules per omplir la seqüència 2."
+    }
+  ],
+  "news.multiple-sequences.step3.alt": [
+    {
+      "type": 0,
+      "value": "Vista de les dues seqüències amb mida augmentada globalment"
+    }
+  ],
+  "news.multiple-sequences.step3.description": [
+    {
+      "type": 0,
+      "value": "A la Vista, el commutador \"Aplicar a totes\" permet ajustar la mida i l'espai de totes les seqüències alhora. Mou el control de mida per veure el canvi aplicat globalment."
+    }
+  ],
+  "news.multiple-sequences.step4.alt": [
+    {
+      "type": 0,
+      "value": "Vista amb la seqüència 2 ajustada individualment a mida diferent"
+    }
+  ],
+  "news.multiple-sequences.step4.description": [
+    {
+      "type": 0,
+      "value": "Desactiva \"Aplicar a totes\" per configurar cada seqüència de manera independent. Expandeix l'acordió de la seqüència que vols ajustar i modifica la seva mida o espaiament sense afectar les altres."
+    }
+  ],
+  "news.multiple-sequences.summary": [
+    {
+      "type": 0,
+      "value": "Ara pots crear i gestionar diverses seqüències alhora amb pestanyes."
+    }
+  ],
+  "news.multiple-sequences.title": [
+    {
+      "type": 0,
+      "value": "Múltiples seqüències"
+    }
+  ],
+  "news.print-preview.content": [
+    {
+      "type": 0,
+      "value": "La vista prèvia et mostra exactament com quedarà la pàgina impresa. Pots controlar la mida dels pictogrames, l'espai entre files i columnes, i l'alineació. Tot es veu en temps real!"
+    }
+  ],
+  "news.print-preview.img1.alt": [
+    {
+      "type": 0,
+      "value": "Vista prèvia de la pàgina"
+    }
+  ],
+  "news.print-preview.img2.alt": [
+    {
+      "type": 0,
+      "value": "Controls de mida i espai"
+    }
+  ],
+  "news.print-preview.summary": [
+    {
+      "type": 0,
+      "value": "Previsualitza exactament com quedarà la teva pàgina abans d'imprimir."
+    }
+  ],
+  "news.print-preview.title": [
+    {
+      "type": 0,
+      "value": "Vista prèvia d'impressió"
+    }
+  ],
+  "news.save-load.content": [
+    {
+      "type": 0,
+      "value": "Trobaràs les opcions de guardar i carregar al menú del logo de SequenciAAC. Quan guardes, es descarrega un fitxer amb totes les seqüències i les imatges dels pictogrames incloses. Així pots recuperar el teu treball en qualsevol moment!"
+    }
+  ],
+  "news.save-load.img1.alt": [
+    {
+      "type": 0,
+      "value": "Menú amb opció de guardar"
+    }
+  ],
+  "news.save-load.img2.alt": [
+    {
+      "type": 0,
+      "value": "Carregar fitxer guardat"
+    }
+  ],
+  "news.save-load.summary": [
+    {
+      "type": 0,
+      "value": "Descarrega les teves seqüències amb les imatges i carrega-les quan vulguis."
+    }
+  ],
+  "news.save-load.title": [
+    {
+      "type": 0,
+      "value": "Guarda i recupera"
+    }
+  ],
+  "news.section.title": [
+    {
+      "type": 0,
+      "value": "Novetats"
+    }
+  ],
+  "news.sequence-settings.content": [
+    {
+      "type": 0,
+      "value": "Ara pots personalitzar cada seqüència de manera independent. Canvia l'alineació dels pictogrames (esquerra, centre o dreta), configura la tipografia i el color dels números de forma independent al text, i descobreix més opcions de format per adaptar les seqüències a les teves necessitats."
+    }
+  ],
+  "news.sequence-settings.img1.alt": [
+    {
+      "type": 0,
+      "value": "Opcions d'alineació"
+    }
+  ],
+  "news.sequence-settings.img2.alt": [
+    {
+      "type": 0,
+      "value": "Configuració de tipografia dels números"
+    }
+  ],
+  "news.sequence-settings.summary": [
+    {
+      "type": 0,
+      "value": "Personalitza cada seqüència amb alineació, tipografia dels números i més opcions."
+    }
+  ],
+  "news.sequence-settings.title": [
+    {
+      "type": 0,
+      "value": "Noves configuracions per seqüència"
+    }
+  ],
+  "pages.viewSequence.alignment.label": [
+    {
+      "type": 0,
+      "value": "Alineació"
+    }
+  ],
+  "pages.viewSequence.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Aplicar a totes"
+    }
+  ],
   "pages.viewSequence.authSequence.helperText": [
     {
       "type": 0,
@@ -365,10 +581,10 @@
       "value": "Autor de la seqüència"
     }
   ],
-  "pages.viewSequence.columnGap.label": [
+  "pages.viewSequence.direction.label": [
     {
       "type": 0,
-      "value": "Espai Columna"
+      "value": "Direcció"
     }
   ],
   "pages.viewSequence.fullScreen.label": [
@@ -377,16 +593,88 @@
       "value": "Pantalla sencera"
     }
   ],
-  "pages.viewSequence.rowGap.label": [
+  "pages.viewSequence.pageSize.label": [
     {
       "type": 0,
-      "value": "Espai Fila"
+      "value": "Mida de pàgina"
+    }
+  ],
+  "pages.viewSequence.pictSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Espai de pictogrames"
+    }
+  ],
+  "pages.viewSequence.sequence.label": [
+    {
+      "type": 0,
+      "value": "Seqüència"
+    }
+  ],
+  "pages.viewSequence.sequenceSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Espai de seqüències"
     }
   ],
   "pages.viewSequence.size.label": [
     {
       "type": 0,
       "value": "Mida"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignCenter": [
+    {
+      "type": 0,
+      "value": "Alinear al centre"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignLeft": [
+    {
+      "type": 0,
+      "value": "Alinear a l'esquerra"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignRight": [
+    {
+      "type": 0,
+      "value": "Alinear a la dreta"
+    }
+  ],
+  "pages.viewSequence.tooltip.applyAll": [
+    {
+      "type": 0,
+      "value": "Aplicar a totes les seqüències"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionColumn": [
+    {
+      "type": 0,
+      "value": "Vertical"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionRow": [
+    {
+      "type": 0,
+      "value": "Horitzontal"
+    }
+  ],
+  "pages.viewSequence.tooltip.fullscreen": [
+    {
+      "type": 0,
+      "value": "Pantalla completa"
+    }
+  ],
+  "pages.viewSequence.tooltip.orientation": [
+    {
+      "type": 0,
+      "value": "Orientació de pàgina"
+    }
+  ],
+  "pages.viewSequence.tooltip.print": [
+    {
+      "type": 0,
+      "value": "Imprimir"
     }
   ],
   "pictogram.empty": [
@@ -765,6 +1053,42 @@
     {
       "type": 0,
       "value": "Inicia"
+    }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "Novetats"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "Nova"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Millora"
+    }
+  ],
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Correcció"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Llegir més"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "Veure totes les novetats"
     }
   ]
 }

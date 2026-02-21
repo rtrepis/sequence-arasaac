@@ -15,10 +15,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "types": ["jest", "@testing-library/jest-dom", "vite/client"],
+    "baseUrl": "./",
     "paths": {
-      "/*": ["./*", "./public/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["src", ".private/mocks"],

@@ -47,6 +47,18 @@
       "value": "Bienvenido"
     }
   ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Saltar al contenido principal"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegación principal"
+    }
+  ],
   "components.buttonWithFileLoad.load.label": [
     {
       "type": 0,
@@ -257,6 +269,12 @@
       "value": "Sacar pictograma"
     }
   ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Subir imagen desde el dispositivo"
+    }
+  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
@@ -353,6 +371,204 @@
       "value": "Vista"
     }
   ],
+  "news.back.button": [
+    {
+      "type": 0,
+      "value": "Volver"
+    }
+  ],
+  "news.moreInfo.button": [
+    {
+      "type": 0,
+      "value": "Más info"
+    }
+  ],
+  "news.multiple-sequences.content": [
+    {
+      "type": 0,
+      "value": "¡Crea tantas secuencias como necesites! Utiliza las pestañas para añadir nuevas secuencias o eliminar las que ya no necesitas. Cada secuencia es independiente y puedes cambiar entre ellas fácilmente."
+    }
+  ],
+  "news.multiple-sequences.img1.alt": [
+    {
+      "type": 0,
+      "value": "Pestañas de secuencia"
+    }
+  ],
+  "news.multiple-sequences.img2.alt": [
+    {
+      "type": 0,
+      "value": "Añadir y eliminar secuencias"
+    }
+  ],
+  "news.multiple-sequences.step1.alt": [
+    {
+      "type": 0,
+      "value": "Secuencia 1 con pictogramas y botón para añadir nueva secuencia"
+    }
+  ],
+  "news.multiple-sequences.step1.description": [
+    {
+      "type": 0,
+      "value": "En la página de edición, busca palabras en el buscador (separadas por comas) y los pictogramas aparecerán automáticamente en la secuencia activa. Haz clic en el botón + para crear una nueva secuencia."
+    }
+  ],
+  "news.multiple-sequences.step2.alt": [
+    {
+      "type": 0,
+      "value": "Dos pestañas de secuencia visibles, secuencia 2 activa"
+    }
+  ],
+  "news.multiple-sequences.step2.description": [
+    {
+      "type": 0,
+      "value": "Haz clic en cualquier pestaña para cambiar de secuencia activa. Cada secuencia tiene su propio contenido independiente. Busca nuevas palabras para rellenar la secuencia 2."
+    }
+  ],
+  "news.multiple-sequences.step3.alt": [
+    {
+      "type": 0,
+      "value": "Vista de las dos secuencias con tamaño aumentado globalmente"
+    }
+  ],
+  "news.multiple-sequences.step3.description": [
+    {
+      "type": 0,
+      "value": "En la Vista, el interruptor \"Aplicar a todas\" permite ajustar el tamaño y el espacio de todas las secuencias a la vez. Mueve el control de tamaño para ver el cambio aplicado globalmente."
+    }
+  ],
+  "news.multiple-sequences.step4.alt": [
+    {
+      "type": 0,
+      "value": "Vista con la secuencia 2 ajustada individualmente a tamaño diferente"
+    }
+  ],
+  "news.multiple-sequences.step4.description": [
+    {
+      "type": 0,
+      "value": "Desactiva \"Aplicar a todas\" para configurar cada secuencia de forma independiente. Despliega el acordeón de la secuencia que quieres ajustar y modifica su tamaño o espaciado sin afectar a las demás."
+    }
+  ],
+  "news.multiple-sequences.summary": [
+    {
+      "type": 0,
+      "value": "Ahora puedes crear y gestionar varias secuencias a la vez con pestañas."
+    }
+  ],
+  "news.multiple-sequences.title": [
+    {
+      "type": 0,
+      "value": "Múltiples secuencias"
+    }
+  ],
+  "news.print-preview.content": [
+    {
+      "type": 0,
+      "value": "La vista previa te muestra exactamente cómo quedará la página impresa. Puedes controlar el tamaño de los pictogramas, el espacio entre filas y columnas, y la alineación. ¡Todo se ve en tiempo real!"
+    }
+  ],
+  "news.print-preview.img1.alt": [
+    {
+      "type": 0,
+      "value": "Vista previa de la página"
+    }
+  ],
+  "news.print-preview.img2.alt": [
+    {
+      "type": 0,
+      "value": "Controles de tamaño y espacio"
+    }
+  ],
+  "news.print-preview.summary": [
+    {
+      "type": 0,
+      "value": "Previsualiza exactamente cómo quedará tu página antes de imprimir."
+    }
+  ],
+  "news.print-preview.title": [
+    {
+      "type": 0,
+      "value": "Vista previa de impresión"
+    }
+  ],
+  "news.save-load.content": [
+    {
+      "type": 0,
+      "value": "Encontrarás las opciones de guardar y cargar en el menú del logo de SequenciAAC. Al guardar, se descarga un archivo con todas las secuencias y las imágenes de los pictogramas incluidas. ¡Así puedes recuperar tu trabajo en cualquier momento!"
+    }
+  ],
+  "news.save-load.img1.alt": [
+    {
+      "type": 0,
+      "value": "Menú con opción de guardar"
+    }
+  ],
+  "news.save-load.img2.alt": [
+    {
+      "type": 0,
+      "value": "Cargar archivo guardado"
+    }
+  ],
+  "news.save-load.summary": [
+    {
+      "type": 0,
+      "value": "Descarga tus secuencias con las imágenes y cárgalas cuando quieras."
+    }
+  ],
+  "news.save-load.title": [
+    {
+      "type": 0,
+      "value": "Guarda y recupera"
+    }
+  ],
+  "news.section.title": [
+    {
+      "type": 0,
+      "value": "Novedades"
+    }
+  ],
+  "news.sequence-settings.content": [
+    {
+      "type": 0,
+      "value": "Ahora puedes personalizar cada secuencia de manera independiente. Cambia la alineación de los pictogramas (izquierda, centro o derecha), configura la tipografía y el color de los números de forma independiente al texto, y descubre más opciones de formato para adaptar las secuencias a tus necesidades."
+    }
+  ],
+  "news.sequence-settings.img1.alt": [
+    {
+      "type": 0,
+      "value": "Opciones de alineación"
+    }
+  ],
+  "news.sequence-settings.img2.alt": [
+    {
+      "type": 0,
+      "value": "Configuración de tipografía de los números"
+    }
+  ],
+  "news.sequence-settings.summary": [
+    {
+      "type": 0,
+      "value": "Personaliza cada secuencia con alineación, tipografía de los números y más opciones."
+    }
+  ],
+  "news.sequence-settings.title": [
+    {
+      "type": 0,
+      "value": "Nuevas configuraciones por secuencia"
+    }
+  ],
+  "pages.viewSequence.alignment.label": [
+    {
+      "type": 0,
+      "value": "Alineación"
+    }
+  ],
+  "pages.viewSequence.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Aplicar a todas"
+    }
+  ],
   "pages.viewSequence.authSequence.helperText": [
     {
       "type": 0,
@@ -365,10 +581,10 @@
       "value": "Autor de la secuencia"
     }
   ],
-  "pages.viewSequence.columnGap.label": [
+  "pages.viewSequence.direction.label": [
     {
       "type": 0,
-      "value": "Espacio Columna"
+      "value": "Dirección"
     }
   ],
   "pages.viewSequence.fullScreen.label": [
@@ -377,16 +593,88 @@
       "value": "Pantalla completa"
     }
   ],
-  "pages.viewSequence.rowGap.label": [
+  "pages.viewSequence.pageSize.label": [
     {
       "type": 0,
-      "value": "Espacio Fila"
+      "value": "Tamaño de página"
+    }
+  ],
+  "pages.viewSequence.pictSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Espacio de pictogramas"
+    }
+  ],
+  "pages.viewSequence.sequence.label": [
+    {
+      "type": 0,
+      "value": "Secuencia"
+    }
+  ],
+  "pages.viewSequence.sequenceSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Espacio de secuencias"
     }
   ],
   "pages.viewSequence.size.label": [
     {
       "type": 0,
       "value": "Tamaño"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignCenter": [
+    {
+      "type": 0,
+      "value": "Alinear al centro"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignLeft": [
+    {
+      "type": 0,
+      "value": "Alinear a la izquierda"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignRight": [
+    {
+      "type": 0,
+      "value": "Alinear a la derecha"
+    }
+  ],
+  "pages.viewSequence.tooltip.applyAll": [
+    {
+      "type": 0,
+      "value": "Aplicar a todas las secuencias"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionColumn": [
+    {
+      "type": 0,
+      "value": "Vertical"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionRow": [
+    {
+      "type": 0,
+      "value": "Horizontal"
+    }
+  ],
+  "pages.viewSequence.tooltip.fullscreen": [
+    {
+      "type": 0,
+      "value": "Pantalla completa"
+    }
+  ],
+  "pages.viewSequence.tooltip.orientation": [
+    {
+      "type": 0,
+      "value": "Orientación de página"
+    }
+  ],
+  "pages.viewSequence.tooltip.print": [
+    {
+      "type": 0,
+      "value": "Imprimir"
     }
   ],
   "pictogram.empty": [
@@ -765,6 +1053,42 @@
     {
       "type": 0,
       "value": "Iniciar"
+    }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "Novedades"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "Nueva"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Mejora"
+    }
+  ],
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Corrección"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Leer más"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "Ver todas las novedades"
     }
   ]
 }

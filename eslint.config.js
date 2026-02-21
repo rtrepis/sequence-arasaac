@@ -1,20 +1,95 @@
+import js from "@eslint/js";
 import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import pluginReact from "eslint-plugin-react";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRedux from "eslint-plugin-react-redux";
+import prettier from "eslint-plugin-prettier";
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
 
 export default [
-  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
-  { ignores: ["mocks/handlers.ts", "mocks/*.*", "**/*test*.*", "test*.tsx"] },
-  { languageOptions: { globals: globals.browser } },
-  pluginJs.configs.recommended,
-  pluginReact.configs.flat.recommended,
   {
-    rules: {
-      // Note: you must disable the base rule as it can report incorrect errors
-      "no-unused-expressions": "off",
-      "@typescript-eslint/no-unused-expressions": "error",
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      "**/*.test.*",
+      "**/*.spec.*",
+      "src/setupTests.ts",
+      ".private/**",
+    ],
+  },
+
+  js.configs.recommended,
+
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+      },
     },
   },
-  ...tseslint.configs.recommended,
+
+  // React
+  react.configs.flat.recommended,
+  {
+    settings: {
+      react: { version: "detect" },
+    },
+  },
+
+  // React Hooks
+  {
+    plugins: { "react-hooks": reactHooks },
+    rules: reactHooks.configs.recommended.rules,
+  },
+
+  // React Redux
+  {
+    plugins: { "react-redux": reactRedux },
+    rules: {
+      "react-redux/useSelector-prefer-selectors": "warn",
+    },
+  },
+
+  // TypeScript (ÚNIC lloc amb @typescript-eslint)
+  {
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tseslint,
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" },
+      ],
+    },
+  },
+
+  // Prettier
+  {
+    plugins: { prettier },
+    rules: {
+      "prettier/prettier": "warn",
+    },
+  },
+
+  // Ajustos globals sense plugins
+  {
+    rules: {
+      "react/react-in-jsx-scope": "off",
+      "no-unused-vars": "off",
+      "no-unused-expressions": "off",
+      "no-console": "warn",
+    },
+  },
 ];

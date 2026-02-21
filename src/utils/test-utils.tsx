@@ -43,8 +43,9 @@ const preloadedState: State = {
   ui: {
     viewSettings: {
       sizePict: 1,
-      columnGap: 1,
-      rowGap: 1,
+      pictSpaceBetween: 1,
+      sequenceSpaceBetween: 1,
+      direction: "column",
     },
     defaultSettings: {
       pictApiAra: {
@@ -57,6 +58,11 @@ const preloadedState: State = {
         numbered: true,
         textPosition: "bottom",
         font: {
+          color: "#998800",
+          size: 12,
+          family: "Roboto",
+        },
+        numberFont: {
           color: "#998800",
           size: 12,
           family: "Roboto",

@@ -7,10 +7,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import {
-  addPictogramActionCreator,
-  subtractLastPictActionCreator,
-} from "../../app/slice/sequenceSlice";
+import { subtractLastPictActionCreator } from "../../app/slice/documentSlice";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { Stack } from "@mui/system";
@@ -19,6 +16,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import messages from "./PictogramAmount.lang";
 import useNewPictogram from "../../hooks/useNewPictogram";
 import React from "react";
+import { addPictogramActionCreator } from "@/app/slice/documentSlice";
 
 interface PictogramAmountProps {
   variant?: "navBar";
@@ -33,7 +31,10 @@ const PictogramAmount = ({
   const dispatch = useAppDispatch();
   const { getPictogramEmptyWithDefaultSettings: pictogramEmpty } =
     useNewPictogram();
-  const amountSequence = useAppSelector((state) => state.sequence.length);
+
+  const getActiveSaacAmountPict = (state) =>
+    state.document.content[state.document.activeSAAC].length;
+  const amountSequence: number = useAppSelector(getActiveSaacAmountPict);
 
   const handleChangesAmount = (operator: number) => {
     if (operator > 0 && amountSequence < 60)
@@ -63,7 +64,11 @@ const PictogramAmount = ({
               onClick={() => handleChangesAmount(-1)}
               disabled={amountSequence <= 0}
             >
-              <AiFillMinusCircle />
+              <AiFillMinusCircle
+                style={{
+                  visibility: amountSequence > 0 ? "visible" : "hidden",
+                }}
+              />
             </IconButton>
           </span>
         </Tooltip>

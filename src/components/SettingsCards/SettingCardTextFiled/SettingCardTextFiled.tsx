@@ -22,7 +22,8 @@ const SettingCadTextFiled = ({
       direction={"row"}
       columnGap={2}
     >
-      <Typography variant="body1" component="h2" minWidth={120} sx={cardTitle}>
+      {/* id associat amb aria-labelledby del TextField per accessibilitat */}
+      <Typography id={`textfield-label-${setting}`} variant="body1" component="h2" minWidth={120} sx={cardTitle}>
         <FormattedMessage {...messages[setting]} />
       </Typography>
       <TextField
@@ -30,6 +31,7 @@ const SettingCadTextFiled = ({
         onChange={(event) => setState(event.target.value)}
         variant="filled"
         fullWidth
+        inputProps={{ "aria-labelledby": `textfield-label-${setting}` }}
         sx={{ ".MuiInputBase-input": { paddingTop: 2 } }}
       />
     </Stack>

@@ -3,10 +3,9 @@ import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   searchedActionCreator,
-  addPictogramActionCreator,
   sortSequenceActionCreator,
   settingsPictApiAraActionCreator,
-} from "../app/slice/sequenceSlice";
+} from "../app/slice/documentSlice";
 import {
   Hair,
   PictApiAraForEdit,
@@ -16,6 +15,7 @@ import {
 } from "../types/sequence";
 import fitzgeraldColors from "../data/fitzgeraldColors";
 import { updateKeywordsActionCreator } from "../app/slice/uiSlice";
+import { addPictogramActionCreator } from "@/app/slice/documentSlice";
 
 const araSaacURL = import.meta.env.VITE_APP_API_ARASAAC_URL;
 
@@ -29,7 +29,11 @@ const useAraSaac = () => {
     font: { size: fontSize },
     textPosition,
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
-  const amountSequence = useAppSelector((state) => state.sequence.length);
+
+  const getActiveSaacAmountPict = (state) =>
+    state.document.content[state.document.activeSAAC].length;
+  const amountSequence = useAppSelector(getActiveSaacAmountPict);
+
   const defaultSettingsPictApiAra = useAppSelector(
     (state) => state.ui.defaultSettings.pictApiAra,
   );
