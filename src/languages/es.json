@@ -23,6 +23,12 @@
       "value": "Fuente"
     }
   ],
+  "component.settingCardFontGroup.numberFont.title": [
+    {
+      "type": 0,
+      "value": "Fuente de los números"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
@@ -147,6 +153,42 @@
     {
       "type": 0,
       "value": "Cargar configuración desde archivo local"
+    }
+  ],
+  "components.logoMenu.download": [
+    {
+      "type": 0,
+      "value": "Descargar"
+    }
+  ],
+  "components.logoMenu.editView": [
+    {
+      "type": 0,
+      "value": "Editar"
+    }
+  ],
+  "components.logoMenu.load": [
+    {
+      "type": 0,
+      "value": "Cargar"
+    }
+  ],
+  "components.logoMenu.menuAriaLabel": [
+    {
+      "type": 0,
+      "value": "Menú principal"
+    }
+  ],
+  "components.logoMenu.previewView": [
+    {
+      "type": 0,
+      "value": "Previsualizar"
+    }
+  ],
+  "components.logoMenu.settings": [
+    {
+      "type": 0,
+      "value": "Configuración"
     }
   ],
   "components.magicSearch.button.": [
@@ -369,6 +411,66 @@
     {
       "type": 0,
       "value": "Vista"
+    }
+  ],
+  "context.feedback.applyAll.success": [
+    {
+      "type": 0,
+      "value": "Aplicado a "
+    },
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pictogramas"
+    }
+  ],
+  "context.feedback.load.error": [
+    {
+      "type": 0,
+      "value": "Error al cargar el archivo"
+    }
+  ],
+  "context.feedback.load.success": [
+    {
+      "type": 0,
+      "value": "Archivo cargado correctamente"
+    }
+  ],
+  "context.feedback.loading": [
+    {
+      "type": 0,
+      "value": "Cargando..."
+    }
+  ],
+  "context.feedback.save.success": [
+    {
+      "type": 0,
+      "value": "Archivo guardado correctamente"
+    }
+  ],
+  "context.feedback.search.complete": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pictogramas añadidos"
+    }
+  ],
+  "context.feedback.search.error": [
+    {
+      "type": 0,
+      "value": "Error buscando pictogramas"
+    }
+  ],
+  "context.feedback.search.loading": [
+    {
+      "type": 0,
+      "value": "Buscando pictogramas..."
     }
   ],
   "news.back.button": [
@@ -1090,5 +1192,13 @@
       "type": 0,
       "value": "Ver todas las novedades"
     }
-  ]
+  ],
+  "news.prevArticle": [{ "type": 0, "value": "Artículo anterior" }],
+  "news.nextArticle": [{ "type": 0, "value": "Artículo siguiente" }],
+  "components.newsNavBar.welcome": [{ "type": 0, "value": "Inicio" }],
+  "components.newsNavBar.start": [{ "type": 0, "value": "Crea una secuencia" }],
+  "components.newsNavBar.langSelector": [{ "type": 0, "value": "Idioma" }],
+  "components.newsNavBar.skipToContent": [{ "type": 0, "value": "Saltar al contenido principal" }],
+  "components.newsNavBar.mainNavigation": [{ "type": 0, "value": "Navegación principal" }],
+  "components.newsNavBar.news": [{ "type": 0, "value": "Novedades" }]
 }

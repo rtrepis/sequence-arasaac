@@ -1,25 +1,42 @@
 import React, { useEffect } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Box, Button, Container, Divider, Stack, Typography } from "@mui/material";
-import { FormattedMessage, useIntl } from "react-intl";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { FormattedMessage, useIntl, defineMessages } from "react-intl";
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { newsItems } from "../../data/newsItems";
-import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
   back: {
     id: "news.back.button",
     defaultMessage: "Tornar",
-    description: "Botó per tornar a la pàgina principal",
+    description: "Botó per tornar a la llista de notícies",
+  },
+  prevArticle: {
+    id: "news.prevArticle",
+    defaultMessage: "Article anterior",
+    description: "Botó per anar a l'article anterior",
+  },
+  nextArticle: {
+    id: "news.nextArticle",
+    defaultMessage: "Article següent",
+    description: "Botó per anar a l'article següent",
   },
 });
 
 const NewsDetailPage = (): React.ReactElement => {
-  const { slug } = useParams<{ slug: string }>();
+  const { slug, locale } = useParams<{ slug: string; locale: string }>();
   const intl = useIntl();
 
   // Buscar la notícia pel slug
   const newsItem = newsItems.find((item) => item.slug === slug);
+
+  // Llista ordenada de més nova a més antiga per a la navegació prev/next
+  const sorted = [...newsItems].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  const currentIndex = sorted.findIndex((i) => i.slug === slug);
+  const prevItem = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
+  const nextItem = currentIndex > 0 ? sorted[currentIndex - 1] : null;
 
   // Estableix el títol del document quan es carrega la notícia
   useEffect(() => {
@@ -28,9 +45,9 @@ const NewsDetailPage = (): React.ReactElement => {
     }
   }, [newsItem, intl]);
 
-  // Si no es troba, redirigir a la pàgina principal
+  // Si no es troba, redirigir a la llista de notícies
   if (!newsItem) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={`/${locale ?? "es"}/news`} replace />;
   }
 
   return (
@@ -124,12 +141,42 @@ const NewsDetailPage = (): React.ReactElement => {
           ))
         )}
 
+        {/* Navegació prev/next entre articles */}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          width="100%"
+          sx={{ mt: 2 }}
+        >
+          {prevItem ? (
+            <Button
+              component={Link}
+              to={`/${locale}/news/${prevItem.slug}`}
+              startIcon={<AiOutlineArrowLeft />}
+            >
+              <FormattedMessage {...messages.prevArticle} />
+            </Button>
+          ) : (
+            <Box />
+          )}
+          {nextItem && (
+            <Button
+              component={Link}
+              to={`/${locale}/news/${nextItem.slug}`}
+              endIcon={<AiOutlineArrowRight />}
+            >
+              <FormattedMessage {...messages.nextArticle} />
+            </Button>
+          )}
+        </Stack>
+
+        {/* Botó per tornar a la llista de notícies */}
         <Button
           component={Link}
-          to="/"
+          to={`/${locale}/news`}
           startIcon={<AiOutlineArrowLeft />}
           variant="outlined"
-          sx={{ mt: 2 }}
+          sx={{ mt: 1 }}
         >
           <FormattedMessage {...messages.back} />
         </Button>
