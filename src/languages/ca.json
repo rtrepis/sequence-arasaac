@@ -23,6 +23,12 @@
       "value": "Tipografia"
     }
   ],
+  "component.settingCardFontGroup.numberFont.title": [
+    {
+      "type": 0,
+      "value": "Font dels números"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
@@ -147,6 +153,42 @@
     {
       "type": 0,
       "value": "Carrega la configuració des d'un fitxer local"
+    }
+  ],
+  "components.logoMenu.download": [
+    {
+      "type": 0,
+      "value": "Descarregar"
+    }
+  ],
+  "components.logoMenu.editView": [
+    {
+      "type": 0,
+      "value": "Editar"
+    }
+  ],
+  "components.logoMenu.load": [
+    {
+      "type": 0,
+      "value": "Carregar"
+    }
+  ],
+  "components.logoMenu.menuAriaLabel": [
+    {
+      "type": 0,
+      "value": "Menú principal"
+    }
+  ],
+  "components.logoMenu.previewView": [
+    {
+      "type": 0,
+      "value": "Previsualitzar"
+    }
+  ],
+  "components.logoMenu.settings": [
+    {
+      "type": 0,
+      "value": "Configuració"
     }
   ],
   "components.magicSearch.button.": [
@@ -369,6 +411,66 @@
     {
       "type": 0,
       "value": "Vista"
+    }
+  ],
+  "context.feedback.applyAll.success": [
+    {
+      "type": 0,
+      "value": "Aplicat a "
+    },
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pictogrames"
+    }
+  ],
+  "context.feedback.load.error": [
+    {
+      "type": 0,
+      "value": "Error carregant el fitxer"
+    }
+  ],
+  "context.feedback.load.success": [
+    {
+      "type": 0,
+      "value": "Fitxer carregat correctament"
+    }
+  ],
+  "context.feedback.loading": [
+    {
+      "type": 0,
+      "value": "Carregant..."
+    }
+  ],
+  "context.feedback.save.success": [
+    {
+      "type": 0,
+      "value": "Fitxer guardat correctament"
+    }
+  ],
+  "context.feedback.search.complete": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pictogrames afegits"
+    }
+  ],
+  "context.feedback.search.error": [
+    {
+      "type": 0,
+      "value": "Error cercant pictogrames"
+    }
+  ],
+  "context.feedback.search.loading": [
+    {
+      "type": 0,
+      "value": "Cercant pictogrames..."
     }
   ],
   "news.back.button": [
@@ -1090,5 +1192,13 @@
       "type": 0,
       "value": "Veure totes les novetats"
     }
-  ]
+  ],
+  "news.prevArticle": [{ "type": 0, "value": "Article anterior" }],
+  "news.nextArticle": [{ "type": 0, "value": "Article següent" }],
+  "components.newsNavBar.welcome": [{ "type": 0, "value": "Inici" }],
+  "components.newsNavBar.start": [{ "type": 0, "value": "Crea una seqüència" }],
+  "components.newsNavBar.langSelector": [{ "type": 0, "value": "Idioma" }],
+  "components.newsNavBar.skipToContent": [{ "type": 0, "value": "Salta al contingut principal" }],
+  "components.newsNavBar.mainNavigation": [{ "type": 0, "value": "Navegació principal" }],
+  "components.newsNavBar.news": [{ "type": 0, "value": "Novetats" }]
 }

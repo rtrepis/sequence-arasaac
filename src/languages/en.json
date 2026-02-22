@@ -23,6 +23,12 @@
       "value": "Font"
     }
   ],
+  "component.settingCardFontGroup.numberFont.title": [
+    {
+      "type": 0,
+      "value": "Number font"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
@@ -147,6 +153,42 @@
     {
       "type": 0,
       "value": "Load settings from local file"
+    }
+  ],
+  "components.logoMenu.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "components.logoMenu.editView": [
+    {
+      "type": 0,
+      "value": "Edit"
+    }
+  ],
+  "components.logoMenu.load": [
+    {
+      "type": 0,
+      "value": "Load"
+    }
+  ],
+  "components.logoMenu.menuAriaLabel": [
+    {
+      "type": 0,
+      "value": "Main menu"
+    }
+  ],
+  "components.logoMenu.previewView": [
+    {
+      "type": 0,
+      "value": "Preview"
+    }
+  ],
+  "components.logoMenu.settings": [
+    {
+      "type": 0,
+      "value": "Settings"
     }
   ],
   "components.magicSearch.button.": [
@@ -369,6 +411,66 @@
     {
       "type": 0,
       "value": "View"
+    }
+  ],
+  "context.feedback.applyAll.success": [
+    {
+      "type": 0,
+      "value": "Applied to "
+    },
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pictograms"
+    }
+  ],
+  "context.feedback.load.error": [
+    {
+      "type": 0,
+      "value": "Error loading file"
+    }
+  ],
+  "context.feedback.load.success": [
+    {
+      "type": 0,
+      "value": "File loaded successfully"
+    }
+  ],
+  "context.feedback.loading": [
+    {
+      "type": 0,
+      "value": "Loading..."
+    }
+  ],
+  "context.feedback.save.success": [
+    {
+      "type": 0,
+      "value": "File saved successfully"
+    }
+  ],
+  "context.feedback.search.complete": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pictograms added"
+    }
+  ],
+  "context.feedback.search.error": [
+    {
+      "type": 0,
+      "value": "Error searching pictograms"
+    }
+  ],
+  "context.feedback.search.loading": [
+    {
+      "type": 0,
+      "value": "Searching pictograms..."
     }
   ],
   "news.back.button": [
@@ -1090,5 +1192,13 @@
       "type": 0,
       "value": "See all updates"
     }
-  ]
+  ],
+  "news.prevArticle": [{ "type": 0, "value": "Previous article" }],
+  "news.nextArticle": [{ "type": 0, "value": "Next article" }],
+  "components.newsNavBar.welcome": [{ "type": 0, "value": "Home" }],
+  "components.newsNavBar.start": [{ "type": 0, "value": "Create a sequence" }],
+  "components.newsNavBar.langSelector": [{ "type": 0, "value": "Language" }],
+  "components.newsNavBar.skipToContent": [{ "type": 0, "value": "Skip to main content" }],
+  "components.newsNavBar.mainNavigation": [{ "type": 0, "value": "Main navigation" }],
+  "components.newsNavBar.news": [{ "type": 0, "value": "Updates" }]
 }
