@@ -1,13 +1,22 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import PictogramAmount from "../../components/PictogramAmount/PictogramAmount";
 import MagicSearch from "../../components/MagicSearch/MagicSearch";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TabsSequences from "../../components/TabsSequences/TabsSequences";
 import { FeedbackProgress } from "@/context/FeedbackContext";
 import { FormattedMessage } from "react-intl";
+import { useAppSelector } from "../../app/hooks";
+import useAraSaac from "../../hooks/useAraSaac";
 
 const EditSequencesPage = (): React.ReactElement => {
   const [info, setInfo] = useState(false);
+  const keywords = useAppSelector((state) => state.ui.lang.keywords);
+  const { getAllKeyWordsForLanguages } = useAraSaac();
+
+  // Carrega les paraules clau de l'ARASAAC la primera vegada que s'obre l'editor
+  useEffect(() => {
+    if (keywords.length === 0) getAllKeyWordsForLanguages();
+  }, []);
 
   const toggleValue = () => {
     setInfo((previous) => !previous);

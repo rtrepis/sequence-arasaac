@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -71,6 +71,7 @@ const groupByMonth = (
 
 const ChangelogPage = (): React.ReactElement => {
   const intl = useIntl();
+  const { locale } = useParams<{ locale: string }>();
   const groups = groupByMonth(newsItems);
 
   // Títol del document
@@ -140,7 +141,7 @@ const ChangelogPage = (): React.ReactElement => {
                     <Box>
                       <Button
                         component={Link}
-                        to={`/news/${item.slug}`}
+                        to={`/${locale}/news/${item.slug}`}
                         endIcon={<AiOutlineArrowRight />}
                         size="small"
                         sx={{ px: 0 }}
