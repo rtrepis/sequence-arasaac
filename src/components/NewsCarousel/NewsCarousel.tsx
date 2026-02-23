@@ -25,7 +25,7 @@ const NewsCarousel = (): React.ReactElement => {
       component="section"
       aria-labelledby="news-section-title"
       sx={{
-        width: "80%",
+        width: { xs: "100%", sm: "80%" },
         mx: "auto",
         py: 4,
       }}
@@ -73,17 +73,24 @@ const NewsCarousel = (): React.ReactElement => {
                 {/* Alt text descriptiu: usa el títol de la notícia en comptes de buit */}
                 <CardMedia
                   component="img"
-                  height="140"
                   image={item.coverImage}
                   alt={intl.formatMessage({ id: item.titleId })}
                   loading="lazy"
-                  sx={{ objectFit: "cover", bgcolor: "grey.200" }}
+                  sx={{
+                    height: { xs: 90, sm: 140 },
+                    objectFit: "cover",
+                    bgcolor: "grey.200",
+                  }}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h6" gutterBottom>
                     <FormattedMessage id={item.titleId} />
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ display: { xs: "none", sm: "block" } }}
+                  >
                     <FormattedMessage id={item.summaryId} />
                   </Typography>
                 </CardContent>

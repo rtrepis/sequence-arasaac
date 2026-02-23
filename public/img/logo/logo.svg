@@ -1,0 +1,41 @@
+<svg width="400" height="320" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bodyGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" style="stop-color:#555555" />
+      <stop offset="50%" style="stop-color:#1a1a1a" />
+      <stop offset="100%" style="stop-color:#000000" />
+    </radialGradient>
+
+    <radialGradient id="innerShadow" cx="50%" cy="50%" r="50%">
+      <stop offset="70%" style="stop-color:#000; stop-opacity:0" />
+      <stop offset="100%" style="stop-color:#000; stop-opacity:0.7" />
+    </radialGradient>
+  </defs>
+
+  <g transform="translate(185, 55) scale(0.65)">
+    <circle cx="0" cy="0" r="50" fill="url(#bodyGrad)" />
+    <g transform="translate(15, -5) rotate(-15)">
+      <ellipse cx="0" cy="0" rx="22" ry="38" fill="#000" />
+      <ellipse cx="-4" cy="0" rx="14" ry="28" fill="#facc15" />
+      <ellipse cx="-4" cy="0" rx="14" ry="28" fill="url(#innerShadow)" />
+    </g>
+  </g>
+
+  <g transform="translate(135, 95) scale(0.8)">
+    <circle cx="0" cy="0" r="50" fill="url(#bodyGrad)" />
+    <g transform="translate(18, -2) rotate(-10)">
+      <ellipse cx="0" cy="0" rx="25" ry="40" fill="#000" />
+      <ellipse cx="-5" cy="0" rx="16" ry="30" fill="#ec4899" />
+      <ellipse cx="-5" cy="0" rx="16" ry="30" fill="url(#innerShadow)" />
+    </g>
+  </g>
+
+  <g transform="translate(65, 145)">
+    <circle cx="0" cy="0" r="55" fill="url(#bodyGrad)" />
+    <g transform="translate(22, 2) rotate(-5)">
+      <ellipse cx="0" cy="0" rx="28" ry="44" fill="#000" />
+      <ellipse cx="-6" cy="0" rx="18" ry="34" fill="#3b82f6" />
+      <ellipse cx="-6" cy="0" rx="18" ry="34" fill="url(#innerShadow)" />
+    </g>
+  </g>
+</svg>
