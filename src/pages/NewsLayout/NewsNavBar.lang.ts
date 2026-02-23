@@ -32,6 +32,11 @@ const messages = defineMessages({
     defaultMessage: "Novetats",
     description: "Enllaç a la llista de novetats (changelog)",
   },
+  openMenu: {
+    id: "components.newsNavBar.openMenu",
+    defaultMessage: "Obrir menú de navegació",
+    description: "Etiqueta ARIA per al botó del logotip que obre el menú en mobile",
+  },
 });
 
 export default messages;

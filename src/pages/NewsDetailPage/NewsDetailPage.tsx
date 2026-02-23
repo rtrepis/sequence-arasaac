@@ -51,137 +51,145 @@ const NewsDetailPage = (): React.ReactElement => {
   }
 
   return (
-    <Container component="main" id="main-content" maxWidth="md" sx={{ py: 4 }}>
-      <Stack spacing={3} alignItems="center">
-        <Typography variant="h4" component="h1" fontWeight={700}>
-          <FormattedMessage id={newsItem.titleId} />
-        </Typography>
+    <>
+      <Container
+        component="main"
+        id="main-content"
+        maxWidth="md"
+        sx={{ py: 4 }}
+      >
+        <Stack spacing={3} alignItems="center">
+          <Typography variant="h4" component="h1" fontWeight={700}>
+            <FormattedMessage id={newsItem.titleId} />
+          </Typography>
 
-        <Typography
-          variant="body1"
-          textAlign="center"
-          sx={{ maxWidth: "600px" }}
-        >
-          <FormattedMessage id={newsItem.contentId} />
-        </Typography>
+          <Typography
+            variant="body1"
+            textAlign="center"
+            sx={{ maxWidth: "600px" }}
+          >
+            <FormattedMessage id={newsItem.contentId} />
+          </Typography>
 
-        {/* Vista pas a pas si la notícia té steps definits */}
-        {newsItem.steps ? (
-          <Stack spacing={4} width="100%">
-            {newsItem.steps.map((step, index) => (
-              <Stack key={index} spacing={2}>
-                <Divider />
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Box
-                    sx={{
-                      minWidth: 40,
-                      height: 40,
-                      borderRadius: "50%",
-                      bgcolor: "primary.main",
-                      color: "primary.contrastText",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: 700,
-                      fontSize: "1.1rem",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {index + 1}
-                  </Box>
-                  <Typography variant="body1">
-                    <FormattedMessage id={step.descriptionId} />
-                  </Typography>
+          {/* Vista pas a pas si la notícia té steps definits */}
+          {newsItem.steps ? (
+            <Stack spacing={4} width="100%">
+              {newsItem.steps.map((step, index) => (
+                <Stack key={index} spacing={2}>
+                  <Divider />
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <Box
+                      sx={{
+                        minWidth: 40,
+                        height: 40,
+                        borderRadius: "50%",
+                        bgcolor: "primary.main",
+                        color: "primary.contrastText",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: 700,
+                        fontSize: "1.1rem",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {index + 1}
+                    </Box>
+                    <Typography variant="body1">
+                      <FormattedMessage id={step.descriptionId} />
+                    </Typography>
+                  </Stack>
+
+                  {/* Vídeo si existeix, si no imatge estàtica */}
+                  {step.video ? (
+                    <Box
+                      component="video"
+                      src={step.video}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      sx={{
+                        maxWidth: "100%",
+                        borderRadius: 2,
+                        boxShadow: 2,
+                      }}
+                    />
+                  ) : (
+                    <Box
+                      component="img"
+                      src={step.image.src}
+                      alt={intl.formatMessage({ id: step.image.altId })}
+                      sx={{
+                        maxWidth: "100%",
+                        borderRadius: 2,
+                        boxShadow: 2,
+                      }}
+                    />
+                  )}
                 </Stack>
-
-                {/* Vídeo si existeix, si no imatge estàtica */}
-                {step.video ? (
-                  <Box
-                    component="video"
-                    src={step.video}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    sx={{
-                      maxWidth: "100%",
-                      borderRadius: 2,
-                      boxShadow: 2,
-                    }}
-                  />
-                ) : (
-                  <Box
-                    component="img"
-                    src={step.image.src}
-                    alt={intl.formatMessage({ id: step.image.altId })}
-                    sx={{
-                      maxWidth: "100%",
-                      borderRadius: 2,
-                      boxShadow: 2,
-                    }}
-                  />
-                )}
-              </Stack>
-            ))}
-          </Stack>
-        ) : (
-          /* Galeria d'imatges per a notícies sense steps */
-          newsItem.images.map((img, index) => (
-            <Box
-              key={index}
-              component="img"
-              src={img.src}
-              alt={intl.formatMessage({ id: img.altId })}
-              sx={{
-                maxWidth: "100%",
-                borderRadius: 2,
-                boxShadow: 2,
-              }}
-            />
-          ))
-        )}
-
-        {/* Navegació prev/next entre articles */}
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          width="100%"
-          sx={{ mt: 2 }}
-        >
-          {prevItem ? (
-            <Button
-              component={Link}
-              to={`/${locale}/news/${prevItem.slug}`}
-              startIcon={<AiOutlineArrowLeft />}
-            >
-              <FormattedMessage {...messages.prevArticle} />
-            </Button>
+              ))}
+            </Stack>
           ) : (
-            <Box />
+            /* Galeria d'imatges per a notícies sense steps */
+            newsItem.images.map((img, index) => (
+              <Box
+                key={index}
+                component="img"
+                src={img.src}
+                alt={intl.formatMessage({ id: img.altId })}
+                sx={{
+                  maxWidth: "100%",
+                  borderRadius: 2,
+                  boxShadow: 2,
+                }}
+              />
+            ))
           )}
-          {nextItem && (
-            <Button
-              component={Link}
-              to={`/${locale}/news/${nextItem.slug}`}
-              endIcon={<AiOutlineArrowRight />}
-            >
-              <FormattedMessage {...messages.nextArticle} />
-            </Button>
-          )}
-        </Stack>
 
-        {/* Botó per tornar a la llista de notícies */}
-        <Button
-          component={Link}
-          to={`/${locale}/news`}
-          startIcon={<AiOutlineArrowLeft />}
-          variant="outlined"
-          sx={{ mt: 1 }}
-        >
-          <FormattedMessage {...messages.back} />
-        </Button>
-      </Stack>
-    </Container>
+          {/* Navegació prev/next inline */}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            width="100%"
+            gap={1}
+            sx={{ mt: 2, display: { xs: "none", sm: "flex" } }}
+          >
+            {prevItem ? (
+              <Button
+                component={Link}
+                to={`/${locale}/news/${prevItem.slug}`}
+                startIcon={<AiOutlineArrowLeft />}
+              >
+                <FormattedMessage {...messages.prevArticle} />
+              </Button>
+            ) : (
+              <Box />
+            )}
+            {nextItem && (
+              <Button
+                component={Link}
+                to={`/${locale}/news/${nextItem.slug}`}
+                endIcon={<AiOutlineArrowRight />}
+              >
+                <FormattedMessage {...messages.nextArticle} />
+              </Button>
+            )}
+          </Stack>
+
+          {/* Botó tornar */}
+          <Button
+            component={Link}
+            to={`/${locale}/news`}
+            startIcon={<AiOutlineArrowLeft />}
+            variant="outlined"
+            sx={{ mt: 1, display: { xs: "none", sm: "flex" } }}
+          >
+            <FormattedMessage {...messages.back} />
+          </Button>
+        </Stack>
+      </Container>
+    </>
   );
 };
 

@@ -24,8 +24,9 @@ const NewsLayout = ({
       messages={messageLocale[(locale ?? localeBrowser) as "ca" | "es" | "en"]}
     >
       {/* NewsNavBar ha d'estar dins IntlProvider perquè usa FormattedMessage */}
-      <NewsNavBar />
-      <Outlet />
+      <NewsNavBar>
+        <Outlet />
+      </NewsNavBar>
     </IntlProvider>
   );
 };

@@ -1,85 +1,163 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Box,
   Button,
-  ButtonGroup,
+  Container,
+  IconButton,
   Stack,
   Toolbar,
 } from "@mui/material";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
+import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
 import messages from "./NewsNavBar.lang";
+import HideOnScroll from "../../components/utils/HiddenOnScroll/HiddenOnScroll";
+import AppNavigationDrawer from "../../components/AppNavigationDrawer/AppNavigationDrawer";
+import { newsItems } from "../../data/newsItems";
 
-// Idiomes suportats per a la navegació
-const LOCALES = ["ca", "es", "en"] as const;
+interface BarProps {
+  children: React.ReactElement;
+}
 
-// Barra de navegació lleugera per a la secció de notícies (/:locale/news)
-const NewsNavBar = (): React.ReactElement => {
-  const { locale } = useParams<{ locale: string }>();
-  const location = useLocation();
+// Llista de noticies ordenada de mes nova a mes antiga (estatic, calculat una vegada)
+const sortedNews = [...newsItems].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+);
+
+// Barra de navegació lleugera per a la seccio de noticies (/:locale/news i /:locale/news/:slug)
+const NewsNavBar = (props: BarProps): React.ReactElement => {
+  const { locale, slug } = useParams<{ locale: string; slug?: string }>();
   const navigate = useNavigate();
   const intl = useIntl();
 
-  // Canvia l'idioma mantenint la ruta actual (substitueix el primer segment)
-  const handleLangChange = (newLocale: string) => {
-    const newPath = location.pathname.replace(/^\/(ca|es|en)/, `/${newLocale}`);
-    navigate(newPath, { replace: true });
-  };
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const currentIndex = slug
+    ? sortedNews.findIndex((i) => i.slug === slug)
+    : -1;
+
+  // ◀ esquerra = anterior = mes recent (index menor al array newest-first)
+  const prevSlug =
+    currentIndex > 0 ? sortedNews[currentIndex - 1].slug : null;
+
+  // ▶ dreta = enrere en el temps = mes antic (index major)
+  // Des de la llista (sense slug) va a la novetat mes recent per comenar a navegar
+  const nextSlug =
+    currentIndex !== -1 && currentIndex < sortedNews.length - 1
+      ? sortedNews[currentIndex + 1].slug
+      : currentIndex === -1 && sortedNews.length > 0
+        ? sortedNews[0].slug
+        : null;
 
   return (
     <>
-      {/* Línia fina superior — idèntica a WelcomePage */}
-      <Box bgcolor={"primary.main"} height={"1em"} width={"100vw"} />
-
-      {/* Accés ràpid al contingut principal (accessibilitat) */}
+      {/* Acces rapid al contingut principal (accessibilitat) */}
       <a href="#main-content" className="skip-link">
         <FormattedMessage {...messages.skipToContent} />
       </a>
 
-      <AppBar position="static" color="transparent" elevation={0}>
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          {/* Costat esquerre: logo + Inici + Novetats + Crea seqüència */}
-          <Stack
-            component="nav"
-            aria-label={intl.formatMessage(messages.mainNavigation)}
-            direction="row"
-            spacing={1}
-            alignItems="center"
-          >
-            <img src="/favicon.png" alt="SequenciAAC" height={25} width={34} />
-            <Button component={Link} to="/" size="small">
-              <FormattedMessage {...messages.welcome} />
-            </Button>
-            <Button component={Link} to={`/${locale}/news`} size="small">
-              <FormattedMessage {...messages.news} />
-            </Button>
+      <HideOnScroll {...props.children}>
+        <AppBar color="transparent" elevation={0}>
+          <Box bgcolor={"primary.main"} height={"1em"} width={"100vw"} />
+          <Toolbar sx={{ justifyContent: "space-between" }}>
+
+            {/* Costat esquerre: logo + navegació entre noticies */}
+            <Stack
+              component="nav"
+              aria-label={intl.formatMessage(messages.mainNavigation)}
+              direction="row"
+              spacing={0.5}
+              alignItems="center"
+            >
+              {/* Logo - sempre clicable (obre el drawer) */}
+              <IconButton
+                onClick={() => setDrawerOpen(true)}
+                aria-label={intl.formatMessage(messages.openMenu)}
+                sx={{ p: 0.5 }}
+              >
+                <img
+                  src="/favicon.png"
+                  alt="SequenciAAC"
+                  height={25}
+                  width={34}
+                />
+              </IconButton>
+
+              {/* ◀ Novetats ▶ */}
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ gap: 0 }}
+              >
+                <IconButton
+                  size="small"
+                  color="primary"
+                  disabled={!prevSlug}
+                  onClick={() =>
+                    prevSlug && navigate(`/${locale}/news/${prevSlug}`)
+                  }
+                  aria-label={intl.formatMessage({
+                    id: "news.prevArticle",
+                    defaultMessage: "Article anterior",
+                  })}
+                  sx={{ p: 0.5 }}
+                >
+                  <AiFillLeftCircle style={{ fontSize: "1.4rem" }} />
+                </IconButton>
+
+                <Button
+                  component={Link}
+                  to={`/${locale}/news`}
+                  size="small"
+                  sx={{ px: 1 }}
+                >
+                  <FormattedMessage {...messages.news} />
+                </Button>
+
+                <IconButton
+                  size="small"
+                  color="primary"
+                  disabled={!nextSlug}
+                  onClick={() =>
+                    nextSlug && navigate(`/${locale}/news/${nextSlug}`)
+                  }
+                  aria-label={intl.formatMessage({
+                    id: "news.nextArticle",
+                    defaultMessage: "Article seguent",
+                  })}
+                  sx={{ p: 0.5 }}
+                >
+                  <AiFillRightCircle style={{ fontSize: "1.4rem" }} />
+                </IconButton>
+              </Stack>
+            </Stack>
+
+            {/* Costat dret: boto crear sequencia */}
             <Button
               component={Link}
               to={`/${locale}/create-sequence`}
               size="small"
+              variant="outlined"
             >
               <FormattedMessage {...messages.start} />
             </Button>
-          </Stack>
+          </Toolbar>
+        </AppBar>
+      </HideOnScroll>
 
-          {/* Costat dret: selector d'idioma */}
-          <ButtonGroup
-            size="small"
-            aria-label={intl.formatMessage(messages.langSelector)}
-          >
-            {LOCALES.map((lang) => (
-              <Button
-                key={lang}
-                onClick={() => handleLangChange(lang)}
-                variant={locale === lang ? "contained" : "outlined"}
-              >
-                {lang}
-              </Button>
-            ))}
-          </ButtonGroup>
-        </Toolbar>
-      </AppBar>
+      <Box sx={{ height: "1em" }} />
+      <Toolbar />
+
+      {/* Drawer de navegacio compartit */}
+      <AppNavigationDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
+
+      <Container id="main-content" component="main" maxWidth={"xl"}>
+        {props.children}
+      </Container>
     </>
   );
 };
