@@ -1,27 +1,8 @@
 import React, { useEffect } from "react";
-import { useParams, Link, Navigate } from "react-router-dom";
-import { Box, Button, Container, Divider, Stack, Typography } from "@mui/material";
-import { FormattedMessage, useIntl, defineMessages } from "react-intl";
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import { useParams, Navigate } from "react-router-dom";
+import { Box, Container, Divider, Stack, Typography } from "@mui/material";
+import { FormattedMessage, useIntl } from "react-intl";
 import { newsItems } from "../../data/newsItems";
-
-const messages = defineMessages({
-  back: {
-    id: "news.back.button",
-    defaultMessage: "Tornar",
-    description: "Botó per tornar a la llista de notícies",
-  },
-  prevArticle: {
-    id: "news.prevArticle",
-    defaultMessage: "Article anterior",
-    description: "Botó per anar a l'article anterior",
-  },
-  nextArticle: {
-    id: "news.nextArticle",
-    defaultMessage: "Article següent",
-    description: "Botó per anar a l'article següent",
-  },
-});
 
 const NewsDetailPage = (): React.ReactElement => {
   const { slug, locale } = useParams<{ slug: string; locale: string }>();
@@ -29,14 +10,6 @@ const NewsDetailPage = (): React.ReactElement => {
 
   // Buscar la notícia pel slug
   const newsItem = newsItems.find((item) => item.slug === slug);
-
-  // Llista ordenada de més nova a més antiga per a la navegació prev/next
-  const sorted = [...newsItems].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
-  const currentIndex = sorted.findIndex((i) => i.slug === slug);
-  const prevItem = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
-  const nextItem = currentIndex > 0 ? sorted[currentIndex - 1] : null;
 
   // Estableix el títol del document quan es carrega la notícia
   useEffect(() => {
@@ -110,9 +83,13 @@ const NewsDetailPage = (): React.ReactElement => {
                       muted
                       playsInline
                       sx={{
-                        maxWidth: "100%",
-                        borderRadius: 2,
-                        boxShadow: 2,
+                        maxWidth: "min(680px, 100%)",
+                        width: "100%",
+                        alignSelf: "center",
+                        borderRadius: 1,
+                        boxShadow: 3,
+                        border: "1px solid",
+                        borderColor: "divider",
                       }}
                     />
                   ) : (
@@ -121,9 +98,13 @@ const NewsDetailPage = (): React.ReactElement => {
                       src={step.image.src}
                       alt={intl.formatMessage({ id: step.image.altId })}
                       sx={{
-                        maxWidth: "100%",
-                        borderRadius: 2,
-                        boxShadow: 2,
+                        maxWidth: "min(680px, 100%)",
+                        width: "100%",
+                        alignSelf: "center",
+                        borderRadius: 1,
+                        boxShadow: 3,
+                        border: "1px solid",
+                        borderColor: "divider",
                       }}
                     />
                   )}
@@ -139,54 +120,17 @@ const NewsDetailPage = (): React.ReactElement => {
                 src={img.src}
                 alt={intl.formatMessage({ id: img.altId })}
                 sx={{
-                  maxWidth: "100%",
-                  borderRadius: 2,
-                  boxShadow: 2,
+                  maxWidth: "min(680px, 100%)",
+                  width: "100%",
+                  alignSelf: "center",
+                  borderRadius: 1,
+                  boxShadow: 3,
+                  border: "1px solid",
+                  borderColor: "divider",
                 }}
               />
             ))
           )}
-
-          {/* Navegació prev/next inline */}
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            width="100%"
-            gap={1}
-            sx={{ mt: 2, display: { xs: "none", sm: "flex" } }}
-          >
-            {prevItem ? (
-              <Button
-                component={Link}
-                to={`/${locale}/news/${prevItem.slug}`}
-                startIcon={<AiOutlineArrowLeft />}
-              >
-                <FormattedMessage {...messages.prevArticle} />
-              </Button>
-            ) : (
-              <Box />
-            )}
-            {nextItem && (
-              <Button
-                component={Link}
-                to={`/${locale}/news/${nextItem.slug}`}
-                endIcon={<AiOutlineArrowRight />}
-              >
-                <FormattedMessage {...messages.nextArticle} />
-              </Button>
-            )}
-          </Stack>
-
-          {/* Botó tornar */}
-          <Button
-            component={Link}
-            to={`/${locale}/news`}
-            startIcon={<AiOutlineArrowLeft />}
-            variant="outlined"
-            sx={{ mt: 1, display: { xs: "none", sm: "flex" } }}
-          >
-            <FormattedMessage {...messages.back} />
-          </Button>
         </Stack>
       </Container>
     </>

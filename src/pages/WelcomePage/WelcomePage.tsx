@@ -95,7 +95,7 @@ const WelcomePage = (): React.ReactElement => {
             sx={{
               flexGrow: 1,
               width: "100%",
-              "color-scheme": "light",
+              colorScheme: "light",
               borderRadius: 4,
             }}
           ></CardMedia>

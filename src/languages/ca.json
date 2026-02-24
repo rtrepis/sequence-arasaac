@@ -563,6 +563,60 @@
       "value": "Múltiples seqüències"
     }
   ],
+  "news.view-improvements.content": [
+    {
+      "type": 0,
+      "value": "S'han corregit errors que feien que la vista prèvia no coincidís exactament amb el resultat imprès. A més, s'han afegit nous controls d'alineació i direcció per a cada seqüència, i ara quan deses una seqüència la configuració de visualització també es desa automàticament."
+    }
+  ],
+  "news.view-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Vista prèvia de la seqüència mostrant la correspondència exacta amb la impressió"
+    }
+  ],
+  "news.view-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "La previsualització ara correspon exactament al resultat imprès. Un càlcul d'escala precís té en compte el format de pàgina (A4, A3) i la resolució de pantalla per mostrar amb fidelitat el que s'imprimirà."
+    }
+  ],
+  "news.view-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Controls d'alineació i direcció de les seqüències"
+    }
+  ],
+  "news.view-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "Nous controls per personalitzar cada seqüència: tria l'alineació (esquerra, centre, dreta) i la direcció (horitzontal o vertical) per adaptar la presentació a les teves necessitats."
+    }
+  ],
+  "news.view-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Botó de desar la seqüència amb configuració de visualització inclosa"
+    }
+  ],
+  "news.view-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "Quan deses la seqüència amb el botó de descàrrega, la configuració de visualització (mides, espais, alineació i direcció) s'inclou automàticament al fitxer, de manera que quan la tornes a carregar tot quedarà tal com ho havies deixat."
+    }
+  ],
+  "news.view-improvements.summary": [
+    {
+      "type": 0,
+      "value": "Vista prèvia fidel a la impressió, nous controls d'alineació i direcció."
+    }
+  ],
+  "news.view-improvements.title": [
+    {
+      "type": 0,
+      "value": "Millores a la previsualització"
+    }
+  ],
   "news.print-preview.content": [
     {
       "type": 0,

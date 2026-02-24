@@ -4,13 +4,14 @@ import {
   Box,
   Button,
   Container,
+  Fab,
   IconButton,
   Stack,
   Toolbar,
 } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
-import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import messages from "./NewsNavBar.lang";
 import HideOnScroll from "../../components/utils/HiddenOnScroll/HiddenOnScroll";
 import AppNavigationDrawer from "../../components/AppNavigationDrawer/AppNavigationDrawer";
@@ -37,12 +38,12 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
     ? sortedNews.findIndex((i) => i.slug === slug)
     : -1;
 
-  // ◀ esquerra = anterior = mes recent (index menor al array newest-first)
+  // Boto esquerra = anterior = article mes recent (index menor al array newest-first)
   const prevSlug =
     currentIndex > 0 ? sortedNews[currentIndex - 1].slug : null;
 
-  // ▶ dreta = enrere en el temps = mes antic (index major)
-  // Des de la llista (sense slug) va a la novetat mes recent per comenar a navegar
+  // Boto dreta = enrere en el temps = article mes antic (index major)
+  // Des de la llista va a la novetat mes recent per comenar a navegar
   const nextSlug =
     currentIndex !== -1 && currentIndex < sortedNews.length - 1
       ? sortedNews[currentIndex + 1].slug
@@ -60,17 +61,15 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
       <HideOnScroll {...props.children}>
         <AppBar color="transparent" elevation={0}>
           <Box bgcolor={"primary.main"} height={"1em"} width={"100vw"} />
-          <Toolbar sx={{ justifyContent: "space-between" }}>
-
-            {/* Costat esquerre: logo + navegació entre noticies */}
+          <Toolbar>
             <Stack
               component="nav"
               aria-label={intl.formatMessage(messages.mainNavigation)}
               direction="row"
-              spacing={0.5}
+              spacing={1}
               alignItems="center"
             >
-              {/* Logo - sempre clicable (obre el drawer) */}
+              {/* Logo - obre el drawer */}
               <IconButton
                 onClick={() => setDrawerOpen(true)}
                 aria-label={intl.formatMessage(messages.openMenu)}
@@ -84,64 +83,15 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
                 />
               </IconButton>
 
-              {/* ◀ Novetats ▶ */}
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{ gap: 0 }}
+              {/* Enllaç a la llista de noticies */}
+              <Button
+                component={Link}
+                to={`/${locale}/news`}
+                size="small"
               >
-                <IconButton
-                  size="small"
-                  color="primary"
-                  disabled={!prevSlug}
-                  onClick={() =>
-                    prevSlug && navigate(`/${locale}/news/${prevSlug}`)
-                  }
-                  aria-label={intl.formatMessage({
-                    id: "news.prevArticle",
-                    defaultMessage: "Article anterior",
-                  })}
-                  sx={{ p: 0.5 }}
-                >
-                  <AiFillLeftCircle style={{ fontSize: "1.4rem" }} />
-                </IconButton>
-
-                <Button
-                  component={Link}
-                  to={`/${locale}/news`}
-                  size="small"
-                  sx={{ px: 1 }}
-                >
-                  <FormattedMessage {...messages.news} />
-                </Button>
-
-                <IconButton
-                  size="small"
-                  color="primary"
-                  disabled={!nextSlug}
-                  onClick={() =>
-                    nextSlug && navigate(`/${locale}/news/${nextSlug}`)
-                  }
-                  aria-label={intl.formatMessage({
-                    id: "news.nextArticle",
-                    defaultMessage: "Article seguent",
-                  })}
-                  sx={{ p: 0.5 }}
-                >
-                  <AiFillRightCircle style={{ fontSize: "1.4rem" }} />
-                </IconButton>
-              </Stack>
+                <FormattedMessage {...messages.news} />
+              </Button>
             </Stack>
-
-            {/* Costat dret: boto crear sequencia */}
-            <Button
-              component={Link}
-              to={`/${locale}/create-sequence`}
-              size="small"
-              variant="outlined"
-            >
-              <FormattedMessage {...messages.start} />
-            </Button>
           </Toolbar>
         </AppBar>
       </HideOnScroll>
@@ -158,6 +108,36 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
       <Container id="main-content" component="main" maxWidth={"xl"}>
         {props.children}
       </Container>
+
+      {/* Boto anterior - fix a la cantonada inferior esquerra */}
+      <Fab
+        size="medium"
+        color="primary"
+        disabled={!prevSlug}
+        onClick={() => prevSlug && navigate(`/${locale}/news/${prevSlug}`)}
+        aria-label={intl.formatMessage({
+          id: "news.prevArticle",
+          defaultMessage: "Article anterior",
+        })}
+        sx={{ position: "fixed", bottom: 24, left: 24 }}
+      >
+        <AiOutlineArrowLeft style={{ fontSize: "1.4rem" }} />
+      </Fab>
+
+      {/* Boto seguent (enrere en el temps) - fix a la cantonada inferior dreta */}
+      <Fab
+        size="medium"
+        color="primary"
+        disabled={!nextSlug}
+        onClick={() => nextSlug && navigate(`/${locale}/news/${nextSlug}`)}
+        aria-label={intl.formatMessage({
+          id: "news.nextArticle",
+          defaultMessage: "Article seguent",
+        })}
+        sx={{ position: "fixed", bottom: 24, right: 24 }}
+      >
+        <AiOutlineArrowRight style={{ fontSize: "1.4rem" }} />
+      </Fab>
     </>
   );
 };

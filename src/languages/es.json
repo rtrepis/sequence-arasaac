@@ -563,6 +563,60 @@
       "value": "Múltiples secuencias"
     }
   ],
+  "news.view-improvements.content": [
+    {
+      "type": 0,
+      "value": "Se han corregido errores que hacían que la vista previa no coincidiera exactamente con el resultado impreso. Además, se han añadido nuevos controles de alineación y dirección para cada secuencia, y ahora cuando guardas una secuencia la configuración de visualización también se guarda automáticamente."
+    }
+  ],
+  "news.view-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Vista previa de la secuencia mostrando la correspondencia exacta con la impresión"
+    }
+  ],
+  "news.view-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "La previsualización ahora corresponde exactamente al resultado impreso. Un cálculo de escala preciso tiene en cuenta el formato de página (A4, A3) y la resolución de pantalla para mostrar fielmente lo que se imprimirá."
+    }
+  ],
+  "news.view-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Controles de alineación y dirección de las secuencias"
+    }
+  ],
+  "news.view-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "Nuevos controles para personalizar cada secuencia: elige la alineación (izquierda, centro, derecha) y la dirección (horizontal o vertical) para adaptar la presentación a tus necesidades."
+    }
+  ],
+  "news.view-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Botón de guardar la secuencia con configuración de visualización incluida"
+    }
+  ],
+  "news.view-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "Cuando guardas la secuencia con el botón de descarga, la configuración de visualización (tamaños, espacios, alineación y dirección) se incluye automáticamente en el archivo, de manera que cuando la vuelves a cargar todo quedará tal como lo habías dejado."
+    }
+  ],
+  "news.view-improvements.summary": [
+    {
+      "type": 0,
+      "value": "Vista previa fiel a la impresión, nuevos controles de alineación y dirección."
+    }
+  ],
+  "news.view-improvements.title": [
+    {
+      "type": 0,
+      "value": "Mejoras en la previsualización"
+    }
+  ],
   "news.print-preview.content": [
     {
       "type": 0,

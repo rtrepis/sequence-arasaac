@@ -27,6 +27,39 @@ export interface NewsItem {
 
 export const newsItems: NewsItem[] = [
   {
+    slug: "view-improvements",
+    titleId: "news.view-improvements.title",
+    summaryId: "news.view-improvements.summary",
+    contentId: "news.view-improvements.content",
+    coverImage: "/img/news/view-improvements.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/view-improvements-step1.png",
+          altId: "news.view-improvements.step1.alt",
+        },
+        descriptionId: "news.view-improvements.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/view-improvements-step2.png",
+          altId: "news.view-improvements.step2.alt",
+        },
+        descriptionId: "news.view-improvements.step2.description",
+      },
+      {
+        image: {
+          src: "/img/news/view-improvements-step3.png",
+          altId: "news.view-improvements.step3.alt",
+        },
+        descriptionId: "news.view-improvements.step3.description",
+      },
+    ],
+    date: "2026-02-24",
+    category: "millora",
+  },
+  {
     slug: "multiple-sequences",
     titleId: "news.multiple-sequences.title",
     summaryId: "news.multiple-sequences.summary",
