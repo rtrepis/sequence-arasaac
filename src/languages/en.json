@@ -563,6 +563,60 @@
       "value": "Multiple sequences"
     }
   ],
+  "news.view-improvements.content": [
+    {
+      "type": 0,
+      "value": "Several bugs have been fixed that caused the print preview to not match the actual printed output. New controls have also been added for alignment and direction of sequences, and when you save a sequence the view settings are now automatically included."
+    }
+  ],
+  "news.view-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Sequence preview showing exact match with printed output"
+    }
+  ],
+  "news.view-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "The sequence preview now corresponds exactly to the printed output. A precise scale calculation takes into account the page format (A4, A3) and screen resolution to faithfully show what will be printed."
+    }
+  ],
+  "news.view-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Alignment and direction controls for sequences"
+    }
+  ],
+  "news.view-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "New controls to customize each sequence: choose the alignment (left, center, right) and direction (horizontal or vertical) to adapt the presentation to your needs."
+    }
+  ],
+  "news.view-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Save sequence button with view settings included"
+    }
+  ],
+  "news.view-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "When you save the sequence using the download button, the view settings (sizes, spacing, alignment and direction) are automatically included in the file, so when you reload it everything will be as you left it."
+    }
+  ],
+  "news.view-improvements.summary": [
+    {
+      "type": 0,
+      "value": "Print preview now matches output exactly. New alignment and direction controls."
+    }
+  ],
+  "news.view-improvements.title": [
+    {
+      "type": 0,
+      "value": "Print preview improvements"
+    }
+  ],
   "news.print-preview.content": [
     {
       "type": 0,

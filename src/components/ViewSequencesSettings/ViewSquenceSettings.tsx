@@ -330,11 +330,12 @@ const ViewSequencesSettings = ({
             <FormattedMessage {...messages.size} />
             <Slider
               name="sizePict"
-              step={0.05}
-              min={0.4}
-              max={6}
+              step={SIZE_PICT_STEP}
+              min={SIZE_PICT_MIN}
+              max={SIZE_PICT_MAX}
               value={seqView.sizePict}
               valueLabelDisplay="auto"
+              valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
               onChange={handleSequenceSliderChange(seqKey)}
             />
           </FormLabel>
@@ -349,6 +350,7 @@ const ViewSequencesSettings = ({
               max={10}
               value={seqView.pictSpaceBetween}
               valueLabelDisplay="auto"
+              valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
               onChange={handleSequenceSliderChange(seqKey)}
             />
           </FormLabel>
@@ -584,20 +586,25 @@ const ViewSequencesSettings = ({
                 </Accordion>
               ))}
 
-              <FormGroup>
-                <FormLabel>
-                  <FormattedMessage {...messages.sequenceSpaceBetween} />
-                  <Slider
-                    name="sequenceSpaceBetween"
-                    step={0.5}
-                    min={0}
-                    max={10}
-                    value={viewSettings.sequenceSpaceBetween}
-                    valueLabelDisplay="auto"
-                    onChange={handleSequenceSpaceChange}
-                  />
-                </FormLabel>
-              </FormGroup>
+              {sequenceKeys.length > 1 && (
+                <FormGroup>
+                  <FormLabel>
+                    <FormattedMessage {...messages.sequenceSpaceBetween} />
+                    <Slider
+                      name="sequenceSpaceBetween"
+                      step={0.5}
+                      min={0}
+                      max={10}
+                      value={viewSettings.sequenceSpaceBetween}
+                      valueLabelDisplay="auto"
+                      valueLabelFormat={(value: number) =>
+                        parseFloat(value.toFixed(2))
+                      }
+                      onChange={handleSequenceSpaceChange}
+                    />
+                  </FormLabel>
+                </FormGroup>
+              )}
 
               <FormGroup>
                 <FormLabel component="legend">
