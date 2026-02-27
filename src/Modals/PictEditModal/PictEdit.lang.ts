@@ -21,6 +21,11 @@ const messages = defineMessages({
     defaultMessage: "Delete",
     description: "Delete modal, edit pictogram",
   },
+  reset: {
+    id: "components.pictEdit.reset",
+    defaultMessage: "Reset to defaults",
+    description: "Restablir els settings del pictograma als valors per defecte globals",
+  },
 });
 
 export default messages;

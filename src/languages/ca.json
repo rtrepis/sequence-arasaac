@@ -227,6 +227,12 @@
       "value": "Eliminar"
     }
   ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Valors per defecte"
+    }
+  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -483,6 +489,60 @@
     {
       "type": 0,
       "value": "Més info"
+    }
+  ],
+  "news.number-font.content": [
+    {
+      "type": 0,
+      "value": "Ara pots configurar de forma independent la tipografia dels números que s'afegeixen als pictogrames quan actives la numeració. Des del diàleg de Configuració per defecte, si actives el switch de Numeració, apareixerà una nova secció per escollir la família tipogràfica, la mida i el color dels números, de manera independent a la tipografia del text dels pictogrames."
+    }
+  ],
+  "news.number-font.step1.alt": [
+    {
+      "type": 0,
+      "value": "Panell de configuració per defecte amb el switch de Numeració desactivat"
+    }
+  ],
+  "news.number-font.step1.description": [
+    {
+      "type": 0,
+      "value": "Obre el diàleg de Configuració per defecte des del menú principal (clica el logo). Veuràs un switch per activar la Numeració dels pictogrames."
+    }
+  ],
+  "news.number-font.step2.alt": [
+    {
+      "type": 0,
+      "value": "Switch de Numeració activat al panell de configuració"
+    }
+  ],
+  "news.number-font.step2.description": [
+    {
+      "type": 0,
+      "value": "Activa el switch de Numeració. Cada pictograma mostrarà el seu número d'ordre a la posició oposada al text."
+    }
+  ],
+  "news.number-font.step3.alt": [
+    {
+      "type": 0,
+      "value": "Nova secció de configuració de la font dels números, amb selector de família, mida i color"
+    }
+  ],
+  "news.number-font.step3.description": [
+    {
+      "type": 0,
+      "value": "Un cop activada la numeració, apareix una nova secció per configurar la tipografia dels números: família, mida i color, de forma independent a la font del text dels pictogrames."
+    }
+  ],
+  "news.number-font.summary": [
+    {
+      "type": 0,
+      "value": "Tria una tipografia pròpia per als números que apareixen als pictogrames."
+    }
+  ],
+  "news.number-font.title": [
+    {
+      "type": 0,
+      "value": "Font personalitzada per als números"
     }
   ],
   "news.logo-menu.content": [

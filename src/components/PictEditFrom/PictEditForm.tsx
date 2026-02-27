@@ -17,11 +17,15 @@ import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBor
 interface PictEditFormProps {
   pictogram: PictSequence;
   submit: boolean;
+  resetToDefaults?: boolean;
+  onResetDone?: () => void;
 }
 
 const PictEditForm = ({
   pictogram,
   submit,
+  resetToDefaults,
+  onResetDone,
 }: PictEditFormProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -115,6 +119,27 @@ const PictEditForm = ({
   useEffect(() => {
     if (submit) handlerSubmit();
   }, [submit, handlerSubmit]);
+
+  // Restableix tots els settings als valors per defecte globals
+  useEffect(() => {
+    if (!resetToDefaults) return;
+    setTextPosition(defaultTextPosition);
+    setBorderIn(defaultBorderIn);
+    setBorderOut(defaultBorderOut);
+    setSkin(defaultSkin);
+    setHair(defaultHair);
+    setColor(defaultColor);
+    onResetDone?.();
+  }, [
+    resetToDefaults,
+    defaultTextPosition,
+    defaultBorderIn,
+    defaultBorderOut,
+    defaultSkin,
+    defaultHair,
+    defaultColor,
+    onResetDone,
+  ]);
 
   return (
     <Box
