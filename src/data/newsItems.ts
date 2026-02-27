@@ -27,6 +27,39 @@ export interface NewsItem {
 
 export const newsItems: NewsItem[] = [
   {
+    slug: "number-font",
+    titleId: "news.number-font.title",
+    summaryId: "news.number-font.summary",
+    contentId: "news.number-font.content",
+    coverImage: "/img/news/number-font.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/number-font-step1.png",
+          altId: "news.number-font.step1.alt",
+        },
+        descriptionId: "news.number-font.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/number-font-step2.png",
+          altId: "news.number-font.step2.alt",
+        },
+        descriptionId: "news.number-font.step2.description",
+      },
+      {
+        image: {
+          src: "/img/news/number-font-step3.png",
+          altId: "news.number-font.step3.alt",
+        },
+        descriptionId: "news.number-font.step3.description",
+      },
+    ],
+    date: "2026-02-27",
+    category: "millora",
+  },
+  {
     slug: "logo-menu",
     titleId: "news.logo-menu.title",
     summaryId: "news.logo-menu.summary",

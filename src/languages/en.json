@@ -227,6 +227,12 @@
       "value": "Delete"
     }
   ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Reset to defaults"
+    }
+  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -483,6 +489,60 @@
     {
       "type": 0,
       "value": "More info"
+    }
+  ],
+  "news.number-font.content": [
+    {
+      "type": 0,
+      "value": "You can now configure the font of pictogram numbers independently. In the Default Settings dialog, enabling the Numbering switch reveals a new section to choose the font family, size, and color for the numbers, separately from the pictogram text font."
+    }
+  ],
+  "news.number-font.step1.alt": [
+    {
+      "type": 0,
+      "value": "Default settings panel with the Numbering switch off"
+    }
+  ],
+  "news.number-font.step1.description": [
+    {
+      "type": 0,
+      "value": "Open the Default Settings dialog from the main menu (click the logo). You will see a switch to enable pictogram numbering."
+    }
+  ],
+  "news.number-font.step2.alt": [
+    {
+      "type": 0,
+      "value": "Numbering switch enabled in the settings panel"
+    }
+  ],
+  "news.number-font.step2.description": [
+    {
+      "type": 0,
+      "value": "Enable the Numbering switch. Each pictogram will now show its order number on the opposite side of the text."
+    }
+  ],
+  "news.number-font.step3.alt": [
+    {
+      "type": 0,
+      "value": "New number font section showing family, size and color selectors"
+    }
+  ],
+  "news.number-font.step3.description": [
+    {
+      "type": 0,
+      "value": "Once numbering is enabled, a new section appears to configure the number font: family, size, and color, independently from the pictogram text font."
+    }
+  ],
+  "news.number-font.summary": [
+    {
+      "type": 0,
+      "value": "Choose an independent font for the numbers shown on pictograms."
+    }
+  ],
+  "news.number-font.title": [
+    {
+      "type": 0,
+      "value": "Custom font for numbers"
     }
   ],
   "news.logo-menu.content": [

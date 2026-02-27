@@ -227,6 +227,12 @@
       "value": "Eliminar"
     }
   ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Valores por defecto"
+    }
+  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -483,6 +489,60 @@
     {
       "type": 0,
       "value": "Más info"
+    }
+  ],
+  "news.number-font.content": [
+    {
+      "type": 0,
+      "value": "Ahora puedes configurar de forma independiente la tipografía de los números que se añaden a los pictogramas cuando activas la numeración. Desde el diálogo de Configuración por defecto, activando el switch de Numeración, aparecerá una nueva sección para escoger la familia tipográfica, el tamaño y el color de los números, de manera independiente a la tipografía del texto de los pictogramas."
+    }
+  ],
+  "news.number-font.step1.alt": [
+    {
+      "type": 0,
+      "value": "Panel de configuración por defecto con el switch de Numeración desactivado"
+    }
+  ],
+  "news.number-font.step1.description": [
+    {
+      "type": 0,
+      "value": "Abre el diálogo de Configuración por defecto desde el menú principal (haz clic en el logo). Verás un switch para activar la Numeración de los pictogramas."
+    }
+  ],
+  "news.number-font.step2.alt": [
+    {
+      "type": 0,
+      "value": "Switch de Numeración activado en el panel de configuración"
+    }
+  ],
+  "news.number-font.step2.description": [
+    {
+      "type": 0,
+      "value": "Activa el switch de Numeración. Cada pictograma mostrará su número de orden en la posición opuesta al texto."
+    }
+  ],
+  "news.number-font.step3.alt": [
+    {
+      "type": 0,
+      "value": "Nueva sección de configuración de la fuente de los números, con selector de familia, tamaño y color"
+    }
+  ],
+  "news.number-font.step3.description": [
+    {
+      "type": 0,
+      "value": "Una vez activada la numeración, aparece una nueva sección para configurar la tipografía de los números: familia, tamaño y color, de forma independiente a la fuente del texto de los pictogramas."
+    }
+  ],
+  "news.number-font.summary": [
+    {
+      "type": 0,
+      "value": "Elige una tipografía propia para los números que aparecen en los pictogramas."
+    }
+  ],
+  "news.number-font.title": [
+    {
+      "type": 0,
+      "value": "Fuente personalizada para los números"
     }
   ],
   "news.logo-menu.content": [
