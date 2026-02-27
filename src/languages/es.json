@@ -485,6 +485,60 @@
       "value": "Más info"
     }
   ],
+  "news.logo-menu.content": [
+    {
+      "type": 0,
+      "value": "¿Sabías que el logo de SequenciAAC es un botón? Haz clic en él para desplegar el menú de navegación principal, desde donde puedes acceder a todas las páginas y funciones de la aplicación."
+    }
+  ],
+  "news.logo-menu.step1.alt": [
+    {
+      "type": 0,
+      "value": "Sección de navegación del menú con los accesos Inicio, Novedades, Edita y Previsualiza"
+    }
+  ],
+  "news.logo-menu.step1.description": [
+    {
+      "type": 0,
+      "value": "La primera sección del menú contiene los accesos directos a todas las páginas: Inicio, Novedades (donde encontrarás todas las actualizaciones), Edita (para crear tus secuencias) y Previsualiza (para verlas e imprimirlas)."
+    }
+  ],
+  "news.logo-menu.step2.alt": [
+    {
+      "type": 0,
+      "value": "Sección de archivos del menú con las opciones Descarga y Carga"
+    }
+  ],
+  "news.logo-menu.step2.description": [
+    {
+      "type": 0,
+      "value": "Desde aquí puedes gestionar los archivos de tus secuencias: Descarga guarda la secuencia actual en un archivo en tu dispositivo, y Carga recupera una secuencia que habías guardado anteriormente."
+    }
+  ],
+  "news.logo-menu.step3.alt": [
+    {
+      "type": 0,
+      "value": "Sección de configuración y selector de idioma con los botones ca, es y en"
+    }
+  ],
+  "news.logo-menu.step3.description": [
+    {
+      "type": 0,
+      "value": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es) o inglés (en)."
+    }
+  ],
+  "news.logo-menu.summary": [
+    {
+      "type": 0,
+      "value": "Haz clic en el logo para abrir el menú principal y acceder a todas las funciones de la app."
+    }
+  ],
+  "news.logo-menu.title": [
+    {
+      "type": 0,
+      "value": "El menú de navegación"
+    }
+  ],
   "news.multiple-sequences.content": [
     {
       "type": 0,

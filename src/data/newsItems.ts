@@ -27,6 +27,39 @@ export interface NewsItem {
 
 export const newsItems: NewsItem[] = [
   {
+    slug: "logo-menu",
+    titleId: "news.logo-menu.title",
+    summaryId: "news.logo-menu.summary",
+    contentId: "news.logo-menu.content",
+    coverImage: "/img/news/logo-menu.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/logo-menu-step1.png",
+          altId: "news.logo-menu.step1.alt",
+        },
+        descriptionId: "news.logo-menu.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/logo-menu-step2.png",
+          altId: "news.logo-menu.step2.alt",
+        },
+        descriptionId: "news.logo-menu.step2.description",
+      },
+      {
+        image: {
+          src: "/img/news/logo-menu-step3.png",
+          altId: "news.logo-menu.step3.alt",
+        },
+        descriptionId: "news.logo-menu.step3.description",
+      },
+    ],
+    date: "2026-02-24",
+    category: "nova",
+  },
+  {
     slug: "view-improvements",
     titleId: "news.view-improvements.title",
     summaryId: "news.view-improvements.summary",

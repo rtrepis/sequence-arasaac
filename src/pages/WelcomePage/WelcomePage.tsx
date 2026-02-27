@@ -11,6 +11,7 @@ import { messages } from "./WelcomePage.lang";
 import { Link } from "react-router-dom";
 import React, { useEffect } from "react";
 import NewsCarousel from "../../components/NewsCarousel/NewsCarousel";
+import Logo from "@/components/Logo";
 
 const WelcomePage = (): React.ReactElement => {
   const intl = useIntl();

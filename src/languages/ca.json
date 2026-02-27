@@ -485,6 +485,60 @@
       "value": "Més info"
     }
   ],
+  "news.logo-menu.content": [
+    {
+      "type": 0,
+      "value": "Sabies que el logo de SequenciAAC és un botó? Clica'l per desplegar el menú de navegació principal, des d'on pots accedir a totes les pàgines i funcions de l'aplicació."
+    }
+  ],
+  "news.logo-menu.step1.alt": [
+    {
+      "type": 0,
+      "value": "Secció de navegació del menú amb els accessos Inici, Novetats, Edita i Previsualitza"
+    }
+  ],
+  "news.logo-menu.step1.description": [
+    {
+      "type": 0,
+      "value": "La primera secció del menú conté els accessos directes a totes les pàgines: Inici, Novetats (on trobaràs totes les actualitzacions), Edita (per crear les teves seqüències) i Previsualitza (per veure-les i imprimir-les)."
+    }
+  ],
+  "news.logo-menu.step2.alt": [
+    {
+      "type": 0,
+      "value": "Secció de fitxers del menú amb les opcions Descarrega i Carrega"
+    }
+  ],
+  "news.logo-menu.step2.description": [
+    {
+      "type": 0,
+      "value": "Des d'aquí pots gestionar els fitxers de les teves seqüències: Descarrega desa la seqüència actual en un fitxer al teu dispositiu, i Carrega recupera una seqüència que havies desat anteriorment."
+    }
+  ],
+  "news.logo-menu.step3.alt": [
+    {
+      "type": 0,
+      "value": "Secció de configuració i selector d'idioma amb els botons ca, es i en"
+    }
+  ],
+  "news.logo-menu.step3.description": [
+    {
+      "type": 0,
+      "value": "Configuració obre el diàleg de configuració per defecte dels pictogrames, on pots ajustar tipografia, marcs, posició del text i altres opcions visuals. A sota trobaràs el selector d'idioma per canviar entre català (ca), castellà (es) o anglès (en)."
+    }
+  ],
+  "news.logo-menu.summary": [
+    {
+      "type": 0,
+      "value": "Clica el logo per obrir el menú principal i accedir a totes les funcions de l'app."
+    }
+  ],
+  "news.logo-menu.title": [
+    {
+      "type": 0,
+      "value": "El menú de navegació"
+    }
+  ],
   "news.multiple-sequences.content": [
     {
       "type": 0,

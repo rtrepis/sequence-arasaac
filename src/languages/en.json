@@ -485,6 +485,60 @@
       "value": "More info"
     }
   ],
+  "news.logo-menu.content": [
+    {
+      "type": 0,
+      "value": "Did you know the SequenciAAC logo is a button? Click it to open the main navigation menu, where you can access all pages and features of the application."
+    }
+  ],
+  "news.logo-menu.step1.alt": [
+    {
+      "type": 0,
+      "value": "Navigation section of the menu with Home, News, Edit and Preview links"
+    }
+  ],
+  "news.logo-menu.step1.description": [
+    {
+      "type": 0,
+      "value": "The first section contains shortcuts to all pages: Home, News (where you'll find all updates), Edit (to create your sequences) and Preview (to view and print them)."
+    }
+  ],
+  "news.logo-menu.step2.alt": [
+    {
+      "type": 0,
+      "value": "File section of the menu with Download and Load options"
+    }
+  ],
+  "news.logo-menu.step2.description": [
+    {
+      "type": 0,
+      "value": "From here you can manage your sequence files: Download saves the current sequence to a file on your device, and Load retrieves a previously saved sequence."
+    }
+  ],
+  "news.logo-menu.step3.alt": [
+    {
+      "type": 0,
+      "value": "Settings section and language selector with ca, es and en buttons"
+    }
+  ],
+  "news.logo-menu.step3.description": [
+    {
+      "type": 0,
+      "value": "Settings opens the default pictogram settings dialog, where you can adjust typography, borders, text position and other visual options. Below it, the language selector lets you switch between Catalan (ca), Spanish (es) or English (en)."
+    }
+  ],
+  "news.logo-menu.summary": [
+    {
+      "type": 0,
+      "value": "Click the logo to open the main menu and access all app features."
+    }
+  ],
+  "news.logo-menu.title": [
+    {
+      "type": 0,
+      "value": "The navigation menu"
+    }
+  ],
   "news.multiple-sequences.content": [
     {
       "type": 0,
