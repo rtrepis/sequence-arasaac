@@ -1,4 +1,24 @@
 {
+  "changelog.category.correccio": {
+    "defaultMessage": "Fix",
+    "description": "Badge de categoria: correcció d'un error"
+  },
+  "changelog.category.millora": {
+    "defaultMessage": "Improvement",
+    "description": "Badge de categoria: millora d'una funcionalitat existent"
+  },
+  "changelog.category.nova": {
+    "defaultMessage": "New",
+    "description": "Badge de categoria: funcionalitat nova"
+  },
+  "changelog.page.title": {
+    "defaultMessage": "What's New",
+    "description": "Títol de la pàgina de changelog"
+  },
+  "changelog.readMore": {
+    "defaultMessage": "Read more",
+    "description": "Botó per anar al detall de la notícia"
+  },
   "component.settingCardBorder.borderIn.title": {
     "defaultMessage": "Border in",
     "description": "setting title "
@@ -15,9 +35,65 @@
     "defaultMessage": "Font",
     "description": "type title"
   },
+  "component.settingCardFontGroup.numberFont.title": {
+    "defaultMessage": "Number font",
+    "description": "number font title"
+  },
+  "components.appNavigationDrawer.download": {
+    "defaultMessage": "Download",
+    "description": "Ítem per descarregar la seqüència com a fitxer"
+  },
+  "components.appNavigationDrawer.editView": {
+    "defaultMessage": "Edit",
+    "description": "Ítem de navegació a la pàgina d'edició de seqüències"
+  },
+  "components.appNavigationDrawer.langSelector": {
+    "defaultMessage": "Language",
+    "description": "Etiqueta ARIA del selector d'idioma dins el drawer"
+  },
+  "components.appNavigationDrawer.load": {
+    "defaultMessage": "Load",
+    "description": "Ítem per carregar una seqüència des d'un fitxer"
+  },
+  "components.appNavigationDrawer.news": {
+    "defaultMessage": "News",
+    "description": "Ítem de navegació a la llista de novetats"
+  },
+  "components.appNavigationDrawer.openMenu": {
+    "defaultMessage": "Open menu",
+    "description": "Etiqueta ARIA per al botó que obre el drawer de navegació"
+  },
+  "components.appNavigationDrawer.previewView": {
+    "defaultMessage": "Preview",
+    "description": "Ítem de navegació a la pàgina de previsualització"
+  },
+  "components.appNavigationDrawer.settings": {
+    "defaultMessage": "Settings",
+    "description": "Ítem per obrir la configuració per defecte"
+  },
+  "components.appNavigationDrawer.settingsClose": {
+    "defaultMessage": "Close",
+    "description": "Botó per tancar el diàleg de configuració"
+  },
+  "components.appNavigationDrawer.settingsTitle": {
+    "defaultMessage": "Default settings",
+    "description": "Títol del diàleg de configuració per defecte"
+  },
+  "components.appNavigationDrawer.welcome": {
+    "defaultMessage": "Home",
+    "description": "Ítem de navegació a la pàgina de benvinguda"
+  },
   "components.barNavigation.edit.title": {
     "defaultMessage": "Edit",
     "description": "Title Page"
+  },
+  "components.barNavigation.mainNavigation": {
+    "defaultMessage": "Main navigation",
+    "description": "Etiqueta ARIA per a la barra de navegació principal"
+  },
+  "components.barNavigation.skipToContent": {
+    "defaultMessage": "Skip to main content",
+    "description": "Enllaç d'accés ràpid al contingut principal per a teclat/lector de pantalla"
   },
   "components.barNavigation.title": {
     "defaultMessage": "SequenciAAC",
@@ -91,6 +167,10 @@
     "defaultMessage": "Load settings from local file",
     "description": "Load settings from local file"
   },
+  "components.logoMenu.menuAriaLabel": {
+    "defaultMessage": "Main menu",
+    "description": "Aria label for the logo menu button"
+  },
   "components.magicSearch.button.": {
     "defaultMessage": "To search",
     "description": "label button field"
@@ -107,6 +187,34 @@
     "defaultMessage": "Example: boy, put, seat belt.",
     "description": "Helper text field"
   },
+  "components.newsNavBar.langSelector": {
+    "defaultMessage": "Language",
+    "description": "Etiqueta ARIA del selector d'idioma"
+  },
+  "components.newsNavBar.mainNavigation": {
+    "defaultMessage": "Main navigation",
+    "description": "Etiqueta ARIA per a la barra de navegació"
+  },
+  "components.newsNavBar.news": {
+    "defaultMessage": "News",
+    "description": "Enllaç a la llista de novetats (changelog)"
+  },
+  "components.newsNavBar.openMenu": {
+    "defaultMessage": "Open navigation menu",
+    "description": "Etiqueta ARIA per al botó del logotip que obre el menú en mobile"
+  },
+  "components.newsNavBar.skipToContent": {
+    "defaultMessage": "Skip to main content",
+    "description": "Enllaç d'accés ràpid al contingut principal (accessibilitat)"
+  },
+  "components.newsNavBar.start": {
+    "defaultMessage": "Create a sequence",
+    "description": "Enllaç a l'editor de seqüències"
+  },
+  "components.newsNavBar.welcome": {
+    "defaultMessage": "Home",
+    "description": "Enllaç a la pàgina de benvinguda"
+  },
   "components.pictEdit.close": {
     "defaultMessage": "Close",
     "description": "Close modal, edit pictogram"
@@ -122,6 +230,10 @@
   "components.pictEdit.modal.label": {
     "defaultMessage": "Edit Pictogram",
     "description": "Title modal"
+  },
+  "components.pictEdit.reset": {
+    "defaultMessage": "Reset to defaults",
+    "description": "Restablir els settings del pictograma als valors per defecte globals"
   },
   "components.pictEditSettings.settings.label": {
     "defaultMessage": "Settings Pictogram",
@@ -179,6 +291,10 @@
     "defaultMessage": "Plus pictograms",
     "description": "Plus pictograms"
   },
+  "components.pictogramSearch.uploadImage": {
+    "defaultMessage": "Upload image from device",
+    "description": "Botó per pujar una imatge pròpia des del dispositiu"
+  },
   "components.sequenceAuthor": {
     "defaultMessage": "Sequence author:",
     "description": "License to use the pictograms"
@@ -235,6 +351,68 @@
     "defaultMessage": "View",
     "description": "Title Page"
   },
+  "context.feedback.applyAll.success": {
+    "defaultMessage": "Applied to {count} pictograms",
+    "description": "Message shown when apply all succeeds"
+  },
+  "context.feedback.load.error": {
+    "defaultMessage": "Error loading file",
+    "description": "Message shown when file load fails"
+  },
+  "context.feedback.load.success": {
+    "defaultMessage": "File loaded successfully",
+    "description": "Message shown when file is loaded"
+  },
+  "context.feedback.loading": {
+    "defaultMessage": "Loading...",
+    "description": "Generic loading message"
+  },
+  "context.feedback.save.success": {
+    "defaultMessage": "File saved successfully",
+    "description": "Message shown when file is saved"
+  },
+  "context.feedback.search.complete": {
+    "defaultMessage": "{count} pictograms added",
+    "description": "Message shown when search is complete"
+  },
+  "context.feedback.search.error": {
+    "defaultMessage": "Error searching pictograms",
+    "description": "Message shown when search fails"
+  },
+  "context.feedback.search.loading": {
+    "defaultMessage": "Searching pictograms...",
+    "description": "Message shown while searching for pictograms"
+  },
+  "news.back.button": {
+    "defaultMessage": "Back",
+    "description": "Button to go back from news article detail"
+  },
+  "news.moreInfo.button": {
+    "defaultMessage": "More info",
+    "description": "Botó per veure detall de la notícia"
+  },
+  "news.nextArticle": {
+    "defaultMessage": "Next article"
+  },
+  "news.prevArticle": {
+    "defaultMessage": "Previous article"
+  },
+  "news.section.title": {
+    "defaultMessage": "News",
+    "description": "Títol de la secció de novetats"
+  },
+  "news.seeAll": {
+    "defaultMessage": "See all news",
+    "description": "Botó per anar al changelog complet"
+  },
+  "pages.viewSequence.alignment.label": {
+    "defaultMessage": "Alignment",
+    "description": "Label for alignment setting"
+  },
+  "pages.viewSequence.applyAll.label": {
+    "defaultMessage": "Apply to all",
+    "description": "Toggle to apply settings to all sequences"
+  },
   "pages.viewSequence.authSequence.helperText": {
     "defaultMessage": "Mark authorship",
     "description": "Helper text form"
@@ -243,13 +421,25 @@
     "defaultMessage": "Sequence author",
     "description": "Label form"
   },
-  "pages.viewSequence.pictSpaceBetween.label": {
-    "defaultMessage": "Pictogram Space",
-    "description": "Label form"
+  "pages.viewSequence.direction.label": {
+    "defaultMessage": "Direction",
+    "description": "Label for direction setting"
   },
   "pages.viewSequence.fullScreen.label": {
     "defaultMessage": "Full Screen",
     "description": "Setting property"
+  },
+  "pages.viewSequence.pageSize.label": {
+    "defaultMessage": "Page Size",
+    "description": "Label form"
+  },
+  "pages.viewSequence.pictSpaceBetween.label": {
+    "defaultMessage": "Pictogram Space",
+    "description": "Label form"
+  },
+  "pages.viewSequence.sequence.label": {
+    "defaultMessage": "Sequence",
+    "description": "Label for sequence selector"
   },
   "pages.viewSequence.sequenceSpaceBetween.label": {
     "defaultMessage": "Sequence Space",
@@ -258,6 +448,42 @@
   "pages.viewSequence.size.label": {
     "defaultMessage": "Size",
     "description": "Label form"
+  },
+  "pages.viewSequence.tooltip.alignCenter": {
+    "defaultMessage": "Align center",
+    "description": "Tooltip del botó d'alineació centre"
+  },
+  "pages.viewSequence.tooltip.alignLeft": {
+    "defaultMessage": "Align left",
+    "description": "Tooltip del botó d'alineació esquerra"
+  },
+  "pages.viewSequence.tooltip.alignRight": {
+    "defaultMessage": "Align right",
+    "description": "Tooltip del botó d'alineació dreta"
+  },
+  "pages.viewSequence.tooltip.applyAll": {
+    "defaultMessage": "Apply to all sequences",
+    "description": "Tooltip del switch d'aplicar a totes les seqüències"
+  },
+  "pages.viewSequence.tooltip.directionColumn": {
+    "defaultMessage": "Vertical",
+    "description": "Tooltip del botó de direcció vertical"
+  },
+  "pages.viewSequence.tooltip.directionRow": {
+    "defaultMessage": "Horizontal",
+    "description": "Tooltip del botó de direcció horitzontal"
+  },
+  "pages.viewSequence.tooltip.fullscreen": {
+    "defaultMessage": "Full screen",
+    "description": "Tooltip del botó de pantalla completa"
+  },
+  "pages.viewSequence.tooltip.orientation": {
+    "defaultMessage": "Page orientation",
+    "description": "Tooltip del botó d'orientació de pàgina"
+  },
+  "pages.viewSequence.tooltip.print": {
+    "defaultMessage": "Print",
+    "description": "Tooltip del botó d'imprimir"
   },
   "pictogram.empty": {
     "defaultMessage": "Empty",
@@ -509,129 +735,5 @@
   "view.welcome.start.button": {
     "defaultMessage": "Start",
     "description": "Start button"
-  },
-  "news.section.title": {
-    "defaultMessage": "What's new",
-    "description": "Títol secció novetats"
-  },
-  "news.moreInfo.button": {
-    "defaultMessage": "More info",
-    "description": "Botó més info notícia"
-  },
-  "news.back.button": {
-    "defaultMessage": "Back",
-    "description": "Botó tornar de detall notícia"
-  },
-  "news.multiple-sequences.title": {
-    "defaultMessage": "Multiple sequences",
-    "description": "Títol notícia múltiples seqüències"
-  },
-  "news.multiple-sequences.summary": {
-    "defaultMessage": "You can now create and manage multiple sequences at once with tabs.",
-    "description": "Resum notícia múltiples seqüències"
-  },
-  "news.multiple-sequences.content": {
-    "defaultMessage": "Create as many sequences as you need! Use tabs to add new sequences or remove the ones you no longer need. Each sequence is independent and you can switch between them easily.",
-    "description": "Contingut notícia múltiples seqüències"
-  },
-  "news.multiple-sequences.img1.alt": {
-    "defaultMessage": "Sequence tabs",
-    "description": "Alt imatge 1 múltiples seqüències"
-  },
-  "news.multiple-sequences.img2.alt": {
-    "defaultMessage": "Add and remove sequences",
-    "description": "Alt imatge 2 múltiples seqüències"
-  },
-  "news.multiple-sequences.step1.alt": {
-    "defaultMessage": "Sequence 1 with pictograms and button to add a new sequence",
-    "description": "Alt imatge pas 1 múltiples seqüències"
-  },
-  "news.multiple-sequences.step1.description": {
-    "defaultMessage": "On the edit page, search for words in the search box (separated by commas) and pictograms will appear automatically in the active sequence. Click the + button to create a new sequence.",
-    "description": "Descripció pas 1 múltiples seqüències"
-  },
-  "news.multiple-sequences.step2.alt": {
-    "defaultMessage": "Two sequence tabs visible, sequence 2 active",
-    "description": "Alt imatge pas 2 múltiples seqüències"
-  },
-  "news.multiple-sequences.step2.description": {
-    "defaultMessage": "Click any tab to switch to a different active sequence. Each sequence has its own independent content. Search for new words to fill sequence 2.",
-    "description": "Descripció pas 2 múltiples seqüències"
-  },
-  "news.multiple-sequences.step3.alt": {
-    "defaultMessage": "View of both sequences with size increased globally",
-    "description": "Alt imatge pas 3 múltiples seqüències"
-  },
-  "news.multiple-sequences.step3.description": {
-    "defaultMessage": "In the View page, the \"Apply to all\" toggle lets you adjust the size and spacing of all sequences at once. Move the size control to see the change applied globally.",
-    "description": "Descripció pas 3 múltiples seqüències"
-  },
-  "news.multiple-sequences.step4.alt": {
-    "defaultMessage": "View with sequence 2 individually adjusted to a different size",
-    "description": "Alt imatge pas 4 múltiples seqüències"
-  },
-  "news.multiple-sequences.step4.description": {
-    "defaultMessage": "Disable \"Apply to all\" to configure each sequence independently. Expand the accordion for the sequence you want to adjust and change its size or spacing without affecting the others.",
-    "description": "Descripció pas 4 múltiples seqüències"
-  },
-  "news.print-preview.title": {
-    "defaultMessage": "Print preview",
-    "description": "Títol notícia vista prèvia"
-  },
-  "news.print-preview.summary": {
-    "defaultMessage": "Preview exactly how your page will look before printing.",
-    "description": "Resum notícia vista prèvia"
-  },
-  "news.print-preview.content": {
-    "defaultMessage": "The print preview shows you exactly how the printed page will look. You can control the pictogram size, row and column spacing, and alignment. Everything updates in real time!",
-    "description": "Contingut notícia vista prèvia"
-  },
-  "news.print-preview.img1.alt": {
-    "defaultMessage": "Page preview",
-    "description": "Alt imatge 1 vista prèvia"
-  },
-  "news.print-preview.img2.alt": {
-    "defaultMessage": "Size and spacing controls",
-    "description": "Alt imatge 2 vista prèvia"
-  },
-  "news.sequence-settings.title": {
-    "defaultMessage": "New per-sequence settings",
-    "description": "Títol notícia configuracions"
-  },
-  "news.sequence-settings.summary": {
-    "defaultMessage": "Customize each sequence with alignment, number typography and more options.",
-    "description": "Resum notícia configuracions"
-  },
-  "news.sequence-settings.content": {
-    "defaultMessage": "You can now customize each sequence independently. Change the pictogram alignment (left, center or right), configure the number typography and color independently from the text, and discover more formatting options to adapt sequences to your needs.",
-    "description": "Contingut notícia configuracions"
-  },
-  "news.sequence-settings.img1.alt": {
-    "defaultMessage": "Alignment options",
-    "description": "Alt imatge 1 configuracions"
-  },
-  "news.sequence-settings.img2.alt": {
-    "defaultMessage": "Number typography settings",
-    "description": "Alt imatge 2 configuracions"
-  },
-  "news.save-load.title": {
-    "defaultMessage": "Save and restore",
-    "description": "Títol notícia guardar i carregar"
-  },
-  "news.save-load.summary": {
-    "defaultMessage": "Download your sequences with images and load them whenever you want.",
-    "description": "Resum notícia guardar i carregar"
-  },
-  "news.save-load.content": {
-    "defaultMessage": "You'll find the save and load options in the SequenciAAC logo menu. When saving, a file is downloaded with all sequences and pictogram images included. This way you can restore your work at any time!",
-    "description": "Contingut notícia guardar i carregar"
-  },
-  "news.save-load.img1.alt": {
-    "defaultMessage": "Menu with save option",
-    "description": "Alt imatge 1 guardar i carregar"
-  },
-  "news.save-load.img2.alt": {
-    "defaultMessage": "Load saved file",
-    "description": "Alt imatge 2 guardar i carregar"
   }
 }

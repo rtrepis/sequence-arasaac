@@ -1,4 +1,34 @@
 {
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Corrección"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Mejora"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "Nueva"
+    }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "Novedades"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Leer más"
+    }
+  ],
   "component.settingCardBorder.borderIn.title": [
     {
       "type": 0,
@@ -26,13 +56,91 @@
   "component.settingCardFontGroup.numberFont.title": [
     {
       "type": 0,
-      "value": "Fuente de los números"
+      "value": "Fuente números"
+    }
+  ],
+  "components.appNavigationDrawer.download": [
+    {
+      "type": 0,
+      "value": "Descargar"
+    }
+  ],
+  "components.appNavigationDrawer.editView": [
+    {
+      "type": 0,
+      "value": "Editar"
+    }
+  ],
+  "components.appNavigationDrawer.langSelector": [
+    {
+      "type": 0,
+      "value": "Idioma"
+    }
+  ],
+  "components.appNavigationDrawer.load": [
+    {
+      "type": 0,
+      "value": "Cargar"
+    }
+  ],
+  "components.appNavigationDrawer.news": [
+    {
+      "type": 0,
+      "value": "Novedades"
+    }
+  ],
+  "components.appNavigationDrawer.openMenu": [
+    {
+      "type": 0,
+      "value": "Abrir menú"
+    }
+  ],
+  "components.appNavigationDrawer.previewView": [
+    {
+      "type": 0,
+      "value": "Previsualizar"
+    }
+  ],
+  "components.appNavigationDrawer.settings": [
+    {
+      "type": 0,
+      "value": "Configuración"
+    }
+  ],
+  "components.appNavigationDrawer.settingsClose": [
+    {
+      "type": 0,
+      "value": "Cerrar"
+    }
+  ],
+  "components.appNavigationDrawer.settingsTitle": [
+    {
+      "type": 0,
+      "value": "Configuración por defecto"
+    }
+  ],
+  "components.appNavigationDrawer.welcome": [
+    {
+      "type": 0,
+      "value": "Inicio"
     }
   ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
       "value": "Editar"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegación principal"
+    }
+  ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Saltar al contenido principal"
     }
   ],
   "components.barNavigation.title": [
@@ -51,18 +159,6 @@
     {
       "type": 0,
       "value": "Bienvenido"
-    }
-  ],
-  "components.barNavigation.skipToContent": [
-    {
-      "type": 0,
-      "value": "Saltar al contenido principal"
-    }
-  ],
-  "components.barNavigation.mainNavigation": [
-    {
-      "type": 0,
-      "value": "Navegación principal"
     }
   ],
   "components.buttonWithFileLoad.load.label": [
@@ -155,40 +251,10 @@
       "value": "Cargar configuración desde archivo local"
     }
   ],
-  "components.logoMenu.download": [
-    {
-      "type": 0,
-      "value": "Descargar"
-    }
-  ],
-  "components.logoMenu.editView": [
-    {
-      "type": 0,
-      "value": "Editar"
-    }
-  ],
-  "components.logoMenu.load": [
-    {
-      "type": 0,
-      "value": "Cargar"
-    }
-  ],
   "components.logoMenu.menuAriaLabel": [
     {
       "type": 0,
       "value": "Menú principal"
-    }
-  ],
-  "components.logoMenu.previewView": [
-    {
-      "type": 0,
-      "value": "Previsualizar"
-    }
-  ],
-  "components.logoMenu.settings": [
-    {
-      "type": 0,
-      "value": "Configuración"
     }
   ],
   "components.magicSearch.button.": [
@@ -215,6 +281,48 @@
       "value": "Ejemplo: niño, poner, cinturón de seguridad."
     }
   ],
+  "components.newsNavBar.langSelector": [
+    {
+      "type": 0,
+      "value": "Idioma"
+    }
+  ],
+  "components.newsNavBar.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegación principal"
+    }
+  ],
+  "components.newsNavBar.news": [
+    {
+      "type": 0,
+      "value": "Novedades"
+    }
+  ],
+  "components.newsNavBar.openMenu": [
+    {
+      "type": 0,
+      "value": "Abrir menú de navegación"
+    }
+  ],
+  "components.newsNavBar.skipToContent": [
+    {
+      "type": 0,
+      "value": "Saltar al contenido principal"
+    }
+  ],
+  "components.newsNavBar.start": [
+    {
+      "type": 0,
+      "value": "Crear una secuencia"
+    }
+  ],
+  "components.newsNavBar.welcome": [
+    {
+      "type": 0,
+      "value": "Inicio"
+    }
+  ],
   "components.pictEdit.close": [
     {
       "type": 0,
@@ -227,12 +335,6 @@
       "value": "Eliminar"
     }
   ],
-  "components.pictEdit.reset": [
-    {
-      "type": 0,
-      "value": "Valores por defecto"
-    }
-  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -243,6 +345,12 @@
     {
       "type": 0,
       "value": "Editar Pictograma"
+    }
+  ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Restablecer a valores predeterminados"
     }
   ],
   "components.pictEditSettings.settings.label": [
@@ -317,12 +425,6 @@
       "value": "Sacar pictograma"
     }
   ],
-  "components.pictogramSearch.uploadImage": [
-    {
-      "type": 0,
-      "value": "Subir imagen desde el dispositivo"
-    }
-  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
@@ -333,6 +435,12 @@
     {
       "type": 0,
       "value": "Añadir pictograma"
+    }
+  ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Subir imagen desde el dispositivo"
     }
   ],
   "components.sequenceAuthor": [
@@ -470,7 +578,7 @@
   "context.feedback.search.error": [
     {
       "type": 0,
-      "value": "Error buscando pictogramas"
+      "value": "Error al buscar pictogramas"
     }
   ],
   "context.feedback.search.loading": [
@@ -489,114 +597,6 @@
     {
       "type": 0,
       "value": "Más info"
-    }
-  ],
-  "news.number-font.content": [
-    {
-      "type": 0,
-      "value": "Ahora puedes configurar de forma independiente la tipografía de los números que se añaden a los pictogramas cuando activas la numeración. Desde el diálogo de Configuración por defecto, activando el switch de Numeración, aparecerá una nueva sección para escoger la familia tipográfica, el tamaño y el color de los números, de manera independiente a la tipografía del texto de los pictogramas."
-    }
-  ],
-  "news.number-font.step1.alt": [
-    {
-      "type": 0,
-      "value": "Panel de configuración por defecto con el switch de Numeración desactivado"
-    }
-  ],
-  "news.number-font.step1.description": [
-    {
-      "type": 0,
-      "value": "Abre el diálogo de Configuración por defecto desde el menú principal (haz clic en el logo). Verás un switch para activar la Numeración de los pictogramas."
-    }
-  ],
-  "news.number-font.step2.alt": [
-    {
-      "type": 0,
-      "value": "Switch de Numeración activado en el panel de configuración"
-    }
-  ],
-  "news.number-font.step2.description": [
-    {
-      "type": 0,
-      "value": "Activa el switch de Numeración. Cada pictograma mostrará su número de orden en la posición opuesta al texto."
-    }
-  ],
-  "news.number-font.step3.alt": [
-    {
-      "type": 0,
-      "value": "Nueva sección de configuración de la fuente de los números, con selector de familia, tamaño y color"
-    }
-  ],
-  "news.number-font.step3.description": [
-    {
-      "type": 0,
-      "value": "Una vez activada la numeración, aparece una nueva sección para configurar la tipografía de los números: familia, tamaño y color, de forma independiente a la fuente del texto de los pictogramas."
-    }
-  ],
-  "news.number-font.summary": [
-    {
-      "type": 0,
-      "value": "Elige una tipografía propia para los números que aparecen en los pictogramas."
-    }
-  ],
-  "news.number-font.title": [
-    {
-      "type": 0,
-      "value": "Fuente personalizada para los números"
-    }
-  ],
-  "news.logo-menu.content": [
-    {
-      "type": 0,
-      "value": "¿Sabías que el logo de SequenciAAC es un botón? Haz clic en él para desplegar el menú de navegación principal, desde donde puedes acceder a todas las páginas y funciones de la aplicación."
-    }
-  ],
-  "news.logo-menu.step1.alt": [
-    {
-      "type": 0,
-      "value": "Sección de navegación del menú con los accesos Inicio, Novedades, Edita y Previsualiza"
-    }
-  ],
-  "news.logo-menu.step1.description": [
-    {
-      "type": 0,
-      "value": "La primera sección del menú contiene los accesos directos a todas las páginas: Inicio, Novedades (donde encontrarás todas las actualizaciones), Edita (para crear tus secuencias) y Previsualiza (para verlas e imprimirlas)."
-    }
-  ],
-  "news.logo-menu.step2.alt": [
-    {
-      "type": 0,
-      "value": "Sección de archivos del menú con las opciones Descarga y Carga"
-    }
-  ],
-  "news.logo-menu.step2.description": [
-    {
-      "type": 0,
-      "value": "Desde aquí puedes gestionar los archivos de tus secuencias: Descarga guarda la secuencia actual en un archivo en tu dispositivo, y Carga recupera una secuencia que habías guardado anteriormente."
-    }
-  ],
-  "news.logo-menu.step3.alt": [
-    {
-      "type": 0,
-      "value": "Sección de configuración y selector de idioma con los botones ca, es y en"
-    }
-  ],
-  "news.logo-menu.step3.description": [
-    {
-      "type": 0,
-      "value": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es) o inglés (en)."
-    }
-  ],
-  "news.logo-menu.summary": [
-    {
-      "type": 0,
-      "value": "Haz clic en el logo para abrir el menú principal y acceder a todas las funciones de la app."
-    }
-  ],
-  "news.logo-menu.title": [
-    {
-      "type": 0,
-      "value": "El menú de navegación"
     }
   ],
   "news.multiple-sequences.content": [
@@ -677,118 +677,118 @@
       "value": "Múltiples secuencias"
     }
   ],
-  "news.view-improvements.content": [
+  "news.nextArticle": [
     {
       "type": 0,
-      "value": "Se han corregido errores que hacían que la vista previa no coincidiera exactamente con el resultado impreso. Además, se han añadido nuevos controles de alineación y dirección para cada secuencia, y ahora cuando guardas una secuencia la configuración de visualización también se guarda automáticamente."
+      "value": "Artículo siguiente"
     }
   ],
-  "news.view-improvements.step1.alt": [
+  "news.prevArticle": [
     {
       "type": 0,
-      "value": "Vista previa de la secuencia mostrando la correspondencia exacta con la impresión"
+      "value": "Artículo anterior"
     }
   ],
-  "news.view-improvements.step1.description": [
+  "news.print-preview.content": [
     {
       "type": 0,
-      "value": "La previsualización ahora corresponde exactamente al resultado impreso. Un cálculo de escala preciso tiene en cuenta el formato de página (A4, A3) y la resolución de pantalla para mostrar fielmente lo que se imprimirá."
+      "value": "La vista previa te muestra exactamente cómo quedará la página impresa. Puedes controlar el tamaño de los pictogramas, el espacio entre filas y columnas, y la alineación. ¡Todo se ve en tiempo real!"
     }
   ],
-  "news.view-improvements.step2.alt": [
+  "news.print-preview.img1.alt": [
     {
       "type": 0,
-      "value": "Controles de alineación y dirección de las secuencias"
+      "value": "Vista previa de la página"
     }
   ],
-  "news.view-improvements.step2.description": [
+  "news.print-preview.img2.alt": [
     {
       "type": 0,
-      "value": "Nuevos controles para personalizar cada secuencia: elige la alineación (izquierda, centro, derecha) y la dirección (horizontal o vertical) para adaptar la presentación a tus necesidades."
+      "value": "Controles de tamaño y espacio"
     }
   ],
-  "news.view-improvements.step3.alt": [
+  "news.print-preview.summary": [
     {
       "type": 0,
-      "value": "Botón de guardar la secuencia con configuración de visualización incluida"
+      "value": "Previsualiza exactamente cómo quedará tu página antes de imprimir."
     }
   ],
-  "news.view-improvements.step3.description": [
+  "news.print-preview.title": [
     {
       "type": 0,
-      "value": "Cuando guardas la secuencia con el botón de descarga, la configuración de visualización (tamaños, espacios, alineación y dirección) se incluye automáticamente en el archivo, de manera que cuando la vuelves a cargar todo quedará tal como lo habías dejado."
+      "value": "Vista previa de impresión"
     }
   ],
-  "news.view-improvements.summary": [
+  "news.save-load.content": [
     {
       "type": 0,
-      "value": "Vista previa fiel a la impresión, nuevos controles de alineación y dirección."
+      "value": "Encontrarás las opciones de guardar y cargar en el menú del logo de SequenciAAC. Al guardar, se descarga un archivo con todas las secuencias y las imágenes de los pictogramas incluidas. ¡Así puedes recuperar tu trabajo en cualquier momento!"
     }
   ],
-  "news.view-improvements.title": [
+  "news.save-load.img1.alt": [
     {
       "type": 0,
-      "value": "Mejoras en la previsualización"
+      "value": "Menú con opción de guardar"
     }
   ],
-  "news.save-improvements.content": [
+  "news.save-load.img2.alt": [
     {
       "type": 0,
-      "value": "Ahora el archivo .saac guarda las imágenes personalizadas que has subido, directamente en el archivo para no perderlas. Además, la configuración de visualización de cada secuencia —tamaño de los pictogramas, espaciado y alineación— también se guarda y recupera exactamente como la dejaste."
+      "value": "Cargar archivo guardado"
     }
   ],
-  "news.save-improvements.step1.alt": [
+  "news.save-load.summary": [
     {
       "type": 0,
-      "value": "Botón para subir una imagen propia al pictograma"
+      "value": "Descarga tus secuencias con las imágenes y cárgalas cuando quieras."
     }
   ],
-  "news.save-improvements.step1.description": [
+  "news.save-load.title": [
     {
       "type": 0,
-      "value": "Sube tu propia imagen a cualquier pictograma. La imagen se guarda directamente en el archivo .saac, sin depender de internet."
-    }
-  ],
-  "news.save-improvements.step2.alt": [
-    {
-      "type": 0,
-      "value": "Diálogo de guardar con las opciones de secuencias y configuración"
-    }
-  ],
-  "news.save-improvements.step2.description": [
-    {
-      "type": 0,
-      "value": "Al guardar el archivo, todas las imágenes personalizadas se incluyen automáticamente."
-    }
-  ],
-  "news.save-improvements.step3.alt": [
-    {
-      "type": 0,
-      "value": "Controles de tamaño y espaciado de los pictogramas"
-    }
-  ],
-  "news.save-improvements.step3.description": [
-    {
-      "type": 0,
-      "value": "El tamaño, el espaciado y la alineación de cada secuencia se guardan y restauran automáticamente al cargar el archivo."
-    }
-  ],
-  "news.save-improvements.summary": [
-    {
-      "type": 0,
-      "value": "El archivo guardado ahora incluye imágenes personalizadas y la configuración de tamaño y espaciado de cada secuencia."
-    }
-  ],
-  "news.save-improvements.title": [
-    {
-      "type": 0,
-      "value": "Mejoras al guardado"
+      "value": "Guarda y recupera"
     }
   ],
   "news.section.title": [
     {
       "type": 0,
       "value": "Novedades"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "Ver todas las novedades"
+    }
+  ],
+  "news.sequence-settings.content": [
+    {
+      "type": 0,
+      "value": "Ahora puedes personalizar cada secuencia de manera independiente. Cambia la alineación de los pictogramas (izquierda, centro o derecha), configura la tipografía y el color de los números de forma independiente al texto, y descubre más opciones de formato para adaptar las secuencias a tus necesidades."
+    }
+  ],
+  "news.sequence-settings.img1.alt": [
+    {
+      "type": 0,
+      "value": "Opciones de alineación"
+    }
+  ],
+  "news.sequence-settings.img2.alt": [
+    {
+      "type": 0,
+      "value": "Configuración de tipografía de los números"
+    }
+  ],
+  "news.sequence-settings.summary": [
+    {
+      "type": 0,
+      "value": "Personaliza cada secuencia con alineación, tipografía de los números y más opciones."
+    }
+  ],
+  "news.sequence-settings.title": [
+    {
+      "type": 0,
+      "value": "Nuevas configuraciones por secuencia"
     }
   ],
   "pages.viewSequence.alignment.label": [
@@ -998,7 +998,7 @@
   "setting.lang.et.label": [
     {
       "type": 0,
-      "value": "Estonian"
+      "value": "Estoniano"
     }
   ],
   "setting.lang.eu.label": [
@@ -1124,7 +1124,7 @@
   "setting.lang.sq.label": [
     {
       "type": 0,
-      "value": "Albano"
+      "value": "Albanés"
     }
   ],
   "setting.lang.sr.label": [
@@ -1220,7 +1220,7 @@
   "settings.skins.black": [
     {
       "type": 0,
-      "value": "Negre"
+      "value": "Negro"
     }
   ],
   "settings.skins.label": [
@@ -1232,13 +1232,13 @@
   "settings.skins.mulatto": [
     {
       "type": 0,
-      "value": "Mulat"
+      "value": "Mulato"
     }
   ],
   "settings.skins.white": [
     {
       "type": 0,
-      "value": "Blanc"
+      "value": "Blanco"
     }
   ],
   "settings.textPosition.bottom": [
@@ -1288,62 +1288,5 @@
       "type": 0,
       "value": "Iniciar"
     }
-  ],
-  "changelog.page.title": [
-    {
-      "type": 0,
-      "value": "Novedades"
-    }
-  ],
-  "changelog.category.nova": [
-    {
-      "type": 0,
-      "value": "Nueva"
-    }
-  ],
-  "changelog.category.millora": [
-    {
-      "type": 0,
-      "value": "Mejora"
-    }
-  ],
-  "changelog.category.correccio": [
-    {
-      "type": 0,
-      "value": "Corrección"
-    }
-  ],
-  "changelog.readMore": [
-    {
-      "type": 0,
-      "value": "Leer más"
-    }
-  ],
-  "news.seeAll": [
-    {
-      "type": 0,
-      "value": "Ver todas las novedades"
-    }
-  ],
-  "news.prevArticle": [{ "type": 0, "value": "Artículo anterior" }],
-  "news.nextArticle": [{ "type": 0, "value": "Artículo siguiente" }],
-  "news.articleNavigation": [{ "type": 0, "value": "Navegación entre artículos" }],
-  "components.newsNavBar.welcome": [{ "type": 0, "value": "Inicio" }],
-  "components.newsNavBar.start": [{ "type": 0, "value": "Crea una secuencia" }],
-  "components.newsNavBar.langSelector": [{ "type": 0, "value": "Idioma" }],
-  "components.newsNavBar.skipToContent": [{ "type": 0, "value": "Saltar al contenido principal" }],
-  "components.newsNavBar.mainNavigation": [{ "type": 0, "value": "Navegación principal" }],
-  "components.newsNavBar.news": [{ "type": 0, "value": "Novedades" }],
-  "components.newsNavBar.openMenu": [{ "type": 0, "value": "Abrir menú de navegación" }],
-  "components.appNavigationDrawer.welcome": [{ "type": 0, "value": "Inicio" }],
-  "components.appNavigationDrawer.news": [{ "type": 0, "value": "Novedades" }],
-  "components.appNavigationDrawer.editView": [{ "type": 0, "value": "Editar" }],
-  "components.appNavigationDrawer.previewView": [{ "type": 0, "value": "Previsualizar" }],
-  "components.appNavigationDrawer.download": [{ "type": 0, "value": "Descargar" }],
-  "components.appNavigationDrawer.load": [{ "type": 0, "value": "Cargar" }],
-  "components.appNavigationDrawer.settings": [{ "type": 0, "value": "Configuración" }],
-  "components.appNavigationDrawer.settingsTitle": [{ "type": 0, "value": "Configuración por defecto" }],
-  "components.appNavigationDrawer.settingsClose": [{ "type": 0, "value": "Cerrar" }],
-  "components.appNavigationDrawer.langSelector": [{ "type": 0, "value": "Idioma" }],
-  "components.appNavigationDrawer.openMenu": [{ "type": 0, "value": "Abrir menú" }]
+  ]
 }
