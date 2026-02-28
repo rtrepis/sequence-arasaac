@@ -124,10 +124,18 @@ export function createPageFormat(
   let baseDimensions: PageDimensions;
 
   if (size === "FULLSCREEN") {
-    baseDimensions = {
-      width: typeof window !== "undefined" ? window.screen.width : 1920,
-      height: typeof window !== "undefined" ? window.screen.height : 1080,
-    };
+    const screenW = typeof window !== "undefined" ? window.screen.width : 1920;
+    const screenH =
+      typeof window !== "undefined" ? window.screen.height : 1080;
+    // Les dimensions de pantalla ja reflecteixen l'orientació física
+    // Usem max/min per garantir landscape=horitzontal, portrait=vertical
+    const maxDim = Math.max(screenW, screenH);
+    const minDim = Math.min(screenW, screenH);
+    const dimensions: PageDimensions =
+      orientation === "landscape"
+        ? { width: maxDim, height: minDim }
+        : { width: minDim, height: maxDim };
+    return { size, orientation, dimensions };
   } else {
     // Calcular dimensions amb DPI actual
     const paperDimensions = PAPER_DIMENSIONS_MM[size];

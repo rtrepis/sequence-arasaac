@@ -454,6 +454,7 @@ const ViewSequencesSettings = ({
               overflow: "hidden",
               outline: "2px solid green",
               marginBottom: 1,
+              "@media print": { marginBottom: 0, outline: "none" },
               position: { xs: "sticky", md: "static" },
               top: { xs: 0 },
               zIndex: { xs: 10, md: "auto" },
