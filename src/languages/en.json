@@ -1540,5 +1540,17 @@
       "type": 0,
       "value": "Start"
     }
+  ],
+  "view.welcome.footer.licenses": [
+    {
+      "type": 0,
+      "value": "Licences"
+    }
+  ],
+  "view.welcome.footer.credits": [
+    {
+      "type": 0,
+      "value": "Credits"
+    }
   ]
 }

@@ -49,7 +49,13 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
       <Box
         aria-live="assertive"
         aria-atomic="true"
-        sx={{ position: "absolute", left: -9999, width: 1, height: 1, overflow: "hidden" }}
+        sx={{
+          position: "absolute",
+          left: -9999,
+          width: 1,
+          height: 1,
+          overflow: "hidden",
+        }}
       >
         {routeAnnouncement}
       </Box>
@@ -99,7 +105,6 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
           </AppBar>
         </HideOnScroll>
         <Toolbar />
-        <CopyRightSpeedDial />
       </NotPrint>
       {/* Contingut principal — destí del skip link */}
       <Container id="main-content" component="main" maxWidth={"xl"}>
