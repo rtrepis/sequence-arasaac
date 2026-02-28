@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { PageFormat } from "@/types/PageFormat";
+import { PageFormat, pixelsToMM } from "@/types/PageFormat";
 
 /**
  * Hook per gestionar els estils CSS d'impressió
@@ -17,6 +17,11 @@ export function usePrintStyles(pageFormat: PageFormat) {
       document.head.appendChild(styleElement);
     }
 
+    // Convertir dimensions de pantalla (px a DPI variable) a mm absoluts
+    // Necessari perquè el navegador sempre usa 96dpi en impressió, independentment del DPI de pantalla
+    const widthMM = pixelsToMM(pageFormat.dimensions.width);
+    const heightMM = pixelsToMM(pageFormat.dimensions.height);
+
     // Generar CSS dinàmic per a impressió
     const printCSS = `
       @media print {
@@ -24,24 +29,15 @@ export function usePrintStyles(pageFormat: PageFormat) {
           size: ${pageFormat.size === "FULLSCREEN" ? "A4" : pageFormat.size} ${pageFormat.orientation};
           margin: 10px;
         }
-        
-        /* Forçar orientació al body també */
-        body {
-          ${
-            pageFormat.orientation === "portrait"
-              ? "width: 210mm; height: 297mm;"
-              : "width: 297mm; height: 210mm;"
-          }
-        }
-        
+
         .preview-container {
           border: none !important;
           outline: none !important;
           padding: 0 !important;
           margin: 0 !important;
-          overflow: visible !important;
-          width: ${pageFormat.dimensions.width}px !important;
-          height: ${pageFormat.dimensions.height}px !important;
+          overflow: hidden !important;
+          width: ${widthMM}mm !important;
+          height: ${heightMM}mm !important;
         }
         
         .preview-container > div {
