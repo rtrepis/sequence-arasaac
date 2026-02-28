@@ -731,36 +731,6 @@
       "value": "Mejoras en la previsualización"
     }
   ],
-  "news.print-preview.content": [
-    {
-      "type": 0,
-      "value": "La vista previa te muestra exactamente cómo quedará la página impresa. Puedes controlar el tamaño de los pictogramas, el espacio entre filas y columnas, y la alineación. ¡Todo se ve en tiempo real!"
-    }
-  ],
-  "news.print-preview.img1.alt": [
-    {
-      "type": 0,
-      "value": "Vista previa de la página"
-    }
-  ],
-  "news.print-preview.img2.alt": [
-    {
-      "type": 0,
-      "value": "Controles de tamaño y espacio"
-    }
-  ],
-  "news.print-preview.summary": [
-    {
-      "type": 0,
-      "value": "Previsualiza exactamente cómo quedará tu página antes de imprimir."
-    }
-  ],
-  "news.print-preview.title": [
-    {
-      "type": 0,
-      "value": "Vista previa de impresión"
-    }
-  ],
   "news.save-improvements.content": [
     {
       "type": 0,
@@ -815,70 +785,10 @@
       "value": "Mejoras al guardado"
     }
   ],
-  "news.save-load.content": [
-    {
-      "type": 0,
-      "value": "Encontrarás las opciones de guardar y cargar en el menú del logo de SequenciAAC. Al guardar, se descarga un archivo con todas las secuencias y las imágenes de los pictogramas incluidas. ¡Así puedes recuperar tu trabajo en cualquier momento!"
-    }
-  ],
-  "news.save-load.img1.alt": [
-    {
-      "type": 0,
-      "value": "Menú con opción de guardar"
-    }
-  ],
-  "news.save-load.img2.alt": [
-    {
-      "type": 0,
-      "value": "Cargar archivo guardado"
-    }
-  ],
-  "news.save-load.summary": [
-    {
-      "type": 0,
-      "value": "Descarga tus secuencias con las imágenes y cárgalas cuando quieras."
-    }
-  ],
-  "news.save-load.title": [
-    {
-      "type": 0,
-      "value": "Guarda y recupera"
-    }
-  ],
   "news.section.title": [
     {
       "type": 0,
       "value": "Novedades"
-    }
-  ],
-  "news.sequence-settings.content": [
-    {
-      "type": 0,
-      "value": "Ahora puedes personalizar cada secuencia de manera independiente. Cambia la alineación de los pictogramas (izquierda, centro o derecha), configura la tipografía y el color de los números de forma independiente al texto, y descubre más opciones de formato para adaptar las secuencias a tus necesidades."
-    }
-  ],
-  "news.sequence-settings.img1.alt": [
-    {
-      "type": 0,
-      "value": "Opciones de alineación"
-    }
-  ],
-  "news.sequence-settings.img2.alt": [
-    {
-      "type": 0,
-      "value": "Configuración de tipografía de los números"
-    }
-  ],
-  "news.sequence-settings.summary": [
-    {
-      "type": 0,
-      "value": "Personaliza cada secuencia con alineación, tipografía de los números y más opciones."
-    }
-  ],
-  "news.sequence-settings.title": [
-    {
-      "type": 0,
-      "value": "Nuevas configuraciones por secuencia"
     }
   ],
   "pages.viewSequence.alignment.label": [

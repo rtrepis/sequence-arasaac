@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Box,
@@ -33,6 +33,11 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
   const intl = useIntl();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Quan canvia l'article, desplaça suaument al principi de la pàgina
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [slug]);
 
   const currentIndex = slug
     ? sortedNews.findIndex((i) => i.slug === slug)
