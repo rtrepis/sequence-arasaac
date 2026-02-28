@@ -961,5 +961,11 @@
   },
   "components.appNavigationDrawer.openMenu": {
     "defaultMessage": "Obrir menú"
+  },
+  "view.welcome.footer.licenses": {
+    "defaultMessage": "Llicències"
+  },
+  "view.welcome.footer.credits": {
+    "defaultMessage": "Crèdits"
   }
 }

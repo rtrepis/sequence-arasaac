@@ -20,4 +20,14 @@ export const messages = defineMessages({
     id: "view.welcome.arcadeLink",
     defaultMessage: "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed",
   },
+  footerLicenses: {
+    id: "view.welcome.footer.licenses",
+    defaultMessage: "Licences",
+    description: "Footer: títol columna de llicències",
+  },
+  footerCredits: {
+    id: "view.welcome.footer.credits",
+    defaultMessage: "Credits",
+    description: "Footer: títol columna de crèdits",
+  },
 });
