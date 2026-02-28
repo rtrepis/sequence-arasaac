@@ -761,6 +761,60 @@
       "value": "Print preview"
     }
   ],
+  "news.save-improvements.content": [
+    {
+      "type": 0,
+      "value": "The .saac file now saves the custom images you've uploaded, stored directly in the file so they're never lost. Additionally, the display settings for each sequence — pictogram size, spacing and alignment — are also saved and restored exactly as you left them."
+    }
+  ],
+  "news.save-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Button to upload a custom image to the pictogram"
+    }
+  ],
+  "news.save-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "Upload your own image to any pictogram. The image is saved directly in the .saac file, without needing internet."
+    }
+  ],
+  "news.save-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Save dialog with sequence and settings options"
+    }
+  ],
+  "news.save-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "When saving the file, all custom images are automatically included."
+    }
+  ],
+  "news.save-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Pictogram size and spacing controls"
+    }
+  ],
+  "news.save-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "The size, spacing and alignment of each sequence are automatically saved and restored when loading the file."
+    }
+  ],
+  "news.save-improvements.summary": [
+    {
+      "type": 0,
+      "value": "The saved file now includes custom images and the size and spacing settings for each sequence."
+    }
+  ],
+  "news.save-improvements.title": [
+    {
+      "type": 0,
+      "value": "Save improvements"
+    }
+  ],
   "news.save-load.content": [
     {
       "type": 0,

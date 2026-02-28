@@ -8,7 +8,7 @@ const VIDEO_DIR = path.join(process.cwd(), "public/video/news");
 
 // Cursor SVG (fletxa clàssica negra amb contorn blanc) per fer-lo visible en captures headless
 const CURSOR_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
+  '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">' +
     '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
     "</svg>",
 )}`;
@@ -87,8 +87,8 @@ const focusedScreenshot = async (
         "position:fixed",
         `left:${x}px`,
         `top:${y}px`,
-        "width:24px",
-        "height:24px",
+        "width:48px",
+        "height:48px",
         "z-index:2147483647",
         "pointer-events:none",
         `background-image:url("${svgUrl}")`,
@@ -161,20 +161,22 @@ test(
       has: page.getByRole("link", { name: "Inici" }),
     });
 
-    // Coberta carousel: crop apaïsat per mostrar el drawer en context (paddingY reduït)
+    // Coberta carousel: target ~700×320px (ratio card 300×140 a 3-per-fila en 1280px)
+    // navList ~260px ample, ~200px alt → paddingX=(700-260)/2=220, paddingY=(320-200)/2=60
     await focusedScreenshot(
       page,
       navList,
       path.join(IMG_DIR, "logo-menu.png"),
-      { paddingX: 220, paddingY: 40, mouseOffset: { x: 30, y: 20 } },
+      { paddingX: 220, paddingY: 60, mouseOffset: { x: 30, y: 20 } },
     );
 
-    // Pas 1: crop centrat en la secció de navegació
+    // Pas 1: target ~680px ample (contingut article NewsDetailPage)
+    // navList ~260px ample → paddingX=(680-260)/2=210
     await focusedScreenshot(
       page,
       navList,
       path.join(IMG_DIR, "logo-menu-step1.png"),
-      { paddingX: 230, paddingY: 190, mouseOffset: { x: 30, y: 20 } },
+      { paddingX: 210, paddingY: 190, mouseOffset: { x: 30, y: 20 } },
     );
 
     // =============================================
@@ -186,11 +188,12 @@ test(
     });
     await fileList.waitFor({ state: "visible", timeout: 10000 });
 
+    // Pas 2: target ~680px ample → paddingX=210
     await focusedScreenshot(
       page,
       fileList,
       path.join(IMG_DIR, "logo-menu-step2.png"),
-      { paddingX: 230, paddingY: 230, mouseOffset: { x: 30, y: 20 } },
+      { paddingX: 210, paddingY: 230, mouseOffset: { x: 30, y: 20 } },
     );
 
     // =============================================
@@ -204,11 +207,12 @@ test(
       .locator("xpath=../..");
     await langSelector.waitFor({ state: "visible", timeout: 10000 });
 
+    // Pas 3: target ~680px ample → paddingX=210
     await focusedScreenshot(
       page,
       langSelector,
       path.join(IMG_DIR, "logo-menu-step3.png"),
-      { paddingX: 230, paddingY: 220, mouseOffset: { x: 30, y: -20 } },
+      { paddingX: 210, paddingY: 220, mouseOffset: { x: 30, y: -20 } },
     );
   },
 );
