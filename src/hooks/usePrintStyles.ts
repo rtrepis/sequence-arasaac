@@ -36,6 +36,7 @@ export function usePrintStyles(pageFormat: PageFormat) {
         
         .preview-container {
           border: none !important;
+          outline: none !important;
           padding: 0 !important;
           margin: 0 !important;
           overflow: visible !important;
