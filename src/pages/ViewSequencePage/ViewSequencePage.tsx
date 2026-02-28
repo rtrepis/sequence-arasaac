@@ -38,8 +38,8 @@ const ViewSequencePage = (): React.ReactElement => {
                   alignItems: "start",
                   justifyContent:
                     ALIGNMENT_TO_JUSTIFY[seqView.alignment] ?? "flex-start",
-                  columnGap: seqView.pictSpaceBetween * scale,
-                  rowGap: seqView.pictSpaceBetween * scale,
+                  columnGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
+                  rowGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
                   height: viewSettings.direction === "column" ? "100%" : "auto",
                   width: viewSettings.direction === "row" ? "100%" : "auto",
                 }}

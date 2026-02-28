@@ -30,9 +30,11 @@ const theme = createTheme({
     MuiToolbar: { styleOverrides: { root: { minHeight: "50px" } } },
     MuiIconButton: {
       styleOverrides: {
-        root: { color: "primary" },
-        disabled: {
-          opacity: 0.35,
+        root: {
+          color: "primary",
+          "&.Mui-disabled": {
+            opacity: 0.35,
+          },
         },
       },
     },

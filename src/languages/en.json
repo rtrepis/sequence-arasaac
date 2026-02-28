@@ -227,6 +227,12 @@
       "value": "Delete"
     }
   ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Reset to defaults"
+    }
+  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -485,6 +491,114 @@
       "value": "More info"
     }
   ],
+  "news.number-font.content": [
+    {
+      "type": 0,
+      "value": "You can now configure the font of pictogram numbers independently. In the Default Settings dialog, enabling the Numbering switch reveals a new section to choose the font family, size, and color for the numbers, separately from the pictogram text font."
+    }
+  ],
+  "news.number-font.step1.alt": [
+    {
+      "type": 0,
+      "value": "Default settings panel with the Numbering switch off"
+    }
+  ],
+  "news.number-font.step1.description": [
+    {
+      "type": 0,
+      "value": "Open the Default Settings dialog from the main menu (click the logo). You will see a switch to enable pictogram numbering."
+    }
+  ],
+  "news.number-font.step2.alt": [
+    {
+      "type": 0,
+      "value": "Numbering switch enabled in the settings panel"
+    }
+  ],
+  "news.number-font.step2.description": [
+    {
+      "type": 0,
+      "value": "Enable the Numbering switch. Each pictogram will now show its order number on the opposite side of the text."
+    }
+  ],
+  "news.number-font.step3.alt": [
+    {
+      "type": 0,
+      "value": "New number font section showing family, size and color selectors"
+    }
+  ],
+  "news.number-font.step3.description": [
+    {
+      "type": 0,
+      "value": "Once numbering is enabled, a new section appears to configure the number font: family, size, and color, independently from the pictogram text font."
+    }
+  ],
+  "news.number-font.summary": [
+    {
+      "type": 0,
+      "value": "Choose an independent font for the numbers shown on pictograms."
+    }
+  ],
+  "news.number-font.title": [
+    {
+      "type": 0,
+      "value": "Custom font for numbers"
+    }
+  ],
+  "news.logo-menu.content": [
+    {
+      "type": 0,
+      "value": "Did you know the SequenciAAC logo is a button? Click it to open the main navigation menu, where you can access all pages and features of the application."
+    }
+  ],
+  "news.logo-menu.step1.alt": [
+    {
+      "type": 0,
+      "value": "Navigation section of the menu with Home, News, Edit and Preview links"
+    }
+  ],
+  "news.logo-menu.step1.description": [
+    {
+      "type": 0,
+      "value": "The first section contains shortcuts to all pages: Home, News (where you'll find all updates), Edit (to create your sequences) and Preview (to view and print them)."
+    }
+  ],
+  "news.logo-menu.step2.alt": [
+    {
+      "type": 0,
+      "value": "File section of the menu with Download and Load options"
+    }
+  ],
+  "news.logo-menu.step2.description": [
+    {
+      "type": 0,
+      "value": "From here you can manage your sequence files: Download saves the current sequence to a file on your device, and Load retrieves a previously saved sequence."
+    }
+  ],
+  "news.logo-menu.step3.alt": [
+    {
+      "type": 0,
+      "value": "Settings section and language selector with ca, es and en buttons"
+    }
+  ],
+  "news.logo-menu.step3.description": [
+    {
+      "type": 0,
+      "value": "Settings opens the default pictogram settings dialog, where you can adjust typography, borders, text position and other visual options. Below it, the language selector lets you switch between Catalan (ca), Spanish (es) or English (en)."
+    }
+  ],
+  "news.logo-menu.summary": [
+    {
+      "type": 0,
+      "value": "Click the logo to open the main menu and access all app features."
+    }
+  ],
+  "news.logo-menu.title": [
+    {
+      "type": 0,
+      "value": "The navigation menu"
+    }
+  ],
   "news.multiple-sequences.content": [
     {
       "type": 0,
@@ -563,100 +677,118 @@
       "value": "Multiple sequences"
     }
   ],
-  "news.print-preview.content": [
+  "news.view-improvements.content": [
     {
       "type": 0,
-      "value": "The print preview shows you exactly how the printed page will look. You can control the pictogram size, row and column spacing, and alignment. Everything updates in real time!"
+      "value": "Several bugs have been fixed that caused the print preview to not match the actual printed output. New controls have also been added for alignment and direction of sequences, and when you save a sequence the view settings are now automatically included."
     }
   ],
-  "news.print-preview.img1.alt": [
+  "news.view-improvements.step1.alt": [
     {
       "type": 0,
-      "value": "Page preview"
+      "value": "Sequence preview showing exact match with printed output"
     }
   ],
-  "news.print-preview.img2.alt": [
+  "news.view-improvements.step1.description": [
     {
       "type": 0,
-      "value": "Size and spacing controls"
+      "value": "The sequence preview now corresponds exactly to the printed output. A precise scale calculation takes into account the page format (A4, A3) and screen resolution to faithfully show what will be printed."
     }
   ],
-  "news.print-preview.summary": [
+  "news.view-improvements.step2.alt": [
     {
       "type": 0,
-      "value": "Preview exactly how your page will look before printing."
+      "value": "Alignment and direction controls for sequences"
     }
   ],
-  "news.print-preview.title": [
+  "news.view-improvements.step2.description": [
     {
       "type": 0,
-      "value": "Print preview"
+      "value": "New controls to customize each sequence: choose the alignment (left, center, right) and direction (horizontal or vertical) to adapt the presentation to your needs."
     }
   ],
-  "news.save-load.content": [
+  "news.view-improvements.step3.alt": [
     {
       "type": 0,
-      "value": "You'll find the save and load options in the SequenciAAC logo menu. When saving, a file is downloaded with all sequences and pictogram images included. This way you can restore your work at any time!"
+      "value": "Save sequence button with view settings included"
     }
   ],
-  "news.save-load.img1.alt": [
+  "news.view-improvements.step3.description": [
     {
       "type": 0,
-      "value": "Menu with save option"
+      "value": "When you save the sequence using the download button, the view settings (sizes, spacing, alignment and direction) are automatically included in the file, so when you reload it everything will be as you left it."
     }
   ],
-  "news.save-load.img2.alt": [
+  "news.view-improvements.summary": [
     {
       "type": 0,
-      "value": "Load saved file"
+      "value": "Print preview now matches output exactly. New alignment and direction controls."
     }
   ],
-  "news.save-load.summary": [
+  "news.view-improvements.title": [
     {
       "type": 0,
-      "value": "Download your sequences with images and load them whenever you want."
+      "value": "Print preview improvements"
     }
   ],
-  "news.save-load.title": [
+  "news.save-improvements.content": [
     {
       "type": 0,
-      "value": "Save and restore"
+      "value": "The .saac file now saves the custom images you've uploaded, stored directly in the file so they're never lost. Additionally, the display settings for each sequence — pictogram size, spacing and alignment — are also saved and restored exactly as you left them."
+    }
+  ],
+  "news.save-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Button to upload a custom image to the pictogram"
+    }
+  ],
+  "news.save-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "Upload your own image to any pictogram. The image is saved directly in the .saac file, without needing internet."
+    }
+  ],
+  "news.save-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Save dialog with sequence and settings options"
+    }
+  ],
+  "news.save-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "When saving the file, all custom images are automatically included."
+    }
+  ],
+  "news.save-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Pictogram size and spacing controls"
+    }
+  ],
+  "news.save-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "The size, spacing and alignment of each sequence are automatically saved and restored when loading the file."
+    }
+  ],
+  "news.save-improvements.summary": [
+    {
+      "type": 0,
+      "value": "The saved file now includes custom images and the size and spacing settings for each sequence."
+    }
+  ],
+  "news.save-improvements.title": [
+    {
+      "type": 0,
+      "value": "Save improvements"
     }
   ],
   "news.section.title": [
     {
       "type": 0,
       "value": "What's new"
-    }
-  ],
-  "news.sequence-settings.content": [
-    {
-      "type": 0,
-      "value": "You can now customize each sequence independently. Change the pictogram alignment (left, center or right), configure the number typography and color independently from the text, and discover more formatting options to adapt sequences to your needs."
-    }
-  ],
-  "news.sequence-settings.img1.alt": [
-    {
-      "type": 0,
-      "value": "Alignment options"
-    }
-  ],
-  "news.sequence-settings.img2.alt": [
-    {
-      "type": 0,
-      "value": "Number typography settings"
-    }
-  ],
-  "news.sequence-settings.summary": [
-    {
-      "type": 0,
-      "value": "Customize each sequence with alignment, number typography and more options."
-    }
-  ],
-  "news.sequence-settings.title": [
-    {
-      "type": 0,
-      "value": "New per-sequence settings"
     }
   ],
   "pages.viewSequence.alignment.label": [
@@ -1195,10 +1327,23 @@
   ],
   "news.prevArticle": [{ "type": 0, "value": "Previous article" }],
   "news.nextArticle": [{ "type": 0, "value": "Next article" }],
+  "news.articleNavigation": [{ "type": 0, "value": "Article navigation" }],
   "components.newsNavBar.welcome": [{ "type": 0, "value": "Home" }],
   "components.newsNavBar.start": [{ "type": 0, "value": "Create a sequence" }],
   "components.newsNavBar.langSelector": [{ "type": 0, "value": "Language" }],
   "components.newsNavBar.skipToContent": [{ "type": 0, "value": "Skip to main content" }],
   "components.newsNavBar.mainNavigation": [{ "type": 0, "value": "Main navigation" }],
-  "components.newsNavBar.news": [{ "type": 0, "value": "Updates" }]
+  "components.newsNavBar.news": [{ "type": 0, "value": "Updates" }],
+  "components.newsNavBar.openMenu": [{ "type": 0, "value": "Open navigation menu" }],
+  "components.appNavigationDrawer.welcome": [{ "type": 0, "value": "Home" }],
+  "components.appNavigationDrawer.news": [{ "type": 0, "value": "News" }],
+  "components.appNavigationDrawer.editView": [{ "type": 0, "value": "Edit" }],
+  "components.appNavigationDrawer.previewView": [{ "type": 0, "value": "Preview" }],
+  "components.appNavigationDrawer.download": [{ "type": 0, "value": "Download" }],
+  "components.appNavigationDrawer.load": [{ "type": 0, "value": "Load" }],
+  "components.appNavigationDrawer.settings": [{ "type": 0, "value": "Settings" }],
+  "components.appNavigationDrawer.settingsTitle": [{ "type": 0, "value": "Default settings" }],
+  "components.appNavigationDrawer.settingsClose": [{ "type": 0, "value": "Close" }],
+  "components.appNavigationDrawer.langSelector": [{ "type": 0, "value": "Language" }],
+  "components.appNavigationDrawer.openMenu": [{ "type": 0, "value": "Open menu" }]
 }

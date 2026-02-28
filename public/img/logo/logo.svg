@@ -1,0 +1,52 @@
+<svg width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sphereBody" cx="50%" cy="50%" r="50%" fx="25%" fy="25%">
+      <stop offset="0%" style="stop-color:#aaaaaa" />
+      <stop offset="60%" style="stop-color:#666666" />
+      <stop offset="100%" style="stop-color:#444444" />
+    </radialGradient>
+
+    <radialGradient id="innerBezelShadow" cx="50%" cy="50%" r="50%" fx="20%" fy="20%">
+      <stop offset="50%" style="stop-color:#333333; stop-opacity:0" />
+      <stop offset="90%" style="stop-color:#333333; stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#333333; stop-opacity:1" />
+    </radialGradient>
+
+    <radialGradient id="lightYellow" cx="50%" cy="50%" r="55%" fx="30%" fy="30%">
+      <stop offset="0%" style="stop-color:#fef08a" /> 
+      <stop offset="40%" style="stop-color:#facc15" /> 
+      <stop offset="100%" style="stop-color:#ca8a04" /> 
+      </radialGradient>
+
+    <radialGradient id="lightPink" cx="50%" cy="50%" r="55%" fx="30%" fy="30%">
+      <stop offset="0%" style="stop-color:#fbcfe8" />
+      <stop offset="40%" style="stop-color:#ec4899" />
+      <stop offset="100%" style="stop-color:#be185d" />
+    </radialGradient>
+
+    <radialGradient id="lightBlue" cx="50%" cy="50%" r="55%" fx="30%" fy="30%">
+      <stop offset="0%" style="stop-color:#bfdbfe" />
+      <stop offset="40%" style="stop-color:#3b82f6" />
+      <stop offset="100%" style="stop-color:#1e40af" />
+    </radialGradient>
+  </defs>
+
+  <g transform="translate(380, 150) scale(0.7)">
+    <circle cx="0" cy="0" r="100" fill="url(#sphereBody)" />
+    <circle cx="10" cy="-10" r="70" fill="url(#lightYellow)" />
+    <circle cx="10" cy="-10" r="70" fill="url(#innerBezelShadow)" />
+  </g>
+
+  <g transform="translate(260, 200) scale(0.85)">
+    <circle cx="0" cy="0" r="100" fill="url(#sphereBody)" />
+    <circle cx="15" cy="-10" r="70" fill="url(#lightPink)" />
+    <circle cx="15" cy="-10" r="70" fill="url(#innerBezelShadow)" />
+  </g>
+
+  <g transform="translate(130, 280) scale(1.0)">
+    <circle cx="0" cy="0" r="100" fill="url(#sphereBody)" />
+    <circle cx="25" cy="-15" r="70" fill="url(#lightBlue)" />
+    <circle cx="25" cy="-15" r="70" fill="url(#innerBezelShadow)" />
+  </g>
+
+</svg>

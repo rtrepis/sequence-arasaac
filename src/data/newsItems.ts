@@ -27,6 +27,138 @@ export interface NewsItem {
 
 export const newsItems: NewsItem[] = [
   {
+    slug: "save-improvements",
+    titleId: "news.save-improvements.title",
+    summaryId: "news.save-improvements.summary",
+    contentId: "news.save-improvements.content",
+    coverImage: "/img/news/save-improvements.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/save-improvements-step1.png",
+          altId: "news.save-improvements.step1.alt",
+        },
+        descriptionId: "news.save-improvements.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/save-improvements-step2.png",
+          altId: "news.save-improvements.step2.alt",
+        },
+        descriptionId: "news.save-improvements.step2.description",
+      },
+      {
+        image: {
+          src: "/img/news/save-improvements-step3.png",
+          altId: "news.save-improvements.step3.alt",
+        },
+        descriptionId: "news.save-improvements.step3.description",
+      },
+    ],
+    date: "2026-02-28",
+    category: "millora",
+  },
+  {
+    slug: "number-font",
+    titleId: "news.number-font.title",
+    summaryId: "news.number-font.summary",
+    contentId: "news.number-font.content",
+    coverImage: "/img/news/number-font.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/number-font-step1.png",
+          altId: "news.number-font.step1.alt",
+        },
+        descriptionId: "news.number-font.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/number-font-step2.png",
+          altId: "news.number-font.step2.alt",
+        },
+        descriptionId: "news.number-font.step2.description",
+      },
+      {
+        image: {
+          src: "/img/news/number-font-step3.png",
+          altId: "news.number-font.step3.alt",
+        },
+        descriptionId: "news.number-font.step3.description",
+      },
+    ],
+    date: "2026-02-27",
+    category: "millora",
+  },
+  {
+    slug: "logo-menu",
+    titleId: "news.logo-menu.title",
+    summaryId: "news.logo-menu.summary",
+    contentId: "news.logo-menu.content",
+    coverImage: "/img/news/logo-menu.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/logo-menu-step1.png",
+          altId: "news.logo-menu.step1.alt",
+        },
+        descriptionId: "news.logo-menu.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/logo-menu-step2.png",
+          altId: "news.logo-menu.step2.alt",
+        },
+        descriptionId: "news.logo-menu.step2.description",
+      },
+      {
+        image: {
+          src: "/img/news/logo-menu-step3.png",
+          altId: "news.logo-menu.step3.alt",
+        },
+        descriptionId: "news.logo-menu.step3.description",
+      },
+    ],
+    date: "2026-02-24",
+    category: "nova",
+  },
+  {
+    slug: "view-improvements",
+    titleId: "news.view-improvements.title",
+    summaryId: "news.view-improvements.summary",
+    contentId: "news.view-improvements.content",
+    coverImage: "/img/news/view-improvements.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/view-improvements-step1.png",
+          altId: "news.view-improvements.step1.alt",
+        },
+        descriptionId: "news.view-improvements.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/view-improvements-step2.png",
+          altId: "news.view-improvements.step2.alt",
+        },
+        descriptionId: "news.view-improvements.step2.description",
+      },
+      {
+        image: {
+          src: "/img/news/view-improvements-step3.png",
+          altId: "news.view-improvements.step3.alt",
+        },
+        descriptionId: "news.view-improvements.step3.description",
+      },
+    ],
+    date: "2026-02-24",
+    category: "millora",
+  },
+  {
     slug: "multiple-sequences",
     titleId: "news.multiple-sequences.title",
     summaryId: "news.multiple-sequences.summary",
@@ -72,64 +204,7 @@ export const newsItems: NewsItem[] = [
         descriptionId: "news.multiple-sequences.step4.description",
       },
     ],
-    date: "2025-01-15",
-    category: "nova",
-  },
-  {
-    slug: "print-preview",
-    titleId: "news.print-preview.title",
-    summaryId: "news.print-preview.summary",
-    contentId: "news.print-preview.content",
-    coverImage: "/img/news/print-preview.png",
-    images: [
-      {
-        src: "/img/news/print-preview-1.png",
-        altId: "news.print-preview.img1.alt",
-      },
-      {
-        src: "/img/news/print-preview-2.png",
-        altId: "news.print-preview.img2.alt",
-      },
-    ],
-    date: "2025-01-15",
-    category: "nova",
-  },
-  {
-    slug: "sequence-settings",
-    titleId: "news.sequence-settings.title",
-    summaryId: "news.sequence-settings.summary",
-    contentId: "news.sequence-settings.content",
-    coverImage: "/img/news/sequence-settings.png",
-    images: [
-      {
-        src: "/img/news/sequence-settings-1.png",
-        altId: "news.sequence-settings.img1.alt",
-      },
-      {
-        src: "/img/news/sequence-settings-2.png",
-        altId: "news.sequence-settings.img2.alt",
-      },
-    ],
-    date: "2025-01-15",
-    category: "millora",
-  },
-  {
-    slug: "save-load",
-    titleId: "news.save-load.title",
-    summaryId: "news.save-load.summary",
-    contentId: "news.save-load.content",
-    coverImage: "/img/news/save-load.png",
-    images: [
-      {
-        src: "/img/news/save-load-1.png",
-        altId: "news.save-load.img1.alt",
-      },
-      {
-        src: "/img/news/save-load-2.png",
-        altId: "news.save-load.img2.alt",
-      },
-    ],
-    date: "2025-01-15",
+    date: "2026-02-15",
     category: "nova",
   },
 ];

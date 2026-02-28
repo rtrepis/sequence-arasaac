@@ -41,6 +41,7 @@ const PictEditModal = ({
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
   const [submit, setSubmit] = useState(false);
+  const [resetToDefaults, setResetToDefaults] = useState(false);
   // Ref per restaurar el focus al botó trigger quan el dialog es tanca
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -62,6 +63,10 @@ const PictEditModal = ({
     setOpen(false);
     // Retorna el focus al botó que va obrir el dialog
     triggerRef.current?.focus();
+  };
+
+  const handleReset = () => {
+    setResetToDefaults(true);
   };
 
   const handleDelete = () => {
@@ -136,7 +141,12 @@ const PictEditModal = ({
         </Stack>
 
         <DialogContent dividers={true} sx={{ padding: 2, overflowX: "hidden" }}>
-          <PictEditForm pictogram={pictogram} submit={submit} />
+          <PictEditForm
+            pictogram={pictogram}
+            submit={submit}
+            resetToDefaults={resetToDefaults}
+            onResetDone={() => setResetToDefaults(false)}
+          />
         </DialogContent>
 
         <DialogActions
@@ -148,6 +158,9 @@ const PictEditModal = ({
             color={"error"}
           >
             <FormattedMessage {...messages.delete} />
+          </StyledButton>
+          <StyledButton onClick={handleReset} variant={"outlined"}>
+            <FormattedMessage {...messages.reset} />
           </StyledButton>
           <StyledButton onClick={handleClose} variant={"contained"}>
             <FormattedMessage {...messages.close} />
