@@ -1,7 +1,7 @@
 import React from "react";
 import { IntlProvider } from "react-intl";
 import { Navigate, Outlet, useParams } from "react-router-dom";
-import { messageLocale } from "@/App";
+import { messageLocale } from "@/i18n/messages";
 import NewsNavBar from "./NewsNavBar";
 
 // Layout compartit per a la secció de notícies (/:locale/news i /:locale/news/:slug)

@@ -2,7 +2,7 @@ import React from "react";
 import { IntlProvider } from "react-intl";
 import { useParams } from "react-router-dom";
 import WelcomePage from "./WelcomePage";
-import { messageLocale } from "/src/App";
+import { messageLocale } from "@/i18n/messages";
 
 const WelcomeLayout = ({ localeBrowser }: { localeBrowser: string }) => {
   const { locale } = useParams<{ locale: string }>();

@@ -22,15 +22,6 @@ const NewsDetailPage = lazy(
   () => import("./pages/NewsDetailPage/NewsDetailPage")
 );
 
-import messages_en from "./languages/en.json";
-import messages_es from "./languages/es.json";
-import messages_ca from "./languages/ca.json";
-
-export const messageLocale = {
-  ca: messages_ca,
-  es: messages_es,
-  en: messages_en,
-};
 import { usePageTracking } from "./hooks/usePageTracking";
 import { useAppSelector } from "./app/hooks";
 
