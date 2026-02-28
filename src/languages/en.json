@@ -1,4 +1,34 @@
 {
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Fix"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Improvement"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "New"
+    }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "What's New"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Read more"
+    }
+  ],
   "component.settingCardBorder.borderIn.title": [
     {
       "type": 0,
@@ -29,10 +59,88 @@
       "value": "Number font"
     }
   ],
+  "components.appNavigationDrawer.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "components.appNavigationDrawer.editView": [
+    {
+      "type": 0,
+      "value": "Edit"
+    }
+  ],
+  "components.appNavigationDrawer.langSelector": [
+    {
+      "type": 0,
+      "value": "Language"
+    }
+  ],
+  "components.appNavigationDrawer.load": [
+    {
+      "type": 0,
+      "value": "Load"
+    }
+  ],
+  "components.appNavigationDrawer.news": [
+    {
+      "type": 0,
+      "value": "News"
+    }
+  ],
+  "components.appNavigationDrawer.openMenu": [
+    {
+      "type": 0,
+      "value": "Open menu"
+    }
+  ],
+  "components.appNavigationDrawer.previewView": [
+    {
+      "type": 0,
+      "value": "Preview"
+    }
+  ],
+  "components.appNavigationDrawer.settings": [
+    {
+      "type": 0,
+      "value": "Settings"
+    }
+  ],
+  "components.appNavigationDrawer.settingsClose": [
+    {
+      "type": 0,
+      "value": "Close"
+    }
+  ],
+  "components.appNavigationDrawer.settingsTitle": [
+    {
+      "type": 0,
+      "value": "Default settings"
+    }
+  ],
+  "components.appNavigationDrawer.welcome": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
       "value": "Edit"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Main navigation"
+    }
+  ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Skip to main content"
     }
   ],
   "components.barNavigation.title": [
@@ -51,18 +159,6 @@
     {
       "type": 0,
       "value": "Welcome"
-    }
-  ],
-  "components.barNavigation.skipToContent": [
-    {
-      "type": 0,
-      "value": "Skip to main content"
-    }
-  ],
-  "components.barNavigation.mainNavigation": [
-    {
-      "type": 0,
-      "value": "Main navigation"
     }
   ],
   "components.buttonWithFileLoad.load.label": [
@@ -155,40 +251,10 @@
       "value": "Load settings from local file"
     }
   ],
-  "components.logoMenu.download": [
-    {
-      "type": 0,
-      "value": "Download"
-    }
-  ],
-  "components.logoMenu.editView": [
-    {
-      "type": 0,
-      "value": "Edit"
-    }
-  ],
-  "components.logoMenu.load": [
-    {
-      "type": 0,
-      "value": "Load"
-    }
-  ],
   "components.logoMenu.menuAriaLabel": [
     {
       "type": 0,
       "value": "Main menu"
-    }
-  ],
-  "components.logoMenu.previewView": [
-    {
-      "type": 0,
-      "value": "Preview"
-    }
-  ],
-  "components.logoMenu.settings": [
-    {
-      "type": 0,
-      "value": "Settings"
     }
   ],
   "components.magicSearch.button.": [
@@ -215,6 +281,48 @@
       "value": "Example: boy, put, seat belt."
     }
   ],
+  "components.newsNavBar.langSelector": [
+    {
+      "type": 0,
+      "value": "Language"
+    }
+  ],
+  "components.newsNavBar.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Main navigation"
+    }
+  ],
+  "components.newsNavBar.news": [
+    {
+      "type": 0,
+      "value": "News"
+    }
+  ],
+  "components.newsNavBar.openMenu": [
+    {
+      "type": 0,
+      "value": "Open navigation menu"
+    }
+  ],
+  "components.newsNavBar.skipToContent": [
+    {
+      "type": 0,
+      "value": "Skip to main content"
+    }
+  ],
+  "components.newsNavBar.start": [
+    {
+      "type": 0,
+      "value": "Create a sequence"
+    }
+  ],
+  "components.newsNavBar.welcome": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
   "components.pictEdit.close": [
     {
       "type": 0,
@@ -227,12 +335,6 @@
       "value": "Delete"
     }
   ],
-  "components.pictEdit.reset": [
-    {
-      "type": 0,
-      "value": "Reset to defaults"
-    }
-  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -243,6 +345,12 @@
     {
       "type": 0,
       "value": "Edit Pictogram"
+    }
+  ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Reset to defaults"
     }
   ],
   "components.pictEditSettings.settings.label": [
@@ -317,12 +425,6 @@
       "value": "Minus pictograms"
     }
   ],
-  "components.pictogramSearch.uploadImage": [
-    {
-      "type": 0,
-      "value": "Upload image from device"
-    }
-  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
@@ -333,6 +435,12 @@
     {
       "type": 0,
       "value": "Plus pictograms"
+    }
+  ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Upload image from device"
     }
   ],
   "components.sequenceAuthor": [
@@ -491,304 +599,28 @@
       "value": "More info"
     }
   ],
-  "news.number-font.content": [
+  "news.nextArticle": [
     {
       "type": 0,
-      "value": "You can now configure the font of pictogram numbers independently. In the Default Settings dialog, enabling the Numbering switch reveals a new section to choose the font family, size, and color for the numbers, separately from the pictogram text font."
+      "value": "Next article"
     }
   ],
-  "news.number-font.step1.alt": [
+  "news.prevArticle": [
     {
       "type": 0,
-      "value": "Default settings panel with the Numbering switch off"
-    }
-  ],
-  "news.number-font.step1.description": [
-    {
-      "type": 0,
-      "value": "Open the Default Settings dialog from the main menu (click the logo). You will see a switch to enable pictogram numbering."
-    }
-  ],
-  "news.number-font.step2.alt": [
-    {
-      "type": 0,
-      "value": "Numbering switch enabled in the settings panel"
-    }
-  ],
-  "news.number-font.step2.description": [
-    {
-      "type": 0,
-      "value": "Enable the Numbering switch. Each pictogram will now show its order number on the opposite side of the text."
-    }
-  ],
-  "news.number-font.step3.alt": [
-    {
-      "type": 0,
-      "value": "New number font section showing family, size and color selectors"
-    }
-  ],
-  "news.number-font.step3.description": [
-    {
-      "type": 0,
-      "value": "Once numbering is enabled, a new section appears to configure the number font: family, size, and color, independently from the pictogram text font."
-    }
-  ],
-  "news.number-font.summary": [
-    {
-      "type": 0,
-      "value": "Choose an independent font for the numbers shown on pictograms."
-    }
-  ],
-  "news.number-font.title": [
-    {
-      "type": 0,
-      "value": "Custom font for numbers"
-    }
-  ],
-  "news.logo-menu.content": [
-    {
-      "type": 0,
-      "value": "Did you know the SequenciAAC logo is a button? Click it to open the main navigation menu, where you can access all pages and features of the application."
-    }
-  ],
-  "news.logo-menu.step1.alt": [
-    {
-      "type": 0,
-      "value": "Navigation section of the menu with Home, News, Edit and Preview links"
-    }
-  ],
-  "news.logo-menu.step1.description": [
-    {
-      "type": 0,
-      "value": "The first section contains shortcuts to all pages: Home, News (where you'll find all updates), Edit (to create your sequences) and Preview (to view and print them)."
-    }
-  ],
-  "news.logo-menu.step2.alt": [
-    {
-      "type": 0,
-      "value": "File section of the menu with Download and Load options"
-    }
-  ],
-  "news.logo-menu.step2.description": [
-    {
-      "type": 0,
-      "value": "From here you can manage your sequence files: Download saves the current sequence to a file on your device, and Load retrieves a previously saved sequence."
-    }
-  ],
-  "news.logo-menu.step3.alt": [
-    {
-      "type": 0,
-      "value": "Settings section and language selector with ca, es and en buttons"
-    }
-  ],
-  "news.logo-menu.step3.description": [
-    {
-      "type": 0,
-      "value": "Settings opens the default pictogram settings dialog, where you can adjust typography, borders, text position and other visual options. Below it, the language selector lets you switch between Catalan (ca), Spanish (es) or English (en)."
-    }
-  ],
-  "news.logo-menu.summary": [
-    {
-      "type": 0,
-      "value": "Click the logo to open the main menu and access all app features."
-    }
-  ],
-  "news.logo-menu.title": [
-    {
-      "type": 0,
-      "value": "The navigation menu"
-    }
-  ],
-  "news.multiple-sequences.content": [
-    {
-      "type": 0,
-      "value": "Create as many sequences as you need! Use tabs to add new sequences or remove the ones you no longer need. Each sequence is independent and you can switch between them easily."
-    }
-  ],
-  "news.multiple-sequences.img1.alt": [
-    {
-      "type": 0,
-      "value": "Sequence tabs"
-    }
-  ],
-  "news.multiple-sequences.img2.alt": [
-    {
-      "type": 0,
-      "value": "Add and remove sequences"
-    }
-  ],
-  "news.multiple-sequences.step1.alt": [
-    {
-      "type": 0,
-      "value": "Sequence 1 with pictograms and button to add a new sequence"
-    }
-  ],
-  "news.multiple-sequences.step1.description": [
-    {
-      "type": 0,
-      "value": "On the edit page, search for words in the search box (separated by commas) and pictograms will appear automatically in the active sequence. Click the + button to create a new sequence."
-    }
-  ],
-  "news.multiple-sequences.step2.alt": [
-    {
-      "type": 0,
-      "value": "Two sequence tabs visible, sequence 2 active"
-    }
-  ],
-  "news.multiple-sequences.step2.description": [
-    {
-      "type": 0,
-      "value": "Click any tab to switch to a different active sequence. Each sequence has its own independent content. Search for new words to fill sequence 2."
-    }
-  ],
-  "news.multiple-sequences.step3.alt": [
-    {
-      "type": 0,
-      "value": "View of both sequences with size increased globally"
-    }
-  ],
-  "news.multiple-sequences.step3.description": [
-    {
-      "type": 0,
-      "value": "In the View page, the \"Apply to all\" toggle lets you adjust the size and spacing of all sequences at once. Move the size control to see the change applied globally."
-    }
-  ],
-  "news.multiple-sequences.step4.alt": [
-    {
-      "type": 0,
-      "value": "View with sequence 2 individually adjusted to a different size"
-    }
-  ],
-  "news.multiple-sequences.step4.description": [
-    {
-      "type": 0,
-      "value": "Disable \"Apply to all\" to configure each sequence independently. Expand the accordion for the sequence you want to adjust and change its size or spacing without affecting the others."
-    }
-  ],
-  "news.multiple-sequences.summary": [
-    {
-      "type": 0,
-      "value": "You can now create and manage multiple sequences at once with tabs."
-    }
-  ],
-  "news.multiple-sequences.title": [
-    {
-      "type": 0,
-      "value": "Multiple sequences"
-    }
-  ],
-  "news.view-improvements.content": [
-    {
-      "type": 0,
-      "value": "Several bugs have been fixed that caused the print preview to not match the actual printed output. New controls have also been added for alignment and direction of sequences, and when you save a sequence the view settings are now automatically included."
-    }
-  ],
-  "news.view-improvements.step1.alt": [
-    {
-      "type": 0,
-      "value": "Sequence preview showing exact match with printed output"
-    }
-  ],
-  "news.view-improvements.step1.description": [
-    {
-      "type": 0,
-      "value": "The sequence preview now corresponds exactly to the printed output. A precise scale calculation takes into account the page format (A4, A3) and screen resolution to faithfully show what will be printed."
-    }
-  ],
-  "news.view-improvements.step2.alt": [
-    {
-      "type": 0,
-      "value": "Alignment and direction controls for sequences"
-    }
-  ],
-  "news.view-improvements.step2.description": [
-    {
-      "type": 0,
-      "value": "New controls to customize each sequence: choose the alignment (left, center, right) and direction (horizontal or vertical) to adapt the presentation to your needs."
-    }
-  ],
-  "news.view-improvements.step3.alt": [
-    {
-      "type": 0,
-      "value": "Save sequence button with view settings included"
-    }
-  ],
-  "news.view-improvements.step3.description": [
-    {
-      "type": 0,
-      "value": "When you save the sequence using the download button, the view settings (sizes, spacing, alignment and direction) are automatically included in the file, so when you reload it everything will be as you left it."
-    }
-  ],
-  "news.view-improvements.summary": [
-    {
-      "type": 0,
-      "value": "Print preview now matches output exactly. New alignment and direction controls."
-    }
-  ],
-  "news.view-improvements.title": [
-    {
-      "type": 0,
-      "value": "Print preview improvements"
-    }
-  ],
-  "news.save-improvements.content": [
-    {
-      "type": 0,
-      "value": "The .saac file now saves the custom images you've uploaded, stored directly in the file so they're never lost. Additionally, the display settings for each sequence — pictogram size, spacing and alignment — are also saved and restored exactly as you left them."
-    }
-  ],
-  "news.save-improvements.step1.alt": [
-    {
-      "type": 0,
-      "value": "Button to upload a custom image to the pictogram"
-    }
-  ],
-  "news.save-improvements.step1.description": [
-    {
-      "type": 0,
-      "value": "Upload your own image to any pictogram. The image is saved directly in the .saac file, without needing internet."
-    }
-  ],
-  "news.save-improvements.step2.alt": [
-    {
-      "type": 0,
-      "value": "Save dialog with sequence and settings options"
-    }
-  ],
-  "news.save-improvements.step2.description": [
-    {
-      "type": 0,
-      "value": "When saving the file, all custom images are automatically included."
-    }
-  ],
-  "news.save-improvements.step3.alt": [
-    {
-      "type": 0,
-      "value": "Pictogram size and spacing controls"
-    }
-  ],
-  "news.save-improvements.step3.description": [
-    {
-      "type": 0,
-      "value": "The size, spacing and alignment of each sequence are automatically saved and restored when loading the file."
-    }
-  ],
-  "news.save-improvements.summary": [
-    {
-      "type": 0,
-      "value": "The saved file now includes custom images and the size and spacing settings for each sequence."
-    }
-  ],
-  "news.save-improvements.title": [
-    {
-      "type": 0,
-      "value": "Save improvements"
+      "value": "Previous article"
     }
   ],
   "news.section.title": [
     {
       "type": 0,
-      "value": "What's new"
+      "value": "News"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "See all news"
     }
   ],
   "pages.viewSequence.alignment.label": [
@@ -1288,62 +1120,5 @@
       "type": 0,
       "value": "Start"
     }
-  ],
-  "changelog.page.title": [
-    {
-      "type": 0,
-      "value": "What's new"
-    }
-  ],
-  "changelog.category.nova": [
-    {
-      "type": 0,
-      "value": "New"
-    }
-  ],
-  "changelog.category.millora": [
-    {
-      "type": 0,
-      "value": "Improvement"
-    }
-  ],
-  "changelog.category.correccio": [
-    {
-      "type": 0,
-      "value": "Fix"
-    }
-  ],
-  "changelog.readMore": [
-    {
-      "type": 0,
-      "value": "Read more"
-    }
-  ],
-  "news.seeAll": [
-    {
-      "type": 0,
-      "value": "See all updates"
-    }
-  ],
-  "news.prevArticle": [{ "type": 0, "value": "Previous article" }],
-  "news.nextArticle": [{ "type": 0, "value": "Next article" }],
-  "news.articleNavigation": [{ "type": 0, "value": "Article navigation" }],
-  "components.newsNavBar.welcome": [{ "type": 0, "value": "Home" }],
-  "components.newsNavBar.start": [{ "type": 0, "value": "Create a sequence" }],
-  "components.newsNavBar.langSelector": [{ "type": 0, "value": "Language" }],
-  "components.newsNavBar.skipToContent": [{ "type": 0, "value": "Skip to main content" }],
-  "components.newsNavBar.mainNavigation": [{ "type": 0, "value": "Main navigation" }],
-  "components.newsNavBar.news": [{ "type": 0, "value": "Updates" }],
-  "components.newsNavBar.openMenu": [{ "type": 0, "value": "Open navigation menu" }],
-  "components.appNavigationDrawer.welcome": [{ "type": 0, "value": "Home" }],
-  "components.appNavigationDrawer.news": [{ "type": 0, "value": "News" }],
-  "components.appNavigationDrawer.editView": [{ "type": 0, "value": "Edit" }],
-  "components.appNavigationDrawer.previewView": [{ "type": 0, "value": "Preview" }],
-  "components.appNavigationDrawer.download": [{ "type": 0, "value": "Download" }],
-  "components.appNavigationDrawer.load": [{ "type": 0, "value": "Load" }],
-  "components.appNavigationDrawer.settings": [{ "type": 0, "value": "Settings" }],
-  "components.appNavigationDrawer.settingsTitle": [{ "type": 0, "value": "Default settings" }],
-  "components.appNavigationDrawer.settingsClose": [{ "type": 0, "value": "Close" }],
-  "components.appNavigationDrawer.langSelector": [{ "type": 0, "value": "Language" }],
-  "components.appNavigationDrawer.openMenu": [{ "type": 0, "value": "Open menu" }]
+  ]
 }
