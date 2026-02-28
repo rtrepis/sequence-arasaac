@@ -633,5 +633,333 @@
   "news.save-load.img2.alt": {
     "defaultMessage": "Carregar fitxer guardat",
     "description": "Alt imatge 2 guardar i carregar"
+  },
+  "news.number-font.title": {
+    "defaultMessage": "Font personalitzada per als números",
+    "description": "Títol notícia font dels números"
+  },
+  "news.number-font.summary": {
+    "defaultMessage": "Tria una tipografia pròpia per als números que apareixen als pictogrames.",
+    "description": "Resum notícia font dels números"
+  },
+  "news.number-font.content": {
+    "defaultMessage": "Ara pots configurar de forma independent la tipografia dels números que s'afegeixen als pictogrames quan actives la numeració. Des del diàleg de Configuració per defecte, si actives el switch de Numeració, apareixerà una nova secció per escollir la família tipogràfica, la mida i el color dels números, de manera independent a la tipografia del text dels pictogrames.",
+    "description": "Contingut notícia font dels números"
+  },
+  "news.number-font.step1.alt": {
+    "defaultMessage": "Panell de configuració per defecte amb el switch de Numeració desactivat",
+    "description": "Alt pas 1 font dels números"
+  },
+  "news.number-font.step1.description": {
+    "defaultMessage": "Obre el diàleg de Configuració per defecte des del menú principal (clica el logo). Veuràs un switch per activar la Numeració dels pictogrames.",
+    "description": "Descripció pas 1 font dels números"
+  },
+  "news.number-font.step2.alt": {
+    "defaultMessage": "Switch de Numeració activat al panell de configuració",
+    "description": "Alt pas 2 font dels números"
+  },
+  "news.number-font.step2.description": {
+    "defaultMessage": "Activa el switch de Numeració. Cada pictograma mostrarà el seu número d'ordre a la posició oposada al text.",
+    "description": "Descripció pas 2 font dels números"
+  },
+  "news.number-font.step3.alt": {
+    "defaultMessage": "Nova secció de configuració de la font dels números, amb selector de família, mida i color",
+    "description": "Alt pas 3 font dels números"
+  },
+  "news.number-font.step3.description": {
+    "defaultMessage": "Un cop activada la numeració, apareix una nova secció per configurar la tipografia dels números: família, mida i color, de forma independent a la font del text dels pictogrames.",
+    "description": "Descripció pas 3 font dels números"
+  },
+  "news.logo-menu.title": {
+    "defaultMessage": "El menú de navegació",
+    "description": "Títol notícia menú logo"
+  },
+  "news.logo-menu.summary": {
+    "defaultMessage": "Clica el logo per obrir el menú principal i accedir a totes les funcions de l'app.",
+    "description": "Resum notícia menú logo"
+  },
+  "news.logo-menu.content": {
+    "defaultMessage": "Sabies que el logo de SequenciAAC és un botó? Clica'l per desplegar el menú de navegació principal, des d'on pots accedir a totes les pàgines i funcions de l'aplicació.",
+    "description": "Contingut notícia menú logo"
+  },
+  "news.logo-menu.step1.alt": {
+    "defaultMessage": "Secció de navegació del menú amb els accessos Inici, Novetats, Edita i Previsualitza",
+    "description": "Alt pas 1 menú logo"
+  },
+  "news.logo-menu.step1.description": {
+    "defaultMessage": "La primera secció del menú conté els accessos directes a totes les pàgines: Inici, Novetats (on trobaràs totes les actualitzacions), Edita (per crear les teves seqüències) i Previsualitza (per veure-les i imprimir-les).",
+    "description": "Descripció pas 1 menú logo"
+  },
+  "news.logo-menu.step2.alt": {
+    "defaultMessage": "Secció de fitxers del menú amb les opcions Descarrega i Carrega",
+    "description": "Alt pas 2 menú logo"
+  },
+  "news.logo-menu.step2.description": {
+    "defaultMessage": "Des d'aquí pots gestionar els fitxers de les teves seqüències: Descarrega desa la seqüència actual en un fitxer al teu dispositiu, i Carrega recupera una seqüència que havies desat anteriorment.",
+    "description": "Descripció pas 2 menú logo"
+  },
+  "news.logo-menu.step3.alt": {
+    "defaultMessage": "Secció de configuració i selector d'idioma amb els botons ca, es i en",
+    "description": "Alt pas 3 menú logo"
+  },
+  "news.logo-menu.step3.description": {
+    "defaultMessage": "Configuració obre el diàleg de configuració per defecte dels pictogrames, on pots ajustar tipografia, marcs, posició del text i altres opcions visuals. A sota trobaràs el selector d'idioma per canviar entre català (ca), castellà (es) o anglès (en).",
+    "description": "Descripció pas 3 menú logo"
+  },
+  "news.view-improvements.title": {
+    "defaultMessage": "Millores a la previsualització",
+    "description": "Títol notícia millores vista"
+  },
+  "news.view-improvements.summary": {
+    "defaultMessage": "Vista prèvia fidel a la impressió, nous controls d'alineació i direcció.",
+    "description": "Resum notícia millores vista"
+  },
+  "news.view-improvements.content": {
+    "defaultMessage": "S'han corregit errors que feien que la vista prèvia no coincidís exactament amb el resultat imprès. A més, s'han afegit nous controls d'alineació i direcció per a cada seqüència, i ara quan deses una seqüència la configuració de visualització també es desa automàticament.",
+    "description": "Contingut notícia millores vista"
+  },
+  "news.view-improvements.step1.alt": {
+    "defaultMessage": "Vista prèvia de la seqüència mostrant la correspondència exacta amb la impressió",
+    "description": "Alt pas 1 millores vista"
+  },
+  "news.view-improvements.step1.description": {
+    "defaultMessage": "La previsualització ara correspon exactament al resultat imprès. Un càlcul d'escala precís té en compte el format de pàgina (A4, A3) i la resolució de pantalla per mostrar amb fidelitat el que s'imprimirà.",
+    "description": "Descripció pas 1 millores vista"
+  },
+  "news.view-improvements.step2.alt": {
+    "defaultMessage": "Controls d'alineació i direcció de les seqüències",
+    "description": "Alt pas 2 millores vista"
+  },
+  "news.view-improvements.step2.description": {
+    "defaultMessage": "Nous controls per personalitzar cada seqüència: tria l'alineació (esquerra, centre, dreta) i la direcció (horitzontal o vertical) per adaptar la presentació a les teves necessitats.",
+    "description": "Descripció pas 2 millores vista"
+  },
+  "news.view-improvements.step3.alt": {
+    "defaultMessage": "Botó de desar la seqüència amb configuració de visualització inclosa",
+    "description": "Alt pas 3 millores vista"
+  },
+  "news.view-improvements.step3.description": {
+    "defaultMessage": "Quan deses la seqüència amb el botó de descàrrega, la configuració de visualització (mides, espais, alineació i direcció) s'inclou automàticament al fitxer, de manera que quan la tornes a carregar tot quedarà tal com ho havies deixat.",
+    "description": "Descripció pas 3 millores vista"
+  },
+  "news.save-improvements.title": {
+    "defaultMessage": "Millores al guardat",
+    "description": "Títol notícia millores guardat"
+  },
+  "news.save-improvements.summary": {
+    "defaultMessage": "El fitxer guardat ara inclou les imatges personalitzades i la configuració de mida i espaiat de cada seqüència.",
+    "description": "Resum notícia millores guardat"
+  },
+  "news.save-improvements.content": {
+    "defaultMessage": "Ara el fitxer .saac guarda les imatges personalitzades que has pujat, directament al fitxer per no perdre-les. A més, la configuració de visualització de cada seqüència —mida dels pictogrames, espaiat i alineació— també es guarda i es recupera exactament com la vas deixar.",
+    "description": "Contingut notícia millores guardat"
+  },
+  "news.save-improvements.step1.alt": {
+    "defaultMessage": "Botó per pujar una imatge pròpia al pictograma",
+    "description": "Alt pas 1 millores guardat"
+  },
+  "news.save-improvements.step1.description": {
+    "defaultMessage": "Puja la teva pròpia imatge a qualsevol pictograma. La imatge es guarda directament al fitxer .saac, sense dependre d'internet.",
+    "description": "Descripció pas 1 millores guardat"
+  },
+  "news.save-improvements.step2.alt": {
+    "defaultMessage": "Diàleg de guardar amb les opcions de seqüències i configuració",
+    "description": "Alt pas 2 millores guardat"
+  },
+  "news.save-improvements.step2.description": {
+    "defaultMessage": "En guardar el fitxer, totes les imatges personalitzades s'hi inclouen automàticament.",
+    "description": "Descripció pas 2 millores guardat"
+  },
+  "news.save-improvements.step3.alt": {
+    "defaultMessage": "Controls de mida i espaiat dels pictogrames",
+    "description": "Alt pas 3 millores guardat"
+  },
+  "news.save-improvements.step3.description": {
+    "defaultMessage": "La mida, l'espaiat i l'alineació de cada seqüència es guarden i es restauren automàticament en carregar el fitxer.",
+    "description": "Descripció pas 3 millores guardat"
+  },
+  "news.seeAll": {
+    "defaultMessage": "Veure totes les novetats",
+    "description": "Botó veure totes les novetats"
+  },
+  "news.prevArticle": {
+    "defaultMessage": "Article anterior",
+    "description": "Navegació article anterior"
+  },
+  "news.nextArticle": {
+    "defaultMessage": "Article següent",
+    "description": "Navegació article següent"
+  },
+  "news.articleNavigation": {
+    "defaultMessage": "Navegació entre articles",
+    "description": "Aria label navegació articles"
+  },
+  "component.settingCardFontGroup.numberFont.title": {
+    "defaultMessage": "Font dels números"
+  },
+  "components.barNavigation.skipToContent": {
+    "defaultMessage": "Salta al contingut principal"
+  },
+  "components.barNavigation.mainNavigation": {
+    "defaultMessage": "Navegació principal"
+  },
+  "components.logoMenu.download": {
+    "defaultMessage": "Descarregar"
+  },
+  "components.logoMenu.editView": {
+    "defaultMessage": "Editar"
+  },
+  "components.logoMenu.load": {
+    "defaultMessage": "Carregar"
+  },
+  "components.logoMenu.menuAriaLabel": {
+    "defaultMessage": "Menú principal"
+  },
+  "components.logoMenu.previewView": {
+    "defaultMessage": "Previsualitzar"
+  },
+  "components.logoMenu.settings": {
+    "defaultMessage": "Configuració"
+  },
+  "components.pictEdit.reset": {
+    "defaultMessage": "Valors per defecte"
+  },
+  "components.pictogramSearch.uploadImage": {
+    "defaultMessage": "Pujar imatge des del dispositiu"
+  },
+  "context.feedback.applyAll.success": {
+    "defaultMessage": "Aplicat a {count} pictogrames"
+  },
+  "context.feedback.load.error": {
+    "defaultMessage": "Error carregant el fitxer"
+  },
+  "context.feedback.load.success": {
+    "defaultMessage": "Fitxer carregat correctament"
+  },
+  "context.feedback.loading": {
+    "defaultMessage": "Carregant..."
+  },
+  "context.feedback.save.success": {
+    "defaultMessage": "Fitxer guardat correctament"
+  },
+  "context.feedback.search.complete": {
+    "defaultMessage": "{count} pictogrames afegits"
+  },
+  "context.feedback.search.error": {
+    "defaultMessage": "Error cercant pictogrames"
+  },
+  "context.feedback.search.loading": {
+    "defaultMessage": "Cercant pictogrames..."
+  },
+  "pages.viewSequence.alignment.label": {
+    "defaultMessage": "Alineació"
+  },
+  "pages.viewSequence.applyAll.label": {
+    "defaultMessage": "Aplicar a totes"
+  },
+  "pages.viewSequence.direction.label": {
+    "defaultMessage": "Direcció"
+  },
+  "pages.viewSequence.pageSize.label": {
+    "defaultMessage": "Mida de pàgina"
+  },
+  "pages.viewSequence.sequence.label": {
+    "defaultMessage": "Seqüència"
+  },
+  "pages.viewSequence.tooltip.alignCenter": {
+    "defaultMessage": "Alinear al centre"
+  },
+  "pages.viewSequence.tooltip.alignLeft": {
+    "defaultMessage": "Alinear a l'esquerra"
+  },
+  "pages.viewSequence.tooltip.alignRight": {
+    "defaultMessage": "Alinear a la dreta"
+  },
+  "pages.viewSequence.tooltip.applyAll": {
+    "defaultMessage": "Aplicar a totes les seqüències"
+  },
+  "pages.viewSequence.tooltip.directionColumn": {
+    "defaultMessage": "Vertical"
+  },
+  "pages.viewSequence.tooltip.directionRow": {
+    "defaultMessage": "Horitzontal"
+  },
+  "pages.viewSequence.tooltip.fullscreen": {
+    "defaultMessage": "Pantalla completa"
+  },
+  "pages.viewSequence.tooltip.orientation": {
+    "defaultMessage": "Orientació de pàgina"
+  },
+  "pages.viewSequence.tooltip.print": {
+    "defaultMessage": "Imprimir"
+  },
+  "changelog.page.title": {
+    "defaultMessage": "Novetats"
+  },
+  "changelog.category.nova": {
+    "defaultMessage": "Nova"
+  },
+  "changelog.category.millora": {
+    "defaultMessage": "Millora"
+  },
+  "changelog.category.correccio": {
+    "defaultMessage": "Correcció"
+  },
+  "changelog.readMore": {
+    "defaultMessage": "Llegir més"
+  },
+  "components.newsNavBar.welcome": {
+    "defaultMessage": "Inici"
+  },
+  "components.newsNavBar.start": {
+    "defaultMessage": "Crea una seqüència"
+  },
+  "components.newsNavBar.langSelector": {
+    "defaultMessage": "Idioma"
+  },
+  "components.newsNavBar.skipToContent": {
+    "defaultMessage": "Salta al contingut principal"
+  },
+  "components.newsNavBar.mainNavigation": {
+    "defaultMessage": "Navegació principal"
+  },
+  "components.newsNavBar.news": {
+    "defaultMessage": "Novetats"
+  },
+  "components.newsNavBar.openMenu": {
+    "defaultMessage": "Obrir menú de navegació"
+  },
+  "components.appNavigationDrawer.welcome": {
+    "defaultMessage": "Inici"
+  },
+  "components.appNavigationDrawer.news": {
+    "defaultMessage": "Novetats"
+  },
+  "components.appNavigationDrawer.editView": {
+    "defaultMessage": "Edita"
+  },
+  "components.appNavigationDrawer.previewView": {
+    "defaultMessage": "Previsualitza"
+  },
+  "components.appNavigationDrawer.download": {
+    "defaultMessage": "Descarrega"
+  },
+  "components.appNavigationDrawer.load": {
+    "defaultMessage": "Carrega"
+  },
+  "components.appNavigationDrawer.settings": {
+    "defaultMessage": "Configuració"
+  },
+  "components.appNavigationDrawer.settingsTitle": {
+    "defaultMessage": "Configuració per defecte"
+  },
+  "components.appNavigationDrawer.settingsClose": {
+    "defaultMessage": "Tancar"
+  },
+  "components.appNavigationDrawer.langSelector": {
+    "defaultMessage": "Idioma"
+  },
+  "components.appNavigationDrawer.openMenu": {
+    "defaultMessage": "Obrir menú"
   }
 }

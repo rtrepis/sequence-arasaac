@@ -633,6 +633,333 @@
   "news.save-load.img2.alt": {
     "defaultMessage": "Cargar archivo guardado",
     "description": "Alt imatge 2 guardar i carregar"
+  },
+  "news.number-font.title": {
+    "defaultMessage": "Fuente personalizada para los números",
+    "description": "Títol notícia font dels números"
+  },
+  "news.number-font.summary": {
+    "defaultMessage": "Elige una tipografía propia para los números que aparecen en los pictogramas.",
+    "description": "Resum notícia font dels números"
+  },
+  "news.number-font.content": {
+    "defaultMessage": "Ahora puedes configurar de forma independiente la tipografía de los números que se añaden a los pictogramas cuando activas la numeración. Desde el diálogo de Configuración por defecto, activando el switch de Numeración, aparecerá una nueva sección para escoger la familia tipográfica, el tamaño y el color de los números, de manera independiente a la tipografía del texto de los pictogramas.",
+    "description": "Contingut notícia font dels números"
+  },
+  "news.number-font.step1.alt": {
+    "defaultMessage": "Panel de configuración por defecto con el switch de Numeración desactivado",
+    "description": "Alt pas 1 font dels números"
+  },
+  "news.number-font.step1.description": {
+    "defaultMessage": "Abre el diálogo de Configuración por defecto desde el menú principal (haz clic en el logo). Verás un switch para activar la Numeración de los pictogramas.",
+    "description": "Descripció pas 1 font dels números"
+  },
+  "news.number-font.step2.alt": {
+    "defaultMessage": "Switch de Numeración activado en el panel de configuración",
+    "description": "Alt pas 2 font dels números"
+  },
+  "news.number-font.step2.description": {
+    "defaultMessage": "Activa el switch de Numeración. Cada pictograma mostrará su número de orden en la posición opuesta al texto.",
+    "description": "Descripció pas 2 font dels números"
+  },
+  "news.number-font.step3.alt": {
+    "defaultMessage": "Nueva sección de configuración de la fuente de los números, con selector de familia, tamaño y color",
+    "description": "Alt pas 3 font dels números"
+  },
+  "news.number-font.step3.description": {
+    "defaultMessage": "Una vez activada la numeración, aparece una nueva sección para configurar la tipografía de los números: familia, tamaño y color, de forma independiente a la fuente del texto de los pictogramas.",
+    "description": "Descripció pas 3 font dels números"
+  },
+  "news.logo-menu.title": {
+    "defaultMessage": "El menú de navegación",
+    "description": "Títol notícia menú logo"
+  },
+  "news.logo-menu.summary": {
+    "defaultMessage": "Haz clic en el logo para abrir el menú principal y acceder a todas las funciones de la app.",
+    "description": "Resum notícia menú logo"
+  },
+  "news.logo-menu.content": {
+    "defaultMessage": "¿Sabías que el logo de SequenciAAC es un botón? Haz clic en él para desplegar el menú de navegación principal, desde donde puedes acceder a todas las páginas y funciones de la aplicación.",
+    "description": "Contingut notícia menú logo"
+  },
+  "news.logo-menu.step1.alt": {
+    "defaultMessage": "Sección de navegación del menú con los accesos Inicio, Novedades, Edita y Previsualiza",
+    "description": "Alt pas 1 menú logo"
+  },
+  "news.logo-menu.step1.description": {
+    "defaultMessage": "La primera sección del menú contiene los accesos directos a todas las páginas: Inicio, Novedades (donde encontrarás todas las actualizaciones), Edita (para crear tus secuencias) y Previsualiza (para verlas e imprimirlas).",
+    "description": "Descripció pas 1 menú logo"
+  },
+  "news.logo-menu.step2.alt": {
+    "defaultMessage": "Sección de archivos del menú con las opciones Descarga y Carga",
+    "description": "Alt pas 2 menú logo"
+  },
+  "news.logo-menu.step2.description": {
+    "defaultMessage": "Desde aquí puedes gestionar los archivos de tus secuencias: Descarga guarda la secuencia actual en un archivo en tu dispositivo, y Carga recupera una secuencia que habías guardado anteriormente.",
+    "description": "Descripció pas 2 menú logo"
+  },
+  "news.logo-menu.step3.alt": {
+    "defaultMessage": "Sección de configuración y selector de idioma con los botones ca, es y en",
+    "description": "Alt pas 3 menú logo"
+  },
+  "news.logo-menu.step3.description": {
+    "defaultMessage": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es) o inglés (en).",
+    "description": "Descripció pas 3 menú logo"
+  },
+  "news.view-improvements.title": {
+    "defaultMessage": "Mejoras en la previsualización",
+    "description": "Títol notícia millores vista"
+  },
+  "news.view-improvements.summary": {
+    "defaultMessage": "Vista previa fiel a la impresión, nuevos controles de alineación y dirección.",
+    "description": "Resum notícia millores vista"
+  },
+  "news.view-improvements.content": {
+    "defaultMessage": "Se han corregido errores que hacían que la vista previa no coincidiera exactamente con el resultado impreso. Además, se han añadido nuevos controles de alineación y dirección para cada secuencia, y ahora cuando guardas una secuencia la configuración de visualización también se guarda automáticamente.",
+    "description": "Contingut notícia millores vista"
+  },
+  "news.view-improvements.step1.alt": {
+    "defaultMessage": "Vista previa de la secuencia mostrando la correspondencia exacta con la impresión",
+    "description": "Alt pas 1 millores vista"
+  },
+  "news.view-improvements.step1.description": {
+    "defaultMessage": "La previsualización ahora corresponde exactamente al resultado impreso. Un cálculo de escala preciso tiene en cuenta el formato de página (A4, A3) y la resolución de pantalla para mostrar fielmente lo que se imprimirá.",
+    "description": "Descripció pas 1 millores vista"
+  },
+  "news.view-improvements.step2.alt": {
+    "defaultMessage": "Controles de alineación y dirección de las secuencias",
+    "description": "Alt pas 2 millores vista"
+  },
+  "news.view-improvements.step2.description": {
+    "defaultMessage": "Nuevos controles para personalizar cada secuencia: elige la alineación (izquierda, centro, derecha) y la dirección (horizontal o vertical) para adaptar la presentación a tus necesidades.",
+    "description": "Descripció pas 2 millores vista"
+  },
+  "news.view-improvements.step3.alt": {
+    "defaultMessage": "Botón de guardar la secuencia con configuración de visualización incluida",
+    "description": "Alt pas 3 millores vista"
+  },
+  "news.view-improvements.step3.description": {
+    "defaultMessage": "Cuando guardas la secuencia con el botón de descarga, la configuración de visualización (tamaños, espacios, alineación y dirección) se incluye automáticamente en el archivo, de manera que cuando la vuelves a cargar todo quedará tal como lo habías dejado.",
+    "description": "Descripció pas 3 millores vista"
+  },
+  "news.save-improvements.title": {
+    "defaultMessage": "Mejoras al guardado",
+    "description": "Títol notícia millores guardat"
+  },
+  "news.save-improvements.summary": {
+    "defaultMessage": "El archivo guardado ahora incluye imágenes personalizadas y la configuración de tamaño y espaciado de cada secuencia.",
+    "description": "Resum notícia millores guardat"
+  },
+  "news.save-improvements.content": {
+    "defaultMessage": "Ahora el archivo .saac guarda las imágenes personalizadas que has subido, directamente en el archivo para no perderlas. Además, la configuración de visualización de cada secuencia —tamaño de los pictogramas, espaciado y alineación— también se guarda y recupera exactamente como la dejaste.",
+    "description": "Contingut notícia millores guardat"
+  },
+  "news.save-improvements.step1.alt": {
+    "defaultMessage": "Botón para subir una imagen propia al pictograma",
+    "description": "Alt pas 1 millores guardat"
+  },
+  "news.save-improvements.step1.description": {
+    "defaultMessage": "Sube tu propia imagen a cualquier pictograma. La imagen se guarda directamente en el archivo .saac, sin depender de internet.",
+    "description": "Descripció pas 1 millores guardat"
+  },
+  "news.save-improvements.step2.alt": {
+    "defaultMessage": "Diálogo de guardar con las opciones de secuencias y configuración",
+    "description": "Alt pas 2 millores guardat"
+  },
+  "news.save-improvements.step2.description": {
+    "defaultMessage": "Al guardar el archivo, todas las imágenes personalizadas se incluyen automáticamente.",
+    "description": "Descripció pas 2 millores guardat"
+  },
+  "news.save-improvements.step3.alt": {
+    "defaultMessage": "Controles de tamaño y espaciado de los pictogramas",
+    "description": "Alt pas 3 millores guardat"
+  },
+  "news.save-improvements.step3.description": {
+    "defaultMessage": "El tamaño, el espaciado y la alineación de cada secuencia se guardan y restauran automáticamente al cargar el archivo.",
+    "description": "Descripció pas 3 millores guardat"
+  },
+  "news.seeAll": {
+    "defaultMessage": "Ver todas las novedades",
+    "description": "Botó veure totes les novetats"
+  },
+  "news.prevArticle": {
+    "defaultMessage": "Artículo anterior",
+    "description": "Navegació article anterior"
+  },
+  "news.nextArticle": {
+    "defaultMessage": "Artículo siguiente",
+    "description": "Navegació article següent"
+  },
+  "news.articleNavigation": {
+    "defaultMessage": "Navegación entre artículos",
+    "description": "Aria label navegació articles"
+  },
+  "component.settingCardFontGroup.numberFont.title": {
+    "defaultMessage": "Fuente de los números"
+  },
+  "components.barNavigation.skipToContent": {
+    "defaultMessage": "Saltar al contenido principal"
+  },
+  "components.barNavigation.mainNavigation": {
+    "defaultMessage": "Navegación principal"
+  },
+  "components.logoMenu.download": {
+    "defaultMessage": "Descargar"
+  },
+  "components.logoMenu.editView": {
+    "defaultMessage": "Editar"
+  },
+  "components.logoMenu.load": {
+    "defaultMessage": "Cargar"
+  },
+  "components.logoMenu.menuAriaLabel": {
+    "defaultMessage": "Menú principal"
+  },
+  "components.logoMenu.previewView": {
+    "defaultMessage": "Previsualizar"
+  },
+  "components.logoMenu.settings": {
+    "defaultMessage": "Configuración"
+  },
+  "components.pictEdit.reset": {
+    "defaultMessage": "Valores por defecto"
+  },
+  "components.pictogramSearch.uploadImage": {
+    "defaultMessage": "Subir imagen desde el dispositivo"
+  },
+  "context.feedback.applyAll.success": {
+    "defaultMessage": "Aplicado a {count} pictogramas"
+  },
+  "context.feedback.load.error": {
+    "defaultMessage": "Error al cargar el archivo"
+  },
+  "context.feedback.load.success": {
+    "defaultMessage": "Archivo cargado correctamente"
+  },
+  "context.feedback.loading": {
+    "defaultMessage": "Cargando..."
+  },
+  "context.feedback.save.success": {
+    "defaultMessage": "Archivo guardado correctamente"
+  },
+  "context.feedback.search.complete": {
+    "defaultMessage": "{count} pictogramas añadidos"
+  },
+  "context.feedback.search.error": {
+    "defaultMessage": "Error buscando pictogramas"
+  },
+  "context.feedback.search.loading": {
+    "defaultMessage": "Buscando pictogramas..."
+  },
+  "pages.viewSequence.alignment.label": {
+    "defaultMessage": "Alineación"
+  },
+  "pages.viewSequence.applyAll.label": {
+    "defaultMessage": "Aplicar a todas"
+  },
+  "pages.viewSequence.direction.label": {
+    "defaultMessage": "Dirección"
+  },
+  "pages.viewSequence.pageSize.label": {
+    "defaultMessage": "Tamaño de página"
+  },
+  "pages.viewSequence.sequence.label": {
+    "defaultMessage": "Secuencia"
+  },
+  "pages.viewSequence.tooltip.alignCenter": {
+    "defaultMessage": "Alinear al centro"
+  },
+  "pages.viewSequence.tooltip.alignLeft": {
+    "defaultMessage": "Alinear a la izquierda"
+  },
+  "pages.viewSequence.tooltip.alignRight": {
+    "defaultMessage": "Alinear a la derecha"
+  },
+  "pages.viewSequence.tooltip.applyAll": {
+    "defaultMessage": "Aplicar a todas las secuencias"
+  },
+  "pages.viewSequence.tooltip.directionColumn": {
+    "defaultMessage": "Vertical"
+  },
+  "pages.viewSequence.tooltip.directionRow": {
+    "defaultMessage": "Horizontal"
+  },
+  "pages.viewSequence.tooltip.fullscreen": {
+    "defaultMessage": "Pantalla completa"
+  },
+  "pages.viewSequence.tooltip.orientation": {
+    "defaultMessage": "Orientación de página"
+  },
+  "pages.viewSequence.tooltip.print": {
+    "defaultMessage": "Imprimir"
+  },
+  "changelog.page.title": {
+    "defaultMessage": "Novedades"
+  },
+  "changelog.category.nova": {
+    "defaultMessage": "Nueva"
+  },
+  "changelog.category.millora": {
+    "defaultMessage": "Mejora"
+  },
+  "changelog.category.correccio": {
+    "defaultMessage": "Corrección"
+  },
+  "changelog.readMore": {
+    "defaultMessage": "Leer más"
+  },
+  "components.newsNavBar.welcome": {
+    "defaultMessage": "Inicio"
+  },
+  "components.newsNavBar.start": {
+    "defaultMessage": "Crea una secuencia"
+  },
+  "components.newsNavBar.langSelector": {
+    "defaultMessage": "Idioma"
+  },
+  "components.newsNavBar.skipToContent": {
+    "defaultMessage": "Saltar al contenido principal"
+  },
+  "components.newsNavBar.mainNavigation": {
+    "defaultMessage": "Navegación principal"
+  },
+  "components.newsNavBar.news": {
+    "defaultMessage": "Novedades"
+  },
+  "components.newsNavBar.openMenu": {
+    "defaultMessage": "Abrir menú de navegación"
+  },
+  "components.appNavigationDrawer.welcome": {
+    "defaultMessage": "Inicio"
+  },
+  "components.appNavigationDrawer.news": {
+    "defaultMessage": "Novedades"
+  },
+  "components.appNavigationDrawer.editView": {
+    "defaultMessage": "Editar"
+  },
+  "components.appNavigationDrawer.previewView": {
+    "defaultMessage": "Previsualizar"
+  },
+  "components.appNavigationDrawer.download": {
+    "defaultMessage": "Descargar"
+  },
+  "components.appNavigationDrawer.load": {
+    "defaultMessage": "Cargar"
+  },
+  "components.appNavigationDrawer.settings": {
+    "defaultMessage": "Configuración"
+  },
+  "components.appNavigationDrawer.settingsTitle": {
+    "defaultMessage": "Configuración por defecto"
+  },
+  "components.appNavigationDrawer.settingsClose": {
+    "defaultMessage": "Cerrar"
+  },
+  "components.appNavigationDrawer.langSelector": {
+    "defaultMessage": "Idioma"
+  },
+  "components.appNavigationDrawer.openMenu": {
+    "defaultMessage": "Abrir menú"
   }
 }
-

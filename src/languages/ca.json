@@ -1,4 +1,34 @@
 {
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Correcció"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Millora"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "Nova"
+    }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "Novetats"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Llegir més"
+    }
+  ],
   "component.settingCardBorder.borderIn.title": [
     {
       "type": 0,
@@ -29,10 +59,88 @@
       "value": "Font dels números"
     }
   ],
+  "components.appNavigationDrawer.download": [
+    {
+      "type": 0,
+      "value": "Descarrega"
+    }
+  ],
+  "components.appNavigationDrawer.editView": [
+    {
+      "type": 0,
+      "value": "Edita"
+    }
+  ],
+  "components.appNavigationDrawer.langSelector": [
+    {
+      "type": 0,
+      "value": "Idioma"
+    }
+  ],
+  "components.appNavigationDrawer.load": [
+    {
+      "type": 0,
+      "value": "Carrega"
+    }
+  ],
+  "components.appNavigationDrawer.news": [
+    {
+      "type": 0,
+      "value": "Novetats"
+    }
+  ],
+  "components.appNavigationDrawer.openMenu": [
+    {
+      "type": 0,
+      "value": "Obrir menú"
+    }
+  ],
+  "components.appNavigationDrawer.previewView": [
+    {
+      "type": 0,
+      "value": "Previsualitza"
+    }
+  ],
+  "components.appNavigationDrawer.settings": [
+    {
+      "type": 0,
+      "value": "Configuració"
+    }
+  ],
+  "components.appNavigationDrawer.settingsClose": [
+    {
+      "type": 0,
+      "value": "Tancar"
+    }
+  ],
+  "components.appNavigationDrawer.settingsTitle": [
+    {
+      "type": 0,
+      "value": "Configuració per defecte"
+    }
+  ],
+  "components.appNavigationDrawer.welcome": [
+    {
+      "type": 0,
+      "value": "Inici"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
       "value": "Editar"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegació principal"
+    }
+  ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Salta al contingut principal"
     }
   ],
   "components.barNavigation.title": [
@@ -51,18 +159,6 @@
     {
       "type": 0,
       "value": "Benvingut"
-    }
-  ],
-  "components.barNavigation.skipToContent": [
-    {
-      "type": 0,
-      "value": "Salta al contingut principal"
-    }
-  ],
-  "components.barNavigation.mainNavigation": [
-    {
-      "type": 0,
-      "value": "Navegació principal"
     }
   ],
   "components.buttonWithFileLoad.load.label": [
@@ -215,6 +311,48 @@
       "value": "Exemple: Nen, posar, el cinturó de seguretat."
     }
   ],
+  "components.newsNavBar.langSelector": [
+    {
+      "type": 0,
+      "value": "Idioma"
+    }
+  ],
+  "components.newsNavBar.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegació principal"
+    }
+  ],
+  "components.newsNavBar.news": [
+    {
+      "type": 0,
+      "value": "Novetats"
+    }
+  ],
+  "components.newsNavBar.openMenu": [
+    {
+      "type": 0,
+      "value": "Obrir menú de navegació"
+    }
+  ],
+  "components.newsNavBar.skipToContent": [
+    {
+      "type": 0,
+      "value": "Salta al contingut principal"
+    }
+  ],
+  "components.newsNavBar.start": [
+    {
+      "type": 0,
+      "value": "Crea una seqüència"
+    }
+  ],
+  "components.newsNavBar.welcome": [
+    {
+      "type": 0,
+      "value": "Inici"
+    }
+  ],
   "components.pictEdit.close": [
     {
       "type": 0,
@@ -227,12 +365,6 @@
       "value": "Eliminar"
     }
   ],
-  "components.pictEdit.reset": [
-    {
-      "type": 0,
-      "value": "Valors per defecte"
-    }
-  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -243,6 +375,12 @@
     {
       "type": 0,
       "value": "Editar Pictograma"
+    }
+  ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Valors per defecte"
     }
   ],
   "components.pictEditSettings.settings.label": [
@@ -317,12 +455,6 @@
       "value": "Treure pictograma"
     }
   ],
-  "components.pictogramSearch.uploadImage": [
-    {
-      "type": 0,
-      "value": "Pujar imatge des del dispositiu"
-    }
-  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
@@ -333,6 +465,12 @@
     {
       "type": 0,
       "value": "Inserir pictograma"
+    }
+  ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Pujar imatge des del dispositiu"
     }
   ],
   "components.sequenceAuthor": [
@@ -479,70 +617,16 @@
       "value": "Cercant pictogrames..."
     }
   ],
+  "news.articleNavigation": [
+    {
+      "type": 0,
+      "value": "Navegació entre articles"
+    }
+  ],
   "news.back.button": [
     {
       "type": 0,
       "value": "Tornar"
-    }
-  ],
-  "news.moreInfo.button": [
-    {
-      "type": 0,
-      "value": "Més info"
-    }
-  ],
-  "news.number-font.content": [
-    {
-      "type": 0,
-      "value": "Ara pots configurar de forma independent la tipografia dels números que s'afegeixen als pictogrames quan actives la numeració. Des del diàleg de Configuració per defecte, si actives el switch de Numeració, apareixerà una nova secció per escollir la família tipogràfica, la mida i el color dels números, de manera independent a la tipografia del text dels pictogrames."
-    }
-  ],
-  "news.number-font.step1.alt": [
-    {
-      "type": 0,
-      "value": "Panell de configuració per defecte amb el switch de Numeració desactivat"
-    }
-  ],
-  "news.number-font.step1.description": [
-    {
-      "type": 0,
-      "value": "Obre el diàleg de Configuració per defecte des del menú principal (clica el logo). Veuràs un switch per activar la Numeració dels pictogrames."
-    }
-  ],
-  "news.number-font.step2.alt": [
-    {
-      "type": 0,
-      "value": "Switch de Numeració activat al panell de configuració"
-    }
-  ],
-  "news.number-font.step2.description": [
-    {
-      "type": 0,
-      "value": "Activa el switch de Numeració. Cada pictograma mostrarà el seu número d'ordre a la posició oposada al text."
-    }
-  ],
-  "news.number-font.step3.alt": [
-    {
-      "type": 0,
-      "value": "Nova secció de configuració de la font dels números, amb selector de família, mida i color"
-    }
-  ],
-  "news.number-font.step3.description": [
-    {
-      "type": 0,
-      "value": "Un cop activada la numeració, apareix una nova secció per configurar la tipografia dels números: família, mida i color, de forma independent a la font del text dels pictogrames."
-    }
-  ],
-  "news.number-font.summary": [
-    {
-      "type": 0,
-      "value": "Tria una tipografia pròpia per als números que apareixen als pictogrames."
-    }
-  ],
-  "news.number-font.title": [
-    {
-      "type": 0,
-      "value": "Font personalitzada per als números"
     }
   ],
   "news.logo-menu.content": [
@@ -597,6 +681,12 @@
     {
       "type": 0,
       "value": "El menú de navegació"
+    }
+  ],
+  "news.moreInfo.button": [
+    {
+      "type": 0,
+      "value": "Més info"
     }
   ],
   "news.multiple-sequences.content": [
@@ -677,58 +767,100 @@
       "value": "Múltiples seqüències"
     }
   ],
-  "news.view-improvements.content": [
+  "news.nextArticle": [
     {
       "type": 0,
-      "value": "S'han corregit errors que feien que la vista prèvia no coincidís exactament amb el resultat imprès. A més, s'han afegit nous controls d'alineació i direcció per a cada seqüència, i ara quan deses una seqüència la configuració de visualització també es desa automàticament."
+      "value": "Article següent"
     }
   ],
-  "news.view-improvements.step1.alt": [
+  "news.number-font.content": [
     {
       "type": 0,
-      "value": "Vista prèvia de la seqüència mostrant la correspondència exacta amb la impressió"
+      "value": "Ara pots configurar de forma independent la tipografia dels números que s'afegeixen als pictogrames quan actives la numeració. Des del diàleg de Configuració per defecte, si actives el switch de Numeració, apareixerà una nova secció per escollir la família tipogràfica, la mida i el color dels números, de manera independent a la tipografia del text dels pictogrames."
     }
   ],
-  "news.view-improvements.step1.description": [
+  "news.number-font.step1.alt": [
     {
       "type": 0,
-      "value": "La previsualització ara correspon exactament al resultat imprès. Un càlcul d'escala precís té en compte el format de pàgina (A4, A3) i la resolució de pantalla per mostrar amb fidelitat el que s'imprimirà."
+      "value": "Panell de configuració per defecte amb el switch de Numeració desactivat"
     }
   ],
-  "news.view-improvements.step2.alt": [
+  "news.number-font.step1.description": [
     {
       "type": 0,
-      "value": "Controls d'alineació i direcció de les seqüències"
+      "value": "Obre el diàleg de Configuració per defecte des del menú principal (clica el logo). Veuràs un switch per activar la Numeració dels pictogrames."
     }
   ],
-  "news.view-improvements.step2.description": [
+  "news.number-font.step2.alt": [
     {
       "type": 0,
-      "value": "Nous controls per personalitzar cada seqüència: tria l'alineació (esquerra, centre, dreta) i la direcció (horitzontal o vertical) per adaptar la presentació a les teves necessitats."
+      "value": "Switch de Numeració activat al panell de configuració"
     }
   ],
-  "news.view-improvements.step3.alt": [
+  "news.number-font.step2.description": [
     {
       "type": 0,
-      "value": "Botó de desar la seqüència amb configuració de visualització inclosa"
+      "value": "Activa el switch de Numeració. Cada pictograma mostrarà el seu número d'ordre a la posició oposada al text."
     }
   ],
-  "news.view-improvements.step3.description": [
+  "news.number-font.step3.alt": [
     {
       "type": 0,
-      "value": "Quan deses la seqüència amb el botó de descàrrega, la configuració de visualització (mides, espais, alineació i direcció) s'inclou automàticament al fitxer, de manera que quan la tornes a carregar tot quedarà tal com ho havies deixat."
+      "value": "Nova secció de configuració de la font dels números, amb selector de família, mida i color"
     }
   ],
-  "news.view-improvements.summary": [
+  "news.number-font.step3.description": [
     {
       "type": 0,
-      "value": "Vista prèvia fidel a la impressió, nous controls d'alineació i direcció."
+      "value": "Un cop activada la numeració, apareix una nova secció per configurar la tipografia dels números: família, mida i color, de forma independent a la font del text dels pictogrames."
     }
   ],
-  "news.view-improvements.title": [
+  "news.number-font.summary": [
     {
       "type": 0,
-      "value": "Millores a la previsualització"
+      "value": "Tria una tipografia pròpia per als números que apareixen als pictogrames."
+    }
+  ],
+  "news.number-font.title": [
+    {
+      "type": 0,
+      "value": "Font personalitzada per als números"
+    }
+  ],
+  "news.prevArticle": [
+    {
+      "type": 0,
+      "value": "Article anterior"
+    }
+  ],
+  "news.print-preview.content": [
+    {
+      "type": 0,
+      "value": "La vista prèvia et mostra exactament com quedarà la pàgina impresa. Pots controlar la mida dels pictogrames, l'espai entre files i columnes, i l'alineació. Tot es veu en temps real!"
+    }
+  ],
+  "news.print-preview.img1.alt": [
+    {
+      "type": 0,
+      "value": "Vista prèvia de la pàgina"
+    }
+  ],
+  "news.print-preview.img2.alt": [
+    {
+      "type": 0,
+      "value": "Controls de mida i espai"
+    }
+  ],
+  "news.print-preview.summary": [
+    {
+      "type": 0,
+      "value": "Previsualitza exactament com quedarà la teva pàgina abans d'imprimir."
+    }
+  ],
+  "news.print-preview.title": [
+    {
+      "type": 0,
+      "value": "Vista prèvia d'impressió"
     }
   ],
   "news.save-improvements.content": [
@@ -785,10 +917,130 @@
       "value": "Millores al guardat"
     }
   ],
+  "news.save-load.content": [
+    {
+      "type": 0,
+      "value": "Trobaràs les opcions de guardar i carregar al menú del logo de SequenciAAC. Quan guardes, es descarrega un fitxer amb totes les seqüències i les imatges dels pictogrames incloses. Així pots recuperar el teu treball en qualsevol moment!"
+    }
+  ],
+  "news.save-load.img1.alt": [
+    {
+      "type": 0,
+      "value": "Menú amb opció de guardar"
+    }
+  ],
+  "news.save-load.img2.alt": [
+    {
+      "type": 0,
+      "value": "Carregar fitxer guardat"
+    }
+  ],
+  "news.save-load.summary": [
+    {
+      "type": 0,
+      "value": "Descarrega les teves seqüències amb les imatges i carrega-les quan vulguis."
+    }
+  ],
+  "news.save-load.title": [
+    {
+      "type": 0,
+      "value": "Guarda i recupera"
+    }
+  ],
   "news.section.title": [
     {
       "type": 0,
       "value": "Novetats"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "Veure totes les novetats"
+    }
+  ],
+  "news.sequence-settings.content": [
+    {
+      "type": 0,
+      "value": "Ara pots personalitzar cada seqüència de manera independent. Canvia l'alineació dels pictogrames (esquerra, centre o dreta), configura la tipografia i el color dels números de forma independent al text, i descobreix més opcions de format per adaptar les seqüències a les teves necessitats."
+    }
+  ],
+  "news.sequence-settings.img1.alt": [
+    {
+      "type": 0,
+      "value": "Opcions d'alineació"
+    }
+  ],
+  "news.sequence-settings.img2.alt": [
+    {
+      "type": 0,
+      "value": "Configuració de tipografia dels números"
+    }
+  ],
+  "news.sequence-settings.summary": [
+    {
+      "type": 0,
+      "value": "Personalitza cada seqüència amb alineació, tipografia dels números i més opcions."
+    }
+  ],
+  "news.sequence-settings.title": [
+    {
+      "type": 0,
+      "value": "Noves configuracions per seqüència"
+    }
+  ],
+  "news.view-improvements.content": [
+    {
+      "type": 0,
+      "value": "S'han corregit errors que feien que la vista prèvia no coincidís exactament amb el resultat imprès. A més, s'han afegit nous controls d'alineació i direcció per a cada seqüència, i ara quan deses una seqüència la configuració de visualització també es desa automàticament."
+    }
+  ],
+  "news.view-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Vista prèvia de la seqüència mostrant la correspondència exacta amb la impressió"
+    }
+  ],
+  "news.view-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "La previsualització ara correspon exactament al resultat imprès. Un càlcul d'escala precís té en compte el format de pàgina (A4, A3) i la resolució de pantalla per mostrar amb fidelitat el que s'imprimirà."
+    }
+  ],
+  "news.view-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Controls d'alineació i direcció de les seqüències"
+    }
+  ],
+  "news.view-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "Nous controls per personalitzar cada seqüència: tria l'alineació (esquerra, centre, dreta) i la direcció (horitzontal o vertical) per adaptar la presentació a les teves necessitats."
+    }
+  ],
+  "news.view-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Botó de desar la seqüència amb configuració de visualització inclosa"
+    }
+  ],
+  "news.view-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "Quan deses la seqüència amb el botó de descàrrega, la configuració de visualització (mides, espais, alineació i direcció) s'inclou automàticament al fitxer, de manera que quan la tornes a carregar tot quedarà tal com ho havies deixat."
+    }
+  ],
+  "news.view-improvements.summary": [
+    {
+      "type": 0,
+      "value": "Vista prèvia fidel a la impressió, nous controls d'alineació i direcció."
+    }
+  ],
+  "news.view-improvements.title": [
+    {
+      "type": 0,
+      "value": "Millores a la previsualització"
     }
   ],
   "pages.viewSequence.alignment.label": [
@@ -1288,62 +1540,5 @@
       "type": 0,
       "value": "Inicia"
     }
-  ],
-  "changelog.page.title": [
-    {
-      "type": 0,
-      "value": "Novetats"
-    }
-  ],
-  "changelog.category.nova": [
-    {
-      "type": 0,
-      "value": "Nova"
-    }
-  ],
-  "changelog.category.millora": [
-    {
-      "type": 0,
-      "value": "Millora"
-    }
-  ],
-  "changelog.category.correccio": [
-    {
-      "type": 0,
-      "value": "Correcció"
-    }
-  ],
-  "changelog.readMore": [
-    {
-      "type": 0,
-      "value": "Llegir més"
-    }
-  ],
-  "news.seeAll": [
-    {
-      "type": 0,
-      "value": "Veure totes les novetats"
-    }
-  ],
-  "news.prevArticle": [{ "type": 0, "value": "Article anterior" }],
-  "news.nextArticle": [{ "type": 0, "value": "Article següent" }],
-  "news.articleNavigation": [{ "type": 0, "value": "Navegació entre articles" }],
-  "components.newsNavBar.welcome": [{ "type": 0, "value": "Inici" }],
-  "components.newsNavBar.start": [{ "type": 0, "value": "Crea una seqüència" }],
-  "components.newsNavBar.langSelector": [{ "type": 0, "value": "Idioma" }],
-  "components.newsNavBar.skipToContent": [{ "type": 0, "value": "Salta al contingut principal" }],
-  "components.newsNavBar.mainNavigation": [{ "type": 0, "value": "Navegació principal" }],
-  "components.newsNavBar.news": [{ "type": 0, "value": "Novetats" }],
-  "components.newsNavBar.openMenu": [{ "type": 0, "value": "Obrir menú de navegació" }],
-  "components.appNavigationDrawer.welcome": [{ "type": 0, "value": "Inici" }],
-  "components.appNavigationDrawer.news": [{ "type": 0, "value": "Novetats" }],
-  "components.appNavigationDrawer.editView": [{ "type": 0, "value": "Edita" }],
-  "components.appNavigationDrawer.previewView": [{ "type": 0, "value": "Previsualitza" }],
-  "components.appNavigationDrawer.download": [{ "type": 0, "value": "Descarrega" }],
-  "components.appNavigationDrawer.load": [{ "type": 0, "value": "Carrega" }],
-  "components.appNavigationDrawer.settings": [{ "type": 0, "value": "Configuració" }],
-  "components.appNavigationDrawer.settingsTitle": [{ "type": 0, "value": "Configuració per defecte" }],
-  "components.appNavigationDrawer.settingsClose": [{ "type": 0, "value": "Tancar" }],
-  "components.appNavigationDrawer.langSelector": [{ "type": 0, "value": "Idioma" }],
-  "components.appNavigationDrawer.openMenu": [{ "type": 0, "value": "Obrir menú" }]
+  ]
 }
