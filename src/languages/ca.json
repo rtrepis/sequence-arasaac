@@ -731,36 +731,6 @@
       "value": "Millores a la previsualització"
     }
   ],
-  "news.print-preview.content": [
-    {
-      "type": 0,
-      "value": "La vista prèvia et mostra exactament com quedarà la pàgina impresa. Pots controlar la mida dels pictogrames, l'espai entre files i columnes, i l'alineació. Tot es veu en temps real!"
-    }
-  ],
-  "news.print-preview.img1.alt": [
-    {
-      "type": 0,
-      "value": "Vista prèvia de la pàgina"
-    }
-  ],
-  "news.print-preview.img2.alt": [
-    {
-      "type": 0,
-      "value": "Controls de mida i espai"
-    }
-  ],
-  "news.print-preview.summary": [
-    {
-      "type": 0,
-      "value": "Previsualitza exactament com quedarà la teva pàgina abans d'imprimir."
-    }
-  ],
-  "news.print-preview.title": [
-    {
-      "type": 0,
-      "value": "Vista prèvia d'impressió"
-    }
-  ],
   "news.save-improvements.content": [
     {
       "type": 0,
@@ -815,70 +785,10 @@
       "value": "Millores al guardat"
     }
   ],
-  "news.save-load.content": [
-    {
-      "type": 0,
-      "value": "Trobaràs les opcions de guardar i carregar al menú del logo de SequenciAAC. Quan guardes, es descarrega un fitxer amb totes les seqüències i les imatges dels pictogrames incloses. Així pots recuperar el teu treball en qualsevol moment!"
-    }
-  ],
-  "news.save-load.img1.alt": [
-    {
-      "type": 0,
-      "value": "Menú amb opció de guardar"
-    }
-  ],
-  "news.save-load.img2.alt": [
-    {
-      "type": 0,
-      "value": "Carregar fitxer guardat"
-    }
-  ],
-  "news.save-load.summary": [
-    {
-      "type": 0,
-      "value": "Descarrega les teves seqüències amb les imatges i carrega-les quan vulguis."
-    }
-  ],
-  "news.save-load.title": [
-    {
-      "type": 0,
-      "value": "Guarda i recupera"
-    }
-  ],
   "news.section.title": [
     {
       "type": 0,
       "value": "Novetats"
-    }
-  ],
-  "news.sequence-settings.content": [
-    {
-      "type": 0,
-      "value": "Ara pots personalitzar cada seqüència de manera independent. Canvia l'alineació dels pictogrames (esquerra, centre o dreta), configura la tipografia i el color dels números de forma independent al text, i descobreix més opcions de format per adaptar les seqüències a les teves necessitats."
-    }
-  ],
-  "news.sequence-settings.img1.alt": [
-    {
-      "type": 0,
-      "value": "Opcions d'alineació"
-    }
-  ],
-  "news.sequence-settings.img2.alt": [
-    {
-      "type": 0,
-      "value": "Configuració de tipografia dels números"
-    }
-  ],
-  "news.sequence-settings.summary": [
-    {
-      "type": 0,
-      "value": "Personalitza cada seqüència amb alineació, tipografia dels números i més opcions."
-    }
-  ],
-  "news.sequence-settings.title": [
-    {
-      "type": 0,
-      "value": "Noves configuracions per seqüència"
     }
   ],
   "pages.viewSequence.alignment.label": [

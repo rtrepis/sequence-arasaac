@@ -731,36 +731,6 @@
       "value": "Print preview improvements"
     }
   ],
-  "news.print-preview.content": [
-    {
-      "type": 0,
-      "value": "The print preview shows you exactly how the printed page will look. You can control the pictogram size, row and column spacing, and alignment. Everything updates in real time!"
-    }
-  ],
-  "news.print-preview.img1.alt": [
-    {
-      "type": 0,
-      "value": "Page preview"
-    }
-  ],
-  "news.print-preview.img2.alt": [
-    {
-      "type": 0,
-      "value": "Size and spacing controls"
-    }
-  ],
-  "news.print-preview.summary": [
-    {
-      "type": 0,
-      "value": "Preview exactly how your page will look before printing."
-    }
-  ],
-  "news.print-preview.title": [
-    {
-      "type": 0,
-      "value": "Print preview"
-    }
-  ],
   "news.save-improvements.content": [
     {
       "type": 0,
@@ -815,70 +785,10 @@
       "value": "Save improvements"
     }
   ],
-  "news.save-load.content": [
-    {
-      "type": 0,
-      "value": "You'll find the save and load options in the SequenciAAC logo menu. When saving, a file is downloaded with all sequences and pictogram images included. This way you can restore your work at any time!"
-    }
-  ],
-  "news.save-load.img1.alt": [
-    {
-      "type": 0,
-      "value": "Menu with save option"
-    }
-  ],
-  "news.save-load.img2.alt": [
-    {
-      "type": 0,
-      "value": "Load saved file"
-    }
-  ],
-  "news.save-load.summary": [
-    {
-      "type": 0,
-      "value": "Download your sequences with images and load them whenever you want."
-    }
-  ],
-  "news.save-load.title": [
-    {
-      "type": 0,
-      "value": "Save and restore"
-    }
-  ],
   "news.section.title": [
     {
       "type": 0,
       "value": "What's new"
-    }
-  ],
-  "news.sequence-settings.content": [
-    {
-      "type": 0,
-      "value": "You can now customize each sequence independently. Change the pictogram alignment (left, center or right), configure the number typography and color independently from the text, and discover more formatting options to adapt sequences to your needs."
-    }
-  ],
-  "news.sequence-settings.img1.alt": [
-    {
-      "type": 0,
-      "value": "Alignment options"
-    }
-  ],
-  "news.sequence-settings.img2.alt": [
-    {
-      "type": 0,
-      "value": "Number typography settings"
-    }
-  ],
-  "news.sequence-settings.summary": [
-    {
-      "type": 0,
-      "value": "Customize each sequence with alignment, number typography and more options."
-    }
-  ],
-  "news.sequence-settings.title": [
-    {
-      "type": 0,
-      "value": "New per-sequence settings"
     }
   ],
   "pages.viewSequence.alignment.label": [
