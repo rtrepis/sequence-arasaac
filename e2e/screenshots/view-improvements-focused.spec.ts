@@ -9,7 +9,7 @@ const FIXTURES_DIR = path.join(process.cwd(), "e2e/fixtures/images");
 
 // Cursor SVG (fletxa clàssica negra amb contorn blanc) per fer-lo visible en captures headless
 const CURSOR_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
+  '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">' +
     '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
     "</svg>",
 )}`;
@@ -116,8 +116,8 @@ const focusedScreenshot = async (
         "position:fixed",
         `left:${x}px`,
         `top:${y}px`,
-        "width:24px",
-        "height:24px",
+        "width:48px",
+        "height:48px",
         "z-index:2147483647",
         "pointer-events:none",
         `background-image:url("${svgUrl}")`,
@@ -234,7 +234,8 @@ test(
     await previewContainer.waitFor({ state: "visible", timeout: 15000 });
     await page.waitForTimeout(1000);
 
-    // Portada carousel: crop apaïsat per mostrar la previsualització en context
+    // Coberta carousel: target ~700×320px (ratio card 300×140 a 3-per-fila)
+    // previewContainer ~260px ample, ~200px alt → paddingX=(700-260)/2=220, paddingY=(320-200)/2=60
     await focusedScreenshot(
       page,
       previewContainer,
@@ -242,12 +243,12 @@ test(
       { paddingX: 220, paddingY: 60, mouseOffset: { x: 30, y: 30 } },
     );
 
-    // Pas 1: crop estàndard centrat en la previsualització
+    // Pas 1: target ~680px ample; previewContainer ~320px → paddingX=(680-320)/2=180
     await focusedScreenshot(
       page,
       previewContainer,
       path.join(IMG_DIR, "view-improvements-step1.png"),
-      { paddingX: 260, paddingY: 280, mouseOffset: { x: 30, y: 30 } },
+      { paddingX: 180, paddingY: 280, mouseOffset: { x: 30, y: 30 } },
     );
 
     // =============================================
@@ -265,12 +266,12 @@ test(
       .filter({ has: page.locator('[aria-label="left"]') });
     await alignmentGroup.waitFor({ state: "visible", timeout: 10000 });
 
-    // Protagonista: grup d'alineació (mostra left/center/right amb icons contextuals)
+    // Pas 2: target ~680px ample; alignmentGroup ~120px → paddingX=(680-120)/2=280
     await focusedScreenshot(
       page,
       alignmentGroup,
       path.join(IMG_DIR, "view-improvements-step2.png"),
-      { padding: 280, mouseOffset: { x: 30, y: 30 } },
+      { paddingX: 280, paddingY: 280, mouseOffset: { x: 30, y: 30 } },
     );
 
     // =============================================
@@ -287,12 +288,12 @@ test(
     const downloadItem = page.getByRole("button", { name: /Descarrega/i });
     await downloadItem.waitFor({ state: "visible", timeout: 10000 });
 
-    // Protagonista: l'ítem de desar (indica que desa la config de visualització)
+    // Pas 3: target ~680px ample; downloadItem ~270px → paddingX=(680-270)/2=205
     await focusedScreenshot(
       page,
       downloadItem,
       path.join(IMG_DIR, "view-improvements-step3.png"),
-      { paddingX: 280, paddingY: 40, mouseOffset: { x: 25, y: 15 } },
+      { paddingX: 205, paddingY: 40, mouseOffset: { x: 25, y: 15 } },
     );
   },
 );

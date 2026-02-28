@@ -7,7 +7,7 @@ const IMG_DIR = path.join(process.cwd(), "public/img/news");
 
 // Cursor SVG (fletxa clàssica negra amb contorn blanc) per fer-lo visible en captures headless
 const CURSOR_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
+  '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">' +
     '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
     "</svg>",
 )}`;
@@ -86,8 +86,8 @@ const focusedScreenshot = async (
         "position:fixed",
         `left:${x}px`,
         `top:${y}px`,
-        "width:24px",
-        "height:24px",
+        "width:48px",
+        "height:48px",
         "z-index:2147483647",
         "pointer-events:none",
         `background-image:url("${svgUrl}")`,
@@ -151,11 +151,12 @@ test(
       await page.waitForTimeout(400);
     }
 
+    // Pas 1: target ~680px ample; switch ~38px → paddingX=(680-38)/2=321
     await focusedScreenshot(
       page,
       numberedSwitch,
       path.join(IMG_DIR, "number-font-step1.png"),
-      { paddingX: 320, paddingY: 80, mouseOffset: { x: 40, y: 20 } },
+      { paddingX: 321, paddingY: 80, mouseOffset: { x: 40, y: 20 } },
     );
 
     // =============================================
@@ -165,11 +166,12 @@ test(
     await numberedSwitch.click();
     await page.waitForTimeout(500);
 
+    // Pas 2: ídem pas 1
     await focusedScreenshot(
       page,
       numberedSwitch,
       path.join(IMG_DIR, "number-font-step2.png"),
-      { paddingX: 320, paddingY: 80, mouseOffset: { x: 40, y: 20 } },
+      { paddingX: 321, paddingY: 80, mouseOffset: { x: 40, y: 20 } },
     );
 
     // =============================================
@@ -181,25 +183,24 @@ test(
     await fontGroupHeading.waitFor({ state: "visible" });
     await page.waitForTimeout(300);
 
+    // Pas 3: target ~680px ample; heading ~200px → paddingX=(680-200)/2=240
     await focusedScreenshot(
       page,
       fontGroupHeading,
       path.join(IMG_DIR, "number-font-step3.png"),
-      { paddingX: 260, paddingY: 100, mouseOffset: { x: 40, y: 30 } },
+      { paddingX: 240, paddingY: 100, mouseOffset: { x: 40, y: 30 } },
     );
 
     // =============================================
-    // COBERTA CAROUSEL — ratio ~700×260 (2.7:1)
-    // Protagonista: switch Numeració (~38×38px)
-    // paddingX/paddingY calculat per a ratio 700×260:
-    //   paddingX = (700 - elem_w) / 2 ≈ 331
-    //   paddingY = (260 - elem_h) / 2 ≈ 111
+    // COBERTA CAROUSEL — target 700×320px
+    // ratio card 300×140 a 3-per-fila (1280px viewport) → ratio 2.14:1
+    // Switch ~38×38px → paddingX=(700-38)/2=331, paddingY=(320-38)/2=141
     // =============================================
     await focusedScreenshot(
       page,
       numberedSwitch,
       path.join(IMG_DIR, "number-font.png"),
-      { paddingX: 331, paddingY: 111, mouseOffset: { x: 40, y: 20 } },
+      { paddingX: 331, paddingY: 141, mouseOffset: { x: 40, y: 20 } },
     );
   },
 );

@@ -761,6 +761,60 @@
       "value": "Vista prèvia d'impressió"
     }
   ],
+  "news.save-improvements.content": [
+    {
+      "type": 0,
+      "value": "Ara el fitxer .saac guarda les imatges personalitzades que has pujat, directament al fitxer per no perdre-les. A més, la configuració de visualització de cada seqüència —mida dels pictogrames, espaiat i alineació— també es guarda i es recupera exactament com la vas deixar."
+    }
+  ],
+  "news.save-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Botó per pujar una imatge pròpia al pictograma"
+    }
+  ],
+  "news.save-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "Puja la teva pròpia imatge a qualsevol pictograma. La imatge es guarda directament al fitxer .saac, sense dependre d'internet."
+    }
+  ],
+  "news.save-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Diàleg de guardar amb les opcions de seqüències i configuració"
+    }
+  ],
+  "news.save-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "En guardar el fitxer, totes les imatges personalitzades s'hi inclouen automàticament."
+    }
+  ],
+  "news.save-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Controls de mida i espaiat dels pictogrames"
+    }
+  ],
+  "news.save-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "La mida, l'espaiat i l'alineació de cada seqüència es guarden i es restauren automàticament en carregar el fitxer."
+    }
+  ],
+  "news.save-improvements.summary": [
+    {
+      "type": 0,
+      "value": "El fitxer guardat ara inclou les imatges personalitzades i la configuració de mida i espaiat de cada seqüència."
+    }
+  ],
+  "news.save-improvements.title": [
+    {
+      "type": 0,
+      "value": "Millores al guardat"
+    }
+  ],
   "news.save-load.content": [
     {
       "type": 0,

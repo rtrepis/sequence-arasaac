@@ -27,6 +27,39 @@ export interface NewsItem {
 
 export const newsItems: NewsItem[] = [
   {
+    slug: "save-improvements",
+    titleId: "news.save-improvements.title",
+    summaryId: "news.save-improvements.summary",
+    contentId: "news.save-improvements.content",
+    coverImage: "/img/news/save-improvements.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/save-improvements-step1.png",
+          altId: "news.save-improvements.step1.alt",
+        },
+        descriptionId: "news.save-improvements.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/save-improvements-step2.png",
+          altId: "news.save-improvements.step2.alt",
+        },
+        descriptionId: "news.save-improvements.step2.description",
+      },
+      {
+        image: {
+          src: "/img/news/save-improvements-step3.png",
+          altId: "news.save-improvements.step3.alt",
+        },
+        descriptionId: "news.save-improvements.step3.description",
+      },
+    ],
+    date: "2026-02-28",
+    category: "millora",
+  },
+  {
     slug: "number-font",
     titleId: "news.number-font.title",
     summaryId: "news.number-font.summary",
@@ -171,7 +204,7 @@ export const newsItems: NewsItem[] = [
         descriptionId: "news.multiple-sequences.step4.description",
       },
     ],
-    date: "2025-01-15",
+    date: "2026-02-15",
     category: "nova",
   },
   {
