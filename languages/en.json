@@ -633,5 +633,333 @@
   "news.save-load.img2.alt": {
     "defaultMessage": "Load saved file",
     "description": "Alt imatge 2 guardar i carregar"
+  },
+  "news.number-font.title": {
+    "defaultMessage": "Custom font for numbers",
+    "description": "Títol notícia font dels números"
+  },
+  "news.number-font.summary": {
+    "defaultMessage": "Choose an independent font for the numbers shown on pictograms.",
+    "description": "Resum notícia font dels números"
+  },
+  "news.number-font.content": {
+    "defaultMessage": "You can now configure the font of pictogram numbers independently. In the Default Settings dialog, enabling the Numbering switch reveals a new section to choose the font family, size, and color for the numbers, separately from the pictogram text font.",
+    "description": "Contingut notícia font dels números"
+  },
+  "news.number-font.step1.alt": {
+    "defaultMessage": "Default settings panel with the Numbering switch off",
+    "description": "Alt pas 1 font dels números"
+  },
+  "news.number-font.step1.description": {
+    "defaultMessage": "Open the Default Settings dialog from the main menu (click the logo). You will see a switch to enable pictogram numbering.",
+    "description": "Descripció pas 1 font dels números"
+  },
+  "news.number-font.step2.alt": {
+    "defaultMessage": "Numbering switch enabled in the settings panel",
+    "description": "Alt pas 2 font dels números"
+  },
+  "news.number-font.step2.description": {
+    "defaultMessage": "Enable the Numbering switch. Each pictogram will now show its order number on the opposite side of the text.",
+    "description": "Descripció pas 2 font dels números"
+  },
+  "news.number-font.step3.alt": {
+    "defaultMessage": "New number font section showing family, size and color selectors",
+    "description": "Alt pas 3 font dels números"
+  },
+  "news.number-font.step3.description": {
+    "defaultMessage": "Once numbering is enabled, a new section appears to configure the number font: family, size, and color, independently from the pictogram text font.",
+    "description": "Descripció pas 3 font dels números"
+  },
+  "news.logo-menu.title": {
+    "defaultMessage": "The navigation menu",
+    "description": "Títol notícia menú logo"
+  },
+  "news.logo-menu.summary": {
+    "defaultMessage": "Click the logo to open the main menu and access all app features.",
+    "description": "Resum notícia menú logo"
+  },
+  "news.logo-menu.content": {
+    "defaultMessage": "Did you know the SequenciAAC logo is a button? Click it to open the main navigation menu, where you can access all pages and features of the application.",
+    "description": "Contingut notícia menú logo"
+  },
+  "news.logo-menu.step1.alt": {
+    "defaultMessage": "Navigation section of the menu with Home, News, Edit and Preview links",
+    "description": "Alt pas 1 menú logo"
+  },
+  "news.logo-menu.step1.description": {
+    "defaultMessage": "The first section contains shortcuts to all pages: Home, News (where you'll find all updates), Edit (to create your sequences) and Preview (to view and print them).",
+    "description": "Descripció pas 1 menú logo"
+  },
+  "news.logo-menu.step2.alt": {
+    "defaultMessage": "File section of the menu with Download and Load options",
+    "description": "Alt pas 2 menú logo"
+  },
+  "news.logo-menu.step2.description": {
+    "defaultMessage": "From here you can manage your sequence files: Download saves the current sequence to a file on your device, and Load retrieves a previously saved sequence.",
+    "description": "Descripció pas 2 menú logo"
+  },
+  "news.logo-menu.step3.alt": {
+    "defaultMessage": "Settings section and language selector with ca, es and en buttons",
+    "description": "Alt pas 3 menú logo"
+  },
+  "news.logo-menu.step3.description": {
+    "defaultMessage": "Settings opens the default pictogram settings dialog, where you can adjust typography, borders, text position and other visual options. Below it, the language selector lets you switch between Catalan (ca), Spanish (es) or English (en).",
+    "description": "Descripció pas 3 menú logo"
+  },
+  "news.view-improvements.title": {
+    "defaultMessage": "Print preview improvements",
+    "description": "Títol notícia millores vista"
+  },
+  "news.view-improvements.summary": {
+    "defaultMessage": "Print preview now matches output exactly. New alignment and direction controls.",
+    "description": "Resum notícia millores vista"
+  },
+  "news.view-improvements.content": {
+    "defaultMessage": "Several bugs have been fixed that caused the print preview to not match the actual printed output. New controls have also been added for alignment and direction of sequences, and when you save a sequence the view settings are now automatically included.",
+    "description": "Contingut notícia millores vista"
+  },
+  "news.view-improvements.step1.alt": {
+    "defaultMessage": "Sequence preview showing exact match with printed output",
+    "description": "Alt pas 1 millores vista"
+  },
+  "news.view-improvements.step1.description": {
+    "defaultMessage": "The sequence preview now corresponds exactly to the printed output. A precise scale calculation takes into account the page format (A4, A3) and screen resolution to faithfully show what will be printed.",
+    "description": "Descripció pas 1 millores vista"
+  },
+  "news.view-improvements.step2.alt": {
+    "defaultMessage": "Alignment and direction controls for sequences",
+    "description": "Alt pas 2 millores vista"
+  },
+  "news.view-improvements.step2.description": {
+    "defaultMessage": "New controls to customize each sequence: choose the alignment (left, center, right) and direction (horizontal or vertical) to adapt the presentation to your needs.",
+    "description": "Descripció pas 2 millores vista"
+  },
+  "news.view-improvements.step3.alt": {
+    "defaultMessage": "Save sequence button with view settings included",
+    "description": "Alt pas 3 millores vista"
+  },
+  "news.view-improvements.step3.description": {
+    "defaultMessage": "When you save the sequence using the download button, the view settings (sizes, spacing, alignment and direction) are automatically included in the file, so when you reload it everything will be as you left it.",
+    "description": "Descripció pas 3 millores vista"
+  },
+  "news.save-improvements.title": {
+    "defaultMessage": "Save improvements",
+    "description": "Títol notícia millores guardat"
+  },
+  "news.save-improvements.summary": {
+    "defaultMessage": "The saved file now includes custom images and the size and spacing settings for each sequence.",
+    "description": "Resum notícia millores guardat"
+  },
+  "news.save-improvements.content": {
+    "defaultMessage": "The .saac file now saves the custom images you've uploaded, stored directly in the file so they're never lost. Additionally, the display settings for each sequence — pictogram size, spacing and alignment — are also saved and restored exactly as you left them.",
+    "description": "Contingut notícia millores guardat"
+  },
+  "news.save-improvements.step1.alt": {
+    "defaultMessage": "Button to upload a custom image to the pictogram",
+    "description": "Alt pas 1 millores guardat"
+  },
+  "news.save-improvements.step1.description": {
+    "defaultMessage": "Upload your own image to any pictogram. The image is saved directly in the .saac file, without needing internet.",
+    "description": "Descripció pas 1 millores guardat"
+  },
+  "news.save-improvements.step2.alt": {
+    "defaultMessage": "Save dialog with sequence and settings options",
+    "description": "Alt pas 2 millores guardat"
+  },
+  "news.save-improvements.step2.description": {
+    "defaultMessage": "When saving the file, all custom images are automatically included.",
+    "description": "Descripció pas 2 millores guardat"
+  },
+  "news.save-improvements.step3.alt": {
+    "defaultMessage": "Pictogram size and spacing controls",
+    "description": "Alt pas 3 millores guardat"
+  },
+  "news.save-improvements.step3.description": {
+    "defaultMessage": "The size, spacing and alignment of each sequence are automatically saved and restored when loading the file.",
+    "description": "Descripció pas 3 millores guardat"
+  },
+  "news.seeAll": {
+    "defaultMessage": "See all updates",
+    "description": "Botó veure totes les novetats"
+  },
+  "news.prevArticle": {
+    "defaultMessage": "Previous article",
+    "description": "Navegació article anterior"
+  },
+  "news.nextArticle": {
+    "defaultMessage": "Next article",
+    "description": "Navegació article següent"
+  },
+  "news.articleNavigation": {
+    "defaultMessage": "Article navigation",
+    "description": "Aria label navegació articles"
+  },
+  "component.settingCardFontGroup.numberFont.title": {
+    "defaultMessage": "Number font"
+  },
+  "components.barNavigation.skipToContent": {
+    "defaultMessage": "Skip to main content"
+  },
+  "components.barNavigation.mainNavigation": {
+    "defaultMessage": "Main navigation"
+  },
+  "components.logoMenu.download": {
+    "defaultMessage": "Download"
+  },
+  "components.logoMenu.editView": {
+    "defaultMessage": "Edit"
+  },
+  "components.logoMenu.load": {
+    "defaultMessage": "Load"
+  },
+  "components.logoMenu.menuAriaLabel": {
+    "defaultMessage": "Main menu"
+  },
+  "components.logoMenu.previewView": {
+    "defaultMessage": "Preview"
+  },
+  "components.logoMenu.settings": {
+    "defaultMessage": "Settings"
+  },
+  "components.pictEdit.reset": {
+    "defaultMessage": "Reset to defaults"
+  },
+  "components.pictogramSearch.uploadImage": {
+    "defaultMessage": "Upload image from device"
+  },
+  "context.feedback.applyAll.success": {
+    "defaultMessage": "Applied to {count} pictograms"
+  },
+  "context.feedback.load.error": {
+    "defaultMessage": "Error loading file"
+  },
+  "context.feedback.load.success": {
+    "defaultMessage": "File loaded successfully"
+  },
+  "context.feedback.loading": {
+    "defaultMessage": "Loading..."
+  },
+  "context.feedback.save.success": {
+    "defaultMessage": "File saved successfully"
+  },
+  "context.feedback.search.complete": {
+    "defaultMessage": "{count} pictograms added"
+  },
+  "context.feedback.search.error": {
+    "defaultMessage": "Error searching pictograms"
+  },
+  "context.feedback.search.loading": {
+    "defaultMessage": "Searching pictograms..."
+  },
+  "pages.viewSequence.alignment.label": {
+    "defaultMessage": "Alignment"
+  },
+  "pages.viewSequence.applyAll.label": {
+    "defaultMessage": "Apply to all"
+  },
+  "pages.viewSequence.direction.label": {
+    "defaultMessage": "Direction"
+  },
+  "pages.viewSequence.pageSize.label": {
+    "defaultMessage": "Page Size"
+  },
+  "pages.viewSequence.sequence.label": {
+    "defaultMessage": "Sequence"
+  },
+  "pages.viewSequence.tooltip.alignCenter": {
+    "defaultMessage": "Align center"
+  },
+  "pages.viewSequence.tooltip.alignLeft": {
+    "defaultMessage": "Align left"
+  },
+  "pages.viewSequence.tooltip.alignRight": {
+    "defaultMessage": "Align right"
+  },
+  "pages.viewSequence.tooltip.applyAll": {
+    "defaultMessage": "Apply to all sequences"
+  },
+  "pages.viewSequence.tooltip.directionColumn": {
+    "defaultMessage": "Vertical"
+  },
+  "pages.viewSequence.tooltip.directionRow": {
+    "defaultMessage": "Horizontal"
+  },
+  "pages.viewSequence.tooltip.fullscreen": {
+    "defaultMessage": "Full screen"
+  },
+  "pages.viewSequence.tooltip.orientation": {
+    "defaultMessage": "Page orientation"
+  },
+  "pages.viewSequence.tooltip.print": {
+    "defaultMessage": "Print"
+  },
+  "changelog.page.title": {
+    "defaultMessage": "What's new"
+  },
+  "changelog.category.nova": {
+    "defaultMessage": "New"
+  },
+  "changelog.category.millora": {
+    "defaultMessage": "Improvement"
+  },
+  "changelog.category.correccio": {
+    "defaultMessage": "Fix"
+  },
+  "changelog.readMore": {
+    "defaultMessage": "Read more"
+  },
+  "components.newsNavBar.welcome": {
+    "defaultMessage": "Home"
+  },
+  "components.newsNavBar.start": {
+    "defaultMessage": "Create a sequence"
+  },
+  "components.newsNavBar.langSelector": {
+    "defaultMessage": "Language"
+  },
+  "components.newsNavBar.skipToContent": {
+    "defaultMessage": "Skip to main content"
+  },
+  "components.newsNavBar.mainNavigation": {
+    "defaultMessage": "Main navigation"
+  },
+  "components.newsNavBar.news": {
+    "defaultMessage": "Updates"
+  },
+  "components.newsNavBar.openMenu": {
+    "defaultMessage": "Open navigation menu"
+  },
+  "components.appNavigationDrawer.welcome": {
+    "defaultMessage": "Home"
+  },
+  "components.appNavigationDrawer.news": {
+    "defaultMessage": "News"
+  },
+  "components.appNavigationDrawer.editView": {
+    "defaultMessage": "Edit"
+  },
+  "components.appNavigationDrawer.previewView": {
+    "defaultMessage": "Preview"
+  },
+  "components.appNavigationDrawer.download": {
+    "defaultMessage": "Download"
+  },
+  "components.appNavigationDrawer.load": {
+    "defaultMessage": "Load"
+  },
+  "components.appNavigationDrawer.settings": {
+    "defaultMessage": "Settings"
+  },
+  "components.appNavigationDrawer.settingsTitle": {
+    "defaultMessage": "Default settings"
+  },
+  "components.appNavigationDrawer.settingsClose": {
+    "defaultMessage": "Close"
+  },
+  "components.appNavigationDrawer.langSelector": {
+    "defaultMessage": "Language"
+  },
+  "components.appNavigationDrawer.openMenu": {
+    "defaultMessage": "Open menu"
   }
 }

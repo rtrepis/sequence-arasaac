@@ -1,4 +1,34 @@
 {
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Corrección"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Mejora"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "Nueva"
+    }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "Novedades"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Leer más"
+    }
+  ],
   "component.settingCardBorder.borderIn.title": [
     {
       "type": 0,
@@ -29,10 +59,88 @@
       "value": "Fuente de los números"
     }
   ],
+  "components.appNavigationDrawer.download": [
+    {
+      "type": 0,
+      "value": "Descargar"
+    }
+  ],
+  "components.appNavigationDrawer.editView": [
+    {
+      "type": 0,
+      "value": "Editar"
+    }
+  ],
+  "components.appNavigationDrawer.langSelector": [
+    {
+      "type": 0,
+      "value": "Idioma"
+    }
+  ],
+  "components.appNavigationDrawer.load": [
+    {
+      "type": 0,
+      "value": "Cargar"
+    }
+  ],
+  "components.appNavigationDrawer.news": [
+    {
+      "type": 0,
+      "value": "Novedades"
+    }
+  ],
+  "components.appNavigationDrawer.openMenu": [
+    {
+      "type": 0,
+      "value": "Abrir menú"
+    }
+  ],
+  "components.appNavigationDrawer.previewView": [
+    {
+      "type": 0,
+      "value": "Previsualizar"
+    }
+  ],
+  "components.appNavigationDrawer.settings": [
+    {
+      "type": 0,
+      "value": "Configuración"
+    }
+  ],
+  "components.appNavigationDrawer.settingsClose": [
+    {
+      "type": 0,
+      "value": "Cerrar"
+    }
+  ],
+  "components.appNavigationDrawer.settingsTitle": [
+    {
+      "type": 0,
+      "value": "Configuración por defecto"
+    }
+  ],
+  "components.appNavigationDrawer.welcome": [
+    {
+      "type": 0,
+      "value": "Inicio"
+    }
+  ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
       "value": "Editar"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegación principal"
+    }
+  ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Saltar al contenido principal"
     }
   ],
   "components.barNavigation.title": [
@@ -51,18 +159,6 @@
     {
       "type": 0,
       "value": "Bienvenido"
-    }
-  ],
-  "components.barNavigation.skipToContent": [
-    {
-      "type": 0,
-      "value": "Saltar al contenido principal"
-    }
-  ],
-  "components.barNavigation.mainNavigation": [
-    {
-      "type": 0,
-      "value": "Navegación principal"
     }
   ],
   "components.buttonWithFileLoad.load.label": [
@@ -215,6 +311,48 @@
       "value": "Ejemplo: niño, poner, cinturón de seguridad."
     }
   ],
+  "components.newsNavBar.langSelector": [
+    {
+      "type": 0,
+      "value": "Idioma"
+    }
+  ],
+  "components.newsNavBar.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navegación principal"
+    }
+  ],
+  "components.newsNavBar.news": [
+    {
+      "type": 0,
+      "value": "Novedades"
+    }
+  ],
+  "components.newsNavBar.openMenu": [
+    {
+      "type": 0,
+      "value": "Abrir menú de navegación"
+    }
+  ],
+  "components.newsNavBar.skipToContent": [
+    {
+      "type": 0,
+      "value": "Saltar al contenido principal"
+    }
+  ],
+  "components.newsNavBar.start": [
+    {
+      "type": 0,
+      "value": "Crea una secuencia"
+    }
+  ],
+  "components.newsNavBar.welcome": [
+    {
+      "type": 0,
+      "value": "Inicio"
+    }
+  ],
   "components.pictEdit.close": [
     {
       "type": 0,
@@ -227,12 +365,6 @@
       "value": "Eliminar"
     }
   ],
-  "components.pictEdit.reset": [
-    {
-      "type": 0,
-      "value": "Valores por defecto"
-    }
-  ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
@@ -243,6 +375,12 @@
     {
       "type": 0,
       "value": "Editar Pictograma"
+    }
+  ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Valores por defecto"
     }
   ],
   "components.pictEditSettings.settings.label": [
@@ -317,12 +455,6 @@
       "value": "Sacar pictograma"
     }
   ],
-  "components.pictogramSearch.uploadImage": [
-    {
-      "type": 0,
-      "value": "Subir imagen desde el dispositivo"
-    }
-  ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
@@ -333,6 +465,12 @@
     {
       "type": 0,
       "value": "Añadir pictograma"
+    }
+  ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Subir imagen desde el dispositivo"
     }
   ],
   "components.sequenceAuthor": [
@@ -479,70 +617,16 @@
       "value": "Buscando pictogramas..."
     }
   ],
+  "news.articleNavigation": [
+    {
+      "type": 0,
+      "value": "Navegación entre artículos"
+    }
+  ],
   "news.back.button": [
     {
       "type": 0,
       "value": "Volver"
-    }
-  ],
-  "news.moreInfo.button": [
-    {
-      "type": 0,
-      "value": "Más info"
-    }
-  ],
-  "news.number-font.content": [
-    {
-      "type": 0,
-      "value": "Ahora puedes configurar de forma independiente la tipografía de los números que se añaden a los pictogramas cuando activas la numeración. Desde el diálogo de Configuración por defecto, activando el switch de Numeración, aparecerá una nueva sección para escoger la familia tipográfica, el tamaño y el color de los números, de manera independiente a la tipografía del texto de los pictogramas."
-    }
-  ],
-  "news.number-font.step1.alt": [
-    {
-      "type": 0,
-      "value": "Panel de configuración por defecto con el switch de Numeración desactivado"
-    }
-  ],
-  "news.number-font.step1.description": [
-    {
-      "type": 0,
-      "value": "Abre el diálogo de Configuración por defecto desde el menú principal (haz clic en el logo). Verás un switch para activar la Numeración de los pictogramas."
-    }
-  ],
-  "news.number-font.step2.alt": [
-    {
-      "type": 0,
-      "value": "Switch de Numeración activado en el panel de configuración"
-    }
-  ],
-  "news.number-font.step2.description": [
-    {
-      "type": 0,
-      "value": "Activa el switch de Numeración. Cada pictograma mostrará su número de orden en la posición opuesta al texto."
-    }
-  ],
-  "news.number-font.step3.alt": [
-    {
-      "type": 0,
-      "value": "Nueva sección de configuración de la fuente de los números, con selector de familia, tamaño y color"
-    }
-  ],
-  "news.number-font.step3.description": [
-    {
-      "type": 0,
-      "value": "Una vez activada la numeración, aparece una nueva sección para configurar la tipografía de los números: familia, tamaño y color, de forma independiente a la fuente del texto de los pictogramas."
-    }
-  ],
-  "news.number-font.summary": [
-    {
-      "type": 0,
-      "value": "Elige una tipografía propia para los números que aparecen en los pictogramas."
-    }
-  ],
-  "news.number-font.title": [
-    {
-      "type": 0,
-      "value": "Fuente personalizada para los números"
     }
   ],
   "news.logo-menu.content": [
@@ -597,6 +681,12 @@
     {
       "type": 0,
       "value": "El menú de navegación"
+    }
+  ],
+  "news.moreInfo.button": [
+    {
+      "type": 0,
+      "value": "Más info"
     }
   ],
   "news.multiple-sequences.content": [
@@ -677,58 +767,100 @@
       "value": "Múltiples secuencias"
     }
   ],
-  "news.view-improvements.content": [
+  "news.nextArticle": [
     {
       "type": 0,
-      "value": "Se han corregido errores que hacían que la vista previa no coincidiera exactamente con el resultado impreso. Además, se han añadido nuevos controles de alineación y dirección para cada secuencia, y ahora cuando guardas una secuencia la configuración de visualización también se guarda automáticamente."
+      "value": "Artículo siguiente"
     }
   ],
-  "news.view-improvements.step1.alt": [
+  "news.number-font.content": [
     {
       "type": 0,
-      "value": "Vista previa de la secuencia mostrando la correspondencia exacta con la impresión"
+      "value": "Ahora puedes configurar de forma independiente la tipografía de los números que se añaden a los pictogramas cuando activas la numeración. Desde el diálogo de Configuración por defecto, activando el switch de Numeración, aparecerá una nueva sección para escoger la familia tipográfica, el tamaño y el color de los números, de manera independiente a la tipografía del texto de los pictogramas."
     }
   ],
-  "news.view-improvements.step1.description": [
+  "news.number-font.step1.alt": [
     {
       "type": 0,
-      "value": "La previsualización ahora corresponde exactamente al resultado impreso. Un cálculo de escala preciso tiene en cuenta el formato de página (A4, A3) y la resolución de pantalla para mostrar fielmente lo que se imprimirá."
+      "value": "Panel de configuración por defecto con el switch de Numeración desactivado"
     }
   ],
-  "news.view-improvements.step2.alt": [
+  "news.number-font.step1.description": [
     {
       "type": 0,
-      "value": "Controles de alineación y dirección de las secuencias"
+      "value": "Abre el diálogo de Configuración por defecto desde el menú principal (haz clic en el logo). Verás un switch para activar la Numeración de los pictogramas."
     }
   ],
-  "news.view-improvements.step2.description": [
+  "news.number-font.step2.alt": [
     {
       "type": 0,
-      "value": "Nuevos controles para personalizar cada secuencia: elige la alineación (izquierda, centro, derecha) y la dirección (horizontal o vertical) para adaptar la presentación a tus necesidades."
+      "value": "Switch de Numeración activado en el panel de configuración"
     }
   ],
-  "news.view-improvements.step3.alt": [
+  "news.number-font.step2.description": [
     {
       "type": 0,
-      "value": "Botón de guardar la secuencia con configuración de visualización incluida"
+      "value": "Activa el switch de Numeración. Cada pictograma mostrará su número de orden en la posición opuesta al texto."
     }
   ],
-  "news.view-improvements.step3.description": [
+  "news.number-font.step3.alt": [
     {
       "type": 0,
-      "value": "Cuando guardas la secuencia con el botón de descarga, la configuración de visualización (tamaños, espacios, alineación y dirección) se incluye automáticamente en el archivo, de manera que cuando la vuelves a cargar todo quedará tal como lo habías dejado."
+      "value": "Nueva sección de configuración de la fuente de los números, con selector de familia, tamaño y color"
     }
   ],
-  "news.view-improvements.summary": [
+  "news.number-font.step3.description": [
     {
       "type": 0,
-      "value": "Vista previa fiel a la impresión, nuevos controles de alineación y dirección."
+      "value": "Una vez activada la numeración, aparece una nueva sección para configurar la tipografía de los números: familia, tamaño y color, de forma independiente a la fuente del texto de los pictogramas."
     }
   ],
-  "news.view-improvements.title": [
+  "news.number-font.summary": [
     {
       "type": 0,
-      "value": "Mejoras en la previsualización"
+      "value": "Elige una tipografía propia para los números que aparecen en los pictogramas."
+    }
+  ],
+  "news.number-font.title": [
+    {
+      "type": 0,
+      "value": "Fuente personalizada para los números"
+    }
+  ],
+  "news.prevArticle": [
+    {
+      "type": 0,
+      "value": "Artículo anterior"
+    }
+  ],
+  "news.print-preview.content": [
+    {
+      "type": 0,
+      "value": "La vista previa te muestra exactamente cómo quedará la página impresa. Puedes controlar el tamaño de los pictogramas, el espacio entre filas y columnas, y la alineación. ¡Todo se ve en tiempo real!"
+    }
+  ],
+  "news.print-preview.img1.alt": [
+    {
+      "type": 0,
+      "value": "Vista previa de la página"
+    }
+  ],
+  "news.print-preview.img2.alt": [
+    {
+      "type": 0,
+      "value": "Controles de tamaño y espacio"
+    }
+  ],
+  "news.print-preview.summary": [
+    {
+      "type": 0,
+      "value": "Previsualiza exactamente cómo quedará tu página antes de imprimir."
+    }
+  ],
+  "news.print-preview.title": [
+    {
+      "type": 0,
+      "value": "Vista previa de impresión"
     }
   ],
   "news.save-improvements.content": [
@@ -785,10 +917,130 @@
       "value": "Mejoras al guardado"
     }
   ],
+  "news.save-load.content": [
+    {
+      "type": 0,
+      "value": "Encontrarás las opciones de guardar y cargar en el menú del logo de SequenciAAC. Al guardar, se descarga un archivo con todas las secuencias y las imágenes de los pictogramas incluidas. ¡Así puedes recuperar tu trabajo en cualquier momento!"
+    }
+  ],
+  "news.save-load.img1.alt": [
+    {
+      "type": 0,
+      "value": "Menú con opción de guardar"
+    }
+  ],
+  "news.save-load.img2.alt": [
+    {
+      "type": 0,
+      "value": "Cargar archivo guardado"
+    }
+  ],
+  "news.save-load.summary": [
+    {
+      "type": 0,
+      "value": "Descarga tus secuencias con las imágenes y cárgalas cuando quieras."
+    }
+  ],
+  "news.save-load.title": [
+    {
+      "type": 0,
+      "value": "Guarda y recupera"
+    }
+  ],
   "news.section.title": [
     {
       "type": 0,
       "value": "Novedades"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "Ver todas las novedades"
+    }
+  ],
+  "news.sequence-settings.content": [
+    {
+      "type": 0,
+      "value": "Ahora puedes personalizar cada secuencia de manera independiente. Cambia la alineación de los pictogramas (izquierda, centro o derecha), configura la tipografía y el color de los números de forma independiente al texto, y descubre más opciones de formato para adaptar las secuencias a tus necesidades."
+    }
+  ],
+  "news.sequence-settings.img1.alt": [
+    {
+      "type": 0,
+      "value": "Opciones de alineación"
+    }
+  ],
+  "news.sequence-settings.img2.alt": [
+    {
+      "type": 0,
+      "value": "Configuración de tipografía de los números"
+    }
+  ],
+  "news.sequence-settings.summary": [
+    {
+      "type": 0,
+      "value": "Personaliza cada secuencia con alineación, tipografía de los números y más opciones."
+    }
+  ],
+  "news.sequence-settings.title": [
+    {
+      "type": 0,
+      "value": "Nuevas configuraciones por secuencia"
+    }
+  ],
+  "news.view-improvements.content": [
+    {
+      "type": 0,
+      "value": "Se han corregido errores que hacían que la vista previa no coincidiera exactamente con el resultado impreso. Además, se han añadido nuevos controles de alineación y dirección para cada secuencia, y ahora cuando guardas una secuencia la configuración de visualización también se guarda automáticamente."
+    }
+  ],
+  "news.view-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Vista previa de la secuencia mostrando la correspondencia exacta con la impresión"
+    }
+  ],
+  "news.view-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "La previsualización ahora corresponde exactamente al resultado impreso. Un cálculo de escala preciso tiene en cuenta el formato de página (A4, A3) y la resolución de pantalla para mostrar fielmente lo que se imprimirá."
+    }
+  ],
+  "news.view-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Controles de alineación y dirección de las secuencias"
+    }
+  ],
+  "news.view-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "Nuevos controles para personalizar cada secuencia: elige la alineación (izquierda, centro, derecha) y la dirección (horizontal o vertical) para adaptar la presentación a tus necesidades."
+    }
+  ],
+  "news.view-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Botón de guardar la secuencia con configuración de visualización incluida"
+    }
+  ],
+  "news.view-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "Cuando guardas la secuencia con el botón de descarga, la configuración de visualización (tamaños, espacios, alineación y dirección) se incluye automáticamente en el archivo, de manera que cuando la vuelves a cargar todo quedará tal como lo habías dejado."
+    }
+  ],
+  "news.view-improvements.summary": [
+    {
+      "type": 0,
+      "value": "Vista previa fiel a la impresión, nuevos controles de alineación y dirección."
+    }
+  ],
+  "news.view-improvements.title": [
+    {
+      "type": 0,
+      "value": "Mejoras en la previsualización"
     }
   ],
   "pages.viewSequence.alignment.label": [
@@ -1288,62 +1540,5 @@
       "type": 0,
       "value": "Iniciar"
     }
-  ],
-  "changelog.page.title": [
-    {
-      "type": 0,
-      "value": "Novedades"
-    }
-  ],
-  "changelog.category.nova": [
-    {
-      "type": 0,
-      "value": "Nueva"
-    }
-  ],
-  "changelog.category.millora": [
-    {
-      "type": 0,
-      "value": "Mejora"
-    }
-  ],
-  "changelog.category.correccio": [
-    {
-      "type": 0,
-      "value": "Corrección"
-    }
-  ],
-  "changelog.readMore": [
-    {
-      "type": 0,
-      "value": "Leer más"
-    }
-  ],
-  "news.seeAll": [
-    {
-      "type": 0,
-      "value": "Ver todas las novedades"
-    }
-  ],
-  "news.prevArticle": [{ "type": 0, "value": "Artículo anterior" }],
-  "news.nextArticle": [{ "type": 0, "value": "Artículo siguiente" }],
-  "news.articleNavigation": [{ "type": 0, "value": "Navegación entre artículos" }],
-  "components.newsNavBar.welcome": [{ "type": 0, "value": "Inicio" }],
-  "components.newsNavBar.start": [{ "type": 0, "value": "Crea una secuencia" }],
-  "components.newsNavBar.langSelector": [{ "type": 0, "value": "Idioma" }],
-  "components.newsNavBar.skipToContent": [{ "type": 0, "value": "Saltar al contenido principal" }],
-  "components.newsNavBar.mainNavigation": [{ "type": 0, "value": "Navegación principal" }],
-  "components.newsNavBar.news": [{ "type": 0, "value": "Novedades" }],
-  "components.newsNavBar.openMenu": [{ "type": 0, "value": "Abrir menú de navegación" }],
-  "components.appNavigationDrawer.welcome": [{ "type": 0, "value": "Inicio" }],
-  "components.appNavigationDrawer.news": [{ "type": 0, "value": "Novedades" }],
-  "components.appNavigationDrawer.editView": [{ "type": 0, "value": "Editar" }],
-  "components.appNavigationDrawer.previewView": [{ "type": 0, "value": "Previsualizar" }],
-  "components.appNavigationDrawer.download": [{ "type": 0, "value": "Descargar" }],
-  "components.appNavigationDrawer.load": [{ "type": 0, "value": "Cargar" }],
-  "components.appNavigationDrawer.settings": [{ "type": 0, "value": "Configuración" }],
-  "components.appNavigationDrawer.settingsTitle": [{ "type": 0, "value": "Configuración por defecto" }],
-  "components.appNavigationDrawer.settingsClose": [{ "type": 0, "value": "Cerrar" }],
-  "components.appNavigationDrawer.langSelector": [{ "type": 0, "value": "Idioma" }],
-  "components.appNavigationDrawer.openMenu": [{ "type": 0, "value": "Abrir menú" }]
+  ]
 }
