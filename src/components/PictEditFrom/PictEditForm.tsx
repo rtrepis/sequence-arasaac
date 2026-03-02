@@ -1,4 +1,4 @@
-import { List, Stack, Box } from "@mui/material";
+import { List, Stack, Box, Button } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import { PictSequence } from "../../types/sequence";
@@ -13,19 +13,16 @@ import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCa
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import React from "react";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
+import { MdSettingsBackupRestore } from "react-icons/md";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
   submit: boolean;
-  resetToDefaults?: boolean;
-  onResetDone?: () => void;
 }
 
 const PictEditForm = ({
   pictogram,
   submit,
-  resetToDefaults,
-  onResetDone,
 }: PictEditFormProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -121,30 +118,19 @@ const PictEditForm = ({
   }, [submit, handlerSubmit]);
 
   // Restableix tots els settings als valors per defecte globals
-  useEffect(() => {
-    if (!resetToDefaults) return;
+  const handleReset = () => {
     setTextPosition(defaultTextPosition);
     setBorderIn(defaultBorderIn);
     setBorderOut(defaultBorderOut);
     setSkin(defaultSkin);
     setHair(defaultHair);
     setColor(defaultColor);
-    onResetDone?.();
-  }, [
-    resetToDefaults,
-    defaultTextPosition,
-    defaultBorderIn,
-    defaultBorderOut,
-    defaultSkin,
-    defaultHair,
-    defaultColor,
-    onResetDone,
-  ]);
+  };
 
   return (
     <Box
       display="grid"
-      gridTemplateColumns={{ xs: "1fr", md: "auto 1fr" }}
+      gridTemplateColumns={{ xs: "1fr", md: "0.5fr 1.5fr" }}
       gap={{ xs: 3, sm: 2 }}
       sx={{ minHeight: 0 }}
     >
@@ -261,6 +247,14 @@ const PictEditForm = ({
               />
             </li>
           </List>
+          <Button
+            variant="outlined"
+            onClick={handleReset}
+            startIcon={<MdSettingsBackupRestore />}
+            sx={{ mt: 1, ml: "auto", display: "flex" }}
+          >
+            {intl.formatMessage({ ...messages.reset })}
+          </Button>
         </SettingAccordion>
       </Box>
     </Box>
