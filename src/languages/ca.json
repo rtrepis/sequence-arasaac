@@ -380,7 +380,7 @@
   "components.pictEdit.reset": [
     {
       "type": 0,
-      "value": "Valors per defecte"
+      "value": "Restablir"
     }
   ],
   "components.pictEditSettings.settings.label": [
