@@ -3,14 +3,9 @@ import {
   DefaultSettings,
   DefaultSettingsPictApiAraForEdit,
   DefaultSettingsPictSequenceForEdit,
-  LangsApp,
   Ui,
   ViewSettings,
 } from "../../types/ui";
-import {
-  langTranslateApp,
-  langTranslateSearch,
-} from "/src/configs/languagesConfigs";
 import {
   VIEW_DEFAULT_SIZE_PICT,
   VIEW_DEFAULT_PICT_SPACE,
@@ -33,33 +28,10 @@ import {
   DEFAULT_BORDER_OUT_SIZE,
 } from "@/configs/defaultSettingsConfig";
 
-const localeBrowser = navigator.language.slice(0, 2);
-
-const langSettings =
-  sessionStorage.getItem("langSettings") ??
-  localStorage.getItem("langSettings");
-
-let userLangSettings: null | Ui["lang"] = null;
-if (langSettings !== null) {
-  userLangSettings = JSON.parse(langSettings) as Ui["lang"];
-}
-
-const localeAPP = (
-  userLangSettings?.app
-    ? userLangSettings.app
-    : langTranslateApp.includes(localeBrowser as LangsApp)
-      ? localeBrowser
-      : "en"
-) as LangsApp;
-
-const localeSearch = userLangSettings?.search
-  ? userLangSettings.search
-  : langTranslateSearch.includes(localeBrowser as LangsApp)
-    ? localeBrowser
-    : "en";
-
+// La llengua inicial es "en" per defecte; AppBootstrap l'actualitza al muntar
+// amb la preferència guardada o la llengua del navegador.
 const uiInitialState: Ui = {
-  lang: { app: localeAPP, search: localeSearch, keywords: [] },
+  lang: { app: "en", search: "en", keywords: [] },
   viewSettings: {
     sizePict: VIEW_DEFAULT_SIZE_PICT,
     pictSpaceBetween: VIEW_DEFAULT_PICT_SPACE,

@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
 import App from "./App";
+import AppBootstrap from "./app/providers/AppBootstrap";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -25,13 +26,15 @@ root.render(
       <ThemeProvider theme={theme}>
         <CssBaseline enable-color-scheme />
         <FeedbackProvider>
-          <BrowserRouter
-            future={{ v7_relativeSplatPath: true, v7_startTransition: false }}
-          >
-            <App />
-          </BrowserRouter>
-          <FeedbackSnackbar />
-          <FeedbackBackdrop />
+          <AppBootstrap>
+            <BrowserRouter
+              future={{ v7_relativeSplatPath: true, v7_startTransition: false }}
+            >
+              <App />
+            </BrowserRouter>
+            <FeedbackSnackbar />
+            <FeedbackBackdrop />
+          </AppBootstrap>
         </FeedbackProvider>
       </ThemeProvider>
     </Provider>

@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useCallback, useEffect, useState } from "react";
 import { DefaultSettings } from "../../types/ui";
 import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
+import { saveSettings } from "../../features/user-settings/storage/settingsStorage";
 import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup";
 import { messages as fontGroupMessages } from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup.lang";
 import React from "react";
@@ -93,15 +94,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
     };
 
     dispatch(updateDefaultSettingsActionCreator(newDefaultSettings));
-
-    sessionStorage.setItem(
-      "pictDefaultSettings",
-      JSON.stringify(newDefaultSettings),
-    );
-    localStorage.setItem(
-      "pictDefaultSettings",
-      JSON.stringify(newDefaultSettings),
-    );
+    saveSettings(newDefaultSettings);
   }, [
     fitzgerald,
     skin,

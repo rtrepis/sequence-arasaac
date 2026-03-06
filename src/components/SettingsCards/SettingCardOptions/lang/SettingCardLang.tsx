@@ -19,6 +19,7 @@ import {
 } from "../../../../configs/languagesConfigs";
 import { updateLangSettingsActionCreator } from "../../../../app/slice/uiSlice";
 import { Ui } from "../../../../types/ui";
+import { saveLangSettings, LangStorageSettings } from "../../../../features/user-settings/storage/settingsStorage";
 import useAraSaac from "/src/hooks/useAraSaac";
 
 interface SettingCardProps {
@@ -45,8 +46,7 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
     };
 
     dispatch(updateLangSettingsActionCreator(newLangValue as Ui["lang"]));
-    sessionStorage.setItem("langSettings", JSON.stringify(newLangValue));
-    localStorage.setItem("langSettings", JSON.stringify(newLangValue));
+    saveLangSettings(newLangValue as LangStorageSettings);
 
     getAllKeyWordsForLanguages(value);
   };

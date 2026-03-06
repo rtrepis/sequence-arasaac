@@ -1,8 +1,6 @@
 import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import "./App.css";
-import { useDispatch } from "react-redux";
-import { ReactElement, lazy, Suspense, useEffect } from "react";
-import { updateDefaultSettingsActionCreator } from "./app/slice/uiSlice";
+import { ReactElement, lazy, Suspense } from "react";
 import LanguageLayout from "./pages/LanguagesLayout/LanguagesLayaut";
 import WelcomeLayout from "./pages/WelcomePage/WelcomeLayout";
 import { Box, CircularProgress } from "@mui/material";
@@ -54,22 +52,9 @@ const RedirectNews = ({ appLang }: { appLang: string }): ReactElement => {
 
 const App = (): ReactElement => {
   usePageTracking();
-  const dispatch = useDispatch();
   const {
     lang: { app: appLang },
   } = useAppSelector((state) => state.ui);
-
-  // Restaura la configuració guardada de l'usuari (sessionStorage o localStorage)
-  useEffect(() => {
-    const pictDefaultSettings =
-      sessionStorage.getItem("pictDefaultSettings") ??
-      localStorage.getItem("pictDefaultSettings");
-
-    if (pictDefaultSettings != null) {
-      const userDefaultSettings = JSON.parse(pictDefaultSettings);
-      dispatch(updateDefaultSettingsActionCreator(userDefaultSettings));
-    }
-  }, [dispatch]);
 
   return (
     <Suspense fallback={<PageLoadingFallback />}>
