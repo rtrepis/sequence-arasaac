@@ -6,12 +6,12 @@ import TabsSequences from "../../components/TabsSequences/TabsSequences";
 import { FeedbackProgress } from "@/context/FeedbackContext";
 import { FormattedMessage } from "react-intl";
 import { useAppSelector } from "../../app/hooks";
-import useAraSaac from "../../hooks/useAraSaac";
+import useSearchPictogram from "../../features/pictogram/hooks/useSearchPictogram";
 
 const EditSequencesPage = (): React.ReactElement => {
   const [info, setInfo] = useState(false);
   const keywords = useAppSelector((state) => state.ui.lang.keywords);
-  const { getAllKeyWordsForLanguages } = useAraSaac();
+  const { getAllKeyWordsForLanguages } = useSearchPictogram();
 
   // Carrega les paraules clau de l'ARASAAC la primera vegada que s'obre l'editor
   useEffect(() => {

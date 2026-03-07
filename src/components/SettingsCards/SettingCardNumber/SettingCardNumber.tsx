@@ -1,8 +1,6 @@
 import { FormLabel, Slider, Stack } from "@mui/material";
-import { useAppDispatch } from "../../../app/hooks";
 import { FormattedMessage } from "react-intl";
 import { cardAction } from "../SettingsCards.styled";
-import { fontSizeApplyAllActionCreator } from "../../../app/slice/documentSlice";
 import { messages } from "./SettingCardNumber.lang";
 import ApplyAll from "../ApplyAll/ApplyAll";
 import React from "react";
@@ -11,28 +9,17 @@ interface SettingCardProps {
   setting: "fontSize";
   state: number;
   setState: React.Dispatch<React.SetStateAction<number>>;
-  apply?: boolean;
+  onApplyAll?: () => void;
 }
 
 const SettingCardNumber = ({
   setting,
   state,
   setState,
-  apply = false,
+  onApplyAll,
 }: SettingCardProps): React.ReactElement => {
-  const dispatch = useAppDispatch();
-
   const handleChange = (event: Event, value: number | number[]) => {
     setState(value as number);
-  };
-
-  const handleApplyAll = (toUpdate: number) => {
-    if (setting === "fontSize")
-      dispatch(
-        fontSizeApplyAllActionCreator({
-          fontSize: toUpdate,
-        }),
-      );
   };
 
   return (
@@ -52,8 +39,8 @@ const SettingCardNumber = ({
         sx={{ width: 100 }}
       />
 
-      {apply && (
-        <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
+      {onApplyAll && (
+        <ApplyAll sx={cardAction} onClick={onApplyAll} />
       )}
     </Stack>
   );

@@ -25,6 +25,15 @@ export interface PictSequenceSettings {
   borderIn?: Border;
 }
 
+// Valors per defecte que PictogramCard necessita per al fallback (sense Redux)
+export interface PictogramCardDefaults {
+  numbered: boolean;
+  font: Font;
+  numberFont?: Font;
+  borderIn: Border;
+  borderOut: Border;
+}
+
 type MyPartialForEdit<Type> = {
   [Property in keyof Type]?: Type[Property];
 } & { indexSequence: number };
@@ -90,3 +99,8 @@ export interface PictApiAraSettings {
 }
 
 export type Languages = (typeof langTranslateSearch)[number];
+
+export interface Ai {
+  word: string;
+  text: string;
+}

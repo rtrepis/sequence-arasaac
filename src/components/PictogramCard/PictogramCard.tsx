@@ -1,8 +1,7 @@
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
-import { useAppSelector } from "../../app/hooks";
-import useAraSaac from "../../hooks/useAraSaac";
-import { Border, PictSequence } from "../../types/sequence";
+import usePictogramUrl from "../../features/pictogram/hooks/usePictogramUrl";
+import { Border, PictogramCardDefaults, PictSequence } from "../../types/sequence";
 import {
   pictogram__card,
   pictogram__media,
@@ -15,6 +14,7 @@ import React from "react";
 interface PictogramCardProps {
   pictogram: PictSequence;
   view: "complete" | "header" | "footer" | "none";
+  defaults: PictogramCardDefaults;
   variant?: "plane";
   size?: { pictSize?: number; scale?: number };
 }
@@ -39,35 +39,29 @@ const PictogramCard = ({
     cross,
   },
   view,
+  defaults,
   variant,
   size,
 }: PictogramCardProps): React.ReactElement => {
-  const {
-    borderIn: borderInDefaultSetting,
-    borderOut: borderOutDefaultSetting,
-    numbered,
-    font: fontDefaultSetting,
-    numberFont: numberFontDefaultSetting,
-  } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
-  const { toUrlPath: toUrlPathApiAraSaac } = useAraSaac();
+  const { buildPictogramUrl } = usePictogramUrl();
   const intl = useIntl();
 
   const text = customText ? customText : word;
 
   const borderIn: Border = pictBorderIn
     ? fitzgeraldToBorder(fitzgerald, pictBorderIn)
-    : fitzgeraldToBorder(fitzgerald, borderInDefaultSetting);
+    : fitzgeraldToBorder(fitzgerald, defaults.borderIn);
 
   const borderOut: Border = pictBorderOut
     ? fitzgeraldToBorder(fitzgerald, pictBorderOut)
-    : fitzgeraldToBorder(fitzgerald, borderOutDefaultSetting);
+    : fitzgeraldToBorder(fitzgerald, defaults.borderOut);
 
   const pictSize = size?.pictSize ?? 1;
   const printPageRatio = size?.scale ?? 1;
-  const font = pictFont ?? fontDefaultSetting;
+  const font = pictFont ?? defaults.font;
   // Tipografia dels números: per-pictograma → per defecte → tipografia del text
   const numberFont =
-    pictNumberFont ?? numberFontDefaultSetting ?? fontDefaultSetting;
+    pictNumberFont ?? defaults.numberFont ?? defaults.font;
 
   const textFontSize = 20 * font.size * printPageRatio * pictSize;
   const numberFontSize = 20 * numberFont.size * printPageRatio * pictSize;
@@ -82,14 +76,14 @@ const PictogramCard = ({
           sx={() =>
             textContent(
               textPosition,
-              numbered,
+              defaults.numbered,
               borderOut.size,
               pictSize,
               printPageRatio,
             )
           }
         >
-          {textPosition !== "top" && numbered && (
+          {textPosition !== "top" && defaults.numbered && (
             <Typography
               fontSize={numberFontSize}
               fontFamily={numberFont.family}
@@ -120,7 +114,7 @@ const PictogramCard = ({
             // Ignorem URLs blob (temporals) perquè no són vàlides després de recarregar
             url && !url.startsWith("blob:")
               ? url
-              : toUrlPathApiAraSaac(selectedId, skin, hair, color)
+              : buildPictogramUrl(selectedId, skin, hair, color)
           }
           height={150 * pictSize * printPageRatio}
           width={150 * pictSize * printPageRatio}
@@ -148,7 +142,7 @@ const PictogramCard = ({
           sx={() =>
             textContent(
               textPosition,
-              numbered,
+              defaults.numbered,
               borderIn.size,
               pictSize,
               printPageRatio,
@@ -166,7 +160,7 @@ const PictogramCard = ({
               {text}
             </Typography>
           )}
-          {textPosition === "top" && numbered && (
+          {textPosition === "top" && defaults.numbered && (
             <Typography
               fontSize={numberFontSize}
               fontFamily={numberFont.family}

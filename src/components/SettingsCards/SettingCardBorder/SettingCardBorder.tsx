@@ -22,27 +22,21 @@ import { useState } from "react";
 import InputColor from "../InputColor/InputColor";
 import React from "react";
 import ApplyAll from "../ApplyAll/ApplyAll";
-import { useAppDispatch } from "@/app/hooks";
-import {
-  borderInApplyAllActionCreator,
-  borderOutApplyAllActionCreator,
-} from "@/app/slice/documentSlice";
 
 interface SettingCardBorderProps {
   border: "borderIn" | "borderOut";
   state: Border;
   setState: React.Dispatch<React.SetStateAction<Border>>;
   indexPict?: number;
-  applyAll?: boolean;
+  onApplyAll?: () => void;
 }
 
 const SettingCardBorder = ({
   border,
   state: { color, size, radius },
   setState,
-  applyAll = false,
+  onApplyAll,
 }: SettingCardBorderProps): React.ReactElement => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const [colorSelect, setColorSelect] = useState(color);
@@ -88,18 +82,6 @@ const SettingCardBorder = ({
     };
 
     setState(newBorder);
-  };
-
-  const handlerApplyAll = (border: "borderIn" | "borderOut") => {
-    if (border === "borderIn")
-      dispatch(
-        borderInApplyAllActionCreator({ borderIn: { color, radius, size } }),
-      );
-
-    if (border === "borderOut")
-      dispatch(
-        borderOutApplyAllActionCreator({ borderOut: { color, radius, size } }),
-      );
   };
 
   return (
@@ -195,8 +177,8 @@ const SettingCardBorder = ({
         </Stack>
       </Stack>
 
-      {applyAll && (
-        <ApplyAll sx={cardAction} onClick={() => handlerApplyAll(border)} />
+      {onApplyAll && (
+        <ApplyAll sx={cardAction} onClick={onApplyAll} />
       )}
     </Stack>
   );

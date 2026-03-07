@@ -2,9 +2,12 @@ import App from "./App";
 import { preloadedState, render, screen } from "./utils/test-utils";
 
 const mockAction = jest.fn();
-jest.mock("./hooks/useAraSaac", () => () => ({
+jest.mock("./features/pictogram/hooks/useSearchPictogram", () => () => ({
   getSearchPictogram: mockAction,
-  toUrlPath: mockAction,
+  getAllKeyWordsForLanguages: mockAction,
+}));
+jest.mock("./features/pictogram/hooks/usePictogramUrl", () => () => ({
+  buildPictogramUrl: mockAction,
 }));
 
 const mockDispatch = jest.fn();

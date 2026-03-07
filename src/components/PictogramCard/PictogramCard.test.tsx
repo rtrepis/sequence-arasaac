@@ -1,4 +1,4 @@
-import { Border, PictSequence } from "../../types/sequence";
+import { Border, PictogramCardDefaults, PictSequence } from "../../types/sequence";
 import { preloadedState, render, screen } from "../../utils/test-utils";
 import PictogramCard from "./PictogramCard";
 
@@ -19,6 +19,15 @@ let pictogramEmpty: PictSequence = {
   text: "CustomText",
 };
 
+// Valors per defecte provinents de preloadedState (sense Redux al component)
+const mockDefaults: PictogramCardDefaults = {
+  numbered: preloadedState.ui.defaultSettings.pictSequence.numbered,
+  font: preloadedState.ui.defaultSettings.pictSequence.font,
+  numberFont: preloadedState.ui.defaultSettings.pictSequence.numberFont,
+  borderIn: preloadedState.ui.defaultSettings.pictSequence.borderIn,
+  borderOut: preloadedState.ui.defaultSettings.pictSequence.borderOut,
+};
+
 const mockDispatch = jest.fn();
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
@@ -37,9 +46,16 @@ describe("Give a PictogramShow component", () => {
         textPictogram: "CustomText",
       };
 
-      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />, {
-        preloadedState: preloadedState,
-      });
+      render(
+        <PictogramCard
+          view={"complete"}
+          pictogram={pictogramEmpty}
+          defaults={mockDefaults}
+        />,
+        {
+          preloadedState: preloadedState,
+        }
+      );
       const pictogramShow = {
         header: screen.getByRole("heading", {
           name: expectPictogram.indexTitle,
@@ -64,9 +80,16 @@ describe("Give a PictogramShow component", () => {
         altImage: "Pictogram image",
       };
 
-      render(<PictogramCard view={"header"} pictogram={pictogramEmpty} />, {
-        preloadedState: preloadedState,
-      });
+      render(
+        <PictogramCard
+          view={"header"}
+          pictogram={pictogramEmpty}
+          defaults={mockDefaults}
+        />,
+        {
+          preloadedState: preloadedState,
+        }
+      );
       const pictogramShow = {
         header: screen.getByRole("heading", { name: expectPictogram.index }),
         image: screen.getByRole("img", { name: expectPictogram.altImage }),
@@ -86,7 +109,13 @@ describe("Give a PictogramShow component", () => {
         textPictogram: "CustomText",
       };
 
-      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
+      render(
+        <PictogramCard
+          view={"complete"}
+          pictogram={pictogramEmpty}
+          defaults={mockDefaults}
+        />
+      );
       const pictogramShow = {
         image: screen.getByRole("img", { name: expectPictogram.altImage }),
         footer: screen.getByRole("heading", {
@@ -107,7 +136,13 @@ describe("Give a PictogramShow component", () => {
         altImage: "Pictogram image",
       };
 
-      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
+      render(
+        <PictogramCard
+          view={"complete"}
+          pictogram={pictogramEmpty}
+          defaults={mockDefaults}
+        />
+      );
       const pictogramShow = {
         image: screen.getByRole("img", { name: expectPictogram.altImage }),
       };
@@ -130,7 +165,13 @@ describe("Give a PictogramShow component", () => {
         radius: 20,
       };
 
-      render(<PictogramCard view={"complete"} pictogram={pictogramEmpty} />);
+      render(
+        <PictogramCard
+          view={"complete"}
+          pictogram={pictogramEmpty}
+          defaults={mockDefaults}
+        />
+      );
       const pictogramShowBorder = {
         card: screen.getByTestId(pictogram.card),
         image: screen.getByRole("img", {
@@ -168,6 +209,7 @@ describe("Give a PictogramShow component", () => {
           view={"complete"}
           variant={variant}
           pictogram={pictogramEmpty}
+          defaults={mockDefaults}
         />
       );
       const pictogramShowBorder = {
@@ -190,7 +232,13 @@ describe("Give a PictogramShow component", () => {
       const expectedPath =
         "https://api.arasaac.org/api/pictograms/26527?skin=assian";
 
-      render(<PictogramCard pictogram={pictogramEmpty} view={"none"} />);
+      render(
+        <PictogramCard
+          pictogram={pictogramEmpty}
+          view={"none"}
+          defaults={mockDefaults}
+        />
+      );
       const image = screen.getByRole("img", { name: "Pictogram image" });
       const pathImage = image.getAttribute("src");
 

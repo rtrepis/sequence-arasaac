@@ -1,7 +1,7 @@
 import { List, Stack, Box, Button } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
-import { PictSequence } from "../../types/sequence";
+import { PictogramCardDefaults, PictSequence } from "../../types/sequence";
 import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import messages from "./PictEditForm.lang";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
@@ -31,6 +31,9 @@ const PictEditForm = ({
       textPosition: defaultTextPosition,
       borderIn: defaultBorderIn,
       borderOut: defaultBorderOut,
+      numbered: defaultNumbered,
+      font: defaultFont,
+      numberFont: defaultNumberFont,
     },
     pictApiAra: { skin: defaultSkin, hair: defaultHair, color: defaultColor },
   } = useAppSelector((state) => state.ui.defaultSettings);
@@ -67,6 +70,15 @@ const PictEditForm = ({
 
   const initialBorderOut = pictogram.settings.borderOut ?? defaultBorderOut;
   const [borderOut, setBorderOut] = useState(initialBorderOut);
+
+  // Valors per defecte globals per al fallback de PictogramCard
+  const defaults: PictogramCardDefaults = {
+    numbered: defaultNumbered,
+    font: defaultFont,
+    numberFont: defaultNumberFont,
+    borderIn,
+    borderOut,
+  };
 
   const pictogramGuide: PictSequence = {
     ...pictogram,
@@ -148,6 +160,7 @@ const PictEditForm = ({
       >
         <PictogramCard
           pictogram={pictogramGuide}
+          defaults={defaults}
           variant="plane"
           view="complete"
           size={{ scale: 0.8 }}
@@ -209,7 +222,6 @@ const PictEditForm = ({
                       setting="color"
                       state={color}
                       setState={setColor}
-                      applyAll={"none"}
                     />
                   </li>
                   <li>

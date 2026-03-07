@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { Stack, ToggleButton, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useAppDispatch } from "../../../app/hooks";
-import {
-  pictAraSettingsApplyAllActionCreator,
-  pictSequenceApplyAllActionCreator,
-} from "../../../app/slice/documentSlice";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
-import { Hair, Skin, TextPosition } from "../../../types/sequence";
 import { settingsCardLang } from "./SettingCard.lang";
 import {
   cardAction,
@@ -23,17 +17,16 @@ interface SettingCardProps {
   state: string | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setState: React.Dispatch<React.SetStateAction<any>>;
-  applyAll?: boolean;
+  onApplyAll?: () => void;
 }
 
 const SettingCard = ({
   setting,
   setState,
   state,
-  applyAll = false,
+  onApplyAll,
 }: SettingCardProps): React.ReactElement => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const settingCard = {
     message: settingsCardLang.messages[setting],
@@ -42,29 +35,6 @@ const SettingCard = ({
 
   const handleSelected = (toUpdate: string) => {
     setState(toUpdate);
-  };
-
-  const handleApplyAll = (toUpdate: string) => {
-    setting === "textPosition" &&
-      dispatch(
-        pictSequenceApplyAllActionCreator({
-          textPosition: toUpdate as TextPosition,
-        }),
-      );
-
-    setting === "skin" &&
-      dispatch(
-        pictAraSettingsApplyAllActionCreator({
-          skin: toUpdate as Skin,
-        }),
-      );
-
-    setting === "hair" &&
-      dispatch(
-        pictAraSettingsApplyAllActionCreator({
-          hair: toUpdate as Hair,
-        }),
-      );
   };
 
   return (
@@ -104,8 +74,8 @@ const SettingCard = ({
         ))}
       </StyledToggleButtonGroup>
 
-      {applyAll && state && (
-        <ApplyAll sx={cardAction} onClick={() => handleApplyAll(state)} />
+      {onApplyAll && state && (
+        <ApplyAll sx={cardAction} onClick={onApplyAll} />
       )}
     </Stack>
   );

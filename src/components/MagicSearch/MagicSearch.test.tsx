@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "../../utils/test-utils";
 import MagicSearch from "./MagicSearch";
 
 const mockAction = jest.fn();
-jest.mock("../../hooks/useAraSaac", () => () => ({
+jest.mock("../../features/pictogram/hooks/useSearchPictogram", () => () => ({
   getSearchPictogram: mockAction,
 }));
 
@@ -17,7 +17,7 @@ describe("Give a component MagicSearch", () => {
       const expectActions_1 = "Hello";
       const expectActions_2 = "word";
 
-      render(<MagicSearch />);
+      render(<MagicSearch info={{ value: false }} />);
       const input = screen.getByRole("textbox", { name: expectInput });
       const button = screen.getByRole("button", { name: expectButton });
 

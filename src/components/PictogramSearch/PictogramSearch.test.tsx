@@ -9,10 +9,12 @@ import {
 import PictogramSearch from "./PictogramSearch";
 
 const mockAction = jest.fn();
-jest.mock("../../hooks/useAraSaac", () => () => ({
+jest.mock("../../features/pictogram/hooks/useSearchPictogram", () => () => ({
   getSettingsPictId: mockAction,
   getSearchPictogram: mockAction,
-  toUrlPath: mockAction,
+}));
+jest.mock("../../features/pictogram/hooks/usePictogramUrl", () => () => ({
+  buildPictogramUrl: mockAction,
 }));
 
 const mockDispatch = jest.fn();
@@ -46,7 +48,7 @@ describe("Give component PictogramSearch", () => {
       render(
         <PictogramSearch
           indexPict={0}
-          state={{ selectedId: 2234, fitzgerald: "#334433" }}
+          state={{ selectedId: 2234, fitzgerald: "#334433", url: undefined }}
           setState={mockDispatch}
         />,
         {
@@ -69,7 +71,7 @@ describe("Give component PictogramSearch", () => {
       render(
         <PictogramSearch
           indexPict={indexPict}
-          state={{ selectedId: 2234, fitzgerald: "#334433" }}
+          state={{ selectedId: 2234, fitzgerald: "#334433", url: undefined }}
           setState={mockDispatch}
         />,
         {
@@ -115,7 +117,7 @@ describe("Give component PictogramSearch", () => {
       render(
         <PictogramSearch
           indexPict={0}
-          state={{ selectedId: 2234, fitzgerald: "#334433" }}
+          state={{ selectedId: 2234, fitzgerald: "#334433", url: undefined }}
           setState={mockDispatch}
         />,
         {
@@ -159,7 +161,7 @@ describe("Give component PictogramSearch", () => {
       render(
         <PictogramSearch
           indexPict={0}
-          state={{ selectedId: 2234, fitzgerald: "#334433" }}
+          state={{ selectedId: 2234, fitzgerald: "#334433", url: undefined }}
           setState={mockDispatch}
         />,
         {

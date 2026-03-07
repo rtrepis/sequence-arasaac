@@ -8,7 +8,8 @@ import {
 import { styled } from "@mui/material/styles";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import useAraSaac from "../../hooks/useAraSaac";
+import useSearchPictogram from "../../features/pictogram/hooks/useSearchPictogram";
+import usePictogramUrl from "../../features/pictogram/hooks/usePictogramUrl";
 import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import messages from "./PictogramSearch.lang";
 import { useAppSelector } from "../../app/hooks";
@@ -17,6 +18,7 @@ import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { Hair, Skin } from "@/types/sequence";
 import { fileToBase64 } from "@/utils/imageToBase64";
+import type { RootState } from "../../app/store";
 
 // Input visualment ocult però accessible per a lectors de pantalla (diferent de hidden)
 const VisuallyHiddenInput = styled("input")({
@@ -60,7 +62,7 @@ const PictogramSearch = ({
   state,
   setState,
 }: PropsPictogramSearch): React.ReactElement => {
-  const getActiveSAACPictImg = (state) =>
+  const getActiveSAACPictImg = (state: RootState) =>
     state.document.content[state.document.activeSAAC][indexPict].img;
   const {
     settings: { skin, hair },
@@ -69,11 +71,8 @@ const PictogramSearch = ({
   const { keywords } = useAppSelector((state) => state.ui.lang);
 
   const intl = useIntl();
-  const {
-    getSearchPictogram,
-    toUrlPath: toUrlPathApiAraSaac,
-    getSettingsPictId,
-  } = useAraSaac();
+  const { getSearchPictogram, getSettingsPictId } = useSearchPictogram();
+  const { buildPictogramUrl } = usePictogramUrl();
 
   const initialWord =
     word === `${intl.formatMessage({ ...messages.empty })}` ? "" : word;
@@ -192,7 +191,7 @@ const PictogramSearch = ({
               selected={pictogram === state.selectedId}
             >
               <img
-                src={toUrlPathApiAraSaac(pictogram, skin, hair)}
+                src={buildPictogramUrl(pictogram, skin, hair)}
                 alt={`${intl.formatMessage({
                   ...messages.pictogram,
                 })} ${newWord}`}

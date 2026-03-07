@@ -14,11 +14,12 @@ import { useRef, useState } from "react";
 import messages from "./PictEdit.lang";
 import { circlePictogramNumber } from "./PictEditModal.styled";
 import StyledButton from "../../style/StyledButton";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
 } from "../../app/slice/documentSlice";
+import { PictogramCardDefaults } from "../../types/sequence";
 import PictEditForm from "../../components/PictEditFrom/PictEditForm";
 import MouseActionList from "../../components/utils/MouseActionList/MouseActionList";
 import React from "react";
@@ -37,6 +38,16 @@ const PictEditModal = ({
 }: PictEditProps): React.ReactElement => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
+  const { pictSequence } = useAppSelector(
+    (state) => state.ui.defaultSettings,
+  );
+  const defaults: PictogramCardDefaults = {
+    numbered: pictSequence.numbered,
+    font: pictSequence.font,
+    numberFont: pictSequence.numberFont,
+    borderIn: pictSequence.borderIn,
+    borderOut: pictSequence.borderOut,
+  };
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
@@ -89,6 +100,7 @@ const PictEditModal = ({
         <PictogramCard
           view={"complete"}
           pictogram={pictogram}
+          defaults={defaults}
           size={{ pictSize: 0.75 }}
         />
       </Button>

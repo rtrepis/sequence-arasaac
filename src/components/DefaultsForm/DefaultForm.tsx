@@ -4,7 +4,7 @@ import SettingCardLang from "../SettingsCards/SettingCardOptions/lang/SettingCar
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
-import { PictSequence } from "../../types/sequence";
+import { PictogramCardDefaults, PictSequence } from "../../types/sequence";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultForm.lang";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -14,6 +14,12 @@ import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
 import { saveSettings } from "../../features/user-settings/storage/settingsStorage";
 import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup";
 import { messages as fontGroupMessages } from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup.lang";
+import {
+  pictAraSettingsApplyAllActionCreator,
+  pictSequenceApplyAllActionCreator,
+  borderInApplyAllActionCreator,
+  borderOutApplyAllActionCreator,
+} from "../../app/slice/documentSlice";
 import React from "react";
 
 interface DefaultFormProps {
@@ -37,7 +43,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
         borderOut: initialBorderOut,
         font: initialFont,
         numberFont: initialNumberFont,
-        numbered,
+        numbered: initialNumbered,
         textPosition: initialTextPosition,
       },
     },
@@ -54,6 +60,15 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
   const [borderOut, setBorderOut] = useState(initialBorderOut);
   const [hair, setHair] = useState(initialHair);
   const [color, setColor] = useState(initialColor);
+  const [numbered, setNumbered] = useState(initialNumbered);
+
+  const defaults: PictogramCardDefaults = {
+    numbered,
+    font,
+    numberFont,
+    borderIn,
+    borderOut,
+  };
 
   const pictogramGuide: PictSequence = {
     indexSequence: 0,
@@ -135,6 +150,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
         >
           <PictogramCard
             pictogram={pictogramGuide}
+            defaults={defaults}
             view="complete"
             variant="plane"
           />
@@ -163,13 +179,22 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
               <SettingCardLang setting="languagesSearch" />
             </li>
             <li>
-              <SettingCardBoolean setting={"numbered"} state={numbered} />
+              <SettingCardBoolean
+                setting={"numbered"}
+                state={numbered}
+                setState={setNumbered}
+              />
             </li>
             <li>
               <SettingCardBoolean
                 setting="color"
                 state={color}
                 setState={setColor}
+                onApplyAll={() =>
+                  dispatch(
+                    pictAraSettingsApplyAllActionCreator({ color: !color }),
+                  )
+                }
               />
             </li>
             <Stack
@@ -185,7 +210,11 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                   setting={"textPosition"}
                   state={textPosition}
                   setState={setTextPosition}
-                  applyAll
+                  onApplyAll={() =>
+                    dispatch(
+                      pictSequenceApplyAllActionCreator({ textPosition }),
+                    )
+                  }
                 />
               </li>
             </Stack>
@@ -214,7 +243,9 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                   border="borderOut"
                   state={borderOut}
                   setState={setBorderOut}
-                  applyAll
+                  onApplyAll={() =>
+                    dispatch(borderOutApplyAllActionCreator({ borderOut }))
+                  }
                 />
               </li>
               <li>
@@ -222,7 +253,9 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                   border="borderIn"
                   state={borderIn}
                   setState={setBorderIn}
-                  applyAll
+                  onApplyAll={() =>
+                    dispatch(borderInApplyAllActionCreator({ borderIn }))
+                  }
                 />
               </li>
             </Stack>
@@ -250,7 +283,9 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                     setting={"skin"}
                     state={skin}
                     setState={setSkin}
-                    applyAll
+                    onApplyAll={() =>
+                      dispatch(pictAraSettingsApplyAllActionCreator({ skin }))
+                    }
                   />
                 </li>
                 <li>
@@ -258,7 +293,9 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                     setting={"hair"}
                     state={hair}
                     setState={setHair}
-                    applyAll
+                    onApplyAll={() =>
+                      dispatch(pictAraSettingsApplyAllActionCreator({ hair }))
+                    }
                   />
                 </li>
               </Stack>

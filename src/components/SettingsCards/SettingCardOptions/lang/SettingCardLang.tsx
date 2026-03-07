@@ -20,7 +20,7 @@ import {
 import { updateLangSettingsActionCreator } from "../../../../app/slice/uiSlice";
 import { Ui } from "../../../../types/ui";
 import { saveLangSettings, LangStorageSettings } from "../../../../features/user-settings/storage/settingsStorage";
-import useAraSaac from "/src/hooks/useAraSaac";
+import useSearchPictogram from "../../../../features/pictogram/hooks/useSearchPictogram";
 
 interface SettingCardProps {
   setting: "languagesApp" | "languagesSearch";
@@ -31,7 +31,7 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
     (store) => store.ui.lang,
   );
   const dispatch = useAppDispatch();
-  const { getAllKeyWordsForLanguages } = useAraSaac();
+  const { getAllKeyWordsForLanguages } = useSearchPictogram();
 
   const initialLang = setting === "languagesApp" ? appLang : searchLang;
   const [lang, setLang] = useState(initialLang);

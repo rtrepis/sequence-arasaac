@@ -2,7 +2,8 @@ import { ButtonBase, InputAdornment, TextField } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useIntl } from "react-intl";
-import useAraSaac, { Ai } from "../../hooks/useAraSaac";
+import useSearchPictogram from "../../features/pictogram/hooks/useSearchPictogram";
+import { Ai } from "../../types/sequence";
 import messages from "./MagicSearch.lang";
 import React from "react";
 import { useAppSelector } from "@/app/hooks";
@@ -21,7 +22,7 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
   const { app: appLang, search: searchLang } = useAppSelector(
     (state) => state.ui.lang,
   );
-  const { getSearchPictogram } = useAraSaac();
+  const { getSearchPictogram } = useSearchPictogram();
   const { showProgress, updateProgress, hideProgress, showSnackbar } =
     useFeedback();
 

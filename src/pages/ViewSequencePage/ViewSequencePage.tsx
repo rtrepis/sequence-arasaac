@@ -6,13 +6,22 @@ import ViewSequencesSettings, {
   ALIGNMENT_TO_JUSTIFY,
 } from "../../components/ViewSequencesSettings/ViewSquenceSettings";
 import CopyRight from "../../components/CopyRight/CopyRight";
+import { PictogramCardDefaults } from "../../types/sequence";
 
 /**
  * Pàgina de visualització de seqüències refactoritzada
  * sizePict, pictSpaceBetween i alignment són per seqüència; sequenceSpaceBetween és global
  */
 const ViewSequencePage = (): React.ReactElement => {
-  const { document } = useAppSelector((state) => state);
+  const { document, ui } = useAppSelector((state) => state);
+  const { pictSequence } = ui.defaultSettings;
+  const defaults: PictogramCardDefaults = {
+    numbered: pictSequence.numbered,
+    font: pictSequence.font,
+    numberFont: pictSequence.numberFont,
+    borderIn: pictSequence.borderIn,
+    borderOut: pictSequence.borderOut,
+  };
 
   return (
     <ViewSequencesSettings>
@@ -48,6 +57,7 @@ const ViewSequencePage = (): React.ReactElement => {
                   <PictogramCard
                     pictogram={pictogram}
                     view={"complete"}
+                    defaults={defaults}
                     variant="plane"
                     size={{
                       pictSize: seqView.sizePict,
