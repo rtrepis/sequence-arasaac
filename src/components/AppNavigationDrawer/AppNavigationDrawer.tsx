@@ -39,9 +39,9 @@ import { useAppDispatch } from "../../app/hooks";
 import {
   addSequenceActionCreator,
   loadDocumentSaacActionCreator,
-} from "../../app/slice/documentSlice";
-import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
-import { trackEvent } from "../../hooks/usePageTracking";
+} from "@features/sequence/store/documentSlice";
+import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
+import { trackEvent } from "@shared/hooks/usePageTracking";
 import { useFeedback } from "../../context/FeedbackContext";
 import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
 

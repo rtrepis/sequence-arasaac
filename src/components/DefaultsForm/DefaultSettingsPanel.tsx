@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { DefaultSettings } from "../../types/ui";
-import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
+import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { saveSettings } from "../../features/user-settings/storage/settingsStorage";
 import {
   pictAraSettingsApplyAllActionCreator,
   pictSequenceApplyAllActionCreator,
   borderInApplyAllActionCreator,
   borderOutApplyAllActionCreator,
-} from "../../app/slice/documentSlice";
+} from "@features/sequence/store/documentSlice";
 import React from "react";
 import DefaultForm from "./DefaultForm";
 

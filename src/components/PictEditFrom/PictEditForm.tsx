@@ -8,7 +8,7 @@ import SettingCard from "../SettingsCards/SettingCard/SettingCard";
 import { useIntl } from "react-intl";
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { updatePictSequenceActionCreator } from "../../app/slice/documentSlice";
+import { updatePictSequenceActionCreator } from "@features/sequence/store/documentSlice";
 import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCardTextFiled";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import React from "react";

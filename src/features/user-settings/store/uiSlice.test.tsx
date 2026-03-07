@@ -1,5 +1,5 @@
-import { DefaultSettingsPictApiAraForEdit, Ui } from "../../types/ui";
-import { preloadedState } from "../../utils/test-utils";
+import { DefaultSettingsPictApiAraForEdit, Ui } from "@/types/ui";
+import { preloadedState } from "@/utils/test-utils";
 import {
   uiReducer,
   updateDefaultSettingPictApiAraActionCreator,

@@ -6,7 +6,7 @@ import { useAppDispatch } from "../hooks";
 import {
   updateDefaultSettingsActionCreator,
   updateLangSettingsActionCreator,
-} from "../slice/uiSlice";
+} from "@features/user-settings/store/uiSlice";
 import {
   getStoredSettings,
   getStoredLangSettings,

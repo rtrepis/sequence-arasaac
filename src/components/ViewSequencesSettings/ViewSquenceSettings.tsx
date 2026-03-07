@@ -5,24 +5,24 @@ import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { MdScreenRotation } from "react-icons/md";
 import { useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
-import useWindowResize from "@/hooks/useWindowResize";
+import useWindowResize from "@shared/hooks/useWindowResize";
 import React from "react";
-import { trackEvent } from "@/hooks/usePageTracking";
-import { usePageFormat } from "@/hooks/usePageFormat";
+import { trackEvent } from "@shared/hooks/usePageTracking";
+import { usePageFormat } from "@features/print/hooks/usePageFormat";
 import {
   useScaleCalculator,
   usePrintDimensions,
-} from "@/hooks/useScaleCalculator";
-import { useFullscreen } from "@/hooks/useFullScreen";
-import { useViewManager, useAuthorManager } from "@/hooks/useViewManager";
+} from "@features/print/hooks/useScaleCalculator";
+import { useFullscreen } from "@features/print/hooks/useFullScreen";
+import { useViewManager, useAuthorManager } from "@features/print/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
-import { usePrintStyles, printWithOrientation } from "@/hooks/usePrintStyles";
+import { usePrintStyles, printWithOrientation } from "@features/print/hooks/usePrintStyles";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import { SequenceViewSettings, SequenceAlignment } from "@/types/document";
 import {
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
-} from "@/app/slice/documentSlice";
+} from "@features/sequence/store/documentSlice";
 import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
 import { SelectChangeEvent } from "@mui/material";

@@ -1,5 +1,5 @@
-import { useAppSelector } from "../app/hooks";
-import { PictSequence } from "../types/sequence";
+import { useAppSelector } from "@/app/hooks";
+import { PictSequence } from "@/types/sequence";
 
 const useNewPictogram = () => {
   const pictSequenceDefault = useAppSelector(

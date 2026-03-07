@@ -18,7 +18,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
-} from "../../app/slice/documentSlice";
+} from "@features/sequence/store/documentSlice";
 import { PictogramCardDefaults } from "../../types/sequence";
 import PictEditForm from "../../components/PictEditFrom/PictEditForm";
 import MouseActionList from "../../components/utils/MouseActionList/MouseActionList";

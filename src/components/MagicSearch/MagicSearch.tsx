@@ -8,7 +8,7 @@ import messages from "./MagicSearch.lang";
 import React from "react";
 import { useAppSelector } from "@/app/hooks";
 import { settingCardOptions } from "../SettingsCards/SettingCardOptions/lang/SettingCardLang.lang";
-import { trackEvent } from "@/hooks/usePageTracking";
+import { trackEvent } from "@shared/hooks/usePageTracking";
 import { useFeedback } from "@/context/FeedbackContext";
 import feedbackMessages from "@/context/FeedbackContext/FeedbackContext.lang";
 

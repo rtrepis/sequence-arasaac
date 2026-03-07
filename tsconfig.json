@@ -19,7 +19,11 @@
     "types": ["jest", "@testing-library/jest-dom", "vite/client"],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@features/*": ["src/features/*"],
+      "@shared/*": ["src/shared/*"],
+      "@app/*": ["src/app/*"],
+      "@components/*": ["src/components/*"]
     }
   },
   "include": ["src", ".private/mocks"],

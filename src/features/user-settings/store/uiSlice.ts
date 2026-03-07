@@ -5,7 +5,7 @@ import {
   DefaultSettingsPictSequenceForEdit,
   Ui,
   ViewSettings,
-} from "../../types/ui";
+} from "@/types/ui";
 import {
   VIEW_DEFAULT_SIZE_PICT,
   VIEW_DEFAULT_PICT_SPACE,

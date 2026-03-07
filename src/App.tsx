@@ -29,7 +29,7 @@ export const messageLocale = {
   es: messages_es,
   en: messages_en,
 };
-import { usePageTracking } from "./hooks/usePageTracking";
+import { usePageTracking } from "@shared/hooks/usePageTracking";
 import { useAppSelector } from "./app/hooks";
 
 // Fallback mentre es carrega un chunk de ruta

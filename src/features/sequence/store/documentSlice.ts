@@ -6,7 +6,7 @@ import {
   PictSequenceSettingsForEdit,
   PictApiAraForEdit,
   PictApiAraSettingsApplyAll,
-} from "../../types/sequence";
+} from "@/types/sequence";
 import { DocumentSAAC, SequenceViewSettings } from "@/types/document";
 import {
   SEQ_VIEW_DEFAULT_SIZE_PICT,

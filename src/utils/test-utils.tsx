@@ -7,7 +7,7 @@ import theme from "../style/themeMui";
 import { CssBaseline } from "@mui/material";
 import { IntlProvider } from "react-intl";
 import messages from "../languages/en.json";
-import { uiReducer } from "../app/slice/uiSlice";
+import { uiReducer } from "@features/user-settings/store/uiSlice";
 import { Sequence } from "../types/sequence";
 import { Ui } from "../types/ui";
 import { BrowserRouter } from "react-router-dom";

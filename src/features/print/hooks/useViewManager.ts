@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
-import { ViewSettings } from "../types/ui";
-import { useAppDispatch } from "../app/hooks";
-import { viewSettingsActionCreator } from "../app/slice/uiSlice";
+import { ViewSettings } from "@/types/ui";
+import { useAppDispatch } from "@/app/hooks";
+import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 
 /**
  * Configuració del hook de gestió de visualització

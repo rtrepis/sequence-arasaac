@@ -18,11 +18,11 @@ import {
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
   updatePictSequenceActionCreator,
-} from "../../../app/slice/documentSlice";
-import useNewPictogram from "../../../hooks/useNewPictogram";
+  insertPictogramActionCreator,
+} from "@features/sequence/store/documentSlice";
+import useNewPictogram from "@features/pictogram/hooks/useNewPictogram";
 import { PictSequence } from "../../../types/sequence";
 import React from "react";
-import { insertPictogramActionCreator } from "@/app/slice/documentSlice";
 
 interface MouseActionListProps {
   pictogram: PictSequence;

@@ -16,7 +16,7 @@ import React, { BaseSyntheticEvent, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ButtonWithModalDonwload.lang";
 import { useAppSelector } from "@/app/hooks";
-import { trackEvent } from "@/hooks/usePageTracking";
+import { trackEvent } from "@shared/hooks/usePageTracking";
 import { DefaultSettings } from "@/types/ui";
 import { DocumentSAAC } from "@/types/document";
 import { useFeedback } from "@/context/FeedbackContext";

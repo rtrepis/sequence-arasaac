@@ -15,7 +15,7 @@ import {
   changeActiveSAACActionCreator,
   addNewSequenceActionCreator,
   deleteLastSequenceActionCreator,
-} from "@/app/slice/documentSlice";
+} from "@features/sequence/store/documentSlice";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 
 const TabsSequences = (): React.ReactElement => {

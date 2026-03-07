@@ -2,7 +2,7 @@ import { Grid2 } from "@mui/material";
 import { PictSequence, Sequence } from "../../types/sequence";
 import PictEditModal from "../PictEditModal/PictEditModal";
 import { useState } from "react";
-import useNewPictogram from "../../hooks/useNewPictogram";
+import useNewPictogram from "@features/pictogram/hooks/useNewPictogram";
 import React from "react";
 
 interface PictEditModalProps {

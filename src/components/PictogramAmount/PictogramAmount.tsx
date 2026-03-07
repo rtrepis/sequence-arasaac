@@ -7,16 +7,16 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { subtractLastPictActionCreator } from "../../app/slice/documentSlice";
+import { subtractLastPictActionCreator } from "@features/sequence/store/documentSlice";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import messages from "./PictogramAmount.lang";
-import useNewPictogram from "../../hooks/useNewPictogram";
+import useNewPictogram from "@features/pictogram/hooks/useNewPictogram";
 import React from "react";
-import { addPictogramActionCreator } from "@/app/slice/documentSlice";
+import { addPictogramActionCreator } from "@features/sequence/store/documentSlice";
 
 interface PictogramAmountProps {
   variant?: "navBar";

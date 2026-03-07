@@ -17,7 +17,7 @@ import {
   langTranslateApp,
   langTranslateSearch,
 } from "../../../../configs/languagesConfigs";
-import { updateLangSettingsActionCreator } from "../../../../app/slice/uiSlice";
+import { updateLangSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { Ui } from "../../../../types/ui";
 import { saveLangSettings, LangStorageSettings } from "../../../../features/user-settings/storage/settingsStorage";
 import useSearchPictogram from "../../../../features/pictogram/hooks/useSearchPictogram";

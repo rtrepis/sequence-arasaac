@@ -5,8 +5,8 @@ import {
   sortSequenceActionCreator,
   settingsPictApiAraActionCreator,
   addPictogramActionCreator,
-} from "../../../app/slice/documentSlice";
-import { updateKeywordsActionCreator } from "../../../app/slice/uiSlice";
+} from "@features/sequence/store/documentSlice";
+import { updateKeywordsActionCreator } from "@features/user-settings/store/uiSlice";
 import { Ai, PictApiAraForEdit, PictSequence } from "../../../types/sequence";
 import {
   searchPictogramByWord,
