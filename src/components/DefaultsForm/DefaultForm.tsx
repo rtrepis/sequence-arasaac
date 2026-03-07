@@ -4,63 +4,81 @@ import SettingCardLang from "../SettingsCards/SettingCardOptions/lang/SettingCar
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
-import { PictogramCardDefaults, PictSequence } from "../../types/sequence";
+import {
+  Border,
+  Font,
+  Hair,
+  PictogramCardDefaults,
+  PictSequence,
+  Skin,
+  TextPosition,
+} from "../../types/sequence";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultForm.lang";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useCallback, useEffect, useState } from "react";
-import { DefaultSettings } from "../../types/ui";
-import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
-import { saveSettings } from "../../features/user-settings/storage/settingsStorage";
 import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup";
 import { messages as fontGroupMessages } from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup.lang";
-import {
-  pictAraSettingsApplyAllActionCreator,
-  pictSequenceApplyAllActionCreator,
-  borderInApplyAllActionCreator,
-  borderOutApplyAllActionCreator,
-} from "../../app/slice/documentSlice";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 interface DefaultFormProps {
-  submit: boolean | "save";
+  font: Font;
+  setFont: Dispatch<SetStateAction<Font>>;
+  numberFont: Font;
+  setNumberFont: Dispatch<SetStateAction<Font>>;
+  textPosition: TextPosition;
+  setTextPosition: Dispatch<SetStateAction<TextPosition>>;
+  skin: Skin;
+  setSkin: Dispatch<SetStateAction<Skin>>;
+  borderIn: Border;
+  setBorderIn: Dispatch<SetStateAction<Border>>;
+  borderOut: Border;
+  setBorderOut: Dispatch<SetStateAction<Border>>;
+  hair: Hair;
+  setHair: Dispatch<SetStateAction<Hair>>;
+  color: boolean;
+  setColor: Dispatch<SetStateAction<boolean>>;
+  numbered: boolean;
+  setNumbered: Dispatch<SetStateAction<boolean>>;
+  onApplyAllColor: () => void;
+  onApplyAllTextPosition: () => void;
+  onApplyAllSkin: () => void;
+  onApplyAllHair: () => void;
+  onApplyAllBorderIn: () => void;
+  onApplyAllBorderOut: () => void;
+  onSubmit: () => void;
 }
 
-const DefaultForm = ({ submit }: DefaultFormProps) => {
+/**
+ * Component de presentació pur: renderitza el formulari de configuració per defecte.
+ * Sense accés a Redux ni a persistència — tota la lògica és al DefaultSettingsPanel.
+ */
+const DefaultForm = ({
+  font,
+  setFont,
+  numberFont,
+  setNumberFont,
+  textPosition,
+  setTextPosition,
+  skin,
+  setSkin,
+  borderIn,
+  setBorderIn,
+  borderOut,
+  setBorderOut,
+  hair,
+  setHair,
+  color,
+  setColor,
+  numbered,
+  setNumbered,
+  onApplyAllColor,
+  onApplyAllTextPosition,
+  onApplyAllSkin,
+  onApplyAllHair,
+  onApplyAllBorderIn,
+  onApplyAllBorderOut,
+  onSubmit,
+}: DefaultFormProps) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
-
-  const {
-    defaultSettings: {
-      pictApiAra: {
-        fitzgerald,
-        skin: initialSkin,
-        hair: initialHair,
-        color: initialColor,
-      },
-      pictSequence: {
-        borderIn: initialBorderIn,
-        borderOut: initialBorderOut,
-        font: initialFont,
-        numberFont: initialNumberFont,
-        numbered: initialNumbered,
-        textPosition: initialTextPosition,
-      },
-    },
-  } = useAppSelector((state) => state.ui);
-
-  const [font, setFont] = useState(initialFont);
-  // Si no hi ha numberFont guardat (dades antigues), usa el font del text com a base
-  const [numberFont, setNumberFont] = useState(
-    initialNumberFont ?? initialFont,
-  );
-  const [textPosition, setTextPosition] = useState(initialTextPosition);
-  const [skin, setSkin] = useState(initialSkin);
-  const [borderIn, setBorderIn] = useState(initialBorderIn);
-  const [borderOut, setBorderOut] = useState(initialBorderOut);
-  const [hair, setHair] = useState(initialHair);
-  const [color, setColor] = useState(initialColor);
-  const [numbered, setNumbered] = useState(initialNumbered);
 
   const defaults: PictogramCardDefaults = {
     numbered,
@@ -95,42 +113,8 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
     cross: false,
   };
 
-  const handlerSubmit = useCallback(() => {
-    const newDefaultSettings: DefaultSettings = {
-      pictApiAra: { fitzgerald, skin, hair, color },
-      pictSequence: {
-        borderIn,
-        borderOut,
-        font,
-        numberFont,
-        numbered,
-        textPosition,
-      },
-    };
-
-    dispatch(updateDefaultSettingsActionCreator(newDefaultSettings));
-    saveSettings(newDefaultSettings);
-  }, [
-    fitzgerald,
-    skin,
-    hair,
-    borderIn,
-    borderOut,
-    numbered,
-    numberFont,
-    textPosition,
-    dispatch,
-    color,
-    font,
-  ]);
-
-  useEffect(() => {
-    if (!submit) handlerSubmit();
-    if (submit === "save") handlerSubmit();
-  }, [submit, handlerSubmit]);
-
   return (
-    <form onSubmit={handlerSubmit}>
+    <form onSubmit={onSubmit}>
       <Stack
         display={"flex"}
         direction={{ xs: "column", md: "row" }}
@@ -190,11 +174,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                 setting="color"
                 state={color}
                 setState={setColor}
-                onApplyAll={() =>
-                  dispatch(
-                    pictAraSettingsApplyAllActionCreator({ color: !color }),
-                  )
-                }
+                onApplyAll={onApplyAllColor}
               />
             </li>
             <Stack
@@ -210,11 +190,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                   setting={"textPosition"}
                   state={textPosition}
                   setState={setTextPosition}
-                  onApplyAll={() =>
-                    dispatch(
-                      pictSequenceApplyAllActionCreator({ textPosition }),
-                    )
-                  }
+                  onApplyAll={onApplyAllTextPosition}
                 />
               </li>
             </Stack>
@@ -243,9 +219,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                   border="borderOut"
                   state={borderOut}
                   setState={setBorderOut}
-                  onApplyAll={() =>
-                    dispatch(borderOutApplyAllActionCreator({ borderOut }))
-                  }
+                  onApplyAll={onApplyAllBorderOut}
                 />
               </li>
               <li>
@@ -253,9 +227,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                   border="borderIn"
                   state={borderIn}
                   setState={setBorderIn}
-                  onApplyAll={() =>
-                    dispatch(borderInApplyAllActionCreator({ borderIn }))
-                  }
+                  onApplyAll={onApplyAllBorderIn}
                 />
               </li>
             </Stack>
@@ -283,9 +255,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                     setting={"skin"}
                     state={skin}
                     setState={setSkin}
-                    onApplyAll={() =>
-                      dispatch(pictAraSettingsApplyAllActionCreator({ skin }))
-                    }
+                    onApplyAll={onApplyAllSkin}
                   />
                 </li>
                 <li>
@@ -293,9 +263,7 @@ const DefaultForm = ({ submit }: DefaultFormProps) => {
                     setting={"hair"}
                     state={hair}
                     setState={setHair}
-                    onApplyAll={() =>
-                      dispatch(pictAraSettingsApplyAllActionCreator({ hair }))
-                    }
+                    onApplyAll={onApplyAllHair}
                   />
                 </li>
               </Stack>

@@ -10,7 +10,7 @@ import { forwardRef, useRef, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
 import { Container } from "@mui/system";
-import DefaultForm from "../../components/DefaultsForm/DefaultForm";
+import DefaultSettingsPanel from "../../components/DefaultsForm/DefaultSettingsPanel";
 import { Stack, Tooltip } from "@mui/material";
 import React from "react";
 
@@ -80,7 +80,7 @@ const DefaultSettingsModal = (): React.ReactElement => {
         </AppBar>
         <Container sx={{ marginTop: 2 }}>
           <Stack sx={{ height: 40, display: { md: "none" } }} />
-          <DefaultForm submit={open} />
+          <DefaultSettingsPanel submit={open} />
         </Container>
       </Dialog>
     </>

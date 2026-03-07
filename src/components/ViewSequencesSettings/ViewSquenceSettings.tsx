@@ -1,41 +1,9 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Divider,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Slider,
-  Stack,
-  Switch,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Divider, Stack, Tooltip } from "@mui/material";
 import { useCallback, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
-import {
-  MdExpandMore,
-  MdFormatAlignLeft,
-  MdFormatAlignCenter,
-  MdFormatAlignRight,
-  MdVerticalAlignTop,
-  MdVerticalAlignCenter,
-  MdVerticalAlignBottom,
-  MdScreenRotation,
-  MdTableRows,
-  MdViewColumn,
-} from "react-icons/md";
-import { FormattedMessage, useIntl } from "react-intl";
+import { MdScreenRotation } from "react-icons/md";
+import { useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 import useWindowResize from "@/hooks/useWindowResize";
 import React from "react";
@@ -55,20 +23,9 @@ import {
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
 } from "@/app/slice/documentSlice";
-import {
-  SEQ_VIEW_DEFAULT_SIZE_PICT,
-  SEQ_VIEW_DEFAULT_PICT_SPACE,
-  SEQ_VIEW_DEFAULT_ALIGNMENT,
-  SIZE_PICT_MIN,
-  SIZE_PICT_MAX,
-  SIZE_PICT_STEP,
-  PICT_SPACE_MIN,
-  PICT_SPACE_MAX,
-  PICT_SPACE_STEP,
-  SEQ_SPACE_MIN,
-  SEQ_SPACE_MAX,
-  SEQ_SPACE_STEP,
-} from "@/configs/viewSettingsConfig";
+import SequenceControlsPanel from "./SequenceControlsPanel";
+import GlobalViewControls from "./GlobalViewControls";
+import { SelectChangeEvent } from "@mui/material";
 
 interface ViewSequencesSettingsChildrenProps {
   viewSettings: ViewSettings;
@@ -93,7 +50,7 @@ const ALIGNMENT_TO_JUSTIFY: Record<SequenceAlignment, string> = {
 };
 
 /**
- * Component refactoritzat per gestionar la configuració de visualització de seqüències
+ * Orquestrador de la visualització de seqüències: gestiona hooks, handlers i composició
  */
 const ViewSequencesSettings = ({
   children,
@@ -310,82 +267,6 @@ const ViewSequencesSettings = ({
     });
   }, [pageFormat, viewSettings.sizePict]);
 
-  /**
-   * Renderitza els controls per una seqüència dins l'acordió
-   */
-  const renderSequenceControls = (seqKey: number) => {
-    const seqView = sequenceViewSettings[seqKey] ?? {
-      sizePict: SEQ_VIEW_DEFAULT_SIZE_PICT,
-      pictSpaceBetween: SEQ_VIEW_DEFAULT_PICT_SPACE,
-      alignment: SEQ_VIEW_DEFAULT_ALIGNMENT as SequenceAlignment,
-    };
-
-    // Mostrar icones d'alineació diferents segons la direcció global
-    const isColumn = viewSettings.direction === "column";
-
-    return (
-      <Stack spacing={1}>
-        <FormGroup>
-          <FormLabel>
-            <FormattedMessage {...messages.size} />
-            <Slider
-              name="sizePict"
-              step={SIZE_PICT_STEP}
-              min={SIZE_PICT_MIN}
-              max={SIZE_PICT_MAX}
-              value={seqView.sizePict}
-              valueLabelDisplay="auto"
-              valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
-              onChange={handleSequenceSliderChange(seqKey)}
-            />
-          </FormLabel>
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>
-            <FormattedMessage {...messages.pictSpaceBetween} />
-            <Slider
-              name="pictSpaceBetween"
-              step={0.5}
-              min={-2}
-              max={10}
-              value={seqView.pictSpaceBetween}
-              valueLabelDisplay="auto"
-              valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
-              onChange={handleSequenceSliderChange(seqKey)}
-            />
-          </FormLabel>
-        </FormGroup>
-        <FormGroup>
-          <FormLabel component="legend">
-            <FormattedMessage {...messages.alignment} />
-          </FormLabel>
-          <ToggleButtonGroup
-            value={seqView.alignment}
-            exclusive
-            onChange={handleAlignmentChange(seqKey)}
-            size="small"
-          >
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignLeft)}>
-              <ToggleButton value="left" aria-label="left">
-                {isColumn ? <MdVerticalAlignTop /> : <MdFormatAlignLeft />}
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignCenter)}>
-              <ToggleButton value="center" aria-label="center">
-                {isColumn ? <MdVerticalAlignCenter /> : <MdFormatAlignCenter />}
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignRight)}>
-              <ToggleButton value="right" aria-label="right">
-                {isColumn ? <MdVerticalAlignBottom /> : <MdFormatAlignRight />}
-              </ToggleButton>
-            </Tooltip>
-          </ToggleButtonGroup>
-        </FormGroup>
-      </Stack>
-    );
-  };
-
   return (
     <>
       <form onBlur={handleBlur} onSubmit={(event) => event.preventDefault()}>
@@ -513,146 +394,41 @@ const ViewSequencesSettings = ({
               alignItems: "stretch",
             }}
           >
-          <NotPrint>
-            <Divider orientation="vertical" />
-          </NotPrint>
+            <NotPrint>
+              <Divider orientation="vertical" />
+            </NotPrint>
 
-          <NotPrint>
-            <Stack
-              maxWidth={{ md: 300 }}
-              width={{ xs: "100%", md: "auto" }}
-              flexShrink={0}
-              spacing={1}
-            >
-              <FormGroup>
-                <FormLabel>
-                  <FormattedMessage {...messages.pageSize} />
-                </FormLabel>
-                <Select<number>
-                  value={pageSizeIndex}
-                  onChange={handlePageSizeChange}
-                  size="small"
+            <NotPrint>
+              <Stack
+                maxWidth={{ md: 300 }}
+                width={{ xs: "100%", md: "auto" }}
+                flexShrink={0}
+                spacing={1}
+              >
+                <GlobalViewControls
+                  viewSettings={viewSettings}
+                  author={author}
+                  pageSizeIndex={pageSizeIndex}
+                  sequenceCount={sequenceKeys.length}
+                  onPageSizeChange={handlePageSizeChange}
+                  onDirectionChange={handleDirectionChange}
+                  onSequenceSpaceChange={handleSequenceSpaceChange}
+                  onAuthorChange={updateAuthor}
                 >
-                  <MenuItem value={0}>A4</MenuItem>
-                  <MenuItem value={1}>A3</MenuItem>
-                  <MenuItem value={2}>
-                    <FormattedMessage {...messages.fullScreen} />
-                  </MenuItem>
-                </Select>
-              </FormGroup>
-
-              {/* Switch aplicar a totes: només visible quan hi ha més d'una seqüència */}
-              {sequenceKeys.length > 1 && (
-                <FormGroup>
-                  <Tooltip title={intl.formatMessage(messages.tooltipApplyAll)}>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={applyAll}
-                          onChange={handleApplyAllChange}
-                          size="small"
-                        />
-                      }
-                      label={intl.formatMessage(messages.applyAll)}
-                    />
-                  </Tooltip>
-                </FormGroup>
-              )}
-
-              {/* Acordions per cada seqüència */}
-              {sequenceKeys.map((seqKey) => (
-                <Accordion
-                  key={seqKey}
-                  expanded={expandedAccordion === seqKey}
-                  onChange={handleAccordionToggle(seqKey)}
-                  disableGutters
-                  sx={{
-                    // Quan applyAll, amagar totes menys la primera
-                    display:
-                      applyAll && seqKey !== sequenceKeys[0] ? "none" : "block",
-                  }}
-                >
-                  <AccordionSummary expandIcon={<MdExpandMore />}>
-                    <Typography variant="subtitle2">
-                      {applyAll
-                        ? intl.formatMessage(messages.sequence)
-                        : `${intl.formatMessage(messages.sequence)} ${seqKey + 1}`}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {renderSequenceControls(
-                      applyAll ? sequenceKeys[0] : seqKey,
-                    )}
-                  </AccordionDetails>
-                </Accordion>
-              ))}
-
-              {sequenceKeys.length > 1 && (
-                <FormGroup>
-                  <FormLabel>
-                    <FormattedMessage {...messages.sequenceSpaceBetween} />
-                    <Slider
-                      name="sequenceSpaceBetween"
-                      step={0.5}
-                      min={0}
-                      max={10}
-                      value={viewSettings.sequenceSpaceBetween}
-                      valueLabelDisplay="auto"
-                      valueLabelFormat={(value: number) =>
-                        parseFloat(value.toFixed(2))
-                      }
-                      onChange={handleSequenceSpaceChange}
-                    />
-                  </FormLabel>
-                </FormGroup>
-              )}
-
-              <FormGroup>
-                <FormLabel component="legend">
-                  <FormattedMessage {...messages.direction} />
-                </FormLabel>
-                <ToggleButtonGroup
-                  value={viewSettings.direction}
-                  exclusive
-                  onChange={handleDirectionChange}
-                  size="small"
-                >
-                  <Tooltip
-                    title={intl.formatMessage(messages.tooltipDirectionRow)}
-                  >
-                    <ToggleButton value="row" aria-label="row">
-                      <MdTableRows />
-                    </ToggleButton>
-                  </Tooltip>
-                  <Tooltip
-                    title={intl.formatMessage(messages.tooltipDirectionColumn)}
-                  >
-                    <ToggleButton value="column" aria-label="column">
-                      <MdViewColumn />
-                    </ToggleButton>
-                  </Tooltip>
-                </ToggleButtonGroup>
-              </FormGroup>
-
-              <FormGroup>
-                <FormLabel>
-                  <FormattedMessage {...messages.authSequence} />
-                  <TextField
-                    value={author}
-                    onChange={(event) => updateAuthor(event.target.value)}
-                    variant="filled"
-                    fullWidth
-                    helperText={intl.formatMessage({
-                      ...messages.authHelperText,
-                    })}
-                    sx={{
-                      ".MuiInputBase-input": { paddingTop: 2 },
-                    }}
+                  <SequenceControlsPanel
+                    sequenceKeys={sequenceKeys}
+                    sequenceViewSettings={sequenceViewSettings}
+                    viewDirection={viewSettings.direction}
+                    applyAll={applyAll}
+                    expandedAccordion={expandedAccordion}
+                    onAccordionToggle={handleAccordionToggle}
+                    onApplyAllChange={handleApplyAllChange}
+                    onSequenceSliderChange={handleSequenceSliderChange}
+                    onAlignmentChange={handleAlignmentChange}
                   />
-                </FormLabel>
-              </FormGroup>
-            </Stack>
-          </NotPrint>
+                </GlobalViewControls>
+              </Stack>
+            </NotPrint>
           </Box>
         </Stack>
       </form>

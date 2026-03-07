@@ -33,7 +33,7 @@ import {
 } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./AppNavigationDrawer.lang";
-import DefaultForm from "../DefaultsForm/DefaultForm";
+import DefaultSettingsPanel from "../DefaultsForm/DefaultSettingsPanel";
 import ModalDownload from "../ButtonWithModalDownload/ModalDownload";
 import { useAppDispatch } from "../../app/hooks";
 import {
@@ -322,7 +322,7 @@ const AppNavigationDrawer = ({
         </AppBar>
         <Container sx={{ marginTop: 2 }}>
           <Stack sx={{ height: 40, display: { md: "none" } }} />
-          <DefaultForm submit={settingsOpen} />
+          <DefaultSettingsPanel submit={settingsOpen} />
         </Container>
       </Dialog>
 
