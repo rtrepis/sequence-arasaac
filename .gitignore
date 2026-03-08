@@ -1,19 +1,33 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Turborepo
+.turbo
+
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
 
-# languages compliled
-src/languages
+# Workspaces
+apps/*/node_modules
+packages/*/node_modules
+
+# Languages compilades (generades per formatjs)
+apps/web/src/languages
 
 # testing
 /coverage
+apps/web/coverage
+apps/web/test-results
 
 # production
 /build
 /dist
+apps/web/build
+apps/web/dist
+
+# Playwright
+apps/web/playwright-report
 
 # personal code
 /.private
@@ -28,4 +42,3 @@ src/languages
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
