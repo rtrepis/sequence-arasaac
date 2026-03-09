@@ -34,6 +34,7 @@ apps/web/playwright-report
 
 # misc
 .DS_Store
+apps/api/.env
 .env.local
 .env.development.local
 .env.test.local
