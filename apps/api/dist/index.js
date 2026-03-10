@@ -15,6 +15,7 @@ const database_1 = require("./config/database");
 const errorHandler_1 = require("./middleware/errorHandler");
 const routes_1 = require("./modules/auth/routes");
 const routes_2 = require("./modules/documents/routes");
+const routes_3 = require("./modules/user-settings/routes");
 exports.app = (0, express_1.default)();
 // --- Middleware global ---
 // CORS amb credencials per permetre cookies HttpOnly (Fase 3)
@@ -44,6 +45,8 @@ exports.app.get("/health", (_req, res) => {
 exports.app.use("/api/auth", routes_1.authRouter);
 // Rutes de documents (Fase 4)
 exports.app.use("/api/documents", routes_2.documentsRouter);
+// Rutes de user-settings (Fase 5)
+exports.app.use("/api/user", routes_3.userSettingsRouter);
 // Handler global d'errors — ha d'anar al final, després de totes les rutes
 exports.app.use(errorHandler_1.errorHandler);
 // --- Arrencada ---

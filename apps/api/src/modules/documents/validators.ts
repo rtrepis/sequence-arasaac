@@ -2,20 +2,13 @@
 // Validació centralitzada — el controller no accedeix a req.body sense validar primer
 
 import { z } from "zod";
+import {
+  fontZodSchema,
+  borderZodSchema,
+  defaultSettingsZodSchema,
+} from "../../shared/zodSchemas";
 
 // --- Sub-schemas Zod per a PictSequence ---
-
-const fontZodSchema = z.object({
-  family: z.string(),
-  color: z.string(),
-  size: z.number(),
-});
-
-const borderZodSchema = z.object({
-  color: z.string(),
-  radius: z.number(),
-  size: z.number(),
-});
 
 const pictApiAraSettingsZodSchema = z.object({
   hair: z.string().optional(),
@@ -60,36 +53,6 @@ const sequenceViewSettingsZodSchema = z.object({
   sizePict: z.number(),
   pictSpaceBetween: z.number(),
   alignment: z.enum(["left", "center", "right"]),
-});
-
-// Sub-schemas Zod per a DefaultSettings (per al camp opcional defaultSettings)
-const fontDefaultZodSchema = z.object({
-  family: z.string(),
-  color: z.string(),
-  size: z.number(),
-});
-
-const borderDefaultZodSchema = z.object({
-  color: z.string(),
-  radius: z.number(),
-  size: z.number(),
-});
-
-const defaultSettingsZodSchema = z.object({
-  pictSequence: z.object({
-    numbered: z.boolean(),
-    textPosition: z.enum(["top", "bottom", "none"]),
-    font: fontDefaultZodSchema,
-    numberFont: fontDefaultZodSchema,
-    borderOut: borderDefaultZodSchema,
-    borderIn: borderDefaultZodSchema,
-  }),
-  pictApiAra: z.object({
-    hair: z.string(),
-    skin: z.string(),
-    fitzgerald: z.string(),
-    color: z.boolean(),
-  }),
 });
 
 // --- Esquemes principals per a crear i actualitzar documents ---

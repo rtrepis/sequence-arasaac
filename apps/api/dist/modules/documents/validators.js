@@ -4,17 +4,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateDocumentSchema = exports.createDocumentSchema = void 0;
 const zod_1 = require("zod");
+const zodSchemas_1 = require("../../shared/zodSchemas");
 // --- Sub-schemas Zod per a PictSequence ---
-const fontZodSchema = zod_1.z.object({
-    family: zod_1.z.string(),
-    color: zod_1.z.string(),
-    size: zod_1.z.number(),
-});
-const borderZodSchema = zod_1.z.object({
-    color: zod_1.z.string(),
-    radius: zod_1.z.number(),
-    size: zod_1.z.number(),
-});
 const pictApiAraSettingsZodSchema = zod_1.z.object({
     hair: zod_1.z.string().optional(),
     skin: zod_1.z.string().optional(),
@@ -34,12 +25,12 @@ const pictApiAraZodSchema = zod_1.z.object({
 const pictSequenceSettingsZodSchema = zod_1.z.object({
     numbered: zod_1.z.boolean().optional(),
     textPosition: zod_1.z.enum(["top", "bottom", "none"]).optional(),
-    font: fontZodSchema.optional(),
-    numberFont: fontZodSchema.optional(),
+    font: zodSchemas_1.fontZodSchema.optional(),
+    numberFont: zodSchemas_1.fontZodSchema.optional(),
     fontSize: zod_1.z.number().optional(),
     fontFamily: zod_1.z.string().optional(),
-    borderOut: borderZodSchema.optional(),
-    borderIn: borderZodSchema.optional(),
+    borderOut: zodSchemas_1.borderZodSchema.optional(),
+    borderIn: zodSchemas_1.borderZodSchema.optional(),
 });
 const pictSequenceZodSchema = zod_1.z.object({
     indexSequence: zod_1.z.number(),
@@ -54,33 +45,6 @@ const sequenceViewSettingsZodSchema = zod_1.z.object({
     pictSpaceBetween: zod_1.z.number(),
     alignment: zod_1.z.enum(["left", "center", "right"]),
 });
-// Sub-schemas Zod per a DefaultSettings (per al camp opcional defaultSettings)
-const fontDefaultZodSchema = zod_1.z.object({
-    family: zod_1.z.string(),
-    color: zod_1.z.string(),
-    size: zod_1.z.number(),
-});
-const borderDefaultZodSchema = zod_1.z.object({
-    color: zod_1.z.string(),
-    radius: zod_1.z.number(),
-    size: zod_1.z.number(),
-});
-const defaultSettingsZodSchema = zod_1.z.object({
-    pictSequence: zod_1.z.object({
-        numbered: zod_1.z.boolean(),
-        textPosition: zod_1.z.enum(["top", "bottom", "none"]),
-        font: fontDefaultZodSchema,
-        numberFont: fontDefaultZodSchema,
-        borderOut: borderDefaultZodSchema,
-        borderIn: borderDefaultZodSchema,
-    }),
-    pictApiAra: zod_1.z.object({
-        hair: zod_1.z.string(),
-        skin: zod_1.z.string(),
-        fitzgerald: zod_1.z.string(),
-        color: zod_1.z.boolean(),
-    }),
-});
 // --- Esquemes principals per a crear i actualitzar documents ---
 exports.createDocumentSchema = zod_1.z.object({
     title: zod_1.z.string().max(200).optional(),
@@ -89,7 +53,7 @@ exports.createDocumentSchema = zod_1.z.object({
     activeSAAC: zod_1.z.number().int().min(0),
     order: zod_1.z.array(zod_1.z.number().int().min(0)).optional(),
     author: zod_1.z.string().max(200).optional(),
-    defaultSettings: defaultSettingsZodSchema.optional(),
+    defaultSettings: zodSchemas_1.defaultSettingsZodSchema.optional(),
 });
 // L'esquema d'actualització és idèntic al de creació — substitució completa del document
 exports.updateDocumentSchema = exports.createDocumentSchema;

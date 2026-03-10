@@ -10,6 +10,7 @@ import { connectDatabase } from "./config/database";
 import { errorHandler } from "./middleware/errorHandler";
 import { authRouter } from "./modules/auth/routes";
 import { documentsRouter } from "./modules/documents/routes";
+import { userSettingsRouter } from "./modules/user-settings/routes";
 
 export const app = express();
 
@@ -51,6 +52,9 @@ app.use("/api/auth", authRouter);
 
 // Rutes de documents (Fase 4)
 app.use("/api/documents", documentsRouter);
+
+// Rutes de user-settings (Fase 5)
+app.use("/api/user", userSettingsRouter);
 
 // Handler global d'errors — ha d'anar al final, després de totes les rutes
 app.use(errorHandler);
