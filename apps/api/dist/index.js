@@ -9,9 +9,11 @@ exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const env_1 = require("./config/env");
 const database_1 = require("./config/database");
 const errorHandler_1 = require("./middleware/errorHandler");
+const routes_1 = require("./modules/auth/routes");
 exports.app = (0, express_1.default)();
 // --- Middleware global ---
 // CORS amb credencials per permetre cookies HttpOnly (Fase 3)
@@ -21,6 +23,8 @@ exports.app.use((0, cors_1.default)({
 }));
 // Parser de JSON per al cos de les peticions
 exports.app.use(express_1.default.json());
+// Parser de cookies — necessari per llegir el refresh token httpOnly a /api/auth/refresh
+exports.app.use((0, cookie_parser_1.default)());
 // Limitador de velocitat global a /api — 300 peticions per minut per IP
 const globalLimiter = (0, express_rate_limit_1.default)({
     windowMs: 60 * 1000,
@@ -35,6 +39,8 @@ exports.app.use("/api", globalLimiter);
 exports.app.get("/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
+// Rutes d'autenticació
+exports.app.use("/api/auth", routes_1.authRouter);
 // Handler global d'errors — ha d'anar al final, després de totes les rutes
 exports.app.use(errorHandler_1.errorHandler);
 // --- Arrencada ---

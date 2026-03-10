@@ -4,9 +4,11 @@
 import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import cookieParser from "cookie-parser";
 import { env } from "./config/env";
 import { connectDatabase } from "./config/database";
 import { errorHandler } from "./middleware/errorHandler";
+import { authRouter } from "./modules/auth/routes";
 
 export const app = express();
 
@@ -22,6 +24,9 @@ app.use(
 
 // Parser de JSON per al cos de les peticions
 app.use(express.json());
+
+// Parser de cookies — necessari per llegir el refresh token httpOnly a /api/auth/refresh
+app.use(cookieParser());
 
 // Limitador de velocitat global a /api — 300 peticions per minut per IP
 const globalLimiter = rateLimit({
@@ -39,6 +44,9 @@ app.use("/api", globalLimiter);
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
+
+// Rutes d'autenticació
+app.use("/api/auth", authRouter);
 
 // Handler global d'errors — ha d'anar al final, després de totes les rutes
 app.use(errorHandler);

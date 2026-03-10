@@ -1,5 +1,8 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 
+// Idiomes suportats per la interfície de l'aplicació (subconjunt de Languages)
+export type LangsApp = "ca" | "en" | "es";
+
 export interface DefaultSettings {
   pictSequence: DefaultSettingsPictSequence;
   pictApiAra: DefaultSettingsPictAra;

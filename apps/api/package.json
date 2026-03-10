@@ -17,7 +17,8 @@
     "zod": "^3",
     "express-rate-limit": "^7",
     "dotenv": "^16",
-    "cors": "^2"
+    "cors": "^2",
+    "cookie-parser": "^1"
   },
   "devDependencies": {
     "typescript": "^5",
@@ -26,6 +27,7 @@
     "@types/jsonwebtoken": "^9",
     "@types/bcryptjs": "^2",
     "@types/cors": "^2",
+    "@types/cookie-parser": "^1",
     "tsx": "^4"
   }
 }
