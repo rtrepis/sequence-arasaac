@@ -4,52 +4,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModel = void 0;
 const mongoose_1 = require("mongoose");
-// --- Sub-schemas explícits (sense Schema.Types.Mixed) ---
-// Sub-schema per a Font
-const fontSchema = new mongoose_1.Schema({
-    family: { type: String, required: true },
-    color: { type: String, required: true },
-    size: { type: Number, required: true },
-}, { _id: false });
-// Sub-schema per a Border
-const borderSchema = new mongoose_1.Schema({
-    color: { type: String, required: true },
-    radius: { type: Number, required: true },
-    size: { type: Number, required: true },
-}, { _id: false });
-// Sub-schema per a DefaultSettingsPictSequence
-const pictSequenceSchema = new mongoose_1.Schema({
-    numbered: { type: Boolean, required: true },
-    textPosition: {
-        type: String,
-        enum: ["top", "bottom", "none"],
-        required: true,
-    },
-    font: { type: fontSchema, required: true },
-    numberFont: { type: fontSchema, required: true },
-    borderOut: { type: borderSchema, required: true },
-    borderIn: { type: borderSchema, required: true },
-}, { _id: false });
-// Sub-schema per a DefaultSettingsPictAra
-const pictApiAraSchema = new mongoose_1.Schema({
-    hair: {
-        type: String,
-        enum: ["black", "blonde", "brown", "darkBrown", "gray", "darkGray", "red"],
-        required: true,
-    },
-    skin: {
-        type: String,
-        enum: ["asian", "aztec", "black", "mulatto", "white"],
-        required: true,
-    },
-    fitzgerald: { type: String, required: true },
-    color: { type: Boolean, required: true },
-}, { _id: false });
-// Sub-schema per a DefaultSettings
-const defaultSettingsSchema = new mongoose_1.Schema({
-    pictSequence: { type: pictSequenceSchema, required: true },
-    pictApiAra: { type: pictApiAraSchema, required: true },
-}, { _id: false });
+const mongooseSchemas_1 = require("../../shared/mongooseSchemas");
 // Sub-schema per a langSettings
 const langSettingsSchema = new mongoose_1.Schema({
     app: { type: String, enum: ["ca", "en", "es"], required: true },
@@ -103,7 +58,7 @@ const userSchema = new mongoose_1.Schema({
         required: true,
     },
     settings: {
-        type: defaultSettingsSchema,
+        type: mongooseSchemas_1.defaultSettingsSchema,
         required: true,
         // Arrow function per evitar que Mongoose comparteixi la mateixa referència entre documents
         default: () => DEFAULT_SETTINGS,

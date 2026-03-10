@@ -9,6 +9,7 @@ import { env } from "./config/env";
 import { connectDatabase } from "./config/database";
 import { errorHandler } from "./middleware/errorHandler";
 import { authRouter } from "./modules/auth/routes";
+import { documentsRouter } from "./modules/documents/routes";
 
 export const app = express();
 
@@ -47,6 +48,9 @@ app.get("/health", (_req, res) => {
 
 // Rutes d'autenticació
 app.use("/api/auth", authRouter);
+
+// Rutes de documents (Fase 4)
+app.use("/api/documents", documentsRouter);
 
 // Handler global d'errors — ha d'anar al final, després de totes les rutes
 app.use(errorHandler);

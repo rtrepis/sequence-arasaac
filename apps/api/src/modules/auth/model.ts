@@ -6,6 +6,7 @@ import type {
   DefaultSettings,
   LangsApp,
 } from "@sequence-arasaac/shared-types";
+import { defaultSettingsSchema } from "../../shared/mongooseSchemas";
 
 // Interfície TypeScript del document User (estén Document de Mongoose)
 export interface IUser extends Document {
@@ -19,73 +20,6 @@ export interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
-
-// --- Sub-schemas explícits (sense Schema.Types.Mixed) ---
-
-// Sub-schema per a Font
-const fontSchema = new Schema(
-  {
-    family: { type: String, required: true },
-    color: { type: String, required: true },
-    size: { type: Number, required: true },
-  },
-  { _id: false }
-);
-
-// Sub-schema per a Border
-const borderSchema = new Schema(
-  {
-    color: { type: String, required: true },
-    radius: { type: Number, required: true },
-    size: { type: Number, required: true },
-  },
-  { _id: false }
-);
-
-// Sub-schema per a DefaultSettingsPictSequence
-const pictSequenceSchema = new Schema(
-  {
-    numbered: { type: Boolean, required: true },
-    textPosition: {
-      type: String,
-      enum: ["top", "bottom", "none"],
-      required: true,
-    },
-    font: { type: fontSchema, required: true },
-    numberFont: { type: fontSchema, required: true },
-    borderOut: { type: borderSchema, required: true },
-    borderIn: { type: borderSchema, required: true },
-  },
-  { _id: false }
-);
-
-// Sub-schema per a DefaultSettingsPictAra
-const pictApiAraSchema = new Schema(
-  {
-    hair: {
-      type: String,
-      enum: ["black", "blonde", "brown", "darkBrown", "gray", "darkGray", "red"],
-      required: true,
-    },
-    skin: {
-      type: String,
-      enum: ["asian", "aztec", "black", "mulatto", "white"],
-      required: true,
-    },
-    fitzgerald: { type: String, required: true },
-    color: { type: Boolean, required: true },
-  },
-  { _id: false }
-);
-
-// Sub-schema per a DefaultSettings
-const defaultSettingsSchema = new Schema(
-  {
-    pictSequence: { type: pictSequenceSchema, required: true },
-    pictApiAra: { type: pictApiAraSchema, required: true },
-  },
-  { _id: false }
-);
 
 // Sub-schema per a langSettings
 const langSettingsSchema = new Schema(
