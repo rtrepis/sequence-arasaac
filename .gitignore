@@ -25,6 +25,7 @@ apps/web/test-results
 /dist
 apps/web/build
 apps/web/dist
+apps/api/dist
 
 # Playwright
 apps/web/playwright-report
