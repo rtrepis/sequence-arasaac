@@ -1552,5 +1552,25 @@
       "type": 0,
       "value": "Inicia"
     }
-  ]
+  ],
+  "features.backend.auth.loginTitle": [{ "type": 0, "value": "Inicia sessió" }],
+  "features.backend.auth.registerTitle": [{ "type": 0, "value": "Crea un compte" }],
+  "features.backend.auth.email": [{ "type": 0, "value": "Correu electrònic" }],
+  "features.backend.auth.password": [{ "type": 0, "value": "Contrasenya" }],
+  "features.backend.auth.submitLogin": [{ "type": 0, "value": "Entra" }],
+  "features.backend.auth.submitRegister": [{ "type": 0, "value": "Registra'm" }],
+  "features.backend.auth.toggleToRegister": [{ "type": 0, "value": "No tens compte? Registra't" }],
+  "features.backend.auth.toggleToLogin": [{ "type": 0, "value": "Ja tens compte? Inicia sessió" }],
+  "features.backend.auth.close": [{ "type": 0, "value": "Tancar" }],
+  "features.backend.auth.showPassword": [{ "type": 0, "value": "Mostra la contrasenya" }],
+  "features.backend.auth.loginItem": [{ "type": 0, "value": "Inicia sessió" }],
+  "features.backend.auth.saveDocument": [{ "type": 0, "value": "Desa al núvol" }],
+  "features.backend.auth.loadDocument": [{ "type": 0, "value": "Carrega del núvol" }],
+  "features.backend.auth.logout": [{ "type": 0, "value": "Tanca sessió" }],
+  "features.backend.auth.documentSaved": [{ "type": 0, "value": "Document desat al núvol" }],
+  "features.backend.auth.documentLoaded": [{ "type": 0, "value": "Document carregat" }],
+  "features.backend.auth.loadDocumentTitle": [{ "type": 0, "value": "Carrega un document" }],
+  "features.backend.auth.noDocuments": [{ "type": 0, "value": "No tens cap document desat" }],
+  "features.backend.auth.deleteDocument": [{ "type": 0, "value": "Eliminar" }],
+  "features.backend.auth.loadAction": [{ "type": 0, "value": "Carrega" }]
 }

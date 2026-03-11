@@ -21,5 +21,14 @@ export default defineConfig({
       "@components": path.resolve(__dirname, "src/components"),
     },
   },
-  server: { hmr: { overlay: false } },
+  server: {
+    hmr: { overlay: false },
+    // Proxy /api al backend Express en dev per evitar problemes CORS amb cookies httpOnly
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+    },
+  },
 });

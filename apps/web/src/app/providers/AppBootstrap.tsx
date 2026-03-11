@@ -16,6 +16,7 @@ import {
   langTranslateSearch,
 } from "../../configs/languagesConfigs";
 import { LangsApp } from "../../types/ui";
+import { refreshSessionThunk } from "@features/backend/auth/store/authSlice";
 
 interface AppBootstrapProps {
   children: ReactNode;
@@ -52,6 +53,10 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
     dispatch(
       updateLangSettingsActionCreator({ app: appLang, search: searchLang, keywords: [] }),
     );
+
+    // Intent de restauració de sessió silenciosa via cookie de refresh.
+    // Si la cookie és vàlida, actualitza l'accessToken i sincronitza les settings del servidor.
+    dispatch(refreshSessionThunk());
   }, [dispatch]);
 
   return <>{children}</>;

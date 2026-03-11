@@ -2,6 +2,7 @@ import React, { ChangeEvent, forwardRef, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   AppBar,
+  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -11,6 +12,7 @@ import {
   Drawer,
   IconButton,
   List,
+  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -29,18 +31,25 @@ import {
   AiOutlineEye,
   AiOutlineHome,
   AiOutlineRead,
+  AiOutlineSave,
   AiOutlineSetting,
+  AiOutlineUser,
 } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./AppNavigationDrawer.lang";
+import authMessages from "@features/backend/auth/components/AuthModal.lang";
 import DefaultSettingsPanel from "../DefaultsForm/DefaultSettingsPanel";
 import ModalDownload from "../ButtonWithModalDownload/ModalDownload";
-import { useAppDispatch } from "../../app/hooks";
+import AuthModal from "@features/backend/auth/components/AuthModal";
+import LoadDocumentModal from "@features/backend/auth/components/LoadDocumentModal";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   addSequenceActionCreator,
   loadDocumentSaacActionCreator,
+  saveDocumentThunk,
 } from "@features/sequence/store/documentSlice";
 import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
+import { logoutThunk } from "@features/backend/auth/store/authSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
 import { useFeedback } from "../../context/FeedbackContext";
 import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
@@ -71,12 +80,21 @@ const AppNavigationDrawer = ({
   const dispatch = useAppDispatch();
   const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
 
+  // Estat d'autenticació
+  const { userEmail, accessToken } = useAppSelector((state) => state.auth);
+  const isLoggedIn = Boolean(accessToken);
+
+  // Document actual (per desar al núvol)
+  const document = useAppSelector((state) => state.document);
+
   // Locale de la ruta; fallback a "ca" si no estem en una ruta amb paràmetre de locale
   const { locale = "ca" } = useParams<{ locale: string }>();
 
   // Estat dels diàlegs interns
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [downloadOpen, setDownloadOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [loadDocModalOpen, setLoadDocModalOpen] = useState(false);
 
   // Ref per al input ocult de càrrega de fitxer
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -93,6 +111,48 @@ const AppNavigationDrawer = ({
   const handleNavigate = (path: string) => {
     onClose();
     navigate(path);
+  };
+
+  // Handlers d'autenticació
+  const handleAuthModalOpen = () => {
+    onClose();
+    setAuthModalOpen(true);
+  };
+
+  const handleSaveToCloud = async () => {
+    onClose();
+    showBackdrop({ message: intl.formatMessage(feedbackMessages.loading) });
+    const result = await dispatch(saveDocumentThunk(document));
+    hideBackdrop();
+    if (result.meta.requestStatus === "fulfilled") {
+      showSnackbar({
+        message: intl.formatMessage(authMessages.documentSaved),
+        severity: "success",
+      });
+    } else {
+      showSnackbar({
+        message: result.payload as string,
+        severity: "error",
+      });
+    }
+  };
+
+  const handleLoadFromCloud = () => {
+    onClose();
+    setLoadDocModalOpen(true);
+  };
+
+  const handleLogout = async () => {
+    onClose();
+    await dispatch(logoutThunk());
+    showSnackbar({ message: intl.formatMessage(authMessages.logout), severity: "info" });
+  };
+
+  const handleDocumentLoaded = () => {
+    showSnackbar({
+      message: intl.formatMessage(authMessages.documentLoaded),
+      severity: "success",
+    });
   };
 
   // Obrir configuració: tanca el drawer i obre el diàleg
@@ -269,6 +329,72 @@ const AppNavigationDrawer = ({
             </Tooltip>
           </List>
 
+          <Divider />
+
+          {/* Secció 5: Autenticació */}
+          {!isLoggedIn ? (
+            <List>
+              <ListItemButton onClick={handleAuthModalOpen}>
+                <ListItemIcon>
+                  <AiOutlineUser />
+                </ListItemIcon>
+                <ListItemText
+                  primary={intl.formatMessage(authMessages.loginItem)}
+                />
+              </ListItemButton>
+            </List>
+          ) : (
+            <List>
+              {/* Fila no interactiva: Avatar + email */}
+              <ListItem>
+                <ListItemIcon>
+                  <Avatar
+                    sx={{ width: 28, height: 28, fontSize: "0.75rem", bgcolor: "primary.main" }}
+                  >
+                    {userEmail ? userEmail.slice(0, 2).toUpperCase() : "?"}
+                  </Avatar>
+                </ListItemIcon>
+                <ListItemText
+                  primary={userEmail ?? ""}
+                  primaryTypographyProps={{
+                    variant: "body2",
+                    noWrap: true,
+                    title: userEmail ?? "",
+                  }}
+                />
+              </ListItem>
+
+              <ListItemButton onClick={handleSaveToCloud}>
+                <ListItemIcon>
+                  <AiOutlineSave />
+                </ListItemIcon>
+                <ListItemText
+                  primary={intl.formatMessage(authMessages.saveDocument)}
+                />
+              </ListItemButton>
+
+              <ListItemButton onClick={handleLoadFromCloud}>
+                <ListItemIcon>
+                  <AiOutlineCloudDownload />
+                </ListItemIcon>
+                <ListItemText
+                  primary={intl.formatMessage(authMessages.loadDocument)}
+                />
+              </ListItemButton>
+
+              <ListItemButton onClick={handleLogout}>
+                <ListItemIcon>
+                  <AiOutlineClose />
+                </ListItemIcon>
+                <ListItemText
+                  primary={intl.formatMessage(authMessages.logout)}
+                />
+              </ListItemButton>
+            </List>
+          )}
+
+          <Divider />
+
           {/* Secció 4: Selector d'idioma (sense divider, centrat) */}
           <Box sx={{ px: 2, py: 2, display: "flex", justifyContent: "center" }}>
             <ButtonGroup
@@ -333,6 +459,19 @@ const AppNavigationDrawer = ({
           onClose={() => setDownloadOpen(false)}
         />
       )}
+
+      {/* Modal d'autenticació */}
+      <AuthModal
+        open={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
+
+      {/* Modal de càrrega de documents del núvol */}
+      <LoadDocumentModal
+        open={loadDocModalOpen}
+        onClose={() => setLoadDocModalOpen(false)}
+        onLoaded={handleDocumentLoaded}
+      />
     </>
   );
 };

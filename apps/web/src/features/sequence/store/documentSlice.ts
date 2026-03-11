@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   PictSequence,
   Sequence,
@@ -13,6 +13,14 @@ import {
   SEQ_VIEW_DEFAULT_PICT_SPACE,
   SEQ_VIEW_DEFAULT_ALIGNMENT,
 } from "@/configs/viewSettingsConfig";
+import {
+  createDocument,
+  updateDocument,
+  fetchDocument,
+  listDocuments,
+  isMongoId,
+  DocumentSummary,
+} from "@features/backend/documents/services/documentService";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);
@@ -280,6 +288,11 @@ const documentSlice = createSlice({
       });
     },
 
+    // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
+    setDocumentId: (previousDocument, action: PayloadAction<string>) => {
+      previousDocument.id = action.payload;
+    },
+
     // Elimina la darrera seqüència
     deleteLastSequence: (previousDocument) => {
       const keys = Object.keys(previousDocument.content);
@@ -300,6 +313,53 @@ const documentSlice = createSlice({
 });
 
 export const documentReducer = documentSlice.reducer;
+
+// Thunk: desa el document al backend (POST si local, PUT si ja té id de MongoDB)
+export const saveDocumentThunk = createAsyncThunk<
+  string,
+  DocumentSAAC,
+  { rejectValue: string }
+>("document/save", async (doc, { dispatch, rejectWithValue }) => {
+  try {
+    const { id, ...payload } = doc;
+    if (isMongoId(id)) {
+      await updateDocument(id, payload);
+      return id;
+    } else {
+      const saved = await createDocument(payload);
+      dispatch(documentSlice.actions.setDocumentId(saved.id));
+      return saved.id;
+    }
+  } catch {
+    return rejectWithValue("No s'ha pogut desar el document");
+  }
+});
+
+// Thunk: carrega un document del backend per id
+export const loadDocumentThunk = createAsyncThunk<
+  DocumentSAAC,
+  string,
+  { rejectValue: string }
+>("document/load", async (id, { rejectWithValue }) => {
+  try {
+    return await fetchDocument(id);
+  } catch {
+    return rejectWithValue("No s'ha pogut carregar el document");
+  }
+});
+
+// Thunk: obté la llista de documents de l'usuari del backend
+export const listDocumentsThunk = createAsyncThunk<
+  DocumentSummary[],
+  void,
+  { rejectValue: string }
+>("document/list", async (_, { rejectWithValue }) => {
+  try {
+    return await listDocuments();
+  } catch {
+    return rejectWithValue("No s'ha pogut obtenir la llista de documents");
+  }
+});
 
 export const {
   loadDocumentSaac: loadDocumentSaacActionCreator,
@@ -325,4 +385,5 @@ export const {
   updateSequenceViewSettings: updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAll: applyViewSettingsToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
+  setDocumentId: setDocumentIdActionCreator,
 } = documentSlice.actions;
