@@ -10,24 +10,25 @@
   },
   "dependencies": {
     "@sequence-arasaac/shared-types": "*",
-    "express": "^4.21",
-    "mongoose": "^8",
-    "jsonwebtoken": "^9",
     "bcryptjs": "^3",
-    "zod": "^3",
-    "express-rate-limit": "^7",
-    "dotenv": "^16",
+    "cloudinary": "^2.9.0",
+    "cookie-parser": "^1",
     "cors": "^2",
-    "cookie-parser": "^1"
+    "dotenv": "^16",
+    "express": "^4.21",
+    "express-rate-limit": "^7",
+    "jsonwebtoken": "^9",
+    "mongoose": "^8",
+    "zod": "^3"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/express": "^4",
-    "@types/node": "^20",
-    "@types/jsonwebtoken": "^9",
     "@types/bcryptjs": "^2",
-    "@types/cors": "^2",
     "@types/cookie-parser": "^1",
-    "tsx": "^4"
+    "@types/cors": "^2",
+    "@types/express": "^4",
+    "@types/jsonwebtoken": "^9",
+    "@types/node": "^20",
+    "tsx": "^4",
+    "typescript": "^5"
   }
 }

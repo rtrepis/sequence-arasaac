@@ -44,11 +44,12 @@ export interface Font {
   size: number;
 }
 
-// PictApiAra sense el camp url — el backend no l'emmagatzema (és derivat i es regenera al front)
+// PictApiAra amb url opcional — si és data:image/ el backend la puja a Cloudinary i la substitueix per la URL CDN
 export interface PictApiAra {
   searched: Word;
   selectedId: number;
   settings: PictApiAraSettings;
+  url?: string;
 }
 
 export interface Word {

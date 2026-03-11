@@ -34,7 +34,7 @@ export interface IDocument extends Document {
 // Sub-schema per a Word
 const wordSchema = new Schema(
   {
-    word: { type: String, required: true },
+    word: { type: String },
     bestIdPicts: [{ type: Number }],
     keyWords: [{ type: String }],
   },
@@ -63,12 +63,13 @@ const pictApiAraSettingsDocSchema = new Schema(
   { _id: false }
 );
 
-// Sub-schema per a PictApiAra (sense camp url — es regenera al frontend)
+// Sub-schema per a PictApiAra — url és la URL de Cloudinary (opcional, per a imatges personalitzades)
 const pictApiAraDocSchema = new Schema(
   {
     searched: { type: wordSchema, required: true },
     selectedId: { type: Number, required: true },
     settings: { type: pictApiAraSettingsDocSchema, required: true },
+    url: { type: String },
   },
   { _id: false }
 );

@@ -24,8 +24,8 @@ app.use(
   })
 );
 
-// Parser de JSON per al cos de les peticions
-app.use(express.json());
+// Parser de JSON — límit de 20mb per admetre documents amb imatges base64 (substituïdes per Cloudinary al service)
+app.use(express.json({ limit: "20mb" }));
 
 // Parser de cookies — necessari per llegir el refresh token httpOnly a /api/auth/refresh
 app.use(cookieParser());

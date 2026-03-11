@@ -32,6 +32,7 @@ const pictApiAraZodSchema = z.object({
   searched: wordZodSchema,
   selectedId: z.number(),
   settings: pictApiAraSettingsZodSchema,
+  url: z.string().optional(),
 });
 
 const pictSequenceSettingsZodSchema = z.object({

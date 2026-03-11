@@ -342,6 +342,7 @@ const documentSlice = createSlice({
 export const documentReducer = documentSlice.reducer;
 
 // Thunk: desa el document al backend (POST si local, PUT si ja té id de MongoDB)
+// Actualitza el Redux amb el document retornat perquè les URLs base64 es substitueixin per URLs de Cloudinary
 export const saveDocumentThunk = createAsyncThunk<
   string,
   DocumentSAAC,
@@ -350,11 +351,12 @@ export const saveDocumentThunk = createAsyncThunk<
   try {
     const { id, ...payload } = doc;
     if (isMongoId(id)) {
-      await updateDocument(id, payload);
+      const updated = await updateDocument(id, payload);
+      dispatch(documentSlice.actions.loadDocumentSaac(updated));
       return id;
     } else {
       const saved = await createDocument(payload);
-      dispatch(documentSlice.actions.setDocumentId(saved.id));
+      dispatch(documentSlice.actions.loadDocumentSaac(saved));
       return saved.id;
     }
   } catch {
