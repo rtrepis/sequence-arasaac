@@ -239,6 +239,18 @@
       "value": "Pictogram guide"
     }
   ],
+  "components.defaultSettings.saveSuccess": [
+    {
+      "type": 0,
+      "value": "Settings saved to server"
+    }
+  ],
+  "components.defaultSettings.saveError": [
+    {
+      "type": 0,
+      "value": "Error saving settings to server"
+    }
+  ],
   "components.defaultSettings.settings.title": [
     {
       "type": 0,

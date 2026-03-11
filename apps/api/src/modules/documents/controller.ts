@@ -56,8 +56,12 @@ export const createDocument = async (
     const userId = requireUserId(req, next);
     if (!userId) return;
 
+    console.log("[DOC] createDocument - userId:", userId);
+    console.log("[DOC] createDocument - body rebut:", JSON.stringify(req.body, null, 2));
+
     const parsed = createDocumentSchema.safeParse(req.body);
     if (!parsed.success) {
+      console.log("[DOC] createDocument - validació fallida:", JSON.stringify(parsed.error.errors, null, 2));
       const error = new Error(
         parsed.error.errors[0]?.message ?? "Dades invàlides"
       ) as AppError;
@@ -65,9 +69,12 @@ export const createDocument = async (
       return next(error);
     }
 
+    console.log("[DOC] createDocument - dades validades OK");
     const document = await createDocumentService(userId, parsed.data);
+    console.log("[DOC] createDocument - document creat:", document.id);
     res.status(201).json(document);
   } catch (err) {
+    console.log("[DOC] createDocument - error inesperat:", err);
     next(err);
   }
 };
@@ -101,8 +108,12 @@ export const updateDocument = async (
     const userId = requireUserId(req, next);
     if (!userId) return;
 
+    console.log("[DOC] updateDocument - userId:", userId, "| id:", req.params.id);
+    console.log("[DOC] updateDocument - body rebut:", JSON.stringify(req.body, null, 2));
+
     const parsed = updateDocumentSchema.safeParse(req.body);
     if (!parsed.success) {
+      console.log("[DOC] updateDocument - validació fallida:", JSON.stringify(parsed.error.errors, null, 2));
       const error = new Error(
         parsed.error.errors[0]?.message ?? "Dades invàlides"
       ) as AppError;
@@ -110,9 +121,12 @@ export const updateDocument = async (
       return next(error);
     }
 
+    console.log("[DOC] updateDocument - dades validades OK");
     const document = await updateDocumentService(userId, req.params.id, parsed.data);
+    console.log("[DOC] updateDocument - document actualitzat:", document.id);
     res.status(200).json(document);
   } catch (err) {
+    console.log("[DOC] updateDocument - error inesperat:", err);
     next(err);
   }
 };

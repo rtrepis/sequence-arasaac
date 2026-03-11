@@ -68,10 +68,15 @@ export type Hair =
   | "darkGray"
   | "red";
 
+export interface FitzgeraldColor {
+  value: string;
+  color: string;
+}
+
 export interface PictApiAraSettings {
   hair?: Hair;
   skin?: Skin;
-  fitzgerald?: string;
+  fitzgerald?: FitzgeraldColor;
   color?: boolean;
 }
 

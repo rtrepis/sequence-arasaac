@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { DefaultSettings } from "../../types/ui";
-import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import { saveSettings } from "../../features/user-settings/storage/settingsStorage";
 import {
   pictAraSettingsApplyAllActionCreator,
   pictSequenceApplyAllActionCreator,
   borderInApplyAllActionCreator,
   borderOutApplyAllActionCreator,
 } from "@features/sequence/store/documentSlice";
+import { saveSettingsThunk } from "@features/backend/user-settings/store/settingsThunks";
+import { useFeedback } from "../../context/FeedbackContext/FeedbackContext";
 import React from "react";
 import DefaultForm from "./DefaultForm";
+import messages from "./DefaultForm.lang";
 
 interface DefaultSettingsPanelProps {
   submit: boolean | "save";
@@ -24,6 +26,8 @@ const DefaultSettingsPanel = ({
   submit,
 }: DefaultSettingsPanelProps): React.ReactElement => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
+  const { showSnackbar } = useFeedback();
 
   const {
     defaultSettings: {
@@ -57,7 +61,7 @@ const DefaultSettingsPanel = ({
   const [color, setColor] = useState(initialColor);
   const [numbered, setNumbered] = useState(initialNumbered);
 
-  const handlerSubmit = useCallback(() => {
+  const handlerSubmit = useCallback(async (showFeedback = false) => {
     const newDefaultSettings: DefaultSettings = {
       pictApiAra: { fitzgerald, skin, hair, color },
       pictSequence: {
@@ -70,8 +74,21 @@ const DefaultSettingsPanel = ({
       },
     };
 
-    dispatch(updateDefaultSettingsActionCreator(newDefaultSettings));
-    saveSettings(newDefaultSettings);
+    const result = await dispatch(saveSettingsThunk(newDefaultSettings));
+
+    if (showFeedback) {
+      if (saveSettingsThunk.fulfilled.match(result) && result.payload.synced) {
+        showSnackbar({
+          message: intl.formatMessage(messages.saveSuccess),
+          severity: "success",
+        });
+      } else if (saveSettingsThunk.rejected.match(result)) {
+        showSnackbar({
+          message: intl.formatMessage(messages.saveError),
+          severity: "error",
+        });
+      }
+    }
   }, [
     fitzgerald,
     skin,
@@ -84,11 +101,13 @@ const DefaultSettingsPanel = ({
     dispatch,
     color,
     font,
+    showSnackbar,
+    intl,
   ]);
 
   useEffect(() => {
-    if (!submit) handlerSubmit();
-    if (submit === "save") handlerSubmit();
+    if (!submit) void handlerSubmit();
+    if (submit === "save") void handlerSubmit(true);
   }, [submit, handlerSubmit]);
 
   return (
@@ -129,7 +148,7 @@ const DefaultSettingsPanel = ({
       onApplyAllBorderOut={() =>
         dispatch(borderOutApplyAllActionCreator({ borderOut }))
       }
-      onSubmit={handlerSubmit}
+      onSubmit={() => void handlerSubmit()}
     />
   );
 };

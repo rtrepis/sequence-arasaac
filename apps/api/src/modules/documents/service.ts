@@ -34,7 +34,10 @@ export const createDocument = async (
   userId: string,
   input: CreateDocumentInput
 ): Promise<DocumentSAAC> => {
+  console.log("[DOC][DB] createDocument - userId:", userId);
+  console.log("[DOC][DB] createDocument - input keys:", Object.keys(input));
   const doc = await DocumentModel.create({ userId, ...input });
+  console.log("[DOC][DB] createDocument - document creat a DB, id:", String(doc._id));
   return serializeDocument(doc);
 };
 
@@ -62,13 +65,24 @@ export const updateDocument = async (
   id: string,
   input: UpdateDocumentInput
 ): Promise<DocumentSAAC> => {
+  console.log("[DOC][DB] updateDocument - userId:", userId, "| id:", id);
+  console.log("[DOC][DB] updateDocument - input keys:", Object.keys(input));
+
   // Primer verifiquem ownership
   const existing = await DocumentModel.findById(id);
-  if (!existing || existing.userId.toString() !== userId) {
+  if (!existing) {
+    console.log("[DOC][DB] updateDocument - document NO trobat a DB");
     const error = new Error("Document no trobat") as AppError;
     error.statusCode = 404;
     throw error;
   }
+  if (existing.userId.toString() !== userId) {
+    console.log("[DOC][DB] updateDocument - ownership KO: doc.userId =", existing.userId.toString(), "!= userId =", userId);
+    const error = new Error("Document no trobat") as AppError;
+    error.statusCode = 404;
+    throw error;
+  }
+  console.log("[DOC][DB] updateDocument - ownership OK, actualitzant...");
 
   const updated = await DocumentModel.findByIdAndUpdate(
     id,
@@ -78,11 +92,13 @@ export const updateDocument = async (
 
   // No hauria d'arribar aquí, però TypeScript ho requereix
   if (!updated) {
+    console.log("[DOC][DB] updateDocument - error: document desaparegut durant update");
     const error = new Error("Document no trobat") as AppError;
     error.statusCode = 404;
     throw error;
   }
 
+  console.log("[DOC][DB] updateDocument - actualitzat correctament");
   return serializeDocument(updated);
 };
 

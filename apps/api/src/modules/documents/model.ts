@@ -52,7 +52,12 @@ const pictApiAraSettingsDocSchema = new Schema(
       type: String,
       enum: ["asian", "aztec", "black", "mulatto", "white"],
     },
-    fitzgerald: { type: String },
+    fitzgerald: {
+      type: new Schema(
+        { value: { type: String }, color: { type: String } },
+        { _id: false }
+      ),
+    },
     color: { type: Boolean },
   },
   { _id: false }

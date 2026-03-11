@@ -239,6 +239,18 @@
       "value": "Pictograma de guia"
     }
   ],
+  "components.defaultSettings.saveSuccess": [
+    {
+      "type": 0,
+      "value": "Configuració desada al servidor"
+    }
+  ],
+  "components.defaultSettings.saveError": [
+    {
+      "type": 0,
+      "value": "Error en desar la configuració al servidor"
+    }
+  ],
   "components.defaultSettings.settings.title": [
     {
       "type": 0,

@@ -10,10 +10,15 @@ import {
 
 // --- Sub-schemas Zod per a PictSequence ---
 
+const fitzgeraldColorZodSchema = z.object({
+  value: z.string(),
+  color: z.string(),
+});
+
 const pictApiAraSettingsZodSchema = z.object({
   hair: z.string().optional(),
   skin: z.string().optional(),
-  fitzgerald: z.string().optional(),
+  fitzgerald: fitzgeraldColorZodSchema.optional(),
   color: z.boolean().optional(),
 });
 

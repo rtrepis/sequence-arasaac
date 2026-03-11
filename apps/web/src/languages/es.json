@@ -239,6 +239,18 @@
       "value": "Pictograma de guía"
     }
   ],
+  "components.defaultSettings.saveSuccess": [
+    {
+      "type": 0,
+      "value": "Configuración guardada en el servidor"
+    }
+  ],
+  "components.defaultSettings.saveError": [
+    {
+      "type": 0,
+      "value": "Error al guardar la configuración en el servidor"
+    }
+  ],
   "components.defaultSettings.settings.title": [
     {
       "type": 0,

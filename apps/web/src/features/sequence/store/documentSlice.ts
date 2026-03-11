@@ -44,6 +44,20 @@ const documentInitialState: DocumentSAAC = {
   order: undefined,
   defaultSettings: undefined,
 };
+
+// Thunk: carrega un document del backend per id (declarat abans del slice per poder-lo usar a extraReducers)
+export const loadDocumentThunk = createAsyncThunk<
+  DocumentSAAC,
+  string,
+  { rejectValue: string }
+>("document/load", async (id, { rejectWithValue }) => {
+  try {
+    return await fetchDocument(id);
+  } catch {
+    return rejectWithValue("No s'ha pogut carregar el document");
+  }
+});
+
 const documentSlice = createSlice({
   name: "document",
   initialState: documentInitialState,
@@ -310,6 +324,19 @@ const documentSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    // Quan el thunk de càrrega acaba, actualitza el document al store
+    builder.addCase(loadDocumentThunk.fulfilled, (state, action) => {
+      const doc = action.payload;
+      if (!doc.viewSettings) {
+        doc.viewSettings = {};
+        Object.keys(doc.content).forEach((key) => {
+          doc.viewSettings[Number(key)] = { ...DEFAULT_SEQUENCE_VIEW };
+        });
+      }
+      return doc;
+    });
+  },
 });
 
 export const documentReducer = documentSlice.reducer;
@@ -332,19 +359,6 @@ export const saveDocumentThunk = createAsyncThunk<
     }
   } catch {
     return rejectWithValue("No s'ha pogut desar el document");
-  }
-});
-
-// Thunk: carrega un document del backend per id
-export const loadDocumentThunk = createAsyncThunk<
-  DocumentSAAC,
-  string,
-  { rejectValue: string }
->("document/load", async (id, { rejectWithValue }) => {
-  try {
-    return await fetchDocument(id);
-  } catch {
-    return rejectWithValue("No s'ha pogut carregar el document");
   }
 });
 
