@@ -11,6 +11,13 @@ const CURSOR_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(
     '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
     "</svg>",
 )}`;
+// Cursor destacat per a covers: 60px amb cercle groc semi-transparent al punt actiu
+const CURSOR_SVG_HIGHLIGHT_URL = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24">' +
+    '<circle cx="5" cy="2" r="6" fill="rgba(255,220,0,0.5)"/>' +
+    '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
+    "</svg>",
+)}`;
 
 // Opcions de la captura centrada
 interface FocusedOptions {
@@ -22,6 +29,10 @@ interface FocusedOptions {
   paddingY?: number;
   // Desplaçament del cursor respecte al centre de l'element. Default {x:35, y:35}.
   mouseOffset?: { x: number; y: number };
+  // URL del cursor SVG a injectar. Default: CURSOR_SVG_DATA_URL.
+  cursorUrl?: string;
+  // Mida del div cursor (px). Default 48.
+  cursorSize?: number;
 }
 
 // Captura centrada en el protagonista amb cursor visual injectat.
@@ -32,7 +43,7 @@ const focusedScreenshot = async (
   outputPath: string,
   options: FocusedOptions = {},
 ): Promise<void> => {
-  const { padding = 280, mouseOffset = { x: 35, y: 35 } } = options;
+  const { padding = 280, mouseOffset = { x: 35, y: 35 }, cursorUrl = CURSOR_SVG_DATA_URL, cursorSize = 48 } = options;
   const px = options.paddingX ?? padding;
   const py = options.paddingY ?? padding;
 
@@ -74,10 +85,12 @@ const focusedScreenshot = async (
       x,
       y,
       svgUrl,
+      size,
     }: {
       x: number;
       y: number;
       svgUrl: string;
+      size: number;
     }) => {
       document.getElementById("__pw_cursor__")?.remove();
       const el = document.createElement("div");
@@ -86,8 +99,8 @@ const focusedScreenshot = async (
         "position:fixed",
         `left:${x}px`,
         `top:${y}px`,
-        "width:48px",
-        "height:48px",
+        `width:${size}px`,
+        `height:${size}px`,
         "z-index:2147483647",
         "pointer-events:none",
         `background-image:url("${svgUrl}")`,
@@ -96,7 +109,7 @@ const focusedScreenshot = async (
       ].join(";");
       document.body.appendChild(el);
     },
-    { x: mouseX, y: mouseY, svgUrl: CURSOR_SVG_DATA_URL },
+    { x: mouseX, y: mouseY, svgUrl: cursorUrl, size: cursorSize },
   );
 
   await page.screenshot({
@@ -192,15 +205,14 @@ test(
     );
 
     // =============================================
-    // COBERTA CAROUSEL — target 700×320px
-    // ratio card 300×140 a 3-per-fila (1280px viewport) → ratio 2.14:1
-    // Switch ~38×38px → paddingX=(700-38)/2=331, paddingY=(320-38)/2=141
+    // COBERTA CAROUSEL — target 700×292px (ratio 2.40:1 per mobile)
+    // Switch ~38×38px → paddingX=(700-38)/2=331, paddingY=(292-38)/2=127
     // =============================================
     await focusedScreenshot(
       page,
       numberedSwitch,
       path.join(IMG_DIR, "number-font.png"),
-      { paddingX: 331, paddingY: 141, mouseOffset: { x: 40, y: 20 } },
+      { paddingX: 331, paddingY: 127, mouseOffset: { x: 40, y: 20 }, cursorUrl: CURSOR_SVG_HIGHLIGHT_URL, cursorSize: 60 },
     );
   },
 );

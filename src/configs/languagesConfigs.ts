@@ -1,4 +1,4 @@
-export const langTranslateApp = ["es", "en", "ca"] as const;
+export const langTranslateApp = ["es", "en", "ca", "fr", "it"] as const;
 export const langTranslateSearch = [
   "an",
   "ar",
