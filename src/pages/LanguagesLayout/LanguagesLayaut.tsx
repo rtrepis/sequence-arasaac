@@ -7,7 +7,7 @@ import { messageLocale } from "@/App";
 const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
   const { locale } = useParams<{ locale: string }>();
 
-  if (!["ca", "es", "en"].includes(locale || "")) {
+  if (!["ca", "es", "en", "fr", "it"].includes(locale || "")) {
     return <Navigate to="/es/create-sequence" replace />;
   }
 
@@ -15,7 +15,7 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
     <IntlProvider
       locale={locale ?? localeBrowser}
       defaultLocale="es"
-      messages={messageLocale[locale ?? localeBrowser]}
+      messages={messageLocale[locale as keyof typeof messageLocale]}
     >
       <BarNavigation>
         <Outlet />

@@ -699,11 +699,11 @@
     "description": "Descripció pas 2 menú logo"
   },
   "news.logo-menu.step3.alt": {
-    "defaultMessage": "Sección de configuración y selector de idioma con los botones ca, es y en",
+    "defaultMessage": "Sección de configuración y selector de idioma",
     "description": "Alt pas 3 menú logo"
   },
   "news.logo-menu.step3.description": {
-    "defaultMessage": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es) o inglés (en).",
+    "defaultMessage": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es), inglés (en), francés (fr) o italiano (it).",
     "description": "Descripció pas 3 menú logo"
   },
   "news.view-improvements.title": {

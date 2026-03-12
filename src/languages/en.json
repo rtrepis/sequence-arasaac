@@ -212,7 +212,7 @@
   "components.copyRightDial.auth.label": [
     {
       "type": 0,
-      "value": "Design & all right reserved: Ramon Trepat & AraSaac."
+      "value": "Design & all right reserved: Ramon Trepat & AraSaac. r.trepis@gmail.com"
     }
   ],
   "components.copyRightDial.license.label": [
@@ -380,7 +380,7 @@
   "components.pictEdit.reset": [
     {
       "type": 0,
-      "value": "Restore"
+      "value": "Reset to defaults"
     }
   ],
   "components.pictEditSettings.settings.label": [
@@ -662,13 +662,13 @@
   "news.logo-menu.step3.alt": [
     {
       "type": 0,
-      "value": "Settings section and language selector with ca, es and en buttons"
+      "value": "Settings section and language selector"
     }
   ],
   "news.logo-menu.step3.description": [
     {
       "type": 0,
-      "value": "Settings opens the default pictogram settings dialog, where you can adjust typography, borders, text position and other visual options. Below it, the language selector lets you switch between Catalan (ca), Spanish (es) or English (en)."
+      "value": "Settings opens the default pictogram settings dialog, where you can adjust typography, borders, text position and other visual options. Below it, the language selector lets you switch between Catalan (ca), Spanish (es), English (en), French (fr) or Italian (it)."
     }
   ],
   "news.logo-menu.summary": [
@@ -1523,6 +1523,18 @@
       "value": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
     }
   ],
+  "view.welcome.footer.credits": [
+    {
+      "type": 0,
+      "value": "Credits"
+    }
+  ],
+  "view.welcome.footer.licenses": [
+    {
+      "type": 0,
+      "value": "Licences"
+    }
+  ],
   "view.welcome.learning": [
     {
       "type": 0,
@@ -1539,18 +1551,6 @@
     {
       "type": 0,
       "value": "Start"
-    }
-  ],
-  "view.welcome.footer.licenses": [
-    {
-      "type": 0,
-      "value": "Licences"
-    }
-  ],
-  "view.welcome.footer.credits": [
-    {
-      "type": 0,
-      "value": "Credits"
     }
   ]
 }

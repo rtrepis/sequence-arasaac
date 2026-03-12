@@ -19,6 +19,13 @@ const makeCursorSvgUrl = (size: number): string =>
 // Cursor estàndard (24px) i gran (48px) per al pas 1
 const CURSOR_SVG_DATA_URL = makeCursorSvgUrl(24);
 const CURSOR_SVG_LARGE_URL = makeCursorSvgUrl(48);
+// Cursor destacat per a covers: 60px amb cercle groc semi-transparent al punt actiu
+const CURSOR_SVG_HIGHLIGHT_URL = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24">' +
+    '<circle cx="5" cy="2" r="6" fill="rgba(255,220,0,0.5)"/>' +
+    '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
+    "</svg>",
+)}`;
 
 // Interfície per als mocks de cerca
 interface PictogramMock {
@@ -57,6 +64,8 @@ interface FocusedOptions {
   mouseOffset?: { x: number; y: number };
   // URL del cursor SVG a injectar. Default: cursor estàndard 24px.
   cursorUrl?: string;
+  // Mida del div cursor (px). Default 48.
+  cursorSize?: number;
 }
 
 // Captura centrada en el protagonista amb cursor visual injectat.
@@ -71,6 +80,7 @@ const focusedScreenshot = async (
     padding = 280,
     mouseOffset = { x: 35, y: 35 },
     cursorUrl = CURSOR_SVG_DATA_URL,
+    cursorSize = 48,
   } = options;
   const px = options.paddingX ?? padding;
   const py = options.paddingY ?? padding;
@@ -113,10 +123,12 @@ const focusedScreenshot = async (
       x,
       y,
       svgUrl,
+      size,
     }: {
       x: number;
       y: number;
       svgUrl: string;
+      size: number;
     }) => {
       document.getElementById("__pw_cursor__")?.remove();
       const el = document.createElement("div");
@@ -125,8 +137,8 @@ const focusedScreenshot = async (
         "position:fixed",
         `left:${x}px`,
         `top:${y}px`,
-        "width:48px",
-        "height:48px",
+        `width:${size}px`,
+        `height:${size}px`,
         "z-index:2147483647",
         "pointer-events:none",
         `background-image:url("${svgUrl}")`,
@@ -135,7 +147,7 @@ const focusedScreenshot = async (
       ].join(";");
       document.body.appendChild(el);
     },
-    { x: mouseX, y: mouseY, svgUrl: cursorUrl },
+    { x: mouseX, y: mouseY, svgUrl: cursorUrl, size: cursorSize },
   );
 
   await page.screenshot({
@@ -262,17 +274,18 @@ test(
       .first();
     await uploadBtn.waitFor({ state: "visible", timeout: 10000 });
 
-    // Coberta carousel: target 700×320px (ratio card 300×140 a 3-per-fila en 1280px)
-    // uploadBtn ~38×38px → paddingX=(700-38)/2=331, paddingY=(320-38)/2=141
+    // Coberta carousel: target ~717×299px (ratio 2.40:1 per mobile)
+    // uploadBtn ~55×55px → paddingX=331 (width≈717), paddingY=(299-55)/2=122
     await focusedScreenshot(
       page,
       uploadBtn,
       path.join(IMG_DIR, "save-improvements.png"),
       {
         paddingX: 331,
-        paddingY: 141,
+        paddingY: 122,
         mouseOffset: { x: 0, y: 0 },
-        cursorUrl: CURSOR_SVG_LARGE_URL,
+        cursorUrl: CURSOR_SVG_HIGHLIGHT_URL,
+        cursorSize: 60,
       },
     );
 

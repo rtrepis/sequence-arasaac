@@ -212,7 +212,7 @@
   "components.copyRightDial.auth.label": [
     {
       "type": 0,
-      "value": "Diseño y todos los derechos reservados: Ramon Trepat & AraSaac."
+      "value": "Diseño y todos los derechos reservados: Ramon Trepat & AraSaac. seqsaac@gmail.com"
     }
   ],
   "components.copyRightDial.license.label": [
@@ -380,7 +380,7 @@
   "components.pictEdit.reset": [
     {
       "type": 0,
-      "value": "Restablecer"
+      "value": "Valores por defecto"
     }
   ],
   "components.pictEditSettings.settings.label": [
@@ -662,13 +662,13 @@
   "news.logo-menu.step3.alt": [
     {
       "type": 0,
-      "value": "Sección de configuración y selector de idioma con los botones ca, es y en"
+      "value": "Sección de configuración y selector de idioma"
     }
   ],
   "news.logo-menu.step3.description": [
     {
       "type": 0,
-      "value": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es) o inglés (en)."
+      "value": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es), inglés (en), francés (fr) o italiano (it)."
     }
   ],
   "news.logo-menu.summary": [
@@ -1523,6 +1523,18 @@
       "value": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
     }
   ],
+  "view.welcome.footer.credits": [
+    {
+      "type": 0,
+      "value": "Créditos"
+    }
+  ],
+  "view.welcome.footer.licenses": [
+    {
+      "type": 0,
+      "value": "Licencias"
+    }
+  ],
   "view.welcome.learning": [
     {
       "type": 0,
@@ -1539,18 +1551,6 @@
     {
       "type": 0,
       "value": "Iniciar"
-    }
-  ],
-  "view.welcome.footer.licenses": [
-    {
-      "type": 0,
-      "value": "Licencias"
-    }
-  ],
-  "view.welcome.footer.credits": [
-    {
-      "type": 0,
-      "value": "Créditos"
     }
   ]
 }

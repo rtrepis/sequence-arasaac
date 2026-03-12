@@ -13,7 +13,7 @@ const NewsLayout = ({
   const { locale } = useParams<{ locale: string }>();
 
   // Redirigeix a la versió en espanyol si el locale no és vàlid
-  if (!["ca", "es", "en"].includes(locale ?? "")) {
+  if (!["ca", "es", "en", "fr", "it"].includes(locale ?? "")) {
     return <Navigate to="/es/news" replace />;
   }
 
@@ -21,7 +21,7 @@ const NewsLayout = ({
     <IntlProvider
       locale={locale ?? localeBrowser}
       defaultLocale="es"
-      messages={messageLocale[(locale ?? localeBrowser) as "ca" | "es" | "en"]}
+      messages={messageLocale[(locale ?? localeBrowser) as keyof typeof messageLocale]}
     >
       {/* NewsNavBar ha d'estar dins IntlProvider perquè usa FormattedMessage */}
       <NewsNavBar>

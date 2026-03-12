@@ -1,14 +1,14 @@
 {
   "component.settingCardBorder.borderIn.title": {
-    "defaultMessage": "Marc interior",
+    "defaultMessage": "Bordo interno",
     "description": "setting title "
   },
   "component.settingCardBorder.borderOut.title": {
-    "defaultMessage": "Marc exterior",
+    "defaultMessage": "Bordo esterno",
     "description": "type title"
   },
   "component.settingCardFontGroup.color.title": {
-    "defaultMessage": "Color",
+    "defaultMessage": "Colore",
     "description": "type title"
   },
   "component.settingCardFontGroup.font.title": {
@@ -16,7 +16,7 @@
     "description": "type title"
   },
   "components.barNavigation.edit.title": {
-    "defaultMessage": "Editar",
+    "defaultMessage": "Modifica",
     "description": "Title Page"
   },
   "components.barNavigation.title": {
@@ -28,207 +28,207 @@
     "description": "Title Page"
   },
   "components.barNavigation.welcome.title": {
-    "defaultMessage": "Benvingut",
+    "defaultMessage": "Benvenuto",
     "description": "Title Page"
   },
   "components.buttonWithFileLoad.load.label": {
-    "defaultMessage": "Carregar",
+    "defaultMessage": "Carica",
     "description": "helper text"
   },
   "components.buttonWithModalDownload.defaultSettings.label": {
-    "defaultMessage": "Configuració predeterminada",
+    "defaultMessage": "Impostazioni predefinite",
     "description": "Type save checkbox"
   },
   "components.buttonWithModalDownload.download.label": {
-    "defaultMessage": "Descarregar",
+    "defaultMessage": "Scarica",
     "description": "helper text"
   },
   "components.buttonWithModalDownload.filename.label": {
-    "defaultMessage": "Nom del fitxer",
+    "defaultMessage": "Nome del file",
     "description": "Type save checkbox"
   },
   "components.buttonWithModalDownload.save.title": {
-    "defaultMessage": "Desa",
+    "defaultMessage": "Salva",
     "description": "Modal tittle"
   },
   "components.buttonWithModalDownload.saveHelper.label": {
-    "defaultMessage": "Desa la seqüència i/o la configuració per defecte, i carrega-les més tard.",
+    "defaultMessage": "Salva la sequenza e/o le impostazioni predefinite, e caricale in seguito.",
     "description": "Helper save modal"
   },
   "components.buttonWithModalDownload.sequence.label": {
-    "defaultMessage": "Seqüència",
+    "defaultMessage": "Sequenza",
     "description": "Type save checkbox"
   },
   "components.copyRight": {
-    "defaultMessage": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA).",
+    "defaultMessage": "Fatto con: SequenciAAC - Autore dei pittogrammi: Sergio Palao. Origine: ARASAAC (http://www.arasaac.org). Licenza: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
   },
   "components.copyRightDial.auth.label": {
-    "defaultMessage": "Disseny i drets reservats: Ramon Trepat i AraSaac. seqsaac@gmail.com",
+    "defaultMessage": "Design e diritti riservati: Ramon Trepat e AraSaac. seqsaac@gmail.com",
     "description": "Page auth"
   },
   "components.copyRightDial.license.label": {
-    "defaultMessage": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA).",
+    "defaultMessage": "Fatto con: SequenciAAC - Autore dei pittogrammi: Sergio Palao. Origine: ARASAAC (http://www.arasaac.org). Licenza: CC (BY-NC-SA).",
     "description": "license "
   },
   "components.defaultSettings.close": {
-    "defaultMessage": "tancar",
+    "defaultMessage": "chiudi",
     "description": "close Settings Default "
   },
   "components.defaultSettings.download": {
-    "defaultMessage": "Desa la configuració en un fitxer local",
+    "defaultMessage": "Salva le impostazioni in un file locale",
     "description": "Save settings to local file"
   },
   "components.defaultSettings.pictGuide": {
-    "defaultMessage": "Pictograma de guia",
+    "defaultMessage": "Pittogramma guida",
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.settings.title": {
-    "defaultMessage": "Configuracions per defecte",
+    "defaultMessage": "Impostazioni predefinite",
     "description": "Settings Default "
   },
   "components.defaultSettings.upload": {
-    "defaultMessage": "Carrega la configuració des d'un fitxer local",
+    "defaultMessage": "Carica le impostazioni da un file locale",
     "description": "Load settings from local file"
   },
   "components.magicSearch.button.": {
-    "defaultMessage": "A cercar",
+    "defaultMessage": "Cerca",
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "Escriviu les paraules en la seqüència entre comes i premeu Retorn o feu clic a la lupa quan hàgiu acabat. Exemple: noi, posar, cinturó de seguretat.",
+    "defaultMessage": "Scrivi le parole della sequenza separate da virgole e premi Invio o fai clic sulla lente di ingrandimento quando hai finito. Esempio: bambino, mettere, cintura di sicurezza.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
-    "defaultMessage": "Cerca màgica",
+    "defaultMessage": "Ricerca magica",
     "description": "label text field"
   },
   "components.magicSearch.sample.": {
-    "defaultMessage": "Exemple: Nen, posar, el cinturó de seguretat.",
+    "defaultMessage": "Esempio: Bambino, mettere, la cintura di sicurezza.",
     "description": "Helper text field"
   },
   "components.pictEdit.close": {
-    "defaultMessage": "Tancar",
+    "defaultMessage": "Chiudi",
     "description": "Close modal, edit pictogram"
   },
   "components.pictEdit.delete": {
-    "defaultMessage": "Eliminar",
+    "defaultMessage": "Elimina",
     "description": "Delete modal, edit pictogram"
   },
   "components.pictEdit.modal.description": {
-    "defaultMessage": "Tu pots editar els pictogrames",
+    "defaultMessage": "Puoi modificare i pittogrammi",
     "description": "Description modal"
   },
   "components.pictEdit.modal.label": {
-    "defaultMessage": "Editar Pictograma",
+    "defaultMessage": "Modifica Pittogramma",
     "description": "Title modal"
   },
   "components.pictEditSettings.settings.label": {
-    "defaultMessage": "Configuracions del Pictograma",
+    "defaultMessage": "Impostazioni del Pittogramma",
     "description": "Title section Pictogram Edit "
   },
   "components.pictogramAmount": {
-    "defaultMessage": "Pictogrames:",
+    "defaultMessage": "Pittogrammi:",
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.Subtract.label": {
-    "defaultMessage": "Treure pictograma",
+    "defaultMessage": "Rimuovi pittogramma",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Afegir pictograma buit",
+    "defaultMessage": "Aggiungi pittogramma vuoto",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Inseriu o extreu un pictograma al final de la seqüència. Trobareu més funcions amb el botó dret del ratolí o premeu llargament als mòbils.",
+    "defaultMessage": "Inserisci o rimuovi un pittogramma alla fine della sequenza. Troverai più funzioni con il tasto destro del mouse o la pressione prolungata sui dispositivi mobili.",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramAmount.info": {
-    "defaultMessage": "Veure més informació",
+    "defaultMessage": "Vedi più informazioni",
     "description": "Toggle view or not more info"
   },
   "components.pictogramCard.pictogram": {
-    "defaultMessage": "Imatge pictograma",
+    "defaultMessage": "Immagine pittogramma",
     "description": "Pictogram image"
   },
   "components.pictogramSearch.alert": {
-    "defaultMessage": "No s'ha trobat cap pictograma, amb aquesta paraula - Intenta-ho amb una altra paraula!",
+    "defaultMessage": "Nessun pittogramma trovato con questa parola - Prova un'altra parola!",
     "description": "Search pictogram not founded results"
   },
   "components.pictogramSearch.empty": {
-    "defaultMessage": "Buit",
+    "defaultMessage": "Vuoto",
     "description": "Empty pictogram"
   },
   "components.pictogramSearch.helperText": {
-    "defaultMessage": "Cercador de Pictogrames",
+    "defaultMessage": "Motore di ricerca di pittogrammi",
     "description": "helper text"
   },
   "components.pictogramSearch.label": {
-    "defaultMessage": "Cercar",
+    "defaultMessage": "Cerca",
     "description": "search pictograms"
   },
   "components.pictogramSearch.minus": {
-    "defaultMessage": "Treure pictograma",
+    "defaultMessage": "Rimuovi pittogramma",
     "description": "Minus pictograms"
   },
   "components.pictogramSearch.pictogram": {
-    "defaultMessage": "Pictograma",
+    "defaultMessage": "Pittogramma",
     "description": "Pictogram"
   },
   "components.pictogramSearch.plus": {
-    "defaultMessage": "Inserir pictograma",
+    "defaultMessage": "Inserisci pittogramma",
     "description": "Plus pictograms"
   },
   "components.sequenceAuthor": {
-    "defaultMessage": "Autor de la seqüència:",
+    "defaultMessage": "Autore della sequenza:",
     "description": "License to use the pictograms"
   },
   "components.settingCard.Radius.title": {
-    "defaultMessage": "Radi",
+    "defaultMessage": "Raggio",
     "description": "Setting title"
   },
   "components.settingCard.Size.title": {
-    "defaultMessage": "Mida",
+    "defaultMessage": "Dimensione",
     "description": "Setting title"
   },
   "components.settingCard.applyAll.label": {
-    "defaultMessage": "Aplicar tots",
+    "defaultMessage": "Applica a tutti",
     "description": "apply to all pictograms"
   },
   "components.settingCard.color.title": {
-    "defaultMessage": "Color",
+    "defaultMessage": "Colore",
     "description": "Setting title"
   },
   "components.settingCard.corss.title": {
-    "defaultMessage": "Creu/X",
+    "defaultMessage": "Croce/X",
     "description": "Setting title"
   },
   "components.settingCard.customText.label": {
-    "defaultMessage": "Text personalitzat",
+    "defaultMessage": "Testo personalizzato",
     "description": "Personalize text pictogram"
   },
   "components.settingCard.fontSize.label": {
-    "defaultMessage": "Mida",
+    "defaultMessage": "Dimensione",
     "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
-    "defaultMessage": "Numeració",
+    "defaultMessage": "Numerazione",
     "description": "Setting title"
   },
   "components.settingCardBorder.fitzgeraldKey.label": {
-    "defaultMessage": "Clau Fitzgerald",
+    "defaultMessage": "Chiave Fitzgerald",
     "description": "type setting "
   },
   "components.settingCardBorder.selected.label": {
-    "defaultMessage": "Selecció",
+    "defaultMessage": "Selezione",
     "description": "type setting "
   },
   "components.settingCardBorder.withoutBorder.label": {
-    "defaultMessage": "Sense línia",
+    "defaultMessage": "Senza bordo",
     "description": "type setting "
   },
   "components.toggleButtonEditViewPages.edit.title": {
-    "defaultMessage": "Editar",
+    "defaultMessage": "Modifica",
     "description": "Title Page"
   },
   "components.toggleButtonEditViewPages.view.title": {
@@ -236,39 +236,39 @@
     "description": "Title Page"
   },
   "pages.viewSequence.authSequence.helperText": {
-    "defaultMessage": "Marcar l'autoria",
+    "defaultMessage": "Indicare la paternità",
     "description": "Helper text form"
   },
   "pages.viewSequence.authSequence.label": {
-    "defaultMessage": "Autor de la seqüència",
+    "defaultMessage": "Autore della sequenza",
     "description": "Label form"
   },
   "pages.viewSequence.pictSpaceBetween.label": {
-    "defaultMessage": "Espai de pictogrames",
+    "defaultMessage": "Spazio tra pittogrammi",
     "description": "Label form"
   },
   "pages.viewSequence.fullScreen.label": {
-    "defaultMessage": "Pantalla sencera",
+    "defaultMessage": "Schermo intero",
     "description": "Setting property"
   },
   "pages.viewSequence.sequenceSpaceBetween.label": {
-    "defaultMessage": "Espai de seqüències",
+    "defaultMessage": "Spazio tra sequenze",
     "description": "Label form"
   },
   "pages.viewSequence.size.label": {
-    "defaultMessage": "Mida",
+    "defaultMessage": "Dimensione",
     "description": "Label form"
   },
   "pictogram.empty": {
-    "defaultMessage": "Buit",
+    "defaultMessage": "Vuoto",
     "description": "Empty pictogram"
   },
   "setting.font-family.title": {
-    "defaultMessage": "Família",
+    "defaultMessage": "Famiglia",
     "description": "Title setting"
   },
   "setting.lang.an.label": {
-    "defaultMessage": "Armeni",
+    "defaultMessage": "Armeno",
     "description": "Type setting"
   },
   "setting.lang.app.title": {
@@ -276,696 +276,696 @@
     "description": "Title setting"
   },
   "setting.lang.ar.label": {
-    "defaultMessage": "Àrab",
+    "defaultMessage": "Arabo",
     "description": "Type setting"
   },
   "setting.lang.bg.label": {
-    "defaultMessage": "Búlgar",
+    "defaultMessage": "Bulgaro",
     "description": "Type setting"
   },
   "setting.lang.br.label": {
-    "defaultMessage": "Bretó",
+    "defaultMessage": "Bretone",
     "description": "Type setting"
   },
   "setting.lang.ca.label": {
-    "defaultMessage": "Català",
+    "defaultMessage": "Catalano",
     "description": "Type setting"
   },
   "setting.lang.cs.label": {
-    "defaultMessage": "Txec",
+    "defaultMessage": "Ceco",
     "description": "Type setting"
   },
   "setting.lang.da.label": {
-    "defaultMessage": "Danès",
+    "defaultMessage": "Danese",
     "description": "Type setting"
   },
   "setting.lang.de.label": {
-    "defaultMessage": "Alemany",
+    "defaultMessage": "Tedesco",
     "description": "Type setting"
   },
   "setting.lang.el.label": {
-    "defaultMessage": "Grec",
+    "defaultMessage": "Greco",
     "description": "Type setting"
   },
   "setting.lang.en.label": {
-    "defaultMessage": "Anglès",
+    "defaultMessage": "Inglese",
     "description": "Type setting"
   },
   "setting.lang.es.label": {
-    "defaultMessage": "Espanyol",
+    "defaultMessage": "Spagnolo",
     "description": "Type setting"
   },
   "setting.lang.et.label": {
-    "defaultMessage": "Estonià",
+    "defaultMessage": "Estone",
     "description": "Type setting"
   },
   "setting.lang.eu.label": {
-    "defaultMessage": "Euskera",
+    "defaultMessage": "Basco",
     "description": "Type setting"
   },
   "setting.lang.fa.label": {
-    "defaultMessage": "Persa",
+    "defaultMessage": "Persiano",
     "description": "Type setting"
   },
   "setting.lang.fr.label": {
-    "defaultMessage": "Francès",
+    "defaultMessage": "Francese",
     "description": "Type setting"
   },
   "setting.lang.gl.label": {
-    "defaultMessage": "Gallec",
+    "defaultMessage": "Galiziano",
     "description": "Type setting"
   },
   "setting.lang.he.label": {
-    "defaultMessage": "Hebreu",
+    "defaultMessage": "Ebraico",
     "description": "Type setting"
   },
   "setting.lang.hr.label": {
-    "defaultMessage": "Croat",
+    "defaultMessage": "Croato",
     "description": "Type setting"
   },
   "setting.lang.hu.label": {
-    "defaultMessage": "Hongarès",
+    "defaultMessage": "Ungherese",
     "description": "Type setting"
   },
   "setting.lang.it.label": {
-    "defaultMessage": "Italià",
+    "defaultMessage": "Italiano",
     "description": "Type setting"
   },
   "setting.lang.ko.label": {
-    "defaultMessage": "Coreà",
+    "defaultMessage": "Coreano",
     "description": "Type setting"
   },
   "setting.lang.lt.label": {
-    "defaultMessage": "Lituà",
+    "defaultMessage": "Lituano",
     "description": "Type setting"
   },
   "setting.lang.lv.label": {
-    "defaultMessage": "Letó",
+    "defaultMessage": "Lettone",
     "description": "Type setting"
   },
   "setting.lang.mk.label": {
-    "defaultMessage": "Macedoni",
+    "defaultMessage": "Macedone",
     "description": "Type setting"
   },
   "setting.lang.nb.label": {
-    "defaultMessage": "Noruec Bokmål",
+    "defaultMessage": "Norvegese Bokmål",
     "description": "Type setting"
   },
   "setting.lang.nl.label": {
-    "defaultMessage": "Holandés",
+    "defaultMessage": "Olandese",
     "description": "Type setting"
   },
   "setting.lang.pl.label": {
-    "defaultMessage": "Polonès",
+    "defaultMessage": "Polacco",
     "description": "Type setting"
   },
   "setting.lang.pt.label": {
-    "defaultMessage": "Portuguès",
+    "defaultMessage": "Portoghese",
     "description": "Type setting"
   },
   "setting.lang.ro.label": {
-    "defaultMessage": "Romanès",
+    "defaultMessage": "Rumeno",
     "description": "Type setting"
   },
   "setting.lang.ru.label": {
-    "defaultMessage": "Rus",
+    "defaultMessage": "Russo",
     "description": "Type setting"
   },
   "setting.lang.search.title": {
-    "defaultMessage": "Cercar",
+    "defaultMessage": "Ricerca",
     "description": "Title setting"
   },
   "setting.lang.sk.label": {
-    "defaultMessage": "Eslovac",
+    "defaultMessage": "Slovacco",
     "description": "Type setting"
   },
   "setting.lang.sq.label": {
-    "defaultMessage": "Albanès",
+    "defaultMessage": "Albanese",
     "description": "Type setting"
   },
   "setting.lang.sr.label": {
-    "defaultMessage": "Sèrbi",
+    "defaultMessage": "Serbo",
     "description": "Type setting"
   },
   "setting.lang.sv.label": {
-    "defaultMessage": "Suec",
+    "defaultMessage": "Svedese",
     "description": "Type setting"
   },
   "setting.lang.uk.label": {
-    "defaultMessage": "Ucraïnès",
+    "defaultMessage": "Ucraino",
     "description": "Type setting"
   },
   "setting.lang.val.label": {
-    "defaultMessage": "Valencià",
+    "defaultMessage": "Valenciano",
     "description": "Type setting"
   },
   "setting.lang.zh.label": {
-    "defaultMessage": "Xinès",
+    "defaultMessage": "Cinese",
     "description": "Type setting"
   },
   "settings.hair.black": {
-    "defaultMessage": "Negre",
+    "defaultMessage": "Nero",
     "description": "Type of setting text position"
   },
   "settings.hair.blonde": {
-    "defaultMessage": "Ros",
+    "defaultMessage": "Biondo",
     "description": "Type of setting text position"
   },
   "settings.hair.brown": {
-    "defaultMessage": "Marró",
+    "defaultMessage": "Bruno",
     "description": "Type of setting text position"
   },
   "settings.hair.darkBrown": {
-    "defaultMessage": "Marró fosc",
+    "defaultMessage": "Bruno scuro",
     "description": "Type of setting text position"
   },
   "settings.hair.darkGray": {
-    "defaultMessage": "Gris fosc",
+    "defaultMessage": "Grigio scuro",
     "description": "Type of setting text position"
   },
   "settings.hair.gray": {
-    "defaultMessage": "Gris",
+    "defaultMessage": "Grigio",
     "description": "Type of setting text position"
   },
   "settings.hair.label": {
-    "defaultMessage": "Cabell",
+    "defaultMessage": "Capelli",
     "description": "Setting Hair label"
   },
   "settings.hair.red": {
-    "defaultMessage": "Pèl-roig",
+    "defaultMessage": "Rosso",
     "description": "Type of setting text position"
   },
   "settings.skins.asian": {
-    "defaultMessage": "Asiàtic",
+    "defaultMessage": "Asiatico",
     "description": "Type of setting skin"
   },
   "settings.skins.aztec": {
-    "defaultMessage": "Asteca",
+    "defaultMessage": "Azteco",
     "description": "Type of setting skin"
   },
   "settings.skins.black": {
-    "defaultMessage": "Negre",
+    "defaultMessage": "Nero",
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Pell",
+    "defaultMessage": "Pelle",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
-    "defaultMessage": "Mulat",
+    "defaultMessage": "Mulatto",
     "description": "Type of setting skin"
   },
   "settings.skins.white": {
-    "defaultMessage": "Blanc",
+    "defaultMessage": "Bianco",
     "description": "Type of setting skin"
   },
   "settings.textPosition.bottom": {
-    "defaultMessage": "Sota",
+    "defaultMessage": "Basso",
     "description": "Type of setting text position"
   },
   "settings.textPosition.label": {
-    "defaultMessage": "Posició text",
+    "defaultMessage": "Posizione testo",
     "description": "Setting Text Position label"
   },
   "settings.textPosition.none": {
-    "defaultMessage": "Sense",
+    "defaultMessage": "Nessuno",
     "description": "Type of setting text position"
   },
   "settings.textPosition.top": {
-    "defaultMessage": "Dalt",
+    "defaultMessage": "Alto",
     "description": "Type of setting text position"
   },
   "view.welcome.arcadeLink": {
     "defaultMessage": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
   },
   "view.welcome.learning": {
-    "defaultMessage": "Aprèn l'ús...",
+    "defaultMessage": "Impara a usare...",
     "description": "Start button"
   },
   "view.welcome.liveMotive.title": {
-    "defaultMessage": "Crea i imprimeix o visualitza la teva pàgina de seqüències.",
+    "defaultMessage": "Crea e stampa o visualizza la tua pagina di sequenze.",
     "description": "Welcome live motive"
   },
   "view.welcome.start.button": {
-    "defaultMessage": "Inicia",
+    "defaultMessage": "Inizia",
     "description": "Start button"
   },
   "news.section.title": {
-    "defaultMessage": "Novetats",
+    "defaultMessage": "Novità",
     "description": "Títol secció novetats"
   },
   "news.moreInfo.button": {
-    "defaultMessage": "Més info",
+    "defaultMessage": "Più info",
     "description": "Botó més info notícia"
   },
   "news.back.button": {
-    "defaultMessage": "Tornar",
+    "defaultMessage": "Indietro",
     "description": "Botó tornar de detall notícia"
   },
   "news.multiple-sequences.title": {
-    "defaultMessage": "Múltiples seqüències",
+    "defaultMessage": "Sequenze multiple",
     "description": "Títol notícia múltiples seqüències"
   },
   "news.multiple-sequences.summary": {
-    "defaultMessage": "Ara pots crear i gestionar diverses seqüències alhora amb pestanyes.",
+    "defaultMessage": "Ora puoi creare e gestire più sequenze contemporaneamente con le schede.",
     "description": "Resum notícia múltiples seqüències"
   },
   "news.multiple-sequences.content": {
-    "defaultMessage": "Crea tantes seqüències com necessitis! Utilitza les pestanyes per afegir noves seqüències o eliminar les que ja no necessites. Cada seqüència és independent i pots canviar entre elles fàcilment.",
+    "defaultMessage": "Crea tutte le sequenze di cui hai bisogno! Usa le schede per aggiungere nuove sequenze o rimuovere quelle di cui non hai più bisogno. Ogni sequenza è indipendente e puoi passare facilmente da una all'altra.",
     "description": "Contingut notícia múltiples seqüències"
   },
   "news.multiple-sequences.img1.alt": {
-    "defaultMessage": "Pestanyes de seqüència",
+    "defaultMessage": "Schede di sequenza",
     "description": "Alt imatge 1 múltiples seqüències"
   },
   "news.multiple-sequences.img2.alt": {
-    "defaultMessage": "Afegir i eliminar seqüències",
+    "defaultMessage": "Aggiungere e rimuovere sequenze",
     "description": "Alt imatge 2 múltiples seqüències"
   },
   "news.multiple-sequences.step1.alt": {
-    "defaultMessage": "Seqüència 1 amb pictogrames i botó per afegir nova seqüència",
+    "defaultMessage": "Sequenza 1 con pittogrammi e pulsante per aggiungere una nuova sequenza",
     "description": "Alt imatge pas 1 múltiples seqüències"
   },
   "news.multiple-sequences.step1.description": {
-    "defaultMessage": "A la pàgina d'edició, busca paraules al cercador (separades per comes) i els pictogrames apareixeran automàticament a la seqüència activa. Fes clic al botó + per crear una nova seqüència.",
+    "defaultMessage": "Nella pagina di modifica, cerca parole nella barra di ricerca (separate da virgole) e i pittogrammi appariranno automaticamente nella sequenza attiva. Fai clic sul pulsante + per creare una nuova sequenza.",
     "description": "Descripció pas 1 múltiples seqüències"
   },
   "news.multiple-sequences.step2.alt": {
-    "defaultMessage": "Dues pestanyes de seqüència visibles, seqüència 2 activa",
+    "defaultMessage": "Due schede di sequenza visibili, sequenza 2 attiva",
     "description": "Alt imatge pas 2 múltiples seqüències"
   },
   "news.multiple-sequences.step2.description": {
-    "defaultMessage": "Fes clic a qualsevol pestanya per canviar de seqüència activa. Cada seqüència té el seu propi contingut independent. Busca noves paraules per omplir la seqüència 2.",
+    "defaultMessage": "Fai clic su qualsiasi scheda per passare a una sequenza attiva diversa. Ogni sequenza ha il suo contenuto indipendente. Cerca nuove parole per riempire la sequenza 2.",
     "description": "Descripció pas 2 múltiples seqüències"
   },
   "news.multiple-sequences.step3.alt": {
-    "defaultMessage": "Vista de les dues seqüències amb mida augmentada globalment",
+    "defaultMessage": "Vista di entrambe le sequenze con dimensione aumentata globalmente",
     "description": "Alt imatge pas 3 múltiples seqüències"
   },
   "news.multiple-sequences.step3.description": {
-    "defaultMessage": "A la Vista, el commutador \"Aplicar a totes\" permet ajustar la mida i l'espai de totes les seqüències alhora. Mou el control de mida per veure el canvi aplicat globalment.",
+    "defaultMessage": "Nella Vista, il selettore \"Applica a tutte\" consente di regolare la dimensione e la spaziatura di tutte le sequenze in una volta. Sposta il controllo della dimensione per vedere il cambiamento applicato globalmente.",
     "description": "Descripció pas 3 múltiples seqüències"
   },
   "news.multiple-sequences.step4.alt": {
-    "defaultMessage": "Vista amb la seqüència 2 ajustada individualment a mida diferent",
+    "defaultMessage": "Vista con la sequenza 2 regolata individualmente a una dimensione diversa",
     "description": "Alt imatge pas 4 múltiples seqüències"
   },
   "news.multiple-sequences.step4.description": {
-    "defaultMessage": "Desactiva \"Aplicar a totes\" per configurar cada seqüència de manera independent. Expandeix l'acordió de la seqüència que vols ajustar i modifica la seva mida o espaiament sense afectar les altres.",
+    "defaultMessage": "Disabilita \"Applica a tutte\" per configurare ogni sequenza in modo indipendente. Espandi il pannello della sequenza che vuoi regolare e modifica la sua dimensione o spaziatura senza influenzare le altre.",
     "description": "Descripció pas 4 múltiples seqüències"
   },
   "news.print-preview.title": {
-    "defaultMessage": "Vista prèvia d'impressió",
+    "defaultMessage": "Anteprima di stampa",
     "description": "Títol notícia vista prèvia"
   },
   "news.print-preview.summary": {
-    "defaultMessage": "Previsualitza exactament com quedarà la teva pàgina abans d'imprimir.",
+    "defaultMessage": "Visualizza in anteprima esattamente come apparirà la tua pagina prima di stampare.",
     "description": "Resum notícia vista prèvia"
   },
   "news.print-preview.content": {
-    "defaultMessage": "La vista prèvia et mostra exactament com quedarà la pàgina impresa. Pots controlar la mida dels pictogrames, l'espai entre files i columnes, i l'alineació. Tot es veu en temps real!",
+    "defaultMessage": "L'anteprima ti mostra esattamente come apparirà la pagina stampata. Puoi controllare la dimensione dei pittogrammi, lo spazio tra righe e colonne e l'allineamento. Tutto si aggiorna in tempo reale!",
     "description": "Contingut notícia vista prèvia"
   },
   "news.print-preview.img1.alt": {
-    "defaultMessage": "Vista prèvia de la pàgina",
+    "defaultMessage": "Anteprima della pagina",
     "description": "Alt imatge 1 vista prèvia"
   },
   "news.print-preview.img2.alt": {
-    "defaultMessage": "Controls de mida i espai",
+    "defaultMessage": "Controlli di dimensione e spaziatura",
     "description": "Alt imatge 2 vista prèvia"
   },
   "news.sequence-settings.title": {
-    "defaultMessage": "Noves configuracions per seqüència",
+    "defaultMessage": "Nuove impostazioni per sequenza",
     "description": "Títol notícia configuracions"
   },
   "news.sequence-settings.summary": {
-    "defaultMessage": "Personalitza cada seqüència amb alineació, tipografia dels números i més opcions.",
+    "defaultMessage": "Personalizza ogni sequenza con allineamento, tipografia dei numeri e altre opzioni.",
     "description": "Resum notícia configuracions"
   },
   "news.sequence-settings.content": {
-    "defaultMessage": "Ara pots personalitzar cada seqüència de manera independent. Canvia l'alineació dels pictogrames (esquerra, centre o dreta), configura la tipografia i el color dels números de forma independent al text, i descobreix més opcions de format per adaptar les seqüències a les teves necessitats.",
+    "defaultMessage": "Ora puoi personalizzare ogni sequenza in modo indipendente. Cambia l'allineamento dei pittogrammi (sinistra, centro o destra), configura la tipografia e il colore dei numeri in modo indipendente dal testo, e scopri più opzioni di formattazione per adattare le sequenze alle tue esigenze.",
     "description": "Contingut notícia configuracions"
   },
   "news.sequence-settings.img1.alt": {
-    "defaultMessage": "Opcions d'alineació",
+    "defaultMessage": "Opzioni di allineamento",
     "description": "Alt imatge 1 configuracions"
   },
   "news.sequence-settings.img2.alt": {
-    "defaultMessage": "Configuració de tipografia dels números",
+    "defaultMessage": "Impostazioni tipografia dei numeri",
     "description": "Alt imatge 2 configuracions"
   },
   "news.save-load.title": {
-    "defaultMessage": "Guarda i recupera",
+    "defaultMessage": "Salva e recupera",
     "description": "Títol notícia guardar i carregar"
   },
   "news.save-load.summary": {
-    "defaultMessage": "Descarrega les teves seqüències amb les imatges i carrega-les quan vulguis.",
+    "defaultMessage": "Scarica le tue sequenze con le immagini e ricaricale quando vuoi.",
     "description": "Resum notícia guardar i carregar"
   },
   "news.save-load.content": {
-    "defaultMessage": "Trobaràs les opcions de guardar i carregar al menú del logo de SequenciAAC. Quan guardes, es descarrega un fitxer amb totes les seqüències i les imatges dels pictogrames incloses. Així pots recuperar el teu treball en qualsevol moment!",
+    "defaultMessage": "Troverai le opzioni di salvataggio e caricamento nel menu del logo SequenciAAC. Quando salvi, viene scaricato un file con tutte le sequenze e le immagini dei pittogrammi incluse. Così puoi recuperare il tuo lavoro in qualsiasi momento!",
     "description": "Contingut notícia guardar i carregar"
   },
   "news.save-load.img1.alt": {
-    "defaultMessage": "Menú amb opció de guardar",
+    "defaultMessage": "Menu con opzione di salvataggio",
     "description": "Alt imatge 1 guardar i carregar"
   },
   "news.save-load.img2.alt": {
-    "defaultMessage": "Carregar fitxer guardat",
+    "defaultMessage": "Caricare file salvato",
     "description": "Alt imatge 2 guardar i carregar"
   },
   "news.number-font.title": {
-    "defaultMessage": "Font personalitzada per als números",
+    "defaultMessage": "Font personalizzato per i numeri",
     "description": "Títol notícia font dels números"
   },
   "news.number-font.summary": {
-    "defaultMessage": "Tria una tipografia pròpia per als números que apareixen als pictogrames.",
+    "defaultMessage": "Scegli una tipografia propria per i numeri che appaiono sui pittogrammi.",
     "description": "Resum notícia font dels números"
   },
   "news.number-font.content": {
-    "defaultMessage": "Ara pots configurar de forma independent la tipografia dels números que s'afegeixen als pictogrames quan actives la numeració. Des del diàleg de Configuració per defecte, si actives el switch de Numeració, apareixerà una nova secció per escollir la família tipogràfica, la mida i el color dels números, de manera independent a la tipografia del text dels pictogrames.",
+    "defaultMessage": "Ora puoi configurare in modo indipendente la tipografia dei numeri aggiunti ai pittogrammi quando attivi la numerazione. Dal dialogo Impostazioni predefinite, se attivi il selettore Numerazione, apparirà una nuova sezione per scegliere la famiglia tipografica, la dimensione e il colore dei numeri, indipendentemente dalla tipografia del testo dei pittogrammi.",
     "description": "Contingut notícia font dels números"
   },
   "news.number-font.step1.alt": {
-    "defaultMessage": "Panell de configuració per defecte amb el switch de Numeració desactivat",
+    "defaultMessage": "Pannello delle impostazioni predefinite con il selettore di numerazione disabilitato",
     "description": "Alt pas 1 font dels números"
   },
   "news.number-font.step1.description": {
-    "defaultMessage": "Obre el diàleg de Configuració per defecte des del menú principal (clica el logo). Veuràs un switch per activar la Numeració dels pictogrames.",
+    "defaultMessage": "Apri il dialogo Impostazioni predefinite dal menu principale (fai clic sul logo). Vedrai un selettore per attivare la numerazione dei pittogrammi.",
     "description": "Descripció pas 1 font dels números"
   },
   "news.number-font.step2.alt": {
-    "defaultMessage": "Switch de Numeració activat al panell de configuració",
+    "defaultMessage": "Selettore di numerazione attivato nel pannello delle impostazioni",
     "description": "Alt pas 2 font dels números"
   },
   "news.number-font.step2.description": {
-    "defaultMessage": "Activa el switch de Numeració. Cada pictograma mostrarà el seu número d'ordre a la posició oposada al text.",
+    "defaultMessage": "Attiva il selettore di numerazione. Ogni pittogramma mostrerà il suo numero d'ordine nella posizione opposta al testo.",
     "description": "Descripció pas 2 font dels números"
   },
   "news.number-font.step3.alt": {
-    "defaultMessage": "Nova secció de configuració de la font dels números, amb selector de família, mida i color",
+    "defaultMessage": "Nuova sezione di configurazione del font dei numeri, con selettore di famiglia, dimensione e colore",
     "description": "Alt pas 3 font dels números"
   },
   "news.number-font.step3.description": {
-    "defaultMessage": "Un cop activada la numeració, apareix una nova secció per configurar la tipografia dels números: família, mida i color, de forma independent a la font del text dels pictogrames.",
+    "defaultMessage": "Una volta attivata la numerazione, appare una nuova sezione per configurare la tipografia dei numeri: famiglia, dimensione e colore, in modo indipendente dal font del testo dei pittogrammi.",
     "description": "Descripció pas 3 font dels números"
   },
   "news.logo-menu.title": {
-    "defaultMessage": "El menú de navegació",
+    "defaultMessage": "Il menu di navigazione",
     "description": "Títol notícia menú logo"
   },
   "news.logo-menu.summary": {
-    "defaultMessage": "Clica el logo per obrir el menú principal i accedir a totes les funcions de l'app.",
+    "defaultMessage": "Fai clic sul logo per aprire il menu principale e accedere a tutte le funzioni dell'applicazione.",
     "description": "Resum notícia menú logo"
   },
   "news.logo-menu.content": {
-    "defaultMessage": "Sabies que el logo de SequenciAAC és un botó? Clica'l per desplegar el menú de navegació principal, des d'on pots accedir a totes les pàgines i funcions de l'aplicació.",
+    "defaultMessage": "Lo sapevi che il logo di SequenciAAC è un pulsante? Fai clic per aprire il menu di navigazione principale, da cui puoi accedere a tutte le pagine e funzioni dell'applicazione.",
     "description": "Contingut notícia menú logo"
   },
   "news.logo-menu.step1.alt": {
-    "defaultMessage": "Secció de navegació del menú amb els accessos Inici, Novetats, Edita i Previsualitza",
+    "defaultMessage": "Sezione di navigazione del menu con i link Home, Novità, Modifica e Anteprima",
     "description": "Alt pas 1 menú logo"
   },
   "news.logo-menu.step1.description": {
-    "defaultMessage": "La primera secció del menú conté els accessos directes a totes les pàgines: Inici, Novetats (on trobaràs totes les actualitzacions), Edita (per crear les teves seqüències) i Previsualitza (per veure-les i imprimir-les).",
+    "defaultMessage": "La prima sezione contiene scorciatoie per tutte le pagine: Home, Novità (dove troverai tutti gli aggiornamenti), Modifica (per creare le tue sequenze) e Anteprima (per visualizzarle e stamparle).",
     "description": "Descripció pas 1 menú logo"
   },
   "news.logo-menu.step2.alt": {
-    "defaultMessage": "Secció de fitxers del menú amb les opcions Descarrega i Carrega",
+    "defaultMessage": "Sezione file del menu con le opzioni Scarica e Carica",
     "description": "Alt pas 2 menú logo"
   },
   "news.logo-menu.step2.description": {
-    "defaultMessage": "Des d'aquí pots gestionar els fitxers de les teves seqüències: Descarrega desa la seqüència actual en un fitxer al teu dispositiu, i Carrega recupera una seqüència que havies desat anteriorment.",
+    "defaultMessage": "Da qui puoi gestire i file delle tue sequenze: Scarica salva la sequenza corrente in un file sul tuo dispositivo, e Carica recupera una sequenza precedentemente salvata.",
     "description": "Descripció pas 2 menú logo"
   },
   "news.logo-menu.step3.alt": {
-    "defaultMessage": "Secció de configuració i selector d'idioma",
+    "defaultMessage": "Sezione impostazioni e selettore di lingua",
     "description": "Alt pas 3 menú logo"
   },
   "news.logo-menu.step3.description": {
-    "defaultMessage": "Configuració obre el diàleg de configuració per defecte dels pictogrames, on pots ajustar tipografia, marcs, posició del text i altres opcions visuals. A sota trobaràs el selector d'idioma per canviar entre català (ca), castellà (es), anglès (en), francès (fr) o italià (it).",
+    "defaultMessage": "Impostazioni apre il dialogo delle impostazioni predefinite dei pittogrammi, dove puoi regolare la tipografia, i bordi, la posizione del testo e altre opzioni visive. Sotto troverai il selettore di lingua per cambiare tra catalano (ca), spagnolo (es), inglese (en), francese (fr) o italiano (it).",
     "description": "Descripció pas 3 menú logo"
   },
   "news.view-improvements.title": {
-    "defaultMessage": "Millores a la previsualització",
+    "defaultMessage": "Miglioramenti all'anteprima",
     "description": "Títol notícia millores vista"
   },
   "news.view-improvements.summary": {
-    "defaultMessage": "Vista prèvia fidel a la impressió, nous controls d'alineació i direcció.",
+    "defaultMessage": "Anteprima fedele alla stampa, nuovi controlli di allineamento e direzione.",
     "description": "Resum notícia millores vista"
   },
   "news.view-improvements.content": {
-    "defaultMessage": "S'han corregit errors que feien que la vista prèvia no coincidís exactament amb el resultat imprès. A més, s'han afegit nous controls d'alineació i direcció per a cada seqüència, i ara quan deses una seqüència la configuració de visualització també es desa automàticament.",
+    "defaultMessage": "Sono stati corretti diversi bug che causavano la non corrispondenza dell'anteprima di stampa con il risultato stampato effettivo. Sono stati aggiunti nuovi controlli per l'allineamento e la direzione delle sequenze, e quando si salva una sequenza le impostazioni di visualizzazione vengono ora incluse automaticamente.",
     "description": "Contingut notícia millores vista"
   },
   "news.view-improvements.step1.alt": {
-    "defaultMessage": "Vista prèvia de la seqüència mostrant la correspondència exacta amb la impressió",
+    "defaultMessage": "Anteprima della sequenza che mostra la corrispondenza esatta con la stampa",
     "description": "Alt pas 1 millores vista"
   },
   "news.view-improvements.step1.description": {
-    "defaultMessage": "La previsualització ara correspon exactament al resultat imprès. Un càlcul d'escala precís té en compte el format de pàgina (A4, A3) i la resolució de pantalla per mostrar amb fidelitat el que s'imprimirà.",
+    "defaultMessage": "L'anteprima della sequenza corrisponde ora esattamente al risultato stampato. Un calcolo preciso della scala tiene conto del formato della pagina (A4, A3) e della risoluzione dello schermo per mostrare fedelmente ciò che verrà stampato.",
     "description": "Descripció pas 1 millores vista"
   },
   "news.view-improvements.step2.alt": {
-    "defaultMessage": "Controls d'alineació i direcció de les seqüències",
+    "defaultMessage": "Controlli di allineamento e direzione per le sequenze",
     "description": "Alt pas 2 millores vista"
   },
   "news.view-improvements.step2.description": {
-    "defaultMessage": "Nous controls per personalitzar cada seqüència: tria l'alineació (esquerra, centre, dreta) i la direcció (horitzontal o vertical) per adaptar la presentació a les teves necessitats.",
+    "defaultMessage": "Nuovi controlli per personalizzare ogni sequenza: scegli l'allineamento (sinistra, centro, destra) e la direzione (orizzontale o verticale) per adattare la presentazione alle tue esigenze.",
     "description": "Descripció pas 2 millores vista"
   },
   "news.view-improvements.step3.alt": {
-    "defaultMessage": "Botó de desar la seqüència amb configuració de visualització inclosa",
+    "defaultMessage": "Pulsante di salvataggio sequenza con le impostazioni di visualizzazione incluse",
     "description": "Alt pas 3 millores vista"
   },
   "news.view-improvements.step3.description": {
-    "defaultMessage": "Quan deses la seqüència amb el botó de descàrrega, la configuració de visualització (mides, espais, alineació i direcció) s'inclou automàticament al fitxer, de manera que quan la tornes a carregar tot quedarà tal com ho havies deixat.",
+    "defaultMessage": "Quando salvi la sequenza usando il pulsante di download, le impostazioni di visualizzazione (dimensioni, spaziature, allineamento e direzione) vengono automaticamente incluse nel file, in modo che quando lo ricarichi tutto sarà come l'hai lasciato.",
     "description": "Descripció pas 3 millores vista"
   },
   "news.save-improvements.title": {
-    "defaultMessage": "Millores al guardat",
+    "defaultMessage": "Miglioramenti al salvataggio",
     "description": "Títol notícia millores guardat"
   },
   "news.save-improvements.summary": {
-    "defaultMessage": "El fitxer guardat ara inclou les imatges personalitzades i la configuració de mida i espaiat de cada seqüència.",
+    "defaultMessage": "Il file salvato ora include le immagini personalizzate e le impostazioni di dimensione e spaziatura di ogni sequenza.",
     "description": "Resum notícia millores guardat"
   },
   "news.save-improvements.content": {
-    "defaultMessage": "Ara el fitxer .saac guarda les imatges personalitzades que has pujat, directament al fitxer per no perdre-les. A més, la configuració de visualització de cada seqüència —mida dels pictogrames, espaiat i alineació— també es guarda i es recupera exactament com la vas deixar.",
+    "defaultMessage": "Ora il file .saac salva le immagini personalizzate che hai caricato, direttamente nel file per non perderle. Inoltre, le impostazioni di visualizzazione di ogni sequenza — dimensione dei pittogrammi, spaziatura e allineamento — vengono anche salvate e recuperate esattamente come le hai lasciate.",
     "description": "Contingut notícia millores guardat"
   },
   "news.save-improvements.step1.alt": {
-    "defaultMessage": "Botó per pujar una imatge pròpia al pictograma",
+    "defaultMessage": "Pulsante per caricare un'immagine personalizzata sul pittogramma",
     "description": "Alt pas 1 millores guardat"
   },
   "news.save-improvements.step1.description": {
-    "defaultMessage": "Puja la teva pròpia imatge a qualsevol pictograma. La imatge es guarda directament al fitxer .saac, sense dependre d'internet.",
+    "defaultMessage": "Carica la tua immagine su qualsiasi pittogramma. L'immagine viene salvata direttamente nel file .saac, senza dipendere da internet.",
     "description": "Descripció pas 1 millores guardat"
   },
   "news.save-improvements.step2.alt": {
-    "defaultMessage": "Diàleg de guardar amb les opcions de seqüències i configuració",
+    "defaultMessage": "Dialogo di salvataggio con le opzioni di sequenze e impostazioni",
     "description": "Alt pas 2 millores guardat"
   },
   "news.save-improvements.step2.description": {
-    "defaultMessage": "En guardar el fitxer, totes les imatges personalitzades s'hi inclouen automàticament.",
+    "defaultMessage": "Quando si salva il file, tutte le immagini personalizzate vengono automaticamente incluse.",
     "description": "Descripció pas 2 millores guardat"
   },
   "news.save-improvements.step3.alt": {
-    "defaultMessage": "Controls de mida i espaiat dels pictogrames",
+    "defaultMessage": "Controlli di dimensione e spaziatura dei pittogrammi",
     "description": "Alt pas 3 millores guardat"
   },
   "news.save-improvements.step3.description": {
-    "defaultMessage": "La mida, l'espaiat i l'alineació de cada seqüència es guarden i es restauren automàticament en carregar el fitxer.",
+    "defaultMessage": "La dimensione, la spaziatura e l'allineamento di ogni sequenza vengono automaticamente salvati e ripristinati al caricamento del file.",
     "description": "Descripció pas 3 millores guardat"
   },
   "news.seeAll": {
-    "defaultMessage": "Veure totes les novetats",
+    "defaultMessage": "Vedi tutte le novità",
     "description": "Botó veure totes les novetats"
   },
   "news.prevArticle": {
-    "defaultMessage": "Article anterior",
+    "defaultMessage": "Articolo precedente",
     "description": "Navegació article anterior"
   },
   "news.nextArticle": {
-    "defaultMessage": "Article següent",
+    "defaultMessage": "Articolo successivo",
     "description": "Navegació article següent"
   },
   "news.articleNavigation": {
-    "defaultMessage": "Navegació entre articles",
+    "defaultMessage": "Navigazione tra articoli",
     "description": "Aria label navegació articles"
   },
   "component.settingCardFontGroup.numberFont.title": {
-    "defaultMessage": "Font dels números"
+    "defaultMessage": "Font dei numeri"
   },
   "components.barNavigation.skipToContent": {
-    "defaultMessage": "Salta al contingut principal"
+    "defaultMessage": "Vai al contenuto principale"
   },
   "components.barNavigation.mainNavigation": {
-    "defaultMessage": "Navegació principal"
+    "defaultMessage": "Navigazione principale"
   },
   "components.logoMenu.download": {
-    "defaultMessage": "Descarregar"
+    "defaultMessage": "Scarica"
   },
   "components.logoMenu.editView": {
-    "defaultMessage": "Editar"
+    "defaultMessage": "Modifica"
   },
   "components.logoMenu.load": {
-    "defaultMessage": "Carregar"
+    "defaultMessage": "Carica"
   },
   "components.logoMenu.menuAriaLabel": {
-    "defaultMessage": "Menú principal"
+    "defaultMessage": "Menu principale"
   },
   "components.logoMenu.previewView": {
-    "defaultMessage": "Previsualitzar"
+    "defaultMessage": "Anteprima"
   },
   "components.logoMenu.settings": {
-    "defaultMessage": "Configuració"
+    "defaultMessage": "Impostazioni"
   },
   "components.pictEdit.reset": {
-    "defaultMessage": "Valors per defecte"
+    "defaultMessage": "Valori predefiniti"
   },
   "components.pictogramSearch.uploadImage": {
-    "defaultMessage": "Pujar imatge des del dispositiu"
+    "defaultMessage": "Carica immagine dal dispositivo"
   },
   "context.feedback.applyAll.success": {
-    "defaultMessage": "Aplicat a {count} pictogrames"
+    "defaultMessage": "Applicato a {count} pittogrammi"
   },
   "context.feedback.load.error": {
-    "defaultMessage": "Error carregant el fitxer"
+    "defaultMessage": "Errore durante il caricamento del file"
   },
   "context.feedback.load.success": {
-    "defaultMessage": "Fitxer carregat correctament"
+    "defaultMessage": "File caricato con successo"
   },
   "context.feedback.loading": {
-    "defaultMessage": "Carregant..."
+    "defaultMessage": "Caricamento..."
   },
   "context.feedback.save.success": {
-    "defaultMessage": "Fitxer guardat correctament"
+    "defaultMessage": "File salvato con successo"
   },
   "context.feedback.search.complete": {
-    "defaultMessage": "{count} pictogrames afegits"
+    "defaultMessage": "{count} pittogrammi aggiunti"
   },
   "context.feedback.search.error": {
-    "defaultMessage": "Error cercant pictogrames"
+    "defaultMessage": "Errore durante la ricerca di pittogrammi"
   },
   "context.feedback.search.loading": {
-    "defaultMessage": "Cercant pictogrames..."
+    "defaultMessage": "Ricerca di pittogrammi..."
   },
   "pages.viewSequence.alignment.label": {
-    "defaultMessage": "Alineació"
+    "defaultMessage": "Allineamento"
   },
   "pages.viewSequence.applyAll.label": {
-    "defaultMessage": "Aplicar a totes"
+    "defaultMessage": "Applica a tutte"
   },
   "pages.viewSequence.direction.label": {
-    "defaultMessage": "Direcció"
+    "defaultMessage": "Direzione"
   },
   "pages.viewSequence.pageSize.label": {
-    "defaultMessage": "Mida de pàgina"
+    "defaultMessage": "Dimensione pagina"
   },
   "pages.viewSequence.sequence.label": {
-    "defaultMessage": "Seqüència"
+    "defaultMessage": "Sequenza"
   },
   "pages.viewSequence.tooltip.alignCenter": {
-    "defaultMessage": "Alinear al centre"
+    "defaultMessage": "Allinea al centro"
   },
   "pages.viewSequence.tooltip.alignLeft": {
-    "defaultMessage": "Alinear a l'esquerra"
+    "defaultMessage": "Allinea a sinistra"
   },
   "pages.viewSequence.tooltip.alignRight": {
-    "defaultMessage": "Alinear a la dreta"
+    "defaultMessage": "Allinea a destra"
   },
   "pages.viewSequence.tooltip.applyAll": {
-    "defaultMessage": "Aplicar a totes les seqüències"
+    "defaultMessage": "Applica a tutte le sequenze"
   },
   "pages.viewSequence.tooltip.directionColumn": {
-    "defaultMessage": "Vertical"
+    "defaultMessage": "Verticale"
   },
   "pages.viewSequence.tooltip.directionRow": {
-    "defaultMessage": "Horitzontal"
+    "defaultMessage": "Orizzontale"
   },
   "pages.viewSequence.tooltip.fullscreen": {
-    "defaultMessage": "Pantalla completa"
+    "defaultMessage": "Schermo intero"
   },
   "pages.viewSequence.tooltip.orientation": {
-    "defaultMessage": "Orientació de pàgina"
+    "defaultMessage": "Orientamento pagina"
   },
   "pages.viewSequence.tooltip.print": {
-    "defaultMessage": "Imprimir"
+    "defaultMessage": "Stampa"
   },
   "changelog.page.title": {
-    "defaultMessage": "Novetats"
+    "defaultMessage": "Novità"
   },
   "changelog.category.nova": {
-    "defaultMessage": "Nova"
+    "defaultMessage": "Nuovo"
   },
   "changelog.category.millora": {
-    "defaultMessage": "Millora"
+    "defaultMessage": "Miglioramento"
   },
   "changelog.category.correccio": {
-    "defaultMessage": "Correcció"
+    "defaultMessage": "Correzione"
   },
   "changelog.readMore": {
-    "defaultMessage": "Llegir més"
+    "defaultMessage": "Leggi di più"
   },
   "components.newsNavBar.welcome": {
-    "defaultMessage": "Inici"
+    "defaultMessage": "Home"
   },
   "components.newsNavBar.start": {
-    "defaultMessage": "Crea una seqüència"
+    "defaultMessage": "Crea una sequenza"
   },
   "components.newsNavBar.langSelector": {
-    "defaultMessage": "Idioma"
+    "defaultMessage": "Lingua"
   },
   "components.newsNavBar.skipToContent": {
-    "defaultMessage": "Salta al contingut principal"
+    "defaultMessage": "Vai al contenuto principale"
   },
   "components.newsNavBar.mainNavigation": {
-    "defaultMessage": "Navegació principal"
+    "defaultMessage": "Navigazione principale"
   },
   "components.newsNavBar.news": {
-    "defaultMessage": "Novetats"
+    "defaultMessage": "Novità"
   },
   "components.newsNavBar.openMenu": {
-    "defaultMessage": "Obrir menú de navegació"
+    "defaultMessage": "Apri menu di navigazione"
   },
   "components.appNavigationDrawer.welcome": {
-    "defaultMessage": "Inici"
+    "defaultMessage": "Home"
   },
   "components.appNavigationDrawer.news": {
-    "defaultMessage": "Novetats"
+    "defaultMessage": "Novità"
   },
   "components.appNavigationDrawer.editView": {
-    "defaultMessage": "Edita"
+    "defaultMessage": "Modifica"
   },
   "components.appNavigationDrawer.previewView": {
-    "defaultMessage": "Previsualitza"
+    "defaultMessage": "Anteprima"
   },
   "components.appNavigationDrawer.download": {
-    "defaultMessage": "Descarrega"
+    "defaultMessage": "Scarica"
   },
   "components.appNavigationDrawer.load": {
-    "defaultMessage": "Carrega"
+    "defaultMessage": "Carica"
   },
   "components.appNavigationDrawer.settings": {
-    "defaultMessage": "Configuració"
+    "defaultMessage": "Impostazioni"
   },
   "components.appNavigationDrawer.settingsTitle": {
-    "defaultMessage": "Configuració per defecte"
+    "defaultMessage": "Impostazioni predefinite"
   },
   "components.appNavigationDrawer.settingsClose": {
-    "defaultMessage": "Tancar"
+    "defaultMessage": "Chiudi"
   },
   "components.appNavigationDrawer.langSelector": {
-    "defaultMessage": "Idioma"
+    "defaultMessage": "Lingua"
   },
   "components.appNavigationDrawer.openMenu": {
-    "defaultMessage": "Obrir menú"
+    "defaultMessage": "Apri menu"
   },
   "view.welcome.footer.licenses": {
-    "defaultMessage": "Llicències"
+    "defaultMessage": "Licenze"
   },
   "view.welcome.footer.credits": {
-    "defaultMessage": "Crèdits"
+    "defaultMessage": "Crediti"
   }
 }

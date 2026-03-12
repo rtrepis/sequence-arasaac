@@ -3,17 +3,19 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   AppBar,
   Box,
-  Button,
-  ButtonGroup,
   Container,
   Dialog,
   Divider,
   Drawer,
+  FormControl,
   IconButton,
+  InputLabel,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  MenuItem,
+  Select,
   Slide,
   Stack,
   Toolbar,
@@ -46,7 +48,16 @@ import { useFeedback } from "../../context/FeedbackContext";
 import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
 
 // Idiomes suportats per a la navegació
-const LOCALES = ["ca", "es", "en"] as const;
+const LOCALES = ["ca", "es", "en", "fr", "it"] as const;
+
+// Nom natiu de cada idioma per mostrar al selector
+const LOCALE_LABELS: Record<string, string> = {
+  ca: "Català",
+  es: "Español",
+  en: "English",
+  fr: "Français",
+  it: "Italiano",
+};
 
 // Transició del diàleg de configuració: llisca des de l'ESQUERRA (direction="right")
 const SettingsTransition = forwardRef(function SettingsTransition(
@@ -84,7 +95,7 @@ const AppNavigationDrawer = ({
   // Canvia l'idioma substituint el primer segment de la ruta
   const handleLangChange = (newLocale: string) => {
     const currentPath = window.location.pathname;
-    const newPath = currentPath.replace(/^\/(ca|es|en)/, `/${newLocale}`);
+    const newPath = currentPath.replace(/^\/(ca|es|en|fr|it)/, `/${newLocale}`);
     navigate(newPath, { replace: true });
     onClose();
   };
@@ -269,22 +280,25 @@ const AppNavigationDrawer = ({
             </Tooltip>
           </List>
 
-          {/* Secció 4: Selector d'idioma (sense divider, centrat) */}
-          <Box sx={{ px: 2, py: 2, display: "flex", justifyContent: "center" }}>
-            <ButtonGroup
-              size="small"
-              aria-label={intl.formatMessage(messages.langSelector)}
-            >
-              {LOCALES.map((lang) => (
-                <Button
-                  key={lang}
-                  onClick={() => handleLangChange(lang)}
-                  variant={locale === lang ? "contained" : "outlined"}
-                >
-                  {lang}
-                </Button>
-              ))}
-            </ButtonGroup>
+          {/* Secció 4: Selector d'idioma */}
+          <Box sx={{ px: 2, py: 2 }}>
+            <FormControl size="small" fullWidth>
+              <InputLabel id="lang-select-label">
+                {intl.formatMessage(messages.langSelector)}
+              </InputLabel>
+              <Select
+                labelId="lang-select-label"
+                value={locale}
+                label={intl.formatMessage(messages.langSelector)}
+                onChange={(e) => handleLangChange(e.target.value)}
+              >
+                {LOCALES.map((lang) => (
+                  <MenuItem key={lang} value={lang}>
+                    {LOCALE_LABELS[lang]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
         </Box>
       </Drawer>

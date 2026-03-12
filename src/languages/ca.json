@@ -212,7 +212,7 @@
   "components.copyRightDial.auth.label": [
     {
       "type": 0,
-      "value": "Disseny i drets reservats: Ramon Trepat i AraSaac."
+      "value": "Disseny i drets reservats: Ramon Trepat i AraSaac. seqsaac@gmail.com"
     }
   ],
   "components.copyRightDial.license.label": [
@@ -380,7 +380,7 @@
   "components.pictEdit.reset": [
     {
       "type": 0,
-      "value": "Restablir"
+      "value": "Valors per defecte"
     }
   ],
   "components.pictEditSettings.settings.label": [
@@ -662,13 +662,13 @@
   "news.logo-menu.step3.alt": [
     {
       "type": 0,
-      "value": "Secció de configuració i selector d'idioma amb els botons ca, es i en"
+      "value": "Secció de configuració i selector d'idioma"
     }
   ],
   "news.logo-menu.step3.description": [
     {
       "type": 0,
-      "value": "Configuració obre el diàleg de configuració per defecte dels pictogrames, on pots ajustar tipografia, marcs, posició del text i altres opcions visuals. A sota trobaràs el selector d'idioma per canviar entre català (ca), castellà (es) o anglès (en)."
+      "value": "Configuració obre el diàleg de configuració per defecte dels pictogrames, on pots ajustar tipografia, marcs, posició del text i altres opcions visuals. A sota trobaràs el selector d'idioma per canviar entre català (ca), castellà (es), anglès (en), francès (fr) o italià (it)."
     }
   ],
   "news.logo-menu.summary": [
@@ -1523,6 +1523,18 @@
       "value": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
     }
   ],
+  "view.welcome.footer.credits": [
+    {
+      "type": 0,
+      "value": "Crèdits"
+    }
+  ],
+  "view.welcome.footer.licenses": [
+    {
+      "type": 0,
+      "value": "Llicències"
+    }
+  ],
   "view.welcome.learning": [
     {
       "type": 0,
@@ -1539,18 +1551,6 @@
     {
       "type": 0,
       "value": "Inicia"
-    }
-  ],
-  "view.welcome.footer.licenses": [
-    {
-      "type": 0,
-      "value": "Llicències"
-    }
-  ],
-  "view.welcome.footer.credits": [
-    {
-      "type": 0,
-      "value": "Crèdits"
     }
   ]
 }
