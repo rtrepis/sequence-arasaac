@@ -66,6 +66,11 @@ const messages = defineMessages({
     defaultMessage: "Print",
     description: "Tooltip del botó d'imprimir",
   },
+  tooltipDownloadPdf: {
+    id: "pages.viewSequence.tooltip.downloadPdf",
+    defaultMessage: "Download PDF",
+    description: "Tooltip del botó de descàrrega de PDF",
+  },
   tooltipFullscreen: {
     id: "pages.viewSequence.tooltip.fullscreen",
     defaultMessage: "Full screen",

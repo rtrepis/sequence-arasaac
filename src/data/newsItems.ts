@@ -27,6 +27,32 @@ export interface NewsItem {
 
 export const newsItems: NewsItem[] = [
   {
+    slug: "download-pdf",
+    titleId: "news.download-pdf.title",
+    summaryId: "news.download-pdf.summary",
+    contentId: "news.download-pdf.content",
+    coverImage: "/img/news/download-pdf.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/download-pdf-step1.png",
+          altId: "news.download-pdf.step1.alt",
+        },
+        descriptionId: "news.download-pdf.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/download-pdf-step2.png",
+          altId: "news.download-pdf.step2.alt",
+        },
+        descriptionId: "news.download-pdf.step2.description",
+      },
+    ],
+    date: "2026-03-13",
+    category: "millora",
+  },
+  {
     slug: "new-languages",
     titleId: "news.new-languages.title",
     summaryId: "news.new-languages.summary",

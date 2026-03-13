@@ -629,6 +629,48 @@
       "value": "Tornar"
     }
   ],
+  "news.download-pdf.content": [
+    {
+      "type": 0,
+      "value": "Des de la pàgina de visualització, fes clic al nou botó PDF de la barra d'eines (al costat del botó d'imprimir) per generar i descarregar un fitxer PDF de la teva seqüència, llest per compartir o arxivar."
+    }
+  ],
+  "news.download-pdf.step1.alt": [
+    {
+      "type": 0,
+      "value": "Barra d'eines de la pàgina de vista amb el nou botó de PDF ressaltat"
+    }
+  ],
+  "news.download-pdf.step1.description": [
+    {
+      "type": 0,
+      "value": "A la barra superior de la pàgina de vista trobaràs el nou botó PDF (icona de document) al costat dels botons d'orientació i d'imprimir. Clica'l per iniciar la descàrrega."
+    }
+  ],
+  "news.download-pdf.step2.alt": [
+    {
+      "type": 0,
+      "value": "Vista prèvia de la seqüència de pictogrames que es descarregarà com a PDF"
+    }
+  ],
+  "news.download-pdf.step2.description": [
+    {
+      "type": 0,
+      "value": "El PDF generat conté exactament el que veus a la previsualització: els pictogrames amb la mida, l'espaiat i l'alineació que hagis configurat. Pots compartir-lo per correu o guardar-lo al dispositiu."
+    }
+  ],
+  "news.download-pdf.summary": [
+    {
+      "type": 0,
+      "value": "Ara pots descarregar la seqüència directament com a fitxer PDF, sense passar pel diàleg d'impressió."
+    }
+  ],
+  "news.download-pdf.title": [
+    {
+      "type": 0,
+      "value": "Descarrega la seqüència en PDF"
+    }
+  ],
   "news.logo-menu.content": [
     {
       "type": 0,
@@ -681,60 +723,6 @@
     {
       "type": 0,
       "value": "El menú de navegació"
-    }
-  ],
-  "news.new-languages.content": [
-    {
-      "type": 0,
-      "value": "SequenciAAC ja és accessible en dos nous idiomes: Français (francès) i Italiano (italià). Amb aquesta incorporació, l'aplicació es pot fer servir en cinc idiomes: català, castellà, anglès, francès i italià.\n\nLes traduccions s'han realitzat de manera automàtica, per la qual cosa és possible que hi hagi alguna inexactitud o expressió poc natural. Demanem disculpes per qualsevol errada i us agraïm que ens ho feu saber per poder-ho millorar."
-    }
-  ],
-  "news.new-languages.step1.alt": [
-    {
-      "type": 0,
-      "value": "Menú de navegació de SequenciAAC amb el selector d'idioma a la part inferior"
-    }
-  ],
-  "news.new-languages.step1.description": [
-    {
-      "type": 0,
-      "value": "Per canviar l'idioma, fes clic al logo de SequenciAAC per obrir el menú de navegació. A la part inferior del menú hi trobaràs el selector d'idioma."
-    }
-  ],
-  "news.new-languages.step2.alt": [
-    {
-      "type": 0,
-      "value": "Selector d'idioma desplegat amb els cinc idiomes disponibles"
-    }
-  ],
-  "news.new-languages.step2.description": [
-    {
-      "type": 0,
-      "value": "Clica el selector per veure els cinc idiomes disponibles: Català, Español, English, Français i Italiano. Selecciona'n un per canviar l'idioma de tota l'aplicació de manera immediata."
-    }
-  ],
-  "news.new-languages.step3.alt": [
-    {
-      "type": 0,
-      "value": "Aplicació SequenciAAC amb la interfície en Français"
-    }
-  ],
-  "news.new-languages.step3.description": [
-    {
-      "type": 0,
-      "value": "La interfície s'actualitza al moment. Aquí pots veure l'aplicació en Français. Si trobes alguna traducció incorrecta, fes-nos-ho saber: ho millorarem."
-    }
-  ],
-  "news.new-languages.summary": [
-    {
-      "type": 0,
-      "value": "L'app ara parla cinc idiomes. T'expliquem com canviar-lo."
-    }
-  ],
-  "news.new-languages.title": [
-    {
-      "type": 0,
-      "value": "Nous idiomes: Français i Italiano"
     }
   ],
   "news.moreInfo.button": [
@@ -1197,6 +1185,12 @@
     {
       "type": 0,
       "value": "Horitzontal"
+    }
+  ],
+  "pages.viewSequence.tooltip.downloadPdf": [
+    {
+      "type": 0,
+      "value": "Descarregar PDF"
     }
   ],
   "pages.viewSequence.tooltip.fullscreen": [
