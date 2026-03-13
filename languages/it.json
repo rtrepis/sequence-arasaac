@@ -522,6 +522,34 @@
     "defaultMessage": "Indietro",
     "description": "Botó tornar de detall notícia"
   },
+  "news.download-pdf.title": {
+    "defaultMessage": "Scarica la sequenza come PDF",
+    "description": "Títol notícia descàrrega PDF"
+  },
+  "news.download-pdf.summary": {
+    "defaultMessage": "Ora puoi scaricare la sequenza direttamente come PDF, senza aprire la finestra di stampa.",
+    "description": "Resum notícia descàrrega PDF"
+  },
+  "news.download-pdf.content": {
+    "defaultMessage": "Dalla pagina di visualizzazione, fai clic sul nuovo pulsante PDF nella barra degli strumenti (accanto al pulsante di stampa) per generare e scaricare un PDF della tua sequenza.",
+    "description": "Contingut notícia descàrrega PDF"
+  },
+  "news.download-pdf.step1.alt": {
+    "defaultMessage": "Barra degli strumenti con il nuovo pulsante PDF evidenziato",
+    "description": "Alt text imatge pas 1"
+  },
+  "news.download-pdf.step1.description": {
+    "defaultMessage": "Nella barra superiore della pagina di visualizzazione troverai il nuovo pulsante PDF (icona documento) accanto ai pulsanti di orientamento e stampa. Cliccaci per avviare il download.",
+    "description": "Descripció pas 1"
+  },
+  "news.download-pdf.step2.alt": {
+    "defaultMessage": "Anteprima della sequenza di pittogrammi che verrà scaricata come PDF",
+    "description": "Alt text imatge pas 2"
+  },
+  "news.download-pdf.step2.description": {
+    "defaultMessage": "Il PDF contiene esattamente ciò che vedi nell'anteprima: i pittogrammi con la dimensione, la spaziatura e l'allineamento impostati. Puoi condividerlo via email o salvarlo sul dispositivo.",
+    "description": "Descripció pas 2"
+  },
   "news.multiple-sequences.title": {
     "defaultMessage": "Sequenze multiple",
     "description": "Títol notícia múltiples seqüències"
@@ -892,6 +920,10 @@
   },
   "pages.viewSequence.tooltip.print": {
     "defaultMessage": "Stampa"
+  },
+  "pages.viewSequence.tooltip.downloadPdf": {
+    "defaultMessage": "Scarica come PDF",
+    "description": "Tooltip del botó de descàrrega de PDF"
   },
   "changelog.page.title": {
     "defaultMessage": "Novità"
