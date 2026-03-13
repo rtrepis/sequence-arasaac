@@ -683,6 +683,60 @@
       "value": "The navigation menu"
     }
   ],
+  "news.new-languages.content": [
+    {
+      "type": 0,
+      "value": "SequenciAAC is now available in two new languages: Français (French) and Italiano (Italian). With this addition, the app can be used in five languages: Catalan, Spanish, English, French, and Italian.\n\nThe translations were done automatically, so there may be some inaccuracies or unnatural phrasing. We apologize for any errors and would greatly appreciate you letting us know so we can improve them."
+    }
+  ],
+  "news.new-languages.step1.alt": [
+    {
+      "type": 0,
+      "value": "SequenciAAC navigation menu with the language selector at the bottom"
+    }
+  ],
+  "news.new-languages.step1.description": [
+    {
+      "type": 0,
+      "value": "To change the language, click the SequenciAAC logo to open the navigation menu. At the bottom of the menu you will find the language selector."
+    }
+  ],
+  "news.new-languages.step2.alt": [
+    {
+      "type": 0,
+      "value": "Language selector open showing the five available options"
+    }
+  ],
+  "news.new-languages.step2.description": [
+    {
+      "type": 0,
+      "value": "Click the selector to see the five available languages: Català, Español, English, Français and Italiano. Select one to instantly change the language of the entire application."
+    }
+  ],
+  "news.new-languages.step3.alt": [
+    {
+      "type": 0,
+      "value": "SequenciAAC application with the interface in Français"
+    }
+  ],
+  "news.new-languages.step3.description": [
+    {
+      "type": 0,
+      "value": "The interface updates immediately. Here you can see the application in Français. If you spot any incorrect translation, please let us know — we will improve it."
+    }
+  ],
+  "news.new-languages.summary": [
+    {
+      "type": 0,
+      "value": "The app now supports five languages. Here's how to change the language."
+    }
+  ],
+  "news.new-languages.title": [
+    {
+      "type": 0,
+      "value": "New languages: Français and Italiano"
+    }
+  ],
   "news.moreInfo.button": [
     {
       "type": 0,

@@ -37,12 +37,16 @@ import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./AppNavigationDrawer.lang";
 import DefaultForm from "../DefaultsForm/DefaultForm";
 import ModalDownload from "../ButtonWithModalDownload/ModalDownload";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   addSequenceActionCreator,
   loadDocumentSaacActionCreator,
 } from "../../app/slice/documentSlice";
-import { updateDefaultSettingsActionCreator } from "../../app/slice/uiSlice";
+import {
+  updateDefaultSettingsActionCreator,
+  updateLangSettingsActionCreator,
+} from "../../app/slice/uiSlice";
+import { LangsApp } from "../../types/ui";
 import { trackEvent } from "../../hooks/usePageTracking";
 import { useFeedback } from "../../context/FeedbackContext";
 import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
@@ -81,6 +85,7 @@ const AppNavigationDrawer = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
+  const { search: searchLang, keywords } = useAppSelector((state) => state.ui.lang);
 
   // Locale de la ruta; fallback a "ca" si no estem en una ruta amb paràmetre de locale
   const { locale = "ca" } = useParams<{ locale: string }>();
@@ -92,11 +97,18 @@ const AppNavigationDrawer = ({
   // Ref per al input ocult de càrrega de fitxer
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Canvia l'idioma substituint el primer segment de la ruta
+  // Canvia l'idioma substituint el primer segment de la ruta,
+  // sincronitza el Redux i el storage perquè WelcomePage (/) també en tingui constància
   const handleLangChange = (newLocale: string) => {
     const currentPath = window.location.pathname;
     const newPath = currentPath.replace(/^\/(ca|es|en|fr|it)/, `/${newLocale}`);
     navigate(newPath, { replace: true });
+
+    const newLangValue = { app: newLocale as LangsApp, search: searchLang, keywords };
+    dispatch(updateLangSettingsActionCreator(newLangValue));
+    sessionStorage.setItem("langSettings", JSON.stringify(newLangValue));
+    localStorage.setItem("langSettings", JSON.stringify(newLangValue));
+
     onClose();
   };
 
