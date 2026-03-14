@@ -316,7 +316,7 @@
     "description": "Type setting"
   },
   "setting.lang.et.label": {
-    "defaultMessage": "Estonian",
+    "defaultMessage": "Estoniano",
     "description": "Type setting"
   },
   "setting.lang.eu.label": {
@@ -400,7 +400,7 @@
     "description": "Type setting"
   },
   "setting.lang.sq.label": {
-    "defaultMessage": "Albano",
+    "defaultMessage": "Albanés",
     "description": "Type setting"
   },
   "setting.lang.sr.label": {
@@ -511,7 +511,7 @@
     "description": "Start button"
   },
   "news.section.title": {
-    "defaultMessage": "Novedades",
+    "defaultMessage": "What's new",
     "description": "Títol secció novetats"
   },
   "news.moreInfo.button": {
@@ -523,291 +523,291 @@
     "description": "Botó tornar de detall notícia"
   },
   "news.download-pdf.title": {
-    "defaultMessage": "Descarga la secuencia en PDF",
+    "defaultMessage": "Download sequence as PDF",
     "description": "Títol notícia descàrrega PDF"
   },
   "news.download-pdf.summary": {
-    "defaultMessage": "Ahora puedes descargar la secuencia directamente como PDF, sin abrir el diálogo de impresión.",
+    "defaultMessage": "You can now download the sequence directly as a PDF file, without opening the print dialog.",
     "description": "Resum notícia descàrrega PDF"
   },
   "news.download-pdf.content": {
-    "defaultMessage": "Desde la página de visualización, haz clic en el nuevo botón PDF de la barra de herramientas (junto al botón de imprimir) para generar y descargar un PDF de tu secuencia.",
+    "defaultMessage": "From the view page, click the new PDF button in the toolbar (next to the print button) to generate and download a PDF of your sequence, ready to share or archive.",
     "description": "Contingut notícia descàrrega PDF"
   },
   "news.download-pdf.step1.alt": {
-    "defaultMessage": "Barra de herramientas con el nuevo botón PDF resaltado",
+    "defaultMessage": "View page toolbar with the new PDF button highlighted",
     "description": "Alt text imatge pas 1"
   },
   "news.download-pdf.step1.description": {
-    "defaultMessage": "En la barra superior de la página de vista encontrarás el nuevo botón PDF (icono de documento) junto a los botones de orientación e imprimir. Haz clic para iniciar la descarga.",
+    "defaultMessage": "In the top toolbar of the view page you will find the new PDF button (document icon) next to the orientation and print buttons. Click it to start the download.",
     "description": "Descripció pas 1"
   },
   "news.download-pdf.step2.alt": {
-    "defaultMessage": "Vista previa de la secuencia de pictogramas que se descargará como PDF",
+    "defaultMessage": "Preview of the pictogram sequence that will be downloaded as PDF",
     "description": "Alt text imatge pas 2"
   },
   "news.download-pdf.step2.description": {
-    "defaultMessage": "El PDF contiene exactamente lo que ves en la previsualización: los pictogramas con el tamaño, espaciado y alineación configurados. Puedes compartirlo por correo o guardarlo en el dispositivo.",
+    "defaultMessage": "The PDF contains exactly what you see in the preview: pictograms with the size, spacing and alignment you have set. You can share it by email or save it to your device.",
     "description": "Descripció pas 2"
   },
   "news.multiple-sequences.title": {
-    "defaultMessage": "Múltiples secuencias",
+    "defaultMessage": "Multiple sequences",
     "description": "Títol notícia múltiples seqüències"
   },
   "news.multiple-sequences.summary": {
-    "defaultMessage": "Ahora puedes crear y gestionar varias secuencias a la vez con pestañas.",
+    "defaultMessage": "You can now create and manage multiple sequences at once with tabs.",
     "description": "Resum notícia múltiples seqüències"
   },
   "news.multiple-sequences.content": {
-    "defaultMessage": "¡Crea tantas secuencias como necesites! Utiliza las pestañas para añadir nuevas secuencias o eliminar las que ya no necesitas. Cada secuencia es independiente y puedes cambiar entre ellas fácilmente.",
+    "defaultMessage": "Create as many sequences as you need! Use tabs to add new sequences or remove the ones you no longer need. Each sequence is independent and you can switch between them easily.",
     "description": "Contingut notícia múltiples seqüències"
   },
   "news.multiple-sequences.img1.alt": {
-    "defaultMessage": "Pestañas de secuencia",
+    "defaultMessage": "Sequence tabs",
     "description": "Alt imatge 1 múltiples seqüències"
   },
   "news.multiple-sequences.img2.alt": {
-    "defaultMessage": "Añadir y eliminar secuencias",
+    "defaultMessage": "Add and remove sequences",
     "description": "Alt imatge 2 múltiples seqüències"
   },
   "news.multiple-sequences.step1.alt": {
-    "defaultMessage": "Secuencia 1 con pictogramas y botón para añadir nueva secuencia",
+    "defaultMessage": "Sequence 1 with pictograms and button to add a new sequence",
     "description": "Alt imatge pas 1 múltiples seqüències"
   },
   "news.multiple-sequences.step1.description": {
-    "defaultMessage": "En la página de edición, busca palabras en el buscador (separadas por comas) y los pictogramas aparecerán automáticamente en la secuencia activa. Haz clic en el botón + para crear una nueva secuencia.",
+    "defaultMessage": "On the edit page, search for words in the search box (separated by commas) and pictograms will appear automatically in the active sequence. Click the + button to create a new sequence.",
     "description": "Descripció pas 1 múltiples seqüències"
   },
   "news.multiple-sequences.step2.alt": {
-    "defaultMessage": "Dos pestañas de secuencia visibles, secuencia 2 activa",
+    "defaultMessage": "Two sequence tabs visible, sequence 2 active",
     "description": "Alt imatge pas 2 múltiples seqüències"
   },
   "news.multiple-sequences.step2.description": {
-    "defaultMessage": "Haz clic en cualquier pestaña para cambiar de secuencia activa. Cada secuencia tiene su propio contenido independiente. Busca nuevas palabras para rellenar la secuencia 2.",
+    "defaultMessage": "Click any tab to switch to a different active sequence. Each sequence has its own independent content. Search for new words to fill sequence 2.",
     "description": "Descripció pas 2 múltiples seqüències"
   },
   "news.multiple-sequences.step3.alt": {
-    "defaultMessage": "Vista de las dos secuencias con tamaño aumentado globalmente",
+    "defaultMessage": "View of both sequences with size increased globally",
     "description": "Alt imatge pas 3 múltiples seqüències"
   },
   "news.multiple-sequences.step3.description": {
-    "defaultMessage": "En la Vista, el interruptor \"Aplicar a todas\" permite ajustar el tamaño y el espacio de todas las secuencias a la vez. Mueve el control de tamaño para ver el cambio aplicado globalmente.",
+    "defaultMessage": "In the View page, the \"Apply to all\" toggle lets you adjust the size and spacing of all sequences at once. Move the size control to see the change applied globally.",
     "description": "Descripció pas 3 múltiples seqüències"
   },
   "news.multiple-sequences.step4.alt": {
-    "defaultMessage": "Vista con la secuencia 2 ajustada individualmente a tamaño diferente",
+    "defaultMessage": "View with sequence 2 individually adjusted to a different size",
     "description": "Alt imatge pas 4 múltiples seqüències"
   },
   "news.multiple-sequences.step4.description": {
-    "defaultMessage": "Desactiva \"Aplicar a todas\" para configurar cada secuencia de forma independiente. Despliega el acordeón de la secuencia que quieres ajustar y modifica su tamaño o espaciado sin afectar a las demás.",
+    "defaultMessage": "Disable \"Apply to all\" to configure each sequence independently. Expand the accordion for the sequence you want to adjust and change its size or spacing without affecting the others.",
     "description": "Descripció pas 4 múltiples seqüències"
   },
   "news.print-preview.title": {
-    "defaultMessage": "Vista previa de impresión",
+    "defaultMessage": "Print preview",
     "description": "Títol notícia vista prèvia"
   },
   "news.print-preview.summary": {
-    "defaultMessage": "Previsualiza exactamente cómo quedará tu página antes de imprimir.",
+    "defaultMessage": "Preview exactly how your page will look before printing.",
     "description": "Resum notícia vista prèvia"
   },
   "news.print-preview.content": {
-    "defaultMessage": "La vista previa te muestra exactamente cómo quedará la página impresa. Puedes controlar el tamaño de los pictogramas, el espacio entre filas y columnas, y la alineación. ¡Todo se ve en tiempo real!",
+    "defaultMessage": "The print preview shows you exactly how the printed page will look. You can control the pictogram size, row and column spacing, and alignment. Everything updates in real time!",
     "description": "Contingut notícia vista prèvia"
   },
   "news.print-preview.img1.alt": {
-    "defaultMessage": "Vista previa de la página",
+    "defaultMessage": "Page preview",
     "description": "Alt imatge 1 vista prèvia"
   },
   "news.print-preview.img2.alt": {
-    "defaultMessage": "Controles de tamaño y espacio",
+    "defaultMessage": "Size and spacing controls",
     "description": "Alt imatge 2 vista prèvia"
   },
   "news.sequence-settings.title": {
-    "defaultMessage": "Nuevas configuraciones por secuencia",
+    "defaultMessage": "New per-sequence settings",
     "description": "Títol notícia configuracions"
   },
   "news.sequence-settings.summary": {
-    "defaultMessage": "Personaliza cada secuencia con alineación, tipografía de los números y más opciones.",
+    "defaultMessage": "Customize each sequence with alignment, number typography and more options.",
     "description": "Resum notícia configuracions"
   },
   "news.sequence-settings.content": {
-    "defaultMessage": "Ahora puedes personalizar cada secuencia de manera independiente. Cambia la alineación de los pictogramas (izquierda, centro o derecha), configura la tipografía y el color de los números de forma independiente al texto, y descubre más opciones de formato para adaptar las secuencias a tus necesidades.",
+    "defaultMessage": "You can now customize each sequence independently. Change the pictogram alignment (left, center or right), configure the number typography and color independently from the text, and discover more formatting options to adapt sequences to your needs.",
     "description": "Contingut notícia configuracions"
   },
   "news.sequence-settings.img1.alt": {
-    "defaultMessage": "Opciones de alineación",
+    "defaultMessage": "Alignment options",
     "description": "Alt imatge 1 configuracions"
   },
   "news.sequence-settings.img2.alt": {
-    "defaultMessage": "Configuración de tipografía de los números",
+    "defaultMessage": "Number typography settings",
     "description": "Alt imatge 2 configuracions"
   },
   "news.save-load.title": {
-    "defaultMessage": "Guarda y recupera",
+    "defaultMessage": "Save and restore",
     "description": "Títol notícia guardar i carregar"
   },
   "news.save-load.summary": {
-    "defaultMessage": "Descarga tus secuencias con las imágenes y cárgalas cuando quieras.",
+    "defaultMessage": "Download your sequences with images and load them whenever you want.",
     "description": "Resum notícia guardar i carregar"
   },
   "news.save-load.content": {
-    "defaultMessage": "Encontrarás las opciones de guardar y cargar en el menú del logo de SequenciAAC. Al guardar, se descarga un archivo con todas las secuencias y las imágenes de los pictogramas incluidas. ¡Así puedes recuperar tu trabajo en cualquier momento!",
+    "defaultMessage": "You'll find the save and load options in the SequenciAAC logo menu. When saving, a file is downloaded with all sequences and pictogram images included. This way you can restore your work at any time!",
     "description": "Contingut notícia guardar i carregar"
   },
   "news.save-load.img1.alt": {
-    "defaultMessage": "Menú con opción de guardar",
+    "defaultMessage": "Menu with save option",
     "description": "Alt imatge 1 guardar i carregar"
   },
   "news.save-load.img2.alt": {
-    "defaultMessage": "Cargar archivo guardado",
+    "defaultMessage": "Load saved file",
     "description": "Alt imatge 2 guardar i carregar"
   },
   "news.number-font.title": {
-    "defaultMessage": "Fuente personalizada para los números",
+    "defaultMessage": "Custom font for numbers",
     "description": "Títol notícia font dels números"
   },
   "news.number-font.summary": {
-    "defaultMessage": "Elige una tipografía propia para los números que aparecen en los pictogramas.",
+    "defaultMessage": "Choose an independent font for the numbers shown on pictograms.",
     "description": "Resum notícia font dels números"
   },
   "news.number-font.content": {
-    "defaultMessage": "Ahora puedes configurar de forma independiente la tipografía de los números que se añaden a los pictogramas cuando activas la numeración. Desde el diálogo de Configuración por defecto, activando el switch de Numeración, aparecerá una nueva sección para escoger la familia tipográfica, el tamaño y el color de los números, de manera independiente a la tipografía del texto de los pictogramas.",
+    "defaultMessage": "You can now configure the font of pictogram numbers independently. In the Default Settings dialog, enabling the Numbering switch reveals a new section to choose the font family, size, and color for the numbers, separately from the pictogram text font.",
     "description": "Contingut notícia font dels números"
   },
   "news.number-font.step1.alt": {
-    "defaultMessage": "Panel de configuración por defecto con el switch de Numeración desactivado",
+    "defaultMessage": "Default settings panel with the Numbering switch off",
     "description": "Alt pas 1 font dels números"
   },
   "news.number-font.step1.description": {
-    "defaultMessage": "Abre el diálogo de Configuración por defecto desde el menú principal (haz clic en el logo). Verás un switch para activar la Numeración de los pictogramas.",
+    "defaultMessage": "Open the Default Settings dialog from the main menu (click the logo). You will see a switch to enable pictogram numbering.",
     "description": "Descripció pas 1 font dels números"
   },
   "news.number-font.step2.alt": {
-    "defaultMessage": "Switch de Numeración activado en el panel de configuración",
+    "defaultMessage": "Numbering switch enabled in the settings panel",
     "description": "Alt pas 2 font dels números"
   },
   "news.number-font.step2.description": {
-    "defaultMessage": "Activa el switch de Numeración. Cada pictograma mostrará su número de orden en la posición opuesta al texto.",
+    "defaultMessage": "Enable the Numbering switch. Each pictogram will now show its order number on the opposite side of the text.",
     "description": "Descripció pas 2 font dels números"
   },
   "news.number-font.step3.alt": {
-    "defaultMessage": "Nueva sección de configuración de la fuente de los números, con selector de familia, tamaño y color",
+    "defaultMessage": "New number font section showing family, size and color selectors",
     "description": "Alt pas 3 font dels números"
   },
   "news.number-font.step3.description": {
-    "defaultMessage": "Una vez activada la numeración, aparece una nueva sección para configurar la tipografía de los números: familia, tamaño y color, de forma independiente a la fuente del texto de los pictogramas.",
+    "defaultMessage": "Once numbering is enabled, a new section appears to configure the number font: family, size, and color, independently from the pictogram text font.",
     "description": "Descripció pas 3 font dels números"
   },
   "news.logo-menu.title": {
-    "defaultMessage": "El menú de navegación",
+    "defaultMessage": "The navigation menu",
     "description": "Títol notícia menú logo"
   },
   "news.logo-menu.summary": {
-    "defaultMessage": "Haz clic en el logo para abrir el menú principal y acceder a todas las funciones de la app.",
+    "defaultMessage": "Click the logo to open the main menu and access all app features.",
     "description": "Resum notícia menú logo"
   },
   "news.logo-menu.content": {
-    "defaultMessage": "¿Sabías que el logo de SequenciAAC es un botón? Haz clic en él para desplegar el menú de navegación principal, desde donde puedes acceder a todas las páginas y funciones de la aplicación.",
+    "defaultMessage": "Did you know the SequenciAAC logo is a button? Click it to open the main navigation menu, where you can access all pages and features of the application.",
     "description": "Contingut notícia menú logo"
   },
   "news.logo-menu.step1.alt": {
-    "defaultMessage": "Sección de navegación del menú con los accesos Inicio, Novedades, Edita y Previsualiza",
+    "defaultMessage": "Navigation section of the menu with Home, News, Edit and Preview links",
     "description": "Alt pas 1 menú logo"
   },
   "news.logo-menu.step1.description": {
-    "defaultMessage": "La primera sección del menú contiene los accesos directos a todas las páginas: Inicio, Novedades (donde encontrarás todas las actualizaciones), Edita (para crear tus secuencias) y Previsualiza (para verlas e imprimirlas).",
+    "defaultMessage": "The first section contains shortcuts to all pages: Home, News (where you'll find all updates), Edit (to create your sequences) and Preview (to view and print them).",
     "description": "Descripció pas 1 menú logo"
   },
   "news.logo-menu.step2.alt": {
-    "defaultMessage": "Sección de archivos del menú con las opciones Descarga y Carga",
+    "defaultMessage": "File section of the menu with Download and Load options",
     "description": "Alt pas 2 menú logo"
   },
   "news.logo-menu.step2.description": {
-    "defaultMessage": "Desde aquí puedes gestionar los archivos de tus secuencias: Descarga guarda la secuencia actual en un archivo en tu dispositivo, y Carga recupera una secuencia que habías guardado anteriormente.",
+    "defaultMessage": "From here you can manage your sequence files: Download saves the current sequence to a file on your device, and Load retrieves a previously saved sequence.",
     "description": "Descripció pas 2 menú logo"
   },
   "news.logo-menu.step3.alt": {
-    "defaultMessage": "Sección de configuración y selector de idioma",
+    "defaultMessage": "Settings section and language selector",
     "description": "Alt pas 3 menú logo"
   },
   "news.logo-menu.step3.description": {
-    "defaultMessage": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es), inglés (en), francés (fr) o italiano (it).",
+    "defaultMessage": "Settings opens the default pictogram settings dialog, where you can adjust typography, borders, text position and other visual options. Below it, the language selector lets you switch between Catalan (ca), Spanish (es), English (en), French (fr) or Italian (it).",
     "description": "Descripció pas 3 menú logo"
   },
   "news.view-improvements.title": {
-    "defaultMessage": "Mejoras en la previsualización",
+    "defaultMessage": "Print preview improvements",
     "description": "Títol notícia millores vista"
   },
   "news.view-improvements.summary": {
-    "defaultMessage": "Vista previa fiel a la impresión, nuevos controles de alineación y dirección.",
+    "defaultMessage": "Print preview now matches output exactly. New alignment and direction controls.",
     "description": "Resum notícia millores vista"
   },
   "news.view-improvements.content": {
-    "defaultMessage": "Se han corregido errores que hacían que la vista previa no coincidiera exactamente con el resultado impreso. Además, se han añadido nuevos controles de alineación y dirección para cada secuencia, y ahora cuando guardas una secuencia la configuración de visualización también se guarda automáticamente.",
+    "defaultMessage": "Several bugs have been fixed that caused the print preview to not match the actual printed output. New controls have also been added for alignment and direction of sequences, and when you save a sequence the view settings are now automatically included.",
     "description": "Contingut notícia millores vista"
   },
   "news.view-improvements.step1.alt": {
-    "defaultMessage": "Vista previa de la secuencia mostrando la correspondencia exacta con la impresión",
+    "defaultMessage": "Sequence preview showing exact match with printed output",
     "description": "Alt pas 1 millores vista"
   },
   "news.view-improvements.step1.description": {
-    "defaultMessage": "La previsualización ahora corresponde exactamente al resultado impreso. Un cálculo de escala preciso tiene en cuenta el formato de página (A4, A3) y la resolución de pantalla para mostrar fielmente lo que se imprimirá.",
+    "defaultMessage": "The sequence preview now corresponds exactly to the printed output. A precise scale calculation takes into account the page format (A4, A3) and screen resolution to faithfully show what will be printed.",
     "description": "Descripció pas 1 millores vista"
   },
   "news.view-improvements.step2.alt": {
-    "defaultMessage": "Controles de alineación y dirección de las secuencias",
+    "defaultMessage": "Alignment and direction controls for sequences",
     "description": "Alt pas 2 millores vista"
   },
   "news.view-improvements.step2.description": {
-    "defaultMessage": "Nuevos controles para personalizar cada secuencia: elige la alineación (izquierda, centro, derecha) y la dirección (horizontal o vertical) para adaptar la presentación a tus necesidades.",
+    "defaultMessage": "New controls to customize each sequence: choose the alignment (left, center, right) and direction (horizontal or vertical) to adapt the presentation to your needs.",
     "description": "Descripció pas 2 millores vista"
   },
   "news.view-improvements.step3.alt": {
-    "defaultMessage": "Botón de guardar la secuencia con configuración de visualización incluida",
+    "defaultMessage": "Save sequence button with view settings included",
     "description": "Alt pas 3 millores vista"
   },
   "news.view-improvements.step3.description": {
-    "defaultMessage": "Cuando guardas la secuencia con el botón de descarga, la configuración de visualización (tamaños, espacios, alineación y dirección) se incluye automáticamente en el archivo, de manera que cuando la vuelves a cargar todo quedará tal como lo habías dejado.",
+    "defaultMessage": "When you save the sequence using the download button, the view settings (sizes, spacing, alignment and direction) are automatically included in the file, so when you reload it everything will be as you left it.",
     "description": "Descripció pas 3 millores vista"
   },
   "news.save-improvements.title": {
-    "defaultMessage": "Mejoras al guardado",
+    "defaultMessage": "Save improvements",
     "description": "Títol notícia millores guardat"
   },
   "news.save-improvements.summary": {
-    "defaultMessage": "El archivo guardado ahora incluye imágenes personalizadas y la configuración de tamaño y espaciado de cada secuencia.",
+    "defaultMessage": "The saved file now includes custom images and the size and spacing settings for each sequence.",
     "description": "Resum notícia millores guardat"
   },
   "news.save-improvements.content": {
-    "defaultMessage": "Ahora el archivo .saac guarda las imágenes personalizadas que has subido, directamente en el archivo para no perderlas. Además, la configuración de visualización de cada secuencia —tamaño de los pictogramas, espaciado y alineación— también se guarda y recupera exactamente como la dejaste.",
+    "defaultMessage": "The .saac file now saves the custom images you've uploaded, stored directly in the file so they're never lost. Additionally, the display settings for each sequence — pictogram size, spacing and alignment — are also saved and restored exactly as you left them.",
     "description": "Contingut notícia millores guardat"
   },
   "news.save-improvements.step1.alt": {
-    "defaultMessage": "Botón para subir una imagen propia al pictograma",
+    "defaultMessage": "Button to upload a custom image to the pictogram",
     "description": "Alt pas 1 millores guardat"
   },
   "news.save-improvements.step1.description": {
-    "defaultMessage": "Sube tu propia imagen a cualquier pictograma. La imagen se guarda directamente en el archivo .saac, sin depender de internet.",
+    "defaultMessage": "Upload your own image to any pictogram. The image is saved directly in the .saac file, without needing internet.",
     "description": "Descripció pas 1 millores guardat"
   },
   "news.save-improvements.step2.alt": {
-    "defaultMessage": "Diálogo de guardar con las opciones de secuencias y configuración",
+    "defaultMessage": "Save dialog with sequence and settings options",
     "description": "Alt pas 2 millores guardat"
   },
   "news.save-improvements.step2.description": {
-    "defaultMessage": "Al guardar el archivo, todas las imágenes personalizadas se incluyen automáticamente.",
+    "defaultMessage": "When saving the file, all custom images are automatically included.",
     "description": "Descripció pas 2 millores guardat"
   },
   "news.save-improvements.step3.alt": {
-    "defaultMessage": "Controles de tamaño y espaciado de los pictogramas",
+    "defaultMessage": "Pictogram size and spacing controls",
     "description": "Alt pas 3 millores guardat"
   },
   "news.save-improvements.step3.description": {
-    "defaultMessage": "El tamaño, el espaciado y la alineación de cada secuencia se guardan y restauran automáticamente al cargar el archivo.",
+    "defaultMessage": "The size, spacing and alignment of each sequence are automatically saved and restored when loading the file.",
     "description": "Descripció pas 3 millores guardat"
   },
   "news.seeAll": {
-    "defaultMessage": "Ver todas las novedades",
+    "defaultMessage": "See all updates",
     "description": "Botó veure totes les novetats"
   },
   "news.prevArticle": {
@@ -819,11 +819,11 @@
     "description": "Navegació article següent"
   },
   "news.articleNavigation": {
-    "defaultMessage": "Navegación entre artículos",
+    "defaultMessage": "Article navigation",
     "description": "Aria label navegació articles"
   },
   "component.settingCardFontGroup.numberFont.title": {
-    "defaultMessage": "Fuente de los números"
+    "defaultMessage": "Fuente números"
   },
   "components.barNavigation.skipToContent": {
     "defaultMessage": "Saltar al contenido principal"
@@ -832,25 +832,25 @@
     "defaultMessage": "Navegación principal"
   },
   "components.logoMenu.download": {
-    "defaultMessage": "Descargar"
+    "defaultMessage": "Download"
   },
   "components.logoMenu.editView": {
     "defaultMessage": "Editar"
   },
   "components.logoMenu.load": {
-    "defaultMessage": "Cargar"
+    "defaultMessage": "Load"
   },
   "components.logoMenu.menuAriaLabel": {
     "defaultMessage": "Menú principal"
   },
   "components.logoMenu.previewView": {
-    "defaultMessage": "Previsualizar"
+    "defaultMessage": "Preview"
   },
   "components.logoMenu.settings": {
-    "defaultMessage": "Configuración"
+    "defaultMessage": "Settings"
   },
   "components.pictEdit.reset": {
-    "defaultMessage": "Valores por defecto"
+    "defaultMessage": "Restablecer a valores predeterminados"
   },
   "components.pictogramSearch.uploadImage": {
     "defaultMessage": "Subir imagen desde el dispositivo"
@@ -874,7 +874,7 @@
     "defaultMessage": "{count} pictogramas añadidos"
   },
   "context.feedback.search.error": {
-    "defaultMessage": "Error buscando pictogramas"
+    "defaultMessage": "Error al buscar pictogramas"
   },
   "context.feedback.search.loading": {
     "defaultMessage": "Buscando pictogramas..."
@@ -922,11 +922,11 @@
     "defaultMessage": "Imprimir"
   },
   "pages.viewSequence.tooltip.downloadPdf": {
-    "defaultMessage": "Descargar PDF",
+    "defaultMessage": "Download PDF",
     "description": "Tooltip del botó de descàrrega de PDF"
   },
   "changelog.page.title": {
-    "defaultMessage": "Novedades"
+    "defaultMessage": "What's new"
   },
   "changelog.category.nova": {
     "defaultMessage": "Nueva"
@@ -944,7 +944,7 @@
     "defaultMessage": "Inicio"
   },
   "components.newsNavBar.start": {
-    "defaultMessage": "Crea una secuencia"
+    "defaultMessage": "Crear una secuencia"
   },
   "components.newsNavBar.langSelector": {
     "defaultMessage": "Idioma"
@@ -956,7 +956,7 @@
     "defaultMessage": "Navegación principal"
   },
   "components.newsNavBar.news": {
-    "defaultMessage": "Novedades"
+    "defaultMessage": "Updates"
   },
   "components.newsNavBar.openMenu": {
     "defaultMessage": "Abrir menú de navegación"
@@ -995,9 +995,10 @@
     "defaultMessage": "Abrir menú"
   },
   "view.welcome.footer.licenses": {
-    "defaultMessage": "Licencias"
+    "defaultMessage": "Licences"
   },
   "view.welcome.footer.credits": {
-    "defaultMessage": "Créditos"
+    "defaultMessage": "Credits"
   }
 }
+
