@@ -49,6 +49,7 @@ import {
 import { LangsApp } from "../../types/ui";
 import { trackEvent } from "../../hooks/usePageTracking";
 import { useFeedback } from "../../context/FeedbackContext";
+import useAraSaac from "../../hooks/useAraSaac";
 import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
 
 // Idiomes suportats per a la navegació
@@ -85,7 +86,8 @@ const AppNavigationDrawer = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
-  const { search: searchLang, keywords } = useAppSelector((state) => state.ui.lang);
+  const { keywords } = useAppSelector((state) => state.ui.lang);
+  const { getAllKeyWordsForLanguages } = useAraSaac();
 
   // Locale de la ruta; fallback a "ca" si no estem en una ruta amb paràmetre de locale
   const { locale = "ca" } = useParams<{ locale: string }>();
@@ -104,10 +106,12 @@ const AppNavigationDrawer = ({
     const newPath = currentPath.replace(/^\/(ca|es|en|fr|it)/, `/${newLocale}`);
     navigate(newPath, { replace: true });
 
-    const newLangValue = { app: newLocale as LangsApp, search: searchLang, keywords };
+    // Actualitza tant l'idioma de l'app com el de cerca al canviar de locale
+    const newLangValue = { app: newLocale as LangsApp, search: newLocale, keywords };
     dispatch(updateLangSettingsActionCreator(newLangValue));
     sessionStorage.setItem("langSettings", JSON.stringify(newLangValue));
     localStorage.setItem("langSettings", JSON.stringify(newLangValue));
+    getAllKeyWordsForLanguages(newLocale);
 
     onClose();
   };
