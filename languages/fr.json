@@ -550,6 +550,42 @@
     "defaultMessage": "The PDF contains exactly what you see in the preview: pictograms with the size, spacing and alignment you have set. You can share it by email or save it to your device.",
     "description": "Descripció pas 2"
   },
+  "news.new-languages.title": {
+    "defaultMessage": "New languages: Français and Italiano",
+    "description": "Títol notícia nous idiomes"
+  },
+  "news.new-languages.summary": {
+    "defaultMessage": "The app now speaks five languages. Here's how to change it.",
+    "description": "Resum notícia nous idiomes"
+  },
+  "news.new-languages.content": {
+    "defaultMessage": "SequenciAAC is now available in two new languages: Français (French) and Italiano (Italian). The application can now be used in five languages: Catalan, Spanish, English, French and Italian.\n\nThe translations have been done automatically, so there may be some inaccuracies or unnatural expressions. We apologise for any errors and we appreciate you letting us know so we can improve.",
+    "description": "Contingut notícia nous idiomes"
+  },
+  "news.new-languages.step1.alt": {
+    "defaultMessage": "SequenciAAC navigation menu with the language selector at the bottom",
+    "description": "Alt text imatge pas 1"
+  },
+  "news.new-languages.step1.description": {
+    "defaultMessage": "To change the language, click the SequenciAAC logo to open the navigation menu. At the bottom of the menu you will find the language selector.",
+    "description": "Descripció pas 1"
+  },
+  "news.new-languages.step2.alt": {
+    "defaultMessage": "Language selector expanded with the five available languages",
+    "description": "Alt text imatge pas 2"
+  },
+  "news.new-languages.step2.description": {
+    "defaultMessage": "Click the selector to see the five available languages: Català, Español, English, Français and Italiano. Select one to change the language of the entire application immediately.",
+    "description": "Descripció pas 2"
+  },
+  "news.new-languages.step3.alt": {
+    "defaultMessage": "SequenciAAC application with the interface in Français",
+    "description": "Alt text imatge pas 3"
+  },
+  "news.new-languages.step3.description": {
+    "defaultMessage": "The interface updates instantly. Here you can see the app in Français. If you find any incorrect translation, let us know: we will improve it.",
+    "description": "Descripció pas 3"
+  },
   "news.multiple-sequences.title": {
     "defaultMessage": "Multiple sequences",
     "description": "Títol notícia múltiples seqüències"
