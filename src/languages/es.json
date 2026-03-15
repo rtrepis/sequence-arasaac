@@ -809,6 +809,60 @@
       "value": "Múltiples secuencias"
     }
   ],
+  "news.new-languages.content": [
+    {
+      "type": 0,
+      "value": "SequenciAAC ya es accesible en dos nuevos idiomas: Français (francés) e Italiano (italiano). Con esta incorporación, la aplicación puede usarse en cinco idiomas: catalán, castellano, inglés, francés e italiano.\n\nLas traducciones se han realizado de forma automática, por lo que es posible que haya alguna inexactitud o expresión poco natural. Pedimos disculpas por cualquier error y os agradecemos que nos lo hagáis saber para poder mejorarlo."
+    }
+  ],
+  "news.new-languages.step1.alt": [
+    {
+      "type": 0,
+      "value": "Menú de navegación de SequenciAAC con el selector de idioma en la parte inferior"
+    }
+  ],
+  "news.new-languages.step1.description": [
+    {
+      "type": 0,
+      "value": "Para cambiar el idioma, haz clic en el logo de SequenciAAC para abrir el menú de navegación. En la parte inferior del menú encontrarás el selector de idioma."
+    }
+  ],
+  "news.new-languages.step2.alt": [
+    {
+      "type": 0,
+      "value": "Selector de idioma desplegado con los cinco idiomas disponibles"
+    }
+  ],
+  "news.new-languages.step2.description": [
+    {
+      "type": 0,
+      "value": "Haz clic en el selector para ver los cinco idiomas disponibles: Català, Español, English, Français e Italiano. Selecciona uno para cambiar el idioma de toda la aplicación de forma inmediata."
+    }
+  ],
+  "news.new-languages.step3.alt": [
+    {
+      "type": 0,
+      "value": "Aplicación SequenciAAC con la interfaz en Français"
+    }
+  ],
+  "news.new-languages.step3.description": [
+    {
+      "type": 0,
+      "value": "La interfaz se actualiza al instante. Aquí puedes ver la aplicación en Français. Si encuentras alguna traducción incorrecta, haznos lo saber: lo mejoraremos."
+    }
+  ],
+  "news.new-languages.summary": [
+    {
+      "type": 0,
+      "value": "La app ahora habla cinco idiomas. Te explicamos cómo cambiarlo."
+    }
+  ],
+  "news.new-languages.title": [
+    {
+      "type": 0,
+      "value": "Nuevos idiomas: Français e Italiano"
+    }
+  ],
   "news.nextArticle": [
     {
       "type": 0,
