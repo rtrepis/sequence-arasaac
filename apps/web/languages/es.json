@@ -522,6 +522,70 @@
     "defaultMessage": "Volver",
     "description": "Botó tornar de detall notícia"
   },
+  "news.download-pdf.title": {
+    "defaultMessage": "Descarga la secuencia en PDF",
+    "description": "Títol notícia descàrrega PDF"
+  },
+  "news.download-pdf.summary": {
+    "defaultMessage": "Ahora puedes descargar la secuencia directamente como PDF, sin abrir el diálogo de impresión.",
+    "description": "Resum notícia descàrrega PDF"
+  },
+  "news.download-pdf.content": {
+    "defaultMessage": "Desde la página de visualización, haz clic en el nuevo botón PDF de la barra de herramientas (junto al botón de imprimir) para generar y descargar un PDF de tu secuencia.",
+    "description": "Contingut notícia descàrrega PDF"
+  },
+  "news.download-pdf.step1.alt": {
+    "defaultMessage": "Barra de herramientas con el nuevo botón PDF resaltado",
+    "description": "Alt text imatge pas 1"
+  },
+  "news.download-pdf.step1.description": {
+    "defaultMessage": "En la barra superior de la página de vista encontrarás el nuevo botón PDF (icono de documento) junto a los botones de orientación e imprimir. Haz clic para iniciar la descarga.",
+    "description": "Descripció pas 1"
+  },
+  "news.download-pdf.step2.alt": {
+    "defaultMessage": "Vista previa de la secuencia de pictogramas que se descargará como PDF",
+    "description": "Alt text imatge pas 2"
+  },
+  "news.download-pdf.step2.description": {
+    "defaultMessage": "El PDF contiene exactamente lo que ves en la previsualización: los pictogramas con el tamaño, espaciado y alineación configurados. Puedes compartirlo por correo o guardarlo en el dispositivo.",
+    "description": "Descripció pas 2"
+  },
+  "news.new-languages.title": {
+    "defaultMessage": "Nuevos idiomas: Français e Italiano",
+    "description": "Títol notícia nous idiomes"
+  },
+  "news.new-languages.summary": {
+    "defaultMessage": "La app ahora habla cinco idiomas. Te explicamos cómo cambiarlo.",
+    "description": "Resum notícia nous idiomes"
+  },
+  "news.new-languages.content": {
+    "defaultMessage": "SequenciAAC ya es accesible en dos nuevos idiomas: Français (francés) e Italiano (italiano). Con esta incorporación, la aplicación puede usarse en cinco idiomas: catalán, castellano, inglés, francés e italiano.\n\nLas traducciones se han realizado de forma automática, por lo que es posible que haya alguna inexactitud o expresión poco natural. Pedimos disculpas por cualquier error y os agradecemos que nos lo hagáis saber para poder mejorarlo.",
+    "description": "Contingut notícia nous idiomes"
+  },
+  "news.new-languages.step1.alt": {
+    "defaultMessage": "Menú de navegación de SequenciAAC con el selector de idioma en la parte inferior",
+    "description": "Alt text imatge pas 1"
+  },
+  "news.new-languages.step1.description": {
+    "defaultMessage": "Para cambiar el idioma, haz clic en el logo de SequenciAAC para abrir el menú de navegación. En la parte inferior del menú encontrarás el selector de idioma.",
+    "description": "Descripció pas 1"
+  },
+  "news.new-languages.step2.alt": {
+    "defaultMessage": "Selector de idioma desplegado con los cinco idiomas disponibles",
+    "description": "Alt text imatge pas 2"
+  },
+  "news.new-languages.step2.description": {
+    "defaultMessage": "Haz clic en el selector para ver los cinco idiomas disponibles: Català, Español, English, Français e Italiano. Selecciona uno para cambiar el idioma de toda la aplicación de forma inmediata.",
+    "description": "Descripció pas 2"
+  },
+  "news.new-languages.step3.alt": {
+    "defaultMessage": "Aplicación SequenciAAC con la interfaz en Français",
+    "description": "Alt text imatge pas 3"
+  },
+  "news.new-languages.step3.description": {
+    "defaultMessage": "La interfaz se actualiza al instante. Aquí puedes ver la aplicación en Français. Si encuentras alguna traducción incorrecta, haznos lo saber: lo mejoraremos.",
+    "description": "Descripció pas 3"
+  },
   "news.multiple-sequences.title": {
     "defaultMessage": "Múltiples secuencias",
     "description": "Títol notícia múltiples seqüències"
@@ -699,11 +763,11 @@
     "description": "Descripció pas 2 menú logo"
   },
   "news.logo-menu.step3.alt": {
-    "defaultMessage": "Sección de configuración y selector de idioma con los botones ca, es y en",
+    "defaultMessage": "Sección de configuración y selector de idioma",
     "description": "Alt pas 3 menú logo"
   },
   "news.logo-menu.step3.description": {
-    "defaultMessage": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es) o inglés (en).",
+    "defaultMessage": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es), inglés (en), francés (fr) o italiano (it).",
     "description": "Descripció pas 3 menú logo"
   },
   "news.view-improvements.title": {
@@ -892,6 +956,10 @@
   },
   "pages.viewSequence.tooltip.print": {
     "defaultMessage": "Imprimir"
+  },
+  "pages.viewSequence.tooltip.downloadPdf": {
+    "defaultMessage": "Descargar PDF",
+    "description": "Tooltip del botó de descàrrega de PDF"
   },
   "changelog.page.title": {
     "defaultMessage": "Novedades"

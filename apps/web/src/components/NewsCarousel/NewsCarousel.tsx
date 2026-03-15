@@ -62,12 +62,13 @@ const NewsCarousel = (): React.ReactElement => {
                 key={item.slug}
                 elevation={4}
                 sx={{
-                  minWidth: { xs: "85%", sm: "45%", md: "30%" },
+                  width: { xs: "85%", sm: "45%", md: "30%" },
                   scrollSnapAlign: "start",
                   flexShrink: 0,
                   display: "flex",
                   flexDirection: "column",
                   borderRadius: 3,
+                  overflow: "hidden",
                 }}
               >
                 {/* Alt text descriptiu: usa el títol de la notícia en comptes de buit */}

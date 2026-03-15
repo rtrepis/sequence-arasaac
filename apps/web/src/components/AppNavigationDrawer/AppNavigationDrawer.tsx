@@ -4,18 +4,20 @@ import {
   AppBar,
   Avatar,
   Box,
-  Button,
-  ButtonGroup,
   Container,
   Dialog,
   Divider,
   Drawer,
+  FormControl,
   IconButton,
+  InputLabel,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  MenuItem,
+  Select,
   Slide,
   Stack,
   Toolbar,
@@ -52,10 +54,20 @@ import { updateDefaultSettingsActionCreator } from "@features/user-settings/stor
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
 import { useFeedback } from "../../context/FeedbackContext";
+import useAraSaac from "../../hooks/useAraSaac";
 import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
 
 // Idiomes suportats per a la navegació
-const LOCALES = ["ca", "es", "en"] as const;
+const LOCALES = ["ca", "es", "en", "fr", "it"] as const;
+
+// Nom natiu de cada idioma per mostrar al selector
+const LOCALE_LABELS: Record<string, string> = {
+  ca: "Català",
+  es: "Español",
+  en: "English",
+  fr: "Français",
+  it: "Italiano",
+};
 
 // Transició del diàleg de configuració: llisca des de l'ESQUERRA (direction="right")
 const SettingsTransition = forwardRef(function SettingsTransition(
@@ -79,6 +91,8 @@ const AppNavigationDrawer = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
+  const { keywords } = useAppSelector((state) => state.ui.lang);
+  const { getAllKeyWordsForLanguages } = useAraSaac();
 
   // Estat d'autenticació
   const { userEmail, accessToken } = useAppSelector((state) => state.auth);
@@ -99,11 +113,20 @@ const AppNavigationDrawer = ({
   // Ref per al input ocult de càrrega de fitxer
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Canvia l'idioma substituint el primer segment de la ruta
+  // Canvia l'idioma substituint el primer segment de la ruta,
+  // sincronitza el Redux i el storage perquè WelcomePage (/) també en tingui constància
   const handleLangChange = (newLocale: string) => {
     const currentPath = window.location.pathname;
-    const newPath = currentPath.replace(/^\/(ca|es|en)/, `/${newLocale}`);
+    const newPath = currentPath.replace(/^\/(ca|es|en|fr|it)/, `/${newLocale}`);
     navigate(newPath, { replace: true });
+
+    // Actualitza tant l'idioma de l'app com el de cerca al canviar de locale
+    const newLangValue = { app: newLocale as LangsApp, search: newLocale, keywords };
+    dispatch(updateLangSettingsActionCreator(newLangValue));
+    sessionStorage.setItem("langSettings", JSON.stringify(newLangValue));
+    localStorage.setItem("langSettings", JSON.stringify(newLangValue));
+    getAllKeyWordsForLanguages(newLocale);
+
     onClose();
   };
 

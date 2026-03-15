@@ -130,7 +130,7 @@ test.beforeAll(() => {
 });
 
 test(
-  "logo-menu-focused: captures contextuals centrades en el protagonista",
+  "new-languages-focused: captures contextuals centrades en el selector d'idioma",
   async ({ page }) => {
     // Interceptar crides a l'API d'ARASAAC per evitar dependències de xarxa
     await page.route("**/api.arasaac.org/**", async (route) => {
@@ -160,72 +160,91 @@ test(
     await menuBtn.click();
     await page.waitForTimeout(600);
 
-    // =============================================
-    // COBERTA + PAS 1: Secció de navegació
-    // Protagonista: llista de navegació (Inici, Novetats, Edita, Previsualitza)
-    // Nota: Inici i Novetats rendeixen com <a> (Link component), no com button
-    // =============================================
-
     // Esperar que el drawer estigui obert comprovant el link d'Inici
     const iniciaLink = page.getByRole("link", { name: "Inici" });
     await iniciaLink.waitFor({ state: "visible", timeout: 10000 });
 
-    const navList = page.locator("ul").filter({
-      has: page.getByRole("link", { name: "Inici" }),
-    });
-
-    // Coberta carousel: target ~680×284px (ratio 2.39:1 per mobile)
-    // navList ~240px ample, ~224px alt → paddingX=(680-240)/2=220, paddingY=(284-224)/2=30
-    await focusedScreenshot(
-      page,
-      navList,
-      path.join(IMG_DIR, "logo-menu.png"),
-      { paddingX: 220, paddingY: 30, mouseOffset: { x: 30, y: 20 }, cursorUrl: CURSOR_SVG_HIGHLIGHT_URL, cursorSize: 60 },
-    );
-
-    // Pas 1: target ~680px ample (contingut article NewsDetailPage)
-    // navList ~260px ample → paddingX=(680-260)/2=210
-    await focusedScreenshot(
-      page,
-      navList,
-      path.join(IMG_DIR, "logo-menu-step1.png"),
-      { paddingX: 210, paddingY: 190, mouseOffset: { x: 30, y: 20 } },
-    );
-
-    // =============================================
-    // PAS 2: Secció de fitxers (Descarrega + Carrega)
-    // Protagonista: llista amb els botons Descarrega i Carrega
-    // =============================================
-    const fileList = page.locator("ul").filter({
-      has: page.getByRole("button", { name: /Descarrega/i }),
-    });
-    await fileList.waitFor({ state: "visible", timeout: 10000 });
-
-    // Pas 2: target ~680px ample → paddingX=210
-    await focusedScreenshot(
-      page,
-      fileList,
-      path.join(IMG_DIR, "logo-menu-step2.png"),
-      { paddingX: 210, paddingY: 230, mouseOffset: { x: 30, y: 20 } },
-    );
-
-    // =============================================
-    // PAS 3: Configuració + Selector d'idioma
-    // Protagonista: selector d'idioma — paddingY generós per incloure el botó
-    // de Configuració per sobre
-    // =============================================
-    // ButtonGroup amb aria-label "Idioma" que conté els botons ca/es/en
-    const langSelector = page
-      .locator("button", { hasText: "ca" })
+    // Localitzar el FormControl del selector d'idioma (Select MUI amb aria-labelledby)
+    // El Select de MUI renderitza un div[aria-labelledby="lang-select-label"]
+    const langFormControl = page
+      .locator('[aria-labelledby="lang-select-label"]')
       .locator("xpath=../..");
-    await langSelector.waitFor({ state: "visible", timeout: 10000 });
 
-    // Pas 3: target ~680px ample → paddingX=210
+    await langFormControl.waitFor({ state: "visible", timeout: 10000 });
+
+    // =============================================
+    // COBERTA: drawer + selector d'idioma visible
+    // Protagonista: FormControl idioma (~240px ample × ~56px alt)
+    // Target coberta: ~700×290px (ratio ~2.4:1)
+    // paddingX=(700-240)/2=230, paddingY=(290-56)/2=117
+    // =============================================
     await focusedScreenshot(
       page,
-      langSelector,
-      path.join(IMG_DIR, "logo-menu-step3.png"),
-      { paddingX: 210, paddingY: 220, mouseOffset: { x: 30, y: -20 } },
+      langFormControl,
+      path.join(IMG_DIR, "new-languages.png"),
+      { paddingX: 230, paddingY: 117, mouseOffset: { x: 30, y: 10 }, cursorUrl: CURSOR_SVG_HIGHLIGHT_URL, cursorSize: 60 },
+    );
+
+    // =============================================
+    // PAS 1: Drawer obert amb selector d'idioma visible
+    // Protagonista: FormControl idioma
+    // Target step: ~700×560px
+    // paddingX=230, paddingY=(560-56)/2=252
+    // =============================================
+    await focusedScreenshot(
+      page,
+      langFormControl,
+      path.join(IMG_DIR, "new-languages-step1.png"),
+      { paddingX: 230, paddingY: 252, mouseOffset: { x: 30, y: 10 } },
+    );
+
+    // =============================================
+    // PAS 2: Select obert mostrant els 5 idiomes
+    // Clic al combobox per desplegar les opcions
+    // =============================================
+    const langCombobox = page.getByRole("combobox");
+    await langCombobox.click();
+    await page.waitForTimeout(400);
+
+    // Protagonista: el listbox desplegable (Paper de MUI)
+    const listbox = page.getByRole("listbox");
+    await listbox.waitFor({ state: "visible", timeout: 5000 });
+
+    // Target step: ~700×560px (~240px ample × ~210px alt per 5 opcions)
+    // paddingX=230, paddingY=(560-210)/2=175
+    await focusedScreenshot(
+      page,
+      listbox,
+      path.join(IMG_DIR, "new-languages-step2.png"),
+      { paddingX: 230, paddingY: 175, mouseOffset: { x: 30, y: 10 } },
+    );
+
+    // =============================================
+    // PAS 3: Seleccionar Français i mostrar la UI actualitzada
+    // Clic a l'opció Français → navega a /fr/create-sequence
+    // =============================================
+    const frOption = page.getByRole("option", { name: "Français" });
+    await frOption.click();
+    await page.waitForTimeout(1200);
+
+    // Re-obrir el drawer (ara en fr)
+    const menuBtnFr = page.getByRole("button", { name: /Menu principal|Menú principal|Main menu/i });
+    await menuBtnFr.waitFor({ state: "visible", timeout: 10000 });
+    await menuBtnFr.click();
+    await page.waitForTimeout(600);
+
+    // Re-localitzar el FormControl (ara mostra "Français" seleccionat)
+    const langFormControlFr = page
+      .locator('[aria-labelledby="lang-select-label"]')
+      .locator("xpath=../..");
+    await langFormControlFr.waitFor({ state: "visible", timeout: 10000 });
+
+    // Target step: ~700×560px
+    await focusedScreenshot(
+      page,
+      langFormControlFr,
+      path.join(IMG_DIR, "new-languages-step3.png"),
+      { paddingX: 230, paddingY: 252, mouseOffset: { x: 30, y: 10 } },
     );
   },
 );
@@ -235,7 +254,7 @@ test.afterEach(async ({ page }, testInfo) => {
   if (testInfo.status === "passed") {
     const video = page.video();
     if (video) {
-      const destPath = path.join(VIDEO_DIR, "logo-menu-guide.webm");
+      const destPath = path.join(VIDEO_DIR, "new-languages-guide.webm");
       try {
         await video.saveAs(destPath);
         console.log(`Vídeo desat a: ${destPath}`);

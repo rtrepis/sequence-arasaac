@@ -45,7 +45,8 @@ const PictogramAmount = ({
   return (
     <FormControl
       sx={{
-        minWidth: 260,
+        minWidth: 330,
+        maxWidth: 400,
         transition: "all 1s ease",
       }}
     >

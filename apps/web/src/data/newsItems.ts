@@ -27,6 +27,65 @@ export interface NewsItem {
 
 export const newsItems: NewsItem[] = [
   {
+    slug: "download-pdf",
+    titleId: "news.download-pdf.title",
+    summaryId: "news.download-pdf.summary",
+    contentId: "news.download-pdf.content",
+    coverImage: "/img/news/download-pdf.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/download-pdf-step1.png",
+          altId: "news.download-pdf.step1.alt",
+        },
+        descriptionId: "news.download-pdf.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/download-pdf-step2.png",
+          altId: "news.download-pdf.step2.alt",
+        },
+        descriptionId: "news.download-pdf.step2.description",
+      },
+    ],
+    date: "2026-03-13",
+    category: "millora",
+  },
+  {
+    slug: "new-languages",
+    titleId: "news.new-languages.title",
+    summaryId: "news.new-languages.summary",
+    contentId: "news.new-languages.content",
+    coverImage: "/img/news/new-languages.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/new-languages-step1.png",
+          altId: "news.new-languages.step1.alt",
+        },
+        descriptionId: "news.new-languages.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/new-languages-step2.png",
+          altId: "news.new-languages.step2.alt",
+        },
+        descriptionId: "news.new-languages.step2.description",
+      },
+      {
+        image: {
+          src: "/img/news/new-languages-step3.png",
+          altId: "news.new-languages.step3.alt",
+        },
+        descriptionId: "news.new-languages.step3.description",
+      },
+    ],
+    date: "2026-03-13",
+    category: "nova",
+  },
+  {
     slug: "save-improvements",
     titleId: "news.save-improvements.title",
     summaryId: "news.save-improvements.summary",

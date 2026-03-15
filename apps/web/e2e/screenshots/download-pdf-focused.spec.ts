@@ -7,18 +7,13 @@ const IMG_DIR = path.join(process.cwd(), "public/img/news");
 const VIDEO_DIR = path.join(process.cwd(), "public/video/news");
 const FIXTURES_DIR = path.join(process.cwd(), "e2e/fixtures/images");
 
-// Generador del cursor SVG (fletxa clàssica negra amb contorn blanc).
-// cursorSize permet usar-lo més gran per al pas 1.
-const makeCursorSvgUrl = (size: number): string =>
-  `data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24">` +
-      '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
-      "</svg>",
-  )}`;
+// Cursor estàndard (48px)
+const CURSOR_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">' +
+    '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
+    "</svg>",
+)}`;
 
-// Cursor estàndard (24px) i gran (48px) per al pas 1
-const CURSOR_SVG_DATA_URL = makeCursorSvgUrl(24);
-const CURSOR_SVG_LARGE_URL = makeCursorSvgUrl(48);
 // Cursor destacat per a covers: 60px amb cercle groc semi-transparent al punt actiu
 const CURSOR_SVG_HIGHLIGHT_URL = `data:image/svg+xml,${encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24">' +
@@ -62,7 +57,7 @@ interface FocusedOptions {
   paddingY?: number;
   // Desplaçament del cursor respecte al centre de l'element. Default {x:35, y:35}.
   mouseOffset?: { x: number; y: number };
-  // URL del cursor SVG a injectar. Default: cursor estàndard 24px.
+  // URL del cursor SVG a injectar. Default: cursor estàndard 48px.
   cursorUrl?: string;
   // Mida del div cursor (px). Default 48.
   cursorSize?: number;
@@ -167,7 +162,7 @@ test.beforeAll(() => {
 });
 
 test(
-  "save-improvements-focused: captures contextuals centrades en el protagonista",
+  "download-pdf-focused: captures contextuals centrades en el botó de descàrrega PDF",
   async ({ page }) => {
     // Interceptar totes les crides a l'API d'ARASAAC i servir dades locals
     await page.route("**/api.arasaac.org/**", async (route) => {
@@ -244,44 +239,25 @@ test(
     );
     await page.waitForTimeout(1000);
 
+    // Navegar a la pàgina de vista mantenint l'estat Redux
+    await page.getByRole("tab", { name: /Vista/i }).click();
+
     // =============================================
-    // PAS 1 + COBERTA: Botó de pujar imatge pròpia
-    // Protagonista: botó d'upload dins PictogramSearch (a dins de PictEditModal)
-    // L'usuari veu el logo de SequenciAAC com a imatge del pictograma.
+    // VIEW PAGE - PAS 1 + COBERTA: Botó de descàrrega PDF
+    // Protagonista: botó "download pdf" (aria-label="download pdf")
     // =============================================
+    const pdfBtn = page.locator('[aria-label="download pdf"]');
+    await pdfBtn.waitFor({ state: "visible", timeout: 15000 });
+    await page.waitForTimeout(500);
 
-    // Clicar al pictograma per obrir el diàleg d'edició
-    const pictCard = page.locator('[data-testid="card-pictogram"]').first();
-    await pictCard.click();
-    await page.waitForTimeout(800);
-
-    // Esperar que el Dialog estigui obert
-    const dialog = page.getByRole("dialog");
-    await dialog.waitFor({ state: "visible", timeout: 10000 });
-
-    // Pujar el logo de SequenciAAC (favicon.png) com a imatge del pictograma.
-    // setInputFiles dispara el handleImageChange que converteix a base64.
-    const fileInput = dialog.locator('input[type="file"][accept="image/*"]');
-    await fileInput.setInputFiles(
-      path.join(process.cwd(), "public/favicon.png"),
-    );
-    await page.waitForTimeout(800);
-
-    // Localitzar el botó d'upload per aria-label.
-    // L'atribut aria-label directe evita ambigüitat amb l'<input> intern.
-    const uploadBtn = page
-      .locator('[aria-label="Pujar imatge des del dispositiu"]')
-      .first();
-    await uploadBtn.waitFor({ state: "visible", timeout: 10000 });
-
-    // Coberta carousel: target ~717×299px (ratio 2.40:1 per mobile)
-    // uploadBtn ~55×55px → paddingX=331 (width≈717), paddingY=(299-55)/2=122
+    // Coberta carousel: target ~700×290px (ratio ~2.4:1 apaïsada)
+    // pdfBtn ~46×46px → paddingX=(700-46)/2=327, paddingY=(290-46)/2=122
     await focusedScreenshot(
       page,
-      uploadBtn,
-      path.join(IMG_DIR, "save-improvements.png"),
+      pdfBtn,
+      path.join(IMG_DIR, "download-pdf.png"),
       {
-        paddingX: 331,
+        paddingX: 327,
         paddingY: 122,
         mouseOffset: { x: 0, y: 0 },
         cursorUrl: CURSOR_SVG_HIGHLIGHT_URL,
@@ -289,82 +265,38 @@ test(
       },
     );
 
-    // Pas 1: target ~680px ample; uploadBtn ~38px → paddingX=(680-38)/2=321
+    // Pas 1: target ~700×560px
+    // paddingX=327, paddingY=(560-46)/2=257
     await focusedScreenshot(
       page,
-      uploadBtn,
-      path.join(IMG_DIR, "save-improvements-step1.png"),
+      pdfBtn,
+      path.join(IMG_DIR, "download-pdf-step1.png"),
       {
-        paddingX: 321,
-        paddingY: 252,
+        paddingX: 327,
+        paddingY: 257,
         mouseOffset: { x: 0, y: 0 },
-        cursorUrl: CURSOR_SVG_LARGE_URL,
       },
     );
 
-    // Tancar el diàleg d'edició (botó Desa = últim botó contained del dialog)
-    const closeBtn = page.getByRole("button", { name: /Desa|Tanca|Close/i }).last();
-    await closeBtn.click();
-    await page.waitForTimeout(500);
-
     // =============================================
-    // PAS 2: Diàleg de guardar el fitxer
-    // Protagonista: el dialog sencer (checkboxes + nom)
+    // VIEW PAGE - PAS 2: Vista prèvia de la seqüència
+    // Protagonista: contenidor de previsualització (.preview-container)
     // =============================================
+    const previewContainer = page.locator(".preview-container");
+    await previewContainer.waitFor({ state: "visible", timeout: 10000 });
 
-    // Obrir el drawer de navegació principal (LogoMenu)
-    const menuBtn = page.getByRole("button", { name: /Menú principal/i });
-    await menuBtn.waitFor({ state: "visible", timeout: 10000 });
-    await menuBtn.click();
-    await page.waitForTimeout(600);
-
-    // Clicar el botó de descàrrega dins el drawer
-    const downloadBtn = page.getByRole("button", { name: /Descarrega/i });
-    await downloadBtn.waitFor({ state: "visible", timeout: 10000 });
-    await downloadBtn.click();
-    await page.waitForTimeout(800);
-
-    // Esperar que el dialog de descàrrega estigui obert
-    const saveDialog = page.getByRole("dialog");
-    await saveDialog.waitFor({ state: "visible", timeout: 10000 });
-
-    // Pas 2: crop ~700×560 centrat en el dialog de guardar
+    // Pas 2: target ~700×560px
+    // previewContainer té dimensions visuals (escala reduïda): ~500px ample, ~400px alt
+    // paddingX=(700-500)/2=100, paddingY=(560-400)/2=80
     await focusedScreenshot(
       page,
-      saveDialog,
-      path.join(IMG_DIR, "save-improvements-step2.png"),
-      { paddingX: 122, paddingY: 125, mouseOffset: { x: 20, y: 20 } },
-    );
-
-    // Tancar el dialog de guardar
-    await page.keyboard.press("Escape");
-    await page.waitForTimeout(500);
-
-    // =============================================
-    // PAS 3: Controls de mida i espaiat a la pàgina de vista
-    // Protagonista: Accordion amb els sliders de sizePict i pictSpaceBetween
-    // =============================================
-
-    // Navegar a la pàgina de vista mantenint l'estat Redux
-    await page.getByRole("tab", { name: /Vista/i }).click();
-
-    // Esperar que el slider de mida sigui visible (indica que la pàgina ha carregat)
-    const sizeSlider = page.getByRole("slider", { name: /Mida/i });
-    await sizeSlider.waitFor({ state: "visible", timeout: 15000 });
-    await page.waitForTimeout(1000);
-
-    // L'acordió obert per defecte conté els sliders i botons d'alineació
-    const accordion = page
-      .locator(".MuiAccordionDetails-root")
-      .filter({ has: page.getByRole("slider", { name: /Mida/i }) });
-    await accordion.waitFor({ state: "visible", timeout: 10000 });
-
-    // Pas 3: crop ~700×560 centrat en l'acordió de configuració
-    await focusedScreenshot(
-      page,
-      accordion,
-      path.join(IMG_DIR, "save-improvements-step3.png"),
-      { paddingX: 200, paddingY: 168, mouseOffset: { x: 20, y: 20 } },
+      previewContainer,
+      path.join(IMG_DIR, "download-pdf-step2.png"),
+      {
+        paddingX: 100,
+        paddingY: 80,
+        mouseOffset: { x: 30, y: 30 },
+      },
     );
   },
 );
@@ -374,7 +306,7 @@ test.afterEach(async ({ page }, testInfo) => {
   if (testInfo.status === "passed") {
     const video = page.video();
     if (video) {
-      const destPath = path.join(VIDEO_DIR, "save-improvements-guide.webm");
+      const destPath = path.join(VIDEO_DIR, "download-pdf-guide.webm");
       try {
         await video.saveAs(destPath);
         console.log(`Vídeo desat a: ${destPath}`);

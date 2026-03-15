@@ -2,6 +2,7 @@ import { Box, Button, Divider, Stack, Tooltip } from "@mui/material";
 import { useCallback, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
+import { BsFilePdf } from "react-icons/bs";
 import { MdScreenRotation } from "react-icons/md";
 import { useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
@@ -17,6 +18,7 @@ import { useFullscreen } from "@features/print/hooks/useFullScreen";
 import { useViewManager, useAuthorManager } from "@features/print/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { usePrintStyles, printWithOrientation } from "@features/print/hooks/usePrintStyles";
+import { useDownloadPdf } from "@/hooks/useDownloadPdf";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import { SequenceViewSettings, SequenceAlignment } from "@/types/document";
 import {
@@ -126,6 +128,9 @@ const ViewSequencesSettings = ({
 
   // Gestió dels estils d'impressió dinàmics
   usePrintStyles(pageFormat);
+
+  // Gestió de la descàrrega de PDF
+  const { downloadPdf, isGenerating } = useDownloadPdf(pageFormat);
 
   // Determinar l'escala activa
   const activeScale = isInFullscreen ? currentScale : calculatedScale;
@@ -298,6 +303,23 @@ const ViewSequencesSettings = ({
                     >
                       <AiFillPrinter />
                     </Button>
+                  </Tooltip>
+                  <Tooltip
+                    title={intl.formatMessage(messages.tooltipDownloadPdf)}
+                  >
+                    {/* span necessari: Tooltip requereix un fill que accepti events DOM; Button disabled no els reenvia */}
+                    <span>
+                      <Button
+                        aria-label={"download pdf"}
+                        variant="text"
+                        color="primary"
+                        sx={{ fontSize: "2rem" }}
+                        onClick={downloadPdf}
+                        disabled={isGenerating}
+                      >
+                        <BsFilePdf />
+                      </Button>
+                    </span>
                   </Tooltip>
                 </>
               ) : (
