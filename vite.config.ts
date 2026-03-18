@@ -5,11 +5,12 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: { chunkSizeWarningLimit: 2000 },
   plugins: [
     react(),
     i18n({
       include: "src/languages/**",
-      locales: ["en", "ca", "es"],
+      locales: ["en", "ca", "es", "fr", "it"],
     }),
   ],
   resolve: {
