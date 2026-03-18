@@ -57,7 +57,12 @@ const PictogramAmount = ({
           </Typography>
         </FormLabel>
 
-        <Tooltip title={intl.formatMessage(messages.subtract)}>
+        <Tooltip
+          title={intl.formatMessage(messages.subtract)}
+          style={{
+            visibility: amountSequence > 0 ? "visible" : "hidden",
+          }}
+        >
           <span>
             <IconButton
               color={variant ? "primary" : "secondary"}

@@ -52,7 +52,10 @@ const TabsSequences = (): React.ReactElement => {
   ));
 
   const removeButton = (
-    <Tooltip title="Eliminar última seqüència">
+    <Tooltip
+      title="Eliminar última seqüència"
+      style={{ visibility: amount > 1 ? "visible" : "hidden" }}
+    >
       <span>
         <IconButton
           color="secondary"
@@ -72,11 +75,7 @@ const TabsSequences = (): React.ReactElement => {
   const addButton = (
     <Tooltip title="Afegir seqüència">
       <span>
-        <IconButton
-          color="secondary"
-          onClick={handleAddSequence}
-          size="small"
-        >
+        <IconButton color="secondary" onClick={handleAddSequence} size="small">
           <AiFillPlusCircle size={isMobile ? 20 : 24} />
         </IconButton>
       </span>
