@@ -1035,5 +1035,8 @@
   },
   "view.welcome.footer.credits": {
     "defaultMessage": "Crediti"
+  },
+  "view.editSequences.sequences.label": {
+    "defaultMessage": "Sequenze"
   }
 }
