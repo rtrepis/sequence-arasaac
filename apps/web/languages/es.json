@@ -1038,5 +1038,85 @@
   },
   "view.editSequences.sequences.label": {
     "defaultMessage": "Secuencias"
+  },
+  "features.backend.auth.loginTitle": {
+    "defaultMessage": "Inicia sesión",
+    "description": "Títol del formulari de login"
+  },
+  "features.backend.auth.registerTitle": {
+    "defaultMessage": "Crea una cuenta",
+    "description": "Títol del formulari de registre"
+  },
+  "features.backend.auth.email": {
+    "defaultMessage": "Correo electrónico",
+    "description": "Etiqueta del camp email"
+  },
+  "features.backend.auth.password": {
+    "defaultMessage": "Contraseña",
+    "description": "Etiqueta del camp contrasenya"
+  },
+  "features.backend.auth.submitLogin": {
+    "defaultMessage": "Entrar",
+    "description": "Botó per enviar el formulari de login"
+  },
+  "features.backend.auth.submitRegister": {
+    "defaultMessage": "Registrarse",
+    "description": "Botó per enviar el formulari de registre"
+  },
+  "features.backend.auth.toggleToRegister": {
+    "defaultMessage": "¿No tienes cuenta? Regístrate",
+    "description": "Enllaç per canviar al formulari de registre"
+  },
+  "features.backend.auth.toggleToLogin": {
+    "defaultMessage": "¿Ya tienes cuenta? Inicia sesión",
+    "description": "Enllaç per tornar al formulari de login"
+  },
+  "features.backend.auth.close": {
+    "defaultMessage": "Cerrar",
+    "description": "Botó per tancar el modal d'autenticació"
+  },
+  "features.backend.auth.showPassword": {
+    "defaultMessage": "Mostrar contraseña",
+    "description": "Etiqueta ARIA per al botó de mostrar/amagar contrasenya"
+  },
+  "features.backend.auth.loginItem": {
+    "defaultMessage": "Inicia sesión",
+    "description": "Ítem del drawer per obrir el modal de login"
+  },
+  "features.backend.auth.saveDocument": {
+    "defaultMessage": "Guardar en la nube",
+    "description": "Ítem del drawer per desar el document al backend"
+  },
+  "features.backend.auth.loadDocument": {
+    "defaultMessage": "Cargar desde la nube",
+    "description": "Ítem del drawer per carregar un document del backend"
+  },
+  "features.backend.auth.logout": {
+    "defaultMessage": "Cerrar sesión",
+    "description": "Ítem del drawer per tancar la sessió"
+  },
+  "features.backend.auth.documentSaved": {
+    "defaultMessage": "Documento guardado en la nube",
+    "description": "Missatge de confirmació quan el document es desa al backend"
+  },
+  "features.backend.auth.documentLoaded": {
+    "defaultMessage": "Documento cargado",
+    "description": "Missatge de confirmació quan es carrega un document del backend"
+  },
+  "features.backend.auth.loadDocumentTitle": {
+    "defaultMessage": "Cargar un documento",
+    "description": "Títol del modal de càrrega de documents del backend"
+  },
+  "features.backend.auth.noDocuments": {
+    "defaultMessage": "No tienes ningún documento guardado",
+    "description": "Missatge quan l'usuari no té documents al backend"
+  },
+  "features.backend.auth.deleteDocument": {
+    "defaultMessage": "Eliminar",
+    "description": "Botó per eliminar un document del backend"
+  },
+  "features.backend.auth.loadAction": {
+    "defaultMessage": "Cargar",
+    "description": "Botó per carregar un document seleccionat del backend"
   }
 }
