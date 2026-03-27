@@ -1,15 +1,17 @@
 {
   "name": "web",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "private": true,
   "dependencies": {
-    "@sequence-arasaac/shared-types": "*",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^6.4.1",
     "@reduxjs/toolkit": "^1.9.3",
+    "@sequence-arasaac/shared-types": "*",
     "axios": "^1.3.4",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-ga4": "^2.1.0",
@@ -28,7 +30,7 @@
     "lint": "eslint ./src",
     "test": "echo 'Tests: WIP' && exit 0",
     "test-coverage": "echo 'Coverage: WIP' && exit 0",
-    "prepare": "npm run compile -- languages/en.json --ast --out-file src/languages/en.json && npm run compile -- languages/ca.json --ast --out-file src/languages/ca.json && npm run compile -- languages/es.json --ast --out-file src/languages/es.json",
+    "prepare": "node scripts/compile-languages.mjs",
     "extract": "formatjs extract",
     "compile": "formatjs compile"
   },

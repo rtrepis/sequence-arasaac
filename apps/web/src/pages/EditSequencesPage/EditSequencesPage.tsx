@@ -7,6 +7,7 @@ import { FeedbackProgress } from "@/context/FeedbackContext";
 import { FormattedMessage } from "react-intl";
 import { useAppSelector } from "../../app/hooks";
 import useSearchPictogram from "../../features/pictogram/hooks/useSearchPictogram";
+import { messages } from "./EditSequencesPage.lang";
 
 const EditSequencesPage = (): React.ReactElement => {
   const [info, setInfo] = useState(false);
@@ -43,7 +44,7 @@ const EditSequencesPage = (): React.ReactElement => {
           color="primary"
           sx={{ whiteSpace: "nowrap", mr: { xs: 1, md: 0 } }}
         >
-          Seqüencies
+          <FormattedMessage {...messages.sequences} />
         </Typography>
         <TabsSequences />
       </Stack>

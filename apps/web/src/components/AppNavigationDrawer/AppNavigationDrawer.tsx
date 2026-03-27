@@ -4,6 +4,8 @@ import {
   AppBar,
   Avatar,
   Box,
+  Button,
+  ButtonGroup,
   Container,
   Dialog,
   Divider,
@@ -50,11 +52,15 @@ import {
   loadDocumentSaacActionCreator,
   saveDocumentThunk,
 } from "@features/sequence/store/documentSlice";
-import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
+import {
+  updateDefaultSettingsActionCreator,
+  updateLangSettingsActionCreator,
+} from "@features/user-settings/store/uiSlice";
+import { LangsApp } from "../../types/ui";
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
 import { useFeedback } from "../../context/FeedbackContext";
-import useAraSaac from "../../hooks/useAraSaac";
+import useSearchPictogram from "@features/pictogram/hooks/useSearchPictogram";
 import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
 
 // Idiomes suportats per a la navegació
@@ -92,7 +98,7 @@ const AppNavigationDrawer = ({
   const dispatch = useAppDispatch();
   const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
   const { keywords } = useAppSelector((state) => state.ui.lang);
-  const { getAllKeyWordsForLanguages } = useAraSaac();
+  const { getAllKeyWordsForLanguages } = useSearchPictogram();
 
   // Estat d'autenticació
   const { userEmail, accessToken } = useAppSelector((state) => state.auth);

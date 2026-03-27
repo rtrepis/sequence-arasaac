@@ -239,18 +239,6 @@
       "value": "Pictogram guide"
     }
   ],
-  "components.defaultSettings.saveSuccess": [
-    {
-      "type": 0,
-      "value": "Settings saved to server"
-    }
-  ],
-  "components.defaultSettings.saveError": [
-    {
-      "type": 0,
-      "value": "Error saving settings to server"
-    }
-  ],
   "components.defaultSettings.settings.title": [
     {
       "type": 0,
@@ -1631,6 +1619,12 @@
       "value": "Top"
     }
   ],
+  "view.editSequences.sequences.label": [
+    {
+      "type": 0,
+      "value": "Sequences"
+    }
+  ],
   "view.welcome.arcadeLink": [
     {
       "type": 0,
@@ -1666,25 +1660,5 @@
       "type": 0,
       "value": "Start"
     }
-  ],
-  "features.backend.auth.loginTitle": [{ "type": 0, "value": "Sign in" }],
-  "features.backend.auth.registerTitle": [{ "type": 0, "value": "Create account" }],
-  "features.backend.auth.email": [{ "type": 0, "value": "Email address" }],
-  "features.backend.auth.password": [{ "type": 0, "value": "Password" }],
-  "features.backend.auth.submitLogin": [{ "type": 0, "value": "Sign in" }],
-  "features.backend.auth.submitRegister": [{ "type": 0, "value": "Register" }],
-  "features.backend.auth.toggleToRegister": [{ "type": 0, "value": "No account? Sign up" }],
-  "features.backend.auth.toggleToLogin": [{ "type": 0, "value": "Already have an account? Sign in" }],
-  "features.backend.auth.close": [{ "type": 0, "value": "Close" }],
-  "features.backend.auth.showPassword": [{ "type": 0, "value": "Show password" }],
-  "features.backend.auth.loginItem": [{ "type": 0, "value": "Sign in" }],
-  "features.backend.auth.saveDocument": [{ "type": 0, "value": "Save to cloud" }],
-  "features.backend.auth.loadDocument": [{ "type": 0, "value": "Load from cloud" }],
-  "features.backend.auth.logout": [{ "type": 0, "value": "Sign out" }],
-  "features.backend.auth.documentSaved": [{ "type": 0, "value": "Document saved to cloud" }],
-  "features.backend.auth.documentLoaded": [{ "type": 0, "value": "Document loaded" }],
-  "features.backend.auth.loadDocumentTitle": [{ "type": 0, "value": "Load a document" }],
-  "features.backend.auth.noDocuments": [{ "type": 0, "value": "You have no saved documents" }],
-  "features.backend.auth.deleteDocument": [{ "type": 0, "value": "Delete" }],
-  "features.backend.auth.loadAction": [{ "type": 0, "value": "Load" }]
+  ]
 }

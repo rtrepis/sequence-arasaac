@@ -2,145 +2,145 @@
   "changelog.category.correccio": [
     {
       "type": 0,
-      "value": "Correcció"
+      "value": "Correction"
     }
   ],
   "changelog.category.millora": [
     {
       "type": 0,
-      "value": "Millora"
+      "value": "Amélioration"
     }
   ],
   "changelog.category.nova": [
     {
       "type": 0,
-      "value": "Nova"
+      "value": "Nouveau"
     }
   ],
   "changelog.page.title": [
     {
       "type": 0,
-      "value": "Novetats"
+      "value": "Nouveautés"
     }
   ],
   "changelog.readMore": [
     {
       "type": 0,
-      "value": "Llegir més"
+      "value": "Lire la suite"
     }
   ],
   "component.settingCardBorder.borderIn.title": [
     {
       "type": 0,
-      "value": "Marc interior"
+      "value": "Bordure intérieure"
     }
   ],
   "component.settingCardBorder.borderOut.title": [
     {
       "type": 0,
-      "value": "Marc exterior"
+      "value": "Bordure extérieure"
     }
   ],
   "component.settingCardFontGroup.color.title": [
     {
       "type": 0,
-      "value": "Color"
+      "value": "Couleur"
     }
   ],
   "component.settingCardFontGroup.font.title": [
     {
       "type": 0,
-      "value": "Tipografia"
+      "value": "Typographie"
     }
   ],
   "component.settingCardFontGroup.numberFont.title": [
     {
       "type": 0,
-      "value": "Font dels números"
+      "value": "Police des numéros"
     }
   ],
   "components.appNavigationDrawer.download": [
     {
       "type": 0,
-      "value": "Descarrega"
+      "value": "Télécharger"
     }
   ],
   "components.appNavigationDrawer.editView": [
     {
       "type": 0,
-      "value": "Edita"
+      "value": "Éditer"
     }
   ],
   "components.appNavigationDrawer.langSelector": [
     {
       "type": 0,
-      "value": "Idioma"
+      "value": "Langue"
     }
   ],
   "components.appNavigationDrawer.load": [
     {
       "type": 0,
-      "value": "Carrega"
+      "value": "Charger"
     }
   ],
   "components.appNavigationDrawer.news": [
     {
       "type": 0,
-      "value": "Novetats"
+      "value": "Nouveautés"
     }
   ],
   "components.appNavigationDrawer.openMenu": [
     {
       "type": 0,
-      "value": "Obrir menú"
+      "value": "Ouvrir le menu"
     }
   ],
   "components.appNavigationDrawer.previewView": [
     {
       "type": 0,
-      "value": "Previsualitza"
+      "value": "Aperçu"
     }
   ],
   "components.appNavigationDrawer.settings": [
     {
       "type": 0,
-      "value": "Configuració"
+      "value": "Paramètres"
     }
   ],
   "components.appNavigationDrawer.settingsClose": [
     {
       "type": 0,
-      "value": "Tancar"
+      "value": "Fermer"
     }
   ],
   "components.appNavigationDrawer.settingsTitle": [
     {
       "type": 0,
-      "value": "Configuració per defecte"
+      "value": "Paramètres par défaut"
     }
   ],
   "components.appNavigationDrawer.welcome": [
     {
       "type": 0,
-      "value": "Inici"
+      "value": "Accueil"
     }
   ],
   "components.barNavigation.edit.title": [
     {
       "type": 0,
-      "value": "Editar"
+      "value": "Éditer"
     }
   ],
   "components.barNavigation.mainNavigation": [
     {
       "type": 0,
-      "value": "Navegació principal"
+      "value": "Navigation principale"
     }
   ],
   "components.barNavigation.skipToContent": [
     {
       "type": 0,
-      "value": "Salta al contingut principal"
+      "value": "Aller au contenu principal"
     }
   ],
   "components.barNavigation.title": [
@@ -152,415 +152,415 @@
   "components.barNavigation.view.title": [
     {
       "type": 0,
-      "value": "Vista"
+      "value": "Vue"
     }
   ],
   "components.barNavigation.welcome.title": [
     {
       "type": 0,
-      "value": "Benvingut"
+      "value": "Accueil"
     }
   ],
   "components.buttonWithFileLoad.load.label": [
     {
       "type": 0,
-      "value": "Carregar"
+      "value": "Charger"
     }
   ],
   "components.buttonWithModalDownload.defaultSettings.label": [
     {
       "type": 0,
-      "value": "Configuració predeterminada"
+      "value": "Paramètres par défaut"
     }
   ],
   "components.buttonWithModalDownload.download.label": [
     {
       "type": 0,
-      "value": "Descarregar"
+      "value": "Télécharger"
     }
   ],
   "components.buttonWithModalDownload.filename.label": [
     {
       "type": 0,
-      "value": "Nom del fitxer"
+      "value": "Nom du fichier"
     }
   ],
   "components.buttonWithModalDownload.save.title": [
     {
       "type": 0,
-      "value": "Desa"
+      "value": "Enregistrer"
     }
   ],
   "components.buttonWithModalDownload.saveHelper.label": [
     {
       "type": 0,
-      "value": "Desa la seqüència i/o la configuració per defecte, i carrega-les més tard."
+      "value": "Enregistrez la séquence et/ou les paramètres par défaut, et rechargez-les plus tard."
     }
   ],
   "components.buttonWithModalDownload.sequence.label": [
     {
       "type": 0,
-      "value": "Seqüència"
+      "value": "Séquence"
     }
   ],
   "components.copyRight": [
     {
       "type": 0,
-      "value": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA)."
+      "value": "Fait avec : SequenciAAC - Auteur des pictogrammes : Sergio Palao. Origine : ARASAAC (http://www.arasaac.org). Licence : CC (BY-NC-SA)."
     }
   ],
   "components.copyRightDial.auth.label": [
     {
       "type": 0,
-      "value": "Disseny i drets reservats: Ramon Trepat i AraSaac. seqsaac@gmail.com"
+      "value": "Design et droits réservés : Ramon Trepat et AraSaac. seqsaac@gmail.com"
     }
   ],
   "components.copyRightDial.license.label": [
     {
       "type": 0,
-      "value": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA)."
+      "value": "Fait avec : SequenciAAC - Auteur des pictogrammes : Sergio Palao. Origine : ARASAAC (http://www.arasaac.org). Licence : CC (BY-NC-SA)."
     }
   ],
   "components.defaultSettings.close": [
     {
       "type": 0,
-      "value": "tancar"
+      "value": "fermer"
     }
   ],
   "components.defaultSettings.download": [
     {
       "type": 0,
-      "value": "Desa la configuració en un fitxer local"
+      "value": "Enregistrer les paramètres dans un fichier local"
     }
   ],
   "components.defaultSettings.pictGuide": [
     {
       "type": 0,
-      "value": "Pictograma de guia"
+      "value": "Pictogramme guide"
     }
   ],
   "components.defaultSettings.settings.title": [
     {
       "type": 0,
-      "value": "Configuracions per defecte"
+      "value": "Paramètres par défaut"
     }
   ],
   "components.defaultSettings.upload": [
     {
       "type": 0,
-      "value": "Carrega la configuració des d'un fitxer local"
+      "value": "Charger les paramètres depuis un fichier local"
     }
   ],
   "components.logoMenu.download": [
     {
       "type": 0,
-      "value": "Descarregar"
+      "value": "Télécharger"
     }
   ],
   "components.logoMenu.editView": [
     {
       "type": 0,
-      "value": "Editar"
+      "value": "Éditer"
     }
   ],
   "components.logoMenu.load": [
     {
       "type": 0,
-      "value": "Carregar"
+      "value": "Charger"
     }
   ],
   "components.logoMenu.menuAriaLabel": [
     {
       "type": 0,
-      "value": "Menú principal"
+      "value": "Menu principal"
     }
   ],
   "components.logoMenu.previewView": [
     {
       "type": 0,
-      "value": "Previsualitzar"
+      "value": "Aperçu"
     }
   ],
   "components.logoMenu.settings": [
     {
       "type": 0,
-      "value": "Configuració"
+      "value": "Paramètres"
     }
   ],
   "components.magicSearch.button.": [
     {
       "type": 0,
-      "value": "A cercar"
+      "value": "Rechercher"
     }
   ],
   "components.magicSearch.helperText.": [
     {
       "type": 0,
-      "value": "Escriviu les paraules en la seqüència entre comes i premeu Retorn o feu clic a la lupa quan hàgiu acabat. Exemple: noi, posar, cinturó de seguretat."
+      "value": "Tapez les mots de la séquence séparés par des virgules et appuyez sur Entrée ou cliquez sur la loupe une fois terminé. Exemple : garçon, mettre, ceinture de sécurité."
     }
   ],
   "components.magicSearch.label": [
     {
       "type": 0,
-      "value": "Cerca màgica"
+      "value": "Recherche magique"
     }
   ],
   "components.magicSearch.sample.": [
     {
       "type": 0,
-      "value": "Exemple: Nen, posar, el cinturó de seguretat."
+      "value": "Exemple : Garçon, mettre, la ceinture de sécurité."
     }
   ],
   "components.newsNavBar.langSelector": [
     {
       "type": 0,
-      "value": "Idioma"
+      "value": "Langue"
     }
   ],
   "components.newsNavBar.mainNavigation": [
     {
       "type": 0,
-      "value": "Navegació principal"
+      "value": "Navigation principale"
     }
   ],
   "components.newsNavBar.news": [
     {
       "type": 0,
-      "value": "Novetats"
+      "value": "Nouveautés"
     }
   ],
   "components.newsNavBar.openMenu": [
     {
       "type": 0,
-      "value": "Obrir menú de navegació"
+      "value": "Ouvrir le menu de navigation"
     }
   ],
   "components.newsNavBar.skipToContent": [
     {
       "type": 0,
-      "value": "Salta al contingut principal"
+      "value": "Aller au contenu principal"
     }
   ],
   "components.newsNavBar.start": [
     {
       "type": 0,
-      "value": "Crea una seqüència"
+      "value": "Créer une séquence"
     }
   ],
   "components.newsNavBar.welcome": [
     {
       "type": 0,
-      "value": "Inici"
+      "value": "Accueil"
     }
   ],
   "components.pictEdit.close": [
     {
       "type": 0,
-      "value": "Tancar"
+      "value": "Fermer"
     }
   ],
   "components.pictEdit.delete": [
     {
       "type": 0,
-      "value": "Eliminar"
+      "value": "Supprimer"
     }
   ],
   "components.pictEdit.modal.description": [
     {
       "type": 0,
-      "value": "Tu pots editar els pictogrames"
+      "value": "Vous pouvez modifier les pictogrammes"
     }
   ],
   "components.pictEdit.modal.label": [
     {
       "type": 0,
-      "value": "Editar Pictograma"
+      "value": "Modifier Pictogramme"
     }
   ],
   "components.pictEdit.reset": [
     {
       "type": 0,
-      "value": "Valors per defecte"
+      "value": "Valeurs par défaut"
     }
   ],
   "components.pictEditSettings.settings.label": [
     {
       "type": 0,
-      "value": "Configuracions del Pictograma"
+      "value": "Paramètres du Pictogramme"
     }
   ],
   "components.pictogramAmount": [
     {
       "type": 0,
-      "value": "Pictogrames:"
+      "value": "Pictogrammes :"
     }
   ],
   "components.pictogramAmount.Subtract.label": [
     {
       "type": 0,
-      "value": "Treure pictograma"
+      "value": "Retirer un pictogramme"
     }
   ],
   "components.pictogramAmount.add.label": [
     {
       "type": 0,
-      "value": "Afegir pictograma buit"
+      "value": "Ajouter un pictogramme vide"
     }
   ],
   "components.pictogramAmount.helperText": [
     {
       "type": 0,
-      "value": "Inseriu o extreu un pictograma al final de la seqüència. Trobareu més funcions amb el botó dret del ratolí o premeu llargament als mòbils."
+      "value": "Insérez ou retirez un pictogramme à la fin de la séquence. Vous trouverez plus de fonctions avec le clic droit de la souris ou un appui long sur les appareils mobiles."
     }
   ],
   "components.pictogramAmount.info": [
     {
       "type": 0,
-      "value": "Veure més informació"
+      "value": "Voir plus d'informations"
     }
   ],
   "components.pictogramCard.pictogram": [
     {
       "type": 0,
-      "value": "Imatge pictograma"
+      "value": "Image du pictogramme"
     }
   ],
   "components.pictogramSearch.alert": [
     {
       "type": 0,
-      "value": "No s'ha trobat cap pictograma, amb aquesta paraula - Intenta-ho amb una altra paraula!"
+      "value": "Aucun pictogramme trouvé avec ce mot - Essayez un autre mot !"
     }
   ],
   "components.pictogramSearch.empty": [
     {
       "type": 0,
-      "value": "Buit"
+      "value": "Vide"
     }
   ],
   "components.pictogramSearch.helperText": [
     {
       "type": 0,
-      "value": "Cercador de Pictogrames"
+      "value": "Moteur de recherche de pictogrammes"
     }
   ],
   "components.pictogramSearch.label": [
     {
       "type": 0,
-      "value": "Cercar"
+      "value": "Rechercher"
     }
   ],
   "components.pictogramSearch.minus": [
     {
       "type": 0,
-      "value": "Treure pictograma"
+      "value": "Retirer un pictogramme"
     }
   ],
   "components.pictogramSearch.pictogram": [
     {
       "type": 0,
-      "value": "Pictograma"
+      "value": "Pictogramme"
     }
   ],
   "components.pictogramSearch.plus": [
     {
       "type": 0,
-      "value": "Inserir pictograma"
+      "value": "Insérer un pictogramme"
     }
   ],
   "components.pictogramSearch.uploadImage": [
     {
       "type": 0,
-      "value": "Pujar imatge des del dispositiu"
+      "value": "Téléverser une image depuis l'appareil"
     }
   ],
   "components.sequenceAuthor": [
     {
       "type": 0,
-      "value": "Autor de la seqüència:"
+      "value": "Auteur de la séquence :"
     }
   ],
   "components.settingCard.Radius.title": [
     {
       "type": 0,
-      "value": "Radi"
+      "value": "Rayon"
     }
   ],
   "components.settingCard.Size.title": [
     {
       "type": 0,
-      "value": "Mida"
+      "value": "Taille"
     }
   ],
   "components.settingCard.applyAll.label": [
     {
       "type": 0,
-      "value": "Aplicar tots"
+      "value": "Appliquer à tous"
     }
   ],
   "components.settingCard.color.title": [
     {
       "type": 0,
-      "value": "Color"
+      "value": "Couleur"
     }
   ],
   "components.settingCard.corss.title": [
     {
       "type": 0,
-      "value": "Creu/X"
+      "value": "Croix/X"
     }
   ],
   "components.settingCard.customText.label": [
     {
       "type": 0,
-      "value": "Text personalitzat"
+      "value": "Texte personnalisé"
     }
   ],
   "components.settingCard.fontSize.label": [
     {
       "type": 0,
-      "value": "Mida"
+      "value": "Taille"
     }
   ],
   "components.settingCard.numbered.title": [
     {
       "type": 0,
-      "value": "Numeració"
+      "value": "Numérotation"
     }
   ],
   "components.settingCardBorder.fitzgeraldKey.label": [
     {
       "type": 0,
-      "value": "Clau Fitzgerald"
+      "value": "Clé Fitzgerald"
     }
   ],
   "components.settingCardBorder.selected.label": [
     {
       "type": 0,
-      "value": "Selecció"
+      "value": "Sélection"
     }
   ],
   "components.settingCardBorder.withoutBorder.label": [
     {
       "type": 0,
-      "value": "Sense línia"
+      "value": "Sans bordure"
     }
   ],
   "components.toggleButtonEditViewPages.edit.title": [
     {
       "type": 0,
-      "value": "Editar"
+      "value": "Éditer"
     }
   ],
   "components.toggleButtonEditViewPages.view.title": [
     {
       "type": 0,
-      "value": "Vista"
+      "value": "Vue"
     }
   ],
   "context.feedback.applyAll.success": [
     {
       "type": 0,
-      "value": "Aplicat a "
+      "value": "Appliqué à "
     },
     {
       "type": 1,
@@ -568,31 +568,31 @@
     },
     {
       "type": 0,
-      "value": " pictogrames"
+      "value": " pictogrammes"
     }
   ],
   "context.feedback.load.error": [
     {
       "type": 0,
-      "value": "Error carregant el fitxer"
+      "value": "Erreur lors du chargement du fichier"
     }
   ],
   "context.feedback.load.success": [
     {
       "type": 0,
-      "value": "Fitxer carregat correctament"
+      "value": "Fichier chargé avec succès"
     }
   ],
   "context.feedback.loading": [
     {
       "type": 0,
-      "value": "Carregant..."
+      "value": "Chargement..."
     }
   ],
   "context.feedback.save.success": [
     {
       "type": 0,
-      "value": "Fitxer guardat correctament"
+      "value": "Fichier enregistré avec succès"
     }
   ],
   "context.feedback.search.complete": [
@@ -602,631 +602,631 @@
     },
     {
       "type": 0,
-      "value": " pictogrames afegits"
+      "value": " pictogrammes ajoutés"
     }
   ],
   "context.feedback.search.error": [
     {
       "type": 0,
-      "value": "Error cercant pictogrames"
+      "value": "Erreur lors de la recherche de pictogrammes"
     }
   ],
   "context.feedback.search.loading": [
     {
       "type": 0,
-      "value": "Cercant pictogrames..."
+      "value": "Recherche de pictogrammes..."
     }
   ],
   "news.articleNavigation": [
     {
       "type": 0,
-      "value": "Navegació entre articles"
+      "value": "Navigation entre articles"
     }
   ],
   "news.back.button": [
     {
       "type": 0,
-      "value": "Tornar"
+      "value": "Retour"
     }
   ],
   "news.download-pdf.content": [
     {
       "type": 0,
-      "value": "Des de la pàgina de visualització, fes clic al nou botó PDF de la barra d'eines (al costat del botó d'imprimir) per generar i descarregar un fitxer PDF de la teva seqüència, llest per compartir o arxivar."
+      "value": "Depuis la page de visualisation, cliquez sur le nouveau bouton PDF dans la barre d'outils (à côté du bouton d'impression) pour générer et télécharger un PDF de votre séquence."
     }
   ],
   "news.download-pdf.step1.alt": [
     {
       "type": 0,
-      "value": "Barra d'eines de la pàgina de vista amb el nou botó de PDF ressaltat"
+      "value": "Barre d'outils avec le nouveau bouton PDF mis en évidence"
     }
   ],
   "news.download-pdf.step1.description": [
     {
       "type": 0,
-      "value": "A la barra superior de la pàgina de vista trobaràs el nou botó PDF (icona de document) al costat dels botons d'orientació i d'imprimir. Clica'l per iniciar la descàrrega."
+      "value": "Dans la barre supérieure de la page de visualisation, vous trouverez le nouveau bouton PDF (icône de document) à côté des boutons d'orientation et d'impression. Cliquez pour démarrer le téléchargement."
     }
   ],
   "news.download-pdf.step2.alt": [
     {
       "type": 0,
-      "value": "Vista prèvia de la seqüència de pictogrames que es descarregarà com a PDF"
+      "value": "Aperçu de la séquence de pictogrammes qui sera téléchargée en PDF"
     }
   ],
   "news.download-pdf.step2.description": [
     {
       "type": 0,
-      "value": "El PDF generat conté exactament el que veus a la previsualització: els pictogrames amb la mida, l'espaiat i l'alineació que hagis configurat. Pots compartir-lo per correu o guardar-lo al dispositiu."
+      "value": "Le PDF contient exactement ce que vous voyez dans l'aperçu : les pictogrammes avec la taille, l'espacement et l'alignement configurés. Vous pouvez le partager par e-mail ou le sauvegarder."
     }
   ],
   "news.download-pdf.summary": [
     {
       "type": 0,
-      "value": "Ara pots descarregar la seqüència directament com a fitxer PDF, sense passar pel diàleg d'impressió."
+      "value": "Vous pouvez maintenant télécharger la séquence directement en PDF, sans ouvrir la boîte de dialogue d'impression."
     }
   ],
   "news.download-pdf.title": [
     {
       "type": 0,
-      "value": "Descarrega la seqüència en PDF"
+      "value": "Télécharger la séquence en PDF"
     }
   ],
   "news.logo-menu.content": [
     {
       "type": 0,
-      "value": "Sabies que el logo de SequenciAAC és un botó? Clica'l per desplegar el menú de navegació principal, des d'on pots accedir a totes les pàgines i funcions de l'aplicació."
+      "value": "Saviez-vous que le logo de SequenciAAC est un bouton ? Cliquez dessus pour ouvrir le menu de navigation principal, depuis lequel vous pouvez accéder à toutes les pages et fonctions de l'application."
     }
   ],
   "news.logo-menu.step1.alt": [
     {
       "type": 0,
-      "value": "Secció de navegació del menú amb els accessos Inici, Novetats, Edita i Previsualitza"
+      "value": "Section de navigation du menu avec les liens Accueil, Nouveautés, Éditer et Aperçu"
     }
   ],
   "news.logo-menu.step1.description": [
     {
       "type": 0,
-      "value": "La primera secció del menú conté els accessos directes a totes les pàgines: Inici, Novetats (on trobaràs totes les actualitzacions), Edita (per crear les teves seqüències) i Previsualitza (per veure-les i imprimir-les)."
+      "value": "La première section contient des raccourcis vers toutes les pages : Accueil, Nouveautés (où vous trouverez toutes les mises à jour), Éditer (pour créer vos séquences) et Aperçu (pour les visualiser et les imprimer)."
     }
   ],
   "news.logo-menu.step2.alt": [
     {
       "type": 0,
-      "value": "Secció de fitxers del menú amb les opcions Descarrega i Carrega"
+      "value": "Section de fichiers du menu avec les options Télécharger et Charger"
     }
   ],
   "news.logo-menu.step2.description": [
     {
       "type": 0,
-      "value": "Des d'aquí pots gestionar els fitxers de les teves seqüències: Descarrega desa la seqüència actual en un fitxer al teu dispositiu, i Carrega recupera una seqüència que havies desat anteriorment."
+      "value": "Depuis ici vous pouvez gérer vos fichiers de séquences : Télécharger enregistre la séquence actuelle dans un fichier sur votre appareil, et Charger récupère une séquence précédemment enregistrée."
     }
   ],
   "news.logo-menu.step3.alt": [
     {
       "type": 0,
-      "value": "Secció de configuració i selector d'idioma"
+      "value": "Section de paramètres et sélecteur de langue"
     }
   ],
   "news.logo-menu.step3.description": [
     {
       "type": 0,
-      "value": "Configuració obre el diàleg de configuració per defecte dels pictogrames, on pots ajustar tipografia, marcs, posició del text i altres opcions visuals. A sota trobaràs el selector d'idioma per canviar entre català (ca), castellà (es), anglès (en), francès (fr) o italià (it)."
+      "value": "Paramètres ouvre le dialogue de paramètres par défaut des pictogrammes, où vous pouvez ajuster la typographie, les bordures, la position du texte et d'autres options visuelles. En dessous, le sélecteur de langue vous permet de changer entre le catalan (ca), l'espagnol (es), l'anglais (en), le français (fr) ou l'italien (it)."
     }
   ],
   "news.logo-menu.summary": [
     {
       "type": 0,
-      "value": "Clica el logo per obrir el menú principal i accedir a totes les funcions de l'app."
+      "value": "Cliquez sur le logo pour ouvrir le menu principal et accéder à toutes les fonctions de l'application."
     }
   ],
   "news.logo-menu.title": [
     {
       "type": 0,
-      "value": "El menú de navegació"
+      "value": "Le menu de navigation"
     }
   ],
   "news.moreInfo.button": [
     {
       "type": 0,
-      "value": "Més info"
+      "value": "Plus d'infos"
     }
   ],
   "news.multiple-sequences.content": [
     {
       "type": 0,
-      "value": "Crea tantes seqüències com necessitis! Utilitza les pestanyes per afegir noves seqüències o eliminar les que ja no necessites. Cada seqüència és independent i pots canviar entre elles fàcilment."
+      "value": "Créez autant de séquences que vous avez besoin ! Utilisez les onglets pour ajouter de nouvelles séquences ou supprimer celles dont vous n'avez plus besoin. Chaque séquence est indépendante et vous pouvez facilement passer de l'une à l'autre."
     }
   ],
   "news.multiple-sequences.img1.alt": [
     {
       "type": 0,
-      "value": "Pestanyes de seqüència"
+      "value": "Onglets de séquence"
     }
   ],
   "news.multiple-sequences.img2.alt": [
     {
       "type": 0,
-      "value": "Afegir i eliminar seqüències"
+      "value": "Ajouter et supprimer des séquences"
     }
   ],
   "news.multiple-sequences.step1.alt": [
     {
       "type": 0,
-      "value": "Seqüència 1 amb pictogrames i botó per afegir nova seqüència"
+      "value": "Séquence 1 avec des pictogrammes et un bouton pour ajouter une nouvelle séquence"
     }
   ],
   "news.multiple-sequences.step1.description": [
     {
       "type": 0,
-      "value": "A la pàgina d'edició, busca paraules al cercador (separades per comes) i els pictogrames apareixeran automàticament a la seqüència activa. Fes clic al botó + per crear una nova seqüència."
+      "value": "Sur la page d'édition, recherchez des mots dans la barre de recherche (séparés par des virgules) et les pictogrammes apparaîtront automatiquement dans la séquence active. Cliquez sur le bouton + pour créer une nouvelle séquence."
     }
   ],
   "news.multiple-sequences.step2.alt": [
     {
       "type": 0,
-      "value": "Dues pestanyes de seqüència visibles, seqüència 2 activa"
+      "value": "Deux onglets de séquence visibles, séquence 2 active"
     }
   ],
   "news.multiple-sequences.step2.description": [
     {
       "type": 0,
-      "value": "Fes clic a qualsevol pestanya per canviar de seqüència activa. Cada seqüència té el seu propi contingut independent. Busca noves paraules per omplir la seqüència 2."
+      "value": "Cliquez sur n'importe quel onglet pour changer de séquence active. Chaque séquence a son propre contenu indépendant. Recherchez de nouveaux mots pour remplir la séquence 2."
     }
   ],
   "news.multiple-sequences.step3.alt": [
     {
       "type": 0,
-      "value": "Vista de les dues seqüències amb mida augmentada globalment"
+      "value": "Vue des deux séquences avec taille augmentée globalement"
     }
   ],
   "news.multiple-sequences.step3.description": [
     {
       "type": 0,
-      "value": "A la Vista, el commutador \"Aplicar a totes\" permet ajustar la mida i l'espai de totes les seqüències alhora. Mou el control de mida per veure el canvi aplicat globalment."
+      "value": "Dans la Vue, le commutateur \"Appliquer à toutes\" permet d'ajuster la taille et l'espacement de toutes les séquences à la fois. Déplacez le contrôle de taille pour voir le changement appliqué globalement."
     }
   ],
   "news.multiple-sequences.step4.alt": [
     {
       "type": 0,
-      "value": "Vista amb la seqüència 2 ajustada individualment a mida diferent"
+      "value": "Vue avec la séquence 2 ajustée individuellement à une taille différente"
     }
   ],
   "news.multiple-sequences.step4.description": [
     {
       "type": 0,
-      "value": "Desactiva \"Aplicar a totes\" per configurar cada seqüència de manera independent. Expandeix l'acordió de la seqüència que vols ajustar i modifica la seva mida o espaiament sense afectar les altres."
+      "value": "Désactivez \"Appliquer à toutes\" pour configurer chaque séquence de manière indépendante. Développez l'accordéon de la séquence que vous souhaitez ajuster et modifiez sa taille ou son espacement sans affecter les autres."
     }
   ],
   "news.multiple-sequences.summary": [
     {
       "type": 0,
-      "value": "Ara pots crear i gestionar diverses seqüències alhora amb pestanyes."
+      "value": "Vous pouvez maintenant créer et gérer plusieurs séquences à la fois avec des onglets."
     }
   ],
   "news.multiple-sequences.title": [
     {
       "type": 0,
-      "value": "Múltiples seqüències"
+      "value": "Séquences multiples"
     }
   ],
   "news.new-languages.content": [
     {
       "type": 0,
-      "value": "SequenciAAC ja és accessible en dos nous idiomes: Français (francès) i Italiano (italià). Amb aquesta incorporació, l'aplicació es pot fer servir en cinc idiomes: català, castellà, anglès, francès i italià.\n\nLes traduccions s'han realitzat de manera automàtica, per la qual cosa és possible que hi hagi alguna inexactitud o expressió poc natural. Demanem disculpes per qualsevol errada i us agraïm que ens ho feu saber per poder-ho millorar."
+      "value": "SequenciAAC est désormais accessible en deux nouvelles langues : Français et Italiano. Avec cet ajout, l'application peut être utilisée en cinq langues : catalan, espagnol, anglais, français et italien.\n\nLes traductions ont été réalisées automatiquement, il est donc possible qu'il y ait quelques inexactitudes ou expressions peu naturelles. Nous nous excusons pour toute erreur et vous remercions de nous le signaler afin que nous puissions l'améliorer."
     }
   ],
   "news.new-languages.step1.alt": [
     {
       "type": 0,
-      "value": "Menú de navegació de SequenciAAC amb el selector d'idioma a la part inferior"
+      "value": "Menu de navigation de SequenciAAC avec le sélecteur de langue en bas"
     }
   ],
   "news.new-languages.step1.description": [
     {
       "type": 0,
-      "value": "Per canviar l'idioma, fes clic al logo de SequenciAAC per obrir el menú de navegació. A la part inferior del menú hi trobaràs el selector d'idioma."
+      "value": "Pour changer de langue, cliquez sur le logo SequenciAAC pour ouvrir le menu de navigation. En bas du menu, vous trouverez le sélecteur de langue."
     }
   ],
   "news.new-languages.step2.alt": [
     {
       "type": 0,
-      "value": "Selector d'idioma desplegat amb els cinc idiomes disponibles"
+      "value": "Sélecteur de langue déployé avec les cinq langues disponibles"
     }
   ],
   "news.new-languages.step2.description": [
     {
       "type": 0,
-      "value": "Clica el selector per veure els cinc idiomes disponibles: Català, Español, English, Français i Italiano. Selecciona'n un per canviar l'idioma de tota l'aplicació de manera immediata."
+      "value": "Cliquez sur le sélecteur pour voir les cinq langues disponibles : Català, Español, English, Français et Italiano. Sélectionnez-en une pour changer la langue de toute l'application immédiatement."
     }
   ],
   "news.new-languages.step3.alt": [
     {
       "type": 0,
-      "value": "Aplicació SequenciAAC amb la interfície en Français"
+      "value": "Application SequenciAAC avec l'interface en Français"
     }
   ],
   "news.new-languages.step3.description": [
     {
       "type": 0,
-      "value": "La interfície s'actualitza al moment. Aquí pots veure l'aplicació en Français. Si trobes alguna traducció incorrecta, fes-nos-ho saber: ho millorarem."
+      "value": "L'interface se met à jour instantanément. Vous pouvez voir ici l'application en Français. Si vous trouvez une traduction incorrecte, faites-le nous savoir : nous l'améliorerons."
     }
   ],
   "news.new-languages.summary": [
     {
       "type": 0,
-      "value": "L'app ara parla cinc idiomes. T'expliquem com canviar-lo."
+      "value": "L'application parle maintenant cinq langues. Voici comment en changer."
     }
   ],
   "news.new-languages.title": [
     {
       "type": 0,
-      "value": "Nous idiomes: Français i Italiano"
+      "value": "Nouvelles langues : Français et Italiano"
     }
   ],
   "news.nextArticle": [
     {
       "type": 0,
-      "value": "Article següent"
+      "value": "Article suivant"
     }
   ],
   "news.number-font.content": [
     {
       "type": 0,
-      "value": "Ara pots configurar de forma independent la tipografia dels números que s'afegeixen als pictogrames quan actives la numeració. Des del diàleg de Configuració per defecte, si actives el switch de Numeració, apareixerà una nova secció per escollir la família tipogràfica, la mida i el color dels números, de manera independent a la tipografia del text dels pictogrames."
+      "value": "Vous pouvez maintenant configurer de manière indépendante la typographie des numéros ajoutés aux pictogrammes lorsque vous activez la numérotation. Depuis le dialogue Paramètres par défaut, si vous activez le commutateur Numérotation, une nouvelle section apparaîtra pour choisir la famille typographique, la taille et la couleur des numéros, indépendamment de la typographie du texte des pictogrammes."
     }
   ],
   "news.number-font.step1.alt": [
     {
       "type": 0,
-      "value": "Panell de configuració per defecte amb el switch de Numeració desactivat"
+      "value": "Panneau de paramètres par défaut avec le commutateur de numérotation désactivé"
     }
   ],
   "news.number-font.step1.description": [
     {
       "type": 0,
-      "value": "Obre el diàleg de Configuració per defecte des del menú principal (clica el logo). Veuràs un switch per activar la Numeració dels pictogrames."
+      "value": "Ouvrez le dialogue Paramètres par défaut depuis le menu principal (cliquez sur le logo). Vous verrez un commutateur pour activer la numérotation des pictogrammes."
     }
   ],
   "news.number-font.step2.alt": [
     {
       "type": 0,
-      "value": "Switch de Numeració activat al panell de configuració"
+      "value": "Commutateur de numérotation activé dans le panneau de paramètres"
     }
   ],
   "news.number-font.step2.description": [
     {
       "type": 0,
-      "value": "Activa el switch de Numeració. Cada pictograma mostrarà el seu número d'ordre a la posició oposada al text."
+      "value": "Activez le commutateur de numérotation. Chaque pictogramme affichera son numéro d'ordre à la position opposée au texte."
     }
   ],
   "news.number-font.step3.alt": [
     {
       "type": 0,
-      "value": "Nova secció de configuració de la font dels números, amb selector de família, mida i color"
+      "value": "Nouvelle section de configuration de la police des numéros, avec sélecteur de famille, taille et couleur"
     }
   ],
   "news.number-font.step3.description": [
     {
       "type": 0,
-      "value": "Un cop activada la numeració, apareix una nova secció per configurar la tipografia dels números: família, mida i color, de forma independent a la font del text dels pictogrames."
+      "value": "Une fois la numérotation activée, une nouvelle section apparaît pour configurer la typographie des numéros : famille, taille et couleur, de manière indépendante à la police du texte des pictogrammes."
     }
   ],
   "news.number-font.summary": [
     {
       "type": 0,
-      "value": "Tria una tipografia pròpia per als números que apareixen als pictogrames."
+      "value": "Choisissez une typographie propre pour les numéros qui apparaissent sur les pictogrammes."
     }
   ],
   "news.number-font.title": [
     {
       "type": 0,
-      "value": "Font personalitzada per als números"
+      "value": "Police personnalisée pour les numéros"
     }
   ],
   "news.prevArticle": [
     {
       "type": 0,
-      "value": "Article anterior"
+      "value": "Article précédent"
     }
   ],
   "news.print-preview.content": [
     {
       "type": 0,
-      "value": "La vista prèvia et mostra exactament com quedarà la pàgina impresa. Pots controlar la mida dels pictogrames, l'espai entre files i columnes, i l'alineació. Tot es veu en temps real!"
+      "value": "L'aperçu vous montre exactement à quoi ressemblera la page imprimée. Vous pouvez contrôler la taille des pictogrammes, l'espace entre les lignes et les colonnes, et l'alignement. Tout est mis à jour en temps réel !"
     }
   ],
   "news.print-preview.img1.alt": [
     {
       "type": 0,
-      "value": "Vista prèvia de la pàgina"
+      "value": "Aperçu de la page"
     }
   ],
   "news.print-preview.img2.alt": [
     {
       "type": 0,
-      "value": "Controls de mida i espai"
+      "value": "Contrôles de taille et d'espacement"
     }
   ],
   "news.print-preview.summary": [
     {
       "type": 0,
-      "value": "Previsualitza exactament com quedarà la teva pàgina abans d'imprimir."
+      "value": "Prévisualisez exactement à quoi ressemblera votre page avant d'imprimer."
     }
   ],
   "news.print-preview.title": [
     {
       "type": 0,
-      "value": "Vista prèvia d'impressió"
+      "value": "Aperçu d'impression"
     }
   ],
   "news.save-improvements.content": [
     {
       "type": 0,
-      "value": "Ara el fitxer .saac guarda les imatges personalitzades que has pujat, directament al fitxer per no perdre-les. A més, la configuració de visualització de cada seqüència —mida dels pictogrames, espaiat i alineació— també es guarda i es recupera exactament com la vas deixar."
+      "value": "Maintenant le fichier .saac enregistre les images personnalisées que vous avez téléversées, directement dans le fichier pour ne pas les perdre. De plus, les paramètres d'affichage de chaque séquence — taille des pictogrammes, espacement et alignement — sont également enregistrés et récupérés exactement comme vous les avez laissés."
     }
   ],
   "news.save-improvements.step1.alt": [
     {
       "type": 0,
-      "value": "Botó per pujar una imatge pròpia al pictograma"
+      "value": "Bouton pour téléverser une image personnalisée sur le pictogramme"
     }
   ],
   "news.save-improvements.step1.description": [
     {
       "type": 0,
-      "value": "Puja la teva pròpia imatge a qualsevol pictograma. La imatge es guarda directament al fitxer .saac, sense dependre d'internet."
+      "value": "Téléversez votre propre image sur n'importe quel pictogramme. L'image est enregistrée directement dans le fichier .saac, sans avoir besoin d'internet."
     }
   ],
   "news.save-improvements.step2.alt": [
     {
       "type": 0,
-      "value": "Diàleg de guardar amb les opcions de seqüències i configuració"
+      "value": "Dialogue d'enregistrement avec les options de séquences et de paramètres"
     }
   ],
   "news.save-improvements.step2.description": [
     {
       "type": 0,
-      "value": "En guardar el fitxer, totes les imatges personalitzades s'hi inclouen automàticament."
+      "value": "Lors de l'enregistrement du fichier, toutes les images personnalisées sont automatiquement incluses."
     }
   ],
   "news.save-improvements.step3.alt": [
     {
       "type": 0,
-      "value": "Controls de mida i espaiat dels pictogrames"
+      "value": "Contrôles de taille et d'espacement des pictogrammes"
     }
   ],
   "news.save-improvements.step3.description": [
     {
       "type": 0,
-      "value": "La mida, l'espaiat i l'alineació de cada seqüència es guarden i es restauren automàticament en carregar el fitxer."
+      "value": "La taille, l'espacement et l'alignement de chaque séquence sont automatiquement enregistrés et restaurés lors du chargement du fichier."
     }
   ],
   "news.save-improvements.summary": [
     {
       "type": 0,
-      "value": "El fitxer guardat ara inclou les imatges personalitzades i la configuració de mida i espaiat de cada seqüència."
+      "value": "Le fichier enregistré inclut maintenant les images personnalisées et les paramètres de taille et d'espacement de chaque séquence."
     }
   ],
   "news.save-improvements.title": [
     {
       "type": 0,
-      "value": "Millores al guardat"
+      "value": "Améliorations de l'enregistrement"
     }
   ],
   "news.save-load.content": [
     {
       "type": 0,
-      "value": "Trobaràs les opcions de guardar i carregar al menú del logo de SequenciAAC. Quan guardes, es descarrega un fitxer amb totes les seqüències i les imatges dels pictogrames incloses. Així pots recuperar el teu treball en qualsevol moment!"
+      "value": "Vous trouverez les options d'enregistrement et de chargement dans le menu du logo SequenciAAC. Lors de l'enregistrement, un fichier est téléchargé avec toutes les séquences et les images des pictogrammes incluses. Ainsi vous pouvez récupérer votre travail à tout moment !"
     }
   ],
   "news.save-load.img1.alt": [
     {
       "type": 0,
-      "value": "Menú amb opció de guardar"
+      "value": "Menu avec option d'enregistrement"
     }
   ],
   "news.save-load.img2.alt": [
     {
       "type": 0,
-      "value": "Carregar fitxer guardat"
+      "value": "Charger un fichier enregistré"
     }
   ],
   "news.save-load.summary": [
     {
       "type": 0,
-      "value": "Descarrega les teves seqüències amb les imatges i carrega-les quan vulguis."
+      "value": "Téléchargez vos séquences avec les images et rechargez-les quand vous voulez."
     }
   ],
   "news.save-load.title": [
     {
       "type": 0,
-      "value": "Guarda i recupera"
+      "value": "Enregistrer et récupérer"
     }
   ],
   "news.section.title": [
     {
       "type": 0,
-      "value": "Novetats"
+      "value": "Nouveautés"
     }
   ],
   "news.seeAll": [
     {
       "type": 0,
-      "value": "Veure totes les novetats"
+      "value": "Voir toutes les nouveautés"
     }
   ],
   "news.sequence-settings.content": [
     {
       "type": 0,
-      "value": "Ara pots personalitzar cada seqüència de manera independent. Canvia l'alineació dels pictogrames (esquerra, centre o dreta), configura la tipografia i el color dels números de forma independent al text, i descobreix més opcions de format per adaptar les seqüències a les teves necessitats."
+      "value": "Vous pouvez maintenant personnaliser chaque séquence de manière indépendante. Modifiez l'alignement des pictogrammes (gauche, centre ou droite), configurez la typographie et la couleur des numéros de manière indépendante du texte, et découvrez plus d'options de mise en forme pour adapter les séquences à vos besoins."
     }
   ],
   "news.sequence-settings.img1.alt": [
     {
       "type": 0,
-      "value": "Opcions d'alineació"
+      "value": "Options d'alignement"
     }
   ],
   "news.sequence-settings.img2.alt": [
     {
       "type": 0,
-      "value": "Configuració de tipografia dels números"
+      "value": "Paramètres de typographie des numéros"
     }
   ],
   "news.sequence-settings.summary": [
     {
       "type": 0,
-      "value": "Personalitza cada seqüència amb alineació, tipografia dels números i més opcions."
+      "value": "Personnalisez chaque séquence avec l'alignement, la typographie des numéros et plus d'options."
     }
   ],
   "news.sequence-settings.title": [
     {
       "type": 0,
-      "value": "Noves configuracions per seqüència"
+      "value": "Nouveaux paramètres par séquence"
     }
   ],
   "news.view-improvements.content": [
     {
       "type": 0,
-      "value": "S'han corregit errors que feien que la vista prèvia no coincidís exactament amb el resultat imprès. A més, s'han afegit nous controls d'alineació i direcció per a cada seqüència, i ara quan deses una seqüència la configuració de visualització també es desa automàticament."
+      "value": "Plusieurs bogues ont été corrigés qui faisaient que l'aperçu d'impression ne correspondait pas exactement au résultat imprimé. De nouveaux contrôles ont également été ajoutés pour l'alignement et la direction des séquences, et lorsque vous enregistrez une séquence, les paramètres d'affichage sont maintenant automatiquement inclus."
     }
   ],
   "news.view-improvements.step1.alt": [
     {
       "type": 0,
-      "value": "Vista prèvia de la seqüència mostrant la correspondència exacta amb la impressió"
+      "value": "Aperçu de la séquence montrant la correspondance exacte avec l'impression"
     }
   ],
   "news.view-improvements.step1.description": [
     {
       "type": 0,
-      "value": "La previsualització ara correspon exactament al resultat imprès. Un càlcul d'escala precís té en compte el format de pàgina (A4, A3) i la resolució de pantalla per mostrar amb fidelitat el que s'imprimirà."
+      "value": "L'aperçu de séquence correspond maintenant exactement au résultat imprimé. Un calcul d'échelle précis prend en compte le format de page (A4, A3) et la résolution d'écran pour montrer fidèlement ce qui sera imprimé."
     }
   ],
   "news.view-improvements.step2.alt": [
     {
       "type": 0,
-      "value": "Controls d'alineació i direcció de les seqüències"
+      "value": "Contrôles d'alignement et de direction pour les séquences"
     }
   ],
   "news.view-improvements.step2.description": [
     {
       "type": 0,
-      "value": "Nous controls per personalitzar cada seqüència: tria l'alineació (esquerra, centre, dreta) i la direcció (horitzontal o vertical) per adaptar la presentació a les teves necessitats."
+      "value": "Nouveaux contrôles pour personnaliser chaque séquence : choisissez l'alignement (gauche, centre, droite) et la direction (horizontal ou vertical) pour adapter la présentation à vos besoins."
     }
   ],
   "news.view-improvements.step3.alt": [
     {
       "type": 0,
-      "value": "Botó de desar la seqüència amb configuració de visualització inclosa"
+      "value": "Bouton d'enregistrement de séquence avec les paramètres de vue inclus"
     }
   ],
   "news.view-improvements.step3.description": [
     {
       "type": 0,
-      "value": "Quan deses la seqüència amb el botó de descàrrega, la configuració de visualització (mides, espais, alineació i direcció) s'inclou automàticament al fitxer, de manera que quan la tornes a carregar tot quedarà tal com ho havies deixat."
+      "value": "Lorsque vous enregistrez la séquence en utilisant le bouton de téléchargement, les paramètres d'affichage (tailles, espacements, alignement et direction) sont automatiquement inclus dans le fichier, de sorte que lorsque vous le rechargez, tout sera tel que vous l'avez laissé."
     }
   ],
   "news.view-improvements.summary": [
     {
       "type": 0,
-      "value": "Vista prèvia fidel a la impressió, nous controls d'alineació i direcció."
+      "value": "Aperçu fidèle à l'impression, nouveaux contrôles d'alignement et de direction."
     }
   ],
   "news.view-improvements.title": [
     {
       "type": 0,
-      "value": "Millores a la previsualització"
+      "value": "Améliorations de l'aperçu"
     }
   ],
   "pages.viewSequence.alignment.label": [
     {
       "type": 0,
-      "value": "Alineació"
+      "value": "Alignement"
     }
   ],
   "pages.viewSequence.applyAll.label": [
     {
       "type": 0,
-      "value": "Aplicar a totes"
+      "value": "Appliquer à toutes"
     }
   ],
   "pages.viewSequence.authSequence.helperText": [
     {
       "type": 0,
-      "value": "Marcar l'autoria"
+      "value": "Marquer la paternité"
     }
   ],
   "pages.viewSequence.authSequence.label": [
     {
       "type": 0,
-      "value": "Autor de la seqüència"
+      "value": "Auteur de la séquence"
     }
   ],
   "pages.viewSequence.direction.label": [
     {
       "type": 0,
-      "value": "Direcció"
+      "value": "Direction"
     }
   ],
   "pages.viewSequence.fullScreen.label": [
     {
       "type": 0,
-      "value": "Pantalla sencera"
+      "value": "Plein écran"
     }
   ],
   "pages.viewSequence.pageSize.label": [
     {
       "type": 0,
-      "value": "Mida de pàgina"
+      "value": "Taille de page"
     }
   ],
   "pages.viewSequence.pictSpaceBetween.label": [
     {
       "type": 0,
-      "value": "Espai de pictogrames"
+      "value": "Espace entre pictogrammes"
     }
   ],
   "pages.viewSequence.sequence.label": [
     {
       "type": 0,
-      "value": "Seqüència"
+      "value": "Séquence"
     }
   ],
   "pages.viewSequence.sequenceSpaceBetween.label": [
     {
       "type": 0,
-      "value": "Espai de seqüències"
+      "value": "Espace entre séquences"
     }
   ],
   "pages.viewSequence.size.label": [
     {
       "type": 0,
-      "value": "Mida"
+      "value": "Taille"
     }
   ],
   "pages.viewSequence.tooltip.alignCenter": [
     {
       "type": 0,
-      "value": "Alinear al centre"
+      "value": "Centrer"
     }
   ],
   "pages.viewSequence.tooltip.alignLeft": [
     {
       "type": 0,
-      "value": "Alinear a l'esquerra"
+      "value": "Aligner à gauche"
     }
   ],
   "pages.viewSequence.tooltip.alignRight": [
     {
       "type": 0,
-      "value": "Alinear a la dreta"
+      "value": "Aligner à droite"
     }
   ],
   "pages.viewSequence.tooltip.applyAll": [
     {
       "type": 0,
-      "value": "Aplicar a totes les seqüències"
+      "value": "Appliquer à toutes les séquences"
     }
   ],
   "pages.viewSequence.tooltip.directionColumn": [
@@ -1238,49 +1238,49 @@
   "pages.viewSequence.tooltip.directionRow": [
     {
       "type": 0,
-      "value": "Horitzontal"
+      "value": "Horizontal"
     }
   ],
   "pages.viewSequence.tooltip.downloadPdf": [
     {
       "type": 0,
-      "value": "Descarregar PDF"
+      "value": "Télécharger en PDF"
     }
   ],
   "pages.viewSequence.tooltip.fullscreen": [
     {
       "type": 0,
-      "value": "Pantalla completa"
+      "value": "Plein écran"
     }
   ],
   "pages.viewSequence.tooltip.orientation": [
     {
       "type": 0,
-      "value": "Orientació de pàgina"
+      "value": "Orientation de la page"
     }
   ],
   "pages.viewSequence.tooltip.print": [
     {
       "type": 0,
-      "value": "Imprimir"
+      "value": "Imprimer"
     }
   ],
   "pictogram.empty": [
     {
       "type": 0,
-      "value": "Buit"
+      "value": "Vide"
     }
   ],
   "setting.font-family.title": [
     {
       "type": 0,
-      "value": "Família"
+      "value": "Famille"
     }
   ],
   "setting.lang.an.label": [
     {
       "type": 0,
-      "value": "Armeni"
+      "value": "Arménien"
     }
   ],
   "setting.lang.app.title": [
@@ -1292,43 +1292,43 @@
   "setting.lang.ar.label": [
     {
       "type": 0,
-      "value": "Àrab"
+      "value": "Arabe"
     }
   ],
   "setting.lang.bg.label": [
     {
       "type": 0,
-      "value": "Búlgar"
+      "value": "Bulgare"
     }
   ],
   "setting.lang.br.label": [
     {
       "type": 0,
-      "value": "Bretó"
+      "value": "Breton"
     }
   ],
   "setting.lang.ca.label": [
     {
       "type": 0,
-      "value": "Català"
+      "value": "Catalan"
     }
   ],
   "setting.lang.cs.label": [
     {
       "type": 0,
-      "value": "Txec"
+      "value": "Tchèque"
     }
   ],
   "setting.lang.da.label": [
     {
       "type": 0,
-      "value": "Danès"
+      "value": "Danois"
     }
   ],
   "setting.lang.de.label": [
     {
       "type": 0,
-      "value": "Alemany"
+      "value": "Allemand"
     }
   ],
   "setting.lang.el.label": [
@@ -1340,205 +1340,205 @@
   "setting.lang.en.label": [
     {
       "type": 0,
-      "value": "Anglès"
+      "value": "Anglais"
     }
   ],
   "setting.lang.es.label": [
     {
       "type": 0,
-      "value": "Espanyol"
+      "value": "Espagnol"
     }
   ],
   "setting.lang.et.label": [
     {
       "type": 0,
-      "value": "Estonià"
+      "value": "Estonien"
     }
   ],
   "setting.lang.eu.label": [
     {
       "type": 0,
-      "value": "Euskera"
+      "value": "Basque"
     }
   ],
   "setting.lang.fa.label": [
     {
       "type": 0,
-      "value": "Persa"
+      "value": "Persan"
     }
   ],
   "setting.lang.fr.label": [
     {
       "type": 0,
-      "value": "Francès"
+      "value": "Français"
     }
   ],
   "setting.lang.gl.label": [
     {
       "type": 0,
-      "value": "Gallec"
+      "value": "Galicien"
     }
   ],
   "setting.lang.he.label": [
     {
       "type": 0,
-      "value": "Hebreu"
+      "value": "Hébreu"
     }
   ],
   "setting.lang.hr.label": [
     {
       "type": 0,
-      "value": "Croat"
+      "value": "Croate"
     }
   ],
   "setting.lang.hu.label": [
     {
       "type": 0,
-      "value": "Hongarès"
+      "value": "Hongrois"
     }
   ],
   "setting.lang.it.label": [
     {
       "type": 0,
-      "value": "Italià"
+      "value": "Italien"
     }
   ],
   "setting.lang.ko.label": [
     {
       "type": 0,
-      "value": "Coreà"
+      "value": "Coréen"
     }
   ],
   "setting.lang.lt.label": [
     {
       "type": 0,
-      "value": "Lituà"
+      "value": "Lituanien"
     }
   ],
   "setting.lang.lv.label": [
     {
       "type": 0,
-      "value": "Letó"
+      "value": "Letton"
     }
   ],
   "setting.lang.mk.label": [
     {
       "type": 0,
-      "value": "Macedoni"
+      "value": "Macédonien"
     }
   ],
   "setting.lang.nb.label": [
     {
       "type": 0,
-      "value": "Noruec Bokmål"
+      "value": "Norvégien Bokmål"
     }
   ],
   "setting.lang.nl.label": [
     {
       "type": 0,
-      "value": "Holandés"
+      "value": "Néerlandais"
     }
   ],
   "setting.lang.pl.label": [
     {
       "type": 0,
-      "value": "Polonès"
+      "value": "Polonais"
     }
   ],
   "setting.lang.pt.label": [
     {
       "type": 0,
-      "value": "Portuguès"
+      "value": "Portugais"
     }
   ],
   "setting.lang.ro.label": [
     {
       "type": 0,
-      "value": "Romanès"
+      "value": "Roumain"
     }
   ],
   "setting.lang.ru.label": [
     {
       "type": 0,
-      "value": "Rus"
+      "value": "Russe"
     }
   ],
   "setting.lang.search.title": [
     {
       "type": 0,
-      "value": "Cercar"
+      "value": "Recherche"
     }
   ],
   "setting.lang.sk.label": [
     {
       "type": 0,
-      "value": "Eslovac"
+      "value": "Slovaque"
     }
   ],
   "setting.lang.sq.label": [
     {
       "type": 0,
-      "value": "Albanès"
+      "value": "Albanais"
     }
   ],
   "setting.lang.sr.label": [
     {
       "type": 0,
-      "value": "Sèrbi"
+      "value": "Serbe"
     }
   ],
   "setting.lang.sv.label": [
     {
       "type": 0,
-      "value": "Suec"
+      "value": "Suédois"
     }
   ],
   "setting.lang.uk.label": [
     {
       "type": 0,
-      "value": "Ucraïnès"
+      "value": "Ukrainien"
     }
   ],
   "setting.lang.val.label": [
     {
       "type": 0,
-      "value": "Valencià"
+      "value": "Valencien"
     }
   ],
   "setting.lang.zh.label": [
     {
       "type": 0,
-      "value": "Xinès"
+      "value": "Chinois"
     }
   ],
   "settings.hair.black": [
     {
       "type": 0,
-      "value": "Negre"
+      "value": "Noir"
     }
   ],
   "settings.hair.blonde": [
     {
       "type": 0,
-      "value": "Ros"
+      "value": "Blond"
     }
   ],
   "settings.hair.brown": [
     {
       "type": 0,
-      "value": "Marró"
+      "value": "Brun"
     }
   ],
   "settings.hair.darkBrown": [
     {
       "type": 0,
-      "value": "Marró fosc"
+      "value": "Brun foncé"
     }
   ],
   "settings.hair.darkGray": [
     {
       "type": 0,
-      "value": "Gris fosc"
+      "value": "Gris foncé"
     }
   ],
   "settings.hair.gray": [
@@ -1550,43 +1550,43 @@
   "settings.hair.label": [
     {
       "type": 0,
-      "value": "Cabell"
+      "value": "Cheveux"
     }
   ],
   "settings.hair.red": [
     {
       "type": 0,
-      "value": "Pèl-roig"
+      "value": "Roux"
     }
   ],
   "settings.skins.asian": [
     {
       "type": 0,
-      "value": "Asiàtic"
+      "value": "Asiatique"
     }
   ],
   "settings.skins.aztec": [
     {
       "type": 0,
-      "value": "Asteca"
+      "value": "Aztèque"
     }
   ],
   "settings.skins.black": [
     {
       "type": 0,
-      "value": "Negre"
+      "value": "Noir"
     }
   ],
   "settings.skins.label": [
     {
       "type": 0,
-      "value": "Pell"
+      "value": "Peau"
     }
   ],
   "settings.skins.mulatto": [
     {
       "type": 0,
-      "value": "Mulat"
+      "value": "Métis"
     }
   ],
   "settings.skins.white": [
@@ -1598,31 +1598,25 @@
   "settings.textPosition.bottom": [
     {
       "type": 0,
-      "value": "Sota"
+      "value": "Bas"
     }
   ],
   "settings.textPosition.label": [
     {
       "type": 0,
-      "value": "Posició text"
+      "value": "Position du texte"
     }
   ],
   "settings.textPosition.none": [
     {
       "type": 0,
-      "value": "Sense"
+      "value": "Aucun"
     }
   ],
   "settings.textPosition.top": [
     {
       "type": 0,
-      "value": "Dalt"
-    }
-  ],
-  "view.editSequences.sequences.label": [
-    {
-      "type": 0,
-      "value": "Seqüències"
+      "value": "Haut"
     }
   ],
   "view.welcome.arcadeLink": [
@@ -1634,31 +1628,31 @@
   "view.welcome.footer.credits": [
     {
       "type": 0,
-      "value": "Crèdits"
+      "value": "Crédits"
     }
   ],
   "view.welcome.footer.licenses": [
     {
       "type": 0,
-      "value": "Llicències"
+      "value": "Licences"
     }
   ],
   "view.welcome.learning": [
     {
       "type": 0,
-      "value": "Aprèn l'ús..."
+      "value": "Apprendre à utiliser..."
     }
   ],
   "view.welcome.liveMotive.title": [
     {
       "type": 0,
-      "value": "Crea i imprimeix o visualitza la teva pàgina de seqüències."
+      "value": "Créez et imprimez ou visualisez votre page de séquences."
     }
   ],
   "view.welcome.start.button": [
     {
       "type": 0,
-      "value": "Inicia"
+      "value": "Commencer"
     }
   ]
 }
