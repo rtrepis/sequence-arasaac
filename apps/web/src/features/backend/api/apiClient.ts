@@ -12,8 +12,8 @@ export const setAccessToken = (token: string | null): void => {
 export const getAccessToken = (): string | null => accessToken;
 
 const apiClient: AxiosInstance = axios.create({
-  // En dev, Vite proxeja /api → http://localhost:3000. En prod, URL relativa al mateix origen.
-  baseURL: "/api",
+  // En dev, Vite proxeja /api → http://localhost:3000. En prod, usa VITE_API_URL si està definida.
+  baseURL: import.meta.env.VITE_API_URL ?? "/api",
   withCredentials: true, // Necessari per enviar/rebre la cookie httpOnly del refresh token
 });
 

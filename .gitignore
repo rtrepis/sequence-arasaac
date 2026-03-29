@@ -33,6 +33,9 @@ apps/web/playwright-report
 # personal code
 /.private
 
+# Claude Code worktrees temporals
+.claude/worktrees/
+
 # misc
 .DS_Store
 apps/api/.env
