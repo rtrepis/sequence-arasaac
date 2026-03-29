@@ -1,0 +1,84 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import { Stack, ToggleButton, Typography } from "@mui/material";
+import { FormattedMessage, useIntl } from "react-intl";
+import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
+import { settingsCardLang } from "./SettingCard.lang";
+import {
+  cardAction,
+  card,
+  cardContent,
+  cardTitle,
+} from "../SettingsCards.styled";
+import ApplyAll from "../ApplyAll/ApplyAll";
+import React from "react";
+
+interface SettingCardProps {
+  setting: "skin" | "textPosition" | "hair";
+  state: string | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setState: React.Dispatch<React.SetStateAction<any>>;
+  onApplyAll?: () => void;
+}
+
+const SettingCard = ({
+  setting,
+  setState,
+  state,
+  onApplyAll,
+}: SettingCardProps): React.ReactElement => {
+  const intl = useIntl();
+
+  const settingCard = {
+    message: settingsCardLang.messages[setting],
+    types: Object.entries(settingsCardLang[setting]),
+  };
+
+  const handleSelected = (toUpdate: string) => {
+    setState(toUpdate);
+  };
+
+  return (
+    <Stack
+      display={"flex"}
+      direction={"row"}
+      flexWrap={"wrap"}
+      columnGap={2}
+      sx={card}
+    >
+      <Typography variant="body1" sx={cardTitle} component="h2">
+        <FormattedMessage {...settingCard.message} />
+      </Typography>
+
+      <StyledToggleButtonGroup
+        exclusive
+        aria-label={`${intl.formatMessage(settingCard.message)}`}
+        sx={cardContent}
+      >
+        {settingCard.types.map(([key, value]) => (
+          <ToggleButton
+            value={key}
+            aria-label={intl.formatMessage(value.message)}
+            key={key}
+            selected={state === key}
+            onClick={() => handleSelected(key)}
+          >
+            <img
+              src={`../img/settings/${setting}/${key}.png`}
+              alt={`${intl.formatMessage({
+                ...settingCard.message,
+              })} ${intl.formatMessage(value.message)}`}
+              width={40}
+              height={40}
+            />
+          </ToggleButton>
+        ))}
+      </StyledToggleButtonGroup>
+
+      {onApplyAll && state && (
+        <ApplyAll sx={cardAction} onClick={onApplyAll} />
+      )}
+    </Stack>
+  );
+};
+
+export default SettingCard;

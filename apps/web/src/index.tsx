@@ -1,0 +1,47 @@
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+import App from "./App";
+import AppBootstrap from "./app/providers/AppBootstrap";
+import reportWebVitals from "./reportWebVitals";
+import "./index.css";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material";
+import theme from "./style/themeMui";
+import { BrowserRouter } from "react-router-dom";
+import {
+  FeedbackProvider,
+  FeedbackSnackbar,
+  FeedbackProgress,
+  FeedbackBackdrop,
+} from "./context/FeedbackContext";
+
+const container = document.getElementById("root")!;
+const root = createRoot(container);
+
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline enable-color-scheme />
+        <FeedbackProvider>
+          <AppBootstrap>
+            <BrowserRouter
+              future={{ v7_relativeSplatPath: true, v7_startTransition: false }}
+            >
+              <App />
+            </BrowserRouter>
+            <FeedbackSnackbar />
+            <FeedbackBackdrop />
+          </AppBootstrap>
+        </FeedbackProvider>
+      </ThemeProvider>
+    </Provider>
+  </React.StrictMode>,
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

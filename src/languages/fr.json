@@ -1,0 +1,1658 @@
+{
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Correction"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Amélioration"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "Nouveau"
+    }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "Nouveautés"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Lire la suite"
+    }
+  ],
+  "component.settingCardBorder.borderIn.title": [
+    {
+      "type": 0,
+      "value": "Bordure intérieure"
+    }
+  ],
+  "component.settingCardBorder.borderOut.title": [
+    {
+      "type": 0,
+      "value": "Bordure extérieure"
+    }
+  ],
+  "component.settingCardFontGroup.color.title": [
+    {
+      "type": 0,
+      "value": "Couleur"
+    }
+  ],
+  "component.settingCardFontGroup.font.title": [
+    {
+      "type": 0,
+      "value": "Typographie"
+    }
+  ],
+  "component.settingCardFontGroup.numberFont.title": [
+    {
+      "type": 0,
+      "value": "Police des numéros"
+    }
+  ],
+  "components.appNavigationDrawer.download": [
+    {
+      "type": 0,
+      "value": "Télécharger"
+    }
+  ],
+  "components.appNavigationDrawer.editView": [
+    {
+      "type": 0,
+      "value": "Éditer"
+    }
+  ],
+  "components.appNavigationDrawer.langSelector": [
+    {
+      "type": 0,
+      "value": "Langue"
+    }
+  ],
+  "components.appNavigationDrawer.load": [
+    {
+      "type": 0,
+      "value": "Charger"
+    }
+  ],
+  "components.appNavigationDrawer.news": [
+    {
+      "type": 0,
+      "value": "Nouveautés"
+    }
+  ],
+  "components.appNavigationDrawer.openMenu": [
+    {
+      "type": 0,
+      "value": "Ouvrir le menu"
+    }
+  ],
+  "components.appNavigationDrawer.previewView": [
+    {
+      "type": 0,
+      "value": "Aperçu"
+    }
+  ],
+  "components.appNavigationDrawer.settings": [
+    {
+      "type": 0,
+      "value": "Paramètres"
+    }
+  ],
+  "components.appNavigationDrawer.settingsClose": [
+    {
+      "type": 0,
+      "value": "Fermer"
+    }
+  ],
+  "components.appNavigationDrawer.settingsTitle": [
+    {
+      "type": 0,
+      "value": "Paramètres par défaut"
+    }
+  ],
+  "components.appNavigationDrawer.welcome": [
+    {
+      "type": 0,
+      "value": "Accueil"
+    }
+  ],
+  "components.barNavigation.edit.title": [
+    {
+      "type": 0,
+      "value": "Éditer"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navigation principale"
+    }
+  ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Aller au contenu principal"
+    }
+  ],
+  "components.barNavigation.title": [
+    {
+      "type": 0,
+      "value": "SequenciAAC"
+    }
+  ],
+  "components.barNavigation.view.title": [
+    {
+      "type": 0,
+      "value": "Vue"
+    }
+  ],
+  "components.barNavigation.welcome.title": [
+    {
+      "type": 0,
+      "value": "Accueil"
+    }
+  ],
+  "components.buttonWithFileLoad.load.label": [
+    {
+      "type": 0,
+      "value": "Charger"
+    }
+  ],
+  "components.buttonWithModalDownload.defaultSettings.label": [
+    {
+      "type": 0,
+      "value": "Paramètres par défaut"
+    }
+  ],
+  "components.buttonWithModalDownload.download.label": [
+    {
+      "type": 0,
+      "value": "Télécharger"
+    }
+  ],
+  "components.buttonWithModalDownload.filename.label": [
+    {
+      "type": 0,
+      "value": "Nom du fichier"
+    }
+  ],
+  "components.buttonWithModalDownload.save.title": [
+    {
+      "type": 0,
+      "value": "Enregistrer"
+    }
+  ],
+  "components.buttonWithModalDownload.saveHelper.label": [
+    {
+      "type": 0,
+      "value": "Enregistrez la séquence et/ou les paramètres par défaut, et rechargez-les plus tard."
+    }
+  ],
+  "components.buttonWithModalDownload.sequence.label": [
+    {
+      "type": 0,
+      "value": "Séquence"
+    }
+  ],
+  "components.copyRight": [
+    {
+      "type": 0,
+      "value": "Fait avec : SequenciAAC - Auteur des pictogrammes : Sergio Palao. Origine : ARASAAC (http://www.arasaac.org). Licence : CC (BY-NC-SA)."
+    }
+  ],
+  "components.copyRightDial.auth.label": [
+    {
+      "type": 0,
+      "value": "Design et droits réservés : Ramon Trepat et AraSaac. seqsaac@gmail.com"
+    }
+  ],
+  "components.copyRightDial.license.label": [
+    {
+      "type": 0,
+      "value": "Fait avec : SequenciAAC - Auteur des pictogrammes : Sergio Palao. Origine : ARASAAC (http://www.arasaac.org). Licence : CC (BY-NC-SA)."
+    }
+  ],
+  "components.defaultSettings.close": [
+    {
+      "type": 0,
+      "value": "fermer"
+    }
+  ],
+  "components.defaultSettings.download": [
+    {
+      "type": 0,
+      "value": "Enregistrer les paramètres dans un fichier local"
+    }
+  ],
+  "components.defaultSettings.pictGuide": [
+    {
+      "type": 0,
+      "value": "Pictogramme guide"
+    }
+  ],
+  "components.defaultSettings.settings.title": [
+    {
+      "type": 0,
+      "value": "Paramètres par défaut"
+    }
+  ],
+  "components.defaultSettings.upload": [
+    {
+      "type": 0,
+      "value": "Charger les paramètres depuis un fichier local"
+    }
+  ],
+  "components.logoMenu.download": [
+    {
+      "type": 0,
+      "value": "Télécharger"
+    }
+  ],
+  "components.logoMenu.editView": [
+    {
+      "type": 0,
+      "value": "Éditer"
+    }
+  ],
+  "components.logoMenu.load": [
+    {
+      "type": 0,
+      "value": "Charger"
+    }
+  ],
+  "components.logoMenu.menuAriaLabel": [
+    {
+      "type": 0,
+      "value": "Menu principal"
+    }
+  ],
+  "components.logoMenu.previewView": [
+    {
+      "type": 0,
+      "value": "Aperçu"
+    }
+  ],
+  "components.logoMenu.settings": [
+    {
+      "type": 0,
+      "value": "Paramètres"
+    }
+  ],
+  "components.magicSearch.button.": [
+    {
+      "type": 0,
+      "value": "Rechercher"
+    }
+  ],
+  "components.magicSearch.helperText.": [
+    {
+      "type": 0,
+      "value": "Tapez les mots de la séquence séparés par des virgules et appuyez sur Entrée ou cliquez sur la loupe une fois terminé. Exemple : garçon, mettre, ceinture de sécurité."
+    }
+  ],
+  "components.magicSearch.label": [
+    {
+      "type": 0,
+      "value": "Recherche magique"
+    }
+  ],
+  "components.magicSearch.sample.": [
+    {
+      "type": 0,
+      "value": "Exemple : Garçon, mettre, la ceinture de sécurité."
+    }
+  ],
+  "components.newsNavBar.langSelector": [
+    {
+      "type": 0,
+      "value": "Langue"
+    }
+  ],
+  "components.newsNavBar.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navigation principale"
+    }
+  ],
+  "components.newsNavBar.news": [
+    {
+      "type": 0,
+      "value": "Nouveautés"
+    }
+  ],
+  "components.newsNavBar.openMenu": [
+    {
+      "type": 0,
+      "value": "Ouvrir le menu de navigation"
+    }
+  ],
+  "components.newsNavBar.skipToContent": [
+    {
+      "type": 0,
+      "value": "Aller au contenu principal"
+    }
+  ],
+  "components.newsNavBar.start": [
+    {
+      "type": 0,
+      "value": "Créer une séquence"
+    }
+  ],
+  "components.newsNavBar.welcome": [
+    {
+      "type": 0,
+      "value": "Accueil"
+    }
+  ],
+  "components.pictEdit.close": [
+    {
+      "type": 0,
+      "value": "Fermer"
+    }
+  ],
+  "components.pictEdit.delete": [
+    {
+      "type": 0,
+      "value": "Supprimer"
+    }
+  ],
+  "components.pictEdit.modal.description": [
+    {
+      "type": 0,
+      "value": "Vous pouvez modifier les pictogrammes"
+    }
+  ],
+  "components.pictEdit.modal.label": [
+    {
+      "type": 0,
+      "value": "Modifier Pictogramme"
+    }
+  ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Valeurs par défaut"
+    }
+  ],
+  "components.pictEditSettings.settings.label": [
+    {
+      "type": 0,
+      "value": "Paramètres du Pictogramme"
+    }
+  ],
+  "components.pictogramAmount": [
+    {
+      "type": 0,
+      "value": "Pictogrammes :"
+    }
+  ],
+  "components.pictogramAmount.Subtract.label": [
+    {
+      "type": 0,
+      "value": "Retirer un pictogramme"
+    }
+  ],
+  "components.pictogramAmount.add.label": [
+    {
+      "type": 0,
+      "value": "Ajouter un pictogramme vide"
+    }
+  ],
+  "components.pictogramAmount.helperText": [
+    {
+      "type": 0,
+      "value": "Insérez ou retirez un pictogramme à la fin de la séquence. Vous trouverez plus de fonctions avec le clic droit de la souris ou un appui long sur les appareils mobiles."
+    }
+  ],
+  "components.pictogramAmount.info": [
+    {
+      "type": 0,
+      "value": "Voir plus d'informations"
+    }
+  ],
+  "components.pictogramCard.pictogram": [
+    {
+      "type": 0,
+      "value": "Image du pictogramme"
+    }
+  ],
+  "components.pictogramSearch.alert": [
+    {
+      "type": 0,
+      "value": "Aucun pictogramme trouvé avec ce mot - Essayez un autre mot !"
+    }
+  ],
+  "components.pictogramSearch.empty": [
+    {
+      "type": 0,
+      "value": "Vide"
+    }
+  ],
+  "components.pictogramSearch.helperText": [
+    {
+      "type": 0,
+      "value": "Moteur de recherche de pictogrammes"
+    }
+  ],
+  "components.pictogramSearch.label": [
+    {
+      "type": 0,
+      "value": "Rechercher"
+    }
+  ],
+  "components.pictogramSearch.minus": [
+    {
+      "type": 0,
+      "value": "Retirer un pictogramme"
+    }
+  ],
+  "components.pictogramSearch.pictogram": [
+    {
+      "type": 0,
+      "value": "Pictogramme"
+    }
+  ],
+  "components.pictogramSearch.plus": [
+    {
+      "type": 0,
+      "value": "Insérer un pictogramme"
+    }
+  ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Téléverser une image depuis l'appareil"
+    }
+  ],
+  "components.sequenceAuthor": [
+    {
+      "type": 0,
+      "value": "Auteur de la séquence :"
+    }
+  ],
+  "components.settingCard.Radius.title": [
+    {
+      "type": 0,
+      "value": "Rayon"
+    }
+  ],
+  "components.settingCard.Size.title": [
+    {
+      "type": 0,
+      "value": "Taille"
+    }
+  ],
+  "components.settingCard.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Appliquer à tous"
+    }
+  ],
+  "components.settingCard.color.title": [
+    {
+      "type": 0,
+      "value": "Couleur"
+    }
+  ],
+  "components.settingCard.corss.title": [
+    {
+      "type": 0,
+      "value": "Croix/X"
+    }
+  ],
+  "components.settingCard.customText.label": [
+    {
+      "type": 0,
+      "value": "Texte personnalisé"
+    }
+  ],
+  "components.settingCard.fontSize.label": [
+    {
+      "type": 0,
+      "value": "Taille"
+    }
+  ],
+  "components.settingCard.numbered.title": [
+    {
+      "type": 0,
+      "value": "Numérotation"
+    }
+  ],
+  "components.settingCardBorder.fitzgeraldKey.label": [
+    {
+      "type": 0,
+      "value": "Clé Fitzgerald"
+    }
+  ],
+  "components.settingCardBorder.selected.label": [
+    {
+      "type": 0,
+      "value": "Sélection"
+    }
+  ],
+  "components.settingCardBorder.withoutBorder.label": [
+    {
+      "type": 0,
+      "value": "Sans bordure"
+    }
+  ],
+  "components.toggleButtonEditViewPages.edit.title": [
+    {
+      "type": 0,
+      "value": "Éditer"
+    }
+  ],
+  "components.toggleButtonEditViewPages.view.title": [
+    {
+      "type": 0,
+      "value": "Vue"
+    }
+  ],
+  "context.feedback.applyAll.success": [
+    {
+      "type": 0,
+      "value": "Appliqué à "
+    },
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pictogrammes"
+    }
+  ],
+  "context.feedback.load.error": [
+    {
+      "type": 0,
+      "value": "Erreur lors du chargement du fichier"
+    }
+  ],
+  "context.feedback.load.success": [
+    {
+      "type": 0,
+      "value": "Fichier chargé avec succès"
+    }
+  ],
+  "context.feedback.loading": [
+    {
+      "type": 0,
+      "value": "Chargement..."
+    }
+  ],
+  "context.feedback.save.success": [
+    {
+      "type": 0,
+      "value": "Fichier enregistré avec succès"
+    }
+  ],
+  "context.feedback.search.complete": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pictogrammes ajoutés"
+    }
+  ],
+  "context.feedback.search.error": [
+    {
+      "type": 0,
+      "value": "Erreur lors de la recherche de pictogrammes"
+    }
+  ],
+  "context.feedback.search.loading": [
+    {
+      "type": 0,
+      "value": "Recherche de pictogrammes..."
+    }
+  ],
+  "news.articleNavigation": [
+    {
+      "type": 0,
+      "value": "Navigation entre articles"
+    }
+  ],
+  "news.back.button": [
+    {
+      "type": 0,
+      "value": "Retour"
+    }
+  ],
+  "news.download-pdf.content": [
+    {
+      "type": 0,
+      "value": "Depuis la page de visualisation, cliquez sur le nouveau bouton PDF dans la barre d'outils (à côté du bouton d'impression) pour générer et télécharger un PDF de votre séquence."
+    }
+  ],
+  "news.download-pdf.step1.alt": [
+    {
+      "type": 0,
+      "value": "Barre d'outils avec le nouveau bouton PDF mis en évidence"
+    }
+  ],
+  "news.download-pdf.step1.description": [
+    {
+      "type": 0,
+      "value": "Dans la barre supérieure de la page de visualisation, vous trouverez le nouveau bouton PDF (icône de document) à côté des boutons d'orientation et d'impression. Cliquez pour démarrer le téléchargement."
+    }
+  ],
+  "news.download-pdf.step2.alt": [
+    {
+      "type": 0,
+      "value": "Aperçu de la séquence de pictogrammes qui sera téléchargée en PDF"
+    }
+  ],
+  "news.download-pdf.step2.description": [
+    {
+      "type": 0,
+      "value": "Le PDF contient exactement ce que vous voyez dans l'aperçu : les pictogrammes avec la taille, l'espacement et l'alignement configurés. Vous pouvez le partager par e-mail ou le sauvegarder."
+    }
+  ],
+  "news.download-pdf.summary": [
+    {
+      "type": 0,
+      "value": "Vous pouvez maintenant télécharger la séquence directement en PDF, sans ouvrir la boîte de dialogue d'impression."
+    }
+  ],
+  "news.download-pdf.title": [
+    {
+      "type": 0,
+      "value": "Télécharger la séquence en PDF"
+    }
+  ],
+  "news.logo-menu.content": [
+    {
+      "type": 0,
+      "value": "Saviez-vous que le logo de SequenciAAC est un bouton ? Cliquez dessus pour ouvrir le menu de navigation principal, depuis lequel vous pouvez accéder à toutes les pages et fonctions de l'application."
+    }
+  ],
+  "news.logo-menu.step1.alt": [
+    {
+      "type": 0,
+      "value": "Section de navigation du menu avec les liens Accueil, Nouveautés, Éditer et Aperçu"
+    }
+  ],
+  "news.logo-menu.step1.description": [
+    {
+      "type": 0,
+      "value": "La première section contient des raccourcis vers toutes les pages : Accueil, Nouveautés (où vous trouverez toutes les mises à jour), Éditer (pour créer vos séquences) et Aperçu (pour les visualiser et les imprimer)."
+    }
+  ],
+  "news.logo-menu.step2.alt": [
+    {
+      "type": 0,
+      "value": "Section de fichiers du menu avec les options Télécharger et Charger"
+    }
+  ],
+  "news.logo-menu.step2.description": [
+    {
+      "type": 0,
+      "value": "Depuis ici vous pouvez gérer vos fichiers de séquences : Télécharger enregistre la séquence actuelle dans un fichier sur votre appareil, et Charger récupère une séquence précédemment enregistrée."
+    }
+  ],
+  "news.logo-menu.step3.alt": [
+    {
+      "type": 0,
+      "value": "Section de paramètres et sélecteur de langue"
+    }
+  ],
+  "news.logo-menu.step3.description": [
+    {
+      "type": 0,
+      "value": "Paramètres ouvre le dialogue de paramètres par défaut des pictogrammes, où vous pouvez ajuster la typographie, les bordures, la position du texte et d'autres options visuelles. En dessous, le sélecteur de langue vous permet de changer entre le catalan (ca), l'espagnol (es), l'anglais (en), le français (fr) ou l'italien (it)."
+    }
+  ],
+  "news.logo-menu.summary": [
+    {
+      "type": 0,
+      "value": "Cliquez sur le logo pour ouvrir le menu principal et accéder à toutes les fonctions de l'application."
+    }
+  ],
+  "news.logo-menu.title": [
+    {
+      "type": 0,
+      "value": "Le menu de navigation"
+    }
+  ],
+  "news.moreInfo.button": [
+    {
+      "type": 0,
+      "value": "Plus d'infos"
+    }
+  ],
+  "news.multiple-sequences.content": [
+    {
+      "type": 0,
+      "value": "Créez autant de séquences que vous avez besoin ! Utilisez les onglets pour ajouter de nouvelles séquences ou supprimer celles dont vous n'avez plus besoin. Chaque séquence est indépendante et vous pouvez facilement passer de l'une à l'autre."
+    }
+  ],
+  "news.multiple-sequences.img1.alt": [
+    {
+      "type": 0,
+      "value": "Onglets de séquence"
+    }
+  ],
+  "news.multiple-sequences.img2.alt": [
+    {
+      "type": 0,
+      "value": "Ajouter et supprimer des séquences"
+    }
+  ],
+  "news.multiple-sequences.step1.alt": [
+    {
+      "type": 0,
+      "value": "Séquence 1 avec des pictogrammes et un bouton pour ajouter une nouvelle séquence"
+    }
+  ],
+  "news.multiple-sequences.step1.description": [
+    {
+      "type": 0,
+      "value": "Sur la page d'édition, recherchez des mots dans la barre de recherche (séparés par des virgules) et les pictogrammes apparaîtront automatiquement dans la séquence active. Cliquez sur le bouton + pour créer une nouvelle séquence."
+    }
+  ],
+  "news.multiple-sequences.step2.alt": [
+    {
+      "type": 0,
+      "value": "Deux onglets de séquence visibles, séquence 2 active"
+    }
+  ],
+  "news.multiple-sequences.step2.description": [
+    {
+      "type": 0,
+      "value": "Cliquez sur n'importe quel onglet pour changer de séquence active. Chaque séquence a son propre contenu indépendant. Recherchez de nouveaux mots pour remplir la séquence 2."
+    }
+  ],
+  "news.multiple-sequences.step3.alt": [
+    {
+      "type": 0,
+      "value": "Vue des deux séquences avec taille augmentée globalement"
+    }
+  ],
+  "news.multiple-sequences.step3.description": [
+    {
+      "type": 0,
+      "value": "Dans la Vue, le commutateur \"Appliquer à toutes\" permet d'ajuster la taille et l'espacement de toutes les séquences à la fois. Déplacez le contrôle de taille pour voir le changement appliqué globalement."
+    }
+  ],
+  "news.multiple-sequences.step4.alt": [
+    {
+      "type": 0,
+      "value": "Vue avec la séquence 2 ajustée individuellement à une taille différente"
+    }
+  ],
+  "news.multiple-sequences.step4.description": [
+    {
+      "type": 0,
+      "value": "Désactivez \"Appliquer à toutes\" pour configurer chaque séquence de manière indépendante. Développez l'accordéon de la séquence que vous souhaitez ajuster et modifiez sa taille ou son espacement sans affecter les autres."
+    }
+  ],
+  "news.multiple-sequences.summary": [
+    {
+      "type": 0,
+      "value": "Vous pouvez maintenant créer et gérer plusieurs séquences à la fois avec des onglets."
+    }
+  ],
+  "news.multiple-sequences.title": [
+    {
+      "type": 0,
+      "value": "Séquences multiples"
+    }
+  ],
+  "news.new-languages.content": [
+    {
+      "type": 0,
+      "value": "SequenciAAC est désormais accessible en deux nouvelles langues : Français et Italiano. Avec cet ajout, l'application peut être utilisée en cinq langues : catalan, espagnol, anglais, français et italien.\n\nLes traductions ont été réalisées automatiquement, il est donc possible qu'il y ait quelques inexactitudes ou expressions peu naturelles. Nous nous excusons pour toute erreur et vous remercions de nous le signaler afin que nous puissions l'améliorer."
+    }
+  ],
+  "news.new-languages.step1.alt": [
+    {
+      "type": 0,
+      "value": "Menu de navigation de SequenciAAC avec le sélecteur de langue en bas"
+    }
+  ],
+  "news.new-languages.step1.description": [
+    {
+      "type": 0,
+      "value": "Pour changer de langue, cliquez sur le logo SequenciAAC pour ouvrir le menu de navigation. En bas du menu, vous trouverez le sélecteur de langue."
+    }
+  ],
+  "news.new-languages.step2.alt": [
+    {
+      "type": 0,
+      "value": "Sélecteur de langue déployé avec les cinq langues disponibles"
+    }
+  ],
+  "news.new-languages.step2.description": [
+    {
+      "type": 0,
+      "value": "Cliquez sur le sélecteur pour voir les cinq langues disponibles : Català, Español, English, Français et Italiano. Sélectionnez-en une pour changer la langue de toute l'application immédiatement."
+    }
+  ],
+  "news.new-languages.step3.alt": [
+    {
+      "type": 0,
+      "value": "Application SequenciAAC avec l'interface en Français"
+    }
+  ],
+  "news.new-languages.step3.description": [
+    {
+      "type": 0,
+      "value": "L'interface se met à jour instantanément. Vous pouvez voir ici l'application en Français. Si vous trouvez une traduction incorrecte, faites-le nous savoir : nous l'améliorerons."
+    }
+  ],
+  "news.new-languages.summary": [
+    {
+      "type": 0,
+      "value": "L'application parle maintenant cinq langues. Voici comment en changer."
+    }
+  ],
+  "news.new-languages.title": [
+    {
+      "type": 0,
+      "value": "Nouvelles langues : Français et Italiano"
+    }
+  ],
+  "news.nextArticle": [
+    {
+      "type": 0,
+      "value": "Article suivant"
+    }
+  ],
+  "news.number-font.content": [
+    {
+      "type": 0,
+      "value": "Vous pouvez maintenant configurer de manière indépendante la typographie des numéros ajoutés aux pictogrammes lorsque vous activez la numérotation. Depuis le dialogue Paramètres par défaut, si vous activez le commutateur Numérotation, une nouvelle section apparaîtra pour choisir la famille typographique, la taille et la couleur des numéros, indépendamment de la typographie du texte des pictogrammes."
+    }
+  ],
+  "news.number-font.step1.alt": [
+    {
+      "type": 0,
+      "value": "Panneau de paramètres par défaut avec le commutateur de numérotation désactivé"
+    }
+  ],
+  "news.number-font.step1.description": [
+    {
+      "type": 0,
+      "value": "Ouvrez le dialogue Paramètres par défaut depuis le menu principal (cliquez sur le logo). Vous verrez un commutateur pour activer la numérotation des pictogrammes."
+    }
+  ],
+  "news.number-font.step2.alt": [
+    {
+      "type": 0,
+      "value": "Commutateur de numérotation activé dans le panneau de paramètres"
+    }
+  ],
+  "news.number-font.step2.description": [
+    {
+      "type": 0,
+      "value": "Activez le commutateur de numérotation. Chaque pictogramme affichera son numéro d'ordre à la position opposée au texte."
+    }
+  ],
+  "news.number-font.step3.alt": [
+    {
+      "type": 0,
+      "value": "Nouvelle section de configuration de la police des numéros, avec sélecteur de famille, taille et couleur"
+    }
+  ],
+  "news.number-font.step3.description": [
+    {
+      "type": 0,
+      "value": "Une fois la numérotation activée, une nouvelle section apparaît pour configurer la typographie des numéros : famille, taille et couleur, de manière indépendante à la police du texte des pictogrammes."
+    }
+  ],
+  "news.number-font.summary": [
+    {
+      "type": 0,
+      "value": "Choisissez une typographie propre pour les numéros qui apparaissent sur les pictogrammes."
+    }
+  ],
+  "news.number-font.title": [
+    {
+      "type": 0,
+      "value": "Police personnalisée pour les numéros"
+    }
+  ],
+  "news.prevArticle": [
+    {
+      "type": 0,
+      "value": "Article précédent"
+    }
+  ],
+  "news.print-preview.content": [
+    {
+      "type": 0,
+      "value": "L'aperçu vous montre exactement à quoi ressemblera la page imprimée. Vous pouvez contrôler la taille des pictogrammes, l'espace entre les lignes et les colonnes, et l'alignement. Tout est mis à jour en temps réel !"
+    }
+  ],
+  "news.print-preview.img1.alt": [
+    {
+      "type": 0,
+      "value": "Aperçu de la page"
+    }
+  ],
+  "news.print-preview.img2.alt": [
+    {
+      "type": 0,
+      "value": "Contrôles de taille et d'espacement"
+    }
+  ],
+  "news.print-preview.summary": [
+    {
+      "type": 0,
+      "value": "Prévisualisez exactement à quoi ressemblera votre page avant d'imprimer."
+    }
+  ],
+  "news.print-preview.title": [
+    {
+      "type": 0,
+      "value": "Aperçu d'impression"
+    }
+  ],
+  "news.save-improvements.content": [
+    {
+      "type": 0,
+      "value": "Maintenant le fichier .saac enregistre les images personnalisées que vous avez téléversées, directement dans le fichier pour ne pas les perdre. De plus, les paramètres d'affichage de chaque séquence — taille des pictogrammes, espacement et alignement — sont également enregistrés et récupérés exactement comme vous les avez laissés."
+    }
+  ],
+  "news.save-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Bouton pour téléverser une image personnalisée sur le pictogramme"
+    }
+  ],
+  "news.save-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "Téléversez votre propre image sur n'importe quel pictogramme. L'image est enregistrée directement dans le fichier .saac, sans avoir besoin d'internet."
+    }
+  ],
+  "news.save-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Dialogue d'enregistrement avec les options de séquences et de paramètres"
+    }
+  ],
+  "news.save-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "Lors de l'enregistrement du fichier, toutes les images personnalisées sont automatiquement incluses."
+    }
+  ],
+  "news.save-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Contrôles de taille et d'espacement des pictogrammes"
+    }
+  ],
+  "news.save-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "La taille, l'espacement et l'alignement de chaque séquence sont automatiquement enregistrés et restaurés lors du chargement du fichier."
+    }
+  ],
+  "news.save-improvements.summary": [
+    {
+      "type": 0,
+      "value": "Le fichier enregistré inclut maintenant les images personnalisées et les paramètres de taille et d'espacement de chaque séquence."
+    }
+  ],
+  "news.save-improvements.title": [
+    {
+      "type": 0,
+      "value": "Améliorations de l'enregistrement"
+    }
+  ],
+  "news.save-load.content": [
+    {
+      "type": 0,
+      "value": "Vous trouverez les options d'enregistrement et de chargement dans le menu du logo SequenciAAC. Lors de l'enregistrement, un fichier est téléchargé avec toutes les séquences et les images des pictogrammes incluses. Ainsi vous pouvez récupérer votre travail à tout moment !"
+    }
+  ],
+  "news.save-load.img1.alt": [
+    {
+      "type": 0,
+      "value": "Menu avec option d'enregistrement"
+    }
+  ],
+  "news.save-load.img2.alt": [
+    {
+      "type": 0,
+      "value": "Charger un fichier enregistré"
+    }
+  ],
+  "news.save-load.summary": [
+    {
+      "type": 0,
+      "value": "Téléchargez vos séquences avec les images et rechargez-les quand vous voulez."
+    }
+  ],
+  "news.save-load.title": [
+    {
+      "type": 0,
+      "value": "Enregistrer et récupérer"
+    }
+  ],
+  "news.section.title": [
+    {
+      "type": 0,
+      "value": "Nouveautés"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "Voir toutes les nouveautés"
+    }
+  ],
+  "news.sequence-settings.content": [
+    {
+      "type": 0,
+      "value": "Vous pouvez maintenant personnaliser chaque séquence de manière indépendante. Modifiez l'alignement des pictogrammes (gauche, centre ou droite), configurez la typographie et la couleur des numéros de manière indépendante du texte, et découvrez plus d'options de mise en forme pour adapter les séquences à vos besoins."
+    }
+  ],
+  "news.sequence-settings.img1.alt": [
+    {
+      "type": 0,
+      "value": "Options d'alignement"
+    }
+  ],
+  "news.sequence-settings.img2.alt": [
+    {
+      "type": 0,
+      "value": "Paramètres de typographie des numéros"
+    }
+  ],
+  "news.sequence-settings.summary": [
+    {
+      "type": 0,
+      "value": "Personnalisez chaque séquence avec l'alignement, la typographie des numéros et plus d'options."
+    }
+  ],
+  "news.sequence-settings.title": [
+    {
+      "type": 0,
+      "value": "Nouveaux paramètres par séquence"
+    }
+  ],
+  "news.view-improvements.content": [
+    {
+      "type": 0,
+      "value": "Plusieurs bogues ont été corrigés qui faisaient que l'aperçu d'impression ne correspondait pas exactement au résultat imprimé. De nouveaux contrôles ont également été ajoutés pour l'alignement et la direction des séquences, et lorsque vous enregistrez une séquence, les paramètres d'affichage sont maintenant automatiquement inclus."
+    }
+  ],
+  "news.view-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Aperçu de la séquence montrant la correspondance exacte avec l'impression"
+    }
+  ],
+  "news.view-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "L'aperçu de séquence correspond maintenant exactement au résultat imprimé. Un calcul d'échelle précis prend en compte le format de page (A4, A3) et la résolution d'écran pour montrer fidèlement ce qui sera imprimé."
+    }
+  ],
+  "news.view-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Contrôles d'alignement et de direction pour les séquences"
+    }
+  ],
+  "news.view-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "Nouveaux contrôles pour personnaliser chaque séquence : choisissez l'alignement (gauche, centre, droite) et la direction (horizontal ou vertical) pour adapter la présentation à vos besoins."
+    }
+  ],
+  "news.view-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Bouton d'enregistrement de séquence avec les paramètres de vue inclus"
+    }
+  ],
+  "news.view-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "Lorsque vous enregistrez la séquence en utilisant le bouton de téléchargement, les paramètres d'affichage (tailles, espacements, alignement et direction) sont automatiquement inclus dans le fichier, de sorte que lorsque vous le rechargez, tout sera tel que vous l'avez laissé."
+    }
+  ],
+  "news.view-improvements.summary": [
+    {
+      "type": 0,
+      "value": "Aperçu fidèle à l'impression, nouveaux contrôles d'alignement et de direction."
+    }
+  ],
+  "news.view-improvements.title": [
+    {
+      "type": 0,
+      "value": "Améliorations de l'aperçu"
+    }
+  ],
+  "pages.viewSequence.alignment.label": [
+    {
+      "type": 0,
+      "value": "Alignement"
+    }
+  ],
+  "pages.viewSequence.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Appliquer à toutes"
+    }
+  ],
+  "pages.viewSequence.authSequence.helperText": [
+    {
+      "type": 0,
+      "value": "Marquer la paternité"
+    }
+  ],
+  "pages.viewSequence.authSequence.label": [
+    {
+      "type": 0,
+      "value": "Auteur de la séquence"
+    }
+  ],
+  "pages.viewSequence.direction.label": [
+    {
+      "type": 0,
+      "value": "Direction"
+    }
+  ],
+  "pages.viewSequence.fullScreen.label": [
+    {
+      "type": 0,
+      "value": "Plein écran"
+    }
+  ],
+  "pages.viewSequence.pageSize.label": [
+    {
+      "type": 0,
+      "value": "Taille de page"
+    }
+  ],
+  "pages.viewSequence.pictSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Espace entre pictogrammes"
+    }
+  ],
+  "pages.viewSequence.sequence.label": [
+    {
+      "type": 0,
+      "value": "Séquence"
+    }
+  ],
+  "pages.viewSequence.sequenceSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Espace entre séquences"
+    }
+  ],
+  "pages.viewSequence.size.label": [
+    {
+      "type": 0,
+      "value": "Taille"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignCenter": [
+    {
+      "type": 0,
+      "value": "Centrer"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignLeft": [
+    {
+      "type": 0,
+      "value": "Aligner à gauche"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignRight": [
+    {
+      "type": 0,
+      "value": "Aligner à droite"
+    }
+  ],
+  "pages.viewSequence.tooltip.applyAll": [
+    {
+      "type": 0,
+      "value": "Appliquer à toutes les séquences"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionColumn": [
+    {
+      "type": 0,
+      "value": "Vertical"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionRow": [
+    {
+      "type": 0,
+      "value": "Horizontal"
+    }
+  ],
+  "pages.viewSequence.tooltip.downloadPdf": [
+    {
+      "type": 0,
+      "value": "Télécharger en PDF"
+    }
+  ],
+  "pages.viewSequence.tooltip.fullscreen": [
+    {
+      "type": 0,
+      "value": "Plein écran"
+    }
+  ],
+  "pages.viewSequence.tooltip.orientation": [
+    {
+      "type": 0,
+      "value": "Orientation de la page"
+    }
+  ],
+  "pages.viewSequence.tooltip.print": [
+    {
+      "type": 0,
+      "value": "Imprimer"
+    }
+  ],
+  "pictogram.empty": [
+    {
+      "type": 0,
+      "value": "Vide"
+    }
+  ],
+  "setting.font-family.title": [
+    {
+      "type": 0,
+      "value": "Famille"
+    }
+  ],
+  "setting.lang.an.label": [
+    {
+      "type": 0,
+      "value": "Arménien"
+    }
+  ],
+  "setting.lang.app.title": [
+    {
+      "type": 0,
+      "value": "App"
+    }
+  ],
+  "setting.lang.ar.label": [
+    {
+      "type": 0,
+      "value": "Arabe"
+    }
+  ],
+  "setting.lang.bg.label": [
+    {
+      "type": 0,
+      "value": "Bulgare"
+    }
+  ],
+  "setting.lang.br.label": [
+    {
+      "type": 0,
+      "value": "Breton"
+    }
+  ],
+  "setting.lang.ca.label": [
+    {
+      "type": 0,
+      "value": "Catalan"
+    }
+  ],
+  "setting.lang.cs.label": [
+    {
+      "type": 0,
+      "value": "Tchèque"
+    }
+  ],
+  "setting.lang.da.label": [
+    {
+      "type": 0,
+      "value": "Danois"
+    }
+  ],
+  "setting.lang.de.label": [
+    {
+      "type": 0,
+      "value": "Allemand"
+    }
+  ],
+  "setting.lang.el.label": [
+    {
+      "type": 0,
+      "value": "Grec"
+    }
+  ],
+  "setting.lang.en.label": [
+    {
+      "type": 0,
+      "value": "Anglais"
+    }
+  ],
+  "setting.lang.es.label": [
+    {
+      "type": 0,
+      "value": "Espagnol"
+    }
+  ],
+  "setting.lang.et.label": [
+    {
+      "type": 0,
+      "value": "Estonien"
+    }
+  ],
+  "setting.lang.eu.label": [
+    {
+      "type": 0,
+      "value": "Basque"
+    }
+  ],
+  "setting.lang.fa.label": [
+    {
+      "type": 0,
+      "value": "Persan"
+    }
+  ],
+  "setting.lang.fr.label": [
+    {
+      "type": 0,
+      "value": "Français"
+    }
+  ],
+  "setting.lang.gl.label": [
+    {
+      "type": 0,
+      "value": "Galicien"
+    }
+  ],
+  "setting.lang.he.label": [
+    {
+      "type": 0,
+      "value": "Hébreu"
+    }
+  ],
+  "setting.lang.hr.label": [
+    {
+      "type": 0,
+      "value": "Croate"
+    }
+  ],
+  "setting.lang.hu.label": [
+    {
+      "type": 0,
+      "value": "Hongrois"
+    }
+  ],
+  "setting.lang.it.label": [
+    {
+      "type": 0,
+      "value": "Italien"
+    }
+  ],
+  "setting.lang.ko.label": [
+    {
+      "type": 0,
+      "value": "Coréen"
+    }
+  ],
+  "setting.lang.lt.label": [
+    {
+      "type": 0,
+      "value": "Lituanien"
+    }
+  ],
+  "setting.lang.lv.label": [
+    {
+      "type": 0,
+      "value": "Letton"
+    }
+  ],
+  "setting.lang.mk.label": [
+    {
+      "type": 0,
+      "value": "Macédonien"
+    }
+  ],
+  "setting.lang.nb.label": [
+    {
+      "type": 0,
+      "value": "Norvégien Bokmål"
+    }
+  ],
+  "setting.lang.nl.label": [
+    {
+      "type": 0,
+      "value": "Néerlandais"
+    }
+  ],
+  "setting.lang.pl.label": [
+    {
+      "type": 0,
+      "value": "Polonais"
+    }
+  ],
+  "setting.lang.pt.label": [
+    {
+      "type": 0,
+      "value": "Portugais"
+    }
+  ],
+  "setting.lang.ro.label": [
+    {
+      "type": 0,
+      "value": "Roumain"
+    }
+  ],
+  "setting.lang.ru.label": [
+    {
+      "type": 0,
+      "value": "Russe"
+    }
+  ],
+  "setting.lang.search.title": [
+    {
+      "type": 0,
+      "value": "Recherche"
+    }
+  ],
+  "setting.lang.sk.label": [
+    {
+      "type": 0,
+      "value": "Slovaque"
+    }
+  ],
+  "setting.lang.sq.label": [
+    {
+      "type": 0,
+      "value": "Albanais"
+    }
+  ],
+  "setting.lang.sr.label": [
+    {
+      "type": 0,
+      "value": "Serbe"
+    }
+  ],
+  "setting.lang.sv.label": [
+    {
+      "type": 0,
+      "value": "Suédois"
+    }
+  ],
+  "setting.lang.uk.label": [
+    {
+      "type": 0,
+      "value": "Ukrainien"
+    }
+  ],
+  "setting.lang.val.label": [
+    {
+      "type": 0,
+      "value": "Valencien"
+    }
+  ],
+  "setting.lang.zh.label": [
+    {
+      "type": 0,
+      "value": "Chinois"
+    }
+  ],
+  "settings.hair.black": [
+    {
+      "type": 0,
+      "value": "Noir"
+    }
+  ],
+  "settings.hair.blonde": [
+    {
+      "type": 0,
+      "value": "Blond"
+    }
+  ],
+  "settings.hair.brown": [
+    {
+      "type": 0,
+      "value": "Brun"
+    }
+  ],
+  "settings.hair.darkBrown": [
+    {
+      "type": 0,
+      "value": "Brun foncé"
+    }
+  ],
+  "settings.hair.darkGray": [
+    {
+      "type": 0,
+      "value": "Gris foncé"
+    }
+  ],
+  "settings.hair.gray": [
+    {
+      "type": 0,
+      "value": "Gris"
+    }
+  ],
+  "settings.hair.label": [
+    {
+      "type": 0,
+      "value": "Cheveux"
+    }
+  ],
+  "settings.hair.red": [
+    {
+      "type": 0,
+      "value": "Roux"
+    }
+  ],
+  "settings.skins.asian": [
+    {
+      "type": 0,
+      "value": "Asiatique"
+    }
+  ],
+  "settings.skins.aztec": [
+    {
+      "type": 0,
+      "value": "Aztèque"
+    }
+  ],
+  "settings.skins.black": [
+    {
+      "type": 0,
+      "value": "Noir"
+    }
+  ],
+  "settings.skins.label": [
+    {
+      "type": 0,
+      "value": "Peau"
+    }
+  ],
+  "settings.skins.mulatto": [
+    {
+      "type": 0,
+      "value": "Métis"
+    }
+  ],
+  "settings.skins.white": [
+    {
+      "type": 0,
+      "value": "Blanc"
+    }
+  ],
+  "settings.textPosition.bottom": [
+    {
+      "type": 0,
+      "value": "Bas"
+    }
+  ],
+  "settings.textPosition.label": [
+    {
+      "type": 0,
+      "value": "Position du texte"
+    }
+  ],
+  "settings.textPosition.none": [
+    {
+      "type": 0,
+      "value": "Aucun"
+    }
+  ],
+  "settings.textPosition.top": [
+    {
+      "type": 0,
+      "value": "Haut"
+    }
+  ],
+  "view.welcome.arcadeLink": [
+    {
+      "type": 0,
+      "value": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
+    }
+  ],
+  "view.welcome.footer.credits": [
+    {
+      "type": 0,
+      "value": "Crédits"
+    }
+  ],
+  "view.welcome.footer.licenses": [
+    {
+      "type": 0,
+      "value": "Licences"
+    }
+  ],
+  "view.welcome.learning": [
+    {
+      "type": 0,
+      "value": "Apprendre à utiliser..."
+    }
+  ],
+  "view.welcome.liveMotive.title": [
+    {
+      "type": 0,
+      "value": "Créez et imprimez ou visualisez votre page de séquences."
+    }
+  ],
+  "view.welcome.start.button": [
+    {
+      "type": 0,
+      "value": "Commencer"
+    }
+  ]
+}

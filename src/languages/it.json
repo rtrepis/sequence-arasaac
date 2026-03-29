@@ -1,0 +1,1760 @@
+{
+  "changelog.category.correccio": [
+    {
+      "type": 0,
+      "value": "Correzione"
+    }
+  ],
+  "changelog.category.millora": [
+    {
+      "type": 0,
+      "value": "Miglioramento"
+    }
+  ],
+  "changelog.category.nova": [
+    {
+      "type": 0,
+      "value": "Nuovo"
+    }
+  ],
+  "changelog.page.title": [
+    {
+      "type": 0,
+      "value": "Novità"
+    }
+  ],
+  "changelog.readMore": [
+    {
+      "type": 0,
+      "value": "Leggi di più"
+    }
+  ],
+  "component.settingCardBorder.borderIn.title": [
+    {
+      "type": 0,
+      "value": "Bordo interno"
+    }
+  ],
+  "component.settingCardBorder.borderOut.title": [
+    {
+      "type": 0,
+      "value": "Bordo esterno"
+    }
+  ],
+  "component.settingCardFontGroup.color.title": [
+    {
+      "type": 0,
+      "value": "Colore"
+    }
+  ],
+  "component.settingCardFontGroup.font.title": [
+    {
+      "type": 0,
+      "value": "Tipografia"
+    }
+  ],
+  "component.settingCardFontGroup.numberFont.title": [
+    {
+      "type": 0,
+      "value": "Font dei numeri"
+    }
+  ],
+  "components.appNavigationDrawer.download": [
+    {
+      "type": 0,
+      "value": "Scarica"
+    }
+  ],
+  "components.appNavigationDrawer.editView": [
+    {
+      "type": 0,
+      "value": "Modifica"
+    }
+  ],
+  "components.appNavigationDrawer.langSelector": [
+    {
+      "type": 0,
+      "value": "Lingua"
+    }
+  ],
+  "components.appNavigationDrawer.load": [
+    {
+      "type": 0,
+      "value": "Carica"
+    }
+  ],
+  "components.appNavigationDrawer.news": [
+    {
+      "type": 0,
+      "value": "Novità"
+    }
+  ],
+  "components.appNavigationDrawer.openMenu": [
+    {
+      "type": 0,
+      "value": "Apri menu"
+    }
+  ],
+  "components.appNavigationDrawer.previewView": [
+    {
+      "type": 0,
+      "value": "Anteprima"
+    }
+  ],
+  "components.appNavigationDrawer.settings": [
+    {
+      "type": 0,
+      "value": "Impostazioni"
+    }
+  ],
+  "components.appNavigationDrawer.settingsClose": [
+    {
+      "type": 0,
+      "value": "Chiudi"
+    }
+  ],
+  "components.appNavigationDrawer.settingsTitle": [
+    {
+      "type": 0,
+      "value": "Impostazioni predefinite"
+    }
+  ],
+  "components.appNavigationDrawer.welcome": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
+  "components.barNavigation.edit.title": [
+    {
+      "type": 0,
+      "value": "Modifica"
+    }
+  ],
+  "components.barNavigation.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navigazione principale"
+    }
+  ],
+  "components.barNavigation.skipToContent": [
+    {
+      "type": 0,
+      "value": "Vai al contenuto principale"
+    }
+  ],
+  "components.barNavigation.title": [
+    {
+      "type": 0,
+      "value": "SequenciAAC"
+    }
+  ],
+  "components.barNavigation.view.title": [
+    {
+      "type": 0,
+      "value": "Vista"
+    }
+  ],
+  "components.barNavigation.welcome.title": [
+    {
+      "type": 0,
+      "value": "Benvenuto"
+    }
+  ],
+  "components.buttonWithFileLoad.load.label": [
+    {
+      "type": 0,
+      "value": "Carica"
+    }
+  ],
+  "components.buttonWithModalDownload.defaultSettings.label": [
+    {
+      "type": 0,
+      "value": "Impostazioni predefinite"
+    }
+  ],
+  "components.buttonWithModalDownload.download.label": [
+    {
+      "type": 0,
+      "value": "Scarica"
+    }
+  ],
+  "components.buttonWithModalDownload.filename.label": [
+    {
+      "type": 0,
+      "value": "Nome del file"
+    }
+  ],
+  "components.buttonWithModalDownload.save.title": [
+    {
+      "type": 0,
+      "value": "Salva"
+    }
+  ],
+  "components.buttonWithModalDownload.saveHelper.label": [
+    {
+      "type": 0,
+      "value": "Salva la sequenza e/o le impostazioni predefinite, e caricale in seguito."
+    }
+  ],
+  "components.buttonWithModalDownload.sequence.label": [
+    {
+      "type": 0,
+      "value": "Sequenza"
+    }
+  ],
+  "components.copyRight": [
+    {
+      "type": 0,
+      "value": "Fatto con: SequenciAAC - Autore dei pittogrammi: Sergio Palao. Origine: ARASAAC (http://www.arasaac.org). Licenza: CC (BY-NC-SA)."
+    }
+  ],
+  "components.copyRightDial.auth.label": [
+    {
+      "type": 0,
+      "value": "Design e diritti riservati: Ramon Trepat e AraSaac. seqsaac@gmail.com"
+    }
+  ],
+  "components.copyRightDial.license.label": [
+    {
+      "type": 0,
+      "value": "Fatto con: SequenciAAC - Autore dei pittogrammi: Sergio Palao. Origine: ARASAAC (http://www.arasaac.org). Licenza: CC (BY-NC-SA)."
+    }
+  ],
+  "components.defaultSettings.close": [
+    {
+      "type": 0,
+      "value": "chiudi"
+    }
+  ],
+  "components.defaultSettings.download": [
+    {
+      "type": 0,
+      "value": "Salva le impostazioni in un file locale"
+    }
+  ],
+  "components.defaultSettings.pictGuide": [
+    {
+      "type": 0,
+      "value": "Pittogramma guida"
+    }
+  ],
+  "components.defaultSettings.settings.title": [
+    {
+      "type": 0,
+      "value": "Impostazioni predefinite"
+    }
+  ],
+  "components.defaultSettings.upload": [
+    {
+      "type": 0,
+      "value": "Carica le impostazioni da un file locale"
+    }
+  ],
+  "components.logoMenu.download": [
+    {
+      "type": 0,
+      "value": "Scarica"
+    }
+  ],
+  "components.logoMenu.editView": [
+    {
+      "type": 0,
+      "value": "Modifica"
+    }
+  ],
+  "components.logoMenu.load": [
+    {
+      "type": 0,
+      "value": "Carica"
+    }
+  ],
+  "components.logoMenu.menuAriaLabel": [
+    {
+      "type": 0,
+      "value": "Menu principale"
+    }
+  ],
+  "components.logoMenu.previewView": [
+    {
+      "type": 0,
+      "value": "Anteprima"
+    }
+  ],
+  "components.logoMenu.settings": [
+    {
+      "type": 0,
+      "value": "Impostazioni"
+    }
+  ],
+  "components.magicSearch.button.": [
+    {
+      "type": 0,
+      "value": "Cerca"
+    }
+  ],
+  "components.magicSearch.helperText.": [
+    {
+      "type": 0,
+      "value": "Scrivi le parole della sequenza separate da virgole e premi Invio o fai clic sulla lente di ingrandimento quando hai finito. Esempio: bambino, mettere, cintura di sicurezza."
+    }
+  ],
+  "components.magicSearch.label": [
+    {
+      "type": 0,
+      "value": "Ricerca magica"
+    }
+  ],
+  "components.magicSearch.sample.": [
+    {
+      "type": 0,
+      "value": "Esempio: Bambino, mettere, la cintura di sicurezza."
+    }
+  ],
+  "components.newsNavBar.langSelector": [
+    {
+      "type": 0,
+      "value": "Lingua"
+    }
+  ],
+  "components.newsNavBar.mainNavigation": [
+    {
+      "type": 0,
+      "value": "Navigazione principale"
+    }
+  ],
+  "components.newsNavBar.news": [
+    {
+      "type": 0,
+      "value": "Novità"
+    }
+  ],
+  "components.newsNavBar.openMenu": [
+    {
+      "type": 0,
+      "value": "Apri menu di navigazione"
+    }
+  ],
+  "components.newsNavBar.skipToContent": [
+    {
+      "type": 0,
+      "value": "Vai al contenuto principale"
+    }
+  ],
+  "components.newsNavBar.start": [
+    {
+      "type": 0,
+      "value": "Crea una sequenza"
+    }
+  ],
+  "components.newsNavBar.welcome": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
+  "components.pictEdit.close": [
+    {
+      "type": 0,
+      "value": "Chiudi"
+    }
+  ],
+  "components.pictEdit.delete": [
+    {
+      "type": 0,
+      "value": "Elimina"
+    }
+  ],
+  "components.pictEdit.modal.description": [
+    {
+      "type": 0,
+      "value": "Puoi modificare i pittogrammi"
+    }
+  ],
+  "components.pictEdit.modal.label": [
+    {
+      "type": 0,
+      "value": "Modifica Pittogramma"
+    }
+  ],
+  "components.pictEdit.reset": [
+    {
+      "type": 0,
+      "value": "Valori predefiniti"
+    }
+  ],
+  "components.pictEditSettings.settings.label": [
+    {
+      "type": 0,
+      "value": "Impostazioni del Pittogramma"
+    }
+  ],
+  "components.pictogramAmount": [
+    {
+      "type": 0,
+      "value": "Pittogrammi:"
+    }
+  ],
+  "components.pictogramAmount.Subtract.label": [
+    {
+      "type": 0,
+      "value": "Rimuovi pittogramma"
+    }
+  ],
+  "components.pictogramAmount.add.label": [
+    {
+      "type": 0,
+      "value": "Aggiungi pittogramma vuoto"
+    }
+  ],
+  "components.pictogramAmount.helperText": [
+    {
+      "type": 0,
+      "value": "Inserisci o rimuovi un pittogramma alla fine della sequenza. Troverai più funzioni con il tasto destro del mouse o la pressione prolungata sui dispositivi mobili."
+    }
+  ],
+  "components.pictogramAmount.info": [
+    {
+      "type": 0,
+      "value": "Vedi più informazioni"
+    }
+  ],
+  "components.pictogramCard.pictogram": [
+    {
+      "type": 0,
+      "value": "Immagine pittogramma"
+    }
+  ],
+  "components.pictogramSearch.alert": [
+    {
+      "type": 0,
+      "value": "Nessun pittogramma trovato con questa parola - Prova un'altra parola!"
+    }
+  ],
+  "components.pictogramSearch.empty": [
+    {
+      "type": 0,
+      "value": "Vuoto"
+    }
+  ],
+  "components.pictogramSearch.helperText": [
+    {
+      "type": 0,
+      "value": "Motore di ricerca di pittogrammi"
+    }
+  ],
+  "components.pictogramSearch.label": [
+    {
+      "type": 0,
+      "value": "Cerca"
+    }
+  ],
+  "components.pictogramSearch.minus": [
+    {
+      "type": 0,
+      "value": "Rimuovi pittogramma"
+    }
+  ],
+  "components.pictogramSearch.pictogram": [
+    {
+      "type": 0,
+      "value": "Pittogramma"
+    }
+  ],
+  "components.pictogramSearch.plus": [
+    {
+      "type": 0,
+      "value": "Inserisci pittogramma"
+    }
+  ],
+  "components.pictogramSearch.uploadImage": [
+    {
+      "type": 0,
+      "value": "Carica immagine dal dispositivo"
+    }
+  ],
+  "components.sequenceAuthor": [
+    {
+      "type": 0,
+      "value": "Autore della sequenza:"
+    }
+  ],
+  "components.settingCard.Radius.title": [
+    {
+      "type": 0,
+      "value": "Raggio"
+    }
+  ],
+  "components.settingCard.Size.title": [
+    {
+      "type": 0,
+      "value": "Dimensione"
+    }
+  ],
+  "components.settingCard.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Applica a tutti"
+    }
+  ],
+  "components.settingCard.color.title": [
+    {
+      "type": 0,
+      "value": "Colore"
+    }
+  ],
+  "components.settingCard.corss.title": [
+    {
+      "type": 0,
+      "value": "Croce/X"
+    }
+  ],
+  "components.settingCard.customText.label": [
+    {
+      "type": 0,
+      "value": "Testo personalizzato"
+    }
+  ],
+  "components.settingCard.fontSize.label": [
+    {
+      "type": 0,
+      "value": "Dimensione"
+    }
+  ],
+  "components.settingCard.numbered.title": [
+    {
+      "type": 0,
+      "value": "Numerazione"
+    }
+  ],
+  "components.settingCardBorder.fitzgeraldKey.label": [
+    {
+      "type": 0,
+      "value": "Chiave Fitzgerald"
+    }
+  ],
+  "components.settingCardBorder.selected.label": [
+    {
+      "type": 0,
+      "value": "Selezione"
+    }
+  ],
+  "components.settingCardBorder.withoutBorder.label": [
+    {
+      "type": 0,
+      "value": "Senza bordo"
+    }
+  ],
+  "components.toggleButtonEditViewPages.edit.title": [
+    {
+      "type": 0,
+      "value": "Modifica"
+    }
+  ],
+  "components.toggleButtonEditViewPages.view.title": [
+    {
+      "type": 0,
+      "value": "Vista"
+    }
+  ],
+  "context.feedback.applyAll.success": [
+    {
+      "type": 0,
+      "value": "Applicato a "
+    },
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pittogrammi"
+    }
+  ],
+  "context.feedback.load.error": [
+    {
+      "type": 0,
+      "value": "Errore durante il caricamento del file"
+    }
+  ],
+  "context.feedback.load.success": [
+    {
+      "type": 0,
+      "value": "File caricato con successo"
+    }
+  ],
+  "context.feedback.loading": [
+    {
+      "type": 0,
+      "value": "Caricamento..."
+    }
+  ],
+  "context.feedback.save.success": [
+    {
+      "type": 0,
+      "value": "File salvato con successo"
+    }
+  ],
+  "context.feedback.search.complete": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " pittogrammi aggiunti"
+    }
+  ],
+  "context.feedback.search.error": [
+    {
+      "type": 0,
+      "value": "Errore durante la ricerca di pittogrammi"
+    }
+  ],
+  "context.feedback.search.loading": [
+    {
+      "type": 0,
+      "value": "Ricerca di pittogrammi..."
+    }
+  ],
+  "news.articleNavigation": [
+    {
+      "type": 0,
+      "value": "Navigazione tra articoli"
+    }
+  ],
+  "news.back.button": [
+    {
+      "type": 0,
+      "value": "Indietro"
+    }
+  ],
+  "news.download-pdf.content": [
+    {
+      "type": 0,
+      "value": "Dalla pagina di visualizzazione, fai clic sul nuovo pulsante PDF nella barra degli strumenti (accanto al pulsante di stampa) per generare e scaricare un PDF della tua sequenza."
+    }
+  ],
+  "news.download-pdf.step1.alt": [
+    {
+      "type": 0,
+      "value": "Barra degli strumenti con il nuovo pulsante PDF evidenziato"
+    }
+  ],
+  "news.download-pdf.step1.description": [
+    {
+      "type": 0,
+      "value": "Nella barra superiore della pagina di visualizzazione troverai il nuovo pulsante PDF (icona documento) accanto ai pulsanti di orientamento e stampa. Cliccaci per avviare il download."
+    }
+  ],
+  "news.download-pdf.step2.alt": [
+    {
+      "type": 0,
+      "value": "Anteprima della sequenza di pittogrammi che verrà scaricata come PDF"
+    }
+  ],
+  "news.download-pdf.step2.description": [
+    {
+      "type": 0,
+      "value": "Il PDF contiene esattamente ciò che vedi nell'anteprima: i pittogrammi con la dimensione, la spaziatura e l'allineamento impostati. Puoi condividerlo via email o salvarlo sul dispositivo."
+    }
+  ],
+  "news.download-pdf.summary": [
+    {
+      "type": 0,
+      "value": "Ora puoi scaricare la sequenza direttamente come PDF, senza aprire la finestra di stampa."
+    }
+  ],
+  "news.download-pdf.title": [
+    {
+      "type": 0,
+      "value": "Scarica la sequenza come PDF"
+    }
+  ],
+  "news.download-pdf.content": [
+    {
+      "type": 0,
+      "value": "Desde la página de visualización, haz clic en el nuevo botón PDF de la barra de herramientas (junto al botón de imprimir) para generar y descargar un PDF de tu secuencia."
+    }
+  ],
+  "news.download-pdf.step1.alt": [
+    {
+      "type": 0,
+      "value": "Barra de herramientas con el nuevo botón PDF resaltado"
+    }
+  ],
+  "news.download-pdf.step1.description": [
+    {
+      "type": 0,
+      "value": "En la barra superior de la página de vista encontrarás el nuevo botón PDF (icono de documento) junto a los botones de orientación e imprimir. Haz clic para iniciar la descarga."
+    }
+  ],
+  "news.download-pdf.step2.alt": [
+    {
+      "type": 0,
+      "value": "Vista previa de la secuencia de pictogramas que se descargará como PDF"
+    }
+  ],
+  "news.download-pdf.step2.description": [
+    {
+      "type": 0,
+      "value": "El PDF contiene exactamente lo que ves en la previsualización: los pictogramas con el tamaño, espaciado y alineación configurados. Puedes compartirlo por correo o guardarlo en el dispositivo."
+    }
+  ],
+  "news.download-pdf.summary": [
+    {
+      "type": 0,
+      "value": "Ahora puedes descargar la secuencia directamente como PDF, sin abrir el diálogo de impresión."
+    }
+  ],
+  "news.download-pdf.title": [
+    {
+      "type": 0,
+      "value": "Descarga la secuencia en PDF"
+    }
+  ],
+  "news.logo-menu.content": [
+    {
+      "type": 0,
+      "value": "Lo sapevi che il logo di SequenciAAC è un pulsante? Fai clic per aprire il menu di navigazione principale, da cui puoi accedere a tutte le pagine e funzioni dell'applicazione."
+    }
+  ],
+  "news.logo-menu.step1.alt": [
+    {
+      "type": 0,
+      "value": "Sezione di navigazione del menu con i link Home, Novità, Modifica e Anteprima"
+    }
+  ],
+  "news.logo-menu.step1.description": [
+    {
+      "type": 0,
+      "value": "La prima sezione contiene scorciatoie per tutte le pagine: Home, Novità (dove troverai tutti gli aggiornamenti), Modifica (per creare le tue sequenze) e Anteprima (per visualizzarle e stamparle)."
+    }
+  ],
+  "news.logo-menu.step2.alt": [
+    {
+      "type": 0,
+      "value": "Sezione file del menu con le opzioni Scarica e Carica"
+    }
+  ],
+  "news.logo-menu.step2.description": [
+    {
+      "type": 0,
+      "value": "Da qui puoi gestire i file delle tue sequenze: Scarica salva la sequenza corrente in un file sul tuo dispositivo, e Carica recupera una sequenza precedentemente salvata."
+    }
+  ],
+  "news.logo-menu.step3.alt": [
+    {
+      "type": 0,
+      "value": "Sezione impostazioni e selettore di lingua"
+    }
+  ],
+  "news.logo-menu.step3.description": [
+    {
+      "type": 0,
+      "value": "Impostazioni apre il dialogo delle impostazioni predefinite dei pittogrammi, dove puoi regolare la tipografia, i bordi, la posizione del testo e altre opzioni visive. Sotto troverai il selettore di lingua per cambiare tra catalano (ca), spagnolo (es), inglese (en), francese (fr) o italiano (it)."
+    }
+  ],
+  "news.logo-menu.summary": [
+    {
+      "type": 0,
+      "value": "Fai clic sul logo per aprire il menu principale e accedere a tutte le funzioni dell'applicazione."
+    }
+  ],
+  "news.logo-menu.title": [
+    {
+      "type": 0,
+      "value": "Il menu di navigazione"
+    }
+  ],
+  "news.moreInfo.button": [
+    {
+      "type": 0,
+      "value": "Più info"
+    }
+  ],
+  "news.multiple-sequences.content": [
+    {
+      "type": 0,
+      "value": "Crea tutte le sequenze di cui hai bisogno! Usa le schede per aggiungere nuove sequenze o rimuovere quelle di cui non hai più bisogno. Ogni sequenza è indipendente e puoi passare facilmente da una all'altra."
+    }
+  ],
+  "news.multiple-sequences.img1.alt": [
+    {
+      "type": 0,
+      "value": "Schede di sequenza"
+    }
+  ],
+  "news.multiple-sequences.img2.alt": [
+    {
+      "type": 0,
+      "value": "Aggiungere e rimuovere sequenze"
+    }
+  ],
+  "news.multiple-sequences.step1.alt": [
+    {
+      "type": 0,
+      "value": "Sequenza 1 con pittogrammi e pulsante per aggiungere una nuova sequenza"
+    }
+  ],
+  "news.multiple-sequences.step1.description": [
+    {
+      "type": 0,
+      "value": "Nella pagina di modifica, cerca parole nella barra di ricerca (separate da virgole) e i pittogrammi appariranno automaticamente nella sequenza attiva. Fai clic sul pulsante + per creare una nuova sequenza."
+    }
+  ],
+  "news.multiple-sequences.step2.alt": [
+    {
+      "type": 0,
+      "value": "Due schede di sequenza visibili, sequenza 2 attiva"
+    }
+  ],
+  "news.multiple-sequences.step2.description": [
+    {
+      "type": 0,
+      "value": "Fai clic su qualsiasi scheda per passare a una sequenza attiva diversa. Ogni sequenza ha il suo contenuto indipendente. Cerca nuove parole per riempire la sequenza 2."
+    }
+  ],
+  "news.multiple-sequences.step3.alt": [
+    {
+      "type": 0,
+      "value": "Vista di entrambe le sequenze con dimensione aumentata globalmente"
+    }
+  ],
+  "news.multiple-sequences.step3.description": [
+    {
+      "type": 0,
+      "value": "Nella Vista, il selettore \"Applica a tutte\" consente di regolare la dimensione e la spaziatura di tutte le sequenze in una volta. Sposta il controllo della dimensione per vedere il cambiamento applicato globalmente."
+    }
+  ],
+  "news.multiple-sequences.step4.alt": [
+    {
+      "type": 0,
+      "value": "Vista con la sequenza 2 regolata individualmente a una dimensione diversa"
+    }
+  ],
+  "news.multiple-sequences.step4.description": [
+    {
+      "type": 0,
+      "value": "Disabilita \"Applica a tutte\" per configurare ogni sequenza in modo indipendente. Espandi il pannello della sequenza che vuoi regolare e modifica la sua dimensione o spaziatura senza influenzare le altre."
+    }
+  ],
+  "news.multiple-sequences.summary": [
+    {
+      "type": 0,
+      "value": "Ora puoi creare e gestire più sequenze contemporaneamente con le schede."
+    }
+  ],
+  "news.multiple-sequences.title": [
+    {
+      "type": 0,
+      "value": "Sequenze multiple"
+    }
+  ],
+  "news.new-languages.content": [
+    {
+      "type": 0,
+      "value": "SequenciAAC è ora accessibile in due nuove lingue: Français (francese) e Italiano. Con questa aggiunta, l'applicazione può essere utilizzata in cinque lingue: catalano, spagnolo, inglese, francese e italiano.\n\nLe traduzioni sono state realizzate automaticamente, quindi è possibile che ci siano alcune imprecisioni o espressioni poco naturali. Ci scusiamo per eventuali errori e vi ringraziamo per averci segnalato qualsiasi problema, così potremo migliorare."
+    }
+  ],
+  "news.new-languages.step1.alt": [
+    {
+      "type": 0,
+      "value": "Menu di navigazione di SequenciAAC con il selettore di lingua in basso"
+    }
+  ],
+  "news.new-languages.step1.description": [
+    {
+      "type": 0,
+      "value": "Per cambiare la lingua, fare clic sul logo SequenciAAC per aprire il menu di navigazione. In fondo al menu si trova il selettore della lingua."
+    }
+  ],
+  "news.new-languages.step2.alt": [
+    {
+      "type": 0,
+      "value": "Selettore di lingua espanso con le cinque lingue disponibili"
+    }
+  ],
+  "news.new-languages.step2.description": [
+    {
+      "type": 0,
+      "value": "Fare clic sul selettore per vedere le cinque lingue disponibili: Català, Español, English, Français e Italiano. Selezionarne una per cambiare la lingua dell'intera applicazione immediatamente."
+    }
+  ],
+  "news.new-languages.step3.alt": [
+    {
+      "type": 0,
+      "value": "Applicazione SequenciAAC con l'interfaccia in Français"
+    }
+  ],
+  "news.new-languages.step3.description": [
+    {
+      "type": 0,
+      "value": "L'interfaccia si aggiorna istantaneamente. Qui potete vedere l'applicazione in Français. Se trovate una traduzione errata, fatecelo sapere: la miglioreremo."
+    }
+  ],
+  "news.new-languages.summary": [
+    {
+      "type": 0,
+      "value": "L'app ora parla cinque lingue. Vi spieghiamo come cambiarla."
+    }
+  ],
+  "news.new-languages.title": [
+    {
+      "type": 0,
+      "value": "Nuove lingue: Français e Italiano"
+    }
+  ],
+  "news.new-languages.content": [
+    {
+      "type": 0,
+      "value": "SequenciAAC ya es accesible en dos nuevos idiomas: Français (francés) e Italiano (italiano). Con esta incorporación, la aplicación puede usarse en cinco idiomas: catalán, castellano, inglés, francés e italiano.\n\nLas traducciones se han realizado de forma automática, por lo que es posible que haya alguna inexactitud o expresión poco natural. Pedimos disculpas por cualquier error y os agradecemos que nos lo hagáis saber para poder mejorarlo."
+    }
+  ],
+  "news.new-languages.step1.alt": [
+    {
+      "type": 0,
+      "value": "Menú de navegación de SequenciAAC con el selector de idioma en la parte inferior"
+    }
+  ],
+  "news.new-languages.step1.description": [
+    {
+      "type": 0,
+      "value": "Para cambiar el idioma, haz clic en el logo de SequenciAAC para abrir el menú de navegación. En la parte inferior del menú encontrarás el selector de idioma."
+    }
+  ],
+  "news.new-languages.step2.alt": [
+    {
+      "type": 0,
+      "value": "Selector de idioma desplegado con los cinco idiomas disponibles"
+    }
+  ],
+  "news.new-languages.step2.description": [
+    {
+      "type": 0,
+      "value": "Haz clic en el selector para ver los cinco idiomas disponibles: Català, Español, English, Français e Italiano. Selecciona uno para cambiar el idioma de toda la aplicación de forma inmediata."
+    }
+  ],
+  "news.new-languages.step3.alt": [
+    {
+      "type": 0,
+      "value": "Aplicación SequenciAAC con la interfaz en Français"
+    }
+  ],
+  "news.new-languages.step3.description": [
+    {
+      "type": 0,
+      "value": "La interfaz se actualiza al instante. Aquí puedes ver la aplicación en Français. Si encuentras alguna traducción incorrecta, haznos lo saber: lo mejoraremos."
+    }
+  ],
+  "news.new-languages.summary": [
+    {
+      "type": 0,
+      "value": "La app ahora habla cinco idiomas. Te explicamos cómo cambiarlo."
+    }
+  ],
+  "news.new-languages.title": [
+    {
+      "type": 0,
+      "value": "Nuevos idiomas: Français e Italiano"
+    }
+  ],
+  "news.nextArticle": [
+    {
+      "type": 0,
+      "value": "Articolo successivo"
+    }
+  ],
+  "news.number-font.content": [
+    {
+      "type": 0,
+      "value": "Ora puoi configurare in modo indipendente la tipografia dei numeri aggiunti ai pittogrammi quando attivi la numerazione. Dal dialogo Impostazioni predefinite, se attivi il selettore Numerazione, apparirà una nuova sezione per scegliere la famiglia tipografica, la dimensione e il colore dei numeri, indipendentemente dalla tipografia del testo dei pittogrammi."
+    }
+  ],
+  "news.number-font.step1.alt": [
+    {
+      "type": 0,
+      "value": "Pannello delle impostazioni predefinite con il selettore di numerazione disabilitato"
+    }
+  ],
+  "news.number-font.step1.description": [
+    {
+      "type": 0,
+      "value": "Apri il dialogo Impostazioni predefinite dal menu principale (fai clic sul logo). Vedrai un selettore per attivare la numerazione dei pittogrammi."
+    }
+  ],
+  "news.number-font.step2.alt": [
+    {
+      "type": 0,
+      "value": "Selettore di numerazione attivato nel pannello delle impostazioni"
+    }
+  ],
+  "news.number-font.step2.description": [
+    {
+      "type": 0,
+      "value": "Attiva il selettore di numerazione. Ogni pittogramma mostrerà il suo numero d'ordine nella posizione opposta al testo."
+    }
+  ],
+  "news.number-font.step3.alt": [
+    {
+      "type": 0,
+      "value": "Nuova sezione di configurazione del font dei numeri, con selettore di famiglia, dimensione e colore"
+    }
+  ],
+  "news.number-font.step3.description": [
+    {
+      "type": 0,
+      "value": "Una volta attivata la numerazione, appare una nuova sezione per configurare la tipografia dei numeri: famiglia, dimensione e colore, in modo indipendente dal font del testo dei pittogrammi."
+    }
+  ],
+  "news.number-font.summary": [
+    {
+      "type": 0,
+      "value": "Scegli una tipografia propria per i numeri che appaiono sui pittogrammi."
+    }
+  ],
+  "news.number-font.title": [
+    {
+      "type": 0,
+      "value": "Font personalizzato per i numeri"
+    }
+  ],
+  "news.prevArticle": [
+    {
+      "type": 0,
+      "value": "Articolo precedente"
+    }
+  ],
+  "news.print-preview.content": [
+    {
+      "type": 0,
+      "value": "L'anteprima ti mostra esattamente come apparirà la pagina stampata. Puoi controllare la dimensione dei pittogrammi, lo spazio tra righe e colonne e l'allineamento. Tutto si aggiorna in tempo reale!"
+    }
+  ],
+  "news.print-preview.img1.alt": [
+    {
+      "type": 0,
+      "value": "Anteprima della pagina"
+    }
+  ],
+  "news.print-preview.img2.alt": [
+    {
+      "type": 0,
+      "value": "Controlli di dimensione e spaziatura"
+    }
+  ],
+  "news.print-preview.summary": [
+    {
+      "type": 0,
+      "value": "Visualizza in anteprima esattamente come apparirà la tua pagina prima di stampare."
+    }
+  ],
+  "news.print-preview.title": [
+    {
+      "type": 0,
+      "value": "Anteprima di stampa"
+    }
+  ],
+  "news.save-improvements.content": [
+    {
+      "type": 0,
+      "value": "Ora il file .saac salva le immagini personalizzate che hai caricato, direttamente nel file per non perderle. Inoltre, le impostazioni di visualizzazione di ogni sequenza — dimensione dei pittogrammi, spaziatura e allineamento — vengono anche salvate e recuperate esattamente come le hai lasciate."
+    }
+  ],
+  "news.save-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Pulsante per caricare un'immagine personalizzata sul pittogramma"
+    }
+  ],
+  "news.save-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "Carica la tua immagine su qualsiasi pittogramma. L'immagine viene salvata direttamente nel file .saac, senza dipendere da internet."
+    }
+  ],
+  "news.save-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Dialogo di salvataggio con le opzioni di sequenze e impostazioni"
+    }
+  ],
+  "news.save-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "Quando si salva il file, tutte le immagini personalizzate vengono automaticamente incluse."
+    }
+  ],
+  "news.save-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Controlli di dimensione e spaziatura dei pittogrammi"
+    }
+  ],
+  "news.save-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "La dimensione, la spaziatura e l'allineamento di ogni sequenza vengono automaticamente salvati e ripristinati al caricamento del file."
+    }
+  ],
+  "news.save-improvements.summary": [
+    {
+      "type": 0,
+      "value": "Il file salvato ora include le immagini personalizzate e le impostazioni di dimensione e spaziatura di ogni sequenza."
+    }
+  ],
+  "news.save-improvements.title": [
+    {
+      "type": 0,
+      "value": "Miglioramenti al salvataggio"
+    }
+  ],
+  "news.save-load.content": [
+    {
+      "type": 0,
+      "value": "Troverai le opzioni di salvataggio e caricamento nel menu del logo SequenciAAC. Quando salvi, viene scaricato un file con tutte le sequenze e le immagini dei pittogrammi incluse. Così puoi recuperare il tuo lavoro in qualsiasi momento!"
+    }
+  ],
+  "news.save-load.img1.alt": [
+    {
+      "type": 0,
+      "value": "Menu con opzione di salvataggio"
+    }
+  ],
+  "news.save-load.img2.alt": [
+    {
+      "type": 0,
+      "value": "Caricare file salvato"
+    }
+  ],
+  "news.save-load.summary": [
+    {
+      "type": 0,
+      "value": "Scarica le tue sequenze con le immagini e ricaricale quando vuoi."
+    }
+  ],
+  "news.save-load.title": [
+    {
+      "type": 0,
+      "value": "Salva e recupera"
+    }
+  ],
+  "news.section.title": [
+    {
+      "type": 0,
+      "value": "Novità"
+    }
+  ],
+  "news.seeAll": [
+    {
+      "type": 0,
+      "value": "Vedi tutte le novità"
+    }
+  ],
+  "news.sequence-settings.content": [
+    {
+      "type": 0,
+      "value": "Ora puoi personalizzare ogni sequenza in modo indipendente. Cambia l'allineamento dei pittogrammi (sinistra, centro o destra), configura la tipografia e il colore dei numeri in modo indipendente dal testo, e scopri più opzioni di formattazione per adattare le sequenze alle tue esigenze."
+    }
+  ],
+  "news.sequence-settings.img1.alt": [
+    {
+      "type": 0,
+      "value": "Opzioni di allineamento"
+    }
+  ],
+  "news.sequence-settings.img2.alt": [
+    {
+      "type": 0,
+      "value": "Impostazioni tipografia dei numeri"
+    }
+  ],
+  "news.sequence-settings.summary": [
+    {
+      "type": 0,
+      "value": "Personalizza ogni sequenza con allineamento, tipografia dei numeri e altre opzioni."
+    }
+  ],
+  "news.sequence-settings.title": [
+    {
+      "type": 0,
+      "value": "Nuove impostazioni per sequenza"
+    }
+  ],
+  "news.view-improvements.content": [
+    {
+      "type": 0,
+      "value": "Sono stati corretti diversi bug che causavano la non corrispondenza dell'anteprima di stampa con il risultato stampato effettivo. Sono stati aggiunti nuovi controlli per l'allineamento e la direzione delle sequenze, e quando si salva una sequenza le impostazioni di visualizzazione vengono ora incluse automaticamente."
+    }
+  ],
+  "news.view-improvements.step1.alt": [
+    {
+      "type": 0,
+      "value": "Anteprima della sequenza che mostra la corrispondenza esatta con la stampa"
+    }
+  ],
+  "news.view-improvements.step1.description": [
+    {
+      "type": 0,
+      "value": "L'anteprima della sequenza corrisponde ora esattamente al risultato stampato. Un calcolo preciso della scala tiene conto del formato della pagina (A4, A3) e della risoluzione dello schermo per mostrare fedelmente ciò che verrà stampato."
+    }
+  ],
+  "news.view-improvements.step2.alt": [
+    {
+      "type": 0,
+      "value": "Controlli di allineamento e direzione per le sequenze"
+    }
+  ],
+  "news.view-improvements.step2.description": [
+    {
+      "type": 0,
+      "value": "Nuovi controlli per personalizzare ogni sequenza: scegli l'allineamento (sinistra, centro, destra) e la direzione (orizzontale o verticale) per adattare la presentazione alle tue esigenze."
+    }
+  ],
+  "news.view-improvements.step3.alt": [
+    {
+      "type": 0,
+      "value": "Pulsante di salvataggio sequenza con le impostazioni di visualizzazione incluse"
+    }
+  ],
+  "news.view-improvements.step3.description": [
+    {
+      "type": 0,
+      "value": "Quando salvi la sequenza usando il pulsante di download, le impostazioni di visualizzazione (dimensioni, spaziature, allineamento e direzione) vengono automaticamente incluse nel file, in modo che quando lo ricarichi tutto sarà come l'hai lasciato."
+    }
+  ],
+  "news.view-improvements.summary": [
+    {
+      "type": 0,
+      "value": "Anteprima fedele alla stampa, nuovi controlli di allineamento e direzione."
+    }
+  ],
+  "news.view-improvements.title": [
+    {
+      "type": 0,
+      "value": "Miglioramenti all'anteprima"
+    }
+  ],
+  "pages.viewSequence.alignment.label": [
+    {
+      "type": 0,
+      "value": "Allineamento"
+    }
+  ],
+  "pages.viewSequence.applyAll.label": [
+    {
+      "type": 0,
+      "value": "Applica a tutte"
+    }
+  ],
+  "pages.viewSequence.authSequence.helperText": [
+    {
+      "type": 0,
+      "value": "Indicare la paternità"
+    }
+  ],
+  "pages.viewSequence.authSequence.label": [
+    {
+      "type": 0,
+      "value": "Autore della sequenza"
+    }
+  ],
+  "pages.viewSequence.direction.label": [
+    {
+      "type": 0,
+      "value": "Direzione"
+    }
+  ],
+  "pages.viewSequence.fullScreen.label": [
+    {
+      "type": 0,
+      "value": "Schermo intero"
+    }
+  ],
+  "pages.viewSequence.pageSize.label": [
+    {
+      "type": 0,
+      "value": "Dimensione pagina"
+    }
+  ],
+  "pages.viewSequence.pictSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Spazio tra pittogrammi"
+    }
+  ],
+  "pages.viewSequence.sequence.label": [
+    {
+      "type": 0,
+      "value": "Sequenza"
+    }
+  ],
+  "pages.viewSequence.sequenceSpaceBetween.label": [
+    {
+      "type": 0,
+      "value": "Spazio tra sequenze"
+    }
+  ],
+  "pages.viewSequence.size.label": [
+    {
+      "type": 0,
+      "value": "Dimensione"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignCenter": [
+    {
+      "type": 0,
+      "value": "Allinea al centro"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignLeft": [
+    {
+      "type": 0,
+      "value": "Allinea a sinistra"
+    }
+  ],
+  "pages.viewSequence.tooltip.alignRight": [
+    {
+      "type": 0,
+      "value": "Allinea a destra"
+    }
+  ],
+  "pages.viewSequence.tooltip.applyAll": [
+    {
+      "type": 0,
+      "value": "Applica a tutte le sequenze"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionColumn": [
+    {
+      "type": 0,
+      "value": "Verticale"
+    }
+  ],
+  "pages.viewSequence.tooltip.directionRow": [
+    {
+      "type": 0,
+      "value": "Orizzontale"
+    }
+  ],
+  "pages.viewSequence.tooltip.downloadPdf": [
+    {
+      "type": 0,
+      "value": "Scarica come PDF"
+    }
+  ],
+  "pages.viewSequence.tooltip.downloadPdf": [
+    {
+      "type": 0,
+      "value": "Descargar PDF"
+    }
+  ],
+  "pages.viewSequence.tooltip.fullscreen": [
+    {
+      "type": 0,
+      "value": "Schermo intero"
+    }
+  ],
+  "pages.viewSequence.tooltip.orientation": [
+    {
+      "type": 0,
+      "value": "Orientamento pagina"
+    }
+  ],
+  "pages.viewSequence.tooltip.print": [
+    {
+      "type": 0,
+      "value": "Stampa"
+    }
+  ],
+  "pictogram.empty": [
+    {
+      "type": 0,
+      "value": "Vuoto"
+    }
+  ],
+  "setting.font-family.title": [
+    {
+      "type": 0,
+      "value": "Famiglia"
+    }
+  ],
+  "setting.lang.an.label": [
+    {
+      "type": 0,
+      "value": "Armeno"
+    }
+  ],
+  "setting.lang.app.title": [
+    {
+      "type": 0,
+      "value": "App"
+    }
+  ],
+  "setting.lang.ar.label": [
+    {
+      "type": 0,
+      "value": "Arabo"
+    }
+  ],
+  "setting.lang.bg.label": [
+    {
+      "type": 0,
+      "value": "Bulgaro"
+    }
+  ],
+  "setting.lang.br.label": [
+    {
+      "type": 0,
+      "value": "Bretone"
+    }
+  ],
+  "setting.lang.ca.label": [
+    {
+      "type": 0,
+      "value": "Catalano"
+    }
+  ],
+  "setting.lang.cs.label": [
+    {
+      "type": 0,
+      "value": "Ceco"
+    }
+  ],
+  "setting.lang.da.label": [
+    {
+      "type": 0,
+      "value": "Danese"
+    }
+  ],
+  "setting.lang.de.label": [
+    {
+      "type": 0,
+      "value": "Tedesco"
+    }
+  ],
+  "setting.lang.el.label": [
+    {
+      "type": 0,
+      "value": "Greco"
+    }
+  ],
+  "setting.lang.en.label": [
+    {
+      "type": 0,
+      "value": "Inglese"
+    }
+  ],
+  "setting.lang.es.label": [
+    {
+      "type": 0,
+      "value": "Spagnolo"
+    }
+  ],
+  "setting.lang.et.label": [
+    {
+      "type": 0,
+      "value": "Estone"
+    }
+  ],
+  "setting.lang.eu.label": [
+    {
+      "type": 0,
+      "value": "Basco"
+    }
+  ],
+  "setting.lang.fa.label": [
+    {
+      "type": 0,
+      "value": "Persiano"
+    }
+  ],
+  "setting.lang.fr.label": [
+    {
+      "type": 0,
+      "value": "Francese"
+    }
+  ],
+  "setting.lang.gl.label": [
+    {
+      "type": 0,
+      "value": "Galiziano"
+    }
+  ],
+  "setting.lang.he.label": [
+    {
+      "type": 0,
+      "value": "Ebraico"
+    }
+  ],
+  "setting.lang.hr.label": [
+    {
+      "type": 0,
+      "value": "Croato"
+    }
+  ],
+  "setting.lang.hu.label": [
+    {
+      "type": 0,
+      "value": "Ungherese"
+    }
+  ],
+  "setting.lang.it.label": [
+    {
+      "type": 0,
+      "value": "Italiano"
+    }
+  ],
+  "setting.lang.ko.label": [
+    {
+      "type": 0,
+      "value": "Coreano"
+    }
+  ],
+  "setting.lang.lt.label": [
+    {
+      "type": 0,
+      "value": "Lituano"
+    }
+  ],
+  "setting.lang.lv.label": [
+    {
+      "type": 0,
+      "value": "Lettone"
+    }
+  ],
+  "setting.lang.mk.label": [
+    {
+      "type": 0,
+      "value": "Macedone"
+    }
+  ],
+  "setting.lang.nb.label": [
+    {
+      "type": 0,
+      "value": "Norvegese Bokmål"
+    }
+  ],
+  "setting.lang.nl.label": [
+    {
+      "type": 0,
+      "value": "Olandese"
+    }
+  ],
+  "setting.lang.pl.label": [
+    {
+      "type": 0,
+      "value": "Polacco"
+    }
+  ],
+  "setting.lang.pt.label": [
+    {
+      "type": 0,
+      "value": "Portoghese"
+    }
+  ],
+  "setting.lang.ro.label": [
+    {
+      "type": 0,
+      "value": "Rumeno"
+    }
+  ],
+  "setting.lang.ru.label": [
+    {
+      "type": 0,
+      "value": "Russo"
+    }
+  ],
+  "setting.lang.search.title": [
+    {
+      "type": 0,
+      "value": "Ricerca"
+    }
+  ],
+  "setting.lang.sk.label": [
+    {
+      "type": 0,
+      "value": "Slovacco"
+    }
+  ],
+  "setting.lang.sq.label": [
+    {
+      "type": 0,
+      "value": "Albanese"
+    }
+  ],
+  "setting.lang.sr.label": [
+    {
+      "type": 0,
+      "value": "Serbo"
+    }
+  ],
+  "setting.lang.sv.label": [
+    {
+      "type": 0,
+      "value": "Svedese"
+    }
+  ],
+  "setting.lang.uk.label": [
+    {
+      "type": 0,
+      "value": "Ucraino"
+    }
+  ],
+  "setting.lang.val.label": [
+    {
+      "type": 0,
+      "value": "Valenciano"
+    }
+  ],
+  "setting.lang.zh.label": [
+    {
+      "type": 0,
+      "value": "Cinese"
+    }
+  ],
+  "settings.hair.black": [
+    {
+      "type": 0,
+      "value": "Nero"
+    }
+  ],
+  "settings.hair.blonde": [
+    {
+      "type": 0,
+      "value": "Biondo"
+    }
+  ],
+  "settings.hair.brown": [
+    {
+      "type": 0,
+      "value": "Bruno"
+    }
+  ],
+  "settings.hair.darkBrown": [
+    {
+      "type": 0,
+      "value": "Bruno scuro"
+    }
+  ],
+  "settings.hair.darkGray": [
+    {
+      "type": 0,
+      "value": "Grigio scuro"
+    }
+  ],
+  "settings.hair.gray": [
+    {
+      "type": 0,
+      "value": "Grigio"
+    }
+  ],
+  "settings.hair.label": [
+    {
+      "type": 0,
+      "value": "Capelli"
+    }
+  ],
+  "settings.hair.red": [
+    {
+      "type": 0,
+      "value": "Rosso"
+    }
+  ],
+  "settings.skins.asian": [
+    {
+      "type": 0,
+      "value": "Asiatico"
+    }
+  ],
+  "settings.skins.aztec": [
+    {
+      "type": 0,
+      "value": "Azteco"
+    }
+  ],
+  "settings.skins.black": [
+    {
+      "type": 0,
+      "value": "Nero"
+    }
+  ],
+  "settings.skins.label": [
+    {
+      "type": 0,
+      "value": "Pelle"
+    }
+  ],
+  "settings.skins.mulatto": [
+    {
+      "type": 0,
+      "value": "Mulatto"
+    }
+  ],
+  "settings.skins.white": [
+    {
+      "type": 0,
+      "value": "Bianco"
+    }
+  ],
+  "settings.textPosition.bottom": [
+    {
+      "type": 0,
+      "value": "Basso"
+    }
+  ],
+  "settings.textPosition.label": [
+    {
+      "type": 0,
+      "value": "Posizione testo"
+    }
+  ],
+  "settings.textPosition.none": [
+    {
+      "type": 0,
+      "value": "Nessuno"
+    }
+  ],
+  "settings.textPosition.top": [
+    {
+      "type": 0,
+      "value": "Alto"
+    }
+  ],
+  "view.welcome.arcadeLink": [
+    {
+      "type": 0,
+      "value": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
+    }
+  ],
+  "view.welcome.footer.credits": [
+    {
+      "type": 0,
+      "value": "Crediti"
+    }
+  ],
+  "view.editSequences.sequences.label": [
+    {
+      "type": 0,
+      "value": "Licenze"
+    }
+  ],
+  "view.welcome.learning": [
+    {
+      "type": 0,
+      "value": "Impara a usare..."
+    }
+  ],
+  "view.welcome.liveMotive.title": [
+    {
+      "type": 0,
+      "value": "Crea e stampa o visualizza la tua pagina di sequenze."
+    }
+  ],
+  "view.welcome.start.button": [
+    {
+      "type": 0,
+      "value": "Inizia"
+    }
+  ]
+}
