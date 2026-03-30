@@ -4,20 +4,18 @@ import {
   AppBar,
   Avatar,
   Box,
+  Button,
+  ButtonGroup,
   Container,
   Dialog,
   Divider,
   Drawer,
-  FormControl,
   IconButton,
-  InputLabel,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  MenuItem,
-  Select,
   Slide,
   Stack,
   Toolbar,
@@ -125,7 +123,11 @@ const AppNavigationDrawer = ({
     navigate(newPath, { replace: true });
 
     // Actualitza tant l'idioma de l'app com el de cerca al canviar de locale
-    const newLangValue = { app: newLocale as LangsApp, search: newLocale, keywords };
+    const newLangValue = {
+      app: newLocale as LangsApp,
+      search: newLocale,
+      keywords,
+    };
     dispatch(updateLangSettingsActionCreator(newLangValue));
     sessionStorage.setItem("langSettings", JSON.stringify(newLangValue));
     localStorage.setItem("langSettings", JSON.stringify(newLangValue));
@@ -172,7 +174,10 @@ const AppNavigationDrawer = ({
   const handleLogout = async () => {
     onClose();
     await dispatch(logoutThunk());
-    showSnackbar({ message: intl.formatMessage(authMessages.logout), severity: "info" });
+    showSnackbar({
+      message: intl.formatMessage(authMessages.logout),
+      severity: "info",
+    });
   };
 
   const handleDocumentLoaded = () => {
@@ -269,7 +274,13 @@ const AppNavigationDrawer = ({
         ModalProps={{ keepMounted: true }}
       >
         <Box
-          sx={{ width: 240, pt: 1, height: "100%", display: "flex", flexDirection: "column" }}
+          sx={{
+            width: 240,
+            pt: 1,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
           role="navigation"
         >
           {/* Secció 1: Navegació per pàgines */}
@@ -278,9 +289,7 @@ const AppNavigationDrawer = ({
               <ListItemIcon>
                 <AiOutlineHome />
               </ListItemIcon>
-              <ListItemText
-                primary={intl.formatMessage(messages.welcome)}
-              />
+              <ListItemText primary={intl.formatMessage(messages.welcome)} />
             </ListItemButton>
 
             <ListItemButton
@@ -349,9 +358,7 @@ const AppNavigationDrawer = ({
                 <ListItemIcon>
                   <AiOutlineSetting />
                 </ListItemIcon>
-                <ListItemText
-                  primary={intl.formatMessage(messages.settings)}
-                />
+                <ListItemText primary={intl.formatMessage(messages.settings)} />
               </ListItemButton>
             </Tooltip>
           </List>
@@ -376,7 +383,12 @@ const AppNavigationDrawer = ({
               <ListItem>
                 <ListItemIcon>
                   <Avatar
-                    sx={{ width: 28, height: 28, fontSize: "0.75rem", bgcolor: "primary.main" }}
+                    sx={{
+                      width: 28,
+                      height: 28,
+                      fontSize: "0.75rem",
+                      bgcolor: "primary.main",
+                    }}
                   >
                     {userEmail ? userEmail.slice(0, 2).toUpperCase() : "?"}
                   </Avatar>
@@ -458,7 +470,10 @@ const AppNavigationDrawer = ({
         onClose={() => setSettingsOpen(false)}
         slots={{ transition: SettingsTransition }}
       >
-        <AppBar sx={{ position: { xs: "fixed", md: "relative" } }} elevation={1}>
+        <AppBar
+          sx={{ position: { xs: "fixed", md: "relative" } }}
+          elevation={1}
+        >
           <Toolbar>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               <FormattedMessage {...messages.settingsTitle} />
@@ -488,10 +503,7 @@ const AppNavigationDrawer = ({
       )}
 
       {/* Modal d'autenticació */}
-      <AuthModal
-        open={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-      />
+      <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
 
       {/* Modal de càrrega de documents del núvol */}
       <LoadDocumentModal
