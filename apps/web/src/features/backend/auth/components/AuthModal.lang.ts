@@ -102,6 +102,58 @@ const messages = defineMessages({
     defaultMessage: "Carrega",
     description: "Botó per carregar un document seleccionat del backend",
   },
+
+  // Errors retornats pel backend com a codis semàntics
+  INVALID_CREDENTIALS: {
+    id: "features.backend.auth.error.INVALID_CREDENTIALS",
+    defaultMessage: "Correu electrònic o contrasenya incorrectes",
+    description: "Error de login: credencials incorrectes",
+  },
+  EMAIL_ALREADY_EXISTS: {
+    id: "features.backend.auth.error.EMAIL_ALREADY_EXISTS",
+    defaultMessage: "Aquest correu electrònic ja està registrat",
+    description: "Error de registre: email ja existent",
+  },
+  EMAIL_REQUIRED: {
+    id: "features.backend.auth.error.EMAIL_REQUIRED",
+    defaultMessage: "El correu electrònic és obligatori",
+    description: "Validació: camp email buit",
+  },
+  EMAIL_INVALID_FORMAT: {
+    id: "features.backend.auth.error.EMAIL_INVALID_FORMAT",
+    defaultMessage: "El format del correu electrònic no és vàlid",
+    description: "Validació: format d'email incorrecte",
+  },
+  PASSWORD_REQUIRED: {
+    id: "features.backend.auth.error.PASSWORD_REQUIRED",
+    defaultMessage: "La contrasenya és obligatòria",
+    description: "Validació: camp contrasenya buit",
+  },
+  PASSWORD_TOO_SHORT: {
+    id: "features.backend.auth.error.PASSWORD_TOO_SHORT",
+    defaultMessage: "La contrasenya ha de tenir com a mínim 8 caràcters",
+    description: "Validació: contrasenya massa curta (registre)",
+  },
+  PASSWORD_TOO_LONG: {
+    id: "features.backend.auth.error.PASSWORD_TOO_LONG",
+    defaultMessage: "La contrasenya no pot superar els 128 caràcters",
+    description: "Validació: contrasenya massa llarga (registre)",
+  },
+  AUTH_ERROR: {
+    id: "features.backend.auth.error.AUTH_ERROR",
+    defaultMessage: "S'ha produït un error en iniciar sessió. Torna-ho a intentar.",
+    description: "Error genèric de login",
+  },
+  REGISTER_ERROR: {
+    id: "features.backend.auth.error.REGISTER_ERROR",
+    defaultMessage: "S'ha produït un error en crear el compte. Torna-ho a intentar.",
+    description: "Error genèric de registre",
+  },
+  UNKNOWN_ERROR: {
+    id: "features.backend.auth.error.UNKNOWN_ERROR",
+    defaultMessage: "S'ha produït un error inesperat. Torna-ho a intentar.",
+    description: "Error desconegut del servidor",
+  },
 });
 
 export default messages;

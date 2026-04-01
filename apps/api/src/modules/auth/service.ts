@@ -54,10 +54,9 @@ export const registerUser = async (
   // Comprovar si ja existeix un usuari amb aquest email
   const existing = await UserModel.findOne({ email: input.email });
   if (existing) {
-    const error = new Error(
-      "Aquest correu electrònic ja està registrat"
-    ) as AppError;
+    const error = new Error("EMAIL_ALREADY_EXISTS") as AppError;
     error.statusCode = 409;
+    error.errorCode = "EMAIL_ALREADY_EXISTS";
     throw error;
   }
 
@@ -77,9 +76,10 @@ export const registerUser = async (
 export const loginUser = async (input: LoginInput): Promise<AuthTokens> => {
   const user: IUser | null = await UserModel.findOne({ email: input.email });
 
-  // Missatge genèric intencionat — no revela si l'email existeix
-  const invalidError = new Error("Credencials incorrectes") as AppError;
+  // Codi genèric intencionat — no revela si l'email existeix o no
+  const invalidError = new Error("INVALID_CREDENTIALS") as AppError;
   invalidError.statusCode = 401;
+  invalidError.errorCode = "INVALID_CREDENTIALS";
 
   if (!user) {
     // Hash fictici per evitar timing attacks (bcrypt.compare és lent)
@@ -107,19 +107,21 @@ export const refreshTokens = (refreshToken: string): AuthTokens => {
 
     // Verificar que és realment un refresh token (no un access token reutilitzat)
     if (payload.type !== "refresh") {
-      const error = new Error("Token de refresc invàlid") as AppError;
+      const error = new Error("INVALID_REFRESH_TOKEN") as AppError;
       error.statusCode = 401;
+      error.errorCode = "INVALID_REFRESH_TOKEN";
       throw error;
     }
 
     return generateTokens(payload.userId);
   } catch (err) {
-    // Si ja és un AppError amb statusCode, el relancem directament
-    if ((err as AppError).statusCode) {
+    // Si ja és un AppError amb errorCode, el relancem directament
+    if ((err as AppError).errorCode) {
       throw err;
     }
-    const error = new Error("Token de refresc invàlid o caducat") as AppError;
+    const error = new Error("REFRESH_TOKEN_EXPIRED") as AppError;
     error.statusCode = 401;
+    error.errorCode = "REFRESH_TOKEN_EXPIRED";
     throw error;
   }
 };

@@ -27,7 +27,14 @@ interface AuthModalProps {
 const AuthModal = ({ open, onClose }: AuthModalProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector((state) => state.auth);
+  const { isLoading, errorCode } = useAppSelector((state) => state.auth);
+
+  // Tradueix el codi d'error del backend al missatge de l'idioma actiu
+  const errorMessage = errorCode
+    ? intl.formatMessage(
+        messages[errorCode as keyof typeof messages] ?? messages.UNKNOWN_ERROR,
+      )
+    : null;
 
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [email, setEmail] = useState("");
@@ -91,9 +98,9 @@ const AuthModal = ({ open, onClose }: AuthModalProps): React.ReactElement => {
           noValidate
           sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 1 }}
         >
-          {error && (
+          {errorMessage && (
             <Alert severity="error" variant="outlined">
-              {error}
+              {errorMessage}
             </Alert>
           )}
 

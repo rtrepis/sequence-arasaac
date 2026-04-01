@@ -33,10 +33,10 @@ export const register = async (
   try {
     const parsed = registerSchema.safeParse(req.body);
     if (!parsed.success) {
-      const error = new Error(
-        parsed.error.errors[0]?.message ?? "Dades invàlides"
-      ) as AppError;
+      const errorCode = parsed.error.errors[0]?.message ?? "INVALID_DATA";
+      const error = new Error(errorCode) as AppError;
       error.statusCode = 400;
+      error.errorCode = errorCode;
       return next(error);
     }
 
@@ -59,10 +59,10 @@ export const login = async (
   try {
     const parsed = loginSchema.safeParse(req.body);
     if (!parsed.success) {
-      const error = new Error(
-        parsed.error.errors[0]?.message ?? "Dades invàlides"
-      ) as AppError;
+      const errorCode = parsed.error.errors[0]?.message ?? "INVALID_DATA";
+      const error = new Error(errorCode) as AppError;
       error.statusCode = 400;
+      error.errorCode = errorCode;
       return next(error);
     }
 
@@ -87,8 +87,9 @@ export const refresh = (
       req.cookies[REFRESH_TOKEN_COOKIE_NAME] as string | undefined;
 
     if (!token) {
-      const error = new Error("Token de refresc no trobat") as AppError;
+      const error = new Error("REFRESH_TOKEN_MISSING") as AppError;
       error.statusCode = 401;
+      error.errorCode = "REFRESH_TOKEN_MISSING";
       return next(error);
     }
 
