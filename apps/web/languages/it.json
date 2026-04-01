@@ -1039,6 +1039,86 @@
   "view.editSequences.sequences.label": {
     "defaultMessage": "Sequenze"
   },
+  "features.backend.auth.loginTitle": {
+    "defaultMessage": "Accedi",
+    "description": "Títol del formulari de login"
+  },
+  "features.backend.auth.registerTitle": {
+    "defaultMessage": "Crea un account",
+    "description": "Títol del formulari de registre"
+  },
+  "features.backend.auth.email": {
+    "defaultMessage": "Indirizzo e-mail",
+    "description": "Etiqueta del camp email"
+  },
+  "features.backend.auth.password": {
+    "defaultMessage": "Password",
+    "description": "Etiqueta del camp contrasenya"
+  },
+  "features.backend.auth.submitLogin": {
+    "defaultMessage": "Accedi",
+    "description": "Botó per enviar el formulari de login"
+  },
+  "features.backend.auth.submitRegister": {
+    "defaultMessage": "Registrati",
+    "description": "Botó per enviar el formulari de registre"
+  },
+  "features.backend.auth.toggleToRegister": {
+    "defaultMessage": "Non hai un account? Registrati",
+    "description": "Enllaç per canviar al formulari de registre"
+  },
+  "features.backend.auth.toggleToLogin": {
+    "defaultMessage": "Hai già un account? Accedi",
+    "description": "Enllaç per tornar al formulari de login"
+  },
+  "features.backend.auth.close": {
+    "defaultMessage": "Chiudi",
+    "description": "Botó per tancar el modal d'autenticació"
+  },
+  "features.backend.auth.showPassword": {
+    "defaultMessage": "Mostra la password",
+    "description": "Etiqueta ARIA per al botó de mostrar/amagar contrasenya"
+  },
+  "features.backend.auth.loginItem": {
+    "defaultMessage": "Accedi",
+    "description": "Ítem del drawer per obrir el modal de login"
+  },
+  "features.backend.auth.saveDocument": {
+    "defaultMessage": "Salva nel cloud",
+    "description": "Ítem del drawer per desar el document al backend"
+  },
+  "features.backend.auth.loadDocument": {
+    "defaultMessage": "Carica dal cloud",
+    "description": "Ítem del drawer per carregar un document del backend"
+  },
+  "features.backend.auth.logout": {
+    "defaultMessage": "Esci",
+    "description": "Ítem del drawer per tancar la sessió"
+  },
+  "features.backend.auth.documentSaved": {
+    "defaultMessage": "Documento salvato nel cloud",
+    "description": "Missatge de confirmació quan el document es desa al backend"
+  },
+  "features.backend.auth.documentLoaded": {
+    "defaultMessage": "Documento caricato",
+    "description": "Missatge de confirmació quan es carrega un document del backend"
+  },
+  "features.backend.auth.loadDocumentTitle": {
+    "defaultMessage": "Carica un documento",
+    "description": "Títol del modal de càrrega de documents del backend"
+  },
+  "features.backend.auth.noDocuments": {
+    "defaultMessage": "Non hai documenti salvati",
+    "description": "Missatge quan l'usuari no té documents al backend"
+  },
+  "features.backend.auth.deleteDocument": {
+    "defaultMessage": "Elimina",
+    "description": "Botó per eliminar un document del backend"
+  },
+  "features.backend.auth.loadAction": {
+    "defaultMessage": "Carica",
+    "description": "Botó per carregar un document seleccionat del backend"
+  },
   "features.backend.auth.error.INVALID_CREDENTIALS": {
     "defaultMessage": "Indirizzo e-mail o password errati",
     "description": "Error de login: credencials incorrectes"
