@@ -3,9 +3,10 @@
 
 import { Request, Response, NextFunction } from "express";
 
-// Interfície per a errors amb codi HTTP personalitzat
+// Interfície per a errors amb codi HTTP personalitzat i codi semàntic
 export interface AppError extends Error {
   statusCode?: number;
+  errorCode?: string;
 }
 
 export const errorHandler = (
@@ -17,11 +18,11 @@ export const errorHandler = (
 ): void => {
   const statusCode = err.statusCode ?? 500;
 
-  // Ocultar detalls interns dels errors 500 a producció
-  const message =
+  // Els errors 500 en producció s'amaguen darrere un codi genèric
+  const errorCode =
     statusCode === 500 && process.env.NODE_ENV === "production"
-      ? "Error intern del servidor"
-      : (err.message ?? "Error desconegut");
+      ? "INTERNAL_ERROR"
+      : (err.errorCode ?? "UNKNOWN_ERROR");
 
-  res.status(statusCode).json({ message });
+  res.status(statusCode).json({ errorCode });
 };

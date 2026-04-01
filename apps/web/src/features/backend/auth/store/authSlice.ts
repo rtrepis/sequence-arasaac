@@ -16,14 +16,14 @@ export interface AuthState {
   accessToken: string | null;
   userEmail: string | null;
   isLoading: boolean;
-  error: string | null;
+  errorCode: string | null;
 }
 
 const initialState: AuthState = {
   accessToken: null,
   userEmail: null,
   isLoading: false,
-  error: null,
+  errorCode: null,
 };
 
 // Sincronitza les settings del backend amb el store local + storage
@@ -60,10 +60,10 @@ export const loginThunk = createAsyncThunk(
       await syncSettingsAfterAuth(dispatch);
       return { accessToken, email };
     } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response
-          ?.data?.message ?? "Error d'autenticació";
-      return rejectWithValue(message);
+      const errorCode =
+        (error as { response?: { data?: { errorCode?: string } } })?.response
+          ?.data?.errorCode ?? "AUTH_ERROR";
+      return rejectWithValue(errorCode);
     }
   },
 );
@@ -81,10 +81,10 @@ export const registerThunk = createAsyncThunk(
       await syncSettingsAfterAuth(dispatch);
       return { accessToken, email };
     } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response
-          ?.data?.message ?? "Error en el registre";
-      return rejectWithValue(message);
+      const errorCode =
+        (error as { response?: { data?: { errorCode?: string } } })?.response
+          ?.data?.errorCode ?? "REGISTER_ERROR";
+      return rejectWithValue(errorCode);
     }
   },
 );
@@ -130,7 +130,7 @@ const authSlice = createSlice({
     clearAuthState: (state) => {
       state.accessToken = null;
       state.userEmail = null;
-      state.error = null;
+      state.errorCode = null;
     },
   },
   extraReducers: (builder) => {
@@ -138,7 +138,7 @@ const authSlice = createSlice({
     builder
       .addCase(loginThunk.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.errorCode = null;
       })
       .addCase(
         loginThunk.fulfilled,
@@ -150,14 +150,14 @@ const authSlice = createSlice({
       )
       .addCase(loginThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.errorCode = action.payload as string;
       });
 
     // Register
     builder
       .addCase(registerThunk.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.errorCode = null;
       })
       .addCase(
         registerThunk.fulfilled,
@@ -169,7 +169,7 @@ const authSlice = createSlice({
       )
       .addCase(registerThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.errorCode = action.payload as string;
       });
 
     // Logout
@@ -177,7 +177,7 @@ const authSlice = createSlice({
       .addCase(logoutThunk.fulfilled, (state) => {
         state.accessToken = null;
         state.userEmail = null;
-        state.error = null;
+        state.errorCode = null;
       });
 
     // Refresh silent

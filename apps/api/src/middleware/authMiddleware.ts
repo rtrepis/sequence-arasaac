@@ -30,7 +30,7 @@ export const authMiddleware = (
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    res.status(401).json({ message: "Token d'autenticació no proporcionat" });
+    res.status(401).json({ errorCode: "AUTH_TOKEN_MISSING" });
     return;
   }
 
@@ -41,6 +41,6 @@ export const authMiddleware = (
     req.userId = decoded.userId;
     next();
   } catch {
-    res.status(401).json({ message: "Token d'autenticació invàlid o caducat" });
+    res.status(401).json({ errorCode: "AUTH_TOKEN_INVALID" });
   }
 };

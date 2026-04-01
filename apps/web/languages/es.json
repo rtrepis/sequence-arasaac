@@ -1071,6 +1071,46 @@
     "defaultMessage": "¿Ya tienes cuenta? Inicia sesión",
     "description": "Enllaç per tornar al formulari de login"
   },
+  "features.backend.auth.error.INVALID_CREDENTIALS": {
+    "defaultMessage": "Correo electrónico o contraseña incorrectos",
+    "description": "Error de login: credencials incorrectes"
+  },
+  "features.backend.auth.error.EMAIL_ALREADY_EXISTS": {
+    "defaultMessage": "Este correo electrónico ya está registrado",
+    "description": "Error de registre: email ja existent"
+  },
+  "features.backend.auth.error.EMAIL_REQUIRED": {
+    "defaultMessage": "El correo electrónico es obligatorio",
+    "description": "Validació: camp email buit"
+  },
+  "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
+    "defaultMessage": "El formato del correo electrónico no es válido",
+    "description": "Validació: format d'email incorrecte"
+  },
+  "features.backend.auth.error.PASSWORD_REQUIRED": {
+    "defaultMessage": "La contraseña es obligatoria",
+    "description": "Validació: camp contrasenya buit"
+  },
+  "features.backend.auth.error.PASSWORD_TOO_SHORT": {
+    "defaultMessage": "La contraseña debe tener al menos 8 caracteres",
+    "description": "Validació: contrasenya massa curta (registre)"
+  },
+  "features.backend.auth.error.PASSWORD_TOO_LONG": {
+    "defaultMessage": "La contraseña no puede superar los 128 caracteres",
+    "description": "Validació: contrasenya massa llarga (registre)"
+  },
+  "features.backend.auth.error.AUTH_ERROR": {
+    "defaultMessage": "Se ha producido un error al iniciar sesión. Inténtalo de nuevo.",
+    "description": "Error genèric de login"
+  },
+  "features.backend.auth.error.REGISTER_ERROR": {
+    "defaultMessage": "Se ha producido un error al crear la cuenta. Inténtalo de nuevo.",
+    "description": "Error genèric de registre"
+  },
+  "features.backend.auth.error.UNKNOWN_ERROR": {
+    "defaultMessage": "Se ha producido un error inesperado. Inténtalo de nuevo.",
+    "description": "Error desconegut del servidor"
+  },
   "features.backend.auth.close": {
     "defaultMessage": "Cerrar",
     "description": "Botó per tancar el modal d'autenticació"

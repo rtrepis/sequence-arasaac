@@ -1038,5 +1038,45 @@
   },
   "view.editSequences.sequences.label": {
     "defaultMessage": "Sequenze"
+  },
+  "features.backend.auth.error.INVALID_CREDENTIALS": {
+    "defaultMessage": "Indirizzo e-mail o password errati",
+    "description": "Error de login: credencials incorrectes"
+  },
+  "features.backend.auth.error.EMAIL_ALREADY_EXISTS": {
+    "defaultMessage": "Questo indirizzo e-mail è già registrato",
+    "description": "Error de registre: email ja existent"
+  },
+  "features.backend.auth.error.EMAIL_REQUIRED": {
+    "defaultMessage": "L'indirizzo e-mail è obbligatorio",
+    "description": "Validació: camp email buit"
+  },
+  "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
+    "defaultMessage": "Il formato dell'indirizzo e-mail non è valido",
+    "description": "Validació: format d'email incorrecte"
+  },
+  "features.backend.auth.error.PASSWORD_REQUIRED": {
+    "defaultMessage": "La password è obbligatoria",
+    "description": "Validació: camp contrasenya buit"
+  },
+  "features.backend.auth.error.PASSWORD_TOO_SHORT": {
+    "defaultMessage": "La password deve contenere almeno 8 caratteri",
+    "description": "Validació: contrasenya massa curta (registre)"
+  },
+  "features.backend.auth.error.PASSWORD_TOO_LONG": {
+    "defaultMessage": "La password non può superare i 128 caratteri",
+    "description": "Validació: contrasenya massa llarga (registre)"
+  },
+  "features.backend.auth.error.AUTH_ERROR": {
+    "defaultMessage": "Si è verificato un errore durante l'accesso. Riprova.",
+    "description": "Error genèric de login"
+  },
+  "features.backend.auth.error.REGISTER_ERROR": {
+    "defaultMessage": "Si è verificato un errore durante la creazione dell'account. Riprova.",
+    "description": "Error genèric de registre"
+  },
+  "features.backend.auth.error.UNKNOWN_ERROR": {
+    "defaultMessage": "Si è verificato un errore imprevisto. Riprova.",
+    "description": "Error desconegut del servidor"
   }
 }

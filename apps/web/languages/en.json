@@ -1071,6 +1071,46 @@
     "defaultMessage": "Have account? Sign in",
     "description": "Enllaç per tornar al formulari de login"
   },
+  "features.backend.auth.error.INVALID_CREDENTIALS": {
+    "defaultMessage": "Incorrect email address or password",
+    "description": "Error de login: credencials incorrectes"
+  },
+  "features.backend.auth.error.EMAIL_ALREADY_EXISTS": {
+    "defaultMessage": "This email address is already registered",
+    "description": "Error de registre: email ja existent"
+  },
+  "features.backend.auth.error.EMAIL_REQUIRED": {
+    "defaultMessage": "Email address is required",
+    "description": "Validació: camp email buit"
+  },
+  "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
+    "defaultMessage": "The email address format is not valid",
+    "description": "Validació: format d'email incorrecte"
+  },
+  "features.backend.auth.error.PASSWORD_REQUIRED": {
+    "defaultMessage": "Password is required",
+    "description": "Validació: camp contrasenya buit"
+  },
+  "features.backend.auth.error.PASSWORD_TOO_SHORT": {
+    "defaultMessage": "Password must be at least 8 characters",
+    "description": "Validació: contrasenya massa curta (registre)"
+  },
+  "features.backend.auth.error.PASSWORD_TOO_LONG": {
+    "defaultMessage": "Password cannot exceed 128 characters",
+    "description": "Validació: contrasenya massa llarga (registre)"
+  },
+  "features.backend.auth.error.AUTH_ERROR": {
+    "defaultMessage": "An error occurred while signing in. Please try again.",
+    "description": "Error genèric de login"
+  },
+  "features.backend.auth.error.REGISTER_ERROR": {
+    "defaultMessage": "An error occurred while creating your account. Please try again.",
+    "description": "Error genèric de registre"
+  },
+  "features.backend.auth.error.UNKNOWN_ERROR": {
+    "defaultMessage": "An unexpected error occurred. Please try again.",
+    "description": "Error desconegut del servidor"
+  },
   "features.backend.auth.close": {
     "defaultMessage": "Close",
     "description": "Botó per tancar el modal d'autenticació"
