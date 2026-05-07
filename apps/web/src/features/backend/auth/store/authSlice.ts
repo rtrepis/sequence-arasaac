@@ -109,12 +109,12 @@ export const refreshSessionThunk = createAsyncThunk(
     try {
       const { accessToken } = await authService.refreshToken();
       setAccessToken(accessToken);
-      // Intentar obtenir l'email del payload del token (base64 decode)
       const payload = JSON.parse(atob(accessToken.split(".")[1])) as {
         userId: string;
+        email: string;
       };
       await syncSettingsAfterAuth(dispatch);
-      return { accessToken, userId: payload.userId };
+      return { accessToken, email: payload.email };
     } catch {
       setAccessToken(null);
       return rejectWithValue("Sessió caducada");
@@ -187,11 +187,10 @@ const authSlice = createSlice({
       })
       .addCase(
         refreshSessionThunk.fulfilled,
-        (state, action: PayloadAction<{ accessToken: string; userId: string }>) => {
+        (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
           state.isLoading = false;
           state.accessToken = action.payload.accessToken;
-          // L'email no el tenim del refresh token (només userId), el deixem null
-          // fins que l'usuari faci alguna acció autenticada
+          state.userEmail = action.payload.email;
         },
       )
       .addCase(refreshSessionThunk.rejected, (state) => {

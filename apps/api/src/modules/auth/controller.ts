@@ -77,11 +77,11 @@ export const login = async (
 
 // POST /api/auth/refresh
 // Llegeix la cookie de refresh token i retorna un nou parell de tokens
-export const refresh = (
+export const refresh = async (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): Promise<void> => {
   try {
     const token: string | undefined =
       req.cookies[REFRESH_TOKEN_COOKIE_NAME] as string | undefined;
@@ -93,7 +93,7 @@ export const refresh = (
       return next(error);
     }
 
-    const { accessToken, refreshToken } = refreshTokens(token);
+    const { accessToken, refreshToken } = await refreshTokens(token);
 
     setRefreshTokenCookie(res, refreshToken);
     res.status(200).json({ accessToken });

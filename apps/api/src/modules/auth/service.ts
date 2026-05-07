@@ -23,6 +23,7 @@ export interface AuthTokens {
 // Payload del JWT d'accés — ha de coincidir amb JwtPayload d'authMiddleware
 interface AccessTokenPayload {
   userId: string;
+  email: string;
 }
 
 // Payload del JWT de refresh — camp type per prevenir reutilització d'access tokens
@@ -31,9 +32,9 @@ interface RefreshTokenPayload {
   type: "refresh";
 }
 
-// Genera el parell de tokens per a un userId donat
-export const generateTokens = (userId: string): AuthTokens => {
-  const accessTokenPayload: AccessTokenPayload = { userId };
+// Genera el parell de tokens per a un userId i email donats
+export const generateTokens = (userId: string, email: string): AuthTokens => {
+  const accessTokenPayload: AccessTokenPayload = { userId, email };
   const refreshTokenPayload: RefreshTokenPayload = { userId, type: "refresh" };
 
   const accessToken = jwt.sign(accessTokenPayload, env.JWT_SECRET, {
@@ -69,7 +70,7 @@ export const registerUser = async (
     // settings i langSettings prenen els valors per defecte definits al model
   });
 
-  return generateTokens(String(user._id));
+  return generateTokens(String(user._id), user.email);
 };
 
 // Autentica un usuari existent — missatge genèric per no revelar si l'email existeix o no
@@ -93,12 +94,12 @@ export const loginUser = async (input: LoginInput): Promise<AuthTokens> => {
     throw invalidError;
   }
 
-  return generateTokens(String(user._id));
+  return generateTokens(String(user._id), user.email);
 };
 
 // Verifica un refresh token i retorna un nou parell de tokens
-// Funció síncrona — jwt.verify és sincronic, no cal accedir a la BD
-export const refreshTokens = (refreshToken: string): AuthTokens => {
+// Consulta la BD per incloure l'email al nou access token
+export const refreshTokens = async (refreshToken: string): Promise<AuthTokens> => {
   try {
     const payload = jwt.verify(
       refreshToken,
@@ -113,7 +114,15 @@ export const refreshTokens = (refreshToken: string): AuthTokens => {
       throw error;
     }
 
-    return generateTokens(payload.userId);
+    const user = await UserModel.findById(payload.userId).select("email").lean();
+    if (!user) {
+      const error = new Error("USER_NOT_FOUND") as AppError;
+      error.statusCode = 401;
+      error.errorCode = "USER_NOT_FOUND";
+      throw error;
+    }
+
+    return generateTokens(payload.userId, user.email);
   } catch (err) {
     // Si ja és un AppError amb errorCode, el relancem directament
     if ((err as AppError).errorCode) {
