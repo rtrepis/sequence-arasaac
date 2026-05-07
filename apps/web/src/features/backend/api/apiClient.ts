@@ -49,11 +49,12 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Evitar loop infinit: no reintentam la pròpia crida de refresh
+    // Evitar loop infinit i no interceptar errors d'autenticació intencionats
+    // Les rutes /auth/* gestionen els seus propis errors — mai cal renovar el token aquí
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      !originalRequest.url?.includes("/auth/refresh")
+      !originalRequest.url?.includes("/auth/")
     ) {
       if (isRefreshing) {
         // Si ja s'està renovant, encua la petició
