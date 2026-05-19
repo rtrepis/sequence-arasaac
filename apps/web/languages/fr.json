@@ -1,4 +1,19 @@
 {
+  "changelog.category.correccio": {
+    "defaultMessage": "Correction"
+  },
+  "changelog.category.millora": {
+    "defaultMessage": "Amélioration"
+  },
+  "changelog.category.nova": {
+    "defaultMessage": "Nouveau"
+  },
+  "changelog.page.title": {
+    "defaultMessage": "Nouveautés"
+  },
+  "changelog.readMore": {
+    "defaultMessage": "Lire la suite"
+  },
   "component.settingCardBorder.borderIn.title": {
     "defaultMessage": "Bordure intérieure",
     "description": "setting title "
@@ -15,9 +30,51 @@
     "defaultMessage": "Typographie",
     "description": "type title"
   },
+  "component.settingCardFontGroup.numberFont.title": {
+    "defaultMessage": "Police des numéros"
+  },
+  "components.appNavigationDrawer.download": {
+    "defaultMessage": "Télécharger"
+  },
+  "components.appNavigationDrawer.editView": {
+    "defaultMessage": "Éditer"
+  },
+  "components.appNavigationDrawer.langSelector": {
+    "defaultMessage": "Langue"
+  },
+  "components.appNavigationDrawer.load": {
+    "defaultMessage": "Charger"
+  },
+  "components.appNavigationDrawer.news": {
+    "defaultMessage": "Nouveautés"
+  },
+  "components.appNavigationDrawer.openMenu": {
+    "defaultMessage": "Ouvrir le menu"
+  },
+  "components.appNavigationDrawer.previewView": {
+    "defaultMessage": "Aperçu"
+  },
+  "components.appNavigationDrawer.settings": {
+    "defaultMessage": "Paramètres"
+  },
+  "components.appNavigationDrawer.settingsClose": {
+    "defaultMessage": "Fermer"
+  },
+  "components.appNavigationDrawer.settingsTitle": {
+    "defaultMessage": "Paramètres par défaut"
+  },
+  "components.appNavigationDrawer.welcome": {
+    "defaultMessage": "Accueil"
+  },
   "components.barNavigation.edit.title": {
     "defaultMessage": "Éditer",
     "description": "Title Page"
+  },
+  "components.barNavigation.mainNavigation": {
+    "defaultMessage": "Navigation principale"
+  },
+  "components.barNavigation.skipToContent": {
+    "defaultMessage": "Aller au contenu principal"
   },
   "components.barNavigation.title": {
     "defaultMessage": "SequenciAAC",
@@ -84,12 +141,58 @@
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.settings.title": {
-    "defaultMessage": "Paramètres par défaut",
+    "defaultMessage": "Paramètres",
     "description": "Settings Default "
+  },
+  "components.defaultSettings.tab.pictograms": {
+    "defaultMessage": "Pictogrammes",
+    "description": "Tab de configuració per defecte dels pictogrames"
+  },
+  "components.defaultSettings.tab.user": {
+    "defaultMessage": "Utilisateur",
+    "description": "Tab d'ajustos d'usuari (idioma, compte...)"
+  },
+  "components.defaultSettings.tab.vocabulary": {
+    "defaultMessage": "Vocabulaire personnel",
+    "description": "Tab de vocabulari personal (paraules personalitzades)"
   },
   "components.defaultSettings.upload": {
     "defaultMessage": "Charger les paramètres depuis un fichier local",
     "description": "Load settings from local file"
+  },
+  "components.defaultSettings.userPanel.interfaceLanguage": {
+    "defaultMessage": "Interface",
+    "description": "Etiqueta de la card de selecció d'idioma de la interfície"
+  },
+  "components.defaultSettings.userPanel.sectionTitle": {
+    "defaultMessage": "Langue",
+    "description": "Títol de la secció d'idiomes al panel d'usuari"
+  },
+  "components.defaultSettings.vocabularyPanel.comingSoon": {
+    "defaultMessage": "Bientôt disponible",
+    "description": "Missatge de pròximament al panel de vocabulari personal"
+  },
+  "components.defaultSettings.vocabularyPanel.description": {
+    "defaultMessage": "Ici vous pourrez assigner un pictogramme spécifique à n'importe quel mot.",
+    "description": "Descripció del panel de vocabulari personal"
+  },
+  "components.logoMenu.download": {
+    "defaultMessage": "Télécharger"
+  },
+  "components.logoMenu.editView": {
+    "defaultMessage": "Éditer"
+  },
+  "components.logoMenu.load": {
+    "defaultMessage": "Charger"
+  },
+  "components.logoMenu.menuAriaLabel": {
+    "defaultMessage": "Menu principal"
+  },
+  "components.logoMenu.previewView": {
+    "defaultMessage": "Aperçu"
+  },
+  "components.logoMenu.settings": {
+    "defaultMessage": "Paramètres"
   },
   "components.magicSearch.button.": {
     "defaultMessage": "Rechercher",
@@ -107,6 +210,27 @@
     "defaultMessage": "Exemple : Garçon, mettre, la ceinture de sécurité.",
     "description": "Helper text field"
   },
+  "components.newsNavBar.langSelector": {
+    "defaultMessage": "Langue"
+  },
+  "components.newsNavBar.mainNavigation": {
+    "defaultMessage": "Navigation principale"
+  },
+  "components.newsNavBar.news": {
+    "defaultMessage": "Nouveautés"
+  },
+  "components.newsNavBar.openMenu": {
+    "defaultMessage": "Ouvrir le menu de navigation"
+  },
+  "components.newsNavBar.skipToContent": {
+    "defaultMessage": "Aller au contenu principal"
+  },
+  "components.newsNavBar.start": {
+    "defaultMessage": "Créer une séquence"
+  },
+  "components.newsNavBar.welcome": {
+    "defaultMessage": "Accueil"
+  },
   "components.pictEdit.close": {
     "defaultMessage": "Fermer",
     "description": "Close modal, edit pictogram"
@@ -122,6 +246,9 @@
   "components.pictEdit.modal.label": {
     "defaultMessage": "Modifier Pictogramme",
     "description": "Title modal"
+  },
+  "components.pictEdit.reset": {
+    "defaultMessage": "Valeurs par défaut"
   },
   "components.pictEditSettings.settings.label": {
     "defaultMessage": "Paramètres du Pictogramme",
@@ -179,6 +306,9 @@
     "defaultMessage": "Insérer un pictogramme",
     "description": "Plus pictograms"
   },
+  "components.pictogramSearch.uploadImage": {
+    "defaultMessage": "Téléverser une image depuis l'appareil"
+  },
   "components.sequenceAuthor": {
     "defaultMessage": "Auteur de la séquence :",
     "description": "License to use the pictograms"
@@ -227,6 +357,10 @@
     "defaultMessage": "Sans bordure",
     "description": "type setting "
   },
+  "components.settingCardLangAppToggle.ariaLabel": {
+    "defaultMessage": "Sélectionner la langue de l'interface",
+    "description": "Aria label del ToggleButtonGroup d'idioma de la interfície"
+  },
   "components.toggleButtonEditViewPages.edit.title": {
     "defaultMessage": "Éditer",
     "description": "Title Page"
@@ -234,6 +368,504 @@
   "components.toggleButtonEditViewPages.view.title": {
     "defaultMessage": "Vue",
     "description": "Title Page"
+  },
+  "context.feedback.applyAll.success": {
+    "defaultMessage": "Appliqué à {count} pictogrammes"
+  },
+  "context.feedback.load.error": {
+    "defaultMessage": "Erreur lors du chargement du fichier"
+  },
+  "context.feedback.load.success": {
+    "defaultMessage": "Fichier chargé avec succès"
+  },
+  "context.feedback.loading": {
+    "defaultMessage": "Chargement..."
+  },
+  "context.feedback.save.success": {
+    "defaultMessage": "Fichier enregistré avec succès"
+  },
+  "context.feedback.search.complete": {
+    "defaultMessage": "{count} pictogrammes ajoutés"
+  },
+  "context.feedback.search.error": {
+    "defaultMessage": "Erreur lors de la recherche de pictogrammes"
+  },
+  "context.feedback.search.loading": {
+    "defaultMessage": "Recherche de pictogrammes..."
+  },
+  "features.backend.auth.close": {
+    "defaultMessage": "Fermer",
+    "description": "Botó per tancar el modal d'autenticació"
+  },
+  "features.backend.auth.deleteDocument": {
+    "defaultMessage": "Supprimer",
+    "description": "Botó per eliminar un document del backend"
+  },
+  "features.backend.auth.documentLoaded": {
+    "defaultMessage": "Document chargé",
+    "description": "Missatge de confirmació quan es carrega un document del backend"
+  },
+  "features.backend.auth.documentSaved": {
+    "defaultMessage": "Document enregistré dans le cloud",
+    "description": "Missatge de confirmació quan el document es desa al backend"
+  },
+  "features.backend.auth.email": {
+    "defaultMessage": "Adresse e-mail",
+    "description": "Etiqueta del camp email"
+  },
+  "features.backend.auth.error.AUTH_ERROR": {
+    "defaultMessage": "Une erreur s'est produite lors de la connexion. Veuillez réessayer.",
+    "description": "Error genèric de login"
+  },
+  "features.backend.auth.error.EMAIL_ALREADY_EXISTS": {
+    "defaultMessage": "Cette adresse e-mail est déjà enregistrée",
+    "description": "Error de registre: email ja existent"
+  },
+  "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
+    "defaultMessage": "Le format de l'adresse e-mail n'est pas valide",
+    "description": "Validació: format d'email incorrecte"
+  },
+  "features.backend.auth.error.EMAIL_REQUIRED": {
+    "defaultMessage": "L'adresse e-mail est obligatoire",
+    "description": "Validació: camp email buit"
+  },
+  "features.backend.auth.error.INVALID_CREDENTIALS": {
+    "defaultMessage": "Adresse e-mail ou mot de passe incorrect",
+    "description": "Error de login: credencials incorrectes"
+  },
+  "features.backend.auth.error.PASSWORD_REQUIRED": {
+    "defaultMessage": "Le mot de passe est obligatoire",
+    "description": "Validació: camp contrasenya buit"
+  },
+  "features.backend.auth.error.PASSWORD_TOO_LONG": {
+    "defaultMessage": "Le mot de passe ne peut pas dépasser 128 caractères",
+    "description": "Validació: contrasenya massa llarga (registre)"
+  },
+  "features.backend.auth.error.PASSWORD_TOO_SHORT": {
+    "defaultMessage": "Le mot de passe doit contenir au moins 8 caractères",
+    "description": "Validació: contrasenya massa curta (registre)"
+  },
+  "features.backend.auth.error.REGISTER_ERROR": {
+    "defaultMessage": "Une erreur s'est produite lors de la création du compte. Veuillez réessayer.",
+    "description": "Error genèric de registre"
+  },
+  "features.backend.auth.error.UNKNOWN_ERROR": {
+    "defaultMessage": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "description": "Error desconegut del servidor"
+  },
+  "features.backend.auth.loadAction": {
+    "defaultMessage": "Charger",
+    "description": "Botó per carregar un document seleccionat del backend"
+  },
+  "features.backend.auth.loadDocument": {
+    "defaultMessage": "Charger depuis le cloud",
+    "description": "Ítem del drawer per carregar un document del backend"
+  },
+  "features.backend.auth.loadDocumentTitle": {
+    "defaultMessage": "Charger un document",
+    "description": "Títol del modal de càrrega de documents del backend"
+  },
+  "features.backend.auth.loginItem": {
+    "defaultMessage": "Se connecter",
+    "description": "Ítem del drawer per obrir el modal de login"
+  },
+  "features.backend.auth.loginTitle": {
+    "defaultMessage": "Se connecter",
+    "description": "Títol del formulari de login"
+  },
+  "features.backend.auth.logout": {
+    "defaultMessage": "Se déconnecter",
+    "description": "Ítem del drawer per tancar la sessió"
+  },
+  "features.backend.auth.noDocuments": {
+    "defaultMessage": "Vous n'avez aucun document enregistré",
+    "description": "Missatge quan l'usuari no té documents al backend"
+  },
+  "features.backend.auth.password": {
+    "defaultMessage": "Mot de passe",
+    "description": "Etiqueta del camp contrasenya"
+  },
+  "features.backend.auth.registerTitle": {
+    "defaultMessage": "Créer un compte",
+    "description": "Títol del formulari de registre"
+  },
+  "features.backend.auth.saveDocument": {
+    "defaultMessage": "Enregistrer dans le cloud",
+    "description": "Ítem del drawer per desar el document al backend"
+  },
+  "features.backend.auth.showPassword": {
+    "defaultMessage": "Afficher le mot de passe",
+    "description": "Etiqueta ARIA per al botó de mostrar/amagar contrasenya"
+  },
+  "features.backend.auth.submitLogin": {
+    "defaultMessage": "Connexion",
+    "description": "Botó per enviar el formulari de login"
+  },
+  "features.backend.auth.submitRegister": {
+    "defaultMessage": "S'inscrire",
+    "description": "Botó per enviar el formulari de registre"
+  },
+  "features.backend.auth.toggleToLogin": {
+    "defaultMessage": "Déjà un compte ? Connectez-vous",
+    "description": "Enllaç per tornar al formulari de login"
+  },
+  "features.backend.auth.toggleToRegister": {
+    "defaultMessage": "Pas de compte ? Inscrivez-vous",
+    "description": "Enllaç per canviar al formulari de registre"
+  },
+  "news.articleNavigation": {
+    "defaultMessage": "Navigation entre articles",
+    "description": "Aria label navegació articles"
+  },
+  "news.back.button": {
+    "defaultMessage": "Retour",
+    "description": "Botó tornar de detall notícia"
+  },
+  "news.download-pdf.content": {
+    "defaultMessage": "Depuis la page de visualisation, cliquez sur le nouveau bouton PDF dans la barre d'outils (à côté du bouton d'impression) pour générer et télécharger un PDF de votre séquence.",
+    "description": "Contingut notícia descàrrega PDF"
+  },
+  "news.download-pdf.step1.alt": {
+    "defaultMessage": "Barre d'outils avec le nouveau bouton PDF mis en évidence",
+    "description": "Alt text imatge pas 1"
+  },
+  "news.download-pdf.step1.description": {
+    "defaultMessage": "Dans la barre supérieure de la page de visualisation, vous trouverez le nouveau bouton PDF (icône de document) à côté des boutons d'orientation et d'impression. Cliquez pour démarrer le téléchargement.",
+    "description": "Descripció pas 1"
+  },
+  "news.download-pdf.step2.alt": {
+    "defaultMessage": "Aperçu de la séquence de pictogrammes qui sera téléchargée en PDF",
+    "description": "Alt text imatge pas 2"
+  },
+  "news.download-pdf.step2.description": {
+    "defaultMessage": "Le PDF contient exactement ce que vous voyez dans l'aperçu : les pictogrammes avec la taille, l'espacement et l'alignement configurés. Vous pouvez le partager par e-mail ou le sauvegarder.",
+    "description": "Descripció pas 2"
+  },
+  "news.download-pdf.summary": {
+    "defaultMessage": "Vous pouvez maintenant télécharger la séquence directement en PDF, sans ouvrir la boîte de dialogue d'impression.",
+    "description": "Resum notícia descàrrega PDF"
+  },
+  "news.download-pdf.title": {
+    "defaultMessage": "Télécharger la séquence en PDF",
+    "description": "Títol notícia descàrrega PDF"
+  },
+  "news.logo-menu.content": {
+    "defaultMessage": "Saviez-vous que le logo de SequenciAAC est un bouton ? Cliquez dessus pour ouvrir le menu de navigation principal, depuis lequel vous pouvez accéder à toutes les pages et fonctions de l'application.",
+    "description": "Contingut notícia menú logo"
+  },
+  "news.logo-menu.step1.alt": {
+    "defaultMessage": "Section de navigation du menu avec les liens Accueil, Nouveautés, Éditer et Aperçu",
+    "description": "Alt pas 1 menú logo"
+  },
+  "news.logo-menu.step1.description": {
+    "defaultMessage": "La première section contient des raccourcis vers toutes les pages : Accueil, Nouveautés (où vous trouverez toutes les mises à jour), Éditer (pour créer vos séquences) et Aperçu (pour les visualiser et les imprimer).",
+    "description": "Descripció pas 1 menú logo"
+  },
+  "news.logo-menu.step2.alt": {
+    "defaultMessage": "Section de fichiers du menu avec les options Télécharger et Charger",
+    "description": "Alt pas 2 menú logo"
+  },
+  "news.logo-menu.step2.description": {
+    "defaultMessage": "Depuis ici vous pouvez gérer vos fichiers de séquences : Télécharger enregistre la séquence actuelle dans un fichier sur votre appareil, et Charger récupère une séquence précédemment enregistrée.",
+    "description": "Descripció pas 2 menú logo"
+  },
+  "news.logo-menu.step3.alt": {
+    "defaultMessage": "Section de paramètres et sélecteur de langue",
+    "description": "Alt pas 3 menú logo"
+  },
+  "news.logo-menu.step3.description": {
+    "defaultMessage": "Paramètres ouvre le dialogue de paramètres par défaut des pictogrammes, où vous pouvez ajuster la typographie, les bordures, la position du texte et d'autres options visuelles. En dessous, le sélecteur de langue vous permet de changer entre le catalan (ca), l'espagnol (es), l'anglais (en), le français (fr) ou l'italien (it).",
+    "description": "Descripció pas 3 menú logo"
+  },
+  "news.logo-menu.summary": {
+    "defaultMessage": "Cliquez sur le logo pour ouvrir le menu principal et accéder à toutes les fonctions de l'application.",
+    "description": "Resum notícia menú logo"
+  },
+  "news.logo-menu.title": {
+    "defaultMessage": "Le menu de navigation",
+    "description": "Títol notícia menú logo"
+  },
+  "news.moreInfo.button": {
+    "defaultMessage": "Plus d'infos",
+    "description": "Botó més info notícia"
+  },
+  "news.multiple-sequences.content": {
+    "defaultMessage": "Créez autant de séquences que vous avez besoin ! Utilisez les onglets pour ajouter de nouvelles séquences ou supprimer celles dont vous n'avez plus besoin. Chaque séquence est indépendante et vous pouvez facilement passer de l'une à l'autre.",
+    "description": "Contingut notícia múltiples seqüències"
+  },
+  "news.multiple-sequences.img1.alt": {
+    "defaultMessage": "Onglets de séquence",
+    "description": "Alt imatge 1 múltiples seqüències"
+  },
+  "news.multiple-sequences.img2.alt": {
+    "defaultMessage": "Ajouter et supprimer des séquences",
+    "description": "Alt imatge 2 múltiples seqüències"
+  },
+  "news.multiple-sequences.step1.alt": {
+    "defaultMessage": "Séquence 1 avec des pictogrammes et un bouton pour ajouter une nouvelle séquence",
+    "description": "Alt imatge pas 1 múltiples seqüències"
+  },
+  "news.multiple-sequences.step1.description": {
+    "defaultMessage": "Sur la page d'édition, recherchez des mots dans la barre de recherche (séparés par des virgules) et les pictogrammes apparaîtront automatiquement dans la séquence active. Cliquez sur le bouton + pour créer une nouvelle séquence.",
+    "description": "Descripció pas 1 múltiples seqüències"
+  },
+  "news.multiple-sequences.step2.alt": {
+    "defaultMessage": "Deux onglets de séquence visibles, séquence 2 active",
+    "description": "Alt imatge pas 2 múltiples seqüències"
+  },
+  "news.multiple-sequences.step2.description": {
+    "defaultMessage": "Cliquez sur n'importe quel onglet pour changer de séquence active. Chaque séquence a son propre contenu indépendant. Recherchez de nouveaux mots pour remplir la séquence 2.",
+    "description": "Descripció pas 2 múltiples seqüències"
+  },
+  "news.multiple-sequences.step3.alt": {
+    "defaultMessage": "Vue des deux séquences avec taille augmentée globalement",
+    "description": "Alt imatge pas 3 múltiples seqüències"
+  },
+  "news.multiple-sequences.step3.description": {
+    "defaultMessage": "Dans la Vue, le commutateur \"Appliquer à toutes\" permet d'ajuster la taille et l'espacement de toutes les séquences à la fois. Déplacez le contrôle de taille pour voir le changement appliqué globalement.",
+    "description": "Descripció pas 3 múltiples seqüències"
+  },
+  "news.multiple-sequences.step4.alt": {
+    "defaultMessage": "Vue avec la séquence 2 ajustée individuellement à une taille différente",
+    "description": "Alt imatge pas 4 múltiples seqüències"
+  },
+  "news.multiple-sequences.step4.description": {
+    "defaultMessage": "Désactivez \"Appliquer à toutes\" pour configurer chaque séquence de manière indépendante. Développez l'accordéon de la séquence que vous souhaitez ajuster et modifiez sa taille ou son espacement sans affecter les autres.",
+    "description": "Descripció pas 4 múltiples seqüències"
+  },
+  "news.multiple-sequences.summary": {
+    "defaultMessage": "Vous pouvez maintenant créer et gérer plusieurs séquences à la fois avec des onglets.",
+    "description": "Resum notícia múltiples seqüències"
+  },
+  "news.multiple-sequences.title": {
+    "defaultMessage": "Séquences multiples",
+    "description": "Títol notícia múltiples seqüències"
+  },
+  "news.new-languages.content": {
+    "defaultMessage": "SequenciAAC est désormais accessible en deux nouvelles langues : Français et Italiano. Avec cet ajout, l'application peut être utilisée en cinq langues : catalan, espagnol, anglais, français et italien.\n\nLes traductions ont été réalisées automatiquement, il est donc possible qu'il y ait quelques inexactitudes ou expressions peu naturelles. Nous nous excusons pour toute erreur et vous remercions de nous le signaler afin que nous puissions l'améliorer.",
+    "description": "Contingut notícia nous idiomes"
+  },
+  "news.new-languages.step1.alt": {
+    "defaultMessage": "Menu de navigation de SequenciAAC avec le sélecteur de langue en bas",
+    "description": "Alt text imatge pas 1"
+  },
+  "news.new-languages.step1.description": {
+    "defaultMessage": "Pour changer de langue, cliquez sur le logo SequenciAAC pour ouvrir le menu de navigation. En bas du menu, vous trouverez le sélecteur de langue.",
+    "description": "Descripció pas 1"
+  },
+  "news.new-languages.step2.alt": {
+    "defaultMessage": "Sélecteur de langue déployé avec les cinq langues disponibles",
+    "description": "Alt text imatge pas 2"
+  },
+  "news.new-languages.step2.description": {
+    "defaultMessage": "Cliquez sur le sélecteur pour voir les cinq langues disponibles : Català, Español, English, Français et Italiano. Sélectionnez-en une pour changer la langue de toute l'application immédiatement.",
+    "description": "Descripció pas 2"
+  },
+  "news.new-languages.step3.alt": {
+    "defaultMessage": "Application SequenciAAC avec l'interface en Français",
+    "description": "Alt text imatge pas 3"
+  },
+  "news.new-languages.step3.description": {
+    "defaultMessage": "L'interface se met à jour instantanément. Vous pouvez voir ici l'application en Français. Si vous trouvez une traduction incorrecte, faites-le nous savoir : nous l'améliorerons.",
+    "description": "Descripció pas 3"
+  },
+  "news.new-languages.summary": {
+    "defaultMessage": "L'application parle maintenant cinq langues. Voici comment en changer.",
+    "description": "Resum notícia nous idiomes"
+  },
+  "news.new-languages.title": {
+    "defaultMessage": "Nouvelles langues : Français et Italiano",
+    "description": "Títol notícia nous idiomes"
+  },
+  "news.nextArticle": {
+    "defaultMessage": "Article suivant",
+    "description": "Navegació article següent"
+  },
+  "news.number-font.content": {
+    "defaultMessage": "Vous pouvez maintenant configurer de manière indépendante la typographie des numéros ajoutés aux pictogrammes lorsque vous activez la numérotation. Depuis le dialogue Paramètres par défaut, si vous activez le commutateur Numérotation, une nouvelle section apparaîtra pour choisir la famille typographique, la taille et la couleur des numéros, indépendamment de la typographie du texte des pictogrammes.",
+    "description": "Contingut notícia font dels números"
+  },
+  "news.number-font.step1.alt": {
+    "defaultMessage": "Panneau de paramètres par défaut avec le commutateur de numérotation désactivé",
+    "description": "Alt pas 1 font dels números"
+  },
+  "news.number-font.step1.description": {
+    "defaultMessage": "Ouvrez le dialogue Paramètres par défaut depuis le menu principal (cliquez sur le logo). Vous verrez un commutateur pour activer la numérotation des pictogrammes.",
+    "description": "Descripció pas 1 font dels números"
+  },
+  "news.number-font.step2.alt": {
+    "defaultMessage": "Commutateur de numérotation activé dans le panneau de paramètres",
+    "description": "Alt pas 2 font dels números"
+  },
+  "news.number-font.step2.description": {
+    "defaultMessage": "Activez le commutateur de numérotation. Chaque pictogramme affichera son numéro d'ordre à la position opposée au texte.",
+    "description": "Descripció pas 2 font dels números"
+  },
+  "news.number-font.step3.alt": {
+    "defaultMessage": "Nouvelle section de configuration de la police des numéros, avec sélecteur de famille, taille et couleur",
+    "description": "Alt pas 3 font dels números"
+  },
+  "news.number-font.step3.description": {
+    "defaultMessage": "Une fois la numérotation activée, une nouvelle section apparaît pour configurer la typographie des numéros : famille, taille et couleur, de manière indépendante à la police du texte des pictogrammes.",
+    "description": "Descripció pas 3 font dels números"
+  },
+  "news.number-font.summary": {
+    "defaultMessage": "Choisissez une typographie propre pour les numéros qui apparaissent sur les pictogrammes.",
+    "description": "Resum notícia font dels números"
+  },
+  "news.number-font.title": {
+    "defaultMessage": "Police personnalisée pour les numéros",
+    "description": "Títol notícia font dels números"
+  },
+  "news.prevArticle": {
+    "defaultMessage": "Article précédent",
+    "description": "Navegació article anterior"
+  },
+  "news.print-preview.content": {
+    "defaultMessage": "L'aperçu vous montre exactement à quoi ressemblera la page imprimée. Vous pouvez contrôler la taille des pictogrammes, l'espace entre les lignes et les colonnes, et l'alignement. Tout est mis à jour en temps réel !",
+    "description": "Contingut notícia vista prèvia"
+  },
+  "news.print-preview.img1.alt": {
+    "defaultMessage": "Aperçu de la page",
+    "description": "Alt imatge 1 vista prèvia"
+  },
+  "news.print-preview.img2.alt": {
+    "defaultMessage": "Contrôles de taille et d'espacement",
+    "description": "Alt imatge 2 vista prèvia"
+  },
+  "news.print-preview.summary": {
+    "defaultMessage": "Prévisualisez exactement à quoi ressemblera votre page avant d'imprimer.",
+    "description": "Resum notícia vista prèvia"
+  },
+  "news.print-preview.title": {
+    "defaultMessage": "Aperçu d'impression",
+    "description": "Títol notícia vista prèvia"
+  },
+  "news.save-improvements.content": {
+    "defaultMessage": "Maintenant le fichier .saac enregistre les images personnalisées que vous avez téléversées, directement dans le fichier pour ne pas les perdre. De plus, les paramètres d'affichage de chaque séquence — taille des pictogrammes, espacement et alignement — sont également enregistrés et récupérés exactement comme vous les avez laissés.",
+    "description": "Contingut notícia millores guardat"
+  },
+  "news.save-improvements.step1.alt": {
+    "defaultMessage": "Bouton pour téléverser une image personnalisée sur le pictogramme",
+    "description": "Alt pas 1 millores guardat"
+  },
+  "news.save-improvements.step1.description": {
+    "defaultMessage": "Téléversez votre propre image sur n'importe quel pictogramme. L'image est enregistrée directement dans le fichier .saac, sans avoir besoin d'internet.",
+    "description": "Descripció pas 1 millores guardat"
+  },
+  "news.save-improvements.step2.alt": {
+    "defaultMessage": "Dialogue d'enregistrement avec les options de séquences et de paramètres",
+    "description": "Alt pas 2 millores guardat"
+  },
+  "news.save-improvements.step2.description": {
+    "defaultMessage": "Lors de l'enregistrement du fichier, toutes les images personnalisées sont automatiquement incluses.",
+    "description": "Descripció pas 2 millores guardat"
+  },
+  "news.save-improvements.step3.alt": {
+    "defaultMessage": "Contrôles de taille et d'espacement des pictogrammes",
+    "description": "Alt pas 3 millores guardat"
+  },
+  "news.save-improvements.step3.description": {
+    "defaultMessage": "La taille, l'espacement et l'alignement de chaque séquence sont automatiquement enregistrés et restaurés lors du chargement du fichier.",
+    "description": "Descripció pas 3 millores guardat"
+  },
+  "news.save-improvements.summary": {
+    "defaultMessage": "Le fichier enregistré inclut maintenant les images personnalisées et les paramètres de taille et d'espacement de chaque séquence.",
+    "description": "Resum notícia millores guardat"
+  },
+  "news.save-improvements.title": {
+    "defaultMessage": "Améliorations de l'enregistrement",
+    "description": "Títol notícia millores guardat"
+  },
+  "news.save-load.content": {
+    "defaultMessage": "Vous trouverez les options d'enregistrement et de chargement dans le menu du logo SequenciAAC. Lors de l'enregistrement, un fichier est téléchargé avec toutes les séquences et les images des pictogrammes incluses. Ainsi vous pouvez récupérer votre travail à tout moment !",
+    "description": "Contingut notícia guardar i carregar"
+  },
+  "news.save-load.img1.alt": {
+    "defaultMessage": "Menu avec option d'enregistrement",
+    "description": "Alt imatge 1 guardar i carregar"
+  },
+  "news.save-load.img2.alt": {
+    "defaultMessage": "Charger un fichier enregistré",
+    "description": "Alt imatge 2 guardar i carregar"
+  },
+  "news.save-load.summary": {
+    "defaultMessage": "Téléchargez vos séquences avec les images et rechargez-les quand vous voulez.",
+    "description": "Resum notícia guardar i carregar"
+  },
+  "news.save-load.title": {
+    "defaultMessage": "Enregistrer et récupérer",
+    "description": "Títol notícia guardar i carregar"
+  },
+  "news.section.title": {
+    "defaultMessage": "Nouveautés",
+    "description": "Títol secció novetats"
+  },
+  "news.seeAll": {
+    "defaultMessage": "Voir toutes les nouveautés",
+    "description": "Botó veure totes les novetats"
+  },
+  "news.sequence-settings.content": {
+    "defaultMessage": "Vous pouvez maintenant personnaliser chaque séquence de manière indépendante. Modifiez l'alignement des pictogrammes (gauche, centre ou droite), configurez la typographie et la couleur des numéros de manière indépendante du texte, et découvrez plus d'options de mise en forme pour adapter les séquences à vos besoins.",
+    "description": "Contingut notícia configuracions"
+  },
+  "news.sequence-settings.img1.alt": {
+    "defaultMessage": "Options d'alignement",
+    "description": "Alt imatge 1 configuracions"
+  },
+  "news.sequence-settings.img2.alt": {
+    "defaultMessage": "Paramètres de typographie des numéros",
+    "description": "Alt imatge 2 configuracions"
+  },
+  "news.sequence-settings.summary": {
+    "defaultMessage": "Personnalisez chaque séquence avec l'alignement, la typographie des numéros et plus d'options.",
+    "description": "Resum notícia configuracions"
+  },
+  "news.sequence-settings.title": {
+    "defaultMessage": "Nouveaux paramètres par séquence",
+    "description": "Títol notícia configuracions"
+  },
+  "news.view-improvements.content": {
+    "defaultMessage": "Plusieurs bogues ont été corrigés qui faisaient que l'aperçu d'impression ne correspondait pas exactement au résultat imprimé. De nouveaux contrôles ont également été ajoutés pour l'alignement et la direction des séquences, et lorsque vous enregistrez une séquence, les paramètres d'affichage sont maintenant automatiquement inclus.",
+    "description": "Contingut notícia millores vista"
+  },
+  "news.view-improvements.step1.alt": {
+    "defaultMessage": "Aperçu de la séquence montrant la correspondance exacte avec l'impression",
+    "description": "Alt pas 1 millores vista"
+  },
+  "news.view-improvements.step1.description": {
+    "defaultMessage": "L'aperçu de séquence correspond maintenant exactement au résultat imprimé. Un calcul d'échelle précis prend en compte le format de page (A4, A3) et la résolution d'écran pour montrer fidèlement ce qui sera imprimé.",
+    "description": "Descripció pas 1 millores vista"
+  },
+  "news.view-improvements.step2.alt": {
+    "defaultMessage": "Contrôles d'alignement et de direction pour les séquences",
+    "description": "Alt pas 2 millores vista"
+  },
+  "news.view-improvements.step2.description": {
+    "defaultMessage": "Nouveaux contrôles pour personnaliser chaque séquence : choisissez l'alignement (gauche, centre, droite) et la direction (horizontal ou vertical) pour adapter la présentation à vos besoins.",
+    "description": "Descripció pas 2 millores vista"
+  },
+  "news.view-improvements.step3.alt": {
+    "defaultMessage": "Bouton d'enregistrement de séquence avec les paramètres de vue inclus",
+    "description": "Alt pas 3 millores vista"
+  },
+  "news.view-improvements.step3.description": {
+    "defaultMessage": "Lorsque vous enregistrez la séquence en utilisant le bouton de téléchargement, les paramètres d'affichage (tailles, espacements, alignement et direction) sont automatiquement inclus dans le fichier, de sorte que lorsque vous le rechargez, tout sera tel que vous l'avez laissé.",
+    "description": "Descripció pas 3 millores vista"
+  },
+  "news.view-improvements.summary": {
+    "defaultMessage": "Aperçu fidèle à l'impression, nouveaux contrôles d'alignement et de direction.",
+    "description": "Resum notícia millores vista"
+  },
+  "news.view-improvements.title": {
+    "defaultMessage": "Améliorations de l'aperçu",
+    "description": "Títol notícia millores vista"
+  },
+  "pages.viewSequence.alignment.label": {
+    "defaultMessage": "Alignement"
+  },
+  "pages.viewSequence.applyAll.label": {
+    "defaultMessage": "Appliquer à toutes"
   },
   "pages.viewSequence.authSequence.helperText": {
     "defaultMessage": "Marquer la paternité",
@@ -243,13 +875,22 @@
     "defaultMessage": "Auteur de la séquence",
     "description": "Label form"
   },
-  "pages.viewSequence.pictSpaceBetween.label": {
-    "defaultMessage": "Espace entre pictogrammes",
-    "description": "Label form"
+  "pages.viewSequence.direction.label": {
+    "defaultMessage": "Direction"
   },
   "pages.viewSequence.fullScreen.label": {
     "defaultMessage": "Plein écran",
     "description": "Setting property"
+  },
+  "pages.viewSequence.pageSize.label": {
+    "defaultMessage": "Taille de page"
+  },
+  "pages.viewSequence.pictSpaceBetween.label": {
+    "defaultMessage": "Espace entre pictogrammes",
+    "description": "Label form"
+  },
+  "pages.viewSequence.sequence.label": {
+    "defaultMessage": "Séquence"
   },
   "pages.viewSequence.sequenceSpaceBetween.label": {
     "defaultMessage": "Espace entre séquences",
@@ -258,6 +899,37 @@
   "pages.viewSequence.size.label": {
     "defaultMessage": "Taille",
     "description": "Label form"
+  },
+  "pages.viewSequence.tooltip.alignCenter": {
+    "defaultMessage": "Centrer"
+  },
+  "pages.viewSequence.tooltip.alignLeft": {
+    "defaultMessage": "Aligner à gauche"
+  },
+  "pages.viewSequence.tooltip.alignRight": {
+    "defaultMessage": "Aligner à droite"
+  },
+  "pages.viewSequence.tooltip.applyAll": {
+    "defaultMessage": "Appliquer à toutes les séquences"
+  },
+  "pages.viewSequence.tooltip.directionColumn": {
+    "defaultMessage": "Vertical"
+  },
+  "pages.viewSequence.tooltip.directionRow": {
+    "defaultMessage": "Horizontal"
+  },
+  "pages.viewSequence.tooltip.downloadPdf": {
+    "defaultMessage": "Télécharger en PDF",
+    "description": "Tooltip del botó de descàrrega de PDF"
+  },
+  "pages.viewSequence.tooltip.fullscreen": {
+    "defaultMessage": "Plein écran"
+  },
+  "pages.viewSequence.tooltip.orientation": {
+    "defaultMessage": "Orientation de la page"
+  },
+  "pages.viewSequence.tooltip.print": {
+    "defaultMessage": "Imprimer"
   },
   "pictogram.empty": {
     "defaultMessage": "Vide",
@@ -495,8 +1167,17 @@
     "defaultMessage": "Haut",
     "description": "Type of setting text position"
   },
+  "view.editSequences.sequences.label": {
+    "defaultMessage": "Séquences"
+  },
   "view.welcome.arcadeLink": {
     "defaultMessage": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
+  },
+  "view.welcome.footer.credits": {
+    "defaultMessage": "Crédits"
+  },
+  "view.welcome.footer.licenses": {
+    "defaultMessage": "Licences"
   },
   "view.welcome.learning": {
     "defaultMessage": "Apprendre à utiliser...",
@@ -509,654 +1190,5 @@
   "view.welcome.start.button": {
     "defaultMessage": "Commencer",
     "description": "Start button"
-  },
-  "news.section.title": {
-    "defaultMessage": "Nouveautés",
-    "description": "Títol secció novetats"
-  },
-  "news.moreInfo.button": {
-    "defaultMessage": "Plus d'infos",
-    "description": "Botó més info notícia"
-  },
-  "news.back.button": {
-    "defaultMessage": "Retour",
-    "description": "Botó tornar de detall notícia"
-  },
-  "news.download-pdf.title": {
-    "defaultMessage": "Télécharger la séquence en PDF",
-    "description": "Títol notícia descàrrega PDF"
-  },
-  "news.download-pdf.summary": {
-    "defaultMessage": "Vous pouvez maintenant télécharger la séquence directement en PDF, sans ouvrir la boîte de dialogue d'impression.",
-    "description": "Resum notícia descàrrega PDF"
-  },
-  "news.download-pdf.content": {
-    "defaultMessage": "Depuis la page de visualisation, cliquez sur le nouveau bouton PDF dans la barre d'outils (à côté du bouton d'impression) pour générer et télécharger un PDF de votre séquence.",
-    "description": "Contingut notícia descàrrega PDF"
-  },
-  "news.download-pdf.step1.alt": {
-    "defaultMessage": "Barre d'outils avec le nouveau bouton PDF mis en évidence",
-    "description": "Alt text imatge pas 1"
-  },
-  "news.download-pdf.step1.description": {
-    "defaultMessage": "Dans la barre supérieure de la page de visualisation, vous trouverez le nouveau bouton PDF (icône de document) à côté des boutons d'orientation et d'impression. Cliquez pour démarrer le téléchargement.",
-    "description": "Descripció pas 1"
-  },
-  "news.download-pdf.step2.alt": {
-    "defaultMessage": "Aperçu de la séquence de pictogrammes qui sera téléchargée en PDF",
-    "description": "Alt text imatge pas 2"
-  },
-  "news.download-pdf.step2.description": {
-    "defaultMessage": "Le PDF contient exactement ce que vous voyez dans l'aperçu : les pictogrammes avec la taille, l'espacement et l'alignement configurés. Vous pouvez le partager par e-mail ou le sauvegarder.",
-    "description": "Descripció pas 2"
-  },
-  "news.new-languages.title": {
-    "defaultMessage": "Nouvelles langues : Français et Italiano",
-    "description": "Títol notícia nous idiomes"
-  },
-  "news.new-languages.summary": {
-    "defaultMessage": "L'application parle maintenant cinq langues. Voici comment en changer.",
-    "description": "Resum notícia nous idiomes"
-  },
-  "news.new-languages.content": {
-    "defaultMessage": "SequenciAAC est désormais accessible en deux nouvelles langues : Français et Italiano. Avec cet ajout, l'application peut être utilisée en cinq langues : catalan, espagnol, anglais, français et italien.\n\nLes traductions ont été réalisées automatiquement, il est donc possible qu'il y ait quelques inexactitudes ou expressions peu naturelles. Nous nous excusons pour toute erreur et vous remercions de nous le signaler afin que nous puissions l'améliorer.",
-    "description": "Contingut notícia nous idiomes"
-  },
-  "news.new-languages.step1.alt": {
-    "defaultMessage": "Menu de navigation de SequenciAAC avec le sélecteur de langue en bas",
-    "description": "Alt text imatge pas 1"
-  },
-  "news.new-languages.step1.description": {
-    "defaultMessage": "Pour changer de langue, cliquez sur le logo SequenciAAC pour ouvrir le menu de navigation. En bas du menu, vous trouverez le sélecteur de langue.",
-    "description": "Descripció pas 1"
-  },
-  "news.new-languages.step2.alt": {
-    "defaultMessage": "Sélecteur de langue déployé avec les cinq langues disponibles",
-    "description": "Alt text imatge pas 2"
-  },
-  "news.new-languages.step2.description": {
-    "defaultMessage": "Cliquez sur le sélecteur pour voir les cinq langues disponibles : Català, Español, English, Français et Italiano. Sélectionnez-en une pour changer la langue de toute l'application immédiatement.",
-    "description": "Descripció pas 2"
-  },
-  "news.new-languages.step3.alt": {
-    "defaultMessage": "Application SequenciAAC avec l'interface en Français",
-    "description": "Alt text imatge pas 3"
-  },
-  "news.new-languages.step3.description": {
-    "defaultMessage": "L'interface se met à jour instantanément. Vous pouvez voir ici l'application en Français. Si vous trouvez une traduction incorrecte, faites-le nous savoir : nous l'améliorerons.",
-    "description": "Descripció pas 3"
-  },
-  "news.multiple-sequences.title": {
-    "defaultMessage": "Séquences multiples",
-    "description": "Títol notícia múltiples seqüències"
-  },
-  "news.multiple-sequences.summary": {
-    "defaultMessage": "Vous pouvez maintenant créer et gérer plusieurs séquences à la fois avec des onglets.",
-    "description": "Resum notícia múltiples seqüències"
-  },
-  "news.multiple-sequences.content": {
-    "defaultMessage": "Créez autant de séquences que vous avez besoin ! Utilisez les onglets pour ajouter de nouvelles séquences ou supprimer celles dont vous n'avez plus besoin. Chaque séquence est indépendante et vous pouvez facilement passer de l'une à l'autre.",
-    "description": "Contingut notícia múltiples seqüències"
-  },
-  "news.multiple-sequences.img1.alt": {
-    "defaultMessage": "Onglets de séquence",
-    "description": "Alt imatge 1 múltiples seqüències"
-  },
-  "news.multiple-sequences.img2.alt": {
-    "defaultMessage": "Ajouter et supprimer des séquences",
-    "description": "Alt imatge 2 múltiples seqüències"
-  },
-  "news.multiple-sequences.step1.alt": {
-    "defaultMessage": "Séquence 1 avec des pictogrammes et un bouton pour ajouter une nouvelle séquence",
-    "description": "Alt imatge pas 1 múltiples seqüències"
-  },
-  "news.multiple-sequences.step1.description": {
-    "defaultMessage": "Sur la page d'édition, recherchez des mots dans la barre de recherche (séparés par des virgules) et les pictogrammes apparaîtront automatiquement dans la séquence active. Cliquez sur le bouton + pour créer une nouvelle séquence.",
-    "description": "Descripció pas 1 múltiples seqüències"
-  },
-  "news.multiple-sequences.step2.alt": {
-    "defaultMessage": "Deux onglets de séquence visibles, séquence 2 active",
-    "description": "Alt imatge pas 2 múltiples seqüències"
-  },
-  "news.multiple-sequences.step2.description": {
-    "defaultMessage": "Cliquez sur n'importe quel onglet pour changer de séquence active. Chaque séquence a son propre contenu indépendant. Recherchez de nouveaux mots pour remplir la séquence 2.",
-    "description": "Descripció pas 2 múltiples seqüències"
-  },
-  "news.multiple-sequences.step3.alt": {
-    "defaultMessage": "Vue des deux séquences avec taille augmentée globalement",
-    "description": "Alt imatge pas 3 múltiples seqüències"
-  },
-  "news.multiple-sequences.step3.description": {
-    "defaultMessage": "Dans la Vue, le commutateur \"Appliquer à toutes\" permet d'ajuster la taille et l'espacement de toutes les séquences à la fois. Déplacez le contrôle de taille pour voir le changement appliqué globalement.",
-    "description": "Descripció pas 3 múltiples seqüències"
-  },
-  "news.multiple-sequences.step4.alt": {
-    "defaultMessage": "Vue avec la séquence 2 ajustée individuellement à une taille différente",
-    "description": "Alt imatge pas 4 múltiples seqüències"
-  },
-  "news.multiple-sequences.step4.description": {
-    "defaultMessage": "Désactivez \"Appliquer à toutes\" pour configurer chaque séquence de manière indépendante. Développez l'accordéon de la séquence que vous souhaitez ajuster et modifiez sa taille ou son espacement sans affecter les autres.",
-    "description": "Descripció pas 4 múltiples seqüències"
-  },
-  "news.print-preview.title": {
-    "defaultMessage": "Aperçu d'impression",
-    "description": "Títol notícia vista prèvia"
-  },
-  "news.print-preview.summary": {
-    "defaultMessage": "Prévisualisez exactement à quoi ressemblera votre page avant d'imprimer.",
-    "description": "Resum notícia vista prèvia"
-  },
-  "news.print-preview.content": {
-    "defaultMessage": "L'aperçu vous montre exactement à quoi ressemblera la page imprimée. Vous pouvez contrôler la taille des pictogrammes, l'espace entre les lignes et les colonnes, et l'alignement. Tout est mis à jour en temps réel !",
-    "description": "Contingut notícia vista prèvia"
-  },
-  "news.print-preview.img1.alt": {
-    "defaultMessage": "Aperçu de la page",
-    "description": "Alt imatge 1 vista prèvia"
-  },
-  "news.print-preview.img2.alt": {
-    "defaultMessage": "Contrôles de taille et d'espacement",
-    "description": "Alt imatge 2 vista prèvia"
-  },
-  "news.sequence-settings.title": {
-    "defaultMessage": "Nouveaux paramètres par séquence",
-    "description": "Títol notícia configuracions"
-  },
-  "news.sequence-settings.summary": {
-    "defaultMessage": "Personnalisez chaque séquence avec l'alignement, la typographie des numéros et plus d'options.",
-    "description": "Resum notícia configuracions"
-  },
-  "news.sequence-settings.content": {
-    "defaultMessage": "Vous pouvez maintenant personnaliser chaque séquence de manière indépendante. Modifiez l'alignement des pictogrammes (gauche, centre ou droite), configurez la typographie et la couleur des numéros de manière indépendante du texte, et découvrez plus d'options de mise en forme pour adapter les séquences à vos besoins.",
-    "description": "Contingut notícia configuracions"
-  },
-  "news.sequence-settings.img1.alt": {
-    "defaultMessage": "Options d'alignement",
-    "description": "Alt imatge 1 configuracions"
-  },
-  "news.sequence-settings.img2.alt": {
-    "defaultMessage": "Paramètres de typographie des numéros",
-    "description": "Alt imatge 2 configuracions"
-  },
-  "news.save-load.title": {
-    "defaultMessage": "Enregistrer et récupérer",
-    "description": "Títol notícia guardar i carregar"
-  },
-  "news.save-load.summary": {
-    "defaultMessage": "Téléchargez vos séquences avec les images et rechargez-les quand vous voulez.",
-    "description": "Resum notícia guardar i carregar"
-  },
-  "news.save-load.content": {
-    "defaultMessage": "Vous trouverez les options d'enregistrement et de chargement dans le menu du logo SequenciAAC. Lors de l'enregistrement, un fichier est téléchargé avec toutes les séquences et les images des pictogrammes incluses. Ainsi vous pouvez récupérer votre travail à tout moment !",
-    "description": "Contingut notícia guardar i carregar"
-  },
-  "news.save-load.img1.alt": {
-    "defaultMessage": "Menu avec option d'enregistrement",
-    "description": "Alt imatge 1 guardar i carregar"
-  },
-  "news.save-load.img2.alt": {
-    "defaultMessage": "Charger un fichier enregistré",
-    "description": "Alt imatge 2 guardar i carregar"
-  },
-  "news.number-font.title": {
-    "defaultMessage": "Police personnalisée pour les numéros",
-    "description": "Títol notícia font dels números"
-  },
-  "news.number-font.summary": {
-    "defaultMessage": "Choisissez une typographie propre pour les numéros qui apparaissent sur les pictogrammes.",
-    "description": "Resum notícia font dels números"
-  },
-  "news.number-font.content": {
-    "defaultMessage": "Vous pouvez maintenant configurer de manière indépendante la typographie des numéros ajoutés aux pictogrammes lorsque vous activez la numérotation. Depuis le dialogue Paramètres par défaut, si vous activez le commutateur Numérotation, une nouvelle section apparaîtra pour choisir la famille typographique, la taille et la couleur des numéros, indépendamment de la typographie du texte des pictogrammes.",
-    "description": "Contingut notícia font dels números"
-  },
-  "news.number-font.step1.alt": {
-    "defaultMessage": "Panneau de paramètres par défaut avec le commutateur de numérotation désactivé",
-    "description": "Alt pas 1 font dels números"
-  },
-  "news.number-font.step1.description": {
-    "defaultMessage": "Ouvrez le dialogue Paramètres par défaut depuis le menu principal (cliquez sur le logo). Vous verrez un commutateur pour activer la numérotation des pictogrammes.",
-    "description": "Descripció pas 1 font dels números"
-  },
-  "news.number-font.step2.alt": {
-    "defaultMessage": "Commutateur de numérotation activé dans le panneau de paramètres",
-    "description": "Alt pas 2 font dels números"
-  },
-  "news.number-font.step2.description": {
-    "defaultMessage": "Activez le commutateur de numérotation. Chaque pictogramme affichera son numéro d'ordre à la position opposée au texte.",
-    "description": "Descripció pas 2 font dels números"
-  },
-  "news.number-font.step3.alt": {
-    "defaultMessage": "Nouvelle section de configuration de la police des numéros, avec sélecteur de famille, taille et couleur",
-    "description": "Alt pas 3 font dels números"
-  },
-  "news.number-font.step3.description": {
-    "defaultMessage": "Une fois la numérotation activée, une nouvelle section apparaît pour configurer la typographie des numéros : famille, taille et couleur, de manière indépendante à la police du texte des pictogrammes.",
-    "description": "Descripció pas 3 font dels números"
-  },
-  "news.logo-menu.title": {
-    "defaultMessage": "Le menu de navigation",
-    "description": "Títol notícia menú logo"
-  },
-  "news.logo-menu.summary": {
-    "defaultMessage": "Cliquez sur le logo pour ouvrir le menu principal et accéder à toutes les fonctions de l'application.",
-    "description": "Resum notícia menú logo"
-  },
-  "news.logo-menu.content": {
-    "defaultMessage": "Saviez-vous que le logo de SequenciAAC est un bouton ? Cliquez dessus pour ouvrir le menu de navigation principal, depuis lequel vous pouvez accéder à toutes les pages et fonctions de l'application.",
-    "description": "Contingut notícia menú logo"
-  },
-  "news.logo-menu.step1.alt": {
-    "defaultMessage": "Section de navigation du menu avec les liens Accueil, Nouveautés, Éditer et Aperçu",
-    "description": "Alt pas 1 menú logo"
-  },
-  "news.logo-menu.step1.description": {
-    "defaultMessage": "La première section contient des raccourcis vers toutes les pages : Accueil, Nouveautés (où vous trouverez toutes les mises à jour), Éditer (pour créer vos séquences) et Aperçu (pour les visualiser et les imprimer).",
-    "description": "Descripció pas 1 menú logo"
-  },
-  "news.logo-menu.step2.alt": {
-    "defaultMessage": "Section de fichiers du menu avec les options Télécharger et Charger",
-    "description": "Alt pas 2 menú logo"
-  },
-  "news.logo-menu.step2.description": {
-    "defaultMessage": "Depuis ici vous pouvez gérer vos fichiers de séquences : Télécharger enregistre la séquence actuelle dans un fichier sur votre appareil, et Charger récupère une séquence précédemment enregistrée.",
-    "description": "Descripció pas 2 menú logo"
-  },
-  "news.logo-menu.step3.alt": {
-    "defaultMessage": "Section de paramètres et sélecteur de langue",
-    "description": "Alt pas 3 menú logo"
-  },
-  "news.logo-menu.step3.description": {
-    "defaultMessage": "Paramètres ouvre le dialogue de paramètres par défaut des pictogrammes, où vous pouvez ajuster la typographie, les bordures, la position du texte et d'autres options visuelles. En dessous, le sélecteur de langue vous permet de changer entre le catalan (ca), l'espagnol (es), l'anglais (en), le français (fr) ou l'italien (it).",
-    "description": "Descripció pas 3 menú logo"
-  },
-  "news.view-improvements.title": {
-    "defaultMessage": "Améliorations de l'aperçu",
-    "description": "Títol notícia millores vista"
-  },
-  "news.view-improvements.summary": {
-    "defaultMessage": "Aperçu fidèle à l'impression, nouveaux contrôles d'alignement et de direction.",
-    "description": "Resum notícia millores vista"
-  },
-  "news.view-improvements.content": {
-    "defaultMessage": "Plusieurs bogues ont été corrigés qui faisaient que l'aperçu d'impression ne correspondait pas exactement au résultat imprimé. De nouveaux contrôles ont également été ajoutés pour l'alignement et la direction des séquences, et lorsque vous enregistrez une séquence, les paramètres d'affichage sont maintenant automatiquement inclus.",
-    "description": "Contingut notícia millores vista"
-  },
-  "news.view-improvements.step1.alt": {
-    "defaultMessage": "Aperçu de la séquence montrant la correspondance exacte avec l'impression",
-    "description": "Alt pas 1 millores vista"
-  },
-  "news.view-improvements.step1.description": {
-    "defaultMessage": "L'aperçu de séquence correspond maintenant exactement au résultat imprimé. Un calcul d'échelle précis prend en compte le format de page (A4, A3) et la résolution d'écran pour montrer fidèlement ce qui sera imprimé.",
-    "description": "Descripció pas 1 millores vista"
-  },
-  "news.view-improvements.step2.alt": {
-    "defaultMessage": "Contrôles d'alignement et de direction pour les séquences",
-    "description": "Alt pas 2 millores vista"
-  },
-  "news.view-improvements.step2.description": {
-    "defaultMessage": "Nouveaux contrôles pour personnaliser chaque séquence : choisissez l'alignement (gauche, centre, droite) et la direction (horizontal ou vertical) pour adapter la présentation à vos besoins.",
-    "description": "Descripció pas 2 millores vista"
-  },
-  "news.view-improvements.step3.alt": {
-    "defaultMessage": "Bouton d'enregistrement de séquence avec les paramètres de vue inclus",
-    "description": "Alt pas 3 millores vista"
-  },
-  "news.view-improvements.step3.description": {
-    "defaultMessage": "Lorsque vous enregistrez la séquence en utilisant le bouton de téléchargement, les paramètres d'affichage (tailles, espacements, alignement et direction) sont automatiquement inclus dans le fichier, de sorte que lorsque vous le rechargez, tout sera tel que vous l'avez laissé.",
-    "description": "Descripció pas 3 millores vista"
-  },
-  "news.save-improvements.title": {
-    "defaultMessage": "Améliorations de l'enregistrement",
-    "description": "Títol notícia millores guardat"
-  },
-  "news.save-improvements.summary": {
-    "defaultMessage": "Le fichier enregistré inclut maintenant les images personnalisées et les paramètres de taille et d'espacement de chaque séquence.",
-    "description": "Resum notícia millores guardat"
-  },
-  "news.save-improvements.content": {
-    "defaultMessage": "Maintenant le fichier .saac enregistre les images personnalisées que vous avez téléversées, directement dans le fichier pour ne pas les perdre. De plus, les paramètres d'affichage de chaque séquence — taille des pictogrammes, espacement et alignement — sont également enregistrés et récupérés exactement comme vous les avez laissés.",
-    "description": "Contingut notícia millores guardat"
-  },
-  "news.save-improvements.step1.alt": {
-    "defaultMessage": "Bouton pour téléverser une image personnalisée sur le pictogramme",
-    "description": "Alt pas 1 millores guardat"
-  },
-  "news.save-improvements.step1.description": {
-    "defaultMessage": "Téléversez votre propre image sur n'importe quel pictogramme. L'image est enregistrée directement dans le fichier .saac, sans avoir besoin d'internet.",
-    "description": "Descripció pas 1 millores guardat"
-  },
-  "news.save-improvements.step2.alt": {
-    "defaultMessage": "Dialogue d'enregistrement avec les options de séquences et de paramètres",
-    "description": "Alt pas 2 millores guardat"
-  },
-  "news.save-improvements.step2.description": {
-    "defaultMessage": "Lors de l'enregistrement du fichier, toutes les images personnalisées sont automatiquement incluses.",
-    "description": "Descripció pas 2 millores guardat"
-  },
-  "news.save-improvements.step3.alt": {
-    "defaultMessage": "Contrôles de taille et d'espacement des pictogrammes",
-    "description": "Alt pas 3 millores guardat"
-  },
-  "news.save-improvements.step3.description": {
-    "defaultMessage": "La taille, l'espacement et l'alignement de chaque séquence sont automatiquement enregistrés et restaurés lors du chargement du fichier.",
-    "description": "Descripció pas 3 millores guardat"
-  },
-  "news.seeAll": {
-    "defaultMessage": "Voir toutes les nouveautés",
-    "description": "Botó veure totes les novetats"
-  },
-  "news.prevArticle": {
-    "defaultMessage": "Article précédent",
-    "description": "Navegació article anterior"
-  },
-  "news.nextArticle": {
-    "defaultMessage": "Article suivant",
-    "description": "Navegació article següent"
-  },
-  "news.articleNavigation": {
-    "defaultMessage": "Navigation entre articles",
-    "description": "Aria label navegació articles"
-  },
-  "component.settingCardFontGroup.numberFont.title": {
-    "defaultMessage": "Police des numéros"
-  },
-  "components.barNavigation.skipToContent": {
-    "defaultMessage": "Aller au contenu principal"
-  },
-  "components.barNavigation.mainNavigation": {
-    "defaultMessage": "Navigation principale"
-  },
-  "components.logoMenu.download": {
-    "defaultMessage": "Télécharger"
-  },
-  "components.logoMenu.editView": {
-    "defaultMessage": "Éditer"
-  },
-  "components.logoMenu.load": {
-    "defaultMessage": "Charger"
-  },
-  "components.logoMenu.menuAriaLabel": {
-    "defaultMessage": "Menu principal"
-  },
-  "components.logoMenu.previewView": {
-    "defaultMessage": "Aperçu"
-  },
-  "components.logoMenu.settings": {
-    "defaultMessage": "Paramètres"
-  },
-  "components.pictEdit.reset": {
-    "defaultMessage": "Valeurs par défaut"
-  },
-  "components.pictogramSearch.uploadImage": {
-    "defaultMessage": "Téléverser une image depuis l'appareil"
-  },
-  "context.feedback.applyAll.success": {
-    "defaultMessage": "Appliqué à {count} pictogrammes"
-  },
-  "context.feedback.load.error": {
-    "defaultMessage": "Erreur lors du chargement du fichier"
-  },
-  "context.feedback.load.success": {
-    "defaultMessage": "Fichier chargé avec succès"
-  },
-  "context.feedback.loading": {
-    "defaultMessage": "Chargement..."
-  },
-  "context.feedback.save.success": {
-    "defaultMessage": "Fichier enregistré avec succès"
-  },
-  "context.feedback.search.complete": {
-    "defaultMessage": "{count} pictogrammes ajoutés"
-  },
-  "context.feedback.search.error": {
-    "defaultMessage": "Erreur lors de la recherche de pictogrammes"
-  },
-  "context.feedback.search.loading": {
-    "defaultMessage": "Recherche de pictogrammes..."
-  },
-  "pages.viewSequence.alignment.label": {
-    "defaultMessage": "Alignement"
-  },
-  "pages.viewSequence.applyAll.label": {
-    "defaultMessage": "Appliquer à toutes"
-  },
-  "pages.viewSequence.direction.label": {
-    "defaultMessage": "Direction"
-  },
-  "pages.viewSequence.pageSize.label": {
-    "defaultMessage": "Taille de page"
-  },
-  "pages.viewSequence.sequence.label": {
-    "defaultMessage": "Séquence"
-  },
-  "pages.viewSequence.tooltip.alignCenter": {
-    "defaultMessage": "Centrer"
-  },
-  "pages.viewSequence.tooltip.alignLeft": {
-    "defaultMessage": "Aligner à gauche"
-  },
-  "pages.viewSequence.tooltip.alignRight": {
-    "defaultMessage": "Aligner à droite"
-  },
-  "pages.viewSequence.tooltip.applyAll": {
-    "defaultMessage": "Appliquer à toutes les séquences"
-  },
-  "pages.viewSequence.tooltip.directionColumn": {
-    "defaultMessage": "Vertical"
-  },
-  "pages.viewSequence.tooltip.directionRow": {
-    "defaultMessage": "Horizontal"
-  },
-  "pages.viewSequence.tooltip.fullscreen": {
-    "defaultMessage": "Plein écran"
-  },
-  "pages.viewSequence.tooltip.orientation": {
-    "defaultMessage": "Orientation de la page"
-  },
-  "pages.viewSequence.tooltip.print": {
-    "defaultMessage": "Imprimer"
-  },
-  "pages.viewSequence.tooltip.downloadPdf": {
-    "defaultMessage": "Télécharger en PDF",
-    "description": "Tooltip del botó de descàrrega de PDF"
-  },
-  "changelog.page.title": {
-    "defaultMessage": "Nouveautés"
-  },
-  "changelog.category.nova": {
-    "defaultMessage": "Nouveau"
-  },
-  "changelog.category.millora": {
-    "defaultMessage": "Amélioration"
-  },
-  "changelog.category.correccio": {
-    "defaultMessage": "Correction"
-  },
-  "changelog.readMore": {
-    "defaultMessage": "Lire la suite"
-  },
-  "components.newsNavBar.welcome": {
-    "defaultMessage": "Accueil"
-  },
-  "components.newsNavBar.start": {
-    "defaultMessage": "Créer une séquence"
-  },
-  "components.newsNavBar.langSelector": {
-    "defaultMessage": "Langue"
-  },
-  "components.newsNavBar.skipToContent": {
-    "defaultMessage": "Aller au contenu principal"
-  },
-  "components.newsNavBar.mainNavigation": {
-    "defaultMessage": "Navigation principale"
-  },
-  "components.newsNavBar.news": {
-    "defaultMessage": "Nouveautés"
-  },
-  "components.newsNavBar.openMenu": {
-    "defaultMessage": "Ouvrir le menu de navigation"
-  },
-  "components.appNavigationDrawer.welcome": {
-    "defaultMessage": "Accueil"
-  },
-  "components.appNavigationDrawer.news": {
-    "defaultMessage": "Nouveautés"
-  },
-  "components.appNavigationDrawer.editView": {
-    "defaultMessage": "Éditer"
-  },
-  "components.appNavigationDrawer.previewView": {
-    "defaultMessage": "Aperçu"
-  },
-  "components.appNavigationDrawer.download": {
-    "defaultMessage": "Télécharger"
-  },
-  "components.appNavigationDrawer.load": {
-    "defaultMessage": "Charger"
-  },
-  "components.appNavigationDrawer.settings": {
-    "defaultMessage": "Paramètres"
-  },
-  "components.appNavigationDrawer.settingsTitle": {
-    "defaultMessage": "Paramètres par défaut"
-  },
-  "components.appNavigationDrawer.settingsClose": {
-    "defaultMessage": "Fermer"
-  },
-  "components.appNavigationDrawer.langSelector": {
-    "defaultMessage": "Langue"
-  },
-  "components.appNavigationDrawer.openMenu": {
-    "defaultMessage": "Ouvrir le menu"
-  },
-  "view.welcome.footer.licenses": {
-    "defaultMessage": "Licences"
-  },
-  "view.welcome.footer.credits": {
-    "defaultMessage": "Crédits"
-  },
-  "view.editSequences.sequences.label": {
-    "defaultMessage": "Séquences"
-  },
-  "features.backend.auth.loginTitle": {
-    "defaultMessage": "Se connecter",
-    "description": "Títol del formulari de login"
-  },
-  "features.backend.auth.registerTitle": {
-    "defaultMessage": "Créer un compte",
-    "description": "Títol del formulari de registre"
-  },
-  "features.backend.auth.email": {
-    "defaultMessage": "Adresse e-mail",
-    "description": "Etiqueta del camp email"
-  },
-  "features.backend.auth.password": {
-    "defaultMessage": "Mot de passe",
-    "description": "Etiqueta del camp contrasenya"
-  },
-  "features.backend.auth.submitLogin": {
-    "defaultMessage": "Connexion",
-    "description": "Botó per enviar el formulari de login"
-  },
-  "features.backend.auth.submitRegister": {
-    "defaultMessage": "S'inscrire",
-    "description": "Botó per enviar el formulari de registre"
-  },
-  "features.backend.auth.toggleToRegister": {
-    "defaultMessage": "Pas de compte ? Inscrivez-vous",
-    "description": "Enllaç per canviar al formulari de registre"
-  },
-  "features.backend.auth.toggleToLogin": {
-    "defaultMessage": "Déjà un compte ? Connectez-vous",
-    "description": "Enllaç per tornar al formulari de login"
-  },
-  "features.backend.auth.close": {
-    "defaultMessage": "Fermer",
-    "description": "Botó per tancar el modal d'autenticació"
-  },
-  "features.backend.auth.showPassword": {
-    "defaultMessage": "Afficher le mot de passe",
-    "description": "Etiqueta ARIA per al botó de mostrar/amagar contrasenya"
-  },
-  "features.backend.auth.loginItem": {
-    "defaultMessage": "Se connecter",
-    "description": "Ítem del drawer per obrir el modal de login"
-  },
-  "features.backend.auth.saveDocument": {
-    "defaultMessage": "Enregistrer dans le cloud",
-    "description": "Ítem del drawer per desar el document al backend"
-  },
-  "features.backend.auth.loadDocument": {
-    "defaultMessage": "Charger depuis le cloud",
-    "description": "Ítem del drawer per carregar un document del backend"
-  },
-  "features.backend.auth.logout": {
-    "defaultMessage": "Se déconnecter",
-    "description": "Ítem del drawer per tancar la sessió"
-  },
-  "features.backend.auth.documentSaved": {
-    "defaultMessage": "Document enregistré dans le cloud",
-    "description": "Missatge de confirmació quan el document es desa al backend"
-  },
-  "features.backend.auth.documentLoaded": {
-    "defaultMessage": "Document chargé",
-    "description": "Missatge de confirmació quan es carrega un document del backend"
-  },
-  "features.backend.auth.loadDocumentTitle": {
-    "defaultMessage": "Charger un document",
-    "description": "Títol del modal de càrrega de documents del backend"
-  },
-  "features.backend.auth.noDocuments": {
-    "defaultMessage": "Vous n'avez aucun document enregistré",
-    "description": "Missatge quan l'usuari no té documents al backend"
-  },
-  "features.backend.auth.deleteDocument": {
-    "defaultMessage": "Supprimer",
-    "description": "Botó per eliminar un document del backend"
-  },
-  "features.backend.auth.loadAction": {
-    "defaultMessage": "Charger",
-    "description": "Botó per carregar un document seleccionat del backend"
-  },
-  "features.backend.auth.error.INVALID_CREDENTIALS": {
-    "defaultMessage": "Adresse e-mail ou mot de passe incorrect",
-    "description": "Error de login: credencials incorrectes"
-  },
-  "features.backend.auth.error.EMAIL_ALREADY_EXISTS": {
-    "defaultMessage": "Cette adresse e-mail est déjà enregistrée",
-    "description": "Error de registre: email ja existent"
-  },
-  "features.backend.auth.error.EMAIL_REQUIRED": {
-    "defaultMessage": "L'adresse e-mail est obligatoire",
-    "description": "Validació: camp email buit"
-  },
-  "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
-    "defaultMessage": "Le format de l'adresse e-mail n'est pas valide",
-    "description": "Validació: format d'email incorrecte"
-  },
-  "features.backend.auth.error.PASSWORD_REQUIRED": {
-    "defaultMessage": "Le mot de passe est obligatoire",
-    "description": "Validació: camp contrasenya buit"
-  },
-  "features.backend.auth.error.PASSWORD_TOO_SHORT": {
-    "defaultMessage": "Le mot de passe doit contenir au moins 8 caractères",
-    "description": "Validació: contrasenya massa curta (registre)"
-  },
-  "features.backend.auth.error.PASSWORD_TOO_LONG": {
-    "defaultMessage": "Le mot de passe ne peut pas dépasser 128 caractères",
-    "description": "Validació: contrasenya massa llarga (registre)"
-  },
-  "features.backend.auth.error.AUTH_ERROR": {
-    "defaultMessage": "Une erreur s'est produite lors de la connexion. Veuillez réessayer.",
-    "description": "Error genèric de login"
-  },
-  "features.backend.auth.error.REGISTER_ERROR": {
-    "defaultMessage": "Une erreur s'est produite lors de la création du compte. Veuillez réessayer.",
-    "description": "Error genèric de registre"
-  },
-  "features.backend.auth.error.UNKNOWN_ERROR": {
-    "defaultMessage": "Une erreur inattendue s'est produite. Veuillez réessayer.",
-    "description": "Error desconegut del servidor"
   }
 }

@@ -1,6 +1,5 @@
-import { Box, List, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
-import SettingCardLang from "../SettingsCards/SettingCardOptions/lang/SettingCardLang";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
@@ -140,136 +139,61 @@ const DefaultForm = ({
           />
         </Box>
 
-        <List
-          sx={{
-            width: { xs: "100%", md: "auto" },
-            overflowY: { xs: "auto", md: "visible" },
-            maxHeight: { xs: "60vh", md: "none" },
-            pr: 1,
-          }}
-        >
-          <Stack
-            display={"flex"}
-            direction={"row"}
-            flexWrap={"wrap"}
-            marginTop={1}
-            rowGap={2}
-            columnGap={2}
-          >
-            <li>
-              <SettingCardLang setting="languagesApp" />
-            </li>
-            <li>
-              <SettingCardLang setting="languagesSearch" />
-            </li>
-            <li>
-              <SettingCardBoolean
-                setting={"numbered"}
-                state={numbered}
-                setState={setNumbered}
+        <Stack direction="column" gap={2} sx={{ pt: 1 }}>
+          <SettingCardBoolean
+            setting={"numbered"}
+            state={numbered}
+            setState={setNumbered}
+          />
+          <SettingCardBoolean
+            setting="color"
+            state={color}
+            setState={setColor}
+            onApplyAll={onApplyAllColor}
+          />
+          <SettingCard
+            setting={"textPosition"}
+            state={textPosition}
+            setState={setTextPosition}
+            onApplyAll={onApplyAllTextPosition}
+          />
+          <SettingCardFontGroup state={font} setState={setFont} />
+          {numbered && (
+            <SettingCardFontGroup
+              state={numberFont}
+              setState={setNumberFont}
+              title={<FormattedMessage {...fontGroupMessages.numberFont} />}
+            />
+          )}
+          <SettingCardBorder
+            border="borderOut"
+            state={borderOut}
+            setState={setBorderOut}
+            onApplyAll={onApplyAllBorderOut}
+          />
+          <SettingCardBorder
+            border="borderIn"
+            state={borderIn}
+            setState={setBorderIn}
+            onApplyAll={onApplyAllBorderIn}
+          />
+          {color && (
+            <>
+              <SettingCard
+                setting={"skin"}
+                state={skin}
+                setState={setSkin}
+                onApplyAll={onApplyAllSkin}
               />
-            </li>
-            <li>
-              <SettingCardBoolean
-                setting="color"
-                state={color}
-                setState={setColor}
-                onApplyAll={onApplyAllColor}
+              <SettingCard
+                setting={"hair"}
+                state={hair}
+                setState={setHair}
+                onApplyAll={onApplyAllHair}
               />
-            </li>
-            <Stack
-              display={"flex"}
-              direction={"row"}
-              flexWrap={"wrap"}
-              marginTop={1}
-              rowGap={2}
-              columnGap={2}
-            >
-              <li>
-                <SettingCard
-                  setting={"textPosition"}
-                  state={textPosition}
-                  setState={setTextPosition}
-                  onApplyAll={onApplyAllTextPosition}
-                />
-              </li>
-            </Stack>
-            <li>
-              <SettingCardFontGroup state={font} setState={setFont} />
-            </li>
-            {numbered && (
-              <li>
-                <SettingCardFontGroup
-                  state={numberFont}
-                  setState={setNumberFont}
-                  title={<FormattedMessage {...fontGroupMessages.numberFont} />}
-                />
-              </li>
-            )}
-            <Stack
-              display={"flex"}
-              direction={"row"}
-              flexWrap={"wrap"}
-              marginTop={1}
-              rowGap={2}
-              columnGap={2}
-            >
-              <li>
-                <SettingCardBorder
-                  border="borderOut"
-                  state={borderOut}
-                  setState={setBorderOut}
-                  onApplyAll={onApplyAllBorderOut}
-                />
-              </li>
-              <li>
-                <SettingCardBorder
-                  border="borderIn"
-                  state={borderIn}
-                  setState={setBorderIn}
-                  onApplyAll={onApplyAllBorderIn}
-                />
-              </li>
-            </Stack>
-
-            <Stack
-              display={"flex"}
-              direction={"row"}
-              flexWrap={"wrap"}
-              marginTop={1}
-              rowGap={2}
-              columnGap={2}
-            ></Stack>
-
-            {color && (
-              <Stack
-                display={"flex"}
-                direction={"row"}
-                flexWrap={"wrap"}
-                marginTop={1}
-                rowGap={2}
-                columnGap={2}
-              >
-                <li>
-                  <SettingCard
-                    setting={"skin"}
-                    state={skin}
-                    setState={setSkin}
-                    onApplyAll={onApplyAllSkin}
-                  />
-                </li>
-                <li>
-                  <SettingCard
-                    setting={"hair"}
-                    state={hair}
-                    setState={setHair}
-                    onApplyAll={onApplyAllHair}
-                  />
-                </li>
-              </Stack>
-            )}
-          </Stack>
-        </List>
+            </>
+          )}
+        </Stack>
       </Stack>
     </form>
   );

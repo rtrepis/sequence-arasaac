@@ -1,12 +1,13 @@
 import {
   FormControl,
-  InputLabel,
   Link,
   MenuItem,
   Select,
   SelectChangeEvent,
   Stack,
+  Typography,
 } from "@mui/material";
+import { SxProps } from "@mui/system";
 import { FormattedMessage } from "react-intl";
 import { card } from "../../SettingsCards.styled";
 import React, { useState } from "react";
@@ -24,9 +25,10 @@ import useSearchPictogram from "../../../../features/pictogram/hooks/useSearchPi
 
 interface SettingCardProps {
   setting: "languagesApp" | "languagesSearch";
+  sx?: SxProps;
 }
 
-const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
+const SettingCardLang = ({ setting, sx }: SettingCardProps): React.ReactElement => {
   const { app: appLang, search: searchLang } = useAppSelector(
     (store) => store.ui.lang,
   );
@@ -55,21 +57,20 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
     <Stack
       display={"flex"}
       direction={"row"}
+      alignItems={"center"}
       flexWrap={"wrap"}
       columnGap={2}
-      sx={card}
+      sx={{ ...card, ...sx }}
       key={`${setting}-stack`}
     >
-      <FormControl fullWidth key={`${setting}-form`}>
-        <InputLabel id="language">
-          <FormattedMessage {...settingCardOptions.messages[setting]} />
-        </InputLabel>
+      <Typography variant="body1" sx={{ fontWeight: "bold", flex: 1 }} component="h2">
+        <FormattedMessage {...settingCardOptions.messages[setting]} />
+      </Typography>
+      <FormControl key={`${setting}-form`}>
         <Select
           defaultValue={"es"}
-          labelId={setting}
           id={setting}
           value={lang}
-          label="language"
           onChange={handleChange}
           sx={{ width: 150 }}
           key={`${setting}-selector`}
