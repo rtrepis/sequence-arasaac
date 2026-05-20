@@ -164,6 +164,18 @@
     "defaultMessage": "Interfaz",
     "description": "Etiqueta de la card de selecció d'idioma de la interfície"
   },
+  "components.defaultSettings.userPanel.sectionAppearance": {
+    "defaultMessage": "Apariencia",
+    "description": "Títol de la secció d'aparença al panel d'usuari"
+  },
+  "components.defaultSettings.userPanel.saveSuccess": {
+    "defaultMessage": "Configuración de usuario guardada",
+    "description": "Snackbar quan els settings d'usuari s'han desat correctament"
+  },
+  "components.defaultSettings.userPanel.saveError": {
+    "defaultMessage": "Error al guardar la configuración de usuario",
+    "description": "Snackbar quan hi ha error en desar els settings d'usuari"
+  },
   "components.defaultSettings.userPanel.sectionTitle": {
     "defaultMessage": "Idioma",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
@@ -360,6 +372,26 @@
   "components.settingCardLangAppToggle.ariaLabel": {
     "defaultMessage": "Selecciona el idioma de la interfaz",
     "description": "Aria label del ToggleButtonGroup d'idioma de la interfície"
+  },
+  "components.settingCardTheme.ariaLabel": {
+    "defaultMessage": "Selecciona el tema",
+    "description": "Aria label del ToggleButtonGroup de tema"
+  },
+  "components.settingCardTheme.dark": {
+    "defaultMessage": "Oscuro",
+    "description": "Opció de tema fosc"
+  },
+  "components.settingCardTheme.light": {
+    "defaultMessage": "Claro",
+    "description": "Opció de tema clar"
+  },
+  "components.settingCardTheme.system": {
+    "defaultMessage": "Sistema",
+    "description": "Opció de tema del sistema"
+  },
+  "components.settingCardTheme.title": {
+    "defaultMessage": "Tema",
+    "description": "Títol de la card de selecció de tema"
   },
   "components.toggleButtonEditViewPages.edit.title": {
     "defaultMessage": "Editar",

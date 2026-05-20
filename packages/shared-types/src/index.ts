@@ -24,4 +24,6 @@ export type {
   DefaultSettingsPictAra,
   DefaultSettingsPictSequence,
   LangsApp,
+  ThemeMode,
+  UserUiSettings,
 } from "./ui";

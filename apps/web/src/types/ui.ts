@@ -2,8 +2,11 @@ import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 
 export type LangsApp = "ca" | "en" | "es" | "fr" | "it";
 
+export type ThemeMode = "light" | "dark" | "system";
+
 export interface Ui {
   lang: { app: LangsApp; search: string; keywords: string[] };
+  theme: ThemeMode;
   viewSettings: ViewSettings;
   defaultSettings: DefaultSettings;
 }

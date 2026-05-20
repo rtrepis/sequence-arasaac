@@ -1,18 +1,14 @@
 // Esquemes Zod per validar els cossos de les peticions de user-settings
-// Validació centralitzada — el controller no accedeix a req.body sense validar primer
-
 import { z } from "zod";
 import { defaultSettingsZodSchema } from "../../shared/zodSchemas";
 
-// Schema per actualitzar DefaultSettings (tot l'objecte és obligatori)
-export const updateSettingsSchema = defaultSettingsZodSchema;
-
-// Schema per actualitzar langSettings
-export const updateLangSchema = z.object({
-  app: z.enum(["ca", "en", "es"]),
-  search: z.string().min(1),
+export const updateUiSettingsSchema = z.object({
+  lang: z.object({
+    app: z.enum(["ca", "en", "es", "fr", "it"]),
+    search: z.string().min(1),
+  }),
+  theme: z.enum(["light", "dark", "system"]),
+  defaultSettings: defaultSettingsZodSchema,
 });
 
-// Tipus inferits — usats al controller i service
-export type UpdateSettingsInput = z.infer<typeof updateSettingsSchema>;
-export type UpdateLangInput = z.infer<typeof updateLangSchema>;
+export type UpdateUiSettingsInput = z.infer<typeof updateUiSettingsSchema>;

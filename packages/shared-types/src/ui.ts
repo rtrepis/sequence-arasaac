@@ -1,7 +1,15 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 
 // Idiomes suportats per la interfície de l'aplicació (subconjunt de Languages)
-export type LangsApp = "ca" | "en" | "es";
+export type LangsApp = "ca" | "en" | "es" | "fr" | "it";
+
+export type ThemeMode = "light" | "dark" | "system";
+
+export interface UserUiSettings {
+  lang: { app: LangsApp; search: string };
+  theme: ThemeMode;
+  defaultSettings: DefaultSettings;
+}
 
 export interface DefaultSettings {
   pictSequence: DefaultSettingsPictSequence;

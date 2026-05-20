@@ -14,13 +14,9 @@ import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { settingCardOptions } from "./SettingCardLang.lang";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import {
-  langTranslateApp,
-  langTranslateSearch,
-} from "../../../../configs/languagesConfigs";
+import { langTranslateApp, langTranslateSearch } from "../../../../configs/languagesConfigs";
 import { updateLangSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import { Ui } from "../../../../types/ui";
-import { saveLangSettings, LangStorageSettings } from "../../../../features/user-settings/storage/settingsStorage";
+import { LangsApp } from "../../../../types/ui";
 import useSearchPictogram from "../../../../features/pictogram/hooks/useSearchPictogram";
 
 interface SettingCardProps {
@@ -29,26 +25,23 @@ interface SettingCardProps {
 }
 
 const SettingCardLang = ({ setting, sx }: SettingCardProps): React.ReactElement => {
-  const { app: appLang, search: searchLang } = useAppSelector(
+  const { app: appLang, search: searchLang, keywords } = useAppSelector(
     (store) => store.ui.lang,
   );
   const dispatch = useAppDispatch();
   const { getAllKeyWordsForLanguages } = useSearchPictogram();
 
-  const initialLang = setting === "languagesApp" ? appLang : searchLang;
-  const [lang, setLang] = useState(initialLang);
+  const [lang, setLang] = useState(setting === "languagesApp" ? appLang : searchLang);
 
   const handleChange = (event: SelectChangeEvent) => {
     const value = event.target.value;
     setLang(value);
 
-    const newLangValue = {
-      app: setting === "languagesApp" ? value : appLang,
+    dispatch(updateLangSettingsActionCreator({
+      app: setting === "languagesApp" ? value as LangsApp : appLang,
       search: setting === "languagesSearch" ? value : searchLang,
-    };
-
-    dispatch(updateLangSettingsActionCreator(newLangValue as Ui["lang"]));
-    saveLangSettings(newLangValue as LangStorageSettings);
+      keywords: setting === "languagesSearch" ? [] : keywords,
+    }));
 
     getAllKeyWordsForLanguages(value);
   };
@@ -72,7 +65,7 @@ const SettingCardLang = ({ setting, sx }: SettingCardProps): React.ReactElement 
           id={setting}
           value={lang}
           onChange={handleChange}
-          sx={{ width: 150 }}
+          sx={{ width: 150, borderRadius: "10px" }}
           key={`${setting}-selector`}
         >
           {setting === "languagesSearch" &&

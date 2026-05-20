@@ -3,6 +3,7 @@ import {
   DefaultSettings,
   DefaultSettingsPictApiAraForEdit,
   DefaultSettingsPictSequenceForEdit,
+  ThemeMode,
   Ui,
   ViewSettings,
 } from "@/types/ui";
@@ -32,6 +33,7 @@ import {
 // amb la preferència guardada o la llengua del navegador.
 const uiInitialState: Ui = {
   lang: { app: "en", search: "en", keywords: [] },
+  theme: "system",
   viewSettings: {
     sizePict: VIEW_DEFAULT_SIZE_PICT,
     pictSpaceBetween: VIEW_DEFAULT_PICT_SPACE,
@@ -126,6 +128,11 @@ const uiSlice = createSlice({
       ...previousUi,
       lang: { ...previousUi.lang, keywords: [...action.payload] },
     }),
+
+    updateTheme: (previousUi, action: PayloadAction<ThemeMode>) => ({
+      ...previousUi,
+      theme: action.payload,
+    }),
   },
 });
 
@@ -139,4 +146,5 @@ export const {
   updateDefaultSettingPictSequence:
     updateDefaultSettingPictSequenceActionCreator,
   updateKeywords: updateKeywordsActionCreator,
+  updateTheme: updateThemeActionCreator,
 } = uiSlice.actions;

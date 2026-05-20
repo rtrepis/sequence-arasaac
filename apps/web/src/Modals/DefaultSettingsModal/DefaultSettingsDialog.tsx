@@ -12,16 +12,20 @@ import {
   AiOutlinePicture,
   AiOutlineBook,
 } from "react-icons/ai";
-import { forwardRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
 import { tabsStyled } from "../../components/TabsEditView/TabsEditView.styled";
 import { toggleButtonTypographyStyles } from "../../components/ToggleButtonEditViewPages/ToggleButtonEditViewPages.styled";
 import { Container } from "@mui/system";
-import DefaultSettingsPanel from "../../components/DefaultsForm/DefaultSettingsPanel";
+import DefaultSettingsPanel, { DefaultSettingsPanelHandle } from "../../components/DefaultsForm/DefaultSettingsPanel";
 import UserSettingsPanel from "./UserSettingsPanel";
 import VocabularySettingsPanel from "./VocabularySettingsPanel";
 import { Stack } from "@mui/material";
+import { useAppDispatch } from "../../app/hooks";
+import { saveUserUiThunk } from "../../features/backend/user-settings/store/settingsThunks";
+import { useFeedback } from "../../context/FeedbackContext/FeedbackContext";
+import messagesUser from "./UserSettingsPanel.lang";
 import React from "react";
 
 type SettingsTab = "user" | "pictograms" | "vocabulary";
@@ -40,13 +44,29 @@ const Transition = forwardRef(function Transition(
 
 const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): React.ReactElement => {
   const intl = useIntl();
+  const dispatch = useAppDispatch();
+  const { showSnackbar } = useFeedback();
   const [activeTab, setActiveTab] = useState<SettingsTab>("user");
+  const pictPanelRef = useRef<DefaultSettingsPanelHandle>(null);
+
+  const handleClose = async () => {
+    // Sincronitza l'estat local del formulari de pictogrames al Redux (dispatch síncron)
+    pictPanelRef.current?.syncToRedux();
+    // Una sola crida amb tota la configuració de l'usuari
+    const result = await dispatch(saveUserUiThunk());
+    if (saveUserUiThunk.fulfilled.match(result)) {
+      showSnackbar({ message: intl.formatMessage(messagesUser.saveSuccess), severity: "success" });
+    } else {
+      showSnackbar({ message: intl.formatMessage(messagesUser.saveError), severity: "error" });
+    }
+    onClose();
+  };
 
   return (
     <Dialog
       fullScreen
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       slots={{ transition: Transition }}
     >
       <AppBar
@@ -100,7 +120,7 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
           <IconButton
             edge="end"
             color="secondary"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label={intl.formatMessage({ ...messages.close })}
           >
             <AiOutlineClose />
@@ -113,9 +133,8 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
 
         {activeTab === "user" && <UserSettingsPanel />}
 
-        {/* DefaultSettingsPanel sempre muntat per preservar el comportament de desar en tancar */}
         <div style={{ display: activeTab === "pictograms" ? "block" : "none" }}>
-          <DefaultSettingsPanel submit={open} />
+          <DefaultSettingsPanel ref={pictPanelRef} />
         </div>
 
         {activeTab === "vocabulary" && <VocabularySettingsPanel />}

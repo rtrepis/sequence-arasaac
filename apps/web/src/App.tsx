@@ -1,6 +1,6 @@
-import { Navigate, Route, Routes, useParams } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import "./App.css";
-import { ReactElement, lazy, Suspense } from "react";
+import { ReactElement, lazy, Suspense, useEffect } from "react";
 import LanguageLayout from "./pages/LanguagesLayout/LanguagesLayaut";
 import WelcomeLayout from "./pages/WelcomePage/WelcomeLayout";
 import { Box, CircularProgress } from "@mui/material";
@@ -35,6 +35,8 @@ export const messageLocale = {
 };
 import { usePageTracking } from "@shared/hooks/usePageTracking";
 import { useAppSelector } from "./app/hooks";
+import { langTranslateApp } from "./configs/languagesConfigs";
+import { LangsApp } from "./types/ui";
 
 // Fallback mentre es carrega un chunk de ruta
 const PageLoadingFallback = (): ReactElement => (
@@ -59,6 +61,23 @@ const App = (): ReactElement => {
   const {
     lang: { app: appLang },
   } = useAppSelector((state) => state.ui);
+  const isAuthenticated = useAppSelector((state) => state.auth.accessToken !== null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Quan l'usuari s'autentica i el backend retorna un idioma diferent al de la URL,
+  // navega a la mateixa pàgina però amb el locale correcte (ex: /ca/create-sequence → /fr/create-sequence)
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const segments = location.pathname.split("/").filter(Boolean);
+    const urlLocale = segments[0] as LangsApp;
+
+    if (!langTranslateApp.includes(urlLocale) || urlLocale === appLang) return;
+
+    const rest = segments.slice(1).join("/");
+    navigate(`/${appLang}/${rest}`, { replace: true });
+  }, [appLang, isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Suspense fallback={<PageLoadingFallback />}>

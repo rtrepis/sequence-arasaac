@@ -3,15 +3,16 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { updateLangSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import { saveLangSettings } from "../../../../features/user-settings/storage/settingsStorage";
 import { langTranslateApp } from "../../../../configs/languagesConfigs";
 import { LangsApp } from "../../../../types/ui";
 import { card, cardContent } from "../../SettingsCards.styled";
 import messages from "./SettingCardLangAppToggle.lang";
 import React from "react";
 
+const sortedLangs = [...langTranslateApp].sort();
+
 const SettingCardLangAppToggle = (): React.ReactElement => {
-  const { app: appLang, search: searchLang } = useAppSelector(
+  const { app: appLang, search: searchLang, keywords } = useAppSelector(
     (store) => store.ui.lang,
   );
   const dispatch = useAppDispatch();
@@ -23,10 +24,7 @@ const SettingCardLangAppToggle = (): React.ReactElement => {
     value: string | null,
   ) => {
     if (!value || value === appLang) return;
-
-    const newLangValue = { app: value as LangsApp, search: searchLang };
-    dispatch(updateLangSettingsActionCreator(newLangValue));
-    saveLangSettings(newLangValue);
+    dispatch(updateLangSettingsActionCreator({ app: value as LangsApp, search: searchLang, keywords }));
     navigate(`../../${value}/create-sequence`);
   };
 
@@ -47,9 +45,13 @@ const SettingCardLangAppToggle = (): React.ReactElement => {
         exclusive
         onChange={handleChange}
         aria-label={intl.formatMessage(messages.ariaLabel)}
-        sx={cardContent}
+        sx={{
+          ...cardContent,
+          "& .MuiToggleButtonGroup-firstButton": { borderRadius: "10px 0 0 10px" },
+          "& .MuiToggleButtonGroup-lastButton": { borderRadius: "0 10px 10px 0" },
+        }}
       >
-        {langTranslateApp.map((lang) => (
+        {sortedLangs.map((lang) => (
           <ToggleButton
             key={lang}
             value={lang}

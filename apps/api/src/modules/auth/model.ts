@@ -5,6 +5,7 @@ import { Schema, model, Document } from "mongoose";
 import type {
   DefaultSettings,
   LangsApp,
+  ThemeMode,
 } from "@sequence-arasaac/shared-types";
 import { defaultSettingsSchema } from "../../shared/mongooseSchemas";
 
@@ -17,6 +18,7 @@ export interface IUser extends Document {
     app: LangsApp;
     search: string;
   };
+  theme: ThemeMode;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,7 +26,7 @@ export interface IUser extends Document {
 // Sub-schema per a langSettings
 const langSettingsSchema = new Schema(
   {
-    app: { type: String, enum: ["ca", "en", "es"], required: true },
+    app: { type: String, enum: ["ca", "en", "es", "fr", "it"], required: true },
     search: { type: String, required: true },
   },
   { _id: false }
@@ -91,6 +93,12 @@ const userSchema = new Schema<IUser>(
       type: langSettingsSchema,
       required: true,
       default: () => ({ app: "ca" as LangsApp, search: "ca" }),
+    },
+    theme: {
+      type: String,
+      enum: ["light", "dark", "system"],
+      required: true,
+      default: "system",
     },
   },
   {

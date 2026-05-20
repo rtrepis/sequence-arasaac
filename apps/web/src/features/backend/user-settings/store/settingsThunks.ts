@@ -1,27 +1,28 @@
-// Thunk per sincronitzar els settings de l'usuari amb el backend.
+// Thunk únic per persistir tota la configuració UI de l'usuari.
+// Autenticat → una sola crida PUT /user/ui-settings.
+// Anònim → una sola escriptura a localStorage (clau userUi).
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { DefaultSettings } from "../../../../types/ui";
+import { UserUiSettings } from "../../../../types/ui";
 import { RootState } from "../../../../app/store";
-import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import { saveSettings } from "@features/user-settings/storage/settingsStorage";
-import { updateSettings } from "../services/settingsService";
+import { saveUserUi } from "@features/user-settings/storage/settingsStorage";
+import { updateUiSettings } from "../services/settingsService";
 
-// Retorna { synced: true } si ha sincronitzat amb backend, { synced: false } si no hi havia sessió.
-export const saveSettingsThunk = createAsyncThunk<
-  { synced: boolean },
-  DefaultSettings,
-  { state: RootState }
->("user-settings/save", async (settings, { dispatch, getState }) => {
-  // Sempre actualitza Redux i storage local
-  dispatch(updateDefaultSettingsActionCreator(settings));
-  saveSettings(settings);
-
-  // Sincronitza amb backend només si l'usuari té sessió activa
-  const isAuthenticated = getState().auth.accessToken !== null;
-  if (!isAuthenticated) {
-    return { synced: false };
-  }
-
-  await updateSettings(settings);
-  return { synced: true };
+const buildUserUiFromState = (state: RootState): UserUiSettings => ({
+  lang: { app: state.ui.lang.app, search: state.ui.lang.search },
+  theme: state.ui.theme,
+  defaultSettings: state.ui.defaultSettings,
 });
+
+export const saveUserUiThunk = createAsyncThunk<void, void, { state: RootState }>(
+  "user-settings/saveUserUi",
+  async (_, { getState }) => {
+    const payload = buildUserUiFromState(getState());
+    const isAuthenticated = getState().auth.accessToken !== null;
+
+    if (isAuthenticated) {
+      await updateUiSettings(payload);
+    } else {
+      saveUserUi(payload);
+    }
+  }
+);
