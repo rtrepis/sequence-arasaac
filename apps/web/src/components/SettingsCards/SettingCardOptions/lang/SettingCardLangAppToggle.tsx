@@ -1,11 +1,12 @@
-import { Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { Stack, ToggleButton, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { updateLangSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { langTranslateApp } from "../../../../configs/languagesConfigs";
 import { LangsApp } from "../../../../types/ui";
-import { card, cardContent } from "../../SettingsCards.styled";
+import { card } from "../../SettingsCards.styled";
+import StyledToggleButtonGroup from "../../../../style/StyledToggleButtonGroup";
 import messages from "./SettingCardLangAppToggle.lang";
 import React from "react";
 
@@ -40,28 +41,23 @@ const SettingCardLangAppToggle = (): React.ReactElement => {
         <FormattedMessage {...messages.cardTitle} />
       </Typography>
 
-      <ToggleButtonGroup
+      <StyledToggleButtonGroup
         value={appLang}
         exclusive
         onChange={handleChange}
         aria-label={intl.formatMessage(messages.ariaLabel)}
-        sx={{
-          ...cardContent,
-          "& .MuiToggleButtonGroup-firstButton": { borderRadius: "10px 0 0 10px" },
-          "& .MuiToggleButtonGroup-lastButton": { borderRadius: "0 10px 10px 0" },
-        }}
       >
         {sortedLangs.map((lang) => (
           <ToggleButton
             key={lang}
             value={lang}
             aria-label={lang}
-            sx={{ width: 44, height: 44 }}
+            selected={lang === appLang}
           >
             {lang.toUpperCase()}
           </ToggleButton>
         ))}
-      </ToggleButtonGroup>
+      </StyledToggleButtonGroup>
     </Stack>
   );
 };

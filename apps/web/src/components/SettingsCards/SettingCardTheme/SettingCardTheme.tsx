@@ -1,10 +1,11 @@
-import { Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { Stack, ToggleButton, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { RiSunLine, RiMoonLine, RiComputerLine } from "react-icons/ri";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { updateThemeActionCreator } from "@features/user-settings/store/uiSlice";
 import { ThemeMode } from "../../../types/ui";
-import { card, cardContent } from "../SettingsCards.styled";
+import { card } from "../SettingsCards.styled";
+import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import messages from "./SettingCardTheme.lang";
 import React from "react";
 
@@ -39,29 +40,25 @@ const SettingCardTheme = (): React.ReactElement => {
         <FormattedMessage {...messages.cardTitle} />
       </Typography>
 
-      <ToggleButtonGroup
+      <StyledToggleButtonGroup
         value={theme}
         exclusive
         onChange={handleChange}
         aria-label={intl.formatMessage(messages.ariaLabel)}
-        sx={{
-          ...cardContent,
-          "& .MuiToggleButtonGroup-firstButton": { borderRadius: "10px 0 0 10px" },
-          "& .MuiToggleButtonGroup-lastButton": { borderRadius: "0 10px 10px 0" },
-        }}
       >
         {THEME_OPTIONS.map(({ value, icon, messageKey }) => (
           <ToggleButton
             key={value}
             value={value}
             aria-label={intl.formatMessage(messages[messageKey])}
-            sx={{ width: 52, height: 52, flexDirection: "column", gap: 0.25, fontSize: "0.6rem" }}
+            selected={value === theme}
+            sx={{ flexDirection: "column", gap: 0.25, fontSize: "0.6rem" }}
           >
             {icon}
             <FormattedMessage {...messages[messageKey]} />
           </ToggleButton>
         ))}
-      </ToggleButtonGroup>
+      </StyledToggleButtonGroup>
     </Stack>
   );
 };
