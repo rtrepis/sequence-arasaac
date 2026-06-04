@@ -169,8 +169,11 @@
     "description": "Opció d'orientació vertical de la pàgina"
   },
   "components.viewSettingsPanel.apply": {
-    "defaultMessage": "Applica",
+    "defaultMessage": "Applica alla vista corrente",
     "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
+  },
+  "components.viewSettingsPanel.applyHelper": {
+    "defaultMessage": "Applica i valori alla sessione di vista attiva senza chiudere le impostazioni."
   },
   "components.defaultSettings.tab.vocabulary": {
     "defaultMessage": "Vocabolario personale",
@@ -963,6 +966,12 @@
   },
   "pages.viewSequence.tooltip.applyAll": {
     "defaultMessage": "Applica a tutte le sequenze"
+  },
+  "pages.viewSequence.tooltip.resetDefaults": {
+    "defaultMessage": "Ripristina le impostazioni predefinite salvate"
+  },
+  "pages.viewSequence.resetDefaults.label": {
+    "defaultMessage": "Ripristina predefiniti"
   },
   "pages.viewSequence.tooltip.directionColumn": {
     "defaultMessage": "Verticale"

@@ -173,8 +173,11 @@
     "description": "Opció d'orientació vertical de la pàgina"
   },
   "components.viewSettingsPanel.apply": {
-    "defaultMessage": "Aplicar",
+    "defaultMessage": "Aplicar a la vista actual",
     "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
+  },
+  "components.viewSettingsPanel.applyHelper": {
+    "defaultMessage": "Aplica els valors a la sessió de vista activa sense tancar la configuració."
   },
   "components.defaultSettings.upload": {
     "defaultMessage": "Carrega la configuració des d'un fitxer local",
@@ -963,6 +966,12 @@
   },
   "pages.viewSequence.tooltip.applyAll": {
     "defaultMessage": "Aplicar a totes les seqüències"
+  },
+  "pages.viewSequence.tooltip.resetDefaults": {
+    "defaultMessage": "Restaurar la configuració per defecte guardada"
+  },
+  "pages.viewSequence.resetDefaults.label": {
+    "defaultMessage": "Restaurar per defecte"
   },
   "pages.viewSequence.tooltip.directionColumn": {
     "defaultMessage": "Vertical"

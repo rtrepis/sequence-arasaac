@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Stack, Tooltip } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { BsFilePdf } from "react-icons/bs";
@@ -69,6 +69,15 @@ const ViewSequencesSettings = ({
   const sequenceKeys = useAppSelector((state) =>
     Object.keys(state.document.content).map(Number),
   );
+
+  // Aplicar les preferències de l'usuari (ui.viewSettings) a totes les seqüències en muntar.
+  // document.viewSettings s'inicialitza amb valors hardcodats al documentSlice;
+  // aquí les substituïm pels valors guardats de l'usuari com a punt de partida.
+  const savedSeqDefaults = useRef(initialViewSettings);
+  useEffect(() => {
+    const { sizePict, pictSpaceBetween, alignment } = savedSeqDefaults.current;
+    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignment }));
+  }, [dispatch]);
 
   // Estat local: mode aplicar a totes vs individual
   const [applyAll, setApplyAll] = useState(true);
@@ -241,6 +250,16 @@ const ViewSequencesSettings = ({
     },
     [updateViewSetting],
   );
+
+  /**
+   * Handler per restaurar les preferències guardades de l'usuari a totes les seqüències
+   */
+  const handleResetToDefaults = useCallback(() => {
+    const { sizePict, pictSpaceBetween, alignment, direction, sequenceSpaceBetween } = initialViewSettings;
+    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignment }));
+    updateViewSetting("direction", direction);
+    updateViewSetting("sequenceSpaceBetween", sequenceSpaceBetween);
+  }, [dispatch, initialViewSettings, updateViewSetting]);
 
   /**
    * Handler per persistir canvis quan es perd el focus
@@ -436,6 +455,7 @@ const ViewSequencesSettings = ({
                   onDirectionChange={handleDirectionChange}
                   onSequenceSpaceChange={handleSequenceSpaceChange}
                   onAuthorChange={updateAuthor}
+                  onResetToDefaults={handleResetToDefaults}
                 >
                   <SequenceControlsPanel
                     sequenceKeys={sequenceKeys}

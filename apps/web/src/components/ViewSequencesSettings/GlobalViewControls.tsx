@@ -1,4 +1,6 @@
 import {
+  Box,
+  Button,
   FormGroup,
   FormLabel,
   MenuItem,
@@ -12,7 +14,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { MdTableRows, MdViewColumn } from "react-icons/md";
+import { MdTableRows, MdViewColumn, MdSettingsBackupRestore } from "react-icons/md";
 import { MdScreenRotation } from "react-icons/md";
 import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
 import messages from "./ViewSequencesSettings.lang";
@@ -30,6 +32,7 @@ interface GlobalViewControlsProps {
   onSequenceSpaceChange: (event: Event, value: number | number[]) => void;
   onAuthorChange: (value: string) => void;
   onOrientationChange?: (orientation: PageOrientation) => void;
+  onResetToDefaults?: () => void;
   children?: React.ReactNode;
 }
 
@@ -47,6 +50,7 @@ const GlobalViewControls = ({
   onSequenceSpaceChange,
   onAuthorChange,
   onOrientationChange,
+  onResetToDefaults,
   children,
 }: GlobalViewControlsProps): React.ReactElement => {
   const intl = useIntl();
@@ -157,6 +161,23 @@ const GlobalViewControls = ({
           />
         </FormLabel>
       </FormGroup>
+
+      {onResetToDefaults && (
+        <Box sx={{ pt: 4, display: "flex", justifyContent: "flex-end" }}>
+          <Tooltip title={intl.formatMessage(messages.tooltipResetDefaults)}>
+            <Button
+              variant="text"
+              color="primary"
+              size="large"
+              endIcon={<MdSettingsBackupRestore />}
+              onClick={onResetToDefaults}
+              sx={{ alignSelf: "flex-start", textTransform: "none" }}
+            >
+              <FormattedMessage {...messages.resetDefaults} />
+            </Button>
+          </Tooltip>
+        </Box>
+      )}
     </>
   );
 };

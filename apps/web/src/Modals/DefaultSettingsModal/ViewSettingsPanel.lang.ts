@@ -18,8 +18,13 @@ const messages = defineMessages({
   },
   apply: {
     id: "components.viewSettingsPanel.apply",
-    defaultMessage: "Apply",
+    defaultMessage: "Apply to current view",
     description: "Botó per aplicar els canvis de visualització a Redux immediatament",
+  },
+  applyHelper: {
+    id: "components.viewSettingsPanel.applyHelper",
+    defaultMessage: "Applies the values to the active view session without closing the settings.",
+    description: "Text explicatiu del botó Apply",
   },
 });
 

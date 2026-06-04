@@ -22,6 +22,7 @@ import {
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
+import { applyViewSettingsToAllActionCreator } from "@features/sequence/store/documentSlice";
 import { DefaultSettingsPanelHandle } from "../../components/DefaultsForm/DefaultSettingsPanel";
 import { ViewSettings, SequenceDirection, PageOrientation } from "../../types/ui";
 import { PageSize } from "../../types/PageFormat";
@@ -99,6 +100,11 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
 
     const handleApply = () => {
       dispatch(viewSettingsActionCreator(localSettings));
+      dispatch(applyViewSettingsToAllActionCreator({
+        sizePict: localSettings.sizePict,
+        pictSpaceBetween: localSettings.pictSpaceBetween,
+        alignment: localSettings.alignment,
+      }));
     };
 
     const isColumn = localSettings.direction === "column";
@@ -196,14 +202,19 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
               </FormGroup>
             </GlobalViewControls>
 
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleApply}
-              sx={{ alignSelf: "flex-start", mt: 1 }}
-            >
-              <FormattedMessage {...messages.apply} />
-            </Button>
+            <Stack gap={0.5} sx={{ mt: 1 }}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleApply}
+                sx={{ alignSelf: "flex-start" }}
+              >
+                <FormattedMessage {...messages.apply} />
+              </Button>
+              <Typography variant="caption" color="text.secondary">
+                <FormattedMessage {...messages.applyHelper} />
+              </Typography>
+            </Stack>
           </Stack>
         </Stack>
       </Stack>

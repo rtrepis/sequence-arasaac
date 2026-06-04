@@ -106,6 +106,16 @@ const messages = defineMessages({
     defaultMessage: "Apply to all sequences",
     description: "Tooltip del switch d'aplicar a totes les seqüències",
   },
+  tooltipResetDefaults: {
+    id: "pages.viewSequence.tooltip.resetDefaults",
+    defaultMessage: "Restore saved default settings",
+    description: "Tooltip del botó de restaurar la configuració per defecte",
+  },
+  resetDefaults: {
+    id: "pages.viewSequence.resetDefaults.label",
+    defaultMessage: "Restore defaults",
+    description: "Label del botó de restaurar la configuració per defecte",
+  },
 });
 
 export default messages;
