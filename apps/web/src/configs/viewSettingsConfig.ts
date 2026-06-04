@@ -10,6 +10,10 @@ export const VIEW_DEFAULT_SIZE_PICT = 1;
 export const VIEW_DEFAULT_PICT_SPACE = 1;
 export const VIEW_DEFAULT_SEQ_SPACE = 1;
 export const VIEW_DEFAULT_DIRECTION = "row" as const;
+export const VIEW_DEFAULT_PAGE_SIZE = "A4" as const;
+export const VIEW_DEFAULT_ORIENTATION = "landscape" as const;
+export const VIEW_DEFAULT_ALIGNMENT = "left" as const;
+export const VIEW_DEFAULT_AUTHOR = "";
 
 // --- Rangs del slider: mida del pictograma (per seqüència) ---
 export const SIZE_PICT_MIN = 0.4;

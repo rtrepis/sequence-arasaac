@@ -26,6 +26,11 @@ const messages = defineMessages({
     defaultMessage: "Pictograms",
     description: "Tab de configuració per defecte dels pictogrames",
   },
+  tabView: {
+    id: "components.defaultSettings.tab.view",
+    defaultMessage: "Vista",
+    description: "Tab de configuració per defecte de la visualització de seqüències",
+  },
   tabVocabulary: {
     id: "components.defaultSettings.tab.vocabulary",
     defaultMessage: "Personal vocabulary",

@@ -7,6 +7,7 @@ import {
   updateDefaultSettingsActionCreator,
   updateLangSettingsActionCreator,
   updateThemeActionCreator,
+  viewSettingsActionCreator,
 } from "@features/user-settings/store/uiSlice";
 import { getStoredUserUi } from "../../features/user-settings/storage/settingsStorage";
 import { langTranslateApp } from "../../configs/languagesConfigs";
@@ -29,6 +30,9 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
       dispatch(updateDefaultSettingsActionCreator(storedUi.defaultSettings));
       dispatch(updateThemeActionCreator(storedUi.theme));
       dispatch(updateLangSettingsActionCreator({ app: storedUi.lang.app, search: storedUi.lang.search, keywords: [] }));
+      if (storedUi.viewSettings) {
+        dispatch(viewSettingsActionCreator(storedUi.viewSettings));
+      }
     } else {
       // Fallback: detecta l'idioma del navegador
       const localeBrowser = navigator.language.slice(0, 2);

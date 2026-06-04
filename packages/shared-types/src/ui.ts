@@ -5,9 +5,23 @@ export type LangsApp = "ca" | "en" | "es" | "fr" | "it";
 
 export type ThemeMode = "light" | "dark" | "system";
 
+export type PageSize = "A4" | "A3" | "FULLSCREEN";
+
+export interface ViewSettings {
+  sizePict: number;
+  pictSpaceBetween: number;
+  sequenceSpaceBetween: number;
+  alignment: "left" | "center" | "right";
+  direction: "row" | "column";
+  pageSize: PageSize;
+  orientation: "landscape" | "portrait";
+  author: string;
+}
+
 export interface UserUiSettings {
   lang: { app: LangsApp; search: string };
   theme: ThemeMode;
+  viewSettings?: ViewSettings;
   defaultSettings: DefaultSettings;
 }
 

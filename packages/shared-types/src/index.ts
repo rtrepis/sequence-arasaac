@@ -25,5 +25,7 @@ export type {
   DefaultSettingsPictSequence,
   LangsApp,
   ThemeMode,
+  PageSize,
+  ViewSettings,
   UserUiSettings,
 } from "./ui";

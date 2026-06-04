@@ -77,7 +77,7 @@ const ViewSequencesSettings = ({
     sequenceKeys[0] ?? 0,
   );
 
-  // Gestió del format de pàgina
+  // Gestió del format de pàgina (usa el pageSize per defecte de l'usuari)
   const {
     pageFormat,
     pageSizeIndex,
@@ -86,8 +86,8 @@ const ViewSequencesSettings = ({
     setPageSizeByIndex,
     toggleOrientation,
   } = usePageFormat({
-    initialSize: "A4",
-    initialOrientation: "landscape",
+    initialSize: initialViewSettings.pageSize ?? "A4",
+    initialOrientation: initialViewSettings.orientation ?? "landscape",
   });
 
   // Gestió de la configuració de visualització global (sequenceSpaceBetween)
@@ -96,8 +96,8 @@ const ViewSequencesSettings = ({
       initialViewSettings,
     });
 
-  // Gestió de l'autor
-  const { author, updateAuthor } = useAuthorManager();
+  // Gestió de l'autor (usa el valor per defecte de l'usuari)
+  const { author, updateAuthor } = useAuthorManager(initialViewSettings.author ?? "");
 
   // Càlculs d'escala
   const {

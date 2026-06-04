@@ -6,6 +6,7 @@ import type {
   DefaultSettings,
   LangsApp,
   ThemeMode,
+  ViewSettings,
 } from "@sequence-arasaac/shared-types";
 import { defaultSettingsSchema } from "../../shared/mongooseSchemas";
 
@@ -19,6 +20,7 @@ export interface IUser extends Document {
     search: string;
   };
   theme: ThemeMode;
+  viewSettings?: ViewSettings;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -99,6 +101,22 @@ const userSchema = new Schema<IUser>(
       enum: ["light", "dark", "system"],
       required: true,
       default: "system",
+    },
+    viewSettings: {
+      type: new Schema(
+        {
+          sizePict: { type: Number },
+          pictSpaceBetween: { type: Number },
+          sequenceSpaceBetween: { type: Number },
+          alignment: { type: String, enum: ["left", "center", "right"] },
+          direction: { type: String, enum: ["row", "column"] },
+          pageSize: { type: String, enum: ["A4", "A3", "FULLSCREEN"] },
+          orientation: { type: String, enum: ["landscape", "portrait"] },
+          author: { type: String },
+        },
+        { _id: false }
+      ),
+      required: false,
     },
   },
   {

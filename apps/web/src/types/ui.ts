@@ -1,4 +1,7 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
+import { PageSize, PageOrientation } from "./PageFormat";
+
+export type { PageSize, PageOrientation };
 
 export type LangsApp = "ca" | "en" | "es" | "fr" | "it";
 
@@ -17,7 +20,11 @@ export interface ViewSettings {
   sizePict: number;
   pictSpaceBetween: number;
   sequenceSpaceBetween: number;
+  alignment: "left" | "center" | "right";
   direction: SequenceDirection;
+  pageSize: PageSize;
+  orientation: PageOrientation;
+  author: string;
 }
 
 export interface DefaultSettings {

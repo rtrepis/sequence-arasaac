@@ -152,6 +152,26 @@
     "defaultMessage": "Utilisateur",
     "description": "Tab d'ajustos d'usuari (idioma, compte...)"
   },
+  "components.defaultSettings.tab.view": {
+    "defaultMessage": "Vue",
+    "description": "Tab de configuració per defecte de la visualització de seqüències"
+  },
+  "components.viewSettingsPanel.panelDescription": {
+    "defaultMessage": "Configurez les valeurs d'affichage par défaut à l'ouverture de la page de vue.",
+    "description": "Text explicatiu del panell de configuració de la vista"
+  },
+  "components.viewSettingsPanel.orientationLandscape": {
+    "defaultMessage": "Paysage",
+    "description": "Opció d'orientació horitzontal de la pàgina"
+  },
+  "components.viewSettingsPanel.orientationPortrait": {
+    "defaultMessage": "Portrait",
+    "description": "Opció d'orientació vertical de la pàgina"
+  },
+  "components.viewSettingsPanel.apply": {
+    "defaultMessage": "Appliquer",
+    "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
+  },
   "components.defaultSettings.tab.vocabulary": {
     "defaultMessage": "Vocabulaire personnel",
     "description": "Tab de vocabulari personal (paraules personalitzades)"

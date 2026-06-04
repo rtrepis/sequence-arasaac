@@ -10,6 +10,7 @@ import { updateUiSettings } from "../services/settingsService";
 const buildUserUiFromState = (state: RootState): UserUiSettings => ({
   lang: { app: state.ui.lang.app, search: state.ui.lang.search },
   theme: state.ui.theme,
+  viewSettings: state.ui.viewSettings,
   defaultSettings: state.ui.defaultSettings,
 });
 

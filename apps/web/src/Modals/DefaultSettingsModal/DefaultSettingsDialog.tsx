@@ -12,6 +12,7 @@ import {
   AiOutlinePicture,
   AiOutlineBook,
 } from "react-icons/ai";
+import { MdGridView } from "react-icons/md";
 import { forwardRef, useRef, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
@@ -20,6 +21,7 @@ import { toggleButtonTypographyStyles } from "../../components/ToggleButtonEditV
 import { Container } from "@mui/system";
 import DefaultSettingsPanel, { DefaultSettingsPanelHandle } from "../../components/DefaultsForm/DefaultSettingsPanel";
 import UserSettingsPanel from "./UserSettingsPanel";
+import ViewSettingsPanel from "./ViewSettingsPanel";
 import VocabularySettingsPanel from "./VocabularySettingsPanel";
 import { Stack } from "@mui/material";
 import { useAppDispatch } from "../../app/hooks";
@@ -28,7 +30,7 @@ import { useFeedback } from "../../context/FeedbackContext/FeedbackContext";
 import messagesUser from "./UserSettingsPanel.lang";
 import React from "react";
 
-type SettingsTab = "user" | "pictograms" | "vocabulary";
+type SettingsTab = "user" | "pictograms" | "view" | "vocabulary";
 
 interface DefaultSettingsDialogProps {
   open: boolean;
@@ -48,10 +50,12 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
   const { showSnackbar } = useFeedback();
   const [activeTab, setActiveTab] = useState<SettingsTab>("user");
   const pictPanelRef = useRef<DefaultSettingsPanelHandle>(null);
+  const viewPanelRef = useRef<DefaultSettingsPanelHandle>(null);
 
   const handleClose = async () => {
-    // Sincronitza l'estat local del formulari de pictogrames al Redux (dispatch síncron)
+    // Sincronitza l'estat local dels formularis al Redux (dispatch síncron)
     pictPanelRef.current?.syncToRedux();
+    viewPanelRef.current?.syncToRedux();
     // Una sola crida amb tota la configuració de l'usuari
     const result = await dispatch(saveUserUiThunk());
     if (saveUserUiThunk.fulfilled.match(result)) {
@@ -106,6 +110,16 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
               }
             />
             <Tab
+              value="view"
+              icon={<MdGridView />}
+              iconPosition="start"
+              label={
+                <Typography variant="h6" component="span" fontWeight={600} sx={toggleButtonTypographyStyles}>
+                  <FormattedMessage {...messages.tabView} />
+                </Typography>
+              }
+            />
+            <Tab
               value="vocabulary"
               icon={<AiOutlineBook />}
               iconPosition="start"
@@ -136,6 +150,8 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
         <div style={{ display: activeTab === "pictograms" ? "block" : "none" }}>
           <DefaultSettingsPanel ref={pictPanelRef} />
         </div>
+
+        {activeTab === "view" && <ViewSettingsPanel ref={viewPanelRef} />}
 
         {activeTab === "vocabulary" && <VocabularySettingsPanel />}
       </Container>

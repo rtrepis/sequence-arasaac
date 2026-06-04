@@ -11,12 +11,13 @@ const notFound = (): AppError => {
 };
 
 export const getUiSettings = async (userId: string): Promise<UserUiSettings> => {
-  const user = await UserModel.findById(userId).select("settings langSettings theme");
+  const user = await UserModel.findById(userId).select("settings langSettings theme viewSettings");
   if (!user) throw notFound();
 
   return {
     lang: user.langSettings,
     theme: user.theme ?? "system",
+    viewSettings: user.viewSettings ?? undefined,
     defaultSettings: user.settings,
   };
 };
@@ -31,6 +32,7 @@ export const updateUiSettings = async (
       $set: {
         langSettings: data.lang,
         theme: data.theme,
+        viewSettings: data.viewSettings,
         settings: data.defaultSettings,
       },
     },
