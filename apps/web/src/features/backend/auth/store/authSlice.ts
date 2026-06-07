@@ -2,15 +2,16 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { setAccessToken } from "../../api/apiClient";
 import * as authService from "../services/authService";
-import { getSettings } from "../../user-settings/services/settingsService";
+import { getUiSettings } from "../../user-settings/services/settingsService";
 import {
   updateDefaultSettingsActionCreator,
   updateLangSettingsActionCreator,
+  updateThemeActionCreator,
+  viewSettingsActionCreator,
 } from "@features/user-settings/store/uiSlice";
-import {
-  saveSettings,
-  saveLangSettings,
-} from "@features/user-settings/storage/settingsStorage";
+import { getStoredUserUi } from "@features/user-settings/storage/settingsStorage";
+import { langTranslateApp } from "../../../../configs/languagesConfigs";
+import { LangsApp } from "../../../../types/ui";
 
 export interface AuthState {
   accessToken: string | null;
@@ -26,25 +27,40 @@ const initialState: AuthState = {
   errorCode: null,
 };
 
-// Sincronitza les settings del backend amb el store local + storage
+// Carrega les preferències del backend al Redux (no toca localStorage — és de l'anònim)
 const syncSettingsAfterAuth = async (
   dispatch: (action: unknown) => void,
 ): Promise<void> => {
   try {
-    const { settings, langSettings } = await getSettings();
-    dispatch(updateDefaultSettingsActionCreator(settings));
-    saveSettings(settings);
-    dispatch(
-      updateLangSettingsActionCreator({
-        app: langSettings.app,
-        search: langSettings.search,
-        keywords: [],
-      }),
-    );
-    saveLangSettings(langSettings);
+    const { lang, theme, defaultSettings, viewSettings } = await getUiSettings();
+    dispatch(updateDefaultSettingsActionCreator(defaultSettings));
+    dispatch(updateLangSettingsActionCreator({ app: lang.app, search: lang.search, keywords: [] }));
+    dispatch(updateThemeActionCreator(theme ?? "system"));
+    if (viewSettings) dispatch(viewSettingsActionCreator(viewSettings));
   } catch {
     // Si falla la sincronització no interrompem el flux d'auth
   }
+};
+
+// Restaura les preferències anònimes del localStorage al Redux després del logout
+const restoreAnonymousSettings = (dispatch: (action: unknown) => void): void => {
+  const storedUi = getStoredUserUi();
+
+  if (storedUi) {
+    dispatch(updateDefaultSettingsActionCreator(storedUi.defaultSettings));
+    dispatch(updateThemeActionCreator(storedUi.theme));
+    dispatch(updateLangSettingsActionCreator({ app: storedUi.lang.app, search: storedUi.lang.search, keywords: [] }));
+    if (storedUi.viewSettings) dispatch(viewSettingsActionCreator(storedUi.viewSettings));
+    return;
+  }
+
+  // Fallback: detecta l'idioma del navegador
+  const localeBrowser = navigator.language.slice(0, 2);
+  const appLang = langTranslateApp.includes(localeBrowser as LangsApp)
+    ? (localeBrowser as LangsApp)
+    : "en";
+  dispatch(updateLangSettingsActionCreator({ app: appLang, search: appLang, keywords: [] }));
+  dispatch(updateThemeActionCreator("system"));
 };
 
 // Thunk: login
@@ -92,13 +108,14 @@ export const registerThunk = createAsyncThunk(
 // Thunk: logout
 export const logoutThunk = createAsyncThunk(
   "auth/logout",
-  async (_, { rejectWithValue }) => {
+  async (_, { dispatch }) => {
     try {
       await authService.logout();
     } catch {
       // Ignorar errors de logout al servidor; netegem l'estat local igualment
     }
     setAccessToken(null);
+    restoreAnonymousSettings(dispatch);
   },
 );
 
@@ -126,7 +143,6 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    // Reducer síncron per situacions on cal netejar l'estat manualment
     clearAuthState: (state) => {
       state.accessToken = null;
       state.userEmail = null;
@@ -134,45 +150,36 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Login
     builder
       .addCase(loginThunk.pending, (state) => {
         state.isLoading = true;
         state.errorCode = null;
       })
-      .addCase(
-        loginThunk.fulfilled,
-        (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
-          state.isLoading = false;
-          state.accessToken = action.payload.accessToken;
-          state.userEmail = action.payload.email;
-        },
-      )
+      .addCase(loginThunk.fulfilled, (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
+        state.isLoading = false;
+        state.accessToken = action.payload.accessToken;
+        state.userEmail = action.payload.email;
+      })
       .addCase(loginThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.errorCode = action.payload as string;
       });
 
-    // Register
     builder
       .addCase(registerThunk.pending, (state) => {
         state.isLoading = true;
         state.errorCode = null;
       })
-      .addCase(
-        registerThunk.fulfilled,
-        (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
-          state.isLoading = false;
-          state.accessToken = action.payload.accessToken;
-          state.userEmail = action.payload.email;
-        },
-      )
+      .addCase(registerThunk.fulfilled, (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
+        state.isLoading = false;
+        state.accessToken = action.payload.accessToken;
+        state.userEmail = action.payload.email;
+      })
       .addCase(registerThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.errorCode = action.payload as string;
       });
 
-    // Logout
     builder
       .addCase(logoutThunk.fulfilled, (state) => {
         state.accessToken = null;
@@ -180,19 +187,15 @@ const authSlice = createSlice({
         state.errorCode = null;
       });
 
-    // Refresh silent
     builder
       .addCase(refreshSessionThunk.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(
-        refreshSessionThunk.fulfilled,
-        (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
-          state.isLoading = false;
-          state.accessToken = action.payload.accessToken;
-          state.userEmail = action.payload.email;
-        },
-      )
+      .addCase(refreshSessionThunk.fulfilled, (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
+        state.isLoading = false;
+        state.accessToken = action.payload.accessToken;
+        state.userEmail = action.payload.email;
+      })
       .addCase(refreshSessionThunk.rejected, (state) => {
         state.isLoading = false;
         state.accessToken = null;

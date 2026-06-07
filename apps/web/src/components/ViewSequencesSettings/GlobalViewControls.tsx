@@ -1,4 +1,6 @@
 import {
+  Box,
+  Button,
   FormGroup,
   FormLabel,
   MenuItem,
@@ -12,8 +14,9 @@ import {
 } from "@mui/material";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { MdTableRows, MdViewColumn } from "react-icons/md";
-import { ViewSettings, SequenceDirection } from "@/types/ui";
+import { MdTableRows, MdViewColumn, MdSettingsBackupRestore } from "react-icons/md";
+import { MdScreenRotation } from "react-icons/md";
+import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
 import messages from "./ViewSequencesSettings.lang";
 
 interface GlobalViewControlsProps {
@@ -28,6 +31,8 @@ interface GlobalViewControlsProps {
   ) => void;
   onSequenceSpaceChange: (event: Event, value: number | number[]) => void;
   onAuthorChange: (value: string) => void;
+  onOrientationChange?: (orientation: PageOrientation) => void;
+  onResetToDefaults?: () => void;
   children?: React.ReactNode;
 }
 
@@ -44,6 +49,8 @@ const GlobalViewControls = ({
   onDirectionChange,
   onSequenceSpaceChange,
   onAuthorChange,
+  onOrientationChange,
+  onResetToDefaults,
   children,
 }: GlobalViewControlsProps): React.ReactElement => {
   const intl = useIntl();
@@ -66,6 +73,31 @@ const GlobalViewControls = ({
           </MenuItem>
         </Select>
       </FormGroup>
+
+      {onOrientationChange && (
+        <FormGroup>
+          <FormLabel>
+            <FormattedMessage {...messages.tooltipOrientation} />
+          </FormLabel>
+          <ToggleButtonGroup
+            value={viewSettings.orientation}
+            exclusive
+            onChange={(_, val: PageOrientation | null) => val && onOrientationChange(val)}
+            size="small"
+          >
+            <Tooltip title={intl.formatMessage(messages.tooltipDirectionRow)}>
+              <ToggleButton value="landscape" aria-label="landscape">
+                <MdScreenRotation style={{ transform: "rotate(90deg)" }} />
+              </ToggleButton>
+            </Tooltip>
+            <Tooltip title={intl.formatMessage(messages.tooltipDirectionColumn)}>
+              <ToggleButton value="portrait" aria-label="portrait">
+                <MdScreenRotation />
+              </ToggleButton>
+            </Tooltip>
+          </ToggleButtonGroup>
+        </FormGroup>
+      )}
 
       {children}
 
@@ -129,6 +161,23 @@ const GlobalViewControls = ({
           />
         </FormLabel>
       </FormGroup>
+
+      {onResetToDefaults && (
+        <Box sx={{ pt: 4, display: "flex", justifyContent: "flex-end" }}>
+          <Tooltip title={intl.formatMessage(messages.tooltipResetDefaults)}>
+            <Button
+              variant="text"
+              color="primary"
+              size="large"
+              endIcon={<MdSettingsBackupRestore />}
+              onClick={onResetToDefaults}
+              sx={{ alignSelf: "flex-start", textTransform: "none" }}
+            >
+              <FormattedMessage {...messages.resetDefaults} />
+            </Button>
+          </Tooltip>
+        </Box>
+      )}
     </>
   );
 };

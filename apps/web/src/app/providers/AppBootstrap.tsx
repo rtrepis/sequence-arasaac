@@ -6,15 +6,11 @@ import { useAppDispatch } from "../hooks";
 import {
   updateDefaultSettingsActionCreator,
   updateLangSettingsActionCreator,
+  updateThemeActionCreator,
+  viewSettingsActionCreator,
 } from "@features/user-settings/store/uiSlice";
-import {
-  getStoredSettings,
-  getStoredLangSettings,
-} from "../../features/user-settings/storage/settingsStorage";
-import {
-  langTranslateApp,
-  langTranslateSearch,
-} from "../../configs/languagesConfigs";
+import { getStoredUserUi } from "../../features/user-settings/storage/settingsStorage";
+import { langTranslateApp } from "../../configs/languagesConfigs";
 import { LangsApp } from "../../types/ui";
 import { refreshSessionThunk } from "@features/backend/auth/store/authSlice";
 
@@ -26,36 +22,28 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // Restaura la configuració per defecte del pictograma (sessionStorage → localStorage)
-    const storedSettings = getStoredSettings();
-    if (storedSettings !== null) {
-      dispatch(updateDefaultSettingsActionCreator(storedSettings));
+    // Restaura preferències de l'usuari anònim (localStorage)
+    // Si hi ha sessió activa, refreshSessionThunk les sobreescriurà amb les del backend
+    const storedUi = getStoredUserUi();
+
+    if (storedUi) {
+      dispatch(updateDefaultSettingsActionCreator(storedUi.defaultSettings));
+      dispatch(updateThemeActionCreator(storedUi.theme));
+      dispatch(updateLangSettingsActionCreator({ app: storedUi.lang.app, search: storedUi.lang.search, keywords: [] }));
+      if (storedUi.viewSettings) {
+        dispatch(viewSettingsActionCreator(storedUi.viewSettings));
+      }
+    } else {
+      // Fallback: detecta l'idioma del navegador
+      const localeBrowser = navigator.language.slice(0, 2);
+      const appLang = langTranslateApp.includes(localeBrowser as LangsApp)
+        ? (localeBrowser as LangsApp)
+        : "en";
+      dispatch(updateLangSettingsActionCreator({ app: appLang, search: appLang, keywords: [] }));
     }
 
-    // Detecta i restaura la configuració de llengua de l'app i de cerca
-    const localeBrowser = navigator.language.slice(0, 2);
-    const storedLang = getStoredLangSettings();
-
-    const appLang = (
-      storedLang?.app
-        ? storedLang.app
-        : langTranslateApp.includes(localeBrowser as LangsApp)
-          ? localeBrowser
-          : "en"
-    ) as LangsApp;
-
-    const searchLang = storedLang?.search
-      ? storedLang.search
-      : (langTranslateSearch as readonly string[]).includes(localeBrowser)
-        ? localeBrowser
-        : "en";
-
-    dispatch(
-      updateLangSettingsActionCreator({ app: appLang, search: searchLang, keywords: [] }),
-    );
-
     // Intent de restauració de sessió silenciosa via cookie de refresh.
-    // Si la cookie és vàlida, actualitza l'accessToken i sincronitza les settings del servidor.
+    // Si la cookie és vàlida, sobreescriu Redux amb les preferències del backend.
     dispatch(refreshSessionThunk());
   }, [dispatch]);
 

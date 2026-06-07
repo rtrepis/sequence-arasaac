@@ -1,13 +1,8 @@
-import React, { ChangeEvent, forwardRef, useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  AppBar,
   Avatar,
   Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Dialog,
   Divider,
   Drawer,
   IconButton,
@@ -16,13 +11,8 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Slide,
-  Stack,
-  Toolbar,
   Tooltip,
-  Typography,
 } from "@mui/material";
-import { TransitionProps } from "@mui/material/transitions";
 import {
   AiOutlineCloudDownload,
   AiOutlineCloudUpload,
@@ -35,10 +25,10 @@ import {
   AiOutlineSetting,
   AiOutlineUser,
 } from "react-icons/ai";
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import messages from "./AppNavigationDrawer.lang";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
-import DefaultSettingsPanel from "../DefaultsForm/DefaultSettingsPanel";
+import DefaultSettingsDialog from "../../Modals/DefaultSettingsModal/DefaultSettingsDialog";
 import ModalDownload from "../ButtonWithModalDownload/ModalDownload";
 import AuthModal from "@features/backend/auth/components/AuthModal";
 import LoadDocumentModal from "@features/backend/auth/components/LoadDocumentModal";
@@ -48,36 +38,11 @@ import {
   loadDocumentSaacActionCreator,
   saveDocumentThunk,
 } from "@features/sequence/store/documentSlice";
-import {
-  updateDefaultSettingsActionCreator,
-  updateLangSettingsActionCreator,
-} from "@features/user-settings/store/uiSlice";
-import { LangsApp } from "../../types/ui";
+import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
 import { useFeedback } from "../../context/FeedbackContext";
-import useSearchPictogram from "@features/pictogram/hooks/useSearchPictogram";
 import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
-
-// Idiomes suportats per a la navegació
-const LOCALES = ["ca", "es", "en", "fr", "it"] as const;
-
-// Nom natiu de cada idioma per mostrar al selector
-const LOCALE_LABELS: Record<string, string> = {
-  ca: "Català",
-  es: "Español",
-  en: "English",
-  fr: "Français",
-  it: "Italiano",
-};
-
-// Transició del diàleg de configuració: llisca des de l'ESQUERRA (direction="right")
-const SettingsTransition = forwardRef(function SettingsTransition(
-  props: TransitionProps & { children: React.ReactElement },
-  ref: React.Ref<unknown>,
-) {
-  return <Slide direction="right" ref={ref} {...props} />;
-});
 
 interface AppNavigationDrawerProps {
   open: boolean;
@@ -93,8 +58,6 @@ const AppNavigationDrawer = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
-  const { keywords } = useAppSelector((state) => state.ui.lang);
-  const { getAllKeyWordsForLanguages } = useSearchPictogram();
 
   // Estat d'autenticació
   const { userEmail, accessToken } = useAppSelector((state) => state.auth);
@@ -114,27 +77,6 @@ const AppNavigationDrawer = ({
 
   // Ref per al input ocult de càrrega de fitxer
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Canvia l'idioma substituint el primer segment de la ruta,
-  // sincronitza el Redux i el storage perquè WelcomePage (/) també en tingui constància
-  const handleLangChange = (newLocale: string) => {
-    const currentPath = window.location.pathname;
-    const newPath = currentPath.replace(/^\/(ca|es|en|fr|it)/, `/${newLocale}`);
-    navigate(newPath, { replace: true });
-
-    // Actualitza tant l'idioma de l'app com el de cerca al canviar de locale
-    const newLangValue = {
-      app: newLocale as LangsApp,
-      search: newLocale,
-      keywords,
-    };
-    dispatch(updateLangSettingsActionCreator(newLangValue));
-    sessionStorage.setItem("langSettings", JSON.stringify(newLangValue));
-    localStorage.setItem("langSettings", JSON.stringify(newLangValue));
-    getAllKeyWordsForLanguages(newLocale);
-
-    onClose();
-  };
 
   // Handlers de navegació: tanquen el drawer i navegan
   const handleNavigate = (path: string) => {
@@ -185,12 +127,6 @@ const AppNavigationDrawer = ({
       message: intl.formatMessage(authMessages.documentLoaded),
       severity: "success",
     });
-  };
-
-  // Obrir configuració: tanca el drawer i obre el diàleg
-  const handleSettingsOpen = () => {
-    onClose();
-    setSettingsOpen(true);
   };
 
   // Obrir descàrrega: tanca el drawer i obre el modal
@@ -343,18 +279,12 @@ const AppNavigationDrawer = ({
             </ListItemButton>
           </List>
 
-          {/* Espai flexible: empeny configuració i idioma al fons */}
-          <Box sx={{ flexGrow: 1 }} />
-
           <Divider />
 
           {/* Secció 3: Configuració */}
           <List>
-            <Tooltip
-              title={intl.formatMessage(messages.settings)}
-              placement="right"
-            >
-              <ListItemButton onClick={handleSettingsOpen}>
+            <Tooltip title={intl.formatMessage(messages.settings)} placement="right">
+              <ListItemButton onClick={() => { onClose(); setSettingsOpen(true); }}>
                 <ListItemIcon>
                   <AiOutlineSetting />
                 </ListItemIcon>
@@ -363,9 +293,12 @@ const AppNavigationDrawer = ({
             </Tooltip>
           </List>
 
+          {/* Espai flexible: empeny autenticació al fons */}
+          <Box sx={{ flexGrow: 1 }} />
+
           <Divider />
 
-          {/* Secció 5: Autenticació */}
+          {/* Secció 3: Autenticació */}
           {!isLoggedIn ? (
             <List>
               <ListItemButton onClick={handleAuthModalOpen}>
@@ -431,26 +364,6 @@ const AppNavigationDrawer = ({
               </ListItemButton>
             </List>
           )}
-
-          <Divider />
-
-          {/* Secció 4: Selector d'idioma (sense divider, centrat) */}
-          <Box sx={{ px: 2, py: 2, display: "flex", justifyContent: "center" }}>
-            <ButtonGroup
-              size="small"
-              aria-label={intl.formatMessage(messages.langSelector)}
-            >
-              {LOCALES.map((lang) => (
-                <Button
-                  key={lang}
-                  onClick={() => handleLangChange(lang)}
-                  variant={locale === lang ? "contained" : "outlined"}
-                >
-                  {lang}
-                </Button>
-              ))}
-            </ButtonGroup>
-          </Box>
         </Box>
       </Drawer>
 
@@ -463,36 +376,8 @@ const AppNavigationDrawer = ({
         accept="text/plain,.saac,application/json"
       />
 
-      {/* Diàleg de configuració per defecte (llisca des de l'ESQUERRA) */}
-      <Dialog
-        fullScreen
-        open={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-        slots={{ transition: SettingsTransition }}
-      >
-        <AppBar
-          sx={{ position: { xs: "fixed", md: "relative" } }}
-          elevation={1}
-        >
-          <Toolbar>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              <FormattedMessage {...messages.settingsTitle} />
-            </Typography>
-            <IconButton
-              edge="start"
-              color="secondary"
-              onClick={() => setSettingsOpen(false)}
-              aria-label={intl.formatMessage(messages.settingsClose)}
-            >
-              <AiOutlineClose />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Container sx={{ marginTop: 2 }}>
-          <Stack sx={{ height: 40, display: { md: "none" } }} />
-          <DefaultSettingsPanel submit={settingsOpen} />
-        </Container>
-      </Dialog>
+      {/* Modal de configuració */}
+      <DefaultSettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
       {/* Modal de descàrrega */}
       {downloadOpen && (

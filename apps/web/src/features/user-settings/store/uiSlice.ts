@@ -3,14 +3,21 @@ import {
   DefaultSettings,
   DefaultSettingsPictApiAraForEdit,
   DefaultSettingsPictSequenceForEdit,
+  ThemeMode,
   Ui,
   ViewSettings,
+  SettingsTab,
 } from "@/types/ui";
 import {
   VIEW_DEFAULT_SIZE_PICT,
   VIEW_DEFAULT_PICT_SPACE,
   VIEW_DEFAULT_SEQ_SPACE,
   VIEW_DEFAULT_DIRECTION,
+  VIEW_DEFAULT_PAGE_SIZE,
+  VIEW_DEFAULT_ORIENTATION,
+  VIEW_DEFAULT_ALIGNMENT_H,
+  VIEW_DEFAULT_ALIGNMENT_V,
+  VIEW_DEFAULT_AUTHOR,
 } from "@/configs/viewSettingsConfig";
 import {
   DEFAULT_SKIN,
@@ -32,11 +39,18 @@ import {
 // amb la preferència guardada o la llengua del navegador.
 const uiInitialState: Ui = {
   lang: { app: "en", search: "en", keywords: [] },
+  theme: "system",
+  settingsActiveTab: "user",
   viewSettings: {
     sizePict: VIEW_DEFAULT_SIZE_PICT,
     pictSpaceBetween: VIEW_DEFAULT_PICT_SPACE,
     sequenceSpaceBetween: VIEW_DEFAULT_SEQ_SPACE,
     direction: VIEW_DEFAULT_DIRECTION,
+    alignmentH: VIEW_DEFAULT_ALIGNMENT_H,
+    alignmentV: VIEW_DEFAULT_ALIGNMENT_V,
+    pageSize: VIEW_DEFAULT_PAGE_SIZE,
+    orientation: VIEW_DEFAULT_ORIENTATION,
+    author: VIEW_DEFAULT_AUTHOR,
   },
   defaultSettings: {
     pictApiAra: {
@@ -126,6 +140,16 @@ const uiSlice = createSlice({
       ...previousUi,
       lang: { ...previousUi.lang, keywords: [...action.payload] },
     }),
+
+    updateTheme: (previousUi, action: PayloadAction<ThemeMode>) => ({
+      ...previousUi,
+      theme: action.payload,
+    }),
+
+    updateSettingsActiveTab: (previousUi, action: PayloadAction<SettingsTab>) => ({
+      ...previousUi,
+      settingsActiveTab: action.payload,
+    }),
   },
 });
 
@@ -139,4 +163,6 @@ export const {
   updateDefaultSettingPictSequence:
     updateDefaultSettingPictSequenceActionCreator,
   updateKeywords: updateKeywordsActionCreator,
+  updateTheme: updateThemeActionCreator,
+  updateSettingsActiveTab: updateSettingsActiveTabActionCreator,
 } = uiSlice.actions;

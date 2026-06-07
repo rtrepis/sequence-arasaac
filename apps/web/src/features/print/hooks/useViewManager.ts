@@ -21,7 +21,7 @@ export interface ViewManagerState {
     value: ViewSettings[K],
   ) => void;
   resetViewSettings: () => void;
-  persistViewSettings: () => void;
+  persistViewSettings: (extra?: Partial<ViewSettings>) => void;
 }
 
 /**
@@ -59,11 +59,12 @@ export function useViewManager(config: ViewManagerConfig): ViewManagerState {
   }, [initialViewSettings]);
 
   /**
-   * Persisteix la configuració actual a la store de Redux
+   * Persisteix la configuració actual a la store de Redux.
+   * Accepta camps extres (author, pageSize, orientation) que viuen fora d'aquest hook.
    */
-  const persistViewSettings = useCallback(() => {
+  const persistViewSettings = useCallback((extra?: Partial<ViewSettings>) => {
     if (persistToStore) {
-      dispatch(viewSettingsActionCreator(viewSettings));
+      dispatch(viewSettingsActionCreator({ ...viewSettings, ...extra }));
     }
   }, [dispatch, viewSettings, persistToStore]);
 

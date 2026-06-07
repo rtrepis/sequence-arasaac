@@ -7,8 +7,7 @@ import AppBootstrap from "./app/providers/AppBootstrap";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material";
-import theme from "./style/themeMui";
+import ThemeWrapper from "./app/providers/ThemeWrapper";
 import { BrowserRouter } from "react-router-dom";
 import {
   FeedbackProvider,
@@ -23,7 +22,7 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
+      <ThemeWrapper>
         <CssBaseline enable-color-scheme />
         <FeedbackProvider>
           <AppBootstrap>
@@ -36,7 +35,7 @@ root.render(
             <FeedbackBackdrop />
           </AppBootstrap>
         </FeedbackProvider>
-      </ThemeProvider>
+      </ThemeWrapper>
     </Provider>
   </React.StrictMode>,
 );

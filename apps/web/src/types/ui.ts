@@ -1,11 +1,20 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
+import { PageSize, PageOrientation } from "./PageFormat";
+
+export type { PageSize, PageOrientation };
 
 export type LangsApp = "ca" | "en" | "es" | "fr" | "it";
 
+export type SettingsTab = "user" | "pictograms" | "view" | "vocabulary";
+
+export type ThemeMode = "light" | "dark" | "system";
+
 export interface Ui {
   lang: { app: LangsApp; search: string; keywords: string[] };
+  theme: ThemeMode;
   viewSettings: ViewSettings;
   defaultSettings: DefaultSettings;
+  settingsActiveTab: SettingsTab;
 }
 
 export type SequenceDirection = "row" | "column";
@@ -14,7 +23,12 @@ export interface ViewSettings {
   sizePict: number;
   pictSpaceBetween: number;
   sequenceSpaceBetween: number;
+  alignmentH: "left" | "center" | "right";
+  alignmentV: "top" | "center" | "bottom";
   direction: SequenceDirection;
+  pageSize: PageSize;
+  orientation: PageOrientation;
+  author: string;
 }
 
 export interface DefaultSettings {
