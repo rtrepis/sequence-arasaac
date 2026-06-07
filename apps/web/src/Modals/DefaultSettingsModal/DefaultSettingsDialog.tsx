@@ -24,7 +24,7 @@ import UserSettingsPanel from "./UserSettingsPanel";
 import ViewSettingsPanel from "./ViewSettingsPanel";
 import VocabularySettingsPanel from "./VocabularySettingsPanel";
 import { Stack } from "@mui/material";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { saveUserUiThunk } from "../../features/backend/user-settings/store/settingsThunks";
 import { useFeedback } from "../../context/FeedbackContext/FeedbackContext";
 import messagesUser from "./UserSettingsPanel.lang";
