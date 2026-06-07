@@ -48,7 +48,14 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { showSnackbar } = useFeedback();
-  const [activeTab, setActiveTab] = useState<SettingsTab>("user");
+  const [activeTab, setActiveTab] = useState<SettingsTab>(
+    () => (sessionStorage.getItem("settingsActiveTab") as SettingsTab) ?? "user"
+  );
+
+  const handleTabChange = (_: React.SyntheticEvent, value: SettingsTab) => {
+    setActiveTab(value);
+    sessionStorage.setItem("settingsActiveTab", value);
+  };
   const pictPanelRef = useRef<DefaultSettingsPanelHandle>(null);
   const viewPanelRef = useRef<DefaultSettingsPanelHandle>(null);
 
@@ -84,7 +91,7 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
 
           <Tabs
             value={activeTab}
-            onChange={(_, value: SettingsTab) => setActiveTab(value)}
+            onChange={handleTabChange}
             textColor="secondary"
             indicatorColor="secondary"
             sx={{ ...tabsStyled, flex: 1 }}

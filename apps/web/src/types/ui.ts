@@ -20,7 +20,8 @@ export interface ViewSettings {
   sizePict: number;
   pictSpaceBetween: number;
   sequenceSpaceBetween: number;
-  alignment: "left" | "center" | "right";
+  alignmentH: "left" | "center" | "right";
+  alignmentV: "top" | "center" | "bottom";
   direction: SequenceDirection;
   pageSize: PageSize;
   orientation: PageOrientation;

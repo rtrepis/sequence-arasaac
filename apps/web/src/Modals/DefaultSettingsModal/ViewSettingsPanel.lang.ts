@@ -26,6 +26,16 @@ const messages = defineMessages({
     defaultMessage: "Applies the values to the active view session without closing the settings.",
     description: "Text explicatiu del botó Apply",
   },
+  reset: {
+    id: "components.viewSettingsPanel.reset",
+    defaultMessage: "Reset",
+    description: "Botó per restablir els valors de fàbrica de la configuració de vista",
+  },
+  tooltipReset: {
+    id: "components.viewSettingsPanel.tooltipReset",
+    defaultMessage: "Reset to application defaults",
+    description: "Tooltip del botó Reset",
+  },
 });
 
 export default messages;

@@ -959,10 +959,10 @@
     "defaultMessage": "Alinear al centre"
   },
   "pages.viewSequence.tooltip.alignLeft": {
-    "defaultMessage": "Alinear a l'esquerra"
+    "defaultMessage": "Esquerra"
   },
   "pages.viewSequence.tooltip.alignRight": {
-    "defaultMessage": "Alinear a la dreta"
+    "defaultMessage": "Dreta"
   },
   "pages.viewSequence.tooltip.applyAll": {
     "defaultMessage": "Aplicar a totes les seqüències"
@@ -1251,5 +1251,35 @@
   "view.welcome.start.button": {
     "defaultMessage": "Inicia",
     "description": "Start button"
+  },
+  "pages.viewSequence.alignmentH.label": {
+    "defaultMessage": "Alineació H"
+  },
+  "pages.viewSequence.alignmentV.label": {
+    "defaultMessage": "Alineació V"
+  },
+  "pages.viewSequence.tooltip.alignHCenter": {
+    "defaultMessage": "Centre"
+  },
+  "pages.viewSequence.tooltip.alignTop": {
+    "defaultMessage": "Dalt"
+  },
+  "pages.viewSequence.tooltip.alignVCenter": {
+    "defaultMessage": "Centre"
+  },
+  "pages.viewSequence.tooltip.alignBottom": {
+    "defaultMessage": "Baix"
+  },
+  "components.viewSettingsPanel.reset": {
+    "defaultMessage": "Restableix"
+  },
+  "components.viewSettingsPanel.tooltipReset": {
+    "defaultMessage": "Restableix els valors de fàbrica"
+  },
+  "components.defaultSettings.reset": {
+    "defaultMessage": "Restableix"
+  },
+  "components.defaultSettings.tooltipReset": {
+    "defaultMessage": "Restableix els valors de fàbrica"
   }
 }

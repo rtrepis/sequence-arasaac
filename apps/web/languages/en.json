@@ -959,10 +959,10 @@
     "defaultMessage": "Align center"
   },
   "pages.viewSequence.tooltip.alignLeft": {
-    "defaultMessage": "Align left"
+    "defaultMessage": "Left"
   },
   "pages.viewSequence.tooltip.alignRight": {
-    "defaultMessage": "Align right"
+    "defaultMessage": "Right"
   },
   "pages.viewSequence.tooltip.applyAll": {
     "defaultMessage": "Apply to all sequences"
@@ -1251,5 +1251,35 @@
   "view.welcome.start.button": {
     "defaultMessage": "Start",
     "description": "Start button"
+  },
+  "pages.viewSequence.alignmentH.label": {
+    "defaultMessage": "H Alignment"
+  },
+  "pages.viewSequence.alignmentV.label": {
+    "defaultMessage": "V Alignment"
+  },
+  "pages.viewSequence.tooltip.alignHCenter": {
+    "defaultMessage": "Center"
+  },
+  "pages.viewSequence.tooltip.alignTop": {
+    "defaultMessage": "Top"
+  },
+  "pages.viewSequence.tooltip.alignVCenter": {
+    "defaultMessage": "Center"
+  },
+  "pages.viewSequence.tooltip.alignBottom": {
+    "defaultMessage": "Bottom"
+  },
+  "components.viewSettingsPanel.reset": {
+    "defaultMessage": "Reset"
+  },
+  "components.viewSettingsPanel.tooltipReset": {
+    "defaultMessage": "Reset to application defaults"
+  },
+  "components.defaultSettings.reset": {
+    "defaultMessage": "Reset"
+  },
+  "components.defaultSettings.tooltipReset": {
+    "defaultMessage": "Reset to application defaults"
   }
 }

@@ -11,7 +11,8 @@ export interface ViewSettings {
   sizePict: number;
   pictSpaceBetween: number;
   sequenceSpaceBetween: number;
-  alignment: "left" | "center" | "right";
+  alignmentH: "left" | "center" | "right";
+  alignmentV: "top" | "center" | "bottom";
   direction: "row" | "column";
   pageSize: PageSize;
   orientation: "landscape" | "portrait";

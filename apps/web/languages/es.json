@@ -959,10 +959,10 @@
     "defaultMessage": "Alinear al centro"
   },
   "pages.viewSequence.tooltip.alignLeft": {
-    "defaultMessage": "Alinear a la izquierda"
+    "defaultMessage": "Izquierda"
   },
   "pages.viewSequence.tooltip.alignRight": {
-    "defaultMessage": "Alinear a la derecha"
+    "defaultMessage": "Derecha"
   },
   "pages.viewSequence.tooltip.applyAll": {
     "defaultMessage": "Aplicar a todas las secuencias"
@@ -1251,5 +1251,35 @@
   "view.welcome.start.button": {
     "defaultMessage": "Iniciar",
     "description": "Start button"
+  },
+  "pages.viewSequence.alignmentH.label": {
+    "defaultMessage": "Alineación H"
+  },
+  "pages.viewSequence.alignmentV.label": {
+    "defaultMessage": "Alineación V"
+  },
+  "pages.viewSequence.tooltip.alignHCenter": {
+    "defaultMessage": "Centro"
+  },
+  "pages.viewSequence.tooltip.alignTop": {
+    "defaultMessage": "Arriba"
+  },
+  "pages.viewSequence.tooltip.alignVCenter": {
+    "defaultMessage": "Centro"
+  },
+  "pages.viewSequence.tooltip.alignBottom": {
+    "defaultMessage": "Abajo"
+  },
+  "components.viewSettingsPanel.reset": {
+    "defaultMessage": "Restablecer"
+  },
+  "components.viewSettingsPanel.tooltipReset": {
+    "defaultMessage": "Restablecer valores de fábrica"
+  },
+  "components.defaultSettings.reset": {
+    "defaultMessage": "Restablecer"
+  },
+  "components.defaultSettings.tooltipReset": {
+    "defaultMessage": "Restablecer valores de fábrica"
   }
 }

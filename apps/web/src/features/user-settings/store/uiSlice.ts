@@ -14,7 +14,8 @@ import {
   VIEW_DEFAULT_DIRECTION,
   VIEW_DEFAULT_PAGE_SIZE,
   VIEW_DEFAULT_ORIENTATION,
-  VIEW_DEFAULT_ALIGNMENT,
+  VIEW_DEFAULT_ALIGNMENT_H,
+  VIEW_DEFAULT_ALIGNMENT_V,
   VIEW_DEFAULT_AUTHOR,
 } from "@/configs/viewSettingsConfig";
 import {
@@ -43,7 +44,8 @@ const uiInitialState: Ui = {
     pictSpaceBetween: VIEW_DEFAULT_PICT_SPACE,
     sequenceSpaceBetween: VIEW_DEFAULT_SEQ_SPACE,
     direction: VIEW_DEFAULT_DIRECTION,
-    alignment: VIEW_DEFAULT_ALIGNMENT,
+    alignmentH: VIEW_DEFAULT_ALIGNMENT_H,
+    alignmentV: VIEW_DEFAULT_ALIGNMENT_V,
     pageSize: VIEW_DEFAULT_PAGE_SIZE,
     orientation: VIEW_DEFAULT_ORIENTATION,
     author: VIEW_DEFAULT_AUTHOR,

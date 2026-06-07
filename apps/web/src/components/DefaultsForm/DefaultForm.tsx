@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Button, Stack, Tooltip } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
@@ -44,6 +44,7 @@ interface DefaultFormProps {
   onApplyAllBorderIn: () => void;
   onApplyAllBorderOut: () => void;
   onSubmit: () => void;
+  onReset?: () => void;
 }
 
 /**
@@ -76,6 +77,7 @@ const DefaultForm = ({
   onApplyAllBorderIn,
   onApplyAllBorderOut,
   onSubmit,
+  onReset,
 }: DefaultFormProps) => {
   const intl = useIntl();
 
@@ -192,6 +194,15 @@ const DefaultForm = ({
                 onApplyAll={onApplyAllHair}
               />
             </>
+          )}
+          {onReset && (
+            <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
+              <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
+                <Button variant="text" color="inherit" onClick={onReset}>
+                  <FormattedMessage {...messages.reset} />
+                </Button>
+              </Tooltip>
+            </Box>
           )}
         </Stack>
       </Stack>

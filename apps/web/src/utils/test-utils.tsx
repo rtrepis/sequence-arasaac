@@ -46,6 +46,11 @@ const preloadedState: State = {
       pictSpaceBetween: 1,
       sequenceSpaceBetween: 1,
       direction: "column",
+      alignmentH: "left",
+      alignmentV: "top",
+      pageSize: "A4",
+      orientation: "landscape",
+      author: "",
     },
     defaultSettings: {
       pictApiAra: {

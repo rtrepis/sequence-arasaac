@@ -26,7 +26,7 @@ import { applyViewSettingsToAllActionCreator } from "@features/sequence/store/do
 import { DefaultSettingsPanelHandle } from "../../components/DefaultsForm/DefaultSettingsPanel";
 import { ViewSettings, SequenceDirection, PageOrientation } from "../../types/ui";
 import { PageSize } from "../../types/PageFormat";
-import { SequenceAlignment } from "../../types/document";
+import { SequenceAlignmentH, SequenceAlignmentV } from "../../types/document";
 import GlobalViewControls from "../../components/ViewSequencesSettings/GlobalViewControls";
 import viewMessages from "../../components/ViewSequencesSettings/ViewSequencesSettings.lang";
 import ViewSettingsPreview from "./ViewSettingsPreview";
@@ -38,6 +38,15 @@ import {
   PICT_SPACE_MIN,
   PICT_SPACE_MAX,
   PICT_SPACE_STEP,
+  VIEW_DEFAULT_SIZE_PICT,
+  VIEW_DEFAULT_PICT_SPACE,
+  VIEW_DEFAULT_SEQ_SPACE,
+  VIEW_DEFAULT_DIRECTION,
+  VIEW_DEFAULT_PAGE_SIZE,
+  VIEW_DEFAULT_ORIENTATION,
+  VIEW_DEFAULT_ALIGNMENT_H,
+  VIEW_DEFAULT_ALIGNMENT_V,
+  VIEW_DEFAULT_AUTHOR,
 } from "../../configs/viewSettingsConfig";
 import React from "react";
 
@@ -56,6 +65,20 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         dispatch(viewSettingsActionCreator(localSettings));
       },
     }));
+
+    const handleResetToDefaults = () => {
+      setLocalSettings({
+        sizePict: VIEW_DEFAULT_SIZE_PICT,
+        pictSpaceBetween: VIEW_DEFAULT_PICT_SPACE,
+        sequenceSpaceBetween: VIEW_DEFAULT_SEQ_SPACE,
+        direction: VIEW_DEFAULT_DIRECTION,
+        pageSize: VIEW_DEFAULT_PAGE_SIZE,
+        orientation: VIEW_DEFAULT_ORIENTATION,
+        alignmentH: VIEW_DEFAULT_ALIGNMENT_H,
+        alignmentV: VIEW_DEFAULT_ALIGNMENT_V,
+        author: VIEW_DEFAULT_AUTHOR,
+      });
+    };
 
     const handlePageSizeChange = (event: SelectChangeEvent<number>) => {
       const pageSize = PAGE_SIZE_MAP[Number(event.target.value)];
@@ -90,12 +113,20 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       setLocalSettings((prev) => ({ ...prev, pictSpaceBetween: value as number }));
     };
 
-    const handleAlignment = (
+    const handleAlignmentH = (
       _: React.MouseEvent<HTMLElement>,
-      value: SequenceAlignment | null,
+      value: SequenceAlignmentH | null,
     ) => {
       if (!value) return;
-      setLocalSettings((prev) => ({ ...prev, alignment: value }));
+      setLocalSettings((prev) => ({ ...prev, alignmentH: value }));
+    };
+
+    const handleAlignmentV = (
+      _: React.MouseEvent<HTMLElement>,
+      value: SequenceAlignmentV | null,
+    ) => {
+      if (!value) return;
+      setLocalSettings((prev) => ({ ...prev, alignmentV: value }));
     };
 
     const handleApply = () => {
@@ -103,14 +134,14 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       dispatch(applyViewSettingsToAllActionCreator({
         sizePict: localSettings.sizePict,
         pictSpaceBetween: localSettings.pictSpaceBetween,
-        alignment: localSettings.alignment,
+        alignmentH: localSettings.alignmentH,
+        alignmentV: localSettings.alignmentV,
       }));
     };
 
-    const isColumn = localSettings.direction === "column";
 
     return (
-      <Stack direction="column" gap={1} sx={{ pt: 1, width: "100%" }}>
+      <Stack direction="column" gap={1} sx={{ pt: 1, maxWidth: 700, mx: "auto", width: "100%" }}>
         <Typography variant="body2" color="text.secondary">
           <FormattedMessage {...messages.panelDescription} />
         </Typography>
@@ -175,45 +206,85 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
 
               <FormGroup>
                 <FormLabel component="legend">
-                  <FormattedMessage {...viewMessages.alignment} />
+                  <FormattedMessage {...viewMessages.alignmentH} />
                 </FormLabel>
                 <ToggleButtonGroup
-                  value={localSettings.alignment}
+                  value={localSettings.alignmentH}
                   exclusive
-                  onChange={handleAlignment}
+                  onChange={handleAlignmentH}
                   size="small"
                 >
                   <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignLeft)}>
                     <ToggleButton value="left" aria-label="left">
-                      {isColumn ? <MdVerticalAlignTop /> : <MdFormatAlignLeft />}
+                      <MdFormatAlignLeft />
                     </ToggleButton>
                   </Tooltip>
-                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignCenter)}>
+                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignHCenter)}>
                     <ToggleButton value="center" aria-label="center">
-                      {isColumn ? <MdVerticalAlignCenter /> : <MdFormatAlignCenter />}
+                      <MdFormatAlignCenter />
                     </ToggleButton>
                   </Tooltip>
                   <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignRight)}>
                     <ToggleButton value="right" aria-label="right">
-                      {isColumn ? <MdVerticalAlignBottom /> : <MdFormatAlignRight />}
+                      <MdFormatAlignRight />
+                    </ToggleButton>
+                  </Tooltip>
+                </ToggleButtonGroup>
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel component="legend">
+                  <FormattedMessage {...viewMessages.alignmentV} />
+                </FormLabel>
+                <ToggleButtonGroup
+                  value={localSettings.alignmentV}
+                  exclusive
+                  onChange={handleAlignmentV}
+                  size="small"
+                >
+                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignTop)}>
+                    <ToggleButton value="top" aria-label="top">
+                      <MdVerticalAlignTop />
+                    </ToggleButton>
+                  </Tooltip>
+                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignVCenter)}>
+                    <ToggleButton value="center" aria-label="center">
+                      <MdVerticalAlignCenter />
+                    </ToggleButton>
+                  </Tooltip>
+                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignBottom)}>
+                    <ToggleButton value="bottom" aria-label="bottom">
+                      <MdVerticalAlignBottom />
                     </ToggleButton>
                   </Tooltip>
                 </ToggleButtonGroup>
               </FormGroup>
             </GlobalViewControls>
 
-            <Stack gap={0.5} sx={{ mt: 1 }}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleApply}
-                sx={{ alignSelf: "flex-start" }}
-              >
-                <FormattedMessage {...messages.apply} />
-              </Button>
-              <Typography variant="caption" color="text.secondary">
-                <FormattedMessage {...messages.applyHelper} />
-              </Typography>
+            <Stack direction="row" gap={1} alignItems="flex-start" sx={{ mt: 1 }}>
+              <Stack gap={0.5}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleApply}
+                  sx={{ alignSelf: "flex-start" }}
+                >
+                  <FormattedMessage {...messages.apply} />
+                </Button>
+                <Typography variant="caption" color="text.secondary">
+                  <FormattedMessage {...messages.applyHelper} />
+                </Typography>
+              </Stack>
+              <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
+                <Button
+                  variant="text"
+                  color="inherit"
+                  onClick={handleResetToDefaults}
+                  sx={{ alignSelf: "flex-start" }}
+                >
+                  <FormattedMessage {...messages.reset} />
+                </Button>
+              </Tooltip>
             </Stack>
           </Stack>
         </Stack>

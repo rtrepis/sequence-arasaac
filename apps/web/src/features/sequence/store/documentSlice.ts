@@ -11,7 +11,8 @@ import { DocumentSAAC, SequenceViewSettings } from "@/types/document";
 import {
   SEQ_VIEW_DEFAULT_SIZE_PICT,
   SEQ_VIEW_DEFAULT_PICT_SPACE,
-  SEQ_VIEW_DEFAULT_ALIGNMENT,
+  SEQ_VIEW_DEFAULT_ALIGNMENT_H,
+  SEQ_VIEW_DEFAULT_ALIGNMENT_V,
 } from "@/configs/viewSettingsConfig";
 import {
   createDocument,
@@ -32,7 +33,8 @@ const getUniqueId = () => {
 const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
   sizePict: SEQ_VIEW_DEFAULT_SIZE_PICT,
   pictSpaceBetween: SEQ_VIEW_DEFAULT_PICT_SPACE,
-  alignment: SEQ_VIEW_DEFAULT_ALIGNMENT,
+  alignmentH: SEQ_VIEW_DEFAULT_ALIGNMENT_H,
+  alignmentV: SEQ_VIEW_DEFAULT_ALIGNMENT_V,
 };
 
 const documentInitialState: DocumentSAAC = {

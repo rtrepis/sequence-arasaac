@@ -46,10 +46,15 @@ const messages = defineMessages({
     defaultMessage: "Sequence",
     description: "Label for sequence selector",
   },
-  alignment: {
-    id: "pages.viewSequence.alignment.label",
-    defaultMessage: "Alignment",
-    description: "Label for alignment setting",
+  alignmentH: {
+    id: "pages.viewSequence.alignmentH.label",
+    defaultMessage: "H Alignment",
+    description: "Label per a l'alineació horitzontal",
+  },
+  alignmentV: {
+    id: "pages.viewSequence.alignmentV.label",
+    defaultMessage: "V Alignment",
+    description: "Label per a l'alineació vertical",
   },
   direction: {
     id: "pages.viewSequence.direction.label",
@@ -88,18 +93,33 @@ const messages = defineMessages({
   },
   tooltipAlignLeft: {
     id: "pages.viewSequence.tooltip.alignLeft",
-    defaultMessage: "Align left",
-    description: "Tooltip del botó d'alineació esquerra",
+    defaultMessage: "Left",
+    description: "Tooltip alineació H esquerra",
   },
-  tooltipAlignCenter: {
-    id: "pages.viewSequence.tooltip.alignCenter",
-    defaultMessage: "Align center",
-    description: "Tooltip del botó d'alineació centre",
+  tooltipAlignHCenter: {
+    id: "pages.viewSequence.tooltip.alignHCenter",
+    defaultMessage: "Center",
+    description: "Tooltip alineació H centre",
   },
   tooltipAlignRight: {
     id: "pages.viewSequence.tooltip.alignRight",
-    defaultMessage: "Align right",
-    description: "Tooltip del botó d'alineació dreta",
+    defaultMessage: "Right",
+    description: "Tooltip alineació H dreta",
+  },
+  tooltipAlignTop: {
+    id: "pages.viewSequence.tooltip.alignTop",
+    defaultMessage: "Top",
+    description: "Tooltip alineació V dalt",
+  },
+  tooltipAlignVCenter: {
+    id: "pages.viewSequence.tooltip.alignVCenter",
+    defaultMessage: "Center",
+    description: "Tooltip alineació V centre",
+  },
+  tooltipAlignBottom: {
+    id: "pages.viewSequence.tooltip.alignBottom",
+    defaultMessage: "Bottom",
+    description: "Tooltip alineació V baix",
   },
   tooltipApplyAll: {
     id: "pages.viewSequence.tooltip.applyAll",

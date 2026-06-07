@@ -24,13 +24,13 @@ import {
   MdVerticalAlignCenter,
   MdVerticalAlignBottom,
 } from "react-icons/md";
-import { SequenceAlignment, SequenceViewSettings } from "@/types/document";
-import { SequenceDirection } from "@/types/ui";
+import { SequenceAlignmentH, SequenceAlignmentV, SequenceViewSettings } from "@/types/document";
 import messages from "./ViewSequencesSettings.lang";
 import {
   SEQ_VIEW_DEFAULT_SIZE_PICT,
   SEQ_VIEW_DEFAULT_PICT_SPACE,
-  SEQ_VIEW_DEFAULT_ALIGNMENT,
+  SEQ_VIEW_DEFAULT_ALIGNMENT_H,
+  SEQ_VIEW_DEFAULT_ALIGNMENT_V,
   SIZE_PICT_MIN,
   SIZE_PICT_MAX,
   SIZE_PICT_STEP,
@@ -39,52 +39,35 @@ import {
 interface SequenceControlsPanelProps {
   sequenceKeys: number[];
   sequenceViewSettings: { [key: number]: SequenceViewSettings };
-  viewDirection: SequenceDirection;
   applyAll: boolean;
   expandedAccordion: number | null;
-  onAccordionToggle: (
-    key: number,
-  ) => (e: React.SyntheticEvent, expanded: boolean) => void;
+  onAccordionToggle: (key: number) => (e: React.SyntheticEvent, expanded: boolean) => void;
   onApplyAllChange: (e: React.SyntheticEvent, checked: boolean) => void;
-  onSequenceSliderChange: (
-    seqKey: number,
-  ) => (event: Event, value: number | number[]) => void;
-  onAlignmentChange: (
-    seqKey: number,
-  ) => (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: SequenceAlignment | null,
-  ) => void;
+  onSequenceSliderChange: (seqKey: number) => (event: Event, value: number | number[]) => void;
+  onAlignmentHChange: (seqKey: number) => (event: React.MouseEvent<HTMLElement>, value: SequenceAlignmentH | null) => void;
+  onAlignmentVChange: (seqKey: number) => (event: React.MouseEvent<HTMLElement>, value: SequenceAlignmentV | null) => void;
 }
 
-/**
- * Panell de controls individuals per seqüència: switch apply-all i acordions
- */
 const SequenceControlsPanel = ({
   sequenceKeys,
   sequenceViewSettings,
-  viewDirection,
   applyAll,
   expandedAccordion,
   onAccordionToggle,
   onApplyAllChange,
   onSequenceSliderChange,
-  onAlignmentChange,
+  onAlignmentHChange,
+  onAlignmentVChange,
 }: SequenceControlsPanelProps): React.ReactElement => {
   const intl = useIntl();
 
-  /**
-   * Renderitza els controls interns d'una seqüència dins l'acordió
-   */
   const renderSequenceControls = (seqKey: number) => {
     const seqView = sequenceViewSettings[seqKey] ?? {
       sizePict: SEQ_VIEW_DEFAULT_SIZE_PICT,
       pictSpaceBetween: SEQ_VIEW_DEFAULT_PICT_SPACE,
-      alignment: SEQ_VIEW_DEFAULT_ALIGNMENT as SequenceAlignment,
+      alignmentH: SEQ_VIEW_DEFAULT_ALIGNMENT_H,
+      alignmentV: SEQ_VIEW_DEFAULT_ALIGNMENT_V,
     };
-
-    // Mostrar icones d'alineació diferents segons la direcció global
-    const isColumn = viewDirection === "column";
 
     return (
       <Stack spacing={1}>
@@ -103,6 +86,7 @@ const SequenceControlsPanel = ({
             />
           </FormLabel>
         </FormGroup>
+
         <FormGroup>
           <FormLabel>
             <FormattedMessage {...messages.pictSpaceBetween} />
@@ -118,29 +102,58 @@ const SequenceControlsPanel = ({
             />
           </FormLabel>
         </FormGroup>
+
         <FormGroup>
           <FormLabel component="legend">
-            <FormattedMessage {...messages.alignment} />
+            <FormattedMessage {...messages.alignmentH} />
           </FormLabel>
           <ToggleButtonGroup
-            value={seqView.alignment}
+            value={seqView.alignmentH}
             exclusive
-            onChange={onAlignmentChange(seqKey)}
+            onChange={onAlignmentHChange(seqKey)}
             size="small"
           >
             <Tooltip title={intl.formatMessage(messages.tooltipAlignLeft)}>
               <ToggleButton value="left" aria-label="left">
-                {isColumn ? <MdVerticalAlignTop /> : <MdFormatAlignLeft />}
+                <MdFormatAlignLeft />
               </ToggleButton>
             </Tooltip>
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignCenter)}>
+            <Tooltip title={intl.formatMessage(messages.tooltipAlignHCenter)}>
               <ToggleButton value="center" aria-label="center">
-                {isColumn ? <MdVerticalAlignCenter /> : <MdFormatAlignCenter />}
+                <MdFormatAlignCenter />
               </ToggleButton>
             </Tooltip>
             <Tooltip title={intl.formatMessage(messages.tooltipAlignRight)}>
               <ToggleButton value="right" aria-label="right">
-                {isColumn ? <MdVerticalAlignBottom /> : <MdFormatAlignRight />}
+                <MdFormatAlignRight />
+              </ToggleButton>
+            </Tooltip>
+          </ToggleButtonGroup>
+        </FormGroup>
+
+        <FormGroup>
+          <FormLabel component="legend">
+            <FormattedMessage {...messages.alignmentV} />
+          </FormLabel>
+          <ToggleButtonGroup
+            value={seqView.alignmentV}
+            exclusive
+            onChange={onAlignmentVChange(seqKey)}
+            size="small"
+          >
+            <Tooltip title={intl.formatMessage(messages.tooltipAlignTop)}>
+              <ToggleButton value="top" aria-label="top">
+                <MdVerticalAlignTop />
+              </ToggleButton>
+            </Tooltip>
+            <Tooltip title={intl.formatMessage(messages.tooltipAlignVCenter)}>
+              <ToggleButton value="center" aria-label="center">
+                <MdVerticalAlignCenter />
+              </ToggleButton>
+            </Tooltip>
+            <Tooltip title={intl.formatMessage(messages.tooltipAlignBottom)}>
+              <ToggleButton value="bottom" aria-label="bottom">
+                <MdVerticalAlignBottom />
               </ToggleButton>
             </Tooltip>
           </ToggleButtonGroup>
@@ -151,7 +164,6 @@ const SequenceControlsPanel = ({
 
   return (
     <>
-      {/* Switch aplicar a totes: només visible quan hi ha més d'una seqüència */}
       {sequenceKeys.length > 1 && (
         <FormGroup>
           <Tooltip title={intl.formatMessage(messages.tooltipApplyAll)}>
@@ -169,7 +181,6 @@ const SequenceControlsPanel = ({
         </FormGroup>
       )}
 
-      {/* Acordions per cada seqüència */}
       {sequenceKeys.map((seqKey) => (
         <Accordion
           key={seqKey}
@@ -177,9 +188,7 @@ const SequenceControlsPanel = ({
           onChange={onAccordionToggle(seqKey)}
           disableGutters
           sx={{
-            // Quan applyAll, amagar totes menys la primera
-            display:
-              applyAll && seqKey !== sequenceKeys[0] ? "none" : "block",
+            display: applyAll && seqKey !== sequenceKeys[0] ? "none" : "block",
           }}
         >
           <AccordionSummary expandIcon={<MdExpandMore />}>

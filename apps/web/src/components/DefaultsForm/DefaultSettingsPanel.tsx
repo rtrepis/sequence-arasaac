@@ -2,6 +2,21 @@ import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { DefaultSettings } from "../../types/ui";
 import {
+  DEFAULT_SKIN,
+  DEFAULT_HAIR,
+  DEFAULT_FITZGERALD,
+  DEFAULT_COLOR,
+  DEFAULT_FONT_FAMILY,
+  DEFAULT_FONT_SIZE,
+  DEFAULT_FONT_COLOR,
+  DEFAULT_BORDER_IN_COLOR,
+  DEFAULT_BORDER_IN_RADIUS,
+  DEFAULT_BORDER_IN_SIZE,
+  DEFAULT_BORDER_OUT_COLOR,
+  DEFAULT_BORDER_OUT_RADIUS,
+  DEFAULT_BORDER_OUT_SIZE,
+} from "../../configs/defaultSettingsConfig";
+import {
   pictAraSettingsApplyAllActionCreator,
   pictSequenceApplyAllActionCreator,
   borderInApplyAllActionCreator,
@@ -56,6 +71,19 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       },
     }), [dispatch, buildSettings]);
 
+    const handleReset = useCallback(() => {
+      const defaultFont = { family: DEFAULT_FONT_FAMILY, color: DEFAULT_FONT_COLOR, size: DEFAULT_FONT_SIZE };
+      setFont(defaultFont);
+      setNumberFont(defaultFont);
+      setTextPosition("bottom");
+      setSkin(DEFAULT_SKIN);
+      setHair(DEFAULT_HAIR);
+      setColor(DEFAULT_COLOR);
+      setNumbered(false);
+      setBorderIn({ color: DEFAULT_BORDER_IN_COLOR, radius: DEFAULT_BORDER_IN_RADIUS, size: DEFAULT_BORDER_IN_SIZE });
+      setBorderOut({ color: DEFAULT_BORDER_OUT_COLOR, radius: DEFAULT_BORDER_OUT_RADIUS, size: DEFAULT_BORDER_OUT_SIZE });
+    }, []);
+
     return (
       <DefaultForm
         font={font}
@@ -83,6 +111,7 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         onApplyAllBorderIn={() => dispatch(borderInApplyAllActionCreator({ borderIn }))}
         onApplyAllBorderOut={() => dispatch(borderOutApplyAllActionCreator({ borderOut }))}
         onSubmit={() => dispatch(updateDefaultSettingsActionCreator(buildSettings()))}
+        onReset={handleReset}
       />
     );
   }

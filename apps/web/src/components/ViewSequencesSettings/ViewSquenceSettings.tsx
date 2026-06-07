@@ -20,11 +20,12 @@ import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { usePrintStyles, printWithOrientation } from "@features/print/hooks/usePrintStyles";
 import { useDownloadPdf } from "@/hooks/useDownloadPdf";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
-import { SequenceViewSettings, SequenceAlignment } from "@/types/document";
+import { SequenceViewSettings, SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
 import {
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
 } from "@features/sequence/store/documentSlice";
+import { saveUserUiThunk } from "@features/backend/user-settings/store/settingsThunks";
 import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
 import { SelectChangeEvent } from "@mui/material";
@@ -42,14 +43,6 @@ interface ViewSequencesSettingsProps {
   ) => React.ReactElement | React.ReactElement[];
 }
 
-/**
- * Mapatge d'alignment a justifyContent CSS
- */
-const ALIGNMENT_TO_JUSTIFY: Record<SequenceAlignment, string> = {
-  left: "flex-start",
-  center: "center",
-  right: "flex-end",
-};
 
 /**
  * Orquestrador de la visualització de seqüències: gestiona hooks, handlers i composició
@@ -89,7 +82,9 @@ const ViewSequencesSettings = ({
   // Gestió del format de pàgina (usa el pageSize per defecte de l'usuari)
   const {
     pageFormat,
+    pageSize,
     pageSizeIndex,
+    orientation,
     isLandscape,
     isFullscreen,
     setPageSizeByIndex,
@@ -197,27 +192,32 @@ const ViewSequencesSettings = ({
   );
 
   /**
-   * Handler per canviar l'alineació d'una seqüència
+   * Handler per canviar l'alineació H d'una seqüència
    */
-  const handleAlignmentChange = useCallback(
+  const handleAlignmentHChange = useCallback(
     (seqKey: number) =>
-      (
-        _: React.MouseEvent<HTMLElement>,
-        newAlignment: SequenceAlignment | null,
-      ) => {
-        if (!newAlignment) return;
-
+      (_: React.MouseEvent<HTMLElement>, value: SequenceAlignmentH | null) => {
+        if (!value) return;
         if (applyAll) {
-          dispatch(
-            applyViewSettingsToAllActionCreator({ alignment: newAlignment }),
-          );
+          dispatch(applyViewSettingsToAllActionCreator({ alignmentH: value }));
         } else {
-          dispatch(
-            updateSequenceViewSettingsActionCreator({
-              key: seqKey,
-              settings: { alignment: newAlignment },
-            }),
-          );
+          dispatch(updateSequenceViewSettingsActionCreator({ key: seqKey, settings: { alignmentH: value } }));
+        }
+      },
+    [applyAll, dispatch],
+  );
+
+  /**
+   * Handler per canviar l'alineació V d'una seqüència
+   */
+  const handleAlignmentVChange = useCallback(
+    (seqKey: number) =>
+      (_: React.MouseEvent<HTMLElement>, value: SequenceAlignmentV | null) => {
+        if (!value) return;
+        if (applyAll) {
+          dispatch(applyViewSettingsToAllActionCreator({ alignmentV: value }));
+        } else {
+          dispatch(updateSequenceViewSettingsActionCreator({ key: seqKey, settings: { alignmentV: value } }));
         }
       },
     [applyAll, dispatch],
@@ -255,18 +255,21 @@ const ViewSequencesSettings = ({
    * Handler per restaurar les preferències guardades de l'usuari a totes les seqüències
    */
   const handleResetToDefaults = useCallback(() => {
-    const { sizePict, pictSpaceBetween, alignment, direction, sequenceSpaceBetween } = initialViewSettings;
-    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignment }));
+    const { sizePict, pictSpaceBetween, alignmentH, alignmentV, direction, sequenceSpaceBetween } = initialViewSettings;
+    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignmentH, alignmentV }));
     updateViewSetting("direction", direction);
     updateViewSetting("sequenceSpaceBetween", sequenceSpaceBetween);
   }, [dispatch, initialViewSettings, updateViewSetting]);
 
   /**
-   * Handler per persistir canvis quan es perd el focus
+   * Handler per persistir canvis quan es perd el focus.
+   * Sincronitza al Redux els camps (author, pageSize, orientation) gestionats per
+   * hooks externs, i després guarda al backend o localStorage.
    */
   const handleBlur = useCallback(() => {
-    persistViewSettings();
-  }, [persistViewSettings]);
+    persistViewSettings({ author, pageSize, orientation });
+    dispatch(saveUserUiThunk());
+  }, [persistViewSettings, dispatch, author, pageSize, orientation]);
 
   /**
    * Handler per canviar la mida de pàgina via Select
@@ -466,7 +469,8 @@ const ViewSequencesSettings = ({
                     onAccordionToggle={handleAccordionToggle}
                     onApplyAllChange={handleApplyAllChange}
                     onSequenceSliderChange={handleSequenceSliderChange}
-                    onAlignmentChange={handleAlignmentChange}
+                    onAlignmentHChange={handleAlignmentHChange}
+                    onAlignmentVChange={handleAlignmentVChange}
                   />
                 </GlobalViewControls>
               </Stack>
@@ -496,5 +500,4 @@ const ViewSequencesSettings = ({
   );
 };
 
-export { ALIGNMENT_TO_JUSTIFY };
 export default ViewSequencesSettings;
