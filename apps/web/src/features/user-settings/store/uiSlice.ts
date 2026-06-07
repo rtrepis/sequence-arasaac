@@ -6,6 +6,7 @@ import {
   ThemeMode,
   Ui,
   ViewSettings,
+  SettingsTab,
 } from "@/types/ui";
 import {
   VIEW_DEFAULT_SIZE_PICT,
@@ -39,6 +40,7 @@ import {
 const uiInitialState: Ui = {
   lang: { app: "en", search: "en", keywords: [] },
   theme: "system",
+  settingsActiveTab: "user",
   viewSettings: {
     sizePict: VIEW_DEFAULT_SIZE_PICT,
     pictSpaceBetween: VIEW_DEFAULT_PICT_SPACE,
@@ -143,6 +145,11 @@ const uiSlice = createSlice({
       ...previousUi,
       theme: action.payload,
     }),
+
+    updateSettingsActiveTab: (previousUi, action: PayloadAction<SettingsTab>) => ({
+      ...previousUi,
+      settingsActiveTab: action.payload,
+    }),
   },
 });
 
@@ -157,4 +164,5 @@ export const {
     updateDefaultSettingPictSequenceActionCreator,
   updateKeywords: updateKeywordsActionCreator,
   updateTheme: updateThemeActionCreator,
+  updateSettingsActiveTab: updateSettingsActiveTabActionCreator,
 } = uiSlice.actions;

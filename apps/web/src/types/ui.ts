@@ -5,6 +5,8 @@ export type { PageSize, PageOrientation };
 
 export type LangsApp = "ca" | "en" | "es" | "fr" | "it";
 
+export type SettingsTab = "user" | "pictograms" | "view" | "vocabulary";
+
 export type ThemeMode = "light" | "dark" | "system";
 
 export interface Ui {
@@ -12,6 +14,7 @@ export interface Ui {
   theme: ThemeMode;
   viewSettings: ViewSettings;
   defaultSettings: DefaultSettings;
+  settingsActiveTab: SettingsTab;
 }
 
 export type SequenceDirection = "row" | "column";

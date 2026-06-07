@@ -13,7 +13,7 @@ import {
   AiOutlineBook,
 } from "react-icons/ai";
 import { MdGridView } from "react-icons/md";
-import { forwardRef, useRef, useState } from "react";
+import { forwardRef, useRef } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
 import { tabsStyled } from "../../components/TabsEditView/TabsEditView.styled";
@@ -30,7 +30,8 @@ import { useFeedback } from "../../context/FeedbackContext/FeedbackContext";
 import messagesUser from "./UserSettingsPanel.lang";
 import React from "react";
 
-type SettingsTab = "user" | "pictograms" | "view" | "vocabulary";
+import { SettingsTab } from "../../types/ui";
+import { updateSettingsActiveTabActionCreator } from "@features/user-settings/store/uiSlice";
 
 interface DefaultSettingsDialogProps {
   open: boolean;
@@ -48,13 +49,10 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { showSnackbar } = useFeedback();
-  const [activeTab, setActiveTab] = useState<SettingsTab>(
-    () => (sessionStorage.getItem("settingsActiveTab") as SettingsTab) ?? "user"
-  );
+  const activeTab = useAppSelector((state) => state.ui.settingsActiveTab);
 
   const handleTabChange = (_: React.SyntheticEvent, value: SettingsTab) => {
-    setActiveTab(value);
-    sessionStorage.setItem("settingsActiveTab", value);
+    dispatch(updateSettingsActiveTabActionCreator(value));
   };
   const pictPanelRef = useRef<DefaultSettingsPanelHandle>(null);
   const viewPanelRef = useRef<DefaultSettingsPanelHandle>(null);
