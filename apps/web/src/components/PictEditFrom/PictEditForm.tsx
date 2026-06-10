@@ -154,7 +154,7 @@ const PictEditForm = ({
           position: "sticky",
           top: 0,
           zIndex: 5,
-          backgroundColor: "white",
+          backgroundColor: "background.paper",
           paddingBlock: { xs: 1 },
         }}
       >

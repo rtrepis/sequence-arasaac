@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Typography, useTheme } from "@mui/material";
 import { useIntl } from "react-intl";
 import usePictogramUrl from "../../features/pictogram/hooks/usePictogramUrl";
 import { Border, PictogramCardDefaults, PictSequence } from "../../types/sequence";
@@ -9,6 +9,7 @@ import {
 } from "./PictogramCard.styled";
 import messages from "./PictogramCart.lang";
 import fitzgeraldToBorder from "../../utils/fitzgeraldToBorder";
+import { getDisplayColor } from "../../utils/colorUtils";
 import React from "react";
 
 interface PictogramCardProps {
@@ -45,6 +46,8 @@ const PictogramCard = ({
 }: PictogramCardProps): React.ReactElement => {
   const { buildPictogramUrl } = usePictogramUrl();
   const intl = useIntl();
+  const { palette } = useTheme();
+  const isDark = palette.mode === "dark";
 
   const text = customText ? customText : word;
 
@@ -65,6 +68,8 @@ const PictogramCard = ({
 
   const textFontSize = 20 * font.size * printPageRatio * pictSize;
   const numberFontSize = 20 * numberFont.size * printPageRatio * pictSize;
+  const displayFontColor = getDisplayColor(font.color, isDark);
+  const displayNumberColor = getDisplayColor(numberFont.color, isDark);
 
   return (
     <Card
@@ -87,9 +92,11 @@ const PictogramCard = ({
             <Typography
               fontSize={numberFontSize}
               fontFamily={numberFont.family}
-              color={numberFont.color}
               component="h3"
-              sx={{ "@media print": { fontSize: 20 * pictSize } }}
+              sx={{
+                color: displayNumberColor,
+                "@media print": { fontSize: 20 * pictSize, color: numberFont.color },
+              }}
             >
               {indexSequence + 1}
             </Typography>
@@ -98,9 +105,11 @@ const PictogramCard = ({
             <Typography
               fontSize={textFontSize}
               fontFamily={font.family}
-              color={font.color}
               component="h3"
-              sx={{ "@media print": { fontSize: 20 * pictSize } }}
+              sx={{
+                color: displayFontColor,
+                "@media print": { fontSize: 20 * pictSize, color: font.color },
+              }}
             >
               {text}
             </Typography>
@@ -153,9 +162,11 @@ const PictogramCard = ({
             <Typography
               fontSize={textFontSize}
               fontFamily={font.family}
-              color={font.color}
               component="h3"
-              sx={{ "@media print": { fontSize: 20 * pictSize } }}
+              sx={{
+                color: displayFontColor,
+                "@media print": { fontSize: 20 * pictSize, color: font.color },
+              }}
             >
               {text}
             </Typography>
@@ -164,9 +175,11 @@ const PictogramCard = ({
             <Typography
               fontSize={numberFontSize}
               fontFamily={numberFont.family}
-              color={numberFont.color}
               component="h3"
-              sx={{ "@media print": { fontSize: 20 * pictSize } }}
+              sx={{
+                color: displayNumberColor,
+                "@media print": { fontSize: 20 * pictSize, color: numberFont.color },
+              }}
             >
               {indexSequence + 1}
             </Typography>

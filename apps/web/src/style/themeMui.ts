@@ -26,7 +26,13 @@ export const buildTheme = (mode: "light" | "dark"): Theme =>
     components: {
       MuiAppBar: {
         styleOverrides: {
-          root: { minHeight: "50px" },
+          root: ({ theme }) => ({
+            minHeight: "50px",
+            ...(theme.palette.mode === "dark" && {
+              backgroundColor: theme.palette.primary.dark,
+              backgroundImage: "none",
+            }),
+          }),
         },
       },
       MuiToolbar: { styleOverrides: { root: { minHeight: "50px" } } },
