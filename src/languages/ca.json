@@ -1619,6 +1619,12 @@
       "value": "Dalt"
     }
   ],
+  "view.editSequences.sequences.label": [
+    {
+      "type": 0,
+      "value": "Seqüències"
+    }
+  ],
   "view.welcome.arcadeLink": [
     {
       "type": 0,
@@ -1653,12 +1659,6 @@
     {
       "type": 0,
       "value": "Inicia"
-    }
-  ],
-  "view.editSequences.sequences.label": [
-    {
-      "type": 0,
-      "value": "Seqüències"
     }
   ]
 }

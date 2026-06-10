@@ -51,6 +51,7 @@ import { useViewManager, useAuthorManager } from "@/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { usePrintStyles, printWithOrientation } from "@/hooks/usePrintStyles";
 import { useDownloadPdf } from "@/hooks/useDownloadPdf";
+import { getCurrentDPI } from "@/features/print-refactor/utils/dpiManager";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import { SequenceViewSettings, SequenceAlignment } from "@/types/document";
 import {
@@ -306,6 +307,7 @@ const ViewSequencesSettings = ({
    * Handler per imprimir amb orientació correcta
    */
   const handlePrint = useCallback(() => {
+    (document.activeElement as HTMLElement)?.blur();
     printWithOrientation(pageFormat);
     trackEvent({
       event: "click-print-view",
@@ -535,146 +537,181 @@ const ViewSequencesSettings = ({
               alignItems: "stretch",
             }}
           >
-          <NotPrint>
-            <Divider orientation="vertical" />
-          </NotPrint>
+            <NotPrint>
+              <Divider orientation="vertical" />
+            </NotPrint>
 
-          <NotPrint>
-            <Stack
-              maxWidth={{ md: 300 }}
-              width={{ xs: "100%", md: "auto" }}
-              flexShrink={0}
-              spacing={1}
-            >
-              <FormGroup>
-                <FormLabel>
-                  <FormattedMessage {...messages.pageSize} />
-                </FormLabel>
-                <Select<number>
-                  value={pageSizeIndex}
-                  onChange={handlePageSizeChange}
-                  size="small"
-                >
-                  <MenuItem value={0}>A4</MenuItem>
-                  <MenuItem value={1}>A3</MenuItem>
-                  <MenuItem value={2}>
-                    <FormattedMessage {...messages.fullScreen} />
-                  </MenuItem>
-                </Select>
-              </FormGroup>
-
-              {/* Switch aplicar a totes: només visible quan hi ha més d'una seqüència */}
-              {sequenceKeys.length > 1 && (
-                <FormGroup>
-                  <Tooltip title={intl.formatMessage(messages.tooltipApplyAll)}>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={applyAll}
-                          onChange={handleApplyAllChange}
-                          size="small"
-                        />
-                      }
-                      label={intl.formatMessage(messages.applyAll)}
-                    />
-                  </Tooltip>
-                </FormGroup>
-              )}
-
-              {/* Acordions per cada seqüència */}
-              {sequenceKeys.map((seqKey) => (
-                <Accordion
-                  key={seqKey}
-                  expanded={expandedAccordion === seqKey}
-                  onChange={handleAccordionToggle(seqKey)}
-                  disableGutters
-                  sx={{
-                    // Quan applyAll, amagar totes menys la primera
-                    display:
-                      applyAll && seqKey !== sequenceKeys[0] ? "none" : "block",
-                  }}
-                >
-                  <AccordionSummary expandIcon={<MdExpandMore />}>
-                    <Typography variant="subtitle2">
-                      {applyAll
-                        ? intl.formatMessage(messages.sequence)
-                        : `${intl.formatMessage(messages.sequence)} ${seqKey + 1}`}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {renderSequenceControls(
-                      applyAll ? sequenceKeys[0] : seqKey,
-                    )}
-                  </AccordionDetails>
-                </Accordion>
-              ))}
-
-              {sequenceKeys.length > 1 && (
+            <NotPrint>
+              <Stack
+                maxWidth={{ md: 300 }}
+                width={{ xs: "100%", md: "auto" }}
+                flexShrink={0}
+                spacing={1}
+              >
                 <FormGroup>
                   <FormLabel>
-                    <FormattedMessage {...messages.sequenceSpaceBetween} />
-                    <Slider
-                      name="sequenceSpaceBetween"
-                      step={0.5}
-                      min={0}
-                      max={10}
-                      value={viewSettings.sequenceSpaceBetween}
-                      valueLabelDisplay="auto"
-                      valueLabelFormat={(value: number) =>
-                        parseFloat(value.toFixed(2))
-                      }
-                      onChange={handleSequenceSpaceChange}
+                    <FormattedMessage {...messages.pageSize} />
+                  </FormLabel>
+                  <Select<number>
+                    value={pageSizeIndex}
+                    onChange={handlePageSizeChange}
+                    size="small"
+                  >
+                    <MenuItem value={0}>A4</MenuItem>
+                    <MenuItem value={1}>A3</MenuItem>
+                    <MenuItem value={2}>
+                      <FormattedMessage {...messages.fullScreen} />
+                    </MenuItem>
+                  </Select>
+                </FormGroup>
+
+                {/* Switch aplicar a totes: només visible quan hi ha més d'una seqüència */}
+                {sequenceKeys.length > 1 && (
+                  <FormGroup>
+                    <Tooltip
+                      title={intl.formatMessage(messages.tooltipApplyAll)}
+                    >
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={applyAll}
+                            onChange={handleApplyAllChange}
+                            size="small"
+                          />
+                        }
+                        label={intl.formatMessage(messages.applyAll)}
+                      />
+                    </Tooltip>
+                  </FormGroup>
+                )}
+
+                {/* Acordions per cada seqüència */}
+                {sequenceKeys.map((seqKey) => (
+                  <Accordion
+                    key={seqKey}
+                    expanded={expandedAccordion === seqKey}
+                    onChange={handleAccordionToggle(seqKey)}
+                    disableGutters
+                    sx={{
+                      // Quan applyAll, amagar totes menys la primera
+                      display:
+                        applyAll && seqKey !== sequenceKeys[0]
+                          ? "none"
+                          : "block",
+                    }}
+                  >
+                    <AccordionSummary expandIcon={<MdExpandMore />}>
+                      <Typography variant="subtitle2">
+                        {applyAll
+                          ? intl.formatMessage(messages.sequence)
+                          : `${intl.formatMessage(messages.sequence)} ${seqKey + 1}`}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {renderSequenceControls(
+                        applyAll ? sequenceKeys[0] : seqKey,
+                      )}
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
+
+                {sequenceKeys.length > 1 && (
+                  <FormGroup>
+                    <FormLabel>
+                      <FormattedMessage {...messages.sequenceSpaceBetween} />
+                      <Slider
+                        name="sequenceSpaceBetween"
+                        step={0.5}
+                        min={0}
+                        max={10}
+                        value={viewSettings.sequenceSpaceBetween}
+                        valueLabelDisplay="auto"
+                        valueLabelFormat={(value: number) =>
+                          parseFloat(value.toFixed(2))
+                        }
+                        onChange={handleSequenceSpaceChange}
+                      />
+                    </FormLabel>
+                  </FormGroup>
+                )}
+
+                <FormGroup>
+                  <FormLabel component="legend">
+                    <FormattedMessage {...messages.direction} />
+                  </FormLabel>
+                  <ToggleButtonGroup
+                    value={viewSettings.direction}
+                    exclusive
+                    onChange={handleDirectionChange}
+                    size="small"
+                  >
+                    <Tooltip
+                      title={intl.formatMessage(messages.tooltipDirectionRow)}
+                    >
+                      <ToggleButton value="row" aria-label="row">
+                        <MdTableRows />
+                      </ToggleButton>
+                    </Tooltip>
+                    <Tooltip
+                      title={intl.formatMessage(
+                        messages.tooltipDirectionColumn,
+                      )}
+                    >
+                      <ToggleButton value="column" aria-label="column">
+                        <MdViewColumn />
+                      </ToggleButton>
+                    </Tooltip>
+                  </ToggleButtonGroup>
+                </FormGroup>
+
+                <FormGroup>
+                  <FormLabel>
+                    <FormattedMessage {...messages.authSequence} />
+                    <TextField
+                      value={author}
+                      onChange={(event) => updateAuthor(event.target.value)}
+                      variant="filled"
+                      fullWidth
+                      helperText={intl.formatMessage({
+                        ...messages.authHelperText,
+                      })}
+                      sx={{
+                        ".MuiInputBase-input": { paddingTop: 2 },
+                      }}
                     />
                   </FormLabel>
                 </FormGroup>
-              )}
 
-              <FormGroup>
-                <FormLabel component="legend">
-                  <FormattedMessage {...messages.direction} />
-                </FormLabel>
-                <ToggleButtonGroup
-                  value={viewSettings.direction}
-                  exclusive
-                  onChange={handleDirectionChange}
-                  size="small"
-                >
-                  <Tooltip
-                    title={intl.formatMessage(messages.tooltipDirectionRow)}
-                  >
-                    <ToggleButton value="row" aria-label="row">
-                      <MdTableRows />
-                    </ToggleButton>
-                  </Tooltip>
-                  <Tooltip
-                    title={intl.formatMessage(messages.tooltipDirectionColumn)}
-                  >
-                    <ToggleButton value="column" aria-label="column">
-                      <MdViewColumn />
-                    </ToggleButton>
-                  </Tooltip>
-                </ToggleButtonGroup>
-              </FormGroup>
+                {/* Diagnòstic de proporció — eliminar un cop resolt */}
+                {(() => {
+                  const expectedRatio = pageFormat.orientation === "landscape" ? 190 / 277 : 277 / 190;
+                  const actualRatio = pageFormat.dimensions.height / pageFormat.dimensions.width;
+                  const isOk = Math.abs(actualRatio - expectedRatio) < 0.005;
+                  return (
+                    <Box
+                      sx={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 1,
+                        fontFamily: "monospace",
+                        fontSize: 11,
+                        background: isOk ? "#d4edda" : "#f8d7da",
+                        border: `1px solid ${isOk ? "#28a745" : "#dc3545"}`,
+                        borderRadius: 1,
+                        px: 1,
+                        py: 0.5,
+                      }}
+                    >
+                      <span style={{ fontWeight: "bold" }}>Proporció A4 {pageFormat.orientation}:</span>
+                      <span style={{ fontWeight: "bold", color: isOk ? "#28a745" : "#dc3545" }}>
+                        {isOk ? "✓ correcta" : `✗ incorrecta (${actualRatio.toFixed(4)} ≠ ${expectedRatio.toFixed(4)})`}
+                      </span>
+                    </Box>
+                  );
+                })()}
 
-              <FormGroup>
-                <FormLabel>
-                  <FormattedMessage {...messages.authSequence} />
-                  <TextField
-                    value={author}
-                    onChange={(event) => updateAuthor(event.target.value)}
-                    variant="filled"
-                    fullWidth
-                    helperText={intl.formatMessage({
-                      ...messages.authHelperText,
-                    })}
-                    sx={{
-                      ".MuiInputBase-input": { paddingTop: 2 },
-                    }}
-                  />
-                </FormLabel>
-              </FormGroup>
-            </Stack>
-          </NotPrint>
+              </Stack>
+            </NotPrint>
           </Box>
         </Stack>
       </form>

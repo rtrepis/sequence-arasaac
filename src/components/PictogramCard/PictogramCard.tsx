@@ -130,16 +130,23 @@ const PictogramCard = ({
         {cross && (
           <Box
             sx={{
-              backgroundImage: `url(${"../img/settings/tachado_rojo.svg"})`,
-              backgroundRepeat: "no-repeat",
               position: "absolute",
-              height: `${300 * pictSize * printPageRatio}px`,
-              width: `${210 * pictSize * printPageRatio}px`,
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -34%)",
+              inset: 0,
+              pointerEvents: "none",
             }}
-          ></Box>
+          >
+            <svg
+              viewBox="-55 147 500 500"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ width: "100%", height: "100%", display: "block" }}
+            >
+              <polygon
+                fill="#FF0000"
+                fillOpacity={0.7}
+                points="419.8,147.1 445,147.1 445,173.5 220.9,398.4 445,623 445,646.9 416.8,646.9 195,424.3 -26.8,646.9 -55,646.9 -55,623 169.1,398.4 -55,173.5 -55,147.1 -29.8,147.1 195,372.5"
+              />
+            </svg>
+          </Box>
         )}
       </CardContent>
 

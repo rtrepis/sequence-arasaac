@@ -1619,6 +1619,12 @@
       "value": "Arriba"
     }
   ],
+  "view.editSequences.sequences.label": [
+    {
+      "type": 0,
+      "value": "Secuencias"
+    }
+  ],
   "view.welcome.arcadeLink": [
     {
       "type": 0,
@@ -1653,12 +1659,6 @@
     {
       "type": 0,
       "value": "Iniciar"
-    }
-  ],
-  "view.editSequences.sequences.label": [
-    {
-      "type": 0,
-      "value": "Secuencias"
     }
   ]
 }

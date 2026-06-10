@@ -26,7 +26,7 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
       // Capturar el contingut real al 100% de resolució
       // html2canvas ignora el transform:scale() visual — llegeix les dimensions CSS naturals
       const canvas = await html2canvas(contentEl, {
-        scale: 1,
+        scale: 3,
         useCORS: true,
         allowTaint: true,
         logging: false,
