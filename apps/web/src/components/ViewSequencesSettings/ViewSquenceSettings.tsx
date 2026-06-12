@@ -19,6 +19,7 @@ import { useViewManager, useAuthorManager } from "@features/print/hooks/useViewM
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { usePrintStyles, printWithOrientation } from "@features/print/hooks/usePrintStyles";
 import { useDownloadPdf } from "@/hooks/useDownloadPdf";
+import { getCurrentDPI } from "@/features/print-refactor/utils/dpiManager";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import { SequenceViewSettings, SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
 import {
@@ -285,6 +286,7 @@ const ViewSequencesSettings = ({
    * Handler per imprimir amb orientació correcta
    */
   const handlePrint = useCallback(() => {
+    (document.activeElement as HTMLElement)?.blur();
     printWithOrientation(pageFormat);
     trackEvent({
       event: "click-print-view",
