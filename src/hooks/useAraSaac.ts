@@ -28,6 +28,8 @@ const useAraSaac = () => {
   const {
     font: { size: fontSize },
     textPosition,
+    borderIn: defaultBorderIn,
+    borderOut: defaultBorderOut,
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
 
   const getActiveSaacAmountPict = (state) =>
@@ -131,7 +133,12 @@ const useAraSaac = () => {
               selectedId: findBestPict[0],
               settings: await makeSettingsProperty(data[0]),
             },
-            settings: { fontSize, textPosition },
+            settings: {
+              fontSize,
+              textPosition,
+              borderIn: defaultBorderIn,
+              borderOut: defaultBorderOut,
+            },
             ...(typeof word === "object" && { text: word.text }),
             cross: false,
           };
@@ -157,7 +164,12 @@ const useAraSaac = () => {
               selectedId: 0,
               settings: { fitzgerald: "#666" },
             },
-            settings: { textPosition, fontSize },
+            settings: {
+              textPosition,
+              fontSize,
+              borderIn: defaultBorderIn,
+              borderOut: defaultBorderOut,
+            },
             ...(typeof word === "object" && { text: word.text }),
             cross: false,
           };
@@ -173,6 +185,8 @@ const useAraSaac = () => {
       makeSettingsProperty,
       fontSize,
       textPosition,
+      defaultBorderIn,
+      defaultBorderOut,
     ],
   );
 
