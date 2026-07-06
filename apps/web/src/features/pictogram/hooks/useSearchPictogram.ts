@@ -19,6 +19,8 @@ const useSearchPictogram = () => {
   const {
     font: { size: fontSize },
     textPosition,
+    borderIn: defaultBorderIn,
+    borderOut: defaultBorderOut,
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
 
   const getActiveSaacAmountPict = (state) =>
@@ -66,7 +68,12 @@ const useSearchPictogram = () => {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               settings: extractPictSettings((data as any[])[0], defaultSettingsPictApiAra),
             },
-            settings: { fontSize, textPosition },
+            settings: {
+              fontSize,
+              textPosition,
+              borderIn: defaultBorderIn,
+              borderOut: defaultBorderOut,
+            },
             ...(typeof word === "object" && { text: word.text }),
             cross: false,
           };
@@ -91,7 +98,12 @@ const useSearchPictogram = () => {
               selectedId: 0,
               settings: { fitzgerald: "#666" },
             },
-            settings: { textPosition, fontSize },
+            settings: {
+              textPosition,
+              fontSize,
+              borderIn: defaultBorderIn,
+              borderOut: defaultBorderOut,
+            },
             ...(typeof word === "object" && { text: word.text }),
             cross: false,
           };
@@ -107,6 +119,8 @@ const useSearchPictogram = () => {
       defaultSettingsPictApiAra,
       fontSize,
       textPosition,
+      defaultBorderIn,
+      defaultBorderOut,
     ],
   );
 
