@@ -203,13 +203,41 @@
     "defaultMessage": "Idioma",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
-  "components.defaultSettings.vocabularyPanel.comingSoon": {
-    "defaultMessage": "Próximamente",
-    "description": "Missatge de pròximament al panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.title": {
+    "defaultMessage": "Vocabulario personal"
   },
-  "components.defaultSettings.vocabularyPanel.description": {
-    "defaultMessage": "Aquí podrás asignar un pictograma específico a cualquier palabra.",
-    "description": "Descripció del panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.wordInputLabel": {
+    "defaultMessage": "Palabra"
+  },
+  "components.defaultSettings.vocabularyPanel.wordInputPlaceholder": {
+    "defaultMessage": "p.ej. Óscar, Marta..."
+  },
+  "components.defaultSettings.vocabularyPanel.addButton": {
+    "defaultMessage": "Añadir"
+  },
+  "components.defaultSettings.vocabularyPanel.emptyList": {
+    "defaultMessage": "Todavía no hay palabras. Añade una para empezar."
+  },
+  "components.defaultSettings.vocabularyPanel.previewLabel": {
+    "defaultMessage": "Vista previa"
+  },
+  "components.defaultSettings.vocabularyPanel.duplicateWarning": {
+    "defaultMessage": "Esta palabra ya existe y se actualizará."
+  },
+  "components.defaultSettings.vocabularyPanel.updateButton": {
+    "defaultMessage": "Actualizar"
+  },
+  "components.defaultSettings.vocabularyPanel.uploadImage": {
+    "defaultMessage": "Subir imagen"
+  },
+  "components.defaultSettings.vocabularyPanel.removeImage": {
+    "defaultMessage": "Eliminar imagen"
+  },
+  "components.defaultSettings.vocabularyPanel.loginRequired": {
+    "defaultMessage": "Necesitas iniciar sesión para usar el vocabulario personal."
+  },
+  "components.defaultSettings.vocabularyPanel.freeLimitReached": {
+    "defaultMessage": "Has alcanzado el límite de {max} palabras del plan gratuito."
   },
   "components.logoMenu.download": {
     "defaultMessage": "Descargar"

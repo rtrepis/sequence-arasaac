@@ -27,9 +27,10 @@ export const updateUiSettings = async (
   try {
     const parsed = updateUiSettingsSchema.safeParse(req.body);
     if (!parsed.success) {
-      const error = new Error(
-        parsed.error.errors[0]?.message ?? "Dades invàlides"
-      ) as AppError;
+      // Log detallat per facilitar el diagnòstic en dev
+      console.error("[user-settings] Validació fallida:", JSON.stringify(parsed.error.errors, null, 2));
+      const messages = parsed.error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join("; ");
+      const error = new Error(messages) as AppError;
       error.statusCode = 400;
       return next(error);
     }

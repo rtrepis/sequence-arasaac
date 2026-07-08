@@ -7,8 +7,10 @@ import type {
   LangsApp,
   ThemeMode,
   ViewSettings,
+  WordProfile,
+  UserTier,
 } from "@sequence-arasaac/shared-types";
-import { defaultSettingsSchema } from "../../shared/mongooseSchemas";
+import { defaultSettingsSchema, wordProfileSchema } from "../../shared/mongooseSchemas";
 
 // Interfície TypeScript del document User (estén Document de Mongoose)
 export interface IUser extends Document {
@@ -21,6 +23,8 @@ export interface IUser extends Document {
   };
   theme: ThemeMode;
   viewSettings?: ViewSettings;
+  wordProfiles: WordProfile[];
+  tier: UserTier;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -118,6 +122,17 @@ const userSchema = new Schema<IUser>(
         { _id: false }
       ),
       required: false,
+    },
+    wordProfiles: {
+      type: [wordProfileSchema],
+      required: true,
+      default: () => [],
+    },
+    tier: {
+      type: String,
+      enum: ["free"],
+      required: true,
+      default: "free",
     },
   },
   {

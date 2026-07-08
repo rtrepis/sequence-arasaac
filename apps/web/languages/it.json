@@ -203,13 +203,41 @@
     "defaultMessage": "Lingua",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
-  "components.defaultSettings.vocabularyPanel.comingSoon": {
-    "defaultMessage": "Prossimamente",
-    "description": "Missatge de pròximament al panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.title": {
+    "defaultMessage": "Vocabolario personale"
   },
-  "components.defaultSettings.vocabularyPanel.description": {
-    "defaultMessage": "Qui potrai assegnare un pittogramma specifico a qualsiasi parola.",
-    "description": "Descripció del panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.wordInputLabel": {
+    "defaultMessage": "Parola"
+  },
+  "components.defaultSettings.vocabularyPanel.wordInputPlaceholder": {
+    "defaultMessage": "es. Oscar, Marta..."
+  },
+  "components.defaultSettings.vocabularyPanel.addButton": {
+    "defaultMessage": "Aggiungi"
+  },
+  "components.defaultSettings.vocabularyPanel.emptyList": {
+    "defaultMessage": "Ancora nessuna parola. Aggiungine una per iniziare."
+  },
+  "components.defaultSettings.vocabularyPanel.previewLabel": {
+    "defaultMessage": "Anteprima"
+  },
+  "components.defaultSettings.vocabularyPanel.duplicateWarning": {
+    "defaultMessage": "Questa parola esiste già e verrà aggiornata."
+  },
+  "components.defaultSettings.vocabularyPanel.updateButton": {
+    "defaultMessage": "Aggiorna"
+  },
+  "components.defaultSettings.vocabularyPanel.uploadImage": {
+    "defaultMessage": "Carica immagine"
+  },
+  "components.defaultSettings.vocabularyPanel.removeImage": {
+    "defaultMessage": "Rimuovi immagine"
+  },
+  "components.defaultSettings.vocabularyPanel.loginRequired": {
+    "defaultMessage": "Devi effettuare l'accesso per usare il vocabolario personale."
+  },
+  "components.defaultSettings.vocabularyPanel.freeLimitReached": {
+    "defaultMessage": "Hai raggiunto il limite di {max} parole del piano gratuito."
   },
   "components.logoMenu.download": {
     "defaultMessage": "Scarica"

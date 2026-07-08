@@ -5,4 +5,6 @@ import { PictApiAraSettings } from "@/types/sequence";
 export interface WordProfile {
   word: string;
   overrides: Partial<PictApiAraSettings>;
+  selectedId?: number;
+  customImageUrl?: string;
 }

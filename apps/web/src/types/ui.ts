@@ -1,5 +1,8 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 import { PageSize, PageOrientation } from "./PageFormat";
+import { WordProfile } from "@features/word-profile/model/WordProfile";
+
+export type UserTier = "free";
 
 export type { PageSize, PageOrientation };
 
@@ -15,6 +18,8 @@ export interface Ui {
   viewSettings: ViewSettings;
   defaultSettings: DefaultSettings;
   settingsActiveTab: SettingsTab;
+  wordProfiles: WordProfile[];
+  tier: UserTier;
 }
 
 export type SequenceDirection = "row" | "column";

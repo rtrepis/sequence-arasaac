@@ -14,6 +14,18 @@ const viewSettingsZodSchema = z.object({
   author: z.string(),
 });
 
+const wordProfileZodSchema = z.object({
+  word: z.string().min(1),
+  overrides: z.object({
+    skin: z.enum(["asian", "aztec", "black", "mulatto", "white"]).optional(),
+    hair: z.enum(["black", "blonde", "brown", "darkBrown", "gray", "darkGray", "red"]).optional(),
+    color: z.boolean().optional(),
+    fitzgerald: z.string().optional(),
+  }),
+  selectedId: z.number().optional(),
+  customImageUrl: z.string().optional(),
+});
+
 export const updateUiSettingsSchema = z.object({
   lang: z.object({
     app: z.enum(["ca", "en", "es", "fr", "it"]),
@@ -22,6 +34,7 @@ export const updateUiSettingsSchema = z.object({
   theme: z.enum(["light", "dark", "system"]),
   viewSettings: viewSettingsZodSchema.optional(),
   defaultSettings: defaultSettingsZodSchema,
+  wordProfiles: z.array(wordProfileZodSchema).optional(),
 });
 
 export type UpdateUiSettingsInput = z.infer<typeof updateUiSettingsSchema>;

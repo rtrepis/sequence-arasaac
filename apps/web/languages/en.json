@@ -203,13 +203,41 @@
     "defaultMessage": "Language",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
-  "components.defaultSettings.vocabularyPanel.comingSoon": {
-    "defaultMessage": "Coming soon",
-    "description": "Missatge de pròximament al panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.title": {
+    "defaultMessage": "Personal vocabulary"
   },
-  "components.defaultSettings.vocabularyPanel.description": {
-    "defaultMessage": "Here you will be able to assign a specific pictogram to any word.",
-    "description": "Descripció del panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.wordInputLabel": {
+    "defaultMessage": "Word"
+  },
+  "components.defaultSettings.vocabularyPanel.wordInputPlaceholder": {
+    "defaultMessage": "e.g. Oscar, Marta..."
+  },
+  "components.defaultSettings.vocabularyPanel.addButton": {
+    "defaultMessage": "Add"
+  },
+  "components.defaultSettings.vocabularyPanel.emptyList": {
+    "defaultMessage": "No words yet. Add a word to get started."
+  },
+  "components.defaultSettings.vocabularyPanel.previewLabel": {
+    "defaultMessage": "Preview"
+  },
+  "components.defaultSettings.vocabularyPanel.duplicateWarning": {
+    "defaultMessage": "This word already exists and will be updated."
+  },
+  "components.defaultSettings.vocabularyPanel.updateButton": {
+    "defaultMessage": "Update"
+  },
+  "components.defaultSettings.vocabularyPanel.uploadImage": {
+    "defaultMessage": "Upload image"
+  },
+  "components.defaultSettings.vocabularyPanel.removeImage": {
+    "defaultMessage": "Remove image"
+  },
+  "components.defaultSettings.vocabularyPanel.loginRequired": {
+    "defaultMessage": "You need to log in to use personal vocabulary."
+  },
+  "components.defaultSettings.vocabularyPanel.freeLimitReached": {
+    "defaultMessage": "You have reached the limit of {max} words for the free plan."
   },
   "components.logoMenu.download": {
     "defaultMessage": "Download"

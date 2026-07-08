@@ -203,13 +203,41 @@
     "defaultMessage": "Langue",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
-  "components.defaultSettings.vocabularyPanel.comingSoon": {
-    "defaultMessage": "Bientôt disponible",
-    "description": "Missatge de pròximament al panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.title": {
+    "defaultMessage": "Vocabulaire personnel"
   },
-  "components.defaultSettings.vocabularyPanel.description": {
-    "defaultMessage": "Ici vous pourrez assigner un pictogramme spécifique à n'importe quel mot.",
-    "description": "Descripció del panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.wordInputLabel": {
+    "defaultMessage": "Mot"
+  },
+  "components.defaultSettings.vocabularyPanel.wordInputPlaceholder": {
+    "defaultMessage": "ex. Oscar, Marta..."
+  },
+  "components.defaultSettings.vocabularyPanel.addButton": {
+    "defaultMessage": "Ajouter"
+  },
+  "components.defaultSettings.vocabularyPanel.emptyList": {
+    "defaultMessage": "Aucun mot pour l'instant. Ajoutez-en un pour commencer."
+  },
+  "components.defaultSettings.vocabularyPanel.previewLabel": {
+    "defaultMessage": "Aperçu"
+  },
+  "components.defaultSettings.vocabularyPanel.duplicateWarning": {
+    "defaultMessage": "Ce mot existe déjà et sera mis à jour."
+  },
+  "components.defaultSettings.vocabularyPanel.updateButton": {
+    "defaultMessage": "Mettre à jour"
+  },
+  "components.defaultSettings.vocabularyPanel.uploadImage": {
+    "defaultMessage": "Télécharger une image"
+  },
+  "components.defaultSettings.vocabularyPanel.removeImage": {
+    "defaultMessage": "Supprimer l'image"
+  },
+  "components.defaultSettings.vocabularyPanel.loginRequired": {
+    "defaultMessage": "Vous devez vous connecter pour utiliser le vocabulaire personnel."
+  },
+  "components.defaultSettings.vocabularyPanel.freeLimitReached": {
+    "defaultMessage": "Vous avez atteint la limite de {max} mots du plan gratuit."
   },
   "components.logoMenu.download": {
     "defaultMessage": "Télécharger"

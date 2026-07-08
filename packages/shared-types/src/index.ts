@@ -28,4 +28,6 @@ export type {
   PageSize,
   ViewSettings,
   UserUiSettings,
+  WordProfile,
+  UserTier,
 } from "./ui";

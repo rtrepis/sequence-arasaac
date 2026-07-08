@@ -7,7 +7,9 @@ import {
   Ui,
   ViewSettings,
   SettingsTab,
+  UserTier,
 } from "@/types/ui";
+import { WordProfile } from "@features/word-profile/model/WordProfile";
 import {
   VIEW_DEFAULT_SIZE_PICT,
   VIEW_DEFAULT_PICT_SPACE,
@@ -84,6 +86,8 @@ const uiInitialState: Ui = {
       },
     },
   },
+  wordProfiles: [],
+  tier: "free",
 };
 
 const uiSlice = createSlice({
@@ -150,6 +154,28 @@ const uiSlice = createSlice({
       ...previousUi,
       settingsActiveTab: action.payload,
     }),
+
+    addWordProfile: (previousUi, action: PayloadAction<WordProfile>) => {
+      const filtered = previousUi.wordProfiles.filter(
+        (p) => p.word.toLowerCase() !== action.payload.word.toLowerCase(),
+      );
+      previousUi.wordProfiles = [...filtered, action.payload];
+    },
+
+    removeWordProfile: (previousUi, action: PayloadAction<string>) => {
+      previousUi.wordProfiles = previousUi.wordProfiles.filter(
+        (p) => p.word.toLowerCase() !== action.payload.toLowerCase(),
+      );
+    },
+
+    // Carregat des del backend en fer login
+    setWordProfiles: (previousUi, action: PayloadAction<WordProfile[]>) => {
+      previousUi.wordProfiles = action.payload;
+    },
+
+    setTier: (previousUi, action: PayloadAction<UserTier>) => {
+      previousUi.tier = action.payload;
+    },
   },
 });
 
@@ -165,4 +191,8 @@ export const {
   updateKeywords: updateKeywordsActionCreator,
   updateTheme: updateThemeActionCreator,
   updateSettingsActiveTab: updateSettingsActiveTabActionCreator,
+  addWordProfile: addWordProfileActionCreator,
+  removeWordProfile: removeWordProfileActionCreator,
+  setWordProfiles: setWordProfilesActionCreator,
+  setTier: setTierActionCreator,
 } = uiSlice.actions;

@@ -60,6 +60,22 @@ const pictApiAraSettingsSchema = new Schema(
   { _id: false }
 );
 
+// Sub-schema per a WordProfile (perfil d'aparença d'una paraula personal)
+export const wordProfileSchema = new Schema(
+  {
+    word: { type: String, required: true },
+    overrides: {
+      skin: { type: String, enum: ["asian", "aztec", "black", "mulatto", "white"] },
+      hair: { type: String, enum: ["black", "blonde", "brown", "darkBrown", "gray", "darkGray", "red"] },
+      color: { type: Boolean },
+      fitzgerald: { type: String },
+    },
+    selectedId: { type: Number },
+    customImageUrl: { type: String },
+  },
+  { _id: false }
+);
+
 // Sub-schema per a DefaultSettings (pictSequence + pictApiAra)
 export const defaultSettingsSchema = new Schema(
   {

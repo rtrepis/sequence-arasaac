@@ -11,7 +11,7 @@ const notFound = (): AppError => {
 };
 
 export const getUiSettings = async (userId: string): Promise<UserUiSettings> => {
-  const user = await UserModel.findById(userId).select("settings langSettings theme viewSettings");
+  const user = await UserModel.findById(userId).select("settings langSettings theme viewSettings wordProfiles tier");
   if (!user) throw notFound();
 
   return {
@@ -19,6 +19,8 @@ export const getUiSettings = async (userId: string): Promise<UserUiSettings> => 
     theme: user.theme ?? "system",
     viewSettings: user.viewSettings ?? undefined,
     defaultSettings: user.settings,
+    wordProfiles: user.wordProfiles ?? [],
+    tier: user.tier ?? "free",
   };
 };
 
@@ -26,16 +28,20 @@ export const updateUiSettings = async (
   userId: string,
   data: UpdateUiSettingsInput
 ): Promise<void> => {
+  const update: Record<string, unknown> = {
+    langSettings: data.lang,
+    theme: data.theme,
+    viewSettings: data.viewSettings,
+    settings: data.defaultSettings,
+  };
+
+  if (data.wordProfiles !== undefined) {
+    update.wordProfiles = data.wordProfiles;
+  }
+
   const user = await UserModel.findByIdAndUpdate(
     userId,
-    {
-      $set: {
-        langSettings: data.lang,
-        theme: data.theme,
-        viewSettings: data.viewSettings,
-        settings: data.defaultSettings,
-      },
-    },
+    { $set: update },
     { new: true, runValidators: true }
   );
 

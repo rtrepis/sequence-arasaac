@@ -203,13 +203,41 @@
     "defaultMessage": "Idioma",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
-  "components.defaultSettings.vocabularyPanel.comingSoon": {
-    "defaultMessage": "Pròximament",
-    "description": "Missatge de pròximament al panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.title": {
+    "defaultMessage": "Vocabulari personal"
   },
-  "components.defaultSettings.vocabularyPanel.description": {
-    "defaultMessage": "Aquí podràs assignar un pictograma específic a qualsevol paraula.",
-    "description": "Descripció del panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.wordInputLabel": {
+    "defaultMessage": "Paraula"
+  },
+  "components.defaultSettings.vocabularyPanel.wordInputPlaceholder": {
+    "defaultMessage": "p.ex. Òscar, Marta..."
+  },
+  "components.defaultSettings.vocabularyPanel.addButton": {
+    "defaultMessage": "Afegir"
+  },
+  "components.defaultSettings.vocabularyPanel.emptyList": {
+    "defaultMessage": "Encara no hi ha paraules. Afegeix-ne una per començar."
+  },
+  "components.defaultSettings.vocabularyPanel.previewLabel": {
+    "defaultMessage": "Previsualització"
+  },
+  "components.defaultSettings.vocabularyPanel.duplicateWarning": {
+    "defaultMessage": "Aquesta paraula ja existeix i s'actualitzarà."
+  },
+  "components.defaultSettings.vocabularyPanel.updateButton": {
+    "defaultMessage": "Actualitzar"
+  },
+  "components.defaultSettings.vocabularyPanel.uploadImage": {
+    "defaultMessage": "Pujar imatge"
+  },
+  "components.defaultSettings.vocabularyPanel.removeImage": {
+    "defaultMessage": "Eliminar imatge"
+  },
+  "components.defaultSettings.vocabularyPanel.loginRequired": {
+    "defaultMessage": "Cal iniciar sessió per usar el vocabulari personal."
+  },
+  "components.defaultSettings.vocabularyPanel.freeLimitReached": {
+    "defaultMessage": "Has arribat al límit de {max} paraules del pla gratuït."
   },
   "components.logoMenu.download": {
     "defaultMessage": "Descarregar"

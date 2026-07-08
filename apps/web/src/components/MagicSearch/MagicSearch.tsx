@@ -1,4 +1,4 @@
-import { ButtonBase, InputAdornment, TextField } from "@mui/material";
+import { Autocomplete, ButtonBase, InputAdornment, TextField } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useIntl } from "react-intl";
@@ -21,6 +21,9 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
   const intl = useIntl();
   const { app: appLang, search: searchLang } = useAppSelector(
     (state) => state.ui.lang,
+  );
+  const personalKeywords = useAppSelector((state) =>
+    state.ui.wordProfiles.map((p) => p.word),
   );
   const { getSearchPictogram } = useSearchPictogram();
   const { showProgress, updateProgress, hideProgress, showSnackbar } =
@@ -118,34 +121,44 @@ const MagicSearch = ({ info }: MagicSearchProps): React.ReactElement => {
 
   return (
     <form onSubmit={SubmitMagicEngine} style={{ flexGrow: 1, width: "100%" }}>
-      <TextField
-        label={`${intl.formatMessage({ ...messages.field })}${languagesSearchTitle}`}
-        id={"search"}
-        variant="outlined"
-        helperText={
-          info.value
-            ? intl.formatMessage({ ...messages.helperText })
-            : intl.formatMessage({ ...messages.sample })
-        }
-        autoComplete={"off"}
-        size="small"
-        value={phrase}
-        onChange={handleChange}
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment
-                position="end"
-                component={ButtonBase}
-                onClick={SubmitMagicEngine}
-                aria-label={intl.formatMessage({ ...messages.button })}
-              >
-                <AiOutlineSearch fontSize={"large"} />
-              </InputAdornment>
-            ),
-          },
+      <Autocomplete
+        freeSolo
+        options={personalKeywords}
+        inputValue={phrase}
+        onInputChange={(_, value) => setPhrase(value)}
+        onChange={(_, value) => {
+          if (value) setPhrase(value);
         }}
         sx={{ width: "100%" }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={`${intl.formatMessage({ ...messages.field })}${languagesSearchTitle}`}
+            id="search"
+            variant="outlined"
+            helperText={
+              info.value
+                ? intl.formatMessage({ ...messages.helperText })
+                : intl.formatMessage({ ...messages.sample })
+            }
+            size="small"
+            slotProps={{
+              input: {
+                ...params.InputProps,
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    component={ButtonBase}
+                    onClick={SubmitMagicEngine}
+                    aria-label={intl.formatMessage({ ...messages.button })}
+                  >
+                    <AiOutlineSearch fontSize={"large"} />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        )}
       />
     </form>
   );

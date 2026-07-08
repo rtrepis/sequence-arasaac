@@ -19,6 +19,7 @@ import { createFilterOptions } from "@mui/material/Autocomplete";
 import { Hair, Skin } from "@/types/sequence";
 import { fileToBase64 } from "@/utils/imageToBase64";
 import type { RootState } from "../../app/store";
+import usePersonalKeywords from "@features/word-profile/hooks/usePersonalKeywords";
 
 // Input visualment ocult però accessible per a lectors de pantalla (diferent de hidden)
 const VisuallyHiddenInput = styled("input")({
@@ -33,10 +34,19 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-const filterOptions = createFilterOptions<string>({
+const baseFilterOptions = createFilterOptions<string>({
   matchFrom: "start",
   limit: 100,
 });
+
+// No mostra opcions fins que l'usuari hagi escrit >= 3 caràcters
+const filterOptions = (
+  options: string[],
+  state: { inputValue: string },
+): string[] => {
+  if (state.inputValue.length < 3) return [];
+  return baseFilterOptions(options, state);
+};
 
 interface PropsPictogramSearch {
   indexPict: number;
@@ -68,7 +78,7 @@ const PictogramSearch = ({
     settings: { skin, hair },
     searched: { word, bestIdPicts },
   } = useAppSelector(getActiveSAACPictImg);
-  const { keywords } = useAppSelector((state) => state.ui.lang);
+  const keywords = usePersonalKeywords();
 
   const intl = useIntl();
   const { getSearchPictogram, getSettingsPictId } = useSearchPictogram();
@@ -78,19 +88,12 @@ const PictogramSearch = ({
     word === `${intl.formatMessage({ ...messages.empty })}` ? "" : word;
   const [newWord, setNewWord] = useState(initialWord);
 
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (value.length >= 3) setIsAutoComplete(true);
-    if (value.length < 3) setIsAutoComplete(false);
-  };
-
   const handleChangeAutocomplete = (
     event: React.SyntheticEvent,
     value: string | null,
   ) => {
     if (value !== null) {
       setNewWord(value);
-      setIsAutoComplete(false);
       handleSubmit(event, value);
     }
   };
@@ -122,7 +125,6 @@ const PictogramSearch = ({
   };
 
   const [isPlus, setIsPlus] = useState(false);
-  const [isAutoComplete, setIsAutoComplete] = useState(false);
 
   const handelPlusAction = async (plus: boolean) => {
     await getSearchPictogram(newWord, indexPict, true, plus);
@@ -167,13 +169,11 @@ const PictogramSearch = ({
         options={keywords}
         filterOptions={filterOptions}
         onChange={handleChangeAutocomplete}
-        open={isAutoComplete}
         sx={{ width: "100%" }}
         renderInput={(params) => (
           <TextField
             {...params}
             label={intl.formatMessage({ ...messages.search })}
-            onChange={handleChangeInput}
             helperText={intl.formatMessage({ ...messages.helperText })}
           />
         )}
