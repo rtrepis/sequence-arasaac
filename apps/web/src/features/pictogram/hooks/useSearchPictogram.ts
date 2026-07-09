@@ -6,12 +6,10 @@ import {
   settingsPictApiAraActionCreator,
   addPictogramActionCreator,
 } from "@features/sequence/store/documentSlice";
-import { updateKeywordsActionCreator } from "@features/user-settings/store/uiSlice";
 import { Ai, PictApiAraForEdit, PictSequence } from "../../../types/sequence";
 import {
   searchPictogramByWord,
   fetchPictogramData,
-  fetchKeywordsForLocale,
   extractPictSettings,
 } from "../api/arasaacClient";
 
@@ -156,23 +154,9 @@ const useSearchPictogram = () => {
     [locale, dispatch, defaultSettingsPictApiAra],
   );
 
-  // Carrega les paraules clau disponibles per a l'idioma de cerca.
-  const getAllKeyWordsForLanguages = useCallback(
-    async (value?: string) => {
-      try {
-        const words = await fetchKeywordsForLocale(value ?? locale);
-        dispatch(updateKeywordsActionCreator(words));
-      } catch {
-        console.info("failed fetch keywords ");
-      }
-    },
-    [dispatch, locale],
-  );
-
   return {
     getSearchPictogram,
     getSettingsPictId,
-    getAllKeyWordsForLanguages,
   };
 };
 

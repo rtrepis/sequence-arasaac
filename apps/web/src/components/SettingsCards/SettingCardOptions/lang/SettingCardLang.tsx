@@ -17,7 +17,6 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { langTranslateApp, langTranslateSearch } from "../../../../configs/languagesConfigs";
 import { updateLangSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { LangsApp } from "../../../../types/ui";
-import useSearchPictogram from "../../../../features/pictogram/hooks/useSearchPictogram";
 
 interface SettingCardProps {
   setting: "languagesApp" | "languagesSearch";
@@ -29,7 +28,6 @@ const SettingCardLang = ({ setting, sx }: SettingCardProps): React.ReactElement 
     (store) => store.ui.lang,
   );
   const dispatch = useAppDispatch();
-  const { getAllKeyWordsForLanguages } = useSearchPictogram();
 
   const [lang, setLang] = useState(setting === "languagesApp" ? appLang : searchLang);
 
@@ -42,8 +40,6 @@ const SettingCardLang = ({ setting, sx }: SettingCardProps): React.ReactElement 
       search: setting === "languagesSearch" ? value : searchLang,
       keywords: setting === "languagesSearch" ? [] : keywords,
     }));
-
-    getAllKeyWordsForLanguages(value);
   };
 
   return (
