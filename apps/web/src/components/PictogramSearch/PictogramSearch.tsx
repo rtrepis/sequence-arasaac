@@ -34,19 +34,10 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-const baseFilterOptions = createFilterOptions<string>({
+const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
   limit: 100,
 });
-
-// No mostra opcions fins que l'usuari hagi escrit >= 3 caràcters
-const filterOptions = (
-  options: string[],
-  state: { inputValue: string },
-): string[] => {
-  if (state.inputValue.length < 3) return [];
-  return baseFilterOptions(options, state);
-};
 
 interface PropsPictogramSearch {
   indexPict: number;
@@ -87,6 +78,18 @@ const PictogramSearch = ({
   const initialWord =
     word === `${intl.formatMessage({ ...messages.empty })}` ? "" : word;
   const [newWord, setNewWord] = useState(initialWord);
+  const [inputValue, setInputValue] = useState(initialWord);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleInputChange = (
+    _: React.SyntheticEvent,
+    value: string,
+    reason: string,
+  ) => {
+    setInputValue(value);
+    // Obre només quan l'usuari escriu >= 3 caràcters; tanca en qualsevol altre cas
+    setIsOpen(reason === "input" && value.length >= 3);
+  };
 
   const handleChangeAutocomplete = (
     event: React.SyntheticEvent,
@@ -94,6 +97,7 @@ const PictogramSearch = ({
   ) => {
     if (value !== null) {
       setNewWord(value);
+      setIsOpen(false);
       handleSubmit(event, value);
     }
   };
@@ -166,6 +170,10 @@ const PictogramSearch = ({
   return (
     <Stack flex={1} sx={{ width: "-webkit-fill-available" }}>
       <Autocomplete
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        inputValue={inputValue}
+        onInputChange={handleInputChange}
         options={keywords}
         filterOptions={filterOptions}
         onChange={handleChangeAutocomplete}

@@ -36,18 +36,10 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-const baseFilterOptions = createFilterOptions<string>({
+const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
   limit: 100,
 });
-
-const filterOptions = (
-  options: string[],
-  state: { inputValue: string },
-): string[] => {
-  if (state.inputValue.length < 3) return [];
-  return baseFilterOptions(options, state);
-};
 
 export interface PictogramSearchLocalResult {
   selectedId: number;
@@ -75,9 +67,20 @@ const PictogramSearchLocal = ({
   );
 
   const [newWord, setNewWord] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [bestIdPicts, setBestIdPicts] = useState<number[]>([]);
   const [isPlus, setIsPlus] = useState(false);
   const [isAlert, setIsAlert] = useState(false);
+
+  const handleInputChange = (
+    _: React.SyntheticEvent,
+    value: string,
+    reason: string,
+  ) => {
+    setInputValue(value);
+    setIsOpen(reason === "input" && value.length >= 3);
+  };
 
   const doSearch = async (word: string, extended: boolean) => {
     try {
@@ -126,6 +129,7 @@ const PictogramSearchLocal = ({
   ) => {
     if (value !== null) {
       setNewWord(value);
+      setIsOpen(false);
       handleSubmit(event, value);
     }
   };
@@ -149,6 +153,10 @@ const PictogramSearchLocal = ({
   return (
     <Stack sx={{ width: "100%" }}>
       <Autocomplete
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        inputValue={inputValue}
+        onInputChange={handleInputChange}
         options={keywords}
         filterOptions={filterOptions}
         onChange={handleChangeAutocomplete}
