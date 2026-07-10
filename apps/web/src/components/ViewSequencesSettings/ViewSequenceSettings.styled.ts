@@ -4,7 +4,7 @@ export const tab: SxProps = {
   display: "flex",
   width: 100,
   height: 40,
-  backgroundColor: "green",
+  backgroundColor: "primary.main",
   borderTopLeftRadius: 20,
   borderTopRightRadius: 20,
   textAlign: "center",

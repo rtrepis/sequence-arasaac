@@ -6,6 +6,14 @@
 - Totes les components han de ser funcionals (no classes)
 - Sempre usar arrow functions
 
+## Estàndard de colors
+
+- El **verd oficial** de l'app és el `primary` del tema MUI (`apps/web/src/style/themeMui.ts`): `main: #8ac34a`, `light: #adf25e`, `dark: #496628`. És el verd de la NavBar.
+- **Mai hardcodejar verds** (`"green"`, hex, rgba...) a components o styled: usar sempre `theme.palette.primary.*` (a `styled` amb `({ theme }) => ...`) o strings de tema a `sx` (`"primary.main"`).
+- Per a tints/transparències derivar del tema amb `alpha(theme.palette.primary.main, x)` de `@mui/material`.
+- Els botons i controls (Button, ToggleButton, etc.) es basen en `color="primary"` (el default del tema), no en colors propis.
+- **Excepció**: els colors semàntics de pictogrames (`fitzgeraldColors.ts`, `inputColorList.ts`) són contingut, no UI — no s'han de tocar.
+
 ---
 
 ## Descripció del projecte

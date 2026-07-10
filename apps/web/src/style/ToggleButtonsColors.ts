@@ -1,6 +1,6 @@
-import { styled, ToggleButtonGroup } from "@mui/material";
+import { alpha, styled, ToggleButtonGroup } from "@mui/material";
 
-const ToggleButtonColor = styled(ToggleButtonGroup)(() => ({
+const ToggleButtonColor = styled(ToggleButtonGroup)(({ theme }) => ({
   display: "flex",
   flexWrap: "wrap",
   scale: "revert-layer",
@@ -26,20 +26,20 @@ const ToggleButtonColor = styled(ToggleButtonGroup)(() => ({
     },
     "&:hover": {
       border: `1.75px solid`,
-      borderColor: "green",
+      borderColor: theme.palette.primary.main,
       borderRadius: 20,
       boxShadow: "0px 0px 10px 1px #A6A6A6",
       opacity: 1,
     },
   },
   "& .Mui-selected": {
-    backgroundColor: "rgba(50,150,50,0.2)",
+    backgroundColor: alpha(theme.palette.primary.main, 0.2),
     opacity: 1,
-    border: `1.75px solid green`,
+    border: `1.75px solid ${theme.palette.primary.main}`,
     borderRadius: `20px`,
     boxShadow: "0px 0px 10px 1px #A6A6A6",
     "&:not(:first-of-type)": {
-      borderLeft: `1.75px solid green`,
+      borderLeft: `1.75px solid ${theme.palette.primary.main}`,
     },
   },
 }));

@@ -6,6 +6,8 @@ export const buildTheme = (mode: "light" | "dark"): Theme =>
   createTheme({
     palette: {
       mode,
+      // Verd oficial de l'app (el de la NavBar). Cap component ha de
+      // hardcodejar verds: sempre theme.palette.primary.*
       primary: {
         light: "#adf25e",
         main: "#8ac34a",
@@ -25,14 +27,10 @@ export const buildTheme = (mode: "light" | "dark"): Theme =>
     },
     components: {
       MuiAppBar: {
+        // La NavBar mostra el verd oficial (primary) també en mode fosc
+        defaultProps: { enableColorOnDark: true },
         styleOverrides: {
-          root: ({ theme }) => ({
-            minHeight: "50px",
-            ...(theme.palette.mode === "dark" && {
-              backgroundColor: theme.palette.primary.dark,
-              backgroundImage: "none",
-            }),
-          }),
+          root: { minHeight: "50px" },
         },
       },
       MuiToolbar: { styleOverrides: { root: { minHeight: "50px" } } },

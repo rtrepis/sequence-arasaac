@@ -379,7 +379,7 @@ const ViewSequencesSettings = ({
               height: displayHeight,
               minWidth: 0,
               overflow: "hidden",
-              outline: "2px solid green",
+              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
               marginBottom: 1,
               "@media print": { marginBottom: 0, outline: "none" },
               position: { xs: "sticky", md: "static" },
