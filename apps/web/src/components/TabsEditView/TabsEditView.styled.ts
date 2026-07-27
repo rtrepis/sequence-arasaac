@@ -1,21 +1,24 @@
+import { alpha } from "@mui/material";
 import { SxProps, Theme } from "@mui/system";
 
+// Tabs sobre la NavBar verda: tots els colors deriven de primary.contrastText
 export const tabsStyled: SxProps<Theme> = {
   "& .MuiTabs-indicator": {
     bottom: "8px", // Pujar la línia
     height: "4px", // Gruix de la línia
     borderRadius: "2px", // Fer els extrems arrodonits
-    backgroundColor: "whitesmoke", // Indicador en whitesmoke
+    backgroundColor: "primary.contrastText",
   },
   "& .MuiTab-root": {
     paddingBottom: "8px", // Ajustar el padding del text dels tabs
-    color: "grey", // Color del text dels tabs no seleccionats
+    // Tabs no seleccionats: atenuats però llegibles sobre el verd
+    color: (theme: Theme) => alpha(theme.palette.primary.contrastText, 0.65),
     textTransform: "none",
     "&.Mui-selected": {
-      color: "whitesmoke", // Color del text del tab seleccionat
+      color: "primary.contrastText",
     },
     "&:hover": {
-      color: "#d3d3d3", // Color del text en passar el cursor
+      color: (theme: Theme) => alpha(theme.palette.primary.contrastText, 0.85),
     },
   },
 };

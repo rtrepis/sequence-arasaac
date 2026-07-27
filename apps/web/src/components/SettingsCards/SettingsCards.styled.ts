@@ -5,7 +5,7 @@ export const card: SxProps = {
   marginBlockStart: 1,
   paddingBlockEnd: 1,
   borderBottom: 4,
-  borderBottomColor: "secondary.light",
+  borderBottomColor: "divider",
   borderRadius: 1,
 };
 

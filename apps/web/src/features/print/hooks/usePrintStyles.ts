@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { PageFormat, CSS_PRINT_DPI } from "@/types/PageFormat";
+import { printColors } from "@/style/palette";
 
 /**
  * Genera el CSS d'impressió per al pageFormat donat.
@@ -34,6 +35,21 @@ export function generatePrintCSS(pageFormat: PageFormat): string {
 
       .preview-container > div {
         transform: none !important;
+      }
+
+      /* La impressió sempre és sobre paper blanc, independentment del tema
+         (clar o fosc). El color de text s'hereta: els pictogrames restauren
+         el seu color real amb les seves pròpies regles @media print. */
+      body,
+      .preview-container,
+      .preview-content,
+      .preview-container .MuiPaper-root {
+        background-color: ${printColors.background} !important;
+      }
+
+      .preview-container,
+      .preview-content {
+        color: ${printColors.text};
       }
 
       .controls,

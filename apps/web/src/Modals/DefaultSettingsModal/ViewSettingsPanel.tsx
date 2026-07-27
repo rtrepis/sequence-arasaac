@@ -19,6 +19,7 @@ import {
   MdVerticalAlignTop,
   MdVerticalAlignCenter,
   MdVerticalAlignBottom,
+  MdSettingsBackupRestore,
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
@@ -279,6 +280,7 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
                 <Button
                   variant="text"
                   color="inherit"
+                  endIcon={<MdSettingsBackupRestore />}
                   onClick={handleResetToDefaults}
                   sx={{ alignSelf: "flex-start" }}
                 >

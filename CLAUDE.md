@@ -8,11 +8,29 @@
 
 ## Estàndard de colors
 
-- El **verd oficial** de l'app és el `primary` del tema MUI (`apps/web/src/style/themeMui.ts`): `main: #8ac34a`, `light: #adf25e`, `dark: #496628`. És el verd de la NavBar.
-- **Mai hardcodejar verds** (`"green"`, hex, rgba...) a components o styled: usar sempre `theme.palette.primary.*` (a `styled` amb `({ theme }) => ...`) o strings de tema a `sx` (`"primary.main"`).
-- Per a tints/transparències derivar del tema amb `alpha(theme.palette.primary.main, x)` de `@mui/material`.
-- Els botons i controls (Button, ToggleButton, etc.) es basen en `color="primary"` (el default del tema), no en colors propis.
+- **Única font de veritat**: `apps/web/src/style/palette.ts` (importat per `themeMui.ts`). Mai definir hexadecimals fora d'aquest fitxer.
+- El **verd oficial** de l'app és `primary.main: #8ac34a` (el de la NavBar, en clar i en fosc via `enableColorOnDark`).
+- **Text/icones sobre verd**: sempre `primary.contrastText` (`#1E2A12`, fosc — contrast 7,2:1 WCAG AA). Mai blanc ni grisos clars sobre el verd (màxim 2,1:1, il·legible).
+- El `secondary` són grisos amb matís verd (`main: #E3E8DC`) amb text fosc — mateixa lògica que el primary.
+- **Mai hardcodejar colors** (`"green"`, `"whitesmoke"`, hex, rgba...) a components o styled: usar `theme.palette.*` (a `styled` amb `({ theme }) => ...`) o strings de tema a `sx` (`"primary.main"`, `"primary.contrastText"`).
+- Per a tints/transparències derivar del tema amb `alpha(theme.palette..., x)` de `@mui/material`.
+- Els botons i controls (Button, ToggleButton, etc.) es basen en `color="primary"` (el default del tema); dins la NavBar, `color="inherit"`.
 - **Excepció**: els colors semàntics de pictogrames (`fitzgeraldColors.ts`, `inputColorList.ts`) són contingut, no UI — no s'han de tocar.
+
+### Patró de zones (fons)
+
+- **`background.default` = zona de treball** (on es veuen/editen pictogrames i seqüències): blanc en clar, negre en fosc. Neutre pur per no alterar els colors dels pictogrames.
+- **`background.paper` = zona de configuració** (diàlegs, panells, acordions, controls): gris verdós (`#F2F5EC` clar / `#242820` fosc).
+- Valors definits a `appBackgrounds` de `palette.ts`. L'overlay d'elevació de MUI està desactivat (`MuiPaper: backgroundImage: none`) perquè el gris de config sigui uniforme.
+- Un preview de pictogrames dins d'una pantalla de config és zona de treball: `backgroundColor: "background.default"` (vegeu `PictEditForm`, `ViewSettingsPreview`). **Excepció**: la mostra de `DefaultForm` és un sol Card sobre el panell — un fons default aquí es veuria com un marc negre/blanc, per això usa `background.paper`.
+- Al modal d'edició de pictograma (`PictEditForm`), tota la part superior (mostra + cerca) és zona de treball; només el `SettingAccordion` de sota és zona de configuració.
+
+### Impressió i PDF
+
+- **La sortida impresa i el PDF sempre són en clar** (paper blanc, text fosc), independentment del tema actiu. Tokens a `printColors` de `palette.ts`.
+- Impressió (`window.print`): `generatePrintCSS` a `usePrintStyles.ts` força fons blanc a `.preview-container`, `.preview-content` i els `MuiPaper` interiors; el color de text s'hereta fosc. Els pictogrames restauren el color real triat per l'usuari amb regles `@media print` pròpies (`PictogramCard`).
+- PDF (`useDownloadPdf.ts`): al clon de html2canvas es normalitzen els colors de tema amb `themeColorReplacements` (fons d'`appBackgrounds` → blanc, text blanc → negre). Els colors de contingut de l'usuari (font, vores, fitzgerald) no es toquen.
+- El pictograma **sense color** (B/N) es mostra invertit en mode fosc (`filter: invert(1)` a `pictogram__media`, mai per a imatges personalitzades); la inversió es neutralitza amb `filter: none` a `@media print` i al `safetyStyle` del PDF perquè paper i PDF surtin sempre amb traç negre.
 
 ---
 

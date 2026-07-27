@@ -39,6 +39,7 @@ export const pictogram__media = (
   view: unknown,
   pictSize: number,
   printPageRatio: number,
+  invertForDark = false,
 ) => {
   const sx: SxProps = {
     marginTop: `${view === "complete" ? 0 : 2 * pictSize * printPageRatio}`,
@@ -48,8 +49,12 @@ export const pictogram__media = (
     borderRadius: `${
       borderIn ? borderIn.radius * pictSize * printPageRatio : 20
     }px`,
+    // En mode fosc, el pictograma sense color (traç negre) s'inverteix per veure's blanc
+    filter: invertForDark ? "invert(1)" : "none",
 
     "@media print": {
+      // La impressió sempre és en clar: es restaura el traç negre original
+      filter: "none",
       marginTop: `${view === "complete" ? 0 : 2 * pictSize}`,
       border: `${borderIn.size * pictSize}px solid`,
       borderColor: borderIn.color,

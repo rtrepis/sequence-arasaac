@@ -17,6 +17,7 @@ import messages from "./DefaultForm.lang";
 import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup";
 import { messages as fontGroupMessages } from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup.lang";
 import React, { Dispatch, SetStateAction } from "react";
+import { MdSettingsBackupRestore } from "react-icons/md";
 
 interface DefaultFormProps {
   font: Font;
@@ -131,6 +132,10 @@ const DefaultForm = ({
             top: { xs: 0, md: "auto" },
             zIndex: { xs: 10, md: "auto" },
             width: { xs: "100%", md: "auto" },
+            // Fons paper (config): el Card de la mostra ja porta el seu propi fons,
+            // un fons default aquí només es veuria com un marc negre/blanc
+            backgroundColor: "background.paper",
+            padding: 1,
           }}
         >
           <PictogramCard
@@ -198,7 +203,12 @@ const DefaultForm = ({
           {onReset && (
             <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
               <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
-                <Button variant="text" color="inherit" onClick={onReset}>
+                <Button
+                  variant="text"
+                  color="inherit"
+                  endIcon={<MdSettingsBackupRestore />}
+                  onClick={onReset}
+                >
                   <FormattedMessage {...messages.reset} />
                 </Button>
               </Tooltip>

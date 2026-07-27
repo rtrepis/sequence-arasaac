@@ -4,7 +4,7 @@ const ToggleButtonColor = styled(ToggleButtonGroup)(({ theme }) => ({
   display: "flex",
   flexWrap: "wrap",
   scale: "revert-layer",
-  background: "whitesmoke",
+  background: theme.palette.background.paper,
   width: "150px",
   margin: 1.5,
 

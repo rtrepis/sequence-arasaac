@@ -66,6 +66,13 @@ const PictogramCard = ({
   const numberFont =
     pictNumberFont ?? defaults.numberFont ?? defaults.font;
 
+  // Imatge personalitzada de l'usuari (les URLs blob són temporals i s'ignoren)
+  const customImageUrl = url && !url.startsWith("blob:") ? url : undefined;
+
+  // En mode fosc, el pictograma sense color es mostra invertit (traç blanc);
+  // mai per a imatges personalitzades de l'usuari
+  const invertForDark = isDark && color === false && !customImageUrl;
+
   const textFontSize = 20 * font.size * printPageRatio * pictSize;
   const numberFontSize = 20 * numberFont.size * printPageRatio * pictSize;
   const displayFontColor = getDisplayColor(font.color, isDark);
@@ -119,16 +126,13 @@ const PictogramCard = ({
       <CardContent sx={{ padding: 0, position: "relative" }}>
         <CardMedia
           component="img"
-          image={
-            // Ignorem URLs blob (temporals) perquè no són vàlides després de recarregar
-            url && !url.startsWith("blob:")
-              ? url
-              : buildPictogramUrl(selectedId, skin, hair, color)
-          }
+          image={customImageUrl ?? buildPictogramUrl(selectedId, skin, hair, color)}
           height={150 * pictSize * printPageRatio}
           width={150 * pictSize * printPageRatio}
           alt={intl.formatMessage({ ...messages.pictogram })}
-          sx={() => pictogram__media(borderIn, view, pictSize, printPageRatio)}
+          sx={() =>
+            pictogram__media(borderIn, view, pictSize, printPageRatio, invertForDark)
+          }
         />
         {cross && (
           <Box

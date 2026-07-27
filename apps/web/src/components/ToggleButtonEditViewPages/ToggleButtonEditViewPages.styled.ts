@@ -1,5 +1,7 @@
+import { alpha } from "@mui/material";
 import { SxProps, Theme } from "@mui/system";
 
+// Toggle de pàgines sobre la NavBar verda: colors derivats de primary.contrastText
 export const toggleButtonGroupStyles: SxProps<Theme> = {
   "& .MuiToggleButton-root": {
     border: "none", // Elimina tots els bordes
@@ -10,24 +12,31 @@ export const toggleButtonGroupStyles: SxProps<Theme> = {
     borderBottomLeftRadius: "0px",
     borderBottomRightRadius: "0px",
     fontSize: "0.8rem",
+    // Botons no seleccionats: atenuats però llegibles sobre el verd
+    color: (theme: Theme) => alpha(theme.palette.primary.contrastText, 0.65),
     transition:
       "background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease", // Transició suau per a fons, color i bordes
   },
   "& .MuiToggleButton-root:not(.Mui-selected):hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.1)", // Fons blanc gairebé transparent en hover
-    borderBottom: "1px solid whitesmoke", // Borde inferior per al hover
-    color: "whitesmoke", // Color de text en hover
+    backgroundColor: (theme: Theme) =>
+      alpha(theme.palette.primary.contrastText, 0.08), // Fons subtil en hover
+    borderBottom: (theme: Theme) =>
+      `1px solid ${theme.palette.primary.contrastText}`, // Borde inferior per al hover
+    color: "primary.contrastText", // Color de text en hover
   },
   "& .Mui-selected": {
-    borderBottom: "3px solid whitesmoke", // Col·loca un borde inferior quan està seleccionat
+    borderBottom: (theme: Theme) =>
+      `3px solid ${theme.palette.primary.contrastText}`, // Borde inferior quan està seleccionat
     backgroundColor: "transparent", // Fons transparent quan seleccionat
-    color: "whitesmoke", // Text blanc quan seleccionat
+    color: "primary.contrastText", // Text quan seleccionat
     fontSize: "1.1rem", // Mida de lletra més gran per seleccionats
   },
   "& .Mui-selected:hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.1)", // Fons blanc gairebé transparent en hover també quan està seleccionat
-    borderBottom: "3px solid whitesmoke", // Borde inferior seleccionat
-    color: "whitesmoke", // Text seleccionat
+    backgroundColor: (theme: Theme) =>
+      alpha(theme.palette.primary.contrastText, 0.08), // Fons subtil en hover també quan està seleccionat
+    borderBottom: (theme: Theme) =>
+      `3px solid ${theme.palette.primary.contrastText}`, // Borde inferior seleccionat
+    color: "primary.contrastText", // Text seleccionat
   },
 };
 

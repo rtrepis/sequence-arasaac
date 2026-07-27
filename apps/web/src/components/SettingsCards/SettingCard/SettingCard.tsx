@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { Stack, ToggleButton, Typography } from "@mui/material";
+import { Box, Stack, ToggleButton, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import { settingsCardLang } from "./SettingCard.lang";
@@ -62,13 +62,22 @@ const SettingCard = ({
             selected={state === key}
             onClick={() => handleSelected(key)}
           >
-            <img
+            <Box
+              component="img"
               src={`../img/settings/${setting}/${key}.png`}
               alt={`${intl.formatMessage({
                 ...settingCard.message,
               })} ${intl.formatMessage(value.message)}`}
               width={40}
               height={40}
+              sx={(theme) => ({
+                // En mode fosc invertim el negre de la icona a blanc mantenint el vermell;
+                // només per a textPosition (skin i hair són contingut, no UI)
+                filter:
+                  theme.palette.mode === "dark" && setting === "textPosition"
+                    ? "invert(1) hue-rotate(180deg)"
+                    : "none",
+              })}
             />
           </ToggleButton>
         ))}

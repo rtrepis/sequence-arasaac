@@ -89,7 +89,7 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
                   component="h1"
                   fontWeight={800}
                   sx={{
-                    display: { xs: "none", sm: "block", color: "whitesmoke" },
+                    display: { xs: "none", sm: "block" },
                     lineHeight: 0,
                   }}
                 >

@@ -83,15 +83,18 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
         elevation={1}
       >
         <Toolbar style={{ minHeight: "50px" }} sx={{ minHeight: "50px" }}>
-          <Typography sx={{ ml: 2, mr: 3 }} variant="h6" component="div">
+          <Typography
+            sx={{ ml: 2, mr: 3 }}
+            variant="h6"
+            component="div"
+            fontWeight={800}
+          >
             <FormattedMessage {...messages.settings} />
           </Typography>
 
           <Tabs
             value={activeTab}
             onChange={handleTabChange}
-            textColor="secondary"
-            indicatorColor="secondary"
             sx={{ ...tabsStyled, flex: 1 }}
           >
             <Tab
@@ -138,7 +141,7 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
 
           <IconButton
             edge="end"
-            color="secondary"
+            color="inherit"
             onClick={handleClose}
             aria-label={intl.formatMessage({ ...messages.close })}
           >

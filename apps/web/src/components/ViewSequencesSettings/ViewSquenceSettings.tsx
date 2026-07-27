@@ -18,7 +18,7 @@ import { useFullscreen } from "@features/print/hooks/useFullScreen";
 import { useViewManager, useAuthorManager } from "@features/print/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { usePrintStyles, printWithOrientation } from "@features/print/hooks/usePrintStyles";
-import { useDownloadPdf } from "@/hooks/useDownloadPdf";
+import { useDownloadPdf } from "@features/print/hooks/useDownloadPdf";
 import { getCurrentDPI } from "@/features/print-refactor/utils/dpiManager";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import { SequenceViewSettings, SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
@@ -385,7 +385,7 @@ const ViewSequencesSettings = ({
               position: { xs: "sticky", md: "static" },
               top: { xs: 0 },
               zIndex: { xs: 10, md: "auto" },
-              backgroundColor: "background.paper",
+              backgroundColor: "background.default",
             }}
           >
             {/* Contenidor interior: dimensions reals amb transform per visualització */}
@@ -450,6 +450,13 @@ const ViewSequencesSettings = ({
                 width={{ xs: "100%", md: "auto" }}
                 flexShrink={0}
                 spacing={1}
+                sx={{
+                  // Zona de configuració: fons paper a tota la columna de controls
+                  backgroundColor: "background.paper",
+                  borderRadius: 2,
+                  padding: 1.5,
+                  height: { md: "100%" },
+                }}
               >
                 <GlobalViewControls
                   viewSettings={viewSettings}

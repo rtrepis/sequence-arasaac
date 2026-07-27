@@ -137,7 +137,7 @@
     "description": "Save settings to local file"
   },
   "components.defaultSettings.pictGuide": {
-    "defaultMessage": "Pictogramme guide",
+    "defaultMessage": "Aperçu",
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.settings.title": {

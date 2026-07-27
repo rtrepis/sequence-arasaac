@@ -60,6 +60,10 @@ const PictEditForm = ({
   const [search, setSearch] = useState(initialSearch);
   const { fitzgerald, selectedId, url } = search;
 
+  // El pictograma admet configuració de color quan la propietat existeix.
+  // `false` és un valor vàlid (pictograma en blanc i negre), no absència.
+  const isColorizable = search.color !== undefined;
+
   const [cross, setCross] = useState(pictogram.cross);
 
   const initialColor = pictogram.img.settings.color ?? defaultColor;
@@ -146,32 +150,49 @@ const PictEditForm = ({
       gap={{ xs: 3, sm: 2 }}
       sx={{ minHeight: 0 }}
     >
+      {/* Zona de treball: mostra del pictograma + cerca, amb fons default
+          (negre en fosc). El collapse de sota és zona de configuració (paper). */}
       <Box
+        gridColumn={{ xs: "1", md: "1 / -1" }}
+        display="grid"
+        gridTemplateColumns={{ xs: "1fr", md: "0.5fr 1.5fr" }}
+        gap={{ xs: 3, sm: 2 }}
         sx={{
-          alignSelf: "start",
-          justifyItems: "center",
-          width: { xs: "100%", md: "auto" },
-          position: "sticky",
-          top: 0,
-          zIndex: 5,
-          backgroundColor: "background.paper",
-          paddingBlock: { xs: 1 },
+          minHeight: 0,
+          backgroundColor: "background.default",
+          borderRadius: 2,
+          padding: 1,
         }}
       >
-        <PictogramCard
-          pictogram={pictogramGuide}
-          defaults={defaults}
-          variant="plane"
-          view="complete"
-          size={{ scale: 0.8 }}
-        />
-      </Box>
-      <Box paddingBlock={1} sx={{ minHeight: 0 }}>
-        <PictogramSearch
-          indexPict={pictogram.indexSequence}
-          state={search}
-          setState={setSearch}
-        />
+        <Box
+          sx={{
+            alignSelf: "start",
+            justifyItems: "center",
+            width: { xs: "100%", md: "auto" },
+            position: "sticky",
+            top: 0,
+            zIndex: 5,
+            // Fons opac perquè els resultats de cerca no es vegin per sota en fer scroll
+            backgroundColor: "background.default",
+            borderRadius: 2,
+            paddingBlock: { xs: 1 },
+          }}
+        >
+          <PictogramCard
+            pictogram={pictogramGuide}
+            defaults={defaults}
+            variant="plane"
+            view="complete"
+            size={{ scale: 0.8 }}
+          />
+        </Box>
+        <Box paddingBlock={1} sx={{ minHeight: 0 }}>
+          <PictogramSearch
+            indexPict={pictogram.indexSequence}
+            state={search}
+            setState={setSearch}
+          />
+        </Box>
       </Box>
 
       <Box gridColumn={{ xs: "1", md: "1 / -1" }} sx={{ minHeight: 0 }}>
@@ -187,7 +208,7 @@ const PictEditForm = ({
               />
             </li>
 
-            {search.color && pictogram.settings.textPosition && (
+            {isColorizable && pictogram.settings.textPosition && (
               <li>
                 <SettingCard
                   setting="textPosition"
@@ -205,7 +226,7 @@ const PictEditForm = ({
               rowGap={2}
               columnGap={2}
             >
-              {!search.color && pictogram.settings.textPosition && (
+              {!isColorizable && pictogram.settings.textPosition && (
                 <li>
                   <SettingCard
                     setting="textPosition"
@@ -215,7 +236,7 @@ const PictEditForm = ({
                 </li>
               )}
 
-              {search.color && (
+              {isColorizable && (
                 <>
                   <li>
                     <SettingCardBoolean
@@ -234,12 +255,12 @@ const PictEditForm = ({
                 </>
               )}
             </Stack>
-            {search.color && search.skin && (
+            {isColorizable && search.skin && (
               <li>
                 <SettingCard setting="skin" state={skin} setState={setSkin} />
               </li>
             )}
-            {search.color && search.hair && (
+            {isColorizable && search.hair && (
               <li>
                 <SettingCard setting="hair" state={hair} setState={setHair} />
               </li>

@@ -13,8 +13,6 @@ const TabsEditView = () => {
   return (
     <Tabs
       value={value}
-      textColor="secondary"
-      indicatorColor="secondary"
       onChange={(_, value) => setValue(value)}
       sx={tabsStyled}
     >

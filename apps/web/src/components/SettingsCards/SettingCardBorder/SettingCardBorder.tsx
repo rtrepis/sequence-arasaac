@@ -41,16 +41,6 @@ const SettingCardBorder = ({
 
   const [colorSelect, setColorSelect] = useState(color);
 
-  const handlerClickColor = () => {
-    const border: Border = {
-      color: colorSelect,
-      radius: radius === 0 ? 20 : radius,
-      size: size === 0 ? 2 : size,
-    };
-
-    setState(border);
-  };
-
   const handleChangesSize = (event: Event, newValue: number | number[]) => {
     const border: Border = {
       color: color,
@@ -84,6 +74,17 @@ const SettingCardBorder = ({
     setState(newBorder);
   };
 
+  // Propaga el color al pare a l'instant perquè el preview s'actualitzi en seleccionar,
+  // sense esperar el blur del ToggleButton
+  const handleChangeColor: React.Dispatch<React.SetStateAction<string>> = (
+    value,
+  ) => {
+    setColorSelect(value);
+    const newColor = typeof value === "function" ? value(colorSelect) : value;
+    // "input" és el valor transitori mentre s'obre el selector natiu de color
+    if (newColor !== "input") handlerUpdateColor(newColor);
+  };
+
   return (
     <Stack
       display={"felx"}
@@ -115,11 +116,10 @@ const SettingCardBorder = ({
             <ToggleButton
               value={"Selected Color"}
               selected={color !== "fitzgerald" && size > 0}
-              onBlur={handlerClickColor}
             >
               <InputColor
                 color={colorSelect}
-                setColor={setColorSelect}
+                setColor={handleChangeColor}
                 inputBorder={1}
                 inputSize={35}
               />

@@ -225,7 +225,8 @@ const documentSlice = createSlice({
         if (action.payload.hair)
           sequence.forEach((p) => (p.img.settings.hair = action.payload.hair));
 
-        if (action.payload.color)
+        // Comprovació explícita: `color: false` és un valor vàlid (pictograma B/N)
+        if (action.payload.color !== undefined)
           sequence.forEach(
             (p) => (p.img.settings.color = action.payload.color),
           );

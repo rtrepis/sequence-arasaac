@@ -76,7 +76,7 @@ const ViewSettingsPreview = ({ settings }: ViewSettingsPreviewProps): React.Reac
         width: PREVIEW_WIDTH,
         height: previewHeight,
         flexShrink: 0,
-        bgcolor: "background.paper",
+        bgcolor: "background.default",
         border: "1px solid",
         borderColor: "divider",
         borderRadius: 1,
