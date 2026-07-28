@@ -25,7 +25,9 @@ import { SequenceViewSettings, SequenceAlignmentH, SequenceAlignmentV } from "@/
 import {
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
+  DEFAULT_SEQUENCE_VIEW,
 } from "@features/sequence/store/documentSlice";
+import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import { saveUserUiThunk } from "@features/backend/user-settings/store/settingsThunks";
 import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
@@ -69,8 +71,8 @@ const ViewSequencesSettings = ({
   // aquí les substituïm pels valors guardats de l'usuari com a punt de partida.
   const savedSeqDefaults = useRef(initialViewSettings);
   useEffect(() => {
-    const { sizePict, pictSpaceBetween, alignment } = savedSeqDefaults.current;
-    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignment }));
+    const { sizePict, pictSpaceBetween, alignmentH, alignmentV } = savedSeqDefaults.current;
+    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignmentH, alignmentV }));
   }, [dispatch]);
 
   // Estat local: mode aplicar a totes vs individual
@@ -139,6 +141,15 @@ const ViewSequencesSettings = ({
 
   // Determinar l'escala activa
   const activeScale = isInFullscreen ? currentScale : calculatedScale;
+
+  // Alineació de bloc: posiciona tot el conjunt de seqüències dins la pàgina,
+  // sempre a l'eix creuat de `direction` (V si row, H si column). Font única:
+  // la primera seqüència (amb applyAll totes comparteixen el mateix valor)
+  const blockSource = sequenceViewSettings[sequenceKeys[0]] ?? DEFAULT_SEQUENCE_VIEW;
+  const isRowDirection = viewSettings.direction === "row";
+  const blockAlign = isRowDirection
+    ? ALIGN_V[blockSource.alignmentV]
+    : ALIGN_H[blockSource.alignmentH];
 
   /**
    * Handler per expandir/col·lapsar un acordió (només un obert a la vegada)
@@ -402,8 +413,8 @@ const ViewSequencesSettings = ({
                 display={"flex"}
                 direction={viewSettings.direction}
                 flexWrap={"wrap"}
-                alignContent={"start"}
-                alignItems={"start"}
+                alignContent={blockAlign}
+                alignItems={blockAlign}
                 columnGap={
                   viewSettings.direction === "column"
                     ? viewSettings.sequenceSpaceBetween
@@ -492,8 +503,8 @@ const ViewSequencesSettings = ({
       <Stack
         className="displayFullScreen"
         direction={"column"}
-        alignContent={"start"}
-        alignItems={"start"}
+        alignContent={blockAlign}
+        alignItems={blockAlign}
         overflow={"hidden"}
         padding={2}
         display={"none"}

@@ -3,6 +3,7 @@ import { ViewSettings } from "../../types/ui";
 import { createPageFormat } from "../../types/PageFormat";
 import { useAppSelector } from "../../app/hooks";
 import { SettingsPreviewFrame } from "../../components/SettingsLayout";
+import { ALIGN_H, ALIGN_V } from "../../shared/constants/alignmentMaps";
 import React, { useMemo } from "react";
 
 interface ViewSettingsPreviewProps {
@@ -13,12 +14,6 @@ const PREVIEW_WIDTH = 260;
 const PREVIEW_BORDER = 1;
 const SEQUENCES = 3;
 const PICTS_PER_SEQUENCE = 6;
-
-const ALIGNMENT_TO_JUSTIFY: Record<string, string> = {
-  left: "flex-start",
-  center: "center",
-  right: "flex-end",
-};
 
 const ViewSettingsPreview = ({ settings }: ViewSettingsPreviewProps): React.ReactElement => {
   // Mateixa fórmula que PictogramCard.styled.ts: amb vora, la targeta és més ampla
@@ -42,7 +37,10 @@ const ViewSettingsPreview = ({ settings }: ViewSettingsPreviewProps): React.Reac
   // Gap en unitats MUI spacing (×8px), igual que columnGap/rowGap a ViewSequencePage.tsx
   const pictGapMui = settings.pictSpaceBetween * settings.sizePict;
   const isRow = settings.direction === "row";
-  const justifyContent = ALIGNMENT_TO_JUSTIFY[settings.alignment] ?? "flex-start";
+  // Eix principal: alineació per seqüència (H si row, V si column) — ja funcionava
+  const justifyContent = isRow ? ALIGN_H[settings.alignmentH] : ALIGN_V[settings.alignmentV];
+  // Eix creuat: alineació de bloc, aplicada al contenidor exterior (tot el conjunt de seqüències)
+  const blockAlign = isRow ? ALIGN_V[settings.alignmentV] : ALIGN_H[settings.alignmentH];
 
   const sequence = (
     <Box
@@ -92,8 +90,8 @@ const ViewSettingsPreview = ({ settings }: ViewSettingsPreviewProps): React.Reac
           display: "flex",
           flexDirection: settings.direction,
           flexWrap: "wrap",
-          alignContent: "flex-start",
-          alignItems: "flex-start",
+          alignContent: blockAlign,
+          alignItems: blockAlign,
           // Mateixa lògica de gap que ViewSquenceSettings.tsx
           columnGap: isRow ? 0 : settings.sequenceSpaceBetween,
           rowGap: isRow ? settings.sequenceSpaceBetween : 0,

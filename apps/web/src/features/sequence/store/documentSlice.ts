@@ -30,7 +30,7 @@ const getUniqueId = () => {
   return uniqueId;
 };
 
-const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
+export const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
   sizePict: SEQ_VIEW_DEFAULT_SIZE_PICT,
   pictSpaceBetween: SEQ_VIEW_DEFAULT_PICT_SPACE,
   alignmentH: SEQ_VIEW_DEFAULT_ALIGNMENT_H,
