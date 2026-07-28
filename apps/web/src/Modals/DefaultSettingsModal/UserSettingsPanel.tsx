@@ -15,16 +15,14 @@ const UserSettingsPanel = (): React.ReactElement => (
     gap={1}
     sx={{ pt: 1, maxWidth: 500, mx: "auto", width: "100%" }}
   >
-    <SectionTitle>
-      <FormattedMessage {...messages.sectionLanguage} />
+    <SectionTitle title={<FormattedMessage {...messages.sectionLanguage} />}>
+      <SettingCardLangAppToggle />
+      <SettingCardLang setting="languagesSearch" sx={searchCardSx} />
     </SectionTitle>
-    <SettingCardLangAppToggle />
-    <SettingCardLang setting="languagesSearch" sx={searchCardSx} />
 
-    <SectionTitle>
-      <FormattedMessage {...messages.sectionAppearance} />
+    <SectionTitle title={<FormattedMessage {...messages.sectionAppearance} />}>
+      <SettingCardTheme />
     </SectionTitle>
-    <SettingCardTheme />
   </Stack>
 );
 

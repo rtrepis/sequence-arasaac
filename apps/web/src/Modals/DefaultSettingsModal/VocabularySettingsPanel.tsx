@@ -164,100 +164,96 @@ const VocabularySettingsPanel = (): React.ReactElement => {
         </SettingsPreviewFrame>
       }
     >
-      <SectionTitle>
-        <FormattedMessage {...messages.sectionWord} />
-      </SectionTitle>
-
-      <Stack direction="row" gap={1} alignItems="flex-start">
-        <TextField
-          label={intl.formatMessage(messages.wordInputLabel)}
-          placeholder={intl.formatMessage(messages.wordInputPlaceholder)}
-          value={word}
-          onChange={(e) => {
-            setWord(e.target.value);
-            if (editingWord && e.target.value.trim() !== editingWord) {
-              setEditingWord(undefined);
-            }
-          }}
-          onKeyDown={handleKeyDown}
-          size="small"
-          sx={{ flex: 1 }}
-        />
-        <Button
-          variant="contained"
-          onClick={handleSave}
-          disabled={!word.trim() || (atFreeLimit && !isEditing)}
-          sx={{ whiteSpace: "nowrap", mt: 0.25 }}
-        >
-          {isEditing ? (
-            <FormattedMessage {...messages.updateButton} />
-          ) : (
-            <FormattedMessage {...messages.addButton} />
-          )}
-        </Button>
-      </Stack>
-
-      {isEditing && (
-        <Alert severity="info" sx={{ py: 0 }}>
-          <FormattedMessage {...messages.duplicateWarning} />
-        </Alert>
-      )}
-
-      {atFreeLimit && !isEditing && (
-        <Alert severity="warning" sx={{ py: 0 }}>
-          <FormattedMessage
-            {...messages.freeLimitReached}
-            values={{ max: FREE_TIER_MAX_WORDS }}
+      <SectionTitle title={<FormattedMessage {...messages.sectionWord} />}>
+        <Stack direction="row" gap={1} alignItems="flex-start">
+          <TextField
+            label={intl.formatMessage(messages.wordInputLabel)}
+            placeholder={intl.formatMessage(messages.wordInputPlaceholder)}
+            value={word}
+            onChange={(e) => {
+              setWord(e.target.value);
+              if (editingWord && e.target.value.trim() !== editingWord) {
+                setEditingWord(undefined);
+              }
+            }}
+            onKeyDown={handleKeyDown}
+            size="small"
+            sx={{ flex: 1 }}
           />
-        </Alert>
-      )}
+          <Button
+            variant="contained"
+            onClick={handleSave}
+            disabled={!word.trim() || (atFreeLimit && !isEditing)}
+            sx={{ whiteSpace: "nowrap", mt: 0.25 }}
+          >
+            {isEditing ? (
+              <FormattedMessage {...messages.updateButton} />
+            ) : (
+              <FormattedMessage {...messages.addButton} />
+            )}
+          </Button>
+        </Stack>
 
-      {wordProfiles.length === 0 ? (
-        <Typography variant="body2" color="text.secondary">
-          <FormattedMessage {...messages.emptyList} />
-        </Typography>
-      ) : (
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-          {wordProfiles.map((profile) => (
-            <Chip
-              key={profile.word}
-              label={profile.word}
-              onDelete={() => {
-                dispatch(removeWordProfileActionCreator(profile.word));
-                if (editingWord === profile.word) handleClear();
-              }}
-              onClick={() => loadProfile(profile)}
-              variant={editingWord === profile.word ? "filled" : "outlined"}
-              color={editingWord === profile.word ? "primary" : "default"}
-              size="small"
+        {isEditing && (
+          <Alert severity="info" sx={{ py: 0 }}>
+            <FormattedMessage {...messages.duplicateWarning} />
+          </Alert>
+        )}
+
+        {atFreeLimit && !isEditing && (
+          <Alert severity="warning" sx={{ py: 0 }}>
+            <FormattedMessage
+              {...messages.freeLimitReached}
+              values={{ max: FREE_TIER_MAX_WORDS }}
             />
-          ))}
-        </Box>
-      )}
+          </Alert>
+        )}
 
-      <SectionTitle>
-        <FormattedMessage {...messages.sectionPictogram} />
+        {wordProfiles.length === 0 ? (
+          <Typography variant="body2" color="text.secondary">
+            <FormattedMessage {...messages.emptyList} />
+          </Typography>
+        ) : (
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            {wordProfiles.map((profile) => (
+              <Chip
+                key={profile.word}
+                label={profile.word}
+                onDelete={() => {
+                  dispatch(removeWordProfileActionCreator(profile.word));
+                  if (editingWord === profile.word) handleClear();
+                }}
+                onClick={() => loadProfile(profile)}
+                variant={editingWord === profile.word ? "filled" : "outlined"}
+                color={editingWord === profile.word ? "primary" : "default"}
+                size="small"
+              />
+            ))}
+          </Box>
+        )}
       </SectionTitle>
 
-      <PictogramSearchLocal
-        selectedId={pictState.selectedId}
-        onSelect={setPictState}
-      />
+      <SectionTitle title={<FormattedMessage {...messages.sectionPictogram} />}>
+        <PictogramSearchLocal
+          selectedId={pictState.selectedId}
+          onSelect={setPictState}
+        />
 
-      {pictState.color && pictState.skin && (
-        <SettingCard
-          setting="skin"
-          state={pictState.skin}
-          setState={(skin) => setPictState((prev) => ({ ...prev, skin: skin as Skin }))}
-        />
-      )}
-      {pictState.color && pictState.hair && (
-        <SettingCard
-          setting="hair"
-          state={pictState.hair}
-          setState={(hair) => setPictState((prev) => ({ ...prev, hair: hair as Hair }))}
-        />
-      )}
+        {pictState.color && pictState.skin && (
+          <SettingCard
+            setting="skin"
+            state={pictState.skin}
+            setState={(skin) => setPictState((prev) => ({ ...prev, skin: skin as Skin }))}
+          />
+        )}
+        {pictState.color && pictState.hair && (
+          <SettingCard
+            setting="hair"
+            state={pictState.hair}
+            setState={(hair) => setPictState((prev) => ({ ...prev, hair: hair as Hair }))}
+          />
+        )}
+      </SectionTitle>
     </SettingsPanelLayout>
   );
 };

@@ -15,6 +15,9 @@ export const SETTINGS_ZONE_GAP = 4;
 /** Amplada màxima del panell centrat (estàndard tauleta). */
 export const SETTINGS_MAX_WIDTH = 900;
 
+/** Indentació (paddingLeft, gap MUI) del contingut d'una secció respecte al seu SectionTitle. */
+export const SETTINGS_INDENT = 3;
+
 /**
  * Fila d'un ajust individual: només padding vertical per al ritme.
  * La separació visual entre ajustos ve del `gap` de la columna; el divisor
@@ -37,4 +40,19 @@ export const settingRowInline: SxProps<Theme> = {
   justifyContent: "space-between",
   columnGap: 2,
   rowGap: 1,
+};
+
+/** Amplada mínima (px) del control d'una fila, perquè sliders no quedin inusables en pantalles estretes. */
+export const SETTINGS_CONTROL_MIN_WIDTH = 150;
+
+/**
+ * Amplada del control a la dreta d'una fila `settingRowInline`: com a màxim 1/3
+ * del contenidor, amb un mínim de {@link SETTINGS_CONTROL_MIN_WIDTH}px de seguretat.
+ * Aplica's a select/slider/textfield; els grups de `StyledToggleButtonGroup` en
+ * queden exempts perquè ja són compactes per si mateixos.
+ */
+export const settingControlWidth: SxProps<Theme> = {
+  flex: "1 1 auto",
+  maxWidth: "33%",
+  minWidth: SETTINGS_CONTROL_MIN_WIDTH,
 };

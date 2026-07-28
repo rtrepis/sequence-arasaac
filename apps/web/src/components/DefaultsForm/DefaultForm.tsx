@@ -136,60 +136,54 @@ const DefaultForm = ({
           </SettingsPreviewFrame>
         }
       >
-        <SectionTitle>
-          <FormattedMessage {...messages.sectionPictogram} />
-        </SectionTitle>
-        <SettingCardBoolean
-          setting={"numbered"}
-          state={numbered}
-          setState={setNumbered}
-        />
-        <SettingCardBoolean
-          setting="color"
-          state={color}
-          setState={setColor}
-          onApplyAll={onApplyAllColor}
-        />
-
-        <SectionTitle>
-          <FormattedMessage {...messages.sectionText} />
-        </SectionTitle>
-        <SettingCard
-          setting={"textPosition"}
-          state={textPosition}
-          setState={setTextPosition}
-          onApplyAll={onApplyAllTextPosition}
-        />
-        <SettingCardFontGroup state={font} setState={setFont} />
-        {numbered && (
-          <SettingCardFontGroup
-            state={numberFont}
-            setState={setNumberFont}
-            title={<FormattedMessage {...fontGroupMessages.numberFont} />}
+        <SectionTitle title={<FormattedMessage {...messages.sectionPictogram} />}>
+          <SettingCardBoolean
+            setting={"numbered"}
+            state={numbered}
+            setState={setNumbered}
           />
-        )}
-
-        <SectionTitle>
-          <FormattedMessage {...messages.sectionBorders} />
+          <SettingCardBoolean
+            setting="color"
+            state={color}
+            setState={setColor}
+            onApplyAll={onApplyAllColor}
+          />
         </SectionTitle>
-        <SettingCardBorder
-          border="borderOut"
-          state={borderOut}
-          setState={setBorderOut}
-          onApplyAll={onApplyAllBorderOut}
-        />
-        <SettingCardBorder
-          border="borderIn"
-          state={borderIn}
-          setState={setBorderIn}
-          onApplyAll={onApplyAllBorderIn}
-        />
+
+        <SectionTitle title={<FormattedMessage {...messages.sectionText} />}>
+          <SettingCard
+            setting={"textPosition"}
+            state={textPosition}
+            setState={setTextPosition}
+            onApplyAll={onApplyAllTextPosition}
+          />
+          <SettingCardFontGroup state={font} setState={setFont} />
+          {numbered && (
+            <SettingCardFontGroup
+              state={numberFont}
+              setState={setNumberFont}
+              title={<FormattedMessage {...fontGroupMessages.numberFont} />}
+            />
+          )}
+        </SectionTitle>
+
+        <SectionTitle title={<FormattedMessage {...messages.sectionBorders} />}>
+          <SettingCardBorder
+            border="borderOut"
+            state={borderOut}
+            setState={setBorderOut}
+            onApplyAll={onApplyAllBorderOut}
+          />
+          <SettingCardBorder
+            border="borderIn"
+            state={borderIn}
+            setState={setBorderIn}
+            onApplyAll={onApplyAllBorderIn}
+          />
+        </SectionTitle>
 
         {color && (
-          <>
-            <SectionTitle>
-              <FormattedMessage {...messages.sectionAppearance} />
-            </SectionTitle>
+          <SectionTitle title={<FormattedMessage {...messages.sectionAppearance} />}>
             <SettingCard
               setting={"skin"}
               state={skin}
@@ -202,7 +196,7 @@ const DefaultForm = ({
               setState={setHair}
               onApplyAll={onApplyAllHair}
             />
-          </>
+          </SectionTitle>
         )}
 
         {onReset && (

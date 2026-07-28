@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  FormGroup,
   FormLabel,
   Slider,
   Stack,
@@ -13,10 +12,11 @@ import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import {
   SettingsPanelLayout,
   SectionTitle,
-  settingRow,
   settingRowInline,
+  settingControlWidth,
   SETTINGS_MAX_WIDTH,
 } from "../../components/SettingsLayout";
+import { cardTitle } from "../../components/SettingsCards/SettingsCards.styled";
 import { FormattedMessage, useIntl } from "react-intl";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
@@ -159,114 +159,108 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           preview={<ViewSettingsPreview settings={localSettings} />}
         >
           {/* Secció: format i disposició de la pàgina (controls compartits amb la vista) */}
-          <SectionTitle>
-            <FormattedMessage {...messages.sectionPageFormat} />
+          <SectionTitle title={<FormattedMessage {...messages.sectionPageFormat} />}>
+            <GlobalViewControls
+              viewSettings={localSettings}
+              author={localSettings.author}
+              pageSizeIndex={PAGE_INDEX_MAP[localSettings.pageSize]}
+              sequenceCount={2}
+              onPageSizeChange={handlePageSizeChange}
+              onDirectionChange={handleDirectionChange}
+              onSequenceSpaceChange={handleSequenceSpaceChange}
+              onAuthorChange={handleAuthorChange}
+              onOrientationChange={handleOrientationChange}
+            />
           </SectionTitle>
-
-          <GlobalViewControls
-            viewSettings={localSettings}
-            author={localSettings.author}
-            pageSizeIndex={PAGE_INDEX_MAP[localSettings.pageSize]}
-            sequenceCount={2}
-            onPageSizeChange={handlePageSizeChange}
-            onDirectionChange={handleDirectionChange}
-            onSequenceSpaceChange={handleSequenceSpaceChange}
-            onAuthorChange={handleAuthorChange}
-            onOrientationChange={handleOrientationChange}
-          />
 
           {/* Secció: mida i alineació dels pictogrames */}
-          <SectionTitle>
-            <FormattedMessage {...messages.sectionPictograms} />
-          </SectionTitle>
-
-          <Box sx={settingRow}>
-            <FormGroup>
-              <FormLabel>
+          <SectionTitle title={<FormattedMessage {...messages.sectionPictograms} />}>
+            <Box sx={settingRowInline}>
+              <FormLabel sx={cardTitle}>
                 <FormattedMessage {...viewMessages.size} />
-                <Slider
-                  step={SIZE_PICT_STEP}
-                  min={SIZE_PICT_MIN}
-                  max={SIZE_PICT_MAX}
-                  value={localSettings.sizePict}
-                  valueLabelDisplay="auto"
-                  valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
-                  onChange={handleSizePict}
-                />
               </FormLabel>
-            </FormGroup>
-          </Box>
+              <Slider
+                step={SIZE_PICT_STEP}
+                min={SIZE_PICT_MIN}
+                max={SIZE_PICT_MAX}
+                value={localSettings.sizePict}
+                valueLabelDisplay="auto"
+                valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
+                onChange={handleSizePict}
+                sx={settingControlWidth}
+              />
+            </Box>
 
-          <Box sx={settingRow}>
-            <FormGroup>
-              <FormLabel>
+            <Box sx={settingRowInline}>
+              <FormLabel sx={cardTitle}>
                 <FormattedMessage {...viewMessages.pictSpaceBetween} />
-                <Slider
-                  step={PICT_SPACE_STEP}
-                  min={PICT_SPACE_MIN}
-                  max={PICT_SPACE_MAX}
-                  value={localSettings.pictSpaceBetween}
-                  valueLabelDisplay="auto"
-                  valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
-                  onChange={handlePictSpaceBetween}
-                />
               </FormLabel>
-            </FormGroup>
-          </Box>
+              <Slider
+                step={PICT_SPACE_STEP}
+                min={PICT_SPACE_MIN}
+                max={PICT_SPACE_MAX}
+                value={localSettings.pictSpaceBetween}
+                valueLabelDisplay="auto"
+                valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
+                onChange={handlePictSpaceBetween}
+                sx={settingControlWidth}
+              />
+            </Box>
 
-          <Box sx={settingRowInline}>
-            <FormLabel component="legend">
-              <FormattedMessage {...viewMessages.alignmentH} />
-            </FormLabel>
-            <StyledToggleButtonGroup
-              value={localSettings.alignmentH}
-              exclusive
-              onChange={handleAlignmentH}
-            >
-              <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignLeft)}>
-                <ToggleButton value="left" aria-label="left">
-                  <MdFormatAlignLeft />
-                </ToggleButton>
-              </Tooltip>
-              <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignHCenter)}>
-                <ToggleButton value="center" aria-label="center">
-                  <MdFormatAlignCenter />
-                </ToggleButton>
-              </Tooltip>
-              <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignRight)}>
-                <ToggleButton value="right" aria-label="right">
-                  <MdFormatAlignRight />
-                </ToggleButton>
-              </Tooltip>
-            </StyledToggleButtonGroup>
-          </Box>
+            <Box sx={settingRowInline}>
+              <FormLabel component="legend" sx={cardTitle}>
+                <FormattedMessage {...viewMessages.alignmentH} />
+              </FormLabel>
+              <StyledToggleButtonGroup
+                value={localSettings.alignmentH}
+                exclusive
+                onChange={handleAlignmentH}
+              >
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignLeft)}>
+                  <ToggleButton value="left" aria-label="left">
+                    <MdFormatAlignLeft />
+                  </ToggleButton>
+                </Tooltip>
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignHCenter)}>
+                  <ToggleButton value="center" aria-label="center">
+                    <MdFormatAlignCenter />
+                  </ToggleButton>
+                </Tooltip>
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignRight)}>
+                  <ToggleButton value="right" aria-label="right">
+                    <MdFormatAlignRight />
+                  </ToggleButton>
+                </Tooltip>
+              </StyledToggleButtonGroup>
+            </Box>
 
-          <Box sx={settingRowInline}>
-            <FormLabel component="legend">
-              <FormattedMessage {...viewMessages.alignmentV} />
-            </FormLabel>
-            <StyledToggleButtonGroup
-              value={localSettings.alignmentV}
-              exclusive
-              onChange={handleAlignmentV}
-            >
-              <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignTop)}>
-                <ToggleButton value="top" aria-label="top">
-                  <MdVerticalAlignTop />
-                </ToggleButton>
-              </Tooltip>
-              <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignVCenter)}>
-                <ToggleButton value="center" aria-label="center">
-                  <MdVerticalAlignCenter />
-                </ToggleButton>
-              </Tooltip>
-              <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignBottom)}>
-                <ToggleButton value="bottom" aria-label="bottom">
-                  <MdVerticalAlignBottom />
-                </ToggleButton>
-              </Tooltip>
-            </StyledToggleButtonGroup>
-          </Box>
+            <Box sx={settingRowInline}>
+              <FormLabel component="legend" sx={cardTitle}>
+                <FormattedMessage {...viewMessages.alignmentV} />
+              </FormLabel>
+              <StyledToggleButtonGroup
+                value={localSettings.alignmentV}
+                exclusive
+                onChange={handleAlignmentV}
+              >
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignTop)}>
+                  <ToggleButton value="top" aria-label="top">
+                    <MdVerticalAlignTop />
+                  </ToggleButton>
+                </Tooltip>
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignVCenter)}>
+                  <ToggleButton value="center" aria-label="center">
+                    <MdVerticalAlignCenter />
+                  </ToggleButton>
+                </Tooltip>
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignBottom)}>
+                  <ToggleButton value="bottom" aria-label="bottom">
+                    <MdVerticalAlignBottom />
+                  </ToggleButton>
+                </Tooltip>
+              </StyledToggleButtonGroup>
+            </Box>
+          </SectionTitle>
 
           <Stack direction="row" gap={1} alignItems="flex-start" sx={{ mt: 1 }}>
             <Stack gap={0.5}>

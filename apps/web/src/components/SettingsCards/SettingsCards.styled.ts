@@ -6,8 +6,16 @@ export const card: SxProps = {
   borderRadius: 1,
 };
 
+/**
+ * Títol d'un ajust individual: fosc i en negreta, per distingir-lo del
+ * títol de secció (`SectionTitle`, gris i en majúscules). Font única de
+ * veritat per a aquest nivell — reutilitzat també fora de `SettingCard*`
+ * (ex. `FormLabel` del tab Vista) perquè `FormLabel` sobreescriu el color
+ * a `text.secondary` per defecte i cal forçar-lo a `text.primary`.
+ */
 export const cardTitle: SxProps = {
   fontWeight: "bold",
+  color: "text.primary",
 };
 
 export const cardContent: SxProps = {

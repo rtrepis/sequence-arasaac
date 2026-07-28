@@ -42,16 +42,19 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
 
 - **`SettingsPanelLayout`** — layout canònic de dues zones: previsualització a **l'esquerra** (sticky en mòbil) + columna de controls a la dreta. Sense `preview`, la columna de controls queda centrada sola (cas del tab Usuari). Props: `preview?`, `maxWidth` (700 per defecte), `controlsGap`.
 - **`SettingsPreviewFrame`** — marc visual únic de qualsevol previsualització: vora `divider`, `borderRadius: 1`, `boxShadow: 1`, `overflow: hidden`. Prop `background`: `"default"` (zona de treball, per defecte) o `"paper"` (mostra d'un sol Card, segons el patró de zones). Les dimensions les aporta el fill via `sx`.
-- **`SectionTitle`** — capçalera de secció (etiqueta en majúscules `text.secondary` + `Divider`). És el nivell superior de la jerarquia de separació.
+- **`SectionTitle`** — **contenidor** de secció: props `title` (capçalera en majúscules `text.secondary` + `Divider`) i `children` (els ajustos de la secció). Els `children` es renderitzen **indentats** (`pl: SETTINGS_INDENT`) sota el títol, com un esquema: `<SectionTitle title={...}>{ajustos}</SectionTitle>`, no com a germans després del títol. És el nivell superior de la jerarquia de separació.
 
 ### Regles
 
 - **Preview sempre a l'esquerra**, mai a la dreta. Un tab sense preview és una sola columna centrada (`maxWidth: 500`).
 - **Amplada estàndard tauleta**: `SETTINGS_MAX_WIDTH` (900) és l'amplada màxima del panell centrat. No hardcodejar amplades noves.
 - **Toggles = marca de la casa**: qualsevol selector d'opcions discretes usa `StyledToggleButtonGroup` (arrodonit 55×55, `primary` en seleccionat). Mai `ToggleButtonGroup` pla de MUI dins del modal de settings.
+- **Criteri únic de fila**: tot ajust individual (slider, select, textfield, grup de toggles) porta el **títol a l'esquerra i el control a la dreta**, via `settingRowInline`. Mai títol a sobre / control a sota. `settingRow` (només padding vertical, sense flex) és exclusivament la base interna de `settingRowInline`; no s'aplica sol a cap fila.
+- **Color/pes del títol de fila**: el títol d'un ajust individual sempre usa `cardTitle` (`SettingsCards.styled.ts` — fosc `text.primary`, `fontWeight: bold`), sigui `Typography` (`SettingCard*`) o `FormLabel` (tab Vista). Mai el gris per defecte de `FormLabel` (`text.secondary`), que quedaria igual que el títol de secció. El títol de secció (`SectionTitle`) sempre és gris (`text.secondary`) i en majúscules — és l'únic nivell gris de la jerarquia.
+- **Amplada del control (dreta)**: a `settingRowInline`, el control (select/slider/textfield) porta `settingControlWidth` (`settingsLayout.styled.ts`) — `max-width: 33%` del contenidor amb `min-width: SETTINGS_CONTROL_MIN_WIDTH` (150px) de seguretat perquè un `Slider` no quedi inusable en pantalles estretes (hi fa `wrap` a sota gràcies al `flexWrap` de `settingRowInline`). Els grups `StyledToggleButtonGroup` en queden exempts — ja són compactes per si mateixos.
 - **Separació = només sota el títol de secció** (`settingsLayout.styled.ts`):
   1. `SectionTitle` agrupa un conjunt d'ajustos relacionats, amb un `Divider` **just sota el títol** (únic divisor visible).
-  2. `settingRow` (només padding vertical) i `settingRowInline` (títol-esquerra + control-dreta) donen ritme a cada fila; la separació entre files ve del `gap`, **sense divisors entre ajustos** (evita carregar visualment).
+  2. `settingRowInline` dona ritme a cada fila; la separació entre files ve del `gap`, **sense divisors entre ajustos** (evita carregar visualment).
 - **Espaiat unificat**: `SETTINGS_ROW_GAP` entre files, `SETTINGS_ZONE_GAP` entre les dues zones. No hardcodejar gaps nous.
 
 ### Estat de migració
@@ -61,7 +64,7 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
 - ✅ **Pictogrames** (`DefaultForm`) — `SettingsPanelLayout` + `SettingsPreviewFrame background="paper"` + 4 seccions (Pictograma, Text i numeració, Vores, Aparença).
 - ✅ **Vocabulari** (`VocabularySettingsPanel`) — preview mogut a l'esquerra amb `SettingsPreviewFrame`; 2 seccions (Paraula, Pictograma).
 - ✅ **Família `SettingCard`** — `card` (`SettingsCards.styled.ts`) ja no porta `borderBottom`; separació només via `SectionTitle` del tab que l'envolta.
-- ✅ **`GlobalViewControls`** — toggles d'orientació i direcció migrats a `StyledToggleButtonGroup`. Component **compartit** amb la pàgina de visualització (`ViewSquenceSettings`): la columna de controls hi és més estreta (300px) però els toggles (55×55, 2 botons per grup) hi encaixen sense retallar-se; verificat visualment als dos llocs.
+- ✅ **`GlobalViewControls`** — toggles d'orientació i direcció migrats a `StyledToggleButtonGroup`; totes les files (mida pàgina, orientació, separació seqüències, direcció, autor) migrades a `settingRowInline` (títol-esquerra/control-dreta), unificant el criteri amb la resta del tab Vista. Component **compartit** amb la pàgina de visualització (`ViewSquenceSettings`): la columna de controls hi és més estreta (300px) però els toggles (55×55, 2 botons per grup) hi encaixen sense retallar-se; verificat visualment als dos llocs.
 - ⏳ **`SequenceControlsPanel`** (alineació H/V per seqüència individual, dins la pàgina de vista) — encara amb `ToggleButtonGroup` pla de MUI. No forma part del modal de configuracions; fora d'abast d'aquesta migració però queda com a following-up per coherència total de la marca a l'app.
 
 ---

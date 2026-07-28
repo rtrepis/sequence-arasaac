@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  FormGroup,
   FormLabel,
   MenuItem,
   Select,
@@ -17,6 +16,8 @@ import { MdTableRows, MdViewColumn, MdSettingsBackupRestore } from "react-icons/
 import { MdScreenRotation } from "react-icons/md";
 import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
 import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
+import { settingRowInline, settingControlWidth } from "@/components/SettingsLayout";
+import { cardTitle } from "@/components/SettingsCards/SettingsCards.styled";
 import messages from "./ViewSequencesSettings.lang";
 
 interface GlobalViewControlsProps {
@@ -57,14 +58,15 @@ const GlobalViewControls = ({
 
   return (
     <>
-      <FormGroup>
-        <FormLabel>
+      <Box sx={settingRowInline}>
+        <FormLabel sx={cardTitle}>
           <FormattedMessage {...messages.pageSize} />
         </FormLabel>
         <Select<number>
           value={pageSizeIndex}
           onChange={onPageSizeChange}
           size="small"
+          sx={settingControlWidth}
         >
           <MenuItem value={0}>A4</MenuItem>
           <MenuItem value={1}>A3</MenuItem>
@@ -72,11 +74,11 @@ const GlobalViewControls = ({
             <FormattedMessage {...messages.fullScreen} />
           </MenuItem>
         </Select>
-      </FormGroup>
+      </Box>
 
       {onOrientationChange && (
-        <FormGroup>
-          <FormLabel>
+        <Box sx={settingRowInline}>
+          <FormLabel sx={cardTitle}>
             <FormattedMessage {...messages.tooltipOrientation} />
           </FormLabel>
           <StyledToggleButtonGroup
@@ -95,33 +97,34 @@ const GlobalViewControls = ({
               </ToggleButton>
             </Tooltip>
           </StyledToggleButtonGroup>
-        </FormGroup>
+        </Box>
       )}
 
       {children}
 
       {sequenceCount > 1 && (
-        <FormGroup>
-          <FormLabel>
+        <Box sx={settingRowInline}>
+          <FormLabel sx={cardTitle}>
             <FormattedMessage {...messages.sequenceSpaceBetween} />
-            <Slider
-              name="sequenceSpaceBetween"
-              step={0.5}
-              min={0}
-              max={10}
-              value={viewSettings.sequenceSpaceBetween}
-              valueLabelDisplay="auto"
-              valueLabelFormat={(value: number) =>
-                parseFloat(value.toFixed(2))
-              }
-              onChange={onSequenceSpaceChange}
-            />
           </FormLabel>
-        </FormGroup>
+          <Slider
+            name="sequenceSpaceBetween"
+            step={0.5}
+            min={0}
+            max={10}
+            value={viewSettings.sequenceSpaceBetween}
+            valueLabelDisplay="auto"
+            valueLabelFormat={(value: number) =>
+              parseFloat(value.toFixed(2))
+            }
+            onChange={onSequenceSpaceChange}
+            sx={settingControlWidth}
+          />
+        </Box>
       )}
 
-      <FormGroup>
-        <FormLabel component="legend">
+      <Box sx={settingRowInline}>
+        <FormLabel component="legend" sx={cardTitle}>
           <FormattedMessage {...messages.direction} />
         </FormLabel>
         <StyledToggleButtonGroup
@@ -142,23 +145,23 @@ const GlobalViewControls = ({
             </ToggleButton>
           </Tooltip>
         </StyledToggleButtonGroup>
-      </FormGroup>
+      </Box>
 
-      <FormGroup>
-        <FormLabel>
+      <Box sx={settingRowInline}>
+        <FormLabel sx={cardTitle}>
           <FormattedMessage {...messages.authSequence} />
-          <TextField
-            value={author}
-            onChange={(event) => onAuthorChange(event.target.value)}
-            variant="filled"
-            fullWidth
-            helperText={intl.formatMessage({ ...messages.authHelperText })}
-            sx={{
-              ".MuiInputBase-input": { paddingTop: 2 },
-            }}
-          />
         </FormLabel>
-      </FormGroup>
+        <TextField
+          value={author}
+          onChange={(event) => onAuthorChange(event.target.value)}
+          variant="filled"
+          helperText={intl.formatMessage({ ...messages.authHelperText })}
+          sx={{
+            ...settingControlWidth,
+            ".MuiInputBase-input": { paddingTop: 2 },
+          }}
+        />
+      </Box>
 
       {onResetToDefaults && (
         <Box sx={{ pt: 4, display: "flex", justifyContent: "flex-end" }}>
