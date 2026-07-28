@@ -6,6 +6,16 @@ const messages = defineMessages({
     defaultMessage: "Personal vocabulary",
     description: "Títol del panel de vocabulari personal",
   },
+  sectionWord: {
+    id: "components.defaultSettings.vocabularyPanel.sectionWord",
+    defaultMessage: "Word",
+    description: "Títol de la secció de paraula i llista del panell de vocabulari",
+  },
+  sectionPictogram: {
+    id: "components.defaultSettings.vocabularyPanel.sectionPictogram",
+    defaultMessage: "Pictogram",
+    description: "Títol de la secció de cerca i aparença del pictograma al panell de vocabulari",
+  },
   wordInputLabel: {
     id: "components.defaultSettings.vocabularyPanel.wordInputLabel",
     defaultMessage: "Word",

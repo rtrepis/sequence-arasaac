@@ -35,7 +35,7 @@ const SettingCardLangAppToggle = (): React.ReactElement => {
       direction="row"
       flexWrap="wrap"
       columnGap={2}
-      sx={{ ...card, borderBottom: 0, width: "100%" }}
+      sx={{ ...card, width: "100%" }}
     >
       <Typography variant="body1" sx={{ fontWeight: "bold", flex: 1 }} component="h2">
         <FormattedMessage {...messages.cardTitle} />

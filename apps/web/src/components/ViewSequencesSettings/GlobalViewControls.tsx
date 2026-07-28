@@ -9,7 +9,6 @@ import {
   Slider,
   TextField,
   ToggleButton,
-  ToggleButtonGroup,
   Tooltip,
 } from "@mui/material";
 import React from "react";
@@ -17,6 +16,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { MdTableRows, MdViewColumn, MdSettingsBackupRestore } from "react-icons/md";
 import { MdScreenRotation } from "react-icons/md";
 import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
+import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
 import messages from "./ViewSequencesSettings.lang";
 
 interface GlobalViewControlsProps {
@@ -79,11 +79,10 @@ const GlobalViewControls = ({
           <FormLabel>
             <FormattedMessage {...messages.tooltipOrientation} />
           </FormLabel>
-          <ToggleButtonGroup
+          <StyledToggleButtonGroup
             value={viewSettings.orientation}
             exclusive
             onChange={(_, val: PageOrientation | null) => val && onOrientationChange(val)}
-            size="small"
           >
             <Tooltip title={intl.formatMessage(messages.tooltipDirectionRow)}>
               <ToggleButton value="landscape" aria-label="landscape">
@@ -95,7 +94,7 @@ const GlobalViewControls = ({
                 <MdScreenRotation />
               </ToggleButton>
             </Tooltip>
-          </ToggleButtonGroup>
+          </StyledToggleButtonGroup>
         </FormGroup>
       )}
 
@@ -125,11 +124,10 @@ const GlobalViewControls = ({
         <FormLabel component="legend">
           <FormattedMessage {...messages.direction} />
         </FormLabel>
-        <ToggleButtonGroup
+        <StyledToggleButtonGroup
           value={viewSettings.direction}
           exclusive
           onChange={onDirectionChange}
-          size="small"
         >
           <Tooltip title={intl.formatMessage(messages.tooltipDirectionRow)}>
             <ToggleButton value="row" aria-label="row">
@@ -143,7 +141,7 @@ const GlobalViewControls = ({
               <MdViewColumn />
             </ToggleButton>
           </Tooltip>
-        </ToggleButtonGroup>
+        </StyledToggleButtonGroup>
       </FormGroup>
 
       <FormGroup>

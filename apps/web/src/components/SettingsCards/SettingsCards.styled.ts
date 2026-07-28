@@ -2,10 +2,7 @@ import { SxProps } from "@mui/material";
 
 export const card: SxProps = {
   minHeight: 70,
-  marginBlockStart: 1,
-  paddingBlockEnd: 1,
-  borderBottom: 4,
-  borderBottomColor: "divider",
+  paddingBlock: 1,
   borderRadius: 1,
 };
 

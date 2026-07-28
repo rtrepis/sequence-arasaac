@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { ViewSettings } from "../../types/ui";
 import { createPageFormat } from "../../types/PageFormat";
 import { useAppSelector } from "../../app/hooks";
+import { SettingsPreviewFrame } from "../../components/SettingsLayout";
 import React, { useMemo } from "react";
 
 interface ViewSettingsPreviewProps {
@@ -71,17 +72,12 @@ const ViewSettingsPreview = ({ settings }: ViewSettingsPreviewProps): React.Reac
   );
 
   return (
-    <Box
+    <SettingsPreviewFrame
+      background="default"
       sx={{
         width: PREVIEW_WIDTH,
         height: previewHeight,
         flexShrink: 0,
-        bgcolor: "background.default",
-        border: "1px solid",
-        borderColor: "divider",
-        borderRadius: 1,
-        boxShadow: 1,
-        overflow: "hidden",
         transition: "height 0.2s ease",
         position: "relative",
       }}
@@ -108,7 +104,7 @@ const ViewSettingsPreview = ({ settings }: ViewSettingsPreviewProps): React.Reac
           <React.Fragment key={i}>{sequence}</React.Fragment>
         ))}
       </Box>
-    </Box>
+    </SettingsPreviewFrame>
   );
 };
 

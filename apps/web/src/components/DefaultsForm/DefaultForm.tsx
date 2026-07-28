@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Tooltip } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
@@ -18,6 +18,11 @@ import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingC
 import { messages as fontGroupMessages } from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup.lang";
 import React, { Dispatch, SetStateAction } from "react";
 import { MdSettingsBackupRestore } from "react-icons/md";
+import {
+  SettingsPanelLayout,
+  SettingsPreviewFrame,
+  SectionTitle,
+} from "../SettingsLayout";
 
 interface DefaultFormProps {
   font: Font;
@@ -117,105 +122,104 @@ const DefaultForm = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <Stack
-        display={"flex"}
-        direction={{ xs: "column", md: "row" }}
-        marginTop={1}
-        rowGap={2}
-        columnGap={2}
-        sx={{ alignItems: "flex-start" }}
-      >
-        <Box
-          minWidth={200}
-          sx={{
-            position: { xs: "sticky", md: "static" },
-            top: { xs: 0, md: "auto" },
-            zIndex: { xs: 10, md: "auto" },
-            width: { xs: "100%", md: "auto" },
-            // Fons paper (config): el Card de la mostra ja porta el seu propi fons,
-            // un fons default aquí només es veuria com un marc negre/blanc
-            backgroundColor: "background.paper",
-            padding: 1,
-          }}
-        >
-          <PictogramCard
-            pictogram={pictogramGuide}
-            defaults={defaults}
-            view="complete"
-            variant="plane"
-          />
-        </Box>
-
-        <Stack direction="column" gap={2} sx={{ pt: 1 }}>
-          <SettingCardBoolean
-            setting={"numbered"}
-            state={numbered}
-            setState={setNumbered}
-          />
-          <SettingCardBoolean
-            setting="color"
-            state={color}
-            setState={setColor}
-            onApplyAll={onApplyAllColor}
-          />
-          <SettingCard
-            setting={"textPosition"}
-            state={textPosition}
-            setState={setTextPosition}
-            onApplyAll={onApplyAllTextPosition}
-          />
-          <SettingCardFontGroup state={font} setState={setFont} />
-          {numbered && (
-            <SettingCardFontGroup
-              state={numberFont}
-              setState={setNumberFont}
-              title={<FormattedMessage {...fontGroupMessages.numberFont} />}
+      <SettingsPanelLayout
+        preview={
+          // Excepció del patró de zones: mostra d'un sol Card sobre el panell,
+          // un fons "default" es veuria com un marc negre/blanc
+          <SettingsPreviewFrame background="paper" sx={{ padding: 1 }}>
+            <PictogramCard
+              pictogram={pictogramGuide}
+              defaults={defaults}
+              view="complete"
+              variant="plane"
             />
-          )}
-          <SettingCardBorder
-            border="borderOut"
-            state={borderOut}
-            setState={setBorderOut}
-            onApplyAll={onApplyAllBorderOut}
+          </SettingsPreviewFrame>
+        }
+      >
+        <SectionTitle>
+          <FormattedMessage {...messages.sectionPictogram} />
+        </SectionTitle>
+        <SettingCardBoolean
+          setting={"numbered"}
+          state={numbered}
+          setState={setNumbered}
+        />
+        <SettingCardBoolean
+          setting="color"
+          state={color}
+          setState={setColor}
+          onApplyAll={onApplyAllColor}
+        />
+
+        <SectionTitle>
+          <FormattedMessage {...messages.sectionText} />
+        </SectionTitle>
+        <SettingCard
+          setting={"textPosition"}
+          state={textPosition}
+          setState={setTextPosition}
+          onApplyAll={onApplyAllTextPosition}
+        />
+        <SettingCardFontGroup state={font} setState={setFont} />
+        {numbered && (
+          <SettingCardFontGroup
+            state={numberFont}
+            setState={setNumberFont}
+            title={<FormattedMessage {...fontGroupMessages.numberFont} />}
           />
-          <SettingCardBorder
-            border="borderIn"
-            state={borderIn}
-            setState={setBorderIn}
-            onApplyAll={onApplyAllBorderIn}
-          />
-          {color && (
-            <>
-              <SettingCard
-                setting={"skin"}
-                state={skin}
-                setState={setSkin}
-                onApplyAll={onApplyAllSkin}
-              />
-              <SettingCard
-                setting={"hair"}
-                state={hair}
-                setState={setHair}
-                onApplyAll={onApplyAllHair}
-              />
-            </>
-          )}
-          {onReset && (
-            <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
-              <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
-                <Button
-                  variant="text"
-                  color="inherit"
-                  endIcon={<MdSettingsBackupRestore />}
-                  onClick={onReset}
-                >
-                  <FormattedMessage {...messages.reset} />
-                </Button>
-              </Tooltip>
-            </Box>
-          )}
-        </Stack>
-      </Stack>
+        )}
+
+        <SectionTitle>
+          <FormattedMessage {...messages.sectionBorders} />
+        </SectionTitle>
+        <SettingCardBorder
+          border="borderOut"
+          state={borderOut}
+          setState={setBorderOut}
+          onApplyAll={onApplyAllBorderOut}
+        />
+        <SettingCardBorder
+          border="borderIn"
+          state={borderIn}
+          setState={setBorderIn}
+          onApplyAll={onApplyAllBorderIn}
+        />
+
+        {color && (
+          <>
+            <SectionTitle>
+              <FormattedMessage {...messages.sectionAppearance} />
+            </SectionTitle>
+            <SettingCard
+              setting={"skin"}
+              state={skin}
+              setState={setSkin}
+              onApplyAll={onApplyAllSkin}
+            />
+            <SettingCard
+              setting={"hair"}
+              state={hair}
+              setState={setHair}
+              onApplyAll={onApplyAllHair}
+            />
+          </>
+        )}
+
+        {onReset && (
+          <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
+            <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
+              <Button
+                variant="text"
+                color="inherit"
+                endIcon={<MdSettingsBackupRestore />}
+                onClick={onReset}
+              >
+                <FormattedMessage {...messages.reset} />
+              </Button>
+            </Tooltip>
+          </Box>
+        )}
+      </SettingsPanelLayout>
     </form>
   );
 };

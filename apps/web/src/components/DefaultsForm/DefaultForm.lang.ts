@@ -6,6 +6,26 @@ const messages = defineMessages({
     defaultMessage: "Preview",
     description: "Paraula del pictograma de mostra dels settings per defecte",
   },
+  sectionPictogram: {
+    id: "components.defaultSettings.sectionPictogram",
+    defaultMessage: "Pictogram",
+    description: "Títol de la secció de numeració i color al panell de pictogrames",
+  },
+  sectionText: {
+    id: "components.defaultSettings.sectionText",
+    defaultMessage: "Text and numbering",
+    description: "Títol de la secció de posició de text i tipografies al panell de pictogrames",
+  },
+  sectionBorders: {
+    id: "components.defaultSettings.sectionBorders",
+    defaultMessage: "Borders",
+    description: "Títol de la secció de vores al panell de pictogrames",
+  },
+  sectionAppearance: {
+    id: "components.defaultSettings.sectionAppearance",
+    defaultMessage: "Appearance",
+    description: "Títol de la secció de pell i cabell al panell de pictogrames",
+  },
   saveSuccess: {
     id: "components.defaultSettings.saveSuccess",
     defaultMessage: "Settings saved to server",

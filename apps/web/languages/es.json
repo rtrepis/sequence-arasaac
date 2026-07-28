@@ -140,6 +140,22 @@
     "defaultMessage": "Vista previa",
     "description": "Pictogram pictogram for default settings"
   },
+  "components.defaultSettings.sectionPictogram": {
+    "defaultMessage": "Pictograma",
+    "description": "Títol de la secció de numeració i color al panell de pictogrames"
+  },
+  "components.defaultSettings.sectionText": {
+    "defaultMessage": "Texto y numeración",
+    "description": "Títol de la secció de posició de text i tipografies al panell de pictogrames"
+  },
+  "components.defaultSettings.sectionBorders": {
+    "defaultMessage": "Bordes",
+    "description": "Títol de la secció de vores al panell de pictogrames"
+  },
+  "components.defaultSettings.sectionAppearance": {
+    "defaultMessage": "Apariencia",
+    "description": "Títol de la secció de pell i cabell al panell de pictogrames"
+  },
   "components.defaultSettings.settings.title": {
     "defaultMessage": "Configuraciones",
     "description": "Settings Default "
@@ -163,6 +179,14 @@
   "components.viewSettingsPanel.panelDescription": {
     "defaultMessage": "Configura los valores de visualización por defecto al abrir la página de vista.",
     "description": "Text explicatiu del panell de configuració de la vista"
+  },
+  "components.viewSettingsPanel.sectionPageFormat": {
+    "defaultMessage": "Formato de página",
+    "description": "Títol de la secció de format de pàgina al panell de vista"
+  },
+  "components.viewSettingsPanel.sectionPictograms": {
+    "defaultMessage": "Pictogramas",
+    "description": "Títol de la secció de mida i alineació de pictogrames al panell de vista"
   },
   "components.viewSettingsPanel.orientationLandscape": {
     "defaultMessage": "Horizontal",
@@ -205,6 +229,14 @@
   },
   "components.defaultSettings.vocabularyPanel.title": {
     "defaultMessage": "Vocabulario personal"
+  },
+  "components.defaultSettings.vocabularyPanel.sectionWord": {
+    "defaultMessage": "Palabra",
+    "description": "Títol de la secció de paraula i llista del panell de vocabulari"
+  },
+  "components.defaultSettings.vocabularyPanel.sectionPictogram": {
+    "defaultMessage": "Pictograma",
+    "description": "Títol de la secció de cerca i aparença del pictograma al panell de vocabulari"
   },
   "components.defaultSettings.vocabularyPanel.wordInputLabel": {
     "defaultMessage": "Palabra"

@@ -6,6 +6,16 @@ const messages = defineMessages({
     defaultMessage: "Configure the default display values when opening the view page.",
     description: "Text explicatiu del panell de configuració de la vista",
   },
+  sectionPageFormat: {
+    id: "components.viewSettingsPanel.sectionPageFormat",
+    defaultMessage: "Page format",
+    description: "Títol de la secció de format de pàgina al panell de vista",
+  },
+  sectionPictograms: {
+    id: "components.viewSettingsPanel.sectionPictograms",
+    defaultMessage: "Pictograms",
+    description: "Títol de la secció de mida i alineació de pictogrames al panell de vista",
+  },
   orientationLandscape: {
     id: "components.viewSettingsPanel.orientationLandscape",
     defaultMessage: "Landscape",

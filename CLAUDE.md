@@ -34,6 +34,38 @@
 
 ---
 
+## Estàndard de configuracions (modal de settings per defecte)
+
+Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames, Vista, Vocabulari). Font única de veritat: `apps/web/src/components/SettingsLayout/`.
+
+### Components compartits
+
+- **`SettingsPanelLayout`** — layout canònic de dues zones: previsualització a **l'esquerra** (sticky en mòbil) + columna de controls a la dreta. Sense `preview`, la columna de controls queda centrada sola (cas del tab Usuari). Props: `preview?`, `maxWidth` (700 per defecte), `controlsGap`.
+- **`SettingsPreviewFrame`** — marc visual únic de qualsevol previsualització: vora `divider`, `borderRadius: 1`, `boxShadow: 1`, `overflow: hidden`. Prop `background`: `"default"` (zona de treball, per defecte) o `"paper"` (mostra d'un sol Card, segons el patró de zones). Les dimensions les aporta el fill via `sx`.
+- **`SectionTitle`** — capçalera de secció (etiqueta en majúscules `text.secondary` + `Divider`). És el nivell superior de la jerarquia de separació.
+
+### Regles
+
+- **Preview sempre a l'esquerra**, mai a la dreta. Un tab sense preview és una sola columna centrada (`maxWidth: 500`).
+- **Amplada estàndard tauleta**: `SETTINGS_MAX_WIDTH` (900) és l'amplada màxima del panell centrat. No hardcodejar amplades noves.
+- **Toggles = marca de la casa**: qualsevol selector d'opcions discretes usa `StyledToggleButtonGroup` (arrodonit 55×55, `primary` en seleccionat). Mai `ToggleButtonGroup` pla de MUI dins del modal de settings.
+- **Separació = només sota el títol de secció** (`settingsLayout.styled.ts`):
+  1. `SectionTitle` agrupa un conjunt d'ajustos relacionats, amb un `Divider` **just sota el títol** (únic divisor visible).
+  2. `settingRow` (només padding vertical) i `settingRowInline` (títol-esquerra + control-dreta) donen ritme a cada fila; la separació entre files ve del `gap`, **sense divisors entre ajustos** (evita carregar visualment).
+- **Espaiat unificat**: `SETTINGS_ROW_GAP` entre files, `SETTINGS_ZONE_GAP` entre les dues zones. No hardcodejar gaps nous.
+
+### Estat de migració
+
+- ✅ **Vista** (`ViewSettingsPanel`) — pilot complet amb els 4 components.
+- ✅ **Usuari** (`UserSettingsPanel`) — usa `SectionTitle` compartit.
+- ✅ **Pictogrames** (`DefaultForm`) — `SettingsPanelLayout` + `SettingsPreviewFrame background="paper"` + 4 seccions (Pictograma, Text i numeració, Vores, Aparença).
+- ✅ **Vocabulari** (`VocabularySettingsPanel`) — preview mogut a l'esquerra amb `SettingsPreviewFrame`; 2 seccions (Paraula, Pictograma).
+- ✅ **Família `SettingCard`** — `card` (`SettingsCards.styled.ts`) ja no porta `borderBottom`; separació només via `SectionTitle` del tab que l'envolta.
+- ✅ **`GlobalViewControls`** — toggles d'orientació i direcció migrats a `StyledToggleButtonGroup`. Component **compartit** amb la pàgina de visualització (`ViewSquenceSettings`): la columna de controls hi és més estreta (300px) però els toggles (55×55, 2 botons per grup) hi encaixen sense retallar-se; verificat visualment als dos llocs.
+- ⏳ **`SequenceControlsPanel`** (alineació H/V per seqüència individual, dins la pàgina de vista) — encara amb `ToggleButtonGroup` pla de MUI. No forma part del modal de configuracions; fora d'abast d'aquesta migració però queda com a following-up per coherència total de la marca a l'app.
+
+---
+
 ## Descripció del projecte
 
 App per crear seqüències de pictogrames (ARASAAC), previsualitzar-les i imprimir-les.
