@@ -7,8 +7,6 @@ import { SectionTitle } from "../../components/SettingsLayout";
 import messages from "./UserSettingsPanel.lang";
 import React from "react";
 
-const searchCardSx = { width: "100%" };
-
 const UserSettingsPanel = (): React.ReactElement => (
   <Stack
     direction="column"
@@ -17,7 +15,7 @@ const UserSettingsPanel = (): React.ReactElement => (
   >
     <SectionTitle title={<FormattedMessage {...messages.sectionLanguage} />}>
       <SettingCardLangAppToggle />
-      <SettingCardLang setting="languagesSearch" sx={searchCardSx} />
+      <SettingCardLang setting="languagesSearch" />
     </SectionTitle>
 
     <SectionTitle title={<FormattedMessage {...messages.sectionAppearance} />}>

@@ -1,10 +1,10 @@
-import { Stack, ToggleButton, Typography } from "@mui/material";
+import { ToggleButton } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { RiSunLine, RiMoonLine, RiComputerLine } from "react-icons/ri";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { updateThemeActionCreator } from "@features/user-settings/store/uiSlice";
 import { ThemeMode } from "../../../types/ui";
-import { card } from "../SettingsCards.styled";
+import SettingRow from "../../SettingsLayout/SettingRow";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import messages from "./SettingCardTheme.lang";
 import React from "react";
@@ -29,17 +29,10 @@ const SettingCardTheme = (): React.ReactElement => {
   };
 
   return (
-    <Stack
-      display="flex"
-      direction="row"
-      flexWrap="wrap"
-      columnGap={2}
-      sx={{ ...card, width: "100%" }}
+    <SettingRow
+      title={<FormattedMessage {...messages.cardTitle} />}
+      control="wide"
     >
-      <Typography variant="body1" sx={{ fontWeight: "bold", flex: 1 }} component="h2">
-        <FormattedMessage {...messages.cardTitle} />
-      </Typography>
-
       <StyledToggleButtonGroup
         value={theme}
         exclusive
@@ -59,7 +52,7 @@ const SettingCardTheme = (): React.ReactElement => {
           </ToggleButton>
         ))}
       </StyledToggleButtonGroup>
-    </Stack>
+    </SettingRow>
   );
 };
 

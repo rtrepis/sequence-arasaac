@@ -1,53 +1,32 @@
-import { Tabs, Tab, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Tabs } from "@mui/material";
+import React from "react";
 import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
-import { Link } from "react-router-dom";
-import { toggleButtonTypographyStyles } from "../ToggleButtonEditViewPages/ToggleButtonEditViewPages.styled";
-import { tabsStyled } from "./TabsEditView.styled";
-import { FormattedMessage } from "react-intl";
+import { Link, useLocation } from "react-router-dom";
+import { useIntl } from "react-intl";
+import { AppTab, tabsStyled } from "../AppTabs";
 import messages from "./TabsEditView.lang";
 
 const TabsEditView = () => {
-  const [value, setValue] = useState<string>("edit");
+  const intl = useIntl();
+  const { pathname } = useLocation();
+  // El tab actiu es deriva de la ruta, no d'estat local: si es recarrega la
+  // pàgina de visualització, el tab marcat ha de ser el de visualització
+  const value = pathname.includes("view-sequence") ? "view" : "edit";
 
   return (
-    <Tabs
-      value={value}
-      onChange={(_, value) => setValue(value)}
-      sx={tabsStyled}
-    >
-      <Tab
+    <Tabs value={value} sx={tabsStyled}>
+      <AppTab
         value="edit"
-        label={
-          <Typography
-            variant={"h6"}
-            component="h2"
-            fontWeight={600}
-            sx={toggleButtonTypographyStyles}
-          >
-            <FormattedMessage {...messages.edit} />
-          </Typography>
-        }
+        label={intl.formatMessage(messages.edit)}
         icon={<AiOutlineEdit />}
-        iconPosition="start"
         component={Link}
         to={"create-sequence"}
       />
 
-      <Tab
+      <AppTab
         value="view"
-        label={
-          <Typography
-            variant={"h6"}
-            component="h2"
-            fontWeight={600}
-            sx={toggleButtonTypographyStyles}
-          >
-            <FormattedMessage {...messages.view} />
-          </Typography>
-        }
+        label={intl.formatMessage(messages.view)}
         icon={<AiOutlineEye />}
-        iconPosition="start"
         component={Link}
         to={"view-sequence"}
       />

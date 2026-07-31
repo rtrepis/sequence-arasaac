@@ -4,6 +4,7 @@ import {
   SETTINGS_ROW_GAP,
   SETTINGS_ZONE_GAP,
   SETTINGS_MAX_WIDTH,
+  SETTINGS_APPBAR_OFFSET,
 } from "./settingsLayout.styled";
 
 interface SettingsPanelLayoutProps {
@@ -38,8 +39,12 @@ const SettingsPanelLayout = ({
       <Box
         sx={{
           position: { xs: "sticky", md: "static" },
-          top: { xs: 0 },
+          // Offset per no quedar sota l'AppBar fix del diàleg en mòbil
+          top: { xs: SETTINGS_APPBAR_OFFSET, md: 0 },
           zIndex: { xs: 10, md: "auto" },
+          // Acotem la mostra perquè no es mengi la pantalla i deixi els controls fora de vista
+          maxHeight: { xs: "35vh", md: "none" },
+          overflow: { xs: "auto", md: "visible" },
         }}
       >
         {preview}

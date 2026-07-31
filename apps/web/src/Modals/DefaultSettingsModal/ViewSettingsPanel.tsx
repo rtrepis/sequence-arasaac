@@ -1,7 +1,5 @@
 import {
-  Box,
   Button,
-  FormLabel,
   Slider,
   Stack,
   ToggleButton,
@@ -12,11 +10,9 @@ import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import {
   SettingsPanelLayout,
   SectionTitle,
-  settingRowInline,
-  settingControlWidth,
+  SettingRow,
   SETTINGS_MAX_WIDTH,
 } from "../../components/SettingsLayout";
-import { cardTitle } from "../../components/SettingsCards/SettingsCards.styled";
 import { FormattedMessage, useIntl } from "react-intl";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
@@ -37,6 +33,7 @@ import { ViewSettings, SequenceDirection, PageOrientation } from "../../types/ui
 import { PageSize } from "../../types/PageFormat";
 import { SequenceAlignmentH, SequenceAlignmentV } from "../../types/document";
 import GlobalViewControls from "../../components/ViewSequencesSettings/GlobalViewControls";
+import PrintFooterSection from "../../components/ViewSequencesSettings/PrintFooterSection";
 import viewMessages from "../../components/ViewSequencesSettings/ViewSequencesSettings.lang";
 import ViewSettingsPreview from "./ViewSettingsPreview";
 import messages from "./ViewSettingsPanel.lang";
@@ -162,23 +159,18 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           <SectionTitle title={<FormattedMessage {...messages.sectionPageFormat} />}>
             <GlobalViewControls
               viewSettings={localSettings}
-              author={localSettings.author}
               pageSizeIndex={PAGE_INDEX_MAP[localSettings.pageSize]}
               sequenceCount={2}
               onPageSizeChange={handlePageSizeChange}
               onDirectionChange={handleDirectionChange}
               onSequenceSpaceChange={handleSequenceSpaceChange}
-              onAuthorChange={handleAuthorChange}
               onOrientationChange={handleOrientationChange}
             />
           </SectionTitle>
 
           {/* Secció: mida i alineació dels pictogrames */}
           <SectionTitle title={<FormattedMessage {...messages.sectionPictograms} />}>
-            <Box sx={settingRowInline}>
-              <FormLabel sx={cardTitle}>
-                <FormattedMessage {...viewMessages.size} />
-              </FormLabel>
+            <SettingRow title={<FormattedMessage {...viewMessages.size} />}>
               <Slider
                 step={SIZE_PICT_STEP}
                 min={SIZE_PICT_MIN}
@@ -187,14 +179,10 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
                 valueLabelDisplay="auto"
                 valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
                 onChange={handleSizePict}
-                sx={settingControlWidth}
               />
-            </Box>
+            </SettingRow>
 
-            <Box sx={settingRowInline}>
-              <FormLabel sx={cardTitle}>
-                <FormattedMessage {...viewMessages.pictSpaceBetween} />
-              </FormLabel>
+            <SettingRow title={<FormattedMessage {...viewMessages.pictSpaceBetween} />}>
               <Slider
                 step={PICT_SPACE_STEP}
                 min={PICT_SPACE_MIN}
@@ -203,14 +191,13 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
                 valueLabelDisplay="auto"
                 valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
                 onChange={handlePictSpaceBetween}
-                sx={settingControlWidth}
               />
-            </Box>
+            </SettingRow>
 
-            <Box sx={settingRowInline}>
-              <FormLabel component="legend" sx={cardTitle}>
-                <FormattedMessage {...viewMessages.alignmentH} />
-              </FormLabel>
+            <SettingRow
+              title={<FormattedMessage {...viewMessages.alignmentH} />}
+              control="wide"
+            >
               <StyledToggleButtonGroup
                 value={localSettings.alignmentH}
                 exclusive
@@ -232,12 +219,12 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
                   </ToggleButton>
                 </Tooltip>
               </StyledToggleButtonGroup>
-            </Box>
+            </SettingRow>
 
-            <Box sx={settingRowInline}>
-              <FormLabel component="legend" sx={cardTitle}>
-                <FormattedMessage {...viewMessages.alignmentV} />
-              </FormLabel>
+            <SettingRow
+              title={<FormattedMessage {...viewMessages.alignmentV} />}
+              control="wide"
+            >
               <StyledToggleButtonGroup
                 value={localSettings.alignmentV}
                 exclusive
@@ -259,8 +246,14 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
                   </ToggleButton>
                 </Tooltip>
               </StyledToggleButtonGroup>
-            </Box>
+            </SettingRow>
           </SectionTitle>
+
+          {/* Secció: el que només surt al peu del full imprès i del PDF */}
+          <PrintFooterSection
+            author={localSettings.author}
+            onAuthorChange={handleAuthorChange}
+          />
 
           <Stack direction="row" gap={1} alignItems="flex-start" sx={{ mt: 1 }}>
             <Stack gap={0.5}>

@@ -1,28 +1,22 @@
 import {
-  Box,
-  Button,
-  FormLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
   Slider,
-  TextField,
   ToggleButton,
   Tooltip,
 } from "@mui/material";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { MdTableRows, MdViewColumn, MdSettingsBackupRestore } from "react-icons/md";
+import { MdTableRows, MdViewColumn } from "react-icons/md";
 import { MdScreenRotation } from "react-icons/md";
 import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
 import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
-import { settingRowInline, settingControlWidth } from "@/components/SettingsLayout";
-import { cardTitle } from "@/components/SettingsCards/SettingsCards.styled";
+import { SettingRow } from "@/components/SettingsLayout";
 import messages from "./ViewSequencesSettings.lang";
 
 interface GlobalViewControlsProps {
   viewSettings: ViewSettings;
-  author: string;
   pageSizeIndex: number;
   sequenceCount: number;
   onPageSizeChange: (event: SelectChangeEvent<number>) => void;
@@ -31,42 +25,33 @@ interface GlobalViewControlsProps {
     newDirection: SequenceDirection | null,
   ) => void;
   onSequenceSpaceChange: (event: Event, value: number | number[]) => void;
-  onAuthorChange: (value: string) => void;
   onOrientationChange?: (orientation: PageOrientation) => void;
-  onResetToDefaults?: () => void;
-  children?: React.ReactNode;
 }
 
 /**
- * Controls globals de visualització: format de pàgina, direcció i autor.
- * Accepta children per intercalar SequenceControlsPanel entre el format i la direcció.
+ * Controls globals de visualització: format de pàgina, orientació, separació
+ * entre seqüències i direcció. Només files d'ajust (`SettingRow`); qui el
+ * consumeix decideix la secció que l'embolcalla i els botons d'acció.
  */
 const GlobalViewControls = ({
   viewSettings,
-  author,
   pageSizeIndex,
   sequenceCount,
   onPageSizeChange,
   onDirectionChange,
   onSequenceSpaceChange,
-  onAuthorChange,
   onOrientationChange,
-  onResetToDefaults,
-  children,
 }: GlobalViewControlsProps): React.ReactElement => {
   const intl = useIntl();
 
   return (
     <>
-      <Box sx={settingRowInline}>
-        <FormLabel sx={cardTitle}>
-          <FormattedMessage {...messages.pageSize} />
-        </FormLabel>
+      <SettingRow title={<FormattedMessage {...messages.pageSize} />}>
         <Select<number>
           value={pageSizeIndex}
           onChange={onPageSizeChange}
           size="small"
-          sx={settingControlWidth}
+          fullWidth
         >
           <MenuItem value={0}>A4</MenuItem>
           <MenuItem value={1}>A3</MenuItem>
@@ -74,13 +59,13 @@ const GlobalViewControls = ({
             <FormattedMessage {...messages.fullScreen} />
           </MenuItem>
         </Select>
-      </Box>
+      </SettingRow>
 
       {onOrientationChange && (
-        <Box sx={settingRowInline}>
-          <FormLabel sx={cardTitle}>
-            <FormattedMessage {...messages.tooltipOrientation} />
-          </FormLabel>
+        <SettingRow
+          title={<FormattedMessage {...messages.tooltipOrientation} />}
+          control="wide"
+        >
           <StyledToggleButtonGroup
             value={viewSettings.orientation}
             exclusive
@@ -97,16 +82,11 @@ const GlobalViewControls = ({
               </ToggleButton>
             </Tooltip>
           </StyledToggleButtonGroup>
-        </Box>
+        </SettingRow>
       )}
 
-      {children}
-
       {sequenceCount > 1 && (
-        <Box sx={settingRowInline}>
-          <FormLabel sx={cardTitle}>
-            <FormattedMessage {...messages.sequenceSpaceBetween} />
-          </FormLabel>
+        <SettingRow title={<FormattedMessage {...messages.sequenceSpaceBetween} />}>
           <Slider
             name="sequenceSpaceBetween"
             step={0.5}
@@ -118,15 +98,14 @@ const GlobalViewControls = ({
               parseFloat(value.toFixed(2))
             }
             onChange={onSequenceSpaceChange}
-            sx={settingControlWidth}
           />
-        </Box>
+        </SettingRow>
       )}
 
-      <Box sx={settingRowInline}>
-        <FormLabel component="legend" sx={cardTitle}>
-          <FormattedMessage {...messages.direction} />
-        </FormLabel>
+      <SettingRow
+        title={<FormattedMessage {...messages.direction} />}
+        control="wide"
+      >
         <StyledToggleButtonGroup
           value={viewSettings.direction}
           exclusive
@@ -145,40 +124,7 @@ const GlobalViewControls = ({
             </ToggleButton>
           </Tooltip>
         </StyledToggleButtonGroup>
-      </Box>
-
-      <Box sx={settingRowInline}>
-        <FormLabel sx={cardTitle}>
-          <FormattedMessage {...messages.authSequence} />
-        </FormLabel>
-        <TextField
-          value={author}
-          onChange={(event) => onAuthorChange(event.target.value)}
-          variant="filled"
-          helperText={intl.formatMessage({ ...messages.authHelperText })}
-          sx={{
-            ...settingControlWidth,
-            ".MuiInputBase-input": { paddingTop: 2 },
-          }}
-        />
-      </Box>
-
-      {onResetToDefaults && (
-        <Box sx={{ pt: 4, display: "flex", justifyContent: "flex-end" }}>
-          <Tooltip title={intl.formatMessage(messages.tooltipResetDefaults)}>
-            <Button
-              variant="text"
-              color="primary"
-              size="large"
-              endIcon={<MdSettingsBackupRestore />}
-              onClick={onResetToDefaults}
-              sx={{ alignSelf: "flex-start", textTransform: "none" }}
-            >
-              <FormattedMessage {...messages.resetDefaults} />
-            </Button>
-          </Tooltip>
-        </Box>
-      )}
+      </SettingRow>
     </>
   );
 };

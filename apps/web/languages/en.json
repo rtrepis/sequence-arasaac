@@ -148,10 +148,6 @@
     "defaultMessage": "Text and numbering",
     "description": "Títol de la secció de posició de text i tipografies al panell de pictogrames"
   },
-  "components.defaultSettings.sectionBorders": {
-    "defaultMessage": "Borders",
-    "description": "Títol de la secció de vores al panell de pictogrames"
-  },
   "components.defaultSettings.sectionAppearance": {
     "defaultMessage": "Appearance",
     "description": "Títol de la secció de pell i cabell al panell de pictogrames"
@@ -447,6 +443,10 @@
   "components.settingCardBorder.selected.label": {
     "defaultMessage": "Selected",
     "description": "type setting "
+  },
+  "components.settingCardBorder.type.title": {
+    "defaultMessage": "Type",
+    "description": "Títol de la fila de tipus de vora (Fitzgerald / color triat / sense vora)"
   },
   "components.settingCardBorder.withoutBorder.label": {
     "defaultMessage": "Without border",
@@ -1341,5 +1341,17 @@
   },
   "components.defaultSettings.tooltipReset": {
     "defaultMessage": "Reset to application defaults"
+  },
+  "pages.viewSequence.section.pageFormat": {
+    "defaultMessage": "Page format",
+    "description": "Títol de la secció de format de pàgina a la columna de configuració de la vista"
+  },
+  "pages.viewSequence.section.sequences": {
+    "defaultMessage": "Sequences",
+    "description": "Títol de la secció d'ajustos per seqüència a la columna de configuració de la vista"
+  },
+  "pages.viewSequence.section.printFooter": {
+    "defaultMessage": "Print footer",
+    "description": "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF"
   }
 }

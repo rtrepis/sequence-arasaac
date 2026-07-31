@@ -1,10 +1,10 @@
-import { FormLabel, Stack, Typography } from "@mui/material";
 import { Font } from "../../../types/sequence";
 import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
 import SettingCardFont from "../SettingCardOptions/font/SettingCardFont";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { card, cardTitle } from "../SettingsCards.styled";
+import SectionTitle from "../../SettingsLayout/SectionTitle";
+import SettingRow from "../../SettingsLayout/SettingRow";
 import { messages } from "./SettingCardFontGroup.lang";
 import InputColor from "../InputColor/InputColor";
 import React from "react";
@@ -15,6 +15,10 @@ interface SettingCardFontGroupProps {
   title?: React.ReactNode;
 }
 
+/**
+ * Secció autotitulada d'una tipografia: família, mida i color com a files
+ * independents. Igual que `SettingCardBorder`, es titula ella mateixa.
+ */
 const SettingCardFontGroup = ({
   state,
   setState,
@@ -29,17 +33,7 @@ const SettingCardFontGroup = ({
   }, [color, family, setState, size]);
 
   return (
-    <Stack
-      display={"flex"}
-      direction={"row"}
-      flexWrap={"wrap"}
-      columnGap={2}
-      sx={card}
-    >
-      <Typography variant="body1" sx={cardTitle} component="h4">
-        {title ?? <FormattedMessage {...messages.font} />}
-      </Typography>
-
+    <SectionTitle title={title ?? <FormattedMessage {...messages.font} />}>
       <SettingCardFont
         setting="fontFamily"
         state={family}
@@ -48,18 +42,15 @@ const SettingCardFontGroup = ({
 
       <SettingCardNumber setting="fontSize" state={size} setState={setSize} />
 
-      <Stack direction={"row"} spacing={2}>
-        <FormLabel>
-          <FormattedMessage {...messages.color} />
-        </FormLabel>
+      <SettingRow title={<FormattedMessage {...messages.color} />} control="compact">
         <InputColor
           inputBorder={4}
           inputSize={45}
           color={color}
           setColor={setColor}
         />
-      </Stack>
-    </Stack>
+      </SettingRow>
+    </SectionTitle>
   );
 };
 

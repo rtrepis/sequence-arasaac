@@ -18,6 +18,13 @@ interface BarProps {
   children: React.ReactElement;
 }
 
+/**
+ * Nom curt de la marca per a mòbil, on el nom sencer no cap al costat del tab actiu.
+ * Conserva l'arrel pròpia de SequenciAAC: «SAAC» sol es llegiria com el terme
+ * genèric del sector (Sistemes Augmentatius i Alternatius de Comunicació).
+ */
+const APP_SHORT_NAME = "SqAAC";
+
 const BarNavigation = ({ children }: BarProps): React.ReactElement => {
   const intl = useIntl();
   const location = useLocation();
@@ -84,16 +91,30 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
                 height={"50px"}
               >
                 <LogoMenu />
+                {/* El nom s'escurça en mòbil per deixar amplada al tab actiu;
+                    l'aria-label manté sempre el nom sencer per als lectors de pantalla */}
                 <Typography
                   variant={"h5"}
                   component="h1"
                   fontWeight={800}
-                  sx={{
-                    display: { xs: "none", sm: "block" },
-                    lineHeight: 0,
-                  }}
+                  aria-label={intl.formatMessage(messages.title)}
+                  sx={{ lineHeight: 0 }}
                 >
-                  <FormattedMessage {...messages.title} />
+                  <Box
+                    component="span"
+                    sx={{ display: { xs: "none", sm: "inline" } }}
+                  >
+                    <FormattedMessage {...messages.title} />
+                  </Box>
+                  <Box
+                    component="span"
+                    sx={{
+                      display: { xs: "inline", sm: "none" },
+                      fontSize: "1.25rem",
+                    }}
+                  >
+                    {APP_SHORT_NAME}
+                  </Box>
                 </Typography>
                 <TabsEditView />
               </Stack>

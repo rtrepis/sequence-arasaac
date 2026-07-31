@@ -1,27 +1,15 @@
-import {
-  FormLabel,
-  Slider,
-  ToggleButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { Stack } from "@mui/system";
+import { Slider, ToggleButton, Tooltip } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import { Border } from "../../../types/sequence";
-import {
-  card,
-  cardAction,
-  cardColor,
-  cardContent,
-  cardTitle,
-} from "../SettingsCards.styled";
+import { cardColor } from "../SettingsCards.styled";
+import SectionTitle from "../../SettingsLayout/SectionTitle";
+import SettingRow from "../../SettingsLayout/SettingRow";
 import "./SettingCardBorder.css";
 import { messages } from "./SettingCardBorder.lang";
 import { useState } from "react";
 import InputColor from "../InputColor/InputColor";
 import React from "react";
-import ApplyAll from "../ApplyAll/ApplyAll";
 
 interface SettingCardBorderProps {
   border: "borderIn" | "borderOut";
@@ -31,6 +19,12 @@ interface SettingCardBorderProps {
   onApplyAll?: () => void;
 }
 
+/**
+ * Secció autotitulada d'una vora: tipus, gruix i radi com a files independents.
+ * Es titula ella mateixa perquè els contextos que no l'embolcallen amb un
+ * `SectionTitle` (com el modal d'edició de pictograma) obtinguin la mateixa
+ * presentació sense canvis.
+ */
 const SettingCardBorder = ({
   border,
   state: { color, size, radius },
@@ -86,22 +80,14 @@ const SettingCardBorder = ({
   };
 
   return (
-    <Stack
-      display={"felx"}
-      direction={"row"}
-      flexWrap={"wrap"}
-      columnGap={2}
-      sx={card}
+    <SectionTitle
+      title={<FormattedMessage {...messages[border]} />}
+      onApplyAll={onApplyAll}
     >
-      <Typography variant="body1" sx={cardTitle} component="h4">
-        <FormattedMessage {...messages[border]} />
-      </Typography>
-
-      <Stack display={"flex"} direction={"row"} flexWrap={"wrap"} columnGap={2}>
+      <SettingRow title={<FormattedMessage {...messages.type} />} control="wide">
         <StyledToggleButtonGroup
           exclusive
           aria-label={`${intl.formatMessage(messages[border])}`}
-          sx={cardContent}
         >
           <ToggleButton
             value={"Fitzgerald Key"}
@@ -141,46 +127,32 @@ const SettingCardBorder = ({
             </Tooltip>
           </ToggleButton>
         </StyledToggleButtonGroup>
+      </SettingRow>
 
-        <Stack direction={"row"} spacing={2}>
-          <FormLabel>
-            <FormattedMessage {...messages.size} />
-          </FormLabel>
-          <Slider
-            defaultValue={size}
-            aria-label={`${intl.formatMessage(messages.size)}`}
-            valueLabelDisplay="auto"
-            max={10}
-            min={1}
-            value={size}
-            onChange={handleChangesSize}
-            sx={{ width: 100 }}
-            disabled={size === 0}
-          />
-        </Stack>
+      <SettingRow title={<FormattedMessage {...messages.size} />}>
+        <Slider
+          aria-label={`${intl.formatMessage(messages.size)}`}
+          valueLabelDisplay="auto"
+          max={10}
+          min={1}
+          value={size}
+          onChange={handleChangesSize}
+          disabled={size === 0}
+        />
+      </SettingRow>
 
-        <Stack direction={"row"} spacing={2}>
-          <FormLabel>
-            <FormattedMessage {...messages.radius} />
-          </FormLabel>
-          <Slider
-            defaultValue={radius}
-            aria-label={`${intl.formatMessage(messages.radius)}`}
-            valueLabelDisplay="auto"
-            max={70}
-            min={1}
-            value={radius}
-            onChange={handleChangesRadius}
-            sx={{ width: 100 }}
-            disabled={size === 0}
-          />
-        </Stack>
-      </Stack>
-
-      {onApplyAll && (
-        <ApplyAll sx={cardAction} onClick={onApplyAll} />
-      )}
-    </Stack>
+      <SettingRow title={<FormattedMessage {...messages.radius} />}>
+        <Slider
+          aria-label={`${intl.formatMessage(messages.radius)}`}
+          valueLabelDisplay="auto"
+          max={70}
+          min={1}
+          value={radius}
+          onChange={handleChangesRadius}
+          disabled={size === 0}
+        />
+      </SettingRow>
+    </SectionTitle>
   );
 };
 export default SettingCardBorder;

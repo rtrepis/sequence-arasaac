@@ -2,14 +2,10 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
   Slider,
   Stack,
   Switch,
   ToggleButton,
-  ToggleButtonGroup,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -24,7 +20,13 @@ import {
   MdVerticalAlignCenter,
   MdVerticalAlignBottom,
 } from "react-icons/md";
-import { SequenceAlignmentH, SequenceAlignmentV, SequenceViewSettings } from "@/types/document";
+import {
+  SequenceAlignmentH,
+  SequenceAlignmentV,
+  SequenceViewSettings,
+} from "@/types/document";
+import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
+import { SettingRow, SETTINGS_ROW_GAP } from "@/components/SettingsLayout";
 import messages from "./ViewSequencesSettings.lang";
 import {
   SEQ_VIEW_DEFAULT_SIZE_PICT,
@@ -41,13 +43,32 @@ interface SequenceControlsPanelProps {
   sequenceViewSettings: { [key: number]: SequenceViewSettings };
   applyAll: boolean;
   expandedAccordion: number | null;
-  onAccordionToggle: (key: number) => (e: React.SyntheticEvent, expanded: boolean) => void;
+  onAccordionToggle: (
+    key: number,
+  ) => (e: React.SyntheticEvent, expanded: boolean) => void;
   onApplyAllChange: (e: React.SyntheticEvent, checked: boolean) => void;
-  onSequenceSliderChange: (seqKey: number) => (event: Event, value: number | number[]) => void;
-  onAlignmentHChange: (seqKey: number) => (event: React.MouseEvent<HTMLElement>, value: SequenceAlignmentH | null) => void;
-  onAlignmentVChange: (seqKey: number) => (event: React.MouseEvent<HTMLElement>, value: SequenceAlignmentV | null) => void;
+  onSequenceSliderChange: (
+    seqKey: number,
+  ) => (event: Event, value: number | number[]) => void;
+  onAlignmentHChange: (
+    seqKey: number,
+  ) => (
+    event: React.MouseEvent<HTMLElement>,
+    value: SequenceAlignmentH | null,
+  ) => void;
+  onAlignmentVChange: (
+    seqKey: number,
+  ) => (
+    event: React.MouseEvent<HTMLElement>,
+    value: SequenceAlignmentV | null,
+  ) => void;
 }
 
+/**
+ * Ajustos d'una seqüència concreta (mida, separació i alineació dels pictogrames),
+ * dins d'un acordió per seqüència. Segueix l'estàndard de configuracions:
+ * cada ajust és un `SettingRow` i els selectors d'opcions són `StyledToggleButtonGroup`.
+ */
 const SequenceControlsPanel = ({
   sequenceKeys,
   sequenceViewSettings,
@@ -68,50 +89,55 @@ const SequenceControlsPanel = ({
       alignmentH: SEQ_VIEW_DEFAULT_ALIGNMENT_H,
       alignmentV: SEQ_VIEW_DEFAULT_ALIGNMENT_V,
     };
+    // Prefix únic per als ids dels títols: cada acordió repeteix els mateixos ajustos
+    const labelId = `sequence-${seqKey}`;
 
     return (
-      <Stack spacing={1}>
-        <FormGroup>
-          <FormLabel>
-            <FormattedMessage {...messages.size} />
-            <Slider
-              name="sizePict"
-              step={SIZE_PICT_STEP}
-              min={SIZE_PICT_MIN}
-              max={SIZE_PICT_MAX}
-              value={seqView.sizePict}
-              valueLabelDisplay="auto"
-              valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
-              onChange={onSequenceSliderChange(seqKey)}
-            />
-          </FormLabel>
-        </FormGroup>
+      <Stack direction="column" gap={SETTINGS_ROW_GAP}>
+        <SettingRow
+          title={<FormattedMessage {...messages.size} />}
+          labelId={`${labelId}-size`}
+        >
+          <Slider
+            name="sizePict"
+            step={SIZE_PICT_STEP}
+            min={SIZE_PICT_MIN}
+            max={SIZE_PICT_MAX}
+            value={seqView.sizePict}
+            valueLabelDisplay="auto"
+            valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
+            onChange={onSequenceSliderChange(seqKey)}
+            aria-labelledby={`${labelId}-size`}
+          />
+        </SettingRow>
 
-        <FormGroup>
-          <FormLabel>
-            <FormattedMessage {...messages.pictSpaceBetween} />
-            <Slider
-              name="pictSpaceBetween"
-              step={0.5}
-              min={-2}
-              max={10}
-              value={seqView.pictSpaceBetween}
-              valueLabelDisplay="auto"
-              valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
-              onChange={onSequenceSliderChange(seqKey)}
-            />
-          </FormLabel>
-        </FormGroup>
+        <SettingRow
+          title={<FormattedMessage {...messages.pictSpaceBetween} />}
+          labelId={`${labelId}-space`}
+        >
+          <Slider
+            name="pictSpaceBetween"
+            step={0.5}
+            min={-2}
+            max={10}
+            value={seqView.pictSpaceBetween}
+            valueLabelDisplay="auto"
+            valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
+            onChange={onSequenceSliderChange(seqKey)}
+            aria-labelledby={`${labelId}-space`}
+          />
+        </SettingRow>
 
-        <FormGroup>
-          <FormLabel component="legend">
-            <FormattedMessage {...messages.alignmentH} />
-          </FormLabel>
-          <ToggleButtonGroup
+        <SettingRow
+          title={<FormattedMessage {...messages.alignmentH} />}
+          labelId={`${labelId}-alignment-h`}
+          control="wide"
+        >
+          <StyledToggleButtonGroup
             value={seqView.alignmentH}
             exclusive
             onChange={onAlignmentHChange(seqKey)}
-            size="small"
+            aria-labelledby={`${labelId}-alignment-h`}
           >
             <Tooltip title={intl.formatMessage(messages.tooltipAlignLeft)}>
               <ToggleButton value="left" aria-label="left">
@@ -128,18 +154,19 @@ const SequenceControlsPanel = ({
                 <MdFormatAlignRight />
               </ToggleButton>
             </Tooltip>
-          </ToggleButtonGroup>
-        </FormGroup>
+          </StyledToggleButtonGroup>
+        </SettingRow>
 
-        <FormGroup>
-          <FormLabel component="legend">
-            <FormattedMessage {...messages.alignmentV} />
-          </FormLabel>
-          <ToggleButtonGroup
+        <SettingRow
+          title={<FormattedMessage {...messages.alignmentV} />}
+          labelId={`${labelId}-alignment-v`}
+          control="wide"
+        >
+          <StyledToggleButtonGroup
             value={seqView.alignmentV}
             exclusive
             onChange={onAlignmentVChange(seqKey)}
-            size="small"
+            aria-labelledby={`${labelId}-alignment-v`}
           >
             <Tooltip title={intl.formatMessage(messages.tooltipAlignTop)}>
               <ToggleButton value="top" aria-label="top">
@@ -156,8 +183,8 @@ const SequenceControlsPanel = ({
                 <MdVerticalAlignBottom />
               </ToggleButton>
             </Tooltip>
-          </ToggleButtonGroup>
-        </FormGroup>
+          </StyledToggleButtonGroup>
+        </SettingRow>
       </Stack>
     );
   };
@@ -165,20 +192,20 @@ const SequenceControlsPanel = ({
   return (
     <>
       {sequenceKeys.length > 1 && (
-        <FormGroup>
+        <SettingRow
+          title={<FormattedMessage {...messages.applyAll} />}
+          control="compact"
+        >
           <Tooltip title={intl.formatMessage(messages.tooltipApplyAll)}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={applyAll}
-                  onChange={onApplyAllChange}
-                  size="small"
-                />
-              }
-              label={intl.formatMessage(messages.applyAll)}
+            <Switch
+              checked={applyAll}
+              onChange={onApplyAllChange}
+              inputProps={{
+                "aria-label": intl.formatMessage(messages.applyAll),
+              }}
             />
           </Tooltip>
-        </FormGroup>
+        </SettingRow>
       )}
 
       {sequenceKeys.map((seqKey) => (
@@ -187,18 +214,22 @@ const SequenceControlsPanel = ({
           expanded={expandedAccordion === seqKey}
           onChange={onAccordionToggle(seqKey)}
           disableGutters
+          elevation={0}
           sx={{
             display: applyAll && seqKey !== sequenceKeys[0] ? "none" : "block",
+            backgroundColor: "transparent",
+            // Sense la línia superior de MUI: el divisor del SectionTitle ja separa la secció
+            "&:before": { display: "none" },
           }}
         >
-          <AccordionSummary expandIcon={<MdExpandMore />}>
+          <AccordionSummary expandIcon={<MdExpandMore />} sx={{ px: 0 }}>
             <Typography variant="subtitle2">
               {applyAll
                 ? intl.formatMessage(messages.sequence)
                 : `${intl.formatMessage(messages.sequence)} ${seqKey + 1}`}
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{ px: 0, pt: 0 }}>
             {renderSequenceControls(applyAll ? sequenceKeys[0] : seqKey)}
           </AccordionDetails>
         </Accordion>

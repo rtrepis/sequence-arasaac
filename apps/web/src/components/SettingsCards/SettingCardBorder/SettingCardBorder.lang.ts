@@ -11,6 +11,11 @@ export const messages = defineMessages({
     defaultMessage: "Border in",
     description: "setting title ",
   },
+  type: {
+    id: "components.settingCardBorder.type.title",
+    defaultMessage: "Type",
+    description: "Títol de la fila de tipus de vora (Fitzgerald / color triat / sense vora)",
+  },
   fitzgeraldKey: {
     id: "components.settingCardBorder.fitzgeraldKey.label",
     defaultMessage: "Fitzgerald Key",

@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import { Tab, Tabs } from "@mui/material";
+import { Tabs } from "@mui/material";
 import {
   AiOutlineClose,
   AiOutlineUser,
@@ -14,10 +14,9 @@ import {
 } from "react-icons/ai";
 import { MdGridView } from "react-icons/md";
 import { forwardRef, useRef } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
-import { tabsStyled } from "../../components/TabsEditView/TabsEditView.styled";
-import { toggleButtonTypographyStyles } from "../../components/ToggleButtonEditViewPages/ToggleButtonEditViewPages.styled";
+import { AppTab, APP_TAB_LABEL_BREAKPOINT, tabsStyled } from "../../components/AppTabs";
 import { Container } from "@mui/system";
 import DefaultSettingsPanel, { DefaultSettingsPanelHandle } from "../../components/DefaultsForm/DefaultSettingsPanel";
 import UserSettingsPanel from "./UserSettingsPanel";
@@ -37,6 +36,20 @@ interface DefaultSettingsDialogProps {
   open: boolean;
   onClose: () => void;
 }
+
+interface SettingsTabDefinition {
+  value: SettingsTab;
+  icon: React.ReactElement;
+  message: MessageDescriptor;
+}
+
+/** Tabs del modal de configuracions, en ordre de presentació. */
+const SETTINGS_TABS: SettingsTabDefinition[] = [
+  { value: "user", icon: <AiOutlineUser />, message: messages.tabUser },
+  { value: "pictograms", icon: <AiOutlinePicture />, message: messages.tabPictograms },
+  { value: "view", icon: <MdGridView />, message: messages.tabView },
+  { value: "vocabulary", icon: <AiOutlineBook />, message: messages.tabVocabulary },
+];
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & { children: React.ReactElement },
@@ -76,6 +89,7 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
       fullScreen
       open={open}
       onClose={handleClose}
+      aria-label={intl.formatMessage(messages.settings)}
       slots={{ transition: Transition }}
     >
       <AppBar
@@ -83,8 +97,14 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
         elevation={1}
       >
         <Toolbar style={{ minHeight: "50px" }} sx={{ minHeight: "50px" }}>
+          {/* En mòbil el títol cedeix l'amplada als tabs; el nom del diàleg
+              es manté a l'aria-label i el del tab actiu, al propi tab seleccionat */}
           <Typography
-            sx={{ ml: 2, mr: 3 }}
+            sx={{
+              ml: 2,
+              mr: 3,
+              display: { xs: "none", [APP_TAB_LABEL_BREAKPOINT]: "block" },
+            }}
             variant="h6"
             component="div"
             fontWeight={800}
@@ -92,51 +112,22 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
             <FormattedMessage {...messages.settings} />
           </Typography>
 
+          {/* Scrollable perquè en mòbil el tab seleccionat amb text no desbordi la barra */}
           <Tabs
             value={activeTab}
             onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
             sx={{ ...tabsStyled, flex: 1 }}
           >
-            <Tab
-              value="user"
-              icon={<AiOutlineUser />}
-              iconPosition="start"
-              label={
-                <Typography variant="h6" component="span" fontWeight={600} sx={toggleButtonTypographyStyles}>
-                  <FormattedMessage {...messages.tabUser} />
-                </Typography>
-              }
-            />
-            <Tab
-              value="pictograms"
-              icon={<AiOutlinePicture />}
-              iconPosition="start"
-              label={
-                <Typography variant="h6" component="span" fontWeight={600} sx={toggleButtonTypographyStyles}>
-                  <FormattedMessage {...messages.tabPictograms} />
-                </Typography>
-              }
-            />
-            <Tab
-              value="view"
-              icon={<MdGridView />}
-              iconPosition="start"
-              label={
-                <Typography variant="h6" component="span" fontWeight={600} sx={toggleButtonTypographyStyles}>
-                  <FormattedMessage {...messages.tabView} />
-                </Typography>
-              }
-            />
-            <Tab
-              value="vocabulary"
-              icon={<AiOutlineBook />}
-              iconPosition="start"
-              label={
-                <Typography variant="h6" component="span" fontWeight={600} sx={toggleButtonTypographyStyles}>
-                  <FormattedMessage {...messages.tabVocabulary} />
-                </Typography>
-              }
-            />
+            {SETTINGS_TABS.map(({ value, icon, message }) => (
+              <AppTab
+                key={value}
+                value={value}
+                icon={icon}
+                label={intl.formatMessage(message)}
+              />
+            ))}
           </Tabs>
 
           <IconButton

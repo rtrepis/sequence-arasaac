@@ -106,8 +106,7 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         setNumbered={setNumbered}
         onApplyAllColor={() => dispatch(pictAraSettingsApplyAllActionCreator({ color }))}
         onApplyAllTextPosition={() => dispatch(pictSequenceApplyAllActionCreator({ textPosition }))}
-        onApplyAllSkin={() => dispatch(pictAraSettingsApplyAllActionCreator({ skin }))}
-        onApplyAllHair={() => dispatch(pictAraSettingsApplyAllActionCreator({ hair }))}
+        onApplyAllAppearance={() => dispatch(pictAraSettingsApplyAllActionCreator({ skin, hair }))}
         onApplyAllBorderIn={() => dispatch(borderInApplyAllActionCreator({ borderIn }))}
         onApplyAllBorderOut={() => dispatch(borderOutApplyAllActionCreator({ borderOut }))}
         onSubmit={() => dispatch(updateDefaultSettingsActionCreator(buildSettings()))}
