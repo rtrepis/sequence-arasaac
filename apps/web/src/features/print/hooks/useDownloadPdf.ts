@@ -28,7 +28,7 @@ const themeColorReplacements: Array<[RegExp, string]> = [
   [themeColorPattern(appBackgrounds.dark.default), printColors.background],
   [themeColorPattern(appBackgrounds.dark.paper), printColors.background],
   [themeColorPattern(appBackgrounds.light.paper), printColors.background],
-  // Text blanc del mode fosc (inclou el que emet getDisplayColor) → negre.
+  // Text blanc del mode fosc (peu d'autoria i altres textos de tema) → negre.
   // El grup ([;{\s]) evita falsos positius com "background-color:#fff".
   [
     /([;{\s])color:\s*(?:#fff\b|#ffffff\b|white\b|rgb\(255,\s*255,\s*255\))/gi,
@@ -84,11 +84,6 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
             .preview-content,
             .preview-content .MuiPaper-root {
               background-color: ${printColors.background} !important;
-            }
-            /* El PDF sempre és en clar: es neutralitza la inversió
-               del pictograma sense color del mode fosc */
-            .preview-content img {
-              filter: none !important;
             }
           `;
           clonedDoc.head.appendChild(safetyStyle);

@@ -1,25 +1,26 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Stack,
-  TextField,
-  Button,
-  Chip,
-  Typography,
-  Alert,
-} from "@mui/material";
+import { Alert, Button, Stack, TextField, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-
-const FREE_TIER_MAX_WORDS = 3;
 import {
   addWordProfileActionCreator,
   removeWordProfileActionCreator,
 } from "@features/user-settings/store/uiSlice";
-import { WordProfile } from "@features/word-profile/model/WordProfile";
+import {
+  DEFAULT_WORD_PICT_ID,
+  FREE_TIER_MAX_WORDS,
+  WordProfile,
+} from "@features/word-profile/model/WordProfile";
+import WordProfileList from "@features/word-profile/components/WordProfileList";
+import { useFeedback } from "@/context/FeedbackContext";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import SettingCard from "../../components/SettingsCards/SettingCard/SettingCard";
-import { Hair, PictogramCardDefaults, PictSequence, Skin } from "../../types/sequence";
+import {
+  Hair,
+  PictogramCardDefaults,
+  PictSequence,
+  Skin,
+} from "../../types/sequence";
 import PictogramSearchLocal, {
   PictogramSearchLocalResult,
 } from "../../features/pictogram/components/PictogramSearchLocal";
@@ -27,28 +28,36 @@ import {
   SettingsPanelLayout,
   SettingsPreviewFrame,
   SectionTitle,
+  SettingsPanelHint,
 } from "../../components/SettingsLayout";
+import AuthForm, {
+  AuthMode,
+} from "../../features/backend/auth/components/AuthForm";
+import authMessages from "../../features/backend/auth/components/AuthModal.lang";
 import messages from "./VocabularySettingsPanel.lang";
 
-const DEFAULT_PICT_ID = 6009;
+/** Amplada de la columna esquerra (mostra + llista de paraules) en escriptori. */
+const VOCABULARY_ASIDE_WIDTH = 280;
 
 const VocabularySettingsPanel = (): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const { showSnackbar } = useFeedback();
 
   const wordProfiles = useAppSelector((state) => state.ui.wordProfiles);
   const defaultSettings = useAppSelector((state) => state.ui.defaultSettings);
   const tier = useAppSelector((state) => state.ui.tier);
-  const isAuthenticated = useAppSelector((state) => state.auth.accessToken !== null);
-
-  const atFreeLimit = tier === "free" && wordProfiles.length >= FREE_TIER_MAX_WORDS;
+  const isAuthenticated = useAppSelector(
+    (state) => state.auth.accessToken !== null,
+  );
 
   const [word, setWord] = useState("");
   const [editingWord, setEditingWord] = useState<string | undefined>();
+  const [authMode, setAuthMode] = useState<AuthMode>("login");
 
   // Estat del pictograma seleccionat (skin/hair/color/selectedId/url)
   const [pictState, setPictState] = useState<PictogramSearchLocalResult>({
-    selectedId: DEFAULT_PICT_ID,
+    selectedId: DEFAULT_WORD_PICT_ID,
     fitzgerald: "#CC00BB",
     url: undefined,
     color: defaultSettings.pictApiAra.color,
@@ -56,13 +65,47 @@ const VocabularySettingsPanel = (): React.ReactElement => {
     skin: defaultSettings.pictApiAra.skin as Skin,
   });
 
+  const trimmedWord = word.trim();
+  const existingProfile = wordProfiles.find(
+    (profile) => profile.word.toLowerCase() === trimmedWord.toLowerCase(),
+  );
+
   const isEditing = editingWord !== undefined;
+  // Editar i canviar el text de la paraula equival a reanomenar-la
+  const isRenaming =
+    isEditing && trimmedWord.toLowerCase() !== editingWord.toLowerCase();
+  // Afegir una paraula que ja existeix la sobreescriu, no en crea una de nova
+  const willOverwrite = !isEditing && existingProfile !== undefined;
+  // El nou nom d'una paraula reanomenada xoca amb una altra de ja desada
+  const hasNameCollision = isRenaming && existingProfile !== undefined;
+
+  const consumesQuota = !isEditing && !willOverwrite;
+  const atFreeLimit =
+    consumesQuota &&
+    tier === "free" &&
+    wordProfiles.length >= FREE_TIER_MAX_WORDS;
+
+  const isUpdate = isEditing || willOverwrite;
+  const canSave = trimmedWord !== "" && !hasNameCollision && !atFreeLimit;
+
+  const resetForm = () => {
+    setWord("");
+    setEditingWord(undefined);
+    setPictState({
+      selectedId: DEFAULT_WORD_PICT_ID,
+      fitzgerald: "#CC00BB",
+      url: undefined,
+      color: defaultSettings.pictApiAra.color,
+      hair: defaultSettings.pictApiAra.hair as Hair,
+      skin: defaultSettings.pictApiAra.skin as Skin,
+    });
+  };
 
   const loadProfile = (profile: WordProfile) => {
     setWord(profile.word);
     setEditingWord(profile.word);
     setPictState({
-      selectedId: profile.selectedId ?? DEFAULT_PICT_ID,
+      selectedId: profile.selectedId ?? DEFAULT_WORD_PICT_ID,
       fitzgerald: profile.overrides.fitzgerald ?? "#CC00BB",
       url: profile.customImageUrl,
       color: profile.overrides.color ?? defaultSettings.pictApiAra.color,
@@ -72,8 +115,7 @@ const VocabularySettingsPanel = (): React.ReactElement => {
   };
 
   const handleSave = () => {
-    const trimmed = word.trim();
-    if (!trimmed) return;
+    if (!canSave) return;
 
     const overrides: WordProfile["overrides"] = {
       color: pictState.color,
@@ -82,27 +124,38 @@ const VocabularySettingsPanel = (): React.ReactElement => {
       ...(pictState.fitzgerald ? { fitzgerald: pictState.fitzgerald } : {}),
     };
 
+    // En reanomenar, la paraula antiga desapareix: primer esborrem, després desem
+    if (isRenaming) dispatch(removeWordProfileActionCreator(editingWord));
+
     dispatch(
       addWordProfileActionCreator({
-        word: trimmed,
+        word: trimmedWord,
         overrides,
-        selectedId: pictState.selectedId !== DEFAULT_PICT_ID ? pictState.selectedId : undefined,
+        selectedId:
+          pictState.selectedId !== DEFAULT_WORD_PICT_ID
+            ? pictState.selectedId
+            : undefined,
         customImageUrl: pictState.url,
       }),
     );
-    handleClear();
+
+    showSnackbar({
+      message: intl.formatMessage(
+        isUpdate ? messages.wordUpdated : messages.wordAdded,
+        { word: trimmedWord },
+      ),
+      severity: "success",
+    });
+    resetForm();
   };
 
-  const handleClear = () => {
-    setWord("");
-    setEditingWord(undefined);
-    setPictState({
-      selectedId: DEFAULT_PICT_ID,
-      fitzgerald: "#CC00BB",
-      url: undefined,
-      color: defaultSettings.pictApiAra.color,
-      hair: defaultSettings.pictApiAra.hair as Hair,
-      skin: defaultSettings.pictApiAra.skin as Skin,
+  const handleDelete = (profileWord: string) => {
+    dispatch(removeWordProfileActionCreator(profileWord));
+    if (editingWord?.toLowerCase() === profileWord.toLowerCase()) resetForm();
+
+    showSnackbar({
+      message: intl.formatMessage(messages.wordRemoved, { word: profileWord }),
+      severity: "info",
     });
   };
 
@@ -125,7 +178,7 @@ const VocabularySettingsPanel = (): React.ReactElement => {
     indexSequence: 0,
     img: {
       searched: {
-        word: word.trim() || intl.formatMessage(messages.previewLabel),
+        word: trimmedWord || intl.formatMessage(messages.previewLabel),
         bestIdPicts: [],
       },
       selectedId: pictState.selectedId,
@@ -141,95 +194,112 @@ const VocabularySettingsPanel = (): React.ReactElement => {
     cross: false,
   };
 
+  // Sense sessió, el panell mostra directament el formulari d'autenticació:
+  // el vocabulari personal es desa al compte de l'usuari.
   if (!isAuthenticated) {
     return (
-      <Box sx={{ pt: 4, textAlign: "center" }}>
-        <Typography variant="body1" color="text.secondary">
-          <FormattedMessage {...messages.loginRequired} />
-        </Typography>
-      </Box>
+      <Stack
+        direction="column"
+        gap={1}
+        sx={{ pt: 1, maxWidth: 500, mx: "auto", width: "100%" }}
+      >
+        <SectionTitle
+          title={
+            <FormattedMessage
+              {...(authMode === "register"
+                ? authMessages.registerTitle
+                : authMessages.loginTitle)}
+            />
+          }
+        >
+          <Typography variant="body2" color="text.secondary">
+            <FormattedMessage {...messages.loginRequired} />
+          </Typography>
+          <AuthForm mode={authMode} onModeChange={setAuthMode} />
+        </SectionTitle>
+      </Stack>
     );
   }
 
   return (
     <SettingsPanelLayout
       preview={
-        <SettingsPreviewFrame background="paper" sx={{ padding: 1 }}>
-          <PictogramCard
-            pictogram={pictogramGuide}
-            defaults={defaults}
-            view="complete"
-            variant="plane"
+        <Stack
+          gap={1}
+          sx={{ width: { xs: "100%", md: VOCABULARY_ASIDE_WIDTH } }}
+        >
+          <SettingsPreviewFrame
+            background="paper"
+            sx={{
+              padding: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <PictogramCard
+              pictogram={pictogramGuide}
+              defaults={defaults}
+              view="complete"
+              variant="plane"
+            />
+          </SettingsPreviewFrame>
+
+          <WordProfileList
+            profiles={wordProfiles}
+            editingWord={editingWord}
+            onSelect={loadProfile}
+            onDelete={handleDelete}
           />
-        </SettingsPreviewFrame>
+        </Stack>
       }
     >
-      <SectionTitle title={<FormattedMessage {...messages.sectionWord} />}>
-        <Stack direction="row" gap={1} alignItems="flex-start">
-          <TextField
-            label={intl.formatMessage(messages.wordInputLabel)}
-            placeholder={intl.formatMessage(messages.wordInputPlaceholder)}
-            value={word}
-            onChange={(e) => {
-              setWord(e.target.value);
-              if (editingWord && e.target.value.trim() !== editingWord) {
-                setEditingWord(undefined);
-              }
-            }}
-            onKeyDown={handleKeyDown}
-            size="small"
-            sx={{ flex: 1 }}
+      {/* Guia: diu en tot moment si s'està creant una paraula o editant-ne una */}
+      <SettingsPanelHint>
+        {isEditing ? (
+          <FormattedMessage
+            {...messages.formHintEditing}
+            values={{ word: editingWord }}
           />
-          <Button
-            variant="contained"
-            onClick={handleSave}
-            disabled={!word.trim() || (atFreeLimit && !isEditing)}
-            sx={{ whiteSpace: "nowrap", mt: 0.25 }}
-          >
-            {isEditing ? (
-              <FormattedMessage {...messages.updateButton} />
-            ) : (
-              <FormattedMessage {...messages.addButton} />
-            )}
-          </Button>
-        </Stack>
+        ) : (
+          <FormattedMessage {...messages.formHintNew} />
+        )}
+      </SettingsPanelHint>
 
-        {isEditing && (
-          <Alert severity="info" sx={{ py: 0 }}>
+      <SectionTitle title={<FormattedMessage {...messages.sectionWord} />}>
+        <TextField
+          label={intl.formatMessage(messages.wordInputLabel)}
+          placeholder={intl.formatMessage(messages.wordInputPlaceholder)}
+          value={word}
+          onChange={(event) => setWord(event.target.value)}
+          onKeyDown={handleKeyDown}
+          error={hasNameCollision}
+          size="small"
+          fullWidth
+        />
+
+        {hasNameCollision && (
+          <Alert severity="error">
+            <FormattedMessage
+              {...messages.nameCollision}
+              values={{ word: trimmedWord }}
+            />
+          </Alert>
+        )}
+
+        {willOverwrite && (
+          <Alert severity="info">
             <FormattedMessage {...messages.duplicateWarning} />
           </Alert>
         )}
 
-        {atFreeLimit && !isEditing && (
-          <Alert severity="warning" sx={{ py: 0 }}>
+        {atFreeLimit && (
+          <Alert severity="warning">
             <FormattedMessage
               {...messages.freeLimitReached}
               values={{ max: FREE_TIER_MAX_WORDS }}
             />
           </Alert>
-        )}
-
-        {wordProfiles.length === 0 ? (
-          <Typography variant="body2" color="text.secondary">
-            <FormattedMessage {...messages.emptyList} />
-          </Typography>
-        ) : (
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-            {wordProfiles.map((profile) => (
-              <Chip
-                key={profile.word}
-                label={profile.word}
-                onDelete={() => {
-                  dispatch(removeWordProfileActionCreator(profile.word));
-                  if (editingWord === profile.word) handleClear();
-                }}
-                onClick={() => loadProfile(profile)}
-                variant={editingWord === profile.word ? "filled" : "outlined"}
-                color={editingWord === profile.word ? "primary" : "default"}
-                size="small"
-              />
-            ))}
-          </Box>
         )}
       </SectionTitle>
 
@@ -243,17 +313,35 @@ const VocabularySettingsPanel = (): React.ReactElement => {
           <SettingCard
             setting="skin"
             state={pictState.skin}
-            setState={(skin) => setPictState((prev) => ({ ...prev, skin: skin as Skin }))}
+            setState={(skin) =>
+              setPictState((prev) => ({ ...prev, skin: skin as Skin }))
+            }
           />
         )}
         {pictState.color && pictState.hair && (
           <SettingCard
             setting="hair"
             state={pictState.hair}
-            setState={(hair) => setPictState((prev) => ({ ...prev, hair: hair as Hair }))}
+            setState={(hair) =>
+              setPictState((prev) => ({ ...prev, hair: hair as Hair }))
+            }
           />
         )}
       </SectionTitle>
+
+      {/* Accions del formulari: sempre al final i a la dreta */}
+      <Stack direction="row" justifyContent="flex-end" gap={1}>
+        {isEditing && (
+          <Button variant="outlined" onClick={resetForm}>
+            <FormattedMessage {...messages.cancelButton} />
+          </Button>
+        )}
+        <Button variant="contained" onClick={handleSave} disabled={!canSave}>
+          <FormattedMessage
+            {...(isUpdate ? messages.updateButton : messages.addButton)}
+          />
+        </Button>
+      </Stack>
     </SettingsPanelLayout>
   );
 };

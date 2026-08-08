@@ -49,6 +49,11 @@ const ViewSequencePage = (): React.ReactElement => {
                   flexWrap: "wrap",
                   flexDirection: isRow ? "row" : "column",
                   justifyContent,
+                  // Eix creuat sempre a l'inici (dalt si és horitzontal, esquerra si és
+                  // vertical): evita el `stretch` per defecte de flex, que igualava
+                  // l'alçada de tots els pictogrames de la fila. L'alineació V/H que
+                  // tria l'usuari és de bloc i l'aplica `ViewSquenceSettings`.
+                  alignItems: "flex-start",
                   columnGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
                   rowGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
                   height: isRow ? "auto" : "100%",

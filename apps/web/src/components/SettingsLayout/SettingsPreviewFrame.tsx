@@ -1,14 +1,15 @@
 import { Box, SxProps, Theme } from "@mui/material";
 import React from "react";
+import { sheetSurface } from "../../style/palette";
 
 interface SettingsPreviewFrameProps {
   children: React.ReactNode;
   /**
    * Fons de la previsualització segons el patró de zones:
-   * - "default" (per defecte): zona de treball (blanc/negre neutre), per a mostres
-   *   de pictogrames o mockups de pàgina que no han d'alterar els colors del contingut.
+   * - "default" (per defecte): superfície de full (blanca en tots dos temes), per a
+   *   mockups de pàgina i mostres que han de reflectir el resultat imprès.
    * - "paper": zona de configuració (gris verdós), per a una mostra que és un sol Card
-   *   sobre el panell (evita que es vegi com un marc negre/blanc).
+   *   sobre el panell (el card ja és blanc: el paper li fa de passe-partout).
    */
   background?: "default" | "paper";
   sx?: SxProps<Theme>;
@@ -26,8 +27,7 @@ const SettingsPreviewFrame = ({
 }: SettingsPreviewFrameProps): React.ReactElement => (
   <Box
     sx={{
-      bgcolor:
-        background === "paper" ? "background.paper" : "background.default",
+      bgcolor: background === "paper" ? "background.paper" : sheetSurface,
       border: "1px solid",
       borderColor: "divider",
       borderRadius: 1,

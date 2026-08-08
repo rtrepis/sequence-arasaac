@@ -1,6 +1,7 @@
 export { default as SettingsPanelLayout } from "./SettingsPanelLayout";
 export { default as SettingsPreviewFrame } from "./SettingsPreviewFrame";
 export { default as SectionTitle } from "./SectionTitle";
+export { default as SettingsPanelHint } from "./SettingsPanelHint";
 export { default as SettingRow } from "./SettingRow";
 export {
   settingRow,

@@ -1,6 +1,12 @@
 import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
+  panelHint: {
+    id: "components.defaultSettings.userPanel.panelHint",
+    defaultMessage:
+      "Settings for your account: app language, search language and theme. They apply everywhere.",
+    description: "Guia del tab d'usuari del modal de configuracions",
+  },
   sectionLanguage: {
     id: "components.defaultSettings.userPanel.sectionTitle",
     defaultMessage: "Language",

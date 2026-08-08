@@ -11,6 +11,7 @@ import {
   SettingsPanelLayout,
   SectionTitle,
   SettingRow,
+  SettingsPanelHint,
   SETTINGS_MAX_WIDTH,
 } from "../../components/SettingsLayout";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -148,13 +149,14 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
 
     return (
       <Stack direction="column" gap={1} sx={{ pt: 1, maxWidth: SETTINGS_MAX_WIDTH, mx: "auto", width: "100%" }}>
-        <Typography variant="body2" color="text.secondary">
-          <FormattedMessage {...messages.panelDescription} />
-        </Typography>
-
         <SettingsPanelLayout
           preview={<ViewSettingsPreview settings={localSettings} />}
         >
+          {/* Guia del tab: què s'ajusta aquí */}
+          <SettingsPanelHint>
+            <FormattedMessage {...messages.panelDescription} />
+          </SettingsPanelHint>
+
           {/* Secció: format i disposició de la pàgina (controls compartits amb la vista) */}
           <SectionTitle title={<FormattedMessage {...messages.sectionPageFormat} />}>
             <GlobalViewControls

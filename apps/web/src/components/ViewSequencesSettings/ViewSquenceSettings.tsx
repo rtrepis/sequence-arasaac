@@ -28,6 +28,7 @@ import {
   DEFAULT_SEQUENCE_VIEW,
 } from "@features/sequence/store/documentSlice";
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
+import { sheetSurface } from "@/style/palette";
 import { saveUserUiThunk } from "@features/backend/user-settings/store/settingsThunks";
 import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
@@ -399,7 +400,9 @@ const ViewSequencesSettings = ({
               position: { xs: "sticky", md: "static" },
               top: { xs: 0 },
               zIndex: { xs: 10, md: "auto" },
-              backgroundColor: "background.default",
+              // El full és paper en tots dos temes: aquesta previsualització ha de
+              // ser idèntica al que sortirà per impressora i al PDF
+              backgroundColor: sheetSurface,
             }}
           >
             {/* Contenidor interior: dimensions reals amb transform per visualització */}
@@ -533,15 +536,32 @@ const ViewSequencesSettings = ({
         </Stack>
       </form>
 
-      {/* Contenidor per a fullscreen */}
+      {/* Contenidor per a fullscreen: mateix layout de blocs que la
+          previsualització (direcció, wrap i separació entre seqüències) */}
       <Stack
         className="displayFullScreen"
-        direction={"column"}
+        direction={viewSettings.direction}
+        flexWrap={"wrap"}
         alignContent={blockAlign}
         alignItems={blockAlign}
+        // La previsualització escala tot el full amb un `transform`; aquí no
+        // n'hi ha, així que la separació es multiplica per l'escala activa
+        // perquè es vegi proporcionada als pictogrames, com el `pictSpaceBetween`
+        columnGap={
+          viewSettings.direction === "column"
+            ? viewSettings.sequenceSpaceBetween * activeScale
+            : 0
+        }
+        rowGap={
+          viewSettings.direction === "row"
+            ? viewSettings.sequenceSpaceBetween * activeScale
+            : 0
+        }
         overflow={"hidden"}
         padding={2}
         display={"none"}
+        // Pantalla completa: mateixa superfície de full que la previsualització
+        sx={{ backgroundColor: sheetSurface }}
       >
         {children({
           viewSettings,

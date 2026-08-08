@@ -35,6 +35,12 @@ const SettingCardBorder = ({
 
   const [colorSelect, setColorSelect] = useState(color);
 
+  // El tooltip "Selecció" es controla per poder-lo tancar mentre la paleta és
+  // oberta: el popover s'ancora just a sota del botó, on el tooltip captura els
+  // clics dels primers colors i els deixa inseleccionables.
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
   const handleChangesSize = (event: Event, newValue: number | number[]) => {
     const border: Border = {
       color: color,
@@ -98,7 +104,12 @@ const SettingCardBorder = ({
             <FormattedMessage {...messages.fitzgeraldKey} />
           </ToggleButton>
 
-          <Tooltip title={intl.formatMessage(messages.selected)}>
+          <Tooltip
+            title={intl.formatMessage(messages.selected)}
+            open={tooltipOpen && !paletteOpen}
+            onOpen={() => setTooltipOpen(true)}
+            onClose={() => setTooltipOpen(false)}
+          >
             <ToggleButton
               value={"Selected Color"}
               selected={color !== "fitzgerald" && size > 0}
@@ -106,6 +117,7 @@ const SettingCardBorder = ({
               <InputColor
                 color={colorSelect}
                 setColor={handleChangeColor}
+                onOpenChange={setPaletteOpen}
                 inputBorder={1}
                 inputSize={35}
               />

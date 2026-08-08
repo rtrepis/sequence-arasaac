@@ -22,6 +22,7 @@ import {
   SettingsPanelLayout,
   SettingsPreviewFrame,
   SectionTitle,
+  SettingsPanelHint,
 } from "../SettingsLayout";
 
 interface DefaultFormProps {
@@ -122,8 +123,9 @@ const DefaultForm = ({
     <form onSubmit={onSubmit}>
       <SettingsPanelLayout
         preview={
-          // Excepció del patró de zones: mostra d'un sol Card sobre el panell,
-          // un fons "default" es veuria com un marc negre/blanc
+          // Excepció del patró de zones: mostra d'un sol Card sobre el panell.
+          // El card ja és paper blanc; el fons "paper" li fa de passe-partout
+          // perquè no es fongui amb el marc
           <SettingsPreviewFrame background="paper" sx={{ padding: 1 }}>
             <PictogramCard
               pictogram={pictogramGuide}
@@ -134,6 +136,11 @@ const DefaultForm = ({
           </SettingsPreviewFrame>
         }
       >
+        {/* Guia del tab: què s'ajusta aquí */}
+        <SettingsPanelHint>
+          <FormattedMessage {...messages.panelHint} />
+        </SettingsPanelHint>
+
         <SectionTitle
           title={<FormattedMessage {...messages.sectionPictogram} />}
           onApplyAll={onApplyAllColor}

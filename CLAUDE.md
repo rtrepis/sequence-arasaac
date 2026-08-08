@@ -19,18 +19,22 @@
 
 ### Patró de zones (fons)
 
-- **`background.default` = zona de treball** (on es veuen/editen pictogrames i seqüències): blanc en clar, negre en fosc. Neutre pur per no alterar els colors dels pictogrames.
+Hi ha **tres** superfícies, no dues:
+
+- **`sheetSurface` = superfície de full** (`palette.ts`): **blanc en tots dos temes**. És tota zona on es veu un pictograma — targetes de `PictogramCard`, full de `.preview-container`, fullscreen i mostres de configuració. **El que es veu és el que s'imprimeix**: mateixos colors a pantalla, a paper i al PDF, sense compensacions per tema. Surt de `printColors.background` a propòsit: full i paper són la mateixa cosa.
+- **`background.default` = escriptori** (el fons sobre el qual sura el full): blanc en clar, negre en fosc.
 - **`background.paper` = zona de configuració** (diàlegs, panells, acordions, controls): gris verdós (`#F2F5EC` clar / `#242820` fosc).
 - Valors definits a `appBackgrounds` de `palette.ts`. L'overlay d'elevació de MUI està desactivat (`MuiPaper: backgroundImage: none`) perquè el gris de config sigui uniforme.
-- Un preview de pictogrames dins d'una pantalla de config és zona de treball: `backgroundColor: "background.default"` (vegeu `PictEditForm`, `ViewSettingsPreview`). **Excepció**: la mostra de `DefaultForm` és un sol Card sobre el panell — un fons default aquí es veuria com un marc negre/blanc, per això usa `background.paper`.
-- Al modal d'edició de pictograma (`PictEditForm`), tota la part superior (mostra + cerca) és zona de treball; només el `SettingAccordion` de sota és zona de configuració.
+- **Mai adaptar al tema res que estigui sobre el full**: ni el color de lletra triat per l'usuari, ni el traç dels pictogrames. El tema fosc governa només el que envolta el full (barra, tabs, panells, controls). El motiu és d'accessibilitat: el contrast del text sobre paper s'ha de poder jutjar mentre es configura, no en descobrir-lo a la impressora.
+- `SettingsPreviewFrame` amb `background="default"` és superfície de full (`ViewSettingsPreview`). **Excepció**: la mostra de `DefaultForm` i la de `VocabularySettingsPanel` són un sol Card sobre el panell i usen `background="paper"` — el card ja és blanc i el gris li fa de passe-partout perquè no es fongui amb el marc.
+- Al modal d'edició de pictograma (`PictEditForm`), la part superior (mostra + cerca) és escriptori i la targeta hi sura a sobre; només el `SettingAccordion` de sota és zona de configuració.
 
 ### Impressió i PDF
 
 - **La sortida impresa i el PDF sempre són en clar** (paper blanc, text fosc), independentment del tema actiu. Tokens a `printColors` de `palette.ts`.
-- Impressió (`window.print`): `generatePrintCSS` a `usePrintStyles.ts` força fons blanc a `.preview-container`, `.preview-content` i els `MuiPaper` interiors; el color de text s'hereta fosc. Els pictogrames restauren el color real triat per l'usuari amb regles `@media print` pròpies (`PictogramCard`).
+- Impressió (`window.print`): `generatePrintCSS` a `usePrintStyles.ts` força fons blanc al `body`, `.preview-container`, `.preview-content` i els `MuiPaper` interiors. Ara és **xarxa de seguretat**, no correcció: les superfícies de full ja són blanques a pantalla. Els pictogrames conserven regles `@media print` pròpies només per a la mida de lletra (`PictogramCard`).
 - PDF (`useDownloadPdf.ts`): al clon de html2canvas es normalitzen els colors de tema amb `themeColorReplacements` (fons d'`appBackgrounds` → blanc, text blanc → negre). Els colors de contingut de l'usuari (font, vores, fitzgerald) no es toquen.
-- El pictograma **sense color** (B/N) es mostra invertit en mode fosc (`filter: invert(1)` a `pictogram__media`, mai per a imatges personalitzades); la inversió es neutralitza amb `filter: none` a `@media print` i al `safetyStyle` del PDF perquè paper i PDF surtin sempre amb traç negre.
+- El pictograma **sense color** (B/N) **no s'inverteix mai**: com que la targeta sempre és paper blanc, el traç negre es veu igual en clar, en fosc, a paper i al PDF. Les compensacions que hi havia per al mode fosc (`filter: invert(1)` a `pictogram__media`, `getDisplayColor` per al color de lletra, i les regles que les desfeien a `@media print` i al `safetyStyle` del PDF) s'han eliminat: amb una sola superfície de full ja no hi ha res a compensar.
 
 ---
 
@@ -41,7 +45,8 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
 ### Components compartits
 
 - **`SettingsPanelLayout`** — layout canònic de dues zones: previsualització a **l'esquerra** (sticky en mòbil) + columna de controls a la dreta. Sense `preview`, la columna de controls queda centrada sola (cas del tab Usuari). Props: `preview?`, `maxWidth` (700 per defecte), `controlsGap`.
-- **`SettingsPreviewFrame`** — marc visual únic de qualsevol previsualització: vora `divider`, `borderRadius: 1`, `boxShadow: 1`, `overflow: hidden`. Prop `background`: `"default"` (zona de treball, per defecte) o `"paper"` (mostra d'un sol Card, segons el patró de zones). Les dimensions les aporta el fill via `sx`.
+- **`SettingsPreviewFrame`** — marc visual únic de qualsevol previsualització: vora `divider`, `borderRadius: 1`, `boxShadow: 1`, `overflow: hidden`. Prop `background`: `"default"` (superfície de full, blanca en tots dos temes; per defecte) o `"paper"` (mostra d'un sol Card, segons el patró de zones). Les dimensions les aporta el fill via `sx`.
+- **`SettingsPanelHint`** — guia d'un tab: `Alert severity="info" variant="outlined"` amb el text que diu **què s'ajusta aquí i sobre què tindrà efecte**. Un sol fill: el missatge traduït.
 - **`SectionTitle`** — **contenidor** de secció: props `title` (capçalera en majúscules `text.secondary` + `Divider`), `children` (els ajustos de la secció) i `onApplyAll?`. Els `children` es renderitzen **indentats** (`pl: SETTINGS_INDENT`) sota el títol, com un esquema: `<SectionTitle title={...}>{ajustos}</SectionTitle>`, no com a germans després del títol. És el nivell superior de la jerarquia de separació.
 - **`SettingRow`** — **única implementació** de la fila d'un ajust individual: `title` a l'esquerra (amb `cardTitle`) i `children` (el control) a la dreta. Props: `title`, `labelId?` (per a `aria-labelledby`) i `control?`, que tria com es dimensiona el control:
   - `"sized"` (per defecte) — slider, select, textfield: amplada acotada amb `settingControlWidth`; apila en mòbil.
@@ -54,6 +59,7 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
 
 - **Preview sempre a l'esquerra**, mai a la dreta. Un tab sense preview és una sola columna centrada (`maxWidth: 500`).
 - **Amplada estàndard tauleta**: `SETTINGS_MAX_WIDTH` (900) és l'amplada màxima del panell centrat. No hardcodejar amplades noves.
+- **Tot tab comença amb la seva guia**: `SettingsPanelHint` és el **primer fill de la columna de controls**, abans de la primera secció, a tots els tabs sense excepció. Format únic (mai un `Typography` solt ni un `Alert` escrit a mà) perquè l'usuari trobi sempre l'explicació al mateix lloc i amb el mateix aspecte. El text respon a què configura el tab i sobre què tindrà efecte; si el panell té estats (crear/editar), el text **canvia amb l'estat** — és la manera de dir on ets sense afegir cap encapçalament (cas del tab Vocabulari).
 - **Toggles = marca de la casa**: qualsevol selector d'opcions discretes usa `StyledToggleButtonGroup` (arrodonit 55×55, `primary` en seleccionat). Mai `ToggleButtonGroup` pla de MUI dins del modal de settings.
 - **Criteri únic de fila**: tot ajust individual (slider, select, textfield, grup de toggles) porta el **títol a l'esquerra i el control a la dreta** (a partir de `sm`; vegeu *Comportament en mòbil*), sempre via `SettingRow`. `settingRowInline` és l'sx intern que hi ha a sota; `settingRow` (només padding vertical, sense flex) n'és la base. Cap dels dos s'aplica directament a una fila.
 - **Un ajust = una fila**: mai amuntegar diversos controls en una sola fila. Un bloc amb 3 controls (una vora, una tipografia) és una **secció pròpia** amb 3 files, no una fila composta. Els components que representen un bloc així (`SettingCardBorder`, `SettingCardFontGroup`) **es titulen ells mateixos** renderitzant el seu propi `SectionTitle` — així els contextos que no els embolcallen (com `PictEditForm`) obtenen la mateixa presentació sense canvis.
@@ -82,7 +88,7 @@ L'estàndard és **un de sol** per a totes les amplades: no hi ha components mò
 - ✅ **Vista** (`ViewSettingsPanel`) — totes les files via `SettingRow`.
 - ✅ **Usuari** (`UserSettingsPanel`) — `SectionTitle` + `SettingRow` (idioma app, idioma cerca, tema).
 - ✅ **Pictogrames** (`DefaultForm`) — `SettingsPanelLayout` + `SettingsPreviewFrame background="paper"` + **7 seccions**: Pictograma, Text i numeració, Lletra del text, Lletra dels números (si `numbered`), Vora exterior, Vora interior, Aparença (si `color`). Les 4 últimes es titulen soles des del propi card.
-- ✅ **Vocabulari** (`VocabularySettingsPanel`) — preview a l'esquerra amb `SettingsPreviewFrame`; 2 seccions (Paraula, Pictograma).
+- ✅ **Vocabulari** (`VocabularySettingsPanel`) — columna esquerra = mostra (`SettingsPreviewFrame`, pictograma centrat) + **llista de paraules desades** (`WordProfileList`, amb la miniatura del pictograma de cada paraula); columna dreta = formulari clàssic (guia, secció Paraula, secció Pictograma) amb els botons **al final i a la dreta**. Triar una paraula de la llista carrega el formulari en mode edició: la guia canvia, la fila queda seleccionada amb el distintiu «Editant» i els botons passen a «Cancel·lar / Actualitzar». Desar, actualitzar i esborrar confirmen amb `showSnackbar`. Reanomenar mentre s'edita mou la paraula (esborra l'antiga) i bloqueja el desat si el nom nou ja existeix.
 - ✅ **Família `SettingCard`** — tots migrats a `SettingRow`. `card`, `cardAction` i `cardContent` **eliminats** de `SettingsCards.styled.ts`; només hi queden `cardTitle` (consumit per `SettingRow`) i `cardColor`.
 - ✅ **`PictEditForm`** i **`VocabularySettingsPanel`** — hereten la fila nova pels components compartits, sense tocar el seu layout propi (regla «la fila és universal, el layout és per context»).
 - ✅ **`GlobalViewControls`** — totes les files (mida pàgina, orientació, separació seqüències, direcció) via `SettingRow`. Component **compartit** amb la pàgina de visualització (`ViewSquenceSettings`); verificat visualment als dos llocs. **Només files**: no renderitza ni seccions ni botons d'acció — qui el consumeix decideix el `SectionTitle` que l'embolcalla i on van els botons.

@@ -31,10 +31,43 @@ const messages = defineMessages({
     defaultMessage: "Add",
     description: "Botó per afegir una paraula al vocabulari personal",
   },
-  emptyList: {
-    id: "components.defaultSettings.vocabularyPanel.emptyList",
-    defaultMessage: "No words yet. Add a word to get started.",
-    description: "Missatge quan la llista de paraules és buida",
+  cancelButton: {
+    id: "components.defaultSettings.vocabularyPanel.cancelButton",
+    defaultMessage: "Cancel",
+    description: "Botó per sortir del mode edició sense desar els canvis",
+  },
+  formHintNew: {
+    id: "components.defaultSettings.vocabularyPanel.formHintNew",
+    defaultMessage:
+      "Write the word, choose its pictogram and press Add to save it in your vocabulary.",
+    description: "Guia del formulari quan es crea una paraula nova",
+  },
+  formHintEditing: {
+    id: "components.defaultSettings.vocabularyPanel.formHintEditing",
+    defaultMessage:
+      "You are editing «{word}». Change what you need and press Update.",
+    description: "Guia del formulari quan s'edita una paraula ja desada",
+  },
+  nameCollision: {
+    id: "components.defaultSettings.vocabularyPanel.nameCollision",
+    defaultMessage:
+      "«{word}» already exists. Choose another word or edit it from the list.",
+    description: "Error en reanomenar una paraula amb un nom ja ocupat",
+  },
+  wordAdded: {
+    id: "components.defaultSettings.vocabularyPanel.wordAdded",
+    defaultMessage: "«{word}» added to your vocabulary.",
+    description: "Confirmació que la paraula s'ha afegit",
+  },
+  wordUpdated: {
+    id: "components.defaultSettings.vocabularyPanel.wordUpdated",
+    defaultMessage: "«{word}» updated.",
+    description: "Confirmació que la paraula s'ha actualitzat",
+  },
+  wordRemoved: {
+    id: "components.defaultSettings.vocabularyPanel.wordRemoved",
+    defaultMessage: "«{word}» removed from your vocabulary.",
+    description: "Confirmació que la paraula s'ha esborrat",
   },
   previewLabel: {
     id: "components.defaultSettings.vocabularyPanel.previewLabel",

@@ -5,6 +5,7 @@ import {
   SETTINGS_ZONE_GAP,
   SETTINGS_MAX_WIDTH,
   SETTINGS_APPBAR_OFFSET,
+  SETTINGS_PREVIEW_STICKY_TOP,
 } from "./settingsLayout.styled";
 
 interface SettingsPanelLayoutProps {
@@ -20,7 +21,7 @@ interface SettingsPanelLayoutProps {
 
 /**
  * Layout canònic de dues zones d'un tab de configuracions:
- * previsualització a l'esquerra (sticky en mòbil) + columna de controls a la dreta.
+ * previsualització a l'esquerra (sempre sticky) + columna de controls a la dreta.
  * Si no es passa `preview`, la columna de controls s'ocupa sola i queda centrada.
  */
 const SettingsPanelLayout = ({
@@ -38,13 +39,22 @@ const SettingsPanelLayout = ({
     {preview && (
       <Box
         sx={{
-          position: { xs: "sticky", md: "static" },
-          // Offset per no quedar sota l'AppBar fix del diàleg en mòbil
-          top: { xs: SETTINGS_APPBAR_OFFSET, md: 0 },
-          zIndex: { xs: 10, md: "auto" },
+          // Sempre sticky: la columna de controls és llarga i la mostra ha de
+          // seguir visible mentre s'ajusten tipografia, vores o aparença
+          position: "sticky",
+          // En mòbil, offset per no quedar sota l'AppBar fix del diàleg;
+          // per sobre de md l'AppBar marxa amb l'scroll i només cal aire
+          top: {
+            xs: SETTINGS_APPBAR_OFFSET,
+            md: SETTINGS_PREVIEW_STICKY_TOP,
+          },
+          zIndex: 10,
           // Acotem la mostra perquè no es mengi la pantalla i deixi els controls fora de vista
-          maxHeight: { xs: "35vh", md: "none" },
-          overflow: { xs: "auto", md: "visible" },
+          maxHeight: {
+            xs: "35vh",
+            md: `calc(100vh - ${SETTINGS_PREVIEW_STICKY_TOP * 2}px)`,
+          },
+          overflow: "auto",
         }}
       >
         {preview}

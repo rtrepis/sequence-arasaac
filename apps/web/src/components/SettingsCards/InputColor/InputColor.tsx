@@ -11,6 +11,8 @@ interface InputColorProps {
   inputBorder: number;
   color: string;
   setColor: React.Dispatch<React.SetStateAction<string>>;
+  /** Notifica el pare quan s'obre o es tanca la paleta, per amagar-hi tooltips que la taparien. */
+  onOpenChange?: (isOpen: boolean) => void;
 }
 
 const InputColor = ({
@@ -18,6 +20,7 @@ const InputColor = ({
   inputSize,
   color,
   setColor,
+  onOpenChange,
 }: InputColorProps): React.ReactElement => {
   const circleSize = {
     height: "2em",
@@ -42,11 +45,13 @@ const InputColor = ({
 
   const handleClose = () => {
     setOpen(false);
+    onOpenChange?.(false);
   };
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     setOpen(true);
+    onOpenChange?.(true);
   };
 
   const handleColorPalette = async () => {

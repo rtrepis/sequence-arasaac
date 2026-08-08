@@ -36,6 +36,13 @@ export const SETTINGS_INDENT = { xs: 1, sm: 3 };
 export const SETTINGS_APPBAR_OFFSET = 50;
 
 /**
+ * Desplaçament vertical (px) del preview sticky en tauleta/escriptori: per sobre
+ * de `md` l'AppBar del diàleg és `position: relative` i marxa amb l'scroll, així
+ * que només cal un marge d'aire respecte a la vora superior del diàleg.
+ */
+export const SETTINGS_PREVIEW_STICKY_TOP = 16;
+
+/**
  * Fila d'un ajust individual: només padding vertical per al ritme.
  * La separació visual entre ajustos ve del `gap` de la columna; el divisor
  * s'usa exclusivament sota el `SectionTitle` (agrupació), no entre files.

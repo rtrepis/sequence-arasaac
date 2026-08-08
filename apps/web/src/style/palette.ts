@@ -30,11 +30,12 @@ export const appPalette: AppPalette = {
 
 /**
  * Patró de zones per fons:
- * - `background.default` = ZONA DE TREBALL (on es veuen/editen pictogrames
- *   i seqüències): blanc en clar, negre en fosc. Neutre pur per no alterar
- *   la percepció dels colors dels pictogrames.
+ * - `background.default` = ESCRIPTORI (el fons sobre el qual sura el full):
+ *   blanc en clar, negre en fosc.
  * - `background.paper` = ZONA DE CONFIGURACIÓ (diàlegs, panells, controls):
  *   gris verdós clar en clar, gris verdós fosc en fosc.
+ * - La superfície on es veuen els pictogrames no és cap de les dues: és
+ *   `sheetSurface` (vegeu més avall).
  */
 export const appBackgrounds: Record<
   "light" | "dark",
@@ -63,3 +64,12 @@ export const printColors = {
   background: "#FFFFFF",
   text: "#000000",
 } as const;
+
+/**
+ * Superfície de full: tota zona on es veu un pictograma (targetes d'edició,
+ * full de la pàgina de vista, fullscreen i mostres de configuració) és sempre
+ * paper blanc, en tema clar i en fosc — el que es veu és el que s'imprimeix.
+ * El tema fosc governa el que envolta el full: barra, tabs, panells i controls.
+ * Per això el token surt de `printColors`: full i paper són la mateixa cosa.
+ */
+export const sheetSurface = printColors.background;

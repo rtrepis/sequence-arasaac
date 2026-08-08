@@ -37,9 +37,9 @@ export function generatePrintCSS(pageFormat: PageFormat): string {
         transform: none !important;
       }
 
-      /* La impressió sempre és sobre paper blanc, independentment del tema
-         (clar o fosc). El color de text s'hereta: els pictogrames restauren
-         el seu color real amb les seves pròpies regles @media print. */
+      /* Xarxa de seguretat: la impressió sempre és sobre paper blanc. Les
+         superfícies de full ja ho són a pantalla (token sheetSurface);
+         aquí es garanteix també per al body i qualsevol Paper interior. */
       body,
       .preview-container,
       .preview-content,

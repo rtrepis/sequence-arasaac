@@ -140,6 +140,9 @@
     "defaultMessage": "Preview",
     "description": "Pictogram pictogram for default settings"
   },
+  "components.defaultSettings.panelHint": {
+    "defaultMessage": "Set how new pictograms will look. To apply the changes to the ones already in the sequence, use «Apply to all»."
+  },
   "components.defaultSettings.sectionPictogram": {
     "defaultMessage": "Pictogram",
     "description": "Títol de la secció de numeració i color al panell de pictogrames"
@@ -223,6 +226,9 @@
     "defaultMessage": "Language",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
+  "components.defaultSettings.userPanel.panelHint": {
+    "defaultMessage": "Settings for your account: app language, search language and theme. They apply everywhere."
+  },
   "components.defaultSettings.vocabularyPanel.title": {
     "defaultMessage": "Personal vocabulary"
   },
@@ -242,9 +248,6 @@
   },
   "components.defaultSettings.vocabularyPanel.addButton": {
     "defaultMessage": "Add"
-  },
-  "components.defaultSettings.vocabularyPanel.emptyList": {
-    "defaultMessage": "No words yet. Add a word to get started."
   },
   "components.defaultSettings.vocabularyPanel.previewLabel": {
     "defaultMessage": "Preview"
@@ -266,6 +269,42 @@
   },
   "components.defaultSettings.vocabularyPanel.freeLimitReached": {
     "defaultMessage": "You have reached the limit of {max} words for the free plan."
+  },
+  "components.defaultSettings.vocabularyPanel.cancelButton": {
+    "defaultMessage": "Cancel"
+  },
+  "components.defaultSettings.vocabularyPanel.formHintNew": {
+    "defaultMessage": "Write the word, choose its pictogram and press Add to save it in your vocabulary."
+  },
+  "components.defaultSettings.vocabularyPanel.formHintEditing": {
+    "defaultMessage": "You are editing «{word}». Change what you need and press Update."
+  },
+  "components.defaultSettings.vocabularyPanel.nameCollision": {
+    "defaultMessage": "«{word}» already exists. Choose another word or edit it from the list."
+  },
+  "components.defaultSettings.vocabularyPanel.wordAdded": {
+    "defaultMessage": "«{word}» added to your vocabulary."
+  },
+  "components.defaultSettings.vocabularyPanel.wordUpdated": {
+    "defaultMessage": "«{word}» updated."
+  },
+  "components.defaultSettings.vocabularyPanel.wordRemoved": {
+    "defaultMessage": "«{word}» removed from your vocabulary."
+  },
+  "features.wordProfile.list.title": {
+    "defaultMessage": "My words ({count})"
+  },
+  "features.wordProfile.list.empty": {
+    "defaultMessage": "No words yet. Use the form to add your first one."
+  },
+  "features.wordProfile.list.editLabel": {
+    "defaultMessage": "Edit {word}"
+  },
+  "features.wordProfile.list.deleteLabel": {
+    "defaultMessage": "Delete {word}"
+  },
+  "features.wordProfile.list.editingBadge": {
+    "defaultMessage": "Editing"
   },
   "components.logoMenu.download": {
     "defaultMessage": "Download"

@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardMedia, Typography, useTheme } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
 import usePictogramUrl from "../../features/pictogram/hooks/usePictogramUrl";
 import { Border, PictogramCardDefaults, PictSequence } from "../../types/sequence";
@@ -9,7 +9,6 @@ import {
 } from "./PictogramCard.styled";
 import messages from "./PictogramCart.lang";
 import fitzgeraldToBorder from "../../utils/fitzgeraldToBorder";
-import { getDisplayColor } from "../../utils/colorUtils";
 import React from "react";
 
 interface PictogramCardProps {
@@ -46,8 +45,6 @@ const PictogramCard = ({
 }: PictogramCardProps): React.ReactElement => {
   const { buildPictogramUrl } = usePictogramUrl();
   const intl = useIntl();
-  const { palette } = useTheme();
-  const isDark = palette.mode === "dark";
 
   const text = customText ? customText : word;
 
@@ -69,14 +66,8 @@ const PictogramCard = ({
   // Imatge personalitzada de l'usuari (les URLs blob són temporals i s'ignoren)
   const customImageUrl = url && !url.startsWith("blob:") ? url : undefined;
 
-  // En mode fosc, el pictograma sense color es mostra invertit (traç blanc);
-  // mai per a imatges personalitzades de l'usuari
-  const invertForDark = isDark && color === false && !customImageUrl;
-
   const textFontSize = 20 * font.size * printPageRatio * pictSize;
   const numberFontSize = 20 * numberFont.size * printPageRatio * pictSize;
-  const displayFontColor = getDisplayColor(font.color, isDark);
-  const displayNumberColor = getDisplayColor(numberFont.color, isDark);
 
   return (
     <Card
@@ -101,8 +92,8 @@ const PictogramCard = ({
               fontFamily={numberFont.family}
               component="h3"
               sx={{
-                color: displayNumberColor,
-                "@media print": { fontSize: 20 * pictSize, color: numberFont.color },
+                color: numberFont.color,
+                "@media print": { fontSize: 20 * pictSize },
               }}
             >
               {indexSequence + 1}
@@ -114,8 +105,8 @@ const PictogramCard = ({
               fontFamily={font.family}
               component="h3"
               sx={{
-                color: displayFontColor,
-                "@media print": { fontSize: 20 * pictSize, color: font.color },
+                color: font.color,
+                "@media print": { fontSize: 20 * pictSize },
               }}
             >
               {text}
@@ -130,9 +121,7 @@ const PictogramCard = ({
           height={150 * pictSize * printPageRatio}
           width={150 * pictSize * printPageRatio}
           alt={intl.formatMessage({ ...messages.pictogram })}
-          sx={() =>
-            pictogram__media(borderIn, view, pictSize, printPageRatio, invertForDark)
-          }
+          sx={() => pictogram__media(borderIn, view, pictSize, printPageRatio)}
         />
         {cross && (
           <Box
@@ -175,8 +164,8 @@ const PictogramCard = ({
               fontFamily={font.family}
               component="h3"
               sx={{
-                color: displayFontColor,
-                "@media print": { fontSize: 20 * pictSize, color: font.color },
+                color: font.color,
+                "@media print": { fontSize: 20 * pictSize },
               }}
             >
               {text}
@@ -188,8 +177,8 @@ const PictogramCard = ({
               fontFamily={numberFont.family}
               component="h3"
               sx={{
-                color: displayNumberColor,
-                "@media print": { fontSize: 20 * pictSize, color: numberFont.color },
+                color: numberFont.color,
+                "@media print": { fontSize: 20 * pictSize },
               }}
             >
               {indexSequence + 1}
