@@ -9,12 +9,17 @@ import type {
   ViewSettings,
   WordProfile,
   UserTier,
+  UserStatus,
+  UserRole,
+  UserUsage,
+  QuotaLimits,
 } from "@sequence-arasaac/shared-types";
 import { defaultSettingsSchema, wordProfileSchema } from "../../shared/mongooseSchemas";
 
 // Interfície TypeScript del document User (estén Document de Mongoose)
 export interface IUser extends Document {
   email: string;
+  emailCanonical: string;
   passwordHash: string;
   settings: DefaultSettings;
   langSettings: {
@@ -25,6 +30,17 @@ export interface IUser extends Document {
   viewSettings?: ViewSettings;
   wordProfiles: WordProfile[];
   tier: UserTier;
+  // --- Identitat i estat del compte ---
+  emailVerified: boolean;
+  status: UserStatus;
+  role: UserRole;
+  tokenVersion: number;
+  failedLoginAttempts: number;
+  lockUntil?: Date;
+  lastLoginAt?: Date;
+  // --- Consum i límits ---
+  usage: UserUsage;
+  quotaOverride?: Partial<QuotaLimits>;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,6 +50,28 @@ const langSettingsSchema = new Schema(
   {
     app: { type: String, enum: ["ca", "en", "es", "fr", "it"], required: true },
     search: { type: String, required: true },
+  },
+  { _id: false }
+);
+
+// Sub-schema dels comptadors de consum — tots comencen a zero
+const usageSchema = new Schema(
+  {
+    documentsCount: { type: Number, required: true, default: 0, min: 0 },
+    wordProfilesCount: { type: Number, required: true, default: 0, min: 0 },
+    storageBytes: { type: Number, required: true, default: 0, min: 0 },
+    assetsCount: { type: Number, required: true, default: 0, min: 0 },
+  },
+  { _id: false }
+);
+
+// Sub-schema d'excepcions de quota — tots els camps opcionals:
+// només s'hi posa el límit que es vol sobreescriure respecte del tier
+const quotaOverrideSchema = new Schema(
+  {
+    documents: { type: Number, min: 0 },
+    wordProfiles: { type: Number, min: 0 },
+    storageBytes: { type: Number, min: 0 },
   },
   { _id: false }
 );
@@ -85,6 +123,16 @@ const userSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
     },
+    // Clau d'identitat real: sense alias de "+" ni punts als dominis que els ignoren.
+    // L'email de sobre es conserva tal com el va escriure l'usuari per poder escriure-li.
+    emailCanonical: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+      lowercase: true,
+      trim: true,
+    },
     passwordHash: {
       type: String,
       required: true,
@@ -133,6 +181,67 @@ const userSchema = new Schema<IUser>(
       enum: ["free"],
       required: true,
       default: "free",
+    },
+
+    // --- Identitat i estat del compte ---
+
+    emailVerified: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    // Un compte nou neix "pending": pot entrar i treballar, però no desar al núvol
+    status: {
+      type: String,
+      enum: ["pending", "active", "suspended"],
+      required: true,
+      default: "pending",
+      index: true,
+    },
+    // Permís d'administració. El primer admin es posa a mà des d'Atlas:
+    // no hi ha cap endpoint que promogui usuaris, seria superfície d'atac inútil
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      required: true,
+      default: "user",
+    },
+    // S'incrementa per invalidar de cop tots els refresh tokens emesos a l'usuari
+    tokenVersion: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    failedLoginAttempts: {
+      type: Number,
+      required: true,
+      default: 0,
+      min: 0,
+    },
+    lockUntil: {
+      type: Date,
+      required: false,
+    },
+    lastLoginAt: {
+      type: Date,
+      required: false,
+    },
+
+    // --- Consum i límits ---
+
+    usage: {
+      type: usageSchema,
+      required: true,
+      default: () => ({
+        documentsCount: 0,
+        wordProfilesCount: 0,
+        storageBytes: 0,
+        assetsCount: 0,
+      }),
+    },
+    quotaOverride: {
+      type: quotaOverrideSchema,
+      required: false,
     },
   },
   {

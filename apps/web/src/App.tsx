@@ -19,6 +19,10 @@ const ChangelogPage = lazy(
 const NewsDetailPage = lazy(
   () => import("./pages/NewsDetailPage/NewsDetailPage")
 );
+const VerifyEmailPage = lazy(
+  () => import("./pages/VerifyEmailPage/VerifyEmailPage")
+);
+const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
 
 import messages_en from "./languages/en.json";
 import messages_es from "./languages/es.json";
@@ -123,6 +127,14 @@ const App = (): ReactElement => {
           <Route index element={<ChangelogPage />} />
           <Route path=":slug" element={<NewsDetailPage />} />
         </Route>
+
+        {/* Destinació de l'enllaç de verificació del correu.
+            Sense locale: l'enllaç s'ha de poder construir des del servidor,
+            que no sap en quin idioma navega l'usuari. */}
+        <Route path="verify-email" element={<VerifyEmailPage />} />
+
+        {/* Panell d'administració — eina interna, fora de LanguageLayout */}
+        <Route path="admin" element={<AdminPage />} />
 
         <Route path="*" element={<Navigate to={"/"} replace />} />
       </Routes>

@@ -15,6 +15,14 @@ import {
   defaultSettingsSchema,
 } from "../../shared/mongooseSchemas";
 
+// Imatge pujada a Cloudinary per aquest document.
+// Els bytes es guarden en pujar-la perquè, en esborrar-la, es pugui restar
+// exactament el que ocupava: sense això el comptador de consum només creixeria.
+export interface DocumentAsset {
+  publicId: string;
+  bytes: number;
+}
+
 // Interfície TypeScript del document (estén Document de Mongoose)
 export interface IDocument extends Document {
   userId: Types.ObjectId;
@@ -25,6 +33,7 @@ export interface IDocument extends Document {
   order?: number[];
   author?: string;
   defaultSettings?: DefaultSettings;
+  assets: DocumentAsset[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -115,6 +124,15 @@ const sequenceViewSettingsSchema = new Schema(
   { _id: false }
 );
 
+// Sub-schema de les imatges pujades a Cloudinary
+const documentAssetSchema = new Schema(
+  {
+    publicId: { type: String, required: true },
+    bytes: { type: Number, required: true, min: 0 },
+  },
+  { _id: false }
+);
+
 // --- Esquema principal del document ---
 
 const documentSchema = new Schema<IDocument>(
@@ -134,6 +152,13 @@ const documentSchema = new Schema<IDocument>(
     order: [{ type: Number }],
     author: { type: String },
     defaultSettings: { type: defaultSettingsSchema },
+    // Els documents creats abans d'aquest camp no en tenen: el seu pes no es
+    // pot conèixer retroactivament i compten com a zero fins que es tornin a desar
+    assets: {
+      type: [documentAssetSchema],
+      required: true,
+      default: () => [],
+    },
   },
   {
     timestamps: true,

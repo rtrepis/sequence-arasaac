@@ -1421,5 +1421,80 @@
   "pages.viewSequence.section.printFooter": {
     "defaultMessage": "Pied de page",
     "description": "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF"
+  },
+  "features.backend.auth.error.ACCOUNT_SUSPENDED": {
+    "defaultMessage": "Ce compte est suspendu. Contacte-nous si tu penses qu'il s'agit d'une erreur."
+  },
+  "features.backend.auth.error.DISPOSABLE_EMAIL": {
+    "defaultMessage": "Cette adresse provient d'un service de messagerie temporaire. Utilise ton adresse habituelle."
+  },
+  "features.backend.auth.error.DOCUMENT_SAVE_ERROR": {
+    "defaultMessage": "Le document n'a pas pu être enregistré. Réessaie."
+  },
+  "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
+    "defaultMessage": "Cette adresse e-mail est déjà vérifiée."
+  },
+  "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
+    "defaultMessage": "Tu dois vérifier ton adresse e-mail avant d'enregistrer dans le cloud. Consulte ta boîte de réception."
+  },
+  "features.backend.auth.error.MAX_USERS_REACHED": {
+    "defaultMessage": "Nous avons atteint le nombre maximal de comptes. Réessaie plus tard."
+  },
+  "features.backend.auth.error.QUOTA_DOCUMENTS_EXCEEDED": {
+    "defaultMessage": "Tu as atteint le nombre maximal de documents enregistrés. Supprimes-en un pour en enregistrer un nouveau."
+  },
+  "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
+    "defaultMessage": "Tu as atteint la limite d'espace pour les images. Supprime un document contenant tes propres images."
+  },
+  "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
+    "defaultMessage": "Tu as atteint le nombre maximal de mots personnalisés. Supprimes-en un pour en ajouter d'autres."
+  },
+  "features.backend.auth.error.REGISTRATION_CLOSED": {
+    "defaultMessage": "Les inscriptions sont temporairement fermées. Réessaie plus tard."
+  },
+  "features.backend.auth.error.TOO_MANY_ATTEMPTS": {
+    "defaultMessage": "Trop de tentatives d'affilée. Attends un instant et réessaie."
+  },
+  "features.backend.auth.error.TOO_MANY_REGISTRATIONS": {
+    "defaultMessage": "Trop de comptes ont été créés depuis cette connexion. Réessaie dans un moment."
+  },
+  "features.backend.auth.error.VERIFICATION_EMAIL_FAILED": {
+    "defaultMessage": "Nous n'avons pas pu envoyer l'e-mail de vérification. Réessaie dans un moment."
+  },
+  "features.backend.auth.error.VERIFICATION_RESEND_LIMIT": {
+    "defaultMessage": "Tu as demandé l'e-mail de vérification trop de fois aujourd'hui. Réessaie demain."
+  },
+  "features.backend.auth.error.VERIFICATION_RESEND_TOO_SOON": {
+    "defaultMessage": "Nous venons de t'envoyer un e-mail. Attends quelques minutes avant d'en demander un autre."
+  },
+  "features.backend.auth.error.VERIFICATION_TOKEN_INVALID": {
+    "defaultMessage": "Ce lien de vérification n'est pas valide ou a expiré. Demandes-en un nouveau."
+  },
+  "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
+    "defaultMessage": "Le lien de vérification est incomplet."
+  },
+  "features.backend.auth.verification.bannerFailed": {
+    "defaultMessage": "Nous n'avons pas pu t'envoyer l'e-mail de vérification. Essaie de le redemander."
+  },
+  "features.backend.auth.verification.bannerPending": {
+    "defaultMessage": "Vérifie ton adresse e-mail pour enregistrer dans le cloud. Nous avons envoyé un lien à {email}."
+  },
+  "features.backend.auth.verification.goToApp": {
+    "defaultMessage": "Aller à l'application"
+  },
+  "features.backend.auth.verification.pageTitle": {
+    "defaultMessage": "Vérification de l'e-mail"
+  },
+  "features.backend.auth.verification.resend": {
+    "defaultMessage": "Renvoyer"
+  },
+  "features.backend.auth.verification.resendSuccess": {
+    "defaultMessage": "E-mail envoyé. Consulte ta boîte de réception."
+  },
+  "features.backend.auth.verification.verified": {
+    "defaultMessage": "Adresse vérifiée ! Tu peux maintenant enregistrer tes séquences dans le cloud."
+  },
+  "features.backend.auth.verification.verifying": {
+    "defaultMessage": "Nous vérifions ton adresse…"
   }
 }

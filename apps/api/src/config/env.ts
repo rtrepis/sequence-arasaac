@@ -19,6 +19,20 @@ const envSchema = z.object({
   CLOUDINARY_CLOUD_NAME: z.string().min(1, "CLOUDINARY_CLOUD_NAME és obligatòria"),
   CLOUDINARY_API_KEY: z.string().min(1, "CLOUDINARY_API_KEY és obligatòria"),
   CLOUDINARY_API_SECRET: z.string().min(1, "CLOUDINARY_API_SECRET és obligatòria"),
+
+  // --- Antifrau i correu ---
+  // Opcionals a l'esquema perquè en desenvolupament es pugui arrencar sense elles
+  // (el correu surt per consola i el hash d'IP usa una clau de treball).
+  // A producció es comproven a sota i el procés s'atura si en falta cap.
+
+  // Clau de l'HMAC amb què es pseudonimitzen les IP. Canviar-la invalida
+  // totes les correlacions anteriors, que és precisament el que ha de passar.
+  IP_HASH_SECRET: z.string().default(""),
+  RESEND_API_KEY: z.string().default(""),
+  // Remitent dels correus — ha de ser d'un domini verificat a Resend
+  MAIL_FROM: z.string().default("SequenciAAC <onboarding@resend.dev>"),
+  // Base pública del frontend, per construir l'enllaç de verificació
+  APP_PUBLIC_URL: z.string().default("http://localhost:5173"),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -27,6 +41,22 @@ if (!parsed.success) {
   console.error("Error de configuració: variables d'entorn invàlides");
   console.error(parsed.error.format());
   process.exit(1);
+}
+
+// Variables que només són obligatòries en producció.
+// En desenvolupament tenen alternativa degradada; en producció, no tenir-les
+// vol dir enviar correus a enlloc o pseudonimitzar IP amb una clau buida.
+const PRODUCTION_REQUIRED = ["IP_HASH_SECRET", "RESEND_API_KEY"] as const;
+
+if (parsed.data.NODE_ENV === "production") {
+  const missing = PRODUCTION_REQUIRED.filter((key) => !parsed.data[key]);
+
+  if (missing.length > 0) {
+    console.error(
+      `Error de configuració: a producció calen ${missing.join(", ")}`
+    );
+    process.exit(1);
+  }
 }
 
 // Exportació tipada de les variables d'entorn validades

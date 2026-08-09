@@ -1,7 +1,11 @@
 // Handlers Express per al mòdul de user-settings
 import { Request, Response, NextFunction } from "express";
 import { updateUiSettingsSchema } from "./validators";
-import { getUiSettings as getUiSettingsService, updateUiSettings as updateUiSettingsService } from "./service";
+import {
+  getUiSettings as getUiSettingsService,
+  updateUiSettings as updateUiSettingsService,
+  deleteAccount as deleteAccountService,
+} from "./service";
 import type { AppError } from "../../middleware/errorHandler";
 
 // GET /api/user/ui-settings
@@ -37,6 +41,30 @@ export const updateUiSettings = async (
 
     await updateUiSettingsService(req.userId as string, parsed.data);
     res.status(200).json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/user/me
+// Esborra el compte de qui fa la petició. Mai el d'un altre: l'identificador
+// surt del token, no del cos de la petició.
+export const deleteAccount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    await deleteAccountService(req.userId as string);
+
+    // La cookie del refresh token s'ha d'anar amb el compte
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.status(204).send();
   } catch (err) {
     next(err);
   }

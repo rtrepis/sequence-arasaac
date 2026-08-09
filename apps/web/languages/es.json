@@ -1421,5 +1421,80 @@
   "pages.viewSequence.section.printFooter": {
     "defaultMessage": "Pie de impresión",
     "description": "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF"
+  },
+  "features.backend.auth.error.ACCOUNT_SUSPENDED": {
+    "defaultMessage": "Esta cuenta está suspendida. Contacta con nosotros si crees que es un error."
+  },
+  "features.backend.auth.error.DISPOSABLE_EMAIL": {
+    "defaultMessage": "Esta dirección es de un servicio de correo temporal. Usa tu correo habitual."
+  },
+  "features.backend.auth.error.DOCUMENT_SAVE_ERROR": {
+    "defaultMessage": "No se ha podido guardar el documento. Inténtalo de nuevo."
+  },
+  "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
+    "defaultMessage": "Este correo ya está verificado."
+  },
+  "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
+    "defaultMessage": "Debes verificar tu correo antes de guardar en la nube. Revisa tu bandeja de entrada."
+  },
+  "features.backend.auth.error.MAX_USERS_REACHED": {
+    "defaultMessage": "Hemos alcanzado el máximo de cuentas disponibles. Inténtalo de nuevo más adelante."
+  },
+  "features.backend.auth.error.QUOTA_DOCUMENTS_EXCEEDED": {
+    "defaultMessage": "Has alcanzado el máximo de documentos guardados. Borra alguno para guardar uno nuevo."
+  },
+  "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
+    "defaultMessage": "Has alcanzado el máximo de espacio para imágenes. Borra algún documento con imágenes propias."
+  },
+  "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
+    "defaultMessage": "Has alcanzado el máximo de palabras personalizadas. Borra alguna para añadir más."
+  },
+  "features.backend.auth.error.REGISTRATION_CLOSED": {
+    "defaultMessage": "Los registros están cerrados temporalmente. Inténtalo de nuevo más adelante."
+  },
+  "features.backend.auth.error.TOO_MANY_ATTEMPTS": {
+    "defaultMessage": "Demasiados intentos seguidos. Espera un momento e inténtalo de nuevo."
+  },
+  "features.backend.auth.error.TOO_MANY_REGISTRATIONS": {
+    "defaultMessage": "Se han creado demasiadas cuentas desde esta conexión. Inténtalo dentro de un rato."
+  },
+  "features.backend.auth.error.VERIFICATION_EMAIL_FAILED": {
+    "defaultMessage": "No hemos podido enviar el correo de verificación. Inténtalo dentro de un rato."
+  },
+  "features.backend.auth.error.VERIFICATION_RESEND_LIMIT": {
+    "defaultMessage": "Has pedido el correo de verificación demasiadas veces hoy. Inténtalo mañana."
+  },
+  "features.backend.auth.error.VERIFICATION_RESEND_TOO_SOON": {
+    "defaultMessage": "Ya te hemos enviado un correo hace poco. Espera unos minutos antes de pedir otro."
+  },
+  "features.backend.auth.error.VERIFICATION_TOKEN_INVALID": {
+    "defaultMessage": "Este enlace de verificación no es válido o ha caducado. Pide uno nuevo."
+  },
+  "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
+    "defaultMessage": "El enlace de verificación está incompleto."
+  },
+  "features.backend.auth.verification.bannerFailed": {
+    "defaultMessage": "No hemos podido enviarte el correo de verificación. Prueba a pedirlo de nuevo."
+  },
+  "features.backend.auth.verification.bannerPending": {
+    "defaultMessage": "Verifica tu correo para poder guardar en la nube. Te hemos enviado un enlace a {email}."
+  },
+  "features.backend.auth.verification.goToApp": {
+    "defaultMessage": "Ir a la aplicación"
+  },
+  "features.backend.auth.verification.pageTitle": {
+    "defaultMessage": "Verificación del correo"
+  },
+  "features.backend.auth.verification.resend": {
+    "defaultMessage": "Vuelve a enviármelo"
+  },
+  "features.backend.auth.verification.resendSuccess": {
+    "defaultMessage": "Correo enviado. Revisa tu bandeja de entrada."
+  },
+  "features.backend.auth.verification.verified": {
+    "defaultMessage": "¡Correo verificado! Ya puedes guardar tus secuencias en la nube."
+  },
+  "features.backend.auth.verification.verifying": {
+    "defaultMessage": "Estamos verificando tu dirección…"
   }
 }
