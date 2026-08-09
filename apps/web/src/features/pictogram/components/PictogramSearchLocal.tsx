@@ -5,11 +5,9 @@ import {
   TextField,
   ToggleButton,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { SyntheticEvent, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { createFilterOptions } from "@mui/material/Autocomplete";
-import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { useAppSelector } from "@/app/hooks";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import {
@@ -18,23 +16,11 @@ import {
   buildPictogramUrl,
   extractPictSettings,
 } from "../api/arasaacClient";
-import { fileToBase64 } from "@/utils/imageToBase64";
 import { Hair, PictApiAraSettings, Skin } from "@/types/sequence";
 import messages from "./PictogramSearchLocal.lang";
 import usePersonalKeywords from "@features/word-profile/hooks/usePersonalKeywords";
+import UploadImageButton from "../../../components/UploadImageButton";
 import React from "react";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 
 const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
@@ -52,11 +38,14 @@ export interface PictogramSearchLocalResult {
 
 interface PictogramSearchLocalProps {
   selectedId: number;
+  /** Data URL de la imatge pròpia, si l'usuari n'ha pujada cap. */
+  imageUrl?: string;
   onSelect: (result: PictogramSearchLocalResult) => void;
 }
 
 const PictogramSearchLocal = ({
   selectedId,
+  imageUrl,
   onSelect,
 }: PictogramSearchLocalProps): React.ReactElement => {
   const intl = useIntl();
@@ -139,16 +128,16 @@ const PictogramSearchLocal = ({
     setIsPlus(!isPlus);
   };
 
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    try {
-      const base64Url = await fileToBase64(file);
-      onSelect({ selectedId: 0, fitzgerald: undefined, url: base64Url, color: undefined, hair: undefined, skin: undefined });
-    } catch (error) {
-      console.error("Error carregant imatge:", error);
-    }
-  };
+  // La imatge pròpia substitueix el pictograma: no té ni color ni variants
+  const applyUploadedImage = (url: string | undefined) =>
+    onSelect({
+      selectedId: 0,
+      fitzgerald: undefined,
+      url,
+      color: undefined,
+      hair: undefined,
+      skin: undefined,
+    });
 
   return (
     <Stack sx={{ width: "100%" }}>
@@ -200,10 +189,12 @@ const PictogramSearchLocal = ({
           </ToggleButton>
         )}
 
-        <ToggleButton value="upload" key="upload" component="label">
-          <MdOutlineDriveFolderUpload size={80} />
-          <VisuallyHiddenInput type="file" onChange={handleImageChange} accept="image/*" />
-        </ToggleButton>
+        <UploadImageButton
+          key="upload"
+          imageUrl={imageUrl}
+          onUpload={applyUploadedImage}
+          onRemove={() => applyUploadedImage(undefined)}
+        />
       </StyledToggleButtonGroup>
 
       {isAlert && (

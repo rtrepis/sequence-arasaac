@@ -36,6 +36,14 @@ export const SETTINGS_INDENT = { xs: 1, sm: 3 };
 export const SETTINGS_APPBAR_OFFSET = 50;
 
 /**
+ * Alçada màxima de la mostra en mòbil quan és l'únic contingut de la zona
+ * esquerra: acota-la perquè no es mengi la pantalla i deixi els controls
+ * fora de vista. Quan la mostra va acompanyada d'una llista (`previewAside`)
+ * no s'aplica: la llista queda en flux normal i no cal cap scroll intern.
+ */
+export const SETTINGS_PREVIEW_MOBILE_MAX_HEIGHT = "35vh";
+
+/**
  * Desplaçament vertical (px) del preview sticky en tauleta/escriptori: per sobre
  * de `md` l'AppBar del diàleg és `position: relative` i marxa amb l'scroll, així
  * que només cal un marge d'aire respecte a la vora superior del diàleg.

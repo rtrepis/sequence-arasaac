@@ -436,8 +436,37 @@
     "defaultMessage": "Plus pictograms",
     "description": "Plus pictograms"
   },
-  "components.pictogramSearch.uploadImage": {
-    "defaultMessage": "Upload image from device"
+  "components.uploadImageButton.upload": {
+    "defaultMessage": "Upload your own image",
+    "description": "Upload own image button"
+  },
+  "components.uploadImageButton.replace": {
+    "defaultMessage": "Change the uploaded image",
+    "description": "Upload button when an image is already uploaded"
+  },
+  "components.uploadImageButton.remove": {
+    "defaultMessage": "Remove the uploaded image",
+    "description": "Remove uploaded image button"
+  },
+  "components.uploadImageButton.loading": {
+    "defaultMessage": "Processing the image…",
+    "description": "Image is being converted and compressed"
+  },
+  "components.uploadImageButton.uploaded": {
+    "defaultMessage": "Image added",
+    "description": "Image successfully added"
+  },
+  "components.uploadImageButton.removed": {
+    "defaultMessage": "Image removed",
+    "description": "Image successfully removed"
+  },
+  "components.uploadImageButton.errorNotImage": {
+    "defaultMessage": "The file is not an image",
+    "description": "Selected file is not an image"
+  },
+  "components.uploadImageButton.errorLoading": {
+    "defaultMessage": "The image could not be loaded",
+    "description": "Generic image loading error"
   },
   "components.sequenceAuthor": {
     "defaultMessage": "Sequence author:",

@@ -436,8 +436,37 @@
     "defaultMessage": "Inserisci pittogramma",
     "description": "Plus pictograms"
   },
-  "components.pictogramSearch.uploadImage": {
-    "defaultMessage": "Carica immagine dal dispositivo"
+  "components.uploadImageButton.upload": {
+    "defaultMessage": "Carica una tua immagine",
+    "description": "Upload own image button"
+  },
+  "components.uploadImageButton.replace": {
+    "defaultMessage": "Cambia l'immagine caricata",
+    "description": "Upload button when an image is already uploaded"
+  },
+  "components.uploadImageButton.remove": {
+    "defaultMessage": "Rimuovi l'immagine caricata",
+    "description": "Remove uploaded image button"
+  },
+  "components.uploadImageButton.loading": {
+    "defaultMessage": "Elaborazione dell'immagine…",
+    "description": "Image is being converted and compressed"
+  },
+  "components.uploadImageButton.uploaded": {
+    "defaultMessage": "Immagine aggiunta",
+    "description": "Image successfully added"
+  },
+  "components.uploadImageButton.removed": {
+    "defaultMessage": "Immagine rimossa",
+    "description": "Image successfully removed"
+  },
+  "components.uploadImageButton.errorNotImage": {
+    "defaultMessage": "Il file non è un'immagine",
+    "description": "Selected file is not an image"
+  },
+  "components.uploadImageButton.errorLoading": {
+    "defaultMessage": "Impossibile caricare l'immagine",
+    "description": "Generic image loading error"
   },
   "components.sequenceAuthor": {
     "defaultMessage": "Autore della sequenza:",

@@ -436,8 +436,37 @@
     "defaultMessage": "Inserir pictograma",
     "description": "Plus pictograms"
   },
-  "components.pictogramSearch.uploadImage": {
-    "defaultMessage": "Pujar imatge des del dispositiu"
+  "components.uploadImageButton.upload": {
+    "defaultMessage": "Puja una imatge teva",
+    "description": "Upload own image button"
+  },
+  "components.uploadImageButton.replace": {
+    "defaultMessage": "Canvia la imatge pujada",
+    "description": "Upload button when an image is already uploaded"
+  },
+  "components.uploadImageButton.remove": {
+    "defaultMessage": "Treu la imatge pujada",
+    "description": "Remove uploaded image button"
+  },
+  "components.uploadImageButton.loading": {
+    "defaultMessage": "S'està processant la imatge…",
+    "description": "Image is being converted and compressed"
+  },
+  "components.uploadImageButton.uploaded": {
+    "defaultMessage": "Imatge afegida",
+    "description": "Image successfully added"
+  },
+  "components.uploadImageButton.removed": {
+    "defaultMessage": "Imatge treta",
+    "description": "Image successfully removed"
+  },
+  "components.uploadImageButton.errorNotImage": {
+    "defaultMessage": "El fitxer no és una imatge",
+    "description": "Selected file is not an image"
+  },
+  "components.uploadImageButton.errorLoading": {
+    "defaultMessage": "No s'ha pogut carregar la imatge",
+    "description": "Generic image loading error"
   },
   "components.sequenceAuthor": {
     "defaultMessage": "Autor de la seqüència:",

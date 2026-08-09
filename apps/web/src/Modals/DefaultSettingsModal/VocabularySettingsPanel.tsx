@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Alert, Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import {
@@ -224,34 +231,33 @@ const VocabularySettingsPanel = (): React.ReactElement => {
   return (
     <SettingsPanelLayout
       preview={
-        <Stack
-          gap={1}
-          sx={{ width: { xs: "100%", md: VOCABULARY_ASIDE_WIDTH } }}
+        <SettingsPreviewFrame
+          background="paper"
+          sx={{
+            padding: 1,
+            width: { md: VOCABULARY_ASIDE_WIDTH },
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <SettingsPreviewFrame
-            background="paper"
-            sx={{
-              padding: 1,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <PictogramCard
-              pictogram={pictogramGuide}
-              defaults={defaults}
-              view="complete"
-              variant="plane"
-            />
-          </SettingsPreviewFrame>
-
+          <PictogramCard
+            pictogram={pictogramGuide}
+            defaults={defaults}
+            view="complete"
+            variant="plane"
+          />
+        </SettingsPreviewFrame>
+      }
+      previewAside={
+        <Box sx={{ width: { xs: "100%", md: VOCABULARY_ASIDE_WIDTH } }}>
           <WordProfileList
             profiles={wordProfiles}
             editingWord={editingWord}
             onSelect={loadProfile}
             onDelete={handleDelete}
           />
-        </Stack>
+        </Box>
       }
     >
       {/* Guia: diu en tot moment si s'està creant una paraula o editant-ne una */}
@@ -306,6 +312,7 @@ const VocabularySettingsPanel = (): React.ReactElement => {
       <SectionTitle title={<FormattedMessage {...messages.sectionPictogram} />}>
         <PictogramSearchLocal
           selectedId={pictState.selectedId}
+          imageUrl={pictState.url}
           onSelect={setPictState}
         />
 
