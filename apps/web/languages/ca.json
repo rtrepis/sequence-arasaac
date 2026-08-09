@@ -1421,5 +1421,80 @@
   "pages.viewSequence.section.printFooter": {
     "defaultMessage": "Peu d'impressió",
     "description": "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF"
+  },
+  "features.backend.auth.error.ACCOUNT_SUSPENDED": {
+    "defaultMessage": "Aquest compte està suspès. Contacta amb nosaltres si creus que és un error."
+  },
+  "features.backend.auth.error.DISPOSABLE_EMAIL": {
+    "defaultMessage": "Aquesta adreça és d'un servei de correu temporal. Fes servir el teu correu habitual."
+  },
+  "features.backend.auth.error.DOCUMENT_SAVE_ERROR": {
+    "defaultMessage": "No s'ha pogut desar el document. Torna-ho a provar."
+  },
+  "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
+    "defaultMessage": "Aquest correu ja està verificat."
+  },
+  "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
+    "defaultMessage": "Has de verificar el teu correu abans de desar al núvol. Mira la teva safata d'entrada."
+  },
+  "features.backend.auth.error.MAX_USERS_REACHED": {
+    "defaultMessage": "Hem arribat al màxim de comptes disponibles. Torna-ho a provar més endavant."
+  },
+  "features.backend.auth.error.QUOTA_DOCUMENTS_EXCEEDED": {
+    "defaultMessage": "Has arribat al màxim de documents desats. Esborra'n algun per desar-ne un de nou."
+  },
+  "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
+    "defaultMessage": "Has arribat al màxim d'espai per a imatges. Esborra algun document amb imatges pròpies."
+  },
+  "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
+    "defaultMessage": "Has arribat al màxim de paraules personalitzades. Esborra'n alguna per afegir-ne més."
+  },
+  "features.backend.auth.error.REGISTRATION_CLOSED": {
+    "defaultMessage": "Els registres estan tancats temporalment. Torna-ho a provar més endavant."
+  },
+  "features.backend.auth.error.TOO_MANY_ATTEMPTS": {
+    "defaultMessage": "Massa intents seguits. Espera un moment i torna-ho a provar."
+  },
+  "features.backend.auth.error.TOO_MANY_REGISTRATIONS": {
+    "defaultMessage": "S'han creat massa comptes des d'aquesta connexió. Prova-ho d'aquí a una estona."
+  },
+  "features.backend.auth.error.VERIFICATION_EMAIL_FAILED": {
+    "defaultMessage": "No hem pogut enviar el correu de verificació. Torna-ho a provar d'aquí a una estona."
+  },
+  "features.backend.auth.error.VERIFICATION_RESEND_LIMIT": {
+    "defaultMessage": "Has demanat el correu de verificació massa vegades avui. Torna-ho a provar demà."
+  },
+  "features.backend.auth.error.VERIFICATION_RESEND_TOO_SOON": {
+    "defaultMessage": "Ja t'hem enviat un correu fa poc. Espera uns minuts abans de demanar-ne un altre."
+  },
+  "features.backend.auth.error.VERIFICATION_TOKEN_INVALID": {
+    "defaultMessage": "Aquest enllaç de verificació no és vàlid o ha caducat. Demana'n un de nou."
+  },
+  "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
+    "defaultMessage": "L'enllaç de verificació està incomplet."
+  },
+  "features.backend.auth.verification.bannerFailed": {
+    "defaultMessage": "No hem pogut enviar-te el correu de verificació. Prova de demanar-lo de nou."
+  },
+  "features.backend.auth.verification.bannerPending": {
+    "defaultMessage": "Verifica el teu correu per poder desar al núvol. T'hem enviat un enllaç a {email}."
+  },
+  "features.backend.auth.verification.goToApp": {
+    "defaultMessage": "Ves a l'aplicació"
+  },
+  "features.backend.auth.verification.pageTitle": {
+    "defaultMessage": "Verificació del correu"
+  },
+  "features.backend.auth.verification.resend": {
+    "defaultMessage": "Torna a enviar-me'l"
+  },
+  "features.backend.auth.verification.resendSuccess": {
+    "defaultMessage": "Correu enviat. Mira la teva safata d'entrada."
+  },
+  "features.backend.auth.verification.verified": {
+    "defaultMessage": "Correu verificat! Ja pots desar les teves seqüències al núvol."
+  },
+  "features.backend.auth.verification.verifying": {
+    "defaultMessage": "Estem verificant la teva adreça…"
   }
 }

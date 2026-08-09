@@ -134,6 +134,52 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 
 ---
 
+## Antifrau i control de comptes
+
+### Identitat
+
+- **`emailCanonical` és l'única clau d'identitat** (`apps/api/src/shared/emailCanonical.ts`). L'`email` es conserva tal com l'escriu l'usuari perquè és l'adreça on se li escriu, però l'índex únic i totes les cerques (registre, login, cerca del panell) van contra el canònic. Sense això, `algu@gmail.com`, `a.l.g.u@gmail.com` i `algu+1@gmail.com` són tres comptes i una sola bústia.
+- `googlemail.com` es canonicalitza a `gmail.com`: és el mateix servei amb el nom antic.
+- Els punts **només** s'eliminen als dominis de Google. A un domini corporatiu, `joan.puig@` i `joanpuig@` poden ser dues persones.
+
+### Estat del compte
+
+- **`status`** (`pending` / `active` / `suspended`) i **`role`** (`user` / `admin`) són coses diferents de **`tier`**: `role` és permís, `tier` és pla comercial. No barrejar-los mai.
+- Un compte **`pending`** (correu sense verificar) **pot entrar i treballar**; només no pot **desar al núvol** (`requireVerifiedEmail` a `POST`/`PUT /api/documents`). Bloquejar l'accés sencer a una eina d'AAC perquè un correu s'ha entretingut castiga l'usuari equivocat. **Esborrar sempre es permet**: mai s'ha d'impedir a algú alliberar espai.
+- **`authMiddleware` no consulta la BD** i no ho ha de fer: la suspensió es fa efectiva al refresh (com a màxim 15 min). `requireAdmin` sí que hi va, perquè són quatre peticions al dia i el que hi ha darrere és el poder de suspendre comptes.
+- Suspendre incrementa `tokenVersion`; el refresh el compara. Sense això, un refresh token ja emès continuaria renovant la sessió fins a set dies.
+
+### Frens de registre
+
+- **`app.set("trust proxy", 1)` a `index.ts` és imprescindible**: a Render, sense això tots els `express-rate-limit` veuen la IP del proxy i o no aturen ningú o els aturen tots alhora.
+- L'interruptor de registre i el sostre d'usuaris viuen a la **BD** (`modules/config`), no a l'`.env`: tancar el registre ha de ser un clic al panell, no un desplegament.
+- Ordre de comprovacions al registre: registre obert → sota el sostre → domini no descartable → canònic lliure. Les que no revelen res van primer.
+
+### Traça antiabús
+
+- **La IP no es desa mai en clar**, enlloc. `shared/ipHash.ts` en fa un HMAC-SHA256 amb `IP_HASH_SECRET`; el `SecurityEvent` només en guarda el hash. Amb això es pot comptar «quantes altes d'aquest origen» sense tenir cap IP a la base de dades.
+- `SecurityEvent` porta **índex TTL de 30 dies**: MongoDB purga sol. Res de cron ni de tasques de manteniment.
+
+### Quotes
+
+- Els límits viuen al **codi** (`shared/tierLimits.ts`), no al document d'usuari: apujar el límit del pla gratuït ha de ser un desplegament, no una migració. `quotaOverride` és només per a excepcions puntuals.
+- **La quota es comprova abans de pujar res a Cloudinary**, estimant els bytes des de la llargada del base64. Pujar primer i rebutjar després deixaria imatges orfes ja pagades.
+- Cada document guarda `assets: [{ publicId, bytes }]`. Sense els bytes no es pot restar res en esborrar i el comptador només creixeria.
+
+### Correu
+
+- `shared/mailer.ts` és **l'únic fitxer que sap que el proveïdor és Resend**. Cap funció seva llança mai.
+- **L'enviament no bloqueja mai el registre.** El pla gratuït de Resend són 100 correus/dia: si s'esgota o el proveïdor falla, el compte s'ha de crear igualment i l'usuari ha de poder demanar el reenviament. Un dia dolent del correu no pot deixar el registre trencat.
+- Sense `RESEND_API_KEY` (desenvolupament) l'enllaç surt per consola: el flux es pot provar sencer sense gastar quota.
+
+### Panell d'administració
+
+- Ruta `/admin`, **fora de `LanguageLayout`** (sense `:locale`) i **només en català, sense `react-intl`**. És eina interna d'una sola persona i cinc fitxers de traducció no s'hi justifiquen. **És una excepció declarada, no un descuit.**
+- La protecció de veritat és `requireAdmin` al servidor; la comprovació del front només evita ensenyar una pantalla que no funcionaria.
+- **El primer admin es posa a mà des d'Atlas.** No hi ha cap endpoint per promoure administradors, i no n'hi ha d'haver.
+
+---
+
 ## Descripció del projecte
 
 App per crear seqüències de pictogrames (ARASAAC), previsualitzar-les i imprimir-les.
