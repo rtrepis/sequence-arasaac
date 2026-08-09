@@ -3,6 +3,9 @@ import apiClient from "../../api/apiClient";
 
 export interface AuthResponse {
   accessToken: string;
+  // Només arriba al registre: indica si el correu de verificació ha pogut sortir.
+  // Que sigui false no vol dir que el registre hagi fallat — el compte ja existeix.
+  verificationEmailSent?: boolean;
 }
 
 export const login = async (
@@ -34,4 +37,14 @@ export const logout = async (): Promise<void> => {
 export const refreshToken = async (): Promise<AuthResponse> => {
   const { data } = await apiClient.post<AuthResponse>("/auth/refresh");
   return data;
+};
+
+// Confirma l'adreça a partir del token de l'enllaç rebut per correu
+export const verifyEmail = async (token: string): Promise<void> => {
+  await apiClient.get("/auth/verify", { params: { token } });
+};
+
+// Demana un correu de verificació nou. Requereix sessió iniciada.
+export const resendVerification = async (): Promise<void> => {
+  await apiClient.post("/auth/resend-verification");
 };

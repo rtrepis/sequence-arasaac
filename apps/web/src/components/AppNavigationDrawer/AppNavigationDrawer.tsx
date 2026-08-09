@@ -60,7 +60,9 @@ const AppNavigationDrawer = ({
   const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
 
   // Estat d'autenticació
-  const { userEmail, accessToken } = useAppSelector((state) => state.auth);
+  const { userEmail, accessToken, isAdmin } = useAppSelector(
+    (state) => state.auth,
+  );
   const isLoggedIn = Boolean(accessToken);
 
   // Document actual (per desar al núvol)
@@ -101,8 +103,13 @@ const AppNavigationDrawer = ({
         severity: "success",
       });
     } else {
+      // El thunk retorna el codi d'error del backend; aquí es converteix en text
+      const errorCode = result.payload as string;
+      const message =
+        authMessages[errorCode as keyof typeof authMessages] ??
+        authMessages.DOCUMENT_SAVE_ERROR;
       showSnackbar({
-        message: result.payload as string,
+        message: intl.formatMessage(message),
         severity: "error",
       });
     }
@@ -353,6 +360,17 @@ const AppNavigationDrawer = ({
                   primary={intl.formatMessage(authMessages.loadDocument)}
                 />
               </ListItemButton>
+
+              {/* Accés al panell d'administració. Text en català sense traduir:
+                  el panell mateix només existeix en català (eina interna) */}
+              {isAdmin && (
+                <ListItemButton onClick={() => handleNavigate("/admin")}>
+                  <ListItemIcon>
+                    <AiOutlineSetting />
+                  </ListItemIcon>
+                  <ListItemText primary="Administració" />
+                </ListItemButton>
+              )}
 
               <ListItemButton onClick={handleLogout}>
                 <ListItemIcon>

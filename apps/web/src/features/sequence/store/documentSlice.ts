@@ -365,8 +365,14 @@ export const saveDocumentThunk = createAsyncThunk<
       dispatch(documentSlice.actions.loadDocumentSaac(saved));
       return saved.id;
     }
-  } catch {
-    return rejectWithValue("No s'ha pogut desar el document");
+  } catch (error: unknown) {
+    // Es propaga el codi semàntic del backend, no un text fix: qui no pot desar
+    // ha de saber per què (correu sense verificar, quota exhaurida) i què hi pot fer.
+    // La traducció la fa qui mostra el missatge.
+    const errorCode =
+      (error as { response?: { data?: { errorCode?: string } } })?.response?.data
+        ?.errorCode ?? "DOCUMENT_SAVE_ERROR";
+    return rejectWithValue(errorCode);
   }
 });
 

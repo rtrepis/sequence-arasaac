@@ -30,4 +30,15 @@ export type {
   UserUiSettings,
   WordProfile,
   UserTier,
+  UserStatus,
+  UserRole,
+  UserUsage,
+  QuotaLimits,
+  AppConfig,
 } from "./ui";
+export type {
+  AdminUserSummary,
+  AdminUserList,
+  AdminStats,
+  AdminSecurityEvent,
+} from "./admin";

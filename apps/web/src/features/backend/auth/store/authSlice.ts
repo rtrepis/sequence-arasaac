@@ -20,6 +20,13 @@ export interface AuthState {
   userEmail: string | null;
   isLoading: boolean;
   errorCode: string | null;
+  // Estat del compte, necessari per decidir què es pot fer i què s'ensenya.
+  // null vol dir "encara no ho sabem" (sessió no restaurada): no és el mateix
+  // que "no verificat", i mostrar l'avís abans d'hora seria alarmar sense motiu.
+  emailVerified: boolean | null;
+  isAdmin: boolean;
+  // Cert quan el registre ha anat bé però el correu de verificació no ha sortit
+  verificationEmailFailed: boolean;
 }
 
 const initialState: AuthState = {
@@ -27,22 +34,36 @@ const initialState: AuthState = {
   userEmail: null,
   isLoading: false,
   errorCode: null,
+  emailVerified: null,
+  isAdmin: false,
+  verificationEmailFailed: false,
 };
 
+// Estat del compte que arriba amb les preferències
+interface AccountFlags {
+  emailVerified: boolean;
+  isAdmin: boolean;
+}
+
 // Carrega les preferències del backend al Redux (no toca localStorage — és de l'anònim)
+// Retorna l'estat del compte perquè el thunk el pugui desar a l'AuthState.
 const syncSettingsAfterAuth = async (
   dispatch: (action: unknown) => void,
-): Promise<void> => {
+): Promise<AccountFlags> => {
   try {
-    const { lang, theme, defaultSettings, viewSettings, wordProfiles, tier } = await getUiSettings();
+    const { lang, theme, defaultSettings, viewSettings, wordProfiles, tier, emailVerified, role } = await getUiSettings();
     dispatch(updateDefaultSettingsActionCreator(defaultSettings));
     dispatch(updateLangSettingsActionCreator({ app: lang.app, search: lang.search, keywords: [] }));
     dispatch(updateThemeActionCreator(theme ?? "system"));
     if (viewSettings) dispatch(viewSettingsActionCreator(viewSettings));
     if (wordProfiles) dispatch(setWordProfilesActionCreator(wordProfiles));
     if (tier) dispatch(setTierActionCreator(tier));
+    return { emailVerified: emailVerified ?? false, isAdmin: role === "admin" };
   } catch {
-    // Si falla la sincronització no interrompem el flux d'auth
+    // Si falla la sincronització no interrompem el flux d'auth.
+    // Es concedeix el benefici del dubte: un error de xarxa no ha de fer
+    // aparèixer un avís de "verifica el correu" a qui ja el té verificat.
+    return { emailVerified: true, isAdmin: false };
   }
 };
 
@@ -77,8 +98,8 @@ export const loginThunk = createAsyncThunk(
     try {
       const { accessToken } = await authService.login(email, password);
       setAccessToken(accessToken);
-      await syncSettingsAfterAuth(dispatch);
-      return { accessToken, email };
+      const account = await syncSettingsAfterAuth(dispatch);
+      return { accessToken, email, ...account };
     } catch (error: unknown) {
       const errorCode =
         (error as { response?: { data?: { errorCode?: string } } })?.response
@@ -96,10 +117,20 @@ export const registerThunk = createAsyncThunk(
     { dispatch, rejectWithValue },
   ) => {
     try {
-      const { accessToken } = await authService.register(email, password);
+      const { accessToken, verificationEmailSent } = await authService.register(
+        email,
+        password,
+      );
       setAccessToken(accessToken);
-      await syncSettingsAfterAuth(dispatch);
-      return { accessToken, email };
+      const account = await syncSettingsAfterAuth(dispatch);
+      return {
+        accessToken,
+        email,
+        ...account,
+        // El compte s'ha creat encara que el correu no hagi sortit: cal dir-ho
+        // a l'usuari i oferir-li el reenviament, no fer com si res.
+        verificationEmailFailed: verificationEmailSent === false,
+      };
     } catch (error: unknown) {
       const errorCode =
         (error as { response?: { data?: { errorCode?: string } } })?.response
@@ -134,14 +165,23 @@ export const refreshSessionThunk = createAsyncThunk(
         userId: string;
         email: string;
       };
-      await syncSettingsAfterAuth(dispatch);
-      return { accessToken, email: payload.email };
+      const account = await syncSettingsAfterAuth(dispatch);
+      return { accessToken, email: payload.email, ...account };
     } catch {
       setAccessToken(null);
       return rejectWithValue("Sessió caducada");
     }
   },
 );
+
+// Payload comú a login, registre i restauració de sessió
+interface AuthSuccessPayload {
+  accessToken: string;
+  email: string;
+  emailVerified: boolean;
+  isAdmin: boolean;
+  verificationEmailFailed?: boolean;
+}
 
 const authSlice = createSlice({
   name: "auth",
@@ -151,6 +191,19 @@ const authSlice = createSlice({
       state.accessToken = null;
       state.userEmail = null;
       state.errorCode = null;
+      state.emailVerified = null;
+      state.isAdmin = false;
+      state.verificationEmailFailed = false;
+    },
+    // La crida a /auth/verify ha anat bé: l'avís ha de desaparèixer a l'instant,
+    // sense esperar la propera restauració de sessió
+    markEmailVerified: (state) => {
+      state.emailVerified = true;
+      state.verificationEmailFailed = false;
+    },
+    // El reenviament ha sortit: deixa de tenir sentit l'avís d'error d'enviament
+    markVerificationEmailSent: (state) => {
+      state.verificationEmailFailed = false;
     },
   },
   extraReducers: (builder) => {
@@ -159,10 +212,12 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.errorCode = null;
       })
-      .addCase(loginThunk.fulfilled, (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
+      .addCase(loginThunk.fulfilled, (state, action: PayloadAction<AuthSuccessPayload>) => {
         state.isLoading = false;
         state.accessToken = action.payload.accessToken;
         state.userEmail = action.payload.email;
+        state.emailVerified = action.payload.emailVerified;
+        state.isAdmin = action.payload.isAdmin;
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.isLoading = false;
@@ -174,10 +229,14 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.errorCode = null;
       })
-      .addCase(registerThunk.fulfilled, (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
+      .addCase(registerThunk.fulfilled, (state, action: PayloadAction<AuthSuccessPayload>) => {
         state.isLoading = false;
         state.accessToken = action.payload.accessToken;
         state.userEmail = action.payload.email;
+        state.emailVerified = action.payload.emailVerified;
+        state.isAdmin = action.payload.isAdmin;
+        state.verificationEmailFailed =
+          action.payload.verificationEmailFailed ?? false;
       })
       .addCase(registerThunk.rejected, (state, action) => {
         state.isLoading = false;
@@ -189,24 +248,32 @@ const authSlice = createSlice({
         state.accessToken = null;
         state.userEmail = null;
         state.errorCode = null;
+        state.emailVerified = null;
+        state.isAdmin = false;
+        state.verificationEmailFailed = false;
       });
 
     builder
       .addCase(refreshSessionThunk.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(refreshSessionThunk.fulfilled, (state, action: PayloadAction<{ accessToken: string; email: string }>) => {
+      .addCase(refreshSessionThunk.fulfilled, (state, action: PayloadAction<AuthSuccessPayload>) => {
         state.isLoading = false;
         state.accessToken = action.payload.accessToken;
         state.userEmail = action.payload.email;
+        state.emailVerified = action.payload.emailVerified;
+        state.isAdmin = action.payload.isAdmin;
       })
       .addCase(refreshSessionThunk.rejected, (state) => {
         state.isLoading = false;
         state.accessToken = null;
         state.userEmail = null;
+        state.emailVerified = null;
+        state.isAdmin = false;
       });
   },
 });
 
-export const { clearAuthState } = authSlice.actions;
+export const { clearAuthState, markEmailVerified, markVerificationEmailSent } =
+  authSlice.actions;
 export const authReducer = authSlice.reducer;

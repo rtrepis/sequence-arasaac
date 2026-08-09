@@ -1421,5 +1421,80 @@
   "pages.viewSequence.section.printFooter": {
     "defaultMessage": "Piè di stampa",
     "description": "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF"
+  },
+  "features.backend.auth.error.ACCOUNT_SUSPENDED": {
+    "defaultMessage": "Questo account è sospeso. Contattaci se pensi che sia un errore."
+  },
+  "features.backend.auth.error.DISPOSABLE_EMAIL": {
+    "defaultMessage": "Questo indirizzo appartiene a un servizio di posta temporanea. Usa la tua email abituale."
+  },
+  "features.backend.auth.error.DOCUMENT_SAVE_ERROR": {
+    "defaultMessage": "Non è stato possibile salvare il documento. Riprova."
+  },
+  "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
+    "defaultMessage": "Questa email è già verificata."
+  },
+  "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
+    "defaultMessage": "Devi verificare la tua email prima di salvare nel cloud. Controlla la posta in arrivo."
+  },
+  "features.backend.auth.error.MAX_USERS_REACHED": {
+    "defaultMessage": "Abbiamo raggiunto il numero massimo di account. Riprova più tardi."
+  },
+  "features.backend.auth.error.QUOTA_DOCUMENTS_EXCEEDED": {
+    "defaultMessage": "Hai raggiunto il numero massimo di documenti salvati. Eliminane uno per salvarne un altro."
+  },
+  "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
+    "defaultMessage": "Hai raggiunto il limite di spazio per le immagini. Elimina un documento con immagini tue."
+  },
+  "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
+    "defaultMessage": "Hai raggiunto il numero massimo di parole personalizzate. Eliminane una per aggiungerne altre."
+  },
+  "features.backend.auth.error.REGISTRATION_CLOSED": {
+    "defaultMessage": "Le registrazioni sono temporaneamente chiuse. Riprova più tardi."
+  },
+  "features.backend.auth.error.TOO_MANY_ATTEMPTS": {
+    "defaultMessage": "Troppi tentativi consecutivi. Aspetta un momento e riprova."
+  },
+  "features.backend.auth.error.TOO_MANY_REGISTRATIONS": {
+    "defaultMessage": "Sono stati creati troppi account da questa connessione. Riprova tra un po'."
+  },
+  "features.backend.auth.error.VERIFICATION_EMAIL_FAILED": {
+    "defaultMessage": "Non siamo riusciti a inviare l'email di verifica. Riprova tra un po'."
+  },
+  "features.backend.auth.error.VERIFICATION_RESEND_LIMIT": {
+    "defaultMessage": "Hai richiesto l'email di verifica troppe volte oggi. Riprova domani."
+  },
+  "features.backend.auth.error.VERIFICATION_RESEND_TOO_SOON": {
+    "defaultMessage": "Ti abbiamo appena inviato un'email. Aspetta qualche minuto prima di richiederne un'altra."
+  },
+  "features.backend.auth.error.VERIFICATION_TOKEN_INVALID": {
+    "defaultMessage": "Questo link di verifica non è valido o è scaduto. Richiedine uno nuovo."
+  },
+  "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
+    "defaultMessage": "Il link di verifica è incompleto."
+  },
+  "features.backend.auth.verification.bannerFailed": {
+    "defaultMessage": "Non siamo riusciti a inviarti l'email di verifica. Prova a richiederla."
+  },
+  "features.backend.auth.verification.bannerPending": {
+    "defaultMessage": "Verifica la tua email per salvare nel cloud. Ti abbiamo inviato un link a {email}."
+  },
+  "features.backend.auth.verification.goToApp": {
+    "defaultMessage": "Vai all'applicazione"
+  },
+  "features.backend.auth.verification.pageTitle": {
+    "defaultMessage": "Verifica dell'email"
+  },
+  "features.backend.auth.verification.resend": {
+    "defaultMessage": "Invia di nuovo"
+  },
+  "features.backend.auth.verification.resendSuccess": {
+    "defaultMessage": "Email inviata. Controlla la posta in arrivo."
+  },
+  "features.backend.auth.verification.verified": {
+    "defaultMessage": "Email verificata! Ora puoi salvare le tue sequenze nel cloud."
+  },
+  "features.backend.auth.verification.verifying": {
+    "defaultMessage": "Stiamo verificando il tuo indirizzo…"
   }
 }
