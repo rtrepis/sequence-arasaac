@@ -26,3 +26,17 @@ services:
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
+      # Clau de l'HMAC amb què es pseudonimitzen les IP dels esdeveniments de
+      # seguretat. La genera Render: no ha de sortir mai del servei, i canviar-la
+      # invalida les correlacions anteriors (que és el comportament correcte).
+      - key: IP_HASH_SECRET
+        generateValue: true
+      - key: RESEND_API_KEY
+        sync: false
+      # Remitent dels correus — ha de ser d'un domini verificat a Resend
+      - key: MAIL_FROM
+        sync: false
+      # Base pública del frontend, per construir els enllaços de verificació.
+      # Sense aquesta, el servidor es nega a arrencar en producció.
+      - key: APP_PUBLIC_URL
+        sync: false
