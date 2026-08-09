@@ -11,10 +11,16 @@ import { errorHandler } from "./middleware/errorHandler";
 import { authRouter } from "./modules/auth/routes";
 import { documentsRouter } from "./modules/documents/routes";
 import { userSettingsRouter } from "./modules/user-settings/routes";
+import { adminRouter } from "./modules/admin/routes";
 
 export const app = express();
 
 // --- Middleware global ---
+
+// Render (i qualsevol PaaS) posa un proxy davant de l'aplicació: sense això,
+// express-rate-limit veuria la IP del proxy a totes les peticions i els limitadors
+// serien decoratius (o bloquejarien tothom alhora). L'1 vol dir "confia en un sol salt".
+app.set("trust proxy", 1);
 
 // CORS amb credencials per permetre cookies HttpOnly (Fase 3)
 app.use(
@@ -55,6 +61,9 @@ app.use("/api/documents", documentsRouter);
 
 // Rutes de user-settings (Fase 5)
 app.use("/api/user", userSettingsRouter);
+
+// Rutes d'administració — protegides per rol, no només per sessió
+app.use("/api/admin", adminRouter);
 
 // Handler global d'errors — ha d'anar al final, després de totes les rutes
 app.use(errorHandler);

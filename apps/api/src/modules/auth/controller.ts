@@ -3,8 +3,15 @@
 
 import { Request, Response, NextFunction } from "express";
 import { registerSchema, loginSchema } from "./validators";
-import { registerUser, loginUser, refreshTokens } from "./service";
+import {
+  registerUser,
+  loginUser,
+  refreshTokens,
+  verifyEmail,
+  resendVerification,
+} from "./service";
 import type { AppError } from "../../middleware/errorHandler";
+import { hashIp } from "../../shared/ipHash";
 
 // Durada de la cookie de refresh token en mil·lisegons (7 dies)
 const REFRESH_TOKEN_COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
@@ -40,10 +47,12 @@ export const register = async (
       return next(error);
     }
 
-    const { accessToken, refreshToken } = await registerUser(parsed.data);
+    // La IP es pseudonimitza aquí: cap capa per sota en veu una de real
+    const { accessToken, refreshToken, verificationEmailSent } =
+      await registerUser(parsed.data, hashIp(req.ip));
 
     setRefreshTokenCookie(res, refreshToken);
-    res.status(201).json({ accessToken });
+    res.status(201).json({ accessToken, verificationEmailSent });
   } catch (err) {
     next(err);
   }
@@ -66,7 +75,10 @@ export const login = async (
       return next(error);
     }
 
-    const { accessToken, refreshToken } = await loginUser(parsed.data);
+    const { accessToken, refreshToken } = await loginUser(
+      parsed.data,
+      hashIp(req.ip)
+    );
 
     setRefreshTokenCookie(res, refreshToken);
     res.status(200).json({ accessToken });
@@ -97,6 +109,54 @@ export const refresh = async (
 
     setRefreshTokenCookie(res, refreshToken);
     res.status(200).json({ accessToken });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// GET /api/auth/verify?token=…
+// Marca el correu com a verificat. La crida la fa la pàgina /verify-email del front,
+// no el navegador directament, perquè el resultat es pugui mostrar dins l'app.
+export const verify = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const token = req.query.token;
+
+    if (typeof token !== "string" || token.length === 0) {
+      const error = new Error("VERIFICATION_TOKEN_MISSING") as AppError;
+      error.statusCode = 400;
+      error.errorCode = "VERIFICATION_TOKEN_MISSING";
+      return next(error);
+    }
+
+    await verifyEmail(token);
+    res.status(200).json({ verified: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// POST /api/auth/resend-verification
+// Requereix sessió: només es pot demanar el reenviament del propi correu
+export const resendVerificationEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    // authMiddleware ja hi ha posat userId; la comprovació és per satisfer el tipus
+    if (!req.userId) {
+      const error = new Error("AUTH_TOKEN_MISSING") as AppError;
+      error.statusCode = 401;
+      error.errorCode = "AUTH_TOKEN_MISSING";
+      return next(error);
+    }
+
+    await resendVerification(req.userId, hashIp(req.ip));
+    res.status(204).send();
   } catch (err) {
     next(err);
   }

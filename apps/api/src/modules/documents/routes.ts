@@ -3,6 +3,7 @@
 
 import { Router } from "express";
 import { authMiddleware } from "../../middleware/authMiddleware";
+import { requireVerifiedEmail } from "../../middleware/requireVerifiedEmail";
 import {
   listDocuments,
   createDocument,
@@ -16,10 +17,13 @@ const documentsRouter = Router();
 // Aplica el middleware d'autenticació a totes les rutes del mòdul
 documentsRouter.use(authMiddleware);
 
+// Llegir i esborrar es permet sempre; escriure requereix el correu verificat,
+// perquè és el que puja imatges a Cloudinary i costa diners.
+// Esborrar en queda fora a propòsit: mai s'ha d'impedir a algú alliberar espai.
 documentsRouter.get("/", listDocuments);
-documentsRouter.post("/", createDocument);
+documentsRouter.post("/", requireVerifiedEmail, createDocument);
 documentsRouter.get("/:id", getDocument);
-documentsRouter.put("/:id", updateDocument);
+documentsRouter.put("/:id", requireVerifiedEmail, updateDocument);
 documentsRouter.delete("/:id", deleteDocument);
 
 export { documentsRouter };

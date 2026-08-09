@@ -12,5 +12,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  // Els tests no s'empaqueten: depenen de mongodb-memory-server, que és una
+  // dependència de desenvolupament i no existeix al servidor de producció
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/test"]
 }

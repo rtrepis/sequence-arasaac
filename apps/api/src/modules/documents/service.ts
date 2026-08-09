@@ -4,8 +4,11 @@
 import type { DocumentSAAC, PictSequence } from "@sequence-arasaac/shared-types";
 import type { AppError } from "../../middleware/errorHandler";
 import { DocumentModel, serializeDocument } from "./model";
+import type { DocumentAsset } from "./model";
 import type { CreateDocumentInput, UpdateDocumentInput } from "./validators";
 import { cloudinary } from "../../shared/cloudinaryClient";
+import { UserModel } from "../auth/model";
+import { resolveQuotaLimits } from "../../shared/tierLimits";
 
 // Resum d'un document per al llistat — evita transferir content complet
 export interface DocumentSummary {
@@ -13,6 +16,22 @@ export interface DocumentSummary {
   title?: string;
   updatedAt: Date;
 }
+
+// Imatge acabada de pujar: la URL serveix per substituir-la al content,
+// publicId i bytes per al recompte de consum
+interface UploadedAsset extends DocumentAsset {
+  url: string;
+}
+
+// Helper d'error semàntic
+const documentError = (errorCode: string, statusCode: number): AppError => {
+  const error = new Error(errorCode) as AppError;
+  error.statusCode = statusCode;
+  error.errorCode = errorCode;
+  return error;
+};
+
+const notFound = (): AppError => documentError("DOCUMENT_NOT_FOUND", 404);
 
 // --- Helpers privats per a la gestió d'imatges amb Cloudinary ---
 
@@ -49,12 +68,33 @@ const extractCloudinaryUrlsFromMap = (
   return urls;
 };
 
-// Recorre el content, puja cada data:image/ a Cloudinary i substitueix la URL in-place
+// Pes aproximat de les imatges base64 que porta un content, abans de pujar-les.
+// Una cadena base64 ocupa 4 caràcters per cada 3 bytes de dades originals.
+// Serveix per rebutjar una petició que excedirà la quota SENSE haver pujat res:
+// pujar primer i rebutjar després deixaria imatges orfes ja pagades a Cloudinary.
+const estimateIncomingBytes = (content: CreateDocumentInput["content"]): number => {
+  let total = 0;
+  for (const sequences of Object.values(content)) {
+    for (const pict of sequences) {
+      const url = pict.img.url;
+      if (url?.startsWith("data:image/")) {
+        const base64Length = url.length - url.indexOf(",") - 1;
+        total += Math.floor((base64Length * 3) / 4);
+      }
+    }
+  }
+  return total;
+};
+
+// Recorre el content, puja cada data:image/ a Cloudinary i substitueix la URL in-place.
 // Modifica l'estructura de l'input directament (ja és una còpia validada per Zod)
+// i retorna les imatges pujades per poder-ne comptar el pes real.
 const extractAndUploadBase64Images = async (
   userId: string,
   content: CreateDocumentInput["content"]
-): Promise<void> => {
+): Promise<UploadedAsset[]> => {
+  const uploaded: UploadedAsset[] = [];
+
   for (const sequences of Object.values(content)) {
     for (const pict of sequences) {
       if (pict.img.url?.startsWith("data:image/")) {
@@ -63,9 +103,16 @@ const extractAndUploadBase64Images = async (
           resource_type: "image",
         });
         pict.img.url = result.secure_url;
+        uploaded.push({
+          publicId: result.public_id,
+          bytes: result.bytes,
+          url: result.secure_url,
+        });
       }
     }
   }
+
+  return uploaded;
 };
 
 // Elimina un conjunt d'URLs de Cloudinary — no falla si alguna ja no existeix
@@ -77,6 +124,57 @@ const deleteCloudinaryImages = async (urls: string[]): Promise<void> => {
     }
   }
 };
+
+// --- Helpers de quota i consum ---
+
+// Comprova que l'usuari pot crear un document més i pujar els bytes que porta.
+// Es crida SEMPRE abans de tocar Cloudinary.
+const assertWithinQuota = async (
+  userId: string,
+  incomingBytes: number,
+  isNewDocument: boolean
+): Promise<void> => {
+  const user = await UserModel.findById(userId)
+    .select("tier quotaOverride usage")
+    .lean();
+
+  if (!user) {
+    throw documentError("USER_NOT_FOUND", 401);
+  }
+
+  const limits = resolveQuotaLimits(user.tier, user.quotaOverride);
+
+  if (isNewDocument && user.usage.documentsCount >= limits.documents) {
+    throw documentError("QUOTA_DOCUMENTS_EXCEEDED", 403);
+  }
+
+  if (user.usage.storageBytes + incomingBytes > limits.storageBytes) {
+    throw documentError("QUOTA_STORAGE_EXCEEDED", 403);
+  }
+};
+
+// Aplica una variació als comptadors de consum de l'usuari.
+// $inc en una sola operació: el comptador i el recurs canvien alhora.
+const applyUsageDelta = async (
+  userId: string,
+  delta: { documents?: number; storageBytes?: number; assets?: number }
+): Promise<void> => {
+  const increments: Record<string, number> = {};
+
+  if (delta.documents) increments["usage.documentsCount"] = delta.documents;
+  if (delta.storageBytes) increments["usage.storageBytes"] = delta.storageBytes;
+  if (delta.assets) increments["usage.assetsCount"] = delta.assets;
+
+  if (Object.keys(increments).length === 0) {
+    return;
+  }
+
+  await UserModel.updateOne({ _id: userId }, { $inc: increments });
+};
+
+// Suma els bytes d'un conjunt d'imatges
+const sumBytes = (assets: DocumentAsset[]): number =>
+  assets.reduce((total, asset) => total + asset.bytes, 0);
 
 // --- Funcions públiques del service ---
 
@@ -105,10 +203,23 @@ export const createDocument = async (
   console.log("[DOC][DB] createDocument - userId:", userId);
   console.log("[DOC][DB] createDocument - input keys:", Object.keys(input));
 
-  await extractAndUploadBase64Images(userId, input.content);
+  await assertWithinQuota(userId, estimateIncomingBytes(input.content), true);
 
-  const doc = await DocumentModel.create({ userId, ...input });
+  const uploaded = await extractAndUploadBase64Images(userId, input.content);
+  const assets: DocumentAsset[] = uploaded.map(({ publicId, bytes }) => ({
+    publicId,
+    bytes,
+  }));
+
+  const doc = await DocumentModel.create({ userId, ...input, assets });
   console.log("[DOC][DB] createDocument - document creat a DB, id:", String(doc._id));
+
+  await applyUsageDelta(userId, {
+    documents: 1,
+    storageBytes: sumBytes(assets),
+    assets: assets.length,
+  });
+
   return serializeDocument(doc);
 };
 
@@ -122,9 +233,7 @@ export const getDocument = async (
   // Retornem 404 tant si no existeix com si pertany a un altre usuari
   // per no revelar l'existència del document a usuaris no autoritzats
   if (!doc || doc.userId.toString() !== userId) {
-    const error = new Error("Document no trobat") as AppError;
-    error.statusCode = 404;
-    throw error;
+    throw notFound();
   }
 
   return serializeDocument(doc);
@@ -144,23 +253,26 @@ export const updateDocument = async (
   const existing = await DocumentModel.findById(id);
   if (!existing) {
     console.log("[DOC][DB] updateDocument - document NO trobat a DB");
-    const error = new Error("Document no trobat") as AppError;
-    error.statusCode = 404;
-    throw error;
+    throw notFound();
   }
   if (existing.userId.toString() !== userId) {
-    console.log("[DOC][DB] updateDocument - ownership KO: doc.userId =", existing.userId.toString(), "!= userId =", userId);
-    const error = new Error("Document no trobat") as AppError;
-    error.statusCode = 404;
-    throw error;
+    console.log(
+      "[DOC][DB] updateDocument - ownership KO: doc.userId =",
+      existing.userId.toString(),
+      "!= userId =",
+      userId
+    );
+    throw notFound();
   }
   console.log("[DOC][DB] updateDocument - ownership OK, actualitzant...");
+
+  await assertWithinQuota(userId, estimateIncomingBytes(input.content), false);
 
   // URLs de Cloudinary que tenia el document abans de l'actualització
   const oldCloudinaryUrls = extractCloudinaryUrlsFromMap(existing.content);
 
   // Puja les noves imatges base64 i substitueix in-place per URLs de Cloudinary
-  await extractAndUploadBase64Images(userId, input.content);
+  const uploaded = await extractAndUploadBase64Images(userId, input.content);
 
   // URLs de Cloudinary que té el nou contingut (inclou les acabades de pujar)
   const newCloudinaryUrls = new Set(extractCloudinaryUrlsFromInput(input.content));
@@ -169,21 +281,41 @@ export const updateDocument = async (
   const orphanUrls = oldCloudinaryUrls.filter((url) => !newCloudinaryUrls.has(url));
   await deleteCloudinaryImages(orphanUrls);
 
+  // El pes de les orfes surt del registre d'assets del document.
+  // Les que hi eren abans d'existir aquest camp compten com a zero: el seu pes
+  // no es va arribar a registrar mai i inventar-lo seria pitjor que ignorar-lo.
+  const orphanPublicIds = new Set(orphanUrls.map(extractPublicId));
+  const orphanAssets = existing.assets.filter((asset) =>
+    orphanPublicIds.has(asset.publicId)
+  );
+
+  const remainingAssets = existing.assets.filter(
+    (asset) => !orphanPublicIds.has(asset.publicId)
+  );
+  const newAssets: DocumentAsset[] = uploaded.map(({ publicId, bytes }) => ({
+    publicId,
+    bytes,
+  }));
+
   const updated = await DocumentModel.findByIdAndUpdate(
     id,
-    { $set: input },
+    { $set: { ...input, assets: [...remainingAssets, ...newAssets] } },
     { new: true, runValidators: true }
   );
 
   // No hauria d'arribar aquí, però TypeScript ho requereix
   if (!updated) {
     console.log("[DOC][DB] updateDocument - error: document desaparegut durant update");
-    const error = new Error("Document no trobat") as AppError;
-    error.statusCode = 404;
-    throw error;
+    throw notFound();
   }
 
   console.log("[DOC][DB] updateDocument - actualitzat correctament");
+
+  await applyUsageDelta(userId, {
+    storageBytes: sumBytes(newAssets) - sumBytes(orphanAssets),
+    assets: newAssets.length - orphanAssets.length,
+  });
+
   return serializeDocument(updated);
 };
 
@@ -195,14 +327,21 @@ export const deleteDocument = async (
   const doc = await DocumentModel.findById(id);
 
   if (!doc || doc.userId.toString() !== userId) {
-    const error = new Error("Document no trobat") as AppError;
-    error.statusCode = 404;
-    throw error;
+    throw notFound();
   }
 
   // Eliminar imatges de Cloudinary associades al document
   const cloudinaryUrls = extractCloudinaryUrlsFromMap(doc.content);
   await deleteCloudinaryImages(cloudinaryUrls);
 
+  const freedBytes = sumBytes(doc.assets);
+  const freedAssets = doc.assets.length;
+
   await doc.deleteOne();
+
+  await applyUsageDelta(userId, {
+    documents: -1,
+    storageBytes: -freedBytes,
+    assets: -freedAssets,
+  });
 };
