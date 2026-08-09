@@ -1,10 +1,22 @@
 // Validació de les variables d'entorn amb zod
 // Si manquen variables obligatòries, el procés s'atura amb un missatge clar
 
+import { resolve } from "path";
 import { config } from "dotenv";
 import { z } from "zod";
 
-config();
+// El .env es busca a l'arrel del paquet, no al directori des d'on s'executa.
+// Per defecte dotenv el resol contra process.cwd(), i llavors arrencar l'API
+// des de l'arrel del monorepo (npm run dev --workspace=api) no en trobava cap:
+// el servidor moria dient que faltaven totes les variables tot i tenir-les.
+config({ path: resolve(__dirname, "../../.env") });
+
+// Valors per defecte que només tenen sentit en desenvolupament.
+// A producció, deixar-los és pitjor que no tenir-los: els enllaços de
+// verificació apuntarien a localhost i els correus sortirien del domini de
+// proves de Resend, que només pot escriure al compte del propietari.
+const DEV_MAIL_FROM = "SequenciAAC <onboarding@resend.dev>";
+const DEV_APP_PUBLIC_URL = "http://localhost:5173";
 
 // Esquema de validació — tots els camps obligatoris per arrencar el servidor
 const envSchema = z.object({
@@ -30,9 +42,9 @@ const envSchema = z.object({
   IP_HASH_SECRET: z.string().default(""),
   RESEND_API_KEY: z.string().default(""),
   // Remitent dels correus — ha de ser d'un domini verificat a Resend
-  MAIL_FROM: z.string().default("SequenciAAC <onboarding@resend.dev>"),
+  MAIL_FROM: z.string().default(DEV_MAIL_FROM),
   // Base pública del frontend, per construir l'enllaç de verificació
-  APP_PUBLIC_URL: z.string().default("http://localhost:5173"),
+  APP_PUBLIC_URL: z.string().default(DEV_APP_PUBLIC_URL),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -49,7 +61,20 @@ if (!parsed.success) {
 const PRODUCTION_REQUIRED = ["IP_HASH_SECRET", "RESEND_API_KEY"] as const;
 
 if (parsed.data.NODE_ENV === "production") {
-  const missing = PRODUCTION_REQUIRED.filter((key) => !parsed.data[key]);
+  const missing: string[] = PRODUCTION_REQUIRED.filter(
+    (key) => !parsed.data[key]
+  );
+
+  // Aquestes dues sí que tenen valor, però és el de desenvolupament.
+  // Sense aquesta comprovació el servidor arrencaria tan tranquil i enviaria
+  // correus amb enllaços a localhost: una fallada silenciosa i molt pitjor
+  // que no arrencar, perquè no se'n sabria res fins que algú es queixés.
+  if (parsed.data.MAIL_FROM === DEV_MAIL_FROM) {
+    missing.push("MAIL_FROM (encara té el remitent de proves)");
+  }
+  if (parsed.data.APP_PUBLIC_URL === DEV_APP_PUBLIC_URL) {
+    missing.push("APP_PUBLIC_URL (encara apunta a localhost)");
+  }
 
   if (missing.length > 0) {
     console.error(
