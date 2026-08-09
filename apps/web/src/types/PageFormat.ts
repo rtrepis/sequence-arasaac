@@ -82,15 +82,20 @@ export const PAPER_DIMENSIONS_MM = {
 } as const;
 
 /**
- * Calcula les dimensions útils d'un paper descomptant marges
- * Usa el DPI actual del sistema per la conversió mm → px
- *
- * IMPORTANT: Aquesta funció ara es crida dinàmicament, no en temps de càrrega
+ * DPI estàndard CSS — el navegador sempre imprimeix amb aquest valor,
+ * independentment del DPI físic de la pantalla o del monitor connectat.
+ */
+export const CSS_PRINT_DPI = 96;
+
+/**
+ * Calcula les dimensions útils d'un paper descomptant marges.
+ * Usa sempre 96 DPI (estàndard CSS) per garantir que el preview
+ * coincideix amb la impressió en qualsevol monitor o devicePixelRatio.
  *
  * @param paperWidthMM - Amplada del paper en mm
  * @param paperHeightMM - Alçada del paper en mm
  * @param marginMM - Marge en mm (aplicat a cada costat)
- * @returns Dimensions útils en píxels segons DPI actual
+ * @returns Dimensions útils en píxels a 96 DPI
  */
 export function calculateUsableDimensions(
   paperWidthMM: number,
@@ -100,10 +105,9 @@ export function calculateUsableDimensions(
   const usableWidthMM = paperWidthMM - marginMM * 2;
   const usableHeightMM = paperHeightMM - marginMM * 2;
 
-  // Usar mmToPx del dpiManager que usa getCurrentDPI()
   return {
-    width: mmToPx(usableWidthMM),
-    height: mmToPx(usableHeightMM),
+    width: mmToPx(usableWidthMM, CSS_PRINT_DPI),
+    height: mmToPx(usableHeightMM, CSS_PRINT_DPI),
   };
 }
 

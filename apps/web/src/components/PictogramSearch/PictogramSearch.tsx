@@ -5,7 +5,6 @@ import {
   TextField,
   ToggleButton,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import useSearchPictogram from "../../features/pictogram/hooks/useSearchPictogram";
@@ -14,24 +13,11 @@ import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import messages from "./PictogramSearch.lang";
 import { useAppSelector } from "../../app/hooks";
 import React from "react";
-import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { Hair, Skin } from "@/types/sequence";
-import { fileToBase64 } from "@/utils/imageToBase64";
 import type { RootState } from "../../app/store";
-
-// Input visualment ocult però accessible per a lectors de pantalla (diferent de hidden)
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import usePersonalKeywords from "@features/word-profile/hooks/usePersonalKeywords";
+import UploadImageButton from "../UploadImageButton";
 
 const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
@@ -68,7 +54,7 @@ const PictogramSearch = ({
     settings: { skin, hair },
     searched: { word, bestIdPicts },
   } = useAppSelector(getActiveSAACPictImg);
-  const { keywords } = useAppSelector((state) => state.ui.lang);
+  const keywords = usePersonalKeywords();
 
   const intl = useIntl();
   const { getSearchPictogram, getSettingsPictId } = useSearchPictogram();
@@ -77,11 +63,17 @@ const PictogramSearch = ({
   const initialWord =
     word === `${intl.formatMessage({ ...messages.empty })}` ? "" : word;
   const [newWord, setNewWord] = useState(initialWord);
+  const [inputValue, setInputValue] = useState(initialWord);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (value.length >= 3) setIsAutoComplete(true);
-    if (value.length < 3) setIsAutoComplete(false);
+  const handleInputChange = (
+    _: React.SyntheticEvent,
+    value: string,
+    reason: string,
+  ) => {
+    setInputValue(value);
+    // Obre només quan l'usuari escriu >= 3 caràcters; tanca en qualsevol altre cas
+    setIsOpen(reason === "input" && value.length >= 3);
   };
 
   const handleChangeAutocomplete = (
@@ -90,7 +82,7 @@ const PictogramSearch = ({
   ) => {
     if (value !== null) {
       setNewWord(value);
-      setIsAutoComplete(false);
+      setIsOpen(false);
       handleSubmit(event, value);
     }
   };
@@ -122,35 +114,22 @@ const PictogramSearch = ({
   };
 
   const [isPlus, setIsPlus] = useState(false);
-  const [isAutoComplete, setIsAutoComplete] = useState(false);
 
   const handelPlusAction = async (plus: boolean) => {
     await getSearchPictogram(newWord, indexPict, true, plus);
     setIsPlus(!isPlus);
   };
 
-  const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    try {
-      // Convertim la imatge a base64 (amb compressió automàtica si supera 2MB)
-      const base64Url = await fileToBase64(file);
-
-      setState({
-        selectedId: 0,
-        fitzgerald: undefined,
-        url: base64Url,
-        color: undefined,
-        hair: undefined,
-        skin: undefined,
-      });
-    } catch (error) {
-      console.error("Error carregant imatge:", error);
-    }
-  };
+  // La imatge pròpia substitueix el pictograma: no té ni color ni variants
+  const applyUploadedImage = (url: string | undefined) =>
+    setState({
+      selectedId: 0,
+      fitzgerald: undefined,
+      url,
+      color: undefined,
+      hair: undefined,
+      skin: undefined,
+    });
 
   const [isAlert, setIsAlert] = useState(false);
 
@@ -164,16 +143,18 @@ const PictogramSearch = ({
   return (
     <Stack flex={1} sx={{ width: "-webkit-fill-available" }}>
       <Autocomplete
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        inputValue={inputValue}
+        onInputChange={handleInputChange}
         options={keywords}
         filterOptions={filterOptions}
         onChange={handleChangeAutocomplete}
-        open={isAutoComplete}
         sx={{ width: "100%" }}
         renderInput={(params) => (
           <TextField
             {...params}
             label={intl.formatMessage({ ...messages.search })}
-            onChange={handleChangeInput}
             helperText={intl.formatMessage({ ...messages.helperText })}
           />
         )}
@@ -241,21 +222,12 @@ const PictogramSearch = ({
           </ToggleButton>
         )}
 
-        {/* Botó d'upload: usa component="label" perquè el clic activi l'input de forma accessible */}
-        <ToggleButton
-          value={"upload"}
-          aria-label={`${intl.formatMessage({ ...messages.uploadImage })}`}
+        <UploadImageButton
           key={"upload"}
-          component="label"
-        >
-          <MdOutlineDriveFolderUpload size={80} />
-          {/* VisuallyHiddenInput manté l'input accessible als lectors de pantalla */}
-          <VisuallyHiddenInput
-            type="file"
-            onChange={handleImageChange}
-            accept="image/*"
-          />
-        </ToggleButton>
+          imageUrl={state.url}
+          onUpload={applyUploadedImage}
+          onRemove={() => applyUploadedImage(undefined)}
+        />
       </StyledToggleButtonGroup>
       {isAlert && (
         <Alert severity="info">

@@ -30,7 +30,7 @@ const getUniqueId = () => {
   return uniqueId;
 };
 
-const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
+export const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
   sizePict: SEQ_VIEW_DEFAULT_SIZE_PICT,
   pictSpaceBetween: SEQ_VIEW_DEFAULT_PICT_SPACE,
   alignmentH: SEQ_VIEW_DEFAULT_ALIGNMENT_H,
@@ -216,44 +216,48 @@ const documentSlice = createSlice({
       previousDocument,
       action: PayloadAction<PictApiAraSettingsApplyAll>,
     ) => {
-      const saac = previousDocument.activeSAAC;
-      const sequence = previousDocument.content[saac];
+      const allSequences = Object.values(previousDocument.content);
 
-      if (action.payload.skin)
-        sequence.map((p) => (p.img.settings.skin = action.payload.skin));
+      allSequences.forEach((sequence) => {
+        if (action.payload.skin)
+          sequence.forEach((p) => (p.img.settings.skin = action.payload.skin));
 
-      if (action.payload.hair)
-        sequence.map((p) => (p.img.settings.hair = action.payload.hair));
+        if (action.payload.hair)
+          sequence.forEach((p) => (p.img.settings.hair = action.payload.hair));
 
-      if (action.payload.color)
-        sequence.map((p) => (p.img.settings.color = action.payload.color));
+        // Comprovació explícita: `color: false` és un valor vàlid (pictograma B/N)
+        if (action.payload.color !== undefined)
+          sequence.forEach(
+            (p) => (p.img.settings.color = action.payload.color),
+          );
+      });
     },
 
     pictSequenceApplyAll: (
       previousDocument,
       action: PayloadAction<PictSequenceApplyAll>,
     ) => {
-      const saac = previousDocument.activeSAAC;
-      const sequence = previousDocument.content[saac];
+      const allSequences = Object.values(previousDocument.content);
 
-      if (action.payload.textPosition)
-        sequence.map(
-          (p) => (p.settings.textPosition = action.payload.textPosition),
-        );
+      allSequences.forEach((sequence) => {
+        if (action.payload.textPosition)
+          sequence.forEach(
+            (p) => (p.settings.textPosition = action.payload.textPosition),
+          );
 
-      if (action.payload.fontFamily)
-        sequence.map(
-          (p) => (p.settings.fontFamily = action.payload.fontFamily),
-        );
+        if (action.payload.fontFamily)
+          sequence.forEach(
+            (p) => (p.settings.fontFamily = action.payload.fontFamily),
+          );
+      });
     },
 
     borderInApplyAll: (
       previousDocument,
       action: PayloadAction<PictSequenceApplyAll>,
     ) => {
-      const saac = previousDocument.activeSAAC;
-      previousDocument.content[saac].map(
-        (p) => (p.settings.borderIn = action.payload.borderIn!),
+      Object.values(previousDocument.content).forEach((sequence) =>
+        sequence.forEach((p) => (p.settings.borderIn = action.payload.borderIn!)),
       );
     },
 
@@ -261,9 +265,10 @@ const documentSlice = createSlice({
       previousDocument,
       action: PayloadAction<PictSequenceApplyAll>,
     ) => {
-      const saac = previousDocument.activeSAAC;
-      previousDocument.content[saac].map(
-        (p) => (p.settings.borderOut = action.payload.borderOut!),
+      Object.values(previousDocument.content).forEach((sequence) =>
+        sequence.forEach(
+          (p) => (p.settings.borderOut = action.payload.borderOut!),
+        ),
       );
     },
 
@@ -271,9 +276,8 @@ const documentSlice = createSlice({
       previousDocument,
       action: PayloadAction<PictSequenceApplyAll>,
     ) => {
-      const saac = previousDocument.activeSAAC;
-      previousDocument.content[saac].map(
-        (p) => (p.settings.fontSize = action.payload.fontSize),
+      Object.values(previousDocument.content).forEach((sequence) =>
+        sequence.forEach((p) => (p.settings.fontSize = action.payload.fontSize)),
       );
     },
 

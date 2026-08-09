@@ -1,11 +1,11 @@
-import { Stack, ToggleButton, Typography } from "@mui/material";
+import { ToggleButton } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { updateLangSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { langTranslateApp } from "../../../../configs/languagesConfigs";
 import { LangsApp } from "../../../../types/ui";
-import { card } from "../../SettingsCards.styled";
+import SettingRow from "../../../SettingsLayout/SettingRow";
 import StyledToggleButtonGroup from "../../../../style/StyledToggleButtonGroup";
 import messages from "./SettingCardLangAppToggle.lang";
 import React from "react";
@@ -30,17 +30,10 @@ const SettingCardLangAppToggle = (): React.ReactElement => {
   };
 
   return (
-    <Stack
-      display="flex"
-      direction="row"
-      flexWrap="wrap"
-      columnGap={2}
-      sx={{ ...card, borderBottom: 0, width: "100%" }}
+    <SettingRow
+      title={<FormattedMessage {...messages.cardTitle} />}
+      control="wide"
     >
-      <Typography variant="body1" sx={{ fontWeight: "bold", flex: 1 }} component="h2">
-        <FormattedMessage {...messages.cardTitle} />
-      </Typography>
-
       <StyledToggleButtonGroup
         value={appLang}
         exclusive
@@ -58,7 +51,7 @@ const SettingCardLangAppToggle = (): React.ReactElement => {
           </ToggleButton>
         ))}
       </StyledToggleButtonGroup>
-    </Stack>
+    </SettingRow>
   );
 };
 

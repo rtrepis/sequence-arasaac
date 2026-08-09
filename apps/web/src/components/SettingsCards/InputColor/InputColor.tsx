@@ -11,6 +11,8 @@ interface InputColorProps {
   inputBorder: number;
   color: string;
   setColor: React.Dispatch<React.SetStateAction<string>>;
+  /** Notifica el pare quan s'obre o es tanca la paleta, per amagar-hi tooltips que la taparien. */
+  onOpenChange?: (isOpen: boolean) => void;
 }
 
 const InputColor = ({
@@ -18,6 +20,7 @@ const InputColor = ({
   inputSize,
   color,
   setColor,
+  onOpenChange,
 }: InputColorProps): React.ReactElement => {
   const circleSize = {
     height: "2em",
@@ -42,11 +45,13 @@ const InputColor = ({
 
   const handleClose = () => {
     setOpen(false);
+    onOpenChange?.(false);
   };
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     setOpen(true);
+    onOpenChange?.(true);
   };
 
   const handleColorPalette = async () => {
@@ -65,7 +70,20 @@ const InputColor = ({
     <>
       <Button
         onClick={handleOpen}
-        sx={{ borderRadius: 100, width: 40, height: 40 }}
+        sx={{
+          borderRadius: 100,
+          width: 55,
+          height: 55,
+          minWidth: 55,
+          padding: 0,
+          // Mateix marc de hover que els toggle buttons de settings (55px, radi 20)
+          "&:hover": {
+            border: "1.75px solid",
+            borderColor: "primary.main",
+            borderRadius: "20px",
+            boxShadow: "0px 0px 10px 1px #A6A6A6",
+          },
+        }}
       >
         <Box
           height={inputSize}
@@ -73,7 +91,7 @@ const InputColor = ({
           borderRadius={100}
           bgcolor={color}
           border={inputBorder}
-          borderColor={"black"}
+          borderColor={"text.primary"}
         ></Box>
       </Button>
       <Popover
@@ -81,14 +99,18 @@ const InputColor = ({
         onClose={handleClose}
         anchorEl={anchorEl}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
+          vertical: "bottom",
+          horizontal: "center",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "left",
+          horizontal: "center",
         }}
-        sx={{ textAlign: "center", backgroundColor: { color } }}
+        sx={{ textAlign: "center" }}
+        slotProps={{
+          // Mateix glow gris que la resta de controls de settings
+          paper: { sx: { boxShadow: "0px 0px 10px 1px #A6A6A6" } },
+        }}
       >
         <ToggleButtonColor exclusive value={color} onChange={handleChange}>
           {inputColorList.map((color) => (

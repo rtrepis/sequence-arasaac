@@ -3,8 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { BsFilePdf } from "react-icons/bs";
-import { MdScreenRotation } from "react-icons/md";
-import { useIntl } from "react-intl";
+import { MdScreenRotation, MdSettingsBackupRestore } from "react-icons/md";
+import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 import useWindowResize from "@shared/hooks/useWindowResize";
 import React from "react";
@@ -18,16 +18,23 @@ import { useFullscreen } from "@features/print/hooks/useFullScreen";
 import { useViewManager, useAuthorManager } from "@features/print/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { usePrintStyles, printWithOrientation } from "@features/print/hooks/usePrintStyles";
-import { useDownloadPdf } from "@/hooks/useDownloadPdf";
+import { useDownloadPdf } from "@features/print/hooks/useDownloadPdf";
+import { getCurrentDPI } from "@/features/print-refactor/utils/dpiManager";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import { SequenceViewSettings, SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
 import {
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
+  DEFAULT_SEQUENCE_VIEW,
 } from "@features/sequence/store/documentSlice";
+import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
+import { sheetSurface } from "@/style/palette";
 import { saveUserUiThunk } from "@features/backend/user-settings/store/settingsThunks";
 import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
+import PrintFooterSection from "./PrintFooterSection";
+import { VIEW_SETTINGS_COLUMN_WIDTH } from "./ViewSequenceSettings.styled";
+import { SectionTitle, SETTINGS_ROW_GAP } from "@/components/SettingsLayout";
 import { SelectChangeEvent } from "@mui/material";
 
 interface ViewSequencesSettingsChildrenProps {
@@ -68,8 +75,8 @@ const ViewSequencesSettings = ({
   // aquí les substituïm pels valors guardats de l'usuari com a punt de partida.
   const savedSeqDefaults = useRef(initialViewSettings);
   useEffect(() => {
-    const { sizePict, pictSpaceBetween, alignment } = savedSeqDefaults.current;
-    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignment }));
+    const { sizePict, pictSpaceBetween, alignmentH, alignmentV } = savedSeqDefaults.current;
+    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignmentH, alignmentV }));
   }, [dispatch]);
 
   // Estat local: mode aplicar a totes vs individual
@@ -138,6 +145,15 @@ const ViewSequencesSettings = ({
 
   // Determinar l'escala activa
   const activeScale = isInFullscreen ? currentScale : calculatedScale;
+
+  // Alineació de bloc: posiciona tot el conjunt de seqüències dins la pàgina,
+  // sempre a l'eix creuat de `direction` (V si row, H si column). Font única:
+  // la primera seqüència (amb applyAll totes comparteixen el mateix valor)
+  const blockSource = sequenceViewSettings[sequenceKeys[0]] ?? DEFAULT_SEQUENCE_VIEW;
+  const isRowDirection = viewSettings.direction === "row";
+  const blockAlign = isRowDirection
+    ? ALIGN_V[blockSource.alignmentV]
+    : ALIGN_H[blockSource.alignmentH];
 
   /**
    * Handler per expandir/col·lapsar un acordió (només un obert a la vegada)
@@ -285,6 +301,7 @@ const ViewSequencesSettings = ({
    * Handler per imprimir amb orientació correcta
    */
   const handlePrint = useCallback(() => {
+    (document.activeElement as HTMLElement)?.blur();
     printWithOrientation(pageFormat);
     trackEvent({
       event: "click-print-view",
@@ -377,13 +394,15 @@ const ViewSequencesSettings = ({
               height: displayHeight,
               minWidth: 0,
               overflow: "hidden",
-              outline: "2px solid green",
+              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
               marginBottom: 1,
               "@media print": { marginBottom: 0, outline: "none" },
               position: { xs: "sticky", md: "static" },
               top: { xs: 0 },
               zIndex: { xs: 10, md: "auto" },
-              backgroundColor: "background.paper",
+              // El full és paper en tots dos temes: aquesta previsualització ha de
+              // ser idèntica al que sortirà per impressora i al PDF
+              backgroundColor: sheetSurface,
             }}
           >
             {/* Contenidor interior: dimensions reals amb transform per visualització */}
@@ -400,8 +419,8 @@ const ViewSequencesSettings = ({
                 display={"flex"}
                 direction={viewSettings.direction}
                 flexWrap={"wrap"}
-                alignContent={"start"}
-                alignItems={"start"}
+                alignContent={blockAlign}
+                alignItems={blockAlign}
                 columnGap={
                   viewSettings.direction === "column"
                     ? viewSettings.sequenceSpaceBetween
@@ -444,26 +463,39 @@ const ViewSequencesSettings = ({
 
             <NotPrint>
               <Stack
-                maxWidth={{ md: 300 }}
+                maxWidth={{ md: VIEW_SETTINGS_COLUMN_WIDTH }}
                 width={{ xs: "100%", md: "auto" }}
                 flexShrink={0}
-                spacing={1}
+                spacing={SETTINGS_ROW_GAP}
+                sx={{
+                  // Zona de configuració: fons paper a tota la columna de controls
+                  backgroundColor: "background.paper",
+                  borderRadius: 2,
+                  padding: 1.5,
+                  height: { md: "100%" },
+                }}
               >
-                <GlobalViewControls
-                  viewSettings={viewSettings}
-                  author={author}
-                  pageSizeIndex={pageSizeIndex}
-                  sequenceCount={sequenceKeys.length}
-                  onPageSizeChange={handlePageSizeChange}
-                  onDirectionChange={handleDirectionChange}
-                  onSequenceSpaceChange={handleSequenceSpaceChange}
-                  onAuthorChange={updateAuthor}
-                  onResetToDefaults={handleResetToDefaults}
+                {/* Secció: format i disposició de la pàgina (afecta tot el document) */}
+                <SectionTitle
+                  title={<FormattedMessage {...messages.sectionPageFormat} />}
+                >
+                  <GlobalViewControls
+                    viewSettings={viewSettings}
+                    pageSizeIndex={pageSizeIndex}
+                    sequenceCount={sequenceKeys.length}
+                    onPageSizeChange={handlePageSizeChange}
+                    onDirectionChange={handleDirectionChange}
+                    onSequenceSpaceChange={handleSequenceSpaceChange}
+                  />
+                </SectionTitle>
+
+                {/* Secció: ajustos de cada seqüència (mida, separació i alineació) */}
+                <SectionTitle
+                  title={<FormattedMessage {...messages.sectionSequences} />}
                 >
                   <SequenceControlsPanel
                     sequenceKeys={sequenceKeys}
                     sequenceViewSettings={sequenceViewSettings}
-                    viewDirection={viewSettings.direction}
                     applyAll={applyAll}
                     expandedAccordion={expandedAccordion}
                     onAccordionToggle={handleAccordionToggle}
@@ -472,22 +504,64 @@ const ViewSequencesSettings = ({
                     onAlignmentHChange={handleAlignmentHChange}
                     onAlignmentVChange={handleAlignmentVChange}
                   />
-                </GlobalViewControls>
+                </SectionTitle>
+
+                {/* Secció: el que només surt al peu del full imprès i del PDF */}
+                <PrintFooterSection
+                  author={author}
+                  onAuthorChange={updateAuthor}
+                />
+
+                {/* Restaura les preferències guardades: afecta totes les seccions, per això va al final */}
+                <Box
+                  sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}
+                >
+                  <Tooltip
+                    title={intl.formatMessage(messages.tooltipResetDefaults)}
+                  >
+                    <Button
+                      variant="text"
+                      color="primary"
+                      endIcon={<MdSettingsBackupRestore />}
+                      onClick={handleResetToDefaults}
+                      sx={{ textTransform: "none" }}
+                    >
+                      <FormattedMessage {...messages.resetDefaults} />
+                    </Button>
+                  </Tooltip>
+                </Box>
               </Stack>
             </NotPrint>
           </Box>
         </Stack>
       </form>
 
-      {/* Contenidor per a fullscreen */}
+      {/* Contenidor per a fullscreen: mateix layout de blocs que la
+          previsualització (direcció, wrap i separació entre seqüències) */}
       <Stack
         className="displayFullScreen"
-        direction={"column"}
-        alignContent={"start"}
-        alignItems={"start"}
+        direction={viewSettings.direction}
+        flexWrap={"wrap"}
+        alignContent={blockAlign}
+        alignItems={blockAlign}
+        // La previsualització escala tot el full amb un `transform`; aquí no
+        // n'hi ha, així que la separació es multiplica per l'escala activa
+        // perquè es vegi proporcionada als pictogrames, com el `pictSpaceBetween`
+        columnGap={
+          viewSettings.direction === "column"
+            ? viewSettings.sequenceSpaceBetween * activeScale
+            : 0
+        }
+        rowGap={
+          viewSettings.direction === "row"
+            ? viewSettings.sequenceSpaceBetween * activeScale
+            : 0
+        }
         overflow={"hidden"}
         padding={2}
         display={"none"}
+        // Pantalla completa: mateixa superfície de full que la previsualització
+        sx={{ backgroundColor: sheetSurface }}
       >
         {children({
           viewSettings,

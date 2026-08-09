@@ -1,15 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-import { Stack, ToggleButton, Typography } from "@mui/material";
+import { Box, ToggleButton } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import { settingsCardLang } from "./SettingCard.lang";
-import {
-  cardAction,
-  card,
-  cardContent,
-  cardTitle,
-} from "../SettingsCards.styled";
-import ApplyAll from "../ApplyAll/ApplyAll";
+import SettingRow from "../../SettingsLayout/SettingRow";
 import React from "react";
 
 interface SettingCardProps {
@@ -17,14 +10,12 @@ interface SettingCardProps {
   state: string | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setState: React.Dispatch<React.SetStateAction<any>>;
-  onApplyAll?: () => void;
 }
 
 const SettingCard = ({
   setting,
   setState,
   state,
-  onApplyAll,
 }: SettingCardProps): React.ReactElement => {
   const intl = useIntl();
 
@@ -38,21 +29,13 @@ const SettingCard = ({
   };
 
   return (
-    <Stack
-      display={"flex"}
-      direction={"row"}
-      flexWrap={"wrap"}
-      columnGap={2}
-      sx={card}
+    <SettingRow
+      title={<FormattedMessage {...settingCard.message} />}
+      control="wide"
     >
-      <Typography variant="body1" sx={cardTitle} component="h2">
-        <FormattedMessage {...settingCard.message} />
-      </Typography>
-
       <StyledToggleButtonGroup
         exclusive
         aria-label={`${intl.formatMessage(settingCard.message)}`}
-        sx={cardContent}
       >
         {settingCard.types.map(([key, value]) => (
           <ToggleButton
@@ -62,22 +45,27 @@ const SettingCard = ({
             selected={state === key}
             onClick={() => handleSelected(key)}
           >
-            <img
+            <Box
+              component="img"
               src={`../img/settings/${setting}/${key}.png`}
               alt={`${intl.formatMessage({
                 ...settingCard.message,
               })} ${intl.formatMessage(value.message)}`}
               width={40}
               height={40}
+              sx={(theme) => ({
+                // En mode fosc invertim el negre de la icona a blanc mantenint el vermell;
+                // només per a textPosition (skin i hair són contingut, no UI)
+                filter:
+                  theme.palette.mode === "dark" && setting === "textPosition"
+                    ? "invert(1) hue-rotate(180deg)"
+                    : "none",
+              })}
             />
           </ToggleButton>
         ))}
       </StyledToggleButtonGroup>
-
-      {onApplyAll && state && (
-        <ApplyAll sx={cardAction} onClick={onApplyAll} />
-      )}
-    </Stack>
+    </SettingRow>
   );
 };
 

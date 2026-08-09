@@ -5,19 +5,7 @@ import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSquenceSettings";
 import CopyRight from "../../components/CopyRight/CopyRight";
 import { PictogramCardDefaults } from "../../types/sequence";
-import { SequenceAlignmentH, SequenceAlignmentV } from "../../types/document";
-
-const ALIGN_H: Record<SequenceAlignmentH, string> = {
-  left: "flex-start",
-  center: "center",
-  right: "flex-end",
-};
-
-const ALIGN_V: Record<SequenceAlignmentV, string> = {
-  top: "flex-start",
-  center: "center",
-  bottom: "flex-end",
-};
+import { ALIGN_H, ALIGN_V } from "../../shared/constants/alignmentMaps";
 
 /**
  * Pàgina de visualització de seqüències
@@ -52,9 +40,6 @@ const ViewSequencePage = (): React.ReactElement => {
             const justifyContent = isRow
               ? ALIGN_H[seqView.alignmentH]
               : ALIGN_V[seqView.alignmentV];
-            const alignContent = isRow
-              ? ALIGN_V[seqView.alignmentV]
-              : ALIGN_H[seqView.alignmentH];
 
             return (
               <Box
@@ -64,12 +49,15 @@ const ViewSequencePage = (): React.ReactElement => {
                   flexWrap: "wrap",
                   flexDirection: isRow ? "row" : "column",
                   justifyContent,
-                  alignItems: alignContent,
-                  alignContent,
+                  // Eix creuat sempre a l'inici (dalt si és horitzontal, esquerra si és
+                  // vertical): evita el `stretch` per defecte de flex, que igualava
+                  // l'alçada de tots els pictogrames de la fila. L'alineació V/H que
+                  // tria l'usuari és de bloc i l'aplica `ViewSquenceSettings`.
+                  alignItems: "flex-start",
                   columnGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
                   rowGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
-                  height: isRow ? "100%" : "100%",
-                  width: isRow ? "100%" : "100%",
+                  height: isRow ? "auto" : "100%",
+                  width: isRow ? "100%" : "auto",
                 }}
               >
                 {sequence.map((pictogram) => (

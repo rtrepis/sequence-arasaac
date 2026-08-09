@@ -81,10 +81,10 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
   const orientation =
     pageSize === "FULLSCREEN" ? orientationFullscreen : orientationA4A3;
 
-  // Recalcular pageFormat quan canvia DPI, size o orientation
+  // Les dimensions d'impressió són sempre a 96 DPI CSS — no depenen del DPI de pantalla
   const pageFormat = useMemo(() => {
     return createPageFormat(pageSize, orientation);
-  }, [pageSize, orientation, screenInfo.dpi]);
+  }, [pageSize, orientation]);
 
   const pageSizeIndex = PAGE_INDEX_MAP[pageSize];
   const isLandscape = orientation === "landscape";

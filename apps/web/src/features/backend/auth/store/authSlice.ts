@@ -8,6 +8,8 @@ import {
   updateLangSettingsActionCreator,
   updateThemeActionCreator,
   viewSettingsActionCreator,
+  setWordProfilesActionCreator,
+  setTierActionCreator,
 } from "@features/user-settings/store/uiSlice";
 import { getStoredUserUi } from "@features/user-settings/storage/settingsStorage";
 import { langTranslateApp } from "../../../../configs/languagesConfigs";
@@ -32,11 +34,13 @@ const syncSettingsAfterAuth = async (
   dispatch: (action: unknown) => void,
 ): Promise<void> => {
   try {
-    const { lang, theme, defaultSettings, viewSettings } = await getUiSettings();
+    const { lang, theme, defaultSettings, viewSettings, wordProfiles, tier } = await getUiSettings();
     dispatch(updateDefaultSettingsActionCreator(defaultSettings));
     dispatch(updateLangSettingsActionCreator({ app: lang.app, search: lang.search, keywords: [] }));
     dispatch(updateThemeActionCreator(theme ?? "system"));
     if (viewSettings) dispatch(viewSettingsActionCreator(viewSettings));
+    if (wordProfiles) dispatch(setWordProfilesActionCreator(wordProfiles));
+    if (tier) dispatch(setTierActionCreator(tier));
   } catch {
     // Si falla la sincronització no interrompem el flux d'auth
   }

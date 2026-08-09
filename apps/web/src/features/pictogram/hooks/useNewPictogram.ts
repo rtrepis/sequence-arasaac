@@ -2,9 +2,11 @@ import { useAppSelector } from "@/app/hooks";
 import { PictSequence } from "@/types/sequence";
 
 const useNewPictogram = () => {
-  const pictSequenceDefault = useAppSelector(
-    (state) => state.ui.defaultSettings.pictSequence
-  );
+  const {
+    textPosition,
+    borderIn: defaultBorderIn,
+    borderOut: defaultBorderOut,
+  } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
 
   const getPictogramEmptyWithDefaultSettings = (indexSequence: number) => {
     const pictogramEmpty: PictSequence = {
@@ -18,7 +20,9 @@ const useNewPictogram = () => {
         settings: { fitzgerald: "#2222ff" },
       },
       settings: {
-        textPosition: pictSequenceDefault.textPosition,
+        textPosition,
+        borderIn: defaultBorderIn,
+        borderOut: defaultBorderOut,
       },
       cross: false,
     };

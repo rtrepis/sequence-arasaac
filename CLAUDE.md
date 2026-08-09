@@ -6,6 +6,132 @@
 - Totes les components han de ser funcionals (no classes)
 - Sempre usar arrow functions
 
+## Estàndard de colors
+
+- **Única font de veritat**: `apps/web/src/style/palette.ts` (importat per `themeMui.ts`). Mai definir hexadecimals fora d'aquest fitxer.
+- El **verd oficial** de l'app és `primary.main: #8ac34a` (el de la NavBar, en clar i en fosc via `enableColorOnDark`).
+- **Text/icones sobre verd**: sempre `primary.contrastText` (`#1E2A12`, fosc — contrast 7,2:1 WCAG AA). Mai blanc ni grisos clars sobre el verd (màxim 2,1:1, il·legible).
+- El `secondary` són grisos amb matís verd (`main: #E3E8DC`) amb text fosc — mateixa lògica que el primary.
+- **Mai hardcodejar colors** (`"green"`, `"whitesmoke"`, hex, rgba...) a components o styled: usar `theme.palette.*` (a `styled` amb `({ theme }) => ...`) o strings de tema a `sx` (`"primary.main"`, `"primary.contrastText"`).
+- Per a tints/transparències derivar del tema amb `alpha(theme.palette..., x)` de `@mui/material`.
+- Els botons i controls (Button, ToggleButton, etc.) es basen en `color="primary"` (el default del tema); dins la NavBar, `color="inherit"`.
+- **Excepció**: els colors semàntics de pictogrames (`fitzgeraldColors.ts`, `inputColorList.ts`) són contingut, no UI — no s'han de tocar.
+
+### Patró de zones (fons)
+
+Hi ha **tres** superfícies, no dues:
+
+- **`sheetSurface` = superfície de full** (`palette.ts`): **blanc en tots dos temes**. És tota zona on es veu un pictograma — targetes de `PictogramCard`, full de `.preview-container`, fullscreen i mostres de configuració. **El que es veu és el que s'imprimeix**: mateixos colors a pantalla, a paper i al PDF, sense compensacions per tema. Surt de `printColors.background` a propòsit: full i paper són la mateixa cosa.
+- **`background.default` = escriptori** (el fons sobre el qual sura el full): blanc en clar, negre en fosc.
+- **`background.paper` = zona de configuració** (diàlegs, panells, acordions, controls): gris verdós (`#F2F5EC` clar / `#242820` fosc).
+- Valors definits a `appBackgrounds` de `palette.ts`. L'overlay d'elevació de MUI està desactivat (`MuiPaper: backgroundImage: none`) perquè el gris de config sigui uniforme.
+- **Mai adaptar al tema res que estigui sobre el full**: ni el color de lletra triat per l'usuari, ni el traç dels pictogrames. El tema fosc governa només el que envolta el full (barra, tabs, panells, controls). El motiu és d'accessibilitat: el contrast del text sobre paper s'ha de poder jutjar mentre es configura, no en descobrir-lo a la impressora.
+- `SettingsPreviewFrame` amb `background="default"` és superfície de full (`ViewSettingsPreview`). **Excepció**: la mostra de `DefaultForm` i la de `VocabularySettingsPanel` són un sol Card sobre el panell i usen `background="paper"` — el card ja és blanc i el gris li fa de passe-partout perquè no es fongui amb el marc.
+- Al modal d'edició de pictograma (`PictEditForm`), la part superior (mostra + cerca) és escriptori i la targeta hi sura a sobre; només el `SettingAccordion` de sota és zona de configuració.
+
+### Impressió i PDF
+
+- **La sortida impresa i el PDF sempre són en clar** (paper blanc, text fosc), independentment del tema actiu. Tokens a `printColors` de `palette.ts`.
+- Impressió (`window.print`): `generatePrintCSS` a `usePrintStyles.ts` força fons blanc al `body`, `.preview-container`, `.preview-content` i els `MuiPaper` interiors. Ara és **xarxa de seguretat**, no correcció: les superfícies de full ja són blanques a pantalla. Els pictogrames conserven regles `@media print` pròpies només per a la mida de lletra (`PictogramCard`).
+- PDF (`useDownloadPdf.ts`): al clon de html2canvas es normalitzen els colors de tema amb `themeColorReplacements` (fons d'`appBackgrounds` → blanc, text blanc → negre). Els colors de contingut de l'usuari (font, vores, fitzgerald) no es toquen.
+- El pictograma **sense color** (B/N) **no s'inverteix mai**: com que la targeta sempre és paper blanc, el traç negre es veu igual en clar, en fosc, a paper i al PDF. Les compensacions que hi havia per al mode fosc (`filter: invert(1)` a `pictogram__media`, `getDisplayColor` per al color de lletra, i les regles que les desfeien a `@media print` i al `safetyStyle` del PDF) s'han eliminat: amb una sola superfície de full ja no hi ha res a compensar.
+
+---
+
+## Estàndard de configuracions (modal de settings per defecte)
+
+Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames, Vista, Vocabulari). Font única de veritat: `apps/web/src/components/SettingsLayout/`.
+
+### Components compartits
+
+- **`SettingsPanelLayout`** — layout canònic de dues zones: previsualització a **l'esquerra** (sticky en mòbil) + columna de controls a la dreta. Sense `preview`, la columna de controls queda centrada sola (cas del tab Usuari). Props: `preview?`, `previewAside?`, `maxWidth` (700 per defecte), `controlsGap`. **`previewAside` és el que acompanya la mostra sense ser mostra** (llistes llargues, com el vocabulari desat): viu a la columna esquerra però queda **en flux normal**, sense enganxar-se ni compartir el límit d'alçada de la mostra. Una llista dins de `preview` obligaria a acotar-la i generaria un scroll intern minúscul dins d'un bloc enganxat: dos scrolls competint en una pantalla de mòbil.
+- **`SettingsPreviewFrame`** — marc visual únic de qualsevol previsualització: vora `divider`, `borderRadius: 1`, `boxShadow: 1`, `overflow: hidden`. Prop `background`: `"default"` (superfície de full, blanca en tots dos temes; per defecte) o `"paper"` (mostra d'un sol Card, segons el patró de zones). Les dimensions les aporta el fill via `sx`.
+- **`SettingsPanelHint`** — guia d'un tab: `Alert severity="info" variant="outlined"` amb el text que diu **què s'ajusta aquí i sobre què tindrà efecte**. Un sol fill: el missatge traduït.
+- **`SectionTitle`** — **contenidor** de secció: props `title` (capçalera en majúscules `text.secondary` + `Divider`), `children` (els ajustos de la secció) i `onApplyAll?`. Els `children` es renderitzen **indentats** (`pl: SETTINGS_INDENT`) sota el títol, com un esquema: `<SectionTitle title={...}>{ajustos}</SectionTitle>`, no com a germans després del títol. És el nivell superior de la jerarquia de separació.
+- **`SettingRow`** — **única implementació** de la fila d'un ajust individual: `title` a l'esquerra (amb `cardTitle`) i `children` (el control) a la dreta. Props: `title`, `labelId?` (per a `aria-labelledby`) i `control?`, que tria com es dimensiona el control:
+  - `"sized"` (per defecte) — slider, select, textfield: amplada acotada amb `settingControlWidth`; apila en mòbil.
+  - `"wide"` — grups de toggles: amplada segons contingut (`flexShrink: 0`, mai comprimit contra el títol); apila en mòbil.
+  - `"compact"` — `Switch`, `InputColor`: **sempre en línia**, també en mòbil — apilar-los només malgastaria alçada, mai els falta amplada.
+
+  **Mai reescriure aquest patró a mà** amb `Box sx={settingRowInline}` + `FormLabel`.
+
+### Regles
+
+- **Preview sempre a l'esquerra**, mai a la dreta. Un tab sense preview és una sola columna centrada (`maxWidth: 500`).
+- **Amplada estàndard tauleta**: `SETTINGS_MAX_WIDTH` (900) és l'amplada màxima del panell centrat. No hardcodejar amplades noves.
+- **Tot tab comença amb la seva guia**: `SettingsPanelHint` és el **primer fill de la columna de controls**, abans de la primera secció, a tots els tabs sense excepció. Format únic (mai un `Typography` solt ni un `Alert` escrit a mà) perquè l'usuari trobi sempre l'explicació al mateix lloc i amb el mateix aspecte. El text respon a què configura el tab i sobre què tindrà efecte; si el panell té estats (crear/editar), el text **canvia amb l'estat** — és la manera de dir on ets sense afegir cap encapçalament (cas del tab Vocabulari).
+- **Toggles = marca de la casa**: qualsevol selector d'opcions discretes usa `StyledToggleButtonGroup` (arrodonit 55×55, `primary` en seleccionat). Mai `ToggleButtonGroup` pla de MUI dins del modal de settings.
+- **Criteri únic de fila**: tot ajust individual (slider, select, textfield, grup de toggles) porta el **títol a l'esquerra i el control a la dreta** (a partir de `sm`; vegeu *Comportament en mòbil*), sempre via `SettingRow`. `settingRowInline` és l'sx intern que hi ha a sota; `settingRow` (només padding vertical, sense flex) n'és la base. Cap dels dos s'aplica directament a una fila.
+- **Un ajust = una fila**: mai amuntegar diversos controls en una sola fila. Un bloc amb 3 controls (una vora, una tipografia) és una **secció pròpia** amb 3 files, no una fila composta. Els components que representen un bloc així (`SettingCardBorder`, `SettingCardFontGroup`) **es titulen ells mateixos** renderitzant el seu propi `SectionTitle` — així els contextos que no els embolcallen (com `PictEditForm`) obtenen la mateixa presentació sense canvis.
+- **Color/pes del títol de fila**: el títol d'un ajust individual sempre usa `cardTitle` (`SettingsCards.styled.ts` — fosc `text.primary`, `fontWeight: bold`). Ho aplica `SettingRow`. Mai el gris per defecte de `FormLabel` (`text.secondary`), que quedaria igual que el títol de secció. El títol de secció (`SectionTitle`) sempre és gris (`text.secondary`) i en majúscules — és l'únic nivell gris de la jerarquia.
+- **Amplada del control (dreta)**: el control (select/slider/textfield) porta `settingControlWidth` (`settingsLayout.styled.ts`) — `max-width: 33%` del contenidor amb `min-width: SETTINGS_CONTROL_MIN_WIDTH` (150px) de seguretat perquè un `Slider` no quedi inusable. Ho aplica `SettingRow` amb `control="sized"`; els grups `StyledToggleButtonGroup` (`"wide"`), els `Switch` i l'`InputColor` (`"compact"`) en queden exempts — ja són compactes per si mateixos.
+- **`ApplyAll` és de secció, no de fila**: «aplica a tots els pictogrames» va un sol cop al final de la secció, via `onApplyAll` de `SectionTitle`. Els `SettingCard*` **no** porten cap prop `onApplyAll` (excepte `SettingCardBorder`, que només la reenvia al seu `SectionTitle` intern).
+- **Separació = només sota el títol de secció** (`settingsLayout.styled.ts`):
+  1. `SectionTitle` agrupa un conjunt d'ajustos relacionats, amb un `Divider` **just sota el títol** (únic divisor visible).
+  2. `SettingRow` dona ritme a cada fila; la separació entre files ve del `gap`, **sense divisors entre ajustos** (evita carregar visualment).
+- **Espaiat unificat**: `SETTINGS_ROW_GAP` entre files, `SETTINGS_ZONE_GAP` entre les dues zones. No hardcodejar gaps nous.
+
+### Comportament en mòbil
+
+L'estàndard és **un de sol** per a totes les amplades: no hi ha components mòbils duplicats, només un breakpoint declarat. Tot es codifica a `settingsLayout.styled.ts`.
+
+- **Breakpoint únic: `sm` (600px)** — `SETTINGS_MOBILE_BREAKPOINT`. Es tria `sm` i no `md` perquè `SettingsPanelLayout` ja apila les dues zones per sota de `md`: entre 600 i 900px la columna de controls ocupa tota l'amplada (~540px), prou perquè fins i tot el grup de cabell (7 toggles ≈ 399px) hi càpiga al costat del títol.
+- **Fila apilada per sota de `sm`** — `settingRowInline` porta `flexDirection: { xs: "column", sm: "row" }`. El títol va a dalt i el control a sota. Això és l'excepció declarada a la regla de «títol-esquerra/control-dreta»: en pantalla estreta un grup de toggles llarg no hi cap mai, i val més un apilat predictible que un wrap accidental. **Excepció de l'excepció**: `control="compact"` (switch, mostra de color) no apila mai — sempre hi caben i apilar-los només afegiria scroll.
+- **Control a amplada completa per sota de `sm`** — `settingControlWidth` porta `width: { xs: "100%" }` i `minWidth: { xs: 0 }`. El mínim de seguretat de 150px només té sentit quan el control comparteix línia amb el títol.
+- **Indentació reduïda** — `SETTINGS_INDENT` és `{ xs: 1, sm: 3 }`. Recupera 16px d'amplada útil per fila sense perdre la lectura d'esquema en escriptori.
+- **Els toggles no es redueixen** — els 55×55 de `StyledToggleButtonGroup` són ≥44px, el mínim WCAG de diana tàctil. En mòbil el grup ocupa tota l'amplada i els botons flueixen en dues files (`flexWrap` ja present al styled).
+- **Preview acotat i sota l'AppBar** — a `SettingsPanelLayout`, el preview sticky porta `top: SETTINGS_APPBAR_OFFSET` (l'AppBar del diàleg és `position: fixed` per sota de `md`) i `maxHeight: SETTINGS_PREVIEW_MOBILE_MAX_HEIGHT` (35vh) amb `overflow: auto`, perquè la mostra no deixi els controls fora de vista. **L'acotació és només per a la mostra sola**: amb `previewAside`, l'enganxada baixa un nivell (s'enganxa la mostra, la llista es queda en flux) i **desapareix el límit d'alçada i l'scroll intern** — el que sobresurt es llegeix amb l'scroll de la pàgina.
+- **La zona sticky sempre és opaca** — `bgcolor: "background.paper"`, el gris de la zona de configuració. Un bloc enganxat transparent deixa veure els controls passant-hi per sota i el text sembla flotar sobre la mostra. El fons coincideix amb el del panell, així que no s'hi veu cap costura.
+- **La mostra ocupa tota l'amplada en mòbil i se centra a dins** — el contenidor de la mostra va a `width: 100%` amb el contingut centrat per `flex`, no a l'amplada del contingut. L'`alignItems="flex-start"` de la zona (necessari en escriptori) faria encongir la zona al contingut i deixaria el pictograma arrambat a l'esquerra de la pantalla; i un fons opac més estret que la pantalla no taparia el que passa per sota.
+- **La fila és universal, el layout és per context** — `SettingRow` i les regles d'aquesta secció s'apliquen a *qualsevol* configuració de l'app (modal de settings, `PictEditForm`, panell de vista). `SettingsPanelLayout` és **exclusiu del modal de settings**; els contextos amb un layout responsive propi — com la graella `xs: "1fr"` / `md: "0.5fr 1.5fr"` de `PictEditForm` — el conserven.
+
+### Estat de migració
+
+- ✅ **Vista** (`ViewSettingsPanel`) — totes les files via `SettingRow`.
+- ✅ **Usuari** (`UserSettingsPanel`) — `SectionTitle` + `SettingRow` (idioma app, idioma cerca, tema).
+- ✅ **Pictogrames** (`DefaultForm`) — `SettingsPanelLayout` + `SettingsPreviewFrame background="paper"` + **7 seccions**: Pictograma, Text i numeració, Lletra del text, Lletra dels números (si `numbered`), Vora exterior, Vora interior, Aparença (si `color`). Les 4 últimes es titulen soles des del propi card.
+- ✅ **Vocabulari** (`VocabularySettingsPanel`) — columna esquerra = mostra (`preview`: `SettingsPreviewFrame` amb el pictograma centrat) + **llista de paraules desades** (`previewAside`: `WordProfileList`, amb la miniatura del pictograma de cada paraula); columna dreta = formulari clàssic (guia, secció Paraula, secció Pictograma) amb els botons **al final i a la dreta**. Triar una paraula de la llista carrega el formulari en mode edició: la guia canvia, la fila queda seleccionada amb el distintiu «Editant» i els botons passen a «Cancel·lar / Actualitzar». Desar, actualitzar i esborrar confirmen amb `showSnackbar`. Reanomenar mentre s'edita mou la paraula (esborra l'antiga) i bloqueja el desat si el nom nou ja existeix.
+- ✅ **Família `SettingCard`** — tots migrats a `SettingRow`. `card`, `cardAction` i `cardContent` **eliminats** de `SettingsCards.styled.ts`; només hi queden `cardTitle` (consumit per `SettingRow`) i `cardColor`.
+- ✅ **`PictEditForm`** i **`VocabularySettingsPanel`** — hereten la fila nova pels components compartits, sense tocar el seu layout propi (regla «la fila és universal, el layout és per context»).
+- ✅ **`GlobalViewControls`** — totes les files (mida pàgina, orientació, separació seqüències, direcció) via `SettingRow`. Component **compartit** amb la pàgina de visualització (`ViewSquenceSettings`); verificat visualment als dos llocs. **Només files**: no renderitza ni seccions ni botons d'acció — qui el consumeix decideix el `SectionTitle` que l'embolcalla i on van els botons.
+- ✅ **`SequenceControlsPanel`** (ajustos per seqüència, dins la pàgina de vista) — «Aplica a totes» és un `SettingRow control="compact"`; dins de cada acordió, mida, separació i alineacions H/V són `SettingRow` amb `StyledToggleButtonGroup`. L'acordió és pla (`elevation={0}`, sense la línia superior de MUI): el `Divider` del `SectionTitle` ja separa la secció.
+- ✅ **`PrintFooterSection`** — l'autor de la seqüència té **secció pròpia** («Peu d'impressió») i va **sempre l'últim**, tant a la columna de la pàgina de vista com al tab Vista del modal. El motiu: és l'únic ajust que no canvia res a pantalla — només surt al peu del full imprès i del PDF (`CopyRight`, `@media print`). Per això el títol de secció diu on apareix, en comptes d'un genèric «Autoria».
+- ✅ **Columna de configuració de la pàgina de vista** (`ViewSquenceSettings`) — 3 seccions: *Format de pàgina* (`GlobalViewControls`), *Seqüències* (`SequenceControlsPanel`) i *Peu d'impressió* (`PrintFooterSection`). El botó «Restaura per defecte» va **després de totes**, perquè restaura tant els ajustos globals com els de cada seqüència. Amplada de la columna: `VIEW_SETTINGS_COLUMN_WIDTH` (350px, a `ViewSequenceSettings.styled.ts`) — a 300px fins i tot els grups de toggles es partien; a 350 les files curtes i els toggles van en línia i només els títols llargs («Espai de pictogrames») es parteixen, perquè el mínim de 150px del control mana per damunt del `max-width: 33%`.
+
+---
+
+## Estàndard de tabs (icona + text)
+
+Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'edició/visualització (`TabsEditView`) i els del modal de configuracions (`DefaultSettingsDialog`).
+
+### Component compartit
+
+- **`AppTab`** — l'única manera de declarar un tab amb icona i text. Props: `label` (string **ja traduït**, no un node), `icon`, més tot el que accepta `Tab` (`value`, `component`, `to`…). Aplica `iconPosition="start"`, els estils responsius i l'`aria-label`. **Mai declarar un `<Tab>` de MUI amb `label={<Typography>…</Typography>}` a mà.**
+- **`tabsStyled`** — estils del contenidor `Tabs` sobre la NavBar verda (indicador i colors derivats de `primary.contrastText`). Viu a `appTabs.styled.ts`, **no** a la carpeta de cap component consumidor.
+
+### Regla d'icona i text
+
+- **Per sobre de `sm` (600px)**: icona + text en línia, com fins ara.
+- **Per sota de `sm`**: **només el tab seleccionat conserva el text**; la resta queden en icona. Sempre hi ha, doncs, un text visible que diu on ets, sense malgastar amplada amb els tabs on no ets. **Criteri únic per a tots els tabs de l'app** — barra de navegació i modal de configuracions es comporten igual; `AppTab` no té cap prop per variar-ho.
+- **L'`aria-label` és sempre present** amb el text traduït — el tab no perd mai el seu nom accessible encara que el text no sigui visible, cosa crítica en una app d'AAC.
+- **Res d'encapçalaments duplicats dins el panell**: el nom del tab actiu el diu el propi tab, no un `h2` a sobre del contingut. Un títol repetit a cada panell és soroll en una pantalla on l'alçada és el recurs escàs.
+- **Els contenidors amb 3 tabs o més van `variant="scrollable"` amb `scrollButtons="auto"`** (cas de `DefaultSettingsDialog`): en mòbil el tab actiu amb text pot desbordar la barra, i les fletxes apareixen només on hi ha ratolí (MUI les amaga en tàctil, on ja hi ha swipe).
+- **El valor del tab es deriva de l'estat real, no d'estat local**: `TabsEditView` calcula el tab actiu des de `useLocation()`. Amb `useState` inicialitzat a un valor fix, recarregar `/view-sequence` marcaria «Editar» — i com que el tab actiu és l'únic amb text en mòbil, l'error seria doblement desorientador.
+- **Mai fer servir `Tooltip` per portar el text del tab en mòbil**: en tàctil només s'obre amb long-press (~700 ms), no és descobrible, xoca amb el menú contextual del sistema i es tanca sol. El tooltip és un ajut d'escriptori, mai l'única via al text.
+- **Res de text apilat sota la icona**: «Pictogrames» i «Vocabulari» no hi caben en un tab estret i acabarien truncats, i el tab creixeria en alçada empenyent l'AppBar de 42px.
+- **El breakpoint és `APP_TAB_LABEL_BREAKPOINT` (`sm`)**, el mateix de l'estàndard de configuracions. No multiplicar ruptures.
+- **L'amagada és per CSS**, no per `useMediaQuery`: així el layout no depèn d'un render de JavaScript ni fa flash en carregar.
+- **Tot l'ajust responsiu va dins d'un `theme.breakpoints.down(sm)`**, mai amb objectes `{ xs: …, sm: … }`. Per sobre del breakpoint el tab ha de conservar **intactes** les mides natives de MUI. En particular, **mai declarar `fontSize: "inherit"` per a escriptori**: el tab heretaria l'`1.75rem` del `Toolbar` de `BarNavigation` (i el `1rem` del body al diàleg) en lloc del seu `0.875rem`, i tant la icona com el text es veurien desmesurats. Per això `appTabSx` i `appTabLabelSx` són funcions de `theme`, no objectes.
+- **Diana tàctil**: en `xs` el tab sense text baixa a `minWidth: 48` (el mínim WCAG de diana tàctil, no menys) i la icona creix a `1.4rem` per compensar la pèrdua del text. El tab seleccionat, que sí que mostra text, recupera les mides normals.
+- **El títol de la barra cedeix abans que els tabs**: a `DefaultSettingsDialog` el títol «Configuracions» s'amaga en `xs` (`display: { xs: "none", sm: "block" }`) i el nom del diàleg passa a l'`aria-label` del `Dialog`.
+- **Marca curta en mòbil**: el `h1` de `BarNavigation` mostra `APP_SHORT_NAME` (**«SqAAC»**) per sota de `sm` i «SequenciAAC» a partir de `sm`, amb l'`aria-label` del `h1` sempre amb el nom sencer. **No fer servir «SAAC» sol com a nom curt**: és el terme genèric del sector (Sistemes Augmentatius i Alternatius de Comunicació) i es llegiria com a categoria, no com a marca; «SqAAC» conserva l'arrel del nom propi.
+
+### Estat de migració
+
+- ✅ **`TabsEditView`** — 2 tabs (Editar/Vista) via `AppTab`; valor derivat de `useLocation()`.
+- ✅ **`DefaultSettingsDialog`** — 4 tabs declarats a l'array `SETTINGS_TABS` (valor + icona + missatge) i renderitzats amb `map`, dins d'un `Tabs` scrollable.
+- ➖ **`TabsSequences`** — fora d'aquest estàndard: els seus tabs són números de seqüència, sense icona ni text traduïble; té la seva pròpia branca `isMobile` (horitzontal scrollable).
+
 ---
 
 ## Descripció del projecte

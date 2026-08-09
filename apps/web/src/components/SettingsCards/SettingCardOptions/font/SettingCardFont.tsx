@@ -1,16 +1,14 @@
 import {
-  FormControl,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
-  Stack,
   Typography,
 } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import { settingCardOptions } from "./SettingCardFont.lang";
 import { fontList } from "../../../../data/fontlist";
 import { FontFamily } from "../../../../types/FontFamily";
+import SettingRow from "../../../SettingsLayout/SettingRow";
 import React from "react";
 
 interface SettingCardProps {
@@ -18,6 +16,8 @@ interface SettingCardProps {
   state: string;
   setState: React.Dispatch<React.SetStateAction<FontFamily>>;
 }
+
+const FONT_FAMILY_LABEL_ID = "setting-font-family-label";
 
 const SettingCardFont = ({
   setting,
@@ -33,27 +33,25 @@ const SettingCardFont = ({
   };
 
   return (
-    <Stack direction={"row"}>
-      <FormControl fullWidth>
-        <InputLabel id="fontFamily">
-          <FormattedMessage {...settingCard.messages} />
-        </InputLabel>
-        <Select
-          labelId="fontFamily"
-          id="language-selected"
-          value={state}
-          label="fontFamily"
-          onChange={handleChange}
-          sx={{ width: 200 }}
-        >
-          {fontList.map((font) => (
-            <MenuItem value={font} key={font}>
-              <Typography fontFamily={font}>{font}</Typography>
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Stack>
+    <SettingRow
+      title={<FormattedMessage {...settingCard.messages} />}
+      labelId={FONT_FAMILY_LABEL_ID}
+    >
+      {/* Sense InputLabel flotant: el títol de la fila ja fa d'etiqueta */}
+      <Select
+        value={state}
+        onChange={handleChange}
+        fullWidth
+        size="small"
+        inputProps={{ "aria-labelledby": FONT_FAMILY_LABEL_ID }}
+      >
+        {fontList.map((font) => (
+          <MenuItem value={font} key={font}>
+            <Typography fontFamily={font}>{font}</Typography>
+          </MenuItem>
+        ))}
+      </Select>
+    </SettingRow>
   );
 };
 

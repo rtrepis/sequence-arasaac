@@ -19,11 +19,22 @@ export interface ViewSettings {
   author: string;
 }
 
+export type UserTier = "free";
+
+export interface WordProfile {
+  word: string;
+  overrides: Partial<Pick<import("./sequence").PictApiAraSettings, "skin" | "hair" | "color" | "fitzgerald">>;
+  selectedId?: number;
+  customImageUrl?: string;
+}
+
 export interface UserUiSettings {
   lang: { app: LangsApp; search: string };
   theme: ThemeMode;
   viewSettings?: ViewSettings;
   defaultSettings: DefaultSettings;
+  wordProfiles?: WordProfile[];
+  tier?: UserTier;
 }
 
 export interface DefaultSettings {

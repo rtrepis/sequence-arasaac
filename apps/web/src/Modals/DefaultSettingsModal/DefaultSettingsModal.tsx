@@ -22,7 +22,7 @@ const DefaultSettingsModal = (): React.ReactElement => {
       <Tooltip title={intl.formatMessage(messages.settings)}>
         <IconButton
           ref={(el) => { triggerRef.current = el; }}
-          color="secondary"
+          color="inherit"
           component="label"
           aria-label={intl.formatMessage(messages.settings)}
           onClick={() => setOpen(true)}

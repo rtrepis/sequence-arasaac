@@ -1,9 +1,10 @@
-import { fireEvent, render, screen } from "../../utils/test-utils";
+import { fireEvent, render, screen } from "../../../../utils/test-utils";
 import MagicSearch from "./MagicSearch";
 
 const mockAction = jest.fn();
-jest.mock("../../features/pictogram/hooks/useSearchPictogram", () => () => ({
+jest.mock("../../hooks/useSearchPictogram", () => () => ({
   getSearchPictogram: mockAction,
+  getAllKeyWordsForLanguages: jest.fn(),
 }));
 
 describe("Give a component MagicSearch", () => {
@@ -17,7 +18,7 @@ describe("Give a component MagicSearch", () => {
       const expectActions_1 = "Hello";
       const expectActions_2 = "word";
 
-      render(<MagicSearch info={{ value: false }} />);
+      render(<MagicSearch showHelperText={false} />);
       const input = screen.getByRole("textbox", { name: expectInput });
       const button = screen.getByRole("button", { name: expectButton });
 

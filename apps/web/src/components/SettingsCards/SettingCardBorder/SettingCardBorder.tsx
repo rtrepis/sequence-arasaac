@@ -1,27 +1,15 @@
-import {
-  FormLabel,
-  Slider,
-  ToggleButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { Stack } from "@mui/system";
+import { Slider, ToggleButton, Tooltip } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import { Border } from "../../../types/sequence";
-import {
-  card,
-  cardAction,
-  cardColor,
-  cardContent,
-  cardTitle,
-} from "../SettingsCards.styled";
+import { cardColor } from "../SettingsCards.styled";
+import SectionTitle from "../../SettingsLayout/SectionTitle";
+import SettingRow from "../../SettingsLayout/SettingRow";
 import "./SettingCardBorder.css";
 import { messages } from "./SettingCardBorder.lang";
 import { useState } from "react";
 import InputColor from "../InputColor/InputColor";
 import React from "react";
-import ApplyAll from "../ApplyAll/ApplyAll";
 
 interface SettingCardBorderProps {
   border: "borderIn" | "borderOut";
@@ -31,6 +19,12 @@ interface SettingCardBorderProps {
   onApplyAll?: () => void;
 }
 
+/**
+ * Secció autotitulada d'una vora: tipus, gruix i radi com a files independents.
+ * Es titula ella mateixa perquè els contextos que no l'embolcallen amb un
+ * `SectionTitle` (com el modal d'edició de pictograma) obtinguin la mateixa
+ * presentació sense canvis.
+ */
 const SettingCardBorder = ({
   border,
   state: { color, size, radius },
@@ -41,15 +35,11 @@ const SettingCardBorder = ({
 
   const [colorSelect, setColorSelect] = useState(color);
 
-  const handlerClickColor = () => {
-    const border: Border = {
-      color: colorSelect,
-      radius: radius === 0 ? 20 : radius,
-      size: size === 0 ? 2 : size,
-    };
-
-    setState(border);
-  };
+  // El tooltip "Selecció" es controla per poder-lo tancar mentre la paleta és
+  // oberta: el popover s'ancora just a sota del botó, on el tooltip captura els
+  // clics dels primers colors i els deixa inseleccionables.
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
   const handleChangesSize = (event: Event, newValue: number | number[]) => {
     const border: Border = {
@@ -84,23 +74,26 @@ const SettingCardBorder = ({
     setState(newBorder);
   };
 
-  return (
-    <Stack
-      display={"felx"}
-      direction={"row"}
-      flexWrap={"wrap"}
-      columnGap={2}
-      sx={card}
-    >
-      <Typography variant="body1" sx={cardTitle} component="h4">
-        <FormattedMessage {...messages[border]} />
-      </Typography>
+  // Propaga el color al pare a l'instant perquè el preview s'actualitzi en seleccionar,
+  // sense esperar el blur del ToggleButton
+  const handleChangeColor: React.Dispatch<React.SetStateAction<string>> = (
+    value,
+  ) => {
+    setColorSelect(value);
+    const newColor = typeof value === "function" ? value(colorSelect) : value;
+    // "input" és el valor transitori mentre s'obre el selector natiu de color
+    if (newColor !== "input") handlerUpdateColor(newColor);
+  };
 
-      <Stack display={"flex"} direction={"row"} flexWrap={"wrap"} columnGap={2}>
+  return (
+    <SectionTitle
+      title={<FormattedMessage {...messages[border]} />}
+      onApplyAll={onApplyAll}
+    >
+      <SettingRow title={<FormattedMessage {...messages.type} />} control="wide">
         <StyledToggleButtonGroup
           exclusive
           aria-label={`${intl.formatMessage(messages[border])}`}
-          sx={cardContent}
         >
           <ToggleButton
             value={"Fitzgerald Key"}
@@ -111,15 +104,20 @@ const SettingCardBorder = ({
             <FormattedMessage {...messages.fitzgeraldKey} />
           </ToggleButton>
 
-          <Tooltip title={intl.formatMessage(messages.selected)}>
+          <Tooltip
+            title={intl.formatMessage(messages.selected)}
+            open={tooltipOpen && !paletteOpen}
+            onOpen={() => setTooltipOpen(true)}
+            onClose={() => setTooltipOpen(false)}
+          >
             <ToggleButton
               value={"Selected Color"}
               selected={color !== "fitzgerald" && size > 0}
-              onBlur={handlerClickColor}
             >
               <InputColor
                 color={colorSelect}
-                setColor={setColorSelect}
+                setColor={handleChangeColor}
+                onOpenChange={setPaletteOpen}
                 inputBorder={1}
                 inputSize={35}
               />
@@ -141,46 +139,32 @@ const SettingCardBorder = ({
             </Tooltip>
           </ToggleButton>
         </StyledToggleButtonGroup>
+      </SettingRow>
 
-        <Stack direction={"row"} spacing={2}>
-          <FormLabel>
-            <FormattedMessage {...messages.size} />
-          </FormLabel>
-          <Slider
-            defaultValue={size}
-            aria-label={`${intl.formatMessage(messages.size)}`}
-            valueLabelDisplay="auto"
-            max={10}
-            min={1}
-            value={size}
-            onChange={handleChangesSize}
-            sx={{ width: 100 }}
-            disabled={size === 0}
-          />
-        </Stack>
+      <SettingRow title={<FormattedMessage {...messages.size} />}>
+        <Slider
+          aria-label={`${intl.formatMessage(messages.size)}`}
+          valueLabelDisplay="auto"
+          max={10}
+          min={1}
+          value={size}
+          onChange={handleChangesSize}
+          disabled={size === 0}
+        />
+      </SettingRow>
 
-        <Stack direction={"row"} spacing={2}>
-          <FormLabel>
-            <FormattedMessage {...messages.radius} />
-          </FormLabel>
-          <Slider
-            defaultValue={radius}
-            aria-label={`${intl.formatMessage(messages.radius)}`}
-            valueLabelDisplay="auto"
-            max={70}
-            min={1}
-            value={radius}
-            onChange={handleChangesRadius}
-            sx={{ width: 100 }}
-            disabled={size === 0}
-          />
-        </Stack>
-      </Stack>
-
-      {onApplyAll && (
-        <ApplyAll sx={cardAction} onClick={onApplyAll} />
-      )}
-    </Stack>
+      <SettingRow title={<FormattedMessage {...messages.radius} />}>
+        <Slider
+          aria-label={`${intl.formatMessage(messages.radius)}`}
+          valueLabelDisplay="auto"
+          max={70}
+          min={1}
+          value={radius}
+          onChange={handleChangesRadius}
+          disabled={size === 0}
+        />
+      </SettingRow>
+    </SectionTitle>
   );
 };
 export default SettingCardBorder;

@@ -1721,6 +1721,12 @@
       "value": "Alto"
     }
   ],
+  "view.editSequences.sequences.label": [
+    {
+      "type": 0,
+      "value": "Secuencias"
+    }
+  ],
   "view.welcome.arcadeLink": [
     {
       "type": 0,

@@ -36,11 +36,6 @@ const messages = defineMessages({
     defaultMessage: "Minus pictograms",
     description: "Minus pictograms",
   },
-  uploadImage: {
-    id: "components.pictogramSearch.uploadImage",
-    defaultMessage: "Upload image from device",
-    description: "Botó per pujar una imatge pròpia des del dispositiu",
-  },
 });
 
 export default messages;

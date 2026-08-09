@@ -6,12 +6,10 @@ import {
   settingsPictApiAraActionCreator,
   addPictogramActionCreator,
 } from "@features/sequence/store/documentSlice";
-import { updateKeywordsActionCreator } from "@features/user-settings/store/uiSlice";
 import { Ai, PictApiAraForEdit, PictSequence } from "../../../types/sequence";
 import {
   searchPictogramByWord,
   fetchPictogramData,
-  fetchKeywordsForLocale,
   extractPictSettings,
 } from "../api/arasaacClient";
 
@@ -19,6 +17,8 @@ const useSearchPictogram = () => {
   const {
     font: { size: fontSize },
     textPosition,
+    borderIn: defaultBorderIn,
+    borderOut: defaultBorderOut,
   } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
 
   const getActiveSaacAmountPict = (state) =>
@@ -28,6 +28,8 @@ const useSearchPictogram = () => {
   const defaultSettingsPictApiAra = useAppSelector(
     (state) => state.ui.defaultSettings.pictApiAra,
   );
+
+  const wordProfiles = useAppSelector((state) => state.ui.wordProfiles);
 
   const dispatch = useAppDispatch();
   const locale = useAppSelector((state) => state.ui.lang.search);
@@ -41,6 +43,11 @@ const useSearchPictogram = () => {
       isExtends?: boolean,
     ) => {
       const wordAraSaac = typeof word === "string" ? word : word.word;
+
+      // Perfil personal per a aquesta paraula (cerca insensible a majúscules)
+      const profile = wordProfiles.find(
+        (p) => p.word.toLowerCase() === wordAraSaac.toLowerCase(),
+      );
 
       try {
         const data = await searchPictogramByWord(wordAraSaac, locale, isExtends);
@@ -58,15 +65,22 @@ const useSearchPictogram = () => {
         }
 
         if (!isUpdate) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const baseSettings = extractPictSettings((data as any[])[0], defaultSettingsPictApiAra);
           const newPict: PictSequence = {
             indexSequence: amountSequence + indexSequence,
             img: {
               searched: { word: wordAraSaac, bestIdPicts: findBestPict },
-              selectedId: findBestPict[0],
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              settings: extractPictSettings((data as any[])[0], defaultSettingsPictApiAra),
+              selectedId: profile?.selectedId ?? findBestPict[0],
+              settings: { ...baseSettings, ...profile?.overrides },
+              ...(profile?.customImageUrl ? { url: profile.customImageUrl } : {}),
             },
-            settings: { fontSize, textPosition },
+            settings: {
+              fontSize,
+              textPosition,
+              borderIn: defaultBorderIn,
+              borderOut: defaultBorderOut,
+            },
             ...(typeof word === "object" && { text: word.text }),
             cross: false,
           };
@@ -88,10 +102,16 @@ const useSearchPictogram = () => {
             indexSequence: amountSequence + indexSequence,
             img: {
               searched: { word: wordAraSaac, bestIdPicts: [0] },
-              selectedId: 0,
-              settings: { fitzgerald: "#666" },
+              selectedId: profile?.selectedId ?? 0,
+              settings: { fitzgerald: "#666", ...profile?.overrides },
+              ...(profile?.customImageUrl ? { url: profile.customImageUrl } : {}),
             },
-            settings: { textPosition, fontSize },
+            settings: {
+              textPosition,
+              fontSize,
+              borderIn: defaultBorderIn,
+              borderOut: defaultBorderOut,
+            },
             ...(typeof word === "object" && { text: word.text }),
             cross: false,
           };
@@ -105,8 +125,11 @@ const useSearchPictogram = () => {
       dispatch,
       amountSequence,
       defaultSettingsPictApiAra,
+      wordProfiles,
       fontSize,
       textPosition,
+      defaultBorderIn,
+      defaultBorderOut,
     ],
   );
 
@@ -131,23 +154,9 @@ const useSearchPictogram = () => {
     [locale, dispatch, defaultSettingsPictApiAra],
   );
 
-  // Carrega les paraules clau disponibles per a l'idioma de cerca.
-  const getAllKeyWordsForLanguages = useCallback(
-    async (value?: string) => {
-      try {
-        const words = await fetchKeywordsForLocale(value ?? locale);
-        dispatch(updateKeywordsActionCreator(words));
-      } catch {
-        console.info("failed fetch keywords ");
-      }
-    },
-    [dispatch, locale],
-  );
-
   return {
     getSearchPictogram,
     getSettingsPictId,
-    getAllKeyWordsForLanguages,
   };
 };
 

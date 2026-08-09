@@ -15,11 +15,13 @@ const ApplyAll = ({ onClick, sx }: ApplyAllProps): React.ReactElement => {
   const intl = useIntl();
   const { showSnackbar } = useFeedback();
 
-  // Obtenim el nombre de pictogrames de la seqüència activa
-  const pictogramCount = useAppSelector((state) => {
-    const activeSaac = state.document.activeSAAC;
-    return state.document.content[activeSaac].length;
-  });
+  // Obtenim el nombre total de pictogrames de totes les seqüències
+  const pictogramCount = useAppSelector((state) =>
+    Object.values(state.document.content).reduce(
+      (total, sequence) => total + sequence.length,
+      0,
+    ),
+  );
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     // Executem l'acció original

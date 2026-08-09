@@ -75,9 +75,9 @@ export const extractPictSettings = (
 ): PictApiAraSettings => {
   const settings: PictApiAraSettings = {};
 
-  settings.fitzgerald = fitzgeraldColors[
-    data.keywords[0].type as keyof typeof fitzgeraldColors
-  ] as unknown as string;
+  settings.fitzgerald =
+    fitzgeraldColors[data.keywords[0].type as keyof typeof fitzgeraldColors]
+      ?.color ?? "#FFCD94";
 
   if (data.skin) settings.skin = defaults.skin;
   if (data.hair) settings.hair = defaults.hair;

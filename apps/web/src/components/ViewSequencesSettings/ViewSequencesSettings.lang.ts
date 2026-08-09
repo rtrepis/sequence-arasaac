@@ -1,6 +1,21 @@
 import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
+  sectionPageFormat: {
+    id: "pages.viewSequence.section.pageFormat",
+    defaultMessage: "Page format",
+    description: "Títol de la secció de format de pàgina a la columna de configuració de la vista",
+  },
+  sectionSequences: {
+    id: "pages.viewSequence.section.sequences",
+    defaultMessage: "Sequences",
+    description: "Títol de la secció d'ajustos per seqüència a la columna de configuració de la vista",
+  },
+  sectionPrintFooter: {
+    id: "pages.viewSequence.section.printFooter",
+    defaultMessage: "Print footer",
+    description: "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF",
+  },
   pageSize: {
     id: "pages.viewSequence.pageSize.label",
     defaultMessage: "Page Size",

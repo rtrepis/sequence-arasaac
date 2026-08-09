@@ -1,14 +1,19 @@
 import {
   Button,
-  FormGroup,
-  FormLabel,
   Slider,
   Stack,
   ToggleButton,
-  ToggleButtonGroup,
   Tooltip,
   Typography,
 } from "@mui/material";
+import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
+import {
+  SettingsPanelLayout,
+  SectionTitle,
+  SettingRow,
+  SettingsPanelHint,
+  SETTINGS_MAX_WIDTH,
+} from "../../components/SettingsLayout";
 import { FormattedMessage, useIntl } from "react-intl";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
@@ -19,6 +24,7 @@ import {
   MdVerticalAlignTop,
   MdVerticalAlignCenter,
   MdVerticalAlignBottom,
+  MdSettingsBackupRestore,
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
@@ -28,6 +34,7 @@ import { ViewSettings, SequenceDirection, PageOrientation } from "../../types/ui
 import { PageSize } from "../../types/PageFormat";
 import { SequenceAlignmentH, SequenceAlignmentV } from "../../types/document";
 import GlobalViewControls from "../../components/ViewSequencesSettings/GlobalViewControls";
+import PrintFooterSection from "../../components/ViewSequencesSettings/PrintFooterSection";
 import viewMessages from "../../components/ViewSequencesSettings/ViewSequencesSettings.lang";
 import ViewSettingsPreview from "./ViewSettingsPreview";
 import messages from "./ViewSettingsPanel.lang";
@@ -141,153 +148,142 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
 
 
     return (
-      <Stack direction="column" gap={1} sx={{ pt: 1, maxWidth: 700, mx: "auto", width: "100%" }}>
-        <Typography variant="body2" color="text.secondary">
-          <FormattedMessage {...messages.panelDescription} />
-        </Typography>
-
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          gap={4}
-          alignItems="flex-start"
-          marginTop={1}
+      <Stack direction="column" gap={1} sx={{ pt: 1, maxWidth: SETTINGS_MAX_WIDTH, mx: "auto", width: "100%" }}>
+        <SettingsPanelLayout
+          preview={<ViewSettingsPreview settings={localSettings} />}
         >
-          <Stack
-            sx={{
-              position: { xs: "sticky", md: "static" },
-              top: { xs: 0 },
-              zIndex: { xs: 10, md: "auto" },
-            }}
-          >
-            <ViewSettingsPreview settings={localSettings} />
-          </Stack>
+          {/* Guia del tab: què s'ajusta aquí */}
+          <SettingsPanelHint>
+            <FormattedMessage {...messages.panelDescription} />
+          </SettingsPanelHint>
 
-          <Stack flex={1} gap={1}>
+          {/* Secció: format i disposició de la pàgina (controls compartits amb la vista) */}
+          <SectionTitle title={<FormattedMessage {...messages.sectionPageFormat} />}>
             <GlobalViewControls
               viewSettings={localSettings}
-              author={localSettings.author}
               pageSizeIndex={PAGE_INDEX_MAP[localSettings.pageSize]}
               sequenceCount={2}
               onPageSizeChange={handlePageSizeChange}
               onDirectionChange={handleDirectionChange}
               onSequenceSpaceChange={handleSequenceSpaceChange}
-              onAuthorChange={handleAuthorChange}
               onOrientationChange={handleOrientationChange}
+            />
+          </SectionTitle>
+
+          {/* Secció: mida i alineació dels pictogrames */}
+          <SectionTitle title={<FormattedMessage {...messages.sectionPictograms} />}>
+            <SettingRow title={<FormattedMessage {...viewMessages.size} />}>
+              <Slider
+                step={SIZE_PICT_STEP}
+                min={SIZE_PICT_MIN}
+                max={SIZE_PICT_MAX}
+                value={localSettings.sizePict}
+                valueLabelDisplay="auto"
+                valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
+                onChange={handleSizePict}
+              />
+            </SettingRow>
+
+            <SettingRow title={<FormattedMessage {...viewMessages.pictSpaceBetween} />}>
+              <Slider
+                step={PICT_SPACE_STEP}
+                min={PICT_SPACE_MIN}
+                max={PICT_SPACE_MAX}
+                value={localSettings.pictSpaceBetween}
+                valueLabelDisplay="auto"
+                valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
+                onChange={handlePictSpaceBetween}
+              />
+            </SettingRow>
+
+            <SettingRow
+              title={<FormattedMessage {...viewMessages.alignmentH} />}
+              control="wide"
             >
-              <FormGroup>
-                <FormLabel>
-                  <FormattedMessage {...viewMessages.size} />
-                  <Slider
-                    step={SIZE_PICT_STEP}
-                    min={SIZE_PICT_MIN}
-                    max={SIZE_PICT_MAX}
-                    value={localSettings.sizePict}
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
-                    onChange={handleSizePict}
-                  />
-                </FormLabel>
-              </FormGroup>
+              <StyledToggleButtonGroup
+                value={localSettings.alignmentH}
+                exclusive
+                onChange={handleAlignmentH}
+              >
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignLeft)}>
+                  <ToggleButton value="left" aria-label="left">
+                    <MdFormatAlignLeft />
+                  </ToggleButton>
+                </Tooltip>
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignHCenter)}>
+                  <ToggleButton value="center" aria-label="center">
+                    <MdFormatAlignCenter />
+                  </ToggleButton>
+                </Tooltip>
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignRight)}>
+                  <ToggleButton value="right" aria-label="right">
+                    <MdFormatAlignRight />
+                  </ToggleButton>
+                </Tooltip>
+              </StyledToggleButtonGroup>
+            </SettingRow>
 
-              <FormGroup>
-                <FormLabel>
-                  <FormattedMessage {...viewMessages.pictSpaceBetween} />
-                  <Slider
-                    step={PICT_SPACE_STEP}
-                    min={PICT_SPACE_MIN}
-                    max={PICT_SPACE_MAX}
-                    value={localSettings.pictSpaceBetween}
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
-                    onChange={handlePictSpaceBetween}
-                  />
-                </FormLabel>
-              </FormGroup>
+            <SettingRow
+              title={<FormattedMessage {...viewMessages.alignmentV} />}
+              control="wide"
+            >
+              <StyledToggleButtonGroup
+                value={localSettings.alignmentV}
+                exclusive
+                onChange={handleAlignmentV}
+              >
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignTop)}>
+                  <ToggleButton value="top" aria-label="top">
+                    <MdVerticalAlignTop />
+                  </ToggleButton>
+                </Tooltip>
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignVCenter)}>
+                  <ToggleButton value="center" aria-label="center">
+                    <MdVerticalAlignCenter />
+                  </ToggleButton>
+                </Tooltip>
+                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignBottom)}>
+                  <ToggleButton value="bottom" aria-label="bottom">
+                    <MdVerticalAlignBottom />
+                  </ToggleButton>
+                </Tooltip>
+              </StyledToggleButtonGroup>
+            </SettingRow>
+          </SectionTitle>
 
-              <FormGroup>
-                <FormLabel component="legend">
-                  <FormattedMessage {...viewMessages.alignmentH} />
-                </FormLabel>
-                <ToggleButtonGroup
-                  value={localSettings.alignmentH}
-                  exclusive
-                  onChange={handleAlignmentH}
-                  size="small"
-                >
-                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignLeft)}>
-                    <ToggleButton value="left" aria-label="left">
-                      <MdFormatAlignLeft />
-                    </ToggleButton>
-                  </Tooltip>
-                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignHCenter)}>
-                    <ToggleButton value="center" aria-label="center">
-                      <MdFormatAlignCenter />
-                    </ToggleButton>
-                  </Tooltip>
-                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignRight)}>
-                    <ToggleButton value="right" aria-label="right">
-                      <MdFormatAlignRight />
-                    </ToggleButton>
-                  </Tooltip>
-                </ToggleButtonGroup>
-              </FormGroup>
+          {/* Secció: el que només surt al peu del full imprès i del PDF */}
+          <PrintFooterSection
+            author={localSettings.author}
+            onAuthorChange={handleAuthorChange}
+          />
 
-              <FormGroup>
-                <FormLabel component="legend">
-                  <FormattedMessage {...viewMessages.alignmentV} />
-                </FormLabel>
-                <ToggleButtonGroup
-                  value={localSettings.alignmentV}
-                  exclusive
-                  onChange={handleAlignmentV}
-                  size="small"
-                >
-                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignTop)}>
-                    <ToggleButton value="top" aria-label="top">
-                      <MdVerticalAlignTop />
-                    </ToggleButton>
-                  </Tooltip>
-                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignVCenter)}>
-                    <ToggleButton value="center" aria-label="center">
-                      <MdVerticalAlignCenter />
-                    </ToggleButton>
-                  </Tooltip>
-                  <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignBottom)}>
-                    <ToggleButton value="bottom" aria-label="bottom">
-                      <MdVerticalAlignBottom />
-                    </ToggleButton>
-                  </Tooltip>
-                </ToggleButtonGroup>
-              </FormGroup>
-            </GlobalViewControls>
-
-            <Stack direction="row" gap={1} alignItems="flex-start" sx={{ mt: 1 }}>
-              <Stack gap={0.5}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={handleApply}
-                  sx={{ alignSelf: "flex-start" }}
-                >
-                  <FormattedMessage {...messages.apply} />
-                </Button>
-                <Typography variant="caption" color="text.secondary">
-                  <FormattedMessage {...messages.applyHelper} />
-                </Typography>
-              </Stack>
-              <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
-                <Button
-                  variant="text"
-                  color="inherit"
-                  onClick={handleResetToDefaults}
-                  sx={{ alignSelf: "flex-start" }}
-                >
-                  <FormattedMessage {...messages.reset} />
-                </Button>
-              </Tooltip>
+          <Stack direction="row" gap={1} alignItems="flex-start" sx={{ mt: 1 }}>
+            <Stack gap={0.5}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleApply}
+                sx={{ alignSelf: "flex-start" }}
+              >
+                <FormattedMessage {...messages.apply} />
+              </Button>
+              <Typography variant="caption" color="text.secondary">
+                <FormattedMessage {...messages.applyHelper} />
+              </Typography>
             </Stack>
+            <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
+              <Button
+                variant="text"
+                color="inherit"
+                endIcon={<MdSettingsBackupRestore />}
+                onClick={handleResetToDefaults}
+                sx={{ alignSelf: "flex-start" }}
+              >
+                <FormattedMessage {...messages.reset} />
+              </Button>
+            </Tooltip>
           </Stack>
-        </Stack>
+        </SettingsPanelLayout>
       </Stack>
     );
   }

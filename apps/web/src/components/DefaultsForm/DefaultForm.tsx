@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Tooltip } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
@@ -17,6 +17,13 @@ import messages from "./DefaultForm.lang";
 import SettingCardFontGroup from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup";
 import { messages as fontGroupMessages } from "../SettingsCards/SettingCardFontGroup/SettingCardFontGroup.lang";
 import React, { Dispatch, SetStateAction } from "react";
+import { MdSettingsBackupRestore } from "react-icons/md";
+import {
+  SettingsPanelLayout,
+  SettingsPreviewFrame,
+  SectionTitle,
+  SettingsPanelHint,
+} from "../SettingsLayout";
 
 interface DefaultFormProps {
   font: Font;
@@ -39,8 +46,7 @@ interface DefaultFormProps {
   setNumbered: Dispatch<SetStateAction<boolean>>;
   onApplyAllColor: () => void;
   onApplyAllTextPosition: () => void;
-  onApplyAllSkin: () => void;
-  onApplyAllHair: () => void;
+  onApplyAllAppearance: () => void;
   onApplyAllBorderIn: () => void;
   onApplyAllBorderOut: () => void;
   onSubmit: () => void;
@@ -72,8 +78,7 @@ const DefaultForm = ({
   setNumbered,
   onApplyAllColor,
   onApplyAllTextPosition,
-  onApplyAllSkin,
-  onApplyAllHair,
+  onApplyAllAppearance,
   onApplyAllBorderIn,
   onApplyAllBorderOut,
   onSubmit,
@@ -116,32 +121,30 @@ const DefaultForm = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <Stack
-        display={"flex"}
-        direction={{ xs: "column", md: "row" }}
-        marginTop={1}
-        rowGap={2}
-        columnGap={2}
-        sx={{ alignItems: "flex-start" }}
+      <SettingsPanelLayout
+        preview={
+          // Excepció del patró de zones: mostra d'un sol Card sobre el panell.
+          // El card ja és paper blanc; el fons "paper" li fa de passe-partout
+          // perquè no es fongui amb el marc
+          <SettingsPreviewFrame background="paper" sx={{ padding: 1 }}>
+            <PictogramCard
+              pictogram={pictogramGuide}
+              defaults={defaults}
+              view="complete"
+              variant="plane"
+            />
+          </SettingsPreviewFrame>
+        }
       >
-        <Box
-          minWidth={200}
-          sx={{
-            position: { xs: "sticky", md: "static" },
-            top: { xs: 0, md: "auto" },
-            zIndex: { xs: 10, md: "auto" },
-            width: { xs: "100%", md: "auto" },
-          }}
-        >
-          <PictogramCard
-            pictogram={pictogramGuide}
-            defaults={defaults}
-            view="complete"
-            variant="plane"
-          />
-        </Box>
+        {/* Guia del tab: què s'ajusta aquí */}
+        <SettingsPanelHint>
+          <FormattedMessage {...messages.panelHint} />
+        </SettingsPanelHint>
 
-        <Stack direction="column" gap={2} sx={{ pt: 1 }}>
+        <SectionTitle
+          title={<FormattedMessage {...messages.sectionPictogram} />}
+          onApplyAll={onApplyAllColor}
+        >
           <SettingCardBoolean
             setting={"numbered"}
             state={numbered}
@@ -151,61 +154,68 @@ const DefaultForm = ({
             setting="color"
             state={color}
             setState={setColor}
-            onApplyAll={onApplyAllColor}
           />
+        </SectionTitle>
+
+        <SectionTitle
+          title={<FormattedMessage {...messages.sectionText} />}
+          onApplyAll={onApplyAllTextPosition}
+        >
           <SettingCard
             setting={"textPosition"}
             state={textPosition}
             setState={setTextPosition}
-            onApplyAll={onApplyAllTextPosition}
           />
-          <SettingCardFontGroup state={font} setState={setFont} />
-          {numbered && (
-            <SettingCardFontGroup
-              state={numberFont}
-              setState={setNumberFont}
-              title={<FormattedMessage {...fontGroupMessages.numberFont} />}
-            />
-          )}
-          <SettingCardBorder
-            border="borderOut"
-            state={borderOut}
-            setState={setBorderOut}
-            onApplyAll={onApplyAllBorderOut}
+        </SectionTitle>
+
+        {/* Les tipografies i les vores es titulen elles mateixes com a secció */}
+        <SettingCardFontGroup state={font} setState={setFont} />
+        {numbered && (
+          <SettingCardFontGroup
+            state={numberFont}
+            setState={setNumberFont}
+            title={<FormattedMessage {...fontGroupMessages.numberFont} />}
           />
-          <SettingCardBorder
-            border="borderIn"
-            state={borderIn}
-            setState={setBorderIn}
-            onApplyAll={onApplyAllBorderIn}
-          />
-          {color && (
-            <>
-              <SettingCard
-                setting={"skin"}
-                state={skin}
-                setState={setSkin}
-                onApplyAll={onApplyAllSkin}
-              />
-              <SettingCard
-                setting={"hair"}
-                state={hair}
-                setState={setHair}
-                onApplyAll={onApplyAllHair}
-              />
-            </>
-          )}
-          {onReset && (
-            <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
-              <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
-                <Button variant="text" color="inherit" onClick={onReset}>
-                  <FormattedMessage {...messages.reset} />
-                </Button>
-              </Tooltip>
-            </Box>
-          )}
-        </Stack>
-      </Stack>
+        )}
+
+        <SettingCardBorder
+          border="borderOut"
+          state={borderOut}
+          setState={setBorderOut}
+          onApplyAll={onApplyAllBorderOut}
+        />
+        <SettingCardBorder
+          border="borderIn"
+          state={borderIn}
+          setState={setBorderIn}
+          onApplyAll={onApplyAllBorderIn}
+        />
+
+        {color && (
+          <SectionTitle
+            title={<FormattedMessage {...messages.sectionAppearance} />}
+            onApplyAll={onApplyAllAppearance}
+          >
+            <SettingCard setting={"skin"} state={skin} setState={setSkin} />
+            <SettingCard setting={"hair"} state={hair} setState={setHair} />
+          </SectionTitle>
+        )}
+
+        {onReset && (
+          <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
+            <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
+              <Button
+                variant="text"
+                color="inherit"
+                endIcon={<MdSettingsBackupRestore />}
+                onClick={onReset}
+              >
+                <FormattedMessage {...messages.reset} />
+              </Button>
+            </Tooltip>
+          </Box>
+        )}
+      </SettingsPanelLayout>
     </form>
   );
 };

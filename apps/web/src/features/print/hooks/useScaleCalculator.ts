@@ -59,12 +59,14 @@ export function calculateDisplayDimensions(
     availableWidth = (dimensions.width * availableHeight) / dimensions.height;
   }
 
-  // Calcular escala basant-se en l'amplada
-  const scale = availableWidth / dimensions.width; // 24 = PRINT_CONTAINER_PADDING
+  // Limitar l'escala a 1.0 màxim: el preview mai pot ser més gran que la impressió real
+  const scale = Math.min(1, availableWidth / dimensions.width);
+  const displayWidth = scale * dimensions.width;
+  const displayHeight = scale * dimensions.height;
 
   return {
-    displayWidth: availableWidth,
-    displayHeight: availableHeight,
+    displayWidth,
+    displayHeight,
     scale,
   };
 }

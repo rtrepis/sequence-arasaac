@@ -1,21 +1,14 @@
-import { Divider, Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import SettingCardLang from "../../components/SettingsCards/SettingCardOptions/lang/SettingCardLang";
 import SettingCardLangAppToggle from "../../components/SettingsCards/SettingCardOptions/lang/SettingCardLangAppToggle";
 import SettingCardTheme from "../../components/SettingsCards/SettingCardTheme/SettingCardTheme";
+import {
+  SectionTitle,
+  SettingsPanelHint,
+} from "../../components/SettingsLayout";
 import messages from "./UserSettingsPanel.lang";
 import React from "react";
-
-const searchCardSx = { borderBottom: 0, width: "100%" };
-
-const SectionTitle = ({ message }: { message: (typeof messages)[keyof typeof messages] }) => (
-  <Stack direction="column" gap={0.5}>
-    <Typography variant="subtitle2" fontWeight="bold" color="text.secondary">
-      <FormattedMessage {...message} />
-    </Typography>
-    <Divider />
-  </Stack>
-);
 
 const UserSettingsPanel = (): React.ReactElement => (
   <Stack
@@ -23,12 +16,19 @@ const UserSettingsPanel = (): React.ReactElement => (
     gap={1}
     sx={{ pt: 1, maxWidth: 500, mx: "auto", width: "100%" }}
   >
-    <SectionTitle message={messages.sectionLanguage} />
-    <SettingCardLangAppToggle />
-    <SettingCardLang setting="languagesSearch" sx={searchCardSx} />
+    {/* Guia del tab: què s'ajusta aquí */}
+    <SettingsPanelHint>
+      <FormattedMessage {...messages.panelHint} />
+    </SettingsPanelHint>
 
-    <SectionTitle message={messages.sectionAppearance} />
-    <SettingCardTheme />
+    <SectionTitle title={<FormattedMessage {...messages.sectionLanguage} />}>
+      <SettingCardLangAppToggle />
+      <SettingCardLang setting="languagesSearch" />
+    </SectionTitle>
+
+    <SectionTitle title={<FormattedMessage {...messages.sectionAppearance} />}>
+      <SettingCardTheme />
+    </SectionTitle>
   </Stack>
 );
 

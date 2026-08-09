@@ -137,8 +137,23 @@
     "description": "Save settings to local file"
   },
   "components.defaultSettings.pictGuide": {
-    "defaultMessage": "Pictograma de guia",
+    "defaultMessage": "Previsualització",
     "description": "Pictogram pictogram for default settings"
+  },
+  "components.defaultSettings.panelHint": {
+    "defaultMessage": "Defineix com es veuran els pictogrames nous. Per aplicar els canvis als que ja hi ha a la seqüència, fes servir «Aplicar tots»."
+  },
+  "components.defaultSettings.sectionPictogram": {
+    "defaultMessage": "Pictograma",
+    "description": "Títol de la secció de numeració i color al panell de pictogrames"
+  },
+  "components.defaultSettings.sectionText": {
+    "defaultMessage": "Text i numeració",
+    "description": "Títol de la secció de posició de text i tipografies al panell de pictogrames"
+  },
+  "components.defaultSettings.sectionAppearance": {
+    "defaultMessage": "Aparença",
+    "description": "Títol de la secció de pell i cabell al panell de pictogrames"
   },
   "components.defaultSettings.settings.title": {
     "defaultMessage": "Configuracions",
@@ -163,6 +178,14 @@
   "components.viewSettingsPanel.panelDescription": {
     "defaultMessage": "Configura els valors de visualització per defecte en obrir la pàgina de vista.",
     "description": "Text explicatiu del panell de configuració de la vista"
+  },
+  "components.viewSettingsPanel.sectionPageFormat": {
+    "defaultMessage": "Format de pàgina",
+    "description": "Títol de la secció de format de pàgina al panell de vista"
+  },
+  "components.viewSettingsPanel.sectionPictograms": {
+    "defaultMessage": "Pictogrames",
+    "description": "Títol de la secció de mida i alineació de pictogrames al panell de vista"
   },
   "components.viewSettingsPanel.orientationLandscape": {
     "defaultMessage": "Horitzontal",
@@ -203,13 +226,85 @@
     "defaultMessage": "Idioma",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
-  "components.defaultSettings.vocabularyPanel.comingSoon": {
-    "defaultMessage": "Pròximament",
-    "description": "Missatge de pròximament al panel de vocabulari personal"
+  "components.defaultSettings.userPanel.panelHint": {
+    "defaultMessage": "Ajustos del teu compte: idioma de l'aplicació, idioma de cerca i tema. S'apliquen a tot arreu."
   },
-  "components.defaultSettings.vocabularyPanel.description": {
-    "defaultMessage": "Aquí podràs assignar un pictograma específic a qualsevol paraula.",
-    "description": "Descripció del panel de vocabulari personal"
+  "components.defaultSettings.vocabularyPanel.title": {
+    "defaultMessage": "Vocabulari personal"
+  },
+  "components.defaultSettings.vocabularyPanel.sectionWord": {
+    "defaultMessage": "Paraula",
+    "description": "Títol de la secció de paraula i llista del panell de vocabulari"
+  },
+  "components.defaultSettings.vocabularyPanel.sectionPictogram": {
+    "defaultMessage": "Pictograma",
+    "description": "Títol de la secció de cerca i aparença del pictograma al panell de vocabulari"
+  },
+  "components.defaultSettings.vocabularyPanel.wordInputLabel": {
+    "defaultMessage": "Paraula"
+  },
+  "components.defaultSettings.vocabularyPanel.wordInputPlaceholder": {
+    "defaultMessage": "p.ex. Òscar, Marta..."
+  },
+  "components.defaultSettings.vocabularyPanel.addButton": {
+    "defaultMessage": "Afegir"
+  },
+  "components.defaultSettings.vocabularyPanel.previewLabel": {
+    "defaultMessage": "Previsualització"
+  },
+  "components.defaultSettings.vocabularyPanel.duplicateWarning": {
+    "defaultMessage": "Aquesta paraula ja existeix i s'actualitzarà."
+  },
+  "components.defaultSettings.vocabularyPanel.updateButton": {
+    "defaultMessage": "Actualitzar"
+  },
+  "components.defaultSettings.vocabularyPanel.uploadImage": {
+    "defaultMessage": "Pujar imatge"
+  },
+  "components.defaultSettings.vocabularyPanel.removeImage": {
+    "defaultMessage": "Eliminar imatge"
+  },
+  "components.defaultSettings.vocabularyPanel.loginRequired": {
+    "defaultMessage": "Cal iniciar sessió per usar el vocabulari personal."
+  },
+  "components.defaultSettings.vocabularyPanel.freeLimitReached": {
+    "defaultMessage": "Has arribat al límit de {max} paraules del pla gratuït."
+  },
+  "components.defaultSettings.vocabularyPanel.cancelButton": {
+    "defaultMessage": "Cancel·lar"
+  },
+  "components.defaultSettings.vocabularyPanel.formHintNew": {
+    "defaultMessage": "Escriu la paraula, tria el seu pictograma i prem Afegir per desar-la al teu vocabulari."
+  },
+  "components.defaultSettings.vocabularyPanel.formHintEditing": {
+    "defaultMessage": "Estàs editant «{word}». Canvia el que calgui i prem Actualitzar."
+  },
+  "components.defaultSettings.vocabularyPanel.nameCollision": {
+    "defaultMessage": "«{word}» ja existeix. Tria una altra paraula o edita-la des de la llista."
+  },
+  "components.defaultSettings.vocabularyPanel.wordAdded": {
+    "defaultMessage": "«{word}» afegida al teu vocabulari."
+  },
+  "components.defaultSettings.vocabularyPanel.wordUpdated": {
+    "defaultMessage": "«{word}» actualitzada."
+  },
+  "components.defaultSettings.vocabularyPanel.wordRemoved": {
+    "defaultMessage": "«{word}» eliminada del teu vocabulari."
+  },
+  "features.wordProfile.list.title": {
+    "defaultMessage": "Les meves paraules ({count})"
+  },
+  "features.wordProfile.list.empty": {
+    "defaultMessage": "Encara no hi ha paraules. Fes servir el formulari per afegir-ne la primera."
+  },
+  "features.wordProfile.list.editLabel": {
+    "defaultMessage": "Editar {word}"
+  },
+  "features.wordProfile.list.deleteLabel": {
+    "defaultMessage": "Eliminar {word}"
+  },
+  "features.wordProfile.list.editingBadge": {
+    "defaultMessage": "Editant"
   },
   "components.logoMenu.download": {
     "defaultMessage": "Descarregar"
@@ -341,8 +436,37 @@
     "defaultMessage": "Inserir pictograma",
     "description": "Plus pictograms"
   },
-  "components.pictogramSearch.uploadImage": {
-    "defaultMessage": "Pujar imatge des del dispositiu"
+  "components.uploadImageButton.upload": {
+    "defaultMessage": "Puja una imatge teva",
+    "description": "Upload own image button"
+  },
+  "components.uploadImageButton.replace": {
+    "defaultMessage": "Canvia la imatge pujada",
+    "description": "Upload button when an image is already uploaded"
+  },
+  "components.uploadImageButton.remove": {
+    "defaultMessage": "Treu la imatge pujada",
+    "description": "Remove uploaded image button"
+  },
+  "components.uploadImageButton.loading": {
+    "defaultMessage": "S'està processant la imatge…",
+    "description": "Image is being converted and compressed"
+  },
+  "components.uploadImageButton.uploaded": {
+    "defaultMessage": "Imatge afegida",
+    "description": "Image successfully added"
+  },
+  "components.uploadImageButton.removed": {
+    "defaultMessage": "Imatge treta",
+    "description": "Image successfully removed"
+  },
+  "components.uploadImageButton.errorNotImage": {
+    "defaultMessage": "El fitxer no és una imatge",
+    "description": "Selected file is not an image"
+  },
+  "components.uploadImageButton.errorLoading": {
+    "defaultMessage": "No s'ha pogut carregar la imatge",
+    "description": "Generic image loading error"
   },
   "components.sequenceAuthor": {
     "defaultMessage": "Autor de la seqüència:",
@@ -387,6 +511,10 @@
   "components.settingCardBorder.selected.label": {
     "defaultMessage": "Selecció",
     "description": "type setting "
+  },
+  "components.settingCardBorder.type.title": {
+    "defaultMessage": "Tipus",
+    "description": "Títol de la fila de tipus de vora (Fitzgerald / color triat / sense vora)"
   },
   "components.settingCardBorder.withoutBorder.label": {
     "defaultMessage": "Sense línia",
@@ -1281,5 +1409,17 @@
   },
   "components.defaultSettings.tooltipReset": {
     "defaultMessage": "Restableix els valors de fàbrica"
+  },
+  "pages.viewSequence.section.pageFormat": {
+    "defaultMessage": "Format de pàgina",
+    "description": "Títol de la secció de format de pàgina a la columna de configuració de la vista"
+  },
+  "pages.viewSequence.section.sequences": {
+    "defaultMessage": "Seqüències",
+    "description": "Títol de la secció d'ajustos per seqüència a la columna de configuració de la vista"
+  },
+  "pages.viewSequence.section.printFooter": {
+    "defaultMessage": "Peu d'impressió",
+    "description": "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF"
   }
 }
