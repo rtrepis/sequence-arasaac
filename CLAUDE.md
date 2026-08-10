@@ -172,6 +172,14 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 - **L'enviament no bloqueja mai el registre.** El pla gratuït de Resend són 100 correus/dia: si s'esgota o el proveïdor falla, el compte s'ha de crear igualment i l'usuari ha de poder demanar el reenviament. Un dia dolent del correu no pot deixar el registre trencat.
 - Sense `RESEND_API_KEY` (desenvolupament) l'enllaç surt per consola: el flux es pot provar sencer sense gastar quota.
 
+### Desplegament: el front i l'API han d'anar al mateix origen
+
+- El front és a Vercel i l'API a Render, però **el navegador ha de veure-les al mateix origen**. Ho aconsegueix la regla `/api/:path*` de `apps/web/vercel.json`, que ha d'anar **sempre abans** del catch-all cap a `/index.html` (les regles s'avaluen en ordre; si el catch-all va primer, se les empassa totes i un `POST /api/...` retorna 405).
+- **No és per estalviar-se el CORS.** La cookie del refresh token va amb `sameSite: "strict"`; si el front és a `vercel.app` i l'API a `onrender.com`, el navegador la considera cookie de tercers i **no la desa mai**. Símptoma: el login sembla funcionar, però tanques la pestanya i has perdut la sessió. Amb el proxy la cookie és de primera part i la sessió sobreviu.
+- Per això mateix, **`VITE_API_URL` no ha d'estar definida a Vercel**. Si hi és amb la URL absoluta de Render, el client se salta el proxy i tornem al problema de la cookie. L'`apiClient` ja cau a `/api` per defecte, que és el que volem.
+- La via alternativa (`sameSite: "none"`) queda descartada: Safari bloqueja les cookies de tercers per defecte, i bona part dels usuaris d'AAC són en iPad.
+- **`MONGODB_URI` ha de portar el nom de la base de dades** (`.../sequence-arasaac?...`). Sense ell, Mongoose es connecta a `test` i l'aplicació arrenca tan tranquil·la contra una base de dades buida: els usuaris no hi són i tots els logins retornen 401. Ha passat dues vegades, en local i a Render.
+
 ### Panell d'administració
 
 - Ruta `/admin`, **fora de `LanguageLayout`** (sense `:locale`) i **només en català, sense `react-intl`**. És eina interna d'una sola persona i cinc fitxers de traducció no s'hi justifiquen. **És una excepció declarada, no un descuit.**
