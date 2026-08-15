@@ -1,6 +1,18 @@
 // Client HTTP centralitzat per a totes les crides al backend propi.
 // Gestiona automàticament els tokens JWT: injecció en headers i renovació en 401.
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
+import { notifyRequestEnd, notifyRequestStart } from "./backendStatus";
+
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    /**
+     * Petició que no neix d'una acció explícita de l'usuari (ping de desvetllament,
+     * restauració silenciosa de sessió en arrencar). No compta per a l'avís de
+     * "servidor despertant-se": ningú està esperant-la i anunciar-la seria soroll.
+     */
+    isBackgroundRequest?: boolean;
+  }
+}
 
 // Token en memòria (no accessible des de JS extern, protecció XSS)
 let accessToken: string | null = null;
@@ -11,19 +23,29 @@ export const setAccessToken = (token: string | null): void => {
 
 export const getAccessToken = (): string | null => accessToken;
 
+// Marge ampli a propòsit: un desvetllament de Render pot vorejar el minut i tallar-lo
+// convertiria una espera llarga en un error, just quan el servidor ja anava a respondre.
+const REQUEST_TIMEOUT_MS = 90_000;
+
 const apiClient: AxiosInstance = axios.create({
   // En dev, Vite proxeja /api → http://localhost:3000. En prod, usa VITE_API_URL si està definida.
   baseURL: import.meta.env.VITE_API_URL ?? "/api",
   withCredentials: true, // Necessari per enviar/rebre la cookie httpOnly del refresh token
+  timeout: REQUEST_TIMEOUT_MS,
 });
 
-// Interceptor de request: afegeix el Bearer token si existeix
-apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
-  return config;
-});
+// Interceptor de request: afegeix el Bearer token si existeix i obre el comptatge
+// de peticions en vol que alimenta l'avís de desvetllament
+apiClient.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    if (!config.isBackgroundRequest) notifyRequestStart();
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
 
 // Variable per evitar bucles infinits de refresh
 let isRefreshing = false;
@@ -45,9 +67,18 @@ const processQueue = (error: unknown, token: string | null): void => {
 
 // Interceptor de response: si 401, intenta renovar el token i reintenta la petició original
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (!response.config.isBackgroundRequest) notifyRequestEnd();
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
+
+    // Es tanca aquí, abans de qualsevol reintent: el reintent torna a passar pel
+    // interceptor de request i obre el seu propi comptatge.
+    if (originalRequest && !originalRequest.isBackgroundRequest) {
+      notifyRequestEnd();
+    }
 
     // Evitar loop infinit i no interceptar errors d'autenticació intencionats
     // Les rutes /auth/* gestionen els seus propis errors — mai cal renovar el token aquí

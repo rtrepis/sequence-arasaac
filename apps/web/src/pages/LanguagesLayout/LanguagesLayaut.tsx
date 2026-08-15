@@ -3,6 +3,7 @@ import { IntlProvider } from "react-intl";
 import { Navigate, Outlet, useParams } from "react-router-dom";
 import BarNavigation from "@/components/BarNavigation/BarNavigation";
 import EmailVerificationBanner from "@features/backend/auth/components/EmailVerificationBanner";
+import BackendWakeUpNotice from "@features/backend/api/BackendWakeUpNotice";
 import { messageLocale } from "@/App";
 
 const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
@@ -23,6 +24,9 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
             tant a l'editor com al visualitzador sense duplicar-lo */}
         <EmailVerificationBanner />
         <Outlet />
+        {/* Va al layout i no a index.tsx perquè necessita l'IntlProvider, i aquest és
+            l'únic lloc de l'app on l'usuari fa crides al backend (entrar, desar, carregar) */}
+        <BackendWakeUpNotice />
       </BarNavigation>
     </IntlProvider>
   );

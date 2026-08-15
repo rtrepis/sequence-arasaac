@@ -1,7 +1,7 @@
 // Punt d'entrada del servidor Express
 // Configura middleware global, rutes i arrenca el servidor
 
-import express from "express";
+import express, { RequestHandler } from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
@@ -48,10 +48,14 @@ app.use("/api", globalLimiter);
 
 // --- Rutes ---
 
-// Endpoint de salut — comprova que el servidor és actiu
-app.get("/health", (_req, res) => {
+// Endpoint de salut — comprova que el servidor és actiu.
+// Es publica també sota /api perquè el front hi pugui arribar: el rewrite de Vercel
+// només reenvia /api/:path*, i el ping de desvetllament (warmUpBackend) el necessita.
+const healthHandler: RequestHandler = (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
-});
+};
+app.get("/health", healthHandler);
+app.get("/api/health", healthHandler);
 
 // Rutes d'autenticació
 app.use("/api/auth", authRouter);

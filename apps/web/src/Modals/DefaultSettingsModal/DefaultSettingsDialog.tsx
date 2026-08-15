@@ -24,9 +24,8 @@ import ViewSettingsPanel from "./ViewSettingsPanel";
 import VocabularySettingsPanel from "./VocabularySettingsPanel";
 import { Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { saveUserUiThunk } from "../../features/backend/user-settings/store/settingsThunks";
-import { useFeedback } from "../../context/FeedbackContext/FeedbackContext";
-import messagesUser from "./UserSettingsPanel.lang";
+import { useSaveUiSettings } from "../../features/backend/user-settings/hooks/useSaveUiSettings";
+import SettingsSaveErrorDialog from "./SettingsSaveErrorDialog";
 import React from "react";
 
 import { SettingsTab } from "../../types/ui";
@@ -61,8 +60,9 @@ const Transition = forwardRef(function Transition(
 const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { showSnackbar } = useFeedback();
   const activeTab = useAppSelector((state) => state.ui.settingsActiveTab);
+  const { saveInBackground, retry, hasFailed, isRetrying, dismissError } =
+    useSaveUiSettings();
 
   const handleTabChange = (_: React.SyntheticEvent, value: SettingsTab) => {
     dispatch(updateSettingsActiveTabActionCreator(value));
@@ -70,22 +70,21 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
   const pictPanelRef = useRef<DefaultSettingsPanelHandle>(null);
   const viewPanelRef = useRef<DefaultSettingsPanelHandle>(null);
 
-  const handleClose = async () => {
+  const handleClose = () => {
     // Sincronitza l'estat local dels formularis al Redux (dispatch síncron)
     pictPanelRef.current?.syncToRedux();
     viewPanelRef.current?.syncToRedux();
-    // Una sola crida amb tota la configuració de l'usuari
-    const result = await dispatch(saveUserUiThunk());
-    if (saveUserUiThunk.fulfilled.match(result)) {
-      showSnackbar({ message: intl.formatMessage(messagesUser.saveSuccess), severity: "success" });
-    } else {
-      showSnackbar({ message: intl.formatMessage(messagesUser.saveError), severity: "error" });
-    }
+    // El modal es tanca a l'instant: el que l'usuari veu ja surt de Redux i no depèn
+    // de la xarxa. Amb el servidor de Render adormit, esperar el desat aquí deixava
+    // la creu sense resposta fins a mig minut, sense cap explicació.
     onClose();
+    // Una sola crida amb tota la configuració de l'usuari, ja en segon pla
+    saveInBackground();
   };
 
   return (
-    <Dialog
+    <>
+      <Dialog
       fullScreen
       open={open}
       onClose={handleClose}
@@ -154,7 +153,18 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
 
         {activeTab === "vocabulary" && <VocabularySettingsPanel />}
       </Container>
-    </Dialog>
+      </Dialog>
+
+      {/* Fora del Dialog: MUI desmunta els fills en tancar-lo, i aquest avís neix
+          justament quan el modal ja s'ha tancat. Viu aquí i no al pare perquè els dos
+          punts de muntatge (engranatge de la barra i menú lateral) el comparteixin. */}
+      <SettingsSaveErrorDialog
+        open={hasFailed}
+        isRetrying={isRetrying}
+        onRetry={retry}
+        onDismiss={dismissError}
+      />
+    </>
   );
 };
 

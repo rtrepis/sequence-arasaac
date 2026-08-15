@@ -1496,5 +1496,26 @@
   },
   "features.backend.auth.verification.verifying": {
     "defaultMessage": "Estem verificant la teva adreça…"
+  },
+  "features.backend.wakeUp.title": {
+    "defaultMessage": "Estem despertant el servidor…"
+  },
+  "features.backend.wakeUp.description": {
+    "defaultMessage": "Pot trigar fins a un minut. Mentrestant pots seguir editant la seqüència."
+  },
+  "components.defaultSettings.saveError.title": {
+    "defaultMessage": "No hem pogut desar la configuració"
+  },
+  "components.defaultSettings.saveError.bodyCloud": {
+    "defaultMessage": "Els canvis es veuen a la pantalla, però no s'han desat al teu compte: si tanques l'aplicació ara, els perdràs. Sovint és perquè el servidor s'estava despertant i ha trigat massa a respondre."
+  },
+  "components.defaultSettings.saveError.bodyLocal": {
+    "defaultMessage": "Els canvis es veuen a la pantalla, però no s'han pogut desar en aquest navegador: si tanques l'aplicació ara, els perdràs."
+  },
+  "components.defaultSettings.saveError.retry": {
+    "defaultMessage": "Torna-ho a provar"
+  },
+  "components.defaultSettings.saveError.dismiss": {
+    "defaultMessage": "Ara no"
   }
 }

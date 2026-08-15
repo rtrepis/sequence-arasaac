@@ -1496,5 +1496,26 @@
   },
   "features.backend.auth.verification.verifying": {
     "defaultMessage": "Estamos verificando tu dirección…"
+  },
+  "features.backend.wakeUp.title": {
+    "defaultMessage": "Estamos despertando el servidor…"
+  },
+  "features.backend.wakeUp.description": {
+    "defaultMessage": "Puede tardar hasta un minuto. Mientras tanto puedes seguir editando la secuencia."
+  },
+  "components.defaultSettings.saveError.title": {
+    "defaultMessage": "No hemos podido guardar la configuración"
+  },
+  "components.defaultSettings.saveError.bodyCloud": {
+    "defaultMessage": "Los cambios se ven en la pantalla, pero no se han guardado en tu cuenta: si cierras la aplicación ahora, los perderás. A menudo es porque el servidor se estaba despertando y ha tardado demasiado en responder."
+  },
+  "components.defaultSettings.saveError.bodyLocal": {
+    "defaultMessage": "Los cambios se ven en la pantalla, pero no se han podido guardar en este navegador: si cierras la aplicación ahora, los perderás."
+  },
+  "components.defaultSettings.saveError.retry": {
+    "defaultMessage": "Inténtalo de nuevo"
+  },
+  "components.defaultSettings.saveError.dismiss": {
+    "defaultMessage": "Ahora no"
   }
 }

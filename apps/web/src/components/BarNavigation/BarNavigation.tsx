@@ -15,7 +15,8 @@ import LogoMenu from "../LogoMenu/LogoMenu";
 import { useLocation } from "react-router-dom";
 
 interface BarProps {
-  children: React.ReactElement;
+  // ReactNode i no ReactElement: com a layout rep diversos fills (avisos + Outlet)
+  children: React.ReactNode;
 }
 
 /**
@@ -71,7 +72,9 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
         <FormattedMessage {...messages.skipToContent} />
       </a>
       <NotPrint>
-        <HideOnScroll {...children}>
+        {/* HideOnScroll només consumeix el seu propi fill (l'AppBar); escampar-hi
+            els children del layout no hi arribava a fer res */}
+        <HideOnScroll>
           <AppBar elevation={1} sx={{ height: "42px" }}>
             <Toolbar
               style={{ minHeight: "50px" }}
