@@ -6,6 +6,10 @@ import type {
   PictSequence,
   Sequence,
   SequenceViewSettings,
+  SequenceAlignmentH,
+  SequenceAlignmentV,
+  SequenceAlignmentLegacy,
+  FitzgeraldColorLegacy,
   DefaultSettings,
 } from "@sequence-arasaac/shared-types";
 import type { DocumentSAAC } from "@sequence-arasaac/shared-types";
@@ -61,12 +65,10 @@ const pictApiAraSettingsDocSchema = new Schema(
       type: String,
       enum: ["asian", "aztec", "black", "mulatto", "white"],
     },
-    fitzgerald: {
-      type: new Schema(
-        { value: { type: String }, color: { type: String } },
-        { _id: false }
-      ),
-    },
+    // Mixed i no String: el client sempre hi ha escrit un color hexadecimal, però a la
+    // base de dades hi pot haver l'objecte { value, color } d'abans. Amb String, llegir
+    // un document antic petaria en hidratar-lo; la normalització es fa al serialitzar.
+    fitzgerald: { type: Schema.Types.Mixed },
     color: { type: Boolean },
   },
   { _id: false }
@@ -110,16 +112,19 @@ const pictSequenceDocSchema = new Schema(
   { _id: false }
 );
 
-// Sub-schema per a SequenceViewSettings
+// Sub-schema per a SequenceViewSettings.
+// Els dos camps d'alineació no són `required` i el camp antic `alignment` es manté
+// declarat: un camp que l'esquema no declara no arriba a existir al document hidratat,
+// i sense ell no hi hauria res a traduir en llegir un document desat abans de separar
+// l'alineació en horitzontal i vertical.
 const sequenceViewSettingsSchema = new Schema(
   {
     sizePict: { type: Number, required: true },
     pictSpaceBetween: { type: Number, required: true },
-    alignment: {
-      type: String,
-      enum: ["left", "center", "right"],
-      required: true,
-    },
+    alignmentH: { type: String, enum: ["left", "center", "right"] },
+    alignmentV: { type: String, enum: ["top", "center", "bottom"] },
+    // Llegat: només el llegeixen els documents antics. Res de nou l'escriu.
+    alignment: { type: String, enum: ["left", "center", "right"] },
   },
   { _id: false }
 );
@@ -168,6 +173,60 @@ const documentSchema = new Schema<IDocument>(
 
 export const DocumentModel = model<IDocument>("Document", documentSchema);
 
+// --- Normalització de formats antics en llegir ---
+//
+// El client només entén el format actual. Traduir aquí, en un sol punt de sortida,
+// estalvia que cada pantalla hagi de conèixer la història del model de dades.
+
+// Valor d'alineació vertical per als documents anteriors a la separació H/V:
+// abans només es podia alinear horitzontalment, i a dalt és el que es veia.
+const LEGACY_ALIGNMENT_V: SequenceAlignmentV = "top";
+const LEGACY_ALIGNMENT_H: SequenceAlignmentH = "left";
+
+interface LegacyViewSettings extends Partial<SequenceViewSettings> {
+  sizePict: number;
+  pictSpaceBetween: number;
+  alignment?: SequenceAlignmentLegacy;
+}
+
+const normalizeViewSettings = (
+  viewSettings: Record<string, LegacyViewSettings>
+): { [key: number]: SequenceViewSettings } => {
+  const normalized: Record<string, SequenceViewSettings> = {};
+
+  for (const [key, settings] of Object.entries(viewSettings)) {
+    const { alignment, alignmentH, alignmentV, ...rest } = settings;
+    normalized[key] = {
+      ...rest,
+      alignmentH: alignmentH ?? alignment ?? LEGACY_ALIGNMENT_H,
+      alignmentV: alignmentV ?? LEGACY_ALIGNMENT_V,
+    };
+  }
+
+  return normalized as { [key: number]: SequenceViewSettings };
+};
+
+// El fitzgerald d'un pictograma pot ser al document com l'objecte { value, color }
+// d'abans; el client espera el color hexadecimal i prou.
+const normalizeContent = (
+  content: Record<string, PictSequence[]>
+): { [key: number]: Sequence } => {
+  for (const sequences of Object.values(content)) {
+    for (const pict of sequences) {
+      const fitzgerald = pict.img?.settings?.fitzgerald as
+        | string
+        | FitzgeraldColorLegacy
+        | undefined;
+
+      if (fitzgerald && typeof fitzgerald === "object") {
+        pict.img.settings.fitzgerald = fitzgerald.color;
+      }
+    }
+  }
+
+  return content as { [key: number]: Sequence };
+};
+
 // Converteix un document Mongoose a DocumentSAAC per a la resposta JSON
 // flattenMaps: true transforma les Maps de Mongoose a objectes plans
 export const serializeDocument = (doc: IDocument): DocumentSAAC => {
@@ -175,10 +234,12 @@ export const serializeDocument = (doc: IDocument): DocumentSAAC => {
   return {
     id: String(obj._id),
     title: obj.title as string | undefined,
-    content: (obj.content ?? {}) as { [key: number]: Sequence },
-    viewSettings: (obj.viewSettings ?? {}) as {
-      [key: number]: SequenceViewSettings;
-    },
+    content: normalizeContent(
+      (obj.content ?? {}) as Record<string, PictSequence[]>
+    ),
+    viewSettings: normalizeViewSettings(
+      (obj.viewSettings ?? {}) as Record<string, LegacyViewSettings>
+    ),
     activeSAAC: obj.activeSAAC as number,
     order: obj.order as number[] | undefined,
     author: obj.author as string | undefined,

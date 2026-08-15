@@ -2,6 +2,7 @@
 // Delega tota la lògica al service — el controller només gestiona req/res
 
 import { Request, Response, NextFunction } from "express";
+import type { ZodError } from "zod";
 import type { AppError } from "../../middleware/errorHandler";
 import { createDocumentSchema, updateDocumentSchema } from "./validators";
 import {
@@ -11,6 +12,25 @@ import {
   updateDocument as updateDocumentService,
   deleteDocument as deleteDocumentService,
 } from "./service";
+
+// Converteix una fallada de Zod en un error de l'API.
+//
+// Porta errorCode propi: sense ell, l'errorHandler retornava "UNKNOWN_ERROR" i el client
+// es quedava sense saber ni que era un problema de format. El camí i el motiu concrets
+// van al log del servidor i no a la resposta: al client no li serveixen de res i
+// descriuen l'estructura interna.
+const validationError = (error: ZodError): AppError => {
+  const issue = error.errors[0];
+  console.error(
+    "[DOC] validació rebutjada:",
+    issue ? `${issue.path.join(".")}: ${issue.message}` : "sense detall"
+  );
+
+  const appError = new Error("Dades invàlides") as AppError;
+  appError.statusCode = 400;
+  appError.errorCode = "DOCUMENT_INVALID_FORMAT";
+  return appError;
+};
 
 // Helper per verificar que l'usuari autenticat és present
 // authMiddleware garanteix userId, però TypeScript ho requereix explícitament
@@ -56,25 +76,14 @@ export const createDocument = async (
     const userId = requireUserId(req, next);
     if (!userId) return;
 
-    console.log("[DOC] createDocument - userId:", userId);
-    console.log("[DOC] createDocument - body rebut:", JSON.stringify(req.body, null, 2));
-
     const parsed = createDocumentSchema.safeParse(req.body);
     if (!parsed.success) {
-      console.log("[DOC] createDocument - validació fallida:", JSON.stringify(parsed.error.errors, null, 2));
-      const error = new Error(
-        parsed.error.errors[0]?.message ?? "Dades invàlides"
-      ) as AppError;
-      error.statusCode = 400;
-      return next(error);
+      return next(validationError(parsed.error));
     }
 
-    console.log("[DOC] createDocument - dades validades OK");
     const document = await createDocumentService(userId, parsed.data);
-    console.log("[DOC] createDocument - document creat:", document.id);
     res.status(201).json(document);
   } catch (err) {
-    console.log("[DOC] createDocument - error inesperat:", err);
     next(err);
   }
 };
@@ -108,25 +117,14 @@ export const updateDocument = async (
     const userId = requireUserId(req, next);
     if (!userId) return;
 
-    console.log("[DOC] updateDocument - userId:", userId, "| id:", req.params.id);
-    console.log("[DOC] updateDocument - body rebut:", JSON.stringify(req.body, null, 2));
-
     const parsed = updateDocumentSchema.safeParse(req.body);
     if (!parsed.success) {
-      console.log("[DOC] updateDocument - validació fallida:", JSON.stringify(parsed.error.errors, null, 2));
-      const error = new Error(
-        parsed.error.errors[0]?.message ?? "Dades invàlides"
-      ) as AppError;
-      error.statusCode = 400;
-      return next(error);
+      return next(validationError(parsed.error));
     }
 
-    console.log("[DOC] updateDocument - dades validades OK");
     const document = await updateDocumentService(userId, req.params.id, parsed.data);
-    console.log("[DOC] updateDocument - document actualitzat:", document.id);
     res.status(200).json(document);
   } catch (err) {
-    console.log("[DOC] updateDocument - error inesperat:", err);
     next(err);
   }
 };

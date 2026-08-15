@@ -1517,5 +1517,8 @@
   },
   "components.defaultSettings.saveError.dismiss": {
     "defaultMessage": "Ara no"
+  },
+  "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
+    "defaultMessage": "El servidor no ha entès el format d'aquesta seqüència. Descarrega-la al teu dispositiu per no perdre-la i avisa'ns."
   }
 }

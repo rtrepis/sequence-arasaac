@@ -200,9 +200,6 @@ export const createDocument = async (
   userId: string,
   input: CreateDocumentInput
 ): Promise<DocumentSAAC> => {
-  console.log("[DOC][DB] createDocument - userId:", userId);
-  console.log("[DOC][DB] createDocument - input keys:", Object.keys(input));
-
   await assertWithinQuota(userId, estimateIncomingBytes(input.content), true);
 
   const uploaded = await extractAndUploadBase64Images(userId, input.content);
@@ -212,7 +209,6 @@ export const createDocument = async (
   }));
 
   const doc = await DocumentModel.create({ userId, ...input, assets });
-  console.log("[DOC][DB] createDocument - document creat a DB, id:", String(doc._id));
 
   await applyUsageDelta(userId, {
     documents: 1,
@@ -246,25 +242,14 @@ export const updateDocument = async (
   id: string,
   input: UpdateDocumentInput
 ): Promise<DocumentSAAC> => {
-  console.log("[DOC][DB] updateDocument - userId:", userId, "| id:", id);
-  console.log("[DOC][DB] updateDocument - input keys:", Object.keys(input));
-
   // Primer verifiquem ownership
   const existing = await DocumentModel.findById(id);
   if (!existing) {
-    console.log("[DOC][DB] updateDocument - document NO trobat a DB");
     throw notFound();
   }
   if (existing.userId.toString() !== userId) {
-    console.log(
-      "[DOC][DB] updateDocument - ownership KO: doc.userId =",
-      existing.userId.toString(),
-      "!= userId =",
-      userId
-    );
     throw notFound();
   }
-  console.log("[DOC][DB] updateDocument - ownership OK, actualitzant...");
 
   await assertWithinQuota(userId, estimateIncomingBytes(input.content), false);
 
@@ -305,11 +290,8 @@ export const updateDocument = async (
 
   // No hauria d'arribar aquí, però TypeScript ho requereix
   if (!updated) {
-    console.log("[DOC][DB] updateDocument - error: document desaparegut durant update");
     throw notFound();
   }
-
-  console.log("[DOC][DB] updateDocument - actualitzat correctament");
 
   await applyUsageDelta(userId, {
     storageBytes: sumBytes(newAssets) - sumBytes(orphanAssets),

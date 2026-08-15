@@ -1517,5 +1517,8 @@
   },
   "components.defaultSettings.saveError.dismiss": {
     "defaultMessage": "Pas maintenant"
+  },
+  "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
+    "defaultMessage": "Le serveur n'a pas compris le format de cette séquence. Téléchargez-la sur votre appareil pour ne pas la perdre et prévenez-nous."
   }
 }

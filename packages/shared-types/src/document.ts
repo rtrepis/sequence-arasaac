@@ -1,12 +1,20 @@
 import { Sequence } from "./sequence";
 import { DefaultSettings } from "./ui";
 
-export type SequenceAlignment = "left" | "center" | "right";
+export type SequenceAlignmentH = "left" | "center" | "right";
+export type SequenceAlignmentV = "top" | "center" | "bottom";
+
+/**
+ * Alineació d'abans de separar horitzontal i vertical. Només es conserva per poder
+ * llegir documents desats amb el format antic; res de nou l'ha d'escriure.
+ */
+export type SequenceAlignmentLegacy = SequenceAlignmentH;
 
 export interface SequenceViewSettings {
   sizePict: number;
   pictSpaceBetween: number;
-  alignment: SequenceAlignment;
+  alignmentH: SequenceAlignmentH;
+  alignmentV: SequenceAlignmentV;
 }
 
 export interface DocumentSAAC {
