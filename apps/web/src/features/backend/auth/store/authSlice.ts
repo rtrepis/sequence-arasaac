@@ -159,7 +159,9 @@ export const refreshSessionThunk = createAsyncThunk(
   "auth/refreshSession",
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const { accessToken } = await authService.refreshToken();
+      // De fons: aquesta crida surt sola en arrencar l'app i, de passada, ja desperta
+      // el servidor de Render abans que l'usuari en necessiti res.
+      const { accessToken } = await authService.refreshToken(true);
       setAccessToken(accessToken);
       const payload = JSON.parse(atob(accessToken.split(".")[1])) as {
         userId: string;

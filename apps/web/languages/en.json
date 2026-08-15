@@ -1496,5 +1496,29 @@
   },
   "features.backend.auth.verification.verifying": {
     "defaultMessage": "We're verifying your address…"
+  },
+  "features.backend.wakeUp.title": {
+    "defaultMessage": "Waking up the server…"
+  },
+  "features.backend.wakeUp.description": {
+    "defaultMessage": "It may take up to a minute. Meanwhile you can keep editing your sequence."
+  },
+  "components.defaultSettings.saveError.title": {
+    "defaultMessage": "We couldn't save your settings"
+  },
+  "components.defaultSettings.saveError.bodyCloud": {
+    "defaultMessage": "The changes are visible on screen, but they haven't been saved to your account: if you close the app now, you'll lose them. This usually happens because the server was waking up and took too long to answer."
+  },
+  "components.defaultSettings.saveError.bodyLocal": {
+    "defaultMessage": "The changes are visible on screen, but they couldn't be saved in this browser: if you close the app now, you'll lose them."
+  },
+  "components.defaultSettings.saveError.retry": {
+    "defaultMessage": "Try again"
+  },
+  "components.defaultSettings.saveError.dismiss": {
+    "defaultMessage": "Not now"
+  },
+  "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
+    "defaultMessage": "The server didn't understand this sequence's format. Download it to your device so you don't lose it, and let us know."
   }
 }

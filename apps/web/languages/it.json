@@ -1496,5 +1496,29 @@
   },
   "features.backend.auth.verification.verifying": {
     "defaultMessage": "Stiamo verificando il tuo indirizzo…"
+  },
+  "features.backend.wakeUp.title": {
+    "defaultMessage": "Stiamo risvegliando il server…"
+  },
+  "features.backend.wakeUp.description": {
+    "defaultMessage": "Può richiedere fino a un minuto. Nel frattempo puoi continuare a modificare la sequenza."
+  },
+  "components.defaultSettings.saveError.title": {
+    "defaultMessage": "Non siamo riusciti a salvare la configurazione"
+  },
+  "components.defaultSettings.saveError.bodyCloud": {
+    "defaultMessage": "Le modifiche sono visibili sullo schermo, ma non sono state salvate nel tuo account: se chiudi l'applicazione ora, le perderai. Spesso succede perché il server si stava risvegliando e ha impiegato troppo tempo a rispondere."
+  },
+  "components.defaultSettings.saveError.bodyLocal": {
+    "defaultMessage": "Le modifiche sono visibili sullo schermo, ma non è stato possibile salvarle in questo browser: se chiudi l'applicazione ora, le perderai."
+  },
+  "components.defaultSettings.saveError.retry": {
+    "defaultMessage": "Riprova"
+  },
+  "components.defaultSettings.saveError.dismiss": {
+    "defaultMessage": "Non ora"
+  },
+  "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
+    "defaultMessage": "Il server non ha compreso il formato di questa sequenza. Scaricala sul tuo dispositivo per non perderla e avvisaci."
   }
 }

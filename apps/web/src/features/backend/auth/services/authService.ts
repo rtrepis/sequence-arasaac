@@ -34,8 +34,14 @@ export const logout = async (): Promise<void> => {
   await apiClient.post("/auth/logout");
 };
 
-export const refreshToken = async (): Promise<AuthResponse> => {
-  const { data } = await apiClient.post<AuthResponse>("/auth/refresh");
+// isBackgroundRequest: cert quan el refresc és la restauració silenciosa d'arrencada,
+// que ningú ha demanat i, per tant, no ha d'encendre l'avís de servidor despertant-se.
+export const refreshToken = async (
+  isBackgroundRequest = false,
+): Promise<AuthResponse> => {
+  const { data } = await apiClient.post<AuthResponse>("/auth/refresh", null, {
+    isBackgroundRequest,
+  });
   return data;
 };
 

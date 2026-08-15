@@ -237,6 +237,13 @@ const messages = defineMessages({
     defaultMessage: "No s'ha pogut desar el document. Torna-ho a provar.",
     description: "Error genèric en desar un document al núvol",
   },
+  DOCUMENT_INVALID_FORMAT: {
+    id: "features.backend.auth.error.DOCUMENT_INVALID_FORMAT",
+    defaultMessage:
+      "El servidor no ha entès el format d'aquesta seqüència. Descarrega-la al teu dispositiu per no perdre-la i avisa'ns.",
+    description:
+      "Error en desar: el document no ha passat la validació del servidor",
+  },
   AUTH_ERROR: {
     id: "features.backend.auth.error.AUTH_ERROR",
     defaultMessage: "S'ha produït un error en iniciar sessió. Torna-ho a intentar.",

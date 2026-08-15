@@ -10,15 +10,11 @@ import {
 
 // --- Sub-schemas Zod per a PictSequence ---
 
-const fitzgeraldColorZodSchema = z.object({
-  value: z.string(),
-  color: z.string(),
-});
-
 const pictApiAraSettingsZodSchema = z.object({
   hair: z.string().optional(),
   skin: z.string().optional(),
-  fitzgerald: fitzgeraldColorZodSchema.optional(),
+  // Color hexadecimal, no objecte: és el que el client escriu des de sempre
+  fitzgerald: z.string().optional(),
   color: z.boolean().optional(),
 });
 
@@ -54,11 +50,15 @@ const pictSequenceZodSchema = z.object({
   settings: pictSequenceSettingsZodSchema,
 });
 
-// Sub-schema Zod per a SequenceViewSettings
+// Sub-schema Zod per a SequenceViewSettings.
+// L'alineació va passar de ser un sol camp a dos (horitzontal i vertical); l'entrada
+// només accepta el format nou, que és l'únic que el client escriu. La lectura de
+// documents antics es resol al model, no aquí.
 const sequenceViewSettingsZodSchema = z.object({
   sizePict: z.number(),
   pictSpaceBetween: z.number(),
-  alignment: z.enum(["left", "center", "right"]),
+  alignmentH: z.enum(["left", "center", "right"]),
+  alignmentV: z.enum(["top", "center", "bottom"]),
 });
 
 // --- Esquemes principals per a crear i actualitzar documents ---

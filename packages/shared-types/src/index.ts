@@ -12,10 +12,13 @@ export type {
   Skin,
   Hair,
   PictApiAraSettings,
+  FitzgeraldColorLegacy,
   Languages,
 } from "./sequence";
 export type {
-  SequenceAlignment,
+  SequenceAlignmentH,
+  SequenceAlignmentV,
+  SequenceAlignmentLegacy,
   SequenceViewSettings,
   DocumentSAAC,
 } from "./document";

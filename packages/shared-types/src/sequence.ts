@@ -69,7 +69,11 @@ export type Hair =
   | "darkGray"
   | "red";
 
-export interface FitzgeraldColor {
+/**
+ * Parell etiqueta/color de la classificació de Fitzgerald. Només es conserva per poder
+ * llegir documents desats quan el camp era un objecte; res de nou l'ha d'escriure.
+ */
+export interface FitzgeraldColorLegacy {
   value: string;
   color: string;
 }
@@ -77,7 +81,9 @@ export interface FitzgeraldColor {
 export interface PictApiAraSettings {
   hair?: Hair;
   skin?: Skin;
-  fitzgerald?: FitzgeraldColor;
+  // El color hexadecimal directament: és el que el front escriu i el que consumeix
+  // fitzgeraldToBorder per pintar la vora del pictograma
+  fitzgerald?: string;
   color?: boolean;
 }
 
