@@ -56,7 +56,7 @@ const syncSettingsAfterAuth = async (
   try {
     const { lang, theme, defaultSettings, viewSettings, wordProfiles, tier, emailVerified, role } = await getUiSettings();
     dispatch(updateDefaultSettingsActionCreator(defaultSettings));
-    dispatch(updateLangSettingsActionCreator({ app: lang.app, search: lang.search, keywords: [] }));
+    dispatch(updateLangSettingsActionCreator({ app: lang.app, search: lang.search }));
     dispatch(updateThemeActionCreator(theme ?? "system"));
     if (viewSettings) dispatch(viewSettingsActionCreator(viewSettings));
     if (wordProfiles) dispatch(setWordProfilesActionCreator(wordProfiles));
@@ -84,7 +84,7 @@ const restoreAnonymousSettings = (dispatch: (action: unknown) => void): void => 
   if (storedUi) {
     dispatch(updateDefaultSettingsActionCreator(storedUi.defaultSettings));
     dispatch(updateThemeActionCreator(storedUi.theme));
-    dispatch(updateLangSettingsActionCreator({ app: storedUi.lang.app, search: storedUi.lang.search, keywords: [] }));
+    dispatch(updateLangSettingsActionCreator({ app: storedUi.lang.app, search: storedUi.lang.search }));
     if (storedUi.viewSettings) dispatch(viewSettingsActionCreator(storedUi.viewSettings));
     return;
   }
@@ -94,7 +94,7 @@ const restoreAnonymousSettings = (dispatch: (action: unknown) => void): void => 
   const appLang = langTranslateApp.includes(localeBrowser as LangsApp)
     ? (localeBrowser as LangsApp)
     : "en";
-  dispatch(updateLangSettingsActionCreator({ app: appLang, search: appLang, keywords: [] }));
+  dispatch(updateLangSettingsActionCreator({ app: appLang, search: appLang }));
   dispatch(updateThemeActionCreator("system"));
 };
 

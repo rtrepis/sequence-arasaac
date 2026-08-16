@@ -94,9 +94,24 @@ const uiSlice = createSlice({
   name: "uiState",
   initialState: uiInitialState,
   reducers: {
-    updateLangSetting: (previousUi, action: PayloadAction<Ui["lang"]>) => ({
+    // Només els idiomes: les keywords són dades d'ARASAAC que carrega
+    // useArasaacKeywords, i qui canvia l'idioma no en sap res.
+    //
+    // Abans el payload les portava (sempre buides) i les esborrava. Quan la
+    // resposta de la sessió arribava després d'haver-les carregat —cosa que passa
+    // sempre si el servidor s'està engegant— i l'idioma no havia canviat, l'efecte
+    // que les carrega no es tornava a executar i el cercador es quedava sense cap
+    // paraula d'ARASAAC: només hi sortien les del vocabulari propi.
+    updateLangSetting: (
+      previousUi,
+      action: PayloadAction<Pick<Ui["lang"], "app" | "search">>,
+    ) => ({
       ...previousUi,
-      lang: action.payload,
+      lang: {
+        ...previousUi.lang,
+        app: action.payload.app,
+        search: action.payload.search,
+      },
     }),
 
     viewSettings: (previousUi, action: PayloadAction<ViewSettings>) => ({
