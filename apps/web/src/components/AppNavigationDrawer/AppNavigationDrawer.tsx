@@ -94,7 +94,9 @@ const AppNavigationDrawer = ({
 
   const handleSaveToCloud = async () => {
     onClose();
-    showBackdrop({ message: intl.formatMessage(feedbackMessages.loading) });
+    // Missatge concret i no un "carregant" genèric: si el servidor de Render dorm,
+    // aquest text pot ser l'únic que l'usuari tingui davant durant mig minut
+    showBackdrop({ message: intl.formatMessage(authMessages.savingDocument) });
     const result = await dispatch(saveDocumentThunk(document));
     hideBackdrop();
     if (result.meta.requestStatus === "fulfilled") {

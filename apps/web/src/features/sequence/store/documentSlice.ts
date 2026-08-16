@@ -22,6 +22,8 @@ import {
   isMongoId,
   DocumentSummary,
 } from "@features/backend/documents/services/documentService";
+import { classifyRequestFailure } from "@features/backend/api/requestFailure";
+import { reportClientError } from "@features/backend/api/clientErrorReport";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);
@@ -369,9 +371,14 @@ export const saveDocumentThunk = createAsyncThunk<
     // Es propaga el codi semàntic del backend, no un text fix: qui no pot desar
     // ha de saber per què (correu sense verificar, quota exhaurida) i què hi pot fer.
     // La traducció la fa qui mostra el missatge.
+    const failure = classifyRequestFailure(error);
     const errorCode =
       (error as { response?: { data?: { errorCode?: string } } })?.response?.data
         ?.errorCode ?? "DOCUMENT_SAVE_ERROR";
+
+    // Desar una seqüència és el que més li importa a l'usuari: si no ho aconsegueix,
+    // val més saber-ho encara que la causa sigui passatgera i no es repeteixi.
+    void reportClientError("document-save", { ...failure, code: errorCode });
     return rejectWithValue(errorCode);
   }
 });

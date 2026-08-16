@@ -9,6 +9,7 @@ import {
   users,
   patchUser,
   events,
+  clientErrors,
   config,
   putConfig,
 } from "./controller";
@@ -23,6 +24,7 @@ adminRouter.get("/stats", stats);
 adminRouter.get("/users", users);
 adminRouter.patch("/users/:id", patchUser);
 adminRouter.get("/events", events);
+adminRouter.get("/client-errors", clientErrors);
 adminRouter.get("/config", config);
 adminRouter.put("/config", putConfig);
 

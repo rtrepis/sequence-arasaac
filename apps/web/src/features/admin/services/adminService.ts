@@ -53,6 +53,24 @@ export const listEvents = async (params: {
   return data;
 };
 
+/** Error que ha arribat a un usuari, tal com el guarda el registre del servidor. */
+export interface AdminClientError {
+  id: string;
+  code: string;
+  context: string;
+  detail?: string;
+  userAgent?: string;
+  emailCanonical?: string;
+  createdAt: string;
+}
+
+export const listClientErrors = async (): Promise<AdminClientError[]> => {
+  const { data } = await apiClient.get<{ errors: AdminClientError[] }>(
+    "/admin/client-errors",
+  );
+  return data.errors;
+};
+
 export const getConfig = async (): Promise<AppConfig> => {
   const { data } = await apiClient.get<AppConfig>("/admin/config");
   return data;

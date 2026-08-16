@@ -20,6 +20,7 @@ import { getConfig, getStats } from "@features/admin/services/adminService";
 import AdminStatsCards from "@features/admin/components/AdminStatsCards";
 import AdminConfigPanel from "@features/admin/components/AdminConfigPanel";
 import AdminUsersTable from "@features/admin/components/AdminUsersTable";
+import AdminClientErrorsTable from "@features/admin/components/AdminClientErrorsTable";
 
 const AdminPage = (): ReactElement => {
   const { accessToken, isAdmin, isLoading: isAuthLoading } = useAppSelector(
@@ -91,6 +92,7 @@ const AdminPage = (): ReactElement => {
           )}
           {stats && <AdminStatsCards stats={stats} />}
           <AdminUsersTable />
+          <AdminClientErrorsTable />
         </Box>
       )}
     </Container>

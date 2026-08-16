@@ -237,6 +237,27 @@ const messages = defineMessages({
     defaultMessage: "No s'ha pogut desar el document. Torna-ho a provar.",
     description: "Error genèric en desar un document al núvol",
   },
+  savingDocument: {
+    id: "features.backend.auth.savingDocument",
+    defaultMessage: "Desant la seqüència al núvol…",
+    description: "Missatge del backdrop mentre es desa el document",
+  },
+  loadListError: {
+    id: "features.backend.auth.loadListError",
+    defaultMessage:
+      "No hem pogut recuperar els teus documents. Comprova la connexió i torna-ho a provar.",
+    description: "Error en obtenir el llistat de documents desats",
+  },
+  loadDocumentError: {
+    id: "features.backend.auth.loadDocumentError",
+    defaultMessage: "No s'ha pogut carregar aquest document. Torna-ho a provar.",
+    description: "Error en carregar un document concret del núvol",
+  },
+  retry: {
+    id: "features.backend.auth.retry",
+    defaultMessage: "Torna-ho a provar",
+    description: "Botó per reintentar una operació fallida",
+  },
   DOCUMENT_INVALID_FORMAT: {
     id: "features.backend.auth.error.DOCUMENT_INVALID_FORMAT",
     defaultMessage:

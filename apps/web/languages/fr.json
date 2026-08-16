@@ -1498,16 +1498,16 @@
     "defaultMessage": "Nous vérifions ton adresse…"
   },
   "features.backend.wakeUp.title": {
-    "defaultMessage": "Réveil du serveur en cours…"
+    "defaultMessage": "Connexion à votre compte…"
   },
   "features.backend.wakeUp.description": {
-    "defaultMessage": "Cela peut prendre jusqu'à une minute. Vous pouvez continuer à modifier votre séquence."
+    "defaultMessage": "La première connexion de la journée peut prendre jusqu'à une minute. Vous pouvez continuer à modifier votre séquence."
   },
   "components.defaultSettings.saveError.title": {
     "defaultMessage": "Nous n'avons pas pu enregistrer la configuration"
   },
   "components.defaultSettings.saveError.bodyCloud": {
-    "defaultMessage": "Les modifications sont visibles à l'écran, mais elles n'ont pas été enregistrées sur votre compte : si vous fermez l'application maintenant, vous les perdrez. C'est souvent parce que le serveur se réveillait et a mis trop de temps à répondre."
+    "defaultMessage": "Les modifications sont visibles à l'écran, mais elles n'ont pas été enregistrées sur votre compte : si vous fermez l'application maintenant, vous les perdrez."
   },
   "components.defaultSettings.saveError.bodyLocal": {
     "defaultMessage": "Les modifications sont visibles à l'écran, mais elles n'ont pas pu être enregistrées dans ce navigateur : si vous fermez l'application maintenant, vous les perdrez."
@@ -1520,5 +1520,29 @@
   },
   "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
     "defaultMessage": "Le serveur n'a pas compris le format de cette séquence. Téléchargez-la sur votre appareil pour ne pas la perdre et prévenez-nous."
+  },
+  "features.backend.wakeUp.descriptionBlocking": {
+    "defaultMessage": "La première connexion de la journée peut prendre jusqu'à une minute. Ne fermez pas l'application."
+  },
+  "features.backend.auth.savingDocument": {
+    "defaultMessage": "Enregistrement de la séquence dans le cloud…"
+  },
+  "features.backend.auth.loadListError": {
+    "defaultMessage": "Nous n'avons pas pu récupérer vos documents. Vérifiez la connexion et réessayez."
+  },
+  "features.backend.auth.loadDocumentError": {
+    "defaultMessage": "Ce document n'a pas pu être chargé. Réessayez."
+  },
+  "features.backend.auth.retry": {
+    "defaultMessage": "Réessayer"
+  },
+  "components.defaultSettings.saveError.bodyStorageFull": {
+    "defaultMessage": "Ce navigateur n'a plus d'espace. Les mots de votre vocabulaire avec image personnelle occupent le plus de place : supprimez-en un que vous n'utilisez plus, ou créez un compte pour tout enregistrer en ligne."
+  },
+  "components.defaultSettings.saveError.understood": {
+    "defaultMessage": "Compris"
+  },
+  "components.defaultSettings.saveError.errorCode": {
+    "defaultMessage": "Code : {code}"
   }
 }

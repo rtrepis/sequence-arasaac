@@ -11,7 +11,10 @@ import {
   setWordProfilesActionCreator,
   setTierActionCreator,
 } from "@features/user-settings/store/uiSlice";
-import { getStoredUserUi } from "@features/user-settings/storage/settingsStorage";
+import {
+  clearStoredWordProfiles,
+  getStoredUserUi,
+} from "@features/user-settings/storage/settingsStorage";
 import { langTranslateApp } from "../../../../configs/languagesConfigs";
 import { LangsApp } from "../../../../types/ui";
 
@@ -69,6 +72,13 @@ const syncSettingsAfterAuth = async (
 
 // Restaura les preferències anònimes del localStorage al Redux després del logout
 const restoreAnonymousSettings = (dispatch: (action: unknown) => void): void => {
+  // El vocabulari personal és del compte, no del dispositiu: només s'hi arriba amb
+  // sessió iniciada. Si no es buida en sortir, es queda a la memòria de l'aplicació
+  // —i el cercador continua aplicant-lo— i acaba escrit al navegador com si fos
+  // configuració anònima. En un dispositiu compartit, que és el cas normal en AAC,
+  // això vol dir deixar-hi el vocabulari de qui l'ha fet servir abans.
+  dispatch(setWordProfilesActionCreator([]));
+
   const storedUi = getStoredUserUi();
 
   if (storedUi) {
@@ -150,6 +160,9 @@ export const logoutThunk = createAsyncThunk(
       // Ignorar errors de logout al servidor; netegem l'estat local igualment
     }
     setAccessToken(null);
+    // També del navegador, no només de la memòria: el que ja hi hagi escrit d'una
+    // sessió anterior ocupa espai i no és d'aquest dispositiu
+    clearStoredWordProfiles();
     restoreAnonymousSettings(dispatch);
   },
 );

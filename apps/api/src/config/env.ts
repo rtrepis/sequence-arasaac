@@ -45,6 +45,9 @@ const envSchema = z.object({
   MAIL_FROM: z.string().default(DEV_MAIL_FROM),
   // Base pública del frontend, per construir l'enllaç de verificació
   APP_PUBLIC_URL: z.string().default(DEV_APP_PUBLIC_URL),
+  // Adreça on arriben els avisos d'errors del client. Buida = sense avisos per
+  // correu; els errors es continuen registrant i es veuen al panell d'administració.
+  ADMIN_ALERT_EMAIL: z.string().default(""),
 });
 
 const parsed = envSchema.safeParse(process.env);

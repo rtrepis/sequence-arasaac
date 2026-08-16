@@ -1,6 +1,7 @@
 // Modal per llistar i carregar documents desats al backend.
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   CircularProgress,
@@ -28,6 +29,8 @@ import {
   deleteDocument,
   DocumentSummary,
 } from "../../documents/services/documentService";
+import { classifyRequestFailure } from "../../api/requestFailure";
+import { reportClientError } from "../../api/clientErrorReport";
 
 interface LoadDocumentModalProps {
   open: boolean;
@@ -47,25 +50,52 @@ const LoadDocumentModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  // Es distingeix de la llista buida a propòsit: davant d'una fallada de xarxa,
+  // dir "no tens cap document" és pitjor que no dir res — l'usuari es pensa que
+  // ha perdut la feina quan només és que el servidor no ha contestat.
+  const [hasListError, setHasListError] = useState(false);
+  const [isLoadingDocument, setIsLoadingDocument] = useState(false);
+  const [hasLoadError, setHasLoadError] = useState(false);
+
+  const fetchDocuments = useCallback((): void => {
+    setIsLoading(true);
+    setHasListError(false);
+    dispatch(listDocumentsThunk())
+      .unwrap()
+      .then((docs) => setDocuments(docs))
+      .catch((error: unknown) => {
+        setDocuments([]);
+        setHasListError(true);
+        void reportClientError("document-list", classifyRequestFailure(error));
+      })
+      .finally(() => setIsLoading(false));
+  }, [dispatch]);
 
   // Carrega la llista en obrir el modal
   useEffect(() => {
     if (!open) return;
-    setIsLoading(true);
-    dispatch(listDocumentsThunk())
-      .unwrap()
-      .then((docs) => setDocuments(docs))
-      .catch(() => setDocuments([]))
-      .finally(() => setIsLoading(false));
-  }, [open, dispatch]);
+    fetchDocuments();
+  }, [open, fetchDocuments]);
 
   const handleLoad = async (): Promise<void> => {
     if (!selectedId) return;
+
+    setIsLoadingDocument(true);
+    setHasLoadError(false);
     const result = await dispatch(loadDocumentThunk(selectedId));
+    setIsLoadingDocument(false);
+
     if (result.meta.requestStatus === "fulfilled") {
       onLoaded();
       onClose();
+      return;
     }
+    // Abans no es deia res: el botó semblava no fer res i el document no arribava
+    setHasLoadError(true);
+    void reportClientError("document-load", {
+      code: String(result.payload ?? "DOCUMENT_LOAD_ERROR"),
+      isTransient: false,
+    });
   };
 
   const handleDelete = async (
@@ -129,6 +159,19 @@ const LoadDocumentModal = ({
           >
             <CircularProgress />
           </Box>
+        ) : hasListError ? (
+          <Alert
+            severity="error"
+            variant="outlined"
+            sx={{ mt: 2 }}
+            action={
+              <Button color="inherit" size="small" onClick={fetchDocuments}>
+                {intl.formatMessage(messages.retry)}
+              </Button>
+            }
+          >
+            {intl.formatMessage(messages.loadListError)}
+          </Alert>
         ) : documents.length === 0 ? (
           <Typography
             variant="body2"
@@ -172,14 +215,25 @@ const LoadDocumentModal = ({
         )}
       </DialogContent>
 
+      {hasLoadError && (
+        <Alert severity="error" variant="outlined" sx={{ mx: 2, mt: 2 }}>
+          {intl.formatMessage(messages.loadDocumentError)}
+        </Alert>
+      )}
+
       <DialogActions>
-        <Button onClick={onClose} color="inherit">
+        <Button onClick={onClose} color="inherit" disabled={isLoadingDocument}>
           {intl.formatMessage(messages.close)}
         </Button>
         <Button
           onClick={handleLoad}
           variant="contained"
-          disabled={!selectedId || isLoading}
+          disabled={!selectedId || isLoading || isLoadingDocument}
+          // El servidor pot trigar mig minut a despertar-se: sense aquest indicador
+          // el botó sembla espatllat i l'usuari el prem una vegada i una altra
+          startIcon={
+            isLoadingDocument ? <CircularProgress size={16} /> : undefined
+          }
         >
           {intl.formatMessage(messages.loadAction)}
         </Button>

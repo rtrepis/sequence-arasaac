@@ -73,6 +73,44 @@ const sendEmail = async ({
   }
 };
 
+interface ClientErrorAlert {
+  code: string;
+  context: string;
+  detail?: string;
+  userAgent?: string;
+  emailCanonical?: string;
+}
+
+// Avís intern quan un usuari topa amb un error que no s'ha resolt sol.
+// Va en català i sense format: el llegeix una sola persona i el que importa és
+// que el codi i el context es vegin de seguida a la safata d'entrada.
+export const sendClientErrorAlert = async (
+  to: string,
+  { code, context, detail, userAgent, emailCanonical }: ClientErrorAlert
+): Promise<boolean> => {
+  const subject = `[SequenciAAC] Error a ${context}: ${code}`;
+
+  const lines = [
+    `Codi:     ${code}`,
+    `On:       ${context}`,
+    `Quan:     ${new Date().toISOString()}`,
+    `Usuari:   ${emailCanonical ?? "(sense sessió)"}`,
+    `Detall:   ${detail ?? "(cap)"}`,
+    `Navegador: ${userAgent ?? "(desconegut)"}`,
+    "",
+    "Els errors passatgers (servei engegant-se, connexió intermitent) no arriben",
+    "aquí: només els que l'usuari ha acabat veient per pantalla.",
+    "No en rebràs cap altre d'aquest mateix codi durant una hora.",
+  ];
+
+  const text = lines.join("\n");
+  const html = `<pre style="font-family: monospace; font-size: 14px;">${lines
+    .join("\n")
+    .replace(/</g, "&lt;")}</pre>`;
+
+  return sendEmail({ to, subject, html, text });
+};
+
 // Cos del correu de verificació. Text pla i HTML mínim a propòsit:
 // arriba millor a la safata d'entrada i es llegeix igual en qualsevol client.
 export const sendVerificationEmail = async (

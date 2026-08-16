@@ -12,6 +12,7 @@ import { authRouter } from "./modules/auth/routes";
 import { documentsRouter } from "./modules/documents/routes";
 import { userSettingsRouter } from "./modules/user-settings/routes";
 import { adminRouter } from "./modules/admin/routes";
+import { clientErrorsRouter } from "./modules/client-errors/routes";
 
 export const app = express();
 
@@ -65,6 +66,9 @@ app.use("/api/documents", documentsRouter);
 
 // Rutes de user-settings (Fase 5)
 app.use("/api/user", userSettingsRouter);
+
+// Report d'errors del client — obert, amb límit propi (vegeu el seu router)
+app.use("/api/client-errors", clientErrorsRouter);
 
 // Rutes d'administració — protegides per rol, no només per sessió
 app.use("/api/admin", adminRouter);
