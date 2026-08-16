@@ -53,8 +53,19 @@ export const classifyRequestFailure = (error: unknown): RequestFailure => {
 
   const status = failure?.response?.status;
 
-  // Sense resposta no hi ha hagut rebuig: la petició no ha arribat a destí
   if (status === undefined) {
+    // Axios sempre posa `code` quan la petició no arriba a destí. Sense `code` i
+    // sense resposta, això no és cap problema de xarxa: és una excepció del propi
+    // client. Reintentar-la seria inútil i amagaria un error que cal corregir.
+    if (failure instanceof Error) {
+      return {
+        code: "CLIENT_EXCEPTION",
+        isTransient: false,
+        detail: `${failure.name}: ${failure.message}`.slice(0, 300),
+      };
+    }
+
+    // Sense resposta no hi ha hagut rebuig: la petició no ha arribat a destí
     return {
       code: "NETWORK_ERROR",
       isTransient: true,

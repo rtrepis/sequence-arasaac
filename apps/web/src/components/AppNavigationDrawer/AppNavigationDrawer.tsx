@@ -111,8 +111,15 @@ const AppNavigationDrawer = ({
         authMessages[errorCode as keyof typeof authMessages] ??
         authMessages.DOCUMENT_SAVE_ERROR;
       showSnackbar({
-        message: intl.formatMessage(message),
+        // El codi va amb el missatge: qui només vol treballar l'ignora, i qui ha de
+        // mirar què ha passat no depèn d'una consola que al mòbil no existeix
+        message: intl.formatMessage(authMessages.errorWithCode, {
+          message: intl.formatMessage(message),
+          code: errorCode,
+        }),
         severity: "error",
+        // Més estona que el d'èxit: un error s'ha de poder llegir i, si cal, copiar
+        duration: 10000,
       });
     }
   };
