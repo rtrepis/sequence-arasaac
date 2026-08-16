@@ -1544,5 +1544,8 @@
   },
   "components.defaultSettings.saveError.errorCode": {
     "defaultMessage": "Codi: {code}"
+  },
+  "features.backend.auth.errorWithCode": {
+    "defaultMessage": "{message} (Codi: {code})"
   }
 }

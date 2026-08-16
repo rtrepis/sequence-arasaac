@@ -39,19 +39,25 @@ const sanitizeViewSettings = (vs: ViewSettings): ViewSettings => ({
 
 // Normalitza el camp fitzgerald d'un WordProfile: si per error antic s'ha
 // guardat com a objecte FitzgeraldColor { value, color }, extreu el color hex.
-const sanitizeWordProfiles = (profiles: WordProfile[]): WordProfile[] =>
-  profiles.map((p) => {
-    const fitz = p.overrides.fitzgerald;
-    if (fitz && typeof fitz === "object") {
+// `overrides` pot no existir en paraules desades abans que el camp fos obligatori.
+// Sense aquest recanvi, llegir-hi a dins llançava i tombava el desat sencer de la
+// configuració: la petició no arribava a sortir i l'usuari veia un error sense causa.
+const sanitizeWordProfiles = (profiles: WordProfile[] = []): WordProfile[] =>
+  profiles.map((profile) => {
+    const overrides = profile.overrides ?? {};
+    const fitzgerald = overrides.fitzgerald;
+
+    if (fitzgerald && typeof fitzgerald === "object") {
       return {
-        ...p,
+        ...profile,
         overrides: {
-          ...p.overrides,
-          fitzgerald: (fitz as { color: string }).color,
+          ...overrides,
+          fitzgerald: (fitzgerald as { color: string }).color,
         },
       };
     }
-    return p;
+
+    return { ...profile, overrides };
   });
 
 const buildUserUiFromState = (state: RootState): UserUiSettings => ({
@@ -67,10 +73,13 @@ export const saveUserUiThunk = createAsyncThunk<
   void,
   { state: RootState; rejectValue: RequestFailure }
 >("user-settings/saveUserUi", async (_, { getState, rejectWithValue }) => {
-  const payload = buildUserUiFromState(getState());
-  const isAuthenticated = getState().auth.accessToken !== null;
-
   try {
+    // Construir el payload va dins del try: si peta aquí (un camp que falta en
+    // dades antigues), el thunk es rebutjava sense passar per rejectWithValue i
+    // l'error arribava sense codi ni causa, indistingible d'una fallada de xarxa.
+    const payload = buildUserUiFromState(getState());
+    const isAuthenticated = getState().auth.accessToken !== null;
+
     if (isAuthenticated) {
       await updateUiSettings(payload);
     } else {

@@ -144,11 +144,22 @@ const assertWithinQuota = async (
 
   const limits = resolveQuotaLimits(user.tier, user.quotaOverride);
 
-  if (isNewDocument && user.usage.documentsCount >= limits.documents) {
+  // Els comptes creats abans que existís el camp `usage` no el tenen, i amb .lean()
+  // Mongoose no aplica els valors per defecte de l'esquema: sense aquest recanvi,
+  // llegir-hi a dins llançava i desar un document acabava en un 500 sense causa
+  // visible. Comptar-los com a zero és el que ja fa la migració amb els antics.
+  const usage = user.usage ?? {
+    documentsCount: 0,
+    wordProfilesCount: 0,
+    storageBytes: 0,
+    assetsCount: 0,
+  };
+
+  if (isNewDocument && usage.documentsCount >= limits.documents) {
     throw documentError("QUOTA_DOCUMENTS_EXCEEDED", 403);
   }
 
-  if (user.usage.storageBytes + incomingBytes > limits.storageBytes) {
+  if (usage.storageBytes + incomingBytes > limits.storageBytes) {
     throw documentError("QUOTA_STORAGE_EXCEEDED", 403);
   }
 };

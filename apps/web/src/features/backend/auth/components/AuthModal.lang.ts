@@ -237,6 +237,12 @@ const messages = defineMessages({
     defaultMessage: "No s'ha pogut desar el document. Torna-ho a provar.",
     description: "Error genèric en desar un document al núvol",
   },
+  errorWithCode: {
+    id: "features.backend.auth.errorWithCode",
+    defaultMessage: "{message} (Codi: {code})",
+    description:
+      "Missatge d'error amb el codi tècnic, per poder-lo dir sense obrir la consola",
+  },
   savingDocument: {
     id: "features.backend.auth.savingDocument",
     defaultMessage: "Desant la seqüència al núvol…",

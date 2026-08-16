@@ -60,9 +60,16 @@ export const useSaveUiSettings = (): UseSaveUiSettings => {
       return null;
     }
 
-    return (
-      result.payload ?? { code: "UNKNOWN_ERROR", isTransient: false }
-    );
+    if (result.payload) return result.payload;
+
+    // Xarxa de seguretat: el thunk s'ha rebutjat sense passar per rejectWithValue.
+    // Passa quan hi llança una excepció, i llavors el missatge és l'única pista
+    // de què ha fallat: es conserva per al registre d'errors.
+    return {
+      code: "UNKNOWN_ERROR",
+      isTransient: false,
+      detail: result.error?.message?.slice(0, 300),
+    };
   }, [dispatch, intl, showSnackbar]);
 
   const saveInBackground = useCallback((): void => {
