@@ -19,7 +19,7 @@ interface SettingCardProps {
 }
 
 const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
-  const { app: appLang, search: searchLang, keywords } = useAppSelector(
+  const { app: appLang, search: searchLang } = useAppSelector(
     (store) => store.ui.lang,
   );
   const dispatch = useAppDispatch();
@@ -30,10 +30,11 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
     const value = event.target.value;
     setLang(value);
 
+    // Les keywords no van al payload: si canvia l'idioma de cerca, useArasaacKeywords
+    // les torna a demanar i les substitueix ell mateix
     dispatch(updateLangSettingsActionCreator({
       app: setting === "languagesApp" ? value as LangsApp : appLang,
       search: setting === "languagesSearch" ? value : searchLang,
-      keywords: setting === "languagesSearch" ? [] : keywords,
     }));
   };
 

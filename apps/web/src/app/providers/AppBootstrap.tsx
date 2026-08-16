@@ -29,7 +29,7 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
     if (storedUi) {
       dispatch(updateDefaultSettingsActionCreator(storedUi.defaultSettings));
       dispatch(updateThemeActionCreator(storedUi.theme));
-      dispatch(updateLangSettingsActionCreator({ app: storedUi.lang.app, search: storedUi.lang.search, keywords: [] }));
+      dispatch(updateLangSettingsActionCreator({ app: storedUi.lang.app, search: storedUi.lang.search }));
       if (storedUi.viewSettings) {
         dispatch(viewSettingsActionCreator(storedUi.viewSettings));
       }
@@ -39,7 +39,7 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
       const appLang = langTranslateApp.includes(localeBrowser as LangsApp)
         ? (localeBrowser as LangsApp)
         : "en";
-      dispatch(updateLangSettingsActionCreator({ app: appLang, search: appLang, keywords: [] }));
+      dispatch(updateLangSettingsActionCreator({ app: appLang, search: appLang }));
     }
 
     // Intent de restauració de sessió silenciosa via cookie de refresh.
