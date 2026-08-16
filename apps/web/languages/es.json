@@ -1498,16 +1498,16 @@
     "defaultMessage": "Estamos verificando tu dirección…"
   },
   "features.backend.wakeUp.title": {
-    "defaultMessage": "Estamos despertando el servidor…"
+    "defaultMessage": "Conectando con tu cuenta…"
   },
   "features.backend.wakeUp.description": {
-    "defaultMessage": "Puede tardar hasta un minuto. Mientras tanto puedes seguir editando la secuencia."
+    "defaultMessage": "La primera conexión del día puede tardar hasta un minuto. Mientras tanto puedes seguir editando la secuencia."
   },
   "components.defaultSettings.saveError.title": {
     "defaultMessage": "No hemos podido guardar la configuración"
   },
   "components.defaultSettings.saveError.bodyCloud": {
-    "defaultMessage": "Los cambios se ven en la pantalla, pero no se han guardado en tu cuenta: si cierras la aplicación ahora, los perderás. A menudo es porque el servidor se estaba despertando y ha tardado demasiado en responder."
+    "defaultMessage": "Los cambios se ven en la pantalla, pero no se han guardado en tu cuenta: si cierras la aplicación ahora, los perderás."
   },
   "components.defaultSettings.saveError.bodyLocal": {
     "defaultMessage": "Los cambios se ven en la pantalla, pero no se han podido guardar en este navegador: si cierras la aplicación ahora, los perderás."
@@ -1520,5 +1520,29 @@
   },
   "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
     "defaultMessage": "El servidor no ha entendido el formato de esta secuencia. Descárgala en tu dispositivo para no perderla y avísanos."
+  },
+  "features.backend.wakeUp.descriptionBlocking": {
+    "defaultMessage": "La primera conexión del día puede tardar hasta un minuto. No cierres la aplicación."
+  },
+  "features.backend.auth.savingDocument": {
+    "defaultMessage": "Guardando la secuencia en la nube…"
+  },
+  "features.backend.auth.loadListError": {
+    "defaultMessage": "No hemos podido recuperar tus documentos. Comprueba la conexión e inténtalo de nuevo."
+  },
+  "features.backend.auth.loadDocumentError": {
+    "defaultMessage": "No se ha podido cargar este documento. Inténtalo de nuevo."
+  },
+  "features.backend.auth.retry": {
+    "defaultMessage": "Inténtalo de nuevo"
+  },
+  "components.defaultSettings.saveError.bodyStorageFull": {
+    "defaultMessage": "Este navegador se ha quedado sin espacio. Las palabras de tu vocabulario con imagen propia son lo que más ocupa: borra alguna que ya no uses, o crea una cuenta para guardarlo todo en línea."
+  },
+  "components.defaultSettings.saveError.understood": {
+    "defaultMessage": "Entendido"
+  },
+  "components.defaultSettings.saveError.errorCode": {
+    "defaultMessage": "Código: {code}"
   }
 }

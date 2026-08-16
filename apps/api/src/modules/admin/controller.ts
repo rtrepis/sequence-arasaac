@@ -17,7 +17,12 @@ import {
 } from "./service";
 import { getAppConfig, updateAppConfig } from "../config/service";
 import { recordSecurityEvent } from "../security/service";
+import { listClientErrors } from "../client-errors/service";
 import { hashIp } from "../../shared/ipHash";
+
+// Prou per veure què està passant aquests dies sense paginar una pantalla
+// que es consulta quan alguna cosa ha anat malament
+const CLIENT_ERRORS_LIMIT = 50;
 
 // Error de validació amb el mateix format que la resta de mòduls
 const invalidData = (message?: string): AppError => {
@@ -102,6 +107,20 @@ export const events = async (
     }
 
     res.status(200).json(await listSecurityEvents(parsed.data));
+  } catch (err) {
+    next(err);
+  }
+};
+
+// GET /api/admin/client-errors
+// Últims errors que han arribat a un usuari, del més recent al més antic
+export const clientErrors = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    res.status(200).json({ errors: await listClientErrors(CLIENT_ERRORS_LIMIT) });
   } catch (err) {
     next(err);
   }

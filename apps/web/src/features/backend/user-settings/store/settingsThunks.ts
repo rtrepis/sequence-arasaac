@@ -8,6 +8,10 @@ import { RootState } from "../../../../app/store";
 import { saveUserUi } from "@features/user-settings/storage/settingsStorage";
 import { updateUiSettings } from "../services/settingsService";
 import {
+  classifyRequestFailure,
+  RequestFailure,
+} from "@features/backend/api/requestFailure";
+import {
   VIEW_DEFAULT_ALIGNMENT_H,
   VIEW_DEFAULT_ALIGNMENT_V,
   VIEW_DEFAULT_DIRECTION,
@@ -58,16 +62,27 @@ const buildUserUiFromState = (state: RootState): UserUiSettings => ({
   wordProfiles: sanitizeWordProfiles(state.ui.wordProfiles),
 });
 
-export const saveUserUiThunk = createAsyncThunk<void, void, { state: RootState }>(
-  "user-settings/saveUserUi",
-  async (_, { getState }) => {
-    const payload = buildUserUiFromState(getState());
-    const isAuthenticated = getState().auth.accessToken !== null;
+export const saveUserUiThunk = createAsyncThunk<
+  void,
+  void,
+  { state: RootState; rejectValue: RequestFailure }
+>("user-settings/saveUserUi", async (_, { getState, rejectWithValue }) => {
+  const payload = buildUserUiFromState(getState());
+  const isAuthenticated = getState().auth.accessToken !== null;
 
+  try {
     if (isAuthenticated) {
       await updateUiSettings(payload);
     } else {
-      saveUserUi(payload);
+      // Sense sessió no hi ha vocabulari personal: la funcionalitat només existeix
+      // dins d'un compte. Escriure'l al navegador només serviria per omplir-lo
+      // d'imatges en base64 —fins a deixar-lo sense espai— i per deixar-hi el
+      // vocabulari de qui hagi tancat sessió abans en un dispositiu compartit.
+      saveUserUi({ ...payload, wordProfiles: [] });
     }
+  } catch (error) {
+    // La fallada surt classificada: qui la rep ha de poder decidir si reintenta
+    // sol o si val més avisar l'usuari, i amb quin missatge.
+    return rejectWithValue(classifyRequestFailure(error));
   }
-);
+});

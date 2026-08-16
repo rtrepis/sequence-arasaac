@@ -40,3 +40,8 @@ services:
       # Sense aquesta, el servidor es nega a arrencar en producció.
       - key: APP_PUBLIC_URL
         sync: false
+      # Adreça on arriben els avisos d'errors que han arribat a un usuari.
+      # Si es deixa buida no s'envia cap correu, però els errors es continuen
+      # registrant i es veuen al panell d'administració.
+      - key: ADMIN_ALERT_EMAIL
+        sync: false

@@ -61,7 +61,7 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const activeTab = useAppSelector((state) => state.ui.settingsActiveTab);
-  const { saveInBackground, retry, hasFailed, isRetrying, dismissError } =
+  const { saveInBackground, retry, failure, isRetrying, dismissError } =
     useSaveUiSettings();
 
   const handleTabChange = (_: React.SyntheticEvent, value: SettingsTab) => {
@@ -159,7 +159,7 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
           justament quan el modal ja s'ha tancat. Viu aquí i no al pare perquè els dos
           punts de muntatge (engranatge de la barra i menú lateral) el comparteixin. */}
       <SettingsSaveErrorDialog
-        open={hasFailed}
+        failure={failure}
         isRetrying={isRetrying}
         onRetry={retry}
         onDismiss={dismissError}

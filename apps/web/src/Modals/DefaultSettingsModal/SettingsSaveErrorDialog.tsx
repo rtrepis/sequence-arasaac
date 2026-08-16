@@ -12,24 +12,30 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Typography,
 } from "@mui/material";
 import { useIntl } from "react-intl";
 import messages from "./SettingsSaveErrorDialog.lang";
 import { useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
+import {
+  RequestFailure,
+  STORAGE_FULL,
+} from "@features/backend/api/requestFailure";
 
 const selectIsAuthenticated = (state: RootState): boolean =>
   state.auth.accessToken !== null;
 
 interface SettingsSaveErrorDialogProps {
-  open: boolean;
+  /** Fallada que ha de descriure el diàleg; null el manté tancat. */
+  failure: RequestFailure | null;
   isRetrying: boolean;
   onRetry: () => void;
   onDismiss: () => void;
 }
 
 const SettingsSaveErrorDialog = ({
-  open,
+  failure,
   isRetrying,
   onRetry,
   onDismiss,
@@ -38,12 +44,21 @@ const SettingsSaveErrorDialog = ({
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   // El que s'ha perdut no és el mateix segons on s'havia de desar, i dir-ho malament
-  // seria pitjor que no dir res: qui no té sessió no ha de patir per cap servidor.
-  const body = isAuthenticated ? messages.bodyCloud : messages.bodyLocal;
+  // seria pitjor que no dir res. L'espai exhaurit del navegador té text propi perquè
+  // és l'únic cas on l'usuari pot fer alguna cosa concreta per resoldre-ho.
+  const body =
+    failure?.code === STORAGE_FULL
+      ? messages.bodyStorageFull
+      : isAuthenticated
+        ? messages.bodyCloud
+        : messages.bodyLocal;
+
+  // Insistir no arregla un navegador ple ni unes dades que el servidor rebutja
+  const canRetry = failure?.code !== STORAGE_FULL;
 
   return (
     <Dialog
-      open={open}
+      open={failure !== null}
       onClose={onDismiss}
       maxWidth="xs"
       aria-labelledby="settings-save-error-title"
@@ -54,20 +69,34 @@ const SettingsSaveErrorDialog = ({
 
       <DialogContent>
         <DialogContentText>{intl.formatMessage(body)}</DialogContentText>
+
+        {/* El codi, discret i al peu: no li diu res a qui només vol treballar, i
+            estalvia una sessió de depuració a qui ha de mirar què ha passat */}
+        {failure && (
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ display: "block", mt: 2 }}
+          >
+            {intl.formatMessage(messages.errorCode, { code: failure.code })}
+          </Typography>
+        )}
       </DialogContent>
 
       <DialogActions>
         <Button onClick={onDismiss} disabled={isRetrying}>
-          {intl.formatMessage(messages.dismiss)}
+          {intl.formatMessage(canRetry ? messages.dismiss : messages.understood)}
         </Button>
-        <Button
-          onClick={onRetry}
-          variant="contained"
-          disabled={isRetrying}
-          startIcon={isRetrying ? <CircularProgress size={16} /> : null}
-        >
-          {intl.formatMessage(messages.retry)}
-        </Button>
+        {canRetry && (
+          <Button
+            onClick={onRetry}
+            variant="contained"
+            disabled={isRetrying}
+            startIcon={isRetrying ? <CircularProgress size={16} /> : null}
+          >
+            {intl.formatMessage(messages.retry)}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

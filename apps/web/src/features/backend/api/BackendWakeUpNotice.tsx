@@ -8,10 +8,16 @@ import { Alert, AlertTitle, LinearProgress, Snackbar } from "@mui/material";
 import { useIntl } from "react-intl";
 import messages from "./BackendWakeUpNotice.lang";
 import { useIsBackendWakingUp } from "./useBackendWakeUp";
+import { useFeedback } from "../../../context/FeedbackContext/FeedbackContext";
 
 const BackendWakeUpNotice = (): ReactElement | null => {
   const intl = useIntl();
   const isWakingUp = useIsBackendWakingUp();
+  const { state } = useFeedback();
+
+  // Amb el backdrop obert la pantalla està bloquejada: convidar a seguir editant
+  // seria una promesa falsa, perquè l'usuari no pot tocar res fins que acabi.
+  const isBlocked = state.backdrop.open;
 
   if (!isWakingUp) return null;
 
@@ -32,7 +38,9 @@ const BackendWakeUpNotice = (): ReactElement | null => {
         sx={{ width: "100%", bgcolor: "background.paper" }}
       >
         <AlertTitle>{intl.formatMessage(messages.title)}</AlertTitle>
-        {intl.formatMessage(messages.description)}
+        {intl.formatMessage(
+          isBlocked ? messages.descriptionBlocking : messages.description,
+        )}
         <LinearProgress
           color="inherit"
           // El text ja diu que s'està esperant; la barra només ho acompanya visualment

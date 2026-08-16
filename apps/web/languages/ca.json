@@ -1498,16 +1498,16 @@
     "defaultMessage": "Estem verificant la teva adreça…"
   },
   "features.backend.wakeUp.title": {
-    "defaultMessage": "Estem despertant el servidor…"
+    "defaultMessage": "Connectant amb el teu compte…"
   },
   "features.backend.wakeUp.description": {
-    "defaultMessage": "Pot trigar fins a un minut. Mentrestant pots seguir editant la seqüència."
+    "defaultMessage": "La primera connexió del dia pot trigar fins a un minut. Mentrestant pots seguir editant la seqüència."
   },
   "components.defaultSettings.saveError.title": {
     "defaultMessage": "No hem pogut desar la configuració"
   },
   "components.defaultSettings.saveError.bodyCloud": {
-    "defaultMessage": "Els canvis es veuen a la pantalla, però no s'han desat al teu compte: si tanques l'aplicació ara, els perdràs. Sovint és perquè el servidor s'estava despertant i ha trigat massa a respondre."
+    "defaultMessage": "Els canvis es veuen a la pantalla, però no s'han desat al teu compte: si tanques l'aplicació ara, els perdràs."
   },
   "components.defaultSettings.saveError.bodyLocal": {
     "defaultMessage": "Els canvis es veuen a la pantalla, però no s'han pogut desar en aquest navegador: si tanques l'aplicació ara, els perdràs."
@@ -1520,5 +1520,29 @@
   },
   "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
     "defaultMessage": "El servidor no ha entès el format d'aquesta seqüència. Descarrega-la al teu dispositiu per no perdre-la i avisa'ns."
+  },
+  "features.backend.wakeUp.descriptionBlocking": {
+    "defaultMessage": "La primera connexió del dia pot trigar fins a un minut. No tanquis l'aplicació."
+  },
+  "features.backend.auth.savingDocument": {
+    "defaultMessage": "Desant la seqüència al núvol…"
+  },
+  "features.backend.auth.loadListError": {
+    "defaultMessage": "No hem pogut recuperar els teus documents. Comprova la connexió i torna-ho a provar."
+  },
+  "features.backend.auth.loadDocumentError": {
+    "defaultMessage": "No s'ha pogut carregar aquest document. Torna-ho a provar."
+  },
+  "features.backend.auth.retry": {
+    "defaultMessage": "Torna-ho a provar"
+  },
+  "components.defaultSettings.saveError.bodyStorageFull": {
+    "defaultMessage": "Aquest navegador s'ha quedat sense espai. Les paraules del teu vocabulari amb imatge pròpia són el que més ocupa: esborra'n alguna que ja no facis servir, o crea un compte per desar-ho tot en línia."
+  },
+  "components.defaultSettings.saveError.understood": {
+    "defaultMessage": "Entesos"
+  },
+  "components.defaultSettings.saveError.errorCode": {
+    "defaultMessage": "Codi: {code}"
   }
 }

@@ -22,6 +22,44 @@ export const getStoredUserUi = (): UserUiSettings | null => {
   }
 };
 
+/** Codi de l'error que llança saveUserUi quan el navegador no té espai. */
+export const STORAGE_FULL_ERROR = "STORAGE_FULL";
+
+export interface StorageError extends Error {
+  code: typeof STORAGE_FULL_ERROR;
+}
+
+/**
+ * Treu el vocabulari personal del que hi ha desat al navegador.
+ *
+ * Es crida en tancar sessió: recupera l'espai que ocupaven les imatges de les
+ * paraules —que és el que deixava l'emmagatzematge ple i impedia desar res més—
+ * i evita que el vocabulari d'algú quedi al dispositiu quan ja no hi és.
+ */
+export const clearStoredWordProfiles = (): void => {
+  const stored = getStoredUserUi();
+  if (!stored?.wordProfiles?.length) return;
+
+  try {
+    saveUserUi({ ...stored, wordProfiles: [] });
+  } catch (error) {
+    // Neteja oportunista: si no es pot escriure, res del que ve després en depèn
+    console.error("No s'ha pogut netejar el vocabulari del navegador:", error);
+  }
+};
+
 export const saveUserUi = (settings: UserUiSettings): void => {
-  writeToStorage(USER_UI_KEY, JSON.stringify(settings));
+  try {
+    writeToStorage(USER_UI_KEY, JSON.stringify(settings));
+  } catch (error) {
+    // El navegador dona uns 5 MB per origen i aquí s'hi escriu dues vegades
+    // (sessió i local). El vocabulari personal amb imatges els omple de pressa,
+    // i llavors qualsevol canvi de configuració deixa de poder-se desar.
+    console.error("No s'ha pogut desar la configuració al navegador:", error);
+    const storageError = new Error(
+      "Emmagatzematge del navegador ple",
+    ) as StorageError;
+    storageError.code = STORAGE_FULL_ERROR;
+    throw storageError;
+  }
 };

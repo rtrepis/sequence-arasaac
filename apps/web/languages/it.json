@@ -1498,16 +1498,16 @@
     "defaultMessage": "Stiamo verificando il tuo indirizzo…"
   },
   "features.backend.wakeUp.title": {
-    "defaultMessage": "Stiamo risvegliando il server…"
+    "defaultMessage": "Connessione al tuo account…"
   },
   "features.backend.wakeUp.description": {
-    "defaultMessage": "Può richiedere fino a un minuto. Nel frattempo puoi continuare a modificare la sequenza."
+    "defaultMessage": "La prima connessione della giornata può richiedere fino a un minuto. Nel frattempo puoi continuare a modificare la sequenza."
   },
   "components.defaultSettings.saveError.title": {
     "defaultMessage": "Non siamo riusciti a salvare la configurazione"
   },
   "components.defaultSettings.saveError.bodyCloud": {
-    "defaultMessage": "Le modifiche sono visibili sullo schermo, ma non sono state salvate nel tuo account: se chiudi l'applicazione ora, le perderai. Spesso succede perché il server si stava risvegliando e ha impiegato troppo tempo a rispondere."
+    "defaultMessage": "Le modifiche sono visibili sullo schermo, ma non sono state salvate nel tuo account: se chiudi l'applicazione ora, le perderai."
   },
   "components.defaultSettings.saveError.bodyLocal": {
     "defaultMessage": "Le modifiche sono visibili sullo schermo, ma non è stato possibile salvarle in questo browser: se chiudi l'applicazione ora, le perderai."
@@ -1520,5 +1520,29 @@
   },
   "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
     "defaultMessage": "Il server non ha compreso il formato di questa sequenza. Scaricala sul tuo dispositivo per non perderla e avvisaci."
+  },
+  "features.backend.wakeUp.descriptionBlocking": {
+    "defaultMessage": "La prima connessione della giornata può richiedere fino a un minuto. Non chiudere l'applicazione."
+  },
+  "features.backend.auth.savingDocument": {
+    "defaultMessage": "Salvataggio della sequenza nel cloud…"
+  },
+  "features.backend.auth.loadListError": {
+    "defaultMessage": "Non siamo riusciti a recuperare i tuoi documenti. Controlla la connessione e riprova."
+  },
+  "features.backend.auth.loadDocumentError": {
+    "defaultMessage": "Non è stato possibile caricare questo documento. Riprova."
+  },
+  "features.backend.auth.retry": {
+    "defaultMessage": "Riprova"
+  },
+  "components.defaultSettings.saveError.bodyStorageFull": {
+    "defaultMessage": "Questo browser ha esaurito lo spazio. Le parole del tuo vocabolario con immagine propria sono quelle che occupano di più: eliminane una che non usi più, oppure crea un account per salvare tutto online."
+  },
+  "components.defaultSettings.saveError.understood": {
+    "defaultMessage": "Ho capito"
+  },
+  "components.defaultSettings.saveError.errorCode": {
+    "defaultMessage": "Codice: {code}"
   }
 }
