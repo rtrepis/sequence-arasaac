@@ -28,7 +28,17 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(1, "JWT_SECRET és obligatòria"),
   JWT_REFRESH_SECRET: z.string().min(1, "JWT_REFRESH_SECRET és obligatòria"),
   CORS_ORIGIN: z.string().default("http://localhost:5173"),
-  CLOUDINARY_CLOUD_NAME: z.string().min(1, "CLOUDINARY_CLOUD_NAME és obligatòria"),
+  // Només el nom del núvol, no la URL sencera. Cloudinary ofereix la credencial
+  // com a `cloudinary://clau:secret@nom-del-nuvol` i enganxar-la aquí deixa el
+  // client mal configurat: el servidor arrenca sense queixar-se i cada pujada
+  // d'imatge acaba en un 500 que no diu enlloc que el problema és aquest.
+  CLOUDINARY_CLOUD_NAME: z
+    .string()
+    .min(1, "CLOUDINARY_CLOUD_NAME és obligatòria")
+    .refine(
+      (value) => !value.includes("://") && !value.includes(":"),
+      "CLOUDINARY_CLOUD_NAME ha de ser només el nom del núvol (la part de després de l'@ a la URL cloudinary://…), no la URL sencera",
+    ),
   CLOUDINARY_API_KEY: z.string().min(1, "CLOUDINARY_API_KEY és obligatòria"),
   CLOUDINARY_API_SECRET: z.string().min(1, "CLOUDINARY_API_SECRET és obligatòria"),
 
