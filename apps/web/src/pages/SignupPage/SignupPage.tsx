@@ -1,7 +1,7 @@
 // Pàgina de creació de compte: nom, ús de l'aplicació i correu — sense
 // contrasenya. La contrasenya s'estableix després, a partir de l'enllaç del
 // correu de benvinguda (vegeu SetPasswordPage).
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Box,
@@ -18,6 +18,7 @@ import { UserUseCase } from "@sequence-arasaac/shared-types";
 import messages from "./SignupPage.lang";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
 import { signup } from "@features/backend/auth/services/authService";
+import { warmUpBackend } from "@features/backend/api/warmUpBackend";
 
 const USE_CASES: { value: UserUseCase; labelId: keyof typeof messages }[] = [
   { value: "family", labelId: "useCaseFamily" },
@@ -38,6 +39,13 @@ const SignupPage = (): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
+
+  // Arribar a aquesta pàgina (des de qualsevol enllaç o per URL directa) ja és
+  // senyal prou clar que es vol el backend: mentre s'omple el formulari, el
+  // servidor de Render ja s'està despertant.
+  useEffect(() => {
+    void warmUpBackend();
+  }, []);
 
   const errorMessage = errorCode
     ? intl.formatMessage(
