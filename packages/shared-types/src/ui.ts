@@ -30,6 +30,10 @@ export type UserStatus = "pending" | "active" | "suspended";
 // Permís, no pla comercial: "role" i "tier" són conceptes independents
 export type UserRole = "user" | "admin";
 
+// Motiu d'ús declarat al signup — serveix per conèixer el perfil de l'usuari,
+// no per restringir res: "other" porta un text lliure opcional (useCaseOther).
+export type UserUseCase = "family" | "teacher" | "professional" | "other";
+
 // Comptadors desnormalitzats al document d'usuari.
 // Es mantenen amb $inc a la mateixa operació que crea o esborra el recurs,
 // perquè comprovar una quota no hagi de fer un countDocuments a cada petició.

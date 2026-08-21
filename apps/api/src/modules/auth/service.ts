@@ -6,7 +6,11 @@ import jwt from "jsonwebtoken";
 import { env } from "../../config/env";
 import { UserModel } from "./model";
 import type { IUser } from "./model";
-import type { RegisterInput, LoginInput } from "./validators";
+import type {
+  SignupInput,
+  LoginInput,
+  SetPasswordInput,
+} from "./validators";
 import type { AppError } from "../../middleware/errorHandler";
 import { toCanonicalEmail } from "../../shared/emailCanonical";
 import { isDisposableEmail } from "../../shared/disposableDomains";
@@ -15,7 +19,7 @@ import {
   recordSecurityEvent,
   countRecentEventsForUser,
 } from "../security/service";
-import { sendVerificationEmail } from "../../shared/mailer";
+import { sendVerificationEmail, sendPasswordResetEmail } from "../../shared/mailer";
 
 // Durades dels tokens
 const ACCESS_TOKEN_EXPIRES_IN = "15m";
@@ -26,29 +30,33 @@ const BCRYPT_ROUNDS = 12;
 const MAX_FAILED_LOGIN_ATTEMPTS = 5;
 const LOCK_DURATION_MS = 15 * 60 * 1000;
 
-// Verificació del correu
+// Verificació del correu (signup) i recuperació de contrasenya (forgot-password)
 const VERIFICATION_TOKEN_EXPIRES_IN = "24h";
-// Límits de reenviament, per no cremar la quota diària del proveïdor de correu
+// Més curt que el de verificació: una recuperació no reclamada de seguida ha de caducar aviat
+const RESET_TOKEN_EXPIRES_IN = "1h";
+// Límits de reenviament/petició, per no cremar la quota diària del proveïdor de correu
 const RESEND_MIN_INTERVAL_MS = 5 * 60 * 1000;
 const RESEND_MAX_PER_DAY = 3;
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
-// Estructura retornada per register i login
+// Estructura retornada per login i setPassword
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
 }
 
-// El registre informa a més de si el correu de verificació ha pogut sortir:
+// El signup informa de si el correu de benvinguda ha pogut sortir:
 // el front ho necessita per triar entre "revisa la safata" i "torna-ho a provar"
-export interface RegisterResult extends AuthTokens {
-  verificationEmailSent: boolean;
+export interface SignupResult {
+  emailSent: boolean;
 }
 
-// Payload del token de verificació de correu
-interface VerifyTokenPayload {
+// Payload del token que arriba amb l'enllaç del correu. El mateix esquema serveix
+// per als dos casos que acaben a /set-password — és el "type" qui distingeix
+// establir la primera contrasenya (verify) de substituir-ne una d'existent (reset).
+interface PasswordTokenPayload {
   userId: string;
-  type: "verify";
+  type: "verify" | "reset";
 }
 
 // Payload del JWT d'accés — ha de coincidir amb JwtPayload d'authMiddleware
@@ -96,33 +104,43 @@ export const generateTokens = (
   return { accessToken, refreshToken };
 };
 
-// Construeix l'enllaç de verificació i l'envia. No llança mai.
-// Retorna si el correu ha sortit, perquè el registre pugui continuar igualment.
-const deliverVerificationEmail = async (
+// Construeix l'enllaç d'establiment de contrasenya i l'envia. No llança mai.
+// Retorna si el correu ha sortit, perquè qui truca pugui continuar igualment.
+const deliverPasswordEmail = async (
   userId: string,
   email: string,
+  name: string | undefined,
+  type: "verify" | "reset",
   ipHash: string
 ): Promise<boolean> => {
-  const token = jwt.sign({ userId, type: "verify" } as VerifyTokenPayload, env.JWT_SECRET, {
-    expiresIn: VERIFICATION_TOKEN_EXPIRES_IN,
+  const token = jwt.sign({ userId, type } as PasswordTokenPayload, env.JWT_SECRET, {
+    expiresIn: type === "verify" ? VERIFICATION_TOKEN_EXPIRES_IN : RESET_TOKEN_EXPIRES_IN,
   });
 
-  const verificationUrl = `${env.APP_PUBLIC_URL}/verify-email?token=${token}`;
-  const sent = await sendVerificationEmail(email, verificationUrl);
+  const url = `${env.APP_PUBLIC_URL}/set-password?token=${token}`;
+  const sent =
+    type === "verify"
+      ? await sendVerificationEmail(email, name, url)
+      : await sendPasswordResetEmail(email, url);
 
   if (sent) {
-    await recordSecurityEvent({ type: "verify_sent", ipHash, userId });
+    await recordSecurityEvent({
+      type: type === "verify" ? "verify_sent" : "reset_requested",
+      ipHash,
+      userId,
+    });
   }
 
   return sent;
 };
 
-// Registra un nou usuari — llança AppError si la bústia ja té compte.
+// Registra un nou usuari sense contrasenya — llança AppError si la bústia ja té compte.
+// La contrasenya s'estableix després, a /set-password, a partir de l'enllaç del correu.
 // ipHash arriba pseudonimitzat des del controller: aquesta capa mai veu una IP.
-export const registerUser = async (
-  input: RegisterInput,
+export const signupUser = async (
+  input: SignupInput,
   ipHash: string
-): Promise<RegisterResult> => {
+): Promise<SignupResult> => {
   const emailCanonical = toCanonicalEmail(input.email);
 
   // Les comprovacions van de la més barata a la més cara, i les que revelen
@@ -152,13 +170,13 @@ export const registerUser = async (
     throw authError("EMAIL_ALREADY_EXISTS", 409);
   }
 
-  // Hash de la contrasenya — 12 rounds és el mínim recomanat per a producció
-  const passwordHash = await bcrypt.hash(input.password, BCRYPT_ROUNDS);
-
   const user = await UserModel.create({
     email: input.email,
     emailCanonical,
-    passwordHash,
+    name: input.name,
+    useCase: input.useCase,
+    useCaseOther: input.useCaseOther,
+    // Sense passwordHash: el compte no pot fer login fins que es completi /set-password.
     // settings, langSettings, status i usage prenen els valors per defecte del model
   });
 
@@ -172,30 +190,33 @@ export const registerUser = async (
   // L'enviament no bloqueja el registre: si el proveïdor falla o s'ha esgotat
   // la quota diària, el compte ja existeix i l'usuari pot demanar el reenviament.
   // Un dia dolent del correu no pot deixar el registre trencat.
-  const verificationEmailSent = await deliverVerificationEmail(
+  const emailSent = await deliverPasswordEmail(
     String(user._id),
     user.email,
+    user.name,
+    "verify",
     ipHash
   );
 
-  return {
-    ...generateTokens(String(user._id), user.email, user.tokenVersion),
-    verificationEmailSent,
-  };
+  return { emailSent };
 };
 
-// Marca el correu com a verificat a partir del token de l'enllaç.
-// Idempotent: tornar a clicar un enllaç ja usat no és cap error per a l'usuari.
-export const verifyEmail = async (token: string): Promise<void> => {
-  let payload: VerifyTokenPayload;
+// Estableix la contrasenya a partir del token de l'enllaç rebut per correu.
+// Serveix els dos casos que porten a /set-password: primera contrasenya (verify)
+// i substitució per recuperació (reset) — és el "type" del token qui ho distingeix.
+// Acaba com un login: retorna un parell de tokens perquè l'usuari entri de seguida.
+export const setPassword = async (
+  input: SetPasswordInput
+): Promise<AuthTokens> => {
+  let payload: PasswordTokenPayload;
 
   try {
-    payload = jwt.verify(token, env.JWT_SECRET) as VerifyTokenPayload;
+    payload = jwt.verify(input.token, env.JWT_SECRET) as PasswordTokenPayload;
   } catch {
     throw authError("VERIFICATION_TOKEN_INVALID", 400);
   }
 
-  if (payload.type !== "verify") {
+  if (payload.type !== "verify" && payload.type !== "reset") {
     throw authError("VERIFICATION_TOKEN_INVALID", 400);
   }
 
@@ -204,44 +225,95 @@ export const verifyEmail = async (token: string): Promise<void> => {
     throw authError("USER_NOT_FOUND", 404);
   }
 
-  if (user.emailVerified) {
-    return;
+  user.passwordHash = await bcrypt.hash(input.password, BCRYPT_ROUNDS);
+
+  if (payload.type === "verify") {
+    user.emailVerified = true;
+    // Un compte suspès no es reactiva en establir la contrasenya: la suspensió mana
+    if (user.status === "pending") {
+      user.status = "active";
+    }
+  } else {
+    // Reset: substituir la contrasenya tanca totes les sessions obertes amb
+    // l'anterior, igual que fa la suspensió de comptes.
+    user.tokenVersion += 1;
   }
 
-  user.emailVerified = true;
-  // Un compte suspès no es reactiva per verificar el correu: la suspensió mana
-  if (user.status === "pending") {
-    user.status = "active";
-  }
   await user.save();
 
   await recordSecurityEvent({
-    type: "verify_completed",
+    type: payload.type === "verify" ? "password_set" : "reset_completed",
     ipHash: "unknown",
     emailCanonical: user.emailCanonical,
     userId: user._id as typeof user._id,
   });
+
+  return generateTokens(String(user._id), user.email, user.tokenVersion);
 };
 
-// Reenvia el correu de verificació a un usuari autenticat.
-// Els límits eviten que un sol compte cremi la quota diària del proveïdor.
-export const resendVerification = async (
-  userId: string,
+// Demana la recuperació de contrasenya. Mai llança i mai diu si l'email existeix:
+// el controller respon sempre igual, existeixi el compte o no.
+export const requestPasswordReset = async (
+  email: string,
   ipHash: string
 ): Promise<void> => {
-  const user = await UserModel.findById(userId).select("email emailVerified").lean();
+  const emailCanonical = toCanonicalEmail(email);
+  const user = await UserModel.findOne({ emailCanonical })
+    .select("email name status")
+    .lean();
 
-  if (!user) {
-    throw authError("USER_NOT_FOUND", 404);
+  // Compte inexistent o suspès: sortir en silenci és la resposta correcta.
+  if (!user || user.status === "suspended") {
+    return;
   }
 
-  if (user.emailVerified) {
-    throw authError("EMAIL_ALREADY_VERIFIED", 409);
+  const userId = String(user._id);
+
+  const requestedLastDay = await countRecentEventsForUser(
+    "reset_requested",
+    userId,
+    ONE_DAY_MS
+  );
+  if (requestedLastDay >= RESEND_MAX_PER_DAY) {
+    return;
   }
+
+  const requestedRecently = await countRecentEventsForUser(
+    "reset_requested",
+    userId,
+    RESEND_MIN_INTERVAL_MS
+  );
+  if (requestedRecently > 0) {
+    return;
+  }
+
+  await deliverPasswordEmail(userId, user.email, user.name, "reset", ipHash);
+};
+
+// Reenvia el correu de benvinguda+verificació. Ja no requereix sessió: un compte
+// sense contrasenya encara no es pot autenticar per demanar-lo, i és per això que
+// —igual que requestPasswordReset— mai llança ni distingeix casos de cara enfora:
+// el controller respon sempre igual, tant si l'email existeix, ja està verificat
+// o s'ha demanat massa cops, com si no. Sense sessió pel mig, qualsevol resposta
+// diferenciada seria una via per confirmar quins correus tenen compte.
+export const resendVerification = async (
+  email: string,
+  ipHash: string
+): Promise<void> => {
+  const emailCanonical = toCanonicalEmail(email);
+  const user = await UserModel.findOne({ emailCanonical })
+    .select("email name emailVerified")
+    .lean();
+
+  if (!user || user.emailVerified) {
+    return;
+  }
+
+  const userId = String(user._id);
 
   const sentLastDay = await countRecentEventsForUser("verify_sent", userId, ONE_DAY_MS);
   if (sentLastDay >= RESEND_MAX_PER_DAY) {
-    throw authError("VERIFICATION_RESEND_LIMIT", 429);
+    return;
   }
 
   const sentRecently = await countRecentEventsForUser(
@@ -250,13 +322,10 @@ export const resendVerification = async (
     RESEND_MIN_INTERVAL_MS
   );
   if (sentRecently > 0) {
-    throw authError("VERIFICATION_RESEND_TOO_SOON", 429);
+    return;
   }
 
-  const sent = await deliverVerificationEmail(userId, user.email, ipHash);
-  if (!sent) {
-    throw authError("VERIFICATION_EMAIL_FAILED", 502);
-  }
+  await deliverPasswordEmail(userId, user.email, user.name, "verify", ipHash);
 };
 
 // Autentica un usuari existent — missatge genèric per no revelar si l'email existeix o no
@@ -285,6 +354,14 @@ export const loginUser = async (
   // Dir "aquest compte està bloquejat" confirmaria a un atacant que l'email existeix;
   // per això el bloqueig és curt (15 min) i no es comunica de manera diferenciada.
   if (user.lockUntil && user.lockUntil.getTime() > Date.now()) {
+    throw invalidError;
+  }
+
+  // Compte creat pel signup però encara sense contrasenya establerta (l'enllaç del
+  // correu de benvinguda no s'ha fet servir encara): mateix error genèric, mateix
+  // hash fictici — no hi ha cap contrasenya real amb què comparar.
+  if (!user.passwordHash) {
+    await bcrypt.hash(input.password, BCRYPT_ROUNDS);
     throw invalidError;
   }
 

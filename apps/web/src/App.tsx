@@ -1,26 +1,36 @@
-import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import "./App.css";
 import { ReactElement, lazy, Suspense, useEffect } from "react";
 import LanguageLayout from "./pages/LanguagesLayout/LanguagesLayaut";
 import WelcomeLayout from "./pages/WelcomePage/WelcomeLayout";
+import AuthStandaloneLayout from "./pages/AuthStandaloneLayout/AuthStandaloneLayout";
 import { Box, CircularProgress } from "@mui/material";
 
 // Pàgines carregades de forma diferida (code splitting per ruta)
 const EditSequencesPage = lazy(
-  () => import("./pages/EditSequencesPage/EditSequencesPage")
+  () => import("./pages/EditSequencesPage/EditSequencesPage"),
 );
 const ViewSequencePage = lazy(
-  () => import("./pages/ViewSequencePage/ViewSequencePage")
+  () => import("./pages/ViewSequencePage/ViewSequencePage"),
 );
 const NewsLayout = lazy(() => import("./pages/NewsLayout/NewsLayout"));
-const ChangelogPage = lazy(
-  () => import("./pages/ChangelogPage/ChangelogPage")
-);
+const ChangelogPage = lazy(() => import("./pages/ChangelogPage/ChangelogPage"));
 const NewsDetailPage = lazy(
-  () => import("./pages/NewsDetailPage/NewsDetailPage")
+  () => import("./pages/NewsDetailPage/NewsDetailPage"),
 );
-const VerifyEmailPage = lazy(
-  () => import("./pages/VerifyEmailPage/VerifyEmailPage")
+const SignupPage = lazy(() => import("./pages/SignupPage/SignupPage"));
+const SetPasswordPage = lazy(
+  () => import("./pages/SetPasswordPage/SetPasswordPage"),
+);
+const ForgotPasswordPage = lazy(
+  () => import("./pages/ForgotPasswordPage/ForgotPasswordPage"),
 );
 const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
 
@@ -65,7 +75,9 @@ const App = (): ReactElement => {
   const {
     lang: { app: appLang },
   } = useAppSelector((state) => state.ui);
-  const isAuthenticated = useAppSelector((state) => state.auth.accessToken !== null);
+  const isAuthenticated = useAppSelector(
+    (state) => state.auth.accessToken !== null,
+  );
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -97,10 +109,7 @@ const App = (): ReactElement => {
           path="changelog"
           element={<Navigate to={`/${appLang}/news`} replace />}
         />
-        <Route
-          path="news/:slug"
-          element={<RedirectNews appLang={appLang} />}
-        />
+        <Route path="news/:slug" element={<RedirectNews appLang={appLang} />} />
         <Route
           path="create-sequence"
           element={<Navigate to={`../${appLang}/create-sequence`} replace />}
@@ -128,10 +137,20 @@ const App = (): ReactElement => {
           <Route path=":slug" element={<NewsDetailPage />} />
         </Route>
 
-        {/* Destinació de l'enllaç de verificació del correu.
-            Sense locale: l'enllaç s'ha de poder construir des del servidor,
-            que no sap en quin idioma navega l'usuari. */}
-        <Route path="verify-email" element={<VerifyEmailPage />} />
+        {/* Pàgines d'autenticació fora de LanguageLayout (no porten BarNavigation):
+            signup i forgot-password es naveguen des de dins l'app i porten locale;
+            set-password és destí d'un enllaç construït pel backend i no en porta
+            —el layout hi cau al localeBrowser. Comparteixen AuthStandaloneLayout
+            perquè totes necessiten el seu propi <IntlProvider>, que aquí no els
+            arriba de LanguageLayout. */}
+        <Route element={<AuthStandaloneLayout localeBrowser={appLang} />}>
+          <Route path=":locale/signup" element={<SignupPage />} />
+          <Route
+            path=":locale/forgot-password"
+            element={<ForgotPasswordPage />}
+          />
+          <Route path="set-password" element={<SetPasswordPage />} />
+        </Route>
 
         {/* Panell d'administració — eina interna, fora de LanguageLayout */}
         <Route path="admin" element={<AdminPage />} />

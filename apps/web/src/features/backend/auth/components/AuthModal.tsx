@@ -1,5 +1,6 @@
-// Modal d'autenticació: embolcalla l'AuthForm en un Dialog amb títol i botó de tancar.
-import React, { useEffect, useState } from "react";
+// Modal d'autenticació: embolcalla l'AuthForm (login) en un Dialog amb títol i
+// botó de tancar. El registre viu a la seva pròpia pàgina (/:locale/signup).
+import React, { useEffect } from "react";
 import {
   Box,
   Dialog,
@@ -10,7 +11,7 @@ import {
 import { AiOutlineClose } from "react-icons/ai";
 import { useIntl } from "react-intl";
 import messages from "./AuthModal.lang";
-import AuthForm, { AuthMode } from "./AuthForm";
+import AuthForm from "./AuthForm";
 import { warmUpBackend } from "../../api/warmUpBackend";
 
 interface AuthModalProps {
@@ -21,28 +22,16 @@ interface AuthModalProps {
 const AuthModal = ({ open, onClose }: AuthModalProps): React.ReactElement => {
   const intl = useIntl();
 
-  const [mode, setMode] = useState<AuthMode>("login");
-
   // Obrir el formulari és el primer senyal clar que l'usuari vol el backend: mentre
   // escriu correu i contrasenya, el servidor de Render ja s'està despertant.
   useEffect(() => {
     if (open) void warmUpBackend();
   }, [open]);
 
-  const handleClose = (): void => {
-    setMode("login");
-    onClose();
-  };
-
-  const title =
-    mode === "register"
-      ? intl.formatMessage(messages.registerTitle)
-      : intl.formatMessage(messages.loginTitle);
-
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       fullWidth
       maxWidth="xs"
       aria-labelledby="auth-modal-title"
@@ -55,9 +44,9 @@ const AuthModal = ({ open, onClose }: AuthModalProps): React.ReactElement => {
             justifyContent: "space-between",
           }}
         >
-          {title}
+          {intl.formatMessage(messages.loginTitle)}
           <IconButton
-            onClick={handleClose}
+            onClick={onClose}
             aria-label={intl.formatMessage(messages.close)}
             size="small"
           >
@@ -67,12 +56,7 @@ const AuthModal = ({ open, onClose }: AuthModalProps): React.ReactElement => {
       </DialogTitle>
 
       <DialogContent>
-        <AuthForm
-          mode={mode}
-          onModeChange={setMode}
-          onSuccess={handleClose}
-          autoFocus
-        />
+        <AuthForm onSuccess={onClose} onNavigateAway={onClose} autoFocus />
       </DialogContent>
     </Dialog>
   );

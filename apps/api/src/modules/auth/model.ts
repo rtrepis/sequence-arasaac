@@ -11,6 +11,7 @@ import type {
   UserTier,
   UserStatus,
   UserRole,
+  UserUseCase,
   UserUsage,
   QuotaLimits,
 } from "@sequence-arasaac/shared-types";
@@ -20,7 +21,13 @@ import { defaultSettingsSchema, wordProfileSchema } from "../../shared/mongooseS
 export interface IUser extends Document {
   email: string;
   emailCanonical: string;
-  passwordHash: string;
+  // Absent fins que l'usuari l'estableix a /set-password: el compte neix del
+  // signup sense contrasenya, i mentrestant no pot fer login (vegeu loginUser).
+  passwordHash?: string;
+  name?: string;
+  useCase?: UserUseCase;
+  // Només té sentit quan useCase === "other"
+  useCaseOther?: string;
   settings: DefaultSettings;
   langSettings: {
     app: LangsApp;
@@ -133,9 +140,25 @@ const userSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
     },
+    // Sense required: absent des del signup fins que /set-password l'estableix
     passwordHash: {
       type: String,
-      required: true,
+      required: false,
+    },
+    name: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    useCase: {
+      type: String,
+      enum: ["family", "teacher", "professional", "other"],
+      required: false,
+    },
+    useCaseOther: {
+      type: String,
+      required: false,
+      trim: true,
     },
     settings: {
       type: defaultSettingsSchema,

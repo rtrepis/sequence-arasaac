@@ -37,9 +37,7 @@ import {
   SectionTitle,
   SettingsPanelHint,
 } from "../../components/SettingsLayout";
-import AuthForm, {
-  AuthMode,
-} from "../../features/backend/auth/components/AuthForm";
+import AuthForm from "../../features/backend/auth/components/AuthForm";
 import authMessages from "../../features/backend/auth/components/AuthModal.lang";
 import messages from "./VocabularySettingsPanel.lang";
 
@@ -60,7 +58,6 @@ const VocabularySettingsPanel = (): React.ReactElement => {
 
   const [word, setWord] = useState("");
   const [editingWord, setEditingWord] = useState<string | undefined>();
-  const [authMode, setAuthMode] = useState<AuthMode>("login");
 
   // Estat del pictograma seleccionat (skin/hair/color/selectedId/url)
   const [pictState, setPictState] = useState<PictogramSearchLocalResult>({
@@ -210,19 +207,11 @@ const VocabularySettingsPanel = (): React.ReactElement => {
         gap={1}
         sx={{ pt: 1, maxWidth: 500, mx: "auto", width: "100%" }}
       >
-        <SectionTitle
-          title={
-            <FormattedMessage
-              {...(authMode === "register"
-                ? authMessages.registerTitle
-                : authMessages.loginTitle)}
-            />
-          }
-        >
+        <SectionTitle title={<FormattedMessage {...authMessages.loginTitle} />}>
           <Typography variant="body2" color="text.secondary">
             <FormattedMessage {...messages.loginRequired} />
           </Typography>
-          <AuthForm mode={authMode} onModeChange={setAuthMode} />
+          <AuthForm />
         </SectionTitle>
       </Stack>
     );

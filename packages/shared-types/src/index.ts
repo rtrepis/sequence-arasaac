@@ -35,6 +35,7 @@ export type {
   UserTier,
   UserStatus,
   UserRole,
+  UserUseCase,
   UserUsage,
   QuotaLimits,
   AppConfig,

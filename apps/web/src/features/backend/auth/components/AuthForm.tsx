@@ -1,5 +1,7 @@
-// Formulari d'autenticació (login / registre) reutilitzable:
-// s'usa dins l'AuthModal i incrustat al panell de vocabulari personal.
+// Formulari de login reutilitzable: s'usa dins l'AuthModal i incrustat al
+// panell de vocabulari personal. El registre viu a la seva pròpia pàgina
+// (/:locale/signup) — aquí només queden l'enllaç cap a ella i el d'oblidar
+// la contrasenya.
 import React, { useState } from "react";
 import {
   Alert,
@@ -13,38 +15,35 @@ import {
 } from "@mui/material";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useIntl } from "react-intl";
+import { useNavigate } from "react-router-dom";
 import messages from "./AuthModal.lang";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { loginThunk, registerThunk } from "../store/authSlice";
-
-export type AuthMode = "login" | "register";
+import { loginThunk } from "../store/authSlice";
 
 interface AuthFormProps {
-  /** Mode actiu del formulari. El controla el contenidor perquè pugui titular-se. */
-  mode: AuthMode;
-  /** Canvi de mode des de l'enllaç inferior del formulari. */
-  onModeChange: (mode: AuthMode) => void;
-  /** Acció posterior a una autenticació correcta (tancar el modal, per exemple). */
+  /** Acció posterior a un login correcte (tancar el modal, per exemple). */
   onSuccess?: () => void;
+  /** Acció en navegar fora del formulari (signup, oblidar contrasenya): tanca
+   * el modal si n'hi ha un, perquè no quedi obert sobre la pàgina nova. */
+  onNavigateAway?: () => void;
   /** Posa el focus al camp de correu en muntar-se. Només té sentit en un modal. */
   autoFocus?: boolean;
 }
 
 const AuthForm = ({
-  mode,
-  onModeChange,
   onSuccess,
+  onNavigateAway,
   autoFocus = false,
 }: AuthFormProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const appLang = useAppSelector((state) => state.ui.lang.app);
   const { isLoading, errorCode } = useAppSelector((state) => state.auth);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  const isRegisterMode = mode === "register";
 
   // Tradueix el codi d'error del backend al missatge de l'idioma actiu
   const errorMessage = errorCode
@@ -57,14 +56,18 @@ const AuthForm = ({
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
-    const thunk = isRegisterMode ? registerThunk : loginThunk;
-    const result = await dispatch(thunk({ email, password }));
+    const result = await dispatch(loginThunk({ email, password }));
     if (result.meta.requestStatus === "fulfilled") {
       setEmail("");
       setPassword("");
       setShowPassword(false);
       onSuccess?.();
     }
+  };
+
+  const goTo = (path: string): void => {
+    onNavigateAway?.();
+    navigate(`/${appLang}/${path}`);
   };
 
   return (
@@ -99,7 +102,7 @@ const AuthForm = ({
         onChange={(e) => setPassword(e.target.value)}
         required
         fullWidth
-        autoComplete={isRegisterMode ? "new-password" : "current-password"}
+        autoComplete="current-password"
         disabled={isLoading}
         InputProps={{
           endAdornment: (
@@ -116,6 +119,15 @@ const AuthForm = ({
         }}
       />
 
+      <Typography
+        variant="body2"
+        align="right"
+        sx={{ cursor: "pointer", color: "primary.main" }}
+        onClick={() => goTo("forgot-password")}
+      >
+        {intl.formatMessage(messages.forgotPassword)}
+      </Typography>
+
       <Button
         type="submit"
         variant="contained"
@@ -123,20 +135,16 @@ const AuthForm = ({
         disabled={isLoading || !email || !password}
         startIcon={isLoading ? <CircularProgress size={16} /> : null}
       >
-        {isRegisterMode
-          ? intl.formatMessage(messages.submitRegister)
-          : intl.formatMessage(messages.submitLogin)}
+        {intl.formatMessage(messages.submitLogin)}
       </Button>
 
       <Typography
         variant="body2"
         align="center"
         sx={{ cursor: "pointer", color: "primary.main" }}
-        onClick={() => onModeChange(isRegisterMode ? "login" : "register")}
+        onClick={() => goTo("signup")}
       >
-        {isRegisterMode
-          ? intl.formatMessage(messages.toggleToLogin)
-          : intl.formatMessage(messages.toggleToRegister)}
+        {intl.formatMessage(messages.toggleToRegister)}
       </Typography>
     </Box>
   );

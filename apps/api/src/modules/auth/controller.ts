@@ -2,12 +2,19 @@
 // Delega tota la lògica al service — el controller només gestiona req/res
 
 import { Request, Response, NextFunction } from "express";
-import { registerSchema, loginSchema } from "./validators";
 import {
-  registerUser,
+  signupSchema,
+  loginSchema,
+  setPasswordSchema,
+  forgotPasswordSchema,
+  resendVerificationSchema,
+} from "./validators";
+import {
+  signupUser,
   loginUser,
   refreshTokens,
-  verifyEmail,
+  setPassword,
+  requestPasswordReset,
   resendVerification,
 } from "./service";
 import type { AppError } from "../../middleware/errorHandler";
@@ -30,29 +37,35 @@ const setRefreshTokenCookie = (res: Response, refreshToken: string): void => {
   });
 };
 
-// POST /api/auth/register
-// Crea un nou usuari i retorna un access token + cookie de refresh
-export const register = async (
+// Helper privat per respondre un 400 semàntic a partir del primer error de zod
+const respondValidationError = (
+  res: Response,
+  next: NextFunction,
+  parsed: { success: false; error: { errors: { message: string }[] } }
+): void => {
+  const errorCode = parsed.error.errors[0]?.message ?? "INVALID_DATA";
+  const error = new Error(errorCode) as AppError;
+  error.statusCode = 400;
+  error.errorCode = errorCode;
+  next(error);
+};
+
+// POST /api/auth/signup
+// Crea un usuari sense contrasenya i envia el correu de benvinguda+verificació.
+// No hi ha sessió: la contrasenya (i el login automàtic) arriben a /set-password.
+export const signup = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const parsed = registerSchema.safeParse(req.body);
-    if (!parsed.success) {
-      const errorCode = parsed.error.errors[0]?.message ?? "INVALID_DATA";
-      const error = new Error(errorCode) as AppError;
-      error.statusCode = 400;
-      error.errorCode = errorCode;
-      return next(error);
-    }
+    const parsed = signupSchema.safeParse(req.body);
+    if (!parsed.success) return respondValidationError(res, next, parsed);
 
     // La IP es pseudonimitza aquí: cap capa per sota en veu una de real
-    const { accessToken, refreshToken, verificationEmailSent } =
-      await registerUser(parsed.data, hashIp(req.ip));
+    const { emailSent } = await signupUser(parsed.data, hashIp(req.ip));
 
-    setRefreshTokenCookie(res, refreshToken);
-    res.status(201).json({ accessToken, verificationEmailSent });
+    res.status(201).json({ emailSent });
   } catch (err) {
     next(err);
   }
@@ -67,13 +80,7 @@ export const login = async (
 ): Promise<void> => {
   try {
     const parsed = loginSchema.safeParse(req.body);
-    if (!parsed.success) {
-      const errorCode = parsed.error.errors[0]?.message ?? "INVALID_DATA";
-      const error = new Error(errorCode) as AppError;
-      error.statusCode = 400;
-      error.errorCode = errorCode;
-      return next(error);
-    }
+    if (!parsed.success) return respondValidationError(res, next, parsed);
 
     const { accessToken, refreshToken } = await loginUser(
       parsed.data,
@@ -114,48 +121,59 @@ export const refresh = async (
   }
 };
 
-// GET /api/auth/verify?token=…
-// Marca el correu com a verificat. La crida la fa la pàgina /verify-email del front,
-// no el navegador directament, perquè el resultat es pugui mostrar dins l'app.
-export const verify = async (
+// POST /api/auth/set-password
+// Estableix la contrasenya a partir del token de l'enllaç del correu (verificació
+// inicial o recuperació) i fa login automàtic — mateixa resposta que /login.
+export const setPasswordHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const token = req.query.token;
+    const parsed = setPasswordSchema.safeParse(req.body);
+    if (!parsed.success) return respondValidationError(res, next, parsed);
 
-    if (typeof token !== "string" || token.length === 0) {
-      const error = new Error("VERIFICATION_TOKEN_MISSING") as AppError;
-      error.statusCode = 400;
-      error.errorCode = "VERIFICATION_TOKEN_MISSING";
-      return next(error);
-    }
+    const { accessToken, refreshToken } = await setPassword(parsed.data);
 
-    await verifyEmail(token);
-    res.status(200).json({ verified: true });
+    setRefreshTokenCookie(res, refreshToken);
+    res.status(200).json({ accessToken });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// POST /api/auth/forgot-password
+// Sempre respon 204, existeixi el compte o no: cap resposta diferenciada pot
+// confirmar a qui la demana quins correus tenen compte.
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const parsed = forgotPasswordSchema.safeParse(req.body);
+    if (!parsed.success) return respondValidationError(res, next, parsed);
+
+    await requestPasswordReset(parsed.data.email, hashIp(req.ip));
+    res.status(204).send();
   } catch (err) {
     next(err);
   }
 };
 
 // POST /api/auth/resend-verification
-// Requereix sessió: només es pot demanar el reenviament del propi correu
+// Sense sessió: un compte encara sense contrasenya no es pot autenticar per
+// demanar-ho. Sempre respon 204, pel mateix motiu que /forgot-password.
 export const resendVerificationEmail = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    // authMiddleware ja hi ha posat userId; la comprovació és per satisfer el tipus
-    if (!req.userId) {
-      const error = new Error("AUTH_TOKEN_MISSING") as AppError;
-      error.statusCode = 401;
-      error.errorCode = "AUTH_TOKEN_MISSING";
-      return next(error);
-    }
+    const parsed = resendVerificationSchema.safeParse(req.body);
+    if (!parsed.success) return respondValidationError(res, next, parsed);
 
-    await resendVerification(req.userId, hashIp(req.ip));
+    await resendVerification(parsed.data.email, hashIp(req.ip));
     res.status(204).send();
   } catch (err) {
     next(err);

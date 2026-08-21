@@ -28,12 +28,13 @@ const EmailVerificationBanner = (): React.ReactElement | null => {
   }
 
   const handleResend = async (): Promise<void> => {
+    if (!userEmail) return;
     setIsSending(true);
     setFeedback(null);
     setErrorCode(null);
 
     try {
-      await resendVerification();
+      await resendVerification(userEmail);
       dispatch(markVerificationEmailSent());
       setFeedback(intl.formatMessage(messages.resendSuccess));
     } catch (error: unknown) {

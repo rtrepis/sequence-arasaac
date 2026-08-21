@@ -3,18 +3,43 @@
 
 import { z } from "zod";
 
-// Esquema de registre — email normalitzat a minúscules, contrasenya mínima 8 caràcters
-// Els missatges Zod usen codis d'error semàntics per facilitar la traducció al frontend
-export const registerSchema = z.object({
-  email: z
-    .string({ required_error: "EMAIL_REQUIRED" })
-    .email("EMAIL_INVALID_FORMAT")
-    .transform((v) => v.toLowerCase().trim()),
-  password: z
-    .string({ required_error: "PASSWORD_REQUIRED" })
-    .min(8, "PASSWORD_TOO_SHORT")
-    .max(128, "PASSWORD_TOO_LONG"),
-});
+// Requisits de robustesa de la contrasenya que s'estableix a /set-password.
+// Un símbol no és obligatori a propòsit: part de l'audiència d'AAC és gent gran
+// o poc habituada a l'ordinador, i les tres regles de sota ja allunyen les
+// contrasenyes trivials sense fer el formulari inabordable.
+const PASSWORD_MIN_LENGTH = 10;
+const passwordField = z
+  .string({ required_error: "PASSWORD_REQUIRED" })
+  .min(PASSWORD_MIN_LENGTH, "PASSWORD_TOO_SHORT")
+  .max(128, "PASSWORD_TOO_LONG")
+  .regex(/[a-z]/, "PASSWORD_MISSING_LOWERCASE")
+  .regex(/[A-Z]/, "PASSWORD_MISSING_UPPERCASE")
+  .regex(/[0-9]/, "PASSWORD_MISSING_NUMBER");
+
+// Esquema del signup — sense contrasenya: es crea l'usuari i s'estableix
+// la contrasenya després, a partir de l'enllaç del correu de benvinguda.
+export const signupSchema = z
+  .object({
+    name: z
+      .string({ required_error: "NAME_REQUIRED" })
+      .trim()
+      .min(1, "NAME_REQUIRED")
+      .max(120, "NAME_TOO_LONG"),
+    useCase: z.enum(["family", "teacher", "professional", "other"], {
+      required_error: "USE_CASE_REQUIRED",
+      invalid_type_error: "USE_CASE_REQUIRED",
+    }),
+    useCaseOther: z.string().trim().max(200).optional(),
+    email: z
+      .string({ required_error: "EMAIL_REQUIRED" })
+      .email("EMAIL_INVALID_FORMAT")
+      .transform((v) => v.toLowerCase().trim()),
+  })
+  // useCaseOther només té sentit —i només s'hi guarda— quan useCase és "other"
+  .transform((data) => ({
+    ...data,
+    useCaseOther: data.useCase === "other" ? data.useCaseOther : undefined,
+  }));
 
 // Esquema de login — contrasenya sense validació de longitud mínima per no revelar regles
 // Si l'usuari introdueix una contrasenya curta, ha de rebre INVALID_CREDENTIALS
@@ -28,6 +53,38 @@ export const loginSchema = z.object({
     .min(1, "PASSWORD_REQUIRED"),
 });
 
+// Esquema d'establiment de contrasenya — comú a la verificació inicial
+// (type "verify" dins el token) i a la recuperació (type "reset")
+export const setPasswordSchema = z
+  .object({
+    token: z.string({ required_error: "VERIFICATION_TOKEN_MISSING" }).min(1, "VERIFICATION_TOKEN_MISSING"),
+    password: passwordField,
+    passwordConfirmation: z.string({ required_error: "PASSWORD_REQUIRED" }),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "PASSWORD_MISMATCH",
+    path: ["passwordConfirmation"],
+  });
+
+// Esquema de la recuperació de contrasenya — un sol camp, cap indici de si l'email existeix
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string({ required_error: "EMAIL_REQUIRED" })
+    .email("EMAIL_INVALID_FORMAT")
+    .transform((v) => v.toLowerCase().trim()),
+});
+
+// Esquema del reenviament del correu de verificació — ja no requereix sessió
+export const resendVerificationSchema = z.object({
+  email: z
+    .string({ required_error: "EMAIL_REQUIRED" })
+    .email("EMAIL_INVALID_FORMAT")
+    .transform((v) => v.toLowerCase().trim()),
+});
+
 // Tipus inferits dels esquemes — usats al controller i service
-export type RegisterInput = z.infer<typeof registerSchema>;
+export type SignupInput = z.infer<typeof signupSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
+export type SetPasswordInput = z.infer<typeof setPasswordSchema>;
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+export type ResendVerificationInput = z.infer<typeof resendVerificationSchema>;

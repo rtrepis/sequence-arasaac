@@ -625,7 +625,7 @@
     "description": "Validació: contrasenya massa llarga (registre)"
   },
   "features.backend.auth.error.PASSWORD_TOO_SHORT": {
-    "defaultMessage": "Le mot de passe doit contenir au moins 8 caractères",
+    "defaultMessage": "Le mot de passe doit comporter au moins 10 caractères",
     "description": "Validació: contrasenya massa curta (registre)"
   },
   "features.backend.auth.error.REGISTER_ERROR": {
@@ -668,10 +668,6 @@
     "defaultMessage": "Mot de passe",
     "description": "Etiqueta del camp contrasenya"
   },
-  "features.backend.auth.registerTitle": {
-    "defaultMessage": "Créer un compte",
-    "description": "Títol del formulari de registre"
-  },
   "features.backend.auth.saveDocument": {
     "defaultMessage": "Enregistrer dans le cloud",
     "description": "Ítem del drawer per desar el document al backend"
@@ -683,14 +679,6 @@
   "features.backend.auth.submitLogin": {
     "defaultMessage": "Connexion",
     "description": "Botó per enviar el formulari de login"
-  },
-  "features.backend.auth.submitRegister": {
-    "defaultMessage": "S'inscrire",
-    "description": "Botó per enviar el formulari de registre"
-  },
-  "features.backend.auth.toggleToLogin": {
-    "defaultMessage": "Déjà un compte ? Connectez-vous",
-    "description": "Enllaç per tornar al formulari de login"
   },
   "features.backend.auth.toggleToRegister": {
     "defaultMessage": "Pas de compte ? Inscrivez-vous",
@@ -1479,23 +1467,11 @@
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Vérifie ton adresse e-mail pour enregistrer dans le cloud. Nous avons envoyé un lien à {email}."
   },
-  "features.backend.auth.verification.goToApp": {
-    "defaultMessage": "Aller à l'application"
-  },
-  "features.backend.auth.verification.pageTitle": {
-    "defaultMessage": "Vérification de l'e-mail"
-  },
   "features.backend.auth.verification.resend": {
     "defaultMessage": "Renvoyer"
   },
   "features.backend.auth.verification.resendSuccess": {
     "defaultMessage": "E-mail envoyé. Consulte ta boîte de réception."
-  },
-  "features.backend.auth.verification.verified": {
-    "defaultMessage": "Adresse vérifiée ! Tu peux maintenant enregistrer tes séquences dans le cloud."
-  },
-  "features.backend.auth.verification.verifying": {
-    "defaultMessage": "Nous vérifions ton adresse…"
   },
   "features.backend.wakeUp.title": {
     "defaultMessage": "Connexion à votre compte…"
@@ -1547,5 +1523,173 @@
   },
   "features.backend.auth.errorWithCode": {
     "defaultMessage": "{message} (Code : {code})"
+  },
+  "features.backend.auth.forgotPassword": {
+    "defaultMessage": "Mot de passe oublié ?",
+    "description": "Enllaç del formulari de login cap a la recuperació de contrasenya"
+  },
+  "features.backend.auth.error.NAME_REQUIRED": {
+    "defaultMessage": "Le nom est obligatoire",
+    "description": "Validació: camp nom buit al signup"
+  },
+  "features.backend.auth.error.NAME_TOO_LONG": {
+    "defaultMessage": "Le nom ne peut pas dépasser 120 caractères",
+    "description": "Validació: nom massa llarg al signup"
+  },
+  "features.backend.auth.error.USE_CASE_REQUIRED": {
+    "defaultMessage": "Merci d'indiquer comment vous utiliserez l'application",
+    "description": "Validació: selector d'ús de l'aplicació buit al signup"
+  },
+  "features.backend.auth.error.PASSWORD_MISSING_LOWERCASE": {
+    "defaultMessage": "Le mot de passe doit contenir au moins une lettre minuscule",
+    "description": "Validació: falta una minúscula a la contrasenya"
+  },
+  "features.backend.auth.error.PASSWORD_MISSING_UPPERCASE": {
+    "defaultMessage": "Le mot de passe doit contenir au moins une lettre majuscule",
+    "description": "Validació: falta una majúscula a la contrasenya"
+  },
+  "features.backend.auth.error.PASSWORD_MISSING_NUMBER": {
+    "defaultMessage": "Le mot de passe doit contenir au moins un chiffre",
+    "description": "Validació: falta un número a la contrasenya"
+  },
+  "features.backend.auth.error.PASSWORD_MISMATCH": {
+    "defaultMessage": "Les mots de passe ne correspondent pas",
+    "description": "Validació: la repetició no coincideix amb la contrasenya"
+  },
+  "features.backend.auth.error.SET_PASSWORD_ERROR": {
+    "defaultMessage": "Une erreur s'est produite lors de la définition du mot de passe. Réessayez.",
+    "description": "Error genèric d'establiment de contrasenya"
+  },
+  "features.backend.auth.password.minLength": {
+    "defaultMessage": "Au moins 10 caractères",
+    "description": "Requisit de contrasenya: longitud mínima"
+  },
+  "features.backend.auth.password.hasLowercase": {
+    "defaultMessage": "Une lettre minuscule",
+    "description": "Requisit de contrasenya: minúscula"
+  },
+  "features.backend.auth.password.hasUppercase": {
+    "defaultMessage": "Une lettre majuscule",
+    "description": "Requisit de contrasenya: majúscula"
+  },
+  "features.backend.auth.password.hasNumber": {
+    "defaultMessage": "Un chiffre",
+    "description": "Requisit de contrasenya: número"
+  },
+  "pages.signup.pageTitle": {
+    "defaultMessage": "Créez votre compte",
+    "description": "Títol de la pàgina de signup"
+  },
+  "pages.signup.hint": {
+    "defaultMessage": "Avec un compte, vous pouvez enregistrer vos séquences dans le cloud et les retrouver depuis n'importe quel appareil. Nous vous enverrons un e-mail pour confirmer votre adresse et choisir votre mot de passe — inutile d'en saisir un ici pour l'instant.",
+    "description": "Guia inicial de la pàgina de signup"
+  },
+  "pages.signup.name": {
+    "defaultMessage": "Nom",
+    "description": "Etiqueta del camp nom"
+  },
+  "pages.signup.useCase": {
+    "defaultMessage": "Comment allez-vous utiliser l'application ?",
+    "description": "Etiqueta del selector d'ús de l'aplicació"
+  },
+  "pages.signup.useCaseFamily": {
+    "defaultMessage": "En famille",
+    "description": "Opció d'ús de l'aplicació: família"
+  },
+  "pages.signup.useCaseTeacher": {
+    "defaultMessage": "En tant qu'enseignant(e)",
+    "description": "Opció d'ús de l'aplicació: docent"
+  },
+  "pages.signup.useCaseProfessional": {
+    "defaultMessage": "En tant que professionnel (orthophoniste, thérapeute...)",
+    "description": "Opció d'ús de l'aplicació: professional"
+  },
+  "pages.signup.useCaseOther": {
+    "defaultMessage": "Autre",
+    "description": "Opció d'ús de l'aplicació: altres"
+  },
+  "pages.signup.useCaseOtherLabel": {
+    "defaultMessage": "Expliquez-nous brièvement votre usage (facultatif)",
+    "description": "Etiqueta del camp de text lliure quan l'ús és \"altres\""
+  },
+  "pages.signup.email": {
+    "defaultMessage": "Adresse e-mail",
+    "description": "Etiqueta del camp correu"
+  },
+  "pages.signup.submit": {
+    "defaultMessage": "Créer le compte",
+    "description": "Botó per enviar el formulari de signup"
+  },
+  "pages.signup.loginLink": {
+    "defaultMessage": "Vous avez déjà un compte ? Connectez-vous",
+    "description": "Enllaç per tornar a l'aplicació i obrir el login"
+  },
+  "pages.signup.successTitle": {
+    "defaultMessage": "Consultez votre e-mail",
+    "description": "Títol de la pantalla d'èxit després del signup"
+  },
+  "pages.signup.success": {
+    "defaultMessage": "Nous avons envoyé un e-mail à {email} avec un lien pour confirmer votre adresse et choisir votre mot de passe. S'il n'apparaît pas dans votre boîte de réception, vérifiez aussi les spams.",
+    "description": "Missatge d'èxit després del signup"
+  },
+  "pages.signup.goToApp": {
+    "defaultMessage": "Aller à l'application",
+    "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"
+  },
+  "pages.setPassword.pageTitle": {
+    "defaultMessage": "Choisissez votre mot de passe",
+    "description": "Títol de la pàgina d'establiment de contrasenya"
+  },
+  "pages.setPassword.hint": {
+    "defaultMessage": "C'est le mot de passe que vous utiliserez désormais pour accéder à votre compte. Choisissez-en un que vous n'utilisez nulle part ailleurs.",
+    "description": "Guia inicial de la pàgina d'establiment de contrasenya"
+  },
+  "pages.setPassword.password": {
+    "defaultMessage": "Mot de passe",
+    "description": "Etiqueta del camp contrasenya"
+  },
+  "pages.setPassword.passwordConfirmation": {
+    "defaultMessage": "Répétez le mot de passe",
+    "description": "Etiqueta del camp de repetició de la contrasenya"
+  },
+  "pages.setPassword.mismatch": {
+    "defaultMessage": "Les mots de passe ne correspondent pas",
+    "description": "Error de validació quan les dues contrasenyes no coincideixen"
+  },
+  "pages.setPassword.submit": {
+    "defaultMessage": "Définir le mot de passe",
+    "description": "Botó per enviar el formulari d'establiment de contrasenya"
+  },
+  "pages.setPassword.missingToken": {
+    "defaultMessage": "Ce lien est incomplet.",
+    "description": "Error quan l'enllaç no porta cap token"
+  },
+  "pages.setPassword.forgotPasswordLink": {
+    "defaultMessage": "J'ai oublié mon mot de passe",
+    "description": "Enllaç a la pàgina de recuperació de contrasenya"
+  },
+  "pages.forgotPassword.pageTitle": {
+    "defaultMessage": "Récupérez votre mot de passe",
+    "description": "Títol de la pàgina de recuperació de contrasenya"
+  },
+  "pages.forgotPassword.hint": {
+    "defaultMessage": "Saisissez l'e-mail de votre compte et nous vous enverrons un lien pour choisir un nouveau mot de passe.",
+    "description": "Guia inicial de la pàgina de recuperació de contrasenya"
+  },
+  "pages.forgotPassword.email": {
+    "defaultMessage": "Adresse e-mail",
+    "description": "Etiqueta del camp correu"
+  },
+  "pages.forgotPassword.submit": {
+    "defaultMessage": "Envoyer le lien",
+    "description": "Botó per demanar l'enllaç de recuperació"
+  },
+  "pages.forgotPassword.success": {
+    "defaultMessage": "Si {email} possède un compte, nous lui avons envoyé un lien pour choisir un nouveau mot de passe. Vérifiez aussi les spams.",
+    "description": "Missatge sempre igual, existeixi o no el compte, per no revelar quins correus estan registrats"
+  },
+  "pages.forgotPassword.goToApp": {
+    "defaultMessage": "Aller à l'application",
+    "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"
   }
 }

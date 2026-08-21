@@ -22,6 +22,8 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const toUserSummary = (user: IUser): AdminUserSummary => ({
   id: String(user._id),
   email: user.email,
+  name: user.name,
+  useCase: user.useCase,
   status: user.status,
   role: user.role,
   emailVerified: user.emailVerified,

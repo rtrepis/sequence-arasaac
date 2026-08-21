@@ -191,41 +191,87 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 ## Descripció del projecte
 
 App per crear seqüències de pictogrames (ARASAAC), previsualitzar-les i imprimir-les.
-Té dos pàgines principales:
+Té dos pàgines principals:
 - **Edició** (`/create-sequence`): es construeix la seqüència afegint pictogrames
 - **Visualització** (`/view-sequence`): es previsualitza amb control de mida dels pictogrames i separació entre files i columnes. Permet imprimir i veure a full screen.
 
+Funciona sencer **sense compte**: la configuració i les seqüències es guarden al navegador (`sessionStorage`/`localStorage`). Amb un compte (opcional), la configuració d'usuari i el vocabulari personal es desen al núvol i se sincronitzen entre dispositius — vegeu «Backend i sincronització al núvol» més avall.
+
 ## Tech stack
 
-- **React 18** + **TypeScript** (Vite)
-- **Redux Toolkit** — estat global amb 2 slices: `uiSlice` i `documentSlice`
+**Monorepo** (npm workspaces + Turborepo, `turbo.json`): `apps/web` (front), `apps/api` (back) i `packages/shared-types` (tipus compartits). Cada workspace té el seu propi `package.json`; les ordres `npm run dev|build|lint|test` a l'arrel les reparteix Turbo a cada workspace (`--filter=<workspace>` per acotar-ne un).
+
+**Front (`apps/web`)**:
+- **React 18** + **TypeScript** (Vite, `@vitejs/plugin-react-swc`)
+- **Redux Toolkit** — estat global amb 2 slices: `uiSlice` (`features/user-settings`) i `documentSlice` (`features/sequence`)
 - **React Router v6** — enrutament amb paràmetre `/:locale`
 - **MUI (Material UI)** + **Emotion** — components UI i estils
-- **react-intl** — multiidioma (ca, es, en)
+- **react-intl** — multiidioma (ca, es, en, fr, it)
+- **Path aliases** (`vite.config.ts` i `tsconfig.json`, han de coincidir): `@/*` → `src/*`, `@features/*`, `@shared/*`, `@app/*`, `@components/*`
+
+**Back (`apps/api`)**:
+- **Express** + **TypeScript**, executat amb `tsx` en dev
+- **MongoDB** + **Mongoose** — persistència de documents, usuaris i esdeveniments de seguretat
+- **Zod** — validació d'entrada i de variables d'entorn (`config/env.ts`)
+- **JWT** (access + refresh amb cookie `httpOnly`) — autenticació
+- **Cloudinary** — imatges personalitzades de vocabulari
+- **Resend** — correu transaccional (verificació, avisos d'error)
+- Desplegat a **Render** (pla gratuït: el contenidor s'adorm als 15 min d'inactivitat — vegeu més avall)
+
+**Tipus compartits (`packages/shared-types`)**: tipus de domini (`document.ts`, `sequence.ts`, `ui.ts`, `admin.ts`, `FontFamily.ts`) importats com a `@sequence-arasaac/shared-types` tant des del front com del back, perquè el contracte de l'API i el model de Redux no divergeixin.
 
 ## Estructura clau
 
 ```
-src/
-├── pages/              # Pàgines (WelcomePage, EditSequencesPage, ViewSequencePage)
-├── components/         # Components reutilitzables
-├── hooks/              # Custom hooks (usePageFormat, useScaleCalculator, usePrintStyles...)
-├── types/              # Tipos TypeScript (sequence.ts, PageFormat.ts, ui.ts...)
-├── app/                # Redux store + slices
-├── features/           # Features modularitzades (print-refactor, print-preview-example)
-├── languages/          # Traduccions JSON
-└── configs/            # Configuracions generals
+apps/
+├── web/
+│   ├── languages/           # Traduccions FONT (ca, es, en, fr, it) — editar aquí
+│   ├── e2e/                 # Tests Playwright (captures/vídeos de funcionalitats)
+│   └── src/
+│       ├── pages/            # Pàgines (WelcomePage, EditSequencesPage, ViewSequencePage, AdminPage...)
+│       ├── components/       # Components reutilitzables (SettingsLayout, AppTabs, PictogramCard...)
+│       ├── Modals/           # DefaultSettingsModal, PictEditModal, PictEditModalList
+│       ├── features/         # Features modularitzades:
+│       │   ├── backend/        #   crida a l'API: api/ (apiClient, wake-up), auth/, documents/, user-settings/
+│       │   ├── user-settings/  #   estat local (Redux) + persistència al navegador
+│       │   ├── sequence/       #   documentSlice, contingut de les seqüències
+│       │   ├── print/          #   hooks d'impressió i format de pàgina
+│       │   ├── pictogram/      #   cerca i keywords d'ARASAAC
+│       │   ├── word-profile/   #   vocabulari personal
+│       │   ├── admin/          #   panell d'administració
+│       │   └── ai-search/
+│       ├── app/               # Redux store (store.ts, hooks.ts)
+│       ├── types/              # Tipus locals (estenen els de shared-types)
+│       ├── style/               # palette.ts, themeMui.ts (única font de veritat de colors)
+│       ├── languages/          # JSON COMPILATS (AST react-intl) — generats, no editar
+│       └── configs/            # Configuracions generals
+├── api/
+│   └── src/
+│       ├── modules/          # Un mòdul per domini, cadascun amb controller/service/model/routes/validators:
+│       │   ├── auth/           #   registre, login, refresh, verificació de correu
+│       │   ├── documents/      #   CRUD de seqüències desades + assets Cloudinary
+│       │   ├── user-settings/  #   configuració UI sincronitzada (PUT /user/ui-settings)
+│       │   ├── client-errors/  #   registre d'errors arribats a l'usuari + avís per correu
+│       │   ├── admin/          #   panell d'administració (requireAdmin)
+│       │   ├── config/         # interruptor de registre / sostre d'usuaris (a BD)
+│       │   └── security/       #   SecurityEvent (traça antiabús, TTL 30 dies)
+│       ├── middleware/       # authMiddleware, requireAdmin, requireVerifiedEmail, errorHandler
+│       ├── shared/            # emailCanonical, ipHash, tierLimits, mailer, mongooseSchemas, zodSchemas
+│       └── config/            # env.ts (validació zod de l'entorn), database.ts
+└── packages/shared-types/    # Tipus de domini compartits pel front i el back
 ```
 
 ## Hooks principals
 
-| Hook | Rol |
-|------|-----|
-| `usePageFormat` | Formats de pàgina (A4, A3, FULLSCREEN) i orientació |
-| `useScaleCalculator` | Càlcul d'escales segons DPI i dimensions |
-| `usePrintStyles` | Estils dinàmics per impressió |
-| `useFullScreen` | Mode fullscreen |
-| `useAraSaac` | Connexió amb API ARASAAC per obtenir pictogrames |
+| Hook | Ubicació | Rol |
+|------|----------|-----|
+| `usePageFormat` | `features/print/hooks` | Formats de pàgina (A4, A3, FULLSCREEN) i orientació |
+| `useScaleCalculator` | `features/print/hooks` | Càlcul d'escales segons DPI i dimensions |
+| `usePrintStyles` | `features/print/hooks` | Estils dinàmics per impressió |
+| `useFullScreen` | `features/print/hooks` | Mode fullscreen |
+| `useArasaacKeywords` | `features/pictogram/hooks` | Connexió amb API ARASAAC per obtenir pictogrames |
+| `useSaveUiSettings` | `features/backend/user-settings/hooks` | Desat en segon pla de la configuració d'usuari, amb reintent i diàleg d'error — vegeu més avall |
+| `useIsBackendWakingUp` | `features/backend/api` | Estat de «el servidor s'està despertant» per a `BackendWakeUpNotice` |
 
 ---
 
@@ -263,12 +309,50 @@ src/
 
 ### Traduccions
 
-- Format dels JSON de languages: objecte amb claus `"id.del.missatge"` i valor array amb `[{ type: 0, value: "text" }]`.
+- **Cinc idiomes**: `ca` (principal), `es`, `en`, `fr`, `it`.
+- **Dos nivells de fitxers, mai confondre'ls**: els FONT viuen a `apps/web/languages/*.json` (format `{ "clau": { "defaultMessage": "...", "description": "..." } }`) i s'editen a mà; els COMPILATS viuen a `apps/web/src/languages/*.json` (AST de react-intl) i es **generen**, mai s'editen directament.
+- Compilar: `cd apps/web && npm run prepare` (crida `scripts/compile-languages.mjs`, que itera tots els `.json` de `languages/` amb `formatjs compile` — afegir un idioma nou no requereix tocar cap script).
 - Les claus de missatge i les traduccions JSON han de coincidir exactament amb els `id` definits a `defineMessages` als `.lang.ts`.
-- Tres fitxers: `ca.json`, `es.json`, `en.json`.
+- Flux complet i checklist: skill `language` (`.claude/skills/language.md`).
 
 ### Build i compilació
 
-- Node es trova a `/usr/local/bin/node`. El compilador TypeScript es runa amb `/usr/local/bin/node node_modules/.bin/tsc --noEmit`.
-- Hi ha errors pre-existents al repositori (path aliases, tests incomplets). Cal filtrar la sortida per verificar que els errors nous son els nostres amb grep.
-- `test-utils.tsx` conté una mock de l'estat Redux completa. Quan s'afegeix un camp obligatori a un type de defaults, cal actualitzar-la aquí.
+- Ordres a l'arrel del monorepo (`npm run dev|build|lint|test`) les reparteix **Turbo** a tots els workspaces; `--filter=web` o `--filter=api` acota a un de sol.
+- **Front** (`apps/web`): `npm run lint` = `eslint ./src`; `npm run build` = `vite build` (comprova tipus com a part del build). `npm test` i `npm run test-coverage` són encara placeholders (`echo ... && exit 0`) tot i que el workspace té `@testing-library/react`, `msw` i tests `.test.ts(x)` reals — no assumir que `npm test` executa res. Els tests e2e (captures/vídeos de funcionalitats) van amb **Playwright** (`apps/web/playwright.config.ts`, carpeta `e2e/`).
+- **Back** (`apps/api`): `npm run lint` = `tsc --noEmit`; `npm test` = `vitest run` (usa `mongodb-memory-server`, per això els fitxers `*.test.ts` i `src/test/` queden exclosos del `tsconfig.json` de build/producció).
+- El compilador TypeScript del front es pot cridar directament amb `node node_modules/.bin/tsc --noEmit` si cal aïllar errors de tipus del lint d'ESLint.
+- Hi ha errors pre-existents al repositori (tests incomplets, etc.). Cal filtrar la sortida per verificar que els errors nous són els nostres amb grep.
+- `test-utils.tsx` (`apps/web/src/utils`) conté una mock de l'estat Redux completa. Quan s'afegeix un camp obligatori a un type de defaults, cal actualitzar-la aquí.
+- Desplegament: front a **Vercel**, back a **Render** (`render.yaml`, `buildCommand: npx turbo build --filter=api`) — vegeu «Desplegament: el front i l'API han d'anar al mateix origen» a l'apartat d'antifrau per als detalls de per què han de compartir origen.
+
+---
+
+## Backend i sincronització al núvol
+
+### Separació `features/*` vs `features/backend/*`
+
+- **`features/<domini>/`** (`user-settings`, `sequence`...) és l'estat local: slice de Redux i, quan cal, persistència directa al navegador (`storage/settingsStorage.ts`). Funciona sense compte.
+- **`features/backend/<domini>/`** (`auth`, `documents`, `user-settings`) és tot el que parla amb l'API: `services/` (crides amb `apiClient`) i `store/` (thunks). `features/backend/api/` és transversal: `apiClient` (axios amb interceptors JWT) i tot el que gestiona l'estat "el servidor s'està despertant".
+- Un domini pot tenir estat a banda i banda (`user-settings` local i `backend/user-settings`) precisament perquè la mateixa configuració es guarda diferent segons si hi ha sessió — vegeu `saveUserUiThunk` (`features/backend/user-settings/store/settingsThunks.ts`): autenticat → `PUT /user/ui-settings`; anònim → `localStorage`, i **sense vocabulari** (`wordProfiles: []`), perquè el vocabulari amb imatges en base64 només té sentit lligat a un compte i ompliria l'espai del navegador d'un dispositiu compartit.
+
+### El servidor s'adorm (pla gratuït de Render)
+
+- Render adorm `apps/api` als 15 minuts sense trànsit; la primera petició que hi arriba el desperta i pot trigar prop d'un minut. Sense cap senyal, l'usuari només veu un botó bloquejat.
+- **`backendStatus.ts`** (`features/backend/api`) dedueix el desvetllament de la durada de les peticions reals en curs (llindar `SLOW_REQUEST_THRESHOLD_MS`, 3 s) — **no** fa cap petició pròpia per comprovar-ho. És un mòdul fora de Redux a propòsit: `apiClient` (que no és un component) l'ha de poder alimentar des dels seus interceptors (`notifyRequestStart`/`notifyRequestEnd`).
+- **`warmUpBackend.ts`** fa un ping preventiu (`GET /health`) quan té sentit avançar el cost (p. ex. en obrir el formulari de login), amb un cooldown de 10 min perquè no es repeteixi dins la mateixa sessió activa.
+- Les peticions de fons (`isBackgroundRequest: true` a `AxiosRequestConfig`, camp propi afegit per augmentació de tipus a `apiClient.ts`) no compten per a l'avís: ningú les espera activament.
+- **`BackendWakeUpNotice`** és un `Snackbar` **no bloquejant**: l'editor funciona sencer sense backend, així que enfosquir la pantalla mig minut seria pitjor que l'espera mateixa. Només si hi ha un backdrop obert (`state.backdrop.open` del `FeedbackContext`) canvia el text per avisar que allò sí que està bloquejat.
+- `REQUEST_TIMEOUT_MS` d'`apiClient` és **90 s**, deliberadament ampli perquè un desvetllament que voreja el minut no es talli i es converteixi en error just quan el servidor ja anava a respondre.
+
+### Classificació de fallades i reintent (`requestFailure.ts`)
+
+- Tota fallada de petició es classifica amb `classifyRequestFailure`: l'únic que importa és si **val la pena reintentar sol** (`isTransient`). Transitori = xarxa/timeout/backend engegant-se (408/425/429/502/503/504, codis axios `ECONNABORTED`/`ETIMEDOUT`/`ERR_NETWORK`); no transitori = rebuig del servidor (dades invàlides, quota) o `STORAGE_FULL` (espai del navegador exhaurit, codi propi que no ve de cap petició HTTP).
+- Patró de referència: `useSaveUiSettings` (`features/backend/user-settings/hooks`). El desat **no bloqueja el tancament del modal** (els panells ja han sincronitzat Redux abans de desar): es llança en segon pla, amb un sol reintent automàtic si la primera fallada és transitòria (`TRANSIENT_RETRY_DELAY_MS`, 8 s), i només si el segon intent també falla apareix `SettingsSaveErrorDialog` — un diàleg, no un snackbar, perquè arriba quan l'usuari ja no pensa en la configuració i cal dir-li què s'hi juga i què pot fer.
+- Qualsevol fallada que arribi a l'usuari (després del reintent automàtic) es reporta amb `reportClientError` cap al mòdul `client-errors` de l'API — «s'informa del que ha arribat a l'usuari, no del que s'ha resolt sol».
+
+### Registre d'errors del client (`modules/client-errors`, API)
+
+- Els errors que arriben a un usuari es registren a `ClientErrorModel` i, si `ADMIN_ALERT_EMAIL` està configurat, generen un correu — amb throttle d'una hora per codi (`ALERT_THROTTLE_MS`) perquè una fallada que afecti tothom alhora no esgoti la quota diària de correu just el dia que més falta fa.
+- `recordClientError` **mai llança**: un problema de registre no ha de convertir un error menor de l'usuari en un de gros.
+- `errorHandler` (middleware Express) hi registra també qualsevol resposta 5xx pròpia amb `SERVER_` de prefix al codi; els 4xx no es registren perquè són respostes previstes.
+- Visible al panell d'administració (`AdminClientErrorsTable`, `features/admin`).
