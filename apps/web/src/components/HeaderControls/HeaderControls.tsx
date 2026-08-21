@@ -32,8 +32,10 @@ const sortedLangs = [...langTranslateApp].sort();
 
 /**
  * Botons d'accés (login/registre) i selector d'idioma de la pantalla
- * d'inici. Per sota de `sm` els tres es pleguen en un únic menú clàssic
- * (icona d'hamburguesa) a la mateixa posició.
+ * d'inici, amb tres nivells segons l'amplada:
+ * - Escriptori (`md`+): idioma, login i registre, tots en línia.
+ * - Tauleta (`sm`-`md`): registre en línia + menú clàssic amb login i idioma.
+ * - Mòbil (<`sm`): tot plegat en un únic menú clàssic.
  */
 const HeaderControls = (): React.ReactElement => {
   const intl = useIntl();
@@ -47,10 +49,12 @@ const HeaderControls = (): React.ReactElement => {
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [langAnchor, setLangAnchor] = useState<null | HTMLElement>(null);
+  const [tabletAnchor, setTabletAnchor] = useState<null | HTMLElement>(null);
   const [mobileAnchor, setMobileAnchor] = useState<null | HTMLElement>(null);
 
   const handleLangChange = (value: string): void => {
     setLangAnchor(null);
+    setTabletAnchor(null);
     setMobileAnchor(null);
     if (value === appLang) return;
     // La pantalla d'inici no porta locale a la URL: n'hi ha prou amb l'estat
@@ -64,6 +68,7 @@ const HeaderControls = (): React.ReactElement => {
   };
 
   const handleLogin = (): void => {
+    setTabletAnchor(null);
     setMobileAnchor(null);
     setAuthModalOpen(true);
   };
@@ -86,18 +91,47 @@ const HeaderControls = (): React.ReactElement => {
     </MenuItem>
   ));
 
+  const loginMenuItem = (
+    <MenuItem key="login" onClick={handleLogin}>
+      <ListItemIcon>
+        <AiOutlineLogin />
+      </ListItemIcon>
+      <ListItemText>{intl.formatMessage(messages.loginButton)}</ListItemText>
+    </MenuItem>
+  );
+
+  const registerMenuItem = (
+    <MenuItem key="register" onClick={handleRegister}>
+      <ListItemIcon>
+        <AiOutlineUserAdd />
+      </ListItemIcon>
+      <ListItemText>{intl.formatMessage(messages.registerButton)}</ListItemText>
+    </MenuItem>
+  );
+
+  const registerButton = !isLoggedIn && (
+    <Button
+      color="primary"
+      variant="outlined"
+      size="small"
+      onClick={handleRegister}
+    >
+      {intl.formatMessage(messages.registerButton)}
+    </Button>
+  );
+
   return (
     <>
-      {/* Grup complet visible a partir de sm */}
+      {/* Escriptori (md+): idioma, login i registre en línia */}
       <Stack
         direction="row"
         spacing={1}
         alignItems="center"
-        sx={{ display: { xs: "none", sm: "flex" } }}
+        sx={{ display: { xs: "none", md: "flex" } }}
       >
         <Tooltip title={intl.formatMessage(messages.languageSelector)}>
           <Button
-            color="inherit"
+            color="primary"
             size="small"
             startIcon={<AiOutlineGlobal />}
             onClick={(event) => setLangAnchor(event.currentTarget)}
@@ -109,26 +143,35 @@ const HeaderControls = (): React.ReactElement => {
         </Tooltip>
 
         {!isLoggedIn && (
-          <>
-            <Button color="inherit" size="small" onClick={handleLogin}>
-              {intl.formatMessage(messages.loginButton)}
-            </Button>
-            <Button
-              color="inherit"
-              variant="outlined"
-              size="small"
-              onClick={handleRegister}
-            >
-              {intl.formatMessage(messages.registerButton)}
-            </Button>
-          </>
+          <Button color="primary" size="small" onClick={handleLogin}>
+            {intl.formatMessage(messages.loginButton)}
+          </Button>
         )}
+        {registerButton}
       </Stack>
 
-      {/* Menú clàssic per sota de sm: mateixos ítems plegats en un sol botó */}
+      {/* Tauleta (sm-md): registre en línia + menú clàssic amb login i idioma */}
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+        sx={{ display: { xs: "none", sm: "flex", md: "none" } }}
+      >
+        {registerButton}
+        <IconButton
+          color="primary"
+          onClick={(event) => setTabletAnchor(event.currentTarget)}
+          aria-label={intl.formatMessage(messages.openMenu)}
+          aria-haspopup="true"
+        >
+          <AiOutlineMenu />
+        </IconButton>
+      </Stack>
+
+      {/* Mòbil (<sm): tot plegat en un únic menú clàssic */}
       <Box sx={{ display: { xs: "flex", sm: "none" } }}>
         <IconButton
-          color="inherit"
+          color="primary"
           onClick={(event) => setMobileAnchor(event.currentTarget)}
           aria-label={intl.formatMessage(messages.openMenu)}
           aria-haspopup="true"
@@ -146,6 +189,16 @@ const HeaderControls = (): React.ReactElement => {
         {langMenuItems}
       </Menu>
 
+      {/* Menú clàssic de tauleta: login i idioma (el registre ja va en línia) */}
+      <Menu
+        anchorEl={tabletAnchor}
+        open={Boolean(tabletAnchor)}
+        onClose={() => setTabletAnchor(null)}
+      >
+        {!isLoggedIn && [loginMenuItem, <Divider key="divider" />]}
+        {langMenuItems}
+      </Menu>
+
       {/* Menú clàssic mòbil: login, registre i idioma junts */}
       <Menu
         anchorEl={mobileAnchor}
@@ -153,22 +206,8 @@ const HeaderControls = (): React.ReactElement => {
         onClose={() => setMobileAnchor(null)}
       >
         {!isLoggedIn && [
-          <MenuItem key="login" onClick={handleLogin}>
-            <ListItemIcon>
-              <AiOutlineLogin />
-            </ListItemIcon>
-            <ListItemText>
-              {intl.formatMessage(messages.loginButton)}
-            </ListItemText>
-          </MenuItem>,
-          <MenuItem key="register" onClick={handleRegister}>
-            <ListItemIcon>
-              <AiOutlineUserAdd />
-            </ListItemIcon>
-            <ListItemText>
-              {intl.formatMessage(messages.registerButton)}
-            </ListItemText>
-          </MenuItem>,
+          loginMenuItem,
+          registerMenuItem,
           <Divider key="divider" />,
         ]}
         {langMenuItems}

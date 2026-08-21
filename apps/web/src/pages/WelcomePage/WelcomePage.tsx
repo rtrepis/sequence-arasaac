@@ -30,15 +30,14 @@ const WelcomePage = (): React.ReactElement => {
 
   return (
     <>
+      <Box bgcolor={"primary.main"} height={"1em"} width={"100wv"}></Box>
       <Box
-        bgcolor={"primary.main"}
-        width={"100wv"}
         sx={{
           display: "flex",
           justifyContent: "flex-end",
           alignItems: "center",
           px: 2,
-          py: 0.5,
+          py: 1,
         }}
       >
         <HeaderControls />
