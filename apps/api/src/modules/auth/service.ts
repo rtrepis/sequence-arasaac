@@ -3,7 +3,9 @@
 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import type { LangsApp } from "@sequence-arasaac/shared-types";
 import { env } from "../../config/env";
+import { toLangsApp } from "../../shared/langsApp";
 import { UserModel } from "./model";
 import type { IUser } from "./model";
 import type {
@@ -115,7 +117,8 @@ const deliverPasswordEmail = async (
   email: string,
   name: string | undefined,
   type: "verify" | "reset",
-  ipHash: string
+  ipHash: string,
+  locale: LangsApp
 ): Promise<boolean> => {
   const token = jwt.sign({ userId, type } as PasswordTokenPayload, env.JWT_SECRET, {
     expiresIn: type === "verify" ? VERIFICATION_TOKEN_EXPIRES_IN : RESET_TOKEN_EXPIRES_IN,
@@ -124,8 +127,8 @@ const deliverPasswordEmail = async (
   const url = `${env.APP_PUBLIC_URL}/set-password?token=${token}`;
   const sent =
     type === "verify"
-      ? await sendVerificationEmail(email, name, url)
-      : await sendPasswordResetEmail(email, url);
+      ? await sendVerificationEmail(email, name, url, locale)
+      : await sendPasswordResetEmail(email, url, locale);
 
   if (sent) {
     await recordSecurityEvent({
@@ -199,7 +202,7 @@ export const signupUser = async (
   // en cap cas: cap canvi de contrasenya passa aquí, només al moment de
   // completar-lo a /set-password.
   const existing = await UserModel.findOne({ emailCanonical })
-    .select("_id email name status")
+    .select("_id email name status langSettings")
     .lean();
 
   if (existing) {
@@ -211,7 +214,14 @@ export const signupUser = async (
         { expiresIn: RESET_TOKEN_EXPIRES_IN }
       );
       const resetUrl = `${env.APP_PUBLIC_URL}/set-password?token=${token}`;
-      const sent = await sendAccountExistsEmail(existing.email, existing.name, resetUrl);
+      // Compte ja existent: el correu va en el seu idioma desat, no en el de qui
+      // ara prova de registrar-se amb la mateixa adreça (pot no ser la mateixa persona).
+      const sent = await sendAccountExistsEmail(
+        existing.email,
+        existing.name,
+        resetUrl,
+        existing.langSettings?.app
+      );
       if (sent) {
         await recordSecurityEvent({
           type: "reset_requested",
@@ -251,7 +261,11 @@ export const signupUser = async (
     user.email,
     user.name,
     "verify",
-    ipHash
+    ipHash,
+    // Encara no hi ha langSettings pròpia: és l'únic moment en què l'idioma
+    // del correu ve de la petició, no del compte. toLangsApp normalitza
+    // qualsevol valor desconegut cap al català, sense bloquejar el registre.
+    toLangsApp(input.locale)
   );
 
   return { emailSent };
@@ -315,7 +329,7 @@ export const requestPasswordReset = async (
 ): Promise<void> => {
   const emailCanonical = toCanonicalEmail(email);
   const user = await UserModel.findOne({ emailCanonical })
-    .select("email name status")
+    .select("email name status langSettings")
     .lean();
 
   // Compte inexistent o suspès: sortir en silenci és la resposta correcta.
@@ -328,7 +342,14 @@ export const requestPasswordReset = async (
     return;
   }
 
-  await deliverPasswordEmail(userId, user.email, user.name, "reset", ipHash);
+  await deliverPasswordEmail(
+    userId,
+    user.email,
+    user.name,
+    "reset",
+    ipHash,
+    user.langSettings?.app ?? "ca"
+  );
 };
 
 // Reenvia el correu de benvinguda+verificació. Ja no requereix sessió: un compte
@@ -343,7 +364,7 @@ export const resendVerification = async (
 ): Promise<void> => {
   const emailCanonical = toCanonicalEmail(email);
   const user = await UserModel.findOne({ emailCanonical })
-    .select("email name emailVerified")
+    .select("email name emailVerified langSettings")
     .lean();
 
   if (!user || user.emailVerified) {
@@ -366,7 +387,14 @@ export const resendVerification = async (
     return;
   }
 
-  await deliverPasswordEmail(userId, user.email, user.name, "verify", ipHash);
+  await deliverPasswordEmail(
+    userId,
+    user.email,
+    user.name,
+    "verify",
+    ipHash,
+    user.langSettings?.app ?? "ca"
+  );
 };
 
 // Autentica un usuari existent — missatge genèric per no revelar si l'email existeix o no

@@ -61,6 +61,7 @@ const SignupPage = (): React.ReactElement => {
         useCase,
         useCaseOther: useCase === "other" ? useCaseOther : undefined,
         email,
+        locale,
       });
       setSubmittedEmail(email);
     } catch (error: unknown) {

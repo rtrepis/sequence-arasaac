@@ -24,11 +24,14 @@ export interface SignupResponse {
 }
 
 // Crea el compte sense contrasenya: s'estableix després, a /set-password
+// locale: idioma del correu de benvinguda — encara no hi ha compte on desar-lo,
+// així que és l'única crida d'auth que l'ha de portar explícitament.
 export const signup = async (input: {
   name: string;
   useCase: UserUseCase;
   useCaseOther?: string;
   email: string;
+  locale?: string;
 }): Promise<SignupResponse> => {
   const { data } = await apiClient.post<SignupResponse>("/auth/signup", input);
   return data;
