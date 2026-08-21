@@ -291,6 +291,9 @@
   "components.defaultSettings.vocabularyPanel.wordRemoved": {
     "defaultMessage": "«{word}» eliminada del teu vocabulari."
   },
+  "features.sequence.draft.saveError": {
+    "defaultMessage": "No s'ha pogut desar la seqüència en aquest navegador. Descarrega el fitxer per no perdre la feina."
+  },
   "features.wordProfile.list.title": {
     "defaultMessage": "Les meves paraules ({count})"
   },

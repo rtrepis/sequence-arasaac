@@ -291,6 +291,9 @@
   "components.defaultSettings.vocabularyPanel.wordRemoved": {
     "defaultMessage": "«{word}» eliminada de tu vocabulario."
   },
+  "features.sequence.draft.saveError": {
+    "defaultMessage": "No se ha podido guardar la secuencia en este navegador. Descarga el archivo para no perder el trabajo."
+  },
   "features.wordProfile.list.title": {
     "defaultMessage": "Mis palabras ({count})"
   },
