@@ -306,6 +306,18 @@
   "features.wordProfile.list.editingBadge": {
     "defaultMessage": "Editing"
   },
+  "components.headerControls.loginButton": {
+    "defaultMessage": "Log in"
+  },
+  "components.headerControls.registerButton": {
+    "defaultMessage": "Sign up"
+  },
+  "components.headerControls.languageSelector": {
+    "defaultMessage": "Language selector"
+  },
+  "components.headerControls.openMenu": {
+    "defaultMessage": "Open account and language menu"
+  },
   "components.logoMenu.download": {
     "defaultMessage": "Download"
   },

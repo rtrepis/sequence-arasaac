@@ -8,6 +8,7 @@ import { CssBaseline } from "@mui/material";
 import { IntlProvider } from "react-intl";
 import messages from "../languages/en.json";
 import { uiReducer } from "@features/user-settings/store/uiSlice";
+import { authReducer } from "@features/backend/auth/store/authSlice";
 import { Sequence } from "../types/sequence";
 import { Ui } from "../types/ui";
 import { BrowserRouter } from "react-router-dom";
@@ -87,6 +88,7 @@ const render = (
       reducer: {
         sequence: sequenceReducer,
         ui: uiReducer,
+        auth: authReducer,
       },
       preloadedState: preloadedState,
     }),

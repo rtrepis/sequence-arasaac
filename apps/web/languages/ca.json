@@ -306,6 +306,18 @@
   "features.wordProfile.list.editingBadge": {
     "defaultMessage": "Editant"
   },
+  "components.headerControls.loginButton": {
+    "defaultMessage": "Inicia sessió"
+  },
+  "components.headerControls.registerButton": {
+    "defaultMessage": "Registra't"
+  },
+  "components.headerControls.languageSelector": {
+    "defaultMessage": "Selector d'idioma"
+  },
+  "components.headerControls.openMenu": {
+    "defaultMessage": "Obrir menú de compte i idioma"
+  },
   "components.logoMenu.download": {
     "defaultMessage": "Descarregar"
   },
