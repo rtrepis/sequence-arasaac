@@ -65,12 +65,32 @@ describe("signupUser", () => {
     expect(user?.name).toBe("Algú");
   });
 
-  it("hauria de rebutjar un alias de la mateixa bústia", async () => {
+  it("hauria de respondre igual a un alias d'una bústia ja registrada, sense crear-hi un segon compte", async () => {
     await signupUser({ ...SIGNUP_INPUT, email: "algu@gmail.com" }, IP_HASH);
 
-    await expect(
-      signupUser({ ...SIGNUP_INPUT, email: "a.l.g.u+prova@gmail.com" }, IP_HASH)
-    ).rejects.toThrow("EMAIL_ALREADY_EXISTS");
+    // Cap error: la resposta ha de ser indistingible d'un signup nou, o es
+    // podrien enumerar comptes provant alias a l'atzar.
+    const result = await signupUser(
+      { ...SIGNUP_INPUT, email: "a.l.g.u+prova@gmail.com" },
+      IP_HASH
+    );
+    expect(result.emailSent).toBe(true);
+
+    const count = await UserModel.countDocuments({ emailCanonical: "algu@gmail.com" });
+    expect(count).toBe(1);
+  });
+
+  it("no hauria de tocar el compte existent en repetir el signup amb el mateix correu", async () => {
+    await createActiveUser("algu@example.com", PASSWORD);
+    const before = await UserModel.findOne({ emailCanonical: "algu@example.com" }).lean();
+
+    await signupUser({ ...SIGNUP_INPUT, email: "algu@example.com" }, IP_HASH);
+
+    const after = await UserModel.findOne({ emailCanonical: "algu@example.com" }).lean();
+    // Res canvia fins que l'usuari completa /set-password amb la contrasenya nova
+    expect(after?.passwordHash).toBe(before?.passwordHash);
+    expect(after?.tokenVersion).toBe(before?.tokenVersion);
+    expect(after?.name).toBe(before?.name);
   });
 
   it("hauria de conservar l'adreça original tal com l'ha escrita l'usuari", async () => {

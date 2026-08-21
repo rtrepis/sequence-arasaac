@@ -102,11 +102,6 @@ const messages = defineMessages({
     defaultMessage: "Correu electrònic o contrasenya incorrectes",
     description: "Error de login: credencials incorrectes",
   },
-  EMAIL_ALREADY_EXISTS: {
-    id: "features.backend.auth.error.EMAIL_ALREADY_EXISTS",
-    defaultMessage: "Aquest correu electrònic ja està registrat",
-    description: "Error de registre: email ja existent",
-  },
   EMAIL_REQUIRED: {
     id: "features.backend.auth.error.EMAIL_REQUIRED",
     defaultMessage: "El correu electrònic és obligatori",
