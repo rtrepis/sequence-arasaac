@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useIntl } from "react-intl";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   AiOutlineCheck,
   AiOutlineGlobal,
@@ -31,22 +31,18 @@ import messages from "./HeaderControls.lang";
 const sortedLangs = [...langTranslateApp].sort();
 
 /**
- * Botons d'accés (login/registre) i selector d'idioma a la dreta de la
- * NavBar. Per sota de `sm` els tres es pleguen en un únic menú clàssic
+ * Botons d'accés (login/registre) i selector d'idioma de la pantalla
+ * d'inici. Per sota de `sm` els tres es pleguen en un únic menú clàssic
  * (icona d'hamburguesa) a la mateixa posició.
  */
 const HeaderControls = (): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { locale = "ca" } = useParams<{ locale: string }>();
 
-  // El redux "app lang" no sempre coincideix amb el locale de la URL (per
-  // exemple en carregar l'app anònimament, abans de triar idioma). El
-  // selector mostra i marca el locale de la URL, que és el que realment
-  // s'està veient a la pantalla.
-  const searchLang = useAppSelector((state) => state.ui.lang.search);
+  const { app: appLang, search: searchLang } = useAppSelector(
+    (state) => state.ui.lang,
+  );
   const isLoggedIn = useAppSelector((state) => state.auth.accessToken !== null);
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -56,14 +52,15 @@ const HeaderControls = (): React.ReactElement => {
   const handleLangChange = (value: string): void => {
     setLangAnchor(null);
     setMobileAnchor(null);
-    if (value === locale) return;
+    if (value === appLang) return;
+    // La pantalla d'inici no porta locale a la URL: n'hi ha prou amb l'estat
+    // redux, que ja governa quin catàleg de missatges fa servir el layout.
     dispatch(
       updateLangSettingsActionCreator({
         app: value as LangsApp,
         search: searchLang,
       }),
     );
-    navigate(location.pathname.replace(`/${locale}/`, `/${value}/`));
   };
 
   const handleLogin = (): void => {
@@ -73,16 +70,18 @@ const HeaderControls = (): React.ReactElement => {
 
   const handleRegister = (): void => {
     setMobileAnchor(null);
-    navigate(`/${locale}/signup`);
+    navigate(`/${appLang}/signup`);
   };
 
   const langMenuItems = sortedLangs.map((lang) => (
     <MenuItem
       key={lang}
-      selected={lang === locale}
+      selected={lang === appLang}
       onClick={() => handleLangChange(lang)}
     >
-      <ListItemIcon>{lang === locale ? <AiOutlineCheck /> : null}</ListItemIcon>
+      <ListItemIcon>
+        {lang === appLang ? <AiOutlineCheck /> : null}
+      </ListItemIcon>
       <ListItemText>{LANGUAGE_NAMES[lang]}</ListItemText>
     </MenuItem>
   ));
@@ -105,7 +104,7 @@ const HeaderControls = (): React.ReactElement => {
             aria-label={intl.formatMessage(messages.languageSelector)}
             aria-haspopup="true"
           >
-            {locale.toUpperCase()}
+            {appLang.toUpperCase()}
           </Button>
         </Tooltip>
 

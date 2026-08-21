@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import React, { useEffect } from "react";
 import NewsCarousel from "../../components/NewsCarousel/NewsCarousel";
 import WelcomeFooter from "../../components/WelcomeFooter/WelcomeFooter";
+import HeaderControls from "../../components/HeaderControls/HeaderControls";
 
 const WelcomePage = (): React.ReactElement => {
   const intl = useIntl();
@@ -29,7 +30,19 @@ const WelcomePage = (): React.ReactElement => {
 
   return (
     <>
-      <Box bgcolor={"primary.main"} height={"1em"} width={"100wv"}></Box>
+      <Box
+        bgcolor={"primary.main"}
+        width={"100wv"}
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          px: 2,
+          py: 0.5,
+        }}
+      >
+        <HeaderControls />
+      </Box>
       <Box component="main" id="main-content">
         <Stack
           display={"flex"}

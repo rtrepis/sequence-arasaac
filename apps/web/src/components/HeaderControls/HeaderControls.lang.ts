@@ -1,24 +1,23 @@
 import { defineMessages } from "react-intl";
 
 // Traduccions dels botons d'accés (login/registre) i del selector d'idioma
-// de la barra de navegació, i del menú clàssic que els plega en mòbil.
+// de la pantalla d'inici, i del menú clàssic que els plega en mòbil.
 const messages = defineMessages({
   loginButton: {
     id: "components.headerControls.loginButton",
     defaultMessage: "Inicia sessió",
-    description: "Botó de la barra de navegació per obrir el modal de login",
+    description: "Botó de la pantalla d'inici per obrir el modal de login",
   },
   registerButton: {
     id: "components.headerControls.registerButton",
     defaultMessage: "Registra't",
-    description:
-      "Botó de la barra de navegació per anar a la pàgina de registre",
+    description: "Botó de la pantalla d'inici per anar a la pàgina de registre",
   },
   languageSelector: {
     id: "components.headerControls.languageSelector",
     defaultMessage: "Selector d'idioma",
     description:
-      "Etiqueta ARIA del botó que obre el desplegable d'idioma a la barra de navegació",
+      "Etiqueta ARIA del botó que obre el desplegable d'idioma a la pantalla d'inici",
   },
   openMenu: {
     id: "components.headerControls.openMenu",

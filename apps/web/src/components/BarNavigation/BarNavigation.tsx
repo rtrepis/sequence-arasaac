@@ -12,7 +12,6 @@ import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
 import React, { useEffect, useState } from "react";
 import TabsEditView from "../TabsEditView/TabsEditView";
 import LogoMenu from "../LogoMenu/LogoMenu";
-import HeaderControls from "../HeaderControls/HeaderControls";
 import { useLocation } from "react-router-dom";
 
 interface BarProps {
@@ -123,8 +122,7 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
                 <TabsEditView />
               </Stack>
 
-              <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                <HeaderControls />
+              <Stack direction={"row"} alignItems={"center"}>
                 <DefaultSettings />
               </Stack>
             </Toolbar>
