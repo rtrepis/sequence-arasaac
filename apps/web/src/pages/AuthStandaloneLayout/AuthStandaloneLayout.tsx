@@ -9,6 +9,7 @@ import React from "react";
 import { IntlProvider } from "react-intl";
 import { Outlet, useParams } from "react-router-dom";
 import { messageLocale } from "@/App";
+import BackendWakeUpNotice from "@features/backend/api/BackendWakeUpNotice";
 
 const AuthStandaloneLayout = ({
   localeBrowser,
@@ -25,6 +26,9 @@ const AuthStandaloneLayout = ({
       messages={messageLocale[resolvedLocale as keyof typeof messageLocale]}
     >
       <Outlet />
+      {/* Aquestes pàgines també criden el backend (signup, set-password) i en
+          poden patir el desvetllament; aquí no els arriba des de LanguageLayout. */}
+      <BackendWakeUpNotice />
     </IntlProvider>
   );
 };
