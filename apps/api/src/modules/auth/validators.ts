@@ -3,6 +3,16 @@
 
 import { z } from "zod";
 
+// Idioma del correu de benvinguda: l'única informació d'idioma que arriba amb
+// el signup, perquè encara no hi ha compte on llegir-la (a diferència de
+// forgot-password i resend-verification, que la treuen de langSettings.app).
+//
+// z.string().optional() i no un enum: un valor que no sigui un dels cinc
+// idiomes (o cap) no ha de tombar tot el signup per un detall cosmètic com és
+// l'idioma del correu — el service ja hi aplica el mateix fallback a "ca" que
+// s'usa a la resta de l'app.
+const langsAppField = z.string().optional();
+
 // Requisits de robustesa de la contrasenya que s'estableix a /set-password.
 // Un símbol no és obligatori a propòsit: part de l'audiència d'AAC és gent gran
 // o poc habituada a l'ordinador, i les tres regles de sota ja allunyen les
@@ -34,6 +44,7 @@ export const signupSchema = z
       .string({ required_error: "EMAIL_REQUIRED" })
       .email("EMAIL_INVALID_FORMAT")
       .transform((v) => v.toLowerCase().trim()),
+    locale: langsAppField,
   })
   // useCaseOther només té sentit —i només s'hi guarda— quan useCase és "other"
   .transform((data) => ({
