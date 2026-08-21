@@ -4,6 +4,14 @@
 // Gmail ignora els punts de la part local i tot el que va després d'un "+",
 // de manera que "a.lg+u@gmail.com" i "alg@gmail.com" arriben al mateix lloc.
 // Sense aquesta normalització, cada usuari té comptes gratuïts il·limitats.
+//
+// Excepció: les bústies llistades a PLUS_ALIAS_EXEMPT_EMAILS conserven
+// l'alias "+" com a part de la identitat, així que "algu+ca@gmail.com" i
+// "algu+es@gmail.com" hi són dos comptes diferents. És només per a proves
+// internes (verificar cada idioma amb un compte real) — els punts es
+// continuen ignorant igual, i qualsevol altra bústia es comporta com sempre.
+
+import { env } from "../config/env";
 
 // Dominis que ignoren els punts i admeten sub-adreces amb "+"
 const DOT_INSENSITIVE_DOMAINS = ["gmail.com", "googlemail.com"];
@@ -29,6 +37,30 @@ const PLUS_ALIAS_DOMAINS = [
   "proton.me",
 ];
 
+// Bústia base (part local sense alias "+", amb els punts ja tractats com
+// correspongui al domini) exempta del descart de l'alias "+".
+// Normalitzada amb la mateixa lògica que toCanonicalEmail perquè
+// "Algu@Gmail.com" a la variable d'entorn i "algu" hi coincideixin.
+const toExemptBase = (rawEntry: string): string => {
+  const trimmed = rawEntry.trim().toLowerCase();
+  const atIndex = trimmed.lastIndexOf("@");
+  if (atIndex <= 0) {
+    return trimmed;
+  }
+  const local = trimmed.slice(0, atIndex);
+  const rawDomain = trimmed.slice(atIndex + 1);
+  const domain = DOMAIN_ALIASES[rawDomain] ?? rawDomain;
+  const dotStripped = DOT_INSENSITIVE_DOMAINS.includes(domain)
+    ? local.replace(/\./g, "")
+    : local;
+  return `${dotStripped}@${domain}`;
+};
+
+const PLUS_ALIAS_EXEMPT_BASES = env.PLUS_ALIAS_EXEMPT_EMAILS.split(",")
+  .map((entry) => entry.trim())
+  .filter((entry) => entry.length > 0)
+  .map(toExemptBase);
+
 // Retorna la forma canònica d'un email: la clau d'identitat real de l'usuari.
 // L'email original s'ha de conservar igualment — és el que es fa servir per escriure-li.
 export const toCanonicalEmail = (email: string): string => {
@@ -44,11 +76,18 @@ export const toCanonicalEmail = (email: string): string => {
   const rawDomain = normalized.slice(atIndex + 1);
   const domain = DOMAIN_ALIASES[rawDomain] ?? rawDomain;
 
-  // Els alias amb "+" van al mateix compte: es descarten
+  // Els alias amb "+" van al mateix compte: es descarten — tret que la
+  // bústia base estigui exempta (proves internes, vegeu PLUS_ALIAS_EXEMPT_EMAILS)
   if (PLUS_ALIAS_DOMAINS.includes(domain)) {
     const plusIndex = localPart.indexOf("+");
     if (plusIndex !== -1) {
-      localPart = localPart.slice(0, plusIndex);
+      const base = localPart.slice(0, plusIndex);
+      const isExempt = PLUS_ALIAS_EXEMPT_BASES.includes(
+        toExemptBase(`${base}@${domain}`)
+      );
+      if (!isExempt) {
+        localPart = base;
+      }
     }
   }
 

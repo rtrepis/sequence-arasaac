@@ -58,6 +58,13 @@ const envSchema = z.object({
   // Adreça on arriben els avisos d'errors del client. Buida = sense avisos per
   // correu; els errors es continuen registrant i es veuen al panell d'administració.
   ADMIN_ALERT_EMAIL: z.string().default(""),
+
+  // Bústies exemptes del descart de l'alias "+" (vegeu emailCanonical.ts).
+  // Únic ús previst: deixar que qui hi apareix es creï diversos comptes de
+  // prova (p. ex. algu+ca@gmail.com, algu+es@gmail.com) per verificar cada
+  // idioma amb un compte real, sense obrir aquesta porta a la resta d'usuaris.
+  // Llista separada per comes; buida = ningú n'està exempt.
+  PLUS_ALIAS_EXEMPT_EMAILS: z.string().default(""),
 });
 
 const parsed = envSchema.safeParse(process.env);

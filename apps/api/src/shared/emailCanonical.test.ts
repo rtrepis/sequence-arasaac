@@ -2,7 +2,7 @@
 // És la peça que impedeix que una mateixa bústia obri comptes il·limitats,
 // i per això és la que ha d'estar coberta abans que cap altra.
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { toCanonicalEmail } from "./emailCanonical";
 
 describe("toCanonicalEmail", () => {
@@ -45,5 +45,39 @@ describe("toCanonicalEmail", () => {
   it("hauria de conservar l'original si l'alias buida la part local", () => {
     // "+algu@gmail.com" donaria una clau buida que col·lisionaria amb tothom
     expect(toCanonicalEmail("+algu@gmail.com")).toBe("+algu@gmail.com");
+  });
+});
+
+describe("toCanonicalEmail amb PLUS_ALIAS_EXEMPT_EMAILS", () => {
+  const ORIGINAL_ENV = process.env.PLUS_ALIAS_EXEMPT_EMAILS;
+
+  // env.ts llegeix process.env un sol cop, en importar-se: cal buidar el
+  // registre de mòduls perquè el canvi de variable es vegi reflectit.
+  afterEach(() => {
+    process.env.PLUS_ALIAS_EXEMPT_EMAILS = ORIGINAL_ENV;
+    vi.resetModules();
+  });
+
+  it("hauria de conservar l'alias per a una bústia exempta, per crear comptes de prova", async () => {
+    process.env.PLUS_ALIAS_EXEMPT_EMAILS = "algu@gmail.com";
+    vi.resetModules();
+    const { toCanonicalEmail: canonicalWithExemption } = await import(
+      "./emailCanonical"
+    );
+
+    expect(canonicalWithExemption("algu+ca@gmail.com")).toBe("algu+ca@gmail.com");
+    expect(canonicalWithExemption("algu+es@gmail.com")).toBe("algu+es@gmail.com");
+    // els punts continuen ignorant-se igual
+    expect(canonicalWithExemption("a.l.g.u+fr@gmail.com")).toBe("algu+fr@gmail.com");
+  });
+
+  it("no hauria d'afectar cap altra bústia", async () => {
+    process.env.PLUS_ALIAS_EXEMPT_EMAILS = "algu@gmail.com";
+    vi.resetModules();
+    const { toCanonicalEmail: canonicalWithExemption } = await import(
+      "./emailCanonical"
+    );
+
+    expect(canonicalWithExemption("altri+prova@gmail.com")).toBe("altri@gmail.com");
   });
 });

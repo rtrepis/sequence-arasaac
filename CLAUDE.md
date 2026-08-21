@@ -141,6 +141,7 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 - **`emailCanonical` és l'única clau d'identitat** (`apps/api/src/shared/emailCanonical.ts`). L'`email` es conserva tal com l'escriu l'usuari perquè és l'adreça on se li escriu, però l'índex únic i totes les cerques (registre, login, cerca del panell) van contra el canònic. Sense això, `algu@gmail.com`, `a.l.g.u@gmail.com` i `algu+1@gmail.com` són tres comptes i una sola bústia.
 - `googlemail.com` es canonicalitza a `gmail.com`: és el mateix servei amb el nom antic.
 - Els punts **només** s'eliminen als dominis de Google. A un domini corporatiu, `joan.puig@` i `joanpuig@` poden ser dues persones.
+- **Excepció per a proves internes**: `PLUS_ALIAS_EXEMPT_EMAILS` (variable d'entorn de l'API, llista separada per comes) exempta bústies concretes del descart de l'alias `+`. Per a una bústia hi llistada, `algu+ca@gmail.com` i `algu+es@gmail.com` són dos comptes diferents (els punts es continuen ignorant igual); per a qualsevol altra, el comportament no canvia. Serveix perquè, amb un únic compte real de Gmail, es puguin crear diversos usuaris de prova (un per idioma) sense obrir aquesta porta a la resta. Buida per defecte — a producció només hi ha d'haver les bústies de l'equip que en necessiten.
 
 ### Estat del compte
 
