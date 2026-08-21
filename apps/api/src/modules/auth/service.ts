@@ -19,7 +19,11 @@ import {
   recordSecurityEvent,
   countRecentEventsForUser,
 } from "../security/service";
-import { sendVerificationEmail, sendPasswordResetEmail } from "../../shared/mailer";
+import {
+  sendVerificationEmail,
+  sendPasswordResetEmail,
+  sendAccountExistsEmail,
+} from "../../shared/mailer";
 
 // Durades dels tokens
 const ACCESS_TOKEN_EXPIRES_IN = "15m";
@@ -134,8 +138,28 @@ const deliverPasswordEmail = async (
   return sent;
 };
 
-// Registra un nou usuari sense contrasenya — llança AppError si la bústia ja té compte.
-// La contrasenya s'estableix després, a /set-password, a partir de l'enllaç del correu.
+// Llindar compartit per qualsevol correu que porti un enllaç d'establiment de
+// contrasenya per a un compte ja existent (recuperació real o avís de signup
+// duplicat): sense això, repetir la petició cremaria la quota diària del
+// proveïdor o inundaria la bústia de qui ja té compte.
+const canSendResetLinkEmail = async (userId: string): Promise<boolean> => {
+  const requestedLastDay = await countRecentEventsForUser(
+    "reset_requested",
+    userId,
+    ONE_DAY_MS
+  );
+  if (requestedLastDay >= RESEND_MAX_PER_DAY) return false;
+
+  const requestedRecently = await countRecentEventsForUser(
+    "reset_requested",
+    userId,
+    RESEND_MIN_INTERVAL_MS
+  );
+  return requestedRecently === 0;
+};
+
+// Registra un nou usuari sense contrasenya. La contrasenya s'estableix
+// després, a /set-password, a partir de l'enllaç del correu.
 // ipHash arriba pseudonimitzat des del controller: aquesta capa mai veu una IP.
 export const signupUser = async (
   input: SignupInput,
@@ -164,10 +188,42 @@ export const signupUser = async (
   }
 
   // La comprovació és sobre la forma canònica, no sobre l'email literal:
-  // altrament, els alias de "+" i els punts de Gmail donarien comptes il·limitats
-  const existing = await UserModel.findOne({ emailCanonical }).select("_id").lean();
+  // altrament, els alias de "+" i els punts de Gmail donarien comptes il·limitats.
+  //
+  // Si ja existeix, NO ho diem: un "aquest correu ja existeix" permetria
+  // enumerar comptes provant adreces a l'atzar (el mateix motiu pel qual
+  // loginUser i requestPasswordReset ja donen sempre la mateixa resposta).
+  // En comptes d'un error, s'envia un avís a la bústia real —que és qui ha de
+  // saber-ho, no qui ha omplert el formulari— amb un enllaç per si l'ha
+  // demanat perquè ha oblidat la contrasenya. El compte existent no es toca
+  // en cap cas: cap canvi de contrasenya passa aquí, només al moment de
+  // completar-lo a /set-password.
+  const existing = await UserModel.findOne({ emailCanonical })
+    .select("_id email name status")
+    .lean();
+
   if (existing) {
-    throw authError("EMAIL_ALREADY_EXISTS", 409);
+    const existingId = String(existing._id);
+    if (existing.status !== "suspended" && (await canSendResetLinkEmail(existingId))) {
+      const token = jwt.sign(
+        { userId: existingId, type: "reset" } as PasswordTokenPayload,
+        env.JWT_SECRET,
+        { expiresIn: RESET_TOKEN_EXPIRES_IN }
+      );
+      const resetUrl = `${env.APP_PUBLIC_URL}/set-password?token=${token}`;
+      const sent = await sendAccountExistsEmail(existing.email, existing.name, resetUrl);
+      if (sent) {
+        await recordSecurityEvent({
+          type: "reset_requested",
+          ipHash,
+          userId: existingId,
+        });
+      }
+    }
+
+    // Resposta idèntica a la d'un signup nou: qui ha omplert el formulari no
+    // ha de poder distingir "ja hi ha compte" de "s'ha creat".
+    return { emailSent: true };
   }
 
   const user = await UserModel.create({
@@ -268,22 +324,7 @@ export const requestPasswordReset = async (
   }
 
   const userId = String(user._id);
-
-  const requestedLastDay = await countRecentEventsForUser(
-    "reset_requested",
-    userId,
-    ONE_DAY_MS
-  );
-  if (requestedLastDay >= RESEND_MAX_PER_DAY) {
-    return;
-  }
-
-  const requestedRecently = await countRecentEventsForUser(
-    "reset_requested",
-    userId,
-    RESEND_MIN_INTERVAL_MS
-  );
-  if (requestedRecently > 0) {
+  if (!(await canSendResetLinkEmail(userId))) {
     return;
   }
 

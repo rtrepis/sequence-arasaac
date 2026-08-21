@@ -164,6 +164,48 @@ export const sendVerificationEmail = async (
   return sendEmail({ to, subject, html, text });
 };
 
+// Cos de l'avís quan algú intenta un signup amb un correu que ja té compte.
+// No diu "aquest correu ja existeix" enlloc de l'aplicació —això revelaria
+// comptes a qui prova adreces a l'atzar—; l'avís només arriba a la bústia
+// real, que és qui de debò necessita saber-ho. Cobreix els dos casos possibles
+// sense distingir-los: no ha estat l'usuari (ignora-ho) o sí (aquí tens l'enllaç).
+export const sendAccountExistsEmail = async (
+  to: string,
+  name: string | undefined,
+  resetUrl: string
+): Promise<boolean> => {
+  const subject = "Algú ha intentat crear un compte amb aquest correu — SequenciAAC";
+  const greeting = name ? `Hola, ${name}!` : "Hola!";
+
+  const text = [
+    greeting,
+    "",
+    "Algú ha intentat crear un compte a SequenciAAC amb aquesta adreça, però ja en tens un.",
+    "",
+    "Si no has estat tu, pots ignorar aquest missatge: no s'ha canviat res del teu compte.",
+    "",
+    "Si has estat tu i no recordes la contrasenya, pots triar-ne una de nova aquí:",
+    resetUrl,
+    "",
+    "L'enllaç caduca d'aquí a 1 hora.",
+  ].join("\n");
+
+  const html = `
+    <div style="font-family: sans-serif; font-size: 16px; line-height: 1.5; color: #1E2A12;">
+      <p>${greeting}</p>
+      <p>Algú ha intentat crear un compte a <strong>SequenciAAC</strong> amb aquesta adreça, però ja en tens un.</p>
+      <p>Si no has estat tu, pots ignorar aquest missatge: no s'ha canviat res del teu compte.</p>
+      <p>Si has estat tu i no recordes la contrasenya, pots triar-ne una de nova aquí:</p>
+      ${actionButton(resetUrl, "Tria una contrasenya nova")}
+      <p style="font-size: 14px; color: #555;">
+        L'enllaç caduca d'aquí a 1 hora.
+      </p>
+    </div>
+  `;
+
+  return sendEmail({ to, subject, html, text });
+};
+
 // Cos del correu de recuperació de contrasenya. Mateix estil que el de
 // verificació però sense to de benvinguda: aquí ja hi ha un compte fet servir.
 export const sendPasswordResetEmail = async (

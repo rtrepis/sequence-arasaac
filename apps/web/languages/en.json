@@ -600,10 +600,6 @@
     "defaultMessage": "An error occurred while signing in. Please try again.",
     "description": "Error genèric de login"
   },
-  "features.backend.auth.error.EMAIL_ALREADY_EXISTS": {
-    "defaultMessage": "This email address is already registered",
-    "description": "Error de registre: email ja existent"
-  },
   "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
     "defaultMessage": "The email address format is not valid",
     "description": "Validació: format d'email incorrecte"
