@@ -24,27 +24,6 @@ const messages = defineMessages({
     defaultMessage: "Correu enviat. Mira la teva safata d'entrada.",
     description: "Confirmació que el correu de verificació s'ha reenviat",
   },
-  pageTitle: {
-    id: "features.backend.auth.verification.pageTitle",
-    defaultMessage: "Verificació del correu",
-    description: "Títol de la pàgina que processa l'enllaç de verificació",
-  },
-  verifying: {
-    id: "features.backend.auth.verification.verifying",
-    defaultMessage: "Estem verificant la teva adreça…",
-    description: "Missatge mentre es processa el token de verificació",
-  },
-  verified: {
-    id: "features.backend.auth.verification.verified",
-    defaultMessage:
-      "Correu verificat! Ja pots desar les teves seqüències al núvol.",
-    description: "Missatge d'èxit després de verificar el correu",
-  },
-  goToApp: {
-    id: "features.backend.auth.verification.goToApp",
-    defaultMessage: "Ves a l'aplicació",
-    description: "Botó per tornar a l'app després de verificar el correu",
-  },
 });
 
 export default messages;

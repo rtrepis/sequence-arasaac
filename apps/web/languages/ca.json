@@ -625,7 +625,7 @@
     "description": "Validació: contrasenya massa llarga (registre)"
   },
   "features.backend.auth.error.PASSWORD_TOO_SHORT": {
-    "defaultMessage": "La contrasenya ha de tenir com a mínim 8 caràcters",
+    "defaultMessage": "La contrasenya ha de tenir com a mínim 10 caràcters",
     "description": "Validació: contrasenya massa curta (registre)"
   },
   "features.backend.auth.error.REGISTER_ERROR": {
@@ -668,10 +668,6 @@
     "defaultMessage": "Contrasenya",
     "description": "Etiqueta del camp contrasenya"
   },
-  "features.backend.auth.registerTitle": {
-    "defaultMessage": "Crea un compte",
-    "description": "Títol del formulari de registre"
-  },
   "features.backend.auth.saveDocument": {
     "defaultMessage": "Desa al núvol",
     "description": "Ítem del drawer per desar el document al backend"
@@ -683,14 +679,6 @@
   "features.backend.auth.submitLogin": {
     "defaultMessage": "Entra",
     "description": "Botó per enviar el formulari de login"
-  },
-  "features.backend.auth.submitRegister": {
-    "defaultMessage": "Registra'm",
-    "description": "Botó per enviar el formulari de registre"
-  },
-  "features.backend.auth.toggleToLogin": {
-    "defaultMessage": "Ja tens compte? Inicia sessió",
-    "description": "Enllaç per tornar al formulari de login"
   },
   "features.backend.auth.toggleToRegister": {
     "defaultMessage": "No tens compte? Registra't",
@@ -1479,23 +1467,11 @@
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Verifica el teu correu per poder desar al núvol. T'hem enviat un enllaç a {email}."
   },
-  "features.backend.auth.verification.goToApp": {
-    "defaultMessage": "Ves a l'aplicació"
-  },
-  "features.backend.auth.verification.pageTitle": {
-    "defaultMessage": "Verificació del correu"
-  },
   "features.backend.auth.verification.resend": {
     "defaultMessage": "Torna a enviar-me'l"
   },
   "features.backend.auth.verification.resendSuccess": {
     "defaultMessage": "Correu enviat. Mira la teva safata d'entrada."
-  },
-  "features.backend.auth.verification.verified": {
-    "defaultMessage": "Correu verificat! Ja pots desar les teves seqüències al núvol."
-  },
-  "features.backend.auth.verification.verifying": {
-    "defaultMessage": "Estem verificant la teva adreça…"
   },
   "features.backend.wakeUp.title": {
     "defaultMessage": "Connectant amb el teu compte…"
@@ -1547,5 +1523,173 @@
   },
   "features.backend.auth.errorWithCode": {
     "defaultMessage": "{message} (Codi: {code})"
+  },
+  "features.backend.auth.forgotPassword": {
+    "defaultMessage": "Has oblidat la contrasenya?",
+    "description": "Enllaç del formulari de login cap a la recuperació de contrasenya"
+  },
+  "features.backend.auth.error.NAME_REQUIRED": {
+    "defaultMessage": "El nom és obligatori",
+    "description": "Validació: camp nom buit al signup"
+  },
+  "features.backend.auth.error.NAME_TOO_LONG": {
+    "defaultMessage": "El nom no pot superar els 120 caràcters",
+    "description": "Validació: nom massa llarg al signup"
+  },
+  "features.backend.auth.error.USE_CASE_REQUIRED": {
+    "defaultMessage": "Cal triar com faràs servir l'aplicació",
+    "description": "Validació: selector d'ús de l'aplicació buit al signup"
+  },
+  "features.backend.auth.error.PASSWORD_MISSING_LOWERCASE": {
+    "defaultMessage": "La contrasenya ha de tenir com a mínim una lletra minúscula",
+    "description": "Validació: falta una minúscula a la contrasenya"
+  },
+  "features.backend.auth.error.PASSWORD_MISSING_UPPERCASE": {
+    "defaultMessage": "La contrasenya ha de tenir com a mínim una lletra majúscula",
+    "description": "Validació: falta una majúscula a la contrasenya"
+  },
+  "features.backend.auth.error.PASSWORD_MISSING_NUMBER": {
+    "defaultMessage": "La contrasenya ha de tenir com a mínim un número",
+    "description": "Validació: falta un número a la contrasenya"
+  },
+  "features.backend.auth.error.PASSWORD_MISMATCH": {
+    "defaultMessage": "Les contrasenyes no coincideixen",
+    "description": "Validació: la repetició no coincideix amb la contrasenya"
+  },
+  "features.backend.auth.error.SET_PASSWORD_ERROR": {
+    "defaultMessage": "S'ha produït un error en establir la contrasenya. Torna-ho a intentar.",
+    "description": "Error genèric d'establiment de contrasenya"
+  },
+  "features.backend.auth.password.minLength": {
+    "defaultMessage": "Com a mínim 10 caràcters",
+    "description": "Requisit de contrasenya: longitud mínima"
+  },
+  "features.backend.auth.password.hasLowercase": {
+    "defaultMessage": "Una lletra minúscula",
+    "description": "Requisit de contrasenya: minúscula"
+  },
+  "features.backend.auth.password.hasUppercase": {
+    "defaultMessage": "Una lletra majúscula",
+    "description": "Requisit de contrasenya: majúscula"
+  },
+  "features.backend.auth.password.hasNumber": {
+    "defaultMessage": "Un número",
+    "description": "Requisit de contrasenya: número"
+  },
+  "pages.signup.pageTitle": {
+    "defaultMessage": "Crea el teu compte",
+    "description": "Títol de la pàgina de signup"
+  },
+  "pages.signup.hint": {
+    "defaultMessage": "Amb un compte pots desar les teves seqüències al núvol i recuperar-les des de qualsevol dispositiu. T'enviarem un correu per confirmar l'adreça i triar la contrasenya — encara no cal que en posis cap aquí.",
+    "description": "Guia inicial de la pàgina de signup"
+  },
+  "pages.signup.name": {
+    "defaultMessage": "Nom",
+    "description": "Etiqueta del camp nom"
+  },
+  "pages.signup.useCase": {
+    "defaultMessage": "Com faràs servir l'aplicació?",
+    "description": "Etiqueta del selector d'ús de l'aplicació"
+  },
+  "pages.signup.useCaseFamily": {
+    "defaultMessage": "En família",
+    "description": "Opció d'ús de l'aplicació: família"
+  },
+  "pages.signup.useCaseTeacher": {
+    "defaultMessage": "Com a docent",
+    "description": "Opció d'ús de l'aplicació: docent"
+  },
+  "pages.signup.useCaseProfessional": {
+    "defaultMessage": "Com a professional (logopeda, terapeuta...)",
+    "description": "Opció d'ús de l'aplicació: professional"
+  },
+  "pages.signup.useCaseOther": {
+    "defaultMessage": "Altres",
+    "description": "Opció d'ús de l'aplicació: altres"
+  },
+  "pages.signup.useCaseOtherLabel": {
+    "defaultMessage": "Explica'ns breument com la faràs servir (opcional)",
+    "description": "Etiqueta del camp de text lliure quan l'ús és \"altres\""
+  },
+  "pages.signup.email": {
+    "defaultMessage": "Correu electrònic",
+    "description": "Etiqueta del camp correu"
+  },
+  "pages.signup.submit": {
+    "defaultMessage": "Crea el compte",
+    "description": "Botó per enviar el formulari de signup"
+  },
+  "pages.signup.loginLink": {
+    "defaultMessage": "Ja tens compte? Inicia sessió",
+    "description": "Enllaç per tornar a l'aplicació i obrir el login"
+  },
+  "pages.signup.successTitle": {
+    "defaultMessage": "Revisa el teu correu",
+    "description": "Títol de la pantalla d'èxit després del signup"
+  },
+  "pages.signup.success": {
+    "defaultMessage": "T'hem enviat un correu a {email} amb un enllaç per confirmar l'adreça i triar la contrasenya. Si no el veus a la safata d'entrada, mira també a spam.",
+    "description": "Missatge d'èxit després del signup"
+  },
+  "pages.signup.goToApp": {
+    "defaultMessage": "Ves a l'aplicació",
+    "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"
+  },
+  "pages.setPassword.pageTitle": {
+    "defaultMessage": "Tria la teva contrasenya",
+    "description": "Títol de la pàgina d'establiment de contrasenya"
+  },
+  "pages.setPassword.hint": {
+    "defaultMessage": "Aquesta contrasenya és la que faràs servir per entrar al teu compte a partir d'ara. Tria'n una que no facis servir enlloc més.",
+    "description": "Guia inicial de la pàgina d'establiment de contrasenya"
+  },
+  "pages.setPassword.password": {
+    "defaultMessage": "Contrasenya",
+    "description": "Etiqueta del camp contrasenya"
+  },
+  "pages.setPassword.passwordConfirmation": {
+    "defaultMessage": "Repeteix la contrasenya",
+    "description": "Etiqueta del camp de repetició de la contrasenya"
+  },
+  "pages.setPassword.mismatch": {
+    "defaultMessage": "Les contrasenyes no coincideixen",
+    "description": "Error de validació quan les dues contrasenyes no coincideixen"
+  },
+  "pages.setPassword.submit": {
+    "defaultMessage": "Estableix la contrasenya",
+    "description": "Botó per enviar el formulari d'establiment de contrasenya"
+  },
+  "pages.setPassword.missingToken": {
+    "defaultMessage": "Aquest enllaç està incomplet.",
+    "description": "Error quan l'enllaç no porta cap token"
+  },
+  "pages.setPassword.forgotPasswordLink": {
+    "defaultMessage": "He oblidat la contrasenya",
+    "description": "Enllaç a la pàgina de recuperació de contrasenya"
+  },
+  "pages.forgotPassword.pageTitle": {
+    "defaultMessage": "Recupera la contrasenya",
+    "description": "Títol de la pàgina de recuperació de contrasenya"
+  },
+  "pages.forgotPassword.hint": {
+    "defaultMessage": "Escriu el correu del teu compte i t'enviarem un enllaç per triar una contrasenya nova.",
+    "description": "Guia inicial de la pàgina de recuperació de contrasenya"
+  },
+  "pages.forgotPassword.email": {
+    "defaultMessage": "Correu electrònic",
+    "description": "Etiqueta del camp correu"
+  },
+  "pages.forgotPassword.submit": {
+    "defaultMessage": "Envia l'enllaç",
+    "description": "Botó per demanar l'enllaç de recuperació"
+  },
+  "pages.forgotPassword.success": {
+    "defaultMessage": "Si {email} té un compte, hi hem enviat un enllaç per triar una contrasenya nova. Revisa també la carpeta de spam.",
+    "description": "Missatge sempre igual, existeixi o no el compte, per no revelar quins correus estan registrats"
+  },
+  "pages.forgotPassword.goToApp": {
+    "defaultMessage": "Ves a l'aplicació",
+    "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"
   }
 }

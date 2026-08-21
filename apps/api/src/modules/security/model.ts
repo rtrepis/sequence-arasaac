@@ -19,6 +19,9 @@ export type SecurityEventType =
   | "account_locked"
   | "verify_sent"
   | "verify_completed"
+  | "password_set"
+  | "reset_requested"
+  | "reset_completed"
   | "admin_action";
 
 export interface ISecurityEvent extends Document {
@@ -42,6 +45,9 @@ const securityEventSchema = new Schema<ISecurityEvent>(
         "account_locked",
         "verify_sent",
         "verify_completed",
+        "password_set",
+        "reset_requested",
+        "reset_completed",
         "admin_action",
       ],
       required: true,

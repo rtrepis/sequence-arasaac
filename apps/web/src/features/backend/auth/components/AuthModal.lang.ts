@@ -1,16 +1,12 @@
 import { defineMessages } from "react-intl";
 
-// Traduccions per al modal d'autenticació (login / registre)
+// Traduccions per al modal d'autenticació (login) i codis d'error compartits
+// per tot el mòdul d'auth (signup, set-password, forgot-password inclosos)
 const messages = defineMessages({
   loginTitle: {
     id: "features.backend.auth.loginTitle",
     defaultMessage: "Inicia sessió",
     description: "Títol del formulari de login",
-  },
-  registerTitle: {
-    id: "features.backend.auth.registerTitle",
-    defaultMessage: "Crea un compte",
-    description: "Títol del formulari de registre",
   },
   email: {
     id: "features.backend.auth.email",
@@ -27,20 +23,16 @@ const messages = defineMessages({
     defaultMessage: "Entra",
     description: "Botó per enviar el formulari de login",
   },
-  submitRegister: {
-    id: "features.backend.auth.submitRegister",
-    defaultMessage: "Registra'm",
-    description: "Botó per enviar el formulari de registre",
-  },
   toggleToRegister: {
     id: "features.backend.auth.toggleToRegister",
     defaultMessage: "No tens compte? Registra't",
-    description: "Enllaç per canviar al formulari de registre",
+    description: "Enllaç del formulari de login cap a la pàgina de signup",
   },
-  toggleToLogin: {
-    id: "features.backend.auth.toggleToLogin",
-    defaultMessage: "Ja tens compte? Inicia sessió",
-    description: "Enllaç per tornar al formulari de login",
+  forgotPassword: {
+    id: "features.backend.auth.forgotPassword",
+    defaultMessage: "Has oblidat la contrasenya?",
+    description:
+      "Enllaç del formulari de login cap a la recuperació de contrasenya",
   },
   close: {
     id: "features.backend.auth.close",
@@ -80,7 +72,8 @@ const messages = defineMessages({
   documentLoaded: {
     id: "features.backend.auth.documentLoaded",
     defaultMessage: "Document carregat",
-    description: "Missatge de confirmació quan es carrega un document del backend",
+    description:
+      "Missatge de confirmació quan es carrega un document del backend",
   },
   loadDocumentTitle: {
     id: "features.backend.auth.loadDocumentTitle",
@@ -124,6 +117,21 @@ const messages = defineMessages({
     defaultMessage: "El format del correu electrònic no és vàlid",
     description: "Validació: format d'email incorrecte",
   },
+  NAME_REQUIRED: {
+    id: "features.backend.auth.error.NAME_REQUIRED",
+    defaultMessage: "El nom és obligatori",
+    description: "Validació: camp nom buit al signup",
+  },
+  NAME_TOO_LONG: {
+    id: "features.backend.auth.error.NAME_TOO_LONG",
+    defaultMessage: "El nom no pot superar els 120 caràcters",
+    description: "Validació: nom massa llarg al signup",
+  },
+  USE_CASE_REQUIRED: {
+    id: "features.backend.auth.error.USE_CASE_REQUIRED",
+    defaultMessage: "Cal triar com faràs servir l'aplicació",
+    description: "Validació: selector d'ús de l'aplicació buit al signup",
+  },
   PASSWORD_REQUIRED: {
     id: "features.backend.auth.error.PASSWORD_REQUIRED",
     defaultMessage: "La contrasenya és obligatòria",
@@ -131,13 +139,35 @@ const messages = defineMessages({
   },
   PASSWORD_TOO_SHORT: {
     id: "features.backend.auth.error.PASSWORD_TOO_SHORT",
-    defaultMessage: "La contrasenya ha de tenir com a mínim 8 caràcters",
-    description: "Validació: contrasenya massa curta (registre)",
+    defaultMessage: "La contrasenya ha de tenir com a mínim 10 caràcters",
+    description: "Validació: contrasenya massa curta",
   },
   PASSWORD_TOO_LONG: {
     id: "features.backend.auth.error.PASSWORD_TOO_LONG",
     defaultMessage: "La contrasenya no pot superar els 128 caràcters",
-    description: "Validació: contrasenya massa llarga (registre)",
+    description: "Validació: contrasenya massa llarga",
+  },
+  PASSWORD_MISSING_LOWERCASE: {
+    id: "features.backend.auth.error.PASSWORD_MISSING_LOWERCASE",
+    defaultMessage:
+      "La contrasenya ha de tenir com a mínim una lletra minúscula",
+    description: "Validació: falta una minúscula a la contrasenya",
+  },
+  PASSWORD_MISSING_UPPERCASE: {
+    id: "features.backend.auth.error.PASSWORD_MISSING_UPPERCASE",
+    defaultMessage:
+      "La contrasenya ha de tenir com a mínim una lletra majúscula",
+    description: "Validació: falta una majúscula a la contrasenya",
+  },
+  PASSWORD_MISSING_NUMBER: {
+    id: "features.backend.auth.error.PASSWORD_MISSING_NUMBER",
+    defaultMessage: "La contrasenya ha de tenir com a mínim un número",
+    description: "Validació: falta un número a la contrasenya",
+  },
+  PASSWORD_MISMATCH: {
+    id: "features.backend.auth.error.PASSWORD_MISMATCH",
+    defaultMessage: "Les contrasenyes no coincideixen",
+    description: "Validació: la repetició no coincideix amb la contrasenya",
   },
   REGISTRATION_CLOSED: {
     id: "features.backend.auth.error.REGISTRATION_CLOSED",
@@ -165,7 +195,8 @@ const messages = defineMessages({
   },
   TOO_MANY_ATTEMPTS: {
     id: "features.backend.auth.error.TOO_MANY_ATTEMPTS",
-    defaultMessage: "Massa intents seguits. Espera un moment i torna-ho a provar.",
+    defaultMessage:
+      "Massa intents seguits. Espera un moment i torna-ho a provar.",
     description: "Error: s'ha superat el límit de peticions",
   },
   ACCOUNT_SUSPENDED: {
@@ -256,7 +287,8 @@ const messages = defineMessages({
   },
   loadDocumentError: {
     id: "features.backend.auth.loadDocumentError",
-    defaultMessage: "No s'ha pogut carregar aquest document. Torna-ho a provar.",
+    defaultMessage:
+      "No s'ha pogut carregar aquest document. Torna-ho a provar.",
     description: "Error en carregar un document concret del núvol",
   },
   retry: {
@@ -273,13 +305,21 @@ const messages = defineMessages({
   },
   AUTH_ERROR: {
     id: "features.backend.auth.error.AUTH_ERROR",
-    defaultMessage: "S'ha produït un error en iniciar sessió. Torna-ho a intentar.",
+    defaultMessage:
+      "S'ha produït un error en iniciar sessió. Torna-ho a intentar.",
     description: "Error genèric de login",
   },
   REGISTER_ERROR: {
     id: "features.backend.auth.error.REGISTER_ERROR",
-    defaultMessage: "S'ha produït un error en crear el compte. Torna-ho a intentar.",
-    description: "Error genèric de registre",
+    defaultMessage:
+      "S'ha produït un error en crear el compte. Torna-ho a intentar.",
+    description: "Error genèric de signup",
+  },
+  SET_PASSWORD_ERROR: {
+    id: "features.backend.auth.error.SET_PASSWORD_ERROR",
+    defaultMessage:
+      "S'ha produït un error en establir la contrasenya. Torna-ho a intentar.",
+    description: "Error genèric d'establiment de contrasenya",
   },
   UNKNOWN_ERROR: {
     id: "features.backend.auth.error.UNKNOWN_ERROR",

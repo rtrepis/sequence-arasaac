@@ -54,9 +54,20 @@ const syncSettingsAfterAuth = async (
   dispatch: (action: unknown) => void,
 ): Promise<AccountFlags> => {
   try {
-    const { lang, theme, defaultSettings, viewSettings, wordProfiles, tier, emailVerified, role } = await getUiSettings();
+    const {
+      lang,
+      theme,
+      defaultSettings,
+      viewSettings,
+      wordProfiles,
+      tier,
+      emailVerified,
+      role,
+    } = await getUiSettings();
     dispatch(updateDefaultSettingsActionCreator(defaultSettings));
-    dispatch(updateLangSettingsActionCreator({ app: lang.app, search: lang.search }));
+    dispatch(
+      updateLangSettingsActionCreator({ app: lang.app, search: lang.search }),
+    );
     dispatch(updateThemeActionCreator(theme ?? "system"));
     if (viewSettings) dispatch(viewSettingsActionCreator(viewSettings));
     if (wordProfiles) dispatch(setWordProfilesActionCreator(wordProfiles));
@@ -71,7 +82,9 @@ const syncSettingsAfterAuth = async (
 };
 
 // Restaura les preferències anònimes del localStorage al Redux després del logout
-const restoreAnonymousSettings = (dispatch: (action: unknown) => void): void => {
+const restoreAnonymousSettings = (
+  dispatch: (action: unknown) => void,
+): void => {
   // El vocabulari personal és del compte, no del dispositiu: només s'hi arriba amb
   // sessió iniciada. Si no es buida en sortir, es queda a la memòria de l'aplicació
   // —i el cercador continua aplicant-lo— i acaba escrit al navegador com si fos
@@ -84,8 +97,14 @@ const restoreAnonymousSettings = (dispatch: (action: unknown) => void): void => 
   if (storedUi) {
     dispatch(updateDefaultSettingsActionCreator(storedUi.defaultSettings));
     dispatch(updateThemeActionCreator(storedUi.theme));
-    dispatch(updateLangSettingsActionCreator({ app: storedUi.lang.app, search: storedUi.lang.search }));
-    if (storedUi.viewSettings) dispatch(viewSettingsActionCreator(storedUi.viewSettings));
+    dispatch(
+      updateLangSettingsActionCreator({
+        app: storedUi.lang.app,
+        search: storedUi.lang.search,
+      }),
+    );
+    if (storedUi.viewSettings)
+      dispatch(viewSettingsActionCreator(storedUi.viewSettings));
     return;
   }
 
@@ -119,32 +138,36 @@ export const loginThunk = createAsyncThunk(
   },
 );
 
-// Thunk: register
-export const registerThunk = createAsyncThunk(
-  "auth/register",
+// Thunk: setPassword — estableix la contrasenya (verificació inicial o
+// recuperació) a partir del token de l'enllaç del correu, i fa login automàtic.
+// Mateix contracte que loginThunk: qui el crida ja té la pàgina SetPasswordPage
+// gestionant el seu propi isLoading local, així que aquí no cal tocar-lo.
+export const setPasswordThunk = createAsyncThunk(
+  "auth/setPassword",
   async (
-    { email, password }: { email: string; password: string },
+    {
+      token,
+      password,
+      passwordConfirmation,
+    }: { token: string; password: string; passwordConfirmation: string },
     { dispatch, rejectWithValue },
   ) => {
     try {
-      const { accessToken, verificationEmailSent } = await authService.register(
-        email,
+      const { accessToken } = await authService.setPassword(
+        token,
         password,
+        passwordConfirmation,
       );
       setAccessToken(accessToken);
       const account = await syncSettingsAfterAuth(dispatch);
-      return {
-        accessToken,
-        email,
-        ...account,
-        // El compte s'ha creat encara que el correu no hagi sortit: cal dir-ho
-        // a l'usuari i oferir-li el reenviament, no fer com si res.
-        verificationEmailFailed: verificationEmailSent === false,
+      const payload = JSON.parse(atob(accessToken.split(".")[1])) as {
+        email: string;
       };
+      return { accessToken, email: payload.email, ...account };
     } catch (error: unknown) {
       const errorCode =
         (error as { response?: { data?: { errorCode?: string } } })?.response
-          ?.data?.errorCode ?? "REGISTER_ERROR";
+          ?.data?.errorCode ?? "SET_PASSWORD_ERROR";
       return rejectWithValue(errorCode);
     }
   },
@@ -227,58 +250,64 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.errorCode = null;
       })
-      .addCase(loginThunk.fulfilled, (state, action: PayloadAction<AuthSuccessPayload>) => {
-        state.isLoading = false;
-        state.accessToken = action.payload.accessToken;
-        state.userEmail = action.payload.email;
-        state.emailVerified = action.payload.emailVerified;
-        state.isAdmin = action.payload.isAdmin;
-      })
+      .addCase(
+        loginThunk.fulfilled,
+        (state, action: PayloadAction<AuthSuccessPayload>) => {
+          state.isLoading = false;
+          state.accessToken = action.payload.accessToken;
+          state.userEmail = action.payload.email;
+          state.emailVerified = action.payload.emailVerified;
+          state.isAdmin = action.payload.isAdmin;
+        },
+      )
       .addCase(loginThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.errorCode = action.payload as string;
       });
 
     builder
-      .addCase(registerThunk.pending, (state) => {
+      .addCase(setPasswordThunk.pending, (state) => {
         state.isLoading = true;
         state.errorCode = null;
       })
-      .addCase(registerThunk.fulfilled, (state, action: PayloadAction<AuthSuccessPayload>) => {
-        state.isLoading = false;
-        state.accessToken = action.payload.accessToken;
-        state.userEmail = action.payload.email;
-        state.emailVerified = action.payload.emailVerified;
-        state.isAdmin = action.payload.isAdmin;
-        state.verificationEmailFailed =
-          action.payload.verificationEmailFailed ?? false;
-      })
-      .addCase(registerThunk.rejected, (state, action) => {
+      .addCase(
+        setPasswordThunk.fulfilled,
+        (state, action: PayloadAction<AuthSuccessPayload>) => {
+          state.isLoading = false;
+          state.accessToken = action.payload.accessToken;
+          state.userEmail = action.payload.email;
+          state.emailVerified = action.payload.emailVerified;
+          state.isAdmin = action.payload.isAdmin;
+        },
+      )
+      .addCase(setPasswordThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.errorCode = action.payload as string;
       });
 
-    builder
-      .addCase(logoutThunk.fulfilled, (state) => {
-        state.accessToken = null;
-        state.userEmail = null;
-        state.errorCode = null;
-        state.emailVerified = null;
-        state.isAdmin = false;
-        state.verificationEmailFailed = false;
-      });
+    builder.addCase(logoutThunk.fulfilled, (state) => {
+      state.accessToken = null;
+      state.userEmail = null;
+      state.errorCode = null;
+      state.emailVerified = null;
+      state.isAdmin = false;
+      state.verificationEmailFailed = false;
+    });
 
     builder
       .addCase(refreshSessionThunk.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(refreshSessionThunk.fulfilled, (state, action: PayloadAction<AuthSuccessPayload>) => {
-        state.isLoading = false;
-        state.accessToken = action.payload.accessToken;
-        state.userEmail = action.payload.email;
-        state.emailVerified = action.payload.emailVerified;
-        state.isAdmin = action.payload.isAdmin;
-      })
+      .addCase(
+        refreshSessionThunk.fulfilled,
+        (state, action: PayloadAction<AuthSuccessPayload>) => {
+          state.isLoading = false;
+          state.accessToken = action.payload.accessToken;
+          state.userEmail = action.payload.email;
+          state.emailVerified = action.payload.emailVerified;
+          state.isAdmin = action.payload.isAdmin;
+        },
+      )
       .addCase(refreshSessionThunk.rejected, (state) => {
         state.isLoading = false;
         state.accessToken = null;

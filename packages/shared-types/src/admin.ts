@@ -1,12 +1,21 @@
 // Tipus del panell d'administració, compartits entre l'API i el frontend
 
-import type { UserRole, UserStatus, UserTier, UserUsage, QuotaLimits } from "./ui";
+import type {
+  UserRole,
+  UserStatus,
+  UserTier,
+  UserUsage,
+  UserUseCase,
+  QuotaLimits,
+} from "./ui";
 
 // Fila de la taula d'usuaris. No inclou mai el hash de la contrasenya
 // ni les preferències: el panell serveix per moderar, no per espiar.
 export interface AdminUserSummary {
   id: string;
   email: string;
+  name?: string;
+  useCase?: UserUseCase;
   status: UserStatus;
   role: UserRole;
   emailVerified: boolean;
