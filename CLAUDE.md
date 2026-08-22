@@ -286,6 +286,19 @@ apps/
 - El reducer `updateDefaultSettings` reemplaça tot el `defaultSettings` — el que usa `handlerSubmit` de `DefaultForm`.
 - **Persistència**: `DefaultForm` guarda a `sessionStorage` i `localStorage` amb la clau `"pictDefaultSettings"`. Si un usuari té dades antigues sense un camp nou, el fallback es gestiona al nivell de lectura (no hi ha migració).
 
+### Esborrany del document i imatges pujades
+
+- **El document no es desa mai a `localStorage`/`sessionStorage`.** L'esborrany va a **IndexedDB** (`features/sequence/storage/draftStorage.ts`, clau `currentDocument`). El motiu és de mida: els storages del navegador donen uns 5 MB per origen i hi compten en UTF-16, i **una sola imatge pujada en base64 ja se'ls menja** — el mateix `STORAGE_FULL_ERROR` que ja passava amb el vocabulari, però enduent-se la feina. A IndexedDB hi cap el document sencer, imatges incloses, **sense tocar-ne el format**: ni el `.saac`, ni el que rep l'API, ni `PictApiAra.url`.
+- **L'esborrany és xarxa de seguretat, no desat.** Sobreviu a un refresc, a tancar la pestanya i a quedar-se sense bateria, però el navegador el pot desallotjar (Safari, als 7 dies sense visitar el lloc). Els desats de veritat continuen sent explícits: «Descarrega» (fitxer `.saac`) i «Desa al núvol» (amb compte). **Mateix mecanisme per a l'usuari anònim i per a l'autenticat** — el que canvia és què hi ha a sobre, no l'esborrany.
+- **No hi ha autodesat al núvol.** Cada `PUT /documents` puja imatges a Cloudinary i passa per la comprovació de quota: desar sol, sense que l'usuari ho hagi demanat, li pot retornar un `QUOTA_STORAGE_EXCEEDED` en un moment en què no pensa a desar, i de passada desperta Render.
+- **Es desa amb debounce d'1 s i es força en amagar la pestanya** (`visibilitychange` i `pagehide`, no només `beforeunload`): a iOS el sistema pot matar una pestanya en segon pla sense disparar-lo mai, i l'iPad és el dispositiu típic d'un usuari d'AAC.
+- **Restauració només en arrencar i només sobre un document verge** (sense títol i sense cap pictograma). Si mentre es llegia l'esborrany l'usuari ja ha carregat un document o ha posat un pictograma, mana el que està veient.
+- **Si el navegador no pot desar, es diu.** `saveDraft` retorna si ho ha aconseguit i el hook avisa **un sol cop** per sessió: amb l'espai exhaurit, cada canvi posterior tornaria a fallar i l'avís es convertiria en soroll.
+- **Les imatges pujades tenen mida fixa: 1.800 px de costat llarg** (`MAX_IMAGE_SIDE_PX` a `utils/imageToBase64.ts`), amb objectiu de ~500 KB ajustant la qualitat i un mínim de 0,5. Surt del cas pitjor d'impressió: el pictograma més gran possible és de 150,8 mm (150 px CSS × `SIZE_PICT_MAX` 3,8, a 96 dpi), i 1.800 px hi donen 303 dpi — per damunt del sostre del PDF mateix (`html2canvas` a `scale: 3` sobre una pàgina de 96 dpi són 288 dpi com a màxim).
+- **La mida és igual per a totes les imatges i no depèn de quantes n'hi hagi.** Rebaixar-la per imatge segons el recompte és temptador (com més pictogrames, més petit s'imprimeix cadascun) però està mal ancorat: quan es puja encara no se sap a quina mida s'imprimirà — `sizePict` es toca després, a la pàgina de vista— reduir és irreversible, i el resultat dependria de l'ordre d'arribada. A més, una progressió a la meitat arriba al terra a la quarta imatge: el terra acaba sent l'única política real.
+- **Es redimensiona sempre, no només quan la imatge passa d'un llindar**, i **mai s'amplia**: inventar píxels no afegeix detall i multiplica el pes.
+- **Les imatges amb transparència no van mai a JPEG** (els pintaria un fons negre): es codifiquen en WebP, que guarda l'alfa amb pes de foto, i si el navegador no el sap codificar `toDataURL` retorna un PNG sense avisar —es detecta pel prefix— i el PNG es dona per bo.
+
 ### Tipografia i Font
 
 - El type `Font` té 3 camps: `family: FontFamily`, `color: string`, `size: number` (multiplicador 0.5–2.0).
