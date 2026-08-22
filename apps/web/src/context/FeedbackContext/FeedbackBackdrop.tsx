@@ -1,17 +1,15 @@
 import { Backdrop, CircularProgress, Typography, Box } from "@mui/material";
 import { ReactElement } from "react";
-import { useIntl } from "react-intl";
 import { useFeedback } from "./FeedbackContext";
-import messages from "./FeedbackContext.lang";
 
-// Component Backdrop que consumeix el context de feedback per operacions bloquejants
+// Component Backdrop que consumeix el context de feedback per operacions bloquejants.
+//
+// Es munta fora del router i, per tant, fora de l'IntlProvider (vegeu index.tsx):
+// aquí no es pot traduir res. El text sempre l'aporta qui obre el backdrop, que sí
+// que viu dins de l'arbre traduït.
 const FeedbackBackdrop = (): ReactElement => {
   const { state } = useFeedback();
-  const intl = useIntl();
   const { open, message } = state.backdrop;
-
-  // Etiqueta accessible: el missatge del context si n'hi ha, o el genèric de "Loading"
-  const label = message || intl.formatMessage(messages.loading);
 
   return (
     <Backdrop
@@ -28,12 +26,10 @@ const FeedbackBackdrop = (): ReactElement => {
       }}
       open={open}
     >
-      {/* Amb missatge, el text ja és el que s'anuncia i la rodona és decoració;
-          sense missatge, la rodona és l'únic que hi ha i li cal nom propi */}
+      {/* Amb missatge, el text és el que s'anuncia i la rodona només és decoració */}
       <CircularProgress
         color="inherit"
         aria-hidden={message ? true : undefined}
-        aria-label={message ? undefined : label}
       />
       {message && (
         <Box>
