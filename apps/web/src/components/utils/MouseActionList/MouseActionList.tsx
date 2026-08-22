@@ -14,6 +14,7 @@ import {
 } from "react-icons/ai";
 import { TbColumnInsertRight } from "react-icons/tb";
 import { useDispatch } from "react-redux";
+import { useIntl } from "react-intl";
 import {
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
@@ -22,6 +23,7 @@ import {
 } from "@features/sequence/store/documentSlice";
 import useNewPictogram from "@features/pictogram/hooks/useNewPictogram";
 import { PictSequence } from "../../../types/sequence";
+import messages from "./MouseActionList.lang";
 import React from "react";
 
 interface MouseActionListProps {
@@ -40,6 +42,7 @@ const MouseActionList = ({
   pasteObject,
 }: MouseActionListProps): React.ReactElement => {
   const dispatch = useDispatch();
+  const intl = useIntl();
   const { getPictogramEmptyWithDefaultSettings: pictogramEmpty } =
     useNewPictogram();
 
@@ -82,7 +85,9 @@ const MouseActionList = ({
           id="nested-list-subheader"
           color="primary"
         >
-          Pictogram {pictogram.indexSequence + 1}
+          {intl.formatMessage(messages.header, {
+            number: pictogram.indexSequence + 1,
+          })}
         </ListSubheader>
       }
     >
@@ -90,7 +95,7 @@ const MouseActionList = ({
         <ListItemIcon>
           <AiOutlineCopy />
         </ListItemIcon>
-        <ListItemText primary="Copy" />
+        <ListItemText primary={intl.formatMessage(messages.copy)} />
       </ListItemButton>
       <ListItemButton
         disabled={pasteObject ? false : true}
@@ -99,19 +104,19 @@ const MouseActionList = ({
         <ListItemIcon>
           <AiOutlinePaperClip />
         </ListItemIcon>
-        <ListItemText primary="Paste" />
+        <ListItemText primary={intl.formatMessage(messages.paste)} />
       </ListItemButton>
       <ListItemButton onClick={editAction}>
         <ListItemIcon>
           <AiOutlineEdit />
         </ListItemIcon>
-        <ListItemText primary="Edit" />
+        <ListItemText primary={intl.formatMessage(messages.edit)} />
       </ListItemButton>
       <ListItemButton onClick={handlerDelete}>
         <ListItemIcon>
           <AiOutlineDelete />
         </ListItemIcon>
-        <ListItemText primary="Delete" />
+        <ListItemText primary={intl.formatMessage(messages.delete)} />
       </ListItemButton>
       <ListItemButton
         onClick={() =>
@@ -121,7 +126,7 @@ const MouseActionList = ({
         <ListItemIcon>
           <TbColumnInsertRight />
         </ListItemIcon>
-        <ListItemText primary="Insert" />
+        <ListItemText primary={intl.formatMessage(messages.insert)} />
       </ListItemButton>
       <ListItemButton
         onClick={() =>
@@ -134,7 +139,7 @@ const MouseActionList = ({
         <ListItemIcon>
           <AiOutlineCopy />
         </ListItemIcon>
-        <ListItemText primary="Duplicate" />
+        <ListItemText primary={intl.formatMessage(messages.duplicate)} />
       </ListItemButton>
     </List>
   );

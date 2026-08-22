@@ -1702,5 +1702,33 @@
   "pages.forgotPassword.goToApp": {
     "defaultMessage": "Ve a la aplicación",
     "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"
+  },
+  "components.mouseActionList.header": {
+    "defaultMessage": "Pictograma {number}",
+    "description": "Capçalera del menú contextual: quin pictograma s'està editant"
+  },
+  "components.mouseActionList.copy": {
+    "defaultMessage": "Copiar",
+    "description": "Desa el pictograma al porta-retalls intern de la seqüència"
+  },
+  "components.mouseActionList.paste": {
+    "defaultMessage": "Pegar (sustituye)",
+    "description": "Substitueix el pictograma actual pel que hi ha al porta-retalls"
+  },
+  "components.mouseActionList.edit": {
+    "defaultMessage": "Editar",
+    "description": "Obre el diàleg d'edició del pictograma"
+  },
+  "components.mouseActionList.delete": {
+    "defaultMessage": "Eliminar",
+    "description": "Treu el pictograma de la seqüència"
+  },
+  "components.mouseActionList.insert": {
+    "defaultMessage": "Insertar uno vacío a continuación",
+    "description": "Insereix un pictograma buit just després del pictograma actual"
+  },
+  "components.mouseActionList.duplicate": {
+    "defaultMessage": "Duplicar a continuación",
+    "description": "Insereix una còpia del pictograma just després del pictograma actual"
   }
 }
