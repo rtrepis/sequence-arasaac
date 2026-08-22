@@ -6,12 +6,8 @@ import {
   ListItemText,
   ListSubheader,
 } from "@mui/material";
-import {
-  AiOutlineCopy,
-  AiOutlineDelete,
-  AiOutlineEdit,
-  AiOutlinePaperClip,
-} from "react-icons/ai";
+import { AiOutlineCopy, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { MdOutlineContentPaste, MdOutlineLibraryAdd } from "react-icons/md";
 import { TbColumnInsertRight } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { useIntl } from "react-intl";
@@ -102,7 +98,9 @@ const MouseActionList = ({
         onClick={handlerPaste}
       >
         <ListItemIcon>
-          <AiOutlinePaperClip />
+          {/* Porta-retalls: la contrapartida de la còpia. El clip de paper
+              d'abans és el símbol universal d'«adjuntar fitxer», no d'enganxar */}
+          <MdOutlineContentPaste />
         </ListItemIcon>
         <ListItemText primary={intl.formatMessage(messages.paste)} />
       </ListItemButton>
@@ -137,7 +135,10 @@ const MouseActionList = ({
         }
       >
         <ListItemIcon>
-          <AiOutlineCopy />
+          {/* Còpies apilades amb «+»: duplicar afegeix un pictograma a la
+              seqüència, mentre que copiar (dos fulls) no la toca. El «+» és
+              el senyal compartit amb «Insereix buit» */}
+          <MdOutlineLibraryAdd />
         </ListItemIcon>
         <ListItemText primary={intl.formatMessage(messages.duplicate)} />
       </ListItemButton>
