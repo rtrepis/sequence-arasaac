@@ -189,6 +189,13 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 
 ---
 
+## Feina pendent coneguda
+
+- `docs/BACKLOG-ux.md` recull les troballes obertes de la revisió d'UX, icones i accessibilitat, amb
+  fitxer, motiu i proposta. **Consultar-lo abans de proposar una millora d'UX**: si ja hi és, cal
+  continuar-hi (marcar-la resolta o caducada), no obrir-la de nou. Una troballa detectada i no
+  resolta al moment s'hi apunta; no es deixa només a la conversa.
+
 ## Descripció del projecte
 
 App per crear seqüències de pictogrames (ARASAAC), previsualitzar-les i imprimir-les.
