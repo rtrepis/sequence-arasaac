@@ -41,14 +41,18 @@ la pestanya.
 - **Proposta**: avís en sortir si hi ha canvis mai exportats ni desats al núvol, o un indicador
   d'estat permanent («esborrany local» vs «desat»).
 
-### A2 — El menú contextual d'un pictograma és 100% en anglès 🔴 Oberta
+### A2 — El menú contextual d'un pictograma era 100% en anglès ✅ Resolta
 
-- **On**: `components/utils/MouseActionList/MouseActionList.tsx` — `Copy`, `Paste`, `Edit`,
-  `Delete`, `Insert`, `Duplicate` literals, sense `react-intl`
-- **Per què importa**: és el menú que s'obre amb clic dret o pulsació llarga sobre qualsevol
-  pictograma — probablement l'acció més repetida de l'editor. En una app de 5 idiomes amb públic
-  català, un menú sencer en anglès és el pitjor lloc on deixar-lo.
-- **Proposta**: `MouseActionList.lang.ts` amb `defineMessages()` i els sis verbs traduïts.
+Branca `claude/analisi-opcions-a2-gi47yq` (commit `734d3c3`). `MouseActionList.lang.ts` amb
+`defineMessages()` i els sis verbs traduïts als cinc idiomes; a més, les etiquetes diuen què fa
+l'acció de debò («Paste (replaces)», «Insert empty after this», «Duplicate after this») en comptes
+del verb sol.
+
+L'entrada va quedar marcada oberta per descuit en crear aquest fitxer, ja amb el codi resolt;
+verificat el 2026-08-22.
+
+**Correcció al text original**: el menú **no** s'obre amb pulsació llarga, només amb clic dret
+(`onContextMenu`) → vegeu A8.
 
 ### A3 — El botó d'imprimir s'anunciava com «view» ✅ Resolta
 
@@ -74,20 +78,29 @@ només canvia el text font i les cinc traduccions.
 **Residu**: el títol de la fila de direcció continua sent el genèric «Direcció»; amb els tooltips
 nous ja no és ambigu, i canviar-lo tocaria una clau compartida amb altres panells.
 
-### A5 — La mateixa icona és «Copiar» i «Duplicar» 🔴 Oberta
+### A5 i A6 — Copiar/Duplicar compartien icona i el clip de paper volia dir «Enganxar» ✅ Resoltes
 
-- **On**: `MouseActionList.tsx` — `AiOutlineCopy` per a *Copy* (porta-retalls intern) i per a
-  *Duplicate* (insereix la còpia al costat)
-- **Per què importa**: dues accions amb resultat diferent, mateix símbol, a dues línies del mateix
-  menú.
-- **Proposta**: porta-retalls per a «Copiar», còpies apilades per a «Duplicar».
+Branca `claude/auditoria-a5-a6-rsxta2`. Es van analitzar juntes perquè **per separat es
+contradiuen**: la proposta d'A5 donava el porta-retalls a «Copiar» i la d'A6 el donava a
+«Enganxar». Amb tres accions i un sol símbol de porta-retalls, resoldre'n una trencava l'altra.
 
-### A6 — Un clip de paper vol dir «Enganxar» 🔴 Oberta
+Criteri final — **cada acció mostra què li passa a la seqüència**, no d'on ve la dada:
 
-- **On**: `MouseActionList.tsx` — `AiOutlinePaperClip` per a l'acció *Paste*
-- **Per què importa**: el clip és universalment «adjuntar arxiu». Fer servir un símbol reconegut per
-  a un concepte que no és el seu gasta l'avantatge del símbol universal.
-- **Proposta**: icona de porta-retalls.
+| Acció | Abans | Ara | Per què |
+|---|---|---|---|
+| Copiar | `AiOutlineCopy` | `AiOutlineCopy` (sense canvi) | Dos fulls **és** el símbol universal de copiar; el conflicte es resol traient-lo de «Duplicar», no de «Copiar» |
+| Enganxar (substitueix) | `AiOutlinePaperClip` | `MdOutlineContentPaste` | El porta-retalls és la contrapartida dels dos fulls; el clip és «adjuntar fitxer» |
+| Duplicar després d'aquest | `AiOutlineCopy` | `MdOutlineLibraryAdd` | Còpies apilades **amb «+»**: duplicar afegeix un pictograma; copiar no toca la seqüència |
+
+El «+» queda com a senyal compartit de «això afegeix un pictograma a la seqüència»: el porten les
+dues úniques accions que insereixen, `TbColumnInsertRight` («Insereix un buit després») i
+`MdOutlineLibraryAdd` («Duplica després»).
+
+**Descartat**: unificar tot el menú en una sola família d'icones. Tabler (l'única que cobreix
+«inserir columna a la dreta») no té cap glif de duplicar amb «+» a la versió que porta
+`react-icons@4`, i Material no en té cap d'«inserir després». Ant i Material es dibuixen igual
+(traçat omplert), així que la família nova no desentona; la que ja hi desentonava — Tabler, de
+traç — hi era abans d'aquest canvi. Vegeu la nota de C3.
 
 ### A7 — El botó de PDF desapareix del focus mentre genera 🔴 Oberta
 
@@ -99,6 +112,23 @@ nous ja no és ambigu, i canviar-lo tocaria una clau compartida amb altres panel
   generant el PDF o si ha fallat.
 - **Proposta**: `aria-disabled` + `aria-busy` en lloc de `disabled` (el botó continua focusable i
   anunciable), i ignorar el clic al handler mentre `isGenerating`.
+
+### A8 — El menú contextual del pictograma no existeix en tàctil 🔴 Oberta
+
+*(Trobada en analitzar A5 i A6, fora del seu abast.)*
+
+- **On**: `Modals/PictEditModal/PictEditModal.tsx` — `onContextMenu` és **l'únic** obridor del
+  `Popover`; no hi ha cap gestor de pulsació llarga enlloc del projecte (`onTouchStart`,
+  temporitzador o similar: cap coincidència).
+- **Per què importa**: Safari d'iOS/iPadOS no dispara mai l'esdeveniment `contextmenu`, i l'iPad és
+  el dispositiu típic de l'usuari d'AAC. Allà, les sis accions del menú — copiar, enganxar, editar,
+  esborrar, inserir i duplicar — són **inabastables**: tocar el pictograma només obre el diàleg
+  d'edició. A Android el clic llarg sí que dispara `contextmenu`, així que el forat és exactament
+  el públic amb més iPads. Arreglar les icones d'A5/A6 no serveix de res a qui no pot obrir el menú.
+- **Proposta**: obrir el mateix `Popover` amb una pulsació llarga (temporitzador amb
+  `onPointerDown`/`onPointerUp`, cancel·lat en moure el dit per no trencar l'scroll), o afegir un
+  botó visible de «més accions» a la targeta. La segona opció és més descobrible i no depèn de cap
+  gest amagat, però ocupa espai a cada pictograma.
 
 ---
 
@@ -151,6 +181,31 @@ Ambigüitat real, però amb context (posició, títol de secció) que ajuda a de
   afegeixen o eliminen una pàgina sencera.
 - **Proposta**: `TabsSequences.lang.ts` amb els dos tooltips.
 
+### B7 — «Esborrar» viu al mig del menú contextual, sense desfer 🔴 Oberta
+
+*(Trobada en analitzar A5 i A6, fora del seu abast.)*
+
+- **On**: `MouseActionList.tsx` — ordre actual: Copiar · Enganxar · Editar · **Esborrar** · Insereix
+  buit · Duplica, sense cap `Divider`
+- **Per què importa**: l'única acció irreversible del menú està encaixonada entre quatre
+  d'inofensives i a un pas de «Editar», i l'app no té desfer (cap `undo` a `features/sequence`).
+  «Enganxar» també sobreescriu el pictograma actual sense confirmació, tot i que l'etiqueta ho diu.
+- **Proposta**: agrupar amb `Divider` (porta-retalls · inserir · esborrar) i deixar l'acció
+  destructiva l'última. Confirmar l'esborrat és una decisió a part: afegeix fricció a una acció que
+  es repeteix molt.
+
+### B8 — El porta-retalls és invisible i «Enganxar» desactivat no s'explica 🔴 Oberta
+
+*(Trobada en analitzar A5 i A6, fora del seu abast.)*
+
+- **On**: `MouseActionList.tsx` (`disabled={pasteObject ? false : true}`) i
+  `Modals/PictEditModalList/PictEditModalList.tsx` (l'estat `copyPictogram`)
+- **Per què importa**: fins que no s'ha copiat res, «Enganxar» surt gris i el menú no diu per què;
+  i quan sí que hi ha alguna cosa copiada, tampoc no es veu enlloc **quin** pictograma s'enganxarà.
+  El porta-retalls viu en un `useState` que no es mostra mai.
+- **Proposta**: text d'ajuda a la fila desactivada («Copia abans un pictograma») o, millor, una
+  miniatura del pictograma copiat a la fila «Enganxar».
+
 ---
 
 ## Gravetat baixa
@@ -174,6 +229,10 @@ Inconsistència de forma o deute intern, sense un moment concret d'acció equivo
 - `react-icons/ai` (majoria), `/md` (barra de vista, restore), `/bs` (PDF, info), `/ri` (selector de
   tema), sense cap regla de quan toca cadascuna.
 - **Proposta**: un estàndard d'icones a `CLAUDE.md`, com ja n'hi ha per a colors i per a tabs.
+- **Nota (A5/A6)**: el menú contextual ara barreja `ai` (copiar, editar, esborrar), `md` (enganxar,
+  duplicar) i `tb` (inserir). És deliberat i documentat a A5/A6: cap família sola cobreix els sis
+  verbs. Ant i Material comparteixen dibuix (traçat omplert); qui desentona és Tabler, de traç. Si
+  algun dia es fixa l'estàndard, aquest menú és el cas de prova.
 
 ### C4 — Components morts i col·lisió de traduccions 🔴 Oberta
 
@@ -205,3 +264,14 @@ fitxers pot canviar silenciosament el text de l'altre.
 - **Proposta**: un `IconActionButton` compartit que prengui **un sol** missatge i en derivi tooltip i
   `aria-label`, de manera que no puguin tornar a divergir. Val la pena si es fa d'una tirada per a
   tots els casos; component a component no compensa el diff.
+
+### C6 — Deute menut del menú contextual 🔴 Oberta
+
+*(Trobada en analitzar A5 i A6, fora del seu abast.)*
+
+- **On**: `MouseActionList.tsx`
+- `/* eslint-disable @typescript-eslint/no-unused-expressions */` a la primera línia del fitxer, per
+  culpa de dos `x && x(...)` que podrien ser un `if`. Desactiva la regla per a tot el fitxer.
+- L'`aria-labelledby` de la llista apunta a `nested-list-subheader`, un id genèric heretat de
+  l'exemple de MUI; el subheader ja diu «Pictograma {n}», així que el nom accessible és correcte,
+  però l'id no descriu res.
