@@ -316,6 +316,10 @@ const ViewSequencesSettings = ({
       <form onBlur={handleBlur} onSubmit={(event) => event.preventDefault()}>
         <NotPrint>
           <Stack direction={"row"} justifyContent={"end"} alignItems={"end"}>
+            {/* Botons només-icona: l'aria-label sempre repeteix el mateix missatge
+                que el tooltip. El tooltip no s'obre en tàctil, així que l'aria-label
+                és l'únic nom del botó; i fer-los coincidir compleix el criteri WCAG
+                2.5.3 (el nom llegit conté el text visible). */}
             <Stack direction={"row"}>
               {!isFullscreen ? (
                 <>
@@ -323,7 +327,9 @@ const ViewSequencesSettings = ({
                     title={intl.formatMessage(messages.tooltipOrientation)}
                   >
                     <Button
-                      aria-label={"page orientation"}
+                      aria-label={intl.formatMessage(
+                        messages.tooltipOrientation,
+                      )}
                       variant="text"
                       color="primary"
                       sx={{ fontSize: "2rem" }}
@@ -334,7 +340,7 @@ const ViewSequencesSettings = ({
                   </Tooltip>
                   <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
                     <Button
-                      aria-label={"view"}
+                      aria-label={intl.formatMessage(messages.tooltipPrint)}
                       variant="text"
                       color="primary"
                       sx={{ fontSize: "2rem" }}
@@ -349,7 +355,9 @@ const ViewSequencesSettings = ({
                     {/* span necessari: Tooltip requereix un fill que accepti events DOM; Button disabled no els reenvia */}
                     <span>
                       <Button
-                        aria-label={"download pdf"}
+                        aria-label={intl.formatMessage(
+                          messages.tooltipDownloadPdf,
+                        )}
                         variant="text"
                         color="primary"
                         sx={{ fontSize: "2rem" }}
@@ -367,7 +375,9 @@ const ViewSequencesSettings = ({
                     title={intl.formatMessage(messages.tooltipFullscreen)}
                   >
                     <Button
-                      aria-label={"fullScreen"}
+                      aria-label={intl.formatMessage(
+                        messages.tooltipFullscreen,
+                      )}
                       variant="text"
                       color="primary"
                       sx={{ fontSize: "2rem" }}
