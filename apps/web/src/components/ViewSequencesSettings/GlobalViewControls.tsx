@@ -71,13 +71,27 @@ const GlobalViewControls = ({
             exclusive
             onChange={(_, val: PageOrientation | null) => val && onOrientationChange(val)}
           >
-            <Tooltip title={intl.formatMessage(messages.tooltipDirectionRow)}>
-              <ToggleButton value="landscape" aria-label="landscape">
+            <Tooltip
+              title={intl.formatMessage(messages.tooltipOrientationLandscape)}
+            >
+              <ToggleButton
+                value="landscape"
+                aria-label={intl.formatMessage(
+                  messages.tooltipOrientationLandscape,
+                )}
+              >
                 <MdScreenRotation style={{ transform: "rotate(90deg)" }} />
               </ToggleButton>
             </Tooltip>
-            <Tooltip title={intl.formatMessage(messages.tooltipDirectionColumn)}>
-              <ToggleButton value="portrait" aria-label="portrait">
+            <Tooltip
+              title={intl.formatMessage(messages.tooltipOrientationPortrait)}
+            >
+              <ToggleButton
+                value="portrait"
+                aria-label={intl.formatMessage(
+                  messages.tooltipOrientationPortrait,
+                )}
+              >
                 <MdScreenRotation />
               </ToggleButton>
             </Tooltip>
@@ -112,14 +126,18 @@ const GlobalViewControls = ({
           onChange={onDirectionChange}
         >
           <Tooltip title={intl.formatMessage(messages.tooltipDirectionRow)}>
-            <ToggleButton value="row" aria-label="row">
+            <ToggleButton
+              value="row"
+              aria-label={intl.formatMessage(messages.tooltipDirectionRow)}
+            >
               <MdTableRows />
             </ToggleButton>
           </Tooltip>
-          <Tooltip
-            title={intl.formatMessage(messages.tooltipDirectionColumn)}
-          >
-            <ToggleButton value="column" aria-label="column">
+          <Tooltip title={intl.formatMessage(messages.tooltipDirectionColumn)}>
+            <ToggleButton
+              value="column"
+              aria-label={intl.formatMessage(messages.tooltipDirectionColumn)}
+            >
               <MdViewColumn />
             </ToggleButton>
           </Tooltip>
