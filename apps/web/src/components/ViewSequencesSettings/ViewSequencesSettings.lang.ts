@@ -96,15 +96,29 @@ const messages = defineMessages({
     defaultMessage: "Full screen",
     description: "Tooltip del botó de pantalla completa",
   },
+  tooltipOrientationLandscape: {
+    id: "pages.viewSequence.tooltip.orientationLandscape",
+    defaultMessage: "Landscape page",
+    description:
+      "Tooltip i nom accessible del botó d'orientació apaïsada de la pàgina",
+  },
+  tooltipOrientationPortrait: {
+    id: "pages.viewSequence.tooltip.orientationPortrait",
+    defaultMessage: "Portrait page",
+    description:
+      "Tooltip i nom accessible del botó d'orientació vertical de la pàgina",
+  },
   tooltipDirectionRow: {
     id: "pages.viewSequence.tooltip.directionRow",
-    defaultMessage: "Horizontal",
-    description: "Tooltip del botó de direcció horitzontal",
+    defaultMessage: "Sequence in rows",
+    description:
+      "Tooltip i nom accessible del botó que apila els pictogrames en files",
   },
   tooltipDirectionColumn: {
     id: "pages.viewSequence.tooltip.directionColumn",
-    defaultMessage: "Vertical",
-    description: "Tooltip del botó de direcció vertical",
+    defaultMessage: "Sequence in columns",
+    description:
+      "Tooltip i nom accessible del botó que apila els pictogrames en columnes",
   },
   tooltipAlignLeft: {
     id: "pages.viewSequence.tooltip.alignLeft",

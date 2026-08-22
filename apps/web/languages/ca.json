@@ -1100,11 +1100,21 @@
   "pages.viewSequence.resetDefaults.label": {
     "defaultMessage": "Restaurar per defecte"
   },
+  "pages.viewSequence.tooltip.orientationLandscape": {
+    "defaultMessage": "Pàgina apaïsada",
+    "description": "Tooltip i nom accessible del botó d'orientació apaïsada de la pàgina"
+  },
+  "pages.viewSequence.tooltip.orientationPortrait": {
+    "defaultMessage": "Pàgina vertical",
+    "description": "Tooltip i nom accessible del botó d'orientació vertical de la pàgina"
+  },
   "pages.viewSequence.tooltip.directionColumn": {
-    "defaultMessage": "Vertical"
+    "defaultMessage": "Seqüència en columnes",
+    "description": "Tooltip i nom accessible del botó que apila els pictogrames en columnes"
   },
   "pages.viewSequence.tooltip.directionRow": {
-    "defaultMessage": "Horitzontal"
+    "defaultMessage": "Seqüència en files",
+    "description": "Tooltip i nom accessible del botó que apila els pictogrames en files"
   },
   "pages.viewSequence.tooltip.downloadPdf": {
     "defaultMessage": "Descarregar PDF",

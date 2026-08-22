@@ -61,15 +61,18 @@ Es va descartar deixar que el `Tooltip` de MUI posés sol l'`aria-label`: el fil
 és el `<span>` embolcall (necessari perquè el `Button` pot estar `disabled`), i l'etiqueta hi cauria
 sobre un element sense rol, deixant el botó **sense cap nom**.
 
-### A4 — «Horitzontal» i «Vertical» volen dir dues coses al mateix panell 🔴 Oberta
+### A4 — «Horitzontal» i «Vertical» volien dir dues coses al mateix panell ✅ Resolta
 
-- **On**: `ViewSequencesSettings/GlobalViewControls.tsx` — `tooltipDirectionRow` /
-  `tooltipDirectionColumn` (**el mateix id de missatge**) fets servir per a l'orientació de la
-  pàgina (`MdScreenRotation`) i per a la direcció d'apilament (`MdTableRows` / `MdViewColumn`)
-- **Per què importa**: dos controls contigus mostren literalment el mateix text per configurar coses
-  diferents. L'adjectiu sol no diu sobre què actua.
-- **Proposta**: «Pàgina apaïsada / vertical» i «Seqüència en files / columnes» — dos parells de
-  claus, no un.
+Branca `claude/auditoria-a4-zlerpz`. L'orientació de pàgina té dos missatges propis
+(`tooltipOrientationLandscape` / `tooltipOrientationPortrait`, «Pàgina apaïsada» / «Pàgina
+vertical») i els de direcció passen a dir sobre què actuen («Seqüència en files» / «Seqüència en
+columnes») en comptes de només l'eix. Cap control comparteix ja text amb l'altre.
+
+Els ids `directionRow` / `directionColumn` es conserven perquè segueixen sent els de la direcció:
+només canvia el text font i les cinc traduccions.
+
+**Residu**: el títol de la fila de direcció continua sent el genèric «Direcció»; amb els tooltips
+nous ja no és ambigu, i canviar-lo tocaria una clau compartida amb altres panells.
 
 ### A5 — La mateixa icona és «Copiar» i «Duplicar» 🔴 Oberta
 
@@ -191,10 +194,11 @@ fitxers pot canviar silenciosament el text de l'altre.
 
 *(Trobada en analitzar A3, fora del seu abast.)*
 
-- **On**: `GlobalViewControls.tsx` (`landscape`, `portrait`, `row`, `column`),
-  `SequenceControlsPanel.tsx` i `Modals/DefaultSettingsModal/ViewSettingsPanel.tsx` (`left`,
+- **On**: `SequenceControlsPanel.tsx` i `Modals/DefaultSettingsModal/ViewSettingsPanel.tsx` (`left`,
   `center`, `right`, `top`, `bottom`), `TabsSequences.tsx` (`sequence number`),
-  `ToggleButtonEditViewPages.tsx` (`Toggle view/edit`, `edit`, `view` — component mort, vegeu C4)
+  `ToggleButtonEditViewPages.tsx` (`Toggle view/edit`, `edit`, `view` — component mort, vegeu C4).
+  `GlobalViewControls.tsx` (`landscape`, `portrait`, `row`, `column`) ja no hi és: en resoldre A4
+  els seus quatre toggles prenen l'`aria-label` del mateix missatge que el tooltip.
 - **Per què importa**: mateixa causa que A3, però molt menys greu: aquests toggles viuen dins d'un
   `SettingRow` amb títol traduït, així que el context el dona la fila. Tot i així són noms
   accessibles en anglès en una app de 5 idiomes.
