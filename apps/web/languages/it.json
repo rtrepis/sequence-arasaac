@@ -1740,5 +1740,17 @@
   "components.mouseActionList.duplicate": {
     "defaultMessage": "Duplica dopo",
     "description": "Insereix una còpia del pictograma just després del pictograma actual"
+  },
+  "features.print.pdf.generating": {
+    "defaultMessage": "Generazione del PDF…",
+    "description": "Missatge del backdrop mentre es genera el PDF"
+  },
+  "features.print.pdf.downloaded": {
+    "defaultMessage": "PDF scaricato",
+    "description": "Confirmació quan el PDF s'ha generat i descarregat"
+  },
+  "features.print.pdf.error": {
+    "defaultMessage": "Non è stato possibile generare il PDF. (Codice: {code})",
+    "description": "Error quan la generació del PDF falla; el codi permet dir què ha passat sense obrir la consola"
   }
 }
