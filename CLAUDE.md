@@ -412,12 +412,13 @@ apps/
 
 ### Build i compilació
 
-- Ordres a l'arrel del monorepo (`npm run dev|build|lint|test`) les reparteix **Turbo** a tots els workspaces; `--filter=web` o `--filter=api` acota a un de sol.
-- **Front** (`apps/web`): `npm run lint` = `eslint ./src`; `npm run build` = `vite build` (comprova tipus com a part del build). `npm test` i `npm run test-coverage` són encara placeholders (`echo ... && exit 0`) tot i que el workspace té `@testing-library/react`, `msw` i tests `.test.ts(x)` reals — no assumir que `npm test` executa res. Els tests e2e (captures/vídeos de funcionalitats) van amb **Playwright** (`apps/web/playwright.config.ts`, carpeta `e2e/`).
-- **Back** (`apps/api`): `npm run lint` = `tsc --noEmit`; `npm test` = `vitest run` (usa `mongodb-memory-server`, per això els fitxers `*.test.ts` i `src/test/` queden exclosos del `tsconfig.json` de build/producció).
-- El compilador TypeScript del front es pot cridar directament amb `node node_modules/.bin/tsc --noEmit` si cal aïllar errors de tipus del lint d'ESLint.
-- Hi ha errors pre-existents al repositori (tests incomplets, etc.). Cal filtrar la sortida per verificar que els errors nous són els nostres amb grep.
-- `test-utils.tsx` (`apps/web/src/utils`) conté una mock de l'estat Redux completa. Quan s'afegeix un camp obligatori a un type de defaults, cal actualitzar-la aquí.
+- Ordres a l'arrel del monorepo (`npm run dev|build|lint|test|typecheck`) les reparteix **Turbo** a tots els workspaces; `--filter=web` o `--filter=api` acota a un de sol.
+- **`npm run typecheck` és l'única barrera de tipus, i cal passar-la abans de donar res per bo.** `vite build` **no** comprova tipus: `@vitejs/plugin-react-swc` els llença sense mirar-los, i ESLint no els mira tampoc. Un `✓ built` verd al web no vol dir que el TypeScript quadri. (Aquest apartat deia el contrari fins a la branca `claude/document-limit-users-sjig8o`; hi havia codi de producció amb tipus trencats que passava el build cada dia.)
+- **Front** (`apps/web`): `npm run typecheck` = `tsc --noEmit`; `npm run lint` = `eslint ./src`; `npm run build` = `vite build` (només empaqueta). `npm test` i `npm run test-coverage` són encara placeholders (`echo ... && exit 0`) tot i que el workspace té `@testing-library/react`, `msw` i tests `.test.ts(x)` reals — no assumir que `npm test` executa res. Els tests e2e (captures/vídeos de funcionalitats) van amb **Playwright** (`apps/web/playwright.config.ts`, carpeta `e2e/`).
+- **Back** (`apps/api`): `npm run typecheck` i `npm run lint` són tots dos `tsc --noEmit` (el nom `lint` hi era abans); `npm test` = `vitest run` (usa `mongodb-memory-server`, per això els fitxers `*.test.ts` i `src/test/` queden exclosos del `tsconfig.json` de build/producció).
+- **Els tests del web queden fora del `typecheck`** (`exclude` del `tsconfig.json`: `*.test.*`, `setupTests.ts`, `test-utils.tsx`), com a l'API. Ja hi havien de ser des de sempre, però l'`exclude` tenia les dues rutes dins d'una sola cadena separades per una coma i no excloïa res. La suite no compila contra el codi actual (referencia un `sequenceSlice` que ja no existeix i props que han canviat): mentre no es revisqui o s'esborri, no pot ser la barrera de ningú. Vegeu C10 de `docs/BACKLOG-ux.md`.
+- **`npm run lint` del web surt vermell amb errors preexistents** (13, a `test-utils.tsx` i a pàgines soltes): quan s'hi passa, cal filtrar la sortida amb grep pels fitxers tocats per verificar que els errors nous no són nostres. El `typecheck`, en canvi, ha d'estar **net**: si en surt un, és nostre.
+- `test-utils.tsx` (`apps/web/src/utils`) conté una mock de l'estat Redux, avui **desincronitzada** amb l'store real. No serveix de referència fins que es refaci.
 - Desplegament: front a **Vercel**, back a **Render** (`render.yaml`, `buildCommand: npx turbo build --filter=api`) — vegeu «Desplegament: el front i l'API han d'anar al mateix origen» a l'apartat d'antifrau per als detalls de per què han de compartir origen.
 
 ---

@@ -284,10 +284,10 @@ Ambigüitat real, però amb context (posició, títol de secció) que ajuda a de
 - **Proposta**: o generar el PDF amb format personalitzat (`format: [widthMM, heightMM]`), o no
   oferir la descàrrega quan la mida activa és FULLSCREEN.
 
+### B10 — L'esborrany escriu el document sencer, imatges incloses, a cada canvi ✅ Resolta
 
----
-
-### B9 — L'esborrany escriu el document sencer, imatges incloses, a cada canvi ✅ Resolta
+*(Oberta com a «B9» per error: ja hi havia un B9 —el del PDF en FULLSCREEN— i el fitxer va quedar
+amb dues entrades amb el mateix número. Renumerada aquí; el contingut no ha canviat.)*
 
 Branca `claude/a1b-closure-options-h6z8ha`. Les imatges pujades han sortit del camí calent: van a un
 magatzem propi d'IndexedDB (`draftImages`), s'hi escriuen **un sol cop** i el document en desa la
@@ -311,7 +311,7 @@ També s'ha afegit la comparació que evita reescriure el mateix document (el fl
 connexió i escriure en temps ociós— perquè amb el cost ja pla no compensa la complexitat: mantenir
 una connexió oberta obliga a gestionar `onversionchange` i connexions tancades.
 
-### B10 — Pujar una imatge congela la interfície mig segon llarg 🔴 Oberta
+### B11 — Pujar una imatge congela la interfície mig segon llarg 🔴 Oberta
 
 *(Trobada provant A1b, fora del seu abast.)*
 
@@ -324,6 +324,43 @@ una connexió oberta obliga a gestionar `onversionchange` i connexions tancades.
 - **Proposta**: saltar-se l'escaneig d'alfa quan el fitxer d'origen no en pot tenir (un JPEG no té
   transparència); i moure la conversió a un worker amb `createImageBitmap` + `OffscreenCanvas`
   perquè no bloquegi la interfície.
+
+### B12 — Els documents del núvol no es podien distingir l'un de l'altre ✅ Resolta
+
+Branca `claude/document-limit-users-sjig8o` (PR #238).
+
+- **Què passava**: «Desa al núvol» enviava el document **sense títol** i el llistat l'anomenava amb
+  els últims sis caràcters de l'identificador (`Document a3f9c1`). Amb el sostre de documents
+  baixat de 30 a **3** per compte, triar quin s'esborra per fer lloc passava a ser una endevinalla
+  amb tres noms il·legibles i la data de modificació com a únic senyal.
+- **Què hi ha ara**:
+  - `SaveDocumentModal` demana el nom abans de desar, **preomplert** amb les quatre primeres
+    paraules de la seqüència (`suggestDocumentTitle`): acceptar la proposta costa el mateix que no
+    posar-hi nom, que és l'única manera que la casella no es converteixi en un peatge.
+  - `LoadDocumentModal` ensenya una **miniatura** de cada document —els tres primers pictogrames—
+    derivada al servidor en desar (`modules/documents/thumbnail.ts`). Són referències, no imatges
+    noves: reconèixer la seqüència pel dibuix no havia de costar ni Cloudinary ni quota de l'usuari.
+    Els documents desats abans del camp la tenen buida i surten amb icona genèrica.
+  - Progrés real de pujada i baixada (events d'axios a `documentTransfer.ts`) i snackbar en desar,
+    carregar i esborrar.
+
+**Nota de vocabulari**: el nom viu al document, no al diàleg, i per això sobreviu a l'esborrany
+d'IndexedDB i al fitxer `.saac`.
+
+### B13 — Amb tres documents de sostre, ningú diu quants te'n queden 🔴 Oberta
+
+*(Trobada en baixar el límit a B12, fora del seu abast.)*
+
+- **On**: `features/backend/documents/components/` — ni `SaveDocumentModal` ni `LoadDocumentModal`
+  mostren el consum; el sostre és a `apps/api/src/shared/tierLimits.ts` (`documents: 3`) i l'usuari
+  només el descobreix quan `QUOTA_DOCUMENTS_EXCEEDED` li rebota el desat.
+- **Per què importa**: amb 30 documents, topar-hi era rar; amb 3 és el cas normal. El missatge
+  d'error arriba **després** d'haver escrit el nom i haver esperat la pujada, que és el pitjor
+  moment per descobrir que calia esborrar-ne un abans.
+- **Proposta**: ensenyar «2 de 3 documents» al diàleg de càrrega i al de desat, i avisar-ne abans
+  d'enviar res quan ja s'és al límit i el document és nou. El comptador ja existeix al servidor
+  (`usage.documentsCount` de l'usuari) però avui no viatja enlloc: caldria exposar-lo, per exemple
+  amb els límits efectius, a la resposta de `GET /documents`.
 
 ## Gravetat baixa
 
@@ -363,6 +400,7 @@ Verificat el 2026-08-22:
 | `ButtonWithModalDownload/ButtonWithModalDonwload.tsx` | El botó no s'importa enlloc; només se'n fa servir `ModalDownload.tsx` (des d'`AppNavigationDrawer`) |
 | `components.pictEdit.reset` | Definit dos cops: `PictEditForm.lang.ts` (usat, «Restore») i `PictEditModal/PictEdit.lang.ts` (no usat, «Reset to defaults») — mateix id, dos textos font |
 | Missatges orfes | `upload`, `download`, `openMenu`, `langSelector`… a `BarNavigation.lang.ts` i `AppNavigationDrawer.lang.ts`, sense consumidor |
+| `features.backend.auth.documentSaved` | Orfe des de B12: el desat confirma amb `documentSavedNamed` (««{title}» s'ha desat al núvol»), que sempre té nom. Es conserva traduït als cinc idiomes sense que ningú el demani |
 
 **Per què importa**: no confon l'usuari final, però tocar `components.pictEdit.reset` en un dels dos
 fitxers pot canviar silenciosament el text de l'altre.
@@ -413,3 +451,64 @@ fitxers pot canviar silenciosament el text de l'altre.
   no la toca s'endú la configuració dins del `.saac` sense haver-ho demanat.
 - **Proposta**: una sola font per a l'estat de cada casella; que el que es pinta i el que es desa
   siguin el mateix valor.
+
+### C9 — El build del web no comprovava tipus, i el CLAUDE.md deia que sí ✅ Resolta
+
+Branca `claude/document-limit-users-sjig8o`.
+
+- **Què passava**: `npm run build` del web és `vite build` amb `@vitejs/plugin-react-swc`, que
+  **transpila sense mirar els tipus**; `npm run lint` és ESLint, que tampoc no els mira. El
+  `CLAUDE.md` deia literalment «`vite build` (comprova tipus com a part del build)», així que un
+  `✓ built` verd es donava per bo. Es va veure en fusionar B12: una crida amb un valor que no era a
+  la unió `ClientErrorContext` va passar el build sencer i només va sortir passant `tsc` a mà.
+- **Què hi havia amagat a sota** (codi de producció, no tests):
+
+  | Fitxer | Error |
+  |---|---|
+  | `types/ui.ts` | `UserUiSettings` no existia; l'importaven `settingsService`, `settingsThunks` i `settingsStorage`. Ara hi és, amb els camps de compte que `authSlice` ja llegia (`tier`, `emailVerified`, `role`) |
+  | `pages/WelcomePage/WelcomeLayout.tsx` | `import … from "/src/App"` — ruta absoluta que només resol Vite. Passa a l'àlies `@/App` |
+  | `utils/fitzgeraldToBorder.ts` | `fitzgeraldColors.not` no ha existit mai (vegeu C11) |
+
+- **Què hi ha ara**: `npm run typecheck` a l'arrel (tasca de Turbo) i a cada workspace. **Ha d'estar
+  net**: si en surt un error, és nostre. No s'ha encadenat dins de `npm run lint` a propòsit —
+  el lint del web ja surt vermell amb 13 errors preexistents d'ESLint i una barrera que neix
+  vermella no la mira ningú.
+- **Residu**: aquests 13 errors d'ESLint segueixen oberts; 6 són a `test-utils.tsx` (vegeu C10) i la
+  resta són apòstrofs sense escapar i dos `@ts-ignore` en pàgines soltes.
+
+### C10 — La suite de tests del web no compila ni s'executa 🔴 Oberta
+
+*(Trobada en posar la barrera de tipus de C9.)*
+
+- **On**: `src/**/*.test.tsx`, `src/setupTests.ts` i `src/utils/test-utils.tsx`.
+- **Per què importa**: no és que els tests fallin — és que **no poden ni arrencar**. `npm test` és un
+  placeholder (`echo 'Tests: WIP'`), el workspace no té configuració de vitest, `test-utils.tsx`
+  munta un store amb un `sequenceReducer` de `app/slice/sequenceSlice` (mòdul esborrat) i una mock
+  d'`Ui` a la qual falten `lang`, `theme`, `settingsActiveTab`, `wordProfiles` i `tier`; els tests
+  passen props que ja no existeixen (`BarNavigation title`) o n'obliden d'obligatòries
+  (`PictogramAmount info`), i `setupTests.ts` importa `.private/mocks/server`, que no és al
+  repositori. Mentrestant el `CLAUDE.md` els presentava com a «tests reals».
+- **Proposta**: decidir-ho d'una: o es reviu la suite (configurar vitest al web, refer `test-utils`
+  contra l'store actual —`document`, `ui`, `auth`— i actualitzar els sis fitxers de test), o
+  s'esborra i es deixa dit que la cobertura del front són els e2e de Playwright. Mantenir-la a mig
+  camí és el pitjor dels tres: ocupa lloc, dona sensació de xarxa de seguretat i no n'és cap.
+- **Mentrestant**: exclosa del `typecheck` (`exclude` del `tsconfig.json`), com els tests de l'API.
+  L'`exclude` ja ho intentava, però tenia les dues rutes dins d'una sola cadena separades per una
+  coma, que no coincideix amb cap fitxer.
+
+### C11 — Una vora «fitzgerald» sense classificació es pinta del color del text 🔴 Oberta
+
+*(Trobada en posar la barrera de tipus de C9.)*
+
+- **On**: `utils/fitzgeraldToBorder.ts`
+- **Per què importa**: el fallback era `fitzgeraldColors.not`, una clau que **no existeix** a
+  `data/fitzgeraldColors` (només hi ha `1`…`6`). Resolia a `undefined`, el `borderColor` sortia
+  buit i el navegador el pintava amb `currentColor` — el color de la lletra del voltant. Passa amb
+  els pictogrames sense `fitzgerald` (documents antics: `extractPictSettings` sempre l'omple) quan
+  la vora està configurada com a «fitzgerald». No és greu perquè és una vora, però el color surt
+  d'un accident, no d'una decisió.
+- **Fet a C9**: escriure `currentColor` explícitament, per no canviar cap dibuix mentre es posava la
+  barrera de tipus.
+- **Proposta**: triar un color de debò per al cas «sense classificació» —el candidat natural és el
+  mateix `#FFCD94` que `extractPictSettings` fa servir per defecte— o no pintar vora quan no hi ha
+  classificació. Decisió de producte, no de tipus.
