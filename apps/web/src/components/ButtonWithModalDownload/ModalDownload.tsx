@@ -15,7 +15,8 @@ import {
 import React, { BaseSyntheticEvent, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ButtonWithModalDonwload.lang";
-import { useAppSelector } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
 import { DefaultSettings } from "@/types/ui";
 import { DocumentSAAC } from "@/types/document";
@@ -36,6 +37,7 @@ const ModalDownload = ({
     ui: { defaultSettings },
   } = useAppSelector((state) => state);
   const intl = useIntl();
+  const dispatch = useAppDispatch();
   const { showSnackbar } = useFeedback();
 
   const [fileName, setFileName] = useState("");
@@ -78,6 +80,9 @@ const ModalDownload = ({
     if (save.documentState) {
       downloadObject.documentState = documentSaac;
       valueEventsTrace.push("documentState");
+      // Només compta com a còpia externa si el fitxer se'n duu la seqüència:
+      // baixar-se la configuració sola no salva cap feina
+      dispatch(documentMadeDurableActionCreator({ kind: "file" }));
     }
 
     const file = new Blob([JSON.stringify(downloadObject)], {

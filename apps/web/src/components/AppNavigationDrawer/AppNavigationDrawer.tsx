@@ -39,6 +39,7 @@ import {
   addSequenceActionCreator,
   loadDocumentSaacActionCreator,
 } from "@features/sequence/store/documentSlice";
+import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
@@ -152,6 +153,9 @@ const AppNavigationDrawer = ({
             }
             if ("documentState" in parsedJson) {
               dispatch(loadDocumentSaacActionCreator(parsedJson.documentState));
+              // El que s'acaba de carregar existeix en un fitxer del disc: és
+              // l'únic cas en què obrir també vol dir «això ja està desat»
+              dispatch(documentMadeDurableActionCreator({ kind: "file" }));
               valueTrackEvent.push("documentState");
             }
             if ("defaultSettings" in parsedJson) {
@@ -274,8 +278,16 @@ const AppNavigationDrawer = ({
 
           {/* Secció 3: Configuració */}
           <List>
-            <Tooltip title={intl.formatMessage(messages.settings)} placement="right">
-              <ListItemButton onClick={() => { onClose(); setSettingsOpen(true); }}>
+            <Tooltip
+              title={intl.formatMessage(messages.settings)}
+              placement="right"
+            >
+              <ListItemButton
+                onClick={() => {
+                  onClose();
+                  setSettingsOpen(true);
+                }}
+              >
                 <ListItemIcon>
                   <AiOutlineSetting />
                 </ListItemIcon>
@@ -379,7 +391,10 @@ const AppNavigationDrawer = ({
       />
 
       {/* Modal de configuració */}
-      <DefaultSettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <DefaultSettingsDialog
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+      />
 
       {/* Modal de descàrrega */}
       {downloadOpen && (

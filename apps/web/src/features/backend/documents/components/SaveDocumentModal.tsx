@@ -28,6 +28,7 @@ import {
   saveDocumentThunk,
   setDocumentTitleActionCreator,
 } from "@features/sequence/store/documentSlice";
+import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
 import {
   DOCUMENT_TITLE_MAX_LENGTH,
   suggestDocumentTitle,
@@ -84,6 +85,9 @@ const SaveDocumentModal = ({
     setIsSaving(false);
 
     if (result.meta.requestStatus === "fulfilled") {
+      // Ho declara qui desa i no qui l'ha cridat: així el botó flotant d'estat
+      // diu la veritat vingui la crida del drawer o d'ell mateix
+      dispatch(documentMadeDurableActionCreator({ kind: "cloud" }));
       showSnackbar({
         message: intl.formatMessage(messages.documentSavedNamed, { title }),
         severity: "success",

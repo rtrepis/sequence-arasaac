@@ -329,6 +329,17 @@ apps/
 ### Esborrany del document i imatges pujades
 
 - **El document no es desa mai a `localStorage`/`sessionStorage`.** L'esborrany va a **IndexedDB** (`features/sequence/storage/draftStorage.ts`, clau `currentDocument`). El motiu és de mida: els storages del navegador donen uns 5 MB per origen i hi compten en UTF-16, i **una sola imatge pujada en base64 ja se'ls menja** — el mateix `STORAGE_FULL_ERROR` que ja passava amb el vocabulari, però enduent-se la feina. A IndexedDB hi cap el document sencer, imatges incloses, **sense tocar-ne el format**: ni el `.saac`, ni el que rep l'API, ni `PictApiAra.url`.
+- **Les imatges pujades no viuen dins de l'esborrany**: van a un magatzem propi d'IndexedDB
+  (`draftImages`) escrit **un sol cop per imatge**, i el document en desa una referència
+  (`draft-image:<id>`). Sense això, moure un slider tornava a escriure tots els base64 sencers cada
+  segon: mesurat, de 7 ms amb una imatge a 22 ms amb dotze (i molt pitjor en tauleta), quan el que
+  canvia són uns quants KB. Amb el magatzem a part el desat és pla, ~1-2 ms, hi hagi les imatges que
+  hi hagi. **És capa d'emmagatzematge i prou**: ni el `.saac`, ni el que rep l'API, ni
+  `PictApiAra.url` a Redux canvien de forma. L'id surt d'un mostreig del contingut (llargada + tres
+  trossos), no de recórrer la cadena sencera, que seria tornar a pagar el que s'estalvia.
+- **No es reescriu el mateix document dues vegades**: el flush de `visibilitychange` compara amb
+  l'última referència escrita. Sense la comparació, amagar i tornar a mostrar la pestanya escrivia
+  igualment.
 - **L'esborrany és xarxa de seguretat, no desat.** Sobreviu a un refresc, a tancar la pestanya i a quedar-se sense bateria, però el navegador el pot desallotjar (Safari, als 7 dies sense visitar el lloc). Els desats de veritat continuen sent explícits: «Descarrega» (fitxer `.saac`) i «Desa al núvol» (amb compte). **Mateix mecanisme per a l'usuari anònim i per a l'autenticat** — el que canvia és què hi ha a sobre, no l'esborrany.
 - **No hi ha autodesat al núvol.** Cada `PUT /documents` puja imatges a Cloudinary i passa per la comprovació de quota: desar sol, sense que l'usuari ho hagi demanat, li pot retornar un `QUOTA_STORAGE_EXCEEDED` en un moment en què no pensa a desar, i de passada desperta Render.
 - **Es desa amb debounce d'1 s i es força en amagar la pestanya** (`visibilitychange` i `pagehide`, no només `beforeunload`): a iOS el sistema pot matar una pestanya en segon pla sense disparar-lo mai, i l'iPad és el dispositiu típic d'un usuari d'AAC.
@@ -338,6 +349,36 @@ apps/
 - **La mida és igual per a totes les imatges i no depèn de quantes n'hi hagi.** Rebaixar-la per imatge segons el recompte és temptador (com més pictogrames, més petit s'imprimeix cadascun) però està mal ancorat: quan es puja encara no se sap a quina mida s'imprimirà — `sizePict` es toca després, a la pàgina de vista— reduir és irreversible, i el resultat dependria de l'ordre d'arribada. A més, una progressió a la meitat arriba al terra a la quarta imatge: el terra acaba sent l'única política real.
 - **Es redimensiona sempre, no només quan la imatge passa d'un llindar**, i **mai s'amplia**: inventar píxels no afegeix detall i multiplica el pes.
 - **Les imatges amb transparència no van mai a JPEG** (els pintaria un fons negre): es codifiquen en WebP, que guarda l'alfa amb pes de foto, i si el navegador no el sap codificar `toDataURL` retorna un PNG sense avisar —es detecta pel prefix— i el PNG es dona per bo.
+
+### Estat de durabilitat i botó flotant
+
+- **Tres nivells, no dos**: esborrany d'IndexedDB (automàtic, aquest navegador), fitxer `.saac`
+  (explícit) i núvol (explícit, amb compte). `documentStatus` (`features/sequence/store/documentStatusSlice.ts`)
+  és l'única font de veritat de quin d'ells té la feina que hi ha a pantalla.
+- **Viu fora de `documentSlice` a propòsit**: no és contingut del document, no viatja al `.saac` ni
+  al cos de l'API. Si hi fos, desar el document el canviaria.
+- **Cap component marca «hi ha canvis»**: ho fa `documentStatusMiddleware` escoltant les accions
+  `document/*` de dos segments. En queden fora `changeActiveSAAC` (navegació, no contingut),
+  `loadDocumentSaac` i `resetDocument` — qui carrega un document és qui sap d'on ve i ho declara ell
+  mateix amb `documentMadeDurable` (fitxer o núvol).
+- **De l'esborrany no se'n diu mai «desat» a seques.** Qui llegeix «desat» entén que la feina és
+  fora de perill i l'esborrany no ho garanteix; els textos diuen sempre «només en aquest
+  dispositiu». És tota la raó de ser de l'indicador.
+- **La durabilitat es desa dins de l'esborrany** (`DraftMeta`): sense això, recarregar convertiria
+  un document acabat de desar al núvol en feina que sembla no ser enlloc.
+- **`DocumentStatusFab`** és l'únic lloc que ho explica: `SpeedDial` a baix a la dreta, muntat a
+  `LanguageLayout` (editor i visualitzador), fora del `Container` perquè és capa flotant. **S'obre
+  només amb el clic** (`reason === "toggle"`): amb l'obertura per hover, el clic següent la tancaria
+  i el botó semblaria mort, i amb la del focus es reobriria sola en tancar-se el diàleg de
+  descàrrega. No surt mai a la impressió (`@media print`).
+- **«Document nou» (`startNewDocumentThunk`) és l'única porta a `resetDocument`** i sempre esborra
+  l'esborrany: buidar la pantalla sense esborrar-lo deixaria la feina antiga a punt de ressuscitar
+  al primer refresc. Conserva la configuració per defecte —és de l'usuari, no del document— i
+  demana confirmació si la feina no té còpia externa.
+- **El botó flotant desa pel mateix diàleg de nom que el drawer** (`SaveDocumentModal`, vegeu més
+  avall): dues portes a la mateixa acció, un sol comportament. I **qui declara la durabilitat és el
+  diàleg que fa l'operació** —`SaveDocumentModal` en desar, `LoadDocumentModal` en carregar—, no qui
+  l'ha obert: així l'indicador diu la veritat vingui la crida d'on vingui.
 
 ### Tipografia i Font
 

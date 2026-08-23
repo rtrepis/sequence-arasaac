@@ -29,6 +29,7 @@ import {
   listDocumentsThunk,
   loadDocumentThunk,
 } from "@features/sequence/store/documentSlice";
+import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { deleteDocument, DocumentSummary } from "../services/documentService";
 import { useDocumentTransfer } from "../hooks/useDocumentTransfer";
 import { classifyRequestFailure } from "@features/backend/api/requestFailure";
@@ -97,6 +98,9 @@ const LoadDocumentModal = ({
     setIsLoadingDocument(false);
 
     if (result.meta.requestStatus === "fulfilled") {
+      // El document que s'acaba de carregar continua sent al núvol: no és feina
+      // que només visqui en aquest navegador
+      dispatch(documentMadeDurableActionCreator({ kind: "cloud" }));
       onLoaded(selected ? documentName(selected) : "");
       onClose();
       return;

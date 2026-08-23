@@ -1741,6 +1741,74 @@
     "defaultMessage": "Duplicate after this",
     "description": "Insereix una còpia del pictograma just després del pictograma actual"
   },
+  "features.sequence.status.fabLabel": {
+    "defaultMessage": "Where your work is saved",
+    "description": "Nom accessible del botó flotant d'estat del document"
+  },
+  "features.sequence.status.pristine": {
+    "defaultMessage": "Nothing to save yet",
+    "description": "Estat quan el document és buit"
+  },
+  "features.sequence.status.saving": {
+    "defaultMessage": "Saving on this device…",
+    "description": "Estat mentre l'esborrany encara no s'ha escrit"
+  },
+  "features.sequence.status.local": {
+    "defaultMessage": "Only on this device, since {time}",
+    "description": "Estat quan la feina només és a l'esborrany del navegador"
+  },
+  "features.sequence.status.file": {
+    "defaultMessage": "Downloaded to a file at {time}",
+    "description": "Estat quan la feina té còpia en un fitxer .saac"
+  },
+  "features.sequence.status.cloud": {
+    "defaultMessage": "Saved to the cloud at {time}",
+    "description": "Estat quan la feina té còpia al compte de l'usuari"
+  },
+  "features.sequence.status.error": {
+    "defaultMessage": "This browser could not save your work",
+    "description": "Estat quan l'escriptura de l'esborrany falla"
+  },
+  "features.sequence.status.hintLocal": {
+    "defaultMessage": "It stays in this browser, which can delete it on its own. Download it or save it to the cloud to keep it somewhere else.",
+    "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
+  },
+  "features.sequence.status.hintError": {
+    "defaultMessage": "Download the file now: it is the only way not to lose your work.",
+    "description": "Explicació quan el navegador no pot desar l'esborrany"
+  },
+  "features.sequence.status.actionCloud": {
+    "defaultMessage": "Save to the cloud",
+    "description": "Acció del botó flotant: desar el document al compte"
+  },
+  "features.sequence.status.actionDownload": {
+    "defaultMessage": "Download the file",
+    "description": "Acció del botó flotant: descarregar el document"
+  },
+  "features.sequence.status.actionNew": {
+    "defaultMessage": "New document",
+    "description": "Acció del botó flotant: començar un document buit"
+  },
+  "features.sequence.status.confirmTitle": {
+    "defaultMessage": "Start a new document?",
+    "description": "Títol del diàleg de confirmació abans de buidar el document"
+  },
+  "features.sequence.status.confirmBody": {
+    "defaultMessage": "Your current work is only in this browser. If you start from scratch, it is lost.",
+    "description": "Cos del diàleg de confirmació abans de buidar el document"
+  },
+  "features.sequence.status.confirmCancel": {
+    "defaultMessage": "Cancel",
+    "description": "Botó per no buidar el document"
+  },
+  "features.sequence.status.confirmDownloadFirst": {
+    "defaultMessage": "Download it first",
+    "description": "Botó per desar la feina en un fitxer abans de buidar-la"
+  },
+  "features.sequence.status.confirmDiscard": {
+    "defaultMessage": "Start from scratch",
+    "description": "Botó que buida el document i l'esborrany"
+  },
   "features.backend.documents.saveTitle": {
     "defaultMessage": "Save to the cloud",
     "description": "Títol del diàleg per desar un document nou al núvol"
