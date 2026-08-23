@@ -315,6 +315,13 @@ const documentSlice = createSlice({
       previousDocument.id = action.payload;
     },
 
+    // Nom del document, tal com el tria l'usuari en desar-lo al núvol.
+    // Viu al document i no al modal perquè sobreviu a l'esborrany (IndexedDB) i
+    // al fitxer .saac: qui torna l'endemà retroba el nom que li havia posat.
+    setDocumentTitle: (previousDocument, action: PayloadAction<string>) => {
+      previousDocument.title = action.payload;
+    },
+
     // Elimina la darrera seqüència
     deleteLastSequence: (previousDocument) => {
       const keys = Object.keys(previousDocument.content);
@@ -421,4 +428,5 @@ export const {
   applyViewSettingsToAll: applyViewSettingsToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
   setDocumentId: setDocumentIdActionCreator,
+  setDocumentTitle: setDocumentTitleActionCreator,
 } = documentSlice.actions;
