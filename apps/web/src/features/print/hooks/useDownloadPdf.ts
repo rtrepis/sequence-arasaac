@@ -1,6 +1,22 @@
 import { useCallback, useState } from "react";
+import { useIntl } from "react-intl";
 import { type PageFormat, pixelsToMM, CSS_PRINT_DPI } from "@/types/PageFormat";
 import { appBackgrounds, printColors } from "@/style/palette";
+import { useFeedback } from "@/context/FeedbackContext";
+import {
+  classifyRequestFailure,
+  type RequestFailure,
+} from "@features/backend/api/requestFailure";
+import { reportClientError } from "@features/backend/api/clientErrorReport";
+import { trackEvent } from "@shared/hooks/usePageTracking";
+import messages from "./useDownloadPdf.lang";
+
+// Un error s'ha de poder llegir i, si cal, copiar: més estona a pantalla que una
+// confirmació. Mateix criteri que les fallades de desat al núvol.
+const ERROR_SNACKBAR_MS = 10000;
+
+/** Codi propi: el full que s'havia de capturar no és a la pàgina. */
+const PDF_NO_CONTENT = "PDF_NO_CONTENT";
 
 /** Converteix un canal d'un color hex (#RRGGBB) al seu valor decimal */
 const hexChannels = (hex: string): number[] => {
@@ -46,13 +62,39 @@ const themeColorReplacements: Array<[RegExp, string]> = [
  */
 export const useDownloadPdf = (pageFormat: PageFormat) => {
   const [isGenerating, setIsGenerating] = useState(false);
+  const intl = useIntl();
+  const { showBackdrop, hideBackdrop, showSnackbar } = useFeedback();
+
+  /** Avisa l'usuari i deixa constància al registre d'errors del client. */
+  const reportFailure = useCallback(
+    (failure: RequestFailure) => {
+      showSnackbar({
+        // El codi va amb el missatge: qui només vol treballar l'ignora, i qui ha
+        // de mirar què ha passat no depèn d'una consola que al mòbil no existeix
+        message: intl.formatMessage(messages.error, { code: failure.code }),
+        severity: "error",
+        duration: ERROR_SNACKBAR_MS,
+      });
+      void reportClientError("pdf-export", failure);
+    },
+    [intl, showSnackbar],
+  );
 
   const downloadPdf = useCallback(async () => {
     // Localitzar el contenidor amb les dimensions reals de la pàgina (sense transform d'escala)
     const contentEl = document.querySelector<HTMLElement>(".preview-content");
-    if (!contentEl) return;
+    // Sense full no hi ha res a capturar. Es tracta com una fallada i no com un
+    // retorn mut: per a qui ha clicat, el clic ha estat igual de real.
+    if (!contentEl) {
+      reportFailure({ code: PDF_NO_CONTENT, isTransient: false });
+      return;
+    }
 
     setIsGenerating(true);
+    // La captura bloqueja el fil principal: mentre dura, no es pot fer res més i
+    // qualsevol interacció alteraria justament el que s'està capturant. Per això
+    // backdrop, com al desat al núvol, i no un avís que deixi la pàgina viva.
+    showBackdrop({ message: intl.formatMessage(messages.generating) });
     try {
       // Importació dinàmica: html2canvas + jspdf es carreguen al primer clic (~500KB)
       const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
@@ -104,10 +146,38 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
       // Afegir la imatge capturada ocupant tota la pàgina
       pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, widthMM, heightMM);
       pdf.save("sequencia.pdf");
+
+      // La descàrrega la confirma el navegador de maneres molt diferents (i a
+      // iPadOS, gairebé gens): sense aquest missatge, acabar bé i no fer res
+      // s'assemblen massa.
+      showSnackbar({
+        message: intl.formatMessage(messages.downloaded),
+        severity: "success",
+      });
+
+      trackEvent({
+        event: "download-pdf-view",
+        event_category: "View",
+        event_label: "Download PDF",
+        value: `${pageFormat.size}_${pageFormat.orientation}`,
+      });
+    } catch (error) {
+      // classifyRequestFailure no és només per a peticions: d'una excepció del
+      // client en treu CLIENT_EXCEPTION amb el detall, que és exactament el que
+      // el registre d'errors necessita per orientar el diagnòstic.
+      reportFailure(classifyRequestFailure(error));
     } finally {
+      hideBackdrop();
       setIsGenerating(false);
     }
-  }, [pageFormat]);
+  }, [
+    pageFormat,
+    intl,
+    showBackdrop,
+    hideBackdrop,
+    showSnackbar,
+    reportFailure,
+  ]);
 
   return { downloadPdf, isGenerating };
 };

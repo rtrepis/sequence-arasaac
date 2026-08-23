@@ -1816,5 +1816,17 @@
   "features.backend.documents.thumbnailLabel": {
     "defaultMessage": "Primeros pictogramas de «{title}»",
     "description": "Text alternatiu de la miniatura d'un document del llistat"
+  },
+  "features.print.pdf.generating": {
+    "defaultMessage": "Generando el PDF…",
+    "description": "Missatge del backdrop mentre es genera el PDF"
+  },
+  "features.print.pdf.downloaded": {
+    "defaultMessage": "PDF descargado",
+    "description": "Confirmació quan el PDF s'ha generat i descarregat"
+  },
+  "features.print.pdf.error": {
+    "defaultMessage": "No se ha podido generar el PDF. (Código: {code})",
+    "description": "Error quan la generació del PDF falla; el codi permet dir què ha passat sense obrir la consola"
   }
 }

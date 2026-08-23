@@ -244,9 +244,10 @@ test(
 
     // =============================================
     // VIEW PAGE - PAS 1 + COBERTA: Botó de descàrrega PDF
-    // Protagonista: botó "download pdf" (aria-label="download pdf")
+    // Protagonista: el botó de descàrrega de PDF. L'aria-label surt del mateix
+    // missatge que el tooltip (vegeu A3 al backlog d'UX), així que va traduït.
     // =============================================
-    const pdfBtn = page.locator('[aria-label="download pdf"]');
+    const pdfBtn = page.getByRole("button", { name: "Descarregar PDF" });
     await pdfBtn.waitFor({ state: "visible", timeout: 15000 });
     await page.waitForTimeout(500);
 

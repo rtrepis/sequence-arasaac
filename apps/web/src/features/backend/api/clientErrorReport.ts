@@ -11,7 +11,10 @@ export type ClientErrorContext =
   | "settings-save"
   | "document-save"
   | "document-load"
-  | "document-list";
+  | "document-list"
+  // No ve de cap petició: la generació del PDF passa sencera al navegador. Hi entra
+  // igualment perquè és una fallada que l'usuari veu i que ningú explicaria altrament.
+  | "pdf-export";
 
 export const reportClientError = async (
   context: ClientErrorContext,

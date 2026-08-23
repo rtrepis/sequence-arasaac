@@ -298,6 +298,16 @@ const ViewSequencesSettings = ({
   );
 
   /**
+   * Handler de la descàrrega del PDF.
+   * El botó continua sent focusable mentre genera (aria-disabled), així que el
+   * clic repetit el para aquí: el backdrop del hook ja diu què està passant.
+   */
+  const handleDownloadPdf = useCallback(() => {
+    if (isGenerating) return;
+    void downloadPdf();
+  }, [isGenerating, downloadPdf]);
+
+  /**
    * Handler per imprimir amb orientació correcta
    */
   const handlePrint = useCallback(() => {
@@ -352,21 +362,24 @@ const ViewSequencesSettings = ({
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipDownloadPdf)}
                   >
-                    {/* span necessari: Tooltip requereix un fill que accepti events DOM; Button disabled no els reenvia */}
-                    <span>
-                      <Button
-                        aria-label={intl.formatMessage(
-                          messages.tooltipDownloadPdf,
-                        )}
-                        variant="text"
-                        color="primary"
-                        sx={{ fontSize: "2rem" }}
-                        onClick={downloadPdf}
-                        disabled={isGenerating}
-                      >
-                        <BsFilePdf />
-                      </Button>
-                    </span>
+                    {/* aria-disabled i no `disabled`: un botó desactivat surt de
+                        l'ordre de tabulació i qui hi navega amb teclat el perd
+                        de sota els dits sense cap avís. Sense `disabled` tampoc
+                        cal el <span> embolcall: el Tooltip ja rep els events del
+                        Button i l'aria-label es queda on ha de ser. */}
+                    <Button
+                      aria-label={intl.formatMessage(
+                        messages.tooltipDownloadPdf,
+                      )}
+                      aria-disabled={isGenerating}
+                      aria-busy={isGenerating}
+                      variant="text"
+                      color="primary"
+                      sx={{ fontSize: "2rem" }}
+                      onClick={handleDownloadPdf}
+                    >
+                      <BsFilePdf />
+                    </Button>
                   </Tooltip>
                 </>
               ) : (
