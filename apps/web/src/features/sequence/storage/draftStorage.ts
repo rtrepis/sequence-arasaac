@@ -10,15 +10,26 @@
 // desallotjar (Safari ho fa als 7 dies sense visitar el lloc). Qui mana
 // segueixen sent «Descarrega» i «Desa al núvol».
 import { DocumentSAAC } from "@/types/document";
+import { DurableKind } from "@features/sequence/store/documentStatusSlice";
 
 const DB_NAME = "sequenciaac";
 const DB_VERSION = 1;
 const STORE_NAME = "drafts";
 const DRAFT_KEY = "currentDocument";
 
-export interface DocumentDraft {
-  document: DocumentSAAC;
+/**
+ * Estat de durabilitat que viatja amb l'esborrany. Sense ell, en recarregar la
+ * pàgina un document acabat de desar al núvol tornaria a semblar feina que no
+ * és enlloc, i l'indicador d'estat mentiria just quan més se'l mira.
+ */
+export interface DraftMeta {
   savedAt: number;
+  durableAt: number | null;
+  durableKind: DurableKind | null;
+}
+
+export interface DocumentDraft extends DraftMeta {
+  document: DocumentSAAC;
 }
 
 /**
@@ -91,11 +102,14 @@ const runTransaction = <TResult>(
  * avisar l'usuari: quedar-se sense espai amb la feina només a la pantalla és
  * exactament el que aquest mòdul ha d'evitar.
  */
-export const saveDraft = async (document: DocumentSAAC): Promise<boolean> => {
+export const saveDraft = async (
+  document: DocumentSAAC,
+  meta: DraftMeta,
+): Promise<boolean> => {
   const db = await openDatabase();
   if (!db) return false;
 
-  const draft: DocumentDraft = { document, savedAt: Date.now() };
+  const draft: DocumentDraft = { document, ...meta };
   const { ok } = await runTransaction(db, "readwrite", (store) =>
     store.put(draft, DRAFT_KEY),
   );
@@ -115,4 +129,15 @@ export const readDraft = async (): Promise<DocumentDraft | null> => {
   );
 
   return ok && result ? result : null;
+};
+
+/**
+ * Esborra l'esborrany. La fa servir «Document nou»: sense això, un refresc
+ * ressuscitaria la feina que l'usuari acaba de decidir deixar enrere.
+ */
+export const clearDraft = async (): Promise<void> => {
+  const db = await openDatabase();
+  if (!db) return;
+
+  await runTransaction(db, "readwrite", (store) => store.delete(DRAFT_KEY));
 };

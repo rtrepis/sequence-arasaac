@@ -36,8 +36,9 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   addSequenceActionCreator,
   loadDocumentSaacActionCreator,
-  saveDocumentThunk,
 } from "@features/sequence/store/documentSlice";
+import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
+import useSaveDocumentToCloud from "@features/backend/documents/hooks/useSaveDocumentToCloud";
 import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
@@ -65,8 +66,8 @@ const AppNavigationDrawer = ({
   );
   const isLoggedIn = Boolean(accessToken);
 
-  // Document actual (per desar al núvol)
-  const document = useAppSelector((state) => state.document);
+  // El desat al núvol el comparteix amb el botó flotant d'estat
+  const { saveToCloud } = useSaveDocumentToCloud();
 
   // Locale de la ruta; fallback a "ca" si no estem en una ruta amb paràmetre de locale
   const { locale = "ca" } = useParams<{ locale: string }>();
@@ -94,34 +95,7 @@ const AppNavigationDrawer = ({
 
   const handleSaveToCloud = async () => {
     onClose();
-    // Missatge concret i no un "carregant" genèric: si el servidor de Render dorm,
-    // aquest text pot ser l'únic que l'usuari tingui davant durant mig minut
-    showBackdrop({ message: intl.formatMessage(authMessages.savingDocument) });
-    const result = await dispatch(saveDocumentThunk(document));
-    hideBackdrop();
-    if (result.meta.requestStatus === "fulfilled") {
-      showSnackbar({
-        message: intl.formatMessage(authMessages.documentSaved),
-        severity: "success",
-      });
-    } else {
-      // El thunk retorna el codi d'error del backend; aquí es converteix en text
-      const errorCode = result.payload as string;
-      const message =
-        authMessages[errorCode as keyof typeof authMessages] ??
-        authMessages.DOCUMENT_SAVE_ERROR;
-      showSnackbar({
-        // El codi va amb el missatge: qui només vol treballar l'ignora, i qui ha de
-        // mirar què ha passat no depèn d'una consola que al mòbil no existeix
-        message: intl.formatMessage(authMessages.errorWithCode, {
-          message: intl.formatMessage(message),
-          code: errorCode,
-        }),
-        severity: "error",
-        // Més estona que el d'èxit: un error s'ha de poder llegir i, si cal, copiar
-        duration: 10000,
-      });
-    }
+    await saveToCloud();
   };
 
   const handleLoadFromCloud = () => {
@@ -139,6 +113,7 @@ const AppNavigationDrawer = ({
   };
 
   const handleDocumentLoaded = () => {
+    dispatch(documentMadeDurableActionCreator({ kind: "cloud" }));
     showSnackbar({
       message: intl.formatMessage(authMessages.documentLoaded),
       severity: "success",
@@ -177,6 +152,9 @@ const AppNavigationDrawer = ({
             }
             if ("documentState" in parsedJson) {
               dispatch(loadDocumentSaacActionCreator(parsedJson.documentState));
+              // El que s'acaba de carregar existeix en un fitxer del disc: és
+              // l'únic cas en què obrir també vol dir «això ja està desat»
+              dispatch(documentMadeDurableActionCreator({ kind: "file" }));
               valueTrackEvent.push("documentState");
             }
             if ("defaultSettings" in parsedJson) {

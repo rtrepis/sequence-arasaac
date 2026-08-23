@@ -306,6 +306,35 @@ apps/
 - **Es redimensiona sempre, no només quan la imatge passa d'un llindar**, i **mai s'amplia**: inventar píxels no afegeix detall i multiplica el pes.
 - **Les imatges amb transparència no van mai a JPEG** (els pintaria un fons negre): es codifiquen en WebP, que guarda l'alfa amb pes de foto, i si el navegador no el sap codificar `toDataURL` retorna un PNG sense avisar —es detecta pel prefix— i el PNG es dona per bo.
 
+### Estat de durabilitat i botó flotant
+
+- **Tres nivells, no dos**: esborrany d'IndexedDB (automàtic, aquest navegador), fitxer `.saac`
+  (explícit) i núvol (explícit, amb compte). `documentStatus` (`features/sequence/store/documentStatusSlice.ts`)
+  és l'única font de veritat de quin d'ells té la feina que hi ha a pantalla.
+- **Viu fora de `documentSlice` a propòsit**: no és contingut del document, no viatja al `.saac` ni
+  al cos de l'API. Si hi fos, desar el document el canviaria.
+- **Cap component marca «hi ha canvis»**: ho fa `documentStatusMiddleware` escoltant les accions
+  `document/*` de dos segments. En queden fora `changeActiveSAAC` (navegació, no contingut),
+  `loadDocumentSaac` i `resetDocument` — qui carrega un document és qui sap d'on ve i ho declara ell
+  mateix amb `documentMadeDurable` (fitxer o núvol).
+- **De l'esborrany no se'n diu mai «desat» a seques.** Qui llegeix «desat» entén que la feina és
+  fora de perill i l'esborrany no ho garanteix; els textos diuen sempre «només en aquest
+  dispositiu». És tota la raó de ser de l'indicador.
+- **La durabilitat es desa dins de l'esborrany** (`DraftMeta`): sense això, recarregar convertiria
+  un document acabat de desar al núvol en feina que sembla no ser enlloc.
+- **`DocumentStatusFab`** és l'únic lloc que ho explica: `SpeedDial` a baix a la dreta, muntat a
+  `LanguageLayout` (editor i visualitzador), fora del `Container` perquè és capa flotant. **S'obre
+  només amb el clic** (`reason === "toggle"`): amb l'obertura per hover, el clic següent la tancaria
+  i el botó semblaria mort, i amb la del focus es reobriria sola en tancar-se el diàleg de
+  descàrrega. No surt mai a la impressió (`@media print`).
+- **«Document nou» (`startNewDocumentThunk`) és l'única porta a `resetDocument`** i sempre esborra
+  l'esborrany: buidar la pantalla sense esborrar-lo deixaria la feina antiga a punt de ressuscitar
+  al primer refresc. Conserva la configuració per defecte —és de l'usuari, no del document— i
+  demana confirmació si la feina no té còpia externa.
+- **El desat al núvol passa sempre per `useSaveDocumentToCloud`** (`features/backend/documents/hooks`),
+  compartit pel drawer i pel botó flotant: duplicar-lo hauria acabat amb dos textos d'error
+  diferents per a la mateixa fallada.
+
 ### Tipografia i Font
 
 - El type `Font` té 3 camps: `family: FontFamily`, `color: string`, `size: number` (multiplicador 0.5–2.0).

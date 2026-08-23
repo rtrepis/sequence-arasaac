@@ -10,6 +10,11 @@ import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { RootState } from "@app/store";
 import { loadDocumentSaacActionCreator } from "@features/sequence/store/documentSlice";
 import { readDraft, saveDraft } from "@features/sequence/storage/draftStorage";
+import {
+  documentStatusRestoredActionCreator,
+  draftSavedActionCreator,
+  draftSaveFailedActionCreator,
+} from "@features/sequence/store/documentStatusSlice";
 import { useFeedback } from "@/context/FeedbackContext";
 import { DocumentSAAC } from "@/types/document";
 import messages from "../components/DocumentDraftSync.lang";
@@ -19,6 +24,11 @@ import messages from "../components/DocumentDraftSync.lang";
 const DRAFT_SAVE_DELAY_MS = 1000;
 
 const selectDocument = (state: RootState): DocumentSAAC => state.document;
+
+// Es tria l'objecte sencer i no un de nou amb els dos camps: un objecte
+// construït al selector és una referència nova a cada acció de l'app i faria
+// re-renderitzar per res
+const selectStatus = (state: RootState) => state.documentStatus;
 
 /**
  * Un document «verge» és el que crea documentSlice en arrencar: sense títol i
@@ -46,6 +56,12 @@ export const useDocumentDraft = (): void => {
   const documentRef = useRef(document);
   documentRef.current = document;
 
+  // La durabilitat es desa dins de l'esborrany, però no ha de reprogramar-ne
+  // cap escriptura: per això va en una ref i no a les dependències de l'efecte
+  const status = useAppSelector(selectStatus);
+  const statusRef = useRef(status);
+  statusRef.current = status;
+
   // L'avís de «no s'ha pogut desar» surt un sol cop: si l'espai s'ha acabat,
   // cada canvi posterior tornaria a fallar i el convertiria en soroll
   const hasWarnedRef = useRef(false);
@@ -54,15 +70,24 @@ export const useDocumentDraft = (): void => {
     const current = documentRef.current;
     if (isPristineDocument(current)) return;
 
-    const saved = await saveDraft(current);
-    if (saved || hasWarnedRef.current) return;
+    const savedAt = Date.now();
+    const { durableAt, durableKind } = statusRef.current;
+    const saved = await saveDraft(current, { savedAt, durableAt, durableKind });
+
+    if (saved) {
+      dispatch(draftSavedActionCreator(savedAt));
+      return;
+    }
+
+    dispatch(draftSaveFailedActionCreator());
+    if (hasWarnedRef.current) return;
 
     hasWarnedRef.current = true;
     showSnackbar({
       message: intl.formatMessage({ ...messages.saveError }),
       severity: "warning",
     });
-  }, [intl, showSnackbar]);
+  }, [dispatch, intl, showSnackbar]);
 
   // Restauració: només en arrencar, i només si no hi ha res a la pantalla.
   // Si mentre es llegia l'esborrany l'usuari ja ha carregat un document o ha
@@ -76,6 +101,16 @@ export const useDocumentDraft = (): void => {
       if (!isPristineDocument(documentRef.current)) return;
 
       dispatch(loadDocumentSaacActionCreator(draft.document));
+      // El moment de l'últim canvi no es coneix: el que se sap és quan es va
+      // escriure l'esborrany, i és el que l'usuari va veure com a «desat»
+      dispatch(
+        documentStatusRestoredActionCreator({
+          changedAt: draft.savedAt,
+          draftSavedAt: draft.savedAt,
+          durableAt: draft.durableAt ?? null,
+          durableKind: draft.durableKind ?? null,
+        }),
+      );
     })();
 
     return () => {

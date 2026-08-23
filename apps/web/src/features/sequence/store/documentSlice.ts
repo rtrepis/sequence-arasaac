@@ -23,6 +23,8 @@ import {
   DocumentSummary,
 } from "@features/backend/documents/services/documentService";
 import { classifyRequestFailure } from "@features/backend/api/requestFailure";
+import { clearDraft } from "@features/sequence/storage/draftStorage";
+import { documentStatusClearedActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { reportClientError } from "@features/backend/api/clientErrorReport";
 
 const getUniqueId = () => {
@@ -315,6 +317,19 @@ const documentSlice = createSlice({
       previousDocument.id = action.payload;
     },
 
+    // Document nou: contingut buit i id nou. La configuració per defecte no
+    // s'hi toca — és de l'usuari, no del document, i qui comença un treball nou
+    // no vol tornar a triar la lletra i les vores.
+    resetDocument: () => ({
+      id: getUniqueId(),
+      title: undefined,
+      content: { 0: [] },
+      viewSettings: { 0: { ...DEFAULT_SEQUENCE_VIEW } },
+      activeSAAC: 0,
+      order: undefined,
+      defaultSettings: undefined,
+    }),
+
     // Elimina la darrera seqüència
     deleteLastSequence: (previousDocument) => {
       const keys = Object.keys(previousDocument.content);
@@ -382,6 +397,20 @@ export const saveDocumentThunk = createAsyncThunk<
     return rejectWithValue(errorCode);
   }
 });
+
+// Thunk: comença un document nou.
+//
+// És l'única porta al reducer `resetDocument`, i per això no se n'exporta el
+// creador d'acció: buidar la pantalla sense esborrar l'esborrany deixaria la
+// feina antiga a punt de ressuscitar al primer refresc.
+export const startNewDocumentThunk = createAsyncThunk<void, void>(
+  "document/startNew",
+  async (_, { dispatch }) => {
+    dispatch(documentSlice.actions.resetDocument());
+    dispatch(documentStatusClearedActionCreator());
+    await clearDraft();
+  },
+);
 
 // Thunk: obté la llista de documents de l'usuari del backend
 export const listDocumentsThunk = createAsyncThunk<

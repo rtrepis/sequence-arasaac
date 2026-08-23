@@ -31,15 +31,34 @@ la pestanya.
 
 **Residu que sí que queda obert** → vegeu A1b.
 
-### A1b — Sortir amb feina no exportada no avisa 🔴 Oberta
+### A1b — Sortir amb feina no exportada no avisa ✅ Resolta
 
-- **On**: `features/sequence/hooks/useDocumentDraft.ts`
-- **Per què importa**: l'esborrany d'IndexedDB és xarxa de seguretat, no desat — el navegador el pot
-  desallotjar (Safari, als 7 dies sense visitar el lloc). L'usuari no té cap senyal que allò que veu
-  a pantalla encara no és enlloc de durador, i «Descarrega» / «Desa al núvol» continuen sent
-  explícits.
-- **Proposta**: avís en sortir si hi ha canvis mai exportats ni desats al núvol, o un indicador
-  d'estat permanent («esborrany local» vs «desat»).
+Branca `claude/a1b-closure-options-h6z8ha`. De les dues propostes originals s'ha triat la segona —
+**indicador d'estat permanent**— i s'ha descartat l'avís de sortida (`beforeunload`): l'esborrany ja
+fa que tancar la pestanya no perdi res, així que el diàleg del navegador cridaria al llop cada
+vegada; a més el seu text no es pot traduir i a iOS Safari no és fiable.
+
+El que hi ha ara és `DocumentStatusFab` (`features/sequence/components/DocumentStatusFab/`), un botó
+flotant a baix a la dreta muntat a `LanguageLayout` (editor i visualitzador). La icona **és** l'estat
+i, en prémer-la, s'obre la frase sencera més les accions que hi poden fer alguna cosa:
+
+| Estat | Quan | Què diu |
+|---|---|---|
+| `pristine` | document buit | «Encara no hi ha res per desar» |
+| `saving` | hi ha canvis encara no escrits a l'esborrany | «Desant en aquest dispositiu…» |
+| `local` | esborrany al dia, cap còpia externa | «Només en aquest dispositiu, des de les {hora}» |
+| `durable` | hi ha `.saac` baixat o desat al núvol posterior a l'últim canvi | «Descarregat en un fitxer / Desat al núvol a les {hora}» |
+| `error` | el navegador no ha pogut escriure l'esborrany | «Aquest navegador no ha pogut desar la feina» |
+
+**Vocabulari deliberat**: de l'esborrany no se'n diu mai «desat» a seques. Qui llegeix «desat» entén
+que la feina és fora de perill, i l'esborrany no ho garanteix.
+
+De passada tanca la regressió que havia obert l'esborrany mateix: **no hi havia cap manera de
+començar de zero**. Recarregar era el reset de facto i des d'`981fe6b` restaura la feina. L'acció
+«Document nou» (`startNewDocumentThunk`) buida contingut, títol i id, **esborra l'esborrany
+d'IndexedDB** —si no, el primer refresc el ressuscitaria— i conserva la configuració per defecte,
+que és de l'usuari i no del document. Si la feina no té còpia externa, abans demana confirmació amb
+sortida per «Descarrega-ho abans».
 
 ### A2 — El menú contextual d'un pictograma era 100% en anglès ✅ Resolta
 
@@ -208,6 +227,37 @@ Ambigüitat real, però amb context (posició, títol de secció) que ajuda a de
 
 ---
 
+### B9 — L'esborrany escriu el document sencer, imatges incloses, a cada canvi 🔴 Oberta
+
+*(Trobada provant A1b, fora del seu abast.)*
+
+- **On**: `features/sequence/storage/draftStorage.ts` (`saveDraft`) i `useDocumentDraft`
+- **Per què importa**: cada segon d'activitat s'escriu tot el document a IndexedDB encara que només
+  hagi canviat `sizePict` d'un slider, i les imatges pujades hi van en base64. Mesurat en un
+  Chromium d'escriptori, amb 24 pictogrames: 1 ms sense imatges, ~23 ms amb 3, ~30-55 ms amb 6,
+  fins a ~140 ms amb 16 MB de document. En un iPad —el dispositiu típic d'un usuari d'AAC— val
+  multiplicar-ho per 3-5. És el perfil de «l'app va a batzegades» que es va notar en provar.
+- **Proposta**, del més barat al més profund: no reescriure quan no ha canviat res (ara el flush de
+  `visibilitychange` reescriu igualment); reutilitzar la connexió en comptes d'obrir-la i tancar-la
+  a cada escriptura; escriure en temps ociós (`requestIdleCallback`) amb el debounce a 2-3 s; i
+  l'arranjament de veritat, treure els base64 del camí calent amb un magatzem separat escrit només
+  quan les imatges canvien, de manera que el desat freqüent siguin uns quants KB. El format del
+  `.saac` i el de l'API no s'han de tocar: és capa d'emmagatzematge.
+
+### B10 — Pujar una imatge congela la interfície mig segon llarg 🔴 Oberta
+
+*(Trobada provant A1b, fora del seu abast.)*
+
+- **On**: `utils/imageToBase64.ts` — `fileToBase64`
+- **Per què importa**: tot passa al fil principal. Mesurat amb una foto de 4032×3024 en un Chromium
+  d'escriptori: ~64 ms de `drawImage`, ~215 ms de `getImageData` per detectar transparència
+  (3,24 M píxels) i fins a ~290-400 ms de `toDataURL` (cinc passades abaixant qualitat). Total
+  ~0,6 s de pantalla congelada, i en tauleta uns quants segons. Abans d'`981fe6b` no es
+  redimensionava, o sigui que aquesta feina és nova.
+- **Proposta**: saltar-se l'escaneig d'alfa quan el fitxer d'origen no en pot tenir (un JPEG no té
+  transparència); i moure la conversió a un worker amb `createImageBitmap` + `OffscreenCanvas`
+  perquè no bloquegi la interfície.
+
 ## Gravetat baixa
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.
@@ -242,6 +292,7 @@ Verificat el 2026-08-22:
 |---|---|
 | `ToggleButtonEditViewPages` | Cap import extern. Substituït per `TabsEditView`, però manté el seu `.lang.ts` amb «Edit»/«View» hardcodats |
 | `ButtonWithFileLoad` | Cap import extern |
+| `CopyRightSpeedDial` | `BarNavigation` l'importa però no el renderitza mai: el racó inferior dret era lliure quan s'hi va posar `DocumentStatusFab` (A1b) |
 | `ButtonWithModalDownload/ButtonWithModalDonwload.tsx` | El botó no s'importa enlloc; només se'n fa servir `ModalDownload.tsx` (des d'`AppNavigationDrawer`) |
 | `components.pictEdit.reset` | Definit dos cops: `PictEditForm.lang.ts` (usat, «Restore») i `PictEditModal/PictEdit.lang.ts` (no usat, «Reset to defaults») — mateix id, dos textos font |
 | Missatges orfes | `upload`, `download`, `openMenu`, `langSelector`… a `BarNavigation.lang.ts` i `AppNavigationDrawer.lang.ts`, sense consumidor |
@@ -275,3 +326,23 @@ fitxers pot canviar silenciosament el text de l'altre.
 - L'`aria-labelledby` de la llista apunta a `nested-list-subheader`, un id genèric heretat de
   l'exemple de MUI; el subheader ja diu «Pictograma {n}», així que el nom accessible és correcte,
   però l'id no descriu res.
+
+### C7 — El snackbar tapa el botó flotant d'estat en mòbil 🔴 Oberta
+
+*(Trobada en implementar A1b.)*
+
+- **On**: `context/FeedbackContext/FeedbackSnackbar.tsx` — `anchorOrigin` a `bottom/center`
+- **Per què importa**: per sota de `sm` el `Snackbar` de MUI ocupa gairebé tota l'amplada inferior i
+  se superposa al `DocumentStatusFab`, que viu a `bottom: 16, right: 16`. Dura els segons de
+  l'avís, però és justament quan l'usuari acaba de desar i pot voler mirar l'estat.
+- **Proposta**: pujar el FAB mentre hi hagi snackbar obert, o ancorar el snackbar a l'esquerra en
+  mòbil.
+
+### C8 — A «Descarrega», l'estat inicial de la casella de configuració no és el que es veu 🔴 Oberta
+
+- **On**: `components/ButtonWithModalDownload/ModalDownload.tsx` — `useState` de `save`
+- **Per què importa**: `save.defaultSettings` s'inicialitza a `documentSaacIsNotEmpty` (cert quan hi
+  ha seqüència) mentre la casella es pinta desmarcada (`<Checkbox />` sense `defaultChecked`). Qui
+  no la toca s'endú la configuració dins del `.saac` sense haver-ho demanat.
+- **Proposta**: una sola font per a l'estat de cada casella; que el que es pinta i el que es desa
+  siguin el mateix valor.
