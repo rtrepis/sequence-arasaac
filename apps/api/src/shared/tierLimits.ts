@@ -13,7 +13,7 @@ const MEGABYTE = 1024 * 1024;
 
 export const TIER_LIMITS: Record<UserTier, QuotaLimits> = {
   free: {
-    documents: 30,
+    documents: 3,
     wordProfiles: 200,
     storageBytes: 50 * MEGABYTE,
   },

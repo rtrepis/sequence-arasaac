@@ -37,7 +37,7 @@ import {
   DocumentDurability,
   getDocumentDurability,
 } from "@features/sequence/store/documentStatusSlice";
-import useSaveDocumentToCloud from "@features/backend/documents/hooks/useSaveDocumentToCloud";
+import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
 import messages from "./DocumentStatusFab.lang";
 
@@ -53,9 +53,9 @@ const DocumentStatusFab = (): ReactElement => {
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectDocumentStatus);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
-  const { saveToCloud } = useSaveDocumentToCloud();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isCloudOpen, setIsCloudOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
@@ -131,9 +131,11 @@ const DocumentStatusFab = (): ReactElement => {
     setIsDownloadOpen(true);
   };
 
+  // Desar passa pel mateix diàleg de nom que al drawer: dues portes a la
+  // mateixa acció, un sol comportament
   const handleSaveToCloud = (): void => {
     setIsOpen(false);
-    void saveToCloud();
+    setIsCloudOpen(true);
   };
 
   const handleDownload = (): void => {
@@ -275,6 +277,13 @@ const DocumentStatusFab = (): ReactElement => {
       >
         {durability === "error" || durability === "durable" ? statusText : ""}
       </Box>
+
+      {isCloudOpen && (
+        <SaveDocumentModal
+          open={isCloudOpen}
+          onClose={() => setIsCloudOpen(false)}
+        />
+      )}
 
       {isDownloadOpen && (
         <ModalDownload

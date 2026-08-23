@@ -317,9 +317,16 @@ const documentSlice = createSlice({
       previousDocument.id = action.payload;
     },
 
-    // Document nou: contingut buit i id nou. La configuració per defecte no
-    // s'hi toca — és de l'usuari, no del document, i qui comença un treball nou
-    // no vol tornar a triar la lletra i les vores.
+    // Nom del document, tal com el tria l'usuari en desar-lo al núvol.
+    // Viu al document i no al modal perquè sobreviu a l'esborrany (IndexedDB) i
+    // al fitxer .saac: qui torna l'endemà retroba el nom que li havia posat.
+    setDocumentTitle: (previousDocument, action: PayloadAction<string>) => {
+      previousDocument.title = action.payload;
+    },
+
+    // Document nou: contingut buit, títol i id nous. La configuració per
+    // defecte no s'hi toca — és de l'usuari, no del document, i qui comença un
+    // treball nou no vol tornar a triar la lletra i les vores.
     resetDocument: () => ({
       id: getUniqueId(),
       title: undefined,
@@ -388,8 +395,8 @@ export const saveDocumentThunk = createAsyncThunk<
     // La traducció la fa qui mostra el missatge.
     const failure = classifyRequestFailure(error);
     const errorCode =
-      (error as { response?: { data?: { errorCode?: string } } })?.response?.data
-        ?.errorCode ?? "DOCUMENT_SAVE_ERROR";
+      (error as { response?: { data?: { errorCode?: string } } })?.response
+        ?.data?.errorCode ?? "DOCUMENT_SAVE_ERROR";
 
     // Desar una seqüència és el que més li importa a l'usuari: si no ho aconsegueix,
     // val més saber-ho encara que la causa sigui passatgera i no es repeteixi.
@@ -450,4 +457,5 @@ export const {
   applyViewSettingsToAll: applyViewSettingsToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
   setDocumentId: setDocumentIdActionCreator,
+  setDocumentTitle: setDocumentTitleActionCreator,
 } = documentSlice.actions;

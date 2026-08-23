@@ -121,16 +121,44 @@ dues úniques accions que insereixen, `TbColumnInsertRight` («Insereix un buit 
 (traçat omplert), així que la família nova no desentona; la que ja hi desentonava — Tabler, de
 traç — hi era abans d'aquest canvi. Vegeu la nota de C3.
 
-### A7 — El botó de PDF desapareix del focus mentre genera 🔴 Oberta
+### A7 — Generar el PDF no deia res: ni mentre, ni en acabar, ni si fallava ✅ Resolta
 
-*(Trobada en analitzar A3, fora del seu abast.)*
+Branca `claude/a7-feedback-analysis-i6403g`.
 
-- **On**: `ViewSequencesSettings/ViewSquenceSettings.tsx` — `disabled={isGenerating}`
-- **Per què importa**: un `Button` `disabled` no és focusable. Qui navega amb lector de pantalla
-  prem el botó, el botó desapareix de l'ordre de tabulació i no rep cap anunci: no sap si s'està
-  generant el PDF o si ha fallat.
-- **Proposta**: `aria-disabled` + `aria-busy` en lloc de `disabled` (el botó continua focusable i
-  anunciable), i ignorar el clic al handler mentre `isGenerating`.
+L'entrada original només parlava del focus perdut pel `disabled`. En analitzar-la va resultar que
+allò era **la meitat petita** del problema: el gris del botó era l'únic senyal de tot el procés
+(import dinàmic de ~500 KB + `html2canvas` bloquejant el fil principal), l'estat final era idèntic a
+l'inicial — ningú deia que el PDF s'hagués fet — i el `try/finally` **sense `catch`**, en un projecte
+sense `ErrorBoundary` ni gestor d'`unhandledrejection`, feia que una fallada i un èxit es veiessin
+exactament igual. Ni l'usuari se n'assabentava ni quedava rastre enlloc.
+
+Criteri: **generar el PDF és una operació bloquejant i s'ha de comportar com les altres**. La regla
+que l'app ja seguia sense tenir-la escrita (ara sí, a `CLAUDE.md` § *Estàndard de feedback
+d'operacions*):
+
+| Mecanisme | Quan | Precedents |
+|---|---|---|
+| Backdrop amb missatge + snackbar final | L'operació impedeix seguir treballant | desa/carrega al núvol, carrega `.saac` |
+| Snackbar sol | Final d'acció instantània | descarrega `.saac`, `ApplyAll`, vocabulari |
+| Progress determinat | Hi ha N passos comptables | `useSequentialSearch` |
+| Spinner al botó + `aria-busy` | El botó és l'únic que canvia i l'app segueix viva | `UploadImageButton` |
+
+Canvis:
+
+- **`useDownloadPdf`** es fa càrrec del seu feedback (com `useSaveUiSettings` i `useDocumentDraft`):
+  `showBackdrop` amb missatge concret mentre genera, snackbar d'èxit en acabar, `catch` que avisa amb
+  el codi visible (10 s a pantalla) i `reportClientError("pdf-export", …)`. `classifyRequestFailure`
+  ja converteix un `Error` pelat en `CLIENT_EXCEPTION`, i el `context` de l'API és string lliure
+  validat amb zod: **cap canvi al backend**. `!contentEl` deixa de ser un retorn mut.
+- **El botó** passa a `aria-disabled` + `aria-busy` amb guarda al handler; sense `disabled` ja no cal
+  el `<span>` embolcall que A3 havia hagut de conservar.
+- **`FeedbackBackdrop`** guanya `role="status"` + `aria-live="polite"`. Aquí és on la correcció deixa
+  de ser un pedaç del botó de PDF: el backdrop no s'anunciava **enlloc**, així que també arregla desar
+  al núvol, carregar del núvol i carregar un fitxer.
+- El `trackEvent` que faltava (imprimir i fullscreen ja en tenien).
+
+**Descartat**: barra de progrés determinada (`html2canvas` no reporta progrés i una barra aturada
+menteix) i spinner dins el botó (amb el backdrop obert serien dos indicadors alhora).
 
 ### A8 — El menú contextual del pictograma no existeix en tàctil 🔴 Oberta
 
@@ -148,6 +176,24 @@ traç — hi era abans d'aquest canvi. Vegeu la nota de C3.
   `onPointerDown`/`onPointerUp`, cancel·lat en moure el dit per no trencar l'scroll), o afegir un
   botó visible de «més accions» a la targeta. La segona opció és més descobrible i no depèn de cap
   gest amagat, però ocupa espai a cada pictograma.
+
+### A9 — El PDF pot sortir en blanc a l'iPad sense que ningú ho digui 🔴 Oberta
+
+*(Trobada en resoldre A7, fora del seu abast.)*
+
+- **On**: `features/print/hooks/useDownloadPdf.ts` — `html2canvas(contentEl, { scale: 3 })`
+- **Per què importa**: a `scale: 3`, un A4 apaïsat són 3.141×2.154 px (6,8 Mpx) i un A3 apaïsat
+  4.535×3.141 (14,2 Mpx); amb la mida FULLSCREEN les dimensions surten de `window.screen` i en una
+  pantalla de 2.560×1.440 arriben a 33 Mpx. Safari d'iOS acota l'àrea del canvas i la mida màxima de
+  costat, i quan es passa **no llança cap error**: retorna el canvas buit. El PDF surt en blanc — i
+  ara, amb el snackbar d'A7, a sobre dirà que ha anat bé. L'iPad és el dispositiu típic de l'usuari
+  d'AAC, el mateix motiu que fa greu A8.
+- **Pendent de mesurar**: els números són calculats, no observats en un dispositiu real. Cal
+  reproduir-ho abans de decidir el llindar.
+- **Proposta**: derivar `scale` de l'àrea resultant (baixar a 2 o 1,5 quan es passa d'un llindar
+  segur) i comprovar que el canvas no és buit abans de muntar el PDF; si ho és, fer-ho passar per la
+  fallada que A7 ja reporta, en comptes de desar un full en blanc.
+
 
 ---
 
@@ -224,6 +270,20 @@ Ambigüitat real, però amb context (posició, títol de secció) que ajuda a de
   El porta-retalls viu en un `useState` que no es mostra mai.
 - **Proposta**: text d'ajuda a la fila desactivada («Copia abans un pictograma») o, millor, una
   miniatura del pictograma copiat a la fila «Enganxar».
+
+### B9 — El PDF de la mida FULLSCREEN es desa com si fos un A4 🔴 Oberta
+
+*(Trobada en resoldre A7, fora del seu abast.)*
+
+- **On**: `useDownloadPdf.ts` — `const pdfSize = pageFormat.size === "FULLSCREEN" ? "A4" : …`
+- **Per què importa**: els mil·límetres (`widthMM`/`heightMM`) es calculen de `pageFormat.dimensions`,
+  que amb FULLSCREEN són les de la pantalla, mentre que la pàgina del jsPDF és un A4. La imatge es
+  col·loca a `0,0` amb una mida que no té res a veure amb el full: segons la pantalla surt escapçada
+  o encongida en un racó. És mitjana i no alta perquè FULLSCREEN és una mida de pantalla, no de
+  paper: qui la tria normalment mira, no imprimeix.
+- **Proposta**: o generar el PDF amb format personalitzat (`format: [widthMM, heightMM]`), o no
+  oferir la descàrrega quan la mida activa és FULLSCREEN.
+
 
 ---
 

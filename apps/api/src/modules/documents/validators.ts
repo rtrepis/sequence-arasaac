@@ -10,9 +10,15 @@ import {
 
 // --- Sub-schemas Zod per a PictSequence ---
 
+// skin i hair van amb els mateixos valors que l'esquema de Mongoose i no amb un
+// string qualsevol: amb z.string() el rebuig arribava igualment, però com a error
+// de validació de Mongoose (500) en comptes d'un 400 que diu què s'ha rebutjat.
+// A més, així el tipus inferit serveix per derivar la miniatura sense conversions.
 const pictApiAraSettingsZodSchema = z.object({
-  hair: z.string().optional(),
-  skin: z.string().optional(),
+  hair: z
+    .enum(["black", "blonde", "brown", "darkBrown", "gray", "darkGray", "red"])
+    .optional(),
+  skin: z.enum(["asian", "aztec", "black", "mulatto", "white"]).optional(),
   // Color hexadecimal, no objecte: és el que el client escriu des de sempre
   fitzgerald: z.string().optional(),
   color: z.boolean().optional(),

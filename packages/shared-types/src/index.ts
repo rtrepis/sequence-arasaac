@@ -20,6 +20,7 @@ export type {
   SequenceAlignmentV,
   SequenceAlignmentLegacy,
   SequenceViewSettings,
+  DocumentThumbnailPict,
   DocumentSAAC,
 } from "./document";
 export type {

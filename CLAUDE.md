@@ -134,6 +134,39 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 
 ---
 
+## Estàndard de feedback d'operacions
+
+Font única de veritat: `context/FeedbackContext/`. Quatre mecanismes i un criteri per triar-los —
+**quant de temps dura l'operació i què pot fer l'usuari mentrestant**, mai «com d'important és».
+
+| Mecanisme | Quan | Precedents |
+|---|---|---|
+| **Backdrop amb missatge + snackbar al final** | L'operació **impedeix seguir treballant** (bloqueja el fil principal o l'app no té sentit fins que acabi) | desa i carrega al núvol (`AppNavigationDrawer`), carrega `.saac` (`ButtonWithFileLoad`), genera el PDF (`useDownloadPdf`) |
+| **Snackbar sol** | Final d'acció instantània, èxit i error | descarrega `.saac`, `ApplyAll`, vocabulari, esborrany |
+| **Progress determinat** | Hi ha **N passos comptables** | `useSequentialSearch` (N paraules) |
+| **Spinner al botó + `aria-busy`** | El botó és l'únic que canvia i **l'app segueix viva** | `UploadImageButton` |
+
+Regles:
+
+- **Tota acció que l'usuari ha demanat acaba amb un missatge**, tant si va bé com si no. L'estat
+  final no pot ser idèntic a l'inicial: la confirmació del navegador (barra de descàrregues) no
+  compta, perquè a iPadOS gairebé no existeix.
+- **El feedback viu al hook, no al component**, quan l'operació té hook propi (`useSaveUiSettings`,
+  `useDocumentDraft`, `useDownloadPdf`): el hook crida `useFeedback()` i porta el seu `.lang.ts`.
+- **El missatge del backdrop és concret, mai un «Carregant…» genèric**: si el servidor de Render
+  dorm o la captura triga, aquell text pot ser l'únic que l'usuari tingui davant durant mig minut.
+- **L'error porta el codi visible** (`{code}`) i dura més que una confirmació (10 s): s'ha de poder
+  llegir i, si cal, dictar per telèfon, sense obrir una consola que al mòbil no existeix.
+- **Tota fallada que arriba a l'usuari es reporta** amb `reportClientError`, també les que no venen
+  de cap petició HTTP: el `context` de l'API és string lliure, així que afegir-n'hi una de nova és
+  una línia a `ClientErrorContext` i res al backend.
+- **Mai `disabled` per dir «s'està fent»**: un botó desactivat surt de l'ordre de tabulació i qui
+  navega amb teclat el perd sense cap avís. `aria-disabled` + `aria-busy` i guarda al handler.
+- **Mai dos indicadors alhora** per a la mateixa operació (backdrop *i* spinner al botó).
+- **Mai una barra de progrés que no es pugui moure**: sense passos comptables, spinner.
+
+---
+
 ## Antifrau i control de comptes
 
 ### Identitat
@@ -342,9 +375,10 @@ apps/
   l'esborrany: buidar la pantalla sense esborrar-lo deixaria la feina antiga a punt de ressuscitar
   al primer refresc. Conserva la configuració per defecte —és de l'usuari, no del document— i
   demana confirmació si la feina no té còpia externa.
-- **El desat al núvol passa sempre per `useSaveDocumentToCloud`** (`features/backend/documents/hooks`),
-  compartit pel drawer i pel botó flotant: duplicar-lo hauria acabat amb dos textos d'error
-  diferents per a la mateixa fallada.
+- **El botó flotant desa pel mateix diàleg de nom que el drawer** (`SaveDocumentModal`, vegeu més
+  avall): dues portes a la mateixa acció, un sol comportament. I **qui declara la durabilitat és el
+  diàleg que fa l'operació** —`SaveDocumentModal` en desar, `LoadDocumentModal` en carregar—, no qui
+  l'ha obert: així l'indicador diu la veritat vingui la crida d'on vingui.
 
 ### Tipografia i Font
 
@@ -410,6 +444,16 @@ apps/
 - Tota fallada de petició es classifica amb `classifyRequestFailure`: l'únic que importa és si **val la pena reintentar sol** (`isTransient`). Transitori = xarxa/timeout/backend engegant-se (408/425/429/502/503/504, codis axios `ECONNABORTED`/`ETIMEDOUT`/`ERR_NETWORK`); no transitori = rebuig del servidor (dades invàlides, quota) o `STORAGE_FULL` (espai del navegador exhaurit, codi propi que no ve de cap petició HTTP).
 - Patró de referència: `useSaveUiSettings` (`features/backend/user-settings/hooks`). El desat **no bloqueja el tancament del modal** (els panells ja han sincronitzat Redux abans de desar): es llança en segon pla, amb un sol reintent automàtic si la primera fallada és transitòria (`TRANSIENT_RETRY_DELAY_MS`, 8 s), i només si el segon intent també falla apareix `SettingsSaveErrorDialog` — un diàleg, no un snackbar, perquè arriba quan l'usuari ja no pensa en la configuració i cal dir-li què s'hi juga i què pot fer.
 - Qualsevol fallada que arribi a l'usuari (després del reintent automàtic) es reporta amb `reportClientError` cap al mòdul `client-errors` de l'API — «s'informa del que ha arribat a l'usuari, no del que s'ha resolt sol».
+
+### Documents al núvol: nom, miniatura i progrés
+
+- **Desar al núvol passa sempre pel diàleg de nom** (`SaveDocumentModal`, `features/backend/documents/components`). Abans, «Desa al núvol» enviava el document sense títol i el llistat l'anomenava amb els últims sis caràcters de l'identificador: amb un sostre de pocs documents per compte, distingir-los abans d'esborrar-ne cap deixa de ser una comoditat.
+- **La casella no comença en blanc**: `suggestDocumentTitle` (`features/sequence/utils`) proposa les **quatre primeres paraules** de la seqüència, en l'ordre en què l'usuari les veu. Acceptar la proposta ha de costar el mateix que no posar-hi nom; si no, el camp es converteix en un peatge i tothom hi deixa el que hi hagi.
+- El nom viu al **document** (`setDocumentTitle` a `documentSlice`), no al diàleg: així sobreviu a l'esborrany d'IndexedDB i al fitxer `.saac`.
+- **La miniatura la deriva el servidor**, no el client (`modules/documents/thumbnail.ts`): els **tres primers pictogrames** del document, guardats com a referències (`selectedId` + aparença, o la URL de Cloudinary d'una imatge pròpia). **No es genera ni es puja cap imatge nova** — no costaria només diners de Cloudinary, sinó quota de l'usuari. Es calcula **després** de pujar les imatges, perquè mai hi entri un base64.
+- Es guarda al document i no es calcula en llistar: `listDocuments` només selecciona `title updatedAt thumbnail`, i llegir el contingut sencer de cada document per pintar tres quadradets seria transferir megabytes per res. Els documents desats abans d'existir el camp el tenen buit i el llistat els ensenya amb icona genèrica.
+- **El progrés de la transferència surt dels events d'axios** (`onUploadProgress`/`onDownloadProgress`) i es publica a `documentTransfer.ts`, un mòdul fora de Redux com `backendStatus`: el thunk no pot rebre una funció per argument sense fer l'acció no serialitzable. Si la petició no diu la mida total, el percentatge és `null` i la barra passa a indeterminada — més val això que un número inventat.
+- **Èxit → snackbar; error → es queda al diàleg.** En desar bé o carregar bé, un snackbar amb el nom del document. Si falla, l'`Alert` es queda dins del diàleg (amb el codi semàntic del backend) perquè es pugui tornar a provar sense reescriure el nom.
 
 ### Registre d'errors del client (`modules/client-errors`, API)
 

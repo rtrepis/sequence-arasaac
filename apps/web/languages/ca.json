@@ -1808,5 +1808,93 @@
   "features.sequence.status.confirmDiscard": {
     "defaultMessage": "Comença de zero",
     "description": "Botó que buida el document i l'esborrany"
+  },
+  "features.backend.documents.saveTitle": {
+    "defaultMessage": "Desa al núvol",
+    "description": "Títol del diàleg per desar un document nou al núvol"
+  },
+  "features.backend.documents.updateTitle": {
+    "defaultMessage": "Actualitza al núvol",
+    "description": "Títol del diàleg quan el document ja existeix al núvol i se'n desa una versió nova"
+  },
+  "features.backend.documents.nameLabel": {
+    "defaultMessage": "Nom del document",
+    "description": "Etiqueta del camp de nom del document"
+  },
+  "features.backend.documents.nameHelper": {
+    "defaultMessage": "És el nom amb què el retrobaràs quan el tornis a carregar.",
+    "description": "Text d'ajuda del camp de nom del document"
+  },
+  "features.backend.documents.nameRequired": {
+    "defaultMessage": "Posa-li un nom per poder-lo retrobar.",
+    "description": "Validació: el nom del document és obligatori"
+  },
+  "features.backend.documents.updateHint": {
+    "defaultMessage": "Aquest document ja és al núvol: desar-lo en substituirà la versió desada.",
+    "description": "Avís del diàleg quan el document ja existeix al núvol"
+  },
+  "features.backend.documents.saveAction": {
+    "defaultMessage": "Desa",
+    "description": "Botó per desar el document al núvol"
+  },
+  "features.backend.documents.updateAction": {
+    "defaultMessage": "Actualitza",
+    "description": "Botó per actualitzar el document ja desat al núvol"
+  },
+  "features.backend.documents.cancel": {
+    "defaultMessage": "Cancel·la",
+    "description": "Botó per tancar el diàleg sense desar"
+  },
+  "features.backend.documents.uploading": {
+    "defaultMessage": "Enviant la seqüència… {percent}%",
+    "description": "Progrés de la pujada del document al núvol"
+  },
+  "features.backend.documents.uploadingUnknown": {
+    "defaultMessage": "Enviant la seqüència…",
+    "description": "Progrés de la pujada quan no se'n sap la mida total"
+  },
+  "features.backend.documents.downloading": {
+    "defaultMessage": "Rebent el document… {percent}%",
+    "description": "Progrés de la baixada d'un document del núvol"
+  },
+  "features.backend.documents.downloadingUnknown": {
+    "defaultMessage": "Rebent el document…",
+    "description": "Progrés de la baixada quan no se'n sap la mida total"
+  },
+  "features.backend.documents.documentSavedNamed": {
+    "defaultMessage": "«{title}» s'ha desat al núvol",
+    "description": "Confirmació en desar un document amb nom"
+  },
+  "features.backend.documents.documentLoadedNamed": {
+    "defaultMessage": "«{title}» s'ha carregat",
+    "description": "Confirmació en carregar un document amb nom"
+  },
+  "features.backend.documents.documentDeleted": {
+    "defaultMessage": "Document esborrat del núvol",
+    "description": "Confirmació en esborrar un document del núvol"
+  },
+  "features.backend.documents.deleteError": {
+    "defaultMessage": "No s'ha pogut esborrar el document. Torna-ho a provar.",
+    "description": "Error en esborrar un document del núvol"
+  },
+  "features.backend.documents.untitled": {
+    "defaultMessage": "Sense nom",
+    "description": "Nom que es mostra per a un document desat sense títol"
+  },
+  "features.backend.documents.thumbnailLabel": {
+    "defaultMessage": "Primers pictogrames de «{title}»",
+    "description": "Text alternatiu de la miniatura d'un document del llistat"
+  },
+  "features.print.pdf.generating": {
+    "defaultMessage": "S'està generant el PDF…",
+    "description": "Missatge del backdrop mentre es genera el PDF"
+  },
+  "features.print.pdf.downloaded": {
+    "defaultMessage": "PDF descarregat",
+    "description": "Confirmació quan el PDF s'ha generat i descarregat"
+  },
+  "features.print.pdf.error": {
+    "defaultMessage": "No s'ha pogut generar el PDF. (Codi: {code})",
+    "description": "Error quan la generació del PDF falla; el codi permet dir què ha passat sense obrir la consola"
   }
 }

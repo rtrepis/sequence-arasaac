@@ -1,7 +1,11 @@
 // Lògica de negoci del mòdul de documents
 // Cap dependència d'Express — treballa únicament amb models i tipus
 
-import type { DocumentSAAC, PictSequence } from "@sequence-arasaac/shared-types";
+import type {
+  DocumentSAAC,
+  DocumentThumbnailPict,
+  PictSequence,
+} from "@sequence-arasaac/shared-types";
 import type { AppError } from "../../middleware/errorHandler";
 import { DocumentModel, serializeDocument } from "./model";
 import type { DocumentAsset } from "./model";
@@ -9,12 +13,14 @@ import type { CreateDocumentInput, UpdateDocumentInput } from "./validators";
 import { cloudinary } from "../../shared/cloudinaryClient";
 import { UserModel } from "../auth/model";
 import { resolveQuotaLimits } from "../../shared/tierLimits";
+import { buildDocumentThumbnail } from "./thumbnail";
 
 // Resum d'un document per al llistat — evita transferir content complet
 export interface DocumentSummary {
   id: string;
   title?: string;
   updatedAt: Date;
+  thumbnail: DocumentThumbnailPict[];
 }
 
 // Imatge acabada de pujar: la URL serveix per substituir-la al content,
@@ -194,7 +200,7 @@ export const listDocuments = async (
   userId: string
 ): Promise<DocumentSummary[]> => {
   const docs = await DocumentModel.find({ userId })
-    .select("title updatedAt")
+    .select("title updatedAt thumbnail")
     .sort({ updatedAt: -1 })
     .lean();
 
@@ -202,6 +208,8 @@ export const listDocuments = async (
     id: String(doc._id),
     title: doc.title,
     updatedAt: doc.updatedAt,
+    // Els documents desats abans que existís el camp no en tenen cap
+    thumbnail: doc.thumbnail ?? [],
   }));
 };
 
@@ -219,7 +227,11 @@ export const createDocument = async (
     bytes,
   }));
 
-  const doc = await DocumentModel.create({ userId, ...input, assets });
+  // La miniatura es deriva després de pujar les imatges: així mai hi entra un
+  // base64 i les imatges pròpies hi van amb la URL definitiva de Cloudinary.
+  const thumbnail = buildDocumentThumbnail(input.content, input.order);
+
+  const doc = await DocumentModel.create({ userId, ...input, assets, thumbnail });
 
   await applyUsageDelta(userId, {
     documents: 1,
@@ -293,9 +305,17 @@ export const updateDocument = async (
     bytes,
   }));
 
+  const thumbnail = buildDocumentThumbnail(input.content, input.order);
+
   const updated = await DocumentModel.findByIdAndUpdate(
     id,
-    { $set: { ...input, assets: [...remainingAssets, ...newAssets] } },
+    {
+      $set: {
+        ...input,
+        assets: [...remainingAssets, ...newAssets],
+        thumbnail,
+      },
+    },
     { new: true, runValidators: true }
   );
 

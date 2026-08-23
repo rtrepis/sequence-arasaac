@@ -11,6 +11,7 @@ import type {
   SequenceAlignmentLegacy,
   FitzgeraldColorLegacy,
   DefaultSettings,
+  DocumentThumbnailPict,
 } from "@sequence-arasaac/shared-types";
 import type { DocumentSAAC } from "@sequence-arasaac/shared-types";
 import {
@@ -37,6 +38,7 @@ export interface IDocument extends Document {
   order?: number[];
   author?: string;
   defaultSettings?: DefaultSettings;
+  thumbnail: DocumentThumbnailPict[];
   assets: DocumentAsset[];
   createdAt: Date;
   updatedAt: Date;
@@ -129,6 +131,24 @@ const sequenceViewSettingsSchema = new Schema(
   { _id: false }
 );
 
+// Sub-schema de la miniatura: els primers pictogrames del document, per al llistat
+const thumbnailPictSchema = new Schema(
+  {
+    selectedId: { type: Number, required: true },
+    url: { type: String },
+    skin: {
+      type: String,
+      enum: ["asian", "aztec", "black", "mulatto", "white"],
+    },
+    hair: {
+      type: String,
+      enum: ["black", "blonde", "brown", "darkBrown", "gray", "darkGray", "red"],
+    },
+    color: { type: Boolean },
+  },
+  { _id: false }
+);
+
 // Sub-schema de les imatges pujades a Cloudinary
 const documentAssetSchema = new Schema(
   {
@@ -157,6 +177,13 @@ const documentSchema = new Schema<IDocument>(
     order: [{ type: Number }],
     author: { type: String },
     defaultSettings: { type: defaultSettingsSchema },
+    // Els documents desats abans que existís la miniatura la tenen buida fins que
+    // es tornin a desar: el llistat ha de saber ensenyar-los igualment.
+    thumbnail: {
+      type: [thumbnailPictSchema],
+      required: true,
+      default: () => [],
+    },
     // Els documents creats abans d'aquest camp no en tenen: el seu pes no es
     // pot conèixer retroactivament i compten com a zero fins que es tornin a desar
     assets: {

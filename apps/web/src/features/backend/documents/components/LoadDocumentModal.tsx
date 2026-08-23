@@ -10,7 +10,9 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  LinearProgress,
   List,
+  ListItemAvatar,
   ListItemButton,
   ListItemSecondaryAction,
   ListItemText,
@@ -19,23 +21,25 @@ import {
 } from "@mui/material";
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
 import { useIntl } from "react-intl";
-import messages from "./AuthModal.lang";
-import { useAppDispatch } from "../../../../app/hooks";
+import authMessages from "@features/backend/auth/components/AuthModal.lang";
+import messages from "./DocumentModals.lang";
+import DocumentThumbnail from "./DocumentThumbnail";
+import { useAppDispatch } from "@/app/hooks";
 import {
   listDocumentsThunk,
   loadDocumentThunk,
 } from "@features/sequence/store/documentSlice";
-import {
-  deleteDocument,
-  DocumentSummary,
-} from "../../documents/services/documentService";
-import { classifyRequestFailure } from "../../api/requestFailure";
-import { reportClientError } from "../../api/clientErrorReport";
+import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
+import { deleteDocument, DocumentSummary } from "../services/documentService";
+import { useDocumentTransfer } from "../hooks/useDocumentTransfer";
+import { classifyRequestFailure } from "@features/backend/api/requestFailure";
+import { reportClientError } from "@features/backend/api/clientErrorReport";
+import { useFeedback } from "@/context/FeedbackContext";
 
 interface LoadDocumentModalProps {
   open: boolean;
   onClose: () => void;
-  onLoaded: () => void;
+  onLoaded: (title: string) => void;
 }
 
 const LoadDocumentModal = ({
@@ -45,6 +49,8 @@ const LoadDocumentModal = ({
 }: LoadDocumentModalProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const { showSnackbar } = useFeedback();
+  const transfer = useDocumentTransfer();
 
   const [documents, setDocuments] = useState<DocumentSummary[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,8 +83,14 @@ const LoadDocumentModal = ({
     fetchDocuments();
   }, [open, fetchDocuments]);
 
+  // Nom visible d'un document: el seu, o el genèric traduït si es va desar sense
+  const documentName = (doc: DocumentSummary): string =>
+    doc.title ?? intl.formatMessage(messages.untitled);
+
   const handleLoad = async (): Promise<void> => {
     if (!selectedId) return;
+
+    const selected = documents.find((doc) => doc.id === selectedId);
 
     setIsLoadingDocument(true);
     setHasLoadError(false);
@@ -86,7 +98,10 @@ const LoadDocumentModal = ({
     setIsLoadingDocument(false);
 
     if (result.meta.requestStatus === "fulfilled") {
-      onLoaded();
+      // El document que s'acaba de carregar continua sent al núvol: no és feina
+      // que només visqui en aquest navegador
+      dispatch(documentMadeDurableActionCreator({ kind: "cloud" }));
+      onLoaded(selected ? documentName(selected) : "");
       onClose();
       return;
     }
@@ -108,6 +123,19 @@ const LoadDocumentModal = ({
       await deleteDocument(id);
       setDocuments((prev) => prev.filter((d) => d.id !== id));
       if (selectedId === id) setSelectedId(null);
+      showSnackbar({
+        message: intl.formatMessage(messages.documentDeleted),
+        severity: "success",
+      });
+    } catch (error: unknown) {
+      // Esborrar allibera quota: si ha fallat, l'usuari ho ha de saber, perquè
+      // altrament tornarà a topar amb el sostre de documents sense entendre res
+      showSnackbar({
+        message: intl.formatMessage(messages.deleteError),
+        severity: "error",
+        duration: 10000,
+      });
+      void reportClientError("document-delete", classifyRequestFailure(error));
     } finally {
       setIsDeleting(null);
     }
@@ -119,6 +147,12 @@ const LoadDocumentModal = ({
       month: "short",
       day: "numeric",
     });
+
+  // Missatge de la baixada: amb percentatge quan el servidor diu la mida
+  const downloadMessage = (): string =>
+    transfer.percent !== null
+      ? intl.formatMessage(messages.downloading, { percent: transfer.percent })
+      : intl.formatMessage(messages.downloadingUnknown);
 
   return (
     <Dialog
@@ -136,10 +170,10 @@ const LoadDocumentModal = ({
             justifyContent: "space-between",
           }}
         >
-          {intl.formatMessage(messages.loadDocumentTitle)}
+          {intl.formatMessage(authMessages.loadDocumentTitle)}
           <IconButton
             onClick={onClose}
-            aria-label={intl.formatMessage(messages.close)}
+            aria-label={intl.formatMessage(authMessages.close)}
             size="small"
           >
             <AiOutlineClose />
@@ -166,11 +200,11 @@ const LoadDocumentModal = ({
             sx={{ mt: 2 }}
             action={
               <Button color="inherit" size="small" onClick={fetchDocuments}>
-                {intl.formatMessage(messages.retry)}
+                {intl.formatMessage(authMessages.retry)}
               </Button>
             }
           >
-            {intl.formatMessage(messages.loadListError)}
+            {intl.formatMessage(authMessages.loadListError)}
           </Alert>
         ) : documents.length === 0 ? (
           <Typography
@@ -179,7 +213,7 @@ const LoadDocumentModal = ({
             align="center"
             sx={{ mt: 4 }}
           >
-            {intl.formatMessage(messages.noDocuments)}
+            {intl.formatMessage(authMessages.noDocuments)}
           </Typography>
         ) : (
           <List disablePadding>
@@ -188,18 +222,32 @@ const LoadDocumentModal = ({
                 key={doc.id}
                 selected={selectedId === doc.id}
                 onClick={() => setSelectedId(doc.id)}
+                disabled={isLoadingDocument}
               >
+                <ListItemAvatar sx={{ minWidth: 0, mr: 2 }}>
+                  <DocumentThumbnail
+                    thumbnail={doc.thumbnail}
+                    label={intl.formatMessage(messages.thumbnailLabel, {
+                      title: documentName(doc),
+                    })}
+                  />
+                </ListItemAvatar>
                 <ListItemText
-                  primary={doc.title ?? `Document ${doc.id.slice(-6)}`}
+                  primary={documentName(doc)}
                   secondary={formatDate(doc.updatedAt)}
                 />
                 <ListItemSecondaryAction>
-                  <Tooltip title={intl.formatMessage(messages.deleteDocument)}>
+                  <Tooltip
+                    title={intl.formatMessage(authMessages.deleteDocument)}
+                  >
                     <IconButton
                       edge="end"
                       size="small"
                       onClick={(e) => handleDelete(e, doc.id)}
-                      disabled={isDeleting === doc.id}
+                      disabled={isDeleting === doc.id || isLoadingDocument}
+                      aria-label={intl.formatMessage(
+                        authMessages.deleteDocument,
+                      )}
                     >
                       {isDeleting === doc.id ? (
                         <CircularProgress size={16} />
@@ -215,15 +263,30 @@ const LoadDocumentModal = ({
         )}
       </DialogContent>
 
+      {/* Progrés de la baixada: un document amb imatges pròpies pot pesar, i el
+          servidor de Render pot trigar mig minut a despertar-se */}
+      {isLoadingDocument && (
+        <Box sx={{ px: 3, pt: 2 }}>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            {downloadMessage()}
+          </Typography>
+          {transfer.percent !== null ? (
+            <LinearProgress variant="determinate" value={transfer.percent} />
+          ) : (
+            <LinearProgress />
+          )}
+        </Box>
+      )}
+
       {hasLoadError && (
         <Alert severity="error" variant="outlined" sx={{ mx: 2, mt: 2 }}>
-          {intl.formatMessage(messages.loadDocumentError)}
+          {intl.formatMessage(authMessages.loadDocumentError)}
         </Alert>
       )}
 
       <DialogActions>
         <Button onClick={onClose} color="inherit" disabled={isLoadingDocument}>
-          {intl.formatMessage(messages.close)}
+          {intl.formatMessage(authMessages.close)}
         </Button>
         <Button
           onClick={handleLoad}
@@ -235,7 +298,7 @@ const LoadDocumentModal = ({
             isLoadingDocument ? <CircularProgress size={16} /> : undefined
           }
         >
-          {intl.formatMessage(messages.loadAction)}
+          {intl.formatMessage(authMessages.loadAction)}
         </Button>
       </DialogActions>
     </Dialog>
