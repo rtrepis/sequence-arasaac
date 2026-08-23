@@ -1741,6 +1741,82 @@
     "defaultMessage": "Duplicate after this",
     "description": "Insereix una còpia del pictograma just després del pictograma actual"
   },
+  "features.backend.documents.saveTitle": {
+    "defaultMessage": "Save to the cloud",
+    "description": "Títol del diàleg per desar un document nou al núvol"
+  },
+  "features.backend.documents.updateTitle": {
+    "defaultMessage": "Update in the cloud",
+    "description": "Títol del diàleg quan el document ja existeix al núvol i se'n desa una versió nova"
+  },
+  "features.backend.documents.nameLabel": {
+    "defaultMessage": "Document name",
+    "description": "Etiqueta del camp de nom del document"
+  },
+  "features.backend.documents.nameHelper": {
+    "defaultMessage": "This is the name you will find it by when you load it again.",
+    "description": "Text d'ajuda del camp de nom del document"
+  },
+  "features.backend.documents.nameRequired": {
+    "defaultMessage": "Give it a name so you can find it again.",
+    "description": "Validació: el nom del document és obligatori"
+  },
+  "features.backend.documents.updateHint": {
+    "defaultMessage": "This document is already in the cloud: saving it will replace the stored version.",
+    "description": "Avís del diàleg quan el document ja existeix al núvol"
+  },
+  "features.backend.documents.saveAction": {
+    "defaultMessage": "Save",
+    "description": "Botó per desar el document al núvol"
+  },
+  "features.backend.documents.updateAction": {
+    "defaultMessage": "Update",
+    "description": "Botó per actualitzar el document ja desat al núvol"
+  },
+  "features.backend.documents.cancel": {
+    "defaultMessage": "Cancel",
+    "description": "Botó per tancar el diàleg sense desar"
+  },
+  "features.backend.documents.uploading": {
+    "defaultMessage": "Sending your sequence… {percent}%",
+    "description": "Progrés de la pujada del document al núvol"
+  },
+  "features.backend.documents.uploadingUnknown": {
+    "defaultMessage": "Sending your sequence…",
+    "description": "Progrés de la pujada quan no se'n sap la mida total"
+  },
+  "features.backend.documents.downloading": {
+    "defaultMessage": "Receiving the document… {percent}%",
+    "description": "Progrés de la baixada d'un document del núvol"
+  },
+  "features.backend.documents.downloadingUnknown": {
+    "defaultMessage": "Receiving the document…",
+    "description": "Progrés de la baixada quan no se'n sap la mida total"
+  },
+  "features.backend.documents.documentSavedNamed": {
+    "defaultMessage": "“{title}” has been saved to the cloud",
+    "description": "Confirmació en desar un document amb nom"
+  },
+  "features.backend.documents.documentLoadedNamed": {
+    "defaultMessage": "“{title}” has been loaded",
+    "description": "Confirmació en carregar un document amb nom"
+  },
+  "features.backend.documents.documentDeleted": {
+    "defaultMessage": "Document deleted from the cloud",
+    "description": "Confirmació en esborrar un document del núvol"
+  },
+  "features.backend.documents.deleteError": {
+    "defaultMessage": "The document could not be deleted. Please try again.",
+    "description": "Error en esborrar un document del núvol"
+  },
+  "features.backend.documents.untitled": {
+    "defaultMessage": "Untitled",
+    "description": "Nom que es mostra per a un document desat sense títol"
+  },
+  "features.backend.documents.thumbnailLabel": {
+    "defaultMessage": "First pictograms of “{title}”",
+    "description": "Text alternatiu de la miniatura d'un document del llistat"
+  },
   "features.print.pdf.generating": {
     "defaultMessage": "Generating the PDF…",
     "description": "Missatge del backdrop mentre es genera el PDF"

@@ -31,12 +31,13 @@ import authMessages from "@features/backend/auth/components/AuthModal.lang";
 import DefaultSettingsDialog from "../../Modals/DefaultSettingsModal/DefaultSettingsDialog";
 import ModalDownload from "../ButtonWithModalDownload/ModalDownload";
 import AuthModal from "@features/backend/auth/components/AuthModal";
-import LoadDocumentModal from "@features/backend/auth/components/LoadDocumentModal";
+import LoadDocumentModal from "@features/backend/documents/components/LoadDocumentModal";
+import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
+import documentMessages from "@features/backend/documents/components/DocumentModals.lang";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   addSequenceActionCreator,
   loadDocumentSaacActionCreator,
-  saveDocumentThunk,
 } from "@features/sequence/store/documentSlice";
 import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
@@ -65,9 +66,6 @@ const AppNavigationDrawer = ({
   );
   const isLoggedIn = Boolean(accessToken);
 
-  // Document actual (per desar al núvol)
-  const document = useAppSelector((state) => state.document);
-
   // Locale de la ruta; fallback a "ca" si no estem en una ruta amb paràmetre de locale
   const { locale = "ca" } = useParams<{ locale: string }>();
 
@@ -75,6 +73,7 @@ const AppNavigationDrawer = ({
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [downloadOpen, setDownloadOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [saveDocModalOpen, setSaveDocModalOpen] = useState(false);
   const [loadDocModalOpen, setLoadDocModalOpen] = useState(false);
 
   // Ref per al input ocult de càrrega de fitxer
@@ -92,36 +91,10 @@ const AppNavigationDrawer = ({
     setAuthModalOpen(true);
   };
 
-  const handleSaveToCloud = async () => {
+  // Desar passa pel diàleg de nom: el document s'ha de poder distingir al llistat
+  const handleSaveToCloud = () => {
     onClose();
-    // Missatge concret i no un "carregant" genèric: si el servidor de Render dorm,
-    // aquest text pot ser l'únic que l'usuari tingui davant durant mig minut
-    showBackdrop({ message: intl.formatMessage(authMessages.savingDocument) });
-    const result = await dispatch(saveDocumentThunk(document));
-    hideBackdrop();
-    if (result.meta.requestStatus === "fulfilled") {
-      showSnackbar({
-        message: intl.formatMessage(authMessages.documentSaved),
-        severity: "success",
-      });
-    } else {
-      // El thunk retorna el codi d'error del backend; aquí es converteix en text
-      const errorCode = result.payload as string;
-      const message =
-        authMessages[errorCode as keyof typeof authMessages] ??
-        authMessages.DOCUMENT_SAVE_ERROR;
-      showSnackbar({
-        // El codi va amb el missatge: qui només vol treballar l'ignora, i qui ha de
-        // mirar què ha passat no depèn d'una consola que al mòbil no existeix
-        message: intl.formatMessage(authMessages.errorWithCode, {
-          message: intl.formatMessage(message),
-          code: errorCode,
-        }),
-        severity: "error",
-        // Més estona que el d'èxit: un error s'ha de poder llegir i, si cal, copiar
-        duration: 10000,
-      });
-    }
+    setSaveDocModalOpen(true);
   };
 
   const handleLoadFromCloud = () => {
@@ -138,9 +111,11 @@ const AppNavigationDrawer = ({
     });
   };
 
-  const handleDocumentLoaded = () => {
+  const handleDocumentLoaded = (title: string) => {
     showSnackbar({
-      message: intl.formatMessage(authMessages.documentLoaded),
+      message: title
+        ? intl.formatMessage(documentMessages.documentLoadedNamed, { title })
+        : intl.formatMessage(authMessages.documentLoaded),
       severity: "success",
     });
   };
@@ -411,6 +386,14 @@ const AppNavigationDrawer = ({
         <ModalDownload
           open={downloadOpen}
           onClose={() => setDownloadOpen(false)}
+        />
+      )}
+
+      {/* Modal per desar al núvol amb nom */}
+      {saveDocModalOpen && (
+        <SaveDocumentModal
+          open={saveDocModalOpen}
+          onClose={() => setSaveDocModalOpen(false)}
         />
       )}
 
