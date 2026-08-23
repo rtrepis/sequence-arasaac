@@ -62,19 +62,25 @@ export const useDocumentDraft = (): void => {
   const statusRef = useRef(status);
   statusRef.current = status;
 
+  // L'últim document que s'ha arribat a escriure. El flush de `visibilitychange`
+  // salta cada cop que s'amaga la pestanya, i sense això reescriuria el mateix
+  // document una vegada i una altra sense que hagi canviat res
+  const persistedRef = useRef<DocumentSAAC | null>(null);
+
   // L'avís de «no s'ha pogut desar» surt un sol cop: si l'espai s'ha acabat,
   // cada canvi posterior tornaria a fallar i el convertiria en soroll
   const hasWarnedRef = useRef(false);
 
   const persist = useCallback(async () => {
     const current = documentRef.current;
-    if (isPristineDocument(current)) return;
+    if (isPristineDocument(current) || current === persistedRef.current) return;
 
     const savedAt = Date.now();
     const { durableAt, durableKind } = statusRef.current;
     const saved = await saveDraft(current, { savedAt, durableAt, durableKind });
 
     if (saved) {
+      persistedRef.current = current;
       dispatch(draftSavedActionCreator(savedAt));
       return;
     }

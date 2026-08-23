@@ -227,22 +227,29 @@ Ambigüitat real, però amb context (posició, títol de secció) que ajuda a de
 
 ---
 
-### B9 — L'esborrany escriu el document sencer, imatges incloses, a cada canvi 🔴 Oberta
+### B9 — L'esborrany escriu el document sencer, imatges incloses, a cada canvi ✅ Resolta
 
-*(Trobada provant A1b, fora del seu abast.)*
+Branca `claude/a1b-closure-options-h6z8ha`. Les imatges pujades han sortit del camí calent: van a un
+magatzem propi d'IndexedDB (`draftImages`), s'hi escriuen **un sol cop** i el document en desa la
+referència. El desat freqüent passa a ser l'esquelet, uns quants KB.
 
-- **On**: `features/sequence/storage/draftStorage.ts` (`saveDraft`) i `useDocumentDraft`
-- **Per què importa**: cada segon d'activitat s'escriu tot el document a IndexedDB encara que només
-  hagi canviat `sizePict` d'un slider, i les imatges pujades hi van en base64. Mesurat en un
-  Chromium d'escriptori, amb 24 pictogrames: 1 ms sense imatges, ~23 ms amb 3, ~30-55 ms amb 6,
-  fins a ~140 ms amb 16 MB de document. En un iPad —el dispositiu típic d'un usuari d'AAC— val
-  multiplicar-ho per 3-5. És el perfil de «l'app va a batzegades» que es va notar en provar.
-- **Proposta**, del més barat al més profund: no reescriure quan no ha canviat res (ara el flush de
-  `visibilitychange` reescriu igualment); reutilitzar la connexió en comptes d'obrir-la i tancar-la
-  a cada escriptura; escriure en temps ociós (`requestIdleCallback`) amb el debounce a 2-3 s; i
-  l'arranjament de veritat, treure els base64 del camí calent amb un magatzem separat escrit només
-  quan les imatges canvien, de manera que el desat freqüent siguin uns quants KB. El format del
-  `.saac` i el de l'API no s'han de tocar: és capa d'emmagatzematge.
+Mesurat al mateix Chromium, document de 24 pictogrames, mitjana de quatre escriptures:
+
+| Imatges | Pes del document | Abans | Ara |
+|---|---|---|---|
+| 0 | 0,01 MB | 1,5 ms | 1,1 ms |
+| 3 | 2 MB | 6,8 ms | 1,4 ms |
+| 6 | 4 MB | 12,4 ms | 1,3 ms |
+| 12 | 8 MB | 22,1 ms | 2,1 ms |
+
+El cost deixa de dependre del pes del document. Comprovat també al navegador de debò amb una imatge
+pujada: el registre de l'esborrany passa de 391 KB a 1 KB, la imatge (390 KB) queda una sola vegada
+al magatzem, torna sencera en recarregar, i «Document nou» deixa els dos magatzems buits.
+
+També s'ha afegit la comparació que evita reescriure el mateix document (el flush de
+`visibilitychange` ho feia igualment). **No** s'ha fet el que quedava de la proposta —reutilitzar la
+connexió i escriure en temps ociós— perquè amb el cost ja pla no compensa la complexitat: mantenir
+una connexió oberta obliga a gestionar `onversionchange` i connexions tancades.
 
 ### B10 — Pujar una imatge congela la interfície mig segon llarg 🔴 Oberta
 

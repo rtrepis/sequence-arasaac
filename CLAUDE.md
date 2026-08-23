@@ -296,6 +296,17 @@ apps/
 ### Esborrany del document i imatges pujades
 
 - **El document no es desa mai a `localStorage`/`sessionStorage`.** L'esborrany va a **IndexedDB** (`features/sequence/storage/draftStorage.ts`, clau `currentDocument`). El motiu és de mida: els storages del navegador donen uns 5 MB per origen i hi compten en UTF-16, i **una sola imatge pujada en base64 ja se'ls menja** — el mateix `STORAGE_FULL_ERROR` que ja passava amb el vocabulari, però enduent-se la feina. A IndexedDB hi cap el document sencer, imatges incloses, **sense tocar-ne el format**: ni el `.saac`, ni el que rep l'API, ni `PictApiAra.url`.
+- **Les imatges pujades no viuen dins de l'esborrany**: van a un magatzem propi d'IndexedDB
+  (`draftImages`) escrit **un sol cop per imatge**, i el document en desa una referència
+  (`draft-image:<id>`). Sense això, moure un slider tornava a escriure tots els base64 sencers cada
+  segon: mesurat, de 7 ms amb una imatge a 22 ms amb dotze (i molt pitjor en tauleta), quan el que
+  canvia són uns quants KB. Amb el magatzem a part el desat és pla, ~1-2 ms, hi hagi les imatges que
+  hi hagi. **És capa d'emmagatzematge i prou**: ni el `.saac`, ni el que rep l'API, ni
+  `PictApiAra.url` a Redux canvien de forma. L'id surt d'un mostreig del contingut (llargada + tres
+  trossos), no de recórrer la cadena sencera, que seria tornar a pagar el que s'estalvia.
+- **No es reescriu el mateix document dues vegades**: el flush de `visibilitychange` compara amb
+  l'última referència escrita. Sense la comparació, amagar i tornar a mostrar la pestanya escrivia
+  igualment.
 - **L'esborrany és xarxa de seguretat, no desat.** Sobreviu a un refresc, a tancar la pestanya i a quedar-se sense bateria, però el navegador el pot desallotjar (Safari, als 7 dies sense visitar el lloc). Els desats de veritat continuen sent explícits: «Descarrega» (fitxer `.saac`) i «Desa al núvol» (amb compte). **Mateix mecanisme per a l'usuari anònim i per a l'autenticat** — el que canvia és què hi ha a sobre, no l'esborrany.
 - **No hi ha autodesat al núvol.** Cada `PUT /documents` puja imatges a Cloudinary i passa per la comprovació de quota: desar sol, sense que l'usuari ho hagi demanat, li pot retornar un `QUOTA_STORAGE_EXCEEDED` en un moment en què no pensa a desar, i de passada desperta Render.
 - **Es desa amb debounce d'1 s i es força en amagar la pestanya** (`visibilitychange` i `pagehide`, no només `beforeunload`): a iOS el sistema pot matar una pestanya en segon pla sense disparar-lo mai, i l'iPad és el dispositiu típic d'un usuari d'AAC.
