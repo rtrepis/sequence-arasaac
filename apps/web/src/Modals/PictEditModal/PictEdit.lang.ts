@@ -11,6 +11,12 @@ const messages = defineMessages({
     defaultMessage: "You can edit pictogram",
     description: "Description modal",
   },
+  moreActions: {
+    id: "components.pictEdit.moreActions",
+    defaultMessage: "More actions",
+    description:
+      "Obre el menú d'accions del pictograma des del diàleg d'edició",
+  },
   close: {
     id: "components.pictEdit.close",
     defaultMessage: "Close",
@@ -24,7 +30,8 @@ const messages = defineMessages({
   reset: {
     id: "components.pictEdit.reset",
     defaultMessage: "Reset to defaults",
-    description: "Restablir els settings del pictograma als valors per defecte globals",
+    description:
+      "Restablir els settings del pictograma als valors per defecte globals",
   },
 });
 
