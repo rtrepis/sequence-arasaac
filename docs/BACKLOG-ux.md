@@ -208,23 +208,35 @@ diàleg, l'enganxada que no es desfà i el duplicat amb els canvis del formulari
 **Residus**: B7 (l'esborrat al mig del menú, sense desfer) i B8 (el porta-retalls invisible)
 segueixen oberts — el menú del diàleg els hereta tots dos.
 
-### A9 — El PDF pot sortir en blanc a l'iPad sense que ningú ho digui 🔴 Oberta
+### A9 — El PDF pot sortir en blanc a l'iPad sense que ningú ho digui ✅ Resolta
 
-*(Trobada en resoldre A7, fora del seu abast.)*
+Branca `claude/seguim-avui-v3tpm2`. Dues coses, i la segona és la que compta.
 
-- **On**: `features/print/hooks/useDownloadPdf.ts` — `html2canvas(contentEl, { scale: 3 })`
-- **Per què importa**: a `scale: 3`, un A4 apaïsat són 3.141×2.154 px (6,8 Mpx) i un A3 apaïsat
-  4.535×3.141 (14,2 Mpx); amb la mida FULLSCREEN les dimensions surten de `window.screen` i en una
-  pantalla de 2.560×1.440 arriben a 33 Mpx. Safari d'iOS acota l'àrea del canvas i la mida màxima de
-  costat, i quan es passa **no llança cap error**: retorna el canvas buit. El PDF surt en blanc — i
-  ara, amb el snackbar d'A7, a sobre dirà que ha anat bé. L'iPad és el dispositiu típic de l'usuari
-  d'AAC, el mateix motiu que fa greu A8.
-- **Pendent de mesurar**: els números són calculats, no observats en un dispositiu real. Cal
-  reproduir-ho abans de decidir el llindar.
-- **Proposta**: derivar `scale` de l'àrea resultant (baixar a 2 o 1,5 quan es passa d'un llindar
-  segur) i comprovar que el canvas no és buit abans de muntar el PDF; si ho és, fer-ho passar per la
-  fallada que A7 ja reporta, en comptes de desar un full en blanc.
+**El sostre de la captura.** `scale` ja no és `3` fix: surt de `captureScaleFor`, que respecta un
+màxim d'àrea (16,7 Mpx) i un màxim de costat (4.096 px) —els límits publicats de Safari a iOS— amb
+terra a 1×. Amb les dimensions reals de cada format:
 
+| Format | Full (px CSS) | Abans (3×) | Ara | dpi |
+|---|---|---|---|---|
+| A4, qualsevol orientació | 718×1.047 | 2.154×3.141, 6,8 Mpx | igual | 288 |
+| A3, qualsevol orientació | 1.047×1.512 | 3.141×4.536 — **costat fora de límit** | 2.836×4.096 | 260 |
+| FULLSCREEN 1.366×1.024 | 1.366×1.024 | 4.098×3.072 — **costat fora de límit** | 4.096×3.071 | 288 |
+| FULLSCREEN 2.560×1.440 | 2.560×1.440 | 7.680×4.320, 33,2 Mpx — **fora** | 4.096×2.304 | 154 |
+
+El sostre s'aplica a tots els navegadors i no només a Safari: l'únic cost real és l'A3 baixant de
+288 a 260 dpi, invisible al paper, i a canvi no cal cap branca per navegador ni endevinar la versió
+d'iOS.
+
+**Els límits segueixen sense mesurar-se en un iPad**, que és el que l'entrada demanava. Per això la
+part que de debò tanca la troballa és l'altra: `isCanvasBlank` mira una mostra de píxels de la
+captura i, si tot és transparent (el que retorna Safari quan no ha pogut fer-la), la generació
+falla amb codi propi `PDF_EMPTY_CANVAS` pel mateix camí que A7 ja havia obert —snackbar amb el codi
+i `reportClientError`— en comptes de desar un full en blanc i dir que ha anat bé. Si el llindar
+triat és massa alt, ara es veurà i quedarà registrat; abans no.
+
+**Provat** a `e2e/download-pdf-page-format.spec.ts`: amb `getImageData` retornant alfa 0, es
+mostra l'error amb el codi, no s'anuncia cap èxit i **no es descarrega cap fitxer**. Sense el guard
+la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
 
 ---
 
@@ -302,18 +314,31 @@ Ambigüitat real, però amb context (posició, títol de secció) que ajuda a de
 - **Proposta**: text d'ajuda a la fila desactivada («Copia abans un pictograma») o, millor, una
   miniatura del pictograma copiat a la fila «Enganxar».
 
-### B9 — El PDF de la mida FULLSCREEN es desa com si fos un A4 🔴 Oberta
+### B9 — El PDF de la mida FULLSCREEN es desa com si fos un A4 ✅ Resolta, amb correcció
 
-*(Trobada en resoldre A7, fora del seu abast.)*
+Branca `claude/seguim-avui-v3tpm2`.
 
-- **On**: `useDownloadPdf.ts` — `const pdfSize = pageFormat.size === "FULLSCREEN" ? "A4" : …`
-- **Per què importa**: els mil·límetres (`widthMM`/`heightMM`) es calculen de `pageFormat.dimensions`,
-  que amb FULLSCREEN són les de la pantalla, mentre que la pàgina del jsPDF és un A4. La imatge es
-  col·loca a `0,0` amb una mida que no té res a veure amb el full: segons la pantalla surt escapçada
-  o encongida en un racó. És mitjana i no alta perquè FULLSCREEN és una mida de pantalla, no de
-  paper: qui la tria normalment mira, no imprimeix.
-- **Proposta**: o generar el PDF amb format personalitzat (`format: [widthMM, heightMM]`), o no
-  oferir la descàrrega quan la mida activa és FULLSCREEN.
+**La correcció primer**: l'entrada donava per fet que aquell full escapçat arribava a l'usuari, i
+no hi arriba. Amb la mida FULLSCREEN, `ViewSquenceSettings` **no renderitza el botó de PDF** (ni el
+d'imprimir): amb `isFullscreen` la barra només ofereix «pantalla completa». La segona proposta de
+l'entrada —«no oferir la descàrrega quan la mida activa és FULLSCREEN»— ja estava feta des d'abans
+d'escriure-la. Era, doncs, un defecte latent en una branca inabastable, no un full escapçat que
+ningú es trobés.
+
+**Què s'ha fet igualment.** El `pdfSize = … ? "A4" : …` era una trampa per a qui reobrís el botó, i
+el hook accepta qualsevol `PageFormat` vingui d'on vingui. Ara el full es fa a mida amb
+`format: [widthMM, heightMM]` quan la mida és FULLSCREEN, que és la primera proposta de l'entrada.
+
+**I una cosa que sí que arribava a tothom**, trobada pel camí: la imatge es col·locava a `0,0`
+també amb A4 i A3, però les dimensions d'aquests formats són les **útils** (el paper menys els
+marges de 10 mm). El resultat era el full enganxat al cantó superior esquerre i 20 mm de marge
+acumulats a la dreta i a baix, en comptes de 10 a cada costat. Ara es centra amb la mida real de la
+pàgina (`pdf.internal.pageSize`), cosa que amb FULLSCREEN dona desplaçament 0 sense cap cas especial.
+
+**Provat** a `e2e/download-pdf-page-format.spec.ts`, llegint el fitxer generat i no la pantalla: el
+`/MediaBox` és un A4 i la matriu de col·locació de la imatge deixa 28,32 pt (10 mm exactes) a cada
+costat. Sense l'arranjament la prova falla amb 0. Una segona prova fixa que amb FULLSCREEN no
+s'ofereix la descàrrega, perquè qui torni a oferir-la vegi que hi havia una prova esperant-lo.
 
 ### B10 — L'esborrany escriu el document sencer, imatges incloses, a cada canvi ✅ Resolta
 
@@ -543,3 +568,17 @@ Branca `claude/document-limit-users-sjig8o`.
 - **Proposta**: triar un color de debò per al cas «sense classificació» —el candidat natural és el
   mateix `#FFCD94` que `extractPictSettings` fa servir per defecte— o no pintar vora quan no hi ha
   classificació. Decisió de producte, no de tipus.
+
+### C12 — El desplegable de mida de pàgina no té nom accessible 🔴 Oberta
+
+*(Trobada en escriure les proves d'A9 i B9: el `getByLabel("Mida de pàgina")` no trobava res.)*
+
+- **On**: `components/ViewSequencesSettings/GlobalViewControls.tsx` — el `Select` de la mida de
+  pàgina, dins d'un `SettingRow title={…}` sense `labelId`
+- **Per què importa**: el títol de la fila és text al costat, no una etiqueta associada, així que
+  el control arriba al lector de pantalla com un `combobox` sense nom: es llegeix el valor («A4»)
+  però no què és. `SettingRow` ja té la prop `labelId` pensada per a això i el `Select` de MUI
+  accepta `labelId`; només falta lligar-los. Cal repassar si passa el mateix als altres controls
+  amb `SettingRow` que no siguin toggles.
+- **Proposta**: passar un `labelId` a `SettingRow` i al `Select` del mateix component. Mentrestant,
+  la prova e2e localitza el desplegable pel valor que mostra i ho diu al comentari.
