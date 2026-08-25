@@ -227,7 +227,8 @@ El sostre s'aplica a tots els navegadors i no només a Safari: l'únic cost real
 288 a 260 dpi, invisible al paper, i a canvi no cal cap branca per navegador ni endevinar la versió
 d'iOS.
 
-**Els límits segueixen sense mesurar-se en un iPad**, que és el que l'entrada demanava. Per això la
+**Els límits segueixen sense mesurar-se en un iPad**, que és el que l'entrada demanava; això queda
+obert a B14. Per això la
 part que de debò tanca la troballa és l'altra: `isCanvasBlank` mira una mostra de píxels de la
 captura i, si tot és transparent (el que retorna Safari quan no ha pogut fer-la), la generació
 falla amb codi propi `PDF_EMPTY_CANVAS` pel mateix camí que A7 ja havia obert —snackbar amb el codi
@@ -417,6 +418,41 @@ d'IndexedDB i al fitxer `.saac`.
   d'enviar res quan ja s'és al límit i el document és nou. El comptador ja existeix al servidor
   (`usage.documentsCount` de l'usuari) però avui no viatja enlloc: caldria exposar-lo, per exemple
   amb els límits efectius, a la resposta de `GET /documents`.
+
+### B14 — El sostre del canvas del PDF és un valor publicat, no un valor mesurat 🔴 Oberta
+
+*(Residu d'A9: era la seva condició de «pendent de mesurar» i no s'ha pogut fer.)*
+
+- **On**: `features/print/hooks/useDownloadPdf.ts` — `MAX_CANVAS_AREA_PX` (16.777.216) i
+  `MAX_CANVAS_SIDE_PX` (4.096), que alimenten `captureScaleFor`
+- **Per què importa**: A9 va tancar la part que compta —una captura en blanc ja no es desa dient
+  que ha anat bé—, però l'escala a partir de la qual es rebaixa la resolució surt dels límits
+  **publicats** de Safari a iOS, no d'haver-ho provat en un iPad. Els dos errors possibles són
+  reals i oposats: si el sostre és massa baix, tothom perd qualitat sense necessitat (l'A3 ja baixa
+  a 260 dpi i una pantalla de 2.560×1.440 a 154); si és massa alt, l'usuari es troba un error en
+  comptes d'un PDF. Els límits també varien per versió d'iOS i per memòria del dispositiu, de manera
+  que el número «correcte» pot no ser un de sol.
+- **Com comprovar-ho**: generar el PDF en un iPad real amb A3 i amb pantalla sencera, i mirar si
+  el `PDF_EMPTY_CANVAS` apareix al registre d'errors del client (`context: "pdf-export"`), que és
+  precisament per a què serveix. Amb el guard posat, la dada arriba sola: no cal instrumentar res.
+- **Proposta**: esperar a tenir casos reals al registre abans de tocar cap número. Si no n'hi ha
+  cap en un temps raonable, provar de pujar el costat a 8.192 (el límit dels iOS moderns) i veure
+  si en surten; si en surten, el valor conservador d'ara ja era el bo.
+
+### B15 — Amb la mida «pantalla sencera» no es pot exportar res 🔴 Oberta
+
+*(Trobada en resoldre B9.)*
+
+- **On**: `components/ViewSequencesSettings/ViewSquenceSettings.tsx` — amb `isFullscreen` la barra
+  d'eines només ofereix «pantalla completa»: ni imprimir ni PDF.
+- **Per què importa**: és deliberat i té sentit (és una mida de pantalla, no de paper), però no es
+  diu enlloc. Qui tria «pantalla sencera» veu desaparèixer dos botons sense cap explicació, i la
+  manera de recuperar-los és endevinar que depenen de la mida de pàgina. Ara, a més, el hook ja
+  genera correctament un full a mida de pantalla, o sigui que la restricció és de producte i no
+  tècnica.
+- **Proposta**: decidir-ho explícitament. O bé oferir el PDF també aquí —el full sortirà de la mida
+  de la pantalla, que és el que la mida promet— o bé dir per què no hi és, en comptes de fer
+  desaparèixer els botons en silenci.
 
 ## Gravetat baixa
 
