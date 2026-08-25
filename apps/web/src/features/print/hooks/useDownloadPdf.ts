@@ -1,6 +1,11 @@
 import { useCallback, useState } from "react";
 import { useIntl } from "react-intl";
-import { type PageFormat, pixelsToMM, CSS_PRINT_DPI } from "@/types/PageFormat";
+import {
+  type PageFormat,
+  type PageDimensions,
+  pixelsToMM,
+  CSS_PRINT_DPI,
+} from "@/types/PageFormat";
 import { appBackgrounds, printColors } from "@/style/palette";
 import { useFeedback } from "@/context/FeedbackContext";
 import {
@@ -17,6 +22,91 @@ const ERROR_SNACKBAR_MS = 10000;
 
 /** Codi propi: el full que s'havia de capturar no és a la pàgina. */
 const PDF_NO_CONTENT = "PDF_NO_CONTENT";
+
+/** Codi propi: el navegador ha tornat una captura en blanc. */
+const PDF_EMPTY_CANVAS = "PDF_EMPTY_CANVAS";
+
+/**
+ * Resolució de la captura. A 3× una pàgina de 96 dpi surt a 288 dpi, que ja és
+ * el sostre útil de l'app: les imatges pujades es guarden a 1.800 px de costat
+ * llarg, pensades justament per a aquest màxim.
+ */
+const CAPTURE_SCALE = 3;
+
+/**
+ * Sostre de la captura, en àrea i en costat.
+ *
+ * Safari a iOS acota totes dues coses i, quan es passen, **no llança res**:
+ * retorna el canvas buit i el PDF surt en blanc —i, des del feedback d'A7, amb
+ * un missatge dient que ha anat bé. Són els límits publicats de Safari a iOS
+ * (16,7 Mpx d'àrea, 4.096 px de costat), no mesurats en un dispositiu: es
+ * prenen com el cas pitjor conegut.
+ *
+ * S'apliquen a tots els navegadors a propòsit, en comptes de mirar quin és.
+ * L'A4 no els toca (2.154×3.141 px, 6,8 Mpx) i l'A3 hi topa pel costat en totes
+ * dues orientacions: baixa de 288 a 260 dpi, invisible al paper. A canvi no cal
+ * mantenir una branca per navegador ni endevinar la versió d'iOS. Amb la mida
+ * FULLSCREEN d'una pantalla gran la rebaixa sí que és forta (a 2.560×1.440,
+ * 154 dpi), però allà l'alternativa era el full en blanc.
+ */
+const MAX_CANVAS_AREA_PX = 16_777_216;
+const MAX_CANVAS_SIDE_PX = 4096;
+
+/**
+ * Per sota d'1× la captura tindria menys resolució que la pantalla mateixa. Si
+ * ni tan sols a 1 hi cabés, val més intentar-ho igualment i, si torna en blanc,
+ * dir-ho: el guard de sota ho detecta.
+ */
+const MIN_CAPTURE_SCALE = 1;
+
+/** Escala de captura que respecta els dos sostres per a unes dimensions donades. */
+const captureScaleFor = ({ width, height }: PageDimensions): number =>
+  Math.max(
+    MIN_CAPTURE_SCALE,
+    Math.min(
+      CAPTURE_SCALE,
+      Math.sqrt(MAX_CANVAS_AREA_PX / (width * height)),
+      MAX_CANVAS_SIDE_PX / Math.max(width, height),
+    ),
+  );
+
+/**
+ * Diu si la captura ha tornat en blanc.
+ *
+ * html2canvas pinta el fons de blanc opac, així que una captura bona té alfa
+ * 255 a tot arreu; la que Safari no ha pogut fer es queda transparent. Es mira
+ * una mostra de punts i no el canvas sencer: llegir 33 Mpx costaria més que la
+ * captura mateixa, el mateix criteri que ja es va aplicar a l'escaneig d'alfa
+ * de les imatges pujades.
+ *
+ * Si el canvas està tacat, `getImageData` llança i no es pot saber. Llavors no
+ * es bloqueja res: el `toDataURL` de després fallarà igualment i el catch
+ * general ho recollirà amb el seu propi codi.
+ */
+const isCanvasBlank = (canvas: HTMLCanvasElement): boolean => {
+  if (canvas.width === 0 || canvas.height === 0) return true;
+
+  const context = canvas.getContext("2d");
+  if (!context) return false;
+
+  const maxX = canvas.width - 1;
+  const maxY = canvas.height - 1;
+  const samples: Array<[number, number]> = [
+    [0, 0],
+    [maxX, 0],
+    [0, maxY],
+    [maxX, maxY],
+    [Math.floor(maxX / 2), Math.floor(maxY / 2)],
+  ];
+
+  try {
+    return samples.every(
+      ([x, y]) => context.getImageData(x, y, 1, 1).data[3] === 0,
+    );
+  } catch {
+    return false;
+  }
+};
 
 /** Converteix un canal d'un color hex (#RRGGBB) al seu valor decimal */
 const hexChannels = (hex: string): number[] => {
@@ -105,7 +195,7 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
       // Capturar el contingut real al 100% de resolució
       // html2canvas ignora el transform:scale() visual — llegeix les dimensions CSS naturals
       const canvas = await html2canvas(contentEl, {
-        scale: 3,
+        scale: captureScaleFor(pageFormat.dimensions),
         useCORS: true,
         allowTaint: true,
         logging: false,
@@ -132,19 +222,49 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
         },
       });
 
+      // La captura pot haver tornat en blanc sense que ningú hagi llançat res.
+      // Val més una fallada visible —la mateixa que ja reporta qualsevol altre
+      // error d'aquí— que desar un full en blanc dient que ha anat bé.
+      if (isCanvasBlank(canvas)) {
+        reportFailure({ code: PDF_EMPTY_CANVAS, isTransient: false });
+        return;
+      }
+
       // Calcular dimensions en mil·límetres per al PDF
       const widthMM = pixelsToMM(pageFormat.dimensions.width, CSS_PRINT_DPI);
       const heightMM = pixelsToMM(pageFormat.dimensions.height, CSS_PRINT_DPI);
-      const pdfSize = pageFormat.size === "FULLSCREEN" ? "A4" : pageFormat.size;
 
+      // FULLSCREEN no és cap paper: les seves dimensions surten de la pantalla,
+      // així que el full del PDF es fa a mida. Abans s'encabia en un A4 amb els
+      // mil·límetres de la pantalla, i la imatge en sortia escapçada. Avui la
+      // barra d'eines no ofereix la descàrrega amb aquesta mida, o sigui que era
+      // un defecte latent; es corregeix igualment perquè el hook accepta
+      // qualsevol `PageFormat` i el cas especial era una trampa per a qui
+      // reobrís el botó.
       const pdf = new jsPDF({
         orientation: pageFormat.orientation,
         unit: "mm",
-        format: pdfSize.toLowerCase(),
+        format:
+          pageFormat.size === "FULLSCREEN"
+            ? [widthMM, heightMM]
+            : pageFormat.size.toLowerCase(),
       });
 
-      // Afegir la imatge capturada ocupant tota la pàgina
-      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, widthMM, heightMM);
+      // Les dimensions d'A4 i A3 són les útils (el paper menys els marges), de
+      // manera que col·locar la imatge a 0,0 deixava tot el marge a la dreta i a
+      // baix. Centrada, el marge queda repartit com a la impressió. Amb
+      // FULLSCREEN el full és exactament la imatge i els dos desplaçaments són 0.
+      const offsetX = (pdf.internal.pageSize.getWidth() - widthMM) / 2;
+      const offsetY = (pdf.internal.pageSize.getHeight() - heightMM) / 2;
+
+      pdf.addImage(
+        canvas.toDataURL("image/png"),
+        "PNG",
+        offsetX,
+        offsetY,
+        widthMM,
+        heightMM,
+      );
       pdf.save("sequencia.pdf");
 
       // La descàrrega la confirma el navegador de maneres molt diferents (i a
