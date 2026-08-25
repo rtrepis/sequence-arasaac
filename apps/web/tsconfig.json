@@ -27,8 +27,15 @@
     }
   },
   "include": ["src", ".private/mocks"],
+  // Els tests i el seu arnès queden fora de la comprovació de tipus, com a l'API.
+  // Abans hi eren de fet, però per accident: les dues rutes anaven dins d'una sola
+  // cadena amb una coma al mig, que no coincideix amb cap fitxer.
+  // La suite del web no compila contra el codi actual (vegeu C10 del backlog);
+  // mentre no es revisqui o s'esborri, no pot ser la barrera de tipus de ningú.
   "exclude": [
-    "src/**/*.test.*, src/setupTests.ts",
+    "src/**/*.test.*",
+    "src/setupTests.ts",
+    "src/utils/test-utils.tsx",
     ".private/mocks/handlers.ts"
   ]
 }

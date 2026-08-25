@@ -28,6 +28,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "lint": "eslint ./src",
+    "typecheck": "tsc --noEmit",
     "test": "echo 'Tests: WIP' && exit 0",
     "test-coverage": "echo 'Coverage: WIP' && exit 0",
     "prepare": "node scripts/compile-languages.mjs",

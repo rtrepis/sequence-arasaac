@@ -1,6 +1,7 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 import { PageSize, PageOrientation } from "./PageFormat";
 import { WordProfile } from "@features/word-profile/model/WordProfile";
+import type { UserRole } from "@sequence-arasaac/shared-types";
 
 export type UserTier = "free";
 
@@ -20,6 +21,25 @@ export interface Ui {
   settingsActiveTab: SettingsTab;
   wordProfiles: WordProfile[];
   tier: UserTier;
+}
+
+/**
+ * Configuració de l'usuari tal com viatja amb el backend (`GET`/`PUT /user/ui-settings`)
+ * i tal com es desa al navegador quan no hi ha sessió.
+ *
+ * No és `Ui`: aquí no hi ha ni les paraules clau de la cerca ni el tab actiu del modal,
+ * que són estat de la pantalla i no preferències de ningú. Els camps de compte
+ * (`tier`, `emailVerified`, `role`) només arriben del servidor; el client no els envia.
+ */
+export interface UserUiSettings {
+  lang: { app: LangsApp; search: string };
+  theme: ThemeMode;
+  viewSettings?: ViewSettings;
+  defaultSettings: DefaultSettings;
+  wordProfiles?: WordProfile[];
+  tier?: UserTier;
+  emailVerified?: boolean;
+  role?: UserRole;
 }
 
 export type SequenceDirection = "row" | "column";
