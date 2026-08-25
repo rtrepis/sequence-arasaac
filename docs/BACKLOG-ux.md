@@ -434,7 +434,12 @@ d'IndexedDB i al fitxer `.saac`.
   que el número «correcte» pot no ser un de sol.
 - **Com comprovar-ho**: generar el PDF en un iPad real amb A3 i amb pantalla sencera, i mirar si
   el `PDF_EMPTY_CANVAS` apareix al registre d'errors del client (`context: "pdf-export"`), que és
-  precisament per a què serveix. Amb el guard posat, la dada arriba sola: no cal instrumentar res.
+  precisament per a què serveix.
+- **Fet**: l'informe porta el detall que cal per decidir-ho —format, mida del full, escala aplicada
+  i dimensions del canvas resultant (`A4 landscape full 1047×718, escala 3.00, canvas 2700×1854`)—
+  i el servidor ja hi desa el `userAgent`. Quan es va obrir aquesta entrada l'informe només portava
+  el codi, o sigui que un cas real hauria dit que la captura va sortir en blanc **sense dir a quina
+  mida**, que és l'únic número que fa falta.
 - **Proposta**: esperar a tenir casos reals al registre abans de tocar cap número. Si no n'hi ha
   cap en un temps raonable, provar de pujar el costat a 8.192 (el límit dels iOS moderns) i veure
   si en surten; si en surten, el valor conservador d'ara ja era el bo.
@@ -453,6 +458,27 @@ d'IndexedDB i al fitxer `.saac`.
 - **Proposta**: decidir-ho explícitament. O bé oferir el PDF també aquí —el full sortirà de la mida
   de la pantalla, que és el que la mida promet— o bé dir per què no hi és, en comptes de fer
   desaparèixer els botons en silenci.
+
+### B16 — La resolució del PDF depèn de com de reduïda es vegi la previsualització 🔴 Oberta
+
+*(Trobada instrumentant B14: els números de l'informe no quadraven.)*
+
+- **On**: `features/print/hooks/useDownloadPdf.ts` — `html2canvas(contentEl, …)` sobre
+  `.preview-content`, que porta `transform: scale(calculatedScale)` (`ViewSquenceSettings`)
+- **Per què importa**: el comentari del codi deia que «html2canvas ignora el `transform:scale()`
+  visual i llegeix les dimensions CSS naturals», i **és fals**: mesura amb
+  `getBoundingClientRect()`, o sigui amb el transform aplicat. Mesurat en un Chromium a 1.280×800
+  amb A4 apaïsat: el full fa 1.047×718 px d'`offsetWidth`, però el rectangle és 900×617
+  (`scale(0,8596)`) i el canvas surt 2.700×1.854 en comptes de 3.141×2.154. La resolució del PDF,
+  doncs, **no és la que es demana**: és `escala visual × 3`. Aquí, 248 dpi en comptes de 288; en una
+  pantalla estreta, on la previsualització es redueix molt més, cau proporcionalment. Afecta
+  justament qui exporta des d'una tauleta o un mòbil.
+- **Nota**: no compromet el sostre d'A9/B14. El guard es calcula sobre les dimensions naturals, que
+  són més grans que el que es captura de debò, o sigui que erra pel cantó segur —però explica per
+  què l'A3 baixa a 260 dpi quan potser no calia.
+- **Proposta**: passar `width`/`height` (i, si cal, `windowWidth`/`windowHeight`) a html2canvas amb
+  les dimensions naturals del full, o capturar sobre un clon sense transform. Cal tornar a validar
+  tot el camí del PDF: canvia la mida del canvas i, per tant, el que el sostre d'A9 hi fa.
 
 ## Gravetat baixa
 
