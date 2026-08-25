@@ -160,22 +160,53 @@ Canvis:
 **Descartat**: barra de progrés determinada (`html2canvas` no reporta progrés i una barra aturada
 menteix) i spinner dins el botó (amb el backdrop obert serien dos indicadors alhora).
 
-### A8 — El menú contextual del pictograma no existeix en tàctil 🔴 Oberta
+### A8 — El menú contextual del pictograma no existeix en tàctil ✅ Resolta
 
-*(Trobada en analitzar A5 i A6, fora del seu abast.)*
+Branca `claude/discussion-followup-sq7jo9`.
 
-- **On**: `Modals/PictEditModal/PictEditModal.tsx` — `onContextMenu` és **l'únic** obridor del
-  `Popover`; no hi ha cap gestor de pulsació llarga enlloc del projecte (`onTouchStart`,
-  temporitzador o similar: cap coincidència).
-- **Per què importa**: Safari d'iOS/iPadOS no dispara mai l'esdeveniment `contextmenu`, i l'iPad és
-  el dispositiu típic de l'usuari d'AAC. Allà, les sis accions del menú — copiar, enganxar, editar,
-  esborrar, inserir i duplicar — són **inabastables**: tocar el pictograma només obre el diàleg
-  d'edició. A Android el clic llarg sí que dispara `contextmenu`, així que el forat és exactament
-  el públic amb més iPads. Arreglar les icones d'A5/A6 no serveix de res a qui no pot obrir el menú.
-- **Proposta**: obrir el mateix `Popover` amb una pulsació llarga (temporitzador amb
-  `onPointerDown`/`onPointerUp`, cancel·lat en moure el dit per no trencar l'scroll), o afegir un
-  botó visible de «més accions» a la targeta. La segona opció és més descobrible i no depèn de cap
-  gest amagat, però ocupa espai a cada pictograma.
+**Correcció de l'entrada original**: no eren les sis accions. Tocar el pictograma obre el `Dialog`
+d'edició, així que **Editar** i **Esborrar** (el botó vermell del peu) sí que hi arribaven. Les que
+no tenien cap altra porta eren quatre: **Copiar, Enganxar, Insereix un buit després i Duplica
+després** — les que serveixen justament per construir la seqüència.
+
+**Comprovat en un dispositiu real** (iPhone, Safari i Chrome): la pulsació llarga no obre el menú de
+l'app, obre el **menú del sistema sobre la imatge** («Guardar imagen / Copiar / Compartir»). Al iOS
+tots els navegadors van per sota amb WebKit, així que no n'hi ha cap que se salvi. No era, doncs,
+«no passa res»: passava una cosa d'un altre programa que semblava resposta de l'app.
+
+**Descartada la pulsació llarga pròpia**, que era la proposta original:
+
+- Android i el tàctil de Windows **ja disparen `contextmenu`** en la pulsació llarga. Implementar-la
+  a mà seria construir el gest per als únics dispositius que ja el tenen, i encara caldria suprimir
+  el `click` posterior perquè no s'obrís també el diàleg d'edició.
+- Al iOS caldria abans matar el menú del sistema i barallar-se amb l'arrossegament de la imatge, per
+  acabar amb un gest amagat que exigeix mantenir el dit quiet mig segon — mal peatge en una app
+  d'AAC, on part dels usuaris tenen tremolor o control motor fi limitat.
+- I **branquejar per dispositiu no serveix**: des d'iPadOS 13, Safari de l'iPad s'identifica com a
+  Macintosh. Una branca «iPhone / no iPhone» deixaria l'iPad —el dispositiu del problema— al camí
+  equivocat.
+
+**El que hi ha ara**, sense cap detecció de dispositiu i amb un sol camí per a tothom:
+
+| Canvi | On |
+|---|---|
+| Menú d'accions al diàleg d'edició, amb les 4 accions sense altra via | `PictEditModal` (`MdMoreVert` a la capçalera) |
+| Les accions són font única compartida amb el menú contextual | `usePictogramActions.ts` |
+| El menú contextual surt **sota** la targeta i ja no la tapa | `anchorOrigin`/`transformOrigin` del `Popover` |
+| El menú del sistema d'iOS deixa de sortir sobre el pictograma | `pictogramTrigger` (`-webkit-touch-callout`, `user-select`) |
+
+**L'acció triada al diàleg s'executa quan el diàleg ja ha sortit de pantalla** (`TransitionProps.onExited`),
+mai abans. `PictEditForm` guarda els seus canvis en estat local i només els desa en tancar-se: si
+l'acció s'executés al moment, aquell desat **desfaria l'enganxada**. Mesurat, no suposat — amb
+l'acció immediata, enganxar deixa el pictograma tal com estava i sembla que el menú no funcioni.
+Ajornant-la, l'acció treballa sobre el pictograma al dia i duplicar arrossega el que s'acaba
+d'escriure.
+
+Cobert per `e2e/pictogram-actions.spec.ts` (4 proves: ancoratge del menú, quines accions surten al
+diàleg, l'enganxada que no es desfà i el duplicat amb els canvis del formulari).
+
+**Residus**: B7 (l'esborrat al mig del menú, sense desfer) i B8 (el porta-retalls invisible)
+segueixen oberts — el menú del diàleg els hereta tots dos.
 
 ### A9 — El PDF pot sortir en blanc a l'iPad sense que ningú ho digui 🔴 Oberta
 
@@ -421,16 +452,16 @@ fitxers pot canviar silenciosament el text de l'altre.
   `aria-label`, de manera que no puguin tornar a divergir. Val la pena si es fa d'una tirada per a
   tots els casos; component a component no compensa el diff.
 
-### C6 — Deute menut del menú contextual 🔴 Oberta
+### C6 — Deute menut del menú contextual ✅ Resolta
 
-*(Trobada en analitzar A5 i A6, fora del seu abast.)*
+Branca `claude/discussion-followup-sq7jo9`, de retruc en reescriure `MouseActionList` per compartir
+les accions amb el diàleg (A8).
 
-- **On**: `MouseActionList.tsx`
-- `/* eslint-disable @typescript-eslint/no-unused-expressions */` a la primera línia del fitxer, per
-  culpa de dos `x && x(...)` que podrien ser un `if`. Desactiva la regla per a tot el fitxer.
-- L'`aria-labelledby` de la llista apunta a `nested-list-subheader`, un id genèric heretat de
-  l'exemple de MUI; el subheader ja diu «Pictograma {n}», així que el nom accessible és correcte,
-  però l'id no descriu res.
+- L'`/* eslint-disable @typescript-eslint/no-unused-expressions */` de tot el fitxer ha desaparegut:
+  els dos `x && x(...)` que el motivaven viuen ara a `usePictogramActions` com a `copyAction?.(…)`.
+- L'`aria-labelledby` ja no apunta a `nested-list-subheader`, un id genèric heretat de l'exemple de
+  MUI, sinó a `pictogram-actions-{índex}`. A més d'anomenar el que hi ha, evita ids repetits al DOM:
+  la mateixa llista es pot muntar des del menú contextual o des del diàleg.
 
 ### C7 — El snackbar tapa el botó flotant d'estat en mòbil 🔴 Oberta
 

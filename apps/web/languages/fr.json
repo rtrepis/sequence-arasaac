@@ -392,6 +392,10 @@
     "defaultMessage": "Modifier Pictogramme",
     "description": "Title modal"
   },
+  "components.pictEdit.moreActions": {
+    "defaultMessage": "Plus d'actions",
+    "description": "Obre el menú d'accions del pictograma des del diàleg d'edició"
+  },
   "components.pictEdit.reset": {
     "defaultMessage": "Valeurs par défaut"
   },
