@@ -2,7 +2,8 @@ import { CircularProgress, ToggleButton, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React, { useRef, useState } from "react";
 import { useIntl } from "react-intl";
-import { MdDeleteOutline, MdOutlineDriveFolderUpload } from "react-icons/md";
+import { MdOutlineDriveFolderUpload } from "react-icons/md";
+import { AiOutlineDelete } from "react-icons/ai";
 import { fileToBase64, isValidImageUrl } from "@/utils/imageToBase64";
 import { useFeedback } from "@/context/FeedbackContext";
 import messages from "./UploadImageButton.lang";
@@ -163,7 +164,7 @@ const UploadImageButton = ({
             aria-label={removeLabel}
             onClick={handleRemove}
           >
-            <MdDeleteOutline size={ICON_SIZE} />
+            <AiOutlineDelete size={ICON_SIZE} />
           </ToggleButton>
         </Tooltip>
       )}

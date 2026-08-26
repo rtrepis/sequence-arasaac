@@ -10,7 +10,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { MdDeleteOutline } from "react-icons/md";
+import { AiOutlineDelete } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
 import { SectionTitle } from "@components/SettingsLayout";
 import { buildPictogramUrl } from "@features/pictogram/api/arasaacClient";
@@ -88,7 +88,7 @@ const WordProfileList = ({
                       word: profile.word,
                     })}
                   >
-                    <MdDeleteOutline />
+                    <AiOutlineDelete />
                   </IconButton>
                 }
               >

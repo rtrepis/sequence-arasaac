@@ -252,7 +252,7 @@ test(
     await page.waitForTimeout(1000);
 
     // Pas 1: target ~680px ample; addBtn ~40px → paddingX=(680-40)/2=320
-    const addSeqButton = page.locator('[aria-label="Afegir seqüència"] button');
+    const addSeqButton = page.locator('button[aria-label="Afegeix una seqüència"]');
     await focusedScreenshot(
       page,
       addSeqButton,
@@ -264,8 +264,8 @@ test(
     // EDIT PAGE - PAS 2: Afegir seq 2 i navegar
     // Protagonista: pestanya 2 activa (nova pestanya creada)
     // =============================================
-    // Clic al botó "Afegir seqüència"
-    await page.locator('[aria-label="Afegir seqüència"] button').click();
+    // Clic al botó d'afegir seqüència
+    await page.locator('button[aria-label="Afegeix una seqüència"]').click();
     await page.waitForTimeout(500);
 
     // Navegar a la tab 2 (#vertical-tab-1)

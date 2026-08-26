@@ -541,6 +541,7 @@ const ViewSequencesSettings = ({
                 >
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipResetDefaults)}
+                    describeChild
                   >
                     <Button
                       variant="text"

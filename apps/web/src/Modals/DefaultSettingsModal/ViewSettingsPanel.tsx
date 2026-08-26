@@ -1,17 +1,11 @@
-import {
-  Button,
-  Slider,
-  Stack,
-  ToggleButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Button, Slider, Stack, Tooltip, Typography } from "@mui/material";
 import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import {
   SettingsPanelLayout,
   SectionTitle,
   SettingRow,
   SettingsPanelHint,
+  IconToggleButton,
   SETTINGS_MAX_WIDTH,
 } from "../../components/SettingsLayout";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -59,6 +53,9 @@ import React from "react";
 
 const PAGE_SIZE_MAP: Record<number, PageSize> = { 0: "A4", 1: "A3", 2: "FULLSCREEN" };
 const PAGE_INDEX_MAP: Record<PageSize, 0 | 1 | 2> = { A4: 0, A3: 1, FULLSCREEN: 2 };
+
+// Prefix dels ids dels títols de fila, per lligar-los als controls amb aria-labelledby
+const VIEW_PANEL_LABEL_ID = "view-settings-panel";
 
 const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
   (_, ref): React.ReactElement => {
@@ -172,8 +169,12 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
 
           {/* Secció: mida i alineació dels pictogrames */}
           <SectionTitle title={<FormattedMessage {...messages.sectionPictograms} />}>
-            <SettingRow title={<FormattedMessage {...viewMessages.size} />}>
+            <SettingRow
+              title={<FormattedMessage {...viewMessages.size} />}
+              labelId={`${VIEW_PANEL_LABEL_ID}-size`}
+            >
               <Slider
+                aria-labelledby={`${VIEW_PANEL_LABEL_ID}-size`}
                 step={SIZE_PICT_STEP}
                 min={SIZE_PICT_MIN}
                 max={SIZE_PICT_MAX}
@@ -184,8 +185,12 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
               />
             </SettingRow>
 
-            <SettingRow title={<FormattedMessage {...viewMessages.pictSpaceBetween} />}>
+            <SettingRow
+              title={<FormattedMessage {...viewMessages.pictSpaceBetween} />}
+              labelId={`${VIEW_PANEL_LABEL_ID}-space`}
+            >
               <Slider
+                aria-labelledby={`${VIEW_PANEL_LABEL_ID}-space`}
                 step={PICT_SPACE_STEP}
                 min={PICT_SPACE_MIN}
                 max={PICT_SPACE_MAX}
@@ -205,21 +210,24 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
                 exclusive
                 onChange={handleAlignmentH}
               >
-                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignLeft)}>
-                  <ToggleButton value="left" aria-label="left">
-                    <MdFormatAlignLeft />
-                  </ToggleButton>
-                </Tooltip>
-                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignHCenter)}>
-                  <ToggleButton value="center" aria-label="center">
-                    <MdFormatAlignCenter />
-                  </ToggleButton>
-                </Tooltip>
-                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignRight)}>
-                  <ToggleButton value="right" aria-label="right">
-                    <MdFormatAlignRight />
-                  </ToggleButton>
-                </Tooltip>
+                <IconToggleButton
+                  value="left"
+                  message={viewMessages.tooltipAlignLeft}
+                >
+                  <MdFormatAlignLeft />
+                </IconToggleButton>
+                <IconToggleButton
+                  value="center"
+                  message={viewMessages.tooltipAlignHCenter}
+                >
+                  <MdFormatAlignCenter />
+                </IconToggleButton>
+                <IconToggleButton
+                  value="right"
+                  message={viewMessages.tooltipAlignRight}
+                >
+                  <MdFormatAlignRight />
+                </IconToggleButton>
               </StyledToggleButtonGroup>
             </SettingRow>
 
@@ -232,21 +240,24 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
                 exclusive
                 onChange={handleAlignmentV}
               >
-                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignTop)}>
-                  <ToggleButton value="top" aria-label="top">
-                    <MdVerticalAlignTop />
-                  </ToggleButton>
-                </Tooltip>
-                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignVCenter)}>
-                  <ToggleButton value="center" aria-label="center">
-                    <MdVerticalAlignCenter />
-                  </ToggleButton>
-                </Tooltip>
-                <Tooltip title={intl.formatMessage(viewMessages.tooltipAlignBottom)}>
-                  <ToggleButton value="bottom" aria-label="bottom">
-                    <MdVerticalAlignBottom />
-                  </ToggleButton>
-                </Tooltip>
+                <IconToggleButton
+                  value="top"
+                  message={viewMessages.tooltipAlignTop}
+                >
+                  <MdVerticalAlignTop />
+                </IconToggleButton>
+                <IconToggleButton
+                  value="center"
+                  message={viewMessages.tooltipAlignVCenter}
+                >
+                  <MdVerticalAlignCenter />
+                </IconToggleButton>
+                <IconToggleButton
+                  value="bottom"
+                  message={viewMessages.tooltipAlignBottom}
+                >
+                  <MdVerticalAlignBottom />
+                </IconToggleButton>
               </StyledToggleButtonGroup>
             </SettingRow>
           </SectionTitle>
@@ -271,7 +282,7 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
                 <FormattedMessage {...messages.applyHelper} />
               </Typography>
             </Stack>
-            <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
+            <Tooltip title={intl.formatMessage(messages.tooltipReset)} describeChild>
               <Button
                 variant="text"
                 color="inherit"

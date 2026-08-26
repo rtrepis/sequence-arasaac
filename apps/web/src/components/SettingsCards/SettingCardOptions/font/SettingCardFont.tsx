@@ -43,7 +43,7 @@ const SettingCardFont = ({
         onChange={handleChange}
         fullWidth
         size="small"
-        inputProps={{ "aria-labelledby": FONT_FAMILY_LABEL_ID }}
+        labelId={FONT_FAMILY_LABEL_ID}
       >
         {fontList.map((font) => (
           <MenuItem value={font} key={font}>

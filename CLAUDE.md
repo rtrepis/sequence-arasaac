@@ -54,6 +54,12 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
   - `"compact"` — `Switch`, `InputColor`: **sempre en línia**, també en mòbil — apilar-los només malgastaria alçada, mai els falta amplada.
 
   **Mai reescriure aquest patró a mà** amb `Box sx={settingRowInline}` + `FormLabel`.
+- **`IconToggleButton`** — **única manera** de declarar un botó només-icona dins d'un
+  `StyledToggleButtonGroup`. Pren **un sol** `message` (un `MessageDescriptor`) i en deriva el
+  `Tooltip` i l'`aria-label`. Mai escriure `<Tooltip title={intl.formatMessage(x)}><ToggleButton
+  aria-label="left">`: amb dues fonts, el text traduït i el nom accessible se separen i el segon
+  acaba en anglès (era la troballa C5 del backlog). Funciona sense reenviar cap prop perquè el
+  `ToggleButtonGroup` de MUI v6 passa la selecció per **context**, no clonant els fills.
 
 ### Regles
 
@@ -61,6 +67,9 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
 - **Amplada estàndard tauleta**: `SETTINGS_MAX_WIDTH` (900) és l'amplada màxima del panell centrat. No hardcodejar amplades noves.
 - **Tot tab comença amb la seva guia**: `SettingsPanelHint` és el **primer fill de la columna de controls**, abans de la primera secció, a tots els tabs sense excepció. Format únic (mai un `Typography` solt ni un `Alert` escrit a mà) perquè l'usuari trobi sempre l'explicació al mateix lloc i amb el mateix aspecte. El text respon a què configura el tab i sobre què tindrà efecte; si el panell té estats (crear/editar), el text **canvia amb l'estat** — és la manera de dir on ets sense afegir cap encapçalament (cas del tab Vocabulari).
 - **Toggles = marca de la casa**: qualsevol selector d'opcions discretes usa `StyledToggleButtonGroup` (arrodonit 55×55, `primary` en seleccionat). Mai `ToggleButtonGroup` pla de MUI dins del modal de settings.
+- **Tot control ha de tenir nom accessible, i ha de sortir del títol de la seva fila**: `SettingRow` posa l'`id` que se li passa a `labelId` al `FormLabel`; el control l'ha de recollir. Un `Select` ho fa amb la seva prop **`labelId`** —**mai** amb `inputProps={{ "aria-labelledby": … }}`, que deixa el nom a l'`<input>` natiu amagat i no al `div[role="combobox"]`, l'element que llegeix i clica tothom—; un `Slider`, amb `aria-labelledby`; un `TextField`, amb `inputProps` (allà l'`<input>` sí que és el control). Sense això el control arriba com un «combobox» que llegeix el valor però no diu de què és.
+- **Un `Tooltip` sobre un botó *amb text* porta `describeChild`**: amb un títol de text, MUI el posa com a `aria-label` del fill i **tapa l'etiqueta visible**. El nom accessible passaria a ser el tooltip, que no conté el text del botó (WCAG 2.5.3 «Label in Name», i qui fa servir control per veu no pot dir el que llegeix). Amb `describeChild` el tooltip és `aria-describedby` i el botó conserva el seu text. **No** aplica als botons només-icona (`IconToggleButton`, els d'afegir/treure seqüència): allà el tooltip **és** el nom.
+- **Restaurar per defecte es diu sempre «Restaura [àmbit]»**: mateix verb a tot arreu, l'àmbit distingeix (`el pictograma` / `els pictogrames` / `la vista` / `les seqüències`) i el **tooltip diu a quins valors torna** — els de fàbrica o els que l'usuari té desats. És l'única diferència real entre els quatre botons i no pot viure en quatre verbs diferents.
 - **Criteri únic de fila**: tot ajust individual (slider, select, textfield, grup de toggles) porta el **títol a l'esquerra i el control a la dreta** (a partir de `sm`; vegeu *Comportament en mòbil*), sempre via `SettingRow`. `settingRowInline` és l'sx intern que hi ha a sota; `settingRow` (només padding vertical, sense flex) n'és la base. Cap dels dos s'aplica directament a una fila.
 - **Un ajust = una fila**: mai amuntegar diversos controls en una sola fila. Un bloc amb 3 controls (una vora, una tipografia) és una **secció pròpia** amb 3 files, no una fila composta. Els components que representen un bloc així (`SettingCardBorder`, `SettingCardFontGroup`) **es titulen ells mateixos** renderitzant el seu propi `SectionTitle` — així els contextos que no els embolcallen (com `PictEditForm`) obtenen la mateixa presentació sense canvis.
 - **Color/pes del títol de fila**: el títol d'un ajust individual sempre usa `cardTitle` (`SettingsCards.styled.ts` — fosc `text.primary`, `fontWeight: bold`). Ho aplica `SettingRow`. Mai el gris per defecte de `FormLabel` (`text.secondary`), que quedaria igual que el títol de secció. El títol de secció (`SectionTitle`) sempre és gris (`text.secondary`) i en majúscules — és l'únic nivell gris de la jerarquia.
@@ -129,6 +138,8 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 ### Estat de migració
 
 - ✅ **`TabsEditView`** — 2 tabs (Editar/Vista) via `AppTab`; valor derivat de `useLocation()`.
+  Les etiquetes surten de `@shared/messages/navigation.lang`, **compartides amb el drawer**: el
+  mateix destí no es pot dir de dues maneres segons per on s'hi arriba (era B4 del backlog).
 - ✅ **`DefaultSettingsDialog`** — 4 tabs declarats a l'array `SETTINGS_TABS` (valor + icona + missatge) i renderitzats amb `map`, dins d'un `Tabs` scrollable.
 - ➖ **`TabsSequences`** — fora d'aquest estàndard: els seus tabs són números de seqüència, sense icona ni text traduïble; té la seva pròpia branca `isMobile` (horitzontal scrollable).
 

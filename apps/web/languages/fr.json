@@ -36,9 +36,6 @@
   "components.appNavigationDrawer.download": {
     "defaultMessage": "Télécharger"
   },
-  "components.appNavigationDrawer.editView": {
-    "defaultMessage": "Éditer"
-  },
   "components.appNavigationDrawer.langSelector": {
     "defaultMessage": "Langue"
   },
@@ -50,9 +47,6 @@
   },
   "components.appNavigationDrawer.openMenu": {
     "defaultMessage": "Ouvrir le menu"
-  },
-  "components.appNavigationDrawer.previewView": {
-    "defaultMessage": "Aperçu"
   },
   "components.appNavigationDrawer.settings": {
     "defaultMessage": "Paramètres"
@@ -397,7 +391,7 @@
     "description": "Obre el menú d'accions del pictograma des del diàleg d'edició"
   },
   "components.pictEdit.reset": {
-    "defaultMessage": "Valeurs par défaut"
+    "defaultMessage": "Restaurer le pictogramme"
   },
   "components.pictEditSettings.settings.label": {
     "defaultMessage": "Paramètres du Pictogramme",
@@ -562,14 +556,6 @@
   "components.settingCardTheme.title": {
     "defaultMessage": "Thème",
     "description": "Títol de la card de selecció de tema"
-  },
-  "components.toggleButtonEditViewPages.edit.title": {
-    "defaultMessage": "Éditer",
-    "description": "Title Page"
-  },
-  "components.toggleButtonEditViewPages.view.title": {
-    "defaultMessage": "Vue",
-    "description": "Title Page"
   },
   "context.feedback.applyAll.success": {
     "defaultMessage": "Appliqué à {count} pictogrammes"
@@ -1099,10 +1085,10 @@
     "defaultMessage": "Appliquer à toutes les séquences"
   },
   "pages.viewSequence.tooltip.resetDefaults": {
-    "defaultMessage": "Restaurer les paramètres par défaut enregistrés"
+    "defaultMessage": "Rétablit toutes les séquences à vos réglages enregistrés"
   },
   "pages.viewSequence.resetDefaults.label": {
-    "defaultMessage": "Restaurer les défauts"
+    "defaultMessage": "Restaurer les séquences"
   },
   "pages.viewSequence.tooltip.orientationLandscape": {
     "defaultMessage": "Page paysage",
@@ -1412,16 +1398,16 @@
     "defaultMessage": "Bas"
   },
   "components.viewSettingsPanel.reset": {
-    "defaultMessage": "Réinitialiser"
+    "defaultMessage": "Restaurer la vue"
   },
   "components.viewSettingsPanel.tooltipReset": {
-    "defaultMessage": "Réinitialiser aux valeurs par défaut"
+    "defaultMessage": "Rétablit les réglages d'affichage aux valeurs d'usine"
   },
   "components.defaultSettings.reset": {
-    "defaultMessage": "Réinitialiser"
+    "defaultMessage": "Restaurer les pictogrammes"
   },
   "components.defaultSettings.tooltipReset": {
-    "defaultMessage": "Réinitialiser aux valeurs par défaut"
+    "defaultMessage": "Rétablit les réglages de pictogrammes aux valeurs d'usine"
   },
   "pages.viewSequence.section.pageFormat": {
     "defaultMessage": "Format de page",
@@ -1900,5 +1886,29 @@
   "features.print.pdf.error": {
     "defaultMessage": "Impossible de générer le PDF. (Code : {code})",
     "description": "Error quan la generació del PDF falla; el codi permet dir què ha passat sense obrir la consola"
+  },
+  "shared.navigation.edit": {
+    "defaultMessage": "Éditer",
+    "description": "Nom de la page d'édition des séquences"
+  },
+  "shared.navigation.view": {
+    "defaultMessage": "Vue",
+    "description": "Nom de la page de visualisation des séquences"
+  },
+  "components.tabsSequences.addSequence": {
+    "defaultMessage": "Ajouter une séquence",
+    "description": "Infobulle du bouton qui ajoute une nouvelle séquence"
+  },
+  "components.tabsSequences.deleteLastSequence": {
+    "defaultMessage": "Supprimer la dernière séquence",
+    "description": "Infobulle du bouton qui supprime la dernière séquence"
+  },
+  "components.tabsSequences.sequenceNumber": {
+    "defaultMessage": "Numéro de séquence",
+    "description": "Nom accessible de la liste des onglets de séquences"
+  },
+  "components.pictEdit.tooltipReset": {
+    "defaultMessage": "Rétablit ce pictogramme à vos valeurs par défaut",
+    "description": "Infobulle du bouton de restauration du pictogramme"
   }
 }
