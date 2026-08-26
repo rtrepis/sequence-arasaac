@@ -1787,10 +1787,6 @@
     "defaultMessage": "Le travail actuel n'est que dans ce navigateur. Si vous repartez de zéro, il est perdu.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
   },
-  "features.sequence.status.confirmCancel": {
-    "defaultMessage": "Annuler",
-    "description": "Botó per no buidar el document"
-  },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Le télécharger avant",
     "description": "Botó per desar la feina en un fitxer abans de buidar-la"
@@ -1910,5 +1906,21 @@
   "components.pictEdit.tooltipReset": {
     "defaultMessage": "Rétablit ce pictogramme à vos valeurs par défaut",
     "description": "Infobulle du bouton de restauration du pictogramme"
+  },
+  "components.confirmDialog.cancel": {
+    "defaultMessage": "Annuler",
+    "description": "Bouton qui ferme une confirmation sans faire l'action"
+  },
+  "components.tabsSequences.confirmDeleteTitle": {
+    "defaultMessage": "Supprimer la séquence {number} ?",
+    "description": "Titre de la confirmation de suppression de la dernière séquence"
+  },
+  "components.tabsSequences.confirmDeleteBody": {
+    "defaultMessage": "Elle contient {count, plural, one {# pictogramme} other {# pictogrammes}}. Supprimer la séquence les emporte tous et c'est irréversible.",
+    "description": "Corps de la confirmation : ce qui est perdu en supprimant la séquence"
+  },
+  "components.tabsSequences.confirmDelete": {
+    "defaultMessage": "Supprimer la séquence",
+    "description": "Bouton qui confirme la suppression de la dernière séquence"
   }
 }

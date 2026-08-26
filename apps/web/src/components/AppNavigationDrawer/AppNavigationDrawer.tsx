@@ -17,11 +17,13 @@ import {
   AiOutlineCloudDownload,
   AiOutlineCloudUpload,
   AiOutlineClose,
+  AiOutlineDownload,
   AiOutlineEdit,
   AiOutlineEye,
+  AiOutlineFolderOpen,
   AiOutlineHome,
   AiOutlineRead,
-  AiOutlineSave,
+  AiOutlineSafety,
   AiOutlineSetting,
   AiOutlineUser,
 } from "react-icons/ai";
@@ -264,14 +266,14 @@ const AppNavigationDrawer = ({
           <List>
             <ListItemButton onClick={handleDownloadOpen}>
               <ListItemIcon>
-                <AiOutlineCloudDownload />
+                <AiOutlineDownload />
               </ListItemIcon>
               <ListItemText primary={intl.formatMessage(messages.download)} />
             </ListItemButton>
 
             <ListItemButton onClick={handleLoadClick}>
               <ListItemIcon>
-                <AiOutlineCloudUpload />
+                <AiOutlineFolderOpen />
               </ListItemIcon>
               <ListItemText primary={intl.formatMessage(messages.load)} />
             </ListItemButton>
@@ -344,7 +346,7 @@ const AppNavigationDrawer = ({
 
               <ListItemButton onClick={handleSaveToCloud}>
                 <ListItemIcon>
-                  <AiOutlineSave />
+                  <AiOutlineCloudUpload />
                 </ListItemIcon>
                 <ListItemText
                   primary={intl.formatMessage(authMessages.saveDocument)}
@@ -365,7 +367,7 @@ const AppNavigationDrawer = ({
               {isAdmin && (
                 <ListItemButton onClick={() => handleNavigate("/admin")}>
                   <ListItemIcon>
-                    <AiOutlineSetting />
+                    <AiOutlineSafety />
                   </ListItemIcon>
                   <ListItemText primary="Administració" />
                 </ListItemButton>

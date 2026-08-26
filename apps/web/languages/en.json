@@ -1787,10 +1787,6 @@
     "defaultMessage": "Your current work is only in this browser. If you start from scratch, it is lost.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
   },
-  "features.sequence.status.confirmCancel": {
-    "defaultMessage": "Cancel",
-    "description": "Botó per no buidar el document"
-  },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Download it first",
     "description": "Botó per desar la feina en un fitxer abans de buidar-la"
@@ -1910,5 +1906,21 @@
   "components.pictEdit.tooltipReset": {
     "defaultMessage": "Return this pictogram to your default values",
     "description": "Tooltip of the restore pictogram button"
+  },
+  "components.confirmDialog.cancel": {
+    "defaultMessage": "Cancel",
+    "description": "Button that closes a confirmation without doing the action"
+  },
+  "components.tabsSequences.confirmDeleteTitle": {
+    "defaultMessage": "Delete sequence {number}?",
+    "description": "Title of the confirmation for deleting the last sequence"
+  },
+  "components.tabsSequences.confirmDeleteBody": {
+    "defaultMessage": "It has {count, plural, one {# pictogram} other {# pictograms}}. Deleting the sequence takes them all with it and it cannot be undone.",
+    "description": "Body of the confirmation: what is lost when deleting the sequence"
+  },
+  "components.tabsSequences.confirmDelete": {
+    "defaultMessage": "Delete sequence",
+    "description": "Button confirming deletion of the last sequence"
   }
 }

@@ -1787,10 +1787,6 @@
     "defaultMessage": "El trabajo actual solo está en este navegador. Si empiezas de cero, se pierde.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
   },
-  "features.sequence.status.confirmCancel": {
-    "defaultMessage": "Cancelar",
-    "description": "Botó per no buidar el document"
-  },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Descárgalo antes",
     "description": "Botó per desar la feina en un fitxer abans de buidar-la"
@@ -1910,5 +1906,21 @@
   "components.pictEdit.tooltipReset": {
     "defaultMessage": "Devuelve este pictograma a tus valores por defecto",
     "description": "Tooltip del botón de restaurar el pictograma"
+  },
+  "components.confirmDialog.cancel": {
+    "defaultMessage": "Cancelar",
+    "description": "Botón que cierra una confirmación sin hacer la acción"
+  },
+  "components.tabsSequences.confirmDeleteTitle": {
+    "defaultMessage": "¿Borras la secuencia {number}?",
+    "description": "Título de la confirmación de borrar la última secuencia"
+  },
+  "components.tabsSequences.confirmDeleteBody": {
+    "defaultMessage": "Tiene {count, plural, one {# pictograma} other {# pictogramas}}. Borrar la secuencia se los lleva todos y no se puede deshacer.",
+    "description": "Cuerpo de la confirmación: qué se pierde al borrar la secuencia"
+  },
+  "components.tabsSequences.confirmDelete": {
+    "defaultMessage": "Borra la secuencia",
+    "description": "Botón que confirma el borrado de la última secuencia"
   }
 }
