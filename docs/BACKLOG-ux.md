@@ -275,8 +275,21 @@ Branca `claude/backlog-branch-master-64uh75`.
   `components.toggleButtonEditViewPages.edit`/`view.title`) s'han fos en un de sol,
   `shared.navigation.edit` / `shared.navigation.view`, a `src/shared/messages/navigation.lang.ts`.
   Els consumeixen `TabsEditView` i `AppNavigationDrawer`.
-- Guanya el parell dels tabs («Editar» / «Vista»), que és la superfície permanent i la que l'usuari
-  ja coneix; el drawer hi cedeix «Edita» / «Previsualitza».
+- El parell unificat és **«Edició» / «Vista»**: noms als dos costats. Els tres candidats eren
+  «Editar/Vista» (el dels tabs), «Edita/Previsualitza» (el del drawer) i aquest.
+- Mana el nom perquè l'app ja separa **destins (noms)** d'**accions (verbs)** —al drawer, Inici ·
+  Novetats · Configuració contra Descarrega · Carrega— i perquè l'altra tira de tabs, la del modal
+  de configuracions, és tota de noms (Usuari · Pictogrames · **Vista** · Vocabulari personal).
+  `Editar / Vista` era l'únic parell desaparellat de l'app, i qui hi desentonava era «Editar»:
+  «Vista» ja és com la configuració anomena aquesta mateixa pàgina.
+- L'argument decisiu és l'estàndard de mòbil: per sota de `sm` **el tab seleccionat és l'únic que
+  conserva el text**, o sigui que aquell text diu *on ets*, no *què pots fer*. Un infinitiu com a
+  única etiqueta visible es llegeix com una acció pendent quan de fet ja hi ets. I no costa amplada:
+  «Edició» són els mateixos sis caràcters que «Editar».
+- **La regla és per idioma, no una traducció mecànica**: canvien ca («Edició»), es («Edición») i fr
+  («Édition», que a més treu l'anglicisme «Éditer» — l'estàndard francès de menús és *Édition*). En
+  queden fora **en** («Edit») i **it** («Modifica»), perquè en aquestes dues llengües el terme
+  estàndard del menú ja és el que hi havia i «Editing» hi sonaria estrany.
 - Els ids porten el prefix `shared.` i no el nom d'un component, perquè el destí és de l'app i no de
   qui hi porta. Els antics anomenaven `toggleButtonEditViewPages`, un component que ja no existeix.
 - Fixat a `e2e/accessible-names.spec.ts`: el tab i l'ítem del drawer han de dir el mateix.

@@ -1888,7 +1888,7 @@
     "description": "Error quan la generació del PDF falla; el codi permet dir què ha passat sense obrir la consola"
   },
   "shared.navigation.edit": {
-    "defaultMessage": "Editar",
+    "defaultMessage": "Edición",
     "description": "Nombre de la página de edición de secuencias"
   },
   "shared.navigation.view": {

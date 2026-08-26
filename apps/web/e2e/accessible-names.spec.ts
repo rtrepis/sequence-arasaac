@@ -29,10 +29,10 @@ test("els controls de seqüències es diuen en l'idioma de l'app", async ({
   ).toBeVisible();
 
   // B4: els tabs i el drawer comparteixen un sol parell de missatges
-  await expect(page.getByRole("tab", { name: "Editar" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Edició" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Vista" })).toBeVisible();
   await page.getByRole("button", { name: "Menú principal" }).click();
-  await expect(page.getByRole("button", { name: "Editar" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Edició" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Vista" })).toBeVisible();
 });
 
