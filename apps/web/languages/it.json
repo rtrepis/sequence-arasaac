@@ -1787,10 +1787,6 @@
     "defaultMessage": "Il lavoro attuale è solo in questo browser. Se inizi da zero, va perso.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
   },
-  "features.sequence.status.confirmCancel": {
-    "defaultMessage": "Annulla",
-    "description": "Botó per no buidar el document"
-  },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Scaricalo prima",
     "description": "Botó per desar la feina en un fitxer abans de buidar-la"
@@ -1910,5 +1906,21 @@
   "components.pictEdit.tooltipReset": {
     "defaultMessage": "Riporta questo pittogramma ai tuoi valori predefiniti",
     "description": "Tooltip del pulsante di ripristino del pittogramma"
+  },
+  "components.confirmDialog.cancel": {
+    "defaultMessage": "Annulla",
+    "description": "Pulsante che chiude una conferma senza eseguire l'azione"
+  },
+  "components.tabsSequences.confirmDeleteTitle": {
+    "defaultMessage": "Elimini la sequenza {number}?",
+    "description": "Titolo della conferma di eliminazione dell'ultima sequenza"
+  },
+  "components.tabsSequences.confirmDeleteBody": {
+    "defaultMessage": "Contiene {count, plural, one {# pittogramma} other {# pittogrammi}}. Eliminare la sequenza li porta via tutti e non si può annullare.",
+    "description": "Corpo della conferma: cosa si perde eliminando la sequenza"
+  },
+  "components.tabsSequences.confirmDelete": {
+    "defaultMessage": "Elimina la sequenza",
+    "description": "Pulsante che conferma l'eliminazione dell'ultima sequenza"
   }
 }

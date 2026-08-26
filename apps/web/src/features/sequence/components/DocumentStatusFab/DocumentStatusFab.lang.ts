@@ -79,11 +79,6 @@ const messages = defineMessages({
       "La feina d'ara només és en aquest navegador. Si comences de zero, es perd.",
     description: "Cos del diàleg de confirmació abans de buidar el document",
   },
-  confirmCancel: {
-    id: "features.sequence.status.confirmCancel",
-    defaultMessage: "Cancel·la",
-    description: "Botó per no buidar el document",
-  },
   confirmDownloadFirst: {
     id: "features.sequence.status.confirmDownloadFirst",
     defaultMessage: "Descarrega-ho abans",

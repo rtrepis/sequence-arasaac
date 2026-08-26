@@ -1787,10 +1787,6 @@
     "defaultMessage": "La feina d'ara només és en aquest navegador. Si comences de zero, es perd.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
   },
-  "features.sequence.status.confirmCancel": {
-    "defaultMessage": "Cancel·la",
-    "description": "Botó per no buidar el document"
-  },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Descarrega-ho abans",
     "description": "Botó per desar la feina en un fitxer abans de buidar-la"
@@ -1910,5 +1906,21 @@
   "components.pictEdit.tooltipReset": {
     "defaultMessage": "Torna aquest pictograma als teus valors per defecte",
     "description": "Tooltip del botó de restaurar el pictograma"
+  },
+  "components.confirmDialog.cancel": {
+    "defaultMessage": "Cancel·la",
+    "description": "Botó que tanca una confirmació sense fer l'acció"
+  },
+  "components.tabsSequences.confirmDeleteTitle": {
+    "defaultMessage": "Esborres la seqüència {number}?",
+    "description": "Títol de la confirmació d'esborrar l'última seqüència"
+  },
+  "components.tabsSequences.confirmDeleteBody": {
+    "defaultMessage": "Té {count, plural, one {# pictograma} other {# pictogrames}}. Esborrar la seqüència se'ls endú tots i no es pot desfer.",
+    "description": "Cos de la confirmació: què es perd en esborrar la seqüència"
+  },
+  "components.tabsSequences.confirmDelete": {
+    "defaultMessage": "Esborra la seqüència",
+    "description": "Botó que confirma l'esborrat de l'última seqüència"
   }
 }

@@ -186,6 +186,34 @@ Regles:
 
 ---
 
+## Estàndard d'accions destructives
+
+L'app **no té desfer**: no hi ha cap `undo` a `features/sequence`. Per això el que protegeix la
+feina és on viu cada acció i quan demana permís.
+
+- **El criteri és quant costa refer-ho, mai com sona l'acció.** Treure un pictograma es repeteix
+  molt i es refà amb un clic: **no** es confirma. Esborrar una seqüència se'n porta tots els seus:
+  **sí**. Posar un diàleg a tot el que sona greu acaba en gent que hi clica sense llegir.
+- **`ConfirmDialog`** (`components/ConfirmDialog/`) és la **única** confirmació de l'app. Mai
+  escriure un `Dialog` de confirmació a mà: si el criteri de dalt s'ha de poder aplicar, s'ha de
+  poder llegir en un sol lloc. Props: `title` (pregunta), `body` (**què es perd, en concret**),
+  `confirmLabel`, i `alternative` opcional per a la sortida que evita la pèrdua en comptes de
+  consumar-la («Descarrega-ho abans»), que va al mig perquè no és ni acceptar ni cancel·lar.
+- **«Cancel·la» és un sol missatge per a tota l'app** (`components.confirmDialog.cancel`), dins del
+  propi `ConfirmDialog`. Qui el crida no el passa.
+- **Res de confirmar en va**: si no hi ha res a perdre, no es pregunta. `TabsSequences` compta els
+  pictogrames **amb contingut** (`selectedId > 0`, imatge pujada o text) i amb la seqüència buida
+  esborra directament.
+- **El cos diu la xifra, no un avís genèric**: «Té 2 pictogrames…». Qui decideix sovint no està
+  mirant el que perdrà.
+- **Cap botó no rep el focus inicial**: se'l queda el diàleg (comportament de MUI). Així el lector
+  de pantalla llegeix títol i cos i Enter no consuma res. **Mai posar `autoFocus`** al botó
+  destructiu ni al de cancel·lar.
+- **A les llistes d'accions, la destructiva va sola i l'última**, separada per `Divider` i en
+  `error.main` (`MouseActionList`). Un grup buit per `omit` no deixa cap separador penjat.
+
+---
+
 ## Antifrau i control de comptes
 
 ### Identitat

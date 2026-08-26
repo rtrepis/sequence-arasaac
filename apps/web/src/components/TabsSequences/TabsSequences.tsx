@@ -8,7 +8,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import React, { SyntheticEvent } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import TabPanelSequence from "../TabPanelSecuence/TabPanelSecuence";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import {
@@ -19,6 +19,7 @@ import {
 import { BsFileEarmarkPlus, BsFileEarmarkMinus } from "react-icons/bs";
 import { useIntl } from "react-intl";
 import messages from "./TabsSequences.lang";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 
 const TabsSequences = (): React.ReactElement => {
   const dispatch = useAppDispatch();
@@ -30,6 +31,16 @@ const TabsSequences = (): React.ReactElement => {
   const amount = useAppSelector(
     (state) => Object.keys(state.document.content).length,
   );
+  // Quants pictogrames amb contingut té l'última seqüència: és el que es perdria
+  // en esborrar-la. Els buits no compten — tornar-los a posar és un clic
+  const lastSequenceFilled = useAppSelector((state) => {
+    const keys = Object.keys(state.document.content);
+    const last = state.document.content[Number(keys[keys.length - 1])] ?? [];
+    return last.filter(
+      (pict) => pict.img.selectedId > 0 || pict.img.url || pict.text,
+    ).length;
+  });
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     dispatch(changeActiveSAACActionCreator(newValue));
@@ -40,8 +51,20 @@ const TabsSequences = (): React.ReactElement => {
     dispatch(changeActiveSAACActionCreator(amount));
   };
 
-  const handleDeleteLastSequence = () => {
+  const deleteLastSequence = () => {
+    setIsConfirmOpen(false);
     dispatch(deleteLastSequenceActionCreator());
+  };
+
+  // Esborrar una seqüència s'endú tots els seus pictogrames i no hi ha desfer.
+  // Amb la seqüència buida no hi ha res a perdre i la confirmació només seria
+  // fricció: el criteri és quant costa refer-ho, no com sona l'acció
+  const handleDeleteLastSequence = () => {
+    if (lastSequenceFilled > 0) {
+      setIsConfirmOpen(true);
+      return;
+    }
+    deleteLastSequence();
   };
 
   const tabs = [...Array(amount)].map((_, index) => (
@@ -91,6 +114,21 @@ const TabsSequences = (): React.ReactElement => {
     </Tooltip>
   );
 
+  const confirmDialog = (
+    <ConfirmDialog
+      open={isConfirmOpen}
+      title={intl.formatMessage(messages.confirmDeleteTitle, {
+        number: amount,
+      })}
+      body={intl.formatMessage(messages.confirmDeleteBody, {
+        count: lastSequenceFilled,
+      })}
+      confirmLabel={intl.formatMessage(messages.confirmDelete)}
+      onConfirm={deleteLastSequence}
+      onCancel={() => setIsConfirmOpen(false)}
+    />
+  );
+
   // Mòbil: tabs horitzontals + panel a sota (fragment per integrar amb el pare)
   if (isMobile) {
     return (
@@ -113,6 +151,7 @@ const TabsSequences = (): React.ReactElement => {
         <Box sx={{ width: "100%" }}>
           <TabPanelSequence index={value} />
         </Box>
+        {confirmDialog}
       </>
     );
   }
@@ -141,6 +180,7 @@ const TabsSequences = (): React.ReactElement => {
         {addButton}
       </div>
       <TabPanelSequence index={value} />
+      {confirmDialog}
     </div>
   );
 };

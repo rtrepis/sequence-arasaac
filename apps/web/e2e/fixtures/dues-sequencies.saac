@@ -1,0 +1,72 @@
+{
+  "documentState": {
+    "id": "test-c14",
+    "title": "Prova C14",
+    "content": {
+      "0": [
+        {
+          "indexSequence": 0,
+          "img": {
+            "searched": {
+              "word": "prova",
+              "bestIdPicts": [
+                2462
+              ]
+            },
+            "selectedId": 2462,
+            "settings": {
+              "fitzgerald": "#2222ff"
+            }
+          },
+          "cross": false,
+          "settings": {
+            "textPosition": "bottom"
+          }
+        }
+      ],
+      "1": [
+        {
+          "indexSequence": 0,
+          "img": {
+            "searched": {
+              "word": "prova",
+              "bestIdPicts": [
+                2462
+              ]
+            },
+            "selectedId": 2462,
+            "settings": {
+              "fitzgerald": "#2222ff"
+            }
+          },
+          "cross": false,
+          "settings": {
+            "textPosition": "bottom"
+          }
+        },
+        {
+          "indexSequence": 1,
+          "img": {
+            "searched": {
+              "word": "prova",
+              "bestIdPicts": [
+                2463
+              ]
+            },
+            "selectedId": 2463,
+            "settings": {
+              "fitzgerald": "#2222ff"
+            }
+          },
+          "cross": false,
+          "settings": {
+            "textPosition": "bottom"
+          }
+        }
+      ]
+    },
+    "activeSAAC": 0,
+    "order": null,
+    "defaultSettings": null
+  }
+}
