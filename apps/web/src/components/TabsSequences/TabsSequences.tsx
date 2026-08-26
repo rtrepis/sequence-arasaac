@@ -16,7 +16,7 @@ import {
   addNewSequenceActionCreator,
   deleteLastSequenceActionCreator,
 } from "@features/sequence/store/documentSlice";
-import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
+import { BsFileEarmarkPlus, BsFileEarmarkMinus } from "react-icons/bs";
 import { useIntl } from "react-intl";
 import messages from "./TabsSequences.lang";
 
@@ -67,7 +67,7 @@ const TabsSequences = (): React.ReactElement => {
           size="small"
           aria-label={intl.formatMessage(messages.deleteLastSequence)}
         >
-          <AiFillMinusCircle
+          <BsFileEarmarkMinus
             size={isMobile ? 20 : 24}
             style={{ visibility: amount > 1 ? "visible" : "hidden" }}
           />
@@ -85,7 +85,7 @@ const TabsSequences = (): React.ReactElement => {
           size="small"
           aria-label={intl.formatMessage(messages.addSequence)}
         >
-          <AiFillPlusCircle size={isMobile ? 20 : 24} />
+          <BsFileEarmarkPlus size={isMobile ? 20 : 24} />
         </IconButton>
       </span>
     </Tooltip>

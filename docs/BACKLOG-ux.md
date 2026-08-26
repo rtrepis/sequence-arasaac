@@ -245,27 +245,63 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
 
 Ambigüitat real, però amb context (posició, títol de secció) que ajuda a desfer-la.
 
-### B1 — Una icona de núvol per a dues destinacions oposades 🔴 Oberta
+### B1 — Una icona de núvol per a dues destinacions oposades ✅ Resolta
 
-- **On**: `AppNavigationDrawer.tsx` — `AiOutlineCloudDownload` per a «Descarrega» (seqüència →
-  fitxer local) i per a «Carrega del núvol» (servidor → app)
-- **Proposta**: icona pròpia per a «Carrega del núvol», diferenciada de la de fitxer local.
+Branca `claude/backlog-branch-master-64uh75`.
 
-### B2 — L'engranatge porta a «Configuració» i també a «Administració» 🔴 Oberta
+En mirar-ho de prop el problema era més gros que l'entrada: **el núvol el portaven les dues
+operacions que no el toquen**, i la que hi va de debò portava un disquet.
 
-- **On**: `AppNavigationDrawer.tsx` — `AiOutlineSetting` reutilitzada per a dos destins
-- **Per què importa**: «Administració» només surt per a comptes admin, però quan surt comparteix
-  símbol amb els ajustos personals.
-- **Proposta**: icona d'escut o de panell per a «Administració».
+| Ítem | Abans | Ara |
+|---|---|---|
+| Descarrega (→ fitxer al dispositiu) | `AiOutlineCloudDownload` ☁︎↓ | `AiOutlineDownload` ↓ |
+| Carrega (← fitxer del dispositiu) | `AiOutlineCloudUpload` ☁︎↑ | `AiOutlineFolderOpen` 🗀 |
+| Desa al núvol (→ servidor) | `AiOutlineSave` (disquet) | `AiOutlineCloudUpload` ☁︎↑ |
+| Carrega del núvol (← servidor) | `AiOutlineCloudDownload` ☁︎↓ | *(igual)* |
 
-### B3 — El mateix «+» / «−» gestiona pictogrames i seqüències senceres 🔴 Oberta
+- **El núvol només surt quan hi ha servidor.** Importa més en aquesta app que en una altra: la
+  durabilitat hi té tres nivells (esborrany / fitxer / núvol) i el `DocumentStatusFab` existeix
+  només per explicar on és la feina. Si les icones menteixen sobre quin nivell toca una acció,
+  contradiuen el component que hi ha per aclarir-ho.
+- **No ho decideix el gust: ho decideix `DocumentStatusFab`**, que ja feia servir aquest sistema
+  (`MdOutlineCloudUpload` per a desar al núvol, `MdOutlineFileDownload` —sense núvol— per a
+  descarregar). Qui anava per lliure era el drawer.
+- «Carrega» acaba en carpeta oberta i no en `AiOutlineUpload`: amb les fletxes, «Descarrega» i
+  «Carrega» quedaven **el mateix dibuix mirallat**, i de costat en una llista a 24px no es
+  distingien (verificat amb captura). La carpeta, a més, diu la veritat: no es puja res enlloc, es
+  tria un fitxer.
+- Queden amb la icona antiga `ButtonWithFileLoad` i `ButtonWithModalDownload`, que són codi mort
+  (verificat de nou); van amb C4.
 
-- **On**: `PictogramAmount.tsx` i `TabsSequences.tsx` — `AiFillPlusCircle` / `AiFillMinusCircle` a
-  totes dues
-- **Per què importa**: conviuen a la mateixa pantalla d'edició amb la mateixa forma i color;
-  només canvien de mida i posició. Esborrar una seqüència per error costa molt més que esborrar un
-  pictograma.
-- **Proposta**: reservar el cercle ple per a pictogrames; pàgina amb +/− per a seqüències.
+### B2 — L'engranatge porta a «Configuració» i també a «Administració» ✅ Resolta
+
+Branca `claude/backlog-branch-master-64uh75`.
+
+- «Administració» passa a `AiOutlineSafety` (escut), la primera opció que proposava l'entrada.
+- Provats i descartats: `AiOutlineDashboard` **és un velocímetre** —parla de rendiment, no de
+  panell— i `AiOutlineControl` (comandaments) s'assemblava massa a l'engranatge que precisament
+  havíem de deixar de repetir. `AiOutlineAppstore` (graella) servia però no diu res de qui hi pot
+  entrar. L'escut sí: el que separa `/admin` dels ajustos personals és que és **zona restringida**.
+- **Troballa nova, no resolta**: l'ítem del drawer és `primary="Administració"` **hardcodat**,
+  mentre tots els altres passen per `react-intl`. L'excepció declarada al `CLAUDE.md` és que la
+  *pàgina* `/admin` va només en català; el drawer no hi entra, i un admin amb l'app en francès hi
+  veu una paraula catalana. És un missatge, però no toca a B2. Vegeu C13.
+
+### B3 — El mateix «+» / «−» gestiona pictogrames i seqüències senceres ✅ Resolta
+
+Branca `claude/backlog-branch-master-64uh75`.
+
+- El **cercle ple** (`AiFillPlusCircle` / `AiFillMinusCircle`) queda reservat als pictogrames
+  (`PictogramAmount`). Les seqüències passen a **pàgina amb +/−**
+  (`BsFileEarmarkPlus` / `BsFileEarmarkMinus`), tal com proposava l'entrada.
+- Cal l'**«earmark»**: `BsFilePlus` es dibuixa com un rectangle arrodonit i es llegia com un botó
+  qualsevol; amb la cantonada doblegada sí que es llegeix com un full. Descartat el parell de
+  Tabler pel motiu que ja diu C3 (és de traç i desentona amb Ant i Material).
+- És `bs`, una família que l'app ja fa servir i que és a la mateixa pantalla (`BsInfoCircle`, dins
+  del mateix `PictogramAmount`).
+- **El que això no arregla**: `deleteLastSequence` esborra la seqüència sencera amb tots els seus
+  pictogrames, **sense confirmació i sense desfer**. La icona ara distingeix l'abast, però la
+  xarxa de seguretat continua sense existir. Vegeu C14.
 
 ### B4 — Tres etiquetes catalanes per al mateix destí ✅ Resolta
 
@@ -678,3 +714,32 @@ Branca `claude/backlog-branch-master-64uh75`.
   `labelId`, que MUI posa al display i al `listbox`. Corregits també `SettingCardFont` i
   `SettingCardLang`, que arrossegaven el mateix error d'ençà que es van migrar.
 - Els `TextField` sí que continuen amb `inputProps`: allà l'`<input>` és el control de debò.
+
+### C13 — L'ítem «Administració» del drawer és català hardcodat 🔴 Oberta
+
+*(Trobada en resoldre B2, fora del seu abast.)*
+
+- **On**: `AppNavigationDrawer.tsx` — `<ListItemText primary="Administració" />`, l'únic ítem del
+  drawer que no passa per `react-intl`
+- **Per què importa**: el `CLAUDE.md` declara una excepció perquè la **pàgina** `/admin` vagi només
+  en català (eina interna d'una sola persona). El drawer no hi entra: és superfície traduïda, i un
+  admin amb l'app en francès hi troba una paraula catalana enmig d'una llista francesa. L'enllaç
+  s'ha de poder llegir encara que el que hi ha darrere sigui una excepció declarada.
+- **Proposta**: un missatge `components.appNavigationDrawer.admin` als cinc idiomes. És una línia i
+  no toca l'excepció de la pàgina.
+
+### C14 — Esborrar una seqüència no demana confirmació ni es pot desfer 🔴 Oberta
+
+*(Trobada en resoldre B3, fora del seu abast: B3 era d'icones.)*
+
+- **On**: `documentSlice.deleteLastSequence`, disparat des de `TabsSequences.tsx`
+- **Per què importa**: el reducer fa `delete previousDocument.content[lastKey]` i s'endú **tots els
+  pictogrames de la seqüència**. No hi ha confirmació, no hi ha `undo` a `features/sequence` i el
+  botó és a un pas del d'afegir. B3 ha fet que la icona digui l'abast (pàgina, no pictograma), però
+  distingir l'abast no és protegir-lo.
+- **Comparació**: «Document nou» (`startNewDocumentThunk`), que destrueix menys —conserva la
+  configuració i sovint la feina ja té còpia—, **sí que demana confirmació** quan no hi ha còpia
+  externa. El criteri no és coherent.
+- **Proposta**: confirmar només quan la seqüència té contingut (si és buida no hi ha res a
+  perdre), amb el mateix diàleg de confirmació que ja fa servir el botó flotant. Relacionada amb
+  B7, que demana el mateix per a «Esborrar» del menú contextual.

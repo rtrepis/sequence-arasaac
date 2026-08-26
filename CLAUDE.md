@@ -390,6 +390,13 @@ apps/
   només amb el clic** (`reason === "toggle"`): amb l'obertura per hover, el clic següent la tancaria
   i el botó semblaria mort, i amb la del focus es reobriria sola en tancar-se el diàleg de
   descàrrega. No surt mai a la impressió (`@media print`).
+- **El núvol només el porten les icones que toquen el núvol.** Amb tres nivells de durabilitat, les
+  icones han de dir quin toca cada acció: `AiOutlineDownload` (↓, sense núvol) per a descarregar el
+  `.saac`, `AiOutlineFolderOpen` per a carregar-lo —no una fletxa amunt, que quedava el mateix
+  dibuix mirallat que la de descarregar i no es distingia a 24px—, i el núvol **només** a «Desa al
+  núvol» (`AiOutlineCloudUpload`) i «Carrega del núvol» (`AiOutlineCloudDownload`). Un disquet o un
+  núvol a les operacions de fitxer local contradiuen el `DocumentStatusFab`, que existeix
+  precisament per dir on és la feina.
 - **«Document nou» (`startNewDocumentThunk`) és l'única porta a `resetDocument`** i sempre esborra
   l'esborrany: buidar la pantalla sense esborrar-lo deixaria la feina antiga a punt de ressuscitar
   al primer refresc. Conserva la configuració per defecte —és de l'usuari, no del document— i
