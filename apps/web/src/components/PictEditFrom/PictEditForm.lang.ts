@@ -8,8 +8,14 @@ const messages = defineMessages({
   },
   reset: {
     id: "components.pictEdit.reset",
-    defaultMessage: "Restore",
-    description: "Restablir els settings del pictograma als valors per defecte globals",
+    defaultMessage: "Restore pictogram",
+    description:
+      "Botó que torna aquest pictograma als valors per defecte de l'usuari",
+  },
+  tooltipReset: {
+    id: "components.pictEdit.tooltipReset",
+    defaultMessage: "Return this pictogram to your default values",
+    description: "Tooltip del botó de restaurar el pictograma",
   },
 });
 

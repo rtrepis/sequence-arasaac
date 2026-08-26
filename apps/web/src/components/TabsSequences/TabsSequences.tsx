@@ -17,9 +17,12 @@ import {
   deleteLastSequenceActionCreator,
 } from "@features/sequence/store/documentSlice";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
+import { useIntl } from "react-intl";
+import messages from "./TabsSequences.lang";
 
 const TabsSequences = (): React.ReactElement => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const value = useAppSelector((state) => state.document.activeSAAC);
@@ -53,7 +56,7 @@ const TabsSequences = (): React.ReactElement => {
 
   const removeButton = (
     <Tooltip
-      title="Eliminar última seqüència"
+      title={intl.formatMessage(messages.deleteLastSequence)}
       style={{ visibility: amount > 1 ? "visible" : "hidden" }}
     >
       <span>
@@ -62,6 +65,7 @@ const TabsSequences = (): React.ReactElement => {
           onClick={handleDeleteLastSequence}
           disabled={amount <= 1}
           size="small"
+          aria-label={intl.formatMessage(messages.deleteLastSequence)}
         >
           <AiFillMinusCircle
             size={isMobile ? 20 : 24}
@@ -73,9 +77,14 @@ const TabsSequences = (): React.ReactElement => {
   );
 
   const addButton = (
-    <Tooltip title="Afegir seqüència">
+    <Tooltip title={intl.formatMessage(messages.addSequence)}>
       <span>
-        <IconButton color="secondary" onClick={handleAddSequence} size="small">
+        <IconButton
+          color="secondary"
+          onClick={handleAddSequence}
+          size="small"
+          aria-label={intl.formatMessage(messages.addSequence)}
+        >
           <AiFillPlusCircle size={isMobile ? 20 : 24} />
         </IconButton>
       </span>
@@ -94,7 +103,7 @@ const TabsSequences = (): React.ReactElement => {
             scrollButtons="auto"
             value={value}
             onChange={handleChange}
-            aria-label="sequence number"
+            aria-label={intl.formatMessage(messages.sequenceNumber)}
             sx={{ minHeight: 36 }}
           >
             {tabs}
@@ -124,7 +133,7 @@ const TabsSequences = (): React.ReactElement => {
           variant="scrollable"
           value={value}
           onChange={handleChange}
-          aria-label="sequence number"
+          aria-label={intl.formatMessage(messages.sequenceNumber)}
           sx={{ borderRight: 1, borderColor: "divider", width: 100 }}
         >
           {tabs}

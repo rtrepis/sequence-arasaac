@@ -267,28 +267,73 @@ Ambigüitat real, però amb context (posició, títol de secció) que ajuda a de
   pictograma.
 - **Proposta**: reservar el cercle ple per a pictogrames; pàgina amb +/− per a seqüències.
 
-### B4 — Tres etiquetes catalanes per al mateix destí 🔴 Oberta
+### B4 — Tres etiquetes catalanes per al mateix destí ✅ Resolta
 
-- **On**: `AppNavigationDrawer.tsx` («Edita» / «Previsualitza») vs `TabsEditView.tsx` («Editar» /
-  «Vista») — mateixes icones, mateix destí
-- **Proposta**: un únic parell de missatges reutilitzat als dos llocs.
+Branca `claude/backlog-branch-master-64uh75`.
 
-### B5 — Quatre textos per al botó «restaurar per defecte» 🔴 Oberta
+- Els dos parells de missatges (`components.appNavigationDrawer.editView`/`previewView` i
+  `components.toggleButtonEditViewPages.edit`/`view.title`) s'han fos en un de sol,
+  `shared.navigation.edit` / `shared.navigation.view`, a `src/shared/messages/navigation.lang.ts`.
+  Els consumeixen `TabsEditView` i `AppNavigationDrawer`.
+- El parell unificat és **«Edició» / «Vista»**: noms als dos costats. Els tres candidats eren
+  «Editar/Vista» (el dels tabs), «Edita/Previsualitza» (el del drawer) i aquest.
+- Mana el nom perquè l'app ja separa **destins (noms)** d'**accions (verbs)** —al drawer, Inici ·
+  Novetats · Configuració contra Descarrega · Carrega— i perquè l'altra tira de tabs, la del modal
+  de configuracions, és tota de noms (Usuari · Pictogrames · **Vista** · Vocabulari personal).
+  `Editar / Vista` era l'únic parell desaparellat de l'app, i qui hi desentonava era «Editar»:
+  «Vista» ja és com la configuració anomena aquesta mateixa pàgina.
+- L'argument decisiu és l'estàndard de mòbil: per sota de `sm` **el tab seleccionat és l'únic que
+  conserva el text**, o sigui que aquell text diu *on ets*, no *què pots fer*. Un infinitiu com a
+  única etiqueta visible es llegeix com una acció pendent quan de fet ja hi ets. I no costa amplada:
+  «Edició» són els mateixos sis caràcters que «Editar».
+- **La regla és per idioma, no una traducció mecànica**: canvien ca («Edició»), es («Edición») i fr
+  («Édition», que a més treu l'anglicisme «Éditer» — l'estàndard francès de menús és *Édition*). En
+  queden fora **en** («Edit») i **it** («Modifica»), perquè en aquestes dues llengües el terme
+  estàndard del menú ja és el que hi havia i «Editing» hi sonaria estrany.
+- Els ids porten el prefix `shared.` i no el nom d'un component, perquè el destí és de l'app i no de
+  qui hi porta. Els antics anomenaven `toggleButtonEditViewPages`, un component que ja no existeix.
+- Fixat a `e2e/accessible-names.spec.ts`: el tab i l'ítem del drawer han de dir el mateix.
 
-- **On**: `DefaultForm`, `ViewSettingsPanel`, `ViewSquenceSettings`, `PictEditForm` —
-  `MdSettingsBackupRestore` amb «Restableix» / «Restableix» / «Restaurar per defecte» / «Valors per
-  defecte»
-- **Per què importa**: l'abast real difereix (un pictograma / la vista / la sessió / tota la
-  configuració), cosa que justifica un matís — però no quatre formulacions.
-- **Proposta**: patró únic «Restaura [àmbit]».
+### B5 — Quatre textos per al botó «restaurar per defecte» ✅ Resolta
 
-### B6 — Els tooltips de seqüències són català hardcodat 🔴 Oberta
+Branca `claude/backlog-branch-master-64uh75`.
 
-- **On**: `TabsSequences.tsx` — «Afegir seqüència» / «Eliminar última seqüència», únic component de
-  la zona sense `react-intl`
-- **Per què importa**: un usuari d'es/en/fr/it hi veu català sense traduir, justament als botons que
-  afegeixen o eliminen una pàgina sencera.
-- **Proposta**: `TabsSequences.lang.ts` amb els dos tooltips.
+Patró únic **«Restaura [àmbit]»**: el verb no canvia mai, l'àmbit sí, i el tooltip diu **a quins
+valors** torna, que és on els quatre botons de debò es diferencien.
+
+| Component | Botó | Tooltip |
+|---|---|---|
+| `PictEditForm` | Restaura el pictograma | Torna aquest pictograma als teus valors per defecte |
+| `DefaultForm` | Restaura els pictogrames | Torna la configuració de pictogrames als valors de fàbrica |
+| `ViewSettingsPanel` | Restaura la vista | Torna la configuració de vista als valors de fàbrica |
+| `ViewSquenceSettings` | Restaura les seqüències | Torna totes les seqüències a la teva configuració desada |
+
+- Els dos primers van a valors **de l'usuari**; els dos del mig, a valors **de fàbrica**. El matís
+  que justificava el desori ara viu al tooltip, no en quatre verbs diferents.
+- `PictEditForm` era l'únic sense tooltip: n'hi hem posat un, perquè «Restaura el pictograma» sol no
+  diu a quins valors.
+- Els quatre `Tooltip` porten ara **`describeChild`**. Sense això MUI posa el títol com a
+  `aria-label` del fill i **tapa el text visible del botó**: el nom accessible passava a ser el
+  tooltip sencer, que no conté l'etiqueta que es veu (WCAG 2.5.3, «Label in Name», i qui fa servir
+  control per veu no pot dir el que llegeix). Amb `describeChild` el tooltip és `aria-describedby` i
+  el botó conserva el seu text. No aplica als botons només-icona, on el tooltip **és** el nom.
+- Resol de passada la col·lisió de `components.pictEdit.reset` que apuntava C4: la definició no
+  usada de `Modals/PictEditModal/PictEdit.lang.ts` s'ha esborrat, perquè en canviar el text les dues
+  haurien divergit en silenci.
+
+### B6 — Els tooltips de seqüències són català hardcodat ✅ Resolta
+
+Branca `claude/backlog-branch-master-64uh75`.
+
+- `TabsSequences.lang.ts` nou, amb tres missatges als cinc idiomes: «Afegeix una seqüència»,
+  «Elimina l'última seqüència» i «Número de seqüència».
+- El tercer és l'`aria-label` de les dues `Tabs` (mòbil i escriptori), que deia `sequence number` en
+  anglès. Entrava per C5 i s'ha resolt aquí perquè és el mateix fitxer.
+- Els dos `IconButton` porten ara `aria-label` propi. Abans el nom accessible el posava el `Tooltip`
+  al `<span>` embolcallador, cosa que funcionava però deixava el botó sense nom si algun dia es treu
+  el tooltip; i era el que obligava els e2e a localitzar-lo amb `[aria-label="…"] button`.
+- Les dues proves e2e de `multiple-sequences` que hi apuntaven s'han actualitzat al selector directe
+  `button[aria-label="Afegeix una seqüència"]`.
 
 ### B7 — «Esborrar» viu al mig del menú contextual, sense desfer 🔴 Oberta
 
@@ -464,11 +509,14 @@ Inconsistència de forma o deute intern, sense un moment concret d'acció equivo
 - **Per què importa**: en tàctil el hover no existeix; el tooltip no s'obre. És decisió de producte
   (fer lloc a etiquetes visibles), no un canvi de nomenclatura.
 
-### C2 — «Eliminar» té tres representacions d'icona 🔴 Oberta
+### C2 — «Eliminar» té tres representacions d'icona ✅ Resolta
 
-- **On**: `AiOutlineDelete` (menú contextual, càrrega de núvol) vs `MdDeleteOutline` (vocabulari,
-  imatge pujada) vs sense icona (`PictEditModal`)
-- El text sempre és clar, així que no indueix a error: és inconsistència visual.
+Branca `claude/backlog-branch-master-64uh75`.
+
+- Tot passa a `AiOutlineDelete`: `UploadImageButton` i `WordProfileList` deixen `MdDeleteOutline`, i
+  el botó d'esborrar de `PictEditModal` —l'únic sense icona— n'estrena una.
+- S'ha triat la família `ai` perquè és la majoritària a l'app (vegeu C3); no és encara l'estàndard
+  d'icones que C3 demana, només deixa d'haver-hi tres dibuixos per a la mateixa acció destructiva.
 
 ### C3 — Quatre famílies d'icones barrejades sense patró 🔴 Oberta
 
@@ -486,32 +534,41 @@ Verificat el 2026-08-22:
 
 | Element | Problema |
 |---|---|
-| `ToggleButtonEditViewPages` | Cap import extern. Substituït per `TabsEditView`, però manté el seu `.lang.ts` amb «Edit»/«View» hardcodats |
+| ~~`ToggleButtonEditViewPages`~~ | ✅ Esborrat (B4/C5, branca `claude/backlog-branch-master-64uh75`), amb el seu `.lang.ts` i el seu `.styled.ts` |
 | `ButtonWithFileLoad` | Cap import extern |
 | `CopyRightSpeedDial` | `BarNavigation` l'importa però no el renderitza mai: el racó inferior dret era lliure quan s'hi va posar `DocumentStatusFab` (A1b) |
 | `ButtonWithModalDownload/ButtonWithModalDonwload.tsx` | El botó no s'importa enlloc; només se'n fa servir `ModalDownload.tsx` (des d'`AppNavigationDrawer`) |
-| `components.pictEdit.reset` | Definit dos cops: `PictEditForm.lang.ts` (usat, «Restore») i `PictEditModal/PictEdit.lang.ts` (no usat, «Reset to defaults») — mateix id, dos textos font |
+| ~~`components.pictEdit.reset`~~ | ✅ Resolt (B5, branca `claude/backlog-branch-master-64uh75`): esborrada la definició no usada de `PictEditModal/PictEdit.lang.ts` |
 | Missatges orfes | `upload`, `download`, `openMenu`, `langSelector`… a `BarNavigation.lang.ts` i `AppNavigationDrawer.lang.ts`, sense consumidor |
 | `features.backend.auth.documentSaved` | Orfe des de B12: el desat confirma amb `documentSavedNamed` (««{title}» s'ha desat al núvol»), que sempre té nom. Es conserva traduït als cinc idiomes sense que ningú el demani |
 
 **Per què importa**: no confon l'usuari final, però tocar `components.pictEdit.reset` en un dels dos
 fitxers pot canviar silenciosament el text de l'altre.
 
-### C5 — `aria-label` en anglès literal als grups de toggles 🔴 Oberta
+**Estat**: queden obertes les entrades sense ratllar de la taula. Les dues ratllades van caure de
+retruc en resoldre B4/B5/C5; la resta (`ButtonWithFileLoad`, `CopyRightSpeedDial`,
+`ButtonWithModalDownload` i els missatges orfes) continuen igual.
 
-*(Trobada en analitzar A3, fora del seu abast.)*
+### C5 — `aria-label` en anglès literal als grups de toggles ✅ Resolta
 
-- **On**: `SequenceControlsPanel.tsx` i `Modals/DefaultSettingsModal/ViewSettingsPanel.tsx` (`left`,
-  `center`, `right`, `top`, `bottom`), `TabsSequences.tsx` (`sequence number`),
-  `ToggleButtonEditViewPages.tsx` (`Toggle view/edit`, `edit`, `view` — component mort, vegeu C4).
-  `GlobalViewControls.tsx` (`landscape`, `portrait`, `row`, `column`) ja no hi és: en resoldre A4
-  els seus quatre toggles prenen l'`aria-label` del mateix missatge que el tooltip.
-- **Per què importa**: mateixa causa que A3, però molt menys greu: aquests toggles viuen dins d'un
-  `SettingRow` amb títol traduït, així que el context el dona la fila. Tot i així són noms
-  accessibles en anglès en una app de 5 idiomes.
-- **Proposta**: un `IconActionButton` compartit que prengui **un sol** missatge i en derivi tooltip i
-  `aria-label`, de manera que no puguin tornar a divergir. Val la pena si es fa d'una tirada per a
-  tots els casos; component a component no compensa el diff.
+Branca `claude/backlog-branch-master-64uh75`. S'ha fet d'una tirada, com deia la proposta.
+
+- **`IconToggleButton`** nou a `components/SettingsLayout/`: pren **un sol** `message` i en deriva el
+  `Tooltip` i l'`aria-label`. És l'única manera de declarar un botó només-icona dins d'un
+  `StyledToggleButtonGroup`. Substitueix el parell `<Tooltip><ToggleButton aria-label="left">`, que
+  era on el text traduït i el nom accessible es podien separar sense que res ho notés.
+- Migrats els setze botons: `SequenceControlsPanel` (6), `ViewSettingsPanel` (6) i
+  `GlobalViewControls` (4). Aquests últims ja tenien l'`aria-label` traduït des d'A4, però repetint
+  `intl.formatMessage(...)` dos cops per botó; ara el missatge s'escriu una vegada.
+- Es diu `IconToggleButton` i no `IconActionButton` perquè és específic del `ToggleButtonGroup`: en
+  MUI v6 el grup passa la selecció per **context**, no clonant els fills, i per això un embolcall
+  propi hi funciona sense reenviar cap prop. Un botó d'acció solt és un altre problema.
+- `TabsSequences.tsx` (`sequence number`) ha entrat per B6, que tocava el mateix fitxer.
+- `ToggleButtonEditViewPages.tsx` no s'ha traduït: **s'ha esborrat**. Era codi mort (cap import
+  extern, vegeu C4) i, a sobre, el seu `.lang.ts` declarava els mateixos ids que `TabsEditView`.
+  Traduir-lo hauria estat pagar per una pantalla que ningú veu.
+- `e2e/accessible-names.spec.ts` comprova que no queda cap `[aria-label="left|right|center|top|
+  bottom"]` al DOM, ni a la pàgina de vista ni al modal.
 
 ### C6 — Deute menut del menú contextual ✅ Resolta
 
@@ -605,16 +662,19 @@ Branca `claude/document-limit-users-sjig8o`.
   mateix `#FFCD94` que `extractPictSettings` fa servir per defecte— o no pintar vora quan no hi ha
   classificació. Decisió de producte, no de tipus.
 
-### C12 — El desplegable de mida de pàgina no té nom accessible 🔴 Oberta
+### C12 — El desplegable de mida de pàgina no té nom accessible ✅ Resolta
 
-*(Trobada en escriure les proves d'A9 i B9: el `getByLabel("Mida de pàgina")` no trobava res.)*
+Branca `claude/backlog-branch-master-64uh75`.
 
-- **On**: `components/ViewSequencesSettings/GlobalViewControls.tsx` — el `Select` de la mida de
-  pàgina, dins d'un `SettingRow title={…}` sense `labelId`
-- **Per què importa**: el títol de la fila és text al costat, no una etiqueta associada, així que
-  el control arriba al lector de pantalla com un `combobox` sense nom: es llegeix el valor («A4»)
-  però no què és. `SettingRow` ja té la prop `labelId` pensada per a això i el `Select` de MUI
-  accepta `labelId`; només falta lligar-los. Cal repassar si passa el mateix als altres controls
-  amb `SettingRow` que no siguin toggles.
-- **Proposta**: passar un `labelId` a `SettingRow` i al `Select` del mateix component. Mentrestant,
-  la prova e2e localitza el desplegable pel valor que mostra i ho diu al comentari.
+- `GlobalViewControls` passa el `labelId` del `SettingRow` al `Select`, i `download-pdf-page-format`
+  ja el localitza amb `getByLabel("Mida de pàgina")` en comptes del valor que mostra.
+- Repassats els altres controls no-toggle amb `SettingRow`, com demanava l'entrada. Hi faltava el
+  nom a tres més: els dos `Slider` de `ViewSettingsPanel` (mida i espai de pictogrames) i el
+  `TextField` de l'autor a `PrintFooterSection`.
+- **El nom ha d'anar amb la prop `labelId` del `Select`, no amb `inputProps`.** Amb
+  `inputProps={{ "aria-labelledby": … }}` el nom acaba a l'`<input>` natiu **amagat**, no al
+  `div[role="combobox"]` que és el que veu un lector de pantalla i el que rep el clic: el
+  `getByLabel` trobava l'input ocult i el clic hi rebotava contra el div de sobre. Ho fa bé la prop
+  `labelId`, que MUI posa al display i al `listbox`. Corregits també `SettingCardFont` i
+  `SettingCardLang`, que arrossegaven el mateix error d'ençà que es van migrar.
+- Els `TextField` sí que continuen amb `inputProps`: allà l'`<input>` és el control de debò.

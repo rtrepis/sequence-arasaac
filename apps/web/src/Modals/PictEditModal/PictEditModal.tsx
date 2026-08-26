@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import { MdMoreVert } from "react-icons/md";
+import { AiOutlineDelete } from "react-icons/ai";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { PictSequence } from "../../types/sequence";
 import { useRef, useState } from "react";
@@ -236,6 +237,7 @@ const PictEditModal = ({
             onClick={handleDelete}
             variant={"outlined"}
             color={"error"}
+            startIcon={<AiOutlineDelete />}
           >
             <FormattedMessage {...messages.delete} />
           </StyledButton>

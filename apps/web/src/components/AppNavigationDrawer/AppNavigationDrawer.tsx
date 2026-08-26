@@ -27,6 +27,7 @@ import {
 } from "react-icons/ai";
 import { useIntl } from "react-intl";
 import messages from "./AppNavigationDrawer.lang";
+import navigationMessages from "@shared/messages/navigation.lang";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
 import DefaultSettingsDialog from "../../Modals/DefaultSettingsModal/DefaultSettingsDialog";
 import ModalDownload from "../ButtonWithModalDownload/ModalDownload";
@@ -240,7 +241,9 @@ const AppNavigationDrawer = ({
               <ListItemIcon>
                 <AiOutlineEdit />
               </ListItemIcon>
-              <ListItemText primary={intl.formatMessage(messages.editView)} />
+              <ListItemText
+                primary={intl.formatMessage(navigationMessages.edit)}
+              />
             </ListItemButton>
 
             <ListItemButton
@@ -250,7 +253,7 @@ const AppNavigationDrawer = ({
                 <AiOutlineEye />
               </ListItemIcon>
               <ListItemText
-                primary={intl.formatMessage(messages.previewView)}
+                primary={intl.formatMessage(navigationMessages.view)}
               />
             </ListItemButton>
           </List>

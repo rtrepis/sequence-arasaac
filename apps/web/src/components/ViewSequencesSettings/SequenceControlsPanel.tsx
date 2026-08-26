@@ -5,7 +5,6 @@ import {
   Slider,
   Stack,
   Switch,
-  ToggleButton,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -26,7 +25,11 @@ import {
   SequenceViewSettings,
 } from "@/types/document";
 import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
-import { SettingRow, SETTINGS_ROW_GAP } from "@/components/SettingsLayout";
+import {
+  SettingRow,
+  IconToggleButton,
+  SETTINGS_ROW_GAP,
+} from "@/components/SettingsLayout";
 import messages from "./ViewSequencesSettings.lang";
 import {
   SEQ_VIEW_DEFAULT_SIZE_PICT,
@@ -139,21 +142,21 @@ const SequenceControlsPanel = ({
             onChange={onAlignmentHChange(seqKey)}
             aria-labelledby={`${labelId}-alignment-h`}
           >
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignLeft)}>
-              <ToggleButton value="left" aria-label="left">
-                <MdFormatAlignLeft />
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignHCenter)}>
-              <ToggleButton value="center" aria-label="center">
-                <MdFormatAlignCenter />
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignRight)}>
-              <ToggleButton value="right" aria-label="right">
-                <MdFormatAlignRight />
-              </ToggleButton>
-            </Tooltip>
+            <IconToggleButton value="left" message={messages.tooltipAlignLeft}>
+              <MdFormatAlignLeft />
+            </IconToggleButton>
+            <IconToggleButton
+              value="center"
+              message={messages.tooltipAlignHCenter}
+            >
+              <MdFormatAlignCenter />
+            </IconToggleButton>
+            <IconToggleButton
+              value="right"
+              message={messages.tooltipAlignRight}
+            >
+              <MdFormatAlignRight />
+            </IconToggleButton>
           </StyledToggleButtonGroup>
         </SettingRow>
 
@@ -168,21 +171,21 @@ const SequenceControlsPanel = ({
             onChange={onAlignmentVChange(seqKey)}
             aria-labelledby={`${labelId}-alignment-v`}
           >
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignTop)}>
-              <ToggleButton value="top" aria-label="top">
-                <MdVerticalAlignTop />
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignVCenter)}>
-              <ToggleButton value="center" aria-label="center">
-                <MdVerticalAlignCenter />
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title={intl.formatMessage(messages.tooltipAlignBottom)}>
-              <ToggleButton value="bottom" aria-label="bottom">
-                <MdVerticalAlignBottom />
-              </ToggleButton>
-            </Tooltip>
+            <IconToggleButton value="top" message={messages.tooltipAlignTop}>
+              <MdVerticalAlignTop />
+            </IconToggleButton>
+            <IconToggleButton
+              value="center"
+              message={messages.tooltipAlignVCenter}
+            >
+              <MdVerticalAlignCenter />
+            </IconToggleButton>
+            <IconToggleButton
+              value="bottom"
+              message={messages.tooltipAlignBottom}
+            >
+              <MdVerticalAlignBottom />
+            </IconToggleButton>
           </StyledToggleButtonGroup>
         </SettingRow>
       </Stack>
