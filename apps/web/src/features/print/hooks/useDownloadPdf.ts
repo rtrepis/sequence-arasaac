@@ -192,10 +192,15 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
         import("jspdf"),
       ]);
 
-      // Capturar el contingut real al 100% de resolució
-      // html2canvas ignora el transform:scale() visual — llegeix les dimensions CSS naturals
+      // Atenció: html2canvas **sí que** fa cas del `transform: scale()` visual del
+      // full —mesura amb `getBoundingClientRect()`—, així que el canvas surt més
+      // petit que `dimensions × escala` i la resolució del PDF depèn de com de
+      // reduïda es vegi la previsualització. Aquí el sostre es calcula sobre les
+      // dimensions naturals, que és el cas pitjor i deixa el guard pel cantó
+      // segur; que la captura hi vagi lligada és un defecte a part (backlog B16).
+      const captureScale = captureScaleFor(pageFormat.dimensions);
       const canvas = await html2canvas(contentEl, {
-        scale: captureScaleFor(pageFormat.dimensions),
+        scale: captureScale,
         useCORS: true,
         allowTaint: true,
         logging: false,
@@ -226,7 +231,21 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
       // Val més una fallada visible —la mateixa que ja reporta qualsevol altre
       // error d'aquí— que desar un full en blanc dient que ha anat bé.
       if (isCanvasBlank(canvas)) {
-        reportFailure({ code: PDF_EMPTY_CANVAS, isTransient: false });
+        reportFailure({
+          code: PDF_EMPTY_CANVAS,
+          isTransient: false,
+          // Els sostres de dalt encara no s'han validat en cap dispositiu real
+          // (backlog B14) i aquests números són l'única manera de fer-ho: saber
+          // que una captura ha sortit en blanc no serveix de res si no es diu a
+          // quina mida ha passat. El `userAgent` ja el desa el servidor.
+          // El canvas és la mida de veritat; la del full i l'escala hi van al
+          // costat perquè es vegi la diferència que hi introdueix B16.
+          detail:
+            `${pageFormat.size} ${pageFormat.orientation} ` +
+            `full ${pageFormat.dimensions.width}×${pageFormat.dimensions.height}, ` +
+            `escala ${captureScale.toFixed(2)}, ` +
+            `canvas ${canvas.width}×${canvas.height}`,
+        });
         return;
       }
 

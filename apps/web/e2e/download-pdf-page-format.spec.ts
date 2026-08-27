@@ -150,4 +150,12 @@ test("una captura en blanc es diu, i no es desa cap full buit", async ({
     code: "PDF_EMPTY_CANVAS",
     context: "pdf-export",
   });
+
+  // El codi sol no serveix per decidir el llindar de B14: cal saber a quina mida
+  // ha passat. El detall porta el format, les dimensions del full, l'escala
+  // aplicada i el canvas que n'ha sortit (el `userAgent` ja el desa el servidor).
+  const detail = String(reported[0].detail);
+  expect(detail).toMatch(
+    /^A4 (landscape|portrait) full \d+×\d+, escala \d+\.\d{2}, canvas \d+×\d+$/,
+  );
 });
