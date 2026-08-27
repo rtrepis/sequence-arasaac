@@ -36,26 +36,17 @@
   "components.appNavigationDrawer.download": {
     "defaultMessage": "Scarica"
   },
-  "components.appNavigationDrawer.langSelector": {
-    "defaultMessage": "Lingua"
-  },
   "components.appNavigationDrawer.load": {
     "defaultMessage": "Carica"
   },
   "components.appNavigationDrawer.news": {
     "defaultMessage": "Novità"
   },
-  "components.appNavigationDrawer.openMenu": {
-    "defaultMessage": "Apri menu"
-  },
   "components.appNavigationDrawer.settings": {
     "defaultMessage": "Impostazioni"
   },
-  "components.appNavigationDrawer.settingsClose": {
-    "defaultMessage": "Chiudi"
-  },
-  "components.appNavigationDrawer.settingsTitle": {
-    "defaultMessage": "Impostazioni predefinite"
+  "components.appNavigationDrawer.admin": {
+    "defaultMessage": "Amministrazione"
   },
   "components.appNavigationDrawer.welcome": {
     "defaultMessage": "Home"
@@ -77,14 +68,6 @@
   "components.barNavigation.view.title": {
     "defaultMessage": "Vista",
     "description": "Title Page"
-  },
-  "components.barNavigation.welcome.title": {
-    "defaultMessage": "Benvenuto",
-    "description": "Title Page"
-  },
-  "components.buttonWithFileLoad.load.label": {
-    "defaultMessage": "Carica",
-    "description": "helper text"
   },
   "components.buttonWithModalDownload.defaultSettings.label": {
     "defaultMessage": "Impostazioni predefinite",
@@ -125,10 +108,6 @@
   "components.defaultSettings.close": {
     "defaultMessage": "chiudi",
     "description": "close Settings Default "
-  },
-  "components.defaultSettings.download": {
-    "defaultMessage": "Salva le impostazioni in un file locale",
-    "description": "Save settings to local file"
   },
   "components.defaultSettings.pictGuide": {
     "defaultMessage": "Anteprima",
@@ -177,14 +156,6 @@
     "defaultMessage": "Pittogrammi",
     "description": "Títol de la secció de mida i alineació de pictogrames al panell de vista"
   },
-  "components.viewSettingsPanel.orientationLandscape": {
-    "defaultMessage": "Orizzontale",
-    "description": "Opció d'orientació horitzontal de la pàgina"
-  },
-  "components.viewSettingsPanel.orientationPortrait": {
-    "defaultMessage": "Verticale",
-    "description": "Opció d'orientació vertical de la pàgina"
-  },
   "components.viewSettingsPanel.apply": {
     "defaultMessage": "Applica alla vista corrente",
     "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
@@ -195,10 +166,6 @@
   "components.defaultSettings.tab.vocabulary": {
     "defaultMessage": "Vocabolario personale",
     "description": "Tab de vocabulari personal (paraules personalitzades)"
-  },
-  "components.defaultSettings.upload": {
-    "defaultMessage": "Carica le impostazioni da un file locale",
-    "description": "Load settings from local file"
   },
   "components.defaultSettings.userPanel.interfaceLanguage": {
     "defaultMessage": "Interfaccia",
@@ -212,19 +179,12 @@
     "defaultMessage": "Impostazioni utente salvate",
     "description": "Snackbar quan els settings d'usuari s'han desat correctament"
   },
-  "components.defaultSettings.userPanel.saveError": {
-    "defaultMessage": "Errore nel salvataggio delle impostazioni utente",
-    "description": "Snackbar quan hi ha error en desar els settings d'usuari"
-  },
   "components.defaultSettings.userPanel.sectionTitle": {
     "defaultMessage": "Lingua",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
   "components.defaultSettings.userPanel.panelHint": {
     "defaultMessage": "Impostazioni del tuo account: lingua dell'app, lingua di ricerca e tema. Valgono in tutta l'applicazione."
-  },
-  "components.defaultSettings.vocabularyPanel.title": {
-    "defaultMessage": "Vocabolario personale"
   },
   "components.defaultSettings.vocabularyPanel.sectionWord": {
     "defaultMessage": "Parola",
@@ -251,12 +211,6 @@
   },
   "components.defaultSettings.vocabularyPanel.updateButton": {
     "defaultMessage": "Aggiorna"
-  },
-  "components.defaultSettings.vocabularyPanel.uploadImage": {
-    "defaultMessage": "Carica immagine"
-  },
-  "components.defaultSettings.vocabularyPanel.removeImage": {
-    "defaultMessage": "Rimuovi immagine"
   },
   "components.defaultSettings.vocabularyPanel.loginRequired": {
     "defaultMessage": "Devi effettuare l'accesso per usare il vocabolario personale."
@@ -349,9 +303,6 @@
     "defaultMessage": "Esempio: Bambino, mettere, la cintura di sicurezza.",
     "description": "Helper text field"
   },
-  "components.newsNavBar.langSelector": {
-    "defaultMessage": "Lingua"
-  },
   "components.newsNavBar.mainNavigation": {
     "defaultMessage": "Navigazione principale"
   },
@@ -364,12 +315,6 @@
   "components.newsNavBar.skipToContent": {
     "defaultMessage": "Vai al contenuto principale"
   },
-  "components.newsNavBar.start": {
-    "defaultMessage": "Crea una sequenza"
-  },
-  "components.newsNavBar.welcome": {
-    "defaultMessage": "Home"
-  },
   "components.pictEdit.close": {
     "defaultMessage": "Chiudi",
     "description": "Close modal, edit pictogram"
@@ -377,10 +322,6 @@
   "components.pictEdit.delete": {
     "defaultMessage": "Elimina",
     "description": "Delete modal, edit pictogram"
-  },
-  "components.pictEdit.modal.description": {
-    "defaultMessage": "Puoi modificare i pittogrammi",
-    "description": "Description modal"
   },
   "components.pictEdit.modal.label": {
     "defaultMessage": "Modifica Pittogramma",
@@ -575,9 +516,6 @@
   "context.feedback.search.complete": {
     "defaultMessage": "{count} pittogrammi aggiunti"
   },
-  "context.feedback.search.error": {
-    "defaultMessage": "Errore durante la ricerca di pittogrammi"
-  },
   "context.feedback.search.loading": {
     "defaultMessage": "Ricerca di pittogrammi..."
   },
@@ -592,10 +530,6 @@
   "features.backend.auth.documentLoaded": {
     "defaultMessage": "Documento caricato",
     "description": "Missatge de confirmació quan es carrega un document del backend"
-  },
-  "features.backend.auth.documentSaved": {
-    "defaultMessage": "Documento salvato nel cloud",
-    "description": "Missatge de confirmació quan el document es desa al backend"
   },
   "features.backend.auth.email": {
     "defaultMessage": "Indirizzo e-mail",
@@ -1118,10 +1052,6 @@
   },
   "pages.viewSequence.tooltip.print": {
     "defaultMessage": "Stampa"
-  },
-  "pictogram.empty": {
-    "defaultMessage": "Vuoto",
-    "description": "Empty pictogram"
   },
   "setting.font-family.title": {
     "defaultMessage": "Famiglia",

@@ -8,7 +8,6 @@ import messages from "./BarNavigation.lang";
 import { Box, Stack } from "@mui/material";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
-import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
 import React, { useEffect, useState } from "react";
 import TabsEditView from "../TabsEditView/TabsEditView";
 import LogoMenu from "../LogoMenu/LogoMenu";

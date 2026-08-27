@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import React, { BaseSyntheticEvent, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import messages from "./ButtonWithModalDonwload.lang";
+import messages from "./ModalDownload.lang";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
@@ -43,13 +43,17 @@ const ModalDownload = ({
   const [fileName, setFileName] = useState("");
 
   const documentSaacIsNotEmpty = documentSaac.content[0].length > 0;
+  // Les caselles són controlades: el que es pinta i el que se n'endú el fitxer
+  // surten del mateix valor. Amb `defaultChecked` i un estat inicial a part,
+  // la configuració es colava dins del `.saac` amb la casella desmarcada
+  // (troballa C8 de l'auditoria d'UX).
   const [save, setSave] = useState({
     documentState: documentSaacIsNotEmpty,
-    defaultSettings: documentSaacIsNotEmpty,
+    defaultSettings: false,
   });
 
   const onChangeCheckbox = (event: BaseSyntheticEvent, checked: boolean) => {
-    const name = event.target.name;
+    const name = event.target.name as keyof typeof save;
 
     setSave((previous) => {
       return { ...previous, [name]: checked };
@@ -126,7 +130,7 @@ const ModalDownload = ({
           <FormGroup>
             {documentSaacIsNotEmpty && (
               <FormControlLabel
-                control={<Checkbox defaultChecked />}
+                control={<Checkbox checked={save.documentState} />}
                 label={intl.formatMessage(messages.sequence)}
                 onChange={onChangeCheckbox}
                 name="documentState"
@@ -134,7 +138,7 @@ const ModalDownload = ({
             )}
 
             <FormControlLabel
-              control={<Checkbox />}
+              control={<Checkbox checked={save.defaultSettings} />}
               label={intl.formatMessage(messages.defaultSettings)}
               onChange={onChangeCheckbox}
               name="defaultSettings"
