@@ -8,12 +8,6 @@
 import React, { ReactElement, useState } from "react";
 import {
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Paper,
   SpeedDial,
   SpeedDialAction,
@@ -39,6 +33,7 @@ import {
 } from "@features/sequence/store/documentStatusSlice";
 import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
+import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
 import messages from "./DocumentStatusFab.lang";
 
 const selectDocumentStatus = (state: RootState) => state.documentStatus;
@@ -292,25 +287,18 @@ const DocumentStatusFab = (): ReactElement => {
         />
       )}
 
-      <Dialog open={isConfirmOpen} onClose={() => setIsConfirmOpen(false)}>
-        <DialogTitle>{intl.formatMessage(messages.confirmTitle)}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {intl.formatMessage(messages.confirmBody)}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsConfirmOpen(false)}>
-            {intl.formatMessage(messages.confirmCancel)}
-          </Button>
-          <Button onClick={handleDownloadFirst}>
-            {intl.formatMessage(messages.confirmDownloadFirst)}
-          </Button>
-          <Button onClick={startNewDocument} color="error" variant="contained">
-            {intl.formatMessage(messages.confirmDiscard)}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmDialog
+        open={isConfirmOpen}
+        title={intl.formatMessage(messages.confirmTitle)}
+        body={intl.formatMessage(messages.confirmBody)}
+        confirmLabel={intl.formatMessage(messages.confirmDiscard)}
+        onConfirm={startNewDocument}
+        onCancel={() => setIsConfirmOpen(false)}
+        alternative={{
+          label: intl.formatMessage(messages.confirmDownloadFirst),
+          onClick: handleDownloadFirst,
+        }}
+      />
     </>
   );
 };

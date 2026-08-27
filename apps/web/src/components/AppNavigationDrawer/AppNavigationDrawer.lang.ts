@@ -12,16 +12,6 @@ const messages = defineMessages({
     defaultMessage: "Novetats",
     description: "Ítem de navegació a la llista de novetats",
   },
-  editView: {
-    id: "components.appNavigationDrawer.editView",
-    defaultMessage: "Edita",
-    description: "Ítem de navegació a la pàgina d'edició de seqüències",
-  },
-  previewView: {
-    id: "components.appNavigationDrawer.previewView",
-    defaultMessage: "Previsualitza",
-    description: "Ítem de navegació a la pàgina de previsualització",
-  },
   download: {
     id: "components.appNavigationDrawer.download",
     defaultMessage: "Descarrega",

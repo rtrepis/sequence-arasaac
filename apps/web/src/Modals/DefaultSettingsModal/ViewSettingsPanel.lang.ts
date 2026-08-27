@@ -38,13 +38,13 @@ const messages = defineMessages({
   },
   reset: {
     id: "components.viewSettingsPanel.reset",
-    defaultMessage: "Reset",
+    defaultMessage: "Restore view",
     description: "Botó per restablir els valors de fàbrica de la configuració de vista",
   },
   tooltipReset: {
     id: "components.viewSettingsPanel.tooltipReset",
-    defaultMessage: "Reset to application defaults",
-    description: "Tooltip del botó Reset",
+    defaultMessage: "Return view settings to factory values",
+    description: "Tooltip del botó de restaurar la configuració de vista",
   },
 });
 

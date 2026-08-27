@@ -157,13 +157,14 @@ const messages = defineMessages({
   },
   tooltipResetDefaults: {
     id: "pages.viewSequence.tooltip.resetDefaults",
-    defaultMessage: "Restore saved default settings",
-    description: "Tooltip del botó de restaurar la configuració per defecte",
+    defaultMessage: "Return all sequences to your saved settings",
+    description: "Tooltip del botó de restaurar les seqüències",
   },
   resetDefaults: {
     id: "pages.viewSequence.resetDefaults.label",
-    defaultMessage: "Restore defaults",
-    description: "Label del botó de restaurar la configuració per defecte",
+    defaultMessage: "Restore sequences",
+    description:
+      "Botó que torna totes les seqüències a la configuració desada de l'usuari",
   },
 });
 

@@ -36,9 +36,6 @@
   "components.appNavigationDrawer.download": {
     "defaultMessage": "Download"
   },
-  "components.appNavigationDrawer.editView": {
-    "defaultMessage": "Edit"
-  },
   "components.appNavigationDrawer.langSelector": {
     "defaultMessage": "Language"
   },
@@ -50,9 +47,6 @@
   },
   "components.appNavigationDrawer.openMenu": {
     "defaultMessage": "Open menu"
-  },
-  "components.appNavigationDrawer.previewView": {
-    "defaultMessage": "Preview"
   },
   "components.appNavigationDrawer.settings": {
     "defaultMessage": "Settings"
@@ -397,7 +391,7 @@
     "description": "Obre el menú d'accions del pictograma des del diàleg d'edició"
   },
   "components.pictEdit.reset": {
-    "defaultMessage": "Reset to defaults"
+    "defaultMessage": "Restore pictogram"
   },
   "components.pictEditSettings.settings.label": {
     "defaultMessage": "Settings Pictogram",
@@ -562,14 +556,6 @@
   "components.settingCardTheme.title": {
     "defaultMessage": "Theme",
     "description": "Títol de la card de selecció de tema"
-  },
-  "components.toggleButtonEditViewPages.edit.title": {
-    "defaultMessage": "Edit",
-    "description": "Title Page"
-  },
-  "components.toggleButtonEditViewPages.view.title": {
-    "defaultMessage": "View",
-    "description": "Title Page"
   },
   "context.feedback.applyAll.success": {
     "defaultMessage": "Applied to {count} pictograms"
@@ -1099,10 +1085,10 @@
     "defaultMessage": "Apply to all sequences"
   },
   "pages.viewSequence.tooltip.resetDefaults": {
-    "defaultMessage": "Restore saved default settings"
+    "defaultMessage": "Return all sequences to your saved settings"
   },
   "pages.viewSequence.resetDefaults.label": {
-    "defaultMessage": "Restore defaults"
+    "defaultMessage": "Restore sequences"
   },
   "pages.viewSequence.tooltip.orientationLandscape": {
     "defaultMessage": "Landscape page",
@@ -1412,16 +1398,16 @@
     "defaultMessage": "Bottom"
   },
   "components.viewSettingsPanel.reset": {
-    "defaultMessage": "Reset"
+    "defaultMessage": "Restore view"
   },
   "components.viewSettingsPanel.tooltipReset": {
-    "defaultMessage": "Reset to application defaults"
+    "defaultMessage": "Return view settings to factory values"
   },
   "components.defaultSettings.reset": {
-    "defaultMessage": "Reset"
+    "defaultMessage": "Restore pictograms"
   },
   "components.defaultSettings.tooltipReset": {
-    "defaultMessage": "Reset to application defaults"
+    "defaultMessage": "Return pictogram settings to factory values"
   },
   "pages.viewSequence.section.pageFormat": {
     "defaultMessage": "Page format",
@@ -1801,10 +1787,6 @@
     "defaultMessage": "Your current work is only in this browser. If you start from scratch, it is lost.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
   },
-  "features.sequence.status.confirmCancel": {
-    "defaultMessage": "Cancel",
-    "description": "Botó per no buidar el document"
-  },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Download it first",
     "description": "Botó per desar la feina en un fitxer abans de buidar-la"
@@ -1900,5 +1882,45 @@
   "features.print.pdf.error": {
     "defaultMessage": "The PDF could not be generated. (Code: {code})",
     "description": "Error quan la generació del PDF falla; el codi permet dir què ha passat sense obrir la consola"
+  },
+  "shared.navigation.edit": {
+    "defaultMessage": "Edit",
+    "description": "Name of the sequence editing page"
+  },
+  "shared.navigation.view": {
+    "defaultMessage": "View",
+    "description": "Name of the sequence view page"
+  },
+  "components.tabsSequences.addSequence": {
+    "defaultMessage": "Add sequence",
+    "description": "Tooltip of the button that adds a new sequence"
+  },
+  "components.tabsSequences.deleteLastSequence": {
+    "defaultMessage": "Delete last sequence",
+    "description": "Tooltip of the button that deletes the last sequence"
+  },
+  "components.tabsSequences.sequenceNumber": {
+    "defaultMessage": "Sequence number",
+    "description": "Accessible name of the sequence tab list"
+  },
+  "components.pictEdit.tooltipReset": {
+    "defaultMessage": "Return this pictogram to your default values",
+    "description": "Tooltip of the restore pictogram button"
+  },
+  "components.confirmDialog.cancel": {
+    "defaultMessage": "Cancel",
+    "description": "Button that closes a confirmation without doing the action"
+  },
+  "components.tabsSequences.confirmDeleteTitle": {
+    "defaultMessage": "Delete sequence {number}?",
+    "description": "Title of the confirmation for deleting the last sequence"
+  },
+  "components.tabsSequences.confirmDeleteBody": {
+    "defaultMessage": "It has {count, plural, one {# pictogram} other {# pictograms}}. Deleting the sequence takes them all with it and it cannot be undone.",
+    "description": "Body of the confirmation: what is lost when deleting the sequence"
+  },
+  "components.tabsSequences.confirmDelete": {
+    "defaultMessage": "Delete sequence",
+    "description": "Button confirming deletion of the last sequence"
   }
 }

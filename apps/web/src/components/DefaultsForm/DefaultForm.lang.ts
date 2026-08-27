@@ -39,13 +39,13 @@ const messages = defineMessages({
   },
   reset: {
     id: "components.defaultSettings.reset",
-    defaultMessage: "Reset",
+    defaultMessage: "Restore pictograms",
     description: "Botó per restablir els valors de fàbrica de la configuració de pictogrames",
   },
   tooltipReset: {
     id: "components.defaultSettings.tooltipReset",
-    defaultMessage: "Reset to application defaults",
-    description: "Tooltip del botó Reset de pictogrames",
+    defaultMessage: "Return pictogram settings to factory values",
+    description: "Tooltip del botó de restaurar la configuració de pictogrames",
   },
 });
 

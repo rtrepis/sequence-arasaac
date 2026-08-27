@@ -54,6 +54,12 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
   - `"compact"` — `Switch`, `InputColor`: **sempre en línia**, també en mòbil — apilar-los només malgastaria alçada, mai els falta amplada.
 
   **Mai reescriure aquest patró a mà** amb `Box sx={settingRowInline}` + `FormLabel`.
+- **`IconToggleButton`** — **única manera** de declarar un botó només-icona dins d'un
+  `StyledToggleButtonGroup`. Pren **un sol** `message` (un `MessageDescriptor`) i en deriva el
+  `Tooltip` i l'`aria-label`. Mai escriure `<Tooltip title={intl.formatMessage(x)}><ToggleButton
+  aria-label="left">`: amb dues fonts, el text traduït i el nom accessible se separen i el segon
+  acaba en anglès (era la troballa C5 del backlog). Funciona sense reenviar cap prop perquè el
+  `ToggleButtonGroup` de MUI v6 passa la selecció per **context**, no clonant els fills.
 
 ### Regles
 
@@ -61,6 +67,9 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
 - **Amplada estàndard tauleta**: `SETTINGS_MAX_WIDTH` (900) és l'amplada màxima del panell centrat. No hardcodejar amplades noves.
 - **Tot tab comença amb la seva guia**: `SettingsPanelHint` és el **primer fill de la columna de controls**, abans de la primera secció, a tots els tabs sense excepció. Format únic (mai un `Typography` solt ni un `Alert` escrit a mà) perquè l'usuari trobi sempre l'explicació al mateix lloc i amb el mateix aspecte. El text respon a què configura el tab i sobre què tindrà efecte; si el panell té estats (crear/editar), el text **canvia amb l'estat** — és la manera de dir on ets sense afegir cap encapçalament (cas del tab Vocabulari).
 - **Toggles = marca de la casa**: qualsevol selector d'opcions discretes usa `StyledToggleButtonGroup` (arrodonit 55×55, `primary` en seleccionat). Mai `ToggleButtonGroup` pla de MUI dins del modal de settings.
+- **Tot control ha de tenir nom accessible, i ha de sortir del títol de la seva fila**: `SettingRow` posa l'`id` que se li passa a `labelId` al `FormLabel`; el control l'ha de recollir. Un `Select` ho fa amb la seva prop **`labelId`** —**mai** amb `inputProps={{ "aria-labelledby": … }}`, que deixa el nom a l'`<input>` natiu amagat i no al `div[role="combobox"]`, l'element que llegeix i clica tothom—; un `Slider`, amb `aria-labelledby`; un `TextField`, amb `inputProps` (allà l'`<input>` sí que és el control). Sense això el control arriba com un «combobox» que llegeix el valor però no diu de què és.
+- **Un `Tooltip` sobre un botó *amb text* porta `describeChild`**: amb un títol de text, MUI el posa com a `aria-label` del fill i **tapa l'etiqueta visible**. El nom accessible passaria a ser el tooltip, que no conté el text del botó (WCAG 2.5.3 «Label in Name», i qui fa servir control per veu no pot dir el que llegeix). Amb `describeChild` el tooltip és `aria-describedby` i el botó conserva el seu text. **No** aplica als botons només-icona (`IconToggleButton`, els d'afegir/treure seqüència): allà el tooltip **és** el nom.
+- **Restaurar per defecte es diu sempre «Restaura [àmbit]»**: mateix verb a tot arreu, l'àmbit distingeix (`el pictograma` / `els pictogrames` / `la vista` / `les seqüències`) i el **tooltip diu a quins valors torna** — els de fàbrica o els que l'usuari té desats. És l'única diferència real entre els quatre botons i no pot viure en quatre verbs diferents.
 - **Criteri únic de fila**: tot ajust individual (slider, select, textfield, grup de toggles) porta el **títol a l'esquerra i el control a la dreta** (a partir de `sm`; vegeu *Comportament en mòbil*), sempre via `SettingRow`. `settingRowInline` és l'sx intern que hi ha a sota; `settingRow` (només padding vertical, sense flex) n'és la base. Cap dels dos s'aplica directament a una fila.
 - **Un ajust = una fila**: mai amuntegar diversos controls en una sola fila. Un bloc amb 3 controls (una vora, una tipografia) és una **secció pròpia** amb 3 files, no una fila composta. Els components que representen un bloc així (`SettingCardBorder`, `SettingCardFontGroup`) **es titulen ells mateixos** renderitzant el seu propi `SectionTitle` — així els contextos que no els embolcallen (com `PictEditForm`) obtenen la mateixa presentació sense canvis.
 - **Color/pes del títol de fila**: el títol d'un ajust individual sempre usa `cardTitle` (`SettingsCards.styled.ts` — fosc `text.primary`, `fontWeight: bold`). Ho aplica `SettingRow`. Mai el gris per defecte de `FormLabel` (`text.secondary`), que quedaria igual que el títol de secció. El títol de secció (`SectionTitle`) sempre és gris (`text.secondary`) i en majúscules — és l'únic nivell gris de la jerarquia.
@@ -116,7 +125,7 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 - **L'`aria-label` és sempre present** amb el text traduït — el tab no perd mai el seu nom accessible encara que el text no sigui visible, cosa crítica en una app d'AAC.
 - **Res d'encapçalaments duplicats dins el panell**: el nom del tab actiu el diu el propi tab, no un `h2` a sobre del contingut. Un títol repetit a cada panell és soroll en una pantalla on l'alçada és el recurs escàs.
 - **Els contenidors amb 3 tabs o més van `variant="scrollable"` amb `scrollButtons="auto"`** (cas de `DefaultSettingsDialog`): en mòbil el tab actiu amb text pot desbordar la barra, i les fletxes apareixen només on hi ha ratolí (MUI les amaga en tàctil, on ja hi ha swipe).
-- **El valor del tab es deriva de l'estat real, no d'estat local**: `TabsEditView` calcula el tab actiu des de `useLocation()`. Amb `useState` inicialitzat a un valor fix, recarregar `/view-sequence` marcaria «Editar» — i com que el tab actiu és l'únic amb text en mòbil, l'error seria doblement desorientador.
+- **El valor del tab es deriva de l'estat real, no d'estat local**: `TabsEditView` calcula el tab actiu des de `useLocation()`. Amb `useState` inicialitzat a un valor fix, recarregar `/view-sequence` marcaria «Edició» — i com que el tab actiu és l'únic amb text en mòbil, l'error seria doblement desorientador.
 - **Mai fer servir `Tooltip` per portar el text del tab en mòbil**: en tàctil només s'obre amb long-press (~700 ms), no és descobrible, xoca amb el menú contextual del sistema i es tanca sol. El tooltip és un ajut d'escriptori, mai l'única via al text.
 - **Res de text apilat sota la icona**: «Pictogrames» i «Vocabulari» no hi caben en un tab estret i acabarien truncats, i el tab creixeria en alçada empenyent l'AppBar de 42px.
 - **El breakpoint és `APP_TAB_LABEL_BREAKPOINT` (`sm`)**, el mateix de l'estàndard de configuracions. No multiplicar ruptures.
@@ -124,11 +133,21 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 - **Tot l'ajust responsiu va dins d'un `theme.breakpoints.down(sm)`**, mai amb objectes `{ xs: …, sm: … }`. Per sobre del breakpoint el tab ha de conservar **intactes** les mides natives de MUI. En particular, **mai declarar `fontSize: "inherit"` per a escriptori**: el tab heretaria l'`1.75rem` del `Toolbar` de `BarNavigation` (i el `1rem` del body al diàleg) en lloc del seu `0.875rem`, i tant la icona com el text es veurien desmesurats. Per això `appTabSx` i `appTabLabelSx` són funcions de `theme`, no objectes.
 - **Diana tàctil**: en `xs` el tab sense text baixa a `minWidth: 48` (el mínim WCAG de diana tàctil, no menys) i la icona creix a `1.4rem` per compensar la pèrdua del text. El tab seleccionat, que sí que mostra text, recupera les mides normals.
 - **El títol de la barra cedeix abans que els tabs**: a `DefaultSettingsDialog` el títol «Configuracions» s'amaga en `xs` (`display: { xs: "none", sm: "block" }`) i el nom del diàleg passa a l'`aria-label` del `Dialog`.
+- **Un destí es diu amb un nom; una acció, amb un verb**: els tabs i els ítems de navegació que
+  porten a un lloc són noms (**Edició** · **Vista**, i al drawer Inici · Novetats · Configuració);
+  els ítems que obren un diàleg i fan alguna cosa són verbs (Descarrega · Carrega). Els quatre tabs
+  del modal de configuracions són noms per la mateixa raó. El motiu és l'amagada d'etiquetes en
+  mòbil: com que el tab seleccionat és l'únic amb text, aquell text diu **on ets**, no què pots fer,
+  i un infinitiu sol es llegeix com una acció pendent. **La regla s'aplica per idioma, no traduint
+  mecànicament**: en anglès i en italià el terme estàndard del menú ja és «Edit» i «Modifica», i
+  forçar-hi un nom seria pitjor.
 - **Marca curta en mòbil**: el `h1` de `BarNavigation` mostra `APP_SHORT_NAME` (**«SqAAC»**) per sota de `sm` i «SequenciAAC» a partir de `sm`, amb l'`aria-label` del `h1` sempre amb el nom sencer. **No fer servir «SAAC» sol com a nom curt**: és el terme genèric del sector (Sistemes Augmentatius i Alternatius de Comunicació) i es llegiria com a categoria, no com a marca; «SqAAC» conserva l'arrel del nom propi.
 
 ### Estat de migració
 
-- ✅ **`TabsEditView`** — 2 tabs (Editar/Vista) via `AppTab`; valor derivat de `useLocation()`.
+- ✅ **`TabsEditView`** — 2 tabs (Edició/Vista) via `AppTab`; valor derivat de `useLocation()`.
+  Les etiquetes surten de `@shared/messages/navigation.lang`, **compartides amb el drawer**: el
+  mateix destí no es pot dir de dues maneres segons per on s'hi arriba (era B4 del backlog).
 - ✅ **`DefaultSettingsDialog`** — 4 tabs declarats a l'array `SETTINGS_TABS` (valor + icona + missatge) i renderitzats amb `map`, dins d'un `Tabs` scrollable.
 - ➖ **`TabsSequences`** — fora d'aquest estàndard: els seus tabs són números de seqüència, sense icona ni text traduïble; té la seva pròpia branca `isMobile` (horitzontal scrollable).
 
@@ -164,6 +183,34 @@ Regles:
   navega amb teclat el perd sense cap avís. `aria-disabled` + `aria-busy` i guarda al handler.
 - **Mai dos indicadors alhora** per a la mateixa operació (backdrop *i* spinner al botó).
 - **Mai una barra de progrés que no es pugui moure**: sense passos comptables, spinner.
+
+---
+
+## Estàndard d'accions destructives
+
+L'app **no té desfer**: no hi ha cap `undo` a `features/sequence`. Per això el que protegeix la
+feina és on viu cada acció i quan demana permís.
+
+- **El criteri és quant costa refer-ho, mai com sona l'acció.** Treure un pictograma es repeteix
+  molt i es refà amb un clic: **no** es confirma. Esborrar una seqüència se'n porta tots els seus:
+  **sí**. Posar un diàleg a tot el que sona greu acaba en gent que hi clica sense llegir.
+- **`ConfirmDialog`** (`components/ConfirmDialog/`) és la **única** confirmació de l'app. Mai
+  escriure un `Dialog` de confirmació a mà: si el criteri de dalt s'ha de poder aplicar, s'ha de
+  poder llegir en un sol lloc. Props: `title` (pregunta), `body` (**què es perd, en concret**),
+  `confirmLabel`, i `alternative` opcional per a la sortida que evita la pèrdua en comptes de
+  consumar-la («Descarrega-ho abans»), que va al mig perquè no és ni acceptar ni cancel·lar.
+- **«Cancel·la» és un sol missatge per a tota l'app** (`components.confirmDialog.cancel`), dins del
+  propi `ConfirmDialog`. Qui el crida no el passa.
+- **Res de confirmar en va**: si no hi ha res a perdre, no es pregunta. `TabsSequences` compta els
+  pictogrames **amb contingut** (`selectedId > 0`, imatge pujada o text) i amb la seqüència buida
+  esborra directament.
+- **El cos diu la xifra, no un avís genèric**: «Té 2 pictogrames…». Qui decideix sovint no està
+  mirant el que perdrà.
+- **Cap botó no rep el focus inicial**: se'l queda el diàleg (comportament de MUI). Així el lector
+  de pantalla llegeix títol i cos i Enter no consuma res. **Mai posar `autoFocus`** al botó
+  destructiu ni al de cancel·lar.
+- **A les llistes d'accions, la destructiva va sola i l'última**, separada per `Divider` i en
+  `error.main` (`MouseActionList`). Un grup buit per `omit` no deixa cap separador penjat.
 
 ---
 
@@ -371,6 +418,13 @@ apps/
   només amb el clic** (`reason === "toggle"`): amb l'obertura per hover, el clic següent la tancaria
   i el botó semblaria mort, i amb la del focus es reobriria sola en tancar-se el diàleg de
   descàrrega. No surt mai a la impressió (`@media print`).
+- **El núvol només el porten les icones que toquen el núvol.** Amb tres nivells de durabilitat, les
+  icones han de dir quin toca cada acció: `AiOutlineDownload` (↓, sense núvol) per a descarregar el
+  `.saac`, `AiOutlineFolderOpen` per a carregar-lo —no una fletxa amunt, que quedava el mateix
+  dibuix mirallat que la de descarregar i no es distingia a 24px—, i el núvol **només** a «Desa al
+  núvol» (`AiOutlineCloudUpload`) i «Carrega del núvol» (`AiOutlineCloudDownload`). Un disquet o un
+  núvol a les operacions de fitxer local contradiuen el `DocumentStatusFab`, que existeix
+  precisament per dir on és la feina.
 - **«Document nou» (`startNewDocumentThunk`) és l'única porta a `resetDocument`** i sempre esborra
   l'esborrany: buidar la pantalla sense esborrar-lo deixaria la feina antiga a punt de ressuscitar
   al primer refresc. Conserva la configuració per defecte —és de l'usuari, no del document— i

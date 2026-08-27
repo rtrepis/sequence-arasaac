@@ -1,4 +1,4 @@
-import { List, Stack, Box, Button } from "@mui/material";
+import { List, Stack, Box, Button, Tooltip } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import { PictogramCardDefaults, PictSequence } from "../../types/sequence";
@@ -280,14 +280,16 @@ const PictEditForm = ({
               />
             </li>
           </List>
-          <Button
-            variant="outlined"
-            onClick={handleReset}
-            startIcon={<MdSettingsBackupRestore />}
-            sx={{ mt: 1, ml: "auto", display: "flex" }}
-          >
-            {intl.formatMessage({ ...messages.reset })}
-          </Button>
+          <Tooltip title={intl.formatMessage(messages.tooltipReset)} describeChild>
+            <Button
+              variant="outlined"
+              onClick={handleReset}
+              startIcon={<MdSettingsBackupRestore />}
+              sx={{ mt: 1, ml: "auto", display: "flex" }}
+            >
+              {intl.formatMessage(messages.reset)}
+            </Button>
+          </Tooltip>
         </SettingAccordion>
       </Box>
     </Box>

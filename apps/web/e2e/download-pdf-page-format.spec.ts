@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 
 const PDF_BUTTON = "Descarregar PDF";
 const FULLSCREEN_OPTION = "Pantalla sencera";
-const DEFAULT_PAGE_SIZE = "A4";
+const PAGE_SIZE_LABEL = "Mida de pàgina";
 
 const MM_TO_PT = 72 / 25.4;
 
@@ -90,13 +90,9 @@ test("amb pantalla sencera no s'ofereix la descàrrega del PDF", async ({
 }) => {
   await gotoView(page);
 
-  // El desplegable s'identifica pel valor que mostra i no pel seu nom: avui no
-  // en té cap, perquè `GlobalViewControls` no passa el `labelId` de `SettingRow`
-  // al `Select` (backlog C12). Quan es resolgui, aquí hi anirà `getByLabel`.
-  await page
-    .getByRole("combobox")
-    .filter({ hasText: DEFAULT_PAGE_SIZE })
-    .click();
+  // El desplegable ja té nom accessible: `GlobalViewControls` lliga el `labelId`
+  // del `SettingRow` amb l'`aria-labelledby` del `Select` (backlog C12).
+  await page.getByLabel(PAGE_SIZE_LABEL).click();
   await page.getByRole("option", { name: FULLSCREEN_OPTION }).click();
 
   // Amb aquesta mida la barra només ofereix «pantalla completa»: ni imprimir ni

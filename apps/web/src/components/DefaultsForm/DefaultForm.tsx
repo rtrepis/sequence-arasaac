@@ -203,7 +203,7 @@ const DefaultForm = ({
 
         {onReset && (
           <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
-            <Tooltip title={intl.formatMessage(messages.tooltipReset)}>
+            <Tooltip title={intl.formatMessage(messages.tooltipReset)} describeChild>
               <Button
                 variant="text"
                 color="inherit"

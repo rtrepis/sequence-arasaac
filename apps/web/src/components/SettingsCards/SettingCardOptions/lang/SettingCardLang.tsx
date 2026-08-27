@@ -51,7 +51,7 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
         onChange={handleChange}
         fullWidth
         sx={{ borderRadius: "10px" }}
-        inputProps={{ "aria-labelledby": labelId }}
+        labelId={labelId}
       >
         {setting === "languagesSearch" &&
           langTranslateSearch.map((item) => (

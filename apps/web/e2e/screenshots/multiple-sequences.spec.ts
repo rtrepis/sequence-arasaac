@@ -130,8 +130,8 @@ test("multiple-sequences: captures i vídeo per la guia de novetats", async ({
   // =============================================
   // EDIT PAGE - PAS 2: Afegir seq 2 i navegar
   // =============================================
-  // Clic al botó "Afegir seqüència" (MUI Tooltip posa aria-label al span wrapper)
-  await page.locator('[aria-label="Afegir seqüència"] button').click();
+  // Clic al botó d'afegir seqüència (el botó porta l'aria-label traduït)
+  await page.locator('button[aria-label="Afegeix una seqüència"]').click();
   await page.waitForTimeout(500);
 
   // Navegar a la tab 2 (#vertical-tab-1)

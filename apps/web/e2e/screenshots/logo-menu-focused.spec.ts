@@ -162,7 +162,7 @@ test(
 
     // =============================================
     // COBERTA + PAS 1: Secció de navegació
-    // Protagonista: llista de navegació (Inici, Novetats, Edita, Previsualitza)
+    // Protagonista: llista de navegació (Inici, Novetats, Edició, Vista)
     // Nota: Inici i Novetats rendeixen com <a> (Link component), no com button
     // =============================================
 

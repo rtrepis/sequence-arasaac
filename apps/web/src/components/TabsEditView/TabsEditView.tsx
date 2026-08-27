@@ -4,7 +4,7 @@ import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 import { Link, useLocation } from "react-router-dom";
 import { useIntl } from "react-intl";
 import { AppTab, tabsStyled } from "../AppTabs";
-import messages from "./TabsEditView.lang";
+import navigationMessages from "@shared/messages/navigation.lang";
 
 const TabsEditView = () => {
   const intl = useIntl();
@@ -17,7 +17,7 @@ const TabsEditView = () => {
     <Tabs value={value} sx={tabsStyled}>
       <AppTab
         value="edit"
-        label={intl.formatMessage(messages.edit)}
+        label={intl.formatMessage(navigationMessages.edit)}
         icon={<AiOutlineEdit />}
         component={Link}
         to={"create-sequence"}
@@ -25,7 +25,7 @@ const TabsEditView = () => {
 
       <AppTab
         value="view"
-        label={intl.formatMessage(messages.view)}
+        label={intl.formatMessage(navigationMessages.view)}
         icon={<AiOutlineEye />}
         component={Link}
         to={"view-sequence"}

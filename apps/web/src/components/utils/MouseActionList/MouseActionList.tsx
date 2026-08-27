@@ -1,4 +1,5 @@
 import {
+  Divider,
   List,
   ListItemButton,
   ListItemIcon,
@@ -33,23 +34,48 @@ interface MouseActionListProps {
   onSelect?: (action: PictogramActionKey) => void;
 }
 
-/** Ordre i aspecte de cada acció; l'ordre és el que veu l'usuari */
-const actionItems: Array<{
+interface ActionItem {
   key: PictogramActionKey;
   icon: React.ReactElement;
   message: keyof typeof messages;
-}> = [
-  { key: "copy", icon: <AiOutlineCopy />, message: "copy" },
-  // Porta-retalls: la contrapartida de la còpia. El clip de paper d'abans és
-  // el símbol universal d'«adjuntar fitxer», no d'enganxar
-  { key: "paste", icon: <MdOutlineContentPaste />, message: "paste" },
-  { key: "edit", icon: <AiOutlineEdit />, message: "edit" },
-  { key: "delete", icon: <AiOutlineDelete />, message: "delete" },
-  { key: "insert", icon: <TbColumnInsertRight />, message: "insert" },
-  // Còpies apilades amb «+»: duplicar afegeix un pictograma a la seqüència,
-  // mentre que copiar (dos fulls) no la toca. El «+» és el senyal compartit
-  // amb «Insereix buit»
-  { key: "duplicate", icon: <MdOutlineLibraryAdd />, message: "duplicate" },
+  /** Marca visual d'irreversible: text i icona en `error` */
+  destructive?: boolean;
+}
+
+/**
+ * Els grups són l'ordre que veu l'usuari, separats per un `Divider`:
+ * el que fa servir més amunt, el que destrueix al capdavall i sol.
+ *
+ * «Esborra» estava encaixonat entre quatre accions inofensives i a un pas
+ * d'«Edita», que és la que més es pitja. Com que `features/sequence` no té
+ * `undo`, la distància i el color són tota la protecció que hi ha: aquí no
+ * s'hi posa confirmació a propòsit, perquè treure un pictograma es repeteix
+ * molt i es refà amb un clic —a diferència d'esborrar una seqüència sencera,
+ * que sí que la demana.
+ */
+const actionGroups: ActionItem[][] = [
+  [{ key: "edit", icon: <AiOutlineEdit />, message: "edit" }],
+  [
+    { key: "copy", icon: <AiOutlineCopy />, message: "copy" },
+    // Porta-retalls: la contrapartida de la còpia. El clip de paper d'abans és
+    // el símbol universal d'«adjuntar fitxer», no d'enganxar
+    { key: "paste", icon: <MdOutlineContentPaste />, message: "paste" },
+  ],
+  [
+    { key: "insert", icon: <TbColumnInsertRight />, message: "insert" },
+    // Còpies apilades amb «+»: duplicar afegeix un pictograma a la seqüència,
+    // mentre que copiar (dos fulls) no la toca. El «+» és el senyal compartit
+    // amb «Insereix buit»
+    { key: "duplicate", icon: <MdOutlineLibraryAdd />, message: "duplicate" },
+  ],
+  [
+    {
+      key: "delete",
+      icon: <AiOutlineDelete />,
+      message: "delete",
+      destructive: true,
+    },
+  ],
 ];
 
 const MouseActionList = ({
@@ -93,18 +119,30 @@ const MouseActionList = ({
         </ListSubheader>
       }
     >
-      {actionItems
-        .filter(({ key }) => !omit.includes(key))
-        .map(({ key, icon, message }) => (
-          <ListItemButton
-            key={key}
-            // Enganxar sense res copiat no té cap efecte possible
-            disabled={key === "paste" && !pasteObject}
-            onClick={() => handlerSelect(key)}
-          >
-            <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText primary={intl.formatMessage(messages[message])} />
-          </ListItemButton>
+      {actionGroups
+        .map((group) => group.filter(({ key }) => !omit.includes(key)))
+        // Un grup que es queda buit per `omit` no ha de deixar cap separador
+        .filter((group) => group.length > 0)
+        .map((group, groupIndex) => (
+          <React.Fragment key={group[0].key}>
+            {groupIndex > 0 && <Divider component="li" />}
+            {group.map(({ key, icon, message, destructive }) => (
+              <ListItemButton
+                key={key}
+                // Enganxar sense res copiat no té cap efecte possible
+                disabled={key === "paste" && !pasteObject}
+                onClick={() => handlerSelect(key)}
+                sx={destructive ? { color: "error.main" } : undefined}
+              >
+                <ListItemIcon
+                  sx={destructive ? { color: "error.main" } : undefined}
+                >
+                  {icon}
+                </ListItemIcon>
+                <ListItemText primary={intl.formatMessage(messages[message])} />
+              </ListItemButton>
+            ))}
+          </React.Fragment>
         ))}
     </List>
   );
