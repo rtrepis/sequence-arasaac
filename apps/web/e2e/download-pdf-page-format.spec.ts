@@ -155,7 +155,17 @@ test("una captura en blanc es diu, i no es desa cap full buit", async ({
   // ha passat. El detall porta el format, les dimensions del full, l'escala
   // aplicada i el canvas que n'ha sortit (el `userAgent` ja el desa el servidor).
   const detail = String(reported[0].detail);
-  expect(detail).toMatch(
-    /^A4 (landscape|portrait) full \d+×\d+, escala \d+\.\d{2}, canvas \d+×\d+$/,
+  const parsed = detail.match(
+    /^A4 (?:landscape|portrait) full (\d+)×(\d+), escala (\d+\.\d{2}), canvas (\d+)×(\d+)$/,
   );
+  expect(parsed, `detall inesperat: ${detail}`).not.toBeNull();
+
+  // I sobretot: el canvas ha de sortir a `full × escala`, que és B16. Abans es
+  // capturava amb el `transform: scale()` de la previsualització aplicat, o sigui
+  // que aquí sortia 2700×1854 en comptes de 3141×2154 i el PDF perdia resolució
+  // segons com de reduït es veiés el full. La tolerància és per l'arrodoniment
+  // d'html2canvas, que treballa amb el rectangle en decimals.
+  const [, sheetW, sheetH, scale, canvasW, canvasH] = parsed!;
+  expect(Number(canvasW)).toBeCloseTo(Number(sheetW) * Number(scale), -1);
+  expect(Number(canvasH)).toBeCloseTo(Number(sheetH) * Number(scale), -1);
 });

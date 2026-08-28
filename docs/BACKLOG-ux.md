@@ -526,15 +526,20 @@ d'IndexedDB i al fitxer `.saac`.
   el `PDF_EMPTY_CANVAS` apareix al registre d'errors del client (`context: "pdf-export"`), que és
   precisament per a què serveix.
 - **Fet**: l'informe porta el detall que cal per decidir-ho —format, mida del full, escala aplicada
-  i dimensions del canvas resultant (`A4 landscape full 1047×718, escala 3.00, canvas 2700×1854`)—
+  i dimensions del canvas resultant (`A4 landscape full 1047×718, escala 3.00, canvas 3141×2156`)—
   i el servidor ja hi desa el `userAgent`. Quan es va obrir aquesta entrada l'informe només portava
   el codi, o sigui que un cas real hauria dit que la captura va sortir en blanc **sense dir a quina
   mida**, que és l'únic número que fa falta.
+- **Més urgent des de B16**: mentre la captura sortia reduïda per l'escala visual, el sostre es
+  calculava sobre unes dimensions més grans que les reals i **sobrava marge sense saber-ho**. Ara ja
+  no: l'A3 apaïsat va exactament als 4.096 px de costat que Safari publica. O sigui que el número
+  publicat ha passat de ser un coixí a ser la vora, i validar-lo amb casos reals deixa de ser una
+  comoditat.
 - **Proposta**: esperar a tenir casos reals al registre abans de tocar cap número. Si no n'hi ha
   cap en un temps raonable, provar de pujar el costat a 8.192 (el límit dels iOS moderns) i veure
   si en surten; si en surten, el valor conservador d'ara ja era el bo.
 
-### B15 — Amb la mida «pantalla sencera» no es pot exportar res 🔴 Oberta
+### B15 — Amb la mida «pantalla sencera» no es pot exportar res ✅ Resolta (decisió de producte)
 
 *(Trobada en resoldre B9.)*
 
@@ -548,8 +553,15 @@ d'IndexedDB i al fitxer `.saac`.
 - **Proposta**: decidir-ho explícitament. O bé oferir el PDF també aquí —el full sortirà de la mida
   de la pantalla, que és el que la mida promet— o bé dir per què no hi és, en comptes de fer
   desaparèixer els botons en silenci.
+- **Decidit (2026-08-26)**: **es queda com està, i sense explicació.** «Pantalla sencera» és una
+  mida de pantalla, i cada pantalla en té una de diferent: un PDF fet des d'aquí no seria
+  reutilitzable enlloc. Es tracta igual que la impressora quan es tria una resolució de vídeo —
+  ningú espera imprimir un Full HD i ningú demana que se li expliqui—: es dona per evident que
+  d'aquesta mida no se n'exporta. Si arriben usuaris demanant-ho, es reobre.
+- **Estat**: es marca resolta perquè la pregunta que obria («decidir-ho explícitament») té resposta.
+  El codi no canvia.
 
-### B16 — La resolució del PDF depèn de com de reduïda es vegi la previsualització 🔴 Oberta
+### B16 — La resolució del PDF depèn de com de reduïda es vegi la previsualització ✅ Resolta
 
 *(Trobada instrumentant B14: els números de l'informe no quadraven.)*
 
@@ -566,9 +578,24 @@ d'IndexedDB i al fitxer `.saac`.
 - **Nota**: no compromet el sostre d'A9/B14. El guard es calcula sobre les dimensions naturals, que
   són més grans que el que es captura de debò, o sigui que erra pel cantó segur —però explica per
   què l'A3 baixa a 260 dpi quan potser no calia.
-- **Proposta**: passar `width`/`height` (i, si cal, `windowWidth`/`windowHeight`) a html2canvas amb
-  les dimensions naturals del full, o capturar sobre un clon sense transform. Cal tornar a validar
-  tot el camí del PDF: canvia la mida del canvas i, per tant, el que el sostre d'A9 hi fa.
+- **Resolta** a Branca `claude/backlog-branch-master-64uh75`. Es **compensa** l'escala visual en comptes d'anul·lar-la:
+  `visualScaleOf(contentEl)` la mesura (`getBoundingClientRect().width / offsetWidth`, que és
+  exactament el factor que el navegador aplica, transforms d'avantpassats inclosos) i es demana
+  `captureScale / visualScale`, de manera que quan html2canvas hi torni a aplicar la visual en
+  surti `natural × captureScale`.
+- **Per què no tocar el clon**: html2canvas calcula mides i posició de la captura sobre l'element
+  **original**, abans de clonar. Treure el `transform` a l'`onclone` no mouria els límits i, a
+  sobre, deixaria la posició descordada. Compensar l'escala és una línia i no toca el DOM.
+- **Mesurat abans i després** (Chromium 1.280×900, A4 apaïsat, full 1047×718 amb escala 3):
+  canvas **2700×1854 → 3141×2156**, és a dir de 248 a 288 dpi. Els 2px de l'alçada són
+  l'arrodoniment d'html2canvas, que treballa amb el rectangle en decimals.
+- **Fixat a la prova**: `download-pdf-page-format.spec.ts` ja no comprova només el format del
+  detall, sinó que **el canvas surti a `full × escala`**. Verificat que atrapa la regressió:
+  desfent la compensació, la prova falla amb «Expected 3141, Received 2700».
+- **Conseqüència per a B14**: el sostre d'A9 ara **cenyeix de debò**. Abans es calculava sobre les
+  dimensions naturals mentre la captura sortia més petita, o sigui que sobrava marge sense saber-ho;
+  ara l'A3 apaïsat va exactament als 4.096 px de costat que Safari publica com a límit. La
+  instrumentació de B14 passa de ser útil a ser necessària.
 
 ## Gravetat baixa
 

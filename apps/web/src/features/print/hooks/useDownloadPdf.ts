@@ -71,6 +71,24 @@ const captureScaleFor = ({ width, height }: PageDimensions): number =>
   );
 
 /**
+ * Escala visual amb què es veu ara mateix un element, transforms d'avantpassats
+ * inclosos.
+ *
+ * `offsetWidth` és l'amplada de disposició, que **no** té en compte cap
+ * `transform`; `getBoundingClientRect()` sí. El quocient, doncs, és el factor
+ * que el navegador hi aplica per pintar-lo.
+ *
+ * Torna 1 si no es pot mesurar (element amagat o de zero px): val més capturar
+ * a l'escala demanada que dividir per zero i quedar-se sense PDF.
+ */
+const visualScaleOf = (element: HTMLElement): number => {
+  const { width } = element.getBoundingClientRect();
+  const layoutWidth = element.offsetWidth;
+  if (!layoutWidth || !width) return 1;
+  return width / layoutWidth;
+};
+
+/**
  * Diu si la captura ha tornat en blanc.
  *
  * html2canvas pinta el fons de blanc opac, així que una captura bona té alfa
@@ -192,15 +210,21 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
         import("jspdf"),
       ]);
 
-      // Atenció: html2canvas **sí que** fa cas del `transform: scale()` visual del
-      // full —mesura amb `getBoundingClientRect()`—, així que el canvas surt més
-      // petit que `dimensions × escala` i la resolució del PDF depèn de com de
-      // reduïda es vegi la previsualització. Aquí el sostre es calcula sobre les
-      // dimensions naturals, que és el cas pitjor i deixa el guard pel cantó
-      // segur; que la captura hi vagi lligada és un defecte a part (backlog B16).
+      // html2canvas mesura amb `getBoundingClientRect()`, o sigui **amb el
+      // `transform: scale()` visual del full aplicat** (el posa `ViewSquenceSettings`
+      // per encabir la previsualització a la pantalla). Sense compensar-lo, el
+      // canvas sortia a `natural × escala visual × escala de captura` i la
+      // resolució del PDF depenia de com de reduïda es veiés la previsualització:
+      // en una tauleta, on es redueix molt més, queia proporcionalment.
       const captureScale = captureScaleFor(pageFormat.dimensions);
+      const visualScale = visualScaleOf(contentEl);
       const canvas = await html2canvas(contentEl, {
-        scale: captureScale,
+        // Es demana l'escala inflada perquè, un cop html2canvas hi torni a
+        // aplicar la visual, en surti exactament `natural × captureScale`. Es
+        // compensa i no s'anul·la el transform al clon perquè les mides i la
+        // posició de la captura les calcula html2canvas sobre l'element
+        // **original**, abans de clonar: tocar el clon no les mouria.
+        scale: captureScale / visualScale,
         useCORS: true,
         allowTaint: true,
         logging: false,
@@ -238,8 +262,9 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
           // (backlog B14) i aquests números són l'única manera de fer-ho: saber
           // que una captura ha sortit en blanc no serveix de res si no es diu a
           // quina mida ha passat. El `userAgent` ja el desa el servidor.
-          // El canvas és la mida de veritat; la del full i l'escala hi van al
-          // costat perquè es vegi la diferència que hi introdueix B16.
+          // Des que es compensa l'escala visual, el canvas ha de sortir
+          // exactament `full × escala`: si un informe no quadra, el problema és
+          // la captura i no el sostre.
           detail:
             `${pageFormat.size} ${pageFormat.orientation} ` +
             `full ${pageFormat.dimensions.width}×${pageFormat.dimensions.height}, ` +
