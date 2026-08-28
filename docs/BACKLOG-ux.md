@@ -239,7 +239,7 @@ triat és massa alt, ara es veurà i quedarà registrat; abans no.
 mostra l'error amb el codi, no s'anuncia cap èxit i **no es descarrega cap fitxer**. Sense el guard
 la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
 
-### A10 — Un document desat al núvol torna com a «Només en aquest dispositiu» 🔴 Oberta
+### A10 — Un document desat al núvol torna com a «Només en aquest dispositiu» ✅ Resolta
 
 *(Trobada a l'estudi de què passa en tornar més tard a la pestanya, branca `claude/app-behavior-inactive-tab-p2vc2l`.)*
 
@@ -258,6 +258,9 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
 - **Proposta**: portar `changedAt` dins de `DraftMeta` i restaurar-lo tal qual, en comptes de
   suplantar-lo amb `savedAt`. Per als esborranys ja escrits sense el camp, `durableAt ?? savedAt`
   conserva el comportament d'avui sense mentir en el cas durador.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`: `changedAt` viatja dins de
+  `DraftMeta` i la restauració el llegeix tal com és, amb `durableAt ?? savedAt` de recanvi per als
+  esborranys antics. Fixat a `e2e/draft-restore.spec.ts`, que abans del canvi falla.
 
 ### A11 — La sessió pot haver caducat i l'app continua dient que hi ha sessió 🔴 Oberta
 

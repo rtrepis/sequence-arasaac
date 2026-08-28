@@ -37,6 +37,14 @@ const IMAGE_REF_PREFIX = "draft-image:";
  */
 export interface DraftMeta {
   savedAt: number;
+  /**
+   * Moment de l'últim canvi de contingut. Hi ha de ser perquè `savedAt` no el
+   * pot substituir: l'esborrany s'escriu un segon després de desar (debounce),
+   * o sigui que sempre és posterior a `durableAt`, i en restaurar-lo com a
+   * «últim canvi» la comparació de `getDocumentDurability` no sortia bé mai —
+   * un document acabat de desar al núvol tornava dient que no era enlloc.
+   */
+  changedAt: number | null;
   durableAt: number | null;
   durableKind: DurableKind | null;
 }

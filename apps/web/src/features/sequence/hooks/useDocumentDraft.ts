@@ -76,8 +76,16 @@ export const useDocumentDraft = (): void => {
     if (isPristineDocument(current) || current === persistedRef.current) return;
 
     const savedAt = Date.now();
-    const { durableAt, durableKind } = statusRef.current;
-    const saved = await saveDraft(current, { savedAt, durableAt, durableKind });
+    // `changedAt` viatja tal com és: si es posés `savedAt` al seu lloc en
+    // restaurar, sempre semblaria que hi ha hagut un canvi després de l'últim
+    // desat
+    const { changedAt, durableAt, durableKind } = statusRef.current;
+    const saved = await saveDraft(current, {
+      savedAt,
+      changedAt,
+      durableAt,
+      durableKind,
+    });
 
     if (saved) {
       persistedRef.current = current;
@@ -107,11 +115,12 @@ export const useDocumentDraft = (): void => {
       if (!isPristineDocument(documentRef.current)) return;
 
       dispatch(loadDocumentSaacActionCreator(draft.document));
-      // El moment de l'últim canvi no es coneix: el que se sap és quan es va
-      // escriure l'esborrany, i és el que l'usuari va veure com a «desat»
       dispatch(
         documentStatusRestoredActionCreator({
-          changedAt: draft.savedAt,
+          // Els esborranys escrits abans que hi hagués el camp no en porten:
+          // amb `durableAt` el cas durador continua dient la veritat, i sense
+          // còpia fora `savedAt` deixa el comportament que ja tenien
+          changedAt: draft.changedAt ?? draft.durableAt ?? draft.savedAt,
           draftSavedAt: draft.savedAt,
           durableAt: draft.durableAt ?? null,
           durableKind: draft.durableKind ?? null,
