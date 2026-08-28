@@ -1024,6 +1024,15 @@
   "pages.viewSequence.resetDefaults.label": {
     "defaultMessage": "Restaurer les séquences"
   },
+  "pages.viewSequence.savePreferences.label": {
+    "defaultMessage": "Enregistrer comme préférences"
+  },
+  "pages.viewSequence.tooltip.savePreferencesCloud": {
+    "defaultMessage": "Enregistre ces réglages sur votre compte et les utilise par défaut dans les nouvelles séquences"
+  },
+  "pages.viewSequence.tooltip.savePreferencesLocal": {
+    "defaultMessage": "Enregistre ces réglages dans ce navigateur et les utilise par défaut dans les nouvelles séquences"
+  },
   "pages.viewSequence.tooltip.orientationLandscape": {
     "defaultMessage": "Page paysage",
     "description": "Tooltip i nom accessible del botó d'orientació apaïsada de la pàgina"

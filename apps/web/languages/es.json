@@ -1024,6 +1024,15 @@
   "pages.viewSequence.resetDefaults.label": {
     "defaultMessage": "Restaura las secuencias"
   },
+  "pages.viewSequence.savePreferences.label": {
+    "defaultMessage": "Guardar como preferencias"
+  },
+  "pages.viewSequence.tooltip.savePreferencesCloud": {
+    "defaultMessage": "Guarda estos ajustes en tu cuenta y los usa por defecto en las secuencias nuevas"
+  },
+  "pages.viewSequence.tooltip.savePreferencesLocal": {
+    "defaultMessage": "Guarda estos ajustes en este navegador y los usa por defecto en las secuencias nuevas"
+  },
   "pages.viewSequence.tooltip.orientationLandscape": {
     "defaultMessage": "Página apaisada",
     "description": "Tooltip i nom accessible del botó d'orientació apaïsada de la pàgina"
