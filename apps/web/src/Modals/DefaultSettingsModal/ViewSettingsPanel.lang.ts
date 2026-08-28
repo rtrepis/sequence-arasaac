@@ -16,16 +16,6 @@ const messages = defineMessages({
     defaultMessage: "Pictograms",
     description: "Títol de la secció de mida i alineació de pictogrames al panell de vista",
   },
-  orientationLandscape: {
-    id: "components.viewSettingsPanel.orientationLandscape",
-    defaultMessage: "Landscape",
-    description: "Opció d'orientació horitzontal de la pàgina",
-  },
-  orientationPortrait: {
-    id: "components.viewSettingsPanel.orientationPortrait",
-    defaultMessage: "Portrait",
-    description: "Opció d'orientació vertical de la pàgina",
-  },
   apply: {
     id: "components.viewSettingsPanel.apply",
     defaultMessage: "Apply to current view",

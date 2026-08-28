@@ -13,11 +13,6 @@ const messages = defineMessages({
     defaultMessage: "{count} pictograms added",
     description: "Message shown when search is complete",
   },
-  searchError: {
-    id: "context.feedback.search.error",
-    defaultMessage: "Error searching pictograms",
-    description: "Message shown when search fails",
-  },
 
   // Apply All
   applyAllSuccess: {

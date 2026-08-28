@@ -27,25 +27,10 @@ const messages = defineMessages({
     defaultMessage: "Configuració",
     description: "Ítem per obrir la configuració per defecte",
   },
-  settingsTitle: {
-    id: "components.appNavigationDrawer.settingsTitle",
-    defaultMessage: "Configuració per defecte",
-    description: "Títol del diàleg de configuració per defecte",
-  },
-  settingsClose: {
-    id: "components.appNavigationDrawer.settingsClose",
-    defaultMessage: "Tancar",
-    description: "Botó per tancar el diàleg de configuració",
-  },
-  langSelector: {
-    id: "components.appNavigationDrawer.langSelector",
-    defaultMessage: "Idioma",
-    description: "Etiqueta ARIA del selector d'idioma dins el drawer",
-  },
-  openMenu: {
-    id: "components.appNavigationDrawer.openMenu",
-    defaultMessage: "Obrir menú",
-    description: "Etiqueta ARIA per al botó que obre el drawer de navegació",
+  admin: {
+    id: "components.appNavigationDrawer.admin",
+    defaultMessage: "Administració",
+    description: "Ítem d'accés al panell d'administració (només per a admins)",
   },
 });
 

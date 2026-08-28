@@ -22,11 +22,6 @@ const messages = defineMessages({
     defaultMessage: "User settings saved",
     description: "Snackbar quan els settings d'usuari s'han desat correctament",
   },
-  saveError: {
-    id: "components.defaultSettings.userPanel.saveError",
-    defaultMessage: "Error saving user settings",
-    description: "Snackbar quan hi ha error en desar els settings d'usuari",
-  },
 });
 
 export default messages;
