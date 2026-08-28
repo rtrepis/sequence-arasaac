@@ -1372,6 +1372,58 @@
   "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
     "defaultMessage": "Este correo ya está verificado."
   },
+  "features.backend.auth.error.REFRESH_TOKEN_EXPIRED": {
+    "defaultMessage": "La sesión ha caducado. Vuelve a entrar para guardar en la nube; el trabajo no se ha perdido.",
+    "description": "Error: el token de refresco ha caducado"
+  },
+  "features.backend.auth.error.REFRESH_TOKEN_MISSING": {
+    "defaultMessage": "La sesión se ha cerrado en este navegador. Vuelve a entrar para guardar en la nube; el trabajo no se ha perdido.",
+    "description": "Error: no hay cookie de sesión"
+  },
+  "features.backend.auth.error.INVALID_REFRESH_TOKEN": {
+    "defaultMessage": "La sesión se ha cerrado desde otro dispositivo. Vuelve a entrar para guardar en la nube; el trabajo no se ha perdido.",
+    "description": "Error: la sesión se ha invalidado desde otro lugar"
+  },
+  "features.backend.auth.error.USER_NOT_FOUND": {
+    "defaultMessage": "Esta cuenta ya no existe. El trabajo sigue guardado en este dispositivo: descárgalo si quieres una copia.",
+    "description": "Error: la cuenta de la sesión ya no está"
+  },
+  "features.backend.auth.sessionExpired.titleExpired": {
+    "defaultMessage": "La sesión ha caducado",
+    "description": "Título del aviso cuando la sesión ha caducado por el paso del tiempo"
+  },
+  "features.backend.auth.sessionExpired.titleMissing": {
+    "defaultMessage": "La sesión se ha cerrado en este navegador",
+    "description": "Título del aviso cuando ya no hay cookie de sesión"
+  },
+  "features.backend.auth.sessionExpired.titleInvalid": {
+    "defaultMessage": "La sesión se ha cerrado desde otro dispositivo",
+    "description": "Título del aviso cuando la sesión se ha invalidado desde otro lugar"
+  },
+  "features.backend.auth.sessionExpired.titleSuspended": {
+    "defaultMessage": "Esta cuenta está suspendida",
+    "description": "Título del aviso cuando la cuenta ha sido suspendida"
+  },
+  "features.backend.auth.sessionExpired.titleGone": {
+    "defaultMessage": "Esta cuenta ya no existe",
+    "description": "Título del aviso cuando la cuenta no se encuentra"
+  },
+  "features.backend.auth.sessionExpired.bodyCanReturn": {
+    "defaultMessage": "El trabajo no se ha perdido: sigue guardado en este dispositivo. Para guardarlo en la nube, vuelve a entrar.",
+    "description": "Cuerpo del aviso de sesión caída cuando se puede volver a iniciar sesión"
+  },
+  "features.backend.auth.sessionExpired.bodyNoReturn": {
+    "defaultMessage": "El trabajo no se ha perdido: sigue guardado en este dispositivo. Descárgalo si quieres una copia, y contacta con nosotros si crees que es un error.",
+    "description": "Cuerpo del aviso de sesión caída cuando volver a entrar no serviría de nada"
+  },
+  "features.backend.auth.sessionExpired.action": {
+    "defaultMessage": "Vuelve a entrar",
+    "description": "Botón del aviso que abre el formulario de inicio de sesión"
+  },
+  "features.backend.auth.sessionExpired.dismiss": {
+    "defaultMessage": "Cerrar el aviso",
+    "description": "Botón para cerrar el aviso de sesión caída"
+  },
   "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
     "defaultMessage": "Debes verificar tu correo antes de guardar en la nube. Revisa tu bandeja de entrada."
   },

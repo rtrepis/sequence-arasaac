@@ -1372,6 +1372,58 @@
   "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
     "defaultMessage": "This email is already verified."
   },
+  "features.backend.auth.error.REFRESH_TOKEN_EXPIRED": {
+    "defaultMessage": "Your session has expired. Sign in again to save to the cloud; your work hasn't been lost.",
+    "description": "Error: the refresh token has expired"
+  },
+  "features.backend.auth.error.REFRESH_TOKEN_MISSING": {
+    "defaultMessage": "Your session was closed in this browser. Sign in again to save to the cloud; your work hasn't been lost.",
+    "description": "Error: there is no session cookie"
+  },
+  "features.backend.auth.error.INVALID_REFRESH_TOKEN": {
+    "defaultMessage": "Your session was closed from another device. Sign in again to save to the cloud; your work hasn't been lost.",
+    "description": "Error: the session was invalidated elsewhere"
+  },
+  "features.backend.auth.error.USER_NOT_FOUND": {
+    "defaultMessage": "This account no longer exists. Your work is still saved on this device: download it if you want a copy.",
+    "description": "Error: the session's account is gone"
+  },
+  "features.backend.auth.sessionExpired.titleExpired": {
+    "defaultMessage": "Your session has expired",
+    "description": "Notice title when the session expired over time"
+  },
+  "features.backend.auth.sessionExpired.titleMissing": {
+    "defaultMessage": "Your session was closed in this browser",
+    "description": "Notice title when the session cookie is gone"
+  },
+  "features.backend.auth.sessionExpired.titleInvalid": {
+    "defaultMessage": "Your session was closed from another device",
+    "description": "Notice title when the session was invalidated elsewhere"
+  },
+  "features.backend.auth.sessionExpired.titleSuspended": {
+    "defaultMessage": "This account is suspended",
+    "description": "Notice title when the account has been suspended"
+  },
+  "features.backend.auth.sessionExpired.titleGone": {
+    "defaultMessage": "This account no longer exists",
+    "description": "Notice title when the account can't be found"
+  },
+  "features.backend.auth.sessionExpired.bodyCanReturn": {
+    "defaultMessage": "Your work hasn't been lost: it's still saved on this device. To save it to the cloud, sign in again.",
+    "description": "Notice body when signing in again is possible"
+  },
+  "features.backend.auth.sessionExpired.bodyNoReturn": {
+    "defaultMessage": "Your work hasn't been lost: it's still saved on this device. Download it if you want a copy, and contact us if you think this is a mistake.",
+    "description": "Notice body when signing in again wouldn't help"
+  },
+  "features.backend.auth.sessionExpired.action": {
+    "defaultMessage": "Sign in again",
+    "description": "Notice button that opens the sign-in form"
+  },
+  "features.backend.auth.sessionExpired.dismiss": {
+    "defaultMessage": "Dismiss notice",
+    "description": "Button to dismiss the session notice"
+  },
   "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
     "defaultMessage": "You need to verify your email before saving to the cloud. Check your inbox."
   },
