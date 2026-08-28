@@ -2,7 +2,7 @@
 // Autenticat → una sola crida PUT /user/ui-settings.
 // Anònim → una sola escriptura a localStorage (clau userUi).
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { UserUiSettings, ViewSettings } from "../../../../types/ui";
+import { UserUiSettings } from "../../../../types/ui";
 import { WordProfile } from "@features/word-profile/model/WordProfile";
 import { RootState } from "../../../../app/store";
 import { saveUserUi } from "@features/user-settings/storage/settingsStorage";
@@ -11,31 +11,7 @@ import {
   classifyRequestFailure,
   RequestFailure,
 } from "@features/backend/api/requestFailure";
-import {
-  VIEW_DEFAULT_ALIGNMENT_H,
-  VIEW_DEFAULT_ALIGNMENT_V,
-  VIEW_DEFAULT_DIRECTION,
-  VIEW_DEFAULT_ORIENTATION,
-  VIEW_DEFAULT_PAGE_SIZE,
-  VIEW_DEFAULT_PICT_SPACE,
-  VIEW_DEFAULT_SEQ_SPACE,
-  VIEW_DEFAULT_SIZE_PICT,
-  VIEW_DEFAULT_AUTHOR,
-} from "@/configs/viewSettingsConfig";
-
-// Garanteix que tots els camps de viewSettings tinguin valor vàlid,
-// per si la BD té dades antigues sense camps nous (ex: alignmentH/V).
-const sanitizeViewSettings = (vs: ViewSettings): ViewSettings => ({
-  sizePict: vs.sizePict ?? VIEW_DEFAULT_SIZE_PICT,
-  pictSpaceBetween: vs.pictSpaceBetween ?? VIEW_DEFAULT_PICT_SPACE,
-  sequenceSpaceBetween: vs.sequenceSpaceBetween ?? VIEW_DEFAULT_SEQ_SPACE,
-  direction: vs.direction ?? VIEW_DEFAULT_DIRECTION,
-  alignmentH: vs.alignmentH ?? VIEW_DEFAULT_ALIGNMENT_H,
-  alignmentV: vs.alignmentV ?? VIEW_DEFAULT_ALIGNMENT_V,
-  pageSize: vs.pageSize ?? VIEW_DEFAULT_PAGE_SIZE,
-  orientation: vs.orientation ?? VIEW_DEFAULT_ORIENTATION,
-  author: vs.author ?? VIEW_DEFAULT_AUTHOR,
-});
+import { sanitizeViewSettings } from "@/configs/viewSettingsConfig";
 
 // Normalitza el camp fitzgerald d'un WordProfile: si per error antic s'ha
 // guardat com a objecte FitzgeraldColor { value, color }, extreu el color hex.

@@ -19,6 +19,7 @@
 // `PictApiAra.url` a Redux canvien de forma.
 import { DocumentSAAC } from "@/types/document";
 import { Sequence } from "@/types/sequence";
+import { ViewSettings } from "@/types/ui";
 import { DurableKind } from "@features/sequence/store/documentStatusSlice";
 
 const DB_NAME = "sequenciaac";
@@ -51,6 +52,16 @@ export interface DraftMeta {
 
 export interface DocumentDraft extends DraftMeta {
   document: DocumentSAAC;
+  /**
+   * Format de pàgina i ajustos globals de la vista (mida, orientació, direcció,
+   * separació entre seqüències, autor). Van **al costat** del document i mai a
+   * dins: el document és el contracte del `.saac` i del cos de l'API, i això és
+   * estat de sessió d'aquest navegador. Els ajustos per seqüència sí que són del
+   * document i ja hi viatgen.
+   *
+   * Opcional perquè els esborranys escrits abans d'existir el camp no en porten.
+   */
+  viewSettings?: ViewSettings;
 }
 
 /**
@@ -221,12 +232,13 @@ const restoreImages = (
 export const saveDraft = async (
   document: DocumentSAAC,
   meta: DraftMeta,
+  viewSettings: ViewSettings,
 ): Promise<boolean> => {
   const db = await openDatabase();
   if (!db) return false;
 
   const { document: skeleton, images } = externalizeImages(document);
-  const draft: DocumentDraft = { document: skeleton, ...meta };
+  const draft: DocumentDraft = { document: skeleton, ...meta, viewSettings };
 
   return runTransaction(db, "readwrite", (drafts, imageStore) => {
     drafts.put(draft, DRAFT_KEY);

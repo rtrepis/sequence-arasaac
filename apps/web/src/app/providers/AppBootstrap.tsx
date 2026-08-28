@@ -7,7 +7,7 @@ import {
   updateDefaultSettingsActionCreator,
   updateLangSettingsActionCreator,
   updateThemeActionCreator,
-  viewSettingsActionCreator,
+  applyUserViewSettingsActionCreator,
 } from "@features/user-settings/store/uiSlice";
 import { getStoredUserUi } from "../../features/user-settings/storage/settingsStorage";
 import { langTranslateApp } from "../../configs/languagesConfigs";
@@ -30,8 +30,10 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
       dispatch(updateDefaultSettingsActionCreator(storedUi.defaultSettings));
       dispatch(updateThemeActionCreator(storedUi.theme));
       dispatch(updateLangSettingsActionCreator({ app: storedUi.lang.app, search: storedUi.lang.search }));
+      // `applyUser…` i no `viewSettings…`: si l'esborrany ja ha restaurat el
+      // format amb què es treballava, mana aquell i no la preferència desada
       if (storedUi.viewSettings) {
-        dispatch(viewSettingsActionCreator(storedUi.viewSettings));
+        dispatch(applyUserViewSettingsActionCreator(storedUi.viewSettings));
       }
     } else {
       // Fallback: detecta l'idioma del navegador

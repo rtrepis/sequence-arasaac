@@ -17,6 +17,13 @@ export interface Ui {
   lang: { app: LangsApp; search: string; keywords: string[] };
   theme: ThemeMode;
   viewSettings: ViewSettings;
+  /**
+   * `viewSettings` ve de l'esborrany d'aquesta sessió i no de les preferències
+   * desades. Serveix perquè les preferències que arriben més tard —les del
+   * compte, que amb el servidor adormit poden trigar un minut— no reescriguin
+   * el format amb què s'estava treballant.
+   */
+  viewSettingsFromSession: boolean;
   defaultSettings: DefaultSettings;
   settingsActiveTab: SettingsTab;
   wordProfiles: WordProfile[];

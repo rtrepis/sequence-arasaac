@@ -260,7 +260,9 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
   conserva el comportament d'avui sense mentir en el cas durador.
 - **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`: `changedAt` viatja dins de
   `DraftMeta` i la restauració el llegeix tal com és, amb `durableAt ?? savedAt` de recanvi per als
-  esborranys antics. Fixat a `e2e/draft-restore.spec.ts`, que abans del canvi falla.
+  esborranys antics. Un canvi de format de pàgina escriu l'esborrany però **no** toca `changedAt`:
+  no és contingut del document i no viatja ni al `.saac` ni al núvol. Fixat a
+  `e2e/draft-restore.spec.ts`, que abans del canvi falla.
 
 ### A11 — La sessió pot haver caducat i l'app continua dient que hi ha sessió 🔴 Oberta
 
@@ -695,7 +697,7 @@ d'IndexedDB i al fitxer `.saac`.
   el conflicte. Amb `BroadcastChannel` es podria, a més, fer que la pestanya que torna es posi al
   dia; però amb la comprovació d'escriptura ja no es perd res, que és el que importa.
 
-### B20 — El format de pàgina no és del document i es perd en recarregar 🔴 Oberta
+### B20 — El format de pàgina no és del document i es perd en recarregar ✅ Resolta
 
 *(Mateixa branca.)*
 
@@ -710,6 +712,40 @@ d'IndexedDB i al fitxer `.saac`.
 - **Proposta**: desar `ui.viewSettings` dins de l'esborrany i restaurar-lo amb el document. És
   estat de sessió, no una preferència: desar-lo a l'esborrany no el converteix en preferència de
   l'usuari, que continua sent cosa del botó de desar.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`. Desar-ho era la meitat petita; el
+  que costava era que sobrevisqués als dos segons següents:
+  - **L'escriptura no s'arribava a disparar.** `persistedRef` guardava l'últim *document* escrit i
+    girar el full no el toca: ni el debounce (dependències `[document, persist]`) ni el flush
+    d'amagar la pestanya escrivien res. Ara la ref guarda la parella document + `viewSettings` i les
+    compara totes dues.
+  - **El muntatge.** `usePageFormat` i `useViewManager` copien el format a un estat local en
+    muntar-se i ja no el tornen a mirar; recarregant directament a `/view-sequence` la columna es
+    muntava abans que respongués IndexedDB. `documentStatus.draftRestoreSettled` marca que
+    l'arrencada ja ha mirat si hi havia esborrany —hi fos o no— i la pàgina de vista hi espera.
+  - **El backend.** `syncSettingsAfterAuth` tornava a aplicar el `viewSettings` del compte quan
+    responia Render, fins a un minut després. Ara les preferències entren per
+    `applyUserViewSettings`, que no fa res si `ui.viewSettingsFromSession` diu que el format ve de
+    l'esborrany: **el format que l'usuari estava fent servir mana per damunt del que té desat**,
+    fins que el canviï o desi les preferències.
+  - Fixat a `e2e/draft-restore.spec.ts`.
+
+### B21 — `ui.viewSettings` fa de preferència i de mirall de sessió alhora 🔴 Oberta
+
+*(Trobada resolent B20, branca `claude/estudi-pla-execucio-2w1pzq`.)*
+
+- **On**: `uiSlice.ts` (`ui.viewSettings`), `ViewSquenceSettings.tsx` (`savedUserDefaults`, el mirall
+  de sessió) i `useViewManager.ts` (`persistViewSettings`).
+- **Per què importa**: el mateix camp guarda dues coses que no ho són: el format que l'usuari té
+  **desat** i el que està **fent servir ara**. El mirall el reescriu a cada canvi, i la instantània
+  de «Restaura les seqüències» es pren en muntar-se la columna — o sigui que **anar a Edició i
+  tornar ja fa que «Restaura» torni als valors que l'usuari acaba de tocar**, sense cap esborrany
+  pel mig. Hi ha un comentari al codi que diu que la instantània «només avança quan es desen les
+  preferències», i amb el remuntatge això no és cert. B20 hi ha afegit
+  `ui.viewSettingsFromSession` per protegir el format restaurat de les preferències que arriben
+  tard: fa la feina, però és un pedaç sobre la mateixa confusió.
+- **Proposta**: separar els dos rols —preferència desada i estat de sessió de la vista— en dos
+  camps, i que «Restaura» llegeixi sempre el primer. Toca el panell de vista sencer, per això no
+  s'ha fet dins de B20.
 
 ## Gravetat baixa
 
