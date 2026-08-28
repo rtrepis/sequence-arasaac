@@ -526,7 +526,7 @@ d'IndexedDB i al fitxer `.saac`.
   el `PDF_EMPTY_CANVAS` apareix al registre d'errors del client (`context: "pdf-export"`), que és
   precisament per a què serveix.
 - **Fet**: l'informe porta el detall que cal per decidir-ho —format, mida del full, escala aplicada
-  i dimensions del canvas resultant (`A4 landscape full 1047×718, escala 3.00, canvas 2700×1854`)—
+  i dimensions del canvas resultant (`A4 landscape full 1047×718, escala 3.00, canvas 3141×2156`)—
   i el servidor ja hi desa el `userAgent`. Quan es va obrir aquesta entrada l'informe només portava
   el codi, o sigui que un cas real hauria dit que la captura va sortir en blanc **sense dir a quina
   mida**, que és l'únic número que fa falta.
