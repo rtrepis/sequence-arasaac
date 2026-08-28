@@ -239,6 +239,47 @@ triat és massa alt, ara es veurà i quedarà registrat; abans no.
 mostra l'error amb el codi, no s'anuncia cap èxit i **no es descarrega cap fitxer**. Sense el guard
 la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
 
+### A10 — Un document desat al núvol torna com a «Només en aquest dispositiu» 🔴 Oberta
+
+*(Trobada a l'estudi de què passa en tornar més tard a la pestanya, branca `claude/app-behavior-inactive-tab-p2vc2l`.)*
+
+- **On**: `useDocumentDraft.ts` (l'efecte de restauració, que despatxa
+  `documentStatusRestored` amb `changedAt: draft.savedAt`) i `documentStatusSlice.ts`
+  (`getDocumentDurability`).
+- **Per què importa**: la durabilitat viatja dins de l'esborrany precisament perquè recarregar no
+  faci semblar feina perduda la que ja és al núvol —ho diu el comentari de `DraftMeta`—, i en canvi
+  no se'n surt **mai**. L'esborrany s'escriu 1 s després de desar (debounce), o sigui que `savedAt`
+  sempre és posterior a `durableAt`; en restaurar-lo com a `changedAt`, la comparació
+  `changedAt <= durableAt` de `getDocumentDurability` falla i l'estat cau a `local`. Traçat amb els
+  valors reals: en memòria `durable`, després de recarregar `local`. No és un cas de frontera, és
+  el cas normal: qualsevol pestanya descartada pel navegador i recuperada, o un simple refresc,
+  torna dient que la feina no és enlloc. L'usuari que se'l creu torna a desar —desperta Render,
+  torna a pujar les imatges i torna a passar per la quota— per res.
+- **Proposta**: portar `changedAt` dins de `DraftMeta` i restaurar-lo tal qual, en comptes de
+  suplantar-lo amb `savedAt`. Per als esborranys ja escrits sense el camp, `durableAt ?? savedAt`
+  conserva el comportament d'avui sense mentir en el cas durador.
+
+### A11 — La sessió pot haver caducat i l'app continua dient que hi ha sessió 🔴 Oberta
+
+*(Mateixa branca.)*
+
+- **On**: `apiClient.ts` (el `catch (refreshError)` de l'interceptor de resposta, que fa
+  `setAccessToken(null)` i prou), `authSlice.ts` (`clearAuthState`, **exportat i no usat enlloc**) i
+  `AuthModal.lang.ts` (no hi ha missatge per a `REFRESH_TOKEN_EXPIRED` ni `REFRESH_TOKEN_MISSING`).
+- **Per què importa**: el token d'accés dura 15 minuts i no es renova sol —no hi ha cap temporitzador
+  de refresc—, així que qui torna a la pestanya l'endemà el té mort. Normalment no es nota: el 401
+  dispara el refresc i la cookie de 7 dies el resol. Però quan el refresc **falla** (cookie caducada,
+  sessió tancada en una altra pestanya, compte suspès des del panell), l'única cosa que passa és que
+  el token de memòria es posa a `null`. Redux continua amb `accessToken` i `userEmail`, la barra
+  continua dient qui ets, el botó flotant continua oferint «Desa al núvol» i el diàleg de desar
+  ensenya el genèric `DOCUMENT_SAVE_ERROR` perquè el codi que arriba no té traducció. L'usuari acaba
+  reintentant una acció que no pot funcionar mai, amb la feina només a l'esborrany.
+- **Proposta**: que el `catch` del refresc avisi l'app (un `store.dispatch(clearAuthState())` des del
+  mòdul que munta l'store, o un esdeveniment que hi escolti), i que en netejar-la surti un snackbar
+  que digui les dues coses que importen: la sessió ha caducat i **la feina no s'ha perdut** —és a
+  l'esborrany— però cal tornar a entrar per desar-la al núvol. Amb missatges propis per als dos
+  codis de refresc.
+
 ---
 
 ## Gravetat mitjana
@@ -597,6 +638,76 @@ d'IndexedDB i al fitxer `.saac`.
   ara l'A3 apaïsat va exactament als 4.096 px de costat que Safari publica com a límit. La
   instrumentació de B14 passa de ser útil a ser necessària.
 
+### B17 — En tornar a la pestanya ningú desperta el servidor 🔴 Oberta
+
+*(Trobada a l'estudi de la tornada a la pestanya, branca `claude/app-behavior-inactive-tab-p2vc2l`.)*
+
+- **On**: `warmUpBackend.ts` i els seus dos únics punts de crida, `AuthModal.tsx` (en obrir-se) i
+  `SignupPage.tsx`. Ni `SaveDocumentModal` ni `LoadDocumentModal` ni cap gestor de
+  `visibilitychange` el criden.
+- **Per què importa**: Render adorm el servei als 15 minuts, i tornar a una pestanya deixada de fons
+  vol dir gairebé sempre passar d'aquest llindar. El primer «Desa al núvol» de la tornada paga el
+  desvetllament sencer —a prop del minut— amb el diàleg obert i la barra de progrés quieta. El
+  patró per evitar-ho ja existeix i està escrit per a exactament això («avançar el cost»), però
+  només cobreix l'entrada al compte, que és el moment en què l'espera menys mal fa: allà l'usuari
+  encara ha d'escriure el correu i la contrasenya.
+- **Proposta**: cridar `warmUpBackend()` en tornar la pestanya a visible si hi ha sessió (el
+  cooldown de 10 min ja evita que es repeteixi), i en obrir els diàlegs de desar i carregar del
+  núvol, com fa `AuthModal`. Cap dels dos casos afegeix trànsit apreciable: és un `GET /health` de
+  fons que no encén l'avís de desvetllament.
+
+### B18 — En recarregar amb sessió, l'app es pinta amb la configuració de l'anònim fins que respon Render 🔴 Oberta
+
+*(Mateixa branca.)*
+
+- **On**: `AppBootstrap.tsx` (aplica `getStoredUserUi()` i tot seguit despatxa `refreshSessionThunk`)
+  i `App.tsx` (l'efecte que canvia el locale de la URL quan el del compte no hi coincideix).
+- **Per què importa**: per a l'usuari registrat la font de veritat és el backend i el `localStorage`
+  no s'hi actualitza mai —`saveUserUiThunk` només hi escriu quan és anònim—, de manera que el que
+  s'aplica primer és el que hi va quedar **abans** d'entrar al compte, o el dels valors per defecte.
+  Amb el servidor despert són uns quants centenars de mil·lisegons i passa desapercebut; amb el
+  servidor adormit, l'app es queda fins a un minut amb el tema, l'idioma i el format d'un altre, i
+  quan finalment arriba la resposta canvia sola —inclosa la URL, que salta a un altre locale. Qui
+  torna a la pestanya després d'una estona ho veu just en el moment de menys paciència.
+- **Proposta**: mantenir al `localStorage` una còpia de la darrera configuració coneguda **del
+  compte** (sense vocabulari, com ja fa el thunk anònim) i fer-la servir com a caché d'arrencada
+  quan hi ha una marca de sessió prèvia; així el que es pinta primer ja és el bo i la resposta del
+  backend, quan arriba, no canvia res a la vista.
+
+### B19 — Amb dues pestanyes obertes, la que torna del fons sobreescriu la feina de l'altra 🔴 Oberta
+
+*(Mateixa branca.)*
+
+- **On**: `useDocumentDraft.ts` (`persistedRef` i el flush de `visibilitychange`) i
+  `draftStorage.ts` (clau única `currentDocument`, sense comprovar què hi ha escrit).
+- **Per què importa**: l'esborrany és un sol registre per a tot l'origen i cada pestanya hi escriu
+  el seu document sense mirar-ne la data. `persistedRef` només evita que una pestanya reescrigui el
+  que ella mateixa ha escrit; no sap res de les altres. Dues pestanyes obertes a l'editor, es
+  treballa a la segona i es torna a la primera: el primer canvi que s'hi faci —o el primer cop que
+  s'amagui, perquè `persistedRef` comença a `null` i el flush escriu el document restaurat en
+  arrencar— deixa a IndexedDB la versió antiga. La feina de l'altra pestanya desapareix del disc
+  sense que ningú ho digui, i és la que es restaurarà al proper refresc.
+- **Proposta**: escriure només si el que hi ha a IndexedDB no és més nou que l'última escriptura
+  d'aquesta pestanya (comparació de `savedAt` dins la mateixa transacció), i avisar quan es detecti
+  el conflicte. Amb `BroadcastChannel` es podria, a més, fer que la pestanya que torna es posi al
+  dia; però amb la comprovació d'escriptura ja no es perd res, que és el que importa.
+
+### B20 — El format de pàgina no és del document i es perd en recarregar 🔴 Oberta
+
+*(Mateixa branca.)*
+
+- **On**: `uiSlice.ts` (`ui.viewSettings`) contra `documentSlice.ts` (`document.viewSettings`, per
+  seqüència) i `draftStorage.ts` (l'esborrany només desa el document).
+- **Per què importa**: els ajustos per seqüència (mida, separació, alineacions) viuen al document i
+  sobreviuen al refresc dins de l'esborrany; els globals —mida de pàgina, orientació, direcció,
+  separació entre seqüències— viuen a `ui` i no els desa ningú fins que es prem «Desa com a
+  preferències». Qui deixa la feina a mitges havent posat un A3 apaïsat i torna a una pestanya que
+  el navegador ha descartat, es retroba la seqüència sencera dins d'un A4 vertical. La seqüència es
+  recupera i la pàgina no, i per a un full imprès la pàgina és mitja feina.
+- **Proposta**: desar `ui.viewSettings` dins de l'esborrany i restaurar-lo amb el document. És
+  estat de sessió, no una preferència: desar-lo a l'esborrany no el converteix en preferència de
+  l'usuari, que continua sent cosa del botó de desar.
+
 ## Gravetat baixa
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.
@@ -833,3 +944,33 @@ Branca `claude/backlog-branch-master-64uh75`.
   de cancel·lar no feia res i s'ha tret; la prova e2e ho vigila.
 - Fixat a `e2e/destructive-actions.spec.ts` amb la fixture `e2e/fixtures/dues-sequencies.saac`.
 
+
+### C15 — L'estat del document diu l'hora però no el dia 🔴 Oberta
+
+*(Trobada a l'estudi de la tornada a la pestanya, branca `claude/app-behavior-inactive-tab-p2vc2l`.)*
+
+- **On**: `DocumentStatusFab.tsx` (`formatTime` → `intl.formatTime`) i els missatges
+  `statusLocal`, `statusFile` i `statusCloud`.
+- **Per què importa**: l'indicador existeix per a qui torna a una feina que ha deixat a mitges, i
+  aquest és justament qui no sap quin dia és el de l'hora que llegeix. «Només en aquest dispositiu,
+  des de les 18:42», obert un dimarts al matí, es llegeix com d'aquest matí. Amb l'esborrany, que
+  pot ser de fa dies i que el navegador pot desallotjar als set, la diferència no és cosmètica.
+- **Proposta**: hora sola quan és d'avui, i data quan no ho és (`intl.formatDate` amb
+  `dateStyle: "short"` afegit al missatge), o `intl.formatRelativeTime` per als casos recents. La
+  decisió es pot prendre al mateix `formatTime`, sense tocar cap consumidor.
+
+### C16 — Ningú demana emmagatzematge persistent al navegador 🔴 Oberta
+
+*(Mateixa branca.)*
+
+- **On**: `draftStorage.ts` — `openDatabase` obre IndexedDB sense cridar mai
+  `navigator.storage.persist()`.
+- **Per què importa**: per defecte l'esborrany viu en emmagatzematge «best effort» i el navegador
+  el pot desallotjar quan li falta espai, sense avisar i sense que l'app se n'assabenti. Amb el
+  permís concedit, Chrome i Firefox deixen de desallotjar-lo automàticament. Safari manté el seu
+  límit de set dies sense visitar el lloc —això no ho arregla res— però és precisament als altres
+  dos on l'usuari té més probabilitats de tenir el disc ple d'altres coses.
+- **Proposta**: una crida oportunista a `navigator.storage.persist()` la primera vegada que
+  s'escriu un esborrany, ignorant-ne el resultat (a Chrome es concedeix sol segons l'ús del lloc, i
+  no obre cap diàleg). No canvia res del format ni del flux; només fa que el nivell 1 dels tres de
+  durabilitat aguanti el que diu que aguanta.
