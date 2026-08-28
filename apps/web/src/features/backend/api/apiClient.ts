@@ -2,6 +2,7 @@
 // Gestiona automàticament els tokens JWT: injecció en headers i renovació en 401.
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import { notifyRequestEnd, notifyRequestStart } from "./backendStatus";
+import { notifySessionExpired } from "./sessionExpiry";
 
 declare module "axios" {
   export interface AxiosRequestConfig {
@@ -46,6 +47,16 @@ apiClient.interceptors.request.use(
   },
   (error) => Promise.reject(error),
 );
+
+/**
+ * Codi semàntic de la fallada del refresc. El servidor en pot respondre cinc
+ * (`REFRESH_TOKEN_MISSING`, `REFRESH_TOKEN_EXPIRED`, `INVALID_REFRESH_TOKEN`,
+ * `USER_NOT_FOUND` i `ACCOUNT_SUSPENDED`) i no volen dir el mateix: als dos
+ * últims no se'ls pot convidar a tornar a entrar.
+ */
+const getRefreshFailureCode = (error: unknown): string =>
+  (error as { response?: { data?: { errorCode?: string } } })?.response?.data
+    ?.errorCode ?? "REFRESH_TOKEN_EXPIRED";
 
 // Variable per evitar bucles infinits de refresh
 let isRefreshing = false;
@@ -113,6 +124,12 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
+        // Només si hi havia sessió: sense token a la memòria, un 401 no és una
+        // sessió que cau sinó una petició que no n'ha tingut mai, i dir-li a qui
+        // no ha entrat mai que se li ha acabat la sessió seria mentir-li
+        if (accessToken !== null) {
+          notifySessionExpired(getRefreshFailureCode(refreshError));
+        }
         setAccessToken(null);
         return Promise.reject(refreshError);
       } finally {

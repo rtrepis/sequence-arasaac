@@ -1372,6 +1372,58 @@
   "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
     "defaultMessage": "Cette adresse e-mail est déjà vérifiée."
   },
+  "features.backend.auth.error.REFRESH_TOKEN_EXPIRED": {
+    "defaultMessage": "La session a expiré. Reconnecte-toi pour enregistrer dans le cloud ; ton travail n'est pas perdu.",
+    "description": "Erreur : le jeton de rafraîchissement a expiré"
+  },
+  "features.backend.auth.error.REFRESH_TOKEN_MISSING": {
+    "defaultMessage": "La session a été fermée dans ce navigateur. Reconnecte-toi pour enregistrer dans le cloud ; ton travail n'est pas perdu.",
+    "description": "Erreur : il n'y a pas de cookie de session"
+  },
+  "features.backend.auth.error.INVALID_REFRESH_TOKEN": {
+    "defaultMessage": "La session a été fermée depuis un autre appareil. Reconnecte-toi pour enregistrer dans le cloud ; ton travail n'est pas perdu.",
+    "description": "Erreur : la session a été invalidée ailleurs"
+  },
+  "features.backend.auth.error.USER_NOT_FOUND": {
+    "defaultMessage": "Ce compte n'existe plus. Ton travail reste enregistré sur cet appareil : télécharge-le si tu en veux une copie.",
+    "description": "Erreur : le compte de la session n'existe plus"
+  },
+  "features.backend.auth.sessionExpired.titleExpired": {
+    "defaultMessage": "La session a expiré",
+    "description": "Titre de l'avis lorsque la session a expiré avec le temps"
+  },
+  "features.backend.auth.sessionExpired.titleMissing": {
+    "defaultMessage": "La session a été fermée dans ce navigateur",
+    "description": "Titre de l'avis lorsqu'il n'y a plus de cookie de session"
+  },
+  "features.backend.auth.sessionExpired.titleInvalid": {
+    "defaultMessage": "La session a été fermée depuis un autre appareil",
+    "description": "Titre de l'avis lorsque la session a été invalidée ailleurs"
+  },
+  "features.backend.auth.sessionExpired.titleSuspended": {
+    "defaultMessage": "Ce compte est suspendu",
+    "description": "Titre de l'avis lorsque le compte a été suspendu"
+  },
+  "features.backend.auth.sessionExpired.titleGone": {
+    "defaultMessage": "Ce compte n'existe plus",
+    "description": "Titre de l'avis lorsque le compte est introuvable"
+  },
+  "features.backend.auth.sessionExpired.bodyCanReturn": {
+    "defaultMessage": "Ton travail n'est pas perdu : il reste enregistré sur cet appareil. Pour l'enregistrer dans le cloud, reconnecte-toi.",
+    "description": "Corps de l'avis lorsque se reconnecter est possible"
+  },
+  "features.backend.auth.sessionExpired.bodyNoReturn": {
+    "defaultMessage": "Ton travail n'est pas perdu : il reste enregistré sur cet appareil. Télécharge-le si tu en veux une copie, et contacte-nous si tu penses qu'il s'agit d'une erreur.",
+    "description": "Corps de l'avis lorsque se reconnecter ne servirait à rien"
+  },
+  "features.backend.auth.sessionExpired.action": {
+    "defaultMessage": "Se reconnecter",
+    "description": "Bouton de l'avis qui ouvre le formulaire de connexion"
+  },
+  "features.backend.auth.sessionExpired.dismiss": {
+    "defaultMessage": "Fermer l'avis",
+    "description": "Bouton pour fermer l'avis de session"
+  },
   "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
     "defaultMessage": "Tu dois vérifier ton adresse e-mail avant d'enregistrer dans le cloud. Consulte ta boîte de réception."
   },

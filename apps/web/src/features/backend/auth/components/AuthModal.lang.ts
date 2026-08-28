@@ -195,6 +195,30 @@ const messages = defineMessages({
       "Aquest compte està suspès. Contacta amb nosaltres si creus que és un error.",
     description: "Error: compte suspès per l'administració",
   },
+  REFRESH_TOKEN_EXPIRED: {
+    id: "features.backend.auth.error.REFRESH_TOKEN_EXPIRED",
+    defaultMessage:
+      "La sessió ha caducat. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
+    description: "Error: el token de refresc ha caducat",
+  },
+  REFRESH_TOKEN_MISSING: {
+    id: "features.backend.auth.error.REFRESH_TOKEN_MISSING",
+    defaultMessage:
+      "La sessió s'ha tancat en aquest navegador. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
+    description: "Error: no hi ha galeta de sessió",
+  },
+  INVALID_REFRESH_TOKEN: {
+    id: "features.backend.auth.error.INVALID_REFRESH_TOKEN",
+    defaultMessage:
+      "La sessió s'ha tancat des d'un altre dispositiu. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
+    description: "Error: la sessió s'ha invalidat des d'un altre lloc",
+  },
+  USER_NOT_FOUND: {
+    id: "features.backend.auth.error.USER_NOT_FOUND",
+    defaultMessage:
+      "Aquest compte ja no existeix. La feina continua desada en aquest dispositiu: descarrega-la si en vols una còpia.",
+    description: "Error: el compte de la sessió ja no hi és",
+  },
   EMAIL_NOT_VERIFIED: {
     id: "features.backend.auth.error.EMAIL_NOT_VERIFIED",
     defaultMessage:

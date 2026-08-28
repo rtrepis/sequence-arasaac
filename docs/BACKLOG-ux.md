@@ -264,7 +264,7 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
   no és contingut del document i no viatja ni al `.saac` ni al núvol. Fixat a
   `e2e/draft-restore.spec.ts`, que abans del canvi falla.
 
-### A11 — La sessió pot haver caducat i l'app continua dient que hi ha sessió 🔴 Oberta
+### A11 — La sessió pot haver caducat i l'app continua dient que hi ha sessió ✅ Resolta
 
 *(Mateixa branca.)*
 
@@ -284,6 +284,30 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
   que digui les dues coses que importen: la sessió ha caducat i **la feina no s'ha perdut** —és a
   l'esborrany— però cal tornar a entrar per desar-la al núvol. Amb missatges propis per als dos
   codis de refresc.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`:
+  - **No eren dos codis, eren cinc.** `POST /auth/refresh` pot fallar amb `REFRESH_TOKEN_MISSING`,
+    `REFRESH_TOKEN_EXPIRED`, `INVALID_REFRESH_TOKEN`, `USER_NOT_FOUND` i `ACCOUNT_SUSPENDED`
+    (aquest amb 403). Els dos últims **no admeten «torna a entrar»**: enviar al formulari d'entrada
+    algú a qui han suspès el compte és enviar-lo a un altre no. L'avís els tracta a part i no els
+    ofereix el botó.
+  - `features/backend/api/sessionExpiry.ts`, mòdul fora de Redux com `backendStatus` —
+    l'`apiClient` no és un component i importar-hi l'store seria un cicle (store → slices →
+    serveis → apiClient).
+  - El `catch` del refresc hi avisa **només si hi havia token a la memòria**: sense sessió, un 401
+    no és una sessió que cau sinó una petició que no n'ha tingut mai, i la restauració silenciosa
+    de l'arrencada va contra `/auth/`, que l'interceptor deixa passar de llarg.
+  - `SessionExpiredNotice`, muntat al `LanguageLayout` al costat de `BackendWakeUpNotice`: despatxa
+    `clearAuthState()` —el creador d'acció que estava exportat i sense consumidor— i ensenya un
+    `Snackbar` persistent que diu què ha passat, que la feina continua en aquest dispositiu i, quan
+    té sentit, ofereix tornar a entrar. Es tanca sol quan hi torna a haver sessió.
+  - Quatre missatges nous al catàleg d'`AuthModal.lang` (`ACCOUNT_SUSPENDED` ja hi era): amb això
+    `SaveDocumentModal` deixa de caure al genèric `DOCUMENT_SAVE_ERROR`, perquè ja hi buscava el
+    codi i només li faltava que hi fos. Traduïts als cinc idiomes.
+  - **Sense `reportClientError`**: una sessió que caduca als set dies no és una fallada sinó el
+    final previst d'una sessió, i reportar-la ompliria el registre i el *throttle* de correu amb el
+    funcionament normal.
+  - Fixat a `e2e/session-expired.spec.ts`, amb el backend simulat: caducada, compte suspès, usuari
+    que no ha entrat mai i tornada a entrar.
 
 ---
 

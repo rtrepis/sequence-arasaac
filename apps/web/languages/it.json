@@ -1372,6 +1372,58 @@
   "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
     "defaultMessage": "Questa email è già verificata."
   },
+  "features.backend.auth.error.REFRESH_TOKEN_EXPIRED": {
+    "defaultMessage": "La sessione è scaduta. Accedi di nuovo per salvare nel cloud; il lavoro non è andato perso.",
+    "description": "Errore: il token di aggiornamento è scaduto"
+  },
+  "features.backend.auth.error.REFRESH_TOKEN_MISSING": {
+    "defaultMessage": "La sessione è stata chiusa in questo browser. Accedi di nuovo per salvare nel cloud; il lavoro non è andato perso.",
+    "description": "Errore: non c'è il cookie di sessione"
+  },
+  "features.backend.auth.error.INVALID_REFRESH_TOKEN": {
+    "defaultMessage": "La sessione è stata chiusa da un altro dispositivo. Accedi di nuovo per salvare nel cloud; il lavoro non è andato perso.",
+    "description": "Errore: la sessione è stata invalidata altrove"
+  },
+  "features.backend.auth.error.USER_NOT_FOUND": {
+    "defaultMessage": "Questo account non esiste più. Il lavoro resta salvato su questo dispositivo: scaricalo se ne vuoi una copia.",
+    "description": "Errore: l'account della sessione non esiste più"
+  },
+  "features.backend.auth.sessionExpired.titleExpired": {
+    "defaultMessage": "La sessione è scaduta",
+    "description": "Titolo dell'avviso quando la sessione è scaduta col tempo"
+  },
+  "features.backend.auth.sessionExpired.titleMissing": {
+    "defaultMessage": "La sessione è stata chiusa in questo browser",
+    "description": "Titolo dell'avviso quando non c'è più il cookie di sessione"
+  },
+  "features.backend.auth.sessionExpired.titleInvalid": {
+    "defaultMessage": "La sessione è stata chiusa da un altro dispositivo",
+    "description": "Titolo dell'avviso quando la sessione è stata invalidata altrove"
+  },
+  "features.backend.auth.sessionExpired.titleSuspended": {
+    "defaultMessage": "Questo account è sospeso",
+    "description": "Titolo dell'avviso quando l'account è stato sospeso"
+  },
+  "features.backend.auth.sessionExpired.titleGone": {
+    "defaultMessage": "Questo account non esiste più",
+    "description": "Titolo dell'avviso quando l'account non si trova"
+  },
+  "features.backend.auth.sessionExpired.bodyCanReturn": {
+    "defaultMessage": "Il lavoro non è andato perso: resta salvato su questo dispositivo. Per salvarlo nel cloud, accedi di nuovo.",
+    "description": "Corpo dell'avviso quando si può accedere di nuovo"
+  },
+  "features.backend.auth.sessionExpired.bodyNoReturn": {
+    "defaultMessage": "Il lavoro non è andato perso: resta salvato su questo dispositivo. Scaricalo se ne vuoi una copia e contattaci se pensi che sia un errore.",
+    "description": "Corpo dell'avviso quando accedere di nuovo non servirebbe"
+  },
+  "features.backend.auth.sessionExpired.action": {
+    "defaultMessage": "Accedi di nuovo",
+    "description": "Pulsante dell'avviso che apre il modulo di accesso"
+  },
+  "features.backend.auth.sessionExpired.dismiss": {
+    "defaultMessage": "Chiudi l'avviso",
+    "description": "Pulsante per chiudere l'avviso di sessione"
+  },
   "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
     "defaultMessage": "Devi verificare la tua email prima di salvare nel cloud. Controlla la posta in arrivo."
   },
