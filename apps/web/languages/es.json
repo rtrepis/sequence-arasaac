@@ -1754,6 +1754,18 @@
     "defaultMessage": "Se queda en este navegador y puede borrarlo por su cuenta. Descárgalo o guárdalo en la nube para tenerlo en otro sitio.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
   },
+  "features.sequence.draft.conflictError": {
+    "defaultMessage": "Otra pestaña tiene trabajo más reciente. Esta ha dejado de guardar sola para no borrarlo: descarga lo que tienes aquí si quieres conservarlo.",
+    "description": "Aviso cuando otra pestaña ha guardado el borrador más tarde que esta"
+  },
+  "features.sequence.status.conflict": {
+    "defaultMessage": "Otra pestaña tiene trabajo más reciente",
+    "description": "Estado cuando esta pestaña ha dejado de escribir el borrador para no pisar otra"
+  },
+  "features.sequence.status.hintConflict": {
+    "defaultMessage": "Esta pestaña ya no guarda sola. Descarga lo que tienes aquí si quieres conservarlo.",
+    "description": "Explicación cuando otra pestaña tiene una versión más reciente del borrador"
+  },
   "features.sequence.status.hintError": {
     "defaultMessage": "Descarga el archivo ahora: es la única manera de no perder el trabajo.",
     "description": "Explicació quan el navegador no pot desar l'esborrany"

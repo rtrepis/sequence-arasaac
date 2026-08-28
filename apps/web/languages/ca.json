@@ -1754,6 +1754,18 @@
     "defaultMessage": "Es queda en aquest navegador i el pot esborrar sol. Descarrega-ho o desa-ho al núvol per tenir-ho en un altre lloc.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
   },
+  "features.sequence.draft.conflictError": {
+    "defaultMessage": "Una altra pestanya té feina més nova. Aquesta ha deixat de desar sola per no esborrar-la: descarrega el que hi tens si el vols conservar.",
+    "description": "Avís quan una altra pestanya ha desat l'esborrany més tard que aquesta"
+  },
+  "features.sequence.status.conflict": {
+    "defaultMessage": "Una altra pestanya té feina més nova",
+    "description": "Estat quan aquesta pestanya ha deixat d'escriure l'esborrany per no trepitjar-ne una altra"
+  },
+  "features.sequence.status.hintConflict": {
+    "defaultMessage": "Aquesta pestanya ja no desa sola. Descarrega el que hi tens si el vols conservar.",
+    "description": "Explicació quan una altra pestanya té una versió més nova de l'esborrany"
+  },
   "features.sequence.status.hintError": {
     "defaultMessage": "Descarrega el fitxer ara: és l'única manera de no perdre la feina.",
     "description": "Explicació quan el navegador no pot desar l'esborrany"

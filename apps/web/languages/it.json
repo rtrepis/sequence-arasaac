@@ -1754,6 +1754,18 @@
     "defaultMessage": "Resta in questo browser, che può cancellarlo da solo. Scaricalo o salvalo nel cloud per averlo altrove.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
   },
+  "features.sequence.draft.conflictError": {
+    "defaultMessage": "Un'altra scheda ha un lavoro più recente. Questa ha smesso di salvare da sola per non cancellarlo: scarica quello che hai qui se vuoi conservarlo.",
+    "description": "Avviso quando un'altra scheda ha salvato la bozza più tardi di questa"
+  },
+  "features.sequence.status.conflict": {
+    "defaultMessage": "Un'altra scheda ha un lavoro più recente",
+    "description": "Stato quando questa scheda ha smesso di scrivere la bozza per non sovrascriverne un'altra"
+  },
+  "features.sequence.status.hintConflict": {
+    "defaultMessage": "Questa scheda non salva più da sola. Scarica quello che hai qui se vuoi conservarlo.",
+    "description": "Spiegazione quando un'altra scheda ha una versione più recente della bozza"
+  },
   "features.sequence.status.hintError": {
     "defaultMessage": "Scarica il file adesso: è l'unico modo per non perdere il lavoro.",
     "description": "Explicació quan el navegador no pot desar l'esborrany"
