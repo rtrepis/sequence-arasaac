@@ -19,6 +19,14 @@ export interface DocumentStatusState {
   /** Últim desat fora del navegador. */
   durableAt: number | null;
   durableKind: DurableKind | null;
+  /**
+   * L'intent de restaurar l'esborrany ja ha acabat, hi hagués esborrany o no.
+   * Ho mira la pàgina de vista abans de muntar-se: els seus hooks copien el
+   * format de pàgina a un estat local en muntar-se i ja no el tornen a mirar,
+   * de manera que muntar-los abans de la restauració vol dir quedar-se amb el
+   * format d'abans encara que arribi el bo un instant després.
+   */
+  draftRestoreSettled: boolean;
 }
 
 const initialState: DocumentStatusState = {
@@ -27,6 +35,7 @@ const initialState: DocumentStatusState = {
   hasDraftError: false,
   durableAt: null,
   durableKind: null,
+  draftRestoreSettled: false,
 };
 
 const documentStatusSlice = createSlice({
@@ -65,8 +74,21 @@ const documentStatusSlice = createSlice({
       action: PayloadAction<Partial<DocumentStatusState>>,
     ) => ({ ...state, ...action.payload }),
 
-    /** Document nou: no hi ha res desat ni res pendent. */
-    documentStatusCleared: () => initialState,
+    /** L'arrencada ja ha mirat si hi havia esborrany. */
+    draftRestoreSettled: (state) => {
+      state.draftRestoreSettled = true;
+    },
+
+    /**
+     * Document nou: no hi ha res desat ni res pendent. `draftRestoreSettled` no
+     * hi entra: no diu res del document, sinó que l'arrencada ja ha passat, i
+     * tornar-lo a fals deixaria la pàgina de vista esperant una restauració que
+     * no ha de tornar a passar mai.
+     */
+    documentStatusCleared: (state) => ({
+      ...initialState,
+      draftRestoreSettled: state.draftRestoreSettled,
+    }),
   },
 });
 
@@ -78,6 +100,7 @@ export const {
   draftSaveFailed: draftSaveFailedActionCreator,
   documentMadeDurable: documentMadeDurableActionCreator,
   documentStatusRestored: documentStatusRestoredActionCreator,
+  draftRestoreSettled: draftRestoreSettledActionCreator,
   documentStatusCleared: documentStatusClearedActionCreator,
 } = documentStatusSlice.actions;
 

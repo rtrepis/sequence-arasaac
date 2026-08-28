@@ -54,6 +54,7 @@ const uiInitialState: Ui = {
     orientation: VIEW_DEFAULT_ORIENTATION,
     author: VIEW_DEFAULT_AUTHOR,
   },
+  viewSettingsFromSession: false,
   defaultSettings: {
     pictApiAra: {
       skin: DEFAULT_SKIN,
@@ -118,6 +119,37 @@ const uiSlice = createSlice({
       ...previousUi,
       viewSettings: action.payload,
     }),
+
+    /**
+     * El format que l'usuari estava fent servir, recuperat de l'esborrany en
+     * arrencar. Marca l'estat com a format de sessió perquè
+     * `applyUserViewSettings` no l'esborri després.
+     */
+    sessionViewSettingsRestored: (
+      previousUi,
+      action: PayloadAction<ViewSettings>,
+    ) => ({
+      ...previousUi,
+      viewSettings: action.payload,
+      viewSettingsFromSession: true,
+    }),
+
+    /**
+     * Format que ve de les preferències desades (navegador o compte). No té
+     * efecte si abans s'ha restaurat el de la sessió: **el format que l'usuari
+     * estava fent servir mana per damunt del que té desat**, fins que el canviï
+     * o desi les preferències. Sense això, la resposta del compte —que amb
+     * Render adormit pot arribar un minut després d'arrencar— tornaria a posar
+     * l'A4 a una feina que s'estava fent en A3.
+     */
+    applyUserViewSettings: (
+      previousUi,
+      action: PayloadAction<ViewSettings>,
+    ) => {
+      if (previousUi.viewSettingsFromSession) return previousUi;
+
+      return { ...previousUi, viewSettings: action.payload };
+    },
 
     updateDefaultSettings: (
       previousUi,
@@ -198,6 +230,8 @@ export const uiReducer = uiSlice.reducer;
 
 export const {
   viewSettings: viewSettingsActionCreator,
+  sessionViewSettingsRestored: sessionViewSettingsRestoredActionCreator,
+  applyUserViewSettings: applyUserViewSettingsActionCreator,
   updateLangSetting: updateLangSettingsActionCreator,
   updateDefaultSettings: updateDefaultSettingsActionCreator,
   updateDefaultSettingPictApiAra: updateDefaultSettingPictApiAraActionCreator,

@@ -7,7 +7,7 @@ import {
   updateDefaultSettingsActionCreator,
   updateLangSettingsActionCreator,
   updateThemeActionCreator,
-  viewSettingsActionCreator,
+  applyUserViewSettingsActionCreator,
   setWordProfilesActionCreator,
   setTierActionCreator,
 } from "@features/user-settings/store/uiSlice";
@@ -69,7 +69,8 @@ const syncSettingsAfterAuth = async (
       updateLangSettingsActionCreator({ app: lang.app, search: lang.search }),
     );
     dispatch(updateThemeActionCreator(theme ?? "system"));
-    if (viewSettings) dispatch(viewSettingsActionCreator(viewSettings));
+    if (viewSettings)
+      dispatch(applyUserViewSettingsActionCreator(viewSettings));
     if (wordProfiles) dispatch(setWordProfilesActionCreator(wordProfiles));
     if (tier) dispatch(setTierActionCreator(tier));
     return { emailVerified: emailVerified ?? false, isAdmin: role === "admin" };
@@ -104,7 +105,7 @@ const restoreAnonymousSettings = (
       }),
     );
     if (storedUi.viewSettings)
-      dispatch(viewSettingsActionCreator(storedUi.viewSettings));
+      dispatch(applyUserViewSettingsActionCreator(storedUi.viewSettings));
     return;
   }
 

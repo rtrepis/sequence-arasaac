@@ -13,7 +13,7 @@ import { ALIGN_H, ALIGN_V } from "../../shared/constants/alignmentMaps";
  * independentment de la direcció de la seqüència
  */
 const ViewSequencePage = (): React.ReactElement => {
-  const { document, ui } = useAppSelector((state) => state);
+  const { document, ui, documentStatus } = useAppSelector((state) => state);
   const { pictSequence } = ui.defaultSettings;
   const defaults: PictogramCardDefaults = {
     numbered: pictSequence.numbered,
@@ -22,6 +22,12 @@ const ViewSequencePage = (): React.ReactElement => {
     borderIn: pictSequence.borderIn,
     borderOut: pictSequence.borderOut,
   };
+
+  // La columna d'ajustos copia el format de pàgina a un estat local en muntar-se
+  // i ja no el torna a mirar: muntar-la abans que la restauració de l'esborrany
+  // hagi acabat voldria dir quedar-se amb l'A4 encara que la feina fos en A3.
+  // Són mil·lisegons, i amb IndexedDB inaccessible la marca arriba igualment.
+  if (!documentStatus.draftRestoreSettled) return <></>;
 
   return (
     <ViewSequencesSettings>

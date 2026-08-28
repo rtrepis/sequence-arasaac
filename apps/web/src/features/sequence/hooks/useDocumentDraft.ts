@@ -12,11 +12,15 @@ import { loadDocumentSaacActionCreator } from "@features/sequence/store/document
 import { readDraft, saveDraft } from "@features/sequence/storage/draftStorage";
 import {
   documentStatusRestoredActionCreator,
+  draftRestoreSettledActionCreator,
   draftSavedActionCreator,
   draftSaveFailedActionCreator,
 } from "@features/sequence/store/documentStatusSlice";
+import { sessionViewSettingsRestoredActionCreator } from "@features/user-settings/store/uiSlice";
+import { sanitizeViewSettings } from "@/configs/viewSettingsConfig";
 import { useFeedback } from "@/context/FeedbackContext";
 import { DocumentSAAC } from "@/types/document";
+import { ViewSettings } from "@/types/ui";
 import messages from "../components/DocumentDraftSync.lang";
 
 // Prou curt perquè no es perdi res en tancar de cop, prou llarg perquè
@@ -29,6 +33,12 @@ const selectDocument = (state: RootState): DocumentSAAC => state.document;
 // construït al selector és una referència nova a cada acció de l'app i faria
 // re-renderitzar per res
 const selectStatus = (state: RootState) => state.documentStatus;
+
+// El format de pàgina i els ajustos globals de la vista. És estat de sessió —el
+// mirall que manté la pàgina de vista—, no una preferència desada, i per això
+// va a l'esborrany i no al compte.
+const selectViewSettings = (state: RootState): ViewSettings =>
+  state.ui.viewSettings;
 
 /**
  * Un document «verge» és el que crea documentSlice en arrencar: sense títol i
@@ -62,10 +72,20 @@ export const useDocumentDraft = (): void => {
   const statusRef = useRef(status);
   statusRef.current = status;
 
-  // L'últim document que s'ha arribat a escriure. El flush de `visibilitychange`
+  const viewSettings = useAppSelector(selectViewSettings);
+  const viewSettingsRef = useRef(viewSettings);
+  viewSettingsRef.current = viewSettings;
+
+  // L'última parella que s'ha arribat a escriure. El flush de `visibilitychange`
   // salta cada cop que s'amaga la pestanya, i sense això reescriuria el mateix
-  // document una vegada i una altra sense que hagi canviat res
-  const persistedRef = useRef<DocumentSAAC | null>(null);
+  // esborrany una vegada i una altra sense que hagi canviat res. Hi ha de ser
+  // la parella i no només el document: girar el full no toca el document, i
+  // comparant-ne només aquest la comprovació donava «res a fer» i el format nou
+  // no s'arribava a escriure mai.
+  const persistedRef = useRef<{
+    document: DocumentSAAC;
+    viewSettings: ViewSettings;
+  } | null>(null);
 
   // L'avís de «no s'ha pogut desar» surt un sol cop: si l'espai s'ha acabat,
   // cada canvi posterior tornaria a fallar i el convertiria en soroll
@@ -73,14 +93,32 @@ export const useDocumentDraft = (): void => {
 
   const persist = useCallback(async () => {
     const current = documentRef.current;
-    if (isPristineDocument(current) || current === persistedRef.current) return;
+    const currentView = viewSettingsRef.current;
+    if (isPristineDocument(current)) return;
+
+    const persisted = persistedRef.current;
+    if (
+      persisted !== null &&
+      persisted.document === current &&
+      persisted.viewSettings === currentView
+    )
+      return;
 
     const savedAt = Date.now();
-    const { durableAt, durableKind } = statusRef.current;
-    const saved = await saveDraft(current, { savedAt, durableAt, durableKind });
+    // `changedAt` viatja tal com és: si es posés `savedAt` al seu lloc en
+    // restaurar, sempre semblaria que hi ha hagut un canvi després de l'últim
+    // desat. Un canvi de format **no** el toca —no és contingut del document i
+    // no viatja ni al `.saac` ni al núvol—, així que girar el full no converteix
+    // un document desat al núvol en feina sense desar.
+    const { changedAt, durableAt, durableKind } = statusRef.current;
+    const saved = await saveDraft(
+      current,
+      { savedAt, changedAt, durableAt, durableKind },
+      currentView,
+    );
 
     if (saved) {
-      persistedRef.current = current;
+      persistedRef.current = { document: current, viewSettings: currentView };
       dispatch(draftSavedActionCreator(savedAt));
       return;
     }
@@ -103,20 +141,40 @@ export const useDocumentDraft = (): void => {
 
     void (async () => {
       const draft = await readDraft();
-      if (cancelled || !draft || isPristineDocument(draft.document)) return;
-      if (!isPristineDocument(documentRef.current)) return;
+      if (cancelled) return;
 
-      dispatch(loadDocumentSaacActionCreator(draft.document));
-      // El moment de l'últim canvi no es coneix: el que se sap és quan es va
-      // escriure l'esborrany, i és el que l'usuari va veure com a «desat»
-      dispatch(
-        documentStatusRestoredActionCreator({
-          changedAt: draft.savedAt,
-          draftSavedAt: draft.savedAt,
-          durableAt: draft.durableAt ?? null,
-          durableKind: draft.durableKind ?? null,
-        }),
-      );
+      if (
+        draft !== null &&
+        !isPristineDocument(draft.document) &&
+        isPristineDocument(documentRef.current)
+      ) {
+        dispatch(loadDocumentSaacActionCreator(draft.document));
+        dispatch(
+          documentStatusRestoredActionCreator({
+            // Els esborranys escrits abans que hi hagués el camp no en porten:
+            // amb `durableAt` el cas durador continua dient la veritat, i sense
+            // còpia fora `savedAt` deixa el comportament que ja tenien
+            changedAt: draft.changedAt ?? draft.durableAt ?? draft.savedAt,
+            draftSavedAt: draft.savedAt,
+            durableAt: draft.durableAt ?? null,
+            durableKind: draft.durableKind ?? null,
+          }),
+        );
+
+        // El format de pàgina només es restaura amb el document: aplicar el
+        // d'una sessió antiga sobre feina nova seria pitjor que perdre'l
+        if (draft.viewSettings)
+          dispatch(
+            sessionViewSettingsRestoredActionCreator(
+              sanitizeViewSettings(draft.viewSettings),
+            ),
+          );
+      }
+
+      // Es marca sempre, hi hagi hagut esborrany o no: la pàgina de vista hi
+      // espera per no muntar-se amb un format que la restauració canviarà un
+      // instant després
+      dispatch(draftRestoreSettledActionCreator());
     })();
 
     return () => {
@@ -133,7 +191,10 @@ export const useDocumentDraft = (): void => {
     }, DRAFT_SAVE_DELAY_MS);
 
     return () => window.clearTimeout(timer);
-  }, [document, persist]);
+    // `viewSettings` hi és perquè el format de pàgina també s'ha de desar: no
+    // canvia el document, i sense això només s'escriuria de retruc al següent
+    // canvi de contingut
+  }, [document, viewSettings, persist]);
 
   // En amagar la pestanya es desa sense esperar el debounce. `visibilitychange`
   // i no només `beforeunload` perquè a iOS el sistema pot matar una pestanya en
