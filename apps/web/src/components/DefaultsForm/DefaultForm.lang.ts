@@ -27,16 +27,6 @@ const messages = defineMessages({
     defaultMessage: "Appearance",
     description: "Títol de la secció de pell i cabell al panell de pictogrames",
   },
-  saveSuccess: {
-    id: "components.defaultSettings.saveSuccess",
-    defaultMessage: "Settings saved to server",
-    description: "Snackbar quan els settings s'han desat correctament al servidor",
-  },
-  saveError: {
-    id: "components.defaultSettings.saveError",
-    defaultMessage: "Error saving settings to server",
-    description: "Snackbar quan hi ha error en desar els settings al servidor",
-  },
   reset: {
     id: "components.defaultSettings.reset",
     defaultMessage: "Restore pictograms",

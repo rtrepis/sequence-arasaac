@@ -9,7 +9,7 @@ import { FormattedMessage } from "react-intl";
 import { FaLinkedin } from "react-icons/fa";
 import React from "react";
 import { messages } from "../../pages/WelcomePage/WelcomePage.lang";
-import copyrightMessages from "../CopyRightSpeedDial/CopyRightSpeedDial.lang";
+import copyrightMessages from "./WelcomeFooter.lang";
 
 const WelcomeFooter = (): React.ReactElement => (
   <Box component="footer" sx={{ bgcolor: "#c8e49a" }}>

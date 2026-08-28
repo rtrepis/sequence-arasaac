@@ -1,11 +1,6 @@
 import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
-  title: {
-    id: "components.defaultSettings.vocabularyPanel.title",
-    defaultMessage: "Personal vocabulary",
-    description: "Títol del panel de vocabulari personal",
-  },
   sectionWord: {
     id: "components.defaultSettings.vocabularyPanel.sectionWord",
     defaultMessage: "Word",
@@ -83,16 +78,6 @@ const messages = defineMessages({
     id: "components.defaultSettings.vocabularyPanel.updateButton",
     defaultMessage: "Update",
     description: "Botó per actualitzar una paraula existent",
-  },
-  uploadImage: {
-    id: "components.defaultSettings.vocabularyPanel.uploadImage",
-    defaultMessage: "Upload image",
-    description: "Botó per pujar una imatge personalitzada per a la paraula",
-  },
-  removeImage: {
-    id: "components.defaultSettings.vocabularyPanel.removeImage",
-    defaultMessage: "Remove image",
-    description: "Botó per eliminar la imatge personalitzada",
   },
   loginRequired: {
     id: "components.defaultSettings.vocabularyPanel.loginRequired",

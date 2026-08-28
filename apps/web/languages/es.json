@@ -36,26 +36,17 @@
   "components.appNavigationDrawer.download": {
     "defaultMessage": "Descargar"
   },
-  "components.appNavigationDrawer.langSelector": {
-    "defaultMessage": "Idioma"
-  },
   "components.appNavigationDrawer.load": {
     "defaultMessage": "Cargar"
   },
   "components.appNavigationDrawer.news": {
     "defaultMessage": "Novedades"
   },
-  "components.appNavigationDrawer.openMenu": {
-    "defaultMessage": "Abrir menú"
-  },
   "components.appNavigationDrawer.settings": {
     "defaultMessage": "Configuración"
   },
-  "components.appNavigationDrawer.settingsClose": {
-    "defaultMessage": "Cerrar"
-  },
-  "components.appNavigationDrawer.settingsTitle": {
-    "defaultMessage": "Configuración por defecto"
+  "components.appNavigationDrawer.admin": {
+    "defaultMessage": "Administración"
   },
   "components.appNavigationDrawer.welcome": {
     "defaultMessage": "Inicio"
@@ -77,14 +68,6 @@
   "components.barNavigation.view.title": {
     "defaultMessage": "Vista",
     "description": "Title Page"
-  },
-  "components.barNavigation.welcome.title": {
-    "defaultMessage": "Bienvenido",
-    "description": "Title Page"
-  },
-  "components.buttonWithFileLoad.load.label": {
-    "defaultMessage": "Cargar",
-    "description": "helper text"
   },
   "components.buttonWithModalDownload.defaultSettings.label": {
     "defaultMessage": "Configuración por defecto",
@@ -125,10 +108,6 @@
   "components.defaultSettings.close": {
     "defaultMessage": "cerrar",
     "description": "close Settings Default "
-  },
-  "components.defaultSettings.download": {
-    "defaultMessage": "Guardar configuración en archivo local",
-    "description": "Save settings to local file"
   },
   "components.defaultSettings.pictGuide": {
     "defaultMessage": "Vista previa",
@@ -181,24 +160,12 @@
     "defaultMessage": "Pictogramas",
     "description": "Títol de la secció de mida i alineació de pictogrames al panell de vista"
   },
-  "components.viewSettingsPanel.orientationLandscape": {
-    "defaultMessage": "Horizontal",
-    "description": "Opció d'orientació horitzontal de la pàgina"
-  },
-  "components.viewSettingsPanel.orientationPortrait": {
-    "defaultMessage": "Vertical",
-    "description": "Opció d'orientació vertical de la pàgina"
-  },
   "components.viewSettingsPanel.apply": {
     "defaultMessage": "Aplicar a la vista actual",
     "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
   },
   "components.viewSettingsPanel.applyHelper": {
     "defaultMessage": "Aplica los valores a la sesión de vista activa sin cerrar la configuración."
-  },
-  "components.defaultSettings.upload": {
-    "defaultMessage": "Cargar configuración desde archivo local",
-    "description": "Load settings from local file"
   },
   "components.defaultSettings.userPanel.interfaceLanguage": {
     "defaultMessage": "Interfaz",
@@ -212,19 +179,12 @@
     "defaultMessage": "Configuración de usuario guardada",
     "description": "Snackbar quan els settings d'usuari s'han desat correctament"
   },
-  "components.defaultSettings.userPanel.saveError": {
-    "defaultMessage": "Error al guardar la configuración de usuario",
-    "description": "Snackbar quan hi ha error en desar els settings d'usuari"
-  },
   "components.defaultSettings.userPanel.sectionTitle": {
     "defaultMessage": "Idioma",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
   "components.defaultSettings.userPanel.panelHint": {
     "defaultMessage": "Ajustes de tu cuenta: idioma de la aplicación, idioma de búsqueda y tema. Se aplican en toda la app."
-  },
-  "components.defaultSettings.vocabularyPanel.title": {
-    "defaultMessage": "Vocabulario personal"
   },
   "components.defaultSettings.vocabularyPanel.sectionWord": {
     "defaultMessage": "Palabra",
@@ -251,12 +211,6 @@
   },
   "components.defaultSettings.vocabularyPanel.updateButton": {
     "defaultMessage": "Actualizar"
-  },
-  "components.defaultSettings.vocabularyPanel.uploadImage": {
-    "defaultMessage": "Subir imagen"
-  },
-  "components.defaultSettings.vocabularyPanel.removeImage": {
-    "defaultMessage": "Eliminar imagen"
   },
   "components.defaultSettings.vocabularyPanel.loginRequired": {
     "defaultMessage": "Necesitas iniciar sesión para usar el vocabulario personal."
@@ -349,9 +303,6 @@
     "defaultMessage": "Ejemplo: niño, poner, cinturón de seguridad.",
     "description": "Helper text field"
   },
-  "components.newsNavBar.langSelector": {
-    "defaultMessage": "Idioma"
-  },
   "components.newsNavBar.mainNavigation": {
     "defaultMessage": "Navegación principal"
   },
@@ -364,12 +315,6 @@
   "components.newsNavBar.skipToContent": {
     "defaultMessage": "Saltar al contenido principal"
   },
-  "components.newsNavBar.start": {
-    "defaultMessage": "Crea una secuencia"
-  },
-  "components.newsNavBar.welcome": {
-    "defaultMessage": "Inicio"
-  },
   "components.pictEdit.close": {
     "defaultMessage": "Cerrar",
     "description": "Close modal, edit pictogram"
@@ -377,10 +322,6 @@
   "components.pictEdit.delete": {
     "defaultMessage": "Eliminar",
     "description": "Delete modal, edit pictogram"
-  },
-  "components.pictEdit.modal.description": {
-    "defaultMessage": "Puedes editar el pictograma",
-    "description": "Description modal"
   },
   "components.pictEdit.modal.label": {
     "defaultMessage": "Editar Pictograma",
@@ -575,9 +516,6 @@
   "context.feedback.search.complete": {
     "defaultMessage": "{count} pictogramas añadidos"
   },
-  "context.feedback.search.error": {
-    "defaultMessage": "Error buscando pictogramas"
-  },
   "context.feedback.search.loading": {
     "defaultMessage": "Buscando pictogramas..."
   },
@@ -592,10 +530,6 @@
   "features.backend.auth.documentLoaded": {
     "defaultMessage": "Documento cargado",
     "description": "Missatge de confirmació quan es carrega un document del backend"
-  },
-  "features.backend.auth.documentSaved": {
-    "defaultMessage": "Documento guardado en la nube",
-    "description": "Missatge de confirmació quan el document es desa al backend"
   },
   "features.backend.auth.email": {
     "defaultMessage": "Correo electrónico",
@@ -1118,10 +1052,6 @@
   },
   "pages.viewSequence.tooltip.print": {
     "defaultMessage": "Imprimir"
-  },
-  "pictogram.empty": {
-    "defaultMessage": "Vacío",
-    "description": "Empty pictogram"
   },
   "setting.font-family.title": {
     "defaultMessage": "Familia",

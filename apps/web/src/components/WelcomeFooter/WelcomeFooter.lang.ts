@@ -1,5 +1,9 @@
 import { defineMessages } from "react-intl";
 
+// Textos d'atribució del peu de la pàgina d'inici. Venien de
+// `CopyRightSpeedDial`, esborrat perquè ningú el renderitzava (C4 de
+// l'auditoria d'UX); els `id` conserven el nom antic a propòsit, perquè
+// canviar-los només rebatejaria les claus dels cinc fitxers de traducció.
 const messages = defineMessages({
   license: {
     id: "components.copyRightDial.license.label",

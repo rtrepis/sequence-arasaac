@@ -64,11 +64,6 @@ const messages = defineMessages({
     defaultMessage: "Tanca sessió",
     description: "Ítem del drawer per tancar la sessió",
   },
-  documentSaved: {
-    id: "features.backend.auth.documentSaved",
-    defaultMessage: "Document desat al núvol",
-    description: "Missatge de confirmació quan el document es desa al backend",
-  },
   documentLoaded: {
     id: "features.backend.auth.documentLoaded",
     defaultMessage: "Document carregat",

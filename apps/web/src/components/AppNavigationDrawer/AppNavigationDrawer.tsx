@@ -5,7 +5,6 @@ import {
   Box,
   Divider,
   Drawer,
-  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -362,14 +361,17 @@ const AppNavigationDrawer = ({
                 />
               </ListItemButton>
 
-              {/* Accés al panell d'administració. Text en català sense traduir:
-                  el panell mateix només existeix en català (eina interna) */}
+              {/* Accés al panell d'administració. L'enllaç sí que es tradueix,
+                  encara que la pàgina de darrere només existeixi en català
+                  (excepció declarada al CLAUDE.md): el drawer és superfície
+                  traduïda i una paraula catalana enmig d'una llista francesa no
+                  es pot llegir */}
               {isAdmin && (
                 <ListItemButton onClick={() => handleNavigate("/admin")}>
                   <ListItemIcon>
                     <AiOutlineSafety />
                   </ListItemIcon>
-                  <ListItemText primary="Administració" />
+                  <ListItemText primary={intl.formatMessage(messages.admin)} />
                 </ListItemButton>
               )}
 

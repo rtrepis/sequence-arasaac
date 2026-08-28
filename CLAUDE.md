@@ -160,7 +160,7 @@ Font única de veritat: `context/FeedbackContext/`. Quatre mecanismes i un crite
 
 | Mecanisme | Quan | Precedents |
 |---|---|---|
-| **Backdrop amb missatge + snackbar al final** | L'operació **impedeix seguir treballant** (bloqueja el fil principal o l'app no té sentit fins que acabi) | desa i carrega al núvol (`AppNavigationDrawer`), carrega `.saac` (`ButtonWithFileLoad`), genera el PDF (`useDownloadPdf`) |
+| **Backdrop amb missatge + snackbar al final** | L'operació **impedeix seguir treballant** (bloqueja el fil principal o l'app no té sentit fins que acabi) | desa i carrega al núvol, i carrega `.saac` (`AppNavigationDrawer`), genera el PDF (`useDownloadPdf`) |
 | **Snackbar sol** | Final d'acció instantània, èxit i error | descarrega `.saac`, `ApplyAll`, vocabulari, esborrany |
 | **Progress determinat** | Hi ha **N passos comptables** | `useSequentialSearch` (N paraules) |
 | **Spinner al botó + `aria-busy`** | El botó és l'únic que canvia i **l'app segueix viva** | `UploadImageButton` |

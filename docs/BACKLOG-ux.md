@@ -270,8 +270,8 @@ operacions que no el toquen**, i la que hi va de debò portava un disquet.
   «Carrega» quedaven **el mateix dibuix mirallat**, i de costat en una llista a 24px no es
   distingien (verificat amb captura). La carpeta, a més, diu la veritat: no es puja res enlloc, es
   tria un fitxer.
-- Queden amb la icona antiga `ButtonWithFileLoad` i `ButtonWithModalDownload`, que són codi mort
-  (verificat de nou); van amb C4.
+- Quedaven amb la icona antiga `ButtonWithFileLoad` i `ButtonWithModalDownload`, que eren codi
+  mort; C4 els ha esborrat.
 
 ### B2 — L'engranatge porta a «Configuració» i també a «Administració» ✅ Resolta
 
@@ -599,26 +599,39 @@ Branca `claude/backlog-branch-master-64uh75`.
   verbs. Ant i Material comparteixen dibuix (traçat omplert); qui desentona és Tabler, de traç. Si
   algun dia es fixa l'estàndard, aquest menú és el cas de prova.
 
-### C4 — Components morts i col·lisió de traduccions 🔴 Oberta
+### C4 — Components morts i col·lisió de traduccions ✅ Resolta
 
-Verificat el 2026-08-22:
+Branca `claude/backlog-tasques-255sae`.
 
-| Element | Problema |
+**Components esborrats**
+
+| Element | Què se n'ha fet |
 |---|---|
-| ~~`ToggleButtonEditViewPages`~~ | ✅ Esborrat (B4/C5, branca `claude/backlog-branch-master-64uh75`), amb el seu `.lang.ts` i el seu `.styled.ts` |
-| `ButtonWithFileLoad` | Cap import extern |
-| `CopyRightSpeedDial` | `BarNavigation` l'importa però no el renderitza mai: el racó inferior dret era lliure quan s'hi va posar `DocumentStatusFab` (A1b) |
-| `ButtonWithModalDownload/ButtonWithModalDonwload.tsx` | El botó no s'importa enlloc; només se'n fa servir `ModalDownload.tsx` (des d'`AppNavigationDrawer`) |
-| ~~`components.pictEdit.reset`~~ | ✅ Resolt (B5, branca `claude/backlog-branch-master-64uh75`): esborrada la definició no usada de `PictEditModal/PictEdit.lang.ts` |
-| Missatges orfes | `upload`, `download`, `openMenu`, `langSelector`… a `BarNavigation.lang.ts` i `AppNavigationDrawer.lang.ts`, sense consumidor |
-| `features.backend.auth.documentSaved` | Orfe des de B12: el desat confirma amb `documentSavedNamed` (««{title}» s'ha desat al núvol»), que sempre té nom. Es conserva traduït als cinc idiomes sense que ningú el demani |
+| `ToggleButtonEditViewPages` | ✅ Esborrat abans (B4/C5, branca `claude/backlog-branch-master-64uh75`) |
+| `ButtonWithFileLoad` | Esborrat sencer (component + `.lang.ts`): cap import extern. Qui carrega el `.saac` és `AppNavigationDrawer`, i el `CLAUDE.md` deia el contrari a la taula de feedback — corregit |
+| `CopyRightSpeedDial` | Esborrat el component i l'`import` mort de `BarNavigation`. El seu `.lang.ts` **sobreviu**, mogut a `WelcomeFooter.lang.ts`, que n'era l'únic consumidor de debò |
+| `ButtonWithModalDonwload.tsx` | Esborrat el botó; el `.lang.ts` passa a dir-se `ModalDownload.lang.ts`, pel component que en queda |
+| `features/pictogram/hooks/newPictogram.lang.ts` | Esborrat: cap importador i la seva única clau (`pictogram.empty`) sense consumidor |
+| `IconButton` a `AppNavigationDrawer` | Import sense ús, el va trobar l'ESLint en passar-hi |
 
-**Per què importa**: no confon l'usuari final, però tocar `components.pictEdit.reset` en un dels dos
-fitxers pot canviar silenciosament el text de l'altre.
+**Missatges orfes**: 23 claus esborrades dels cinc fitxers de traducció (516 → 495 claus per
+idioma), entre elles les quatre que l'entrada nomenava (`upload`, `download`, `openMenu`,
+`langSelector`) i `features.backend.auth.documentSaved`. També `NewsNavBar` (3),
+`VocabularySettingsPanel` (3), `ViewSettingsPanel` (2), `DefaultForm` (2) i quatre més soltes.
 
-**Estat**: queden obertes les entrades sense ratllar de la taula. Les dues ratllades van caure de
-retruc en resoldre B4/B5/C5; la resta (`ButtonWithFileLoad`, `CopyRightSpeedDial`,
-`ButtonWithModalDownload` i els missatges orfes) continuen igual.
+**Com s'han trobat, i per què es pot confiar en el resultat**: un `id` es dona per orfe només si
+apareix **una sola vegada** a tot `src` —la seva pròpia definició— i el fitxer que el declara no
+llegeix els seus missatges per clau dinàmica. La segona condició és imprescindible: hi ha vuit
+fitxers que fan `messages[clau]` (els `SettingCard*`, `MouseActionList`, els codis d'error
+d'`AuthModal`, `PasswordStrengthGuide`, `SignupPage`), i buscar-hi `.clau` literal els donaria tots
+per morts. El detector els va marcar i es van descartar un a un.
+
+**La col·lisió que hi havia darrere**: `components.defaultSettings.saveError` (a `DefaultForm.lang.ts`)
+semblava usat perquè `SettingsSaveErrorDialog.lang.ts` en declara set variants amb el mateix prefix
+(`.title`, `.bodyCloud`, `.retry`…). Buscar la clau per text donava nou coincidències i cap era
+seva. Aquesta era exactament la manera de canviar un text sense voler que l'entrada avisava; ara la
+clau ja no hi és, i les altres dues del mateix cas (`components.defaultSettings.upload` i
+`.download`, declarades a `BarNavigation.lang.ts` amb un prefix que no els tocava) tampoc.
 
 ### C5 — `aria-label` en anglès literal als grups de toggles ✅ Resolta
 
@@ -652,25 +665,34 @@ les accions amb el diàleg (A8).
   MUI, sinó a `pictogram-actions-{índex}`. A més d'anomenar el que hi ha, evita ids repetits al DOM:
   la mateixa llista es pot muntar des del menú contextual o des del diàleg.
 
-### C7 — El snackbar tapa el botó flotant d'estat en mòbil 🔴 Oberta
+### C7 — El snackbar tapa el botó flotant d'estat en mòbil ✅ Resolta
 
-*(Trobada en implementar A1b.)*
+Branca `claude/backlog-tasques-255sae`. *(Trobada en implementar A1b.)*
 
-- **On**: `context/FeedbackContext/FeedbackSnackbar.tsx` — `anchorOrigin` a `bottom/center`
-- **Per què importa**: per sota de `sm` el `Snackbar` de MUI ocupa gairebé tota l'amplada inferior i
-  se superposa al `DocumentStatusFab`, que viu a `bottom: 16, right: 16`. Dura els segons de
-  l'avís, però és justament quan l'usuari acaba de desar i pot voler mirar l'estat.
-- **Proposta**: pujar el FAB mentre hi hagi snackbar obert, o ancorar el snackbar a l'esquerra en
-  mòbil.
+- **De les dues propostes s'ha triat moure el snackbar**, no el botó: el botó és permanent i l'avís
+  dura tres segons, o sigui que el que és de pas és el que s'aparta. Pujar el FAB, a més, exigia
+  saber l'alçada real del snackbar (una o dues línies segons el missatge i l'idioma) i acoblar el
+  botó al `FeedbackContext` per un ajust de píxels.
+- Per sota de `sm`, `FeedbackSnackbar` deixa `right: 72px` lliures: el `DocumentStatusFab` viu a
+  `bottom: 16, right: 16` i fa 48 px d'ample, o sigui que arriba fins als 64 del cantó. **Ancorar-lo
+  a l'esquerra sol no hauria servit de res**: per sota de `sm` MUI força `left: 8, right: 8` al
+  Snackbar sigui quin sigui l'`anchorOrigin`, de manera que continua sent de banda a banda.
+- Mesurat a 390px abans i després: el snackbar arribava a `x = 356,6` amb el botó començant a
+  `x = 320` — 37 px de solapament, prou per tapar-lo mig. Ara acaba a `x = 318`.
+- Fixat a `e2e/download-and-status.spec.ts`, que compara les dues caixes.
 
-### C8 — A «Descarrega», l'estat inicial de la casella de configuració no és el que es veu 🔴 Oberta
+### C8 — A «Descarrega», l'estat inicial de la casella de configuració no és el que es veu ✅ Resolta
 
-- **On**: `components/ButtonWithModalDownload/ModalDownload.tsx` — `useState` de `save`
-- **Per què importa**: `save.defaultSettings` s'inicialitza a `documentSaacIsNotEmpty` (cert quan hi
-  ha seqüència) mentre la casella es pinta desmarcada (`<Checkbox />` sense `defaultChecked`). Qui
-  no la toca s'endú la configuració dins del `.saac` sense haver-ho demanat.
-- **Proposta**: una sola font per a l'estat de cada casella; que el que es pinta i el que es desa
-  siguin el mateix valor.
+Branca `claude/backlog-tasques-255sae`.
+
+- Les dues caselles de `ModalDownload` passen a ser **controlades** (`checked={save.…}`): el que es
+  pinta i el que se n'endú el fitxer surten del mateix valor, que era la proposta.
+- L'estat inicial que es conserva és **el que es veia**, no el que es desava: seqüència marcada,
+  configuració desmarcada. Qui obre «Descarrega» ve a salvar la seva feina, no la seva
+  configuració; endur-se-la era l'accident, no la intenció.
+- Confirmat abans de corregir-ho amb `e2e/download-and-status.spec.ts`: amb la casella desmarcada, el
+  `.saac` portava igualment el `defaultSettings` sencer (pell, cabell, vores, tipografies). Ara el
+  test compara el que diuen les caselles amb el que hi ha dins del fitxer descarregat.
 
 ### C9 — El build del web no comprovava tipus, i el CLAUDE.md deia que sí ✅ Resolta
 
@@ -750,18 +772,15 @@ Branca `claude/backlog-branch-master-64uh75`.
   `SettingCardLang`, que arrossegaven el mateix error d'ençà que es van migrar.
 - Els `TextField` sí que continuen amb `inputProps`: allà l'`<input>` és el control de debò.
 
-### C13 — L'ítem «Administració» del drawer és català hardcodat 🔴 Oberta
+### C13 — L'ítem «Administració» del drawer és català hardcodat ✅ Resolta
 
-*(Trobada en resoldre B2, fora del seu abast.)*
+Branca `claude/backlog-tasques-255sae`. *(Trobada en resoldre B2, fora del seu abast.)*
 
-- **On**: `AppNavigationDrawer.tsx` — `<ListItemText primary="Administració" />`, l'únic ítem del
-  drawer que no passa per `react-intl`
-- **Per què importa**: el `CLAUDE.md` declara una excepció perquè la **pàgina** `/admin` vagi només
-  en català (eina interna d'una sola persona). El drawer no hi entra: és superfície traduïda, i un
-  admin amb l'app en francès hi troba una paraula catalana enmig d'una llista francesa. L'enllaç
-  s'ha de poder llegir encara que el que hi ha darrere sigui una excepció declarada.
-- **Proposta**: un missatge `components.appNavigationDrawer.admin` als cinc idiomes. És una línia i
-  no toca l'excepció de la pàgina.
+- `components.appNavigationDrawer.admin` als cinc idiomes, tal com deia la proposta. L'excepció de
+  la **pàgina** `/admin` (només català, sense `react-intl`) queda intacta: el que es tradueix és
+  l'enllaç, que viu en superfície traduïda.
+- El comentari del codi ho diu ara explícitament, perquè el següent que hi passi no ho «arregli» a
+  l'inrevés donant per fet que l'excepció també cobria el drawer.
 
 ### C14 — Esborrar una seqüència no demana confirmació ni es pot desfer ✅ Resolta
 
