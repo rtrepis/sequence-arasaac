@@ -173,8 +173,9 @@ const PictEditModal = ({
         maxWidth={"sm"}
         fullWidth
         TransitionProps={{ onExited: handleExited }}
+        // El radi ja el posa el tema (`MuiDialog`), que és d'on l'ha de treure
+        // qualsevol diàleg: aquí només queda el que és propi d'aquest
         sx={{
-          ".MuiDialog-paperScrollPaper": { borderRadius: 5 },
           ".MuiDialogContent-root": { paddingInline: 1, paddingBlock: 0 },
         }}
       >
