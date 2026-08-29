@@ -1072,7 +1072,7 @@ Branca `claude/backlog-branch-master-64uh75`.
   `dateStyle: "short"` afegit al missatge), o `intl.formatRelativeTime` per als casos recents. La
   decisió es pot prendre al mateix `formatTime`, sense tocar cap consumidor.
 
-### C16 — Ningú demana emmagatzematge persistent al navegador 🔴 Oberta
+### C16 — Ningú demana emmagatzematge persistent al navegador ✅ Resolta
 
 *(Mateixa branca.)*
 
@@ -1087,3 +1087,21 @@ Branca `claude/backlog-branch-master-64uh75`.
   s'escriu un esborrany, ignorant-ne el resultat (a Chrome es concedeix sol segons l'ús del lloc, i
   no obre cap diàleg). No canvia res del format ni del flux; només fa que el nivell 1 dels tres de
   durabilitat aguanti el que diu que aguanta.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`, amb una correcció important a la
+  proposta: **«no obre cap diàleg» només val per a Chrome**. Comprovat a la documentació dels
+  navegadors, Firefox obre un diàleg de permís i, sobretot, **no concedeix res si la crida no ve
+  d'un gest de l'usuari** — o sigui que demanar-ho només des del desat automàtic (un segon després
+  d'un canvi, fora de qualsevol clic) hi és paper mullat.
+  - `storage/persistentStorage.ts` demana `persist()` **una sola vegada per càrrega de pàgina** i
+    només si `persisted()` diu que encara no està concedit; el resultat s'ignora i cap error surt
+    de la funció.
+  - Dos punts de crida: després de la **primera escriptura correcta** de l'esborrany (cobreix
+    Chrome sense demanar res a ningú) i en **obrir el botó flotant d'estat** — un clic, i el moment
+    de l'app on el permís té més sentit, perquè és quan l'usuari està preguntant on es desa la
+    feina. No es demana des de «Desa al núvol» ni «Descarrega»: allà la feina ja va a un lloc
+    durador.
+  - Safari continua amb el seu límit de set dies: contra això no hi ha crida que valgui, i la
+    resposta de l'app ja és una altra (el `.saac` i el núvol).
+  - Fixat a `e2e/persistent-storage.spec.ts`, amb un doble de `navigator.storage` que compta les
+    crides: primera escriptura, gest del botó d'estat, cap crida si ja està concedit i cap canvi de
+    comportament en un navegador sense l'API.
