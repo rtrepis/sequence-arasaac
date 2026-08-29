@@ -23,7 +23,7 @@ import {
   MdOutlineNoteAdd,
   MdOutlineSync,
 } from "react-icons/md";
-import { useIntl } from "react-intl";
+import { MessageDescriptor, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { RootState } from "@app/store";
 import { startNewDocumentThunk } from "@features/sequence/store/documentSlice";
@@ -39,6 +39,23 @@ import messages from "./DocumentStatusFab.lang";
 
 const selectDocumentStatus = (state: RootState) => state.documentStatus;
 const selectIsLoggedIn = (state: RootState) => state.auth.accessToken !== null;
+
+/**
+ * Si un moment és d'avui, comparant **dia de calendari** i no «fa menys de 24
+ * hores»: a les 00:30, un esborrany de les 23:50 d'ahir no és d'avui encara que
+ * faci quaranta minuts, i dir-ne «des de les 23:50» seria exactament el
+ * malentès que aquesta distinció evita.
+ */
+const isToday = (at: number): boolean => {
+  const now = new Date();
+  const moment = new Date(at);
+
+  return (
+    moment.getDate() === now.getDate() &&
+    moment.getMonth() === now.getMonth() &&
+    moment.getFullYear() === now.getFullYear()
+  );
+};
 
 /** Estats en què la feina de pantalla no té cap còpia fora del navegador. */
 const isAtRisk = (durability: DocumentDurability): boolean =>
@@ -57,8 +74,30 @@ const DocumentStatusFab = (): ReactElement => {
 
   const durability = getDocumentDurability(status);
 
-  const formatTime = (at: number | null): string =>
-    at === null ? "" : intl.formatTime(at);
+  /**
+   * L'hora sola quan és d'avui; el dia i l'hora quan no. L'indicador és per a
+   * qui torna, i qui torna és justament qui no sap de quin dia és l'hora que
+   * llegeix. La data no es pot encaixar dins de la frase de sempre («des de les
+   * {time}»): cada llengua hi porta la seva preposició, i per això cada estat té
+   * dues frases i no un format condicional.
+   */
+  const momentText = (
+    at: number | null,
+    todayMessage: MessageDescriptor,
+    datedMessage: MessageDescriptor,
+  ): string => {
+    if (at === null) return intl.formatMessage(todayMessage, { time: "" });
+
+    if (isToday(at))
+      return intl.formatMessage(todayMessage, { time: intl.formatTime(at) });
+
+    return intl.formatMessage(datedMessage, {
+      // Curta i amb any: al panell hi caben 260 px, i un esborrany pot
+      // sobreviure a un canvi d'any
+      date: intl.formatDate(at, { dateStyle: "short" }),
+      time: intl.formatTime(at),
+    });
+  };
 
   const statusText = ((): string => {
     switch (durability) {
@@ -75,16 +114,23 @@ const DocumentStatusFab = (): ReactElement => {
             : messages.statusError,
         );
       case "durable":
-        return intl.formatMessage(
-          status.durableKind === "cloud"
-            ? messages.statusCloud
-            : messages.statusFile,
-          { time: formatTime(status.durableAt) },
-        );
+        return status.durableKind === "cloud"
+          ? momentText(
+              status.durableAt,
+              messages.statusCloud,
+              messages.statusCloudDated,
+            )
+          : momentText(
+              status.durableAt,
+              messages.statusFile,
+              messages.statusFileDated,
+            );
       default:
-        return intl.formatMessage(messages.statusLocal, {
-          time: formatTime(status.draftSavedAt),
-        });
+        return momentText(
+          status.draftSavedAt,
+          messages.statusLocal,
+          messages.statusLocalDated,
+        );
     }
   })();
 

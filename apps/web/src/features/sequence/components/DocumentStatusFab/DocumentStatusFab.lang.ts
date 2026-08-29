@@ -36,6 +36,22 @@ const messages = defineMessages({
     defaultMessage: "Desat al núvol a les {time}",
     description: "Estat quan la feina té còpia al compte de l'usuari",
   },
+  statusLocalDated: {
+    id: "features.sequence.status.localDated",
+    defaultMessage: "Només en aquest dispositiu, des del {date} a les {time}",
+    description:
+      "Estat quan la feina només és a l'esborrany i és d'un altre dia",
+  },
+  statusFileDated: {
+    id: "features.sequence.status.fileDated",
+    defaultMessage: "Descarregat en un fitxer el {date} a les {time}",
+    description: "Estat quan la còpia en fitxer és d'un altre dia",
+  },
+  statusCloudDated: {
+    id: "features.sequence.status.cloudDated",
+    defaultMessage: "Desat al núvol el {date} a les {time}",
+    description: "Estat quan la còpia al núvol és d'un altre dia",
+  },
   statusError: {
     id: "features.sequence.status.error",
     defaultMessage: "Aquest navegador no ha pogut desar la feina",

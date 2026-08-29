@@ -1746,6 +1746,18 @@
     "defaultMessage": "Salvato nel cloud alle {time}",
     "description": "Estat quan la feina té còpia al compte de l'usuari"
   },
+  "features.sequence.status.localDated": {
+    "defaultMessage": "Solo su questo dispositivo, dal {date} alle {time}",
+    "description": "Stato quando il lavoro è solo nella bozza ed è di un altro giorno"
+  },
+  "features.sequence.status.fileDated": {
+    "defaultMessage": "Scaricato in un file il {date} alle {time}",
+    "description": "Stato quando la copia in file è di un altro giorno"
+  },
+  "features.sequence.status.cloudDated": {
+    "defaultMessage": "Salvato nel cloud il {date} alle {time}",
+    "description": "Stato quando la copia nel cloud è di un altro giorno"
+  },
   "features.sequence.status.error": {
     "defaultMessage": "Questo browser non è riuscito a salvare il lavoro",
     "description": "Estat quan l'escriptura de l'esborrany falla"
