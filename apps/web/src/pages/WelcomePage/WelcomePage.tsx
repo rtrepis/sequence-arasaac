@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  CardMedia,
-  Divider,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, CardMedia, Divider, Stack, Typography } from "@mui/material";
 
 import { FormattedMessage, useIntl } from "react-intl";
 import { messages } from "./WelcomePage.lang";
@@ -14,6 +7,7 @@ import React, { useEffect } from "react";
 import NewsCarousel from "../../components/NewsCarousel/NewsCarousel";
 import WelcomeFooter from "../../components/WelcomeFooter/WelcomeFooter";
 import HeaderControls from "../../components/HeaderControls/HeaderControls";
+import StyledButton from "@/style/StyledButton";
 
 const WelcomePage = (): React.ReactElement => {
   const intl = useIntl();
@@ -67,14 +61,16 @@ const WelcomePage = (): React.ReactElement => {
             <FormattedMessage {...messages.liveMotive} />
           </Typography>
           <Link to={"create-sequence"}>
-            <Button
+            {/* El botó de la casa: és l'única acció verda de la pàgina, i al
+                costat d'un «Registra't» arrodonit no pot ser un rectangle en
+                majúscules */}
+            <StyledButton
               variant="contained"
               aria-label={intl.formatMessage(messages.start)}
-              color="primary"
-              sx={{ marginTop: 3, fontWeight: 700 }}
+              sx={{ marginTop: 3 }}
             >
               <FormattedMessage {...messages.start} />
-            </Button>
+            </StyledButton>
           </Link>
         </Stack>
 

@@ -35,8 +35,10 @@ const EditSequencesPage = (): React.ReactElement => {
         alignItems={{ xs: "center", md: "stretch" }}
         flexWrap="wrap"
       >
+        {/* Etiqueta de la tira de seqüències. En verd es quedava a 2,1:1 sobre
+            el full; en gris fa de rètol, que és el que és */}
         <Typography
-          color="primary"
+          color="text.secondary"
           sx={{ whiteSpace: "nowrap", mr: { xs: 1, md: 0 } }}
         >
           <FormattedMessage {...messages.sequences} />
