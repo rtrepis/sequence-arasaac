@@ -283,7 +283,7 @@ export const PAPER_DIMENSIONS_MM = {
 
           <Stack spacing={2}>
             <Box>
-              <Typography variant="subtitle2" color="primary">
+              <Typography variant="subtitle2">
                 A4 Landscape (útil després de marges)
               </Typography>
               <Typography variant="body2">
@@ -294,7 +294,7 @@ export const PAPER_DIMENSIONS_MM = {
                 En píxels: {Math.round(a4Landscape.widthPx)} ×{" "}
                 {Math.round(a4Landscape.heightPx)} px
               </Typography>
-              <Typography variant="body2" color="secondary">
+              <Typography variant="body2" color="text.secondary">
                 Escala calculada: {scaleA4Landscape.toFixed(3)}
               </Typography>
             </Box>
@@ -302,7 +302,7 @@ export const PAPER_DIMENSIONS_MM = {
             <Divider />
 
             <Box>
-              <Typography variant="subtitle2" color="primary">
+              <Typography variant="subtitle2">
                 A4 Portrait (útil després de marges)
               </Typography>
               <Typography variant="body2">
@@ -313,7 +313,7 @@ export const PAPER_DIMENSIONS_MM = {
                 En píxels: {Math.round(a4Portrait.widthPx)} ×{" "}
                 {Math.round(a4Portrait.heightPx)} px
               </Typography>
-              <Typography variant="body2" color="secondary">
+              <Typography variant="body2" color="text.secondary">
                 Escala calculada: {scaleA4Portrait.toFixed(3)}
               </Typography>
             </Box>
@@ -321,7 +321,7 @@ export const PAPER_DIMENSIONS_MM = {
             <Divider />
 
             <Box>
-              <Typography variant="subtitle2" color="primary">
+              <Typography variant="subtitle2">
                 A3 Landscape (útil després de marges)
               </Typography>
               <Typography variant="body2">

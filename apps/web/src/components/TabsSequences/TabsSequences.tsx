@@ -67,6 +67,16 @@ const TabsSequences = (): React.ReactElement => {
     deleteLastSequence();
   };
 
+  /**
+   * El número de la seqüència activa el diu la tinta del tema, no el verd: com a
+   * color de text, el verd de la casa es queda a 2,1:1 sobre el full. El verd es
+   * queda a la barra de l'indicador, que és decoració i no l'única senyal.
+   */
+  const sequenceTabsSx = {
+    "& .MuiTab-root": { color: "text.secondary" },
+    "& .MuiTab-root.Mui-selected": { color: "text.primary" },
+  };
+
   const tabs = [...Array(amount)].map((_, index) => (
     <Tab
       key={`tab-${index}`}
@@ -144,7 +154,7 @@ const TabsSequences = (): React.ReactElement => {
             value={value}
             onChange={handleChange}
             aria-label={intl.formatMessage(messages.sequenceNumber)}
-            sx={{ minHeight: 36 }}
+            sx={{ minHeight: 36, ...sequenceTabsSx }}
           >
             {tabs}
           </Tabs>
@@ -175,7 +185,12 @@ const TabsSequences = (): React.ReactElement => {
           value={value}
           onChange={handleChange}
           aria-label={intl.formatMessage(messages.sequenceNumber)}
-          sx={{ borderRight: 1, borderColor: "divider", width: 100 }}
+          sx={{
+            borderRight: 1,
+            borderColor: "divider",
+            width: 100,
+            ...sequenceTabsSx,
+          }}
         >
           {tabs}
         </Tabs>
