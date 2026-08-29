@@ -698,7 +698,7 @@ d'IndexedDB i al fitxer `.saac`.
     absència curta (cap ping), absència llarga (un ping), sense sessió (cap ping) i diàleg de desar
     (un ping).
 
-### B18 — En recarregar amb sessió, l'app es pinta amb la configuració de l'anònim fins que respon Render 🔴 Oberta
+### B18 — En recarregar amb sessió, l'app es pinta amb la configuració de l'anònim fins que respon Render ✅ Resolta
 
 *(Mateixa branca.)*
 
@@ -715,6 +715,25 @@ d'IndexedDB i al fitxer `.saac`.
   compte** (sense vocabulari, com ja fa el thunk anònim) i fer-la servir com a caché d'arrencada
   quan hi ha una marca de sessió prèvia; així el que es pinta primer ja és el bo i la resposta del
   backend, quan arriba, no canvia res a la vista.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`:
+  - `settingsStorage` guarda l'última configuració coneguda del compte sota una **clau pròpia**
+    (`accountUi`), mai la de l'anònim: si compartissin calaix, entrar al compte se les menjaria i
+    tancar sessió no podria recuperar-les. Només s'hi desa el que es pinta —idioma, tema,
+    pictogrames i vista—: ni vocabulari (imatges, dispositiu compartit) ni estat del compte
+    (`tier`, `emailVerified`, `role`), que el decideix el servidor a cada petició.
+  - S'escriu als dos únics moments on la configuració del compte és certa: quan el backend la
+    retorna (`syncSettingsAfterAuth`) i quan l'usuari prem «Desa com a preferències» amb sessió.
+    S'esborra en tancar sessió i quan el refresc silenciós falla — **sense repintar la sessió en
+    curs**, que seria tornar a fer el salt que això vol treure i just quan A11 ja està dient que la
+    sessió ha caducat.
+  - **El salt d'URL calia desbloquejar-lo a part.** L'efecte de locale d'`App.tsx` estava tancat
+    darrere de `isAuthenticated`, que no és cert fins que respon el servidor: amb la caché sola,
+    el tema i els pictogrames sortien bé des del primer render però la URL i els textos continuaven
+    saltant tard. Ara l'efecte també s'executa quan el navegador ja portava configuració de compte
+    en arrencar (llegit un sol cop, en muntar). Sense caché no canvia res: a l'usuari sense compte,
+    un enllaç `/ca/…` continua obrint-se en català.
+  - Fixat a `e2e/account-settings-cache.spec.ts`, amb la resposta de la configuració alentida cinc
+    segons: a la segona càrrega, idioma i URL del compte hi són abans que el servidor respongui.
 
 ### B19 — Amb dues pestanyes obertes, la que torna del fons sobreescriu la feina de l'altra ✅ Resolta
 
@@ -820,6 +839,22 @@ d'IndexedDB i al fitxer `.saac`.
   l'esborrany. Amb compte: posar-se al dia no pot voler dir substituir el que l'usuari té a la
   pantalla —fer desaparèixer feina visible és pitjor que no desar-la—, així que el més probable és
   que hagi de ser un avís amb acció, no un canvi automàtic.
+
+### B23 — L'idioma desat de l'usuari sense compte no mana sobre el de la URL 🔴 Oberta
+
+*(Trobada resolent B18, branca `claude/estudi-pla-execucio-2w1pzq`.)*
+
+- **On**: `App.tsx` (l'efecte de locale, que només s'executa amb sessió o amb caché de compte) i
+  `LanguagesLayaut.tsx` (l'`IntlProvider` pren l'idioma del `:locale` de la URL).
+- **Per què importa**: qui té compte veu l'app en el seu idioma encara que obri un enllaç d'un
+  altre locale; qui no en té, no. Un usuari sense compte que hagi triat castellà i obri
+  `/ca/create-sequence` es queda en català, i la seva preferència desada no hi pinta res. Són
+  **dues regles diferents per a la mateixa cosa** segons si hi ha sessió.
+- **Proposta**: decidir-ne una de sola. Fer que la preferència mani sempre és una línia (treure la
+  condició), però canvia el comportament dels **enllaços compartits**: qui rebi un `/fr/…` d'algú
+  altre acabarà al seu propi idioma. L'alternativa és la contrària —que la URL mani sempre i la
+  preferència només decideixi on aterra qui entra per l'arrel—, que treu el salt del tot. Cap de
+  les dues és òbvia i per això no s'ha decidit dins de B18.
 
 ## Gravetat baixa
 

@@ -5,7 +5,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UserUiSettings } from "../../../../types/ui";
 import { WordProfile } from "@features/word-profile/model/WordProfile";
 import { RootState } from "../../../../app/store";
-import { saveUserUi } from "@features/user-settings/storage/settingsStorage";
+import {
+  saveAccountUi,
+  saveUserUi,
+} from "@features/user-settings/storage/settingsStorage";
 import { updateUiSettings } from "../services/settingsService";
 import {
   classifyRequestFailure,
@@ -58,6 +61,9 @@ export const saveUserUiThunk = createAsyncThunk<
 
     if (isAuthenticated) {
       await updateUiSettings(payload);
+      // La caché d'arrencada avança amb el que l'usuari acaba de desar; si no,
+      // la propera vegada s'hi pintaria la configuració anterior
+      saveAccountUi(payload);
     } else {
       // Sense sessió no hi ha vocabulari personal: la funcionalitat només existeix
       // dins d'un compte. Escriure'l al navegador només serviria per omplir-lo

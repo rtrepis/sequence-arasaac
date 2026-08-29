@@ -9,7 +9,10 @@ import {
   updateThemeActionCreator,
   applyUserViewSettingsActionCreator,
 } from "@features/user-settings/store/uiSlice";
-import { getStoredUserUi } from "../../features/user-settings/storage/settingsStorage";
+import {
+  getStoredAccountUi,
+  getStoredUserUi,
+} from "../../features/user-settings/storage/settingsStorage";
 import { langTranslateApp } from "../../configs/languagesConfigs";
 import { LangsApp } from "../../types/ui";
 import { refreshSessionThunk } from "@features/backend/auth/store/authSlice";
@@ -27,9 +30,12 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
   useWarmUpOnReturn();
 
   useEffect(() => {
-    // Restaura preferències de l'usuari anònim (localStorage)
-    // Si hi ha sessió activa, refreshSessionThunk les sobreescriurà amb les del backend
-    const storedUi = getStoredUserUi();
+    // L'última configuració coneguda del compte mana sobre la de l'anònim: si hi
+    // és, l'última cosa que va passar en aquest navegador va ser tenir sessió, i
+    // esperar el servidor per pintar-la vol dir fins a un minut amb el tema i
+    // l'idioma d'una altra persona. La caché s'esborra en tancar sessió i quan el
+    // refresc silenciós falla, de manera que la seva presència ja és el senyal.
+    const storedUi = getStoredAccountUi() ?? getStoredUserUi();
 
     if (storedUi) {
       dispatch(updateDefaultSettingsActionCreator(storedUi.defaultSettings));
