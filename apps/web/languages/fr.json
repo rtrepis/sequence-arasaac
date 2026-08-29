@@ -1754,6 +1754,18 @@
     "defaultMessage": "Cela reste dans ce navigateur, qui peut l'effacer de lui-même. Téléchargez-le ou enregistrez-le dans le cloud pour le conserver ailleurs.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
   },
+  "features.sequence.draft.conflictError": {
+    "defaultMessage": "Un autre onglet a un travail plus récent. Celui-ci a cessé d'enregistrer tout seul pour ne pas l'effacer : télécharge ce que tu as ici si tu veux le garder.",
+    "description": "Avertissement lorsqu'un autre onglet a enregistré le brouillon plus tard que celui-ci"
+  },
+  "features.sequence.status.conflict": {
+    "defaultMessage": "Un autre onglet a un travail plus récent",
+    "description": "État lorsque cet onglet a cessé d'écrire le brouillon pour ne pas en écraser un autre"
+  },
+  "features.sequence.status.hintConflict": {
+    "defaultMessage": "Cet onglet n'enregistre plus tout seul. Télécharge ce que tu as ici si tu veux le garder.",
+    "description": "Explication lorsqu'un autre onglet détient une version plus récente du brouillon"
+  },
   "features.sequence.status.hintError": {
     "defaultMessage": "Téléchargez le fichier maintenant : c'est le seul moyen de ne pas perdre le travail.",
     "description": "Explicació quan el navegador no pot desar l'esborrany"

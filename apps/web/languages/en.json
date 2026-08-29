@@ -1754,6 +1754,18 @@
     "defaultMessage": "It stays in this browser, which can delete it on its own. Download it or save it to the cloud to keep it somewhere else.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
   },
+  "features.sequence.draft.conflictError": {
+    "defaultMessage": "Another tab has newer work. This one has stopped saving on its own so it doesn't erase it: download what you have here if you want to keep it.",
+    "description": "Warning when another tab saved the draft more recently than this one"
+  },
+  "features.sequence.status.conflict": {
+    "defaultMessage": "Another tab has newer work",
+    "description": "Status when this tab stopped writing the draft to avoid overwriting another one"
+  },
+  "features.sequence.status.hintConflict": {
+    "defaultMessage": "This tab no longer saves on its own. Download what you have here if you want to keep it.",
+    "description": "Explanation when another tab holds a newer version of the draft"
+  },
   "features.sequence.status.hintError": {
     "defaultMessage": "Download the file now: it is the only way not to lose your work.",
     "description": "Explicació quan el navegador no pot desar l'esborrany"

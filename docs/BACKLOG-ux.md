@@ -703,7 +703,7 @@ d'IndexedDB i al fitxer `.saac`.
   quan hi ha una marca de sessió prèvia; així el que es pinta primer ja és el bo i la resposta del
   backend, quan arriba, no canvia res a la vista.
 
-### B19 — Amb dues pestanyes obertes, la que torna del fons sobreescriu la feina de l'altra 🔴 Oberta
+### B19 — Amb dues pestanyes obertes, la que torna del fons sobreescriu la feina de l'altra ✅ Resolta
 
 *(Mateixa branca.)*
 
@@ -720,6 +720,27 @@ d'IndexedDB i al fitxer `.saac`.
   d'aquesta pestanya (comparació de `savedAt` dins la mateixa transacció), i avisar quan es detecti
   el conflicte. Amb `BroadcastChannel` es podria, a més, fer que la pestanya que torna es posi al
   dia; però amb la comprovació d'escriptura ja no es perd res, que és el que importa.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`:
+  - **També s'enduia les imatges.** La recollida d'òrfenes del magatzem `draftImages` va dins de la
+    mateixa escriptura i esborra tot el que el document entrant no referencia: la pestanya vella no
+    només guanyava, sinó que deixava l'altra sense imatges. El guard cobreix les dues coses — amb
+    conflicte, la transacció es queda en una lectura i no toca res.
+  - `saveDraft` llegeix el registre i compara `savedAt` **dins de la mateixa transacció**
+    `readwrite` (el navegador les serialitza sobre un mateix magatzem, així que entre la lectura i
+    l'escriptura no s'hi pot ficar ningú) i retorna `"saved" | "conflict" | "error"` en comptes
+    d'un booleà.
+  - `useDocumentDraft` recorda el `savedAt` de l'últim registre que aquesta pestanya coneix: el que
+    ha llegit en arrencar —tant si el restaura com si no, perquè el que compta és haver-lo vist— i
+    el que ha escrit ella mateixa. I **marca com a escrit el document que acaba de restaurar**:
+    sense això, el primer flush el tornava a escriure tal qual, i amb una altra pestanya pel mig
+    aquella escriptura innecessària era justament la que es carregava la feina bona.
+  - `hasDraftError: boolean` passa a `draftError: "storage" | "conflict" | null`. Calia que el
+    conflicte arribés a l'estat: amb `draftSavedAt` congelat, `getDocumentDurability` es quedava en
+    `saving` i el botó flotant deia «Desant en aquest dispositiu…» per sempre. Ara diu «Una altra
+    pestanya té feina més nova» i què s'hi pot fer.
+  - Avís un sol cop per sessió, com el d'espai exhaurit. Traduït als cinc idiomes.
+  - Fixat a `e2e/draft-two-tabs.spec.ts`, amb dues pàgines dins del **mateix context** de
+    Playwright (que és el que fa que comparteixin l'IndexedDB de l'origen).
 
 ### B20 — El format de pàgina no és del document i es perd en recarregar ✅ Resolta
 
@@ -770,6 +791,22 @@ d'IndexedDB i al fitxer `.saac`.
 - **Proposta**: separar els dos rols —preferència desada i estat de sessió de la vista— en dos
   camps, i que «Restaura» llegeixi sempre el primer. Toca el panell de vista sencer, per això no
   s'ha fet dins de B20.
+
+### B22 — Les pestanyes no es coordinen: ni es posen al dia ni comparteixen el «Document nou» 🔴 Oberta
+
+*(Trobada resolent B19, branca `claude/estudi-pla-execucio-2w1pzq`.)*
+
+- **On**: `useDocumentDraft.ts` (la pestanya bloquejada per conflicte), `documentSlice.ts`
+  (`startNewDocumentThunk` → `clearDraft`) i `draftStorage.ts` (clau única per a tot l'origen).
+- **Per què importa**: B19 ha tancat la pèrdua de feina —una pestanya ja no pot esborrar la feina
+  d'una altra—, però les pestanyes continuen sense parlar-se. Passen dues coses: la pestanya
+  bloquejada **es queda bloquejada** fins que es recarrega, encara que l'altra ja s'hagi tancat; i
+  «Document nou» d'una pestanya **esborra l'esborrany de totes**, de manera que l'altra es queda
+  amb la feina només a la pantalla sense saber-ho.
+- **Proposta**: `BroadcastChannel` per avisar les altres pestanyes quan es desa o s'esborra
+  l'esborrany. Amb compte: posar-se al dia no pot voler dir substituir el que l'usuari té a la
+  pantalla —fer desaparèixer feina visible és pitjor que no desar-la—, així que el més probable és
+  que hagi de ser un avís amb acció, no un canvi automàtic.
 
 ## Gravetat baixa
 

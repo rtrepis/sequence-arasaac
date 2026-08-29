@@ -66,7 +66,13 @@ const DocumentStatusFab = (): ReactElement => {
       case "saving":
         return intl.formatMessage(messages.statusSaving);
       case "error":
-        return intl.formatMessage(messages.statusError);
+        // Les dues causes deixen la feina només a la pantalla, però no volen dir
+        // el mateix ni tenen la mateixa sortida
+        return intl.formatMessage(
+          status.draftError === "conflict"
+            ? messages.statusConflict
+            : messages.statusError,
+        );
       case "durable":
         return intl.formatMessage(
           status.durableKind === "cloud"
@@ -82,7 +88,12 @@ const DocumentStatusFab = (): ReactElement => {
   })();
 
   const hintText = ((): string | null => {
-    if (durability === "error") return intl.formatMessage(messages.hintError);
+    if (durability === "error")
+      return intl.formatMessage(
+        status.draftError === "conflict"
+          ? messages.hintConflict
+          : messages.hintError,
+      );
     if (durability === "local" || durability === "saving")
       return intl.formatMessage(messages.hintLocal);
     return null;

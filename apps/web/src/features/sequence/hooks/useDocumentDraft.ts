@@ -5,13 +5,14 @@
 // només es conservava prement «Descarrega» o «Desa al núvol», i un refresc
 // accidental s'enduia la feina sense cap avís.
 import { useCallback, useEffect, useRef } from "react";
-import { useIntl } from "react-intl";
+import { MessageDescriptor, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { RootState } from "@app/store";
 import { loadDocumentSaacActionCreator } from "@features/sequence/store/documentSlice";
 import { readDraft, saveDraft } from "@features/sequence/storage/draftStorage";
 import {
   documentStatusRestoredActionCreator,
+  draftBlockedByOtherTabActionCreator,
   draftRestoreSettledActionCreator,
   draftSavedActionCreator,
   draftSaveFailedActionCreator,
@@ -87,9 +88,28 @@ export const useDocumentDraft = (): void => {
     viewSettings: ViewSettings;
   } | null>(null);
 
-  // L'avís de «no s'ha pogut desar» surt un sol cop: si l'espai s'ha acabat,
-  // cada canvi posterior tornaria a fallar i el convertiria en soroll
+  // El `savedAt` de l'últim registre que aquesta pestanya coneix: el que ha
+  // llegit en arrencar o el que ha escrit ella mateixa. Si al disc n'hi ha un de
+  // més nou, és d'una altra pestanya i no es pot trepitjar.
+  const lastSeenSavedAtRef = useRef<number | null>(null);
+
+  // L'avís de «no s'ha pogut desar» surt un sol cop: si l'espai s'ha acabat —o
+  // si l'altra pestanya continua treballant—, cada canvi posterior tornaria a
+  // fallar i el convertiria en soroll
   const hasWarnedRef = useRef(false);
+
+  const warnOnce = useCallback(
+    (message: MessageDescriptor) => {
+      if (hasWarnedRef.current) return;
+
+      hasWarnedRef.current = true;
+      showSnackbar({
+        message: intl.formatMessage(message),
+        severity: "warning",
+      });
+    },
+    [intl, showSnackbar],
+  );
 
   const persist = useCallback(async () => {
     const current = documentRef.current;
@@ -111,27 +131,29 @@ export const useDocumentDraft = (): void => {
     // no viatja ni al `.saac` ni al núvol—, així que girar el full no converteix
     // un document desat al núvol en feina sense desar.
     const { changedAt, durableAt, durableKind } = statusRef.current;
-    const saved = await saveDraft(
+    const result = await saveDraft(
       current,
       { savedAt, changedAt, durableAt, durableKind },
       currentView,
+      lastSeenSavedAtRef.current,
     );
 
-    if (saved) {
+    if (result === "saved") {
       persistedRef.current = { document: current, viewSettings: currentView };
+      lastSeenSavedAtRef.current = savedAt;
       dispatch(draftSavedActionCreator(savedAt));
       return;
     }
 
-    dispatch(draftSaveFailedActionCreator());
-    if (hasWarnedRef.current) return;
+    if (result === "conflict") {
+      dispatch(draftBlockedByOtherTabActionCreator());
+      warnOnce(messages.conflictError);
+      return;
+    }
 
-    hasWarnedRef.current = true;
-    showSnackbar({
-      message: intl.formatMessage({ ...messages.saveError }),
-      severity: "warning",
-    });
-  }, [dispatch, intl, showSnackbar]);
+    dispatch(draftSaveFailedActionCreator());
+    warnOnce(messages.saveError);
+  }, [dispatch, warnOnce]);
 
   // Restauració: només en arrencar, i només si no hi ha res a la pantalla.
   // Si mentre es llegia l'esborrany l'usuari ja ha carregat un document o ha
@@ -142,6 +164,10 @@ export const useDocumentDraft = (): void => {
     void (async () => {
       const draft = await readDraft();
       if (cancelled) return;
+
+      // S'ha vist encara que no se'n faci cas: el que compta per no trepitjar
+      // una altra pestanya és quin registre coneix aquesta, no si l'ha restaurat
+      if (draft !== null) lastSeenSavedAtRef.current = draft.savedAt;
 
       if (
         draft !== null &&
@@ -161,14 +187,23 @@ export const useDocumentDraft = (): void => {
           }),
         );
 
+        const restoredView = draft.viewSettings
+          ? sanitizeViewSettings(draft.viewSettings)
+          : null;
+
         // El format de pàgina només es restaura amb el document: aplicar el
         // d'una sessió antiga sobre feina nova seria pitjor que perdre'l
-        if (draft.viewSettings)
-          dispatch(
-            sessionViewSettingsRestoredActionCreator(
-              sanitizeViewSettings(draft.viewSettings),
-            ),
-          );
+        if (restoredView !== null)
+          dispatch(sessionViewSettingsRestoredActionCreator(restoredView));
+
+        // El que s'acaba de llegir ja és el que hi ha escrit: sense marcar-ho,
+        // el primer flush el tornaria a escriure tal qual, i amb una altra
+        // pestanya pel mig aquella escriptura innecessària és justament la que
+        // es carrega la feina bona
+        persistedRef.current = {
+          document: draft.document,
+          viewSettings: restoredView ?? viewSettingsRef.current,
+        };
       }
 
       // Es marca sempre, hi hagi hagut esborrany o no: la pàgina de vista hi

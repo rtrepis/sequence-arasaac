@@ -41,6 +41,12 @@ const messages = defineMessages({
     defaultMessage: "Aquest navegador no ha pogut desar la feina",
     description: "Estat quan l'escriptura de l'esborrany falla",
   },
+  statusConflict: {
+    id: "features.sequence.status.conflict",
+    defaultMessage: "Una altra pestanya té feina més nova",
+    description:
+      "Estat quan aquesta pestanya ha deixat d'escriure l'esborrany per no trepitjar-ne una altra",
+  },
   hintLocal: {
     id: "features.sequence.status.hintLocal",
     defaultMessage:
@@ -52,6 +58,13 @@ const messages = defineMessages({
     defaultMessage:
       "Descarrega el fitxer ara: és l'única manera de no perdre la feina.",
     description: "Explicació quan el navegador no pot desar l'esborrany",
+  },
+  hintConflict: {
+    id: "features.sequence.status.hintConflict",
+    defaultMessage:
+      "Aquesta pestanya ja no desa sola. Descarrega el que hi tens si el vols conservar.",
+    description:
+      "Explicació quan una altra pestanya té una versió més nova de l'esborrany",
   },
   actionCloud: {
     id: "features.sequence.status.actionCloud",
