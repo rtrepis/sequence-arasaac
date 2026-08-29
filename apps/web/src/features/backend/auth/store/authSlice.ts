@@ -12,8 +12,10 @@ import {
   setTierActionCreator,
 } from "@features/user-settings/store/uiSlice";
 import {
+  clearStoredAccountUi,
   clearStoredWordProfiles,
   getStoredUserUi,
+  saveAccountUi,
 } from "@features/user-settings/storage/settingsStorage";
 import { langTranslateApp } from "../../../../configs/languagesConfigs";
 import { LangsApp } from "../../../../types/ui";
@@ -54,6 +56,7 @@ const syncSettingsAfterAuth = async (
   dispatch: (action: unknown) => void,
 ): Promise<AccountFlags> => {
   try {
+    const settings = await getUiSettings();
     const {
       lang,
       theme,
@@ -63,7 +66,13 @@ const syncSettingsAfterAuth = async (
       tier,
       emailVerified,
       role,
-    } = await getUiSettings();
+    } = settings;
+
+    // Aquest és un dels dos moments on la configuració del compte és certa (l'altre
+    // és quan l'usuari la desa): es guarda per pintar-hi la propera arrencada
+    // sense haver d'esperar el servidor
+    saveAccountUi(settings);
+
     dispatch(updateDefaultSettingsActionCreator(defaultSettings));
     dispatch(
       updateLangSettingsActionCreator({ app: lang.app, search: lang.search }),
@@ -92,6 +101,10 @@ const restoreAnonymousSettings = (
   // configuració anònima. En un dispositiu compartit, que és el cas normal en AAC,
   // això vol dir deixar-hi el vocabulari de qui l'ha fet servir abans.
   dispatch(setWordProfilesActionCreator([]));
+
+  // La cara del compte tampoc no s'ha de quedar al dispositiu: sense això, la
+  // propera arrencada anònima tindria el tema i l'idioma de qui ha sortit
+  clearStoredAccountUi();
 
   const storedUi = getStoredUserUi();
 
@@ -208,6 +221,11 @@ export const refreshSessionThunk = createAsyncThunk(
       return { accessToken, email: payload.email, ...account };
     } catch {
       setAccessToken(null);
+      // La sessió que havia deixat aquesta caché ja no existeix. No es repinta
+      // el que hi ha a pantalla —seria tornar a fer el salt que la caché evita,
+      // i just quan l'avís de sessió caducada ja ho està explicant—, però la
+      // propera arrencada ja ha de ser anònima.
+      clearStoredAccountUi();
       return rejectWithValue("Sessió caducada");
     }
   },

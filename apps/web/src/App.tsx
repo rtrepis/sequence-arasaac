@@ -7,8 +7,9 @@ import {
   useParams,
 } from "react-router-dom";
 import "./App.css";
-import { ReactElement, lazy, Suspense, useEffect } from "react";
+import { ReactElement, lazy, Suspense, useEffect, useState } from "react";
 import LanguageLayout from "./pages/LanguagesLayout/LanguagesLayaut";
+import { getStoredAccountUi } from "./features/user-settings/storage/settingsStorage";
 import WelcomeLayout from "./pages/WelcomePage/WelcomeLayout";
 import AuthStandaloneLayout from "./pages/AuthStandaloneLayout/AuthStandaloneLayout";
 import { Box, CircularProgress } from "@mui/material";
@@ -81,10 +82,22 @@ const App = (): ReactElement => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Quan l'usuari s'autentica i el backend retorna un idioma diferent al de la URL,
-  // navega a la mateixa pàgina però amb el locale correcte (ex: /ca/create-sequence → /fr/create-sequence)
+  // Quan l'idioma del compte no és el de la URL, navega a la mateixa pàgina amb
+  // el locale correcte (ex: /ca/create-sequence → /fr/create-sequence).
+  //
+  // No espera l'autenticació si el navegador ja porta la configuració del compte
+  // desada: aquell efecte és el que feia que la URL saltés a mitja feina quan
+  // responia Render, fins a un minut després d'arrencar. Amb la caché, l'idioma
+  // bo ja hi és al primer render i la correcció passa abans que hi hagi res per
+  // llegir. Sense caché no es toca res: a l'usuari sense compte, un enllaç
+  // /ca/… continua obrint-se en català.
+  // Es llegeix un sol cop, en muntar: el que interessa és si aquest navegador ja
+  // coneixia un compte **en arrencar**. Si s'hi entra després, la condició la fa
+  // `isAuthenticated`.
+  const [hasAccountSettings] = useState(() => getStoredAccountUi() !== null);
+
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated && !hasAccountSettings) return;
 
     const segments = location.pathname.split("/").filter(Boolean);
     const urlLocale = segments[0] as LangsApp;
@@ -93,7 +106,7 @@ const App = (): ReactElement => {
 
     const rest = segments.slice(1).join("/");
     navigate(`/${appLang}/${rest}`, { replace: true });
-  }, [appLang, isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [appLang, isAuthenticated, hasAccountSettings]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Suspense fallback={<PageLoadingFallback />}>
