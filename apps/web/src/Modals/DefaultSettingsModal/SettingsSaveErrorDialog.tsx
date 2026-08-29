@@ -4,16 +4,9 @@
 // no pensa en la configuració: cal dir-li què ha passat, què s'hi juga i què pot fer,
 // i això no cap en un avís que marxa sol al cap de tres segons.
 import React from "react";
-import {
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
+import { CircularProgress, DialogContentText, Typography } from "@mui/material";
+import { AppDialog, AppDialogActions } from "@components/AppDialog";
+import StyledButton from "@/style/StyledButton";
 import { useIntl } from "react-intl";
 import messages from "./SettingsSaveErrorDialog.lang";
 import { useAppSelector } from "../../app/hooks";
@@ -57,48 +50,51 @@ const SettingsSaveErrorDialog = ({
   const canRetry = failure?.code !== STORAGE_FULL;
 
   return (
-    <Dialog
+    <AppDialog
       open={failure !== null}
       onClose={onDismiss}
+      title={intl.formatMessage(messages.title)}
+      titleId="settings-save-error-title"
       maxWidth="xs"
-      aria-labelledby="settings-save-error-title"
-    >
-      <DialogTitle id="settings-save-error-title">
-        {intl.formatMessage(messages.title)}
-      </DialogTitle>
-
-      <DialogContent>
-        <DialogContentText>{intl.formatMessage(body)}</DialogContentText>
-
-        {/* El codi, discret i al peu: no li diu res a qui només vol treballar, i
-            estalvia una sessió de depuració a qui ha de mirar què ha passat */}
-        {failure && (
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ display: "block", mt: 2 }}
-          >
-            {intl.formatMessage(messages.errorCode, { code: failure.code })}
-          </Typography>
-        )}
-      </DialogContent>
-
-      <DialogActions>
-        <Button onClick={onDismiss} disabled={isRetrying}>
-          {intl.formatMessage(canRetry ? messages.dismiss : messages.understood)}
-        </Button>
-        {canRetry && (
-          <Button
-            onClick={onRetry}
-            variant="contained"
+      dividers={false}
+      actions={
+        <AppDialogActions>
+          <StyledButton
+            onClick={onDismiss}
+            color="inherit"
             disabled={isRetrying}
-            startIcon={isRetrying ? <CircularProgress size={16} /> : null}
           >
-            {intl.formatMessage(messages.retry)}
-          </Button>
-        )}
-      </DialogActions>
-    </Dialog>
+            {intl.formatMessage(
+              canRetry ? messages.dismiss : messages.understood,
+            )}
+          </StyledButton>
+          {canRetry && (
+            <StyledButton
+              onClick={onRetry}
+              variant="contained"
+              disabled={isRetrying}
+              startIcon={isRetrying ? <CircularProgress size={16} /> : null}
+            >
+              {intl.formatMessage(messages.retry)}
+            </StyledButton>
+          )}
+        </AppDialogActions>
+      }
+    >
+      <DialogContentText>{intl.formatMessage(body)}</DialogContentText>
+
+      {/* El codi, discret i al peu: no li diu res a qui només vol treballar, i
+          estalvia una sessió de depuració a qui ha de mirar què ha passat */}
+      {failure && (
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ display: "block", mt: 2 }}
+        >
+          {intl.formatMessage(messages.errorCode, { code: failure.code })}
+        </Typography>
+      )}
+    </AppDialog>
   );
 };
 

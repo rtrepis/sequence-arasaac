@@ -38,6 +38,13 @@ interface AppDialogProps {
   headerAction?: ReactNode;
   /** Sempre un `<AppDialogActions>`. */
   actions?: ReactNode;
+  /**
+   * Estat de l'operació en curs —una barra de progrés, l'error de l'últim
+   * intent— entre el contingut i el peu. Hi va i no dins del contingut perquè
+   * ha de quedar visible sempre: amb una llista llarga, a dins quedaria fora
+   * de pantalla justament mentre s'espera.
+   */
+  statusSlot?: ReactNode;
   children: ReactNode;
   /** `xs` per a una pregunta o un missatge; `sm` per a un formulari o una llista. */
   maxWidth?: DialogProps["maxWidth"];
@@ -66,6 +73,7 @@ const AppDialog = ({
   badge,
   headerAction,
   actions,
+  statusSlot,
   children,
   maxWidth = "sm",
   dividers = true,
@@ -119,6 +127,8 @@ const AppDialog = ({
       <DialogContent dividers={dividers} sx={contentSx}>
         {children}
       </DialogContent>
+
+      {statusSlot}
 
       {actions}
     </Dialog>
