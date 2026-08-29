@@ -667,7 +667,7 @@ d'IndexedDB i al fitxer `.saac`.
   ara l'A3 apaïsat va exactament als 4.096 px de costat que Safari publica com a límit. La
   instrumentació de B14 passa de ser útil a ser necessària.
 
-### B17 — En tornar a la pestanya ningú desperta el servidor 🔴 Oberta
+### B17 — En tornar a la pestanya ningú desperta el servidor ✅ Resolta
 
 *(Trobada a l'estudi de la tornada a la pestanya, branca `claude/app-behavior-inactive-tab-p2vc2l`.)*
 
@@ -684,6 +684,19 @@ d'IndexedDB i al fitxer `.saac`.
   cooldown de 10 min ja evita que es repeteixi), i en obrir els diàlegs de desar i carregar del
   núvol, com fa `AuthModal`. Cap dels dos casos afegeix trànsit apreciable: és un `GET /health` de
   fons que no encén l'avís de desvetllament.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`, amb dues correccions a la proposta:
+  - **Al diàleg de carregar no hi serveix de res.** `LoadDocumentModal` demana el llistat en un
+    efecte que salta amb `open`, així que la petició de debò surt al mateix instant que sortiria el
+    ping. Només s'ha afegit al de desar, on entre obrir-lo i prémer el botó hi ha escriure un nom.
+  - **No a cada canvi de pestanya.** En tauleta es canvia d'aplicació desenes de vegades al dia i
+    cada ping manté Render despert, gastant hores del pla gratuït tant si serveixen com si no.
+    `useWarmUpOnReturn` (muntat a `AppBootstrap`) només el desperta després d'una absència de
+    **5 minuts o més** i amb sessió — mirada amb `getAccessToken()` i no amb un selector: no cal
+    subscriure's a Redux, i des d'A11 un refresc fallit ja deixa el token a `null`, o sigui que una
+    sessió morta tampoc no desperta ningú.
+  - Fixat a `e2e/warm-up.spec.ts`, que fa passar el temps amb `page.clock` en comptes d'esperar-lo:
+    absència curta (cap ping), absència llarga (un ping), sense sessió (cap ping) i diàleg de desar
+    (un ping).
 
 ### B18 — En recarregar amb sessió, l'app es pinta amb la configuració de l'anònim fins que respon Render 🔴 Oberta
 

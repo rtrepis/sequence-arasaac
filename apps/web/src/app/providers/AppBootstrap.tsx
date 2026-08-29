@@ -13,6 +13,7 @@ import { getStoredUserUi } from "../../features/user-settings/storage/settingsSt
 import { langTranslateApp } from "../../configs/languagesConfigs";
 import { LangsApp } from "../../types/ui";
 import { refreshSessionThunk } from "@features/backend/auth/store/authSlice";
+import { useWarmUpOnReturn } from "@features/backend/api/useWarmUpOnReturn";
 
 interface AppBootstrapProps {
   children: ReactNode;
@@ -20,6 +21,10 @@ interface AppBootstrapProps {
 
 const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
   const dispatch = useAppDispatch();
+
+  // Qui torna a la pestanya després d'una estona es troba el servidor adormit:
+  // val més començar a despertar-lo ara que quan premi «Desa al núvol»
+  useWarmUpOnReturn();
 
   useEffect(() => {
     // Restaura preferències de l'usuari anònim (localStorage)
