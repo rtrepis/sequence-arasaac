@@ -9,8 +9,8 @@ divergències trobades amb fitxer i motiu, i al final el patró i el pla de
 migració. Les regles que en surtin passaran a `CLAUDE.md`; aquest fitxer es
 queda com la raó de cada regla.
 
-**Estat**: estudi tancat; migració feta llevat de l'últim punt (l'estàndard
-condensat a `CLAUDE.md`).
+**Estat**: migració feta. L'estàndard viu a `CLAUDE.md`; aquest document és el
+perquè.
 
 ---
 
@@ -355,8 +355,8 @@ Per ordre, del que fixa el patró al que només l'hereta:
     `NewsNavBar`, amb `floatingControlSx` i l'àncora única.
 11. ✅ **Colors hardcodats** (F10) — `#fff` del backdrop i l'ombra `#A6A6A6` dels
     dos grups de toggles.
-12. **Documentació** — *pendent*: l'estàndard condensat a `CLAUDE.md` i les troballes
-    tancades aquí.
+12. ✅ **Documentació** — l'estàndard condensat a `CLAUDE.md`; aquí s'hi queda la
+    raó de cada regla.
 
 Fora d'abast, amb motiu: **`DefaultSettingsDialog`** (és `fullScreen` i ja té
 estàndard propi, el de tabs: barra superior, `✕` a l'`AppBar` i cap peu), el
