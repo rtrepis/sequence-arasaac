@@ -1,11 +1,3 @@
-export const circlePictogramNumber = {
-  backgroundColor: "primary.main",
-  borderRadius: "50%",
-  color: "primary.contrastText",
-  minWidth: "2.75rem",
-  textAlign: "center",
-};
-
 /**
  * Targeta de l'editor com a botó. `WebkitTouchCallout` i `userSelect` apaguen
  * el menú del sistema que iOS obre en mantenir el dit sobre la imatge

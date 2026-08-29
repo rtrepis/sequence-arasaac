@@ -1,25 +1,13 @@
-import Typography from "@mui/material/Typography";
 import { FormattedMessage, useIntl } from "react-intl";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  IconButton,
-  Popover,
-  Tooltip,
-  Button,
-} from "@mui/material";
-import { Stack } from "@mui/system";
+import { IconButton, Popover, Tooltip, Button } from "@mui/material";
 import { MdMoreVert } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { PictSequence } from "../../types/sequence";
 import { useRef, useState } from "react";
 import messages from "./PictEdit.lang";
-import {
-  circlePictogramNumber,
-  pictogramTrigger,
-} from "./PictEditModal.styled";
+import { pictogramTrigger } from "./PictEditModal.styled";
+import { AppDialog, AppDialogActions } from "@components/AppDialog";
 import StyledButton from "../../style/StyledButton";
 import { useAppSelector } from "../../app/hooks";
 import { PictogramCardDefaults } from "../../types/sequence";
@@ -166,36 +154,15 @@ const PictEditModal = ({
         />
       </Popover>
 
-      <Dialog
+      <AppDialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="pict-edit-dialog-title"
-        maxWidth={"sm"}
-        fullWidth
-        TransitionProps={{ onExited: handleExited }}
-        // El radi ja el posa el tema (`MuiDialog`), que és d'on l'ha de treure
-        // qualsevol diàleg: aquí només queda el que és propi d'aquest
-        sx={{
-          ".MuiDialogContent-root": { paddingInline: 1, paddingBlock: 0 },
-        }}
-      >
-        <Stack
-          display="flex"
-          flexDirection={"row"}
-          justifyContent={"space-around"}
-          alignItems={"center"}
-          padding={1.5}
-        >
-          <Typography id="pict-edit-dialog-title" variant="h5" component="h2">
-            <FormattedMessage {...messages.modal} />
-          </Typography>
-
-          <Typography variant="h4" component="h2" sx={circlePictogramNumber}>
-            {pictogram.indexSequence + 1}
-          </Typography>
-
-          {/* Única via a copiar, enganxar, inserir i duplicar allà on el
-              navegador no dispara mai `contextmenu` (tot el WebKit d'iOS) */}
+        title={intl.formatMessage(messages.modal)}
+        titleId="pict-edit-dialog-title"
+        badge={pictogram.indexSequence + 1}
+        headerAction={
+          /* Única via a copiar, enganxar, inserir i duplicar allà on el
+             navegador no dispara mai `contextmenu` (tot el WebKit d'iOS) */
           <Tooltip title={moreActionsLabel}>
             <IconButton
               aria-label={moreActionsLabel}
@@ -206,8 +173,28 @@ const PictEditModal = ({
               <MdMoreVert />
             </IconButton>
           </Tooltip>
-        </Stack>
-
+        }
+        transitionProps={{ onExited: handleExited }}
+        contentSx={{ paddingInline: 1, paddingBlock: 0, overflowX: "hidden" }}
+        actions={
+          <AppDialogActions
+            startAction={
+              <StyledButton
+                onClick={handleDelete}
+                variant={"outlined"}
+                color={"error"}
+                startIcon={<AiOutlineDelete />}
+              >
+                <FormattedMessage {...messages.delete} />
+              </StyledButton>
+            }
+          >
+            <StyledButton onClick={handleClose} variant={"contained"}>
+              <FormattedMessage {...messages.close} />
+            </StyledButton>
+          </AppDialogActions>
+        }
+      >
         <Popover
           id={dialogMenuId}
           open={Boolean(menuAnchorEl)}
@@ -227,27 +214,8 @@ const PictEditModal = ({
           />
         </Popover>
 
-        <DialogContent dividers={true} sx={{ padding: 2, overflowX: "hidden" }}>
-          <PictEditForm pictogram={pictogram} submit={submit} />
-        </DialogContent>
-
-        <DialogActions
-          sx={{ justifyContent: "space-between", paddingInline: 3 }}
-        >
-          <StyledButton
-            onClick={handleDelete}
-            variant={"outlined"}
-            color={"error"}
-            startIcon={<AiOutlineDelete />}
-          >
-            <FormattedMessage {...messages.delete} />
-          </StyledButton>
-
-          <StyledButton onClick={handleClose} variant={"contained"}>
-            <FormattedMessage {...messages.close} />
-          </StyledButton>
-        </DialogActions>
-      </Dialog>
+        <PictEditForm pictogram={pictogram} submit={submit} />
+      </AppDialog>
     </>
   );
 };
