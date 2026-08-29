@@ -170,6 +170,24 @@ Contra la regla de colors del `CLAUDE.md`:
 No són d'aquest estàndard estrictament, però són el mateix deute i es toquen
 amb els mateixos fitxers.
 
+### F11 — Els botons de text dels diàlegs són verds sobre paper: 2,1:1
+
+Un `<Button>` de MUI sense `color` pinta el text amb `primary.main`. En tema
+clar, el verd de la casa sobre el paper de configuració dona **2,1:1** —el
+mateix número que la regla de colors del `CLAUDE.md` ja rebutja per al blanc
+sobre verd—, molt per sota del 4,5:1 del WCAG AA. Hi cauen «Cancel·la» i
+«Descarrega-ho abans» de `ConfirmDialog`, el botó de `ModalDownload` i el
+«Ara no» de `SettingsSaveErrorDialog`. `SaveDocumentModal` i
+`LoadDocumentModal` se'n salven perquè hi van passar `color="inherit"`.
+
+En tema fosc el mateix verd sobre `#242820` dona 7,1:1 i es llegeix bé: és un
+error que només es veu on més s'usa l'app.
+
+La sortida no és enfosquir el verd: és que **el botó de text prengui la tinta
+del tema** i que el verd es quedi al botó ple, que és on va acompanyat de la
+seva tinta fosca (7,2:1). Un botó de text no ha de dur el color de marca per
+dir que es pot clicar; ja ho diu que sigui un botó.
+
 ---
 
 ## 4. El patró
@@ -219,6 +237,13 @@ de debò** i no desplaçat per l'acció del racó:
 - **Quan la destrucció *és* l'acció principal** (`ConfirmDialog`), va a la
   dreta i en `contained color="error"`: allà no és una sortida secundària, és el
   que s'ha vingut a fer.
+- **L'alternativa que evita la pèrdua** («Descarrega-ho abans») ocupa llavors la
+  ranura de l'esquerra. L'estàndard d'accions destructives ja deia que va «al
+  mig» perquè no és ni acceptar ni cancel·lar; la ranura de l'esquerra és
+  exactament això, i de passada la separa per tota l'amplada del diàleg de la
+  que consuma la pèrdua. Amb els tres botons junts a la dreta, en canvi, el peu
+  es parteix en dues línies en qualsevol diàleg estret.
+- **Els botons de text prenen la tinta del tema, mai `primary.main`** (F11).
 - Tots els botons del peu són `StyledButton` (resol F5).
 
 ### 4.4 Amplada
@@ -284,6 +309,7 @@ Per ordre, del que fixa el patró al que només l'hereta:
 1. **Tokens i tema** — `style/appShape.ts`, `floatingControl.ts`, radi del paper
    de `Dialog` a `themeMui.ts` (i `paperFullScreen` a 0). `StyledButton`: fora
    el `maxWidth: 130px`, que passa a l'`sx` d'`ApplyAll`, i `whiteSpace: nowrap`.
+   El botó de text dels peus deixa de ser verd (F11).
 2. **`components/AppDialog/`** — els tres components nous.
 3. **`PictEditModal`** — passa a `AppDialog`. És la referència: ha de quedar
    **igual que ara**, i si no queda igual és que el component està mal fet.
