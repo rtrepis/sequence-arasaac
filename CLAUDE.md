@@ -289,6 +289,10 @@ feina és on viu cada acció i quan demana permís.
   fitxer, motiu i proposta. **Consultar-lo abans de proposar una millora d'UX**: si ja hi és, cal
   continuar-hi (marcar-la resolta o caducada), no obrir-la de nou. Una troballa detectada i no
   resolta al moment s'hi apunta; no es deixa només a la conversa.
+- `docs/ESTANDARD-capes-flotants.md` és l'estudi de diàlegs, avisos i botons flotants: inventari del
+  que hi ha, deu divergències numerades (F1–F10), el patró que se'n deriva i el pla de migració.
+  **Consultar-lo abans de tocar cap `Dialog`, `Snackbar` o botó flotant.** Quan la migració es
+  tanqui, l'estàndard condensat puja aquí i el document es queda com la raó de cada regla.
 
 ## Descripció del projecte
 
