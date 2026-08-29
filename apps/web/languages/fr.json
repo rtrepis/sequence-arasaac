@@ -1746,6 +1746,18 @@
     "defaultMessage": "Enregistré dans le cloud à {time}",
     "description": "Estat quan la feina té còpia al compte de l'usuari"
   },
+  "features.sequence.status.localDated": {
+    "defaultMessage": "Uniquement sur cet appareil, depuis le {date} à {time}",
+    "description": "État lorsque le travail n'est que dans le brouillon et date d'un autre jour"
+  },
+  "features.sequence.status.fileDated": {
+    "defaultMessage": "Téléchargé dans un fichier le {date} à {time}",
+    "description": "État lorsque la copie en fichier date d'un autre jour"
+  },
+  "features.sequence.status.cloudDated": {
+    "defaultMessage": "Enregistré dans le cloud le {date} à {time}",
+    "description": "État lorsque la copie dans le cloud date d'un autre jour"
+  },
   "features.sequence.status.error": {
     "defaultMessage": "Ce navigateur n'a pas pu enregistrer le travail",
     "description": "Estat quan l'escriptura de l'esborrany falla"

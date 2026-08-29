@@ -1058,7 +1058,7 @@ Branca `claude/backlog-branch-master-64uh75`.
 - Fixat a `e2e/destructive-actions.spec.ts` amb la fixture `e2e/fixtures/dues-sequencies.saac`.
 
 
-### C15 — L'estat del document diu l'hora però no el dia 🔴 Oberta
+### C15 — L'estat del document diu l'hora però no el dia ✅ Resolta
 
 *(Trobada a l'estudi de la tornada a la pestanya, branca `claude/app-behavior-inactive-tab-p2vc2l`.)*
 
@@ -1071,6 +1071,22 @@ Branca `claude/backlog-branch-master-64uh75`.
 - **Proposta**: hora sola quan és d'avui, i data quan no ho és (`intl.formatDate` amb
   `dateStyle: "short"` afegit al missatge), o `intl.formatRelativeTime` per als casos recents. La
   decisió es pot prendre al mateix `formatTime`, sense tocar cap consumidor.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`, amb una correcció a la proposta:
+  **no es podia decidir només a `formatTime`**. El que en surt entra dins de frases que donen per
+  fet que és una hora —«des de **les** {time}», «a **les** {time}»— i una data hi queda com «des de
+  les 27/8/26 18:42», que en català no es diu; el mateix a les altres quatre llengües, cadascuna
+  amb la seva preposició. Per això cada estat té ara **dues frases**: `statusLocalDated`,
+  `statusFileDated` i `statusCloudDated`, traduïdes als cinc idiomes.
+  - `isToday` compara **dia de calendari**, no «fa menys de 24 hores»: a les 00:30, un moment de
+    les 23:50 d'ahir ha de sortir amb data encara que faci quaranta minuts.
+  - Data curta amb any (`dateStyle: "short"`): al panell hi caben 260 px, i un esborrany pot
+    sobreviure a un canvi d'any.
+  - **Sense «ahir»**: es llegeix millor, però afegeix un tercer estat a cada frase —quinze
+    missatges més entre els cinc idiomes—, obliga a decidir què passa amb «abans-d'ahir» i no
+    resol el cas que va originar la troballa, que és l'esborrany de fa dies.
+  - Fixat a `e2e/document-status-date.spec.ts`, que fa passar el temps amb `page.clock`: d'avui
+    diu l'hora, de l'endemà diu el dia, i una feina d'ahir a les 23:50 llegida a les 00:30 surt
+    datada.
 
 ### C16 — Ningú demana emmagatzematge persistent al navegador ✅ Resolta
 

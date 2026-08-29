@@ -1746,6 +1746,18 @@
     "defaultMessage": "Guardado en la nube a las {time}",
     "description": "Estat quan la feina té còpia al compte de l'usuari"
   },
+  "features.sequence.status.localDated": {
+    "defaultMessage": "Solo en este dispositivo, desde el {date} a las {time}",
+    "description": "Estado cuando el trabajo solo está en el borrador y es de otro día"
+  },
+  "features.sequence.status.fileDated": {
+    "defaultMessage": "Descargado en un archivo el {date} a las {time}",
+    "description": "Estado cuando la copia en archivo es de otro día"
+  },
+  "features.sequence.status.cloudDated": {
+    "defaultMessage": "Guardado en la nube el {date} a las {time}",
+    "description": "Estado cuando la copia en la nube es de otro día"
+  },
   "features.sequence.status.error": {
     "defaultMessage": "Este navegador no ha podido guardar el trabajo",
     "description": "Estat quan l'escriptura de l'esborrany falla"
