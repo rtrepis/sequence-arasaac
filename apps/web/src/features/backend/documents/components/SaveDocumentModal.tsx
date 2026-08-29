@@ -6,7 +6,7 @@
 // una comoditat. La casella no comença en blanc — es proposa el nom a partir de
 // les primeres paraules de la seqüència — perquè posar-hi nom no costi més que no
 // posar-n'hi.
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Box,
@@ -29,6 +29,7 @@ import {
   setDocumentTitleActionCreator,
 } from "@features/sequence/store/documentSlice";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
+import { warmUpBackend } from "@features/backend/api/warmUpBackend";
 import {
   DOCUMENT_TITLE_MAX_LENGTH,
   suggestDocumentTitle,
@@ -51,6 +52,13 @@ const SaveDocumentModal = ({
   const { showSnackbar } = useFeedback();
   const document = useAppSelector((state) => state.document);
   const transfer = useDocumentTransfer();
+
+  // Obrir el diàleg és el primer senyal que vindrà una petició: mentre s'escriu
+  // el nom, el servidor ja s'està despertant. Al de carregar no caldria —demana
+  // el llistat en obrir-se i la petició de debò surt al mateix instant.
+  useEffect(() => {
+    if (open) void warmUpBackend();
+  }, [open]);
 
   // El component es munta en obrir-se, així que l'estat inicial ja és el bo:
   // el nom que ja tenia el document o, si no en tenia, el que se li proposa.
