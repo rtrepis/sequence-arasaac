@@ -112,7 +112,10 @@ const MouseActionList = ({
       component="nav"
       aria-labelledby={subheaderId}
       subheader={
-        <ListSubheader component="span" id={subheaderId} color="primary">
+        // Sense `color="primary"`: en verd es quedava a 2,1:1 sobre el paper del
+        // menú, i el gris per defecte del subheader és el que li toca a un rètol
+        // que diu sobre què són les accions
+        <ListSubheader component="span" id={subheaderId}>
           {intl.formatMessage(messages.header, {
             number: pictogram.indexSequence + 1,
           })}

@@ -45,7 +45,12 @@ export const buildTheme = (mode: "light" | "dark"): Theme =>
       MuiIconButton: {
         styleOverrides: {
           root: {
-            color: "primary",
+            // Aquí hi havia `color: "primary"`, que no és cap valor CSS vàlid:
+            // el navegador el descartava i les icones sortien amb el gris per
+            // defecte de MUI. Es treu perquè era una trampa, no una decisió:
+            // «arreglar-lo» posant-hi el verd de debò deixaria totes les icones
+            // de l'app a 2,1:1 sobre el paper (F11). El color el tria qui fa
+            // servir el botó, i sobre paper o full és sempre `inherit`.
             "&.Mui-disabled": {
               opacity: 0.35,
             },

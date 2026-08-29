@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import {
   Box,
-  Button,
   Divider,
-  IconButton,
   ListItemIcon,
   ListItemText,
   Menu,
@@ -27,6 +25,8 @@ import { langTranslateApp } from "../../configs/languagesConfigs";
 import { LANGUAGE_NAMES } from "@shared/constants/languageNames";
 import { LangsApp } from "../../types/ui";
 import messages from "./HeaderControls.lang";
+import StyledButton from "@/style/StyledButton";
+import StyledIconButton from "@/style/StyledIconButton";
 
 const sortedLangs = [...langTranslateApp].sort();
 
@@ -109,15 +109,18 @@ const HeaderControls = (): React.ReactElement => {
     </MenuItem>
   );
 
+  // `inherit` i no el primary: aquesta capçalera va sobre blanc, i el verd de
+  // la casa com a color de text s'hi queda a 2,1:1. El verd de la pàgina és el
+  // botó ple de «Comença», que és l'acció que hi ha vingut a fer tothom.
   const registerButton = !isLoggedIn && (
-    <Button
-      color="primary"
+    <StyledButton
+      color="inherit"
       variant="outlined"
       size="small"
       onClick={handleRegister}
     >
       {intl.formatMessage(messages.registerButton)}
-    </Button>
+    </StyledButton>
   );
 
   return (
@@ -130,8 +133,8 @@ const HeaderControls = (): React.ReactElement => {
         sx={{ display: { xs: "none", md: "flex" } }}
       >
         <Tooltip title={intl.formatMessage(messages.languageSelector)}>
-          <Button
-            color="primary"
+          <StyledButton
+            color="inherit"
             size="small"
             startIcon={<AiOutlineGlobal />}
             onClick={(event) => setLangAnchor(event.currentTarget)}
@@ -139,13 +142,13 @@ const HeaderControls = (): React.ReactElement => {
             aria-haspopup="true"
           >
             {appLang.toUpperCase()}
-          </Button>
+          </StyledButton>
         </Tooltip>
 
         {!isLoggedIn && (
-          <Button color="primary" size="small" onClick={handleLogin}>
+          <StyledButton color="inherit" size="small" onClick={handleLogin}>
             {intl.formatMessage(messages.loginButton)}
-          </Button>
+          </StyledButton>
         )}
         {registerButton}
       </Stack>
@@ -158,26 +161,26 @@ const HeaderControls = (): React.ReactElement => {
         sx={{ display: { xs: "none", sm: "flex", md: "none" } }}
       >
         {registerButton}
-        <IconButton
-          color="primary"
+        <StyledIconButton
+          color="inherit"
           onClick={(event) => setTabletAnchor(event.currentTarget)}
           aria-label={intl.formatMessage(messages.openMenu)}
           aria-haspopup="true"
         >
           <AiOutlineMenu />
-        </IconButton>
+        </StyledIconButton>
       </Stack>
 
       {/* Mòbil (<sm): tot plegat en un únic menú clàssic */}
       <Box sx={{ display: { xs: "flex", sm: "none" } }}>
-        <IconButton
-          color="primary"
+        <StyledIconButton
+          color="inherit"
           onClick={(event) => setMobileAnchor(event.currentTarget)}
           aria-label={intl.formatMessage(messages.openMenu)}
           aria-haspopup="true"
         >
           <AiOutlineMenu />
-        </IconButton>
+        </StyledIconButton>
       </Box>
 
       {/* Desplegable del selector d'idioma (escriptori) */}

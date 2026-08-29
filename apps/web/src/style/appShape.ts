@@ -20,6 +20,14 @@ export const APP_CONTROL_BORDER_WIDTH = 1.75;
 /** Costat del control quadrat de la casa (toggle, botó flotant principal). */
 export const APP_CONTROL_SIZE = 55;
 
+/**
+ * Diana tàctil mínima (px) del WCAG 2.5.5. El `small` d'un `Fab` de MUI es queda
+ * a 40 i un `IconButton` sense icona gran, a 40 també: per sota d'aquest valor,
+ * en una app que es fa servir amb el dit i sovint amb poca precisió, el botó
+ * existeix però no s'encerta.
+ */
+export const APP_TOUCH_TARGET_MIN = 44;
+
 /** Separació de qualsevol capa flotant respecte del cantó de la finestra. */
 export const FLOATING_EDGE_GAP = 16;
 

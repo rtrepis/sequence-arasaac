@@ -46,6 +46,9 @@ const ApplyAll = ({ onClick, sx }: ApplyAllProps): React.ReactElement => {
   return (
     <StyledButton
       variant="outlined"
+      // `inherit` i no el primary: un `outlined` verd sobre el paper de
+      // configuració es queda a 2,1:1 i no es llegeix en tema clar (F11)
+      color="inherit"
       sx={[
         { maxWidth: APPLY_ALL_MAX_WIDTH },
         ...(Array.isArray(sx) ? sx : [sx]),

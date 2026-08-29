@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Stack, Tooltip } from "@mui/material";
+import { Box, Divider, Stack, Tooltip } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
@@ -10,6 +10,8 @@ import {
 } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
+import StyledButton from "@/style/StyledButton";
+import StyledIconButton from "@/style/StyledIconButton";
 import useWindowResize from "@shared/hooks/useWindowResize";
 import React from "react";
 import { trackEvent } from "@shared/hooks/usePageTracking";
@@ -19,13 +21,23 @@ import {
   usePrintDimensions,
 } from "@features/print/hooks/useScaleCalculator";
 import { useFullscreen } from "@features/print/hooks/useFullScreen";
-import { useViewManager, useAuthorManager } from "@features/print/hooks/useViewManager";
+import {
+  useViewManager,
+  useAuthorManager,
+} from "@features/print/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
-import { usePrintStyles, printWithOrientation } from "@features/print/hooks/usePrintStyles";
+import {
+  usePrintStyles,
+  printWithOrientation,
+} from "@features/print/hooks/usePrintStyles";
 import { useDownloadPdf } from "@features/print/hooks/useDownloadPdf";
 import { getCurrentDPI } from "@/features/print-refactor/utils/dpiManager";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
-import { SequenceViewSettings, SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
+import {
+  SequenceViewSettings,
+  SequenceAlignmentH,
+  SequenceAlignmentV,
+} from "@/types/document";
 import {
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
@@ -61,7 +73,6 @@ interface ViewSequencesSettingsProps {
   ) => React.ReactElement | React.ReactElement[];
 }
 
-
 /**
  * Orquestrador de la visualització de seqüències: gestiona hooks, handlers i composició
  */
@@ -95,8 +106,16 @@ const ViewSequencesSettings = ({
   // Només avança quan l'usuari desa les preferències explícitament.
   const savedUserDefaults = useRef(initialViewSettings);
   useEffect(() => {
-    const { sizePict, pictSpaceBetween, alignmentH, alignmentV } = savedUserDefaults.current;
-    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignmentH, alignmentV }));
+    const { sizePict, pictSpaceBetween, alignmentH, alignmentV } =
+      savedUserDefaults.current;
+    dispatch(
+      applyViewSettingsToAllActionCreator({
+        sizePict,
+        pictSpaceBetween,
+        alignmentH,
+        alignmentV,
+      }),
+    );
   }, [dispatch]);
 
   // Estat local: mode aplicar a totes vs individual
@@ -128,7 +147,9 @@ const ViewSequencesSettings = ({
     });
 
   // Gestió de l'autor (usa el valor per defecte de l'usuari)
-  const { author, updateAuthor } = useAuthorManager(initialViewSettings.author ?? "");
+  const { author, updateAuthor } = useAuthorManager(
+    initialViewSettings.author ?? "",
+  );
 
   // Càlculs d'escala
   const {
@@ -169,7 +190,8 @@ const ViewSequencesSettings = ({
   // Alineació de bloc: posiciona tot el conjunt de seqüències dins la pàgina,
   // sempre a l'eix creuat de `direction` (V si row, H si column). Font única:
   // la primera seqüència (amb applyAll totes comparteixen el mateix valor)
-  const blockSource = sequenceViewSettings[sequenceKeys[0]] ?? DEFAULT_SEQUENCE_VIEW;
+  const blockSource =
+    sequenceViewSettings[sequenceKeys[0]] ?? DEFAULT_SEQUENCE_VIEW;
   const isRowDirection = viewSettings.direction === "row";
   const blockAlign = isRowDirection
     ? ALIGN_V[blockSource.alignmentV]
@@ -237,7 +259,12 @@ const ViewSequencesSettings = ({
         if (applyAll) {
           dispatch(applyViewSettingsToAllActionCreator({ alignmentH: value }));
         } else {
-          dispatch(updateSequenceViewSettingsActionCreator({ key: seqKey, settings: { alignmentH: value } }));
+          dispatch(
+            updateSequenceViewSettingsActionCreator({
+              key: seqKey,
+              settings: { alignmentH: value },
+            }),
+          );
         }
       },
     [applyAll, dispatch],
@@ -253,7 +280,12 @@ const ViewSequencesSettings = ({
         if (applyAll) {
           dispatch(applyViewSettingsToAllActionCreator({ alignmentV: value }));
         } else {
-          dispatch(updateSequenceViewSettingsActionCreator({ key: seqKey, settings: { alignmentV: value } }));
+          dispatch(
+            updateSequenceViewSettingsActionCreator({
+              key: seqKey,
+              settings: { alignmentV: value },
+            }),
+          );
         }
       },
     [applyAll, dispatch],
@@ -291,8 +323,22 @@ const ViewSequencesSettings = ({
    * Handler per restaurar les preferències guardades de l'usuari a totes les seqüències
    */
   const handleResetToDefaults = useCallback(() => {
-    const { sizePict, pictSpaceBetween, alignmentH, alignmentV, direction, sequenceSpaceBetween } = savedUserDefaults.current;
-    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignmentH, alignmentV }));
+    const {
+      sizePict,
+      pictSpaceBetween,
+      alignmentH,
+      alignmentV,
+      direction,
+      sequenceSpaceBetween,
+    } = savedUserDefaults.current;
+    dispatch(
+      applyViewSettingsToAllActionCreator({
+        sizePict,
+        pictSpaceBetween,
+        alignmentH,
+        alignmentV,
+      }),
+    );
     updateViewSetting("direction", direction);
     updateViewSetting("sequenceSpaceBetween", sequenceSpaceBetween);
   }, [dispatch, updateViewSetting]);
@@ -377,28 +423,26 @@ const ViewSequencesSettings = ({
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipOrientation)}
                   >
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(
                         messages.tooltipOrientation,
                       )}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={toggleOrientation}
                     >
                       <MdScreenRotation />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                   <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(messages.tooltipPrint)}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={handlePrint}
                     >
                       <AiFillPrinter />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipDownloadPdf)}
@@ -408,19 +452,18 @@ const ViewSequencesSettings = ({
                         de sota els dits sense cap avís. Sense `disabled` tampoc
                         cal el <span> embolcall: el Tooltip ja rep els events del
                         Button i l'aria-label es queda on ha de ser. */}
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(
                         messages.tooltipDownloadPdf,
                       )}
                       aria-disabled={isGenerating}
                       aria-busy={isGenerating}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={handleDownloadPdf}
                     >
                       <BsFilePdf />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                 </>
               ) : (
@@ -428,17 +471,16 @@ const ViewSequencesSettings = ({
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipFullscreen)}
                   >
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(
                         messages.tooltipFullscreen,
                       )}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={enterFullscreen}
                     >
                       <AiOutlineFullscreen />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                 )
               )}
@@ -591,15 +633,15 @@ const ViewSequencesSettings = ({
                     title={intl.formatMessage(messages.tooltipResetDefaults)}
                     describeChild
                   >
-                    <Button
-                      variant="text"
-                      color="primary"
+                    {/* `inherit` i no el primary: el verd de la casa sobre el
+                        paper es queda a 2,1:1 i no es llegeix (F11) */}
+                    <StyledButton
+                      color="inherit"
                       endIcon={<MdSettingsBackupRestore />}
                       onClick={handleResetToDefaults}
-                      sx={{ textTransform: "none" }}
                     >
                       <FormattedMessage {...messages.resetDefaults} />
-                    </Button>
+                    </StyledButton>
                   </Tooltip>
                   {/* El tooltip diu on van a parar els ajustos, que no és el mateix
                       lloc amb sessió que sense */}
@@ -611,15 +653,13 @@ const ViewSequencesSettings = ({
                     )}
                     describeChild
                   >
-                    <Button
+                    <StyledButton
                       variant="contained"
-                      color="primary"
                       endIcon={<MdOutlinePushPin />}
                       onClick={handleSavePreferences}
-                      sx={{ textTransform: "none" }}
                     >
                       <FormattedMessage {...messages.savePreferences} />
-                    </Button>
+                    </StyledButton>
                   </Tooltip>
                 </Box>
               </Stack>

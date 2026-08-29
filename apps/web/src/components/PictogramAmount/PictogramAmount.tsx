@@ -2,11 +2,11 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  IconButton,
   Input,
   Tooltip,
   Typography,
 } from "@mui/material";
+import StyledIconButton from "@/style/StyledIconButton";
 import { subtractLastPictActionCreator } from "@features/sequence/store/documentSlice";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
@@ -19,12 +19,10 @@ import React from "react";
 import { addPictogramActionCreator } from "@features/sequence/store/documentSlice";
 
 interface PictogramAmountProps {
-  variant?: "navBar";
   info: { value: boolean; toggleValue?: () => void };
 }
 
 const PictogramAmount = ({
-  variant,
   info,
 }: PictogramAmountProps): React.ReactElement => {
   const intl = useIntl();
@@ -52,7 +50,7 @@ const PictogramAmount = ({
     >
       <Stack direction={"row"} alignItems={"center"}>
         <FormLabel htmlFor="amount">
-          <Typography color={variant && "primary.contrastText"}>
+          <Typography>
             <FormattedMessage {...messages.amount} />
           </Typography>
         </FormLabel>
@@ -64,8 +62,8 @@ const PictogramAmount = ({
           }}
         >
           <span>
-            <IconButton
-              color={variant ? "primary" : "secondary"}
+            <StyledIconButton
+              color="inherit"
               aria-label={intl.formatMessage({ ...messages.subtract })}
               onClick={() => handleChangesAmount(-1)}
               disabled={amountSequence <= 0}
@@ -75,7 +73,7 @@ const PictogramAmount = ({
                   visibility: amountSequence > 0 ? "visible" : "hidden",
                 }}
               />
-            </IconButton>
+            </StyledIconButton>
           </span>
         </Tooltip>
 
@@ -91,8 +89,8 @@ const PictogramAmount = ({
 
         <Tooltip title={intl.formatMessage(messages.add)}>
           <span>
-            <IconButton
-              color={variant ? "primary" : "secondary"}
+            <StyledIconButton
+              color="inherit"
               aria-label={intl.formatMessage({
                 ...messages.add,
               })}
@@ -100,19 +98,18 @@ const PictogramAmount = ({
               onClick={() => handleChangesAmount(+1)}
             >
               <AiFillPlusCircle />
-            </IconButton>
+            </StyledIconButton>
           </span>
         </Tooltip>
 
         <Tooltip title={intl.formatMessage(messages.info)}>
-          <IconButton
-            sx={{ alingSlef: "start" }}
+          <StyledIconButton
+            color="inherit"
+            sx={{ color: "text.secondary" }}
             onClick={() => info.toggleValue?.()}
           >
-            <Typography variant="body2" color={"primary"}>
-              <BsInfoCircle />
-            </Typography>
-          </IconButton>
+            <BsInfoCircle size={20} />
+          </StyledIconButton>
         </Tooltip>
       </Stack>
 

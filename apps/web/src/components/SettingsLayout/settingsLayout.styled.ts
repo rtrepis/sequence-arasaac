@@ -29,17 +29,34 @@ export const SETTINGS_MAX_WIDTH = 900;
 export const SETTINGS_INDENT = { xs: 1, sm: 3 };
 
 /**
- * Desplaçament vertical (px) del preview sticky en mòbil: l'AppBar del diàleg de
- * configuracions és `position: fixed` per sota de `md`, i sense aquest offset el
- * preview lliscaria per sota de la barra.
+ * Alçada (px) de la barra superior del diàleg de configuracions. És l'alçada
+ * real del `Toolbar` (el `minHeight` que li posa el tema), no la de l'`AppBar`,
+ * que declara 42 i acaba fent-ne 50.
  */
-export const SETTINGS_APPBAR_OFFSET = 50;
+export const SETTINGS_DIALOG_APPBAR_HEIGHT = 50;
 
 /**
- * Alçada màxima de la mostra en mòbil quan és l'únic contingut de la zona
- * esquerra: acota-la perquè no es mengi la pantalla i deixi els controls
- * fora de vista. Quan la mostra va acompanyada d'una llista (`previewAside`)
- * no s'aplica: la llista queda en flux normal i no cal cap scroll intern.
+ * Aire entre la barra superior i el contingut del panell. Sense aquest marge, en
+ * mòbil el primer element quedava a sis píxels de la barra i el panell semblava
+ * enganxat a sota d'un bloc verd.
+ */
+export const SETTINGS_CONTENT_TOP_GAP = 3;
+
+/**
+ * Desplaçament vertical (px) del preview sticky en mòbil: l'AppBar del diàleg de
+ * configuracions és `position: fixed` per sota de `md`, i sense aquest offset el
+ * preview lliscaria per sota de la barra. És **exactament** l'alçada de la barra:
+ * amb un píxel de més, el contingut que passa per darrere de la mostra enganxada
+ * s'entreveu per la franja que queda entre les dues. L'aire es fa amb el padding
+ * de dins de la mostra, que sí que va pintat.
+ */
+export const SETTINGS_APPBAR_OFFSET = SETTINGS_DIALOG_APPBAR_HEIGHT;
+
+/**
+ * Alçada màxima de la mostra en mòbil: acota-la perquè no es mengi la pantalla
+ * i deixi els controls fora de vista. S'aplica sempre a la mostra, també quan va
+ * acompanyada d'una llista (`previewAside`) — allà la que no s'acota és la
+ * llista, que queda en flux normal i sense scroll intern.
  */
 export const SETTINGS_PREVIEW_MOBILE_MAX_HEIGHT = "35vh";
 

@@ -35,6 +35,7 @@ import { requestPersistentStorage } from "@features/sequence/storage/persistentS
 import {
   APP_CONTROL_SIZE,
   APP_CORNER_RADIUS,
+  APP_TOUCH_TARGET_MIN,
   FLOATING_EDGE_GAP,
 } from "@/style/appShape";
 import { floatingControlSx } from "@/style/floatingControl";
@@ -323,11 +324,13 @@ const DocumentStatusFab = (): ReactElement => {
                   whiteSpace: "nowrap",
                 },
               }}
-              // 44 px és el mínim de diana tàctil (WCAG); el `small` de MUI
-              // es queda a 40
+              // El `small` de MUI es queda a 40, per sota de la diana mínima
               FabProps={{
                 disabled: action.disabled,
-                sx: [floatingControlSx(), { width: 44, height: 44 }],
+                sx: [
+                  floatingControlSx(),
+                  { width: APP_TOUCH_TARGET_MIN, height: APP_TOUCH_TARGET_MIN },
+                ],
               }}
             />
           ))}

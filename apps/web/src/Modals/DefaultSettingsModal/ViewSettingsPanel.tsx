@@ -1,7 +1,9 @@
-import { Button, Slider, Stack, Tooltip, Typography } from "@mui/material";
+import { Slider, Stack, Tooltip, Typography } from "@mui/material";
+import StyledButton from "@/style/StyledButton";
 import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import {
   SettingsPanelLayout,
+  SettingsActions,
   SectionTitle,
   SettingRow,
   SettingsPanelHint,
@@ -24,7 +26,11 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { applyViewSettingsToAllActionCreator } from "@features/sequence/store/documentSlice";
 import { DefaultSettingsPanelHandle } from "../../components/DefaultsForm/DefaultSettingsPanel";
-import { ViewSettings, SequenceDirection, PageOrientation } from "../../types/ui";
+import {
+  ViewSettings,
+  SequenceDirection,
+  PageOrientation,
+} from "../../types/ui";
 import { PageSize } from "../../types/PageFormat";
 import { SequenceAlignmentH, SequenceAlignmentV } from "../../types/document";
 import GlobalViewControls from "../../components/ViewSequencesSettings/GlobalViewControls";
@@ -51,8 +57,16 @@ import {
 } from "../../configs/viewSettingsConfig";
 import React from "react";
 
-const PAGE_SIZE_MAP: Record<number, PageSize> = { 0: "A4", 1: "A3", 2: "FULLSCREEN" };
-const PAGE_INDEX_MAP: Record<PageSize, 0 | 1 | 2> = { A4: 0, A3: 1, FULLSCREEN: 2 };
+const PAGE_SIZE_MAP: Record<number, PageSize> = {
+  0: "A4",
+  1: "A3",
+  2: "FULLSCREEN",
+};
+const PAGE_INDEX_MAP: Record<PageSize, 0 | 1 | 2> = {
+  A4: 0,
+  A3: 1,
+  FULLSCREEN: 2,
+};
 
 // Prefix dels ids dels títols de fila, per lligar-los als controls amb aria-labelledby
 const VIEW_PANEL_LABEL_ID = "view-settings-panel";
@@ -62,7 +76,8 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     const dispatch = useAppDispatch();
     const intl = useIntl();
     const reduxViewSettings = useAppSelector((store) => store.ui.viewSettings);
-    const [localSettings, setLocalSettings] = useState<ViewSettings>(reduxViewSettings);
+    const [localSettings, setLocalSettings] =
+      useState<ViewSettings>(reduxViewSettings);
 
     useImperativeHandle(ref, () => ({
       syncToRedux: () => {
@@ -98,7 +113,10 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     };
 
     const handleSequenceSpaceChange = (_: Event, value: number | number[]) => {
-      setLocalSettings((prev) => ({ ...prev, sequenceSpaceBetween: value as number }));
+      setLocalSettings((prev) => ({
+        ...prev,
+        sequenceSpaceBetween: value as number,
+      }));
     };
 
     const handleOrientationChange = (orientation: PageOrientation) => {
@@ -114,7 +132,10 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     };
 
     const handlePictSpaceBetween = (_: Event, value: number | number[]) => {
-      setLocalSettings((prev) => ({ ...prev, pictSpaceBetween: value as number }));
+      setLocalSettings((prev) => ({
+        ...prev,
+        pictSpaceBetween: value as number,
+      }));
     };
 
     const handleAlignmentH = (
@@ -135,17 +156,22 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
 
     const handleApply = () => {
       dispatch(viewSettingsActionCreator(localSettings));
-      dispatch(applyViewSettingsToAllActionCreator({
-        sizePict: localSettings.sizePict,
-        pictSpaceBetween: localSettings.pictSpaceBetween,
-        alignmentH: localSettings.alignmentH,
-        alignmentV: localSettings.alignmentV,
-      }));
+      dispatch(
+        applyViewSettingsToAllActionCreator({
+          sizePict: localSettings.sizePict,
+          pictSpaceBetween: localSettings.pictSpaceBetween,
+          alignmentH: localSettings.alignmentH,
+          alignmentV: localSettings.alignmentV,
+        }),
+      );
     };
 
-
     return (
-      <Stack direction="column" gap={1} sx={{ pt: 1, maxWidth: SETTINGS_MAX_WIDTH, mx: "auto", width: "100%" }}>
+      <Stack
+        direction="column"
+        gap={1}
+        sx={{ pt: 1, maxWidth: SETTINGS_MAX_WIDTH, mx: "auto", width: "100%" }}
+      >
         <SettingsPanelLayout
           preview={<ViewSettingsPreview settings={localSettings} />}
         >
@@ -155,7 +181,9 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           </SettingsPanelHint>
 
           {/* Secció: format i disposició de la pàgina (controls compartits amb la vista) */}
-          <SectionTitle title={<FormattedMessage {...messages.sectionPageFormat} />}>
+          <SectionTitle
+            title={<FormattedMessage {...messages.sectionPageFormat} />}
+          >
             <GlobalViewControls
               viewSettings={localSettings}
               pageSizeIndex={PAGE_INDEX_MAP[localSettings.pageSize]}
@@ -168,7 +196,9 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           </SectionTitle>
 
           {/* Secció: mida i alineació dels pictogrames */}
-          <SectionTitle title={<FormattedMessage {...messages.sectionPictograms} />}>
+          <SectionTitle
+            title={<FormattedMessage {...messages.sectionPictograms} />}
+          >
             <SettingRow
               title={<FormattedMessage {...viewMessages.size} />}
               labelId={`${VIEW_PANEL_LABEL_ID}-size`}
@@ -268,36 +298,31 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
             onAuthorChange={handleAuthorChange}
           />
 
-          <Stack direction="row" gap={1} alignItems="flex-start" sx={{ mt: 1 }}>
-            <Stack gap={0.5}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleApply}
-                sx={{ alignSelf: "flex-start" }}
-              >
-                <FormattedMessage {...messages.apply} />
-              </Button>
-              <Typography variant="caption" color="text.secondary">
-                <FormattedMessage {...messages.applyHelper} />
-              </Typography>
-            </Stack>
-            <Tooltip title={intl.formatMessage(messages.tooltipReset)} describeChild>
-              <Button
-                variant="text"
+          {/* Al final i a la dreta, com el peu d'un diàleg: afecten tot el que
+              hi ha a sobre. «Aplica» és la principal i per això va plena */}
+          <SettingsActions
+            helper={<FormattedMessage {...messages.applyHelper} />}
+          >
+            <Tooltip
+              title={intl.formatMessage(messages.tooltipReset)}
+              describeChild
+            >
+              <StyledButton
                 color="inherit"
                 endIcon={<MdSettingsBackupRestore />}
                 onClick={handleResetToDefaults}
-                sx={{ alignSelf: "flex-start" }}
               >
                 <FormattedMessage {...messages.reset} />
-              </Button>
+              </StyledButton>
             </Tooltip>
-          </Stack>
+            <StyledButton variant="contained" onClick={handleApply}>
+              <FormattedMessage {...messages.apply} />
+            </StyledButton>
+          </SettingsActions>
         </SettingsPanelLayout>
       </Stack>
     );
-  }
+  },
 );
 
 ViewSettingsPanel.displayName = "ViewSettingsPanel";
