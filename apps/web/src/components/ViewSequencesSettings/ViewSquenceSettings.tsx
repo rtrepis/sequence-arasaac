@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Stack, Tooltip } from "@mui/material";
+import { Box, Divider, Stack, Tooltip } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
@@ -11,6 +11,7 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 import StyledButton from "@/style/StyledButton";
+import StyledIconButton from "@/style/StyledIconButton";
 import useWindowResize from "@shared/hooks/useWindowResize";
 import React from "react";
 import { trackEvent } from "@shared/hooks/usePageTracking";
@@ -422,28 +423,26 @@ const ViewSequencesSettings = ({
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipOrientation)}
                   >
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(
                         messages.tooltipOrientation,
                       )}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={toggleOrientation}
                     >
                       <MdScreenRotation />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                   <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(messages.tooltipPrint)}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={handlePrint}
                     >
                       <AiFillPrinter />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipDownloadPdf)}
@@ -453,19 +452,18 @@ const ViewSequencesSettings = ({
                         de sota els dits sense cap avís. Sense `disabled` tampoc
                         cal el <span> embolcall: el Tooltip ja rep els events del
                         Button i l'aria-label es queda on ha de ser. */}
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(
                         messages.tooltipDownloadPdf,
                       )}
                       aria-disabled={isGenerating}
                       aria-busy={isGenerating}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={handleDownloadPdf}
                     >
                       <BsFilePdf />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                 </>
               ) : (
@@ -473,17 +471,16 @@ const ViewSequencesSettings = ({
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipFullscreen)}
                   >
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(
                         messages.tooltipFullscreen,
                       )}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={enterFullscreen}
                     >
                       <AiOutlineFullscreen />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                 )
               )}
