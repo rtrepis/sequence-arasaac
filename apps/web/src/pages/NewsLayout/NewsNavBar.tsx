@@ -12,6 +12,8 @@ import {
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import { APP_CONTROL_SIZE, FLOATING_EDGE_GAP } from "@/style/appShape";
+import { floatingControlSx } from "@/style/floatingControl";
 import messages from "./NewsNavBar.lang";
 import HideOnScroll from "../../components/utils/HiddenOnScroll/HiddenOnScroll";
 import AppNavigationDrawer from "../../components/AppNavigationDrawer/AppNavigationDrawer";
@@ -39,13 +41,10 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [slug]);
 
-  const currentIndex = slug
-    ? sortedNews.findIndex((i) => i.slug === slug)
-    : -1;
+  const currentIndex = slug ? sortedNews.findIndex((i) => i.slug === slug) : -1;
 
   // Boto esquerra = anterior = article mes recent (index menor al array newest-first)
-  const prevSlug =
-    currentIndex > 0 ? sortedNews[currentIndex - 1].slug : null;
+  const prevSlug = currentIndex > 0 ? sortedNews[currentIndex - 1].slug : null;
 
   // Boto dreta = enrere en el temps = article mes antic (index major)
   // Des de la llista va a la novetat mes recent per comenar a navegar
@@ -89,11 +88,7 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
               </IconButton>
 
               {/* Enllaç a la llista de noticies */}
-              <Button
-                component={Link}
-                to={`/${locale}/news`}
-                size="small"
-              >
+              <Button component={Link} to={`/${locale}/news`} size="small">
                 <FormattedMessage {...messages.news} />
               </Button>
             </Stack>
@@ -117,14 +112,22 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
       {/* Boto anterior - fix a la cantonada inferior esquerra */}
       <Fab
         size="medium"
-        color="primary"
         disabled={!prevSlug}
         onClick={() => prevSlug && navigate(`/${locale}/news/${prevSlug}`)}
         aria-label={intl.formatMessage({
           id: "news.prevArticle",
           defaultMessage: "Article anterior",
         })}
-        sx={{ position: "fixed", bottom: 24, left: 24 }}
+        sx={[
+          floatingControlSx(),
+          {
+            position: "fixed",
+            bottom: FLOATING_EDGE_GAP,
+            left: FLOATING_EDGE_GAP,
+            width: APP_CONTROL_SIZE,
+            height: APP_CONTROL_SIZE,
+          },
+        ]}
       >
         <AiOutlineArrowLeft style={{ fontSize: "1.4rem" }} />
       </Fab>
@@ -132,14 +135,22 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
       {/* Boto seguent (enrere en el temps) - fix a la cantonada inferior dreta */}
       <Fab
         size="medium"
-        color="primary"
         disabled={!nextSlug}
         onClick={() => nextSlug && navigate(`/${locale}/news/${nextSlug}`)}
         aria-label={intl.formatMessage({
           id: "news.nextArticle",
           defaultMessage: "Article seguent",
         })}
-        sx={{ position: "fixed", bottom: 24, right: 24 }}
+        sx={[
+          floatingControlSx(),
+          {
+            position: "fixed",
+            bottom: FLOATING_EDGE_GAP,
+            right: FLOATING_EDGE_GAP,
+            width: APP_CONTROL_SIZE,
+            height: APP_CONTROL_SIZE,
+          },
+        ]}
       >
         <AiOutlineArrowRight style={{ fontSize: "1.4rem" }} />
       </Fab>

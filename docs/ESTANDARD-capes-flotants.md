@@ -9,7 +9,7 @@ divergències trobades amb fitxer i motiu, i al final el patró i el pla de
 migració. Les regles que en surtin passaran a `CLAUDE.md`; aquest fitxer es
 queda com la raó de cada regla.
 
-**Estat**: estudi tancat, migració pendent. Vegeu «Pla de migració».
+**Estat**: estudi tancat; migració en curs (fets els punts 1, 9 i 10 del pla).
 
 ---
 
@@ -188,6 +188,30 @@ del tema** i que el verd es quedi al botó ple, que és on va acompanyat de la
 seva tinta fosca (7,2:1). Un botó de text no ha de dur el color de marca per
 dir que es pot clicar; ja ho diu que sigui un botó.
 
+### F12 — El que sura tapa el final del contingut, i l'scroll no hi arriba
+
+Reportat treballant: amb l'avís «Connectant amb el teu compte…» a la pantalla,
+**els últims pictogrames queden a sota i no es poden veure**. Passa en mòbil i
+en escriptori, i no és cosa de l'avís sol: el botó d'estat fa el mateix al seu
+racó, permanentment.
+
+El motiu és que una capa `position: fixed` no ocupa lloc al document: quan la
+pàgina s'acaba, l'última fila queda sota la capa i **no hi ha scroll que la
+pugui apartar**, perquè ja no queda pàgina per moure. I l'avís del
+desvetllament és justament dels que no marxen sols: es queda fins que respon el
+servidor, que pot ser un minut.
+
+Mou l'avís no és la sortida —a baix és on ha de ser—: el que ha de passar és que
+**el contingut reservi al seu final l'espai del que hi sura a sobre**. El mínim
+és el que ocupa el botó d'estat, que hi és sempre; els avisos que no marxen sols
+hi afegeixen la seva alçada, **mesurada i no calculada**, perquè el mateix
+missatge fa dues línies en escriptori i cinc en un telèfon —i és al telèfon on
+tapa més.
+
+Les confirmacions de tres segons (`FeedbackSnackbar`) en queden fora a
+propòsit: fer saltar la pàgina cada cop que es desa alguna cosa seria pitjor que
+el que arregla.
+
 ---
 
 ## 4. El patró
@@ -306,7 +330,7 @@ diàleg continua amb les claus de traducció que ja té.
 
 Per ordre, del que fixa el patró al que només l'hereta:
 
-1. **Tokens i tema** — `style/appShape.ts`, `floatingControl.ts`, radi del paper
+1. ✅ **Tokens i tema** — `style/appShape.ts`, `floatingControl.ts`, radi del paper
    de `Dialog` a `themeMui.ts` (i `paperFullScreen` a 0). `StyledButton`: fora
    el `maxWidth: 130px`, que passa a l'`sx` d'`ApplyAll`, i `whiteSpace: nowrap`.
    El botó de text dels peus deixa de ser verd (F11).
@@ -322,8 +346,10 @@ Per ordre, del que fixa el patró al que només l'hereta:
 8. **`ModalDownload`** — el més tocat: nom accessible (F3), l'ajuda surt del
    títol, peu de debò amb «Cancel·la» i l'acció principal en un **sol** missatge
    nou (F4) als cinc idiomes.
-9. **Avisos** — aparença única i separació calculada per als tres `Snackbar`.
-10. **Botons flotants** — `DocumentStatusFab` i les dues fletxes de
+9. ✅ **Avisos** — aparença única (`floatingNoticeSx`), separació calculada des
+   dels tokens i **reserva d'espai al final del contingut** per als dos que no
+   marxen sols (`components/FloatingLayer/`, F12).
+10. ✅ **Botons flotants** — `DocumentStatusFab` i les dues fletxes de
     `NewsNavBar`, amb `floatingControlSx` i l'àncora única.
 11. **Colors hardcodats** (F10) — `#fff` del backdrop i l'ombra `#A6A6A6` dels
     dos grups de toggles.

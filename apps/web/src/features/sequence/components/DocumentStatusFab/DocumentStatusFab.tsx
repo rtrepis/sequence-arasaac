@@ -32,6 +32,12 @@ import {
   getDocumentDurability,
 } from "@features/sequence/store/documentStatusSlice";
 import { requestPersistentStorage } from "@features/sequence/storage/persistentStorage";
+import {
+  APP_CONTROL_SIZE,
+  APP_CORNER_RADIUS,
+  FLOATING_EDGE_GAP,
+} from "@/style/appShape";
+import { floatingControlSx } from "@/style/floatingControl";
 import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
@@ -231,8 +237,8 @@ const DocumentStatusFab = (): ReactElement => {
       <Box
         sx={{
           position: "fixed",
-          bottom: 16,
-          right: 16,
+          bottom: FLOATING_EDGE_GAP,
+          right: FLOATING_EDGE_GAP,
           // Columna alineada a la dreta i ancorada a baix: el que s'hi afegeix
           // creix cap amunt, de manera que la frase d'estat queda per sobre de
           // les accions sense haver de calcular-ne l'alçada
@@ -252,8 +258,9 @@ const DocumentStatusFab = (): ReactElement => {
             elevation={3}
             sx={{
               width: 260,
-              maxWidth: "calc(100vw - 32px)",
+              maxWidth: `calc(100vw - ${FLOATING_EDGE_GAP * 2}px)`,
               p: 1.5,
+              borderRadius: `${APP_CORNER_RADIUS}px`,
               pointerEvents: "none",
             }}
           >
@@ -292,8 +299,15 @@ const DocumentStatusFab = (): ReactElement => {
             if (reason !== "mouseLeave") setIsOpen(false);
           }}
           icon={statusIcon}
-          FabProps={{ color: fabColor, size: "medium" }}
-          sx={{ ".MuiSpeedDial-fab": { width: 48, height: 48 } }}
+          // La forma del toggle seleccionat, que és la marca de la casa: fins
+          // ara era un `Fab` rodó de MUI, sense cap decisió nostra i sense
+          // assemblar-se a cap dels controls que té a sota
+          FabProps={{
+            sx: [
+              floatingControlSx(fabColor),
+              { width: APP_CONTROL_SIZE, height: APP_CONTROL_SIZE },
+            ],
+          }}
         >
           {actions.map((action) => (
             <SpeedDialAction
@@ -313,7 +327,7 @@ const DocumentStatusFab = (): ReactElement => {
               // es queda a 40
               FabProps={{
                 disabled: action.disabled,
-                sx: { width: 44, height: 44 },
+                sx: [floatingControlSx(), { width: 44, height: 44 }],
               }}
             />
           ))}
