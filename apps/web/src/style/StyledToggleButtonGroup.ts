@@ -1,4 +1,5 @@
 import { alpha, styled, ToggleButtonGroup } from "@mui/material";
+import { controlGlow } from "./floatingControl";
 import {
   APP_CONTROL_BORDER_WIDTH,
   APP_CONTROL_SIZE,
@@ -30,7 +31,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
       border: `${APP_CONTROL_BORDER_WIDTH}px solid`,
       borderColor: theme.palette.primary.main,
       borderRadius: APP_CORNER_RADIUS,
-      boxShadow: "0px 0px 10px 1px #A6A6A6",
+      boxShadow: controlGlow(theme),
       opacity: 1,
     },
   },
@@ -39,7 +40,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     opacity: 1,
     border: `${APP_CONTROL_BORDER_WIDTH}px solid ${theme.palette.primary.main}`,
     borderRadius: `${APP_CORNER_RADIUS}px`,
-    boxShadow: "0px 0px 10px 1px #A6A6A6",
+    boxShadow: controlGlow(theme),
     "&:not(:first-of-type)": {
       borderLeft: `${APP_CONTROL_BORDER_WIDTH}px solid ${theme.palette.primary.main}`,
     },

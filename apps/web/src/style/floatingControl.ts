@@ -2,6 +2,14 @@ import { alpha, Theme } from "@mui/material";
 import { SystemStyleObject } from "@mui/system";
 import { APP_CONTROL_BORDER_WIDTH, APP_CORNER_RADIUS } from "./appShape";
 
+/**
+ * Ombra dels controls de la casa (toggle seleccionat o amb el ratolí a sobre).
+ * Conserva la geometria de sempre, però el color surt del tema: el gris fix que
+ * hi havia (`#A6A6A6`) no feia d'ombra de res en tema fosc.
+ */
+export const controlGlow = (theme: Theme): string =>
+  `0px 0px 10px 1px ${alpha(theme.palette.text.primary, 0.35)}`;
+
 /** Intensitat del tint sobre el paper, la mateixa del toggle seleccionat. */
 const TINT_OPACITY = 0.2;
 /** Tint del passi del ratolí: el mateix salt que fa el toggle en `:hover`. */

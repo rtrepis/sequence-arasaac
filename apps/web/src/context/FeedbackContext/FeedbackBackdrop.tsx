@@ -19,7 +19,7 @@ const FeedbackBackdrop = (): ReactElement => {
       role="status"
       aria-live="polite"
       sx={{
-        color: "#fff",
+        color: "common.white",
         zIndex: (theme) => theme.zIndex.drawer + 1,
         flexDirection: "column",
         gap: 2,

@@ -9,7 +9,8 @@ divergències trobades amb fitxer i motiu, i al final el patró i el pla de
 migració. Les regles que en surtin passaran a `CLAUDE.md`; aquest fitxer es
 queda com la raó de cada regla.
 
-**Estat**: estudi tancat; migració en curs (fets els punts 1, 9 i 10 del pla).
+**Estat**: estudi tancat; migració feta llevat de l'últim punt (l'estàndard
+condensat a `CLAUDE.md`).
 
 ---
 
@@ -334,16 +335,17 @@ Per ordre, del que fixa el patró al que només l'hereta:
    de `Dialog` a `themeMui.ts` (i `paperFullScreen` a 0). `StyledButton`: fora
    el `maxWidth: 130px`, que passa a l'`sx` d'`ApplyAll`, i `whiteSpace: nowrap`.
    El botó de text dels peus deixa de ser verd (F11).
-2. **`components/AppDialog/`** — els tres components nous.
-3. **`PictEditModal`** — passa a `AppDialog`. És la referència: ha de quedar
+2. ✅ **`components/AppDialog/`** — els components nous (amb una ranura d'estat
+   per al progrés que ha de quedar visible entre el contingut i el peu).
+3. ✅ **`PictEditModal`** — passa a `AppDialog`. És la referència: ha de quedar
    **igual que ara**, i si no queda igual és que el component està mal fet.
-4. **`ConfirmDialog`** — capçalera centrada i botons `StyledButton`. Cap canvi
+4. ✅ **`ConfirmDialog`** — capçalera centrada i botons `StyledButton`. Cap canvi
    de comportament: ni `autoFocus`, ni focus inicial a cap botó.
-5. **`SettingsSaveErrorDialog`**, **`SaveDocumentModal`** — capçalera i peu nous.
-6. **`LoadDocumentModal`** — fora la `✕` de la capçalera; tancar es queda al peu.
-7. **`AuthModal`** — fora la `✕`; peu amb «Tanca». «Entra» continua sent el
+5. ✅ **`SettingsSaveErrorDialog`**, **`SaveDocumentModal`** — capçalera i peu nous.
+6. ✅ **`LoadDocumentModal`** — fora la `✕` de la capçalera; tancar es queda al peu.
+7. ✅ **`AuthModal`** — fora la `✕`; peu amb «Tanca». «Entra» continua sent el
    submit del formulari, que és on ha de ser.
-8. **`ModalDownload`** — el més tocat: nom accessible (F3), l'ajuda surt del
+8. ✅ **`ModalDownload`** — el més tocat: nom accessible (F3), l'ajuda surt del
    títol, peu de debò amb «Cancel·la» i l'acció principal en un **sol** missatge
    nou (F4) als cinc idiomes.
 9. ✅ **Avisos** — aparença única (`floatingNoticeSx`), separació calculada des
@@ -351,9 +353,9 @@ Per ordre, del que fixa el patró al que només l'hereta:
    marxen sols (`components/FloatingLayer/`, F12).
 10. ✅ **Botons flotants** — `DocumentStatusFab` i les dues fletxes de
     `NewsNavBar`, amb `floatingControlSx` i l'àncora única.
-11. **Colors hardcodats** (F10) — `#fff` del backdrop i l'ombra `#A6A6A6` dels
+11. ✅ **Colors hardcodats** (F10) — `#fff` del backdrop i l'ombra `#A6A6A6` dels
     dos grups de toggles.
-12. **Documentació** — l'estàndard condensat a `CLAUDE.md` i les troballes
+12. **Documentació** — *pendent*: l'estàndard condensat a `CLAUDE.md` i les troballes
     tancades aquí.
 
 Fora d'abast, amb motiu: **`DefaultSettingsDialog`** (és `fullScreen` i ja té
