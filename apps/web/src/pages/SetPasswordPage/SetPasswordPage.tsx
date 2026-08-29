@@ -9,8 +9,8 @@ import React, { ReactElement, useState } from "react";
 import {
   Alert,
   Box,
-  Button,
   CircularProgress,
+  Link,
   Paper,
   TextField,
   Typography,
@@ -18,6 +18,8 @@ import {
 import { useIntl } from "react-intl";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import messages from "./SetPasswordPage.lang";
+import StyledButton from "@/style/StyledButton";
+import { APP_CORNER_RADIUS } from "@/style/appShape";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
 import PasswordStrengthGuide, {
   getPasswordRequirements,
@@ -82,6 +84,8 @@ const SetPasswordPage = (): ReactElement => {
         backgroundColor: "background.default",
       }}
     >
+      {/* La targeta és una superfície que sura sobre l'escriptori: porta la
+          cantonada de la casa, com els diàlegs i els controls */}
       <Paper
         sx={{
           p: 4,
@@ -90,6 +94,7 @@ const SetPasswordPage = (): ReactElement => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
+          borderRadius: `${APP_CORNER_RADIUS}px`,
         }}
       >
         <Typography variant="h5" component="h1" align="center">
@@ -116,13 +121,15 @@ const SetPasswordPage = (): ReactElement => {
                 {errorMessage}
                 {isInvalidToken && (
                   <Box sx={{ mt: 1 }}>
-                    <Typography
+                    <Link
+                      component="button"
+                      type="button"
                       variant="body2"
-                      sx={{ cursor: "pointer", color: "primary.main" }}
+                      color="inherit"
                       onClick={() => navigate(`/${appLang}/forgot-password`)}
                     >
                       {intl.formatMessage(messages.forgotPasswordLink)}
-                    </Typography>
+                    </Link>
                   </Box>
                 )}
               </Alert>
@@ -158,7 +165,7 @@ const SetPasswordPage = (): ReactElement => {
               }
             />
 
-            <Button
+            <StyledButton
               type="submit"
               variant="contained"
               fullWidth
@@ -171,7 +178,7 @@ const SetPasswordPage = (): ReactElement => {
               startIcon={isLoading ? <CircularProgress size={16} /> : null}
             >
               {intl.formatMessage(messages.submit)}
-            </Button>
+            </StyledButton>
           </Box>
         )}
       </Paper>

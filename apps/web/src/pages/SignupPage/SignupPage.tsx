@@ -5,9 +5,9 @@ import React, { useEffect, useState } from "react";
 import {
   Alert,
   Box,
-  Button,
   CircularProgress,
   MenuItem,
+  Link,
   Paper,
   TextField,
   Typography,
@@ -16,6 +16,8 @@ import { useIntl } from "react-intl";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserUseCase } from "@sequence-arasaac/shared-types";
 import messages from "./SignupPage.lang";
+import StyledButton from "@/style/StyledButton";
+import { APP_CORNER_RADIUS } from "@/style/appShape";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
 import { signup } from "@features/backend/auth/services/authService";
 import { warmUpBackend } from "@features/backend/api/warmUpBackend";
@@ -93,6 +95,8 @@ const SignupPage = (): React.ReactElement => {
         backgroundColor: "background.default",
       }}
     >
+      {/* La targeta és una superfície que sura sobre l'escriptori: porta la
+          cantonada de la casa, com els diàlegs i els controls */}
       <Paper
         sx={{
           p: 4,
@@ -101,6 +105,7 @@ const SignupPage = (): React.ReactElement => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
+          borderRadius: `${APP_CORNER_RADIUS}px`,
         }}
       >
         <Typography variant="h5" component="h1" align="center">
@@ -114,12 +119,12 @@ const SignupPage = (): React.ReactElement => {
             <Alert severity="success" variant="outlined">
               {intl.formatMessage(messages.success, { email: submittedEmail })}
             </Alert>
-            <Button
+            <StyledButton
               variant="contained"
               onClick={() => navigate(`/${locale}/create-sequence`)}
             >
               {intl.formatMessage(messages.goToApp)}
-            </Button>
+            </StyledButton>
           </>
         ) : (
           <Box
@@ -186,7 +191,7 @@ const SignupPage = (): React.ReactElement => {
               disabled={isLoading}
             />
 
-            <Button
+            <StyledButton
               type="submit"
               variant="contained"
               fullWidth
@@ -194,16 +199,21 @@ const SignupPage = (): React.ReactElement => {
               startIcon={isLoading ? <CircularProgress size={16} /> : null}
             >
               {intl.formatMessage(messages.submit)}
-            </Button>
+            </StyledButton>
 
-            <Typography
+            {/* Enllaç de debò i no un `Typography` amb `cursor: pointer`: així s'hi
+                arriba amb el tabulador, i amb la tinta del tema es llegeix (el verd
+                de la casa com a color de text es queda a 2,1:1) */}
+            <Link
+              component="button"
+              type="button"
               variant="body2"
-              align="center"
-              sx={{ cursor: "pointer", color: "primary.main" }}
+              color="inherit"
               onClick={() => navigate(`/${locale}/create-sequence`)}
+              sx={{ alignSelf: "center" }}
             >
               {intl.formatMessage(messages.loginLink)}
-            </Typography>
+            </Link>
           </Box>
         )}
       </Paper>
