@@ -2,7 +2,6 @@ import {
   Tab,
   Tabs,
   Tooltip,
-  IconButton,
   Stack,
   Box,
   useTheme,
@@ -17,6 +16,7 @@ import {
   deleteLastSequenceActionCreator,
 } from "@features/sequence/store/documentSlice";
 import { BsFileEarmarkPlus, BsFileEarmarkMinus } from "react-icons/bs";
+import StyledIconButton from "@/style/StyledIconButton";
 import { useIntl } from "react-intl";
 import messages from "./TabsSequences.lang";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
@@ -83,8 +83,10 @@ const TabsSequences = (): React.ReactElement => {
       style={{ visibility: amount > 1 ? "visible" : "hidden" }}
     >
       <span>
-        <IconButton
-          color="secondary"
+        {/* `secondary.main` és el gris verdós dels fons, no una tinta: sobre el
+            full es quedava a 1,15:1 i el botó gairebé no hi era */}
+        <StyledIconButton
+          color="inherit"
           onClick={handleDeleteLastSequence}
           disabled={amount <= 1}
           size="small"
@@ -94,7 +96,7 @@ const TabsSequences = (): React.ReactElement => {
             size={isMobile ? 20 : 24}
             style={{ visibility: amount > 1 ? "visible" : "hidden" }}
           />
-        </IconButton>
+        </StyledIconButton>
       </span>
     </Tooltip>
   );
@@ -102,14 +104,14 @@ const TabsSequences = (): React.ReactElement => {
   const addButton = (
     <Tooltip title={intl.formatMessage(messages.addSequence)}>
       <span>
-        <IconButton
-          color="secondary"
+        <StyledIconButton
+          color="inherit"
           onClick={handleAddSequence}
           size="small"
           aria-label={intl.formatMessage(messages.addSequence)}
         >
           <BsFileEarmarkPlus size={isMobile ? 20 : 24} />
-        </IconButton>
+        </StyledIconButton>
       </span>
     </Tooltip>
   );
