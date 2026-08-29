@@ -54,6 +54,15 @@ const SettingsPanelLayout = ({
         <Stack
           gap={1}
           sx={{
+            // Amb llista acompanyant i en mòbil, la zona deixa de ser una caixa
+            // (`display: contents`): els seus fills passen a ser fills directes
+            // del panell. Ho necessita la mostra enganxada: un `sticky` només
+            // s'enganxa mentre el seu pare és a la vista, i el pare era una
+            // columna tan alta com la llista —buida, tan alta com la mostra
+            // mateixa—, així que la mostra se n'anava amunt tot just començar a
+            // baixar, justament quan es toquen la pell i el cabell que ha
+            // d'ensenyar.
+            display: hasAside ? { xs: "contents", md: "flex" } : "flex",
             // En mòbil la zona ocupa tota l'amplada del panell: si s'ajustés al
             // contingut quedaria arrambada a l'esquerra pel alignItems del pare
             width: { xs: "100%", md: "auto" },
@@ -66,8 +75,8 @@ const SettingsPanelLayout = ({
               xs: SETTINGS_APPBAR_OFFSET,
               md: SETTINGS_PREVIEW_STICKY_TOP,
             },
-            // Acotem la mostra perquè no es mengi la pantalla; amb llista no
-            // cal: el que sobresurt es llegeix fent scroll a la pàgina
+            // Acotem la mostra perquè no es mengi la pantalla; la llista, no:
+            // el que sobresurt es llegeix fent scroll a la pàgina
             maxHeight: hasAside
               ? { md: desktopMaxHeight }
               : {
@@ -75,6 +84,9 @@ const SettingsPanelLayout = ({
                   md: desktopMaxHeight,
                 },
             overflow: hasAside ? { xs: "visible", md: "auto" } : "auto",
+            // L'aire sota la barra va dins de la caixa enganxada, no al `top`:
+            // fora, el contingut que hi passa per darrere s'entreveuria
+            paddingTop: hasAside ? 0 : { xs: 1, md: 0 },
             zIndex: 10,
             // Opaca: mentre és sticky, els controls li passen per sota
             bgcolor: "background.paper",
@@ -87,7 +99,12 @@ const SettingsPanelLayout = ({
                 top: SETTINGS_APPBAR_OFFSET,
                 zIndex: 10,
                 bgcolor: "background.paper",
-                paddingBottom: hasAside ? { xs: 1, md: 0 } : 0,
+                paddingBlock: hasAside ? { xs: 1, md: 0 } : 0,
+                // La mostra enganxada tampoc no s'ha de menjar la pantalla
+                maxHeight: hasAside
+                  ? { xs: SETTINGS_PREVIEW_MOBILE_MAX_HEIGHT, md: "none" }
+                  : "none",
+                overflow: hasAside ? { xs: "auto", md: "visible" } : "visible",
                 // Amplada completa en mòbil (perquè el fons tapi el que passa
                 // per sota) amb la mostra centrada a dins
                 width: { xs: "100%", md: "auto" },

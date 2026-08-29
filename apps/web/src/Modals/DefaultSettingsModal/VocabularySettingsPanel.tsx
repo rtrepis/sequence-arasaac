@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, Stack, TextField, Typography } from "@mui/material";
+import StyledButton from "@/style/StyledButton";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import {
@@ -36,6 +30,7 @@ import {
   SettingsPreviewFrame,
   SectionTitle,
   SettingsPanelHint,
+  SettingsActions,
 } from "../../components/SettingsLayout";
 import AuthForm from "../../features/backend/auth/components/AuthForm";
 import authMessages from "../../features/backend/auth/components/AuthModal.lang";
@@ -326,18 +321,22 @@ const VocabularySettingsPanel = (): React.ReactElement => {
       </SectionTitle>
 
       {/* Accions del formulari: sempre al final i a la dreta */}
-      <Stack direction="row" justifyContent="flex-end" gap={1}>
+      <SettingsActions>
         {isEditing && (
-          <Button variant="outlined" onClick={resetForm}>
+          <StyledButton color="inherit" onClick={resetForm}>
             <FormattedMessage {...messages.cancelButton} />
-          </Button>
+          </StyledButton>
         )}
-        <Button variant="contained" onClick={handleSave} disabled={!canSave}>
+        <StyledButton
+          variant="contained"
+          onClick={handleSave}
+          disabled={!canSave}
+        >
           <FormattedMessage
             {...(isUpdate ? messages.updateButton : messages.addButton)}
           />
-        </Button>
-      </Stack>
+        </StyledButton>
+      </SettingsActions>
     </SettingsPanelLayout>
   );
 };

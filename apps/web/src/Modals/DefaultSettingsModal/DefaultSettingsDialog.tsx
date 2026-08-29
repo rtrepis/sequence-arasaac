@@ -16,9 +16,19 @@ import { MdGridView } from "react-icons/md";
 import { forwardRef, useRef } from "react";
 import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
-import { AppTab, APP_TAB_LABEL_BREAKPOINT, tabsStyled } from "../../components/AppTabs";
+import {
+  AppTab,
+  APP_TAB_LABEL_BREAKPOINT,
+  tabsStyled,
+} from "../../components/AppTabs";
+import {
+  SETTINGS_CONTENT_TOP_GAP,
+  SETTINGS_DIALOG_APPBAR_HEIGHT,
+} from "../../components/SettingsLayout";
 import { Container } from "@mui/system";
-import DefaultSettingsPanel, { DefaultSettingsPanelHandle } from "../../components/DefaultsForm/DefaultSettingsPanel";
+import DefaultSettingsPanel, {
+  DefaultSettingsPanelHandle,
+} from "../../components/DefaultsForm/DefaultSettingsPanel";
 import UserSettingsPanel from "./UserSettingsPanel";
 import ViewSettingsPanel from "./ViewSettingsPanel";
 import VocabularySettingsPanel from "./VocabularySettingsPanel";
@@ -45,9 +55,17 @@ interface SettingsTabDefinition {
 /** Tabs del modal de configuracions, en ordre de presentació. */
 const SETTINGS_TABS: SettingsTabDefinition[] = [
   { value: "user", icon: <AiOutlineUser />, message: messages.tabUser },
-  { value: "pictograms", icon: <AiOutlinePicture />, message: messages.tabPictograms },
+  {
+    value: "pictograms",
+    icon: <AiOutlinePicture />,
+    message: messages.tabPictograms,
+  },
   { value: "view", icon: <MdGridView />, message: messages.tabView },
-  { value: "vocabulary", icon: <AiOutlineBook />, message: messages.tabVocabulary },
+  {
+    value: "vocabulary",
+    icon: <AiOutlineBook />,
+    message: messages.tabVocabulary,
+  },
 ];
 
 const Transition = forwardRef(function Transition(
@@ -57,7 +75,10 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="right" ref={ref} {...props} />;
 });
 
-const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): React.ReactElement => {
+const DefaultSettingsDialog = ({
+  open,
+  onClose,
+}: DefaultSettingsDialogProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const activeTab = useAppSelector((state) => state.ui.settingsActiveTab);
@@ -85,74 +106,84 @@ const DefaultSettingsDialog = ({ open, onClose }: DefaultSettingsDialogProps): R
   return (
     <>
       <Dialog
-      fullScreen
-      open={open}
-      onClose={handleClose}
-      aria-label={intl.formatMessage(messages.settings)}
-      slots={{ transition: Transition }}
-    >
-      <AppBar
-        sx={{ position: { xs: "fixed", md: "relative" }, height: "42px" }}
-        elevation={1}
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        aria-label={intl.formatMessage(messages.settings)}
+        slots={{ transition: Transition }}
       >
-        <Toolbar style={{ minHeight: "50px" }} sx={{ minHeight: "50px" }}>
-          {/* En mòbil el títol cedeix l'amplada als tabs; el nom del diàleg
+        <AppBar
+          sx={{ position: { xs: "fixed", md: "relative" }, height: "42px" }}
+          elevation={1}
+        >
+          <Toolbar style={{ minHeight: "50px" }} sx={{ minHeight: "50px" }}>
+            {/* En mòbil el títol cedeix l'amplada als tabs; el nom del diàleg
               es manté a l'aria-label i el del tab actiu, al propi tab seleccionat */}
-          <Typography
+            <Typography
+              sx={{
+                ml: 2,
+                mr: 3,
+                display: { xs: "none", [APP_TAB_LABEL_BREAKPOINT]: "block" },
+              }}
+              variant="h6"
+              component="div"
+              fontWeight={800}
+            >
+              <FormattedMessage {...messages.settings} />
+            </Typography>
+
+            {/* Scrollable perquè en mòbil el tab seleccionat amb text no desbordi la barra */}
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{ ...tabsStyled, flex: 1 }}
+            >
+              {SETTINGS_TABS.map(({ value, icon, message }) => (
+                <AppTab
+                  key={value}
+                  value={value}
+                  icon={icon}
+                  label={intl.formatMessage(message)}
+                />
+              ))}
+            </Tabs>
+
+            <IconButton
+              edge="end"
+              color="inherit"
+              onClick={handleClose}
+              aria-label={intl.formatMessage({ ...messages.close })}
+            >
+              <AiOutlineClose />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+
+        <Container sx={{ paddingTop: SETTINGS_CONTENT_TOP_GAP }}>
+          {/* Per sota de `md` l'AppBar és `position: fixed` i no ocupa lloc: sense
+            aquest buit de la seva alçada exacta, el contingut li començava a sis
+            píxels i el panell semblava enganxat sota un bloc verd */}
+          <Stack
             sx={{
-              ml: 2,
-              mr: 3,
-              display: { xs: "none", [APP_TAB_LABEL_BREAKPOINT]: "block" },
+              height: SETTINGS_DIALOG_APPBAR_HEIGHT,
+              display: { md: "none" },
             }}
-            variant="h6"
-            component="div"
-            fontWeight={800}
+          />
+
+          {activeTab === "user" && <UserSettingsPanel />}
+
+          <div
+            style={{ display: activeTab === "pictograms" ? "block" : "none" }}
           >
-            <FormattedMessage {...messages.settings} />
-          </Typography>
+            <DefaultSettingsPanel ref={pictPanelRef} />
+          </div>
 
-          {/* Scrollable perquè en mòbil el tab seleccionat amb text no desbordi la barra */}
-          <Tabs
-            value={activeTab}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{ ...tabsStyled, flex: 1 }}
-          >
-            {SETTINGS_TABS.map(({ value, icon, message }) => (
-              <AppTab
-                key={value}
-                value={value}
-                icon={icon}
-                label={intl.formatMessage(message)}
-              />
-            ))}
-          </Tabs>
+          {activeTab === "view" && <ViewSettingsPanel ref={viewPanelRef} />}
 
-          <IconButton
-            edge="end"
-            color="inherit"
-            onClick={handleClose}
-            aria-label={intl.formatMessage({ ...messages.close })}
-          >
-            <AiOutlineClose />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-
-      <Container sx={{ marginTop: 2 }}>
-        <Stack sx={{ height: 40, display: { md: "none" } }} />
-
-        {activeTab === "user" && <UserSettingsPanel />}
-
-        <div style={{ display: activeTab === "pictograms" ? "block" : "none" }}>
-          <DefaultSettingsPanel ref={pictPanelRef} />
-        </div>
-
-        {activeTab === "view" && <ViewSettingsPanel ref={viewPanelRef} />}
-
-        {activeTab === "vocabulary" && <VocabularySettingsPanel />}
-      </Container>
+          {activeTab === "vocabulary" && <VocabularySettingsPanel />}
+        </Container>
       </Dialog>
 
       {/* Fora del Dialog: MUI desmunta els fills en tancar-lo, i aquest avís neix
