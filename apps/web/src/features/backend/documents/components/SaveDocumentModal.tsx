@@ -10,16 +10,13 @@ import React, { useEffect, useState } from "react";
 import {
   Alert,
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
   DialogContentText,
-  DialogTitle,
   LinearProgress,
   TextField,
   Typography,
 } from "@mui/material";
+import { AppDialog, AppDialogActions } from "@components/AppDialog";
+import StyledButton from "@/style/StyledButton";
 import { useIntl } from "react-intl";
 import messages from "./DocumentModals.lang";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
@@ -128,82 +125,84 @@ const SaveDocumentModal = ({
     authMessages.DOCUMENT_SAVE_ERROR;
 
   return (
-    <Dialog
+    <AppDialog
       open={open}
       onClose={handleClose}
-      fullWidth
-      maxWidth="sm"
-      aria-labelledby="save-doc-modal-title"
-    >
-      <DialogTitle id="save-doc-modal-title">
-        {intl.formatMessage(
-          isExisting ? messages.updateTitle : messages.saveTitle,
-        )}
-      </DialogTitle>
-
-      <DialogContent>
-        {isExisting && (
-          <DialogContentText variant="body2" sx={{ mb: 2 }}>
-            {intl.formatMessage(messages.updateHint)}
-          </DialogContentText>
-        )}
-
-        <TextField
-          autoFocus
-          fullWidth
-          value={name}
-          onChange={(event) => {
-            setName(event.target.value);
-            setIsNameMissing(false);
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && !isSaving) void handleSave();
-          }}
-          disabled={isSaving}
-          label={intl.formatMessage(messages.nameLabel)}
-          error={isNameMissing}
-          helperText={intl.formatMessage(
-            isNameMissing ? messages.nameRequired : messages.nameHelper,
-          )}
-          inputProps={{ maxLength: DOCUMENT_TITLE_MAX_LENGTH }}
-        />
-
-        {isSaving && (
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              {progressMessage()}
-            </Typography>
-            {/* Determinada mentre axios sàpiga la mida total; si no la sap, val
-                més una barra indeterminada que un percentatge inventat */}
-            {transfer.percent !== null ? (
-              <LinearProgress variant="determinate" value={transfer.percent} />
-            ) : (
-              <LinearProgress />
+      title={intl.formatMessage(
+        isExisting ? messages.updateTitle : messages.saveTitle,
+      )}
+      titleId="save-doc-modal-title"
+      actions={
+        <AppDialogActions>
+          <StyledButton
+            onClick={handleClose}
+            color="inherit"
+            disabled={isSaving}
+          >
+            {intl.formatMessage(messages.cancel)}
+          </StyledButton>
+          <StyledButton
+            onClick={handleSave}
+            variant="contained"
+            disabled={isSaving}
+          >
+            {intl.formatMessage(
+              isExisting ? messages.updateAction : messages.saveAction,
             )}
-          </Box>
-        )}
+          </StyledButton>
+        </AppDialogActions>
+      }
+    >
+      {isExisting && (
+        <DialogContentText variant="body2" sx={{ mb: 2 }}>
+          {intl.formatMessage(messages.updateHint)}
+        </DialogContentText>
+      )}
 
-        {errorCode && (
-          <Alert severity="error" variant="outlined" sx={{ mt: 2 }}>
-            {intl.formatMessage(authMessages.errorWithCode, {
-              message: intl.formatMessage(errorMessage),
-              code: errorCode,
-            })}
-          </Alert>
+      <TextField
+        autoFocus
+        fullWidth
+        value={name}
+        onChange={(event) => {
+          setName(event.target.value);
+          setIsNameMissing(false);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !isSaving) void handleSave();
+        }}
+        disabled={isSaving}
+        label={intl.formatMessage(messages.nameLabel)}
+        error={isNameMissing}
+        helperText={intl.formatMessage(
+          isNameMissing ? messages.nameRequired : messages.nameHelper,
         )}
-      </DialogContent>
+        inputProps={{ maxLength: DOCUMENT_TITLE_MAX_LENGTH }}
+      />
 
-      <DialogActions>
-        <Button onClick={handleClose} color="inherit" disabled={isSaving}>
-          {intl.formatMessage(messages.cancel)}
-        </Button>
-        <Button onClick={handleSave} variant="contained" disabled={isSaving}>
-          {intl.formatMessage(
-            isExisting ? messages.updateAction : messages.saveAction,
+      {isSaving && (
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            {progressMessage()}
+          </Typography>
+          {/* Determinada mentre axios sàpiga la mida total; si no la sap, val
+              més una barra indeterminada que un percentatge inventat */}
+          {transfer.percent !== null ? (
+            <LinearProgress variant="determinate" value={transfer.percent} />
+          ) : (
+            <LinearProgress />
           )}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </Box>
+      )}
+
+      {errorCode && (
+        <Alert severity="error" variant="outlined" sx={{ mt: 2 }}>
+          {intl.formatMessage(authMessages.errorWithCode, {
+            message: intl.formatMessage(errorMessage),
+            code: errorCode,
+          })}
+        </Alert>
+      )}
+    </AppDialog>
   );
 };
 

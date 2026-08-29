@@ -2,6 +2,7 @@ import { createTheme, Theme } from "@mui/material";
 import "../style/fonts.css";
 import { fontList } from "../data/fontlist";
 import { appBackgrounds, appDividers, appPalette } from "./palette";
+import { APP_CORNER_RADIUS } from "./appShape";
 
 export const buildTheme = (mode: "light" | "dark"): Theme =>
   createTheme({
@@ -21,6 +22,16 @@ export const buildTheme = (mode: "light" | "dark"): Theme =>
       MuiPaper: {
         styleOverrides: {
           root: { backgroundImage: "none" },
+        },
+      },
+      // La cantonada de la casa per a tota capa flotant: cap diàleg no se l'ha
+      // de tornar a escriure al seu `sx` (fins ara només la duia el modal
+      // d'edició). El `fullScreen` en queda fora: una pantalla sencera no té
+      // cantonades, i MUI aplica `paperFullScreen` després de `paper`.
+      MuiDialog: {
+        styleOverrides: {
+          paper: { borderRadius: `${APP_CORNER_RADIUS}px` },
+          paperFullScreen: { borderRadius: 0 },
         },
       },
       MuiAppBar: {

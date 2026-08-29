@@ -1,15 +1,9 @@
-// Modal d'autenticació: embolcalla l'AuthForm (login) en un Dialog amb títol i
-// botó de tancar. El registre viu a la seva pròpia pàgina (/:locale/signup).
+// Modal d'autenticació: embolcalla l'AuthForm (login) en el diàleg de la casa.
+// El registre viu a la seva pròpia pàgina (/:locale/signup).
 import React, { useEffect } from "react";
-import {
-  Box,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-} from "@mui/material";
-import { AiOutlineClose } from "react-icons/ai";
 import { useIntl } from "react-intl";
+import { AppDialog, AppDialogActions } from "@components/AppDialog";
+import StyledButton from "@/style/StyledButton";
 import messages from "./AuthModal.lang";
 import AuthForm from "./AuthForm";
 import { warmUpBackend } from "../../api/warmUpBackend";
@@ -29,36 +23,24 @@ const AuthModal = ({ open, onClose }: AuthModalProps): React.ReactElement => {
   }, [open]);
 
   return (
-    <Dialog
+    <AppDialog
       open={open}
       onClose={onClose}
-      fullWidth
+      title={intl.formatMessage(messages.loginTitle)}
+      titleId="auth-modal-title"
       maxWidth="xs"
-      aria-labelledby="auth-modal-title"
+      // «Entra» es queda dins del formulari, que és on ha de ser: és el submit
+      // del login, no l'acció del diàleg. El peu només en té la sortida.
+      actions={
+        <AppDialogActions>
+          <StyledButton onClick={onClose} color="inherit">
+            {intl.formatMessage(messages.close)}
+          </StyledButton>
+        </AppDialogActions>
+      }
     >
-      <DialogTitle id="auth-modal-title">
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          {intl.formatMessage(messages.loginTitle)}
-          <IconButton
-            onClick={onClose}
-            aria-label={intl.formatMessage(messages.close)}
-            size="small"
-          >
-            <AiOutlineClose />
-          </IconButton>
-        </Box>
-      </DialogTitle>
-
-      <DialogContent>
-        <AuthForm onSuccess={onClose} onNavigateAway={onClose} autoFocus />
-      </DialogContent>
-    </Dialog>
+      <AuthForm onSuccess={onClose} onNavigateAway={onClose} autoFocus />
+    </AppDialog>
   );
 };
 

@@ -7,6 +7,11 @@
 // desar al núvol seria treure l'eina a qui encara pot treballar.
 import { ReactElement, useEffect, useState } from "react";
 import { Alert, AlertTitle, Button, IconButton, Snackbar } from "@mui/material";
+import {
+  floatingNoticeSx,
+  floatingSnackbarSx,
+  useFloatingInset,
+} from "@components/FloatingLayer";
 import { AiOutlineClose } from "react-icons/ai";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
@@ -50,6 +55,8 @@ const SessionExpiredNotice = (): ReactElement | null => {
   const accessToken = useAppSelector(selectAccessToken);
 
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  // Abans de la sortida per `null`: un hook no pot quedar darrere d'un return
+  const insetRef = useFloatingInset("session-expired");
   // Estat i no `ref`: el render següent és el que ha de veure l'estat d'auth ja
   // net, i és el que permet distingir «acabo de netejar-ho» de «ha tornat a
   // entrar» a l'efecte de sota
@@ -91,15 +98,17 @@ const SessionExpiredNotice = (): ReactElement | null => {
       <Snackbar
         open
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        sx={floatingSnackbarSx}
         // Sense autoHideDuration: no és la confirmació d'una acció, és un canvi
         // d'estat del compte que l'usuari ha de poder llegir quan torni a mirar
       >
         <Alert
+          // Es queda a la pantalla fins que l'usuari el tanca: mentrestant ha
+          // de reservar el seu espai al final del contingut
+          ref={insetRef}
           severity="warning"
           variant="outlined"
-          // L'outlined de MUI és transparent i, sobre el contingut, el text
-          // quedaria il·legible
-          sx={{ width: "100%", bgcolor: "background.paper" }}
+          sx={floatingNoticeSx}
           // Tot dins d'`action`: quan MUI en rep un, deixa de pintar el botó de
           // tancar de `onClose`, i un avís sense temporitzador que no es pot
           // treure de la pantalla és una trampa, sobretot en mòbil

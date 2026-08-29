@@ -1,0 +1,850 @@
+<title>Capes flotants de SequenciAAC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  /* ---------- Paleta de la pàgina (neutres amb biaix oliva, del verd de l'app) ---------- */
+  :root {
+    --ground: #F6F8F1;
+    --surface: #FFFFFF;
+    --sunk: #ECEFE4;
+    --ink: #1E2A12;
+    --ink-soft: #5B6650;
+    --ink-faint: #8A9480;
+    --line: rgba(30, 42, 18, 0.14);
+    --line-strong: rgba(30, 42, 18, 0.28);
+    --accent: #6E9E33;
+    --accent-bright: #8AC34A;
+    --was: #A53F2B;
+    --shadow-card: 0 1px 2px rgba(30, 42, 18, .06), 0 8px 24px -12px rgba(30, 42, 18, .25);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101309;
+      --surface: #191D12;
+      --sunk: #0B0D06;
+      --ink: #E9EDE1;
+      --ink-soft: #A6B098;
+      --ink-faint: #6F7A63;
+      --line: rgba(233, 237, 225, 0.16);
+      --line-strong: rgba(233, 237, 225, 0.34);
+      --accent: #A8D46B;
+      --accent-bright: #8AC34A;
+      --was: #E29584;
+      --shadow-card: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 24px -12px rgba(0, 0, 0, .8);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #101309;
+    --surface: #191D12;
+    --sunk: #0B0D06;
+    --ink: #E9EDE1;
+    --ink-soft: #A6B098;
+    --ink-faint: #6F7A63;
+    --line: rgba(233, 237, 225, 0.16);
+    --line-strong: rgba(233, 237, 225, 0.34);
+    --accent: #A8D46B;
+    --accent-bright: #8AC34A;
+    --was: #E29584;
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 24px -12px rgba(0, 0, 0, .8);
+  }
+
+  /* ---------- Paleta de l'APP simulada: no depèn del tema de la pàgina, ----------
+       sinó de l'interruptor Clar/Fosc, perquè és el que s'està jutjant. */
+  [data-app] {
+    --a-green: #8AC34A;
+    --a-green-ink: #1E2A12;
+    --a-error: #d32f2f;
+    --a-info: #0288d1;
+    --a-sheet: #FFFFFF;
+    --a-scrim: rgba(0, 0, 0, .5);
+  }
+  [data-app="light"] {
+    --a-default: #FFFFFF;
+    --a-paper: #F2F5EC;
+    --a-text: rgba(0, 0, 0, .87);
+    --a-text2: rgba(0, 0, 0, .6);
+    --a-line: rgba(0, 0, 0, .15);
+    --a-outline: rgba(0, 0, 0, .23);
+    --a-tint-hover: rgba(138, 195, 74, .08);
+  }
+  [data-app="dark"] {
+    --a-default: #121212;
+    --a-paper: #242820;
+    --a-text: #FFFFFF;
+    --a-text2: rgba(255, 255, 255, .7);
+    --a-line: rgba(255, 255, 255, .15);
+    --a-outline: rgba(255, 255, 255, .23);
+    --a-error: #f44336;
+    --a-info: #29b6f6;
+    --a-tint-hover: rgba(138, 195, 74, .16);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Capçalera ---------- */
+  .masthead { padding: 72px 0 40px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--ink-faint);
+    margin: 0 0 18px;
+  }
+  h1 {
+    font-size: clamp(34px, 5.5vw, 52px);
+    line-height: 1.06; letter-spacing: -.02em; font-weight: 700;
+    margin: 0 0 20px; text-wrap: balance; max-width: 16ch;
+  }
+  .deck { font-size: 19px; color: var(--ink-soft); max-width: 62ch; margin: 0; }
+  .deck b { color: var(--ink); font-weight: 700; }
+
+  /* ---------- Tira de tokens ---------- */
+  .tokens {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
+    border-radius: 14px; overflow: hidden; margin: 44px 0 0;
+  }
+  .token { background: var(--surface); padding: 16px 18px; }
+  .token dt {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 6px;
+  }
+  .token dd { margin: 0; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .token .swatches { display: flex; gap: 6px; margin-top: 4px; }
+  .token .swatches i { width: 20px; height: 20px; border-radius: 6px; border: 1px solid var(--line-strong); }
+
+  /* ---------- Barra de control enganxada ---------- */
+  .bar {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    margin-top: 56px;
+  }
+  .bar__inner {
+    max-width: 1180px; margin: 0 auto; padding: 12px 24px;
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  }
+  .bar__label {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint);
+  }
+  .seg { display: flex; gap: 6px; }
+  .seg button {
+    font: inherit; font-size: 14px; font-weight: 700;
+    padding: 7px 18px; border-radius: 20px; cursor: pointer;
+    border: 1.75px solid var(--line-strong); background: transparent; color: var(--ink);
+  }
+  .seg button[aria-pressed="true"] {
+    border-color: var(--accent-bright);
+    background: color-mix(in srgb, var(--accent-bright) 20%, var(--surface));
+  }
+  .seg button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Bandes ---------- */
+  main { padding: 8px 0 40px; }
+  .band {
+    display: grid; grid-template-columns: minmax(240px, 300px) 1fr;
+    gap: 40px; padding: 56px 0; border-top: 1px solid var(--line);
+  }
+  .band:first-child { border-top: none; }
+  .band__note h2 {
+    font-size: 27px; line-height: 1.15; letter-spacing: -.015em;
+    margin: 10px 0 12px; text-wrap: balance;
+  }
+  .band__note p { margin: 0 0 18px; color: var(--ink-soft); font-size: 15.5px; }
+  .codes { display: flex; flex-wrap: wrap; gap: 6px; }
+  .code {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: .06em; padding: 3px 8px; border-radius: 5px;
+    background: var(--sunk); color: var(--ink-soft); border: 1px solid var(--line);
+  }
+  .deltas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .delta { display: grid; grid-template-columns: 18px 1fr; gap: 10px; font-size: 14.5px; line-height: 1.45; }
+  .delta::before {
+    font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 15px;
+    line-height: 1.35; text-align: center;
+  }
+  .delta--out { color: var(--ink-soft); }
+  .delta--out::before { content: "−"; color: var(--was); }
+  .delta--in::before { content: "+"; color: var(--accent); }
+
+  .stages { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+  .stages--single { grid-template-columns: 1fr; max-width: 560px; }
+  figure { margin: 0; }
+  .flag {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+  }
+  .flag::before { content: ""; width: 22px; height: 2px; background: currentColor; }
+  .flag--now { color: var(--was); }
+  .flag--next { color: var(--accent); }
+
+  /* ---------- L'escenari: una miniatura de l'app amb la capa a sobre ---------- */
+  .stage {
+    position: relative; height: 356px; overflow: hidden;
+    border-radius: 12px; border: 1px solid var(--line-strong);
+    background: var(--a-default);
+    display: grid; place-items: center;
+    box-shadow: var(--shadow-card);
+  }
+  .stage--short { height: 244px; }
+  .stage--fab { height: 292px; }
+  .stage__app { position: absolute; inset: 0; }
+  .stage__bar { height: 30px; background: var(--a-green); }
+  .stage__sheet { display: flex; gap: 10px; padding: 22px 16px; }
+  .stage__sheet i {
+    flex: 1; height: 86px; border-radius: 6px;
+    background: var(--a-sheet); border: 1px solid var(--a-line);
+  }
+  .scrim { position: absolute; inset: 0; background: var(--a-scrim); }
+  .stage__layer { position: relative; width: 100%; display: grid; place-items: center; padding: 14px; }
+  .note-under {
+    margin: 10px 2px 0; font-size: 13px; color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  /* ---------- Diàleg simulat. Base = patró nou; .stage--now el torna al MUI d'avui ---------- */
+  .d {
+    position: relative; width: min(360px, 100%);
+    background: var(--a-paper); color: var(--a-text);
+    border-radius: 20px;
+    box-shadow: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12);
+    font-size: 13px;
+  }
+  .stage--now .d { border-radius: 4px; }
+
+  .d__head { display: flex; align-items: center; gap: 8px; padding: 12px; }
+  .d__slot { width: 36px; flex: 0 0 36px; display: flex; justify-content: flex-end; }
+  .d__titlewrap { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .d__title { font-size: 20px; line-height: 1.33; margin: 0; text-align: center; }
+  .d__badge {
+    width: 38px; height: 38px; border-radius: 50%; flex: 0 0 38px;
+    background: var(--a-green); color: var(--a-green-ink);
+    display: grid; place-items: center; font-size: 22px; line-height: 1;
+  }
+  .stage--now .d__head { display: block; padding: 16px 24px; }
+  .stage--now .d__title { text-align: left; font-size: 20px; font-weight: 400; }
+
+  .d__iconbtn {
+    width: 32px; height: 32px; border-radius: 50%; border: 0; background: transparent;
+    color: var(--a-text2); display: grid; place-items: center; cursor: default; padding: 0;
+  }
+
+  .d__body { padding: 8px 24px 16px; color: var(--a-text); }
+  .d__body p { margin: 0 0 12px; color: var(--a-text2); font-size: 13px; line-height: 1.5; }
+  .d--dividers .d__body { border-top: 1px solid var(--a-line); border-bottom: 1px solid var(--a-line); padding: 16px 24px; }
+
+  .d__foot {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 12px 20px 16px; justify-content: flex-end;
+  }
+  .d__foot--split { justify-content: space-between; }
+  .d__footright { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .stage--now .d__foot { padding: 8px; }
+
+  /* ---------- Botons ---------- */
+  .b {
+    font: inherit; font-size: 13px; font-weight: 700; line-height: 1.75;
+    border-radius: 20px; padding: 5px 15px; border: 1.5px solid transparent;
+    background: transparent; color: var(--a-green-ink); cursor: default; white-space: nowrap;
+  }
+  .stage--now .b {
+    border-radius: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: .02857em;
+  }
+  .b--text { color: var(--a-text2); }
+  .stage--now .b--text { color: var(--a-green); }
+  .b--filled { background: var(--a-green); color: var(--a-green-ink); border-color: var(--a-green); }
+  .b--danger { background: var(--a-error); color: #fff; border-color: var(--a-error); }
+  .b--outline-danger { color: var(--a-error); border-color: color-mix(in srgb, var(--a-error) 50%, transparent); }
+  .b--outline { color: var(--a-text); border-color: var(--a-outline); }
+  .b--block { width: 100%; display: block; padding: 8px 15px; }
+  .b--icon { display: inline-flex; align-items: center; gap: 7px; }
+
+  /* ---------- Peces de formulari ---------- */
+  .field {
+    border: 1px solid var(--a-outline); border-radius: 4px; padding: 9px 12px;
+    color: var(--a-text2); font-size: 13px; background: transparent; margin-bottom: 4px;
+  }
+  .field--underline { border: 0; border-bottom: 1px solid var(--a-outline); border-radius: 0; padding: 6px 0; }
+  .helper { font-size: 11px; color: var(--a-text2); margin: 0 0 12px 2px; }
+  .checkline { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
+  .checkbox {
+    width: 17px; height: 17px; border-radius: 3px; border: 2px solid var(--a-text2); flex: none;
+  }
+  .checkbox--on { background: var(--a-green); border-color: var(--a-green); position: relative; }
+  .checkbox--on::after {
+    content: ""; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px;
+    border: solid var(--a-green-ink); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+
+  /* ---------- Targeta de pictograma ---------- */
+  .pict {
+    background: var(--a-sheet); border: 1px solid rgba(0,0,0,.15); border-radius: 4px;
+    width: 104px; padding: 6px; text-align: center; color: #000;
+  }
+  .pict svg { display: block; width: 100%; height: auto; }
+  .pict span { font-size: 12px; font-weight: 700; }
+
+  /* ---------- Avís flotant ---------- */
+  .snackzone { position: absolute; left: 8px; right: 8px; bottom: 12px; display: flex; justify-content: center; }
+  .snackzone--clear { right: 79px; }
+  .alert {
+    width: 100%; max-width: 340px; display: flex; gap: 10px; padding: 8px 14px;
+    border-radius: 20px; border: 1px solid var(--a-info);
+    background: var(--a-paper); color: var(--a-text); font-size: 12.5px;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14);
+  }
+  .stage--now .alert { border-radius: 4px; box-shadow: none; }
+  .alert__icon { color: var(--a-info); flex: none; margin-top: 1px; }
+  .alert__title { font-weight: 700; margin: 0 0 2px; }
+  .alert p { margin: 0; color: var(--a-text2); font-size: 12px; line-height: 1.4; }
+  .alert__bar { height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--a-info) 30%, transparent); margin-top: 7px; position: relative; overflow: hidden; }
+  .alert__bar::after { content: ""; position: absolute; inset: 0 42% 0 0; background: var(--a-info); border-radius: 2px; }
+
+  /* ---------- Botó flotant ---------- */
+  .fabzone { position: absolute; right: 16px; bottom: 16px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .fab {
+    width: 55px; height: 55px; border-radius: 20px;
+    border: 1.75px solid var(--a-green);
+    background: linear-gradient(rgba(138,195,74,.2), rgba(138,195,74,.2)), var(--a-paper);
+    color: var(--a-text); display: grid; place-items: center;
+  }
+  .stage--now .fab {
+    width: 48px; height: 48px; border-radius: 50%; border: 0;
+    background: var(--a-green); color: var(--a-green-ink);
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14);
+  }
+  .statuspanel {
+    width: 218px; background: var(--a-paper); color: var(--a-text);
+    border-radius: 20px; padding: 12px 14px; font-size: 12px;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14);
+  }
+  .stage--now .statuspanel { border-radius: 4px; }
+  .statuspanel b { display: block; font-size: 12.5px; }
+  .statuspanel span { color: var(--a-text2); font-size: 11.5px; }
+
+  /* ---------- Grup de toggles de la casa (referència de forma) ---------- */
+  .toggles { position: absolute; left: 18px; top: 46px; display: flex; gap: 2px; }
+  .toggle {
+    width: 55px; height: 55px; border-radius: 20px; border: 1.75px solid var(--a-line);
+    display: grid; place-items: center; color: var(--a-text); opacity: .6;
+    background: var(--a-paper);
+  }
+  .toggle--on {
+    opacity: 1; border-color: var(--a-green);
+    background: linear-gradient(rgba(138,195,74,.2), rgba(138,195,74,.2)), var(--a-paper);
+  }
+  .stagelabel {
+    position: absolute; left: 18px; top: 42px;
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--a-text2);
+  }
+
+  /* ---------- Peu ---------- */
+  footer {
+    border-top: 1px solid var(--line); padding: 40px 0 72px;
+    color: var(--ink-soft); font-size: 14.5px;
+  }
+  footer code {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px;
+    background: var(--sunk); padding: 2px 6px; border-radius: 4px; color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .band { grid-template-columns: 1fr; gap: 28px; padding: 44px 0; }
+    .stages { grid-template-columns: 1fr; }
+    .masthead { padding: 48px 0 32px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div id="app-scope" data-app="light">
+
+<div class="wrap masthead">
+  <p class="eyebrow">SequenciAAC · Estàndard de capes flotants</p>
+  <h1>Tot el que sura sobre la pàgina</h1>
+  <p class="deck">
+    Set diàlegs, tres avisos i tres botons flotants, avui i amb el patró aplicat. El patró no
+    s'inventa res: surt de <b>la capçalera i el peu del modal d'edició</b> i de <b>la forma del
+    toggle de 55×55</b>, que ja són la marca de la casa a tot arreu menys aquí.
+  </p>
+
+  <dl class="tokens">
+    <div class="token">
+      <dt>Radi</dt><dd>20 px</dd>
+    </div>
+    <div class="token">
+      <dt>Vora del control</dt><dd>1,75 px</dd>
+    </div>
+    <div class="token">
+      <dt>Control quadrat</dt><dd>55 × 55</dd>
+    </div>
+    <div class="token">
+      <dt>Verd i tinta</dt>
+      <dd class="swatches">
+        <i style="background:#8AC34A"></i><i style="background:#1E2A12"></i>
+      </dd>
+    </div>
+    <div class="token">
+      <dt>Papers</dt>
+      <dd class="swatches">
+        <i style="background:#F2F5EC"></i><i style="background:#242820"></i>
+      </dd>
+    </div>
+  </dl>
+</div>
+
+<div class="bar">
+  <div class="bar__inner">
+    <span class="bar__label">Tema de l'app simulada</span>
+    <div class="seg" role="group" aria-label="Tema de l'app simulada">
+      <button type="button" data-set-theme="light" aria-pressed="true">Clar</button>
+      <button type="button" data-set-theme="dark" aria-pressed="false">Fosc</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ============ 1. La referència ============ -->
+  <section class="band">
+    <div class="band__note">
+      <div class="codes"><span class="code">REFERÈNCIA</span></div>
+      <h2>El modal d'edició, que ja hi és</h2>
+      <p>
+        És l'únic diàleg amb decisions pròpies, i és el que dóna el patró: títol que diu on ets,
+        distintiu que diu <em>sobre què</em>, i un peu on l'acció que destrueix queda a l'altra
+        punta de la que tanca.
+      </p>
+      <ul class="deltas">
+        <li class="delta delta--in"><span>La ranura de la dreta és per al menú de més accions, mai per a una creu.</span></li>
+        <li class="delta delta--in"><span>Eliminar és <em>outlined</em> i vermell: hi és, però no s'hi ensopega.</span></li>
+      </ul>
+    </div>
+    <div class="stages stages--single">
+      <figure>
+        <div class="flag flag--next">Tal com és avui</div>
+        <div class="stage" data-mock-app>
+          <div class="scrim"></div>
+          <div class="stage__layer">
+            <div class="d d--dividers" style="width:min(400px,100%)">
+              <div class="d__head">
+                <div class="d__slot" aria-hidden="true"></div>
+                <div class="d__titlewrap">
+                  <h3 class="d__title">Editar Pictograma</h3>
+                  <div class="d__badge">4</div>
+                </div>
+                <div class="d__slot">
+                  <span class="d__iconbtn" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                  </span>
+                </div>
+              </div>
+              <div class="d__body" style="display:flex; gap:16px; align-items:center;">
+                <div class="pict">
+                  <svg viewBox="0 0 100 100" aria-hidden="true">
+                    <path d="M30 24h40l-5 52a10 10 0 0 1-30 0z" fill="none" stroke="#000" stroke-width="4.5" stroke-linejoin="round"/>
+                    <path d="M32.5 46h35" stroke="#000" stroke-width="4.5"/>
+                  </svg>
+                  <span>beure</span>
+                </div>
+                <div style="flex:1">
+                  <div class="checkline" style="justify-content:space-between"><b>Text</b><span style="color:var(--a-text2)">a sota</span></div>
+                  <div class="checkline" style="justify-content:space-between"><b>Vora exterior</b><span style="color:var(--a-text2)">2 px</span></div>
+                  <div class="checkline" style="justify-content:space-between"><b>Numerat</b><span style="color:var(--a-text2)">sí</span></div>
+                </div>
+              </div>
+              <div class="d__foot d__foot--split">
+                <button class="b b--outline-danger b--icon" type="button">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>
+                  Eliminar
+                </button>
+                <div class="d__footright">
+                  <button class="b b--filled" type="button">Tancar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="note-under">Amplada reduïda per encabir la comparació; radis, vores i espais són els reals.</p>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 2. Confirmació ============ -->
+  <section class="band">
+    <div class="band__note">
+      <div class="codes"><span class="code">F1</span><span class="code">F2</span><span class="code">F5</span><span class="code">F6</span><span class="code">F11</span></div>
+      <h2>Confirmar una acció que no es pot desfer</h2>
+      <p>
+        L'app no té desfer: aquest diàleg és tota la xarxa que hi ha. Avui, però, no s'assembla al
+        modal d'edició en res — ni la cantonada, ni el títol, ni els botons.
+      </p>
+      <ul class="deltas">
+        <li class="delta delta--out"><span>Botons en MAJÚSCULES i cantonada de 4 px, de MUI i de ningú.</span></li>
+        <li class="delta delta--in"><span>Títol centrat: la pregunta és el que s'ha de llegir primer.</span></li>
+        <li class="delta delta--in"><span>«Descarrega-ho abans» passa a l'esquerra: no és ni acceptar ni cancel·lar, i la distància la separa de la que consuma la pèrdua.</span></li>
+        <li class="delta delta--in"><span>La destructiva es queda a la dreta i plena: aquí <em>és</em> el que s'ha vingut a fer.</span></li>
+        <li class="delta delta--out"><span>«Cancel·la» és verd sobre paper: <b>2,1:1</b>. Prova de canviar el tema — en fosc passa, en clar no.</span></li>
+        <li class="delta delta--in"><span>Els botons de text prenen la tinta del tema; el verd es queda al botó ple, on va amb tinta fosca (7,2:1).</span></li>
+      </ul>
+    </div>
+    <div class="stages">
+      <figure>
+        <div class="flag flag--now">Abans</div>
+        <div class="stage stage--now" data-mock-app>
+          <div class="scrim"></div>
+          <div class="stage__layer">
+            <div class="d">
+              <div class="d__head"><h3 class="d__title">Comences un document nou?</h3></div>
+              <div class="d__body"><p>La feina d'ara només és en aquest navegador. Si comences de zero, es perd.</p></div>
+              <div class="d__foot">
+                <div class="d__footright">
+                  <button class="b b--text" type="button">Cancel·la</button>
+                  <button class="b b--text" type="button">Descarrega-ho abans</button>
+                  <button class="b b--danger" type="button">Comença de zero</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </figure>
+      <figure>
+        <div class="flag flag--next">Després</div>
+        <div class="stage" data-mock-app>
+          <div class="scrim"></div>
+          <div class="stage__layer">
+            <div class="d">
+              <div class="d__head">
+                <div class="d__slot" aria-hidden="true"></div>
+                <div class="d__titlewrap"><h3 class="d__title">Comences un document nou?</h3></div>
+                <div class="d__slot" aria-hidden="true"></div>
+              </div>
+              <div class="d__body"><p>La feina d'ara només és en aquest navegador. Si comences de zero, es perd.</p></div>
+              <div class="d__foot d__foot--split">
+                <button class="b b--outline b--icon" type="button">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14"/></svg>
+                  Descarrega-ho abans
+                </button>
+                <div class="d__footright">
+                  <button class="b b--text" type="button">Cancel·la</button>
+                  <button class="b b--danger" type="button">Comença de zero</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 3. Descarregar ============ -->
+  <section class="band">
+    <div class="band__note">
+      <div class="codes"><span class="code">F1</span><span class="code">F3</span><span class="code">F4</span><span class="code">F5</span><span class="code">F11</span></div>
+      <h2>Descarregar el fitxer</h2>
+      <p>
+        El cas pitjor de tots: <em>no té cap botó de tancar</em>. Qui l'obre i canvia d'idea ha
+        d'endevinar que ha de clicar fora, i en tàctil no hi ha ni ESC.
+      </p>
+      <ul class="deltas">
+        <li class="delta delta--out"><span>L'explicació viu dins de l'encapçalament i es llegeix com si en formés part.</span></li>
+        <li class="delta delta--out"><span>L'etiqueta del botó s'ajunta amb una «&amp;» hardcodada, en cinc idiomes.</span></li>
+        <li class="delta delta--out"><span>És l'únic diàleg de l'app sense nom accessible.</span></li>
+        <li class="delta delta--in"><span>Peu de debò, amb sortida per als dos camins.</span></li>
+      </ul>
+    </div>
+    <div class="stages">
+      <figure>
+        <div class="flag flag--now">Abans</div>
+        <div class="stage stage--now" data-mock-app>
+          <div class="scrim"></div>
+          <div class="stage__layer">
+            <div class="d">
+              <div class="d__head">
+                <h3 class="d__title">Desa …</h3>
+                <p class="helper" style="margin-top:4px">Desa la seqüència i/o la configuració per defecte, i carrega-les més tard.</p>
+              </div>
+              <div class="d__body">
+                <div class="checkline"><span class="checkbox checkbox--on"></span> Seqüència</div>
+                <div class="checkline"><span class="checkbox"></span> Configuració predeterminada</div>
+                <div class="field field--underline" style="margin-top:14px">Nom del fitxer</div>
+                <div style="display:flex; justify-content:flex-end; margin-top:16px">
+                  <button class="b b--text" type="button">Desa &amp; Descarregar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </figure>
+      <figure>
+        <div class="flag flag--next">Després</div>
+        <div class="stage" data-mock-app>
+          <div class="scrim"></div>
+          <div class="stage__layer">
+            <div class="d">
+              <div class="d__head">
+                <div class="d__slot" aria-hidden="true"></div>
+                <div class="d__titlewrap"><h3 class="d__title">Desa i descarrega</h3></div>
+                <div class="d__slot" aria-hidden="true"></div>
+              </div>
+              <div class="d__body">
+                <p>Desa la seqüència i/o la configuració per defecte, i carrega-les més tard.</p>
+                <div class="checkline"><span class="checkbox checkbox--on"></span> Seqüència</div>
+                <div class="checkline"><span class="checkbox"></span> Configuració predeterminada</div>
+                <div class="field" style="margin-top:12px">Nom del fitxer</div>
+              </div>
+              <div class="d__foot">
+                <div class="d__footright">
+                  <button class="b b--text" type="button">Cancel·la</button>
+                  <button class="b b--filled" type="button">Descarrega</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 4. La creu ============ -->
+  <section class="band">
+    <div class="band__note">
+      <div class="codes"><span class="code">F1</span></div>
+      <h2>Una sola manera de tancar</h2>
+      <p>
+        Avui n'hi ha cinc. El mateix racó de dalt a la dreta conté una creu a «Inicia sessió» i el
+        menú de més accions al modal d'edició: el mateix lloc vol dir dues coses segons el diàleg.
+      </p>
+      <ul class="deltas">
+        <li class="delta delta--out"><span>A «Carrega un document» s'hi tanca de dues maneres alhora: la creu i el peu.</span></li>
+        <li class="delta delta--in"><span>Tancar sempre és al peu, a l'esquerra de l'acció principal.</span></li>
+        <li class="delta delta--in"><span>«Entra» es queda dins del formulari, que és on ha de ser: és el submit, no el botó del diàleg.</span></li>
+      </ul>
+    </div>
+    <div class="stages">
+      <figure>
+        <div class="flag flag--now">Abans</div>
+        <div class="stage stage--now" data-mock-app>
+          <div class="scrim"></div>
+          <div class="stage__layer">
+            <div class="d" style="width:min(320px,100%)">
+              <div class="d__head" style="display:flex; align-items:center; justify-content:space-between">
+                <h3 class="d__title">Inicia sessió</h3>
+                <span class="d__iconbtn" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg>
+                </span>
+              </div>
+              <div class="d__body">
+                <div class="field" style="margin-bottom:12px">Correu electrònic</div>
+                <div class="field" style="margin-bottom:16px">Contrasenya</div>
+                <button class="b b--filled b--block" type="button">Entra</button>
+                <p style="text-align:center; margin:14px 0 0; font-size:12px">Has oblidat la contrasenya?</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </figure>
+      <figure>
+        <div class="flag flag--next">Després</div>
+        <div class="stage" data-mock-app>
+          <div class="scrim"></div>
+          <div class="stage__layer">
+            <div class="d" style="width:min(320px,100%)">
+              <div class="d__head">
+                <div class="d__slot" aria-hidden="true"></div>
+                <div class="d__titlewrap"><h3 class="d__title">Inicia sessió</h3></div>
+                <div class="d__slot" aria-hidden="true"></div>
+              </div>
+              <div class="d__body">
+                <div class="field" style="margin-bottom:12px">Correu electrònic</div>
+                <div class="field" style="margin-bottom:16px">Contrasenya</div>
+                <button class="b b--filled b--block" type="button">Entra</button>
+                <p style="text-align:center; margin:14px 0 0; font-size:12px">Has oblidat la contrasenya?</p>
+              </div>
+              <div class="d__foot">
+                <div class="d__footright">
+                  <button class="b b--text" type="button">Tancar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 5. Avisos ============ -->
+  <section class="band">
+    <div class="band__note">
+      <div class="codes"><span class="code">F7</span><span class="code">F8</span></div>
+      <h2>Els avisos que no marxen sols</h2>
+      <p>
+        «La sessió ha caducat» i «Connectant amb el teu compte…» no tenen temporitzador: es queden
+        a la pantalla. I es queden justament a sobre del botó que diu on és la feina.
+      </p>
+      <ul class="deltas">
+        <li class="delta delta--out"><span>Només un dels tres avisos aparta el botó flotant, i amb un 72 escrit a mà.</span></li>
+        <li class="delta delta--in"><span>La separació es calcula des dels tokens: si el botó creix, l'avís se n'assabenta.</span></li>
+        <li class="delta delta--in"><span>Una sola aparença per als tres: vora de severitat sobre paper opac, i la cantonada de la casa.</span></li>
+      </ul>
+    </div>
+    <div class="stages">
+      <figure>
+        <div class="flag flag--now">Abans</div>
+        <div class="stage stage--short stage--now" data-mock-app>
+          <div class="fabzone">
+            <div class="fab" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="14" height="10" rx="1.5"/><rect x="17" y="9" width="5" height="10" rx="1.5"/><path d="M6 19h6"/></svg>
+            </div>
+          </div>
+          <div class="snackzone">
+            <div class="alert">
+              <span class="alert__icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>
+              </span>
+              <div>
+                <p class="alert__title">Connectant amb el teu compte…</p>
+                <p>La primera connexió del dia pot trigar fins a un minut. Mentrestant pots seguir editant la seqüència.</p>
+                <div class="alert__bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="note-under">L'avís tapa el botó d'estat, i no marxa fins que respon el servidor.</p>
+      </figure>
+      <figure>
+        <div class="flag flag--next">Després</div>
+        <div class="stage stage--short" data-mock-app>
+          <div class="fabzone">
+            <div class="fab" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="14" height="10" rx="1.5"/><rect x="17" y="9" width="5" height="10" rx="1.5"/><path d="M6 19h6"/></svg>
+            </div>
+          </div>
+          <div class="snackzone snackzone--clear">
+            <div class="alert">
+              <span class="alert__icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>
+              </span>
+              <div>
+                <p class="alert__title">Connectant amb el teu compte…</p>
+                <p>La primera connexió del dia pot trigar fins a un minut. Mentrestant pots seguir editant la seqüència.</p>
+                <div class="alert__bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="note-under">El que és de pas és el que s'aparta; el botó és permanent.</p>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 6. Botó flotant ============ -->
+  <section class="band">
+    <div class="band__note">
+      <div class="codes"><span class="code">F9</span></div>
+      <h2>El botó flotant, amb la forma de la casa</h2>
+      <p>
+        A l'esquerra de cada escenari hi ha el grup de toggles tal com surt a les configuracions.
+        És la comparació que importa: avui el botó d'estat no s'assembla a res del que hi ha a
+        sota.
+      </p>
+      <ul class="deltas">
+        <li class="delta delta--out"><span>Rodó de 48 px, verd ple: un <em>Fab</em> de MUI sense cap decisió nostra.</span></li>
+        <li class="delta delta--in"><span>55×55 i radi 20, com el toggle seleccionat: vora del color i tint al 20 %.</span></li>
+        <li class="delta delta--in"><span>El tint es pinta sobre el paper i queda <b>opac</b>: sura damunt del full, i amb transparència s'hi veurien passar els pictogrames.</span></li>
+      </ul>
+    </div>
+    <div class="stages">
+      <figure>
+        <div class="flag flag--now">Abans</div>
+        <div class="stage stage--short stage--fab stage--now" data-mock-app>
+          <div class="toggles" aria-hidden="true">
+            <div class="toggle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M4 5h16"/></svg></div>
+            <div class="toggle toggle--on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="11" rx="1"/><path d="M4 19h16"/></svg></div>
+            <div class="toggle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="1"/></svg></div>
+          </div>
+          <div class="fabzone">
+            <div class="statuspanel">
+              <b>Només en aquest dispositiu, des de les 17.42</b>
+              <span>Es queda en aquest navegador i el pot esborrar sol.</span>
+            </div>
+            <div class="fab" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="14" height="10" rx="1.5"/><rect x="17" y="9" width="5" height="10" rx="1.5"/><path d="M6 19h6"/></svg>
+            </div>
+          </div>
+        </div>
+        <p class="note-under">Rodó i verd ple: no s'assembla als toggles que té a tres dits.</p>
+      </figure>
+      <figure>
+        <div class="flag flag--next">Després</div>
+        <div class="stage stage--short stage--fab" data-mock-app>
+          <div class="toggles" aria-hidden="true">
+            <div class="toggle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M4 5h16"/></svg></div>
+            <div class="toggle toggle--on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="11" rx="1"/><path d="M4 19h16"/></svg></div>
+            <div class="toggle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="1"/></svg></div>
+          </div>
+          <div class="fabzone">
+            <div class="statuspanel">
+              <b>Només en aquest dispositiu, des de les 17.42</b>
+              <span>Es queda en aquest navegador i el pot esborrar sol.</span>
+            </div>
+            <div class="fab" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="14" height="10" rx="1.5"/><rect x="17" y="9" width="5" height="10" rx="1.5"/><path d="M6 19h6"/></svg>
+            </div>
+          </div>
+        </div>
+        <p class="note-under">La mateixa forma, la mateixa vora i el mateix tint que el toggle seleccionat.</p>
+      </figure>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p>
+    Simulació estàtica del patró de <code>docs/ESTANDARD-capes-flotants.md</code>. Els colors,
+    els radis i les vores surten de <code>style/palette.ts</code> i de
+    <code>StyledToggleButtonGroup</code>; la tipografia és Atkinson Hyperlegible, la primera de
+    <code>data/fontlist.ts</code>. Encara no hi ha res implementat: això és el que es proposa.
+  </p>
+</footer>
+
+</div>
+
+<script>
+  // Fons de l'app dins de cada escenari: barra verda i full amb targetes.
+  // És decoració, per això s'injecta i porta aria-hidden.
+  document.querySelectorAll("[data-mock-app]").forEach(function (stage) {
+    var app = document.createElement("div");
+    app.className = "stage__app";
+    app.setAttribute("aria-hidden", "true");
+    app.innerHTML = '<div class="stage__bar"></div><div class="stage__sheet"><i></i><i></i><i></i></div>';
+    stage.prepend(app);
+  });
+
+  // Interruptor de tema de l'app simulada: no toca el tema de la pàgina
+  var buttons = document.querySelectorAll("[data-set-theme]");
+  buttons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      document.getElementById("app-scope").dataset.app = button.dataset.setTheme;
+      buttons.forEach(function (other) {
+        other.setAttribute("aria-pressed", String(other === button));
+      });
+    });
+  });
+</script>

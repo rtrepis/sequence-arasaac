@@ -1937,5 +1937,9 @@
   "components.tabsSequences.confirmDelete": {
     "defaultMessage": "Borra la secuencia",
     "description": "Botón que confirma el borrado de la última secuencia"
+  },
+  "components.buttonWithModalDownload.dialogTitle": {
+    "defaultMessage": "Guarda y descarga",
+    "description": "Título del diálogo de descarga del archivo .saac"
   }
 }

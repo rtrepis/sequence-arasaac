@@ -74,7 +74,7 @@
     "description": "Type save checkbox"
   },
   "components.buttonWithModalDownload.download.label": {
-    "defaultMessage": "Descarregar",
+    "defaultMessage": "Descarrega",
     "description": "helper text"
   },
   "components.buttonWithModalDownload.filename.label": {
@@ -1937,5 +1937,9 @@
   "components.tabsSequences.confirmDelete": {
     "defaultMessage": "Esborra la seqüència",
     "description": "Botó que confirma l'esborrat de l'última seqüència"
+  },
+  "components.buttonWithModalDownload.dialogTitle": {
+    "defaultMessage": "Desa i descarrega",
+    "description": "Títol del diàleg de descàrrega del fitxer .saac"
   }
 }

@@ -6,7 +6,6 @@ import React, { useState } from "react";
 import {
   Alert,
   Box,
-  Button,
   CircularProgress,
   IconButton,
   InputAdornment,
@@ -19,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import messages from "./AuthModal.lang";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { loginThunk } from "../store/authSlice";
+import StyledButton from "@/style/StyledButton";
 
 interface AuthFormProps {
   /** Acció posterior a un login correcte (tancar el modal, per exemple). */
@@ -128,7 +128,10 @@ const AuthForm = ({
         {intl.formatMessage(messages.forgotPassword)}
       </Typography>
 
-      <Button
+      {/* El botó de la casa: dins del diàleg de login comparteix pantalla amb
+          el peu, i un «ENTRA» en majúscules al costat d'un «Tancar» que no ho
+          està es llegeix com si fossin de dues aplicacions */}
+      <StyledButton
         type="submit"
         variant="contained"
         fullWidth
@@ -136,7 +139,7 @@ const AuthForm = ({
         startIcon={isLoading ? <CircularProgress size={16} /> : null}
       >
         {intl.formatMessage(messages.submitLogin)}
-      </Button>
+      </StyledButton>
 
       <Typography
         variant="body2"

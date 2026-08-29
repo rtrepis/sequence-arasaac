@@ -1937,5 +1937,9 @@
   "components.tabsSequences.confirmDelete": {
     "defaultMessage": "Supprimer la séquence",
     "description": "Bouton qui confirme la suppression de la dernière séquence"
+  },
+  "components.buttonWithModalDownload.dialogTitle": {
+    "defaultMessage": "Enregistrer et télécharger",
+    "description": "Titre de la boîte de dialogue de téléchargement du fichier .saac"
   }
 }
