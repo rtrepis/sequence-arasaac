@@ -31,6 +31,7 @@ import {
   DocumentDurability,
   getDocumentDurability,
 } from "@features/sequence/store/documentStatusSlice";
+import { requestPersistentStorage } from "@features/sequence/storage/persistentStorage";
 import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
@@ -231,7 +232,13 @@ const DocumentStatusFab = (): ReactElement => {
           // el diàleg de descàrrega el focus torna al botó i el panell es
           // tornaria a obrir tot sol.
           onOpen={(_event, reason) => {
-            if (reason === "toggle") setIsOpen(true);
+            if (reason !== "toggle") return;
+
+            setIsOpen(true);
+            // El gest que Firefox necessita per concedir emmagatzematge
+            // persistent, i el moment de l'app on demanar-lo té més sentit:
+            // qui obre això està preguntant precisament on es desa la feina
+            void requestPersistentStorage();
           }}
           // Tanca tot menys treure-hi el ratolí de sobre: qui l'ha obert per
           // llegir l'estat pot moure el cursor mentre llegeix

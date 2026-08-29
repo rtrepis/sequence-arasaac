@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { RootState } from "@app/store";
 import { loadDocumentSaacActionCreator } from "@features/sequence/store/documentSlice";
 import { readDraft, saveDraft } from "@features/sequence/storage/draftStorage";
+import { requestPersistentStorage } from "@features/sequence/storage/persistentStorage";
 import {
   documentStatusRestoredActionCreator,
   draftBlockedByOtherTabActionCreator,
@@ -142,6 +143,10 @@ export const useDocumentDraft = (): void => {
       persistedRef.current = { document: current, viewSettings: currentView };
       lastSeenSavedAtRef.current = savedAt;
       dispatch(draftSavedActionCreator(savedAt));
+      // Ara que hi ha alguna cosa a protegir, es demana al navegador que no la
+      // desallotgi. A Chrome es resol en silenci; a Firefox caldrà el gest de
+      // l'usuari que fa el botó d'estat
+      void requestPersistentStorage();
       return;
     }
 
