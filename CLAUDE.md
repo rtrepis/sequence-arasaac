@@ -101,6 +101,15 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
   tocar i sembla que no faci res. `ViewSquenceSettings` en guarda una `useRef` en muntar i només
   l'avança quan es desen les preferències.
 - **Criteri únic de fila**: tot ajust individual (slider, select, textfield, grup de toggles) porta el **títol a l'esquerra i el control a la dreta** (a partir de `sm`; vegeu *Comportament en mòbil*), sempre via `SettingRow`. `settingRowInline` és l'sx intern que hi ha a sota; `settingRow` (només padding vertical, sense flex) n'és la base. Cap dels dos s'aplica directament a una fila.
+- **La fila no es parteix mai; el que es parteix és el títol**: `settingRowInline` va
+  amb `flexWrap: nowrap`. Amb `wrap`, el navegador reparteix els elements per línies
+  mirant l'amplada que **voldrien** tenir, abans de deixar-los encongir: a la columna
+  de la pàgina de vista, que dona 289 px útils per fila, «Espai de pictogrames» (194)
+  amb el seu control (150) no hi cabia i el control queia sota el títol, mentre que
+  «Mida» (43) es quedava al costat. La columna sortia irregular, i canviava sola en
+  canviar d'idioma o quan un control creixia. Sense `wrap`, l'encongiment sí que
+  s'aplica: el títol es reparteix en dues línies i el control es queda sempre al
+  mateix lloc.
 - **Un ajust = una fila**: mai amuntegar diversos controls en una sola fila. Un bloc amb 3 controls (una vora, una tipografia) és una **secció pròpia** amb 3 files, no una fila composta. Els components que representen un bloc així (`SettingCardBorder`, `SettingCardFontGroup`) **es titulen ells mateixos** renderitzant el seu propi `SectionTitle` — així els contextos que no els embolcallen (com `PictEditForm`) obtenen la mateixa presentació sense canvis.
 - **Color/pes del títol de fila**: el títol d'un ajust individual sempre usa `cardTitle` (`SettingsCards.styled.ts` — fosc `text.primary`, `fontWeight: bold`). Ho aplica `SettingRow`. Mai el gris per defecte de `FormLabel` (`text.secondary`), que quedaria igual que el títol de secció. El títol de secció (`SectionTitle`) sempre és gris (`text.secondary`) i en majúscules — és l'únic nivell gris de la jerarquia.
 - **Amplada del control (dreta)**: el control (select/slider/textfield) porta `settingControlWidth` (`settingsLayout.styled.ts`) — `max-width: 33%` del contenidor amb `min-width: SETTINGS_CONTROL_MIN_WIDTH` (150px) de seguretat perquè un `Slider` no quedi inusable. Ho aplica `SettingRow` amb `control="sized"`; els grups `StyledToggleButtonGroup` (`"wide"`), els `Switch` i l'`InputColor` (`"compact"`) en queden exempts — ja són compactes per si mateixos.

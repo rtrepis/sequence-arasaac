@@ -81,12 +81,22 @@ export const settingRow: SxProps<Theme> = {
  * Per sota de {@link SETTINGS_MOBILE_BREAKPOINT} la fila s'apila (títol a dalt,
  * control a sota) de forma deliberada: en pantalla estreta un grup de toggles
  * llarg (pell, cabell) no cap mai al costat del títol.
+ *
+ * **El que es parteix és el títol, no la fila** (`nowrap`). Amb `wrap`, el
+ * navegador reparteix els elements per línies mirant l'amplada que voldrien
+ * tenir, **abans** de deixar-los encongir: a la columna de la pàgina de vista,
+ * que dona 289 px per fila, «Espai de pictogrames» (194) més el control (150)
+ * sumaven més que la fila i el control queia a sota, mentre que «Mida» (43) es
+ * quedava al costat. El resultat era una columna irregular on cada ajust
+ * s'ensenyava d'una manera, i que canviava sol en canviar d'idioma o en créixer
+ * un control. Sense `wrap`, l'encongiment sí que s'aplica: el títol es reparteix
+ * en dues línies i el control es queda sempre al mateix lloc.
  */
 export const settingRowInline: SxProps<Theme> = {
   ...settingRow,
   display: "flex",
   flexDirection: { xs: "column", sm: "row" },
-  flexWrap: "wrap",
+  flexWrap: "nowrap",
   alignItems: { xs: "flex-start", sm: "center" },
   justifyContent: "space-between",
   columnGap: 2,
