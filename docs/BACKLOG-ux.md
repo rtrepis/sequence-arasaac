@@ -361,9 +361,12 @@ Branca `claude/backlog-branch-master-64uh75`.
 
 Branca `claude/backlog-branch-master-64uh75`.
 
-- El **cercle ple** (`AiFillPlusCircle` / `AiFillMinusCircle`) queda reservat als pictogrames
-  (`PictogramAmount`). Les seqüències passen a **pàgina amb +/−**
-  (`BsFileEarmarkPlus` / `BsFileEarmarkMinus`), tal com proposava l'entrada.
+- El **cercle** queda reservat als pictogrames (`PictogramAmount`). Les seqüències passen a
+  **pàgina amb +/−** (`BsFileEarmarkPlus` / `BsFileEarmarkMinus`), tal com proposava l'entrada.
+  El cercle era ple (`AiFill*`) i ara és de contorn (`AiOutlinePlusCircle` /
+  `AiOutlineMinusCircle`): el ple era l'única icona massissa de la pantalla i desentonava amb la
+  resta, que és tota de traç —vegeu C3—. La distinció que aquesta entrada demanava no en depèn:
+  el que separa les dues accions és cercle contra full, no ple contra buit.
 - Cal l'**«earmark»**: `BsFilePlus` es dibuixa com un rectangle arrodonit i es llegia com un botó
   qualsevol; amb la cantonada doblegada sí que es llegeix com un full. Descartat el parell de
   Tabler pel motiu que ja diu C3 (és de traç i desentona amb Ant i Material).
