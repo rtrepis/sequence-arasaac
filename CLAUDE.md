@@ -428,6 +428,11 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   fitxer, motiu i proposta. **Consultar-lo abans de proposar una millora d'UX**: si ja hi és, cal
   continuar-hi (marcar-la resolta o caducada), no obrir-la de nou. Una troballa detectada i no
   resolta al moment s'hi apunta; no es deixa només a la conversa.
+- `docs/ESTUDI-limits-serveis-gratuits.md` inventaria els límits del pla gratuït de cada servei
+  (Atlas, Cloudinary, Render, Vercel, Resend, ARASAAC, GA4) i els contrasta amb el que l'app en
+  consumeix de debò. **Consultar-lo abans d'afegir res que desi, pugi o enviï correu**: hi ha les
+  troballes obertes L1–L8, i la primera és que les imatges del vocabulari van a MongoDB en base64
+  sense passar per cap quota.
 - `docs/ESTANDARD-capes-flotants.md` és l'estudi que hi ha darrere de l'estàndard de capes
   flotants: l'inventari del que hi havia, les dotze divergències numerades (F1–F12) amb fitxer i
   motiu, i el pla de migració. L'estàndard viu més amunt; **el document és la raó de cada regla**, i
