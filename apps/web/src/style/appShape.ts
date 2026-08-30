@@ -14,6 +14,17 @@
 /** Radi de cantonada de la casa, en píxels. */
 export const APP_CORNER_RADIUS = 20;
 
+/**
+ * Radi dels camps i dels blocs de contingut: camps de text, desplegables i
+ * avisos en línia.
+ *
+ * És **més petit que el de la casa** a propòsit: un camp és un contenidor on
+ * s'escriu, no un control que es prem, i amb el radi dels toggles s'assemblaria
+ * a un botó. Amb els 4 px de MUI, en canvi, els camps semblaven enganxats de
+ * fora de la targeta que els conté.
+ */
+export const APP_FIELD_RADIUS = 12;
+
 /** Gruix de la vora dels controls de la casa (toggles, botó flotant). */
 export const APP_CONTROL_BORDER_WIDTH = 1.75;
 

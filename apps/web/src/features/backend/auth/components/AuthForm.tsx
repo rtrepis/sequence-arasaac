@@ -9,8 +9,8 @@ import {
   CircularProgress,
   IconButton,
   InputAdornment,
+  Link,
   TextField,
-  Typography,
 } from "@mui/material";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useIntl } from "react-intl";
@@ -119,14 +119,18 @@ const AuthForm = ({
         }}
       />
 
-      <Typography
+      {/* Enllaços de debò i no `Typography` amb `cursor: pointer`: així s'hi
+          arriba amb el tabulador, i amb la tinta del tema es llegeixen */}
+      <Link
+        component="button"
+        type="button"
         variant="body2"
-        align="right"
-        sx={{ cursor: "pointer", color: "primary.main" }}
+        color="inherit"
         onClick={() => goTo("forgot-password")}
+        sx={{ alignSelf: "flex-end" }}
       >
         {intl.formatMessage(messages.forgotPassword)}
-      </Typography>
+      </Link>
 
       {/* El botó de la casa: dins del diàleg de login comparteix pantalla amb
           el peu, i un «ENTRA» en majúscules al costat d'un «Tancar» que no ho
@@ -141,14 +145,16 @@ const AuthForm = ({
         {intl.formatMessage(messages.submitLogin)}
       </StyledButton>
 
-      <Typography
+      <Link
+        component="button"
+        type="button"
         variant="body2"
-        align="center"
-        sx={{ cursor: "pointer", color: "primary.main" }}
+        color="inherit"
         onClick={() => goTo("signup")}
+        sx={{ alignSelf: "center" }}
       >
         {intl.formatMessage(messages.toggleToRegister)}
-      </Typography>
+      </Link>
     </Box>
   );
 };

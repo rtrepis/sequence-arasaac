@@ -52,7 +52,11 @@ import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
 import PrintFooterSection from "./PrintFooterSection";
 import { VIEW_SETTINGS_COLUMN_WIDTH } from "./ViewSequenceSettings.styled";
-import { SectionTitle, SETTINGS_ROW_GAP } from "@/components/SettingsLayout";
+import {
+  SectionTitle,
+  SettingsActions,
+  SETTINGS_ROW_GAP,
+} from "@/components/SettingsLayout";
 import { SelectChangeEvent } from "@mui/material";
 
 // El desat de preferències va al compte o al navegador segons si hi ha sessió,
@@ -619,16 +623,10 @@ const ViewSequencesSettings = ({
                 />
 
                 {/* Accions de tota la columna, per això van al final: restaurar el
-                    que hi ha desat i desar el que hi ha ara com a preferència */}
-                <Box
-                  sx={{
-                    pt: 2,
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 1,
-                    justifyContent: "flex-end",
-                  }}
-                >
+                    que hi ha desat i desar el que hi ha ara com a preferència.
+                    Amb `floatingClearance` perquè aquesta columna acaba al mateix
+                    racó on sura el botó d'estat */}
+                <SettingsActions floatingClearance>
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipResetDefaults)}
                     describeChild
@@ -661,7 +659,7 @@ const ViewSequencesSettings = ({
                       <FormattedMessage {...messages.savePreferences} />
                     </StyledButton>
                   </Tooltip>
-                </Box>
+                </SettingsActions>
               </Stack>
             </NotPrint>
           </Box>

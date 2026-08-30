@@ -1,4 +1,4 @@
-import { Slider, Stack, Tooltip, Typography } from "@mui/material";
+import { Slider, Stack, Tooltip } from "@mui/material";
 import StyledButton from "@/style/StyledButton";
 import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import {

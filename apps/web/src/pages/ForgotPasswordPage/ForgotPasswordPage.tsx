@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import {
   Alert,
   Box,
-  Button,
   CircularProgress,
   Paper,
   TextField,
@@ -14,6 +13,8 @@ import {
 import { useIntl } from "react-intl";
 import { useNavigate, useParams } from "react-router-dom";
 import messages from "./ForgotPasswordPage.lang";
+import StyledButton from "@/style/StyledButton";
+import { APP_CORNER_RADIUS } from "@/style/appShape";
 import { forgotPassword } from "@features/backend/auth/services/authService";
 
 const ForgotPasswordPage = (): React.ReactElement => {
@@ -52,6 +53,8 @@ const ForgotPasswordPage = (): React.ReactElement => {
         backgroundColor: "background.default",
       }}
     >
+      {/* La targeta és una superfície que sura sobre l'escriptori: porta la
+          cantonada de la casa, com els diàlegs i els controls */}
       <Paper
         sx={{
           p: 4,
@@ -60,6 +63,7 @@ const ForgotPasswordPage = (): React.ReactElement => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
+          borderRadius: `${APP_CORNER_RADIUS}px`,
         }}
       >
         <Typography variant="h5" component="h1" align="center">
@@ -71,12 +75,12 @@ const ForgotPasswordPage = (): React.ReactElement => {
             <Alert severity="success" variant="outlined">
               {intl.formatMessage(messages.success, { email: submittedEmail })}
             </Alert>
-            <Button
+            <StyledButton
               variant="contained"
               onClick={() => navigate(`/${locale}/create-sequence`)}
             >
               {intl.formatMessage(messages.goToApp)}
-            </Button>
+            </StyledButton>
           </>
         ) : (
           <Box
@@ -101,7 +105,7 @@ const ForgotPasswordPage = (): React.ReactElement => {
               disabled={isLoading}
             />
 
-            <Button
+            <StyledButton
               type="submit"
               variant="contained"
               fullWidth
@@ -109,7 +113,7 @@ const ForgotPasswordPage = (): React.ReactElement => {
               startIcon={isLoading ? <CircularProgress size={16} /> : null}
             >
               {intl.formatMessage(messages.submit)}
-            </Button>
+            </StyledButton>
           </Box>
         )}
       </Paper>

@@ -54,6 +54,9 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
   acceptar ni cancel·lar va sol a l'esquerra (`startAction`). L'explicació del que fan
   va a `helper`, **sota** la fila, no al costat d'un botó: si no, la fila deixa de
   tenir el mateix ordre que la d'un diàleg. Tots els botons són `StyledButton`.
+  Amb `floatingClearance`, la fila reserva a la dreta l'amplada del botó flotant:
+  cal allà on el panell viu dins de la finestra amb el botó a sobre —la columna
+  de la pàgina de vista, que acaba al mateix racó—, no dins d'un diàleg que el tapa.
 - **`SettingsPanelHint`** — guia d'un tab: `Alert severity="info" variant="outlined"` amb el text que diu **què s'ajusta aquí i sobre què tindrà efecte**. Un sol fill: el missatge traduït.
 - **`SectionTitle`** — **contenidor** de secció: props `title` (capçalera en majúscules `text.secondary` + `Divider`), `children` (els ajustos de la secció) i `onApplyAll?`. Els `children` es renderitzen **indentats** (`pl: SETTINGS_INDENT`) sota el títol, com un esquema: `<SectionTitle title={...}>{ajustos}</SectionTitle>`, no com a germans després del títol. És el nivell superior de la jerarquia de separació.
 - **`SettingRow`** — **única implementació** de la fila d'un ajust individual: `title` a l'esquerra (amb `cardTitle`) i `children` (el control) a la dreta. Props: `title`, `labelId?` (per a `aria-labelledby`) i `control?`, que tria com es dimensiona el control:
@@ -101,6 +104,15 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
   tocar i sembla que no faci res. `ViewSquenceSettings` en guarda una `useRef` en muntar i només
   l'avança quan es desen les preferències.
 - **Criteri únic de fila**: tot ajust individual (slider, select, textfield, grup de toggles) porta el **títol a l'esquerra i el control a la dreta** (a partir de `sm`; vegeu *Comportament en mòbil*), sempre via `SettingRow`. `settingRowInline` és l'sx intern que hi ha a sota; `settingRow` (només padding vertical, sense flex) n'és la base. Cap dels dos s'aplica directament a una fila.
+- **La fila no es parteix mai; el que es parteix és el títol**: `settingRowInline` va
+  amb `flexWrap: nowrap`. Amb `wrap`, el navegador reparteix els elements per línies
+  mirant l'amplada que **voldrien** tenir, abans de deixar-los encongir: a la columna
+  de la pàgina de vista, que dona 289 px útils per fila, «Espai de pictogrames» (194)
+  amb el seu control (150) no hi cabia i el control queia sota el títol, mentre que
+  «Mida» (43) es quedava al costat. La columna sortia irregular, i canviava sola en
+  canviar d'idioma o quan un control creixia. Sense `wrap`, l'encongiment sí que
+  s'aplica: el títol es reparteix en dues línies i el control es queda sempre al
+  mateix lloc.
 - **Un ajust = una fila**: mai amuntegar diversos controls en una sola fila. Un bloc amb 3 controls (una vora, una tipografia) és una **secció pròpia** amb 3 files, no una fila composta. Els components que representen un bloc així (`SettingCardBorder`, `SettingCardFontGroup`) **es titulen ells mateixos** renderitzant el seu propi `SectionTitle` — així els contextos que no els embolcallen (com `PictEditForm`) obtenen la mateixa presentació sense canvis.
 - **Color/pes del títol de fila**: el títol d'un ajust individual sempre usa `cardTitle` (`SettingsCards.styled.ts` — fosc `text.primary`, `fontWeight: bold`). Ho aplica `SettingRow`. Mai el gris per defecte de `FormLabel` (`text.secondary`), que quedaria igual que el títol de secció. El títol de secció (`SectionTitle`) sempre és gris (`text.secondary`) i en majúscules — és l'únic nivell gris de la jerarquia.
 - **Amplada del control (dreta)**: el control (select/slider/textfield) porta `settingControlWidth` (`settingsLayout.styled.ts`) — `max-width: 33%` del contenidor amb `min-width: SETTINGS_CONTROL_MIN_WIDTH` (150px) de seguretat perquè un `Slider` no quedi inusable. Ho aplica `SettingRow` amb `control="sized"`; els grups `StyledToggleButtonGroup` (`"wide"`), els `Switch` i l'`InputColor` (`"compact"`) en queden exempts — ja són compactes per si mateixos.
@@ -318,6 +330,13 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   seu `sx`. El `fullScreen` en queda fora (`paperFullScreen` a 0).
 - `APP_CONTROL_BORDER_WIDTH` (1,75) i `APP_CONTROL_SIZE` (55) completen el joc.
   **No hardcodejar cap d'aquests tres valors** enlloc.
+- **Els camps no porten el radi de la casa**: `APP_FIELD_RADIUS` (12 px) per als
+  camps de text, els desplegables i els avisos **en línia**, via el tema
+  (`MuiOutlinedInput`, `MuiFilledInput`, `MuiAlert`). Un camp és un contenidor
+  on s'escriu, no un control que es prem: amb els 20 px s'assemblaria a un botó,
+  i amb els 4 de MUI semblava enganxat de fora de la targeta que el conté. Els
+  avisos **flotants** en queden fora: porten el radi de la casa des de
+  `floatingNoticeSx`, que mana per damunt del tema.
 
 ### Diàlegs
 
@@ -375,6 +394,14 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - El contingut (`Container` de `BarNavigation`) reserva sempre
   `FLOATING_BOTTOM_INSET` —el que ocupa el botó, que hi és sempre— i, per
   damunt, el que declari la capa més alta.
+- **La reserva del final de la pàgina no protegeix qui acaba al mateix racó**:
+  amb la pàgina tot just més alta que la finestra —entre 30 i 90 px d'scroll, o
+  sigui a 900 i 950 px d'alçada, que són mides de pantalla corrents— el botó
+  flotant queia damunt de «Desa com a preferències» de la columna de vista, i cap
+  reserva vertical ho arregla, perquè a scroll 0 aquell botó ja és dins la franja
+  del flotant. Qui comparteix el racó reserva l'**amplada** del botó
+  (`FLOATING_CONTROL_CLEARANCE`), igual que fan els avisos: és el mateix token i
+  el mateix criteri, en horitzontal.
 
 ### Botons flotants
 
