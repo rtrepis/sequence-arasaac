@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import StyledIconButton from "@/style/StyledIconButton";
 import { subtractLastPictActionCreator } from "@features/sequence/store/documentSlice";
-import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
+import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { Stack } from "@mui/system";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -68,7 +68,7 @@ const PictogramAmount = ({
               onClick={() => handleChangesAmount(-1)}
               disabled={amountSequence <= 0}
             >
-              <AiFillMinusCircle
+              <AiOutlineMinusCircle
                 style={{
                   visibility: amountSequence > 0 ? "visible" : "hidden",
                 }}
@@ -97,7 +97,7 @@ const PictogramAmount = ({
               disabled={amountSequence > 59}
               onClick={() => handleChangesAmount(+1)}
             >
-              <AiFillPlusCircle />
+              <AiOutlinePlusCircle />
             </StyledIconButton>
           </span>
         </Tooltip>
