@@ -318,6 +318,13 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   seu `sx`. El `fullScreen` en queda fora (`paperFullScreen` a 0).
 - `APP_CONTROL_BORDER_WIDTH` (1,75) i `APP_CONTROL_SIZE` (55) completen el joc.
   **No hardcodejar cap d'aquests tres valors** enlloc.
+- **Els camps no porten el radi de la casa**: `APP_FIELD_RADIUS` (12 px) per als
+  camps de text, els desplegables i els avisos **en línia**, via el tema
+  (`MuiOutlinedInput`, `MuiFilledInput`, `MuiAlert`). Un camp és un contenidor
+  on s'escriu, no un control que es prem: amb els 20 px s'assemblaria a un botó,
+  i amb els 4 de MUI semblava enganxat de fora de la targeta que el conté. Els
+  avisos **flotants** en queden fora: porten el radi de la casa des de
+  `floatingNoticeSx`, que mana per damunt del tema.
 
 ### Diàlegs
 
