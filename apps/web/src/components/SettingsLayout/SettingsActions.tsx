@@ -1,6 +1,7 @@
 import React, { ReactElement, ReactNode } from "react";
 import { Stack, Typography } from "@mui/material";
 import { SETTINGS_ROW_GAP } from "./settingsLayout.styled";
+import { FLOATING_CONTROL_CLEARANCE } from "@/style/appShape";
 
 interface SettingsActionsProps {
   /**
@@ -20,6 +21,13 @@ interface SettingsActionsProps {
    * d'un diàleg.
    */
   helper?: ReactNode;
+  /**
+   * Reserva a la dreta l'amplada del botó flotant d'estat. Cal allà on el panell
+   * viu dins de la finestra amb el botó a sobre —la columna de la pàgina de
+   * vista, que acaba al mateix racó—, no dins d'un diàleg que el tapa. És el
+   * mateix criteri que ja fan servir els avisos, i el mateix token.
+   */
+  floatingClearance?: boolean;
 }
 
 /**
@@ -34,8 +42,15 @@ const SettingsActions = ({
   startAction,
   children,
   helper,
+  floatingClearance = false,
 }: SettingsActionsProps): ReactElement => (
-  <Stack gap={0.5} sx={{ mt: SETTINGS_ROW_GAP }}>
+  <Stack
+    gap={0.5}
+    sx={{
+      mt: SETTINGS_ROW_GAP,
+      paddingRight: floatingClearance ? `${FLOATING_CONTROL_CLEARANCE}px` : 0,
+    }}
+  >
     <Stack
       direction="row"
       gap={1}

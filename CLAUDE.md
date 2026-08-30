@@ -54,6 +54,9 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
   acceptar ni cancel·lar va sol a l'esquerra (`startAction`). L'explicació del que fan
   va a `helper`, **sota** la fila, no al costat d'un botó: si no, la fila deixa de
   tenir el mateix ordre que la d'un diàleg. Tots els botons són `StyledButton`.
+  Amb `floatingClearance`, la fila reserva a la dreta l'amplada del botó flotant:
+  cal allà on el panell viu dins de la finestra amb el botó a sobre —la columna
+  de la pàgina de vista, que acaba al mateix racó—, no dins d'un diàleg que el tapa.
 - **`SettingsPanelHint`** — guia d'un tab: `Alert severity="info" variant="outlined"` amb el text que diu **què s'ajusta aquí i sobre què tindrà efecte**. Un sol fill: el missatge traduït.
 - **`SectionTitle`** — **contenidor** de secció: props `title` (capçalera en majúscules `text.secondary` + `Divider`), `children` (els ajustos de la secció) i `onApplyAll?`. Els `children` es renderitzen **indentats** (`pl: SETTINGS_INDENT`) sota el títol, com un esquema: `<SectionTitle title={...}>{ajustos}</SectionTitle>`, no com a germans després del títol. És el nivell superior de la jerarquia de separació.
 - **`SettingRow`** — **única implementació** de la fila d'un ajust individual: `title` a l'esquerra (amb `cardTitle`) i `children` (el control) a la dreta. Props: `title`, `labelId?` (per a `aria-labelledby`) i `control?`, que tria com es dimensiona el control:
@@ -391,6 +394,14 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - El contingut (`Container` de `BarNavigation`) reserva sempre
   `FLOATING_BOTTOM_INSET` —el que ocupa el botó, que hi és sempre— i, per
   damunt, el que declari la capa més alta.
+- **La reserva del final de la pàgina no protegeix qui acaba al mateix racó**:
+  amb la pàgina tot just més alta que la finestra —entre 30 i 90 px d'scroll, o
+  sigui a 900 i 950 px d'alçada, que són mides de pantalla corrents— el botó
+  flotant queia damunt de «Desa com a preferències» de la columna de vista, i cap
+  reserva vertical ho arregla, perquè a scroll 0 aquell botó ja és dins la franja
+  del flotant. Qui comparteix el racó reserva l'**amplada** del botó
+  (`FLOATING_CONTROL_CLEARANCE`), igual que fan els avisos: és el mateix token i
+  el mateix criteri, en horitzontal.
 
 ### Botons flotants
 
