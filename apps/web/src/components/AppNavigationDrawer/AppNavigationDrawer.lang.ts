@@ -32,6 +32,29 @@ const messages = defineMessages({
     defaultMessage: "Administració",
     description: "Ítem d'accés al panell d'administració (només per a admins)",
   },
+  logoutConfirmTitle: {
+    id: "components.appNavigationDrawer.logoutConfirmTitle",
+    defaultMessage: "Tanques la sessió?",
+    description:
+      "Títol de la confirmació de tancar sessió amb feina sense còpia",
+  },
+  logoutConfirmBody: {
+    id: "components.appNavigationDrawer.logoutConfirmBody",
+    defaultMessage:
+      "En sortir també es tanca el document, i el que hi ha a pantalla no és desat al núvol: es perd.",
+    description: "Cos de la confirmació de tancar sessió amb feina sense còpia",
+  },
+  logoutSaveFirst: {
+    id: "components.appNavigationDrawer.logoutSaveFirst",
+    defaultMessage: "Desa al núvol abans",
+    description: "Botó per desar la feina al núvol abans de tancar la sessió",
+  },
+  logoutDocumentClosed: {
+    id: "components.appNavigationDrawer.logoutDocumentClosed",
+    defaultMessage:
+      "Sessió tancada. El document també s'ha tancat: no es queda en aquest dispositiu.",
+    description: "Confirmació de tancar sessió quan hi havia un document obert",
+  },
 });
 
 export default messages;

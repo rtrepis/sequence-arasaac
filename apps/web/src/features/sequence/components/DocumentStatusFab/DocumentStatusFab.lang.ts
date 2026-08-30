@@ -52,6 +52,29 @@ const messages = defineMessages({
     defaultMessage: "Desat al núvol el {date} a les {time}",
     description: "Estat quan la còpia al núvol és d'un altre dia",
   },
+  statusStaleCloud: {
+    id: "features.sequence.status.staleCloud",
+    defaultMessage: "Amb canvis nous des del desat al núvol de les {time}",
+    description: "Estat quan hi ha canvis posteriors a l'última còpia al núvol",
+  },
+  statusStaleCloudDated: {
+    id: "features.sequence.status.staleCloudDated",
+    defaultMessage:
+      "Amb canvis nous des del desat al núvol del {date} a les {time}",
+    description: "Estat de canvis posteriors quan la còpia és d'un altre dia",
+  },
+  statusStaleFile: {
+    id: "features.sequence.status.staleFile",
+    defaultMessage: "Amb canvis nous des del fitxer descarregat a les {time}",
+    description:
+      "Estat quan hi ha canvis posteriors a l'última còpia en fitxer",
+  },
+  statusStaleFileDated: {
+    id: "features.sequence.status.staleFileDated",
+    defaultMessage:
+      "Amb canvis nous des del fitxer descarregat el {date} a les {time}",
+    description: "Estat de canvis posteriors quan el fitxer és d'un altre dia",
+  },
   statusError: {
     id: "features.sequence.status.error",
     defaultMessage: "Aquest navegador no ha pogut desar la feina",
@@ -68,6 +91,20 @@ const messages = defineMessages({
     defaultMessage:
       "Es queda en aquest navegador i el pot esborrar sol. Descarrega-ho o desa-ho al núvol per tenir-ho en un altre lloc.",
     description: "Explicació de què vol dir tenir la feina només a l'esborrany",
+  },
+  hintStaleCloud: {
+    id: "features.sequence.status.hintStaleCloud",
+    defaultMessage:
+      "El que hi ha a pantalla encara no és al núvol. Torna-hi a desar per actualitzar-ne la còpia.",
+    description:
+      "Explicació de l'estat de canvis posteriors a la còpia al núvol",
+  },
+  hintStaleFile: {
+    id: "features.sequence.status.hintStaleFile",
+    defaultMessage:
+      "El que hi ha a pantalla encara no és al fitxer. Torna'l a descarregar per actualitzar-lo.",
+    description:
+      "Explicació de l'estat de canvis posteriors a la còpia en fitxer",
   },
   hintError: {
     id: "features.sequence.status.hintError",
@@ -107,6 +144,13 @@ const messages = defineMessages({
     defaultMessage:
       "La feina d'ara només és en aquest navegador. Si comences de zero, es perd.",
     description: "Cos del diàleg de confirmació abans de buidar el document",
+  },
+  confirmBodyStale: {
+    id: "features.sequence.status.confirmBodyStale",
+    defaultMessage:
+      "La còpia desada és d'abans. Si comences de zero, es perd tot el que has fet des d'aleshores.",
+    description:
+      "Cos del diàleg de confirmació quan hi ha una còpia però amb canvis posteriors",
   },
   confirmDownloadFirst: {
     id: "features.sequence.status.confirmDownloadFirst",

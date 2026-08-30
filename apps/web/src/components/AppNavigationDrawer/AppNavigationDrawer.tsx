@@ -37,16 +37,25 @@ import LoadDocumentModal from "@features/backend/documents/components/LoadDocume
 import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
 import documentMessages from "@features/backend/documents/components/DocumentModals.lang";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { RootState } from "@app/store";
 import {
   addSequenceActionCreator,
   loadDocumentSaacActionCreator,
+  startNewDocumentThunk,
 } from "@features/sequence/store/documentSlice";
-import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
+import {
+  documentMadeDurableActionCreator,
+  getDocumentDurability,
+  isWorkAtRisk,
+} from "@features/sequence/store/documentStatusSlice";
+import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
 import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
 import { useFeedback } from "../../context/FeedbackContext";
 import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
+
+const selectDocumentStatus = (state: RootState) => state.documentStatus;
 
 interface AppNavigationDrawerProps {
   open: boolean;
@@ -78,6 +87,14 @@ const AppNavigationDrawer = ({
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [saveDocModalOpen, setSaveDocModalOpen] = useState(false);
   const [loadDocModalOpen, setLoadDocModalOpen] = useState(false);
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+
+  // Estat de durabilitat del document: tancar la sessió també el tanca, i el
+  // que decideix si això s'ha de confirmar és si la feina té còpia enlloc
+  const durability = getDocumentDurability(
+    useAppSelector(selectDocumentStatus),
+  );
+  const isDocumentOpen = durability !== "pristine";
 
   // Ref per al input ocult de càrrega de fitxer
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -105,13 +122,57 @@ const AppNavigationDrawer = ({
     setLoadDocModalOpen(true);
   };
 
-  const handleLogout = async () => {
-    onClose();
+  /**
+   * Tancar la sessió tanca també el document.
+   *
+   * El vocabulari personal ja se n'anava en sortir, i pel mateix motiu: en AAC
+   * el dispositiu es comparteix, i el que queda a pantalla —i a l'esborrany del
+   * navegador, que sobreviu al refresc— és feina d'algú altre. A més, el
+   * document desat al núvol se'n porta l'id del compte que l'ha desat: sense
+   * tancar-lo, l'indicador d'estat continuava dient «Desat al núvol» a qui ja no
+   * hi té sessió, i desar-lo des d'un altre compte hauria estat un PUT a un
+   * document que no és seu.
+   *
+   * Només ho fa el tancament explícit. La sessió que caduca sola (`A11`) no hi
+   * passa: allà l'usuari no ha demanat res i perdre-li la feina seria el pitjor
+   * dels dos mals.
+   */
+  const closeSessionAndDocument = async () => {
     await dispatch(logoutThunk());
+
+    if (isDocumentOpen) await dispatch(startNewDocumentThunk());
+
     showSnackbar({
-      message: intl.formatMessage(authMessages.logout),
+      message: intl.formatMessage(
+        isDocumentOpen ? messages.logoutDocumentClosed : authMessages.logout,
+      ),
       severity: "info",
     });
+  };
+
+  const handleLogout = () => {
+    onClose();
+
+    // Amb còpia al núvol o al fitxer no es pregunta res: no hi ha res a perdre
+    // i preguntar-ho cada vegada acabaria en gent que hi clica sense llegir
+    if (isWorkAtRisk(durability)) {
+      setLogoutConfirmOpen(true);
+      return;
+    }
+
+    void closeSessionAndDocument();
+  };
+
+  const handleLogoutConfirm = () => {
+    setLogoutConfirmOpen(false);
+    void closeSessionAndDocument();
+  };
+
+  // La sortida que evita la pèrdua en comptes de consumar-la: encara hi ha
+  // sessió, així que desar al núvol continua sent possible
+  const handleSaveBeforeLogout = () => {
+    setLogoutConfirmOpen(false);
+    setSaveDocModalOpen(true);
   };
 
   const handleDocumentLoaded = (title: string) => {
@@ -421,6 +482,22 @@ const AppNavigationDrawer = ({
 
       {/* Modal d'autenticació */}
       <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+
+      {/* Confirmació abans de tancar la sessió amb feina sense còpia */}
+      <ConfirmDialog
+        open={logoutConfirmOpen}
+        title={intl.formatMessage(messages.logoutConfirmTitle)}
+        body={intl.formatMessage(messages.logoutConfirmBody)}
+        // El mateix text que l'ítem del calaix que hi porta: la mateixa acció no
+        // es pot dir de dues maneres segons on es llegeixi
+        confirmLabel={intl.formatMessage(authMessages.logout)}
+        onConfirm={handleLogoutConfirm}
+        onCancel={() => setLogoutConfirmOpen(false)}
+        alternative={{
+          label: intl.formatMessage(messages.logoutSaveFirst),
+          onClick: handleSaveBeforeLogout,
+        }}
+      />
 
       {/* Modal de càrrega de documents del núvol */}
       <LoadDocumentModal

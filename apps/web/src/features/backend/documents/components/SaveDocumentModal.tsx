@@ -1,4 +1,5 @@
-// Diàleg per desar el document al núvol amb un nom triat per l'usuari.
+// Diàleg per desar el document al núvol amb un nom triat per l'usuari, i
+// l'única porta al «Desa'n una còpia».
 //
 // Abans, «Desa al núvol» enviava el document directament i sense nom: al llistat
 // tots es deien «Document» i sis caràcters d'identificador. Amb el sostre de
@@ -62,7 +63,11 @@ const SaveDocumentModal = ({
   const [name, setName] = useState(
     () => document.title ?? suggestDocumentTitle(document),
   );
-  const [isNameMissing, setIsNameMissing] = useState(false);
+  // Un sol estat per als dos motius pels quals el nom no serveix: així el camp
+  // no pot quedar mai en error sense dir quin és
+  const [nameError, setNameError] = useState<
+    "missing" | "sameAsOriginal" | null
+  >(null);
   const [isSaving, setIsSaving] = useState(false);
   const [errorCode, setErrorCode] = useState<string | null>(null);
 
@@ -75,10 +80,19 @@ const SaveDocumentModal = ({
     onClose();
   };
 
-  const handleSave = async (): Promise<void> => {
+  const handleSave = async (asCopy = false): Promise<void> => {
     const title = name.trim();
     if (!title) {
-      setIsNameMissing(true);
+      setNameError("missing");
+      return;
+    }
+
+    // Una còpia amb el nom de l'original deixaria dues files iguals al llistat,
+    // i el llistat és l'únic lloc on es tria quin document es carrega o
+    // s'esborra. Es demana el nom aquí, que és quan encara se'n sap la
+    // diferència, i no després
+    if (asCopy && title === document.title) {
+      setNameError("sameAsOriginal");
       return;
     }
 
@@ -86,7 +100,9 @@ const SaveDocumentModal = ({
     setErrorCode(null);
     dispatch(setDocumentTitleActionCreator(title));
 
-    const result = await dispatch(saveDocumentThunk({ ...document, title }));
+    const result = await dispatch(
+      saveDocumentThunk({ document: { ...document, title }, asCopy }),
+    );
     setIsSaving(false);
 
     if (result.meta.requestStatus === "fulfilled") {
@@ -94,7 +110,13 @@ const SaveDocumentModal = ({
       // diu la veritat vingui la crida del drawer o d'ell mateix
       dispatch(documentMadeDurableActionCreator({ kind: "cloud" }));
       showSnackbar({
-        message: intl.formatMessage(messages.documentSavedNamed, { title }),
+        // La còpia diu, a més, sobre què es treballa a partir d'ara: el thunk
+        // ha canviat l'id del document per la còpia, i qui no ho sap acabaria
+        // desant a la còpia pensant que desa a l'original
+        message: intl.formatMessage(
+          asCopy ? messages.documentCopiedNamed : messages.documentSavedNamed,
+          { title },
+        ),
         severity: "success",
       });
       onClose();
@@ -133,7 +155,23 @@ const SaveDocumentModal = ({
       )}
       titleId="save-doc-modal-title"
       actions={
-        <AppDialogActions>
+        <AppDialogActions
+          startAction={
+            // Ni acceptar ni cancel·lar: desa, però no on l'usuari ve de desar.
+            // Va sol a l'esquerra, separat de l'acció que substitueix la versió
+            // del núvol, perquè no s'hi premi per inèrcia
+            isExisting ? (
+              <StyledButton
+                onClick={() => void handleSave(true)}
+                variant="outlined"
+                color="inherit"
+                disabled={isSaving}
+              >
+                {intl.formatMessage(messages.saveCopyAction)}
+              </StyledButton>
+            ) : undefined
+          }
+        >
           <StyledButton
             onClick={handleClose}
             color="inherit"
@@ -142,7 +180,7 @@ const SaveDocumentModal = ({
             {intl.formatMessage(messages.cancel)}
           </StyledButton>
           <StyledButton
-            onClick={handleSave}
+            onClick={() => void handleSave()}
             variant="contained"
             disabled={isSaving}
           >
@@ -155,7 +193,8 @@ const SaveDocumentModal = ({
     >
       {isExisting && (
         <DialogContentText variant="body2" sx={{ mb: 2 }}>
-          {intl.formatMessage(messages.updateHint)}
+          {intl.formatMessage(messages.updateHint)}{" "}
+          {intl.formatMessage(messages.copyHint)}
         </DialogContentText>
       )}
 
@@ -165,16 +204,22 @@ const SaveDocumentModal = ({
         value={name}
         onChange={(event) => {
           setName(event.target.value);
-          setIsNameMissing(false);
+          setNameError(null);
         }}
         onKeyDown={(event) => {
+          // Enter fa l'acció principal, mai la còpia: el que es prem sense
+          // mirar ha de ser el que el diàleg diu al títol
           if (event.key === "Enter" && !isSaving) void handleSave();
         }}
         disabled={isSaving}
         label={intl.formatMessage(messages.nameLabel)}
-        error={isNameMissing}
+        error={nameError !== null}
         helperText={intl.formatMessage(
-          isNameMissing ? messages.nameRequired : messages.nameHelper,
+          nameError === "missing"
+            ? messages.nameRequired
+            : nameError === "sameAsOriginal"
+              ? messages.nameSameAsOriginal
+              : messages.nameHelper,
         )}
         inputProps={{ maxLength: DOCUMENT_TITLE_MAX_LENGTH }}
       />

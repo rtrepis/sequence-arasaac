@@ -22,14 +22,15 @@ import {
   MdOutlineFileDownloadDone,
   MdOutlineNoteAdd,
   MdOutlineSync,
+  MdOutlineSyncProblem,
 } from "react-icons/md";
 import { MessageDescriptor, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { RootState } from "@app/store";
 import { startNewDocumentThunk } from "@features/sequence/store/documentSlice";
 import {
-  DocumentDurability,
   getDocumentDurability,
+  isWorkAtRisk,
 } from "@features/sequence/store/documentStatusSlice";
 import { requestPersistentStorage } from "@features/sequence/storage/persistentStorage";
 import {
@@ -63,10 +64,6 @@ const isToday = (at: number): boolean => {
     moment.getFullYear() === now.getFullYear()
   );
 };
-
-/** Estats en què la feina de pantalla no té cap còpia fora del navegador. */
-const isAtRisk = (durability: DocumentDurability): boolean =>
-  durability === "saving" || durability === "local" || durability === "error";
 
 const DocumentStatusFab = (): ReactElement => {
   const intl = useIntl();
@@ -120,6 +117,20 @@ const DocumentStatusFab = (): ReactElement => {
             ? messages.statusConflict
             : messages.statusError,
         );
+      case "stale":
+        // La frase parla de la còpia, no del canvi: el que l'usuari ha de
+        // decidir és si la torna a desar, i per això hi ha de llegir de quan és
+        return status.durableKind === "cloud"
+          ? momentText(
+              status.durableAt,
+              messages.statusStaleCloud,
+              messages.statusStaleCloudDated,
+            )
+          : momentText(
+              status.durableAt,
+              messages.statusStaleFile,
+              messages.statusStaleFileDated,
+            );
       case "durable":
         return status.durableKind === "cloud"
           ? momentText(
@@ -148,6 +159,12 @@ const DocumentStatusFab = (): ReactElement => {
           ? messages.hintConflict
           : messages.hintError,
       );
+    if (durability === "stale")
+      return intl.formatMessage(
+        status.durableKind === "cloud"
+          ? messages.hintStaleCloud
+          : messages.hintStaleFile,
+      );
     if (durability === "local" || durability === "saving")
       return intl.formatMessage(messages.hintLocal);
     return null;
@@ -159,6 +176,11 @@ const DocumentStatusFab = (): ReactElement => {
         return <MdOutlineSync />;
       case "error":
         return <MdOutlineErrorOutline />;
+      case "stale":
+        // Una sola icona per als dos orígens: qui hi és no ha de distingir el
+        // núvol del fitxer, sinó veure que la còpia i la pantalla no diuen el
+        // mateix. De quina còpia es tracta ho diu la frase
+        return <MdOutlineSyncProblem />;
       case "durable":
         return status.durableKind === "cloud" ? (
           <MdOutlineCloudDone />
@@ -170,7 +192,17 @@ const DocumentStatusFab = (): ReactElement => {
     }
   })();
 
-  const fabColor = durability === "error" ? "error" : "primary";
+  /**
+   * El groc de `stale` és tota la raó de ser d'aquest estat: el panell només
+   * s'obre amb el clic, així que el color del botó és l'únic que es veu de cua
+   * d'ull. Amb el verd de sempre, un document desat i el mateix document amb
+   * mitja hora de feina a sobre es veien igual.
+   */
+  const fabColor = ((): "primary" | "warning" | "error" => {
+    if (durability === "error") return "error";
+    if (durability === "stale") return "warning";
+    return "primary";
+  })();
 
   const startNewDocument = (): void => {
     setIsConfirmOpen(false);
@@ -179,7 +211,7 @@ const DocumentStatusFab = (): ReactElement => {
   };
 
   const handleNewDocument = (): void => {
-    if (isAtRisk(durability)) {
+    if (isWorkAtRisk(durability)) {
       setIsConfirmOpen(true);
       return;
     }
@@ -351,7 +383,11 @@ const DocumentStatusFab = (): ReactElement => {
           overflow: "hidden",
         }}
       >
-        {durability === "error" || durability === "durable" ? statusText : ""}
+        {durability === "error" ||
+        durability === "stale" ||
+        durability === "durable"
+          ? statusText
+          : ""}
       </Box>
 
       {isCloudOpen && (
@@ -371,7 +407,13 @@ const DocumentStatusFab = (): ReactElement => {
       <ConfirmDialog
         open={isConfirmOpen}
         title={intl.formatMessage(messages.confirmTitle)}
-        body={intl.formatMessage(messages.confirmBody)}
+        body={intl.formatMessage(
+          // Amb una còpia enrere, el que es perd no és tot: és el que s'ha fet
+          // des d'aleshores. Dir-li que ho perd tot seria fer-li desar per res
+          durability === "stale"
+            ? messages.confirmBodyStale
+            : messages.confirmBody,
+        )}
         confirmLabel={intl.formatMessage(messages.confirmDiscard)}
         onConfirm={startNewDocument}
         onCancel={() => setIsConfirmOpen(false)}

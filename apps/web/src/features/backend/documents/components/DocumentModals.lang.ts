@@ -30,11 +30,24 @@ const messages = defineMessages({
     defaultMessage: "Posa-li un nom per poder-lo retrobar.",
     description: "Validació: el nom del document és obligatori",
   },
+  nameSameAsOriginal: {
+    id: "features.backend.documents.nameSameAsOriginal",
+    defaultMessage:
+      "La còpia necessita un nom diferent per no confondre-la amb l'original.",
+    description:
+      "Validació: la còpia d'un document no pot tenir el mateix nom que l'original",
+  },
   updateHint: {
     id: "features.backend.documents.updateHint",
     defaultMessage:
       "Aquest document ja és al núvol: desar-lo en substituirà la versió desada.",
     description: "Avís del diàleg quan el document ja existeix al núvol",
+  },
+  copyHint: {
+    id: "features.backend.documents.copyHint",
+    defaultMessage:
+      "Amb «Desa'n una còpia» en desa un de nou i deixa l'original tal com és.",
+    description: "Avís que explica què fa el botó de desar una còpia",
   },
   saveAction: {
     id: "features.backend.documents.saveAction",
@@ -45,6 +58,12 @@ const messages = defineMessages({
     id: "features.backend.documents.updateAction",
     defaultMessage: "Actualitza",
     description: "Botó per actualitzar el document ja desat al núvol",
+  },
+  saveCopyAction: {
+    id: "features.backend.documents.saveCopyAction",
+    defaultMessage: "Desa'n una còpia",
+    description:
+      "Botó per desar el document com un de nou sense tocar el que ja hi ha al núvol",
   },
   cancel: {
     id: "features.backend.documents.cancel",
@@ -75,6 +94,12 @@ const messages = defineMessages({
     id: "features.backend.documents.documentSavedNamed",
     defaultMessage: "«{title}» s'ha desat al núvol",
     description: "Confirmació en desar un document amb nom",
+  },
+  documentCopiedNamed: {
+    id: "features.backend.documents.documentCopiedNamed",
+    defaultMessage: "S'ha desat la còpia «{title}»: ara hi treballes a sobre",
+    description:
+      "Confirmació en desar una còpia: avisa que el document actiu passa a ser la còpia",
   },
   documentLoadedNamed: {
     id: "features.backend.documents.documentLoadedNamed",

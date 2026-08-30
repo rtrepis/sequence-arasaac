@@ -48,6 +48,22 @@
   "components.appNavigationDrawer.admin": {
     "defaultMessage": "Administración"
   },
+  "components.appNavigationDrawer.logoutConfirmTitle": {
+    "defaultMessage": "¿Cierras la sesión?",
+    "description": "Títol de la confirmació de tancar sessió amb feina sense còpia"
+  },
+  "components.appNavigationDrawer.logoutConfirmBody": {
+    "defaultMessage": "Al salir también se cierra el documento, y lo que hay en pantalla no está guardado en la nube: se pierde.",
+    "description": "Cos de la confirmació de tancar sessió amb feina sense còpia"
+  },
+  "components.appNavigationDrawer.logoutSaveFirst": {
+    "defaultMessage": "Guarda en la nube antes",
+    "description": "Botó per desar la feina al núvol abans de tancar la sessió"
+  },
+  "components.appNavigationDrawer.logoutDocumentClosed": {
+    "defaultMessage": "Sesión cerrada. El documento también se ha cerrado: no se queda en este dispositivo.",
+    "description": "Confirmació de tancar sessió quan hi havia un document obert"
+  },
   "components.appNavigationDrawer.welcome": {
     "defaultMessage": "Inicio"
   },
@@ -1754,6 +1770,22 @@
     "defaultMessage": "Descargado en un archivo el {date} a las {time}",
     "description": "Estado cuando la copia en archivo es de otro día"
   },
+  "features.sequence.status.staleCloud": {
+    "defaultMessage": "Con cambios nuevos desde el guardado en la nube de las {time}",
+    "description": "Estat quan hi ha canvis posteriors a l'última còpia al núvol"
+  },
+  "features.sequence.status.staleCloudDated": {
+    "defaultMessage": "Con cambios nuevos desde el guardado en la nube del {date} a las {time}",
+    "description": "Estat de canvis posteriors quan la còpia és d'un altre dia"
+  },
+  "features.sequence.status.staleFile": {
+    "defaultMessage": "Con cambios nuevos desde el archivo descargado a las {time}",
+    "description": "Estat quan hi ha canvis posteriors a l'última còpia en fitxer"
+  },
+  "features.sequence.status.staleFileDated": {
+    "defaultMessage": "Con cambios nuevos desde el archivo descargado el {date} a las {time}",
+    "description": "Estat de canvis posteriors quan el fitxer és d'un altre dia"
+  },
   "features.sequence.status.cloudDated": {
     "defaultMessage": "Guardado en la nube el {date} a las {time}",
     "description": "Estado cuando la copia en la nube es de otro día"
@@ -1765,6 +1797,14 @@
   "features.sequence.status.hintLocal": {
     "defaultMessage": "Se queda en este navegador y puede borrarlo por su cuenta. Descárgalo o guárdalo en la nube para tenerlo en otro sitio.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
+  },
+  "features.sequence.status.hintStaleCloud": {
+    "defaultMessage": "Lo que ves en pantalla todavía no está en la nube. Vuelve a guardarlo para actualizar la copia.",
+    "description": "Explicació de l'estat de canvis posteriors a la còpia al núvol"
+  },
+  "features.sequence.status.hintStaleFile": {
+    "defaultMessage": "Lo que ves en pantalla todavía no está en el archivo. Vuelve a descargarlo para actualizarlo.",
+    "description": "Explicació de l'estat de canvis posteriors a la còpia en fitxer"
   },
   "features.sequence.draft.conflictError": {
     "defaultMessage": "Otra pestaña tiene trabajo más reciente. Esta ha dejado de guardar sola para no borrarlo: descarga lo que tienes aquí si quieres conservarlo.",
@@ -1802,6 +1842,10 @@
     "defaultMessage": "El trabajo actual solo está en este navegador. Si empiezas de cero, se pierde.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
   },
+  "features.sequence.status.confirmBodyStale": {
+    "defaultMessage": "La copia guardada es anterior. Si empiezas de cero, se pierde todo lo que has hecho desde entonces.",
+    "description": "Cos del diàleg de confirmació quan hi ha una còpia però amb canvis posteriors"
+  },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Descárgalo antes",
     "description": "Botó per desar la feina en un fitxer abans de buidar-la"
@@ -1830,9 +1874,17 @@
     "defaultMessage": "Ponle un nombre para poder encontrarlo.",
     "description": "Validació: el nom del document és obligatori"
   },
+  "features.backend.documents.nameSameAsOriginal": {
+    "defaultMessage": "La copia necesita un nombre distinto para no confundirla con el original.",
+    "description": "Validació: la còpia d'un document no pot tenir el mateix nom que l'original"
+  },
   "features.backend.documents.updateHint": {
     "defaultMessage": "Este documento ya está en la nube: al guardarlo sustituirás la versión guardada.",
     "description": "Avís del diàleg quan el document ja existeix al núvol"
+  },
+  "features.backend.documents.copyHint": {
+    "defaultMessage": "Con «Guarda una copia» guardas uno nuevo y dejas el original tal como está.",
+    "description": "Avís que explica què fa el botó de desar una còpia"
   },
   "features.backend.documents.saveAction": {
     "defaultMessage": "Guardar",
@@ -1841,6 +1893,10 @@
   "features.backend.documents.updateAction": {
     "defaultMessage": "Actualizar",
     "description": "Botó per actualitzar el document ja desat al núvol"
+  },
+  "features.backend.documents.saveCopyAction": {
+    "defaultMessage": "Guarda una copia",
+    "description": "Botó per desar el document com un de nou sense tocar el que ja hi ha al núvol"
   },
   "features.backend.documents.cancel": {
     "defaultMessage": "Cancelar",
@@ -1865,6 +1921,10 @@
   "features.backend.documents.documentSavedNamed": {
     "defaultMessage": "«{title}» se ha guardado en la nube",
     "description": "Confirmació en desar un document amb nom"
+  },
+  "features.backend.documents.documentCopiedNamed": {
+    "defaultMessage": "Se ha guardado la copia «{title}»: ahora trabajas sobre ella",
+    "description": "Confirmació en desar una còpia: avisa que el document actiu passa a ser la còpia"
   },
   "features.backend.documents.documentLoadedNamed": {
     "defaultMessage": "«{title}» se ha cargado",
