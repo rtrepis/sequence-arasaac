@@ -565,6 +565,21 @@ apps/
   `document/*` de dos segments. En queden fora `changeActiveSAAC` (navegació, no contingut),
   `loadDocumentSaac` i `resetDocument` — qui carrega un document és qui sap d'on ve i ho declara ell
   mateix amb `documentMadeDurable` (fitxer o núvol).
+- **Amb còpia i amb canvis a sobre, l'estat és `stale` i el botó es posa groc.** És un estat propi
+  entre `local` i `durable`: la còpia existeix, però és d'abans del que hi ha a pantalla. Sense ell,
+  seguir treballant damunt d'un document desat el tornava a «Només en aquest dispositiu» —cert, i
+  alhora amagant el que importa— i ho deia **amb el mateix verd** que un document acabat de desar. El
+  panell del botó només s'obre amb el clic, així que el color és l'única cosa que es veu de cua
+  d'ull: el groc (`warning`, només a la vora i al tint de `floatingControlSx`; la icona continua
+  sent la tinta del tema) és tota la diferència entre «ho tens desat» i «ho tenies desat».
+- **El groc és per a la còpia que s'ha quedat enrere, mai per a l'esborrany a seques.** Un document
+  que no ha estat mai enlloc —el cas normal de qui treballa sense compte— es queda en verd amb el
+  text de sempre: pintar d'alerta permanent el flux principal de l'app convertiria l'avís en soroll
+  i no diria res que el text no digui.
+- **`isWorkAtRisk` viu al slice, no al botó**: és el criteri de tota l'app per saber si una acció que
+  buida la pantalla —«Document nou», tancar la sessió— s'ha de confirmar, i `stale` hi entra encara
+  que hi hagi còpia (el que es perdria és tot el que s'ha fet des d'aleshores, i el cos del diàleg ho
+  diu així en comptes de dir que es perd tot).
 - **De l'esborrany no se'n diu mai «desat» a seques.** Qui llegeix «desat» entén que la feina és
   fora de perill i l'esborrany no ho garanteix; els textos diuen sempre «només en aquest
   dispositiu». És tota la raó de ser de l'indicador.
@@ -586,6 +601,16 @@ apps/
   l'esborrany: buidar la pantalla sense esborrar-lo deixaria la feina antiga a punt de ressuscitar
   al primer refresc. Conserva la configuració per defecte —és de l'usuari, no del document— i
   demana confirmació si la feina no té còpia externa.
+- **Tancar la sessió tanca també el document** (`AppNavigationDrawer`, `startNewDocumentThunk`
+  després de `logoutThunk`). El vocabulari personal ja se n'anava en sortir i és exactament el mateix
+  motiu: en AAC el dispositiu es comparteix, i el que quedava a pantalla —i a l'esborrany
+  d'IndexedDB, que sobreviu al refresc— era feina d'algú altre. A més, un document del núvol es
+  quedava amb l'id del compte que l'havia desat: l'indicador deia «Desat al núvol» a qui ja no hi
+  tenia sessió, i desar-lo des d'un altre compte hauria estat un `PUT` a un document que no és seu.
+  Si la feina no té còpia (`isWorkAtRisk`) es confirma abans, amb «Desa al núvol abans» a la ranura
+  de l'alternativa —encara hi ha sessió, i per això aquella sortida encara és possible.
+- **Només ho fa el tancament explícit.** La sessió que caduca sola (A11) no toca el document: allà
+  l'usuari no ha demanat res, i perdre-li la feina seria el pitjor dels dos mals.
 - **El botó flotant desa pel mateix diàleg de nom que el drawer** (`SaveDocumentModal`, vegeu més
   avall): dues portes a la mateixa acció, un sol comportament. I **qui declara la durabilitat és el
   diàleg que fa l'operació** —`SaveDocumentModal` en desar, `LoadDocumentModal` en carregar—, no qui
@@ -665,6 +690,16 @@ apps/
 - **La miniatura la deriva el servidor**, no el client (`modules/documents/thumbnail.ts`): els **tres primers pictogrames** del document, guardats com a referències (`selectedId` + aparença, o la URL de Cloudinary d'una imatge pròpia). **No es genera ni es puja cap imatge nova** — no costaria només diners de Cloudinary, sinó quota de l'usuari. Es calcula **després** de pujar les imatges, perquè mai hi entri un base64.
 - Es guarda al document i no es calcula en llistar: `listDocuments` només selecciona `title updatedAt thumbnail`, i llegir el contingut sencer de cada document per pintar tres quadradets seria transferir megabytes per res. Els documents desats abans d'existir el camp el tenen buit i el llistat els ensenya amb icona genèrica.
 - **El progrés de la transferència surt dels events d'axios** (`onUploadProgress`/`onDownloadProgress`) i es publica a `documentTransfer.ts`, un mòdul fora de Redux com `backendStatus`: el thunk no pot rebre una funció per argument sense fer l'acció no serialitzable. Si la petició no diu la mida total, el percentatge és `null` i la barra passa a indeterminada — més val això que un número inventat.
+- **«Desa'n una còpia» és l'única manera de derivar un document d'un altre** (`saveDocumentThunk`
+  amb `asCopy`, que força el `POST` encara que el document ja tingui id de MongoDB). Viu al peu del
+  mateix diàleg de desar, a la **ranura de l'esquerra**: desa, però no on l'usuari ve de desar, i
+  així queda separat de l'acció que substitueix la versió del núvol. L'`Enter` del camp de nom fa
+  sempre l'acció principal, mai la còpia. L'id nou el recull el `loadDocumentSaac` de sempre, de
+  manera que **a partir d'aquell moment es treballa sobre la còpia**: el snackbar ho diu, perquè si
+  no el desat següent aniria a parar a la còpia pensant que va a l'original.
+- **La còpia no pot tenir el nom de l'original**: al llistat quedarien dues files iguals, i el
+  llistat és l'únic lloc on es tria quin document es carrega i quin s'esborra. Es demana el nom quan
+  encara se'n sap la diferència, no després.
 - **Èxit → snackbar; error → es queda al diàleg.** En desar bé o carregar bé, un snackbar amb el nom del document. Si falla, l'`Alert` es queda dins del diàleg (amb el codi semàntic del backend) perquè es pugui tornar a provar sense reescriure el nom.
 
 ### Registre d'errors del client (`modules/client-errors`, API)

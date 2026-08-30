@@ -125,14 +125,22 @@ export const {
 } = documentStatusSlice.actions;
 
 /**
- * Els cinc estats que pot veure l'usuari. `local` i `durable` es diferencien
+ * Els sis estats que pot veure l'usuari. `local` i `durable` es diferencien
  * a propòsit: l'esborrany del navegador no és un desat, i dir-ne «desat» a
  * seques és el malentès que aquest indicador ha d'evitar.
+ *
+ * `stale` és el tercer d'aquesta mateixa família: hi ha còpia fora del
+ * navegador, però és **d'abans** del que hi ha a pantalla. Sense ell, seguir
+ * treballant damunt d'un document desat el tornava a «Només en aquest
+ * dispositiu», que és cert i alhora amaga el que de debò importa —que la còpia
+ * existeix i s'ha quedat enrere—, i ho deia amb el mateix color que un document
+ * acabat de desar.
  */
 export type DocumentDurability =
   | "pristine"
   | "saving"
   | "local"
+  | "stale"
   | "durable"
   | "error";
 
@@ -143,10 +151,31 @@ export const getDocumentDurability = (
 
   if (draftError !== null) return "error";
   if (changedAt === null && durableAt === null) return "pristine";
+
+  // Va **abans** de `saving`: qui treballa sobre un document que ja té còpia ha
+  // de veure de seguida que la còpia s'ha quedat enrere, i no el segon
+  // d'escriptura de l'esborrany, que és el que passa amb qualsevol tecla.
+  if (durableAt !== null && changedAt !== null && changedAt > durableAt)
+    return "stale";
+
   if (changedAt !== null && (draftSavedAt === null || draftSavedAt < changedAt))
     return "saving";
-  if (durableAt !== null && (changedAt === null || changedAt <= durableAt))
-    return "durable";
+  if (durableAt !== null) return "durable";
 
   return "local";
 };
+
+/**
+ * Estats en què el que hi ha a pantalla es perdria si es buidés. `stale` hi
+ * entra encara que hi hagi còpia: la còpia és d'abans, i el que es perdria és
+ * tot el que s'ha fet des d'aleshores.
+ *
+ * Viu aquí i no al botó flotant perquè no és una decisió d'aquell botó: és el
+ * criteri de tota l'app per saber quan una acció que buida la pantalla —començar
+ * un document nou, tancar la sessió— s'ha de confirmar.
+ */
+export const isWorkAtRisk = (durability: DocumentDurability): boolean =>
+  durability === "saving" ||
+  durability === "local" ||
+  durability === "stale" ||
+  durability === "error";

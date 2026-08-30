@@ -32,10 +32,14 @@ const tintLayer = (color: string, opacity: number): string => {
  * contingut. El tint es pinta com a capa de `backgroundImage` damunt del paper,
  * de manera que el color resultant és exactament el del toggle seleccionat i
  * alhora no deixa veure res del que hi ha a sota.
+ *
+ * El color només viu a la vora i al tint: la icona es queda amb la tinta del
+ * tema. Per això `warning` s'hi pot fer servir sense mirar-hi el contrast —el
+ * groc no arriba a ser mai color de dibuix, que és el que l'estàndard prohibeix.
  */
 export const floatingControlSx =
   (
-    color: "primary" | "error" = "primary",
+    color: "primary" | "warning" | "error" = "primary",
   ): ((theme: Theme) => SystemStyleObject<Theme>) =>
   (theme: Theme) => ({
     borderRadius: `${APP_CORNER_RADIUS}px`,

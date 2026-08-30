@@ -48,6 +48,22 @@
   "components.appNavigationDrawer.admin": {
     "defaultMessage": "Administration"
   },
+  "components.appNavigationDrawer.logoutConfirmTitle": {
+    "defaultMessage": "Se déconnecter ?",
+    "description": "Títol de la confirmació de tancar sessió amb feina sense còpia"
+  },
+  "components.appNavigationDrawer.logoutConfirmBody": {
+    "defaultMessage": "En vous déconnectant, le document se ferme aussi, et ce qui est à l'écran n'est pas enregistré dans le cloud : il sera perdu.",
+    "description": "Cos de la confirmació de tancar sessió amb feina sense còpia"
+  },
+  "components.appNavigationDrawer.logoutSaveFirst": {
+    "defaultMessage": "Enregistrer dans le cloud avant",
+    "description": "Botó per desar la feina al núvol abans de tancar la sessió"
+  },
+  "components.appNavigationDrawer.logoutDocumentClosed": {
+    "defaultMessage": "Session fermée. Le document a également été fermé : il ne reste pas sur cet appareil.",
+    "description": "Confirmació de tancar sessió quan hi havia un document obert"
+  },
   "components.appNavigationDrawer.welcome": {
     "defaultMessage": "Accueil"
   },
@@ -1754,6 +1770,22 @@
     "defaultMessage": "Téléchargé dans un fichier le {date} à {time}",
     "description": "État lorsque la copie en fichier date d'un autre jour"
   },
+  "features.sequence.status.staleCloud": {
+    "defaultMessage": "Modifié depuis l'enregistrement dans le cloud de {time}",
+    "description": "Estat quan hi ha canvis posteriors a l'última còpia al núvol"
+  },
+  "features.sequence.status.staleCloudDated": {
+    "defaultMessage": "Modifié depuis l'enregistrement dans le cloud du {date} à {time}",
+    "description": "Estat de canvis posteriors quan la còpia és d'un altre dia"
+  },
+  "features.sequence.status.staleFile": {
+    "defaultMessage": "Modifié depuis le fichier téléchargé à {time}",
+    "description": "Estat quan hi ha canvis posteriors a l'última còpia en fitxer"
+  },
+  "features.sequence.status.staleFileDated": {
+    "defaultMessage": "Modifié depuis le fichier téléchargé le {date} à {time}",
+    "description": "Estat de canvis posteriors quan el fitxer és d'un altre dia"
+  },
   "features.sequence.status.cloudDated": {
     "defaultMessage": "Enregistré dans le cloud le {date} à {time}",
     "description": "État lorsque la copie dans le cloud date d'un autre jour"
@@ -1765,6 +1797,14 @@
   "features.sequence.status.hintLocal": {
     "defaultMessage": "Cela reste dans ce navigateur, qui peut l'effacer de lui-même. Téléchargez-le ou enregistrez-le dans le cloud pour le conserver ailleurs.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
+  },
+  "features.sequence.status.hintStaleCloud": {
+    "defaultMessage": "Ce qui est à l'écran n'est pas encore dans le cloud. Enregistrez-le à nouveau pour mettre à jour la copie.",
+    "description": "Explicació de l'estat de canvis posteriors a la còpia al núvol"
+  },
+  "features.sequence.status.hintStaleFile": {
+    "defaultMessage": "Ce qui est à l'écran n'est pas encore dans le fichier. Téléchargez-le à nouveau pour le mettre à jour.",
+    "description": "Explicació de l'estat de canvis posteriors a la còpia en fitxer"
   },
   "features.sequence.draft.conflictError": {
     "defaultMessage": "Un autre onglet a un travail plus récent. Celui-ci a cessé d'enregistrer tout seul pour ne pas l'effacer : télécharge ce que tu as ici si tu veux le garder.",
@@ -1802,6 +1842,10 @@
     "defaultMessage": "Le travail actuel n'est que dans ce navigateur. Si vous repartez de zéro, il est perdu.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
   },
+  "features.sequence.status.confirmBodyStale": {
+    "defaultMessage": "La copie enregistrée est antérieure. Si vous repartez de zéro, tout ce qui a été fait depuis est perdu.",
+    "description": "Cos del diàleg de confirmació quan hi ha una còpia però amb canvis posteriors"
+  },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Le télécharger avant",
     "description": "Botó per desar la feina en un fitxer abans de buidar-la"
@@ -1830,9 +1874,17 @@
     "defaultMessage": "Donne-lui un nom pour pouvoir le retrouver.",
     "description": "Validació: el nom del document és obligatori"
   },
+  "features.backend.documents.nameSameAsOriginal": {
+    "defaultMessage": "La copie a besoin d'un nom différent pour ne pas la confondre avec l'original.",
+    "description": "Validació: la còpia d'un document no pot tenir el mateix nom que l'original"
+  },
   "features.backend.documents.updateHint": {
     "defaultMessage": "Ce document est déjà dans le cloud : l'enregistrer remplacera la version enregistrée.",
     "description": "Avís del diàleg quan el document ja existeix al núvol"
+  },
+  "features.backend.documents.copyHint": {
+    "defaultMessage": "Avec « Enregistrer une copie », un nouveau document est enregistré et l'original reste tel quel.",
+    "description": "Avís que explica què fa el botó de desar una còpia"
   },
   "features.backend.documents.saveAction": {
     "defaultMessage": "Enregistrer",
@@ -1841,6 +1893,10 @@
   "features.backend.documents.updateAction": {
     "defaultMessage": "Mettre à jour",
     "description": "Botó per actualitzar el document ja desat al núvol"
+  },
+  "features.backend.documents.saveCopyAction": {
+    "defaultMessage": "Enregistrer une copie",
+    "description": "Botó per desar el document com un de nou sense tocar el que ja hi ha al núvol"
   },
   "features.backend.documents.cancel": {
     "defaultMessage": "Annuler",
@@ -1865,6 +1921,10 @@
   "features.backend.documents.documentSavedNamed": {
     "defaultMessage": "« {title} » a été enregistré dans le cloud",
     "description": "Confirmació en desar un document amb nom"
+  },
+  "features.backend.documents.documentCopiedNamed": {
+    "defaultMessage": "La copie « {title} » a été enregistrée : vous travaillez maintenant dessus",
+    "description": "Confirmació en desar una còpia: avisa que el document actiu passa a ser la còpia"
   },
   "features.backend.documents.documentLoadedNamed": {
     "defaultMessage": "« {title} » a été chargé",
