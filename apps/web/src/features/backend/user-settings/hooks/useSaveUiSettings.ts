@@ -12,6 +12,7 @@ import { useCallback, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useAppDispatch } from "../../../../app/hooks";
 import { saveUserUiThunk } from "../store/settingsThunks";
+import { refreshQuotaThunk } from "../store/quotaSlice";
 import { useFeedback } from "../../../../context/FeedbackContext/FeedbackContext";
 import messages from "../../../../Modals/DefaultSettingsModal/UserSettingsPanel.lang";
 import { RequestFailure } from "@features/backend/api/requestFailure";
@@ -53,6 +54,9 @@ export const useSaveUiSettings = (): UseSaveUiSettings => {
     const result = await dispatch(saveUserUiThunk());
 
     if (saveUserUiThunk.fulfilled.match(result)) {
+      // El vocabulari pot haver pujat o tret imatges: el consum del compte ja
+      // no és el que deia abans de desar
+      void dispatch(refreshQuotaThunk());
       showSnackbar({
         message: intl.formatMessage(messages.saveSuccess),
         severity: "success",

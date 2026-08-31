@@ -141,7 +141,10 @@ L'estàndard és **un de sol** per a totes les amplades: no hi ha components mò
 ### Estat de migració
 
 - ✅ **Vista** (`ViewSettingsPanel`) — totes les files via `SettingRow`; els botons, via `SettingsActions`.
-- ✅ **Usuari** (`UserSettingsPanel`) — `SectionTitle` + `SettingRow` (idioma app, idioma cerca, tema).
+- ✅ **Usuari** (`UserSettingsPanel`) — `SectionTitle` + `SettingRow`: idiomes, tema, **Imatges**
+  (qualitat de pujada, també sense compte: mana sobre el pes de l'esborrany i sobre el que
+  s'imprimeix) i **L'espai del teu compte** (comptadors + llistat d'imatges), aquesta última
+  només amb sessió.
 - ✅ **Pictogrames** (`DefaultForm`) — `SettingsPanelLayout` + `SettingsPreviewFrame background="paper"` + **7 seccions**: Pictograma, Text i numeració, Lletra del text, Lletra dels números (si `numbered`), Vora exterior, Vora interior, Aparença (si `color`). Les 4 últimes es titulen soles des del propi card.
 - ✅ **Vocabulari** (`VocabularySettingsPanel`) — columna esquerra = mostra (`preview`: `SettingsPreviewFrame` amb el pictograma centrat) + **llista de paraules desades** (`previewAside`: `WordProfileList`, amb la miniatura del pictograma de cada paraula); columna dreta = formulari clàssic (guia, secció Paraula, secció Pictograma) amb els botons **al final i a la dreta**. Triar una paraula de la llista carrega el formulari en mode edició: la guia canvia, la fila queda seleccionada amb el distintiu «Editant» i els botons passen a «Cancel·lar / Actualitzar». Desar, actualitzar i esborrar confirmen amb `showSnackbar`. Reanomenar mentre s'edita mou la paraula (esborra l'antiga) i bloqueja el desat si el nom nou ja existeix.
 - ✅ **Família `SettingCard`** — tots migrats a `SettingRow`. `card`, `cardAction` i `cardContent` **eliminats** de `SettingsCards.styled.ts`; només hi queden `cardTitle` (consumit per `SettingRow`) i `cardColor`.
@@ -320,6 +323,54 @@ feina és on viu cada acció i quan demana permís.
 - **Les imatges orfes s'esborren després d'escriure, no abans.** Si s'esborren abans i l'escriptura
   falla, els perfils desats apunten a imatges que ja no existeixen. Val més una imatge orfe a
   Cloudinary que un vocabulari trencat. (`modules/documents/service.ts` encara ho fa a l'inrevés.)
+- **El que l'usuari gasta se li ensenya, i abans de topar-hi.** Els comptadors d'`usage`
+  existien des del principi però només els veia l'administrador: qui feia servir l'app
+  descobria el límit en forma d'error en desar, quan ja hi havia mitja hora de feina a
+  sobre. Ara `GET /user/ui-settings` retorna `usage` i `limits` —no costa cap petició
+  més: aquella ja surt a cada restauració de sessió i llegeix el mateix document— i
+  `GET /user/quota` els torna a demanar quan han canviat (després de desar, d'esborrar
+  un document o una imatge). El tab **Usuari** els pinta a la secció «L'espai del teu
+  compte», i és l'única de tot el modal que **no** surt sense sessió: sense compte no hi
+  ha cap límit i una secció buida només faria preguntar què hi falta.
+- **`quota` és un slice a part d'`uiSlice`**, com `documentStatus` ho és de `documentSlice`:
+  no és cap preferència ni res que l'usuari pugui triar, és el que diu el servidor de com
+  està el compte. Si hi fos, desar la configuració l'enviaria de tornada com si fos una
+  tria. I `usage: null` **no vol dir zero**: vol dir que encara no se sap (sense sessió, o
+  amb Render adormit). Amb aquesta diferència esborrada, l'avís de «no hi cap» sortiria a
+  qui treballa sense compte, que no té cap límit.
+- **La qualitat de les imatges la tria l'usuari, i només val per a les que vindran.**
+  `imageQuality` (`print` 1.800 px/500 KB, `standard` 1.200/250, `compact` 800/120, a
+  `IMAGE_QUALITY_PRESETS`) és una preferència del compte, no un automatisme: quan es puja
+  una imatge encara no se sap a quina mida s'imprimirà —`sizePict` es toca després— i
+  reduir és irreversible, de manera que el client no ho pot decidir sol (és el mateix
+  motiu pel qual no es rebaixa segons quantes imatges hi hagi). Per això `print` continua
+  sent el valor per defecte i **les imatges ja pujades no es toquen mai**: tornar-les a
+  comprimir seria perdre detall que ningú ha demanat de perdre.
+- **Una imatge que no cap es diu en pujar-la, no en desar.** `UploadImageButton` comprova
+  dos sostres amb la imatge ja convertida: el pes màxim per imatge (`MAX_UPLOAD_IMAGE_BYTES`,
+  el mateix `MAX_IMAGE_BYTES` que fa complir el servidor) i, **només amb sessió**, l'espai
+  que queda al compte. Si algun es passa, `encodeToFit` prova els nivells més petits
+  **codificant de veritat** —el pes objectiu és una fita, no una promesa— i el diàleg
+  ofereix la versió que sí que hi cabria. És l'únic moment en què encara es pot fer alguna
+  cosa: aquí la imatge original encara és al dispositiu; mitja hora després, en desar,
+  l'única sortida seria treure-la del document.
+- **La pujada no es bloqueja mai.** L'app funciona sencera sense compte i sense xarxa: una
+  imatge que no cabrà al núvol s'ha de poder posar igualment i imprimir-la des d'aquest
+  dispositiu, i per això «Posa-la igualment» hi és sempre. El que sí que canvia és el
+  missatge de quan es desa: `QUOTA_STORAGE_EXCEEDED` diu on mirar què ocupa cada imatge, i
+  `IMAGE_TOO_LARGE` —que el servidor retornava des que hi ha sostre per imatge i que
+  arribava a l'usuari com un codi cru— ja té text. Cap dels dos ofereix reintentar:
+  insistir no allibera espai.
+- **Esborrar una imatge no esborra el que la feia servir.** `DELETE /user/assets` treu la
+  imatge del pictograma del document (que conserva text i número) o de la paraula del
+  vocabulari (que es queda amb el seu pictograma d'ARASAAC), en aquest ordre: primer
+  s'escriu qui la feia servir, després s'esborra del núvol i al final s'ajusta el comptador
+  —esborrar primer i que l'escriptura falli deixaria un document apuntant a una imatge que
+  ja no existeix. La miniatura del document també se n'ha de netejar, o el llistat
+  ensenyaria un quadre trencat. I si el document esborrat és el que s'està editant,
+  `removeCloudImage` el posa al dia: **no** compta com a canvi de contingut
+  (`documentStatusMiddleware`), perquè la còpia del núvol no s'ha quedat enrere sinó que
+  s'ha avançat, i demanar de tornar-la a desar seria demanar de desar el mateix.
 - Cada document guarda `assets: [{ publicId, bytes }]`. Sense els bytes no es pot restar res en esborrar i el comptador només creixeria.
 
 ### Correu

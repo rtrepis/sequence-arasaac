@@ -310,6 +310,19 @@ Cap no s'ha resolt en aquest estudi: és un inventari, no una branca de canvis.
   Els comptes que caben a Atlas passen de ~5.900 a ~10.100. Amb això Atlas deixa de ser el
   sostre que arriba primer.
 
+- **L10 — ✅ RESOLTA (nova). Els límits existien però l'usuari no els veia.** Els comptadors
+  d'`usage` només sortien al panell d'administració: qui feia servir l'app descobria el
+  sostre en forma d'error en desar, amb la feina ja feta, i no tenia cap manera de saber
+  què li ocupava l'espai ni de recuperar-ne sense esborrar documents sencers. A més,
+  `IMAGE_TOO_LARGE` —que el servidor retorna des que hi ha pes màxim per imatge— no tenia
+  cap traducció al front i arribava com un codi cru.
+  *Resolució:* el consum viatja amb `GET /user/ui-settings` (cap petició de més) i es
+  refresca amb `GET /user/quota`; el tab Usuari els ensenya amb el llistat d'imatges i el
+  seu pes, i `DELETE /user/assets` en treu una sense esborrar el document ni la paraula.
+  La pujada avisa abans de desar quan una imatge no cabria, i ofereix comprimir-la més.
+  `imageQuality` deixa triar entre 500, 250 i 120 KB per imatge: amb la qualitat compacta,
+  els 5 MB del pla gratuït passen de 10 imatges garantides a 40.
+
 - **L6 — Les 750 h de Render són de l'espai de treball, no del servei.** Avui hi
   ha un sol servei i l'aturada per inactivitat deixa marge; **un segon servei
   gratuït** (cron, worker) no hi cabria.

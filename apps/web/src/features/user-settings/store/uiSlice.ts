@@ -8,8 +8,10 @@ import {
   ViewSettings,
   SettingsTab,
   UserTier,
+  ImageQuality,
 } from "@/types/ui";
 import { WordProfile } from "@features/word-profile/model/WordProfile";
+import { DEFAULT_IMAGE_QUALITY } from "@/utils/imageToBase64";
 import {
   VIEW_DEFAULT_SIZE_PICT,
   VIEW_DEFAULT_PICT_SPACE,
@@ -88,6 +90,7 @@ const uiInitialState: Ui = {
     },
   },
   wordProfiles: [],
+  imageQuality: DEFAULT_IMAGE_QUALITY,
   tier: "free",
 };
 
@@ -223,6 +226,14 @@ const uiSlice = createSlice({
     setTier: (previousUi, action: PayloadAction<UserTier>) => {
       previousUi.tier = action.payload;
     },
+
+    // Qualitat de les imatges que es pugen. Com la resta de preferències, aquí
+    // només queda reflectida: al compte o al navegador només hi va quan
+    // l'usuari desa (vegeu «Les preferències d'usuari només es desen quan
+    // l'usuari ho demana» al CLAUDE.md).
+    updateImageQuality: (previousUi, action: PayloadAction<ImageQuality>) => {
+      previousUi.imageQuality = action.payload;
+    },
   },
 });
 
@@ -244,4 +255,5 @@ export const {
   removeWordProfile: removeWordProfileActionCreator,
   setWordProfiles: setWordProfilesActionCreator,
   setTier: setTierActionCreator,
+  updateImageQuality: updateImageQualityActionCreator,
 } = uiSlice.actions;
