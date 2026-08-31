@@ -36,6 +36,16 @@ export const updateUiSettingsSchema = z.object({
   viewSettings: viewSettingsZodSchema.optional(),
   defaultSettings: defaultSettingsZodSchema,
   wordProfiles: z.array(wordProfileZodSchema).optional(),
+  imageQuality: z.enum(["print", "standard", "compact"]).optional(),
 });
 
 export type UpdateUiSettingsInput = z.infer<typeof updateUiSettingsSchema>;
+
+// Esborrat d'una imatge del compte. El publicId identifica la imatge a
+// Cloudinary; que sigui d'aquest usuari es comprova al servei, mai aquí: el cos
+// de la petició no és cap prova de propietat.
+export const deleteAssetSchema = z.object({
+  publicId: z.string().min(1).max(300),
+});
+
+export type DeleteAssetInput = z.infer<typeof deleteAssetSchema>;

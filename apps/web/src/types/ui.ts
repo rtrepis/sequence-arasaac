@@ -1,7 +1,14 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 import { PageSize, PageOrientation } from "./PageFormat";
 import { WordProfile } from "@features/word-profile/model/WordProfile";
-import type { UserRole } from "@sequence-arasaac/shared-types";
+import type {
+  ImageQuality,
+  QuotaLimits,
+  UserRole,
+  UserUsage,
+} from "@sequence-arasaac/shared-types";
+
+export type { ImageQuality, QuotaLimits, UserUsage };
 
 export type UserTier = "free";
 
@@ -27,6 +34,8 @@ export interface Ui {
   defaultSettings: DefaultSettings;
   settingsActiveTab: SettingsTab;
   wordProfiles: WordProfile[];
+  /** Qualitat amb què es codifiquen les imatges que puja l'usuari. */
+  imageQuality: ImageQuality;
   tier: UserTier;
 }
 
@@ -44,9 +53,13 @@ export interface UserUiSettings {
   viewSettings?: ViewSettings;
   defaultSettings: DefaultSettings;
   wordProfiles?: WordProfile[];
+  imageQuality?: ImageQuality;
   tier?: UserTier;
   emailVerified?: boolean;
   role?: UserRole;
+  // Consum i límits del compte: només arriben del servidor, com tier o role
+  usage?: UserUsage;
+  limits?: QuotaLimits;
 }
 
 export type SequenceDirection = "row" | "column";

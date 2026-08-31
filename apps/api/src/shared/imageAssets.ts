@@ -123,13 +123,16 @@ export const uploadBase64Slots = async (
   return uploaded;
 };
 
+// Elimina una imatge pel seu public_id — no falla si ja no existeix
+export const deleteCloudinaryAsset = async (publicId: string): Promise<void> => {
+  if (!publicId) return;
+  await cloudinary.uploader.destroy(publicId);
+};
+
 // Elimina un conjunt d'URLs de Cloudinary — no falla si alguna ja no existeix
 export const deleteCloudinaryImages = async (urls: string[]): Promise<void> => {
   for (const url of urls) {
-    const publicId = extractPublicId(url);
-    if (publicId) {
-      await cloudinary.uploader.destroy(publicId);
-    }
+    await deleteCloudinaryAsset(extractPublicId(url));
   }
 };
 

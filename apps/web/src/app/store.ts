@@ -4,6 +4,7 @@ import { documentReducer } from "@features/sequence/store/documentSlice";
 import { documentStatusReducer } from "@features/sequence/store/documentStatusSlice";
 import { documentStatusListener } from "@features/sequence/store/documentStatusMiddleware";
 import { authReducer } from "@features/backend/auth/store/authSlice";
+import { quotaReducer } from "@features/backend/user-settings/store/quotaSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     documentStatus: documentStatusReducer,
     ui: uiReducer,
     auth: authReducer,
+    quota: quotaReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().prepend(documentStatusListener.middleware),

@@ -46,6 +46,7 @@ const buildUserUiFromState = (state: RootState): UserUiSettings => ({
   viewSettings: sanitizeViewSettings(state.ui.viewSettings),
   defaultSettings: state.ui.defaultSettings,
   wordProfiles: sanitizeWordProfiles(state.ui.wordProfiles),
+  imageQuality: state.ui.imageQuality,
 });
 
 export const saveUserUiThunk = createAsyncThunk<

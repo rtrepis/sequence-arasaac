@@ -8,6 +8,7 @@ import {
   updateLangSettingsActionCreator,
   updateThemeActionCreator,
   applyUserViewSettingsActionCreator,
+  updateImageQualityActionCreator,
 } from "@features/user-settings/store/uiSlice";
 import {
   getStoredAccountUi,
@@ -45,6 +46,9 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
       // format amb què es treballava, mana aquell i no la preferència desada
       if (storedUi.viewSettings) {
         dispatch(applyUserViewSettingsActionCreator(storedUi.viewSettings));
+      }
+      if (storedUi.imageQuality) {
+        dispatch(updateImageQualityActionCreator(storedUi.imageQuality));
       }
     } else {
       // Fallback: detecta l'idioma del navegador

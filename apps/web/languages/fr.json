@@ -200,7 +200,7 @@
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
   "components.defaultSettings.userPanel.panelHint": {
-    "defaultMessage": "Réglages de votre compte : langue de l'application, langue de recherche et thème. Ils s'appliquent partout."
+    "defaultMessage": "Réglages de votre compte : langues, thème et images. Ils s'appliquent partout."
   },
   "components.defaultSettings.vocabularyPanel.sectionWord": {
     "defaultMessage": "Mot",
@@ -1450,7 +1450,7 @@
     "defaultMessage": "Tu as atteint le nombre maximal de documents enregistrés. Supprimes-en un pour en enregistrer un nouveau."
   },
   "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
-    "defaultMessage": "Tu as atteint la limite d'espace pour les images. Supprime un document contenant tes propres images."
+    "defaultMessage": "Tu as atteint la limite d'espace pour les images. Dans Réglages › Utilisateur, tu peux voir ce que chaque image occupe et en supprimer."
   },
   "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
     "defaultMessage": "Tu as atteint le nombre maximal de mots personnalisés. Supprimes-en un pour en ajouter d'autres."
@@ -2001,5 +2001,140 @@
   "components.buttonWithModalDownload.dialogTitle": {
     "defaultMessage": "Enregistrer et télécharger",
     "description": "Titre de la boîte de dialogue de téléchargement du fichier .saac"
+  },
+  "features.backend.userSettings.usage.storageTitle": {
+    "defaultMessage": "Espace pour les images"
+  },
+  "features.backend.userSettings.usage.documentsTitle": {
+    "defaultMessage": "Séquences dans le nuage"
+  },
+  "features.backend.userSettings.usage.wordsTitle": {
+    "defaultMessage": "Mots du vocabulaire"
+  },
+  "features.backend.userSettings.usage.countOfLimit": {
+    "defaultMessage": "{used} sur {limit}"
+  },
+  "features.backend.userSettings.usage.bytesOfLimit": {
+    "defaultMessage": "{used} sur {limit}"
+  },
+  "features.backend.userSettings.usage.megabytes": {
+    "defaultMessage": "{value} Mo"
+  },
+  "features.backend.userSettings.usage.kilobytes": {
+    "defaultMessage": "{value} Ko"
+  },
+  "features.backend.userSettings.usage.remainingImages": {
+    "defaultMessage": "{count, plural, =0 {Aucune autre image ne tient avec la qualité choisie} one {# image de plus tient avec la qualité choisie} other {# images de plus tiennent avec la qualité choisie}}"
+  },
+  "features.backend.userSettings.usage.imagesTitle": {
+    "defaultMessage": "Tes images"
+  },
+  "features.backend.userSettings.usage.imagesEmpty": {
+    "defaultMessage": "Tu n'as encore téléversé aucune image. Les pictogrammes ARASAAC n'occupent pas d'espace dans ton compte."
+  },
+  "features.backend.userSettings.usage.imagesLoadError": {
+    "defaultMessage": "Impossible de charger les images. Réessaie dans un moment."
+  },
+  "features.backend.userSettings.usage.reload": {
+    "defaultMessage": "Réessayer"
+  },
+  "features.backend.userSettings.usage.inDocument": {
+    "defaultMessage": "Dans la séquence « {title} »"
+  },
+  "features.backend.userSettings.usage.inUntitledDocument": {
+    "defaultMessage": "Dans une séquence sans nom"
+  },
+  "features.backend.userSettings.usage.inWord": {
+    "defaultMessage": "Dans le mot « {word} »"
+  },
+  "features.backend.userSettings.usage.deleteImage": {
+    "defaultMessage": "Supprimer l'image"
+  },
+  "features.backend.userSettings.usage.deleteTitle": {
+    "defaultMessage": "Supprimer l'image ?"
+  },
+  "features.backend.userSettings.usage.deleteBodyDocument": {
+    "defaultMessage": "Le pictogramme se retrouvera sans image dans la séquence enregistrée dans le nuage, et tu récupéreras {size}. L'image est irrécupérable."
+  },
+  "features.backend.userSettings.usage.deleteBodyWord": {
+    "defaultMessage": "Le mot gardera son pictogramme ARASAAC, et tu récupéreras {size}. L'image est irrécupérable."
+  },
+  "features.backend.userSettings.usage.deleteConfirm": {
+    "defaultMessage": "Supprimer l'image"
+  },
+  "features.backend.userSettings.usage.deleted": {
+    "defaultMessage": "Image supprimée. Tu as récupéré {size}."
+  },
+  "features.backend.userSettings.usage.deleteError": {
+    "defaultMessage": "Impossible de supprimer l'image. (Code : {code})"
+  },
+  "features.backend.userSettings.usage.thumbnailAlt": {
+    "defaultMessage": "Image téléversée"
+  },
+  "components.settingCardImageQuality.cardTitle": {
+    "defaultMessage": "Qualité des images"
+  },
+  "components.settingCardImageQuality.ariaLabel": {
+    "defaultMessage": "Qualité des images que tu téléverses"
+  },
+  "components.settingCardImageQuality.print": {
+    "defaultMessage": "Impression"
+  },
+  "components.settingCardImageQuality.standard": {
+    "defaultMessage": "Standard"
+  },
+  "components.settingCardImageQuality.compact": {
+    "defaultMessage": "Compacte"
+  },
+  "components.settingCardImageQuality.helper": {
+    "defaultMessage": "Chaque nouvelle image occupera au maximum {size}. Celles que tu as déjà téléversées ne changent pas."
+  },
+  "components.defaultSettings.userPanel.sectionImages": {
+    "defaultMessage": "Images"
+  },
+  "components.defaultSettings.userPanel.sectionStorage": {
+    "defaultMessage": "L'espace de ton compte"
+  },
+  "components.uploadImageButton.print": {
+    "defaultMessage": "impression"
+  },
+  "components.uploadImageButton.standard": {
+    "defaultMessage": "standard"
+  },
+  "components.uploadImageButton.compact": {
+    "defaultMessage": "compacte"
+  },
+  "components.uploadImageButton.tooBigTitle": {
+    "defaultMessage": "L'image prend trop de place"
+  },
+  "components.uploadImageButton.tooBigQuotaSmaller": {
+    "defaultMessage": "L'image occupe {size} et il ne reste que {available} dans ton compte. En qualité {quality}, elle occuperait {smallerSize} et tiendrait."
+  },
+  "components.uploadImageButton.tooBigQuotaOnly": {
+    "defaultMessage": "L'image occupe {size} et il ne reste que {available} dans ton compte. Elle ne tient à aucune qualité : tu peux quand même l'ajouter et l'imprimer depuis cet appareil, mais il faudra libérer de l'espace pour l'enregistrer dans le nuage."
+  },
+  "components.uploadImageButton.tooBigPerImageSmaller": {
+    "defaultMessage": "L'image occupe {size} et le maximum par image est {available}. En qualité {quality}, elle occuperait {smallerSize}."
+  },
+  "components.uploadImageButton.tooBigPerImageOnly": {
+    "defaultMessage": "L'image occupe {size} et le maximum par image est {available}. Tu peux quand même l'ajouter et l'imprimer depuis cet appareil, mais elle ne pourra pas être enregistrée dans le nuage."
+  },
+  "components.uploadImageButton.useSmaller": {
+    "defaultMessage": "La réduire"
+  },
+  "components.uploadImageButton.useOriginal": {
+    "defaultMessage": "L'ajouter quand même"
+  },
+  "components.uploadImageButton.cancelUpload": {
+    "defaultMessage": "Annuler"
+  },
+  "features.backend.auth.error.IMAGE_TOO_LARGE": {
+    "defaultMessage": "Une des images est trop lourde pour être enregistrée dans le nuage. Ajoute-la de nouveau avec une qualité plus basse (Réglages › Utilisateur › Qualité des images)."
+  },
+  "components.defaultSettings.saveError.bodyQuota": {
+    "defaultMessage": "Ton compte n'a plus d'espace pour les images, et les réglages n'ont donc pas été enregistrés. Dans Réglages › Utilisateur, tu verras ce qu'occupe chaque image du vocabulaire et tu pourras en supprimer."
+  },
+  "components.defaultSettings.saveError.bodyImageTooLarge": {
+    "defaultMessage": "Une des images du vocabulaire est trop lourde pour être enregistrée dans le nuage. Ajoute-la de nouveau avec une qualité plus basse : tu la choisis dans Réglages › Utilisateur › Qualité des images."
   }
 }
