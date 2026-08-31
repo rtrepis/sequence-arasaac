@@ -15,7 +15,12 @@ import type {
   UserUsage,
   QuotaLimits,
 } from "@sequence-arasaac/shared-types";
-import { defaultSettingsSchema, wordProfileSchema } from "../../shared/mongooseSchemas";
+import {
+  cloudinaryAssetSchema,
+  defaultSettingsSchema,
+  wordProfileSchema,
+} from "../../shared/mongooseSchemas";
+import type { CloudinaryAsset } from "../../shared/imageAssets";
 
 // Interfície TypeScript del document User (estén Document de Mongoose)
 export interface IUser extends Document {
@@ -36,6 +41,7 @@ export interface IUser extends Document {
   theme: ThemeMode;
   viewSettings?: ViewSettings;
   wordProfiles: WordProfile[];
+  wordProfileAssets: CloudinaryAsset[];
   tier: UserTier;
   // --- Identitat i estat del compte ---
   emailVerified: boolean;
@@ -196,6 +202,15 @@ const userSchema = new Schema<IUser>(
     },
     wordProfiles: {
       type: [wordProfileSchema],
+      required: true,
+      default: () => [],
+    },
+    // Registre de les imatges del vocabulari pujades a Cloudinary.
+    // Va a part de wordProfiles i no a dins perquè WordProfile és un tipus
+    // compartit amb el front, i el client no ha d'arrossegar un camp de
+    // comptabilitat que no fa servir. Calca Document.assets.
+    wordProfileAssets: {
+      type: [cloudinaryAssetSchema],
       required: true,
       default: () => [],
     },

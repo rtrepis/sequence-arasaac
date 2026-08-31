@@ -1,6 +1,7 @@
 // Esquemes Zod per validar els cossos de les peticions de user-settings
 import { z } from "zod";
 import { defaultSettingsZodSchema } from "../../shared/zodSchemas";
+import { MAX_IMAGE_DATA_URL_LENGTH } from "../../shared/imageAssets";
 
 const viewSettingsZodSchema = z.object({
   sizePict: z.number(),
@@ -23,7 +24,7 @@ const wordProfileZodSchema = z.object({
     fitzgerald: z.string().optional(),
   }),
   selectedId: z.number().optional(),
-  customImageUrl: z.string().optional(),
+  customImageUrl: z.string().max(MAX_IMAGE_DATA_URL_LENGTH).optional(),
 });
 
 export const updateUiSettingsSchema = z.object({

@@ -10,6 +10,12 @@ porten enllaç a la font.
 
 ---
 
+## Estat
+
+**L1, L2 i L3 estan resoltes** (branca `claude/estudi-limits-gratuïts-serveis`): les imatges
+del vocabulari ja no entren mai a MongoDB. L'anàlisi que segueix es conserva perquè explica
+per què calia, i perquè les xifres de capacitat continuen sent les bones.
+
 ## Resum: què s'esgota primer
 
 L'app té un sostre de **200 usuaris** (`DEFAULT_MAX_USERS`, `modules/config/model.ts`)
@@ -18,8 +24,8 @@ i una quota per usuari de **3 documents, 200 paraules de vocabulari i 50 MB**
 
 | # | Sostre | Quan arriba | Gravetat |
 |---|---|---|---|
-| 1 | **BSON de 16 MB per document de MongoDB** | A la **24a imatge de vocabulari** d'un sol usuari | Trencament dur, error 500 sense causa visible |
-| 2 | **512 MB de MongoDB Atlas M0** | Cap a les **780 imatges de vocabulari** de tota la plataforma (≈4 per usuari amb 200 comptes) | El servei deixa d'escriure |
+| ~~1~~ | ~~**BSON de 16 MB per document de MongoDB**~~ | ~~A la **24a imatge de vocabulari** d'un sol usuari~~ | ✅ **Resolt** — les imatges van a Cloudinary |
+| ~~2~~ | ~~**512 MB de MongoDB Atlas M0** per imatges~~ | ~~Cap a les **780 imatges de vocabulari**~~ | ✅ **Resolt** — a Atlas hi queden els documents, no les imatges |
 | 3 | **25 crèdits/mes de Cloudinary** | Per **amplada de banda**, no per emmagatzematge | Degradació, factura si hi ha targeta |
 | 4 | **100 correus/dia de Resend** | Només si els avisos d'error es desboquen | Els registres es queden sense enllaç, en silenci |
 | 5 | **750 h/mes de Render** | Amb un sol servei no s'hi arriba; amb dos, sí | Suspensió fins al mes següent |
@@ -250,21 +256,26 @@ s'ha de pujar a 14 al panell de GA, i no es recupera retroactivament.
 Numerades per poder-hi tornar, en l'estil de `ESTANDARD-capes-flotants.md`.
 Cap no s'ha resolt en aquest estudi: és un inventari, no una branca de canvis.
 
-- **L1 — Les imatges de vocabulari van a MongoDB en base64.**
-  `PUT /user/ui-settings` desa `customImageUrl` tal com arriba, sense passar per
-  Cloudinary, mentre que `POST /documents` sí que hi passa. És el mur que trenca
-  primer (16 MB de BSON, ≈24 imatges) i el que omple els 512 MB d'Atlas.
-  *Fitxers:* `modules/user-settings/service.ts:67`, `validators.ts:26`.
+- **L1 — ✅ RESOLTA. Les imatges de vocabulari anaven a MongoDB en base64.**
+  `PUT /user/ui-settings` desava `customImageUrl` tal com arribava, sense passar per
+  Cloudinary, mentre que `POST /documents` sí que hi passava. Era el mur que trencava
+  primer (16 MB de BSON, ≈24 imatges) i el que omplia els 512 MB d'Atlas.
+  *Resolució:* `shared/imageAssets.ts` és ara l'única porta al núvol i el comparteixen
+  els dos mòduls; `updateUiSettings` puja, fa el diff d'orfes i n'ajusta el consum,
+  igual que `updateDocument`. Les que ja hi eren es traslladen amb
+  `npm run migrate:word-images`.
 
-- **L2 — La quota de 50 MB no cobreix el vocabulari.** `assertWithinQuota` només
-  es crida des del mòdul de documents, de manera que `storageBytes` pot ser zero
-  amb 16 MB ocupats a la base de dades. El límit de 200 `wordProfiles` compta
-  entrades, no pes.
+- **L2 — ✅ RESOLTA. La quota de 50 MB no cobria el vocabulari.** `assertWithinQuota`
+  només es cridava des del mòdul de documents, de manera que `storageBytes` podia ser
+  zero amb 16 MB ocupats a la base de dades.
+  *Resolució:* viu a `shared/quota.ts` i el criden els dos mòduls, de manera que el pes
+  d'un compte és un de sol. `MAX_IMAGE_BYTES` al servidor posa sostre a cada imatge:
+  sense això, un recompte d'imatges no garanteix cap pes i no protegeix res.
 
-- **L3 — L'ordre dels murs està invertit.** `express.json({ limit: "20mb" })` és
-  **més gran** que els 16 MB de BSON: una petició massa gran passa la porta i
-  peta a Mongoose, i l'usuari rep un 500 en comptes d'un 413 amb missatge.
-  *Fitxer:* `apps/api/src/index.ts:35`.
+- **L3 — ✅ RESOLTA. L'ordre dels murs estava invertit.** `express.json({ limit: "20mb" })`
+  era **més gran** que els 16 MB de BSON: una petició massa gran passava la porta i
+  petava a Mongoose, i l'usuari rebia un 500 en comptes d'un 413 amb missatge.
+  *Resolució:* el límit del cos baixa a 12 MB, per sota del de BSON.
 
 - **L4 — Les miniatures del llistat baixen la imatge sencera.** El `thumbnail`
   desa el `secure_url` sense cap transformació de mida: fins a 4,5 MB de banda de
@@ -291,11 +302,14 @@ Cap no s'ha resolt en aquest estudi: és un inventari, no una branca de canvis.
 
 ## Capacitat que tenim, en una frase
 
-Amb els 200 comptes del sostre actual, **l'app hi cap folgadament mentre els
-usuaris facin servir pictogrames d'ARASAAC**. El que no hi cap és l'ús intensiu
-d'**imatges pròpies al vocabulari**: a partir d'unes quatre per usuari de
-mitjana, el clúster gratuït de MongoDB es queda sense espai, i qualsevol usuari
-sol pot topar amb un error 500 a la seva 24a imatge.
+Amb L1–L3 resoltes, **el coll d'ampolla ja no és MongoDB sinó Cloudinary**, que és
+la quota que l'aplicació sí que sap mesurar i ensenyar. A Atlas hi queden els
+documents i les preferències, que pesen quilobytes.
+
+El que ara mana és l'**emmagatzematge de Cloudinary**, i té una propietat que cap
+altre límit d'aquest document no té: **no baixa mai sol**. Els 15 GB que es poden
+dedicar a desar-hi imatges són ~68.000 imatges per a tota la vida del projecte,
+i el dia que s'acostin no hi haurà cap mes que ho reinicialitzi.
 
 ---
 

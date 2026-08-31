@@ -39,8 +39,13 @@ export const updateUiSettings = async (
       return next(error);
     }
 
-    await updateUiSettingsService(req.userId as string, parsed.data);
-    res.status(200).json({ ok: true });
+    // Els perfils tornen amb les URLs definitives de Cloudinary: sense això el
+    // client desaria el mateix base64 un altre cop al desat següent.
+    const wordProfiles = await updateUiSettingsService(
+      req.userId as string,
+      parsed.data
+    );
+    res.status(200).json({ ok: true, wordProfiles });
   } catch (err) {
     next(err);
   }
