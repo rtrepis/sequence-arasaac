@@ -19,6 +19,13 @@ import {
 const selectIsAuthenticated = (state: RootState): boolean =>
   state.auth.accessToken !== null;
 
+/** Rebutjos per quota del compte: cap d'ells canvia per tornar-ho a provar. */
+const QUOTA_CODES = new Set([
+  "QUOTA_STORAGE_EXCEEDED",
+  "QUOTA_DOCUMENTS_EXCEEDED",
+  "QUOTA_WORD_PROFILES_EXCEEDED",
+]);
+
 interface SettingsSaveErrorDialogProps {
   /** Fallada que ha de descriure el diàleg; null el manté tancat. */
   failure: RequestFailure | null;
@@ -37,17 +44,24 @@ const SettingsSaveErrorDialog = ({
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   // El que s'ha perdut no és el mateix segons on s'havia de desar, i dir-ho malament
-  // seria pitjor que no dir res. L'espai exhaurit del navegador té text propi perquè
-  // és l'únic cas on l'usuari pot fer alguna cosa concreta per resoldre-ho.
-  const body =
-    failure?.code === STORAGE_FULL
-      ? messages.bodyStorageFull
-      : isAuthenticated
-        ? messages.bodyCloud
-        : messages.bodyLocal;
+  // seria pitjor que no dir res. Els casos amb text propi són aquells on l'usuari
+  // pot fer alguna cosa concreta: l'espai del navegador exhaurit, el del compte, i
+  // una imatge que passa del pes màxim.
+  const body = (() => {
+    if (failure?.code === STORAGE_FULL) return messages.bodyStorageFull;
+    if (failure?.code === "IMAGE_TOO_LARGE") return messages.bodyImageTooLarge;
+    if (failure && QUOTA_CODES.has(failure.code)) return messages.bodyQuota;
+    return isAuthenticated ? messages.bodyCloud : messages.bodyLocal;
+  })();
 
-  // Insistir no arregla un navegador ple ni unes dades que el servidor rebutja
-  const canRetry = failure?.code !== STORAGE_FULL;
+  // Insistir no arregla un navegador ple, un compte sense espai ni unes dades que
+  // el servidor rebutja: el botó de reintentar només hi és quan pot canviar alguna
+  // cosa, i oferir-lo quan no serviria de res només fa perdre el temps
+  const canRetry =
+    failure !== null &&
+    failure.code !== STORAGE_FULL &&
+    failure.code !== "IMAGE_TOO_LARGE" &&
+    !QUOTA_CODES.has(failure.code);
 
   return (
     <AppDialog

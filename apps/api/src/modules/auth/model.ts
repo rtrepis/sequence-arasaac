@@ -14,6 +14,7 @@ import type {
   UserUseCase,
   UserUsage,
   QuotaLimits,
+  ImageQuality,
 } from "@sequence-arasaac/shared-types";
 import {
   cloudinaryAssetSchema,
@@ -42,6 +43,7 @@ export interface IUser extends Document {
   viewSettings?: ViewSettings;
   wordProfiles: WordProfile[];
   wordProfileAssets: CloudinaryAsset[];
+  imageQuality: ImageQuality;
   tier: UserTier;
   // --- Identitat i estat del compte ---
   emailVerified: boolean;
@@ -213,6 +215,15 @@ const userSchema = new Schema<IUser>(
       type: [cloudinaryAssetSchema],
       required: true,
       default: () => [],
+    },
+    // Qualitat amb què el client codifica les imatges que puja. Viu al compte i
+    // no al navegador perquè és el que decideix quant ocupa cada imatge de la
+    // quota, i la quota és del compte, no del dispositiu.
+    imageQuality: {
+      type: String,
+      enum: ["print", "standard", "compact"],
+      required: true,
+      default: "print",
     },
     tier: {
       type: String,

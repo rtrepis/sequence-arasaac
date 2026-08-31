@@ -61,7 +61,8 @@ export const saveAccountUi = (settings: UserUiSettings): void => {
     // Només el que es pinta. Ni `tier` ni `emailVerified` ni `role`: són estat
     // del compte que decideix el servidor a cada petició, i tenir-ne una còpia
     // vella al navegador només podria fer prendre decisions amb dades caducades.
-    const { lang, theme, defaultSettings, viewSettings } = settings;
+    const { lang, theme, defaultSettings, viewSettings, imageQuality } =
+      settings;
 
     writeToStorage(
       ACCOUNT_UI_KEY,
@@ -70,6 +71,7 @@ export const saveAccountUi = (settings: UserUiSettings): void => {
         theme,
         defaultSettings,
         viewSettings,
+        imageQuality,
         wordProfiles: [],
       }),
     );

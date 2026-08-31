@@ -28,6 +28,7 @@ import {
   loadDocumentThunk,
 } from "@features/sequence/store/documentSlice";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
+import { refreshQuotaThunk } from "@features/backend/user-settings/store/quotaSlice";
 import { deleteDocument, DocumentSummary } from "../services/documentService";
 import { useDocumentTransfer } from "../hooks/useDocumentTransfer";
 import { classifyRequestFailure } from "@features/backend/api/requestFailure";
@@ -120,6 +121,9 @@ const LoadDocumentModal = ({
     try {
       await deleteDocument(id);
       setDocuments((prev) => prev.filter((d) => d.id !== id));
+      // Esborrar un document allibera el seu espai d'imatges: el comptador ho
+      // ha de dir de seguida, que és justament per això que s'esborra
+      void dispatch(refreshQuotaThunk());
       if (selectedId === id) setSelectedId(null);
       showSnackbar({
         message: intl.formatMessage(messages.documentDeleted),

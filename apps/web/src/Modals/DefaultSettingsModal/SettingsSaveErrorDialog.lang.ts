@@ -20,6 +20,18 @@ const messages = defineMessages({
     description:
       "Explicació quan l'emmagatzematge del navegador està ple (QuotaExceededError)",
   },
+  bodyQuota: {
+    id: "components.defaultSettings.saveError.bodyQuota",
+    defaultMessage:
+      "El teu compte s'ha quedat sense espai per a imatges, i per això la configuració no s'ha desat. A Configuració › Usuari veuràs què ocupa cada imatge del vocabulari i en podràs esborrar alguna.",
+    description: "Explicació quan el desat topa amb la quota del compte",
+  },
+  bodyImageTooLarge: {
+    id: "components.defaultSettings.saveError.bodyImageTooLarge",
+    defaultMessage:
+      "Alguna imatge del vocabulari pesa massa per desar-la al núvol. Torna-la a posar amb una qualitat més baixa: la tries a Configuració › Usuari › Qualitat de les imatges.",
+    description: "Explicació quan una imatge passa del pes màxim per imatge",
+  },
   bodyLocal: {
     id: "components.defaultSettings.saveError.bodyLocal",
     defaultMessage:

@@ -10,6 +10,19 @@
 import { UserModel } from "../modules/auth/model";
 import { resolveQuotaLimits } from "./tierLimits";
 import type { AppError } from "../middleware/errorHandler";
+import type { UserUsage } from "@sequence-arasaac/shared-types";
+
+// Comptadors d'un usuari, amb recanvi per als comptes creats abans que el camp
+// existís. Amb .lean() Mongoose no aplica els valors per defecte de l'esquema:
+// sense aquest recanvi, llegir-hi a dins llança i el desat acaba en un 500 sense
+// causa visible. Comptar-los com a zero és el que ja fa la migració amb els antics.
+export const resolveUsage = (usage?: UserUsage): UserUsage =>
+  usage ?? {
+    documentsCount: 0,
+    wordProfilesCount: 0,
+    storageBytes: 0,
+    assetsCount: 0,
+  };
 
 const quotaError = (errorCode: string, statusCode: number): AppError => {
   const error = new Error(errorCode) as AppError;
@@ -49,16 +62,7 @@ export const assertWithinQuota = async (
 
   const limits = resolveQuotaLimits(user.tier, user.quotaOverride);
 
-  // Els comptes creats abans que existís el camp `usage` no el tenen, i amb .lean()
-  // Mongoose no aplica els valors per defecte de l'esquema: sense aquest recanvi,
-  // llegir-hi a dins llançava i desar acabava en un 500 sense causa visible.
-  // Comptar-los com a zero és el que ja fa la migració amb els antics.
-  const usage = user.usage ?? {
-    documentsCount: 0,
-    wordProfilesCount: 0,
-    storageBytes: 0,
-    assetsCount: 0,
-  };
+  const usage = resolveUsage(user.usage);
 
   if (request.newDocument && usage.documentsCount >= limits.documents) {
     throw quotaError("QUOTA_DOCUMENTS_EXCEEDED", 403);

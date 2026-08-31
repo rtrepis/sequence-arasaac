@@ -10,7 +10,12 @@ import {
   applyUserViewSettingsActionCreator,
   setWordProfilesActionCreator,
   setTierActionCreator,
+  updateImageQualityActionCreator,
 } from "@features/user-settings/store/uiSlice";
+import {
+  clearQuotaActionCreator,
+  setQuotaActionCreator,
+} from "@features/backend/user-settings/store/quotaSlice";
 import {
   clearStoredAccountUi,
   clearStoredWordProfiles,
@@ -63,9 +68,12 @@ const syncSettingsAfterAuth = async (
       defaultSettings,
       viewSettings,
       wordProfiles,
+      imageQuality,
       tier,
       emailVerified,
       role,
+      usage,
+      limits,
     } = settings;
 
     // Aquest és un dels dos moments on la configuració del compte és certa (l'altre
@@ -81,7 +89,11 @@ const syncSettingsAfterAuth = async (
     if (viewSettings)
       dispatch(applyUserViewSettingsActionCreator(viewSettings));
     if (wordProfiles) dispatch(setWordProfilesActionCreator(wordProfiles));
+    if (imageQuality) dispatch(updateImageQualityActionCreator(imageQuality));
     if (tier) dispatch(setTierActionCreator(tier));
+    // El consum arriba amb la configuració: cap petició de més, i és el moment
+    // en què l'app sap del cert com està el compte
+    if (usage || limits) dispatch(setQuotaActionCreator({ usage, limits }));
     return { emailVerified: emailVerified ?? false, isAdmin: role === "admin" };
   } catch {
     // Si falla la sincronització no interrompem el flux d'auth.
@@ -101,6 +113,10 @@ const restoreAnonymousSettings = (
   // configuració anònima. En un dispositiu compartit, que és el cas normal en AAC,
   // això vol dir deixar-hi el vocabulari de qui l'ha fet servir abans.
   dispatch(setWordProfilesActionCreator([]));
+
+  // El consum del compte tampoc: sense sessió no hi ha cap límit a ensenyar,
+  // i deixar-hi el de qui ha sortit seria dir-li a un altre quant espai gasta
+  dispatch(clearQuotaActionCreator());
 
   // La cara del compte tampoc no s'ha de quedar al dispositiu: sense això, la
   // propera arrencada anònima tindria el tema i l'idioma de qui ha sortit
@@ -221,6 +237,7 @@ export const refreshSessionThunk = createAsyncThunk(
       return { accessToken, email: payload.email, ...account };
     } catch {
       setAccessToken(null);
+      dispatch(clearQuotaActionCreator());
       // La sessió que havia deixat aquesta caché ja no existeix. No es repinta
       // el que hi ha a pantalla —seria tornar a fer el salt que la caché evita,
       // i just quan l'avís de sessió caducada ja ho està explicant—, però la
