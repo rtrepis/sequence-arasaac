@@ -19,9 +19,17 @@ xifres de capacitat continuen sent les bones.
 
 ## Resum: què s'esgota primer
 
-L'app té un sostre de **200 usuaris** (`DEFAULT_MAX_USERS`, `modules/config/model.ts`)
-i una quota per usuari de **3 documents, 200 paraules de vocabulari i 50 MB**
-(`shared/tierLimits.ts`). Contra aquests números, l'ordre en què es toca sostre és:
+La quota per usuari és de **10 documents, 3 paraules de vocabulari i 5 MB**
+(`shared/tierLimits.ts`). Els 5 MB, amb el sostre de 500 KB per imatge que valida
+el servidor, volen dir **10 imatges pròpies garantides** per compte.
+
+Amb aquests números i el contingut ja compactat, els dos sostres coincideixen:
+**~3.250 comptes** plens del tot per Atlas (5 KB del document d'usuari + 10 × 15,6 KB)
+i **~3.000** per l'emmagatzematge de Cloudinary. Cap dels dos és la baula feble, que
+és com han de quedar. Són el cas pitjor: amb l'ompliment mitjà real —la majoria
+d'usuaris no puja cap imatge— hi cap molta més gent.
+
+L'ordre en què es toca sostre és:
 
 | # | Sostre | Quan arriba | Gravetat |
 |---|---|---|---|
@@ -293,6 +301,14 @@ Cap no s'ha resolt en aquest estudi: és un inventari, no una branca de canvis.
   de Resend.** El refredament d'una hora és **per codi**, així que cinc codes
   simultanis en generen 120 al dia. Quan s'esgota, els registres es queden sense
   enllaç i no ho diu res. *Fitxer:* `modules/client-errors/service.ts:11`.
+
+- **L9 — ✅ RESOLTA (nova). El contingut dels documents desava el mateix dues vegades.**
+  Cada pictograma en portava els ajustos encara que fossin idèntics als del document, i tots
+  els identificadors que havia retornat la cerca d'ARASAAC. Mesurat: 28 KB per un document de
+  32 pictogrames, dels quals 12,4 eren còpies.
+  *Resolució:* `modules/documents/contentStorage.ts` compacta en desar i completa en llegir.
+  Els comptes que caben a Atlas passen de ~5.900 a ~10.100. Amb això Atlas deixa de ser el
+  sostre que arriba primer.
 
 - **L6 — Les 750 h de Render són de l'espai de treball, no del servei.** Avui hi
   ha un sol servei i l'aturada per inactivitat deixa marge; **un segon servei

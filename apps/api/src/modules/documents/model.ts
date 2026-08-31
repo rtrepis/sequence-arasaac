@@ -21,6 +21,7 @@ import {
   cloudinaryAssetSchema,
 } from "../../shared/mongooseSchemas";
 import type { CloudinaryAsset } from "../../shared/imageAssets";
+import { expandContent } from "./contentStorage";
 
 // Imatge pujada a Cloudinary per aquest document. Mateixa forma que la del
 // vocabulari personal, i per això el tipus és compartit.
@@ -247,18 +248,25 @@ const normalizeContent = (
 // flattenMaps: true transforma les Maps de Mongoose a objectes plans
 export const serializeDocument = (doc: IDocument): DocumentSAAC => {
   const obj = doc.toObject({ flattenMaps: true }) as Record<string, unknown>;
+  const defaultSettings = obj.defaultSettings as DefaultSettings | undefined;
+
+  const content = normalizeContent(
+    (obj.content ?? {}) as Record<string, PictSequence[]>
+  );
+  // Torna a posar els ajustos que es van ometre en desar per no repetir els del
+  // document. El que surt d'aquí té la mateixa forma de sempre.
+  expandContent(content, defaultSettings?.pictSequence);
+
   return {
     id: String(obj._id),
     title: obj.title as string | undefined,
-    content: normalizeContent(
-      (obj.content ?? {}) as Record<string, PictSequence[]>
-    ),
+    content,
     viewSettings: normalizeViewSettings(
       (obj.viewSettings ?? {}) as Record<string, LegacyViewSettings>
     ),
     activeSAAC: obj.activeSAAC as number,
     order: obj.order as number[] | undefined,
     author: obj.author as string | undefined,
-    defaultSettings: obj.defaultSettings as DefaultSettings | undefined,
+    defaultSettings,
   };
 };

@@ -289,6 +289,17 @@ feina és on viu cada acció i quan demana permís.
 
 - Els límits viuen al **codi** (`shared/tierLimits.ts`), no al document d'usuari: apujar el límit del pla gratuït ha de ser un desplegament, no una migració. `quotaOverride` és només per a excepcions puntuals.
 - **La quota es comprova abans de pujar res a Cloudinary**, estimant els bytes des de la llargada del base64. Pujar primer i rebutjar després deixaria imatges orfes ja pagades.
+- **El contingut d'un document es compacta en desar-lo i es completa en llegir-lo**
+  (`modules/documents/contentStorage.ts`). Mesurat amb `BSON.calculateObjectSize`, un document
+  de 32 pictogrames ocupava 28 KB dels quals gairebé sis de cada deu bytes eren còpies: ajustos
+  idèntics als del propi document i identificadors de resultats de cerca d'ARASAAC. Compactat
+  en fa 15,6, i els comptes que caben als 512 MB d'Atlas passen de ~5.900 a ~10.100.
+  **És capa d'emmagatzematge i prou**: ni el `.saac`, ni el que retorna l'API, ni Redux canvien
+  de forma. Dues regles que no es poden trencar: **`textPosition` no s'omet mai** —el
+  `PictogramCard` el llegeix sense fallback i el pictograma sortiria sense text—, i **sense
+  `defaultSettings` al document no es compacta cap ajust**, perquè no hi hauria amb què
+  tornar-lo a omplir. El retall de `bestIdPicts` és l'única part que no es desfà: és una caché
+  d'una petició gratuïta i el botó d'ampliar la cerca la recupera.
 - **Cap imatge d'usuari es desa mai a MongoDB.** `shared/imageAssets.ts` és l'única porta al núvol
   i el comparteixen els documents i el vocabulari personal; `shared/quota.ts` és l'únic lloc on es
   comprova el consum, perquè el pes d'un compte és un de sol repartit entre els dos. Fins a la
