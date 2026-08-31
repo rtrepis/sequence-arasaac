@@ -12,9 +12,10 @@ porten enllaç a la font.
 
 ## Estat
 
-**L1, L2 i L3 estan resoltes** (branca `claude/estudi-limits-gratuïts-serveis`): les imatges
-del vocabulari ja no entren mai a MongoDB. L'anàlisi que segueix es conserva perquè explica
-per què calia, i perquè les xifres de capacitat continuen sent les bones.
+**L1, L2, L3 i L4 estan resoltes** (branca `claude/estudi-limits-gratuïts-serveis`): les imatges
+del vocabulari ja no entren mai a MongoDB, i els llistats demanen les imatges a la mida en
+què les pinten. L'anàlisi que segueix es conserva perquè explica per què calia, i perquè les
+xifres de capacitat continuen sent les bones.
 
 ## Resum: què s'esgota primer
 
@@ -113,21 +114,22 @@ natural.
 **Emmagatzematge:** està acotat per disseny. 200 usuaris × 50 MB = **10 GB**, o
 sigui 10 dels 25 crèdits en el pitjor cas absolut. No és el problema.
 
-**Transformacions:** avui **zero**. Val la pena saber-ho abans d'afegir un
-`f_auto,q_auto` a cap URL: passaria a comptar 1 crèdit per cada 1.000 derivades.
+**Transformacions:** una per imatge, per a la variant de miniatura. Es paga **un
+sol cop per imatge** —després la serveix el CDN—, o sigui 1 crèdit per cada 1.000
+imatges **noves**, no per visualització. A qualsevol ritme de creixement plausible
+és menys d'un crèdit o dos al mes, i estalvia ~490 KB de banda per visualització.
 
-**Amplada de banda: aquí és on se'n va el pressupost.** Les imatges se serveixen
-a mida completa (1.800 px de costat llarg, ~500 KB), i es baixen dues vegades on
-no caldria:
+**Amplada de banda: aquí és on se'n va el pressupost.** Les imatges es desen a
+mida d'impressió (1.800 px de costat llarg, ~500 KB), i el que importa és a quina
+mida es demanen:
 
-- **Les miniatures del llistat de documents són la imatge sencera.**
-  `buildDocumentThumbnail` desa el `secure_url` tal qual (`thumbnail.ts:57-60`) i
-  el client el pinta petit. Obrir el diàleg de càrrega amb 3 documents plens
-  d'imatges pròpies pot baixar **9 imatges × 500 KB ≈ 4,5 MB** per pintar nou
-  quadradets. El comentari del fitxer diu, amb raó, que la miniatura «no costa ni
-  un byte de Cloudinary», i és cert de l'emmagatzematge — però no de la banda.
-- **Carregar un document** en baixa totes les imatges a mida d'impressió, encara
-  que a pantalla es vegin a 150 px.
+- **Els llistats ja demanen la variant reduïda** (`utils/cloudinaryUrl.ts`): el de
+  documents i el de vocabulari hi pinten quadradets de 40 px i en demanen 80 px de
+  costat. Passen de ~500 KB a ~8 KB per imatge. Abans, obrir el diàleg de càrrega
+  amb 3 documents plens d'imatges pròpies en baixava 4,5 MB, i la pestanya de
+  vocabulari amb 30 paraules amb foto, 15 MB.
+- **Carregar un document** en baixa totes les imatges a mida d'impressió, i això
+  sí que és correcte: és la mida a què s'imprimiran.
 
 Amb 15 crèdits lliures després de l'emmagatzematge, són **~15 GB/mes**: unes
 2.500 càrregues de document de 12 imatges, o ~3.300 obertures del llistat. Per a
@@ -277,10 +279,15 @@ Cap no s'ha resolt en aquest estudi: és un inventari, no una branca de canvis.
   petava a Mongoose, i l'usuari rebia un 500 en comptes d'un 413 amb missatge.
   *Resolució:* el límit del cos baixa a 12 MB, per sota del de BSON.
 
-- **L4 — Les miniatures del llistat baixen la imatge sencera.** El `thumbnail`
-  desa el `secure_url` sense cap transformació de mida: fins a 4,5 MB de banda de
-  Cloudinary per pintar nou quadradets. És la partida que més de pressa consumeix
-  els 25 crèdits. *Fitxer:* `modules/documents/thumbnail.ts:57-60`.
+- **L4 — ✅ RESOLTA. Les miniatures baixaven la imatge sencera.** El `thumbnail`
+  desava el `secure_url` sense cap transformació de mida: fins a 4,5 MB de banda per
+  pintar nou quadradets, i 15 MB a la pestanya de vocabulari un cop les imatges de
+  les paraules van passar a Cloudinary. Era la partida que més de pressa consumia
+  els 25 crèdits.
+  *Resolució:* `utils/cloudinaryUrl.ts` demana la variant a la mida en què es pinta.
+  La transformació **no es desa** a la base de dades: la mateixa imatge s'ha de poder
+  servir sencera a l'editor, i lligar el que hi ha desat a una mida de pantalla és el
+  que després no es pot desfer.
 
 - **L5 — Els avisos d'error i els correus de verificació comparteixen els 100/dia
   de Resend.** El refredament d'una hora és **per codi**, així que cinc codes

@@ -296,6 +296,13 @@ feina és on viu cada acció i quan demana permís.
   en base64 dins del document d'usuari: no passava per cap quota i topava amb el límit de 16 MB per
   document de MongoDB a la vint-i-quatrena imatge, vuit vegades abans del límit de 200 paraules que
   l'app deia tenir.
+- **Una imatge es demana sempre a la mida en què es pinta.** Les de l'usuari es desen a mida
+  d'impressió (~500 KB); als llistats es veuen en quadradets de 40 px. `utils/cloudinaryUrl.ts`
+  n'és l'única porta: en demana la variant reduïda a Cloudinary (el doble de la mida de pantalla,
+  per a densitat 2×) i deixa passar intacta qualsevol URL que no sigui de Cloudinary, de manera
+  que els components l'apliquen sense saber d'on ve cada imatge. La transformació **no es desa
+  mai** a la base de dades: la mateixa imatge s'ha de poder servir sencera a l'editor. Sense això,
+  obrir el llistat de documents costava 4,5 MB i la pestanya de vocabulari, 15 MB.
 - **`MAX_IMAGE_BYTES` es comprova al servidor, no només al front.** És el que fa que «nombre
   d'imatges» vulgui dir un pes concret: sense sostre per imatge, qualsevol límit expressat en
   recompte deixa de protegir res, perquè el client el pot ignorar.
@@ -444,9 +451,9 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - `docs/ESTUDI-limits-serveis-gratuits.md` inventaria els límits del pla gratuït de cada servei
   (Atlas, Cloudinary, Render, Vercel, Resend, ARASAAC, GA4) i els contrasta amb el que l'app en
   consumeix de debò. **Consultar-lo abans d'afegir res que desi, pugi o enviï correu**: hi ha les
-  troballes L1–L8, de les quals L1–L3 (les imatges del vocabulari a MongoDB) estan resoltes i
-  L4–L8 continuen obertes. La primera de les que queden és que les miniatures del llistat de
-  documents baixen la imatge sencera.
+  troballes L1–L8, de les quals L1–L4 estan resoltes i L5–L8 continuen obertes. La primera de
+  les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
+  correus diaris de Resend.
 - `docs/ESTANDARD-capes-flotants.md` és l'estudi que hi ha darrere de l'estàndard de capes
   flotants: l'inventari del que hi havia, les dotze divergències numerades (F1–F12) amb fitxer i
   motiu, i el pla de migració. L'estàndard viu més amunt; **el document és la raó de cada regla**, i
