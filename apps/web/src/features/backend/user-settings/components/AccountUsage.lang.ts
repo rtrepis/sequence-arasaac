@@ -116,6 +116,87 @@ const messages = defineMessages({
     defaultMessage: "No s'ha pogut esborrar la imatge. (Codi: {code})",
     description: "Error en esborrar una imatge",
   },
+  centimeters: {
+    id: "features.backend.userSettings.usage.centimeters",
+    defaultMessage: "{value} cm",
+    description: "Mida impresa en centímetres",
+  },
+  sizeWithPrint: {
+    id: "features.backend.userSettings.usage.sizeWithPrint",
+    defaultMessage: "{size} · es veu bé fins a {width}",
+    description: "Pes d'una imatge i mida fins a la qual s'imprimeix nítida",
+  },
+  resizeImage: {
+    id: "features.backend.userSettings.usage.resizeImage",
+    defaultMessage: "Canvia la mida de la imatge",
+    description: "Botó per reduir una imatge del compte",
+  },
+  resizeTitle: {
+    id: "features.backend.userSettings.usage.resizeTitle",
+    defaultMessage: "Canvia la mida de la imatge",
+    description: "Títol del diàleg per reduir una imatge",
+  },
+  resizeCurrent: {
+    id: "features.backend.userSettings.usage.resizeCurrent",
+    defaultMessage:
+      "Ara ocupa {size} i es veu bé impresa fins a {width} d'ample. El pictograma no canvia: només la mida de la imatge.",
+    description: "Estat actual de la imatge dins del diàleg de canvi de mida",
+  },
+  resizeCurrentUnknown: {
+    id: "features.backend.userSettings.usage.resizeCurrentUnknown",
+    defaultMessage:
+      "Ara ocupa {size}. El pictograma no canvia: només la mida de la imatge.",
+    description:
+      "Estat actual de la imatge quan encara no se'n saben els píxels",
+  },
+  resizePreparing: {
+    id: "features.backend.userSettings.usage.resizePreparing",
+    defaultMessage: "S'estan preparant les mides…",
+    description: "Espera mentre es calculen les versions més petites",
+  },
+  resizeOption: {
+    id: "features.backend.userSettings.usage.resizeOption",
+    defaultMessage:
+      "Es veurà bé fins a {width} d'ample i ocuparà {size}: recuperes {saved}.",
+    description: "Què passa amb la mida triada al diàleg de canvi de mida",
+  },
+  resizeNone: {
+    id: "features.backend.userSettings.usage.resizeNone",
+    defaultMessage:
+      "Aquesta imatge ja és a la mida més petita: reduir-la més la faria borrosa impresa. Si necessites espai, esborra-la.",
+    description: "La imatge no es pot reduir més",
+  },
+  resizeConfirm: {
+    id: "features.backend.userSettings.usage.resizeConfirm",
+    defaultMessage: "Canvia la mida",
+    description: "Botó que aplica la mida triada",
+  },
+  resizeCancel: {
+    id: "features.backend.userSettings.usage.resizeCancel",
+    defaultMessage: "Cancel·la",
+    description: "Botó que tanca el diàleg de canvi de mida sense fer res",
+  },
+  resizeApplying: {
+    id: "features.backend.userSettings.usage.resizeApplying",
+    defaultMessage: "S'està canviant la mida de la imatge…",
+    description: "Espera mentre la imatge nova puja al núvol",
+  },
+  resizeLoadError: {
+    id: "features.backend.userSettings.usage.resizeLoadError",
+    defaultMessage:
+      "No s'ha pogut preparar la imatge. Comprova la connexió i torna-ho a provar.",
+    description: "Error en baixar o comprimir la imatge al navegador",
+  },
+  resizeError: {
+    id: "features.backend.userSettings.usage.resizeError",
+    defaultMessage: "No s'ha pogut canviar la mida de la imatge. (Codi: {code})",
+    description: "Error en desar la imatge reduïda",
+  },
+  resized: {
+    id: "features.backend.userSettings.usage.resized",
+    defaultMessage: "La imatge ara ocupa {size}. Has recuperat {saved}.",
+    description: "Confirmació del canvi de mida amb l'espai recuperat",
+  },
   thumbnailAlt: {
     id: "features.backend.userSettings.usage.thumbnailAlt",
     defaultMessage: "Imatge pujada",

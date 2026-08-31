@@ -1,11 +1,16 @@
 // Handlers Express per al mòdul de user-settings
 import { Request, Response, NextFunction } from "express";
-import { deleteAssetSchema, updateUiSettingsSchema } from "./validators";
+import {
+  deleteAssetSchema,
+  replaceAssetSchema,
+  updateUiSettingsSchema,
+} from "./validators";
 import {
   getUiSettings as getUiSettingsService,
   getQuotaStatus as getQuotaStatusService,
   listUserAssets as listUserAssetsService,
   deleteUserAsset as deleteUserAssetService,
+  replaceUserAsset as replaceUserAssetService,
   updateUiSettings as updateUiSettingsService,
   deleteAccount as deleteAccountService,
 } from "./service";
@@ -103,6 +108,37 @@ export const deleteUserAsset = async (
 
     await deleteUserAssetService(req.userId as string, parsed.data.publicId);
     res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
+// PATCH /api/user/assets — canvia de mida una imatge del compte.
+//
+// La imatge nova arriba ja reduïda: el client la prepara amb el mateix
+// codificador amb què puja les altres, i així el resultat és el mateix que si
+// s'hagués pujat amb aquella qualitat. Torna l'asset tal com ha quedat perquè
+// la URL canvia i qui la feia servir s'ho ha de poder apuntar.
+export const replaceUserAsset = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const parsed = replaceAssetSchema.safeParse(req.body);
+    if (!parsed.success) {
+      const error = new Error("ASSET_INVALID_ID") as AppError;
+      error.statusCode = 400;
+      error.errorCode = "ASSET_INVALID_ID";
+      return next(error);
+    }
+
+    const asset = await replaceUserAssetService(
+      req.userId as string,
+      parsed.data.publicId,
+      parsed.data.image
+    );
+    res.status(200).json({ asset });
   } catch (err) {
     next(err);
   }

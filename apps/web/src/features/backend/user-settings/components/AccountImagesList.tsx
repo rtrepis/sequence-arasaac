@@ -4,6 +4,12 @@
 // què s'ha de treure per recuperar-ne. Van ordenades de més pesada a menys,
 // perquè qui obre la llista busca què esborrar, no un inventari.
 //
+// El pes va acompanyat de **fins a quina mida s'imprimeix bé** cada imatge, que
+// és el que permet decidir sense saber què és un kilobyte: una imatge que es veu
+// bé fins a 15 cm en una seqüència que s'imprimeix a 5 té resolució de sobres, i
+// això no es dedueix del pes. Per això, a més d'esborrar-la, se'n pot canviar la
+// mida: recuperar espai sense quedar-se sense imatge.
+//
 // Es demana en obrir el tab i no en arrencar l'app: recórrer el contingut de
 // tots els documents és barat però no és gratis, i el servidor de Render pot
 // estar adormit quan ningú ha demanat res.
@@ -23,18 +29,25 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { AiOutlineDelete } from "react-icons/ai";
+import { MdOutlinePhotoSizeSelectLarge } from "react-icons/md";
 import type { UserAsset } from "@sequence-arasaac/shared-types";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import StyledButton from "@/style/StyledButton";
 import StyledIconButton from "@/style/StyledIconButton";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
 import { cloudinaryThumbnailUrl } from "@/utils/cloudinaryUrl";
+import { APP_TOUCH_TARGET_MIN } from "@/style/appShape";
 import { useFeedback } from "@/context/FeedbackContext";
 import { setWordProfilesActionCreator } from "@features/user-settings/store/uiSlice";
-import { removeCloudImageActionCreator } from "@features/sequence/store/documentSlice";
+import {
+  removeCloudImageActionCreator,
+  replaceCloudImageActionCreator,
+} from "@features/sequence/store/documentSlice";
 import { deleteUserAsset, listUserAssets } from "../services/settingsService";
 import { refreshQuotaThunk } from "../store/quotaSlice";
 import { useFormatBytes } from "../hooks/useFormatBytes";
+import { useFormatPrintSize } from "../hooks/useFormatPrintSize";
+import ImageResizeDialog from "./ImageResizeDialog";
 import messages from "./AccountUsage.lang";
 
 /** Costat de la miniatura, el mateix que a la resta de llistats. */
@@ -44,6 +57,7 @@ const AccountImagesList = (): React.ReactElement | null => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const formatBytes = useFormatBytes();
+  const formatPrintSize = useFormatPrintSize();
   const { showSnackbar } = useFeedback();
 
   const isAuthenticated = useAppSelector(
@@ -56,6 +70,7 @@ const AccountImagesList = (): React.ReactElement | null => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<UserAsset | null>(null);
+  const [pendingResize, setPendingResize] = useState<UserAsset | null>(null);
 
   const load = useCallback(async () => {
     setIsLoading(true);
@@ -130,6 +145,57 @@ const AccountImagesList = (): React.ReactElement | null => {
     });
   };
 
+  // La imatge nova ja és al núvol i la vella ja no hi és: el que queda és que
+  // tothom qui l'apuntava adopti la URL nova, exactament com en esborrar-la
+  const handleResized = (previous: UserAsset, next: UserAsset) => {
+    setPendingResize(null);
+
+    if (previous.source === "vocabulary") {
+      dispatch(
+        setWordProfilesActionCreator(
+          wordProfiles.map((profile) =>
+            profile.customImageUrl === previous.url
+              ? { ...profile, customImageUrl: next.url }
+              : profile,
+          ),
+        ),
+      );
+    } else if (previous.documentId === openDocumentId) {
+      dispatch(
+        replaceCloudImageActionCreator({ from: previous.url, to: next.url }),
+      );
+    }
+
+    setAssets((current) =>
+      current.map((candidate) =>
+        candidate.publicId === previous.publicId ? next : candidate,
+      ),
+    );
+    void dispatch(refreshQuotaThunk());
+
+    showSnackbar({
+      message: intl.formatMessage(messages.resized, {
+        size: formatBytes(next.bytes),
+        saved: formatBytes(Math.max(0, previous.bytes - next.bytes)),
+      }),
+      severity: "success",
+    });
+  };
+
+  // El pes sol no diu res a qui no és informàtic; amb els píxels es pot dir a
+  // quina mida s'imprimeix bé, que és la pregunta que es fa de veritat. Les
+  // imatges de les quals Cloudinary no ha dit les mides es queden amb el pes:
+  // val més una dada menys que una xifra inventada.
+  const sizeOf = (asset: UserAsset): string => {
+    const longestSide = Math.max(asset.width ?? 0, asset.height ?? 0);
+    if (longestSide === 0) return formatBytes(asset.bytes);
+
+    return intl.formatMessage(messages.sizeWithPrint, {
+      size: formatBytes(asset.bytes),
+      width: formatPrintSize(longestSide),
+    });
+  };
+
   return (
     <Stack gap={1}>
       <Typography sx={{ fontWeight: "bold" }}>
@@ -173,16 +239,34 @@ const AccountImagesList = (): React.ReactElement | null => {
               {index > 0 && <Divider component="li" />}
               <ListItem
                 disableGutters
+                // MUI només aparta el text 48 px per a l'acció secundària, que
+                // és el que ocupa un botó sol; amb dos, l'origen de la imatge
+                // se n'anava a passar per sota del d'esborrar
+                sx={{ pr: `${2 * APP_TOUCH_TARGET_MIN + 8}px` }}
                 secondaryAction={
-                  <Tooltip title={intl.formatMessage(messages.deleteImage)}>
-                    <StyledIconButton
-                      color="inherit"
-                      aria-label={intl.formatMessage(messages.deleteImage)}
-                      onClick={() => setPendingDelete(asset)}
-                    >
-                      <AiOutlineDelete />
-                    </StyledIconButton>
-                  </Tooltip>
+                  <>
+                    {/* Canviar de mida va abans d'esborrar: recupera espai
+                        sense perdre la imatge, i és el que sol resoldre el cas */}
+                    <Tooltip title={intl.formatMessage(messages.resizeImage)}>
+                      <StyledIconButton
+                        color="inherit"
+                        aria-label={intl.formatMessage(messages.resizeImage)}
+                        onClick={() => setPendingResize(asset)}
+                      >
+                        <MdOutlinePhotoSizeSelectLarge />
+                      </StyledIconButton>
+                    </Tooltip>
+
+                    <Tooltip title={intl.formatMessage(messages.deleteImage)}>
+                      <StyledIconButton
+                        color="inherit"
+                        aria-label={intl.formatMessage(messages.deleteImage)}
+                        onClick={() => setPendingDelete(asset)}
+                      >
+                        <AiOutlineDelete />
+                      </StyledIconButton>
+                    </Tooltip>
+                  </>
                 }
               >
                 <ListItemAvatar>
@@ -198,7 +282,7 @@ const AccountImagesList = (): React.ReactElement | null => {
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={formatBytes(asset.bytes)}
+                  primary={sizeOf(asset)}
                   secondary={originOf(asset)}
                   primaryTypographyProps={{ variant: "body2" }}
                   secondaryTypographyProps={{ variant: "caption" }}
@@ -208,6 +292,12 @@ const AccountImagesList = (): React.ReactElement | null => {
           ))}
         </List>
       )}
+
+      <ImageResizeDialog
+        asset={pendingResize}
+        onCancel={() => setPendingResize(null)}
+        onResized={handleResized}
+      />
 
       <ConfirmDialog
         open={pendingDelete !== null}

@@ -273,6 +273,74 @@ export const encodeToFit = async (
 };
 
 /**
+ * Baixa una imatge d'una URL i la torna com a data URL.
+ *
+ * Es baixa i es torna a codificar en comptes de passar la URL directament al
+ * canvas perquè una imatge remota el contamina —`toDataURL` llavors llança— i
+ * arreglar-ho voldria dir dependre que el servidor enviï la capçalera de CORS
+ * per a la imatge *i* per al canvas. Amb un data URL no hi ha res a contaminar.
+ */
+export const fetchAsDataUrl = async (url: string): Promise<string> => {
+  const response = await fetch(url);
+  if (!response.ok)
+    throw new Error(`No s'ha pogut baixar la imatge: ${response.status}`);
+
+  const blob = await response.blob();
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("No s'ha pogut llegir la imatge"));
+    reader.readAsDataURL(blob);
+  });
+};
+
+/** Una versió alternativa d'una imatge, ja codificada i pesada. */
+export interface ImageVersion {
+  quality: ImageQuality;
+  dataUrl: string;
+  bytes: number;
+}
+
+/** Com és una imatge avui i què se'n pot fer de més petit. */
+export interface SmallerVersions {
+  /** Costat llarg en píxels: és el que decideix fins a quina mida s'imprimeix bé. */
+  longestSide: number;
+  bytes: number;
+  versions: ImageVersion[];
+}
+
+/**
+ * Versions més petites que es poden oferir d'una imatge ja pujada.
+ *
+ * Es codifiquen de veritat, com a `encodeToFit`: el pes objectiu d'un nivell és
+ * una fita, no una promesa, i oferir una reducció que després no redueix res
+ * seria fer perdre qualitat a canvi de res. Per això només hi surten els
+ * nivells que retallen píxels (els que no arriben al costat llarg d'ara) i que,
+ * un cop codificats, pesen menys del que pesa avui.
+ */
+export const encodeSmallerVersions = async (
+  dataUrl: string,
+): Promise<SmallerVersions> => {
+  const img = await loadImage(dataUrl);
+  const longestSide = Math.max(img.naturalWidth, img.naturalHeight);
+  const bytes = getBase64SizeInBytes(dataUrl);
+  const versions: ImageVersion[] = [];
+
+  for (const quality of IMAGE_QUALITY_ORDER) {
+    if (IMAGE_QUALITY_PRESETS[quality].maxSidePx >= longestSide) continue;
+
+    const encoded = await encodeImage(dataUrl, quality);
+    const encodedBytes = getBase64SizeInBytes(encoded);
+    if (encodedBytes >= bytes) continue;
+
+    versions.push({ quality, dataUrl: encoded, bytes: encodedBytes });
+  }
+
+  return { longestSide, bytes, versions };
+};
+
+/**
  * Comprova si una URL és vàlida per renderitzar.
  * Retorna false per URLs blob (temporals i no persistents).
  */

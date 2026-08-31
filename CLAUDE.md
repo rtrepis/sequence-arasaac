@@ -344,8 +344,31 @@ feina és on viu cada acció i quan demana permís.
   una imatge encara no se sap a quina mida s'imprimirà —`sizePict` es toca després— i
   reduir és irreversible, de manera que el client no ho pot decidir sol (és el mateix
   motiu pel qual no es rebaixa segons quantes imatges hi hagi). Per això `print` continua
-  sent el valor per defecte i **les imatges ja pujades no es toquen mai**: tornar-les a
-  comprimir seria perdre detall que ningú ha demanat de perdre.
+  sent el valor per defecte i **cap automatisme no toca mai una imatge ja pujada**:
+  tornar-la a comprimir sola seria perdre detall que ningú ha demanat de perdre. Qui sí
+  que en pot canviar la mida és **l'usuari, una per una** i sabent què hi perd — vegeu
+  «Canviar de mida una imatge ja pujada» més avall.
+- **El pes es diu sempre amb la mida d'impressió al costat.** «500 KB» no és cap referència
+  per a qui no és informàtic, i el que decideix de veritat és si el pictograma es veurà bé
+  al full: `utils/imagePrintSize.ts` tradueix els píxels a centímetres a 300 ppp
+  (`GOOD_PRINT_DPI`), i `useFormatPrintSize` és l'única manera d'escriure-ho, com
+  `useFormatBytes` ho és per al pes. Els tres nivells surten a 15, 10 i 7 cm, i el
+  d'`Impressió` cobreix el pictograma més gran que l'app pot imprimir (150,8 mm). Ho porten
+  el triador de qualitat (peu i tooltip de cada nivell), el diàleg de la imatge que no cap i
+  cada fila de la llista d'imatges del compte. La xifra és un **sostre** («fins a»), mai una
+  mida recomanada, i no s'inventa mai: sense píxels coneguts es diu només el pes.
+- **Canviar de mida una imatge ja pujada** (`PATCH /user/assets`, `ImageResizeDialog`) és
+  l'altra sortida de la llista d'imatges, i sovint la que toca: esborrar recupera tot
+  l'espai però deixa el pictograma sense imatge, i a qui imprimeix petit el que li sobra és
+  resolució, no la imatge. La versió reduïda la prepara el navegador amb el mateix
+  codificador de la pujada —**codificant de veritat**, com `encodeToFit`: només s'ofereixen
+  els nivells que retallen píxels i que, un cop codificats, pesen menys— i el servidor puja
+  la nova, la posa on hi havia la vella i esborra la vella, en aquest ordre. **La URL
+  canvia**: qui la feia servir l'ha d'adoptar (`replaceCloudImage` al document obert, els
+  `wordProfiles` al vocabulari), igual com passa en esborrar-la, i per això la resposta
+  torna l'asset tal com ha quedat. El pes de referència és el del registre d'assets, que és
+  el que es restarà del comptador; el mesurat només mana quan el registre no en sap res
+  (imatges d'abans que el registre existís, que en canviar de mida s'hi donen d'alta).
 - **Una imatge que no cap es diu en pujar-la, no en desar.** `UploadImageButton` comprova
   dos sostres amb la imatge ja convertida: el pes màxim per imatge (`MAX_UPLOAD_IMAGE_BYTES`,
   el mateix `MAX_IMAGE_BYTES` que fa complir el servidor) i, **només amb sessió**, l'espai
@@ -372,6 +395,12 @@ feina és on viu cada acció i quan demana permís.
   (`documentStatusMiddleware`), perquè la còpia del núvol no s'ha quedat enrere sinó que
   s'ha avançat, i demanar de tornar-la a desar seria demanar de desar el mateix.
 - Cada document guarda `assets: [{ publicId, bytes }]`. Sense els bytes no es pot restar res en esborrar i el comptador només creixeria.
+- **Els píxels d'una imatge no es desen enlloc**: els bytes sí, perquè el comptador els ha de
+  poder restar, però l'amplada i l'alçada només serveixen per ensenyar-les i desar-les
+  voldria dir una migració de tot el que ja hi ha. `listUserAssets` les demana a Cloudinary
+  en **una sola petició** per a tota la llista (`fetchImageDimensions`, `resources_by_ids`),
+  que a més cobreix les imatges antigues. No llança mai: si Cloudinary no respon, la llista
+  surt amb el pes i sense la mida d'impressió — val més una dada menys que cap llista.
 
 ### Correu
 

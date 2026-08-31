@@ -11,15 +11,17 @@ import { documentChangedActionCreator } from "./documentStatusSlice";
  *   mirar-se'l.
  * - `loadDocumentSaac` la fa servir qui carrega un document (fitxer, núvol o
  *   esborrany) i és qui sap d'on ve; ho diu ell mateix tot seguit.
- * - `removeCloudImage` només posa el document obert al dia d'un esborrat que ja
- *   s'ha fet al núvol: la còpia de fora no s'ha quedat enrere, s'ha avançat, i
- *   demanar de tornar-la a desar seria demanar de desar el mateix.
+ * - `removeCloudImage` i `replaceCloudImage` només posen el document obert al
+ *   dia d'un esborrat o d'un canvi de mida que ja s'ha fet al núvol: la còpia
+ *   de fora no s'ha quedat enrere, s'ha avançat, i demanar de tornar-la a desar
+ *   seria demanar de desar el mateix.
  */
 const NOT_A_CONTENT_CHANGE = new Set([
   "document/changeActiveSAAC",
   "document/loadDocumentSaac",
   "document/resetDocument",
   "document/removeCloudImage",
+  "document/replaceCloudImage",
 ]);
 
 /**

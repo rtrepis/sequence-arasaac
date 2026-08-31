@@ -50,3 +50,17 @@ export const listUserAssets = async (): Promise<UserAsset[]> => {
 export const deleteUserAsset = async (publicId: string): Promise<void> => {
   await apiClient.delete("/user/assets", { data: { publicId } });
 };
+
+// Canvia de mida una imatge del compte: hi puja la versió reduïda que ha
+// preparat el navegador i en torna l'asset tal com ha quedat. La URL canvia
+// —al núvol és una imatge nova— i per això qui la feia servir l'ha d'adoptar.
+export const resizeUserAsset = async (
+  publicId: string,
+  image: string,
+): Promise<UserAsset> => {
+  const { data } = await apiClient.patch<{ asset: UserAsset }>("/user/assets", {
+    publicId,
+    image,
+  });
+  return data.asset;
+};
