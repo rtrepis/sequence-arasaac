@@ -1,5 +1,9 @@
 // Lògica de negoci del mòdul de user-settings
-import type { UserUiSettings } from "@sequence-arasaac/shared-types";
+import type {
+  UserAsset,
+  UserQuotaStatus,
+  UserUiSettings,
+} from "@sequence-arasaac/shared-types";
 import type { AppError } from "../../middleware/errorHandler";
 import { UserModel } from "../auth/model";
 import type { UpdateUiSettingsInput } from "./validators";
@@ -7,7 +11,9 @@ import { DocumentModel } from "../documents/model";
 import { SecurityEventModel } from "../security/model";
 import { cloudinary } from "../../shared/cloudinaryClient";
 import {
+  MAX_IMAGE_BYTES,
   assertImagesWithinSize,
+  deleteCloudinaryAsset,
   deleteCloudinaryImages,
   estimateIncomingBytes,
   extractPublicId,
@@ -22,8 +28,10 @@ import {
 import {
   applyUsageDelta,
   assertWithinQuota,
+  resolveUsage,
   type UsageDelta,
 } from "../../shared/quota";
+import { resolveQuotaLimits } from "../../shared/tierLimits";
 
 const notFound = (): AppError => {
   const error = new Error("Usuari no trobat") as AppError;
@@ -33,9 +41,11 @@ const notFound = (): AppError => {
 
 export const getUiSettings = async (userId: string): Promise<UserUiSettings> => {
   const user = await UserModel.findById(userId).select(
-    "settings langSettings theme viewSettings wordProfiles tier emailVerified role"
+    "settings langSettings theme viewSettings wordProfiles imageQuality tier quotaOverride usage emailVerified role"
   );
   if (!user) throw notFound();
+
+  const usage = resolveUsage(user.usage);
 
   return {
     lang: user.langSettings,
@@ -43,9 +53,31 @@ export const getUiSettings = async (userId: string): Promise<UserUiSettings> => 
     viewSettings: user.viewSettings ?? undefined,
     defaultSettings: user.settings,
     wordProfiles: user.wordProfiles ?? [],
+    imageQuality: user.imageQuality ?? "print",
     tier: user.tier ?? "free",
     emailVerified: user.emailVerified ?? false,
     role: user.role ?? "user",
+    // El consum viatja amb les preferències perquè no costa cap petició més:
+    // aquesta ja surt a cada restauració de sessió i llegeix el mateix document.
+    usage,
+    limits: resolveQuotaLimits(user.tier ?? "free", user.quotaOverride),
+  };
+};
+
+// Consum i límits del compte, per refrescar-los sense tornar a demanar tota la
+// configuració: el que canvia després de desar un document són quatre números.
+export const getQuotaStatus = async (
+  userId: string
+): Promise<UserQuotaStatus> => {
+  const user = await UserModel.findById(userId)
+    .select("tier quotaOverride usage")
+    .lean();
+  if (!user) throw notFound();
+
+  return {
+    usage: resolveUsage(user.usage),
+    limits: resolveQuotaLimits(user.tier ?? "free", user.quotaOverride),
+    maxImageBytes: MAX_IMAGE_BYTES,
   };
 };
 
@@ -69,6 +101,12 @@ export const updateUiSettings = async (
     viewSettings: data.viewSettings,
     settings: data.defaultSettings,
   };
+
+  // Opcional: les versions antigues del client no l'envien, i sobreescriure-la
+  // amb el valor per defecte els canviaria la preferència sense demanar-ho.
+  if (data.imageQuality !== undefined) {
+    update.imageQuality = data.imageQuality;
+  }
 
   // El consum i l'esborrat de les imatges que sobren s'apliquen DESPRÉS
   // d'escriure els perfils. Esborrar-les abans i que després l'escriptura
@@ -158,6 +196,184 @@ export const updateUiSettings = async (
   }
 
   return data.wordProfiles;
+};
+
+// --- Gestió de les imatges pròpies del compte ---
+
+// Totes les imatges que ocupen espai al compte, amb el lloc d'on pengen.
+//
+// El pes surt del registre d'assets —el mateix d'on el treu la quota—, de manera
+// que la suma de la llista i el comptador diuen el mateix. Les pujades abans que
+// existís el registre hi surten a zero: el seu pes no es va desar mai, i
+// inventar-lo seria pitjor que ensenyar-lo buit.
+//
+// Es recorre el contingut dels documents i no només el registre perquè la llista
+// ha de dir ON és cada imatge: un pes solt no serveix per decidir què esborrar.
+export const listUserAssets = async (userId: string): Promise<UserAsset[]> => {
+  const user = await UserModel.findById(userId)
+    .select("wordProfiles wordProfileAssets")
+    .lean();
+  if (!user) throw notFound();
+
+  // Sense .lean(): el contingut és una Map de Mongoose i es recorre com a tal.
+  // Són com a molt els documents que caben a la quota, uns quilobytes cadascun.
+  const documents = await DocumentModel.find({ userId }).select(
+    "title content assets"
+  );
+
+  const assets: UserAsset[] = [];
+  // Una mateixa imatge pot sortir dues vegades al contingut si l'usuari ha
+  // duplicat el pictograma, però al núvol només n'hi ha una i només es paga un cop
+  const seen = new Set<string>();
+
+  for (const doc of documents) {
+    const bytesById = new Map(
+      doc.assets.map((asset) => [asset.publicId, asset.bytes])
+    );
+
+    for (const sequence of doc.content.values()) {
+      for (const pict of sequence) {
+        const url = pict.img.url;
+        if (!isCloudinaryUrl(url)) continue;
+
+        const publicId = extractPublicId(url as string);
+        if (seen.has(publicId)) continue;
+        seen.add(publicId);
+
+        assets.push({
+          publicId,
+          url: url as string,
+          bytes: bytesById.get(publicId) ?? 0,
+          source: "document",
+          documentId: String(doc._id),
+          documentTitle: doc.title,
+        });
+      }
+    }
+  }
+
+  const wordBytesById = new Map(
+    (user.wordProfileAssets ?? []).map((asset) => [asset.publicId, asset.bytes])
+  );
+
+  for (const profile of user.wordProfiles ?? []) {
+    const url = profile.customImageUrl;
+    if (!isCloudinaryUrl(url)) continue;
+
+    const publicId = extractPublicId(url as string);
+    if (seen.has(publicId)) continue;
+    seen.add(publicId);
+
+    assets.push({
+      publicId,
+      url: url as string,
+      bytes: wordBytesById.get(publicId) ?? 0,
+      source: "vocabulary",
+      word: profile.word,
+    });
+  }
+
+  // Les que més ocupen primer: la llista serveix per alliberar espai, i qui la
+  // mira busca què treure, no un inventari per ordre d'arribada
+  return assets.sort((a, b) => b.bytes - a.bytes);
+};
+
+// Esborra una imatge del compte, sigui d'un document o d'una paraula.
+//
+// Mateix ordre que a la resta del mòdul: primer s'escriu qui la feia servir,
+// després s'esborra del núvol i al final s'ajusta el comptador. Si s'esborrés
+// primer, una escriptura fallida deixaria un document apuntant a una imatge que
+// ja no existeix — val més una imatge orfe a Cloudinary que un document trencat.
+//
+// El pictograma d'un document es queda sense imatge (conserva text i número) i
+// la paraula del vocabulari es queda amb el seu pictograma d'ARASAAC: cap de les
+// dues coses s'esborra, només la imatge que ocupava espai.
+export const deleteUserAsset = async (
+  userId: string,
+  publicId: string
+): Promise<void> => {
+  const user = await UserModel.findById(userId).select(
+    "wordProfiles wordProfileAssets"
+  );
+  if (!user) throw notFound();
+
+  const profile = user.wordProfiles.find(
+    (candidate) =>
+      isCloudinaryUrl(candidate.customImageUrl) &&
+      extractPublicId(candidate.customImageUrl as string) === publicId
+  );
+
+  if (profile) {
+    const asset = user.wordProfileAssets.find(
+      (candidate) => candidate.publicId === publicId
+    );
+
+    profile.customImageUrl = undefined;
+    user.wordProfileAssets = user.wordProfileAssets.filter(
+      (candidate) => candidate.publicId !== publicId
+    );
+    user.markModified("wordProfiles");
+    await user.save();
+
+    await deleteCloudinaryAsset(publicId);
+    await applyUsageDelta(userId, {
+      storageBytes: -(asset?.bytes ?? 0),
+      assets: asset ? -1 : 0,
+    });
+    return;
+  }
+
+  // Els documents es recorren sencers i no es filtren per `assets.publicId`:
+  // les imatges pujades abans que existís el registre no hi són, i també s'han
+  // de poder treure de sobre.
+  const documents = await DocumentModel.find({ userId });
+
+  for (const doc of documents) {
+    let found = false;
+
+    for (const sequence of doc.content.values()) {
+      for (const pict of sequence) {
+        if (
+          isCloudinaryUrl(pict.img.url) &&
+          extractPublicId(pict.img.url as string) === publicId
+        ) {
+          pict.img.url = undefined;
+          found = true;
+        }
+      }
+    }
+
+    if (!found) continue;
+
+    // La miniatura del llistat guarda la URL de les imatges pròpies: si no s'hi
+    // treu, la fila del document ensenyaria un quadre trencat.
+    for (const pict of doc.thumbnail) {
+      if (pict.url && extractPublicId(pict.url) === publicId) {
+        pict.url = undefined;
+      }
+    }
+
+    const asset = doc.assets.find((candidate) => candidate.publicId === publicId);
+    doc.assets = doc.assets.filter(
+      (candidate) => candidate.publicId !== publicId
+    );
+
+    doc.markModified("content");
+    doc.markModified("thumbnail");
+    await doc.save();
+
+    await deleteCloudinaryAsset(publicId);
+    await applyUsageDelta(userId, {
+      storageBytes: -(asset?.bytes ?? 0),
+      assets: asset ? -1 : 0,
+    });
+    return;
+  }
+
+  const error = new Error("ASSET_NOT_FOUND") as AppError;
+  error.statusCode = 404;
+  error.errorCode = "ASSET_NOT_FOUND";
+  throw error;
 };
 
 // Esborra el compte i tot el que en penja.

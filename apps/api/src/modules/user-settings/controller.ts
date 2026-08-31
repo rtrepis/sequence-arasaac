@@ -1,8 +1,11 @@
 // Handlers Express per al mòdul de user-settings
 import { Request, Response, NextFunction } from "express";
-import { updateUiSettingsSchema } from "./validators";
+import { deleteAssetSchema, updateUiSettingsSchema } from "./validators";
 import {
   getUiSettings as getUiSettingsService,
+  getQuotaStatus as getQuotaStatusService,
+  listUserAssets as listUserAssetsService,
+  deleteUserAsset as deleteUserAssetService,
   updateUiSettings as updateUiSettingsService,
   deleteAccount as deleteAccountService,
 } from "./service";
@@ -46,6 +49,60 @@ export const updateUiSettings = async (
       parsed.data
     );
     res.status(200).json({ ok: true, wordProfiles });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// GET /api/user/quota — consum i límits del compte
+export const getQuotaStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const result = await getQuotaStatusService(req.userId as string);
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// GET /api/user/assets — imatges pròpies del compte, amb el lloc d'on pengen
+export const listUserAssets = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const assets = await listUserAssetsService(req.userId as string);
+    res.status(200).json({ assets });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/user/assets — treu una imatge del compte.
+//
+// El publicId va al cos i no a la ruta perquè en porta de barres
+// (`seq/<userId>/<nom>`), i una ruta amb comodí convidaria a construir-lo des
+// del client. Que la imatge sigui d'aquest usuari ho comprova el servei.
+export const deleteUserAsset = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const parsed = deleteAssetSchema.safeParse(req.body);
+    if (!parsed.success) {
+      const error = new Error("ASSET_INVALID_ID") as AppError;
+      error.statusCode = 400;
+      error.errorCode = "ASSET_INVALID_ID";
+      return next(error);
+    }
+
+    await deleteUserAssetService(req.userId as string, parsed.data.publicId);
+    res.status(204).send();
   } catch (err) {
     next(err);
   }

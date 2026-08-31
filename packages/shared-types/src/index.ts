@@ -39,6 +39,9 @@ export type {
   UserUseCase,
   UserUsage,
   QuotaLimits,
+  ImageQuality,
+  UserQuotaStatus,
+  UserAsset,
   AppConfig,
 } from "./ui";
 export type {
