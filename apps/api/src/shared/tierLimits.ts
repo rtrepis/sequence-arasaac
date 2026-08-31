@@ -20,12 +20,15 @@ const MEGABYTE = 1024 * 1024;
 // - Amb 10 documents compactats (~15,6 KB cadascun) i 5 MB d'imatges, els dos
 //   sostres coincideixen a uns 3.000 comptes plens del tot: ni Atlas ni
 //   Cloudinary és el baula feble, que és com han de quedar.
-// - wordProfiles compta entrades, no pes: una paraula sense imatge pròpia són
-//   un parell de centenars de bytes i no cal ser-hi garrepa.
+// - wordProfiles a 3 no és cap retallada: el front ja ho aplicava des de sempre
+//   amb FREE_TIER_MAX_WORDS (VocabularySettingsPanel bloqueja el desat en
+//   arribar-hi i el missatge diu la xifra). El 200 d'aquí era lletra morta, i un
+//   límit que el servidor declara però que ningú fa complir no protegeix res:
+//   és el mateix error que tenia el vocabulari amb les imatges.
 export const TIER_LIMITS: Record<UserTier, QuotaLimits> = {
   free: {
     documents: 10,
-    wordProfiles: 200,
+    wordProfiles: 3,
     storageBytes: 5 * MEGABYTE,
   },
 };

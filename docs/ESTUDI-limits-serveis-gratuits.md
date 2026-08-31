@@ -19,7 +19,7 @@ xifres de capacitat continuen sent les bones.
 
 ## Resum: què s'esgota primer
 
-La quota per usuari és de **10 documents, 200 paraules de vocabulari i 5 MB**
+La quota per usuari és de **10 documents, 3 paraules de vocabulari i 5 MB**
 (`shared/tierLimits.ts`). Els 5 MB, amb el sostre de 500 KB per imatge que valida
 el servidor, volen dir **10 imatges pròpies garantides** per compte.
 
