@@ -19,9 +19,17 @@ xifres de capacitat continuen sent les bones.
 
 ## Resum: què s'esgota primer
 
-L'app té un sostre de **200 usuaris** (`DEFAULT_MAX_USERS`, `modules/config/model.ts`)
-i una quota per usuari de **3 documents, 200 paraules de vocabulari i 50 MB**
-(`shared/tierLimits.ts`). Contra aquests números, l'ordre en què es toca sostre és:
+La quota per usuari és de **10 documents, 200 paraules de vocabulari i 5 MB**
+(`shared/tierLimits.ts`). Els 5 MB, amb el sostre de 500 KB per imatge que valida
+el servidor, volen dir **10 imatges pròpies garantides** per compte.
+
+Amb aquests números i el contingut ja compactat, els dos sostres coincideixen:
+**~3.250 comptes** plens del tot per Atlas (5 KB del document d'usuari + 10 × 15,6 KB)
+i **~3.000** per l'emmagatzematge de Cloudinary. Cap dels dos és la baula feble, que
+és com han de quedar. Són el cas pitjor: amb l'ompliment mitjà real —la majoria
+d'usuaris no puja cap imatge— hi cap molta més gent.
+
+L'ordre en què es toca sostre és:
 
 | # | Sostre | Quan arriba | Gravetat |
 |---|---|---|---|

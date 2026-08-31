@@ -859,6 +859,49 @@ d'IndexedDB i al fitxer `.saac`.
   preferència només decideixi on aterra qui entra per l'arrel—, que treu el salt del tot. Cap de
   les dues és òbvia i per això no s'ha decidit dins de B18.
 
+### B24 — L'usuari no veu els seus límits ni pot fer res per no topar-hi 🔴 Oberta
+
+- **On**: `shared/tierLimits.ts` (els límits), `modules/user-settings/service.ts` `getUiSettings`
+  (que **no** retorna `usage`), `utils/imageToBase64.ts` (`MAX_IMAGE_SIDE_PX`, fix a 1800),
+  `UploadImageButton`, `VocabularySettingsPanel`, `SaveDocumentModal`.
+- **Per què importa**: el pla gratuït dona **10 imatges pròpies** (5 MB amb el sostre de 500 KB per
+  imatge). Enlloc de l'app es diu això, ni quantes se n'han fet servir. Qui puja una foto ja ha fet
+  la feina de triar-la i retallar-la abans de descobrir que no hi cabia, i l'única sortida que
+  se li ofereix és esborrar-ne una altra. Un límit que només es descobreix xocant-hi és un límit
+  mal comunicat, i aquí encara més: en AAC les imatges pròpies —les cares de la família, els
+  objectes de casa— són justament el que fa que l'app sigui d'aquella persona.
+- **I el sostre no cal que sigui aquest**: les imatges es desen sempre a mida d'impressió
+  (1.800 px, ~500 KB), que és el cas pitjor absolut —un pictograma sol a 150 mm. Dotze pictogrames
+  en un A4 surten a uns 70 mm cadascun, i amb 1.000 px n'hi hauria de sobres. La resolució que cal
+  depèn de la mida impresa, i **això ho sap l'usuari i no ho sap el sistema**.
+
+**Proposta** (dues meitats, i la segona no té sentit sense la primera):
+
+1. **Ensenyar el consum.** «Has fet servir 6 de 10 imatges», al panell de Vocabulari i al costat del
+   botó de pujar. Té una dependència de backend que avui no hi és: `getUiSettings` selecciona
+   `settings langSettings theme viewSettings wordProfiles tier emailVerified role` i **`usage` no hi
+   surt**, o sigui que el front no pot pintar cap comptador. És una línia al `.select()`.
+   L'error d'arribar-hi ha de portar codi propi (`QUOTA_IMAGES_EXCEEDED`, no el genèric d'espai) i
+   dir què fer, no «quota excedida».
+2. **Deixar triar la mida en pujar**, en termes de mida impresa i no de píxels:
+
+   | | Costat llarg | Imprimeix bé fins a | Pes | Caben en 5 MB |
+   |---|---|---|---|---|
+   | Gran | 1800 px | 152 mm (pictograma a mida màxima) | ~500 KB | 10 |
+   | **Normal** (per defecte) | 1000 px | 85 mm | ~155 KB | 33 |
+   | Petita | 600 px | 51 mm | ~56 KB | 91 |
+
+   I **retroactiva**: qui topa amb el límit ha de poder reduir les que ja té. A Cloudinary es fa
+   tornant a pujar la variant petita sobre el mateix `public_id` amb `overwrite: true` — la URL no
+   canvia, així que no s'ha de tocar res de la base de dades, només el `bytes` del registre
+   d'assets i el comptador.
+
+**Compte amb la regla que això toca**: el CLAUDE.md diu que la mida de les imatges és igual per a
+totes i no depèn de quantes n'hi hagi, perquè en pujar-la encara no se sap a quina mida s'imprimirà
+i el resultat dependria de l'ordre d'arribada. Aquesta proposta hi cap perquè **tria l'usuari, no el
+sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert de la regla és que
+**reduir és irreversible**, i per això s'ha de dir i no amagar.
+
 ## Gravetat baixa
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.
