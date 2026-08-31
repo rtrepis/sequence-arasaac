@@ -56,6 +56,9 @@ const AuthForm = ({
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
+    // La guarda al handler substitueix el `disabled` mentre s'espera: el botó
+    // continua sent visible i tabulable, i un segon Enter no envia res.
+    if (isLoading) return;
     const result = await dispatch(loginThunk({ email, password }));
     if (result.meta.requestStatus === "fulfilled") {
       setEmail("");
@@ -92,7 +95,6 @@ const AuthForm = ({
         fullWidth
         autoFocus={autoFocus}
         autoComplete="email"
-        disabled={isLoading}
       />
 
       <TextField
@@ -103,7 +105,6 @@ const AuthForm = ({
         required
         fullWidth
         autoComplete="current-password"
-        disabled={isLoading}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -135,11 +136,18 @@ const AuthForm = ({
       {/* El botó de la casa: dins del diàleg de login comparteix pantalla amb
           el peu, i un «ENTRA» en majúscules al costat d'un «Tancar» que no ho
           està es llegeix com si fossin de dues aplicacions */}
+      {/* `aria-disabled` i no `disabled` mentre s'espera: un botó desactivat surt
+          de l'ordre de tabulació i qui navega amb teclat el perd sense cap avís.
+          El `disabled` només es queda per als camps buits, que és validació i no
+          espera. L'`aria-busy` és el que diu al lector de pantalla que allò està
+          en marxa, ara que el bloqueig visual ja no ho insinua */}
       <StyledButton
         type="submit"
         variant="contained"
         fullWidth
-        disabled={isLoading || !email || !password}
+        disabled={!email || !password}
+        aria-disabled={isLoading}
+        aria-busy={isLoading}
         startIcon={isLoading ? <CircularProgress size={16} /> : null}
       >
         {intl.formatMessage(messages.submitLogin)}
