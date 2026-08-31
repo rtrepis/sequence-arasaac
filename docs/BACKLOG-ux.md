@@ -309,6 +309,29 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
   - Fixat a `e2e/session-expired.spec.ts`, amb el backend simulat: caducada, compte suspès, usuari
     que no ha entrat mai i tornada a entrar.
 
+### A12 — El primer login del dia no diu res mentre el servidor es desperta ✅ Resolta
+
+*(Trobada d'ús: entrar des de la pantalla d'inici amb Render adormit.)*
+
+- **On**: `pages/WelcomePage/WelcomeLayout.tsx` (no muntava `BackendWakeUpNotice`) i
+  `features/backend/auth/components/AuthForm.tsx` (`disabled={isLoading}` als camps i al botó).
+- **Per què importa**: la pantalla d'inici és **on es fa el primer login del dia**, i per tant
+  l'única on el desvetllament de Render és gairebé segur. L'avís hi era a `LanguageLayout` i a
+  `AuthStandaloneLayout`, però no al layout de la benvinguda: en prémer «Entra» els camps es
+  bloquejaven, el botó es quedava amb el rodet i durant prop d'un minut no apareixia cap
+  explicació. Justament el cas que l'avís existeix per cobrir —«sense cap senyal, l'usuari només
+  veu un botó bloquejat»— passava al lloc on més mal fa, perquè és el primer contacte amb l'app.
+  A sobre, bloquejar els camps mentre s'espera impedeix corregir una lletra del correu durant tot
+  el minut, i contradiu l'estàndard de feedback («mai `disabled` per dir "s'està fent"»).
+- **Resolta** a la branca `claude/login-startup-feedback-6cqj7u`:
+  - `WelcomeLayout` munta `BackendWakeUpNotice`, dins del seu `IntlProvider` i al costat de la
+    pàgina. No calen proveïdors nous: el `FeedbackProvider` que llegeix (per saber si hi ha un
+    backdrop obert) viu a `index.tsx`, per damunt de les rutes.
+  - `AuthForm` deixa d'usar `disabled` per a l'espera: els camps es poden seguir editant i el botó
+    passa a `aria-disabled` + `aria-busy` amb guarda al handler, de manera que no surt de l'ordre
+    de tabulació i el lector de pantalla el llegeix com a ocupat. El `disabled` només es queda per
+    als camps buits, que és validació i no espera.
+
 ---
 
 ## Gravetat mitjana
