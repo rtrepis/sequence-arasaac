@@ -294,6 +294,14 @@ Cap no s'ha resolt en aquest estudi: és un inventari, no una branca de canvis.
   simultanis en generen 120 al dia. Quan s'esgota, els registres es queden sense
   enllaç i no ho diu res. *Fitxer:* `modules/client-errors/service.ts:11`.
 
+- **L9 — ✅ RESOLTA (nova). El contingut dels documents desava el mateix dues vegades.**
+  Cada pictograma en portava els ajustos encara que fossin idèntics als del document, i tots
+  els identificadors que havia retornat la cerca d'ARASAAC. Mesurat: 28 KB per un document de
+  32 pictogrames, dels quals 12,4 eren còpies.
+  *Resolució:* `modules/documents/contentStorage.ts` compacta en desar i completa en llegir.
+  Els comptes que caben a Atlas passen de ~5.900 a ~10.100. Amb això Atlas deixa de ser el
+  sostre que arriba primer.
+
 - **L6 — Les 750 h de Render són de l'espai de treball, no del servei.** Avui hi
   ha un sol servei i l'aturada per inactivitat deixa marge; **un segon servei
   gratuït** (cron, worker) no hi cabria.

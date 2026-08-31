@@ -23,6 +23,7 @@ import {
 } from "../../shared/imageAssets";
 import { applyUsageDelta, assertWithinQuota } from "../../shared/quota";
 import { buildDocumentThumbnail } from "./thumbnail";
+import { compactContent } from "./contentStorage";
 
 // Resum d'un document per al llistat — evita transferir content complet
 export interface DocumentSummary {
@@ -123,6 +124,10 @@ export const createDocument = async (
   // base64 i les imatges pròpies hi van amb la URL definitiva de Cloudinary.
   const thumbnail = buildDocumentThumbnail(input.content, input.order);
 
+  // Es compacta l'últim, just abans d'escriure: la miniatura i les imatges es
+  // deriven del contingut sencer, i el que en surt es torna a completar en llegir
+  compactContent(input.content, input.defaultSettings?.pictSequence);
+
   const doc = await DocumentModel.create({ userId, ...input, assets, thumbnail });
 
   await applyUsageDelta(userId, {
@@ -200,6 +205,8 @@ export const updateDocument = async (
   }));
 
   const thumbnail = buildDocumentThumbnail(input.content, input.order);
+
+  compactContent(input.content, input.defaultSettings?.pictSequence);
 
   const updated = await DocumentModel.findByIdAndUpdate(
     id,
