@@ -32,7 +32,11 @@ app.use(
 );
 
 // Parser de JSON — límit de 20mb per admetre documents amb imatges base64 (substituïdes per Cloudinary al service)
-app.use(express.json({ limit: "20mb" }));
+// El sostre ha de quedar per sota dels 16 MB per document de MongoDB. Amb els
+// 20 MB que hi havia, una petició massa grossa passava la porta i moria a
+// Mongoose: l'usuari rebia un 500 sense causa en comptes d'un 413 explicat.
+// 12 MB donen per a un lot d'imatges (~14 a 500 KB en base64) amb marge.
+app.use(express.json({ limit: "12mb" }));
 
 // Parser de cookies — necessari per llegir el refresh token httpOnly a /api/auth/refresh
 app.use(cookieParser());

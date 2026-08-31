@@ -11,6 +11,7 @@ import { AiOutlineFileImage } from "react-icons/ai";
 import usePictogramUrl from "@features/pictogram/hooks/usePictogramUrl";
 import { DocumentThumbnailPict } from "@/types/document";
 import { sheetSurface } from "@/style/palette";
+import { cloudinaryThumbnailUrl } from "@/utils/cloudinaryUrl";
 
 interface DocumentThumbnailProps {
   thumbnail: DocumentThumbnailPict[];
@@ -65,15 +66,18 @@ const DocumentThumbnail = ({
           <Box
             key={`${pict.selectedId}-${index}`}
             component="img"
-            src={
+            // La imatge pròpia es desa a mida d'impressió: sense demanar-ne la
+            // variant reduïda, cada quadradet de 40px baixaria ~500 KB
+            src={cloudinaryThumbnailUrl(
               pict.url ??
-              buildPictogramUrl(
-                pict.selectedId,
-                pict.skin,
-                pict.hair,
-                pict.color,
-              )
-            }
+                buildPictogramUrl(
+                  pict.selectedId,
+                  pict.skin,
+                  pict.hair,
+                  pict.color,
+                ),
+              THUMBNAIL_PICT_SIZE,
+            )}
             alt=""
             loading="lazy"
             sx={{

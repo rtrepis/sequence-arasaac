@@ -289,6 +289,26 @@ feina és on viu cada acció i quan demana permís.
 
 - Els límits viuen al **codi** (`shared/tierLimits.ts`), no al document d'usuari: apujar el límit del pla gratuït ha de ser un desplegament, no una migració. `quotaOverride` és només per a excepcions puntuals.
 - **La quota es comprova abans de pujar res a Cloudinary**, estimant els bytes des de la llargada del base64. Pujar primer i rebutjar després deixaria imatges orfes ja pagades.
+- **Cap imatge d'usuari es desa mai a MongoDB.** `shared/imageAssets.ts` és l'única porta al núvol
+  i el comparteixen els documents i el vocabulari personal; `shared/quota.ts` és l'únic lloc on es
+  comprova el consum, perquè el pes d'un compte és un de sol repartit entre els dos. Fins a la
+  branca `claude/estudi-limits-gratuïts-serveis`, `PUT /user/ui-settings` desava el `customImageUrl`
+  en base64 dins del document d'usuari: no passava per cap quota i topava amb el límit de 16 MB per
+  document de MongoDB a la vint-i-quatrena imatge, vuit vegades abans del límit de 200 paraules que
+  l'app deia tenir.
+- **Una imatge es demana sempre a la mida en què es pinta.** Les de l'usuari es desen a mida
+  d'impressió (~500 KB); als llistats es veuen en quadradets de 40 px. `utils/cloudinaryUrl.ts`
+  n'és l'única porta: en demana la variant reduïda a Cloudinary (el doble de la mida de pantalla,
+  per a densitat 2×) i deixa passar intacta qualsevol URL que no sigui de Cloudinary, de manera
+  que els components l'apliquen sense saber d'on ve cada imatge. La transformació **no es desa
+  mai** a la base de dades: la mateixa imatge s'ha de poder servir sencera a l'editor. Sense això,
+  obrir el llistat de documents costava 4,5 MB i la pestanya de vocabulari, 15 MB.
+- **`MAX_IMAGE_BYTES` es comprova al servidor, no només al front.** És el que fa que «nombre
+  d'imatges» vulgui dir un pes concret: sense sostre per imatge, qualsevol límit expressat en
+  recompte deixa de protegir res, perquè el client el pot ignorar.
+- **Les imatges orfes s'esborren després d'escriure, no abans.** Si s'esborren abans i l'escriptura
+  falla, els perfils desats apunten a imatges que ja no existeixen. Val més una imatge orfe a
+  Cloudinary que un vocabulari trencat. (`modules/documents/service.ts` encara ho fa a l'inrevés.)
 - Cada document guarda `assets: [{ publicId, bytes }]`. Sense els bytes no es pot restar res en esborrar i el comptador només creixeria.
 
 ### Correu
@@ -428,6 +448,12 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   fitxer, motiu i proposta. **Consultar-lo abans de proposar una millora d'UX**: si ja hi és, cal
   continuar-hi (marcar-la resolta o caducada), no obrir-la de nou. Una troballa detectada i no
   resolta al moment s'hi apunta; no es deixa només a la conversa.
+- `docs/ESTUDI-limits-serveis-gratuits.md` inventaria els límits del pla gratuït de cada servei
+  (Atlas, Cloudinary, Render, Vercel, Resend, ARASAAC, GA4) i els contrasta amb el que l'app en
+  consumeix de debò. **Consultar-lo abans d'afegir res que desi, pugi o enviï correu**: hi ha les
+  troballes L1–L8, de les quals L1–L4 estan resoltes i L5–L8 continuen obertes. La primera de
+  les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
+  correus diaris de Resend.
 - `docs/ESTANDARD-capes-flotants.md` és l'estudi que hi ha darrere de l'estàndard de capes
   flotants: l'inventari del que hi havia, les dotze divergències numerades (F1–F12) amb fitxer i
   motiu, i el pla de migració. L'estàndard viu més amunt; **el document és la raó de cada regla**, i

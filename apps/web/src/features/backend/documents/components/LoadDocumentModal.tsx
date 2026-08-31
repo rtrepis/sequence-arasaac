@@ -253,8 +253,20 @@ const LoadDocumentModal = ({
               selected={selectedId === doc.id}
               onClick={() => setSelectedId(doc.id)}
               disabled={isLoadingDocument}
+              // Per sota de sm la fila s'apila: la miniatura a dalt i el nom a
+              // sota. En un telèfon de 360px, el diàleg deixa uns 216px de fila
+              // i la miniatura se'n menja 148: al nom li'n quedaven menys de
+              // trenta i quedava tallat sempre. És la mateixa regla que
+              // settingRowInline —apilat predictible abans que wrap accidental—
+              // i el mateix breakpoint, que no se'n multipliquen.
+              sx={{
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "flex-start", sm: "center" },
+              }}
             >
-              <ListItemAvatar sx={{ minWidth: 0, mr: 2 }}>
+              <ListItemAvatar
+                sx={{ minWidth: 0, mr: { xs: 0, sm: 2 }, mb: { xs: 1, sm: 0 } }}
+              >
                 <DocumentThumbnail
                   thumbnail={doc.thumbnail}
                   label={intl.formatMessage(messages.thumbnailLabel, {
@@ -265,6 +277,15 @@ const LoadDocumentModal = ({
               <ListItemText
                 primary={documentName(doc)}
                 secondary={formatDate(doc.updatedAt)}
+                // width al 100% en apilat: amb alignItems flex-start, un fill
+                // de columna s'encongeix al contingut i el nom quedaria centrat
+                // a l'esquerra en comptes d'ocupar la fila (mateix motiu que la
+                // mostra del panell de vocabulari a l'estàndard de settings).
+                //
+                // El pr reserva el botó d'esborrar, que va posicionat a sobre de
+                // la fila i no hi ocupa lloc: sense la reserva, un nom llarg li
+                // passa per sota — i amb la fila apilada hi passaria sempre.
+                sx={{ pr: 5, my: 0, width: { xs: "100%", sm: "auto" } }}
               />
               <ListItemSecondaryAction>
                 <Tooltip
