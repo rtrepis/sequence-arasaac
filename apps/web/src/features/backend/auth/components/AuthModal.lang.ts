@@ -171,6 +171,12 @@ const messages = defineMessages({
       "Hem arribat al màxim de comptes disponibles. Torna-ho a provar més endavant.",
     description: "Error de registre: s'ha assolit el sostre d'usuaris",
   },
+  DAILY_SIGNUP_LIMIT_REACHED: {
+    id: "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED",
+    defaultMessage:
+      "Avui ja s'han creat tots els comptes nous que admetem. Torna-ho a provar demà.",
+    description: "Error de registre: s'ha assolit el límit d'altes del dia",
+  },
   DISPOSABLE_EMAIL: {
     id: "features.backend.auth.error.DISPOSABLE_EMAIL",
     defaultMessage:

@@ -559,6 +559,9 @@
     "defaultMessage": "Une erreur s'est produite lors de la connexion. Veuillez réessayer.",
     "description": "Error genèric de login"
   },
+  "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED": {
+    "defaultMessage": "Tous les nouveaux comptes que nous acceptons aujourd'hui ont déjà été créés. Réessaie demain."
+  },
   "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
     "defaultMessage": "Le format de l'adresse e-mail n'est pas valide",
     "description": "Validació: format d'email incorrecte"

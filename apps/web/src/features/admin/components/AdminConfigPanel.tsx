@@ -26,12 +26,16 @@ const AdminConfigPanel = ({
   onConfigChange,
 }: AdminConfigPanelProps): ReactElement => {
   const [maxUsers, setMaxUsers] = useState(String(config.maxUsers));
+  const [maxDailySignups, setMaxDailySignups] = useState(
+    String(config.maxDailySignups),
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const applyChange = async (update: {
     registrationOpen?: boolean;
     maxUsers?: number;
+    maxDailySignups?: number;
   }): Promise<void> => {
     setIsSaving(true);
     setError(null);
@@ -51,6 +55,15 @@ const AdminConfigPanel = ({
       return;
     }
     await applyChange({ maxUsers: parsed });
+  };
+
+  const handleMaxDailySignupsSave = async (): Promise<void> => {
+    const parsed = Number(maxDailySignups);
+    if (!Number.isInteger(parsed) || parsed < 0) {
+      setError("Les altes per dia han de ser un nombre enter positiu.");
+      return;
+    }
+    await applyChange({ maxDailySignups: parsed });
   };
 
   return (
@@ -113,6 +126,45 @@ const AdminConfigPanel = ({
               variant="outlined"
               onClick={handleMaxUsersSave}
               disabled={isSaving || maxUsers === String(config.maxUsers)}
+            >
+              Desa
+            </Button>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+            flexWrap: "wrap",
+          }}
+        >
+          <Box>
+            <Typography sx={{ fontWeight: "bold" }}>Altes per dia</Typography>
+            {/* El sostre global diu quanta gent hi cap; aquest, a quina
+                velocitat hi entra. El comptador es reinicia a mitjanit UTC. */}
+            <Typography variant="body2" color="text.secondary">
+              Comptes nous que s&apos;admeten cada dia. Es reinicia a mitjanit
+              (UTC).
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+            <TextField
+              size="small"
+              type="number"
+              value={maxDailySignups}
+              onChange={(event) => setMaxDailySignups(event.target.value)}
+              disabled={isSaving}
+              sx={{ width: 120 }}
+              inputProps={{ min: 0, "aria-label": "Altes per dia" }}
+            />
+            <Button
+              variant="outlined"
+              onClick={handleMaxDailySignupsSave}
+              disabled={
+                isSaving || maxDailySignups === String(config.maxDailySignups)
+              }
             >
               Desa
             </Button>

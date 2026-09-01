@@ -94,7 +94,30 @@ export interface QuotaLimits {
 export interface AppConfig {
   registrationOpen: boolean;
   maxUsers: number;
+  // Sostre d'altes per dia. És un fre diferent del maxUsers: aquell diu quanta
+  // gent hi cap en total, aquest a quina velocitat pot entrar-hi.
+  maxDailySignups: number;
   updatedAt: string;
+}
+
+// El que se sap del registre sense tenir compte: qui encara no n'ha creat cap
+// ha de poder veure si hi queda lloc abans d'omplir el formulari, i quanta gent
+// hi ha ja. No hi surt res que identifiqui ningú — només recomptes.
+export interface RegistrationStatus {
+  registrationOpen: boolean;
+  // Quanta gent hi ha registrada i quantes places queden en total
+  totalUsers: number;
+  maxUsers: number;
+  remainingUsers: number;
+  // Altes del dia: quantes se n'han fet, quantes en queden i quan es reinicia
+  // el comptador (mitjanit UTC, en ISO perquè el front el pinti en hora local)
+  maxDailySignups: number;
+  signupsToday: number;
+  remainingToday: number;
+  resetsAt: string;
+  // Es pot crear un compte ara mateix? Les tres condicions resoltes en una,
+  // perquè el front no les hagi de recompondre.
+  canSignup: boolean;
 }
 
 export interface WordProfile {

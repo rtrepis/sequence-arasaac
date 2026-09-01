@@ -318,7 +318,23 @@ feina és on viu cada acció i quan demana permís.
 
 - **`app.set("trust proxy", 1)` a `index.ts` és imprescindible**: a Render, sense això tots els `express-rate-limit` veuen la IP del proxy i o no aturen ningú o els aturen tots alhora.
 - L'interruptor de registre i el sostre d'usuaris viuen a la **BD** (`modules/config`), no a l'`.env`: tancar el registre ha de ser un clic al panell, no un desplegament.
-- Ordre de comprovacions al registre: registre obert → sota el sostre → domini no descartable → canònic lliure. Les que no revelen res van primer.
+- Ordre de comprovacions al registre: registre obert → sota el sostre → **sota el límit del dia** → domini no descartable → canònic lliure. Les que no revelen res van primer.
+- **Dos sostres, no un**: `maxUsers` diu quanta gent hi cap en total i `maxDailySignups` (40 per
+  defecte) a quina velocitat pot entrar-hi. El diari no és cap rate limiter: aquell és per IP i una
+  allau des de mil connexions se li escaparia; el que es limita aquí són **comptes creats**, no
+  peticions rebudes. Passar-se'l retorna `DAILY_SIGNUP_LIMIT_REACHED`.
+- **El comptador del dia és una col·lecció pròpia** (`modules/config/signupCounterModel.ts`), un
+  document per dia amb la data en UTC, no un recompte d'usuaris creats des de mitjanit: esborrar el
+  compte (`deleteAccount`) esborra l'usuari **i** els seus `SecurityEvent`, de manera que qualsevol
+  xifra derivada d'aquelles col·leccions es podria buidar donant-se de baixa —just el que un fre
+  diari ha d'impedir. El comptador només puja, i el purga un índex TTL de 60 dies.
+- **Només compta una alta de debò**: un correu que ja té compte no gasta plaça del dia, i el `$inc`
+  va **després** de crear l'usuari perquè una creació fallida no en cremi cap.
+- **El que queda es pot consultar abans d'omplir res**: `GET /api/auth/registration-status` és
+  públic i retorna només recomptes —gent registrada, places totals i del dia que queden, quan es
+  reinicia el comptador (mitjanit UTC, en ISO perquè el front el pinti en hora local) i un
+  `canSignup` amb les tres condicions ja resoltes. Descobrir que avui no hi cap ningú després
+  d'omplir el formulari és el que això evita.
 
 ### Traça antiabús
 
