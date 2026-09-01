@@ -547,6 +547,15 @@ Tots els correus que surten de l'aplicació tenen la mateixa cara. Font única d
   registrat com a `admin_action` (només que se n'ha generat un i de quina mena, mai el token) i un
   compte suspès no en rep cap. La recepta del token viu només a `createPasswordLink`
   (`auth/service.ts`): amb dues, un dia una de les dues caducaria diferent sense que ho digués res.
+  **Val 24 h sigui del tipus que sigui** (`ADMIN_PASSWORD_LINK_TTL_MS`, passat com a `ttlMs` a la
+  mateixa recepta). L'hora que dura un `reset` val quan qui el demana té la pantalla oberta
+  esperant-lo; aquest no el demana qui l'ha de fer servir, sinó que l'administrador el genera i
+  l'ha de fer arribar per un canal que no controla ningú, i entremig hi poden passar hores.
+  **A la taula, l'enllaç no es dibuixa**: un cop generat hi ha la icona de copiar i la d'enviar per
+  correu, i el que l'enllaç és i fins quan val van al tooltip. Pintat en un camp es menjava mitja
+  taula per un text que ningú no ha de llegir mai —el que se'n fa és copiar-lo—, i el porta-retalls
+  ja diu que ha anat bé amb el snackbar de sempre. La sortida de quan el porta-retalls falla no es
+  perd: aleshores l'URL surt sencer i seleccionable a l'avís de dalt, que només hi és en aquell cas.
 - **El botó «Envia» de l'enllaç no envia res: obre un `mailto:`** al client de correu de qui
   administra, i el missatge surt de la seva adreça. Un `mailto:` només porta text (RFC 6068), així
   que la plantilla d'`emailLayout.ts` no hi cap i **no és cap descuit**. El que sí que hi ha de ser
@@ -566,7 +575,7 @@ Tots els correus que surten de l'aplicació tenen la mateixa cara. Font única d
 Tot el que sura per damunt de la pàgina. Font única de veritat:
 `components/AppDialog/`, `components/FloatingLayer/`, `style/appShape.ts` i
 `style/floatingControl.ts`. La raó de cada regla és a
-`docs/ESTANDARD-capes-flotants.md` (inventari, troballes F1–F12 i pla).
+`docs/ESTANDARD-capes-flotants.md` (inventari, troballes F1–F13 i pla).
 
 ### La forma
 
@@ -626,10 +635,19 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   `background.paper` **opac**, amb el radi de la casa i ombra. La severitat la
   diuen la vora i la icona, mai un fons de color.
 - **Una sola posició** (`floatingSnackbarSx`): per sota de `sm` l'avís aparta el
-  botó d'estat, i la separació surt de `FLOATING_CONTROL_CLEARANCE`, **calculada
-  des dels tokens**. Abans era un 72 escrit a mà a partir dels 48 px del botó, i
-  quan el botó ha canviat de mida el número ha deixat de quadrar sense que res
-  ho digués.
+  control que hi hagi al racó, i la separació surt de `FLOATING_CONTROL_CLEARANCE`,
+  **calculada des dels tokens**. Abans era un 72 escrit a mà a partir dels 48 px
+  del botó, i quan el botó ha canviat de mida el número ha deixat de quadrar sense
+  que res ho digués.
+- **Només s'aparta si hi ha de què apartar-se** (`useFloatingCorner`): qui ocupa
+  el racó inferior dret declara la reserva mentre és a la pantalla —el botó
+  d'estat a l'editor i al visualitzador, la fletxa dreta a les notícies— i l'avís
+  la llegeix d'una variable CSS, igual com el contingut llegeix l'alçada del peu
+  de `floatingInset`. Amb el desplaçament escrit a l'`sx` de l'avís, l'aplicava
+  **tota** l'app: a la pantalla d'inici, on `BackendWakeUpNotice` també es munta
+  —i on el desvetllament de Render és més probable, perquè és on es fa el primer
+  login del dia—, l'avís sortia descentrat 79 px apartant-se de res. Sense cap
+  control al racó, l'avís es queda als 8 px que MUI li posa per defecte (F13).
 - **El que no marxa sol, reserva espai** (`useFloatingInset`): una capa
   `position: fixed` no ocupa lloc al document, i quan la pàgina s'acaba l'última
   fila de pictogrames queda a sota sense cap scroll que la pugui apartar (F12).
@@ -681,7 +699,7 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
   correus diaris de Resend.
 - `docs/ESTANDARD-capes-flotants.md` és l'estudi que hi ha darrere de l'estàndard de capes
-  flotants: l'inventari del que hi havia, les dotze divergències numerades (F1–F12) amb fitxer i
+  flotants: l'inventari del que hi havia, les tretze divergències numerades (F1–F13) amb fitxer i
   motiu, i el pla de migració. L'estàndard viu més amunt; **el document és la raó de cada regla**, i
   s'hi va a mirar quan una regla sembla arbitrària o quan se'n vol canviar alguna.
 

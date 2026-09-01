@@ -11,7 +11,10 @@ import type {
 import type { AppError } from "../../middleware/errorHandler";
 import { UserModel } from "../auth/model";
 import type { IUser } from "../auth/model";
-import { createPasswordLink } from "../auth/service";
+import {
+  ADMIN_PASSWORD_LINK_TTL_MS,
+  createPasswordLink,
+} from "../auth/service";
 import { DocumentModel } from "../documents/model";
 import { SecurityEventModel } from "../security/model";
 import type { UpdateUserInput, ListUsersQuery } from "./validators";
@@ -183,7 +186,13 @@ export const createUserPasswordLink = async (
   // el compte actiu, que és el que el de recuperació no fa.
   const type = !user.passwordHash || !user.emailVerified ? "verify" : "reset";
 
-  return { ...createPasswordLink(userId, type), email: user.email };
+  // Val un dia sigui del tipus que sigui: aquest enllaç viatja per un canal que
+  // no controla ningú i pot trigar hores a arribar a qui l'ha de fer servir
+  // (vegeu ADMIN_PASSWORD_LINK_TTL_MS).
+  return {
+    ...createPasswordLink(userId, type, ADMIN_PASSWORD_LINK_TTL_MS),
+    email: user.email,
+  };
 };
 
 // Esdeveniments de seguretat, filtrables per correu o per origen.

@@ -23,13 +23,17 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import { AiOutlineCopy, AiOutlineMail } from "react-icons/ai";
 import type {
   AdminPasswordLink,
   AdminUserSummary,
   UserStatus,
 } from "@sequence-arasaac/shared-types";
+import StyledIconButton from "@/style/StyledIconButton";
+import { useFeedback } from "@/context/FeedbackContext";
 import {
   getUserPasswordLink,
   listUsers,
@@ -144,7 +148,7 @@ const AdminUsersTable = (): ReactElement => {
   // oberta: són credencials, i no han de sobreviure a la sessió del panell
   const [links, setLinks] = useState<Record<string, AdminPasswordLink>>({});
   const [pendingLinkId, setPendingLinkId] = useState<string | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const { showSnackbar } = useFeedback();
 
   useEffect(() => {
     const load = async (): Promise<void> => {
@@ -200,7 +204,6 @@ const AdminUsersTable = (): ReactElement => {
     try {
       const link = await getUserPasswordLink(userId);
       setLinks((current) => ({ ...current, [userId]: link }));
-      setCopiedId(null);
     } catch (err: unknown) {
       const code =
         (err as { response?: { data?: { errorCode?: string } } })?.response
@@ -211,15 +214,21 @@ const AdminUsersTable = (): ReactElement => {
     }
   };
 
-  // El porta-retalls no hi és sempre (sense HTTPS, o amb el permís denegat).
-  // Si falla no es perd res: el camp és visible i seleccionable, que és
-  // precisament per què l'enllaç es pinta en un camp i no en un text.
-  const handleCopy = async (userId: string, url: string): Promise<void> => {
+  // El porta-retalls no hi és sempre (sense HTTPS, o amb el permís denegat), i
+  // aquí ja no hi ha cap camp d'on treure l'enllaç a mà. Per això, quan falla,
+  // l'URL surt sencer a l'avís de dalt: es pot seleccionar igualment, i no
+  // ocupa amplada de la taula perquè només hi és quan alguna cosa ha anat mal.
+  const handleCopy = async (url: string): Promise<void> => {
+    setError(null);
+
     try {
       await navigator.clipboard.writeText(url);
-      setCopiedId(userId);
+      showSnackbar({
+        message: "Enllaç copiat al porta-retalls.",
+        severity: "success",
+      });
     } catch {
-      setError("Copia'l a mà des del camp: el navegador no ho ha permès.");
+      setError(`El navegador no ha deixat copiar. Copia'l a mà: ${url}`);
     }
   };
 
@@ -315,47 +324,39 @@ const AdminUsersTable = (): ReactElement => {
                   </TableCell>
                   <TableCell>{formatDate(user.createdAt)}</TableCell>
                   <TableCell>{formatDate(user.lastLoginAt)}</TableCell>
-                  <TableCell sx={{ minWidth: 260 }}>
+                  <TableCell sx={{ whiteSpace: "nowrap" }}>
                     {links[user.id] ? (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 0.5,
-                        }}
-                      >
-                        <Box sx={{ display: "flex", gap: 1 }}>
-                          {/* Camp i no text: així es pot seleccionar sencer
-                              encara que el porta-retalls no funcioni */}
-                          <TextField
+                      <>
+                        {/* L'enllaç no es pinta: és una credencial i, dibuixat,
+                            es menjava mitja taula sense que ningú l'hagi de
+                            llegir mai —el que se'n fa és copiar-lo. El que
+                            l'enllaç és i fins quan val, que abans ocupava una
+                            línia pròpia sota el camp, va al tooltip i al nom
+                            accessible dels dos botons */}
+                        <Tooltip
+                          title={`Copia l'enllaç · ${LINK_TYPE_LABEL[links[user.id].type]} · caduca el ${formatExpiry(links[user.id].expiresAt)}`}
+                        >
+                          <StyledIconButton
+                            onClick={() => void handleCopy(links[user.id].url)}
+                            color="inherit"
                             size="small"
-                            value={links[user.id].url}
-                            InputProps={{ readOnly: true }}
-                            onFocus={(event) => event.target.select()}
-                            sx={{ flex: 1, minWidth: 160 }}
-                          />
-                          <Button
-                            size="small"
-                            onClick={() =>
-                              handleCopy(user.id, links[user.id].url)
-                            }
+                            aria-label={`Copia l'enllaç d'accés de ${user.email} (${LINK_TYPE_LABEL[links[user.id].type]}, caduca el ${formatExpiry(links[user.id].expiresAt)})`}
                           >
-                            Copia
-                          </Button>
-                          <Button
-                            size="small"
+                            <AiOutlineCopy />
+                          </StyledIconButton>
+                        </Tooltip>
+                        <Tooltip title="Envia'l per correu">
+                          <StyledIconButton
                             component="a"
                             href={buildMailtoUrl(user, links[user.id])}
+                            color="inherit"
+                            size="small"
+                            aria-label={`Envia l'enllaç d'accés a ${user.email}`}
                           >
-                            Envia
-                          </Button>
-                        </Box>
-                        <Typography variant="caption" color="text.secondary">
-                          {LINK_TYPE_LABEL[links[user.id].type]} · caduca el{" "}
-                          {formatExpiry(links[user.id].expiresAt)}
-                          {copiedId === user.id && " · copiat"}
-                        </Typography>
-                      </Box>
+                            <AiOutlineMail />
+                          </StyledIconButton>
+                        </Tooltip>
+                      </>
                     ) : (
                       <Button
                         size="small"

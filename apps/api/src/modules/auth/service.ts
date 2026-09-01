@@ -49,6 +49,14 @@ const PASSWORD_LINK_TTL_MS: Record<"verify" | "reset", number> = {
   verify: 24 * 60 * 60 * 1000,
   reset: 60 * 60 * 1000,
 };
+
+// Excepció per als enllaços que genera l'administrador des del panell: aquell
+// enllaç no el demana qui l'ha de fer servir. L'administrador el genera i l'ha
+// de fer arribar per un altre canal (un missatge, una trucada, en persona), i
+// entremig hi poden passar hores; l'hora que dura una recuperació val quan qui
+// la demana té la pantalla oberta esperant-la, i aquí no és el cas. Val un dia,
+// com el de primer accés, que és el que ja rebia la meitat dels casos.
+export const ADMIN_PASSWORD_LINK_TTL_MS = 24 * 60 * 60 * 1000;
 // Límits de reenviament/petició, per no cremar la quota diària del proveïdor de correu
 const RESEND_MIN_INTERVAL_MS = 5 * 60 * 1000;
 const RESEND_MAX_PER_DAY = 3;
@@ -130,18 +138,23 @@ export interface PasswordLink {
   expiresAt: string;
 }
 
+// Qui el construeix pot posar-hi una durada pròpia (`ttlMs`), i aleshores mana
+// per damunt de la del tipus. És un argument i no una recepta a part perquè el
+// que caduca el token i el que se li diu a qui el rep continuïn sortint del
+// mateix número: tenir-los per separat és la divergència que això evita.
 export const createPasswordLink = (
   userId: string,
-  type: "verify" | "reset"
+  type: "verify" | "reset",
+  ttlMs: number = PASSWORD_LINK_TTL_MS[type]
 ): PasswordLink => {
   const token = jwt.sign({ userId, type } as PasswordTokenPayload, env.JWT_SECRET, {
-    expiresIn: PASSWORD_LINK_TTL_MS[type] / 1000,
+    expiresIn: ttlMs / 1000,
   });
 
   return {
     url: `${env.APP_PUBLIC_URL}/set-password?token=${token}`,
     type,
-    expiresAt: new Date(Date.now() + PASSWORD_LINK_TTL_MS[type]).toISOString(),
+    expiresAt: new Date(Date.now() + ttlMs).toISOString(),
   };
 };
 
