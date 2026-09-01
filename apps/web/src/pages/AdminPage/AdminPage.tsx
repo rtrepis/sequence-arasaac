@@ -2,6 +2,11 @@
 //
 // Eina interna, en català i sense react-intl: la fa servir una sola persona i
 // cinc fitxers de traducció no s'hi justifiquen (excepció documentada al CLAUDE.md).
+// Els textos d'aquí són literals; l'<IntlProvider> hi és només perquè els
+// components compartits que en depenen (ConfirmDialog, l'única confirmació de
+// l'app) funcionin fora de LanguageLayout. Reescriure'n una còpia per al panell
+// costaria molt més que aquest embolcall, i el criteri de què es confirma ha de
+// poder-se llegir en un sol lloc.
 //
 // La protecció de veritat és al servidor (requireAdmin): la comprovació d'aquí
 // només evita ensenyar una pantalla que no funcionaria.
@@ -13,8 +18,10 @@ import {
   Container,
   Typography,
 } from "@mui/material";
+import { IntlProvider } from "react-intl";
 import { Navigate } from "react-router-dom";
 import type { AdminStats, AppConfig } from "@sequence-arasaac/shared-types";
+import { messageLocale } from "@/App";
 import { useAppSelector } from "../../app/hooks";
 import { getConfig, getStats } from "@features/admin/services/adminService";
 import AdminStatsCards from "@features/admin/components/AdminStatsCards";
@@ -70,32 +77,34 @@ const AdminPage = (): ReactElement => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Administració
-      </Typography>
+    <IntlProvider locale="ca" defaultLocale="ca" messages={messageLocale.ca}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Administració
+        </Typography>
 
-      {error && (
-        <Alert severity="error" variant="outlined" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
+        {error && (
+          <Alert severity="error" variant="outlined" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
-      {isLoading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", p: 8 }}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          {config && (
-            <AdminConfigPanel config={config} onConfigChange={setConfig} />
-          )}
-          {stats && <AdminStatsCards stats={stats} />}
-          <AdminUsersTable />
-          <AdminClientErrorsTable />
-        </Box>
-      )}
-    </Container>
+        {isLoading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", p: 8 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {config && (
+              <AdminConfigPanel config={config} onConfigChange={setConfig} />
+            )}
+            {stats && <AdminStatsCards stats={stats} />}
+            <AdminUsersTable />
+            <AdminClientErrorsTable />
+          </Box>
+        )}
+      </Container>
+    </IntlProvider>
   );
 };
 

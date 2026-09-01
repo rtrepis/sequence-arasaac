@@ -35,6 +35,13 @@ export const listEventsQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(MAX_EVENTS).default(50),
 });
 
+// Query de l'esborrat en bloc d'errors del client.
+// La data és obligatòria a propòsit: un DELETE sense filtre buidaria el registre
+// sencer amb una URL que es pot escriure sense voler.
+export const deleteClientErrorsQuerySchema = z.object({
+  before: z.coerce.date(),
+});
+
 // Cos del PUT de configuració global
 export const updateConfigSchema = z.object({
   registrationOpen: z.boolean().optional(),
@@ -44,4 +51,7 @@ export const updateConfigSchema = z.object({
 export type ListUsersQuery = z.infer<typeof listUsersQuerySchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 export type ListEventsQuery = z.infer<typeof listEventsQuerySchema>;
+export type DeleteClientErrorsQuery = z.infer<
+  typeof deleteClientErrorsQuerySchema
+>;
 export type UpdateConfigInput = z.infer<typeof updateConfigSchema>;
