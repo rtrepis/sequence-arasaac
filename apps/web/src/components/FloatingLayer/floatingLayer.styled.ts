@@ -1,23 +1,26 @@
 import { SxProps, Theme } from "@mui/material";
-import {
-  APP_CORNER_RADIUS,
-  FLOATING_CONTROL_CLEARANCE,
-} from "@/style/appShape";
+import { APP_CORNER_RADIUS } from "@/style/appShape";
+import { FLOATING_CORNER_VARIABLE } from "./floatingCorner";
 
 /**
  * Posició de qualsevol `Snackbar` de l'app.
  *
- * Per sota de `sm` el `Snackbar` de MUI s'estén de banda a banda i taparia el
- * botó d'estat, justament quan l'usuari acaba de desar i pot voler mirar on ha
- * anat a parar la feina (troballa C7). Es mou l'avís i no el botó perquè el
- * botó és permanent i l'avís és de pas.
+ * Per sota de `sm` el `Snackbar` de MUI s'estén de banda a banda —hi força
+ * `left: 8, right: 8` sigui quin sigui l'`anchorOrigin`— i taparia el control
+ * que hi hagi al racó, justament quan l'usuari acaba de desar i pot voler mirar
+ * on ha anat a parar la feina (troballa C7). Es mou l'avís i no el control
+ * perquè el control és permanent i l'avís és de pas.
  *
- * La separació surt dels tokens de forma: abans era un 72 escrit a mà a partir
- * dels 48 px del botó, i quan el botó ha canviat de mida el número ha deixat de
- * quadrar sense que res ho digués.
+ * **Només s'aparta si hi ha alguna cosa de què apartar-se**: la reserva surt de
+ * la variable que declara qui ocupa el racó (`useFloatingCorner`), i on no hi ha
+ * cap control flotant —inici, registre, panell d'administració— l'avís es queda
+ * als 8 px de MUI. Amb el desplaçament escrit a l'sx, aquelles pàgines
+ * ensenyaven un avís descentrat sense res que ho justifiqués.
  */
 export const floatingSnackbarSx: SxProps<Theme> = (theme) => ({
-  [theme.breakpoints.down("sm")]: { right: FLOATING_CONTROL_CLEARANCE },
+  [theme.breakpoints.down("sm")]: {
+    right: `var(${FLOATING_CORNER_VARIABLE}, ${theme.spacing(1)})`,
+  },
 });
 
 /**

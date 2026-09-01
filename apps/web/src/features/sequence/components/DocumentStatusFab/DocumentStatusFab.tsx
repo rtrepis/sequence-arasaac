@@ -40,6 +40,7 @@ import {
   FLOATING_EDGE_GAP,
 } from "@/style/appShape";
 import { floatingControlSx } from "@/style/floatingControl";
+import { useFloatingCorner } from "@components/FloatingLayer";
 import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
@@ -75,6 +76,9 @@ const DocumentStatusFab = (): ReactElement => {
   const [isCloudOpen, setIsCloudOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  // Mentre el botó hi sigui, els avisos del peu li deixen el racó lliure
+  useFloatingCorner("document-status-fab");
 
   const durability = getDocumentDurability(status);
 
