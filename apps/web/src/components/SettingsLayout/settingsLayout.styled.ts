@@ -143,6 +143,21 @@ export const settingRowInline: SxProps<Theme> = {
   rowGap: 1,
 };
 
+/**
+ * Acordió dins d'una configuració: **pla**. Sense elevació, sense fons propi i
+ * sense la línia superior que MUI hi dibuixa (`&:before`), perquè el `Divider`
+ * del `SectionTitle` ja és l'únic divisor visible de la jerarquia. El que el
+ * distingeix d'un títol és només la fletxa que gira, no una caixa.
+ *
+ * Va sempre amb `disableGutters`, `elevation={0}` i un `AccordionSummary` amb
+ * `expandIcon={<MdExpandMore />}`; el `px: 0` del resum i del detall els alinea
+ * amb la resta de files de la columna.
+ */
+export const settingsAccordion: SxProps<Theme> = {
+  backgroundColor: "transparent",
+  "&:before": { display: "none" },
+};
+
 /** Amplada mínima (px) del control d'una fila, perquè sliders no quedin inusables en pantalles estretes. */
 export const SETTINGS_CONTROL_MIN_WIDTH = 150;
 

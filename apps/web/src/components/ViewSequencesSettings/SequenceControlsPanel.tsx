@@ -29,6 +29,7 @@ import {
   SettingRow,
   IconToggleButton,
   SETTINGS_ROW_GAP,
+  settingsAccordion,
 } from "@/components/SettingsLayout";
 import messages from "./ViewSequencesSettings.lang";
 import {
@@ -219,10 +220,8 @@ const SequenceControlsPanel = ({
           disableGutters
           elevation={0}
           sx={{
+            ...settingsAccordion,
             display: applyAll && seqKey !== sequenceKeys[0] ? "none" : "block",
-            backgroundColor: "transparent",
-            // Sense la línia superior de MUI: el divisor del SectionTitle ja separa la secció
-            "&:before": { display: "none" },
           }}
         >
           <AccordionSummary expandIcon={<MdExpandMore />} sx={{ px: 0 }}>

@@ -9,6 +9,7 @@ export {
   settingRow,
   settingRowInline,
   settingControlWidth,
+  settingsAccordion,
   SETTINGS_ROW_GAP,
   SETTINGS_ZONE_GAP,
   SETTINGS_MAX_WIDTH,
