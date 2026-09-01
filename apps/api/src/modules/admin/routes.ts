@@ -10,6 +10,8 @@ import {
   patchUser,
   events,
   clientErrors,
+  deleteClientError,
+  deleteClientErrors,
   config,
   putConfig,
 } from "./controller";
@@ -25,6 +27,10 @@ adminRouter.get("/users", users);
 adminRouter.patch("/users/:id", patchUser);
 adminRouter.get("/events", events);
 adminRouter.get("/client-errors", clientErrors);
+// Esborrar un error i buidar el registre fins a una data: dos camins diferents
+// de la mateixa eina, declarats junts
+adminRouter.delete("/client-errors", deleteClientErrors);
+adminRouter.delete("/client-errors/:id", deleteClientError);
 adminRouter.get("/config", config);
 adminRouter.put("/config", putConfig);
 
