@@ -16,7 +16,11 @@ import type {
 import type { AppError } from "../../middleware/errorHandler";
 import { toCanonicalEmail } from "../../shared/emailCanonical";
 import { isDisposableEmail } from "../../shared/disposableDomains";
-import { getAppConfig } from "../config/service";
+import {
+  getAppConfig,
+  countSignupsToday,
+  recordSignupToday,
+} from "../config/service";
 import {
   recordSecurityEvent,
   countRecentEventsForUser,
@@ -186,6 +190,16 @@ export const signupUser = async (
     throw authError("MAX_USERS_REACHED", 403);
   }
 
+  // Fre diari: encara que hi hagi lloc de sobra al sostre global, no entra més
+  // gent de la que es pot atendre en un dia. Es comprova aquí i no al rate
+  // limiter perquè aquell és per IP —una allau des de mil connexions diferents
+  // se li escaparia— i perquè el que s'està limitant és quants comptes es
+  // creen, no quantes peticions arriben.
+  const signupsToday = await countSignupsToday();
+  if (signupsToday >= config.maxDailySignups) {
+    throw authError("DAILY_SIGNUP_LIMIT_REACHED", 403);
+  }
+
   if (isDisposableEmail(emailCanonical)) {
     throw authError("DISPOSABLE_EMAIL", 400);
   }
@@ -245,6 +259,10 @@ export const signupUser = async (
     // Sense passwordHash: el compte no pot fer login fins que es completi /set-password.
     // settings, langSettings, status i usage prenen els valors per defecte del model
   });
+
+  // El comptador puja només amb un usuari creat de debò: un correu que ja té
+  // compte no gasta plaça del dia, perquè no n'ha ocupat cap.
+  await recordSignupToday();
 
   await recordSecurityEvent({
     type: "register",

@@ -43,6 +43,7 @@ export type {
   UserQuotaStatus,
   UserAsset,
   AppConfig,
+  RegistrationStatus,
 } from "./ui";
 export type {
   AdminUserSummary,

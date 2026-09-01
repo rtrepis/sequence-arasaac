@@ -46,6 +46,7 @@ export const deleteClientErrorsQuerySchema = z.object({
 export const updateConfigSchema = z.object({
   registrationOpen: z.boolean().optional(),
   maxUsers: z.number().int().min(0).optional(),
+  maxDailySignups: z.number().int().min(0).optional(),
 });
 
 export type ListUsersQuery = z.infer<typeof listUsersQuerySchema>;

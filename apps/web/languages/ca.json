@@ -559,6 +559,9 @@
     "defaultMessage": "S'ha produït un error en iniciar sessió. Torna-ho a intentar.",
     "description": "Error genèric de login"
   },
+  "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED": {
+    "defaultMessage": "Avui ja s'han creat tots els comptes nous que admetem. Torna-ho a provar demà."
+  },
   "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
     "defaultMessage": "El format del correu electrònic no és vàlid",
     "description": "Validació: format d'email incorrecte"
