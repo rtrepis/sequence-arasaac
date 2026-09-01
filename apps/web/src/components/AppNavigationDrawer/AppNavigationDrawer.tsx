@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  Avatar,
   Box,
   Divider,
   Drawer,
@@ -49,6 +48,7 @@ import {
   isWorkAtRisk,
 } from "@features/sequence/store/documentStatusSlice";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
+import UserAvatar from "@components/UserAvatar/UserAvatar";
 import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
@@ -383,16 +383,7 @@ const AppNavigationDrawer = ({
               {/* Fila no interactiva: Avatar + email */}
               <ListItem>
                 <ListItemIcon>
-                  <Avatar
-                    sx={{
-                      width: 28,
-                      height: 28,
-                      fontSize: "0.75rem",
-                      bgcolor: "primary.main",
-                    }}
-                  >
-                    {userEmail ? userEmail.slice(0, 2).toUpperCase() : "?"}
-                  </Avatar>
+                  <UserAvatar email={userEmail} />
                 </ListItemIcon>
                 <ListItemText
                   primary={userEmail ?? ""}
