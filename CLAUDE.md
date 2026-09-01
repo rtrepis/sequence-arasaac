@@ -298,6 +298,48 @@ feina és on viu cada acció i quan demana permís.
 
 ---
 
+## Estàndard de correus
+
+Tots els correus que surten de l'aplicació tenen la mateixa cara. Font única de veritat:
+`apps/api/src/shared/emailLayout.ts` (com es dibuixa) i `mailer.ts` (què diu i qui l'envia).
+
+- **`renderEmail` és l'única manera d'escriure un correu.** Cap altre fitxer escriu HTML de
+  correu: si la marca s'ha de poder canviar, s'ha de poder canviar en un sol lloc. L'avís intern
+  d'error hi entra igual que els altres —arriba a la mateixa safata i s'ha de reconèixer igual
+  de ràpid—, amb les dades en una taula en comptes d'un `<pre>`.
+- **El contingut hi arriba en text pla i la plantilla l'escapa sencer.** El nom de l'usuari i el
+  detall d'un error els escriu algú de fora i acaben dins d'un document HTML: amb l'escapat al
+  render, injectar-hi marcatge és impossible per construcció i no per haver-se'n recordat a cada
+  crida.
+- **HTML i text pla surten de la mateixa declaració.** Mantenir-los per separat vol dir que un dia
+  diran coses diferents i ningú se n'assabentarà, perquè la versió de text la llegeix justament
+  qui no pot llegir l'altra. A més, un correu amb les dues parts arriba millor a la safata.
+- **El nom de qui el rep va al cos, no a l'assumpte.** És el senyal que distingeix un correu de
+  debò d'una imitació, que només en coneix l'adreça; l'assumpte, en canvi, identifica el fil i no
+  ha de canviar segons qui el rebi. Si no hi ha nom, la salutació funciona sense («Hola!»).
+- **Tot correu diu per què ha arribat** (`reason`, al peu). És el que separa un transaccional
+  legítim d'un que no s'ha demanat, i el que evita que qui no l'esperava el marqui com a brossa.
+- **Tot enllaç va dues vegades: al botó i en text.** Els botons es bloquegen, es trenquen i no es
+  poden dictar per telèfon. El botó porta la forma de la casa (`APP_CORNER_RADIUS`) i fa 48 px
+  d'alt, per damunt del mínim WCAG de diana tàctil.
+- **Layout de taules, estils en línia i 600 px d'amplada.** No és estil antic: Outlook renderitza
+  amb el motor del Word i no coneix flex ni grid, i molts clients esborren el `<style>`. Per això
+  el botó porta el fons a la cel·la (no a l'enllaç) i una versió VML per a l'Outlook d'escriptori,
+  i el bloc `<style>` només porta el que no es pot escriure en línia (les media queries).
+- **El correu s'ha de reconèixer amb les imatges bloquejades**: el nom de la marca va en text al
+  costat del logotip, mai dins de la imatge, i el logotip porta `alt`, amplada i alçada. En PNG i
+  no en SVG: cap client de correu dibuixa SVG.
+- **Ni blanc pur ni negre pur**: són els que disparen la inversió més agressiva dels clients en
+  mode fosc. Els tokens de la paleta ja hi van bé (`#1E2A12` de tinta) i el correu declara
+  `color-scheme: light dark`.
+- **Excepció declarada a la regla de colors**: `emailLayout.ts` té els hexadecimals literals
+  perquè un correu no pot importar el tema ni carregar cap full d'estil. Són els mateixos valors
+  de `palette.ts` i viuen en un sol lloc de l'API.
+- **Text de previsualització (`preheader`) sempre**: sense ell, la safata ensenya el primer text
+  del cos, que aquí seria el nom de la marca repetit.
+
+---
+
 ## Antifrau i control de comptes
 
 ### Identitat
@@ -514,6 +556,19 @@ feina és on viu cada acció i quan demana permís.
   taula per un text que ningú no ha de llegir mai —el que se'n fa és copiar-lo—, i el porta-retalls
   ja diu que ha anat bé amb el snackbar de sempre. La sortida de quan el porta-retalls falla no es
   perd: aleshores l'URL surt sencer i seleccionable a l'avís de dalt, que només hi és en aquell cas.
+- **El botó «Envia» de l'enllaç no envia res: obre un `mailto:`** al client de correu de qui
+  administra, i el missatge surt de la seva adreça. Un `mailto:` només porta text (RFC 6068), així
+  que la plantilla d'`emailLayout.ts` no hi cap i **no és cap descuit**. El que sí que hi ha de ser
+  és el mateix que porta un correu del servidor: el nom de qui el rep, per què li arriba i **fins
+  quan serveix l'enllaç**. Qui el rep no espera cap correu d'una persona, i un enllaç sol —darrere
+  del qual hi ha establir la contrasenya d'un compte— s'assembla massa a una estafa.
+- **Aquell missatge és l'excepció al «el panell va en català»**: la resta del panell la llegeix qui
+  administra, i això ho llegeix l'usuari, que pot no entendre'l. Per això `AdminUserSummary` porta
+  `lang` —l'únic camp del resum que no es pinta enlloc— i el text viu a
+  `features/admin/utils/passwordLinkMail.ts`, amb els cinc idiomes, fora del component de la taula.
+  **La caducitat hi va amb el fus horari escrit**: l'hora la formata el navegador de qui administra
+  i del compte no en sabem el fus, de manera que sense dir-lo un enllaç es podria donar per caducat
+  quan encara serveix.
 - **El registre d'errors es pot buidar des del panell**, perquè el que hi queda sigui el que encara demana atenció: `DELETE /admin/client-errors/:id` treu un error mirat (sense confirmar: és una línia de registre, i el que es perd torna sol la pròxima vegada que l'error passi) i `DELETE /admin/client-errors?before=<ISO>` buida fins a un moment donat (això sí que passa pel `ConfirmDialog`). **El tall del buidat és una data, no la llista del que es veu**: el panell només n'ensenya els últims 50, així que amb identificadors el botó deixaria enrere tot el que no hi cap; amb la data, en canvi, el que arribi mentre s'està mirant la pantalla es conserva —que és justament el que encara no ha vist ningú. Com la resta d'accions d'administració, el buidat deixa `SecurityEvent`.
 - **La issue de GitHub s'obre amb un enllaç, no des del servidor.** El botó de cada error porta al formulari `issues/new` del repositori ja omplert (codi, on, quan, detall, navegador i etiqueta `bug`), i qui la publica és l'administrador amb el seu compte. Fer-ho amb l'API de GitHub demanaria un token amb permís d'escriptura guardat a Render —una clau més a mantenir i a poder perdre— i tot el que estalviaria és un clic; a canvi, l'enllaç deixa llegir i completar el text abans de publicar-lo. **El correu de l'usuari no hi entra mai**: una issue és pública i el registre d'errors no ho és, i una adreça publicada no es pot desfer.
 

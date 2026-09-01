@@ -7,11 +7,14 @@
 // (quota diària esgotada, incidència del proveïdor, domini no verificat) i cap
 // d'aquestes coses pot impedir que un usuari es doni d'alta. Qui crida aquestes
 // funcions rep un boolean i decideix què n'explica a l'usuari.
+//
+// Aquí hi ha els textos i qui els envia; la cara que fan és a `emailLayout.ts`.
 
 import { Resend } from "resend";
 import { env } from "../config/env";
 import type { LangsApp } from "@sequence-arasaac/shared-types";
 import { DEFAULT_LANGS_APP } from "./langsApp";
+import { renderEmail, type EmailDetailRow } from "./emailLayout";
 
 // Client mandrós: només es construeix si hi ha clau, perquè en desenvolupament
 // el mòdul es pugui importar sense credencials
@@ -58,6 +61,11 @@ const toReason = (error: unknown): string => {
 };
 
 // Envia un correu. Diu si s'ha pogut lliurar al proveïdor i, si no, per què.
+//
+// Sempre en dues versions: la HTML i la de text pla. La segona no és cap
+// resta —és el que llegeixen els clients en mode text, els rellotges i els
+// lectors de pantalla que no volen marcatge—, i a més un correu amb les dues
+// parts arriba millor a la safata d'entrada que un que només porta HTML.
 const sendEmail = async ({
   to,
   subject,
@@ -98,233 +106,302 @@ const sendEmail = async ({
   }
 };
 
-interface ClientErrorAlert {
-  code: string;
-  context: string;
-  detail?: string;
-  userAgent?: string;
-  emailCanonical?: string;
+// --- Textos ---
+//
+// Un joc complet per idioma i per correu. Cap altra part del fitxer coneix cap
+// literal traduïble: tot passa per aquí.
+//
+// Tots tres correus tenen la mateixa forma perquè els tres fan el mateix:
+// donen context, porten a una acció i diuen per què han arribat. El `reason`
+// no és decoració —és el que separa un correu transaccional legítim d'un que
+// no s'ha demanat, i el que evita que qui no l'esperava el marqui com a brossa.
+interface ActionEmailStrings {
+  subject: string;
+  preheader: string;
+  heading: string;
+  greeting: (name?: string) => string;
+  body: string[];
+  buttonLabel: string;
+  footnotes: string[];
+  reason: string;
 }
 
-// Avís intern quan un usuari topa amb un error que no s'ha resolt sol.
-// Va en català i sense format: el llegeix una sola persona i el que importa és
-// que el codi i el context es vegin de seguida a la safata d'entrada.
-export const sendClientErrorAlert = async (
-  to: string,
-  { code, context, detail, userAgent, emailCanonical }: ClientErrorAlert
-): Promise<MailResult> => {
-  const subject = `[SequenciAAC] Error a ${context}: ${code}`;
-
-  const lines = [
-    `Codi:     ${code}`,
-    `On:       ${context}`,
-    `Quan:     ${new Date().toISOString()}`,
-    `Usuari:   ${emailCanonical ?? "(sense sessió)"}`,
-    `Detall:   ${detail ?? "(cap)"}`,
-    `Navegador: ${userAgent ?? "(desconegut)"}`,
-    "",
-    "Els errors passatgers (servei engegant-se, connexió intermitent) no arriben",
-    "aquí: només els que l'usuari ha acabat veient per pantalla.",
-    "No en rebràs cap altre d'aquest mateix codi durant una hora.",
-  ];
-
-  const text = lines.join("\n");
-  const html = `<pre style="font-family: monospace; font-size: 14px;">${lines
-    .join("\n")
-    .replace(/</g, "&lt;")}</pre>`;
-
-  return sendEmail({ to, subject, html, text });
+// El nom el fa arribar l'usuari al registre: pot venir buit o ser tot espais.
+const cleanName = (name?: string): string | undefined => {
+  const trimmed = name?.trim();
+  return trimmed ? trimmed : undefined;
 };
 
-// Botó reutilitzat als dos correus que porten a /set-password
-const actionButton = (url: string, label: string): string => `
-  <p>
-    <a href="${url}"
-       style="display: inline-block; padding: 12px 20px; background: #8ac34a;
-              color: #1E2A12; text-decoration: none; border-radius: 6px; font-weight: bold;">
-      ${label}
-    </a>
-  </p>
-`;
-
-interface VerificationStrings {
-  subject: string;
-  greeting: (name?: string) => string;
-  body1: string;
-  body2: string;
-  buttonLabel: string;
-  expiry: string;
-  ignore: string;
-}
-
-interface AccountExistsStrings {
-  subject: string;
-  greeting: (name?: string) => string;
-  body1: string;
-  body2: string;
-  body3: string;
-  buttonLabel: string;
-  expiry: string;
-}
-
-interface PasswordResetStrings {
-  subject: string;
-  greeting: string;
-  body1: string;
-  body2: string;
-  buttonLabel: string;
-  expiry: string;
-  ignore: string;
-}
-
-// Un joc de textos complet per idioma. Cap altra part del fitxer coneix cap
-// literal traduïble: tot passa per aquí.
-const VERIFICATION_STRINGS: Record<LangsApp, VerificationStrings> = {
+const VERIFICATION_STRINGS: Record<LangsApp, ActionEmailStrings> = {
   ca: {
     subject: "Benvingut/da a SequenciAAC — confirma el teu compte",
+    preheader: "Confirma aquesta adreça i tria la teva contrasenya.",
+    heading: "Et donem la benvinguda",
     greeting: (name) => (name ? `Hola, ${name}!` : "Hola!"),
-    body1: "Gràcies per crear un compte a SequenciAAC.",
-    body2: "Per acabar-lo de configurar i triar la teva contrasenya, confirma aquesta adreça:",
+    body: [
+      "Gràcies per crear un compte a SequenciAAC.",
+      "Per acabar-lo de configurar i triar la teva contrasenya, confirma aquesta adreça:",
+    ],
     buttonLabel: "Confirma i tria la contrasenya",
-    expiry: "L'enllaç caduca d'aquí a 24 hores.",
-    ignore: "Si no has estat tu qui ha creat el compte, pots ignorar aquest missatge.",
+    footnotes: [
+      "L'enllaç caduca d'aquí a 24 hores.",
+      "Si no has estat tu qui ha creat el compte, pots ignorar aquest missatge.",
+    ],
+    reason: "Reps aquest correu perquè s'ha creat un compte a SequenciAAC amb aquesta adreça.",
   },
   es: {
     subject: "Bienvenido/a a SequenciAAC — confirma tu cuenta",
+    preheader: "Confirma esta dirección y elige tu contraseña.",
+    heading: "Te damos la bienvenida",
     greeting: (name) => (name ? `¡Hola, ${name}!` : "¡Hola!"),
-    body1: "Gracias por crear una cuenta en SequenciAAC.",
-    body2: "Para acabar de configurarla y elegir tu contraseña, confirma esta dirección:",
+    body: [
+      "Gracias por crear una cuenta en SequenciAAC.",
+      "Para acabar de configurarla y elegir tu contraseña, confirma esta dirección:",
+    ],
     buttonLabel: "Confirma y elige la contraseña",
-    expiry: "El enlace caduca dentro de 24 horas.",
-    ignore: "Si no has sido tú quien ha creado la cuenta, puedes ignorar este mensaje.",
+    footnotes: [
+      "El enlace caduca dentro de 24 horas.",
+      "Si no has sido tú quien ha creado la cuenta, puedes ignorar este mensaje.",
+    ],
+    reason: "Recibes este correo porque se ha creado una cuenta en SequenciAAC con esta dirección.",
   },
   en: {
     subject: "Welcome to SequenciAAC — confirm your account",
+    preheader: "Confirm this address and choose your password.",
+    heading: "Welcome aboard",
     greeting: (name) => (name ? `Hi, ${name}!` : "Hi!"),
-    body1: "Thanks for creating an account on SequenciAAC.",
-    body2: "To finish setting it up and choose your password, confirm this address:",
+    body: [
+      "Thanks for creating an account on SequenciAAC.",
+      "To finish setting it up and choose your password, confirm this address:",
+    ],
     buttonLabel: "Confirm and choose password",
-    expiry: "The link expires in 24 hours.",
-    ignore: "If you didn't create this account, you can ignore this message.",
+    footnotes: [
+      "The link expires in 24 hours.",
+      "If you didn't create this account, you can ignore this message.",
+    ],
+    reason: "You're receiving this email because an account was created on SequenciAAC with this address.",
   },
   fr: {
     subject: "Bienvenue sur SequenciAAC — confirmez votre compte",
+    preheader: "Confirmez cette adresse et choisissez votre mot de passe.",
+    heading: "Bienvenue",
     greeting: (name) => (name ? `Bonjour, ${name} !` : "Bonjour !"),
-    body1: "Merci d'avoir créé un compte sur SequenciAAC.",
-    body2: "Pour terminer sa configuration et choisir votre mot de passe, confirmez cette adresse :",
+    body: [
+      "Merci d'avoir créé un compte sur SequenciAAC.",
+      "Pour terminer sa configuration et choisir votre mot de passe, confirmez cette adresse :",
+    ],
     buttonLabel: "Confirmer et choisir le mot de passe",
-    expiry: "Le lien expire dans 24 heures.",
-    ignore: "Si vous n'êtes pas à l'origine de la création de ce compte, vous pouvez ignorer ce message.",
+    footnotes: [
+      "Le lien expire dans 24 heures.",
+      "Si vous n'êtes pas à l'origine de la création de ce compte, vous pouvez ignorer ce message.",
+    ],
+    reason: "Vous recevez cet e-mail parce qu'un compte a été créé sur SequenciAAC avec cette adresse.",
   },
   it: {
     subject: "Benvenuto/a su SequenciAAC — conferma il tuo account",
+    preheader: "Conferma questo indirizzo e scegli la tua password.",
+    heading: "Ti diamo il benvenuto",
     greeting: (name) => (name ? `Ciao, ${name}!` : "Ciao!"),
-    body1: "Grazie per aver creato un account su SequenciAAC.",
-    body2: "Per completare la configurazione e scegliere la password, conferma questo indirizzo:",
+    body: [
+      "Grazie per aver creato un account su SequenciAAC.",
+      "Per completare la configurazione e scegliere la password, conferma questo indirizzo:",
+    ],
     buttonLabel: "Conferma e scegli la password",
-    expiry: "Il link scade tra 24 ore.",
-    ignore: "Se non sei stato tu a creare l'account, puoi ignorare questo messaggio.",
+    footnotes: [
+      "Il link scade tra 24 ore.",
+      "Se non sei stato tu a creare l'account, puoi ignorare questo messaggio.",
+    ],
+    reason: "Ricevi questa email perché è stato creato un account su SequenciAAC con questo indirizzo.",
   },
 };
 
-const ACCOUNT_EXISTS_STRINGS: Record<LangsApp, AccountExistsStrings> = {
+const ACCOUNT_EXISTS_STRINGS: Record<LangsApp, ActionEmailStrings> = {
   ca: {
     subject: "Algú ha intentat crear un compte amb aquest correu — SequenciAAC",
+    preheader: "No s'ha creat cap compte nou ni s'ha canviat res del teu.",
+    heading: "Ja tens un compte",
     greeting: (name) => (name ? `Hola, ${name}!` : "Hola!"),
-    body1: "Algú ha intentat crear un compte a SequenciAAC amb aquesta adreça, però ja en tens un.",
-    body2: "Si no has estat tu, pots ignorar aquest missatge: no s'ha canviat res del teu compte.",
-    body3: "Si has estat tu i no recordes la contrasenya, pots triar-ne una de nova aquí:",
+    body: [
+      "Algú ha intentat crear un compte a SequenciAAC amb aquesta adreça, però ja en tens un.",
+      "Si no has estat tu, pots ignorar aquest missatge: no s'ha canviat res del teu compte.",
+      "Si has estat tu i no recordes la contrasenya, pots triar-ne una de nova aquí:",
+    ],
     buttonLabel: "Tria una contrasenya nova",
-    expiry: "L'enllaç caduca d'aquí a 1 hora.",
+    footnotes: ["L'enllaç caduca d'aquí a 1 hora."],
+    reason: "Reps aquest correu perquè algú ha provat de crear un compte amb aquesta adreça.",
   },
   es: {
     subject: "Alguien ha intentado crear una cuenta con este correo — SequenciAAC",
+    preheader: "No se ha creado ninguna cuenta nueva ni se ha cambiado nada.",
+    heading: "Ya tienes una cuenta",
     greeting: (name) => (name ? `¡Hola, ${name}!` : "¡Hola!"),
-    body1: "Alguien ha intentado crear una cuenta en SequenciAAC con esta dirección, pero ya tienes una.",
-    body2: "Si no has sido tú, puedes ignorar este mensaje: no se ha cambiado nada en tu cuenta.",
-    body3: "Si has sido tú y no recuerdas la contraseña, puedes elegir una nueva aquí:",
+    body: [
+      "Alguien ha intentado crear una cuenta en SequenciAAC con esta dirección, pero ya tienes una.",
+      "Si no has sido tú, puedes ignorar este mensaje: no se ha cambiado nada en tu cuenta.",
+      "Si has sido tú y no recuerdas la contraseña, puedes elegir una nueva aquí:",
+    ],
     buttonLabel: "Elige una contraseña nueva",
-    expiry: "El enlace caduca dentro de 1 hora.",
+    footnotes: ["El enlace caduca dentro de 1 hora."],
+    reason: "Recibes este correo porque alguien ha intentado crear una cuenta con esta dirección.",
   },
   en: {
     subject: "Someone tried to create an account with this email — SequenciAAC",
+    preheader: "No new account was created and nothing changed on yours.",
+    heading: "You already have an account",
     greeting: (name) => (name ? `Hi, ${name}!` : "Hi!"),
-    body1: "Someone tried to create an account on SequenciAAC with this address, but you already have one.",
-    body2: "If it wasn't you, you can ignore this message: nothing has changed on your account.",
-    body3: "If it was you and you don't remember the password, you can choose a new one here:",
+    body: [
+      "Someone tried to create an account on SequenciAAC with this address, but you already have one.",
+      "If it wasn't you, you can ignore this message: nothing has changed on your account.",
+      "If it was you and you don't remember the password, you can choose a new one here:",
+    ],
     buttonLabel: "Choose a new password",
-    expiry: "The link expires in 1 hour.",
+    footnotes: ["The link expires in 1 hour."],
+    reason: "You're receiving this email because someone tried to create an account with this address.",
   },
   fr: {
     subject: "Quelqu'un a essayé de créer un compte avec cet e-mail — SequenciAAC",
+    preheader: "Aucun nouveau compte n'a été créé et rien n'a changé sur le vôtre.",
+    heading: "Vous avez déjà un compte",
     greeting: (name) => (name ? `Bonjour, ${name} !` : "Bonjour !"),
-    body1: "Quelqu'un a essayé de créer un compte sur SequenciAAC avec cette adresse, mais vous en avez déjà un.",
-    body2: "Si ce n'était pas vous, vous pouvez ignorer ce message : rien n'a changé sur votre compte.",
-    body3: "Si c'était vous et que vous ne vous souvenez plus du mot de passe, vous pouvez en choisir un nouveau ici :",
+    body: [
+      "Quelqu'un a essayé de créer un compte sur SequenciAAC avec cette adresse, mais vous en avez déjà un.",
+      "Si ce n'était pas vous, vous pouvez ignorer ce message : rien n'a changé sur votre compte.",
+      "Si c'était vous et que vous ne vous souvenez plus du mot de passe, vous pouvez en choisir un nouveau ici :",
+    ],
     buttonLabel: "Choisir un nouveau mot de passe",
-    expiry: "Le lien expire dans 1 heure.",
+    footnotes: ["Le lien expire dans 1 heure."],
+    reason: "Vous recevez cet e-mail parce que quelqu'un a essayé de créer un compte avec cette adresse.",
   },
   it: {
     subject: "Qualcuno ha provato a creare un account con questa email — SequenciAAC",
+    preheader: "Non è stato creato nessun nuovo account e nulla è cambiato nel tuo.",
+    heading: "Hai già un account",
     greeting: (name) => (name ? `Ciao, ${name}!` : "Ciao!"),
-    body1: "Qualcuno ha provato a creare un account su SequenciAAC con questo indirizzo, ma ne hai già uno.",
-    body2: "Se non sei stato tu, puoi ignorare questo messaggio: non è cambiato nulla nel tuo account.",
-    body3: "Se sei stato tu e non ricordi la password, puoi sceglierne una nuova qui:",
+    body: [
+      "Qualcuno ha provato a creare un account su SequenciAAC con questo indirizzo, ma ne hai già uno.",
+      "Se non sei stato tu, puoi ignorare questo messaggio: non è cambiato nulla nel tuo account.",
+      "Se sei stato tu e non ricordi la password, puoi sceglierne una nuova qui:",
+    ],
     buttonLabel: "Scegli una nuova password",
-    expiry: "Il link scade tra 1 ora.",
+    footnotes: ["Il link scade tra 1 ora."],
+    reason: "Ricevi questa email perché qualcuno ha provato a creare un account con questo indirizzo.",
   },
 };
 
-const PASSWORD_RESET_STRINGS: Record<LangsApp, PasswordResetStrings> = {
+const PASSWORD_RESET_STRINGS: Record<LangsApp, ActionEmailStrings> = {
   ca: {
     subject: "Recupera la teva contrasenya — SequenciAAC",
-    greeting: "Hola!",
-    body1: "Hem rebut una petició per canviar la contrasenya del teu compte a SequenciAAC.",
-    body2: "Per triar-ne una de nova, obre aquest enllaç:",
+    preheader: "Enllaç per triar una contrasenya nova. Caduca d'aquí a 1 hora.",
+    heading: "Recupera la contrasenya",
+    greeting: (name) => (name ? `Hola, ${name}!` : "Hola!"),
+    body: [
+      "Hem rebut una petició per canviar la contrasenya del teu compte a SequenciAAC.",
+      "Per triar-ne una de nova, obre aquest enllaç:",
+    ],
     buttonLabel: "Tria una contrasenya nova",
-    expiry: "L'enllaç caduca d'aquí a 1 hora.",
-    ignore: "Si no has estat tu qui ho ha demanat, pots ignorar aquest missatge: la teva contrasenya actual continua funcionant.",
+    footnotes: [
+      "L'enllaç caduca d'aquí a 1 hora.",
+      "Si no has estat tu qui ho ha demanat, pots ignorar aquest missatge: la teva contrasenya actual continua funcionant.",
+    ],
+    reason: "Reps aquest correu perquè s'ha demanat un canvi de contrasenya per a aquest compte.",
   },
   es: {
     subject: "Recupera tu contraseña — SequenciAAC",
-    greeting: "¡Hola!",
-    body1: "Hemos recibido una petición para cambiar la contraseña de tu cuenta en SequenciAAC.",
-    body2: "Para elegir una nueva, abre este enlace:",
+    preheader: "Enlace para elegir una contraseña nueva. Caduca dentro de 1 hora.",
+    heading: "Recupera la contraseña",
+    greeting: (name) => (name ? `¡Hola, ${name}!` : "¡Hola!"),
+    body: [
+      "Hemos recibido una petición para cambiar la contraseña de tu cuenta en SequenciAAC.",
+      "Para elegir una nueva, abre este enlace:",
+    ],
     buttonLabel: "Elige una contraseña nueva",
-    expiry: "El enlace caduca dentro de 1 hora.",
-    ignore: "Si no has sido tú quien lo ha pedido, puedes ignorar este mensaje: tu contraseña actual sigue funcionando.",
+    footnotes: [
+      "El enlace caduca dentro de 1 hora.",
+      "Si no has sido tú quien lo ha pedido, puedes ignorar este mensaje: tu contraseña actual sigue funcionando.",
+    ],
+    reason: "Recibes este correo porque se ha pedido un cambio de contraseña para esta cuenta.",
   },
   en: {
     subject: "Reset your password — SequenciAAC",
-    greeting: "Hi!",
-    body1: "We received a request to change the password for your SequenciAAC account.",
-    body2: "To choose a new one, open this link:",
+    preheader: "Link to choose a new password. It expires in 1 hour.",
+    heading: "Reset your password",
+    greeting: (name) => (name ? `Hi, ${name}!` : "Hi!"),
+    body: [
+      "We received a request to change the password for your SequenciAAC account.",
+      "To choose a new one, open this link:",
+    ],
     buttonLabel: "Choose a new password",
-    expiry: "The link expires in 1 hour.",
-    ignore: "If you didn't request this, you can ignore this message: your current password still works.",
+    footnotes: [
+      "The link expires in 1 hour.",
+      "If you didn't request this, you can ignore this message: your current password still works.",
+    ],
+    reason: "You're receiving this email because a password change was requested for this account.",
   },
   fr: {
     subject: "Récupérez votre mot de passe — SequenciAAC",
-    greeting: "Bonjour !",
-    body1: "Nous avons reçu une demande de changement du mot de passe de votre compte SequenciAAC.",
-    body2: "Pour en choisir un nouveau, ouvrez ce lien :",
+    preheader: "Lien pour choisir un nouveau mot de passe. Il expire dans 1 heure.",
+    heading: "Récupérez votre mot de passe",
+    greeting: (name) => (name ? `Bonjour, ${name} !` : "Bonjour !"),
+    body: [
+      "Nous avons reçu une demande de changement du mot de passe de votre compte SequenciAAC.",
+      "Pour en choisir un nouveau, ouvrez ce lien :",
+    ],
     buttonLabel: "Choisir un nouveau mot de passe",
-    expiry: "Le lien expire dans 1 heure.",
-    ignore: "Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer ce message : votre mot de passe actuel continue de fonctionner.",
+    footnotes: [
+      "Le lien expire dans 1 heure.",
+      "Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer ce message : votre mot de passe actuel continue de fonctionner.",
+    ],
+    reason: "Vous recevez cet e-mail parce qu'un changement de mot de passe a été demandé pour ce compte.",
   },
   it: {
     subject: "Recupera la tua password — SequenciAAC",
-    greeting: "Ciao!",
-    body1: "Abbiamo ricevuto una richiesta di cambio password per il tuo account SequenciAAC.",
-    body2: "Per sceglierne una nuova, apri questo link:",
+    preheader: "Link per scegliere una nuova password. Scade tra 1 ora.",
+    heading: "Recupera la password",
+    greeting: (name) => (name ? `Ciao, ${name}!` : "Ciao!"),
+    body: [
+      "Abbiamo ricevuto una richiesta di cambio password per il tuo account SequenciAAC.",
+      "Per sceglierne una nuova, apri questo link:",
+    ],
     buttonLabel: "Scegli una nuova password",
-    expiry: "Il link scade tra 1 ora.",
-    ignore: "Se non sei stato tu a richiederlo, puoi ignorare questo messaggio: la tua password attuale continua a funzionare.",
+    footnotes: [
+      "Il link scade tra 1 ora.",
+      "Se non sei stato tu a richiederlo, puoi ignorare questo messaggio: la tua password attuale continua a funzionare.",
+    ],
+    reason: "Ricevi questa email perché è stato richiesto un cambio di password per questo account.",
   },
 };
 
-// Cos del correu de benvinguda + verificació. Text pla i HTML mínim a propòsit:
-// arriba millor a la safata d'entrada i es llegeix igual en qualsevol client.
+// Envia un dels tres correus amb enllaç. Els tres tenen la mateixa estructura,
+// així que en tenen una de sola: el que canvia és el joc de textos.
+const sendActionEmail = async (
+  strings: Record<LangsApp, ActionEmailStrings>,
+  to: string,
+  name: string | undefined,
+  url: string,
+  locale: LangsApp
+): Promise<MailResult> => {
+  const s = strings[locale] ?? strings[DEFAULT_LANGS_APP];
+  const safeLocale = strings[locale] ? locale : DEFAULT_LANGS_APP;
+
+  // El nom hi va perquè qui rep el correu pugui reconèixer que és seu d'una
+  // ullada: és el senyal que distingeix un correu de debò d'una imitació, que
+  // només coneix l'adreça. Va al cos i no a l'assumpte —l'assumpte identifica
+  // el fil i no ha de canviar segons qui el rebi.
+  const { html, text } = renderEmail({
+    locale: safeLocale,
+    preheader: s.preheader,
+    heading: s.heading,
+    greeting: s.greeting(cleanName(name)),
+    paragraphs: s.body,
+    action: { url, label: s.buttonLabel },
+    footnotes: s.footnotes,
+    reason: s.reason,
+  });
+
+  return sendEmail({ to, subject: s.subject, html, text });
+};
+
+// Correu de benvinguda + verificació.
 //
 // Dues parts diferenciades: una de benvinguda (el compte ja existeix, encara no
 // es pot fer servir) i una d'acció (el botó porta a triar la contrasenya). Sense
@@ -334,39 +411,10 @@ export const sendVerificationEmail = async (
   name: string | undefined,
   verificationUrl: string,
   locale: LangsApp = DEFAULT_LANGS_APP
-): Promise<MailResult> => {
-  const s = VERIFICATION_STRINGS[locale] ?? VERIFICATION_STRINGS[DEFAULT_LANGS_APP];
-  const greeting = s.greeting(name);
+): Promise<MailResult> =>
+  sendActionEmail(VERIFICATION_STRINGS, to, name, verificationUrl, locale);
 
-  const text = [
-    greeting,
-    "",
-    s.body1,
-    "",
-    s.body2,
-    verificationUrl,
-    "",
-    s.expiry,
-    s.ignore,
-  ].join("\n");
-
-  const html = `
-    <div style="font-family: sans-serif; font-size: 16px; line-height: 1.5; color: #1E2A12;">
-      <p>${greeting}</p>
-      <p>${s.body1}</p>
-      <p>${s.body2}</p>
-      ${actionButton(verificationUrl, s.buttonLabel)}
-      <p style="font-size: 14px; color: #555;">
-        ${s.expiry}<br />
-        ${s.ignore}
-      </p>
-    </div>
-  `;
-
-  return sendEmail({ to, subject: s.subject, html, text });
-};
-
-// Cos de l'avís quan algú intenta un signup amb un correu que ja té compte.
+// Avís quan algú intenta un signup amb un correu que ja té compte.
 // No diu "aquest correu ja existeix" enlloc de l'aplicació —això revelaria
 // comptes a qui prova adreces a l'atzar—; l'avís només arriba a la bústia
 // real, que és qui de debò necessita saber-ho. Cobreix els dos casos possibles
@@ -376,71 +424,59 @@ export const sendAccountExistsEmail = async (
   name: string | undefined,
   resetUrl: string,
   locale: LangsApp = DEFAULT_LANGS_APP
-): Promise<MailResult> => {
-  const s = ACCOUNT_EXISTS_STRINGS[locale] ?? ACCOUNT_EXISTS_STRINGS[DEFAULT_LANGS_APP];
-  const greeting = s.greeting(name);
+): Promise<MailResult> =>
+  sendActionEmail(ACCOUNT_EXISTS_STRINGS, to, name, resetUrl, locale);
 
-  const text = [
-    greeting,
-    "",
-    s.body1,
-    "",
-    s.body2,
-    "",
-    s.body3,
-    resetUrl,
-    "",
-    s.expiry,
-  ].join("\n");
-
-  const html = `
-    <div style="font-family: sans-serif; font-size: 16px; line-height: 1.5; color: #1E2A12;">
-      <p>${greeting}</p>
-      <p>${s.body1}</p>
-      <p>${s.body2}</p>
-      <p>${s.body3}</p>
-      ${actionButton(resetUrl, s.buttonLabel)}
-      <p style="font-size: 14px; color: #555;">
-        ${s.expiry}
-      </p>
-    </div>
-  `;
-
-  return sendEmail({ to, subject: s.subject, html, text });
-};
-
-// Cos del correu de recuperació de contrasenya. Mateix estil que el de
+// Correu de recuperació de contrasenya. Mateixa plantilla que el de
 // verificació però sense to de benvinguda: aquí ja hi ha un compte fet servir.
 export const sendPasswordResetEmail = async (
   to: string,
+  name: string | undefined,
   resetUrl: string,
   locale: LangsApp = DEFAULT_LANGS_APP
+): Promise<MailResult> =>
+  sendActionEmail(PASSWORD_RESET_STRINGS, to, name, resetUrl, locale);
+
+interface ClientErrorAlert {
+  code: string;
+  context: string;
+  detail?: string;
+  userAgent?: string;
+  emailCanonical?: string;
+}
+
+// Avís intern quan un usuari topa amb un error que no s'ha resolt sol.
+// Va en català: el llegeix una sola persona. Porta la mateixa plantilla que la
+// resta —arriba a la mateixa safata i s'ha de reconèixer igual de ràpid—, amb
+// les dades en una taula perquè el codi i el context es vegin de seguida.
+export const sendClientErrorAlert = async (
+  to: string,
+  { code, context, detail, userAgent, emailCanonical }: ClientErrorAlert
 ): Promise<MailResult> => {
-  const s = PASSWORD_RESET_STRINGS[locale] ?? PASSWORD_RESET_STRINGS[DEFAULT_LANGS_APP];
+  const subject = `[SequenciAAC] Error a ${context}: ${code}`;
 
-  const text = [
-    s.greeting,
-    "",
-    s.body1,
-    s.body2,
-    resetUrl,
-    "",
-    s.expiry,
-    s.ignore,
-  ].join("\n");
+  const detailRows: EmailDetailRow[] = [
+    { label: "Codi", value: code },
+    { label: "On", value: context },
+    { label: "Quan", value: new Date().toISOString() },
+    { label: "Usuari", value: emailCanonical ?? "(sense sessió)" },
+    { label: "Detall", value: detail ?? "(cap)" },
+    { label: "Navegador", value: userAgent ?? "(desconegut)" },
+  ];
 
-  const html = `
-    <div style="font-family: sans-serif; font-size: 16px; line-height: 1.5; color: #1E2A12;">
-      <p>${s.greeting}</p>
-      <p>${s.body1}</p>
-      <p>${s.body2}</p>
-      ${actionButton(resetUrl, s.buttonLabel)}
-      <p style="font-size: 14px; color: #555;">
-        ${s.expiry}<br />
-        ${s.ignore}
-      </p>
-    </div>
-  `;
+  const { html, text } = renderEmail({
+    locale: DEFAULT_LANGS_APP,
+    preheader: `${code} a ${context}`,
+    heading: "Un usuari ha vist un error",
+    greeting: "Hola!",
+    paragraphs: ["Aquest error ha arribat a la pantalla d'algú que feia servir l'aplicació."],
+    detailRows,
+    footnotes: [
+      "Els errors passatgers (servei engegant-se, connexió intermitent) no arriben aquí: només els que l'usuari ha acabat veient per pantalla.",
+      "No en rebràs cap altre d'aquest mateix codi durant una hora.",
+    ],
+    reason: "Avís intern del registre d'errors de SequenciAAC.",
+  });
 
-  return sendEmail({ to, subject: s.subject, html, text });
+  return sendEmail({ to, subject, html, text });
 };

@@ -40,6 +40,7 @@ import {
   updateUser,
 } from "../services/adminService";
 import { formatBytes } from "../utils/formatBytes";
+import { buildPasswordLinkMailto } from "../utils/passwordLinkMail";
 
 const PAGE_SIZE = 25;
 
@@ -73,27 +74,6 @@ const formatExpiry = (iso: string): string =>
 const LINK_TYPE_LABEL: Record<AdminPasswordLink["type"], string> = {
   verify: "Primer accés",
   reset: "Nova contrasenya",
-};
-
-// Construeix un mailto: per enviar l'enllaç d'accés des del client de correu
-const buildMailtoUrl = (
-  email: string,
-  linkUrl: string,
-  type: AdminPasswordLink["type"],
-): string => {
-  const subject =
-    type === "verify"
-      ? "Completa el registre a SequenciAAC"
-      : "Nova contrasenya de SequenciAAC";
-  const body = [
-    type === "verify"
-      ? "Obre aquest enllaç per establir la teva contrasenya i activar el compte:"
-      : "Obre aquest enllaç per establir una nova contrasenya:",
-    "",
-    linkUrl,
-  ].join("\n");
-
-  return `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 };
 
 const LINK_ERROR: Record<string, string> = {
@@ -314,11 +294,7 @@ const AdminUsersTable = (): ReactElement => {
                         <Tooltip title="Envia'l per correu">
                           <StyledIconButton
                             component="a"
-                            href={buildMailtoUrl(
-                              user.email,
-                              links[user.id].url,
-                              links[user.id].type,
-                            )}
+                            href={buildPasswordLinkMailto(user, links[user.id])}
                             color="inherit"
                             size="small"
                             aria-label={`Envia l'enllaç d'accés a ${user.email}`}
