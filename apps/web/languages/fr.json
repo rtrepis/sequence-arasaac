@@ -1657,6 +1657,22 @@
     "defaultMessage": "Nous avons envoyé un e-mail à {email} avec un lien pour confirmer votre adresse et choisir votre mot de passe. S'il n'apparaît pas dans votre boîte de réception, vérifiez aussi les spams.",
     "description": "Missatge d'èxit després del signup"
   },
+  "pages.signup.failedTitle": {
+    "defaultMessage": "Nous n'avons pas pu envoyer l'e-mail",
+    "description": "Títol de la pantalla de signup quan el correu no ha sortit"
+  },
+  "pages.signup.failed": {
+    "defaultMessage": "Le compte de {email} a bien été créé, mais l'e-mail contenant le lien pour choisir votre mot de passe n'a pas pu partir. Sans ce lien, vous ne pouvez pas encore vous connecter : demandez-le à nouveau.",
+    "description": "Missatge de signup amb el compte creat i el correu no enviat"
+  },
+  "pages.signup.resend": {
+    "defaultMessage": "Renvoyer l'e-mail",
+    "description": "Botó per demanar de nou el correu de verificació"
+  },
+  "pages.signup.resendDone": {
+    "defaultMessage": "Nous l'avons redemandé. S'il n'arrive toujours pas dans quelques minutes, vérifiez aussi vos spams et réessayez plus tard.",
+    "description": "Confirmació d'haver tornat a demanar el correu de verificació"
+  },
   "pages.signup.goToApp": {
     "defaultMessage": "Aller à l'application",
     "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"

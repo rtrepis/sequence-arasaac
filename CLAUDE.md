@@ -460,6 +460,23 @@ feina és on viu cada acció i quan demana permís.
 - `shared/mailer.ts` és **l'únic fitxer que sap que el proveïdor és Resend**. Cap funció seva llança mai.
 - **L'enviament no bloqueja mai el registre.** El pla gratuït de Resend són 100 correus/dia: si s'esgota o el proveïdor falla, el compte s'ha de crear igualment i l'usuari ha de poder demanar el reenviament. Un dia dolent del correu no pot deixar el registre trencat.
 - Sense `RESEND_API_KEY` (desenvolupament) l'enllaç surt per consola: el flux es pot provar sencer sense gastar quota.
+- **A producció, `MAIL_FROM` no pot ser mai del domini de proves del proveïdor** (`resend.dev`): des
+  d'una adreça d'allà, Resend només deixa escriure a la bústia del propietari del compte i rebutja
+  qualsevol altre destinatari amb un 403. La conseqüència no s'assembla gens a una avaria: els
+  correus interns arriben —l'avís d'error, la recuperació de contrasenya del propietari, el
+  registre repetit amb la seva pròpia adreça—, i els únics que no surten són els de benvinguda de
+  la gent nova, que és qui no et pot avisar. La comprovació d'`env.ts` mira **el domini**, no la
+  cadena sencera: fins a la branca `claude/signup-email-error-tpkg8t` comparava per igualtat exacta
+  amb el valor de desenvolupament, i n'hi havia prou de canviar el nom que va davant de l'adreça
+  perquè passés amb el domini de proves intacte. Va estar setmanes així.
+- **Un correu que no surt es registra com a error vist** (`MAIL_SEND_FAILED` a `client-errors`, amb
+  el motiu que dona el proveïdor). Abans la fallada només anava a la consola de Render: qui es
+  quedava sense l'enllaç no tenia contrasenya, per tant no podia entrar, per tant no podia demanar
+  el reenviament des del banner —que exigeix sessió—, i enlloc de l'aplicació no en constava res.
+- **El signup diu la veritat sobre el correu**: `SignupPage` llegeix l'`emailSent` que retorna
+  l'API i, quan és fals, ho diu i ofereix el reenviament allà mateix (`POST
+  /auth/resend-verification` no demana sessió justament per això). Amb la pantalla d'èxit
+  incondicional, un rebuig del proveïdor i una alta correcta eren indistingibles.
 
 ### Desplegament: el front i l'API han d'anar al mateix origen
 

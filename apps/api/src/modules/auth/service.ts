@@ -25,6 +25,7 @@ import {
   recordSecurityEvent,
   countRecentEventsForUser,
 } from "../security/service";
+import { recordClientError } from "../client-errors/service";
 import {
   sendVerificationEmail,
   sendPasswordResetEmail,
@@ -129,7 +130,7 @@ const deliverPasswordEmail = async (
   });
 
   const url = `${env.APP_PUBLIC_URL}/set-password?token=${token}`;
-  const sent =
+  const { sent, reason } =
     type === "verify"
       ? await sendVerificationEmail(email, name, url, locale)
       : await sendPasswordResetEmail(email, url, locale);
@@ -137,6 +138,19 @@ const deliverPasswordEmail = async (
   if (sent) {
     await recordSecurityEvent({
       type: type === "verify" ? "verify_sent" : "reset_requested",
+      ipHash,
+      userId,
+    });
+  } else {
+    // Un correu que no surt és una fallada que arriba a l'usuari, i de les
+    // pitjors: sense l'enllaç, un compte acabat de crear no té contrasenya i
+    // no s'hi pot entrar mai. Va al mateix registre que la resta d'errors
+    // vistos —panell d'administració i avís— perquè no depengui de si algú
+    // mirava els registres del servidor en aquell moment.
+    await recordClientError({
+      code: "MAIL_SEND_FAILED",
+      context: type === "verify" ? "signup-verification" : "password-reset",
+      detail: reason,
       ipHash,
       userId,
     });
@@ -230,7 +244,7 @@ export const signupUser = async (
       const resetUrl = `${env.APP_PUBLIC_URL}/set-password?token=${token}`;
       // Compte ja existent: el correu va en el seu idioma desat, no en el de qui
       // ara prova de registrar-se amb la mateixa adreça (pot no ser la mateixa persona).
-      const sent = await sendAccountExistsEmail(
+      const { sent, reason } = await sendAccountExistsEmail(
         existing.email,
         existing.name,
         resetUrl,
@@ -239,6 +253,14 @@ export const signupUser = async (
       if (sent) {
         await recordSecurityEvent({
           type: "reset_requested",
+          ipHash,
+          userId: existingId,
+        });
+      } else {
+        await recordClientError({
+          code: "MAIL_SEND_FAILED",
+          context: "signup-account-exists",
+          detail: reason,
           ipHash,
           userId: existingId,
         });
