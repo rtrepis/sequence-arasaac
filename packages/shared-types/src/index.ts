@@ -50,4 +50,5 @@ export type {
   AdminUserList,
   AdminStats,
   AdminSecurityEvent,
+  AdminPasswordLink,
 } from "./admin";

@@ -8,6 +8,7 @@ import {
   stats,
   users,
   patchUser,
+  userPasswordLink,
   events,
   clientErrors,
   deleteClientError,
@@ -25,6 +26,9 @@ adminRouter.use(requireAdmin);
 adminRouter.get("/stats", stats);
 adminRouter.get("/users", users);
 adminRouter.patch("/users/:id", patchUser);
+// Enllaç d'accés d'un usuari, generat a petició i d'un en un: és una
+// credencial, i per això no viatja mai amb el llistat
+adminRouter.post("/users/:id/password-link", userPasswordLink);
 adminRouter.get("/events", events);
 adminRouter.get("/client-errors", clientErrors);
 // Esborrar un error i buidar el registre fins a una data: dos camins diferents

@@ -1486,9 +1486,6 @@
   "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
     "defaultMessage": "L'enllaç de verificació està incomplet."
   },
-  "features.backend.auth.verification.bannerFailed": {
-    "defaultMessage": "No hem pogut enviar-te el correu de verificació. Prova de demanar-lo de nou."
-  },
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Verifica el teu correu per poder desar al núvol. T'hem enviat un enllaç a {email}."
   },
@@ -1656,6 +1653,22 @@
   "pages.signup.success": {
     "defaultMessage": "T'hem enviat un correu a {email} amb un enllaç per confirmar l'adreça i triar la contrasenya. Si no el veus a la safata d'entrada, mira també a spam.",
     "description": "Missatge d'èxit després del signup"
+  },
+  "pages.signup.failedTitle": {
+    "defaultMessage": "No hem pogut enviar el correu",
+    "description": "Títol de la pantalla de signup quan el correu no ha sortit"
+  },
+  "pages.signup.failed": {
+    "defaultMessage": "El compte de {email} s'ha creat, però el correu amb l'enllaç per triar la contrasenya no ha pogut sortir. Sense aquest enllaç encara no hi pots entrar: torna a demanar-lo.",
+    "description": "Missatge de signup amb el compte creat i el correu no enviat"
+  },
+  "pages.signup.resend": {
+    "defaultMessage": "Torna a enviar el correu",
+    "description": "Botó per demanar de nou el correu de verificació"
+  },
+  "pages.signup.resendDone": {
+    "defaultMessage": "Ho hem tornat a demanar. Si al cap d'uns minuts continua sense arribar, mira també a spam i prova-ho més tard.",
+    "description": "Confirmació d'haver tornat a demanar el correu de verificació"
   },
   "pages.signup.goToApp": {
     "defaultMessage": "Ves a l'aplicació",

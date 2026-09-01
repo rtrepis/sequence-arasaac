@@ -1486,9 +1486,6 @@
   "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
     "defaultMessage": "The verification link is incomplete."
   },
-  "features.backend.auth.verification.bannerFailed": {
-    "defaultMessage": "We couldn't send you the verification email. Try requesting it again."
-  },
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Verify your email to save to the cloud. We've sent a link to {email}."
   },
@@ -1656,6 +1653,22 @@
   "pages.signup.success": {
     "defaultMessage": "We've sent an email to {email} with a link to confirm your address and choose your password. If you don't see it in your inbox, check your spam folder too.",
     "description": "Missatge d'èxit després del signup"
+  },
+  "pages.signup.failedTitle": {
+    "defaultMessage": "We couldn't send the email",
+    "description": "Títol de la pantalla de signup quan el correu no ha sortit"
+  },
+  "pages.signup.failed": {
+    "defaultMessage": "The account for {email} was created, but the email with the link to choose your password could not be sent. Without that link you can't sign in yet: request it again.",
+    "description": "Missatge de signup amb el compte creat i el correu no enviat"
+  },
+  "pages.signup.resend": {
+    "defaultMessage": "Send the email again",
+    "description": "Botó per demanar de nou el correu de verificació"
+  },
+  "pages.signup.resendDone": {
+    "defaultMessage": "We've requested it again. If it still hasn't arrived in a few minutes, check your spam folder and try again later.",
+    "description": "Confirmació d'haver tornat a demanar el correu de verificació"
   },
   "pages.signup.goToApp": {
     "defaultMessage": "Go to the app",

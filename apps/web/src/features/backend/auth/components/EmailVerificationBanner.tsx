@@ -8,15 +8,14 @@ import { Alert, Box, Button, CircularProgress } from "@mui/material";
 import { useIntl } from "react-intl";
 import messages from "./EmailVerification.lang";
 import authMessages from "./AuthModal.lang";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { markVerificationEmailSent } from "../store/authSlice";
+import { useAppSelector } from "../../../../app/hooks";
 import { resendVerification } from "../services/authService";
 
 const EmailVerificationBanner = (): React.ReactElement | null => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
-  const { accessToken, userEmail, emailVerified, verificationEmailFailed } =
-    useAppSelector((state) => state.auth);
+  const { accessToken, userEmail, emailVerified } = useAppSelector(
+    (state) => state.auth,
+  );
 
   const [isSending, setIsSending] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -35,7 +34,6 @@ const EmailVerificationBanner = (): React.ReactElement | null => {
 
     try {
       await resendVerification(userEmail);
-      dispatch(markVerificationEmailSent());
       setFeedback(intl.formatMessage(messages.resendSuccess));
     } catch (error: unknown) {
       const code =
@@ -57,7 +55,7 @@ const EmailVerificationBanner = (): React.ReactElement | null => {
   return (
     <Box sx={{ px: 2, pt: 1 }}>
       <Alert
-        severity={verificationEmailFailed ? "error" : "warning"}
+        severity="warning"
         variant="outlined"
         action={
           <Button
@@ -71,11 +69,9 @@ const EmailVerificationBanner = (): React.ReactElement | null => {
           </Button>
         }
       >
-        {verificationEmailFailed
-          ? intl.formatMessage(messages.bannerFailed)
-          : intl.formatMessage(messages.bannerPending, {
-              email: userEmail ?? "",
-            })}
+        {intl.formatMessage(messages.bannerPending, {
+          email: userEmail ?? "",
+        })}
         {feedback && <Box sx={{ mt: 0.5 }}>{feedback}</Box>}
         {errorMessage && <Box sx={{ mt: 0.5 }}>{errorMessage}</Box>}
       </Alert>

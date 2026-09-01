@@ -35,8 +35,6 @@ export interface AuthState {
   // que "no verificat", i mostrar l'avís abans d'hora seria alarmar sense motiu.
   emailVerified: boolean | null;
   isAdmin: boolean;
-  // Cert quan el registre ha anat bé però el correu de verificació no ha sortit
-  verificationEmailFailed: boolean;
 }
 
 const initialState: AuthState = {
@@ -46,7 +44,6 @@ const initialState: AuthState = {
   errorCode: null,
   emailVerified: null,
   isAdmin: false,
-  verificationEmailFailed: false,
 };
 
 // Estat del compte que arriba amb les preferències
@@ -254,7 +251,6 @@ interface AuthSuccessPayload {
   email: string;
   emailVerified: boolean;
   isAdmin: boolean;
-  verificationEmailFailed?: boolean;
 }
 
 const authSlice = createSlice({
@@ -267,17 +263,11 @@ const authSlice = createSlice({
       state.errorCode = null;
       state.emailVerified = null;
       state.isAdmin = false;
-      state.verificationEmailFailed = false;
     },
     // La crida a /auth/verify ha anat bé: l'avís ha de desaparèixer a l'instant,
     // sense esperar la propera restauració de sessió
     markEmailVerified: (state) => {
       state.emailVerified = true;
-      state.verificationEmailFailed = false;
-    },
-    // El reenviament ha sortit: deixa de tenir sentit l'avís d'error d'enviament
-    markVerificationEmailSent: (state) => {
-      state.verificationEmailFailed = false;
     },
   },
   extraReducers: (builder) => {
@@ -327,7 +317,6 @@ const authSlice = createSlice({
       state.errorCode = null;
       state.emailVerified = null;
       state.isAdmin = false;
-      state.verificationEmailFailed = false;
     });
 
     builder
@@ -354,6 +343,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearAuthState, markEmailVerified, markVerificationEmailSent } =
-  authSlice.actions;
+export const { clearAuthState, markEmailVerified } = authSlice.actions;
 export const authReducer = authSlice.reducer;

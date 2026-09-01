@@ -1486,9 +1486,6 @@
   "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
     "defaultMessage": "Il link di verifica è incompleto."
   },
-  "features.backend.auth.verification.bannerFailed": {
-    "defaultMessage": "Non siamo riusciti a inviarti l'email di verifica. Prova a richiederla."
-  },
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Verifica la tua email per salvare nel cloud. Ti abbiamo inviato un link a {email}."
   },
@@ -1656,6 +1653,22 @@
   "pages.signup.success": {
     "defaultMessage": "Ti abbiamo inviato un'email a {email} con un link per confermare l'indirizzo e scegliere la password. Se non la vedi nella posta in arrivo, controlla anche nello spam.",
     "description": "Missatge d'èxit després del signup"
+  },
+  "pages.signup.failedTitle": {
+    "defaultMessage": "Non siamo riusciti a inviare l'email",
+    "description": "Títol de la pantalla de signup quan el correu no ha sortit"
+  },
+  "pages.signup.failed": {
+    "defaultMessage": "L'account di {email} è stato creato, ma l'email con il link per scegliere la password non è potuta partire. Senza quel link non puoi ancora accedere: richiedilo di nuovo.",
+    "description": "Missatge de signup amb el compte creat i el correu no enviat"
+  },
+  "pages.signup.resend": {
+    "defaultMessage": "Invia di nuovo l'email",
+    "description": "Botó per demanar de nou el correu de verificació"
+  },
+  "pages.signup.resendDone": {
+    "defaultMessage": "L'abbiamo richiesta di nuovo. Se tra qualche minuto non è ancora arrivata, controlla anche lo spam e riprova più tardi.",
+    "description": "Confirmació d'haver tornat a demanar el correu de verificació"
   },
   "pages.signup.goToApp": {
     "defaultMessage": "Vai all'applicazione",
