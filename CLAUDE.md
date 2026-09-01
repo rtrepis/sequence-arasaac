@@ -214,6 +214,29 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 
 ---
 
+## Senyal de sessió (la rodona de l'usuari)
+
+Font única de veritat: `components/UserAvatar/UserAvatar.tsx`.
+
+- **Una sola rodona a tota l'app**: les dues primeres lletres del correu, dibuixades pel mateix
+  component al drawer i a la barra. És el senyal de «tens sessió iniciada» i, si al menú fos d'una
+  manera i a la barra d'una altra, no es llegiria com la mateixa cosa.
+- **El botó de configuracions de la NavBar el porta a sobre**: amb sessió, la roda dentada passa a
+  ser un distintiu petit al racó inferior dret de la rodona; sense sessió, el botó és la roda
+  dentada de sempre. Així la confirmació d'haver entrat es veu sense obrir cap menú, i no cal
+  gastar-hi cap altre lloc de la barra, que en mòbil ja va justa.
+- **La rodona s'inverteix segons la superfície** (prop `onPrimary`): sobre el paper de configuració
+  és verda amb la tinta fosca (`primary.contrastText`, 7,2:1); sobre el verd de la NavBar és fosca
+  amb les lletres verdes, perquè una rodona verda damunt de la barra verda no es veuria. El
+  distintiu de la roda dentada va sobre `primary.main` —el verd de la barra mateixa— i per això
+  sembla una osca que separa la icona de la rodona, no una pastilla enganxada a sobre.
+- **El nom accessible diu el compte**: amb sessió, el tooltip i l'`aria-label` del botó són
+  «Configuracions · sessió iniciada com a {email}». En un botó només-icona el tooltip **és** el nom,
+  i qui no distingeix la rodona ha de poder saber igualment amb quin compte treballa —el dispositiu
+  d'AAC sovint es comparteix.
+
+---
+
 ## Estàndard de feedback d'operacions
 
 Font única de veritat: `context/FeedbackContext/`. Quatre mecanismes i un criteri per triar-los —

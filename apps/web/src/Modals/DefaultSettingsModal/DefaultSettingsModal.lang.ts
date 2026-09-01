@@ -6,6 +6,12 @@ const messages = defineMessages({
     defaultMessage: "Settings",
     description: "Settings Default ",
   },
+  settingsLoggedIn: {
+    id: "components.defaultSettings.settings.loggedIn",
+    defaultMessage: "Settings · signed in as {email}",
+    description:
+      "Nom del botó de configuracions quan hi ha sessió: també diu amb quin compte",
+  },
   close: {
     id: "components.defaultSettings.close",
     defaultMessage: "close",

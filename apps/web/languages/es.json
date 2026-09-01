@@ -144,6 +144,10 @@
     "defaultMessage": "Apariencia",
     "description": "Títol de la secció de pell i cabell al panell de pictogrames"
   },
+  "components.defaultSettings.settings.loggedIn": {
+    "defaultMessage": "Configuraciones · sesión iniciada como {email}",
+    "description": "Nom del botó de configuracions quan hi ha sessió: també diu amb quin compte"
+  },
   "components.defaultSettings.settings.title": {
     "defaultMessage": "Configuraciones",
     "description": "Settings Default "
