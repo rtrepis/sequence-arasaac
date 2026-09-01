@@ -86,3 +86,23 @@ export const listClientErrors = async (
     createdAt: error.createdAt,
   }));
 };
+
+// Esborra un error concret del registre. Retorna si n'hi havia cap amb aquest id.
+export const deleteClientError = async (id: string): Promise<boolean> => {
+  const result = await ClientErrorModel.deleteOne({ _id: id });
+  return (result.deletedCount ?? 0) > 0;
+};
+
+// Esborra tots els errors registrats fins a un moment donat (inclòs).
+//
+// El tall va per data i no per llista d'identificadors perquè el panell només
+// n'ensenya els últims: amb els identificadors, el botó deixaria enrere tot el
+// que no hi cap i el comptador d'errors no baixaria mai del tot. Amb la data,
+// en canvi, el que arriba mentre l'administrador mira la pantalla es queda —
+// que és justament el que encara no ha vist ningú.
+export const deleteClientErrorsBefore = async (before: Date): Promise<number> => {
+  const result = await ClientErrorModel.deleteMany({
+    createdAt: { $lte: before },
+  });
+  return result.deletedCount ?? 0;
+};

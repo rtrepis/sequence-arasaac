@@ -71,6 +71,27 @@ export const listClientErrors = async (): Promise<AdminClientError[]> => {
   return data.errors;
 };
 
+// Treu del registre un error concret
+export const deleteClientError = async (id: string): Promise<void> => {
+  await apiClient.delete(`/admin/client-errors/${id}`);
+};
+
+/**
+ * Buida el registre d'errors fins al moment indicat (inclòs) i retorna quants
+ * n'ha esborrat. El tall és una data i no la llista del que es veu perquè el
+ * panell només n'ensenya els últims: així no queden enrere els que no hi caben,
+ * i el que arribi mentre es mira la pantalla es conserva.
+ */
+export const deleteClientErrorsBefore = async (
+  before: string,
+): Promise<number> => {
+  const { data } = await apiClient.delete<{ deleted: number }>(
+    "/admin/client-errors",
+    { params: { before } },
+  );
+  return data.deleted;
+};
+
 export const getConfig = async (): Promise<AppConfig> => {
   const { data } = await apiClient.get<AppConfig>("/admin/config");
   return data;

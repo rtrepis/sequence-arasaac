@@ -2,11 +2,13 @@
 // Delega tota la lògica al service — el controller només gestiona req/res
 
 import { Request, Response, NextFunction } from "express";
+import { isValidObjectId } from "mongoose";
 import type { AppError } from "../../middleware/errorHandler";
 import {
   listUsersQuerySchema,
   updateUserSchema,
   listEventsQuerySchema,
+  deleteClientErrorsQuerySchema,
   updateConfigSchema,
 } from "./validators";
 import {
@@ -17,7 +19,11 @@ import {
 } from "./service";
 import { getAppConfig, updateAppConfig } from "../config/service";
 import { recordSecurityEvent } from "../security/service";
-import { listClientErrors } from "../client-errors/service";
+import {
+  listClientErrors,
+  deleteClientError as deleteClientErrorService,
+  deleteClientErrorsBefore,
+} from "../client-errors/service";
 import { hashIp } from "../../shared/ipHash";
 
 // Prou per veure què està passant aquests dies sense paginar una pantalla
@@ -121,6 +127,67 @@ export const clientErrors = async (
 ): Promise<void> => {
   try {
     res.status(200).json({ errors: await listClientErrors(CLIENT_ERRORS_LIMIT) });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/admin/client-errors/:id
+// Treu del registre un error ja mirat, perquè el que hi queda sigui el que
+// encara demana atenció.
+//
+// A diferència del buidat, no deixa SecurityEvent: descartar files d'una a una
+// és el gest normal de la pantalla, i registrar-lo ompliria la traça de
+// seguretat de soroll amb el mateix pes que el que s'acaba d'esborrar
+export const deleteClientError = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    if (!isValidObjectId(req.params.id)) {
+      return next(invalidData());
+    }
+
+    const deleted = await deleteClientErrorService(req.params.id);
+
+    if (!deleted) {
+      const error = new Error("CLIENT_ERROR_NOT_FOUND") as AppError;
+      error.statusCode = 404;
+      error.errorCode = "CLIENT_ERROR_NOT_FOUND";
+      return next(error);
+    }
+
+    res.status(200).json({ deleted: 1 });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/admin/client-errors?before=<ISO>
+// Buida el registre fins al moment que digui la petició
+export const deleteClientErrors = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const parsed = deleteClientErrorsQuerySchema.safeParse(req.query);
+    if (!parsed.success) {
+      return next(invalidData());
+    }
+
+    const deleted = await deleteClientErrorsBefore(parsed.data.before);
+
+    // Com la resta d'accions d'administració, queda registrat: és l'única
+    // manera de saber després que aquells errors van existir
+    await recordSecurityEvent({
+      type: "admin_action",
+      ipHash: hashIp(req.ip),
+      detail: `client-errors:delete ${deleted} fins a ${parsed.data.before.toISOString()}`,
+    });
+
+    res.status(200).json({ deleted });
   } catch (err) {
     next(err);
   }
