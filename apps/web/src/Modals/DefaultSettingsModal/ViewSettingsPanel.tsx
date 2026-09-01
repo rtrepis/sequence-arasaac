@@ -1,4 +1,4 @@
-import { Slider, Stack, Tooltip } from "@mui/material";
+import { Slider, Tooltip } from "@mui/material";
 import StyledButton from "@/style/StyledButton";
 import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import {
@@ -8,7 +8,6 @@ import {
   SettingRow,
   SettingsPanelHint,
   IconToggleButton,
-  SETTINGS_MAX_WIDTH,
 } from "../../components/SettingsLayout";
 import { FormattedMessage, useIntl } from "react-intl";
 import { forwardRef, useImperativeHandle, useState } from "react";
@@ -167,160 +166,155 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     };
 
     return (
-      <Stack
-        direction="column"
-        gap={1}
-        sx={{ pt: 1, maxWidth: SETTINGS_MAX_WIDTH, mx: "auto", width: "100%" }}
-      >
-        <SettingsPanelLayout
-          preview={<ViewSettingsPreview settings={localSettings} />}
-        >
-          {/* Guia del tab: què s'ajusta aquí */}
+      <SettingsPanelLayout
+        preview={<ViewSettingsPreview settings={localSettings} />}
+        hint={
+          // Guia del tab: què s'ajusta aquí
           <SettingsPanelHint>
             <FormattedMessage {...messages.panelDescription} />
           </SettingsPanelHint>
-
-          {/* Secció: format i disposició de la pàgina (controls compartits amb la vista) */}
-          <SectionTitle
-            title={<FormattedMessage {...messages.sectionPageFormat} />}
-          >
-            <GlobalViewControls
-              viewSettings={localSettings}
-              pageSizeIndex={PAGE_INDEX_MAP[localSettings.pageSize]}
-              sequenceCount={2}
-              onPageSizeChange={handlePageSizeChange}
-              onDirectionChange={handleDirectionChange}
-              onSequenceSpaceChange={handleSequenceSpaceChange}
-              onOrientationChange={handleOrientationChange}
-            />
-          </SectionTitle>
-
-          {/* Secció: mida i alineació dels pictogrames */}
-          <SectionTitle
-            title={<FormattedMessage {...messages.sectionPictograms} />}
-          >
-            <SettingRow
-              title={<FormattedMessage {...viewMessages.size} />}
-              labelId={`${VIEW_PANEL_LABEL_ID}-size`}
-            >
-              <Slider
-                aria-labelledby={`${VIEW_PANEL_LABEL_ID}-size`}
-                step={SIZE_PICT_STEP}
-                min={SIZE_PICT_MIN}
-                max={SIZE_PICT_MAX}
-                value={localSettings.sizePict}
-                valueLabelDisplay="auto"
-                valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
-                onChange={handleSizePict}
-              />
-            </SettingRow>
-
-            <SettingRow
-              title={<FormattedMessage {...viewMessages.pictSpaceBetween} />}
-              labelId={`${VIEW_PANEL_LABEL_ID}-space`}
-            >
-              <Slider
-                aria-labelledby={`${VIEW_PANEL_LABEL_ID}-space`}
-                step={PICT_SPACE_STEP}
-                min={PICT_SPACE_MIN}
-                max={PICT_SPACE_MAX}
-                value={localSettings.pictSpaceBetween}
-                valueLabelDisplay="auto"
-                valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
-                onChange={handlePictSpaceBetween}
-              />
-            </SettingRow>
-
-            <SettingRow
-              title={<FormattedMessage {...viewMessages.alignmentH} />}
-              control="wide"
-            >
-              <StyledToggleButtonGroup
-                value={localSettings.alignmentH}
-                exclusive
-                onChange={handleAlignmentH}
-              >
-                <IconToggleButton
-                  value="left"
-                  message={viewMessages.tooltipAlignLeft}
-                >
-                  <MdFormatAlignLeft />
-                </IconToggleButton>
-                <IconToggleButton
-                  value="center"
-                  message={viewMessages.tooltipAlignHCenter}
-                >
-                  <MdFormatAlignCenter />
-                </IconToggleButton>
-                <IconToggleButton
-                  value="right"
-                  message={viewMessages.tooltipAlignRight}
-                >
-                  <MdFormatAlignRight />
-                </IconToggleButton>
-              </StyledToggleButtonGroup>
-            </SettingRow>
-
-            <SettingRow
-              title={<FormattedMessage {...viewMessages.alignmentV} />}
-              control="wide"
-            >
-              <StyledToggleButtonGroup
-                value={localSettings.alignmentV}
-                exclusive
-                onChange={handleAlignmentV}
-              >
-                <IconToggleButton
-                  value="top"
-                  message={viewMessages.tooltipAlignTop}
-                >
-                  <MdVerticalAlignTop />
-                </IconToggleButton>
-                <IconToggleButton
-                  value="center"
-                  message={viewMessages.tooltipAlignVCenter}
-                >
-                  <MdVerticalAlignCenter />
-                </IconToggleButton>
-                <IconToggleButton
-                  value="bottom"
-                  message={viewMessages.tooltipAlignBottom}
-                >
-                  <MdVerticalAlignBottom />
-                </IconToggleButton>
-              </StyledToggleButtonGroup>
-            </SettingRow>
-          </SectionTitle>
-
-          {/* Secció: el que només surt al peu del full imprès i del PDF */}
-          <PrintFooterSection
-            author={localSettings.author}
-            onAuthorChange={handleAuthorChange}
+        }
+      >
+        {/* Secció: format i disposició de la pàgina (controls compartits amb la vista) */}
+        <SectionTitle
+          title={<FormattedMessage {...messages.sectionPageFormat} />}
+        >
+          <GlobalViewControls
+            viewSettings={localSettings}
+            pageSizeIndex={PAGE_INDEX_MAP[localSettings.pageSize]}
+            sequenceCount={2}
+            onPageSizeChange={handlePageSizeChange}
+            onDirectionChange={handleDirectionChange}
+            onSequenceSpaceChange={handleSequenceSpaceChange}
+            onOrientationChange={handleOrientationChange}
           />
+        </SectionTitle>
 
-          {/* Al final i a la dreta, com el peu d'un diàleg: afecten tot el que
-              hi ha a sobre. «Aplica» és la principal i per això va plena */}
-          <SettingsActions
-            helper={<FormattedMessage {...messages.applyHelper} />}
+        {/* Secció: mida i alineació dels pictogrames */}
+        <SectionTitle
+          title={<FormattedMessage {...messages.sectionPictograms} />}
+        >
+          <SettingRow
+            title={<FormattedMessage {...viewMessages.size} />}
+            labelId={`${VIEW_PANEL_LABEL_ID}-size`}
           >
-            <Tooltip
-              title={intl.formatMessage(messages.tooltipReset)}
-              describeChild
+            <Slider
+              aria-labelledby={`${VIEW_PANEL_LABEL_ID}-size`}
+              step={SIZE_PICT_STEP}
+              min={SIZE_PICT_MIN}
+              max={SIZE_PICT_MAX}
+              value={localSettings.sizePict}
+              valueLabelDisplay="auto"
+              valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
+              onChange={handleSizePict}
+            />
+          </SettingRow>
+
+          <SettingRow
+            title={<FormattedMessage {...viewMessages.pictSpaceBetween} />}
+            labelId={`${VIEW_PANEL_LABEL_ID}-space`}
+          >
+            <Slider
+              aria-labelledby={`${VIEW_PANEL_LABEL_ID}-space`}
+              step={PICT_SPACE_STEP}
+              min={PICT_SPACE_MIN}
+              max={PICT_SPACE_MAX}
+              value={localSettings.pictSpaceBetween}
+              valueLabelDisplay="auto"
+              valueLabelFormat={(v) => parseFloat(v.toFixed(2))}
+              onChange={handlePictSpaceBetween}
+            />
+          </SettingRow>
+
+          <SettingRow
+            title={<FormattedMessage {...viewMessages.alignmentH} />}
+            control="wide"
+          >
+            <StyledToggleButtonGroup
+              value={localSettings.alignmentH}
+              exclusive
+              onChange={handleAlignmentH}
             >
-              <StyledButton
-                color="inherit"
-                endIcon={<MdSettingsBackupRestore />}
-                onClick={handleResetToDefaults}
+              <IconToggleButton
+                value="left"
+                message={viewMessages.tooltipAlignLeft}
               >
-                <FormattedMessage {...messages.reset} />
-              </StyledButton>
-            </Tooltip>
-            <StyledButton variant="contained" onClick={handleApply}>
-              <FormattedMessage {...messages.apply} />
+                <MdFormatAlignLeft />
+              </IconToggleButton>
+              <IconToggleButton
+                value="center"
+                message={viewMessages.tooltipAlignHCenter}
+              >
+                <MdFormatAlignCenter />
+              </IconToggleButton>
+              <IconToggleButton
+                value="right"
+                message={viewMessages.tooltipAlignRight}
+              >
+                <MdFormatAlignRight />
+              </IconToggleButton>
+            </StyledToggleButtonGroup>
+          </SettingRow>
+
+          <SettingRow
+            title={<FormattedMessage {...viewMessages.alignmentV} />}
+            control="wide"
+          >
+            <StyledToggleButtonGroup
+              value={localSettings.alignmentV}
+              exclusive
+              onChange={handleAlignmentV}
+            >
+              <IconToggleButton
+                value="top"
+                message={viewMessages.tooltipAlignTop}
+              >
+                <MdVerticalAlignTop />
+              </IconToggleButton>
+              <IconToggleButton
+                value="center"
+                message={viewMessages.tooltipAlignVCenter}
+              >
+                <MdVerticalAlignCenter />
+              </IconToggleButton>
+              <IconToggleButton
+                value="bottom"
+                message={viewMessages.tooltipAlignBottom}
+              >
+                <MdVerticalAlignBottom />
+              </IconToggleButton>
+            </StyledToggleButtonGroup>
+          </SettingRow>
+        </SectionTitle>
+
+        {/* Secció: el que només surt al peu del full imprès i del PDF */}
+        <PrintFooterSection
+          author={localSettings.author}
+          onAuthorChange={handleAuthorChange}
+        />
+
+        {/* Al final i a la dreta, com el peu d'un diàleg: afecten tot el que
+              hi ha a sobre. «Aplica» és la principal i per això va plena */}
+        <SettingsActions
+          helper={<FormattedMessage {...messages.applyHelper} />}
+        >
+          <Tooltip
+            title={intl.formatMessage(messages.tooltipReset)}
+            describeChild
+          >
+            <StyledButton
+              color="inherit"
+              endIcon={<MdSettingsBackupRestore />}
+              onClick={handleResetToDefaults}
+            >
+              <FormattedMessage {...messages.reset} />
             </StyledButton>
-          </SettingsActions>
-        </SettingsPanelLayout>
-      </Stack>
+          </Tooltip>
+          <StyledButton variant="contained" onClick={handleApply}>
+            <FormattedMessage {...messages.apply} />
+          </StyledButton>
+        </SettingsActions>
+      </SettingsPanelLayout>
     );
   },
 );
