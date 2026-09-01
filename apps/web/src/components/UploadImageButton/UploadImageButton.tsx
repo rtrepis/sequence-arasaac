@@ -4,8 +4,17 @@ import React, { useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
-import { fileToBase64, isValidImageUrl } from "@/utils/imageToBase64";
+import {
+  encodeToFit,
+  fileToBase64,
+  getBase64SizeInBytes,
+  isValidImageUrl,
+  MAX_UPLOAD_IMAGE_BYTES,
+} from "@/utils/imageToBase64";
 import { useFeedback } from "@/context/FeedbackContext";
+import { useAppSelector } from "@/app/hooks";
+import { useAccountQuota } from "@features/backend/user-settings/hooks/useAccountQuota";
+import ImageSizeDialog, { type ImageSizeOffer } from "./ImageSizeDialog";
 import messages from "./UploadImageButton.lang";
 
 /** Mida de la icona dins del botó de 55×55 de StyledToggleButtonGroup. */
@@ -48,7 +57,12 @@ const UploadImageButton = ({
 }: UploadImageButtonProps): React.ReactElement => {
   const intl = useIntl();
   const { showSnackbar } = useFeedback();
+  const imageQuality = useAppSelector((state) => state.ui.imageQuality);
+  const quota = useAccountQuota();
   const [isLoading, setIsLoading] = useState(false);
+  // Imatge convertida que no cap: espera que l'usuari decideixi què en fa
+  const [offer, setOffer] = useState<ImageSizeOffer | null>(null);
+  const [pendingUrl, setPendingUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const hasImage = isValidImageUrl(imageUrl);
@@ -58,6 +72,19 @@ const UploadImageButton = ({
   );
   const removeLabel = intl.formatMessage({ ...messages.remove });
   const loadingLabel = intl.formatMessage({ ...messages.loading });
+
+  const applyImage = (dataUrl: string) => {
+    onUpload(dataUrl);
+    showSnackbar({
+      message: intl.formatMessage({ ...messages.uploaded }),
+      severity: "success",
+    });
+  };
+
+  const closeOffer = () => {
+    setOffer(null);
+    setPendingUrl(null);
+  };
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -79,12 +106,31 @@ const UploadImageButton = ({
     setIsLoading(true);
     try {
       // La conversió comprimeix les imatges grans, per això pot trigar
-      const base64Url = await fileToBase64(file);
-      onUpload(base64Url);
-      showSnackbar({
-        message: intl.formatMessage({ ...messages.uploaded }),
-        severity: "success",
-      });
+      const base64Url = await fileToBase64(file, imageQuality);
+      const bytes = getBase64SizeInBytes(base64Url);
+
+      // Dos sostres: el pes màxim per imatge, que el servidor fa complir sempre,
+      // i l'espai que queda al compte, que només existeix amb sessió. Mana el més
+      // estret dels dos: reduir la imatge només fins a l'altre la deixaria igual
+      // de fora, i hauríem fet perdre qualitat per res.
+      const quotaAvailable = quota.hasQuota
+        ? quota.remainingBytes
+        : Number.POSITIVE_INFINITY;
+      const availableBytes = Math.min(MAX_UPLOAD_IMAGE_BYTES, quotaAvailable);
+
+      if (bytes > availableBytes) {
+        setPendingUrl(base64Url);
+        setOffer({
+          reason:
+            quotaAvailable < MAX_UPLOAD_IMAGE_BYTES ? "quota" : "perImage",
+          bytes,
+          availableBytes,
+          smaller: await encodeToFit(base64Url, availableBytes, imageQuality),
+        });
+        return;
+      }
+
+      applyImage(base64Url);
     } catch (error) {
       console.error("Error carregant imatge:", error);
       showSnackbar({
@@ -156,6 +202,19 @@ const UploadImageButton = ({
           )}
         </ToggleButton>
       </Tooltip>
+
+      <ImageSizeDialog
+        offer={offer}
+        onUseSmaller={() => {
+          if (offer?.smaller) applyImage(offer.smaller.dataUrl);
+          closeOffer();
+        }}
+        onUseOriginal={() => {
+          if (pendingUrl) applyImage(pendingUrl);
+          closeOffer();
+        }}
+        onCancel={closeOffer}
+      />
 
       {hasImage && onRemove && (
         <Tooltip title={removeLabel}>

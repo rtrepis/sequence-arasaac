@@ -1,4 +1,5 @@
 export { default as SettingsPanelLayout } from "./SettingsPanelLayout";
+export { default as SettingsActions } from "./SettingsActions";
 export { default as SettingsPreviewFrame } from "./SettingsPreviewFrame";
 export { default as SectionTitle } from "./SectionTitle";
 export { default as SettingsPanelHint } from "./SettingsPanelHint";
@@ -8,11 +9,19 @@ export {
   settingRow,
   settingRowInline,
   settingControlWidth,
+  settingsAccordion,
   SETTINGS_ROW_GAP,
   SETTINGS_ZONE_GAP,
   SETTINGS_MAX_WIDTH,
+  SETTINGS_WIDE_MAX_WIDTH,
+  SETTINGS_ASIDE_WIDTH,
+  SETTINGS_CONTROLS_WIDTH,
+  SETTINGS_TWO_COLUMN_BREAKPOINT,
+  SETTINGS_THREE_COLUMN_BREAKPOINT,
   SETTINGS_INDENT,
   SETTINGS_CONTROL_MIN_WIDTH,
   SETTINGS_MOBILE_BREAKPOINT,
   SETTINGS_APPBAR_OFFSET,
+  SETTINGS_DIALOG_APPBAR_HEIGHT,
+  SETTINGS_CONTENT_TOP_GAP,
 } from "./settingsLayout.styled";

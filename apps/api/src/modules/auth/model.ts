@@ -14,8 +14,14 @@ import type {
   UserUseCase,
   UserUsage,
   QuotaLimits,
+  ImageQuality,
 } from "@sequence-arasaac/shared-types";
-import { defaultSettingsSchema, wordProfileSchema } from "../../shared/mongooseSchemas";
+import {
+  cloudinaryAssetSchema,
+  defaultSettingsSchema,
+  wordProfileSchema,
+} from "../../shared/mongooseSchemas";
+import type { CloudinaryAsset } from "../../shared/imageAssets";
 
 // Interfície TypeScript del document User (estén Document de Mongoose)
 export interface IUser extends Document {
@@ -36,6 +42,8 @@ export interface IUser extends Document {
   theme: ThemeMode;
   viewSettings?: ViewSettings;
   wordProfiles: WordProfile[];
+  wordProfileAssets: CloudinaryAsset[];
+  imageQuality: ImageQuality;
   tier: UserTier;
   // --- Identitat i estat del compte ---
   emailVerified: boolean;
@@ -198,6 +206,24 @@ const userSchema = new Schema<IUser>(
       type: [wordProfileSchema],
       required: true,
       default: () => [],
+    },
+    // Registre de les imatges del vocabulari pujades a Cloudinary.
+    // Va a part de wordProfiles i no a dins perquè WordProfile és un tipus
+    // compartit amb el front, i el client no ha d'arrossegar un camp de
+    // comptabilitat que no fa servir. Calca Document.assets.
+    wordProfileAssets: {
+      type: [cloudinaryAssetSchema],
+      required: true,
+      default: () => [],
+    },
+    // Qualitat amb què el client codifica les imatges que puja. Viu al compte i
+    // no al navegador perquè és el que decideix quant ocupa cada imatge de la
+    // quota, i la quota és del compte, no del dispositiu.
+    imageQuality: {
+      type: String,
+      enum: ["print", "standard", "compact"],
+      required: true,
+      default: "print",
     },
     tier: {
       type: String,

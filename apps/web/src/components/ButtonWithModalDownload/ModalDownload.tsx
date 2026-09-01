@@ -1,20 +1,17 @@
 import {
-  Button,
   Checkbox,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControl,
+  DialogContentText,
   FormControlLabel,
   FormGroup,
-  FormHelperText,
-  Input,
-  InputLabel,
-  Stack,
+  TextField,
 } from "@mui/material";
 import React, { BaseSyntheticEvent, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
-import messages from "./ButtonWithModalDonwload.lang";
+import { useIntl } from "react-intl";
+import messages from "./ModalDownload.lang";
+// «Cancel·la» és un sol missatge per a tota l'app i viu al ConfirmDialog
+import confirmMessages from "@components/ConfirmDialog/ConfirmDialog.lang";
+import { AppDialog, AppDialogActions } from "@components/AppDialog";
+import StyledButton from "@/style/StyledButton";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
@@ -43,13 +40,17 @@ const ModalDownload = ({
   const [fileName, setFileName] = useState("");
 
   const documentSaacIsNotEmpty = documentSaac.content[0].length > 0;
+  // Les caselles són controlades: el que es pinta i el que se n'endú el fitxer
+  // surten del mateix valor. Amb `defaultChecked` i un estat inicial a part,
+  // la configuració es colava dins del `.saac` amb la casella desmarcada
+  // (troballa C8 de l'auditoria d'UX).
   const [save, setSave] = useState({
     documentState: documentSaacIsNotEmpty,
-    defaultSettings: documentSaacIsNotEmpty,
+    defaultSettings: false,
   });
 
   const onChangeCheckbox = (event: BaseSyntheticEvent, checked: boolean) => {
-    const name = event.target.name;
+    const name = event.target.name as keyof typeof save;
 
     setSave((previous) => {
       return { ...previous, [name]: checked };
@@ -61,8 +62,7 @@ const ModalDownload = ({
     setFileName(value);
   };
 
-  const onSaveFile = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const onSaveFile = () => {
     const valueEventsTrace: string[] = [];
     const isoString = new Date().toISOString();
 
@@ -112,51 +112,62 @@ const ModalDownload = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>
-        <FormattedMessage {...messages.save} />
-        ...
-        <FormHelperText>
-          <FormattedMessage {...messages.saveHelper} />
-        </FormHelperText>
-      </DialogTitle>
+    <AppDialog
+      open={open}
+      onClose={onClose}
+      // Un sol missatge, i no «Desa» + «&» + «Descarregar» ajuntats a mà: en
+      // cinc idiomes, l'ordre i la conjunció no són nostres per decidir (F4)
+      title={intl.formatMessage(messages.dialogTitle)}
+      titleId="download-dialog-title"
+      maxWidth="xs"
+      actions={
+        <AppDialogActions>
+          {/* Fins ara aquest diàleg no tenia cap manera de tancar-se: en tàctil,
+              on no hi ha ESC, l'única sortida era clicar fora i no ho deia
+              ningú (F1) */}
+          <StyledButton onClick={onClose} color="inherit">
+            {intl.formatMessage(confirmMessages.cancel)}
+          </StyledButton>
+          <StyledButton onClick={onSaveFile} variant="contained">
+            {intl.formatMessage(messages.download)}
+          </StyledButton>
+        </AppDialogActions>
+      }
+    >
+      {/* L'ajuda, fora del títol: dins de l'encapçalament es llegia com si en
+          formés part */}
+      <DialogContentText variant="body2" sx={{ mb: 2 }}>
+        {intl.formatMessage(messages.saveHelper)}
+      </DialogContentText>
 
-      <DialogContent>
-        <form name="download-form">
-          <FormGroup>
-            {documentSaacIsNotEmpty && (
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label={intl.formatMessage(messages.sequence)}
-                onChange={onChangeCheckbox}
-                name="documentState"
-              />
-            )}
+      <FormGroup>
+        {documentSaacIsNotEmpty && (
+          <FormControlLabel
+            control={<Checkbox checked={save.documentState} />}
+            label={intl.formatMessage(messages.sequence)}
+            onChange={onChangeCheckbox}
+            name="documentState"
+          />
+        )}
 
-            <FormControlLabel
-              control={<Checkbox />}
-              label={intl.formatMessage(messages.defaultSettings)}
-              onChange={onChangeCheckbox}
-              name="defaultSettings"
-            />
-          </FormGroup>
+        <FormControlLabel
+          control={<Checkbox checked={save.defaultSettings} />}
+          label={intl.formatMessage(messages.defaultSettings)}
+          onChange={onChangeCheckbox}
+          name="defaultSettings"
+        />
+      </FormGroup>
 
-          <FormControl sx={{ marginTop: 2 }}>
-            <InputLabel>
-              <FormattedMessage {...messages.filename} />
-            </InputLabel>
-            <Input onChange={onChangeFileName} value={fileName} />
-          </FormControl>
-
-          <Stack marginTop={2} alignItems={"flex-end"}>
-            <Button type="submit" onClick={onSaveFile}>
-              <FormattedMessage {...messages.save} /> &{" "}
-              <FormattedMessage {...messages.download} />
-            </Button>
-          </Stack>
-        </form>
-      </DialogContent>
-    </Dialog>
+      {/* `TextField` i no `InputLabel` + `Input`: així el nom del camp queda
+          lligat al camp, que abans no ho estava */}
+      <TextField
+        fullWidth
+        value={fileName}
+        onChange={onChangeFileName}
+        label={intl.formatMessage(messages.filename)}
+        sx={{ mt: 2 }}
+      />
+    </AppDialog>
   );
 };
 

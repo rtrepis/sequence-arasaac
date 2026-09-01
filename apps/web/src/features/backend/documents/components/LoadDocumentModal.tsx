@@ -5,10 +5,6 @@ import {
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
   LinearProgress,
   List,
@@ -19,7 +15,9 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
+import { AppDialog, AppDialogActions } from "@components/AppDialog";
+import StyledButton from "@/style/StyledButton";
 import { useIntl } from "react-intl";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
 import messages from "./DocumentModals.lang";
@@ -30,6 +28,7 @@ import {
   loadDocumentThunk,
 } from "@features/sequence/store/documentSlice";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
+import { refreshQuotaThunk } from "@features/backend/user-settings/store/quotaSlice";
 import { deleteDocument, DocumentSummary } from "../services/documentService";
 import { useDocumentTransfer } from "../hooks/useDocumentTransfer";
 import { classifyRequestFailure } from "@features/backend/api/requestFailure";
@@ -122,6 +121,9 @@ const LoadDocumentModal = ({
     try {
       await deleteDocument(id);
       setDocuments((prev) => prev.filter((d) => d.id !== id));
+      // Esborrar un document allibera el seu espai d'imatges: el comptador ho
+      // ha de dir de seguida, que és justament per això que s'esborra
+      void dispatch(refreshQuotaThunk());
       if (selectedId === id) setSelectedId(null);
       showSnackbar({
         message: intl.formatMessage(messages.documentDeleted),
@@ -155,153 +157,164 @@ const LoadDocumentModal = ({
       : intl.formatMessage(messages.downloadingUnknown);
 
   return (
-    <Dialog
+    <AppDialog
       open={open}
       onClose={onClose}
-      fullWidth
-      maxWidth="sm"
-      aria-labelledby="load-doc-modal-title"
+      title={intl.formatMessage(authMessages.loadDocumentTitle)}
+      titleId="load-doc-modal-title"
+      contentSx={{ minHeight: 200 }}
+      // Progrés i error entre la llista i el peu: amb la llista plena, a dins
+      // quedarien fora de pantalla justament mentre s'espera
+      statusSlot={
+        <>
+          {/* Un document amb imatges pròpies pot pesar, i el servidor de Render
+              pot trigar mig minut a despertar-se */}
+          {isLoadingDocument && (
+            <Box sx={{ px: 3, pt: 2 }}>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                {downloadMessage()}
+              </Typography>
+              {transfer.percent !== null ? (
+                <LinearProgress
+                  variant="determinate"
+                  value={transfer.percent}
+                />
+              ) : (
+                <LinearProgress />
+              )}
+            </Box>
+          )}
+
+          {hasLoadError && (
+            <Alert severity="error" variant="outlined" sx={{ mx: 3, mt: 2 }}>
+              {intl.formatMessage(authMessages.loadDocumentError)}
+            </Alert>
+          )}
+        </>
+      }
+      actions={
+        <AppDialogActions>
+          <StyledButton
+            onClick={onClose}
+            color="inherit"
+            disabled={isLoadingDocument}
+          >
+            {intl.formatMessage(authMessages.close)}
+          </StyledButton>
+          <StyledButton
+            onClick={handleLoad}
+            variant="contained"
+            disabled={!selectedId || isLoading || isLoadingDocument}
+            // El servidor pot trigar mig minut a despertar-se: sense aquest
+            // indicador el botó sembla espatllat i l'usuari el prem un cop i un altre
+            startIcon={
+              isLoadingDocument ? <CircularProgress size={16} /> : undefined
+            }
+          >
+            {intl.formatMessage(authMessages.loadAction)}
+          </StyledButton>
+        </AppDialogActions>
+      }
     >
-      <DialogTitle id="load-doc-modal-title">
+      {isLoading ? (
         <Box
           sx={{
             display: "flex",
+            justifyContent: "center",
             alignItems: "center",
-            justifyContent: "space-between",
+            height: 150,
           }}
         >
-          {intl.formatMessage(authMessages.loadDocumentTitle)}
-          <IconButton
-            onClick={onClose}
-            aria-label={intl.formatMessage(authMessages.close)}
-            size="small"
-          >
-            <AiOutlineClose />
-          </IconButton>
+          <CircularProgress />
         </Box>
-      </DialogTitle>
-
-      <DialogContent dividers sx={{ minHeight: 200 }}>
-        {isLoading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: 150,
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : hasListError ? (
-          <Alert
-            severity="error"
-            variant="outlined"
-            sx={{ mt: 2 }}
-            action={
-              <Button color="inherit" size="small" onClick={fetchDocuments}>
-                {intl.formatMessage(authMessages.retry)}
-              </Button>
-            }
-          >
-            {intl.formatMessage(authMessages.loadListError)}
-          </Alert>
-        ) : documents.length === 0 ? (
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            sx={{ mt: 4 }}
-          >
-            {intl.formatMessage(authMessages.noDocuments)}
-          </Typography>
-        ) : (
-          <List disablePadding>
-            {documents.map((doc) => (
-              <ListItemButton
-                key={doc.id}
-                selected={selectedId === doc.id}
-                onClick={() => setSelectedId(doc.id)}
-                disabled={isLoadingDocument}
-              >
-                <ListItemAvatar sx={{ minWidth: 0, mr: 2 }}>
-                  <DocumentThumbnail
-                    thumbnail={doc.thumbnail}
-                    label={intl.formatMessage(messages.thumbnailLabel, {
-                      title: documentName(doc),
-                    })}
-                  />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={documentName(doc)}
-                  secondary={formatDate(doc.updatedAt)}
-                />
-                <ListItemSecondaryAction>
-                  <Tooltip
-                    title={intl.formatMessage(authMessages.deleteDocument)}
-                  >
-                    <IconButton
-                      edge="end"
-                      size="small"
-                      onClick={(e) => handleDelete(e, doc.id)}
-                      disabled={isDeleting === doc.id || isLoadingDocument}
-                      aria-label={intl.formatMessage(
-                        authMessages.deleteDocument,
-                      )}
-                    >
-                      {isDeleting === doc.id ? (
-                        <CircularProgress size={16} />
-                      ) : (
-                        <AiOutlineDelete />
-                      )}
-                    </IconButton>
-                  </Tooltip>
-                </ListItemSecondaryAction>
-              </ListItemButton>
-            ))}
-          </List>
-        )}
-      </DialogContent>
-
-      {/* Progrés de la baixada: un document amb imatges pròpies pot pesar, i el
-          servidor de Render pot trigar mig minut a despertar-se */}
-      {isLoadingDocument && (
-        <Box sx={{ px: 3, pt: 2 }}>
-          <Typography variant="body2" color="text.secondary" gutterBottom>
-            {downloadMessage()}
-          </Typography>
-          {transfer.percent !== null ? (
-            <LinearProgress variant="determinate" value={transfer.percent} />
-          ) : (
-            <LinearProgress />
-          )}
-        </Box>
-      )}
-
-      {hasLoadError && (
-        <Alert severity="error" variant="outlined" sx={{ mx: 2, mt: 2 }}>
-          {intl.formatMessage(authMessages.loadDocumentError)}
-        </Alert>
-      )}
-
-      <DialogActions>
-        <Button onClick={onClose} color="inherit" disabled={isLoadingDocument}>
-          {intl.formatMessage(authMessages.close)}
-        </Button>
-        <Button
-          onClick={handleLoad}
-          variant="contained"
-          disabled={!selectedId || isLoading || isLoadingDocument}
-          // El servidor pot trigar mig minut a despertar-se: sense aquest indicador
-          // el botó sembla espatllat i l'usuari el prem una vegada i una altra
-          startIcon={
-            isLoadingDocument ? <CircularProgress size={16} /> : undefined
+      ) : hasListError ? (
+        <Alert
+          severity="error"
+          variant="outlined"
+          sx={{ mt: 2 }}
+          action={
+            <Button color="inherit" size="small" onClick={fetchDocuments}>
+              {intl.formatMessage(authMessages.retry)}
+            </Button>
           }
         >
-          {intl.formatMessage(authMessages.loadAction)}
-        </Button>
-      </DialogActions>
-    </Dialog>
+          {intl.formatMessage(authMessages.loadListError)}
+        </Alert>
+      ) : documents.length === 0 ? (
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ mt: 4 }}
+        >
+          {intl.formatMessage(authMessages.noDocuments)}
+        </Typography>
+      ) : (
+        <List disablePadding>
+          {documents.map((doc) => (
+            <ListItemButton
+              key={doc.id}
+              selected={selectedId === doc.id}
+              onClick={() => setSelectedId(doc.id)}
+              disabled={isLoadingDocument}
+              // Per sota de sm la fila s'apila: la miniatura a dalt i el nom a
+              // sota. En un telèfon de 360px, el diàleg deixa uns 216px de fila
+              // i la miniatura se'n menja 148: al nom li'n quedaven menys de
+              // trenta i quedava tallat sempre. És la mateixa regla que
+              // settingRowInline —apilat predictible abans que wrap accidental—
+              // i el mateix breakpoint, que no se'n multipliquen.
+              sx={{
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "flex-start", sm: "center" },
+              }}
+            >
+              <ListItemAvatar
+                sx={{ minWidth: 0, mr: { xs: 0, sm: 2 }, mb: { xs: 1, sm: 0 } }}
+              >
+                <DocumentThumbnail
+                  thumbnail={doc.thumbnail}
+                  label={intl.formatMessage(messages.thumbnailLabel, {
+                    title: documentName(doc),
+                  })}
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={documentName(doc)}
+                secondary={formatDate(doc.updatedAt)}
+                // width al 100% en apilat: amb alignItems flex-start, un fill
+                // de columna s'encongeix al contingut i el nom quedaria centrat
+                // a l'esquerra en comptes d'ocupar la fila (mateix motiu que la
+                // mostra del panell de vocabulari a l'estàndard de settings).
+                //
+                // El pr reserva el botó d'esborrar, que va posicionat a sobre de
+                // la fila i no hi ocupa lloc: sense la reserva, un nom llarg li
+                // passa per sota — i amb la fila apilada hi passaria sempre.
+                sx={{ pr: 5, my: 0, width: { xs: "100%", sm: "auto" } }}
+              />
+              <ListItemSecondaryAction>
+                <Tooltip
+                  title={intl.formatMessage(authMessages.deleteDocument)}
+                >
+                  <IconButton
+                    edge="end"
+                    size="small"
+                    onClick={(e) => handleDelete(e, doc.id)}
+                    disabled={isDeleting === doc.id || isLoadingDocument}
+                    aria-label={intl.formatMessage(authMessages.deleteDocument)}
+                  >
+                    {isDeleting === doc.id ? (
+                      <CircularProgress size={16} />
+                    ) : (
+                      <AiOutlineDelete />
+                    )}
+                  </IconButton>
+                </Tooltip>
+              </ListItemSecondaryAction>
+            </ListItemButton>
+          ))}
+        </List>
+      )}
+    </AppDialog>
   );
 };
 

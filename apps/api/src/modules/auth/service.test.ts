@@ -14,7 +14,10 @@ import {
 } from "../../test/setupDatabase";
 import { signupUser, loginUser, setPassword } from "./service";
 import { UserModel } from "./model";
-import { updateAppConfig } from "../config/service";
+import {
+  updateAppConfig,
+  getRegistrationStatus,
+} from "../config/service";
 import { toCanonicalEmail } from "../../shared/emailCanonical";
 import { env } from "../../config/env";
 
@@ -124,12 +127,78 @@ describe("signupUser", () => {
     ).rejects.toThrow("MAX_USERS_REACHED");
   });
 
+  it("hauria de rebutjar el signup en assolir el límit d'altes del dia", async () => {
+    await updateAppConfig({ maxDailySignups: 1 });
+    await signupUser({ ...SIGNUP_INPUT, email: "primer@example.com" }, IP_HASH);
+
+    await expect(
+      signupUser({ ...SIGNUP_INPUT, email: "segon@example.com" }, IP_HASH)
+    ).rejects.toThrow("DAILY_SIGNUP_LIMIT_REACHED");
+  });
+
+  it("no hauria de gastar plaça del dia amb un correu que ja té compte", async () => {
+    await updateAppConfig({ maxDailySignups: 2 });
+    await signupUser({ ...SIGNUP_INPUT, email: "primer@example.com" }, IP_HASH);
+    // Repetir-lo no crea cap compte, i per tant tampoc no ha de consumir
+    // cap de les places que queden avui
+    await signupUser({ ...SIGNUP_INPUT, email: "primer@example.com" }, IP_HASH);
+
+    const status = await getRegistrationStatus();
+    expect(status.signupsToday).toBe(1);
+    expect(status.remainingToday).toBe(1);
+  });
+
+  it("hauria de mantenir el comptador del dia després d'esborrar l'usuari creat", async () => {
+    await updateAppConfig({ maxDailySignups: 1 });
+    await signupUser({ ...SIGNUP_INPUT, email: "primer@example.com" }, IP_HASH);
+    // Donar-se de baixa no torna la plaça del dia: si la tornés, el fre diari
+    // es podria burlar creant i esborrant comptes en cadena
+    await UserModel.deleteMany({});
+
+    await expect(
+      signupUser({ ...SIGNUP_INPUT, email: "segon@example.com" }, IP_HASH)
+    ).rejects.toThrow("DAILY_SIGNUP_LIMIT_REACHED");
+  });
+
   it("hauria de deixar els comptadors de consum a zero", async () => {
     await signupUser({ ...SIGNUP_INPUT, email: "algu@example.com" }, IP_HASH);
 
     const user = await UserModel.findOne({ emailCanonical: "algu@example.com" });
     expect(user?.usage.documentsCount).toBe(0);
     expect(user?.usage.storageBytes).toBe(0);
+  });
+});
+
+describe("getRegistrationStatus", () => {
+  it("hauria de dir quanta gent hi ha registrada i quantes places queden", async () => {
+    await updateAppConfig({ maxUsers: 10, maxDailySignups: 3 });
+    await signupUser({ ...SIGNUP_INPUT, email: "primer@example.com" }, IP_HASH);
+
+    const status = await getRegistrationStatus();
+    expect(status.totalUsers).toBe(1);
+    expect(status.remainingUsers).toBe(9);
+    expect(status.signupsToday).toBe(1);
+    expect(status.remainingToday).toBe(2);
+    expect(status.canSignup).toBe(true);
+  });
+
+  it("no hauria de donar mai places negatives", async () => {
+    await signupUser({ ...SIGNUP_INPUT, email: "primer@example.com" }, IP_HASH);
+    // El sostre es pot abaixar per sota del que ja hi ha: «queden -1» no vol
+    // dir res per a qui ho llegeix
+    await updateAppConfig({ maxUsers: 0, maxDailySignups: 0 });
+
+    const status = await getRegistrationStatus();
+    expect(status.remainingUsers).toBe(0);
+    expect(status.remainingToday).toBe(0);
+    expect(status.canSignup).toBe(false);
+  });
+
+  it("hauria de dir que no es pot registrar ningú amb el registre tancat", async () => {
+    await updateAppConfig({ registrationOpen: false });
+
+    const status = await getRegistrationStatus();
+    expect(status.canSignup).toBe(false);
   });
 });
 

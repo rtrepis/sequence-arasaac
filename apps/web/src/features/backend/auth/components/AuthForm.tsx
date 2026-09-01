@@ -6,12 +6,11 @@ import React, { useState } from "react";
 import {
   Alert,
   Box,
-  Button,
   CircularProgress,
   IconButton,
   InputAdornment,
+  Link,
   TextField,
-  Typography,
 } from "@mui/material";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useIntl } from "react-intl";
@@ -19,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import messages from "./AuthModal.lang";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { loginThunk } from "../store/authSlice";
+import StyledButton from "@/style/StyledButton";
 
 interface AuthFormProps {
   /** Acció posterior a un login correcte (tancar el modal, per exemple). */
@@ -56,6 +56,9 @@ const AuthForm = ({
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
+    // La guarda al handler substitueix el `disabled` mentre s'espera: el botó
+    // continua sent visible i tabulable, i un segon Enter no envia res.
+    if (isLoading) return;
     const result = await dispatch(loginThunk({ email, password }));
     if (result.meta.requestStatus === "fulfilled") {
       setEmail("");
@@ -92,7 +95,6 @@ const AuthForm = ({
         fullWidth
         autoFocus={autoFocus}
         autoComplete="email"
-        disabled={isLoading}
       />
 
       <TextField
@@ -103,7 +105,6 @@ const AuthForm = ({
         required
         fullWidth
         autoComplete="current-password"
-        disabled={isLoading}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -119,33 +120,49 @@ const AuthForm = ({
         }}
       />
 
-      <Typography
+      {/* Enllaços de debò i no `Typography` amb `cursor: pointer`: així s'hi
+          arriba amb el tabulador, i amb la tinta del tema es llegeixen */}
+      <Link
+        component="button"
+        type="button"
         variant="body2"
-        align="right"
-        sx={{ cursor: "pointer", color: "primary.main" }}
+        color="inherit"
         onClick={() => goTo("forgot-password")}
+        sx={{ alignSelf: "flex-end" }}
       >
         {intl.formatMessage(messages.forgotPassword)}
-      </Typography>
+      </Link>
 
-      <Button
+      {/* El botó de la casa: dins del diàleg de login comparteix pantalla amb
+          el peu, i un «ENTRA» en majúscules al costat d'un «Tancar» que no ho
+          està es llegeix com si fossin de dues aplicacions */}
+      {/* `aria-disabled` i no `disabled` mentre s'espera: un botó desactivat surt
+          de l'ordre de tabulació i qui navega amb teclat el perd sense cap avís.
+          El `disabled` només es queda per als camps buits, que és validació i no
+          espera. L'`aria-busy` és el que diu al lector de pantalla que allò està
+          en marxa, ara que el bloqueig visual ja no ho insinua */}
+      <StyledButton
         type="submit"
         variant="contained"
         fullWidth
-        disabled={isLoading || !email || !password}
+        disabled={!email || !password}
+        aria-disabled={isLoading}
+        aria-busy={isLoading}
         startIcon={isLoading ? <CircularProgress size={16} /> : null}
       >
         {intl.formatMessage(messages.submitLogin)}
-      </Button>
+      </StyledButton>
 
-      <Typography
+      <Link
+        component="button"
+        type="button"
         variant="body2"
-        align="center"
-        sx={{ cursor: "pointer", color: "primary.main" }}
+        color="inherit"
         onClick={() => goTo("signup")}
+        sx={{ alignSelf: "center" }}
       >
         {intl.formatMessage(messages.toggleToRegister)}
-      </Typography>
+      </Link>
     </Box>
   );
 };

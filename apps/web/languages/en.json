@@ -36,26 +36,33 @@
   "components.appNavigationDrawer.download": {
     "defaultMessage": "Download"
   },
-  "components.appNavigationDrawer.langSelector": {
-    "defaultMessage": "Language"
-  },
   "components.appNavigationDrawer.load": {
     "defaultMessage": "Load"
   },
   "components.appNavigationDrawer.news": {
     "defaultMessage": "News"
   },
-  "components.appNavigationDrawer.openMenu": {
-    "defaultMessage": "Open menu"
-  },
   "components.appNavigationDrawer.settings": {
     "defaultMessage": "Settings"
   },
-  "components.appNavigationDrawer.settingsClose": {
-    "defaultMessage": "Close"
+  "components.appNavigationDrawer.admin": {
+    "defaultMessage": "Administration"
   },
-  "components.appNavigationDrawer.settingsTitle": {
-    "defaultMessage": "Default settings"
+  "components.appNavigationDrawer.logoutConfirmTitle": {
+    "defaultMessage": "Sign out?",
+    "description": "Títol de la confirmació de tancar sessió amb feina sense còpia"
+  },
+  "components.appNavigationDrawer.logoutConfirmBody": {
+    "defaultMessage": "Signing out also closes the document, and what is on screen is not saved to the cloud: it will be lost.",
+    "description": "Cos de la confirmació de tancar sessió amb feina sense còpia"
+  },
+  "components.appNavigationDrawer.logoutSaveFirst": {
+    "defaultMessage": "Save to the cloud first",
+    "description": "Botó per desar la feina al núvol abans de tancar la sessió"
+  },
+  "components.appNavigationDrawer.logoutDocumentClosed": {
+    "defaultMessage": "Signed out. The document has been closed too: it does not stay on this device.",
+    "description": "Confirmació de tancar sessió quan hi havia un document obert"
   },
   "components.appNavigationDrawer.welcome": {
     "defaultMessage": "Home"
@@ -77,14 +84,6 @@
   "components.barNavigation.view.title": {
     "defaultMessage": "View",
     "description": "Title Page"
-  },
-  "components.barNavigation.welcome.title": {
-    "defaultMessage": "Welcome",
-    "description": "Title Page"
-  },
-  "components.buttonWithFileLoad.load.label": {
-    "defaultMessage": "Load",
-    "description": "helper text"
   },
   "components.buttonWithModalDownload.defaultSettings.label": {
     "defaultMessage": "Default settings",
@@ -126,10 +125,6 @@
     "defaultMessage": "close",
     "description": "close Settings Default "
   },
-  "components.defaultSettings.download": {
-    "defaultMessage": "Save settings to local file",
-    "description": "Save settings to local file"
-  },
   "components.defaultSettings.pictGuide": {
     "defaultMessage": "Preview",
     "description": "Pictogram pictogram for default settings"
@@ -148,6 +143,10 @@
   "components.defaultSettings.sectionAppearance": {
     "defaultMessage": "Appearance",
     "description": "Títol de la secció de pell i cabell al panell de pictogrames"
+  },
+  "components.defaultSettings.settings.loggedIn": {
+    "defaultMessage": "Settings · signed in as {email}",
+    "description": "Nom del botó de configuracions quan hi ha sessió: també diu amb quin compte"
   },
   "components.defaultSettings.settings.title": {
     "defaultMessage": "Settings",
@@ -181,24 +180,12 @@
     "defaultMessage": "Pictograms",
     "description": "Títol de la secció de mida i alineació de pictogrames al panell de vista"
   },
-  "components.viewSettingsPanel.orientationLandscape": {
-    "defaultMessage": "Landscape",
-    "description": "Opció d'orientació horitzontal de la pàgina"
-  },
-  "components.viewSettingsPanel.orientationPortrait": {
-    "defaultMessage": "Portrait",
-    "description": "Opció d'orientació vertical de la pàgina"
-  },
   "components.viewSettingsPanel.apply": {
     "defaultMessage": "Apply to current view",
     "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
   },
   "components.viewSettingsPanel.applyHelper": {
     "defaultMessage": "Applies the values to the active view session without closing the settings."
-  },
-  "components.defaultSettings.upload": {
-    "defaultMessage": "Load settings from local file",
-    "description": "Load settings from local file"
   },
   "components.defaultSettings.userPanel.interfaceLanguage": {
     "defaultMessage": "Interface",
@@ -212,19 +199,12 @@
     "defaultMessage": "User settings saved",
     "description": "Snackbar quan els settings d'usuari s'han desat correctament"
   },
-  "components.defaultSettings.userPanel.saveError": {
-    "defaultMessage": "Error saving user settings",
-    "description": "Snackbar quan hi ha error en desar els settings d'usuari"
-  },
   "components.defaultSettings.userPanel.sectionTitle": {
     "defaultMessage": "Language",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
   "components.defaultSettings.userPanel.panelHint": {
-    "defaultMessage": "Settings for your account: app language, search language and theme. They apply everywhere."
-  },
-  "components.defaultSettings.vocabularyPanel.title": {
-    "defaultMessage": "Personal vocabulary"
+    "defaultMessage": "Settings for your account: languages, theme and images. They apply everywhere."
   },
   "components.defaultSettings.vocabularyPanel.sectionWord": {
     "defaultMessage": "Word",
@@ -251,12 +231,6 @@
   },
   "components.defaultSettings.vocabularyPanel.updateButton": {
     "defaultMessage": "Update"
-  },
-  "components.defaultSettings.vocabularyPanel.uploadImage": {
-    "defaultMessage": "Upload image"
-  },
-  "components.defaultSettings.vocabularyPanel.removeImage": {
-    "defaultMessage": "Remove image"
   },
   "components.defaultSettings.vocabularyPanel.loginRequired": {
     "defaultMessage": "You need to log in to use personal vocabulary."
@@ -349,9 +323,6 @@
     "defaultMessage": "Example: boy, put, seat belt.",
     "description": "Helper text field"
   },
-  "components.newsNavBar.langSelector": {
-    "defaultMessage": "Language"
-  },
   "components.newsNavBar.mainNavigation": {
     "defaultMessage": "Main navigation"
   },
@@ -364,12 +335,6 @@
   "components.newsNavBar.skipToContent": {
     "defaultMessage": "Skip to main content"
   },
-  "components.newsNavBar.start": {
-    "defaultMessage": "Create a sequence"
-  },
-  "components.newsNavBar.welcome": {
-    "defaultMessage": "Home"
-  },
   "components.pictEdit.close": {
     "defaultMessage": "Close",
     "description": "Close modal, edit pictogram"
@@ -377,10 +342,6 @@
   "components.pictEdit.delete": {
     "defaultMessage": "Delete",
     "description": "Delete modal, edit pictogram"
-  },
-  "components.pictEdit.modal.description": {
-    "defaultMessage": "You can edit pictogram",
-    "description": "Description modal"
   },
   "components.pictEdit.modal.label": {
     "defaultMessage": "Edit Pictogram",
@@ -575,9 +536,6 @@
   "context.feedback.search.complete": {
     "defaultMessage": "{count} pictograms added"
   },
-  "context.feedback.search.error": {
-    "defaultMessage": "Error searching pictograms"
-  },
   "context.feedback.search.loading": {
     "defaultMessage": "Searching pictograms..."
   },
@@ -593,10 +551,6 @@
     "defaultMessage": "Document loaded",
     "description": "Missatge de confirmació quan es carrega un document del backend"
   },
-  "features.backend.auth.documentSaved": {
-    "defaultMessage": "Document saved to cloud",
-    "description": "Missatge de confirmació quan el document es desa al backend"
-  },
   "features.backend.auth.email": {
     "defaultMessage": "Email",
     "description": "Etiqueta del camp email"
@@ -604,6 +558,9 @@
   "features.backend.auth.error.AUTH_ERROR": {
     "defaultMessage": "An error occurred while signing in. Please try again.",
     "description": "Error genèric de login"
+  },
+  "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED": {
+    "defaultMessage": "We've already taken all the new accounts we accept today. Please try again tomorrow."
   },
   "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
     "defaultMessage": "The email address format is not valid",
@@ -1090,6 +1047,15 @@
   "pages.viewSequence.resetDefaults.label": {
     "defaultMessage": "Restore sequences"
   },
+  "pages.viewSequence.savePreferences.label": {
+    "defaultMessage": "Save as preferences"
+  },
+  "pages.viewSequence.tooltip.savePreferencesCloud": {
+    "defaultMessage": "Save these settings to your account and use them by default in new sequences"
+  },
+  "pages.viewSequence.tooltip.savePreferencesLocal": {
+    "defaultMessage": "Save these settings in this browser and use them by default in new sequences"
+  },
   "pages.viewSequence.tooltip.orientationLandscape": {
     "defaultMessage": "Landscape page",
     "description": "Tooltip i nom accessible del botó d'orientació apaïsada de la pàgina"
@@ -1118,10 +1084,6 @@
   },
   "pages.viewSequence.tooltip.print": {
     "defaultMessage": "Print"
-  },
-  "pictogram.empty": {
-    "defaultMessage": "Empty",
-    "description": "Empty pictogram"
   },
   "setting.font-family.title": {
     "defaultMessage": "Family",
@@ -1433,6 +1395,58 @@
   "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
     "defaultMessage": "This email is already verified."
   },
+  "features.backend.auth.error.REFRESH_TOKEN_EXPIRED": {
+    "defaultMessage": "Your session has expired. Sign in again to save to the cloud; your work hasn't been lost.",
+    "description": "Error: the refresh token has expired"
+  },
+  "features.backend.auth.error.REFRESH_TOKEN_MISSING": {
+    "defaultMessage": "Your session was closed in this browser. Sign in again to save to the cloud; your work hasn't been lost.",
+    "description": "Error: there is no session cookie"
+  },
+  "features.backend.auth.error.INVALID_REFRESH_TOKEN": {
+    "defaultMessage": "Your session was closed from another device. Sign in again to save to the cloud; your work hasn't been lost.",
+    "description": "Error: the session was invalidated elsewhere"
+  },
+  "features.backend.auth.error.USER_NOT_FOUND": {
+    "defaultMessage": "This account no longer exists. Your work is still saved on this device: download it if you want a copy.",
+    "description": "Error: the session's account is gone"
+  },
+  "features.backend.auth.sessionExpired.titleExpired": {
+    "defaultMessage": "Your session has expired",
+    "description": "Notice title when the session expired over time"
+  },
+  "features.backend.auth.sessionExpired.titleMissing": {
+    "defaultMessage": "Your session was closed in this browser",
+    "description": "Notice title when the session cookie is gone"
+  },
+  "features.backend.auth.sessionExpired.titleInvalid": {
+    "defaultMessage": "Your session was closed from another device",
+    "description": "Notice title when the session was invalidated elsewhere"
+  },
+  "features.backend.auth.sessionExpired.titleSuspended": {
+    "defaultMessage": "This account is suspended",
+    "description": "Notice title when the account has been suspended"
+  },
+  "features.backend.auth.sessionExpired.titleGone": {
+    "defaultMessage": "This account no longer exists",
+    "description": "Notice title when the account can't be found"
+  },
+  "features.backend.auth.sessionExpired.bodyCanReturn": {
+    "defaultMessage": "Your work hasn't been lost: it's still saved on this device. To save it to the cloud, sign in again.",
+    "description": "Notice body when signing in again is possible"
+  },
+  "features.backend.auth.sessionExpired.bodyNoReturn": {
+    "defaultMessage": "Your work hasn't been lost: it's still saved on this device. Download it if you want a copy, and contact us if you think this is a mistake.",
+    "description": "Notice body when signing in again wouldn't help"
+  },
+  "features.backend.auth.sessionExpired.action": {
+    "defaultMessage": "Sign in again",
+    "description": "Notice button that opens the sign-in form"
+  },
+  "features.backend.auth.sessionExpired.dismiss": {
+    "defaultMessage": "Dismiss notice",
+    "description": "Button to dismiss the session notice"
+  },
   "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
     "defaultMessage": "You need to verify your email before saving to the cloud. Check your inbox."
   },
@@ -1443,7 +1457,7 @@
     "defaultMessage": "You've reached the maximum number of saved documents. Delete one to save a new one."
   },
   "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
-    "defaultMessage": "You've reached your image storage limit. Delete a document with your own images."
+    "defaultMessage": "You've reached your image storage limit. In Settings › User you can see what each image takes up and delete some."
   },
   "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
     "defaultMessage": "You've reached the maximum number of personalised words. Delete one to add more."
@@ -1471,9 +1485,6 @@
   },
   "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
     "defaultMessage": "The verification link is incomplete."
-  },
-  "features.backend.auth.verification.bannerFailed": {
-    "defaultMessage": "We couldn't send you the verification email. Try requesting it again."
   },
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Verify your email to save to the cloud. We've sent a link to {email}."
@@ -1643,6 +1654,22 @@
     "defaultMessage": "We've sent an email to {email} with a link to confirm your address and choose your password. If you don't see it in your inbox, check your spam folder too.",
     "description": "Missatge d'èxit després del signup"
   },
+  "pages.signup.failedTitle": {
+    "defaultMessage": "We couldn't send the email",
+    "description": "Títol de la pantalla de signup quan el correu no ha sortit"
+  },
+  "pages.signup.failed": {
+    "defaultMessage": "The account for {email} was created, but the email with the link to choose your password could not be sent. Without that link you can't sign in yet: request it again.",
+    "description": "Missatge de signup amb el compte creat i el correu no enviat"
+  },
+  "pages.signup.resend": {
+    "defaultMessage": "Send the email again",
+    "description": "Botó per demanar de nou el correu de verificació"
+  },
+  "pages.signup.resendDone": {
+    "defaultMessage": "We've requested it again. If it still hasn't arrived in a few minutes, check your spam folder and try again later.",
+    "description": "Confirmació d'haver tornat a demanar el correu de verificació"
+  },
   "pages.signup.goToApp": {
     "defaultMessage": "Go to the app",
     "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"
@@ -1755,6 +1782,34 @@
     "defaultMessage": "Saved to the cloud at {time}",
     "description": "Estat quan la feina té còpia al compte de l'usuari"
   },
+  "features.sequence.status.localDated": {
+    "defaultMessage": "Only on this device, since {date} at {time}",
+    "description": "Status when the work is only in the draft and is from another day"
+  },
+  "features.sequence.status.fileDated": {
+    "defaultMessage": "Downloaded to a file on {date} at {time}",
+    "description": "Status when the file copy is from another day"
+  },
+  "features.sequence.status.staleCloud": {
+    "defaultMessage": "Changed since the cloud save at {time}",
+    "description": "Estat quan hi ha canvis posteriors a l'última còpia al núvol"
+  },
+  "features.sequence.status.staleCloudDated": {
+    "defaultMessage": "Changed since the cloud save on {date} at {time}",
+    "description": "Estat de canvis posteriors quan la còpia és d'un altre dia"
+  },
+  "features.sequence.status.staleFile": {
+    "defaultMessage": "Changed since the file downloaded at {time}",
+    "description": "Estat quan hi ha canvis posteriors a l'última còpia en fitxer"
+  },
+  "features.sequence.status.staleFileDated": {
+    "defaultMessage": "Changed since the file downloaded on {date} at {time}",
+    "description": "Estat de canvis posteriors quan el fitxer és d'un altre dia"
+  },
+  "features.sequence.status.cloudDated": {
+    "defaultMessage": "Saved to the cloud on {date} at {time}",
+    "description": "Status when the cloud copy is from another day"
+  },
   "features.sequence.status.error": {
     "defaultMessage": "This browser could not save your work",
     "description": "Estat quan l'escriptura de l'esborrany falla"
@@ -1762,6 +1817,26 @@
   "features.sequence.status.hintLocal": {
     "defaultMessage": "It stays in this browser, which can delete it on its own. Download it or save it to the cloud to keep it somewhere else.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
+  },
+  "features.sequence.status.hintStaleCloud": {
+    "defaultMessage": "What is on screen is not in the cloud yet. Save it again to update the copy.",
+    "description": "Explicació de l'estat de canvis posteriors a la còpia al núvol"
+  },
+  "features.sequence.status.hintStaleFile": {
+    "defaultMessage": "What is on screen is not in the file yet. Download it again to update it.",
+    "description": "Explicació de l'estat de canvis posteriors a la còpia en fitxer"
+  },
+  "features.sequence.draft.conflictError": {
+    "defaultMessage": "Another tab has newer work. This one has stopped saving on its own so it doesn't erase it: download what you have here if you want to keep it.",
+    "description": "Warning when another tab saved the draft more recently than this one"
+  },
+  "features.sequence.status.conflict": {
+    "defaultMessage": "Another tab has newer work",
+    "description": "Status when this tab stopped writing the draft to avoid overwriting another one"
+  },
+  "features.sequence.status.hintConflict": {
+    "defaultMessage": "This tab no longer saves on its own. Download what you have here if you want to keep it.",
+    "description": "Explanation when another tab holds a newer version of the draft"
   },
   "features.sequence.status.hintError": {
     "defaultMessage": "Download the file now: it is the only way not to lose your work.",
@@ -1786,6 +1861,10 @@
   "features.sequence.status.confirmBody": {
     "defaultMessage": "Your current work is only in this browser. If you start from scratch, it is lost.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
+  },
+  "features.sequence.status.confirmBodyStale": {
+    "defaultMessage": "The saved copy is older. If you start from scratch, everything done since then is lost.",
+    "description": "Cos del diàleg de confirmació quan hi ha una còpia però amb canvis posteriors"
   },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Download it first",
@@ -1815,9 +1894,17 @@
     "defaultMessage": "Give it a name so you can find it again.",
     "description": "Validació: el nom del document és obligatori"
   },
+  "features.backend.documents.nameSameAsOriginal": {
+    "defaultMessage": "The copy needs a different name so it is not mixed up with the original.",
+    "description": "Validació: la còpia d'un document no pot tenir el mateix nom que l'original"
+  },
   "features.backend.documents.updateHint": {
     "defaultMessage": "This document is already in the cloud: saving it will replace the stored version.",
     "description": "Avís del diàleg quan el document ja existeix al núvol"
+  },
+  "features.backend.documents.copyHint": {
+    "defaultMessage": "“Save a copy” stores a new one and leaves the original as it is.",
+    "description": "Avís que explica què fa el botó de desar una còpia"
   },
   "features.backend.documents.saveAction": {
     "defaultMessage": "Save",
@@ -1826,6 +1913,10 @@
   "features.backend.documents.updateAction": {
     "defaultMessage": "Update",
     "description": "Botó per actualitzar el document ja desat al núvol"
+  },
+  "features.backend.documents.saveCopyAction": {
+    "defaultMessage": "Save a copy",
+    "description": "Botó per desar el document com un de nou sense tocar el que ja hi ha al núvol"
   },
   "features.backend.documents.cancel": {
     "defaultMessage": "Cancel",
@@ -1850,6 +1941,10 @@
   "features.backend.documents.documentSavedNamed": {
     "defaultMessage": "“{title}” has been saved to the cloud",
     "description": "Confirmació en desar un document amb nom"
+  },
+  "features.backend.documents.documentCopiedNamed": {
+    "defaultMessage": "Copy “{title}” saved: you are now working on it",
+    "description": "Confirmació en desar una còpia: avisa que el document actiu passa a ser la còpia"
   },
   "features.backend.documents.documentLoadedNamed": {
     "defaultMessage": "“{title}” has been loaded",
@@ -1922,5 +2017,219 @@
   "components.tabsSequences.confirmDelete": {
     "defaultMessage": "Delete sequence",
     "description": "Button confirming deletion of the last sequence"
+  },
+  "components.buttonWithModalDownload.dialogTitle": {
+    "defaultMessage": "Save and download",
+    "description": "Title of the .saac file download dialog"
+  },
+  "features.backend.userSettings.usage.storageTitle": {
+    "defaultMessage": "Image space"
+  },
+  "features.backend.userSettings.usage.documentsTitle": {
+    "defaultMessage": "Sequences in the cloud"
+  },
+  "features.backend.userSettings.usage.wordsTitle": {
+    "defaultMessage": "Vocabulary words"
+  },
+  "features.backend.userSettings.usage.countOfLimit": {
+    "defaultMessage": "{used} of {limit}"
+  },
+  "features.backend.userSettings.usage.bytesOfLimit": {
+    "defaultMessage": "{used} of {limit}"
+  },
+  "features.backend.userSettings.usage.megabytes": {
+    "defaultMessage": "{value} MB"
+  },
+  "features.backend.userSettings.usage.kilobytes": {
+    "defaultMessage": "{value} KB"
+  },
+  "features.backend.userSettings.usage.centimeters": {
+    "defaultMessage": "{value} cm",
+    "description": "Mida impresa en centímetres"
+  },
+  "features.backend.userSettings.usage.sizeWithPrint": {
+    "defaultMessage": "{size} · looks good up to {width}",
+    "description": "Pes d'una imatge i mida fins a la qual s'imprimeix nítida"
+  },
+  "features.backend.userSettings.usage.remainingImages": {
+    "defaultMessage": "{count, plural, =0 {No more images fit at the chosen quality} one {# more image fits at the chosen quality} other {# more images fit at the chosen quality}}"
+  },
+  "features.backend.userSettings.usage.imagesTitle": {
+    "defaultMessage": "Your images"
+  },
+  "features.backend.userSettings.usage.imagesEmpty": {
+    "defaultMessage": "You haven't uploaded any images of your own yet. ARASAAC pictograms take up no space in your account."
+  },
+  "features.backend.userSettings.usage.imagesLoadError": {
+    "defaultMessage": "The images could not be loaded. Try again in a little while."
+  },
+  "features.backend.userSettings.usage.reload": {
+    "defaultMessage": "Try again"
+  },
+  "features.backend.userSettings.usage.inDocument": {
+    "defaultMessage": "In the “{title}” sequence"
+  },
+  "features.backend.userSettings.usage.inUntitledDocument": {
+    "defaultMessage": "In an untitled sequence"
+  },
+  "features.backend.userSettings.usage.inWord": {
+    "defaultMessage": "In the word “{word}”"
+  },
+  "features.backend.userSettings.usage.deleteImage": {
+    "defaultMessage": "Delete the image"
+  },
+  "features.backend.userSettings.usage.deleteTitle": {
+    "defaultMessage": "Delete the image?"
+  },
+  "features.backend.userSettings.usage.deleteBodyDocument": {
+    "defaultMessage": "The pictogram will be left without an image in the sequence saved to the cloud, and you will get {size} back. The image cannot be recovered."
+  },
+  "features.backend.userSettings.usage.deleteBodyWord": {
+    "defaultMessage": "The word will keep its ARASAAC pictogram, and you will get {size} back. The image cannot be recovered."
+  },
+  "features.backend.userSettings.usage.deleteConfirm": {
+    "defaultMessage": "Delete the image"
+  },
+  "features.backend.userSettings.usage.deleted": {
+    "defaultMessage": "Image deleted. You got {size} back."
+  },
+  "features.backend.userSettings.usage.deleteError": {
+    "defaultMessage": "The image could not be deleted. (Code: {code})"
+  },
+  "features.backend.userSettings.usage.resizeImage": {
+    "defaultMessage": "Resize the image",
+    "description": "Botó per reduir una imatge del compte"
+  },
+  "features.backend.userSettings.usage.resizeTitle": {
+    "defaultMessage": "Resize the image",
+    "description": "Títol del diàleg per reduir una imatge"
+  },
+  "features.backend.userSettings.usage.resizeCurrent": {
+    "defaultMessage": "It takes up {size} and looks good printed up to {width} wide. The pictogram does not change: only the size of the image.",
+    "description": "Estat actual de la imatge dins del diàleg de canvi de mida"
+  },
+  "features.backend.userSettings.usage.resizeCurrentUnknown": {
+    "defaultMessage": "It takes up {size}. The pictogram does not change: only the size of the image.",
+    "description": "Estat actual de la imatge quan encara no se'n saben els píxels"
+  },
+  "features.backend.userSettings.usage.resizePreparing": {
+    "defaultMessage": "Preparing the sizes…",
+    "description": "Espera mentre es calculen les versions més petites"
+  },
+  "features.backend.userSettings.usage.resizeOption": {
+    "defaultMessage": "It will look good up to {width} wide and take up {size}: you get {saved} back.",
+    "description": "Què passa amb la mida triada al diàleg de canvi de mida"
+  },
+  "features.backend.userSettings.usage.resizeNone": {
+    "defaultMessage": "This image is already at the smallest size: making it smaller would look blurry in print. If you need space, delete it.",
+    "description": "La imatge no es pot reduir més"
+  },
+  "features.backend.userSettings.usage.resizeConfirm": {
+    "defaultMessage": "Resize",
+    "description": "Botó que aplica la mida triada"
+  },
+  "features.backend.userSettings.usage.resizeCancel": {
+    "defaultMessage": "Cancel",
+    "description": "Botó que tanca el diàleg de canvi de mida sense fer res"
+  },
+  "features.backend.userSettings.usage.resizeApplying": {
+    "defaultMessage": "Resizing the image…",
+    "description": "Espera mentre la imatge nova puja al núvol"
+  },
+  "features.backend.userSettings.usage.resizeLoadError": {
+    "defaultMessage": "The image could not be prepared. Check your connection and try again.",
+    "description": "Error en baixar o comprimir la imatge al navegador"
+  },
+  "features.backend.userSettings.usage.resizeError": {
+    "defaultMessage": "The image could not be resized. (Code: {code})",
+    "description": "Error en desar la imatge reduïda"
+  },
+  "features.backend.userSettings.usage.resized": {
+    "defaultMessage": "The image now takes up {size}. You got {saved} back.",
+    "description": "Confirmació del canvi de mida amb l'espai recuperat"
+  },
+  "features.backend.userSettings.usage.thumbnailAlt": {
+    "defaultMessage": "Uploaded image"
+  },
+  "components.settingCardImageQuality.cardTitle": {
+    "defaultMessage": "Image quality"
+  },
+  "components.settingCardImageQuality.ariaLabel": {
+    "defaultMessage": "Quality of the images you upload"
+  },
+  "components.settingCardImageQuality.print": {
+    "defaultMessage": "Print"
+  },
+  "components.settingCardImageQuality.standard": {
+    "defaultMessage": "Standard"
+  },
+  "components.settingCardImageQuality.compact": {
+    "defaultMessage": "Compact"
+  },
+  "components.settingCardImageQuality.helper": {
+    "defaultMessage": "New images will look good printed up to {width} wide and will take up {size} at most each. Printed larger, they will look blurry.",
+    "description": "Explicació del nivell de qualitat: fins a quina mida s'imprimeix bé i quant ocupa"
+  },
+  "components.settingCardImageQuality.optionHint": {
+    "defaultMessage": "Looks good printed up to {width} wide",
+    "description": "Ajuda de cada nivell: fins a quina mida impresa es veu bé"
+  },
+  "components.settingCardImageQuality.existingUnchanged": {
+    "defaultMessage": "The ones you have already uploaded do not change.",
+    "description": "La qualitat només val per a les imatges noves"
+  },
+  "components.settingCardImageQuality.existingResizable": {
+    "defaultMessage": "The ones you have already uploaded do not change, but you can resize them in “Your account space”.",
+    "description": "La qualitat només val per a les imatges noves, i on canviar les que ja hi són"
+  },
+  "components.defaultSettings.userPanel.sectionImages": {
+    "defaultMessage": "Images"
+  },
+  "components.defaultSettings.userPanel.sectionStorage": {
+    "defaultMessage": "Your account space"
+  },
+  "components.uploadImageButton.print": {
+    "defaultMessage": "print"
+  },
+  "components.uploadImageButton.standard": {
+    "defaultMessage": "standard"
+  },
+  "components.uploadImageButton.compact": {
+    "defaultMessage": "compact"
+  },
+  "components.uploadImageButton.tooBigTitle": {
+    "defaultMessage": "The image takes up too much space"
+  },
+  "components.uploadImageButton.tooBigQuotaSmaller": {
+    "defaultMessage": "The image takes up {size} and only {available} are left in your account. At {quality} quality it would take up {smallerSize}, would still look good printed up to {smallerWidth} wide, and would fit.",
+    "description": "No cap a l'espai del compte, però n'hi ha una de més petita"
+  },
+  "components.uploadImageButton.tooBigQuotaOnly": {
+    "defaultMessage": "The image takes up {size} and only {available} are left in your account. It does not fit at any quality: you can still add it and print it from this device, but you will need to free up space to save it to the cloud."
+  },
+  "components.uploadImageButton.tooBigPerImageSmaller": {
+    "defaultMessage": "The image takes up {size} and the maximum per image is {available}. At {quality} quality it would take up {smallerSize} and would still look good printed up to {smallerWidth} wide.",
+    "description": "Passa del sostre per imatge, però n'hi ha una de més petita"
+  },
+  "components.uploadImageButton.tooBigPerImageOnly": {
+    "defaultMessage": "The image takes up {size} and the maximum per image is {available}. You can still add it and print it from this device, but it cannot be saved to the cloud."
+  },
+  "components.uploadImageButton.useSmaller": {
+    "defaultMessage": "Make it smaller"
+  },
+  "components.uploadImageButton.useOriginal": {
+    "defaultMessage": "Add it anyway"
+  },
+  "components.uploadImageButton.cancelUpload": {
+    "defaultMessage": "Cancel"
+  },
+  "features.backend.auth.error.IMAGE_TOO_LARGE": {
+    "defaultMessage": "One of the images is too heavy to save to the cloud. Add it again at a lower quality (Settings › User › Image quality)."
+  },
+  "components.defaultSettings.saveError.bodyQuota": {
+    "defaultMessage": "Your account has run out of image space, so the settings were not saved. In Settings › User you can see what each vocabulary image takes up and delete some of them."
+  },
+  "components.defaultSettings.saveError.bodyImageTooLarge": {
+    "defaultMessage": "One of the vocabulary images is too heavy to save to the cloud. Add it again at a lower quality: you choose it in Settings › User › Image quality."
   }
 }

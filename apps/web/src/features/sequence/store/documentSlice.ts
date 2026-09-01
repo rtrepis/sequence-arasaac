@@ -313,6 +313,39 @@ const documentSlice = createSlice({
     },
 
     // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
+    // Treu una imatge del núvol del document obert.
+    //
+    // La crida el gestor d'imatges del compte quan la imatge esborrada és d'una
+    // seqüència que l'usuari té a pantalla: al núvol ja no hi és, i sense això
+    // el document que s'està editant continuaria apuntant a una URL morta —i el
+    // desat següent la tornaria a desar.
+    removeCloudImage: (previousDocument, action: PayloadAction<string>) => {
+      Object.values(previousDocument.content).forEach((sequence) => {
+        sequence.forEach((pict) => {
+          if (pict.img.url === action.payload) pict.img.url = undefined;
+        });
+      });
+    },
+
+    // Adopta la imatge nova quan una del núvol s'ha canviat de mida.
+    //
+    // Reduir una imatge al núvol vol dir pujar-ne una altra i esborrar la
+    // vella: la URL canvia, i el document obert es quedaria apuntant a una
+    // imatge que ja no existeix. Com `removeCloudImage`, no és un canvi de
+    // contingut —la còpia de fora no s'ha quedat enrere, s'ha avançat.
+    replaceCloudImage: (
+      previousDocument,
+      action: PayloadAction<{ from: string; to: string }>,
+    ) => {
+      Object.values(previousDocument.content).forEach((sequence) => {
+        sequence.forEach((pict) => {
+          if (pict.img.url === action.payload.from) {
+            pict.img.url = action.payload.to;
+          }
+        });
+      });
+    },
+
     setDocumentId: (previousDocument, action: PayloadAction<string>) => {
       previousDocument.id = action.payload;
     },
@@ -371,39 +404,51 @@ const documentSlice = createSlice({
 
 export const documentReducer = documentSlice.reducer;
 
-// Thunk: desa el document al backend (POST si local, PUT si ja té id de MongoDB)
-// Actualitza el Redux amb el document retornat perquè les URLs base64 es substitueixin per URLs de Cloudinary
+/**
+ * Desa el document al backend: PUT si ja té id de MongoDB, POST si no.
+ * Actualitza el Redux amb el document retornat perquè les URLs base64 es
+ * substitueixin per URLs de Cloudinary.
+ *
+ * Amb `asCopy`, el POST es força encara que el document ja sigui al núvol: és
+ * el «Desa'n una còpia». L'id nou el porta la resposta i el recull el mateix
+ * `loadDocumentSaac` de sempre, de manera que a partir d'aquell moment es
+ * treballa sobre la còpia i l'original es queda tal com estava — que és
+ * justament el que es demana en desar-ne una.
+ */
 export const saveDocumentThunk = createAsyncThunk<
   string,
-  DocumentSAAC,
+  { document: DocumentSAAC; asCopy?: boolean },
   { rejectValue: string }
->("document/save", async (doc, { dispatch, rejectWithValue }) => {
-  try {
-    const { id, ...payload } = doc;
-    if (isMongoId(id)) {
-      const updated = await updateDocument(id, payload);
-      dispatch(documentSlice.actions.loadDocumentSaac(updated));
-      return id;
-    } else {
-      const saved = await createDocument(payload);
-      dispatch(documentSlice.actions.loadDocumentSaac(saved));
-      return saved.id;
-    }
-  } catch (error: unknown) {
-    // Es propaga el codi semàntic del backend, no un text fix: qui no pot desar
-    // ha de saber per què (correu sense verificar, quota exhaurida) i què hi pot fer.
-    // La traducció la fa qui mostra el missatge.
-    const failure = classifyRequestFailure(error);
-    const errorCode =
-      (error as { response?: { data?: { errorCode?: string } } })?.response
-        ?.data?.errorCode ?? "DOCUMENT_SAVE_ERROR";
+>(
+  "document/save",
+  async ({ document: doc, asCopy = false }, { dispatch, rejectWithValue }) => {
+    try {
+      const { id, ...payload } = doc;
+      if (isMongoId(id) && !asCopy) {
+        const updated = await updateDocument(id, payload);
+        dispatch(documentSlice.actions.loadDocumentSaac(updated));
+        return id;
+      } else {
+        const saved = await createDocument(payload);
+        dispatch(documentSlice.actions.loadDocumentSaac(saved));
+        return saved.id;
+      }
+    } catch (error: unknown) {
+      // Es propaga el codi semàntic del backend, no un text fix: qui no pot desar
+      // ha de saber per què (correu sense verificar, quota exhaurida) i què hi pot fer.
+      // La traducció la fa qui mostra el missatge.
+      const failure = classifyRequestFailure(error);
+      const errorCode =
+        (error as { response?: { data?: { errorCode?: string } } })?.response
+          ?.data?.errorCode ?? "DOCUMENT_SAVE_ERROR";
 
-    // Desar una seqüència és el que més li importa a l'usuari: si no ho aconsegueix,
-    // val més saber-ho encara que la causa sigui passatgera i no es repeteixi.
-    void reportClientError("document-save", { ...failure, code: errorCode });
-    return rejectWithValue(errorCode);
-  }
-});
+      // Desar una seqüència és el que més li importa a l'usuari: si no ho aconsegueix,
+      // val més saber-ho encara que la causa sigui passatgera i no es repeteixi.
+      void reportClientError("document-save", { ...failure, code: errorCode });
+      return rejectWithValue(errorCode);
+    }
+  },
+);
 
 // Thunk: comença un document nou.
 //
@@ -456,6 +501,8 @@ export const {
   updateSequenceViewSettings: updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAll: applyViewSettingsToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
+  removeCloudImage: removeCloudImageActionCreator,
+  replaceCloudImage: replaceCloudImageActionCreator,
   setDocumentId: setDocumentIdActionCreator,
   setDocumentTitle: setDocumentTitleActionCreator,
 } = documentSlice.actions;

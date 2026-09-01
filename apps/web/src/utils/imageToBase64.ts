@@ -2,24 +2,59 @@
  * Utilitats per convertir imatges a base64 amb una mida fixa i acotada.
  * Garanteix la persistència de les imatges personalitzades als documents.
  */
+import type { ImageQuality } from "@sequence-arasaac/shared-types";
 
 /**
- * Costat llarg màxim d'una imatge pujada, en píxels.
+ * Costat llarg i pes objectiu de cada nivell de qualitat.
  *
- * El pictograma més gran que es pot imprimir avui és de 150,8 mm de costat
- * (150 px CSS × SIZE_PICT_MAX 3,8, a 96 dpi). Amb 1.800 px hi surt a 303 dpi,
- * per damunt del sostre del propi PDF (html2canvas hi treballa a scale 3 sobre
- * una pàgina de 96 dpi, o sigui 288 dpi com a màxim). Pujar d'aquí només
- * afegiria pes: píxels que cap sortida no arriba a fer servir.
+ * `print` és el de sempre i continua sent el valor per defecte: el pictograma
+ * més gran que es pot imprimir avui fa 150,8 mm de costat (150 px CSS ×
+ * SIZE_PICT_MAX 3,8, a 96 dpi), i 1.800 px hi surten a 303 dpi, per damunt del
+ * sostre del propi PDF (html2canvas treballa a scale 3 sobre una pàgina de
+ * 96 dpi, o sigui 288 dpi com a màxim). Pujar d'aquí només afegiria pes.
  *
- * La mida és FIXA per a totes les imatges, no depèn de quantes n'hi hagi al
- * document: quan es puja encara no se sap a quina mida s'imprimirà —
- * `sizePict` es toca després, a la pàgina de vista— i reduir és irreversible.
+ * Els altres dos nivells NO són una progressió automàtica segons quantes
+ * imatges hi hagi —quan es puja encara no se sap a quina mida s'imprimirà, i
+ * reduir és irreversible—: són una tria de l'usuari, que és l'únic que sap si
+ * imprimirà a mida gran o si el que li falta és espai. Les xifres surten del
+ * que cada nivell dona a la impressió: 1.200 px són 202 dpi (una targeta de
+ * mida corrent, ~75 mm, hi surt a 400 dpi) i 800 px, 135 dpi (prou per a
+ * pantalla i per a pictogrames petits).
+ *
+ * Cap dels tres passa de MAX_IMAGE_BYTES (500 KB), que és el sostre que el
+ * servidor fa complir: si un nivell el passés, «una imatge» deixaria de voler
+ * dir un pes concret.
  */
-export const MAX_IMAGE_SIDE_PX = 1800;
+export const IMAGE_QUALITY_PRESETS: Record<
+  ImageQuality,
+  { maxSidePx: number; targetBytes: number }
+> = {
+  print: { maxSidePx: 1800, targetBytes: 500 * 1024 },
+  standard: { maxSidePx: 1200, targetBytes: 250 * 1024 },
+  compact: { maxSidePx: 800, targetBytes: 120 * 1024 },
+};
 
-/** Pes al qual s'apunta per imatge, ajustant la qualitat de codificació. */
-const TARGET_BYTES = 500 * 1024;
+/**
+ * Pes màxim d'una imatge pujada, el mateix que fa complir el servidor
+ * (`MAX_IMAGE_BYTES` d'`apps/api/src/shared/imageAssets.ts`).
+ *
+ * Es repeteix aquí a propòsit: el client l'ha de poder comprovar abans d'enviar
+ * res, i el servidor l'ha de fer complir encara que el client no ho faci. Els
+ * tres nivells de qualitat hi queden per sota, però una imatge amb
+ * transparència que acabi en PNG —quan el navegador no sap codificar WebP— no
+ * passa per cap pes objectiu i el pot superar.
+ */
+export const MAX_UPLOAD_IMAGE_BYTES = 500 * 1024;
+
+/** Qualitat amb què es puja mentre l'usuari no en triï cap altra. */
+export const DEFAULT_IMAGE_QUALITY: ImageQuality = "print";
+
+/** Nivells en ordre de més a menys pes, per poder-ne provar un de més petit. */
+export const IMAGE_QUALITY_ORDER: ImageQuality[] = [
+  "print",
+  "standard",
+  "compact",
+];
 
 const INITIAL_QUALITY = 0.9;
 const MIN_QUALITY = 0.5;
@@ -30,20 +65,25 @@ const WEBP_MIME = "image/webp";
 const PNG_MIME = "image/png";
 
 /**
- * Carrega una imatge des d'un File i retorna un HTMLImageElement.
+ * Carrega una imatge des d'un File o d'un data URL i retorna un HTMLImageElement.
+ *
+ * Accepta les dues coses perquè el camí de la pujada i el de tornar a comprimir
+ * una imatge ja convertida han de ser el mateix: si es codifiquessin per separat,
+ * la versió comprimida podria no coincidir amb la que es pujaria de nou.
  */
-const loadImage = (file: File): Promise<HTMLImageElement> => {
+const loadImage = (source: File | string): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    const url = URL.createObjectURL(file);
+    const isFile = typeof source !== "string";
+    const url = isFile ? URL.createObjectURL(source) : source;
 
     img.onload = () => {
-      URL.revokeObjectURL(url);
+      if (isFile) URL.revokeObjectURL(url);
       resolve(img);
     };
 
     img.onerror = () => {
-      URL.revokeObjectURL(url);
+      if (isFile) URL.revokeObjectURL(url);
       reject(new Error("Error carregant la imatge"));
     };
 
@@ -60,11 +100,15 @@ interface ImageDimensions {
  * Dimensions de destí: es redueix sempre que el costat llarg passi del màxim,
  * i mai s'amplia — inventar píxels no afegeix detall i multiplica el pes.
  */
-const fitToMaxSide = (width: number, height: number): ImageDimensions => {
+const fitToMaxSide = (
+  width: number,
+  height: number,
+  maxSidePx: number,
+): ImageDimensions => {
   const longestSide = Math.max(width, height);
-  if (longestSide <= MAX_IMAGE_SIDE_PX) return { width, height };
+  if (longestSide <= maxSidePx) return { width, height };
 
-  const ratio = MAX_IMAGE_SIDE_PX / longestSide;
+  const ratio = maxSidePx / longestSide;
   return {
     width: Math.round(width * ratio),
     height: Math.round(height * ratio),
@@ -114,9 +158,12 @@ const hasTransparency = (
 };
 
 /**
- * Calcula la mida en bytes d'una cadena base64.
+ * Mida en bytes d'una cadena base64.
+ *
+ * Exportada perquè és el que decideix si una imatge cap a l'espai que queda al
+ * compte, i això s'ha de poder saber abans d'enviar-la enlloc.
  */
-const getBase64SizeInBytes = (base64String: string): number => {
+export const getBase64SizeInBytes = (base64String: string): number => {
   const base64Data = base64String.split(",")[1] || base64String;
   return Math.ceil((base64Data.length * 3) / 4);
 };
@@ -128,11 +175,12 @@ const getBase64SizeInBytes = (base64String: string): number => {
 const encodeWithTargetSize = (
   canvas: HTMLCanvasElement,
   mimeType: string,
+  targetBytes: number,
 ): string => {
   let quality = INITIAL_QUALITY;
   let result = canvas.toDataURL(mimeType, quality);
 
-  while (getBase64SizeInBytes(result) > TARGET_BYTES && quality > MIN_QUALITY) {
+  while (getBase64SizeInBytes(result) > targetBytes && quality > MIN_QUALITY) {
     quality = Math.round((quality - QUALITY_STEP) * 10) / 10;
     result = canvas.toDataURL(mimeType, quality);
   }
@@ -150,29 +198,146 @@ const encodeWithTargetSize = (
 const encode = (
   ctx: CanvasRenderingContext2D,
   dimensions: ImageDimensions,
+  targetBytes: number,
 ): string => {
   const { canvas } = ctx;
 
   if (!hasTransparency(ctx, dimensions)) {
-    return encodeWithTargetSize(canvas, JPEG_MIME);
+    return encodeWithTargetSize(canvas, JPEG_MIME, targetBytes);
   }
 
-  const webp = encodeWithTargetSize(canvas, WEBP_MIME);
+  const webp = encodeWithTargetSize(canvas, WEBP_MIME, targetBytes);
   if (webp.startsWith(`data:${WEBP_MIME}`)) return webp;
 
   return canvas.toDataURL(PNG_MIME);
 };
 
 /**
- * Converteix un File (imatge) a una cadena base64, sempre acotada a
- * MAX_IMAGE_SIDE_PX de costat llarg.
+ * Converteix una imatge (un File o un data URL ja convertit) a base64, acotada
+ * al costat llarg i al pes del nivell de qualitat demanat.
  */
-export const fileToBase64 = async (file: File): Promise<string> => {
-  const img = await loadImage(file);
-  const dimensions = fitToMaxSide(img.naturalWidth, img.naturalHeight);
+export const encodeImage = async (
+  source: File | string,
+  quality: ImageQuality = DEFAULT_IMAGE_QUALITY,
+): Promise<string> => {
+  const { maxSidePx, targetBytes } = IMAGE_QUALITY_PRESETS[quality];
+  const img = await loadImage(source);
+  const dimensions = fitToMaxSide(
+    img.naturalWidth,
+    img.naturalHeight,
+    maxSidePx,
+  );
   const ctx = drawToCanvas(img, dimensions);
 
-  return encode(ctx, dimensions);
+  return encode(ctx, dimensions, targetBytes);
+};
+
+/**
+ * Converteix un File (imatge) a una cadena base64 amb el nivell de qualitat
+ * triat per l'usuari.
+ */
+export const fileToBase64 = async (
+  file: File,
+  quality: ImageQuality = DEFAULT_IMAGE_QUALITY,
+): Promise<string> => encodeImage(file, quality);
+
+/**
+ * Nivell més gran que faria caber la imatge dins dels bytes disponibles, o null
+ * si no n'hi ha cap.
+ *
+ * Es prova de veritat, codificant: el pes objectiu de cada nivell és una fita,
+ * no una promesa —una foto amb molt detall es pot quedar per sobre encara que
+ * la qualitat hagi baixat al mínim—, i oferir una reducció que després no cap
+ * seria pitjor que no oferir-ne cap.
+ */
+export const encodeToFit = async (
+  dataUrl: string,
+  availableBytes: number,
+  from: ImageQuality,
+): Promise<{
+  dataUrl: string;
+  quality: ImageQuality;
+  bytes: number;
+} | null> => {
+  const smaller = IMAGE_QUALITY_ORDER.slice(
+    IMAGE_QUALITY_ORDER.indexOf(from) + 1,
+  );
+
+  for (const quality of smaller) {
+    const encoded = await encodeImage(dataUrl, quality);
+    const bytes = getBase64SizeInBytes(encoded);
+    if (bytes <= availableBytes) return { dataUrl: encoded, quality, bytes };
+  }
+
+  return null;
+};
+
+/**
+ * Baixa una imatge d'una URL i la torna com a data URL.
+ *
+ * Es baixa i es torna a codificar en comptes de passar la URL directament al
+ * canvas perquè una imatge remota el contamina —`toDataURL` llavors llança— i
+ * arreglar-ho voldria dir dependre que el servidor enviï la capçalera de CORS
+ * per a la imatge *i* per al canvas. Amb un data URL no hi ha res a contaminar.
+ */
+export const fetchAsDataUrl = async (url: string): Promise<string> => {
+  const response = await fetch(url);
+  if (!response.ok)
+    throw new Error(`No s'ha pogut baixar la imatge: ${response.status}`);
+
+  const blob = await response.blob();
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("No s'ha pogut llegir la imatge"));
+    reader.readAsDataURL(blob);
+  });
+};
+
+/** Una versió alternativa d'una imatge, ja codificada i pesada. */
+export interface ImageVersion {
+  quality: ImageQuality;
+  dataUrl: string;
+  bytes: number;
+}
+
+/** Com és una imatge avui i què se'n pot fer de més petit. */
+export interface SmallerVersions {
+  /** Costat llarg en píxels: és el que decideix fins a quina mida s'imprimeix bé. */
+  longestSide: number;
+  bytes: number;
+  versions: ImageVersion[];
+}
+
+/**
+ * Versions més petites que es poden oferir d'una imatge ja pujada.
+ *
+ * Es codifiquen de veritat, com a `encodeToFit`: el pes objectiu d'un nivell és
+ * una fita, no una promesa, i oferir una reducció que després no redueix res
+ * seria fer perdre qualitat a canvi de res. Per això només hi surten els
+ * nivells que retallen píxels (els que no arriben al costat llarg d'ara) i que,
+ * un cop codificats, pesen menys del que pesa avui.
+ */
+export const encodeSmallerVersions = async (
+  dataUrl: string,
+): Promise<SmallerVersions> => {
+  const img = await loadImage(dataUrl);
+  const longestSide = Math.max(img.naturalWidth, img.naturalHeight);
+  const bytes = getBase64SizeInBytes(dataUrl);
+  const versions: ImageVersion[] = [];
+
+  for (const quality of IMAGE_QUALITY_ORDER) {
+    if (IMAGE_QUALITY_PRESETS[quality].maxSidePx >= longestSide) continue;
+
+    const encoded = await encodeImage(dataUrl, quality);
+    const encodedBytes = getBase64SizeInBytes(encoded);
+    if (encodedBytes >= bytes) continue;
+
+    versions.push({ quality, dataUrl: encoded, bytes: encodedBytes });
+  }
+
+  return { longestSide, bytes, versions };
 };
 
 /**

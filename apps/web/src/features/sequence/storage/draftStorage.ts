@@ -19,6 +19,7 @@
 // `PictApiAra.url` a Redux canvien de forma.
 import { DocumentSAAC } from "@/types/document";
 import { Sequence } from "@/types/sequence";
+import { ViewSettings } from "@/types/ui";
 import { DurableKind } from "@features/sequence/store/documentStatusSlice";
 
 const DB_NAME = "sequenciaac";
@@ -37,12 +38,30 @@ const IMAGE_REF_PREFIX = "draft-image:";
  */
 export interface DraftMeta {
   savedAt: number;
+  /**
+   * Moment de l'últim canvi de contingut. Hi ha de ser perquè `savedAt` no el
+   * pot substituir: l'esborrany s'escriu un segon després de desar (debounce),
+   * o sigui que sempre és posterior a `durableAt`, i en restaurar-lo com a
+   * «últim canvi» la comparació de `getDocumentDurability` no sortia bé mai —
+   * un document acabat de desar al núvol tornava dient que no era enlloc.
+   */
+  changedAt: number | null;
   durableAt: number | null;
   durableKind: DurableKind | null;
 }
 
 export interface DocumentDraft extends DraftMeta {
   document: DocumentSAAC;
+  /**
+   * Format de pàgina i ajustos globals de la vista (mida, orientació, direcció,
+   * separació entre seqüències, autor). Van **al costat** del document i mai a
+   * dins: el document és el contracte del `.saac` i del cos de l'API, i això és
+   * estat de sessió d'aquest navegador. Els ajustos per seqüència sí que són del
+   * document i ja hi viatgen.
+   *
+   * Opcional perquè els esborranys escrits abans d'existir el camp no en porten.
+   */
+  viewSettings?: ViewSettings;
 }
 
 /**
@@ -206,39 +225,87 @@ const restoreImages = (
 };
 
 /**
- * Desa l'esborrany. Retorna si s'ha pogut desar, perquè qui el crida pugui
- * avisar l'usuari: quedar-se sense espai amb la feina només a la pantalla és
- * exactament el que aquest mòdul ha d'evitar.
+ * Com ha anat l'escriptura de l'esborrany. Són tres coses diferents i cadascuna
+ * es diu d'una manera: desat, hi ha una versió més nova que aquesta pestanya no
+ * ha vist mai, o el navegador no ha pogut escriure.
+ */
+export type DraftSaveResult = "saved" | "conflict" | "error";
+
+/**
+ * Desa l'esborrany, si el que hi ha escrit no és més nou que l'últim registre
+ * que aquesta pestanya coneix (`lastSeenSavedAt`).
+ *
+ * La comparació existeix perquè l'esborrany és **un sol registre per a tot el
+ * navegador** i cada pestanya hi escrivia el seu document sense mirar-hi: la
+ * pestanya que tornava del fons amb el document de fa una hora se'l carregava,
+ * i de passada s'enduia les imatges de l'altra, que aquest mateix mètode esborra
+ * quan el document entrant no les referencia. Es fa dins de la mateixa
+ * transacció perquè el navegador serialitza les transaccions `readwrite` sobre
+ * un mateix magatzem: entre la lectura i l'escriptura no s'hi pot ficar ningú.
+ *
+ * Retorna com ha anat perquè qui el crida ho pugui dir a l'usuari: quedar-se
+ * sense espai —o deixar de desar per no trepitjar una altra pestanya— amb la
+ * feina només a la pantalla és exactament el que aquest mòdul ha d'evitar.
  */
 export const saveDraft = async (
   document: DocumentSAAC,
   meta: DraftMeta,
-): Promise<boolean> => {
+  viewSettings: ViewSettings,
+  lastSeenSavedAt: number | null,
+): Promise<DraftSaveResult> => {
   const db = await openDatabase();
-  if (!db) return false;
+  if (!db) return "error";
 
   const { document: skeleton, images } = externalizeImages(document);
-  const draft: DocumentDraft = { document: skeleton, ...meta };
+  const draft: DocumentDraft = { document: skeleton, ...meta, viewSettings };
 
-  return runTransaction(db, "readwrite", (drafts, imageStore) => {
-    drafts.put(draft, DRAFT_KEY);
+  let isConflict = false;
 
-    // Les claus del magatzem són poques i curtes: llegir-les surt molt més a
-    // compte que reescriure les imatges per si de cas
-    const storedKeys = imageStore.getAllKeys();
-    storedKeys.onsuccess = () => {
-      const stored = new Set(storedKeys.result.map(String));
+  const completed = await runTransaction(
+    db,
+    "readwrite",
+    (drafts, imageStore) => {
+      const previous = drafts.get(DRAFT_KEY);
 
-      images.forEach((dataUrl, id) => {
-        if (!stored.has(id)) imageStore.put(dataUrl, id);
-      });
+      previous.onsuccess = () => {
+        const stored = previous.result as DocumentDraft | undefined;
 
-      // Escombraries: imatges que ja no fa servir cap pictograma
-      stored.forEach((id) => {
-        if (!images.has(id)) imageStore.delete(id);
-      });
-    };
-  });
+        // Sense `lastSeenSavedAt` aquesta pestanya no ha vist mai cap registre:
+        // el que hi hagi és d'una altra i no és seu per sobreescriure'l
+        if (
+          stored !== undefined &&
+          (lastSeenSavedAt === null || stored.savedAt > lastSeenSavedAt)
+        ) {
+          isConflict = true;
+          return;
+        }
+
+        drafts.put(draft, DRAFT_KEY);
+
+        // Les imatges van dins del mateix guard: la neteja d'òrfenes esborra tot
+        // el que aquest document no fa servir, i amb conflicte serien les de
+        // l'altra pestanya. Les claus del magatzem són poques i curtes: llegir-les
+        // surt molt més a compte que reescriure les imatges per si de cas
+        const storedKeys = imageStore.getAllKeys();
+        storedKeys.onsuccess = () => {
+          const keys = new Set(storedKeys.result.map(String));
+
+          images.forEach((dataUrl, id) => {
+            if (!keys.has(id)) imageStore.put(dataUrl, id);
+          });
+
+          // Escombraries: imatges que ja no fa servir cap pictograma
+          keys.forEach((id) => {
+            if (!images.has(id)) imageStore.delete(id);
+          });
+        };
+      };
+    },
+  );
+
+  if (!completed) return "error";
+
+  return isConflict ? "conflict" : "saved";
 };
 
 /** Llegeix l'esborrany desat, o null si no n'hi ha o no s'ha pogut llegir. */

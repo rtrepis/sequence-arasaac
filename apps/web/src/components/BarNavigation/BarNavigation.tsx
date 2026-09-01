@@ -8,11 +8,12 @@ import messages from "./BarNavigation.lang";
 import { Box, Stack } from "@mui/material";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
-import CopyRightSpeedDial from "../CopyRightSpeedDial/CopyRightSpeedDial";
 import React, { useEffect, useState } from "react";
 import TabsEditView from "../TabsEditView/TabsEditView";
 import LogoMenu from "../LogoMenu/LogoMenu";
 import { useLocation } from "react-router-dom";
+import { FLOATING_BOTTOM_INSET } from "@/style/appShape";
+import { FLOATING_INSET_VARIABLE } from "@components/FloatingLayer";
 
 interface BarProps {
   // ReactNode i no ReactElement: com a layout rep diversos fills (avisos + Outlet)
@@ -131,7 +132,21 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
         <Toolbar />
       </NotPrint>
       {/* Contingut principal — destí del skip link */}
-      <Container id="main-content" component="main" maxWidth={"xl"}>
+      <Container
+        id="main-content"
+        component="main"
+        maxWidth={"xl"}
+        sx={{
+          // El botó d'estat i els avisos suren damunt del final del contingut:
+          // sense aquest espai, l'última fila de pictogrames queda a sota i no
+          // hi ha scroll que la pugui apartar, perquè la pàgina ja s'ha acabat.
+          // El mínim és el que ocupa el botó, que hi és sempre; els avisos que
+          // no marxen sols hi afegeixen la seva alçada mesurada.
+          paddingBottom: `max(${FLOATING_BOTTOM_INSET}px, var(${FLOATING_INSET_VARIABLE}, 0px))`,
+          // Al paper no hi sura res
+          "@media print": { paddingBottom: 0 },
+        }}
+      >
         {children}
       </Container>
     </>

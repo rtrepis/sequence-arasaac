@@ -239,6 +239,99 @@ triat és massa alt, ara es veurà i quedarà registrat; abans no.
 mostra l'error amb el codi, no s'anuncia cap èxit i **no es descarrega cap fitxer**. Sense el guard
 la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
 
+### A10 — Un document desat al núvol torna com a «Només en aquest dispositiu» ✅ Resolta
+
+*(Trobada a l'estudi de què passa en tornar més tard a la pestanya, branca `claude/app-behavior-inactive-tab-p2vc2l`.)*
+
+- **On**: `useDocumentDraft.ts` (l'efecte de restauració, que despatxa
+  `documentStatusRestored` amb `changedAt: draft.savedAt`) i `documentStatusSlice.ts`
+  (`getDocumentDurability`).
+- **Per què importa**: la durabilitat viatja dins de l'esborrany precisament perquè recarregar no
+  faci semblar feina perduda la que ja és al núvol —ho diu el comentari de `DraftMeta`—, i en canvi
+  no se'n surt **mai**. L'esborrany s'escriu 1 s després de desar (debounce), o sigui que `savedAt`
+  sempre és posterior a `durableAt`; en restaurar-lo com a `changedAt`, la comparació
+  `changedAt <= durableAt` de `getDocumentDurability` falla i l'estat cau a `local`. Traçat amb els
+  valors reals: en memòria `durable`, després de recarregar `local`. No és un cas de frontera, és
+  el cas normal: qualsevol pestanya descartada pel navegador i recuperada, o un simple refresc,
+  torna dient que la feina no és enlloc. L'usuari que se'l creu torna a desar —desperta Render,
+  torna a pujar les imatges i torna a passar per la quota— per res.
+- **Proposta**: portar `changedAt` dins de `DraftMeta` i restaurar-lo tal qual, en comptes de
+  suplantar-lo amb `savedAt`. Per als esborranys ja escrits sense el camp, `durableAt ?? savedAt`
+  conserva el comportament d'avui sense mentir en el cas durador.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`: `changedAt` viatja dins de
+  `DraftMeta` i la restauració el llegeix tal com és, amb `durableAt ?? savedAt` de recanvi per als
+  esborranys antics. Un canvi de format de pàgina escriu l'esborrany però **no** toca `changedAt`:
+  no és contingut del document i no viatja ni al `.saac` ni al núvol. Fixat a
+  `e2e/draft-restore.spec.ts`, que abans del canvi falla.
+
+### A11 — La sessió pot haver caducat i l'app continua dient que hi ha sessió ✅ Resolta
+
+*(Mateixa branca.)*
+
+- **On**: `apiClient.ts` (el `catch (refreshError)` de l'interceptor de resposta, que fa
+  `setAccessToken(null)` i prou), `authSlice.ts` (`clearAuthState`, **exportat i no usat enlloc**) i
+  `AuthModal.lang.ts` (no hi ha missatge per a `REFRESH_TOKEN_EXPIRED` ni `REFRESH_TOKEN_MISSING`).
+- **Per què importa**: el token d'accés dura 15 minuts i no es renova sol —no hi ha cap temporitzador
+  de refresc—, així que qui torna a la pestanya l'endemà el té mort. Normalment no es nota: el 401
+  dispara el refresc i la cookie de 7 dies el resol. Però quan el refresc **falla** (cookie caducada,
+  sessió tancada en una altra pestanya, compte suspès des del panell), l'única cosa que passa és que
+  el token de memòria es posa a `null`. Redux continua amb `accessToken` i `userEmail`, la barra
+  continua dient qui ets, el botó flotant continua oferint «Desa al núvol» i el diàleg de desar
+  ensenya el genèric `DOCUMENT_SAVE_ERROR` perquè el codi que arriba no té traducció. L'usuari acaba
+  reintentant una acció que no pot funcionar mai, amb la feina només a l'esborrany.
+- **Proposta**: que el `catch` del refresc avisi l'app (un `store.dispatch(clearAuthState())` des del
+  mòdul que munta l'store, o un esdeveniment que hi escolti), i que en netejar-la surti un snackbar
+  que digui les dues coses que importen: la sessió ha caducat i **la feina no s'ha perdut** —és a
+  l'esborrany— però cal tornar a entrar per desar-la al núvol. Amb missatges propis per als dos
+  codis de refresc.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`:
+  - **No eren dos codis, eren cinc.** `POST /auth/refresh` pot fallar amb `REFRESH_TOKEN_MISSING`,
+    `REFRESH_TOKEN_EXPIRED`, `INVALID_REFRESH_TOKEN`, `USER_NOT_FOUND` i `ACCOUNT_SUSPENDED`
+    (aquest amb 403). Els dos últims **no admeten «torna a entrar»**: enviar al formulari d'entrada
+    algú a qui han suspès el compte és enviar-lo a un altre no. L'avís els tracta a part i no els
+    ofereix el botó.
+  - `features/backend/api/sessionExpiry.ts`, mòdul fora de Redux com `backendStatus` —
+    l'`apiClient` no és un component i importar-hi l'store seria un cicle (store → slices →
+    serveis → apiClient).
+  - El `catch` del refresc hi avisa **només si hi havia token a la memòria**: sense sessió, un 401
+    no és una sessió que cau sinó una petició que no n'ha tingut mai, i la restauració silenciosa
+    de l'arrencada va contra `/auth/`, que l'interceptor deixa passar de llarg.
+  - `SessionExpiredNotice`, muntat al `LanguageLayout` al costat de `BackendWakeUpNotice`: despatxa
+    `clearAuthState()` —el creador d'acció que estava exportat i sense consumidor— i ensenya un
+    `Snackbar` persistent que diu què ha passat, que la feina continua en aquest dispositiu i, quan
+    té sentit, ofereix tornar a entrar. Es tanca sol quan hi torna a haver sessió.
+  - Quatre missatges nous al catàleg d'`AuthModal.lang` (`ACCOUNT_SUSPENDED` ja hi era): amb això
+    `SaveDocumentModal` deixa de caure al genèric `DOCUMENT_SAVE_ERROR`, perquè ja hi buscava el
+    codi i només li faltava que hi fos. Traduïts als cinc idiomes.
+  - **Sense `reportClientError`**: una sessió que caduca als set dies no és una fallada sinó el
+    final previst d'una sessió, i reportar-la ompliria el registre i el *throttle* de correu amb el
+    funcionament normal.
+  - Fixat a `e2e/session-expired.spec.ts`, amb el backend simulat: caducada, compte suspès, usuari
+    que no ha entrat mai i tornada a entrar.
+
+### A12 — El primer login del dia no diu res mentre el servidor es desperta ✅ Resolta
+
+*(Trobada d'ús: entrar des de la pantalla d'inici amb Render adormit.)*
+
+- **On**: `pages/WelcomePage/WelcomeLayout.tsx` (no muntava `BackendWakeUpNotice`) i
+  `features/backend/auth/components/AuthForm.tsx` (`disabled={isLoading}` als camps i al botó).
+- **Per què importa**: la pantalla d'inici és **on es fa el primer login del dia**, i per tant
+  l'única on el desvetllament de Render és gairebé segur. L'avís hi era a `LanguageLayout` i a
+  `AuthStandaloneLayout`, però no al layout de la benvinguda: en prémer «Entra» els camps es
+  bloquejaven, el botó es quedava amb el rodet i durant prop d'un minut no apareixia cap
+  explicació. Justament el cas que l'avís existeix per cobrir —«sense cap senyal, l'usuari només
+  veu un botó bloquejat»— passava al lloc on més mal fa, perquè és el primer contacte amb l'app.
+  A sobre, bloquejar els camps mentre s'espera impedeix corregir una lletra del correu durant tot
+  el minut, i contradiu l'estàndard de feedback («mai `disabled` per dir "s'està fent"»).
+- **Resolta** a la branca `claude/login-startup-feedback-6cqj7u`:
+  - `WelcomeLayout` munta `BackendWakeUpNotice`, dins del seu `IntlProvider` i al costat de la
+    pàgina. No calen proveïdors nous: el `FeedbackProvider` que llegeix (per saber si hi ha un
+    backdrop obert) viu a `index.tsx`, per damunt de les rutes.
+  - `AuthForm` deixa d'usar `disabled` per a l'espera: els camps es poden seguir editant i el botó
+    passa a `aria-disabled` + `aria-busy` amb guarda al handler, de manera que no surt de l'ordre
+    de tabulació i el lector de pantalla el llegeix com a ocupat. El `disabled` només es queda per
+    als camps buits, que és validació i no espera.
+
 ---
 
 ## Gravetat mitjana
@@ -270,8 +363,8 @@ operacions que no el toquen**, i la que hi va de debò portava un disquet.
   «Carrega» quedaven **el mateix dibuix mirallat**, i de costat en una llista a 24px no es
   distingien (verificat amb captura). La carpeta, a més, diu la veritat: no es puja res enlloc, es
   tria un fitxer.
-- Queden amb la icona antiga `ButtonWithFileLoad` i `ButtonWithModalDownload`, que són codi mort
-  (verificat de nou); van amb C4.
+- Quedaven amb la icona antiga `ButtonWithFileLoad` i `ButtonWithModalDownload`, que eren codi
+  mort; C4 els ha esborrat.
 
 ### B2 — L'engranatge porta a «Configuració» i també a «Administració» ✅ Resolta
 
@@ -291,9 +384,12 @@ Branca `claude/backlog-branch-master-64uh75`.
 
 Branca `claude/backlog-branch-master-64uh75`.
 
-- El **cercle ple** (`AiFillPlusCircle` / `AiFillMinusCircle`) queda reservat als pictogrames
-  (`PictogramAmount`). Les seqüències passen a **pàgina amb +/−**
-  (`BsFileEarmarkPlus` / `BsFileEarmarkMinus`), tal com proposava l'entrada.
+- El **cercle** queda reservat als pictogrames (`PictogramAmount`). Les seqüències passen a
+  **pàgina amb +/−** (`BsFileEarmarkPlus` / `BsFileEarmarkMinus`), tal com proposava l'entrada.
+  El cercle era ple (`AiFill*`) i ara és de contorn (`AiOutlinePlusCircle` /
+  `AiOutlineMinusCircle`): el ple era l'única icona massissa de la pantalla i desentonava amb la
+  resta, que és tota de traç —vegeu C3—. La distinció que aquesta entrada demanava no en depèn:
+  el que separa les dues accions és cercle contra full, no ple contra buit.
 - Cal l'**«earmark»**: `BsFilePlus` es dibuixa com un rectangle arrodonit i es llegia com un botó
   qualsevol; amb la cantonada doblegada sí que es llegeix com un full. Descartat el parell de
   Tabler pel motiu que ja diu C3 (és de traç i desentona amb Ant i Material).
@@ -526,15 +622,20 @@ d'IndexedDB i al fitxer `.saac`.
   el `PDF_EMPTY_CANVAS` apareix al registre d'errors del client (`context: "pdf-export"`), que és
   precisament per a què serveix.
 - **Fet**: l'informe porta el detall que cal per decidir-ho —format, mida del full, escala aplicada
-  i dimensions del canvas resultant (`A4 landscape full 1047×718, escala 3.00, canvas 2700×1854`)—
+  i dimensions del canvas resultant (`A4 landscape full 1047×718, escala 3.00, canvas 3141×2156`)—
   i el servidor ja hi desa el `userAgent`. Quan es va obrir aquesta entrada l'informe només portava
   el codi, o sigui que un cas real hauria dit que la captura va sortir en blanc **sense dir a quina
   mida**, que és l'únic número que fa falta.
+- **Més urgent des de B16**: mentre la captura sortia reduïda per l'escala visual, el sostre es
+  calculava sobre unes dimensions més grans que les reals i **sobrava marge sense saber-ho**. Ara ja
+  no: l'A3 apaïsat va exactament als 4.096 px de costat que Safari publica. O sigui que el número
+  publicat ha passat de ser un coixí a ser la vora, i validar-lo amb casos reals deixa de ser una
+  comoditat.
 - **Proposta**: esperar a tenir casos reals al registre abans de tocar cap número. Si no n'hi ha
   cap en un temps raonable, provar de pujar el costat a 8.192 (el límit dels iOS moderns) i veure
   si en surten; si en surten, el valor conservador d'ara ja era el bo.
 
-### B15 — Amb la mida «pantalla sencera» no es pot exportar res 🔴 Oberta
+### B15 — Amb la mida «pantalla sencera» no es pot exportar res ✅ Resolta (decisió de producte)
 
 *(Trobada en resoldre B9.)*
 
@@ -548,8 +649,15 @@ d'IndexedDB i al fitxer `.saac`.
 - **Proposta**: decidir-ho explícitament. O bé oferir el PDF també aquí —el full sortirà de la mida
   de la pantalla, que és el que la mida promet— o bé dir per què no hi és, en comptes de fer
   desaparèixer els botons en silenci.
+- **Decidit (2026-08-26)**: **es queda com està, i sense explicació.** «Pantalla sencera» és una
+  mida de pantalla, i cada pantalla en té una de diferent: un PDF fet des d'aquí no seria
+  reutilitzable enlloc. Es tracta igual que la impressora quan es tria una resolució de vídeo —
+  ningú espera imprimir un Full HD i ningú demana que se li expliqui—: es dona per evident que
+  d'aquesta mida no se n'exporta. Si arriben usuaris demanant-ho, es reobre.
+- **Estat**: es marca resolta perquè la pregunta que obria («decidir-ho explícitament») té resposta.
+  El codi no canvia.
 
-### B16 — La resolució del PDF depèn de com de reduïda es vegi la previsualització 🔴 Oberta
+### B16 — La resolució del PDF depèn de com de reduïda es vegi la previsualització ✅ Resolta
 
 *(Trobada instrumentant B14: els números de l'informe no quadraven.)*
 
@@ -566,9 +674,256 @@ d'IndexedDB i al fitxer `.saac`.
 - **Nota**: no compromet el sostre d'A9/B14. El guard es calcula sobre les dimensions naturals, que
   són més grans que el que es captura de debò, o sigui que erra pel cantó segur —però explica per
   què l'A3 baixa a 260 dpi quan potser no calia.
-- **Proposta**: passar `width`/`height` (i, si cal, `windowWidth`/`windowHeight`) a html2canvas amb
-  les dimensions naturals del full, o capturar sobre un clon sense transform. Cal tornar a validar
-  tot el camí del PDF: canvia la mida del canvas i, per tant, el que el sostre d'A9 hi fa.
+- **Resolta** a Branca `claude/backlog-branch-master-64uh75`. Es **compensa** l'escala visual en comptes d'anul·lar-la:
+  `visualScaleOf(contentEl)` la mesura (`getBoundingClientRect().width / offsetWidth`, que és
+  exactament el factor que el navegador aplica, transforms d'avantpassats inclosos) i es demana
+  `captureScale / visualScale`, de manera que quan html2canvas hi torni a aplicar la visual en
+  surti `natural × captureScale`.
+- **Per què no tocar el clon**: html2canvas calcula mides i posició de la captura sobre l'element
+  **original**, abans de clonar. Treure el `transform` a l'`onclone` no mouria els límits i, a
+  sobre, deixaria la posició descordada. Compensar l'escala és una línia i no toca el DOM.
+- **Mesurat abans i després** (Chromium 1.280×900, A4 apaïsat, full 1047×718 amb escala 3):
+  canvas **2700×1854 → 3141×2156**, és a dir de 248 a 288 dpi. Els 2px de l'alçada són
+  l'arrodoniment d'html2canvas, que treballa amb el rectangle en decimals.
+- **Fixat a la prova**: `download-pdf-page-format.spec.ts` ja no comprova només el format del
+  detall, sinó que **el canvas surti a `full × escala`**. Verificat que atrapa la regressió:
+  desfent la compensació, la prova falla amb «Expected 3141, Received 2700».
+- **Conseqüència per a B14**: el sostre d'A9 ara **cenyeix de debò**. Abans es calculava sobre les
+  dimensions naturals mentre la captura sortia més petita, o sigui que sobrava marge sense saber-ho;
+  ara l'A3 apaïsat va exactament als 4.096 px de costat que Safari publica com a límit. La
+  instrumentació de B14 passa de ser útil a ser necessària.
+
+### B17 — En tornar a la pestanya ningú desperta el servidor ✅ Resolta
+
+*(Trobada a l'estudi de la tornada a la pestanya, branca `claude/app-behavior-inactive-tab-p2vc2l`.)*
+
+- **On**: `warmUpBackend.ts` i els seus dos únics punts de crida, `AuthModal.tsx` (en obrir-se) i
+  `SignupPage.tsx`. Ni `SaveDocumentModal` ni `LoadDocumentModal` ni cap gestor de
+  `visibilitychange` el criden.
+- **Per què importa**: Render adorm el servei als 15 minuts, i tornar a una pestanya deixada de fons
+  vol dir gairebé sempre passar d'aquest llindar. El primer «Desa al núvol» de la tornada paga el
+  desvetllament sencer —a prop del minut— amb el diàleg obert i la barra de progrés quieta. El
+  patró per evitar-ho ja existeix i està escrit per a exactament això («avançar el cost»), però
+  només cobreix l'entrada al compte, que és el moment en què l'espera menys mal fa: allà l'usuari
+  encara ha d'escriure el correu i la contrasenya.
+- **Proposta**: cridar `warmUpBackend()` en tornar la pestanya a visible si hi ha sessió (el
+  cooldown de 10 min ja evita que es repeteixi), i en obrir els diàlegs de desar i carregar del
+  núvol, com fa `AuthModal`. Cap dels dos casos afegeix trànsit apreciable: és un `GET /health` de
+  fons que no encén l'avís de desvetllament.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`, amb dues correccions a la proposta:
+  - **Al diàleg de carregar no hi serveix de res.** `LoadDocumentModal` demana el llistat en un
+    efecte que salta amb `open`, així que la petició de debò surt al mateix instant que sortiria el
+    ping. Només s'ha afegit al de desar, on entre obrir-lo i prémer el botó hi ha escriure un nom.
+  - **No a cada canvi de pestanya.** En tauleta es canvia d'aplicació desenes de vegades al dia i
+    cada ping manté Render despert, gastant hores del pla gratuït tant si serveixen com si no.
+    `useWarmUpOnReturn` (muntat a `AppBootstrap`) només el desperta després d'una absència de
+    **5 minuts o més** i amb sessió — mirada amb `getAccessToken()` i no amb un selector: no cal
+    subscriure's a Redux, i des d'A11 un refresc fallit ja deixa el token a `null`, o sigui que una
+    sessió morta tampoc no desperta ningú.
+  - Fixat a `e2e/warm-up.spec.ts`, que fa passar el temps amb `page.clock` en comptes d'esperar-lo:
+    absència curta (cap ping), absència llarga (un ping), sense sessió (cap ping) i diàleg de desar
+    (un ping).
+
+### B18 — En recarregar amb sessió, l'app es pinta amb la configuració de l'anònim fins que respon Render ✅ Resolta
+
+*(Mateixa branca.)*
+
+- **On**: `AppBootstrap.tsx` (aplica `getStoredUserUi()` i tot seguit despatxa `refreshSessionThunk`)
+  i `App.tsx` (l'efecte que canvia el locale de la URL quan el del compte no hi coincideix).
+- **Per què importa**: per a l'usuari registrat la font de veritat és el backend i el `localStorage`
+  no s'hi actualitza mai —`saveUserUiThunk` només hi escriu quan és anònim—, de manera que el que
+  s'aplica primer és el que hi va quedar **abans** d'entrar al compte, o el dels valors per defecte.
+  Amb el servidor despert són uns quants centenars de mil·lisegons i passa desapercebut; amb el
+  servidor adormit, l'app es queda fins a un minut amb el tema, l'idioma i el format d'un altre, i
+  quan finalment arriba la resposta canvia sola —inclosa la URL, que salta a un altre locale. Qui
+  torna a la pestanya després d'una estona ho veu just en el moment de menys paciència.
+- **Proposta**: mantenir al `localStorage` una còpia de la darrera configuració coneguda **del
+  compte** (sense vocabulari, com ja fa el thunk anònim) i fer-la servir com a caché d'arrencada
+  quan hi ha una marca de sessió prèvia; així el que es pinta primer ja és el bo i la resposta del
+  backend, quan arriba, no canvia res a la vista.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`:
+  - `settingsStorage` guarda l'última configuració coneguda del compte sota una **clau pròpia**
+    (`accountUi`), mai la de l'anònim: si compartissin calaix, entrar al compte se les menjaria i
+    tancar sessió no podria recuperar-les. Només s'hi desa el que es pinta —idioma, tema,
+    pictogrames i vista—: ni vocabulari (imatges, dispositiu compartit) ni estat del compte
+    (`tier`, `emailVerified`, `role`), que el decideix el servidor a cada petició.
+  - S'escriu als dos únics moments on la configuració del compte és certa: quan el backend la
+    retorna (`syncSettingsAfterAuth`) i quan l'usuari prem «Desa com a preferències» amb sessió.
+    S'esborra en tancar sessió i quan el refresc silenciós falla — **sense repintar la sessió en
+    curs**, que seria tornar a fer el salt que això vol treure i just quan A11 ja està dient que la
+    sessió ha caducat.
+  - **El salt d'URL calia desbloquejar-lo a part.** L'efecte de locale d'`App.tsx` estava tancat
+    darrere de `isAuthenticated`, que no és cert fins que respon el servidor: amb la caché sola,
+    el tema i els pictogrames sortien bé des del primer render però la URL i els textos continuaven
+    saltant tard. Ara l'efecte també s'executa quan el navegador ja portava configuració de compte
+    en arrencar (llegit un sol cop, en muntar). Sense caché no canvia res: a l'usuari sense compte,
+    un enllaç `/ca/…` continua obrint-se en català.
+  - Fixat a `e2e/account-settings-cache.spec.ts`, amb la resposta de la configuració alentida cinc
+    segons: a la segona càrrega, idioma i URL del compte hi són abans que el servidor respongui.
+
+### B19 — Amb dues pestanyes obertes, la que torna del fons sobreescriu la feina de l'altra ✅ Resolta
+
+*(Mateixa branca.)*
+
+- **On**: `useDocumentDraft.ts` (`persistedRef` i el flush de `visibilitychange`) i
+  `draftStorage.ts` (clau única `currentDocument`, sense comprovar què hi ha escrit).
+- **Per què importa**: l'esborrany és un sol registre per a tot l'origen i cada pestanya hi escriu
+  el seu document sense mirar-ne la data. `persistedRef` només evita que una pestanya reescrigui el
+  que ella mateixa ha escrit; no sap res de les altres. Dues pestanyes obertes a l'editor, es
+  treballa a la segona i es torna a la primera: el primer canvi que s'hi faci —o el primer cop que
+  s'amagui, perquè `persistedRef` comença a `null` i el flush escriu el document restaurat en
+  arrencar— deixa a IndexedDB la versió antiga. La feina de l'altra pestanya desapareix del disc
+  sense que ningú ho digui, i és la que es restaurarà al proper refresc.
+- **Proposta**: escriure només si el que hi ha a IndexedDB no és més nou que l'última escriptura
+  d'aquesta pestanya (comparació de `savedAt` dins la mateixa transacció), i avisar quan es detecti
+  el conflicte. Amb `BroadcastChannel` es podria, a més, fer que la pestanya que torna es posi al
+  dia; però amb la comprovació d'escriptura ja no es perd res, que és el que importa.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`:
+  - **També s'enduia les imatges.** La recollida d'òrfenes del magatzem `draftImages` va dins de la
+    mateixa escriptura i esborra tot el que el document entrant no referencia: la pestanya vella no
+    només guanyava, sinó que deixava l'altra sense imatges. El guard cobreix les dues coses — amb
+    conflicte, la transacció es queda en una lectura i no toca res.
+  - `saveDraft` llegeix el registre i compara `savedAt` **dins de la mateixa transacció**
+    `readwrite` (el navegador les serialitza sobre un mateix magatzem, així que entre la lectura i
+    l'escriptura no s'hi pot ficar ningú) i retorna `"saved" | "conflict" | "error"` en comptes
+    d'un booleà.
+  - `useDocumentDraft` recorda el `savedAt` de l'últim registre que aquesta pestanya coneix: el que
+    ha llegit en arrencar —tant si el restaura com si no, perquè el que compta és haver-lo vist— i
+    el que ha escrit ella mateixa. I **marca com a escrit el document que acaba de restaurar**:
+    sense això, el primer flush el tornava a escriure tal qual, i amb una altra pestanya pel mig
+    aquella escriptura innecessària era justament la que es carregava la feina bona.
+  - `hasDraftError: boolean` passa a `draftError: "storage" | "conflict" | null`. Calia que el
+    conflicte arribés a l'estat: amb `draftSavedAt` congelat, `getDocumentDurability` es quedava en
+    `saving` i el botó flotant deia «Desant en aquest dispositiu…» per sempre. Ara diu «Una altra
+    pestanya té feina més nova» i què s'hi pot fer.
+  - Avís un sol cop per sessió, com el d'espai exhaurit. Traduït als cinc idiomes.
+  - Fixat a `e2e/draft-two-tabs.spec.ts`, amb dues pàgines dins del **mateix context** de
+    Playwright (que és el que fa que comparteixin l'IndexedDB de l'origen).
+
+### B20 — El format de pàgina no és del document i es perd en recarregar ✅ Resolta
+
+*(Mateixa branca.)*
+
+- **On**: `uiSlice.ts` (`ui.viewSettings`) contra `documentSlice.ts` (`document.viewSettings`, per
+  seqüència) i `draftStorage.ts` (l'esborrany només desa el document).
+- **Per què importa**: els ajustos per seqüència (mida, separació, alineacions) viuen al document i
+  sobreviuen al refresc dins de l'esborrany; els globals —mida de pàgina, orientació, direcció,
+  separació entre seqüències— viuen a `ui` i no els desa ningú fins que es prem «Desa com a
+  preferències». Qui deixa la feina a mitges havent posat un A3 apaïsat i torna a una pestanya que
+  el navegador ha descartat, es retroba la seqüència sencera dins d'un A4 vertical. La seqüència es
+  recupera i la pàgina no, i per a un full imprès la pàgina és mitja feina.
+- **Proposta**: desar `ui.viewSettings` dins de l'esborrany i restaurar-lo amb el document. És
+  estat de sessió, no una preferència: desar-lo a l'esborrany no el converteix en preferència de
+  l'usuari, que continua sent cosa del botó de desar.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`. Desar-ho era la meitat petita; el
+  que costava era que sobrevisqués als dos segons següents:
+  - **L'escriptura no s'arribava a disparar.** `persistedRef` guardava l'últim *document* escrit i
+    girar el full no el toca: ni el debounce (dependències `[document, persist]`) ni el flush
+    d'amagar la pestanya escrivien res. Ara la ref guarda la parella document + `viewSettings` i les
+    compara totes dues.
+  - **El muntatge.** `usePageFormat` i `useViewManager` copien el format a un estat local en
+    muntar-se i ja no el tornen a mirar; recarregant directament a `/view-sequence` la columna es
+    muntava abans que respongués IndexedDB. `documentStatus.draftRestoreSettled` marca que
+    l'arrencada ja ha mirat si hi havia esborrany —hi fos o no— i la pàgina de vista hi espera.
+  - **El backend.** `syncSettingsAfterAuth` tornava a aplicar el `viewSettings` del compte quan
+    responia Render, fins a un minut després. Ara les preferències entren per
+    `applyUserViewSettings`, que no fa res si `ui.viewSettingsFromSession` diu que el format ve de
+    l'esborrany: **el format que l'usuari estava fent servir mana per damunt del que té desat**,
+    fins que el canviï o desi les preferències.
+  - Fixat a `e2e/draft-restore.spec.ts`.
+
+### B21 — `ui.viewSettings` fa de preferència i de mirall de sessió alhora 🔴 Oberta
+
+*(Trobada resolent B20, branca `claude/estudi-pla-execucio-2w1pzq`.)*
+
+- **On**: `uiSlice.ts` (`ui.viewSettings`), `ViewSquenceSettings.tsx` (`savedUserDefaults`, el mirall
+  de sessió) i `useViewManager.ts` (`persistViewSettings`).
+- **Per què importa**: el mateix camp guarda dues coses que no ho són: el format que l'usuari té
+  **desat** i el que està **fent servir ara**. El mirall el reescriu a cada canvi, i la instantània
+  de «Restaura les seqüències» es pren en muntar-se la columna — o sigui que **anar a Edició i
+  tornar ja fa que «Restaura» torni als valors que l'usuari acaba de tocar**, sense cap esborrany
+  pel mig. Hi ha un comentari al codi que diu que la instantània «només avança quan es desen les
+  preferències», i amb el remuntatge això no és cert. B20 hi ha afegit
+  `ui.viewSettingsFromSession` per protegir el format restaurat de les preferències que arriben
+  tard: fa la feina, però és un pedaç sobre la mateixa confusió.
+- **Proposta**: separar els dos rols —preferència desada i estat de sessió de la vista— en dos
+  camps, i que «Restaura» llegeixi sempre el primer. Toca el panell de vista sencer, per això no
+  s'ha fet dins de B20.
+
+### B22 — Les pestanyes no es coordinen: ni es posen al dia ni comparteixen el «Document nou» 🔴 Oberta
+
+*(Trobada resolent B19, branca `claude/estudi-pla-execucio-2w1pzq`.)*
+
+- **On**: `useDocumentDraft.ts` (la pestanya bloquejada per conflicte), `documentSlice.ts`
+  (`startNewDocumentThunk` → `clearDraft`) i `draftStorage.ts` (clau única per a tot l'origen).
+- **Per què importa**: B19 ha tancat la pèrdua de feina —una pestanya ja no pot esborrar la feina
+  d'una altra—, però les pestanyes continuen sense parlar-se. Passen dues coses: la pestanya
+  bloquejada **es queda bloquejada** fins que es recarrega, encara que l'altra ja s'hagi tancat; i
+  «Document nou» d'una pestanya **esborra l'esborrany de totes**, de manera que l'altra es queda
+  amb la feina només a la pantalla sense saber-ho.
+- **Proposta**: `BroadcastChannel` per avisar les altres pestanyes quan es desa o s'esborra
+  l'esborrany. Amb compte: posar-se al dia no pot voler dir substituir el que l'usuari té a la
+  pantalla —fer desaparèixer feina visible és pitjor que no desar-la—, així que el més probable és
+  que hagi de ser un avís amb acció, no un canvi automàtic.
+
+### B23 — L'idioma desat de l'usuari sense compte no mana sobre el de la URL 🔴 Oberta
+
+*(Trobada resolent B18, branca `claude/estudi-pla-execucio-2w1pzq`.)*
+
+- **On**: `App.tsx` (l'efecte de locale, que només s'executa amb sessió o amb caché de compte) i
+  `LanguagesLayaut.tsx` (l'`IntlProvider` pren l'idioma del `:locale` de la URL).
+- **Per què importa**: qui té compte veu l'app en el seu idioma encara que obri un enllaç d'un
+  altre locale; qui no en té, no. Un usuari sense compte que hagi triat castellà i obri
+  `/ca/create-sequence` es queda en català, i la seva preferència desada no hi pinta res. Són
+  **dues regles diferents per a la mateixa cosa** segons si hi ha sessió.
+- **Proposta**: decidir-ne una de sola. Fer que la preferència mani sempre és una línia (treure la
+  condició), però canvia el comportament dels **enllaços compartits**: qui rebi un `/fr/…` d'algú
+  altre acabarà al seu propi idioma. L'alternativa és la contrària —que la URL mani sempre i la
+  preferència només decideixi on aterra qui entra per l'arrel—, que treu el salt del tot. Cap de
+  les dues és òbvia i per això no s'ha decidit dins de B18.
+
+### B24 — L'usuari no veu els seus límits ni pot fer res per no topar-hi 🔴 Oberta
+
+- **On**: `shared/tierLimits.ts` (els límits), `modules/user-settings/service.ts` `getUiSettings`
+  (que **no** retorna `usage`), `utils/imageToBase64.ts` (`MAX_IMAGE_SIDE_PX`, fix a 1800),
+  `UploadImageButton`, `VocabularySettingsPanel`, `SaveDocumentModal`.
+- **Per què importa**: el pla gratuït dona **10 imatges pròpies** (5 MB amb el sostre de 500 KB per
+  imatge). Enlloc de l'app es diu això, ni quantes se n'han fet servir. Qui puja una foto ja ha fet
+  la feina de triar-la i retallar-la abans de descobrir que no hi cabia, i l'única sortida que
+  se li ofereix és esborrar-ne una altra. Un límit que només es descobreix xocant-hi és un límit
+  mal comunicat, i aquí encara més: en AAC les imatges pròpies —les cares de la família, els
+  objectes de casa— són justament el que fa que l'app sigui d'aquella persona.
+- **I el sostre no cal que sigui aquest**: les imatges es desen sempre a mida d'impressió
+  (1.800 px, ~500 KB), que és el cas pitjor absolut —un pictograma sol a 150 mm. Dotze pictogrames
+  en un A4 surten a uns 70 mm cadascun, i amb 1.000 px n'hi hauria de sobres. La resolució que cal
+  depèn de la mida impresa, i **això ho sap l'usuari i no ho sap el sistema**.
+
+**Proposta** (dues meitats, i la segona no té sentit sense la primera):
+
+1. **Ensenyar el consum.** «Has fet servir 6 de 10 imatges», al panell de Vocabulari i al costat del
+   botó de pujar. Té una dependència de backend que avui no hi és: `getUiSettings` selecciona
+   `settings langSettings theme viewSettings wordProfiles tier emailVerified role` i **`usage` no hi
+   surt**, o sigui que el front no pot pintar cap comptador. És una línia al `.select()`.
+   L'error d'arribar-hi ha de portar codi propi (`QUOTA_IMAGES_EXCEEDED`, no el genèric d'espai) i
+   dir què fer, no «quota excedida».
+2. **Deixar triar la mida en pujar**, en termes de mida impresa i no de píxels:
+
+   | | Costat llarg | Imprimeix bé fins a | Pes | Caben en 5 MB |
+   |---|---|---|---|---|
+   | Gran | 1800 px | 152 mm (pictograma a mida màxima) | ~500 KB | 10 |
+   | **Normal** (per defecte) | 1000 px | 85 mm | ~155 KB | 33 |
+   | Petita | 600 px | 51 mm | ~56 KB | 91 |
+
+   I **retroactiva**: qui topa amb el límit ha de poder reduir les que ja té. A Cloudinary es fa
+   tornant a pujar la variant petita sobre el mateix `public_id` amb `overwrite: true` — la URL no
+   canvia, així que no s'ha de tocar res de la base de dades, només el `bytes` del registre
+   d'assets i el comptador.
+
+**Compte amb la regla que això toca**: el CLAUDE.md diu que la mida de les imatges és igual per a
+totes i no depèn de quantes n'hi hagi, perquè en pujar-la encara no se sap a quina mida s'imprimirà
+i el resultat dependria de l'ordre d'arribada. Aquesta proposta hi cap perquè **tria l'usuari, no el
+sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert de la regla és que
+**reduir és irreversible**, i per això s'ha de dir i no amagar.
 
 ## Gravetat baixa
 
@@ -599,26 +954,39 @@ Branca `claude/backlog-branch-master-64uh75`.
   verbs. Ant i Material comparteixen dibuix (traçat omplert); qui desentona és Tabler, de traç. Si
   algun dia es fixa l'estàndard, aquest menú és el cas de prova.
 
-### C4 — Components morts i col·lisió de traduccions 🔴 Oberta
+### C4 — Components morts i col·lisió de traduccions ✅ Resolta
 
-Verificat el 2026-08-22:
+Branca `claude/backlog-tasques-255sae`.
 
-| Element | Problema |
+**Components esborrats**
+
+| Element | Què se n'ha fet |
 |---|---|
-| ~~`ToggleButtonEditViewPages`~~ | ✅ Esborrat (B4/C5, branca `claude/backlog-branch-master-64uh75`), amb el seu `.lang.ts` i el seu `.styled.ts` |
-| `ButtonWithFileLoad` | Cap import extern |
-| `CopyRightSpeedDial` | `BarNavigation` l'importa però no el renderitza mai: el racó inferior dret era lliure quan s'hi va posar `DocumentStatusFab` (A1b) |
-| `ButtonWithModalDownload/ButtonWithModalDonwload.tsx` | El botó no s'importa enlloc; només se'n fa servir `ModalDownload.tsx` (des d'`AppNavigationDrawer`) |
-| ~~`components.pictEdit.reset`~~ | ✅ Resolt (B5, branca `claude/backlog-branch-master-64uh75`): esborrada la definició no usada de `PictEditModal/PictEdit.lang.ts` |
-| Missatges orfes | `upload`, `download`, `openMenu`, `langSelector`… a `BarNavigation.lang.ts` i `AppNavigationDrawer.lang.ts`, sense consumidor |
-| `features.backend.auth.documentSaved` | Orfe des de B12: el desat confirma amb `documentSavedNamed` (««{title}» s'ha desat al núvol»), que sempre té nom. Es conserva traduït als cinc idiomes sense que ningú el demani |
+| `ToggleButtonEditViewPages` | ✅ Esborrat abans (B4/C5, branca `claude/backlog-branch-master-64uh75`) |
+| `ButtonWithFileLoad` | Esborrat sencer (component + `.lang.ts`): cap import extern. Qui carrega el `.saac` és `AppNavigationDrawer`, i el `CLAUDE.md` deia el contrari a la taula de feedback — corregit |
+| `CopyRightSpeedDial` | Esborrat el component i l'`import` mort de `BarNavigation`. El seu `.lang.ts` **sobreviu**, mogut a `WelcomeFooter.lang.ts`, que n'era l'únic consumidor de debò |
+| `ButtonWithModalDonwload.tsx` | Esborrat el botó; el `.lang.ts` passa a dir-se `ModalDownload.lang.ts`, pel component que en queda |
+| `features/pictogram/hooks/newPictogram.lang.ts` | Esborrat: cap importador i la seva única clau (`pictogram.empty`) sense consumidor |
+| `IconButton` a `AppNavigationDrawer` | Import sense ús, el va trobar l'ESLint en passar-hi |
 
-**Per què importa**: no confon l'usuari final, però tocar `components.pictEdit.reset` en un dels dos
-fitxers pot canviar silenciosament el text de l'altre.
+**Missatges orfes**: 23 claus esborrades dels cinc fitxers de traducció (516 → 495 claus per
+idioma), entre elles les quatre que l'entrada nomenava (`upload`, `download`, `openMenu`,
+`langSelector`) i `features.backend.auth.documentSaved`. També `NewsNavBar` (3),
+`VocabularySettingsPanel` (3), `ViewSettingsPanel` (2), `DefaultForm` (2) i quatre més soltes.
 
-**Estat**: queden obertes les entrades sense ratllar de la taula. Les dues ratllades van caure de
-retruc en resoldre B4/B5/C5; la resta (`ButtonWithFileLoad`, `CopyRightSpeedDial`,
-`ButtonWithModalDownload` i els missatges orfes) continuen igual.
+**Com s'han trobat, i per què es pot confiar en el resultat**: un `id` es dona per orfe només si
+apareix **una sola vegada** a tot `src` —la seva pròpia definició— i el fitxer que el declara no
+llegeix els seus missatges per clau dinàmica. La segona condició és imprescindible: hi ha vuit
+fitxers que fan `messages[clau]` (els `SettingCard*`, `MouseActionList`, els codis d'error
+d'`AuthModal`, `PasswordStrengthGuide`, `SignupPage`), i buscar-hi `.clau` literal els donaria tots
+per morts. El detector els va marcar i es van descartar un a un.
+
+**La col·lisió que hi havia darrere**: `components.defaultSettings.saveError` (a `DefaultForm.lang.ts`)
+semblava usat perquè `SettingsSaveErrorDialog.lang.ts` en declara set variants amb el mateix prefix
+(`.title`, `.bodyCloud`, `.retry`…). Buscar la clau per text donava nou coincidències i cap era
+seva. Aquesta era exactament la manera de canviar un text sense voler que l'entrada avisava; ara la
+clau ja no hi és, i les altres dues del mateix cas (`components.defaultSettings.upload` i
+`.download`, declarades a `BarNavigation.lang.ts` amb un prefix que no els tocava) tampoc.
 
 ### C5 — `aria-label` en anglès literal als grups de toggles ✅ Resolta
 
@@ -652,25 +1020,34 @@ les accions amb el diàleg (A8).
   MUI, sinó a `pictogram-actions-{índex}`. A més d'anomenar el que hi ha, evita ids repetits al DOM:
   la mateixa llista es pot muntar des del menú contextual o des del diàleg.
 
-### C7 — El snackbar tapa el botó flotant d'estat en mòbil 🔴 Oberta
+### C7 — El snackbar tapa el botó flotant d'estat en mòbil ✅ Resolta
 
-*(Trobada en implementar A1b.)*
+Branca `claude/backlog-tasques-255sae`. *(Trobada en implementar A1b.)*
 
-- **On**: `context/FeedbackContext/FeedbackSnackbar.tsx` — `anchorOrigin` a `bottom/center`
-- **Per què importa**: per sota de `sm` el `Snackbar` de MUI ocupa gairebé tota l'amplada inferior i
-  se superposa al `DocumentStatusFab`, que viu a `bottom: 16, right: 16`. Dura els segons de
-  l'avís, però és justament quan l'usuari acaba de desar i pot voler mirar l'estat.
-- **Proposta**: pujar el FAB mentre hi hagi snackbar obert, o ancorar el snackbar a l'esquerra en
-  mòbil.
+- **De les dues propostes s'ha triat moure el snackbar**, no el botó: el botó és permanent i l'avís
+  dura tres segons, o sigui que el que és de pas és el que s'aparta. Pujar el FAB, a més, exigia
+  saber l'alçada real del snackbar (una o dues línies segons el missatge i l'idioma) i acoblar el
+  botó al `FeedbackContext` per un ajust de píxels.
+- Per sota de `sm`, `FeedbackSnackbar` deixa `right: 72px` lliures: el `DocumentStatusFab` viu a
+  `bottom: 16, right: 16` i fa 48 px d'ample, o sigui que arriba fins als 64 del cantó. **Ancorar-lo
+  a l'esquerra sol no hauria servit de res**: per sota de `sm` MUI força `left: 8, right: 8` al
+  Snackbar sigui quin sigui l'`anchorOrigin`, de manera que continua sent de banda a banda.
+- Mesurat a 390px abans i després: el snackbar arribava a `x = 356,6` amb el botó començant a
+  `x = 320` — 37 px de solapament, prou per tapar-lo mig. Ara acaba a `x = 318`.
+- Fixat a `e2e/download-and-status.spec.ts`, que compara les dues caixes.
 
-### C8 — A «Descarrega», l'estat inicial de la casella de configuració no és el que es veu 🔴 Oberta
+### C8 — A «Descarrega», l'estat inicial de la casella de configuració no és el que es veu ✅ Resolta
 
-- **On**: `components/ButtonWithModalDownload/ModalDownload.tsx` — `useState` de `save`
-- **Per què importa**: `save.defaultSettings` s'inicialitza a `documentSaacIsNotEmpty` (cert quan hi
-  ha seqüència) mentre la casella es pinta desmarcada (`<Checkbox />` sense `defaultChecked`). Qui
-  no la toca s'endú la configuració dins del `.saac` sense haver-ho demanat.
-- **Proposta**: una sola font per a l'estat de cada casella; que el que es pinta i el que es desa
-  siguin el mateix valor.
+Branca `claude/backlog-tasques-255sae`.
+
+- Les dues caselles de `ModalDownload` passen a ser **controlades** (`checked={save.…}`): el que es
+  pinta i el que se n'endú el fitxer surten del mateix valor, que era la proposta.
+- L'estat inicial que es conserva és **el que es veia**, no el que es desava: seqüència marcada,
+  configuració desmarcada. Qui obre «Descarrega» ve a salvar la seva feina, no la seva
+  configuració; endur-se-la era l'accident, no la intenció.
+- Confirmat abans de corregir-ho amb `e2e/download-and-status.spec.ts`: amb la casella desmarcada, el
+  `.saac` portava igualment el `defaultSettings` sencer (pell, cabell, vores, tipografies). Ara el
+  test compara el que diuen les caselles amb el que hi ha dins del fitxer descarregat.
 
 ### C9 — El build del web no comprovava tipus, i el CLAUDE.md deia que sí ✅ Resolta
 
@@ -750,18 +1127,15 @@ Branca `claude/backlog-branch-master-64uh75`.
   `SettingCardLang`, que arrossegaven el mateix error d'ençà que es van migrar.
 - Els `TextField` sí que continuen amb `inputProps`: allà l'`<input>` és el control de debò.
 
-### C13 — L'ítem «Administració» del drawer és català hardcodat 🔴 Oberta
+### C13 — L'ítem «Administració» del drawer és català hardcodat ✅ Resolta
 
-*(Trobada en resoldre B2, fora del seu abast.)*
+Branca `claude/backlog-tasques-255sae`. *(Trobada en resoldre B2, fora del seu abast.)*
 
-- **On**: `AppNavigationDrawer.tsx` — `<ListItemText primary="Administració" />`, l'únic ítem del
-  drawer que no passa per `react-intl`
-- **Per què importa**: el `CLAUDE.md` declara una excepció perquè la **pàgina** `/admin` vagi només
-  en català (eina interna d'una sola persona). El drawer no hi entra: és superfície traduïda, i un
-  admin amb l'app en francès hi troba una paraula catalana enmig d'una llista francesa. L'enllaç
-  s'ha de poder llegir encara que el que hi ha darrere sigui una excepció declarada.
-- **Proposta**: un missatge `components.appNavigationDrawer.admin` als cinc idiomes. És una línia i
-  no toca l'excepció de la pàgina.
+- `components.appNavigationDrawer.admin` als cinc idiomes, tal com deia la proposta. L'excepció de
+  la **pàgina** `/admin` (només català, sense `react-intl`) queda intacta: el que es tradueix és
+  l'enllaç, que viu en superfície traduïda.
+- El comentari del codi ho diu ara explícitament, perquè el següent que hi passi no ho «arregli» a
+  l'inrevés donant per fet que l'excepció també cobria el drawer.
 
 ### C14 — Esborrar una seqüència no demana confirmació ni es pot desfer ✅ Resolta
 
@@ -787,3 +1161,67 @@ Branca `claude/backlog-branch-master-64uh75`.
   de cancel·lar no feia res i s'ha tret; la prova e2e ho vigila.
 - Fixat a `e2e/destructive-actions.spec.ts` amb la fixture `e2e/fixtures/dues-sequencies.saac`.
 
+
+### C15 — L'estat del document diu l'hora però no el dia ✅ Resolta
+
+*(Trobada a l'estudi de la tornada a la pestanya, branca `claude/app-behavior-inactive-tab-p2vc2l`.)*
+
+- **On**: `DocumentStatusFab.tsx` (`formatTime` → `intl.formatTime`) i els missatges
+  `statusLocal`, `statusFile` i `statusCloud`.
+- **Per què importa**: l'indicador existeix per a qui torna a una feina que ha deixat a mitges, i
+  aquest és justament qui no sap quin dia és el de l'hora que llegeix. «Només en aquest dispositiu,
+  des de les 18:42», obert un dimarts al matí, es llegeix com d'aquest matí. Amb l'esborrany, que
+  pot ser de fa dies i que el navegador pot desallotjar als set, la diferència no és cosmètica.
+- **Proposta**: hora sola quan és d'avui, i data quan no ho és (`intl.formatDate` amb
+  `dateStyle: "short"` afegit al missatge), o `intl.formatRelativeTime` per als casos recents. La
+  decisió es pot prendre al mateix `formatTime`, sense tocar cap consumidor.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`, amb una correcció a la proposta:
+  **no es podia decidir només a `formatTime`**. El que en surt entra dins de frases que donen per
+  fet que és una hora —«des de **les** {time}», «a **les** {time}»— i una data hi queda com «des de
+  les 27/8/26 18:42», que en català no es diu; el mateix a les altres quatre llengües, cadascuna
+  amb la seva preposició. Per això cada estat té ara **dues frases**: `statusLocalDated`,
+  `statusFileDated` i `statusCloudDated`, traduïdes als cinc idiomes.
+  - `isToday` compara **dia de calendari**, no «fa menys de 24 hores»: a les 00:30, un moment de
+    les 23:50 d'ahir ha de sortir amb data encara que faci quaranta minuts.
+  - Data curta amb any (`dateStyle: "short"`): al panell hi caben 260 px, i un esborrany pot
+    sobreviure a un canvi d'any.
+  - **Sense «ahir»**: es llegeix millor, però afegeix un tercer estat a cada frase —quinze
+    missatges més entre els cinc idiomes—, obliga a decidir què passa amb «abans-d'ahir» i no
+    resol el cas que va originar la troballa, que és l'esborrany de fa dies.
+  - Fixat a `e2e/document-status-date.spec.ts`, que fa passar el temps amb `page.clock`: d'avui
+    diu l'hora, de l'endemà diu el dia, i una feina d'ahir a les 23:50 llegida a les 00:30 surt
+    datada.
+
+### C16 — Ningú demana emmagatzematge persistent al navegador ✅ Resolta
+
+*(Mateixa branca.)*
+
+- **On**: `draftStorage.ts` — `openDatabase` obre IndexedDB sense cridar mai
+  `navigator.storage.persist()`.
+- **Per què importa**: per defecte l'esborrany viu en emmagatzematge «best effort» i el navegador
+  el pot desallotjar quan li falta espai, sense avisar i sense que l'app se n'assabenti. Amb el
+  permís concedit, Chrome i Firefox deixen de desallotjar-lo automàticament. Safari manté el seu
+  límit de set dies sense visitar el lloc —això no ho arregla res— però és precisament als altres
+  dos on l'usuari té més probabilitats de tenir el disc ple d'altres coses.
+- **Proposta**: una crida oportunista a `navigator.storage.persist()` la primera vegada que
+  s'escriu un esborrany, ignorant-ne el resultat (a Chrome es concedeix sol segons l'ús del lloc, i
+  no obre cap diàleg). No canvia res del format ni del flux; només fa que el nivell 1 dels tres de
+  durabilitat aguanti el que diu que aguanta.
+- **Resolta** a la branca `claude/estudi-pla-execucio-2w1pzq`, amb una correcció important a la
+  proposta: **«no obre cap diàleg» només val per a Chrome**. Comprovat a la documentació dels
+  navegadors, Firefox obre un diàleg de permís i, sobretot, **no concedeix res si la crida no ve
+  d'un gest de l'usuari** — o sigui que demanar-ho només des del desat automàtic (un segon després
+  d'un canvi, fora de qualsevol clic) hi és paper mullat.
+  - `storage/persistentStorage.ts` demana `persist()` **una sola vegada per càrrega de pàgina** i
+    només si `persisted()` diu que encara no està concedit; el resultat s'ignora i cap error surt
+    de la funció.
+  - Dos punts de crida: després de la **primera escriptura correcta** de l'esborrany (cobreix
+    Chrome sense demanar res a ningú) i en **obrir el botó flotant d'estat** — un clic, i el moment
+    de l'app on el permís té més sentit, perquè és quan l'usuari està preguntant on es desa la
+    feina. No es demana des de «Desa al núvol» ni «Descarrega»: allà la feina ja va a un lloc
+    durador.
+  - Safari continua amb el seu límit de set dies: contra això no hi ha crida que valgui, i la
+    resposta de l'app ja és una altra (el `.saac` i el núvol).
+  - Fixat a `e2e/persistent-storage.spec.ts`, amb un doble de `navigator.storage` que compta les
+    crides: primera escriptura, gest del botó d'estat, cap crida si ja està concedit i cap canvi de
+    comportament en un navegador sense l'API.

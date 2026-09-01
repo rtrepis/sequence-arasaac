@@ -84,3 +84,14 @@ export const defaultSettingsSchema = new Schema(
   },
   { _id: false }
 );
+
+// Sub-schema de les imatges pujades a Cloudinary.
+// El comparteixen els documents i el vocabulari personal: els bytes es guarden
+// en pujar-les perquè, en esborrar-les, se'n pugui restar exactament el pes.
+export const cloudinaryAssetSchema = new Schema(
+  {
+    publicId: { type: String, required: true },
+    bytes: { type: Number, required: true, min: 0 },
+  },
+  { _id: false }
+);

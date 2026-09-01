@@ -5,6 +5,7 @@ import BarNavigation from "@/components/BarNavigation/BarNavigation";
 import EmailVerificationBanner from "@features/backend/auth/components/EmailVerificationBanner";
 import BackendWakeUpNotice from "@features/backend/api/BackendWakeUpNotice";
 import DocumentDraftSync from "@features/sequence/components/DocumentDraftSync";
+import SessionExpiredNotice from "@features/backend/auth/components/SessionExpiredNotice";
 import DocumentStatusFab from "@features/sequence/components/DocumentStatusFab/DocumentStatusFab";
 import { messageLocale } from "@/App";
 
@@ -33,6 +34,10 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
         {/* Va al layout i no a index.tsx perquè necessita l'IntlProvider, i aquest és
             l'únic lloc de l'app on l'usuari fa crides al backend (entrar, desar, carregar) */}
         <BackendWakeUpNotice />
+        {/* Al costat de l'avís de desvetllament perquè comparteix motiu: totes
+            dues coses passen per sota, sense que l'usuari hagi demanat res, i
+            han de poder aparèixer tant a l'editor com al visualitzador */}
+        <SessionExpiredNotice />
       </BarNavigation>
       {/* Fora del Container: és una capa flotant, no contingut de la pàgina, i
           ha de quedar al racó de la finestra i no al del contenidor centrat */}

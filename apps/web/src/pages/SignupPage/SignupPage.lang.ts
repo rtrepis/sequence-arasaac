@@ -74,6 +74,29 @@ const messages = defineMessages({
       "T'hem enviat un correu a {email} amb un enllaç per confirmar l'adreça i triar la contrasenya. Si no el veus a la safata d'entrada, mira també a spam.",
     description: "Missatge d'èxit després del signup",
   },
+  failedTitle: {
+    id: "pages.signup.failedTitle",
+    defaultMessage: "No hem pogut enviar el correu",
+    description: "Títol de la pantalla de signup quan el correu no ha sortit",
+  },
+  failed: {
+    id: "pages.signup.failed",
+    defaultMessage:
+      "El compte de {email} s'ha creat, però el correu amb l'enllaç per triar la contrasenya no ha pogut sortir. Sense aquest enllaç encara no hi pots entrar: torna a demanar-lo.",
+    description: "Missatge de signup amb el compte creat i el correu no enviat",
+  },
+  resend: {
+    id: "pages.signup.resend",
+    defaultMessage: "Torna a enviar el correu",
+    description: "Botó per demanar de nou el correu de verificació",
+  },
+  resendDone: {
+    id: "pages.signup.resendDone",
+    defaultMessage:
+      "Ho hem tornat a demanar. Si al cap d'uns minuts continua sense arribar, mira també a spam i prova-ho més tard.",
+    description:
+      "Confirmació d'haver tornat a demanar el correu de verificació",
+  },
   goToApp: {
     id: "pages.signup.goToApp",
     defaultMessage: "Ves a l'aplicació",

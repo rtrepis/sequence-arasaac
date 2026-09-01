@@ -8,8 +8,10 @@ import {
   ViewSettings,
   SettingsTab,
   UserTier,
+  ImageQuality,
 } from "@/types/ui";
 import { WordProfile } from "@features/word-profile/model/WordProfile";
+import { DEFAULT_IMAGE_QUALITY } from "@/utils/imageToBase64";
 import {
   VIEW_DEFAULT_SIZE_PICT,
   VIEW_DEFAULT_PICT_SPACE,
@@ -54,6 +56,7 @@ const uiInitialState: Ui = {
     orientation: VIEW_DEFAULT_ORIENTATION,
     author: VIEW_DEFAULT_AUTHOR,
   },
+  viewSettingsFromSession: false,
   defaultSettings: {
     pictApiAra: {
       skin: DEFAULT_SKIN,
@@ -87,6 +90,7 @@ const uiInitialState: Ui = {
     },
   },
   wordProfiles: [],
+  imageQuality: DEFAULT_IMAGE_QUALITY,
   tier: "free",
 };
 
@@ -118,6 +122,37 @@ const uiSlice = createSlice({
       ...previousUi,
       viewSettings: action.payload,
     }),
+
+    /**
+     * El format que l'usuari estava fent servir, recuperat de l'esborrany en
+     * arrencar. Marca l'estat com a format de sessió perquè
+     * `applyUserViewSettings` no l'esborri després.
+     */
+    sessionViewSettingsRestored: (
+      previousUi,
+      action: PayloadAction<ViewSettings>,
+    ) => ({
+      ...previousUi,
+      viewSettings: action.payload,
+      viewSettingsFromSession: true,
+    }),
+
+    /**
+     * Format que ve de les preferències desades (navegador o compte). No té
+     * efecte si abans s'ha restaurat el de la sessió: **el format que l'usuari
+     * estava fent servir mana per damunt del que té desat**, fins que el canviï
+     * o desi les preferències. Sense això, la resposta del compte —que amb
+     * Render adormit pot arribar un minut després d'arrencar— tornaria a posar
+     * l'A4 a una feina que s'estava fent en A3.
+     */
+    applyUserViewSettings: (
+      previousUi,
+      action: PayloadAction<ViewSettings>,
+    ) => {
+      if (previousUi.viewSettingsFromSession) return previousUi;
+
+      return { ...previousUi, viewSettings: action.payload };
+    },
 
     updateDefaultSettings: (
       previousUi,
@@ -191,6 +226,14 @@ const uiSlice = createSlice({
     setTier: (previousUi, action: PayloadAction<UserTier>) => {
       previousUi.tier = action.payload;
     },
+
+    // Qualitat de les imatges que es pugen. Com la resta de preferències, aquí
+    // només queda reflectida: al compte o al navegador només hi va quan
+    // l'usuari desa (vegeu «Les preferències d'usuari només es desen quan
+    // l'usuari ho demana» al CLAUDE.md).
+    updateImageQuality: (previousUi, action: PayloadAction<ImageQuality>) => {
+      previousUi.imageQuality = action.payload;
+    },
   },
 });
 
@@ -198,6 +241,8 @@ export const uiReducer = uiSlice.reducer;
 
 export const {
   viewSettings: viewSettingsActionCreator,
+  sessionViewSettingsRestored: sessionViewSettingsRestoredActionCreator,
+  applyUserViewSettings: applyUserViewSettingsActionCreator,
   updateLangSetting: updateLangSettingsActionCreator,
   updateDefaultSettings: updateDefaultSettingsActionCreator,
   updateDefaultSettingPictApiAra: updateDefaultSettingPictApiAraActionCreator,
@@ -210,4 +255,5 @@ export const {
   removeWordProfile: removeWordProfileActionCreator,
   setWordProfiles: setWordProfilesActionCreator,
   setTier: setTierActionCreator,
+  updateImageQuality: updateImageQualityActionCreator,
 } = uiSlice.actions;

@@ -1,11 +1,17 @@
-import { Box, Button, Divider, Stack, Tooltip } from "@mui/material";
+import { Box, Divider, Stack, Tooltip } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { BsFilePdf } from "react-icons/bs";
-import { MdScreenRotation, MdSettingsBackupRestore } from "react-icons/md";
+import {
+  MdOutlinePushPin,
+  MdScreenRotation,
+  MdSettingsBackupRestore,
+} from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
+import StyledButton from "@/style/StyledButton";
+import StyledIconButton from "@/style/StyledIconButton";
 import useWindowResize from "@shared/hooks/useWindowResize";
 import React from "react";
 import { trackEvent } from "@shared/hooks/usePageTracking";
@@ -15,13 +21,23 @@ import {
   usePrintDimensions,
 } from "@features/print/hooks/useScaleCalculator";
 import { useFullscreen } from "@features/print/hooks/useFullScreen";
-import { useViewManager, useAuthorManager } from "@features/print/hooks/useViewManager";
+import {
+  useViewManager,
+  useAuthorManager,
+} from "@features/print/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
-import { usePrintStyles, printWithOrientation } from "@features/print/hooks/usePrintStyles";
+import {
+  usePrintStyles,
+  printWithOrientation,
+} from "@features/print/hooks/usePrintStyles";
 import { useDownloadPdf } from "@features/print/hooks/useDownloadPdf";
 import { getCurrentDPI } from "@/features/print-refactor/utils/dpiManager";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
-import { SequenceViewSettings, SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
+import {
+  SequenceViewSettings,
+  SequenceAlignmentH,
+  SequenceAlignmentV,
+} from "@/types/document";
 import {
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
@@ -29,13 +45,24 @@ import {
 } from "@features/sequence/store/documentSlice";
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import { sheetSurface } from "@/style/palette";
-import { saveUserUiThunk } from "@features/backend/user-settings/store/settingsThunks";
+import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSaveUiSettings";
+import SettingsSaveErrorDialog from "@/Modals/DefaultSettingsModal/SettingsSaveErrorDialog";
+import { RootState } from "@/app/store";
 import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
 import PrintFooterSection from "./PrintFooterSection";
 import { VIEW_SETTINGS_COLUMN_WIDTH } from "./ViewSequenceSettings.styled";
-import { SectionTitle, SETTINGS_ROW_GAP } from "@/components/SettingsLayout";
+import {
+  SectionTitle,
+  SettingsActions,
+  SETTINGS_ROW_GAP,
+} from "@/components/SettingsLayout";
 import { SelectChangeEvent } from "@mui/material";
+
+// El desat de preferències va al compte o al navegador segons si hi ha sessió,
+// i el botó ho ha de dir abans de prémer-lo, no després.
+const selectIsAuthenticated = (state: RootState): boolean =>
+  state.auth.accessToken !== null;
 
 interface ViewSequencesSettingsChildrenProps {
   viewSettings: ViewSettings;
@@ -49,7 +76,6 @@ interface ViewSequencesSettingsProps {
     props: ViewSequencesSettingsChildrenProps,
   ) => React.ReactElement | React.ReactElement[];
 }
-
 
 /**
  * Orquestrador de la visualització de seqüències: gestiona hooks, handlers i composició
@@ -69,14 +95,31 @@ const ViewSequencesSettings = ({
   const sequenceKeys = useAppSelector((state) =>
     Object.keys(state.document.content).map(Number),
   );
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+
+  // Desat de preferències: en segon pla, amb reintent i diàleg d'error
+  const { saveInBackground, retry, failure, isRetrying, dismissError } =
+    useSaveUiSettings();
 
   // Aplicar les preferències de l'usuari (ui.viewSettings) a totes les seqüències en muntar.
   // document.viewSettings s'inicialitza amb valors hardcodats al documentSlice;
   // aquí les substituïm pels valors guardats de l'usuari com a punt de partida.
-  const savedSeqDefaults = useRef(initialViewSettings);
+  // Instantània de les preferències desades en entrar, no el selector viu: el
+  // mirall de sessió de més avall reescriu `ui.viewSettings` a cada canvi, i amb
+  // el selector «Restaura» tornaria als valors que l'usuari acaba de tocar.
+  // Només avança quan l'usuari desa les preferències explícitament.
+  const savedUserDefaults = useRef(initialViewSettings);
   useEffect(() => {
-    const { sizePict, pictSpaceBetween, alignmentH, alignmentV } = savedSeqDefaults.current;
-    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignmentH, alignmentV }));
+    const { sizePict, pictSpaceBetween, alignmentH, alignmentV } =
+      savedUserDefaults.current;
+    dispatch(
+      applyViewSettingsToAllActionCreator({
+        sizePict,
+        pictSpaceBetween,
+        alignmentH,
+        alignmentV,
+      }),
+    );
   }, [dispatch]);
 
   // Estat local: mode aplicar a totes vs individual
@@ -108,7 +151,9 @@ const ViewSequencesSettings = ({
     });
 
   // Gestió de l'autor (usa el valor per defecte de l'usuari)
-  const { author, updateAuthor } = useAuthorManager(initialViewSettings.author ?? "");
+  const { author, updateAuthor } = useAuthorManager(
+    initialViewSettings.author ?? "",
+  );
 
   // Càlculs d'escala
   const {
@@ -149,7 +194,8 @@ const ViewSequencesSettings = ({
   // Alineació de bloc: posiciona tot el conjunt de seqüències dins la pàgina,
   // sempre a l'eix creuat de `direction` (V si row, H si column). Font única:
   // la primera seqüència (amb applyAll totes comparteixen el mateix valor)
-  const blockSource = sequenceViewSettings[sequenceKeys[0]] ?? DEFAULT_SEQUENCE_VIEW;
+  const blockSource =
+    sequenceViewSettings[sequenceKeys[0]] ?? DEFAULT_SEQUENCE_VIEW;
   const isRowDirection = viewSettings.direction === "row";
   const blockAlign = isRowDirection
     ? ALIGN_V[blockSource.alignmentV]
@@ -217,7 +263,12 @@ const ViewSequencesSettings = ({
         if (applyAll) {
           dispatch(applyViewSettingsToAllActionCreator({ alignmentH: value }));
         } else {
-          dispatch(updateSequenceViewSettingsActionCreator({ key: seqKey, settings: { alignmentH: value } }));
+          dispatch(
+            updateSequenceViewSettingsActionCreator({
+              key: seqKey,
+              settings: { alignmentH: value },
+            }),
+          );
         }
       },
     [applyAll, dispatch],
@@ -233,7 +284,12 @@ const ViewSequencesSettings = ({
         if (applyAll) {
           dispatch(applyViewSettingsToAllActionCreator({ alignmentV: value }));
         } else {
-          dispatch(updateSequenceViewSettingsActionCreator({ key: seqKey, settings: { alignmentV: value } }));
+          dispatch(
+            updateSequenceViewSettingsActionCreator({
+              key: seqKey,
+              settings: { alignmentV: value },
+            }),
+          );
         }
       },
     [applyAll, dispatch],
@@ -271,21 +327,56 @@ const ViewSequencesSettings = ({
    * Handler per restaurar les preferències guardades de l'usuari a totes les seqüències
    */
   const handleResetToDefaults = useCallback(() => {
-    const { sizePict, pictSpaceBetween, alignmentH, alignmentV, direction, sequenceSpaceBetween } = initialViewSettings;
-    dispatch(applyViewSettingsToAllActionCreator({ sizePict, pictSpaceBetween, alignmentH, alignmentV }));
+    const {
+      sizePict,
+      pictSpaceBetween,
+      alignmentH,
+      alignmentV,
+      direction,
+      sequenceSpaceBetween,
+    } = savedUserDefaults.current;
+    dispatch(
+      applyViewSettingsToAllActionCreator({
+        sizePict,
+        pictSpaceBetween,
+        alignmentH,
+        alignmentV,
+      }),
+    );
     updateViewSetting("direction", direction);
     updateViewSetting("sequenceSpaceBetween", sequenceSpaceBetween);
-  }, [dispatch, initialViewSettings, updateViewSetting]);
+  }, [dispatch, updateViewSetting]);
 
   /**
-   * Handler per persistir canvis quan es perd el focus.
-   * Sincronitza al Redux els camps (author, pageSize, orientation) gestionats per
-   * hooks externs, i després guarda al backend o localStorage.
+   * Mirall de sessió: manté `ui.viewSettings` al dia amb el que es veu, inclosos
+   * els camps que gestionen hooks externs (author, pageSize, orientation). Serveix
+   * perquè anar a Edició i tornar conservi el format de pàgina; **no desa res
+   * enlloc**. Abans ho feia l'`onBlur` del formulari, que en ser `focusout` puja:
+   * qualsevol control que perdia el focus —fins i tot els botons d'imprimir—
+   * enviava tota la configuració de l'usuari (idioma, tema, pictogrames i el
+   * vocabulari sencer, amb les imatges) al compte o al navegador. Ningú ho havia
+   * demanat, ningú n'era avisat si fallava, i de passada despertava Render.
    */
-  const handleBlur = useCallback(() => {
+  useEffect(() => {
     persistViewSettings({ author, pageSize, orientation });
-    dispatch(saveUserUiThunk());
-  }, [persistViewSettings, dispatch, author, pageSize, orientation]);
+  }, [persistViewSettings, author, pageSize, orientation]);
+
+  /**
+   * Desa aquests ajustos com a preferències de l'usuari: al compte si hi ha
+   * sessió, al navegador si no n'hi ha. Passa per `useSaveUiSettings` perquè
+   * tingui reintent, confirmació i diàleg d'error, com el modal de configuracions.
+   */
+  const handleSavePreferences = useCallback(() => {
+    // El que es desa és el que hi ha a Redux i el mirall ja hi és: la instantània
+    // de «Restaura» pot avançar amb ell.
+    savedUserDefaults.current = {
+      ...viewSettings,
+      author,
+      pageSize,
+      orientation,
+    };
+    saveInBackground();
+  }, [saveInBackground, viewSettings, author, pageSize, orientation]);
 
   /**
    * Handler per canviar la mida de pàgina via Select
@@ -323,7 +414,7 @@ const ViewSequencesSettings = ({
 
   return (
     <>
-      <form onBlur={handleBlur} onSubmit={(event) => event.preventDefault()}>
+      <form onSubmit={(event) => event.preventDefault()}>
         <NotPrint>
           <Stack direction={"row"} justifyContent={"end"} alignItems={"end"}>
             {/* Botons només-icona: l'aria-label sempre repeteix el mateix missatge
@@ -336,28 +427,26 @@ const ViewSequencesSettings = ({
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipOrientation)}
                   >
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(
                         messages.tooltipOrientation,
                       )}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={toggleOrientation}
                     >
                       <MdScreenRotation />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                   <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(messages.tooltipPrint)}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={handlePrint}
                     >
                       <AiFillPrinter />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipDownloadPdf)}
@@ -367,19 +456,18 @@ const ViewSequencesSettings = ({
                         de sota els dits sense cap avís. Sense `disabled` tampoc
                         cal el <span> embolcall: el Tooltip ja rep els events del
                         Button i l'aria-label es queda on ha de ser. */}
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(
                         messages.tooltipDownloadPdf,
                       )}
                       aria-disabled={isGenerating}
                       aria-busy={isGenerating}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={handleDownloadPdf}
                     >
                       <BsFilePdf />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                 </>
               ) : (
@@ -387,17 +475,16 @@ const ViewSequencesSettings = ({
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipFullscreen)}
                   >
-                    <Button
+                    <StyledIconButton
                       aria-label={intl.formatMessage(
                         messages.tooltipFullscreen,
                       )}
-                      variant="text"
-                      color="primary"
+                      color="inherit"
                       sx={{ fontSize: "2rem" }}
                       onClick={enterFullscreen}
                     >
                       <AiOutlineFullscreen />
-                    </Button>
+                    </StyledIconButton>
                   </Tooltip>
                 )
               )}
@@ -535,30 +622,57 @@ const ViewSequencesSettings = ({
                   onAuthorChange={updateAuthor}
                 />
 
-                {/* Restaura les preferències guardades: afecta totes les seccions, per això va al final */}
-                <Box
-                  sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}
-                >
+                {/* Accions de tota la columna, per això van al final: restaurar el
+                    que hi ha desat i desar el que hi ha ara com a preferència.
+                    Amb `floatingClearance` perquè aquesta columna acaba al mateix
+                    racó on sura el botó d'estat */}
+                <SettingsActions floatingClearance>
                   <Tooltip
                     title={intl.formatMessage(messages.tooltipResetDefaults)}
                     describeChild
                   >
-                    <Button
-                      variant="text"
-                      color="primary"
+                    {/* `inherit` i no el primary: el verd de la casa sobre el
+                        paper es queda a 2,1:1 i no es llegeix (F11) */}
+                    <StyledButton
+                      color="inherit"
                       endIcon={<MdSettingsBackupRestore />}
                       onClick={handleResetToDefaults}
-                      sx={{ textTransform: "none" }}
                     >
                       <FormattedMessage {...messages.resetDefaults} />
-                    </Button>
+                    </StyledButton>
                   </Tooltip>
-                </Box>
+                  {/* El tooltip diu on van a parar els ajustos, que no és el mateix
+                      lloc amb sessió que sense */}
+                  <Tooltip
+                    title={intl.formatMessage(
+                      isAuthenticated
+                        ? messages.tooltipSavePreferencesCloud
+                        : messages.tooltipSavePreferencesLocal,
+                    )}
+                    describeChild
+                  >
+                    <StyledButton
+                      variant="contained"
+                      endIcon={<MdOutlinePushPin />}
+                      onClick={handleSavePreferences}
+                    >
+                      <FormattedMessage {...messages.savePreferences} />
+                    </StyledButton>
+                  </Tooltip>
+                </SettingsActions>
               </Stack>
             </NotPrint>
           </Box>
         </Stack>
       </form>
+
+      {/* Només apareix si el desat ha fallat també al reintent automàtic */}
+      <SettingsSaveErrorDialog
+        failure={failure}
+        isRetrying={isRetrying}
+        onRetry={retry}
+        onDismiss={dismissError}
+      />
 
       {/* Contenidor per a fullscreen: mateix layout de blocs que la
           previsualització (direcció, wrap i separació entre seqüències) */}

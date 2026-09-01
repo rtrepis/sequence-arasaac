@@ -9,24 +9,42 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 /** Còpia que sobreviu fora d'aquest navegador: fitxer baixat o document al núvol. */
 export type DurableKind = "file" | "cloud";
 
+/** Motiu pel qual l'esborrany d'aquesta pestanya no s'escriu. */
+export type DraftErrorReason = "storage" | "conflict";
+
 export interface DocumentStatusState {
   /** Últim canvi de contingut del document. */
   changedAt: number | null;
   /** Últim esborrany escrit al navegador (IndexedDB). */
   draftSavedAt: number | null;
-  /** El navegador no ha pogut desar l'esborrany (espai exhaurit, mode privat…). */
-  hasDraftError: boolean;
+  /**
+   * Per què aquesta pestanya no desa l'esborrany, si és el cas. `storage` és el
+   * navegador que no pot escriure (espai exhaurit, mode privat…); `conflict` és
+   * una altra pestanya amb feina més nova, que no es pot trepitjar. Les dues
+   * deixen la feina només a la pantalla, però el que l'usuari hi pot fer no és
+   * el mateix.
+   */
+  draftError: DraftErrorReason | null;
   /** Últim desat fora del navegador. */
   durableAt: number | null;
   durableKind: DurableKind | null;
+  /**
+   * L'intent de restaurar l'esborrany ja ha acabat, hi hagués esborrany o no.
+   * Ho mira la pàgina de vista abans de muntar-se: els seus hooks copien el
+   * format de pàgina a un estat local en muntar-se i ja no el tornen a mirar,
+   * de manera que muntar-los abans de la restauració vol dir quedar-se amb el
+   * format d'abans encara que arribi el bo un instant després.
+   */
+  draftRestoreSettled: boolean;
 }
 
 const initialState: DocumentStatusState = {
   changedAt: null,
   draftSavedAt: null,
-  hasDraftError: false,
+  draftError: null,
   durableAt: null,
   durableKind: null,
+  draftRestoreSettled: false,
 };
 
 const documentStatusSlice = createSlice({
@@ -40,11 +58,21 @@ const documentStatusSlice = createSlice({
 
     draftSaved: (state, action: PayloadAction<number>) => {
       state.draftSavedAt = action.payload;
-      state.hasDraftError = false;
+      state.draftError = null;
     },
 
     draftSaveFailed: (state) => {
-      state.hasDraftError = true;
+      state.draftError = "storage";
+    },
+
+    /**
+     * Una altra pestanya ha desat feina més nova i aquesta ha deixat d'escriure
+     * per no esborrar-la. Ha d'arribar a l'estat i no quedar-se en un avís: amb
+     * `draftSavedAt` congelat, la durabilitat es quedaria dient «Desant en
+     * aquest dispositiu…» per sempre.
+     */
+    draftBlockedByOtherTab: (state) => {
+      state.draftError = "conflict";
     },
 
     /** El document ja té còpia fora del navegador. */
@@ -56,7 +84,7 @@ const documentStatusSlice = createSlice({
       state.durableKind = action.payload.kind;
       // Desar és també la prova que el navegador funciona: si l'esborrany havia
       // fallat, mantenir l'avís d'error només confondria
-      state.hasDraftError = false;
+      state.draftError = null;
     },
 
     /** Recupera l'estat desat amb l'esborrany en arrencar. */
@@ -65,8 +93,21 @@ const documentStatusSlice = createSlice({
       action: PayloadAction<Partial<DocumentStatusState>>,
     ) => ({ ...state, ...action.payload }),
 
-    /** Document nou: no hi ha res desat ni res pendent. */
-    documentStatusCleared: () => initialState,
+    /** L'arrencada ja ha mirat si hi havia esborrany. */
+    draftRestoreSettled: (state) => {
+      state.draftRestoreSettled = true;
+    },
+
+    /**
+     * Document nou: no hi ha res desat ni res pendent. `draftRestoreSettled` no
+     * hi entra: no diu res del document, sinó que l'arrencada ja ha passat, i
+     * tornar-lo a fals deixaria la pàgina de vista esperant una restauració que
+     * no ha de tornar a passar mai.
+     */
+    documentStatusCleared: (state) => ({
+      ...initialState,
+      draftRestoreSettled: state.draftRestoreSettled,
+    }),
   },
 });
 
@@ -76,34 +117,65 @@ export const {
   documentChanged: documentChangedActionCreator,
   draftSaved: draftSavedActionCreator,
   draftSaveFailed: draftSaveFailedActionCreator,
+  draftBlockedByOtherTab: draftBlockedByOtherTabActionCreator,
   documentMadeDurable: documentMadeDurableActionCreator,
   documentStatusRestored: documentStatusRestoredActionCreator,
+  draftRestoreSettled: draftRestoreSettledActionCreator,
   documentStatusCleared: documentStatusClearedActionCreator,
 } = documentStatusSlice.actions;
 
 /**
- * Els cinc estats que pot veure l'usuari. `local` i `durable` es diferencien
+ * Els sis estats que pot veure l'usuari. `local` i `durable` es diferencien
  * a propòsit: l'esborrany del navegador no és un desat, i dir-ne «desat» a
  * seques és el malentès que aquest indicador ha d'evitar.
+ *
+ * `stale` és el tercer d'aquesta mateixa família: hi ha còpia fora del
+ * navegador, però és **d'abans** del que hi ha a pantalla. Sense ell, seguir
+ * treballant damunt d'un document desat el tornava a «Només en aquest
+ * dispositiu», que és cert i alhora amaga el que de debò importa —que la còpia
+ * existeix i s'ha quedat enrere—, i ho deia amb el mateix color que un document
+ * acabat de desar.
  */
 export type DocumentDurability =
   | "pristine"
   | "saving"
   | "local"
+  | "stale"
   | "durable"
   | "error";
 
 export const getDocumentDurability = (
   status: DocumentStatusState,
 ): DocumentDurability => {
-  const { changedAt, draftSavedAt, hasDraftError, durableAt } = status;
+  const { changedAt, draftSavedAt, draftError, durableAt } = status;
 
-  if (hasDraftError) return "error";
+  if (draftError !== null) return "error";
   if (changedAt === null && durableAt === null) return "pristine";
+
+  // Va **abans** de `saving`: qui treballa sobre un document que ja té còpia ha
+  // de veure de seguida que la còpia s'ha quedat enrere, i no el segon
+  // d'escriptura de l'esborrany, que és el que passa amb qualsevol tecla.
+  if (durableAt !== null && changedAt !== null && changedAt > durableAt)
+    return "stale";
+
   if (changedAt !== null && (draftSavedAt === null || draftSavedAt < changedAt))
     return "saving";
-  if (durableAt !== null && (changedAt === null || changedAt <= durableAt))
-    return "durable";
+  if (durableAt !== null) return "durable";
 
   return "local";
 };
+
+/**
+ * Estats en què el que hi ha a pantalla es perdria si es buidés. `stale` hi
+ * entra encara que hi hagi còpia: la còpia és d'abans, i el que es perdria és
+ * tot el que s'ha fet des d'aleshores.
+ *
+ * Viu aquí i no al botó flotant perquè no és una decisió d'aquell botó: és el
+ * criteri de tota l'app per saber quan una acció que buida la pantalla —començar
+ * un document nou, tancar la sessió— s'ha de confirmar.
+ */
+export const isWorkAtRisk = (durability: DocumentDurability): boolean =>
+  durability === "saving" ||
+  durability === "local" ||
+  durability === "stale" ||
+  durability === "error";

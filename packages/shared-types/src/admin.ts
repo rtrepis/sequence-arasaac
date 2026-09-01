@@ -26,6 +26,17 @@ export interface AdminUserSummary {
   lastLoginAt?: string;
 }
 
+// Enllaç d'establiment de contrasenya generat des del panell, per fer-lo
+// arribar a mà quan el correu no és una via disponible.
+// "verify" és la primera contrasenya d'un compte; "reset" en substitueix una
+// que ja existeix. Caduquen diferent, i per això `expiresAt` viatja amb l'URL:
+// qui el passa ha de poder dir fins quan serveix.
+export interface AdminPasswordLink {
+  url: string;
+  type: "verify" | "reset";
+  expiresAt: string;
+}
+
 // Resposta paginada del llistat d'usuaris
 export interface AdminUserList {
   users: AdminUserSummary[];

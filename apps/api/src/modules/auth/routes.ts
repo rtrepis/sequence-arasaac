@@ -4,6 +4,7 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import {
+  registrationStatus,
   signup,
   login,
   refresh,
@@ -50,6 +51,10 @@ const authRouter = Router();
 
 // Aplica el rate limiter general a totes les rutes d'autenticació
 authRouter.use(authLimiter);
+
+// Estat del registre: l'única ruta d'auth que es llegeix sense enviar res.
+// Va abans del signup perquè és el que es consulta abans de provar-ho.
+authRouter.get("/registration-status", registrationStatus);
 
 // El del signup s'hi suma: una petició de signup passa pels dos
 authRouter.post("/signup", signupLimiter, signup);

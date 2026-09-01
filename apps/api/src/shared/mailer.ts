@@ -34,13 +34,36 @@ interface SendEmailInput {
   text: string;
 }
 
-// Envia un correu. Retorna si s'ha pogut lliurar al proveïdor.
+// Resultat d'un enviament. El motiu només s'omple quan falla i és el que diu
+// el proveïdor, retallat: qui truca no el pot interpretar, però l'ha de poder
+// deixar al registre d'errors. Fins ara la fallada només anava a la consola
+// del servidor, que és el lloc on ningú mira fins que algú es queixa.
+export interface MailResult {
+  sent: boolean;
+  reason?: string;
+}
+
+// Llargada del motiu: la mateixa que admet el `detail` del registre d'errors
+const MAX_REASON_LENGTH = 300;
+
+const toReason = (error: unknown): string => {
+  const message =
+    error instanceof Error
+      ? error.message
+      : typeof error === "object" && error !== null
+        ? JSON.stringify(error)
+        : String(error);
+
+  return message.slice(0, MAX_REASON_LENGTH);
+};
+
+// Envia un correu. Diu si s'ha pogut lliurar al proveïdor i, si no, per què.
 const sendEmail = async ({
   to,
   subject,
   html,
   text,
-}: SendEmailInput): Promise<boolean> => {
+}: SendEmailInput): Promise<MailResult> => {
   const client = getClient();
 
   // Sense credencials (desenvolupament) el correu surt per consola.
@@ -51,7 +74,7 @@ const sendEmail = async ({
     console.log(`Assumpte: ${subject}`);
     console.log(text);
     console.log("--- fi del correu ---\n");
-    return true;
+    return { sent: true };
   }
 
   try {
@@ -65,13 +88,13 @@ const sendEmail = async ({
 
     if (error) {
       console.error("Resend ha rebutjat el correu:", error);
-      return false;
+      return { sent: false, reason: toReason(error) };
     }
 
-    return true;
+    return { sent: true };
   } catch (error) {
     console.error("Error en enviar el correu:", error);
-    return false;
+    return { sent: false, reason: toReason(error) };
   }
 };
 
@@ -89,7 +112,7 @@ interface ClientErrorAlert {
 export const sendClientErrorAlert = async (
   to: string,
   { code, context, detail, userAgent, emailCanonical }: ClientErrorAlert
-): Promise<boolean> => {
+): Promise<MailResult> => {
   const subject = `[SequenciAAC] Error a ${context}: ${code}`;
 
   const lines = [
@@ -311,7 +334,7 @@ export const sendVerificationEmail = async (
   name: string | undefined,
   verificationUrl: string,
   locale: LangsApp = DEFAULT_LANGS_APP
-): Promise<boolean> => {
+): Promise<MailResult> => {
   const s = VERIFICATION_STRINGS[locale] ?? VERIFICATION_STRINGS[DEFAULT_LANGS_APP];
   const greeting = s.greeting(name);
 
@@ -353,7 +376,7 @@ export const sendAccountExistsEmail = async (
   name: string | undefined,
   resetUrl: string,
   locale: LangsApp = DEFAULT_LANGS_APP
-): Promise<boolean> => {
+): Promise<MailResult> => {
   const s = ACCOUNT_EXISTS_STRINGS[locale] ?? ACCOUNT_EXISTS_STRINGS[DEFAULT_LANGS_APP];
   const greeting = s.greeting(name);
 
@@ -392,7 +415,7 @@ export const sendPasswordResetEmail = async (
   to: string,
   resetUrl: string,
   locale: LangsApp = DEFAULT_LANGS_APP
-): Promise<boolean> => {
+): Promise<MailResult> => {
   const s = PASSWORD_RESET_STRINGS[locale] ?? PASSWORD_RESET_STRINGS[DEFAULT_LANGS_APP];
 
   const text = [

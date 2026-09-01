@@ -13,11 +13,18 @@ export const APP_CONFIG_KEY = "global";
 // Valors amb què es crea la configuració la primera vegada
 export const DEFAULT_REGISTRATION_OPEN = true;
 export const DEFAULT_MAX_USERS = 200;
+// Altes que s'admeten cada dia. Va a part del sostre global: aquell diu quanta
+// gent hi cap, aquest a quina velocitat pot entrar-hi. Amb 40 al dia, una
+// campanya que es dispari es reparteix en dies i hi ha temps de veure-la venir.
+export const DEFAULT_MAX_DAILY_SIGNUPS = 40;
 
 export interface IAppConfig extends Document {
   key: string;
   registrationOpen: boolean;
   maxUsers: number;
+  // Opcional a propòsit: les configuracions creades abans que existís el fre
+  // diari no el porten, i el service hi posa el valor per defecte en llegir-les
+  maxDailySignups?: number;
   updatedAt: Date;
 }
 
@@ -40,6 +47,14 @@ const appConfigSchema = new Schema<IAppConfig>(
       type: Number,
       required: true,
       default: DEFAULT_MAX_USERS,
+      min: 0,
+    },
+    // Fre diari. No és `required`: les configuracions creades abans que
+    // existís no el porten, i el service hi posa el valor per defecte en
+    // llegir-les — el mateix criteri que amb qualsevol camp nou de dades velles.
+    maxDailySignups: {
+      type: Number,
+      default: DEFAULT_MAX_DAILY_SIGNUPS,
       min: 0,
     },
   },

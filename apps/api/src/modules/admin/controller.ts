@@ -2,11 +2,13 @@
 // Delega tota la lògica al service — el controller només gestiona req/res
 
 import { Request, Response, NextFunction } from "express";
+import { isValidObjectId } from "mongoose";
 import type { AppError } from "../../middleware/errorHandler";
 import {
   listUsersQuerySchema,
   updateUserSchema,
   listEventsQuerySchema,
+  deleteClientErrorsQuerySchema,
   updateConfigSchema,
 } from "./validators";
 import {
@@ -14,10 +16,15 @@ import {
   listUsers,
   updateUser,
   listSecurityEvents,
+  createUserPasswordLink,
 } from "./service";
 import { getAppConfig, updateAppConfig } from "../config/service";
 import { recordSecurityEvent } from "../security/service";
-import { listClientErrors } from "../client-errors/service";
+import {
+  listClientErrors,
+  deleteClientError as deleteClientErrorService,
+  deleteClientErrorsBefore,
+} from "../client-errors/service";
 import { hashIp } from "../../shared/ipHash";
 
 // Prou per veure què està passant aquests dies sense paginar una pantalla
@@ -94,6 +101,47 @@ export const patchUser = async (
   }
 };
 
+// POST /api/admin/users/:id/password-link
+// Torna l'enllaç d'establiment de contrasenya d'un usuari, per fer-l'hi
+// arribar a mà quan el correu no és una via disponible.
+//
+// És un POST i no un GET tot i que no modifica cap dada: genera una credencial
+// d'un compte concret, i un GET s'acaba en un historial, en un registre del
+// proxy o repetit sol en recarregar la pàgina.
+export const userPasswordLink = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    if (!isValidObjectId(req.params.id)) {
+      return next(invalidData("USER_NOT_FOUND"));
+    }
+
+    const link = await createUserPasswordLink(req.params.id);
+
+    // Queda registrat com qualsevol altra acció d'administració: entregar
+    // aquest enllaç és donar accés a un compte i ha de deixar rastre. El token
+    // no s'hi desa —el registre de seguretat no és un magatzem de credencials—,
+    // només que se n'ha generat un i de quina mena.
+    await recordSecurityEvent({
+      type: "admin_action",
+      ipHash: hashIp(req.ip),
+      emailCanonical: link.email,
+      userId: req.params.id,
+      detail: `password_link:${link.type}`,
+    });
+
+    res.status(200).json({
+      url: link.url,
+      type: link.type,
+      expiresAt: link.expiresAt,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // GET /api/admin/events
 export const events = async (
   req: Request,
@@ -121,6 +169,67 @@ export const clientErrors = async (
 ): Promise<void> => {
   try {
     res.status(200).json({ errors: await listClientErrors(CLIENT_ERRORS_LIMIT) });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/admin/client-errors/:id
+// Treu del registre un error ja mirat, perquè el que hi queda sigui el que
+// encara demana atenció.
+//
+// A diferència del buidat, no deixa SecurityEvent: descartar files d'una a una
+// és el gest normal de la pantalla, i registrar-lo ompliria la traça de
+// seguretat de soroll amb el mateix pes que el que s'acaba d'esborrar
+export const deleteClientError = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    if (!isValidObjectId(req.params.id)) {
+      return next(invalidData());
+    }
+
+    const deleted = await deleteClientErrorService(req.params.id);
+
+    if (!deleted) {
+      const error = new Error("CLIENT_ERROR_NOT_FOUND") as AppError;
+      error.statusCode = 404;
+      error.errorCode = "CLIENT_ERROR_NOT_FOUND";
+      return next(error);
+    }
+
+    res.status(200).json({ deleted: 1 });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/admin/client-errors?before=<ISO>
+// Buida el registre fins al moment que digui la petició
+export const deleteClientErrors = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const parsed = deleteClientErrorsQuerySchema.safeParse(req.query);
+    if (!parsed.success) {
+      return next(invalidData());
+    }
+
+    const deleted = await deleteClientErrorsBefore(parsed.data.before);
+
+    // Com la resta d'accions d'administració, queda registrat: és l'única
+    // manera de saber després que aquells errors van existir
+    await recordSecurityEvent({
+      type: "admin_action",
+      ipHash: hashIp(req.ip),
+      detail: `client-errors:delete ${deleted} fins a ${parsed.data.before.toISOString()}`,
+    });
+
+    res.status(200).json({ deleted });
   } catch (err) {
     next(err);
   }

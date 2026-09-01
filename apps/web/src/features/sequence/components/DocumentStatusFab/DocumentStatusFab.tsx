@@ -22,15 +22,24 @@ import {
   MdOutlineFileDownloadDone,
   MdOutlineNoteAdd,
   MdOutlineSync,
+  MdOutlineSyncProblem,
 } from "react-icons/md";
-import { useIntl } from "react-intl";
+import { MessageDescriptor, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { RootState } from "@app/store";
 import { startNewDocumentThunk } from "@features/sequence/store/documentSlice";
 import {
-  DocumentDurability,
   getDocumentDurability,
+  isWorkAtRisk,
 } from "@features/sequence/store/documentStatusSlice";
+import { requestPersistentStorage } from "@features/sequence/storage/persistentStorage";
+import {
+  APP_CONTROL_SIZE,
+  APP_CORNER_RADIUS,
+  APP_TOUCH_TARGET_MIN,
+  FLOATING_EDGE_GAP,
+} from "@/style/appShape";
+import { floatingControlSx } from "@/style/floatingControl";
 import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
@@ -39,9 +48,22 @@ import messages from "./DocumentStatusFab.lang";
 const selectDocumentStatus = (state: RootState) => state.documentStatus;
 const selectIsLoggedIn = (state: RootState) => state.auth.accessToken !== null;
 
-/** Estats en què la feina de pantalla no té cap còpia fora del navegador. */
-const isAtRisk = (durability: DocumentDurability): boolean =>
-  durability === "saving" || durability === "local" || durability === "error";
+/**
+ * Si un moment és d'avui, comparant **dia de calendari** i no «fa menys de 24
+ * hores»: a les 00:30, un esborrany de les 23:50 d'ahir no és d'avui encara que
+ * faci quaranta minuts, i dir-ne «des de les 23:50» seria exactament el
+ * malentès que aquesta distinció evita.
+ */
+const isToday = (at: number): boolean => {
+  const now = new Date();
+  const moment = new Date(at);
+
+  return (
+    moment.getDate() === now.getDate() &&
+    moment.getMonth() === now.getMonth() &&
+    moment.getFullYear() === now.getFullYear()
+  );
+};
 
 const DocumentStatusFab = (): ReactElement => {
   const intl = useIntl();
@@ -56,8 +78,30 @@ const DocumentStatusFab = (): ReactElement => {
 
   const durability = getDocumentDurability(status);
 
-  const formatTime = (at: number | null): string =>
-    at === null ? "" : intl.formatTime(at);
+  /**
+   * L'hora sola quan és d'avui; el dia i l'hora quan no. L'indicador és per a
+   * qui torna, i qui torna és justament qui no sap de quin dia és l'hora que
+   * llegeix. La data no es pot encaixar dins de la frase de sempre («des de les
+   * {time}»): cada llengua hi porta la seva preposició, i per això cada estat té
+   * dues frases i no un format condicional.
+   */
+  const momentText = (
+    at: number | null,
+    todayMessage: MessageDescriptor,
+    datedMessage: MessageDescriptor,
+  ): string => {
+    if (at === null) return intl.formatMessage(todayMessage, { time: "" });
+
+    if (isToday(at))
+      return intl.formatMessage(todayMessage, { time: intl.formatTime(at) });
+
+    return intl.formatMessage(datedMessage, {
+      // Curta i amb any: al panell hi caben 260 px, i un esborrany pot
+      // sobreviure a un canvi d'any
+      date: intl.formatDate(at, { dateStyle: "short" }),
+      time: intl.formatTime(at),
+    });
+  };
 
   const statusText = ((): string => {
     switch (durability) {
@@ -66,23 +110,61 @@ const DocumentStatusFab = (): ReactElement => {
       case "saving":
         return intl.formatMessage(messages.statusSaving);
       case "error":
-        return intl.formatMessage(messages.statusError);
-      case "durable":
+        // Les dues causes deixen la feina només a la pantalla, però no volen dir
+        // el mateix ni tenen la mateixa sortida
         return intl.formatMessage(
-          status.durableKind === "cloud"
-            ? messages.statusCloud
-            : messages.statusFile,
-          { time: formatTime(status.durableAt) },
+          status.draftError === "conflict"
+            ? messages.statusConflict
+            : messages.statusError,
         );
+      case "stale":
+        // La frase parla de la còpia, no del canvi: el que l'usuari ha de
+        // decidir és si la torna a desar, i per això hi ha de llegir de quan és
+        return status.durableKind === "cloud"
+          ? momentText(
+              status.durableAt,
+              messages.statusStaleCloud,
+              messages.statusStaleCloudDated,
+            )
+          : momentText(
+              status.durableAt,
+              messages.statusStaleFile,
+              messages.statusStaleFileDated,
+            );
+      case "durable":
+        return status.durableKind === "cloud"
+          ? momentText(
+              status.durableAt,
+              messages.statusCloud,
+              messages.statusCloudDated,
+            )
+          : momentText(
+              status.durableAt,
+              messages.statusFile,
+              messages.statusFileDated,
+            );
       default:
-        return intl.formatMessage(messages.statusLocal, {
-          time: formatTime(status.draftSavedAt),
-        });
+        return momentText(
+          status.draftSavedAt,
+          messages.statusLocal,
+          messages.statusLocalDated,
+        );
     }
   })();
 
   const hintText = ((): string | null => {
-    if (durability === "error") return intl.formatMessage(messages.hintError);
+    if (durability === "error")
+      return intl.formatMessage(
+        status.draftError === "conflict"
+          ? messages.hintConflict
+          : messages.hintError,
+      );
+    if (durability === "stale")
+      return intl.formatMessage(
+        status.durableKind === "cloud"
+          ? messages.hintStaleCloud
+          : messages.hintStaleFile,
+      );
     if (durability === "local" || durability === "saving")
       return intl.formatMessage(messages.hintLocal);
     return null;
@@ -94,6 +176,11 @@ const DocumentStatusFab = (): ReactElement => {
         return <MdOutlineSync />;
       case "error":
         return <MdOutlineErrorOutline />;
+      case "stale":
+        // Una sola icona per als dos orígens: qui hi és no ha de distingir el
+        // núvol del fitxer, sinó veure que la còpia i la pantalla no diuen el
+        // mateix. De quina còpia es tracta ho diu la frase
+        return <MdOutlineSyncProblem />;
       case "durable":
         return status.durableKind === "cloud" ? (
           <MdOutlineCloudDone />
@@ -105,7 +192,17 @@ const DocumentStatusFab = (): ReactElement => {
     }
   })();
 
-  const fabColor = durability === "error" ? "error" : "primary";
+  /**
+   * El groc de `stale` és tota la raó de ser d'aquest estat: el panell només
+   * s'obre amb el clic, així que el color del botó és l'únic que es veu de cua
+   * d'ull. Amb el verd de sempre, un document desat i el mateix document amb
+   * mitja hora de feina a sobre es veien igual.
+   */
+  const fabColor = ((): "primary" | "warning" | "error" => {
+    if (durability === "error") return "error";
+    if (durability === "stale") return "warning";
+    return "primary";
+  })();
 
   const startNewDocument = (): void => {
     setIsConfirmOpen(false);
@@ -114,7 +211,7 @@ const DocumentStatusFab = (): ReactElement => {
   };
 
   const handleNewDocument = (): void => {
-    if (isAtRisk(durability)) {
+    if (isWorkAtRisk(durability)) {
       setIsConfirmOpen(true);
       return;
     }
@@ -173,8 +270,8 @@ const DocumentStatusFab = (): ReactElement => {
       <Box
         sx={{
           position: "fixed",
-          bottom: 16,
-          right: 16,
+          bottom: FLOATING_EDGE_GAP,
+          right: FLOATING_EDGE_GAP,
           // Columna alineada a la dreta i ancorada a baix: el que s'hi afegeix
           // creix cap amunt, de manera que la frase d'estat queda per sobre de
           // les accions sense haver de calcular-ne l'alçada
@@ -194,8 +291,9 @@ const DocumentStatusFab = (): ReactElement => {
             elevation={3}
             sx={{
               width: 260,
-              maxWidth: "calc(100vw - 32px)",
+              maxWidth: `calc(100vw - ${FLOATING_EDGE_GAP * 2}px)`,
               p: 1.5,
+              borderRadius: `${APP_CORNER_RADIUS}px`,
               pointerEvents: "none",
             }}
           >
@@ -220,7 +318,13 @@ const DocumentStatusFab = (): ReactElement => {
           // el diàleg de descàrrega el focus torna al botó i el panell es
           // tornaria a obrir tot sol.
           onOpen={(_event, reason) => {
-            if (reason === "toggle") setIsOpen(true);
+            if (reason !== "toggle") return;
+
+            setIsOpen(true);
+            // El gest que Firefox necessita per concedir emmagatzematge
+            // persistent, i el moment de l'app on demanar-lo té més sentit:
+            // qui obre això està preguntant precisament on es desa la feina
+            void requestPersistentStorage();
           }}
           // Tanca tot menys treure-hi el ratolí de sobre: qui l'ha obert per
           // llegir l'estat pot moure el cursor mentre llegeix
@@ -228,8 +332,15 @@ const DocumentStatusFab = (): ReactElement => {
             if (reason !== "mouseLeave") setIsOpen(false);
           }}
           icon={statusIcon}
-          FabProps={{ color: fabColor, size: "medium" }}
-          sx={{ ".MuiSpeedDial-fab": { width: 48, height: 48 } }}
+          // La forma del toggle seleccionat, que és la marca de la casa: fins
+          // ara era un `Fab` rodó de MUI, sense cap decisió nostra i sense
+          // assemblar-se a cap dels controls que té a sota
+          FabProps={{
+            sx: [
+              floatingControlSx(fabColor),
+              { width: APP_CONTROL_SIZE, height: APP_CONTROL_SIZE },
+            ],
+          }}
         >
           {actions.map((action) => (
             <SpeedDialAction
@@ -245,11 +356,13 @@ const DocumentStatusFab = (): ReactElement => {
                   whiteSpace: "nowrap",
                 },
               }}
-              // 44 px és el mínim de diana tàctil (WCAG); el `small` de MUI
-              // es queda a 40
+              // El `small` de MUI es queda a 40, per sota de la diana mínima
               FabProps={{
                 disabled: action.disabled,
-                sx: { width: 44, height: 44 },
+                sx: [
+                  floatingControlSx(),
+                  { width: APP_TOUCH_TARGET_MIN, height: APP_TOUCH_TARGET_MIN },
+                ],
               }}
             />
           ))}
@@ -270,7 +383,11 @@ const DocumentStatusFab = (): ReactElement => {
           overflow: "hidden",
         }}
       >
-        {durability === "error" || durability === "durable" ? statusText : ""}
+        {durability === "error" ||
+        durability === "stale" ||
+        durability === "durable"
+          ? statusText
+          : ""}
       </Box>
 
       {isCloudOpen && (
@@ -290,7 +407,13 @@ const DocumentStatusFab = (): ReactElement => {
       <ConfirmDialog
         open={isConfirmOpen}
         title={intl.formatMessage(messages.confirmTitle)}
-        body={intl.formatMessage(messages.confirmBody)}
+        body={intl.formatMessage(
+          // Amb una còpia enrere, el que es perd no és tot: és el que s'ha fet
+          // des d'aleshores. Dir-li que ho perd tot seria fer-li desar per res
+          durability === "stale"
+            ? messages.confirmBodyStale
+            : messages.confirmBody,
+        )}
         confirmLabel={intl.formatMessage(messages.confirmDiscard)}
         onConfirm={startNewDocument}
         onCancel={() => setIsConfirmOpen(false)}

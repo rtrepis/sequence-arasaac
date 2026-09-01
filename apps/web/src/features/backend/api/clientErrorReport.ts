@@ -13,6 +13,7 @@ export type ClientErrorContext =
   | "document-load"
   | "document-list"
   | "document-delete"
+  | "asset-resize"
   // No ve de cap petició: la generació del PDF passa sencera al navegador. Hi entra
   // igualment perquè és una fallada que l'usuari veu i que ningú explicaria altrament.
   | "pdf-export";

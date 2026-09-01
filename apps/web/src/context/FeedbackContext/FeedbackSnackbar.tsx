@@ -1,8 +1,15 @@
 import { Snackbar, Alert } from "@mui/material";
 import { ReactElement, SyntheticEvent } from "react";
 import { useFeedback } from "./FeedbackContext";
+import {
+  floatingNoticeSx,
+  floatingSnackbarSx,
+} from "@components/FloatingLayer";
 
-// Component Snackbar que consumeix el context de feedback
+// Confirmació d'una acció acabada. A diferència dels dos avisos que no marxen
+// sols (sessió caducada, servidor despertant-se), aquest **no** reserva espai al
+// final del contingut: dura tres segons, i fer saltar la pàgina cada vegada que
+// es desa alguna cosa seria pitjor que el que arregla.
 const FeedbackSnackbar = (): ReactElement => {
   const { state, hideSnackbar } = useFeedback();
   const { open, message, severity, duration } = state.snackbar;
@@ -21,12 +28,13 @@ const FeedbackSnackbar = (): ReactElement => {
       autoHideDuration={duration}
       onClose={handleClose}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      sx={floatingSnackbarSx}
     >
       <Alert
         onClose={handleClose}
         severity={severity}
-        variant="standard"
-        sx={{ width: "100%" }}
+        variant="outlined"
+        sx={floatingNoticeSx}
       >
         {message}
       </Alert>

@@ -1,6 +1,13 @@
 import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
+  conflictError: {
+    id: "features.sequence.draft.conflictError",
+    defaultMessage:
+      "Una altra pestanya té feina més nova. Aquesta ha deixat de desar sola per no esborrar-la: descarrega el que hi tens si el vols conservar.",
+    description:
+      "Avís quan una altra pestanya ha desat l'esborrany més tard que aquesta",
+  },
   saveError: {
     id: "features.sequence.draft.saveError",
     defaultMessage:

@@ -1,6 +1,7 @@
 // Esquemes Zod per validar els cossos de les peticions de user-settings
 import { z } from "zod";
 import { defaultSettingsZodSchema } from "../../shared/zodSchemas";
+import { MAX_IMAGE_DATA_URL_LENGTH } from "../../shared/imageAssets";
 
 const viewSettingsZodSchema = z.object({
   sizePict: z.number(),
@@ -23,7 +24,7 @@ const wordProfileZodSchema = z.object({
     fitzgerald: z.string().optional(),
   }),
   selectedId: z.number().optional(),
-  customImageUrl: z.string().optional(),
+  customImageUrl: z.string().max(MAX_IMAGE_DATA_URL_LENGTH).optional(),
 });
 
 export const updateUiSettingsSchema = z.object({
@@ -35,6 +36,27 @@ export const updateUiSettingsSchema = z.object({
   viewSettings: viewSettingsZodSchema.optional(),
   defaultSettings: defaultSettingsZodSchema,
   wordProfiles: z.array(wordProfileZodSchema).optional(),
+  imageQuality: z.enum(["print", "standard", "compact"]).optional(),
 });
 
 export type UpdateUiSettingsInput = z.infer<typeof updateUiSettingsSchema>;
+
+// Esborrat d'una imatge del compte. El publicId identifica la imatge a
+// Cloudinary; que sigui d'aquest usuari es comprova al servei, mai aquí: el cos
+// de la petició no és cap prova de propietat.
+export const deleteAssetSchema = z.object({
+  publicId: z.string().min(1).max(300),
+});
+
+export type DeleteAssetInput = z.infer<typeof deleteAssetSchema>;
+
+// Canvi de mida d'una imatge del compte: la imatge nova arriba ja reduïda pel
+// client, en base64. El sostre de llargada només atura l'absurd; el pes de
+// veritat el comprova `uploadBase64Image` amb MAX_IMAGE_BYTES, que és el que fa
+// que «una imatge» vulgui dir un pes concret.
+export const replaceAssetSchema = z.object({
+  publicId: z.string().min(1).max(300),
+  image: z.string().max(MAX_IMAGE_DATA_URL_LENGTH),
+});
+
+export type ReplaceAssetInput = z.infer<typeof replaceAssetSchema>;

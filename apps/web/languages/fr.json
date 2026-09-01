@@ -36,26 +36,33 @@
   "components.appNavigationDrawer.download": {
     "defaultMessage": "Télécharger"
   },
-  "components.appNavigationDrawer.langSelector": {
-    "defaultMessage": "Langue"
-  },
   "components.appNavigationDrawer.load": {
     "defaultMessage": "Charger"
   },
   "components.appNavigationDrawer.news": {
     "defaultMessage": "Nouveautés"
   },
-  "components.appNavigationDrawer.openMenu": {
-    "defaultMessage": "Ouvrir le menu"
-  },
   "components.appNavigationDrawer.settings": {
     "defaultMessage": "Paramètres"
   },
-  "components.appNavigationDrawer.settingsClose": {
-    "defaultMessage": "Fermer"
+  "components.appNavigationDrawer.admin": {
+    "defaultMessage": "Administration"
   },
-  "components.appNavigationDrawer.settingsTitle": {
-    "defaultMessage": "Paramètres par défaut"
+  "components.appNavigationDrawer.logoutConfirmTitle": {
+    "defaultMessage": "Se déconnecter ?",
+    "description": "Títol de la confirmació de tancar sessió amb feina sense còpia"
+  },
+  "components.appNavigationDrawer.logoutConfirmBody": {
+    "defaultMessage": "En vous déconnectant, le document se ferme aussi, et ce qui est à l'écran n'est pas enregistré dans le cloud : il sera perdu.",
+    "description": "Cos de la confirmació de tancar sessió amb feina sense còpia"
+  },
+  "components.appNavigationDrawer.logoutSaveFirst": {
+    "defaultMessage": "Enregistrer dans le cloud avant",
+    "description": "Botó per desar la feina al núvol abans de tancar la sessió"
+  },
+  "components.appNavigationDrawer.logoutDocumentClosed": {
+    "defaultMessage": "Session fermée. Le document a également été fermé : il ne reste pas sur cet appareil.",
+    "description": "Confirmació de tancar sessió quan hi havia un document obert"
   },
   "components.appNavigationDrawer.welcome": {
     "defaultMessage": "Accueil"
@@ -77,14 +84,6 @@
   "components.barNavigation.view.title": {
     "defaultMessage": "Vue",
     "description": "Title Page"
-  },
-  "components.barNavigation.welcome.title": {
-    "defaultMessage": "Accueil",
-    "description": "Title Page"
-  },
-  "components.buttonWithFileLoad.load.label": {
-    "defaultMessage": "Charger",
-    "description": "helper text"
   },
   "components.buttonWithModalDownload.defaultSettings.label": {
     "defaultMessage": "Paramètres par défaut",
@@ -126,10 +125,6 @@
     "defaultMessage": "fermer",
     "description": "close Settings Default "
   },
-  "components.defaultSettings.download": {
-    "defaultMessage": "Enregistrer les paramètres dans un fichier local",
-    "description": "Save settings to local file"
-  },
   "components.defaultSettings.pictGuide": {
     "defaultMessage": "Aperçu",
     "description": "Pictogram pictogram for default settings"
@@ -148,6 +143,10 @@
   "components.defaultSettings.sectionAppearance": {
     "defaultMessage": "Apparence",
     "description": "Títol de la secció de pell i cabell al panell de pictogrames"
+  },
+  "components.defaultSettings.settings.loggedIn": {
+    "defaultMessage": "Configuration · connecté en tant que {email}",
+    "description": "Nom del botó de configuracions quan hi ha sessió: també diu amb quin compte"
   },
   "components.defaultSettings.settings.title": {
     "defaultMessage": "Paramètres",
@@ -177,14 +176,6 @@
     "defaultMessage": "Pictogrammes",
     "description": "Títol de la secció de mida i alineació de pictogrames al panell de vista"
   },
-  "components.viewSettingsPanel.orientationLandscape": {
-    "defaultMessage": "Paysage",
-    "description": "Opció d'orientació horitzontal de la pàgina"
-  },
-  "components.viewSettingsPanel.orientationPortrait": {
-    "defaultMessage": "Portrait",
-    "description": "Opció d'orientació vertical de la pàgina"
-  },
   "components.viewSettingsPanel.apply": {
     "defaultMessage": "Appliquer à la vue actuelle",
     "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
@@ -195,10 +186,6 @@
   "components.defaultSettings.tab.vocabulary": {
     "defaultMessage": "Vocabulaire personnel",
     "description": "Tab de vocabulari personal (paraules personalitzades)"
-  },
-  "components.defaultSettings.upload": {
-    "defaultMessage": "Charger les paramètres depuis un fichier local",
-    "description": "Load settings from local file"
   },
   "components.defaultSettings.userPanel.interfaceLanguage": {
     "defaultMessage": "Interface",
@@ -212,19 +199,12 @@
     "defaultMessage": "Paramètres utilisateur sauvegardés",
     "description": "Snackbar quan els settings d'usuari s'han desat correctament"
   },
-  "components.defaultSettings.userPanel.saveError": {
-    "defaultMessage": "Erreur lors de la sauvegarde des paramètres utilisateur",
-    "description": "Snackbar quan hi ha error en desar els settings d'usuari"
-  },
   "components.defaultSettings.userPanel.sectionTitle": {
     "defaultMessage": "Langue",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
   "components.defaultSettings.userPanel.panelHint": {
-    "defaultMessage": "Réglages de votre compte : langue de l'application, langue de recherche et thème. Ils s'appliquent partout."
-  },
-  "components.defaultSettings.vocabularyPanel.title": {
-    "defaultMessage": "Vocabulaire personnel"
+    "defaultMessage": "Réglages de votre compte : langues, thème et images. Ils s'appliquent partout."
   },
   "components.defaultSettings.vocabularyPanel.sectionWord": {
     "defaultMessage": "Mot",
@@ -251,12 +231,6 @@
   },
   "components.defaultSettings.vocabularyPanel.updateButton": {
     "defaultMessage": "Mettre à jour"
-  },
-  "components.defaultSettings.vocabularyPanel.uploadImage": {
-    "defaultMessage": "Télécharger une image"
-  },
-  "components.defaultSettings.vocabularyPanel.removeImage": {
-    "defaultMessage": "Supprimer l'image"
   },
   "components.defaultSettings.vocabularyPanel.loginRequired": {
     "defaultMessage": "Vous devez vous connecter pour utiliser le vocabulaire personnel."
@@ -349,9 +323,6 @@
     "defaultMessage": "Exemple : Garçon, mettre, la ceinture de sécurité.",
     "description": "Helper text field"
   },
-  "components.newsNavBar.langSelector": {
-    "defaultMessage": "Langue"
-  },
   "components.newsNavBar.mainNavigation": {
     "defaultMessage": "Navigation principale"
   },
@@ -364,12 +335,6 @@
   "components.newsNavBar.skipToContent": {
     "defaultMessage": "Aller au contenu principal"
   },
-  "components.newsNavBar.start": {
-    "defaultMessage": "Créer une séquence"
-  },
-  "components.newsNavBar.welcome": {
-    "defaultMessage": "Accueil"
-  },
   "components.pictEdit.close": {
     "defaultMessage": "Fermer",
     "description": "Close modal, edit pictogram"
@@ -377,10 +342,6 @@
   "components.pictEdit.delete": {
     "defaultMessage": "Supprimer",
     "description": "Delete modal, edit pictogram"
-  },
-  "components.pictEdit.modal.description": {
-    "defaultMessage": "Vous pouvez modifier les pictogrammes",
-    "description": "Description modal"
   },
   "components.pictEdit.modal.label": {
     "defaultMessage": "Modifier Pictogramme",
@@ -575,9 +536,6 @@
   "context.feedback.search.complete": {
     "defaultMessage": "{count} pictogrammes ajoutés"
   },
-  "context.feedback.search.error": {
-    "defaultMessage": "Erreur lors de la recherche de pictogrammes"
-  },
   "context.feedback.search.loading": {
     "defaultMessage": "Recherche de pictogrammes..."
   },
@@ -593,10 +551,6 @@
     "defaultMessage": "Document chargé",
     "description": "Missatge de confirmació quan es carrega un document del backend"
   },
-  "features.backend.auth.documentSaved": {
-    "defaultMessage": "Document enregistré dans le cloud",
-    "description": "Missatge de confirmació quan el document es desa al backend"
-  },
   "features.backend.auth.email": {
     "defaultMessage": "Adresse e-mail",
     "description": "Etiqueta del camp email"
@@ -604,6 +558,9 @@
   "features.backend.auth.error.AUTH_ERROR": {
     "defaultMessage": "Une erreur s'est produite lors de la connexion. Veuillez réessayer.",
     "description": "Error genèric de login"
+  },
+  "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED": {
+    "defaultMessage": "Tous les nouveaux comptes que nous acceptons aujourd'hui ont déjà été créés. Réessaie demain."
   },
   "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
     "defaultMessage": "Le format de l'adresse e-mail n'est pas valide",
@@ -1090,6 +1047,15 @@
   "pages.viewSequence.resetDefaults.label": {
     "defaultMessage": "Restaurer les séquences"
   },
+  "pages.viewSequence.savePreferences.label": {
+    "defaultMessage": "Enregistrer comme préférences"
+  },
+  "pages.viewSequence.tooltip.savePreferencesCloud": {
+    "defaultMessage": "Enregistre ces réglages sur votre compte et les utilise par défaut dans les nouvelles séquences"
+  },
+  "pages.viewSequence.tooltip.savePreferencesLocal": {
+    "defaultMessage": "Enregistre ces réglages dans ce navigateur et les utilise par défaut dans les nouvelles séquences"
+  },
   "pages.viewSequence.tooltip.orientationLandscape": {
     "defaultMessage": "Page paysage",
     "description": "Tooltip i nom accessible del botó d'orientació apaïsada de la pàgina"
@@ -1118,10 +1084,6 @@
   },
   "pages.viewSequence.tooltip.print": {
     "defaultMessage": "Imprimer"
-  },
-  "pictogram.empty": {
-    "defaultMessage": "Vide",
-    "description": "Empty pictogram"
   },
   "setting.font-family.title": {
     "defaultMessage": "Famille",
@@ -1433,6 +1395,58 @@
   "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
     "defaultMessage": "Cette adresse e-mail est déjà vérifiée."
   },
+  "features.backend.auth.error.REFRESH_TOKEN_EXPIRED": {
+    "defaultMessage": "La session a expiré. Reconnecte-toi pour enregistrer dans le cloud ; ton travail n'est pas perdu.",
+    "description": "Erreur : le jeton de rafraîchissement a expiré"
+  },
+  "features.backend.auth.error.REFRESH_TOKEN_MISSING": {
+    "defaultMessage": "La session a été fermée dans ce navigateur. Reconnecte-toi pour enregistrer dans le cloud ; ton travail n'est pas perdu.",
+    "description": "Erreur : il n'y a pas de cookie de session"
+  },
+  "features.backend.auth.error.INVALID_REFRESH_TOKEN": {
+    "defaultMessage": "La session a été fermée depuis un autre appareil. Reconnecte-toi pour enregistrer dans le cloud ; ton travail n'est pas perdu.",
+    "description": "Erreur : la session a été invalidée ailleurs"
+  },
+  "features.backend.auth.error.USER_NOT_FOUND": {
+    "defaultMessage": "Ce compte n'existe plus. Ton travail reste enregistré sur cet appareil : télécharge-le si tu en veux une copie.",
+    "description": "Erreur : le compte de la session n'existe plus"
+  },
+  "features.backend.auth.sessionExpired.titleExpired": {
+    "defaultMessage": "La session a expiré",
+    "description": "Titre de l'avis lorsque la session a expiré avec le temps"
+  },
+  "features.backend.auth.sessionExpired.titleMissing": {
+    "defaultMessage": "La session a été fermée dans ce navigateur",
+    "description": "Titre de l'avis lorsqu'il n'y a plus de cookie de session"
+  },
+  "features.backend.auth.sessionExpired.titleInvalid": {
+    "defaultMessage": "La session a été fermée depuis un autre appareil",
+    "description": "Titre de l'avis lorsque la session a été invalidée ailleurs"
+  },
+  "features.backend.auth.sessionExpired.titleSuspended": {
+    "defaultMessage": "Ce compte est suspendu",
+    "description": "Titre de l'avis lorsque le compte a été suspendu"
+  },
+  "features.backend.auth.sessionExpired.titleGone": {
+    "defaultMessage": "Ce compte n'existe plus",
+    "description": "Titre de l'avis lorsque le compte est introuvable"
+  },
+  "features.backend.auth.sessionExpired.bodyCanReturn": {
+    "defaultMessage": "Ton travail n'est pas perdu : il reste enregistré sur cet appareil. Pour l'enregistrer dans le cloud, reconnecte-toi.",
+    "description": "Corps de l'avis lorsque se reconnecter est possible"
+  },
+  "features.backend.auth.sessionExpired.bodyNoReturn": {
+    "defaultMessage": "Ton travail n'est pas perdu : il reste enregistré sur cet appareil. Télécharge-le si tu en veux une copie, et contacte-nous si tu penses qu'il s'agit d'une erreur.",
+    "description": "Corps de l'avis lorsque se reconnecter ne servirait à rien"
+  },
+  "features.backend.auth.sessionExpired.action": {
+    "defaultMessage": "Se reconnecter",
+    "description": "Bouton de l'avis qui ouvre le formulaire de connexion"
+  },
+  "features.backend.auth.sessionExpired.dismiss": {
+    "defaultMessage": "Fermer l'avis",
+    "description": "Bouton pour fermer l'avis de session"
+  },
   "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
     "defaultMessage": "Tu dois vérifier ton adresse e-mail avant d'enregistrer dans le cloud. Consulte ta boîte de réception."
   },
@@ -1443,7 +1457,7 @@
     "defaultMessage": "Tu as atteint le nombre maximal de documents enregistrés. Supprimes-en un pour en enregistrer un nouveau."
   },
   "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
-    "defaultMessage": "Tu as atteint la limite d'espace pour les images. Supprime un document contenant tes propres images."
+    "defaultMessage": "Tu as atteint la limite d'espace pour les images. Dans Réglages › Utilisateur, tu peux voir ce que chaque image occupe et en supprimer."
   },
   "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
     "defaultMessage": "Tu as atteint le nombre maximal de mots personnalisés. Supprimes-en un pour en ajouter d'autres."
@@ -1471,9 +1485,6 @@
   },
   "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
     "defaultMessage": "Le lien de vérification est incomplet."
-  },
-  "features.backend.auth.verification.bannerFailed": {
-    "defaultMessage": "Nous n'avons pas pu t'envoyer l'e-mail de vérification. Essaie de le redemander."
   },
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Vérifie ton adresse e-mail pour enregistrer dans le cloud. Nous avons envoyé un lien à {email}."
@@ -1643,6 +1654,22 @@
     "defaultMessage": "Nous avons envoyé un e-mail à {email} avec un lien pour confirmer votre adresse et choisir votre mot de passe. S'il n'apparaît pas dans votre boîte de réception, vérifiez aussi les spams.",
     "description": "Missatge d'èxit després del signup"
   },
+  "pages.signup.failedTitle": {
+    "defaultMessage": "Nous n'avons pas pu envoyer l'e-mail",
+    "description": "Títol de la pantalla de signup quan el correu no ha sortit"
+  },
+  "pages.signup.failed": {
+    "defaultMessage": "Le compte de {email} a bien été créé, mais l'e-mail contenant le lien pour choisir votre mot de passe n'a pas pu partir. Sans ce lien, vous ne pouvez pas encore vous connecter : demandez-le à nouveau.",
+    "description": "Missatge de signup amb el compte creat i el correu no enviat"
+  },
+  "pages.signup.resend": {
+    "defaultMessage": "Renvoyer l'e-mail",
+    "description": "Botó per demanar de nou el correu de verificació"
+  },
+  "pages.signup.resendDone": {
+    "defaultMessage": "Nous l'avons redemandé. S'il n'arrive toujours pas dans quelques minutes, vérifiez aussi vos spams et réessayez plus tard.",
+    "description": "Confirmació d'haver tornat a demanar el correu de verificació"
+  },
   "pages.signup.goToApp": {
     "defaultMessage": "Aller à l'application",
     "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"
@@ -1755,6 +1782,34 @@
     "defaultMessage": "Enregistré dans le cloud à {time}",
     "description": "Estat quan la feina té còpia al compte de l'usuari"
   },
+  "features.sequence.status.localDated": {
+    "defaultMessage": "Uniquement sur cet appareil, depuis le {date} à {time}",
+    "description": "État lorsque le travail n'est que dans le brouillon et date d'un autre jour"
+  },
+  "features.sequence.status.fileDated": {
+    "defaultMessage": "Téléchargé dans un fichier le {date} à {time}",
+    "description": "État lorsque la copie en fichier date d'un autre jour"
+  },
+  "features.sequence.status.staleCloud": {
+    "defaultMessage": "Modifié depuis l'enregistrement dans le cloud de {time}",
+    "description": "Estat quan hi ha canvis posteriors a l'última còpia al núvol"
+  },
+  "features.sequence.status.staleCloudDated": {
+    "defaultMessage": "Modifié depuis l'enregistrement dans le cloud du {date} à {time}",
+    "description": "Estat de canvis posteriors quan la còpia és d'un altre dia"
+  },
+  "features.sequence.status.staleFile": {
+    "defaultMessage": "Modifié depuis le fichier téléchargé à {time}",
+    "description": "Estat quan hi ha canvis posteriors a l'última còpia en fitxer"
+  },
+  "features.sequence.status.staleFileDated": {
+    "defaultMessage": "Modifié depuis le fichier téléchargé le {date} à {time}",
+    "description": "Estat de canvis posteriors quan el fitxer és d'un altre dia"
+  },
+  "features.sequence.status.cloudDated": {
+    "defaultMessage": "Enregistré dans le cloud le {date} à {time}",
+    "description": "État lorsque la copie dans le cloud date d'un autre jour"
+  },
   "features.sequence.status.error": {
     "defaultMessage": "Ce navigateur n'a pas pu enregistrer le travail",
     "description": "Estat quan l'escriptura de l'esborrany falla"
@@ -1762,6 +1817,26 @@
   "features.sequence.status.hintLocal": {
     "defaultMessage": "Cela reste dans ce navigateur, qui peut l'effacer de lui-même. Téléchargez-le ou enregistrez-le dans le cloud pour le conserver ailleurs.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
+  },
+  "features.sequence.status.hintStaleCloud": {
+    "defaultMessage": "Ce qui est à l'écran n'est pas encore dans le cloud. Enregistrez-le à nouveau pour mettre à jour la copie.",
+    "description": "Explicació de l'estat de canvis posteriors a la còpia al núvol"
+  },
+  "features.sequence.status.hintStaleFile": {
+    "defaultMessage": "Ce qui est à l'écran n'est pas encore dans le fichier. Téléchargez-le à nouveau pour le mettre à jour.",
+    "description": "Explicació de l'estat de canvis posteriors a la còpia en fitxer"
+  },
+  "features.sequence.draft.conflictError": {
+    "defaultMessage": "Un autre onglet a un travail plus récent. Celui-ci a cessé d'enregistrer tout seul pour ne pas l'effacer : télécharge ce que tu as ici si tu veux le garder.",
+    "description": "Avertissement lorsqu'un autre onglet a enregistré le brouillon plus tard que celui-ci"
+  },
+  "features.sequence.status.conflict": {
+    "defaultMessage": "Un autre onglet a un travail plus récent",
+    "description": "État lorsque cet onglet a cessé d'écrire le brouillon pour ne pas en écraser un autre"
+  },
+  "features.sequence.status.hintConflict": {
+    "defaultMessage": "Cet onglet n'enregistre plus tout seul. Télécharge ce que tu as ici si tu veux le garder.",
+    "description": "Explication lorsqu'un autre onglet détient une version plus récente du brouillon"
   },
   "features.sequence.status.hintError": {
     "defaultMessage": "Téléchargez le fichier maintenant : c'est le seul moyen de ne pas perdre le travail.",
@@ -1786,6 +1861,10 @@
   "features.sequence.status.confirmBody": {
     "defaultMessage": "Le travail actuel n'est que dans ce navigateur. Si vous repartez de zéro, il est perdu.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
+  },
+  "features.sequence.status.confirmBodyStale": {
+    "defaultMessage": "La copie enregistrée est antérieure. Si vous repartez de zéro, tout ce qui a été fait depuis est perdu.",
+    "description": "Cos del diàleg de confirmació quan hi ha una còpia però amb canvis posteriors"
   },
   "features.sequence.status.confirmDownloadFirst": {
     "defaultMessage": "Le télécharger avant",
@@ -1815,9 +1894,17 @@
     "defaultMessage": "Donne-lui un nom pour pouvoir le retrouver.",
     "description": "Validació: el nom del document és obligatori"
   },
+  "features.backend.documents.nameSameAsOriginal": {
+    "defaultMessage": "La copie a besoin d'un nom différent pour ne pas la confondre avec l'original.",
+    "description": "Validació: la còpia d'un document no pot tenir el mateix nom que l'original"
+  },
   "features.backend.documents.updateHint": {
     "defaultMessage": "Ce document est déjà dans le cloud : l'enregistrer remplacera la version enregistrée.",
     "description": "Avís del diàleg quan el document ja existeix al núvol"
+  },
+  "features.backend.documents.copyHint": {
+    "defaultMessage": "Avec « Enregistrer une copie », un nouveau document est enregistré et l'original reste tel quel.",
+    "description": "Avís que explica què fa el botó de desar una còpia"
   },
   "features.backend.documents.saveAction": {
     "defaultMessage": "Enregistrer",
@@ -1826,6 +1913,10 @@
   "features.backend.documents.updateAction": {
     "defaultMessage": "Mettre à jour",
     "description": "Botó per actualitzar el document ja desat al núvol"
+  },
+  "features.backend.documents.saveCopyAction": {
+    "defaultMessage": "Enregistrer une copie",
+    "description": "Botó per desar el document com un de nou sense tocar el que ja hi ha al núvol"
   },
   "features.backend.documents.cancel": {
     "defaultMessage": "Annuler",
@@ -1850,6 +1941,10 @@
   "features.backend.documents.documentSavedNamed": {
     "defaultMessage": "« {title} » a été enregistré dans le cloud",
     "description": "Confirmació en desar un document amb nom"
+  },
+  "features.backend.documents.documentCopiedNamed": {
+    "defaultMessage": "La copie « {title} » a été enregistrée : vous travaillez maintenant dessus",
+    "description": "Confirmació en desar una còpia: avisa que el document actiu passa a ser la còpia"
   },
   "features.backend.documents.documentLoadedNamed": {
     "defaultMessage": "« {title} » a été chargé",
@@ -1922,5 +2017,219 @@
   "components.tabsSequences.confirmDelete": {
     "defaultMessage": "Supprimer la séquence",
     "description": "Bouton qui confirme la suppression de la dernière séquence"
+  },
+  "components.buttonWithModalDownload.dialogTitle": {
+    "defaultMessage": "Enregistrer et télécharger",
+    "description": "Titre de la boîte de dialogue de téléchargement du fichier .saac"
+  },
+  "features.backend.userSettings.usage.storageTitle": {
+    "defaultMessage": "Espace pour les images"
+  },
+  "features.backend.userSettings.usage.documentsTitle": {
+    "defaultMessage": "Séquences dans le nuage"
+  },
+  "features.backend.userSettings.usage.wordsTitle": {
+    "defaultMessage": "Mots du vocabulaire"
+  },
+  "features.backend.userSettings.usage.countOfLimit": {
+    "defaultMessage": "{used} sur {limit}"
+  },
+  "features.backend.userSettings.usage.bytesOfLimit": {
+    "defaultMessage": "{used} sur {limit}"
+  },
+  "features.backend.userSettings.usage.megabytes": {
+    "defaultMessage": "{value} Mo"
+  },
+  "features.backend.userSettings.usage.kilobytes": {
+    "defaultMessage": "{value} Ko"
+  },
+  "features.backend.userSettings.usage.centimeters": {
+    "defaultMessage": "{value} cm",
+    "description": "Mida impresa en centímetres"
+  },
+  "features.backend.userSettings.usage.sizeWithPrint": {
+    "defaultMessage": "{size} · nette jusqu'à {width}",
+    "description": "Pes d'una imatge i mida fins a la qual s'imprimeix nítida"
+  },
+  "features.backend.userSettings.usage.remainingImages": {
+    "defaultMessage": "{count, plural, =0 {Aucune autre image ne tient avec la qualité choisie} one {# image de plus tient avec la qualité choisie} other {# images de plus tiennent avec la qualité choisie}}"
+  },
+  "features.backend.userSettings.usage.imagesTitle": {
+    "defaultMessage": "Tes images"
+  },
+  "features.backend.userSettings.usage.imagesEmpty": {
+    "defaultMessage": "Tu n'as encore téléversé aucune image. Les pictogrammes ARASAAC n'occupent pas d'espace dans ton compte."
+  },
+  "features.backend.userSettings.usage.imagesLoadError": {
+    "defaultMessage": "Impossible de charger les images. Réessaie dans un moment."
+  },
+  "features.backend.userSettings.usage.reload": {
+    "defaultMessage": "Réessayer"
+  },
+  "features.backend.userSettings.usage.inDocument": {
+    "defaultMessage": "Dans la séquence « {title} »"
+  },
+  "features.backend.userSettings.usage.inUntitledDocument": {
+    "defaultMessage": "Dans une séquence sans nom"
+  },
+  "features.backend.userSettings.usage.inWord": {
+    "defaultMessage": "Dans le mot « {word} »"
+  },
+  "features.backend.userSettings.usage.deleteImage": {
+    "defaultMessage": "Supprimer l'image"
+  },
+  "features.backend.userSettings.usage.deleteTitle": {
+    "defaultMessage": "Supprimer l'image ?"
+  },
+  "features.backend.userSettings.usage.deleteBodyDocument": {
+    "defaultMessage": "Le pictogramme se retrouvera sans image dans la séquence enregistrée dans le nuage, et tu récupéreras {size}. L'image est irrécupérable."
+  },
+  "features.backend.userSettings.usage.deleteBodyWord": {
+    "defaultMessage": "Le mot gardera son pictogramme ARASAAC, et tu récupéreras {size}. L'image est irrécupérable."
+  },
+  "features.backend.userSettings.usage.deleteConfirm": {
+    "defaultMessage": "Supprimer l'image"
+  },
+  "features.backend.userSettings.usage.deleted": {
+    "defaultMessage": "Image supprimée. Tu as récupéré {size}."
+  },
+  "features.backend.userSettings.usage.deleteError": {
+    "defaultMessage": "Impossible de supprimer l'image. (Code : {code})"
+  },
+  "features.backend.userSettings.usage.resizeImage": {
+    "defaultMessage": "Redimensionner l'image",
+    "description": "Botó per reduir una imatge del compte"
+  },
+  "features.backend.userSettings.usage.resizeTitle": {
+    "defaultMessage": "Redimensionner l'image",
+    "description": "Títol del diàleg per reduir una imatge"
+  },
+  "features.backend.userSettings.usage.resizeCurrent": {
+    "defaultMessage": "Elle occupe {size} et reste nette à l'impression jusqu'à {width} de large. Le pictogramme ne change pas : seule la taille de l'image.",
+    "description": "Estat actual de la imatge dins del diàleg de canvi de mida"
+  },
+  "features.backend.userSettings.usage.resizeCurrentUnknown": {
+    "defaultMessage": "Elle occupe {size}. Le pictogramme ne change pas : seule la taille de l'image.",
+    "description": "Estat actual de la imatge quan encara no se'n saben els píxels"
+  },
+  "features.backend.userSettings.usage.resizePreparing": {
+    "defaultMessage": "Préparation des tailles…",
+    "description": "Espera mentre es calculen les versions més petites"
+  },
+  "features.backend.userSettings.usage.resizeOption": {
+    "defaultMessage": "Elle restera nette jusqu'à {width} de large et occupera {size} : tu récupères {saved}.",
+    "description": "Què passa amb la mida triada al diàleg de canvi de mida"
+  },
+  "features.backend.userSettings.usage.resizeNone": {
+    "defaultMessage": "Cette image est déjà à la plus petite taille : la réduire davantage la rendrait floue à l'impression. Si tu as besoin d'espace, supprime-la.",
+    "description": "La imatge no es pot reduir més"
+  },
+  "features.backend.userSettings.usage.resizeConfirm": {
+    "defaultMessage": "Redimensionner",
+    "description": "Botó que aplica la mida triada"
+  },
+  "features.backend.userSettings.usage.resizeCancel": {
+    "defaultMessage": "Annuler",
+    "description": "Botó que tanca el diàleg de canvi de mida sense fer res"
+  },
+  "features.backend.userSettings.usage.resizeApplying": {
+    "defaultMessage": "Redimensionnement de l'image…",
+    "description": "Espera mentre la imatge nova puja al núvol"
+  },
+  "features.backend.userSettings.usage.resizeLoadError": {
+    "defaultMessage": "L'image n'a pas pu être préparée. Vérifie ta connexion et réessaie.",
+    "description": "Error en baixar o comprimir la imatge al navegador"
+  },
+  "features.backend.userSettings.usage.resizeError": {
+    "defaultMessage": "La taille de l'image n'a pas pu être modifiée. (Code : {code})",
+    "description": "Error en desar la imatge reduïda"
+  },
+  "features.backend.userSettings.usage.resized": {
+    "defaultMessage": "L'image occupe maintenant {size}. Tu as récupéré {saved}.",
+    "description": "Confirmació del canvi de mida amb l'espai recuperat"
+  },
+  "features.backend.userSettings.usage.thumbnailAlt": {
+    "defaultMessage": "Image téléversée"
+  },
+  "components.settingCardImageQuality.cardTitle": {
+    "defaultMessage": "Qualité des images"
+  },
+  "components.settingCardImageQuality.ariaLabel": {
+    "defaultMessage": "Qualité des images que tu téléverses"
+  },
+  "components.settingCardImageQuality.print": {
+    "defaultMessage": "Impression"
+  },
+  "components.settingCardImageQuality.standard": {
+    "defaultMessage": "Standard"
+  },
+  "components.settingCardImageQuality.compact": {
+    "defaultMessage": "Compacte"
+  },
+  "components.settingCardImageQuality.helper": {
+    "defaultMessage": "Les nouvelles images seront nettes à l'impression jusqu'à {width} de large et occuperont au maximum {size} chacune. Imprimées plus grandes, elles seront floues.",
+    "description": "Explicació del nivell de qualitat: fins a quina mida s'imprimeix bé i quant ocupa"
+  },
+  "components.settingCardImageQuality.optionHint": {
+    "defaultMessage": "Net à l'impression jusqu'à {width} de large",
+    "description": "Ajuda de cada nivell: fins a quina mida impresa es veu bé"
+  },
+  "components.settingCardImageQuality.existingUnchanged": {
+    "defaultMessage": "Celles que tu as déjà téléversées ne changent pas.",
+    "description": "La qualitat només val per a les imatges noves"
+  },
+  "components.settingCardImageQuality.existingResizable": {
+    "defaultMessage": "Celles que tu as déjà téléversées ne changent pas, mais tu peux les redimensionner dans « L'espace de ton compte ».",
+    "description": "La qualitat només val per a les imatges noves, i on canviar les que ja hi són"
+  },
+  "components.defaultSettings.userPanel.sectionImages": {
+    "defaultMessage": "Images"
+  },
+  "components.defaultSettings.userPanel.sectionStorage": {
+    "defaultMessage": "L'espace de ton compte"
+  },
+  "components.uploadImageButton.print": {
+    "defaultMessage": "impression"
+  },
+  "components.uploadImageButton.standard": {
+    "defaultMessage": "standard"
+  },
+  "components.uploadImageButton.compact": {
+    "defaultMessage": "compacte"
+  },
+  "components.uploadImageButton.tooBigTitle": {
+    "defaultMessage": "L'image prend trop de place"
+  },
+  "components.uploadImageButton.tooBigQuotaSmaller": {
+    "defaultMessage": "L'image occupe {size} et il ne reste que {available} dans ton compte. En qualité {quality}, elle occuperait {smallerSize}, resterait nette à l'impression jusqu'à {smallerWidth} de large et tiendrait.",
+    "description": "No cap a l'espai del compte, però n'hi ha una de més petita"
+  },
+  "components.uploadImageButton.tooBigQuotaOnly": {
+    "defaultMessage": "L'image occupe {size} et il ne reste que {available} dans ton compte. Elle ne tient à aucune qualité : tu peux quand même l'ajouter et l'imprimer depuis cet appareil, mais il faudra libérer de l'espace pour l'enregistrer dans le nuage."
+  },
+  "components.uploadImageButton.tooBigPerImageSmaller": {
+    "defaultMessage": "L'image occupe {size} et le maximum par image est {available}. En qualité {quality}, elle occuperait {smallerSize} et resterait nette à l'impression jusqu'à {smallerWidth} de large.",
+    "description": "Passa del sostre per imatge, però n'hi ha una de més petita"
+  },
+  "components.uploadImageButton.tooBigPerImageOnly": {
+    "defaultMessage": "L'image occupe {size} et le maximum par image est {available}. Tu peux quand même l'ajouter et l'imprimer depuis cet appareil, mais elle ne pourra pas être enregistrée dans le nuage."
+  },
+  "components.uploadImageButton.useSmaller": {
+    "defaultMessage": "La réduire"
+  },
+  "components.uploadImageButton.useOriginal": {
+    "defaultMessage": "L'ajouter quand même"
+  },
+  "components.uploadImageButton.cancelUpload": {
+    "defaultMessage": "Annuler"
+  },
+  "features.backend.auth.error.IMAGE_TOO_LARGE": {
+    "defaultMessage": "Une des images est trop lourde pour être enregistrée dans le nuage. Ajoute-la de nouveau avec une qualité plus basse (Réglages › Utilisateur › Qualité des images)."
+  },
+  "components.defaultSettings.saveError.bodyQuota": {
+    "defaultMessage": "Ton compte n'a plus d'espace pour les images, et les réglages n'ont donc pas été enregistrés. Dans Réglages › Utilisateur, tu verras ce qu'occupe chaque image du vocabulaire et tu pourras en supprimer."
+  },
+  "components.defaultSettings.saveError.bodyImageTooLarge": {
+    "defaultMessage": "Une des images du vocabulaire est trop lourde pour être enregistrée dans le nuage. Ajoute-la de nouveau avec une qualité plus basse : tu la choisis dans Réglages › Utilisateur › Qualité des images."
   }
 }

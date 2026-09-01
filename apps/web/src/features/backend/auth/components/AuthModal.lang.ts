@@ -64,11 +64,6 @@ const messages = defineMessages({
     defaultMessage: "Tanca sessió",
     description: "Ítem del drawer per tancar la sessió",
   },
-  documentSaved: {
-    id: "features.backend.auth.documentSaved",
-    defaultMessage: "Document desat al núvol",
-    description: "Missatge de confirmació quan el document es desa al backend",
-  },
   documentLoaded: {
     id: "features.backend.auth.documentLoaded",
     defaultMessage: "Document carregat",
@@ -176,6 +171,12 @@ const messages = defineMessages({
       "Hem arribat al màxim de comptes disponibles. Torna-ho a provar més endavant.",
     description: "Error de registre: s'ha assolit el sostre d'usuaris",
   },
+  DAILY_SIGNUP_LIMIT_REACHED: {
+    id: "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED",
+    defaultMessage:
+      "Avui ja s'han creat tots els comptes nous que admetem. Torna-ho a provar demà.",
+    description: "Error de registre: s'ha assolit el límit d'altes del dia",
+  },
   DISPOSABLE_EMAIL: {
     id: "features.backend.auth.error.DISPOSABLE_EMAIL",
     defaultMessage:
@@ -199,6 +200,30 @@ const messages = defineMessages({
     defaultMessage:
       "Aquest compte està suspès. Contacta amb nosaltres si creus que és un error.",
     description: "Error: compte suspès per l'administració",
+  },
+  REFRESH_TOKEN_EXPIRED: {
+    id: "features.backend.auth.error.REFRESH_TOKEN_EXPIRED",
+    defaultMessage:
+      "La sessió ha caducat. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
+    description: "Error: el token de refresc ha caducat",
+  },
+  REFRESH_TOKEN_MISSING: {
+    id: "features.backend.auth.error.REFRESH_TOKEN_MISSING",
+    defaultMessage:
+      "La sessió s'ha tancat en aquest navegador. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
+    description: "Error: no hi ha galeta de sessió",
+  },
+  INVALID_REFRESH_TOKEN: {
+    id: "features.backend.auth.error.INVALID_REFRESH_TOKEN",
+    defaultMessage:
+      "La sessió s'ha tancat des d'un altre dispositiu. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
+    description: "Error: la sessió s'ha invalidat des d'un altre lloc",
+  },
+  USER_NOT_FOUND: {
+    id: "features.backend.auth.error.USER_NOT_FOUND",
+    defaultMessage:
+      "Aquest compte ja no existeix. La feina continua desada en aquest dispositiu: descarrega-la si en vols una còpia.",
+    description: "Error: el compte de la sessió ja no hi és",
   },
   EMAIL_NOT_VERIFIED: {
     id: "features.backend.auth.error.EMAIL_NOT_VERIFIED",
@@ -249,8 +274,16 @@ const messages = defineMessages({
   QUOTA_STORAGE_EXCEEDED: {
     id: "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED",
     defaultMessage:
-      "Has arribat al màxim d'espai per a imatges. Esborra algun document amb imatges pròpies.",
+      "Has arribat al màxim d'espai per a imatges. A Configuració › Usuari pots veure què ocupa cada imatge i esborrar-ne alguna.",
     description: "Error en desar: límit d'emmagatzematge assolit",
+  },
+  // El servidor el retorna des que hi ha sostre per imatge, però fins ara no
+  // tenia missatge: arribava a l'usuari com un codi cru dins del text genèric
+  IMAGE_TOO_LARGE: {
+    id: "features.backend.auth.error.IMAGE_TOO_LARGE",
+    defaultMessage:
+      "Alguna imatge pesa massa per desar-la al núvol. Torna-la a posar amb una qualitat més baixa (Configuració › Usuari › Qualitat de les imatges).",
+    description: "Error en desar: una imatge passa del pes màxim per imatge",
   },
   QUOTA_WORD_PROFILES_EXCEEDED: {
     id: "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED",

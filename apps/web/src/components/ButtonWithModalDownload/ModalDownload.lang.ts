@@ -1,6 +1,11 @@
 import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
+  dialogTitle: {
+    id: "components.buttonWithModalDownload.dialogTitle",
+    defaultMessage: "Save and download",
+    description: "Títol del diàleg de descàrrega del fitxer .saac",
+  },
   download: {
     id: "components.buttonWithModalDownload.download.label",
     defaultMessage: "Download",

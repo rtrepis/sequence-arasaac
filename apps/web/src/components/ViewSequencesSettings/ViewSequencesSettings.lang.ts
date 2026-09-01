@@ -166,6 +166,24 @@ const messages = defineMessages({
     description:
       "Botó que torna totes les seqüències a la configuració desada de l'usuari",
   },
+  savePreferences: {
+    id: "pages.viewSequence.savePreferences.label",
+    defaultMessage: "Save as preferences",
+    description:
+      "Botó que desa els ajustos de la vista com a preferències de l'usuari",
+  },
+  tooltipSavePreferencesCloud: {
+    id: "pages.viewSequence.tooltip.savePreferencesCloud",
+    defaultMessage:
+      "Save these settings to your account and use them by default in new sequences",
+    description: "Tooltip del botó de desar preferències amb sessió iniciada",
+  },
+  tooltipSavePreferencesLocal: {
+    id: "pages.viewSequence.tooltip.savePreferencesLocal",
+    defaultMessage:
+      "Save these settings in this browser and use them by default in new sequences",
+    description: "Tooltip del botó de desar preferències sense sessió",
+  },
 });
 
 export default messages;

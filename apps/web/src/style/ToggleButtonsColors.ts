@@ -1,4 +1,6 @@
 import { alpha, styled, ToggleButtonGroup } from "@mui/material";
+import { APP_CONTROL_BORDER_WIDTH, APP_CORNER_RADIUS } from "./appShape";
+import { controlGlow } from "./floatingControl";
 
 const ToggleButtonColor = styled(ToggleButtonGroup)(({ theme }) => ({
   display: "flex",
@@ -19,27 +21,27 @@ const ToggleButtonColor = styled(ToggleButtonGroup)(({ theme }) => ({
       border: 1.75,
     },
     "&:not(:first-of-type)": {
-      borderRadius: 20,
+      borderRadius: APP_CORNER_RADIUS,
     },
     "&:first-of-type": {
-      borderRadius: 20,
+      borderRadius: APP_CORNER_RADIUS,
     },
     "&:hover": {
-      border: `1.75px solid`,
+      border: `${APP_CONTROL_BORDER_WIDTH}px solid`,
       borderColor: theme.palette.primary.main,
-      borderRadius: 20,
-      boxShadow: "0px 0px 10px 1px #A6A6A6",
+      borderRadius: APP_CORNER_RADIUS,
+      boxShadow: controlGlow(theme),
       opacity: 1,
     },
   },
   "& .Mui-selected": {
     backgroundColor: alpha(theme.palette.primary.main, 0.2),
     opacity: 1,
-    border: `1.75px solid ${theme.palette.primary.main}`,
-    borderRadius: `20px`,
-    boxShadow: "0px 0px 10px 1px #A6A6A6",
+    border: `${APP_CONTROL_BORDER_WIDTH}px solid ${theme.palette.primary.main}`,
+    borderRadius: `${APP_CORNER_RADIUS}px`,
+    boxShadow: controlGlow(theme),
     "&:not(:first-of-type)": {
-      borderLeft: `1.75px solid ${theme.palette.primary.main}`,
+      borderLeft: `${APP_CONTROL_BORDER_WIDTH}px solid ${theme.palette.primary.main}`,
     },
   },
 }));
