@@ -8,12 +8,6 @@ const messages = defineMessages({
       "Verifica el teu correu per poder desar al núvol. T'hem enviat un enllaç a {email}.",
     description: "Avís permanent mentre el correu no està verificat",
   },
-  bannerFailed: {
-    id: "features.backend.auth.verification.bannerFailed",
-    defaultMessage:
-      "No hem pogut enviar-te el correu de verificació. Prova de demanar-lo de nou.",
-    description: "Avís quan l'enviament del correu de verificació ha fallat",
-  },
   resend: {
     id: "features.backend.auth.verification.resend",
     defaultMessage: "Torna a enviar-me'l",

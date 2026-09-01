@@ -1486,9 +1486,6 @@
   "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
     "defaultMessage": "Il link di verifica è incompleto."
   },
-  "features.backend.auth.verification.bannerFailed": {
-    "defaultMessage": "Non siamo riusciti a inviarti l'email di verifica. Prova a richiederla."
-  },
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Verifica la tua email per salvare nel cloud. Ti abbiamo inviato un link a {email}."
   },

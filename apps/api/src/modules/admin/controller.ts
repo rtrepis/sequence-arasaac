@@ -16,6 +16,7 @@ import {
   listUsers,
   updateUser,
   listSecurityEvents,
+  createUserPasswordLink,
 } from "./service";
 import { getAppConfig, updateAppConfig } from "../config/service";
 import { recordSecurityEvent } from "../security/service";
@@ -95,6 +96,47 @@ export const patchUser = async (
     });
 
     res.status(200).json(updated);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// POST /api/admin/users/:id/password-link
+// Torna l'enllaç d'establiment de contrasenya d'un usuari, per fer-l'hi
+// arribar a mà quan el correu no és una via disponible.
+//
+// És un POST i no un GET tot i que no modifica cap dada: genera una credencial
+// d'un compte concret, i un GET s'acaba en un historial, en un registre del
+// proxy o repetit sol en recarregar la pàgina.
+export const userPasswordLink = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    if (!isValidObjectId(req.params.id)) {
+      return next(invalidData("USER_NOT_FOUND"));
+    }
+
+    const link = await createUserPasswordLink(req.params.id);
+
+    // Queda registrat com qualsevol altra acció d'administració: entregar
+    // aquest enllaç és donar accés a un compte i ha de deixar rastre. El token
+    // no s'hi desa —el registre de seguretat no és un magatzem de credencials—,
+    // només que se n'ha generat un i de quina mena.
+    await recordSecurityEvent({
+      type: "admin_action",
+      ipHash: hashIp(req.ip),
+      emailCanonical: link.email,
+      userId: req.params.id,
+      detail: `password_link:${link.type}`,
+    });
+
+    res.status(200).json({
+      url: link.url,
+      type: link.type,
+      expiresAt: link.expiresAt,
+    });
   } catch (err) {
     next(err);
   }

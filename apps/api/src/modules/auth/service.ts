@@ -41,10 +41,14 @@ const BCRYPT_ROUNDS = 12;
 const MAX_FAILED_LOGIN_ATTEMPTS = 5;
 const LOCK_DURATION_MS = 15 * 60 * 1000;
 
-// Verificació del correu (signup) i recuperació de contrasenya (forgot-password)
-const VERIFICATION_TOKEN_EXPIRES_IN = "24h";
-// Més curt que el de verificació: una recuperació no reclamada de seguida ha de caducar aviat
-const RESET_TOKEN_EXPIRES_IN = "1h";
+// Verificació del correu (signup) i recuperació de contrasenya (forgot-password).
+// El de recuperació és més curt: una recuperació no reclamada de seguida ha de
+// caducar aviat. En mil·lisegons i en un sol lloc perquè el que caduca el token
+// i el que se li diu a qui el rep no puguin divergir mai.
+const PASSWORD_LINK_TTL_MS: Record<"verify" | "reset", number> = {
+  verify: 24 * 60 * 60 * 1000,
+  reset: 60 * 60 * 1000,
+};
 // Límits de reenviament/petició, per no cremar la quota diària del proveïdor de correu
 const RESEND_MIN_INTERVAL_MS = 5 * 60 * 1000;
 const RESEND_MAX_PER_DAY = 3;
@@ -115,6 +119,32 @@ export const generateTokens = (
   return { accessToken, refreshToken };
 };
 
+// Enllaç a /set-password amb el seu token, i quan caduca.
+//
+// És l'única manera de construir-lo a tot el mòdul: el token dona accés a
+// establir la contrasenya d'un compte, i tenir-ne dues receptes vol dir que
+// un dia una de les dues caducarà diferent de l'altra sense que ho digui res.
+export interface PasswordLink {
+  url: string;
+  type: "verify" | "reset";
+  expiresAt: string;
+}
+
+export const createPasswordLink = (
+  userId: string,
+  type: "verify" | "reset"
+): PasswordLink => {
+  const token = jwt.sign({ userId, type } as PasswordTokenPayload, env.JWT_SECRET, {
+    expiresIn: PASSWORD_LINK_TTL_MS[type] / 1000,
+  });
+
+  return {
+    url: `${env.APP_PUBLIC_URL}/set-password?token=${token}`,
+    type,
+    expiresAt: new Date(Date.now() + PASSWORD_LINK_TTL_MS[type]).toISOString(),
+  };
+};
+
 // Construeix l'enllaç d'establiment de contrasenya i l'envia. No llança mai.
 // Retorna si el correu ha sortit, perquè qui truca pugui continuar igualment.
 const deliverPasswordEmail = async (
@@ -125,11 +155,7 @@ const deliverPasswordEmail = async (
   ipHash: string,
   locale: LangsApp
 ): Promise<boolean> => {
-  const token = jwt.sign({ userId, type } as PasswordTokenPayload, env.JWT_SECRET, {
-    expiresIn: type === "verify" ? VERIFICATION_TOKEN_EXPIRES_IN : RESET_TOKEN_EXPIRES_IN,
-  });
-
-  const url = `${env.APP_PUBLIC_URL}/set-password?token=${token}`;
+  const { url } = createPasswordLink(userId, type);
   const { sent, reason } =
     type === "verify"
       ? await sendVerificationEmail(email, name, url, locale)
@@ -236,12 +262,7 @@ export const signupUser = async (
   if (existing) {
     const existingId = String(existing._id);
     if (existing.status !== "suspended" && (await canSendResetLinkEmail(existingId))) {
-      const token = jwt.sign(
-        { userId: existingId, type: "reset" } as PasswordTokenPayload,
-        env.JWT_SECRET,
-        { expiresIn: RESET_TOKEN_EXPIRES_IN }
-      );
-      const resetUrl = `${env.APP_PUBLIC_URL}/set-password?token=${token}`;
+      const { url: resetUrl } = createPasswordLink(existingId, "reset");
       // Compte ja existent: el correu va en el seu idioma desat, no en el de qui
       // ara prova de registrar-se amb la mateixa adreça (pot no ser la mateixa persona).
       const { sent, reason } = await sendAccountExistsEmail(

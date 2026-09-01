@@ -1486,9 +1486,6 @@
   "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
     "defaultMessage": "L'enllaç de verificació està incomplet."
   },
-  "features.backend.auth.verification.bannerFailed": {
-    "defaultMessage": "No hem pogut enviar-te el correu de verificació. Prova de demanar-lo de nou."
-  },
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Verifica el teu correu per poder desar al núvol. T'hem enviat un enllaç a {email}."
   },

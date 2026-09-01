@@ -6,6 +6,7 @@ import type {
   AdminUserList,
   AdminUserSummary,
   AdminSecurityEvent,
+  AdminPasswordLink,
   AppConfig,
   UserStatus,
   QuotaLimits,
@@ -27,7 +28,9 @@ export const getStats = async (): Promise<AdminStats> => {
 export const listUsers = async (
   params: ListUsersParams,
 ): Promise<AdminUserList> => {
-  const { data } = await apiClient.get<AdminUserList>("/admin/users", { params });
+  const { data } = await apiClient.get<AdminUserList>("/admin/users", {
+    params,
+  });
   return data;
 };
 
@@ -38,6 +41,18 @@ export const updateUser = async (
   const { data } = await apiClient.patch<AdminUserSummary>(
     `/admin/users/${id}`,
     update,
+  );
+  return data;
+};
+
+// Enllaç d'establiment de contrasenya d'un usuari, per fer-l'hi arribar a mà
+// quan el correu no és una via disponible. Es demana d'un en un i a petició:
+// el que torna dona accés a aquell compte fins que caduca.
+export const getUserPasswordLink = async (
+  id: string,
+): Promise<AdminPasswordLink> => {
+  const { data } = await apiClient.post<AdminPasswordLink>(
+    `/admin/users/${id}/password-link`,
   );
   return data;
 };

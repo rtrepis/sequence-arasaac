@@ -469,6 +469,12 @@ feina és on viu cada acció i quan demana permís.
   cadena sencera: fins a la branca `claude/signup-email-error-tpkg8t` comparava per igualtat exacta
   amb el valor de desenvolupament, i n'hi havia prou de canviar el nom que va davant de l'adreça
   perquè passés amb el domini de proves intacte. Va estar setmanes així.
+- **L'avís intern no pot competir amb el correu dels usuaris per la mateixa quota.** El
+  refredament dels avisos és per codi i el codi l'escriu qui informa (`POST /api/client-errors` és
+  obert i el camp és text lliure): amb deu peticions per minut i IP, deu codis diferents cada minut
+  són fins a 600 correus l'hora i els 100 diaris del pla gratuït se'n van en deu minuts. Per això hi
+  ha un sostre diari d'avisos (`MAX_ALERT_EMAILS_PER_DAY`, 20) per damunt del refredament. Compta
+  **intents**, no lliuraments: el que s'ha de limitar és quantes vegades es truca al proveïdor.
 - **Un correu que no surt es registra com a error vist** (`MAIL_SEND_FAILED` a `client-errors`, amb
   el motiu que dona el proveïdor). Abans la fallada només anava a la consola de Render: qui es
   quedava sense l'enllaç no tenia contrasenya, per tant no podia entrar, per tant no podia demanar
@@ -491,6 +497,14 @@ feina és on viu cada acció i quan demana permís.
 - Ruta `/admin`, **fora de `LanguageLayout`** (sense `:locale`) i **només en català, sense `react-intl`**. És eina interna d'una sola persona i cinc fitxers de traducció no s'hi justifiquen. **És una excepció declarada, no un descuit.** El que sí que porta és un `IntlProvider` en català a `AdminPage`: els **textos** hi continuen sent literals, i el proveïdor només hi és perquè els components compartits que en depenen —`ConfirmDialog`, l'única confirmació de l'app— funcionin fora de `LanguageLayout`. Reescriure'n una còpia per al panell trencaria la regla que diu que el criteri de què es confirma s'ha de poder llegir en un sol lloc.
 - La protecció de veritat és `requireAdmin` al servidor; la comprovació del front només evita ensenyar una pantalla que no funcionaria.
 - **El primer admin es posa a mà des d'Atlas.** No hi ha cap endpoint per promoure administradors, i no n'hi ha d'haver.
+- **El panell pot generar l'enllaç d'accés d'un usuari** (`POST /admin/users/:id/password-link`), per
+  fer-lo arribar a mà quan el correu no és una via disponible. Sense ell, un compte nou no té
+  contrasenya i no s'hi pot entrar de cap altra manera: el correu és de tercers i pot fallar
+  sencer. El que retorna **és una credencial**, i per això no viatja mai amb el llistat d'usuaris
+  —es demana d'un en un, amb un POST i amb intenció—, no es desa enlloc del navegador, queda
+  registrat com a `admin_action` (només que se n'ha generat un i de quina mena, mai el token) i un
+  compte suspès no en rep cap. La recepta del token viu només a `createPasswordLink`
+  (`auth/service.ts`): amb dues, un dia una de les dues caducaria diferent sense que ho digués res.
 - **El registre d'errors es pot buidar des del panell**, perquè el que hi queda sigui el que encara demana atenció: `DELETE /admin/client-errors/:id` treu un error mirat (sense confirmar: és una línia de registre, i el que es perd torna sol la pròxima vegada que l'error passi) i `DELETE /admin/client-errors?before=<ISO>` buida fins a un moment donat (això sí que passa pel `ConfirmDialog`). **El tall del buidat és una data, no la llista del que es veu**: el panell només n'ensenya els últims 50, així que amb identificadors el botó deixaria enrere tot el que no hi cap; amb la data, en canvi, el que arribi mentre s'està mirant la pantalla es conserva —que és justament el que encara no ha vist ningú. Com la resta d'accions d'administració, el buidat deixa `SecurityEvent`.
 - **La issue de GitHub s'obre amb un enllaç, no des del servidor.** El botó de cada error porta al formulari `issues/new` del repositori ja omplert (codi, on, quan, detall, navegador i etiqueta `bug`), i qui la publica és l'administrador amb el seu compte. Fer-ho amb l'API de GitHub demanaria un token amb permís d'escriptura guardat a Render —una clau més a mantenir i a poder perdre— i tot el que estalviaria és un clic; a canvi, l'enllaç deixa llegir i completar el text abans de publicar-lo. **El correu de l'usuari no hi entra mai**: una issue és pública i el registre d'errors no ho és, i una adreça publicada no es pot desfer.
 

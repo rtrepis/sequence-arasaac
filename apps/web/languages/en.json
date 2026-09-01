@@ -1486,9 +1486,6 @@
   "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
     "defaultMessage": "The verification link is incomplete."
   },
-  "features.backend.auth.verification.bannerFailed": {
-    "defaultMessage": "We couldn't send you the verification email. Try requesting it again."
-  },
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Verify your email to save to the cloud. We've sent a link to {email}."
   },
