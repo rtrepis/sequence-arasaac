@@ -14,6 +14,9 @@
 // tots els documents és barat però no és gratis, i el servidor de Render pot
 // estar adormit quan ningú ha demanat res.
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Alert,
   Box,
   CircularProgress,
@@ -29,7 +32,7 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { AiOutlineDelete } from "react-icons/ai";
-import { MdOutlinePhotoSizeSelectLarge } from "react-icons/md";
+import { MdExpandMore, MdOutlinePhotoSizeSelectLarge } from "react-icons/md";
 import type { UserAsset } from "@sequence-arasaac/shared-types";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import StyledButton from "@/style/StyledButton";
@@ -45,6 +48,7 @@ import {
 } from "@features/sequence/store/documentSlice";
 import { deleteUserAsset, listUserAssets } from "../services/settingsService";
 import { refreshQuotaThunk } from "../store/quotaSlice";
+import { settingsAccordion } from "@components/SettingsLayout";
 import { useFormatBytes } from "../hooks/useFormatBytes";
 import { useFormatPrintSize } from "../hooks/useFormatPrintSize";
 import ImageResizeDialog from "./ImageResizeDialog";
@@ -198,100 +202,123 @@ const AccountImagesList = (): React.ReactElement | null => {
 
   return (
     <Stack gap={1}>
-      <Typography sx={{ fontWeight: "bold" }}>
-        {intl.formatMessage(messages.imagesTitle)}
-      </Typography>
+      {/* Plegada per defecte: la llista pot ser llarga i el que es llegeix
+          primer són els comptadors de sobre. La càrrega, en canvi, es continua
+          demanant en obrir el tab i no en desplegar: així el que hi ha aquí sota
+          ja hi és quan s'obre, sense esperar-se el servidor de Render */}
+      <Accordion disableGutters elevation={0} sx={settingsAccordion}>
+        <AccordionSummary expandIcon={<MdExpandMore />} sx={{ px: 0 }}>
+          <Typography sx={{ fontWeight: "bold" }}>
+            {intl.formatMessage(messages.imagesTitle)}
+          </Typography>
+        </AccordionSummary>
 
-      {isLoading && (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
-          <CircularProgress size={24} />
-        </Box>
-      )}
+        <AccordionDetails sx={{ px: 0, pt: 0 }}>
+          <Stack gap={1}>
+            {isLoading && (
+              <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+                <CircularProgress size={24} />
+              </Box>
+            )}
 
-      {hasError && !isLoading && (
-        <Alert
-          severity="error"
-          variant="outlined"
-          action={
-            <StyledButton
-              color="inherit"
-              size="small"
-              onClick={() => void load()}
-            >
-              {intl.formatMessage(messages.reload)}
-            </StyledButton>
-          }
-        >
-          {intl.formatMessage(messages.imagesLoadError)}
-        </Alert>
-      )}
-
-      {!isLoading && !hasError && assets.length === 0 && (
-        <Typography variant="body2" color="text.secondary">
-          {intl.formatMessage(messages.imagesEmpty)}
-        </Typography>
-      )}
-
-      {!isLoading && !hasError && assets.length > 0 && (
-        <List disablePadding>
-          {assets.map((asset, index) => (
-            <React.Fragment key={asset.publicId}>
-              {index > 0 && <Divider component="li" />}
-              <ListItem
-                disableGutters
-                // MUI només aparta el text 48 px per a l'acció secundària, que
-                // és el que ocupa un botó sol; amb dos, l'origen de la imatge
-                // se n'anava a passar per sota del d'esborrar
-                sx={{ pr: `${2 * APP_TOUCH_TARGET_MIN + 8}px` }}
-                secondaryAction={
-                  <>
-                    {/* Canviar de mida va abans d'esborrar: recupera espai
-                        sense perdre la imatge, i és el que sol resoldre el cas */}
-                    <Tooltip title={intl.formatMessage(messages.resizeImage)}>
-                      <StyledIconButton
-                        color="inherit"
-                        aria-label={intl.formatMessage(messages.resizeImage)}
-                        onClick={() => setPendingResize(asset)}
-                      >
-                        <MdOutlinePhotoSizeSelectLarge />
-                      </StyledIconButton>
-                    </Tooltip>
-
-                    <Tooltip title={intl.formatMessage(messages.deleteImage)}>
-                      <StyledIconButton
-                        color="inherit"
-                        aria-label={intl.formatMessage(messages.deleteImage)}
-                        onClick={() => setPendingDelete(asset)}
-                      >
-                        <AiOutlineDelete />
-                      </StyledIconButton>
-                    </Tooltip>
-                  </>
+            {hasError && !isLoading && (
+              <Alert
+                severity="error"
+                variant="outlined"
+                action={
+                  <StyledButton
+                    color="inherit"
+                    size="small"
+                    onClick={() => void load()}
+                  >
+                    {intl.formatMessage(messages.reload)}
+                  </StyledButton>
                 }
               >
-                <ListItemAvatar>
-                  {/* A la mida en què es pinta: la imatge desada és de mida
+                {intl.formatMessage(messages.imagesLoadError)}
+              </Alert>
+            )}
+
+            {!isLoading && !hasError && assets.length === 0 && (
+              <Typography variant="body2" color="text.secondary">
+                {intl.formatMessage(messages.imagesEmpty)}
+              </Typography>
+            )}
+
+            {!isLoading && !hasError && assets.length > 0 && (
+              <List disablePadding>
+                {assets.map((asset, index) => (
+                  <React.Fragment key={asset.publicId}>
+                    {index > 0 && <Divider component="li" />}
+                    <ListItem
+                      disableGutters
+                      // MUI només aparta el text 48 px per a l'acció secundària, que
+                      // és el que ocupa un botó sol; amb dos, l'origen de la imatge
+                      // se n'anava a passar per sota del d'esborrar
+                      sx={{ pr: `${2 * APP_TOUCH_TARGET_MIN + 8}px` }}
+                      secondaryAction={
+                        <>
+                          {/* Canviar de mida va abans d'esborrar: recupera espai
+                        sense perdre la imatge, i és el que sol resoldre el cas */}
+                          <Tooltip
+                            title={intl.formatMessage(messages.resizeImage)}
+                          >
+                            <StyledIconButton
+                              color="inherit"
+                              aria-label={intl.formatMessage(
+                                messages.resizeImage,
+                              )}
+                              onClick={() => setPendingResize(asset)}
+                            >
+                              <MdOutlinePhotoSizeSelectLarge />
+                            </StyledIconButton>
+                          </Tooltip>
+
+                          <Tooltip
+                            title={intl.formatMessage(messages.deleteImage)}
+                          >
+                            <StyledIconButton
+                              color="inherit"
+                              aria-label={intl.formatMessage(
+                                messages.deleteImage,
+                              )}
+                              onClick={() => setPendingDelete(asset)}
+                            >
+                              <AiOutlineDelete />
+                            </StyledIconButton>
+                          </Tooltip>
+                        </>
+                      }
+                    >
+                      <ListItemAvatar>
+                        {/* A la mida en què es pinta: la imatge desada és de mida
                       d'impressió i aquí n'hi ha prou amb un quadradet */}
-                  <Box
-                    component="img"
-                    src={cloudinaryThumbnailUrl(asset.url, THUMBNAIL_SIZE)}
-                    alt={intl.formatMessage(messages.thumbnailAlt)}
-                    width={THUMBNAIL_SIZE}
-                    height={THUMBNAIL_SIZE}
-                    sx={{ objectFit: "contain", display: "block" }}
-                  />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={sizeOf(asset)}
-                  secondary={originOf(asset)}
-                  primaryTypographyProps={{ variant: "body2" }}
-                  secondaryTypographyProps={{ variant: "caption" }}
-                />
-              </ListItem>
-            </React.Fragment>
-          ))}
-        </List>
-      )}
+                        <Box
+                          component="img"
+                          src={cloudinaryThumbnailUrl(
+                            asset.url,
+                            THUMBNAIL_SIZE,
+                          )}
+                          alt={intl.formatMessage(messages.thumbnailAlt)}
+                          width={THUMBNAIL_SIZE}
+                          height={THUMBNAIL_SIZE}
+                          sx={{ objectFit: "contain", display: "block" }}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={sizeOf(asset)}
+                        secondary={originOf(asset)}
+                        primaryTypographyProps={{ variant: "body2" }}
+                        secondaryTypographyProps={{ variant: "caption" }}
+                      />
+                    </ListItem>
+                  </React.Fragment>
+                ))}
+              </List>
+            )}
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
 
       <ImageResizeDialog
         asset={pendingResize}

@@ -16,11 +16,51 @@ export const SETTINGS_MOBILE_BREAKPOINT = "sm";
 /** Separació vertical (gap MUI) entre files d'ajustos dins d'una columna de controls. */
 export const SETTINGS_ROW_GAP = 1;
 
-/** Separació vertical (gap MUI) entre les dues zones (preview / controls) en escriptori. */
+/** Separació (gap MUI) entre les columnes del panell (mostra / ajustos / ajuda). */
 export const SETTINGS_ZONE_GAP = 4;
 
-/** Amplada màxima del panell centrat (estàndard tauleta). */
-export const SETTINGS_MAX_WIDTH = 900;
+/**
+ * Breakpoint a partir del qual el panell passa de columna única a **dues**
+ * columnes: la mostra a l'esquerra i, a la dreta, l'ajuda damunt dels ajustos.
+ * És el mateix `md` on l'`AppBar` del diàleg deixa de ser `fixed`, de manera que
+ * l'offset de la mostra enganxada canvia al mateix punt que el layout.
+ */
+export const SETTINGS_TWO_COLUMN_BREAKPOINT = "md";
+
+/**
+ * Breakpoint a partir del qual l'ajuda se'n va a una **tercera** columna, a la
+ * dreta dels ajustos. Es tria `lg` (1200) perquè és el primer punt de la sèrie
+ * del tema on hi caben les tres columnes senceres; no se n'inventa cap de nou.
+ */
+export const SETTINGS_THREE_COLUMN_BREAKPOINT = "lg";
+
+/**
+ * Amplada (px) de les columnes laterals: la mostra a l'esquerra i l'ajuda a la
+ * dreta en fan la mateixa. Surt de la mostra més ampla que hi ha (la llista de
+ * vocabulari i el mockup de pàgina, tots dos de ~260-280).
+ */
+export const SETTINGS_ASIDE_WIDTH = 280;
+
+/**
+ * Amplada (px) de la columna central d'ajustos. **És la mateixa a tots els
+ * tabs**: les columnes laterals es reserven encara que el tab no tingui mostra
+ * (Usuari) perquè els ajustos caiguin sempre al mateix lloc i amb la mateixa
+ * amplada en canviar de pestanya. Si els tabs sense mostra centressin els seus
+ * ajustos, cada canvi de tab els mouria de lloc i costaria de veure què ha
+ * canviat de debò.
+ */
+export const SETTINGS_CONTROLS_WIDTH = 560;
+
+/** Separació (px) entre columnes: {@link SETTINGS_ZONE_GAP} en unitats de tema. */
+const SETTINGS_ZONE_GAP_PX = SETTINGS_ZONE_GAP * 8;
+
+/** Amplada màxima del panell a dues columnes (mostra + ajustos). */
+export const SETTINGS_MAX_WIDTH =
+  SETTINGS_ASIDE_WIDTH + SETTINGS_ZONE_GAP_PX + SETTINGS_CONTROLS_WIDTH;
+
+/** Amplada màxima del panell a tres columnes (mostra + ajustos + ajuda). */
+export const SETTINGS_WIDE_MAX_WIDTH =
+  SETTINGS_MAX_WIDTH + SETTINGS_ZONE_GAP_PX + SETTINGS_ASIDE_WIDTH;
 
 /**
  * Indentació (paddingLeft, gap MUI) del contingut d'una secció respecte al seu SectionTitle.
@@ -101,6 +141,21 @@ export const settingRowInline: SxProps<Theme> = {
   justifyContent: "space-between",
   columnGap: 2,
   rowGap: 1,
+};
+
+/**
+ * Acordió dins d'una configuració: **pla**. Sense elevació, sense fons propi i
+ * sense la línia superior que MUI hi dibuixa (`&:before`), perquè el `Divider`
+ * del `SectionTitle` ja és l'únic divisor visible de la jerarquia. El que el
+ * distingeix d'un títol és només la fletxa que gira, no una caixa.
+ *
+ * Va sempre amb `disableGutters`, `elevation={0}` i un `AccordionSummary` amb
+ * `expandIcon={<MdExpandMore />}`; el `px: 0` del resum i del detall els alinea
+ * amb la resta de files de la columna.
+ */
+export const settingsAccordion: SxProps<Theme> = {
+  backgroundColor: "transparent",
+  "&:before": { display: "none" },
 };
 
 /** Amplada mínima (px) del control d'una fila, perquè sliders no quedin inusables en pantalles estretes. */

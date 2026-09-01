@@ -1,4 +1,3 @@
-import { Stack } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import SettingCardLang from "../../components/SettingsCards/SettingCardOptions/lang/SettingCardLang";
 import SettingCardLangAppToggle from "../../components/SettingsCards/SettingCardOptions/lang/SettingCardLangAppToggle";
@@ -7,6 +6,7 @@ import SettingCardImageQuality from "../../components/SettingsCards/SettingCardI
 import {
   SectionTitle,
   SettingsPanelHint,
+  SettingsPanelLayout,
 } from "../../components/SettingsLayout";
 import AccountStorageSummary from "@features/backend/user-settings/components/AccountStorageSummary";
 import AccountImagesList from "@features/backend/user-settings/components/AccountImagesList";
@@ -23,16 +23,16 @@ const UserSettingsPanel = (): React.ReactElement => {
   );
 
   return (
-    <Stack
-      direction="column"
-      gap={1}
-      sx={{ pt: 1, maxWidth: 500, mx: "auto", width: "100%" }}
+    // Sense mostra, però amb el mateix layout que la resta de tabs: la columna
+    // d'ajustos ha de caure al mateix lloc i amb la mateixa amplada a tot arreu
+    <SettingsPanelLayout
+      hint={
+        // Guia del tab: què s'ajusta aquí
+        <SettingsPanelHint>
+          <FormattedMessage {...messages.panelHint} />
+        </SettingsPanelHint>
+      }
     >
-      {/* Guia del tab: què s'ajusta aquí */}
-      <SettingsPanelHint>
-        <FormattedMessage {...messages.panelHint} />
-      </SettingsPanelHint>
-
       <SectionTitle title={<FormattedMessage {...messages.sectionLanguage} />}>
         <SettingCardLangAppToggle />
         <SettingCardLang setting="languagesSearch" />
@@ -56,7 +56,7 @@ const UserSettingsPanel = (): React.ReactElement => {
           <AccountImagesList />
         </SectionTitle>
       )}
-    </Stack>
+    </SettingsPanelLayout>
   );
 };
 
