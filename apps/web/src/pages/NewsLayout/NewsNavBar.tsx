@@ -14,6 +14,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { APP_CONTROL_SIZE, FLOATING_EDGE_GAP } from "@/style/appShape";
 import { floatingControlSx } from "@/style/floatingControl";
+import { useFloatingCorner } from "@components/FloatingLayer";
 import messages from "./NewsNavBar.lang";
 import HideOnScroll from "../../components/utils/HiddenOnScroll/HiddenOnScroll";
 import AppNavigationDrawer from "../../components/AppNavigationDrawer/AppNavigationDrawer";
@@ -35,6 +36,10 @@ const NewsNavBar = (props: BarProps): React.ReactElement => {
   const intl = useIntl();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // La fletxa de la dreta viu al racó inferior: els avisos del peu li han de
+  // deixar l'espai lliure mentre s'és a les notícies
+  useFloatingCorner("news-nav-next");
 
   // Quan canvia l'article, desplaça suaument al principi de la pàgina
   useEffect(() => {

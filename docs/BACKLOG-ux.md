@@ -1035,6 +1035,9 @@ Branca `claude/backlog-tasques-255sae`. *(Trobada en implementar A1b.)*
 - Mesurat a 390px abans i després: el snackbar arribava a `x = 356,6` amb el botó començant a
   `x = 320` — 37 px de solapament, prou per tapar-lo mig. Ara acaba a `x = 318`.
 - Fixat a `e2e/download-and-status.spec.ts`, que compara les dues caixes.
+- **Seguiment (F13 de l'estàndard de capes flotants)**: la reserva es va escriure a l'avís i per
+  tant s'aplicava a **totes** les pàgines, també on no hi ha cap control al racó (inici, registre,
+  panell). Ara la declara qui l'ocupa (`useFloatingCorner`) i l'avís la llegeix d'una variable CSS.
 
 ### C8 — A «Descarrega», l'estat inicial de la casella de configuració no és el que es veu ✅ Resolta
 
