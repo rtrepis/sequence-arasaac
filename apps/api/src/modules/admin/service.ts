@@ -28,6 +28,7 @@ const toUserSummary = (user: IUser): AdminUserSummary => ({
   id: String(user._id),
   email: user.email,
   name: user.name,
+  lang: user.langSettings?.app ?? "ca",
   useCase: user.useCase,
   status: user.status,
   role: user.role,

@@ -40,6 +40,7 @@ import {
   updateUser,
 } from "../services/adminService";
 import { formatBytes } from "../utils/formatBytes";
+import { buildPasswordLinkMailto } from "../utils/passwordLinkMail";
 
 const PAGE_SIZE = 25;
 
@@ -73,61 +74,6 @@ const formatExpiry = (iso: string): string =>
 const LINK_TYPE_LABEL: Record<AdminPasswordLink["type"], string> = {
   verify: "Primer accés",
   reset: "Nova contrasenya",
-};
-
-// Caducitat per al cos del missatge: dins d'una frase, el "05/09 18:30" de la
-// taula es llegeix com un codi. Allà hi va sol, en una línia d'estat al costat
-// de l'enllaç, i com més curt millor; aquí va enmig d'un text.
-const formatExpiryLong = (iso: string): string =>
-  new Date(iso).toLocaleString("ca-ES", {
-    day: "numeric",
-    month: "long",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-// Construeix un mailto: per enviar l'enllaç d'accés des del client de correu.
-//
-// El cos és text pla i no pot ser cap altra cosa: un mailto: només porta text
-// (RFC 6068), de manera que la plantilla amb marca dels correus del servidor
-// (apps/api/src/shared/emailLayout.ts) aquí no hi té cabuda. El que sí que ha
-// de dir és el mateix que diu aquella: a qui va, per què arriba i fins quan
-// serveix l'enllaç. Qui el rep no ha demanat res i no espera cap correu d'una
-// persona: un enllaç sol, sense nom ni context, s'assembla massa a una estafa
-// —i el que hi ha darrere és establir la contrasenya d'un compte.
-//
-// Va en català, com tot el panell: l'idioma de l'usuari no arriba fins aquí.
-const buildMailtoUrl = (
-  user: AdminUserSummary,
-  link: AdminPasswordLink,
-): string => {
-  const subject =
-    link.type === "verify"
-      ? "Completa el registre a SequenciAAC"
-      : "Nova contrasenya de SequenciAAC";
-
-  const body = [
-    user.name ? `Hola, ${user.name}!` : "Hola!",
-    "",
-    link.type === "verify"
-      ? "T'envio a mà l'enllaç per activar el teu compte de SequenciAAC i triar la contrasenya:"
-      : "T'envio a mà l'enllaç per triar una contrasenya nova a SequenciAAC:",
-    "",
-    link.url,
-    "",
-    `L'enllaç caduca el ${formatExpiryLong(link.expiresAt)}. Si ha caducat, respon aquest correu i te'n passo un altre.`,
-  ];
-
-  if (link.type === "reset") {
-    // El de "verify" no hi va: aquell compte s'acaba de crear i qui el rep sap
-    // que s'hi ha registrat. Un canvi de contrasenya, en canvi, el pot haver
-    // engegat el panell sense que l'usuari hagi demanat res.
-    body.push(
-      "Si no has demanat cap canvi de contrasenya, ignora aquest missatge: la teva contrasenya actual continua funcionant.",
-    );
-  }
-
-  return `mailto:${encodeURIComponent(user.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.join("\n"))}`;
 };
 
 const LINK_ERROR: Record<string, string> = {
@@ -348,7 +294,7 @@ const AdminUsersTable = (): ReactElement => {
                         <Tooltip title="Envia'l per correu">
                           <StyledIconButton
                             component="a"
-                            href={buildMailtoUrl(user, links[user.id])}
+                            href={buildPasswordLinkMailto(user, links[user.id])}
                             color="inherit"
                             size="small"
                             aria-label={`Envia l'enllaç d'accés a ${user.email}`}

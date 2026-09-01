@@ -1,6 +1,7 @@
 // Tipus del panell d'administració, compartits entre l'API i el frontend
 
 import type {
+  LangsApp,
   UserRole,
   UserStatus,
   UserTier,
@@ -15,6 +16,10 @@ export interface AdminUserSummary {
   id: string;
   email: string;
   name?: string;
+  // Idioma del compte. Al panell no es pinta enlloc —els seus textos són en
+  // català— però hi ha d'arribar: l'enllaç d'accés es fa arribar amb un correu
+  // escrit a mà, i qui el rep no té per què entendre el català.
+  lang: LangsApp;
   useCase?: UserUseCase;
   status: UserStatus;
   role: UserRole;

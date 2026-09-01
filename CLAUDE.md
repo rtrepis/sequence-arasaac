@@ -561,8 +561,14 @@ Tots els correus que surten de l'aplicació tenen la mateixa cara. Font única d
   que la plantilla d'`emailLayout.ts` no hi cap i **no és cap descuit**. El que sí que hi ha de ser
   és el mateix que porta un correu del servidor: el nom de qui el rep, per què li arriba i **fins
   quan serveix l'enllaç**. Qui el rep no espera cap correu d'una persona, i un enllaç sol —darrere
-  del qual hi ha establir la contrasenya d'un compte— s'assembla massa a una estafa. Va en català
-  com la resta del panell: l'idioma de l'usuari no arriba a `AdminUserSummary`.
+  del qual hi ha establir la contrasenya d'un compte— s'assembla massa a una estafa.
+- **Aquell missatge és l'excepció al «el panell va en català»**: la resta del panell la llegeix qui
+  administra, i això ho llegeix l'usuari, que pot no entendre'l. Per això `AdminUserSummary` porta
+  `lang` —l'únic camp del resum que no es pinta enlloc— i el text viu a
+  `features/admin/utils/passwordLinkMail.ts`, amb els cinc idiomes, fora del component de la taula.
+  **La caducitat hi va amb el fus horari escrit**: l'hora la formata el navegador de qui administra
+  i del compte no en sabem el fus, de manera que sense dir-lo un enllaç es podria donar per caducat
+  quan encara serveix.
 - **El registre d'errors es pot buidar des del panell**, perquè el que hi queda sigui el que encara demana atenció: `DELETE /admin/client-errors/:id` treu un error mirat (sense confirmar: és una línia de registre, i el que es perd torna sol la pròxima vegada que l'error passi) i `DELETE /admin/client-errors?before=<ISO>` buida fins a un moment donat (això sí que passa pel `ConfirmDialog`). **El tall del buidat és una data, no la llista del que es veu**: el panell només n'ensenya els últims 50, així que amb identificadors el botó deixaria enrere tot el que no hi cap; amb la data, en canvi, el que arribi mentre s'està mirant la pantalla es conserva —que és justament el que encara no ha vist ningú. Com la resta d'accions d'administració, el buidat deixa `SecurityEvent`.
 - **La issue de GitHub s'obre amb un enllaç, no des del servidor.** El botó de cada error porta al formulari `issues/new` del repositori ja omplert (codi, on, quan, detall, navegador i etiqueta `bug`), i qui la publica és l'administrador amb el seu compte. Fer-ho amb l'API de GitHub demanaria un token amb permís d'escriptura guardat a Render —una clau més a mantenir i a poder perdre— i tot el que estalviaria és un clic; a canvi, l'enllaç deixa llegir i completar el text abans de publicar-lo. **El correu de l'usuari no hi entra mai**: una issue és pública i el registre d'errors no ho és, i una adreça publicada no es pot desfer.
 
