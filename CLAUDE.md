@@ -505,6 +505,15 @@ feina és on viu cada acció i quan demana permís.
   registrat com a `admin_action` (només que se n'ha generat un i de quina mena, mai el token) i un
   compte suspès no en rep cap. La recepta del token viu només a `createPasswordLink`
   (`auth/service.ts`): amb dues, un dia una de les dues caducaria diferent sense que ho digués res.
+  **Val 24 h sigui del tipus que sigui** (`ADMIN_PASSWORD_LINK_TTL_MS`, passat com a `ttlMs` a la
+  mateixa recepta). L'hora que dura un `reset` val quan qui el demana té la pantalla oberta
+  esperant-lo; aquest no el demana qui l'ha de fer servir, sinó que l'administrador el genera i
+  l'ha de fer arribar per un canal que no controla ningú, i entremig hi poden passar hores.
+  **A la taula, l'enllaç no es dibuixa**: un cop generat hi ha la icona de copiar i la d'enviar per
+  correu, i el que l'enllaç és i fins quan val van al tooltip. Pintat en un camp es menjava mitja
+  taula per un text que ningú no ha de llegir mai —el que se'n fa és copiar-lo—, i el porta-retalls
+  ja diu que ha anat bé amb el snackbar de sempre. La sortida de quan el porta-retalls falla no es
+  perd: aleshores l'URL surt sencer i seleccionable a l'avís de dalt, que només hi és en aquell cas.
 - **El registre d'errors es pot buidar des del panell**, perquè el que hi queda sigui el que encara demana atenció: `DELETE /admin/client-errors/:id` treu un error mirat (sense confirmar: és una línia de registre, i el que es perd torna sol la pròxima vegada que l'error passi) i `DELETE /admin/client-errors?before=<ISO>` buida fins a un moment donat (això sí que passa pel `ConfirmDialog`). **El tall del buidat és una data, no la llista del que es veu**: el panell només n'ensenya els últims 50, així que amb identificadors el botó deixaria enrere tot el que no hi cap; amb la data, en canvi, el que arribi mentre s'està mirant la pantalla es conserva —que és justament el que encara no ha vist ningú. Com la resta d'accions d'administració, el buidat deixa `SecurityEvent`.
 - **La issue de GitHub s'obre amb un enllaç, no des del servidor.** El botó de cada error porta al formulari `issues/new` del repositori ja omplert (codi, on, quan, detall, navegador i etiqueta `bug`), i qui la publica és l'administrador amb el seu compte. Fer-ho amb l'API de GitHub demanaria un token amb permís d'escriptura guardat a Render —una clau més a mantenir i a poder perdre— i tot el que estalviaria és un clic; a canvi, l'enllaç deixa llegir i completar el text abans de publicar-lo. **El correu de l'usuari no hi entra mai**: una issue és pública i el registre d'errors no ho és, i una adreça publicada no es pot desfer.
 
