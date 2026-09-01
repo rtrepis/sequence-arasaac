@@ -110,15 +110,20 @@ if (parsed.data.NODE_ENV === "production") {
     (key) => !parsed.data[key]
   );
 
-  // Aquestes dues sí que tenen valor, però és el de desenvolupament.
-  // Sense aquesta comprovació el servidor arrencaria tan tranquil i enviaria
-  // correus amb enllaços a localhost: una fallada silenciosa i molt pitjor
-  // que no arrencar, perquè no se'n sabria res fins que algú es queixés.
+  // MAIL_FROM del domini de proves: avís, no error fatal.
+  // L'enllaç d'accés del panell d'administració permet entregar credencials
+  // a mà mentre el correu no estigui configurat amb un domini verificat.
   if (isTestMailFrom(parsed.data.MAIL_FROM)) {
-    missing.push(
-      `MAIL_FROM (és del domini de proves ${TEST_MAIL_DOMAIN}: només pot escriure a la bústia del compte del proveïdor, i cap usuari nou rebria el correu de benvinguda). Cal un domini verificat.`
+    console.warn(
+      `⚠ MAIL_FROM és del domini de proves ${TEST_MAIL_DOMAIN}: ` +
+        `cap usuari nou rebrà el correu de benvinguda. ` +
+        `Cal un domini verificat a Resend. Mentrestant, l'enllaç d'accés ` +
+        `del panell d'administració permet entregar credencials a mà.`,
     );
   }
+
+  // APP_PUBLIC_URL amb el valor de desenvolupament: els enllaços de
+  // verificació apuntarien a localhost i no servirien de res.
   if (parsed.data.APP_PUBLIC_URL === DEV_APP_PUBLIC_URL) {
     missing.push("APP_PUBLIC_URL (encara apunta a localhost)");
   }

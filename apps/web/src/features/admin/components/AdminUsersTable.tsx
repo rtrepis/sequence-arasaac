@@ -71,6 +71,27 @@ const LINK_TYPE_LABEL: Record<AdminPasswordLink["type"], string> = {
   reset: "Nova contrasenya",
 };
 
+// Construeix un mailto: per enviar l'enllaç d'accés des del client de correu
+const buildMailtoUrl = (
+  email: string,
+  linkUrl: string,
+  type: AdminPasswordLink["type"],
+): string => {
+  const subject =
+    type === "verify"
+      ? "Completa el registre a SequenciAAC"
+      : "Nova contrasenya de SequenciAAC";
+  const body = [
+    type === "verify"
+      ? "Obre aquest enllaç per establir la teva contrasenya i activar el compte:"
+      : "Obre aquest enllaç per establir una nova contrasenya:",
+    "",
+    linkUrl,
+  ].join("\n");
+
+  return `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
+
 const LINK_ERROR: Record<string, string> = {
   ACCOUNT_SUSPENDED:
     "El compte està suspès: reactiva'l abans de generar-li l'enllaç.",
@@ -259,6 +280,7 @@ const AdminUsersTable = (): ReactElement => {
                     {formatBytes(user.usage.storageBytes)}
                   </TableCell>
                   <TableCell>{formatDate(user.createdAt)}</TableCell>
+                  <TableCell>{formatDate(user.lastLoginAt)}</TableCell>
                   <TableCell sx={{ minWidth: 260 }}>
                     {links[user.id] ? (
                       <Box
@@ -285,6 +307,17 @@ const AdminUsersTable = (): ReactElement => {
                             }
                           >
                             Copia
+                          </Button>
+                          <Button
+                            size="small"
+                            component="a"
+                            href={buildMailtoUrl(
+                              user.email,
+                              links[user.id].url,
+                              links[user.id].type,
+                            )}
+                          >
+                            Envia
                           </Button>
                         </Box>
                         <Typography variant="caption" color="text.secondary">
