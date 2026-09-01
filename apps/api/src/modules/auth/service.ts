@@ -159,7 +159,7 @@ const deliverPasswordEmail = async (
   const { sent, reason } =
     type === "verify"
       ? await sendVerificationEmail(email, name, url, locale)
-      : await sendPasswordResetEmail(email, url, locale);
+      : await sendPasswordResetEmail(email, name, url, locale);
 
   if (sent) {
     await recordSecurityEvent({
