@@ -1,51 +1,42 @@
 // Qualitat amb què es pugen les imatges pròpies.
 //
 // És l'únic ajust de l'app que decideix quant espai gasta l'usuari, i per això
-// va al costat del comptador: la xifra del peu diu què vol dir cada nivell en
-// pes, que és l'única manera de triar-lo amb criteri.
+// va al costat del comptador. El peu diu què vol dir cada nivell en dues
+// unitats: **fins a quants centímetres s'imprimeix bé** i quant pesa. La
+// primera és la que permet triar amb criteri a qui no pensa en kilobytes, que
+// és pràcticament tothom: el que es decideix aquí no és un pes, és si el
+// pictograma es veurà bé al full.
 //
 // El que no fa és canviar el que ja hi ha: reduir una imatge és irreversible i
-// tornar a comprimir el que ja està desat només perdria detall sense demanar-ho.
-import { Stack, ToggleButton, Typography } from "@mui/material";
+// tornar a comprimir el que ja està desat perdria detall sense demanar-ho. Amb
+// sessió, però, sí que es diu on es pot fer d'una en una.
+import { Stack, ToggleButton, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import {
-  MdOutlineImage,
-  MdOutlinePhotoSizeSelectSmall,
-  MdOutlinePrint,
-} from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { updateImageQualityActionCreator } from "@features/user-settings/store/uiSlice";
 import { ImageQuality } from "../../../types/ui";
 import { IMAGE_QUALITY_PRESETS } from "@/utils/imageToBase64";
 import { useFormatBytes } from "@features/backend/user-settings/hooks/useFormatBytes";
+import { useFormatPrintSize } from "@features/backend/user-settings/hooks/useFormatPrintSize";
 import SettingRow from "../../SettingsLayout/SettingRow";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
+import { IMAGE_QUALITY_OPTIONS, qualityToggleSx } from "./imageQualityOptions";
 import messages from "./SettingCardImageQuality.lang";
-
-const QUALITY_OPTIONS: {
-  value: ImageQuality;
-  icon: React.ReactNode;
-  messageKey: keyof typeof messages;
-}[] = [
-  { value: "print", icon: <MdOutlinePrint size={22} />, messageKey: "print" },
-  {
-    value: "standard",
-    icon: <MdOutlineImage size={22} />,
-    messageKey: "standard",
-  },
-  {
-    value: "compact",
-    icon: <MdOutlinePhotoSizeSelectSmall size={22} />,
-    messageKey: "compact",
-  },
-];
 
 const SettingCardImageQuality = (): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const formatBytes = useFormatBytes();
+  const formatPrintSize = useFormatPrintSize();
   const imageQuality = useAppSelector((store) => store.ui.imageQuality);
+  // Canviar de mida el que ja s'ha pujat només existeix al núvol: sense sessió,
+  // dir on es fa seria enviar l'usuari a una secció que no li surt
+  const isAuthenticated = useAppSelector(
+    (state) => state.auth.accessToken !== null,
+  );
+
+  const preset = IMAGE_QUALITY_PRESETS[imageQuality];
 
   const handleChange = (
     _: React.MouseEvent<HTMLElement>,
@@ -67,25 +58,43 @@ const SettingCardImageQuality = (): React.ReactElement => {
           onChange={handleChange}
           aria-label={intl.formatMessage(messages.ariaLabel)}
         >
-          {QUALITY_OPTIONS.map(({ value, icon, messageKey }) => (
-            <ToggleButton
+          {IMAGE_QUALITY_OPTIONS.map(({ value, icon, label }) => (
+            // `describeChild`: el botó porta text, i sense això el tooltip li
+            // prendria el nom accessible i el nom del nivell es perdria
+            <Tooltip
               key={value}
-              value={value}
-              aria-label={intl.formatMessage(messages[messageKey])}
-              selected={value === imageQuality}
-              sx={{ flexDirection: "column", gap: 0.25, fontSize: "0.6rem" }}
+              describeChild
+              title={intl.formatMessage(messages.optionHint, {
+                width: formatPrintSize(IMAGE_QUALITY_PRESETS[value].maxSidePx),
+              })}
             >
-              {icon}
-              <FormattedMessage {...messages[messageKey]} />
-            </ToggleButton>
+              <ToggleButton
+                value={value}
+                aria-label={intl.formatMessage(label)}
+                selected={value === imageQuality}
+                sx={qualityToggleSx}
+              >
+                {icon}
+                <FormattedMessage {...label} />
+              </ToggleButton>
+            </Tooltip>
           ))}
         </StyledToggleButtonGroup>
       </SettingRow>
 
       <Typography variant="caption" color="text.secondary">
         {intl.formatMessage(messages.helper, {
-          size: formatBytes(IMAGE_QUALITY_PRESETS[imageQuality].targetBytes),
+          width: formatPrintSize(preset.maxSidePx),
+          size: formatBytes(preset.targetBytes),
         })}
+      </Typography>
+
+      <Typography variant="caption" color="text.secondary">
+        <FormattedMessage
+          {...(isAuthenticated
+            ? messages.existingResizable
+            : messages.existingUnchanged)}
+        />
       </Typography>
     </Stack>
   );

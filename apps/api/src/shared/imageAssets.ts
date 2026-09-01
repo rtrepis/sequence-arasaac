@@ -23,6 +23,9 @@ export const MAX_IMAGE_BYTES = 500 * 1024;
 // llargada de caràcters. Això només atura l'absurd abans d'arribar-hi.
 export const MAX_IMAGE_DATA_URL_LENGTH = 2 * 1024 * 1024;
 
+// Imatges per petició a l'API de Cloudinary (el seu màxim és 100)
+const RESOURCES_PER_REQUEST = 100;
+
 const CLOUDINARY_PREFIX = "https://res.cloudinary.com/";
 const BASE64_PREFIX = "data:image/";
 
@@ -35,6 +38,17 @@ export interface CloudinaryAsset {
 
 interface UploadedAsset extends CloudinaryAsset {
   url: string;
+  // Píxels de la imatge tal com ha quedat desada, que és el que decideix a
+  // quina mida s'imprimeix bé
+  width: number;
+  height: number;
+}
+
+// Mides d'una imatge ja pujada, per dir-ne la mida d'impressió sense haver-la
+// de baixar
+export interface ImageDimensions {
+  width: number;
+  height: number;
 }
 
 // Una ranura d'imatge dins d'una estructura qualsevol: qui la crea sap on és la
@@ -117,10 +131,85 @@ export const uploadBase64Slots = async (
       publicId: result.public_id,
       bytes: result.bytes,
       url: result.secure_url,
+      width: result.width,
+      height: result.height,
     });
   }
 
   return uploaded;
+};
+
+// Puja una imatge base64 solta i en torna la URL, el pes i les mides reals.
+//
+// És el camí d'una imatge que substitueix una altra —canviar-la de mida— i no
+// pot passar per `uploadBase64Slots`: allà una ranura és un lloc dins d'una
+// estructura, i aquí encara no se sap quin lloc serà fins que la nova imatge
+// existeix. Els bytes i els píxels són els que diu Cloudinary, mai els que
+// havíem estimat abans de comprimir.
+export const uploadBase64Image = async (
+  folder: string,
+  dataUrl: string
+): Promise<UploadedAsset> => {
+  if (!isBase64Image(dataUrl)) {
+    throw imageError("IMAGE_INVALID", 400);
+  }
+
+  if (base64Bytes(dataUrl) > MAX_IMAGE_BYTES) {
+    throw imageError("IMAGE_TOO_LARGE", 413);
+  }
+
+  const result = await cloudinary.uploader.upload(dataUrl, {
+    folder,
+    resource_type: "image",
+  });
+
+  return {
+    publicId: result.public_id,
+    bytes: result.bytes,
+    url: result.secure_url,
+    width: result.width,
+    height: result.height,
+  };
+};
+
+// Mides de les imatges ja pujades, en una sola petició a Cloudinary.
+//
+// Les mides no es desen a la base de dades a propòsit: els bytes sí que s'hi
+// desen perquè el comptador de consum els ha de poder restar en esborrar, però
+// els píxels només serveixen per ensenyar-los, i desar-los voldria dir una
+// migració per a tot el que ja s'ha pujat. Aquí surten d'una sola crida per a
+// tota la llista, també per a les imatges antigues.
+//
+// No llança mai: si Cloudinary no respon, la llista d'imatges s'ha de poder
+// veure igualment —amb el pes, que és el que decideix què s'esborra— i el que
+// falta és la mida d'impressió, no la llista.
+export const fetchImageDimensions = async (
+  publicIds: string[]
+): Promise<Map<string, ImageDimensions>> => {
+  const dimensions = new Map<string, ImageDimensions>();
+  if (publicIds.length === 0) return dimensions;
+
+  try {
+    // L'API de Cloudinary n'accepta cent per petició; un compte del pla gratuït
+    // no hi arriba, però el tall ha de ser aquí i no en la confiança que no hi arribi
+    for (let start = 0; start < publicIds.length; start += RESOURCES_PER_REQUEST) {
+      const batch = publicIds.slice(start, start + RESOURCES_PER_REQUEST);
+      const { resources } = await cloudinary.api.resources_by_ids(batch, {
+        resource_type: "image",
+      });
+
+      for (const resource of resources) {
+        dimensions.set(resource.public_id, {
+          width: resource.width,
+          height: resource.height,
+        });
+      }
+    }
+  } catch (error) {
+    console.error("[imageAssets] No s'han pogut llegir les mides:", error);
+  }
+
+  return dimensions;
 };
 
 // Elimina una imatge pel seu public_id — no falla si ja no existeix

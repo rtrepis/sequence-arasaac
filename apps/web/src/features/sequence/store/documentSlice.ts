@@ -327,6 +327,25 @@ const documentSlice = createSlice({
       });
     },
 
+    // Adopta la imatge nova quan una del núvol s'ha canviat de mida.
+    //
+    // Reduir una imatge al núvol vol dir pujar-ne una altra i esborrar la
+    // vella: la URL canvia, i el document obert es quedaria apuntant a una
+    // imatge que ja no existeix. Com `removeCloudImage`, no és un canvi de
+    // contingut —la còpia de fora no s'ha quedat enrere, s'ha avançat.
+    replaceCloudImage: (
+      previousDocument,
+      action: PayloadAction<{ from: string; to: string }>,
+    ) => {
+      Object.values(previousDocument.content).forEach((sequence) => {
+        sequence.forEach((pict) => {
+          if (pict.img.url === action.payload.from) {
+            pict.img.url = action.payload.to;
+          }
+        });
+      });
+    },
+
     setDocumentId: (previousDocument, action: PayloadAction<string>) => {
       previousDocument.id = action.payload;
     },
@@ -483,6 +502,7 @@ export const {
   applyViewSettingsToAll: applyViewSettingsToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
   removeCloudImage: removeCloudImageActionCreator,
+  replaceCloudImage: replaceCloudImageActionCreator,
   setDocumentId: setDocumentIdActionCreator,
   setDocumentTitle: setDocumentTitleActionCreator,
 } = documentSlice.actions;

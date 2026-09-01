@@ -59,7 +59,7 @@ const messages = defineMessages({
   tooBigQuotaSmaller: {
     id: "components.uploadImageButton.tooBigQuotaSmaller",
     defaultMessage:
-      "The image takes up {size} and only {available} are left in your account. With {quality} quality it would take up {smallerSize} and would fit.",
+      "The image takes up {size} and only {available} are left in your account. With {quality} quality it would take up {smallerSize} and would still print well up to {smallerWidth} wide, so it would fit.",
     description: "No cap a l'espai del compte, però n'hi ha una de més petita",
   },
   tooBigQuotaOnly: {
@@ -72,7 +72,7 @@ const messages = defineMessages({
   tooBigPerImageSmaller: {
     id: "components.uploadImageButton.tooBigPerImageSmaller",
     defaultMessage:
-      "The image takes up {size} and the maximum per image is {available}. With {quality} quality it would take up {smallerSize}.",
+      "The image takes up {size} and the maximum per image is {available}. With {quality} quality it would take up {smallerSize} and would still print well up to {smallerWidth} wide.",
     description: "Passa del sostre per imatge, però n'hi ha una de més petita",
   },
   tooBigPerImageOnly: {

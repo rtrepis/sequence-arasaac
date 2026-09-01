@@ -16,6 +16,8 @@ import type { ImageQuality } from "@/types/ui";
 import { AppDialog, AppDialogActions } from "@components/AppDialog";
 import StyledButton from "@/style/StyledButton";
 import { useFormatBytes } from "@features/backend/user-settings/hooks/useFormatBytes";
+import { useFormatPrintSize } from "@features/backend/user-settings/hooks/useFormatPrintSize";
+import { IMAGE_QUALITY_PRESETS } from "@/utils/imageToBase64";
 import messages from "./UploadImageButton.lang";
 
 /** Per què no cap: pel sostre de cada imatge o per l'espai que queda al compte. */
@@ -48,6 +50,7 @@ const ImageSizeDialog = ({
 }: ImageSizeDialogProps): React.ReactElement => {
   const intl = useIntl();
   const formatBytes = useFormatBytes();
+  const formatPrintSize = useFormatPrintSize();
 
   const body = (): string => {
     if (!offer) return "";
@@ -58,6 +61,13 @@ const ImageSizeDialog = ({
       smallerSize: offer.smaller ? formatBytes(offer.smaller.bytes) : "",
       quality: offer.smaller
         ? intl.formatMessage(messages[offer.smaller.quality])
+        : "",
+      // Quant es perd de veritat en acceptar la reducció, dit en la unitat en
+      // què es decideix: fins a quina mida es continuarà imprimint bé
+      smallerWidth: offer.smaller
+        ? formatPrintSize(
+            IMAGE_QUALITY_PRESETS[offer.smaller.quality].maxSidePx,
+          )
         : "",
     };
 

@@ -2023,6 +2023,14 @@
   "features.backend.userSettings.usage.kilobytes": {
     "defaultMessage": "{value} KB"
   },
+  "features.backend.userSettings.usage.centimeters": {
+    "defaultMessage": "{value} cm",
+    "description": "Mida impresa en centímetres"
+  },
+  "features.backend.userSettings.usage.sizeWithPrint": {
+    "defaultMessage": "{size} · es veu bé fins a {width}",
+    "description": "Pes d'una imatge i mida fins a la qual s'imprimeix nítida"
+  },
   "features.backend.userSettings.usage.remainingImages": {
     "defaultMessage": "{count, plural, =0 {No hi cap cap imatge més amb la qualitat triada} one {Hi cap # imatge més amb la qualitat triada} other {Hi caben # imatges més amb la qualitat triada}}"
   },
@@ -2068,6 +2076,58 @@
   "features.backend.userSettings.usage.deleteError": {
     "defaultMessage": "No s'ha pogut esborrar la imatge. (Codi: {code})"
   },
+  "features.backend.userSettings.usage.resizeImage": {
+    "defaultMessage": "Canvia la mida de la imatge",
+    "description": "Botó per reduir una imatge del compte"
+  },
+  "features.backend.userSettings.usage.resizeTitle": {
+    "defaultMessage": "Canvia la mida de la imatge",
+    "description": "Títol del diàleg per reduir una imatge"
+  },
+  "features.backend.userSettings.usage.resizeCurrent": {
+    "defaultMessage": "Ara ocupa {size} i es veu bé impresa fins a {width} d'ample. El pictograma no canvia: només la mida de la imatge.",
+    "description": "Estat actual de la imatge dins del diàleg de canvi de mida"
+  },
+  "features.backend.userSettings.usage.resizeCurrentUnknown": {
+    "defaultMessage": "Ara ocupa {size}. El pictograma no canvia: només la mida de la imatge.",
+    "description": "Estat actual de la imatge quan encara no se'n saben els píxels"
+  },
+  "features.backend.userSettings.usage.resizePreparing": {
+    "defaultMessage": "S'estan preparant les mides…",
+    "description": "Espera mentre es calculen les versions més petites"
+  },
+  "features.backend.userSettings.usage.resizeOption": {
+    "defaultMessage": "Es veurà bé fins a {width} d'ample i ocuparà {size}: recuperes {saved}.",
+    "description": "Què passa amb la mida triada al diàleg de canvi de mida"
+  },
+  "features.backend.userSettings.usage.resizeNone": {
+    "defaultMessage": "Aquesta imatge ja és a la mida més petita: reduir-la més la faria borrosa impresa. Si necessites espai, esborra-la.",
+    "description": "La imatge no es pot reduir més"
+  },
+  "features.backend.userSettings.usage.resizeConfirm": {
+    "defaultMessage": "Canvia la mida",
+    "description": "Botó que aplica la mida triada"
+  },
+  "features.backend.userSettings.usage.resizeCancel": {
+    "defaultMessage": "Cancel·la",
+    "description": "Botó que tanca el diàleg de canvi de mida sense fer res"
+  },
+  "features.backend.userSettings.usage.resizeApplying": {
+    "defaultMessage": "S'està canviant la mida de la imatge…",
+    "description": "Espera mentre la imatge nova puja al núvol"
+  },
+  "features.backend.userSettings.usage.resizeLoadError": {
+    "defaultMessage": "No s'ha pogut preparar la imatge. Comprova la connexió i torna-ho a provar.",
+    "description": "Error en baixar o comprimir la imatge al navegador"
+  },
+  "features.backend.userSettings.usage.resizeError": {
+    "defaultMessage": "No s'ha pogut canviar la mida de la imatge. (Codi: {code})",
+    "description": "Error en desar la imatge reduïda"
+  },
+  "features.backend.userSettings.usage.resized": {
+    "defaultMessage": "La imatge ara ocupa {size}. Has recuperat {saved}.",
+    "description": "Confirmació del canvi de mida amb l'espai recuperat"
+  },
   "features.backend.userSettings.usage.thumbnailAlt": {
     "defaultMessage": "Imatge pujada"
   },
@@ -2087,7 +2147,20 @@
     "defaultMessage": "Compacta"
   },
   "components.settingCardImageQuality.helper": {
-    "defaultMessage": "Cada imatge nova ocuparà com a màxim {size}. Les que ja has pujat no canvien."
+    "defaultMessage": "Les imatges noves es veuran bé impreses fins a {width} d'ample i ocuparan com a màxim {size} cadascuna. Impreses més grans, es veuran borroses.",
+    "description": "Explicació del nivell de qualitat: fins a quina mida s'imprimeix bé i quant ocupa"
+  },
+  "components.settingCardImageQuality.optionHint": {
+    "defaultMessage": "Es veu bé imprès fins a {width} d'ample",
+    "description": "Ajuda de cada nivell: fins a quina mida impresa es veu bé"
+  },
+  "components.settingCardImageQuality.existingUnchanged": {
+    "defaultMessage": "Les que ja has pujat no canvien.",
+    "description": "La qualitat només val per a les imatges noves"
+  },
+  "components.settingCardImageQuality.existingResizable": {
+    "defaultMessage": "Les que ja has pujat no canvien, però les pots canviar de mida a «L'espai del teu compte».",
+    "description": "La qualitat només val per a les imatges noves, i on canviar les que ja hi són"
   },
   "components.defaultSettings.userPanel.sectionImages": {
     "defaultMessage": "Imatges"
@@ -2108,13 +2181,15 @@
     "defaultMessage": "La imatge ocupa massa"
   },
   "components.uploadImageButton.tooBigQuotaSmaller": {
-    "defaultMessage": "La imatge ocupa {size} i al teu compte només queden {available}. Amb la qualitat {quality} ocuparia {smallerSize} i sí que hi cabria."
+    "defaultMessage": "La imatge ocupa {size} i al teu compte només queden {available}. Amb la qualitat {quality} ocuparia {smallerSize}, es continuaria veient bé impresa fins a {smallerWidth} d'ample i sí que hi cabria.",
+    "description": "No cap a l'espai del compte, però n'hi ha una de més petita"
   },
   "components.uploadImageButton.tooBigQuotaOnly": {
     "defaultMessage": "La imatge ocupa {size} i al teu compte només queden {available}. No hi cap amb cap qualitat: la pots posar igualment i imprimir-la des d'aquest dispositiu, però per desar-la al núvol hauràs d'alliberar espai."
   },
   "components.uploadImageButton.tooBigPerImageSmaller": {
-    "defaultMessage": "La imatge ocupa {size} i el màxim per imatge és {available}. Amb la qualitat {quality} ocuparia {smallerSize}."
+    "defaultMessage": "La imatge ocupa {size} i el màxim per imatge és {available}. Amb la qualitat {quality} ocuparia {smallerSize} i es continuaria veient bé impresa fins a {smallerWidth} d'ample.",
+    "description": "Passa del sostre per imatge, però n'hi ha una de més petita"
   },
   "components.uploadImageButton.tooBigPerImageOnly": {
     "defaultMessage": "La imatge ocupa {size} i el màxim per imatge és {available}. La pots posar igualment i imprimir-la des d'aquest dispositiu, però no es podrà desar al núvol."

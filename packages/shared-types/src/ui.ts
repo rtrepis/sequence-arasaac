@@ -68,6 +68,12 @@ export interface UserAsset {
   publicId: string;
   url: string;
   bytes: number;
+  // Píxels de la imatge desada. Serveixen per dir a quina mida s'imprimeix bé,
+  // que és l'única manera que en té l'usuari de saber si li sobra qualitat o li
+  // falta. Poden faltar: no es desen enlloc, es demanen a Cloudinary en llistar,
+  // i si aquella petició falla val més una llista sense mides que cap llista.
+  width?: number;
+  height?: number;
   source: "document" | "vocabulary";
   documentId?: string;
   documentTitle?: string;

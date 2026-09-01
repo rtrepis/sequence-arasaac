@@ -7,6 +7,7 @@ import {
   getQuotaStatus,
   listUserAssets,
   deleteUserAsset,
+  replaceUserAsset,
   deleteAccount,
 } from "./controller";
 
@@ -23,6 +24,9 @@ userSettingsRouter.put("/ui-settings", updateUiSettings);
 userSettingsRouter.get("/quota", getQuotaStatus);
 userSettingsRouter.get("/assets", listUserAssets);
 userSettingsRouter.delete("/assets", deleteUserAsset);
+// Canviar de mida tampoc demana el correu verificat: allibera espai, com
+// esborrar, i a més conserva la imatge
+userSettingsRouter.patch("/assets", replaceUserAsset);
 // Esborrat del propi compte (RGPD) — irreversible i sense confirmació al servidor:
 // la confirmació és responsabilitat de la interfície
 userSettingsRouter.delete("/me", deleteAccount);

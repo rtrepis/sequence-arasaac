@@ -49,3 +49,14 @@ export const deleteAssetSchema = z.object({
 });
 
 export type DeleteAssetInput = z.infer<typeof deleteAssetSchema>;
+
+// Canvi de mida d'una imatge del compte: la imatge nova arriba ja reduïda pel
+// client, en base64. El sostre de llargada només atura l'absurd; el pes de
+// veritat el comprova `uploadBase64Image` amb MAX_IMAGE_BYTES, que és el que fa
+// que «una imatge» vulgui dir un pes concret.
+export const replaceAssetSchema = z.object({
+  publicId: z.string().min(1).max(300),
+  image: z.string().max(MAX_IMAGE_DATA_URL_LENGTH),
+});
+
+export type ReplaceAssetInput = z.infer<typeof replaceAssetSchema>;

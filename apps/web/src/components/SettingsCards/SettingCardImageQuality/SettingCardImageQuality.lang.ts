@@ -29,8 +29,26 @@ const messages = defineMessages({
   helper: {
     id: "components.settingCardImageQuality.helper",
     defaultMessage:
-      "Cada imatge nova ocuparà com a màxim {size}. Les que ja has pujat no canvien.",
-    description: "Explicació del pes que ocupa cada nivell de qualitat",
+      "Les imatges noves es veuran bé impreses fins a {width} d'ample i ocuparan com a màxim {size} cadascuna. Impreses més grans, es veuran borroses.",
+    description:
+      "Explicació del nivell de qualitat: fins a quina mida s'imprimeix bé i quant ocupa",
+  },
+  optionHint: {
+    id: "components.settingCardImageQuality.optionHint",
+    defaultMessage: "Es veu bé imprès fins a {width} d'ample",
+    description: "Ajuda de cada nivell: fins a quina mida impresa es veu bé",
+  },
+  existingUnchanged: {
+    id: "components.settingCardImageQuality.existingUnchanged",
+    defaultMessage: "Les que ja has pujat no canvien.",
+    description: "La qualitat només val per a les imatges noves",
+  },
+  existingResizable: {
+    id: "components.settingCardImageQuality.existingResizable",
+    defaultMessage:
+      "Les que ja has pujat no canvien, però les pots canviar de mida a «L'espai del teu compte».",
+    description:
+      "La qualitat només val per a les imatges noves, i on canviar les que ja hi són",
   },
 });
 

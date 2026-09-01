@@ -13,12 +13,15 @@ import { cloudinary } from "../../shared/cloudinaryClient";
 import {
   MAX_IMAGE_BYTES,
   assertImagesWithinSize,
+  base64Bytes,
   deleteCloudinaryAsset,
   deleteCloudinaryImages,
   estimateIncomingBytes,
   extractPublicId,
+  fetchImageDimensions,
   isCloudinaryUrl,
   sumBytes,
+  uploadBase64Image,
   uploadBase64Slots,
   userAssetFolder,
   vocabularyAssetFolder,
@@ -273,6 +276,18 @@ export const listUserAssets = async (userId: string): Promise<UserAsset[]> => {
     });
   }
 
+  // Les mides es demanen a Cloudinary en una sola petició i per a tota la
+  // llista: són el que permet dir a quina mida s'imprimeix bé cada imatge, i
+  // sense elles el pes és un número que no vol dir res per a qui no és informàtic
+  const dimensions = await fetchImageDimensions(assets.map((a) => a.publicId));
+  for (const asset of assets) {
+    const size = dimensions.get(asset.publicId);
+    if (size) {
+      asset.width = size.width;
+      asset.height = size.height;
+    }
+  }
+
   // Les que més ocupen primer: la llista serveix per alliberar espai, i qui la
   // mira busca què treure, no un inventari per ordre d'arribada
   return assets.sort((a, b) => b.bytes - a.bytes);
@@ -374,6 +389,164 @@ export const deleteUserAsset = async (
   error.statusCode = 404;
   error.errorCode = "ASSET_NOT_FOUND";
   throw error;
+};
+
+// Canvia de mida una imatge del compte: en puja una de nova, la posa on hi
+// havia l'antiga i esborra l'antiga.
+//
+// És l'altra sortida de la llista d'imatges, i sovint la que toca: esborrar
+// recupera tot l'espai però es queda sense imatge, i qui ha imprès sempre a
+// mida petita no necessita cap de les dues coses —li sobra resolució, no la
+// imatge. La versió reduïda la prepara el client amb el mateix codificador amb
+// què les puja, de manera que el resultat és exactament el que hi hauria si
+// l'hagués pujada amb aquella qualitat.
+//
+// Mateix ordre que la resta del mòdul: primer existeix la imatge nova, després
+// s'escriu qui la fa servir, després s'esborra la vella del núvol i al final
+// s'ajusta el comptador. A l'inrevés, una escriptura fallida deixaria el
+// document apuntant a una imatge que ja no existeix.
+//
+// La URL canvia (és una imatge nova, amb el seu public_id): qui la feia servir
+// s'ha d'assabentar, i per això la resposta torna l'asset tal com ha quedat.
+export const replaceUserAsset = async (
+  userId: string,
+  publicId: string,
+  image: string
+): Promise<UserAsset> => {
+  const user = await UserModel.findById(userId).select(
+    "wordProfiles wordProfileAssets"
+  );
+  if (!user) throw notFound();
+
+  const profile = user.wordProfiles.find(
+    (candidate) =>
+      isCloudinaryUrl(candidate.customImageUrl) &&
+      extractPublicId(candidate.customImageUrl as string) === publicId
+  );
+
+  // El pes de la imatge que se'n va: el que ja hi havia només es compta si el
+  // registre el coneix. Les pujades abans que existís el registre hi valen zero
+  // —el seu pes no es va desar mai— i canviar-les de mida les hi dona d'alta.
+  const quotaFor = async (previousBytes: number): Promise<void> => {
+    await assertWithinQuota(userId, {
+      incomingBytes: Math.max(0, base64Bytes(image) - previousBytes),
+    });
+  };
+
+  if (profile) {
+    const previous = user.wordProfileAssets.find(
+      (candidate) => candidate.publicId === publicId
+    );
+
+    await quotaFor(previous?.bytes ?? 0);
+    const uploaded = await uploadBase64Image(
+      vocabularyAssetFolder(userId),
+      image
+    );
+
+    profile.customImageUrl = uploaded.url;
+    user.wordProfileAssets = [
+      ...user.wordProfileAssets.filter(
+        (candidate) => candidate.publicId !== publicId
+      ),
+      { publicId: uploaded.publicId, bytes: uploaded.bytes },
+    ];
+    user.markModified("wordProfiles");
+    await user.save();
+
+    await deleteCloudinaryAsset(publicId);
+    await applyUsageDelta(userId, {
+      storageBytes: uploaded.bytes - (previous?.bytes ?? 0),
+      assets: previous ? 0 : 1,
+    });
+
+    return {
+      publicId: uploaded.publicId,
+      url: uploaded.url,
+      bytes: uploaded.bytes,
+      width: uploaded.width,
+      height: uploaded.height,
+      source: "vocabulary",
+      word: profile.word,
+    };
+  }
+
+  const documents = await DocumentModel.find({ userId });
+
+  for (const doc of documents) {
+    const previous = doc.assets.find(
+      (candidate) => candidate.publicId === publicId
+    );
+
+    // Es busca al contingut i no al registre d'assets: les imatges pujades
+    // abans que el registre existís no hi són, i també s'han de poder reduir
+    let found = false;
+    for (const sequence of doc.content.values()) {
+      for (const pict of sequence) {
+        if (
+          isCloudinaryUrl(pict.img.url) &&
+          extractPublicId(pict.img.url as string) === publicId
+        ) {
+          found = true;
+        }
+      }
+    }
+
+    if (!found) continue;
+
+    await quotaFor(previous?.bytes ?? 0);
+    const uploaded = await uploadBase64Image(userAssetFolder(userId), image);
+
+    for (const sequence of doc.content.values()) {
+      for (const pict of sequence) {
+        if (
+          isCloudinaryUrl(pict.img.url) &&
+          extractPublicId(pict.img.url as string) === publicId
+        ) {
+          pict.img.url = uploaded.url;
+        }
+      }
+    }
+
+    // La miniatura del llistat guarda la URL de les imatges pròpies: amb la
+    // vella, la fila del document ensenyaria un quadre trencat
+    for (const pict of doc.thumbnail) {
+      if (pict.url && extractPublicId(pict.url) === publicId) {
+        pict.url = uploaded.url;
+      }
+    }
+
+    doc.assets = [
+      ...doc.assets.filter((candidate) => candidate.publicId !== publicId),
+      { publicId: uploaded.publicId, bytes: uploaded.bytes },
+    ];
+
+    doc.markModified("content");
+    doc.markModified("thumbnail");
+    await doc.save();
+
+    await deleteCloudinaryAsset(publicId);
+    await applyUsageDelta(userId, {
+      storageBytes: uploaded.bytes - (previous?.bytes ?? 0),
+      assets: previous ? 0 : 1,
+    });
+
+    return {
+      publicId: uploaded.publicId,
+      url: uploaded.url,
+      bytes: uploaded.bytes,
+      width: uploaded.width,
+      height: uploaded.height,
+      source: "document",
+      documentId: String(doc._id),
+      documentTitle: doc.title,
+    };
+  }
+
+  const missing = new Error("ASSET_NOT_FOUND") as AppError;
+  missing.statusCode = 404;
+  missing.errorCode = "ASSET_NOT_FOUND";
+  throw missing;
 };
 
 // Esborra el compte i tot el que en penja.
