@@ -708,6 +708,11 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   flotants: l'inventari del que hi havia, les tretze divergències numerades (F1–F13) amb fitxer i
   motiu, i el pla de migració. L'estàndard viu més amunt; **el document és la raó de cada regla**, i
   s'hi va a mirar quan una regla sembla arbitrària o quan se'n vol canviar alguna.
+- `docs/ESTUDI-aprimar-arquitectura.md` estudia quants dels cinc proveïdors (Vercel, Render,
+  Atlas, Cloudinary, Resend) calen de debò, què costaria treure'n cadascun i en quin ordre.
+  **Consultar-lo abans de proposar cap canvi d'allotjament o de proveïdor**: hi ha els tres
+  escenaris de consolidació amb el seu cost, les troballes A1–A10 i el motiu pel qual E3 (que
+  l'Express serveixi també l'SPA) queda descartada per escrit.
 
 ## Descripció del projecte
 
