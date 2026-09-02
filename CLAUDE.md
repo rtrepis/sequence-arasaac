@@ -713,6 +713,12 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   **Consultar-lo abans de proposar cap canvi d'allotjament o de proveïdor**: hi ha els tres
   escenaris de consolidació amb el seu cost, les troballes A1–A10 i el motiu pel qual E3 (que
   l'Express serveixi també l'SPA) queda descartada per escrit.
+- `docs/ESTUDI-servidor-propi.md` respon si es poden muntar en una màquina pròpia els serveis
+  que avui donen els operadors. **Consultar-lo abans de plantejar qualsevol autoallotjament**:
+  quatre dels cinc es munten sense drama i el correu no s'ha de muntar mai (reputació d'IP, no
+  dificultat tècnica), hi ha el dimensionament de la màquina, el cost en diners i en hores, i les
+  troballes S1–S10. La distribució recomanada és H3 —API, base de dades i imatges pròpies; l'SPA
+  en un estàtic que no sigui teu— perquè qui no té compte no depengui de cap servidor.
 
 ## Descripció del projecte
 

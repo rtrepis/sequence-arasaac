@@ -7,7 +7,9 @@ quin ordre té sentit, amb els números del repositori a la mà.
 
 És un **estudi, no una branca de canvis**: no proposa tocar res avui. Fa parella
 amb `ESTUDI-limits-serveis-gratuits.md`, que mira *quant marge* queda a cada
-servei; aquest mira *quants serveis calen*.
+servei; aquest mira *quants serveis calen*. I amb `ESTUDI-servidor-propi.md`, que
+es fa la mateixa pregunta **sortint del núvol**: què passa si els serveis que ens
+donen els operadors se'ls munta un mateix.
 
 Data de l'estudi: setembre del 2026. Els límits dels proveïdors canvien; les
 xifres porten enllaç a la font.
