@@ -6,11 +6,11 @@ Diàlegs, avisos i botons flotants: tot el que sura per damunt de la pàgina.
 (`components/SettingsLayout/`) i el de **tabs** (`components/AppTabs/`), i es
 llegeix igual que ells: primer l'inventari del que hi ha, després les
 divergències trobades amb fitxer i motiu, i al final el patró i el pla de
-migració. Les regles que en surtin passaran a `CLAUDE.md`; aquest fitxer es
-queda com la raó de cada regla.
+migració. Les regles que en surtin passaran a `docs/estandards/capes-flotants.md`;
+aquest fitxer es queda com la raó de cada regla.
 
-**Estat**: migració feta. L'estàndard viu a `CLAUDE.md`; aquest document és el
-perquè.
+**Estat**: migració feta. L'estàndard viu a `docs/estandards/capes-flotants.md`;
+aquest document és el perquè.
 
 ---
 
