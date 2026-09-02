@@ -120,6 +120,27 @@ export interface RegistrationStatus {
   canSignup: boolean;
 }
 
+// El que la pàgina d'establiment de contrasenya sap del compte abans que
+// l'usuari hi escrigui res. Ho retorna el backend a canvi del token de l'enllaç
+// del correu, i serveix per confirmar-li **a quin compte** entrarà: qui obre un
+// enllaç d'un correu no ha de poder confondre'l amb el d'una altra persona que
+// comparteixi el dispositiu, que en AAC és el cas normal.
+//
+// No obre cap via d'enumeració: qui té el token ja pot establir la contrasenya
+// d'aquell compte, de manera que el nom i el correu no li diuen res que el
+// mateix enllaç no li doni.
+export interface PasswordLinkInfo {
+  // Opcional perquè el model no exigeix nom (els comptes creats per
+  // l'administrador poden no tenir-ne)
+  name?: string;
+  email: string;
+  // "verify" = enllaç del correu de benvinguda; "reset" = de la recuperació
+  type: "verify" | "reset";
+  // Si el compte ja té contrasenya, la que s'estableixi ara en substitueix una
+  // d'existent; si no, és la primera. És la diferència que la pàgina explica.
+  hasPassword: boolean;
+}
+
 export interface WordProfile {
   word: string;
   overrides: Partial<Pick<import("./sequence").PictApiAraSettings, "skin" | "hair" | "color" | "fitzgerald">>;

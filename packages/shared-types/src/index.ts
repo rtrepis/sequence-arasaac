@@ -44,6 +44,7 @@ export type {
   UserAsset,
   AppConfig,
   RegistrationStatus,
+  PasswordLinkInfo,
 } from "./ui";
 export type {
   AdminUserSummary,

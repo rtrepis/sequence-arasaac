@@ -8,6 +8,7 @@ import {
   setPasswordSchema,
   forgotPasswordSchema,
   resendVerificationSchema,
+  passwordLinkInfoSchema,
 } from "./validators";
 import {
   signupUser,
@@ -16,6 +17,7 @@ import {
   setPassword,
   requestPasswordReset,
   resendVerification,
+  readPasswordLink,
 } from "./service";
 import { getRegistrationStatus } from "../config/service";
 import type { AppError } from "../../middleware/errorHandler";
@@ -153,6 +155,25 @@ export const setPasswordHandler = async (
 
     setRefreshTokenCookie(res, refreshToken);
     res.status(200).json({ accessToken });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// POST /api/auth/password-link-info
+// Diu de quin compte és l'enllaç d'establiment de contrasenya, perquè la
+// pàgina ho pugui confirmar abans que l'usuari hi escrigui res. No consumeix
+// el token: només el llegeix.
+export const passwordLinkInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const parsed = passwordLinkInfoSchema.safeParse(req.body);
+    if (!parsed.success) return respondValidationError(res, next, parsed);
+
+    res.status(200).json(await readPasswordLink(parsed.data.token));
   } catch (err) {
     next(err);
   }

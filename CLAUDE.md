@@ -340,6 +340,86 @@ Tots els correus que surten de l'aplicació tenen la mateixa cara. Font única d
 
 ---
 
+## Estàndard de pàgines d'autenticació
+
+Les tres pàgines que viuen **fora de l'app** —creació de compte, recuperació de contrasenya i
+establiment de contrasenya— comparteixen closca i criteris. Font única de veritat:
+`components/AuthLayout/` (layout i arguments), `components/PasswordField/` (camps de contrasenya)
+i `utils/useCountdown.ts`.
+
+- **`AuthLayout` és l'única manera de declarar-ne una.** Marca a dalt (i és també la sortida cap a
+  l'inici: aquí no hi ha barra de navegació), targeta del formulari, i una columna de suport
+  opcional. Cap pàgina no torna a escriure el `Box` centrat amb el `Paper` a dins.
+- **Dues columnes en escriptori i una per sota de `md`, però no és el mateix apilat.** En una sola
+  columna la marca es queda a dalt i els **arguments passen sota la targeta**: amb el text de suport
+  a sobre, en un telèfon el primer camp cauria fora de la pantalla, i el que s'ha vingut a fer aquí
+  és omplir el formulari.
+- **Sense columna de suport, la targeta se centra** (`aside` absent). És el cas de la pàgina de
+  contrasenya, que té una sola feina; amb l'amplada de dues columnes quedaria arrambada a la dreta
+  amb mig escriptori buit al costat.
+- **Amplades derivades, no escrites**: `AUTH_MAX_WIDTH` es calcula des de `AUTH_CARD_WIDTH` (460),
+  `AUTH_ASIDE_WIDTH` (360) i `AUTH_ZONE_GAP`, com `SETTINGS_MAX_WIDTH` a l'estàndard de
+  configuracions. La targeta no passa dels 460 px perquè un camp més llarg que qualsevol correu que
+  s'hi escriurà no ajuda ningú.
+- **Cada pàgina posa el seu `document.title`** (ho fa el layout): s'hi arriba des d'un correu, sovint
+  amb l'app oberta en una altra pestanya.
+- **La icona d'un argument va sobre una superfície verda** amb `primary.contrastText`. El verd com a
+  color d'icona sobre l'escriptori es queda a 2,1:1 i el mínim per a una icona és 3:1.
+
+### Places limitades i compte enrere (signup)
+
+- **L'avís hi és sempre, i diu tres coses en aquest ordre**: que el projecte és petit i per això les
+  altes van comptades, quantes en queden, i **quan** se'n tornen a obrir. Un formulari que no deixa
+  registrar-se i no diu per què sembla espatllat.
+- **El compte enrere compta cap al reinici diari** (`resetsAt` de `GET /auth/registration-status`,
+  mitjanit UTC pintada en hora local). En arribar a zero **no es desactiva res**: es torna a demanar
+  l'estat, perquè el que el compte enrere anuncia és que la xifra de pantalla ha deixat de ser bona.
+- **L'hora exacta va sempre al costat del compte enrere.** Un compte enrere sol no diu a quina hora
+  s'hi ha de tornar, i a més l'avís va amb `role="note"` i no amb el `role="alert"` que MUI hi posa
+  per defecte: una regió viva faria llegir la xifra en veu alta cada segon.
+- **`useCountdown` retorna els components separats** (hores, minuts, segons), no una cadena
+  formatada: el text el compon qui el pinta, amb els seus missatges traduïts. Tres formats segons el
+  que queda —amb hores els segons només fan ballar la xifra; a l'últim minut són l'única cosa que es
+  mou.
+- **Desconeixement no és tancament**: si `registration-status` falla (Render adormit, xarxa), el
+  formulari es deixa provar. Qui decideix si hi cap una alta més és el servidor en rebre-la, i donar
+  el registre per tancat perquè una petició informativa ha fallat seria tancar-lo per equivocació.
+- **Amb el registre tancat el formulari es desactiva, no desapareix**: `disabled` de debò als camps
+  —aquí no estan ocupats fent res, és una condició del servidor—, i l'avís de sobre diu el motiu i
+  quan es podrà tornar. Així la pàgina no canvia de forma quan el comptador es renova. És diferent
+  de `disabled` per dir «s'està fent», que no es fa mai enlloc.
+- **La xifra de persones registrades només s'ensenya a partir de `SIGNUP_SOCIAL_PROOF_MIN_USERS`
+  (200).** Per sota, una xifra petita no diu «hi ha lloc», diu «aquí no hi ha ningú» —just el
+  contrari del que la pàgina explica. El que sí que s'ensenya sempre són les places que queden.
+- **Les places totals només surten quan són elles les que manen** (`remainingUsers <
+  maxDailySignups`): si en queden menys que un dia sencer d'altes, la xifra del dia enganya.
+
+### Recuperar i establir la contrasenya
+
+- **La pàgina de contrasenya diu de quin compte és l'enllaç abans de demanar res**
+  (`POST /auth/password-link-info` → nom, correu, i si el compte ja en té una). En AAC el dispositiu
+  es comparteix, i qui obre un enllaç d'un correu ha de poder veure que és el seu. La rodona és la
+  mateixa `UserAvatar` de la barra de l'app: ha de llegir-se com el mateix senyal quan hi hagi entrat.
+- **No obre cap via d'enumeració**: qui té el token ja pot establir la contrasenya d'aquell compte,
+  així que el nom i el correu no li diuen res que el mateix enllaç no li doni. Va per **POST** i no
+  per GET amb el token a la query, que acabaria escrit als registres del servidor i del proxy. I
+  **no consumeix el token**: només el llegeix, amb la mateixa validació que `setPassword`, perquè un
+  enllaç caducat no es pugui llegir bé aquí i fallar en desar.
+- **El text diu si la contrasenya és la primera o en substitueix una** (`hasPassword`), i en el segon
+  cas avisa que tancarà les sessions obertes en altres dispositius. És el que passarà de debò
+  (`tokenVersion += 1`), i no es descobreix després.
+- **`/auth/forgot-password` continua sense distingir si el correu existeix.** És la mateixa regla que
+  al signup: una resposta diferenciada deixaria enumerar quines adreces hi ha registrades. El que sí
+  que es pot confirmar és **a quina adreça s'ha escrit** —la pantalla de resultat la repeteix sencera
+  i deixa tornar enrere a corregir-la—, que és el dubte real de qui no veu arribar el correu.
+- **Un sol camp de contrasenya destapat alhora, i garantit per construcció**: la visibilitat viu al
+  `PasswordVisibilityGroup`, que en recorda un de sol, no en un booleà per camp. Amb els dos
+  destapats, repetir la contrasenya deixa de comprovar res: es copia amb els ulls en comptes
+  d'escriure's. **`PasswordField` és l'única manera de declarar-ne un**, i el botó de l'ull porta
+  `aria-pressed` (diu en quin dels dos estats és) i es pot arribar amb el tabulador.
+
+---
+
 ## Antifrau i control de comptes
 
 ### Identitat

@@ -1,20 +1,25 @@
 // Pàgina de recuperació de contrasenya: demana el correu i envia un enllaç cap
 // a SetPasswordPage. La resposta és sempre la mateixa, existeixi o no el
-// compte — el backend (POST /auth/forgot-password) no ho distingeix mai.
+// compte — el backend (POST /auth/forgot-password) no ho distingeix mai, i és
+// el mateix motiu pel qual el signup no diu si un correu ja té compte: una
+// resposta diferenciada deixaria enumerar quines adreces hi estan registrades.
+//
+// El que sí que es pot confirmar és **a quina adreça s'ha escrit**: la pantalla
+// de resultat la repeteix sencera i deixa tornar enrere a corregir-la, que és
+// el dubte real de qui no veu arribar el correu.
 import React, { useState } from "react";
+import { Alert, Box, CircularProgress, Link, TextField } from "@mui/material";
 import {
-  Alert,
-  Box,
-  CircularProgress,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+  AiOutlineClockCircle,
+  AiOutlineMail,
+  AiOutlineTool,
+} from "react-icons/ai";
 import { useIntl } from "react-intl";
 import { useNavigate, useParams } from "react-router-dom";
 import messages from "./ForgotPasswordPage.lang";
 import StyledButton from "@/style/StyledButton";
-import { APP_CORNER_RADIUS } from "@/style/appShape";
+import AuthLayout from "@components/AuthLayout/AuthLayout";
+import AuthHighlights from "@components/AuthLayout/AuthHighlights";
 import { forgotPassword } from "@features/backend/auth/services/authService";
 
 const ForgotPasswordPage = (): React.ReactElement => {
@@ -30,6 +35,8 @@ const ForgotPasswordPage = (): React.ReactElement => {
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
+    if (isLoading) return;
+
     setIsLoading(true);
 
     try {
@@ -42,82 +49,116 @@ const ForgotPasswordPage = (): React.ReactElement => {
     }
   };
 
-  return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        p: 2,
-        backgroundColor: "background.default",
-      }}
-    >
-      {/* La targeta és una superfície que sura sobre l'escriptori: porta la
-          cantonada de la casa, com els diàlegs i els controls */}
-      <Paper
-        sx={{
-          p: 4,
-          maxWidth: 480,
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          borderRadius: `${APP_CORNER_RADIUS}px`,
-        }}
+  const highlights = (
+    <AuthHighlights
+      title={intl.formatMessage(messages.asideTitle)}
+      items={[
+        {
+          id: "inbox",
+          icon: <AiOutlineMail />,
+          title: intl.formatMessage(messages.hintInboxTitle),
+          description: intl.formatMessage(messages.hintInboxText),
+        },
+        {
+          id: "expires",
+          icon: <AiOutlineClockCircle />,
+          title: intl.formatMessage(messages.hintExpiresTitle),
+          description: intl.formatMessage(messages.hintExpiresText),
+        },
+        {
+          id: "meanwhile",
+          icon: <AiOutlineTool />,
+          title: intl.formatMessage(messages.hintMeanwhileTitle),
+          description: intl.formatMessage(messages.hintMeanwhileText),
+        },
+      ]}
+    />
+  );
+
+  if (submittedEmail) {
+    return (
+      <AuthLayout
+        title={intl.formatMessage(messages.successTitle)}
+        aside={highlights}
       >
-        <Typography variant="h5" component="h1" align="center">
-          {intl.formatMessage(messages.pageTitle)}
-        </Typography>
+        <Alert severity="success" variant="outlined">
+          {intl.formatMessage(messages.success, { email: submittedEmail })}
+        </Alert>
 
-        {submittedEmail ? (
-          <>
-            <Alert severity="success" variant="outlined">
-              {intl.formatMessage(messages.success, { email: submittedEmail })}
-            </Alert>
-            <StyledButton
-              variant="contained"
-              onClick={() => navigate(`/${locale}/create-sequence`)}
-            >
-              {intl.formatMessage(messages.goToApp)}
-            </StyledButton>
-          </>
-        ) : (
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-          >
-            <Alert severity="info" variant="outlined">
-              {intl.formatMessage(messages.hint)}
-            </Alert>
+        <StyledButton
+          variant="contained"
+          onClick={() => navigate(`/${locale}/create-sequence`)}
+        >
+          {intl.formatMessage(messages.goToApp)}
+        </StyledButton>
 
-            <TextField
-              label={intl.formatMessage(messages.email)}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              fullWidth
-              autoFocus
-              autoComplete="email"
-              disabled={isLoading}
-            />
+        {/* La sortida de qui s'ha equivocat escrivint l'adreça: tornar al
+            formulari amb el que hi havia, no començar de zero */}
+        <StyledButton color="inherit" onClick={() => setSubmittedEmail(null)}>
+          {intl.formatMessage(messages.changeEmail)}
+        </StyledButton>
 
-            <StyledButton
-              type="submit"
-              variant="contained"
-              fullWidth
-              disabled={isLoading || !email}
-              startIcon={isLoading ? <CircularProgress size={16} /> : null}
-            >
-              {intl.formatMessage(messages.submit)}
-            </StyledButton>
-          </Box>
-        )}
-      </Paper>
-    </Box>
+        <Link
+          component="button"
+          type="button"
+          variant="body2"
+          color="inherit"
+          onClick={() => navigate(`/${locale}/signup`)}
+          sx={{ alignSelf: "center" }}
+        >
+          {intl.formatMessage(messages.signupLink)}
+        </Link>
+      </AuthLayout>
+    );
+  }
+
+  return (
+    <AuthLayout
+      title={intl.formatMessage(messages.pageTitle)}
+      subtitle={intl.formatMessage(messages.hint)}
+      aside={highlights}
+    >
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        <TextField
+          label={intl.formatMessage(messages.email)}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          fullWidth
+          autoFocus
+          autoComplete="email"
+          helperText={intl.formatMessage(messages.emailHelp)}
+        />
+
+        <StyledButton
+          type="submit"
+          variant="contained"
+          fullWidth
+          disabled={!email}
+          aria-busy={isLoading}
+          startIcon={isLoading ? <CircularProgress size={16} /> : null}
+        >
+          {intl.formatMessage(messages.submit)}
+        </StyledButton>
+
+        <Link
+          component="button"
+          type="button"
+          variant="body2"
+          color="inherit"
+          onClick={() => navigate(`/${locale}/signup`)}
+          sx={{ alignSelf: "center" }}
+        >
+          {intl.formatMessage(messages.signupLink)}
+        </Link>
+      </Box>
+    </AuthLayout>
   );
 };
 

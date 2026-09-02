@@ -1678,10 +1678,6 @@
     "defaultMessage": "Scegli la tua password",
     "description": "Títol de la pàgina d'establiment de contrasenya"
   },
-  "pages.setPassword.hint": {
-    "defaultMessage": "Questa è la password che userai per accedere al tuo account d'ora in poi. Scegline una che non usi da nessun'altra parte.",
-    "description": "Guia inicial de la pàgina d'establiment de contrasenya"
-  },
   "pages.setPassword.password": {
     "defaultMessage": "Password",
     "description": "Etiqueta del camp contrasenya"
@@ -2231,5 +2227,193 @@
   },
   "components.defaultSettings.saveError.bodyImageTooLarge": {
     "defaultMessage": "Una delle immagini del vocabolario è troppo pesante per salvarla nel cloud. Aggiungila di nuovo con una qualità più bassa: la scegli in Impostazioni › Utente › Qualità delle immagini."
+  },
+  "pages.signup.pageSubtitle": {
+    "defaultMessage": "È gratuito e facoltativo: l'applicazione funziona per intero senza account.",
+    "description": "Línia sota el títol de la pàgina de signup"
+  },
+  "pages.signup.useCaseHelp": {
+    "defaultMessage": "Ci aiuta a capire per chi facciamo l'applicazione. Non viene pubblicato da nessuna parte.",
+    "description": "Ajuda del selector d'ús de l'aplicació"
+  },
+  "pages.signup.emailHelp": {
+    "defaultMessage": "Lì ti invieremo il link per confermare l'indirizzo e scegliere la password.",
+    "description": "Ajuda del camp correu"
+  },
+  "pages.signup.continueWithoutAccount": {
+    "defaultMessage": "Continua senza account",
+    "description": "Enllaç per anar a l'aplicació sense crear cap compte"
+  },
+  "pages.signup.asideTitle": {
+    "defaultMessage": "Cosa ci guadagni",
+    "description": "Encapçalament de la columna d'arguments del signup"
+  },
+  "pages.signup.benefitCloudTitle": {
+    "defaultMessage": "Le sequenze, nel cloud",
+    "description": "Títol de l'argument del desat al núvol"
+  },
+  "pages.signup.benefitCloudText": {
+    "defaultMessage": "Salvale e ritrovale da qualsiasi dispositivo, senza dipendere da questo browser.",
+    "description": "Text de l'argument del desat al núvol"
+  },
+  "pages.signup.benefitVocabularyTitle": {
+    "defaultMessage": "Il tuo vocabolario",
+    "description": "Títol de l'argument del vocabulari personal"
+  },
+  "pages.signup.benefitVocabularyText": {
+    "defaultMessage": "Le parole che usi spesso, con il pittogramma e le immagini che ci metti.",
+    "description": "Text de l'argument del vocabulari personal"
+  },
+  "pages.signup.benefitSettingsTitle": {
+    "defaultMessage": "Le tue impostazioni",
+    "description": "Títol de l'argument de la configuració sincronitzada"
+  },
+  "pages.signup.benefitSettingsText": {
+    "defaultMessage": "Dimensioni, colori e formato di pagina ti seguono da un dispositivo all'altro.",
+    "description": "Text de l'argument de la configuració sincronitzada"
+  },
+  "pages.signup.benefitNoAccountTitle": {
+    "defaultMessage": "Anche senza account",
+    "description": "Títol de l'argument que l'app funciona sense compte"
+  },
+  "pages.signup.benefitNoAccountText": {
+    "defaultMessage": "Creare sequenze e stamparle non richiede un account: quello che l'account aggiunge è non perderle.",
+    "description": "Text de l'argument que l'app funciona sense compte"
+  },
+  "pages.signup.limitedTitle": {
+    "defaultMessage": "Le iscrizioni sono limitate",
+    "description": "Títol de l'avís de places limitades"
+  },
+  "pages.signup.limitedProject": {
+    "defaultMessage": "SequenciAAC è un progetto piccolo e si regge su servizi gratuiti. Apriamo le iscrizioni poco a poco perché possa crescere senza rompersi.",
+    "description": "Explicació de per què les altes són limitades"
+  },
+  "pages.signup.limitedToday": {
+    "defaultMessage": "{remaining, plural, =0 {Nessuna iscrizione disponibile} one {# iscrizione disponibile} other {# iscrizioni disponibili}} sulle {total} di oggi.",
+    "description": "Altes que queden avui"
+  },
+  "pages.signup.limitedTotal": {
+    "defaultMessage": "{remaining, plural, =0 {Nessun posto rimasto in totale} one {# posto rimasto in totale} other {# posti rimasti in totale}}.",
+    "description": "Places totals que queden quan són menys que les d'un dia"
+  },
+  "pages.signup.limitedResets": {
+    "defaultMessage": "Si riaprono tra {countdown}, alle {time}.",
+    "description": "Compte enrere fins a la renovació de les altes del dia"
+  },
+  "pages.signup.reopensIn": {
+    "defaultMessage": "Riprova tra {countdown}, alle {time}.",
+    "description": "Compte enrere quan les altes del dia ja s'han esgotat"
+  },
+  "pages.signup.closedTodayTitle": {
+    "defaultMessage": "Le iscrizioni di oggi sono esaurite",
+    "description": "Títol de l'avís quan s'han esgotat les altes del dia"
+  },
+  "pages.signup.closedFullTitle": {
+    "defaultMessage": "Al momento non ci sono posti disponibili",
+    "description": "Títol de l'avís quan s'ha arribat al sostre d'usuaris"
+  },
+  "pages.signup.closedRegistrationTitle": {
+    "defaultMessage": "Le iscrizioni sono chiuse per ora",
+    "description": "Títol de l'avís quan el registre està tancat"
+  },
+  "pages.signup.socialProof": {
+    "defaultMessage": "Ci sono già {total} persone che usano SequenciAAC.",
+    "description": "Nombre de persones registrades — només s'ensenya a partir del llindar"
+  },
+  "pages.signup.countdownHours": {
+    "defaultMessage": "{hours} h {minutes} min",
+    "description": "Compte enrere amb hores"
+  },
+  "pages.signup.countdownMinutes": {
+    "defaultMessage": "{minutes} min {seconds} s",
+    "description": "Compte enrere amb minuts"
+  },
+  "pages.signup.countdownSeconds": {
+    "defaultMessage": "{seconds} s",
+    "description": "Compte enrere de l'últim minut"
+  },
+  "pages.forgotPassword.emailHelp": {
+    "defaultMessage": "L'indirizzo con cui hai creato l'account.",
+    "description": "Ajuda del camp correu"
+  },
+  "pages.forgotPassword.successTitle": {
+    "defaultMessage": "Controlla la tua email",
+    "description": "Títol de la pantalla de confirmació"
+  },
+  "pages.forgotPassword.changeEmail": {
+    "defaultMessage": "Prova con un altro indirizzo",
+    "description": "Botó per tornar al formulari quan l'adreça escrita pot ser equivocada"
+  },
+  "pages.forgotPassword.signupLink": {
+    "defaultMessage": "Non hai ancora un account? Creane uno",
+    "description": "Enllaç a la pàgina de creació de compte"
+  },
+  "pages.forgotPassword.asideTitle": {
+    "defaultMessage": "Cosa c'è da sapere",
+    "description": "Encapçalament de la columna d'ajuda"
+  },
+  "pages.forgotPassword.hintInboxTitle": {
+    "defaultMessage": "Controlla anche la posta indesiderata",
+    "description": "Títol de l'ajuda sobre la safata d'entrada"
+  },
+  "pages.forgotPassword.hintInboxText": {
+    "defaultMessage": "Il link parte subito. Se non lo vedi nella posta in arrivo, di solito è nella posta indesiderata.",
+    "description": "Text de l'ajuda sobre la safata d'entrada"
+  },
+  "pages.forgotPassword.hintExpiresTitle": {
+    "defaultMessage": "Il link dura un'ora",
+    "description": "Títol de l'ajuda sobre la caducitat de l'enllaç"
+  },
+  "pages.forgotPassword.hintExpiresText": {
+    "defaultMessage": "Passata l'ora smette di funzionare e devi chiederne un altro. È breve di proposito: apre il tuo account.",
+    "description": "Text de l'ajuda sobre la caducitat de l'enllaç"
+  },
+  "pages.forgotPassword.hintMeanwhileTitle": {
+    "defaultMessage": "Nel frattempo puoi lavorare",
+    "description": "Títol de l'ajuda sobre treballar sense sessió"
+  },
+  "pages.forgotPassword.hintMeanwhileText": {
+    "defaultMessage": "L'applicazione funziona per intero senza sessione: solo il salvataggio nel cloud richiede l'accesso.",
+    "description": "Text de l'ajuda sobre treballar sense sessió"
+  },
+  "pages.setPassword.pageTitleReset": {
+    "defaultMessage": "Scegli una nuova password",
+    "description": "Títol quan el compte ja té contrasenya i la nova en substitueix una d'existent"
+  },
+  "pages.setPassword.greeting": {
+    "defaultMessage": "Ciao, {name}!",
+    "description": "Salutació amb el nom del compte de l'enllaç"
+  },
+  "pages.setPassword.hintFirst": {
+    "defaultMessage": "È la prima password di questo account: d'ora in poi sarà quella che userai per entrare. Scegline una che non usi da nessun'altra parte.",
+    "description": "Guia quan el compte encara no té contrasenya"
+  },
+  "pages.setPassword.hintReplace": {
+    "defaultMessage": "La nuova password sostituirà quella attuale e chiuderà le sessioni aperte su altri dispositivi. Scegline una che non usi da nessun'altra parte.",
+    "description": "Guia quan el compte ja té contrasenya"
+  },
+  "pages.setPassword.checkingTitle": {
+    "defaultMessage": "Verifica del link",
+    "description": "Títol mentre es comprova de quin compte és l'enllaç"
+  },
+  "pages.setPassword.checking": {
+    "defaultMessage": "Stiamo controllando a quale account appartiene questo link…",
+    "description": "Missatge d'espera mentre es comprova l'enllaç"
+  },
+  "pages.setPassword.invalidLinkTitle": {
+    "defaultMessage": "Questo link non funziona",
+    "description": "Títol de la pantalla d'enllaç incomplet o caducat"
+  },
+  "pages.setPassword.notYou": {
+    "defaultMessage": "Non hai chiesto nessuna password? Chiudi questa pagina senza fare nulla: il link scade da solo e l'account non viene toccato.",
+    "description": "Avís per a qui rep un enllaç que no ha demanat"
+  },
+  "components.passwordField.show": {
+    "defaultMessage": "Mostra la password",
+    "description": "Nom accessible del botó que destapa la contrasenya"
+  },
+  "components.passwordField.hide": {
+    "defaultMessage": "Nascondi la password",
+    "description": "Nom accessible del botó que torna a tapar la contrasenya"
   }
 }

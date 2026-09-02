@@ -3,7 +3,10 @@
 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import type { LangsApp } from "@sequence-arasaac/shared-types";
+import type {
+  LangsApp,
+  PasswordLinkInfo,
+} from "@sequence-arasaac/shared-types";
 import { env } from "../../config/env";
 import { toLangsApp } from "../../shared/langsApp";
 import { UserModel } from "./model";
@@ -393,6 +396,54 @@ export const setPassword = async (
   });
 
   return generateTokens(String(user._id), user.email, user.tokenVersion);
+};
+
+// Llegeix el token d'un enllaç de contrasenya i diu de quin compte és.
+//
+// No consumeix el token ni toca res: només serveix perquè /set-password pugui
+// dir a qui l'obre a quin compte està a punt d'entrar. Qui té el token ja pot
+// establir-hi la contrasenya, així que retornar-ne el nom i el correu no revela
+// res de nou —i, en canvi, és l'única manera que té qui rep el correu de
+// comprovar que l'enllaç és seu abans de fer-lo servir.
+//
+// Comparteix la validació del token amb setPassword a propòsit: si un enllaç
+// caducat es llegís bé aquí i fallés en desar, la pàgina prometria una cosa
+// que després no compleix.
+export const readPasswordLink = async (
+  token: string
+): Promise<PasswordLinkInfo> => {
+  let payload: PasswordTokenPayload;
+
+  try {
+    payload = jwt.verify(token, env.JWT_SECRET) as PasswordTokenPayload;
+  } catch {
+    throw authError("VERIFICATION_TOKEN_INVALID", 400);
+  }
+
+  if (payload.type !== "verify" && payload.type !== "reset") {
+    throw authError("VERIFICATION_TOKEN_INVALID", 400);
+  }
+
+  const user = await UserModel.findById(payload.userId)
+    .select("email name passwordHash status")
+    .lean();
+
+  if (!user) {
+    throw authError("USER_NOT_FOUND", 404);
+  }
+
+  // Un compte suspès no ha de poder establir cap contrasenya, i val més
+  // dir-ho abans d'omplir el formulari que després d'haver-lo omplert.
+  if (user.status === "suspended") {
+    throw authError("ACCOUNT_SUSPENDED", 403);
+  }
+
+  return {
+    name: user.name,
+    email: user.email,
+    type: payload.type,
+    hasPassword: Boolean(user.passwordHash),
+  };
 };
 
 // Demana la recuperació de contrasenya. Mai llança i mai diu si l'email existeix:

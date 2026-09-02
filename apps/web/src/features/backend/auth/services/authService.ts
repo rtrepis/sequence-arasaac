@@ -1,6 +1,7 @@
 // Capa de servei per a l'autenticació: encapsula les crides HTTP d'auth.
 import apiClient from "../../api/apiClient";
 import {
+  PasswordLinkInfo,
   RegistrationStatus,
   UserUseCase,
 } from "@sequence-arasaac/shared-types";
@@ -71,6 +72,22 @@ export const setPassword = async (
 // existeixi o no el compte: el backend no ho distingeix de cara enfora.
 export const forgotPassword = async (email: string): Promise<void> => {
   await apiClient.post("/auth/forgot-password", { email });
+};
+
+// Diu de quin compte és l'enllaç d'establiment de contrasenya, per poder-ho
+// confirmar a qui l'obre abans que hi escrigui res. No consumeix el token.
+//
+// Va per POST tot i que només llegeix: el token dona accés a establir la
+// contrasenya d'un compte i a la query d'un GET acabaria escrit als registres
+// del servidor i del proxy.
+export const getPasswordLinkInfo = async (
+  token: string,
+): Promise<PasswordLinkInfo> => {
+  const { data } = await apiClient.post<PasswordLinkInfo>(
+    "/auth/password-link-info",
+    { token },
+  );
+  return data;
 };
 
 export const logout = async (): Promise<void> => {

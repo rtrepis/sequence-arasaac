@@ -30,6 +30,65 @@ const messages = defineMessages({
     description:
       "Missatge sempre igual, existeixi o no el compte, per no revelar quins correus estan registrats",
   },
+  emailHelp: {
+    id: "pages.forgotPassword.emailHelp",
+    defaultMessage: "L'adreça amb què vas crear el compte.",
+    description: "Ajuda del camp correu",
+  },
+  successTitle: {
+    id: "pages.forgotPassword.successTitle",
+    defaultMessage: "Revisa el teu correu",
+    description: "Títol de la pantalla de confirmació",
+  },
+  changeEmail: {
+    id: "pages.forgotPassword.changeEmail",
+    defaultMessage: "Prova amb una altra adreça",
+    description:
+      "Botó per tornar al formulari quan l'adreça escrita pot ser equivocada",
+  },
+  signupLink: {
+    id: "pages.forgotPassword.signupLink",
+    defaultMessage: "Encara no tens compte? Crea'n un",
+    description: "Enllaç a la pàgina de creació de compte",
+  },
+  asideTitle: {
+    id: "pages.forgotPassword.asideTitle",
+    defaultMessage: "Què cal saber",
+    description: "Encapçalament de la columna d'ajuda",
+  },
+  hintInboxTitle: {
+    id: "pages.forgotPassword.hintInboxTitle",
+    defaultMessage: "Mira també el correu brossa",
+    description: "Títol de l'ajuda sobre la safata d'entrada",
+  },
+  hintInboxText: {
+    id: "pages.forgotPassword.hintInboxText",
+    defaultMessage:
+      "L'enllaç surt de seguida. Si no el veus a la safata d'entrada, sol ser a la carpeta de brossa.",
+    description: "Text de l'ajuda sobre la safata d'entrada",
+  },
+  hintExpiresTitle: {
+    id: "pages.forgotPassword.hintExpiresTitle",
+    defaultMessage: "L'enllaç dura una hora",
+    description: "Títol de l'ajuda sobre la caducitat de l'enllaç",
+  },
+  hintExpiresText: {
+    id: "pages.forgotPassword.hintExpiresText",
+    defaultMessage:
+      "Passada l'hora deixa de servir i n'has de demanar un altre. És curt a propòsit: obre el teu compte.",
+    description: "Text de l'ajuda sobre la caducitat de l'enllaç",
+  },
+  hintMeanwhileTitle: {
+    id: "pages.forgotPassword.hintMeanwhileTitle",
+    defaultMessage: "Mentrestant pots treballar",
+    description: "Títol de l'ajuda sobre treballar sense sessió",
+  },
+  hintMeanwhileText: {
+    id: "pages.forgotPassword.hintMeanwhileText",
+    defaultMessage:
+      "L'aplicació funciona sencera sense sessió: només el desat al núvol demana entrar-hi.",
+    description: "Text de l'ajuda sobre treballar sense sessió",
+  },
   goToApp: {
     id: "pages.forgotPassword.goToApp",
     defaultMessage: "Ves a l'aplicació",

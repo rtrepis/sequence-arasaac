@@ -1,24 +1,38 @@
 // Pàgina de creació de compte: nom, ús de l'aplicació i correu — sense
 // contrasenya. La contrasenya s'estableix després, a partir de l'enllaç del
 // correu de benvinguda (vegeu SetPasswordPage).
-import React, { useEffect, useState } from "react";
+//
+// El formulari conviu amb l'avís de places limitades: les altes van comptades
+// (un sostre total i un de diari, vegeu `modules/config` a l'API) i qui arriba
+// aquí ho ha de saber **abans** d'omplir res, no en prémer el botó.
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
   Box,
   CircularProgress,
   MenuItem,
   Link,
-  Paper,
+  Stack,
   TextField,
-  Typography,
 } from "@mui/material";
+import {
+  AiOutlineCheckCircle,
+  AiOutlineCloudUpload,
+  AiOutlinePicture,
+  AiOutlineSetting,
+} from "react-icons/ai";
 import { useIntl } from "react-intl";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserUseCase } from "@sequence-arasaac/shared-types";
 import messages from "./SignupPage.lang";
+import SignupRegistrationNotice, {
+  getClosedReason,
+} from "./SignupRegistrationNotice";
 import StyledButton from "@/style/StyledButton";
-import { APP_CORNER_RADIUS } from "@/style/appShape";
+import AuthLayout from "@components/AuthLayout/AuthLayout";
+import AuthHighlights from "@components/AuthLayout/AuthHighlights";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
+import useRegistrationStatus from "@features/backend/auth/hooks/useRegistrationStatus";
 import {
   resendVerification,
   signup,
@@ -51,6 +65,13 @@ const SignupPage = (): React.ReactElement => {
   const [isResending, setIsResending] = useState(false);
   const [resendDone, setResendDone] = useState(false);
 
+  const { status, refresh } = useRegistrationStatus();
+  const closedReason = getClosedReason(status);
+
+  // Estable: useCountdown no reinicia el compte enrere quan canvia la funció,
+  // i amb una de nova a cada render el rellotge tornaria a començar cada segon
+  const handleCountdownOver = useCallback(() => refresh(), [refresh]);
+
   // Arribar a aquesta pàgina (des de qualsevol enllaç o per URL directa) ja és
   // senyal prou clar que es vol el backend: mentre s'omple el formulari, el
   // servidor de Render ja s'està despertant.
@@ -69,7 +90,9 @@ const SignupPage = (): React.ReactElement => {
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
-    if (!useCase) return;
+    // Guarda al handler i no `disabled` al botó: un botó desactivat surt de
+    // l'ordre de tabulació i qui navega amb teclat el perd sense cap avís
+    if (!useCase || isLoading || closedReason) return;
 
     setIsLoading(true);
     setErrorCode(null);
@@ -89,6 +112,9 @@ const SignupPage = (): React.ReactElement => {
         (error as { response?: { data?: { errorCode?: string } } })?.response
           ?.data?.errorCode ?? "REGISTER_ERROR";
       setErrorCode(code);
+      // Una alta rebutjada per un sostre vol dir que la xifra que hi ha a
+      // pantalla ja no és bona: algú altre s'hi ha posat mentre s'omplia
+      refresh();
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +125,7 @@ const SignupPage = (): React.ReactElement => {
   // El servidor respon sempre igual (204) per no revelar quins correus tenen
   // compte, així que aquí es pot confirmar que s'ha demanat, mai que hagi arribat.
   const handleResend = async (): Promise<void> => {
-    if (!submittedEmail) return;
+    if (!submittedEmail || isResending) return;
 
     setIsResending(true);
     setErrorCode(null);
@@ -117,105 +143,66 @@ const SignupPage = (): React.ReactElement => {
     }
   };
 
-  return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        p: 2,
-        backgroundColor: "background.default",
-      }}
-    >
-      {/* La targeta és una superfície que sura sobre l'escriptori: porta la
-          cantonada de la casa, com els diàlegs i els controls */}
-      <Paper
-        sx={{
-          p: 4,
-          maxWidth: 480,
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          borderRadius: `${APP_CORNER_RADIUS}px`,
-        }}
-      >
-        <Typography variant="h5" component="h1" align="center">
-          {intl.formatMessage(
-            submittedEmail
-              ? emailSent === false
-                ? messages.failedTitle
-                : messages.successTitle
-              : messages.pageTitle,
-          )}
-        </Typography>
+  const goToApp = (): void => {
+    navigate(`/${locale}/create-sequence`);
+  };
 
-        {submittedEmail ? (
+  const title = intl.formatMessage(
+    submittedEmail
+      ? emailSent === false
+        ? messages.failedTitle
+        : messages.successTitle
+      : messages.pageTitle,
+  );
+
+  const highlights = (
+    <AuthHighlights
+      title={intl.formatMessage(messages.asideTitle)}
+      items={[
+        {
+          id: "cloud",
+          icon: <AiOutlineCloudUpload />,
+          title: intl.formatMessage(messages.benefitCloudTitle),
+          description: intl.formatMessage(messages.benefitCloudText),
+        },
+        {
+          id: "vocabulary",
+          icon: <AiOutlinePicture />,
+          title: intl.formatMessage(messages.benefitVocabularyTitle),
+          description: intl.formatMessage(messages.benefitVocabularyText),
+        },
+        {
+          id: "settings",
+          icon: <AiOutlineSetting />,
+          title: intl.formatMessage(messages.benefitSettingsTitle),
+          description: intl.formatMessage(messages.benefitSettingsText),
+        },
+        {
+          id: "no-account",
+          icon: <AiOutlineCheckCircle />,
+          title: intl.formatMessage(messages.benefitNoAccountTitle),
+          description: intl.formatMessage(messages.benefitNoAccountText),
+        },
+      ]}
+    />
+  );
+
+  // Pantalla de resultat: el compte ja existeix i el que queda per dir és si el
+  // correu ha sortit o no
+  if (submittedEmail) {
+    return (
+      <AuthLayout title={title} aside={highlights}>
+        {emailSent === false ? (
           <>
-            {emailSent === false ? (
-              <>
-                <Alert severity="warning" variant="outlined">
-                  {intl.formatMessage(messages.failed, {
-                    email: submittedEmail,
-                  })}
-                </Alert>
-
-                {resendDone && (
-                  <Alert severity="info" variant="outlined">
-                    {intl.formatMessage(messages.resendDone)}
-                  </Alert>
-                )}
-
-                {errorMessage && (
-                  <Alert severity="error" variant="outlined">
-                    {errorMessage}
-                  </Alert>
-                )}
-
-                <StyledButton
-                  variant="contained"
-                  onClick={handleResend}
-                  disabled={isResending}
-                  startIcon={
-                    isResending ? <CircularProgress size={16} /> : null
-                  }
-                >
-                  {intl.formatMessage(messages.resend)}
-                </StyledButton>
-                <StyledButton
-                  color="inherit"
-                  onClick={() => navigate(`/${locale}/create-sequence`)}
-                >
-                  {intl.formatMessage(messages.goToApp)}
-                </StyledButton>
-              </>
-            ) : (
-              <>
-                <Alert severity="success" variant="outlined">
-                  {intl.formatMessage(messages.success, {
-                    email: submittedEmail,
-                  })}
-                </Alert>
-                <StyledButton
-                  variant="contained"
-                  onClick={() => navigate(`/${locale}/create-sequence`)}
-                >
-                  {intl.formatMessage(messages.goToApp)}
-                </StyledButton>
-              </>
-            )}
-          </>
-        ) : (
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-          >
-            <Alert severity="info" variant="outlined">
-              {intl.formatMessage(messages.hint)}
+            <Alert severity="warning" variant="outlined">
+              {intl.formatMessage(messages.failed, { email: submittedEmail })}
             </Alert>
+
+            {resendDone && (
+              <Alert severity="info" variant="outlined">
+                {intl.formatMessage(messages.resendDone)}
+              </Alert>
+            )}
 
             {errorMessage && (
               <Alert severity="error" variant="outlined">
@@ -223,81 +210,146 @@ const SignupPage = (): React.ReactElement => {
               </Alert>
             )}
 
-            <TextField
-              label={intl.formatMessage(messages.name)}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              fullWidth
-              autoFocus
-              autoComplete="name"
-              disabled={isLoading}
-            />
-
-            <TextField
-              select
-              label={intl.formatMessage(messages.useCase)}
-              value={useCase}
-              onChange={(e) => setUseCase(e.target.value as UserUseCase)}
-              required
-              fullWidth
-              disabled={isLoading}
-            >
-              {USE_CASES.map(({ value, labelId }) => (
-                <MenuItem key={value} value={value}>
-                  {intl.formatMessage(messages[labelId])}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            {useCase === "other" && (
-              <TextField
-                label={intl.formatMessage(messages.useCaseOtherLabel)}
-                value={useCaseOther}
-                onChange={(e) => setUseCaseOther(e.target.value)}
-                fullWidth
-                disabled={isLoading}
-              />
-            )}
-
-            <TextField
-              label={intl.formatMessage(messages.email)}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              fullWidth
-              autoComplete="email"
-              disabled={isLoading}
-            />
-
             <StyledButton
-              type="submit"
               variant="contained"
-              fullWidth
-              disabled={isLoading || !name || !useCase || !email}
-              startIcon={isLoading ? <CircularProgress size={16} /> : null}
+              onClick={handleResend}
+              aria-disabled={isResending}
+              aria-busy={isResending}
+              startIcon={isResending ? <CircularProgress size={16} /> : null}
             >
-              {intl.formatMessage(messages.submit)}
+              {intl.formatMessage(messages.resend)}
             </StyledButton>
-
-            {/* Enllaç de debò i no un `Typography` amb `cursor: pointer`: així s'hi
-                arriba amb el tabulador, i amb la tinta del tema es llegeix (el verd
-                de la casa com a color de text es queda a 2,1:1) */}
-            <Link
-              component="button"
-              type="button"
-              variant="body2"
-              color="inherit"
-              onClick={() => navigate(`/${locale}/create-sequence`)}
-              sx={{ alignSelf: "center" }}
-            >
-              {intl.formatMessage(messages.loginLink)}
-            </Link>
-          </Box>
+            <StyledButton color="inherit" onClick={goToApp}>
+              {intl.formatMessage(messages.goToApp)}
+            </StyledButton>
+          </>
+        ) : (
+          <>
+            <Alert severity="success" variant="outlined">
+              {intl.formatMessage(messages.success, { email: submittedEmail })}
+            </Alert>
+            <StyledButton variant="contained" onClick={goToApp}>
+              {intl.formatMessage(messages.goToApp)}
+            </StyledButton>
+          </>
         )}
-      </Paper>
-    </Box>
+      </AuthLayout>
+    );
+  }
+
+  return (
+    <AuthLayout
+      title={title}
+      subtitle={intl.formatMessage(messages.pageSubtitle)}
+      aside={highlights}
+    >
+      <SignupRegistrationNotice
+        status={status}
+        onCountdownOver={handleCountdownOver}
+      />
+
+      {errorMessage && (
+        <Alert severity="error" variant="outlined">
+          {errorMessage}
+        </Alert>
+      )}
+
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        {/* `disabled` de debò, i no `aria-disabled`: aquí el camp no està
+            ocupat fent res —no hi cap cap alta més fins que el comptador es
+            renovi—, i el que el desactiva és una condició del servidor, no
+            una espera. L'avís de sobre en diu el motiu i quan es podrà tornar. */}
+        <TextField
+          label={intl.formatMessage(messages.name)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          fullWidth
+          autoFocus
+          autoComplete="name"
+          disabled={closedReason !== null}
+        />
+
+        <TextField
+          select
+          label={intl.formatMessage(messages.useCase)}
+          value={useCase}
+          onChange={(e) => setUseCase(e.target.value as UserUseCase)}
+          required
+          fullWidth
+          disabled={closedReason !== null}
+          helperText={intl.formatMessage(messages.useCaseHelp)}
+        >
+          {USE_CASES.map(({ value, labelId }) => (
+            <MenuItem key={value} value={value}>
+              {intl.formatMessage(messages[labelId])}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        {useCase === "other" && (
+          <TextField
+            label={intl.formatMessage(messages.useCaseOtherLabel)}
+            value={useCaseOther}
+            onChange={(e) => setUseCaseOther(e.target.value)}
+            fullWidth
+            disabled={closedReason !== null}
+          />
+        )}
+
+        <TextField
+          label={intl.formatMessage(messages.email)}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          fullWidth
+          autoComplete="email"
+          disabled={closedReason !== null}
+          helperText={intl.formatMessage(messages.emailHelp)}
+        />
+
+        <StyledButton
+          type="submit"
+          variant="contained"
+          fullWidth
+          disabled={closedReason !== null || !name || !useCase || !email}
+          aria-busy={isLoading}
+          startIcon={isLoading ? <CircularProgress size={16} /> : null}
+        >
+          {intl.formatMessage(messages.submit)}
+        </StyledButton>
+
+        <Stack spacing={1} alignItems="center">
+          {/* Enllaç de debò i no un `Typography` amb `cursor: pointer`: així s'hi
+              arriba amb el tabulador, i amb la tinta del tema es llegeix (el verd
+              de la casa com a color de text es queda a 2,1:1) */}
+          <Link
+            component="button"
+            type="button"
+            variant="body2"
+            color="inherit"
+            onClick={goToApp}
+          >
+            {intl.formatMessage(messages.loginLink)}
+          </Link>
+          <Link
+            component="button"
+            type="button"
+            variant="body2"
+            color="inherit"
+            onClick={goToApp}
+          >
+            {intl.formatMessage(messages.continueWithoutAccount)}
+          </Link>
+        </Stack>
+      </Box>
+    </AuthLayout>
   );
 };
 

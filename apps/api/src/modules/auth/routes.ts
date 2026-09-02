@@ -10,6 +10,7 @@ import {
   refresh,
   logout,
   setPasswordHandler,
+  passwordLinkInfo,
   forgotPassword,
   resendVerificationEmail,
 } from "./controller";
@@ -62,6 +63,8 @@ authRouter.post("/login", login);
 authRouter.post("/refresh", refresh);
 authRouter.post("/logout", logout);
 authRouter.post("/set-password", setPasswordHandler);
+// Només llegeix el token de l'enllaç; el limitador general d'auth ja hi és
+authRouter.post("/password-link-info", passwordLinkInfo);
 authRouter.post("/forgot-password", emailRequestLimiter, forgotPassword);
 authRouter.post("/resend-verification", emailRequestLimiter, resendVerificationEmail);
 

@@ -12,7 +12,12 @@ import {
   stopTestDatabase,
   clearTestDatabase,
 } from "../../test/setupDatabase";
-import { signupUser, loginUser, setPassword } from "./service";
+import {
+  signupUser,
+  loginUser,
+  setPassword,
+  readPasswordLink,
+} from "./service";
 import { UserModel } from "./model";
 import {
   updateAppConfig,
@@ -257,6 +262,70 @@ describe("setPassword", () => {
         passwordConfirmation: PASSWORD,
       })
     ).rejects.toThrow("VERIFICATION_TOKEN_INVALID");
+  });
+});
+
+describe("readPasswordLink", () => {
+  it("hauria de dir de quin compte és l'enllaç i que encara no té contrasenya", async () => {
+    await signupUser({ ...SIGNUP_INPUT, email: "algu@example.com" }, IP_HASH);
+    const user = await UserModel.findOne({ emailCanonical: "algu@example.com" });
+
+    const info = await readPasswordLink(
+      signPasswordToken(String(user!._id), "verify")
+    );
+
+    expect(info).toEqual({
+      name: SIGNUP_INPUT.name,
+      email: "algu@example.com",
+      type: "verify",
+      hasPassword: false,
+    });
+  });
+
+  it("hauria de dir que la contrasenya se substitueix quan el compte ja en té", async () => {
+    await createActiveUser("algu@example.com", PASSWORD);
+    const user = await UserModel.findOne({ emailCanonical: "algu@example.com" });
+
+    const info = await readPasswordLink(
+      signPasswordToken(String(user!._id), "reset")
+    );
+
+    expect(info.type).toBe("reset");
+    expect(info.hasPassword).toBe(true);
+  });
+
+  it("no hauria de consumir el token: després de llegir-lo encara serveix", async () => {
+    await signupUser({ ...SIGNUP_INPUT, email: "algu@example.com" }, IP_HASH);
+    const user = await UserModel.findOne({ emailCanonical: "algu@example.com" });
+    const token = signPasswordToken(String(user!._id), "verify");
+
+    await readPasswordLink(token);
+    const tokens = await setPassword({
+      token,
+      password: PASSWORD,
+      passwordConfirmation: PASSWORD,
+    });
+
+    expect(tokens.accessToken).toBeTruthy();
+  });
+
+  it("hauria de rebutjar un token invàlid, igual que setPassword", async () => {
+    await expect(readPasswordLink("no-es-cap-jwt")).rejects.toThrow(
+      "VERIFICATION_TOKEN_INVALID"
+    );
+  });
+
+  it("hauria de rebutjar l'enllaç d'un compte suspès", async () => {
+    await createActiveUser("algu@example.com", PASSWORD);
+    await UserModel.updateOne(
+      { emailCanonical: "algu@example.com" },
+      { $set: { status: "suspended" } }
+    );
+    const user = await UserModel.findOne({ emailCanonical: "algu@example.com" });
+
+    await expect(
+      readPasswordLink(signPasswordToken(String(user!._id), "reset"))
+    ).rejects.toThrow("ACCOUNT_SUSPENDED");
   });
 });
 

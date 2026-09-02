@@ -77,6 +77,16 @@ export const setPasswordSchema = z
     path: ["passwordConfirmation"],
   });
 
+// Esquema de la lectura de l'enllaç de contrasenya. Va per POST i no per GET
+// amb el token a la query perquè un token d'aquests dona accés a establir la
+// contrasenya d'un compte, i a la query acabaria escrit als registres del
+// servidor i del proxy.
+export const passwordLinkInfoSchema = z.object({
+  token: z
+    .string({ required_error: "VERIFICATION_TOKEN_MISSING" })
+    .min(1, "VERIFICATION_TOKEN_MISSING"),
+});
+
 // Esquema de la recuperació de contrasenya — un sol camp, cap indici de si l'email existeix
 export const forgotPasswordSchema = z.object({
   email: z
@@ -99,3 +109,4 @@ export type LoginInput = z.infer<typeof loginSchema>;
 export type SetPasswordInput = z.infer<typeof setPasswordSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResendVerificationInput = z.infer<typeof resendVerificationSchema>;
+export type PasswordLinkInfoInput = z.infer<typeof passwordLinkInfoSchema>;
