@@ -10,14 +10,11 @@ import StyledButton from "@/style/StyledButton";
 import { useIntl } from "react-intl";
 import messages from "./SettingsSaveErrorDialog.lang";
 import { useAppSelector } from "../../app/hooks";
-import { RootState } from "../../app/store";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import {
   RequestFailure,
   STORAGE_FULL,
 } from "@features/backend/api/requestFailure";
-
-const selectIsAuthenticated = (state: RootState): boolean =>
-  state.auth.accessToken !== null;
 
 /** Rebutjos per quota del compte: cap d'ells canvia per tornar-ho a provar. */
 const QUOTA_CODES = new Set([
@@ -41,7 +38,7 @@ const SettingsSaveErrorDialog = ({
   onDismiss,
 }: SettingsSaveErrorDialogProps): React.ReactElement => {
   const intl = useIntl();
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isAuthenticated = useAppSelector(selectIsLoggedIn);
 
   // El que s'ha perdut no és el mateix segons on s'havia de desar, i dir-ho malament
   // seria pitjor que no dir res. Els casos amb text propi són aquells on l'usuari

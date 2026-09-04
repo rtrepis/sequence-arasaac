@@ -38,6 +38,38 @@
   `canSignup` amb les tres condicions ja resoltes. Descobrir que avui no hi cap ningú després
   d'omplir el formulari és el que això evita.
 
+## Apagar les funcions de compte
+
+- **Hi ha un interruptor per publicar l'app sense comptes**, sense treure'n el codi:
+  `VITE_ACCOUNTS_ENABLED=false` al front (`apps/web/src/configs/accountsConfig.ts`) i
+  `ACCOUNTS_ENABLED=false` a l'API. Sense la variable, tot queda encès: una compilació que no
+  la porti es comporta com sempre.
+- **És de compilació, i no de BD com `registrationOpen`**, a posta. Tancar el registre és una
+  decisió d'un dia i ha de ser un clic al panell; apagar els comptes sencers s'engega justament
+  quan no es vol dependre que el servidor respongui, i llegir-ho del servidor voldria dir esperar
+  el desvetllament de Render per saber si es pot pintar el botó d'entrar.
+- **Les dues bandes han d'anar de bracet.** El front apagat amb l'API oberta deixa l'API servint
+  comptes que ningú pot fer servir; l'invers deixa l'app ensenyant una porta que dóna a un 503.
+- **Al front tot penja de `selectIsLoggedIn`** (`features/backend/auth/store/authSelectors.ts`):
+  amb els comptes apagats no hi ha sessió mai, i el núvol, el vocabulari personal, la quota, la
+  qualitat d'imatge i la sincronització de preferències s'apaguen amb ell. Compte: `!selectIsLoggedIn`
+  **no** vol dir «ensenya la porta d'entrada» —qui pinti el botó d'entrar, el registre, les rutes
+  de `/signup`, `/forgot-password`, `/set-password` i `/admin` o el refresc silenciós d'arrencada
+  ha de mirar `ACCOUNTS_ENABLED` a més d'això.
+- **La caché del compte al navegador queda ignorada** (`AppBootstrap`, `App`): pintar el tema i
+  l'idioma d'una sessió que ja no es pot obrir, en un dispositiu compartit i sense manera de
+  tancar-la, seria pitjor que no recordar res.
+- **A l'API el porter és un de sol** (`middleware/requireAccountsEnabled.ts`) i cobreix `/api/auth`,
+  `/api/documents`, `/api/user` i `/api/admin`, amb un 503 `ACCOUNTS_DISABLED` —el servei existeix i
+  tornarà. En queden fora `/health` i `/api/client-errors`: l'app funciona sencera sense compte, i
+  els seus errors i el seu ping s'han de continuar servint.
+- **Qui tingui sessió oberta no en surt expulsat**: senzillament no li torna, perquè el refresc
+  silenciós no s'intenta. L'esborrany del navegador es conserva; els documents del núvol queden
+  inabastables fins que es torni a encendre, no perduts.
+- **Els tests e2e de compte** (`login-wake-up-notice`, `session-expired`, `warm-up`,
+  `account-settings-cache`, `save-copy-and-status`) donen per fet que hi ha comptes: amb
+  l'interruptor apagat no tenen res a provar.
+
 ## Traça antiabús
 
 - **La IP no es desa mai en clar**, enlloc. `shared/ipHash.ts` en fa un HMAC-SHA256 amb `IP_HASH_SECRET`; el `SecurityEvent` només en guarda el hash. Amb això es pot comptar «quantes altes d'aquest origen» sense tenir cap IP a la base de dades.

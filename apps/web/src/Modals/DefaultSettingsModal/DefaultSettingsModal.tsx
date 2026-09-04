@@ -7,6 +7,7 @@ import DefaultSettingsDialog from "./DefaultSettingsDialog";
 import StyledIconButton from "@/style/StyledIconButton";
 import UserAvatar from "@components/UserAvatar/UserAvatar";
 import { useAppSelector } from "../../app/hooks";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import React from "react";
 
 /** Diàmetre de la rodona de l'usuari dins de la barra */
@@ -21,8 +22,8 @@ const DefaultSettingsModal = (): React.ReactElement => {
   // Ref per restaurar el focus al botó d'obertura quan el modal es tanca
   const triggerRef = useRef<HTMLElement | null>(null);
 
-  const { accessToken, userEmail } = useAppSelector((state) => state.auth);
-  const isLoggedIn = Boolean(accessToken);
+  const userEmail = useAppSelector((state) => state.auth.userEmail);
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
 
   // Amb sessió, el nom del botó diu també amb quin compte s'ha entrat: és
   // l'única confirmació que hi ha sense obrir el menú, i el tooltip d'un botó

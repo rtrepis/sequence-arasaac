@@ -48,6 +48,7 @@ import {
 } from "@features/sequence/store/documentSlice";
 import { deleteUserAsset, listUserAssets } from "../services/settingsService";
 import { refreshQuotaThunk } from "../store/quotaSlice";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import { settingsAccordion } from "@components/SettingsLayout";
 import { useFormatBytes } from "../hooks/useFormatBytes";
 import { useFormatPrintSize } from "../hooks/useFormatPrintSize";
@@ -64,9 +65,7 @@ const AccountImagesList = (): React.ReactElement | null => {
   const formatPrintSize = useFormatPrintSize();
   const { showSnackbar } = useFeedback();
 
-  const isAuthenticated = useAppSelector(
-    (state) => state.auth.accessToken !== null,
-  );
+  const isAuthenticated = useAppSelector(selectIsLoggedIn);
   const openDocumentId = useAppSelector((state) => state.document.id);
   const wordProfiles = useAppSelector((state) => state.ui.wordProfiles);
 

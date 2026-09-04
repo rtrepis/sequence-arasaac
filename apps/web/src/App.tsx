@@ -49,6 +49,8 @@ export const messageLocale = {
   it: messages_it,
 };
 import { usePageTracking } from "@shared/hooks/usePageTracking";
+import { ACCOUNTS_ENABLED } from "./configs/accountsConfig";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import { useAppSelector } from "./app/hooks";
 import { langTranslateApp } from "./configs/languagesConfigs";
 import { LangsApp } from "./types/ui";
@@ -76,9 +78,7 @@ const App = (): ReactElement => {
   const {
     lang: { app: appLang },
   } = useAppSelector((state) => state.ui);
-  const isAuthenticated = useAppSelector(
-    (state) => state.auth.accessToken !== null,
-  );
+  const isAuthenticated = useAppSelector(selectIsLoggedIn);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -94,7 +94,11 @@ const App = (): ReactElement => {
   // Es llegeix un sol cop, en muntar: el que interessa és si aquest navegador ja
   // coneixia un compte **en arrencar**. Si s'hi entra després, la condició la fa
   // `isAuthenticated`.
-  const [hasAccountSettings] = useState(() => getStoredAccountUi() !== null);
+  // Amb els comptes apagats la caché del compte no mana res: el que hi ha
+  // desat és d'una sessió que ja no es pot tenir.
+  const [hasAccountSettings] = useState(
+    () => ACCOUNTS_ENABLED && getStoredAccountUi() !== null,
+  );
 
   useEffect(() => {
     if (!isAuthenticated && !hasAccountSettings) return;
@@ -156,17 +160,21 @@ const App = (): ReactElement => {
             —el layout hi cau al localeBrowser. Comparteixen AuthStandaloneLayout
             perquè totes necessiten el seu propi <IntlProvider>, que aquí no els
             arriba de LanguageLayout. */}
-        <Route element={<AuthStandaloneLayout localeBrowser={appLang} />}>
-          <Route path=":locale/signup" element={<SignupPage />} />
-          <Route
-            path=":locale/forgot-password"
-            element={<ForgotPasswordPage />}
-          />
-          <Route path="set-password" element={<SetPasswordPage />} />
-        </Route>
+        {ACCOUNTS_ENABLED && (
+          <Route element={<AuthStandaloneLayout localeBrowser={appLang} />}>
+            <Route path=":locale/signup" element={<SignupPage />} />
+            <Route
+              path=":locale/forgot-password"
+              element={<ForgotPasswordPage />}
+            />
+            <Route path="set-password" element={<SetPasswordPage />} />
+          </Route>
+        )}
 
-        {/* Panell d'administració — eina interna, fora de LanguageLayout */}
-        <Route path="admin" element={<AdminPage />} />
+        {/* Panell d'administració — eina interna, fora de LanguageLayout.
+            Va amb la resta de funcions de compte: hi cal sessió d'administrador,
+            i sense comptes no n'hi pot haver cap. */}
+        {ACCOUNTS_ENABLED && <Route path="admin" element={<AdminPage />} />}
 
         <Route path="*" element={<Navigate to={"/"} replace />} />
       </Routes>

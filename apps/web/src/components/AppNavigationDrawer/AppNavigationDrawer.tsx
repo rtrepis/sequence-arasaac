@@ -49,6 +49,8 @@ import {
 } from "@features/sequence/store/documentStatusSlice";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
 import UserAvatar from "@components/UserAvatar/UserAvatar";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
+import { ACCOUNTS_ENABLED } from "@/configs/accountsConfig";
 import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
 import { trackEvent } from "@shared/hooks/usePageTracking";
@@ -73,10 +75,8 @@ const AppNavigationDrawer = ({
   const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
 
   // Estat d'autenticació
-  const { userEmail, accessToken, isAdmin } = useAppSelector(
-    (state) => state.auth,
-  );
-  const isLoggedIn = Boolean(accessToken);
+  const { userEmail, isAdmin } = useAppSelector((state) => state.auth);
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
 
   // Locale de la ruta; fallback a "ca" si no estem en una ruta amb paràmetre de locale
   const { locale = "ca" } = useParams<{ locale: string }>();
@@ -364,78 +364,86 @@ const AppNavigationDrawer = ({
           {/* Espai flexible: empeny autenticació al fons */}
           <Box sx={{ flexGrow: 1 }} />
 
-          <Divider />
+          {/* Amb les funcions de compte apagades no hi ha sessió ni porta
+              per obrir-ne cap: la secció sencera no existeix */}
+          {ACCOUNTS_ENABLED && (
+            <>
+              <Divider />
 
-          {/* Secció 3: Autenticació */}
-          {!isLoggedIn ? (
-            <List>
-              <ListItemButton onClick={handleAuthModalOpen}>
-                <ListItemIcon>
-                  <AiOutlineUser />
-                </ListItemIcon>
-                <ListItemText
-                  primary={intl.formatMessage(authMessages.loginItem)}
-                />
-              </ListItemButton>
-            </List>
-          ) : (
-            <List>
-              {/* Fila no interactiva: Avatar + email */}
-              <ListItem>
-                <ListItemIcon>
-                  <UserAvatar email={userEmail} />
-                </ListItemIcon>
-                <ListItemText
-                  primary={userEmail ?? ""}
-                  primaryTypographyProps={{
-                    variant: "body2",
-                    noWrap: true,
-                    title: userEmail ?? "",
-                  }}
-                />
-              </ListItem>
+              {/* Secció 3: Autenticació */}
+              {!isLoggedIn ? (
+                <List>
+                  <ListItemButton onClick={handleAuthModalOpen}>
+                    <ListItemIcon>
+                      <AiOutlineUser />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={intl.formatMessage(authMessages.loginItem)}
+                    />
+                  </ListItemButton>
+                </List>
+              ) : (
+                <List>
+                  {/* Fila no interactiva: Avatar + email */}
+                  <ListItem>
+                    <ListItemIcon>
+                      <UserAvatar email={userEmail} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={userEmail ?? ""}
+                      primaryTypographyProps={{
+                        variant: "body2",
+                        noWrap: true,
+                        title: userEmail ?? "",
+                      }}
+                    />
+                  </ListItem>
 
-              <ListItemButton onClick={handleSaveToCloud}>
-                <ListItemIcon>
-                  <AiOutlineCloudUpload />
-                </ListItemIcon>
-                <ListItemText
-                  primary={intl.formatMessage(authMessages.saveDocument)}
-                />
-              </ListItemButton>
+                  <ListItemButton onClick={handleSaveToCloud}>
+                    <ListItemIcon>
+                      <AiOutlineCloudUpload />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={intl.formatMessage(authMessages.saveDocument)}
+                    />
+                  </ListItemButton>
 
-              <ListItemButton onClick={handleLoadFromCloud}>
-                <ListItemIcon>
-                  <AiOutlineCloudDownload />
-                </ListItemIcon>
-                <ListItemText
-                  primary={intl.formatMessage(authMessages.loadDocument)}
-                />
-              </ListItemButton>
+                  <ListItemButton onClick={handleLoadFromCloud}>
+                    <ListItemIcon>
+                      <AiOutlineCloudDownload />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={intl.formatMessage(authMessages.loadDocument)}
+                    />
+                  </ListItemButton>
 
-              {/* Accés al panell d'administració. L'enllaç sí que es tradueix,
-                  encara que la pàgina de darrere només existeixi en català
-                  (excepció declarada al CLAUDE.md): el drawer és superfície
-                  traduïda i una paraula catalana enmig d'una llista francesa no
-                  es pot llegir */}
-              {isAdmin && (
-                <ListItemButton onClick={() => handleNavigate("/admin")}>
-                  <ListItemIcon>
-                    <AiOutlineSafety />
-                  </ListItemIcon>
-                  <ListItemText primary={intl.formatMessage(messages.admin)} />
-                </ListItemButton>
+                  {/* Accés al panell d'administració. L'enllaç sí que es tradueix,
+                    encara que la pàgina de darrere només existeixi en català
+                    (excepció declarada al CLAUDE.md): el drawer és superfície
+                    traduïda i una paraula catalana enmig d'una llista francesa no
+                    es pot llegir */}
+                  {isAdmin && (
+                    <ListItemButton onClick={() => handleNavigate("/admin")}>
+                      <ListItemIcon>
+                        <AiOutlineSafety />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={intl.formatMessage(messages.admin)}
+                      />
+                    </ListItemButton>
+                  )}
+
+                  <ListItemButton onClick={handleLogout}>
+                    <ListItemIcon>
+                      <AiOutlineClose />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={intl.formatMessage(authMessages.logout)}
+                    />
+                  </ListItemButton>
+                </List>
               )}
-
-              <ListItemButton onClick={handleLogout}>
-                <ListItemIcon>
-                  <AiOutlineClose />
-                </ListItemIcon>
-                <ListItemText
-                  primary={intl.formatMessage(authMessages.logout)}
-                />
-              </ListItemButton>
-            </List>
+            </>
           )}
         </Box>
       </Drawer>
@@ -472,7 +480,12 @@ const AppNavigationDrawer = ({
       )}
 
       {/* Modal d'autenticació */}
-      <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+      {ACCOUNTS_ENABLED && (
+        <AuthModal
+          open={authModalOpen}
+          onClose={() => setAuthModalOpen(false)}
+        />
+      )}
 
       {/* Confirmació abans de tancar la sessió amb feina sense còpia */}
       <ConfirmDialog

@@ -47,7 +47,7 @@ import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import { sheetSurface } from "@/style/palette";
 import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSaveUiSettings";
 import SettingsSaveErrorDialog from "@/Modals/DefaultSettingsModal/SettingsSaveErrorDialog";
-import { RootState } from "@/app/store";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
 import PrintFooterSection from "./PrintFooterSection";
@@ -58,11 +58,6 @@ import {
   SETTINGS_ROW_GAP,
 } from "@/components/SettingsLayout";
 import { SelectChangeEvent } from "@mui/material";
-
-// El desat de preferències va al compte o al navegador segons si hi ha sessió,
-// i el botó ho ha de dir abans de prémer-lo, no després.
-const selectIsAuthenticated = (state: RootState): boolean =>
-  state.auth.accessToken !== null;
 
 interface ViewSequencesSettingsChildrenProps {
   viewSettings: ViewSettings;
@@ -95,7 +90,9 @@ const ViewSequencesSettings = ({
   const sequenceKeys = useAppSelector((state) =>
     Object.keys(state.document.content).map(Number),
   );
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  // El desat de preferències va al compte o al navegador segons si hi ha
+  // sessió, i el botó ho ha de dir abans de prémer-lo, no després.
+  const isAuthenticated = useAppSelector(selectIsLoggedIn);
 
   // Desat de preferències: en segon pla, amb reintent i diàleg d'error
   const { saveInBackground, retry, failure, isRetrying, dismissError } =

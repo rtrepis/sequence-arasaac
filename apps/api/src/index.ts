@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import { env } from "./config/env";
 import { connectDatabase } from "./config/database";
 import { errorHandler } from "./middleware/errorHandler";
+import { requireAccountsEnabled } from "./middleware/requireAccountsEnabled";
 import { authRouter } from "./modules/auth/routes";
 import { documentsRouter } from "./modules/documents/routes";
 import { userSettingsRouter } from "./modules/user-settings/routes";
@@ -62,20 +63,27 @@ const healthHandler: RequestHandler = (_req, res) => {
 app.get("/health", healthHandler);
 app.get("/api/health", healthHandler);
 
+// Rutes de compte. Totes passen pel mateix porter: amb ACCOUNTS_ENABLED a
+// "false" no se'n serveix cap. El panell d'administració hi va inclòs, encara
+// que ja hi quedaria tancat de retruc —hi cal una sessió que ja no es pot
+// obrir—, perquè no depengui d'aquesta casualitat.
+// Fora del porter queden /health i /api/client-errors: l'app funciona sencera
+// sense compte, i els seus errors i el seu ping s'han de continuar servint.
+
 // Rutes d'autenticació
-app.use("/api/auth", authRouter);
+app.use("/api/auth", requireAccountsEnabled, authRouter);
 
 // Rutes de documents (Fase 4)
-app.use("/api/documents", documentsRouter);
+app.use("/api/documents", requireAccountsEnabled, documentsRouter);
 
 // Rutes de user-settings (Fase 5)
-app.use("/api/user", userSettingsRouter);
+app.use("/api/user", requireAccountsEnabled, userSettingsRouter);
 
 // Report d'errors del client — obert, amb límit propi (vegeu el seu router)
 app.use("/api/client-errors", clientErrorsRouter);
 
 // Rutes d'administració — protegides per rol, no només per sessió
-app.use("/api/admin", adminRouter);
+app.use("/api/admin", requireAccountsEnabled, adminRouter);
 
 // Handler global d'errors — ha d'anar al final, després de totes les rutes
 app.use(errorHandler);
