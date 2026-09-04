@@ -2001,5 +2001,173 @@
   "components.buttonWithModalDownload.dialogTitle": {
     "defaultMessage": "Save and download",
     "description": "Title of the .saac file download dialog"
+  },
+  "news.autosave-draft.title": {
+    "defaultMessage": "Your work is no longer lost",
+    "description": "Títol de la notícia «autosave-draft»"
+  },
+  "news.autosave-draft.summary": {
+    "defaultMessage": "Your sequence saves itself as you work, and a new button tells you where it is.",
+    "description": "Resum de la notícia «autosave-draft» al carrusel"
+  },
+  "news.autosave-draft.content": {
+    "defaultMessage": "Until now, reloading the page or closing the tab by accident took hours of work with no warning. Your sequence now saves itself in this browser as you work, and a button at the bottom right tells you where your work is and how recent it is. It is a safety net, not a save: the browser can clear it, so real saving still means «Download» —the .saac file— and, with an account, the cloud.",
+    "description": "Cos de la notícia «autosave-draft»"
+  },
+  "news.autosave-draft.step1.alt": {
+    "defaultMessage": "Editor with the round document status button at the bottom right",
+    "description": "Text alternatiu de la imatge del pas 1 de «autosave-draft»"
+  },
+  "news.autosave-draft.step1.description": {
+    "defaultMessage": "There is a new button at the bottom right. Its colour tells you at a glance how your work stands: green means it is where it should be, amber means you have a copy but it has fallen behind what is on screen.",
+    "description": "Descripció del pas 1 de «autosave-draft»"
+  },
+  "news.autosave-draft.step2.alt": {
+    "defaultMessage": "The status button open, showing the status sentence and the available actions",
+    "description": "Text alternatiu de la imatge del pas 2 de «autosave-draft»"
+  },
+  "news.autosave-draft.step2.description": {
+    "defaultMessage": "Press it and the full sentence appears —«Only on this device, since…»— along with the actions: save, download the file, and start a new document, which previously was not possible without reloading.",
+    "description": "Descripció del pas 2 de «autosave-draft»"
+  },
+  "news.pictogram-actions-touch.title": {
+    "defaultMessage": "Pictogram actions, on tablets too",
+    "description": "Títol de la notícia «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.summary": {
+    "defaultMessage": "Copy, paste, insert and duplicate no longer depend on right-click.",
+    "description": "Resum de la notícia «pictogram-actions-touch» al carrusel"
+  },
+  "news.pictogram-actions-touch.content": {
+    "defaultMessage": "These actions only opened with a right-click, and on iPad and iPhone that menu never opens. Edit and delete were still reachable through the pictogram dialog, but copy, paste, insert and duplicate had no door at all — precisely the four you use to build the sequence. They are now in that dialog's menu too, the same on computer and tablet. Along the way, the menu is no longer in English and the labels say what they actually do.",
+    "description": "Cos de la notícia «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step1.alt": {
+    "defaultMessage": "Pictogram edit dialog with the more-actions button in the header",
+    "description": "Text alternatiu de la imatge del pas 1 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step1.description": {
+    "defaultMessage": "Tap a pictogram to open its edit dialog. The more-actions button is in the top right corner.",
+    "description": "Descripció del pas 1 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step2.alt": {
+    "defaultMessage": "Expanded menu with the four pictogram-building actions",
+    "description": "Text alternatiu de la imatge del pas 2 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step2.description": {
+    "defaultMessage": "All four appear: copy, paste —which replaces the pictogram, and now says so—, insert an empty one after it, and duplicate after it. Deleting it is still the button in the dialog footer.",
+    "description": "Descripció del pas 2 de «pictogram-actions-touch»"
+  },
+  "news.search-suggestions.title": {
+    "defaultMessage": "Type the phrase and find the pictograms",
+    "description": "Títol de la notícia «search-suggestions»"
+  },
+  "news.search-suggestions.summary": {
+    "defaultMessage": "The search box suggests words as you type, and a whole phrase becomes a sequence.",
+    "description": "Resum de la notícia «search-suggestions» al carrusel"
+  },
+  "news.search-suggestions.content": {
+    "defaultMessage": "As you type, the search box proposes words and you can accept them with the Tab key. And you no longer need to look them up one by one: type the whole phrase, separated by commas, and the app builds the sequence word by word, with a bar showing how far along it is.",
+    "description": "Cos de la notícia «search-suggestions»"
+  },
+  "news.search-suggestions.step1.alt": {
+    "defaultMessage": "Search box with the suggestion list open and the «Tab» chip",
+    "description": "Text alternatiu de la imatge del pas 1 de «search-suggestions»"
+  },
+  "news.search-suggestions.step1.description": {
+    "defaultMessage": "Start typing and the suggestions appear. The «Tab» chip reminds you that the Tab key accepts the highlighted word, so you do not have to type it in full.",
+    "description": "Descripció del pas 1 de «search-suggestions»"
+  },
+  "news.search-suggestions.step2.alt": {
+    "defaultMessage": "Sequence with three pictograms produced from a single phrase",
+    "description": "Text alternatiu de la imatge del pas 2 de «search-suggestions»"
+  },
+  "news.search-suggestions.step2.description": {
+    "defaultMessage": "Type the whole phrase separated by commas and press Enter: each word becomes a pictogram in the sequence, in the order you wrote it.",
+    "description": "Descripció del pas 2 de «search-suggestions»"
+  },
+  "news.user-preferences.title": {
+    "defaultMessage": "Dark theme and expanded settings",
+    "description": "Títol de la notícia «user-preferences»"
+  },
+  "news.user-preferences.summary": {
+    "defaultMessage": "The app now has a dark mode, and the settings are split into tabs.",
+    "description": "Resum de la notícia «user-preferences» al carrusel"
+  },
+  "news.user-preferences.content": {
+    "defaultMessage": "The settings dialog is now split into tabs, and one of them is new and about you: under User you will find the app language, the language pictograms are searched in, and the theme, light or dark. The preview sheet stays white in dark mode too, and that is deliberate: what you see on screen is what will come out printed.",
+    "description": "Cos de la notícia «user-preferences»"
+  },
+  "news.user-preferences.step1.alt": {
+    "defaultMessage": "User tab of the settings with the theme selector",
+    "description": "Text alternatiu de la imatge del pas 1 de «user-preferences»"
+  },
+  "news.user-preferences.step1.description": {
+    "defaultMessage": "Open Settings from the main menu. The theme selector is in the User tab: light, dark, or whatever the system says.",
+    "description": "Descripció del pas 1 de «user-preferences»"
+  },
+  "news.user-preferences.step2.alt": {
+    "defaultMessage": "The editor in dark theme, with the sequence sheet still white",
+    "description": "Text alternatiu de la imatge del pas 2 de «user-preferences»"
+  },
+  "news.user-preferences.step2.description": {
+    "defaultMessage": "The whole interface goes dark, but the sheet stays white: it is what gets printed, and the contrast of text on paper has to be judged while you are setting it up.",
+    "description": "Descripció del pas 2 de «user-preferences»"
+  },
+  "news.pdf-quality.title": {
+    "defaultMessage": "The PDF comes out as you see it",
+    "description": "Títol de la notícia «pdf-quality»"
+  },
+  "news.pdf-quality.summary": {
+    "defaultMessage": "The PDF no longer loses quality depending on how small the preview looks.",
+    "description": "Resum de la notícia «pdf-quality» al carrusel"
+  },
+  "news.pdf-quality.content": {
+    "defaultMessage": "The PDF was generated at the resolution the preview happened to be shown at: the smaller the screen, the worse the file — precisely the worst case for anyone exporting from a tablet. It now always comes out at the right resolution, the image is centred on the page instead of pushing all the margin to one side, and no blank sheet can come out any more. While it is being generated, the app tells you what it is doing.",
+    "description": "Cos de la notícia «pdf-quality»"
+  },
+  "news.pdf-quality.step1.alt": {
+    "defaultMessage": "Sequence preview on the view page",
+    "description": "Text alternatiu de la imatge del pas 1 de «pdf-quality»"
+  },
+  "news.pdf-quality.step1.description": {
+    "defaultMessage": "What you see in the preview is what you will find in the PDF: the same size, the same spacing and the same margins, whether you are looking at a big screen or a small one.",
+    "description": "Descripció del pas 1 de «pdf-quality»"
+  },
+  "news.pdf-quality.step2.alt": {
+    "defaultMessage": "Waiting message while the PDF is generated",
+    "description": "Text alternatiu de la imatge del pas 2 de «pdf-quality»"
+  },
+  "news.pdf-quality.step2.description": {
+    "defaultMessage": "When you press the PDF button, the app says it is generating it, and tells you both when it finishes and if something fails. Before, the only signal was the button turning grey.",
+    "description": "Descripció del pas 2 de «pdf-quality»"
+  },
+  "news.safe-delete.title": {
+    "defaultMessage": "No sequence is deleted without warning",
+    "description": "Títol de la notícia «safe-delete»"
+  },
+  "news.safe-delete.summary": {
+    "defaultMessage": "Deleting a sequence now asks first, and says how many pictograms will go.",
+    "description": "Resum de la notícia «safe-delete» al carrusel"
+  },
+  "news.safe-delete.content": {
+    "defaultMessage": "The app has no undo, so deleting a whole sequence was the easiest way to lose work: it took all its pictograms with it and asked nothing. Now it asks, and gives the number. If the sequence is empty it does not ask: there is no point requesting permission to throw away blank slots. And in the pictogram menu, «Delete» has moved out of the middle and gone to the very end, on its own.",
+    "description": "Cos de la notícia «safe-delete»"
+  },
+  "news.safe-delete.step1.alt": {
+    "defaultMessage": "Confirmation dialog stating how many pictograms will be deleted",
+    "description": "Text alternatiu de la imatge del pas 1 de «safe-delete»"
+  },
+  "news.safe-delete.step1.description": {
+    "defaultMessage": "When you delete a sequence that has content, the app asks first and says how many pictograms you will lose. Whoever decides is often not looking at what they are about to lose.",
+    "description": "Descripció del pas 1 de «safe-delete»"
+  },
+  "news.safe-delete.step2.alt": {
+    "defaultMessage": "Pictogram menu with «Delete» set apart at the end",
+    "description": "Text alternatiu de la imatge del pas 2 de «safe-delete»"
+  },
+  "news.safe-delete.step2.description": {
+    "defaultMessage": "In the pictogram menu, «Delete» is no longer in the middle, where it got pressed by accident: it goes last, separated from the rest by a line.",
+    "description": "Descripció del pas 2 de «safe-delete»"
   }
 }

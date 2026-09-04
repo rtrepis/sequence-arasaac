@@ -2001,5 +2001,173 @@
   "components.buttonWithModalDownload.dialogTitle": {
     "defaultMessage": "Desa i descarrega",
     "description": "Títol del diàleg de descàrrega del fitxer .saac"
+  },
+  "news.autosave-draft.title": {
+    "defaultMessage": "La teva feina ja no es perd",
+    "description": "Títol de la notícia «autosave-draft»"
+  },
+  "news.autosave-draft.summary": {
+    "defaultMessage": "La seqüència es desa sola mentre treballes, i un botó nou et diu on és.",
+    "description": "Resum de la notícia «autosave-draft» al carrusel"
+  },
+  "news.autosave-draft.content": {
+    "defaultMessage": "Fins ara, recarregar la pàgina o tancar la pestanya sense voler s'enduia hores de feina sense cap avís. Ara la seqüència es desa sola en aquest navegador mentre treballes, i a baix a la dreta hi ha un botó que diu on és la teva feina i de quan és. És una xarxa de seguretat, no un desat: el navegador la pot buidar, així que per guardar de debò hi continua havent «Descarrega» —el fitxer .saac— i, amb compte, el núvol.",
+    "description": "Cos de la notícia «autosave-draft»"
+  },
+  "news.autosave-draft.step1.alt": {
+    "defaultMessage": "Editor amb el botó rodó d'estat del document a baix a la dreta",
+    "description": "Text alternatiu de la imatge del pas 1 de «autosave-draft»"
+  },
+  "news.autosave-draft.step1.description": {
+    "defaultMessage": "A baix a la dreta hi ha un botó nou. El color diu com està la feina d'un cop d'ull: en verd la tens on toca, i en groc tens una còpia però s'ha quedat enrere del que hi ha a pantalla.",
+    "description": "Descripció del pas 1 de «autosave-draft»"
+  },
+  "news.autosave-draft.step2.alt": {
+    "defaultMessage": "El botó d'estat obert, amb la frase d'estat i les accions disponibles",
+    "description": "Text alternatiu de la imatge del pas 2 de «autosave-draft»"
+  },
+  "news.autosave-draft.step2.description": {
+    "defaultMessage": "Prem-lo i s'obre la frase sencera —«Només en aquest dispositiu, des de les…»— i les accions: desar, descarregar el fitxer i començar un document nou, cosa que abans no es podia fer sense recarregar.",
+    "description": "Descripció del pas 2 de «autosave-draft»"
+  },
+  "news.pictogram-actions-touch.title": {
+    "defaultMessage": "Les accions del pictograma, també a la tauleta",
+    "description": "Títol de la notícia «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.summary": {
+    "defaultMessage": "Copiar, enganxar, inserir i duplicar ja no depenen del clic dret.",
+    "description": "Resum de la notícia «pictogram-actions-touch» al carrusel"
+  },
+  "news.pictogram-actions-touch.content": {
+    "defaultMessage": "Aquestes accions només s'obrien amb el clic dret, i a l'iPad i a l'iPhone aquell menú no s'obre mai. Editar i esborrar sí que hi arribaven pel diàleg del pictograma, però copiar, enganxar, inserir i duplicar hi quedaven sense cap porta: justament les quatre que serveixen per construir la seqüència. Ara també són al menú d'aquell diàleg, igual a l'ordinador i a la tauleta. De passada, el menú ha deixat d'estar en anglès i les etiquetes diuen el que fan de debò.",
+    "description": "Cos de la notícia «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step1.alt": {
+    "defaultMessage": "Diàleg d'edició del pictograma amb el botó de més accions a la capçalera",
+    "description": "Text alternatiu de la imatge del pas 1 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step1.description": {
+    "defaultMessage": "Toca un pictograma per obrir-ne el diàleg d'edició. A la cantonada de dalt a la dreta hi ha el botó de més accions.",
+    "description": "Descripció del pas 1 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step2.alt": {
+    "defaultMessage": "Menú desplegat amb les quatre accions de construcció del pictograma",
+    "description": "Text alternatiu de la imatge del pas 2 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step2.description": {
+    "defaultMessage": "S'hi despleguen les quatre: copiar, enganxar —que substitueix el pictograma, i ara ho diu—, inserir-ne un de buit a continuació i duplicar a continuació. Esborrar-lo continua sent el botó del peu del diàleg.",
+    "description": "Descripció del pas 2 de «pictogram-actions-touch»"
+  },
+  "news.search-suggestions.title": {
+    "defaultMessage": "Escriu la frase i troba els pictogrames",
+    "description": "Títol de la notícia «search-suggestions»"
+  },
+  "news.search-suggestions.summary": {
+    "defaultMessage": "El cercador suggereix paraules mentre escrius, i d'una frase sencera en surt la seqüència.",
+    "description": "Resum de la notícia «search-suggestions» al carrusel"
+  },
+  "news.search-suggestions.content": {
+    "defaultMessage": "Mentre escrius, el cercador et proposa paraules i les pots acceptar amb el tabulador. I no cal buscar-les d'una en una: escriu la frase sencera, separada per comes, i l'aplicació munta la seqüència anant paraula per paraula, amb una barra que va dient per on va.",
+    "description": "Cos de la notícia «search-suggestions»"
+  },
+  "news.search-suggestions.step1.alt": {
+    "defaultMessage": "Cercador amb la llista de suggeriments oberta i el xip «Tab»",
+    "description": "Text alternatiu de la imatge del pas 1 de «search-suggestions»"
+  },
+  "news.search-suggestions.step1.description": {
+    "defaultMessage": "Comença a escriure i apareixen els suggeriments. El xip «Tab» et recorda que amb el tabulador acceptes el que hi ha marcat, sense haver de escriure la paraula sencera.",
+    "description": "Descripció del pas 1 de «search-suggestions»"
+  },
+  "news.search-suggestions.step2.alt": {
+    "defaultMessage": "Seqüència amb tres pictogrames sortits d'una sola frase",
+    "description": "Text alternatiu de la imatge del pas 2 de «search-suggestions»"
+  },
+  "news.search-suggestions.step2.description": {
+    "defaultMessage": "Escriu la frase sencera separada per comes i prem Enter: cada paraula es converteix en un pictograma de la seqüència, en el mateix ordre en què l'has escrita.",
+    "description": "Descripció del pas 2 de «search-suggestions»"
+  },
+  "news.user-preferences.title": {
+    "defaultMessage": "Tema fosc i configuració ampliada",
+    "description": "Títol de la notícia «user-preferences»"
+  },
+  "news.user-preferences.summary": {
+    "defaultMessage": "L'app ja té mode fosc, i la configuració s'ha repartit en pestanyes.",
+    "description": "Resum de la notícia «user-preferences» al carrusel"
+  },
+  "news.user-preferences.content": {
+    "defaultMessage": "El diàleg de configuració s'ha repartit en pestanyes, i n'hi ha una de nova per a tu: a Usuari hi trobaràs l'idioma de l'aplicació, l'idioma amb què es busquen els pictogrames i el tema, clar o fosc. El full de la previsualització es manté blanc també en fosc, i és a propòsit: el que veus a la pantalla és el que sortirà imprès.",
+    "description": "Cos de la notícia «user-preferences»"
+  },
+  "news.user-preferences.step1.alt": {
+    "defaultMessage": "Pestanya Usuari de la configuració amb el selector de tema",
+    "description": "Text alternatiu de la imatge del pas 1 de «user-preferences»"
+  },
+  "news.user-preferences.step1.description": {
+    "defaultMessage": "Obre Configuració des del menú principal. A la pestanya Usuari hi ha el selector de tema: clar, fosc o el que digui el sistema.",
+    "description": "Descripció del pas 1 de «user-preferences»"
+  },
+  "news.user-preferences.step2.alt": {
+    "defaultMessage": "L'editor en tema fosc, amb el full de la seqüència encara blanc",
+    "description": "Text alternatiu de la imatge del pas 2 de «user-preferences»"
+  },
+  "news.user-preferences.step2.description": {
+    "defaultMessage": "Tota la interfície passa a fosc, però el full es manté blanc: és el que s'imprimeix, i el contrast del text sobre el paper s'ha de poder jutjar mentre el configures.",
+    "description": "Descripció del pas 2 de «user-preferences»"
+  },
+  "news.pdf-quality.title": {
+    "defaultMessage": "El PDF surt com el veus",
+    "description": "Títol de la notícia «pdf-quality»"
+  },
+  "news.pdf-quality.summary": {
+    "defaultMessage": "El PDF ja no perd qualitat segons com de reduïda es vegi la previsualització.",
+    "description": "Resum de la notícia «pdf-quality» al carrusel"
+  },
+  "news.pdf-quality.content": {
+    "defaultMessage": "El PDF es generava a la resolució a la qual es veia la previsualització: com més petita la pantalla, pitjor el fitxer, que és justament el pitjor cas per a qui exporta des d'una tauleta. Ara surt sempre a la resolució que toca, la imatge es centra a la pàgina en comptes d'acumular tot el marge a un costat, i ja no pot sortir cap full en blanc. Mentre es genera, l'aplicació diu què està fent.",
+    "description": "Cos de la notícia «pdf-quality»"
+  },
+  "news.pdf-quality.step1.alt": {
+    "defaultMessage": "Previsualització de la seqüència a la pàgina de vista",
+    "description": "Text alternatiu de la imatge del pas 1 de «pdf-quality»"
+  },
+  "news.pdf-quality.step1.description": {
+    "defaultMessage": "El que veus a la previsualització és el que trobaràs al PDF: la mateixa mida, el mateix espaiat i els mateixos marges, tant si el mires en una pantalla gran com en una de petita.",
+    "description": "Descripció del pas 1 de «pdf-quality»"
+  },
+  "news.pdf-quality.step2.alt": {
+    "defaultMessage": "Missatge d'espera mentre es genera el PDF",
+    "description": "Text alternatiu de la imatge del pas 2 de «pdf-quality»"
+  },
+  "news.pdf-quality.step2.description": {
+    "defaultMessage": "En prémer el botó de PDF, l'aplicació diu que l'està generant, i t'avisa tant quan acaba com si alguna cosa falla. Abans, l'únic senyal era que el botó es posava gris.",
+    "description": "Descripció del pas 2 de «pdf-quality»"
+  },
+  "news.safe-delete.title": {
+    "defaultMessage": "Ningú esborra una seqüència sense avisar",
+    "description": "Títol de la notícia «safe-delete»"
+  },
+  "news.safe-delete.summary": {
+    "defaultMessage": "Esborrar una seqüència ara pregunta, i diu quants pictogrames se'n van.",
+    "description": "Resum de la notícia «safe-delete» al carrusel"
+  },
+  "news.safe-delete.content": {
+    "defaultMessage": "L'aplicació no té desfer, així que esborrar una seqüència sencera era la manera més fàcil de perdre feina: se n'anava amb tots els seus pictogrames i no preguntava res. Ara pregunta, i diu la xifra. Si la seqüència és buida no pregunta: no cal demanar permís per llençar caselles en blanc. I al menú del pictograma, «Elimina» ha sortit del mig i ha anat a l'últim lloc, sol.",
+    "description": "Cos de la notícia «safe-delete»"
+  },
+  "news.safe-delete.step1.alt": {
+    "defaultMessage": "Diàleg de confirmació que diu quants pictogrames s'esborraran",
+    "description": "Text alternatiu de la imatge del pas 1 de «safe-delete»"
+  },
+  "news.safe-delete.step1.description": {
+    "defaultMessage": "En esborrar una seqüència amb contingut, l'aplicació pregunta abans i diu quants pictogrames perdràs. Qui decideix sovint no està mirant el que perdrà.",
+    "description": "Descripció del pas 1 de «safe-delete»"
+  },
+  "news.safe-delete.step2.alt": {
+    "defaultMessage": "Menú del pictograma amb «Elimina» separat al final",
+    "description": "Text alternatiu de la imatge del pas 2 de «safe-delete»"
+  },
+  "news.safe-delete.step2.description": {
+    "defaultMessage": "Al menú del pictograma, «Elimina» ja no és al mig, on es premia sense voler: va a l'últim lloc, separat de la resta per una línia.",
+    "description": "Descripció del pas 2 de «safe-delete»"
   }
 }

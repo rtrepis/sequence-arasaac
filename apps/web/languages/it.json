@@ -2001,5 +2001,173 @@
   "components.buttonWithModalDownload.dialogTitle": {
     "defaultMessage": "Salva e scarica",
     "description": "Titolo della finestra di download del file .saac"
+  },
+  "news.autosave-draft.title": {
+    "defaultMessage": "Il tuo lavoro non si perde più",
+    "description": "Títol de la notícia «autosave-draft»"
+  },
+  "news.autosave-draft.summary": {
+    "defaultMessage": "La sequenza si salva da sola mentre lavori, e un nuovo pulsante ti dice dov'è.",
+    "description": "Resum de la notícia «autosave-draft» al carrusel"
+  },
+  "news.autosave-draft.content": {
+    "defaultMessage": "Finora, ricaricare la pagina o chiudere la scheda per sbaglio si portava via ore di lavoro senza alcun avviso. Ora la sequenza si salva da sola in questo browser mentre lavori, e in basso a destra c'è un pulsante che dice dov'è il tuo lavoro e di quando è. È una rete di sicurezza, non un salvataggio: il browser può svuotarla, quindi per salvare davvero restano «Scarica» —il file .saac— e, con un account, il cloud.",
+    "description": "Cos de la notícia «autosave-draft»"
+  },
+  "news.autosave-draft.step1.alt": {
+    "defaultMessage": "Editor con il pulsante rotondo di stato del documento in basso a destra",
+    "description": "Text alternatiu de la imatge del pas 1 de «autosave-draft»"
+  },
+  "news.autosave-draft.step1.description": {
+    "defaultMessage": "In basso a destra c'è un pulsante nuovo. Il colore dice a colpo d'occhio come sta il lavoro: in verde è dove deve essere, in giallo hai una copia ma è rimasta indietro rispetto a quello che c'è sullo schermo.",
+    "description": "Descripció del pas 1 de «autosave-draft»"
+  },
+  "news.autosave-draft.step2.alt": {
+    "defaultMessage": "Il pulsante di stato aperto, con la frase di stato e le azioni disponibili",
+    "description": "Text alternatiu de la imatge del pas 2 de «autosave-draft»"
+  },
+  "news.autosave-draft.step2.description": {
+    "defaultMessage": "Premilo e si apre la frase intera —«Solo su questo dispositivo, dalle…»— e le azioni: salvare, scaricare il file e iniziare un documento nuovo, cosa che prima non si poteva fare senza ricaricare.",
+    "description": "Descripció del pas 2 de «autosave-draft»"
+  },
+  "news.pictogram-actions-touch.title": {
+    "defaultMessage": "Le azioni del pittogramma, anche su tablet",
+    "description": "Títol de la notícia «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.summary": {
+    "defaultMessage": "Copiare, incollare, inserire e duplicare non dipendono più dal clic destro.",
+    "description": "Resum de la notícia «pictogram-actions-touch» al carrusel"
+  },
+  "news.pictogram-actions-touch.content": {
+    "defaultMessage": "Queste azioni si aprivano solo con il clic destro, e su iPad e iPhone quel menu non si apre mai. Modificare ed eliminare arrivavano comunque dalla finestra del pittogramma, ma copiare, incollare, inserire e duplicare restavano senza nessuna porta: proprio le quattro che servono a costruire la sequenza. Ora sono anche nel menu di quella finestra, uguale su computer e su tablet. Di passaggio, il menu non è più in inglese e le etichette dicono quello che fanno davvero.",
+    "description": "Cos de la notícia «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step1.alt": {
+    "defaultMessage": "Finestra di modifica del pittogramma con il pulsante altre azioni nell'intestazione",
+    "description": "Text alternatiu de la imatge del pas 1 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step1.description": {
+    "defaultMessage": "Tocca un pittogramma per aprire la sua finestra di modifica. Nell'angolo in alto a destra c'è il pulsante altre azioni.",
+    "description": "Descripció del pas 1 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step2.alt": {
+    "defaultMessage": "Menu aperto con le quattro azioni di costruzione del pittogramma",
+    "description": "Text alternatiu de la imatge del pas 2 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step2.description": {
+    "defaultMessage": "Si aprono tutte e quattro: copiare, incollare —che sostituisce il pittogramma, e ora lo dice—, inserirne uno vuoto di seguito e duplicare di seguito. Eliminarlo resta il pulsante in fondo alla finestra.",
+    "description": "Descripció del pas 2 de «pictogram-actions-touch»"
+  },
+  "news.search-suggestions.title": {
+    "defaultMessage": "Scrivi la frase e trova i pittogrammi",
+    "description": "Títol de la notícia «search-suggestions»"
+  },
+  "news.search-suggestions.summary": {
+    "defaultMessage": "Il campo di ricerca suggerisce parole mentre scrivi, e da una frase intera nasce la sequenza.",
+    "description": "Resum de la notícia «search-suggestions» al carrusel"
+  },
+  "news.search-suggestions.content": {
+    "defaultMessage": "Mentre scrivi, il campo di ricerca ti propone parole e puoi accettarle con il tabulatore. E non serve cercarle una a una: scrivi la frase intera, separata da virgole, e l'applicazione costruisce la sequenza parola per parola, con una barra che dice a che punto è.",
+    "description": "Cos de la notícia «search-suggestions»"
+  },
+  "news.search-suggestions.step1.alt": {
+    "defaultMessage": "Campo di ricerca con l'elenco dei suggerimenti aperto e il chip «Tab»",
+    "description": "Text alternatiu de la imatge del pas 1 de «search-suggestions»"
+  },
+  "news.search-suggestions.step1.description": {
+    "defaultMessage": "Inizia a scrivere e compaiono i suggerimenti. Il chip «Tab» ricorda che con il tabulatore accetti quello che è evidenziato, senza dover scrivere la parola intera.",
+    "description": "Descripció del pas 1 de «search-suggestions»"
+  },
+  "news.search-suggestions.step2.alt": {
+    "defaultMessage": "Sequenza con tre pittogrammi nati da una sola frase",
+    "description": "Text alternatiu de la imatge del pas 2 de «search-suggestions»"
+  },
+  "news.search-suggestions.step2.description": {
+    "defaultMessage": "Scrivi la frase intera separata da virgole e premi Invio: ogni parola diventa un pittogramma della sequenza, nello stesso ordine in cui l'hai scritta.",
+    "description": "Descripció del pas 2 de «search-suggestions»"
+  },
+  "news.user-preferences.title": {
+    "defaultMessage": "Tema scuro e impostazioni ampliate",
+    "description": "Títol de la notícia «user-preferences»"
+  },
+  "news.user-preferences.summary": {
+    "defaultMessage": "L'app ora ha la modalità scura, e le impostazioni sono divise in schede.",
+    "description": "Resum de la notícia «user-preferences» al carrusel"
+  },
+  "news.user-preferences.content": {
+    "defaultMessage": "La finestra delle impostazioni è ora divisa in schede, e una è nuova e riguarda te: in Utente trovi la lingua dell'applicazione, la lingua con cui si cercano i pittogrammi e il tema, chiaro o scuro. Il foglio dell'anteprima resta bianco anche in scuro, ed è voluto: quello che vedi sullo schermo è quello che uscirà stampato.",
+    "description": "Cos de la notícia «user-preferences»"
+  },
+  "news.user-preferences.step1.alt": {
+    "defaultMessage": "Scheda Utente delle impostazioni con il selettore del tema",
+    "description": "Text alternatiu de la imatge del pas 1 de «user-preferences»"
+  },
+  "news.user-preferences.step1.description": {
+    "defaultMessage": "Apri Impostazioni dal menu principale. Nella scheda Utente c'è il selettore del tema: chiaro, scuro o quello di sistema.",
+    "description": "Descripció del pas 1 de «user-preferences»"
+  },
+  "news.user-preferences.step2.alt": {
+    "defaultMessage": "L'editor in tema scuro, con il foglio della sequenza ancora bianco",
+    "description": "Text alternatiu de la imatge del pas 2 de «user-preferences»"
+  },
+  "news.user-preferences.step2.description": {
+    "defaultMessage": "Tutta l'interfaccia passa allo scuro, ma il foglio resta bianco: è quello che si stampa, e il contrasto del testo sulla carta si deve poter giudicare mentre lo imposti.",
+    "description": "Descripció del pas 2 de «user-preferences»"
+  },
+  "news.pdf-quality.title": {
+    "defaultMessage": "Il PDF esce come lo vedi",
+    "description": "Títol de la notícia «pdf-quality»"
+  },
+  "news.pdf-quality.summary": {
+    "defaultMessage": "Il PDF non perde più qualità a seconda di quanto è ridotta l'anteprima.",
+    "description": "Resum de la notícia «pdf-quality» al carrusel"
+  },
+  "news.pdf-quality.content": {
+    "defaultMessage": "Il PDF veniva generato alla risoluzione con cui si vedeva l'anteprima: più piccolo lo schermo, peggiore il file — proprio il caso peggiore per chi esporta da un tablet. Ora esce sempre alla risoluzione giusta, l'immagine si centra nella pagina invece di accumulare tutto il margine da un lato, e non può più uscire nessun foglio bianco. Mentre si genera, l'applicazione dice cosa sta facendo.",
+    "description": "Cos de la notícia «pdf-quality»"
+  },
+  "news.pdf-quality.step1.alt": {
+    "defaultMessage": "Anteprima della sequenza nella pagina di vista",
+    "description": "Text alternatiu de la imatge del pas 1 de «pdf-quality»"
+  },
+  "news.pdf-quality.step1.description": {
+    "defaultMessage": "Quello che vedi nell'anteprima è quello che troverai nel PDF: stessa dimensione, stessa spaziatura e stessi margini, sia su uno schermo grande sia su uno piccolo.",
+    "description": "Descripció del pas 1 de «pdf-quality»"
+  },
+  "news.pdf-quality.step2.alt": {
+    "defaultMessage": "Messaggio di attesa mentre si genera il PDF",
+    "description": "Text alternatiu de la imatge del pas 2 de «pdf-quality»"
+  },
+  "news.pdf-quality.step2.description": {
+    "defaultMessage": "Premendo il pulsante PDF, l'applicazione dice che lo sta generando, e ti avvisa sia quando finisce sia se qualcosa non va. Prima, l'unico segnale era il pulsante che diventava grigio.",
+    "description": "Descripció del pas 2 de «pdf-quality»"
+  },
+  "news.safe-delete.title": {
+    "defaultMessage": "Nessuno cancella una sequenza senza avvisare",
+    "description": "Títol de la notícia «safe-delete»"
+  },
+  "news.safe-delete.summary": {
+    "defaultMessage": "Cancellare una sequenza ora chiede conferma, e dice quanti pittogrammi se ne vanno.",
+    "description": "Resum de la notícia «safe-delete» al carrusel"
+  },
+  "news.safe-delete.content": {
+    "defaultMessage": "L'applicazione non ha annulla, quindi cancellare una sequenza intera era il modo più facile di perdere lavoro: se ne andava con tutti i suoi pittogrammi senza chiedere nulla. Ora chiede, e dice la cifra. Se la sequenza è vuota non chiede: non serve chiedere il permesso per buttare caselle bianche. E nel menu del pittogramma, «Elimina» è uscito dal mezzo ed è andato all'ultimo posto, da solo.",
+    "description": "Cos de la notícia «safe-delete»"
+  },
+  "news.safe-delete.step1.alt": {
+    "defaultMessage": "Finestra di conferma che dice quanti pittogrammi saranno cancellati",
+    "description": "Text alternatiu de la imatge del pas 1 de «safe-delete»"
+  },
+  "news.safe-delete.step1.description": {
+    "defaultMessage": "Cancellando una sequenza con contenuto, l'applicazione chiede prima e dice quanti pittogrammi perderai. Chi decide spesso non sta guardando quello che perderà.",
+    "description": "Descripció del pas 1 de «safe-delete»"
+  },
+  "news.safe-delete.step2.alt": {
+    "defaultMessage": "Menu del pittogramma con «Elimina» separato alla fine",
+    "description": "Text alternatiu de la imatge del pas 2 de «safe-delete»"
+  },
+  "news.safe-delete.step2.description": {
+    "defaultMessage": "Nel menu del pittogramma, «Elimina» non è più al centro, dove si premeva per sbaglio: va all'ultimo posto, separato dal resto da una linea.",
+    "description": "Descripció del pas 2 de «safe-delete»"
   }
 }

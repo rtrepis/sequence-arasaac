@@ -1159,3 +1159,48 @@ Branca `claude/backlog-branch-master-64uh75`.
   - Fixat a `e2e/persistent-storage.spec.ts`, amb un doble de `navigator.storage` que compta les
     crides: primera escriptura, gest del botó d'estat, cap crida si ja està concedit i cap canvi de
     comportament en un navegador sense l'API.
+
+---
+
+## Novetats pendents de publicar
+
+Surten de la tria de `docs/NOTICIES-candidates-des-de-2.0.2.md`. Les sis notícies que no
+demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per què.
+
+### N1 — Les tres notícies de compte no estan escrites 🔴 Oberta
+
+- **On**: `apps/web/src/data/newsItems.ts` — hi falten `user-account`, `cloud-documents` i
+  `personal-vocabulary`, que la tria dona per prioritat alta.
+- **Per què importa**: són les tres funcionalitats més grans de la versió i cap usuari se n'ha
+  assabentat. Es van deixar per a més endavant a propòsit, no per descuit: totes tres demanen
+  compte i s'han de publicar juntes i en ordre —primer el compte, després el vocabulari i els
+  documents—, perquè les altres dues no s'entenen sense la primera.
+- **Proposta**: la tria ja porta la fitxa de cadascuna, amb els passos i el que **no** s'hi ha de
+  dir. Dues decisions hi són imprescindibles i no són de redacció: la notícia del compte ha de dir
+  aviat que **tot el que funcionava sense compte continua funcionant sense compte**, i la del núvol
+  ha de dir el **sostre de tres documents** amb el `.saac` il·limitat al costat, en comptes de
+  deixar-lo descobrir al quart document.
+
+### N2 — Dues notícies publicades ja no són certes 🔴 Oberta
+
+- **On**: `apps/web/languages/*.json`, claus `news.logo-menu.*` i `news.new-languages.*`
+- **Per què importa**: `logo-menu` anomena el menú «Edita» i «Previsualitza» —avui es diuen
+  **Edició** i **Vista**— i el seu pas 3 diu que el selector d'idioma és a baix del menú lateral,
+  d'on va marxar cap al tab Usuari de configuració i cap a la pantalla d'inici. `new-languages`
+  hi dedica els passos 1 i 2 sencers a aquell camí. Una notícia que explica un camí que ja no
+  existeix és pitjor que no tenir-la: qui la segueix conclou que l'app està trencada.
+- **Proposta**: reescriure els textos afectats als cinc idiomes i regenerar les captures amb els
+  `*-focused.spec.ts` que ja hi ha. **Verificat que cal**: en tornar a executar
+  `download-pdf-focused.spec.ts` les tres imatges canvien, o sigui que totes les captures
+  anteriors al canvi d'icones i de contrast de la barra de vista estan desfasades, encara que el
+  text que les acompanya continuï sent cert.
+
+### N3 — La notícia de llegibilitat es va deixar sense escriure 🔴 Oberta
+
+- **On**: la tria la proposava com a `readability`, categoria `millora`, prioritat baixa.
+- **Per què importa**: poc. És el calaix de canvis que individualment no són notícia —el verd que
+  marxa d'on feia de text, els botons d'afegir que eren invisibles, els diàlegs que ara es tanquen
+  igual, el que sura que ja no tapa l'última fila.
+- **Proposta**: si s'escriu, demana una captura **d'abans i després** de la barra de la pàgina de
+  vista, i l'«abans» obliga a construir una revisió antiga. És l'única de les sis sense compte que
+  no s'ha publicat, i el motiu és aquest cost, no el contingut.

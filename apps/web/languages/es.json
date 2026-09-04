@@ -2001,5 +2001,173 @@
   "components.buttonWithModalDownload.dialogTitle": {
     "defaultMessage": "Guarda y descarga",
     "description": "Título del diálogo de descarga del archivo .saac"
+  },
+  "news.autosave-draft.title": {
+    "defaultMessage": "Tu trabajo ya no se pierde",
+    "description": "Títol de la notícia «autosave-draft»"
+  },
+  "news.autosave-draft.summary": {
+    "defaultMessage": "La secuencia se guarda sola mientras trabajas, y un botón nuevo te dice dónde está.",
+    "description": "Resum de la notícia «autosave-draft» al carrusel"
+  },
+  "news.autosave-draft.content": {
+    "defaultMessage": "Hasta ahora, recargar la página o cerrar la pestaña sin querer se llevaba horas de trabajo sin ningún aviso. Ahora la secuencia se guarda sola en este navegador mientras trabajas, y abajo a la derecha hay un botón que dice dónde está tu trabajo y de cuándo es. Es una red de seguridad, no un guardado: el navegador puede vaciarla, así que para guardar de verdad sigue estando «Descarga» —el fichero .saac— y, con cuenta, la nube.",
+    "description": "Cos de la notícia «autosave-draft»"
+  },
+  "news.autosave-draft.step1.alt": {
+    "defaultMessage": "Editor con el botón redondo de estado del documento abajo a la derecha",
+    "description": "Text alternatiu de la imatge del pas 1 de «autosave-draft»"
+  },
+  "news.autosave-draft.step1.description": {
+    "defaultMessage": "Abajo a la derecha hay un botón nuevo. El color dice cómo está el trabajo de un vistazo: en verde lo tienes donde toca, y en ámbar tienes una copia pero se ha quedado atrás de lo que hay en pantalla.",
+    "description": "Descripció del pas 1 de «autosave-draft»"
+  },
+  "news.autosave-draft.step2.alt": {
+    "defaultMessage": "El botón de estado abierto, con la frase de estado y las acciones disponibles",
+    "description": "Text alternatiu de la imatge del pas 2 de «autosave-draft»"
+  },
+  "news.autosave-draft.step2.description": {
+    "defaultMessage": "Púlsalo y se abre la frase entera —«Solo en este dispositivo, desde las…»— y las acciones: guardar, descargar el fichero y empezar un documento nuevo, algo que antes no se podía hacer sin recargar.",
+    "description": "Descripció del pas 2 de «autosave-draft»"
+  },
+  "news.pictogram-actions-touch.title": {
+    "defaultMessage": "Las acciones del pictograma, también en la tableta",
+    "description": "Títol de la notícia «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.summary": {
+    "defaultMessage": "Copiar, pegar, insertar y duplicar ya no dependen del clic derecho.",
+    "description": "Resum de la notícia «pictogram-actions-touch» al carrusel"
+  },
+  "news.pictogram-actions-touch.content": {
+    "defaultMessage": "Estas acciones solo se abrían con el clic derecho, y en el iPad y el iPhone ese menú no se abre nunca. Editar y borrar sí llegaban por el diálogo del pictograma, pero copiar, pegar, insertar y duplicar se quedaban sin ninguna puerta: justo las cuatro que sirven para construir la secuencia. Ahora están también en el menú de ese diálogo, igual en el ordenador que en la tableta. De paso, el menú ha dejado de estar en inglés y las etiquetas dicen lo que hacen de verdad.",
+    "description": "Cos de la notícia «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step1.alt": {
+    "defaultMessage": "Diálogo de edición del pictograma con el botón de más acciones en la cabecera",
+    "description": "Text alternatiu de la imatge del pas 1 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step1.description": {
+    "defaultMessage": "Toca un pictograma para abrir su diálogo de edición. En la esquina superior derecha está el botón de más acciones.",
+    "description": "Descripció del pas 1 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step2.alt": {
+    "defaultMessage": "Menú desplegado con las cuatro acciones de construcción del pictograma",
+    "description": "Text alternatiu de la imatge del pas 2 de «pictogram-actions-touch»"
+  },
+  "news.pictogram-actions-touch.step2.description": {
+    "defaultMessage": "Se despliegan las cuatro: copiar, pegar —que sustituye el pictograma, y ahora lo dice—, insertar uno vacío a continuación y duplicar a continuación. Borrarlo sigue siendo el botón del pie del diálogo.",
+    "description": "Descripció del pas 2 de «pictogram-actions-touch»"
+  },
+  "news.search-suggestions.title": {
+    "defaultMessage": "Escribe la frase y encuentra los pictogramas",
+    "description": "Títol de la notícia «search-suggestions»"
+  },
+  "news.search-suggestions.summary": {
+    "defaultMessage": "El buscador sugiere palabras mientras escribes, y de una frase entera sale la secuencia.",
+    "description": "Resum de la notícia «search-suggestions» al carrusel"
+  },
+  "news.search-suggestions.content": {
+    "defaultMessage": "Mientras escribes, el buscador te propone palabras y puedes aceptarlas con el tabulador. Y no hace falta buscarlas de una en una: escribe la frase entera, separada por comas, y la aplicación monta la secuencia palabra por palabra, con una barra que va diciendo por dónde va.",
+    "description": "Cos de la notícia «search-suggestions»"
+  },
+  "news.search-suggestions.step1.alt": {
+    "defaultMessage": "Buscador con la lista de sugerencias abierta y el chip «Tab»",
+    "description": "Text alternatiu de la imatge del pas 1 de «search-suggestions»"
+  },
+  "news.search-suggestions.step1.description": {
+    "defaultMessage": "Empieza a escribir y aparecen las sugerencias. El chip «Tab» te recuerda que con el tabulador aceptas lo que está marcado, sin tener que escribir la palabra entera.",
+    "description": "Descripció del pas 1 de «search-suggestions»"
+  },
+  "news.search-suggestions.step2.alt": {
+    "defaultMessage": "Secuencia con tres pictogramas salidos de una sola frase",
+    "description": "Text alternatiu de la imatge del pas 2 de «search-suggestions»"
+  },
+  "news.search-suggestions.step2.description": {
+    "defaultMessage": "Escribe la frase entera separada por comas y pulsa Enter: cada palabra se convierte en un pictograma de la secuencia, en el mismo orden en que la has escrito.",
+    "description": "Descripció del pas 2 de «search-suggestions»"
+  },
+  "news.user-preferences.title": {
+    "defaultMessage": "Tema oscuro y configuración ampliada",
+    "description": "Títol de la notícia «user-preferences»"
+  },
+  "news.user-preferences.summary": {
+    "defaultMessage": "La app ya tiene modo oscuro, y la configuración se ha repartido en pestañas.",
+    "description": "Resum de la notícia «user-preferences» al carrusel"
+  },
+  "news.user-preferences.content": {
+    "defaultMessage": "El diálogo de configuración se ha repartido en pestañas, y hay una nueva para ti: en Usuario encontrarás el idioma de la aplicación, el idioma con el que se buscan los pictogramas y el tema, claro u oscuro. La hoja de la previsualización se mantiene blanca también en oscuro, y es a propósito: lo que ves en la pantalla es lo que saldrá impreso.",
+    "description": "Cos de la notícia «user-preferences»"
+  },
+  "news.user-preferences.step1.alt": {
+    "defaultMessage": "Pestaña Usuario de la configuración con el selector de tema",
+    "description": "Text alternatiu de la imatge del pas 1 de «user-preferences»"
+  },
+  "news.user-preferences.step1.description": {
+    "defaultMessage": "Abre Configuración desde el menú principal. En la pestaña Usuario está el selector de tema: claro, oscuro o el que diga el sistema.",
+    "description": "Descripció del pas 1 de «user-preferences»"
+  },
+  "news.user-preferences.step2.alt": {
+    "defaultMessage": "El editor en tema oscuro, con la hoja de la secuencia todavía blanca",
+    "description": "Text alternatiu de la imatge del pas 2 de «user-preferences»"
+  },
+  "news.user-preferences.step2.description": {
+    "defaultMessage": "Toda la interfaz pasa a oscuro, pero la hoja se mantiene blanca: es lo que se imprime, y el contraste del texto sobre el papel se tiene que poder juzgar mientras lo configuras.",
+    "description": "Descripció del pas 2 de «user-preferences»"
+  },
+  "news.pdf-quality.title": {
+    "defaultMessage": "El PDF sale como lo ves",
+    "description": "Títol de la notícia «pdf-quality»"
+  },
+  "news.pdf-quality.summary": {
+    "defaultMessage": "El PDF ya no pierde calidad según lo reducida que se vea la previsualización.",
+    "description": "Resum de la notícia «pdf-quality» al carrusel"
+  },
+  "news.pdf-quality.content": {
+    "defaultMessage": "El PDF se generaba a la resolución a la que se veía la previsualización: cuanto más pequeña la pantalla, peor el fichero, que es justo el peor caso para quien exporta desde una tableta. Ahora sale siempre a la resolución que toca, la imagen se centra en la página en vez de acumular todo el margen a un lado, y ya no puede salir ninguna hoja en blanco. Mientras se genera, la aplicación dice qué está haciendo.",
+    "description": "Cos de la notícia «pdf-quality»"
+  },
+  "news.pdf-quality.step1.alt": {
+    "defaultMessage": "Previsualización de la secuencia en la página de vista",
+    "description": "Text alternatiu de la imatge del pas 1 de «pdf-quality»"
+  },
+  "news.pdf-quality.step1.description": {
+    "defaultMessage": "Lo que ves en la previsualización es lo que encontrarás en el PDF: el mismo tamaño, el mismo espaciado y los mismos márgenes, tanto si lo miras en una pantalla grande como en una pequeña.",
+    "description": "Descripció del pas 1 de «pdf-quality»"
+  },
+  "news.pdf-quality.step2.alt": {
+    "defaultMessage": "Mensaje de espera mientras se genera el PDF",
+    "description": "Text alternatiu de la imatge del pas 2 de «pdf-quality»"
+  },
+  "news.pdf-quality.step2.description": {
+    "defaultMessage": "Al pulsar el botón de PDF, la aplicación dice que lo está generando, y te avisa tanto cuando termina como si algo falla. Antes, la única señal era que el botón se ponía gris.",
+    "description": "Descripció del pas 2 de «pdf-quality»"
+  },
+  "news.safe-delete.title": {
+    "defaultMessage": "Nadie borra una secuencia sin avisar",
+    "description": "Títol de la notícia «safe-delete»"
+  },
+  "news.safe-delete.summary": {
+    "defaultMessage": "Borrar una secuencia ahora pregunta, y dice cuántos pictogramas se van.",
+    "description": "Resum de la notícia «safe-delete» al carrusel"
+  },
+  "news.safe-delete.content": {
+    "defaultMessage": "La aplicación no tiene deshacer, así que borrar una secuencia entera era la manera más fácil de perder trabajo: se iba con todos sus pictogramas y no preguntaba nada. Ahora pregunta, y dice la cifra. Si la secuencia está vacía no pregunta: no hace falta pedir permiso para tirar casillas en blanco. Y en el menú del pictograma, «Eliminar» ha salido del medio y se ha ido al último lugar, solo.",
+    "description": "Cos de la notícia «safe-delete»"
+  },
+  "news.safe-delete.step1.alt": {
+    "defaultMessage": "Diálogo de confirmación que dice cuántos pictogramas se borrarán",
+    "description": "Text alternatiu de la imatge del pas 1 de «safe-delete»"
+  },
+  "news.safe-delete.step1.description": {
+    "defaultMessage": "Al borrar una secuencia con contenido, la aplicación pregunta antes y dice cuántos pictogramas perderás. Quien decide a menudo no está mirando lo que va a perder.",
+    "description": "Descripció del pas 1 de «safe-delete»"
+  },
+  "news.safe-delete.step2.alt": {
+    "defaultMessage": "Menú del pictograma con «Eliminar» separado al final",
+    "description": "Text alternatiu de la imatge del pas 2 de «safe-delete»"
+  },
+  "news.safe-delete.step2.description": {
+    "defaultMessage": "En el menú del pictograma, «Eliminar» ya no está en el medio, donde se pulsaba sin querer: va al último lugar, separado del resto por una línea.",
+    "description": "Descripció del pas 2 de «safe-delete»"
   }
 }
