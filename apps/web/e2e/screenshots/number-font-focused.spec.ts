@@ -1,6 +1,7 @@
 import { test, type Page, type Locator } from "@playwright/test";
 import path from "node:path";
 import fs from "node:fs";
+import { mockArasaac } from "./newsShot";
 
 // Directoris de sortida per a imatges
 const IMG_DIR = path.join(process.cwd(), "public/img/news");
@@ -133,7 +134,12 @@ test(
     // =============================================
     // Navegar a la pàgina d'edició i obrir el menú
     // =============================================
-    await page.goto("/ca/create-sequence");
+    // Aquest spec no tenia cap mock d'ARASAAC perquè el panell antic no
+    // ensenyava cap pictograma. El d'ara sí: la mostra del tab Pictogrames
+    // carrega el 6009, i sense servir-lo del repositori surt una icona
+    // d'imatge trencada al mig de la captura.
+    await mockArasaac(page);
+    await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
     await page.waitForLoadState("domcontentloaded");
     await page.waitForTimeout(1000);
 
@@ -149,13 +155,20 @@ test(
     await page.getByRole("dialog").waitFor({ state: "visible" });
     await page.waitForTimeout(500);
 
+    // El diàleg ara té pestanyes i no obre al formulari de pictogrames: la
+    // numeració viu a «Pictogrames», i sense aquest clic la captura es
+    // buscava en un panell que no la conté.
+    await page.getByRole("tab", { name: /Pictogrames/i }).click();
+    await page.waitForTimeout(1000);
+
     // =============================================
     // PAS 1: Switch de Numeració (desactivat)
-    // Protagonista: el span clicable del switch (aria-label="Numeració")
-    // Nota: MUI Switch posa l'aria-label al span MuiButtonBase, no a l'input interior
+    // Protagonista: el span clicable del switch (aria-label="Numeració").
+    // MUI posa l'aria-label al span del SwitchBase i no a l'<input>, cosa que
+    // aquí serveix i per a un lector de pantalla no (vegeu C17 al backlog).
     // =============================================
     const numberedSwitch = page.locator('[aria-label="Numeració"]');
-    await numberedSwitch.waitFor({ state: "visible" });
+    await numberedSwitch.waitFor({ state: "visible", timeout: 15000 });
 
     // Assegurar que el switch és desactivat (si estava activat, desactivar-lo)
     const isChecked = await numberedSwitch.locator("input").isChecked();
@@ -169,7 +182,7 @@ test(
       page,
       numberedSwitch,
       path.join(IMG_DIR, "number-font-step1.png"),
-      { paddingX: 321, paddingY: 80, mouseOffset: { x: 40, y: 20 } },
+      { paddingX: 640, paddingY: 240, mouseOffset: { x: 40, y: 20 } },
     );
 
     // =============================================
@@ -184,7 +197,7 @@ test(
       page,
       numberedSwitch,
       path.join(IMG_DIR, "number-font-step2.png"),
-      { paddingX: 321, paddingY: 80, mouseOffset: { x: 40, y: 20 } },
+      { paddingX: 640, paddingY: 240, mouseOffset: { x: 40, y: 20 } },
     );
 
     // =============================================
@@ -194,14 +207,18 @@ test(
     // =============================================
     const fontGroupHeading = page.getByText("Font dels números");
     await fontGroupHeading.waitFor({ state: "visible" });
-    await page.waitForTimeout(300);
+    // La secció queda per sota de la primera pantalla del panell. Sense
+    // pujar-la a la vista, el retall es clava al final de la finestra i la
+    // captura ensenyava la tipografia del text, que és una altra secció.
+    await fontGroupHeading.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(600);
 
     // Pas 3: target ~680px ample; heading ~200px → paddingX=(680-200)/2=240
     await focusedScreenshot(
       page,
       fontGroupHeading,
       path.join(IMG_DIR, "number-font-step3.png"),
-      { paddingX: 240, paddingY: 100, mouseOffset: { x: 40, y: 30 } },
+      { paddingX: 640, paddingY: 240, mouseOffset: { x: 40, y: 30 } },
     );
 
     // =============================================
@@ -212,7 +229,7 @@ test(
       page,
       numberedSwitch,
       path.join(IMG_DIR, "number-font.png"),
-      { paddingX: 331, paddingY: 127, mouseOffset: { x: 40, y: 20 }, cursorUrl: CURSOR_SVG_HIGHLIGHT_URL, cursorSize: 60 },
+      { paddingX: 640, paddingY: 127, mouseOffset: { x: 40, y: 20 }, cursorUrl: CURSOR_SVG_HIGHLIGHT_URL, cursorSize: 60 },
     );
   },
 );

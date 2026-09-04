@@ -1228,3 +1228,98 @@ Branca `claude/backlog-branch-master-64uh75`.
   - Fixat a `e2e/persistent-storage.spec.ts`, amb un doble de `navigator.storage` que compta les
     crides: primera escriptura, gest del botó d'estat, cap crida si ja està concedit i cap canvi de
     comportament en un navegador sense l'API.
+
+### C18 — L'spec de vídeo de «multiple-sequences» no s'executa des de C5 🔴 Oberta
+
+*(Trobada regenerant les captures després de fusionar master, fora de l'abast de N2.)*
+
+- **On**: `apps/web/e2e/screenshots/multiple-sequences.spec.ts` — busca
+  `getByRole("checkbox", { name: /apply.*(all|tots)/i })`.
+- **Per què importa**: poc, i per això no s'ha arreglat aquí. És l'únic spec que grava vídeo, i
+  cap notícia n'usa cap avui (`NewsStep.video` és opcional i no el fa servir ningú). Falla des
+  de `cc62c90`, el commit de C5 que va treure els noms accessibles en anglès literal; les
+  imatges de la notícia les fa `multiple-sequences-focused.spec.ts`, que sí que passa.
+- **Proposta**: decidir primer si el vídeo es vol. Si es vol, el switch «Aplica a totes» és avui
+  un `SettingRow control="compact"` i el seu nom no és al `checkbox` (vegeu C17); si no, esborrar
+  l'spec en comptes de deixar-lo vermell fent de soroll a la suite.
+
+### C17 — El switch d'un ajust arriba sense nom al lector de pantalla 🔴 Oberta
+
+*(Trobada regenerant les captures de N2, fora del seu abast.)*
+
+- **On**: `components/SettingsCards/SettingCardBoolean/SettingCardBoolean.tsx` — l'`aria-label` es
+  passa directament al `Switch` de MUI.
+- **Per què importa**: MUI el posa al `span` del `SwitchBase`, que no té cap rol, i **no** a
+  l'`<input type="checkbox">` de dins. Comprovat al navegador: els dos switches del tab
+  Pictogrames («Numeració» i «Color») tenen `aria-label` nul a l'input, o sigui que un lector de
+  pantalla anuncia una casella sense nom. És el mateix defecte que C12 va corregir als `Select`
+  —l'etiqueta posada a l'element que no és el control—, i afecta tot `SettingCardBoolean`.
+- **Proposta**: seguir el patró de l'estàndard i no repetir l'etiqueta: que `SettingRow` passi el
+  seu `labelId` i el `Switch` el reculli amb `inputProps={{ "aria-labelledby": labelId }}`. Així
+  el nom surt del títol de la fila, com a la resta de controls.
+
+---
+
+## Novetats pendents de publicar
+
+Surten de la tria de `docs/NOTICIES-candidates-des-de-2.0.2.md`. Les sis notícies que no
+demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per què.
+
+### N1 — Les tres notícies de compte no estan escrites 🔴 Oberta
+
+- **On**: `apps/web/src/data/newsItems.ts` — hi falten `user-account`, `cloud-documents` i
+  `personal-vocabulary`, que la tria dona per prioritat alta.
+- **Per què importa**: són les tres funcionalitats més grans de la versió i cap usuari se n'ha
+  assabentat. Es van deixar per a més endavant a propòsit, no per descuit: totes tres demanen
+  compte i s'han de publicar juntes i en ordre —primer el compte, després el vocabulari i els
+  documents—, perquè les altres dues no s'entenen sense la primera.
+- **Proposta**: la tria ja porta la fitxa de cadascuna, amb els passos i el que **no** s'hi ha de
+  dir. Dues decisions hi són imprescindibles i no són de redacció: la notícia del compte ha de dir
+  aviat que **tot el que funcionava sense compte continua funcionant sense compte**, i la del núvol
+  ha de dir el **sostre de tres documents** amb el `.saac` il·limitat al costat, en comptes de
+  deixar-lo descobrir al quart document.
+
+### N2 — Dues notícies publicades ja no són certes ✅ Resolta
+
+- **On**: `apps/web/languages/*.json`, claus `news.logo-menu.*` i `news.new-languages.*`
+- **Per què importa**: `logo-menu` anomena el menú «Edita» i «Previsualitza» —avui es diuen
+  **Edició** i **Vista**— i el seu pas 3 diu que el selector d'idioma és a baix del menú lateral,
+  d'on va marxar cap al tab Usuari de configuració i cap a la pantalla d'inici. `new-languages`
+  hi dedica els passos 1 i 2 sencers a aquell camí. Una notícia que explica un camí que ja no
+  existeix és pitjor que no tenir-la: qui la segueix conclou que l'app està trencada.
+- **Proposta**: reescriure els textos afectats als cinc idiomes i regenerar les captures amb els
+  `*-focused.spec.ts` que ja hi ha. **Verificat que cal**: en tornar a executar
+  `download-pdf-focused.spec.ts` les tres imatges canvien, o sigui que totes les captures
+  anteriors al canvi d'icones i de contrast de la barra de vista estan desfasades, encara que el
+  text que les acompanya continuï sent cert.
+- **Resolta** a la branca `claude/inventory-features-2-0-2-l2p1zu`. L'entrada es quedava curta: no
+  eren dos textos i unes captures velles, sinó que **cinc dels set specs de captura ja no corrien
+  contra la interfície d'avui**, cadascun per un motiu diferent i tots conseqüència de canvis que
+  sí que estan documentats aquí:
+  - `logo-menu` i `new-languages` buscaven el selector d'idioma del calaix, que ja no hi és.
+    Reescrits sencers sobre `newsShot.ts`; el primer ensenya ara la secció de configuració i el
+    segon el camí nou (menú principal → Configuració → pestanya Usuari).
+  - `view-improvements` filtrava el grup de toggles per `[aria-label="left"]`, un literal en
+    anglès que **C5 va eliminar** en fer que el nom accessible surti del missatge traduït.
+  - `save-improvements` buscava el botó de pujar imatge pel seu nom de «pujar», però la captura
+    es fa **després** de pujar-la i aleshores el botó es diu «Canvia la imatge pujada».
+  - `number-font` obria el diàleg de configuració i hi buscava la numeració sense canviar de
+    pestanya: el diàleg **té pestanyes** des de la migració i obre a Usuari. A més no tenia cap
+    mock d'ARASAAC —el panell antic no ensenyava cap pictograma i el d'ara sí, i sortia una
+    imatge trencada al mig— i la secció dels números queda per sota de la primera pantalla.
+  - Els tres últims, a més, feien `goto` esperant l'esdeveniment `load`, que amb les fonts de
+    Google no arriba mai: passen a `domcontentloaded` i a servir les fonts buides, com els nous.
+  Els enquadraments dels controls petits dins d'una fila ampla s'han eixamplat a l'amplada del
+  panell: centrats en el control, el títol que diu **de què és** quedava fora per l'esquerra.
+  Verificat que les **tretze** pàgines de novetats es renderitzen sense cap clau sense traduir i
+  amb totes les imatges carregades.
+
+### N3 — La notícia de llegibilitat es va deixar sense escriure 🔴 Oberta
+
+- **On**: la tria la proposava com a `readability`, categoria `millora`, prioritat baixa.
+- **Per què importa**: poc. És el calaix de canvis que individualment no són notícia —el verd que
+  marxa d'on feia de text, els botons d'afegir que eren invisibles, els diàlegs que ara es tanquen
+  igual, el que sura que ja no tapa l'última fila.
+- **Proposta**: si s'escriu, demana una captura **d'abans i després** de la barra de la pàgina de
+  vista, i l'«abans» obliga a construir una revisió antiga. És l'única de les sis sense compte que
+  no s'ha publicat, i el motiu és aquest cost, no el contingut.

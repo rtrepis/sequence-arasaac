@@ -27,6 +27,162 @@ export interface NewsItem {
 
 export const newsItems: NewsItem[] = [
   {
+    slug: "autosave-draft",
+    titleId: "news.autosave-draft.title",
+    summaryId: "news.autosave-draft.summary",
+    contentId: "news.autosave-draft.content",
+    coverImage: "/img/news/autosave-draft.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/autosave-draft-step1.png",
+          altId: "news.autosave-draft.step1.alt",
+        },
+        descriptionId: "news.autosave-draft.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/autosave-draft-step2.png",
+          altId: "news.autosave-draft.step2.alt",
+        },
+        descriptionId: "news.autosave-draft.step2.description",
+      },
+    ],
+    date: "2026-09-04",
+    category: "millora",
+  },
+  {
+    slug: "pictogram-actions-touch",
+    titleId: "news.pictogram-actions-touch.title",
+    summaryId: "news.pictogram-actions-touch.summary",
+    contentId: "news.pictogram-actions-touch.content",
+    coverImage: "/img/news/pictogram-actions-touch.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/pictogram-actions-touch-step1.png",
+          altId: "news.pictogram-actions-touch.step1.alt",
+        },
+        descriptionId: "news.pictogram-actions-touch.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/pictogram-actions-touch-step2.png",
+          altId: "news.pictogram-actions-touch.step2.alt",
+        },
+        descriptionId: "news.pictogram-actions-touch.step2.description",
+      },
+    ],
+    date: "2026-09-04",
+    category: "correccio",
+  },
+  {
+    slug: "search-suggestions",
+    titleId: "news.search-suggestions.title",
+    summaryId: "news.search-suggestions.summary",
+    contentId: "news.search-suggestions.content",
+    coverImage: "/img/news/search-suggestions.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/search-suggestions-step1.png",
+          altId: "news.search-suggestions.step1.alt",
+        },
+        descriptionId: "news.search-suggestions.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/search-suggestions-step2.png",
+          altId: "news.search-suggestions.step2.alt",
+        },
+        descriptionId: "news.search-suggestions.step2.description",
+      },
+    ],
+    date: "2026-09-04",
+    category: "millora",
+  },
+  {
+    slug: "user-preferences",
+    titleId: "news.user-preferences.title",
+    summaryId: "news.user-preferences.summary",
+    contentId: "news.user-preferences.content",
+    coverImage: "/img/news/user-preferences.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/user-preferences-step1.png",
+          altId: "news.user-preferences.step1.alt",
+        },
+        descriptionId: "news.user-preferences.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/user-preferences-step2.png",
+          altId: "news.user-preferences.step2.alt",
+        },
+        descriptionId: "news.user-preferences.step2.description",
+      },
+    ],
+    date: "2026-09-04",
+    category: "nova",
+  },
+  {
+    slug: "pdf-quality",
+    titleId: "news.pdf-quality.title",
+    summaryId: "news.pdf-quality.summary",
+    contentId: "news.pdf-quality.content",
+    coverImage: "/img/news/pdf-quality.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/pdf-quality-step1.png",
+          altId: "news.pdf-quality.step1.alt",
+        },
+        descriptionId: "news.pdf-quality.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/pdf-quality-step2.png",
+          altId: "news.pdf-quality.step2.alt",
+        },
+        descriptionId: "news.pdf-quality.step2.description",
+      },
+    ],
+    date: "2026-09-04",
+    category: "correccio",
+  },
+  {
+    slug: "safe-delete",
+    titleId: "news.safe-delete.title",
+    summaryId: "news.safe-delete.summary",
+    contentId: "news.safe-delete.content",
+    coverImage: "/img/news/safe-delete.png",
+    images: [],
+    steps: [
+      {
+        image: {
+          src: "/img/news/safe-delete-step1.png",
+          altId: "news.safe-delete.step1.alt",
+        },
+        descriptionId: "news.safe-delete.step1.description",
+      },
+      {
+        image: {
+          src: "/img/news/safe-delete-step2.png",
+          altId: "news.safe-delete.step2.alt",
+        },
+        descriptionId: "news.safe-delete.step2.description",
+      },
+    ],
+    date: "2026-09-04",
+    category: "millora",
+  },
+  {
     slug: "download-pdf",
     titleId: "news.download-pdf.title",
     summaryId: "news.download-pdf.summary",

@@ -158,7 +158,7 @@ abans de tocar la seva àrea; no cal llegir-los tots.
 ## Estudis i feina pendent
 
 Els estàndards diuen **què** s'ha de fer; aquests documents diuen **per què** i **què
-queda obert**. Cap dels tres és de lectura habitual: s'hi va quan la pregunta que es té
+queda obert**. Cap d'ells és de lectura habitual: s'hi va quan la pregunta que es té
 al davant hi encaixa.
 
 - `docs/BACKLOG-ux.md` recull les troballes obertes de la revisió d'UX, icones i accessibilitat, amb
@@ -176,3 +176,9 @@ al davant hi encaixa.
   motiu, i el pla de migració. L'estàndard viu a `docs/estandards/capes-flotants.md`; **aquest
   document és la raó de cada regla**, i s'hi va a mirar quan una regla sembla arbitrària o quan
   se'n vol canviar alguna.
+- `docs/INVENTARI-funcionalitats-des-de-2.0.2.md` recull, per blocs, tot el que l'app fa avui i no
+  feia a la 2.0.2. **Consultar-lo quan cal explicar la versió a algú de fora** —una nota de
+  llançament, un resum a l'equip— en comptes de tornar a recórrer el registre de commits.
+- `docs/NOTICIES-candidates-des-de-2.0.2.md` és la tria editorial que en surt: què d'aquell
+  inventari es publica a Novetats i què no, amb la fitxa de cada notícia i el que **no** s'hi ha
+  de dir. **Consultar-lo abans d'escriure una entrada de `newsItems.ts`.**

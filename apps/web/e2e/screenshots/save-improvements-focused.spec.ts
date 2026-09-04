@@ -231,7 +231,13 @@ test(
     // =============================================
     // EDIT PAGE: Afegir un pictograma a la seqüència
     // =============================================
-    await page.goto("/ca/create-sequence");
+    // Les fonts de Google se serveixen buides i la navegació no espera
+    // l'esdeveniment `load`: amb dotzenes de famílies que aquí no es jutgen,
+    // «load» no arriba mai i la captura mor esperant la xarxa.
+    await page.route("https://fonts.googleapis.com/**", (route) =>
+      route.fulfill({ status: 200, contentType: "text/css", body: "" }),
+    );
+    await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
     await page.waitForLoadState("domcontentloaded");
     await page.waitForTimeout(1500);
 
@@ -267,10 +273,11 @@ test(
     );
     await page.waitForTimeout(800);
 
-    // Localitzar el botó d'upload per aria-label.
-    // L'atribut aria-label directe evita ambigüitat amb l'<input> intern.
+    // Localitzar el botó d'upload per aria-label. Amb la imatge ja pujada el
+    // botó es diu «Canvia la imatge pujada» i no «Puja una imatge teva»: el
+    // nom depèn de si el pictograma ja en té una, i aquí ja n'hi ha.
     const uploadBtn = page
-      .locator('[aria-label="Pujar imatge des del dispositiu"]')
+      .locator('[aria-label="Canvia la imatge pujada"]')
       .first();
     await uploadBtn.waitFor({ state: "visible", timeout: 10000 });
 

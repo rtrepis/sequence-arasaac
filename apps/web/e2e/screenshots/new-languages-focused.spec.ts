@@ -1,266 +1,75 @@
-import { test, type Page, type Locator } from "@playwright/test";
-import path from "node:path";
-import fs from "node:fs";
+import { test } from "@playwright/test";
+import { COVER, ensureImgDir, mockArasaac, shot } from "./newsShot";
 
-// Directoris de sortida per a imatges i vídeos
-const IMG_DIR = path.join(process.cwd(), "public/img/news");
-const VIDEO_DIR = path.join(process.cwd(), "public/video/news");
+// Captures de la notícia «new-languages»: on es canvia l'idioma de l'app.
+//
+// Reescrit sencer: els passos 1 i 2 explicaven el selector del menú lateral,
+// que ja no hi és. Avui l'idioma de la interfície viu a la pestanya Usuari del
+// diàleg de configuració (troballa N2 del backlog).
 
-// Cursor SVG (fletxa clàssica negra amb contorn blanc) per fer-lo visible en captures headless
-const CURSOR_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">' +
-    '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
-    "</svg>",
-)}`;
-// Cursor destacat per a covers: 60px amb cercle groc semi-transparent al punt actiu
-const CURSOR_SVG_HIGHLIGHT_URL = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24">' +
-    '<circle cx="5" cy="2" r="6" fill="rgba(255,220,0,0.5)"/>' +
-    '<path d="M5 2L5 19L9 15L12 22L14 21L11 14L17 14Z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>' +
-    "</svg>",
-)}`;
+test.beforeAll(ensureImgDir);
 
-// Opcions de la captura centrada
-interface FocusedOptions {
-  // Marge al voltant de l'element protagonista (px). Default 280.
-  padding?: number;
-  // Override horitzontal del padding (prioritat sobre padding).
-  paddingX?: number;
-  // Override vertical del padding (prioritat sobre padding).
-  paddingY?: number;
-  // Desplaçament del cursor respecte al centre de l'element. Default {x:35, y:35}.
-  mouseOffset?: { x: number; y: number };
-  // URL del cursor SVG a injectar. Default: CURSOR_SVG_DATA_URL.
-  cursorUrl?: string;
-  // Mida del div cursor (px). Default 48.
-  cursorSize?: number;
-}
+test("new-languages: captures del canvi d'idioma des de configuració", async ({
+  page,
+}) => {
+  await mockArasaac(page);
+  await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
+  await page.waitForTimeout(2000);
 
-// Captura centrada en el protagonista amb cursor visual injectat.
-// headless no renderitza el cursor del sistema — s'injecta un div amb l'SVG del cursor.
-const focusedScreenshot = async (
-  page: Page,
-  protagonist: Locator,
-  outputPath: string,
-  options: FocusedOptions = {},
-): Promise<void> => {
-  const { padding = 280, mouseOffset = { x: 35, y: 35 }, cursorUrl = CURSOR_SVG_DATA_URL, cursorSize = 48 } = options;
-  const px = options.paddingX ?? padding;
-  const py = options.paddingY ?? padding;
+  // Pas 1: el camí fins a la configuració
+  await page.getByRole("button", { name: /Menú principal/i }).click();
+  await page.waitForTimeout(800);
 
-  const box = await protagonist.boundingBox();
-  if (!box) throw new Error(`Element no trobat per a la captura: ${outputPath}`);
-
-  const viewport = page.viewportSize()!;
-
-  // Centrar l'element dins del clip
-  const centerX = box.x + box.width / 2;
-  const centerY = box.y + box.height / 2;
-  const clipWidth = Math.min(viewport.width, box.width + px * 2);
-  const clipHeight = Math.min(viewport.height, box.height + py * 2);
-  const clipX = Math.max(
-    0,
-    Math.min(centerX - clipWidth / 2, viewport.width - clipWidth),
-  );
-  const clipY = Math.max(
-    0,
-    Math.min(centerY - clipHeight / 2, viewport.height - clipHeight),
-  );
-
-  // Posició del cursor: aprop però sense cobrir l'element
-  const mouseX = Math.min(
-    viewport.width - 5,
-    Math.max(5, centerX + mouseOffset.x),
-  );
-  const mouseY = Math.min(
-    viewport.height - 5,
-    Math.max(5, centerY + mouseOffset.y),
-  );
-
-  // Moure el ratolí real activa els estats :hover CSS
-  await page.mouse.move(mouseX, mouseY);
-
-  // Injectar div cursor visible (headless no mostra el cursor del sistema)
-  await page.evaluate(
-    ({
-      x,
-      y,
-      svgUrl,
-      size,
-    }: {
-      x: number;
-      y: number;
-      svgUrl: string;
-      size: number;
-    }) => {
-      document.getElementById("__pw_cursor__")?.remove();
-      const el = document.createElement("div");
-      el.id = "__pw_cursor__";
-      el.style.cssText = [
-        "position:fixed",
-        `left:${x}px`,
-        `top:${y}px`,
-        `width:${size}px`,
-        `height:${size}px`,
-        "z-index:2147483647",
-        "pointer-events:none",
-        `background-image:url("${svgUrl}")`,
-        "background-repeat:no-repeat",
-        "background-size:contain",
-      ].join(";");
-      document.body.appendChild(el);
-    },
-    { x: mouseX, y: mouseY, svgUrl: cursorUrl, size: cursorSize },
-  );
-
-  await page.screenshot({
-    path: outputPath,
-    clip: { x: clipX, y: clipY, width: clipWidth, height: clipHeight },
+  const settingsItem = page.getByRole("button", { name: "Configuració" });
+  await settingsItem.waitFor({ state: "visible", timeout: 15000 });
+  await shot(page, settingsItem, "new-languages-step1.png", {
+    mouseOffset: { x: 40, y: 20 },
   });
 
-  // Netejar cursor injectat per no interferir amb interaccions posteriors
-  await page.evaluate(() => {
-    document.getElementById("__pw_cursor__")?.remove();
+  await settingsItem.click();
+  await page.getByRole("dialog").waitFor({ state: "visible", timeout: 15000 });
+  await page.waitForTimeout(1500);
+
+  // Coberta i pas 2: la fila «Interfície», amb els cinc idiomes a la vista.
+  // L'amplada és la del diàleg i no la del grup de botons: centrat en el grup,
+  // el títol de la fila queda fora per l'esquerra.
+  const langGroup = page.getByRole("group", {
+    name: "Selecciona l'idioma de la interfície",
   });
-};
+  await langGroup.waitFor({ state: "visible", timeout: 15000 });
 
-test.beforeAll(() => {
-  fs.mkdirSync(IMG_DIR, { recursive: true });
-  fs.mkdirSync(VIDEO_DIR, { recursive: true });
-});
-
-test(
-  "new-languages-focused: captures contextuals centrades en el selector d'idioma",
-  async ({ page }) => {
-    // Interceptar crides a l'API d'ARASAAC per evitar dependències de xarxa
-    await page.route("**/api.arasaac.org/**", async (route) => {
-      const pathname = new URL(route.request().url()).pathname;
-      if (/\/api\/keywords\//.test(pathname)) {
-        return route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({ words: [] }),
-        });
-      }
-      return route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify([]),
-      });
-    });
-
-    // Navegar a la pàgina d'edició
-    await page.goto("/ca/create-sequence");
-    await page.waitForLoadState("domcontentloaded");
-    await page.waitForTimeout(1000);
-
-    // Obrir el drawer de navegació principal (LogoMenu)
-    const menuBtn = page.getByRole("button", { name: /Menú principal/i });
-    await menuBtn.waitFor({ state: "visible", timeout: 10000 });
-    await menuBtn.click();
-    await page.waitForTimeout(600);
-
-    // Esperar que el drawer estigui obert comprovant el link d'Inici
-    const iniciaLink = page.getByRole("link", { name: "Inici" });
-    await iniciaLink.waitFor({ state: "visible", timeout: 10000 });
-
-    // Localitzar el FormControl del selector d'idioma (Select MUI amb aria-labelledby)
-    // El Select de MUI renderitza un div[aria-labelledby="lang-select-label"]
-    const langFormControl = page
-      .locator('[aria-labelledby="lang-select-label"]')
-      .locator("xpath=../..");
-
-    await langFormControl.waitFor({ state: "visible", timeout: 10000 });
-
-    // =============================================
-    // COBERTA: drawer + selector d'idioma visible
-    // Protagonista: FormControl idioma (~240px ample × ~56px alt)
-    // Target coberta: ~700×290px (ratio ~2.4:1)
-    // paddingX=(700-240)/2=230, paddingY=(290-56)/2=117
-    // =============================================
-    await focusedScreenshot(
-      page,
-      langFormControl,
-      path.join(IMG_DIR, "new-languages.png"),
-      { paddingX: 230, paddingY: 117, mouseOffset: { x: 30, y: 10 }, cursorUrl: CURSOR_SVG_HIGHLIGHT_URL, cursorSize: 60 },
-    );
-
-    // =============================================
-    // PAS 1: Drawer obert amb selector d'idioma visible
-    // Protagonista: FormControl idioma
-    // Target step: ~700×560px
-    // paddingX=230, paddingY=(560-56)/2=252
-    // =============================================
-    await focusedScreenshot(
-      page,
-      langFormControl,
-      path.join(IMG_DIR, "new-languages-step1.png"),
-      { paddingX: 230, paddingY: 252, mouseOffset: { x: 30, y: 10 } },
-    );
-
-    // =============================================
-    // PAS 2: Select obert mostrant els 5 idiomes
-    // Clic al combobox per desplegar les opcions
-    // =============================================
-    const langCombobox = page.getByRole("combobox");
-    await langCombobox.click();
-    await page.waitForTimeout(400);
-
-    // Protagonista: el listbox desplegable (Paper de MUI)
-    const listbox = page.getByRole("listbox");
-    await listbox.waitFor({ state: "visible", timeout: 5000 });
-
-    // Target step: ~700×560px (~240px ample × ~210px alt per 5 opcions)
-    // paddingX=230, paddingY=(560-210)/2=175
-    await focusedScreenshot(
-      page,
-      listbox,
-      path.join(IMG_DIR, "new-languages-step2.png"),
-      { paddingX: 230, paddingY: 175, mouseOffset: { x: 30, y: 10 } },
-    );
-
-    // =============================================
-    // PAS 3: Seleccionar Français i mostrar la UI actualitzada
-    // Clic a l'opció Français → navega a /fr/create-sequence
-    // =============================================
-    const frOption = page.getByRole("option", { name: "Français" });
-    await frOption.click();
+  // La interfície arrenca marcada en «en» encara que la URL sigui /ca i tot
+  // es vegi en català (troballa B23). En una notícia que va precisament
+  // d'idiomes, això es llegiria com un error de l'app: es marca el que s'hi
+  // veu abans de fotografiar-ho. El toggle navega i desmunta el diàleg.
+  await page.getByRole("button", { name: "ca", exact: true }).click();
+  await page.waitForTimeout(1500);
+  if (!(await page.getByRole("dialog").isVisible())) {
+    await page.getByRole("button", { name: /Menú principal/i }).click();
+    await page.getByRole("button", { name: "Configuració" }).click();
+    await page.getByRole("dialog").waitFor({ state: "visible", timeout: 15000 });
     await page.waitForTimeout(1200);
-
-    // Re-obrir el drawer (ara en fr)
-    const menuBtnFr = page.getByRole("button", { name: /Menu principal|Menú principal|Main menu/i });
-    await menuBtnFr.waitFor({ state: "visible", timeout: 10000 });
-    await menuBtnFr.click();
-    await page.waitForTimeout(600);
-
-    // Re-localitzar el FormControl (ara mostra "Français" seleccionat)
-    const langFormControlFr = page
-      .locator('[aria-labelledby="lang-select-label"]')
-      .locator("xpath=../..");
-    await langFormControlFr.waitFor({ state: "visible", timeout: 10000 });
-
-    // Target step: ~700×560px
-    await focusedScreenshot(
-      page,
-      langFormControlFr,
-      path.join(IMG_DIR, "new-languages-step3.png"),
-      { paddingX: 230, paddingY: 252, mouseOffset: { x: 30, y: 10 } },
-    );
-  },
-);
-
-test.afterEach(async ({ page }, testInfo) => {
-  // Desar el vídeo enregistrat a public/video/news/ si el test ha passat
-  if (testInfo.status === "passed") {
-    const video = page.video();
-    if (video) {
-      const destPath = path.join(VIDEO_DIR, "new-languages-guide.webm");
-      try {
-        await video.saveAs(destPath);
-        console.log(`Vídeo desat a: ${destPath}`);
-      } catch (e) {
-        console.warn(`No s'ha pogut desar el vídeo: ${e}`);
-      }
-    }
   }
+
+  // La secció «Idioma» i no el diàleg sencer: el tab Usuari complet ja és la
+  // captura de la notícia del tema fosc, i dues notícies amb la mateixa
+  // imatge no expliquen res.
+  await shot(page, langGroup, "new-languages.png", {
+    size: { width: 1280, height: COVER.height },
+    mouseOffset: { x: 70, y: 30 },
+    highlight: true,
+  });
+  await shot(page, langGroup, "new-languages-step2.png", {
+    size: { width: 1280, height: 400 },
+    mouseOffset: { x: 70, y: 30 },
+  });
+
+  // Pas 3: triar «fr» i ensenyar l'app en francès
+  await page.getByRole("button", { name: "fr", exact: true }).click();
+  await page.waitForTimeout(2500);
+
+  await shot(page, page.locator("body"), "new-languages-step3.png", {
+    size: { width: 1280, height: 800 },
+    noCursor: true,
+  });
 });
