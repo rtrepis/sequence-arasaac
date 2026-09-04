@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "audit:users": "tsx src/scripts/auditUsers.ts",
-    "migrate:users": "tsx src/scripts/migrateUsers.ts"
+    "migrate:users": "tsx src/scripts/migrateUsers.ts",
+    "migrate:word-images": "tsx src/scripts/migrateWordProfileImages.ts"
   },
   "dependencies": {
     "@sequence-arasaac/shared-types": "*",

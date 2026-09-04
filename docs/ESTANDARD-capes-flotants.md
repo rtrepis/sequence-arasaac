@@ -6,11 +6,11 @@ Diàlegs, avisos i botons flotants: tot el que sura per damunt de la pàgina.
 (`components/SettingsLayout/`) i el de **tabs** (`components/AppTabs/`), i es
 llegeix igual que ells: primer l'inventari del que hi ha, després les
 divergències trobades amb fitxer i motiu, i al final el patró i el pla de
-migració. Les regles que en surtin passaran a `CLAUDE.md`; aquest fitxer es
-queda com la raó de cada regla.
+migració. Les regles que en surtin passaran a `docs/estandards/capes-flotants.md`;
+aquest fitxer es queda com la raó de cada regla.
 
-**Estat**: migració feta. L'estàndard viu a `CLAUDE.md`; aquest document és el
-perquè.
+**Estat**: migració feta. L'estàndard viu a `docs/estandards/capes-flotants.md`;
+aquest document és el perquè.
 
 ---
 
@@ -213,6 +213,28 @@ Les confirmacions de tres segons (`FeedbackSnackbar`) en queden fora a
 propòsit: fer saltar la pàgina cada cop que es desa alguna cosa seria pitjor que
 el que arregla.
 
+### F13 — L'avís s'aparta d'un botó que en aquella pàgina no hi és
+
+*(Trobada després de migrar F7: reportada mirant l'app, no llegint el codi.)*
+
+La reserva de F7 va quedar escrita dins de `floatingSnackbarSx`, o sigui **a
+l'avís**, i per tant s'aplica a totes les pàgines de l'app. Però el control del
+racó no hi és a totes: el botó d'estat viu a `LanguageLayout` (editor i
+visualitzador) i les fletxes de novetats, a les notícies. A la pantalla d'inici,
+al registre o al panell d'administració no hi ha res al racó inferior dret.
+
+El cas és real i no és cap raresa: `BackendWakeUpNotice` es munta també a
+`WelcomeLayout` —a propòsit, perquè la pantalla d'inici és on es fa el primer
+login del dia i on el desvetllament de Render és més probable—, i allà l'avís
+surt en mòbil descentrat 79 px cap a l'esquerra, apartant-se de res. Un avís
+descentrat sense motiu visible es llegeix com un error de maquetació, i just en
+el moment en què l'usuari ja està esperant.
+
+La sortida és la mateixa que ja es fa servir per a l'alçada del peu (F12):
+**qui ocupa el racó és qui declara la reserva**, i l'avís només la llegeix. Amb
+el control a la pantalla, l'avís s'aparta exactament com fins ara; sense
+control, es queda als 8 px que MUI li posa per defecte.
+
 ---
 
 ## 4. El patró
@@ -287,6 +309,13 @@ Tots tres aparten el botó flotant per sota de `sm`, i la separació es **calcul
 des dels tokens** (`APP_CONTROL_SIZE` + les vores), no amb un 72 escrit a mà
 (resol F7 i F8).
 
+I només s'aparten **si hi ha de què apartar-se**: la reserva la declara qui
+ocupa el racó (`useFloatingCorner`, del botó d'estat i de la fletxa de
+novetats) i l'avís la llegeix d'una variable CSS, com el contingut llegeix
+l'alçada del peu de `floatingInset`. A les pàgines sense control flotant
+—inici, registre, panell d'administració— l'avís es queda on el posa MUI
+(resol F13).
+
 ### 4.6 Botons flotants
 
 Forma de toggle seleccionat: radi 20, vora d'1,75 px del color, tint del color
@@ -357,6 +386,11 @@ Per ordre, del que fixa el patró al que només l'hereta:
     dos grups de toggles.
 12. ✅ **Documentació** — l'estàndard condensat a `CLAUDE.md`; aquí s'hi queda la
     raó de cada regla.
+13. ✅ **La reserva del racó, declarada per qui l'ocupa** (F13) —
+    `components/FloatingLayer/floatingCorner.ts` i `useFloatingCorner`, que
+    porten `DocumentStatusFab` i la fletxa dreta de `NewsNavBar`. L'avís passa a
+    llegir-la d'una variable CSS i deixa d'apartar-se a les pàgines on no hi ha
+    cap control flotant.
 
 Fora d'abast, amb motiu: **`DefaultSettingsDialog`** (és `fullScreen` i ja té
 estàndard propi, el de tabs: barra superior, `✕` a l'`AppBar` i cap peu), el

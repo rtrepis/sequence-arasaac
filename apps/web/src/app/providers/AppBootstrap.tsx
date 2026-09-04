@@ -8,6 +8,7 @@ import {
   updateLangSettingsActionCreator,
   updateThemeActionCreator,
   applyUserViewSettingsActionCreator,
+  updateImageQualityActionCreator,
 } from "@features/user-settings/store/uiSlice";
 import {
   getStoredAccountUi,
@@ -17,6 +18,7 @@ import { langTranslateApp } from "../../configs/languagesConfigs";
 import { LangsApp } from "../../types/ui";
 import { refreshSessionThunk } from "@features/backend/auth/store/authSlice";
 import { useWarmUpOnReturn } from "@features/backend/api/useWarmUpOnReturn";
+import { ACCOUNTS_ENABLED } from "../../configs/accountsConfig";
 
 interface AppBootstrapProps {
   children: ReactNode;
@@ -35,7 +37,11 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
     // esperar el servidor per pintar-la vol dir fins a un minut amb el tema i
     // l'idioma d'una altra persona. La caché s'esborra en tancar sessió i quan el
     // refresc silenciós falla, de manera que la seva presència ja és el senyal.
-    const storedUi = getStoredAccountUi() ?? getStoredUserUi();
+    // Amb els comptes apagats no es mira la del compte: pintar la configuració
+    // d'una sessió que ja no es pot obrir seria deixar el tema i l'idioma d'algú
+    // altre en un dispositiu compartit sense cap manera de tancar-los.
+    const storedUi =
+      (ACCOUNTS_ENABLED ? getStoredAccountUi() : null) ?? getStoredUserUi();
 
     if (storedUi) {
       dispatch(updateDefaultSettingsActionCreator(storedUi.defaultSettings));
@@ -45,6 +51,9 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
       // format amb què es treballava, mana aquell i no la preferència desada
       if (storedUi.viewSettings) {
         dispatch(applyUserViewSettingsActionCreator(storedUi.viewSettings));
+      }
+      if (storedUi.imageQuality) {
+        dispatch(updateImageQualityActionCreator(storedUi.imageQuality));
       }
     } else {
       // Fallback: detecta l'idioma del navegador
@@ -57,7 +66,9 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
 
     // Intent de restauració de sessió silenciosa via cookie de refresh.
     // Si la cookie és vàlida, sobreescriu Redux amb les preferències del backend.
-    dispatch(refreshSessionThunk());
+    // Amb els comptes apagats no s'intenta: una cookie encara viva tornaria a
+    // obrir la sessió i ompliria el Redux d'un compte que l'app ja no ensenya.
+    if (ACCOUNTS_ENABLED) dispatch(refreshSessionThunk());
   }, [dispatch]);
 
   return <>{children}</>;

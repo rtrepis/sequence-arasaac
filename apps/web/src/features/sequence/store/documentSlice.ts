@@ -313,6 +313,39 @@ const documentSlice = createSlice({
     },
 
     // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
+    // Treu una imatge del núvol del document obert.
+    //
+    // La crida el gestor d'imatges del compte quan la imatge esborrada és d'una
+    // seqüència que l'usuari té a pantalla: al núvol ja no hi és, i sense això
+    // el document que s'està editant continuaria apuntant a una URL morta —i el
+    // desat següent la tornaria a desar.
+    removeCloudImage: (previousDocument, action: PayloadAction<string>) => {
+      Object.values(previousDocument.content).forEach((sequence) => {
+        sequence.forEach((pict) => {
+          if (pict.img.url === action.payload) pict.img.url = undefined;
+        });
+      });
+    },
+
+    // Adopta la imatge nova quan una del núvol s'ha canviat de mida.
+    //
+    // Reduir una imatge al núvol vol dir pujar-ne una altra i esborrar la
+    // vella: la URL canvia, i el document obert es quedaria apuntant a una
+    // imatge que ja no existeix. Com `removeCloudImage`, no és un canvi de
+    // contingut —la còpia de fora no s'ha quedat enrere, s'ha avançat.
+    replaceCloudImage: (
+      previousDocument,
+      action: PayloadAction<{ from: string; to: string }>,
+    ) => {
+      Object.values(previousDocument.content).forEach((sequence) => {
+        sequence.forEach((pict) => {
+          if (pict.img.url === action.payload.from) {
+            pict.img.url = action.payload.to;
+          }
+        });
+      });
+    },
+
     setDocumentId: (previousDocument, action: PayloadAction<string>) => {
       previousDocument.id = action.payload;
     },
@@ -468,6 +501,8 @@ export const {
   updateSequenceViewSettings: updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAll: applyViewSettingsToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
+  removeCloudImage: removeCloudImageActionCreator,
+  replaceCloudImage: replaceCloudImageActionCreator,
   setDocumentId: setDocumentIdActionCreator,
   setDocumentTitle: setDocumentTitleActionCreator,
 } = documentSlice.actions;

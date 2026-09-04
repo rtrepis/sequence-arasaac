@@ -39,11 +39,16 @@ export type {
   UserUseCase,
   UserUsage,
   QuotaLimits,
+  ImageQuality,
+  UserQuotaStatus,
+  UserAsset,
   AppConfig,
+  RegistrationStatus,
 } from "./ui";
 export type {
   AdminUserSummary,
   AdminUserList,
   AdminStats,
   AdminSecurityEvent,
+  AdminPasswordLink,
 } from "./admin";

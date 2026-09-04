@@ -18,6 +18,31 @@ config({ path: resolve(__dirname, "../../.env") });
 const DEV_MAIL_FROM = "SequenciAAC <onboarding@resend.dev>";
 const DEV_APP_PUBLIC_URL = "http://localhost:5173";
 
+// Domini de proves del proveïdor de correu. Una adreça d'aquí només pot
+// escriure a la bústia del propietari del compte: qualsevol altre destinatari
+// es rebutja amb un 403. A producció, doncs, vol dir que els correus interns
+// arriben —són per a un mateix— i que cap usuari real rep mai el seu enllaç de
+// benvinguda, que és exactament la fallada més difícil de veure que hi ha.
+const TEST_MAIL_DOMAIN = "resend.dev";
+
+// Domini d'un remitent, tant si ve com "Nom <bustia@domini>" com a pèl
+const mailFromDomain = (mailFrom: string): string => {
+  const open = mailFrom.lastIndexOf("<");
+  const close = mailFrom.lastIndexOf(">");
+  const address = open !== -1 && close > open ? mailFrom.slice(open + 1, close) : mailFrom;
+  return address.slice(address.lastIndexOf("@") + 1).trim().toLowerCase();
+};
+
+// Es mira el domini, no la cadena sencera. Abans es comparava per igualtat
+// exacta amb DEV_MAIL_FROM, i n'hi havia prou de canviar el nom que va davant
+// de l'adreça perquè la comprovació passés amb el domini de proves intacte:
+// el servidor arrencava, els correus a un mateix arribaven i els dels usuaris
+// nous es rebutjaven en silenci.
+const isTestMailFrom = (mailFrom: string): boolean => {
+  const domain = mailFromDomain(mailFrom);
+  return domain === TEST_MAIL_DOMAIN || domain.endsWith(`.${TEST_MAIL_DOMAIN}`);
+};
+
 // Esquema de validació — tots els camps obligatoris per arrencar el servidor
 const envSchema = z.object({
   NODE_ENV: z
@@ -65,6 +90,14 @@ const envSchema = z.object({
   // idioma amb un compte real, sense obrir aquesta porta a la resta d'usuaris.
   // Llista separada per comes; buida = ningú n'està exempt.
   PLUS_ALIAS_EXEMPT_EMAILS: z.string().default(""),
+
+  // Interruptor de les funcions de compte (registre, sessió, documents al núvol
+  // i preferències sincronitzades). "false" les tanca totes; qualsevol altre
+  // valor —o cap— les deixa obertes, que és com ha funcionat sempre.
+  // Ha d'anar de bracet amb el VITE_ACCOUNTS_ENABLED del front: el front apagat
+  // amb l'API oberta deixa l'API servint comptes que ningú pot fer servir, i
+  // l'invers deixa l'app ensenyant una porta que dóna a un 503.
+  ACCOUNTS_ENABLED: z.enum(["true", "false"]).default("true"),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -85,13 +118,20 @@ if (parsed.data.NODE_ENV === "production") {
     (key) => !parsed.data[key]
   );
 
-  // Aquestes dues sí que tenen valor, però és el de desenvolupament.
-  // Sense aquesta comprovació el servidor arrencaria tan tranquil i enviaria
-  // correus amb enllaços a localhost: una fallada silenciosa i molt pitjor
-  // que no arrencar, perquè no se'n sabria res fins que algú es queixés.
-  if (parsed.data.MAIL_FROM === DEV_MAIL_FROM) {
-    missing.push("MAIL_FROM (encara té el remitent de proves)");
+  // MAIL_FROM del domini de proves: avís, no error fatal.
+  // L'enllaç d'accés del panell d'administració permet entregar credencials
+  // a mà mentre el correu no estigui configurat amb un domini verificat.
+  if (isTestMailFrom(parsed.data.MAIL_FROM)) {
+    console.warn(
+      `⚠ MAIL_FROM és del domini de proves ${TEST_MAIL_DOMAIN}: ` +
+        `cap usuari nou rebrà el correu de benvinguda. ` +
+        `Cal un domini verificat a Resend. Mentrestant, l'enllaç d'accés ` +
+        `del panell d'administració permet entregar credencials a mà.`,
+    );
   }
+
+  // APP_PUBLIC_URL amb el valor de desenvolupament: els enllaços de
+  // verificació apuntarien a localhost i no servirien de res.
   if (parsed.data.APP_PUBLIC_URL === DEV_APP_PUBLIC_URL) {
     missing.push("APP_PUBLIC_URL (encara apunta a localhost)");
   }
@@ -108,4 +148,5 @@ if (parsed.data.NODE_ENV === "production") {
 export const env = {
   ...parsed.data,
   PORT: parseInt(parsed.data.PORT, 10),
+  ACCOUNTS_ENABLED: parsed.data.ACCOUNTS_ENABLED === "true",
 } as const;

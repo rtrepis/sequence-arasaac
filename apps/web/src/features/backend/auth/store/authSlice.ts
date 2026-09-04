@@ -10,7 +10,12 @@ import {
   applyUserViewSettingsActionCreator,
   setWordProfilesActionCreator,
   setTierActionCreator,
+  updateImageQualityActionCreator,
 } from "@features/user-settings/store/uiSlice";
+import {
+  clearQuotaActionCreator,
+  setQuotaActionCreator,
+} from "@features/backend/user-settings/store/quotaSlice";
 import {
   clearStoredAccountUi,
   clearStoredWordProfiles,
@@ -30,8 +35,6 @@ export interface AuthState {
   // que "no verificat", i mostrar l'avís abans d'hora seria alarmar sense motiu.
   emailVerified: boolean | null;
   isAdmin: boolean;
-  // Cert quan el registre ha anat bé però el correu de verificació no ha sortit
-  verificationEmailFailed: boolean;
 }
 
 const initialState: AuthState = {
@@ -41,7 +44,6 @@ const initialState: AuthState = {
   errorCode: null,
   emailVerified: null,
   isAdmin: false,
-  verificationEmailFailed: false,
 };
 
 // Estat del compte que arriba amb les preferències
@@ -63,9 +65,12 @@ const syncSettingsAfterAuth = async (
       defaultSettings,
       viewSettings,
       wordProfiles,
+      imageQuality,
       tier,
       emailVerified,
       role,
+      usage,
+      limits,
     } = settings;
 
     // Aquest és un dels dos moments on la configuració del compte és certa (l'altre
@@ -81,7 +86,11 @@ const syncSettingsAfterAuth = async (
     if (viewSettings)
       dispatch(applyUserViewSettingsActionCreator(viewSettings));
     if (wordProfiles) dispatch(setWordProfilesActionCreator(wordProfiles));
+    if (imageQuality) dispatch(updateImageQualityActionCreator(imageQuality));
     if (tier) dispatch(setTierActionCreator(tier));
+    // El consum arriba amb la configuració: cap petició de més, i és el moment
+    // en què l'app sap del cert com està el compte
+    if (usage || limits) dispatch(setQuotaActionCreator({ usage, limits }));
     return { emailVerified: emailVerified ?? false, isAdmin: role === "admin" };
   } catch {
     // Si falla la sincronització no interrompem el flux d'auth.
@@ -101,6 +110,10 @@ const restoreAnonymousSettings = (
   // configuració anònima. En un dispositiu compartit, que és el cas normal en AAC,
   // això vol dir deixar-hi el vocabulari de qui l'ha fet servir abans.
   dispatch(setWordProfilesActionCreator([]));
+
+  // El consum del compte tampoc: sense sessió no hi ha cap límit a ensenyar,
+  // i deixar-hi el de qui ha sortit seria dir-li a un altre quant espai gasta
+  dispatch(clearQuotaActionCreator());
 
   // La cara del compte tampoc no s'ha de quedar al dispositiu: sense això, la
   // propera arrencada anònima tindria el tema i l'idioma de qui ha sortit
@@ -221,6 +234,7 @@ export const refreshSessionThunk = createAsyncThunk(
       return { accessToken, email: payload.email, ...account };
     } catch {
       setAccessToken(null);
+      dispatch(clearQuotaActionCreator());
       // La sessió que havia deixat aquesta caché ja no existeix. No es repinta
       // el que hi ha a pantalla —seria tornar a fer el salt que la caché evita,
       // i just quan l'avís de sessió caducada ja ho està explicant—, però la
@@ -237,7 +251,6 @@ interface AuthSuccessPayload {
   email: string;
   emailVerified: boolean;
   isAdmin: boolean;
-  verificationEmailFailed?: boolean;
 }
 
 const authSlice = createSlice({
@@ -250,17 +263,11 @@ const authSlice = createSlice({
       state.errorCode = null;
       state.emailVerified = null;
       state.isAdmin = false;
-      state.verificationEmailFailed = false;
     },
     // La crida a /auth/verify ha anat bé: l'avís ha de desaparèixer a l'instant,
     // sense esperar la propera restauració de sessió
     markEmailVerified: (state) => {
       state.emailVerified = true;
-      state.verificationEmailFailed = false;
-    },
-    // El reenviament ha sortit: deixa de tenir sentit l'avís d'error d'enviament
-    markVerificationEmailSent: (state) => {
-      state.verificationEmailFailed = false;
     },
   },
   extraReducers: (builder) => {
@@ -310,7 +317,6 @@ const authSlice = createSlice({
       state.errorCode = null;
       state.emailVerified = null;
       state.isAdmin = false;
-      state.verificationEmailFailed = false;
     });
 
     builder
@@ -337,6 +343,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearAuthState, markEmailVerified, markVerificationEmailSent } =
-  authSlice.actions;
+export const { clearAuthState, markEmailVerified } = authSlice.actions;
 export const authReducer = authSlice.reducer;

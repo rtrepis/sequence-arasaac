@@ -1,7 +1,11 @@
-// Taula d'usuaris amb cerca, filtre d'estat i suspensió.
+// Taula d'usuaris amb cerca, filtre d'estat, suspensió i enllaç d'accés.
 //
-// L'única acció d'escriptura és suspendre i reactivar. No hi ha edició de
-// preferències ni accés al contingut: el panell serveix per moderar comptes.
+// No hi ha edició de preferències ni accés al contingut: el panell serveix per
+// moderar comptes. L'enllaç d'accés és l'excepció a la regla de només moderar,
+// i hi és perquè el correu és un servei de tercers que pot no estar disponible
+// (domini per verificar, quota diària esgotada): mentre no ho estigui, un
+// compte nou sense el seu enllaç no té contrasenya i no s'hi pot entrar de cap
+// altra manera.
 import React, { ReactElement, useEffect, useState } from "react";
 import {
   Alert,
@@ -19,14 +23,24 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import { AiOutlineCopy, AiOutlineMail } from "react-icons/ai";
 import type {
+  AdminPasswordLink,
   AdminUserSummary,
   UserStatus,
 } from "@sequence-arasaac/shared-types";
-import { listUsers, updateUser } from "../services/adminService";
+import StyledIconButton from "@/style/StyledIconButton";
+import { useFeedback } from "@/context/FeedbackContext";
+import {
+  getUserPasswordLink,
+  listUsers,
+  updateUser,
+} from "../services/adminService";
 import { formatBytes } from "../utils/formatBytes";
+import { buildPasswordLinkMailto } from "../utils/passwordLinkMail";
 
 const PAGE_SIZE = 25;
 
@@ -46,6 +60,28 @@ const STATUS_LABEL: Record<UserStatus, string> = {
 const formatDate = (iso?: string): string =>
   iso ? new Date(iso).toLocaleDateString("ca-ES") : "—";
 
+// Amb l'hora: d'un enllaç que es passa a mà, el que cal saber és fins quan serveix
+const formatExpiry = (iso: string): string =>
+  new Date(iso).toLocaleString("ca-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+// "verify" estableix la primera contrasenya i dona el correu per verificat;
+// "reset" en substitueix una que ja existeix. Qui el passa ho ha de poder dir.
+const LINK_TYPE_LABEL: Record<AdminPasswordLink["type"], string> = {
+  verify: "Primer accés",
+  reset: "Nova contrasenya",
+};
+
+const LINK_ERROR: Record<string, string> = {
+  ACCOUNT_SUSPENDED:
+    "El compte està suspès: reactiva'l abans de generar-li l'enllaç.",
+  USER_NOT_FOUND: "Aquest usuari ja no existeix.",
+};
+
 const AdminUsersTable = (): ReactElement => {
   const [users, setUsers] = useState<AdminUserSummary[]>([]);
   const [total, setTotal] = useState(0);
@@ -54,6 +90,11 @@ const AdminUsersTable = (): ReactElement => {
   const [statusFilter, setStatusFilter] = useState<UserStatus | "">("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Els enllaços es demanen d'un en un i només viuen mentre la pantalla és
+  // oberta: són credencials, i no han de sobreviure a la sessió del panell
+  const [links, setLinks] = useState<Record<string, AdminPasswordLink>>({});
+  const [pendingLinkId, setPendingLinkId] = useState<string | null>(null);
+  const { showSnackbar } = useFeedback();
 
   useEffect(() => {
     const load = async (): Promise<void> => {
@@ -99,6 +140,41 @@ const AdminUsersTable = (): ReactElement => {
       );
     } catch {
       setError("No s'ha pogut canviar l'estat del compte.");
+    }
+  };
+
+  const handleGenerateLink = async (userId: string): Promise<void> => {
+    setPendingLinkId(userId);
+    setError(null);
+
+    try {
+      const link = await getUserPasswordLink(userId);
+      setLinks((current) => ({ ...current, [userId]: link }));
+    } catch (err: unknown) {
+      const code =
+        (err as { response?: { data?: { errorCode?: string } } })?.response
+          ?.data?.errorCode ?? "";
+      setError(LINK_ERROR[code] ?? "No s'ha pogut generar l'enllaç.");
+    } finally {
+      setPendingLinkId(null);
+    }
+  };
+
+  // El porta-retalls no hi és sempre (sense HTTPS, o amb el permís denegat), i
+  // aquí ja no hi ha cap camp d'on treure l'enllaç a mà. Per això, quan falla,
+  // l'URL surt sencer a l'avís de dalt: es pot seleccionar igualment, i no
+  // ocupa amplada de la taula perquè només hi és quan alguna cosa ha anat mal.
+  const handleCopy = async (url: string): Promise<void> => {
+    setError(null);
+
+    try {
+      await navigator.clipboard.writeText(url);
+      showSnackbar({
+        message: "Enllaç copiat al porta-retalls.",
+        severity: "success",
+      });
+    } catch {
+      setError(`El navegador no ha deixat copiar. Copia'l a mà: ${url}`);
     }
   };
 
@@ -158,13 +234,14 @@ const AdminUsersTable = (): ReactElement => {
                 <TableCell align="right">Espai</TableCell>
                 <TableCell>Alta</TableCell>
                 <TableCell>Últim accés</TableCell>
+                <TableCell>Enllaç d&apos;accés</TableCell>
                 <TableCell align="right">Acció</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} align="center">
+                  <TableCell colSpan={8} align="center">
                     Cap usuari amb aquests filtres.
                   </TableCell>
                 </TableRow>
@@ -185,12 +262,57 @@ const AdminUsersTable = (): ReactElement => {
                       variant="outlined"
                     />
                   </TableCell>
-                  <TableCell align="right">{user.usage.documentsCount}</TableCell>
+                  <TableCell align="right">
+                    {user.usage.documentsCount}
+                  </TableCell>
                   <TableCell align="right">
                     {formatBytes(user.usage.storageBytes)}
                   </TableCell>
                   <TableCell>{formatDate(user.createdAt)}</TableCell>
                   <TableCell>{formatDate(user.lastLoginAt)}</TableCell>
+                  <TableCell sx={{ whiteSpace: "nowrap" }}>
+                    {links[user.id] ? (
+                      <>
+                        {/* L'enllaç no es pinta: és una credencial i, dibuixat,
+                            es menjava mitja taula sense que ningú l'hagi de
+                            llegir mai —el que se'n fa és copiar-lo. El que
+                            l'enllaç és i fins quan val, que abans ocupava una
+                            línia pròpia sota el camp, va al tooltip i al nom
+                            accessible dels dos botons */}
+                        <Tooltip
+                          title={`Copia l'enllaç · ${LINK_TYPE_LABEL[links[user.id].type]} · caduca el ${formatExpiry(links[user.id].expiresAt)}`}
+                        >
+                          <StyledIconButton
+                            onClick={() => void handleCopy(links[user.id].url)}
+                            color="inherit"
+                            size="small"
+                            aria-label={`Copia l'enllaç d'accés de ${user.email} (${LINK_TYPE_LABEL[links[user.id].type]}, caduca el ${formatExpiry(links[user.id].expiresAt)})`}
+                          >
+                            <AiOutlineCopy />
+                          </StyledIconButton>
+                        </Tooltip>
+                        <Tooltip title="Envia'l per correu">
+                          <StyledIconButton
+                            component="a"
+                            href={buildPasswordLinkMailto(user, links[user.id])}
+                            color="inherit"
+                            size="small"
+                            aria-label={`Envia l'enllaç d'accés a ${user.email}`}
+                          >
+                            <AiOutlineMail />
+                          </StyledIconButton>
+                        </Tooltip>
+                      </>
+                    ) : (
+                      <Button
+                        size="small"
+                        onClick={() => handleGenerateLink(user.id)}
+                        disabled={pendingLinkId === user.id}
+                      >
+                        {pendingLinkId === user.id ? "Generant…" : "Genera"}
+                      </Button>
+                    )}
+                  </TableCell>
                   <TableCell align="right">
                     <Button
                       size="small"

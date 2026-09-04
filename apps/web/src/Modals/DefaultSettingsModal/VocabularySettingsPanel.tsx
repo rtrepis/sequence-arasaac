@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Box, Stack, TextField, Typography } from "@mui/material";
+import { Alert, TextField, Typography } from "@mui/material";
 import StyledButton from "@/style/StyledButton";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
@@ -34,10 +34,8 @@ import {
 } from "../../components/SettingsLayout";
 import AuthForm from "../../features/backend/auth/components/AuthForm";
 import authMessages from "../../features/backend/auth/components/AuthModal.lang";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import messages from "./VocabularySettingsPanel.lang";
-
-/** Amplada de la columna esquerra (mostra + llista de paraules) en escriptori. */
-const VOCABULARY_ASIDE_WIDTH = 280;
 
 const VocabularySettingsPanel = (): React.ReactElement => {
   const intl = useIntl();
@@ -47,9 +45,7 @@ const VocabularySettingsPanel = (): React.ReactElement => {
   const wordProfiles = useAppSelector((state) => state.ui.wordProfiles);
   const defaultSettings = useAppSelector((state) => state.ui.defaultSettings);
   const tier = useAppSelector((state) => state.ui.tier);
-  const isAuthenticated = useAppSelector(
-    (state) => state.auth.accessToken !== null,
-  );
+  const isAuthenticated = useAppSelector(selectIsLoggedIn);
 
   const [word, setWord] = useState("");
   const [editingWord, setEditingWord] = useState<string | undefined>();
@@ -197,18 +193,14 @@ const VocabularySettingsPanel = (): React.ReactElement => {
   // el vocabulari personal es desa al compte de l'usuari.
   if (!isAuthenticated) {
     return (
-      <Stack
-        direction="column"
-        gap={1}
-        sx={{ pt: 1, maxWidth: 500, mx: "auto", width: "100%" }}
-      >
+      <SettingsPanelLayout>
         <SectionTitle title={<FormattedMessage {...authMessages.loginTitle} />}>
           <Typography variant="body2" color="text.secondary">
             <FormattedMessage {...messages.loginRequired} />
           </Typography>
           <AuthForm />
         </SectionTitle>
-      </Stack>
+      </SettingsPanelLayout>
     );
   }
 
@@ -219,7 +211,9 @@ const VocabularySettingsPanel = (): React.ReactElement => {
           background="paper"
           sx={{
             padding: 1,
-            width: { md: VOCABULARY_ASIDE_WIDTH },
+            // A l'amplada de la columna, no a la del token: si la columna
+            // enganxada treu barra d'scroll, un ample fix hi desbordaria
+            width: { md: "100%" },
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -234,28 +228,27 @@ const VocabularySettingsPanel = (): React.ReactElement => {
         </SettingsPreviewFrame>
       }
       previewAside={
-        <Box sx={{ width: { xs: "100%", md: VOCABULARY_ASIDE_WIDTH } }}>
-          <WordProfileList
-            profiles={wordProfiles}
-            editingWord={editingWord}
-            onSelect={loadProfile}
-            onDelete={handleDelete}
-          />
-        </Box>
+        <WordProfileList
+          profiles={wordProfiles}
+          editingWord={editingWord}
+          onSelect={loadProfile}
+          onDelete={handleDelete}
+        />
+      }
+      hint={
+        // Guia: diu en tot moment si s'està creant una paraula o editant-ne una
+        <SettingsPanelHint>
+          {isEditing ? (
+            <FormattedMessage
+              {...messages.formHintEditing}
+              values={{ word: editingWord }}
+            />
+          ) : (
+            <FormattedMessage {...messages.formHintNew} />
+          )}
+        </SettingsPanelHint>
       }
     >
-      {/* Guia: diu en tot moment si s'està creant una paraula o editant-ne una */}
-      <SettingsPanelHint>
-        {isEditing ? (
-          <FormattedMessage
-            {...messages.formHintEditing}
-            values={{ word: editingWord }}
-          />
-        ) : (
-          <FormattedMessage {...messages.formHintNew} />
-        )}
-      </SettingsPanelHint>
-
       <SectionTitle title={<FormattedMessage {...messages.sectionWord} />}>
         <TextField
           label={intl.formatMessage(messages.wordInputLabel)}

@@ -352,9 +352,10 @@ El canvi de comportament més visible per a qui fa servir l'app cada dia. A la
   correcció concreta (estat del document, esborrany, dues pestanyes, PDF, accions
   destructives, sessió caducada, noms accessibles, còpia de document…).
 - **Tests d'API** amb Vitest i `mongodb-memory-server`.
-- **Documentació del projecte**: `CLAUDE.md` amb els estàndards (colors,
-  configuracions, tabs, feedback, accions destructives, capes flotants,
-  antifrau), `docs/BACKLOG-ux.md` i `docs/ESTANDARD-capes-flotants.md`.
+- **Documentació del projecte**: `CLAUDE.md` com a índex i els estàndards a
+  `docs/estandards/` (colors, configuracions, navegació, capes flotants,
+  feedback, estat i persistència, backend, comptes i quotes, correus), més
+  `docs/BACKLOG-ux.md` i els estudis que hi ha darrere de cada estàndard.
 - **Neteja**: quatre components morts esborrats i 23 claus de traducció sense cap
   consumidor tretes dels cinc idiomes.
 

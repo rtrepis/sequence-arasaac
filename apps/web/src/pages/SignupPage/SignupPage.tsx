@@ -19,7 +19,10 @@ import messages from "./SignupPage.lang";
 import StyledButton from "@/style/StyledButton";
 import { APP_CORNER_RADIUS } from "@/style/appShape";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
-import { signup } from "@features/backend/auth/services/authService";
+import {
+  resendVerification,
+  signup,
+} from "@features/backend/auth/services/authService";
 import { warmUpBackend } from "@features/backend/api/warmUpBackend";
 
 const USE_CASES: { value: UserUseCase; labelId: keyof typeof messages }[] = [
@@ -41,6 +44,12 @@ const SignupPage = (): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
+  // null mentre no s'ha enviat res. Un cop enviat, diu si el correu ha sortit:
+  // el compte es crea igualment quan no surt, i qui ho ha demanat ha de poder
+  // distingir "mira la safata" de "torna-ho a demanar".
+  const [emailSent, setEmailSent] = useState<boolean | null>(null);
+  const [isResending, setIsResending] = useState(false);
+  const [resendDone, setResendDone] = useState(false);
 
   // Arribar a aquesta pàgina (des de qualsevol enllaç o per URL directa) ja és
   // senyal prou clar que es vol el backend: mentre s'omple el formulari, el
@@ -66,7 +75,7 @@ const SignupPage = (): React.ReactElement => {
     setErrorCode(null);
 
     try {
-      await signup({
+      const result = await signup({
         name,
         useCase,
         useCaseOther: useCase === "other" ? useCaseOther : undefined,
@@ -74,6 +83,7 @@ const SignupPage = (): React.ReactElement => {
         locale,
       });
       setSubmittedEmail(email);
+      setEmailSent(result.emailSent);
     } catch (error: unknown) {
       const code =
         (error as { response?: { data?: { errorCode?: string } } })?.response
@@ -81,6 +91,29 @@ const SignupPage = (): React.ReactElement => {
       setErrorCode(code);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // El reenviament no requereix sessió, i és imprescindible que no en requereixi:
+  // un compte acabat de crear encara no té contrasenya i no pot iniciar-ne cap.
+  // El servidor respon sempre igual (204) per no revelar quins correus tenen
+  // compte, així que aquí es pot confirmar que s'ha demanat, mai que hagi arribat.
+  const handleResend = async (): Promise<void> => {
+    if (!submittedEmail) return;
+
+    setIsResending(true);
+    setErrorCode(null);
+
+    try {
+      await resendVerification(submittedEmail);
+      setResendDone(true);
+    } catch (error: unknown) {
+      const code =
+        (error as { response?: { data?: { errorCode?: string } } })?.response
+          ?.data?.errorCode ?? "VERIFICATION_EMAIL_FAILED";
+      setErrorCode(code);
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -110,21 +143,68 @@ const SignupPage = (): React.ReactElement => {
       >
         <Typography variant="h5" component="h1" align="center">
           {intl.formatMessage(
-            submittedEmail ? messages.successTitle : messages.pageTitle,
+            submittedEmail
+              ? emailSent === false
+                ? messages.failedTitle
+                : messages.successTitle
+              : messages.pageTitle,
           )}
         </Typography>
 
         {submittedEmail ? (
           <>
-            <Alert severity="success" variant="outlined">
-              {intl.formatMessage(messages.success, { email: submittedEmail })}
-            </Alert>
-            <StyledButton
-              variant="contained"
-              onClick={() => navigate(`/${locale}/create-sequence`)}
-            >
-              {intl.formatMessage(messages.goToApp)}
-            </StyledButton>
+            {emailSent === false ? (
+              <>
+                <Alert severity="warning" variant="outlined">
+                  {intl.formatMessage(messages.failed, {
+                    email: submittedEmail,
+                  })}
+                </Alert>
+
+                {resendDone && (
+                  <Alert severity="info" variant="outlined">
+                    {intl.formatMessage(messages.resendDone)}
+                  </Alert>
+                )}
+
+                {errorMessage && (
+                  <Alert severity="error" variant="outlined">
+                    {errorMessage}
+                  </Alert>
+                )}
+
+                <StyledButton
+                  variant="contained"
+                  onClick={handleResend}
+                  disabled={isResending}
+                  startIcon={
+                    isResending ? <CircularProgress size={16} /> : null
+                  }
+                >
+                  {intl.formatMessage(messages.resend)}
+                </StyledButton>
+                <StyledButton
+                  color="inherit"
+                  onClick={() => navigate(`/${locale}/create-sequence`)}
+                >
+                  {intl.formatMessage(messages.goToApp)}
+                </StyledButton>
+              </>
+            ) : (
+              <>
+                <Alert severity="success" variant="outlined">
+                  {intl.formatMessage(messages.success, {
+                    email: submittedEmail,
+                  })}
+                </Alert>
+                <StyledButton
+                  variant="contained"
+                  onClick={() => navigate(`/${locale}/create-sequence`)}
+                >
+                  {intl.formatMessage(messages.goToApp)}
+                </StyledButton>
+              </>
+            )}
           </>
         ) : (
           <Box

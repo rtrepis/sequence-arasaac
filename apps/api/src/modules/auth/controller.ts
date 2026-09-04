@@ -17,6 +17,7 @@ import {
   requestPasswordReset,
   resendVerification,
 } from "./service";
+import { getRegistrationStatus } from "../config/service";
 import type { AppError } from "../../middleware/errorHandler";
 import { hashIp } from "../../shared/ipHash";
 
@@ -48,6 +49,21 @@ const respondValidationError = (
   error.statusCode = 400;
   error.errorCode = errorCode;
   next(error);
+};
+
+// GET /api/auth/registration-status
+// Públic i sense sessió: qui encara no té compte ha de poder saber si en pot
+// crear un abans d'omplir el formulari. Només retorna recomptes i sostres.
+export const registrationStatus = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    res.status(200).json(await getRegistrationStatus());
+  } catch (err) {
+    next(err);
+  }
 };
 
 // POST /api/auth/signup

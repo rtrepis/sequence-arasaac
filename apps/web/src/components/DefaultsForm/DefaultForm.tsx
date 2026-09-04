@@ -135,12 +135,13 @@ const DefaultForm = ({
             />
           </SettingsPreviewFrame>
         }
+        hint={
+          // Guia del tab: què s'ajusta aquí
+          <SettingsPanelHint>
+            <FormattedMessage {...messages.panelHint} />
+          </SettingsPanelHint>
+        }
       >
-        {/* Guia del tab: què s'ajusta aquí */}
-        <SettingsPanelHint>
-          <FormattedMessage {...messages.panelHint} />
-        </SettingsPanelHint>
-
         <SectionTitle
           title={<FormattedMessage {...messages.sectionPictogram} />}
           onApplyAll={onApplyAllColor}
@@ -203,7 +204,10 @@ const DefaultForm = ({
 
         {onReset && (
           <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
-            <Tooltip title={intl.formatMessage(messages.tooltipReset)} describeChild>
+            <Tooltip
+              title={intl.formatMessage(messages.tooltipReset)}
+              describeChild
+            >
               <Button
                 variant="text"
                 color="inherit"

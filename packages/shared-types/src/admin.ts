@@ -1,6 +1,7 @@
 // Tipus del panell d'administració, compartits entre l'API i el frontend
 
 import type {
+  LangsApp,
   UserRole,
   UserStatus,
   UserTier,
@@ -15,6 +16,10 @@ export interface AdminUserSummary {
   id: string;
   email: string;
   name?: string;
+  // Idioma del compte. Al panell no es pinta enlloc —els seus textos són en
+  // català— però hi ha d'arribar: l'enllaç d'accés es fa arribar amb un correu
+  // escrit a mà, i qui el rep no té per què entendre el català.
+  lang: LangsApp;
   useCase?: UserUseCase;
   status: UserStatus;
   role: UserRole;
@@ -24,6 +29,17 @@ export interface AdminUserSummary {
   quotaOverride?: Partial<QuotaLimits>;
   createdAt: string;
   lastLoginAt?: string;
+}
+
+// Enllaç d'establiment de contrasenya generat des del panell, per fer-lo
+// arribar a mà quan el correu no és una via disponible.
+// "verify" és la primera contrasenya d'un compte; "reset" en substitueix una
+// que ja existeix. Caduquen diferent, i per això `expiresAt` viatja amb l'URL:
+// qui el passa ha de poder dir fins quan serveix.
+export interface AdminPasswordLink {
+  url: string;
+  type: "verify" | "reset";
+  expiresAt: string;
 }
 
 // Resposta paginada del llistat d'usuaris

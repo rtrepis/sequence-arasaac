@@ -6,10 +6,15 @@ import type {
   AdminUserList,
   AdminUserSummary,
   AdminSecurityEvent,
+  AdminPasswordLink,
 } from "@sequence-arasaac/shared-types";
 import type { AppError } from "../../middleware/errorHandler";
 import { UserModel } from "../auth/model";
 import type { IUser } from "../auth/model";
+import {
+  ADMIN_PASSWORD_LINK_TTL_MS,
+  createPasswordLink,
+} from "../auth/service";
 import { DocumentModel } from "../documents/model";
 import { SecurityEventModel } from "../security/model";
 import type { UpdateUserInput, ListUsersQuery } from "./validators";
@@ -23,6 +28,7 @@ const toUserSummary = (user: IUser): AdminUserSummary => ({
   id: String(user._id),
   email: user.email,
   name: user.name,
+  lang: user.langSettings?.app ?? "ca",
   useCase: user.useCase,
   status: user.status,
   role: user.role,
@@ -138,6 +144,56 @@ export const updateUser = async (
   await user.save();
 
   return toUserSummary(user);
+};
+
+// Genera a mà l'enllaç que normalment arriba per correu.
+//
+// Existeix perquè el correu és un servei de tercers que pot no estar
+// disponible —domini per verificar, quota diària esgotada, una bústia que ho
+// llença a brossa— i, mentrestant, un compte nou sense l'enllaç no té
+// contrasenya i no s'hi pot entrar de cap altra manera. Aquí l'administrador
+// el pot obtenir i fer-lo arribar pel canal que sigui.
+//
+// El que retorna **és una credencial**: qui la tingui pot posar la contrasenya
+// d'aquell compte fins que caduqui. Per això no viatja mai amb el llistat
+// d'usuaris —es demana d'un en un, amb intenció— i queda registrat com a acció
+// d'administració, com la suspensió.
+//
+// Un compte suspès no en rep: donar la clau d'entrada a un compte que s'acaba
+// de tancar és gairebé sempre una errada, i si no ho és, primer es reactiva.
+export const createUserPasswordLink = async (
+  userId: string
+): Promise<AdminPasswordLink & { email: string }> => {
+  const user = await UserModel.findById(userId)
+    .select("email status emailVerified passwordHash")
+    .lean();
+
+  if (!user) {
+    const error = new Error("USER_NOT_FOUND") as AppError;
+    error.statusCode = 404;
+    error.errorCode = "USER_NOT_FOUND";
+    throw error;
+  }
+
+  if (user.status === "suspended") {
+    const error = new Error("ACCOUNT_SUSPENDED") as AppError;
+    error.statusCode = 409;
+    error.errorCode = "ACCOUNT_SUSPENDED";
+    throw error;
+  }
+
+  // Sense contrasenya o sense correu verificat, el que toca és el primer
+  // enllaç (verify): a més d'establir-la, dona el correu per verificat i deixa
+  // el compte actiu, que és el que el de recuperació no fa.
+  const type = !user.passwordHash || !user.emailVerified ? "verify" : "reset";
+
+  // Val un dia sigui del tipus que sigui: aquest enllaç viatja per un canal que
+  // no controla ningú i pot trigar hores a arribar a qui l'ha de fer servir
+  // (vegeu ADMIN_PASSWORD_LINK_TTL_MS).
+  return {
+    ...createPasswordLink(userId, type, ADMIN_PASSWORD_LINK_TTL_MS),
+    email: user.email,
+  };
 };
 
 // Esdeveniments de seguretat, filtrables per correu o per origen.

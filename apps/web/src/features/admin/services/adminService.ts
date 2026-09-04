@@ -6,6 +6,7 @@ import type {
   AdminUserList,
   AdminUserSummary,
   AdminSecurityEvent,
+  AdminPasswordLink,
   AppConfig,
   UserStatus,
   QuotaLimits,
@@ -27,7 +28,9 @@ export const getStats = async (): Promise<AdminStats> => {
 export const listUsers = async (
   params: ListUsersParams,
 ): Promise<AdminUserList> => {
-  const { data } = await apiClient.get<AdminUserList>("/admin/users", { params });
+  const { data } = await apiClient.get<AdminUserList>("/admin/users", {
+    params,
+  });
   return data;
 };
 
@@ -38,6 +41,18 @@ export const updateUser = async (
   const { data } = await apiClient.patch<AdminUserSummary>(
     `/admin/users/${id}`,
     update,
+  );
+  return data;
+};
+
+// Enllaç d'establiment de contrasenya d'un usuari, per fer-l'hi arribar a mà
+// quan el correu no és una via disponible. Es demana d'un en un i a petició:
+// el que torna dona accés a aquell compte fins que caduca.
+export const getUserPasswordLink = async (
+  id: string,
+): Promise<AdminPasswordLink> => {
+  const { data } = await apiClient.post<AdminPasswordLink>(
+    `/admin/users/${id}/password-link`,
   );
   return data;
 };
@@ -69,6 +84,27 @@ export const listClientErrors = async (): Promise<AdminClientError[]> => {
     "/admin/client-errors",
   );
   return data.errors;
+};
+
+// Treu del registre un error concret
+export const deleteClientError = async (id: string): Promise<void> => {
+  await apiClient.delete(`/admin/client-errors/${id}`);
+};
+
+/**
+ * Buida el registre d'errors fins al moment indicat (inclòs) i retorna quants
+ * n'ha esborrat. El tall és una data i no la llista del que es veu perquè el
+ * panell només n'ensenya els últims: així no queden enrere els que no hi caben,
+ * i el que arribi mentre es mira la pantalla es conserva.
+ */
+export const deleteClientErrorsBefore = async (
+  before: string,
+): Promise<number> => {
+  const { data } = await apiClient.delete<{ deleted: number }>(
+    "/admin/client-errors",
+    { params: { before } },
+  );
+  return data.deleted;
 };
 
 export const getConfig = async (): Promise<AppConfig> => {

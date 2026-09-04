@@ -27,6 +27,7 @@ import {
   setDocumentTitleActionCreator,
 } from "@features/sequence/store/documentSlice";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
+import { refreshQuotaThunk } from "@features/backend/user-settings/store/quotaSlice";
 import { warmUpBackend } from "@features/backend/api/warmUpBackend";
 import {
   DOCUMENT_TITLE_MAX_LENGTH,
@@ -109,6 +110,9 @@ const SaveDocumentModal = ({
       // Ho declara qui desa i no qui l'ha cridat: així el botó flotant d'estat
       // diu la veritat vingui la crida del drawer o d'ell mateix
       dispatch(documentMadeDurableActionCreator({ kind: "cloud" }));
+      // El consum acaba de canviar: si no es refresca, el comptador d'espai
+      // continuaria dient el d'abans de pujar les imatges d'aquest document
+      void dispatch(refreshQuotaThunk());
       showSnackbar({
         // La còpia diu, a més, sobre què es treballa a partir d'ara: el thunk
         // ha canviat l'id del document per la còpia, i qui no ho sap acabaria

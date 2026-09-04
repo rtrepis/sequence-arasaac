@@ -14,6 +14,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FormattedMessage, useIntl } from "react-intl";
 import { SectionTitle } from "@components/SettingsLayout";
 import { buildPictogramUrl } from "@features/pictogram/api/arasaacClient";
+import { cloudinaryThumbnailUrl } from "@/utils/cloudinaryUrl";
 import { DEFAULT_WORD_PICT_ID, WordProfile } from "../model/WordProfile";
 import messages from "./WordProfileList.lang";
 
@@ -28,19 +29,29 @@ interface WordProfileListProps {
   onDelete: (word: string) => void;
 }
 
+// Costat de l'Avatar de MUI, que és on es pinta la miniatura
+const WORD_THUMBNAIL_SIZE = 40;
+
 // Miniatura del pictograma associat a la paraula: imatge pròpia si n'hi ha,
-// si no la d'ARASAAC amb els seus overrides d'aparença
+// si no la d'ARASAAC amb els seus overrides d'aparença.
+//
+// De la imatge pròpia se'n demana la variant reduïda: es desa a mida
+// d'impressió, i amb un vocabulari de trenta paraules amb foto, obrir aquesta
+// pestanya baixaria quinze megabytes per pintar trenta quadradets.
 const buildThumbnailUrl = ({
   customImageUrl,
   selectedId,
   overrides,
 }: WordProfile): string =>
-  customImageUrl ??
-  buildPictogramUrl(
-    selectedId ?? DEFAULT_WORD_PICT_ID,
-    overrides.skin,
-    overrides.hair,
-    overrides.color,
+  cloudinaryThumbnailUrl(
+    customImageUrl ??
+      buildPictogramUrl(
+        selectedId ?? DEFAULT_WORD_PICT_ID,
+        overrides.skin,
+        overrides.hair,
+        overrides.color,
+      ),
+    WORD_THUMBNAIL_SIZE,
   );
 
 /**

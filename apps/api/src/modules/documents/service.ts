@@ -10,10 +10,20 @@ import type { AppError } from "../../middleware/errorHandler";
 import { DocumentModel, serializeDocument } from "./model";
 import type { DocumentAsset } from "./model";
 import type { CreateDocumentInput, UpdateDocumentInput } from "./validators";
-import { cloudinary } from "../../shared/cloudinaryClient";
-import { UserModel } from "../auth/model";
-import { resolveQuotaLimits } from "../../shared/tierLimits";
+import {
+  assertImagesWithinSize,
+  estimateIncomingBytes,
+  deleteCloudinaryImages,
+  extractPublicId,
+  isCloudinaryUrl,
+  sumBytes,
+  uploadBase64Slots,
+  userAssetFolder,
+  type ImageSlot,
+} from "../../shared/imageAssets";
+import { applyUsageDelta, assertWithinQuota } from "../../shared/quota";
 import { buildDocumentThumbnail } from "./thumbnail";
+import { compactContent } from "./contentStorage";
 
 // Resum d'un document per al llistat — evita transferir content complet
 export interface DocumentSummary {
@@ -21,12 +31,6 @@ export interface DocumentSummary {
   title?: string;
   updatedAt: Date;
   thumbnail: DocumentThumbnailPict[];
-}
-
-// Imatge acabada de pujar: la URL serveix per substituir-la al content,
-// publicId i bytes per al recompte de consum
-interface UploadedAsset extends DocumentAsset {
-  url: string;
 }
 
 // Helper d'error semàntic
@@ -39,159 +43,43 @@ const documentError = (errorCode: string, statusCode: number): AppError => {
 
 const notFound = (): AppError => documentError("DOCUMENT_NOT_FOUND", 404);
 
-// --- Helpers privats per a la gestió d'imatges amb Cloudinary ---
+// --- Helpers privats ---
 
-// Extreu el public_id de Cloudinary a partir de la URL segura
-// Exemple: "https://res.cloudinary.com/cloud/image/upload/v123/seq/abc.jpg" → "seq/abc"
-const extractPublicId = (url: string): string => {
-  const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.[^.]+$/);
-  return match?.[1] ?? "";
-};
-
-// Extreu totes les URLs de Cloudinary d'un content de document (format Zod)
-const extractCloudinaryUrlsFromInput = (
+// Ranures d'imatge d'un content de document (format Zod).
+// Cada pictograma en té una: la lògica de Cloudinary no ha de saber com és un
+// content, només com llegir i escriure la URL de cada imatge.
+const contentImageSlots = (
   content: CreateDocumentInput["content"]
-): string[] => {
-  return Object.values(content)
+): ImageSlot[] =>
+  Object.values(content)
     .flat()
-    .flatMap((pict) =>
-      pict.img.url?.startsWith("https://res.cloudinary.com/") ? [pict.img.url] : []
-    );
-};
+    .map((pict) => ({
+      url: pict.img.url,
+      assign: (url: string) => {
+        pict.img.url = url;
+      },
+    }));
 
-// Extreu totes les URLs de Cloudinary d'un content de document (format Mongoose Map)
-const extractCloudinaryUrlsFromMap = (
-  content: Map<string, PictSequence[]>
-): string[] => {
+// URLs de Cloudinary que té un content ja processat (format Zod)
+const cloudinaryUrlsFromInput = (
+  content: CreateDocumentInput["content"]
+): string[] =>
+  Object.values(content)
+    .flat()
+    .flatMap((pict) => (isCloudinaryUrl(pict.img.url) ? [pict.img.url as string] : []));
+
+// URLs de Cloudinary d'un content ja desat (format Mongoose Map)
+const cloudinaryUrlsFromMap = (content: Map<string, PictSequence[]>): string[] => {
   const urls: string[] = [];
   for (const sequences of content.values()) {
     for (const pict of sequences) {
-      if (pict.img.url?.startsWith("https://res.cloudinary.com/")) {
-        urls.push(pict.img.url);
+      if (isCloudinaryUrl(pict.img.url)) {
+        urls.push(pict.img.url as string);
       }
     }
   }
   return urls;
 };
-
-// Pes aproximat de les imatges base64 que porta un content, abans de pujar-les.
-// Una cadena base64 ocupa 4 caràcters per cada 3 bytes de dades originals.
-// Serveix per rebutjar una petició que excedirà la quota SENSE haver pujat res:
-// pujar primer i rebutjar després deixaria imatges orfes ja pagades a Cloudinary.
-const estimateIncomingBytes = (content: CreateDocumentInput["content"]): number => {
-  let total = 0;
-  for (const sequences of Object.values(content)) {
-    for (const pict of sequences) {
-      const url = pict.img.url;
-      if (url?.startsWith("data:image/")) {
-        const base64Length = url.length - url.indexOf(",") - 1;
-        total += Math.floor((base64Length * 3) / 4);
-      }
-    }
-  }
-  return total;
-};
-
-// Recorre el content, puja cada data:image/ a Cloudinary i substitueix la URL in-place.
-// Modifica l'estructura de l'input directament (ja és una còpia validada per Zod)
-// i retorna les imatges pujades per poder-ne comptar el pes real.
-const extractAndUploadBase64Images = async (
-  userId: string,
-  content: CreateDocumentInput["content"]
-): Promise<UploadedAsset[]> => {
-  const uploaded: UploadedAsset[] = [];
-
-  for (const sequences of Object.values(content)) {
-    for (const pict of sequences) {
-      if (pict.img.url?.startsWith("data:image/")) {
-        const result = await cloudinary.uploader.upload(pict.img.url, {
-          folder: `seq/${userId}`,
-          resource_type: "image",
-        });
-        pict.img.url = result.secure_url;
-        uploaded.push({
-          publicId: result.public_id,
-          bytes: result.bytes,
-          url: result.secure_url,
-        });
-      }
-    }
-  }
-
-  return uploaded;
-};
-
-// Elimina un conjunt d'URLs de Cloudinary — no falla si alguna ja no existeix
-const deleteCloudinaryImages = async (urls: string[]): Promise<void> => {
-  for (const url of urls) {
-    const publicId = extractPublicId(url);
-    if (publicId) {
-      await cloudinary.uploader.destroy(publicId);
-    }
-  }
-};
-
-// --- Helpers de quota i consum ---
-
-// Comprova que l'usuari pot crear un document més i pujar els bytes que porta.
-// Es crida SEMPRE abans de tocar Cloudinary.
-const assertWithinQuota = async (
-  userId: string,
-  incomingBytes: number,
-  isNewDocument: boolean
-): Promise<void> => {
-  const user = await UserModel.findById(userId)
-    .select("tier quotaOverride usage")
-    .lean();
-
-  if (!user) {
-    throw documentError("USER_NOT_FOUND", 401);
-  }
-
-  const limits = resolveQuotaLimits(user.tier, user.quotaOverride);
-
-  // Els comptes creats abans que existís el camp `usage` no el tenen, i amb .lean()
-  // Mongoose no aplica els valors per defecte de l'esquema: sense aquest recanvi,
-  // llegir-hi a dins llançava i desar un document acabava en un 500 sense causa
-  // visible. Comptar-los com a zero és el que ja fa la migració amb els antics.
-  const usage = user.usage ?? {
-    documentsCount: 0,
-    wordProfilesCount: 0,
-    storageBytes: 0,
-    assetsCount: 0,
-  };
-
-  if (isNewDocument && usage.documentsCount >= limits.documents) {
-    throw documentError("QUOTA_DOCUMENTS_EXCEEDED", 403);
-  }
-
-  if (usage.storageBytes + incomingBytes > limits.storageBytes) {
-    throw documentError("QUOTA_STORAGE_EXCEEDED", 403);
-  }
-};
-
-// Aplica una variació als comptadors de consum de l'usuari.
-// $inc en una sola operació: el comptador i el recurs canvien alhora.
-const applyUsageDelta = async (
-  userId: string,
-  delta: { documents?: number; storageBytes?: number; assets?: number }
-): Promise<void> => {
-  const increments: Record<string, number> = {};
-
-  if (delta.documents) increments["usage.documentsCount"] = delta.documents;
-  if (delta.storageBytes) increments["usage.storageBytes"] = delta.storageBytes;
-  if (delta.assets) increments["usage.assetsCount"] = delta.assets;
-
-  if (Object.keys(increments).length === 0) {
-    return;
-  }
-
-  await UserModel.updateOne({ _id: userId }, { $inc: increments });
-};
-
-// Suma els bytes d'un conjunt d'imatges
-const sumBytes = (assets: DocumentAsset[]): number =>
-  assets.reduce((total, asset) => total + asset.bytes, 0);
 
 // --- Funcions públiques del service ---
 
@@ -219,9 +107,14 @@ export const createDocument = async (
   userId: string,
   input: CreateDocumentInput
 ): Promise<DocumentSAAC> => {
-  await assertWithinQuota(userId, estimateIncomingBytes(input.content), true);
+  const slots = contentImageSlots(input.content);
+  assertImagesWithinSize(slots);
+  await assertWithinQuota(userId, {
+    incomingBytes: estimateIncomingBytes(slots),
+    newDocument: true,
+  });
 
-  const uploaded = await extractAndUploadBase64Images(userId, input.content);
+  const uploaded = await uploadBase64Slots(userAssetFolder(userId), slots);
   const assets: DocumentAsset[] = uploaded.map(({ publicId, bytes }) => ({
     publicId,
     bytes,
@@ -230,6 +123,10 @@ export const createDocument = async (
   // La miniatura es deriva després de pujar les imatges: així mai hi entra un
   // base64 i les imatges pròpies hi van amb la URL definitiva de Cloudinary.
   const thumbnail = buildDocumentThumbnail(input.content, input.order);
+
+  // Es compacta l'últim, just abans d'escriure: la miniatura i les imatges es
+  // deriven del contingut sencer, i el que en surt es torna a completar en llegir
+  compactContent(input.content, input.defaultSettings?.pictSequence);
 
   const doc = await DocumentModel.create({ userId, ...input, assets, thumbnail });
 
@@ -274,16 +171,18 @@ export const updateDocument = async (
     throw notFound();
   }
 
-  await assertWithinQuota(userId, estimateIncomingBytes(input.content), false);
+  const slots = contentImageSlots(input.content);
+  assertImagesWithinSize(slots);
+  await assertWithinQuota(userId, { incomingBytes: estimateIncomingBytes(slots) });
 
   // URLs de Cloudinary que tenia el document abans de l'actualització
-  const oldCloudinaryUrls = extractCloudinaryUrlsFromMap(existing.content);
+  const oldCloudinaryUrls = cloudinaryUrlsFromMap(existing.content);
 
   // Puja les noves imatges base64 i substitueix in-place per URLs de Cloudinary
-  const uploaded = await extractAndUploadBase64Images(userId, input.content);
+  const uploaded = await uploadBase64Slots(userAssetFolder(userId), slots);
 
   // URLs de Cloudinary que té el nou contingut (inclou les acabades de pujar)
-  const newCloudinaryUrls = new Set(extractCloudinaryUrlsFromInput(input.content));
+  const newCloudinaryUrls = new Set(cloudinaryUrlsFromInput(input.content));
 
   // Imatges orfes = estaven a l'anterior però no apareixen al nou contingut
   const orphanUrls = oldCloudinaryUrls.filter((url) => !newCloudinaryUrls.has(url));
@@ -306,6 +205,8 @@ export const updateDocument = async (
   }));
 
   const thumbnail = buildDocumentThumbnail(input.content, input.order);
+
+  compactContent(input.content, input.defaultSettings?.pictSequence);
 
   const updated = await DocumentModel.findByIdAndUpdate(
     id,
@@ -344,7 +245,7 @@ export const deleteDocument = async (
   }
 
   // Eliminar imatges de Cloudinary associades al document
-  const cloudinaryUrls = extractCloudinaryUrlsFromMap(doc.content);
+  const cloudinaryUrls = cloudinaryUrlsFromMap(doc.content);
   await deleteCloudinaryImages(cloudinaryUrls);
 
   const freedBytes = sumBytes(doc.assets);

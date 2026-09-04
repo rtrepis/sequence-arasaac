@@ -18,15 +18,14 @@ import {
   fontSchema,
   borderSchema,
   defaultSettingsSchema,
+  cloudinaryAssetSchema,
 } from "../../shared/mongooseSchemas";
+import type { CloudinaryAsset } from "../../shared/imageAssets";
+import { expandContent } from "./contentStorage";
 
-// Imatge pujada a Cloudinary per aquest document.
-// Els bytes es guarden en pujar-la perquè, en esborrar-la, es pugui restar
-// exactament el que ocupava: sense això el comptador de consum només creixeria.
-export interface DocumentAsset {
-  publicId: string;
-  bytes: number;
-}
+// Imatge pujada a Cloudinary per aquest document. Mateixa forma que la del
+// vocabulari personal, i per això el tipus és compartit.
+export type DocumentAsset = CloudinaryAsset;
 
 // Interfície TypeScript del document (estén Document de Mongoose)
 export interface IDocument extends Document {
@@ -149,15 +148,6 @@ const thumbnailPictSchema = new Schema(
   { _id: false }
 );
 
-// Sub-schema de les imatges pujades a Cloudinary
-const documentAssetSchema = new Schema(
-  {
-    publicId: { type: String, required: true },
-    bytes: { type: Number, required: true, min: 0 },
-  },
-  { _id: false }
-);
-
 // --- Esquema principal del document ---
 
 const documentSchema = new Schema<IDocument>(
@@ -187,7 +177,7 @@ const documentSchema = new Schema<IDocument>(
     // Els documents creats abans d'aquest camp no en tenen: el seu pes no es
     // pot conèixer retroactivament i compten com a zero fins que es tornin a desar
     assets: {
-      type: [documentAssetSchema],
+      type: [cloudinaryAssetSchema],
       required: true,
       default: () => [],
     },
@@ -258,18 +248,25 @@ const normalizeContent = (
 // flattenMaps: true transforma les Maps de Mongoose a objectes plans
 export const serializeDocument = (doc: IDocument): DocumentSAAC => {
   const obj = doc.toObject({ flattenMaps: true }) as Record<string, unknown>;
+  const defaultSettings = obj.defaultSettings as DefaultSettings | undefined;
+
+  const content = normalizeContent(
+    (obj.content ?? {}) as Record<string, PictSequence[]>
+  );
+  // Torna a posar els ajustos que es van ometre en desar per no repetir els del
+  // document. El que surt d'aquí té la mateixa forma de sempre.
+  expandContent(content, defaultSettings?.pictSequence);
+
   return {
     id: String(obj._id),
     title: obj.title as string | undefined,
-    content: normalizeContent(
-      (obj.content ?? {}) as Record<string, PictSequence[]>
-    ),
+    content,
     viewSettings: normalizeViewSettings(
       (obj.viewSettings ?? {}) as Record<string, LegacyViewSettings>
     ),
     activeSAAC: obj.activeSAAC as number,
     order: obj.order as number[] | undefined,
     author: obj.author as string | undefined,
-    defaultSettings: obj.defaultSettings as DefaultSettings | undefined,
+    defaultSettings,
   };
 };

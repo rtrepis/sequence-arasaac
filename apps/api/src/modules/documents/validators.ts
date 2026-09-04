@@ -7,6 +7,7 @@ import {
   borderZodSchema,
   defaultSettingsZodSchema,
 } from "../../shared/zodSchemas";
+import { MAX_IMAGE_DATA_URL_LENGTH } from "../../shared/imageAssets";
 
 // --- Sub-schemas Zod per a PictSequence ---
 
@@ -34,7 +35,7 @@ const pictApiAraZodSchema = z.object({
   searched: wordZodSchema,
   selectedId: z.number(),
   settings: pictApiAraSettingsZodSchema,
-  url: z.string().optional(),
+  url: z.string().max(MAX_IMAGE_DATA_URL_LENGTH).optional(),
 });
 
 const pictSequenceSettingsZodSchema = z.object({

@@ -44,6 +44,42 @@ export interface UserUsage {
   assetsCount: number;
 }
 
+// Qualitat amb què es codifiquen les imatges que puja l'usuari.
+//
+// És una preferència, no un automatisme: la mida a què s'imprimirà un pictograma
+// es tria després de pujar-lo, de manera que el client no la pot endevinar, i
+// reduir una imatge és irreversible. Qui imprimeix a mida gran es queda amb
+// "print"; qui té l'espai just pot triar de gastar-ne menys per imatge.
+export type ImageQuality = "print" | "standard" | "compact";
+
+// Consum i límits d'un compte tal com els veu el seu propietari.
+// maxImageBytes hi va perquè és el que fa que "imatges que et caben" sigui una
+// xifra i no una estimació: cap imatge no pot passar d'aquest pes.
+export interface UserQuotaStatus {
+  usage: UserUsage;
+  limits: QuotaLimits;
+  maxImageBytes: number;
+}
+
+// Una imatge pròpia del compte, amb el lloc d'on penja.
+// L'origen decideix què passa en esborrar-la: la paraula del vocabulari es queda
+// amb el seu pictograma d'ARASAAC, i el pictograma del document, sense imatge.
+export interface UserAsset {
+  publicId: string;
+  url: string;
+  bytes: number;
+  // Píxels de la imatge desada. Serveixen per dir a quina mida s'imprimeix bé,
+  // que és l'única manera que en té l'usuari de saber si li sobra qualitat o li
+  // falta. Poden faltar: no es desen enlloc, es demanen a Cloudinary en llistar,
+  // i si aquella petició falla val més una llista sense mides que cap llista.
+  width?: number;
+  height?: number;
+  source: "document" | "vocabulary";
+  documentId?: string;
+  documentTitle?: string;
+  word?: string;
+}
+
 // Límits efectius d'un usuari. Els valors per defecte viuen al codi (TIER_LIMITS);
 // això només serveix per a excepcions puntuals sense inventar un tier nou.
 export interface QuotaLimits {
@@ -58,7 +94,30 @@ export interface QuotaLimits {
 export interface AppConfig {
   registrationOpen: boolean;
   maxUsers: number;
+  // Sostre d'altes per dia. És un fre diferent del maxUsers: aquell diu quanta
+  // gent hi cap en total, aquest a quina velocitat pot entrar-hi.
+  maxDailySignups: number;
   updatedAt: string;
+}
+
+// El que se sap del registre sense tenir compte: qui encara no n'ha creat cap
+// ha de poder veure si hi queda lloc abans d'omplir el formulari, i quanta gent
+// hi ha ja. No hi surt res que identifiqui ningú — només recomptes.
+export interface RegistrationStatus {
+  registrationOpen: boolean;
+  // Quanta gent hi ha registrada i quantes places queden en total
+  totalUsers: number;
+  maxUsers: number;
+  remainingUsers: number;
+  // Altes del dia: quantes se n'han fet, quantes en queden i quan es reinicia
+  // el comptador (mitjanit UTC, en ISO perquè el front el pinti en hora local)
+  maxDailySignups: number;
+  signupsToday: number;
+  remainingToday: number;
+  resetsAt: string;
+  // Es pot crear un compte ara mateix? Les tres condicions resoltes en una,
+  // perquè el front no les hagi de recompondre.
+  canSignup: boolean;
 }
 
 export interface WordProfile {
@@ -74,12 +133,18 @@ export interface UserUiSettings {
   viewSettings?: ViewSettings;
   defaultSettings: DefaultSettings;
   wordProfiles?: WordProfile[];
+  imageQuality?: ImageQuality;
   tier?: UserTier;
   // Estat del compte. Viatja amb les preferències perquè el frontend el sàpiga
   // en restaurar la sessió, sense una crida addicional: decideix si cal
   // mostrar l'avís de verificació i si s'ensenya l'accés al panell d'admin.
   emailVerified?: boolean;
   role?: UserRole;
+  // Consum i límits del compte. Viatgen amb les preferències perquè arribin sols
+  // a cada restauració de sessió: la petició ja es fa, i el document d'usuari on
+  // viuen els comptadors és el mateix que ja s'hi llegeix.
+  usage?: UserUsage;
+  limits?: QuotaLimits;
 }
 
 export interface DefaultSettings {

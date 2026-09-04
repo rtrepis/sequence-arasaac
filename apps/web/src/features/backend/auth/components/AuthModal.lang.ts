@@ -171,6 +171,12 @@ const messages = defineMessages({
       "Hem arribat al màxim de comptes disponibles. Torna-ho a provar més endavant.",
     description: "Error de registre: s'ha assolit el sostre d'usuaris",
   },
+  DAILY_SIGNUP_LIMIT_REACHED: {
+    id: "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED",
+    defaultMessage:
+      "Avui ja s'han creat tots els comptes nous que admetem. Torna-ho a provar demà.",
+    description: "Error de registre: s'ha assolit el límit d'altes del dia",
+  },
   DISPOSABLE_EMAIL: {
     id: "features.backend.auth.error.DISPOSABLE_EMAIL",
     defaultMessage:
@@ -268,8 +274,16 @@ const messages = defineMessages({
   QUOTA_STORAGE_EXCEEDED: {
     id: "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED",
     defaultMessage:
-      "Has arribat al màxim d'espai per a imatges. Esborra algun document amb imatges pròpies.",
+      "Has arribat al màxim d'espai per a imatges. A Configuració › Usuari pots veure què ocupa cada imatge i esborrar-ne alguna.",
     description: "Error en desar: límit d'emmagatzematge assolit",
+  },
+  // El servidor el retorna des que hi ha sostre per imatge, però fins ara no
+  // tenia missatge: arribava a l'usuari com un codi cru dins del text genèric
+  IMAGE_TOO_LARGE: {
+    id: "features.backend.auth.error.IMAGE_TOO_LARGE",
+    defaultMessage:
+      "Alguna imatge pesa massa per desar-la al núvol. Torna-la a posar amb una qualitat més baixa (Configuració › Usuari › Qualitat de les imatges).",
+    description: "Error en desar: una imatge passa del pes màxim per imatge",
   },
   QUOTA_WORD_PROFILES_EXCEEDED: {
     id: "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED",

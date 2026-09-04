@@ -144,6 +144,10 @@
     "defaultMessage": "Aspetto",
     "description": "Títol de la secció de pell i cabell al panell de pictogrames"
   },
+  "components.defaultSettings.settings.loggedIn": {
+    "defaultMessage": "Impostazioni · sessione attiva come {email}",
+    "description": "Nom del botó de configuracions quan hi ha sessió: també diu amb quin compte"
+  },
   "components.defaultSettings.settings.title": {
     "defaultMessage": "Impostazioni",
     "description": "Settings Default "
@@ -200,7 +204,7 @@
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
   "components.defaultSettings.userPanel.panelHint": {
-    "defaultMessage": "Impostazioni del tuo account: lingua dell'app, lingua di ricerca e tema. Valgono in tutta l'applicazione."
+    "defaultMessage": "Impostazioni del tuo account: lingue, tema e immagini. Valgono in tutta l'applicazione."
   },
   "components.defaultSettings.vocabularyPanel.sectionWord": {
     "defaultMessage": "Parola",
@@ -554,6 +558,9 @@
   "features.backend.auth.error.AUTH_ERROR": {
     "defaultMessage": "Si è verificato un errore durante l'accesso. Riprova.",
     "description": "Error genèric de login"
+  },
+  "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED": {
+    "defaultMessage": "Oggi sono già stati creati tutti i nuovi account che accettiamo. Riprova domani."
   },
   "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
     "defaultMessage": "Il formato dell'indirizzo e-mail non è valido",
@@ -1450,7 +1457,7 @@
     "defaultMessage": "Hai raggiunto il numero massimo di documenti salvati. Eliminane uno per salvarne un altro."
   },
   "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
-    "defaultMessage": "Hai raggiunto il limite di spazio per le immagini. Elimina un documento con immagini tue."
+    "defaultMessage": "Hai raggiunto il limite di spazio per le immagini. In Impostazioni › Utente puoi vedere quanto occupa ogni immagine ed eliminarne qualcuna."
   },
   "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
     "defaultMessage": "Hai raggiunto il numero massimo di parole personalizzate. Eliminane una per aggiungerne altre."
@@ -1478,9 +1485,6 @@
   },
   "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
     "defaultMessage": "Il link di verifica è incompleto."
-  },
-  "features.backend.auth.verification.bannerFailed": {
-    "defaultMessage": "Non siamo riusciti a inviarti l'email di verifica. Prova a richiederla."
   },
   "features.backend.auth.verification.bannerPending": {
     "defaultMessage": "Verifica la tua email per salvare nel cloud. Ti abbiamo inviato un link a {email}."
@@ -1649,6 +1653,22 @@
   "pages.signup.success": {
     "defaultMessage": "Ti abbiamo inviato un'email a {email} con un link per confermare l'indirizzo e scegliere la password. Se non la vedi nella posta in arrivo, controlla anche nello spam.",
     "description": "Missatge d'èxit després del signup"
+  },
+  "pages.signup.failedTitle": {
+    "defaultMessage": "Non siamo riusciti a inviare l'email",
+    "description": "Títol de la pantalla de signup quan el correu no ha sortit"
+  },
+  "pages.signup.failed": {
+    "defaultMessage": "L'account di {email} è stato creato, ma l'email con il link per scegliere la password non è potuta partire. Senza quel link non puoi ancora accedere: richiedilo di nuovo.",
+    "description": "Missatge de signup amb el compte creat i el correu no enviat"
+  },
+  "pages.signup.resend": {
+    "defaultMessage": "Invia di nuovo l'email",
+    "description": "Botó per demanar de nou el correu de verificació"
+  },
+  "pages.signup.resendDone": {
+    "defaultMessage": "L'abbiamo richiesta di nuovo. Se tra qualche minuto non è ancora arrivata, controlla anche lo spam e riprova più tardi.",
+    "description": "Confirmació d'haver tornat a demanar el correu de verificació"
   },
   "pages.signup.goToApp": {
     "defaultMessage": "Vai all'applicazione",
@@ -2001,6 +2021,216 @@
   "components.buttonWithModalDownload.dialogTitle": {
     "defaultMessage": "Salva e scarica",
     "description": "Titolo della finestra di download del file .saac"
+  },
+  "features.backend.userSettings.usage.storageTitle": {
+    "defaultMessage": "Spazio per le immagini"
+  },
+  "features.backend.userSettings.usage.documentsTitle": {
+    "defaultMessage": "Sequenze nel cloud"
+  },
+  "features.backend.userSettings.usage.wordsTitle": {
+    "defaultMessage": "Parole del vocabolario"
+  },
+  "features.backend.userSettings.usage.countOfLimit": {
+    "defaultMessage": "{used} di {limit}"
+  },
+  "features.backend.userSettings.usage.bytesOfLimit": {
+    "defaultMessage": "{used} di {limit}"
+  },
+  "features.backend.userSettings.usage.megabytes": {
+    "defaultMessage": "{value} MB"
+  },
+  "features.backend.userSettings.usage.kilobytes": {
+    "defaultMessage": "{value} KB"
+  },
+  "features.backend.userSettings.usage.centimeters": {
+    "defaultMessage": "{value} cm",
+    "description": "Mida impresa en centímetres"
+  },
+  "features.backend.userSettings.usage.sizeWithPrint": {
+    "defaultMessage": "{size} · si vede bene fino a {width}",
+    "description": "Pes d'una imatge i mida fins a la qual s'imprimeix nítida"
+  },
+  "features.backend.userSettings.usage.remainingImages": {
+    "defaultMessage": "{count, plural, =0 {Non c'è spazio per altre immagini con la qualità scelta} one {C'è spazio per # altra immagine con la qualità scelta} other {C'è spazio per altre # immagini con la qualità scelta}}"
+  },
+  "features.backend.userSettings.usage.imagesTitle": {
+    "defaultMessage": "Le tue immagini"
+  },
+  "features.backend.userSettings.usage.imagesEmpty": {
+    "defaultMessage": "Non hai ancora caricato nessuna immagine tua. I pittogrammi ARASAAC non occupano spazio nel tuo account."
+  },
+  "features.backend.userSettings.usage.imagesLoadError": {
+    "defaultMessage": "Non è stato possibile caricare le immagini. Riprova tra poco."
+  },
+  "features.backend.userSettings.usage.reload": {
+    "defaultMessage": "Riprova"
+  },
+  "features.backend.userSettings.usage.inDocument": {
+    "defaultMessage": "Nella sequenza «{title}»"
+  },
+  "features.backend.userSettings.usage.inUntitledDocument": {
+    "defaultMessage": "In una sequenza senza nome"
+  },
+  "features.backend.userSettings.usage.inWord": {
+    "defaultMessage": "Nella parola «{word}»"
+  },
+  "features.backend.userSettings.usage.deleteImage": {
+    "defaultMessage": "Elimina l'immagine"
+  },
+  "features.backend.userSettings.usage.deleteTitle": {
+    "defaultMessage": "Eliminare l'immagine?"
+  },
+  "features.backend.userSettings.usage.deleteBodyDocument": {
+    "defaultMessage": "Il pittogramma resterà senza immagine nella sequenza salvata nel cloud e recupererai {size}. L'immagine non si può recuperare."
+  },
+  "features.backend.userSettings.usage.deleteBodyWord": {
+    "defaultMessage": "La parola manterrà il suo pittogramma ARASAAC e recupererai {size}. L'immagine non si può recuperare."
+  },
+  "features.backend.userSettings.usage.deleteConfirm": {
+    "defaultMessage": "Elimina l'immagine"
+  },
+  "features.backend.userSettings.usage.deleted": {
+    "defaultMessage": "Immagine eliminata. Hai recuperato {size}."
+  },
+  "features.backend.userSettings.usage.deleteError": {
+    "defaultMessage": "Non è stato possibile eliminare l'immagine. (Codice: {code})"
+  },
+  "features.backend.userSettings.usage.resizeImage": {
+    "defaultMessage": "Ridimensiona l'immagine",
+    "description": "Botó per reduir una imatge del compte"
+  },
+  "features.backend.userSettings.usage.resizeTitle": {
+    "defaultMessage": "Ridimensiona l'immagine",
+    "description": "Títol del diàleg per reduir una imatge"
+  },
+  "features.backend.userSettings.usage.resizeCurrent": {
+    "defaultMessage": "Ora occupa {size} e si vede bene stampata fino a {width} di larghezza. Il pittogramma non cambia: solo la dimensione dell'immagine.",
+    "description": "Estat actual de la imatge dins del diàleg de canvi de mida"
+  },
+  "features.backend.userSettings.usage.resizeCurrentUnknown": {
+    "defaultMessage": "Ora occupa {size}. Il pittogramma non cambia: solo la dimensione dell'immagine.",
+    "description": "Estat actual de la imatge quan encara no se'n saben els píxels"
+  },
+  "features.backend.userSettings.usage.resizePreparing": {
+    "defaultMessage": "Preparazione delle dimensioni…",
+    "description": "Espera mentre es calculen les versions més petites"
+  },
+  "features.backend.userSettings.usage.resizeOption": {
+    "defaultMessage": "Si vedrà bene fino a {width} di larghezza e occuperà {size}: recuperi {saved}.",
+    "description": "Què passa amb la mida triada al diàleg de canvi de mida"
+  },
+  "features.backend.userSettings.usage.resizeNone": {
+    "defaultMessage": "Questa immagine è già alla dimensione più piccola: ridurla ancora la renderebbe sfocata in stampa. Se ti serve spazio, eliminala.",
+    "description": "La imatge no es pot reduir més"
+  },
+  "features.backend.userSettings.usage.resizeConfirm": {
+    "defaultMessage": "Ridimensiona",
+    "description": "Botó que aplica la mida triada"
+  },
+  "features.backend.userSettings.usage.resizeCancel": {
+    "defaultMessage": "Annulla",
+    "description": "Botó que tanca el diàleg de canvi de mida sense fer res"
+  },
+  "features.backend.userSettings.usage.resizeApplying": {
+    "defaultMessage": "Ridimensionamento dell'immagine…",
+    "description": "Espera mentre la imatge nova puja al núvol"
+  },
+  "features.backend.userSettings.usage.resizeLoadError": {
+    "defaultMessage": "Non è stato possibile preparare l'immagine. Controlla la connessione e riprova.",
+    "description": "Error en baixar o comprimir la imatge al navegador"
+  },
+  "features.backend.userSettings.usage.resizeError": {
+    "defaultMessage": "Non è stato possibile ridimensionare l'immagine. (Codice: {code})",
+    "description": "Error en desar la imatge reduïda"
+  },
+  "features.backend.userSettings.usage.resized": {
+    "defaultMessage": "L'immagine ora occupa {size}. Hai recuperato {saved}.",
+    "description": "Confirmació del canvi de mida amb l'espai recuperat"
+  },
+  "features.backend.userSettings.usage.thumbnailAlt": {
+    "defaultMessage": "Immagine caricata"
+  },
+  "components.settingCardImageQuality.cardTitle": {
+    "defaultMessage": "Qualità delle immagini"
+  },
+  "components.settingCardImageQuality.ariaLabel": {
+    "defaultMessage": "Qualità delle immagini che carichi"
+  },
+  "components.settingCardImageQuality.print": {
+    "defaultMessage": "Stampa"
+  },
+  "components.settingCardImageQuality.standard": {
+    "defaultMessage": "Standard"
+  },
+  "components.settingCardImageQuality.compact": {
+    "defaultMessage": "Compatta"
+  },
+  "components.settingCardImageQuality.helper": {
+    "defaultMessage": "Le nuove immagini si vedranno bene stampate fino a {width} di larghezza e occuperanno al massimo {size} ciascuna. Stampate più grandi, si vedranno sfocate.",
+    "description": "Explicació del nivell de qualitat: fins a quina mida s'imprimeix bé i quant ocupa"
+  },
+  "components.settingCardImageQuality.optionHint": {
+    "defaultMessage": "Si vede bene stampato fino a {width} di larghezza",
+    "description": "Ajuda de cada nivell: fins a quina mida impresa es veu bé"
+  },
+  "components.settingCardImageQuality.existingUnchanged": {
+    "defaultMessage": "Quelle che hai già caricato non cambiano.",
+    "description": "La qualitat només val per a les imatges noves"
+  },
+  "components.settingCardImageQuality.existingResizable": {
+    "defaultMessage": "Quelle che hai già caricato non cambiano, ma puoi ridimensionarle in «Lo spazio del tuo account».",
+    "description": "La qualitat només val per a les imatges noves, i on canviar les que ja hi són"
+  },
+  "components.defaultSettings.userPanel.sectionImages": {
+    "defaultMessage": "Immagini"
+  },
+  "components.defaultSettings.userPanel.sectionStorage": {
+    "defaultMessage": "Lo spazio del tuo account"
+  },
+  "components.uploadImageButton.print": {
+    "defaultMessage": "stampa"
+  },
+  "components.uploadImageButton.standard": {
+    "defaultMessage": "standard"
+  },
+  "components.uploadImageButton.compact": {
+    "defaultMessage": "compatta"
+  },
+  "components.uploadImageButton.tooBigTitle": {
+    "defaultMessage": "L'immagine occupa troppo"
+  },
+  "components.uploadImageButton.tooBigQuotaSmaller": {
+    "defaultMessage": "L'immagine occupa {size} e nel tuo account restano solo {available}. Con la qualità {quality} occuperebbe {smallerSize}, si vedrebbe ancora bene stampata fino a {smallerWidth} di larghezza e ci starebbe.",
+    "description": "No cap a l'espai del compte, però n'hi ha una de més petita"
+  },
+  "components.uploadImageButton.tooBigQuotaOnly": {
+    "defaultMessage": "L'immagine occupa {size} e nel tuo account restano solo {available}. Non ci sta con nessuna qualità: puoi aggiungerla lo stesso e stamparla da questo dispositivo, ma per salvarla nel cloud dovrai liberare spazio."
+  },
+  "components.uploadImageButton.tooBigPerImageSmaller": {
+    "defaultMessage": "L'immagine occupa {size} e il massimo per immagine è {available}. Con la qualità {quality} occuperebbe {smallerSize} e si vedrebbe ancora bene stampata fino a {smallerWidth} di larghezza.",
+    "description": "Passa del sostre per imatge, però n'hi ha una de més petita"
+  },
+  "components.uploadImageButton.tooBigPerImageOnly": {
+    "defaultMessage": "L'immagine occupa {size} e il massimo per immagine è {available}. Puoi aggiungerla lo stesso e stamparla da questo dispositivo, ma non si potrà salvare nel cloud."
+  },
+  "components.uploadImageButton.useSmaller": {
+    "defaultMessage": "Rendila più piccola"
+  },
+  "components.uploadImageButton.useOriginal": {
+    "defaultMessage": "Aggiungila lo stesso"
+  },
+  "components.uploadImageButton.cancelUpload": {
+    "defaultMessage": "Annulla"
+  },
+  "features.backend.auth.error.IMAGE_TOO_LARGE": {
+    "defaultMessage": "Una delle immagini è troppo pesante per salvarla nel cloud. Aggiungila di nuovo con una qualità più bassa (Impostazioni › Utente › Qualità delle immagini)."
+  },
+  "components.defaultSettings.saveError.bodyQuota": {
+    "defaultMessage": "Il tuo account ha esaurito lo spazio per le immagini e per questo le impostazioni non sono state salvate. In Impostazioni › Utente vedrai quanto occupa ogni immagine del vocabolario e potrai eliminarne qualcuna."
+  },
+  "components.defaultSettings.saveError.bodyImageTooLarge": {
+    "defaultMessage": "Una delle immagini del vocabolario è troppo pesante per salvarla nel cloud. Aggiungila di nuovo con una qualità più bassa: la scegli in Impostazioni › Utente › Qualità delle immagini."
   },
   "news.autosave-draft.title": {
     "defaultMessage": "Il tuo lavoro non si perde più",

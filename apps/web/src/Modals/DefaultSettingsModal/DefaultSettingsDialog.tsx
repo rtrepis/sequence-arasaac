@@ -161,7 +161,10 @@ const DefaultSettingsDialog = ({
           </Toolbar>
         </AppBar>
 
-        <Container sx={{ paddingTop: SETTINGS_CONTENT_TOP_GAP }}>
+        {/* `xl` i no el `lg` per defecte: el panell a tres columnes fa
+            SETTINGS_WIDE_MAX_WIDTH i el contenidor no l'ha d'escanyar. L'amplada
+            del panell la posa el propi SettingsPanelLayout, que se centra sol */}
+        <Container maxWidth="xl" sx={{ paddingTop: SETTINGS_CONTENT_TOP_GAP }}>
           {/* Per sota de `md` l'AppBar és `position: fixed` i no ocupa lloc: sense
             aquest buit de la seva alçada exacta, el contingut li començava a sis
             píxels i el panell semblava enganxat sota un bloc verd */}
