@@ -34,6 +34,7 @@ import {
 } from "../../components/SettingsLayout";
 import AuthForm from "../../features/backend/auth/components/AuthForm";
 import authMessages from "../../features/backend/auth/components/AuthModal.lang";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import messages from "./VocabularySettingsPanel.lang";
 
 const VocabularySettingsPanel = (): React.ReactElement => {
@@ -44,9 +45,7 @@ const VocabularySettingsPanel = (): React.ReactElement => {
   const wordProfiles = useAppSelector((state) => state.ui.wordProfiles);
   const defaultSettings = useAppSelector((state) => state.ui.defaultSettings);
   const tier = useAppSelector((state) => state.ui.tier);
-  const isAuthenticated = useAppSelector(
-    (state) => state.auth.accessToken !== null,
-  );
+  const isAuthenticated = useAppSelector(selectIsLoggedIn);
 
   const [word, setWord] = useState("");
   const [editingWord, setEditingWord] = useState<string | undefined>();

@@ -90,6 +90,14 @@ const envSchema = z.object({
   // idioma amb un compte real, sense obrir aquesta porta a la resta d'usuaris.
   // Llista separada per comes; buida = ningú n'està exempt.
   PLUS_ALIAS_EXEMPT_EMAILS: z.string().default(""),
+
+  // Interruptor de les funcions de compte (registre, sessió, documents al núvol
+  // i preferències sincronitzades). "false" les tanca totes; qualsevol altre
+  // valor —o cap— les deixa obertes, que és com ha funcionat sempre.
+  // Ha d'anar de bracet amb el VITE_ACCOUNTS_ENABLED del front: el front apagat
+  // amb l'API oberta deixa l'API servint comptes que ningú pot fer servir, i
+  // l'invers deixa l'app ensenyant una porta que dóna a un 503.
+  ACCOUNTS_ENABLED: z.enum(["true", "false"]).default("true"),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -140,4 +148,5 @@ if (parsed.data.NODE_ENV === "production") {
 export const env = {
   ...parsed.data,
   PORT: parseInt(parsed.data.PORT, 10),
+  ACCOUNTS_ENABLED: parsed.data.ACCOUNTS_ENABLED === "true",
 } as const;

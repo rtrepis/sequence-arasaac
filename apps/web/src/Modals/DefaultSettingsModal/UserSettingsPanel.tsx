@@ -11,6 +11,7 @@ import {
 import AccountStorageSummary from "@features/backend/user-settings/components/AccountStorageSummary";
 import AccountImagesList from "@features/backend/user-settings/components/AccountImagesList";
 import { useAppSelector } from "../../app/hooks";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import messages from "./UserSettingsPanel.lang";
 import React from "react";
 
@@ -18,9 +19,7 @@ const UserSettingsPanel = (): React.ReactElement => {
   // L'espai i les imatges són del compte: sense sessió no hi ha cap límit a
   // ensenyar ni cap imatge al núvol, i una secció buida només faria preguntar
   // què hi falta
-  const isAuthenticated = useAppSelector(
-    (state) => state.auth.accessToken !== null,
-  );
+  const isAuthenticated = useAppSelector(selectIsLoggedIn);
 
   return (
     // Sense mostra, però amb el mateix layout que la resta de tabs: la columna

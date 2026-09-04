@@ -45,9 +45,9 @@ import SaveDocumentModal from "@features/backend/documents/components/SaveDocume
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
 import messages from "./DocumentStatusFab.lang";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 
 const selectDocumentStatus = (state: RootState) => state.documentStatus;
-const selectIsLoggedIn = (state: RootState) => state.auth.accessToken !== null;
 
 /**
  * Si un moment és d'avui, comparant **dia de calendari** i no «fa menys de 24
