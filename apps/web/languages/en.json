@@ -676,11 +676,11 @@
     "description": "Contingut notícia menú logo"
   },
   "news.logo-menu.step1.alt": {
-    "defaultMessage": "Navigation section of the menu with Home, News, Edit and Preview links",
+    "defaultMessage": "Menu navigation section with the Home, What's new, Edit and View links",
     "description": "Alt pas 1 menú logo"
   },
   "news.logo-menu.step1.description": {
-    "defaultMessage": "The first section contains shortcuts to all pages: Home, News (where you'll find all updates), Edit (to create your sequences) and Preview (to view and print them).",
+    "defaultMessage": "The first section of the menu holds the shortcuts to every page: Home, What's new (where you will find all the updates), Edit (to build your sequences) and View (to see and print them).",
     "description": "Descripció pas 1 menú logo"
   },
   "news.logo-menu.step2.alt": {
@@ -692,11 +692,11 @@
     "description": "Descripció pas 2 menú logo"
   },
   "news.logo-menu.step3.alt": {
-    "defaultMessage": "Settings section and language selector",
+    "defaultMessage": "Settings section of the main menu",
     "description": "Alt pas 3 menú logo"
   },
   "news.logo-menu.step3.description": {
-    "defaultMessage": "Settings opens the default pictogram settings dialog, where you can adjust typography, borders, text position and other visual options. Below it, the language selector lets you switch between Catalan (ca), Spanish (es), English (en), French (fr) or Italian (it).",
+    "defaultMessage": "Settings opens the preferences dialog, split into four tabs: User (the app language, the language pictograms are searched in, and the light or dark theme), Pictograms (typeface, frames and text position), View (page format) and Personal vocabulary.",
     "description": "Descripció pas 3 menú logo"
   },
   "news.logo-menu.summary": {
@@ -768,23 +768,23 @@
     "description": "Contingut notícia nous idiomes"
   },
   "news.new-languages.step1.alt": {
-    "defaultMessage": "SequenciAAC navigation menu with the language selector at the bottom",
+    "defaultMessage": "Main menu open, showing the Settings entry",
     "description": "Alt text imatge pas 1"
   },
   "news.new-languages.step1.description": {
-    "defaultMessage": "To change the language, click the SequenciAAC logo to open the navigation menu. At the bottom of the menu you will find the language selector.",
+    "defaultMessage": "To change the language, open the main menu with the SequenciAAC logo and go into Settings. From the welcome screen you can also change it directly, with the language button in the header.",
     "description": "Descripció pas 1"
   },
   "news.new-languages.step2.alt": {
-    "defaultMessage": "Language selector expanded with the five available languages",
+    "defaultMessage": "Language section of the User tab, with all five languages visible",
     "description": "Alt text imatge pas 2"
   },
   "news.new-languages.step2.description": {
-    "defaultMessage": "Click the selector to see the five available languages: Català, Español, English, Français and Italiano. Select one to change the language of the entire application immediately.",
+    "defaultMessage": "In the User tab, the «Interface» row shows all five languages —ca, en, es, fr and it—: tap the one you want and the whole app follows. Below it, «Search» picks the language pictograms are searched in, which can be a different one.",
     "description": "Descripció pas 2"
   },
   "news.new-languages.step3.alt": {
-    "defaultMessage": "SequenciAAC application with the interface in Français",
+    "defaultMessage": "The app with its interface in Français",
     "description": "Alt text imatge pas 3"
   },
   "news.new-languages.step3.description": {
@@ -792,7 +792,7 @@
     "description": "Descripció pas 3"
   },
   "news.new-languages.summary": {
-    "defaultMessage": "The app now speaks five languages. Here's how to change it.",
+    "defaultMessage": "The app speaks five languages. Here is where you change it.",
     "description": "Resum notícia nous idiomes"
   },
   "news.new-languages.title": {

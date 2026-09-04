@@ -676,11 +676,11 @@
     "description": "Contingut notícia menú logo"
   },
   "news.logo-menu.step1.alt": {
-    "defaultMessage": "Sección de navegación del menú con los accesos Inicio, Novedades, Edita y Previsualiza",
+    "defaultMessage": "Sección de navegación del menú con los accesos Inicio, Novedades, Edición y Vista",
     "description": "Alt pas 1 menú logo"
   },
   "news.logo-menu.step1.description": {
-    "defaultMessage": "La primera sección del menú contiene los accesos directos a todas las páginas: Inicio, Novedades (donde encontrarás todas las actualizaciones), Edita (para crear tus secuencias) y Previsualiza (para verlas e imprimirlas).",
+    "defaultMessage": "La primera sección del menú contiene los accesos directos a todas las páginas: Inicio, Novedades (donde encontrarás todas las actualizaciones), Edición (para crear tus secuencias) y Vista (para verlas e imprimirlas).",
     "description": "Descripció pas 1 menú logo"
   },
   "news.logo-menu.step2.alt": {
@@ -692,11 +692,11 @@
     "description": "Descripció pas 2 menú logo"
   },
   "news.logo-menu.step3.alt": {
-    "defaultMessage": "Sección de configuración y selector de idioma",
+    "defaultMessage": "Sección de configuración del menú principal",
     "description": "Alt pas 3 menú logo"
   },
   "news.logo-menu.step3.description": {
-    "defaultMessage": "Configuración abre el diálogo de configuración por defecto de los pictogramas, donde puedes ajustar tipografía, marcos, posición del texto y otras opciones visuales. Debajo encontrarás el selector de idioma para cambiar entre catalán (ca), castellano (es), inglés (en), francés (fr) o italiano (it).",
+    "defaultMessage": "Configuración abre el diálogo de ajustes, repartido en cuatro pestañas: Usuario (el idioma de la aplicación, el idioma con el que se buscan los pictogramas y el tema claro u oscuro), Pictogramas (tipografía, marcos y posición del texto), Vista (formato de página) y Vocabulario personal.",
     "description": "Descripció pas 3 menú logo"
   },
   "news.logo-menu.summary": {
@@ -768,23 +768,23 @@
     "description": "Contingut notícia nous idiomes"
   },
   "news.new-languages.step1.alt": {
-    "defaultMessage": "Menú de navegación de SequenciAAC con el selector de idioma en la parte inferior",
+    "defaultMessage": "Menú principal abierto con el acceso a Configuración",
     "description": "Alt text imatge pas 1"
   },
   "news.new-languages.step1.description": {
-    "defaultMessage": "Para cambiar el idioma, haz clic en el logo de SequenciAAC para abrir el menú de navegación. En la parte inferior del menú encontrarás el selector de idioma.",
+    "defaultMessage": "Para cambiar el idioma, abre el menú principal con el logo de SequenciAAC y entra en Configuración. Desde la pantalla de inicio también lo puedes cambiar directamente, con el botón de idioma de la cabecera.",
     "description": "Descripció pas 1"
   },
   "news.new-languages.step2.alt": {
-    "defaultMessage": "Selector de idioma desplegado con los cinco idiomas disponibles",
+    "defaultMessage": "Sección Idioma de la pestaña Usuario, con los cinco idiomas a la vista",
     "description": "Alt text imatge pas 2"
   },
   "news.new-languages.step2.description": {
-    "defaultMessage": "Haz clic en el selector para ver los cinco idiomas disponibles: Català, Español, English, Français e Italiano. Selecciona uno para cambiar el idioma de toda la aplicación de forma inmediata.",
+    "defaultMessage": "En la pestaña Usuario, la fila «Interfaz» tiene los cinco idiomas a la vista —ca, en, es, fr e it—: toca el que quieras y toda la aplicación cambia. Debajo, «Buscar» elige en qué idioma se buscan los pictogramas, que puede ser otro.",
     "description": "Descripció pas 2"
   },
   "news.new-languages.step3.alt": {
-    "defaultMessage": "Aplicación SequenciAAC con la interfaz en Français",
+    "defaultMessage": "La aplicación con la interfaz en Français",
     "description": "Alt text imatge pas 3"
   },
   "news.new-languages.step3.description": {
@@ -792,7 +792,7 @@
     "description": "Descripció pas 3"
   },
   "news.new-languages.summary": {
-    "defaultMessage": "La app ahora habla cinco idiomas. Te explicamos cómo cambiarlo.",
+    "defaultMessage": "La app habla cinco idiomas. Te explicamos dónde se cambia.",
     "description": "Resum notícia nous idiomes"
   },
   "news.new-languages.title": {

@@ -223,7 +223,13 @@ test(
     // =============================================
     // EDIT PAGE: Afegir pictogrames a la seqüència
     // =============================================
-    await page.goto("/ca/create-sequence");
+    // Les fonts de Google se serveixen buides i la navegació no espera
+    // l'esdeveniment `load`: amb dotzenes de famílies que aquí no es jutgen,
+    // «load» no arriba mai i la captura mor esperant la xarxa.
+    await page.route("https://fonts.googleapis.com/**", (route) =>
+      route.fulfill({ status: 200, contentType: "text/css", body: "" }),
+    );
+    await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
     await page.waitForLoadState("domcontentloaded");
     await page.waitForTimeout(1500);
 
@@ -245,7 +251,9 @@ test(
     // =============================================
     const previewContainer = page.locator(".preview-container");
     await previewContainer.waitFor({ state: "visible", timeout: 15000 });
-    await page.waitForTimeout(1000);
+    // Prou espera perquè el missatge de «pictogrames afegits» ja hagi
+    // marxat: dura tres segons i sortia al cantó de totes les captures.
+    await page.waitForTimeout(4500);
 
     // Coberta carousel: target ~699×291px (ratio 2.40:1 per mobile)
     // previewContainer ~831px ample, ~570px alt → padding negatiu per retallar
@@ -274,10 +282,12 @@ test(
     await sizeSlider.waitFor({ state: "visible", timeout: 10000 });
     await page.waitForTimeout(500);
 
-    // El ToggleButtonGroup d'alineació conté els botons left/center/right
+    // El ToggleButtonGroup d'alineació. Els aria-label ja no són literals en
+    // anglès («left»): des de C5 surten del mateix missatge traduït que el
+    // tooltip, així que el grup es busca per l'etiqueta que es llegeix.
     const alignmentGroup = page
       .getByRole("group")
-      .filter({ has: page.locator('[aria-label="left"]') });
+      .filter({ has: page.getByRole("button", { name: "Esquerra" }) });
     await alignmentGroup.waitFor({ state: "visible", timeout: 10000 });
 
     // Pas 2: target ~680px ample; alignmentGroup ~120px → paddingX=(680-120)/2=280

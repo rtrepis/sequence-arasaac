@@ -676,11 +676,11 @@
     "description": "Contingut notícia menú logo"
   },
   "news.logo-menu.step1.alt": {
-    "defaultMessage": "Section de navigation du menu avec les liens Accueil, Nouveautés, Éditer et Aperçu",
+    "defaultMessage": "Section de navigation du menu avec les accès Accueil, Nouveautés, Édition et Vue",
     "description": "Alt pas 1 menú logo"
   },
   "news.logo-menu.step1.description": {
-    "defaultMessage": "La première section contient des raccourcis vers toutes les pages : Accueil, Nouveautés (où vous trouverez toutes les mises à jour), Éditer (pour créer vos séquences) et Aperçu (pour les visualiser et les imprimer).",
+    "defaultMessage": "La première section du menu contient les accès à toutes les pages : Accueil, Nouveautés (où vous trouverez toutes les mises à jour), Édition (pour créer vos séquences) et Vue (pour les voir et les imprimer).",
     "description": "Descripció pas 1 menú logo"
   },
   "news.logo-menu.step2.alt": {
@@ -692,11 +692,11 @@
     "description": "Descripció pas 2 menú logo"
   },
   "news.logo-menu.step3.alt": {
-    "defaultMessage": "Section de paramètres et sélecteur de langue",
+    "defaultMessage": "Section des réglages du menu principal",
     "description": "Alt pas 3 menú logo"
   },
   "news.logo-menu.step3.description": {
-    "defaultMessage": "Paramètres ouvre le dialogue de paramètres par défaut des pictogrammes, où vous pouvez ajuster la typographie, les bordures, la position du texte et d'autres options visuelles. En dessous, le sélecteur de langue vous permet de changer entre le catalan (ca), l'espagnol (es), l'anglais (en), le français (fr) ou l'italien (it).",
+    "defaultMessage": "Réglages ouvre la boîte de dialogue des préférences, répartie en quatre onglets : Utilisateur (la langue de l'application, la langue de recherche des pictogrammes et le thème clair ou sombre), Pictogrammes (typographie, cadres et position du texte), Vue (format de page) et Vocabulaire personnel.",
     "description": "Descripció pas 3 menú logo"
   },
   "news.logo-menu.summary": {
@@ -768,23 +768,23 @@
     "description": "Contingut notícia nous idiomes"
   },
   "news.new-languages.step1.alt": {
-    "defaultMessage": "Menu de navigation de SequenciAAC avec le sélecteur de langue en bas",
+    "defaultMessage": "Menu principal ouvert avec l'accès aux Réglages",
     "description": "Alt text imatge pas 1"
   },
   "news.new-languages.step1.description": {
-    "defaultMessage": "Pour changer de langue, cliquez sur le logo SequenciAAC pour ouvrir le menu de navigation. En bas du menu, vous trouverez le sélecteur de langue.",
+    "defaultMessage": "Pour changer de langue, ouvrez le menu principal avec le logo SequenciAAC et entrez dans Réglages. Depuis l'écran d'accueil, vous pouvez aussi en changer directement, avec le bouton de langue de l'en-tête.",
     "description": "Descripció pas 1"
   },
   "news.new-languages.step2.alt": {
-    "defaultMessage": "Sélecteur de langue déployé avec les cinq langues disponibles",
+    "defaultMessage": "Section Langue de l'onglet Utilisateur, avec les cinq langues visibles",
     "description": "Alt text imatge pas 2"
   },
   "news.new-languages.step2.description": {
-    "defaultMessage": "Cliquez sur le sélecteur pour voir les cinq langues disponibles : Català, Español, English, Français et Italiano. Sélectionnez-en une pour changer la langue de toute l'application immédiatement.",
+    "defaultMessage": "Dans l'onglet Utilisateur, la ligne « Interface » affiche les cinq langues —ca, en, es, fr et it— : touchez celle que vous voulez et toute l'application suit. En dessous, « Rechercher » choisit la langue de recherche des pictogrammes, qui peut être différente.",
     "description": "Descripció pas 2"
   },
   "news.new-languages.step3.alt": {
-    "defaultMessage": "Application SequenciAAC avec l'interface en Français",
+    "defaultMessage": "L'application avec l'interface en Français",
     "description": "Alt text imatge pas 3"
   },
   "news.new-languages.step3.description": {
@@ -792,7 +792,7 @@
     "description": "Descripció pas 3"
   },
   "news.new-languages.summary": {
-    "defaultMessage": "L'application parle maintenant cinq langues. Voici comment en changer.",
+    "defaultMessage": "L'application parle cinq langues. Voici où en changer.",
     "description": "Resum notícia nous idiomes"
   },
   "news.new-languages.title": {
