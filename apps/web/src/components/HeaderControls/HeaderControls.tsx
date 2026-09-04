@@ -21,6 +21,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updateLangSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import AuthModal from "@features/backend/auth/components/AuthModal";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
+import { ACCOUNTS_ENABLED } from "@/configs/accountsConfig";
 import { langTranslateApp } from "../../configs/languagesConfigs";
 import { LANGUAGE_NAMES } from "@shared/constants/languageNames";
 import { LangsApp } from "../../types/ui";
@@ -45,7 +47,11 @@ const HeaderControls = (): React.ReactElement => {
   const { app: appLang, search: searchLang } = useAppSelector(
     (state) => state.ui.lang,
   );
-  const isLoggedIn = useAppSelector((state) => state.auth.accessToken !== null);
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+
+  // Entrar i registrar-se no és el contrari de tenir sessió: amb els comptes
+  // apagats no hi ha sessió **ni** porta per obrir-ne cap.
+  const showAuthEntry = ACCOUNTS_ENABLED && !isLoggedIn;
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [langAnchor, setLangAnchor] = useState<null | HTMLElement>(null);
@@ -112,7 +118,7 @@ const HeaderControls = (): React.ReactElement => {
   // `inherit` i no el primary: aquesta capçalera va sobre blanc, i el verd de
   // la casa com a color de text s'hi queda a 2,1:1. El verd de la pàgina és el
   // botó ple de «Comença», que és l'acció que hi ha vingut a fer tothom.
-  const registerButton = !isLoggedIn && (
+  const registerButton = showAuthEntry && (
     <StyledButton
       color="inherit"
       variant="outlined"
@@ -145,7 +151,7 @@ const HeaderControls = (): React.ReactElement => {
           </StyledButton>
         </Tooltip>
 
-        {!isLoggedIn && (
+        {showAuthEntry && (
           <StyledButton color="inherit" size="small" onClick={handleLogin}>
             {intl.formatMessage(messages.loginButton)}
           </StyledButton>
@@ -198,7 +204,7 @@ const HeaderControls = (): React.ReactElement => {
         open={Boolean(tabletAnchor)}
         onClose={() => setTabletAnchor(null)}
       >
-        {!isLoggedIn && [loginMenuItem, <Divider key="divider" />]}
+        {showAuthEntry && [loginMenuItem, <Divider key="divider" />]}
         {langMenuItems}
       </Menu>
 
@@ -208,7 +214,7 @@ const HeaderControls = (): React.ReactElement => {
         open={Boolean(mobileAnchor)}
         onClose={() => setMobileAnchor(null)}
       >
-        {!isLoggedIn && [
+        {showAuthEntry && [
           loginMenuItem,
           registerMenuItem,
           <Divider key="divider" />,
@@ -216,7 +222,12 @@ const HeaderControls = (): React.ReactElement => {
         {langMenuItems}
       </Menu>
 
-      <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+      {ACCOUNTS_ENABLED && (
+        <AuthModal
+          open={authModalOpen}
+          onClose={() => setAuthModalOpen(false)}
+        />
+      )}
     </>
   );
 };

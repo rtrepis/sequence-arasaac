@@ -19,6 +19,7 @@ import { ImageQuality } from "../../../types/ui";
 import { IMAGE_QUALITY_PRESETS } from "@/utils/imageToBase64";
 import { useFormatBytes } from "@features/backend/user-settings/hooks/useFormatBytes";
 import { useFormatPrintSize } from "@features/backend/user-settings/hooks/useFormatPrintSize";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import SettingRow from "../../SettingsLayout/SettingRow";
 import StyledToggleButtonGroup from "../../../style/StyledToggleButtonGroup";
 import { IMAGE_QUALITY_OPTIONS, qualityToggleSx } from "./imageQualityOptions";
@@ -32,9 +33,7 @@ const SettingCardImageQuality = (): React.ReactElement => {
   const imageQuality = useAppSelector((store) => store.ui.imageQuality);
   // Canviar de mida el que ja s'ha pujat només existeix al núvol: sense sessió,
   // dir on es fa seria enviar l'usuari a una secció que no li surt
-  const isAuthenticated = useAppSelector(
-    (state) => state.auth.accessToken !== null,
-  );
+  const isAuthenticated = useAppSelector(selectIsLoggedIn);
 
   const preset = IMAGE_QUALITY_PRESETS[imageQuality];
 

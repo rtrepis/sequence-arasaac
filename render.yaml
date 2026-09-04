@@ -45,3 +45,9 @@ services:
       # registrant i es veuen al panell d'administració.
       - key: ADMIN_ALERT_EMAIL
         sync: false
+      # Interruptor de les funcions de compte. "true" és el comportament de
+      # sempre; "false" tanca /api/auth, /api/documents, /api/user i /api/admin
+      # amb un 503 sense treure'n el codi, i ha d'anar de bracet amb el
+      # VITE_ACCOUNTS_ENABLED de la compilació del front.
+      - key: ACCOUNTS_ENABLED
+        value: "true"

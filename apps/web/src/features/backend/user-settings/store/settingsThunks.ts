@@ -16,6 +16,7 @@ import {
 } from "@features/backend/api/requestFailure";
 import { sanitizeViewSettings } from "@/configs/viewSettingsConfig";
 import { setWordProfilesActionCreator } from "@features/user-settings/store/uiSlice";
+import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 
 // Normalitza el camp fitzgerald d'un WordProfile: si per error antic s'ha
 // guardat com a objecte FitzgeraldColor { value, color }, extreu el color hex.
@@ -61,7 +62,7 @@ export const saveUserUiThunk = createAsyncThunk<
       // dades antigues), el thunk es rebutjava sense passar per rejectWithValue i
       // l'error arribava sense codi ni causa, indistingible d'una fallada de xarxa.
       const payload = buildUserUiFromState(getState());
-      const isAuthenticated = getState().auth.accessToken !== null;
+      const isAuthenticated = selectIsLoggedIn(getState());
 
       if (isAuthenticated) {
         const saved = await updateUiSettings(payload);

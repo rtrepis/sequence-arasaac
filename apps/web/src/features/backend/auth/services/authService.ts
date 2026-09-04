@@ -1,9 +1,6 @@
 // Capa de servei per a l'autenticació: encapsula les crides HTTP d'auth.
 import apiClient from "../../api/apiClient";
-import {
-  RegistrationStatus,
-  UserUseCase,
-} from "@sequence-arasaac/shared-types";
+import { UserUseCase } from "@sequence-arasaac/shared-types";
 
 export interface AuthResponse {
   accessToken: string;
@@ -17,18 +14,6 @@ export const login = async (
     email,
     password,
   });
-  return data;
-};
-
-// Estat del registre: quanta gent hi ha registrada, quantes places queden en
-// total i quantes en queden avui. No cal sessió.
-// isBackgroundRequest: ningú espera aquesta xifra amb el dit a sobre —la pàgina
-// funciona igual sense—, així que no ha d'encendre l'avís de servidor despertant-se.
-export const getRegistrationStatus = async (): Promise<RegistrationStatus> => {
-  const { data } = await apiClient.get<RegistrationStatus>(
-    "/auth/registration-status",
-    { isBackgroundRequest: true },
-  );
   return data;
 };
 
