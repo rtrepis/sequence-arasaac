@@ -719,6 +719,10 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   dificultat tècnica), hi ha el dimensionament de la màquina, el cost en diners i en hores, i les
   troballes S1–S10. La distribució recomanada és H3 —API, base de dades i imatges pròpies; l'SPA
   en un estàtic que no sigui teu— perquè qui no té compte no depengui de cap servidor.
+- `docs/COMPARATIVA-opcions-infraestructura.md` és el full de decisió que posa les sis opcions
+  de costat amb el que costen en diners i en hores (avui, E1, E2, H1, H2, H3). **És un resum: el
+  raonament de cada opció viu als dos estudis**, no aquí. Porta també la feina que val la pena fer
+  sigui quina sigui l'opció, que és la que no es llença si després es canvia de rumb.
 
 ## Descripció del projecte
 
