@@ -2403,5 +2403,21 @@
   "news.safe-delete.step2.description": {
     "defaultMessage": "Al menú del pictograma, «Elimina» ja no és al mig, on es premia sense voler: va a l'últim lloc, separat de la resta per una línia.",
     "description": "Descripció del pas 2 de «safe-delete»"
+  },
+  "randomNames.page.title": {
+    "defaultMessage": "Noms aleatoris",
+    "description": "Títol de la pàgina de noms aleatoris"
+  },
+  "randomNames.card.title": {
+    "defaultMessage": "Noms Disney",
+    "description": "Títol de la targeta amb la llista de noms"
+  },
+  "randomNames.card.subtitle": {
+    "defaultMessage": "Una tria a l'atzar de personatges Disney",
+    "description": "Subtítol de la targeta amb la llista de noms"
+  },
+  "randomNames.shuffle": {
+    "defaultMessage": "Genera'n uns altres",
+    "description": "Botó que torna a triar els noms de la llista"
   }
 }

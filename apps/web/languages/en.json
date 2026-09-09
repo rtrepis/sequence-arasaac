@@ -2403,5 +2403,21 @@
   "news.safe-delete.step2.description": {
     "defaultMessage": "In the pictogram menu, «Delete» is no longer in the middle, where it got pressed by accident: it goes last, separated from the rest by a line.",
     "description": "Descripció del pas 2 de «safe-delete»"
+  },
+  "randomNames.page.title": {
+    "defaultMessage": "Random names",
+    "description": "Títol de la pàgina de noms aleatoris"
+  },
+  "randomNames.card.title": {
+    "defaultMessage": "Disney names",
+    "description": "Títol de la targeta amb la llista de noms"
+  },
+  "randomNames.card.subtitle": {
+    "defaultMessage": "A random pick of Disney characters",
+    "description": "Subtítol de la targeta amb la llista de noms"
+  },
+  "randomNames.shuffle": {
+    "defaultMessage": "Pick new ones",
+    "description": "Botó que torna a triar els noms de la llista"
   }
 }

@@ -34,6 +34,9 @@ const ForgotPasswordPage = lazy(
   () => import("./pages/ForgotPasswordPage/ForgotPasswordPage"),
 );
 const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
+const RandomNamesPage = lazy(
+  () => import("./pages/RandomNamesPage/RandomNamesPage"),
+);
 
 import messages_en from "./languages/en.json";
 import messages_es from "./languages/es.json";
@@ -143,6 +146,7 @@ const App = (): ReactElement => {
         >
           <Route path="create-sequence" element={<EditSequencesPage />} />
           <Route path="view-sequence" element={<ViewSequencePage />} />
+          <Route path="random-names" element={<RandomNamesPage />} />
         </Route>
 
         {/* Secció de notícies — més específic que :locale, cap col·lisió */}
