@@ -16,6 +16,15 @@ detectar-les no es perdin al xat ni dins d'una pàgina publicada.
 
 Llegenda d'estat: `🔴 Oberta` · `✅ Resolta` · `➖ Caducada`
 
+### Revisions
+
+Cada revisió contrasta **totes les entrades obertes** amb el codi del moment. Les que no canvien
+no es toquen; les que sí, porten una nota amb la data de la revisió.
+
+| Data | Branca | Resultat |
+|---|---|---|
+| 2026-09-27 | `claude/backlog-review-bs867a` | 16 obertes revisades. **B24** resolta (per `52ac416`, que no l'havia marcat). **B13**, **B11**, **C3** i **N1** actualitzades: el codi s'ha mogut per sota i el text ja no era cert del tot. La resta (B8, B14, B21, B22, B23, C1, C10, C11, C17, C18, N3) continua exactament igual |
+
 ---
 
 ## Gravetat alta
@@ -567,6 +576,13 @@ una connexió oberta obliga a gestionar `onversionchange` i connexions tancades.
 - **Proposta**: saltar-se l'escaneig d'alfa quan el fitxer d'origen no en pot tenir (un JPEG no té
   transparència); i moure la conversió a un worker amb `createImageBitmap` + `OffscreenCanvas`
   perquè no bloquegi la interfície.
+- **Revisió 2026-09-27 — continua oberta, i ara el cas pitjor és més llarg.** La funció és ara
+  `encodeImage` (amb `fileToBase64` d'embolcall) i `hasTransparency` segueix escanejant tots els
+  píxels sense mirar `file.type`. Des de `52ac416`, quan la imatge no cap a l'espai del compte,
+  `UploadImageButton` en fa **una segona codificació** (`encodeToFit`) per oferir la versió que sí
+  que hi cap: dues congelacions seguides just en el moment d'avisar l'usuari. El botó ja porta
+  rodet mentre dura (`isLoading`), però el rodet també es queda quiet si el fil principal està
+  bloquejat.
 
 ### B12 — Els documents del núvol no es podien distingir l'un de l'altre ✅ Resolta
 
@@ -604,6 +620,16 @@ d'IndexedDB i al fitxer `.saac`.
   d'enviar res quan ja s'és al límit i el document és nou. El comptador ja existeix al servidor
   (`usage.documentsCount` de l'usuari) però avui no viatja enlloc: caldria exposar-lo, per exemple
   amb els límits efectius, a la resposta de `GET /documents`.
+- **Revisió 2026-09-27 — continua oberta, però la meitat de la premissa ha caducat:**
+  - **El sostre ja no és 3, és 10** (`a166e4b`, `tierLimits.ts`). Topar-hi torna a ser rar, que era
+    el que feia urgent l'entrada.
+  - **El comptador ja viatja i ja es veu**: `quotaSlice` + `useAccountQuota` (`52ac416`) i
+    `AccountStorageSummary`, al tab Usuari de configuració, diu «N de 10» per a documents. La
+    dependència de backend que proposava l'entrada ja no cal.
+  - **El que queda**: ni `SaveDocumentModal` ni `LoadDocumentModal` ensenyen el comptador (només
+    criden `refreshQuotaThunk` després de desar o esborrar), i desar un document **nou** amb el
+    compte ple continua enviant-lo i esperant que el servidor el rebutgi. Amb `useAccountQuota` ja
+    al front, és una línia al diàleg i una comprovació abans d'enviar.
 
 ### B14 — El sostre del canvas del PDF és un valor publicat, no un valor mesurat 🔴 Oberta
 
@@ -882,7 +908,29 @@ d'IndexedDB i al fitxer `.saac`.
   preferència només decideixi on aterra qui entra per l'arrel—, que treu el salt del tot. Cap de
   les dues és òbvia i per això no s'ha decidit dins de B18.
 
-### B24 — L'usuari no veu els seus límits ni pot fer res per no topar-hi 🔴 Oberta
+### B24 — L'usuari no veu els seus límits ni pot fer res per no topar-hi ✅ Resolta
+
+**Resolta per `52ac416`** (branca anterior a l'última edició d'aquest fitxer, però sense marcar-la);
+detectat a la revisió del 2026-09-27. Les dues meitats de la proposta hi són, amb tres diferències:
+
+- **Consum visible**: `AccountStorageSummary` al tab Usuari —espai amb barra i xifra, imatges que
+  encara hi caben, documents i paraules—, només amb sessió. El `.select()` que faltava ja no cal:
+  el consum arriba per `refreshQuotaThunk` / `quotaSlice`.
+- **Mida triada per l'usuari**: `SettingCardImageQuality` amb tres nivells (`print` 1.800 px /
+  500 KB, `standard` 1.200 px / 250 KB, `compact` 800 px / 120 KB). Els números difereixen dels de
+  la taula de sota; `print` continua sent el valor per defecte.
+- **Avís en pujar, no en desar**: si la imatge no cap, `ImageSizeDialog` ho diu i ofereix la versió
+  comprimida que sí que hi cap. La pujada no es bloqueja mai.
+- **Diferència 1 — no és `QUOTA_IMAGES_EXCEEDED`**: el límit real és d'espai
+  (`QUOTA_STORAGE_EXCEEDED`), i ara el seu missatge diu on es veu què ocupa cada imatge.
+- **Diferència 2 — sense reducció retroactiva**: decidit a propòsit. «Les imatges ja pujades no es
+  toquen mai», perquè reduir és irreversible. En comptes d'això, `AccountImagesList` mostra el pes
+  de cada imatge i d'on penja, perquè l'usuari triï quina esborra.
+- **Diferència 3**: el comptador no és al costat del botó de pujar, sinó al tab Usuari; al botó
+  només hi arriba quan la imatge no cap. Si més endavant es troba a faltar, reobrir-ho com a
+  entrada nova.
+
+*Text original de l'entrada:*
 
 - **On**: `shared/tierLimits.ts` (els límits), `modules/user-settings/service.ts` `getUiSettings`
   (que **no** retorna `usage`), `utils/imageToBase64.ts` (`MAX_IMAGE_SIDE_PX`, fix a 1800),
@@ -953,6 +1001,13 @@ Branca `claude/backlog-branch-master-64uh75`.
   duplicar) i `tb` (inserir). És deliberat i documentat a A5/A6: cap família sola cobreix els sis
   verbs. Ant i Material comparteixen dibuix (traçat omplert); qui desentona és Tabler, de traç. Si
   algun dia es fixa l'estàndard, aquest menú és el cas de prova.
+- **Revisió 2026-09-27 — continua oberta, i ja no són quatre famílies sinó set**: `ai` (24
+  fitxers), `md` (14), `bs` (3: `TabsSequences`, `ViewSquenceSettings`, `PictogramAmount`) i una
+  sola icona de `ri` (`SettingCardTheme`), `tb` (`MouseActionList`), `io` (`InputColor`,
+  `IoIosColorPalette`) i `fa` (`WelcomeFooter`, `FaLinkedin`). Aquesta última és un **logotip de
+  marca** i no compta: l'estàndard, quan es faci, l'ha de declarar com a excepció. `io` no té cap
+  motiu escrit i és el candidat més clar a passar a `ai`/`md`. Continua sense haver-hi cap
+  estàndard d'icones a `docs/estandards/`.
 
 ### C4 — Components morts i col·lisió de traduccions ✅ Resolta
 
@@ -1298,6 +1353,17 @@ demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per 
   aviat que **tot el que funcionava sense compte continua funcionant sense compte**, i la del núvol
   ha de dir el **sostre de tres documents** amb el `.saac` il·limitat al costat, en comptes de
   deixar-lo descobrir al quart document.
+- **Revisió 2026-09-27 — continua oberta, amb dues correccions:**
+  - **El sostre és ara de 10 documents** (`a166e4b`), no de 3; el de vocabulari, de 3 paraules, i
+    l'espai d'imatges, de 5 MB. La fitxa de `docs/NOTICIES-candidates-des-de-2.0.2.md` (§ notícia 4 i
+    decisió 2) i `docs/INVENTARI-funcionalitats-des-de-2.0.2.md` (§ quotes: «3 documents, 200
+    paraules, 50 MB») encara porten els números vells. **Cal corregir-los abans d'escriure la
+    notícia**, o es publicarà un límit que no és cert.
+  - **Depèn de l'interruptor de comptes.** Des de la 2.1.0 hi ha compilacions amb
+    `VITE_ACCOUNTS_ENABLED=false` (`accountsConfig.ts`), on el compte, el núvol i el vocabulari
+    personal no hi són. Aquestes tres notícies només es poden publicar quan la compilació de
+    producció tingui els comptes encesos; si no, expliquen funcionalitats que l'usuari no troba,
+    que és exactament el defecte de N2.
 
 ### N2 — Dues notícies publicades ja no són certes ✅ Resolta
 
