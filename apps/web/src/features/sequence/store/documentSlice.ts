@@ -332,8 +332,8 @@ const documentSlice = createSlice({
       previousDocument.viewSettings[key] = { ...current, ...settings };
     },
 
-    // Canvia la vista de totes les seqüències alhora: és tocar l'estil de la
-    // seqüència, i per això també en mou la base. Les pestanyes que no tenen
+    // Canvia la vista de totes les seqüències alhora: és tocar l'estil del
+    // document, i per això també en mou la base. Les pestanyes que no tenen
     // vista pròpia la segueixen soles. `styleView` és la vista de l'estil que
     // té ara el document (la seva o la heretada)
     applyViewSettingsToAll: (
@@ -460,7 +460,7 @@ const documentSlice = createSlice({
 
     // Document nou: contingut buit, títol i id nous, i sense estil propi: el
     // torna a heretar de l'estil per defecte de l'usuari, que és el que ha de
-    // rebre una seqüència nova.
+    // rebre un document nou.
     resetDocument: () => ({
       id: getUniqueId(),
       title: undefined,

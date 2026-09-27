@@ -13,7 +13,7 @@ import {
   AiOutlineBook,
 } from "react-icons/ai";
 import { MdGridView } from "react-icons/md";
-import { forwardRef, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { FormattedMessage, MessageDescriptor, useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
 import {
@@ -40,6 +40,7 @@ import React from "react";
 
 import { SettingsTab } from "../../types/ui";
 import { updateSettingsActiveTabActionCreator } from "@features/user-settings/store/uiSlice";
+import { settingsDialogOpenChangedActionCreator } from "@features/sequence/store/styleSlice";
 import { ACCOUNTS_ENABLED } from "@/configs/accountsConfig";
 
 interface DefaultSettingsDialogProps {
@@ -101,6 +102,16 @@ const DefaultSettingsDialog = ({
     dispatch(updateSettingsActiveTabActionCreator(value));
   };
   const pictPanelRef = useRef<DefaultSettingsPanelHandle>(null);
+
+  // Mentre és obert, el snackbar de desfer l'estil es pinta dins del panell i no
+  // al layout: el diàleg atrapa el focus (vegeu `StyleUndoSnackbar`)
+  useEffect(() => {
+    if (!open) return;
+    dispatch(settingsDialogOpenChangedActionCreator(true));
+    return () => {
+      dispatch(settingsDialogOpenChangedActionCreator(false));
+    };
+  }, [open, dispatch]);
   const viewPanelRef = useRef<DefaultSettingsPanelHandle>(null);
 
   const handleClose = () => {
@@ -121,8 +132,12 @@ const DefaultSettingsDialog = ({
         fullScreen
         open={open}
         onClose={handleClose}
-        aria-label={intl.formatMessage(messages.settings)}
+        // El nom va al `Paper`, que és qui porta `role="dialog"`: a l'arrel del
+        // Dialog, el diàleg quedava sense nom per al lector de pantalla
         slots={{ transition: Transition }}
+        slotProps={{
+          paper: { "aria-label": intl.formatMessage(messages.settings) },
+        }}
       >
         <AppBar
           sx={{ position: { xs: "fixed", md: "relative" }, height: "42px" }}

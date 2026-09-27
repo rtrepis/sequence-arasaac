@@ -1,4 +1,4 @@
-// Lectura i escriptura dels fitxers `.saac` (seqüència) i `.saacstyle` (estil).
+// Lectura i escriptura dels fitxers `.saac` (document) i `.saacstyle` (estil).
 //
 // **Tot el que entra d'un fitxer passa per aquí**, i també els documents que
 // arriben del núvol: és l'únic lloc que coneix la història del format i el
@@ -12,7 +12,7 @@
 // | `{ sequence }`                          | Primitiu: una sola seqüència             |
 // | `{ documentState }` sense `viewSettings` | Antic                                   |
 // | `{ documentState?, defaultSettings? }`  | 2.1.0: les dues claus opcionals i soltes |
-// | `{ schemaVersion: 2, documentState }`   | Seqüència amb l'estil a dins             |
+// | `{ schemaVersion: 2, documentState }`   | Document amb l'estil a dins              |
 // | `{ schemaVersion: 2, style }`           | Fitxer d'estil                           |
 //
 // Un fitxer sense `schemaVersion` vol dir «2.1.0 o anterior».
@@ -28,10 +28,10 @@ import { Sequence } from "@/types/sequence";
 import { materializeDocumentStyle, pictStyleOf, tabViewOf } from "./styleModel";
 
 export const SAAC_SCHEMA_VERSION = 2;
-export const SEQUENCE_FILE_EXTENSION = ".saac";
+export const DOCUMENT_FILE_EXTENSION = ".saac";
 export const STYLE_FILE_EXTENSION = ".saacstyle";
 
-export interface SequenceFileV2 {
+export interface DocumentFileV2 {
   schemaVersion: typeof SAAC_SCHEMA_VERSION;
   documentState: DocumentSAAC;
 }
@@ -41,7 +41,7 @@ export interface StyleFileV2 {
   style: SequenceStyle;
 }
 
-/** D'on ha sortit l'estil d'una seqüència oberta. */
+/** D'on ha sortit l'estil d'un document obert. */
 export type StyleOrigin =
   /** El fitxer el portava sencer */
   | "file"
@@ -51,17 +51,17 @@ export type StyleOrigin =
   | "default";
 
 export type ParsedSaacFile =
-  | { kind: "sequence"; document: DocumentSAAC; styleOrigin: StyleOrigin }
+  | { kind: "document"; document: DocumentSAAC; styleOrigin: StyleOrigin }
   | { kind: "style"; style: SequenceStyle }
   | { kind: "invalid" };
 
 // --- Escriure ---
 
-/** «Desar seqüència»: el document amb el seu estil, sempre. */
-export const buildSequenceFile = (
+/** «Desa el document»: el document amb el seu estil, sempre. */
+export const buildDocumentFile = (
   document: DocumentSAAC,
   style: SequenceStyle,
-): SequenceFileV2 => ({
+): DocumentFileV2 => ({
   schemaVersion: SAAC_SCHEMA_VERSION,
   documentState: materializeDocumentStyle(document, style),
 });
@@ -370,7 +370,7 @@ export const parseSaacFile = (
     return { kind: "style", style: mergeStyle(raw.style, userDefault).style };
   }
 
-  // Seqüència (2.1.0, antic o esquema 2)
+  // Document (2.1.0, antic o esquema 2)
   if (isRecord(raw.documentState)) {
     const normalized = normalizeDocumentState(raw.documentState, {
       userDefault,
@@ -378,7 +378,7 @@ export const parseSaacFile = (
     });
     if (normalized === null) return { kind: "invalid" };
     if (normalized.document.id === "") normalized.document.id = newId();
-    return { kind: "sequence", ...normalized };
+    return { kind: "document", ...normalized };
   }
 
   // Primitiu: una sola seqüència, sense estil
@@ -388,7 +388,7 @@ export const parseSaacFile = (
       { userDefault },
     );
     if (normalized === null) return { kind: "invalid" };
-    return { kind: "sequence", ...normalized };
+    return { kind: "document", ...normalized };
   }
 
   // Antic «només preferències»: s'interpreta com a fitxer d'estil

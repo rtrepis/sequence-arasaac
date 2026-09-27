@@ -1,4 +1,4 @@
-// Fitxer d'estil obert sense cap seqüència a què aplicar-lo: es pregunta si es
+// Fitxer d'estil obert sense cap document a què aplicar-lo: es pregunta si es
 // vol fer servir per defecte (fonaments, punt 3). És una confirmació perquè
 // substitueix l'estil per defecte que l'usuari ja tenia.
 import React from "react";
@@ -8,7 +8,7 @@ import SettingsSaveErrorDialog from "@/Modals/DefaultSettingsModal/SettingsSaveE
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { pendingDefaultStyleSetActionCreator } from "@features/sequence/store/styleSlice";
 import { useSetDefaultStyle } from "@features/sequence/hooks/useSetDefaultStyle";
-import messages from "./ChangeStyle.lang";
+import messages from "./DocumentStyle.lang";
 
 const PendingDefaultStyleDialog = (): React.ReactElement => {
   const intl = useIntl();

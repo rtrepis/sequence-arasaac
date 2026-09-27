@@ -15,8 +15,8 @@ import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelect
  */
 const ViewSequencePage = (): React.ReactElement => {
   const { document, documentStatus } = useAppSelector((state) => state);
-  // La seqüència es veu sempre amb el seu estil, no amb les preferències de
-  // qui la mira (`docs/fonaments/sequencia-i-estil.md`)
+  // El document es veu sempre amb el seu estil, no amb les preferències de
+  // qui el mira (`docs/fonaments/sequencia-i-estil.md`)
   const defaults: PictogramCardDefaults = useAppSelector(
     selectDocumentCardDefaults,
   );

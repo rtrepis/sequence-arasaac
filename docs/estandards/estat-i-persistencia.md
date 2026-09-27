@@ -116,7 +116,7 @@
 
 ## Default Settings Modal i DefaultForm
 
-- **El tab de pictogrames edita l'estil de la seqüència oberta** («Estil d'aquesta seqüència»), no l'estil per defecte: en tancar la configuració l'aplica al document amb la regla dels retocs (si no ha canviat res, no toca el document). Per a les seqüències noves hi ha «Desa com a estil per defecte».
+- **El tab «Estil del document» edita l'estil del document obert** (el que s'aplica a totes les seves seqüències), no l'estil per defecte: en tancar la configuració l'aplica al document amb la regla dels retocs (si no ha canviat res, no toca el document). Per als documents nous hi ha «Desa com a estil per defecte» a la capçalera del panell.
 - `DefaultSettingsModal` obrir un Dialog fullscreen que conté `<DefaultForm submit={open} />`.
 - `DefaultForm` usa estat local per a tots els camps que es configuren amb sub-components (font, borders, textPosition, skin, hair, color, numberFont). El pattern és: `useState(initialValue)` → passar `state` i `setState` al component filho → a `handlerSubmit` construir el payload sencer i dispatch + guardar.
 - El render condicional de sections segon un boolean del Redux (ex: `{numbered && (...)}`, `{color && (...)}`) és el pattern establert per mostrar/amagar configuradors.

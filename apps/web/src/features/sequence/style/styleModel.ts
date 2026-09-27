@@ -1,4 +1,4 @@
-// Model de l'estil d'una seqüència: què és, d'on surt i com se n'aplica un de nou.
+// Model de l'estil del document: què és, d'on surt i com se n'aplica un de nou.
 //
 // Funcions pures, sense Redux ni React: les fan servir el lector del `.saac`, els
 // reducers del document i els selectors, i es proven soles. Les regles que
@@ -54,7 +54,7 @@ export const tabViewOf = (view: SequenceStyleView): SequenceViewSettings => ({
 /**
  * L'estil amb què es veu un document. La part que el document no porta (un
  * document nou que encara no s'ha desat ni se n'ha tocat l'estil) **hereta** la
- * de l'estil per defecte: així una seqüència nova neix amb l'estil de l'usuari
+ * de l'estil per defecte: així un document nou neix amb l'estil de l'usuari
  * encara que les preferències arribin després de crear-la.
  */
 export const resolveDocumentStyle = (
@@ -89,7 +89,7 @@ export const resolveSequenceViews = (
 
 /**
  * Omple el document amb l'estil que fa servir, perquè el fitxer o el núvol se
- * l'enduguin sencer: «Desar seqüència» inclou sempre el seu estil. No canvia res
+ * l'enduguin sencer: «Desa el document» inclou sempre el seu estil. No canvia res
  * del que es veu; només fa explícit el que s'heretava.
  */
 export const materializeDocumentStyle = (
@@ -237,8 +237,8 @@ export const fontFamiliesUsed = (
 };
 
 /**
- * Pila de lletra amb reserva: si el dispositiu no té la font que demana la
- * seqüència (fitxer d'una versió més nova, o sense connexió a Google Fonts), el
+ * Pila de lletra amb reserva: si el dispositiu no té la font que demana el
+ * document (fitxer d'una versió més nova, o sense connexió a Google Fonts), el
  * text surt en una sans-serif del sistema i no en la serif per defecte del
  * navegador, que en CAA es llegeix pitjor.
  */

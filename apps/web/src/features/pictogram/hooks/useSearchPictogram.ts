@@ -20,7 +20,7 @@ const useSearchPictogram = () => {
     textPosition,
     borderIn: defaultBorderIn,
     borderOut: defaultBorderOut,
-    // Els pictogrames nous reben l'estil de la seqüència on entren
+    // Els pictogrames nous reben l'estil del document on entren
   } = useAppSelector((state) => selectDocumentPictStyle(state).pictSequence);
 
   const getActiveSaacAmountPict = (state) =>

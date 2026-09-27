@@ -1,10 +1,11 @@
-// Estat de la interfície de l'estil: l'avís que surt en obrir una seqüència, el
-// desfer de l'últim canvi d'estil, el diàleg «Canvia l'estil» i el fitxer
-// d'estil pendent de decidir què se'n fa.
+// Estat de la interfície de l'estil del document: el bàner que surt en obrir un
+// document, el snackbar amb «Desfés» de l'últim canvi d'estil, la petició
+// d'obrir el panell «Estil del document» i el fitxer d'estil pendent de decidir
+// què se'n fa.
 //
 // Viu a Redux i no en un component perquè el fan servir llocs que no comparteixen
 // pare: el menú lateral (obrir un fitxer), la pàgina de vista, el panell de
-// configuració i l'avís mateix, que va al layout.
+// configuració i el bàner mateix, que va al layout.
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SequenceStyle } from "@/types/document";
 import {
@@ -23,26 +24,21 @@ import { stylesEqual } from "@features/sequence/style/styleModel";
 /** D'on ve l'estil que s'acaba d'aplicar. */
 export type StyleChangeSource = "userDefault" | "file";
 
-export type StyleNotice =
+/**
+ * Bàner d'estat del document que s'acaba d'obrir: és estat, no confirmació, i
+ * per això és un bàner i no un snackbar (`docs/estandards/feedback-i-accions.md`).
+ */
+export interface StyleNotice {
+  /** Té un estil diferent de l'estil per defecte de qui l'obre */
+  ownStyle: boolean;
+  /** Fonts que demana i aquest dispositiu no té */
+  unavailableFonts: string[];
   /**
-   * S'acaba d'obrir una seqüència. `ownStyle`: té un estil diferent de l'estil
-   * per defecte de qui l'obre. `unavailableFonts`: fonts que demana i aquest
-   * dispositiu no té.
+   * Document a què es refereix: si se n'obre o se'n comença un altre, el bàner
+   * ja no hi té res a dir i deixa de mostrar-se.
    */
-  (
-    | { kind: "opened"; ownStyle: boolean; unavailableFonts: string[] }
-    /**
-     * S'acaba de canviar l'estil de la seqüència oberta. Amb `fileStyle`, l'estil
-     * venia d'un fitxer i es pot desar com a estil per defecte.
-     */
-    | { kind: "changed"; source: StyleChangeSource; fileStyle?: SequenceStyle }
-  ) & {
-    /**
-     * Document a què es refereix l'avís: si se n'obre o se'n comença un altre,
-     * l'avís ja no hi té res a dir i deixa de mostrar-se.
-     */
-    documentId: string;
-  };
+  documentId: string;
+}
 
 interface StyleUndo {
   /** Com era el document abans del canvi */
@@ -55,18 +51,35 @@ interface StyleUndo {
   after: DocumentStyleSnapshot;
 }
 
+/** Confirmació del canvi d'estil que s'acaba de fer, amb «Desfés». */
+export interface StyleUndoSnackbar {
+  source: StyleChangeSource;
+  /** Cada canvi n'obre un de nou, encara que el text sigui el mateix */
+  id: number;
+}
+
 export interface StyleUiState {
   notice: StyleNotice | null;
   undo: StyleUndo | null;
-  changeStyleOpen: boolean;
-  /** Fitxer d'estil obert sense cap seqüència: es pregunta si es vol per defecte */
+  undoSnackbar: StyleUndoSnackbar | null;
+  /** Algú (el bàner) ha demanat obrir el panell «Estil del document» */
+  stylePanelRequested: boolean;
+  /**
+   * El diàleg de configuració és obert. Mentre ho és, el snackbar de desfer
+   * es pinta a dins del panell i no al layout: el diàleg atrapa el focus, i un
+   * snackbar de fora no s'hi podria fer servir amb el teclat.
+   */
+  settingsDialogOpen: boolean;
+  /** Fitxer d'estil obert sense cap document: es pregunta si es vol per defecte */
   pendingDefaultStyle: SequenceStyle | null;
 }
 
 const initialState: StyleUiState = {
   notice: null,
   undo: null,
-  changeStyleOpen: false,
+  undoSnackbar: null,
+  stylePanelRequested: false,
+  settingsDialogOpen: false,
   pendingDefaultStyle: null,
 };
 
@@ -80,26 +93,38 @@ const styleSlice = createSlice({
     styleNoticeClosed: (state) => {
       state.notice = null;
     },
-    // La comprovació de fonts és asíncrona i arriba després de l'avís
+    // La comprovació de fonts és asíncrona i arriba després del bàner
     styleNoticeFontsChecked: (
       state,
       action: PayloadAction<{ documentId: string; unavailableFonts: string[] }>,
     ) => {
       const { notice } = state;
-      if (
-        notice?.kind === "opened" &&
-        notice.documentId === action.payload.documentId
-      )
+      if (notice?.documentId === action.payload.documentId)
         notice.unavailableFonts = action.payload.unavailableFonts;
     },
     styleUndoRecorded: (state, action: PayloadAction<StyleUndo | null>) => {
       state.undo = action.payload;
     },
-    changeStyleOpened: (state) => {
-      state.changeStyleOpen = true;
+    styleUndoSnackbarShown: (
+      state,
+      action: PayloadAction<StyleChangeSource>,
+    ) => {
+      state.undoSnackbar = {
+        source: action.payload,
+        id: (state.undoSnackbar?.id ?? 0) + 1,
+      };
     },
-    changeStyleClosed: (state) => {
-      state.changeStyleOpen = false;
+    styleUndoSnackbarClosed: (state) => {
+      state.undoSnackbar = null;
+    },
+    stylePanelRequested: (state) => {
+      state.stylePanelRequested = true;
+    },
+    stylePanelRequestHandled: (state) => {
+      state.stylePanelRequested = false;
+    },
+    settingsDialogOpenChanged: (state, action: PayloadAction<boolean>) => {
+      state.settingsDialogOpen = action.payload;
     },
     pendingDefaultStyleSet: (
       state,
@@ -117,8 +142,11 @@ export const {
   styleNoticeClosed: styleNoticeClosedActionCreator,
   styleNoticeFontsChecked: styleNoticeFontsCheckedActionCreator,
   styleUndoRecorded: styleUndoRecordedActionCreator,
-  changeStyleOpened: changeStyleOpenedActionCreator,
-  changeStyleClosed: changeStyleClosedActionCreator,
+  styleUndoSnackbarShown: styleUndoSnackbarShownActionCreator,
+  styleUndoSnackbarClosed: styleUndoSnackbarClosedActionCreator,
+  stylePanelRequested: stylePanelRequestedActionCreator,
+  stylePanelRequestHandled: stylePanelRequestHandledActionCreator,
+  settingsDialogOpenChanged: settingsDialogOpenChangedActionCreator,
   pendingDefaultStyleSet: pendingDefaultStyleSetActionCreator,
 } = styleSlice.actions;
 
@@ -132,16 +160,12 @@ const sameSnapshot = (
   a.styleView === b.styleView;
 
 /**
- * Canvia l'estil de la seqüència oberta amb la regla dels retocs, i deixa el
- * canvi a punt de desfer. No toca cap fitxer: el document queda amb canvis
- * sense desar, com qualsevol altra edició.
+ * Aplica un estil al document obert amb la regla dels retocs, i deixa el canvi
+ * a punt de desfer amb un snackbar. No toca cap fitxer: el document queda amb
+ * canvis sense desar, com qualsevol altra edició.
  */
 export const changeDocumentStyleThunk =
-  (
-    style: SequenceStyle,
-    source: StyleChangeSource,
-    fileStyle?: SequenceStyle,
-  ): AppThunk =>
+  (style: SequenceStyle, source: StyleChangeSource): AppThunk =>
   (dispatch, getState) => {
     const from = selectDocumentStyle(getState());
     const before = takeDocumentStyleSnapshot(getState().document);
@@ -150,14 +174,7 @@ export const changeDocumentStyleThunk =
 
     const after = takeDocumentStyleSnapshot(getState().document);
     dispatch(styleUndoRecordedActionCreator({ before, after }));
-    dispatch(
-      styleNoticeShownActionCreator({
-        kind: "changed",
-        source,
-        fileStyle,
-        documentId: getState().document.id,
-      }),
-    );
+    dispatch(styleUndoSnackbarShownActionCreator(source));
   };
 
 /** Si el document no s'ha tocat des del canvi d'estil, es pot desfer. */
@@ -177,10 +194,10 @@ export const undoStyleChangeThunk = (): AppThunk => (dispatch, getState) => {
 
   dispatch(restoreDocumentStyleActionCreator(state.style.undo.before));
   dispatch(styleUndoRecordedActionCreator(null));
-  dispatch(styleNoticeClosedActionCreator());
+  dispatch(styleUndoSnackbarClosedActionCreator());
 };
 
-/** L'estil de la seqüència oberta és diferent de l'estil per defecte? */
+/** L'estil del document obert és diferent de l'estil per defecte? */
 export const selectDocumentHasOwnStyle = (
   state: Parameters<typeof selectDocumentStyle>[0],
 ): boolean =>

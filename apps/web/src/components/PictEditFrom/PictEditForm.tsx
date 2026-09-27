@@ -37,7 +37,7 @@ const PictEditForm = ({
       numberFont: defaultNumberFont,
     },
     pictApiAra: { skin: defaultSkin, hair: defaultHair, color: defaultColor },
-    // L'estil de la seqüència, no les preferències de qui l'edita
+    // L'estil del document, no les preferències de qui l'edita
   } = useAppSelector(selectDocumentPictStyle);
 
   const initialTextPosition =

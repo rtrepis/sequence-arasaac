@@ -25,7 +25,6 @@ import {
   AiOutlineSetting,
   AiOutlineUser,
 } from "react-icons/ai";
-import { MdOutlinePalette } from "react-icons/md";
 import { useIntl } from "react-intl";
 import messages from "./AppNavigationDrawer.lang";
 import navigationMessages from "@shared/messages/navigation.lang";
@@ -43,15 +42,12 @@ import {
   getDocumentDurability,
   isWorkAtRisk,
 } from "@features/sequence/store/documentStatusSlice";
-import { changeStyleOpenedActionCreator } from "@features/sequence/store/styleSlice";
 import { useOpenSaacFile } from "@features/sequence/hooks/useOpenSaacFile";
 import {
-  SEQUENCE_FILE_EXTENSION,
+  DOCUMENT_FILE_EXTENSION,
   STYLE_FILE_EXTENSION,
 } from "@features/sequence/style/saacFile";
-import ChangeStyleDialog from "@features/sequence/components/ChangeStyle/ChangeStyleDialog";
-import PendingDefaultStyleDialog from "@features/sequence/components/ChangeStyle/PendingDefaultStyleDialog";
-import styleMessages from "@features/sequence/components/ChangeStyle/ChangeStyle.lang";
+import PendingDefaultStyleDialog from "@features/sequence/components/DocumentStyle/PendingDefaultStyleDialog";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
 import UserAvatar from "@components/UserAvatar/UserAvatar";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
@@ -211,12 +207,6 @@ const AppNavigationDrawer = ({
     if (file) void openFile(file, "open");
   };
 
-  // «Canvia l'estil» és al menú perquè ha d'estar disponible en qualsevol moment
-  const handleChangeStyle = () => {
-    onClose();
-    dispatch(changeStyleOpenedActionCreator());
-  };
-
   return (
     <>
       {/* Drawer de navegació (des de l'esquerra) */}
@@ -296,15 +286,6 @@ const AppNavigationDrawer = ({
                 <AiOutlineFolderOpen />
               </ListItemIcon>
               <ListItemText primary={intl.formatMessage(messages.load)} />
-            </ListItemButton>
-
-            <ListItemButton onClick={handleChangeStyle}>
-              <ListItemIcon>
-                <MdOutlinePalette />
-              </ListItemIcon>
-              <ListItemText
-                primary={intl.formatMessage(styleMessages.changeStyle)}
-              />
             </ListItemButton>
           </List>
 
@@ -423,13 +404,11 @@ const AppNavigationDrawer = ({
         type="file"
         style={{ display: "none" }}
         onChange={handleFileLoad}
-        accept={`${SEQUENCE_FILE_EXTENSION},${STYLE_FILE_EXTENSION},text/plain,application/json`}
+        accept={`${DOCUMENT_FILE_EXTENSION},${STYLE_FILE_EXTENSION},text/plain,application/json`}
       />
 
-      {/* «Canvia l'estil» i la pregunta d'un fitxer d'estil obert sense
-          seqüència: un sol lloc per a tota l'app, perquè el menú hi és a totes
-          les pàgines */}
-      <ChangeStyleDialog />
+      {/* La pregunta d'un fitxer d'estil obert sense cap document: és el menú
+          qui obre fitxers, i el menú hi és a totes les pàgines */}
       <PendingDefaultStyleDialog />
 
       {/* Modal de configuració */}

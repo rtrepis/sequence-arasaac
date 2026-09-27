@@ -1,12 +1,14 @@
 import { Badge, Tooltip } from "@mui/material";
 import { AiOutlineSetting } from "react-icons/ai";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import messages from "./DefaultSettingsModal.lang";
 import DefaultSettingsDialog from "./DefaultSettingsDialog";
 import StyledIconButton from "@/style/StyledIconButton";
 import UserAvatar from "@components/UserAvatar/UserAvatar";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { updateSettingsActiveTabActionCreator } from "@features/user-settings/store/uiSlice";
+import { stylePanelRequestHandledActionCreator } from "@features/sequence/store/styleSlice";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import React from "react";
 
@@ -19,8 +21,27 @@ const GEAR_BADGE_SIZE = 17;
 const DefaultSettingsModal = (): React.ReactElement => {
   const intl = useIntl();
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
   // Ref per restaurar el focus al botó d'obertura quan el modal es tanca
   const triggerRef = useRef<HTMLElement | null>(null);
+  // Qui l'ha obert si no ha estat la roda dentada (el botó del bàner d'estil):
+  // en tancar, el focus hi ha de tornar i no a la barra
+  const requesterRef = useRef<HTMLElement | null>(null);
+
+  // El bàner que surt en obrir un document demana el panell «Estil del
+  // document». És aquest diàleg qui l'obre perquè és a totes les pàgines amb
+  // document (la barra de navegació)
+  const stylePanelRequested = useAppSelector(
+    (state) => state.style.stylePanelRequested,
+  );
+  useEffect(() => {
+    if (!stylePanelRequested) return;
+    const active = document.activeElement;
+    requesterRef.current = active instanceof HTMLElement ? active : null;
+    dispatch(updateSettingsActiveTabActionCreator("pictograms"));
+    setOpen(true);
+    dispatch(stylePanelRequestHandledActionCreator());
+  }, [stylePanelRequested, dispatch]);
 
   const userEmail = useAppSelector((state) => state.auth.userEmail);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -34,7 +55,11 @@ const DefaultSettingsModal = (): React.ReactElement => {
 
   const handleClose = () => {
     setOpen(false);
-    triggerRef.current?.focus();
+    // Si qui l'ha obert ja no hi és (el bàner s'ha tancat), a la roda dentada
+    const requester = requesterRef.current;
+    requesterRef.current = null;
+    if (requester?.isConnected) requester.focus();
+    else triggerRef.current?.focus();
   };
 
   return (

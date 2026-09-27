@@ -1,7 +1,7 @@
 // Selectors de l'estil: quin és l'estil per defecte de l'usuari i amb quin es
 // veu el document obert. Tot el que pinta pictogrames del document ha de llegir
-// l'estil d'aquí, no de `ui.defaultSettings`: les preferències de qui obre una
-// seqüència no la reescriuen (`docs/fonaments/sequencia-i-estil.md`).
+// l'estil d'aquí, no de `ui.defaultSettings`: les preferències de qui obre un
+// document no el reescriuen (`docs/fonaments/sequencia-i-estil.md`).
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/app/store";
 import { DefaultSettings } from "@/types/ui";

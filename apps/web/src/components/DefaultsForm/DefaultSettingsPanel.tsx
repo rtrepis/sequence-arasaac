@@ -1,4 +1,10 @@
-import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { DefaultSettings } from "../../types/ui";
 import {
@@ -27,9 +33,9 @@ import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import { deepEqual, pictStyleOf } from "@features/sequence/style/styleModel";
 import { useSetDefaultStyle } from "@features/sequence/hooks/useSetDefaultStyle";
 import SettingsSaveErrorDialog from "@/Modals/DefaultSettingsModal/SettingsSaveErrorDialog";
-import styleMessages from "@features/sequence/components/ChangeStyle/ChangeStyle.lang";
-import StyledButton from "@/style/StyledButton";
+import DocumentStyleHeader from "@features/sequence/components/DocumentStyle/DocumentStyleHeader";
 import { FormattedMessage } from "react-intl";
+import formMessages from "./DefaultForm.lang";
 import React from "react";
 import DefaultForm from "./DefaultForm";
 
@@ -41,9 +47,10 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
   (_, ref): React.ReactElement => {
     const dispatch = useAppDispatch();
 
-    // Aquest panell edita l'estil de la seqüència oberta, no les preferències
-    // de l'usuari: per a les seqüències noves hi ha «Desa com a estil per
-    // defecte» (`docs/fonaments/sequencia-i-estil.md`)
+    // Aquest panell edita l'estil del document obert —el que s'aplica a totes
+    // les seves seqüències—, no les preferències de l'usuari: per als documents
+    // nous hi ha «Desa com a estil per defecte»
+    // (`docs/fonaments/sequencia-i-estil.md`)
     const documentStyle = useAppSelector(selectDocumentStyle);
     const {
       pictApiAra: {
@@ -102,7 +109,23 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       ],
     );
 
-    // Porta el formulari a l'estil de la seqüència, amb la regla dels retocs:
+    // Quan l'estil del document canvia des de fora del formulari —les accions
+    // de la capçalera: aplicar l'estil per defecte, carregar-ne un, desfer—, el
+    // formulari passa a ensenyar el que té ara el document
+    useEffect(() => {
+      const { pictSequence, pictApiAra } = documentStyle;
+      setFont(pictSequence.font);
+      setNumberFont(pictSequence.numberFont ?? pictSequence.font);
+      setTextPosition(pictSequence.textPosition);
+      setSkin(pictApiAra.skin);
+      setBorderIn(pictSequence.borderIn);
+      setBorderOut(pictSequence.borderOut);
+      setHair(pictApiAra.hair);
+      setColor(pictApiAra.color);
+      setNumbered(pictSequence.numbered);
+    }, [documentStyle]);
+
+    // Porta el formulari a l'estil del document, amb la regla dels retocs:
     // els pictogrames que tenien el mateix que l'estil el segueixen. Si no ha
     // canviat res no es toca el document, que si no quedaria com a canviat
     // només per haver obert la configuració
@@ -194,11 +217,12 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           }
           onSubmit={applyToDocument}
           onReset={handleReset}
-          title={<FormattedMessage {...styleMessages.panelTitle} />}
-          extraActions={
-            <StyledButton variant="contained" onClick={handleSetAsDefault}>
-              <FormattedMessage {...styleMessages.setAsDefault} />
-            </StyledButton>
+          header={
+            <DocumentStyleHeader
+              help={<FormattedMessage {...formMessages.panelHint} />}
+              onBeforeAction={applyToDocument}
+              onSetAsDefault={handleSetAsDefault}
+            />
           }
         />
         <SettingsSaveErrorDialog

@@ -15,10 +15,12 @@
 
 App per crear seqüències de pictogrames (ARASAAC), previsualitzar-les i imprimir-les.
 Té dos pàgines principals:
-- **Edició** (`/create-sequence`): es construeix la seqüència afegint pictogrames
+- **Edició** (`/create-sequence`): es construeix el document afegint pictogrames a les seves seqüències
 - **Visualització** (`/view-sequence`): es previsualitza amb control de mida dels pictogrames i separació entre files i columnes. Permet imprimir i veure a full screen.
 
-Funciona sencer **sense compte**: la configuració i les seqüències es guarden al navegador (`sessionStorage`/`localStorage`). Amb un compte (opcional), la configuració d'usuari i el vocabulari personal es desen al núvol i se sincronitzen entre dispositius — vegeu `docs/estandards/backend.md`.
+Un **document** (el fitxer `.saac`) conté una o més **seqüències** (les pestanyes). Vegeu la nomenclatura a `docs/fonaments/sequencia-i-estil.md`.
+
+Funciona sencer **sense compte**: la configuració i el document en curs es guarden al navegador (`sessionStorage`/`localStorage`). Amb un compte (opcional), la configuració d'usuari i el vocabulari personal es desen al núvol i se sincronitzen entre dispositius — vegeu `docs/estandards/backend.md`.
 
 ## Tech stack
 
@@ -72,7 +74,7 @@ apps/
 │   └── src/
 │       ├── modules/          # Un mòdul per domini, cadascun amb controller/service/model/routes/validators:
 │       │   ├── auth/           #   registre, login, refresh, verificació de correu
-│       │   ├── documents/      #   CRUD de seqüències desades + assets Cloudinary
+│       │   ├── documents/      #   CRUD de documents desats + assets Cloudinary
 │       │   ├── user-settings/  #   configuració UI sincronitzada (PUT /user/ui-settings)
 │       │   ├── client-errors/  #   registre d'errors arribats a l'usuari + avís per correu
 │       │   ├── admin/          #   panell d'administració (requireAdmin)
@@ -115,7 +117,12 @@ Són el resum executable dels estàndards. **Quan una d'aquestes regles entri en
 de debò —o quan calgui saber-ne el perquè— cal obrir el document de l'àrea**, que és
 on viu el criteri complet i el motiu de cada decisió.
 
-- **Seqüència, estil i preferències són tres coses**: la seqüència es desa sempre **amb** el seu
+- **Nomenclatura**: **document** = el fitxer `.saac`, el conjunt de totes les seqüències;
+  **seqüència** = cadascuna de les que conté (una pestanya); **estil del document** = el que
+  s'aplica a totes les seqüències; **vista d'aquesta seqüència** = els ajustos d'una sola, que
+  retoquen l'estil. «Seqüència» no vol dir mai el fitxer sencer, ni a la interfície, ni a les
+  traduccions, ni als comentaris.
+- **Document, estil i preferències són tres coses**: el document es desa sempre **amb** el seu
   estil i s'obre tal com es va desar; les preferències d'interfície són de l'usuari i no entren mai
   dins cap document. **Llegir `docs/fonaments/sequencia-i-estil.md` abans de tocar res que desi,
   carregui o apliqui estils.**
@@ -149,7 +156,7 @@ si un estàndard el contradiu, és l'estàndard el que s'ha de corregir.
 
 | Document | Llegir-lo abans de tocar |
 |---|---|
-| `docs/fonaments/sequencia-i-estil.md` | Qualsevol cosa que desi, carregui o apliqui estils: el `.saac`, el desat al núvol, `documentSlice`, `uiSlice.defaultSettings`/`viewSettings`, la columna de la vista i el panell de pictogrames |
+| `docs/fonaments/sequencia-i-estil.md` | Nomenclatura (document, seqüència, estil del document, vista d'aquesta seqüència) i qualsevol cosa que desi, carregui o apliqui estils: el `.saac`, el desat al núvol, `documentSlice`, `uiSlice.defaultSettings`/`viewSettings`, la columna de la vista i el panell «Estil del document» |
 
 ## Índex d'estàndards
 

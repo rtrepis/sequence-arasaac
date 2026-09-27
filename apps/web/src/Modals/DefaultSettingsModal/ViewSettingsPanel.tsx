@@ -160,7 +160,7 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       setLocalSettings((prev) => ({ ...prev, alignmentV: value }));
     };
 
-    // «Aplica a la vista actual» porta aquests valors a la seqüència oberta:
+    // «Aplica a la vista actual» porta aquests valors al document obert:
     // tocar-ne les mides i els espaiats és tocar-ne l'estil
     const handleApply = () => {
       dispatch(viewSettingsActionCreator(localSettings));

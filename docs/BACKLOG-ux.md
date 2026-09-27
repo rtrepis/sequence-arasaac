@@ -68,6 +68,9 @@ l'entrada.
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
 | B26 | La disposició (direcció, pàgina, orientació) no viatja al `.saac` | És contingut segons els fonaments de l'estil, i l'esquema 2 ja té el camp (`layout`). S'ha de fer abans de la fase 1 del mode lliure, que hi afegeix la disposició per pàgina | M | No: la decisió és a `docs/fonaments/sequencia-i-estil.md` |
+| B29 | La previsualització del vocabulari personal sobresurt del requadre amb valors grans | Mateixa causa que el bug de la previsualització del panell d'estil, ja resolt amb `ScaleToFit`: la solució és una línia | S | No |
+| B27 | Les fonts de Google no se serveixen des de l'app | Sense connexió a Google Fonts, un document no es veu tal com es va desar (el fonament de l'estil ho promet) | M | No |
+| B28 | Una paraula llarga amb lletra gran es talla dins de la targeta | Surt així al paper i al PDF, i ningú no ho avisa | S–M | Sí: partir la paraula, o reduir-ne la lletra |
 | B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb B25 ja només hi queda barrejada la disposició; es fa amb B26, que la treu de les preferències per portar-la al document | M | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
@@ -958,8 +961,8 @@ d'IndexedDB i al fitxer `.saac`.
 - **Revisió 2026-09-27 (resolent B25, `claude/sequencia-estil-b25-16pluv`)**: la meitat ja no és
   certa. Les mides, els espais i l'alineació són ara de l'estil del document, i el mirall de sessió
   de `ViewSquenceSettings` només hi escriu la disposició (direcció, pàgina, orientació, autor).
-  «Restaura les seqüències» ja no existeix: l'ha substituït «Canvia l'estil › El meu estil per
-  defecte», que llegeix sempre l'estil per defecte desat i es pot desfer. El que queda barrejat és
+  «Restaura les seqüències» ja no existeix: l'ha substituït «Aplica el meu estil per defecte», que
+  llegeix sempre l'estil per defecte desat i es pot desfer. El que queda barrejat és
   la disposició, i es resol amb **B26**, que la porta al document.
 
 ### B22 — Les pestanyes no es coordinen: ni es posen al dia ni comparteixen el «Document nou» 🔴 Oberta
@@ -1115,6 +1118,52 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   l'esquema. Ho ha de fer abans la fase 1 del mode lliure, que hi afegeix la disposició per pàgina.
   Tanca també el que queda de B21.
 
+### B27 — Les fonts de Google no se serveixen des de l'app 🔴 Oberta
+
+*(Obert en revisar la fase 2 de l'estil del document, branca `claude/sequencia-estil-b25-16pluv`.)*
+
+- **On**: `apps/web/src/style/fonts.css`, que carrega unes noranta famílies amb `@import` de
+  `fonts.googleapis.com`; `features/sequence/style/fontAvailability.ts`, que avui només pot avisar
+  que en falta alguna.
+- **Per què importa**: el `.saac` desa només el nom de la família. Sense accés a Google Fonts —sense
+  connexió, o en una xarxa d'escola que el bloqueja— el text surt amb la sans-serif de reserva, i el
+  document no es veu tal com es va desar, que és el que promet `docs/fonaments/sequencia-i-estil.md`.
+  A més, cada visita envia l'adreça IP de l'usuari a Google, cosa que a la UE s'ha considerat una
+  transferència de dades personals sense base legal.
+- **Proposta**: servir les fonts des de la mateixa app (fitxers `woff2`, subconjunts llatí i llatí
+  ampliat, amb `font-display: swap`) i carregar-les a demanda, només les famílies que fa servir el
+  document obert, en lloc dels noranta `@import` de cada arrencada. **No** incrustar-les al `.saac`:
+  cada família i pes hi afegiria de desenes a centenars de KB, i un fitxer de seqüències s'ha de
+  poder enviar per correu. Cal mesurar el pes del paquet abans i després, i mirar les llicències
+  (totes les de Google Fonts són OFL o Apache, que ho permeten).
+
+### B28 — Una paraula llarga amb lletra gran es talla dins de la targeta 🔴 Oberta
+
+*(Mateixa revisió.)*
+
+- **On**: `PictogramCard` (`textContent` a `PictogramCard.styled.ts`): la caixa del text fa l'ample
+  de la imatge i la targeta retalla el que en sobresurt.
+- **Per què importa**: una paraula que no es parteix («Previsualització», «esmorzar-se» a mida 2)
+  es talla a la vora de la targeta a la pantalla, al paper i al PDF, sense cap avís. Es veu a la
+  previsualització del panell «Estil del document» amb l'estil extrem de
+  `e2e/fixtures/estil-extrem.saacstyle`.
+- **Proposta**: triar entre partir la paraula (`hyphens: auto` amb l'idioma de la cerca) o reduir-ne
+  la lletra fins que hi càpiga. Cal decidir-ho: en CAA partir una paraula no és neutral per a qui
+  llegeix, i reduir-la trenca la mida que ha triat qui prepara el document.
+
+### B29 — La previsualització del vocabulari personal sobresurt del requadre 🔴 Oberta
+
+*(Mateixa revisió.)*
+
+- **On**: `VocabularySettingsPanel.tsx`, la mostra de la columna esquerra.
+- **Per què importa**: és la mateixa causa que tenia la previsualització del panell «Estil del
+  document»: una targeta sense escalar dins d'un requadre de mida fixa amb `overflow: hidden`. Amb
+  vores amples o lletra gran, en mòbil (on el requadre fa com a molt el 35 % de l'alçada) la part de
+  baix queda fora de la vista.
+- **Proposta**: embolcallar la targeta amb `ScaleToFit` (`components/SettingsLayout/`), com
+  `DefaultForm`. `PictEditForm` no té aquest problema (no té requadre fix) i `ViewSettingsPreview` ja
+  escala el full sencer.
+
 ## Gravetat baixa
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.
@@ -1249,8 +1298,9 @@ Branca `claude/backlog-tasques-255sae`.
   `.saac` portava igualment el `defaultSettings` sencer (pell, cabell, vores, tipografies). Ara el
   test compara el que diuen les caselles amb el que hi ha dins del fitxer descarregat.
 - **Nota posterior (B25)**: les caselles ja no hi són. Els fonaments de l'estil
-  (`docs/fonaments/sequencia-i-estil.md`) les substitueixen per dues accions, «Desa la seqüència»
-  (sempre amb l'estil) i «Desa l'estil» (`.saacstyle`), i el test comprova ara això.
+  (`docs/fonaments/sequencia-i-estil.md`) les substitueixen per una sola acció, «Desa el document»
+  (sempre amb l'estil); desar només l'estil (`.saacstyle`) és al panell «Estil del document». El
+  test comprova ara això.
 
 ### C9 — El build del web no comprovava tipus, i el CLAUDE.md deia que sí ✅ Resolta
 
