@@ -165,6 +165,8 @@ al davant hi encaixa.
   fitxer, motiu i proposta. **Consultar-lo abans de proposar una millora d'UX**: si ja hi és, cal
   continuar-hi (marcar-la resolta o caducada), no obrir-la de nou. Una troballa detectada i no
   resolta al moment s'hi apunta; no es deixa només a la conversa.
+  La secció **Prioritats**, al capdamunt, diu per on començar (Ara · Després · Més endavant ·
+  Ajornades); una entrada nova s'hi afegeix en obrir-la.
 - `docs/ESTUDI-limits-serveis-gratuits.md` inventaria els límits del pla gratuït de cada servei
   (Atlas, Cloudinary, Render, Vercel, Resend, ARASAAC, GA4) i els contrasta amb el que l'app en
   consumeix de debò. **Consultar-lo abans d'afegir res que desi, pugi o enviï correu**: hi ha les
