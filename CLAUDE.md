@@ -115,6 +115,10 @@ Són el resum executable dels estàndards. **Quan una d'aquestes regles entri en
 de debò —o quan calgui saber-ne el perquè— cal obrir el document de l'àrea**, que és
 on viu el criteri complet i el motiu de cada decisió.
 
+- **Seqüència, estil i preferències són tres coses**: la seqüència es desa sempre **amb** el seu
+  estil i s'obre tal com es va desar; les preferències d'interfície són de l'usuari i no entren mai
+  dins cap document. **Llegir `docs/fonaments/sequencia-i-estil.md` abans de tocar res que desi,
+  carregui o apliqui estils.**
 - **Colors**: única font de veritat `apps/web/src/style/palette.ts`. Mai un hexadecimal,
   un `rgba` ni un nom de color CSS fora d'aquell fitxer. El verd **no és mai color de
   text ni d'icona**; sobre verd, sempre `primary.contrastText`.
@@ -137,6 +141,15 @@ on viu el criteri complet i el motiu de cada decisió.
   Cal passar-la neta abans de donar res per bo.
 - **Abans de proposar una millora d'UX**, mirar `docs/BACKLOG-ux.md`: si ja hi és, s'hi
   continua (marcant-la resolta o caducada), no s'obre de nou.
+
+## Fonaments
+
+Decisions de producte de fons: diuen **què és cada cosa i de qui és**. Mana sobre els estàndards;
+si un estàndard el contradiu, és l'estàndard el que s'ha de corregir.
+
+| Document | Llegir-lo abans de tocar |
+|---|---|
+| `docs/fonaments/sequencia-i-estil.md` | Qualsevol cosa que desi, carregui o apliqui estils: el `.saac`, el desat al núvol, `documentSlice`, `uiSlice.defaultSettings`/`viewSettings`, la columna de la vista i el panell de pictogrames |
 
 ## Índex d'estàndards
 

@@ -1057,6 +1057,10 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 
 *(Trobada preparant les fixtures de regressió del mode lliure, branca `feature/fixtures-saac`.)*
 
+> **Decisió presa** (branca `claude/sequencia-estil-b25-16pluv`): la regla és la de
+> `docs/fonaments/sequencia-i-estil.md` — la seqüència es desa amb el seu estil i s'obre tal com es
+> va desar; les preferències de qui l'obre no la reescriuen. La implementació és a la mateixa branca.
+
 - **On**: `ViewSquenceSettings.tsx`, l'efecte de muntatge que fa
   `applyViewSettingsToAllActionCreator(savedUserDefaults.current)`.
 - **Per què importa**: el `.saac` desa `documentState.viewSettings` per seqüència (mida, separació,
