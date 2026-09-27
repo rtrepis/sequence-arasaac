@@ -30,6 +30,9 @@ els fitxers). No importa: les proves serveixen les imatges des de `e2e/fixtures/
 > **Pendent**: afegir-hi un o dos `.saac` d'usuaris reals, amb permís i sense dades personals (el
 > camp `author`, el títol i les imatges pròpies poden identificar algú), a `reals/`. Els sintètics
 > cobreixen les formes que coneixem; els reals cobreixen les que no.
+>
+> **Pendent també**: el camí amb compte (desar al núvol, imatges a Cloudinary). Es farà quan es
+> tornin a encendre els comptes: vegeu P1 a `docs/BACKLOG-ux.md`.
 
 ## Els fitxers
 
