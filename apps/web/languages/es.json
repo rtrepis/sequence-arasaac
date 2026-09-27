@@ -85,14 +85,6 @@
     "defaultMessage": "Vista",
     "description": "Title Page"
   },
-  "components.buttonWithModalDownload.defaultSettings.label": {
-    "defaultMessage": "Configuración por defecto",
-    "description": "Type save checkbox"
-  },
-  "components.buttonWithModalDownload.download.label": {
-    "defaultMessage": "Descargar",
-    "description": "helper text"
-  },
   "components.buttonWithModalDownload.filename.label": {
     "defaultMessage": "Nombre del archivo",
     "description": "Type save checkbox"
@@ -102,12 +94,8 @@
     "description": "Modal tittle"
   },
   "components.buttonWithModalDownload.saveHelper.label": {
-    "defaultMessage": "Guardar la secuencia y/o configuración predeterminada, y cargarlos más adelante",
+    "defaultMessage": "Guarda la secuencia con su estilo, o solo el estilo para usarlo en otras secuencias.",
     "description": "Helper save modal"
-  },
-  "components.buttonWithModalDownload.sequence.label": {
-    "defaultMessage": "Secuencia",
-    "description": "Type save checkbox"
   },
   "components.copyRight": {
     "defaultMessage": "Hecho con: SequenciAAC - Autor de los pictogramas: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Licencia: CC (BY-NC-SA).",
@@ -130,7 +118,8 @@
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.panelHint": {
-    "defaultMessage": "Define cómo se verán los pictogramas nuevos. Para aplicar los cambios a los que ya están en la secuencia, usa «Aplicar todo»."
+    "defaultMessage": "Los cambios son para la secuencia abierta y se aplican al cerrar la configuración. Los pictogramas que tenían lo mismo que el estilo lo siguen; para cambiar también los retocados uno a uno, usa «Aplicar todo». Para que las secuencias nuevas los reciban, guárdalos como estilo predeterminado.",
+    "description": "Guia del tab de pictogrames del modal de configuracions"
   },
   "components.defaultSettings.sectionPictogram": {
     "defaultMessage": "Pictograma",
@@ -1040,12 +1029,6 @@
   },
   "pages.viewSequence.tooltip.applyAll": {
     "defaultMessage": "Aplicar a todas las secuencias"
-  },
-  "pages.viewSequence.tooltip.resetDefaults": {
-    "defaultMessage": "Devuelve todas las secuencias a tu configuración guardada"
-  },
-  "pages.viewSequence.resetDefaults.label": {
-    "defaultMessage": "Restaura las secuencias"
   },
   "pages.viewSequence.savePreferences.label": {
     "defaultMessage": "Guardar como preferencias"
@@ -2403,5 +2386,93 @@
   "news.safe-delete.step2.description": {
     "defaultMessage": "En el menú del pictograma, «Eliminar» ya no está en el medio, donde se pulsaba sin querer: va al último lugar, separado del resto por una línea.",
     "description": "Descripció del pas 2 de «safe-delete»"
+  },
+  "features.sequence.style.changeStyle": {
+    "defaultMessage": "Cambiar el estilo",
+    "description": "Botó i títol del diàleg per triar un altre estil per a la seqüència oberta"
+  },
+  "features.sequence.style.changeStyle.tooltip": {
+    "defaultMessage": "Elige otro estilo para esta secuencia. Se puede deshacer.",
+    "description": "Ajuda del botó «Canvia l'estil»"
+  },
+  "features.sequence.style.dialog.intro": {
+    "defaultMessage": "Elige con qué estilo quieres ver esta secuencia. Podrás deshacerlo, y el archivo no cambia hasta que lo guardes.",
+    "description": "Explicació del diàleg «Canvia l'estil»"
+  },
+  "features.sequence.style.option.userDefault": {
+    "defaultMessage": "Mi estilo predeterminado",
+    "description": "Opció de «Canvia l'estil»: aplicar l'estil per defecte de l'usuari"
+  },
+  "features.sequence.style.option.userDefault.help": {
+    "defaultMessage": "El que reciben las secuencias nuevas.",
+    "description": "Explicació de l'opció «El meu estil per defecte»"
+  },
+  "features.sequence.style.option.file": {
+    "defaultMessage": "Cargar un estilo…",
+    "description": "Opció de «Canvia l'estil»: aplicar l'estil d'un fitxer"
+  },
+  "features.sequence.style.option.file.help": {
+    "defaultMessage": "De un archivo de estilo (.saacstyle) o de otra secuencia (.saac).",
+    "description": "Explicació de l'opció «Carrega un estil…»"
+  },
+  "features.sequence.style.notice.ownStyle": {
+    "defaultMessage": "Esta secuencia tiene su propio estilo.",
+    "description": "Avís en obrir una seqüència amb un estil diferent de l'estil per defecte de l'usuari"
+  },
+  "features.sequence.style.notice.unavailableFonts": {
+    "defaultMessage": "Algunas fuentes no están disponibles en este dispositivo ({fonts}): se muestran con una fuente de reserva.",
+    "description": "Avís en obrir una seqüència que fa servir fonts que el dispositiu no té. {fonts} és la llista de noms"
+  },
+  "features.sequence.style.notice.changed.userDefault": {
+    "defaultMessage": "Se ha aplicado tu estilo predeterminado a esta secuencia.",
+    "description": "Avís després de canviar l'estil a l'estil per defecte"
+  },
+  "features.sequence.style.notice.changed.file": {
+    "defaultMessage": "Se ha aplicado el estilo del archivo a esta secuencia.",
+    "description": "Avís després de canviar l'estil a un de carregat d'un fitxer"
+  },
+  "features.sequence.style.undo": {
+    "defaultMessage": "Deshacer",
+    "description": "Botó per desfer el canvi d'estil"
+  },
+  "features.sequence.style.undone": {
+    "defaultMessage": "Se ha deshecho el cambio de estilo",
+    "description": "Confirmació després de desfer un canvi d'estil"
+  },
+  "features.sequence.style.setAsDefault": {
+    "defaultMessage": "Guardar como estilo predeterminado",
+    "description": "Botó que fa que un estil sigui el que reben les seqüències noves"
+  },
+  "features.sequence.style.setAsDefault.success": {
+    "defaultMessage": "Guardado como estilo predeterminado",
+    "description": "Confirmació de «Desa com a estil per defecte»"
+  },
+  "features.sequence.style.notice.close": {
+    "defaultMessage": "Cerrar el aviso",
+    "description": "Nom accessible del botó que tanca l'avís d'estil"
+  },
+  "features.sequence.style.pendingDefault.title": {
+    "defaultMessage": "¿Quieres usar este estilo como predeterminado?",
+    "description": "Pregunta en obrir un fitxer d'estil sense cap seqüència oberta"
+  },
+  "features.sequence.style.pendingDefault.body": {
+    "defaultMessage": "No hay ninguna secuencia abierta a la que aplicarlo. Si lo usas como predeterminado, las secuencias nuevas lo recibirán en lugar del estilo que tienes ahora.",
+    "description": "Explicació de què passa si s'accepta l'estil com a per defecte"
+  },
+  "features.sequence.style.pendingDefault.confirm": {
+    "defaultMessage": "Usarlo como predeterminado",
+    "description": "Botó per acceptar l'estil del fitxer com a estil per defecte"
+  },
+  "features.sequence.style.panel.title": {
+    "defaultMessage": "Estilo de esta secuencia",
+    "description": "Títol del panell de pictogrames de la configuració: diu que els canvis són per a la seqüència oberta"
+  },
+  "components.buttonWithModalDownload.saveSequence": {
+    "defaultMessage": "Guardar la secuencia",
+    "description": "Botó que desa la seqüència amb el seu estil en un fitxer .saac"
+  },
+  "components.buttonWithModalDownload.saveStyle": {
+    "defaultMessage": "Guardar el estilo",
+    "description": "Botó que desa només l'estil de la seqüència en un fitxer .saacstyle"
   }
 }

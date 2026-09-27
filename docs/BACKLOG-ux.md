@@ -59,7 +59,6 @@ l'entrada.
 
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| B25 | Entrar a la vista esborra la vista per seqüència del `.saac` | **Pèrdua de dades silenciosa**, i s'ha de resoldre abans de la fase 1 del mode lliure (`feature/mode-lliure`) | M | Sí: la regla de l'entrada (preferències només on no n'hi ha) canvia el que es veu en obrir un `.saac` |
 | C17 | El switch d'un ajust no té nom per al lector de pantalla | Exclusió d'accessibilitat a tots els `SettingCardBoolean`; el patró ja existeix (C12) | S | No |
 | C18 | L'spec de vídeo de `multiple-sequences` és vermell | Surt de retruc amb C17 (el selector que falla és el d'aquell switch). Si no, s'esborra | S | Si el vídeo es vol |
 | B11a | Pujar una imatge congela la interfície (primera meitat) | Saltar l'escaneig d'alfa quan el fitxer és JPEG. Retalla la major part del temps en el cas més comú (fotos del mòbil) | S | No |
@@ -68,7 +67,8 @@ l'entrada.
 
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Arrel de B25 i de «Restaura» que torna a valors equivocats. Es fa just després de B25, o junt amb ella si la solució de B25 ja obliga a separar els camps | L | No |
+| B26 | La disposició (direcció, pàgina, orientació) no viatja al `.saac` | És contingut segons els fonaments de l'estil, i l'esquema 2 ja té el camp (`layout`). S'ha de fer abans de la fase 1 del mode lliure, que hi afegeix la disposició per pàgina | M | No: la decisió és a `docs/fonaments/sequencia-i-estil.md` |
+| B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb B25 ja només hi queda barrejada la disposició; es fa amb B26, que la treu de les preferències per portar-la al document | M | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
 | C11 | Vora «fitzgerald» sense classificació pintada del color del text | Una línia quan es triï el color | S | Sí: quin color, o cap vora |
@@ -955,6 +955,12 @@ d'IndexedDB i al fitxer `.saac`.
 - **Proposta**: separar els dos rols —preferència desada i estat de sessió de la vista— en dos
   camps, i que «Restaura» llegeixi sempre el primer. Toca el panell de vista sencer, per això no
   s'ha fet dins de B20.
+- **Revisió 2026-09-27 (resolent B25, `claude/sequencia-estil-b25-16pluv`)**: la meitat ja no és
+  certa. Les mides, els espais i l'alineació són ara de l'estil del document, i el mirall de sessió
+  de `ViewSquenceSettings` només hi escriu la disposició (direcció, pàgina, orientació, autor).
+  «Restaura les seqüències» ja no existeix: l'ha substituït «Canvia l'estil › El meu estil per
+  defecte», que llegeix sempre l'estil per defecte desat i es pot desfer. El que queda barrejat és
+  la disposició, i es resol amb **B26**, que la porta al document.
 
 ### B22 — Les pestanyes no es coordinen: ni es posen al dia ni comparteixen el «Document nou» 🔴 Oberta
 
@@ -1053,9 +1059,13 @@ i el resultat dependria de l'ordre d'arribada. Aquesta proposta hi cap perquè *
 sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert de la regla és que
 **reduir és irreversible**, i per això s'ha de dir i no amagar.
 
-### B25 — Entrar a la vista esborra la vista per seqüència que porta el `.saac` 🔴 Oberta
+### B25 — Entrar a la vista esborra la vista per seqüència que porta el `.saac` ✅ Resolta
 
 *(Trobada preparant les fixtures de regressió del mode lliure, branca `feature/fixtures-saac`.)*
+
+> **Decisió presa** (branca `claude/sequencia-estil-b25-16pluv`): la regla és la de
+> `docs/fonaments/sequencia-i-estil.md` — la seqüència es desa amb el seu estil i s'obre tal com es
+> va desar; les preferències de qui l'obre no la reescriuen. La implementació és a la mateixa branca.
 
 - **On**: `ViewSquenceSettings.tsx`, l'efecte de muntatge que fa
   `applyViewSettingsToAllActionCreator(savedUserDefaults.current)`.
@@ -1073,6 +1083,37 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   fitxer— i per això no s'ha fet aquí. Cal decidir-ho **abans** de la fase 1 del mode lliure: la
   disposició per pàgina que hi afegeix seria el següent camp esborrat pel mateix efecte. En
   resoldre-la, les captures de `e2e/saac-fixtures.spec.ts` s'han de regenerar a propòsit.
+- **Resolta** a la branca `claude/sequencia-estil-b25-16pluv`, amb una decisió més àmplia que la
+  proposta: `docs/fonaments/sequencia-i-estil.md`. La seqüència es desa **sempre amb el seu
+  estil** (esquema 2 del `.saac`, i `.saacstyle` per a l'estil sol) i s'obre tal com es va desar;
+  les preferències de qui l'obre només arriben a les seqüències noves, que hereten l'estil per
+  defecte fins que es desen.
+  - **La causa era doble.** L'efecte de muntatge de la columna de vista posava les preferències a
+    totes les pestanyes; i, a més, la lletra, la lletra dels números i la numeració no es desaven
+    enlloc del document —es pintaven amb `ui.defaultSettings` de qui l'obria—, i obrir un `.saac`
+    amb configuració substituïa la de l'usuari. L'efecte s'ha tret i tot el que pinta pictogrames
+    llegeix l'estil del document (`style/styleSelectors.ts`).
+  - La lectura de tots els formats és a `features/sequence/style/saacFile.ts`, amb fusió camp a
+    camp dels estils parcials, i passa també pels documents del núvol.
+  - Captures regenerades: 01–04 canvien perquè ara es veuen amb la vista del fitxer; totes sis
+    canvien la lletra de reserva (el test bloqueja Google Fonts, i la reserva és ara sans-serif en
+    comptes de la serif del navegador). 06 i 07 no canvien de disposició. Fixtures noves 08–10.
+
+### B26 — La disposició no viatja al `.saac` 🔴 Oberta
+
+*(Obert resolent B25, branca `claude/sequencia-estil-b25-16pluv`.)*
+
+- **On**: `ui.viewSettings` (`direction`, `pageSize`, `orientation`) contra `DocumentSAAC.layout`,
+  que l'esquema 2 ja admet i ningú no escriu (`packages/shared-types/src/document.ts`).
+- **Per què importa**: segons `docs/fonaments/sequencia-i-estil.md`, la disposició és contingut de
+  la seqüència, com l'ordre o les pestanyes. Avui és una preferència més, i qui obre un `.saac` el
+  veu en la pàgina i la direcció de qui l'obre: una seqüència preparada en A3 apaïsat en columnes
+  surt en A4 en files. És el mateix que passava amb l'estil abans de B25, en més petit.
+- **Proposta**: escriure `layout` en desar i llegir-lo en obrir; els fitxers sense `layout`
+  s'obren amb la disposició per defecte de l'usuari, com l'estil. El lector
+  (`style/saacFile.ts`) ja el conserva, l'API ja el valida i el desa, i no cal cap versió 3 de
+  l'esquema. Ho ha de fer abans la fase 1 del mode lliure, que hi afegeix la disposició per pàgina.
+  Tanca també el que queda de B21.
 
 ## Gravetat baixa
 
@@ -1207,6 +1248,9 @@ Branca `claude/backlog-tasques-255sae`.
 - Confirmat abans de corregir-ho amb `e2e/download-and-status.spec.ts`: amb la casella desmarcada, el
   `.saac` portava igualment el `defaultSettings` sencer (pell, cabell, vores, tipografies). Ara el
   test compara el que diuen les caselles amb el que hi ha dins del fitxer descarregat.
+- **Nota posterior (B25)**: les caselles ja no hi són. Els fonaments de l'estil
+  (`docs/fonaments/sequencia-i-estil.md`) les substitueixen per dues accions, «Desa la seqüència»
+  (sempre amb l'estil) i «Desa l'estil» (`.saacstyle`), i el test comprova ara això.
 
 ### C9 — El build del web no comprovava tipus, i el CLAUDE.md deia que sí ✅ Resolta
 

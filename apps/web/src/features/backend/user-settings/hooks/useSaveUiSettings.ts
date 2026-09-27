@@ -23,9 +23,17 @@ import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 // Amb menys, el reintent cau dins la mateixa finestra dolenta i no serveix de res.
 const TRANSIENT_RETRY_DELAY_MS = 8000;
 
+interface SaveOptions {
+  /**
+   * Confirmació pròpia en comptes de la genèrica: «Desa com a estil per
+   * defecte» ha de dir què s'ha desat, no només que s'ha desat alguna cosa.
+   */
+  successMessage?: string;
+}
+
 interface UseSaveUiSettings {
   /** Llança el desat i torna de seguida: qui el crida no s'ha d'esperar. */
-  saveInBackground: () => void;
+  saveInBackground: (options?: SaveOptions) => void;
   /** Torna a intentar el desat que ha fallat, a petició de l'usuari. */
   retry: () => void;
   /** Fallada que ha sobreviscut al reintent automàtic; null mentre no n'hi hagi. */
@@ -54,7 +62,9 @@ export const useSaveUiSettings = (): UseSaveUiSettings => {
 
   // L'èxit es confirma amb un snackbar; la fallada la reporta qui crida,
   // perquè mereix més espai que una línia que marxa sola.
-  const save = useCallback(async (): Promise<RequestFailure | null> => {
+  const save = useCallback(async (
+    successMessage?: string,
+  ): Promise<RequestFailure | null> => {
     const result = await dispatch(saveUserUiThunk());
 
     if (saveUserUiThunk.fulfilled.match(result)) {
@@ -68,7 +78,7 @@ export const useSaveUiSettings = (): UseSaveUiSettings => {
       // l'avís de «Connectant amb el teu compte…» a qui no en té cap.
       if (isLoggedIn) void dispatch(refreshQuotaThunk());
       showSnackbar({
-        message: intl.formatMessage(messages.saveSuccess),
+        message: successMessage ?? intl.formatMessage(messages.saveSuccess),
         severity: "success",
       });
       return null;
@@ -86,19 +96,19 @@ export const useSaveUiSettings = (): UseSaveUiSettings => {
     };
   }, [dispatch, intl, showSnackbar, isLoggedIn]);
 
-  const saveInBackground = useCallback((): void => {
+  const saveInBackground = useCallback((options?: SaveOptions): void => {
     if (isSavingRef.current) return;
     isSavingRef.current = true;
 
     void (async () => {
-      let result = await save();
+      let result = await save(options?.successMessage);
 
       // Una fallada transitòria no és notícia: el servei encara s'estava engegant
       // o la connexió ha parpellejat. Es torna a provar un cop abans de dir res,
       // i només si el segon intent també falla apareix el diàleg.
       if (result?.isTransient) {
         await wait(TRANSIENT_RETRY_DELAY_MS);
-        result = await save();
+        result = await save(options?.successMessage);
       }
 
       setFailure(result);

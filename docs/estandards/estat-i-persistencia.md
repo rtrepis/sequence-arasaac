@@ -4,11 +4,14 @@
 
 ## Redux i estat
 
-- **`uiSlice`** gestiona `defaultSettings` (configuració global de l'usuari). Té dos sub-objectes: `pictApiAra` (skin, hair, color) i `pictSequence` (font, numbered, borders, textPosition, numberFont).
-- **`documentSlice`** gestiona el contingut de les seqüències (`content`, `activeSAAC`).
+- **Abans de tocar res de l'estil, llegir `docs/fonaments/sequencia-i-estil.md`.** Seqüència, estil i preferències són tres coses, i el lloc on viu cadascuna no és negociable.
+- **`uiSlice`** gestiona `defaultSettings`, que és la part dels pictogrames de l'**estil per defecte** de l'usuari (el que reben les seqüències noves), no la de la seqüència oberta. Té dos sub-objectes: `pictApiAra` (skin, hair, color) i `pictSequence` (font, numbered, borders, textPosition, numberFont). Els camps d'estil de `ui.viewSettings` (mida, espais, alineació) en són la resta.
+- **`documentSlice`** gestiona el contingut de les seqüències (`content`, `activeSAAC`) **i el seu estil** (`defaultSettings`, `styleView`, `viewSettings` per pestanya). Un document nou no en porta i hereta l'estil per defecte fins que es desa.
+- **Res que pinti pictogrames del document llegeix `ui.defaultSettings`**: l'estil surt de `features/sequence/style/styleSelectors.ts` (`selectDocumentPictStyle`, `selectDocumentCardDefaults`, `selectResolvedSequenceViews`). Llegir les preferències és el que feia que un `.saac` es veiés amb l'estil de qui l'obria (B25).
+- **Tot el que entra d'un fitxer o del núvol passa per `features/sequence/style/saacFile.ts`**, que coneix tots els formats i hi fa la fusió camp a camp. Cap altre lloc no ha de fer `JSON.parse` d'un `.saac`.
 - El reducer `updateDefaultSettingPictSequence` fa un spread shallow sobre `pictSequence`, per tant qualsevol nou camp al nivell de `pictSequence` es pot actualitzar sense canviar el reducer.
 - El reducer `updateDefaultSettings` reemplaça tot el `defaultSettings` — el que usa `handlerSubmit` de `DefaultForm`.
-- **Persistència**: `DefaultForm` guarda a `sessionStorage` i `localStorage` amb la clau `"pictDefaultSettings"`. Si un usuari té dades antigues sense un camp nou, el fallback es gestiona al nivell de lectura (no hi ha migració).
+- **Persistència de l'estil per defecte**: va amb la resta de preferències (`userUi` al navegador, o el compte), i només quan l'usuari ho demana («Desa com a estil per defecte», «Desa com a preferències» o tancar la configuració). Si un usuari té dades antigues sense un camp nou, el fallback es gestiona al nivell de lectura (no hi ha migració).
 
 ## Esborrany del document i imatges pujades
 
@@ -113,6 +116,7 @@
 
 ## Default Settings Modal i DefaultForm
 
+- **El tab de pictogrames edita l'estil de la seqüència oberta** («Estil d'aquesta seqüència»), no l'estil per defecte: en tancar la configuració l'aplica al document amb la regla dels retocs (si no ha canviat res, no toca el document). Per a les seqüències noves hi ha «Desa com a estil per defecte».
 - `DefaultSettingsModal` obrir un Dialog fullscreen que conté `<DefaultForm submit={open} />`.
 - `DefaultForm` usa estat local per a tots els camps que es configuren amb sub-components (font, borders, textPosition, skin, hair, color, numberFont). El pattern és: `useState(initialValue)` → passar `state` i `setState` al component filho → a `handlerSubmit` construir el payload sencer i dispatch + guardar.
 - El render condicional de sections segon un boolean del Redux (ex: `{numbered && (...)}`, `{color && (...)}`) és el pattern establert per mostrar/amagar configuradors.

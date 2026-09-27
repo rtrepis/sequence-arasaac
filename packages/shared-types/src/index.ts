@@ -22,6 +22,9 @@ export type {
   SequenceViewSettings,
   DocumentThumbnailPict,
   DocumentSAAC,
+  SequenceStyleView,
+  SequenceStyle,
+  DocumentLayout,
 } from "./document";
 export type {
   DefaultSettings,

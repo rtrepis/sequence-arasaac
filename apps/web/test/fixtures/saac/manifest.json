@@ -92,5 +92,35 @@
     "activeSAAC": 0,
     "teConfiguracioGlobal": false,
     "anadaITornada": "sequence-a-documentState"
+  },
+  "08-esquema-2-sequencia.saac": {
+    "format": "esquema 2",
+    "descripcio": "El 02 obert i desat amb «Desa la seqüència» de l'esquema 2: `schemaVersion` i l'estil dins del document (`defaultSettings` i `styleView`). Generat per l'app, no a mà.",
+    "cobreix": ["seqüència amb l'estil sencer", "anada i tornada byte a byte de l'esquema 2"],
+    "pestanyes": { "0": 3, "1": 5, "2": 4, "3": 0 },
+    "activeSAAC": 2,
+    "teConfiguracioGlobal": true,
+    "anadaITornada": "identic"
+  },
+  "09-esquema-2-estil.saacstyle": {
+    "format": "esquema 2 (fitxer d'estil)",
+    "descripcio": "L'estil del 02 desat amb «Desa l'estil»: només `schemaVersion` i `style`. Generat per l'app, no a mà.",
+    "cobreix": ["fitxer d'estil `.saacstyle`"],
+    "pestanyes": null,
+    "activeSAAC": null,
+    "teConfiguracioGlobal": true,
+    "anadaITornada": "identic"
+  },
+  "10-estil-parcial.saac": {
+    "format": "2.1.0 amb configuració d'una versió anterior",
+    "descripcio": "El 01 amb la configuració global d'abans que existís `numberFont`: un estil parcial. Construït a mà.",
+    "cobreix": [
+      "estil parcial: fusió camp a camp amb l'estil per defecte",
+      "sense `numberFont`, els números fan servir la lletra del text del fitxer"
+    ],
+    "pestanyes": { "0": 7 },
+    "activeSAAC": 0,
+    "teConfiguracioGlobal": true,
+    "anadaITornada": "estil-fusionat"
   }
 }

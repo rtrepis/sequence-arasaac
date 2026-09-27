@@ -23,7 +23,11 @@ import {
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import { applyViewSettingsToAllActionCreator } from "@features/sequence/store/documentSlice";
+import {
+  applyViewSettingsToAllActionCreator,
+  setSequenceSpaceBetweenActionCreator,
+} from "@features/sequence/store/documentSlice";
+import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import { DefaultSettingsPanelHandle } from "../../components/DefaultsForm/DefaultSettingsPanel";
 import {
   ViewSettings,
@@ -75,6 +79,9 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     const dispatch = useAppDispatch();
     const intl = useIntl();
     const reduxViewSettings = useAppSelector((store) => store.ui.viewSettings);
+    const documentStyleView = useAppSelector(
+      (store) => selectDocumentStyle(store).view,
+    );
     const [localSettings, setLocalSettings] =
       useState<ViewSettings>(reduxViewSettings);
 
@@ -153,14 +160,31 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       setLocalSettings((prev) => ({ ...prev, alignmentV: value }));
     };
 
+    // «Aplica a la vista actual» porta aquests valors a la seqüència oberta:
+    // tocar-ne les mides i els espaiats és tocar-ne l'estil
     const handleApply = () => {
       dispatch(viewSettingsActionCreator(localSettings));
       dispatch(
         applyViewSettingsToAllActionCreator({
-          sizePict: localSettings.sizePict,
-          pictSpaceBetween: localSettings.pictSpaceBetween,
-          alignmentH: localSettings.alignmentH,
-          alignmentV: localSettings.alignmentV,
+          settings: {
+            sizePict: localSettings.sizePict,
+            pictSpaceBetween: localSettings.pictSpaceBetween,
+            alignmentH: localSettings.alignmentH,
+            alignmentV: localSettings.alignmentV,
+          },
+          styleView: documentStyleView,
+        }),
+      );
+      dispatch(
+        setSequenceSpaceBetweenActionCreator({
+          value: localSettings.sequenceSpaceBetween,
+          styleView: {
+            ...documentStyleView,
+            sizePict: localSettings.sizePict,
+            pictSpaceBetween: localSettings.pictSpaceBetween,
+            alignmentH: localSettings.alignmentH,
+            alignmentV: localSettings.alignmentV,
+          },
         }),
       );
     };

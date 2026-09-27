@@ -10,6 +10,9 @@ import {
 import messages from "./PictogramCart.lang";
 import fitzgeraldToBorder from "../../utils/fitzgeraldToBorder";
 import React from "react";
+// Amb reserva: si el dispositiu no té la font de la seqüència, sans-serif i no
+// la serif per defecte del navegador (vegeu `fontAvailability.ts`)
+import { fontStack } from "@features/sequence/style/styleModel";
 
 interface PictogramCardProps {
   pictogram: PictSequence;
@@ -89,7 +92,7 @@ const PictogramCard = ({
           {textPosition !== "top" && defaults.numbered && (
             <Typography
               fontSize={numberFontSize}
-              fontFamily={numberFont.family}
+              fontFamily={fontStack(numberFont.family)}
               component="h3"
               sx={{
                 color: numberFont.color,
@@ -102,7 +105,7 @@ const PictogramCard = ({
           {textPosition === "top" && (
             <Typography
               fontSize={textFontSize}
-              fontFamily={font.family}
+              fontFamily={fontStack(font.family)}
               component="h3"
               sx={{
                 color: font.color,
@@ -161,7 +164,7 @@ const PictogramCard = ({
           {textPosition === "bottom" && (
             <Typography
               fontSize={textFontSize}
-              fontFamily={font.family}
+              fontFamily={fontStack(font.family)}
               component="h3"
               sx={{
                 color: font.color,
@@ -174,7 +177,7 @@ const PictogramCard = ({
           {textPosition === "top" && defaults.numbered && (
             <Typography
               fontSize={numberFontSize}
-              fontFamily={numberFont.family}
+              fontFamily={fontStack(numberFont.family)}
               component="h3"
               sx={{
                 color: numberFont.color,

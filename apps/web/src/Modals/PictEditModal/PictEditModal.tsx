@@ -17,6 +17,7 @@ import {
   usePictogramActions,
   type PictogramActionKey,
 } from "../../components/utils/MouseActionList/usePictogramActions";
+import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
 import React from "react";
 
 interface PictEditProps {
@@ -38,14 +39,10 @@ const PictEditModal = ({
   setCopy,
 }: PictEditProps): React.ReactElement => {
   const intl = useIntl();
-  const { pictSequence } = useAppSelector((state) => state.ui.defaultSettings);
-  const defaults: PictogramCardDefaults = {
-    numbered: pictSequence.numbered,
-    font: pictSequence.font,
-    numberFont: pictSequence.numberFont,
-    borderIn: pictSequence.borderIn,
-    borderOut: pictSequence.borderOut,
-  };
+  // L'estil de la seqüència, no les preferències de qui la mira
+  const defaults: PictogramCardDefaults = useAppSelector(
+    selectDocumentCardDefaults,
+  );
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLButtonElement | null>(

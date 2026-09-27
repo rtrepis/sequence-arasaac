@@ -31,6 +31,39 @@ export interface DocumentThumbnailPict {
   color?: boolean;
 }
 
+/**
+ * Part de l'estil d'una seqüència que no és de cada pictograma: mida, separació i
+ * alineació dels pictogrames, i espai entre seqüències.
+ *
+ * És la base de les pestanyes: cada pestanya porta els seus `viewSettings`, i els
+ * que coincideixen amb aquesta base segueixen l'estil quan es canvia (vegeu
+ * `docs/fonaments/sequencia-i-estil.md`).
+ */
+export interface SequenceStyleView extends SequenceViewSettings {
+  sequenceSpaceBetween: number;
+}
+
+/**
+ * Estil d'una seqüència: fonts, colors, vores, numeració, aparença dels
+ * pictogrames, mides i espaiats. És el que porta un fitxer `.saacstyle` i el que
+ * l'usuari té com a «estil per defecte».
+ */
+export interface SequenceStyle extends DefaultSettings {
+  view: SequenceStyleView;
+}
+
+/**
+ * Disposició de la seqüència (direcció i format de pàgina). És contingut, no
+ * estil, i viatjarà al `.saac` amb B26. Avui **ningú no l'escriu**: l'esquema 2
+ * l'admet ja com a opcional perquè B26 no hagi d'obrir una versió 3, i qui la
+ * rep la conserva tal com arriba.
+ */
+export interface DocumentLayout {
+  direction?: "row" | "column";
+  pageSize?: "A4" | "A3" | "FULLSCREEN";
+  orientation?: "landscape" | "portrait";
+}
+
 export interface DocumentSAAC {
   id: string;
   title?: string;
@@ -39,5 +72,13 @@ export interface DocumentSAAC {
   activeSAAC: number;
   order?: number[];
   author?: string;
+  /**
+   * Estil dels pictogrames de la seqüència. Opcional per als documents d'abans de
+   * l'esquema 2, que no en portaven: en obrir-los s'omple amb l'estil per defecte.
+   */
   defaultSettings?: DefaultSettings;
+  /** Mides i espaiats de l'estil. Opcional pel mateix motiu que `defaultSettings`. */
+  styleView?: SequenceStyleView;
+  /** Reservat per a B26: vegeu `DocumentLayout`. */
+  layout?: DocumentLayout;
 }

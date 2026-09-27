@@ -68,6 +68,21 @@ const sequenceViewSettingsZodSchema = z.object({
   alignmentV: z.enum(["top", "center", "bottom"]),
 });
 
+// Mides i espaiats de l'estil del document (esquema 2 del .saac). Opcional: els
+// documents d'abans no en porten, i el client els obre amb l'estil per defecte
+// de qui els obre. Vegeu docs/fonaments/sequencia-i-estil.md.
+const sequenceStyleViewZodSchema = sequenceViewSettingsZodSchema.extend({
+  sequenceSpaceBetween: z.number(),
+});
+
+// Disposició (direcció i format de pàgina). Reservada per a B26: avui el client
+// no l'escriu, però l'esquema 2 ja l'admet perquè B26 no hagi d'obrir una v3.
+const documentLayoutZodSchema = z.object({
+  direction: z.enum(["row", "column"]).optional(),
+  pageSize: z.enum(["A4", "A3", "FULLSCREEN"]).optional(),
+  orientation: z.enum(["landscape", "portrait"]).optional(),
+});
+
 // --- Esquemes principals per a crear i actualitzar documents ---
 
 export const createDocumentSchema = z.object({
@@ -78,6 +93,8 @@ export const createDocumentSchema = z.object({
   order: z.array(z.number().int().min(0)).optional(),
   author: z.string().max(200).optional(),
   defaultSettings: defaultSettingsZodSchema.optional(),
+  styleView: sequenceStyleViewZodSchema.optional(),
+  layout: documentLayoutZodSchema.optional(),
 });
 
 // L'esquema d'actualització és idèntic al de creació — substitució completa del document

@@ -6,10 +6,17 @@ const messages = defineMessages({
     defaultMessage: "Save and download",
     description: "Títol del diàleg de descàrrega del fitxer .saac",
   },
-  download: {
-    id: "components.buttonWithModalDownload.download.label",
-    defaultMessage: "Download",
-    description: "helper text",
+  saveSequence: {
+    id: "components.buttonWithModalDownload.saveSequence",
+    defaultMessage: "Desa la seqüència",
+    description:
+      "Botó que desa la seqüència amb el seu estil en un fitxer .saac",
+  },
+  saveStyle: {
+    id: "components.buttonWithModalDownload.saveStyle",
+    defaultMessage: "Desa l'estil",
+    description:
+      "Botó que desa només l'estil de la seqüència en un fitxer .saacstyle",
   },
   save: {
     id: "components.buttonWithModalDownload.save.title",
@@ -19,18 +26,8 @@ const messages = defineMessages({
   saveHelper: {
     id: "components.buttonWithModalDownload.saveHelper.label",
     defaultMessage:
-      "Save the sequence and/or default settings, and load them later",
+      "Desa la seqüència amb el seu estil, o només l'estil per fer-lo servir en altres seqüències.",
     description: "Helper save modal",
-  },
-  defaultSettings: {
-    id: "components.buttonWithModalDownload.defaultSettings.label",
-    defaultMessage: "Default settings",
-    description: "Type save checkbox",
-  },
-  sequence: {
-    id: "components.buttonWithModalDownload.sequence.label",
-    defaultMessage: "Sequence",
-    description: "Type save checkbox",
   },
   filename: {
     id: "components.buttonWithModalDownload.filename.label",
