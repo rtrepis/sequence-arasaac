@@ -37,8 +37,11 @@ Regles:
 
 ## Estàndard d'accions destructives
 
-L'app **no té desfer**: no hi ha cap `undo` a `features/sequence`. Per això el que protegeix la
-feina és on viu cada acció i quan demana permís.
+L'app **no té desfer**, amb una sola excepció: **canviar l'estil d'una seqüència** («Canvia
+l'estil», o obrir un fitxer d'estil amb una seqüència oberta) es pot desfer des de l'avís que en
+surt, mentre el document no s'hagi tocat des d'aleshores (`features/sequence/store/styleSlice.ts`;
+vegeu `docs/fonaments/sequencia-i-estil.md`). La resta de `features/sequence` no té `undo`, i per
+això el que protegeix la feina és on viu cada acció i quan demana permís.
 
 - **El criteri és quant costa refer-ho, mai com sona l'acció.** Treure un pictograma es repeteix
   molt i es refà amb un clic: **no** es confirma. Esborrar una seqüència se'n porta tots els seus:
