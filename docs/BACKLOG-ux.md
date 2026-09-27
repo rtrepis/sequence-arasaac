@@ -1301,6 +1301,65 @@ l'encavalcament horitzontal; l'alineació vertical va quedar com estava.)*
 
 ---
 
+## Proves pendents
+
+Proves que se sap que falten i que no es poden fer ara. Cada entrada diu per què s'ajorna i què
+l'ha de desencallar.
+
+### P1 — Regressió del `.saac` amb els comptes encesos 🔴 Oberta (ajornada)
+
+*(Branca `feature/mode-lliure`, en preparar les fixtures de regressió del mode lliure.)*
+
+- **Per què s'ajorna**: el 27-09-2026 s'aturen els comptes (`VITE_ACCOUNTS_ENABLED=false` al web,
+  `ACCOUNTS_ENABLED=false` a l'API). Aquestes proves es faran quan es tornin a encendre.
+- **El que ja hi és**: `e2e/saac-fixtures.spec.ts` amb les fixtures de
+  `apps/web/test/fixtures/saac/` cobreix el camí sense compte: obrir, tornar a desar i pintar la
+  vista. Passa igual amb els comptes encesos i apagats, amb les mateixes captures. Totes les proves
+  van des de fitxer; cap no passa pel servidor.
+- **El que falta, amb compte i contra l'API de debò**:
+  1. **Anada i tornada pel núvol.** Desar cada fixture al núvol, tornar-la a obrir i baixar-la a
+     `.saac`. Pel camí, `contentStorage` compacta els ajustos que coincideixen amb la configuració
+     del document, `expandContent` els torna a posar i `serializeDocument` normalitza. Cal
+     comprovar que en surt el mateix document, com passa amb el fitxer. Hi ha una excepció
+     buscada: el núvol conserva només 12 `bestIdPicts` per pictograma
+     (`MAX_STORED_BEST_ID_PICTS`). Les fixtures en porten com a màxim 3; cal afegir-n'hi una amb
+     més per fixar aquest retall.
+  2. **Imatges pròpies.** La `03` porta dues imatges en `data:image`: en desar-la s'han de pujar a
+     Cloudinary i substituir per la URL. Cal comprovar que el `.saac` baixat després porta les
+     URL, que la vista es pinta igual i que `storageBytes` compta el que toca.
+  3. **Document del núvol baixat a fitxer i tornat a pujar.** La `02` té un id de Mongo: cal
+     comprovar-ne els dos camins (actualitzar el mateix document o desar-ne una còpia, per
+     `isMongoId`) amb un usuari que no és el propietari de l'id.
+  4. **Configuració global amb sessió.** Obrir la `02`, la `03` o la `05`, que porten
+     `defaultSettings`, no ha de disparar `saveUserUiThunk`. Les preferències només es desen quan
+     l'usuari ho demana.
+  5. **Camps nous del mode lliure (fase 5).** Els validadors de `modules/documents/validators.ts`
+     són `z.object` normals, i per tant **descarten en silenci les claus que no coneixen**. Si no
+     s'hi afegeixen `schemaVersion` i la disposició de pàgina, el núvol se la menjarà sense cap
+     error, mentre que el fitxer la conservarà. Aquesta prova és la que ho ha de detectar.
+- **Proposta: un usuari de proves dedicat.**
+  - **Entorn.** Ha de ser una base de dades de proves (una altra base dins del mateix clúster
+    d'Atlas n'hi ha prou) i no la de producció. Un compte creat a producció ocupa una plaça de
+    `maxUsers` i una de les altes del dia, surt a les estadístiques del panell i barreja les seves
+    imatges amb les de la gent.
+  - **Compte.** Una adreça que controli el mantenidor (un àlies `+proves` de la seva), verificada
+    des del panell d'administració (estat `active`) per no gastar cap dels 100 correus diaris de Resend (L5 de
+    `docs/ESTUDI-limits-serveis-gratuits.md`), amb rol `user` i no `admin`: ha de veure el que veu
+    la gent.
+  - **Quotes.** El pla gratuït té 10 documents i 5 MB. Les set fixtures hi caben, però una prova
+    que falli a mitges deixa documents i imatges penjats. Les proves han d'esborrar el que creen en
+    acabar, i des del panell se li pot posar un `quotaOverride` perquè una
+    passada a mig netejar no bloquegi la següent.
+  - **Credencials.** `E2E_USER_EMAIL` i `E2E_USER_PASSWORD` com a variables d'entorn, mai al
+    repositori. L'spec que les necessiti s'ha de saltar (`test.skip`) si no hi són, perquè
+    `saac-fixtures.spec.ts` es continuï podent executar sense compte.
+  - **Alternativa per al dia a dia.** API local amb `mongodb-memory-server` (el que ja fan els tests
+    d'`apps/api`) i Cloudinary interceptat. No gasta cap quota i no necessita cap compte real.
+    L'usuari de proves quedaria llavors per a una passada final contra els serveis de debò abans de
+    tornar a encendre els comptes.
+- **Desencalla**: tornar a encendre els comptes, o bé tenir l'API local amb base de dades en
+  memòria.
+
 ## Novetats pendents de publicar
 
 Surten de la tria de `docs/NOTICIES-candidates-des-de-2.0.2.md`. Les sis notícies que no
