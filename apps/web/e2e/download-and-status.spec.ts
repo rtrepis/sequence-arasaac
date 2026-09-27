@@ -53,7 +53,10 @@ test("el .saac s'endú exactament el que diuen les caselles", async ({
   await expect(settings).not.toBeChecked();
 
   const download = page.waitForEvent("download");
-  await page.getByRole("button", { name: /Desa/ }).click();
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: "Descarrega" })
+    .click();
   const file = await (await download).createReadStream();
   const chunks: Buffer[] = [];
   for await (const chunk of file) chunks.push(Buffer.from(chunk));
