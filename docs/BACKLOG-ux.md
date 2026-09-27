@@ -14,7 +14,86 @@ detectar-les no es perdin al xat ni dins d'una pàgina publicada.
   Sense els tres, no és una entrada: és una opinió.
 - Les referències de línia envelleixen. Val el nom del component i el símbol, no el número.
 
-Llegenda d'estat: `🔴 Oberta` · `✅ Resolta` · `➖ Caducada`
+Llegenda d'estat: `🔴 Oberta` · `🔴 Oberta (ajornada)` · `✅ Resolta` · `➖ Caducada`
+
+«Ajornada» vol dir que depèn d'una cosa que avui no es farà. Ara mateix, els comptes: el
+2026-09-27 es van apagar (`VITE_ACCOUNTS_ENABLED=false` al web, `ACCOUNTS_ENABLED=false` a l'API)
+i tot el que en depèn queda per quan es tornin a encendre.
+
+---
+
+## Prioritats
+
+**Per on començar.** Les entrades de sota estan ordenades per **gravetat** i numerades per ordre
+d'arribada. Aquest ordre diu com de greu és el problema, però no diu què s'ha d'atacar primer. Això
+ho diu aquesta secció.
+
+### Com es prioritza
+
+Hi ha diversos mètodes coneguts. Els principals són: **RICE** (abast × impacte × confiança /
+esforç), **WSJF** (cost d'esperar / mida de la feina), **MoSCoW** (must/should/could/won't) i la
+matriu **valor/esforç**. RICE demana dades d'ús (quanta gent toca cada pantalla) que aquí no hi
+són, i MoSCoW serveix per tancar l'abast d'un llançament, no per ordenar un backlog viu. Es fa
+servir una versió lleugera de **WSJF** amb la matriu valor/esforç, repartida en tres calaixos,
+**Ara · Després · Més endavant**, a la manera d'un full de ruta *Now/Next/Later*:
+
+1. **Bloqueig.** Si depèn d'una cosa que no es farà aviat (els comptes), va a *Ajornades* i no
+   competeix amb la resta.
+2. **Cost d'esperar.** És el criteri que més pesa, i és el de WSJF. Una entrada que s'encareix com
+   més es tarda puja de calaix encara que no sigui la més greu. Per exemple, B25 s'ha de decidir
+   abans del mode lliure, perquè cada camp nou que s'hi afegeixi també s'esborrarà.
+3. **Impacte.** Pèrdua de dades > exclusió d'accessibilitat > fricció en una tasca habitual >
+   inconsistència de forma. És el mateix criteri que les gravetats, però mesurat per a l'usuari que
+   ho pateix.
+4. **Esforç.** **S** és menys d'una sessió; **M** és una sessió amb proves; **L** vol disseny previ
+   o toca diverses capes. Amb el mateix impacte, primer la S: les victòries ràpides mantenen el
+   backlog curt.
+5. **Decisió.** Si abans del codi cal una decisió de producte, es diu. Aquestes entrades no
+   avancen fins que es pren la decisió, i la decisió és la primera tasca.
+
+**Manteniment**: tota entrada nova s'afegeix a aquesta taula quan s'obre. A cada revisió es
+reordenen els calaixos, i una entrada resolta en surt. La taula és un índex: el detall és a
+l'entrada.
+
+### Ara
+
+| Id | Què | Per què ara | Esforç | Decisió prèvia |
+|---|---|---|---|---|
+| B25 | Entrar a la vista esborra la vista per seqüència del `.saac` | **Pèrdua de dades silenciosa**, i s'ha de resoldre abans de la fase 1 del mode lliure (`feature/mode-lliure`) | M | Sí: la regla de l'entrada (preferències només on no n'hi ha) canvia el que es veu en obrir un `.saac` |
+| C17 | El switch d'un ajust no té nom per al lector de pantalla | Exclusió d'accessibilitat a tots els `SettingCardBoolean`; el patró ja existeix (C12) | S | No |
+| C18 | L'spec de vídeo de `multiple-sequences` és vermell | Surt de retruc amb C17 (el selector que falla és el d'aquell switch). Si no, s'esborra | S | Si el vídeo es vol |
+| B11a | Pujar una imatge congela la interfície (primera meitat) | Saltar l'escaneig d'alfa quan el fitxer és JPEG. Retalla la major part del temps en el cas més comú (fotos del mòbil) | S | No |
+
+### Després
+
+| Id | Què | Per què | Esforç | Decisió prèvia |
+|---|---|---|---|---|
+| B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Arrel de B25 i de «Restaura» que torna a valors equivocats. Es fa just després de B25, o junt amb ella si la solució de B25 ja obliga a separar els camps | L | No |
+| C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
+| B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
+| C11 | Vora «fitzgerald» sense classificació pintada del color del text | Una línia quan es triï el color | S | Sí: quin color, o cap vora |
+| C10 | La suite de tests del web no compila | Dona una falsa sensació de xarxa de seguretat. Esborrar-la és S; reviure-la és L | S / L | Sí: reviure o esborrar |
+| B23 | L'idioma desat de l'usuari sense compte no mana sobre la URL | Amb els comptes apagats, **tothom** és usuari sense compte: la regla que val és aquesta | S | Sí: mana la URL o mana la preferència |
+
+### Més endavant
+
+| Id | Què | Per què pot esperar | Esforç |
+|---|---|---|---|
+| B11b | Pujar una imatge: conversió en un worker | Quan B11a s'hagi mesurat en una tauleta, si encara es nota | M |
+| B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
+| C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
+| B14 | Sostre del canvas del PDF sense mesurar | S'espera tenir casos reals al registre d'errors (`/api/client-errors` continua obert amb els comptes apagats, i l'avís per correu també); no hi ha res a fer fins que n'arribin | — |
+| N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
+
+### Ajornades (comptes apagats)
+
+| Id | Què | Què la desencalla |
+|---|---|---|
+| B13 | El comptador de documents no surt en desar | Tornar a encendre els comptes |
+| N1 | Les tres notícies de compte | Tornar a encendre els comptes; abans, corregir els números de `NOTICIES` i `INVENTARI` |
+| P1 | Proves de regressió del `.saac` amb compte | Tornar a encendre els comptes, o tenir l'API local amb BD en memòria |
+
+---
 
 ### Revisions
 
@@ -24,6 +103,7 @@ no es toquen; les que sí, porten una nota amb la data de la revisió.
 | Data | Branca | Resultat |
 |---|---|---|
 | 2026-09-27 | `claude/backlog-review-bs867a` | 16 obertes revisades. **B24** resolta (per `52ac416`, que no l'havia marcat). **B13**, **B11**, **C3** i **N1** actualitzades: el codi s'ha mogut per sota i el text ja no era cert del tot. La resta (B8, B14, B21, B22, B23, C1, C10, C11, C17, C18, N3) continua exactament igual |
+| 2026-09-27 (2a) | `claude/backlog-review-bs867a`, amb master al dia (`a15ed31`) | Master hi afegeix **B25** i **P1**; B25 verificada al codi. Els comptes s'apaguen: **B13** i **N1** passen a ajornades, com P1. La resta, sense canvis respecte de la primera passada. S'afegeix la secció *Prioritats* |
 
 ---
 
@@ -606,7 +686,7 @@ Branca `claude/document-limit-users-sjig8o` (PR #238).
 **Nota de vocabulari**: el nom viu al document, no al diàleg, i per això sobreviu a l'esborrany
 d'IndexedDB i al fitxer `.saac`.
 
-### B13 — Amb tres documents de sostre, ningú diu quants te'n queden 🔴 Oberta
+### B13 — Amb tres documents de sostre, ningú diu quants te'n queden 🔴 Oberta (ajornada)
 
 *(Trobada en baixar el límit a B12, fora del seu abast.)*
 
@@ -1420,7 +1500,7 @@ l'ha de desencallar.
 Surten de la tria de `docs/NOTICIES-candidates-des-de-2.0.2.md`. Les sis notícies que no
 demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per què.
 
-### N1 — Les tres notícies de compte no estan escrites 🔴 Oberta
+### N1 — Les tres notícies de compte no estan escrites 🔴 Oberta (ajornada)
 
 - **On**: `apps/web/src/data/newsItems.ts` — hi falten `user-account`, `cloud-documents` i
   `personal-vocabulary`, que la tria dona per prioritat alta.
