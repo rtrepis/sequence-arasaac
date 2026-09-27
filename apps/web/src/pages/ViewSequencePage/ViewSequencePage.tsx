@@ -6,6 +6,7 @@ import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSq
 import CopyRight from "../../components/CopyRight/CopyRight";
 import { PictogramCardDefaults } from "../../types/sequence";
 import { ALIGN_H, ALIGN_V } from "../../shared/constants/alignmentMaps";
+import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
 
 /**
  * Pàgina de visualització de seqüències
@@ -13,15 +14,12 @@ import { ALIGN_H, ALIGN_V } from "../../shared/constants/alignmentMaps";
  * independentment de la direcció de la seqüència
  */
 const ViewSequencePage = (): React.ReactElement => {
-  const { document, ui, documentStatus } = useAppSelector((state) => state);
-  const { pictSequence } = ui.defaultSettings;
-  const defaults: PictogramCardDefaults = {
-    numbered: pictSequence.numbered,
-    font: pictSequence.font,
-    numberFont: pictSequence.numberFont,
-    borderIn: pictSequence.borderIn,
-    borderOut: pictSequence.borderOut,
-  };
+  const { document, documentStatus } = useAppSelector((state) => state);
+  // La seqüència es veu sempre amb el seu estil, no amb les preferències de
+  // qui la mira (`docs/fonaments/sequencia-i-estil.md`)
+  const defaults: PictogramCardDefaults = useAppSelector(
+    selectDocumentCardDefaults,
+  );
 
   // La columna d'ajustos copia el format de pàgina a un estat local en muntar-se
   // i ja no el torna a mirar: muntar-la abans que la restauració de l'esborrany
@@ -35,12 +33,9 @@ const ViewSequencePage = (): React.ReactElement => {
         <>
           {Object.entries(document.content).map(([key, sequence]) => {
             const seqKey = Number(key);
-            const seqView = sequenceViewSettings[seqKey] ?? {
-              sizePict: 0.9,
-              pictSpaceBetween: 1,
-              alignmentH: "left" as const,
-              alignmentV: "top" as const,
-            };
+            // Totes les pestanyes en porten: la columna de vista les resol
+            // amb la de l'estil quan no en tenen de pròpia
+            const seqView = sequenceViewSettings[seqKey];
 
             const isRow = viewSettings.direction === "row";
             const justifyContent = isRow

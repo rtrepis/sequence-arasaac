@@ -7,6 +7,7 @@ import BackendWakeUpNotice from "@features/backend/api/BackendWakeUpNotice";
 import DocumentDraftSync from "@features/sequence/components/DocumentDraftSync";
 import SessionExpiredNotice from "@features/backend/auth/components/SessionExpiredNotice";
 import DocumentStatusFab from "@features/sequence/components/DocumentStatusFab/DocumentStatusFab";
+import DocumentStyleNotice from "@features/sequence/components/ChangeStyle/DocumentStyleNotice";
 import { messageLocale } from "@/App";
 
 const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
@@ -30,6 +31,9 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
         {/* L'avís de verificació va aquí i no dins de cada pàgina: així apareix
             tant a l'editor com al visualitzador sense duplicar-lo */}
         <EmailVerificationBanner />
+        {/* Al mateix lloc i pel mateix motiu: l'avís de l'estil de la seqüència
+            oberta ha de sortir tant a l'editor com al visualitzador */}
+        <DocumentStyleNotice />
         <Outlet />
         {/* Va al layout i no a index.tsx perquè necessita l'IntlProvider, i aquest és
             l'únic lloc de l'app on l'usuari fa crides al backend (entrar, desar, carregar) */}

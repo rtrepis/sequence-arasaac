@@ -21,6 +21,7 @@ import messages from "./PictogramSearchLocal.lang";
 import usePersonalKeywords from "@features/word-profile/hooks/usePersonalKeywords";
 import UploadImageButton from "../../../components/UploadImageButton";
 import React from "react";
+import { selectDocumentPictStyle } from "@features/sequence/style/styleSelectors";
 
 const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
@@ -52,7 +53,7 @@ const PictogramSearchLocal = ({
   const locale = useAppSelector((state) => state.ui.lang.search);
   const keywords = usePersonalKeywords();
   const defaultPictApiAra = useAppSelector(
-    (state) => state.ui.defaultSettings.pictApiAra,
+    (state) => selectDocumentPictStyle(state).pictApiAra,
   );
 
   const [newWord, setNewWord] = useState("");

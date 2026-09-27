@@ -7,7 +7,22 @@ import {
   PictApiAraForEdit,
   PictApiAraSettingsApplyAll,
 } from "@/types/sequence";
-import { DocumentSAAC, SequenceViewSettings } from "@/types/document";
+import {
+  DocumentSAAC,
+  SequenceStyle,
+  SequenceStyleView,
+  SequenceViewSettings,
+} from "@/types/document";
+import { DefaultSettings, ViewSettings } from "@/types/ui";
+import {
+  applyStyleToDocument,
+  buildUserDefaultStyle,
+  materializeDocumentStyle,
+  pictStyleOf,
+  resolveDocumentStyle,
+  tabViewOf,
+} from "@features/sequence/style/styleModel";
+import { normalizeDocumentState } from "@features/sequence/style/saacFile";
 import {
   SEQ_VIEW_DEFAULT_SIZE_PICT,
   SEQ_VIEW_DEFAULT_PICT_SPACE,
@@ -41,27 +56,51 @@ export const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
   alignmentV: SEQ_VIEW_DEFAULT_ALIGNMENT_V,
 };
 
+// Un document nou no porta estil ni vista de pestanya: tots dos s'hereten de
+// l'estil per defecte de l'usuari fins que es desa o se'n toca l'estil. Així
+// neix amb l'estil de l'usuari encara que les preferències (les del compte, amb
+// el servidor adormit) arribin després de crear-lo.
+// Vegeu `docs/fonaments/sequencia-i-estil.md`.
 const documentInitialState: DocumentSAAC = {
   id: getUniqueId(),
   title: undefined,
   content: { 0: [] },
-  viewSettings: { 0: { ...DEFAULT_SEQUENCE_VIEW } },
+  viewSettings: {},
   activeSAAC: 0,
   order: undefined,
   defaultSettings: undefined,
 };
+
+/**
+ * El que els thunks del document necessiten de l'store. Es declara aquí i no
+ * s'importa `RootState` perquè l'store importa aquest fitxer.
+ */
+interface StyleSourceState {
+  document: DocumentSAAC;
+  ui: { defaultSettings: DefaultSettings; viewSettings: ViewSettings };
+}
+
+const userDefaultStyleOf = (state: StyleSourceState): SequenceStyle =>
+  buildUserDefaultStyle(state.ui.defaultSettings, state.ui.viewSettings);
 
 // Thunk: carrega un document del backend per id (declarat abans del slice per poder-lo usar a extraReducers)
 export const loadDocumentThunk = createAsyncThunk<
   DocumentSAAC,
   string,
   { rejectValue: string }
->("document/load", async (id, { rejectWithValue }) => {
+>("document/load", async (id, { getState, rejectWithValue }) => {
+  let fetched: DocumentSAAC;
   try {
-    return await fetchDocument(id);
+    fetched = await fetchDocument(id);
   } catch {
     return rejectWithValue("No s'ha pogut carregar el document");
   }
+  // Mateixa lectura que un fitxer: els documents desats abans de l'esquema 2
+  // no porten estil, i s'obren amb l'estil per defecte de qui els obre
+  const normalized = normalizeDocumentState(fetched, {
+    userDefault: userDefaultStyleOf(getState() as StyleSourceState),
+  });
+  return normalized?.document ?? fetched;
 });
 
 const documentSlice = createSlice({
@@ -73,26 +112,20 @@ const documentSlice = createSlice({
       previousDocument,
       action: PayloadAction<DocumentSAAC>,
     ) => {
+      // Els fitxers i el núvol arriben ja normalitzats (`saacFile.ts`); aquí
+      // només hi passa a més l'esborrany, que pot ser d'un document nou i per
+      // tant sense vista de pestanya: la pestanya sense vista hereta la de l'estil
       const doc = action.payload;
-      if (!doc.viewSettings) {
-        doc.viewSettings = {};
-        Object.keys(doc.content).forEach((key) => {
-          doc.viewSettings[Number(key)] = { ...DEFAULT_SEQUENCE_VIEW };
-        });
-      }
+      if (!doc.viewSettings) doc.viewSettings = {};
       return doc;
     },
 
     changeActiveSAAC: (previousDocument, action: PayloadAction<number>) => {
       previousDocument.activeSAAC = action.payload;
 
+      // Una pestanya nova no porta vista: segueix la de l'estil del document
       if (previousDocument.content[action.payload] === undefined)
         previousDocument.content[action.payload] = [];
-
-      if (previousDocument.viewSettings[action.payload] === undefined)
-        previousDocument.viewSettings[action.payload] = {
-          ...DEFAULT_SEQUENCE_VIEW,
-        };
 
       return previousDocument;
     },
@@ -100,9 +133,7 @@ const documentSlice = createSlice({
     // Crea una nova seqüència buida amb la clau indicada sense canviar l'actiu
     addNewSequence: (previousDocument, action: PayloadAction<number>) => {
       previousDocument.content[action.payload] = [];
-      previousDocument.viewSettings[action.payload] = {
-        ...DEFAULT_SEQUENCE_VIEW,
-      };
+      delete previousDocument.viewSettings[action.payload];
     },
 
     addPictogram: (previousDocument, action: PayloadAction<PictSequence>) => {
@@ -285,30 +316,100 @@ const documentSlice = createSlice({
       );
     },
 
-    // Actualitza viewSettings d'una seqüència concreta
+    // Retoca la vista d'una seqüència concreta. `base` és la vista que té
+    // ara (la seva o, si no en té, la de l'estil), perquè el reducer no sap
+    // quin és l'estil per defecte de l'usuari
     updateSequenceViewSettings: (
       previousDocument,
       action: PayloadAction<{
         key: number;
         settings: Partial<SequenceViewSettings>;
+        base: SequenceViewSettings;
       }>,
     ) => {
-      const { key, settings } = action.payload;
-      const current =
-        previousDocument.viewSettings[key] ?? DEFAULT_SEQUENCE_VIEW;
+      const { key, settings, base } = action.payload;
+      const current = previousDocument.viewSettings[key] ?? base;
       previousDocument.viewSettings[key] = { ...current, ...settings };
     },
 
-    // Aplica viewSettings a totes les seqüències
+    // Canvia la vista de totes les seqüències alhora: és tocar l'estil de la
+    // seqüència, i per això també en mou la base. Les pestanyes que no tenen
+    // vista pròpia la segueixen soles. `styleView` és la vista de l'estil que
+    // té ara el document (la seva o la heretada)
     applyViewSettingsToAll: (
       previousDocument,
-      action: PayloadAction<Partial<SequenceViewSettings>>,
+      action: PayloadAction<{
+        settings: Partial<SequenceViewSettings>;
+        styleView: SequenceStyleView;
+      }>,
     ) => {
-      const keys = Object.keys(previousDocument.content).map(Number);
-      keys.forEach((key) => {
-        const current =
-          previousDocument.viewSettings[key] ?? DEFAULT_SEQUENCE_VIEW;
-        previousDocument.viewSettings[key] = { ...current, ...action.payload };
+      const { settings, styleView } = action.payload;
+      previousDocument.styleView = { ...styleView, ...settings };
+      Object.keys(previousDocument.viewSettings).forEach((key) => {
+        const current = previousDocument.viewSettings[Number(key)];
+        previousDocument.viewSettings[Number(key)] = {
+          ...current,
+          ...settings,
+        };
+      });
+    },
+
+    // Espai entre seqüències: és part de l'estil del document
+    setSequenceSpaceBetween: (
+      previousDocument,
+      action: PayloadAction<{ value: number; styleView: SequenceStyleView }>,
+    ) => {
+      previousDocument.styleView = {
+        ...action.payload.styleView,
+        sequenceSpaceBetween: action.payload.value,
+      };
+    },
+
+    // Aplica un estil nou al document amb la regla dels retocs: el que
+    // coincidia amb l'estil vell (`from`) segueix el nou, la resta es conserva
+    applyDocumentStyle: (
+      previousDocument,
+      action: PayloadAction<{ from: SequenceStyle; to: SequenceStyle }>,
+    ) => {
+      applyStyleToDocument(
+        previousDocument,
+        action.payload.from,
+        action.payload.to,
+      );
+    },
+
+    // Desfà un canvi d'estil: torna el document a com era just abans
+    restoreDocumentStyle: (
+      previousDocument,
+      action: PayloadAction<DocumentStyleSnapshot>,
+    ) => {
+      const { content, viewSettings, defaultSettings, styleView } =
+        action.payload;
+      previousDocument.content = content;
+      previousDocument.viewSettings = viewSettings;
+      previousDocument.defaultSettings = defaultSettings;
+      previousDocument.styleView = styleView;
+    },
+
+    // Fa explícit l'estil que el document heretava, en desar-lo: el que s'ha
+    // desat ja no ha de canviar si després canvia l'estil per defecte. No
+    // canvia res del que es veu, i per això no és un canvi de contingut
+    documentStyleMaterialized: (
+      previousDocument,
+      action: PayloadAction<SequenceStyle>,
+    ) => {
+      // Només s'omple el que falta: el que ja hi era no es reescriu, perquè
+      // un canvi de referència faria creure que el document s'ha tocat (i, per
+      // exemple, ja no es podria desfer l'últim canvi d'estil)
+      const style = action.payload;
+      if (previousDocument.defaultSettings === undefined)
+        previousDocument.defaultSettings = pictStyleOf(style);
+      if (previousDocument.styleView === undefined)
+        previousDocument.styleView = style.view;
+      const tabBase = tabViewOf(previousDocument.styleView);
+      Object.keys(previousDocument.content).forEach((key) => {
+        if (previousDocument.viewSettings[Number(key)] === undefined)
+          previousDocument.viewSettings[Number(key)] = { ...tabBase };
       });
     },
 
@@ -357,14 +458,14 @@ const documentSlice = createSlice({
       previousDocument.title = action.payload;
     },
 
-    // Document nou: contingut buit, títol i id nous. La configuració per
-    // defecte no s'hi toca — és de l'usuari, no del document, i qui comença un
-    // treball nou no vol tornar a triar la lletra i les vores.
+    // Document nou: contingut buit, títol i id nous, i sense estil propi: el
+    // torna a heretar de l'estil per defecte de l'usuari, que és el que ha de
+    // rebre una seqüència nova.
     resetDocument: () => ({
       id: getUniqueId(),
       title: undefined,
       content: { 0: [] },
-      viewSettings: { 0: { ...DEFAULT_SEQUENCE_VIEW } },
+      viewSettings: {},
       activeSAAC: 0,
       order: undefined,
       defaultSettings: undefined,
@@ -390,19 +491,39 @@ const documentSlice = createSlice({
   extraReducers: (builder) => {
     // Quan el thunk de càrrega acaba, actualitza el document al store
     builder.addCase(loadDocumentThunk.fulfilled, (state, action) => {
-      const doc = action.payload;
-      if (!doc.viewSettings) {
-        doc.viewSettings = {};
-        Object.keys(doc.content).forEach((key) => {
-          doc.viewSettings[Number(key)] = { ...DEFAULT_SEQUENCE_VIEW };
-        });
-      }
-      return doc;
+      return action.payload;
     });
   },
 });
 
 export const documentReducer = documentSlice.reducer;
+
+/** El que toca un canvi d'estil, per poder-lo desfer. */
+export interface DocumentStyleSnapshot {
+  content: DocumentSAAC["content"];
+  viewSettings: DocumentSAAC["viewSettings"];
+  defaultSettings: DocumentSAAC["defaultSettings"];
+  styleView: DocumentSAAC["styleView"];
+}
+
+export const takeDocumentStyleSnapshot = (
+  document: DocumentSAAC,
+): DocumentStyleSnapshot => ({
+  content: document.content,
+  viewSettings: document.viewSettings,
+  defaultSettings: document.defaultSettings,
+  styleView: document.styleView,
+});
+
+/**
+ * El document tal com s'ha d'enviar a fora: amb l'estil que fa servir. Si
+ * l'heretava, a partir d'ara el té propi.
+ */
+export const selectDocumentToSave = (state: StyleSourceState): DocumentSAAC =>
+  materializeDocumentStyle(
+    state.document,
+    resolveDocumentStyle(state.document, userDefaultStyleOf(state)),
+  );
 
 /**
  * Desa el document al backend: PUT si ja té id de MongoDB, POST si no.
@@ -421,8 +542,18 @@ export const saveDocumentThunk = createAsyncThunk<
   { rejectValue: string }
 >(
   "document/save",
-  async ({ document: doc, asCopy = false }, { dispatch, rejectWithValue }) => {
+  async (
+    { document: requested, asCopy = false },
+    { dispatch, getState, rejectWithValue },
+  ) => {
     try {
+      // Desar al núvol també inclou sempre l'estil: si el document l'heretava,
+      // se li escriu el que fa servir ara
+      const state = getState() as StyleSourceState;
+      const doc = materializeDocumentStyle(
+        requested,
+        resolveDocumentStyle(requested, userDefaultStyleOf(state)),
+      );
       const { id, ...payload } = doc;
       if (isMongoId(id) && !asCopy) {
         const updated = await updateDocument(id, payload);
@@ -500,6 +631,10 @@ export const {
   settingsPictSequence: settingsPictSequenceActionCreator,
   updateSequenceViewSettings: updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAll: applyViewSettingsToAllActionCreator,
+  setSequenceSpaceBetween: setSequenceSpaceBetweenActionCreator,
+  applyDocumentStyle: applyDocumentStyleActionCreator,
+  restoreDocumentStyle: restoreDocumentStyleActionCreator,
+  documentStyleMaterialized: documentStyleMaterializedActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
   removeCloudImage: removeCloudImageActionCreator,
   replaceCloudImage: replaceCloudImageActionCreator,

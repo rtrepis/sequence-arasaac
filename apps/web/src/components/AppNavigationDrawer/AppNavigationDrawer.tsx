@@ -25,6 +25,7 @@ import {
   AiOutlineSetting,
   AiOutlineUser,
 } from "react-icons/ai";
+import { MdOutlinePalette } from "react-icons/md";
 import { useIntl } from "react-intl";
 import messages from "./AppNavigationDrawer.lang";
 import navigationMessages from "@shared/messages/navigation.lang";
@@ -37,25 +38,26 @@ import SaveDocumentModal from "@features/backend/documents/components/SaveDocume
 import documentMessages from "@features/backend/documents/components/DocumentModals.lang";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { RootState } from "@app/store";
+import { startNewDocumentThunk } from "@features/sequence/store/documentSlice";
 import {
-  addSequenceActionCreator,
-  loadDocumentSaacActionCreator,
-  startNewDocumentThunk,
-} from "@features/sequence/store/documentSlice";
-import {
-  documentMadeDurableActionCreator,
   getDocumentDurability,
   isWorkAtRisk,
 } from "@features/sequence/store/documentStatusSlice";
+import { changeStyleOpenedActionCreator } from "@features/sequence/store/styleSlice";
+import { useOpenSaacFile } from "@features/sequence/hooks/useOpenSaacFile";
+import {
+  SEQUENCE_FILE_EXTENSION,
+  STYLE_FILE_EXTENSION,
+} from "@features/sequence/style/saacFile";
+import ChangeStyleDialog from "@features/sequence/components/ChangeStyle/ChangeStyleDialog";
+import PendingDefaultStyleDialog from "@features/sequence/components/ChangeStyle/PendingDefaultStyleDialog";
+import styleMessages from "@features/sequence/components/ChangeStyle/ChangeStyle.lang";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
 import UserAvatar from "@components/UserAvatar/UserAvatar";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import { ACCOUNTS_ENABLED } from "@/configs/accountsConfig";
-import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { logoutThunk } from "@features/backend/auth/store/authSlice";
-import { trackEvent } from "@shared/hooks/usePageTracking";
 import { useFeedback } from "../../context/FeedbackContext";
-import feedbackMessages from "../../context/FeedbackContext/FeedbackContext.lang";
 
 const selectDocumentStatus = (state: RootState) => state.documentStatus;
 
@@ -72,7 +74,8 @@ const AppNavigationDrawer = ({
   const intl = useIntl();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { showSnackbar, showBackdrop, hideBackdrop } = useFeedback();
+  const { showSnackbar } = useFeedback();
+  const { openFile, announceOpenedDocument } = useOpenSaacFile();
 
   // Estat d'autenticació
   const { userEmail, isAdmin } = useAppSelector((state) => state.auth);
@@ -182,6 +185,9 @@ const AppNavigationDrawer = ({
         : intl.formatMessage(authMessages.documentLoaded),
       severity: "success",
     });
+    // Un document del núvol s'obre igual que un fitxer: amb el seu estil, i
+    // amb l'avís si és diferent de l'estil per defecte
+    announceOpenedDocument();
   };
 
   // Obrir descàrrega: tanca el drawer i obre el modal
@@ -196,65 +202,19 @@ const AppNavigationDrawer = ({
     fileInputRef.current?.click();
   };
 
-  // Lògica de càrrega de fitxer (mateixa que tenia LogoMenu)
+  // Obrir un fitxer: què se'n fa segons el que porta és a `useOpenSaacFile`
   const handleFileLoad = (event: ChangeEvent<HTMLInputElement>) => {
-    const valueTrackEvent: string[] = [];
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      if (file) {
-        showBackdrop({ message: intl.formatMessage(feedbackMessages.loading) });
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          try {
-            const parsedJson = JSON.parse(e.target?.result as string);
-
-            if ("sequence" in parsedJson) {
-              dispatch(addSequenceActionCreator(parsedJson.sequence));
-              valueTrackEvent.push("sequence");
-            }
-            if ("documentState" in parsedJson) {
-              dispatch(loadDocumentSaacActionCreator(parsedJson.documentState));
-              // El que s'acaba de carregar existeix en un fitxer del disc: és
-              // l'únic cas en què obrir també vol dir «això ja està desat»
-              dispatch(documentMadeDurableActionCreator({ kind: "file" }));
-              valueTrackEvent.push("documentState");
-            }
-            if ("defaultSettings" in parsedJson) {
-              dispatch(
-                updateDefaultSettingsActionCreator(parsedJson.defaultSettings),
-              );
-              valueTrackEvent.push("defaultSettings");
-            }
-
-            hideBackdrop();
-            showSnackbar({
-              message: intl.formatMessage(feedbackMessages.loadSuccess),
-              severity: "success",
-            });
-          } catch (error) {
-            console.error(error);
-            hideBackdrop();
-            showSnackbar({
-              message: intl.formatMessage(feedbackMessages.loadError),
-              severity: "error",
-            });
-          }
-        };
-        reader.readAsText(file);
-      }
-    }
-
-    trackEvent({
-      event: "load-event",
-      event_category: "file",
-      event_label: "load",
-      value: valueTrackEvent.join(" "),
-    });
-
+    const file = input.files?.[0];
     // Netejar l'input per permetre carregar el mateix fitxer dues vegades
-    if (input) input.value = "";
+    input.value = "";
+    if (file) void openFile(file, "open");
+  };
+
+  // «Canvia l'estil» és al menú perquè ha d'estar disponible en qualsevol moment
+  const handleChangeStyle = () => {
+    onClose();
+    dispatch(changeStyleOpenedActionCreator());
   };
 
   return (
@@ -336,6 +296,15 @@ const AppNavigationDrawer = ({
                 <AiOutlineFolderOpen />
               </ListItemIcon>
               <ListItemText primary={intl.formatMessage(messages.load)} />
+            </ListItemButton>
+
+            <ListItemButton onClick={handleChangeStyle}>
+              <ListItemIcon>
+                <MdOutlinePalette />
+              </ListItemIcon>
+              <ListItemText
+                primary={intl.formatMessage(styleMessages.changeStyle)}
+              />
             </ListItemButton>
           </List>
 
@@ -454,8 +423,14 @@ const AppNavigationDrawer = ({
         type="file"
         style={{ display: "none" }}
         onChange={handleFileLoad}
-        accept="text/plain,.saac,application/json"
+        accept={`${SEQUENCE_FILE_EXTENSION},${STYLE_FILE_EXTENSION},text/plain,application/json`}
       />
+
+      {/* «Canvia l'estil» i la pregunta d'un fitxer d'estil obert sense
+          seqüència: un sol lloc per a tota l'app, perquè el menú hi és a totes
+          les pàgines */}
+      <ChangeStyleDialog />
+      <PendingDefaultStyleDialog />
 
       {/* Modal de configuració */}
       <DefaultSettingsDialog

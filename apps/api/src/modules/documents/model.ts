@@ -12,6 +12,8 @@ import type {
   FitzgeraldColorLegacy,
   DefaultSettings,
   DocumentThumbnailPict,
+  SequenceStyleView,
+  DocumentLayout,
 } from "@sequence-arasaac/shared-types";
 import type { DocumentSAAC } from "@sequence-arasaac/shared-types";
 import {
@@ -37,6 +39,8 @@ export interface IDocument extends Document {
   order?: number[];
   author?: string;
   defaultSettings?: DefaultSettings;
+  styleView?: SequenceStyleView;
+  layout?: DocumentLayout;
   thumbnail: DocumentThumbnailPict[];
   assets: DocumentAsset[];
   createdAt: Date;
@@ -148,6 +152,28 @@ const thumbnailPictSchema = new Schema(
   { _id: false }
 );
 
+// Sub-schema per a la vista de l'estil del document
+const sequenceStyleViewSchema = new Schema(
+  {
+    sizePict: { type: Number, required: true },
+    pictSpaceBetween: { type: Number, required: true },
+    alignmentH: { type: String, enum: ["left", "center", "right"], required: true },
+    alignmentV: { type: String, enum: ["top", "center", "bottom"], required: true },
+    sequenceSpaceBetween: { type: Number, required: true },
+  },
+  { _id: false }
+);
+
+// Sub-schema per a la disposició (B26): tots els camps opcionals
+const documentLayoutSchema = new Schema(
+  {
+    direction: { type: String, enum: ["row", "column"] },
+    pageSize: { type: String, enum: ["A4", "A3", "FULLSCREEN"] },
+    orientation: { type: String, enum: ["landscape", "portrait"] },
+  },
+  { _id: false }
+);
+
 // --- Esquema principal del document ---
 
 const documentSchema = new Schema<IDocument>(
@@ -167,6 +193,10 @@ const documentSchema = new Schema<IDocument>(
     order: [{ type: Number }],
     author: { type: String },
     defaultSettings: { type: defaultSettingsSchema },
+    // Mides i espaiats de l'estil (esquema 2). Els documents d'abans no en tenen
+    styleView: { type: sequenceStyleViewSchema },
+    // Disposició, reservada per a B26: es desa i es retorna tal com arriba
+    layout: { type: documentLayoutSchema },
     // Els documents desats abans que existís la miniatura la tenen buida fins que
     // es tornin a desar: el llistat ha de saber ensenyar-los igualment.
     thumbnail: {
@@ -268,5 +298,8 @@ export const serializeDocument = (doc: IDocument): DocumentSAAC => {
     order: obj.order as number[] | undefined,
     author: obj.author as string | undefined,
     defaultSettings,
+    // Només si hi són: un document d'abans no ha de sortir amb claus buides
+    ...(obj.styleView ? { styleView: obj.styleView as SequenceStyleView } : {}),
+    ...(obj.layout ? { layout: obj.layout as DocumentLayout } : {}),
   };
 };

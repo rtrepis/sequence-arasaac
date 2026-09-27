@@ -1,11 +1,5 @@
-import {
-  Checkbox,
-  DialogContentText,
-  FormControlLabel,
-  FormGroup,
-  TextField,
-} from "@mui/material";
-import React, { BaseSyntheticEvent, useState } from "react";
+import { DialogContentText, TextField } from "@mui/material";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import messages from "./ModalDownload.lang";
 // «Cancel·la» és un sol missatge per a tota l'app i viu al ConfirmDialog
@@ -14,9 +8,15 @@ import { AppDialog, AppDialogActions } from "@components/AppDialog";
 import StyledButton from "@/style/StyledButton";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
+import { documentStyleMaterializedActionCreator } from "@features/sequence/store/documentSlice";
+import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
+import {
+  buildSequenceFile,
+  buildStyleFile,
+  SEQUENCE_FILE_EXTENSION,
+  STYLE_FILE_EXTENSION,
+} from "@features/sequence/style/saacFile";
 import { trackEvent } from "@shared/hooks/usePageTracking";
-import { DefaultSettings } from "@/types/ui";
-import { DocumentSAAC } from "@/types/document";
 import { useFeedback } from "@/context/FeedbackContext";
 import feedbackMessages from "@/context/FeedbackContext/FeedbackContext.lang";
 
@@ -25,90 +25,74 @@ interface ModalDownloadProps {
   onClose: () => void;
 }
 
+/**
+ * Desar a fitxer. Dues accions i cap casella (`docs/fonaments/sequencia-i-estil.md`,
+ * punt 2): «Desa la seqüència» se n'endú sempre l'estil, i «Desa l'estil» només
+ * l'aparença. Abans hi havia dues caselles —seqüència i configuració— que
+ * donaven tres combinacions, i la de la seqüència sense estil feia que en
+ * obrir-la es veiés amb les preferències de qui l'obria.
+ */
 const ModalDownload = ({
   open,
   onClose,
 }: ModalDownloadProps): React.ReactElement => {
-  const {
-    document: documentSaac,
-    ui: { defaultSettings },
-  } = useAppSelector((state) => state);
+  const documentSaac = useAppSelector((state) => state.document);
+  const style = useAppSelector(selectDocumentStyle);
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { showSnackbar } = useFeedback();
 
   const [fileName, setFileName] = useState("");
 
-  const documentSaacIsNotEmpty = documentSaac.content[0].length > 0;
-  // Les caselles són controlades: el que es pinta i el que se n'endú el fitxer
-  // surten del mateix valor. Amb `defaultChecked` i un estat inicial a part,
-  // la configuració es colava dins del `.saac` amb la casella desmarcada
-  // (troballa C8 de l'auditoria d'UX).
-  const [save, setSave] = useState({
-    documentState: documentSaacIsNotEmpty,
-    defaultSettings: false,
-  });
-
-  const onChangeCheckbox = (event: BaseSyntheticEvent, checked: boolean) => {
-    const name = event.target.name as keyof typeof save;
-
-    setSave((previous) => {
-      return { ...previous, [name]: checked };
-    });
-  };
+  const documentSaacIsNotEmpty = Object.values(documentSaac.content).some(
+    (sequence) => sequence.length > 0,
+  );
 
   const onChangeFileName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setFileName(value);
+    setFileName(event.target.value);
   };
 
-  const onSaveFile = () => {
-    const valueEventsTrace: string[] = [];
+  const download = (content: object, extension: string) => {
     const isoString = new Date().toISOString();
-
     const fileElement = window.document.createElement("a");
-    const downloadObject: {
-      documentState?: DocumentSAAC;
-      defaultSettings?: DefaultSettings;
-    } = {};
-
-    if (save.defaultSettings) {
-      downloadObject.defaultSettings = defaultSettings;
-      valueEventsTrace.push("defaultSettings");
-    }
-
-    if (save.documentState) {
-      downloadObject.documentState = documentSaac;
-      valueEventsTrace.push("documentState");
-      // Només compta com a còpia externa si el fitxer se'n duu la seqüència:
-      // baixar-se la configuració sola no salva cap feina
-      dispatch(documentMadeDurableActionCreator({ kind: "file" }));
-    }
-
-    const file = new Blob([JSON.stringify(downloadObject)], {
-      type: "text/plain",
-    });
+    const file = new Blob([JSON.stringify(content)], { type: "text/plain" });
     fileElement.href = URL.createObjectURL(file);
     fileElement.download =
       fileName !== ""
-        ? `${fileName}.saac`
-        : `SequenciAAC_${isoString.slice(0, -5)}.saac`;
+        ? `${fileName}${extension}`
+        : `SequenciAAC_${isoString.slice(0, -5)}${extension}`;
     fileElement.click();
 
-    trackEvent({
-      event: "safe-event",
-      event_category: "file",
-      event_label: "safe:",
-      value: valueEventsTrace.join(" "),
-    });
-
-    // Mostrem el snackbar de confirmació
     showSnackbar({
       message: intl.formatMessage(feedbackMessages.saveSuccess),
       severity: "success",
     });
-
     onClose();
+  };
+
+  const onSaveSequence = () => {
+    download(buildSequenceFile(documentSaac, style), SEQUENCE_FILE_EXTENSION);
+    // El que s'ha desat ja té l'estil propi: si el document l'heretava, deixa
+    // de seguir l'estil per defecte, com qualsevol seqüència oberta d'un fitxer
+    dispatch(documentStyleMaterializedActionCreator(style));
+    dispatch(documentMadeDurableActionCreator({ kind: "file" }));
+    trackEvent({
+      event: "safe-event",
+      event_category: "file",
+      event_label: "safe:",
+      value: "documentState",
+    });
+  };
+
+  const onSaveStyle = () => {
+    // Desar l'estil no salva cap feina: no compta com a còpia del document
+    download(buildStyleFile(style), STYLE_FILE_EXTENSION);
+    trackEvent({
+      event: "safe-event",
+      event_category: "file",
+      event_label: "safe:",
+      value: "style",
+    });
   };
 
   return (
@@ -128,9 +112,19 @@ const ModalDownload = ({
           <StyledButton onClick={onClose} color="inherit">
             {intl.formatMessage(confirmMessages.cancel)}
           </StyledButton>
-          <StyledButton onClick={onSaveFile} variant="contained">
-            {intl.formatMessage(messages.download)}
+          <StyledButton
+            onClick={onSaveStyle}
+            variant="outlined"
+            color="inherit"
+          >
+            {intl.formatMessage(messages.saveStyle)}
           </StyledButton>
+          {/* Una seqüència buida no té res a desar; l'estil sí */}
+          {documentSaacIsNotEmpty && (
+            <StyledButton onClick={onSaveSequence} variant="contained">
+              {intl.formatMessage(messages.saveSequence)}
+            </StyledButton>
+          )}
         </AppDialogActions>
       }
     >
@@ -139,24 +133,6 @@ const ModalDownload = ({
       <DialogContentText variant="body2" sx={{ mb: 2 }}>
         {intl.formatMessage(messages.saveHelper)}
       </DialogContentText>
-
-      <FormGroup>
-        {documentSaacIsNotEmpty && (
-          <FormControlLabel
-            control={<Checkbox checked={save.documentState} />}
-            label={intl.formatMessage(messages.sequence)}
-            onChange={onChangeCheckbox}
-            name="documentState"
-          />
-        )}
-
-        <FormControlLabel
-          control={<Checkbox checked={save.defaultSettings} />}
-          label={intl.formatMessage(messages.defaultSettings)}
-          onChange={onChangeCheckbox}
-          name="defaultSettings"
-        />
-      </FormGroup>
 
       {/* `TextField` i no `InputLabel` + `Input`: així el nom del camp queda
           lligat al camp, que abans no ho estava */}

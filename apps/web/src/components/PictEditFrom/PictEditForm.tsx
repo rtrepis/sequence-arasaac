@@ -14,6 +14,7 @@ import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardB
 import React from "react";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
 import { MdSettingsBackupRestore } from "react-icons/md";
+import { selectDocumentPictStyle } from "@features/sequence/style/styleSelectors";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
@@ -36,7 +37,8 @@ const PictEditForm = ({
       numberFont: defaultNumberFont,
     },
     pictApiAra: { skin: defaultSkin, hair: defaultHair, color: defaultColor },
-  } = useAppSelector((state) => state.ui.defaultSettings);
+    // L'estil de la seqüència, no les preferències de qui l'edita
+  } = useAppSelector(selectDocumentPictStyle);
 
   const initialTextPosition =
     pictogram.settings.textPosition ?? defaultTextPosition;

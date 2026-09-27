@@ -1,13 +1,9 @@
 import { Box, Divider, Stack, Tooltip } from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { BsFilePdf } from "react-icons/bs";
-import {
-  MdOutlinePushPin,
-  MdScreenRotation,
-  MdSettingsBackupRestore,
-} from "react-icons/md";
+import { MdOutlinePushPin, MdScreenRotation } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 import StyledButton from "@/style/StyledButton";
@@ -41,8 +37,14 @@ import {
 import {
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
-  DEFAULT_SEQUENCE_VIEW,
+  setSequenceSpaceBetweenActionCreator,
 } from "@features/sequence/store/documentSlice";
+import {
+  selectDocumentStyle,
+  selectResolvedSequenceViews,
+} from "@features/sequence/style/styleSelectors";
+import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
+import ChangeStyleButton from "@features/sequence/components/ChangeStyle/ChangeStyleButton";
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import { sheetSurface } from "@/style/palette";
 import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSaveUiSettings";
@@ -84,9 +86,10 @@ const ViewSequencesSettings = ({
 
   // Obtenir configuració des de Redux
   const initialViewSettings = useAppSelector((state) => state.ui.viewSettings);
-  const sequenceViewSettings = useAppSelector(
-    (state) => state.document.viewSettings,
-  );
+  // La vista de cada pestanya és la del document (B25): la que porta el
+  // `.saac`, o la de l'estil de la seqüència a les pestanyes que no en tenen
+  const sequenceViewSettings = useAppSelector(selectResolvedSequenceViews);
+  const documentStyle = useAppSelector(selectDocumentStyle);
   const sequenceKeys = useAppSelector((state) =>
     Object.keys(state.document.content).map(Number),
   );
@@ -98,26 +101,11 @@ const ViewSequencesSettings = ({
   const { saveInBackground, retry, failure, isRetrying, dismissError } =
     useSaveUiSettings();
 
-  // Aplicar les preferències de l'usuari (ui.viewSettings) a totes les seqüències en muntar.
-  // document.viewSettings s'inicialitza amb valors hardcodats al documentSlice;
-  // aquí les substituïm pels valors guardats de l'usuari com a punt de partida.
-  // Instantània de les preferències desades en entrar, no el selector viu: el
-  // mirall de sessió de més avall reescriu `ui.viewSettings` a cada canvi, i amb
-  // el selector «Restaura» tornaria als valors que l'usuari acaba de tocar.
-  // Només avança quan l'usuari desa les preferències explícitament.
-  const savedUserDefaults = useRef(initialViewSettings);
-  useEffect(() => {
-    const { sizePict, pictSpaceBetween, alignmentH, alignmentV } =
-      savedUserDefaults.current;
-    dispatch(
-      applyViewSettingsToAllActionCreator({
-        sizePict,
-        pictSpaceBetween,
-        alignmentH,
-        alignmentV,
-      }),
-    );
-  }, [dispatch]);
+  // Aquí hi havia un efecte que, en muntar-se la columna, posava les
+  // preferències de l'usuari a totes les pestanyes: el `.saac` no es veia mai
+  // com s'havia desat, i tornar-lo a desar en perdia la vista (B25). Ara la
+  // seqüència es veu sempre amb el seu estil, i les preferències només arriben
+  // a les seqüències noves, que l'hereten (`docs/fonaments/sequencia-i-estil.md`).
 
   // Estat local: mode aplicar a totes vs individual
   const [applyAll, setApplyAll] = useState(true);
@@ -141,11 +129,23 @@ const ViewSequencesSettings = ({
     initialOrientation: initialViewSettings.orientation ?? "landscape",
   });
 
-  // Gestió de la configuració de visualització global (sequenceSpaceBetween)
-  const { viewSettings, updateViewSetting, persistViewSettings } =
+  // Gestió de la disposició de la pàgina (direcció). L'espai entre seqüències
+  // és de l'estil del document i surt d'allà, no d'aquest estat local
+  const { viewSettings: layoutViewSettings, updateViewSetting } =
     useViewManager({
       initialViewSettings,
+      persistToStore: false,
     });
+  // Les preferències tal com són ara a l'store, per al mirall de sessió
+  const uiViewSettingsRef = useRef(initialViewSettings);
+  uiViewSettingsRef.current = initialViewSettings;
+  const viewSettings = useMemo(
+    () => ({
+      ...layoutViewSettings,
+      sequenceSpaceBetween: documentStyle.view.sequenceSpaceBetween,
+    }),
+    [layoutViewSettings, documentStyle.view.sequenceSpaceBetween],
+  );
 
   // Gestió de l'autor (usa el valor per defecte de l'usuari)
   const { author, updateAuthor } = useAuthorManager(
@@ -192,7 +192,7 @@ const ViewSequencesSettings = ({
   // sempre a l'eix creuat de `direction` (V si row, H si column). Font única:
   // la primera seqüència (amb applyAll totes comparteixen el mateix valor)
   const blockSource =
-    sequenceViewSettings[sequenceKeys[0]] ?? DEFAULT_SEQUENCE_VIEW;
+    sequenceViewSettings[sequenceKeys[0]] ?? documentStyle.view;
   const isRowDirection = viewSettings.direction === "row";
   const blockAlign = isRowDirection
     ? ALIGN_V[blockSource.alignmentV]
@@ -236,18 +236,22 @@ const ViewSequencesSettings = ({
 
         if (applyAll) {
           dispatch(
-            applyViewSettingsToAllActionCreator({ [name]: value as number }),
+            applyViewSettingsToAllActionCreator({
+              settings: { [name]: value as number },
+              styleView: documentStyle.view,
+            }),
           );
         } else {
           dispatch(
             updateSequenceViewSettingsActionCreator({
               key: seqKey,
               settings: { [name]: value as number },
+              base: sequenceViewSettings[seqKey],
             }),
           );
         }
       },
-    [applyAll, dispatch],
+    [applyAll, dispatch, documentStyle.view, sequenceViewSettings],
   );
 
   /**
@@ -258,17 +262,23 @@ const ViewSequencesSettings = ({
       (_: React.MouseEvent<HTMLElement>, value: SequenceAlignmentH | null) => {
         if (!value) return;
         if (applyAll) {
-          dispatch(applyViewSettingsToAllActionCreator({ alignmentH: value }));
+          dispatch(
+            applyViewSettingsToAllActionCreator({
+              settings: { alignmentH: value },
+              styleView: documentStyle.view,
+            }),
+          );
         } else {
           dispatch(
             updateSequenceViewSettingsActionCreator({
               key: seqKey,
               settings: { alignmentH: value },
+              base: sequenceViewSettings[seqKey],
             }),
           );
         }
       },
-    [applyAll, dispatch],
+    [applyAll, dispatch, documentStyle.view, sequenceViewSettings],
   );
 
   /**
@@ -279,17 +289,23 @@ const ViewSequencesSettings = ({
       (_: React.MouseEvent<HTMLElement>, value: SequenceAlignmentV | null) => {
         if (!value) return;
         if (applyAll) {
-          dispatch(applyViewSettingsToAllActionCreator({ alignmentV: value }));
+          dispatch(
+            applyViewSettingsToAllActionCreator({
+              settings: { alignmentV: value },
+              styleView: documentStyle.view,
+            }),
+          );
         } else {
           dispatch(
             updateSequenceViewSettingsActionCreator({
               key: seqKey,
               settings: { alignmentV: value },
+              base: sequenceViewSettings[seqKey],
             }),
           );
         }
       },
-    [applyAll, dispatch],
+    [applyAll, dispatch, documentStyle.view, sequenceViewSettings],
   );
 
   /**
@@ -307,42 +323,19 @@ const ViewSequencesSettings = ({
   );
 
   /**
-   * Handler per canviar sequenceSpaceBetween (global)
+   * Handler per canviar l'espai entre seqüències: és de l'estil del document
    */
   const handleSequenceSpaceChange = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (event: any, value: number | number[]) => {
-      const target = event.target;
-      if (target?.name) {
-        updateViewSetting(target.name as keyof ViewSettings, value as number);
-      }
+    (_: Event, value: number | number[]) => {
+      dispatch(
+        setSequenceSpaceBetweenActionCreator({
+          value: value as number,
+          styleView: documentStyle.view,
+        }),
+      );
     },
-    [updateViewSetting],
+    [dispatch, documentStyle.view],
   );
-
-  /**
-   * Handler per restaurar les preferències guardades de l'usuari a totes les seqüències
-   */
-  const handleResetToDefaults = useCallback(() => {
-    const {
-      sizePict,
-      pictSpaceBetween,
-      alignmentH,
-      alignmentV,
-      direction,
-      sequenceSpaceBetween,
-    } = savedUserDefaults.current;
-    dispatch(
-      applyViewSettingsToAllActionCreator({
-        sizePict,
-        pictSpaceBetween,
-        alignmentH,
-        alignmentV,
-      }),
-    );
-    updateViewSetting("direction", direction);
-    updateViewSetting("sequenceSpaceBetween", sequenceSpaceBetween);
-  }, [dispatch, updateViewSetting]);
 
   /**
    * Mirall de sessió: manté `ui.viewSettings` al dia amb el que es veu, inclosos
@@ -354,9 +347,22 @@ const ViewSequencesSettings = ({
    * vocabulari sencer, amb les imatges) al compte o al navegador. Ningú ho havia
    * demanat, ningú n'era avisat si fallava, i de passada despertava Render.
    */
+  // Només hi escriu la disposició: les mides i els espaiats d'aquí són de
+  // l'estil de la seqüència, i a les preferències només hi van quan l'usuari
+  // les desa. Abans el mirall les copiava totes i així barrejava els dos rols
+  // (B21).
+  const { direction } = layoutViewSettings;
   useEffect(() => {
-    persistViewSettings({ author, pageSize, orientation });
-  }, [persistViewSettings, author, pageSize, orientation]);
+    dispatch(
+      viewSettingsActionCreator({
+        ...uiViewSettingsRef.current,
+        direction,
+        author,
+        pageSize,
+        orientation,
+      }),
+    );
+  }, [dispatch, direction, author, pageSize, orientation]);
 
   /**
    * Desa aquests ajustos com a preferències de l'usuari: al compte si hi ha
@@ -364,16 +370,28 @@ const ViewSequencesSettings = ({
    * tingui reintent, confirmació i diàleg d'error, com el modal de configuracions.
    */
   const handleSavePreferences = useCallback(() => {
-    // El que es desa és el que hi ha a Redux i el mirall ja hi és: la instantània
-    // de «Restaura» pot avançar amb ell.
-    savedUserDefaults.current = {
-      ...viewSettings,
-      author,
-      pageSize,
-      orientation,
-    };
+    // Les mides i els espaiats de la seqüència passen a ser els de l'estil per
+    // defecte; la pàgina, la direcció i l'autor, les preferències de disposició
+    dispatch(
+      viewSettingsActionCreator({
+        ...uiViewSettingsRef.current,
+        ...documentStyle.view,
+        direction,
+        author,
+        pageSize,
+        orientation,
+      }),
+    );
     saveInBackground();
-  }, [saveInBackground, viewSettings, author, pageSize, orientation]);
+  }, [
+    dispatch,
+    saveInBackground,
+    documentStyle.view,
+    direction,
+    author,
+    pageSize,
+    orientation,
+  ]);
 
   /**
    * Handler per canviar la mida de pàgina via Select
@@ -624,20 +642,10 @@ const ViewSequencesSettings = ({
                     Amb `floatingClearance` perquè aquesta columna acaba al mateix
                     racó on sura el botó d'estat */}
                 <SettingsActions floatingClearance>
-                  <Tooltip
-                    title={intl.formatMessage(messages.tooltipResetDefaults)}
-                    describeChild
-                  >
-                    {/* `inherit` i no el primary: el verd de la casa sobre el
-                        paper es queda a 2,1:1 i no es llegeix (F11) */}
-                    <StyledButton
-                      color="inherit"
-                      endIcon={<MdSettingsBackupRestore />}
-                      onClick={handleResetToDefaults}
-                    >
-                      <FormattedMessage {...messages.resetDefaults} />
-                    </StyledButton>
-                  </Tooltip>
+                  {/* Substitueix «Restaura les seqüències»: tornar a l'estil per
+                      defecte és una de les dues opcions de «Canvia l'estil», i
+                      ara es pot desfer */}
+                  <ChangeStyleButton />
                   {/* El tooltip diu on van a parar els ajustos, que no és el mateix
                       lloc amb sessió que sense */}
                   <Tooltip

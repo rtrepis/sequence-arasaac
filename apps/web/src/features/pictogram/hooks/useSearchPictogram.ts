@@ -12,6 +12,7 @@ import {
   fetchPictogramData,
   extractPictSettings,
 } from "../api/arasaacClient";
+import { selectDocumentPictStyle } from "@features/sequence/style/styleSelectors";
 
 const useSearchPictogram = () => {
   const {
@@ -19,14 +20,15 @@ const useSearchPictogram = () => {
     textPosition,
     borderIn: defaultBorderIn,
     borderOut: defaultBorderOut,
-  } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
+    // Els pictogrames nous reben l'estil de la seqüència on entren
+  } = useAppSelector((state) => selectDocumentPictStyle(state).pictSequence);
 
   const getActiveSaacAmountPict = (state) =>
     state.document.content[state.document.activeSAAC].length;
   const amountSequence = useAppSelector(getActiveSaacAmountPict);
 
   const defaultSettingsPictApiAra = useAppSelector(
-    (state) => state.ui.defaultSettings.pictApiAra,
+    (state) => selectDocumentPictStyle(state).pictApiAra,
   );
 
   const wordProfiles = useAppSelector((state) => state.ui.wordProfiles);

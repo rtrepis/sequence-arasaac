@@ -15,6 +15,9 @@ import { documentChangedActionCreator } from "./documentStatusSlice";
  *   dia d'un esborrat o d'un canvi de mida que ja s'ha fet al núvol: la còpia
  *   de fora no s'ha quedat enrere, s'ha avançat, i demanar de tornar-la a desar
  *   seria demanar de desar el mateix.
+ * - `documentStyleMaterialized` només fa explícit, en desar, l'estil que el
+ *   document ja heretava: el que es veu no canvia, i marcar-lo just després de
+ *   desar faria que el document desat semblés no desat.
  */
 const NOT_A_CONTENT_CHANGE = new Set([
   "document/changeActiveSAAC",
@@ -22,6 +25,7 @@ const NOT_A_CONTENT_CHANGE = new Set([
   "document/resetDocument",
   "document/removeCloudImage",
   "document/replaceCloudImage",
+  "document/documentStyleMaterialized",
 ]);
 
 /**

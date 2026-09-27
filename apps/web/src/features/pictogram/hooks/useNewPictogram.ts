@@ -1,12 +1,14 @@
 import { useAppSelector } from "@/app/hooks";
 import { PictSequence } from "@/types/sequence";
+import { selectDocumentPictStyle } from "@features/sequence/style/styleSelectors";
 
 const useNewPictogram = () => {
   const {
     textPosition,
     borderIn: defaultBorderIn,
     borderOut: defaultBorderOut,
-  } = useAppSelector((state) => state.ui.defaultSettings.pictSequence);
+    // Els pictogrames nous reben l'estil de la seqüència on entren
+  } = useAppSelector((state) => selectDocumentPictStyle(state).pictSequence);
 
   const getPictogramEmptyWithDefaultSettings = (indexSequence: number) => {
     const pictogramEmpty: PictSequence = {

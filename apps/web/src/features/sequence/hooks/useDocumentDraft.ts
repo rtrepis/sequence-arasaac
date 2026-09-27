@@ -9,6 +9,7 @@ import { MessageDescriptor, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { RootState } from "@app/store";
 import { loadDocumentSaacActionCreator } from "@features/sequence/store/documentSlice";
+import { isPristineDocument } from "@features/sequence/utils/isPristineDocument";
 import { readDraft, saveDraft } from "@features/sequence/storage/draftStorage";
 import { requestPersistentStorage } from "@features/sequence/storage/persistentStorage";
 import {
@@ -41,21 +42,6 @@ const selectStatus = (state: RootState) => state.documentStatus;
 // va a l'esborrany i no al compte.
 const selectViewSettings = (state: RootState): ViewSettings =>
   state.ui.viewSettings;
-
-/**
- * Un document «verge» és el que crea documentSlice en arrencar: sense títol i
- * sense cap pictograma. Ni s'hi restaura res a sobre ni se'n desa cap còpia —
- * desar-lo només serviria per esborrar l'esborrany bo.
- */
-const isPristineDocument = (document: DocumentSAAC): boolean => {
-  const sequences = Object.values(document.content);
-
-  return (
-    document.title === undefined &&
-    sequences.length <= 1 &&
-    sequences.every((sequence) => sequence.length === 0)
-  );
-};
 
 export const useDocumentDraft = (): void => {
   const dispatch = useAppDispatch();

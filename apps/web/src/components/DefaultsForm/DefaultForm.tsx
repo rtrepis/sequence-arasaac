@@ -1,4 +1,4 @@
-import { Box, Button, Tooltip } from "@mui/material";
+import { AlertTitle, Box, Button, Tooltip } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
@@ -51,6 +51,10 @@ interface DefaultFormProps {
   onApplyAllBorderOut: () => void;
   onSubmit: () => void;
   onReset?: () => void;
+  /** Títol del panell: diu sobre què tenen efecte els canvis */
+  title?: React.ReactNode;
+  /** Accions de més al peu, a la dreta de «Restaura» */
+  extraActions?: React.ReactNode;
 }
 
 /**
@@ -83,6 +87,8 @@ const DefaultForm = ({
   onApplyAllBorderOut,
   onSubmit,
   onReset,
+  title,
+  extraActions,
 }: DefaultFormProps) => {
   const intl = useIntl();
 
@@ -138,6 +144,7 @@ const DefaultForm = ({
         hint={
           // Guia del tab: què s'ajusta aquí
           <SettingsPanelHint>
+            {title && <AlertTitle component="h2">{title}</AlertTitle>}
             <FormattedMessage {...messages.panelHint} />
           </SettingsPanelHint>
         }
@@ -202,21 +209,32 @@ const DefaultForm = ({
           </SectionTitle>
         )}
 
-        {onReset && (
-          <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
-            <Tooltip
-              title={intl.formatMessage(messages.tooltipReset)}
-              describeChild
-            >
-              <Button
-                variant="text"
-                color="inherit"
-                endIcon={<MdSettingsBackupRestore />}
-                onClick={onReset}
+        {(onReset || extraActions) && (
+          <Box
+            sx={{
+              pt: 2,
+              display: "flex",
+              justifyContent: "flex-end",
+              flexWrap: "wrap",
+              gap: 1,
+            }}
+          >
+            {onReset && (
+              <Tooltip
+                title={intl.formatMessage(messages.tooltipReset)}
+                describeChild
               >
-                <FormattedMessage {...messages.reset} />
-              </Button>
-            </Tooltip>
+                <Button
+                  variant="text"
+                  color="inherit"
+                  endIcon={<MdSettingsBackupRestore />}
+                  onClick={onReset}
+                >
+                  <FormattedMessage {...messages.reset} />
+                </Button>
+              </Tooltip>
+            )}
+            {extraActions}
           </Box>
         )}
       </SettingsPanelLayout>
