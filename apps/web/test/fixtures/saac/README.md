@@ -21,8 +21,10 @@ Al repositori no hi havia cap `.saac` d'usuari real: només `e2e/fixtures/dues-s
 en garanteixen la fidelitat:
 
 - **Tipus**: cada fitxer quadra amb `DocumentSAAC`, `DefaultSettings` i `Sequence` (`tsc`).
-- **Anada i tornada** (`e2e/saac-fixtures.spec.ts`): l'app de debò obre els fitxers de format 2.1.0
-  i, en tornar-los a desar, en surt **el mateix fitxer byte a byte**.
+- **Anada i tornada** (`e2e/saac-fixtures.spec.ts`): l'app de la 2.1.0 obria els fitxers de format
+  2.1.0 i, en tornar-los a desar, en sortia **el mateix fitxer byte a byte**. Des de l'esquema 2,
+  tornar a desar un fitxer de la 2.1.0 en dona el mateix document **amb l'estil a dins**; el que
+  continua sortint byte a byte és l'anada i tornada d'un fitxer de l'esquema 2 (08 i 09).
 
 Els ids d'ARASAAC són versemblants però no s'han contrastat amb l'API (no era accessible en generar
 els fitxers). No importa: les proves serveixen les imatges des de `e2e/fixtures/images/`.
@@ -48,32 +50,44 @@ per pestanya, pestanya activa, si porta configuració global i què se n'espera 
 | `05-nomes-configuracio` | 2.1.0 | — | sí | fitxer sense `documentState` |
 | `06-format-antic-sense-viewsettings` | antic | 2 (2, 3) | no | sense `viewSettings`; `order` i `defaultSettings` a `null` |
 | `07-format-primitiu-sequence` | primitiu | 1 (3) | no | clau `sequence` en lloc de `documentState` |
+| `08-esquema-2-sequencia` | esquema 2 | 4 (3, 5, 4, 0) | dins del document | el 02 desat amb «Desa la seqüència»: estil dins del document; anada i tornada byte a byte |
+| `09-esquema-2-estil.saacstyle` | esquema 2 | — | és un estil | el 02 desat amb «Desa l'estil» |
+| `10-estil-parcial` | 2.1.0 | 1 (7) | parcial | el 01 amb una configuració d'abans de `numberFont`: fusió camp a camp |
 
-## El que cal saber del format abans de migrar-lo
+Les 08 i 09 les ha escrit l'app (obrir el 02 i desar-lo), no s'han fet a mà; la 10 sí, a partir de
+la 01. La captura del 08 és idèntica, píxel a píxel, a la del 02: és la prova que una seqüència es
+veu igual després de desar-la en el format nou i tornar-la a obrir.
+
+## El que cal saber del format
+
+> Des de la branca `claude/sequencia-estil-b25-16pluv` el format té **esquema 2**
+> (`schemaVersion: 2`), i la regla de què és cada cosa és a `docs/fonaments/sequencia-i-estil.md`.
+> Els punts de sota descriuen el format **d'abans** (el de les fixtures 01–07), que el lector
+> continua acceptant sencer; on el comportament ha canviat, es diu.
 
 - **Dues claus opcionals i independents** al primer nivell: `defaultSettings` (la configuració global,
   només si l'usuari marca la casella, que surt desmarcada) i `documentState` (el document). Un fitxer
   pot portar-ne una, l'altra o totes dues. El carregador (`AppNavigationDrawer.tsx`,
   `handleFileLoad`) encara accepta una tercera, `sequence`, del format primitiu.
-- **No hi ha número de versió.** La migració l'ha de deduir de la forma: `sequence` → primitiu;
-  `documentState` sense `viewSettings` → antic; la resta → 2.1.0. El `schemaVersion` nou ha de ser
-  opcional en llegir, i un fitxer sense ha de voler dir «2.1.0 o anterior».
-- **La pàgina no és al fitxer.** Mida, orientació, direcció i separació entre seqüències viuen a
-  `ui.viewSettings` (preferència de l'usuari i esborrany), no al document (vegeu B20 a
-  `docs/BACKLOG-ux.md`). El `Page { size, orientation, layoutMode }` del mode lliure és camp nou:
-  un fitxer antic l'ha de prendre de les preferències, que és el que fa avui.
-- **Entrar a la vista esborra la vista per seqüència del fitxer** (B25 al backlog): els
-  `viewSettings` del `.saac` se substitueixen per les preferències globals en muntar-se la columna.
-  Les captures de referència recullen aquest comportament tal com és avui. La disposició lliure que
-  s'hi afegeixi no pot anar pel mateix camí.
-- **El carregador no valida ni normalitza gairebé res**: `loadDocumentSaac` només omple els
-  `viewSettings` que falten. Les normalitzacions de formats vells (`alignment` únic →
-  `alignmentH`/`alignmentV`, `fitzgerald` com a objecte `{ value, color }`) viuen només a l'API
-  (`apps/api/src/modules/documents/model.ts`, `serializeDocument`). Segons l'historial, el web no
-  ha escrit mai aquestes formes en un fitxer, però si la migració nova es fa en un sol punt, és bo
-  que les accepti totes dues.
-- **Carregar un fitxer amb configuració global substitueix la de l'usuari** a l'estat (no a les
-  preferències desades).
+- **No hi havia número de versió.** El lector (`features/sequence/style/saacFile.ts`) el dedueix
+  de la forma: `sequence` → primitiu; `documentState` sense `viewSettings` → antic; la resta →
+  2.1.0. Un fitxer sense `schemaVersion` vol dir «2.1.0 o anterior».
+- **La pàgina no és al fitxer.** Mida, orientació i direcció viuen a `ui.viewSettings`
+  (preferència de l'usuari i esborrany), no al document; l'esquema 2 ja admet `layout`, i portar-la
+  al fitxer és B26 a `docs/BACKLOG-ux.md`. La separació entre seqüències sí que hi va ara, com a
+  part de l'estil (`styleView`). El `Page { size, orientation, layoutMode }` del mode lliure és camp
+  nou: un fitxer antic l'ha de prendre de les preferències, que és el que fa avui.
+- **Entrar a la vista esborrava la vista per seqüència del fitxer** (B25, ✅ resolta): els
+  `viewSettings` del `.saac` se substituïen per les preferències globals en muntar-se la columna.
+  Ja no: cada pestanya es veu amb la seva vista. Les captures de 01–04 s'han regenerat a propòsit
+  per aquest motiu, i totes sis perquè la lletra de reserva és ara sans-serif (el test bloqueja
+  Google Fonts); vegeu la nota de B25 al backlog.
+- **El carregador valida i normalitza en un sol punt** (`saacFile.ts`): fusió camp a camp dels
+  estils parcials, i les formes velles que abans només entenia l'API (`alignment` únic,
+  `fitzgerald` com a objecte).
+- **Carregar un fitxer amb configuració global ja no substitueix la de l'usuari**: aquella
+  configuració és l'estil de la seqüència. Un fitxer que **només** porta configuració (05)
+  s'interpreta com a fitxer d'estil.
 - **Les imatges pròpies** van a `img.url`: `data:image/…;base64` sense compte, URL de Cloudinary
   amb compte. Són el gruix del pes del fitxer (`03` fa 57 KB per dues imatges).
 
@@ -85,10 +99,14 @@ npx playwright test e2e/saac-fixtures.spec.ts
 ```
 
 Per cada fixture: s'obre amb les pestanyes i els pictogrames esperats; tornar-lo a desar dona el
-mateix document; i la vista es pinta igual que la captura de referència
-(`e2e/saac-fixtures.spec.ts-snapshots/`).
+mateix document amb el seu estil (i, de l'esquema 2, el mateix fitxer); i la vista es pinta igual
+que la captura de referència (`e2e/saac-fixtures.spec.ts-snapshots/`). Els tests unitaris de la
+lectura, la fusió i la migració són a `src/features/sequence/style/*.test.ts` i fan servir aquestes
+mateixes fixtures (`npx vitest run src/features/sequence`).
 
-Les captures depenen de la plataforma (el nom porta `-linux`). Les que hi ha s'han fet a Linux amb
-el codi de la 2.1.0, **abans de cap canvi del mode lliure**. Per tenir-les en una altra plataforma,
-cal generar-les amb `--update-snapshots` des del commit que les va afegir, no des d'un de posterior:
-una captura feta amb el codi nou no demostra res.
+Les captures depenen de la plataforma (el nom porta `-linux`). Les de 01–07 es van fer a Linux amb
+el codi de la 2.1.0 i **s'han regenerat a propòsit una vegada**, en resoldre B25: cada canvi hi és
+explicat a la nota de B25 de `docs/BACKLOG-ux.md` (la vista del fitxer, que abans s'esborrava, i la
+lletra de reserva). Per tenir-les en una altra plataforma, cal generar-les amb `--update-snapshots`
+des del commit que les va regenerar, no des d'un de posterior: una captura feta amb el codi nou no
+demostra res.

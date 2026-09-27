@@ -52,9 +52,10 @@ test("la columna de la pàgina de vista té tots els controls amb nom", async ({
   await expect(page.getByRole("button", { name: "Dalt" })).toBeVisible();
   await expectNoEnglishOrphans(page);
 
-  // B5: el botó diu el seu àmbit, i el tooltip (describeChild) no li pren el nom
+  // B5: el botó diu el seu àmbit, i el tooltip (describeChild) no li pren el nom.
+  // «Restaura les seqüències» és ara «Canvia l'estil» (fonaments de l'estil)
   await expect(
-    page.getByRole("button", { name: "Restaura les seqüències" }),
+    page.getByRole("button", { name: "Canvia l'estil" }),
   ).toBeVisible();
 });
 
