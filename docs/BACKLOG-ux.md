@@ -925,6 +925,27 @@ i el resultat dependria de l'ordre d'arribada. Aquesta proposta hi cap perquè *
 sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert de la regla és que
 **reduir és irreversible**, i per això s'ha de dir i no amagar.
 
+### B25 — Entrar a la vista esborra la vista per seqüència que porta el `.saac` 🔴 Oberta
+
+*(Trobada preparant les fixtures de regressió del mode lliure, branca `feature/mode-lliure`.)*
+
+- **On**: `ViewSquenceSettings.tsx`, l'efecte de muntatge que fa
+  `applyViewSettingsToAllActionCreator(savedUserDefaults.current)`.
+- **Per què importa**: el `.saac` desa `documentState.viewSettings` per seqüència (mida, separació,
+  alineació H/V), però en obrir la pestanya «Vista» l'efecte els sobreescriu **tots** amb les
+  preferències globals de l'usuari. El document no es veu mai com es va desar, i si després es torna
+  a descarregar, el fitxer ja no porta els valors originals: és pèrdua de dades silenciosa.
+  Reproduït amb `apps/web/test/fixtures/saac/02-diverses-pestanyes.saac` (pestanya 0 a 1.5 i
+  centrada, pestanya 2 a 0.7 a baix a la dreta): després de passar per la vista, les quatre
+  pestanyes surten a `sizePict: 1`, a dalt a l'esquerra. És la mateixa confusió entre preferència
+  i estat de B21, vista des del document.
+- **Proposta**: aplicar les preferències només a les seqüències que no en tenen (document nou,
+  pestanya nova, `.saac` antic sense `viewSettings`), no a tot el document en cada muntatge. És un
+  canvi de comportament visible —qui avui obre un `.saac` veu les seves preferències, no les del
+  fitxer— i per això no s'ha fet aquí. Cal decidir-ho **abans** de la fase 1 del mode lliure: la
+  disposició per pàgina que hi afegeix seria el següent camp esborrat pel mateix efecte. En
+  resoldre-la, les captures de `e2e/saac-fixtures.spec.ts` s'han de regenerar a propòsit.
+
 ## Gravetat baixa
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.

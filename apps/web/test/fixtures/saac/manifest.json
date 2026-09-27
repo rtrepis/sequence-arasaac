@@ -1,0 +1,96 @@
+{
+  "01-una-pestanya.saac": {
+    "format": "2.1.0",
+    "descripcio": "Document nou d'una sola pestanya, tal com surt de l'app sense compte: sense títol, sense configuració global.",
+    "cobreix": [
+      "una pestanya",
+      "pictograma no trobat a ARASAAC (selectedId 0)",
+      "pictograma amb una altra imatge triada (selectedId ≠ bestIdPicts[0])",
+      "text propi (`text`) diferent de la paraula cercada"
+    ],
+    "pestanyes": { "0": 7 },
+    "activeSAAC": 0,
+    "teConfiguracioGlobal": false,
+    "anadaITornada": "identic"
+  },
+  "02-diverses-pestanyes.saac": {
+    "format": "2.1.0",
+    "descripcio": "Document desat al núvol i baixat a fitxer: id de Mongo, títol, autor i `order`. Quatre pestanyes, l'última buida, i la configuració global desada al fitxer.",
+    "cobreix": [
+      "diverses pestanyes",
+      "pestanya buida",
+      "pestanya activa que no és la primera",
+      "viewSettings diferents per pestanya (mida, espai, alineació H/V)",
+      "configuració global personalitzada (numerat, text a dalt, vora exterior)",
+      "pell i cabell no per defecte"
+    ],
+    "pestanyes": { "0": 3, "1": 5, "2": 4, "3": 0 },
+    "activeSAAC": 2,
+    "teConfiguracioGlobal": true,
+    "anadaITornada": "identic"
+  },
+  "03-fonts-personalitzades.saac": {
+    "format": "2.1.0",
+    "descripcio": "Tipografies pròpies de l'app i de Google per pictograma, colors i mides de lletra, numeració amb font pròpia, vores, creu, blanc i negre, i imatges pròpies (base64 i Cloudinary).",
+    "cobreix": [
+      "fonts pròpies: Escolar, Massallera, OpenDyslexic, Atkinson-Hyperlegible, Memima, Pipomayu",
+      "fonts de Google: Caveat, Noto Sans Arabic",
+      "textPosition top / bottom / none",
+      "numbered amb numberFont",
+      "cross: true",
+      "color: false (blanc i negre)",
+      "vores amb color fix i amb `fitzgerald`",
+      "imatge pròpia en base64 (`data:image/png`) — la que desa l'app sense compte",
+      "imatge pròpia a Cloudinary — la que desa l'app amb compte",
+      "configuració global amb fonts pròpies"
+    ],
+    "pestanyes": { "0": 6, "1": 4 },
+    "activeSAAC": 0,
+    "teConfiguracioGlobal": true,
+    "anadaITornada": "identic"
+  },
+  "04-molts-pictogrames.saac": {
+    "format": "2.1.0",
+    "descripcio": "Tauler gran: 60 pictogrames en una pestanya, 24 en una altra i 1 sol en la tercera, amb els valors extrems dels controls de vista.",
+    "cobreix": [
+      "molts pictogrames (60) a la mida mínima (0.4) i sense espai",
+      "espai màxim entre pictogrames (10)",
+      "un sol pictograma a la mida màxima (3.8)"
+    ],
+    "pestanyes": { "0": 60, "1": 24, "2": 1 },
+    "activeSAAC": 0,
+    "teConfiguracioGlobal": false,
+    "anadaITornada": "identic"
+  },
+  "05-nomes-configuracio.saac": {
+    "format": "2.1.0",
+    "descripcio": "Només la configuració global, sense cap seqüència (casella «Seqüència» desmarcada).",
+    "cobreix": ["fitxer sense `documentState`"],
+    "pestanyes": null,
+    "activeSAAC": null,
+    "teConfiguracioGlobal": true,
+    "anadaITornada": "identic"
+  },
+  "06-format-antic-sense-viewsettings.saac": {
+    "format": "anterior a viewSettings per pestanya",
+    "descripcio": "Fitxer d'abans que cada pestanya tingués la seva vista: sense `viewSettings`, amb `order` i `defaultSettings` a null i pictogrames amb els ajustos mínims. És la mateixa forma que `e2e/fixtures/dues-sequencies.saac`.",
+    "cobreix": [
+      "absència de viewSettings (el carregador n'hi posa els de per defecte)",
+      "order: null i defaultSettings: null",
+      "pictogrames sense fontSize ni vores"
+    ],
+    "pestanyes": { "0": 2, "1": 3 },
+    "activeSAAC": 1,
+    "teConfiguracioGlobal": false,
+    "anadaITornada": "viewSettings-per-defecte"
+  },
+  "07-format-primitiu-sequence.saac": {
+    "format": "primitiu (clau `sequence`)",
+    "descripcio": "Format més antic: una sola seqüència a la clau `sequence`. Encara el llegeix `AppNavigationDrawer`, que la posa a la pestanya activa del document obert.",
+    "cobreix": ["clau `sequence` en comptes de `documentState`"],
+    "pestanyes": { "0": 3 },
+    "activeSAAC": 0,
+    "teConfiguracioGlobal": false,
+    "anadaITornada": "sequence-a-documentState"
+  }
+}
