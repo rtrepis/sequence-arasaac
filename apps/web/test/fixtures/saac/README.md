@@ -1,7 +1,7 @@
 # Fixtures `.saac`
 
 Fitxers `.saac` de referència per a les proves de regressió del canvi de model de dades del **mode
-lliure** (`docs/spec-mode-lliure.md`, §4 «Compatibilitat» i §12 «Regressió»). La pregunta que
+lliure** (encàrrec a la branca `feature/mode-lliure`, `docs/spec-mode-lliure.md`, §4 i §12). La pregunta que
 responen és una sola: *un fitxer desat amb la versió 2.1.0, s'obre, es torna a desar i es veu
 exactament igual després del canvi?*
 

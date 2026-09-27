@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 // `test/fixtures/saac/` (vegeu-ne el README).
 //
 // Són la xarxa del canvi de model de dades que demana el mode lliure
-// (`docs/spec-mode-lliure.md`, §4 i §12): un `.saac` desat amb la versió
+// (`docs/spec-mode-lliure.md` a la branca `feature/mode-lliure`, §4 i §12): un `.saac` desat amb la versió
 // d'avui s'ha d'obrir, tornar a desar i veure exactament igual després.
 //
 // Requereix el servidor de desenvolupament engegat: `npm run dev` a apps/web.

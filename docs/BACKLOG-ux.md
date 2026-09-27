@@ -927,7 +927,7 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 
 ### B25 — Entrar a la vista esborra la vista per seqüència que porta el `.saac` 🔴 Oberta
 
-*(Trobada preparant les fixtures de regressió del mode lliure, branca `feature/mode-lliure`.)*
+*(Trobada preparant les fixtures de regressió del mode lliure, branca `feature/fixtures-saac`.)*
 
 - **On**: `ViewSquenceSettings.tsx`, l'efecte de muntatge que fa
   `applyViewSettingsToAllActionCreator(savedUserDefaults.current)`.
@@ -1308,7 +1308,7 @@ l'ha de desencallar.
 
 ### P1 — Regressió del `.saac` amb els comptes encesos 🔴 Oberta (ajornada)
 
-*(Branca `feature/mode-lliure`, en preparar les fixtures de regressió del mode lliure.)*
+*(Branca `feature/fixtures-saac`, en preparar les fixtures de regressió del mode lliure.)*
 
 - **Per què s'ajorna**: el 27-09-2026 s'aturen els comptes (`VITE_ACCOUNTS_ENABLED=false` al web,
   `ACCOUNTS_ENABLED=false` a l'API). Aquestes proves es faran quan es tornin a encendre.
