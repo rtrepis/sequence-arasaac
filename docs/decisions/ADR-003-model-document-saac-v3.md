@@ -52,9 +52,12 @@ mòbil, amb compte o sense.**
     l'estil). L'historial complet és **B30**.
 13. **Descàrrega** amb `application/octet-stream` i el nom acabat en `.saac` o `.saacstyle`. El tipus
     es decideix pel contingut, i s'obren també els `.saac.txt`.
-14. **El Fitzgerald d'un pictograma és contingut, no un retoc** (*pendent de confirmar*). «Aplica a
-    tots», aplicar un estil i «Restableix» no el toquen, i no fa sortir l'indicador
-    «personalitzat».
+14. **El Fitzgerald se separa en categoria i colors.** Cada pictograma guarda la seva **categoria**
+    (`category`, fora de l'estil, només si en té), que és contingut i la dona ARASAAC. L'estil del
+    document guarda la **taula de colors** per categoria, amb `none` per als que no en tenen. Un
+    pictograma pot portar un sol color com a retoc. Així el Fitzgerald es comporta com qualsevol
+    altra propietat: «Restableix» torna al color de la categoria sense connexió, i «Aplica a
+    tots», el desfer i l'indicador «personalitzat» funcionen igual que amb la resta.
 
 ## Alternatives descartades
 
@@ -70,6 +73,8 @@ mòbil, amb compte o sense.**
 | Reescriure Redux amb la forma v3 | Molt més risc i cap guany per a l'usuari: la v3 és un contracte del fitxer |
 | Canviar la forma de l'API al format v3 | Toca la validació, la compactació i les miniatures, i els comptes estan apagats: no es podria provar de punta a punta |
 | Historial general de desfer i refer | Fora d'abast: és B30 |
+| El Fitzgerald com un color del pictograma que cap acció d'estil toca | Gairebé tots els pictogrames sortirien com a «personalitzats», i «Restableix» no podria tornar al color de la categoria |
+| «Restableix» torna a demanar la categoria a ARASAAC | Necessita connexió, no és immediat, complica el desfer, i no recupera els colors del vocabulari personal ni els dels pictogrames sense categoria |
 | Estil per seqüència complet (lletra, vores) | Fora d'abast en aquesta versió |
 
 ## Conseqüències
@@ -82,14 +87,20 @@ mòbil, amb compte o sense.**
   - Els documents antics s'obren amb la pàgina de qui obre (com ara), però **els v3 s'obren amb la
     seva**: canvien les captures on la pàgina del fitxer i la de les preferències no coincideixen.
   - Qualsevol altra captura que canviï és un error.
-- **Redux** guanya camps opcionals per fer l'anada i tornada: els `id` de seqüències i pictogrames i
-  els camps desconeguts del fitxer. Els documents d'abans no els tenen i continuen sent vàlids.
+- **Redux** guanya camps opcionals per fer l'anada i tornada: els `id` de seqüències i pictogrames, la
+  categoria de Fitzgerald i els camps desconeguts del fitxer. Els documents d'abans no els tenen i continuen sent vàlids.
 - **Aplicar un estil ja no canvia l'espai entre seqüències**, perquè ara és pàgina (decisió 9).
 - **`ui.viewSettings`** deixa de fer de pàgina del document: queda com a **pàgina per defecte**
   dels documents nous, que és una preferència.
 - **Regla de canvi** (a `CLAUDE.md`): qualsevol canvi al format `.saac` requereix actualitzar
   l'esquema, incrementar `schemaVersion` si trenca la compatibilitat, afegir-hi una migració i una
   fixture.
-- **Pendent de confirmar**: la decisió 14. L'especificació deia que «Restableix» esborra tot el
-  `style` del pictograma; com que gairebé tots tenen un Fitzgerald propi, s'hauria perdut el color
-  de la categoria i gairebé tots haurien sortit com a «personalitzats».
+- **Fitzgerald als fitxers antics**: la categoria es dedueix del color (fonament 06, «Fitzgerald»).
+  Un color que no és de cap categoria es conserva com a retoc.
+- **Pictogrames nous sense categoria** (no trobats, imatges pròpies, tipus d'ARASAAC desconegut)
+  es pinten amb el color `none` de l'estil (`#666666`). Fins ara n'hi havia de tres colors
+  (`#666`, `#2222ff` i `#FFCD94`) segons com havien nascut. Els documents antics no canvien:
+  aquests colors hi queden com a retoc.
+- **Pendent de confirmar**: els pictogrames antics **sense cap** color de Fitzgerald es pintaran amb
+  `none`, en lloc del color del text que tenien per accident (C11). És l'única excepció a la
+  invariant de la migració.

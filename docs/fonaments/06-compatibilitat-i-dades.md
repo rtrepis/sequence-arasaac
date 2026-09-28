@@ -22,7 +22,13 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   "meta": { "id": "…", "title": "…", "author": "…", "createdAt": "ISO", "updatedAt": "ISO" },
   "page": { "size": "A4", "orientation": "portrait", "direction": "row", "sequenceGap": 1, "layout": "flow" },
   "style": {
-    "pictogram": { "skin": "mulatto", "hair": "black", "color": true, "fitzgerald": "#666666" },
+    "pictogram": {
+      "skin": "mulatto", "hair": "black", "color": true,
+      "fitzgerald": {
+        "properNoun": "#FFEB3B", "noun": "#FF9800", "verb": "#4CAF50", "descriptive": "#2196F3",
+        "socialContent": "#9C27B0", "miscellaneous": "#FFFFFF", "none": "#666666"
+      }
+    },
     "card": {
       "numbered": true, "textPosition": "top",
       "font": { "family": "Roboto", "color": "#000000", "size": 1 },
@@ -38,9 +44,9 @@ i una fixture (`apps/web/test/fixtures/saac/`).
       "style": { "view": { "sizePict": 1.5 } },
       "pictograms": [
         {
-          "id": "p_…", "word": "llevar-se", "text": "L'escola", "cross": false,
+          "id": "p_…", "word": "llevar-se", "text": "L'escola", "cross": false, "category": "verb",
           "image": { "source": "arasaac", "id": 6627, "alternatives": [6627, 6628] },
-          "style": { "pictogram": { "fitzgerald": "#4CAF50" }, "card": { "borderOut": { "color": "#999999" } } }
+          "style": { "card": { "borderOut": { "color": "#999999" } } }
         },
         { "id": "p_…", "word": "foto", "image": { "source": "own", "asset": "img_1" } }
       ]
@@ -79,6 +85,13 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   `page.layout` és `"free"`. Avui només es reserva: cap versió de l'app l'escriu.
 - **`pictograms[].style`** porta **només** les diferències amb l'estil resolt de la seqüència
   (`pictogram` i `card`).
+- **Fitzgerald** (vegeu el fonament 03, «El color de Fitzgerald»):
+  - **`pictograms[].category`** és la categoria de la paraula, fora de l'estil: `"properNoun"`,
+    `"noun"`, `"verb"`, `"descriptive"`, `"socialContent"` o `"miscellaneous"`. **Només hi és si el
+    pictograma en té.**
+  - **`style.pictogram.fitzgerald`** del document és la taula de colors: una clau per categoria i
+    `none` per als pictogrames sense categoria. Sempre completa.
+  - **`style.pictogram.fitzgerald`** d'un pictograma és un **sol color**: el retoc.
 - **`image.source`**:
 
   | Valor | Camps | Què és |
@@ -156,7 +169,9 @@ existien publicats: `sequence`, `documentState` i la 2.1.0 (`defaultSettings` + 
 | `img.searched.word` | `word` | — |
 | `img.searched.bestIdPicts` | `image.alternatives` | — |
 | `img.searched.keyWords` | `image.keywords` | Només si hi és |
-| `img.settings` | `pictograms[].style.pictogram` | Només les diferències |
+| `img.settings` (pell, cabell, color) | `pictograms[].style.pictogram` | Només les diferències |
+| `img.settings.fitzgerald` | `category` i, si cal, un retoc | Vegeu «Fitzgerald», a sota |
+| `defaultSettings.pictApiAra.fitzgerald` | — | S'ignora: era el color amb què naixien els pictogrames, i ara és `none` de la taula |
 | `img.url` (`data:` en base64) | `assets` i `image.asset` amb `source: "own"` | Deduplicació pel hash |
 | `img.url` (Cloudinary) | `assets` amb `url`, i `image.asset` | Sense descarregar la imatge |
 | `settings` del pictograma | `pictograms[].style.card` | Només les diferències. `fontSize` i `fontFamily` s'ignoren (vegeu el fonament 03) |
@@ -164,6 +179,18 @@ existien publicats: `sequence`, `documentState` i la 2.1.0 (`defaultSettings` + 
 | (no existeix) | `page` | Es pren de les preferències de pàgina de qui obre, i `layout: "flow"` |
 | (no existeix) | `id` de seqüències i pictogrames | Es generen |
 
+- **Fitzgerald**: els fitxers antics només guarden el color. La categoria es dedueix del color:
+  - Si és exactament el color d'una categoria de la taula de l'app (sense distingir majúscules),
+    el pictograma rep aquesta categoria i **cap** retoc.
+  - Si és `#666` o `#666666`, el pictograma no té categoria i **cap** retoc.
+  - Si és qualsevol altre color (`#FFCD94`, `#2222ff`, els del vocabulari personal), el pictograma
+    no té categoria i el color es guarda com a **retoc**, perquè es continuï veient igual.
+  - Si **no porta cap color** (documents molt antics), el pictograma no té categoria ni retoc, i es
+    pinta amb `none`. **És l'única excepció a la invariant**: fins ara la vora «fitzgerald»
+    d'aquests pictogrames sortia del color del text per accident (C11 a `docs/BACKLOG-ux.md`).
+    *Pendent de confirmar.*
+  - Cas límit acceptat: un color del vocabulari personal que coincideix amb el d'una categoria es
+    llegeix com aquella categoria. Es veu igual, però «Restableix» no el canvia.
 - Si **totes** les seqüències són buides, se'n conserva una de buida: un document té sempre com a
   mínim una seqüència.
 - Una seqüència buida d'un fitxer v3 **no** es descarta: l'usuari l'ha desada així.

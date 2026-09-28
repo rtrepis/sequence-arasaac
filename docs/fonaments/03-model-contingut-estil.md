@@ -57,7 +57,7 @@ al codi nou i als documents.
 
 | Cosa | De qui és | On viu |
 |---|---|---|
-| Seqüències, pictogrames, textos, imatges pròpies | Del document | `.saac` |
+| Seqüències, pictogrames, textos, categoria de Fitzgerald, imatges pròpies | Del document | `.saac` |
 | Estil del document i vista de cada seqüència | Del document | `.saac` |
 | Retocs d'un pictograma | Del document | `.saac` |
 | Pàgina (mida, orientació, direcció, espai entre seqüències) | Del document | `.saac` |
@@ -116,18 +116,28 @@ La mida del text del pictograma és **només** `card.font.size`, i ve de la casc
 
 ### El color de Fitzgerald
 
-El color de Fitzgerald del pictograma (`style.pictogram.fitzgerald`) és el color de la categoria de
-la paraula, i el dona ARASAAC en triar el pictograma. És **del contingut**, encara que es guardi a
-l'estil.
+El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 
-- El Fitzgerald de l'estil del document és només el color amb què neixen els pictogrames sense
-  categoria.
-- **MAI** «Aplica a tots», aplicar un estil ni «Restableix» toquen el Fitzgerald d'un pictograma.
-- **MAI** el Fitzgerald sol fa que un pictograma es mostri com a «personalitzat».
+| Part | Què és | On viu | És |
+|---|---|---|---|
+| **Categoria** | El tipus de paraula: nom propi, nom, verb, descriptiu, contingut social o miscel·lània | `pictograms[].category`, **fora** de l'estil | Contingut, com la paraula |
+| **Colors** | El color de cada categoria, i el dels pictogrames sense categoria | `style.pictogram.fitzgerald` del document | Estil |
 
-> **Pendent de confirmar** (vegeu l'ADR-003): l'especificació deia que «Restableix» esborra tot el
-> `style` del pictograma. Com que gairebé tots els pictogrames tenen un Fitzgerald propi, s'hauria
-> perdut el color de la categoria i gairebé tots haurien sortit com a «personalitzats».
+- **SEMPRE** la categoria la dona ARASAAC en triar el pictograma (el tipus de la primera paraula
+  clau). Un pictograma no trobat o una imatge pròpia **no** en porten.
+- **SEMPRE** el color es resol així: el retoc del pictograma (`style.pictogram.fitzgerald`, un sol
+  color) si n'hi ha; si no, el color de la seva categoria a l'estil del document; si no té
+  categoria, el color `none` de l'estil del document.
+- **MAI** una acció d'estil toca la categoria. «Restableix» esborra el retoc de color, i el
+  pictograma torna al color de la seva categoria, **sense connexió i a l'instant**.
+- El Fitzgerald es comporta com qualsevol altra propietat: «Aplica a tots», aplicar un estil,
+  «Restableix», el desfer i l'indicador «personalitzat» el tracten igual que la resta.
+- Un color fixat pel **vocabulari personal** és un retoc del pictograma.
+- Els colors de l'estil del document són, d'entrada, els de l'app (`data/fitzgeraldColors.ts`, i
+  `#666666` per als que no tenen categoria). Van dins del document perquè, si l'app canvia mai la
+  taula, els documents desats es continuïn veient igual. **No** hi ha cap interfície per
+  editar-los.
+- Els colors es comparen **sense distingir majúscules**, i `#666` és el mateix que `#666666`.
 
 ## 5. Accions sobre l'estil
 
@@ -137,7 +147,7 @@ l'estil.
 | **Aplica a tots** | Formulari del pictograma; columna de la vista | Canvia l'estil del document **i esborra aquestes propietats** de tots els retocs de seqüències i pictogrames. |
 | **Aplica a aquesta seqüència** | Columna de la vista, sense «Aplica a tots» | Canvia la vista d'aquesta seqüència. Els pictogrames no tenen `view`, de manera que no hi ha cap retoc seu per esborrar. |
 | **Canviar un pictograma** | Formulari del pictograma | Canvia **només** el `style` d'aquell pictograma, i **només** les propietats tocades. |
-| **Restableix** un pictograma | Formulari del pictograma | Esborra el seu `style`, tret del Fitzgerald. |
+| **Restableix** un pictograma | Formulari del pictograma | Esborra el seu `style`. La categoria, que és contingut, es queda. |
 | **Aplica el meu estil per defecte** | Panell «Estil del document»; columna de la vista | Com canviar l'estil del document, amb l'estil per defecte de l'usuari. |
 | **Carrega un estil des d'un fitxer** | Panell «Estil del document» | Com canviar l'estil del document, amb l'estil del fitxer. Pregunta si es conserven els retocs; la resposta per defecte és que sí. |
 
@@ -150,7 +160,7 @@ l'estil.
 
 ## 6. L'indicador «personalitzat»
 
-Un pictograma amb retocs propis (un `style` amb alguna cosa més que el Fitzgerald) ho ha de dir.
+Un pictograma amb retocs propis (un `style` no buit) ho ha de dir.
 
 - **SEMPRE** visible, i **MAI** només amb color: una icona o un text.
 - **SEMPRE** amb nom accessible («Pictograma personalitzat»), no només un `title`.

@@ -1376,6 +1376,9 @@ Branca `claude/document-limit-users-sjig8o`.
   els pictogrames sense `fitzgerald` (documents antics: `extractPictSettings` sempre l'omple) quan
   la vora està configurada com a «fitzgerald». No és greu perquè és una vora, però el color surt
   d'un accident, no d'una decisió.
+- **Relació amb el model v3** (`docs/decisions/ADR-003-model-document-saac-v3.md`): el color dels
+  pictogrames sense categoria passa a ser `none` de l'estil del document (`#666666`). Si es confirma
+  que els pictogrames antics sense cap color també el prenen, aquesta entrada queda resolta.
 - **Fet a C9**: escriure `currentColor` explícitament, per no canviar cap dibuix mentre es posava la
   barrera de tipus.
 - **Proposta**: triar un color de debò per al cas «sense classificació» —el candidat natural és el
