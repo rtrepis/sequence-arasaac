@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sequenciaac.app/schema/saac-v3.schema.json",
+  "title": "SequenciAAC — document (.saac) i estil (.saacstyle), esquema 3",
+  "description": "Vegeu docs/fonaments/06-compatibilitat-i-dades.md. Els camps desconeguts s'admeten a tots els nivells i es conserven en tornar a desar.",
+  "oneOf": [{ "$ref": "#/$defs/documentFile" }, { "$ref": "#/$defs/styleFile" }],
+  "$defs": {
+    "header": {
+      "type": "object",
+      "required": ["format", "kind", "schemaVersion"],
+      "properties": {
+        "format": { "const": "sequenciaac" },
+        "kind": { "enum": ["document", "style"] },
+        "schemaVersion": { "type": "integer", "minimum": 3 },
+        "savedWith": { "type": "string", "description": "Versió de l'app que el va escriure. Només informa." }
+      }
+    },
+
+    "documentFile": {
+      "allOf": [{ "$ref": "#/$defs/header" }],
+      "type": "object",
+      "required": ["format", "kind", "schemaVersion", "meta", "page", "style", "sequences"],
+      "properties": {
+        "kind": { "const": "document" },
+        "meta": { "$ref": "#/$defs/documentMeta" },
+        "page": { "$ref": "#/$defs/page" },
+        "style": { "$ref": "#/$defs/fullStyle" },
+        "sequences": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/sequence" }
+        },
+        "assets": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/asset" }
+        },
+        "ui": {
+          "type": "object",
+          "description": "Estat d'edició. Mai no afecta l'aspecte ni la impressió.",
+          "properties": { "activeSequence": { "type": "string" } }
+        }
+      }
+    },
+
+    "styleFile": {
+      "allOf": [{ "$ref": "#/$defs/header" }],
+      "type": "object",
+      "required": ["format", "kind", "schemaVersion", "style"],
+      "properties": {
+        "kind": { "const": "style" },
+        "meta": {
+          "type": "object",
+          "properties": { "title": { "type": "string" } }
+        },
+        "style": { "$ref": "#/$defs/fullStyle" }
+      }
+    },
+
+    "documentMeta": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "author": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+
+    "page": {
+      "type": "object",
+      "required": ["size", "orientation", "direction", "sequenceGap", "layout"],
+      "properties": {
+        "size": { "enum": ["A4", "A3", "FULLSCREEN"] },
+        "orientation": { "enum": ["portrait", "landscape"] },
+        "direction": {
+          "enum": ["row", "column"],
+          "description": "Seqüències en files o en columnes."
+        },
+        "sequenceGap": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Espai entre seqüències. És un factor, no mil·límetres."
+        },
+        "layout": {
+          "enum": ["flow", "free"],
+          "description": "\"free\" es reserva per al mode lliure; avui només s'escriu \"flow\"."
+        }
+      }
+    },
+
+    "sequence": {
+      "type": "object",
+      "required": ["id", "pictograms"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "style": {
+          "type": "object",
+          "description": "En aquesta versió, només view. Només les diferències amb l'estil del document.",
+          "properties": { "view": { "$ref": "#/$defs/partialView" } }
+        },
+        "frame": {
+          "type": "object",
+          "description": "Reservat per al mode lliure (page.layout = \"free\"). Mil·límetres sobre la pàgina.",
+          "required": ["x", "y", "w", "h"],
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "w": { "type": "number", "minimum": 0 },
+            "h": { "type": "number", "minimum": 0 },
+            "z": { "type": "integer" }
+          }
+        },
+        "pictograms": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/pictogram" }
+        }
+      }
+    },
+
+    "pictogram": {
+      "type": "object",
+      "required": ["id", "word", "image"],
+      "properties": {
+        "id": { "type": "string" },
+        "word": { "type": "string" },
+        "text": { "type": "string" },
+        "cross": { "type": "boolean" },
+        "image": { "$ref": "#/$defs/image" },
+        "style": {
+          "type": "object",
+          "description": "Només les diferències amb l'estil resolt de la seqüència. Mai view.",
+          "properties": {
+            "pictogram": { "$ref": "#/$defs/partialPictogramStyle" },
+            "card": { "$ref": "#/$defs/partialCardStyle" }
+          },
+          "not": { "required": ["view"] }
+        }
+      }
+    },
+
+    "image": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["source", "id"],
+          "properties": {
+            "source": { "const": "arasaac" },
+            "id": { "type": "integer", "minimum": 1 },
+            "alternatives": { "type": "array", "items": { "type": "integer" } },
+            "keywords": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["source", "asset"],
+          "properties": {
+            "source": { "const": "own" },
+            "asset": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["source"],
+          "properties": { "source": { "const": "none" } }
+        }
+      ]
+    },
+
+    "asset": {
+      "type": "object",
+      "required": ["mime"],
+      "anyOf": [{ "required": ["data"] }, { "required": ["url"] }],
+      "properties": {
+        "mime": { "type": "string", "pattern": "^image/" },
+        "data": { "type": "string", "pattern": "^data:image/" },
+        "url": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "skin": { "enum": ["asian", "aztec", "black", "mulatto", "white"] },
+    "hair": { "enum": ["black", "blonde", "brown", "darkBrown", "gray", "darkGray", "red"] },
+    "textPosition": { "enum": ["top", "bottom", "none"] },
+    "alignmentH": { "enum": ["left", "center", "right"] },
+    "alignmentV": { "enum": ["top", "center", "bottom"] },
+
+    "font": {
+      "type": "object",
+      "required": ["family", "color", "size"],
+      "properties": {
+        "family": { "type": "string" },
+        "color": { "type": "string" },
+        "size": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "partialFont": {
+      "type": "object",
+      "properties": {
+        "family": { "type": "string" },
+        "color": { "type": "string" },
+        "size": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "border": {
+      "type": "object",
+      "required": ["color", "radius", "size"],
+      "properties": {
+        "color": { "type": "string", "description": "Un color, o \"fitzgerald\"." },
+        "radius": { "type": "number", "minimum": 0 },
+        "size": { "type": "number", "minimum": 0 }
+      }
+    },
+    "partialBorder": {
+      "type": "object",
+      "properties": {
+        "color": { "type": "string" },
+        "radius": { "type": "number", "minimum": 0 },
+        "size": { "type": "number", "minimum": 0 }
+      }
+    },
+
+    "fullStyle": {
+      "type": "object",
+      "description": "Estil del document o d'un fitxer d'estil: sempre complet.",
+      "required": ["pictogram", "card", "view"],
+      "properties": {
+        "pictogram": {
+          "type": "object",
+          "required": ["skin", "hair", "color", "fitzgerald"],
+          "properties": {
+            "skin": { "$ref": "#/$defs/skin" },
+            "hair": { "$ref": "#/$defs/hair" },
+            "color": { "type": "boolean" },
+            "fitzgerald": { "type": "string" }
+          }
+        },
+        "card": {
+          "type": "object",
+          "required": ["numbered", "textPosition", "font", "numberFont", "borderIn", "borderOut"],
+          "properties": {
+            "numbered": { "type": "boolean" },
+            "textPosition": { "$ref": "#/$defs/textPosition" },
+            "font": { "$ref": "#/$defs/font" },
+            "numberFont": { "$ref": "#/$defs/font" },
+            "borderIn": { "$ref": "#/$defs/border" },
+            "borderOut": { "$ref": "#/$defs/border" }
+          }
+        },
+        "view": {
+          "type": "object",
+          "required": ["sizePict", "pictSpaceBetween", "alignmentH", "alignmentV"],
+          "properties": {
+            "sizePict": { "type": "number", "exclusiveMinimum": 0 },
+            "pictSpaceBetween": { "type": "number", "minimum": 0 },
+            "alignmentH": { "$ref": "#/$defs/alignmentH" },
+            "alignmentV": { "$ref": "#/$defs/alignmentV" }
+          }
+        }
+      }
+    },
+
+    "partialPictogramStyle": {
+      "type": "object",
+      "properties": {
+        "skin": { "$ref": "#/$defs/skin" },
+        "hair": { "$ref": "#/$defs/hair" },
+        "color": { "type": "boolean" },
+        "fitzgerald": { "type": "string" }
+      }
+    },
+    "partialCardStyle": {
+      "type": "object",
+      "properties": {
+        "numbered": { "type": "boolean" },
+        "textPosition": { "$ref": "#/$defs/textPosition" },
+        "font": { "$ref": "#/$defs/partialFont" },
+        "numberFont": { "$ref": "#/$defs/partialFont" },
+        "borderIn": { "$ref": "#/$defs/partialBorder" },
+        "borderOut": { "$ref": "#/$defs/partialBorder" }
+      }
+    },
+    "partialView": {
+      "type": "object",
+      "properties": {
+        "sizePict": { "type": "number", "exclusiveMinimum": 0 },
+        "pictSpaceBetween": { "type": "number", "minimum": 0 },
+        "alignmentH": { "$ref": "#/$defs/alignmentH" },
+        "alignmentV": { "$ref": "#/$defs/alignmentV" }
+      }
+    }
+  }
+}

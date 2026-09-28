@@ -87,6 +87,7 @@ l'entrada.
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
 | B14 | Sostre del canvas del PDF sense mesurar | S'espera tenir casos reals al registre d'errors (`/api/client-errors` continua obert amb els comptes apagats, i l'avís per correu també); no hi ha res a fer fins que n'arribin | — |
 | N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
+| B30 | No hi ha historial de desfer i refer | El desfer que ja existeix cobreix els canvis d'estil, «Aplica a tots» i «Restableix», que són els que esborren més feina d'un cop | L |
 
 ### Ajornades (comptes apagats)
 
@@ -1112,6 +1113,9 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   la seqüència, com l'ordre o les pestanyes. Avui és una preferència més, i qui obre un `.saac` el
   veu en la pàgina i la direcció de qui l'obre: una seqüència preparada en A3 apaïsat en columnes
   surt en A4 en files. És el mateix que passava amb l'estil abans de B25, en més petit.
+- **Decisió (2026-09-28)**: es resol amb el model v3: la pàgina passa a `page` del document
+  (`docs/decisions/ADR-003-model-document-saac-v3.md`, decisió 6). Es marcarà resolta quan la
+  implementació es fusioni.
 - **Proposta**: escriure `layout` en desar i llegir-lo en obrir; els fitxers sense `layout`
   s'obren amb la disposició per defecte de l'usuari, com l'estil. El lector
   (`style/saacFile.ts`) ja el conserva, l'API ja el valida i el desa, i no cal cap versió 3 de
@@ -1163,6 +1167,21 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 - **Proposta**: embolcallar la targeta amb `ScaleToFit` (`components/SettingsLayout/`), com
   `DefaultForm`. `PictEditForm` no té aquest problema (no té requadre fix) i `ViewSettingsPreview` ja
   escala el full sencer.
+
+### B30 — No hi ha historial de desfer i refer 🔴 Oberta
+
+*(Obert en decidir el model de document `.saac` v3, `docs/decisions/ADR-003-model-document-saac-v3.md`.)*
+
+- **On**: `features/sequence/store/styleSlice.ts`, que guarda un sol desfer (l'últim canvi
+  d'estil) i l'ofereix amb un snackbar. La resta d'accions del document (afegir, esborrar i moure
+  pictogrames, canviar-ne un, canviar la vista d'una seqüència) no es poden desfer.
+- **Per què importa**: l'especificació del model v3 demanava desfer i refer per a totes les
+  accions sobre l'estil. En aquesta versió només «Aplica a tots», «Restableix» i aplicar un estil
+  fan servir el desfer que ja existeix (`docs/fonaments/03-model-contingut-estil.md` §5).
+- **Proposta**: un historial del document (una pila de desfer i una de refer) a `documentSlice`,
+  amb dreceres de teclat (Ctrl+Z, Ctrl+Maj+Z) i botons visibles a la barra de l'editor. Cal
+  decidir-ne l'abast (quines accions en formen part, quants passos) i què passa amb el snackbar de
+  «Desfés» actual.
 
 ## Gravetat baixa
 
