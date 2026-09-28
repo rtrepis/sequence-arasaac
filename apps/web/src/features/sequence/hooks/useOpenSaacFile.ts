@@ -3,8 +3,8 @@
 //
 // | Fitxer    | Des de «Carrega»                           | Des de «Carrega un estil…»   |
 // |-----------|--------------------------------------------|------------------------------|
-// | Seqüència | s'obre tal com es va desar                 | se n'aplica només l'estil    |
-// | Estil     | s'aplica a la seqüència oberta (amb desfer) | s'aplica (amb desfer)        |
+// | Document  | s'obre tal com es va desar                 | se n'aplica només l'estil    |
+// | Estil     | s'aplica al document obert (amb desfer)    | s'aplica (amb desfer)        |
 // |           | o, si no n'hi ha, es proposa per defecte    |                              |
 //
 // La interpretació del fitxer (formats antics, estil parcial) és a `saacFile.ts`.
@@ -63,7 +63,7 @@ export const useOpenSaacFile = () => {
   const { showBackdrop, hideBackdrop, showSnackbar } = useFeedback();
 
   /**
-   * Avís d'estil de la seqüència que s'acaba d'obrir (fitxer o núvol): si té
+   * Bàner d'estil del document que s'acaba d'obrir (fitxer o núvol): si té
    * un estil diferent de l'estil per defecte, i quines fonts no hi ha.
    */
   const announceOpenedDocument = useCallback(() => {
@@ -76,7 +76,6 @@ export const useOpenSaacFile = () => {
     if (ownStyle)
       dispatch(
         styleNoticeShownActionCreator({
-          kind: "opened",
           documentId: document.id,
           ownStyle,
           unavailableFonts: [],
@@ -103,7 +102,6 @@ export const useOpenSaacFile = () => {
       else
         dispatch(
           styleNoticeShownActionCreator({
-            kind: "opened",
             documentId: document.id,
             ownStyle: false,
             unavailableFonts,
@@ -113,7 +111,7 @@ export const useOpenSaacFile = () => {
   }, [dispatch, store]);
 
   const openSequence = useCallback(
-    (parsed: Extract<ParsedSaacFile, { kind: "sequence" }>) => {
+    (parsed: Extract<ParsedSaacFile, { kind: "document" }>) => {
       dispatch(loadDocumentSaacActionCreator(parsed.document));
       // El que s'acaba de carregar existeix en un fitxer del disc: és l'únic
       // cas en què obrir també vol dir «això ja està desat»
@@ -160,7 +158,7 @@ export const useOpenSaacFile = () => {
         return;
       }
 
-      if (parsed.kind === "sequence" && intent === "open") {
+      if (parsed.kind === "document" && intent === "open") {
         openSequence(parsed);
         return;
       }
@@ -174,7 +172,7 @@ export const useOpenSaacFile = () => {
               selectUserDefaultStyle(store.getState()),
             );
 
-      // Un fitxer d'estil obert sense cap seqüència no té on aplicar-se: es
+      // Un fitxer d'estil obert sense cap document no té on aplicar-se: es
       // pregunta si es vol fer servir per defecte
       if (intent === "open" && isPristineDocument(store.getState().document)) {
         dispatch(pendingDefaultStyleSetActionCreator(style));
@@ -182,7 +180,7 @@ export const useOpenSaacFile = () => {
       }
 
       // L'avís del canvi, amb «Desfés», és el missatge d'aquesta acció
-      dispatch(changeDocumentStyleThunk(style, "file", style));
+      dispatch(changeDocumentStyleThunk(style, "file"));
     },
     [
       dispatch,

@@ -3,9 +3,9 @@ import { defineMessages } from "react-intl";
 const messages = defineMessages({
   panelHint: {
     id: "components.defaultSettings.panelHint",
-    defaultMessage:
-      "Set how new pictograms will look. To apply the changes to the ones already in the sequence, use «Apply to all».",
-    description: "Guia del tab de pictogrames del modal de configuracions",
+    defaultMessage: "S'aplica a totes les seqüències d'aquest document.",
+    description:
+      "Ajuda del panell «Estil del document»: l'estil és del document sencer, no d'una sola seqüència",
   },
   pictGuide: {
     id: "components.defaultSettings.pictGuide",

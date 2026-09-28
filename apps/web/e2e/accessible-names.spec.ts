@@ -8,7 +8,9 @@ import { test, expect } from "@playwright/test";
 // Els aria-label en anglès que hi havia escrits a mà als grups de toggles
 const ENGLISH_ORPHANS = ["left", "right", "center", "top", "bottom"];
 
-const expectNoEnglishOrphans = async (page: import("@playwright/test").Page) => {
+const expectNoEnglishOrphans = async (
+  page: import("@playwright/test").Page,
+) => {
   for (const orphan of ENGLISH_ORPHANS) {
     await expect(page.locator(`[aria-label="${orphan}"]`)).toHaveCount(0);
   }
@@ -53,9 +55,10 @@ test("la columna de la pàgina de vista té tots els controls amb nom", async ({
   await expectNoEnglishOrphans(page);
 
   // B5: el botó diu el seu àmbit, i el tooltip (describeChild) no li pren el nom.
-  // «Restaura les seqüències» és ara «Canvia l'estil» (fonaments de l'estil)
+  // «Restaura les seqüències» és ara «Aplica el meu estil per defecte», amb
+  // desfer (docs/fonaments/sequencia-i-estil.md)
   await expect(
-    page.getByRole("button", { name: "Canvia l'estil" }),
+    page.getByRole("button", { name: "Aplica el meu estil per defecte" }),
   ).toBeVisible();
 });
 
@@ -66,7 +69,7 @@ test("els botons de restaurar del modal diuen cadascun el seu àmbit", async ({
   await page.getByRole("button", { name: "Menú principal" }).click();
   await page.getByRole("button", { name: "Configuració" }).click();
 
-  await page.getByRole("tab", { name: "Pictogrames" }).click();
+  await page.getByRole("tab", { name: "Estil del document" }).click();
   await expect(
     page.getByRole("button", { name: "Restaura els pictogrames" }),
   ).toBeVisible();

@@ -7,7 +7,8 @@ import BackendWakeUpNotice from "@features/backend/api/BackendWakeUpNotice";
 import DocumentDraftSync from "@features/sequence/components/DocumentDraftSync";
 import SessionExpiredNotice from "@features/backend/auth/components/SessionExpiredNotice";
 import DocumentStatusFab from "@features/sequence/components/DocumentStatusFab/DocumentStatusFab";
-import DocumentStyleNotice from "@features/sequence/components/ChangeStyle/DocumentStyleNotice";
+import DocumentStyleNotice from "@features/sequence/components/DocumentStyle/DocumentStyleNotice";
+import StyleUndoSnackbar from "@features/sequence/components/DocumentStyle/StyleUndoSnackbar";
 import { messageLocale } from "@/App";
 
 const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
@@ -31,9 +32,12 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
         {/* L'avís de verificació va aquí i no dins de cada pàgina: així apareix
             tant a l'editor com al visualitzador sense duplicar-lo */}
         <EmailVerificationBanner />
-        {/* Al mateix lloc i pel mateix motiu: l'avís de l'estil de la seqüència
-            oberta ha de sortir tant a l'editor com al visualitzador */}
+        {/* Al mateix lloc i pel mateix motiu: el bàner d'estat de l'estil del
+            document obert ha de sortir tant a l'editor com al visualitzador */}
         <DocumentStyleNotice />
+        {/* Es pinta a baix, però va al DOM aquí dalt, just després del bàner,
+            perquè el tabulador arribi aviat a «Desfés» */}
+        <StyleUndoSnackbar placement="layout" />
         <Outlet />
         {/* Va al layout i no a index.tsx perquè necessita l'IntlProvider, i aquest és
             l'únic lloc de l'app on l'usuari fa crides al backend (entrar, desar, carregar) */}

@@ -35,11 +35,33 @@ Regles:
 
 ---
 
+## Snackbar o bàner: la regla dels missatges
+
+Dos llocs per a dues coses diferents. **El criteri és què diu el missatge, no com d'important és.**
+
+| | **Snackbar** (a baix, flotant) | **Bàner** (a dalt, dins del contingut) |
+|---|---|---|
+| **Què diu** | La **confirmació d'una acció que l'usuari acaba de fer** | L'**estat del document obert** que cal conèixer per entendre'l |
+| **Exemples** | «Fitxer desat», «S'ha aplicat el teu estil per defecte al document» | «Aquest document té el seu propi estil», les fonts que falten |
+| **Durada** | Breu i temporal (3 s). **Si porta una acció** («Desfés»), 10 s, que s'aturen mentre el ratolí o el focus hi són | **Persistent** fins que l'usuari el tanca (creu, o Esc des de dins) |
+| **Accessibilitat** | L'acció, abastable amb el teclat: el snackbar va al DOM just després del que l'ha provocat, encara que es pinti a baix. Dins d'un diàleg, el snackbar es pinta **dins** del diàleg, que atrapa el focus | Regió viva `aria-live="polite"` que hi és sempre (el contingut hi apareix a dins), botons de 44 px |
+| **Impressió** | — | **No s'imprimeix** (`NotPrint`) |
+| **Referència** | `FeedbackSnackbar` (sense acció), `StyleUndoSnackbar` (amb «Desfés») | `DocumentStyleNotice`, `EmailVerificationBanner` |
+
+- **Un snackbar amb acció no desapareix perquè n'arribi un altre**: s'hi apila a sobre
+  (`StyleUndoSnackbar`). Una confirmació d'una altra cosa —«Configuració desada» en tancar el
+  panell— no pot endur-se el «Desfés».
+- **Un bàner no confirma accions**, i **un snackbar no explica l'estat del document**: el primer es
+  quedaria penjat després que la confirmació ja no vulgui dir res, i el segon marxaria abans que
+  l'usuari l'hagués pogut llegir.
+
+---
+
 ## Estàndard d'accions destructives
 
-L'app **no té desfer**, amb una sola excepció: **canviar l'estil d'una seqüència** («Canvia
-l'estil», o obrir un fitxer d'estil amb una seqüència oberta) es pot desfer des de l'avís que en
-surt, mentre el document no s'hagi tocat des d'aleshores (`features/sequence/store/styleSlice.ts`;
+L'app **no té desfer**, amb una sola excepció: **aplicar un estil al document** («Aplica el meu
+estil per defecte», «Carrega un estil des d'un fitxer…», o obrir un fitxer d'estil amb un document
+obert) es pot desfer des del snackbar que en surt, mentre el document no s'hagi tocat des d'aleshores (`features/sequence/store/styleSlice.ts`;
 vegeu `docs/fonaments/sequencia-i-estil.md`). La resta de `features/sequence` no té `undo`, i per
 això el que protegeix la feina és on viu cada acció i quan demana permís.
 

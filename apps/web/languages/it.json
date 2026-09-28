@@ -94,7 +94,7 @@
     "description": "Modal tittle"
   },
   "components.buttonWithModalDownload.saveHelper.label": {
-    "defaultMessage": "Salva la sequenza con il suo stile, oppure solo lo stile per usarlo in altre sequenze.",
+    "defaultMessage": "Salva tutte le sequenze del documento con il suo stile. Quando lo aprirai, si vedrà come adesso.",
     "description": "Helper save modal"
   },
   "components.copyRight": {
@@ -118,7 +118,7 @@
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.panelHint": {
-    "defaultMessage": "Le modifiche riguardano la sequenza aperta e si applicano alla chiusura delle impostazioni. I pittogrammi che avevano lo stesso dello stile lo seguono; per cambiare anche quelli ritoccati uno per uno, usa «Applica a tutti». Perché le nuove sequenze le ricevano, salvale come stile predefinito.",
+    "defaultMessage": "Si applica a tutte le sequenze di questo documento.",
     "description": "Guia del tab de pictogrames del modal de configuracions"
   },
   "components.defaultSettings.sectionPictogram": {
@@ -142,8 +142,8 @@
     "description": "Settings Default "
   },
   "components.defaultSettings.tab.pictograms": {
-    "defaultMessage": "Pittogrammi",
-    "description": "Tab de configuració per defecte dels pictogrames"
+    "defaultMessage": "Stile del documento",
+    "description": "Tab del panell «Estil del document»: l'estil que s'aplica a totes les seqüències del document obert"
   },
   "components.defaultSettings.tab.user": {
     "defaultMessage": "Utente",
@@ -249,7 +249,8 @@
     "defaultMessage": "«{word}» eliminata dal tuo vocabolario."
   },
   "features.sequence.draft.saveError": {
-    "defaultMessage": "Non è stato possibile salvare la sequenza in questo browser. Scarica il file per non perdere il lavoro."
+    "defaultMessage": "Non è stato possibile salvare il documento in questo browser. Scarica il file per non perdere il lavoro.",
+    "description": "Avís quan el navegador no pot desar l'esborrany automàtic del document"
   },
   "features.wordProfile.list.title": {
     "defaultMessage": "Le mie parole ({count})"
@@ -432,7 +433,7 @@
     "description": "Generic image loading error"
   },
   "components.sequenceAuthor": {
-    "defaultMessage": "Autore della sequenza:",
+    "defaultMessage": "Autore del documento:",
     "description": "License to use the pictograms"
   },
   "components.settingCard.Radius.title": {
@@ -990,7 +991,7 @@
     "description": "Helper text form"
   },
   "pages.viewSequence.authSequence.label": {
-    "defaultMessage": "Autore della sequenza",
+    "defaultMessage": "Autore del documento",
     "description": "Label form"
   },
   "pages.viewSequence.direction.label": {
@@ -1034,10 +1035,12 @@
     "defaultMessage": "Salva come preferenze"
   },
   "pages.viewSequence.tooltip.savePreferencesCloud": {
-    "defaultMessage": "Salva queste impostazioni nel tuo account e le usa come predefinite nelle sequenze nuove"
+    "defaultMessage": "Salva queste impostazioni nel tuo account e le usa come predefinite nei nuovi documenti",
+    "description": "Tooltip del botó de desar preferències amb sessió iniciada"
   },
   "pages.viewSequence.tooltip.savePreferencesLocal": {
-    "defaultMessage": "Salva queste impostazioni in questo browser e le usa come predefinite nelle sequenze nuove"
+    "defaultMessage": "Salva queste impostazioni in questo browser e le usa come predefinite nei nuovi documenti",
+    "description": "Tooltip del botó de desar preferències sense sessió"
   },
   "pages.viewSequence.tooltip.orientationLandscape": {
     "defaultMessage": "Pagina orizzontale",
@@ -1482,7 +1485,8 @@
     "defaultMessage": "Connessione al tuo account…"
   },
   "features.backend.wakeUp.description": {
-    "defaultMessage": "La prima connessione della giornata può richiedere fino a un minuto. Nel frattempo puoi continuare a modificare la sequenza."
+    "defaultMessage": "La prima connessione della giornata può richiedere fino a un minuto. Nel frattempo puoi continuare a modificare il documento.",
+    "description": "Explicació de l'espera i del que l'usuari pot fer mentrestant"
   },
   "components.defaultSettings.saveError.title": {
     "defaultMessage": "Non siamo riusciti a salvare la configurazione"
@@ -1500,13 +1504,15 @@
     "defaultMessage": "Non ora"
   },
   "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
-    "defaultMessage": "Il server non ha compreso il formato di questa sequenza. Scaricala sul tuo dispositivo per non perderla e avvisaci."
+    "defaultMessage": "Il server non ha compreso il formato di questo documento. Scaricalo sul tuo dispositivo per non perderlo e avvisaci.",
+    "description": "Error en desar: el document no ha passat la validació del servidor"
   },
   "features.backend.wakeUp.descriptionBlocking": {
     "defaultMessage": "La prima connessione della giornata può richiedere fino a un minuto. Non chiudere l'applicazione."
   },
   "features.backend.auth.savingDocument": {
-    "defaultMessage": "Salvataggio della sequenza nel cloud…"
+    "defaultMessage": "Salvataggio del documento nel cloud…",
+    "description": "Missatge del backdrop mentre es desa el document"
   },
   "features.backend.auth.loadListError": {
     "defaultMessage": "Non siamo riusciti a recuperare i tuoi documenti. Controlla la connessione e riprova."
@@ -1586,7 +1592,7 @@
     "description": "Títol de la pàgina de signup"
   },
   "pages.signup.hint": {
-    "defaultMessage": "Con un account puoi salvare le tue sequenze nel cloud e recuperarle da qualsiasi dispositivo. Ti invieremo un'email per confermare l'indirizzo e scegliere la password — non serve ancora inserirne una qui.",
+    "defaultMessage": "Con un account puoi salvare i tuoi documenti nel cloud e recuperarli da qualsiasi dispositivo. Ti invieremo un'email per confermare l'indirizzo e scegliere la password — non serve ancora inserirne una qui.",
     "description": "Guia inicial de la pàgina de signup"
   },
   "pages.signup.name": {
@@ -1910,11 +1916,11 @@
     "description": "Botó per tancar el diàleg sense desar"
   },
   "features.backend.documents.uploading": {
-    "defaultMessage": "Invio della sequenza… {percent}%",
+    "defaultMessage": "Invio del documento… {percent}%",
     "description": "Progrés de la pujada del document al núvol"
   },
   "features.backend.documents.uploadingUnknown": {
-    "defaultMessage": "Invio della sequenza…",
+    "defaultMessage": "Invio del documento…",
     "description": "Progrés de la pujada quan no se'n sap la mida total"
   },
   "features.backend.documents.downloading": {
@@ -2013,7 +2019,8 @@
     "defaultMessage": "Spazio per le immagini"
   },
   "features.backend.userSettings.usage.documentsTitle": {
-    "defaultMessage": "Sequenze nel cloud"
+    "defaultMessage": "Documenti nel cloud",
+    "description": "Títol del comptador de documents desats al núvol"
   },
   "features.backend.userSettings.usage.wordsTitle": {
     "defaultMessage": "Parole del vocabolario"
@@ -2054,10 +2061,12 @@
     "defaultMessage": "Riprova"
   },
   "features.backend.userSettings.usage.inDocument": {
-    "defaultMessage": "Nella sequenza «{title}»"
+    "defaultMessage": "Nel documento «{title}»",
+    "description": "Origen d'una imatge: el document on es fa servir"
   },
   "features.backend.userSettings.usage.inUntitledDocument": {
-    "defaultMessage": "In una sequenza senza nome"
+    "defaultMessage": "In un documento senza nome",
+    "description": "Origen d'una imatge d'un document que no té títol"
   },
   "features.backend.userSettings.usage.inWord": {
     "defaultMessage": "Nella parola «{word}»"
@@ -2069,7 +2078,8 @@
     "defaultMessage": "Eliminare l'immagine?"
   },
   "features.backend.userSettings.usage.deleteBodyDocument": {
-    "defaultMessage": "Il pittogramma resterà senza immagine nella sequenza salvata nel cloud e recupererai {size}. L'immagine non si può recuperare."
+    "defaultMessage": "Il pittogramma resterà senza immagine nel documento salvato nel cloud e recupererai {size}. L'immagine non si può recuperare.",
+    "description": "Què es perd en esborrar la imatge d'un document"
   },
   "features.backend.userSettings.usage.deleteBodyWord": {
     "defaultMessage": "La parola manterrà il suo pittogramma ARASAAC e recupererai {size}. L'immagine non si può recuperare."
@@ -2387,49 +2397,13 @@
     "defaultMessage": "Nel menu del pittogramma, «Elimina» non è più al centro, dove si premeva per sbaglio: va all'ultimo posto, separato dal resto da una linea.",
     "description": "Descripció del pas 2 de «safe-delete»"
   },
-  "features.sequence.style.changeStyle": {
-    "defaultMessage": "Cambia lo stile",
-    "description": "Botó i títol del diàleg per triar un altre estil per a la seqüència oberta"
-  },
-  "features.sequence.style.changeStyle.tooltip": {
-    "defaultMessage": "Scegli un altro stile per questa sequenza. Si può annullare.",
-    "description": "Ajuda del botó «Canvia l'estil»"
-  },
-  "features.sequence.style.dialog.intro": {
-    "defaultMessage": "Scegli con quale stile vuoi vedere questa sequenza. Potrai annullarlo, e il file non cambia finché non lo salvi.",
-    "description": "Explicació del diàleg «Canvia l'estil»"
-  },
-  "features.sequence.style.option.userDefault": {
-    "defaultMessage": "Il mio stile predefinito",
-    "description": "Opció de «Canvia l'estil»: aplicar l'estil per defecte de l'usuari"
-  },
-  "features.sequence.style.option.userDefault.help": {
-    "defaultMessage": "Quello che ricevono le nuove sequenze.",
-    "description": "Explicació de l'opció «El meu estil per defecte»"
-  },
-  "features.sequence.style.option.file": {
-    "defaultMessage": "Carica uno stile…",
-    "description": "Opció de «Canvia l'estil»: aplicar l'estil d'un fitxer"
-  },
-  "features.sequence.style.option.file.help": {
-    "defaultMessage": "Da un file di stile (.saacstyle) o da un'altra sequenza (.saac).",
-    "description": "Explicació de l'opció «Carrega un estil…»"
-  },
   "features.sequence.style.notice.ownStyle": {
-    "defaultMessage": "Questa sequenza ha il suo stile.",
-    "description": "Avís en obrir una seqüència amb un estil diferent de l'estil per defecte de l'usuari"
+    "defaultMessage": "Questo documento ha il suo stile.",
+    "description": "Bàner en obrir un document amb un estil diferent de l'estil per defecte de l'usuari"
   },
   "features.sequence.style.notice.unavailableFonts": {
     "defaultMessage": "Alcuni caratteri non sono disponibili su questo dispositivo ({fonts}): vengono mostrati con un carattere di riserva.",
     "description": "Avís en obrir una seqüència que fa servir fonts que el dispositiu no té. {fonts} és la llista de noms"
-  },
-  "features.sequence.style.notice.changed.userDefault": {
-    "defaultMessage": "Il tuo stile predefinito è stato applicato a questa sequenza.",
-    "description": "Avís després de canviar l'estil a l'estil per defecte"
-  },
-  "features.sequence.style.notice.changed.file": {
-    "defaultMessage": "Lo stile del file è stato applicato a questa sequenza.",
-    "description": "Avís després de canviar l'estil a un de carregat d'un fitxer"
   },
   "features.sequence.style.undo": {
     "defaultMessage": "Annulla",
@@ -2456,7 +2430,7 @@
     "description": "Pregunta en obrir un fitxer d'estil sense cap seqüència oberta"
   },
   "features.sequence.style.pendingDefault.body": {
-    "defaultMessage": "Non c'è nessuna sequenza aperta a cui applicarlo. Se lo usi come predefinito, le nuove sequenze lo riceveranno al posto dello stile attuale.",
+    "defaultMessage": "Non c'è nessun documento aperto a cui applicarlo. Se lo usi come predefinito, i nuovi documenti lo riceveranno al posto dello stile attuale.",
     "description": "Explicació de què passa si s'accepta l'estil com a per defecte"
   },
   "features.sequence.style.pendingDefault.confirm": {
@@ -2464,15 +2438,51 @@
     "description": "Botó per acceptar l'estil del fitxer com a estil per defecte"
   },
   "features.sequence.style.panel.title": {
-    "defaultMessage": "Stile di questa sequenza",
-    "description": "Títol del panell de pictogrames de la configuració: diu que els canvis són per a la seqüència oberta"
-  },
-  "components.buttonWithModalDownload.saveSequence": {
-    "defaultMessage": "Salva la sequenza",
-    "description": "Botó que desa la seqüència amb el seu estil en un fitxer .saac"
+    "defaultMessage": "Stile del documento",
+    "description": "Títol del panell d'estil i del botó del bàner que hi porta. L'estil s'aplica a totes les seqüències del document"
   },
   "components.buttonWithModalDownload.saveStyle": {
     "defaultMessage": "Salva lo stile",
     "description": "Botó que desa només l'estil de la seqüència en un fitxer .saacstyle"
+  },
+  "features.sequence.style.applyUserDefault": {
+    "defaultMessage": "Applica il mio stile predefinito",
+    "description": "Acció que aplica l'estil per defecte de l'usuari al document obert (es pot desfer)"
+  },
+  "features.sequence.style.applyUserDefault.tooltip": {
+    "defaultMessage": "Riporta tutte le sequenze del documento al tuo stile predefinito. Si può annullare.",
+    "description": "Ajuda del botó «Aplica el meu estil per defecte» de la vista"
+  },
+  "features.sequence.style.loadStyleFile": {
+    "defaultMessage": "Carica uno stile da un file…",
+    "description": "Acció que aplica al document l'estil d'un fitxer .saacstyle o d'un altre document .saac"
+  },
+  "features.sequence.style.saveStyleFile": {
+    "defaultMessage": "Salva lo stile in un file…",
+    "description": "Acció que obre el diàleg per desar només l'estil del document en un fitxer .saacstyle"
+  },
+  "features.sequence.style.actions": {
+    "defaultMessage": "Azioni di stile",
+    "description": "Nom accessible del botó «⋯» que obre el menú amb les accions d'estil en mòbil"
+  },
+  "features.sequence.style.changed.userDefault": {
+    "defaultMessage": "Il tuo stile predefinito è stato applicato al documento.",
+    "description": "Snackbar després d'aplicar l'estil per defecte al document"
+  },
+  "features.sequence.style.changed.file": {
+    "defaultMessage": "Lo stile del file è stato applicato al documento.",
+    "description": "Snackbar després d'aplicar al document l'estil d'un fitxer"
+  },
+  "components.buttonWithModalDownload.saveDocument": {
+    "defaultMessage": "Salva il documento",
+    "description": "Botó que desa el document (totes les seqüències) amb el seu estil en un fitxer .saac"
+  },
+  "components.buttonWithModalDownload.styleDialogTitle": {
+    "defaultMessage": "Salva lo stile in un file",
+    "description": "Títol del diàleg per desar només l'estil del document"
+  },
+  "components.buttonWithModalDownload.styleHelper": {
+    "defaultMessage": "Solo l'aspetto del documento —caratteri, colori, bordi, dimensioni e spazi—, senza nessuna sequenza. Si può applicare ad altri documenti.",
+    "description": "Explicació del diàleg per desar només l'estil"
   }
 }

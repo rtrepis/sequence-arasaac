@@ -26,6 +26,7 @@ const SettingsPreviewFrame = ({
   sx,
 }: SettingsPreviewFrameProps): React.ReactElement => (
   <Box
+    data-testid="settings-preview-frame"
     sx={{
       bgcolor: background === "paper" ? "background.paper" : sheetSurface,
       border: "1px solid",

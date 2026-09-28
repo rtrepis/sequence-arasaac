@@ -39,7 +39,7 @@ const PictEditModal = ({
   setCopy,
 }: PictEditProps): React.ReactElement => {
   const intl = useIntl();
-  // L'estil de la seqüència, no les preferències de qui la mira
+  // L'estil del document, no les preferències de qui el mira
   const defaults: PictogramCardDefaults = useAppSelector(
     selectDocumentCardDefaults,
   );

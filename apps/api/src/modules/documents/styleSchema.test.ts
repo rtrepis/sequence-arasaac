@@ -1,6 +1,6 @@
 // Tests de l'estil dels documents desats al núvol (esquema 2 del .saac)
 //
-// «Desar seqüència» inclou sempre l'estil, també al núvol: el client envia
+// «Desa el document» inclou sempre l'estil, també al núvol: el client envia
 // `defaultSettings` i `styleView`, i els ha de tornar a rebre tal com els va
 // enviar. Els documents d'abans no en porten i s'han de continuar acceptant.
 // Vegeu docs/fonaments/sequencia-i-estil.md.

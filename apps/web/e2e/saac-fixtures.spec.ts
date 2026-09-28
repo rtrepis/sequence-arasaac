@@ -135,22 +135,48 @@ const openFixture = async (
 const expectLoaded = async (page: Page) =>
   expect(page.getByText("Fitxer carregat correctament")).toBeVisible();
 
-/** Desa amb «Descarrega» i en retorna el text tal com surt. */
+/** Obre el panell «Estil del document» des de la configuració del menú. */
+const openStylePanel = async (page: Page) => {
+  await page.getByRole("button", { name: "Menú principal" }).click();
+  await page.getByRole("button", { name: "Configuració" }).click();
+  await page.getByRole("tab", { name: "Estil del document" }).click();
+};
+
+/**
+ * Desa i en retorna el text tal com surt: el document, amb «Descarrega»; només
+ * l'estil, des del panell «Estil del document», que és on viu aquesta acció.
+ */
 const downloadSaac = async (
   page: Page,
-  kind: "sequence" | "style",
+  kind: "document" | "style",
 ): Promise<string> => {
-  await page.getByRole("button", { name: "Menú principal" }).click();
-  await page.getByRole("button", { name: "Descarrega" }).click();
-  const dialog = page.getByRole("dialog");
+  if (kind === "document") {
+    await page.getByRole("button", { name: "Menú principal" }).click();
+    await page.getByRole("button", { name: "Descarrega" }).click();
+  } else {
+    await openStylePanel(page);
+    await page
+      .getByRole("button", { name: "Desa l'estil en un fitxer…" })
+      .click();
+  }
+  const dialog = page.getByRole("dialog", {
+    name:
+      kind === "document" ? "Desa i descarrega" : "Desa l'estil en un fitxer",
+  });
 
   const download = page.waitForEvent("download");
   await dialog
     .getByRole("button", {
-      name: kind === "sequence" ? "Desa la seqüència" : "Desa l'estil",
+      name: kind === "document" ? "Desa el document" : "Desa l'estil",
     })
     .click();
-  return fs.readFileSync(await (await download).path(), "utf8");
+  const text = fs.readFileSync(await (await download).path(), "utf8");
+  // Es tanca la configuració, si s'havia obert
+  if (kind === "style") {
+    await expect(dialog).toBeHidden();
+    await page.keyboard.press("Escape");
+  }
+  return text;
 };
 
 const asUpload = (text: string, name: string): FileInput => ({
@@ -222,7 +248,7 @@ for (const [name, expected] of Object.entries(manifest)) {
       }
       await expectLoaded(page);
 
-      const savedText = await downloadSaac(page, "sequence");
+      const savedText = await downloadSaac(page, "document");
       const saved = JSON.parse(savedText) as SaacFile;
       expect(saved.schemaVersion).toBe(2);
       expect(saved).not.toHaveProperty("defaultSettings");
@@ -255,7 +281,9 @@ for (const [name, expected] of Object.entries(manifest)) {
           pictApiAra: unknown;
         };
         expect(state.content).toEqual(original.documentState!.content);
-        expect(state.viewSettings).toEqual(original.documentState!.viewSettings);
+        expect(state.viewSettings).toEqual(
+          original.documentState!.viewSettings,
+        );
         expect(savedStyle.pictSequence).toMatchObject(fileStyle.pictSequence);
         expect(savedStyle.pictApiAra).toEqual(fileStyle.pictApiAra);
         // Sense lletra per als números, la del text del fitxer
@@ -284,7 +312,7 @@ for (const [name, expected] of Object.entries(manifest)) {
       // Just després de desar, l'avís diu «desat»: el de «carregat» vol dir
       // que el fitxer ja s'ha tornat a llegir
       await expectLoaded(page);
-      expect(await downloadSaac(page, "sequence")).toBe(savedText);
+      expect(await downloadSaac(page, "document")).toBe(savedText);
     });
 
     if (expected.pestanyes) {
@@ -317,34 +345,68 @@ for (const [name, expected] of Object.entries(manifest)) {
   });
 }
 
-// --- Estil de la seqüència ---
+// --- Estil del document ---
 
-const notice = (page: Page) => page.getByRole("status").filter({ hasText: /./ });
+const banner = (page: Page) =>
+  page.getByRole("status").filter({ hasText: "Aquest document" });
 
-test.describe("estil de la seqüència", () => {
-  test("una seqüència amb estil propi ho diu, i «Canvia l'estil» es pot desfer", async ({
+test.describe("estil del document", () => {
+  test("un document amb estil propi ho diu en un bàner, que porta al panell", async ({
     page,
   }) => {
     await openFixture(page, "02-diverses-pestanyes.saac");
     await expectLoaded(page);
 
-    // Avís discret, no bloquejant, en una regió viva educada
-    const ownStyle = page.getByText("Aquesta seqüència té el seu propi estil.");
+    // Bàner d'estat: dins d'una regió viva educada, no s'imprimeix
+    const ownStyle = page.getByText("Aquest document té el seu propi estil.");
     await expect(ownStyle).toBeVisible();
-    await expect(page.locator('[aria-live="polite"]').filter({ has: ownStyle })).toHaveCount(1);
+    await expect(banner(page)).toHaveCount(1);
+    await expect(banner(page)).toHaveAttribute("aria-live", "polite");
 
-    await notice(page).getByRole("button", { name: "Canvia l'estil" }).click();
-    await page
-      .getByRole("dialog", { name: "Canvia l'estil" })
-      .getByRole("button", { name: /El meu estil per defecte/ })
-      .click();
+    const open = banner(page).getByRole("button", {
+      name: "Estil del document",
+    });
+    await open.click();
+    const settings = page.getByRole("dialog", { name: "Configuracions" });
     await expect(
-      page.getByText("S'ha aplicat el teu estil per defecte a aquesta seqüència."),
+      settings.getByRole("heading", { name: "Estil del document" }),
     ).toBeVisible();
+    await expect(
+      settings.getByText("S'aplica a totes les seqüències d'aquest document."),
+    ).toBeVisible();
+
+    // En tancar, el focus torna al botó del bàner
+    await page.keyboard.press("Escape");
+    await expect(settings).toBeHidden();
+    await expect(open).toBeFocused();
+  });
+
+  test("«Aplica el meu estil per defecte» es pot desfer des del snackbar", async ({
+    page,
+  }) => {
+    await openFixture(page, "02-diverses-pestanyes.saac");
+    await expectLoaded(page);
+    const original = JSON.parse(
+      readFixture("02-diverses-pestanyes.saac"),
+    ) as SaacFile;
+
+    await openStylePanel(page);
+    await page
+      .getByRole("button", { name: "Aplica el meu estil per defecte" })
+      .click();
+    const applied = page.getByText(
+      "S'ha aplicat el teu estil per defecte al document.",
+    );
+    await expect(applied).toBeVisible();
+    // Tancar la configuració («Configuració desada») no s'endú el «Desfés»
+    await page.keyboard.press("Escape");
+    await expect(applied).toBeVisible();
 
     // Amb l'estil per defecte: sense numerar i amb la vista per defecte. Obrir
     // el 02 (que portava configuració) no ha tocat l'estil per defecte de l'usuari
-    const changed = JSON.parse(await downloadSaac(page, "sequence")) as SaacFile;
+    const changed = JSON.parse(
+      await downloadSaac(page, "document"),
+    ) as SaacFile;
     const changedState = changed.documentState as unknown as {
       defaultSettings: { pictSequence: { numbered: boolean } };
       viewSettings: Record<string, { sizePict: number }>;
@@ -353,34 +415,65 @@ test.describe("estil de la seqüència", () => {
     expect(changedState.viewSettings["0"].sizePict).toBe(1);
 
     // Desfer torna exactament al que hi havia (desar no s'ha endut el desfer)
-    await notice(page).getByRole("button", { name: "Desfés" }).click();
+    await page.getByRole("button", { name: "Desfés" }).click();
     await expect(page.getByText("S'ha desfet el canvi d'estil")).toBeVisible();
-    const undone = JSON.parse(await downloadSaac(page, "sequence")) as SaacFile;
-    const original = JSON.parse(readFixture("02-diverses-pestanyes.saac")) as SaacFile;
-    expect(undone.documentState?.defaultSettings).toEqual(original.defaultSettings);
+    const undone = JSON.parse(await downloadSaac(page, "document")) as SaacFile;
+    expect(undone.documentState?.defaultSettings).toEqual(
+      original.defaultSettings,
+    );
     expect(undone.documentState?.viewSettings).toEqual(
       original.documentState?.viewSettings,
     );
   });
 
-  test("l'avís es tanca amb el teclat", async ({ page }) => {
+  test("el «Desfés» s'abasta amb el teclat just després de l'acció", async ({
+    page,
+  }) => {
     await openFixture(page, "02-diverses-pestanyes.saac");
     await expectLoaded(page);
-    const text = page.getByText("Aquesta seqüència té el seu propi estil.");
+    await openStylePanel(page);
+
+    const apply = page.getByRole("button", {
+      name: "Aplica el meu estil per defecte",
+    });
+    await apply.focus();
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByText("S'ha aplicat el teu estil per defecte al document."),
+    ).toBeVisible();
+
+    // El snackbar és al DOM just després de les quatre accions
+    for (let i = 0; i < 3; i += 1) await page.keyboard.press("Tab");
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("button", { name: "Desfés" })).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page.getByText("S'ha desfet el canvi d'estil")).toBeVisible();
+  });
+
+  test("el bàner es tanca amb el teclat i té dianes de 44 px", async ({
+    page,
+  }) => {
+    await openFixture(page, "02-diverses-pestanyes.saac");
+    await expectLoaded(page);
+    const text = page.getByText("Aquest document té el seu propi estil.");
     await expect(text).toBeVisible();
 
     const close = page.getByRole("button", { name: "Tanca l'avís" });
-    const box = await close.boundingBox();
-    // Diana tàctil de 44 px (WCAG 2.5.8 en demana 24; la casa, 44)
-    expect(box!.width).toBeGreaterThanOrEqual(44);
-    expect(box!.height).toBeGreaterThanOrEqual(44);
+    for (const button of [
+      close,
+      banner(page).getByRole("button", { name: "Estil del document" }),
+    ]) {
+      const box = await button.boundingBox();
+      expect(box!.height).toBeGreaterThanOrEqual(44);
+    }
+    expect((await close.boundingBox())!.width).toBeGreaterThanOrEqual(44);
 
     await close.focus();
     await page.keyboard.press("Escape");
     await expect(text).toBeHidden();
   });
 
-  test("un fitxer d'estil s'aplica a la seqüència oberta i es pot fer per defecte", async ({
+  test("un fitxer d'estil s'aplica al document obert, amb desfer", async ({
     page,
   }) => {
     await openFixture(page, "02-diverses-pestanyes.saac");
@@ -388,16 +481,26 @@ test.describe("estil de la seqüència", () => {
     await openFixture(page, "05-nomes-configuracio.saac", { navigate: false });
 
     await expect(
-      page.getByText("S'ha aplicat l'estil del fitxer a aquesta seqüència."),
+      page.getByText("S'ha aplicat l'estil del fitxer al document."),
     ).toBeVisible();
-    await notice(page)
+    await expect(page.getByRole("button", { name: "Desfés" })).toBeVisible();
+
+    // I des del panell es fa servir per defecte
+    await openStylePanel(page);
+    await page
       .getByRole("button", { name: "Desa com a estil per defecte" })
       .click();
-    await expect(page.getByText("S'ha desat com a estil per defecte")).toBeVisible();
+    await expect(
+      page.getByText("S'ha desat com a estil per defecte"),
+    ).toBeVisible();
+    await page.keyboard.press("Escape");
 
-    // L'estil per defecte és ara el del fitxer: «Document nou» el rep
-    const style = JSON.parse(readFixture("05-nomes-configuracio.saac")) as SaacFile;
+    const style = JSON.parse(
+      readFixture("05-nomes-configuracio.saac"),
+    ) as SaacFile;
     const saved = JSON.parse(await downloadSaac(page, "style")) as SaacFile;
-    expect(saved.style?.pictSequence).toEqual(style.defaultSettings?.pictSequence);
+    expect(saved.style?.pictSequence).toEqual(
+      style.defaultSettings?.pictSequence,
+    );
   });
 });

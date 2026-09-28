@@ -108,6 +108,18 @@ export const SETTINGS_PREVIEW_MOBILE_MAX_HEIGHT = "35vh";
 export const SETTINGS_PREVIEW_STICKY_TOP = 16;
 
 /**
+ * Alçada màxima de la mostra **dins** del seu marc (`SettingsPreviewFrame`, amb
+ * 8 px de padding i 1 px de vora per banda), per a `ScaleToFit`. Surt dels dos
+ * límits de la columna: en mòbil, `SETTINGS_PREVIEW_MOBILE_MAX_HEIGHT` menys el
+ * padding de la caixa enganxada; a partir de `md`, l'alçada de la finestra menys
+ * l'aire de dalt i el de baix de la columna enganxada.
+ */
+export const SETTINGS_PREVIEW_FIT_MAX_HEIGHT = {
+  xs: `calc(${SETTINGS_PREVIEW_MOBILE_MAX_HEIGHT} - 16px - 18px)`,
+  md: `calc(100vh - ${SETTINGS_PREVIEW_STICKY_TOP * 2}px - 18px)`,
+};
+
+/**
  * Fila d'un ajust individual: només padding vertical per al ritme.
  * La separació visual entre ajustos ve del `gap` de la columna; el divisor
  * s'usa exclusivament sota el `SectionTitle` (agrupació), no entre files.

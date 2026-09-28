@@ -1,11 +1,11 @@
-// Quines fonts d'una seqüència no es poden pintar en aquest dispositiu.
+// Quines fonts d'un document no es poden pintar en aquest dispositiu.
 //
 // El `.saac` només desa el nom de la família, mai la font: les sis pròpies
 // viuen dins de l'app (`style/fonts/`) i la resta arriben de Google Fonts. Una
 // família pot faltar si el fitxer ve d'una versió de l'app que en té alguna que
 // aquesta no coneix, o si el dispositiu no arriba a Google Fonts (sense
 // connexió, o una xarxa d'escola que el bloqueja). En tots dos casos el text es
-// pinta amb la font de reserva (`fontStack`), i l'avís en obrir la seqüència ho
+// pinta amb la font de reserva (`fontStack`), i el bàner en obrir el document ho
 // diu.
 import { fontList } from "@/data/fontlist";
 

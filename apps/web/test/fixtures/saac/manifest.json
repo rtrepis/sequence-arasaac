@@ -95,7 +95,7 @@
   },
   "08-esquema-2-sequencia.saac": {
     "format": "esquema 2",
-    "descripcio": "El 02 obert i desat amb «Desa la seqüència» de l'esquema 2: `schemaVersion` i l'estil dins del document (`defaultSettings` i `styleView`). Generat per l'app, no a mà.",
+    "descripcio": "El 02 obert i desat amb «Desa el document» de l'esquema 2: `schemaVersion` i l'estil dins del document (`defaultSettings` i `styleView`). Generat per l'app, no a mà.",
     "cobreix": ["seqüència amb l'estil sencer", "anada i tornada byte a byte de l'esquema 2"],
     "pestanyes": { "0": 3, "1": 5, "2": 4, "3": 0 },
     "activeSAAC": 2,
@@ -104,7 +104,7 @@
   },
   "09-esquema-2-estil.saacstyle": {
     "format": "esquema 2 (fitxer d'estil)",
-    "descripcio": "L'estil del 02 desat amb «Desa l'estil»: només `schemaVersion` i `style`. Generat per l'app, no a mà.",
+    "descripcio": "L'estil del 02 desat amb «Desa l'estil en un fitxer…»: només `schemaVersion` i `style`. Generat per l'app, no a mà.",
     "cobreix": ["fitxer d'estil `.saacstyle`"],
     "pestanyes": null,
     "activeSAAC": null,

@@ -32,7 +32,7 @@ import { PictSequence } from "@/types/sequence";
 import { SequenceStyle } from "@/types/document";
 
 // Proves de l'estil a l'store: les mateixes peces que fa servir l'app, sense
-// React. Cobreixen el cicle de vida de l'estil d'una seqüència.
+// React. Cobreixen el cicle de vida de l'estil d'un document.
 
 const makeStore = () =>
   configureStore({
@@ -79,7 +79,7 @@ const OTHER_STYLE = (base: SequenceStyle): SequenceStyle => ({
   view: { ...base.view, sizePict: 2.2, sequenceSpaceBetween: 6 },
 });
 
-describe("seqüència nova", () => {
+describe("document nou", () => {
   it("neix amb l'estil per defecte, encara que les preferències arribin després", () => {
     const store = makeStore();
     // Les preferències (del navegador o del compte) arriben després de crear el document
@@ -121,7 +121,7 @@ describe("seqüència nova", () => {
     expect(Object.keys(saved.viewSettings)).toEqual(["0", "1"]);
 
     store.dispatch(documentStyleMaterializedActionCreator(userDefault));
-    // Canviar l'estil per defecte ja no canvia la seqüència desada
+    // Canviar l'estil per defecte ja no canvia el document desat
     store.dispatch(
       viewSettingsActionCreator({
         ...state(store).ui.viewSettings,
@@ -161,7 +161,7 @@ describe("seqüència nova", () => {
   });
 });
 
-describe("obrir una seqüència", () => {
+describe("obrir un document", () => {
   it("es veu amb el seu estil, i les preferències de qui l'obre no la reescriuen (B25)", () => {
     const store = makeStore();
     const userDefault = selectUserDefaultStyle(state(store));
@@ -190,7 +190,7 @@ describe("obrir una seqüència", () => {
       },
       { userDefault, newId: () => "x" },
     );
-    if (parsed.kind !== "sequence") throw new Error(parsed.kind);
+    if (parsed.kind !== "document") throw new Error(parsed.kind);
     store.dispatch(loadDocumentSaacActionCreator(parsed.document));
 
     expect(selectDocumentStyle(state(store))).toEqual(fileStyle);
@@ -236,7 +236,7 @@ describe("«Canvia l'estil»", () => {
     const before = state(store).document;
     const target = OTHER_STYLE(userDefault);
 
-    store.dispatch(changeDocumentStyleThunk(target, "file", target));
+    store.dispatch(changeDocumentStyleThunk(target, "file"));
 
     const after = state(store).document;
     expect(selectDocumentStyle(state(store))).toEqual(target);
@@ -244,10 +244,9 @@ describe("«Canvia l'estil»", () => {
     expect(after.content[0][1].settings.font.family).toBe("Caveat"); // retoc conservat
     expect(after.content[0][0].settings.textPosition).toBe("top");
     expect(selectResolvedSequenceViews(state(store))[0].sizePict).toBe(2.2);
-    expect(state(store).style.notice).toMatchObject({
-      kind: "changed",
-      source: "file",
-    });
+    // La confirmació és un snackbar amb «Desfés», no un bàner
+    expect(state(store).style.undoSnackbar).toMatchObject({ source: "file" });
+    expect(state(store).style.notice).toBeNull();
     // No toca cap fitxer: el document queda amb canvis sense desar
     expect(state(store).documentStatus.changedAt).not.toBeNull();
 
@@ -255,6 +254,7 @@ describe("«Canvia l'estil»", () => {
     store.dispatch(undoStyleChangeThunk());
     expect(state(store).document).toEqual(before);
     expect(selectCanUndoStyle(state(store))).toBe(false);
+    expect(state(store).style.undoSnackbar).toBeNull();
   });
 
   it("«El meu estil per defecte» torna a l'estil de l'usuari", () => {

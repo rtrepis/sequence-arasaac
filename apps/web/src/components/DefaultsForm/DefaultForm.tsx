@@ -1,4 +1,4 @@
-import { AlertTitle, Box, Button, Tooltip } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
@@ -23,6 +23,8 @@ import {
   SettingsPreviewFrame,
   SectionTitle,
   SettingsPanelHint,
+  ScaleToFit,
+  SETTINGS_PREVIEW_FIT_MAX_HEIGHT,
 } from "../SettingsLayout";
 
 interface DefaultFormProps {
@@ -51,10 +53,11 @@ interface DefaultFormProps {
   onApplyAllBorderOut: () => void;
   onSubmit: () => void;
   onReset?: () => void;
-  /** Títol del panell: diu sobre què tenen efecte els canvis */
-  title?: React.ReactNode;
-  /** Accions de més al peu, a la dreta de «Restaura» */
-  extraActions?: React.ReactNode;
+  /**
+   * Capçalera del panell (títol, ajuda i accions), al lloc de la guia del tab.
+   * Sense, es pinta la guia de sempre.
+   */
+  header?: React.ReactNode;
 }
 
 /**
@@ -87,8 +90,7 @@ const DefaultForm = ({
   onApplyAllBorderOut,
   onSubmit,
   onReset,
-  title,
-  extraActions,
+  header,
 }: DefaultFormProps) => {
   const intl = useIntl();
 
@@ -132,21 +134,29 @@ const DefaultForm = ({
           // Excepció del patró de zones: mostra d'un sol Card sobre el panell.
           // El card ja és paper blanc; el fons "paper" li fa de passe-partout
           // perquè no es fongui amb el marc
-          <SettingsPreviewFrame background="paper" sx={{ padding: 1 }}>
-            <PictogramCard
-              pictogram={pictogramGuide}
-              defaults={defaults}
-              view="complete"
-              variant="plane"
-            />
+          // A tota l'amplada de la columna, i la mostra escalada a dins: amb
+          // vores amples o lletra gran, el pictograma sobresortia del marc
+          <SettingsPreviewFrame
+            background="paper"
+            sx={{ padding: 1, width: "100%" }}
+          >
+            <ScaleToFit maxHeight={SETTINGS_PREVIEW_FIT_MAX_HEIGHT}>
+              <PictogramCard
+                pictogram={pictogramGuide}
+                defaults={defaults}
+                view="complete"
+                variant="plane"
+              />
+            </ScaleToFit>
           </SettingsPreviewFrame>
         }
         hint={
           // Guia del tab: què s'ajusta aquí
-          <SettingsPanelHint>
-            {title && <AlertTitle component="h2">{title}</AlertTitle>}
-            <FormattedMessage {...messages.panelHint} />
-          </SettingsPanelHint>
+          header ?? (
+            <SettingsPanelHint>
+              <FormattedMessage {...messages.panelHint} />
+            </SettingsPanelHint>
+          )
         }
       >
         <SectionTitle
@@ -209,32 +219,21 @@ const DefaultForm = ({
           </SectionTitle>
         )}
 
-        {(onReset || extraActions) && (
-          <Box
-            sx={{
-              pt: 2,
-              display: "flex",
-              justifyContent: "flex-end",
-              flexWrap: "wrap",
-              gap: 1,
-            }}
-          >
-            {onReset && (
-              <Tooltip
-                title={intl.formatMessage(messages.tooltipReset)}
-                describeChild
+        {onReset && (
+          <Box sx={{ pt: 2, display: "flex", justifyContent: "flex-end" }}>
+            <Tooltip
+              title={intl.formatMessage(messages.tooltipReset)}
+              describeChild
+            >
+              <Button
+                variant="text"
+                color="inherit"
+                endIcon={<MdSettingsBackupRestore />}
+                onClick={onReset}
               >
-                <Button
-                  variant="text"
-                  color="inherit"
-                  endIcon={<MdSettingsBackupRestore />}
-                  onClick={onReset}
-                >
-                  <FormattedMessage {...messages.reset} />
-                </Button>
-              </Tooltip>
-            )}
-            {extraActions}
+                <FormattedMessage {...messages.reset} />
+              </Button>
+            </Tooltip>
           </Box>
         )}
       </SettingsPanelLayout>

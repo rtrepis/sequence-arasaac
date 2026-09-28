@@ -1,5 +1,5 @@
 // «Desa com a estil per defecte»: l'estil passa a ser el que reben les
-// seqüències noves, i es desa com les altres preferències (al compte si hi ha
+// documents nous, i es desa com les altres preferències (al compte si hi ha
 // sessió, al navegador si no n'hi ha), amb reintent i diàleg d'error.
 import { useCallback } from "react";
 import { useIntl } from "react-intl";
@@ -11,7 +11,7 @@ import {
 } from "@features/user-settings/store/uiSlice";
 import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSaveUiSettings";
 import { pictStyleOf } from "@features/sequence/style/styleModel";
-import messages from "@features/sequence/components/ChangeStyle/ChangeStyle.lang";
+import messages from "@features/sequence/components/DocumentStyle/DocumentStyle.lang";
 
 export const useSetDefaultStyle = () => {
   const intl = useIntl();

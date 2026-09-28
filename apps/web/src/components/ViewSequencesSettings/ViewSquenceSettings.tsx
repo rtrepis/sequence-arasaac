@@ -44,7 +44,7 @@ import {
   selectResolvedSequenceViews,
 } from "@features/sequence/style/styleSelectors";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import ChangeStyleButton from "@features/sequence/components/ChangeStyle/ChangeStyleButton";
+import ApplyUserDefaultStyleButton from "@features/sequence/components/DocumentStyle/ApplyUserDefaultStyleButton";
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import { sheetSurface } from "@/style/palette";
 import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSaveUiSettings";
@@ -87,7 +87,7 @@ const ViewSequencesSettings = ({
   // Obtenir configuració des de Redux
   const initialViewSettings = useAppSelector((state) => state.ui.viewSettings);
   // La vista de cada pestanya és la del document (B25): la que porta el
-  // `.saac`, o la de l'estil de la seqüència a les pestanyes que no en tenen
+  // `.saac`, o la de l'estil del document a les seqüències que no en tenen
   const sequenceViewSettings = useAppSelector(selectResolvedSequenceViews);
   const documentStyle = useAppSelector(selectDocumentStyle);
   const sequenceKeys = useAppSelector((state) =>
@@ -104,8 +104,8 @@ const ViewSequencesSettings = ({
   // Aquí hi havia un efecte que, en muntar-se la columna, posava les
   // preferències de l'usuari a totes les pestanyes: el `.saac` no es veia mai
   // com s'havia desat, i tornar-lo a desar en perdia la vista (B25). Ara la
-  // seqüència es veu sempre amb el seu estil, i les preferències només arriben
-  // a les seqüències noves, que l'hereten (`docs/fonaments/sequencia-i-estil.md`).
+  // document es veu sempre amb el seu estil, i les preferències només arriben
+  // als documents nous, que l'hereten (`docs/fonaments/sequencia-i-estil.md`).
 
   // Estat local: mode aplicar a totes vs individual
   const [applyAll, setApplyAll] = useState(true);
@@ -348,7 +348,7 @@ const ViewSequencesSettings = ({
    * demanat, ningú n'era avisat si fallava, i de passada despertava Render.
    */
   // Només hi escriu la disposició: les mides i els espaiats d'aquí són de
-  // l'estil de la seqüència, i a les preferències només hi van quan l'usuari
+  // l'estil del document, i a les preferències només hi van quan l'usuari
   // les desa. Abans el mirall les copiava totes i així barrejava els dos rols
   // (B21).
   const { direction } = layoutViewSettings;
@@ -370,7 +370,7 @@ const ViewSequencesSettings = ({
    * tingui reintent, confirmació i diàleg d'error, com el modal de configuracions.
    */
   const handleSavePreferences = useCallback(() => {
-    // Les mides i els espaiats de la seqüència passen a ser els de l'estil per
+    // Les mides i els espaiats del document passen a ser els de l'estil per
     // defecte; la pàgina, la direcció i l'autor, les preferències de disposició
     dispatch(
       viewSettingsActionCreator({
@@ -642,10 +642,9 @@ const ViewSequencesSettings = ({
                     Amb `floatingClearance` perquè aquesta columna acaba al mateix
                     racó on sura el botó d'estat */}
                 <SettingsActions floatingClearance>
-                  {/* Substitueix «Restaura les seqüències»: tornar a l'estil per
-                      defecte és una de les dues opcions de «Canvia l'estil», i
-                      ara es pot desfer */}
-                  <ChangeStyleButton />
+                  {/* Substitueix «Restaura les seqüències»: fa el mateix, amb tot
+                      l'estil del document i amb desfer */}
+                  <ApplyUserDefaultStyleButton />
                   {/* El tooltip diu on van a parar els ajustos, que no és el mateix
                       lloc amb sessió que sense */}
                   <Tooltip

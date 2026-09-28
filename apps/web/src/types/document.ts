@@ -35,7 +35,7 @@ export interface DocumentThumbnailPict {
 export type SequenceStyleView = SharedSequenceStyleView;
 
 /**
- * Estil d'una seqüència (el d'un `.saacstyle` i l'estil per defecte de
+ * Estil del document (el d'un `.saacstyle` i l'estil per defecte de
  * l'usuari). Es declara sobre el `DefaultSettings` local, com `DocumentSAAC`.
  */
 export interface SequenceStyle extends DefaultSettings {
@@ -51,7 +51,7 @@ export interface DocumentSAAC {
   order?: number[];
   author?: string;
   /**
-   * Estil dels pictogrames. Sense valor, la seqüència encara no en té de propi i
+   * Estil dels pictogrames. Sense valor, el document encara no en té de propi i
    * **hereta l'estil per defecte** de l'usuari: és el cas d'un document nou fins
    * que es desa o se n'edita l'estil (`docs/fonaments/sequencia-i-estil.md`).
    */

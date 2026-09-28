@@ -50,8 +50,8 @@ per pestanya, pestanya activa, si porta configuració global i què se n'espera 
 | `05-nomes-configuracio` | 2.1.0 | — | sí | fitxer sense `documentState` |
 | `06-format-antic-sense-viewsettings` | antic | 2 (2, 3) | no | sense `viewSettings`; `order` i `defaultSettings` a `null` |
 | `07-format-primitiu-sequence` | primitiu | 1 (3) | no | clau `sequence` en lloc de `documentState` |
-| `08-esquema-2-sequencia` | esquema 2 | 4 (3, 5, 4, 0) | dins del document | el 02 desat amb «Desa la seqüència»: estil dins del document; anada i tornada byte a byte |
-| `09-esquema-2-estil.saacstyle` | esquema 2 | — | és un estil | el 02 desat amb «Desa l'estil» |
+| `08-esquema-2-sequencia` | esquema 2 | 4 (3, 5, 4, 0) | dins del document | el 02 desat amb «Desa el document»: estil dins del document; anada i tornada byte a byte |
+| `09-esquema-2-estil.saacstyle` | esquema 2 | — | és un estil | el 02 desat amb «Desa l'estil en un fitxer…» |
 | `10-estil-parcial` | 2.1.0 | 1 (7) | parcial | el 01 amb una configuració d'abans de `numberFont`: fusió camp a camp |
 
 Les 08 i 09 les ha escrit l'app (obrir el 02 i desar-lo), no s'han fet a mà; la 10 sí, a partir de

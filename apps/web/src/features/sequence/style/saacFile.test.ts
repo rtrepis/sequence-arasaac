@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import {
-  buildSequenceFile,
+  buildDocumentFile,
   buildStyleFile,
   mergeStyle,
   normalizeDocumentState,
@@ -48,10 +48,10 @@ const USER_DEFAULT: SequenceStyle = {
 
 const options = { userDefault: USER_DEFAULT, newId: () => "id-nou" };
 
-const parseSequence = (raw: unknown) => {
+const parseDocument = (raw: unknown) => {
   const parsed = parseSaacFile(raw, options);
-  if (parsed.kind !== "sequence")
-    throw new Error(`esperava una seqüència, ha sortit ${parsed.kind}`);
+  if (parsed.kind !== "document")
+    throw new Error(`esperava un document, ha sortit ${parsed.kind}`);
   return parsed;
 };
 
@@ -69,7 +69,7 @@ describe("fitxers antics", () => {
   });
 
   it("2.1.0 sense configuració: estil per defecte, vista de cada pestanya del fitxer", () => {
-    const { document, styleOrigin } = parseSequence(
+    const { document, styleOrigin } = parseDocument(
       readFixture("04-molts-pictogrames.saac"),
     );
 
@@ -100,7 +100,7 @@ describe("fitxers antics", () => {
     const raw = readFixture("02-diverses-pestanyes.saac") as {
       defaultSettings: DefaultSettings;
     };
-    const { document, styleOrigin } = parseSequence(raw);
+    const { document, styleOrigin } = parseDocument(raw);
 
     expect(styleOrigin).toBe("file");
     expect(document.defaultSettings).toEqual(raw.defaultSettings);
@@ -123,7 +123,7 @@ describe("fitxers antics", () => {
   });
 
   it("antic sense viewSettings: vista de l'estil per defecte a totes les pestanyes", () => {
-    const { document, styleOrigin } = parseSequence(
+    const { document, styleOrigin } = parseDocument(
       readFixture("06-format-antic-sense-viewsettings.saac"),
     );
 
@@ -141,11 +141,11 @@ describe("fitxers antics", () => {
     expect(document.defaultSettings?.pictSequence.font.family).toBe("Lato");
   });
 
-  it("primitiu: la seqüència és la primera pestanya d'un document nou", () => {
+  it("primitiu: la seqüència és la primera d'un document nou", () => {
     const raw = readFixture("07-format-primitiu-sequence.saac") as {
       sequence: unknown[];
     };
-    const { document, styleOrigin } = parseSequence(raw);
+    const { document, styleOrigin } = parseDocument(raw);
 
     expect(styleOrigin).toBe("default");
     expect(document.id).toBe("id-nou");
@@ -168,7 +168,7 @@ describe("fitxers antics", () => {
   });
 
   it("alineació única d'abans i fitzgerald en objecte, com els normalitza l'API", () => {
-    const { document } = parseSequence({
+    const { document } = parseDocument({
       documentState: {
         id: "x",
         content: {
@@ -212,7 +212,7 @@ describe("estil parcial: fusió camp a camp", () => {
     const raw = readFixture("10-estil-parcial.saac") as {
       defaultSettings: { pictSequence: { font: unknown } };
     };
-    const { document, styleOrigin } = parseSequence(raw);
+    const { document, styleOrigin } = parseDocument(raw);
 
     expect(styleOrigin).toBe("partial");
     const ps = document.defaultSettings!.pictSequence;
@@ -225,10 +225,10 @@ describe("estil parcial: fusió camp a camp", () => {
     const sequence = readFixture("08-esquema-2-sequencia.saac") as {
       documentState: DocumentSAAC;
     };
-    const parsed = parseSequence(sequence);
+    const parsed = parseDocument(sequence);
     expect(parsed.styleOrigin).toBe("file");
     expect(
-      buildSequenceFile(
+      buildDocumentFile(
         parsed.document,
         resolveDocumentStyle(parsed.document, USER_DEFAULT),
       ),
@@ -244,7 +244,7 @@ describe("estil parcial: fusió camp a camp", () => {
   });
 
   it("fa servir les propietats del fitxer i omple les que falten", () => {
-    const { document, styleOrigin } = parseSequence({
+    const { document, styleOrigin } = parseDocument({
       defaultSettings: {
         pictSequence: {
           numbered: true,
@@ -326,8 +326,8 @@ describe("esquema 2", () => {
     activeSAAC: 0,
   };
 
-  it("«Desar seqüència» porta sempre l'estil, i totes les pestanyes amb vista", () => {
-    const file = buildSequenceFile(document, USER_DEFAULT);
+  it("«Desa el document» porta sempre l'estil, i totes les seqüències amb vista", () => {
+    const file = buildDocumentFile(document, USER_DEFAULT);
 
     expect(file.schemaVersion).toBe(SAAC_SCHEMA_VERSION);
     expect(file.documentState.defaultSettings).toEqual({
@@ -343,9 +343,9 @@ describe("esquema 2", () => {
     });
   });
 
-  it("una seqüència desada s'obre tal com es va desar, amb un altre estil per defecte", () => {
+  it("un document desat s'obre tal com es va desar, amb un altre estil per defecte", () => {
     const saved = JSON.parse(
-      JSON.stringify(buildSequenceFile(document, USER_DEFAULT)),
+      JSON.stringify(buildDocumentFile(document, USER_DEFAULT)),
     );
     const otherUser: SequenceStyle = {
       ...USER_DEFAULT,
@@ -360,8 +360,8 @@ describe("esquema 2", () => {
       userDefault: otherUser,
       newId: () => "?",
     });
-    expect(parsed.kind).toBe("sequence");
-    if (parsed.kind !== "sequence") return;
+    expect(parsed.kind).toBe("document");
+    if (parsed.kind !== "document") return;
 
     expect(parsed.styleOrigin).toBe("file");
     expect(resolveDocumentStyle(parsed.document, otherUser)).toEqual(
@@ -372,9 +372,9 @@ describe("esquema 2", () => {
   });
 
   it("anada i tornada: tornar a desar dona el mateix fitxer", () => {
-    const first = buildSequenceFile(document, USER_DEFAULT);
-    const parsed = parseSequence(JSON.parse(JSON.stringify(first)));
-    const second = buildSequenceFile(
+    const first = buildDocumentFile(document, USER_DEFAULT);
+    const parsed = parseDocument(JSON.parse(JSON.stringify(first)));
+    const second = buildDocumentFile(
       parsed.document,
       resolveDocumentStyle(parsed.document, USER_DEFAULT),
     );

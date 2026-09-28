@@ -10,7 +10,7 @@ import {
 import messages from "./PictogramCart.lang";
 import fitzgeraldToBorder from "../../utils/fitzgeraldToBorder";
 import React from "react";
-// Amb reserva: si el dispositiu no té la font de la seqüència, sans-serif i no
+// Amb reserva: si el dispositiu no té la font del document, sans-serif i no
 // la serif per defecte del navegador (vegeu `fontAvailability.ts`)
 import { fontStack } from "@features/sequence/style/styleModel";
 
