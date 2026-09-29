@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-// El panell «Estil del document» (docs/fonaments/sequencia-i-estil.md):
+// El panell «Estil del document» (docs/fonaments/03-model-contingut-estil.md):
 //
 // - Les quatre accions d'estil, en l'ordre dels fonaments: botons en
 //   escriptori, menú «⋯» («Accions d'estil») en mòbil, tot amb el teclat i

@@ -59,6 +59,13 @@ mòbil, amb compte o sense.**
     altra propietat: «Restableix» torna al color de la categoria sense connexió, i «Aplica a
     tots», el desfer i l'indicador «personalitzat» funcionen igual que amb la resta.
 
+15. **Una imatge d'ARASAAC diu quines opcions d'aparença admet** (`image.variants`: `skin`, `hair`,
+    `color`). No era a l'especificació: ha calgut en implementar-la. Fins ara l'app ho sabia perquè
+    un pictograma sense pell no portava `skin`; amb la cascada, la pell s'hereta de l'estil del
+    document i aquesta informació es perdia. El formulari d'edició la necessita per saber quins
+    ajustos ensenya, i la URL d'ARASAAC per saber quins paràmetres hi posa. És contingut, com la
+    categoria.
+
 ## Alternatives descartades
 
 | Alternativa | Per què no |
@@ -101,6 +108,10 @@ mòbil, amb compte o sense.**
   es pinten amb el color `none` de l'estil (`#666666`). Fins ara n'hi havia de tres colors
   (`#666`, `#2222ff` i `#FFCD94`) segons com havien nascut. Els documents antics no canvien:
   aquests colors hi queden com a retoc.
+- **El núvol**: els documents del núvol passen sempre per la migració en llegir-los (la forma de
+  l'API és l'antiga), i també en perden les seqüències buides.
+- **Un fitxer d'estil obert com a document** sempre pregunta què se'n fa (aplicar-lo, fer-lo per
+  defecte o res). Abans, amb un document obert, s'aplicava directament.
 - **Pictogrames antics sense cap color de Fitzgerald**: es pinten amb
   `none`, en lloc del color del text que tenien per accident (C11). És l'única excepció a la
   invariant de la migració.

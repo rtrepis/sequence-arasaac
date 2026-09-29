@@ -320,6 +320,18 @@
               "items": {
                 "type": "string"
               }
+            },
+            "variants": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "skin",
+                  "hair",
+                  "color"
+                ]
+              },
+              "description": "Les opcions d'aparença que admet aquest pictograma d'ARASAAC (no tots tenen pell o cabell). És contingut. Sense la llista, les admet totes."
             }
           }
         },

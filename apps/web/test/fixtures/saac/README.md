@@ -69,10 +69,11 @@ l'esquema `docs/schema/saac-v3.schema.json`. Els tests del model v3 són a
 
 ## El que cal saber del format
 
-> Des de la branca `claude/sequencia-estil-b25-16pluv` el format té **esquema 2**
-> (`schemaVersion: 2`), i la regla de què és cada cosa és a `docs/fonaments/sequencia-i-estil.md`.
-> Els punts de sota descriuen el format **d'abans** (el de les fixtures 01–07), que el lector
-> continua acceptant sencer; on el comportament ha canviat, es diu.
+> Des del **model v3** (`docs/decisions/ADR-003-model-document-saac-v3.md`) l'app escriu sempre
+> el format v3 (`format: "sequenciaac"`, `schemaVersion: 3`), i l'esquema 2 de la branca
+> `claude/sequencia-estil-b25-16pluv` va ser un pas intern que no es va publicar. Els punts de sota
+> descriuen el format **d'abans** (el de les fixtures 01–07), que el lector continua acceptant sencer
+> i migra al v3 en obrir-lo (`docs/fonaments/06-compatibilitat-i-dades.md`, §4).
 
 - **Dues claus opcionals i independents** al primer nivell: `defaultSettings` (la configuració global,
   només si l'usuari marca la casella, que surt desmarcada) i `documentState` (el document). Un fitxer
@@ -104,7 +105,7 @@ l'esquema `docs/schema/saac-v3.schema.json`. Els tests del model v3 són a
 
 ```bash
 npm run dev                                   # a apps/web, en una altra terminal
-npx playwright test e2e/saac-fixtures.spec.ts
+npx playwright test e2e/saac-fixtures.spec.ts e2e/saac-v3.spec.ts
 ```
 
 Per cada fixture: s'obre amb les pestanyes i els pictogrames esperats; tornar-lo a desar dona el

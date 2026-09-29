@@ -1,5 +1,5 @@
 // Obre un fitxer `.saac` o `.saacstyle` i decideix què se'n fa, segons el que
-// porta i per què s'ha obert (`docs/fonaments/sequencia-i-estil.md`, punt 3):
+// porta i per què s'ha obert (`docs/fonaments/03-model-contingut-estil.md`, punt 3):
 //
 // | Fitxer    | Des de «Carrega»                           | Des de «Carrega un estil…»   |
 // |-----------|--------------------------------------------|------------------------------|

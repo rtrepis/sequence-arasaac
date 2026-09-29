@@ -41,7 +41,7 @@ interface ModalDownloadProps {
 }
 
 /**
- * Desar a fitxer, amb una sola acció (`docs/fonaments/sequencia-i-estil.md`,
+ * Desar a fitxer, amb una sola acció (`docs/fonaments/03-model-contingut-estil.md`,
  * punt 2): «Desa el document» se n'endú sempre l'estil. Abans hi havia dues
  * caselles —seqüència i configuració— que donaven tres combinacions, i la del
  * document sense estil feia que en obrir-lo es veiés amb les preferències de

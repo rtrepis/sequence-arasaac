@@ -7,7 +7,7 @@ import { FLOATING_EDGE_GAP } from "../src/style/appShape";
 //
 // - C8: a «Descarrega», el que es pinta i el que se n'endú el fitxer han de ser
 //   el mateix valor. Abans eren dues caselles; ara és una sola acció, «Desa el
-//   document», sempre amb l'estil (docs/fonaments/sequencia-i-estil.md). Desar
+//   document», sempre amb l'estil (docs/fonaments/03-model-contingut-estil.md). Desar
 //   només l'estil és al panell «Estil del document».
 // - C7: per sota de `sm` el Snackbar de MUI s'estén de banda a banda i tapava el
 //   `DocumentStatusFab` justament quan l'usuari acabava de desar. Els avisos
@@ -56,11 +56,17 @@ test("«Desa el document» és l'única acció, i s'endú sempre l'estil", async
   const saved = JSON.parse(Buffer.concat(chunks).toString("utf8"));
 
   expect((await download).suggestedFilename()).toMatch(/\.saac$/);
-  expect(saved.schemaVersion).toBe(2);
-  expect(saved.documentState).toHaveProperty("defaultSettings");
-  expect(saved.documentState).toHaveProperty("styleView");
+  // Format v3: el document sencer, amb el seu estil i la seva pàgina
+  expect(saved).toMatchObject({
+    format: "sequenciaac",
+    kind: "document",
+    schemaVersion: 3,
+  });
+  expect(saved).toHaveProperty("style");
+  expect(saved).toHaveProperty("page");
   // Les preferències d'interfície no entren mai dins del document
   expect(saved).not.toHaveProperty("defaultSettings");
+  expect(saved).not.toHaveProperty("ui.lang");
 });
 
 test("el snackbar no tapa el botó d'estat en mòbil", async ({ page }) => {

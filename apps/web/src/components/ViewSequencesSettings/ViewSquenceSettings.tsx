@@ -107,7 +107,7 @@ const ViewSequencesSettings = ({
   // preferències de l'usuari a totes les pestanyes: el `.saac` no es veia mai
   // com s'havia desat, i tornar-lo a desar en perdia la vista (B25). Ara la
   // document es veu sempre amb el seu estil, i les preferències només arriben
-  // als documents nous, que l'hereten (`docs/fonaments/sequencia-i-estil.md`).
+  // als documents nous, que l'hereten (`docs/fonaments/03-model-contingut-estil.md`).
 
   // Estat local: mode aplicar a totes vs individual
   const [applyAll, setApplyAll] = useState(true);

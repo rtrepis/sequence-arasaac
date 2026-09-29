@@ -56,7 +56,7 @@ test("la columna de la pàgina de vista té tots els controls amb nom", async ({
 
   // B5: el botó diu el seu àmbit, i el tooltip (describeChild) no li pren el nom.
   // «Restaura les seqüències» és ara «Aplica el meu estil per defecte», amb
-  // desfer (docs/fonaments/sequencia-i-estil.md)
+  // desfer (docs/fonaments/03-model-contingut-estil.md)
   await expect(
     page.getByRole("button", { name: "Aplica el meu estil per defecte" }),
   ).toBeVisible();

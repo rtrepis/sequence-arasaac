@@ -2,7 +2,7 @@ import { defineMessages } from "react-intl";
 
 // Missatges de l'estil del document: el panell «Estil del document» i les seves
 // accions, el bàner en obrir un document i el snackbar de desfer. Vegeu
-// `docs/fonaments/sequencia-i-estil.md` (nomenclatura inclosa: «document» és el
+// `docs/fonaments/03-model-contingut-estil.md` (nomenclatura inclosa: «document» és el
 // fitxer sencer, «seqüència» cadascuna de les que conté).
 const messages = defineMessages({
   noticeLegacy: {

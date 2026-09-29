@@ -67,14 +67,12 @@ l'entrada.
 
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| B26 | La disposició (direcció, pàgina, orientació) no viatja al `.saac` | És contingut segons els fonaments de l'estil, i l'esquema 2 ja té el camp (`layout`). S'ha de fer abans de la fase 1 del mode lliure, que hi afegeix la disposició per pàgina | M | No: la decisió és a `docs/fonaments/sequencia-i-estil.md` |
 | B29 | La previsualització del vocabulari personal sobresurt del requadre amb valors grans | Mateixa causa que el bug de la previsualització del panell d'estil, ja resolt amb `ScaleToFit`: la solució és una línia | S | No |
 | B27 | Les fonts de Google no se serveixen des de l'app | Sense connexió a Google Fonts, un document no es veu tal com es va desar (el fonament de l'estil ho promet) | M | No |
 | B28 | Una paraula llarga amb lletra gran es talla dins de la targeta | Surt així al paper i al PDF, i ningú no ho avisa | S–M | Sí: partir la paraula, o reduir-ne la lletra |
-| B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb B25 ja només hi queda barrejada la disposició; es fa amb B26, que la treu de les preferències per portar-la al document | M | No |
+| B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
-| C11 | Vora «fitzgerald» sense classificació pintada del color del text | Una línia quan es triï el color | S | Sí: quin color, o cap vora |
 | C10 | La suite de tests del web no compila | Dona una falsa sensació de xarxa de seguretat. Esborrar-la és S; reviure-la és L | S / L | Sí: reviure o esborrar |
 | B23 | L'idioma desat de l'usuari sense compte no mana sobre la URL | Amb els comptes apagats, **tothom** és usuari sense compte: la regla que val és aquesta | S | Sí: mana la URL o mana la preferència |
 
@@ -966,6 +964,8 @@ d'IndexedDB i al fitxer `.saac`.
   llegeix sempre l'estil per defecte desat i es pot desfer. El que queda barrejat és
   la disposició, i es resol amb **B26**, que la porta al document.
 
+- **Actualització (2026-09-29, model v3)**: el mirall de sessió ja només hi escriu l'autor; la pàgina
+  és del document (B26). Queda obert per l'autor, que és a `ui.viewSettings` i al document alhora.
 ### B22 — Les pestanyes no es coordinen: ni es posen al dia ni comparteixen el «Document nou» 🔴 Oberta
 
 *(Trobada resolent B19, branca `claude/estudi-pla-execucio-2w1pzq`.)*
@@ -1103,7 +1103,7 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
     canvien la lletra de reserva (el test bloqueja Google Fonts, i la reserva és ara sans-serif en
     comptes de la serif del navegador). 06 i 07 no canvien de disposició. Fixtures noves 08–10.
 
-### B26 — La disposició no viatja al `.saac` 🔴 Oberta
+### B26 — La disposició no viatja al `.saac` ✅ Resolta
 
 *(Obert resolent B25, branca `claude/sequencia-estil-b25-16pluv`.)*
 
@@ -1113,9 +1113,10 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   la seqüència, com l'ordre o les pestanyes. Avui és una preferència més, i qui obre un `.saac` el
   veu en la pàgina i la direcció de qui l'obre: una seqüència preparada en A3 apaïsat en columnes
   surt en A4 en files. És el mateix que passava amb l'estil abans de B25, en més petit.
-- **Decisió (2026-09-28)**: es resol amb el model v3: la pàgina passa a `page` del document
-  (`docs/decisions/ADR-003-model-document-saac-v3.md`, decisió 6). Es marcarà resolta quan la
-  implementació es fusioni.
+- **Resolta (2026-09-29, model v3, ADR-003 decisió 6)**: la pàgina (mida, orientació, direcció i
+  espai entre seqüències) és a `page` del fitxer i a `DocumentSAAC.layout`. La columna de la vista
+  parteix de la del document i hi escriu els canvis; un document sense pàgina (nou, o d'un format
+  antic) hereta la de les preferències fins que es desa.
 - **Proposta**: escriure `layout` en desar i llegir-lo en obrir; els fitxers sense `layout`
   s'obren amb la disposició per defecte de l'usuari, com l'estil. El lector
   (`style/saacFile.ts`) ja el conserva, l'API ja el valida i el desa, i no cal cap versió 3 de
@@ -1365,7 +1366,7 @@ Branca `claude/document-limit-users-sjig8o`.
   L'`exclude` ja ho intentava, però tenia les dues rutes dins d'una sola cadena separades per una
   coma, que no coincideix amb cap fitxer.
 
-### C11 — Una vora «fitzgerald» sense classificació es pinta del color del text 🔴 Oberta
+### C11 — Una vora «fitzgerald» sense classificació es pinta del color del text ✅ Resolta
 
 *(Trobada en posar la barrera de tipus de C9.)*
 
@@ -1376,9 +1377,9 @@ Branca `claude/document-limit-users-sjig8o`.
   els pictogrames sense `fitzgerald` (documents antics: `extractPictSettings` sempre l'omple) quan
   la vora està configurada com a «fitzgerald». No és greu perquè és una vora, però el color surt
   d'un accident, no d'una decisió.
-- **Relació amb el model v3** (`docs/decisions/ADR-003-model-document-saac-v3.md`): el color dels
-  pictogrames sense categoria passa a ser `none` de l'estil del document (`#666666`). Si es confirma
-  que els pictogrames antics sense cap color també el prenen, aquesta entrada queda resolta.
+- **Resolta (2026-09-29, model v3)**: el color dels pictogrames sense categoria és `none` de l'estil
+  del document (`#666666`), també per als antics que no en portaven cap. La targeta el rep a
+  `PictogramCardDefaults.fitzgerald`; `currentColor` només queda com a última reserva.
 - **Fet a C9**: escriure `currentColor` explícitament, per no canviar cap dibuix mentre es posava la
   barrera de tipus.
 - **Proposta**: triar un color de debò per al cas «sense classificació» —el candidat natural és el

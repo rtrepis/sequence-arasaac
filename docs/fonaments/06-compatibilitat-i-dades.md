@@ -96,7 +96,7 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 
   | Valor | Camps | Què és |
   |---|---|---|
-  | `"arasaac"` | `id`, `alternatives?`, `keywords?` | Pictograma d'ARASAAC. `alternatives` són els resultats de la cerca, per triar-ne un altre |
+  | `"arasaac"` | `id`, `alternatives?`, `keywords?`, `variants?` | Pictograma d'ARASAAC. `alternatives` són els resultats de la cerca, per triar-ne un altre. `variants` diu quines opcions d'aparença admet (`skin`, `hair`, `color`): no tots els pictogrames tenen pell o cabell. Sense la llista, les admet totes |
   | `"own"` | `asset`, `id?` | Imatge pròpia, referenciada a `assets`. `id` és el pictograma d'ARASAAC que substitueix, per si es treu |
   | `"none"` | — | Sense imatge (la paraula no es va trobar) |
 
@@ -171,7 +171,8 @@ existien publicats: `sequence`, `documentState` i la 2.1.0 (`defaultSettings` + 
 | `img.searched.word` | `word` | — |
 | `img.searched.bestIdPicts` | `image.alternatives` | — |
 | `img.searched.keyWords` | `image.keywords` | Només si hi és |
-| `img.settings` (pell, cabell, color) | `pictograms[].style.pictogram` | Només les diferències |
+| `img.settings` (pell, cabell, color) | `pictograms[].style.pictogram` | Només les diferències, i només en un pictograma d'ARASAAC |
+| (quins d'aquests tres porta) | `image.variants` | Els que hi són: és com l'app sabia quines opcions admet el pictograma |
 | `img.settings.fitzgerald` | `category` i, si cal, un retoc | Vegeu «Fitzgerald», a sota |
 | `defaultSettings.pictApiAra.fitzgerald` | — | S'ignora: era el color amb què naixien els pictogrames, i ara és `none` de la taula |
 | `img.url` (`data:` en base64) | `assets` i `image.asset` amb `source: "own"` | Deduplicació pel hash |
@@ -246,6 +247,9 @@ a.download = `${nom}.saac`; // o `.saacstyle`
 - **MAI** una migració massiva de la base de dades. Els documents es migren **en llegir-los**.
 - Les imatges de Cloudinary s'escriuen a `assets` amb `url`.
 - **SEMPRE** ha de funcionar amb els comptes encesos i apagats (`VITE_ACCOUNTS_ENABLED`).
+- Com que el núvol conserva la forma antiga, **tot** document del núvol passa per la migració en
+  llegir-lo: també en perd les seqüències buides. El bàner de «versió anterior» no hi surt: és un
+  avís dels fitxers.
 
 ## 8. Missatges
 

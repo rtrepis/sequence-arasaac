@@ -65,7 +65,7 @@ export const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
 // l'estil per defecte de l'usuari fins que es desa o se'n toca l'estil. Així
 // neix amb l'estil de l'usuari encara que les preferències (les del compte, amb
 // el servidor adormit) arribin després de crear-lo.
-// Vegeu `docs/fonaments/sequencia-i-estil.md`.
+// Vegeu `docs/fonaments/03-model-contingut-estil.md`.
 const documentInitialState: DocumentSAAC = {
   id: getUniqueId(),
   title: undefined,

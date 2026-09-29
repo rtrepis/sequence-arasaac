@@ -74,7 +74,7 @@ export interface DocumentSAAC {
   /**
    * Estil dels pictogrames. Sense valor, el document encara no en té de propi i
    * **hereta l'estil per defecte** de l'usuari: és el cas d'un document nou fins
-   * que es desa o se n'edita l'estil (`docs/fonaments/sequencia-i-estil.md`).
+   * que es desa o se n'edita l'estil (`docs/fonaments/03-model-contingut-estil.md`).
    */
   defaultSettings?: DefaultSettings;
   /** Mides i espaiats de l'estil. Sense valor, hereta com `defaultSettings`. */

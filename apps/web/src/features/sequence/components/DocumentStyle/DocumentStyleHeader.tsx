@@ -1,5 +1,5 @@
 // Capçalera del panell «Estil del document»: títol, ajuda i les quatre accions
-// d'estil, en l'ordre dels fonaments (`docs/fonaments/sequencia-i-estil.md`):
+// d'estil, en l'ordre dels fonaments (`docs/fonaments/03-model-contingut-estil.md`):
 //
 //   1. Aplica el meu estil per defecte
 //   2. Carrega un estil des d'un fitxer…

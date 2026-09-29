@@ -70,7 +70,7 @@ const sequenceViewSettingsZodSchema = z.object({
 
 // Mides i espaiats de l'estil del document (esquema 2 del .saac). Opcional: els
 // documents d'abans no en porten, i el client els obre amb l'estil per defecte
-// de qui els obre. Vegeu docs/fonaments/sequencia-i-estil.md.
+// de qui els obre. Vegeu docs/fonaments/03-model-contingut-estil.md.
 const sequenceStyleViewZodSchema = sequenceViewSettingsZodSchema.extend({
   sequenceSpaceBetween: z.number(),
 });
