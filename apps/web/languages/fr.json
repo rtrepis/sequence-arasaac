@@ -342,7 +342,8 @@
     "description": "Obre el menú d'accions del pictograma des del diàleg d'edició"
   },
   "components.pictEdit.reset": {
-    "defaultMessage": "Restaurer le pictogramme"
+    "defaultMessage": "Réinitialiser",
+    "description": "Botó que esborra els retocs d'aquest pictograma: torna a l'estil del document (es pot desfer)"
   },
   "components.pictEditSettings.settings.label": {
     "defaultMessage": "Paramètres du Pictogramme",
@@ -1992,8 +1993,8 @@
     "description": "Nom accessible de la liste des onglets de séquences"
   },
   "components.pictEdit.tooltipReset": {
-    "defaultMessage": "Rétablit ce pictogramme à vos valeurs par défaut",
-    "description": "Infobulle du bouton de restauration du pictogramme"
+    "defaultMessage": "Remet ce pictogramme au style du document. C'est annulable.",
+    "description": "Tooltip del botó «Restableix» del pictograma"
   },
   "components.confirmDialog.cancel": {
     "defaultMessage": "Annuler",
@@ -2425,17 +2426,9 @@
     "defaultMessage": "Fermer l'avis",
     "description": "Nom accessible del botó que tanca l'avís d'estil"
   },
-  "features.sequence.style.pendingDefault.title": {
-    "defaultMessage": "Utiliser ce style par défaut ?",
-    "description": "Pregunta en obrir un fitxer d'estil sense cap seqüència oberta"
-  },
   "features.sequence.style.pendingDefault.body": {
     "defaultMessage": "Aucun document n'est ouvert pour l'appliquer. Si vous en faites votre style par défaut, les nouveaux documents le recevront à la place de votre style actuel.",
     "description": "Explicació de què passa si s'accepta l'estil com a per defecte"
-  },
-  "features.sequence.style.pendingDefault.confirm": {
-    "defaultMessage": "En faire mon style par défaut",
-    "description": "Botó per acceptar l'estil del fitxer com a estil per defecte"
   },
   "features.sequence.style.panel.title": {
     "defaultMessage": "Style du document",
@@ -2484,5 +2477,73 @@
   "components.buttonWithModalDownload.styleHelper": {
     "defaultMessage": "Seulement l'apparence du document —polices, couleurs, bordures, tailles et espacements—, sans aucune séquence. Vous pourrez l'appliquer à d'autres documents.",
     "description": "Explicació del diàleg per desar només l'estil"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.title": {
+    "defaultMessage": "Qu'est-ce qui est enregistré dans un document ?",
+    "description": "Títol del quadre d'ajuda del diàleg de desar el document"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.sequences": {
+    "defaultMessage": "Les séquences et les pictogrammes.",
+    "description": "Quadre «Què es guarda»: primer element de la llista"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.style": {
+    "defaultMessage": "Leur apparence (police, bordures, couleurs, tailles), y compris les modifications faites sur un seul pictogramme.",
+    "description": "Quadre «Què es guarda»: l'estil, també el de cada pictograma"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.page": {
+    "defaultMessage": "La page : taille, orientation et direction.",
+    "description": "Quadre «Què es guarda»: la pàgina del document"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.images": {
+    "defaultMessage": "Vos propres photos.",
+    "description": "Quadre «Què es guarda»: les imatges pujades per l'usuari"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.not": {
+    "defaultMessage": "Les préférences de l'application, comme la langue ou le style par défaut, ne sont pas enregistrées.",
+    "description": "Quadre «Què es guarda»: el que no hi va"
+  },
+  "components.pictEdit.customized": {
+    "defaultMessage": "Pictogramme personnalisé",
+    "description": "Indicador: el pictograma té retocs propis, diferents de l'estil del document"
+  },
+  "context.feedback.load.invalidFile": {
+    "defaultMessage": "Impossible de l'ouvrir. Ce n'est pas un document SequenciAAC ou il est endommagé.",
+    "description": "Error en obrir un fitxer que no és un .saac ni un .saacstyle, o que està malmès"
+  },
+  "features.sequence.style.notice.legacy": {
+    "defaultMessage": "Ce document provient d'une version antérieure. Nous l'avons adapté ; quand vous l'enregistrerez, il le sera au nouveau format.",
+    "description": "Bàner en obrir un document desat amb una versió anterior de l'app (format antic)"
+  },
+  "features.sequence.style.notice.withoutStyle": {
+    "defaultMessage": "Il n'avait pas de style propre ; nous y avons appliqué votre style par défaut.",
+    "description": "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer)"
+  },
+  "features.sequence.style.notice.newerVersion": {
+    "defaultMessage": "Ce document a été créé avec une version plus récente de SequenciAAC. Il se peut que quelque chose ne s'affiche pas bien. Si vous l'enregistrez ici, des modifications pourraient être perdues.",
+    "description": "Bàner d'avís en obrir un document d'una versió de l'app més nova que la d'ara"
+  },
+  "features.sequence.style.changed.applyAll": {
+    "defaultMessage": "Appliqué à tous les pictogrammes du document.",
+    "description": "Snackbar després d'«Aplica a tots»: el valor passa a l'estil del document i a tots els pictogrames"
+  },
+  "features.sequence.style.changed.reset": {
+    "defaultMessage": "Le pictogramme a de nouveau le style du document.",
+    "description": "Snackbar després de «Restableix» un pictograma: se n'esborren els retocs"
+  },
+  "features.sequence.style.styleFileOpened.title": {
+    "defaultMessage": "Ce fichier est un style, pas un document",
+    "description": "Títol del diàleg que surt en obrir un fitxer d'estil (.saacstyle) com si fos un document"
+  },
+  "features.sequence.style.styleFileOpened.body": {
+    "defaultMessage": "Vous pouvez l'appliquer au document ouvert, ou en faire votre style par défaut, celui que reçoivent les nouveaux documents.",
+    "description": "Explicació del diàleg de fitxer d'estil quan hi ha un document obert"
+  },
+  "features.sequence.style.styleFileOpened.apply": {
+    "defaultMessage": "L'appliquer à ce document",
+    "description": "Botó que aplica l'estil del fitxer al document obert (es pot desfer)"
+  },
+  "features.sequence.style.styleFileOpened.makeDefault": {
+    "defaultMessage": "En faire mon style par défaut",
+    "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
   }
 }
