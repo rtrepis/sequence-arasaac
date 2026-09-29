@@ -97,7 +97,7 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   | Valor | Camps | Què és |
   |---|---|---|
   | `"arasaac"` | `id`, `alternatives?`, `keywords?` | Pictograma d'ARASAAC. `alternatives` són els resultats de la cerca, per triar-ne un altre |
-  | `"own"` | `asset` | Imatge pròpia, referenciada a `assets` |
+  | `"own"` | `asset`, `id?` | Imatge pròpia, referenciada a `assets`. `id` és el pictograma d'ARASAAC que substitueix, per si es treu |
   | `"none"` | — | Sense imatge (la paraula no es va trobar) |
 
 - **`assets`**: cada imatge pròpia hi és **un sol cop**, deduplicada pel hash del contingut.
@@ -106,8 +106,10 @@ i una fixture (`apps/web/test/fixtures/saac/`).
     fitxer.
 - **`ui`** guarda l'estat d'edició que val la pena conservar (la seqüència activa). **MAI** afecta
   l'aspecte ni la impressió.
-- **Camps desconeguts**: es conserven tal com vénen, a qualsevol nivell, i es tornen a escriure en
-  desar.
+- **Camps desconeguts**: es conserven tal com vénen i es tornen a escriure en desar. Valen per a
+  l'arrel, `meta`, `page`, `style`, `ui`, cada seqüència, cada pictograma i cada imatge. Dins de
+  l'estil (`style.card.font`, per exemple) no es conserven: allà un camp desconegut no es pot
+  pintar.
 - **`id` estables**: les seqüències i els pictogrames tenen `id`. Un `id` que ve del fitxer es
   conserva en tornar a desar. Els que no en tenen, se'ls genera.
 - **Una sola línia**: el JSON es desa sense espais ni salts de línia, com fins ara.
@@ -187,8 +189,8 @@ existien publicats: `sequence`, `documentState` i la 2.1.0 (`defaultSettings` + 
     no té categoria i el color es guarda com a **retoc**, perquè es continuï veient igual.
   - Si **no porta cap color** (documents molt antics), el pictograma no té categoria ni retoc, i es
     pinta amb `none`. **És l'única excepció a la invariant**: fins ara la vora «fitzgerald»
-    d'aquests pictogrames sortia del color del text per accident (C11 a `docs/BACKLOG-ux.md`).
-    *Pendent de confirmar.*
+    d'aquests pictogrames sortia del color del text per accident (C11 a `docs/BACKLOG-ux.md`, que
+    queda resolta amb això).
   - Cas límit acceptat: un color del vocabulari personal que coincideix amb el d'una categoria es
     llegeix com aquella categoria. Es veu igual, però «Restableix» no el canvia.
 - Si **totes** les seqüències són buides, se'n conserva una de buida: un document té sempre com a

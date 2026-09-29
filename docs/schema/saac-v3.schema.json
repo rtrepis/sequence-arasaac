@@ -335,6 +335,11 @@
             },
             "asset": {
               "type": "string"
+            },
+            "id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "El pictograma d'ARASAAC que la imatge pròpia substitueix, per si es treu."
             }
           }
         },

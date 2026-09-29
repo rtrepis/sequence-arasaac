@@ -101,6 +101,6 @@ mòbil, amb compte o sense.**
   es pinten amb el color `none` de l'estil (`#666666`). Fins ara n'hi havia de tres colors
   (`#666`, `#2222ff` i `#FFCD94`) segons com havien nascut. Els documents antics no canvien:
   aquests colors hi queden com a retoc.
-- **Pendent de confirmar**: els pictogrames antics **sense cap** color de Fitzgerald es pintaran amb
+- **Pictogrames antics sense cap color de Fitzgerald**: es pinten amb
   `none`, en lloc del color del text que tenien per accident (C11). És l'única excepció a la
   invariant de la migració.
