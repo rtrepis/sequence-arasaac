@@ -181,7 +181,10 @@ test("flux amb teclat: obrir un fitxer antic, canviar un pictograma, Restableix 
   await tabTo(page, menu);
   await page.keyboard.press("Enter");
   const load = page.getByRole("button", { name: "Carrega", exact: true });
+  // El menú s'obre amb una transició: s'espera que hi sigui abans de tabular
+  await expect(load).toBeVisible();
   await tabTo(page, load);
+  await expect(load).toBeFocused();
   const chooser = page.waitForEvent("filechooser");
   await page.keyboard.press("Enter");
   await (await chooser).setFiles(path.join(FIXTURES, "01-una-pestanya.saac"));

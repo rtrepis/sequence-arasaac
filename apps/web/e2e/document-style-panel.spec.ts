@@ -143,6 +143,13 @@ for (const [name, viewport] of [
     await expect(page.getByText("Fitxer carregat correctament")).toBeVisible();
     // Vores de 10, lletra i números a mida 2, numerat i text a dalt
     await openFile(page, EXTREME_STYLE);
+    // Obert com a document, pregunta què se'n fa (model v3)
+    await page
+      .getByRole("dialog", {
+        name: "Aquest fitxer és un estil, no un document",
+      })
+      .getByRole("button", { name: "Aplica'l a aquest document" })
+      .click();
     await expect(
       page.getByText("S'ha aplicat l'estil del fitxer al document."),
     ).toBeVisible();
