@@ -7,6 +7,7 @@ import {
   updatePictSequenceActionCreator,
 } from "@features/sequence/store/documentSlice";
 import useNewPictogram from "@features/pictogram/hooks/useNewPictogram";
+import { resetPictogramStyleThunk } from "@features/sequence/store/styleSlice";
 import { PictSequence } from "../../../types/sequence";
 
 /** Les accions que es poden fer sobre un pictograma de la seqüència. */
@@ -16,7 +17,8 @@ export type PictogramActionKey =
   | "edit"
   | "delete"
   | "insert"
-  | "duplicate";
+  | "duplicate"
+  | "resetStyle";
 
 interface PictogramActionsParams {
   pictogram: PictSequence;
@@ -75,5 +77,9 @@ export const usePictogramActions = ({
         ...pictogram,
         indexSequence: pictogram.indexSequence + 1,
       }),
+
+    // Fora del formulari d'edició: s'aplica al document al moment, amb Desfés
+    resetStyle: () =>
+      dispatch(resetPictogramStyleThunk(pictogram.indexSequence)),
   };
 };

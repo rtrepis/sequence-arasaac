@@ -110,7 +110,7 @@ const messages = defineMessages({
   },
   changedReset: {
     id: "features.sequence.style.changed.reset",
-    defaultMessage: "El pictograma torna a tenir l'estil del document.",
+    defaultMessage: "Estil restablert",
     description:
       "Snackbar després de «Restableix» un pictograma: se n'esborren els retocs",
   },

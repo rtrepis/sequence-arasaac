@@ -1,7 +1,23 @@
-import { List, Stack, Box, Button, Chip, Tooltip } from "@mui/material";
+import {
+  Alert,
+  Box,
+  List,
+  Snackbar,
+  Stack,
+  Tooltip,
+  useMediaQuery,
+} from "@mui/material";
+import { Theme } from "@mui/material/styles";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
-import { PictogramCardDefaults, PictSequence } from "../../types/sequence";
+import {
+  Border,
+  Hair,
+  PictogramCardDefaults,
+  PictSequence,
+  Skin,
+  TextPosition,
+} from "../../types/sequence";
 import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import messages from "./PictEditForm.lang";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
@@ -13,28 +29,55 @@ import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCa
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import React from "react";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
-import { MdSettingsBackupRestore, MdTune } from "react-icons/md";
+import { MdSettingsBackupRestore } from "react-icons/md";
 import {
   selectDocumentPictStyle,
   selectDocumentStyle,
 } from "@features/sequence/style/styleSelectors";
-import { undoableStyleChangeThunk } from "@features/sequence/store/styleSlice";
-import { pictogramStyleOverride } from "@features/sequence/saac/serialize";
 import {
-  DEFAULT_FITZGERALD_CATEGORY_COLORS,
-  categoryOf,
-  colorForCategory,
-} from "@features/sequence/saac/fitzgerald";
+  isPictogramCustomized,
+  resetPictogramStyle,
+} from "@features/sequence/style/pictogramStyle";
 import { APP_TOUCH_TARGET_MIN } from "@/style/appShape";
+import {
+  floatingNoticeSx,
+  floatingSnackbarSx,
+} from "@components/FloatingLayer";
+import StyledButton from "@/style/StyledButton";
+import ScaleToFit from "@components/SettingsLayout/ScaleToFit";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
   submit: boolean;
+  /** Avisa si el pictograma que s'edita té retocs propis (el menú del diàleg) */
+  onCustomizedChange?: (customized: boolean) => void;
+  /**
+   * Cada canvi d'aquest número demana «Restableix» des de fora del formulari:
+   * el menú «Més accions» del diàleg, que és l'única via a iOS
+   */
+  resetRequest?: number;
+}
+
+/** Prou temps per llegir-lo i arribar a «Desfés» amb el teclat */
+const RESET_SNACKBAR_DURATION_MS = 10000;
+
+/** Els valors d'estil que «Restableix» canvia al formulari, per poder-los desfer */
+interface StyleSnapshot {
+  textPosition: TextPosition;
+  borderIn: Border;
+  borderOut: Border;
+  skin: Skin;
+  hair: Hair;
+  color: boolean;
+  fitzgerald: string | undefined;
+  resetDone: boolean;
 }
 
 const PictEditForm = ({
   pictogram,
   submit,
+  onCustomizedChange,
+  resetRequest,
 }: PictEditFormProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -57,9 +100,14 @@ const PictEditForm = ({
   } = useAppSelector(selectDocumentPictStyle);
   const documentStyle = useAppSelector(selectDocumentStyle);
 
-  // «Restableix» esborra els retocs del pictograma en desar-lo (fonament 03,
-  // §5): la lletra, que aquest formulari no edita, també
+  // «Restableix» és una edició més del formulari: es desa en tancar-lo, com
+  // tota la resta (fonament 03, §5). També treu la lletra, que el formulari no
+  // edita. El snackbar ofereix «Desfés», que torna l'estil d'abans al formulari
   const [resetDone, setResetDone] = useState(false);
+  const [resetUndo, setResetUndo] = useState<StyleSnapshot | null>(null);
+  const [resetNotice, setResetNotice] = useState(0);
+  // On va el focus quan «Restableix» desapareix: el botó de la capçalera
+  const summaryRef = useRef<HTMLButtonElement>(null);
 
   const initialTextPosition =
     pictogram.settings.textPosition ?? defaultTextPosition;
@@ -165,10 +213,7 @@ const PictEditForm = ({
       cross,
     };
 
-    const update = () => updatePictSequenceActionCreator(newPictogram);
-    // Restablir es pot desfer, amb el mateix «Desfés» que els canvis d'estil
-    if (resetDone) dispatch(undoableStyleChangeThunk(update, "reset"));
-    else dispatch(update());
+    dispatch(updatePictSequenceActionCreator(newPictogram));
     // `variantSettings` i `resetSettings` es tornen a crear a cada render: les
     // dependències són els valors de què surten
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -196,66 +241,135 @@ const PictEditForm = ({
     if (submit) handlerSubmit();
   }, [submit, handlerSubmit]);
 
+  // Té retocs propis respecte de l'estil del document?
+  const isCustomized = isPictogramCustomized(pictogramGuide, documentStyle);
+  useEffect(() => {
+    onCustomizedChange?.(isCustomized);
+  }, [isCustomized, onCustomizedChange]);
+
   // «Restableix»: el pictograma torna a l'estil del document. El Fitzgerald
   // torna al color de la seva categoria; la categoria, que és contingut, es
   // queda (fonament 03, «El color de Fitzgerald»)
   const handleReset = () => {
-    setTextPosition(defaultTextPosition);
-    setBorderIn(defaultBorderIn);
-    setBorderOut(defaultBorderOut);
+    setResetUndo({
+      textPosition,
+      borderIn,
+      borderOut,
+      skin,
+      hair,
+      color,
+      fitzgerald,
+      resetDone,
+    });
+    const reset = resetPictogramStyle(pictogramGuide, documentStyle);
+    setTextPosition(reset.settings.textPosition ?? defaultTextPosition);
+    setBorderIn(reset.settings.borderIn ?? defaultBorderIn);
+    setBorderOut(reset.settings.borderOut ?? defaultBorderOut);
     setSkin(defaultSkin);
     setHair(defaultHair);
     setColor(defaultColor);
     setSearch((previous) => ({
       ...previous,
-      fitzgerald: colorForCategory(
-        previous.category ?? categoryOf(pictogram),
-        documentStyle.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
-        noCategoryColor,
-      ),
+      fitzgerald: reset.img.settings.fitzgerald,
     }));
     setResetDone(true);
+    setResetNotice((notice) => notice + 1);
+    // «Restableix» desapareix: el focus no s'ha de perdre
+    summaryRef.current?.focus();
   };
 
-  // Té retocs propis respecte de l'estil del document?
-  const isCustomized =
-    pictogramStyleOverride(pictogramGuide, documentStyle) !== undefined;
+  // «Desfés»: l'estil d'abans torna al formulari; la resta d'edicions no es toca
+  const handleUndoReset = () => {
+    if (!resetUndo) return;
+    setTextPosition(resetUndo.textPosition);
+    setBorderIn(resetUndo.borderIn);
+    setBorderOut(resetUndo.borderOut);
+    setSkin(resetUndo.skin);
+    setHair(resetUndo.hair);
+    setColor(resetUndo.color);
+    setSearch((previous) => ({
+      ...previous,
+      fitzgerald: resetUndo.fitzgerald,
+    }));
+    setResetDone(resetUndo.resetDone);
+    setResetUndo(null);
+    summaryRef.current?.focus();
+  };
+
+  // «Restableix l'estil» des del menú «Més accions» del diàleg
+  const handleResetRef = useRef(handleReset);
+  handleResetRef.current = handleReset;
+  useEffect(() => {
+    if (resetRequest) handleResetRef.current();
+  }, [resetRequest]);
+
+  // La previsualització es queda fixa a dalt; en pantalles baixes, en començar
+  // a desplaçar s'encongeix fins al 30 % de l'alçada, sencera i llegible
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const lowScreen = useMediaQuery(
+    (theme: Theme) =>
+      `(max-height: 700px), ${theme.breakpoints.down("sm").replace("@media ", "")}`,
+  );
+  useEffect(() => {
+    const scroller = rootRef.current?.closest(".MuiDialogContent-root");
+    if (!scroller) return;
+    const onScroll = () => setScrolled(scroller.scrollTop > 0);
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    return () => scroller.removeEventListener("scroll", onScroll);
+  }, []);
+  const compactPreview = scrolled && lowScreen;
+
+  const resetButton = isCustomized && (
+    <Tooltip title={intl.formatMessage(messages.tooltipReset)} describeChild>
+      <StyledButton
+        variant="outlined"
+        color="inherit"
+        onClick={handleReset}
+        startIcon={<MdSettingsBackupRestore aria-hidden />}
+        sx={{ minHeight: APP_TOUCH_TARGET_MIN, flexShrink: 0 }}
+      >
+        {intl.formatMessage(messages.reset)}
+      </StyledButton>
+    </Tooltip>
+  );
 
   return (
     <Box
-      display="grid"
-      gridTemplateColumns={{ xs: "1fr", md: "0.5fr 1.5fr" }}
-      gap={{ xs: 3, sm: 2 }}
-      sx={{ minHeight: 0 }}
+      ref={rootRef}
+      // Mòbil: una columna; la previsualització, fixa a dalt. Escriptori: la
+      // previsualització a l'esquerra, fixa, i la cerca i la configuració a la
+      // dreta. En tots dos, la zona fixa és filla directa del que es desplaça:
+      // dins d'una fila de graella, el `sticky` marxava amb la seva fila
+      sx={{
+        display: { xs: "flex", md: "grid" },
+        flexDirection: "column",
+        gridTemplateColumns: { md: "0.5fr 1.5fr" },
+        gridTemplateRows: { md: "auto 1fr" },
+        columnGap: 2,
+        rowGap: { xs: 1, sm: 2 },
+        minHeight: 0,
+      }}
     >
-      {/* Zona de treball: mostra del pictograma + cerca, amb fons default
-          (negre en fosc). El collapse de sota és zona de configuració (paper). */}
       <Box
-        gridColumn={{ xs: "1", md: "1 / -1" }}
-        display="grid"
-        gridTemplateColumns={{ xs: "1fr", md: "0.5fr 1.5fr" }}
-        gap={{ xs: 3, sm: 2 }}
+        data-testid="pict-edit-preview"
         sx={{
-          minHeight: 0,
+          gridColumn: { md: "1" },
+          gridRow: { md: "1 / span 2" },
+          // A la graella, a dalt de la seva àrea (el `sticky` hi necessita
+          // lloc); en columna, amplada sencera: si s'encongia, `ScaleToFit`
+          // no tenia amplada i la previsualització desapareixia
+          alignSelf: { xs: "stretch", md: "start" },
+          position: "sticky",
+          top: 0,
+          zIndex: 5,
+          // Fons opac perquè el que es desplaça no es vegi per sota
           backgroundColor: "background.default",
           borderRadius: 2,
           padding: 1,
         }}
       >
-        <Box
-          sx={{
-            alignSelf: "start",
-            justifyItems: "center",
-            width: { xs: "100%", md: "auto" },
-            position: "sticky",
-            top: 0,
-            zIndex: 5,
-            // Fons opac perquè els resultats de cerca no es vegin per sota en fer scroll
-            backgroundColor: "background.default",
-            borderRadius: 2,
-            paddingBlock: { xs: 1 },
-          }}
-        >
+        <ScaleToFit maxHeight={compactPreview ? "30vh" : undefined} animate>
           <PictogramCard
             pictogram={pictogramGuide}
             defaults={defaults}
@@ -263,55 +377,35 @@ const PictEditForm = ({
             view="complete"
             size={{ scale: 0.8 }}
           />
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
-            flexWrap="wrap"
-            gap={1}
-            sx={{ mt: 1 }}
-          >
-            {/* L'indicador diu amb text (no només amb color) que el
-                pictograma té retocs propis; la regió viva l'anuncia quan
-                apareix o desapareix */}
-            <Box role="status" aria-live="polite">
-              {isCustomized && (
-                <Chip
-                  icon={<MdTune aria-hidden />}
-                  label={intl.formatMessage(messages.customized)}
-                  variant="outlined"
-                  size="small"
-                />
-              )}
-            </Box>
-            <Tooltip
-              title={intl.formatMessage(messages.tooltipReset)}
-              describeChild
-            >
-              <Button
-                variant="outlined"
-                color="inherit"
-                onClick={handleReset}
-                startIcon={<MdSettingsBackupRestore aria-hidden />}
-                sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
-              >
-                {intl.formatMessage(messages.reset)}
-              </Button>
-            </Tooltip>
-          </Stack>
-        </Box>
-        <Box paddingBlock={1} sx={{ minHeight: 0 }}>
-          <PictogramSearch
-            indexPict={pictogram.indexSequence}
-            state={search}
-            setState={setSearch}
-          />
-        </Box>
+        </ScaleToFit>
       </Box>
 
-      <Box gridColumn={{ xs: "1", md: "1 / -1" }} sx={{ minHeight: 0 }}>
+      <Box
+        sx={{
+          gridColumn: { md: "2" },
+          minHeight: 0,
+          backgroundColor: "background.default",
+          borderRadius: 2,
+          padding: 1,
+        }}
+      >
+        <PictogramSearch
+          indexPict={pictogram.indexSequence}
+          state={search}
+          setState={setSearch}
+        />
+      </Box>
+
+      <Box sx={{ gridColumn: { md: "2" }, minHeight: 0 }}>
         <SettingAccordion
-          title={`${intl.formatMessage({ ...messages.title })}`}
+          label={intl.formatMessage(
+            isCustomized ? messages.settingsCustomized : messages.settings,
+          )}
+          status={
+            isCustomized ? intl.formatMessage(messages.customized) : undefined
+          }
+          statusAction={resetButton}
+          summaryRef={summaryRef}
         >
           <List>
             <li>
@@ -396,6 +490,36 @@ const PictEditForm = ({
           </List>
         </SettingAccordion>
       </Box>
+
+      {/* Dins del diàleg, que atrapa el focus: un snackbar de fora no s'hi
+          podria fer servir amb el teclat. L'`Alert` n'és la regió viva */}
+      <Snackbar
+        key={resetNotice}
+        open={resetNotice > 0 && resetUndo !== null}
+        autoHideDuration={RESET_SNACKBAR_DURATION_MS}
+        onClose={(_, reason) => {
+          if (reason !== "clickaway") setResetUndo(null);
+        }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        sx={floatingSnackbarSx}
+      >
+        <Alert
+          severity="success"
+          variant="outlined"
+          sx={floatingNoticeSx}
+          action={
+            <StyledButton
+              color="inherit"
+              onClick={handleUndoReset}
+              sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+            >
+              {intl.formatMessage(messages.undo)}
+            </StyledButton>
+          }
+        >
+          {intl.formatMessage(messages.resetDone)}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

@@ -10,6 +10,11 @@ interface ScaleToFitProps {
    * `vh` i els mateixos punts de trencament que el layout que l'envolta.
    */
   maxHeight?: ResponsiveStyleValue<string | number>;
+  /**
+   * Anima el canvi d'escala (la previsualització fixa del formulari d'edició,
+   * que s'encongeix en desplaçar). Mai amb `prefers-reduced-motion`.
+   */
+  animate?: boolean;
 }
 
 /**
@@ -42,6 +47,7 @@ interface Fit {
 const ScaleToFit = ({
   children,
   maxHeight,
+  animate = false,
 }: ScaleToFitProps): React.ReactElement => {
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
@@ -52,6 +58,12 @@ const ScaleToFit = ({
   // `setFit`, que programa un render encara que torni el mateix valor
   const fitRef = useRef<Fit>(fit);
   const measuredWidth = useRef(0);
+  const transition = animate
+    ? {
+        transition: "transform 150ms ease-out, height 150ms ease-out",
+        "@media (prefers-reduced-motion: reduce)": { transition: "none" },
+      }
+    : {};
 
   const measure = useCallback(() => {
     const outer = outerRef.current;
@@ -117,6 +129,7 @@ const ScaleToFit = ({
         maxHeight,
         height: fit.height * fit.scale,
         overflow: "hidden",
+        ...transition,
       }}
     >
       <Box
@@ -128,6 +141,7 @@ const ScaleToFit = ({
           width: "max-content",
           transform: `translateX(-50%) scale(${fit.scale})`,
           transformOrigin: "top center",
+          ...transition,
         }}
       >
         {children}

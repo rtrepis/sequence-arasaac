@@ -345,10 +345,6 @@
     "defaultMessage": "Restablecer",
     "description": "Botó que esborra els retocs d'aquest pictograma: torna a l'estil del document (es pot desfer)"
   },
-  "components.pictEditSettings.settings.label": {
-    "defaultMessage": "Configuraciones de Pictograma",
-    "description": "Title section Pictogram Edit "
-  },
   "components.pictogramAmount": {
     "defaultMessage": "Pictogramas:",
     "description": "Amount Pictogram"
@@ -2503,8 +2499,8 @@
     "description": "Quadre «Què es guarda»: el que no hi va"
   },
   "components.pictEdit.customized": {
-    "defaultMessage": "Pictograma personalizado",
-    "description": "Indicador: el pictograma té retocs propis, diferents de l'estil del document"
+    "defaultMessage": "Personalizado",
+    "description": "Estat a la capçalera de la configuració: el pictograma té retocs propis"
   },
   "context.feedback.load.invalidFile": {
     "defaultMessage": "No se ha podido abrir. No es un documento de SequenciAAC o está dañado.",
@@ -2527,8 +2523,8 @@
     "description": "Snackbar després d'«Aplica a tots»: el valor passa a l'estil del document i a tots els pictogrames"
   },
   "features.sequence.style.changed.reset": {
-    "defaultMessage": "El pictograma vuelve a tener el estilo del documento.",
-    "description": "Snackbar després de «Restableix» un pictograma: se n'esborren els retocs"
+    "defaultMessage": "Estilo restablecido",
+    "description": "Snackbar després de «Restableix l'estil» des del menú contextual (es pot desfer)"
   },
   "features.sequence.style.styleFileOpened.title": {
     "defaultMessage": "Este archivo es un estilo, no un documento",
@@ -2545,5 +2541,37 @@
   "features.sequence.style.styleFileOpened.makeDefault": {
     "defaultMessage": "Convertirlo en mi estilo predeterminado",
     "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
+  },
+  "components.pictEdit.settings": {
+    "defaultMessage": "Configuración",
+    "description": "Nom accessible del botó que obre i tanca la configuració del pictograma"
+  },
+  "components.pictEdit.settingsCustomized": {
+    "defaultMessage": "Configuración, personalizado",
+    "description": "Nom accessible del botó de la configuració quan el pictograma té retocs propis"
+  },
+  "components.pictEdit.resetDone": {
+    "defaultMessage": "Estilo restablecido",
+    "description": "Snackbar després de «Restableix» un pictograma (es pot desfer)"
+  },
+  "components.pictEdit.undo": {
+    "defaultMessage": "Deshacer",
+    "description": "Botó del snackbar que desfà «Restableix» dins del formulari"
+  },
+  "components.pictEdit.cardName": {
+    "defaultMessage": "{text}, pictograma {number}",
+    "description": "Nom accessible d'una targeta de la graella d'edició: el text i el número"
+  },
+  "components.pictEdit.cardNameNoText": {
+    "defaultMessage": "Pictograma {number}",
+    "description": "Nom accessible d'una targeta de la graella que encara no té paraula"
+  },
+  "components.pictEdit.cardNameCustomized": {
+    "defaultMessage": "{name}, personalizado",
+    "description": "Nom accessible d'una targeta amb retocs propis"
+  },
+  "components.mouseActionList.resetStyle": {
+    "defaultMessage": "Restablecer el estilo",
+    "description": "Treu els retocs d'estil del pictograma: torna a l'estil del document (es pot desfer)"
   }
 }

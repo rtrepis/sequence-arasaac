@@ -9,6 +9,7 @@ import { documentStatusReducer } from "./documentStatusSlice";
 import { documentStatusListener } from "./documentStatusMiddleware";
 import {
   applyToAllPictogramsThunk,
+  resetPictogramStyleThunk,
   selectCanUndoStyle,
   styleReducer,
   undoStyleChangeThunk,
@@ -17,6 +18,10 @@ import {
 import { uiReducer } from "@features/user-settings/store/uiSlice";
 import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import { pictogramStyleOverride } from "@features/sequence/saac/serialize";
+import {
+  isPictogramCustomized,
+  resetPictogramStyle,
+} from "@features/sequence/style/pictogramStyle";
 import type { PictSequence } from "@/types/sequence";
 
 // «Aplica a tots» i «Restableix» amb el desfer que ja existia (ADR-003,
@@ -167,5 +172,60 @@ describe("Restableix i l'indicador «personalitzat»", () => {
 
     store.dispatch(undoStyleChangeThunk());
     expect(state(store).document.content).toBe(before);
+  });
+});
+
+describe("Restableix l'estil", () => {
+  const retouched = () =>
+    pict(
+      0,
+      {
+        borderIn: { color: "#ff00ff", radius: 0, size: 9 },
+        font: { family: "Escolar", color: "#123456", size: 2 },
+      },
+      { color: false, fitzgerald: "#000000" },
+    );
+
+  it("treu tots els retocs i conserva el contingut i la categoria", () => {
+    const store = makeStore();
+    const style = selectDocumentStyle(state(store));
+    const before = { ...retouched(), text: "L'escola", cross: true };
+    expect(isPictogramCustomized(before, style)).toBe(true);
+
+    const after = resetPictogramStyle(before, style);
+    expect(isPictogramCustomized(after, style)).toBe(false);
+    expect(after.text).toBe("L'escola");
+    expect(after.cross).toBe(true);
+    expect(after.img.category).toBe("verb");
+    expect(after.img.selectedId).toBe(before.img.selectedId);
+    // El Fitzgerald torna al color de la categoria, no al gris de l'estil
+    expect(after.img.settings.fitzgerald).toBe("#4CAf50");
+    expect(after.settings.font).toBeUndefined();
+  });
+
+  it("no hi posa pell si el pictograma no en té", () => {
+    const store = makeStore();
+    const style = selectDocumentStyle(state(store));
+    const withoutSkin = pict(0, {}, { skin: undefined });
+    expect(
+      resetPictogramStyle(withoutSkin, style).img.settings,
+    ).not.toHaveProperty("skin");
+  });
+
+  it("des del menú contextual s'aplica al moment, i Desfés el recupera", () => {
+    const store = makeStore();
+    store.dispatch(addPictogramActionCreator(retouched()));
+    const before = state(store).document.content[0][0];
+    const style = selectDocumentStyle(state(store));
+
+    store.dispatch(resetPictogramStyleThunk(0));
+    const reset = state(store).document.content[0][0];
+    expect(isPictogramCustomized(reset, style)).toBe(false);
+    expect(reset.id).toBe(before.id);
+    expect(state(store).style.undoSnackbar).toMatchObject({ source: "reset" });
+
+    store.dispatch(undoStyleChangeThunk());
+    expect(state(store).document.content[0][0]).toBe(before);
+    expect(isPictogramCustomized(before, style)).toBe(true);
   });
 });

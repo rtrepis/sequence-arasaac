@@ -13,6 +13,7 @@ import {
   applyDocumentStyleActionCreator,
   DocumentStyleSnapshot,
   pictStyleAppliedToAllActionCreator,
+  updatePictSequenceActionCreator,
   restoreDocumentStyleActionCreator,
   takeDocumentStyleSnapshot,
 } from "./documentSlice";
@@ -22,6 +23,7 @@ import {
   selectUserDefaultStyle,
 } from "@features/sequence/style/styleSelectors";
 import { pictStyleOf, stylesEqual } from "@features/sequence/style/styleModel";
+import { resetPictogramStyle } from "@features/sequence/style/pictogramStyle";
 
 /**
  * D'on ve el canvi d'estil que es pot desfer: l'estil per defecte, un fitxer,
@@ -220,6 +222,28 @@ export const applyToAllPictogramsThunk =
       undoableStyleChangeThunk(
         () => pictStyleAppliedToAllActionCreator({ patch, base }),
         "applyAll",
+      ),
+    );
+  };
+
+/**
+ * «Restableix l'estil» des del menú contextual de la graella: fora del
+ * formulari d'edició, s'aplica al document al moment, amb Desfés. Dins del
+ * formulari, restablir és una edició més i es desa en tancar-lo.
+ */
+export const resetPictogramStyleThunk =
+  (indexSequence: number): AppThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    const pictogram = state.document.content[state.document.activeSAAC]?.find(
+      (pict) => pict.indexSequence === indexSequence,
+    );
+    if (!pictogram) return;
+    const reset = resetPictogramStyle(pictogram, selectDocumentStyle(state));
+    dispatch(
+      undoableStyleChangeThunk(
+        () => updatePictSequenceActionCreator(reset),
+        "reset",
       ),
     );
   };
