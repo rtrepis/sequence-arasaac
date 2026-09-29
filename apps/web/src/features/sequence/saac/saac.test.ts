@@ -138,7 +138,7 @@ describe("migració dels formats antics", () => {
         newId: () => "doc-nou",
       });
       if (legacy.kind !== "document") throw new Error("no és un document");
-      const { file } = parseDocument(name);
+      const { file, document } = parseDocument(name);
 
       const keys = Object.keys(legacy.document.content)
         .map(Number)
@@ -171,11 +171,28 @@ describe("migració dels formats antics", () => {
           expect(sameColor(now.pictogram.fitzgerald, old.fitzgerald!)).toBe(
             true,
           );
-          // Pell, cabell i color: els del pictograma, quan en portava
-          if (old.skin !== undefined) expect(now.pictogram.skin).toBe(old.skin);
-          if (old.hair !== undefined) expect(now.pictogram.hair).toBe(old.hair);
-          if (old.color !== undefined)
-            expect(now.pictogram.color).toBe(old.color);
+          // Pell, cabell i color: només es pinten en un pictograma d'ARASAAC,
+          // i només els que el pictograma admet (i per tant portava)
+          if (sequence.pictograms[p].image.source === "arasaac") {
+            if (old.skin !== undefined)
+              expect(now.pictogram.skin).toBe(old.skin);
+            if (old.hair !== undefined)
+              expect(now.pictogram.hair).toBe(old.hair);
+            if (old.color !== undefined)
+              expect(now.pictogram.color).toBe(old.color);
+            // I Redux continua sabent quines opcions admet
+            const loaded = sortedPicts(document.content[s])[p];
+            expect(Object.keys(loaded.img.settings).sort()).toEqual(
+              Object.keys(pict.img.settings)
+                .filter((k) => pict.img.settings[k as "skin"] !== undefined)
+                .concat(
+                  pict.img.settings.fitzgerald === undefined
+                    ? ["fitzgerald"]
+                    : [],
+                )
+                .sort(),
+            );
+          }
         });
       });
     },

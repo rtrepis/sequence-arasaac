@@ -1,6 +1,13 @@
 import axios from "axios";
-import fitzgeraldColors from "../../../data/fitzgeraldColors";
 import { Hair, PictApiAraSettings, Skin } from "../../../types/sequence";
+import {
+  DEFAULT_FITZGERALD_CATEGORY_COLORS,
+  FITZGERALD_NONE_COLOR,
+  FitzgeraldCategory,
+  FitzgeraldCategoryColors,
+  categoryFromArasaacType,
+  colorForCategory,
+} from "@features/sequence/saac/fitzgerald";
 
 const araSaacURL = import.meta.env.VITE_APP_API_ARASAAC_URL;
 
@@ -67,17 +74,30 @@ export const buildPictogramUrl = (
   return path;
 };
 
-// Extreu les settings d'aparença de les dades brutes de l'API ARASAAC.
+// Categoria de Fitzgerald d'un pictograma d'ARASAAC: el tipus de la primera
+// paraula clau. És contingut del pictograma, no estil.
+export const extractPictCategory = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any,
+): FitzgeraldCategory | "none" =>
+  categoryFromArasaacType(data?.keywords?.[0]?.type) ?? "none";
+
+// Extreu les settings d'aparença de les dades brutes de l'API ARASAAC. El color
+// de Fitzgerald és el de la categoria a l'estil del document; sense categoria,
+// el dels que no en tenen (abans hi havia un taronja fix, `#FFCD94`).
 export const extractPictSettings = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any,
-  defaults: { skin: Skin; hair: Hair; color: boolean },
+  defaults: { skin: Skin; hair: Hair; color: boolean; fitzgerald?: string },
+  categoryColors: FitzgeraldCategoryColors = DEFAULT_FITZGERALD_CATEGORY_COLORS,
 ): PictApiAraSettings => {
   const settings: PictApiAraSettings = {};
 
-  settings.fitzgerald =
-    fitzgeraldColors[data.keywords[0].type as keyof typeof fitzgeraldColors]
-      ?.color ?? "#FFCD94";
+  settings.fitzgerald = colorForCategory(
+    extractPictCategory(data),
+    categoryColors,
+    defaults.fitzgerald ?? FITZGERALD_NONE_COLOR,
+  );
 
   if (data.skin) settings.skin = defaults.skin;
   if (data.hair) settings.hair = defaults.hair;

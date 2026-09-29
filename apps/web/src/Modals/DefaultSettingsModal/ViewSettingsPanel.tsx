@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import {
   applyViewSettingsToAllActionCreator,
+  documentLayoutChangedActionCreator,
   setSequenceSpaceBetweenActionCreator,
 } from "@features/sequence/store/documentSlice";
 import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
@@ -161,9 +162,24 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     };
 
     // «Aplica a la vista actual» porta aquests valors al document obert:
-    // tocar-ne les mides i els espaiats és tocar-ne l'estil
+    // tocar-ne les mides i els espaiats és tocar-ne l'estil, i la pàgina també
+    // és seva (B26)
     const handleApply = () => {
       dispatch(viewSettingsActionCreator(localSettings));
+      dispatch(
+        documentLayoutChangedActionCreator({
+          layout: {
+            direction: localSettings.direction,
+            pageSize: localSettings.pageSize,
+            orientation: localSettings.orientation,
+          },
+          base: {
+            direction: localSettings.direction,
+            pageSize: localSettings.pageSize,
+            orientation: localSettings.orientation,
+          },
+        }),
+      );
       dispatch(
         applyViewSettingsToAllActionCreator({
           settings: {

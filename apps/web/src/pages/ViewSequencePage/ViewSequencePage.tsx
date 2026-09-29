@@ -16,7 +16,7 @@ import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelect
 const ViewSequencePage = (): React.ReactElement => {
   const { document, documentStatus } = useAppSelector((state) => state);
   // El document es veu sempre amb el seu estil, no amb les preferències de
-  // qui el mira (`docs/fonaments/sequencia-i-estil.md`)
+  // qui el mira (`docs/fonaments/03-model-contingut-estil.md`)
   const defaults: PictogramCardDefaults = useAppSelector(
     selectDocumentCardDefaults,
   );
@@ -28,7 +28,9 @@ const ViewSequencePage = (): React.ReactElement => {
   if (!documentStatus.draftRestoreSettled) return <></>;
 
   return (
-    <ViewSequencesSettings>
+    // La columna copia la pàgina del document en muntar-se: un altre document
+    // (obert des del menú sense sortir d'aquí) la torna a muntar amb la seva
+    <ViewSequencesSettings key={document.id}>
       {({ viewSettings, sequenceViewSettings, scale, author }) => (
         <>
           {Object.entries(document.content).map(([key, sequence]) => {

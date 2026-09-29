@@ -16,7 +16,14 @@ import type {
 import type { DefaultSettings } from "@/types/ui";
 import { mergeDeep, resolveCardStyle } from "./cascade";
 import type { FitzgeraldCategoryColors } from "./fitzgerald";
-import type { SaacDocumentV3, V3Pictogram, V3Style, V3View } from "./types";
+import { PICTOGRAM_VARIANTS } from "./types";
+import type {
+  PictogramVariant,
+  SaacDocumentV3,
+  V3Pictogram,
+  V3Style,
+  V3View,
+} from "./types";
 
 /** Els camps d'un objecte del fitxer que l'app no coneix. */
 export const unknownFields = (
@@ -62,6 +69,7 @@ export const PICTOGRAM_KEYS = [
   "style",
 ] as const;
 const IMAGE_KEYS = [
+  "variants",
   "source",
   "id",
   "alternatives",
@@ -121,6 +129,11 @@ const pictogramToRedux = (
       ? (image.alternatives ?? [image.id])
       : [selectedId];
 
+  // Sense la llista (un fitxer v3 escrit per una altra eina), un pictograma
+  // d'ARASAAC les admet totes: és el que feia la targeta amb l'estil
+  const variants: readonly PictogramVariant[] =
+    image.source === "arasaac" ? (image.variants ?? PICTOGRAM_VARIANTS) : [];
+
   const pictogramExtra = unknownFields(pictogram, PICTOGRAM_KEYS);
   const imageExtra = unknownFields(image, IMAGE_KEYS);
 
@@ -135,10 +148,13 @@ const pictogramToRedux = (
           image.keywords && { keyWords: image.keywords }),
       },
       selectedId,
+      // Només les opcions que admet el pictograma: el formulari d'edició ho
+      // mira per saber quins ajustos ensenya, i la URL d'ARASAAC per saber
+      // quins paràmetres hi posa
       settings: {
-        skin: resolved.pictogram.skin,
-        hair: resolved.pictogram.hair,
-        color: resolved.pictogram.color,
+        ...(variants.includes("skin") && { skin: resolved.pictogram.skin }),
+        ...(variants.includes("hair") && { hair: resolved.pictogram.hair }),
+        ...(variants.includes("color") && { color: resolved.pictogram.color }),
         fitzgerald: resolved.pictogram.fitzgerald,
       },
       ...(url && { url }),

@@ -256,11 +256,13 @@ const documentSlice = createSlice({
       action: PayloadAction<PictApiAraForEdit>,
     ) => {
       const saac = previousDocument.activeSAAC;
-      previousDocument.content[saac].map(
-        (pictogram, index) =>
-          index === action.payload.indexSequence &&
-          (pictogram.img.settings = action.payload.settings!),
-      );
+      previousDocument.content[saac].forEach((pictogram, index) => {
+        if (index !== action.payload.indexSequence) return;
+        pictogram.img.settings = action.payload.settings!;
+        // Un altre pictograma d'ARASAAC pot ser d'una altra categoria
+        if (action.payload.category !== undefined)
+          pictogram.img.category = action.payload.category;
+      });
     },
 
     settingsPictSequence: (

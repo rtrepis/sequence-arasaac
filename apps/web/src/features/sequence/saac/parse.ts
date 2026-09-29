@@ -25,6 +25,8 @@ import {
   unknownFields,
 } from "./toRedux";
 import {
+  PICTOGRAM_VARIANTS,
+  PictogramVariant,
   SAAC_FORMAT,
   SAAC_V3,
   SaacDocumentV3,
@@ -182,12 +184,17 @@ const readImage = (
   if (value.source === "arasaac" && typeof value.id === "number") {
     const alternatives = numbers(value.alternatives);
     const keywords = strings(value.keywords);
+    const variants = strings(value.variants)?.filter(
+      (variant): variant is PictogramVariant =>
+        (PICTOGRAM_VARIANTS as readonly string[]).includes(variant),
+    );
     return {
       ...value,
       source: "arasaac",
       id: value.id,
       ...(alternatives && { alternatives }),
       ...(keywords && { keywords }),
+      ...(variants && { variants }),
     } as V3Image;
   }
   if (

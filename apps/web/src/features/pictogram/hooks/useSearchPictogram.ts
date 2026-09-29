@@ -10,13 +10,16 @@ import { Ai, PictApiAraForEdit, PictSequence } from "../../../types/sequence";
 import {
   searchPictogramByWord,
   fetchPictogramData,
+  extractPictCategory,
   extractPictSettings,
 } from "../api/arasaacClient";
-import { selectDocumentPictStyle } from "@features/sequence/style/styleSelectors";
+import {
+  selectDocumentPictStyle,
+  selectDocumentStyle,
+} from "@features/sequence/style/styleSelectors";
 
 const useSearchPictogram = () => {
   const {
-    font: { size: fontSize },
     textPosition,
     borderIn: defaultBorderIn,
     borderOut: defaultBorderOut,
@@ -29,6 +32,11 @@ const useSearchPictogram = () => {
 
   const defaultSettingsPictApiAra = useAppSelector(
     (state) => selectDocumentPictStyle(state).pictApiAra,
+  );
+  // Colors de Fitzgerald de l'estil del document: el pictograma nou pren el de
+  // la seva categoria
+  const categoryColors = useAppSelector(
+    (state) => selectDocumentStyle(state).fitzgeraldColors,
   );
 
   const wordProfiles = useAppSelector((state) => state.ui.wordProfiles);
@@ -68,7 +76,12 @@ const useSearchPictogram = () => {
 
         if (!isUpdate) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const baseSettings = extractPictSettings((data as any[])[0], defaultSettingsPictApiAra);
+          const baseSettings = extractPictSettings(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (data as any[])[0],
+            defaultSettingsPictApiAra,
+            categoryColors,
+          );
           const newPict: PictSequence = {
             indexSequence: amountSequence + indexSequence,
             img: {
@@ -76,9 +89,10 @@ const useSearchPictogram = () => {
               selectedId: profile?.selectedId ?? findBestPict[0],
               settings: { ...baseSettings, ...profile?.overrides },
               ...(profile?.customImageUrl ? { url: profile.customImageUrl } : {}),
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              category: extractPictCategory((data as any[])[0]),
             },
             settings: {
-              fontSize,
               textPosition,
               borderIn: defaultBorderIn,
               borderOut: defaultBorderOut,
@@ -105,12 +119,16 @@ const useSearchPictogram = () => {
             img: {
               searched: { word: wordAraSaac, bestIdPicts: [0] },
               selectedId: profile?.selectedId ?? 0,
-              settings: { fitzgerald: "#666", ...profile?.overrides },
+              // Sense categoria: el color dels que no en tenen, de l'estil
+              settings: {
+                fitzgerald: defaultSettingsPictApiAra.fitzgerald,
+                ...profile?.overrides,
+              },
               ...(profile?.customImageUrl ? { url: profile.customImageUrl } : {}),
+              category: "none",
             },
             settings: {
               textPosition,
-              fontSize,
               borderIn: defaultBorderIn,
               borderOut: defaultBorderOut,
             },
@@ -127,8 +145,8 @@ const useSearchPictogram = () => {
       dispatch,
       amountSequence,
       defaultSettingsPictApiAra,
+      categoryColors,
       wordProfiles,
-      fontSize,
       textPosition,
       defaultBorderIn,
       defaultBorderOut,
@@ -140,20 +158,27 @@ const useSearchPictogram = () => {
     async (pictogramId: number, indexSequence: number) => {
       try {
         const data = await fetchPictogramData(pictogramId, locale);
-        const findSettings = extractPictSettings(data, defaultSettingsPictApiAra);
+        const findSettings = extractPictSettings(
+          data,
+          defaultSettingsPictApiAra,
+          categoryColors,
+        );
+
+        const category = extractPictCategory(data);
 
         dispatch(
           settingsPictApiAraActionCreator({
             indexSequence: indexSequence,
             settings: findSettings,
+            category,
           }),
         );
-        return findSettings;
+        return { settings: findSettings, category };
       } catch {
         console.error("getSettingsPictId ");
       }
     },
-    [locale, dispatch, defaultSettingsPictApiAra],
+    [locale, dispatch, defaultSettingsPictApiAra, categoryColors],
   );
 
   return {

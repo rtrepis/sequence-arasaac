@@ -6,7 +6,7 @@ import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import messages from "./PictEditForm.lang";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
 import { useIntl } from "react-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updatePictSequenceActionCreator } from "@features/sequence/store/documentSlice";
 import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCardTextFiled";
@@ -36,7 +36,12 @@ const PictEditForm = ({
       font: defaultFont,
       numberFont: defaultNumberFont,
     },
-    pictApiAra: { skin: defaultSkin, hair: defaultHair, color: defaultColor },
+    pictApiAra: {
+      skin: defaultSkin,
+      hair: defaultHair,
+      color: defaultColor,
+      fitzgerald: noCategoryColor,
+    },
     // L'estil del document, no les preferències de qui l'edita
   } = useAppSelector(selectDocumentPictStyle);
 
@@ -58,9 +63,10 @@ const PictEditForm = ({
     color: pictogram.img.settings.color,
     hair: pictogram.img.settings.hair,
     skin: pictogram.img.settings.skin,
+    category: pictogram.img.category,
   };
   const [search, setSearch] = useState(initialSearch);
-  const { fitzgerald, selectedId, url } = search;
+  const { fitzgerald, selectedId, url, category } = search;
 
   // El pictograma admet configuració de color quan la propietat existeix.
   // `false` és un valor vàlid (pictograma en blanc i negre), no absència.
@@ -80,6 +86,7 @@ const PictEditForm = ({
   // Valors per defecte globals per al fallback de PictogramCard
   const defaults: PictogramCardDefaults = {
     numbered: defaultNumbered,
+    fitzgerald: noCategoryColor,
     font: defaultFont,
     numberFont: defaultNumberFont,
     borderIn,
@@ -99,24 +106,35 @@ const PictEditForm = ({
     cross,
   };
 
+  // El pictograma tal com és ara, per a l'hora de desar. En una ref i no a les
+  // dependències: desar-lo el canvia, i tornaria a disparar el desat
+  const pictogramRef = useRef(pictogram);
+  pictogramRef.current = pictogram;
+
   const handlerSubmit = useCallback(() => {
+    const pictogram = pictogramRef.current;
+    // Canviar un pictograma només en canvia el que s'ha tocat: l'identificador,
+    // els camps del fitxer i els retocs que aquest formulari no edita (la
+    // lletra) es conserven
     const newPictogram: PictSequence = {
+      ...pictogram,
       indexSequence: pictogram.indexSequence,
       img: {
+        ...pictogram.img,
         searched: pictogram.img.searched,
         url,
         selectedId,
         settings: { fitzgerald, skin, hair, color },
+        category,
       },
-      settings: { textPosition, borderIn, borderOut },
+      settings: { ...pictogram.settings, textPosition, borderIn, borderOut },
       text,
       cross,
     };
 
     dispatch(updatePictSequenceActionCreator(newPictogram));
   }, [
-    pictogram.indexSequence,
-    pictogram.img.searched,
+    category,
     selectedId,
     fitzgerald,
     skin,

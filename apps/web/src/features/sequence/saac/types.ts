@@ -87,12 +87,20 @@ export interface V3Page {
   layout: "flow" | "free";
 }
 
+export const PICTOGRAM_VARIANTS = ["skin", "hair", "color"] as const;
+export type PictogramVariant = (typeof PICTOGRAM_VARIANTS)[number];
+
 export type V3Image =
   | {
       source: "arasaac";
       id: number;
       alternatives?: number[];
       keywords?: string[];
+      /**
+       * Les opcions d'aparença que admet aquest pictograma d'ARASAAC (no tots
+       * tenen pell o cabell). És contingut: ho diu ARASAAC, no l'estil
+       */
+      variants?: PictogramVariant[];
     }
   | {
       source: "own";

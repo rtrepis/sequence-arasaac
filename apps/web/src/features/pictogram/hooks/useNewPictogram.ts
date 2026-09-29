@@ -9,6 +9,10 @@ const useNewPictogram = () => {
     borderOut: defaultBorderOut,
     // Els pictogrames nous reben l'estil del document on entren
   } = useAppSelector((state) => selectDocumentPictStyle(state).pictSequence);
+  // Un pictograma buit no té categoria: pren el color dels que no en tenen
+  const noCategoryColor = useAppSelector(
+    (state) => selectDocumentPictStyle(state).pictApiAra.fitzgerald,
+  );
 
   const getPictogramEmptyWithDefaultSettings = (indexSequence: number) => {
     const pictogramEmpty: PictSequence = {
@@ -19,7 +23,8 @@ const useNewPictogram = () => {
           bestIdPicts: [],
         },
         selectedId: 0,
-        settings: { fitzgerald: "#2222ff" },
+        settings: { fitzgerald: noCategoryColor },
+        category: "none",
       },
       settings: {
         textPosition,

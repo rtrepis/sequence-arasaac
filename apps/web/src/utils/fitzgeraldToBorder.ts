@@ -1,13 +1,10 @@
 import { Border } from "../types/sequence";
 
 /**
- * Color de la vora quan el pictograma no té classificació de Fitzgerald.
- *
- * Abans aquí hi havia `fitzgeraldColors.not`, una clau que no existeix a
- * `data/fitzgeraldColors`: resolia a `undefined`, el `borderColor` sortia sense
- * valor i el navegador el resolia com a `currentColor`. Es deixa escrit el que
- * ja passava —mateix dibuix a la pantalla— en comptes de triar un color nou pel
- * camí; quin ha de ser el color de debò és una decisió de producte (backlog C11).
+ * Última reserva del color de la vora quan no n'arriba cap. Ja no hauria de
+ * passar: des del model v3 (C11 resolta), un pictograma sense categoria pren el
+ * color `none` de l'estil del document, i la targeta el passa aquí. Es queda
+ * `currentColor` per a qui cridi sense estil (una previsualització, un test).
  */
 const NO_FITZGERALD_COLOR = "currentColor";
 

@@ -13,6 +13,7 @@ import React from "react";
 // Amb reserva: si el dispositiu no té la font del document, sans-serif i no
 // la serif per defecte del navegador (vegeu `fontAvailability.ts`)
 import { fontStack } from "@features/sequence/style/styleModel";
+import { mergeDeep } from "@features/sequence/saac/cascade";
 
 interface PictogramCardProps {
   pictogram: PictSequence;
@@ -51,20 +52,29 @@ const PictogramCard = ({
 
   const text = customText ? customText : word;
 
-  const borderIn: Border = pictBorderIn
-    ? fitzgeraldToBorder(fitzgerald, pictBorderIn)
-    : fitzgeraldToBorder(fitzgerald, defaults.borderIn);
+  // La cascada (`features/sequence/saac/cascade.ts`): el que retoca el
+  // pictograma, propietat a propietat, sobre l'estil del document. Un
+  // pictograma sense Fitzgerald pren el dels que no tenen categoria (C11)
+  const fitzgeraldColor = fitzgerald ?? defaults.fitzgerald;
 
-  const borderOut: Border = pictBorderOut
-    ? fitzgeraldToBorder(fitzgerald, pictBorderOut)
-    : fitzgeraldToBorder(fitzgerald, defaults.borderOut);
+  const borderIn: Border = fitzgeraldToBorder(
+    fitzgeraldColor,
+    mergeDeep(defaults.borderIn, pictBorderIn),
+  );
+
+  const borderOut: Border = fitzgeraldToBorder(
+    fitzgeraldColor,
+    mergeDeep(defaults.borderOut, pictBorderOut),
+  );
 
   const pictSize = size?.pictSize ?? 1;
   const printPageRatio = size?.scale ?? 1;
-  const font = pictFont ?? defaults.font;
+  const font = mergeDeep(defaults.font, pictFont);
   // Tipografia dels números: per-pictograma → per defecte → tipografia del text
-  const numberFont =
-    pictNumberFont ?? defaults.numberFont ?? defaults.font;
+  const numberFont = mergeDeep(
+    defaults.numberFont ?? defaults.font,
+    pictNumberFont,
+  );
 
   // Imatge personalitzada de l'usuari (les URLs blob són temporals i s'ignoren)
   const customImageUrl = url && !url.startsWith("blob:") ? url : undefined;

@@ -30,6 +30,7 @@ import {
   V3Sequence,
   V3Style,
   V3View,
+  PICTOGRAM_VARIANTS,
 } from "./types";
 
 /** Pàgina per defecte de qui desa: la que hereta un document sense pàgina. */
@@ -158,7 +159,7 @@ const imageOf = (
   pict: PictSequence,
   addAsset: (url: string) => string,
 ): V3Image => {
-  const { url, selectedId, searched } = pict.img;
+  const { url, selectedId, searched, settings } = pict.img;
   // Les URL `blob:` són temporals: la targeta tampoc no les pinta
   if (url && !url.startsWith("blob:"))
     return {
@@ -176,6 +177,9 @@ const imageOf = (
         alternatives: searched.bestIdPicts,
       }),
       ...(searched.keyWords && { keywords: searched.keyWords }),
+      // Redux diu quines opcions admet el pictograma perquè només hi posa les
+      // que ARASAAC li dona
+      variants: PICTOGRAM_VARIANTS.filter((key) => settings[key] !== undefined),
     };
 
   return { source: "none" };
@@ -185,8 +189,12 @@ const pictogramOverride = (
   pict: PictSequence,
   style: V3Style,
   category: FitzgeraldCategory | "none",
+  image: V3Image,
 ): V3PictogramOverride | undefined => {
+  // Pell, cabell i color només són d'un pictograma d'ARASAAC: en una imatge
+  // pròpia o sense imatge no es pinten, i no són cap retoc
   const { skin, hair, color, fitzgerald } = pict.img.settings;
+  const applies = image.source === "arasaac";
   const { none, ...categoryColors } = style.pictogram.fitzgerald;
   const expectedColor = colorForCategory(category, categoryColors, none);
 
@@ -196,7 +204,7 @@ const pictogramOverride = (
       hair: style.pictogram.hair,
       color: style.pictogram.color,
     },
-    { skin, hair, color },
+    applies ? { skin, hair, color } : {},
   ) as V3PictogramOverride["pictogram"];
   const fitzgeraldOverride =
     fitzgerald !== undefined && !sameColor(fitzgerald, expectedColor)
@@ -237,7 +245,8 @@ const pictogramToV3 = (
   addAsset: (url: string) => string,
 ): V3Pictogram => {
   const category = categoryOf(pict);
-  const override = pictogramOverride(pict, style, category);
+  const image = imageOf(pict, addAsset);
+  const override = pictogramOverride(pict, style, category, image);
   const extra = pict.saacExtra;
 
   return {
@@ -247,7 +256,7 @@ const pictogramToV3 = (
     ...(pict.text !== undefined && { text: pict.text }),
     cross: pict.cross,
     ...(category !== "none" && { category }),
-    image: { ...extra?.image, ...imageOf(pict, addAsset) } as V3Image,
+    image: { ...extra?.image, ...image } as V3Image,
     ...(override && { style: override }),
   };
 };

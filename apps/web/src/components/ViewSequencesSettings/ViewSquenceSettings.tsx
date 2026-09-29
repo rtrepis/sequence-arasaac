@@ -30,11 +30,13 @@ import { useDownloadPdf } from "@features/print/hooks/useDownloadPdf";
 import { getCurrentDPI } from "@/features/print-refactor/utils/dpiManager";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import {
+  DocumentLayout,
   SequenceViewSettings,
   SequenceAlignmentH,
   SequenceAlignmentV,
 } from "@/types/document";
 import {
+  documentLayoutChangedActionCreator,
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
   setSequenceSpaceBetweenActionCreator,
@@ -114,7 +116,18 @@ const ViewSequencesSettings = ({
     sequenceKeys[0] ?? 0,
   );
 
-  // Gestió del format de pàgina (usa el pageSize per defecte de l'usuari)
+  // La pàgina és del document (B26): la seva, o la de les preferències de
+  // l'usuari si encara l'hereta (un document nou que no s'ha desat)
+  const documentLayout = useAppSelector((state) => state.document.layout);
+  const pageLayout: DocumentLayout = documentLayout ?? {
+    pageSize: initialViewSettings.pageSize ?? "A4",
+    orientation: initialViewSettings.orientation ?? "landscape",
+    direction: initialViewSettings.direction ?? "row",
+  };
+  const pageLayoutRef = useRef(pageLayout);
+  pageLayoutRef.current = pageLayout;
+
+  // Gestió del format de pàgina: parteix de la del document
   const {
     pageFormat,
     pageSize,
@@ -125,15 +138,18 @@ const ViewSequencesSettings = ({
     setPageSizeByIndex,
     toggleOrientation,
   } = usePageFormat({
-    initialSize: initialViewSettings.pageSize ?? "A4",
-    initialOrientation: initialViewSettings.orientation ?? "landscape",
+    initialSize: pageLayout.pageSize ?? "A4",
+    initialOrientation: pageLayout.orientation ?? "landscape",
   });
 
   // Gestió de la disposició de la pàgina (direcció). L'espai entre seqüències
   // és de l'estil del document i surt d'allà, no d'aquest estat local
   const { viewSettings: layoutViewSettings, updateViewSetting } =
     useViewManager({
-      initialViewSettings,
+      initialViewSettings: {
+        ...initialViewSettings,
+        direction: pageLayout.direction ?? initialViewSettings.direction,
+      },
       persistToStore: false,
     });
   // Les preferències tal com són ara a l'store, per al mirall de sessió
@@ -347,22 +363,37 @@ const ViewSequencesSettings = ({
    * vocabulari sencer, amb les imatges) al compte o al navegador. Ningú ho havia
    * demanat, ningú n'era avisat si fallava, i de passada despertava Render.
    */
-  // Només hi escriu la disposició: les mides i els espaiats d'aquí són de
-  // l'estil del document, i a les preferències només hi van quan l'usuari
-  // les desa. Abans el mirall les copiava totes i així barrejava els dos rols
-  // (B21).
+  // Només hi escriu l'autor. La pàgina ja no hi va: és del document (B26), i
+  // les preferències de pàgina només canvien quan l'usuari les desa. Abans el
+  // mirall copiava la pàgina i les mides i barrejava els dos rols (B21).
   const { direction } = layoutViewSettings;
   useEffect(() => {
     dispatch(
       viewSettingsActionCreator({
         ...uiViewSettingsRef.current,
-        direction,
         author,
-        pageSize,
-        orientation,
       }),
     );
-  }, [dispatch, direction, author, pageSize, orientation]);
+  }, [dispatch, author]);
+
+  // La pàgina que es toca aquí és la del document. En muntar-se coincideix amb
+  // la que ja té (o hereta), i llavors no s'hi escriu res: el document no ha
+  // canviat només per mirar-lo
+  useEffect(() => {
+    const current = pageLayoutRef.current;
+    if (
+      current.direction === direction &&
+      current.pageSize === pageSize &&
+      current.orientation === orientation
+    )
+      return;
+    dispatch(
+      documentLayoutChangedActionCreator({
+        layout: { direction, pageSize, orientation },
+        base: current,
+      }),
+    );
+  }, [dispatch, direction, pageSize, orientation]);
 
   /**
    * Desa aquests ajustos com a preferències de l'usuari: al compte si hi ha

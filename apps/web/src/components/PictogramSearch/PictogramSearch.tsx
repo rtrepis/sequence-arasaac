@@ -12,6 +12,7 @@ import usePictogramUrl from "../../features/pictogram/hooks/usePictogramUrl";
 import StyledToggleButtonGroup from "../../style/StyledToggleButtonGroup";
 import messages from "./PictogramSearch.lang";
 import { useAppSelector } from "../../app/hooks";
+import type { FitzgeraldCategory } from "@features/sequence/saac/fitzgerald";
 import React from "react";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { Hair, Skin } from "@/types/sequence";
@@ -39,6 +40,7 @@ interface PropsPictogramSearch {
       selectedId: number;
       fitzgerald: string | undefined;
       url: string | undefined;
+      category: FitzgeraldCategory | "none" | undefined;
     }>
   >;
 }
@@ -88,22 +90,18 @@ const PictogramSearch = ({
   };
 
   const handleUpDatePictNumber = async (upDatePictNumber: number) => {
-    const pictApiAraSettings = await getSettingsPictId(
-      upDatePictNumber,
-      indexPict,
-    );
+    const found = await getSettingsPictId(upDatePictNumber, indexPict);
 
-    const fitzgerald = pictApiAraSettings
-      ? pictApiAraSettings.fitzgerald
-      : "#999999";
-
+    // Si ARASAAC no respon, sense color: la targeta pren el dels pictogrames
+    // sense categoria de l'estil del document
     setState({
-      color: pictApiAraSettings?.color,
-      hair: pictApiAraSettings?.hair,
-      skin: pictApiAraSettings?.skin,
+      color: found?.settings.color,
+      hair: found?.settings.hair,
+      skin: found?.settings.skin,
       selectedId: upDatePictNumber,
-      fitzgerald: fitzgerald,
+      fitzgerald: found?.settings.fitzgerald,
       url: undefined,
+      category: found?.category ?? "none",
     });
   };
 
@@ -120,7 +118,8 @@ const PictogramSearch = ({
     setIsPlus(!isPlus);
   };
 
-  // La imatge pròpia substitueix el pictograma: no té ni color ni variants
+  // La imatge pròpia substitueix el pictograma: no té ni color ni variants,
+  // ni categoria de Fitzgerald
   const applyUploadedImage = (url: string | undefined) =>
     setState({
       selectedId: 0,
@@ -129,6 +128,7 @@ const PictogramSearch = ({
       color: undefined,
       hair: undefined,
       skin: undefined,
+      category: "none",
     });
 
   const [isAlert, setIsAlert] = useState(false);
