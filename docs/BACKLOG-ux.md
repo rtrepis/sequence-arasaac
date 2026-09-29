@@ -1207,7 +1207,9 @@ Inconsistència de forma o deute intern, sense un moment concret d'acció equivo
 
 ### C20 — Errors d'axe als controls del formulari d'edició del pictograma 🔴 Oberta
 
-*(Trobada en afegir l'estat «personalitzat» a la capçalera de la configuració, 2026-09-29.)*
+*(Trobada en afegir l'estat «personalitzat» al formulari, 2026-09-29. L'acordió torna a ser el de
+MUI, que torna a amagar el contingut plegat: els errors hi continuen igual, i aquesta entrada
+també.)*
 
 - **On**: el formulari d'edició del pictograma (`PictEditForm` i les `SettingsCards`), i la graella.
 - **Per què importa**: amb la configuració desplegada, axe hi troba errors que ja hi eren. Abans no
@@ -1221,8 +1223,8 @@ Inconsistència de forma o deute intern, sense un moment concret d'acció equivo
   - `heading-order`: el text de la targeta és un `h3` i els rètols de secció, `h6`;
   - a la barra, `aria-valid-attr-value` a `#vertical-tab-0`.
 - **Proposta**: resoldre-ho per peces, començant per C17. L'e2e
-  `pictogram-customized.spec.ts` passa axe només sobre el que ha canviat (la capçalera, la
-  previsualització, el snackbar i la marca); quan això es resolgui, s'ha d'ampliar a tot el diàleg.
+  `pictogram-customized.spec.ts` passa axe només sobre el que ha canviat (la franja, la capçalera,
+  la previsualització i la seva còpia fixa, el snackbar i la marca); quan això es resolgui, s'ha d'ampliar a tot el diàleg.
 
 ### C1 — Diversos botons només mostren l'etiqueta en passar-hi el ratolí 🔴 Oberta
 

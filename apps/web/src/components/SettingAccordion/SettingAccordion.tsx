@@ -1,88 +1,61 @@
-import { Box, ButtonBase, Collapse, Paper, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+} from "@mui/material";
 import { AiOutlineSetting } from "react-icons/ai";
-import React, { useId, useState } from "react";
-import { APP_TOUCH_TARGET_MIN } from "@/style/appShape";
-import { settingsContent, settingsList } from "./SettingAccordion.styled";
+import {
+  settingsContent,
+  settingsList,
+  settingsListAttached,
+  settingsListTitle,
+  settingsListTitleContent,
+} from "./SettingAccordion.styled";
+import React from "react";
 
 interface SettingAccordionProps {
   children: React.ReactElement | React.ReactElement[] | undefined;
-  /** Nom accessible del botó que obre i tanca («Configuració, personalitzat») */
-  label: string;
-  /**
-   * Estat que la capçalera diu amb text (p. ex. «Personalitzat»). Sense estat,
-   * la icona queda centrada, com sempre; amb estat, passa a l'esquerra.
-   */
-  status?: string;
-  /**
-   * Acció que va al costat del botó de la capçalera, **mai a dins**: un botó
-   * dins d'un altre no es pot fer servir amb el teclat ni amb el lector.
-   */
-  statusAction?: React.ReactNode;
-  /** El botó de la capçalera: on va el focus quan l'acció desapareix */
-  summaryRef?: React.Ref<HTMLButtonElement>;
+  title: string;
+  expanded: boolean;
+  onChange: (expanded: boolean) => void;
+  /** Text que descriu l'estat de la capçalera (la franja «Personalitzat») */
+  describedBy?: string;
+  /** La capçalera: on va el focus quan la franja de sobre desapareix */
+  summaryRef?: React.Ref<HTMLDivElement>;
+  /** Hi ha una franja enganxada a sobre: sense marge ni cantonades de dalt */
+  attachedAbove?: boolean;
 }
 
-/**
- * Secció plegable del formulari d'edició del pictograma. Abans era un
- * `Accordion` de MUI amb un `IconButton` dins de la capçalera, que ja és un
- * botó: dos botons un dins l'altre. Ara la capçalera és un sol botó (amb
- * `aria-expanded` i `aria-controls`), i l'acció d'estat n'és germana.
- */
 const SettingAccordion = ({
   children,
-  label,
-  status,
-  statusAction,
+  title,
+  expanded,
+  onChange,
+  describedBy,
   summaryRef,
+  attachedAbove = false,
 }: SettingAccordionProps): React.ReactElement => {
-  const [expanded, setExpanded] = useState(false);
-  const id = useId();
-  const buttonId = `${id}-summary`;
-  const regionId = `${id}-region`;
-
   return (
-    <Paper variant="outlined" sx={settingsList}>
-      <Box
-        data-testid="setting-accordion-header"
-        sx={{ display: "flex", alignItems: "center", gap: 1, pr: 1 }}
+    <Accordion
+      variant="outlined"
+      expanded={expanded}
+      onChange={(_, isExpanded) => onChange(isExpanded)}
+      sx={attachedAbove ? settingsListAttached : settingsList}
+    >
+      <AccordionSummary
+        ref={summaryRef}
+        aria-label={title}
+        aria-describedby={describedBy}
+        sx={settingsListTitle}
       >
-        <ButtonBase
-          ref={summaryRef}
-          id={buttonId}
-          aria-expanded={expanded}
-          aria-controls={regionId}
-          aria-label={label}
-          onClick={() => setExpanded((open) => !open)}
-          sx={{
-            flex: 1,
-            minHeight: APP_TOUCH_TARGET_MIN,
-            px: 2,
-            gap: 1,
-            // Sense estat, la icona al mig com sempre; amb estat, a l'esquerra
-            justifyContent: status ? "flex-start" : "center",
-            fontSize: "2rem",
-          }}
-        >
-          <AiOutlineSetting aria-hidden />
-          {status && (
-            <Typography component="span" variant="body2" fontWeight="bold">
-              {status}
-            </Typography>
-          )}
-        </ButtonBase>
-        {statusAction}
-      </Box>
-      <Collapse in={expanded}>
-        <Box
-          id={regionId}
-          role="region"
-          aria-labelledby={buttonId}
-          sx={settingsContent}
-        >
-          {children}
+        {/* Decorativa: abans era un `IconButton`, un botó dins d'un altre */}
+        <Box component="span" aria-hidden sx={settingsListTitleContent}>
+          <AiOutlineSetting />
         </Box>
-      </Collapse>
-    </Paper>
+      </AccordionSummary>
+      <AccordionDetails sx={settingsContent}>{children}</AccordionDetails>
+    </Accordion>
   );
 };
 

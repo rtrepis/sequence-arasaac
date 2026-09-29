@@ -212,20 +212,20 @@ test("flux amb teclat: obrir un fitxer antic, canviar un pictograma, Restableix 
   await expect(dialog).toBeVisible();
 
   // Canviar-lo: el color (blanc i negre) és un retoc de l'estil
-  const accordion = dialog.getByRole("button", { name: /^Configuració/ });
+  const accordion = dialog.getByRole("button", { name: "Configuració" });
   await tabTo(page, accordion);
   if ((await accordion.getAttribute("aria-expanded")) !== "true")
     await page.keyboard.press("Enter");
   const colorSwitch = dialog.locator('input[type="checkbox"]').first();
   await tabTo(page, colorSwitch);
   await page.keyboard.press("Space");
-  await expect(accordion).toHaveAccessibleName("Configuració, personalitzat");
+  await expect(accordion).toHaveAccessibleDescription("Personalitzat");
 
-  // Restableix: al costat de la capçalera; el focus hi torna
+  // Restableix: a la franja de sobre de la capçalera; el focus hi torna
   const reset = dialog.getByRole("button", { name: "Restableix" });
   await tabTo(page, reset, { backwards: true });
   await page.keyboard.press("Enter");
-  await expect(accordion).toHaveAccessibleName("Configuració");
+  await expect(dialog.getByTestId("customized-strip")).toHaveCount(0);
   await expect(accordion).toBeFocused();
   await expect(dialog.getByText("Estil restablert")).toBeVisible();
 

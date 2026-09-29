@@ -42,7 +42,7 @@ const gotoEditor = async (page: Page, amount: number): Promise<void> => {
 const typePictogramText = async (page: Page, text: string): Promise<void> => {
   const dialog = page.getByRole("dialog");
   const accordion = dialog
-    .getByRole("button", { name: /^Configuració/ })
+    .getByRole("button", { name: "Configuració" })
     .first();
   if ((await accordion.getAttribute("aria-expanded")) !== "true") {
     await accordion.click();

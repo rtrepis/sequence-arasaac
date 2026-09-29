@@ -5,9 +5,9 @@ import {
   Snackbar,
   Stack,
   Tooltip,
-  useMediaQuery,
+  Typography,
 } from "@mui/material";
-import { Theme } from "@mui/material/styles";
+import { keyframes } from "@mui/system";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import {
@@ -22,7 +22,14 @@ import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import messages from "./PictEditForm.lang";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
 import { useIntl } from "react-intl";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updatePictSequenceActionCreator } from "@features/sequence/store/documentSlice";
 import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCardTextFiled";
@@ -60,6 +67,12 @@ interface PictEditFormProps {
 
 /** Prou temps per llegir-lo i arribar a «Desfés» amb el teclat */
 const RESET_SNACKBAR_DURATION_MS = 10000;
+
+/** La còpia fixa de la previsualització entra sense cop (mai amb moviment reduït) */
+const previewCopyIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
 
 /** Els valors d'estil que «Restableix» canvia al formulari, per poder-los desfer */
 interface StyleSnapshot {
@@ -107,7 +120,7 @@ const PictEditForm = ({
   const [resetUndo, setResetUndo] = useState<StyleSnapshot | null>(null);
   const [resetNotice, setResetNotice] = useState(0);
   // On va el focus quan «Restableix» desapareix: el botó de la capçalera
-  const summaryRef = useRef<HTMLButtonElement>(null);
+  const summaryRef = useRef<HTMLDivElement>(null);
 
   const initialTextPosition =
     pictogram.settings.textPosition ?? defaultTextPosition;
@@ -303,138 +316,208 @@ const PictEditForm = ({
     if (resetRequest) handleResetRef.current();
   }, [resetRequest]);
 
-  // La previsualització es queda fixa a dalt; en pantalles baixes, en començar
-  // a desplaçar s'encongeix fins al 30 % de l'alçada, sencera i llegible
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [scrolled, setScrolled] = useState(false);
-  const lowScreen = useMediaQuery(
-    (theme: Theme) =>
-      `(max-height: 700px), ${theme.breakpoints.down("sm").replace("@media ", "")}`,
-  );
-  useEffect(() => {
-    const scroller = rootRef.current?.closest(".MuiDialogContent-root");
-    if (!scroller) return;
-    const onScroll = () => setScrolled(scroller.scrollTop > 0);
-    scroller.addEventListener("scroll", onScroll, { passive: true });
-    return () => scroller.removeEventListener("scroll", onScroll);
-  }, []);
-  const compactPreview = scrolled && lowScreen;
+  // L'acordió es controla des d'aquí: la franja de sobre imita el seu marge
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const statusId = useId();
 
-  const resetButton = isCustomized && (
-    <Tooltip title={intl.formatMessage(messages.tooltipReset)} describeChild>
-      <StyledButton
-        variant="outlined"
-        color="inherit"
-        onClick={handleReset}
-        startIcon={<MdSettingsBackupRestore aria-hidden />}
-        sx={{ minHeight: APP_TOUCH_TARGET_MIN, flexShrink: 0 }}
-      >
-        {intl.formatMessage(messages.reset)}
-      </StyledButton>
-    </Tooltip>
+  // La franja «Personalitzat» apareix i desapareix a sobre de l'acordió: el
+  // que s'està editant a sota no s'ha de moure sota el dit ni el ratolí. Es
+  // compensa el desplaçament amb l'alçada de la franja (el navegador no ho fa:
+  // l'acordió de MUI i aquest formulari porten `overflow-anchor: none`)
+  const rootRef = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
+  const stripHeight = useRef(0);
+  const firstLayout = useRef(true);
+  useLayoutEffect(() => {
+    const height = stripRef.current?.offsetHeight ?? 0;
+    const delta = height - stripHeight.current;
+    stripHeight.current = height;
+    if (firstLayout.current) {
+      firstLayout.current = false;
+      return;
+    }
+    const scroller = rootRef.current?.closest(".MuiDialogContent-root");
+    if (scroller && delta !== 0) scroller.scrollTop += delta;
+  }, [isCustomized]);
+
+  // La previsualització original es queda on és. Quan surt de la vista per
+  // dalt, en surt una còpia compacta fixa a dalt de la zona que es desplaça;
+  // quan l'original torna a la vista, la còpia desapareix
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [previewAway, setPreviewAway] = useState(false);
+  useEffect(() => {
+    const preview = previewRef.current;
+    const scroller = rootRef.current?.closest(".MuiDialogContent-root");
+    if (!preview || !scroller) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const top = entry.rootBounds?.top ?? 0;
+        setPreviewAway(
+          !entry.isIntersecting && entry.boundingClientRect.bottom <= top + 1,
+        );
+      },
+      { root: scroller },
+    );
+    observer.observe(preview);
+    return () => observer.disconnect();
+  }, []);
+
+  // La còpia és només per a la vista: el lector i el teclat la salten
+  const previewCopyRef = useCallback((element: HTMLDivElement | null) => {
+    element?.setAttribute("inert", "");
+  }, []);
+
+  const card = (
+    <PictogramCard
+      pictogram={pictogramGuide}
+      defaults={defaults}
+      variant="plane"
+      view="complete"
+      size={{ scale: 0.8 }}
+    />
   );
 
   return (
-    <Box
-      ref={rootRef}
-      // Mòbil: una columna; la previsualització, fixa a dalt. Escriptori: la
-      // previsualització a l'esquerra, fixa, i la cerca i la configuració a la
-      // dreta. En tots dos, la zona fixa és filla directa del que es desplaça:
-      // dins d'una fila de graella, el `sticky` marxava amb la seva fila
-      sx={{
-        display: { xs: "flex", md: "grid" },
-        flexDirection: "column",
-        gridTemplateColumns: { md: "0.5fr 1.5fr" },
-        gridTemplateRows: { md: "auto 1fr" },
-        columnGap: 2,
-        rowGap: { xs: 1, sm: 2 },
-        minHeight: 0,
-      }}
-    >
-      <Box
-        data-testid="pict-edit-preview"
-        sx={{
-          gridColumn: { md: "1" },
-          gridRow: { md: "1 / span 2" },
-          // A la graella, a dalt de la seva àrea (el `sticky` hi necessita
-          // lloc); en columna, amplada sencera: si s'encongia, `ScaleToFit`
-          // no tenia amplada i la previsualització desapareixia
-          alignSelf: { xs: "stretch", md: "start" },
-          position: "sticky",
-          top: 0,
-          zIndex: 5,
-          // Fons opac perquè el que es desplaça no es vegi per sota
-          backgroundColor: "background.default",
-          borderRadius: 2,
-          padding: 1,
-        }}
-      >
-        <ScaleToFit maxHeight={compactPreview ? "30vh" : undefined} animate>
-          <PictogramCard
-            pictogram={pictogramGuide}
-            defaults={defaults}
-            variant="plane"
-            view="complete"
-            size={{ scale: 0.8 }}
-          />
-        </ScaleToFit>
-      </Box>
-
-      <Box
-        sx={{
-          gridColumn: { md: "2" },
-          minHeight: 0,
-          backgroundColor: "background.default",
-          borderRadius: 2,
-          padding: 1,
-        }}
-      >
-        <PictogramSearch
-          indexPict={pictogram.indexSequence}
-          state={search}
-          setState={setSearch}
-        />
-      </Box>
-
-      <Box sx={{ gridColumn: { md: "2" }, minHeight: 0 }}>
-        <SettingAccordion
-          label={intl.formatMessage(
-            isCustomized ? messages.settingsCustomized : messages.settings,
-          )}
-          status={
-            isCustomized ? intl.formatMessage(messages.customized) : undefined
-          }
-          statusAction={resetButton}
-          summaryRef={summaryRef}
+    // Contenidor invisible: el marc de la còpia fixa, que ha de fer tota
+    // l'alçada del formulari. La graella de sota és la de sempre
+    <Box ref={rootRef} sx={{ overflowAnchor: "none" }}>
+      {previewAway && (
+        <Box
+          data-testid="pict-edit-preview-copy"
+          aria-hidden="true"
+          ref={previewCopyRef}
+          // Alçada zero: no mou res; la còpia hi penja per sobre
+          sx={{ position: "sticky", top: 0, height: 0, zIndex: 6 }}
         >
-          <List>
-            <li>
-              <SettingCadTextFiled
-                setting="customText"
-                state={text}
-                setState={setText}
-              />
-            </li>
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              padding: 1,
+              backgroundColor: "background.default",
+              borderBottom: 1,
+              borderColor: "divider",
+              boxShadow: 2,
+              animation: `${previewCopyIn} 150ms ease-out`,
+              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+            }}
+          >
+            <ScaleToFit maxHeight="min(30vh, 200px)">{card}</ScaleToFit>
+          </Box>
+        </Box>
+      )}
 
-            {isColorizable && pictogram.settings.textPosition && (
+      <Box
+        display="grid"
+        gridTemplateColumns={{ xs: "1fr", md: "0.5fr 1.5fr" }}
+        gap={{ xs: 3, sm: 2 }}
+        sx={{ minHeight: 0 }}
+      >
+        {/* Zona de treball: mostra del pictograma + cerca, amb fons default
+            (negre en fosc). El collapse de sota és zona de configuració (paper). */}
+        <Box
+          gridColumn={{ xs: "1", md: "1 / -1" }}
+          display="grid"
+          gridTemplateColumns={{ xs: "1fr", md: "0.5fr 1.5fr" }}
+          gap={{ xs: 3, sm: 2 }}
+          sx={{
+            minHeight: 0,
+            backgroundColor: "background.default",
+            borderRadius: 2,
+            padding: 1,
+          }}
+        >
+          <Box
+            ref={previewRef}
+            data-testid="pict-edit-preview"
+            sx={{
+              alignSelf: "start",
+              justifyItems: "center",
+              width: { xs: "100%", md: "auto" },
+              position: "sticky",
+              top: 0,
+              zIndex: 5,
+              // Fons opac perquè els resultats de cerca no es vegin per sota en fer scroll
+              backgroundColor: "background.default",
+              borderRadius: 2,
+              paddingBlock: { xs: 1 },
+            }}
+          >
+            {card}
+          </Box>
+          <Box paddingBlock={1} sx={{ minHeight: 0 }}>
+            <PictogramSearch
+              indexPict={pictogram.indexSequence}
+              state={search}
+              setState={setSearch}
+            />
+          </Box>
+        </Box>
+
+        <Box gridColumn={{ xs: "1", md: "1 / -1" }} sx={{ minHeight: 0 }}>
+          {/* La franja i l'acordió són germans, mai un dins de l'altre: el
+              botó de la franja no pot anar dins del botó de la capçalera */}
+          {isCustomized && (
+            <Box
+              ref={stripRef}
+              data-testid="customized-strip"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 1,
+                // El marge de dalt que tindria l'acordió, que el cedeix
+                marginTop: settingsOpen ? 0 : 2,
+                paddingBlock: 0.5,
+                paddingInlineStart: 2,
+                paddingInlineEnd: 1,
+                backgroundColor: "background.paper",
+                border: 1,
+                borderBottom: 0,
+                borderColor: "divider",
+                borderTopLeftRadius: (theme) => theme.shape.borderRadius,
+                borderTopRightRadius: (theme) => theme.shape.borderRadius,
+              }}
+            >
+              <Typography id={statusId} variant="body2" fontWeight="bold">
+                {intl.formatMessage(messages.customized)}
+              </Typography>
+              <Tooltip
+                title={intl.formatMessage(messages.tooltipReset)}
+                describeChild
+              >
+                <StyledButton
+                  variant="outlined"
+                  color="inherit"
+                  onClick={handleReset}
+                  startIcon={<MdSettingsBackupRestore aria-hidden />}
+                  sx={{ minHeight: APP_TOUCH_TARGET_MIN, flexShrink: 0 }}
+                >
+                  {intl.formatMessage(messages.reset)}
+                </StyledButton>
+              </Tooltip>
+            </Box>
+          )}
+          <SettingAccordion
+            title={intl.formatMessage(messages.settings)}
+            expanded={settingsOpen}
+            onChange={setSettingsOpen}
+            describedBy={isCustomized ? statusId : undefined}
+            summaryRef={summaryRef}
+            attachedAbove={isCustomized}
+          >
+            <List>
               <li>
-                <SettingCard
-                  setting="textPosition"
-                  state={textPosition}
-                  setState={setTextPosition}
+                <SettingCadTextFiled
+                  setting="customText"
+                  state={text}
+                  setState={setText}
                 />
               </li>
-            )}
 
-            <Stack
-              display={"flex"}
-              direction={"row"}
-              flexWrap={"wrap"}
-              marginTop={1}
-              rowGap={2}
-              columnGap={2}
-            >
-              {!isColorizable && pictogram.settings.textPosition && (
+              {isColorizable && pictogram.settings.textPosition && (
                 <li>
                   <SettingCard
                     setting="textPosition"
@@ -444,51 +527,70 @@ const PictEditForm = ({
                 </li>
               )}
 
-              {isColorizable && (
-                <>
+              <Stack
+                display={"flex"}
+                direction={"row"}
+                flexWrap={"wrap"}
+                marginTop={1}
+                rowGap={2}
+                columnGap={2}
+              >
+                {!isColorizable && pictogram.settings.textPosition && (
                   <li>
-                    <SettingCardBoolean
-                      setting="color"
-                      state={color}
-                      setState={setColor}
+                    <SettingCard
+                      setting="textPosition"
+                      state={textPosition}
+                      setState={setTextPosition}
                     />
                   </li>
-                  <li>
-                    <SettingCardBoolean
-                      setting="corss"
-                      state={cross}
-                      setState={setCross}
-                    />
-                  </li>
-                </>
+                )}
+
+                {isColorizable && (
+                  <>
+                    <li>
+                      <SettingCardBoolean
+                        setting="color"
+                        state={color}
+                        setState={setColor}
+                      />
+                    </li>
+                    <li>
+                      <SettingCardBoolean
+                        setting="corss"
+                        state={cross}
+                        setState={setCross}
+                      />
+                    </li>
+                  </>
+                )}
+              </Stack>
+              {isColorizable && search.skin && (
+                <li>
+                  <SettingCard setting="skin" state={skin} setState={setSkin} />
+                </li>
               )}
-            </Stack>
-            {isColorizable && search.skin && (
+              {isColorizable && search.hair && (
+                <li>
+                  <SettingCard setting="hair" state={hair} setState={setHair} />
+                </li>
+              )}
               <li>
-                <SettingCard setting="skin" state={skin} setState={setSkin} />
+                <SettingCardBorder
+                  border="borderIn"
+                  state={borderIn}
+                  setState={setBorderIn}
+                />
               </li>
-            )}
-            {isColorizable && search.hair && (
               <li>
-                <SettingCard setting="hair" state={hair} setState={setHair} />
+                <SettingCardBorder
+                  border="borderOut"
+                  state={borderOut}
+                  setState={setBorderOut}
+                />
               </li>
-            )}
-            <li>
-              <SettingCardBorder
-                border="borderIn"
-                state={borderIn}
-                setState={setBorderIn}
-              />
-            </li>
-            <li>
-              <SettingCardBorder
-                border="borderOut"
-                state={borderOut}
-                setState={setBorderOut}
-              />
-            </li>
-          </List>
-        </SettingAccordion>
+            </List>
+          </SettingAccordion>
+        </Box>
       </Box>
 
       {/* Dins del diàleg, que atrapa el focus: un snackbar de fora no s'hi

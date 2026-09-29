@@ -147,7 +147,7 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 | **Aplica a tots** | Panell «Estil del document»; columna de la vista | S'aplica a **tot el document**: canvia l'estil del document **i esborra aquestes propietats** de tots els retocs de seqüències i pictogrames. |
 | **Canviar la vista d'una seqüència** | Columna de la vista, sense «Aplicar a totes» | Canvia la mida, l'espai o l'alineació d'aquesta seqüència. És l'únic estil que té una seqüència en aquesta versió. |
 | **Canviar un pictograma** | Formulari del pictograma | Canvia **només** el `style` d'aquell pictograma, i **només** les propietats tocades. |
-| **Restableix** un pictograma | Formulari del pictograma (capçalera de la configuració o «Més accions»); menú contextual de la graella («Restableix l'estil») | Esborra el seu `style`. La categoria, que és contingut, es queda. Dins del formulari és una edició més i es desa en tancar-lo; des del menú contextual s'aplica al document al moment. |
+| **Restableix** un pictograma | Formulari del pictograma (franja «Personalitzat» o «Més accions»); menú contextual de la graella («Restableix l'estil») | Esborra el seu `style`. La categoria, que és contingut, es queda. Dins del formulari és una edició més i es desa en tancar-lo; des del menú contextual s'aplica al document al moment. |
 | **Aplica el meu estil per defecte** | Panell «Estil del document»; columna de la vista | Com canviar l'estil del document, amb l'estil per defecte de l'usuari. |
 | **Carrega un estil des d'un fitxer** | Panell «Estil del document» | Com canviar l'estil del document, amb l'estil del fitxer. Pregunta si es conserven els retocs; la resposta per defecte és que sí. |
 
@@ -169,17 +169,24 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 Un pictograma amb retocs propis (un `style` no buit) ho ha de dir. Serveix perquè s'entengui per què
 una targeta no ha canviat amb «Aplica a tots».
 
-**Al formulari d'edició** (capçalera de la configuració):
+**Al formulari d'edició** (una franja a sobre de la configuració):
 
-- Sense retocs, la capçalera és la de sempre: la icona de configuració al mig.
-- Amb retocs, la icona passa a l'esquerra, amb el text «Personalitzat», i al costat hi ha el botó
-  **Restableix**.
-- **MAI** un botó dins d'un altre: el de la capçalera (amb `aria-expanded` i `aria-controls`) i
-  Restableix són germans. El nom accessible del de la capçalera és «Configuració» o «Configuració,
-  personalitzat».
-- En prémer Restableix, el focus va al botó de la capçalera, perquè Restableix desapareix.
-- La previsualització del pictograma es queda **fixa** a dalt mentre es desplaça el formulari; en
-  pantalles baixes s'encongeix fins al 30 % de l'alçada, sense animació si l'usuari ho demana.
+- El modal és el de sempre: la previsualització i la cerca a dalt, la configuració a sota. La
+  capçalera de la configuració **no canvia mai**: la icona al mig i el nom accessible
+  «Configuració».
+- Amb retocs, a sobre de la configuració hi ha una **franja** enganxada, amb el mateix fons i la
+  mateixa vora: la franja té les cantonades de dalt arrodonides i la configuració les perd, i tots
+  dos fan un sol bloc. A l'esquerra, «Personalitzat»; a la dreta, el botó **Restableix**.
+- **MAI** un botó dins d'un altre: la franja i la configuració són germanes. L'ordre del focus és
+  Restableix i després la capçalera, que porta `aria-describedby` cap al text «Personalitzat».
+- En prémer Restableix, la franja desapareix, surt el snackbar «Estil restablert» amb Desfés, i el
+  focus va a la capçalera.
+- Quan la franja apareix o desapareix, el que s'està editant a sota **no es mou** sota el dit ni el
+  ratolí: es compensa el desplaçament amb l'alçada de la franja. Sense animació.
+- Quan la previsualització surt de la vista per dalt, se'n veu una **còpia compacta** fixa a dalt de
+  la zona que es desplaça (com a molt, el 30 % de l'alçada o 200 px); quan l'original torna a la
+  vista, la còpia desapareix. La còpia és només per a la vista (`aria-hidden`, `inert`) i entra
+  sense animació si l'usuari ho demana. L'original no es mou del seu lloc.
 
 **A la graella d'edició** (la targeta):
 

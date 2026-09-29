@@ -2500,7 +2500,7 @@
   },
   "components.pictEdit.customized": {
     "defaultMessage": "Customised",
-    "description": "Estat a la capçalera de la configuració: el pictograma té retocs propis"
+    "description": "Franja a sobre de la configuració: el pictograma té retocs propis"
   },
   "context.feedback.load.invalidFile": {
     "defaultMessage": "It couldn't be opened. It isn't a SequenciAAC document or it is damaged.",
@@ -2545,10 +2545,6 @@
   "components.pictEdit.settings": {
     "defaultMessage": "Settings",
     "description": "Nom accessible del botó que obre i tanca la configuració del pictograma"
-  },
-  "components.pictEdit.settingsCustomized": {
-    "defaultMessage": "Settings, customised",
-    "description": "Nom accessible del botó de la configuració quan el pictograma té retocs propis"
   },
   "components.pictEdit.resetDone": {
     "defaultMessage": "Style reset",
