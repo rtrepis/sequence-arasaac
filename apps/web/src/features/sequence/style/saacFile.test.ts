@@ -59,6 +59,9 @@ describe("fitxers antics", () => {
   it("cap fixture deixa d'obrir-se", () => {
     const names = fs
       .readdirSync(FIXTURES)
+      // Les del format d'abans (01–10); de la 11 endavant són del v3, i n'hi
+      // ha una de malmesa a propòsit (`src/features/sequence/saac/`)
+      .filter((n) => /^(0\d|10)-/.test(n))
       .filter((n) => n.endsWith(".saac") || n.endsWith(".saacstyle"));
     expect(names.length).toBeGreaterThanOrEqual(10);
     names.forEach((name) => {
