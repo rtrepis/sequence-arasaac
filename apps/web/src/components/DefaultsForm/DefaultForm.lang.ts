@@ -15,12 +15,14 @@ const messages = defineMessages({
   sectionPictogram: {
     id: "components.defaultSettings.sectionPictogram",
     defaultMessage: "Pictogram",
-    description: "Títol de la secció de numeració i color al panell de pictogrames",
+    description:
+      "Títol de la secció de numeració i color al panell de pictogrames",
   },
   sectionText: {
     id: "components.defaultSettings.sectionText",
     defaultMessage: "Text and numbering",
-    description: "Títol de la secció de posició de text i tipografies al panell de pictogrames",
+    description:
+      "Títol de la secció de posició de text i tipografies al panell de pictogrames",
   },
   sectionAppearance: {
     id: "components.defaultSettings.sectionAppearance",
@@ -30,7 +32,8 @@ const messages = defineMessages({
   reset: {
     id: "components.defaultSettings.reset",
     defaultMessage: "Restore pictograms",
-    description: "Botó per restablir els valors de fàbrica de la configuració de pictogrames",
+    description:
+      "Botó per restablir els valors de fàbrica de la configuració de pictogrames",
   },
   tooltipReset: {
     id: "components.defaultSettings.tooltipReset",

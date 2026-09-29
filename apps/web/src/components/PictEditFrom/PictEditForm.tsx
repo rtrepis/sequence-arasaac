@@ -1,4 +1,4 @@
-import { List, Stack, Box, Button, Tooltip } from "@mui/material";
+import { List, Stack, Box, Button, Chip, Tooltip } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import { PictogramCardDefaults, PictSequence } from "../../types/sequence";
@@ -13,8 +13,19 @@ import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCa
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import React from "react";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
-import { MdSettingsBackupRestore } from "react-icons/md";
-import { selectDocumentPictStyle } from "@features/sequence/style/styleSelectors";
+import { MdSettingsBackupRestore, MdTune } from "react-icons/md";
+import {
+  selectDocumentPictStyle,
+  selectDocumentStyle,
+} from "@features/sequence/style/styleSelectors";
+import { undoableStyleChangeThunk } from "@features/sequence/store/styleSlice";
+import { pictogramStyleOverride } from "@features/sequence/saac/serialize";
+import {
+  DEFAULT_FITZGERALD_CATEGORY_COLORS,
+  categoryOf,
+  colorForCategory,
+} from "@features/sequence/saac/fitzgerald";
+import { APP_TOUCH_TARGET_MIN } from "@/style/appShape";
 
 interface PictEditFormProps {
   pictogram: PictSequence;
@@ -44,6 +55,11 @@ const PictEditForm = ({
     },
     // L'estil del document, no les preferències de qui l'edita
   } = useAppSelector(selectDocumentPictStyle);
+  const documentStyle = useAppSelector(selectDocumentStyle);
+
+  // «Restableix» esborra els retocs del pictograma en desar-lo (fonament 03,
+  // §5): la lletra, que aquest formulari no edita, també
+  const [resetDone, setResetDone] = useState(false);
 
   const initialTextPosition =
     pictogram.settings.textPosition ?? defaultTextPosition;
@@ -93,15 +109,32 @@ const PictEditForm = ({
     borderOut,
   };
 
+  // Pell, cabell i color només si el pictograma els admet: ARASAAC no en dona
+  // a tots, i el que no admet no s'ha d'escriure
+  const variantSettings = {
+    fitzgerald,
+    ...(search.skin !== undefined && { skin }),
+    ...(search.hair !== undefined && { hair }),
+    ...(search.color !== undefined && { color }),
+  };
+
+  // Els retocs que es desen: després de «Restableix», només el que s'ha tornat
+  // a tocar aquí; si no, també els que el formulari no edita
+  const resetSettings = (settings: PictSequence["settings"]) =>
+    resetDone
+      ? { textPosition, borderIn, borderOut }
+      : { ...settings, textPosition, borderIn, borderOut };
+
   const pictogramGuide: PictSequence = {
     ...pictogram,
     img: {
       ...pictogram.img,
       url,
       selectedId,
-      settings: { fitzgerald, skin, hair, color },
+      settings: variantSettings,
+      category,
     },
-    settings: { ...pictogram.settings, textPosition, borderIn, borderOut },
+    settings: resetSettings(pictogram.settings),
     text,
     cross,
   };
@@ -124,17 +157,27 @@ const PictEditForm = ({
         searched: pictogram.img.searched,
         url,
         selectedId,
-        settings: { fitzgerald, skin, hair, color },
+        settings: variantSettings,
         category,
       },
-      settings: { ...pictogram.settings, textPosition, borderIn, borderOut },
+      settings: resetSettings(pictogram.settings),
       text,
       cross,
     };
 
-    dispatch(updatePictSequenceActionCreator(newPictogram));
+    const update = () => updatePictSequenceActionCreator(newPictogram);
+    // Restablir es pot desfer, amb el mateix «Desfés» que els canvis d'estil
+    if (resetDone) dispatch(undoableStyleChangeThunk(update, "reset"));
+    else dispatch(update());
+    // `variantSettings` i `resetSettings` es tornen a crear a cada render: les
+    // dependències són els valors de què surten
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     category,
+    resetDone,
+    search.skin,
+    search.hair,
+    search.color,
     selectedId,
     fitzgerald,
     skin,
@@ -153,7 +196,9 @@ const PictEditForm = ({
     if (submit) handlerSubmit();
   }, [submit, handlerSubmit]);
 
-  // Restableix tots els settings als valors per defecte globals
+  // «Restableix»: el pictograma torna a l'estil del document. El Fitzgerald
+  // torna al color de la seva categoria; la categoria, que és contingut, es
+  // queda (fonament 03, «El color de Fitzgerald»)
   const handleReset = () => {
     setTextPosition(defaultTextPosition);
     setBorderIn(defaultBorderIn);
@@ -161,7 +206,20 @@ const PictEditForm = ({
     setSkin(defaultSkin);
     setHair(defaultHair);
     setColor(defaultColor);
+    setSearch((previous) => ({
+      ...previous,
+      fitzgerald: colorForCategory(
+        previous.category ?? categoryOf(pictogram),
+        documentStyle.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
+        noCategoryColor,
+      ),
+    }));
+    setResetDone(true);
   };
+
+  // Té retocs propis respecte de l'estil del document?
+  const isCustomized =
+    pictogramStyleOverride(pictogramGuide, documentStyle) !== undefined;
 
   return (
     <Box
@@ -205,6 +263,42 @@ const PictEditForm = ({
             view="complete"
             size={{ scale: 0.8 }}
           />
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            flexWrap="wrap"
+            gap={1}
+            sx={{ mt: 1 }}
+          >
+            {/* L'indicador diu amb text (no només amb color) que el
+                pictograma té retocs propis; la regió viva l'anuncia quan
+                apareix o desapareix */}
+            <Box role="status" aria-live="polite">
+              {isCustomized && (
+                <Chip
+                  icon={<MdTune aria-hidden />}
+                  label={intl.formatMessage(messages.customized)}
+                  variant="outlined"
+                  size="small"
+                />
+              )}
+            </Box>
+            <Tooltip
+              title={intl.formatMessage(messages.tooltipReset)}
+              describeChild
+            >
+              <Button
+                variant="outlined"
+                color="inherit"
+                onClick={handleReset}
+                startIcon={<MdSettingsBackupRestore aria-hidden />}
+                sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+              >
+                {intl.formatMessage(messages.reset)}
+              </Button>
+            </Tooltip>
+          </Stack>
         </Box>
         <Box paddingBlock={1} sx={{ minHeight: 0 }}>
           <PictogramSearch
@@ -300,16 +394,6 @@ const PictEditForm = ({
               />
             </li>
           </List>
-          <Tooltip title={intl.formatMessage(messages.tooltipReset)} describeChild>
-            <Button
-              variant="outlined"
-              onClick={handleReset}
-              startIcon={<MdSettingsBackupRestore />}
-              sx={{ mt: 1, ml: "auto", display: "flex" }}
-            >
-              {intl.formatMessage(messages.reset)}
-            </Button>
-          </Tooltip>
         </SettingAccordion>
       </Box>
     </Box>

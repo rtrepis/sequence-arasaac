@@ -375,3 +375,18 @@ export const documentToV3 = (
 /** El JSON del fitxer, en una sola línia com sempre. */
 export const serializeSaac = (file: SaacDocumentV3 | SaacStyleFileV3): string =>
   JSON.stringify(file);
+
+/**
+ * Els retocs d'un pictograma respecte de l'estil del document: el mateix que
+ * s'escriuria al fitxer. `undefined` si no en té cap. És el que decideix si
+ * el pictograma surt com a «personalitzat».
+ */
+export const pictogramStyleOverride = (
+  pict: PictSequence,
+  documentStyle: SequenceStyle,
+): V3PictogramOverride | undefined => {
+  const style = styleToV3(documentStyle);
+  // Només cal saber el tipus d'imatge: el nom de l'asset no hi compta
+  const image = imageOf(pict, () => "");
+  return pictogramOverride(pict, style, categoryOf(pict), image);
+};

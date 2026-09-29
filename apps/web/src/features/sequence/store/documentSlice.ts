@@ -2,10 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   PictSequence,
   Sequence,
-  PictSequenceApplyAll,
   PictSequenceSettingsForEdit,
   PictApiAraForEdit,
-  PictApiAraSettingsApplyAll,
 } from "@/types/sequence";
 import {
   DocumentLayout,
@@ -277,76 +275,43 @@ const documentSlice = createSlice({
       );
     },
 
-    pictAraSettingsApplyAll: (
+    // «Aplica a tots»: canvia l'estil del document i treu aquestes propietats
+    // dels retocs de tots els pictogrames (fonament 03, §5). `base` és l'estil
+    // que té ara el document (el seu o l'heretat).
+    //
+    // Pell, cabell i color només es posen als pictogrames que els admeten: no
+    // tots els pictogrames d'ARASAAC tenen pell o cabell
+    pictStyleAppliedToAll: (
       previousDocument,
-      action: PayloadAction<PictApiAraSettingsApplyAll>,
+      action: PayloadAction<{
+        patch: {
+          pictApiAra?: Partial<DefaultSettings["pictApiAra"]>;
+          pictSequence?: Partial<DefaultSettings["pictSequence"]>;
+        };
+        base: DefaultSettings;
+      }>,
     ) => {
-      const allSequences = Object.values(previousDocument.content);
+      const { patch, base } = action.payload;
+      previousDocument.defaultSettings = {
+        pictApiAra: { ...base.pictApiAra, ...patch.pictApiAra },
+        pictSequence: { ...base.pictSequence, ...patch.pictSequence },
+      };
 
-      allSequences.forEach((sequence) => {
-        if (action.payload.skin)
-          sequence.forEach((p) => (p.img.settings.skin = action.payload.skin));
-
-        if (action.payload.hair)
-          sequence.forEach((p) => (p.img.settings.hair = action.payload.hair));
-
-        // Comprovació explícita: `color: false` és un valor vàlid (pictograma B/N)
-        if (action.payload.color !== undefined)
-          sequence.forEach(
-            (p) => (p.img.settings.color = action.payload.color),
-          );
-      });
-    },
-
-    pictSequenceApplyAll: (
-      previousDocument,
-      action: PayloadAction<PictSequenceApplyAll>,
-    ) => {
-      const allSequences = Object.values(previousDocument.content);
-
-      allSequences.forEach((sequence) => {
-        if (action.payload.textPosition)
-          sequence.forEach(
-            (p) => (p.settings.textPosition = action.payload.textPosition),
-          );
-
-        if (action.payload.fontFamily)
-          sequence.forEach(
-            (p) => (p.settings.fontFamily = action.payload.fontFamily),
-          );
-      });
-    },
-
-    borderInApplyAll: (
-      previousDocument,
-      action: PayloadAction<PictSequenceApplyAll>,
-    ) => {
       Object.values(previousDocument.content).forEach((sequence) =>
-        sequence.forEach(
-          (p) => (p.settings.borderIn = action.payload.borderIn!),
-        ),
-      );
-    },
-
-    borderOutApplyAll: (
-      previousDocument,
-      action: PayloadAction<PictSequenceApplyAll>,
-    ) => {
-      Object.values(previousDocument.content).forEach((sequence) =>
-        sequence.forEach(
-          (p) => (p.settings.borderOut = action.payload.borderOut!),
-        ),
-      );
-    },
-
-    fontSizeApplyAll: (
-      previousDocument,
-      action: PayloadAction<PictSequenceApplyAll>,
-    ) => {
-      Object.values(previousDocument.content).forEach((sequence) =>
-        sequence.forEach(
-          (p) => (p.settings.fontSize = action.payload.fontSize),
-        ),
+        sequence.forEach((pict: PictSequence) => {
+          Object.entries(patch.pictApiAra ?? {}).forEach(([key, value]) => {
+            const settings = pict.img.settings as Record<string, unknown>;
+            if (value !== undefined && settings[key] !== undefined)
+              settings[key] = value;
+          });
+          Object.entries(patch.pictSequence ?? {}).forEach(([key, value]) => {
+            if (value !== undefined)
+              (pict.settings as Record<string, unknown>)[key] =
+                typeof value === "object"
+                  ? JSON.parse(JSON.stringify(value))
+                  : value;
+          });
+        }),
       );
     },
 
@@ -687,11 +652,6 @@ export const {
   updatePictSequence: updatePictSequenceActionCreator,
   selectedId: selectedIdActionCreator,
   searched: searchedActionCreator,
-  pictAraSettingsApplyAll: pictAraSettingsApplyAllActionCreator,
-  pictSequenceApplyAll: pictSequenceApplyAllActionCreator,
-  borderInApplyAll: borderInApplyAllActionCreator,
-  borderOutApplyAll: borderOutApplyAllActionCreator,
-  fontSizeApplyAll: fontSizeApplyAllActionCreator,
   settingsPictApiAra: settingsPictApiAraActionCreator,
   settingsPictSequence: settingsPictSequenceActionCreator,
   updateSequenceViewSettings: updateSequenceViewSettingsActionCreator,
@@ -701,6 +661,7 @@ export const {
   restoreDocumentStyle: restoreDocumentStyleActionCreator,
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
   documentLayoutChanged: documentLayoutChangedActionCreator,
+  pictStyleAppliedToAll: pictStyleAppliedToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
   removeCloudImage: removeCloudImageActionCreator,
   replaceCloudImage: replaceCloudImageActionCreator,

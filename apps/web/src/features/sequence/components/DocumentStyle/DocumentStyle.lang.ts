@@ -102,6 +102,18 @@ const messages = defineMessages({
     defaultMessage: "S'ha aplicat l'estil del fitxer al document.",
     description: "Snackbar després d'aplicar al document l'estil d'un fitxer",
   },
+  changedApplyAll: {
+    id: "features.sequence.style.changed.applyAll",
+    defaultMessage: "S'ha aplicat a tots els pictogrames del document.",
+    description:
+      "Snackbar després d'«Aplica a tots»: el valor passa a l'estil del document i a tots els pictogrames",
+  },
+  changedReset: {
+    id: "features.sequence.style.changed.reset",
+    defaultMessage: "El pictograma torna a tenir l'estil del document.",
+    description:
+      "Snackbar després de «Restableix» un pictograma: se n'esborren els retocs",
+  },
   undo: {
     id: "features.sequence.style.undo",
     defaultMessage: "Desfés",
