@@ -185,43 +185,55 @@ test("flux amb teclat: obrir un fitxer antic, canviar un pictograma, Restableix 
   await expect(load).toBeVisible();
   await tabTo(page, load);
   await expect(load).toBeFocused();
-  const chooser = page.waitForEvent("filechooser");
-  await page.keyboard.press("Enter");
-  await (await chooser).setFiles(path.join(FIXTURES, "01-una-pestanya.saac"));
+  // Amb la màquina carregada, el primer Enter pot arribar abans que el menú
+  // estigui a punt: es torna a provar, sempre amb el teclat
+  let chooser = null;
+  for (let attempt = 0; attempt < 3 && !chooser; attempt++) {
+    const waiting = page
+      .waitForEvent("filechooser", { timeout: 5000 })
+      .catch(() => null);
+    await page.keyboard.press("Enter");
+    chooser = await waiting;
+    if (!chooser && !(await load.isVisible())) {
+      await tabTo(page, menu);
+      await page.keyboard.press("Enter");
+      await tabTo(page, load);
+    }
+  }
+  expect(chooser).not.toBeNull();
+  await chooser!.setFiles(path.join(FIXTURES, "01-una-pestanya.saac"));
   await expect(page.getByText("Fitxer carregat correctament")).toBeVisible();
 
   // Editar el primer pictograma
-  const card = page.locator("button:has(> .MuiCard-root)").first();
+  const card = page.locator("button:has(.MuiCard-root)").first();
   await tabTo(page, card);
   await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
 
   // Canviar-lo: el color (blanc i negre) és un retoc de l'estil
-  const accordion = dialog.getByRole("button", { name: /Configuracions/i });
-  await tabTo(page, accordion.first());
-  if ((await accordion.first().getAttribute("aria-expanded")) !== "true")
+  const accordion = dialog.getByRole("button", { name: /^Configuració/ });
+  await tabTo(page, accordion);
+  if ((await accordion.getAttribute("aria-expanded")) !== "true")
     await page.keyboard.press("Enter");
   const colorSwitch = dialog.locator('input[type="checkbox"]').first();
   await tabTo(page, colorSwitch);
   await page.keyboard.press("Space");
-  const customized = dialog.getByText("Pictograma personalitzat");
-  await expect(customized).toBeVisible();
+  await expect(accordion).toHaveAccessibleName("Configuració, personalitzat");
 
-  // Restableix
+  // Restableix: al costat de la capçalera; el focus hi torna
   const reset = dialog.getByRole("button", { name: "Restableix" });
   await tabTo(page, reset, { backwards: true });
   await page.keyboard.press("Enter");
-  await expect(customized).toBeHidden();
+  await expect(accordion).toHaveAccessibleName("Configuració");
+  await expect(accordion).toBeFocused();
+  await expect(dialog.getByText("Estil restablert")).toBeVisible();
 
-  // Tancar el diàleg desa el pictograma; el «Desfés» n'és el missatge
+  // Tancar el diàleg desa el pictograma
   const close = dialog.getByRole("button", { name: "Tancar" });
   await tabTo(page, close);
   await page.keyboard.press("Enter");
   await expect(dialog).toBeHidden();
-  await expect(
-    page.getByText("El pictograma torna a tenir l'estil del document."),
-  ).toBeVisible();
 
   // Desa
   await tabTo(page, menu);

@@ -42,7 +42,10 @@ const SettingAccordion = ({
 
   return (
     <Paper variant="outlined" sx={settingsList}>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1, pr: 1 }}>
+      <Box
+        data-testid="setting-accordion-header"
+        sx={{ display: "flex", alignItems: "center", gap: 1, pr: 1 }}
+      >
         <ButtonBase
           ref={summaryRef}
           id={buttonId}

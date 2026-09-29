@@ -144,29 +144,57 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 | Acció | On | Efecte |
 |---|---|---|
 | **Canviar l'estil del document** | Panell «Estil del document» | Canvia l'estil del document. El que coincidia amb l'estil vell segueix el nou; els retocs es conserven. |
-| **Aplica a tots** | Formulari del pictograma; columna de la vista | Canvia l'estil del document **i esborra aquestes propietats** de tots els retocs de seqüències i pictogrames. |
-| **Aplica a aquesta seqüència** | Columna de la vista, sense «Aplica a tots» | Canvia la vista d'aquesta seqüència. Els pictogrames no tenen `view`, de manera que no hi ha cap retoc seu per esborrar. |
+| **Aplica a tots** | Panell «Estil del document»; columna de la vista | S'aplica a **tot el document**: canvia l'estil del document **i esborra aquestes propietats** de tots els retocs de seqüències i pictogrames. |
+| **Canviar la vista d'una seqüència** | Columna de la vista, sense «Aplicar a totes» | Canvia la mida, l'espai o l'alineació d'aquesta seqüència. És l'únic estil que té una seqüència en aquesta versió. |
 | **Canviar un pictograma** | Formulari del pictograma | Canvia **només** el `style` d'aquell pictograma, i **només** les propietats tocades. |
-| **Restableix** un pictograma | Formulari del pictograma | Esborra el seu `style`. La categoria, que és contingut, es queda. |
+| **Restableix** un pictograma | Formulari del pictograma (capçalera de la configuració o «Més accions»); menú contextual de la graella («Restableix l'estil») | Esborra el seu `style`. La categoria, que és contingut, es queda. Dins del formulari és una edició més i es desa en tancar-lo; des del menú contextual s'aplica al document al moment. |
 | **Aplica el meu estil per defecte** | Panell «Estil del document»; columna de la vista | Com canviar l'estil del document, amb l'estil per defecte de l'usuari. |
 | **Carrega un estil des d'un fitxer** | Panell «Estil del document» | Com canviar l'estil del document, amb l'estil del fitxer. Pregunta si es conserven els retocs; la resposta per defecte és que sí. |
 
+- **Estil per seqüència**: en aquesta versió, una seqüència **només** té estil de vista (mida,
+  espai, alineació), que es configura per seqüència a la columna de la vista. No hi ha cap acció per
+  canviar la lletra o les vores de tots els pictogrames d'una seqüència: és una idea oberta, **B31**
+  a `docs/BACKLOG-ux.md`.
 - **SEMPRE** «Aplica a tots», «Restableix», «Aplica el meu estil per defecte» i «Carrega un estil»
   es poden desfer amb el **desfer que ja existeix**: un snackbar amb «Desfés» que torna el document
-  exactament a com era, mentre no s'hagi tocat des d'aleshores.
+  exactament a com era, mentre no s'hagi tocat des d'aleshores. Dins del formulari del pictograma,
+  el «Desfés» de «Restableix» torna l'estil d'abans **al formulari**, sense tocar les altres
+  edicions que s'hi hagin fet.
 - L'historial complet de desfer i refer per a totes les accions **no** forma part d'aquesta
   versió: és **B30** a `docs/BACKLOG-ux.md`.
 - **SEMPRE** una acció acaba amb un missatge (`docs/estandards/feedback-i-accions.md`).
 
 ## 6. L'indicador «personalitzat»
 
-Un pictograma amb retocs propis (un `style` no buit) ho ha de dir.
+Un pictograma amb retocs propis (un `style` no buit) ho ha de dir. Serveix perquè s'entengui per què
+una targeta no ha canviat amb «Aplica a tots».
 
-- **SEMPRE** visible, i **MAI** només amb color: una icona o un text.
-- **SEMPRE** amb nom accessible («Pictograma personalitzat»), no només un `title`.
-- **SEMPRE** al costat del botó **Restableix**, al formulari del pictograma.
-- **SEMPRE** objectius tàctils de 44 × 44 px com a mínim al mòbil.
-- **MAI** s'imprimeix ni surt al PDF: és un estat de l'edició, no del document.
+**Al formulari d'edició** (capçalera de la configuració):
+
+- Sense retocs, la capçalera és la de sempre: la icona de configuració al mig.
+- Amb retocs, la icona passa a l'esquerra, amb el text «Personalitzat», i al costat hi ha el botó
+  **Restableix**.
+- **MAI** un botó dins d'un altre: el de la capçalera (amb `aria-expanded` i `aria-controls`) i
+  Restableix són germans. El nom accessible del de la capçalera és «Configuració» o «Configuració,
+  personalitzat».
+- En prémer Restableix, el focus va al botó de la capçalera, perquè Restableix desapareix.
+- La previsualització del pictograma es queda **fixa** a dalt mentre es desplaça el formulari; en
+  pantalles baixes s'encongeix fins al 30 % de l'alçada, sense animació si l'usuari ho demana.
+
+**A la graella d'edició** (la targeta):
+
+- Una marca petita a la cantonada inferior dreta, que mossega la vora exterior. **MAI** tapa la
+  imatge, el text ni el número (van centrats i aquella cantonada és buida).
+- Una forma, no només un color, amb contrast de 3:1 com a mínim amb el fons i amb la vora.
+- **És informativa**: no rep el focus ni té acció. El nom accessible de la targeta diu
+  «personalitzat» («esmorzar, pictograma 3, personalitzat»).
+- El menú contextual (clic dret, pulsació llarga, Maj+F10 o la tecla de menú) ofereix
+  «Restableix l'estil», només si el pictograma és personalitzat.
+
+**MAI** a la vista, la pantalla completa, la impressió ni el PDF: és un estat de l'edició, no del
+document, i l'usuari de CAA no l'ha de veure.
+
+- **SEMPRE** objectius tàctils de 44 × 44 px com a mínim al mòbil (la marca no n'és cap).
 
 ## 7. Documents nous
 

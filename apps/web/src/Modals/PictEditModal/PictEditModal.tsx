@@ -163,7 +163,6 @@ const PictEditModal = ({
         ref={triggerRef}
         aria-label={cardLabel}
         aria-describedby={openPopover ? popoverId : undefined}
-        aria-haspopup="menu"
         variant="text"
         onClick={handlerClickOpen}
         onContextMenu={handlerContextMenu}

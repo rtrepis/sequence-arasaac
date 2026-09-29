@@ -39,7 +39,9 @@ test("una seqüència buida s'esborra sense preguntar res", async ({ page }) => 
   await page.getByRole("button", { name: "Afegeix una seqüència" }).click();
   await expect(page.getByRole("tab", { name: "2" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Elimina l'última seqüència" }).click();
+  await page
+    .getByRole("button", { name: "Elimina l'última seqüència" })
+    .click();
 
   // Sense res a perdre, la confirmació només seria fricció
   await expect(page.getByRole("dialog")).toHaveCount(0);
@@ -51,7 +53,9 @@ test("una seqüència amb pictogrames confirma, i diu quants en perd", async ({
 }) => {
   await loadFixture(page);
 
-  await page.getByRole("button", { name: "Elimina l'última seqüència" }).click();
+  await page
+    .getByRole("button", { name: "Elimina l'última seqüència" })
+    .click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toContainText("Esborres la seqüència 2?");
   // El cos diu la xifra concreta, no un avís genèric
@@ -61,14 +65,18 @@ test("una seqüència amb pictogrames confirma, i diu quants en perd", async ({
   await dialog.getByRole("button", { name: "Cancel·la" }).click();
   await expect(page.getByRole("tab", { name: "2" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Elimina l'última seqüència" }).click();
+  await page
+    .getByRole("button", { name: "Elimina l'última seqüència" })
+    .click();
   await page.getByRole("button", { name: "Esborra la seqüència" }).click();
   await expect(page.getByRole("tab", { name: "2" })).toHaveCount(0);
 });
 
 test("cap botó no queda armat en obrir la confirmació", async ({ page }) => {
   await loadFixture(page);
-  await page.getByRole("button", { name: "Elimina l'última seqüència" }).click();
+  await page
+    .getByRole("button", { name: "Elimina l'última seqüència" })
+    .click();
   await expect(page.getByRole("dialog")).toBeVisible();
 
   // El focus se'l queda el diàleg: el lector de pantalla llegeix què es perd i
@@ -100,15 +108,16 @@ test("al menú contextual, esborrar va l'últim i separat de la resta", async ({
   await expect(menu).toBeVisible();
 
   // L'ordre és el que veu l'usuari: primer el que més es fa, l'irreversible al final
-  const texts = (
-    await menu.locator(".MuiListItemText-root").allTextContents()
-  )
+  const texts = (await menu.locator(".MuiListItemText-root").allTextContents())
     .map((text) => text.trim())
     .filter(Boolean);
   expect(texts[0]).toBe("Edita");
   expect(texts[texts.length - 1]).toBe("Elimina");
 
-  // Quatre grups, tres separadors: abans no n'hi havia cap i «Elimina» quedava
-  // encaixonat entre accions inofensives
-  await expect(menu.locator(".MuiDivider-root")).toHaveCount(3);
+  // Un separador entre cada grup: abans no n'hi havia cap i «Elimina» quedava
+  // encaixonat entre accions inofensives. El pictograma d'aquest fitxer té un
+  // Fitzgerald propi (és personalitzat), i per això hi ha el grup de
+  // «Restableix l'estil»: cinc grups, quatre separadors
+  expect(texts).toContain("Restableix l'estil");
+  await expect(menu.locator(".MuiDivider-root")).toHaveCount(4);
 });

@@ -86,6 +86,7 @@ l'entrada.
 | B14 | Sostre del canvas del PDF sense mesurar | S'espera tenir casos reals al registre d'errors (`/api/client-errors` continua obert amb els comptes apagats, i l'avís per correu també); no hi ha res a fer fins que n'arribin | — |
 | N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
 | B30 | No hi ha historial de desfer i refer | El desfer que ja existeix cobreix els canvis d'estil, «Aplica a tots» i «Restableix», que són els que esborren més feina d'un cop | L |
+| C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. Va amb C17 | M | No |
 
 ### Ajornades (comptes apagats)
 
@@ -108,6 +109,22 @@ no es toquen; les que sí, porten una nota amb la data de la revisió.
 | 2026-09-27 (2a) | `claude/backlog-review-bs867a`, amb master al dia (`a15ed31`) | Master hi afegeix **B25** i **P1**; B25 verificada al codi. Els comptes s'apaguen: **B13** i **N1** passen a ajornades, com P1. La resta, sense canvis respecte de la primera passada. S'afegeix la secció *Prioritats* |
 
 ---
+
+## Idees
+
+Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posar-les a
+*Prioritats*.
+
+### B31 — Aplicar canvis d'estil per seqüència 💡 Idea
+
+*(Oberta en treure «Aplica a aquesta seqüència» dels fonaments, 2026-09-29.)*
+
+- **Què**: pensar com modificar l'estil de tots els pictogrames d'una seqüència alhora.
+- **Possible enfocament**: un botó que obri un modal per fer les modificacions a la seqüència.
+- **Cal decidir-ho abans d'implementar-ho**: on es col·loca a la interfície, i com conviu amb
+  l'estil del document i amb les excepcions per pictograma (`docs/fonaments/03-model-contingut-estil.md`,
+  §4 i §5). Avui una seqüència només té estil de vista (mida, espai, alineació).
+- Pendent de treballar-ho més endavant.
 
 ## Gravetat alta
 
@@ -1187,6 +1204,25 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 ## Gravetat baixa
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.
+
+### C20 — Errors d'axe als controls del formulari d'edició del pictograma 🔴 Oberta
+
+*(Trobada en afegir l'estat «personalitzat» a la capçalera de la configuració, 2026-09-29.)*
+
+- **On**: el formulari d'edició del pictograma (`PictEditForm` i les `SettingsCards`), i la graella.
+- **Per què importa**: amb la configuració desplegada, axe hi troba errors que ja hi eren. Abans no
+  sortien perquè l'acordió de MUI amagava el contingut plegat i la prova no el desplegava:
+  - `label`, `aria-prohibited-attr`: els interruptors (Color, Creu/X) porten el nom a l'`span` i no
+    a l'`input` (és **C17**);
+  - `nested-interactive`, `button-name`: el botó de color (`InputColor`) va dins d'un
+    `ToggleButton`, i el «Puja una imatge teva» és una `label` amb rol de botó i un control a dins
+    (`aria-allowed-role`);
+  - `list`, `listitem`: la llista del formulari barreja `li` i `Stack`;
+  - `heading-order`: el text de la targeta és un `h3` i els rètols de secció, `h6`;
+  - a la barra, `aria-valid-attr-value` a `#vertical-tab-0`.
+- **Proposta**: resoldre-ho per peces, començant per C17. L'e2e
+  `pictogram-customized.spec.ts` passa axe només sobre el que ha canviat (la capçalera, la
+  previsualització, el snackbar i la marca); quan això es resolgui, s'ha d'ampliar a tot el diàleg.
 
 ### C1 — Diversos botons només mostren l'etiqueta en passar-hi el ratolí 🔴 Oberta
 

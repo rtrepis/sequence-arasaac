@@ -89,7 +89,7 @@ for (const locale of LOCALES) {
       await searchWord(page, firstWord);
       await page.waitForTimeout(4000);
 
-      await page.locator("button:has(> .MuiCard-root)").first().click();
+      await page.locator("button:has(.MuiCard-root)").first().click();
       const dialog = page.getByRole("dialog");
       await dialog.waitFor({ state: "visible", timeout: 15000 });
       await page.waitForTimeout(800);
