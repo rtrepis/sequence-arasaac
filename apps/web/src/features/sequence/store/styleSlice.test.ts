@@ -1,3 +1,4 @@
+import { DEFAULT_FITZGERALD_CATEGORY_COLORS } from "@features/sequence/saac/fitzgerald";
 import { describe, expect, it } from "vitest";
 import { configureStore } from "@reduxjs/toolkit";
 import { documentReducer } from "./documentSlice";
@@ -120,7 +121,16 @@ describe("document nou", () => {
     expect(saved.styleView).toEqual(userDefault.view);
     expect(Object.keys(saved.viewSettings)).toEqual(["0", "1"]);
 
-    store.dispatch(documentStyleMaterializedActionCreator(userDefault));
+    store.dispatch(
+      documentStyleMaterializedActionCreator({
+        style: userDefault,
+        layout: {
+          pageSize: "A4",
+          orientation: "landscape",
+          direction: "row",
+        } as const,
+      }),
+    );
     // Canviar l'estil per defecte ja no canvia el document desat
     store.dispatch(
       viewSettingsActionCreator({
@@ -138,9 +148,14 @@ describe("document nou", () => {
     store.dispatch(addPictogramActionCreator(pict()));
     const changedAt = state(store).documentStatus.changedAt;
     store.dispatch(
-      documentStyleMaterializedActionCreator(
-        selectUserDefaultStyle(state(store)),
-      ),
+      documentStyleMaterializedActionCreator({
+        style: selectUserDefaultStyle(state(store)),
+        layout: {
+          pageSize: "A4",
+          orientation: "landscape",
+          direction: "row",
+        } as const,
+      }),
     );
     expect(state(store).documentStatus.changedAt).toBe(changedAt);
   });
@@ -239,7 +254,15 @@ describe("«Canvia l'estil»", () => {
     store.dispatch(changeDocumentStyleThunk(target, "file"));
 
     const after = state(store).document;
-    expect(selectDocumentStyle(state(store))).toEqual(target);
+    // L'espai entre seqüències és de la pàgina: aplicar un estil no el toca
+    expect(selectDocumentStyle(state(store))).toEqual({
+      ...target,
+      view: {
+        ...target.view,
+        sequenceSpaceBetween: userDefault.view.sequenceSpaceBetween,
+      },
+      fitzgeraldColors: DEFAULT_FITZGERALD_CATEGORY_COLORS,
+    });
     expect(after.content[0][0].settings.font).toEqual(target.pictSequence.font);
     expect(after.content[0][1].settings.font.family).toBe("Caveat"); // retoc conservat
     expect(after.content[0][0].settings.textPosition).toBe("top");
@@ -272,7 +295,16 @@ describe("«Canvia l'estil»", () => {
     store.dispatch(
       changeDocumentStyleThunk(OTHER_STYLE(userDefault), "userDefault"),
     );
-    store.dispatch(documentStyleMaterializedActionCreator(userDefault));
+    store.dispatch(
+      documentStyleMaterializedActionCreator({
+        style: userDefault,
+        layout: {
+          pageSize: "A4",
+          orientation: "landscape",
+          direction: "row",
+        } as const,
+      }),
+    );
     expect(selectCanUndoStyle(state(store))).toBe(true);
   });
 

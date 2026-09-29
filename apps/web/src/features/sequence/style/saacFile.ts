@@ -1,9 +1,9 @@
-// Lectura i escriptura dels fitxers `.saac` (document) i `.saacstyle` (estil).
+// Lectura dels formats d'abans del v3: el `.saac` sense `format` (primitiu,
+// antic, 2.1.0) i l'esquema 2 intern que mai no es va publicar.
 //
-// **Tot el que entra d'un fitxer passa per aquí**, i també els documents que
-// arriben del núvol: és l'únic lloc que coneix la història del format i el
-// tradueix al model d'avui. Les regles són les de
-// `docs/fonaments/sequencia-i-estil.md` (punts 2 i 4).
+// Ja no escriu res: els fitxers els escriu `features/sequence/saac/`, que
+// passa per aquí per llegir els formats antics i després els migra al v3
+// (`docs/fonaments/06-compatibilitat-i-dades.md`, §3 i §4).
 //
 // Formes conegudes, de la més vella a la més nova:
 //
@@ -25,21 +25,7 @@ import {
 } from "@/types/document";
 import { DefaultSettings } from "@/types/ui";
 import { Sequence } from "@/types/sequence";
-import { materializeDocumentStyle, pictStyleOf, tabViewOf } from "./styleModel";
-
-export const SAAC_SCHEMA_VERSION = 2;
-export const DOCUMENT_FILE_EXTENSION = ".saac";
-export const STYLE_FILE_EXTENSION = ".saacstyle";
-
-export interface DocumentFileV2 {
-  schemaVersion: typeof SAAC_SCHEMA_VERSION;
-  documentState: DocumentSAAC;
-}
-
-export interface StyleFileV2 {
-  schemaVersion: typeof SAAC_SCHEMA_VERSION;
-  style: SequenceStyle;
-}
+import { pictStyleOf, tabViewOf } from "./styleModel";
 
 /** D'on ha sortit l'estil d'un document obert. */
 export type StyleOrigin =
@@ -54,23 +40,6 @@ export type ParsedSaacFile =
   | { kind: "document"; document: DocumentSAAC; styleOrigin: StyleOrigin }
   | { kind: "style"; style: SequenceStyle }
   | { kind: "invalid" };
-
-// --- Escriure ---
-
-/** «Desa el document»: el document amb el seu estil, sempre. */
-export const buildDocumentFile = (
-  document: DocumentSAAC,
-  style: SequenceStyle,
-): DocumentFileV2 => ({
-  schemaVersion: SAAC_SCHEMA_VERSION,
-  documentState: materializeDocumentStyle(document, style),
-});
-
-/** «Desar estil»: només l'aparença, sense contingut. */
-export const buildStyleFile = (style: SequenceStyle): StyleFileV2 => ({
-  schemaVersion: SAAC_SCHEMA_VERSION,
-  style,
-});
 
 // --- Fusió camp a camp ---
 

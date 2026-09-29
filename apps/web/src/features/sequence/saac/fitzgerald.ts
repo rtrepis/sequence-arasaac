@@ -3,6 +3,7 @@
 // «El color de Fitzgerald».
 import fitzgeraldColors from "@/data/fitzgeraldColors";
 import { DEFAULT_FITZGERALD } from "@/configs/defaultSettingsConfig";
+import type { PictSequence } from "@/types/sequence";
 
 export const FITZGERALD_CATEGORIES = [
   "properNoun",
@@ -84,3 +85,13 @@ export const colorForCategory = (
   category === undefined || category === "none"
     ? noneColor
     : categoryColors[category];
+
+/**
+ * Categoria d'un pictograma de Redux. Si no se sap (un pictograma d'abans del
+ * v3), es dedueix del color: només si és exactament el d'una categoria.
+ */
+export const categoryOf = (pict: PictSequence): FitzgeraldCategory | "none" => {
+  if (pict.img.category !== undefined) return pict.img.category;
+  const color = pict.img.settings.fitzgerald;
+  return (color !== undefined && categoryFromColor(color)) || "none";
+};

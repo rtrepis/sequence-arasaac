@@ -13,7 +13,7 @@ import {
   DEFAULT_FITZGERALD_CATEGORY_COLORS,
   FitzgeraldCategory,
   FitzgeraldCategoryColors,
-  categoryFromColor,
+  categoryOf,
   colorForCategory,
   sameColor,
 } from "./fitzgerald";
@@ -181,16 +181,6 @@ const imageOf = (
   return { source: "none" };
 };
 
-/**
- * Categoria del pictograma. Si no se sap (un pictograma d'abans del v3), es
- * dedueix del color: només si és exactament el d'una categoria.
- */
-export const categoryOf = (pict: PictSequence): FitzgeraldCategory | "none" => {
-  if (pict.img.category !== undefined) return pict.img.category;
-  const color = pict.img.settings.fitzgerald;
-  return (color !== undefined && categoryFromColor(color)) || "none";
-};
-
 const pictogramOverride = (
   pict: PictSequence,
   style: V3Style,
@@ -243,7 +233,7 @@ const pictogramOverride = (
 const pictogramToV3 = (
   pict: PictSequence,
   style: V3Style,
-  context: SerializeContext,
+  id: string,
   addAsset: (url: string) => string,
 ): V3Pictogram => {
   const category = categoryOf(pict);
@@ -252,7 +242,7 @@ const pictogramToV3 = (
 
   return {
     ...extra?.pictogram,
-    id: pict.id ?? context.newId("p"),
+    id,
     word: pict.img.searched.word,
     ...(pict.text !== undefined && { text: pict.text }),
     cross: pict.cross,
@@ -289,6 +279,22 @@ export const documentToV3 = (
     .map(Number)
     .sort((a, b) => a - b);
 
+  // Un identificador només pot sortir un cop: un pictograma enganxat porta el
+  // de l'original, i un de nou (o d'abans del v3) encara no en té
+  const usedIds = new Set<string>();
+  const uniqueId = (id: string | undefined, fresh: () => string): string => {
+    let unique = id !== undefined && !usedIds.has(id) ? id : fresh();
+    while (usedIds.has(unique)) unique = fresh();
+    usedIds.add(unique);
+    return unique;
+  };
+  // Les seqüències sense identificador en reben un que depèn de la seva
+  // posició, i per tant és el mateix a cada desat
+  const sequenceIdOf = (key: number): string =>
+    uniqueId(document.sequenceIds?.[key], () =>
+      usedIds.has(`seq_${key + 1}`) ? context.newId("seq") : `seq_${key + 1}`,
+    );
+
   const sequences: V3Sequence[] = keys.map((key) => {
     const view = document.viewSettings?.[key];
     const viewDiff = view
@@ -301,11 +307,18 @@ export const documentToV3 = (
       : undefined;
     const pictograms = [...document.content[key]]
       .sort((a, b) => a.indexSequence - b.indexSequence)
-      .map((pict) => pictogramToV3(pict, style, context, addAsset));
+      .map((pict) =>
+        pictogramToV3(
+          pict,
+          style,
+          uniqueId(pict.id, () => context.newId("p")),
+          addAsset,
+        ),
+      );
 
     return {
       ...extra.sequences?.[key],
-      id: document.sequenceIds?.[key] ?? context.newId("seq"),
+      id: sequenceIdOf(key),
       ...(viewDiff && { style: { view: viewDiff } }),
       pictograms,
     };
@@ -353,36 +366,3 @@ export const documentToV3 = (
 /** El JSON del fitxer, en una sola línia com sempre. */
 export const serializeSaac = (file: SaacDocumentV3 | SaacStyleFileV3): string =>
   JSON.stringify(file);
-
-/**
- * Els identificadors que `documentToV3` ha generat, per escriure'ls a Redux
- * després de desar: així el pròxim desat en fa servir els mateixos. Els dels
- * pictogrames, per seqüència i per `indexSequence`.
- */
-export interface SaacIds {
-  sequenceIds: { [key: number]: string };
-  pictogramIds: { [key: number]: { [indexSequence: number]: string } };
-}
-
-export const idsOf = (
-  document: DocumentSAAC,
-  file: SaacDocumentV3,
-): SaacIds => {
-  const keys = Object.keys(document.content)
-    .map(Number)
-    .sort((a, b) => a - b);
-  const sequenceIds: SaacIds["sequenceIds"] = {};
-  const pictogramIds: SaacIds["pictogramIds"] = {};
-  keys.forEach((key, index) => {
-    sequenceIds[key] = file.sequences[index].id;
-    const sorted = [...document.content[key]].sort(
-      (a, b) => a.indexSequence - b.indexSequence,
-    );
-    pictogramIds[key] = {};
-    sorted.forEach((pict, i) => {
-      pictogramIds[key][pict.indexSequence] =
-        file.sequences[index].pictograms[i].id;
-    });
-  });
-  return { sequenceIds, pictogramIds };
-};

@@ -37,6 +37,13 @@ const messages = defineMessages({
     defaultMessage: "Error loading file",
     description: "Message shown when file load fails",
   },
+  loadInvalidFile: {
+    id: "context.feedback.load.invalidFile",
+    defaultMessage:
+      "No s'ha pogut obrir. No és un document de SequenciAAC o està malmès.",
+    description:
+      "Error en obrir un fitxer que no és un .saac ni un .saacstyle, o que està malmès",
+  },
   loading: {
     id: "context.feedback.loading",
     defaultMessage: "Loading...",

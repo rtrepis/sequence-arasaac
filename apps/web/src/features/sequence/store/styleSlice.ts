@@ -31,6 +31,12 @@ export type StyleChangeSource = "userDefault" | "file";
 export interface StyleNotice {
   /** Té un estil diferent de l'estil per defecte de qui l'obre */
   ownStyle: boolean;
+  /** És d'una versió anterior i s'ha adaptat al format v3 */
+  legacy?: boolean;
+  /** No portava estil propi (o sencer): hi va el de qui l'obre */
+  withoutStyle?: boolean;
+  /** És d'una versió més nova de l'app */
+  newerVersion?: boolean;
   /** Fonts que demana i aquest dispositiu no té */
   unavailableFonts: string[];
   /**
@@ -157,7 +163,8 @@ const sameSnapshot = (
   a.content === b.content &&
   a.viewSettings === b.viewSettings &&
   a.defaultSettings === b.defaultSettings &&
-  a.styleView === b.styleView;
+  a.styleView === b.styleView &&
+  a.fitzgeraldColors === b.fitzgeraldColors;
 
 /**
  * Aplica un estil al document obert amb la regla dels retocs, i deixa el canvi

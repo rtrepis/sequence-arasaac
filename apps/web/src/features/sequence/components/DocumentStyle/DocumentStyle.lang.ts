@@ -5,6 +5,27 @@ import { defineMessages } from "react-intl";
 // `docs/fonaments/sequencia-i-estil.md` (nomenclatura inclosa: «document» és el
 // fitxer sencer, «seqüència» cadascuna de les que conté).
 const messages = defineMessages({
+  noticeLegacy: {
+    id: "features.sequence.style.notice.legacy",
+    defaultMessage:
+      "Aquest document és d'una versió anterior. L'hem adaptat; quan el desis es guardarà amb el format nou.",
+    description:
+      "Bàner en obrir un document desat amb una versió anterior de l'app (format antic)",
+  },
+  noticeWithoutStyle: {
+    id: "features.sequence.style.notice.withoutStyle",
+    defaultMessage:
+      "No portava estil propi, i hi hem aplicat el teu estil per defecte.",
+    description:
+      "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer)",
+  },
+  noticeNewerVersion: {
+    id: "features.sequence.style.notice.newerVersion",
+    defaultMessage:
+      "Aquest document s'ha creat amb una versió més nova de SequenciAAC. Pot ser que alguna cosa no es vegi bé. Si el deses aquí, es podrien perdre canvis.",
+    description:
+      "Bàner d'avís en obrir un document d'una versió de l'app més nova que la d'ara",
+  },
   panelTitle: {
     id: "features.sequence.style.panel.title",
     defaultMessage: "Estil del document",
@@ -68,7 +89,8 @@ const messages = defineMessages({
   closeNotice: {
     id: "features.sequence.style.notice.close",
     defaultMessage: "Tanca l'avís",
-    description: "Nom accessible del botó que tanca el bàner o el snackbar d'estil",
+    description:
+      "Nom accessible del botó que tanca el bàner o el snackbar d'estil",
   },
   changedUserDefault: {
     id: "features.sequence.style.changed.userDefault",
@@ -90,21 +112,37 @@ const messages = defineMessages({
     defaultMessage: "S'ha desfet el canvi d'estil",
     description: "Confirmació després de desfer un canvi d'estil",
   },
-  pendingDefaultTitle: {
-    id: "features.sequence.style.pendingDefault.title",
-    defaultMessage: "Vols fer servir aquest estil per defecte?",
-    description: "Pregunta en obrir un fitxer d'estil sense cap document obert",
+  styleFileOpenedTitle: {
+    id: "features.sequence.style.styleFileOpened.title",
+    defaultMessage: "Aquest fitxer és un estil, no un document",
+    description:
+      "Títol del diàleg que surt en obrir un fitxer d'estil (.saacstyle) com si fos un document",
+  },
+  styleFileOpenedBody: {
+    id: "features.sequence.style.styleFileOpened.body",
+    defaultMessage:
+      "Pots aplicar-lo al document obert, o fer-lo el teu estil per defecte, que és el que reben els documents nous.",
+    description:
+      "Explicació del diàleg de fitxer d'estil quan hi ha un document obert",
+  },
+  styleFileApply: {
+    id: "features.sequence.style.styleFileOpened.apply",
+    defaultMessage: "Aplica'l a aquest document",
+    description:
+      "Botó que aplica l'estil del fitxer al document obert (es pot desfer)",
+  },
+  styleFileMakeDefault: {
+    id: "features.sequence.style.styleFileOpened.makeDefault",
+    defaultMessage: "Fes-lo el meu estil per defecte",
+    description:
+      "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari",
   },
   pendingDefaultBody: {
     id: "features.sequence.style.pendingDefault.body",
     defaultMessage:
       "No hi ha cap document obert a què aplicar-lo. Si el fas servir per defecte, els documents nous el rebran en lloc de l'estil que tens ara.",
-    description: "Explicació de què passa si s'accepta l'estil com a per defecte",
-  },
-  pendingDefaultConfirm: {
-    id: "features.sequence.style.pendingDefault.confirm",
-    defaultMessage: "Fes-lo servir per defecte",
-    description: "Botó per acceptar l'estil del fitxer com a estil per defecte",
+    description:
+      "Explicació de què passa si s'accepta l'estil com a per defecte",
   },
 });
 

@@ -11,6 +11,21 @@ export const SAAC_V3 = 3;
 export const DOCUMENT_FILE_EXTENSION = ".saac";
 export const STYLE_FILE_EXTENSION = ".saacstyle";
 
+/**
+ * El que accepta el selector de fitxers. El tipus es decideix pel contingut, i
+ * per això s'hi admeten també els `.txt` i `.json`: els `.saac.txt` que el
+ * mòbil desava amb `text/plain` s'han de poder obrir.
+ */
+export const SAAC_FILE_ACCEPT = [
+  DOCUMENT_FILE_EXTENSION,
+  STYLE_FILE_EXTENSION,
+  ".txt",
+  ".json",
+  "text/plain",
+  "application/json",
+  "application/octet-stream",
+].join(",");
+
 /** Tipus MIME de la descàrrega: amb `text/plain`, el mòbil hi afegeix `.txt`. */
 export const SAAC_DOWNLOAD_MIME = "application/octet-stream";
 

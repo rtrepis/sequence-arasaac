@@ -16,10 +16,10 @@ import {
   SerializeContext,
   buildStyleFileV3,
   documentToV3,
-  idsOf,
   serializeSaac,
 } from "./serialize";
 import { documentFromV3 } from "./toRedux";
+import { saacBlob, saacFileName } from "./download";
 import type { ResolvedCardStyle, V3Style } from "./types";
 
 // Proves del model v3: migració, anada i tornada, cascada i detecció del
@@ -386,18 +386,22 @@ describe("anada i tornada", () => {
     },
   );
 
-  it("els identificadors es generen un cop i es conserven", () => {
-    const { document } = parseDocument("01-una-pestanya.saac");
-    const fresh: DocumentSAAC = {
+  it("els identificadors del fitxer es conserven, i els repetits se'n generen de nous", () => {
+    const { document, file } = parseDocument("01-una-pestanya.saac");
+    const [first, second, ...rest] = document.content[0];
+    const pasted: DocumentSAAC = {
       ...document,
       sequenceIds: undefined,
-      content: { 0: document.content[0].map((p) => ({ ...p, id: undefined })) },
+      content: { 0: [first, { ...second, id: first.id }, ...rest] },
     };
-    const file = documentToV3(fresh, serializeContext);
-    const ids = idsOf(fresh, file);
-    expect(ids.sequenceIds[0]).toBe(file.sequences[0].id);
-    expect(Object.values(ids.pictogramIds[0])).toEqual(
-      file.sequences[0].pictograms.map((p) => p.id),
+    const again = documentToV3(pasted, serializeContext);
+    const ids = again.sequences[0].pictograms.map((p) => p.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids[0]).toBe(file.sequences[0].pictograms[0].id);
+    // Sense identificador, la seqüència en rep un que depèn de la posició
+    expect(again.sequences[0].id).toBe("seq_1");
+    expect(documentToV3(pasted, serializeContext).sequences[0].id).toBe(
+      "seq_1",
     );
   });
 });
@@ -489,5 +493,22 @@ describe("aïllament", () => {
     LEGACY_FIXTURES.forEach((name) => parseDocument(name));
     parseDocument("14-versio-99.saac");
     expect(JSON.stringify({ USER_DEFAULT, USER_PAGE })).toBe(before);
+  });
+});
+
+describe("descàrrega", () => {
+  it("el Blob és `application/octet-stream`", () => {
+    expect(saacBlob("{}").type).toBe("application/octet-stream");
+  });
+
+  it("el nom acaba en `.saac` o `.saacstyle`, sense repetir-la", () => {
+    const date = new Date("2026-09-29T10:00:00.000Z");
+    expect(saacFileName("Rutina", ".saac", date)).toBe("Rutina.saac");
+    expect(saacFileName("Rutina.saac", ".saac", date)).toBe("Rutina.saac");
+    expect(saacFileName("Rutina.saac.txt", ".saac", date)).toBe("Rutina.saac");
+    expect(saacFileName("Blau", ".saacstyle", date)).toBe("Blau.saacstyle");
+    expect(saacFileName("", ".saac", date)).toBe(
+      "SequenciAAC_2026-09-29T10:00:00.saac",
+    );
   });
 });
