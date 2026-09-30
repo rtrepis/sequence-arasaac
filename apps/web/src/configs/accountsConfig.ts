@@ -13,7 +13,9 @@
 // comptes, un problema de quota— i llegir-lo del servidor voldria dir esperar
 // el desvetllament de Render per saber si es pot pintar el botó d'entrar.
 //
-// El valor per defecte és «encendre»: una compilació sense la variable es
-// comporta com sempre.
-export const ACCOUNTS_ENABLED: boolean =
-  import.meta.env.VITE_ACCOUNTS_ENABLED !== "false";
+// A la 2.2.0 el valor és fix a `false` i ja no es llegeix de la variable
+// d'entorn `VITE_ACCOUNTS_ENABLED`: la compilació publicada va sense comptes
+// passi el que passi a la configuració del desplegament. Per tornar-los a
+// encendre cal posar-hi `true` (o recuperar la lectura de l'entorn) i tornar a
+// desplegar.
+export const ACCOUNTS_ENABLED: boolean = false;
