@@ -70,12 +70,18 @@ interface PictEditFormProps {
 const RESET_SNACKBAR_DURATION_MS = 10000;
 
 /**
- * La còpia fixa de la previsualització baixa des de dalt, prou a poc a poc
- * perquè no aparegui de cop; en marxar, torna amunt una mica més de pressa.
- * Mai amb moviment reduït.
+ * La còpia fixa de la previsualització baixa des de dalt en entrar i hi torna
+ * en marxar, amb el mateix temps i la mateixa corba, perquè cap dels dos
+ * moviments no sembli de cop. Mai amb moviment reduït.
  */
-const PREVIEW_COPY_IN_MS = 320;
-const PREVIEW_COPY_OUT_MS = 220;
+const PREVIEW_COPY_MS = 220;
+const PREVIEW_COPY_EASING = "cubic-bezier(0.4, 0, 0.2, 1)";
+
+/**
+ * Quina part de la previsualització original pot quedar a la vista quan ja
+ * surt la còpia: així entra una mica abans que l'original acabi de marxar
+ */
+const PREVIEW_COPY_VISIBLE_RATIO = 0.35;
 
 /** Els valors d'estil que «Restableix» canvia al formulari, per poder-los desfer */
 interface StyleSnapshot {
@@ -357,11 +363,16 @@ const PictEditForm = ({
     const observer = new IntersectionObserver(
       ([entry]) => {
         const top = entry.rootBounds?.top ?? 0;
+        // Marxa per dalt i ja se'n veu menys d'una part: la còpia entra
         setPreviewAway(
-          !entry.isIntersecting && entry.boundingClientRect.bottom <= top + 1,
+          entry.boundingClientRect.top < top &&
+            entry.intersectionRatio < PREVIEW_COPY_VISIBLE_RATIO,
         );
       },
-      { root: scroller },
+      {
+        root: scroller,
+        threshold: [0, PREVIEW_COPY_VISIBLE_RATIO, 1],
+      },
     );
     observer.observe(preview);
     return () => observer.disconnect();
@@ -399,15 +410,8 @@ const PictEditForm = ({
           container={copyFrame}
           mountOnEnter
           unmountOnExit
-          timeout={
-            reducedMotion
-              ? 0
-              : { enter: PREVIEW_COPY_IN_MS, exit: PREVIEW_COPY_OUT_MS }
-          }
-          easing={{
-            enter: "cubic-bezier(0.2, 0, 0, 1)",
-            exit: "cubic-bezier(0.3, 0, 1, 1)",
-          }}
+          timeout={reducedMotion ? 0 : PREVIEW_COPY_MS}
+          easing={PREVIEW_COPY_EASING}
         >
           <Box
             data-testid="pict-edit-preview-copy"

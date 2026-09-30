@@ -183,11 +183,11 @@ una targeta no ha canviat amb «Aplica a tots».
   focus va a la capçalera.
 - Quan la franja apareix o desapareix, el que s'està editant a sota **no es mou** sota el dit ni el
   ratolí: es compensa el desplaçament amb l'alçada de la franja. Sense animació.
-- Quan la previsualització surt de la vista per dalt, se'n veu una **còpia compacta** fixa a dalt de
-  la zona que es desplaça (com a molt, el 30 % de l'alçada o 200 px); quan l'original torna a la
-  vista, la còpia desapareix. La còpia és només per a la vista (`aria-hidden`, `inert`). Entra
-  lliscant des de dalt (320 ms) i torna amunt en marxar (220 ms), perquè no aparegui de cop; amb
-  moviment reduït, apareix i desapareix sense moviment. L'original no es mou del seu lloc.
+- Quan a la previsualització només se'n veu menys d'un terç per dalt, se'n veu una **còpia
+  compacta** fixa a dalt de la zona que es desplaça (com a molt, el 30 % de l'alçada o 200 px); quan
+  l'original torna a la vista, la còpia desapareix. La còpia és només per a la vista
+  (`aria-hidden`, `inert`). Entra i surt lliscant des de dalt, amb el mateix temps (220 ms) i la
+  mateixa corba, perquè no aparegui de cop; amb moviment reduït, sense moviment. L'original no es mou del seu lloc.
 
 **A la graella d'edició** (la targeta):
 

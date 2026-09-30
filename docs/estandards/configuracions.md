@@ -98,6 +98,13 @@ L'estàndard és **un de sol** per a totes les amplades: no hi ha components mò
 - **Breakpoint únic: `sm` (600px)** — `SETTINGS_MOBILE_BREAKPOINT`. És el de la **fila**, no el del panell: el panell canvia de nombre de columnes a `md` i a `lg`, i el que fa la fila a 600px no depèn de cap dels dos. Es tria `sm` i no `md` perquè `SettingsPanelLayout` ja apila les zones per sota de `md`: entre 600 i 900px la columna d'ajustos hi és sola i arriba a `SETTINGS_CONTROLS_WIDTH` (560px), prou perquè fins i tot el grup de cabell (7 toggles ≈ 399px) càpiga al costat del títol.
 - **Fila apilada per sota de `sm`** — `settingRowInline` porta `flexDirection: { xs: "column", sm: "row" }`. El títol va a dalt i el control a sota. Això és l'excepció declarada a la regla de «títol-esquerra/control-dreta»: en pantalla estreta un grup de toggles llarg no hi cap mai, i val més un apilat predictible que un wrap accidental. **Excepció de l'excepció**: `control="compact"` (switch, mostra de color) no apila mai — sempre hi caben i apilar-los només afegiria scroll.
 - **Control a amplada completa per sota de `sm`** — `settingControlWidth` porta `width: { xs: "100%" }` i `minWidth: { xs: 0 }`. El mínim de seguretat de 150px només té sentit quan el control comparteix línia amb el títol.
+- **El slider, amb marge a l'esquerra per sota de `sm`** — apilat sota el títol, començava arran de
+  la vora esquerra, alineat amb el títol. El tema (`MuiSlider` a `themeMui.ts`) li posa
+  `marginLeft: 2` en mòbil, per a tots els sliders de l'app.
+- **En tàctil, un slider només es mou arrossegant-ne el botó** — en desplaçar el panell el dit queia
+  a la barra i canviava un ajust sense voler. El tema, amb `(pointer: coarse)`, fa que la barra
+  deixi passar el gest (`pointer-events: none`, `touch-action: pan-y`) i que només el botó el
+  capturi. Tocar la barra ja no hi salta; el teclat i el ratolí no canvien.
 - **Indentació reduïda** — `SETTINGS_INDENT` és `{ xs: 1, sm: 3 }`. Recupera 16px d'amplada útil per fila sense perdre la lectura d'esquema en escriptori.
 - **Els toggles no es redueixen** — els 55×55 de `StyledToggleButtonGroup` són ≥44px, el mínim WCAG de diana tàctil. En mòbil el grup ocupa tota l'amplada i els botons flueixen en dues files (`flexWrap` ja present al styled).
 - **Preview acotat i sota l'AppBar** — a `SettingsPanelLayout`, el preview sticky porta `top: SETTINGS_APPBAR_OFFSET` (l'AppBar del diàleg és `position: fixed` per sota de `md`) i `maxHeight: SETTINGS_PREVIEW_MOBILE_MAX_HEIGHT` (35vh) amb `overflow: auto`, perquè la mostra no deixi els controls fora de vista. L'acotació val **sempre per a la mostra**; el que no s'acota mai és la llista de `previewAside`, que queda en flux i es llegeix amb l'scroll de la pàgina.

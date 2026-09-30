@@ -375,3 +375,54 @@ test("axe: el formulari (configuració plegada i desplegada) i la graella", asyn
     .analyze();
   expect(snackbar.violations).toEqual([]);
 });
+
+test.describe("al mòbil tàctil", () => {
+  test.use({ viewport: MOBILE, hasTouch: true, isMobile: true });
+
+  test("tocar la barra d'un slider no el canvia; arrossegar-ne el botó, sí", async ({
+    page,
+  }) => {
+    await openDocument(page);
+    const { dialog } = await openFirstWithSettings(page);
+    await expect(dialog.locator(".MuiCollapse-entered")).toHaveCount(1);
+    expect(
+      await page.evaluate(() => matchMedia("(pointer: coarse)").matches),
+    ).toBe(true);
+
+    const root = dialog
+      .locator(".MuiSlider-root")
+      .filter({ has: page.getByRole("slider", { name: "Radi" }) })
+      .first();
+    const slider = root.getByRole("slider");
+    await root.scrollIntoViewIfNeeded();
+    const before = await slider.getAttribute("aria-valuenow");
+
+    // El dit cau a la barra, lluny del botó (com en desplaçar la pàgina)
+    const box = (await root.boundingBox())!;
+    const thumb = (await root.locator(".MuiSlider-thumb").boundingBox())!;
+    const farX =
+      thumb.x > box.x + box.width / 2 ? box.x + 10 : box.x + box.width - 10;
+    await page.touchscreen.tap(farX, box.y + box.height / 2);
+    await expect(slider).toHaveAttribute("aria-valuenow", before!);
+
+    // Al mòbil, el slider no comença arran del títol
+    const label = dialog.getByText("Radi", { exact: true }).first();
+    const labelBox = (await label.boundingBox())!;
+    expect(box.x - labelBox.x).toBeGreaterThanOrEqual(15);
+
+    // Arrossegant el botó, sí que canvia
+    const cdp = await page.context().newCDPSession(page);
+    const x = thumb.x + thumb.width / 2;
+    const y = thumb.y + thumb.height / 2;
+    const touch = (type: string, px: number) =>
+      cdp.send("Input.dispatchTouchEvent", {
+        type,
+        touchPoints: type === "touchEnd" ? [] : [{ x: px, y }],
+      });
+    await touch("touchStart", x);
+    await touch("touchMove", x + 40);
+    await touch("touchMove", x + 80);
+    await touch("touchEnd", x + 80);
+    await expect(slider).not.toHaveAttribute("aria-valuenow", before!);
+  });
+});
