@@ -96,7 +96,8 @@ const messages = defineMessages({
     id: "features.sequence.status.hintLocalNoCloud",
     defaultMessage:
       "Es queda en aquest navegador i el pot esborrar sol. Descarrega-ho.",
-    description: "Explicació de l'esborrany amb les funcions de compte apagades",
+    description:
+      "Explicació de l'esborrany amb les funcions de compte apagades",
   },
   hintStaleCloud: {
     id: "features.sequence.status.hintStaleCloud",

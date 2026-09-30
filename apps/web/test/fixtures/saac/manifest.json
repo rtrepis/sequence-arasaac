@@ -8,7 +8,9 @@
       "pictograma amb una altra imatge triada (selectedId ≠ bestIdPicts[0])",
       "text propi (`text`) diferent de la paraula cercada"
     ],
-    "pestanyes": { "0": 7 },
+    "pestanyes": {
+      "0": 7
+    },
     "activeSAAC": 0,
     "teConfiguracioGlobal": false,
     "anadaITornada": "identic"
@@ -24,10 +26,15 @@
       "configuració global personalitzada (numerat, text a dalt, vora exterior)",
       "pell i cabell no per defecte"
     ],
-    "pestanyes": { "0": 3, "1": 5, "2": 4, "3": 0 },
+    "pestanyes": {
+      "0": 3,
+      "1": 5,
+      "2": 4
+    },
     "activeSAAC": 2,
     "teConfiguracioGlobal": true,
-    "anadaITornada": "identic"
+    "anadaITornada": "identic",
+    "notaV3": "En obrir-lo, la pestanya buida (la 3) es descarta: ADR-003, decisió 5. El fitxer en porta quatre."
   },
   "03-fonts-personalitzades.saac": {
     "format": "2.1.0",
@@ -44,7 +51,10 @@
       "imatge pròpia a Cloudinary — la que desa l'app amb compte",
       "configuració global amb fonts pròpies"
     ],
-    "pestanyes": { "0": 6, "1": 4 },
+    "pestanyes": {
+      "0": 6,
+      "1": 4
+    },
     "activeSAAC": 0,
     "teConfiguracioGlobal": true,
     "anadaITornada": "identic"
@@ -57,7 +67,11 @@
       "espai màxim entre pictogrames (10)",
       "un sol pictograma a la mida màxima (3.8)"
     ],
-    "pestanyes": { "0": 60, "1": 24, "2": 1 },
+    "pestanyes": {
+      "0": 60,
+      "1": 24,
+      "2": 1
+    },
     "activeSAAC": 0,
     "teConfiguracioGlobal": false,
     "anadaITornada": "identic"
@@ -65,7 +79,9 @@
   "05-nomes-configuracio.saac": {
     "format": "2.1.0",
     "descripcio": "Només la configuració global, sense cap seqüència (casella «Seqüència» desmarcada).",
-    "cobreix": ["fitxer sense `documentState`"],
+    "cobreix": [
+      "fitxer sense `documentState`"
+    ],
     "pestanyes": null,
     "activeSAAC": null,
     "teConfiguracioGlobal": true,
@@ -79,7 +95,10 @@
       "order: null i defaultSettings: null",
       "pictogrames sense fontSize ni vores"
     ],
-    "pestanyes": { "0": 2, "1": 3 },
+    "pestanyes": {
+      "0": 2,
+      "1": 3
+    },
     "activeSAAC": 1,
     "teConfiguracioGlobal": false,
     "anadaITornada": "viewSettings-per-defecte"
@@ -87,8 +106,12 @@
   "07-format-primitiu-sequence.saac": {
     "format": "primitiu (clau `sequence`)",
     "descripcio": "Format més antic: una sola seqüència a la clau `sequence`. Encara el llegeix `AppNavigationDrawer`, que la posa a la pestanya activa del document obert.",
-    "cobreix": ["clau `sequence` en comptes de `documentState`"],
-    "pestanyes": { "0": 3 },
+    "cobreix": [
+      "clau `sequence` en comptes de `documentState`"
+    ],
+    "pestanyes": {
+      "0": 3
+    },
     "activeSAAC": 0,
     "teConfiguracioGlobal": false,
     "anadaITornada": "sequence-a-documentState"
@@ -96,16 +119,26 @@
   "08-esquema-2-sequencia.saac": {
     "format": "esquema 2",
     "descripcio": "El 02 obert i desat amb «Desa el document» de l'esquema 2: `schemaVersion` i l'estil dins del document (`defaultSettings` i `styleView`). Generat per l'app, no a mà.",
-    "cobreix": ["seqüència amb l'estil sencer", "anada i tornada byte a byte de l'esquema 2"],
-    "pestanyes": { "0": 3, "1": 5, "2": 4, "3": 0 },
+    "cobreix": [
+      "seqüència amb l'estil sencer",
+      "anada i tornada byte a byte de l'esquema 2"
+    ],
+    "pestanyes": {
+      "0": 3,
+      "1": 5,
+      "2": 4
+    },
     "activeSAAC": 2,
     "teConfiguracioGlobal": true,
-    "anadaITornada": "identic"
+    "anadaITornada": "identic",
+    "notaV3": "En obrir-lo, la pestanya buida (la 3) es descarta: ADR-003, decisió 5. El fitxer en porta quatre."
   },
   "09-esquema-2-estil.saacstyle": {
     "format": "esquema 2 (fitxer d'estil)",
     "descripcio": "L'estil del 02 desat amb «Desa l'estil en un fitxer…»: només `schemaVersion` i `style`. Generat per l'app, no a mà.",
-    "cobreix": ["fitxer d'estil `.saacstyle`"],
+    "cobreix": [
+      "fitxer d'estil `.saacstyle`"
+    ],
     "pestanyes": null,
     "activeSAAC": null,
     "teConfiguracioGlobal": true,
@@ -118,7 +151,9 @@
       "estil parcial: fusió camp a camp amb l'estil per defecte",
       "sense `numberFont`, els números fan servir la lletra del text del fitxer"
     ],
-    "pestanyes": { "0": 7 },
+    "pestanyes": {
+      "0": 7
+    },
     "activeSAAC": 0,
     "teConfiguracioGlobal": true,
     "anadaITornada": "estil-fusionat"

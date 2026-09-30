@@ -7,7 +7,11 @@ import {
   ListSubheader,
 } from "@mui/material";
 import { AiOutlineCopy, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
-import { MdOutlineContentPaste, MdOutlineLibraryAdd } from "react-icons/md";
+import {
+  MdOutlineContentPaste,
+  MdOutlineLibraryAdd,
+  MdSettingsBackupRestore,
+} from "react-icons/md";
 import { TbColumnInsertRight } from "react-icons/tb";
 import { useIntl } from "react-intl";
 import { PictSequence } from "../../../types/sequence";
@@ -26,6 +30,11 @@ interface MouseActionListProps {
   pasteObject: PictSequence | undefined;
   /** Accions que el context que consumeix la llista ja ofereix pel seu compte */
   omit?: PictogramActionKey[];
+  /**
+   * El pictograma té retocs propis: només llavors hi ha «Restableix l'estil».
+   * Qui munta la llista ho sap millor (al diàleg, el formulari encara no desat)
+   */
+  customized?: boolean;
   /**
    * Si es passa, la llista no executa res: només diu quina acció s'ha triat.
    * Serveix al diàleg d'edició, que ha d'ajornar-la fins després de tancar-se
@@ -61,6 +70,14 @@ const actionGroups: ActionItem[][] = [
     // el símbol universal d'«adjuntar fitxer», no d'enganxar
     { key: "paste", icon: <MdOutlineContentPaste />, message: "paste" },
   ],
+  // Només si el pictograma té retocs propis (vegeu `customized`)
+  [
+    {
+      key: "resetStyle",
+      icon: <MdSettingsBackupRestore />,
+      message: "resetStyle",
+    },
+  ],
   [
     { key: "insert", icon: <TbColumnInsertRight />, message: "insert" },
     // Còpies apilades amb «+»: duplicar afegeix un pictograma a la seqüència,
@@ -85,6 +102,7 @@ const MouseActionList = ({
   copyAction,
   pasteObject,
   omit = [],
+  customized = false,
   onSelect,
 }: MouseActionListProps): React.ReactElement => {
   const intl = useIntl();
@@ -123,7 +141,12 @@ const MouseActionList = ({
       }
     >
       {actionGroups
-        .map((group) => group.filter(({ key }) => !omit.includes(key)))
+        .map((group) =>
+          group.filter(
+            ({ key }) =>
+              !omit.includes(key) && (key !== "resetStyle" || customized),
+          ),
+        )
         // Un grup que es queda buit per `omit` no ha de deixar cap separador
         .filter((group) => group.length > 0)
         .map((group, groupIndex) => (

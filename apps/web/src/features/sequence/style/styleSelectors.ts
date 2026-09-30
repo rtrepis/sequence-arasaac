@@ -1,7 +1,7 @@
 // Selectors de l'estil: quin és l'estil per defecte de l'usuari i amb quin es
 // veu el document obert. Tot el que pinta pictogrames del document ha de llegir
 // l'estil d'aquí, no de `ui.defaultSettings`: les preferències de qui obre un
-// document no el reescriuen (`docs/fonaments/sequencia-i-estil.md`).
+// document no el reescriuen (`docs/fonaments/03-model-contingut-estil.md`).
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/app/store";
 import { DefaultSettings } from "@/types/ui";
@@ -51,8 +51,10 @@ export const selectResolvedSequenceViews = createSelector(
 /** Els valors de reserva que `PictogramCard` necessita, a partir d'un estil. */
 export const cardDefaultsOf = ({
   pictSequence,
+  pictApiAra,
 }: DefaultSettings): PictogramCardDefaults => ({
   numbered: pictSequence.numbered,
+  fitzgerald: pictApiAra.fitzgerald,
   font: pictSequence.font,
   numberFont: pictSequence.numberFont,
   borderIn: pictSequence.borderIn,

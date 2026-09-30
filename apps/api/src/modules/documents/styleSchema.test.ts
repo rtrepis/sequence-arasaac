@@ -3,7 +3,7 @@
 // «Desa el document» inclou sempre l'estil, també al núvol: el client envia
 // `defaultSettings` i `styleView`, i els ha de tornar a rebre tal com els va
 // enviar. Els documents d'abans no en porten i s'han de continuar acceptant.
-// Vegeu docs/fonaments/sequencia-i-estil.md.
+// Vegeu docs/fonaments/03-model-contingut-estil.md.
 //
 // No toquen la base de dades: el model es construeix en memòria i
 // `serializeDocument` és el mateix camí que fa servir qualsevol lectura.

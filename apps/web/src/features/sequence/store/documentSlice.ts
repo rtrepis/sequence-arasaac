@@ -2,12 +2,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   PictSequence,
   Sequence,
-  PictSequenceApplyAll,
   PictSequenceSettingsForEdit,
   PictApiAraForEdit,
-  PictApiAraSettingsApplyAll,
 } from "@/types/sequence";
 import {
+  DocumentLayout,
   DocumentSAAC,
   SequenceStyle,
   SequenceStyleView,
@@ -22,7 +21,13 @@ import {
   resolveDocumentStyle,
   tabViewOf,
 } from "@features/sequence/style/styleModel";
-import { normalizeDocumentState } from "@features/sequence/style/saacFile";
+import { parseSaacValue } from "@features/sequence/saac/parse";
+import {
+  parseContextOf,
+  userPageOf,
+} from "@features/sequence/saac/saacContext";
+import { newSaacId } from "@features/sequence/saac/serialize";
+import { DEFAULT_FITZGERALD_CATEGORY_COLORS } from "@features/sequence/saac/fitzgerald";
 import {
   SEQ_VIEW_DEFAULT_SIZE_PICT,
   SEQ_VIEW_DEFAULT_PICT_SPACE,
@@ -60,7 +65,7 @@ export const DEFAULT_SEQUENCE_VIEW: SequenceViewSettings = {
 // l'estil per defecte de l'usuari fins que es desa o se'n toca l'estil. Així
 // neix amb l'estil de l'usuari encara que les preferències (les del compte, amb
 // el servidor adormit) arribin després de crear-lo.
-// Vegeu `docs/fonaments/sequencia-i-estil.md`.
+// Vegeu `docs/fonaments/03-model-contingut-estil.md`.
 const documentInitialState: DocumentSAAC = {
   id: getUniqueId(),
   title: undefined,
@@ -83,6 +88,12 @@ interface StyleSourceState {
 const userDefaultStyleOf = (state: StyleSourceState): SequenceStyle =>
   buildUserDefaultStyle(state.ui.defaultSettings, state.ui.viewSettings);
 
+/** La pàgina per defecte de l'usuari, amb la forma de `DocumentSAAC.layout`. */
+export const userLayoutOf = (state: StyleSourceState): DocumentLayout => {
+  const { size, orientation, direction } = userPageOf(state);
+  return { pageSize: size, orientation, direction };
+};
+
 // Thunk: carrega un document del backend per id (declarat abans del slice per poder-lo usar a extraReducers)
 export const loadDocumentThunk = createAsyncThunk<
   DocumentSAAC,
@@ -95,12 +106,17 @@ export const loadDocumentThunk = createAsyncThunk<
   } catch {
     return rejectWithValue("No s'ha pogut carregar el document");
   }
-  // Mateixa lectura que un fitxer: els documents desats abans de l'esquema 2
-  // no porten estil, i s'obren amb l'estil per defecte de qui els obre
-  const normalized = normalizeDocumentState(fetched, {
-    userDefault: userDefaultStyleOf(getState() as StyleSourceState),
-  });
-  return normalized?.document ?? fetched;
+  // Mateixa lectura que un fitxer (`features/sequence/saac/parse.ts`): el
+  // núvol conserva la forma de l'API, i el document es migra en llegir-lo. Els
+  // documents desats abans no porten estil ni pàgina, i s'obren amb els de qui
+  // els obre
+  const parsed = parseSaacValue(
+    { documentState: fetched },
+    parseContextOf(getState() as StyleSourceState),
+  );
+  if (parsed.kind !== "document") return fetched;
+  // L'id és el de MongoDB: si el document no en portava, és el de la petició
+  return { ...parsed.document, id: fetched.id || id };
 });
 
 const documentSlice = createSlice({
@@ -136,22 +152,32 @@ const documentSlice = createSlice({
       delete previousDocument.viewSettings[action.payload];
     },
 
-    addPictogram: (previousDocument, action: PayloadAction<PictSequence>) => {
-      previousDocument.content[previousDocument.activeSAAC] = [
-        ...previousDocument.content[previousDocument.activeSAAC],
-        action.payload,
-      ];
+    // Els pictogrames nous reben l'identificador del fitxer v3 en néixer: així
+    // és el mateix a cada desat
+    addPictogram: {
+      reducer: (previousDocument, action: PayloadAction<PictSequence>) => {
+        previousDocument.content[previousDocument.activeSAAC] = [
+          ...previousDocument.content[previousDocument.activeSAAC],
+          action.payload,
+        ];
+      },
+      prepare: (pictogram: PictSequence) => ({
+        payload: { ...pictogram, id: pictogram.id ?? newSaacId("p") },
+      }),
     },
 
-    insertPictogram: (
-      previousDocument,
-      action: PayloadAction<PictSequence>,
-    ) => {
-      previousDocument.content[previousDocument.activeSAAC].splice(
-        action.payload.indexSequence,
-        0,
-        action.payload,
-      );
+    // Un pictograma enganxat en porta un de nou: el de l'original ja hi és
+    insertPictogram: {
+      reducer: (previousDocument, action: PayloadAction<PictSequence>) => {
+        previousDocument.content[previousDocument.activeSAAC].splice(
+          action.payload.indexSequence,
+          0,
+          action.payload,
+        );
+      },
+      prepare: (pictogram: PictSequence) => ({
+        payload: { ...pictogram, id: newSaacId("p") },
+      }),
     },
 
     subtractPictogram: (previousDocument, action: PayloadAction<number>) => {
@@ -228,11 +254,13 @@ const documentSlice = createSlice({
       action: PayloadAction<PictApiAraForEdit>,
     ) => {
       const saac = previousDocument.activeSAAC;
-      previousDocument.content[saac].map(
-        (pictogram, index) =>
-          index === action.payload.indexSequence &&
-          (pictogram.img.settings = action.payload.settings!),
-      );
+      previousDocument.content[saac].forEach((pictogram, index) => {
+        if (index !== action.payload.indexSequence) return;
+        pictogram.img.settings = action.payload.settings!;
+        // Un altre pictograma d'ARASAAC pot ser d'una altra categoria
+        if (action.payload.category !== undefined)
+          pictogram.img.category = action.payload.category;
+      });
     },
 
     settingsPictSequence: (
@@ -247,72 +275,43 @@ const documentSlice = createSlice({
       );
     },
 
-    pictAraSettingsApplyAll: (
+    // «Aplica a tots»: canvia l'estil del document i treu aquestes propietats
+    // dels retocs de tots els pictogrames (fonament 03, §5). `base` és l'estil
+    // que té ara el document (el seu o l'heretat).
+    //
+    // Pell, cabell i color només es posen als pictogrames que els admeten: no
+    // tots els pictogrames d'ARASAAC tenen pell o cabell
+    pictStyleAppliedToAll: (
       previousDocument,
-      action: PayloadAction<PictApiAraSettingsApplyAll>,
+      action: PayloadAction<{
+        patch: {
+          pictApiAra?: Partial<DefaultSettings["pictApiAra"]>;
+          pictSequence?: Partial<DefaultSettings["pictSequence"]>;
+        };
+        base: DefaultSettings;
+      }>,
     ) => {
-      const allSequences = Object.values(previousDocument.content);
+      const { patch, base } = action.payload;
+      previousDocument.defaultSettings = {
+        pictApiAra: { ...base.pictApiAra, ...patch.pictApiAra },
+        pictSequence: { ...base.pictSequence, ...patch.pictSequence },
+      };
 
-      allSequences.forEach((sequence) => {
-        if (action.payload.skin)
-          sequence.forEach((p) => (p.img.settings.skin = action.payload.skin));
-
-        if (action.payload.hair)
-          sequence.forEach((p) => (p.img.settings.hair = action.payload.hair));
-
-        // Comprovació explícita: `color: false` és un valor vàlid (pictograma B/N)
-        if (action.payload.color !== undefined)
-          sequence.forEach(
-            (p) => (p.img.settings.color = action.payload.color),
-          );
-      });
-    },
-
-    pictSequenceApplyAll: (
-      previousDocument,
-      action: PayloadAction<PictSequenceApplyAll>,
-    ) => {
-      const allSequences = Object.values(previousDocument.content);
-
-      allSequences.forEach((sequence) => {
-        if (action.payload.textPosition)
-          sequence.forEach(
-            (p) => (p.settings.textPosition = action.payload.textPosition),
-          );
-
-        if (action.payload.fontFamily)
-          sequence.forEach(
-            (p) => (p.settings.fontFamily = action.payload.fontFamily),
-          );
-      });
-    },
-
-    borderInApplyAll: (
-      previousDocument,
-      action: PayloadAction<PictSequenceApplyAll>,
-    ) => {
       Object.values(previousDocument.content).forEach((sequence) =>
-        sequence.forEach((p) => (p.settings.borderIn = action.payload.borderIn!)),
-      );
-    },
-
-    borderOutApplyAll: (
-      previousDocument,
-      action: PayloadAction<PictSequenceApplyAll>,
-    ) => {
-      Object.values(previousDocument.content).forEach((sequence) =>
-        sequence.forEach(
-          (p) => (p.settings.borderOut = action.payload.borderOut!),
-        ),
-      );
-    },
-
-    fontSizeApplyAll: (
-      previousDocument,
-      action: PayloadAction<PictSequenceApplyAll>,
-    ) => {
-      Object.values(previousDocument.content).forEach((sequence) =>
-        sequence.forEach((p) => (p.settings.fontSize = action.payload.fontSize)),
+        sequence.forEach((pict: PictSequence) => {
+          Object.entries(patch.pictApiAra ?? {}).forEach(([key, value]) => {
+            const settings = pict.img.settings as Record<string, unknown>;
+            if (value !== undefined && settings[key] !== undefined)
+              settings[key] = value;
+          });
+          Object.entries(patch.pictSequence ?? {}).forEach(([key, value]) => {
+            if (value !== undefined)
+              (pict.settings as Record<string, unknown>)[key] =
+                typeof value === "object"
+                  ? JSON.parse(JSON.stringify(value))
+                  : value;
+          });
+        }),
       );
     },
 
@@ -383,12 +382,18 @@ const documentSlice = createSlice({
       previousDocument,
       action: PayloadAction<DocumentStyleSnapshot>,
     ) => {
-      const { content, viewSettings, defaultSettings, styleView } =
-        action.payload;
+      const {
+        content,
+        viewSettings,
+        defaultSettings,
+        styleView,
+        fitzgeraldColors,
+      } = action.payload;
       previousDocument.content = content;
       previousDocument.viewSettings = viewSettings;
       previousDocument.defaultSettings = defaultSettings;
       previousDocument.styleView = styleView;
+      previousDocument.fitzgeraldColors = fitzgeraldColors;
     },
 
     // Fa explícit l'estil que el document heretava, en desar-lo: el que s'ha
@@ -396,21 +401,42 @@ const documentSlice = createSlice({
     // canvia res del que es veu, i per això no és un canvi de contingut
     documentStyleMaterialized: (
       previousDocument,
-      action: PayloadAction<SequenceStyle>,
+      action: PayloadAction<{ style: SequenceStyle; layout: DocumentLayout }>,
     ) => {
       // Només s'omple el que falta: el que ja hi era no es reescriu, perquè
       // un canvi de referència faria creure que el document s'ha tocat (i, per
       // exemple, ja no es podria desfer l'últim canvi d'estil)
-      const style = action.payload;
+      const { style, layout } = action.payload;
       if (previousDocument.defaultSettings === undefined)
         previousDocument.defaultSettings = pictStyleOf(style);
       if (previousDocument.styleView === undefined)
         previousDocument.styleView = style.view;
+      if (previousDocument.fitzgeraldColors === undefined)
+        previousDocument.fitzgeraldColors =
+          style.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS;
+      // La pàgina també és del document (B26): la que heretava, s'hi escriu
+      if (previousDocument.layout === undefined)
+        previousDocument.layout = layout;
       const tabBase = tabViewOf(previousDocument.styleView);
       Object.keys(previousDocument.content).forEach((key) => {
         if (previousDocument.viewSettings[Number(key)] === undefined)
           previousDocument.viewSettings[Number(key)] = { ...tabBase };
       });
+    },
+
+    // Canvia la pàgina del document (B26): mida, orientació o direcció. `base`
+    // és la que té ara (la seva o, si l'hereta, la de les preferències)
+    documentLayoutChanged: (
+      previousDocument,
+      action: PayloadAction<{
+        layout: Partial<DocumentLayout>;
+        base: DocumentLayout;
+      }>,
+    ) => {
+      previousDocument.layout = {
+        ...(previousDocument.layout ?? action.payload.base),
+        ...action.payload.layout,
+      };
     },
 
     // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
@@ -504,6 +530,7 @@ export interface DocumentStyleSnapshot {
   viewSettings: DocumentSAAC["viewSettings"];
   defaultSettings: DocumentSAAC["defaultSettings"];
   styleView: DocumentSAAC["styleView"];
+  fitzgeraldColors: DocumentSAAC["fitzgeraldColors"];
 }
 
 export const takeDocumentStyleSnapshot = (
@@ -513,6 +540,7 @@ export const takeDocumentStyleSnapshot = (
   viewSettings: document.viewSettings,
   defaultSettings: document.defaultSettings,
   styleView: document.styleView,
+  fitzgeraldColors: document.fitzgeraldColors,
 });
 
 /**
@@ -523,6 +551,7 @@ export const selectDocumentToSave = (state: StyleSourceState): DocumentSAAC =>
   materializeDocumentStyle(
     state.document,
     resolveDocumentStyle(state.document, userDefaultStyleOf(state)),
+    userLayoutOf(state),
   );
 
 /**
@@ -553,6 +582,7 @@ export const saveDocumentThunk = createAsyncThunk<
       const doc = materializeDocumentStyle(
         requested,
         resolveDocumentStyle(requested, userDefaultStyleOf(state)),
+        userLayoutOf(state),
       );
       const { id, ...payload } = doc;
       if (isMongoId(id) && !asCopy) {
@@ -622,11 +652,6 @@ export const {
   updatePictSequence: updatePictSequenceActionCreator,
   selectedId: selectedIdActionCreator,
   searched: searchedActionCreator,
-  pictAraSettingsApplyAll: pictAraSettingsApplyAllActionCreator,
-  pictSequenceApplyAll: pictSequenceApplyAllActionCreator,
-  borderInApplyAll: borderInApplyAllActionCreator,
-  borderOutApplyAll: borderOutApplyAllActionCreator,
-  fontSizeApplyAll: fontSizeApplyAllActionCreator,
   settingsPictApiAra: settingsPictApiAraActionCreator,
   settingsPictSequence: settingsPictSequenceActionCreator,
   updateSequenceViewSettings: updateSequenceViewSettingsActionCreator,
@@ -635,6 +660,8 @@ export const {
   applyDocumentStyle: applyDocumentStyleActionCreator,
   restoreDocumentStyle: restoreDocumentStyleActionCreator,
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
+  documentLayoutChanged: documentLayoutChangedActionCreator,
+  pictStyleAppliedToAll: pictStyleAppliedToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
   removeCloudImage: removeCloudImageActionCreator,
   replaceCloudImage: replaceCloudImageActionCreator,

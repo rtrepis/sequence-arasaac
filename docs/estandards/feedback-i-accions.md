@@ -62,7 +62,7 @@ Dos llocs per a dues coses diferents. **El criteri és què diu el missatge, no 
 L'app **no té desfer**, amb una sola excepció: **aplicar un estil al document** («Aplica el meu
 estil per defecte», «Carrega un estil des d'un fitxer…», o obrir un fitxer d'estil amb un document
 obert) es pot desfer des del snackbar que en surt, mentre el document no s'hagi tocat des d'aleshores (`features/sequence/store/styleSlice.ts`;
-vegeu `docs/fonaments/sequencia-i-estil.md`). La resta de `features/sequence` no té `undo`, i per
+vegeu `docs/fonaments/03-model-contingut-estil.md`). La resta de `features/sequence` no té `undo`, i per
 això el que protegeix la feina és on viu cada acció i quan demana permís.
 
 - **El criteri és quant costa refer-ho, mai com sona l'acció.** Treure un pictograma es repeteix

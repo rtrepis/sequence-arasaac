@@ -1,21 +1,40 @@
 import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
-  title: {
-    id: "components.pictEditSettings.settings.label",
-    defaultMessage: "Settings Pictogram",
-    description: "Title section Pictogram Edit ",
-  },
   reset: {
     id: "components.pictEdit.reset",
-    defaultMessage: "Restore pictogram",
+    defaultMessage: "Restableix",
     description:
-      "Botó que torna aquest pictograma als valors per defecte de l'usuari",
+      "Botó que esborra els retocs d'aquest pictograma: torna a l'estil del document (es pot desfer)",
   },
   tooltipReset: {
     id: "components.pictEdit.tooltipReset",
-    defaultMessage: "Return this pictogram to your default values",
-    description: "Tooltip del botó de restaurar el pictograma",
+    defaultMessage:
+      "Torna aquest pictograma a l'estil del document. Es pot desfer.",
+    description: "Tooltip del botó «Restableix» del pictograma",
+  },
+  customized: {
+    id: "components.pictEdit.customized",
+    defaultMessage: "Personalitzat",
+    description:
+      "Franja a sobre de la configuració: el pictograma té retocs propis, diferents de l'estil del document",
+  },
+  settings: {
+    id: "components.pictEdit.settings",
+    defaultMessage: "Configuració",
+    description:
+      "Nom accessible del botó que obre i tanca la configuració del pictograma",
+  },
+  resetDone: {
+    id: "components.pictEdit.resetDone",
+    defaultMessage: "Estil restablert",
+    description:
+      "Snackbar després de «Restableix» un pictograma: se n'han tret els retocs (es pot desfer)",
+  },
+  undo: {
+    id: "components.pictEdit.undo",
+    defaultMessage: "Desfés",
+    description: "Botó del snackbar que desfà «Restableix» dins del formulari",
   },
 });
 

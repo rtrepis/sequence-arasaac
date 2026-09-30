@@ -64,6 +64,14 @@ interface StyleUndoSnackbarProps {
   returnFocusRef?: RefObject<HTMLElement>;
 }
 
+/** Què s'ha fet, segons d'on ve el canvi. */
+const CHANGED_MESSAGE = {
+  file: messages.changedFile,
+  userDefault: messages.changedUserDefault,
+  applyAll: messages.changedApplyAll,
+  reset: messages.changedReset,
+} as const;
+
 const StyleUndoSnackbar = ({
   placement,
   returnFocusRef,
@@ -135,11 +143,7 @@ const StyleUndoSnackbar = ({
           </StyledButton>
         }
       >
-        {intl.formatMessage(
-          snackbar.source === "file"
-            ? messages.changedFile
-            : messages.changedUserDefault,
-        )}
+        {intl.formatMessage(CHANGED_MESSAGE[snackbar.source])}
       </Alert>
     </Snackbar>
   );

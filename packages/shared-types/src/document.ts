@@ -37,7 +37,7 @@ export interface DocumentThumbnailPict {
  *
  * És la base de les pestanyes: cada pestanya porta els seus `viewSettings`, i els
  * que coincideixen amb aquesta base segueixen l'estil quan es canvia (vegeu
- * `docs/fonaments/sequencia-i-estil.md`).
+ * `docs/fonaments/03-model-contingut-estil.md`).
  */
 export interface SequenceStyleView extends SequenceViewSettings {
   sequenceSpaceBetween: number;

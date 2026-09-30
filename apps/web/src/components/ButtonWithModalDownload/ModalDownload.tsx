@@ -1,4 +1,4 @@
-import { DialogContentText, TextField } from "@mui/material";
+import { Box, DialogContentText, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import messages from "./ModalDownload.lang";
@@ -6,16 +6,26 @@ import messages from "./ModalDownload.lang";
 import confirmMessages from "@components/ConfirmDialog/ConfirmDialog.lang";
 import { AppDialog, AppDialogActions } from "@components/AppDialog";
 import StyledButton from "@/style/StyledButton";
+import { useStore } from "react-redux";
+import type { RootState } from "@/app/store";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { documentStyleMaterializedActionCreator } from "@features/sequence/store/documentSlice";
 import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import {
-  buildDocumentFile,
-  buildStyleFile,
   DOCUMENT_FILE_EXTENSION,
   STYLE_FILE_EXTENSION,
-} from "@features/sequence/style/saacFile";
+} from "@features/sequence/saac/types";
+import {
+  buildStyleFileV3,
+  documentToV3,
+  serializeSaac,
+} from "@features/sequence/saac/serialize";
+import { serializeContextOf } from "@features/sequence/saac/saacContext";
+import {
+  downloadSaac,
+  SaacFileExtension,
+} from "@features/sequence/saac/download";
 import { trackEvent } from "@shared/hooks/usePageTracking";
 import { useFeedback } from "@/context/FeedbackContext";
 import feedbackMessages from "@/context/FeedbackContext/FeedbackContext.lang";
@@ -31,7 +41,7 @@ interface ModalDownloadProps {
 }
 
 /**
- * Desar a fitxer, amb una sola acció (`docs/fonaments/sequencia-i-estil.md`,
+ * Desar a fitxer, amb una sola acció (`docs/fonaments/03-model-contingut-estil.md`,
  * punt 2): «Desa el document» se n'endú sempre l'estil. Abans hi havia dues
  * caselles —seqüència i configuració— que donaven tres combinacions, i la del
  * document sense estil feia que en obrir-lo es veiés amb les preferències de
@@ -45,6 +55,7 @@ const ModalDownload = ({
 }: ModalDownloadProps): React.ReactElement => {
   const documentSaac = useAppSelector((state) => state.document);
   const style = useAppSelector(selectDocumentStyle);
+  const store = useStore<RootState>();
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { showSnackbar } = useFeedback();
@@ -55,16 +66,8 @@ const ModalDownload = ({
     setFileName(event.target.value);
   };
 
-  const download = (content: object, extension: string) => {
-    const isoString = new Date().toISOString();
-    const fileElement = window.document.createElement("a");
-    const file = new Blob([JSON.stringify(content)], { type: "text/plain" });
-    fileElement.href = URL.createObjectURL(file);
-    fileElement.download =
-      fileName !== ""
-        ? `${fileName}${extension}`
-        : `SequenciAAC_${isoString.slice(0, -5)}${extension}`;
-    fileElement.click();
+  const download = (json: string, extension: SaacFileExtension) => {
+    downloadSaac(json, fileName, extension);
 
     showSnackbar({
       message: intl.formatMessage(feedbackMessages.saveSuccess),
@@ -74,10 +77,25 @@ const ModalDownload = ({
   };
 
   const onSaveDocument = () => {
-    download(buildDocumentFile(documentSaac, style), DOCUMENT_FILE_EXTENSION);
-    // El que s'ha desat ja té l'estil propi: si el document l'heretava, deixa
-    // de seguir l'estil per defecte, com qualsevol document obert d'un fitxer
-    dispatch(documentStyleMaterializedActionCreator(style));
+    // El document sencer en format v3: contingut, estil, pàgina i imatges
+    const file = documentToV3(
+      documentSaac,
+      serializeContextOf(store.getState()),
+    );
+    download(serializeSaac(file), DOCUMENT_FILE_EXTENSION);
+    // El que s'ha desat ja té l'estil i la pàgina propis: si el document els
+    // heretava, deixa de seguir els de l'usuari, com qualsevol document obert
+    // d'un fitxer
+    dispatch(
+      documentStyleMaterializedActionCreator({
+        style,
+        layout: {
+          pageSize: file.page.size,
+          orientation: file.page.orientation,
+          direction: file.page.direction,
+        },
+      }),
+    );
     dispatch(documentMadeDurableActionCreator({ kind: "file" }));
     trackEvent({
       event: "safe-event",
@@ -89,7 +107,7 @@ const ModalDownload = ({
 
   const onSaveStyle = () => {
     // Desar l'estil no salva cap feina: no compta com a còpia del document
-    download(buildStyleFile(style), STYLE_FILE_EXTENSION);
+    download(serializeSaac(buildStyleFileV3(style)), STYLE_FILE_EXTENSION);
     trackEvent({
       event: "safe-event",
       event_category: "file",
@@ -136,6 +154,39 @@ const ModalDownload = ({
           kind === "style" ? messages.styleHelper : messages.saveHelper,
         )}
       </DialogContentText>
+
+      {/* Què es guarda i què no: el document és autocontingut, i les
+          preferències de l'app no hi van mai (fonament 03, §3) */}
+      {kind === "document" && (
+        <Box
+          component="section"
+          aria-labelledby="download-dialog-what-is-saved"
+          sx={{
+            border: 1,
+            borderColor: "divider",
+            borderRadius: 1,
+            px: 2,
+            py: 1.5,
+          }}
+        >
+          <Typography
+            id="download-dialog-what-is-saved"
+            component="h3"
+            variant="subtitle2"
+          >
+            {intl.formatMessage(messages.whatIsSavedTitle)}
+          </Typography>
+          <Typography component="ul" variant="body2" sx={{ pl: 2.5, my: 1 }}>
+            <li>{intl.formatMessage(messages.whatIsSavedSequences)}</li>
+            <li>{intl.formatMessage(messages.whatIsSavedStyle)}</li>
+            <li>{intl.formatMessage(messages.whatIsSavedPage)}</li>
+            <li>{intl.formatMessage(messages.whatIsSavedImages)}</li>
+          </Typography>
+          <Typography variant="body2">
+            {intl.formatMessage(messages.whatIsNotSaved)}
+          </Typography>
+        </Box>
+      )}
 
       {/* `TextField` i no `InputLabel` + `Input`: així el nom del camp queda
           lligat al camp, que abans no ho estava */}

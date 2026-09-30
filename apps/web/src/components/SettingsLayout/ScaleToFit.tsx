@@ -12,6 +12,12 @@ interface ScaleToFitProps {
   maxHeight?: ResponsiveStyleValue<string | number>;
 }
 
+/**
+ * Més que el gruix d'una barra de desplaçament (uns 15 px als navegadors
+ * d'escriptori): el que canvia l'amplada quan la barra apareix o desapareix.
+ */
+const SCROLLBAR_ALLOWANCE = 24;
+
 interface Fit {
   scale: number;
   width: number;
@@ -30,7 +36,8 @@ interface Fit {
  * Mesura la mida natural del contingut —`scrollWidth`/`scrollHeight`, que
  * inclouen el que sobresurt de la targeta, com una paraula més ampla que ella—
  * i la compara amb l'amplada disponible i l'alçada màxima. `transform` no
- * canvia la mida de maquetació, de manera que tornar a mesurar no entra en bucle.
+ * canvia la mida de maquetació del contingut; l'alçada del contenidor, sí, i
+ * això podia entrar en bucle amb la barra de desplaçament (vegeu `measure`).
  */
 const ScaleToFit = ({
   children,
@@ -39,6 +46,12 @@ const ScaleToFit = ({
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   const [fit, setFit] = useState<Fit>({ scale: 1, width: 0, height: 0 });
+
+  // L'escala que hi ha ara, i amb quina amplada disponible es va calcular. En
+  // una ref i no només a l'estat: així es pot saber si ha canviat sense cridar
+  // `setFit`, que programa un render encara que torni el mateix valor
+  const fitRef = useRef<Fit>(fit);
+  const measuredWidth = useRef(0);
 
   const measure = useCallback(() => {
     const outer = outerRef.current;
@@ -51,19 +64,33 @@ const ScaleToFit = ({
 
     const limit = parseFloat(getComputedStyle(outer).maxHeight);
     const availableHeight = Number.isFinite(limit) ? limit : Infinity;
-    const scale = Math.min(
-      1,
-      outer.clientWidth / width,
-      availableHeight / height,
-    );
+    const availableWidth = outer.clientWidth;
+    const scale = Math.min(1, availableWidth / width, availableHeight / height);
 
-    setFit((previous) =>
+    const previous = fitRef.current;
+    if (
       previous.scale === scale &&
       previous.width === width &&
       previous.height === height
-        ? previous
-        : { scale, width, height },
-    );
+    )
+      return;
+
+    // Contra el bucle: escalar canvia l'alçada, l'alçada fa aparèixer o
+    // desaparèixer la barra de desplaçament del diàleg, i la barra canvia
+    // l'amplada disponible, que torna a canviar l'escala. Amb el mateix
+    // contingut, l'escala només torna a créixer si l'espai s'ha eixamplat més
+    // que el gruix d'una barra de desplaçament
+    const sameContent = previous.width === width && previous.height === height;
+    if (
+      sameContent &&
+      scale > previous.scale &&
+      availableWidth - measuredWidth.current <= SCROLLBAR_ALLOWANCE
+    )
+      return;
+
+    measuredWidth.current = availableWidth;
+    fitRef.current = { scale, width, height };
+    setFit(fitRef.current);
   }, []);
 
   // A cada render: el contingut canvia de mida amb cada ajust del formulari

@@ -4,13 +4,14 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Proves de regressió del format `.saac` amb les fixtures de
-// `test/fixtures/saac/` (vegeu-ne el README), i de l'estil de la seqüència
-// (`docs/fonaments/sequencia-i-estil.md`).
+// `test/fixtures/saac/` (vegeu-ne el README), i de l'estil del document
+// (`docs/fonaments/03-model-contingut-estil.md`).
 //
-// Des de l'esquema 2, desar una seqüència hi afegeix sempre l'estil: tornar a
-// desar un fitxer de la 2.1.0 ja no en dona el mateix byte a byte, sinó el
-// mateix document amb l'estil a dins. El que sí ha de ser idèntic byte a byte
-// és l'anada i tornada d'un fitxer de l'esquema 2.
+// Des del format v3 (`docs/decisions/ADR-003-model-document-saac-v3.md`),
+// desar escriu sempre el v3: un fitxer antic s'obre, es migra, i en tornar-lo
+// a desar en surt un v3. El que ha de ser idèntic és l'anada i tornada d'un v3
+// (tret de `meta.updatedAt`), i la vista, que es pinta igual que abans. Les
+// proves fines de la migració són a `src/features/sequence/saac/saac.test.ts`.
 //
 // Són la xarxa del canvi de model de dades que demana el mode lliure
 // (`docs/spec-mode-lliure.md` a la branca `feature/mode-lliure`, §4 i §12): un `.saac` desat amb la versió
@@ -53,20 +54,20 @@ interface SaacFile {
   style?: { pictSequence: unknown; pictApiAra: unknown; view: unknown };
 }
 
+// Forma mínima d'un fitxer v3 per comparar-lo
+interface V3File {
+  format?: string;
+  kind?: string;
+  schemaVersion?: number;
+  meta?: Record<string, unknown>;
+  style?: { card: unknown; pictogram: unknown };
+  sequences?: { pictograms: unknown[] }[];
+  [key: string]: unknown;
+}
+
 const manifest = JSON.parse(
   fs.readFileSync(path.join(FIXTURES, "manifest.json"), "utf8"),
 ) as Record<string, FixtureExpectation>;
-
-// La vista que reben les pestanyes que no en porten: la de l'estil per defecte,
-// que en un navegador nou és la de `uiSlice` (`VIEW_DEFAULT_*`)
-const DEFAULT_TAB_VIEW = {
-  sizePict: 1,
-  pictSpaceBetween: 1,
-  alignmentH: "left",
-  alignmentV: "top",
-};
-// La lletra de l'estil per defecte en un navegador nou
-const DEFAULT_FONT_FAMILY = "Roboto";
 
 // Imatges d'ARASAAC i de Cloudinary servides des del disc: les captures no
 // poden dependre de la xarxa. Cada id cau sempre a la mateixa imatge.
@@ -195,7 +196,7 @@ for (const [name, expected] of Object.entries(manifest)) {
         // «Només preferències» s'interpreta com a fitxer d'estil
         await expect(
           page.getByRole("dialog", {
-            name: "Vols fer servir aquest estil per defecte?",
+            name: "Aquest fitxer és un estil, no un document",
           }),
         ).toBeVisible();
         return;
@@ -214,105 +215,61 @@ for (const [name, expected] of Object.entries(manifest)) {
       );
     });
 
-    test("desar-lo de nou conserva el document i hi posa l'estil", async ({
-      page,
-    }) => {
+    test("desar-lo de nou dona un v3, que torna igual", async ({ page }) => {
       await openFixture(page, name);
       const original = JSON.parse(readFixture(name)) as SaacFile;
 
       if (!expected.pestanyes) {
-        // Fitxer d'estil sense seqüència oberta: es fa servir per defecte, i
-        // «Desa l'estil» en torna el mateix estil
+        // Fitxer d'estil sense document obert: es fa servir per defecte, i
+        // «Desa l'estil» en torna el mateix estil, en v3
         await page
           .getByRole("dialog")
-          .getByRole("button", { name: "Fes-lo servir per defecte" })
+          .getByRole("button", { name: "Fes-lo el meu estil per defecte" })
           .click();
         await expect(
           page.getByText("S'ha desat com a estil per defecte"),
         ).toBeVisible();
-        const savedText = await downloadSaac(page, "style");
-        const saved = JSON.parse(savedText) as SaacFile;
-        // Un fitxer d'estil de l'esquema 2 torna byte a byte
-        if (original.schemaVersion === 2) {
-          expect(savedText).toBe(readFixture(name));
-          return;
-        }
-        expect(saved.schemaVersion).toBe(2);
-        expect(saved.style?.pictSequence).toEqual(
-          original.defaultSettings?.pictSequence,
+        const saved = JSON.parse(await downloadSaac(page, "style")) as V3File;
+        expect(saved).toMatchObject({
+          format: "sequenciaac",
+          kind: "style",
+          schemaVersion: 3,
+        });
+        const source = original.style ?? original.defaultSettings!;
+        expect(saved.style!.card).toMatchObject(
+          source.pictSequence as Record<string, unknown>,
         );
-        expect(saved.style?.pictApiAra).toEqual(
-          original.defaultSettings?.pictApiAra,
-        );
+        const { fitzgerald: _none, ...pictogram } = source.pictApiAra as Record<
+          string,
+          unknown
+        >;
+        expect(saved.style!.pictogram).toMatchObject(pictogram);
         return;
       }
       await expectLoaded(page);
 
       const savedText = await downloadSaac(page, "document");
-      const saved = JSON.parse(savedText) as SaacFile;
-      expect(saved.schemaVersion).toBe(2);
-      expect(saved).not.toHaveProperty("defaultSettings");
-      const state = saved.documentState!;
-      expect(state.styleView).toBeDefined();
+      const saved = JSON.parse(savedText) as V3File;
+      expect(saved).toMatchObject({
+        format: "sequenciaac",
+        kind: "document",
+        schemaVersion: 3,
+      });
+      // Les pestanyes buides es descarten; els pictogrames, tots
+      expect(saved.sequences!.map((s) => s.pictograms.length)).toEqual(
+        Object.values(expected.pestanyes),
+      );
 
-      if (original.schemaVersion === 2) {
-        // Esquema 2: el mateix fitxer, byte a byte
-        expect(savedText).toBe(readFixture(name));
-      } else if (expected.anadaITornada === "identic") {
-        // El document, igual; l'estil, el que portava el fitxer o el per defecte
-        const { defaultSettings, styleView: _style, ...rest } = state;
-        const originalState = { ...original.documentState! };
-        delete originalState.defaultSettings;
-        expect(rest).toEqual(originalState);
-        if (expected.teConfiguracioGlobal)
-          expect(defaultSettings).toEqual(original.defaultSettings);
-        else
-          expect(defaultSettings?.pictSequence.font.family).toBe(
-            DEFAULT_FONT_FAMILY,
-          );
-      } else if (expected.anadaITornada === "estil-fusionat") {
-        // Estil parcial: el que porta el fitxer, i la resta del per defecte
-        const fileStyle = original.defaultSettings as unknown as {
-          pictSequence: { font: unknown };
-          pictApiAra: unknown;
-        };
-        const savedStyle = state.defaultSettings as unknown as {
-          pictSequence: { font: unknown; numberFont: unknown };
-          pictApiAra: unknown;
-        };
-        expect(state.content).toEqual(original.documentState!.content);
-        expect(state.viewSettings).toEqual(
-          original.documentState!.viewSettings,
-        );
-        expect(savedStyle.pictSequence).toMatchObject(fileStyle.pictSequence);
-        expect(savedStyle.pictApiAra).toEqual(fileStyle.pictApiAra);
-        // Sense lletra per als números, la del text del fitxer
-        expect(savedStyle.pictSequence.numberFont).toEqual(
-          fileStyle.pictSequence.font,
-        );
-      } else if (expected.anadaITornada === "viewSettings-per-defecte") {
-        // Sense vista al fitxer: la de l'estil per defecte a totes les pestanyes
-        expect(state.content).toEqual(original.documentState!.content);
-        expect(state.viewSettings).toEqual(
-          Object.fromEntries(
-            Object.keys(state.content).map((key) => [key, DEFAULT_TAB_VIEW]),
-          ),
-        );
-        expect(state.activeSAAC).toBe(original.documentState!.activeSAAC);
-        expect(state.title).toBe(original.documentState!.title);
-      } else {
-        // Format primitiu: la seqüència és la primera pestanya d'un document nou
-        expect(state.content["0"]).toEqual(original.sequence);
-      }
-
-      // L'esquema 2 sí que fa l'anada i tornada byte a byte
+      // L'anada i tornada d'un v3: el mateix fitxer, tret de l'hora de desar
       await openFixture(page, asUpload(savedText, "tornada.saac"), {
         navigate: false,
       });
-      // Just després de desar, l'avís diu «desat»: el de «carregat» vol dir
-      // que el fitxer ja s'ha tornat a llegir
       await expectLoaded(page);
-      expect(await downloadSaac(page, "document")).toBe(savedText);
+      const again = JSON.parse(await downloadSaac(page, "document")) as V3File;
+      expect({ ...again, meta: { ...again.meta, updatedAt: "" } }).toEqual({
+        ...saved,
+        meta: { ...saved.meta, updatedAt: "" },
+      });
     });
 
     if (expected.pestanyes) {
@@ -323,6 +280,12 @@ for (const [name, expected] of Object.entries(manifest)) {
         await expect(page.getByText("Fitxer carregat correctament")).toBeHidden(
           { timeout: 15000 },
         );
+        // El bàner d'obrir (versió anterior, estil propi) no és del document:
+        // es tanca perquè no desplaci el full ni una fracció de píxel
+        const closeBanner = page
+          .getByRole("status")
+          .getByRole("button", { name: "Tanca l'avís" });
+        if (await closeBanner.count()) await closeBanner.click();
         await page.getByRole("tab", { name: "Vista" }).click();
 
         const sheet = page.locator(".preview-content");
@@ -386,9 +349,8 @@ test.describe("estil del document", () => {
   }) => {
     await openFixture(page, "02-diverses-pestanyes.saac");
     await expectLoaded(page);
-    const original = JSON.parse(
-      readFixture("02-diverses-pestanyes.saac"),
-    ) as SaacFile;
+    // Com era abans del canvi (desar no s'endú el desfer)
+    const original = JSON.parse(await downloadSaac(page, "document")) as V3File;
 
     await openStylePanel(page);
     await page
@@ -404,26 +366,21 @@ test.describe("estil del document", () => {
 
     // Amb l'estil per defecte: sense numerar i amb la vista per defecte. Obrir
     // el 02 (que portava configuració) no ha tocat l'estil per defecte de l'usuari
-    const changed = JSON.parse(
-      await downloadSaac(page, "document"),
-    ) as SaacFile;
-    const changedState = changed.documentState as unknown as {
-      defaultSettings: { pictSequence: { numbered: boolean } };
-      viewSettings: Record<string, { sizePict: number }>;
+    const changed = JSON.parse(await downloadSaac(page, "document")) as {
+      style: { card: { numbered: boolean }; view: { sizePict: number } };
+      sequences: { style?: { view?: { sizePict?: number } } }[];
     };
-    expect(changedState.defaultSettings.pictSequence.numbered).toBe(false);
-    expect(changedState.viewSettings["0"].sizePict).toBe(1);
+    expect(changed.style.card.numbered).toBe(false);
+    expect(
+      changed.sequences[0].style?.view?.sizePict ?? changed.style.view.sizePict,
+    ).toBe(1);
 
-    // Desfer torna exactament al que hi havia (desar no s'ha endut el desfer)
+    // Desfer torna exactament al que hi havia
     await page.getByRole("button", { name: "Desfés" }).click();
     await expect(page.getByText("S'ha desfet el canvi d'estil")).toBeVisible();
-    const undone = JSON.parse(await downloadSaac(page, "document")) as SaacFile;
-    expect(undone.documentState?.defaultSettings).toEqual(
-      original.defaultSettings,
-    );
-    expect(undone.documentState?.viewSettings).toEqual(
-      original.documentState?.viewSettings,
-    );
+    const undone = JSON.parse(await downloadSaac(page, "document")) as V3File;
+    expect(undone.style).toEqual(original.style);
+    expect(undone.sequences).toEqual(original.sequences);
   });
 
   test("el «Desfés» s'abasta amb el teclat just després de l'acció", async ({
@@ -480,6 +437,13 @@ test.describe("estil del document", () => {
     await expectLoaded(page);
     await openFixture(page, "05-nomes-configuracio.saac", { navigate: false });
 
+    // Obert com a document, pregunta què se'n fa
+    await page
+      .getByRole("dialog", {
+        name: "Aquest fitxer és un estil, no un document",
+      })
+      .getByRole("button", { name: "Aplica'l a aquest document" })
+      .click();
     await expect(
       page.getByText("S'ha aplicat l'estil del fitxer al document."),
     ).toBeVisible();
@@ -498,9 +462,9 @@ test.describe("estil del document", () => {
     const style = JSON.parse(
       readFixture("05-nomes-configuracio.saac"),
     ) as SaacFile;
-    const saved = JSON.parse(await downloadSaac(page, "style")) as SaacFile;
-    expect(saved.style?.pictSequence).toEqual(
-      style.defaultSettings?.pictSequence,
+    const saved = JSON.parse(await downloadSaac(page, "style")) as V3File;
+    expect(saved.style?.card).toMatchObject(
+      style.defaultSettings?.pictSequence as Record<string, unknown>,
     );
   });
 });

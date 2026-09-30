@@ -43,10 +43,7 @@ import {
   isWorkAtRisk,
 } from "@features/sequence/store/documentStatusSlice";
 import { useOpenSaacFile } from "@features/sequence/hooks/useOpenSaacFile";
-import {
-  DOCUMENT_FILE_EXTENSION,
-  STYLE_FILE_EXTENSION,
-} from "@features/sequence/style/saacFile";
+import { SAAC_FILE_ACCEPT } from "@features/sequence/saac/types";
 import PendingDefaultStyleDialog from "@features/sequence/components/DocumentStyle/PendingDefaultStyleDialog";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
 import UserAvatar from "@components/UserAvatar/UserAvatar";
@@ -404,7 +401,7 @@ const AppNavigationDrawer = ({
         type="file"
         style={{ display: "none" }}
         onChange={handleFileLoad}
-        accept={`${DOCUMENT_FILE_EXTENSION},${STYLE_FILE_EXTENSION},text/plain,application/json`}
+        accept={SAAC_FILE_ACCEPT}
       />
 
       {/* La pregunta d'un fitxer d'estil obert sense cap document: és el menú

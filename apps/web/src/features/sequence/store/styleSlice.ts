@@ -6,11 +6,14 @@
 // Viu a Redux i no en un component perquè el fan servir llocs que no comparteixen
 // pare: el menú lateral (obrir un fitxer), la pàgina de vista, el panell de
 // configuració i el bàner mateix, que va al layout.
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SequenceStyle } from "@/types/document";
+import { DefaultSettings } from "@/types/ui";
 import {
   applyDocumentStyleActionCreator,
   DocumentStyleSnapshot,
+  pictStyleAppliedToAllActionCreator,
+  updatePictSequenceActionCreator,
   restoreDocumentStyleActionCreator,
   takeDocumentStyleSnapshot,
 } from "./documentSlice";
@@ -19,10 +22,14 @@ import {
   selectDocumentStyle,
   selectUserDefaultStyle,
 } from "@features/sequence/style/styleSelectors";
-import { stylesEqual } from "@features/sequence/style/styleModel";
+import { pictStyleOf, stylesEqual } from "@features/sequence/style/styleModel";
+import { resetPictogramStyle } from "@features/sequence/style/pictogramStyle";
 
-/** D'on ve l'estil que s'acaba d'aplicar. */
-export type StyleChangeSource = "userDefault" | "file";
+/**
+ * D'on ve el canvi d'estil que es pot desfer: l'estil per defecte, un fitxer,
+ * «Aplica a tots» o «Restableix» d'un pictograma.
+ */
+export type StyleChangeSource = "userDefault" | "file" | "applyAll" | "reset";
 
 /**
  * Bàner d'estat del document que s'acaba d'obrir: és estat, no confirmació, i
@@ -31,6 +38,12 @@ export type StyleChangeSource = "userDefault" | "file";
 export interface StyleNotice {
   /** Té un estil diferent de l'estil per defecte de qui l'obre */
   ownStyle: boolean;
+  /** És d'una versió anterior i s'ha adaptat al format v3 */
+  legacy?: boolean;
+  /** No portava estil propi (o sencer): hi va el de qui l'obre */
+  withoutStyle?: boolean;
+  /** És d'una versió més nova de l'app */
+  newerVersion?: boolean;
   /** Fonts que demana i aquest dispositiu no té */
   unavailableFonts: string[];
   /**
@@ -157,7 +170,25 @@ const sameSnapshot = (
   a.content === b.content &&
   a.viewSettings === b.viewSettings &&
   a.defaultSettings === b.defaultSettings &&
-  a.styleView === b.styleView;
+  a.styleView === b.styleView &&
+  a.fitzgeraldColors === b.fitzgeraldColors;
+
+/**
+ * Fa un canvi d'estil del document i el deixa a punt de desfer amb un snackbar
+ * («Desfés»). És el desfer que ja existia per als canvis d'estil, i el fan
+ * servir també «Aplica a tots» i «Restableix» (ADR-003, decisió 12).
+ */
+export const undoableStyleChangeThunk =
+  (change: () => AnyAction, source: StyleChangeSource): AppThunk =>
+  (dispatch, getState) => {
+    const before = takeDocumentStyleSnapshot(getState().document);
+
+    dispatch(change());
+
+    const after = takeDocumentStyleSnapshot(getState().document);
+    dispatch(styleUndoRecordedActionCreator({ before, after }));
+    dispatch(styleUndoSnackbarShownActionCreator(source));
+  };
 
 /**
  * Aplica un estil al document obert amb la regla dels retocs, i deixa el canvi
@@ -168,13 +199,53 @@ export const changeDocumentStyleThunk =
   (style: SequenceStyle, source: StyleChangeSource): AppThunk =>
   (dispatch, getState) => {
     const from = selectDocumentStyle(getState());
-    const before = takeDocumentStyleSnapshot(getState().document);
+    dispatch(
+      undoableStyleChangeThunk(
+        () => applyDocumentStyleActionCreator({ from, to: style }),
+        source,
+      ),
+    );
+  };
 
-    dispatch(applyDocumentStyleActionCreator({ from, to: style }));
+/**
+ * «Aplica a tots»: el valor passa a l'estil del document i deixa de ser un
+ * retoc a tots els pictogrames. Es pot desfer.
+ */
+export const applyToAllPictogramsThunk =
+  (patch: {
+    pictApiAra?: Partial<DefaultSettings["pictApiAra"]>;
+    pictSequence?: Partial<DefaultSettings["pictSequence"]>;
+  }): AppThunk =>
+  (dispatch, getState) => {
+    const base = pictStyleOf(selectDocumentStyle(getState()));
+    dispatch(
+      undoableStyleChangeThunk(
+        () => pictStyleAppliedToAllActionCreator({ patch, base }),
+        "applyAll",
+      ),
+    );
+  };
 
-    const after = takeDocumentStyleSnapshot(getState().document);
-    dispatch(styleUndoRecordedActionCreator({ before, after }));
-    dispatch(styleUndoSnackbarShownActionCreator(source));
+/**
+ * «Restableix l'estil» des del menú contextual de la graella: fora del
+ * formulari d'edició, s'aplica al document al moment, amb Desfés. Dins del
+ * formulari, restablir és una edició més i es desa en tancar-lo.
+ */
+export const resetPictogramStyleThunk =
+  (indexSequence: number): AppThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    const pictogram = state.document.content[state.document.activeSAAC]?.find(
+      (pict) => pict.indexSequence === indexSequence,
+    );
+    if (!pictogram) return;
+    const reset = resetPictogramStyle(pictogram, selectDocumentStyle(state));
+    dispatch(
+      undoableStyleChangeThunk(
+        () => updatePictSequenceActionCreator(reset),
+        "reset",
+      ),
+    );
   };
 
 /** Si el document no s'ha tocat des del canvi d'estil, es pot desfer. */

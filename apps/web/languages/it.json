@@ -342,11 +342,8 @@
     "description": "Obre el menú d'accions del pictograma des del diàleg d'edició"
   },
   "components.pictEdit.reset": {
-    "defaultMessage": "Ripristina il pittogramma"
-  },
-  "components.pictEditSettings.settings.label": {
-    "defaultMessage": "Impostazioni del Pittogramma",
-    "description": "Title section Pictogram Edit "
+    "defaultMessage": "Ripristina",
+    "description": "Botó que esborra els retocs d'aquest pictograma: torna a l'estil del document (es pot desfer)"
   },
   "components.pictogramAmount": {
     "defaultMessage": "Pittogrammi:",
@@ -1992,8 +1989,8 @@
     "description": "Nome accessibile dell'elenco delle schede di sequenza"
   },
   "components.pictEdit.tooltipReset": {
-    "defaultMessage": "Riporta questo pittogramma ai tuoi valori predefiniti",
-    "description": "Tooltip del pulsante di ripristino del pittogramma"
+    "defaultMessage": "Riporta questo pittogramma allo stile del documento. Si può annullare.",
+    "description": "Tooltip del botó «Restableix» del pictograma"
   },
   "components.confirmDialog.cancel": {
     "defaultMessage": "Annulla",
@@ -2425,17 +2422,9 @@
     "defaultMessage": "Chiudi l'avviso",
     "description": "Nom accessible del botó que tanca l'avís d'estil"
   },
-  "features.sequence.style.pendingDefault.title": {
-    "defaultMessage": "Vuoi usare questo stile come predefinito?",
-    "description": "Pregunta en obrir un fitxer d'estil sense cap seqüència oberta"
-  },
   "features.sequence.style.pendingDefault.body": {
     "defaultMessage": "Non c'è nessun documento aperto a cui applicarlo. Se lo usi come predefinito, i nuovi documenti lo riceveranno al posto dello stile attuale.",
     "description": "Explicació de què passa si s'accepta l'estil com a per defecte"
-  },
-  "features.sequence.style.pendingDefault.confirm": {
-    "defaultMessage": "Usalo come predefinito",
-    "description": "Botó per acceptar l'estil del fitxer com a estil per defecte"
   },
   "features.sequence.style.panel.title": {
     "defaultMessage": "Stile del documento",
@@ -2484,5 +2473,229 @@
   "components.buttonWithModalDownload.styleHelper": {
     "defaultMessage": "Solo l'aspetto del documento —caratteri, colori, bordi, dimensioni e spazi—, senza nessuna sequenza. Si può applicare ad altri documenti.",
     "description": "Explicació del diàleg per desar només l'estil"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.title": {
+    "defaultMessage": "Cosa si salva in un documento?",
+    "description": "Títol del quadre d'ajuda del diàleg de desar el document"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.sequences": {
+    "defaultMessage": "Le sequenze e i pittogrammi.",
+    "description": "Quadre «Què es guarda»: primer element de la llista"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.style": {
+    "defaultMessage": "Come si vedono (carattere, bordi, colori, dimensioni), comprese le modifiche fatte a un solo pittogramma.",
+    "description": "Quadre «Què es guarda»: l'estil, també el de cada pictograma"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.page": {
+    "defaultMessage": "La pagina: dimensione, orientamento e direzione.",
+    "description": "Quadre «Què es guarda»: la pàgina del document"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.images": {
+    "defaultMessage": "Le foto proprie.",
+    "description": "Quadre «Què es guarda»: les imatges pujades per l'usuari"
+  },
+  "components.buttonWithModalDownload.whatIsSaved.not": {
+    "defaultMessage": "Non si salvano le preferenze dell'app, come la lingua o lo stile predefinito.",
+    "description": "Quadre «Què es guarda»: el que no hi va"
+  },
+  "components.pictEdit.customized": {
+    "defaultMessage": "Personalizzato",
+    "description": "Franja a sobre de la configuració: el pictograma té retocs propis"
+  },
+  "context.feedback.load.invalidFile": {
+    "defaultMessage": "Non è stato possibile aprirlo. Non è un documento di SequenciAAC o è danneggiato.",
+    "description": "Error en obrir un fitxer que no és un .saac ni un .saacstyle, o que està malmès"
+  },
+  "features.sequence.style.notice.legacy": {
+    "defaultMessage": "Questo documento è di una versione precedente. L'abbiamo adattato; quando lo salverai, verrà salvato nel nuovo formato.",
+    "description": "Bàner en obrir un document desat amb una versió anterior de l'app (format antic)"
+  },
+  "features.sequence.style.notice.withoutStyle": {
+    "defaultMessage": "Non aveva uno stile proprio, e gli abbiamo applicato il tuo stile predefinito.",
+    "description": "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer)"
+  },
+  "features.sequence.style.notice.newerVersion": {
+    "defaultMessage": "Questo documento è stato creato con una versione più recente di SequenciAAC. Può darsi che qualcosa non si veda bene. Se lo salvi qui, alcune modifiche potrebbero andare perse.",
+    "description": "Bàner d'avís en obrir un document d'una versió de l'app més nova que la d'ara"
+  },
+  "features.sequence.style.changed.applyAll": {
+    "defaultMessage": "Applicato a tutti i pittogrammi del documento.",
+    "description": "Snackbar després d'«Aplica a tots»: el valor passa a l'estil del document i a tots els pictogrames"
+  },
+  "features.sequence.style.changed.reset": {
+    "defaultMessage": "Stile ripristinato",
+    "description": "Snackbar després de «Restableix l'estil» des del menú contextual (es pot desfer)"
+  },
+  "features.sequence.style.styleFileOpened.title": {
+    "defaultMessage": "Questo file è uno stile, non un documento",
+    "description": "Títol del diàleg que surt en obrir un fitxer d'estil (.saacstyle) com si fos un document"
+  },
+  "features.sequence.style.styleFileOpened.body": {
+    "defaultMessage": "Puoi applicarlo al documento aperto, o farne il tuo stile predefinito, che è quello che ricevono i nuovi documenti.",
+    "description": "Explicació del diàleg de fitxer d'estil quan hi ha un document obert"
+  },
+  "features.sequence.style.styleFileOpened.apply": {
+    "defaultMessage": "Applicalo a questo documento",
+    "description": "Botó que aplica l'estil del fitxer al document obert (es pot desfer)"
+  },
+  "features.sequence.style.styleFileOpened.makeDefault": {
+    "defaultMessage": "Rendilo il mio stile predefinito",
+    "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
+  },
+  "components.pictEdit.settings": {
+    "defaultMessage": "Configurazione",
+    "description": "Nom accessible del botó que obre i tanca la configuració del pictograma"
+  },
+  "components.pictEdit.resetDone": {
+    "defaultMessage": "Stile ripristinato",
+    "description": "Snackbar després de «Restableix» un pictograma (es pot desfer)"
+  },
+  "components.pictEdit.undo": {
+    "defaultMessage": "Annulla",
+    "description": "Botó del snackbar que desfà «Restableix» dins del formulari"
+  },
+  "components.pictEdit.cardName": {
+    "defaultMessage": "{text}, pittogramma {number}",
+    "description": "Nom accessible d'una targeta de la graella d'edició: el text i el número"
+  },
+  "components.pictEdit.cardNameNoText": {
+    "defaultMessage": "Pittogramma {number}",
+    "description": "Nom accessible d'una targeta de la graella que encara no té paraula"
+  },
+  "components.pictEdit.cardNameCustomized": {
+    "defaultMessage": "{name}, personalizzato",
+    "description": "Nom accessible d'una targeta amb retocs propis"
+  },
+  "components.mouseActionList.resetStyle": {
+    "defaultMessage": "Ripristina lo stile",
+    "description": "Treu els retocs d'estil del pictograma: torna a l'estil del document (es pot desfer)"
+  },
+  "news.documents-everywhere.title": {
+    "defaultMessage": "I documenti di SequenciAAC ora si vedono uguali ovunque",
+    "description": "Títol de la notícia del nou model de document (octubre de 2026)"
+  },
+  "news.documents-everywhere.summary": {
+    "defaultMessage": "Un file .saac si apre e si stampa allo stesso modo su qualsiasi computer, tablet o cellulare. Salvare è più semplice, e lo stile si può riutilizzare.",
+    "description": "Resum de la notícia del nou model de document, a la targeta del carrusel"
+  },
+  "news.documents-everywhere.content": {
+    "defaultMessage": "<p>Questo ottobre inauguriamo un nuovo modo di salvare i documenti di SequenciAAC. Ora un file .saac si apre e si stampa allo stesso modo su qualsiasi computer, tablet o cellulare. Salvare è più semplice, e lo stile si può riutilizzare in altri documenti.</p><p>Finora, al momento di salvare bisognava scegliere tra «Sequenza» e «Impostazioni predefinite». Se non si spuntava l'opzione giusta, il documento si apriva su un altro computer con un altro carattere, altri bordi o un'altra dimensione di pagina. Lo abbiamo risolto alla radice. Non è una toppa: abbiamo cambiato dall'interno il modo in cui si salvano i documenti, perché quelli che crei oggi continuino a funzionare per molti anni.</p>",
+    "description": "Introducció de la notícia del nou model de document. Pot portar <p> i <b>"
+  },
+  "news.documents-everywhere.step1.title": {
+    "defaultMessage": "Un solo pulsante «Salva il documento»",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step1.description": {
+    "defaultMessage": "<p>Non serve più scegliere cosa salvare. Il pulsante <b>Salva il documento</b> salva il documento intero in un file .saac.</p><p><b>Cosa si salva in un documento</b></p><ul><li>Tutte le sequenze del documento, ognuna con i suoi pittogrammi e nello stesso ordine.</li><li>L'aspetto di ogni scheda: il carattere, la dimensione, i colori, i bordi, la numerazione e la posizione del testo.</li><li>Le modifiche fatte su un solo pittogramma, come un bordo di un altro colore o un pittogramma barrato.</li><li>La dimensione dei pittogrammi, lo spazio tra di loro e l'allineamento di ogni sequenza.</li><li>La pagina: la dimensione, l'orientamento e se le sequenze vanno in righe o in colonne.</li><li>Le tue immagini, dentro lo stesso file. Se usi la stessa foto più volte, si salva una volta sola.</li></ul><p><b>Cosa non si salva</b>: le tue preferenze dell'applicazione, come la lingua o lo stile predefinito per i nuovi documenti. Per questo, aprire il documento di un'altra persona non ti cambia mai le impostazioni.</p>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step2.title": {
+    "defaultMessage": "Il tuo stile, riutilizzabile",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step2.description": {
+    "defaultMessage": "<p>Se hai trovato uno stile che funziona, come il carattere scolastico, i bordi del colore della classe o la numerazione grande, ora puoi salvarlo in un file di stile (.saacstyle) e applicarlo a qualsiasi documento.</p><p>I file di stile si possono anche condividere. Un gruppo di insegnanti può usare lo stesso stile e tutti i materiali della scuola avranno lo stesso aspetto.</p><p>Se apri un file di stile da «Carica», l'applicazione lo riconosce e ti chiede cosa vuoi farne.</p>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step3.title": {
+    "defaultMessage": "Lo stile generale e le modifiche a un solo pittogramma",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step3.description": {
+    "defaultMessage": "<p>Ogni documento ha uno <b>stile generale</b>, quello di tutte le schede. Se cambi qualcosa in un solo pittogramma, si salva solo quella modifica, e il resto segue lo stile generale.</p><p>Un esempio: il documento usa bordi blu, e metti in rosso il bordo del pittogramma «colazione» perché risalti. Se poi cambi il carattere di tutto il documento, anche «colazione» cambia carattere, ma mantiene il bordo rosso.</p><p>Perché tu sappia sempre cosa succede:</p><ul><li>Quando modifichi un pittogramma con modifiche proprie, sopra le impostazioni compare la striscia <b>Personalizzato</b>, con il pulsante <b>Ripristina</b> perché torni a seguire lo stile generale.</li><li>Nella griglia, i pittogrammi personalizzati hanno un <b>piccolo segno</b> nell'angolo. Lo vedi solo tu mentre modifichi: non compare mai nella stampa, nel PDF né a schermo intero.</li><li>Puoi anche ripristinarli dal menu del pittogramma, con <b>Ripristina lo stile</b>.</li><li><b>Applica a tutti</b> dà lo stesso stile a tutte le schede e toglie le modifiche proprie.</li><li>Se sbagli, <b>Annulla</b> rimette tutto com'era.</li></ul>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step4.title": {
+    "defaultMessage": "I tuoi documenti vecchi e il cellulare",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step4.description": {
+    "defaultMessage": "<p><b>I documenti vecchi continuano a funzionare.</b> Quando ne apri uno, l'applicazione lo adatta da sola e ti avvisa. Il file originale non viene toccato: quando lo salverai di nuovo, sarà salvato nel modo nuovo.</p><ul><li>Se il documento vecchio non aveva uno stile proprio, gli si applica il tuo stile predefinito e te lo diciamo.</li><li>Le schede vuote, senza nessun pittogramma, vengono tolte.</li><li>Ogni scheda si continua a vedere come prima.</li></ul><p><b>Sul cellulare, il file si scarica con il nome giusto.</b> Prima, su Android e iPhone il file poteva diventare «routine.saac.txt». Ora si scarica come «routine.saac». Anche i file che hai già con «.txt» alla fine si aprono senza doverli rinominare.</p>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step5.title": {
+    "defaultMessage": "Come è pensato un documento",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step5.description": {
+    "defaultMessage": "<p>D'ora in poi, tutte le novità di SequenciAAC seguiranno queste sei idee.</p><ol><li><b>Il documento porta tutto.</b> Le sequenze, il loro aspetto, la pagina e le tue foto stanno nello stesso file. Per questo si vede uguale ovunque, con o senza account.</li><li><b>Documento, sequenze e pittogrammi.</b> Un documento ha diverse sequenze, quelle che vedi nelle schede, e ogni sequenza ha i suoi pittogrammi.</li><li><b>Uno stile generale, e le modifiche di ogni pittogramma a parte.</b> Il documento ha lo stile generale. Ogni sequenza può avere la sua dimensione, lo spazio tra i pittogrammi e l'allineamento. Ogni pittogramma ricorda solo quello che gli hai cambiato. Così cambiare l'aspetto di tutto il documento è facile, e nessuna scheda resta diversa senza che tu lo sappia.</li><li><b>Quello che è tuo resta con te.</b> La lingua dell'applicazione e le tue preferenze non viaggiano con il documento.</li><li><b>Ogni file, una cosa.</b> Un .saac è un documento, e un .saacstyle è uno stile. L'applicazione sa cos'è ogni file anche se il cellulare gli ha cambiato nome.</li><li><b>Pronti per il futuro.</b> Quando SequenciAAC migliorerà, i tuoi documenti continueranno ad aprirsi e si adatteranno da soli, come succede ora con quelli vecchi, senza che tu perda nulla. Se un giorno apri un documento creato con una versione più nuova dell'applicazione, ti avviserà prima.</li></ol>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.faq.title": {
+    "defaultMessage": "Domande frequenti",
+    "description": "Títol de les preguntes freqüents de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q1": {
+    "defaultMessage": "Devo fare qualcosa con i miei file?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a1": {
+    "defaultMessage": "No. Aprili come sempre. Se vuoi che siano salvati nel modo nuovo, salvali di nuovo.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q2": {
+    "defaultMessage": "Che differenza c'è tra un .saac e un .saacstyle?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a2": {
+    "defaultMessage": "Il .saac è un documento con le sue sequenze. Il .saacstyle è solo uno stile, da applicare ad altri documenti.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q3": {
+    "defaultMessage": "Se mando un documento a un'altra famiglia o alla scuola, lo vedranno uguale?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a3": {
+    "defaultMessage": "Sì. Il documento porta il carattere, i bordi, le dimensioni, la pagina e le tue immagini.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q4": {
+    "defaultMessage": "Aprire il documento di un'altra persona mi cambierà le impostazioni?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a4": {
+    "defaultMessage": "No. Le tue preferenze cambiano solo se lo scegli tu.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q5": {
+    "defaultMessage": "Il segno di «personalizzato» comparirà quando stampo?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a5": {
+    "defaultMessage": "No. Si vede solo mentre modifichi.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.closing": {
+    "defaultMessage": "SequenciAAC resta gratuita e funziona senza account. Se trovi qualsiasi problema con i tuoi documenti, raccontacelo.",
+    "description": "Paràgraf final de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.save.alt": {
+    "defaultMessage": "Finestra «Salva e scarica» con il riquadro «Cosa si salva in un documento?», che spiega cosa si salva e cosa no.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.styleFile.alt": {
+    "defaultMessage": "Finestra che compare aprendo un file di stile: «Questo file è uno stile, non un documento», con i pulsanti per applicarlo al documento o renderlo lo stile predefinito.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.customizedStrip.alt": {
+    "defaultMessage": "Finestra di modifica di un pittogramma con la striscia «Personalizzato» e il pulsante «Ripristina» sopra le impostazioni.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.gridMark.alt": {
+    "defaultMessage": "Griglia di pittogrammi in cui uno ha un piccolo segno nell'angolo perché ha modifiche proprie, accanto ad altri senza segno.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.resetMenu.alt": {
+    "defaultMessage": "Menu di un pittogramma con l'opzione «Ripristina lo stile».",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.oldDocument.alt": {
+    "defaultMessage": "Avviso all'apertura di un documento di una versione precedente: l'applicazione lo ha adattato e, quando lo salverai, sarà salvato nel modo nuovo.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.structure.alt": {
+    "defaultMessage": "Disegno: un documento contiene sequenze, e ogni sequenza contiene pittogrammi. Accanto, lo stile generale e le modifiche di un pittogramma. Dentro il documento, anche la pagina e le tue foto; le tue preferenze restano fuori.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   }
 }

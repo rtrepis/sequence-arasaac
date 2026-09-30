@@ -4,7 +4,7 @@
 
 ## Redux i estat
 
-- **Abans de tocar res de l'estil, llegir `docs/fonaments/sequencia-i-estil.md`.** Seqüència, estil i preferències són tres coses, i el lloc on viu cadascuna no és negociable.
+- **Abans de tocar res de l'estil, llegir `docs/fonaments/03-model-contingut-estil.md`.** Seqüència, estil i preferències són tres coses, i el lloc on viu cadascuna no és negociable.
 - **`uiSlice`** gestiona `defaultSettings`, que és la part dels pictogrames de l'**estil per defecte** de l'usuari (el que reben les seqüències noves), no la de la seqüència oberta. Té dos sub-objectes: `pictApiAra` (skin, hair, color) i `pictSequence` (font, numbered, borders, textPosition, numberFont). Els camps d'estil de `ui.viewSettings` (mida, espais, alineació) en són la resta.
 - **`documentSlice`** gestiona el contingut de les seqüències (`content`, `activeSAAC`) **i el seu estil** (`defaultSettings`, `styleView`, `viewSettings` per pestanya). Un document nou no en porta i hereta l'estil per defecte fins que es desa.
 - **Res que pinti pictogrames del document llegeix `ui.defaultSettings`**: l'estil surt de `features/sequence/style/styleSelectors.ts` (`selectDocumentPictStyle`, `selectDocumentCardDefaults`, `selectResolvedSequenceViews`). Llegir les preferències és el que feia que un `.saac` es veiés amb l'estil de qui l'obria (B25).

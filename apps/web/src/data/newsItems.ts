@@ -3,14 +3,29 @@
 export type NewsCategory = "nova" | "millora" | "correccio";
 
 export interface NewsImage {
+  /**
+   * Ruta de la imatge. Si porta `{locale}`, és una captura per idioma: cada
+   * versió de la notícia ensenya l'app en el seu idioma (vegeu
+   * `localizedNewsSrc`)
+   */
   src: string;
   altId: string;
 }
 
 export interface NewsStep {
   image: NewsImage;
+  /** Imatges de més del mateix pas, sota la primera */
+  moreImages?: NewsImage[];
+  /** Títol del pas, quan la notícia es llegeix per apartats */
+  titleId?: string;
   descriptionId: string;
   video?: string;
+}
+
+/** Una pregunta freqüent i la seva resposta */
+export interface NewsQuestion {
+  questionId: string;
+  answerId: string;
 }
 
 export interface NewsItem {
@@ -23,9 +38,73 @@ export interface NewsItem {
   steps?: NewsStep[];
   date: string;
   category: NewsCategory;
+  /** Preguntes freqüents, al final de la notícia, amb el seu títol */
+  faq?: { titleId: string; questions: NewsQuestion[] };
+  /** Paràgraf de tancament, després de tot */
+  closingId?: string;
 }
 
+/** La ruta d'una imatge de notícia en l'idioma de qui la llegeix */
+export const localizedNewsSrc = (src: string, locale: string): string =>
+  src.replace("{locale}", locale);
+
+const DOCUMENTS = "/img/news/documents-everywhere/{locale}";
+const documentsImage = (name: string, alt: string): NewsImage => ({
+  src: `${DOCUMENTS}/${name}.png`,
+  altId: `news.documents-everywhere.${alt}.alt`,
+});
+const documentsId = (key: string): string => `news.documents-everywhere.${key}`;
+
 export const newsItems: NewsItem[] = [
+  {
+    slug: "documents-everywhere",
+    titleId: documentsId("title"),
+    summaryId: documentsId("summary"),
+    contentId: documentsId("content"),
+    coverImage: `${DOCUMENTS}/portada.png`,
+    images: [],
+    steps: [
+      {
+        titleId: documentsId("step1.title"),
+        descriptionId: documentsId("step1.description"),
+        image: documentsImage("desar", "save"),
+      },
+      {
+        titleId: documentsId("step2.title"),
+        descriptionId: documentsId("step2.description"),
+        image: documentsImage("fitxer-estil", "styleFile"),
+      },
+      {
+        titleId: documentsId("step3.title"),
+        descriptionId: documentsId("step3.description"),
+        image: documentsImage("franja-personalitzat", "customizedStrip"),
+        moreImages: [
+          documentsImage("marca-graella", "gridMark"),
+          documentsImage("menu-restableix", "resetMenu"),
+        ],
+      },
+      {
+        titleId: documentsId("step4.title"),
+        descriptionId: documentsId("step4.description"),
+        image: documentsImage("avis-antic", "oldDocument"),
+      },
+      {
+        titleId: documentsId("step5.title"),
+        descriptionId: documentsId("step5.description"),
+        image: documentsImage("estructura", "structure"),
+      },
+    ],
+    faq: {
+      titleId: documentsId("faq.title"),
+      questions: [1, 2, 3, 4, 5].map((n) => ({
+        questionId: documentsId(`faq.q${n}`),
+        answerId: documentsId(`faq.a${n}`),
+      })),
+    },
+    closingId: documentsId("closing"),
+    date: "2026-10-01",
+    category: "nova",
+  },
   {
     slug: "autosave-draft",
     titleId: "news.autosave-draft.title",

@@ -34,6 +34,12 @@ const messages = defineMessages({
     description:
       "Insereix un pictograma buit just després del pictograma actual",
   },
+  resetStyle: {
+    id: "components.mouseActionList.resetStyle",
+    defaultMessage: "Restableix l'estil",
+    description:
+      "Treu els retocs d'estil del pictograma: torna a l'estil del document (es pot desfer)",
+  },
   duplicate: {
     id: "components.mouseActionList.duplicate",
     defaultMessage: "Duplicate after this",

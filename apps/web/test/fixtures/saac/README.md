@@ -53,17 +53,27 @@ per pestanya, pestanya activa, si porta configuració global i què se n'espera 
 | `08-esquema-2-sequencia` | esquema 2 | 4 (3, 5, 4, 0) | dins del document | el 02 desat amb «Desa el document»: estil dins del document; anada i tornada byte a byte |
 | `09-esquema-2-estil.saacstyle` | esquema 2 | — | és un estil | el 02 desat amb «Desa l'estil en un fitxer…» |
 | `10-estil-parcial` | 2.1.0 | 1 (7) | parcial | el 01 amb una configuració d'abans de `numberFont`: fusió camp a camp |
+| `11-una-pestanya.saac.txt` | 2.1.0 | 1 (7) | no | el 01 byte a byte, amb el nom que li posava el mòbil: el tipus es decideix pel contingut |
+| `12-imatge-repetida` | 2.1.0 | 2 (3, 3) | no | una imatge en base64 tres cops i una de Cloudinary dues: al v3 hi ha d'haver dos `assets` |
+| `13-malmes` | — | — | — | la meitat del 02: no s'ha de poder obrir, i s'ha de dir |
+| `14-versio-99` | v3, `schemaVersion: 99` | 1 (2) | dins del document | una versió més nova: s'obre, avisa i conserva els camps que no coneix |
 
 Les 08 i 09 les ha escrit l'app (obrir el 02 i desar-lo), no s'han fet a mà; la 10 sí, a partir de
 la 01. La captura del 08 és idèntica, píxel a píxel, a la del 02: és la prova que una seqüència es
 veu igual després de desar-la en el format nou i tornar-la a obrir.
 
+Les 11–14 s'han afegit amb el format v3 (`docs/decisions/ADR-003-model-document-saac-v3.md`), a
+mà: la 11 és una còpia exacta de la 01, la 12 fa servir les imatges de la 03 i la 14 segueix
+l'esquema `docs/schema/saac-v3.schema.json`. Els tests del model v3 són a
+`src/features/sequence/saac/saac.test.ts` i fan servir totes les fixtures.
+
 ## El que cal saber del format
 
-> Des de la branca `claude/sequencia-estil-b25-16pluv` el format té **esquema 2**
-> (`schemaVersion: 2`), i la regla de què és cada cosa és a `docs/fonaments/sequencia-i-estil.md`.
-> Els punts de sota descriuen el format **d'abans** (el de les fixtures 01–07), que el lector
-> continua acceptant sencer; on el comportament ha canviat, es diu.
+> Des del **model v3** (`docs/decisions/ADR-003-model-document-saac-v3.md`) l'app escriu sempre
+> el format v3 (`format: "sequenciaac"`, `schemaVersion: 3`), i l'esquema 2 de la branca
+> `claude/sequencia-estil-b25-16pluv` va ser un pas intern que no es va publicar. Els punts de sota
+> descriuen el format **d'abans** (el de les fixtures 01–07), que el lector continua acceptant sencer
+> i migra al v3 en obrir-lo (`docs/fonaments/06-compatibilitat-i-dades.md`, §4).
 
 - **Dues claus opcionals i independents** al primer nivell: `defaultSettings` (la configuració global,
   només si l'usuari marca la casella, que surt desmarcada) i `documentState` (el document). Un fitxer
@@ -95,7 +105,7 @@ veu igual després de desar-la en el format nou i tornar-la a obrir.
 
 ```bash
 npm run dev                                   # a apps/web, en una altra terminal
-npx playwright test e2e/saac-fixtures.spec.ts
+npx playwright test e2e/saac-fixtures.spec.ts e2e/saac-v3.spec.ts
 ```
 
 Per cada fixture: s'obre amb les pestanyes i els pictogrames esperats; tornar-lo a desar dona el

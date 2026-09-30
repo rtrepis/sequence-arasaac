@@ -1,3 +1,4 @@
+import { DEFAULT_FITZGERALD_CATEGORY_COLORS } from "@features/sequence/saac/fitzgerald";
 import { describe, expect, it } from "vitest";
 import {
   applyStyleToDocument,
@@ -196,7 +197,11 @@ describe("canviar l'estil d'un document", () => {
       alignmentV: "center",
     });
     expect(doc.viewSettings[2]).toBeUndefined();
-    expect(doc.styleView).toEqual(NEW.view);
+    // L'espai entre seqüències és de la pàgina: aplicar un estil no el toca
+    expect(doc.styleView).toEqual({
+      ...NEW.view,
+      sequenceSpaceBetween: OLD.view.sequenceSpaceBetween,
+    });
     expect(resolveSequenceViews(doc, doc.styleView!)[2].sizePict).toBe(2);
   });
 
@@ -218,7 +223,11 @@ describe("canviar l'estil d'un document", () => {
     ]);
     const before = JSON.parse(JSON.stringify(doc));
     applyStyleToDocument(doc, OLD, OLD);
-    expect(doc).toEqual(before);
+    // Només s'hi escriu la taula de Fitzgerald, que abans heretava
+    expect(doc).toEqual({
+      ...before,
+      fitzgeraldColors: DEFAULT_FITZGERALD_CATEGORY_COLORS,
+    });
   });
 });
 
@@ -230,7 +239,10 @@ describe("estil d'un document nou", () => {
       viewSettings: {},
       activeSAAC: 0,
     };
-    expect(resolveDocumentStyle(doc, NEW)).toEqual(NEW);
+    expect(resolveDocumentStyle(doc, NEW)).toEqual({
+      ...NEW,
+      fitzgeraldColors: DEFAULT_FITZGERALD_CATEGORY_COLORS,
+    });
 
     const saved = materializeDocumentStyle(doc, NEW);
     expect(saved.defaultSettings).toEqual({

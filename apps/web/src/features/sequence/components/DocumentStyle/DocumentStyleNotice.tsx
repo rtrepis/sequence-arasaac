@@ -1,5 +1,6 @@
 // Bàner d'estat del document que s'acaba d'obrir: té un estil propi, diferent
-// de l'estil per defecte de qui l'obre, o demana fonts que el dispositiu no té.
+// de l'estil per defecte de qui l'obre, demana fonts que el dispositiu no té, o
+// és d'una altra versió de l'app (més antiga i adaptada, o més nova).
 //
 // És **estat del document**, no la confirmació d'una acció, i per això és un
 // bàner i no un snackbar (`docs/estandards/feedback-i-accions.md`): va dins del
@@ -39,7 +40,8 @@ const DocumentStyleNotice = (): React.ReactElement => {
         {visible && (
           <Box sx={{ px: 2, pt: 1 }}>
             <Alert
-              severity="info"
+              // Una versió més nova pot perdre canvis si es desa: és un avís
+              severity={notice.newerVersion ? "warning" : "info"}
               variant="outlined"
               // La regió viva és el contenidor: l'Alert no ha de tornar a ser
               // un `role="alert"`, que interromp el que s'estigui llegint
@@ -62,6 +64,16 @@ const DocumentStyleNotice = (): React.ReactElement => {
                 flexWrap="wrap"
               >
                 <Box>
+                  {notice.newerVersion && (
+                    <div>{intl.formatMessage(messages.noticeNewerVersion)}</div>
+                  )}
+                  {notice.legacy && (
+                    <div>
+                      {intl.formatMessage(messages.noticeLegacy)}
+                      {notice.withoutStyle &&
+                        ` ${intl.formatMessage(messages.noticeWithoutStyle)}`}
+                    </div>
+                  )}
                   {notice.ownStyle && (
                     <div>{intl.formatMessage(messages.noticeOwnStyle)}</div>
                   )}

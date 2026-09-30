@@ -1,5 +1,5 @@
 // Capçalera del panell «Estil del document»: títol, ajuda i les quatre accions
-// d'estil, en l'ordre dels fonaments (`docs/fonaments/sequencia-i-estil.md`):
+// d'estil, en l'ordre dels fonaments (`docs/fonaments/03-model-contingut-estil.md`):
 //
 //   1. Aplica el meu estil per defecte
 //   2. Carrega un estil des d'un fitxer…
@@ -38,10 +38,7 @@ import { SETTINGS_TWO_COLUMN_BREAKPOINT } from "@components/SettingsLayout/setti
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
 import { changeDocumentStyleThunk } from "@features/sequence/store/styleSlice";
 import { selectUserDefaultStyle } from "@features/sequence/style/styleSelectors";
-import {
-  DOCUMENT_FILE_EXTENSION,
-  STYLE_FILE_EXTENSION,
-} from "@features/sequence/style/saacFile";
+import { SAAC_FILE_ACCEPT } from "@features/sequence/saac/types";
 import { useOpenSaacFile } from "@features/sequence/hooks/useOpenSaacFile";
 import StyleUndoSnackbar from "./StyleUndoSnackbar";
 import messages from "./DocumentStyle.lang";
@@ -228,7 +225,7 @@ const DocumentStyleHeader = ({
         type="file"
         hidden
         onChange={handleFileChange}
-        accept={`${STYLE_FILE_EXTENSION},${DOCUMENT_FILE_EXTENSION},application/json,text/plain`}
+        accept={SAAC_FILE_ACCEPT}
       />
 
       {saveStyleOpen && (

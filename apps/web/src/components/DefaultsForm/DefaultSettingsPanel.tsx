@@ -22,12 +22,7 @@ import {
   DEFAULT_BORDER_OUT_RADIUS,
   DEFAULT_BORDER_OUT_SIZE,
 } from "../../configs/defaultSettingsConfig";
-import {
-  pictAraSettingsApplyAllActionCreator,
-  pictSequenceApplyAllActionCreator,
-  borderInApplyAllActionCreator,
-  borderOutApplyAllActionCreator,
-} from "@features/sequence/store/documentSlice";
+import { applyToAllPictogramsThunk } from "@features/sequence/store/styleSlice";
 import { applyDocumentStyleActionCreator } from "@features/sequence/store/documentSlice";
 import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import { deepEqual, pictStyleOf } from "@features/sequence/style/styleModel";
@@ -50,7 +45,7 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     // Aquest panell edita l'estil del document obert —el que s'aplica a totes
     // les seves seqüències—, no les preferències de l'usuari: per als documents
     // nous hi ha «Desa com a estil per defecte»
-    // (`docs/fonaments/sequencia-i-estil.md`)
+    // (`docs/fonaments/03-model-contingut-estil.md`)
     const documentStyle = useAppSelector(selectDocumentStyle);
     const {
       pictApiAra: {
@@ -200,20 +195,24 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           setColor={setColor}
           numbered={numbered}
           setNumbered={setNumbered}
+          // «Aplica a tots» canvia l'estil del document i treu el retoc de
+          // tots els pictogrames; el snackbar amb «Desfés» n'és el missatge
           onApplyAllColor={() =>
-            dispatch(pictAraSettingsApplyAllActionCreator({ color }))
+            dispatch(applyToAllPictogramsThunk({ pictApiAra: { color } }))
           }
           onApplyAllTextPosition={() =>
-            dispatch(pictSequenceApplyAllActionCreator({ textPosition }))
+            dispatch(
+              applyToAllPictogramsThunk({ pictSequence: { textPosition } }),
+            )
           }
           onApplyAllAppearance={() =>
-            dispatch(pictAraSettingsApplyAllActionCreator({ skin, hair }))
+            dispatch(applyToAllPictogramsThunk({ pictApiAra: { skin, hair } }))
           }
           onApplyAllBorderIn={() =>
-            dispatch(borderInApplyAllActionCreator({ borderIn }))
+            dispatch(applyToAllPictogramsThunk({ pictSequence: { borderIn } }))
           }
           onApplyAllBorderOut={() =>
-            dispatch(borderOutApplyAllActionCreator({ borderOut }))
+            dispatch(applyToAllPictogramsThunk({ pictSequence: { borderOut } }))
           }
           onSubmit={applyToDocument}
           onReset={handleReset}

@@ -1,14 +1,8 @@
+import { DEFAULT_FITZGERALD_CATEGORY_COLORS } from "@features/sequence/saac/fitzgerald";
 import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import {
-  buildDocumentFile,
-  buildStyleFile,
-  mergeStyle,
-  normalizeDocumentState,
-  parseSaacFile,
-  SAAC_SCHEMA_VERSION,
-} from "./saacFile";
+import { mergeStyle, normalizeDocumentState, parseSaacFile } from "./saacFile";
 import { resolveDocumentStyle } from "./styleModel";
 import { DocumentSAAC, SequenceStyle } from "@/types/document";
 import { DefaultSettings } from "@/types/ui";
@@ -44,6 +38,7 @@ const USER_DEFAULT: SequenceStyle = {
     alignmentV: "bottom",
     sequenceSpaceBetween: 4,
   },
+  fitzgeraldColors: DEFAULT_FITZGERALD_CATEGORY_COLORS,
 };
 
 const options = { userDefault: USER_DEFAULT, newId: () => "id-nou" };
@@ -59,6 +54,9 @@ describe("fitxers antics", () => {
   it("cap fixture deixa d'obrir-se", () => {
     const names = fs
       .readdirSync(FIXTURES)
+      // Les del format d'abans (01–10); de la 11 endavant són del v3, i n'hi
+      // ha una de malmesa a propòsit (`src/features/sequence/saac/`)
+      .filter((n) => /^(0\d|10)-/.test(n))
       .filter((n) => n.endsWith(".saac") || n.endsWith(".saacstyle"));
     expect(names.length).toBeGreaterThanOrEqual(10);
     names.forEach((name) => {
@@ -227,12 +225,13 @@ describe("estil parcial: fusió camp a camp", () => {
     };
     const parsed = parseDocument(sequence);
     expect(parsed.styleOrigin).toBe("file");
-    expect(
-      buildDocumentFile(
-        parsed.document,
-        resolveDocumentStyle(parsed.document, USER_DEFAULT),
-      ),
-    ).toEqual(sequence);
+    // L'esquema 2 ja no s'escriu (el v3 el substitueix), però es llegeix tal
+    // com es va desar
+    const saved = sequence.documentState;
+    expect(parsed.document.defaultSettings).toEqual(saved.defaultSettings);
+    expect(parsed.document.styleView).toEqual(saved.styleView);
+    expect(parsed.document.viewSettings).toEqual(saved.viewSettings);
+    expect(parsed.document.content).toEqual(saved.content);
 
     const style = readFixture("09-esquema-2-estil.saacstyle") as {
       style: SequenceStyle;
@@ -325,69 +324,6 @@ describe("esquema 2", () => {
     },
     activeSAAC: 0,
   };
-
-  it("«Desa el document» porta sempre l'estil, i totes les seqüències amb vista", () => {
-    const file = buildDocumentFile(document, USER_DEFAULT);
-
-    expect(file.schemaVersion).toBe(SAAC_SCHEMA_VERSION);
-    expect(file.documentState.defaultSettings).toEqual({
-      pictSequence: USER_DEFAULT.pictSequence,
-      pictApiAra: USER_DEFAULT.pictApiAra,
-    });
-    expect(file.documentState.styleView).toEqual(USER_DEFAULT.view);
-    expect(file.documentState.viewSettings[1]).toEqual({
-      sizePict: 1.3,
-      pictSpaceBetween: 2.5,
-      alignmentH: "right",
-      alignmentV: "bottom",
-    });
-  });
-
-  it("un document desat s'obre tal com es va desar, amb un altre estil per defecte", () => {
-    const saved = JSON.parse(
-      JSON.stringify(buildDocumentFile(document, USER_DEFAULT)),
-    );
-    const otherUser: SequenceStyle = {
-      ...USER_DEFAULT,
-      pictSequence: {
-        ...USER_DEFAULT.pictSequence,
-        font: { family: "Inter", color: "#000000", size: 1 },
-      },
-      view: { ...USER_DEFAULT.view, sizePict: 0.5 },
-    };
-
-    const parsed = parseSaacFile(saved, {
-      userDefault: otherUser,
-      newId: () => "?",
-    });
-    expect(parsed.kind).toBe("document");
-    if (parsed.kind !== "document") return;
-
-    expect(parsed.styleOrigin).toBe("file");
-    expect(resolveDocumentStyle(parsed.document, otherUser)).toEqual(
-      USER_DEFAULT,
-    );
-    expect(parsed.document.viewSettings[0].sizePict).toBe(2);
-    expect(parsed.document.viewSettings[1].sizePict).toBe(1.3);
-  });
-
-  it("anada i tornada: tornar a desar dona el mateix fitxer", () => {
-    const first = buildDocumentFile(document, USER_DEFAULT);
-    const parsed = parseDocument(JSON.parse(JSON.stringify(first)));
-    const second = buildDocumentFile(
-      parsed.document,
-      resolveDocumentStyle(parsed.document, USER_DEFAULT),
-    );
-    expect(second).toEqual(first);
-  });
-
-  it("«Desar estil» porta només l'aparença, i es llegeix com a estil", () => {
-    const file = JSON.parse(JSON.stringify(buildStyleFile(USER_DEFAULT)));
-    expect(Object.keys(file).sort()).toEqual(["schemaVersion", "style"]);
-
-    const parsed = parseSaacFile(file, options);
-    expect(parsed).toEqual({ kind: "style", style: USER_DEFAULT });
-  });
 
   it("la disposició (B26) s'admet i es conserva, encara que ningú no l'escrigui", () => {
     const layout = {

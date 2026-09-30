@@ -2,7 +2,7 @@
 //
 // Funcions pures, sense Redux ni React: les fan servir el lector del `.saac`, els
 // reducers del document i els selectors, i es proven soles. Les regles que
-// implementen són les de `docs/fonaments/sequencia-i-estil.md`.
+// implementen són les de `docs/fonaments/03-model-contingut-estil.md`.
 import {
   DocumentSAAC,
   SequenceStyle,
@@ -10,7 +10,14 @@ import {
   SequenceViewSettings,
 } from "@/types/document";
 import { DefaultSettings, ViewSettings } from "@/types/ui";
+import { DocumentLayout } from "@/types/document";
 import { PictSequence } from "@/types/sequence";
+import {
+  DEFAULT_FITZGERALD_CATEGORY_COLORS,
+  categoryOf,
+  colorForCategory,
+  sameColor,
+} from "@features/sequence/saac/fitzgerald";
 
 // --- Estil per defecte de l'usuari ---
 
@@ -33,6 +40,7 @@ export const buildUserDefaultStyle = (
     alignmentV: viewSettings.alignmentV,
     sequenceSpaceBetween: viewSettings.sequenceSpaceBetween,
   },
+  fitzgeraldColors: DEFAULT_FITZGERALD_CATEGORY_COLORS,
 });
 
 /** La part de l'estil que es desa com a `defaultSettings`. */
@@ -58,13 +66,20 @@ export const tabViewOf = (view: SequenceStyleView): SequenceViewSettings => ({
  * encara que les preferències arribin després de crear-la.
  */
 export const resolveDocumentStyle = (
-  document: Pick<DocumentSAAC, "defaultSettings" | "styleView">,
+  document: Pick<
+    DocumentSAAC,
+    "defaultSettings" | "styleView" | "fitzgeraldColors"
+  >,
   userDefault: SequenceStyle,
 ): SequenceStyle => ({
   pictSequence:
     document.defaultSettings?.pictSequence ?? userDefault.pictSequence,
   pictApiAra: document.defaultSettings?.pictApiAra ?? userDefault.pictApiAra,
   view: document.styleView ?? userDefault.view,
+  fitzgeraldColors:
+    document.fitzgeraldColors ??
+    userDefault.fitzgeraldColors ??
+    DEFAULT_FITZGERALD_CATEGORY_COLORS,
 });
 
 /**
@@ -95,11 +110,17 @@ export const resolveSequenceViews = (
 export const materializeDocumentStyle = (
   document: DocumentSAAC,
   style: SequenceStyle,
+  layout?: DocumentLayout,
 ): DocumentSAAC => ({
   ...document,
   defaultSettings: pictStyleOf(style),
   styleView: style.view,
   viewSettings: resolveSequenceViews(document, style.view),
+  fitzgeraldColors:
+    style.fitzgeraldColors ??
+    document.fitzgeraldColors ??
+    DEFAULT_FITZGERALD_CATEGORY_COLORS,
+  ...((document.layout ?? layout) && { layout: document.layout ?? layout }),
 });
 
 // --- Comparació ---
@@ -128,8 +149,15 @@ export const deepEqual = (a: unknown, b: unknown): boolean => {
   return keysA.every((key) => deepEqual(recordA[key], recordB[key]));
 };
 
+/**
+ * Dos estils són el mateix? L'espai entre seqüències no hi compta: és de la
+ * pàgina, no de l'estil (ADR-003, decisió 9), encara que Redux el guardi aquí.
+ */
 export const stylesEqual = (a: SequenceStyle, b: SequenceStyle): boolean =>
-  deepEqual(a, b);
+  deepEqual(
+    { ...a, view: tabViewOf(a.view) },
+    { ...b, view: tabViewOf(b.view) },
+  );
 
 // --- Aplicar un estil a un document ---
 
@@ -145,8 +173,8 @@ const PICT_SEQUENCE_KEYS = [
   "borderIn",
 ] as const;
 
-// `fitzgerald` tampoc: al pictograma és el color de la categoria de la paraula,
-// que dona ARASAAC, i no una tria d'aparença.
+// El Fitzgerald va a part: el que segueix l'estil és el color de la categoria
+// del pictograma, no un color fix
 const PICT_API_ARA_KEYS = ["skin", "hair", "color"] as const;
 
 const VIEW_KEYS = [
@@ -167,6 +195,9 @@ const VIEW_KEYS = [
  *   retocat: no hi ha manera de distingir-los, i el desfer cobreix l'error.
  * - El que no hi era (el pictograma o la pestanya l'heretaven) continua sense
  *   ser-hi, i per tant hereta el nou.
+ * - El Fitzgerald: si el pictograma tenia el color de la seva categoria a
+ *   l'estil vell, pren el de l'estil nou. Un color triat a mà es conserva.
+ * - L'espai entre seqüències no canvia: és de la pàgina (ADR-003, decisió 9).
  */
 export const applyStyleToDocument = (
   document: DocumentSAAC,
@@ -191,6 +222,20 @@ export const applyStyleToDocument = (
           (pict.img.settings as Record<string, unknown>)[key] =
             to.pictApiAra[key];
       });
+
+      const category = categoryOf(pict);
+      const oldColor = colorForCategory(
+        category,
+        from.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
+        from.pictApiAra.fitzgerald,
+      );
+      const { fitzgerald } = pict.img.settings;
+      if (fitzgerald === undefined || sameColor(fitzgerald, oldColor))
+        pict.img.settings.fitzgerald = colorForCategory(
+          category,
+          to.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
+          to.pictApiAra.fitzgerald,
+        );
     }),
   );
 
@@ -203,7 +248,13 @@ export const applyStyleToDocument = (
   });
 
   document.defaultSettings = structuredCopy(pictStyleOf(to));
-  document.styleView = { ...to.view };
+  document.styleView = {
+    ...to.view,
+    sequenceSpaceBetween: from.view.sequenceSpaceBetween,
+  };
+  document.fitzgeraldColors = {
+    ...(to.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS),
+  };
 };
 
 // Còpia de dades JSON planes (fonts i vores): `structuredClone` no hi és als

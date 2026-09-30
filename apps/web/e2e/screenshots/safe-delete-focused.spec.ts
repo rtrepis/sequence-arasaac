@@ -46,7 +46,7 @@ test("safe-delete: captures de la confirmació i del menú del pictograma", asyn
   // omet «Elimina» precisament perquè allà ja hi ha el botó del peu.
   await gotoEditor(page, 1);
   await page
-    .locator("button:has(> .MuiCard-root)")
+    .locator("button:has(.MuiCard-root)")
     .first()
     .click({ button: "right" });
 

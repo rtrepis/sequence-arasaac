@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-// El panell «Estil del document» (docs/fonaments/sequencia-i-estil.md):
+// El panell «Estil del document» (docs/fonaments/03-model-contingut-estil.md):
 //
 // - Les quatre accions d'estil, en l'ordre dels fonaments: botons en
 //   escriptori, menú «⋯» («Accions d'estil») en mòbil, tot amb el teclat i
@@ -143,6 +143,13 @@ for (const [name, viewport] of [
     await expect(page.getByText("Fitxer carregat correctament")).toBeVisible();
     // Vores de 10, lletra i números a mida 2, numerat i text a dalt
     await openFile(page, EXTREME_STYLE);
+    // Obert com a document, pregunta què se'n fa (model v3)
+    await page
+      .getByRole("dialog", {
+        name: "Aquest fitxer és un estil, no un document",
+      })
+      .getByRole("button", { name: "Aplica'l a aquest document" })
+      .click();
     await expect(
       page.getByText("S'ha aplicat l'estil del fitxer al document."),
     ).toBeVisible();
@@ -179,3 +186,28 @@ for (const [name, viewport] of [
     );
   });
 }
+
+// Regressió: portar els ajustos del panell al màxim deixava la pàgina en blanc.
+// La previsualització (`ScaleToFit`) i la barra de desplaçament del diàleg
+// entraven en bucle, i React tallava amb «Maximum update depth exceeded».
+test("canviar els ajustos del panell no deixa la pàgina en blanc", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
+  await openFile(page, DOCUMENT);
+  await expect(page.getByText("Fitxer carregat correctament")).toBeVisible();
+  await openStylePanel(page);
+
+  const sliders = page.getByRole("dialog").getByRole("slider");
+  const count = await sliders.count();
+  expect(count).toBeGreaterThan(0);
+  for (let i = 0; i < count; i++) {
+    await sliders.nth(i).focus();
+    await page.keyboard.press("End");
+  }
+
+  await expect(page.getByTestId("settings-preview-frame")).toBeVisible();
+  expect(errors).toEqual([]);
+});

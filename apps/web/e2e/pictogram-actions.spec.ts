@@ -23,7 +23,7 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-const cards = (page: Page) => page.locator("button:has(> .MuiCard-root)");
+const cards = (page: Page) => page.locator("button:has(.MuiCard-root)");
 
 /** Obre l'editor amb `amount` pictogrames buits */
 const gotoEditor = async (page: Page, amount: number): Promise<void> => {
@@ -42,7 +42,7 @@ const gotoEditor = async (page: Page, amount: number): Promise<void> => {
 const typePictogramText = async (page: Page, text: string): Promise<void> => {
   const dialog = page.getByRole("dialog");
   const accordion = dialog
-    .getByRole("button", { name: /Configuracions/i })
+    .getByRole("button", { name: "Configuració" })
     .first();
   if ((await accordion.getAttribute("aria-expanded")) !== "true") {
     await accordion.click();

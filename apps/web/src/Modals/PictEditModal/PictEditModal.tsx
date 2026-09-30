@@ -1,6 +1,6 @@
 import { FormattedMessage, useIntl } from "react-intl";
-import { IconButton, Popover, Tooltip, Button } from "@mui/material";
-import { MdMoreVert } from "react-icons/md";
+import { Box, IconButton, Popover, Tooltip, Button } from "@mui/material";
+import { MdMoreVert, MdTune } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import { PictSequence } from "../../types/sequence";
@@ -17,7 +17,12 @@ import {
   usePictogramActions,
   type PictogramActionKey,
 } from "../../components/utils/MouseActionList/usePictogramActions";
-import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
+import {
+  selectDocumentCardDefaults,
+  selectDocumentStyle,
+} from "@features/sequence/style/styleSelectors";
+import { isPictogramCustomized } from "@features/sequence/style/pictogramStyle";
+import { customizedMark } from "./PictEditModal.styled";
 import React from "react";
 
 interface PictEditProps {
@@ -43,6 +48,14 @@ const PictEditModal = ({
   const defaults: PictogramCardDefaults = useAppSelector(
     selectDocumentCardDefaults,
   );
+  const documentStyle = useAppSelector(selectDocumentStyle);
+  // Té retocs propis? Ho diuen la marca de la targeta, el seu nom accessible i
+  // el menú contextual, que llavors ofereix «Restableix l'estil»
+  const customized = isPictogramCustomized(pictogram, documentStyle);
+  // El mateix, però del formulari obert, que encara no s'ha desat
+  const [formCustomized, setFormCustomized] = useState(customized);
+  // «Restableix l'estil» triat al menú del diàleg: el fa el formulari
+  const [resetRequest, setResetRequest] = useState(0);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLButtonElement | null>(
@@ -77,6 +90,18 @@ const PictEditModal = ({
     setAnchorEl(event.currentTarget);
   };
 
+  // El menú contextual amb el teclat: Maj+F10 i la tecla de menú. Windows i
+  // Linux ja hi disparen `contextmenu`, però macOS no; aquí val a tot arreu
+  const handlerKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (
+      event.key === "ContextMenu" ||
+      (event.shiftKey && event.key === "F10")
+    ) {
+      event.preventDefault();
+      setAnchorEl(event.currentTarget);
+    }
+  };
+
   const handleClose = () => {
     setSubmit(true);
     setOpen(false);
@@ -98,6 +123,11 @@ const PictEditModal = ({
 
   const handleSelectFromDialog = (action: PictogramActionKey) => {
     setMenuAnchorEl(null);
+    // Dins del diàleg, restablir és una edició més del formulari: no el tanca
+    if (action === "resetStyle") {
+      setResetRequest((request) => request + 1);
+      return;
+    }
     setPendingAction(action);
     handleClose();
   };
@@ -114,22 +144,52 @@ const PictEditModal = ({
   const dialogMenuId = `pictogram-dialog-menu-${pictogram.indexSequence}`;
   const moreActionsLabel = intl.formatMessage(messages.moreActions);
 
+  // Nom accessible de la targeta: «esmorzar, pictograma 3, personalitzat»
+  const cardText = pictogram.text || pictogram.img.searched.word;
+  const cardNumber = pictogram.indexSequence + 1;
+  const cardName = cardText
+    ? intl.formatMessage(messages.cardName, {
+        text: cardText,
+        number: cardNumber,
+      })
+    : intl.formatMessage(messages.cardNameNoText, { number: cardNumber });
+  const cardLabel = customized
+    ? intl.formatMessage(messages.cardNameCustomized, { name: cardName })
+    : cardName;
+
   return (
     <>
       <Button
         ref={triggerRef}
+        aria-label={cardLabel}
         aria-describedby={openPopover ? popoverId : undefined}
         variant="text"
         onClick={handlerClickOpen}
         onContextMenu={handlerContextMenu}
+        onKeyDown={handlerKeyDown}
         sx={pictogramTrigger}
       >
-        <PictogramCard
-          view={"complete"}
-          pictogram={pictogram}
-          defaults={defaults}
-          size={{ pictSize: 0.75 }}
-        />
+        {/* La marca va fora de la targeta, que talla el que en sobresurt, i
+            només a la graella d'edició: la vista, la pantalla completa, la
+            impressió i el PDF pinten la targeta sense aquest embolcall */}
+        <Box sx={{ position: "relative" }}>
+          <PictogramCard
+            view={"complete"}
+            pictogram={pictogram}
+            defaults={defaults}
+            size={{ pictSize: 0.75 }}
+          />
+          {customized && (
+            <Box
+              data-testid="customized-mark"
+              data-html2canvas-ignore
+              aria-hidden
+              sx={customizedMark}
+            >
+              <MdTune />
+            </Box>
+          )}
+        </Box>
       </Button>
       <Popover
         id={popoverId}
@@ -148,6 +208,7 @@ const PictEditModal = ({
           closeAction={handlerClosePopover}
           copyAction={setCopy}
           pasteObject={copy}
+          customized={customized}
         />
       </Popover>
 
@@ -207,11 +268,17 @@ const PictEditModal = ({
             copyAction={setCopy}
             pasteObject={copy}
             omit={ACTIONS_IN_DIALOG}
+            customized={formCustomized}
             onSelect={handleSelectFromDialog}
           />
         </Popover>
 
-        <PictEditForm pictogram={pictogram} submit={submit} />
+        <PictEditForm
+          pictogram={pictogram}
+          submit={submit}
+          onCustomizedChange={setFormCustomized}
+          resetRequest={resetRequest}
+        />
       </AppDialog>
     </>
   );

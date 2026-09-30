@@ -18,7 +18,7 @@ Té dos pàgines principals:
 - **Edició** (`/create-sequence`): es construeix el document afegint pictogrames a les seves seqüències
 - **Visualització** (`/view-sequence`): es previsualitza amb control de mida dels pictogrames i separació entre files i columnes. Permet imprimir i veure a full screen.
 
-Un **document** (el fitxer `.saac`) conté una o més **seqüències** (les pestanyes). Vegeu la nomenclatura a `docs/fonaments/sequencia-i-estil.md`.
+Un **document** (el fitxer `.saac`) conté una o més **seqüències** (les pestanyes). Vegeu la nomenclatura a `docs/fonaments/03-model-contingut-estil.md`.
 
 Funciona sencer **sense compte**: la configuració i el document en curs es guarden al navegador (`sessionStorage`/`localStorage`). Amb un compte (opcional), la configuració d'usuari i el vocabulari personal es desen al núvol i se sincronitzen entre dispositius — vegeu `docs/estandards/backend.md`.
 
@@ -124,8 +124,11 @@ on viu el criteri complet i el motiu de cada decisió.
   traduccions, ni als comentaris.
 - **Document, estil i preferències són tres coses**: el document es desa sempre **amb** el seu
   estil i s'obre tal com es va desar; les preferències d'interfície són de l'usuari i no entren mai
-  dins cap document. **Llegir `docs/fonaments/sequencia-i-estil.md` abans de tocar res que desi,
-  carregui o apliqui estils.**
+  dins cap document. **Llegir `docs/fonaments/03-model-contingut-estil.md` abans de tocar res que
+  desi, carregui o apliqui estils.**
+- **Format `.saac`**: qualsevol canvi al format `.saac` requereix actualitzar l'esquema
+  (`docs/schema/`), incrementar `schemaVersion` si trenca compatibilitat, afegir-hi una migració i
+  una fixture (`apps/web/test/fixtures/saac/`). Vegeu `docs/fonaments/06-compatibilitat-i-dades.md`.
 - **Colors**: única font de veritat `apps/web/src/style/palette.ts`. Mai un hexadecimal,
   un `rgba` ni un nom de color CSS fora d'aquell fitxer. El verd **no és mai color de
   text ni d'icona**; sobre verd, sempre `primary.contrastText`.
@@ -156,7 +159,9 @@ si un estàndard el contradiu, és l'estàndard el que s'ha de corregir.
 
 | Document | Llegir-lo abans de tocar |
 |---|---|
-| `docs/fonaments/sequencia-i-estil.md` | Nomenclatura (document, seqüència, estil del document, vista d'aquesta seqüència) i qualsevol cosa que desi, carregui o apliqui estils: el `.saac`, el desat al núvol, `documentSlice`, `uiSlice.defaultSettings`/`viewSettings`, la columna de la vista i el panell «Estil del document» |
+| `docs/fonaments/03-model-contingut-estil.md` | Nomenclatura (document, seqüència, pictograma, estil, pàgina, preferències), de qui és cada cosa, la cascada d'estil (`resolveStyle`, `diffStyle`) i les accions sobre l'estil: `documentSlice`, `uiSlice.defaultSettings`/`viewSettings`, la targeta, el PDF, la columna de la vista i el panell «Estil del document» |
+| `docs/fonaments/06-compatibilitat-i-dades.md` | El format `.saac` v3 i `.saacstyle`, la migració dels formats antics, desar i obrir (fitxer i núvol), la descàrrega i el selector de fitxers. Esquema formal: `docs/schema/saac-v3.schema.json` |
+| `docs/decisions/ADR-003-model-document-saac-v3.md` | Per què el format és com és, i què es va descartar. `docs/fonaments/sequencia-i-estil.md` n'és l'antecessor i ara només redirigeix |
 
 ## Índex d'estàndards
 
@@ -174,6 +179,7 @@ abans de tocar la seva àrea; no cal llegir-los tots.
 | `docs/estandards/backend.md` | `features/backend/*` i els mòduls d'`apps/api` |
 | `docs/estandards/comptes-i-quotes.md` | Autenticació, registre, quotes, imatges al núvol, panell d'administració, desplegament |
 | `docs/estandards/correus.md` | `apps/api/src/shared/emailLayout.ts` i `mailer.ts` |
+| `docs/estandards/noticies.md` | Una notícia de Novetats: `newsItems.ts`, les claus `news.*`, les captures i els specs de `e2e/screenshots/`. Hi ha la regla «sense tecnicismes» |
 
 ## Estudis i feina pendent
 
@@ -203,4 +209,4 @@ al davant hi encaixa.
   llançament, un resum a l'equip— en comptes de tornar a recórrer el registre de commits.
 - `docs/NOTICIES-candidates-des-de-2.0.2.md` és la tria editorial que en surt: què d'aquell
   inventari es publica a Novetats i què no, amb la fitxa de cada notícia i el que **no** s'hi ha
-  de dir. **Consultar-lo abans d'escriure una entrada de `newsItems.ts`.**
+  de dir. **Consultar-lo abans d'escriure una entrada de `newsItems.ts`**; com s'escriu, a `docs/estandards/noticies.md`.

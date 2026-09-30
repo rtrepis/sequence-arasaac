@@ -84,6 +84,30 @@ export const buildTheme = (mode: "light" | "dark"): Theme =>
           },
         },
       },
+      MuiSlider: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            // Al mòbil el slider va sota el seu títol: sense aquest marge,
+            // començava just a la vora esquerra, arran del títol
+            [theme.breakpoints.down("sm")]: {
+              marginLeft: theme.spacing(2),
+              width: `calc(100% - ${theme.spacing(2)})`,
+            },
+            // En tàctil, només es mou arrossegant el botó. Tocar la barra ja
+            // no canvia el valor: en desplaçar la pàgina, el dit hi queia a
+            // sobre i canviava un ajust sense voler. La barra deixa passar el
+            // gest al que es desplaça; el botó, no
+            "@media (pointer: coarse)": {
+              pointerEvents: "none",
+              touchAction: "pan-y",
+              "& .MuiSlider-thumb": {
+                pointerEvents: "auto",
+                touchAction: "none",
+              },
+            },
+          }),
+        },
+      },
       // Desactiva transicions i animacions per a usuaris que ho demanen al SO
       MuiCssBaseline: {
         styleOverrides: `
