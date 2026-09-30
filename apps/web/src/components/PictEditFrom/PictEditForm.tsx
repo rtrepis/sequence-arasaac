@@ -2,12 +2,13 @@ import {
   Alert,
   Box,
   List,
+  Slide,
   Snackbar,
   Stack,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
-import { keyframes } from "@mui/system";
 import PictogramCard from "../PictogramCard/PictogramCard";
 import PictogramSearch from "../PictogramSearch/PictogramSearch";
 import {
@@ -68,11 +69,13 @@ interface PictEditFormProps {
 /** Prou temps per llegir-lo i arribar a «Desfés» amb el teclat */
 const RESET_SNACKBAR_DURATION_MS = 10000;
 
-/** La còpia fixa de la previsualització entra sense cop (mai amb moviment reduït) */
-const previewCopyIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
+/**
+ * La còpia fixa de la previsualització baixa des de dalt, prou a poc a poc
+ * perquè no aparegui de cop; en marxar, torna amunt una mica més de pressa.
+ * Mai amb moviment reduït.
+ */
+const PREVIEW_COPY_IN_MS = 320;
+const PREVIEW_COPY_OUT_MS = 220;
 
 /** Els valors d'estil que «Restableix» canvia al formulari, per poder-los desfer */
 interface StyleSnapshot {
@@ -345,6 +348,8 @@ const PictEditForm = ({
   // quan l'original torna a la vista, la còpia desapareix
   const previewRef = useRef<HTMLDivElement>(null);
   const [previewAway, setPreviewAway] = useState(false);
+  const [copyFrame, setCopyFrame] = useState<HTMLDivElement | null>(null);
+  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   useEffect(() => {
     const preview = previewRef.current;
     const scroller = rootRef.current?.closest(".MuiDialogContent-root");
@@ -381,15 +386,33 @@ const PictEditForm = ({
     // Contenidor invisible: el marc de la còpia fixa, que ha de fer tota
     // l'alçada del formulari. La graella de sota és la de sempre
     <Box ref={rootRef} sx={{ overflowAnchor: "none" }}>
-      {previewAway && (
-        <Box
-          data-testid="pict-edit-preview-copy"
-          aria-hidden="true"
-          ref={previewCopyRef}
-          // Alçada zero: no mou res; la còpia hi penja per sobre
-          sx={{ position: "sticky", top: 0, height: 0, zIndex: 6 }}
+      {/* Alçada zero: no mou res; la còpia hi penja per sobre, i en entrar
+          baixa des de dalt de la zona que es desplaça, que la retalla */}
+      <Box
+        ref={setCopyFrame}
+        aria-hidden="true"
+        sx={{ position: "sticky", top: 0, height: 0, zIndex: 6 }}
+      >
+        <Slide
+          in={previewAway}
+          direction="down"
+          container={copyFrame}
+          mountOnEnter
+          unmountOnExit
+          timeout={
+            reducedMotion
+              ? 0
+              : { enter: PREVIEW_COPY_IN_MS, exit: PREVIEW_COPY_OUT_MS }
+          }
+          easing={{
+            enter: "cubic-bezier(0.2, 0, 0, 1)",
+            exit: "cubic-bezier(0.3, 0, 1, 1)",
+          }}
         >
           <Box
+            data-testid="pict-edit-preview-copy"
+            aria-hidden="true"
+            ref={previewCopyRef}
             sx={{
               position: "absolute",
               top: 0,
@@ -400,14 +423,12 @@ const PictEditForm = ({
               borderBottom: 1,
               borderColor: "divider",
               boxShadow: 2,
-              animation: `${previewCopyIn} 150ms ease-out`,
-              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
             }}
           >
             <ScaleToFit maxHeight="min(30vh, 200px)">{card}</ScaleToFit>
           </Box>
-        </Box>
-      )}
+        </Slide>
+      </Box>
 
       <Box
         display="grid"

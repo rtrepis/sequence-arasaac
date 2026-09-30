@@ -114,8 +114,11 @@ for (const [name, viewport] of [
     const box = (await content.boundingBox())!;
     const copyCard = copy.getByTestId("card-pictogram");
     await expect(copyCard).toBeVisible();
+    // Baixa des de dalt: es mesura quan ha acabat d'entrar
+    await expect
+      .poll(async () => (await copyCard.boundingBox())!.y)
+      .toBeGreaterThanOrEqual(box.y - 1);
     const cardBox = (await copyCard.boundingBox())!;
-    expect(cardBox.y).toBeGreaterThanOrEqual(box.y - 1);
     expect(cardBox.y + cardBox.height).toBeLessThanOrEqual(box.y + box.height);
     expect(cardBox.height).toBeGreaterThan(80);
     // Només per a la vista: fora del lector i del teclat
@@ -143,11 +146,13 @@ test("amb moviment reduït, la còpia apareix sense animació", async ({
       return copy.count();
     })
     .toBe(1);
-  expect(
-    await copy
-      .locator("> div")
-      .evaluate((el) => getComputedStyle(el).animationName),
-  ).toBe("none");
+  // Sense durada: apareix d'una vegada, sense lliscar
+  // (0 s, o la centèsima de mil·lisegon que el CSS global de moviment
+  // reduït posa a totes les transicions)
+  const duration = await copy.evaluate((el) =>
+    parseFloat(getComputedStyle(el).transitionDuration),
+  );
+  expect(duration).toBeLessThan(0.001);
 });
 
 test("la franja «Personalitzat» surt només quan toca, i Restableix la treu", async ({

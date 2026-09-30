@@ -185,8 +185,9 @@ una targeta no ha canviat amb «Aplica a tots».
   ratolí: es compensa el desplaçament amb l'alçada de la franja. Sense animació.
 - Quan la previsualització surt de la vista per dalt, se'n veu una **còpia compacta** fixa a dalt de
   la zona que es desplaça (com a molt, el 30 % de l'alçada o 200 px); quan l'original torna a la
-  vista, la còpia desapareix. La còpia és només per a la vista (`aria-hidden`, `inert`) i entra
-  sense animació si l'usuari ho demana. L'original no es mou del seu lloc.
+  vista, la còpia desapareix. La còpia és només per a la vista (`aria-hidden`, `inert`). Entra
+  lliscant des de dalt (320 ms) i torna amunt en marxar (220 ms), perquè no aparegui de cop; amb
+  moviment reduït, apareix i desapareix sense moviment. L'original no es mou del seu lloc.
 
 **A la graella d'edició** (la targeta):
 
