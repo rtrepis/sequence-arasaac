@@ -2569,5 +2569,133 @@
   "components.mouseActionList.resetStyle": {
     "defaultMessage": "Restableix l'estil",
     "description": "Treu els retocs d'estil del pictograma: torna a l'estil del document (es pot desfer)"
+  },
+  "news.documents-everywhere.title": {
+    "defaultMessage": "Els documents de SequenciAAC ara es veuen igual a tot arreu",
+    "description": "Títol de la notícia del nou model de document (octubre de 2026)"
+  },
+  "news.documents-everywhere.summary": {
+    "defaultMessage": "Un fitxer .saac s'obre i s'imprimeix igual a qualsevol ordinador, tauleta o mòbil. Desar és més senzill, i l'estil es pot reutilitzar.",
+    "description": "Resum de la notícia del nou model de document, a la targeta del carrusel"
+  },
+  "news.documents-everywhere.content": {
+    "defaultMessage": "<p>Aquest octubre estrenem una nova manera de desar els documents de SequenciAAC. Ara un fitxer .saac s'obre i s'imprimeix igual a qualsevol ordinador, tauleta o mòbil. Desar és més senzill, i l'estil es pot reutilitzar en altres documents.</p><p>Fins ara, en desar calia triar entre «Seqüència» i «Configuració predeterminada». Si no es marcava la bona opció, el document s'obria en un altre ordinador amb una altra lletra, altres vores o una altra mida de pàgina. Ho hem resolt de soca-rel. No és un pedaç: hem canviat per dins la manera com es guarden els documents, perquè els que facis avui continuïn funcionant d'aquí a molts anys.</p>",
+    "description": "Introducció de la notícia del nou model de document. Pot portar <p> i <b>"
+  },
+  "news.documents-everywhere.step1.title": {
+    "defaultMessage": "Un sol botó «Desa el document»",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step1.description": {
+    "defaultMessage": "<p>Ja no cal triar què es desa. El botó <b>Desa el document</b> guarda el document sencer en un fitxer .saac.</p><p><b>Què es guarda en un document</b></p><ul><li>Totes les seqüències del document, cadascuna amb els seus pictogrames i en el mateix ordre.</li><li>Com es veu cada targeta: la lletra, la mida, els colors, les vores, la numeració i la posició del text.</li><li>Els canvis que hagis fet només en un pictograma, com una vora d'un altre color o un pictograma ratllat.</li><li>La mida dels pictogrames, l'espai entre ells i l'alineació de cada seqüència.</li><li>La pàgina: la mida, l'orientació i si les seqüències van en files o en columnes.</li><li>Les teves imatges pròpies, dins el mateix fitxer. Si fas servir la mateixa foto diverses vegades, només es guarda un cop.</li></ul><p><b>Què no es guarda</b>: les teves preferències de l'aplicació, com l'idioma o l'estil per defecte per als documents nous. Per això, obrir el document d'una altra persona no et canvia mai la configuració.</p>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step2.title": {
+    "defaultMessage": "El teu estil, reutilitzable",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step2.description": {
+    "defaultMessage": "<p>Si has trobat un estil que funciona, com la lletra escolar, les vores del color de l'aula o la numeració grossa, ara el pots desar en un fitxer d'estil (.saacstyle) i aplicar-lo a qualsevol document.</p><p>Els fitxers d'estil també es poden compartir. Un equip docent pot fer servir el mateix estil i tots els materials de l'escola tindran el mateix aspecte.</p><p>Si obres un fitxer d'estil des de «Carrega», l'aplicació ho detecta i et pregunta què vols fer amb ell.</p>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step3.title": {
+    "defaultMessage": "L'estil general i els canvis en un sol pictograma",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step3.description": {
+    "defaultMessage": "<p>Cada document té un <b>estil general</b>, que és el que tenen totes les targetes. Si canvies alguna cosa en un sol pictograma, només es guarda aquell canvi, i la resta segueix l'estil general.</p><p>Un exemple: el document fa servir vores blaves, i marques en vermell la vora del pictograma «esmorzar» perquè destaqui. Si després canvies la lletra de tot el document, «esmorzar» també canvia de lletra, però manté la vora vermella.</p><p>Perquè sempre sàpigues què passa:</p><ul><li>En editar un pictograma amb canvis propis, sobre la configuració hi apareix la franja <b>Personalitzat</b>, amb el botó <b>Restableix</b> perquè torni a seguir l'estil general.</li><li>A la graella, els pictogrames personalitzats porten una <b>marca petita</b> a la cantonada. Només la veus tu mentre edites: no surt mai ni a la impressió, ni al PDF, ni en pantalla completa.</li><li>També pots restablir-los des del menú del pictograma, amb <b>Restableix l'estil</b>.</li><li><b>Aplicar tots</b> posa el mateix estil a totes les targetes i treu els canvis propis.</li><li>Si t'equivoques, <b>Desfés</b> ho torna a deixar com estava.</li></ul>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step4.title": {
+    "defaultMessage": "Els teus documents antics i el mòbil",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step4.description": {
+    "defaultMessage": "<p><b>Els documents antics continuen funcionant.</b> Quan n'obres un, l'aplicació l'adapta sola i t'avisa. El fitxer original no es toca: quan el tornis a desar, es guardarà de la manera nova.</p><ul><li>Si el document antic no portava estil propi, s'hi aplica el teu estil per defecte i t'ho diem.</li><li>Les pestanyes buides, sense cap pictograma, es treuen.</li><li>Cada targeta es continua veient com abans.</li></ul><p><b>Al mòbil, el fitxer es baixa amb el nom correcte.</b> Abans, a Android i iPhone el fitxer podia quedar com a «rutina.saac.txt». Ara es baixa com a «rutina.saac». Els fitxers que ja tinguis amb «.txt» al final també s'obren sense haver-los de reanomenar.</p>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step5.title": {
+    "defaultMessage": "Com està pensat un document",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step5.description": {
+    "defaultMessage": "<p>A partir d'ara, totes les novetats de SequenciAAC seguiran aquestes sis idees.</p><ol><li><b>El document ho porta tot.</b> Les seqüències, com es veuen, la pàgina i les teves fotos van dins el mateix fitxer. Per això es veu igual a tot arreu, amb compte o sense.</li><li><b>Document, seqüències i pictogrames.</b> Un document té diverses seqüències, que són les que veus en pestanyes, i cada seqüència té els seus pictogrames.</li><li><b>Un estil general, i els canvis de cada pictograma a part.</b> El document té l'estil general. Cada seqüència pot tenir la seva mida, l'espai entre pictogrames i l'alineació. Cada pictograma només recorda allò que li has canviat. Així, canviar l'aspecte de tot el document és fàcil, i cap targeta queda diferent sense que ho sàpigues.</li><li><b>El que és teu es queda amb tu.</b> L'idioma de l'aplicació i les teves preferències no viatgen amb el document.</li><li><b>Cada fitxer, una cosa.</b> Un .saac és un document, i un .saacstyle és un estil. L'aplicació sap què és cada fitxer encara que el mòbil li hagi canviat el nom.</li><li><b>Preparats per al futur.</b> Quan SequenciAAC millori, els teus documents es continuaran obrint i s'adaptaran sols, com passa ara amb els antics, sense que perdis res. Si algun dia obres un document fet amb una versió més nova de l'aplicació, t'avisarà abans.</li></ol>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.faq.title": {
+    "defaultMessage": "Preguntes freqüents",
+    "description": "Títol de les preguntes freqüents de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q1": {
+    "defaultMessage": "He de fer alguna cosa amb els meus fitxers?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a1": {
+    "defaultMessage": "No. Obre'ls com sempre. Si vols que quedin guardats de la manera nova, torna'ls a desar.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q2": {
+    "defaultMessage": "Quina diferència hi ha entre un .saac i un .saacstyle?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a2": {
+    "defaultMessage": "El .saac és un document amb les seves seqüències. El .saacstyle només és un estil, per aplicar-lo a altres documents.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q3": {
+    "defaultMessage": "Si envio un document a una altra família o a l'escola, el veuran igual?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a3": {
+    "defaultMessage": "Sí. El document porta la lletra, les vores, les mides, la pàgina i les imatges pròpies.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q4": {
+    "defaultMessage": "Obrir el document d'una altra persona em canviarà la configuració?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a4": {
+    "defaultMessage": "No. Les teves preferències només canvien si tu ho tries.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q5": {
+    "defaultMessage": "La marca de «personalitzat» sortirà quan imprimeixi?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a5": {
+    "defaultMessage": "No. Només es veu mentre edites.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.closing": {
+    "defaultMessage": "SequenciAAC continua sent gratuïta i funciona sense compte. Si trobes qualsevol problema amb els teus documents, explica'ns-ho.",
+    "description": "Paràgraf final de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.save.alt": {
+    "defaultMessage": "Diàleg «Desa i descarrega» amb el quadre «Què es guarda en un document?», que explica què es desa i què no.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.styleFile.alt": {
+    "defaultMessage": "Diàleg que surt en obrir un fitxer d'estil: «Aquest fitxer és un estil, no un document», amb els botons per aplicar-lo al document o fer-lo l'estil per defecte.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.customizedStrip.alt": {
+    "defaultMessage": "Finestra d'edició d'un pictograma amb la franja «Personalitzat» i el botó «Restableix» a sobre de la configuració.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.gridMark.alt": {
+    "defaultMessage": "Graella de pictogrames on un porta una marca petita a la cantonada perquè té canvis propis, al costat d'altres sense marca.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.resetMenu.alt": {
+    "defaultMessage": "Menú d'un pictograma amb l'opció «Restableix l'estil».",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.oldDocument.alt": {
+    "defaultMessage": "Avís en obrir un document d'una versió anterior: l'aplicació l'ha adaptat i quan el desis es guardarà de la manera nova.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.structure.alt": {
+    "defaultMessage": "Dibuix: un document conté seqüències, i cada seqüència conté pictogrames. Al costat, l'estil general i els canvis d'un pictograma. Dins el document, també la pàgina i les teves fotos; les teves preferències queden fora.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   }
 }

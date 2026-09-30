@@ -13,7 +13,7 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { newsItems } from "../../data/newsItems";
+import { localizedNewsSrc, newsItems } from "../../data/newsItems";
 import messages from "./NewsCarousel.lang";
 
 const NewsCarousel = (): React.ReactElement => {
@@ -74,7 +74,7 @@ const NewsCarousel = (): React.ReactElement => {
                 {/* Alt text descriptiu: usa el títol de la notícia en comptes de buit */}
                 <CardMedia
                   component="img"
-                  image={item.coverImage}
+                  image={localizedNewsSrc(item.coverImage, intl.locale)}
                   alt={intl.formatMessage({ id: item.titleId })}
                   loading="lazy"
                   sx={{

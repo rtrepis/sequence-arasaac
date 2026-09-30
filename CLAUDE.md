@@ -179,6 +179,7 @@ abans de tocar la seva àrea; no cal llegir-los tots.
 | `docs/estandards/backend.md` | `features/backend/*` i els mòduls d'`apps/api` |
 | `docs/estandards/comptes-i-quotes.md` | Autenticació, registre, quotes, imatges al núvol, panell d'administració, desplegament |
 | `docs/estandards/correus.md` | `apps/api/src/shared/emailLayout.ts` i `mailer.ts` |
+| `docs/estandards/noticies.md` | Una notícia de Novetats: `newsItems.ts`, les claus `news.*`, les captures i els specs de `e2e/screenshots/`. Hi ha la regla «sense tecnicismes» |
 
 ## Estudis i feina pendent
 
@@ -208,4 +209,4 @@ al davant hi encaixa.
   llançament, un resum a l'equip— en comptes de tornar a recórrer el registre de commits.
 - `docs/NOTICIES-candidates-des-de-2.0.2.md` és la tria editorial que en surt: què d'aquell
   inventari es publica a Novetats i què no, amb la fitxa de cada notícia i el que **no** s'hi ha
-  de dir. **Consultar-lo abans d'escriure una entrada de `newsItems.ts`.**
+  de dir. **Consultar-lo abans d'escriure una entrada de `newsItems.ts`**; com s'escriu, a `docs/estandards/noticies.md`.

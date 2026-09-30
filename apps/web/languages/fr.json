@@ -2569,5 +2569,133 @@
   "components.mouseActionList.resetStyle": {
     "defaultMessage": "Réinitialiser le style",
     "description": "Treu els retocs d'estil del pictograma: torna a l'estil del document (es pot desfer)"
+  },
+  "news.documents-everywhere.title": {
+    "defaultMessage": "Les documents de SequenciAAC s'affichent désormais de la même façon partout",
+    "description": "Títol de la notícia del nou model de document (octubre de 2026)"
+  },
+  "news.documents-everywhere.summary": {
+    "defaultMessage": "Un fichier .saac s'ouvre et s'imprime de la même façon sur n'importe quel ordinateur, tablette ou mobile. Enregistrer est plus simple, et le style peut être réutilisé.",
+    "description": "Resum de la notícia del nou model de document, a la targeta del carrusel"
+  },
+  "news.documents-everywhere.content": {
+    "defaultMessage": "<p>Ce mois d'octobre, nous inaugurons une nouvelle façon d'enregistrer les documents de SequenciAAC. Désormais, un fichier .saac s'ouvre et s'imprime de la même façon sur n'importe quel ordinateur, tablette ou mobile. Enregistrer est plus simple, et le style peut être réutilisé dans d'autres documents.</p><p>Jusqu'ici, au moment d'enregistrer, il fallait choisir entre « Séquence » et « Paramètres par défaut ». Si la bonne option n'était pas cochée, le document s'ouvrait sur un autre ordinateur avec une autre police, d'autres bordures ou une autre taille de page. Nous avons réglé le problème à la racine. Ce n'est pas un rafistolage : nous avons changé de l'intérieur la façon dont les documents sont enregistrés, pour que ceux que vous créez aujourd'hui fonctionnent encore dans de nombreuses années.</p>",
+    "description": "Introducció de la notícia del nou model de document. Pot portar <p> i <b>"
+  },
+  "news.documents-everywhere.step1.title": {
+    "defaultMessage": "Un seul bouton « Enregistrer le document »",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step1.description": {
+    "defaultMessage": "<p>Plus besoin de choisir ce qui est enregistré. Le bouton <b>Enregistrer le document</b> enregistre le document entier dans un fichier .saac.</p><p><b>Ce qui est enregistré dans un document</b></p><ul><li>Toutes les séquences du document, chacune avec ses pictogrammes et dans le même ordre.</li><li>L'apparence de chaque carte : la police, la taille, les couleurs, les bordures, la numérotation et la position du texte.</li><li>Les modifications faites sur un seul pictogramme, comme une bordure d'une autre couleur ou un pictogramme barré.</li><li>La taille des pictogrammes, l'espace entre eux et l'alignement de chaque séquence.</li><li>La page : la taille, l'orientation et si les séquences vont en lignes ou en colonnes.</li><li>Vos propres images, dans le même fichier. Si vous utilisez la même photo plusieurs fois, elle n'est enregistrée qu'une seule fois.</li></ul><p><b>Ce qui n'est pas enregistré</b> : vos préférences de l'application, comme la langue ou le style par défaut des nouveaux documents. C'est pourquoi ouvrir le document de quelqu'un d'autre ne change jamais vos réglages.</p>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step2.title": {
+    "defaultMessage": "Votre style, réutilisable",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step2.description": {
+    "defaultMessage": "<p>Si vous avez trouvé un style qui fonctionne, comme la police scolaire, des bordures de la couleur de la classe ou une grande numérotation, vous pouvez maintenant l'enregistrer dans un fichier de style (.saacstyle) et l'appliquer à n'importe quel document.</p><p>Les fichiers de style peuvent aussi être partagés. Une équipe pédagogique peut utiliser le même style, et tous les supports de l'école auront la même apparence.</p><p>Si vous ouvrez un fichier de style depuis « Charger », l'application le reconnaît et vous demande ce que vous voulez en faire.</p>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step3.title": {
+    "defaultMessage": "Le style général et les modifications d'un seul pictogramme",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step3.description": {
+    "defaultMessage": "<p>Chaque document a un <b>style général</b>, celui de toutes les cartes. Si vous modifiez quelque chose sur un seul pictogramme, seule cette modification est enregistrée, et le reste suit le style général.</p><p>Un exemple : le document utilise des bordures bleues, et vous mettez en rouge la bordure du pictogramme « petit-déjeuner » pour qu'il ressorte. Si vous changez ensuite la police de tout le document, « petit-déjeuner » change aussi de police, mais garde sa bordure rouge.</p><p>Pour que vous sachiez toujours ce qui se passe :</p><ul><li>Quand vous modifiez un pictogramme qui a ses propres modifications, le bandeau <b>Personnalisé</b> apparaît au-dessus des réglages, avec le bouton <b>Réinitialiser</b> pour qu'il suive de nouveau le style général.</li><li>Dans la grille, les pictogrammes personnalisés portent une <b>petite marque</b> dans le coin. Vous seul la voyez pendant que vous modifiez : elle n'apparaît jamais à l'impression, dans le PDF ni en plein écran.</li><li>Vous pouvez aussi les réinitialiser depuis le menu du pictogramme, avec <b>Réinitialiser le style</b>.</li><li><b>Appliquer à tous</b> donne le même style à toutes les cartes et supprime leurs propres modifications.</li><li>Si vous vous trompez, <b>Annuler</b> remet tout comme avant.</li></ul>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step4.title": {
+    "defaultMessage": "Vos anciens documents et le mobile",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step4.description": {
+    "defaultMessage": "<p><b>Les anciens documents fonctionnent toujours.</b> Quand vous en ouvrez un, l'application l'adapte toute seule et vous prévient. Le fichier d'origine n'est pas modifié : quand vous l'enregistrerez de nouveau, il sera enregistré de la nouvelle façon.</p><ul><li>Si l'ancien document n'avait pas de style propre, votre style par défaut lui est appliqué et nous vous le disons.</li><li>Les onglets vides, sans aucun pictogramme, sont supprimés.</li><li>Chaque carte s'affiche comme avant.</li></ul><p><b>Sur mobile, le fichier se télécharge avec le bon nom.</b> Avant, sur Android et iPhone, le fichier pouvait s'appeler « routine.saac.txt ». Maintenant, il se télécharge sous le nom « routine.saac ». Les fichiers que vous avez déjà avec « .txt » à la fin s'ouvrent aussi sans devoir les renommer.</p>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.step5.title": {
+    "defaultMessage": "Comment un document est pensé",
+    "description": "Títol d'un apartat de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.step5.description": {
+    "defaultMessage": "<p>Désormais, toutes les nouveautés de SequenciAAC suivront ces six idées.</p><ol><li><b>Le document contient tout.</b> Les séquences, leur apparence, la page et vos photos sont dans le même fichier. C'est pourquoi il s'affiche de la même façon partout, avec ou sans compte.</li><li><b>Document, séquences et pictogrammes.</b> Un document contient plusieurs séquences, celles que vous voyez dans les onglets, et chaque séquence contient ses pictogrammes.</li><li><b>Un style général, et les modifications de chaque pictogramme à part.</b> Le document a le style général. Chaque séquence peut avoir sa taille, l'espace entre les pictogrammes et l'alignement. Chaque pictogramme ne retient que ce que vous y avez modifié. Ainsi, changer l'apparence de tout le document est facile, et aucune carte ne reste différente sans que vous le sachiez.</li><li><b>Ce qui est à vous reste avec vous.</b> La langue de l'application et vos préférences ne voyagent pas avec le document.</li><li><b>Un fichier, une chose.</b> Un .saac est un document, et un .saacstyle est un style. L'application sait ce qu'est chaque fichier même si le mobile a changé son nom.</li><li><b>Prêts pour l'avenir.</b> Quand SequenciAAC s'améliorera, vos documents continueront de s'ouvrir et s'adapteront tout seuls, comme c'est le cas aujourd'hui pour les anciens, sans que vous perdiez quoi que ce soit. Si un jour vous ouvrez un document créé avec une version plus récente de l'application, elle vous préviendra d'abord.</li></ol>",
+    "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.documents-everywhere.faq.title": {
+    "defaultMessage": "Questions fréquentes",
+    "description": "Títol de les preguntes freqüents de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q1": {
+    "defaultMessage": "Dois-je faire quelque chose avec mes fichiers ?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a1": {
+    "defaultMessage": "Non. Ouvrez-les comme d'habitude. Si vous voulez qu'ils soient enregistrés de la nouvelle façon, enregistrez-les de nouveau.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q2": {
+    "defaultMessage": "Quelle est la différence entre un .saac et un .saacstyle ?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a2": {
+    "defaultMessage": "Le .saac est un document avec ses séquences. Le .saacstyle n'est qu'un style, à appliquer à d'autres documents.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q3": {
+    "defaultMessage": "Si j'envoie un document à une autre famille ou à l'école, le verront-ils de la même façon ?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a3": {
+    "defaultMessage": "Oui. Le document contient la police, les bordures, les tailles, la page et vos propres images.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q4": {
+    "defaultMessage": "Ouvrir le document de quelqu'un d'autre va-t-il changer mes réglages ?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a4": {
+    "defaultMessage": "Non. Vos préférences ne changent que si vous le choisissez.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.q5": {
+    "defaultMessage": "La marque « personnalisé » apparaîtra-t-elle à l'impression ?",
+    "description": "Pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.faq.a5": {
+    "defaultMessage": "Non. Vous ne la voyez que pendant que vous modifiez.",
+    "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.closing": {
+    "defaultMessage": "SequenciAAC reste gratuite et fonctionne sans compte. Si vous rencontrez le moindre problème avec vos documents, dites-le-nous.",
+    "description": "Paràgraf final de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.save.alt": {
+    "defaultMessage": "Dialogue « Enregistrer et télécharger » avec l'encadré « Qu'est-ce qui est enregistré dans un document ? », qui explique ce qui est enregistré et ce qui ne l'est pas.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.styleFile.alt": {
+    "defaultMessage": "Dialogue affiché à l'ouverture d'un fichier de style : « Ce fichier est un style, pas un document », avec les boutons pour l'appliquer au document ou en faire le style par défaut.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.customizedStrip.alt": {
+    "defaultMessage": "Fenêtre de modification d'un pictogramme avec le bandeau « Personnalisé » et le bouton « Réinitialiser » au-dessus des réglages.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.gridMark.alt": {
+    "defaultMessage": "Grille de pictogrammes où l'un porte une petite marque dans le coin parce qu'il a ses propres modifications, à côté d'autres sans marque.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.resetMenu.alt": {
+    "defaultMessage": "Menu d'un pictogramme avec l'option « Réinitialiser le style ».",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.oldDocument.alt": {
+    "defaultMessage": "Avis à l'ouverture d'un document d'une version antérieure : l'application l'a adapté et il sera enregistré de la nouvelle façon quand vous l'enregistrerez.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "news.documents-everywhere.structure.alt": {
+    "defaultMessage": "Dessin : un document contient des séquences, et chaque séquence contient des pictogrammes. À côté, le style général et les modifications d'un pictogramme. Dans le document, aussi la page et vos photos ; vos préférences restent à l'extérieur.",
+    "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   }
 }
