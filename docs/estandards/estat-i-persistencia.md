@@ -127,5 +127,6 @@
 - **Cinc idiomes**: `ca` (principal), `es`, `en`, `fr`, `it`.
 - **Dos nivells de fitxers, mai confondre'ls**: els FONT viuen a `apps/web/languages/*.json` (format `{ "clau": { "defaultMessage": "...", "description": "..." } }`) i s'editen a mà; els COMPILATS viuen a `apps/web/src/languages/*.json` (AST de react-intl) i es **generen**, mai s'editen directament.
 - Compilar: `cd apps/web && npm run prepare` (crida `scripts/compile-languages.mjs`, que itera tots els `.json` de `languages/` amb `formatjs compile` — afegir un idioma nou no requereix tocar cap script).
+- **El `build` del web també compila les traduccions** (`node scripts/compile-languages.mjs && vite build`). Els compilats són a `.gitignore` i abans només els generava el `prepare`, que npm executa en instal·lar; si un desplegament reaprofitava la memòria cau i no el tornava a executar, s'empaquetaven compilats antics i el build sortia verd igualment. Va passar amb la notícia `documents-everywhere` a la 2.2.0: tenia les traduccions a la font, però a producció no hi eren.
 - Les claus de missatge i les traduccions JSON han de coincidir exactament amb els `id` definits a `defineMessages` als `.lang.ts`.
 - Flux complet i checklist: skill `language` (`.claude/skills/language.md`).
