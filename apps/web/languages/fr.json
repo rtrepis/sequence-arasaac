@@ -2705,5 +2705,45 @@
   "components.pictEdit.cardTextInput": {
     "defaultMessage": "Texte du pictogramme {number}",
     "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
+  },
+  "news.edit-text-on-card.title": {
+    "defaultMessage": "Modifiez le texte du pictogramme sans quitter la grille",
+    "description": "Títol de la notícia «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.summary": {
+    "defaultMessage": "Cliquez sur le mot sous le pictogramme et écrivez-en un autre : plus besoin d'ouvrir une fenêtre.",
+    "description": "Resum de la notícia «edit-text-on-card» al carrusel"
+  },
+  "news.edit-text-on-card.content": {
+    "defaultMessage": "Jusqu'à présent, pour changer le mot qui accompagne un pictogramme, il fallait ouvrir sa fenêtre de modification, y chercher le texte et la refermer. Désormais, il s'écrit directement sur la carte, dans la grille même où vous construisez la séquence.",
+    "description": "Cos de la notícia «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step1.description": {
+    "defaultMessage": "<p>Cliquez sur le mot de la carte : il devient un champ de saisie, avec le texte déjà sélectionné. Écrivez-en un autre.</p><p>Pour l'enregistrer, appuyez sur <b>Entrée</b> ou cliquez n'importe où ailleurs. Si vous changez d'avis, <b>Échap</b> laisse tout comme avant.</p>",
+    "description": "Descripció del pas 1 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step1.alt": {
+    "defaultMessage": "Une séquence de pictogrammes : le mot du deuxième est en train d'être réécrit sur la carte elle-même",
+    "description": "Text alternatiu de la imatge del pas 1 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step2.description": {
+    "defaultMessage": "La carte affiche déjà le nouveau texte. Si un jour vous effacez tout le texte et le laissez vide, la carte reprend le mot que vous aviez recherché.",
+    "description": "Descripció del pas 2 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step2.alt": {
+    "defaultMessage": "La même séquence avec le nouveau texte enregistré sous le deuxième pictogramme",
+    "description": "Text alternatiu de la imatge del pas 2 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step3.description": {
+    "defaultMessage": "<p>Vous pouvez aussi y accéder autrement :</p><ul><li>Avec le clic droit sur le pictogramme, option « Modifier le texte ».</li><li>Au clavier : placez-vous sur la carte et appuyez sur <b>F2</b>.</li></ul>",
+    "description": "Descripció del pas 3 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step3.alt": {
+    "defaultMessage": "Le menu du clic droit d'un pictogramme, avec l'option « Modifier le texte » en surbrillance",
+    "description": "Text alternatiu de la imatge del pas 3 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.closing": {
+    "defaultMessage": "Cliquer sur l'image du pictogramme ouvre toujours la fenêtre de modification, avec tous les réglages habituels. Et si la carte n'affiche aucun texte, le mot se modifie depuis là, avec « Modifier ».",
+    "description": "Paràgraf de tancament de la notícia «edit-text-on-card»"
   }
 }

@@ -1,9 +1,8 @@
 import { test, expect, type Page } from "@playwright/test";
 import fs from "node:fs";
 import os from "node:os";
-import { execFileSync } from "node:child_process";
 import path from "node:path";
-import { IMG_DIR, mockArasaac, shot } from "./newsShot";
+import { IMG_DIR, mockArasaac, serveGoogleFonts, shot } from "./newsShot";
 import {
   STRUCTURE_LABELS,
   documentStructureHtml,
@@ -95,40 +94,6 @@ const demoDocument = (locale: Locale): string => {
     },
   });
 };
-
-/**
- * Les fonts de Google, de debò. `mockArasaac` les serveix buides, i llavors
- * l'avís del document antic hi afegia que la lletra del document no és al
- * dispositiu, cosa que només passa a l'entorn de proves. Es baixen amb `curl`,
- * que surt pel mateix camí que la resta d'eines de la màquina.
- */
-const fontCache = new Map<string, { body: Buffer; contentType: string }>();
-const serveGoogleFonts = async (page: Page): Promise<void> => {
-  await page.unroute("https://fonts.googleapis.com/**");
-  await page.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//, (route) => {
-    const url = route.request().url();
-    let cached = fontCache.get(url);
-    if (!cached) {
-      try {
-        const body = execFileSync("curl", ["-sSfL", "-A", USER_AGENT, url], {
-          maxBuffer: 20 * 1024 * 1024,
-        });
-        cached = {
-          body,
-          contentType: url.includes("googleapis") ? "text/css" : "font/woff2",
-        };
-        fontCache.set(url, cached);
-      } catch {
-        return route.abort();
-      }
-    }
-    return route.fulfill({ status: 200, ...cached });
-  });
-};
-
-// Google Fonts tria el format pel navegador: amb el d'un Chrome, `woff2`
-const USER_AGENT =
-  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
 
 const out = (locale: Locale, name: string): string =>
   `${NEWS_DIR}/${locale}/${name}.png`;
