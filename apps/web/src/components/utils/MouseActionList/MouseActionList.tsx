@@ -10,6 +10,7 @@ import { AiOutlineCopy, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import {
   MdOutlineContentPaste,
   MdOutlineLibraryAdd,
+  MdOutlineTextFields,
   MdSettingsBackupRestore,
 } from "react-icons/md";
 import { TbColumnInsertRight } from "react-icons/tb";
@@ -25,6 +26,11 @@ import React from "react";
 interface MouseActionListProps {
   pictogram: PictSequence;
   editAction: () => void;
+  /**
+   * Edita el text damunt de la targeta. Només si es passa hi ha «Edita el
+   * text»: el diàleg ja té el seu camp, i sense text visible no hi ha on fer-ho
+   */
+  editTextAction?: () => void;
   closeAction: () => void;
   copyAction: React.Dispatch<React.SetStateAction<PictSequence>> | undefined;
   pasteObject: PictSequence | undefined;
@@ -63,7 +69,11 @@ interface ActionItem {
  * que sí que la demana.
  */
 const actionGroups: ActionItem[][] = [
-  [{ key: "edit", icon: <AiOutlineEdit />, message: "edit" }],
+  [
+    { key: "edit", icon: <AiOutlineEdit />, message: "edit" },
+    // Només si qui munta la llista ho permet (vegeu `editTextAction`)
+    { key: "editText", icon: <MdOutlineTextFields />, message: "editText" },
+  ],
   [
     { key: "copy", icon: <AiOutlineCopy />, message: "copy" },
     // Porta-retalls: la contrapartida de la còpia. El clip de paper d'abans és
@@ -98,6 +108,7 @@ const actionGroups: ActionItem[][] = [
 const MouseActionList = ({
   pictogram,
   editAction,
+  editTextAction,
   closeAction,
   copyAction,
   pasteObject,
@@ -109,6 +120,7 @@ const MouseActionList = ({
   const actions = usePictogramActions({
     pictogram,
     editAction,
+    editTextAction,
     copyAction,
     pasteObject,
   });
@@ -144,7 +156,9 @@ const MouseActionList = ({
         .map((group) =>
           group.filter(
             ({ key }) =>
-              !omit.includes(key) && (key !== "resetStyle" || customized),
+              !omit.includes(key) &&
+              (key !== "resetStyle" || customized) &&
+              (key !== "editText" || editTextAction !== undefined),
           ),
         )
         // Un grup que es queda buit per `omit` no ha de deixar cap separador

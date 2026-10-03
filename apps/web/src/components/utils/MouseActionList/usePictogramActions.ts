@@ -15,6 +15,7 @@ export type PictogramActionKey =
   | "copy"
   | "paste"
   | "edit"
+  | "editText"
   | "delete"
   | "insert"
   | "duplicate"
@@ -23,6 +24,8 @@ export type PictogramActionKey =
 interface PictogramActionsParams {
   pictogram: PictSequence;
   editAction: () => void;
+  /** Edita el text damunt de la targeta. Sense, l'acció no fa res */
+  editTextAction?: () => void;
   copyAction: React.Dispatch<React.SetStateAction<PictSequence>> | undefined;
   pasteObject: PictSequence | undefined;
 }
@@ -37,6 +40,7 @@ interface PictogramActionsParams {
 export const usePictogramActions = ({
   pictogram,
   editAction,
+  editTextAction,
   copyAction,
   pasteObject,
 }: PictogramActionsParams): Record<PictogramActionKey, () => void> => {
@@ -64,6 +68,8 @@ export const usePictogramActions = ({
     },
 
     edit: editAction,
+
+    editText: () => editTextAction?.(),
 
     delete: () => {
       dispatch(subtractPictogramActionCreator(pictogram.indexSequence));

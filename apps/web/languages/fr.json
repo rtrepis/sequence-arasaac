@@ -2697,5 +2697,13 @@
   "news.documents-everywhere.structure.alt": {
     "defaultMessage": "Dessin : un document contient des séquences, et chaque séquence contient des pictogrammes. À côté, le style général et les modifications d'un pictogramme. Dans le document, aussi la page et vos photos ; vos préférences restent à l'extérieur.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "components.mouseActionList.editText": {
+    "defaultMessage": "Modifier le texte",
+    "description": "Canvia el text del pictograma directament damunt de la targeta, sense obrir el diàleg"
+  },
+  "components.pictEdit.cardTextInput": {
+    "defaultMessage": "Texte du pictogramme {number}",
+    "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
   }
 }

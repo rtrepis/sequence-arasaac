@@ -2697,5 +2697,13 @@
   "news.documents-everywhere.structure.alt": {
     "defaultMessage": "Dibuix: un document conté seqüències, i cada seqüència conté pictogrames. Al costat, l'estil general i els canvis d'un pictograma. Dins el document, també la pàgina i les teves fotos; les teves preferències queden fora.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "components.mouseActionList.editText": {
+    "defaultMessage": "Edita el text",
+    "description": "Canvia el text del pictograma directament damunt de la targeta, sense obrir el diàleg"
+  },
+  "components.pictEdit.cardTextInput": {
+    "defaultMessage": "Text del pictograma {number}",
+    "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
   }
 }

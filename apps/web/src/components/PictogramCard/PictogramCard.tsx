@@ -117,6 +117,8 @@ const PictogramCard = ({
               fontSize={textFontSize}
               fontFamily={fontStack(font.family)}
               component="h3"
+              // A la graella d'edició, un clic aquí edita el text a la targeta
+              data-card-text
               sx={{
                 color: font.color,
                 "@media print": { fontSize: 20 * pictSize },
@@ -176,6 +178,8 @@ const PictogramCard = ({
               fontSize={textFontSize}
               fontFamily={fontStack(font.family)}
               component="h3"
+              // A la graella d'edició, un clic aquí edita el text a la targeta
+              data-card-text
               sx={{
                 color: font.color,
                 "@media print": { fontSize: 20 * pictSize },

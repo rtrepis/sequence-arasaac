@@ -23,6 +23,12 @@ const messages = defineMessages({
     defaultMessage: "Edit",
     description: "Obre el diàleg d'edició del pictograma",
   },
+  editText: {
+    id: "components.mouseActionList.editText",
+    defaultMessage: "Edit text",
+    description:
+      "Canvia el text del pictograma directament damunt de la targeta, sense obrir el diàleg",
+  },
   delete: {
     id: "components.mouseActionList.delete",
     defaultMessage: "Delete",

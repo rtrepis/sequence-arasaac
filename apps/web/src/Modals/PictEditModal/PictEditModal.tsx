@@ -9,7 +9,9 @@ import messages from "./PictEdit.lang";
 import { pictogramTrigger } from "./PictEditModal.styled";
 import { AppDialog, AppDialogActions } from "@components/AppDialog";
 import StyledButton from "../../style/StyledButton";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { updatePictSequenceActionCreator } from "@features/sequence/store/documentSlice";
+import CardTextEditor from "./CardTextEditor";
 import { PictogramCardDefaults } from "../../types/sequence";
 import PictEditForm from "../../components/PictEditFrom/PictEditForm";
 import MouseActionList from "../../components/utils/MouseActionList/MouseActionList";
@@ -44,6 +46,7 @@ const PictEditModal = ({
   setCopy,
 }: PictEditProps): React.ReactElement => {
   const intl = useIntl();
+  const dispatch = useAppDispatch();
   // L'estil del document, no les preferències de qui el mira
   const defaults: PictogramCardDefaults = useAppSelector(
     selectDocumentCardDefaults,
@@ -74,9 +77,69 @@ const PictEditModal = ({
     setOpen(true);
   };
 
+  // El text s'edita damunt de la targeta allà on la targeta el pinta: a dalt
+  // o a baix. Sense text visible, no hi ha on editar-lo (queda el diàleg)
+  const { textPosition } = pictogram.settings;
+  const textEditPosition =
+    textPosition === "top" || textPosition === "bottom"
+      ? textPosition
+      : undefined;
+  const [editingText, setEditingText] = useState(false);
+
+  const handlerEditText = () => {
+    if (textEditPosition) setEditingText(true);
+  };
+
+  // Des del menú contextual, el camp surt quan el menú ja s'ha tancat: en
+  // tancar-se torna el focus a la targeta, i el camp el perdria i es tancaria
+  const editTextOnMenuExited = useRef(false);
+  const handlerEditTextFromMenu = () => {
+    editTextOnMenuExited.current = true;
+  };
+  const handlerMenuExited = () => {
+    if (!editTextOnMenuExited.current) return;
+    editTextOnMenuExited.current = false;
+    handlerEditText();
+  };
+
+  const handlerCommitText = (value: string, fromKeyboard: boolean) => {
+    setEditingText(false);
+    if (fromKeyboard) triggerRef.current?.focus();
+    const newText = value.trim();
+    // Sense canvis, no es toca el document
+    if (newText === (pictogram.text || pictogram.img.searched.word)) return;
+    dispatch(
+      updatePictSequenceActionCreator({
+        ...pictogram,
+        // Buit: la targeta torna a mostrar la paraula cercada
+        text: newText === "" ? undefined : newText,
+      }),
+    );
+  };
+
+  const handlerCancelText = () => {
+    setEditingText(false);
+    triggerRef.current?.focus();
+  };
+
+  // Un clic damunt del text de la targeta l'edita allà mateix; a la resta de
+  // la targeta, obre el diàleg com sempre
+  const handlerClickCard = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (
+      textEditPosition &&
+      event.target instanceof Element &&
+      event.target.closest("[data-card-text]")
+    ) {
+      setEditingText(true);
+      return;
+    }
+    handlerClickOpen();
+  };
+
   const actions = usePictogramActions({
     pictogram,
     editAction: handlerClickOpen,
+    editTextAction: handlerEditText,
     copyAction: setCopy,
     pasteObject: copy,
   });
@@ -91,8 +154,14 @@ const PictEditModal = ({
   };
 
   // El menú contextual amb el teclat: Maj+F10 i la tecla de menú. Windows i
-  // Linux ja hi disparen `contextmenu`, però macOS no; aquí val a tot arreu
+  // Linux ja hi disparen `contextmenu`, però macOS no; aquí val a tot arreu.
+  // F2, com a tot arreu per reanomenar, edita el text a la targeta
   const handlerKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "F2" && textEditPosition) {
+      event.preventDefault();
+      setEditingText(true);
+      return;
+    }
     if (
       event.key === "ContextMenu" ||
       (event.shiftKey && event.key === "F10")
@@ -159,38 +228,54 @@ const PictEditModal = ({
 
   return (
     <>
-      <Button
-        ref={triggerRef}
-        aria-label={cardLabel}
-        aria-describedby={openPopover ? popoverId : undefined}
-        variant="text"
-        onClick={handlerClickOpen}
-        onContextMenu={handlerContextMenu}
-        onKeyDown={handlerKeyDown}
-        sx={pictogramTrigger}
-      >
-        {/* La marca va fora de la targeta, que talla el que en sobresurt, i
+      {/* L'editor del text va fora del botó: un camp no pot anar dins d'un
+          botó. L'embolcall li dona on posar-se, damunt de la targeta */}
+      <Box sx={{ position: "relative" }}>
+        <Button
+          ref={triggerRef}
+          aria-label={cardLabel}
+          aria-describedby={openPopover ? popoverId : undefined}
+          aria-keyshortcuts={textEditPosition ? "F2" : undefined}
+          variant="text"
+          onClick={handlerClickCard}
+          onContextMenu={handlerContextMenu}
+          onKeyDown={handlerKeyDown}
+          sx={pictogramTrigger}
+        >
+          {/* La marca va fora de la targeta, que talla el que en sobresurt, i
             només a la graella d'edició: la vista, la pantalla completa, la
             impressió i el PDF pinten la targeta sense aquest embolcall */}
-        <Box sx={{ position: "relative" }}>
-          <PictogramCard
-            view={"complete"}
-            pictogram={pictogram}
-            defaults={defaults}
-            size={{ pictSize: 0.75 }}
+          <Box sx={{ position: "relative" }}>
+            <PictogramCard
+              view={"complete"}
+              pictogram={pictogram}
+              defaults={defaults}
+              size={{ pictSize: 0.75 }}
+            />
+            {customized && (
+              <Box
+                data-testid="customized-mark"
+                data-html2canvas-ignore
+                aria-hidden
+                sx={customizedMark}
+              >
+                <MdTune />
+              </Box>
+            )}
+          </Box>
+        </Button>
+        {editingText && textEditPosition && (
+          <CardTextEditor
+            initialText={cardText}
+            label={intl.formatMessage(messages.cardTextInput, {
+              number: cardNumber,
+            })}
+            position={textEditPosition}
+            onCommit={handlerCommitText}
+            onCancel={handlerCancelText}
           />
-          {customized && (
-            <Box
-              data-testid="customized-mark"
-              data-html2canvas-ignore
-              aria-hidden
-              sx={customizedMark}
-            >
-              <MdTune />
-            </Box>
-          )}
-        </Box>
-      </Button>
+        )}
+      </Box>
       <Popover
         id={popoverId}
         open={openPopover}
@@ -201,10 +286,14 @@ const PictEditModal = ({
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         transformOrigin={{ vertical: "top", horizontal: "center" }}
         onClose={handlerClosePopover}
+        TransitionProps={{ onExited: handlerMenuExited }}
       >
         <MouseActionList
           pictogram={pictogram}
           editAction={handlerClickOpen}
+          editTextAction={
+            textEditPosition ? handlerEditTextFromMenu : undefined
+          }
           closeAction={handlerClosePopover}
           copyAction={setCopy}
           pasteObject={copy}
