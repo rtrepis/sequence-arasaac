@@ -1795,3 +1795,165 @@ demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per 
     `e2e/download-pdf-page-format.spec.ts`, que llegeix el `/MediaBox` del PDF que surt.
   - Dels 7 errors d'ESLint del web en queden **3** (els apòstrofs de `features/admin/`), i els
     avisos passen de 237 a 142.
+
+### C22 — La impressió sortia més petita, i diferent amb Ctrl+P que amb el botó ✅ Resolta
+
+*(Reportada per l'usuari el 2026-10-03: amb la finestra a mitja pantalla i Ctrl+P la impressió
+sortia com la vista; amb el Mac a pantalla completa i el botó d'imprimir, més petita. L'usuari va
+insistir que la diferència entre els dos disparadors era real —i ho era.)*
+
+- **On**: `features/print/hooks/usePrintStyles.ts` (`generatePrintCSS`).
+- **La causa**: el CSS d'impressió amagava els controls amb `[class*="NotPrint"]`, però **les capes
+  que suren no són a l'arbre de l'app**: MUI les penja de `document.body` amb un portal, i
+  `NotPrint` no hi arriba mai. Mesurat amb el mitjà `print` emulat, abans del canvi:
+
+  | capa | quan hi és | mida en impressió |
+  |---|---|---|
+  | `MuiDrawer-root` | **sempre** | `display: block`, **l'amplada de la finestra** (1680 px amb la finestra a 1680) |
+  | `MuiTooltip-popper` | **només amb el ratolí damunt del botó** | `display: block`, 65 px, acabant a x = 1545 |
+
+  Les dues es colaven al paper, però **la que encongia el full és el tooltip**: el menú lateral fa
+  el 100 % de l'amplada i es replanteja amb la pàgina, mentre que el tooltip es queda clavat on era
+  a la pantalla (vegeu el punt següent). I el tooltip del botó d'imprimir **està obert justament
+  quan el cliques amb el ratolí**, mentre que **Ctrl+P no passa per cap tooltip**: d'aquí que el
+  mateix full sortís bé amb el teclat i petit amb el botó. El `blur()` de `handlePrint` tanca el
+  tooltip que ve del focus, no el que ve del ratolí.
+
+- **Per què es nota com una mida**: el tooltip no s'hi col·loca sol. MUI l'hi posa amb un
+  `transform: translate(1384px, 112px)` **en línia i en píxels, escrit per JavaScript**. Quan el
+  navegador replanteja la pàgina a l'amplada del full (1047 px) per imprimir, el tooltip es queda
+  clavat als 1384 px: queda molt fora del paper, el document passa a fer tota aquella amplada i el
+  navegador **encongeix tot el dibuix** per fer-l'hi cabre.
+- **Reproduït al pipeline d'impressió de debò** (PDF de Chromium, finestra de 1512 px):
+
+  | ratolí damunt del botó | caixa de la pàgina | escala del dibuix |
+  |---|---|---|
+  | no (com un Ctrl+P) | 1103 × 774 px | 3,125 |
+  | **sí (com quan el cliques)** | **1448 × 1016 px** | **2,379** — un **76 %** |
+
+  Les captures que va enviar l'usuari donen **71,4 %**, amb la graella i el peu de llicència
+  escalats pel **mateix** factor (graella 1163 → 831 px; peu 919 → 656 px): és un encongiment
+  uniforme de tot el document, no un canvi de disposició. La diferència amb el 76 % mesurat aquí és
+  l'amplada de la finestra —com més ampla, més lluny queda el tooltip i més encongeix.
+- **No és cosa de Safari.** Això es va escriure primer com una particularitat del WebKit, i és fals:
+  **Chromium ho fa igual**. El que amagava la troballa és que les mesures d'abans es feien sense el
+  tooltip obert, i sense tooltip no hi ha res que desbordi.
+- **Per què no es reproduïa canviant mides a les eines de desenvolupador**: perquè la mida no era
+  la variable. Calia **el ratolí damunt del botó**, i provant-ho des de les eines no s'hi arriba.
+  La mida de la finestra només hi entra perquè com més ampla és, més lluny cau el tooltip i més
+  encongeix.
+- **El primer intent, i per què no bastava**: es van amagar les capes una per una
+  (`.MuiDrawer-root`, `.MuiPopper-root`, `.MuiTooltip-popper`…) i es va lligar `html`/`body` a
+  l'amplada del full. Funcionava per a les capes conegudes, però era una **llista negra**: cada
+  capa nova de MUI hi tornava a ser una fuita. Ho va dir l'usuari, i tenia raó.
+- **Què s'ha fet**: girar-ho a **llista blanca**. `usePrintSheet` penja del `body` una còpia de
+  `.preview-content` dins de `#print-root` i marca el `body`; el CSS d'impressió amaga **tot** el
+  que penja del `body` i només deixa passar aquesta còpia. És el mateix camí que ja feia
+  l'exportació a PDF —captura `.preview-content` i prou—, i per això el PDF no ha patit mai aquest
+  problema.
+  - El botó prepara la còpia ell mateix abans d'imprimir; **Ctrl+P no passa per codi nostre**, i
+    per això el hook escolta també `beforeprint` (i el canvi de mitjà, per als Safari antics). Les
+    dues vies donen el mateix full **per construcció**.
+  - Si no hi ha full, no s'amaga res: val més imprimir la pàgina tal com surti que deixar l'usuari
+    amb un paper en blanc.
+  - El CSS d'impressió ja no anomena cap classe de MUI ni cap `NotPrint`: hi ha un test que ho
+    comprova, perquè la llista negra no hi pugui tornar.
+- **Verificació** (PDF de Chromium, amb el ratolí damunt del botó i sense):
+
+  | finestra | via | caixa de la pàgina | escala del dibuix |
+  |---|---|---|---|
+  | 1280 | Ctrl+P / botó | 1047 × 718 px | 3,125 / 3,125 |
+  | 1512 | Ctrl+P / botó | 1047 × 718 px | 3,125 / 3,125 |
+  | 2560 | Ctrl+P / botó | 1047 × 718 px | 3,125 / 3,125 |
+
+- **I una troballa que ningú no havia reportat**: la impressió sortia en **dues pàgines**, totes
+  dues amb el full sencer (128 operacions de text a cada flux de contingut). Ara n'és una.
+- **Proves de regressió**: `usePrintSheet.test.ts` (11 casos: la còpia, l'escala treta, que no es
+  toca el full de la pantalla, la idempotència, el cas sense full i els avisos del navegador) i
+  `usePrintStyles.test.ts` (9 casos: el marge, la llista blanca, les mides en mil·límetres i que no
+  hi torni a aparèixer cap llista negra).
+
+### C23 — El peu de llicència queia damunt de l'última fila de pictogrames ✅ Resolta
+
+*(Reportada per l'usuari el 2026-10-04, provant la correcció de C22: «el peu de pàgina surt sobre
+els pictogrames… i també al PDF, que també passa».)*
+
+- **On**: `components/CopyRight/CopyRight.tsx`, el full de
+  `components/ViewSequencesSettings/ViewSquenceSettings.tsx` i el CSS del clon de
+  `features/print/hooks/useDownloadPdf.ts`.
+- **Què passava**: el peu estava **tret del flux** a tots dos camins —`position: fixed` a la
+  impressió, `position: absolute` al clon del PDF— amb el comentari explícit de «sense ocupar lloc
+  a la seqüència». Mentre el full imprès era més gran que la pàgina hi havia prou aire i no es
+  notava; en fer que el full sigui exactament la pàgina (C22), el peu i l'última fila de
+  pictogrames van passar a compartir els mateixos píxels. Al PDF ja hi era des del principi.
+- **Què s'ha fet**: el peu passa a ser **l'últim bloc de la columna del full**. `.preview-content`
+  és ara una columna flex: el contingut (`flex: 1; min-height: 0`) i, a sota, el peu
+  (`flex-shrink: 0`). Així es reserva l'espai ell mateix i no cal encertar cap alçada a mà —si el
+  text fa dues línies, com pot passar en vertical, el full n'hi reserva dues.
+  - El peu també canvia de propietari: el munta qui munta el full (`ViewSquenceSettings`) i no la
+    pàgina (`ViewSequencePage`), que és on havia d'anar des del principi.
+  - Al PDF, el CSS del clon es queda només amb `display: block` i el color: la part de posicionar-lo
+    cau sencera.
+- **Verificació** (full A4 apaïsat de 718 px d'alçada):
+
+  | | contingut | peu |
+  |---|---|---|
+  | impressió | 0 – 689 px | 689 – 718 px |
+  | captura del PDF | 0 – 689 px | 689 – 718 px |
+
+  Cap encavalcament, i els dos camins donen el mateix. Els set e2e de PDF, verds.
+- **Segona passada** (l'usuari: «continuen trepitjant-se, 6 pictogrames a mida 1,6»): reservar
+  l'espai només al paper no bastava, per dues raons que es tapaven l'una a l'altra.
+  1. **La previsualització oferia 29 px que el full no tenia.** El peu només es pintava al paper,
+     de manera que a la pantalla el contingut podia arribar fins a baix de tot i en imprimir es
+     trobava el peu a sobre. Ara el peu **es veu també a la previsualització**: el full ensenya tot
+     el que s'imprimirà, i la vista i el paper tornen a ser la mateixa cosa —que és el que demana
+     `docs/fonaments/03-model-contingut-estil.md`. Amb això decau C23b.
+  2. **El contingut podia pintar-se fora de la seva caixa.** La columna li reservava l'espai, però
+     res no l'hi retenia: amb `overflow: hidden` al bloc del contingut, el que no hi cap es **talla**,
+     que és el que fa el paper. Comprovat amb 12 pictogrames a 1,6: la caixa fa 685 px i el
+     contingut en demanaria 1259; la tercera fila surt tallada i el peu queda net i llegible.
+  3. **Un espai que el delimita**: `SHEET_FOOTER_GAP_PX` (8 px) entre l'última fila i el peu, perquè
+     no es toquin mai.
+  4. El peu porta **tinta de paper** (`printColors.text`) i no la del tema: en fosc era text blanc,
+     i ara que es veu damunt del full blanc hi hauria quedat invisible.
+- **Verificació final** (full A4 apaïsat de 718 px):
+
+  | | contingut | peu |
+  |---|---|---|
+  | previsualització | 0 – 685 px | 685 – 718 px |
+  | impressió | 0 – 685 px | 685 – 718 px |
+  | captura del PDF | 0 – 685 px | 685 – 718 px |
+
+  Les tres superfícies, idèntiques. 187 tests verds i 12 e2e d'impressió i PDF.
+- **Prova de regressió**: `components/CopyRight/CopyRight.test.tsx` (6 casos), amb els que vigilen
+  que el peu no torni a sortir del flux ni a amagar-se de la previsualització.
+
+### C24 — El full deixava 10 mm de blanc a cada banda del paper ✅ Resolta
+
+*(Demanat per l'usuari el 2026-10-04, veient el resultat de C22 i C23: «podem fer que ara ocupi tota
+la pàgina».)*
+
+- **On**: `PRINT_MARGIN_MM`, a `features/print/utils/pageFormat.ts`.
+- **Context**: aquella constant mana dues coses alhora —el que es descompta del paper per calcular
+  el full, i el marge del `@page`—, i per això n'hi ha d'haver una de sola: amb els dos números
+  iguals, la caixa de la pàgina i el full fan la mateixa mida i el full queda centrat sol, sense que
+  el navegador hagi d'encongir res (C22).
+- **Què s'ha fet**: baixar-la de **10 mm a 5 mm**.
+
+  | marge | full (A4 apaïsat) | % del paper |
+  |---|---|---|
+  | 10 mm | 277 × 190 mm (1047 × 718 px) | 84,4 % |
+  | **5 mm** | **287 × 200 mm (1085 × 756 px)** | **92,1 %** |
+
+- **Per què no menys**: per sota d'aquí es trepitja el que les impressores no poden imprimir —la
+  vora de sota és la més restrictiva—, i el que passaria llavors és el que es va arreglar a C22: el
+  navegador ampliaria el marge pel seu compte i encongiria tot el full per fer-l'hi cabre. Si alguna
+  impressora retalla el peu de llicència, aquest és el número que s'ha de pujar.
+- **Verificació** (PDF de Chromium): paper 297 × 210 mm, full 287 × 200 mm, 5,0 mm per banda,
+  **92,1 %** del paper, i escala del dibuix 3,125 —o sigui 1:1, sense cap encongiment. El contingut
+  passa de 685 a **723 px** d'alçada útil i el peu es queda a la seva franja (723–756). Els nou e2e
+  d'impressió i PDF, verds.
+- **Efecte secundari a tenir present**: el full creix en píxels, de manera que a les seqüències ja
+  fetes hi cap una mica més de contingut per fila i per columna. No canvia la mida dels pictogrames
+  —aquesta la mana el control de mida—, només l'espai de què disposen.

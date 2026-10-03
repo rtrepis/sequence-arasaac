@@ -1,7 +1,16 @@
 import { useEffect } from "react";
-import { PageFormat, CSS_PRINT_DPI } from "../utils/pageFormat";
+import {
+  PageFormat,
+  CSS_PRINT_DPI,
+  PRINT_MARGIN_MM,
+} from "../utils/pageFormat";
 import { pixelsToMM } from "../utils/pageUnits";
 import { printColors } from "@/style/palette";
+import {
+  mountPrintSheet,
+  PRINT_ROOT_ID,
+  PRINTING_BODY_CLASS,
+} from "./usePrintSheet";
 
 /**
  * Genera el CSS d'impressió per al pageFormat donat.
@@ -16,47 +25,58 @@ export function generatePrintCSS(pageFormat: PageFormat): string {
     @media print {
       @page {
         size: ${pageFormat.size === "FULLSCREEN" ? "A4" : pageFormat.size} ${pageFormat.orientation};
-        margin: 10px;
+        /* El mateix marge que ja es descompta del paper per calcular el full
+           (\`calculateUsableDimensions\`). Així la caixa de la pàgina i el full
+           fan exactament la mateixa mida i el full queda centrat sol. */
+        margin: ${PRINT_MARGIN_MM}mm;
       }
 
-      form {
-        width: ${widthMM}mm !important;
-        overflow: hidden !important;
+      /* **Al paper hi va el full, i res més.**
+         No s'amaga el que sobra —això era una llista negra, i cada capa nova de
+         MUI n'era una fuita—: es pinta només la còpia del full que
+         \`usePrintSheet\` penja del \`body\`. Tota la resta, l'app inclosa i les
+         capes que MUI hi posa amb un portal (menú lateral, tooltips, menús,
+         avisos, diàlegs), queda fora per defecte i no pot tornar a entrar-hi.
+         La classe del \`body\` només hi és si la còpia s'ha pogut fer: si no,
+         val més imprimir la pàgina tal com surti que un paper en blanc. */
+      body.${PRINTING_BODY_CLASS} > * {
+        display: none !important;
       }
 
-      .preview-container {
-        border: none !important;
-        outline: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: hidden !important;
+      body.${PRINTING_BODY_CLASS} > #${PRINT_ROOT_ID} {
+        display: block !important;
+      }
+
+      /* El document fa exactament el full: no hi ha res que desbordi el paper
+         i, per tant, res que faci encongir el dibuix per fer-l'hi cabre */
+      html,
+      body {
         width: ${widthMM}mm !important;
         height: ${heightMM}mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
       }
 
-      .preview-container > div {
+      #${PRINT_ROOT_ID},
+      #${PRINT_ROOT_ID} > * {
+        width: ${widthMM}mm !important;
+        height: ${heightMM}mm !important;
+        overflow: hidden !important;
+        /* L'escala de la previsualització és per encabir el full a la pantalla */
         transform: none !important;
       }
 
-      /* Xarxa de seguretat: la impressió sempre és sobre paper blanc. Les
-         superfícies de full ja ho són a pantalla (token sheetSurface);
-         aquí es garanteix també per al body i qualsevol Paper interior. */
+      /* La impressió sempre és sobre paper blanc, també en tema fosc */
+      html,
       body,
-      .preview-container,
-      .preview-content,
-      .preview-container .MuiPaper-root {
+      #${PRINT_ROOT_ID},
+      #${PRINT_ROOT_ID} .MuiPaper-root {
         background-color: ${printColors.background} !important;
       }
 
-      .preview-container,
-      .preview-content {
+      #${PRINT_ROOT_ID} {
         color: ${printColors.text};
-      }
-
-      .controls,
-      .displayFullScreen,
-      [class*="NotPrint"] {
-        display: none !important;
       }
     }
   `;
@@ -90,12 +110,16 @@ export function usePrintStyles(pageFormat: PageFormat) {
 }
 
 /**
- * Funció helper per imprimir amb l'orientació correcta
- * Soluciona problemes de navegadors que no respecten @page
+ * Imprimeix el full.
+ *
+ * Prepara la còpia aquí mateix i no espera el `beforeprint` del navegador:
+ * així el botó no depèn que l'esdeveniment arribi ni de quan arribi. Ctrl+P sí
+ * que hi depèn, i per això `usePrintSheet` també l'escolta.
  */
 export function printWithOrientation(pageFormat: PageFormat) {
-  // Forçar aplicació dels estils d'impressió amb valors frescos just abans d'imprimir
+  // Valors frescos, per si el format ha canviat des de l'últim render
   applyPrintStyles(pageFormat);
+  mountPrintSheet();
 
   // Petit delay per assegurar que el DOM ha processat els nous estils
   setTimeout(() => {

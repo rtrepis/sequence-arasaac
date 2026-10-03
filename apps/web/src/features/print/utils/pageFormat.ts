@@ -36,11 +36,22 @@ export interface ScreenMargins {
 }
 
 /**
- * Marges d'impressió en mil·límetres (per cada costat)
- * Aquests són els marges típics que els navegadors/impressores apliquen
+ * Marge d'impressió, en mil·límetres per cada costat.
  *
+ * Mana dues coses alhora, i per això n'hi ha d'haver un de sol: és el que es
+ * descompta del paper per calcular el full **i** el marge del `@page`. Amb els
+ * dos números iguals, la caixa de la pàgina i el full fan exactament la mateixa
+ * mida i el full queda centrat sol, sense que el navegador hagi d'encongir res
+ * per fer-l'hi cabre.
+ *
+ * A 5 mm el full ocupa el 92 % de l'A4 (287 × 200 mm); a 10 mm n'ocupava el
+ * 84 %. Per sota d'aquí es comença a trepitjar el que les impressores no poden
+ * imprimir —la vora de sota és la més restrictiva de totes—, i el que passaria
+ * llavors és que el navegador ampliaria el marge pel seu compte i encongiria
+ * tot el full per fer-l'hi cabre. Si alguna impressora retalla el peu de
+ * llicència, aquest és el número que s'ha de pujar.
  */
-export const PRINT_MARGIN_MM = 10;
+export const PRINT_MARGIN_MM = 5;
 
 /**
  * Configuració de marges per a diferents mides de pantalla

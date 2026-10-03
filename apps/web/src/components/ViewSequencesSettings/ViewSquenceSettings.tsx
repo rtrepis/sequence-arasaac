@@ -26,6 +26,8 @@ import {
   usePrintStyles,
   printWithOrientation,
 } from "@features/print/hooks/usePrintStyles";
+import { usePrintSheet } from "@features/print/hooks/usePrintSheet";
+import CopyRight from "@components/CopyRight/CopyRight";
 import { useDownloadPdf } from "@features/print/hooks/useDownloadPdf";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import {
@@ -196,6 +198,8 @@ const ViewSequencesSettings = ({
 
   // Gestió dels estils d'impressió dinàmics
   usePrintStyles(pageFormat);
+  // I la còpia del full, que és l'únic que arriba al paper —també amb Ctrl+P
+  usePrintSheet();
 
   // Gestió de la descàrrega de PDF
   const { downloadPdf, isGenerating } = useDownloadPdf(pageFormat);
@@ -560,7 +564,9 @@ const ViewSequencesSettings = ({
               backgroundColor: sheetSurface,
             }}
           >
-            {/* Contenidor interior: dimensions reals amb transform per visualització */}
+            {/* Contenidor interior: dimensions reals amb transform per visualització.
+                És el full sencer i l'únic que s'imprimeix (`usePrintSheet`): una
+                columna amb el contingut i, a sota, el peu de llicència */}
             <Box
               className="preview-content"
               sx={{
@@ -568,6 +574,8 @@ const ViewSequencesSettings = ({
                 height: pageFormat.dimensions.height,
                 transform: `scale(${calculatedScale})`,
                 transformOrigin: "top left",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
               <Stack
@@ -587,8 +595,14 @@ const ViewSequencesSettings = ({
                     : 0
                 }
                 width="100%"
-                height="100%"
                 sx={{
+                  flex: 1,
+                  // Sense això, un contingut alt eixamplaria el full en comptes
+                  // de quedar retallat per la vora, com fa el paper
+                  minHeight: 0,
+                  // I sense això el sobrant es pintaria damunt del peu: el que
+                  // no hi cap es talla, que és el que fa el paper
+                  overflow: "hidden",
                   padding: 2,
                   paddingInline: 1.5,
                 }}
@@ -600,6 +614,11 @@ const ViewSequencesSettings = ({
                   author,
                 })}
               </Stack>
+
+              {/* Al peu del full, dins del flux: només es pinta al paper i al
+                  PDF, i allà s'hi reserva l'espai perquè no caigui damunt de
+                  l'última fila de pictogrames */}
+              <CopyRight author={author} />
             </Box>
           </Box>
 

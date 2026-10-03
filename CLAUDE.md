@@ -104,6 +104,7 @@ apps/
 | `usePageFormat` | `features/print/hooks` | Formats de pàgina (A4, A3, FULLSCREEN) i orientació |
 | `useScaleCalculator` | `features/print/hooks` | Càlcul d'escales segons DPI i dimensions |
 | `usePrintStyles` | `features/print/hooks` | Estils dinàmics per impressió |
+| `usePrintSheet` | `features/print/hooks` | La còpia del full, que és l'únic que s'imprimeix (Ctrl+P inclòs) |
 | `useFullScreen` | `features/print/hooks` | Mode fullscreen |
 | `useArasaacKeywords` | `features/pictogram/hooks` | Connexió amb API ARASAAC per obtenir pictogrames |
 | `useSaveUiSettings` | `features/backend/user-settings/hooks` | Desat en segon pla de la configuració d'usuari, amb reintent i diàleg d'error (`docs/estandards/backend.md`) |
