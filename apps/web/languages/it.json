@@ -2705,5 +2705,45 @@
   "components.pictEdit.cardTextInput": {
     "defaultMessage": "Testo del pittogramma {number}",
     "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
+  },
+  "news.edit-text-on-card.title": {
+    "defaultMessage": "Cambia il testo del pittogramma senza lasciare la griglia",
+    "description": "Títol de la notícia «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.summary": {
+    "defaultMessage": "Fai clic sulla parola sotto il pittogramma e scrivine un'altra: non serve più aprire nessuna finestra.",
+    "description": "Resum de la notícia «edit-text-on-card» al carrusel"
+  },
+  "news.edit-text-on-card.content": {
+    "defaultMessage": "Finora, per cambiare la parola che accompagna un pittogramma bisognava aprirne la finestra di modifica, cercare il testo e richiuderla. Ora si scrive direttamente sulla scheda, nella stessa griglia in cui costruisci la sequenza.",
+    "description": "Cos de la notícia «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step1.description": {
+    "defaultMessage": "<p>Fai clic sulla parola della scheda e diventa un campo in cui scrivere, con il testo già selezionato. Scrivine un'altra.</p><p>Per salvarla, premi <b>Invio</b> o fai clic in qualsiasi altro punto. Se ci ripensi, <b>Esc</b> lascia tutto com'era.</p>",
+    "description": "Descripció del pas 1 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step1.alt": {
+    "defaultMessage": "Una sequenza di pittogrammi: la parola del secondo viene riscritta sulla scheda stessa",
+    "description": "Text alternatiu de la imatge del pas 1 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step2.description": {
+    "defaultMessage": "La scheda mostra già il testo nuovo. Se un giorno cancelli tutto il testo e lo lasci vuoto, la scheda torna a mostrare la parola che avevi cercato.",
+    "description": "Descripció del pas 2 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step2.alt": {
+    "defaultMessage": "La stessa sequenza con il testo nuovo salvato sotto il secondo pittogramma",
+    "description": "Text alternatiu de la imatge del pas 2 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step3.description": {
+    "defaultMessage": "<p>Ci arrivi anche in altri modi:</p><ul><li>Con il clic destro sul pittogramma, dall'opzione «Modifica il testo».</li><li>Con la tastiera: posizionati sulla scheda e premi <b>F2</b>.</li></ul>",
+    "description": "Descripció del pas 3 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step3.alt": {
+    "defaultMessage": "Il menu del clic destro di un pittogramma, con l'opzione «Modifica il testo» evidenziata",
+    "description": "Text alternatiu de la imatge del pas 3 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.closing": {
+    "defaultMessage": "Fare clic sull'immagine del pittogramma apre ancora la finestra di modifica, con tutte le impostazioni di sempre. E se la scheda non mostra alcun testo, la parola si cambia da lì, con «Modifica».",
+    "description": "Paràgraf de tancament de la notícia «edit-text-on-card»"
   }
 }

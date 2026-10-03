@@ -55,7 +55,39 @@ const documentsImage = (name: string, alt: string): NewsImage => ({
 });
 const documentsId = (key: string): string => `news.documents-everywhere.${key}`;
 
+const EDIT_TEXT = "/img/news/edit-text-on-card/{locale}";
+const editTextImage = (name: string, step: number): NewsImage => ({
+  src: `${EDIT_TEXT}/${name}.png`,
+  altId: `news.edit-text-on-card.step${step}.alt`,
+});
+const editTextId = (key: string): string => `news.edit-text-on-card.${key}`;
+
 export const newsItems: NewsItem[] = [
+  {
+    slug: "edit-text-on-card",
+    titleId: editTextId("title"),
+    summaryId: editTextId("summary"),
+    contentId: editTextId("content"),
+    coverImage: `${EDIT_TEXT}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: editTextId("step1.description"),
+        image: editTextImage("escriure", 1),
+      },
+      {
+        descriptionId: editTextId("step2.description"),
+        image: editTextImage("desat", 2),
+      },
+      {
+        descriptionId: editTextId("step3.description"),
+        image: editTextImage("menu", 3),
+      },
+    ],
+    closingId: editTextId("closing"),
+    date: "2026-10-03",
+    category: "nova",
+  },
   {
     slug: "documents-everywhere",
     titleId: documentsId("title"),

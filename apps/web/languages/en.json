@@ -2705,5 +2705,45 @@
   "components.pictEdit.cardTextInput": {
     "defaultMessage": "Text of pictogram {number}",
     "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
+  },
+  "news.edit-text-on-card.title": {
+    "defaultMessage": "Change a pictogram's text without leaving the grid",
+    "description": "Títol de la notícia «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.summary": {
+    "defaultMessage": "Click the word under the pictogram and type another one: no window to open anymore.",
+    "description": "Resum de la notícia «edit-text-on-card» al carrusel"
+  },
+  "news.edit-text-on-card.content": {
+    "defaultMessage": "Until now, changing the word that goes with a pictogram meant opening its edit window, finding the text and closing it again. Now you type it straight onto the card, in the same grid where you build the sequence.",
+    "description": "Cos de la notícia «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step1.description": {
+    "defaultMessage": "<p>Click the word on the card and it turns into a field you can type in, with the text already selected. Type a new one.</p><p>To save it, press <b>Enter</b> or click anywhere else. If you change your mind, <b>Esc</b> leaves everything as it was.</p>",
+    "description": "Descripció del pas 1 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step1.alt": {
+    "defaultMessage": "A sequence of pictograms: the word of the second one is being rewritten on the card itself",
+    "description": "Text alternatiu de la imatge del pas 1 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step2.description": {
+    "defaultMessage": "The card now shows the new text. If you ever delete all the text and leave it empty, the card goes back to the word you searched for.",
+    "description": "Descripció del pas 2 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step2.alt": {
+    "defaultMessage": "The same sequence with the new text saved under the second pictogram",
+    "description": "Text alternatiu de la imatge del pas 2 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step3.description": {
+    "defaultMessage": "<p>You can also get there other ways:</p><ul><li>Right-click the pictogram and choose “Edit text”.</li><li>With the keyboard: move to the card and press <b>F2</b>.</li></ul>",
+    "description": "Descripció del pas 3 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step3.alt": {
+    "defaultMessage": "A pictogram's right-click menu, with the “Edit text” option highlighted",
+    "description": "Text alternatiu de la imatge del pas 3 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.closing": {
+    "defaultMessage": "Clicking the pictogram's image still opens the edit window, with all the usual settings. And if the card shows no text, you change the word from there, with “Edit”.",
+    "description": "Paràgraf de tancament de la notícia «edit-text-on-card»"
   }
 }

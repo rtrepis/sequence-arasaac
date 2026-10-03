@@ -2705,5 +2705,45 @@
   "components.pictEdit.cardTextInput": {
     "defaultMessage": "Text del pictograma {number}",
     "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
+  },
+  "news.edit-text-on-card.title": {
+    "defaultMessage": "Canvia el text del pictograma sense sortir de la graella",
+    "description": "Títol de la notícia «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.summary": {
+    "defaultMessage": "Clica la paraula de sota el pictograma i escriu-ne una altra: ja no cal obrir cap finestra.",
+    "description": "Resum de la notícia «edit-text-on-card» al carrusel"
+  },
+  "news.edit-text-on-card.content": {
+    "defaultMessage": "Fins ara, per canviar la paraula que acompanya un pictograma calia obrir-ne la finestra d'edició, buscar-hi el text i tornar a tancar-la. Ara s'escriu directament damunt de la targeta, a la mateixa graella on construeixes la seqüència.",
+    "description": "Cos de la notícia «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step1.description": {
+    "defaultMessage": "<p>Clica la paraula de la targeta i es converteix en un camp per escriure, amb el text ja seleccionat. Escriu-ne una altra.</p><p>Per desar-la, prem <b>Retorn</b> o clica a qualsevol altre lloc. Si t'ho repenses, <b>Esc</b> ho deixa tot com era.</p>",
+    "description": "Descripció del pas 1 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step1.alt": {
+    "defaultMessage": "Una seqüència de pictogrames: la paraula del segon s'està reescrivint damunt de la mateixa targeta",
+    "description": "Text alternatiu de la imatge del pas 1 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step2.description": {
+    "defaultMessage": "La targeta ja diu el text nou. Si un dia esborres tot el text i el deixes buit, la targeta torna a dir la paraula que havies cercat.",
+    "description": "Descripció del pas 2 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step2.alt": {
+    "defaultMessage": "La mateixa seqüència amb el text nou desat a sota del segon pictograma",
+    "description": "Text alternatiu de la imatge del pas 2 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step3.description": {
+    "defaultMessage": "<p>També hi arribes per altres camins:</p><ul><li>Amb el clic dret damunt del pictograma, a l'opció «Edita el text».</li><li>Amb el teclat: situa't damunt de la targeta i prem <b>F2</b>.</li></ul>",
+    "description": "Descripció del pas 3 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.step3.alt": {
+    "defaultMessage": "El menú del clic dret d'un pictograma, amb l'opció «Edita el text» marcada",
+    "description": "Text alternatiu de la imatge del pas 3 de «edit-text-on-card»"
+  },
+  "news.edit-text-on-card.closing": {
+    "defaultMessage": "Clicar la imatge del pictograma continua obrint la finestra d'edició, amb tots els ajustos de sempre. I si la targeta no mostra cap text, la paraula es canvia des d'allà, amb «Edita».",
+    "description": "Paràgraf de tancament de la notícia «edit-text-on-card»"
   }
 }
