@@ -221,12 +221,18 @@ for (const locale of LOCALES) {
     await page.keyboard.press("Escape");
     await expect(reset).toBeHidden();
 
-    // 4. La finestra d'edició, amb la franja «Personalitzat»
+    // 4. La finestra d'edició, amb «Restableix» a la capçalera de l'estil
     await customized.click();
     const editDialog = page.getByRole("dialog");
-    await expect(page.getByTestId("customized-strip")).toBeVisible();
+    await expect(
+      page
+        .getByTestId("setting-accordion-header")
+        .getByRole("button", {
+          name: /Restableix|Restablecer|Reset|Réinitialiser|Ripristina/,
+        }),
+    ).toBeVisible();
     await page.waitForTimeout(600);
-    await shot(page, editDialog, out(locale, "franja-personalitzat"), {
+    await shot(page, editDialog, out(locale, "estil-pictograma"), {
       size: { width: 700, height: 560 },
       noCursor: true,
     });

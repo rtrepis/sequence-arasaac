@@ -19,6 +19,12 @@ const messages = defineMessages({
     description:
       "Nom accessible d'una targeta amb retocs propis: el nom i «personalitzat»",
   },
+  cardTextInput: {
+    id: "components.pictEdit.cardTextInput",
+    defaultMessage: "Text of pictogram {number}",
+    description:
+      "Nom accessible del camp que edita el text damunt de la targeta de la graella",
+  },
   modal: {
     id: "components.pictEdit.modal.label",
     defaultMessage: "Edit Pictogram",

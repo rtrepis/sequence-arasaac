@@ -13,17 +13,17 @@ const messages = defineMessages({
       "Torna aquest pictograma a l'estil del document. Es pot desfer.",
     description: "Tooltip del botó «Restableix» del pictograma",
   },
-  customized: {
-    id: "components.pictEdit.customized",
-    defaultMessage: "Personalitzat",
+  styleSection: {
+    id: "components.pictEdit.styleSection",
+    defaultMessage: "Estil del pictograma",
     description:
-      "Franja a sobre de la configuració: el pictograma té retocs propis, diferents de l'estil del document",
+      "Capçalera de la configuració del pictograma: diu què s'obre en desplegar-la",
   },
-  settings: {
-    id: "components.pictEdit.settings",
-    defaultMessage: "Configuració",
+  styleSectionSubtitle: {
+    id: "components.pictEdit.styleSectionSubtitle",
+    defaultMessage: "Personalització",
     description:
-      "Nom accessible del botó que obre i tanca la configuració del pictograma",
+      "Segona línia de la capçalera de la configuració del pictograma: el que s'hi fa és personalitzar-lo respecte de l'estil del document",
   },
   resetDone: {
     id: "components.pictEdit.resetDone",

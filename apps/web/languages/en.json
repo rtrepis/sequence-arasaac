@@ -2498,9 +2498,13 @@
     "defaultMessage": "App preferences, such as the language or your default style, are not saved.",
     "description": "Quadre «Què es guarda»: el que no hi va"
   },
-  "components.pictEdit.customized": {
-    "defaultMessage": "Customised",
-    "description": "Franja a sobre de la configuració: el pictograma té retocs propis"
+  "components.pictEdit.styleSection": {
+    "defaultMessage": "Pictogram style",
+    "description": "Capçalera de la configuració del pictograma: diu què s'obre"
+  },
+  "components.pictEdit.styleSectionSubtitle": {
+    "defaultMessage": "Customisation",
+    "description": "Segona línia de la capçalera de la configuració del pictograma"
   },
   "context.feedback.load.invalidFile": {
     "defaultMessage": "It couldn't be opened. It isn't a SequenciAAC document or it is damaged.",
@@ -2541,10 +2545,6 @@
   "features.sequence.style.styleFileOpened.makeDefault": {
     "defaultMessage": "Make it my default style",
     "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
-  },
-  "components.pictEdit.settings": {
-    "defaultMessage": "Settings",
-    "description": "Nom accessible del botó que obre i tanca la configuració del pictograma"
   },
   "components.pictEdit.resetDone": {
     "defaultMessage": "Style reset",
@@ -2603,7 +2603,7 @@
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step3.description": {
-    "defaultMessage": "<p>Each document has a <b>general style</b>, which is the one all the cards share. If you change something in a single pictogram, only that change is saved, and the rest follows the general style.</p><p>An example: the document uses blue borders, and you make the border of the «breakfast» pictogram red so that it stands out. If you then change the font of the whole document, «breakfast» changes font too, but keeps its red border.</p><p>So that you always know what is going on:</p><ul><li>When you edit a pictogram with its own changes, the <b>Customised</b> strip appears above the settings, with the <b>Reset</b> button to make it follow the general style again.</li><li>In the grid, customised pictograms have a <b>small mark</b> in the corner. Only you see it while you edit: it never appears in the printout, the PDF or full screen.</li><li>You can also reset them from the pictogram menu, with <b>Reset style</b>.</li><li><b>Apply All</b> gives all the cards the same style and removes their own changes.</li><li>If you make a mistake, <b>Undo</b> puts it back the way it was.</li></ul>",
+    "defaultMessage": "<p>Each document has a <b>general style</b>, which is the one all the cards share. If you change something in a single pictogram, only that change is saved, and the rest follows the general style.</p><p>An example: the document uses blue borders, and you make the border of the «breakfast» pictogram red so that it stands out. If you then change the font of the whole document, «breakfast» changes font too, but keeps its red border.</p><p>So that you always know what is going on:</p><ul><li>When you edit a pictogram with its own changes, the <b>Reset</b> button appears next to <b>Pictogram style</b>, to make it follow the general style again.</li><li>In the grid, customised pictograms have a <b>small mark</b> in the corner. Only you see it while you edit: it never appears in the printout, the PDF or full screen.</li><li>You can also reset them from the pictogram menu, with <b>Reset style</b>.</li><li><b>Apply All</b> gives all the cards the same style and removes their own changes.</li><li>If you make a mistake, <b>Undo</b> puts it back the way it was.</li></ul>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.step4.title": {
@@ -2678,8 +2678,8 @@
     "defaultMessage": "Dialog shown when opening a style file: «This file is a style, not a document», with buttons to apply it to the document or make it the default style.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
-  "news.documents-everywhere.customizedStrip.alt": {
-    "defaultMessage": "Pictogram editing window with the «Customised» strip and the «Reset» button above the settings.",
+  "news.documents-everywhere.styleHeader.alt": {
+    "defaultMessage": "Pictogram editing window with the «Reset» button next to «Pictogram style».",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.gridMark.alt": {
@@ -2697,5 +2697,13 @@
   "news.documents-everywhere.structure.alt": {
     "defaultMessage": "Drawing: a document contains sequences, and each sequence contains pictograms. Beside it, the general style and a pictogram's changes. Inside the document, also the page and your photos; your preferences stay outside.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "components.mouseActionList.editText": {
+    "defaultMessage": "Edit text",
+    "description": "Canvia el text del pictograma directament damunt de la targeta, sense obrir el diàleg"
+  },
+  "components.pictEdit.cardTextInput": {
+    "defaultMessage": "Text of pictogram {number}",
+    "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
   }
 }

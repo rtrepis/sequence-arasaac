@@ -40,3 +40,24 @@ export const customizedMark: SxProps<Theme> = {
   pointerEvents: "none",
   "@media print": { display: "none" },
 };
+
+/**
+ * Camp que edita el text damunt de la targeta de la graella: tapa el text de
+ * la targeta, a dalt o a baix segons on el pinta. És damunt del full, i per
+ * això no s'adapta al tema: paper blanc i lletra negra, com la targeta. El
+ * contorn verd només diu on és el focus. La lletra, a 16 px com a mínim: amb
+ * menys, Safari d'iOS amplia la pàgina en entrar-hi.
+ */
+export const cardTextEditor = (position: "top" | "bottom"): SxProps<Theme> => ({
+  position: "absolute",
+  insetInline: 12,
+  ...(position === "top" ? { top: 10 } : { bottom: 10 }),
+  zIndex: 1,
+  paddingInline: 1,
+  fontSize: 16,
+  color: printColors.text,
+  backgroundColor: sheetSurface,
+  borderRadius: 1,
+  boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}`,
+  "& input": { textAlign: "center" },
+});

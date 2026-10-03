@@ -42,7 +42,7 @@ const gotoEditor = async (page: Page, amount: number): Promise<void> => {
 const typePictogramText = async (page: Page, text: string): Promise<void> => {
   const dialog = page.getByRole("dialog");
   const accordion = dialog
-    .getByRole("button", { name: "Configuració" })
+    .getByRole("button", { name: "Estil del pictograma" })
     .first();
   if ((await accordion.getAttribute("aria-expanded")) !== "true") {
     await accordion.click();
@@ -61,9 +61,7 @@ const runDialogAction = async (page: Page, action: string): Promise<void> => {
   await page.getByRole("button", { name: action }).click();
 };
 
-test("el menú contextual no tapa el pictograma que descriu", async ({
-  page,
-}) => {
+test("el menú contextual surt sencer a la finestra", async ({ page }) => {
   await gotoEditor(page, 1);
   const card = cards(page).first();
   await card.click({ button: "right" });
@@ -71,14 +69,17 @@ test("el menú contextual no tapa el pictograma que descriu", async ({
   const popover = page.locator(".MuiPopover-paper");
   await expect(popover).toBeVisible();
 
-  // El menú diu «Pictograma 1»: s'ha de poder comprovar que l'1 és el que es
-  // tenia al davant, i per això comença per sota de la targeta
-  const cardBox = await card.boundingBox();
-  const popoverBox = await popover.boundingBox();
-  expect(cardBox && popoverBox).toBeTruthy();
-  expect(popoverBox!.y).toBeGreaterThanOrEqual(
-    cardBox!.y + cardBox!.height - 1,
+  // S'ancora sota la targeta, però amb set accions ja no hi cap en una
+  // finestra baixa i MUI el puja: el que s'ha de complir sempre és que hi
+  // surti sencer, perquè no en quedi cap acció fora de l'abast
+  const popoverBox = (await popover.boundingBox())!;
+  const viewport = page.viewportSize()!;
+  expect(popoverBox.y).toBeGreaterThanOrEqual(0);
+  expect(popoverBox.y + popoverBox.height).toBeLessThanOrEqual(
+    viewport.height,
   );
+  expect(popoverBox.x).toBeGreaterThanOrEqual(0);
+  expect(popoverBox.x + popoverBox.width).toBeLessThanOrEqual(viewport.width);
 });
 
 test("el diàleg ofereix les accions que no tenen cap altra via, i no repeteix les que sí", async ({

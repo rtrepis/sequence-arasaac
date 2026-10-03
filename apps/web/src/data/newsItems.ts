@@ -77,7 +77,7 @@ export const newsItems: NewsItem[] = [
       {
         titleId: documentsId("step3.title"),
         descriptionId: documentsId("step3.description"),
-        image: documentsImage("franja-personalitzat", "customizedStrip"),
+        image: documentsImage("estil-pictograma", "styleHeader"),
         moreImages: [
           documentsImage("marca-graella", "gridMark"),
           documentsImage("menu-restableix", "resetMenu"),

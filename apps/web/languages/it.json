@@ -2498,9 +2498,13 @@
     "defaultMessage": "Non si salvano le preferenze dell'app, come la lingua o lo stile predefinito.",
     "description": "Quadre «Què es guarda»: el que no hi va"
   },
-  "components.pictEdit.customized": {
-    "defaultMessage": "Personalizzato",
-    "description": "Franja a sobre de la configuració: el pictograma té retocs propis"
+  "components.pictEdit.styleSection": {
+    "defaultMessage": "Stile del pittogramma",
+    "description": "Capçalera de la configuració del pictograma: diu què s'obre"
+  },
+  "components.pictEdit.styleSectionSubtitle": {
+    "defaultMessage": "Personalizzazione",
+    "description": "Segona línia de la capçalera de la configuració del pictograma"
   },
   "context.feedback.load.invalidFile": {
     "defaultMessage": "Non è stato possibile aprirlo. Non è un documento di SequenciAAC o è danneggiato.",
@@ -2541,10 +2545,6 @@
   "features.sequence.style.styleFileOpened.makeDefault": {
     "defaultMessage": "Rendilo il mio stile predefinito",
     "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
-  },
-  "components.pictEdit.settings": {
-    "defaultMessage": "Configurazione",
-    "description": "Nom accessible del botó que obre i tanca la configuració del pictograma"
   },
   "components.pictEdit.resetDone": {
     "defaultMessage": "Stile ripristinato",
@@ -2603,7 +2603,7 @@
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step3.description": {
-    "defaultMessage": "<p>Ogni documento ha uno <b>stile generale</b>, quello di tutte le schede. Se cambi qualcosa in un solo pittogramma, si salva solo quella modifica, e il resto segue lo stile generale.</p><p>Un esempio: il documento usa bordi blu, e metti in rosso il bordo del pittogramma «colazione» perché risalti. Se poi cambi il carattere di tutto il documento, anche «colazione» cambia carattere, ma mantiene il bordo rosso.</p><p>Perché tu sappia sempre cosa succede:</p><ul><li>Quando modifichi un pittogramma con modifiche proprie, sopra le impostazioni compare la striscia <b>Personalizzato</b>, con il pulsante <b>Ripristina</b> perché torni a seguire lo stile generale.</li><li>Nella griglia, i pittogrammi personalizzati hanno un <b>piccolo segno</b> nell'angolo. Lo vedi solo tu mentre modifichi: non compare mai nella stampa, nel PDF né a schermo intero.</li><li>Puoi anche ripristinarli dal menu del pittogramma, con <b>Ripristina lo stile</b>.</li><li><b>Applica a tutti</b> dà lo stesso stile a tutte le schede e toglie le modifiche proprie.</li><li>Se sbagli, <b>Annulla</b> rimette tutto com'era.</li></ul>",
+    "defaultMessage": "<p>Ogni documento ha uno <b>stile generale</b>, quello di tutte le schede. Se cambi qualcosa in un solo pittogramma, si salva solo quella modifica, e il resto segue lo stile generale.</p><p>Un esempio: il documento usa bordi blu, e metti in rosso il bordo del pittogramma «colazione» perché risalti. Se poi cambi il carattere di tutto il documento, anche «colazione» cambia carattere, ma mantiene il bordo rosso.</p><p>Perché tu sappia sempre cosa succede:</p><ul><li>Quando modifichi un pittogramma con modifiche proprie, accanto a <b>Stile del pittogramma</b> compare il pulsante <b>Ripristina</b>, perché torni a seguire lo stile generale.</li><li>Nella griglia, i pittogrammi personalizzati hanno un <b>piccolo segno</b> nell'angolo. Lo vedi solo tu mentre modifichi: non compare mai nella stampa, nel PDF né a schermo intero.</li><li>Puoi anche ripristinarli dal menu del pittogramma, con <b>Ripristina lo stile</b>.</li><li><b>Applica a tutti</b> dà lo stesso stile a tutte le schede e toglie le modifiche proprie.</li><li>Se sbagli, <b>Annulla</b> rimette tutto com'era.</li></ul>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.step4.title": {
@@ -2678,8 +2678,8 @@
     "defaultMessage": "Finestra che compare aprendo un file di stile: «Questo file è uno stile, non un documento», con i pulsanti per applicarlo al documento o renderlo lo stile predefinito.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
-  "news.documents-everywhere.customizedStrip.alt": {
-    "defaultMessage": "Finestra di modifica di un pittogramma con la striscia «Personalizzato» e il pulsante «Ripristina» sopra le impostazioni.",
+  "news.documents-everywhere.styleHeader.alt": {
+    "defaultMessage": "Finestra di modifica di un pittogramma con il pulsante «Ripristina» accanto a «Stile del pittogramma».",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.gridMark.alt": {
@@ -2697,5 +2697,13 @@
   "news.documents-everywhere.structure.alt": {
     "defaultMessage": "Disegno: un documento contiene sequenze, e ogni sequenza contiene pittogrammi. Accanto, lo stile generale e le modifiche di un pittogramma. Dentro il documento, anche la pagina e le tue foto; le tue preferenze restano fuori.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "components.mouseActionList.editText": {
+    "defaultMessage": "Modifica il testo",
+    "description": "Canvia el text del pictograma directament damunt de la targeta, sense obrir el diàleg"
+  },
+  "components.pictEdit.cardTextInput": {
+    "defaultMessage": "Testo del pittogramma {number}",
+    "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
   }
 }

@@ -2498,9 +2498,13 @@
     "defaultMessage": "No se guardan las preferencias de la app, como el idioma o el estilo predeterminado.",
     "description": "Quadre «Què es guarda»: el que no hi va"
   },
-  "components.pictEdit.customized": {
-    "defaultMessage": "Personalizado",
-    "description": "Franja a sobre de la configuració: el pictograma té retocs propis"
+  "components.pictEdit.styleSection": {
+    "defaultMessage": "Estilo del pictograma",
+    "description": "Capçalera de la configuració del pictograma: diu què s'obre"
+  },
+  "components.pictEdit.styleSectionSubtitle": {
+    "defaultMessage": "Personalización",
+    "description": "Segona línia de la capçalera de la configuració del pictograma"
   },
   "context.feedback.load.invalidFile": {
     "defaultMessage": "No se ha podido abrir. No es un documento de SequenciAAC o está dañado.",
@@ -2541,10 +2545,6 @@
   "features.sequence.style.styleFileOpened.makeDefault": {
     "defaultMessage": "Convertirlo en mi estilo predeterminado",
     "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
-  },
-  "components.pictEdit.settings": {
-    "defaultMessage": "Configuración",
-    "description": "Nom accessible del botó que obre i tanca la configuració del pictograma"
   },
   "components.pictEdit.resetDone": {
     "defaultMessage": "Estilo restablecido",
@@ -2603,7 +2603,7 @@
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step3.description": {
-    "defaultMessage": "<p>Cada documento tiene un <b>estilo general</b>, que es el que tienen todas las tarjetas. Si cambias algo en un solo pictograma, solo se guarda ese cambio, y el resto sigue el estilo general.</p><p>Un ejemplo: el documento usa bordes azules, y marcas en rojo el borde del pictograma «desayunar» para que destaque. Si después cambias la letra de todo el documento, «desayunar» también cambia de letra, pero mantiene el borde rojo.</p><p>Para que siempre sepas qué pasa:</p><ul><li>Al editar un pictograma con cambios propios, sobre la configuración aparece la franja <b>Personalizado</b>, con el botón <b>Restablecer</b> para que vuelva a seguir el estilo general.</li><li>En la cuadrícula, los pictogramas personalizados llevan una <b>marca pequeña</b> en la esquina. Solo la ves tú mientras editas: nunca sale ni en la impresión, ni en el PDF, ni en pantalla completa.</li><li>También puedes restablecerlos desde el menú del pictograma, con <b>Restablecer el estilo</b>.</li><li><b>Aplicar todo</b> pone el mismo estilo en todas las tarjetas y quita los cambios propios.</li><li>Si te equivocas, <b>Deshacer</b> lo vuelve a dejar como estaba.</li></ul>",
+    "defaultMessage": "<p>Cada documento tiene un <b>estilo general</b>, que es el que tienen todas las tarjetas. Si cambias algo en un solo pictograma, solo se guarda ese cambio, y el resto sigue el estilo general.</p><p>Un ejemplo: el documento usa bordes azules, y marcas en rojo el borde del pictograma «desayunar» para que destaque. Si después cambias la letra de todo el documento, «desayunar» también cambia de letra, pero mantiene el borde rojo.</p><p>Para que siempre sepas qué pasa:</p><ul><li>Al editar un pictograma con cambios propios, junto a <b>Estilo del pictograma</b> aparece el botón <b>Restablecer</b>, para que vuelva a seguir el estilo general.</li><li>En la cuadrícula, los pictogramas personalizados llevan una <b>marca pequeña</b> en la esquina. Solo la ves tú mientras editas: nunca sale ni en la impresión, ni en el PDF, ni en pantalla completa.</li><li>También puedes restablecerlos desde el menú del pictograma, con <b>Restablecer el estilo</b>.</li><li><b>Aplicar todo</b> pone el mismo estilo en todas las tarjetas y quita los cambios propios.</li><li>Si te equivocas, <b>Deshacer</b> lo vuelve a dejar como estaba.</li></ul>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.step4.title": {
@@ -2678,8 +2678,8 @@
     "defaultMessage": "Diálogo que aparece al abrir un archivo de estilo: «Este archivo es un estilo, no un documento», con los botones para aplicarlo al documento o convertirlo en el estilo predeterminado.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
-  "news.documents-everywhere.customizedStrip.alt": {
-    "defaultMessage": "Ventana de edición de un pictograma con la franja «Personalizado» y el botón «Restablecer» sobre la configuración.",
+  "news.documents-everywhere.styleHeader.alt": {
+    "defaultMessage": "Ventana de edición de un pictograma con el botón «Restablecer» junto a «Estilo del pictograma».",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.gridMark.alt": {
@@ -2697,5 +2697,13 @@
   "news.documents-everywhere.structure.alt": {
     "defaultMessage": "Dibujo: un documento contiene secuencias, y cada secuencia contiene pictogramas. Al lado, el estilo general y los cambios de un pictograma. Dentro del documento, también la página y tus fotos; tus preferencias quedan fuera.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
+  },
+  "components.mouseActionList.editText": {
+    "defaultMessage": "Editar el texto",
+    "description": "Canvia el text del pictograma directament damunt de la targeta, sense obrir el diàleg"
+  },
+  "components.pictEdit.cardTextInput": {
+    "defaultMessage": "Texto del pictograma {number}",
+    "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
   }
 }

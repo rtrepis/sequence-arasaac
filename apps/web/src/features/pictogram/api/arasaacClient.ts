@@ -11,6 +11,12 @@ import {
 
 const araSaacURL = import.meta.env.VITE_APP_API_ARASAAC_URL;
 
+/**
+ * El pictograma en blanc: el del lloc buit d'una seqüència i el que es pinta
+ * quan una imatge no arriba (`PictogramCard`).
+ */
+export const EMPTY_PICTOGRAM_URL = "../img/settings/white.svg";
+
 // Cerca pictogrames per paraula. Retorna l'array de dades brutes de l'API.
 export const searchPictogramByWord = async (
   word: string,
@@ -45,33 +51,31 @@ export const fetchKeywordsForLocale = async (
 };
 
 // Construeix la URL del pictograma amb paràmetres d'aparença (skin, hair, color).
+//
+// Els paràmetres s'ajunten tots alhora i la interrogació la posa qui els uneix.
+// Encadenant-los a mà, cada condició havia d'endevinar si ja n'hi havia cap
+// abans, i amb pell blanca i sense cabell no ho encertava: el blanc i negre hi
+// arribava com a `&color=false`, sense cap `?` al davant, i aquella adreça no
+// torna cap imatge. Passava en treure el color d'un pictograma al seu
+// formulari, que és on la pell blanca és el valor de sortida.
 export const buildPictogramUrl = (
   pictogramId: number,
   skin?: Skin,
   hair?: Hair,
   color?: boolean,
 ): string => {
-  if (pictogramId === 0) return "../img/settings/white.svg";
-  let path = `${araSaacURL}pictograms/${pictogramId}`;
+  if (pictogramId === 0) return EMPTY_PICTOGRAM_URL;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  skin &&
-    skin !== "white" &&
-    (path += `?skin=${skin === "asian" ? "assian" : skin}`);
+  const params = new URLSearchParams();
+  // La pell blanca és la del pictograma tal com ve: no cal demanar-la
+  if (skin && skin !== "white")
+    params.set("skin", skin === "asian" ? "assian" : skin);
+  if (hair) params.set("hair", hair);
+  // Només es demana el blanc i negre; en color ja ve
+  if (color === false) params.set("color", "false");
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  hair &&
-    (skin === undefined || skin === "white"
-      ? (path += `?hair=${hair}`)
-      : (path += `&hair=${hair}`));
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  color === false &&
-    (skin === undefined && hair === undefined
-      ? (path += `?color=${color}`)
-      : (path += `&color=${color}`));
-
-  return path;
+  const query = params.toString();
+  return `${araSaacURL}pictograms/${pictogramId}${query ? `?${query}` : ""}`;
 };
 
 // Categoria de Fitzgerald d'un pictograma d'ARASAAC: el tipus de la primera
