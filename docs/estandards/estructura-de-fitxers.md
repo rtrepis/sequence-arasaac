@@ -80,8 +80,11 @@ col·locat (o li falta rebre per props el que ara va a buscar).
   diàleg, `SettingsDialog` és el diàleg. Tenir `DefaultSettingsModal` (un botó) i
   `DefaultSettingsDialog` (el diàleg) a la mateixa carpeta no ho deixava saber a
   ningú.
-- **Els noms provisionals no es queden**: `features/print-refactor/` és avui la
-  implementació de debò i encara es diu «refactor» (vegeu `docs/BACKLOG-ux.md`).
+- **Els noms provisionals no es queden.** `features/print-refactor/` va viure
+  nou mesos dient-se «refactor» mentre era la implementació de debò, al costat
+  d'un `features/print/` que semblava el bo. Es va esborrar sencer el
+  2026-10-03 (C21): de les 1.481 línies, el que feia falta eren les vuit de
+  `features/print/utils/pageUnits.ts`.
 - **Els identificadors dels missatges no canvien quan un component es mou.** Són
   la clau de les traduccions dels cinc idiomes: `SettingsDialog.lang.ts` conserva
   els ids `components.defaultSettings.*` a propòsit.

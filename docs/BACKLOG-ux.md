@@ -86,8 +86,7 @@ l'entrada.
 | N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
 | B30 | No hi ha historial de desfer i refer | El desfer que ja existeix cobreix els canvis d'estil, «Aplica a tots» i «Restableix», que són els que esborren més feina d'un cop | L |
 | C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. Va amb C17 | M | No |
-| C10 | Dotze fitxers de test en quarantena | El runner i l'arnès ja hi són; queda portar-los-hi o esborrar-los, un per un | S cada un | Sí: per cada fitxer, reviure o esborrar |
-| C21 | `features/print-refactor/` és el nom provisional que s'ha quedat | Dues carpetes per a la mateixa àrea i mana la que sembla provisional; demana els tests de DPI de C10 | M | No |
+| C10 | Vuit fitxers de test en quarantena | El runner i l'arnès ja hi són; queda portar-los-hi o esborrar-los, un per un | S cada un | Sí: per cada fitxer, reviure o esborrar |
 
 ### Ajornades (comptes apagats)
 
@@ -1389,9 +1388,11 @@ Branca `claude/document-limit-users-sjig8o`.
 
 ### C10 — La suite de tests del web no compilava ni s'executava 🔴 Oberta (en quarantena)
 
+*(Actualitzada el 2026-10-03: dels dotze fitxers en quarantena en queden vuit, vegeu C21.)*
+
 *(Trobada en posar la barrera de tipus de C9. Mig resolta en reorganitzar `Modals/`.)*
 
-- **On**: els dotze fitxers llistats al `exclude` de `vitest.config.ts` i del `tsconfig.json`.
+- **On**: els vuit fitxers llistats al `exclude` de `vitest.config.ts` i del `tsconfig.json`.
 - **Què s'ha fet**: el web ja té runner i arnès.
   - `vitest` + `jsdom` al workspace (`vitest.config.ts` hereta els alias del `vite.config.ts`, així
     no hi ha dues llistes que es puguin desalinear); `npm test` = `vitest run`.
@@ -1405,14 +1406,20 @@ Branca `claude/document-limit-users-sjig8o`.
     `applyAllReset.test.ts`) es muntaven el seu propi store amb quatre slices i ara fan servir
     `createAppStore`.
   - Estat: **140 tests verds** al web i 81 a l'API (`npx turbo test`).
-- **Què queda**: dotze fitxers en quarantena, per dos motius diferents.
+- **Què queda**: vuit fitxers en quarantena, tots del mateix motiu.
   1. **Model d'estat anterior** (vuit): `App.test.tsx`, `BarNavigation`, `PictogramAmount`,
      `PictogramCard`, `PictogramSearch`, `SettingCard`, `MagicSearch`, `uiSlice.test.tsx`. Escrits
      contra un slice `sequence` que ja no existeix, amb API de Jest i props que han canviat.
-  2. **Expectatives caducades** (quatre): `loadLocaleMessage.test.ts` espera una clau de missatge
-     que s'ha esborrat, i `usePageFormat` + els dos `useScaleCalculator` esperen mides de pàgina
-     d'abans que canviés el DPI per defecte (975 on ara en surten 1047). Un d'ells
-     (`useScaleCalculator.oreintationFixe.test.ts` — amb l'errata al nom) no té cap test a dins.
+  2. ~~**Expectatives caducades** (quatre)~~ — **tancat el 2026-10-03 amb C21**.
+     `usePageFormat.test.ts` i `useScaleCalculator.test.ts` esperaven les mides `PAGE_FORMATS`
+     escrites a mà i esborrades el 2026-02-01 (975×689 per a un A4 apaïsat, quan la mida correcta
+     d'avui, derivada de l'ISO 216 menys els marges a 96 DPI, és 1047×718). Reescrits perquè
+     **derivin** el que esperen de `PAPER_DIMENSIONS_MM`, `PRINT_MARGIN_MM` i `CSS_PRINT_DPI`: així
+     el test diu la regla i no una fotografia dels números d'un dia. De passada va caure la
+     premissa d'un cas («menys marge, més escala»), que el límit d'escala a 1,0 del commit
+     `7dea37c` havia invalidat. `useScaleCalculator.oreintationFixe.test.ts` (sense cap test a
+     dins) i `loadLocaleMessage.test.ts` s'han esborrat; el segon, amb el mòdul que provava
+     (`languages/loadLocaleMessages.ts`), que no importava ningú.
 - **Per què en quarantena i no arreglats**: perquè «arreglar-los» aquí voldria dir reescriure els
   números que s'esperen sense haver mirat si el que ha canviat és correcte, i això és convertir una
   prova en una fotografia del bug. I deixar-los dins vol dir que `npm test` neix vermell, que és
@@ -1742,17 +1749,49 @@ demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per 
   vista, i l'«abans» obliga a construir una revisió antiga. És l'única de les sis sense compte que
   no s'ha publicat, i el motiu és aquest cost, no el contingut.
 
-### C21 — `features/print-refactor/` és la implementació de debò i encara es diu «refactor» 🔴 Oberta
+### C21 — `features/print-refactor/` era la implementació de debò i es deia «refactor» ✅ Resolta
 
-*(Trobada en establir l'estàndard d'estructura de fitxers, en treure `Modals/`.)*
+*(Trobada en establir l'estàndard d'estructura de fitxers, en treure `Modals/`. Resolta el 2026-10-03.)*
 
-- **On**: `features/print-refactor/` (`components/dpiDetector.tsx`, `utils/dpiManager.ts`,
-  `hooks/usePageDimmension.ts`) i qui en depèn: `types/PageFormat.ts`,
-  `features/print/hooks/usePageFormat.ts` i `components/ViewSequencesSettings/ViewSquenceSettings.tsx`.
-- **Per què importa**: hi ha dues carpetes de la mateixa àrea (`print/` i `print-refactor/`) i la
-  que mana és la que sembla provisional. Qui hi arriba per primera vegada no té manera de saber
-  quina de les dues és viva, i el nom convida a tocar la que no toca. Els quatre errors d'ESLint que
-  queden al web també són aquí (`@ts-ignore`, `no-undef`).
-- **Proposta**: fondre les dues carpetes en `features/print/` i deixar `dpiDetector`/`dpiManager`
-  dins seu. És un moviment sense canvi de comportament, com el de `Modals/`, i demana el mateix:
-  tests del DPI abans de moure res — que avui són quatre dels fitxers en quarantena de C10.
+- **On era**: `features/print-refactor/` — 1.481 línies en cinc fitxers.
+- **Què s'hi va trobar en revisar-la**: no era un problema de nom, era una carpeta buida de feina.
+  - **Res del que calculava no s'usava.** Tots els camins vius passen el DPI explícitament
+    (`CSS_PRINT_DPI`, 96): `calculateUsableDimensions`, `useDownloadPdf` i `usePrintStyles`. El
+    commit `7dea37c` (2026-06-12, «Escala impressió: sempre 96 CSS DPI per pageFormat») va deixar
+    la detecció sense feina, i ningú no la va treure.
+  - **I la detecció era tautològica.** `detectPhysicalDPI()` mesurava un `div` d'una polzada, però
+    una polzada CSS val 96 px per definició. Comprovat amb Chromium a `deviceScaleFactor` 1, 2 i 3:
+    **96 px sempre**. La branca de «pantalla Retina = 192 DPI» no s'executava mai.
+  - **Un cost real, això sí**: `usePageFormat` cridava `useScreenDPI()` i no en llegia el valor. A
+    cada esdeveniment de `resize`, sense throttle, inseria un `div` al `document.body`, en llegia
+    l'`offsetWidth` —reflow sincrònic forçat—, el treia i feia `setState` amb un objecte nou, o
+    sigui re-render de tota la pàgina de vista amb els pictogrames a dins. El `resize` de debò ja
+    el porta `useWindowResize`.
+  - **Codi mort**: `CalibrationTool.tsx` (486 línies, ningú no l'importava, i reimplementava les
+    conversions per quarta vegada), `usePageDimmension.ts` (85, i calculava la pàgina amb el DPI
+    *de pantalla*: revifar-lo hauria trencat la coincidència entre previsualització i paper),
+    `DPISettings` i els dos `logDPIInfo`.
+  - **El `README.md`** (299 línies) enllaçava a quatre documents esborrats el 2026-02-01, descrivia
+    una estructura inexistent i donava per fetes mètriques inventades («0 bugs relacionats amb
+    càlculs d'escala en 3 mesos», «Reducció del 60% en complexitat ciclomàtica»), amb
+    `Status: ✅ Production Ready`.
+  - **Qualitat**: `import` al mig del fitxer, `React.FC` sense importar React (l'error `no-undef`),
+    textos en català clavats al codi i `grey.100` a `DPISettings`, `localStorage` directe per fora
+    de `settingsStorage`, `// @@ts-expect-error` amb dues arrobes (que no fa res),
+    `useDPIChangeListener` que es diu `use*` i no és un hook, guardes de SSR en una SPA i una
+    cache mutable a nivell de mòdul.
+- **Què s'ha fet**: esborrar-la sencera. El que calia conservar són les dues conversions, ara a
+  `features/print/utils/pageUnits.ts` (8 línies) i **amb el DPI com a argument obligatori**: abans
+  queien a un DPI «detectat» quan no se'ls passava cap, i qui escrivia `mmToPixels(210)` sortia del
+  contracte sense cap avís.
+  - `types/PageFormat.ts` → `features/print/utils/pageFormat.ts`, que era lògica del domini
+    d'impressió vivint a `types/` (8 importadors).
+  - `PageSize` es declarava dues vegades (aquí i a `shared-types`, que és la que viatja dins del
+    `.saac` i de l'API): ara es reexporta la compartida.
+  - S'ha esborrat també `PRINT_CONTAINER_PADDING` (valia 0 i no la llegia ningú) i
+    `languages/loadLocaleMessages.ts` amb el seu test, que tampoc no importava ningú.
+  - **Sense canvi de comportament**: les mides del full les segueix donant la mateixa aritmètica a
+    96 DPI. Verificat amb el `typecheck` net, 162 tests verds i l'spec
+    `e2e/download-pdf-page-format.spec.ts`, que llegeix el `/MediaBox` del PDF que surt.
+  - Dels 7 errors d'ESLint del web en queden **3** (els apòstrofs de `features/admin/`), i els
+    avisos passen de 237 a 142.

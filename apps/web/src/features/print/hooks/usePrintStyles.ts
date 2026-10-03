@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { PageFormat, CSS_PRINT_DPI } from "@/types/PageFormat";
+import { PageFormat, CSS_PRINT_DPI } from "../utils/pageFormat";
+import { pixelsToMM } from "../utils/pageUnits";
 import { printColors } from "@/style/palette";
 
 /**
@@ -8,8 +9,8 @@ import { printColors } from "@/style/palette";
  * independentment del DPI de pantalla o del monitor connectat.
  */
 export function generatePrintCSS(pageFormat: PageFormat): string {
-  const widthMM = (pageFormat.dimensions.width * 25.4) / CSS_PRINT_DPI;
-  const heightMM = (pageFormat.dimensions.height * 25.4) / CSS_PRINT_DPI;
+  const widthMM = pixelsToMM(pageFormat.dimensions.width, CSS_PRINT_DPI);
+  const heightMM = pixelsToMM(pageFormat.dimensions.height, CSS_PRINT_DPI);
 
   return `
     @media print {

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { ViewSettings } from "@/types/ui";
-import { createPageFormat } from "@/types/PageFormat";
+import { createPageFormat } from "@features/print/utils/pageFormat";
 import { useAppSelector } from "@app/hooks";
 import { SettingsPreviewFrame } from "@components/SettingsLayout";
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";

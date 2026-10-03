@@ -27,7 +27,6 @@ import {
   printWithOrientation,
 } from "@features/print/hooks/usePrintStyles";
 import { useDownloadPdf } from "@features/print/hooks/useDownloadPdf";
-import { getCurrentDPI } from "@/features/print-refactor/utils/dpiManager";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import {
   DocumentLayout,

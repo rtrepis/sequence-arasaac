@@ -1,5 +1,8 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
-import { PageSize, PageOrientation } from "./PageFormat";
+import {
+  PageSize,
+  PageOrientation,
+} from "@features/print/utils/pageFormat";
 import { WordProfile } from "@features/word-profile/model/WordProfile";
 import type {
   ImageQuality,

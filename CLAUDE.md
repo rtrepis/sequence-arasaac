@@ -59,7 +59,7 @@ apps/
 │       │   ├── backend/        #   crida a l'API: api/ (apiClient, wake-up), auth/, documents/, user-settings/ (SettingsSaveErrorDialog)
 │       │   ├── user-settings/  #   estat local (Redux), persistència al navegador i components/SettingsDialog/ (el diàleg de configuració i els seus panells)
 │       │   ├── sequence/       #   documentSlice, contingut de les seqüències i components/PictEdit/ (edició d'un pictograma)
-│       │   ├── print/          #   hooks d'impressió i format de pàgina
+│       │   ├── print/          #   hooks d'impressió i utils/ (pageFormat: mides ISO del paper; pageUnits: mm↔px)
 │       │   ├── pictogram/      #   cerca i keywords d'ARASAAC
 │       │   ├── word-profile/   #   vocabulari personal
 │       │   ├── admin/          #   panell d'administració
@@ -93,7 +93,7 @@ apps/
 - **Front** (`apps/web`): `npm run typecheck` = `tsc --noEmit`; `npm run lint` = `eslint ./src`; `npm run build` = compila les traduccions (`scripts/compile-languages.mjs`) i després `vite build` (que només empaqueta). `npm test` = `vitest run` (jsdom + Testing Library, config a `vitest.config.ts`, que hereta els alias del `vite.config.ts`); `npm run test:watch` per anar-hi treballant. Els tests e2e (captures/vídeos de funcionalitats) van amb **Playwright** (`apps/web/playwright.config.ts`, carpeta `e2e/`).
 - **Back** (`apps/api`): `npm run typecheck` i `npm run lint` són tots dos `tsc --noEmit` (el nom `lint` hi era abans); `npm test` = `vitest run` (usa `mongodb-memory-server`, per això els fitxers `*.test.ts` i `src/test/` queden exclosos del `tsconfig.json` de build/producció).
 - **Els tests que corren entren al `typecheck`**: són codi del projecte i la barrera de tipus també els mira. L'única cosa que queda fora és la **quarantena**: una dotzena de fitxers heretats de Create React App que no compilen ni passen contra el codi d'avui, llistats a `vitest.config.ts` i al `exclude` del `tsconfig.json` amb el mateix comentari. Vegeu C10 de `docs/BACKLOG-ux.md`; reviure'n un vol dir portar-lo a `src/test/renderWithProviders`.
-- **`npm run lint` del web surt vermell amb errors preexistents** (7, a `features/admin/` i a `features/print-refactor/dpiDetector.tsx`): quan s'hi passa, cal filtrar la sortida amb grep pels fitxers tocats per verificar que els errors nous no són nostres. El `typecheck`, en canvi, ha d'estar **net**: si en surt un, és nostre.
+- **`npm run lint` del web surt vermell amb errors preexistents** (3, apòstrofs sense escapar a `features/admin/`): quan s'hi passa, cal filtrar la sortida amb grep pels fitxers tocats per verificar que els errors nous no són nostres. El `typecheck`, en canvi, ha d'estar **net**: si en surt un, és nostre.
 - **L'arnès de proves del web és `src/test/`**: `renderWithProviders` munta la mateixa pila de proveïdors que `index.tsx` amb l'store de debò (`createAppStore`, d'`app/store.ts`, l'única declaració del mapa de reducers), i `fixtures/` té els objectes de domini. Cap test no s'ha de muntar el seu propi store: la mock paral·lela d'abans (`utils/test-utils.tsx`, esborrada) es va desincronitzar i va deixar la suite provant un model inexistent.
 - Desplegament: front a **Vercel**, back a **Render** (`render.yaml`, `buildCommand: npx turbo build --filter=api`) — vegeu «Desplegament» a `docs/estandards/comptes-i-quotes.md` per als detalls de per què han de compartir origen.
 

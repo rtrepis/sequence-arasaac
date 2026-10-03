@@ -40,10 +40,6 @@
     "src/components/SettingsCards/SettingCard/SettingCard.test.tsx",
     "src/features/pictogram/components/MagicSearch/MagicSearch.test.tsx",
     "src/features/user-settings/store/uiSlice.test.tsx",
-    "src/languages/loadLocaleMessage.test.ts",
-    "src/features/print/hooks/usePageFormat.test.ts",
-    "src/features/print/hooks/useScaleCalculator.test.ts",
-    "src/features/print/hooks/useScaleCalculator.oreintationFixe.test.ts",
     ".private/mocks/handlers.ts"
   ]
 }

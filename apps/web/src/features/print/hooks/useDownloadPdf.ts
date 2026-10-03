@@ -3,9 +3,9 @@ import { useIntl } from "react-intl";
 import {
   type PageFormat,
   type PageDimensions,
-  pixelsToMM,
   CSS_PRINT_DPI,
-} from "@/types/PageFormat";
+} from "../utils/pageFormat";
+import { pixelsToMM } from "../utils/pageUnits";
 import { appBackgrounds, printColors } from "@/style/palette";
 import { PRINT_COPYRIGHT_CLASS } from "@components/CopyRight/CopyRight";
 import { useFeedback } from "@/context/FeedbackContext";

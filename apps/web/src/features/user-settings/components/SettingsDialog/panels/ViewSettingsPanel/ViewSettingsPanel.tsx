@@ -31,7 +31,7 @@ import {
 import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import { DefaultSettingsPanelHandle } from "../DefaultSettingsPanel/DefaultSettingsPanel";
 import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
-import { PageSize } from "@/types/PageFormat";
+import { PageSize } from "@features/print/utils/pageFormat";
 import { SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
 import GlobalViewControls from "@components/ViewSequencesSettings/GlobalViewControls";
 import PrintFooterSection from "@components/ViewSequencesSettings/PrintFooterSection";

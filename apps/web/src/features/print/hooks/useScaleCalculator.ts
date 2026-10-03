@@ -5,7 +5,7 @@ import {
   FOOTER_SPACE,
   isMediumScreen,
   PageDimensions,
-} from "@/types/PageFormat";
+} from "../utils/pageFormat";
 
 /**
  * Paràmetres per al càlcul d'escala

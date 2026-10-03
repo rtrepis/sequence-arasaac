@@ -1,17 +1,22 @@
 /**
- * Tipus i configuracions per a formats de pàgina
- * Actualitzat per usar dpiManager com a font única de veritat per DPI
+ * Tipus i configuracions dels formats de pàgina.
  *
- * Segueix el principi Open/Closed: fàcil afegir nous formats sense modificar codi existent
+ * Les mides surten del paper (ISO 216, en mil·límetres) i es converteixen amb
+ * `CSS_PRINT_DPI`: el navegador imprimeix sempre a 96 DPI CSS, de manera que
+ * la previsualització coincideix amb el full en qualsevol monitor. Aquest
+ * fitxer feia abans un camí més llarg —demanava el DPI «de la pantalla» a un
+ * detector que, per força, sempre retornava 96, perquè una polzada CSS val 96
+ * píxels per definició.
  */
 
-import {
-  getCurrentDPI,
-  mmToPixels as mmToPx,
-  pixelsToMM as pxToMM,
-} from "@/features/print-refactor/utils/dpiManager";
+import type { PageSize } from "@sequence-arasaac/shared-types";
+import { mmToPixels } from "./pageUnits";
 
-export type PageSize = "A4" | "A3" | "FULLSCREEN";
+// La mida de pàgina viatja dins del document i de l'API: la declara
+// `shared-types` i aquí només es reexporta, perquè no n'hi hagi dues versions
+// que puguin divergir
+export type { PageSize };
+
 export type PageOrientation = "landscape" | "portrait";
 
 export interface PageDimensions {
@@ -29,14 +34,6 @@ export interface ScreenMargins {
   small: number; // xs/sm screens
   medium: number; // md+ screens
 }
-
-/**
- * Re-exportar funcions de conversió del dpiManager per compatibilitat
- * @deprecated Usar directament des de @/utils/dpiManager
- */
-export const mmToPixels = mmToPx;
-export const pixelsToMM = pxToMM;
-export const getDPIForUser = getCurrentDPI;
 
 /**
  * Marges d'impressió en mil·límetres (per cada costat)
@@ -64,13 +61,6 @@ export const FOOTER_SPACE = 150;
 export const FULLSCREEN_SCALE = 0.82;
 
 /**
- * Padding del contenidor d'impressió
- * Aquest valor s'utilitza per calcular l'escala de previsualització
- *
- */
-export const PRINT_CONTAINER_PADDING = 0;
-
-/**
  * Dimensions de paper estàndard ISO en mil·límetres
  * Font: https://en.wikipedia.org/wiki/ISO_216
  */
@@ -89,8 +79,8 @@ export const CSS_PRINT_DPI = 96;
 
 /**
  * Calcula les dimensions útils d'un paper descomptant marges.
- * Usa sempre 96 DPI (estàndard CSS) per garantir que el preview
- * coincideix amb la impressió en qualsevol monitor o devicePixelRatio.
+ * Sempre a `CSS_PRINT_DPI`, perquè el preview coincideixi amb la impressió en
+ * qualsevol monitor o `devicePixelRatio`.
  *
  * @param paperWidthMM - Amplada del paper en mm
  * @param paperHeightMM - Alçada del paper en mm
@@ -106,20 +96,17 @@ export function calculateUsableDimensions(
   const usableHeightMM = paperHeightMM - marginMM * 2;
 
   return {
-    width: mmToPx(usableWidthMM, CSS_PRINT_DPI),
-    height: mmToPx(usableHeightMM, CSS_PRINT_DPI),
+    width: mmToPixels(usableWidthMM, CSS_PRINT_DPI),
+    height: mmToPixels(usableHeightMM, CSS_PRINT_DPI),
   };
 }
 
 /**
- * Factory function per crear configuracions de pàgina
- * Calcula dimensions dinàmicament segons el DPI actual
- *
- * Segueix el principi de substitució de Liskov
+ * Crea la configuració d'una pàgina.
  *
  * @param size - Mida de pàgina (A4, A3, FULLSCREEN)
  * @param orientation - Orientació (landscape, portrait)
- * @returns PageFormat amb dimensions calculades segons DPI actual
+ * @returns El format, amb les dimensions útils en píxels d'impressió
  */
 export function createPageFormat(
   size: PageSize,
@@ -128,9 +115,8 @@ export function createPageFormat(
   let baseDimensions: PageDimensions;
 
   if (size === "FULLSCREEN") {
-    const screenW = typeof window !== "undefined" ? window.screen.width : 1920;
-    const screenH =
-      typeof window !== "undefined" ? window.screen.height : 1080;
+    const screenW = window.screen.width;
+    const screenH = window.screen.height;
     // Les dimensions de pantalla ja reflecteixen l'orientació física
     // Usem max/min per garantir landscape=horitzontal, portrait=vertical
     const maxDim = Math.max(screenW, screenH);
@@ -141,7 +127,7 @@ export function createPageFormat(
         : { width: minDim, height: maxDim };
     return { size, orientation, dimensions };
   } else {
-    // Calcular dimensions amb DPI actual
+    // Les mides del paper, menys els marges, en píxels d'impressió
     const paperDimensions = PAPER_DIMENSIONS_MM[size];
     baseDimensions = calculateUsableDimensions(
       paperDimensions.width,
