@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/app/hooks";
 import { RootState } from "@/app/store";
-import PictEditModalList from "@/Modals/PictEditModalList/PictEditModalList";
+import { PictEditModalList } from "@features/sequence/components/PictEdit";
 import React from "react";
 
 interface TabPanelSequenceProps {

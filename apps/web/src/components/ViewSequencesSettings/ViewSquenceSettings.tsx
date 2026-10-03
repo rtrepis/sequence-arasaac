@@ -50,7 +50,7 @@ import ApplyUserDefaultStyleButton from "@features/sequence/components/DocumentS
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import { sheetSurface } from "@/style/palette";
 import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSaveUiSettings";
-import SettingsSaveErrorDialog from "@/Modals/DefaultSettingsModal/SettingsSaveErrorDialog";
+import SettingsSaveErrorDialog from "@features/backend/user-settings/components/SettingsSaveErrorDialog";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";

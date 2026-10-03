@@ -3,7 +3,8 @@
 > **Quan llegir-lo:** abans de declarar un `Dialog`, un `Snackbar` o un botó flotant.
 
 Tot el que sura per damunt de la pàgina. Font única de veritat:
-`components/AppDialog/`, `components/FloatingLayer/`, `style/appShape.ts` i
+`components/AppDialog/`, `components/AppFullScreenDialog/`,
+`components/FloatingLayer/`, `style/appShape.ts` i
 `style/floatingControl.ts`. La raó de cada regla és a
 `docs/ESTANDARD-capes-flotants.md` (inventari, troballes F1–F13 i pla).
 
@@ -25,8 +26,17 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 
 ## Diàlegs
 
-- **`AppDialog` és l'única manera de declarar un `Dialog`.** Mai un `Dialog` de
-  MUI amb `DialogTitle`/`DialogActions` a mà.
+- **Hi ha dos diàlegs canònics i cap més: `AppDialog` i `AppFullScreenDialog`.**
+  Mai un `Dialog` de MUI fora d'aquestes dues carpetes, ni amb
+  `DialogTitle`/`DialogActions` a mà.
+  - **`AppDialog`** per a una pregunta, un missatge, un formulari o una llista:
+    centrat, títol al mig i accions al peu.
+  - **`AppFullScreenDialog`** per a una superfície de treball: pantalla
+    completa, barra superior amb títol, tabs si en té i la creu de tancar.
+  No són un component amb dues cares ni una excepció l'un de l'altre: són dues
+  formes diferents, i encabir-les en un sol component volia dir el doble de
+  props i dues personalitats. Un tercer tipus de diàleg seria un tercer
+  component canònic, mai un `Dialog` escrit a mà.
 - **Capçalera de tres franges**: una de buida, el títol centrat amb el seu
   distintiu, i la ranura d'icona. Les dues franges laterals fan la mateixa
   amplada perquè el títol quedi centrat **de debò** tant si hi ha acció com si
@@ -34,9 +44,11 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - **El títol diu on ets; el distintiu (`badge`) diu sobre què** —el número del
   pictograma—, i **forma part del nom accessible** (`aria-labelledby` amb els dos
   identificadors): «Editar Pictograma 4», no «Editar Pictograma».
-- **A la ranura de la capçalera només hi va un menú de més accions. Mai una
-  creu de tancar**: tancar viu al peu, en un sol lloc de tota l'app. Amb una
-  creu allà, el mateix racó voldria dir dues coses segons el diàleg (F1).
+- **A la ranura de la capçalera d'un `AppDialog` només hi va un menú de més
+  accions. Mai una creu de tancar**: tancar viu al peu, en un sol lloc (F1).
+  L'`AppFullScreenDialog` sí que porta la creu a la barra, i no al peu: a
+  pantalla completa no hi ha peu on posar-la, i la barra és on tothom la busca.
+  Cada forma té **un** lloc per tancar, i sempre el mateix.
 - **Peu (`AppDialogActions`)**: l'acció que no és ni acceptar ni cancel·lar va
   **sola a l'esquerra** (l'esborrat del modal d'edició, `outlined error`; la
   sortida que evita la pèrdua d'un `ConfirmDialog`); a la dreta, tancar o
@@ -55,9 +67,13 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - **`statusSlot`** és per al progrés o l'error que ha de quedar visible entre el
   contingut i el peu: dins d'una llista llarga quedaria fora de pantalla
   justament mentre s'espera.
-- **Excepció declarada**: `DefaultSettingsDialog` és `fullScreen` i segueix
-  l'estàndard de tabs (barra superior amb tabs i creu, sense peu). Drawer, menús
-  i popovers són capes de navegació i queden fora d'aquest estàndard.
+- **L'alçada de la barra d'un diàleg a pantalla completa** surt de
+  `APP_FULLSCREEN_APPBAR_HEIGHT`, que exporta `AppFullScreenDialog`. Per sota de
+  `md` la barra és `position: fixed` i no ocupa lloc: el buit que la compensa el
+  posa el propi diàleg, i la mostra enganxada dels panells s'hi aparta amb
+  `SETTINGS_APPBAR_OFFSET`, que en surt. Un sol número, en un sol lloc.
+- Drawer, menús i popovers són capes de navegació i queden fora d'aquest
+  estàndard.
 
 ## Avisos flotants
 
@@ -120,4 +136,8 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   **`LoadDocumentModal`**, **`AuthModal`**, **`ModalDownload`**.
 - ✅ **Avisos** — els tres `Snackbar` comparteixen aparença, posició i reserva.
 - ✅ **Botons flotants** — `DocumentStatusFab` i les fletxes de `NewsNavBar`.
-- ➖ **`DefaultSettingsDialog`** — fora d'abast, amb motiu (estàndard de tabs).
+- ✅ **`SettingsDialog`** (abans `DefaultSettingsDialog`) — era l'única excepció
+  declarada: un `Dialog` de MUI a pell, amb la seva barra, la seva transició i la
+  seva creu escrites a dins. Ara la forma viu a `AppFullScreenDialog` i el
+  diàleg de configuració només hi posa els tabs i els panells. **Ja no hi ha cap
+  excepció: zero `Dialog` de MUI fora dels dos components canònics.**

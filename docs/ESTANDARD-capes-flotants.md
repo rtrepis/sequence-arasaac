@@ -22,7 +22,7 @@ flotants:
 - El **toggle arrodonit** de `StyledToggleButtonGroup` (55×55, radi 20, vora
   d'1,75 px, tint del verd quan està seleccionat). És la marca de la casa: hi ha
   a les configuracions, a la pàgina de vista i al formulari d'edició.
-- El **modal d'edició de pictograma** (`Modals/PictEditModal`), que és l'únic
+- El **modal d'edició de pictograma** (avui `features/sequence/components/PictEdit`), que és l'únic
   diàleg amb capçalera pròpia (títol + número del pictograma + menú d'accions),
   cantonades arrodonides i un peu amb l'acció destructiva a l'esquerra i la
   principal a la dreta.
@@ -47,7 +47,7 @@ app té set diàlegs amb cinc maneres diferents de tancar-se**.
 | `LoadDocumentModal` | `sm` + `fullWidth` | `DialogTitle` + **`✕`** a la dreta | **`✕` de la capçalera i «Tanca» del peu** | dreta: Tanca (text `inherit`) · Carrega (contained) |
 | `AuthModal` | `xs` + `fullWidth` | `DialogTitle` + **`✕`** a la dreta | **només la `✕`** | **cap**: «Entra» és el submit del formulari |
 | `SettingsSaveErrorDialog` | `xs` | `DialogTitle`, a l'esquerra | **Ara no** del peu | dreta: descarta (text) · Reintenta (contained) |
-| `DefaultSettingsDialog` | `fullScreen` | `AppBar` amb tabs + `✕` | **`✕`** de l'`AppBar` | cap |
+| `DefaultSettingsDialog` (avui `SettingsDialog`) | `fullScreen` | `AppBar` amb tabs + `✕` | **`✕`** de l'`AppBar` | cap |
 
 Cinc maneres de tancar: peu, creu, peu **i** creu, només fora del diàleg, i
 creu d'una barra superior.
@@ -398,7 +398,7 @@ Per ordre, del que fixa el patró al que només l'hereta:
     llegir-la d'una variable CSS i deixa d'apartar-se a les pàgines on no hi ha
     cap control flotant.
 
-Fora d'abast, amb motiu: **`DefaultSettingsDialog`** (és `fullScreen` i ja té
+Fora d'abast en aquell moment: **`DefaultSettingsDialog`** (és `fullScreen` i ja té
 estàndard propi, el de tabs: barra superior, `✕` a l'`AppBar` i cap peu), el
 **drawer**, els **menús** i els **popovers** (capes de navegació, no de
 missatge), i el **backdrop** (que només hereta el color, punt 11).

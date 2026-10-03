@@ -14,7 +14,7 @@ import { useIntl } from "react-intl";
 import { AppDialog, AppDialogActions } from "@components/AppDialog";
 import StyledButton from "@/style/StyledButton";
 import confirmMessages from "@components/ConfirmDialog/ConfirmDialog.lang";
-import SettingsSaveErrorDialog from "@/Modals/DefaultSettingsModal/SettingsSaveErrorDialog";
+import SettingsSaveErrorDialog from "@features/backend/user-settings/components/SettingsSaveErrorDialog";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import {
   changeDocumentStyleThunk,

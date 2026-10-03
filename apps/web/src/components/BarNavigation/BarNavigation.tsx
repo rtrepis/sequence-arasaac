@@ -2,7 +2,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import DefaultSettings from "../../Modals/DefaultSettingsModal/DefaultSettingsModal";
+import { SettingsDialogButton } from "@features/user-settings/components/SettingsDialog";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./BarNavigation.lang";
 import { Box, Stack } from "@mui/material";
@@ -124,7 +124,7 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
               </Stack>
 
               <Stack direction={"row"} alignItems={"center"}>
-                <DefaultSettings />
+                <SettingsDialogButton />
               </Stack>
             </Toolbar>
           </AppBar>

@@ -73,7 +73,6 @@ l'entrada.
 | B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
-| C10 | La suite de tests del web no compila | Dona una falsa sensació de xarxa de seguretat. Esborrar-la és S; reviure-la és L | S / L | Sí: reviure o esborrar |
 | B23 | L'idioma desat de l'usuari sense compte no mana sobre la URL | Amb els comptes apagats, **tothom** és usuari sense compte: la regla que val és aquesta | S | Sí: mana la URL o mana la preferència |
 
 ### Més endavant
@@ -87,6 +86,8 @@ l'entrada.
 | N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
 | B30 | No hi ha historial de desfer i refer | El desfer que ja existeix cobreix els canvis d'estil, «Aplica a tots» i «Restableix», que són els que esborren més feina d'un cop | L |
 | C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. Va amb C17 | M | No |
+| C10 | Dotze fitxers de test en quarantena | El runner i l'arnès ja hi són; queda portar-los-hi o esborrar-los, un per un | S cada un | Sí: per cada fitxer, reviure o esborrar |
+| C21 | `features/print-refactor/` és el nom provisional que s'ha quedat | Dues carpetes per a la mateixa àrea i mana la que sembla provisional; demana els tests de DPI de C10 | M | No |
 
 ### Ajornades (comptes apagats)
 
@@ -558,7 +559,7 @@ valors** torna, que és on els quatre botons de debò es diferencien.
   control per veu no pot dir el que llegeix). Amb `describeChild` el tooltip és `aria-describedby` i
   el botó conserva el seu text. No aplica als botons només-icona, on el tooltip **és** el nom.
 - Resol de passada la col·lisió de `components.pictEdit.reset` que apuntava C4: la definició no
-  usada de `Modals/PictEditModal/PictEdit.lang.ts` s'ha esborrat, perquè en canviar el text les dues
+  usada de `features/sequence/components/PictEdit/PictEdit.lang.ts` s'ha esborrat, perquè en canviar el text les dues
   haurien divergit en silenci.
 
 ### B6 — Els tooltips de seqüències són català hardcodat ✅ Resolta
@@ -602,7 +603,7 @@ Ordre nou, en quatre grups separats per `Divider`:
 *(Trobada en analitzar A5 i A6, fora del seu abast.)*
 
 - **On**: `MouseActionList.tsx` (`disabled={pasteObject ? false : true}`) i
-  `Modals/PictEditModalList/PictEditModalList.tsx` (l'estat `copyPictogram`)
+  `features/sequence/components/PictEdit/PictEditModalList.tsx` (l'estat `copyPictogram`)
 - **Per què importa**: fins que no s'ha copiat res, «Enganxar» surt gris i el menú no diu per què;
   i quan sí que hi ha alguna cosa copiada, tampoc no es veu enlloc **quin** pictograma s'enganxarà.
   El porta-retalls viu en un `useState` que no es mostra mai.
@@ -1382,28 +1383,43 @@ Branca `claude/document-limit-users-sjig8o`.
   net**: si en surt un error, és nostre. No s'ha encadenat dins de `npm run lint` a propòsit —
   el lint del web ja surt vermell amb 13 errors preexistents d'ESLint i una barrera que neix
   vermella no la mira ningú.
-- **Residu**: aquests 13 errors d'ESLint segueixen oberts; 6 són a `test-utils.tsx` (vegeu C10) i la
-  resta són apòstrofs sense escapar i dos `@ts-ignore` en pàgines soltes.
+- **Residu**: en queden **7** (n'eren 13). Els 6 de `test-utils.tsx` han marxat amb el fitxer, que
+  s'ha esborrat en refer l'arnès de proves (C10). Els que queden són apòstrofs sense escapar a
+  `features/admin/` i dos `@ts-ignore` a `features/print-refactor/dpiDetector.tsx`.
 
-### C10 — La suite de tests del web no compila ni s'executa 🔴 Oberta
+### C10 — La suite de tests del web no compilava ni s'executava 🔴 Oberta (en quarantena)
 
-*(Trobada en posar la barrera de tipus de C9.)*
+*(Trobada en posar la barrera de tipus de C9. Mig resolta en reorganitzar `Modals/`.)*
 
-- **On**: `src/**/*.test.tsx`, `src/setupTests.ts` i `src/utils/test-utils.tsx`.
-- **Per què importa**: no és que els tests fallin — és que **no poden ni arrencar**. `npm test` és un
-  placeholder (`echo 'Tests: WIP'`), el workspace no té configuració de vitest, `test-utils.tsx`
-  munta un store amb un `sequenceReducer` de `app/slice/sequenceSlice` (mòdul esborrat) i una mock
-  d'`Ui` a la qual falten `lang`, `theme`, `settingsActiveTab`, `wordProfiles` i `tier`; els tests
-  passen props que ja no existeixen (`BarNavigation title`) o n'obliden d'obligatòries
-  (`PictogramAmount info`), i `setupTests.ts` importa `.private/mocks/server`, que no és al
-  repositori. Mentrestant el `CLAUDE.md` els presentava com a «tests reals».
-- **Proposta**: decidir-ho d'una: o es reviu la suite (configurar vitest al web, refer `test-utils`
-  contra l'store actual —`document`, `ui`, `auth`— i actualitzar els sis fitxers de test), o
-  s'esborra i es deixa dit que la cobertura del front són els e2e de Playwright. Mantenir-la a mig
-  camí és el pitjor dels tres: ocupa lloc, dona sensació de xarxa de seguretat i no n'és cap.
-- **Mentrestant**: exclosa del `typecheck` (`exclude` del `tsconfig.json`), com els tests de l'API.
-  L'`exclude` ja ho intentava, però tenia les dues rutes dins d'una sola cadena separades per una
-  coma, que no coincideix amb cap fitxer.
+- **On**: els dotze fitxers llistats al `exclude` de `vitest.config.ts` i del `tsconfig.json`.
+- **Què s'ha fet**: el web ja té runner i arnès.
+  - `vitest` + `jsdom` al workspace (`vitest.config.ts` hereta els alias del `vite.config.ts`, així
+    no hi ha dues llistes que es puguin desalinear); `npm test` = `vitest run`.
+  - `src/test/renderWithProviders.tsx` munta la mateixa pila de proveïdors que `index.tsx` amb
+    l'store **de debò**: `app/store.ts` exporta `createAppStore`, que és l'única declaració del
+    mapa de reducers. L'arrel del problema era justament tenir-ne dues.
+  - `src/test/fixtures/document.ts` per als objectes de domini.
+  - `utils/test-utils.tsx` i `setupTests.ts`, esborrats: eren la mock paral·lela desincronitzada i
+    un `setup` que importava `.private/mocks/server`, que no és al repositori.
+  - Els tests que corren **entren al `typecheck`**. Dos fitxers de l'store (`styleSlice.test.ts`,
+    `applyAllReset.test.ts`) es muntaven el seu propi store amb quatre slices i ara fan servir
+    `createAppStore`.
+  - Estat: **140 tests verds** al web i 81 a l'API (`npx turbo test`).
+- **Què queda**: dotze fitxers en quarantena, per dos motius diferents.
+  1. **Model d'estat anterior** (vuit): `App.test.tsx`, `BarNavigation`, `PictogramAmount`,
+     `PictogramCard`, `PictogramSearch`, `SettingCard`, `MagicSearch`, `uiSlice.test.tsx`. Escrits
+     contra un slice `sequence` que ja no existeix, amb API de Jest i props que han canviat.
+  2. **Expectatives caducades** (quatre): `loadLocaleMessage.test.ts` espera una clau de missatge
+     que s'ha esborrat, i `usePageFormat` + els dos `useScaleCalculator` esperen mides de pàgina
+     d'abans que canviés el DPI per defecte (975 on ara en surten 1047). Un d'ells
+     (`useScaleCalculator.oreintationFixe.test.ts` — amb l'errata al nom) no té cap test a dins.
+- **Per què en quarantena i no arreglats**: perquè «arreglar-los» aquí voldria dir reescriure els
+  números que s'esperen sense haver mirat si el que ha canviat és correcte, i això és convertir una
+  prova en una fotografia del bug. I deixar-los dins vol dir que `npm test` neix vermell, que és
+  tornar al punt de partida: una barrera que no mira ningú.
+- **Proposta**: per cada fitxer, portar-lo a `src/test/renderWithProviders` o esborrar-lo. Els
+  quatre d'expectatives caducades, derivant les mides de la constant de DPI en comptes de clavar-hi
+  el número. Els de la llista 1 demanen tants retocs com reescriure'ls.
 
 ### C11 — Una vora «fitzgerald» sense classificació es pinta del color del text ✅ Resolta
 
@@ -1725,3 +1741,18 @@ demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per 
 - **Proposta**: si s'escriu, demana una captura **d'abans i després** de la barra de la pàgina de
   vista, i l'«abans» obliga a construir una revisió antiga. És l'única de les sis sense compte que
   no s'ha publicat, i el motiu és aquest cost, no el contingut.
+
+### C21 — `features/print-refactor/` és la implementació de debò i encara es diu «refactor» 🔴 Oberta
+
+*(Trobada en establir l'estàndard d'estructura de fitxers, en treure `Modals/`.)*
+
+- **On**: `features/print-refactor/` (`components/dpiDetector.tsx`, `utils/dpiManager.ts`,
+  `hooks/usePageDimmension.ts`) i qui en depèn: `types/PageFormat.ts`,
+  `features/print/hooks/usePageFormat.ts` i `components/ViewSequencesSettings/ViewSquenceSettings.tsx`.
+- **Per què importa**: hi ha dues carpetes de la mateixa àrea (`print/` i `print-refactor/`) i la
+  que mana és la que sembla provisional. Qui hi arriba per primera vegada no té manera de saber
+  quina de les dues és viva, i el nom convida a tocar la que no toca. Els quatre errors d'ESLint que
+  queden al web també són aquí (`@ts-ignore`, `no-undef`).
+- **Proposta**: fondre les dues carpetes en `features/print/` i deixar `dpiDetector`/`dpiManager`
+  dins seu. És un moviment sense canvi de comportament, com el de `Modals/`, i demana el mateix:
+  tests del DPI abans de moure res — que avui són quatre dels fitxers en quarantena de C10.

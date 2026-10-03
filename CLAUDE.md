@@ -54,18 +54,18 @@ apps/
 │   ├── e2e/                 # Tests Playwright (captures/vídeos de funcionalitats)
 │   └── src/
 │       ├── pages/            # Pàgines (WelcomePage, EditSequencesPage, ViewSequencePage, AdminPage...)
-│       ├── components/       # Components reutilitzables (SettingsLayout, AppTabs, PictogramCard...)
-│       ├── Modals/           # DefaultSettingsModal, PictEditModal, PictEditModalList
-│       ├── features/         # Features modularitzades:
-│       │   ├── backend/        #   crida a l'API: api/ (apiClient, wake-up), auth/, documents/, user-settings/
-│       │   ├── user-settings/  #   estat local (Redux) + persistència al navegador
-│       │   ├── sequence/       #   documentSlice, contingut de les seqüències
+│       ├── components/       # Genèrics, sense domini (AppDialog, AppFullScreenDialog, AppTabs, SettingsLayout, PictogramCard...)
+│       ├── features/         # Features modularitzades (cada component viu amb el seu domini):
+│       │   ├── backend/        #   crida a l'API: api/ (apiClient, wake-up), auth/, documents/, user-settings/ (SettingsSaveErrorDialog)
+│       │   ├── user-settings/  #   estat local (Redux), persistència al navegador i components/SettingsDialog/ (el diàleg de configuració i els seus panells)
+│       │   ├── sequence/       #   documentSlice, contingut de les seqüències i components/PictEdit/ (edició d'un pictograma)
 │       │   ├── print/          #   hooks d'impressió i format de pàgina
 │       │   ├── pictogram/      #   cerca i keywords d'ARASAAC
 │       │   ├── word-profile/   #   vocabulari personal
 │       │   ├── admin/          #   panell d'administració
 │       │   └── ai-search/
-│       ├── app/               # Redux store (store.ts, hooks.ts)
+│       ├── app/               # Redux store (store.ts amb createAppStore, hooks.ts)
+│       ├── test/              # Arnès de proves: renderWithProviders, setup.ts, fixtures/
 │       ├── types/              # Tipus locals (estenen els de shared-types)
 │       ├── style/               # palette.ts, themeMui.ts (única font de veritat de colors)
 │       ├── languages/          # JSON COMPILATS (AST react-intl) — generats, no editar
@@ -90,11 +90,11 @@ apps/
 
 - Ordres a l'arrel del monorepo (`npm run dev|build|lint|test|typecheck`) les reparteix **Turbo** a tots els workspaces; `--filter=web` o `--filter=api` acota a un de sol.
 - **`npm run typecheck` és l'única barrera de tipus, i cal passar-la abans de donar res per bo.** `vite build` **no** comprova tipus: `@vitejs/plugin-react-swc` els llença sense mirar-los, i ESLint no els mira tampoc. Un `✓ built` verd al web no vol dir que el TypeScript quadri. (Aquest apartat deia el contrari fins a la branca `claude/document-limit-users-sjig8o`; hi havia codi de producció amb tipus trencats que passava el build cada dia.)
-- **Front** (`apps/web`): `npm run typecheck` = `tsc --noEmit`; `npm run lint` = `eslint ./src`; `npm run build` = compila les traduccions (`scripts/compile-languages.mjs`) i després `vite build` (que només empaqueta). `npm test` i `npm run test-coverage` són encara placeholders (`echo ... && exit 0`) tot i que el workspace té `@testing-library/react`, `msw` i tests `.test.ts(x)` reals — no assumir que `npm test` executa res. Els tests e2e (captures/vídeos de funcionalitats) van amb **Playwright** (`apps/web/playwright.config.ts`, carpeta `e2e/`).
+- **Front** (`apps/web`): `npm run typecheck` = `tsc --noEmit`; `npm run lint` = `eslint ./src`; `npm run build` = compila les traduccions (`scripts/compile-languages.mjs`) i després `vite build` (que només empaqueta). `npm test` = `vitest run` (jsdom + Testing Library, config a `vitest.config.ts`, que hereta els alias del `vite.config.ts`); `npm run test:watch` per anar-hi treballant. Els tests e2e (captures/vídeos de funcionalitats) van amb **Playwright** (`apps/web/playwright.config.ts`, carpeta `e2e/`).
 - **Back** (`apps/api`): `npm run typecheck` i `npm run lint` són tots dos `tsc --noEmit` (el nom `lint` hi era abans); `npm test` = `vitest run` (usa `mongodb-memory-server`, per això els fitxers `*.test.ts` i `src/test/` queden exclosos del `tsconfig.json` de build/producció).
-- **Els tests del web queden fora del `typecheck`** (`exclude` del `tsconfig.json`: `*.test.*`, `setupTests.ts`, `test-utils.tsx`), com a l'API. Ja hi havien de ser des de sempre, però l'`exclude` tenia les dues rutes dins d'una sola cadena separades per una coma i no excloïa res. La suite no compila contra el codi actual (referencia un `sequenceSlice` que ja no existeix i props que han canviat): mentre no es revisqui o s'esborri, no pot ser la barrera de ningú. Vegeu C10 de `docs/BACKLOG-ux.md`.
-- **`npm run lint` del web surt vermell amb errors preexistents** (13, a `test-utils.tsx` i a pàgines soltes): quan s'hi passa, cal filtrar la sortida amb grep pels fitxers tocats per verificar que els errors nous no són nostres. El `typecheck`, en canvi, ha d'estar **net**: si en surt un, és nostre.
-- `test-utils.tsx` (`apps/web/src/utils`) conté una mock de l'estat Redux, avui **desincronitzada** amb l'store real. No serveix de referència fins que es refaci.
+- **Els tests que corren entren al `typecheck`**: són codi del projecte i la barrera de tipus també els mira. L'única cosa que queda fora és la **quarantena**: una dotzena de fitxers heretats de Create React App que no compilen ni passen contra el codi d'avui, llistats a `vitest.config.ts` i al `exclude` del `tsconfig.json` amb el mateix comentari. Vegeu C10 de `docs/BACKLOG-ux.md`; reviure'n un vol dir portar-lo a `src/test/renderWithProviders`.
+- **`npm run lint` del web surt vermell amb errors preexistents** (7, a `features/admin/` i a `features/print-refactor/dpiDetector.tsx`): quan s'hi passa, cal filtrar la sortida amb grep pels fitxers tocats per verificar que els errors nous no són nostres. El `typecheck`, en canvi, ha d'estar **net**: si en surt un, és nostre.
+- **L'arnès de proves del web és `src/test/`**: `renderWithProviders` munta la mateixa pila de proveïdors que `index.tsx` amb l'store de debò (`createAppStore`, d'`app/store.ts`, l'única declaració del mapa de reducers), i `fixtures/` té els objectes de domini. Cap test no s'ha de muntar el seu propi store: la mock paral·lela d'abans (`utils/test-utils.tsx`, esborrada) es va desincronitzar i va deixar la suite provant un model inexistent.
 - Desplegament: front a **Vercel**, back a **Render** (`render.yaml`, `buildCommand: npx turbo build --filter=api`) — vegeu «Desplegament» a `docs/estandards/comptes-i-quotes.md` per als detalls de per què han de compartir origen.
 
 ## Hooks principals
@@ -138,8 +138,14 @@ on viu el criteri complet i el motiu de cada decisió.
 - **Impressió i PDF sempre en clar**, independentment del tema actiu.
 - **Un ajust = una fila = `SettingRow`.** Mai reescriure la fila a mà. Els botons d'un
   panell, sempre via `SettingsActions`; les seccions, via `SectionTitle`.
-- **`AppDialog` és l'única manera de declarar un `Dialog`**; `ConfirmDialog`, l'única
-  confirmació de l'app; `AppTab`, l'única manera de declarar un tab amb icona i text.
+- **Dos diàlegs canònics i cap més**: `AppDialog` (centrat, accions al peu) i
+  `AppFullScreenDialog` (pantalla completa, barra amb tabs i creu). Cap `Dialog` de
+  MUI fora d'aquestes dues carpetes. `ConfirmDialog` és l'única confirmació de l'app;
+  `AppTab`, l'única manera de declarar un tab amb icona i text.
+- **S'agrupa per domini, mai per mecanisme**: un component viu a `features/<domini>/components/`
+  si parla d'un domini i a `components/` només si no en sap de cap. Cap carpeta
+  `Modals/`, `Dialogs/` ni `Forms/`. Imports sempre per alias, i les dependències en un
+  sol sentit (`pages` → `features` → `components`). Vegeu `docs/estandards/estructura-de-fitxers.md`.
 - **Tota acció que l'usuari ha demanat acaba amb un missatge**, vagi bé o malament.
   Mai `disabled` per dir «s'està fent».
 - **Les preferències d'usuari només es desen quan l'usuari ho demana**: cap control
@@ -170,8 +176,9 @@ abans de tocar la seva àrea; no cal llegir-los tots.
 
 | Document | Llegir-lo abans de tocar |
 |---|---|
+| `docs/estandards/estructura-de-fitxers.md` | On viu un component: crear-ne un, moure'n un, decidir carpeta, imports i on van els tests |
 | `docs/estandards/colors.md` | Colors, fons, tema fosc, impressió i PDF |
-| `docs/estandards/configuracions.md` | Panells d'ajustos: `SettingsLayout/`, `DefaultSettingsModal`, `PictEditForm`, columna de la pàgina de vista |
+| `docs/estandards/configuracions.md` | Panells d'ajustos: `SettingsLayout/`, `SettingsDialog` i els seus panells, `PictEditForm`, columna de la pàgina de vista |
 | `docs/estandards/navegacio.md` | `AppTabs/`, `TabsEditView`, `BarNavigation`, `UserAvatar` |
 | `docs/estandards/capes-flotants.md` | Qualsevol `Dialog`, `Snackbar` o botó flotant |
 | `docs/estandards/feedback-i-accions.md` | Progrés, backdrops, snackbars i accions que esborren feina |

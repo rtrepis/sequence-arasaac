@@ -10,11 +10,11 @@
 // pot fer. Però abans d'avisar ningú es mira si val la pena tornar-ho a provar sol.
 import { useCallback, useRef, useState } from "react";
 import { useIntl } from "react-intl";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { saveUserUiThunk } from "../store/settingsThunks";
 import { refreshQuotaThunk } from "../store/quotaSlice";
-import { useFeedback } from "../../../../context/FeedbackContext/FeedbackContext";
-import messages from "../../../../Modals/DefaultSettingsModal/UserSettingsPanel.lang";
+import { useFeedback } from "@/context/FeedbackContext";
+import messages from "./useSaveUiSettings.lang";
 import { RequestFailure } from "@features/backend/api/requestFailure";
 import { reportClientError } from "@features/backend/api/clientErrorReport";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
@@ -62,62 +62,66 @@ export const useSaveUiSettings = (): UseSaveUiSettings => {
 
   // L'èxit es confirma amb un snackbar; la fallada la reporta qui crida,
   // perquè mereix més espai que una línia que marxa sola.
-  const save = useCallback(async (
-    successMessage?: string,
-  ): Promise<RequestFailure | null> => {
-    const result = await dispatch(saveUserUiThunk());
+  const save = useCallback(
+    async (successMessage?: string): Promise<RequestFailure | null> => {
+      const result = await dispatch(saveUserUiThunk());
 
-    if (saveUserUiThunk.fulfilled.match(result)) {
-      // El vocabulari pot haver pujat o tret imatges: el consum del compte ja
-      // no és el que deia abans de desar.
-      //
-      // Només quan el desat hi ha anat de debò. Sense sessió —i, per tant,
-      // sempre amb les funcions de compte apagades— el que s'acaba de desar és
-      // al navegador: no hi ha cap consum que hagi canviat, i la petició només
-      // servia per despertar Render i, passats els 3 s del llindar, encendre
-      // l'avís de «Connectant amb el teu compte…» a qui no en té cap.
-      if (isLoggedIn) void dispatch(refreshQuotaThunk());
-      showSnackbar({
-        message: successMessage ?? intl.formatMessage(messages.saveSuccess),
-        severity: "success",
-      });
-      return null;
-    }
-
-    if (result.payload) return result.payload;
-
-    // Xarxa de seguretat: el thunk s'ha rebutjat sense passar per rejectWithValue.
-    // Passa quan hi llança una excepció, i llavors el missatge és l'única pista
-    // de què ha fallat: es conserva per al registre d'errors.
-    return {
-      code: "UNKNOWN_ERROR",
-      isTransient: false,
-      detail: result.error?.message?.slice(0, 300),
-    };
-  }, [dispatch, intl, showSnackbar, isLoggedIn]);
-
-  const saveInBackground = useCallback((options?: SaveOptions): void => {
-    if (isSavingRef.current) return;
-    isSavingRef.current = true;
-
-    void (async () => {
-      let result = await save(options?.successMessage);
-
-      // Una fallada transitòria no és notícia: el servei encara s'estava engegant
-      // o la connexió ha parpellejat. Es torna a provar un cop abans de dir res,
-      // i només si el segon intent també falla apareix el diàleg.
-      if (result?.isTransient) {
-        await wait(TRANSIENT_RETRY_DELAY_MS);
-        result = await save(options?.successMessage);
+      if (saveUserUiThunk.fulfilled.match(result)) {
+        // El vocabulari pot haver pujat o tret imatges: el consum del compte ja
+        // no és el que deia abans de desar.
+        //
+        // Només quan el desat hi ha anat de debò. Sense sessió —i, per tant,
+        // sempre amb les funcions de compte apagades— el que s'acaba de desar és
+        // al navegador: no hi ha cap consum que hagi canviat, i la petició només
+        // servia per despertar Render i, passats els 3 s del llindar, encendre
+        // l'avís de «Connectant amb el teu compte…» a qui no en té cap.
+        if (isLoggedIn) void dispatch(refreshQuotaThunk());
+        showSnackbar({
+          message: successMessage ?? intl.formatMessage(messages.saveSuccess),
+          severity: "success",
+        });
+        return null;
       }
 
-      setFailure(result);
-      isSavingRef.current = false;
+      if (result.payload) return result.payload;
 
-      // S'informa del que ha arribat a l'usuari, no del que s'ha resolt sol
-      if (result) void reportClientError("settings-save", result);
-    })();
-  }, [save]);
+      // Xarxa de seguretat: el thunk s'ha rebutjat sense passar per rejectWithValue.
+      // Passa quan hi llança una excepció, i llavors el missatge és l'única pista
+      // de què ha fallat: es conserva per al registre d'errors.
+      return {
+        code: "UNKNOWN_ERROR",
+        isTransient: false,
+        detail: result.error?.message?.slice(0, 300),
+      };
+    },
+    [dispatch, intl, showSnackbar, isLoggedIn],
+  );
+
+  const saveInBackground = useCallback(
+    (options?: SaveOptions): void => {
+      if (isSavingRef.current) return;
+      isSavingRef.current = true;
+
+      void (async () => {
+        let result = await save(options?.successMessage);
+
+        // Una fallada transitòria no és notícia: el servei encara s'estava engegant
+        // o la connexió ha parpellejat. Es torna a provar un cop abans de dir res,
+        // i només si el segon intent també falla apareix el diàleg.
+        if (result?.isTransient) {
+          await wait(TRANSIENT_RETRY_DELAY_MS);
+          result = await save(options?.successMessage);
+        }
+
+        setFailure(result);
+        isSavingRef.current = false;
+
+        // S'informa del que ha arribat a l'usuari, no del que s'ha resolt sol
+        if (result) void reportClientError("settings-save", result);
+      })();
+    },
+    [save],
+  );
 
   const retry = useCallback((): void => {
     setIsRetrying(true);

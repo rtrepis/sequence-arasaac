@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { configureStore } from "@reduxjs/toolkit";
+import { createAppStore } from "@app/store";
 import {
   addPictogramActionCreator,
   documentReducer,
@@ -27,17 +27,7 @@ import type { PictSequence } from "@/types/sequence";
 // «Aplica a tots» i «Restableix» amb el desfer que ja existia (ADR-003,
 // decisió 12), i l'indicador «personalitzat» (fonament 03, §6).
 
-const makeStore = () =>
-  configureStore({
-    reducer: {
-      document: documentReducer,
-      documentStatus: documentStatusReducer,
-      ui: uiReducer,
-      style: styleReducer,
-    },
-    middleware: (getDefault) =>
-      getDefault().prepend(documentStatusListener.middleware),
-  });
+const makeStore = () => createAppStore();
 
 type TestStore = ReturnType<typeof makeStore>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

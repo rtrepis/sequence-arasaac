@@ -1,3 +1,4 @@
+import { APP_FULLSCREEN_APPBAR_HEIGHT } from "@components/AppFullScreenDialog";
 import { SxProps, Theme } from "@mui/material";
 
 /**
@@ -69,13 +70,6 @@ export const SETTINGS_WIDE_MAX_WIDTH =
 export const SETTINGS_INDENT = { xs: 1, sm: 3 };
 
 /**
- * Alçada (px) de la barra superior del diàleg de configuracions. És l'alçada
- * real del `Toolbar` (el `minHeight` que li posa el tema), no la de l'`AppBar`,
- * que declara 42 i acaba fent-ne 50.
- */
-export const SETTINGS_DIALOG_APPBAR_HEIGHT = 50;
-
-/**
  * Aire entre la barra superior i el contingut del panell. Sense aquest marge, en
  * mòbil el primer element quedava a sis píxels de la barra i el panell semblava
  * enganxat a sota d'un bloc verd.
@@ -90,7 +84,7 @@ export const SETTINGS_CONTENT_TOP_GAP = 3;
  * s'entreveu per la franja que queda entre les dues. L'aire es fa amb el padding
  * de dins de la mostra, que sí que va pintat.
  */
-export const SETTINGS_APPBAR_OFFSET = SETTINGS_DIALOG_APPBAR_HEIGHT;
+export const SETTINGS_APPBAR_OFFSET = APP_FULLSCREEN_APPBAR_HEIGHT;
 
 /**
  * Alçada màxima de la mostra en mòbil: acota-la perquè no es mengi la pantalla
