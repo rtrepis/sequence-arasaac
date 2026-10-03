@@ -6,7 +6,6 @@ import {
   Snackbar,
   Stack,
   Tooltip,
-  Typography,
   useMediaQuery,
 } from "@mui/material";
 import PictogramCard from "../PictogramCard/PictogramCard";
@@ -23,21 +22,14 @@ import SettingAccordion from "../SettingAccordion/SettingAccordion";
 import messages from "./PictEditForm.lang";
 import SettingCard from "../SettingsCards/SettingCard/SettingCard";
 import { useIntl } from "react-intl";
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updatePictSequenceActionCreator } from "@features/sequence/store/documentSlice";
 import SettingCadTextFiled from "../SettingsCards/SettingCardTextFiled/SettingCardTextFiled";
 import SettingCardBoolean from "../SettingsCards/SettingCardBoolean/SettingCardBoolean";
 import React from "react";
 import SettingCardBorder from "../SettingsCards/SettingCardBorder/SettingCardBorder";
-import { MdSettingsBackupRestore } from "react-icons/md";
+import { MdSettingsBackupRestore, MdTune } from "react-icons/md";
 import {
   selectDocumentPictStyle,
   selectDocumentStyle,
@@ -52,6 +44,9 @@ import {
   floatingSnackbarSx,
 } from "@components/FloatingLayer";
 import StyledButton from "@/style/StyledButton";
+import StyledIconButton from "@/style/StyledIconButton";
+import { SETTINGS_MOBILE_BREAKPOINT } from "@components/SettingsLayout";
+import { Theme } from "@mui/material/styles";
 import ScaleToFit from "@components/SettingsLayout/ScaleToFit";
 
 interface PictEditFormProps {
@@ -129,7 +124,7 @@ const PictEditForm = ({
   const [resetUndo, setResetUndo] = useState<StyleSnapshot | null>(null);
   const [resetNotice, setResetNotice] = useState(0);
   // On va el focus quan «Restableix» desapareix: el botó de la capçalera
-  const summaryRef = useRef<HTMLDivElement>(null);
+  const summaryRef = useRef<HTMLButtonElement>(null);
 
   const initialTextPosition =
     pictogram.settings.textPosition ?? defaultTextPosition;
@@ -325,29 +320,9 @@ const PictEditForm = ({
     if (resetRequest) handleResetRef.current();
   }, [resetRequest]);
 
-  // L'acordió es controla des d'aquí: la franja de sobre imita el seu marge
+  // L'acordió es controla des d'aquí
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const statusId = useId();
-
-  // La franja «Personalitzat» apareix i desapareix a sobre de l'acordió: el
-  // que s'està editant a sota no s'ha de moure sota el dit ni el ratolí. Es
-  // compensa el desplaçament amb l'alçada de la franja (el navegador no ho fa:
-  // l'acordió de MUI i aquest formulari porten `overflow-anchor: none`)
   const rootRef = useRef<HTMLDivElement>(null);
-  const stripRef = useRef<HTMLDivElement>(null);
-  const stripHeight = useRef(0);
-  const firstLayout = useRef(true);
-  useLayoutEffect(() => {
-    const height = stripRef.current?.offsetHeight ?? 0;
-    const delta = height - stripHeight.current;
-    stripHeight.current = height;
-    if (firstLayout.current) {
-      firstLayout.current = false;
-      return;
-    }
-    const scroller = rootRef.current?.closest(".MuiDialogContent-root");
-    if (scroller && delta !== 0) scroller.scrollTop += delta;
-  }, [isCustomized]);
 
   // La previsualització original es queda on és. Quan surt de la vista per
   // dalt, en surt una còpia compacta fixa a dalt de la zona que es desplaça;
@@ -382,6 +357,37 @@ const PictEditForm = ({
   const previewCopyRef = useCallback((element: HTMLDivElement | null) => {
     element?.setAttribute("inert", "");
   }, []);
+
+  // «Restableix», a la capçalera de la configuració. Per sota de `sm` només hi
+  // va la icona: amb el text, el títol de la capçalera es partiria en dues
+  // línies justament quan apareix, i el que s'edita a sota es mouria
+  const compact = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down(SETTINGS_MOBILE_BREAKPOINT),
+  );
+  const resetLabel = intl.formatMessage(messages.reset);
+  const resetAction = compact ? (
+    <Tooltip title={resetLabel}>
+      <StyledIconButton
+        color="inherit"
+        onClick={handleReset}
+        aria-label={resetLabel}
+      >
+        <MdSettingsBackupRestore />
+      </StyledIconButton>
+    </Tooltip>
+  ) : (
+    <Tooltip title={intl.formatMessage(messages.tooltipReset)} describeChild>
+      <StyledButton
+        variant="outlined"
+        color="inherit"
+        onClick={handleReset}
+        startIcon={<MdSettingsBackupRestore aria-hidden />}
+        sx={{ minHeight: APP_TOUCH_TARGET_MIN, flexShrink: 0 }}
+      >
+        {resetLabel}
+      </StyledButton>
+    </Tooltip>
+  );
 
   const card = (
     <PictogramCard
@@ -482,56 +488,16 @@ const PictEditForm = ({
         </Box>
 
         <Box gridColumn={{ xs: "1", md: "1 / -1" }} sx={{ minHeight: 0 }}>
-          {/* La franja i l'acordió són germans, mai un dins de l'altre: el
-              botó de la franja no pot anar dins del botó de la capçalera */}
-          {isCustomized && (
-            <Box
-              ref={stripRef}
-              data-testid="customized-strip"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 1,
-                // El marge de dalt que tindria l'acordió, que el cedeix
-                marginTop: settingsOpen ? 0 : 2,
-                paddingBlock: 0.5,
-                paddingInlineStart: 2,
-                paddingInlineEnd: 1,
-                backgroundColor: "background.paper",
-                border: 1,
-                borderBottom: 0,
-                borderColor: "divider",
-                borderTopLeftRadius: (theme) => theme.shape.borderRadius,
-                borderTopRightRadius: (theme) => theme.shape.borderRadius,
-              }}
-            >
-              <Typography id={statusId} variant="body2" fontWeight="bold">
-                {intl.formatMessage(messages.customized)}
-              </Typography>
-              <Tooltip
-                title={intl.formatMessage(messages.tooltipReset)}
-                describeChild
-              >
-                <StyledButton
-                  variant="outlined"
-                  color="inherit"
-                  onClick={handleReset}
-                  startIcon={<MdSettingsBackupRestore aria-hidden />}
-                  sx={{ minHeight: APP_TOUCH_TARGET_MIN, flexShrink: 0 }}
-                >
-                  {intl.formatMessage(messages.reset)}
-                </StyledButton>
-              </Tooltip>
-            </Box>
-          )}
           <SettingAccordion
-            title={intl.formatMessage(messages.settings)}
+            title={intl.formatMessage(messages.styleSection)}
+            subtitle={intl.formatMessage(messages.styleSectionSubtitle)}
+            // La mateixa icona que marca la targeta personalitzada a la
+            // graella (`customizedMark`): així es relacionen d'una ullada
+            icon={<MdTune />}
+            action={isCustomized ? resetAction : undefined}
             expanded={settingsOpen}
             onChange={setSettingsOpen}
-            describedBy={isCustomized ? statusId : undefined}
             summaryRef={summaryRef}
-            attachedAbove={isCustomized}
           >
             <List>
               <li>

@@ -2498,9 +2498,13 @@
     "defaultMessage": "No es guarden les preferències de l'app, com l'idioma o l'estil per defecte.",
     "description": "Quadre «Què es guarda»: el que no hi va"
   },
-  "components.pictEdit.customized": {
-    "defaultMessage": "Personalitzat",
-    "description": "Franja a sobre de la configuració: el pictograma té retocs propis"
+  "components.pictEdit.styleSection": {
+    "defaultMessage": "Estil del pictograma",
+    "description": "Capçalera de la configuració del pictograma: diu què s'obre"
+  },
+  "components.pictEdit.styleSectionSubtitle": {
+    "defaultMessage": "Personalització",
+    "description": "Segona línia de la capçalera de la configuració del pictograma"
   },
   "context.feedback.load.invalidFile": {
     "defaultMessage": "No s'ha pogut obrir. No és un document de SequenciAAC o està malmès.",
@@ -2541,10 +2545,6 @@
   "features.sequence.style.styleFileOpened.makeDefault": {
     "defaultMessage": "Fes-lo el meu estil per defecte",
     "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
-  },
-  "components.pictEdit.settings": {
-    "defaultMessage": "Configuració",
-    "description": "Nom accessible del botó que obre i tanca la configuració del pictograma"
   },
   "components.pictEdit.resetDone": {
     "defaultMessage": "Estil restablert",
@@ -2603,7 +2603,7 @@
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step3.description": {
-    "defaultMessage": "<p>Cada document té un <b>estil general</b>, que és el que tenen totes les targetes. Si canvies alguna cosa en un sol pictograma, només es guarda aquell canvi, i la resta segueix l'estil general.</p><p>Un exemple: el document fa servir vores blaves, i marques en vermell la vora del pictograma «esmorzar» perquè destaqui. Si després canvies la lletra de tot el document, «esmorzar» també canvia de lletra, però manté la vora vermella.</p><p>Perquè sempre sàpigues què passa:</p><ul><li>En editar un pictograma amb canvis propis, sobre la configuració hi apareix la franja <b>Personalitzat</b>, amb el botó <b>Restableix</b> perquè torni a seguir l'estil general.</li><li>A la graella, els pictogrames personalitzats porten una <b>marca petita</b> a la cantonada. Només la veus tu mentre edites: no surt mai ni a la impressió, ni al PDF, ni en pantalla completa.</li><li>També pots restablir-los des del menú del pictograma, amb <b>Restableix l'estil</b>.</li><li><b>Aplicar tots</b> posa el mateix estil a totes les targetes i treu els canvis propis.</li><li>Si t'equivoques, <b>Desfés</b> ho torna a deixar com estava.</li></ul>",
+    "defaultMessage": "<p>Cada document té un <b>estil general</b>, que és el que tenen totes les targetes. Si canvies alguna cosa en un sol pictograma, només es guarda aquell canvi, i la resta segueix l'estil general.</p><p>Un exemple: el document fa servir vores blaves, i marques en vermell la vora del pictograma «esmorzar» perquè destaqui. Si després canvies la lletra de tot el document, «esmorzar» també canvia de lletra, però manté la vora vermella.</p><p>Perquè sempre sàpigues què passa:</p><ul><li>En editar un pictograma amb canvis propis, al costat de <b>Estil del pictograma</b> hi apareix el botó <b>Restableix</b>, perquè torni a seguir l'estil general.</li><li>A la graella, els pictogrames personalitzats porten una <b>marca petita</b> a la cantonada. Només la veus tu mentre edites: no surt mai ni a la impressió, ni al PDF, ni en pantalla completa.</li><li>També pots restablir-los des del menú del pictograma, amb <b>Restableix l'estil</b>.</li><li><b>Aplicar tots</b> posa el mateix estil a totes les targetes i treu els canvis propis.</li><li>Si t'equivoques, <b>Desfés</b> ho torna a deixar com estava.</li></ul>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.step4.title": {
@@ -2678,8 +2678,8 @@
     "defaultMessage": "Diàleg que surt en obrir un fitxer d'estil: «Aquest fitxer és un estil, no un document», amb els botons per aplicar-lo al document o fer-lo l'estil per defecte.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
-  "news.documents-everywhere.customizedStrip.alt": {
-    "defaultMessage": "Finestra d'edició d'un pictograma amb la franja «Personalitzat» i el botó «Restableix» a sobre de la configuració.",
+  "news.documents-everywhere.styleHeader.alt": {
+    "defaultMessage": "Finestra d'edició d'un pictograma amb el botó «Restableix» al costat de «Estil del pictograma».",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.gridMark.alt": {

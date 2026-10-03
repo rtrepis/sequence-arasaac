@@ -22,6 +22,8 @@ import usePersonalKeywords from "@features/word-profile/hooks/usePersonalKeyword
 import UploadImageButton from "../../../components/UploadImageButton";
 import React from "react";
 import { selectDocumentPictStyle } from "@features/sequence/style/styleSelectors";
+import { TbMinus, TbPlus } from "react-icons/tb";
+import { searchToggleIcon } from "@components/PictogramSearch/PictogramSearch.styled";
 
 const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
@@ -179,14 +181,26 @@ const PictogramSearchLocal = ({
           ))}
 
         {!isPlus && bestIdPicts.length > 0 && bestIdPicts[0] !== 0 && (
-          <ToggleButton value="plus" key="plus" onClick={() => handlePlusAction(true)}>
-            <img src="../img/settings/+.png" alt="more" width={25} height={25} />
+          <ToggleButton
+            value="plus"
+            key="plus"
+            aria-label={intl.formatMessage(messages.plus)}
+            onClick={() => handlePlusAction(true)}
+            sx={searchToggleIcon}
+          >
+            <TbPlus size={25} aria-hidden />
           </ToggleButton>
         )}
 
         {isPlus && (
-          <ToggleButton value="minus" key="minus" onClick={() => handlePlusAction(false)}>
-            <img src="../img/settings/-.png" alt="less" width={25} height={25} />
+          <ToggleButton
+            value="minus"
+            key="minus"
+            aria-label={intl.formatMessage(messages.minus)}
+            onClick={() => handlePlusAction(false)}
+            sx={searchToggleIcon}
+          >
+            <TbMinus size={25} aria-hidden />
           </ToggleButton>
         )}
 

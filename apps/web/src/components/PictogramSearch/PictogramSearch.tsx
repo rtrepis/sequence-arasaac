@@ -19,6 +19,8 @@ import { Hair, Skin } from "@/types/sequence";
 import type { RootState } from "../../app/store";
 import usePersonalKeywords from "@features/word-profile/hooks/usePersonalKeywords";
 import UploadImageButton from "../UploadImageButton";
+import { TbMinus, TbPlus } from "react-icons/tb";
+import { searchToggleIcon } from "./PictogramSearch.styled";
 
 const filterOptions = createFilterOptions<string>({
   matchFrom: "start",
@@ -189,15 +191,9 @@ const PictogramSearch = ({
             })}`}
             key={`plus`}
             onClick={() => handelPlusAction(true)}
+            sx={searchToggleIcon}
           >
-            <img
-              src={"../img/settings/+.png"}
-              alt={`${intl.formatMessage({
-                ...messages.plus,
-              })}`}
-              width={25}
-              height={25}
-            />
+            <TbPlus size={25} aria-hidden />
           </ToggleButton>
         )}
 
@@ -209,16 +205,9 @@ const PictogramSearch = ({
             })}`}
             key={`minus`}
             onClick={() => handelPlusAction(false)}
-            sx={{ width: 30, height: 30 }}
+            sx={{ ...searchToggleIcon, width: 30, height: 30 }}
           >
-            <img
-              src={"../img/settings/-.png"}
-              alt={`${intl.formatMessage({
-                ...messages.minus,
-              })}`}
-              width={25}
-              height={25}
-            />
+            <TbMinus size={25} aria-hidden />
           </ToggleButton>
         )}
 

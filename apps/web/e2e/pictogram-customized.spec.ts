@@ -5,10 +5,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Pictograma personalitzat (`docs/fonaments/03-model-contingut-estil.md`, §6):
-// la còpia fixa de la previsualització, la franja «Personalitzat» a sobre de
-// la configuració, la marca a la graella i «Restableix l'estil» del menú
-// contextual. Que el modal és el de master ho comprova
-// `pict-edit-vs-master.spec.ts`.
+// la còpia fixa de la previsualització, el «Restableix» a la capçalera de
+// «Estil del pictograma», la marca a la graella i «Restableix l'estil» del
+// menú contextual.
 //
 // Requereix el servidor de desenvolupament engegat: `npm run dev` a apps/web.
 
@@ -40,7 +39,7 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-const strip = (page: Page) => page.getByTestId("customized-strip");
+const header = (page: Page) => page.getByTestId("setting-accordion-header");
 const cards = (page: Page) => page.locator("button:has(.MuiCard-root)");
 const marks = (page: Page) => page.getByTestId("customized-mark");
 
@@ -56,7 +55,9 @@ const openDocument = async (page: Page) => {
 const openFirstWithSettings = async (page: Page) => {
   await cards(page).first().click();
   const dialog = page.getByRole("dialog");
-  const settings = dialog.getByRole("button", { name: "Configuració" });
+  const settings = dialog.getByRole("button", {
+    name: "Estil del pictograma",
+  });
   await settings.click();
   await expect(settings).toHaveAttribute("aria-expanded", "true");
   return { dialog, settings };
@@ -77,9 +78,11 @@ const toggleColor = async (dialog: Locator) =>
 
 /** El pictograma 1 del 01, personalitzat i desat. */
 const customizeFirst = async (page: Page) => {
-  const { dialog, settings } = await openFirstWithSettings(page);
+  const { dialog } = await openFirstWithSettings(page);
   await toggleColor(dialog);
-  await expect(settings).toHaveAccessibleDescription("Personalitzat");
+  await expect(
+    header(page).getByRole("button", { name: "Restableix" }),
+  ).toBeVisible();
   await dialog.getByRole("button", { name: "Tancar" }).click();
   await expect(dialog).toBeHidden();
 };
@@ -155,57 +158,48 @@ test("amb moviment reduït, la còpia apareix sense animació", async ({
   expect(duration).toBeLessThan(0.001);
 });
 
-test("la franja «Personalitzat» surt només quan toca, i Restableix la treu", async ({
+test("«Restableix» surt a la capçalera només quan toca, i es treu ell mateix", async ({
   page,
 }) => {
   await openDocument(page);
   const { dialog, settings } = await openFirstWithSettings(page);
 
-  await expect(strip(page)).toHaveCount(0);
-  await expect(settings).not.toHaveAttribute("aria-describedby");
+  const reset = () => header(page).getByRole("button", { name: "Restableix" });
+  await expect(reset()).toHaveCount(0);
+  // La capçalera diu sempre què s'obre, personalitzat o no
+  await expect(settings).toHaveAccessibleName(/Estil del pictograma/);
 
   await toggleColor(dialog);
-  await expect(strip(page)).toBeVisible();
-  await expect(strip(page)).toContainText("Personalitzat");
-  // La capçalera no canvia: el mateix nom, i la franja la descriu
-  await expect(settings).toHaveAccessibleName("Configuració");
-  await expect(settings).toHaveAccessibleDescription("Personalitzat");
-  const reset = strip(page).getByRole("button", { name: "Restableix" });
-  await expect(reset).toBeVisible();
+  await expect(reset()).toBeVisible();
   // Germans, mai un dins de l'altre
   expect(await settings.locator("button").count()).toBe(0);
-  expect(await strip(page).locator(".MuiAccordionSummary-root").count()).toBe(
-    0,
-  );
-  const box = (await reset.boundingBox())!;
+  const box = (await reset().boundingBox())!;
   expect(box.height).toBeGreaterThanOrEqual(44);
-  // Un sol bloc: la franja just a sobre de l'acordió, de la mateixa amplada
-  const stripBox = (await strip(page).boundingBox())!;
-  const accordionBox = (await dialog
-    .locator(".MuiAccordion-root")
-    .boundingBox())!;
-  expect(
-    Math.abs(stripBox.y + stripBox.height - accordionBox.y),
-  ).toBeLessThanOrEqual(1);
-  expect(Math.abs(stripBox.width - accordionBox.width)).toBeLessThanOrEqual(1);
+  // Tots dos a la mateixa fila: el botó, a la dreta del que desplega
+  const headerBox = (await header(page).boundingBox())!;
+  const settingsBox = (await settings.boundingBox())!;
+  expect(box.x).toBeGreaterThanOrEqual(settingsBox.x + settingsBox.width - 1);
+  expect(box.y).toBeGreaterThanOrEqual(headerBox.y - 1);
+  expect(box.y + box.height).toBeLessThanOrEqual(
+    headerBox.y + headerBox.height + 1,
+  );
 
-  // L'ordre del focus: Restableix i després la capçalera
-  await reset.focus();
+  // L'ordre del focus: la capçalera i després «Restableix»
+  await settings.focus();
   await page.keyboard.press("Tab");
-  await expect(settings).toBeFocused();
+  await expect(reset()).toBeFocused();
 
-  await reset.click();
-  await expect(strip(page)).toHaveCount(0);
+  await reset().click();
+  await expect(reset()).toHaveCount(0);
   await expect(dialog.getByText("Estil restablert")).toBeVisible();
   await expect(settings).toBeFocused();
-  await expect(settings).not.toHaveAttribute("aria-describedby");
 
-  // Desfés torna l'estil d'abans al formulari, i la franja
+  // Desfés torna l'estil d'abans al formulari, i el botó
   await dialog.getByRole("button", { name: "Desfés" }).click();
-  await expect(strip(page)).toBeVisible();
+  await expect(reset()).toBeVisible();
 });
 
-test("el que s'edita no salta quan la franja apareix o desapareix", async ({
+test("el que s'edita no salta quan «Restableix» apareix o desapareix", async ({
   page,
 }) => {
   await page.setViewportSize(MOBILE);
@@ -227,7 +221,8 @@ test("el que s'edita no salta quan la franja apareix o desapareix", async ({
     .first();
   await colorSwitch.evaluate((el) => el.focus({ preventScroll: true }));
   await page.keyboard.press("Space");
-  await expect(strip(page)).toHaveCount(1);
+  const reset = header(page).getByRole("button", { name: "Restableix" });
+  await expect(reset).toBeVisible();
   expect(Math.abs((await colorLabel.boundingBox())!.y - before)).toBeLessThan(
     1,
   );
@@ -235,7 +230,7 @@ test("el que s'edita no salta quan la franja apareix o desapareix", async ({
   // I quan desapareix (Restableix des de «Més accions», sense moure res)
   await dialog.getByRole("button", { name: "Més accions" }).click();
   await page.getByRole("button", { name: "Restableix l'estil" }).click();
-  await expect(strip(page)).toHaveCount(0);
+  await expect(reset).toHaveCount(0);
   expect(Math.abs((await colorLabel.boundingBox())!.y - before)).toBeLessThan(
     1,
   );
@@ -337,18 +332,19 @@ test("axe: el formulari (configuració plegada i desplegada) i la graella", asyn
   await cards(page).first().click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
-  // El que ha canviat: la franja, la capçalera de la configuració i la
-  // previsualització (i la seva còpia fixa). Els controls de dins del
-  // formulari tenen errors d'abans d'aquest canvi, apuntats a C20
+  // El que ha canviat: la capçalera de la configuració (amb el seu
+  // «Restableix») i la previsualització (i la seva còpia fixa). Els controls
+  // de dins del formulari tenen errors d'abans d'aquest canvi, apuntats a C20
   const changed = () =>
     new AxeBuilder({ page })
-      .include('[data-testid="customized-strip"]')
-      .include(".MuiAccordionSummary-root")
+      .include('[data-testid="setting-accordion-header"]')
       .include('[data-testid="pict-edit-preview"]');
   const collapsed = await changed().analyze();
   expect(collapsed.violations).toEqual([]);
 
-  const settings = dialog.getByRole("button", { name: "Configuració" });
+  const settings = dialog.getByRole("button", {
+    name: "Estil del pictograma",
+  });
   await settings.click();
   await expect(settings).toHaveAttribute("aria-expanded", "true");
   const expanded = await changed().analyze();
@@ -368,7 +364,7 @@ test("axe: el formulari (configuració plegada i desplegada) i la graella", asyn
   expect(withCopy.violations).toEqual([]);
 
   // I el snackbar de Restableix, amb el seu Desfés
-  await strip(page).getByRole("button", { name: "Restableix" }).click();
+  await header(page).getByRole("button", { name: "Restableix" }).click();
   await expect(dialog.getByText("Estil restablert")).toBeVisible();
   const snackbar = await new AxeBuilder({ page })
     .include(".MuiSnackbar-root")

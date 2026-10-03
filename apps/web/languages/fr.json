@@ -2498,9 +2498,13 @@
     "defaultMessage": "Les préférences de l'application, comme la langue ou le style par défaut, ne sont pas enregistrées.",
     "description": "Quadre «Què es guarda»: el que no hi va"
   },
-  "components.pictEdit.customized": {
-    "defaultMessage": "Personnalisé",
-    "description": "Franja a sobre de la configuració: el pictograma té retocs propis"
+  "components.pictEdit.styleSection": {
+    "defaultMessage": "Style du pictogramme",
+    "description": "Capçalera de la configuració del pictograma: diu què s'obre"
+  },
+  "components.pictEdit.styleSectionSubtitle": {
+    "defaultMessage": "Personnalisation",
+    "description": "Segona línia de la capçalera de la configuració del pictograma"
   },
   "context.feedback.load.invalidFile": {
     "defaultMessage": "Impossible de l'ouvrir. Ce n'est pas un document SequenciAAC ou il est endommagé.",
@@ -2541,10 +2545,6 @@
   "features.sequence.style.styleFileOpened.makeDefault": {
     "defaultMessage": "En faire mon style par défaut",
     "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
-  },
-  "components.pictEdit.settings": {
-    "defaultMessage": "Configuration",
-    "description": "Nom accessible del botó que obre i tanca la configuració del pictograma"
   },
   "components.pictEdit.resetDone": {
     "defaultMessage": "Style réinitialisé",
@@ -2603,7 +2603,7 @@
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step3.description": {
-    "defaultMessage": "<p>Chaque document a un <b>style général</b>, celui de toutes les cartes. Si vous modifiez quelque chose sur un seul pictogramme, seule cette modification est enregistrée, et le reste suit le style général.</p><p>Un exemple : le document utilise des bordures bleues, et vous mettez en rouge la bordure du pictogramme « petit-déjeuner » pour qu'il ressorte. Si vous changez ensuite la police de tout le document, « petit-déjeuner » change aussi de police, mais garde sa bordure rouge.</p><p>Pour que vous sachiez toujours ce qui se passe :</p><ul><li>Quand vous modifiez un pictogramme qui a ses propres modifications, le bandeau <b>Personnalisé</b> apparaît au-dessus des réglages, avec le bouton <b>Réinitialiser</b> pour qu'il suive de nouveau le style général.</li><li>Dans la grille, les pictogrammes personnalisés portent une <b>petite marque</b> dans le coin. Vous seul la voyez pendant que vous modifiez : elle n'apparaît jamais à l'impression, dans le PDF ni en plein écran.</li><li>Vous pouvez aussi les réinitialiser depuis le menu du pictogramme, avec <b>Réinitialiser le style</b>.</li><li><b>Appliquer à tous</b> donne le même style à toutes les cartes et supprime leurs propres modifications.</li><li>Si vous vous trompez, <b>Annuler</b> remet tout comme avant.</li></ul>",
+    "defaultMessage": "<p>Chaque document a un <b>style général</b>, celui de toutes les cartes. Si vous modifiez quelque chose sur un seul pictogramme, seule cette modification est enregistrée, et le reste suit le style général.</p><p>Un exemple : le document utilise des bordures bleues, et vous mettez en rouge la bordure du pictogramme « petit-déjeuner » pour qu'il ressorte. Si vous changez ensuite la police de tout le document, « petit-déjeuner » change aussi de police, mais garde sa bordure rouge.</p><p>Pour que vous sachiez toujours ce qui se passe :</p><ul><li>Quand vous modifiez un pictogramme qui a ses propres modifications, le bouton <b>Réinitialiser</b> apparaît à côté de <b>Style du pictogramme</b>, pour qu'il suive de nouveau le style général.</li><li>Dans la grille, les pictogrammes personnalisés portent une <b>petite marque</b> dans le coin. Vous seul la voyez pendant que vous modifiez : elle n'apparaît jamais à l'impression, dans le PDF ni en plein écran.</li><li>Vous pouvez aussi les réinitialiser depuis le menu du pictogramme, avec <b>Réinitialiser le style</b>.</li><li><b>Appliquer à tous</b> donne le même style à toutes les cartes et supprime leurs propres modifications.</li><li>Si vous vous trompez, <b>Annuler</b> remet tout comme avant.</li></ul>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.step4.title": {
@@ -2678,8 +2678,8 @@
     "defaultMessage": "Dialogue affiché à l'ouverture d'un fichier de style : « Ce fichier est un style, pas un document », avec les boutons pour l'appliquer au document ou en faire le style par défaut.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
-  "news.documents-everywhere.customizedStrip.alt": {
-    "defaultMessage": "Fenêtre de modification d'un pictogramme avec le bandeau « Personnalisé » et le bouton « Réinitialiser » au-dessus des réglages.",
+  "news.documents-everywhere.styleHeader.alt": {
+    "defaultMessage": "Fenêtre de modification d'un pictogramme avec le bouton « Réinitialiser » à côté de « Style du pictogramme ».",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.gridMark.alt": {

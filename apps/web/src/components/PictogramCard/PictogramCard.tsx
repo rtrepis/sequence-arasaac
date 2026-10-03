@@ -1,7 +1,11 @@
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
 import usePictogramUrl from "../../features/pictogram/hooks/usePictogramUrl";
-import { Border, PictogramCardDefaults, PictSequence } from "../../types/sequence";
+import {
+  Border,
+  PictogramCardDefaults,
+  PictSequence,
+} from "../../types/sequence";
 import {
   pictogram__card,
   pictogram__media,
@@ -9,7 +13,8 @@ import {
 } from "./PictogramCard.styled";
 import messages from "./PictogramCart.lang";
 import fitzgeraldToBorder from "../../utils/fitzgeraldToBorder";
-import React from "react";
+import React, { useState } from "react";
+import { EMPTY_PICTOGRAM_URL } from "@features/pictogram/api/arasaacClient";
 // Amb reserva: si el dispositiu no té la font del document, sans-serif i no
 // la serif per defecte del navegador (vegeu `fontAvailability.ts`)
 import { fontStack } from "@features/sequence/style/styleModel";
@@ -79,6 +84,16 @@ const PictogramCard = ({
   // Imatge personalitzada de l'usuari (les URLs blob són temporals i s'ignoren)
   const customImageUrl = url && !url.startsWith("blob:") ? url : undefined;
 
+  // Si la imatge no arriba —sense xarxa, una adreça que l'API ja no serveix,
+  // una imatge pujada que s'ha esborrat—, la targeta es queda en blanc. La
+  // icona de trencat del navegador també sortiria a la impressió i al PDF, i
+  // allà no hi ha res a reintentar. Es desa quina adreça ha fallat, i no un
+  // booleà, perquè en canviar-la (un altre pictograma, un altre color) es
+  // torni a provar
+  const imageUrl =
+    customImageUrl ?? buildPictogramUrl(selectedId, skin, hair, color);
+  const [failedUrl, setFailedUrl] = useState<string | undefined>(undefined);
+
   const textFontSize = 20 * font.size * printPageRatio * pictSize;
   const numberFontSize = 20 * numberFont.size * printPageRatio * pictSize;
 
@@ -132,7 +147,8 @@ const PictogramCard = ({
       <CardContent sx={{ padding: 0, position: "relative" }}>
         <CardMedia
           component="img"
-          image={customImageUrl ?? buildPictogramUrl(selectedId, skin, hair, color)}
+          image={failedUrl === imageUrl ? EMPTY_PICTOGRAM_URL : imageUrl}
+          onError={() => setFailedUrl(imageUrl)}
           height={150 * pictSize * printPageRatio}
           width={150 * pictSize * printPageRatio}
           alt={intl.formatMessage({ ...messages.pictogram })}

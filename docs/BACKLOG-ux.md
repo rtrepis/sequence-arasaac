@@ -1223,8 +1223,9 @@ també.)*
   - `heading-order`: el text de la targeta és un `h3` i els rètols de secció, `h6`;
   - a la barra, `aria-valid-attr-value` a `#vertical-tab-0`.
 - **Proposta**: resoldre-ho per peces, començant per C17. L'e2e
-  `pictogram-customized.spec.ts` passa axe només sobre el que ha canviat (la franja, la capçalera,
-  la previsualització i la seva còpia fixa, el snackbar i la marca); quan això es resolgui, s'ha d'ampliar a tot el diàleg.
+  `pictogram-customized.spec.ts` passa axe només sobre el que ha canviat (la capçalera de «Estil del
+  pictograma» amb el seu «Restableix», la previsualització i la seva còpia fixa, el snackbar i la
+  marca); quan això es resolgui, s'ha d'ampliar a tot el diàleg.
 
 ### C1 — Diversos botons només mostren l'etiqueta en passar-hi el ratolí 🔴 Oberta
 
