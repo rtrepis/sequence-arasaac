@@ -3,19 +3,34 @@ import React from "react";
 import { FormattedMessage } from "react-intl";
 import { MdTableRows, MdViewColumn } from "react-icons/md";
 import { MdScreenRotation } from "react-icons/md";
-import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
+import {
+  ViewSettings,
+  SequenceDirection,
+  PageOrientation,
+  PageSize,
+} from "@/types/ui";
+import { PAGE_SIZES } from "@features/print/utils/pageFormat";
 import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
 import { SettingRow, IconToggleButton } from "@/components/SettingsLayout";
 import messages from "./ViewSequencesSettings.lang";
+
+// L'A4 i l'A3 es diuen igual a tots els idiomes; la resta de mides es tradueixen
+const PAGE_SIZE_LABELS: Record<PageSize, React.ReactNode> = {
+  A4: "A4",
+  A3: "A3",
+  LETTER: <FormattedMessage {...messages.pageSizeLetter} />,
+  TABLOID: <FormattedMessage {...messages.pageSizeTabloid} />,
+  FULLSCREEN: <FormattedMessage {...messages.fullScreen} />,
+};
 
 // Prefix dels ids dels títols de fila, per lligar-los als controls amb aria-labelledby
 const GLOBAL_CONTROLS_LABEL_ID = "global-view-controls";
 
 interface GlobalViewControlsProps {
   viewSettings: ViewSettings;
-  pageSizeIndex: number;
+  pageSize: PageSize;
   sequenceCount: number;
-  onPageSizeChange: (event: SelectChangeEvent<number>) => void;
+  onPageSizeChange: (pageSize: PageSize) => void;
   onDirectionChange: (
     event: React.MouseEvent<HTMLElement>,
     newDirection: SequenceDirection | null,
@@ -31,7 +46,7 @@ interface GlobalViewControlsProps {
  */
 const GlobalViewControls = ({
   viewSettings,
-  pageSizeIndex,
+  pageSize,
   sequenceCount,
   onPageSizeChange,
   onDirectionChange,
@@ -44,18 +59,20 @@ const GlobalViewControls = ({
       labelId={`${GLOBAL_CONTROLS_LABEL_ID}-page-size`}
     >
       {/* Sense InputLabel flotant: el títol de la fila ja fa d'etiqueta */}
-      <Select<number>
-        value={pageSizeIndex}
-        onChange={onPageSizeChange}
+      <Select<PageSize>
+        value={pageSize}
+        onChange={(event: SelectChangeEvent<PageSize>) =>
+          onPageSizeChange(event.target.value as PageSize)
+        }
         size="small"
         fullWidth
         labelId={`${GLOBAL_CONTROLS_LABEL_ID}-page-size`}
       >
-        <MenuItem value={0}>A4</MenuItem>
-        <MenuItem value={1}>A3</MenuItem>
-        <MenuItem value={2}>
-          <FormattedMessage {...messages.fullScreen} />
-        </MenuItem>
+        {PAGE_SIZES.map((size) => (
+          <MenuItem key={size} value={size}>
+            {PAGE_SIZE_LABELS[size]}
+          </MenuItem>
+        ))}
       </Select>
     </SettingRow>
 

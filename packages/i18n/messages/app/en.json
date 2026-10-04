@@ -258,6 +258,8 @@
   "pages.viewSequence.direction.label": "Direction",
   "pages.viewSequence.fullScreen.label": "Full Screen",
   "pages.viewSequence.pageSize.label": "Page Size",
+  "pages.viewSequence.pageSize.letter": "Letter (8.5 × 11″)",
+  "pages.viewSequence.pageSize.tabloid": "Tabloid (11 × 17″)",
   "pages.viewSequence.pictSpaceBetween.label": "Pictogram Space",
   "pages.viewSequence.sequence.label": "Sequence",
   "pages.viewSequence.sequenceSpaceBetween.label": "Sequence Space",

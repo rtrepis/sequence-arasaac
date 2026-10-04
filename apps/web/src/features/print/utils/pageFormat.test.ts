@@ -6,6 +6,7 @@ import {
   CSS_PRINT_DPI,
   PAPER_DIMENSIONS_MM,
   PRINT_MARGIN_MM,
+  regionalPaperSize,
 } from "./pageFormat";
 import { mmToPixels } from "./pageUnits";
 
@@ -78,6 +79,17 @@ describe("pageFormat", () => {
       expect(a3.height).toBeGreaterThan(a4.height);
     });
 
+    it("hauria de donar el Carta i el Tabloide amb les mides del seu paper", () => {
+      expect(createPageFormat("LETTER", "portrait").dimensions).toEqual({
+        width: usablePx(PAPER_DIMENSIONS_MM.LETTER.width),
+        height: usablePx(PAPER_DIMENSIONS_MM.LETTER.height),
+      });
+      expect(createPageFormat("TABLOID", "landscape").dimensions).toEqual({
+        width: usablePx(PAPER_DIMENSIONS_MM.TABLOID.height),
+        height: usablePx(PAPER_DIMENSIONS_MM.TABLOID.width),
+      });
+    });
+
     it("hauria d'intercanviar les dues mides en girar l'orientació", () => {
       const landscape = createPageFormat("A4", "landscape");
       const portrait = createPageFormat("A4", "portrait");
@@ -94,6 +106,32 @@ describe("pageFormat", () => {
 
       expect(landscape.dimensions).toEqual({ width: long, height: short });
       expect(portrait.dimensions).toEqual({ width: short, height: long });
+    });
+  });
+
+  describe("regionalPaperSize", () => {
+    it("hauria de donar Carta als EUA, al Canadà i a l'Amèrica Llatina que el fa servir", () => {
+      expect(regionalPaperSize(["en-US", "en"])).toBe("LETTER");
+      expect(regionalPaperSize(["fr-CA"])).toBe("LETTER");
+      expect(regionalPaperSize(["es-MX", "es"])).toBe("LETTER");
+      expect(regionalPaperSize(["es-co"])).toBe("LETTER");
+    });
+
+    it("hauria de donar A4 a la resta del món", () => {
+      expect(regionalPaperSize(["ca-ES", "ca"])).toBe("A4");
+      expect(regionalPaperSize(["en-GB", "en"])).toBe("A4");
+      expect(regionalPaperSize(["es-AR"])).toBe("A4");
+    });
+
+    it("hauria de manar la primera llengua que porta regió", () => {
+      expect(regionalPaperSize(["es", "es-MX", "en-GB"])).toBe("LETTER");
+      expect(regionalPaperSize(["zh-Hant-TW", "en-US"])).toBe("A4");
+    });
+
+    it("no hauria d'endevinar la regió d'una llengua que no en porta", () => {
+      expect(regionalPaperSize(["en"])).toBe("A4");
+      expect(regionalPaperSize([])).toBe("A4");
+      expect(regionalPaperSize(["es-419"])).toBe("A4");
     });
   });
 

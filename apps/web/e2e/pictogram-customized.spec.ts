@@ -28,6 +28,10 @@ const LOCAL_IMAGE = fs.readFileSync(
 const DESKTOP = { width: 1280, height: 800 };
 const MOBILE = { width: 390, height: 844 };
 
+// El paper per defecte surt de la regió del navegador (Carta als EUA): sense
+// fixar-la, el Chromium de Playwright diu «en-US» i la vista no obriria en A4
+test.use({ locale: "ca-ES" });
+
 test.beforeEach(async ({ page }) => {
   await page.route("https://fonts.googleapis.com/**", (route) =>
     route.fulfill({ status: 200, contentType: "text/css", body: "" }),

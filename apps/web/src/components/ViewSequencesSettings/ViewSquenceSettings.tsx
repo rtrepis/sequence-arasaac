@@ -62,7 +62,6 @@ import {
   SettingsActions,
   SETTINGS_ROW_GAP,
 } from "@/components/SettingsLayout";
-import { SelectChangeEvent } from "@mui/material";
 
 interface ViewSequencesSettingsChildrenProps {
   viewSettings: ViewSettings;
@@ -132,11 +131,10 @@ const ViewSequencesSettings = ({
   const {
     pageFormat,
     pageSize,
-    pageSizeIndex,
     orientation,
     isLandscape,
     isFullscreen,
-    setPageSizeByIndex,
+    setPageSize,
     toggleOrientation,
   } = usePageFormat({
     initialSize: pageLayout.pageSize ?? "A4",
@@ -430,16 +428,6 @@ const ViewSequencesSettings = ({
   ]);
 
   /**
-   * Handler per canviar la mida de pàgina via Select
-   */
-  const handlePageSizeChange = useCallback(
-    (event: SelectChangeEvent<number>) => {
-      setPageSizeByIndex(Number(event.target.value) as 0 | 1 | 2);
-    },
-    [setPageSizeByIndex],
-  );
-
-  /**
    * Handler de la descàrrega del PDF.
    * El botó continua sent focusable mentre genera (aria-disabled), així que el
    * clic repetit el para aquí: el backdrop del hook ja diu què està passant.
@@ -657,9 +645,9 @@ const ViewSequencesSettings = ({
                 >
                   <GlobalViewControls
                     viewSettings={viewSettings}
-                    pageSizeIndex={pageSizeIndex}
+                    pageSize={pageSize}
                     sequenceCount={sequenceKeys.length}
-                    onPageSizeChange={handlePageSizeChange}
+                    onPageSizeChange={setPageSize}
                     onDirectionChange={handleDirectionChange}
                     onSequenceSpaceChange={handleSequenceSpaceChange}
                   />

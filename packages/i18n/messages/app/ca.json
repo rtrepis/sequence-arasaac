@@ -974,6 +974,14 @@
   "pages.viewSequence.pageSize.label": {
     "message": "Mida de pàgina"
   },
+  "pages.viewSequence.pageSize.letter": {
+    "message": "Carta (8,5 × 11″)",
+    "description": "Mida de pàgina: el paper Carta nord-americà, amb les mides en polzades. És el paper de cada dia als EUA, el Canadà, Mèxic i bona part de l'Amèrica Llatina"
+  },
+  "pages.viewSequence.pageSize.tabloid": {
+    "message": "Tabloide (11 × 17″)",
+    "description": "Mida de pàgina: el paper Tabloide nord-americà, amb les mides en polzades. És el doble del Carta, com l'A3 ho és de l'A4"
+  },
   "pages.viewSequence.pictSpaceBetween.label": {
     "message": "Espai de pictogrames",
     "description": "Label form"

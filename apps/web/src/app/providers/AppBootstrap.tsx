@@ -9,7 +9,9 @@ import {
   updateThemeActionCreator,
   applyUserViewSettingsActionCreator,
   updateImageQualityActionCreator,
+  regionalPageSizeDetectedActionCreator,
 } from "@features/user-settings/store/uiSlice";
+import { regionalPaperSize } from "@features/print/utils/pageFormat";
 import {
   getStoredAccountUi,
   getStoredUserUi,
@@ -62,6 +64,12 @@ const AppBootstrap = ({ children }: AppBootstrapProps): ReactElement => {
         ? (localeBrowser as LangsApp)
         : "en";
       dispatch(updateLangSettingsActionCreator({ app: appLang, search: appLang }));
+      // I el paper de la seva regió: als EUA o a Mèxic, el Carta
+      dispatch(
+        regionalPageSizeDetectedActionCreator(
+          regionalPaperSize(navigator.languages),
+        ),
+      );
     }
 
     // Intent de restauració de sessió silenciosa via cookie de refresh.

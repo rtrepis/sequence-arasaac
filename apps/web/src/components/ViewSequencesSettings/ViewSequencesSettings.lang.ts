@@ -64,6 +64,18 @@ const messages = defineMessages({
     description:
       "Ajuda de l'interruptor de llicència quan hi ha autor i no es pot treure",
   },
+  pageSizeLetter: {
+    id: "pages.viewSequence.pageSize.letter",
+    defaultMessage: "Letter (8.5 × 11″)",
+    description:
+      "Mida de pàgina: el paper Carta nord-americà, amb les mides en polzades. És el paper de cada dia als EUA, el Canadà, Mèxic i bona part de l'Amèrica Llatina",
+  },
+  pageSizeTabloid: {
+    id: "pages.viewSequence.pageSize.tabloid",
+    defaultMessage: "Tabloid (11 × 17″)",
+    description:
+      "Mida de pàgina: el paper Tabloide nord-americà, amb les mides en polzades. És el doble del Carta, com l'A3 ho és de l'A4",
+  },
   fullScreen: {
     id: "pages.viewSequence.fullScreen.label",
     defaultMessage: "Full Screen",
