@@ -67,7 +67,7 @@ noms. Les proves marquen tot el que falta.
 - Format: `domini.subdomini.clau` en camelCase
 - Exemples:
   - `features.backend.auth.loginTitle`
-  - `features.backend.auth.error.INVALID_CREDENTIALS`
+  - `features.backend.auth.deleteDocument`
   - `components.settingCard.title`
 - Els textos dels codis d'error van a `errors/` amb la clau `error.<CODI>` (UPPER_SNAKE_CASE), no
   a cap `.lang.ts`. Un codi nou de l'API s'afegeix primer a `API_ERROR_CODES`
