@@ -686,5 +686,15 @@
   "news.edit-text-on-card.step2.alt": "La misma secuencia con el texto nuevo guardado debajo del segundo pictograma",
   "news.edit-text-on-card.step3.description": "<p>También llegas por otros caminos:</p><ul><li>Con el clic derecho sobre el pictograma, en la opción «Editar el texto».</li><li>Con el teclado: sitúate sobre la tarjeta y pulsa <b>F2</b>.</li></ul>",
   "news.edit-text-on-card.step3.alt": "El menú del clic derecho de un pictograma, con la opción «Editar el texto» marcada",
-  "news.edit-text-on-card.closing": "Hacer clic en la imagen del pictograma sigue abriendo la ventana de edición, con todos los ajustes de siempre. Y si la tarjeta no muestra ningún texto, la palabra se cambia desde allí, con «Editar»."
+  "news.edit-text-on-card.closing": "Hacer clic en la imagen del pictograma sigue abriendo la ventana de edición, con todos los ajustes de siempre. Y si la tarjeta no muestra ningún texto, la palabra se cambia desde allí, con «Editar».",
+  "components.pictEdit.textOverflow.mark": "Pictograma {number}: el texto no cabe",
+  "components.pictEdit.textOverflow.tooltip": "El texto no cabe y se corta. Haz clic para ver qué puedes hacer.",
+  "components.pictEdit.textOverflow.title": "El texto no cabe",
+  "components.pictEdit.textOverflow.explanation": "Una palabra es demasiado larga para el ancho de la tarjeta y se corta un trozo. También saldrá cortada al imprimir y en el PDF.",
+  "components.pictEdit.textOverflow.tooLong": "Ni con la letra más pequeña cabe: hay que acortar el texto.",
+  "components.pictEdit.textOverflow.fitDocument": "Reduce la letra de todo el documento a {size}",
+  "components.pictEdit.textOverflow.fitPictogram": "Reduce la letra solo de este pictograma a {size}",
+  "components.pictEdit.textOverflow.editText": "Edita el texto",
+  "features.sequence.style.changed.fitTextPictogram": "Se ha reducido la letra de este pictograma para que el texto quepa.",
+  "features.sequence.style.changed.fitTextDocument": "Se ha reducido la letra de todo el documento para que el texto quepa."
 }

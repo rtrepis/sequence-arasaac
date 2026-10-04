@@ -24,7 +24,16 @@ import {
   selectDocumentStyle,
 } from "@features/sequence/style/styleSelectors";
 import { isPictogramCustomized } from "@features/sequence/style/pictogramStyle";
-import { customizedMark } from "./PictEditModal.styled";
+import { cardMarks, customizedMark } from "./PictEditModal.styled";
+import TextOverflowWarning from "./TextOverflowWarning";
+import {
+  fittingFontSize,
+  useCardTextOverflow,
+} from "@features/sequence/hooks/useCardTextOverflow";
+import {
+  fitDocumentTextThunk,
+  fitPictogramTextThunk,
+} from "@features/sequence/store/styleSlice";
 import React from "react";
 
 interface PictEditProps {
@@ -72,6 +81,19 @@ const PictEditModal = ({
   );
   // Ref per restaurar el focus al botó trigger quan el dialog es tanca
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  // El text no hi cap i es talla (B28): la marca d'avís i les seves opcions.
+  // Es mesura la targeta de la graella; la proporció és la mateixa al paper
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const textOverflow = useCardTextOverflow(cardRef);
+  const pictFontSize = pictogram.settings.font?.size;
+  const fontSize = pictFontSize ?? defaults.font.size;
+  const fittingSize = textOverflow
+    ? fittingFontSize(fontSize, textOverflow.boxWidth, textOverflow.textWidth)
+    : null;
+  // Amb mida pròpia, reduir la del document no el tocaria: no s'ofereix
+  const canFitDocument =
+    pictFontSize === undefined || pictFontSize === defaults.font.size;
 
   const handlerClickOpen = () => {
     setOpen(true);
@@ -242,20 +264,35 @@ const PictEditModal = ({
           onKeyDown={handlerKeyDown}
           sx={pictogramTrigger}
         >
-          {/* La marca va fora de la targeta, que talla el que en sobresurt, i
-            només a la graella d'edició: la vista, la pantalla completa, la
-            impressió i el PDF pinten la targeta sense aquest embolcall */}
-          <Box sx={{ position: "relative" }}>
+          <Box ref={cardRef}>
             <PictogramCard
               view={"complete"}
               pictogram={pictogram}
               defaults={defaults}
               size={{ pictSize: 0.75 }}
             />
+          </Box>
+        </Button>
+        {/* Les marques van fora del botó: l'avís de text tallat també és un
+            botó. Només a la graella d'edició: la vista, la pantalla completa,
+            la impressió i el PDF pinten la targeta sense aquest embolcall */}
+        {(customized || textOverflow) && (
+          <Box data-html2canvas-ignore sx={cardMarks}>
+            {textOverflow && (
+              <TextOverflowWarning
+                number={cardNumber}
+                fittingSize={fittingSize}
+                canFitDocument={canFitDocument}
+                onFitPictogram={(size) =>
+                  dispatch(fitPictogramTextThunk(pictogram.indexSequence, size))
+                }
+                onFitDocument={(size) => dispatch(fitDocumentTextThunk(size))}
+                onEditText={textEditPosition ? handlerEditText : undefined}
+              />
+            )}
             {customized && (
               <Box
                 data-testid="customized-mark"
-                data-html2canvas-ignore
                 aria-hidden
                 sx={customizedMark}
               >
@@ -263,7 +300,7 @@ const PictEditModal = ({
               </Box>
             )}
           </Box>
-        </Button>
+        )}
         {editingText && textEditPosition && (
           <CardTextEditor
             initialText={cardText}

@@ -70,6 +70,8 @@ const CHANGED_MESSAGE = {
   userDefault: messages.changedUserDefault,
   applyAll: messages.changedApplyAll,
   reset: messages.changedReset,
+  fitTextPictogram: messages.changedFitTextPictogram,
+  fitTextDocument: messages.changedFitTextDocument,
 } as const;
 
 const StyleUndoSnackbar = ({

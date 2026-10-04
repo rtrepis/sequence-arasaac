@@ -2612,5 +2612,45 @@
   "news.edit-text-on-card.closing": {
     "message": "Clicar la imatge del pictograma continua obrint la finestra d'edició, amb tots els ajustos de sempre. I si la targeta no mostra cap text, la paraula es canvia des d'allà, amb «Edita».",
     "description": "Paràgraf de tancament de la notícia «edit-text-on-card»"
+  },
+  "components.pictEdit.textOverflow.mark": {
+    "message": "Pictograma {number}: el text no hi cap",
+    "description": "Nom accessible de la marca d'avís de la graella quan el text de la targeta es talla. Obre les opcions"
+  },
+  "components.pictEdit.textOverflow.tooltip": {
+    "message": "El text no hi cap i es talla. Clica per veure què pots fer.",
+    "description": "Tooltip de la marca d'avís quan el text de la targeta es talla"
+  },
+  "components.pictEdit.textOverflow.title": {
+    "message": "El text no hi cap",
+    "description": "Títol del quadre d'opcions quan el text de la targeta es talla"
+  },
+  "components.pictEdit.textOverflow.explanation": {
+    "message": "Una paraula és massa llarga per a l'amplada de la targeta i se'n talla un tros. Sortirà tallada també en imprimir i al PDF.",
+    "description": "Explicació del quadre d'opcions quan el text de la targeta es talla"
+  },
+  "components.pictEdit.textOverflow.tooLong": {
+    "message": "Ni amb la lletra més petita no hi cap: cal escurçar el text.",
+    "description": "Quadre d'opcions del text tallat, quan cap mida de lletra no el fa cabre"
+  },
+  "components.pictEdit.textOverflow.fitDocument": {
+    "message": "Redueix la lletra de tot el document a {size}",
+    "description": "Opció del text tallat: redueix la mida de la lletra de l'estil del document, i totes les targetes la mantenen igual. {size} és la mida nova (p. ex. 0,8)"
+  },
+  "components.pictEdit.textOverflow.fitPictogram": {
+    "message": "Redueix la lletra només d'aquest pictograma a {size}",
+    "description": "Opció del text tallat: redueix la mida de la lletra només d'aquesta targeta. {size} és la mida nova (p. ex. 0,8)"
+  },
+  "components.pictEdit.textOverflow.editText": {
+    "message": "Edita el text",
+    "description": "Opció del text tallat: obre l'edició del text damunt de la targeta"
+  },
+  "features.sequence.style.changed.fitTextPictogram": {
+    "message": "S'ha reduït la lletra d'aquest pictograma perquè el text hi càpiga.",
+    "description": "Snackbar després de reduir la lletra d'un sol pictograma des de l'avís «el text no hi cap» (es pot desfer)"
+  },
+  "features.sequence.style.changed.fitTextDocument": {
+    "message": "S'ha reduït la lletra de tot el document perquè el text hi càpiga.",
+    "description": "Snackbar després de reduir la lletra de l'estil del document des de l'avís «el text no hi cap» (es pot desfer)"
   }
 }

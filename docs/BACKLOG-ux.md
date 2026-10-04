@@ -59,6 +59,7 @@ l'entrada.
 
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
+| B32 | La impressió del navegador no respecta la mida de la lletra | Tot document amb una mida diferent d'1 surt imprès diferent de la pantalla i del PDF, sense cap avís; i l'avís de B28 no arregla el paper fins que això no es corregeixi | S | Sí: canvia com surten impresos els documents d'avui |
 
 ### Després
 
@@ -66,7 +67,6 @@ l'entrada.
 |---|---|---|---|---|
 | B29 | La previsualització del vocabulari personal sobresurt del requadre amb valors grans | Mateixa causa que el bug de la previsualització del panell d'estil, ja resolt amb `ScaleToFit`: la solució és una línia | S | No |
 | B27 | Les fonts de Google no se serveixen des de l'app | Sense connexió a Google Fonts, un document no es veu tal com es va desar (el fonament de l'estil ho promet) | M | No |
-| B28 | Una paraula llarga amb lletra gran es talla dins de la targeta | Surt així al paper i al PDF, i ningú no ho avisa | S–M | Sí: partir la paraula, o reduir-ne la lletra |
 | B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
@@ -437,6 +437,22 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
     passa a `aria-disabled` + `aria-busy` amb guarda al handler, de manera que no surt de l'ordre
     de tabulació i el lector de pantalla el llegeix com a ocupat. El `disabled` només es queda per
     als camps buits, que és validació i no espera.
+
+### B32 — La impressió del navegador no respecta la mida de la lletra 🔴 Oberta
+
+*(Trobada resolent B28.)*
+
+- **On**: `PictogramCard.tsx` — les quatre `Typography` del text i del número porten
+  `"@media print": { fontSize: 20 * pictSize }`, sense `font.size` ni `numberFont.size`.
+- **Per què importa**: a la impressió (el botó i Ctrl+P), el text surt sempre a la mida 1, triï el
+  que triï qui prepara el document. Mesurat amb la lletra del document a 0,6: la pàgina de vista
+  pinta 12 px i la impressió 20 px, també a `#print-root`. El PDF sí que la respecta, perquè captura
+  la pantalla. O sigui que el paper, la pantalla i el PDF no coincideixen, i l'avís de B28 diu que
+  el tall també surt imprès, cosa que només és certa a la mida 1.
+- **Proposta**: `20 * font.size * pictSize` al text i `20 * numberFont.size * pictSize` al número.
+  La regla de `@media print` hi és per treure `printPageRatio` (l'escala de pantalla), no la mida
+  de la lletra. Cal confirmar-ho abans, perquè **canvia com surten impresos** els documents d'avui
+  que no fan servir la mida 1. Després, regenerar les captures que en depenguin.
 
 ---
 
@@ -1164,7 +1180,7 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   poder enviar per correu. Cal mesurar el pes del paquet abans i després, i mirar les llicències
   (totes les de Google Fonts són OFL o Apache, que ho permeten).
 
-### B28 — Una paraula llarga amb lletra gran es talla dins de la targeta 🔴 Oberta
+### B28 — Una paraula llarga amb lletra gran es talla dins de la targeta ✅ Resolta
 
 *(Mateixa revisió.)*
 
@@ -1177,6 +1193,19 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 - **Proposta**: triar entre partir la paraula (`hyphens: auto` amb l'idioma de la cerca) o reduir-ne
   la lletra fins que hi càpiga. Cal decidir-ho: en CAA partir una paraula no és neutral per a qui
   llegeix, i reduir-la trenca la mida que ha triat qui prepara el document.
+- **Decisió (2026-10-04)**: l'app no tria. La targeta de la graella ho avisa amb una marca i qui
+  prepara el document decideix en cada cas: reduir la lletra de **tot el document** (totes les
+  targetes amb la mateixa mida), reduir-la **només d'aquell pictograma**, o editar el text.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`). `useCardTextOverflow` mesura el text de cada targeta
+  de la graella; `TextOverflowWarning` és la marca (botó de 44 px, al costat de «personalitzat»)
+  amb el tooltip i el quadre d'opcions; `fitDocumentTextThunk` i `fitPictogramTextThunk` fan els
+  canvis amb el desfer de l'estil. Regles a `docs/fonaments/03-model-contingut-estil.md` (§5 i §6).
+  Proves: `fitText.test.ts`, `useCardTextOverflow.test.ts`, `TextOverflowWarning.test.tsx` i
+  `e2e/text-overflow.spec.ts`.
+- **El que no fa**: no parteix paraules soles (`hyphens: auto`) ni guarda un «deixa-ho així»: un
+  tall acceptat continua marcat. Desar-ho voldria un camp nou al `.saac`, i no s'ha demanat.
+- Fent-ho s'ha trobat **B32**: la impressió del navegador no respecta la mida de la lletra, i fins
+  que no s'arregli, reduir-la només arregla la pantalla i el PDF.
 
 ### B29 — La previsualització del vocabulari personal sobresurt del requadre 🔴 Oberta
 

@@ -686,5 +686,15 @@
   "news.edit-text-on-card.step2.alt": "La stessa sequenza con il testo nuovo salvato sotto il secondo pittogramma",
   "news.edit-text-on-card.step3.description": "<p>Ci arrivi anche in altri modi:</p><ul><li>Con il clic destro sul pittogramma, dall'opzione «Modifica il testo».</li><li>Con la tastiera: posizionati sulla scheda e premi <b>F2</b>.</li></ul>",
   "news.edit-text-on-card.step3.alt": "Il menu del clic destro di un pittogramma, con l'opzione «Modifica il testo» evidenziata",
-  "news.edit-text-on-card.closing": "Fare clic sull'immagine del pittogramma apre ancora la finestra di modifica, con tutte le impostazioni di sempre. E se la scheda non mostra alcun testo, la parola si cambia da lì, con «Modifica»."
+  "news.edit-text-on-card.closing": "Fare clic sull'immagine del pittogramma apre ancora la finestra di modifica, con tutte le impostazioni di sempre. E se la scheda non mostra alcun testo, la parola si cambia da lì, con «Modifica».",
+  "components.pictEdit.textOverflow.mark": "Pittogramma {number}: il testo non ci sta",
+  "components.pictEdit.textOverflow.tooltip": "Il testo non ci sta e viene tagliato. Fai clic per vedere cosa puoi fare.",
+  "components.pictEdit.textOverflow.title": "Il testo non ci sta",
+  "components.pictEdit.textOverflow.explanation": "Una parola è troppo lunga per la larghezza della scheda e ne viene tagliato un pezzo. Sarà tagliata anche in stampa e nel PDF.",
+  "components.pictEdit.textOverflow.tooLong": "Non ci sta nemmeno con il carattere più piccolo: bisogna accorciare il testo.",
+  "components.pictEdit.textOverflow.fitDocument": "Riduci il carattere di tutto il documento a {size}",
+  "components.pictEdit.textOverflow.fitPictogram": "Riduci il carattere solo di questo pittogramma a {size}",
+  "components.pictEdit.textOverflow.editText": "Modifica il testo",
+  "features.sequence.style.changed.fitTextPictogram": "Il carattere di questo pittogramma è stato ridotto perché il testo ci stia.",
+  "features.sequence.style.changed.fitTextDocument": "Il carattere di tutto il documento è stato ridotto perché il testo ci stia."
 }
