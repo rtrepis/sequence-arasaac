@@ -1,4 +1,9 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  combineReducers,
+  ThunkAction,
+  Action,
+} from "@reduxjs/toolkit";
 import { uiReducer } from "@features/user-settings/store/uiSlice";
 import { documentReducer } from "@features/sequence/store/documentSlice";
 import { documentStatusReducer } from "@features/sequence/store/documentStatusSlice";
@@ -7,21 +12,36 @@ import { authReducer } from "@features/backend/auth/store/authSlice";
 import { quotaReducer } from "@features/backend/user-settings/store/quotaSlice";
 import { styleReducer } from "@features/sequence/store/styleSlice";
 
-export const store = configureStore({
-  reducer: {
-    document: documentReducer,
-    documentStatus: documentStatusReducer,
-    ui: uiReducer,
-    auth: authReducer,
-    quota: quotaReducer,
-    style: styleReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().prepend(documentStatusListener.middleware),
+const rootReducer = combineReducers({
+  document: documentReducer,
+  documentStatus: documentStatusReducer,
+  ui: uiReducer,
+  auth: authReducer,
+  quota: quotaReducer,
+  style: styleReducer,
 });
 
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
+
+/**
+ * Únic lloc on es declara de què està fet l'estat de l'app.
+ *
+ * L'app en fa una instància i els tests en fan una de nova per cada cas: amb el
+ * mapa de reducers escrit dues vegades, l'arnès de proves es desincronitzava de
+ * l'store real i els tests comprovaven un model que ja no existia.
+ */
+export const createAppStore = (preloadedState?: Partial<RootState>) =>
+  configureStore({
+    reducer: rootReducer,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().prepend(documentStatusListener.middleware),
+  });
+
+export const store = createAppStore();
+
+export type AppStore = ReturnType<typeof createAppStore>;
+export type AppDispatch = AppStore["dispatch"];
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,

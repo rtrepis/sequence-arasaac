@@ -3,9 +3,9 @@ import { useIntl } from "react-intl";
 import {
   type PageFormat,
   type PageDimensions,
-  pixelsToMM,
   CSS_PRINT_DPI,
-} from "@/types/PageFormat";
+} from "../utils/pageFormat";
+import { pixelsToMM } from "../utils/pageUnits";
 import { appBackgrounds, printColors } from "@/style/palette";
 import { PRINT_COPYRIGHT_CLASS } from "@components/CopyRight/CopyRight";
 import { useFeedback } from "@/context/FeedbackContext";
@@ -164,15 +164,6 @@ const themeColorReplacements: Array<[RegExp, string]> = [
 ];
 
 /**
- * Separació del peu de llicència respecte a les vores del full, en píxels de
- * pàgina. A baix, els mateixos 10 px que li dona la regla `@media print` de
- * `CopyRight`; als costats, els 12 px de `paddingInline` del full, perquè quedi
- * alineat amb el contingut i no enganxat a la vora.
- */
-const COPYRIGHT_BOTTOM_PX = 10;
-const COPYRIGHT_INLINE_PX = 12;
-
-/**
  * Peu de llicència al PDF.
  *
  * El full imprès el porta des de sempre (ARASAAC demana que hi consti l'autoria
@@ -180,25 +171,18 @@ const COPYRIGHT_INLINE_PX = 12;
  * només es mostra dins d'`@media print` i html2canvas clona el document en
  * `media: screen`, on aquella regla no existeix. Aquí es fa visible al clon.
  *
- * `position: fixed` s'ha de convertir en `absolute`: html2canvas situa el que és
- * fix respecte de la finestra, no del full, i el peu acabaria fora de la zona
- * capturada. Amb el full com a bloc contenidor queda al peu de la pàgina, com a
- * la impressió, i sense ocupar lloc a la seqüència.
+ * Només cal ensenyar-lo: el peu és l'últim bloc de la columna del full i es
+ * reserva l'espai ell mateix, igual que a la impressió. Abans se'l treia del
+ * flux amb un `position: absolute` «sense ocupar lloc a la seqüència», i
+ * justament per això queia damunt de l'última fila de pictogrames.
  *
  * El color s'hi força perquè el peu és text del tema: en fosc és blanc i, tot i
  * que `themeColorReplacements` ja el passaria a negre, aquí no costa res
  * assegurar-ho —el PDF sempre és paper blanc amb tinta negra.
  */
 const COPYRIGHT_FOOTER_CSS = `
-  .preview-content {
-    position: relative !important;
-  }
   .preview-content .${PRINT_COPYRIGHT_CLASS} {
     display: block !important;
-    position: absolute !important;
-    left: ${COPYRIGHT_INLINE_PX}px;
-    right: ${COPYRIGHT_INLINE_PX}px;
-    bottom: ${COPYRIGHT_BOTTOM_PX}px;
     color: ${printColors.text} !important;
   }
 `;

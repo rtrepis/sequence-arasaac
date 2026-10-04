@@ -1,0 +1,49 @@
+import { defineMessages } from "react-intl";
+
+const messages = defineMessages({
+  settings: {
+    id: "components.defaultSettings.settings.title",
+    defaultMessage: "Settings",
+    description: "Settings Default ",
+  },
+  settingsLoggedIn: {
+    id: "components.defaultSettings.settings.loggedIn",
+    defaultMessage: "Settings · signed in as {email}",
+    description:
+      "Nom del botó de configuracions quan hi ha sessió: també diu amb quin compte",
+  },
+  close: {
+    id: "components.defaultSettings.close",
+    defaultMessage: "close",
+    description: "close Settings Default ",
+  },
+  pictGuide: {
+    id: "components.defaultSettings.pictGuide",
+    defaultMessage: "Preview",
+    description: "Paraula del pictograma de mostra dels settings per defecte",
+  },
+  tabUser: {
+    id: "components.defaultSettings.tab.user",
+    defaultMessage: "User",
+    description: "Tab d'ajustos d'usuari (idioma, compte...)",
+  },
+  tabPictograms: {
+    id: "components.defaultSettings.tab.pictograms",
+    defaultMessage: "Estil del document",
+    description:
+      "Tab del panell «Estil del document»: l'estil que s'aplica a totes les seqüències del document obert",
+  },
+  tabView: {
+    id: "components.defaultSettings.tab.view",
+    defaultMessage: "Vista",
+    description:
+      "Tab de configuració per defecte de la visualització de seqüències",
+  },
+  tabVocabulary: {
+    id: "components.defaultSettings.tab.vocabulary",
+    defaultMessage: "Personal vocabulary",
+    description: "Tab de vocabulari personal (paraules personalitzades)",
+  },
+});
+
+export default messages;

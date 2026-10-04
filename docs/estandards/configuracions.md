@@ -1,8 +1,8 @@
 # Configuracions (panells d'ajustos)
 
-> **Quan llegir-lo:** abans de tocar qualsevol panell d'ajustos: `DefaultSettingsModal`, `SettingsLayout/`, `SettingRow`, `PictEditForm` o la columna de la pàgina de vista.
+> **Quan llegir-lo:** abans de tocar qualsevol panell d'ajustos: `SettingsDialog`, `SettingsLayout/`, `SettingRow`, `PictEditForm` o la columna de la pàgina de vista.
 
-Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames, Vista, Vocabulari). Font única de veritat: `apps/web/src/components/SettingsLayout/`.
+Patró únic per a tots els tabs del `SettingsDialog` (Usuari, Estil del document, Vista, Vocabulari), a `features/user-settings/components/SettingsDialog/panels/`. Font única de veritat: `apps/web/src/components/SettingsLayout/`.
 
 ## Components compartits
 
@@ -52,7 +52,7 @@ Patró únic per a tots els tabs del `DefaultSettingsModal` (Usuari, Pictogrames
   porta `color="inherit"`; el verd només al botó ple, on va amb `primary.contrastText`.
 - **El contingut no s'enganxa a la barra**: el panell arrenca a `SETTINGS_CONTENT_TOP_GAP`
   de la barra superior del diàleg, i per sota de `md` —on l'`AppBar` és `fixed` i no
-  ocupa lloc— el buit que la compensa fa exactament `SETTINGS_DIALOG_APPBAR_HEIGHT`.
+  ocupa lloc— el buit que la compensa fa exactament `APP_FULLSCREEN_APPBAR_HEIGHT`, que el posa `AppFullScreenDialog`.
   Amb els 40 px que hi havia, el primer element començava a sis píxels de la barra.
 - **Toggles = marca de la casa**: qualsevol selector d'opcions discretes usa `StyledToggleButtonGroup` (arrodonit 55×55, `primary` en seleccionat). Mai `ToggleButtonGroup` pla de MUI dins del modal de settings.
 - **Tot control ha de tenir nom accessible, i ha de sortir del títol de la seva fila**: `SettingRow` posa l'`id` que se li passa a `labelId` al `FormLabel`; el control l'ha de recollir. Un `Select` ho fa amb la seva prop **`labelId`** —**mai** amb `inputProps={{ "aria-labelledby": … }}`, que deixa el nom a l'`<input>` natiu amagat i no al `div[role="combobox"]`, l'element que llegeix i clica tothom—; un `Slider`, amb `aria-labelledby`; un `TextField`, amb `inputProps` (allà l'`<input>` sí que és el control). Sense això el control arriba com un «combobox» que llegeix el valor però no diu de què és.

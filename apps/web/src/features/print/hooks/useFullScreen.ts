@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { FULLSCREEN_SCALE } from "@/types/PageFormat";
+import { FULLSCREEN_SCALE } from "../utils/pageFormat";
 
 /**
  * Selector CSS per al contenidor de fullscreen

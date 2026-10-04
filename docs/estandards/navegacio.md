@@ -4,7 +4,7 @@
 
 ## Estàndard de tabs (icona + text)
 
-Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'edició/visualització (`TabsEditView`) i els del modal de configuracions (`DefaultSettingsDialog`).
+Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'edició/visualització (`TabsEditView`) i i els del diàleg de configuració (`SettingsDialog`, que els declara i els passa a `AppFullScreenDialog`).
 
 ### Component compartit
 
@@ -17,7 +17,7 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 - **Per sota de `sm`**: **només el tab seleccionat conserva el text**; la resta queden en icona. Sempre hi ha, doncs, un text visible que diu on ets, sense malgastar amplada amb els tabs on no ets. **Criteri únic per a tots els tabs de l'app** — barra de navegació i modal de configuracions es comporten igual; `AppTab` no té cap prop per variar-ho.
 - **L'`aria-label` és sempre present** amb el text traduït — el tab no perd mai el seu nom accessible encara que el text no sigui visible, cosa crítica en una app d'AAC.
 - **Res d'encapçalaments duplicats dins el panell**: el nom del tab actiu el diu el propi tab, no un `h2` a sobre del contingut. Un títol repetit a cada panell és soroll en una pantalla on l'alçada és el recurs escàs.
-- **Els contenidors amb 3 tabs o més van `variant="scrollable"` amb `scrollButtons="auto"`** (cas de `DefaultSettingsDialog`): en mòbil el tab actiu amb text pot desbordar la barra, i les fletxes apareixen només on hi ha ratolí (MUI les amaga en tàctil, on ja hi ha swipe).
+- **Els contenidors amb 3 tabs o més van `variant="scrollable"` amb `scrollButtons="auto"`** (cas del diàleg de configuració): en mòbil el tab actiu amb text pot desbordar la barra, i les fletxes apareixen només on hi ha ratolí (MUI les amaga en tàctil, on ja hi ha swipe).
 - **El valor del tab es deriva de l'estat real, no d'estat local**: `TabsEditView` calcula el tab actiu des de `useLocation()`. Amb `useState` inicialitzat a un valor fix, recarregar `/view-sequence` marcaria «Edició» — i com que el tab actiu és l'únic amb text en mòbil, l'error seria doblement desorientador.
 - **Mai fer servir `Tooltip` per portar el text del tab en mòbil**: en tàctil només s'obre amb long-press (~700 ms), no és descobrible, xoca amb el menú contextual del sistema i es tanca sol. El tooltip és un ajut d'escriptori, mai l'única via al text.
 - **Res de text apilat sota la icona**: «Pictogrames» i «Vocabulari» no hi caben en un tab estret i acabarien truncats, i el tab creixeria en alçada empenyent l'AppBar de 42px.
@@ -25,7 +25,7 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 - **L'amagada és per CSS**, no per `useMediaQuery`: així el layout no depèn d'un render de JavaScript ni fa flash en carregar.
 - **Tot l'ajust responsiu va dins d'un `theme.breakpoints.down(sm)`**, mai amb objectes `{ xs: …, sm: … }`. Per sobre del breakpoint el tab ha de conservar **intactes** les mides natives de MUI. En particular, **mai declarar `fontSize: "inherit"` per a escriptori**: el tab heretaria l'`1.75rem` del `Toolbar` de `BarNavigation` (i el `1rem` del body al diàleg) en lloc del seu `0.875rem`, i tant la icona com el text es veurien desmesurats. Per això `appTabSx` i `appTabLabelSx` són funcions de `theme`, no objectes.
 - **Diana tàctil**: en `xs` el tab sense text baixa a `minWidth: 48` (el mínim WCAG de diana tàctil, no menys) i la icona creix a `1.4rem` per compensar la pèrdua del text. El tab seleccionat, que sí que mostra text, recupera les mides normals.
-- **El títol de la barra cedeix abans que els tabs**: a `DefaultSettingsDialog` el títol «Configuracions» s'amaga en `xs` (`display: { xs: "none", sm: "block" }`) i el nom del diàleg passa a l'`aria-label` del `Dialog`.
+- **El títol de la barra cedeix abans que els tabs**: a `AppFullScreenDialog` el títol s'amaga en `xs` (`display: { xs: "none", sm: "block" }`) i el nom del diàleg passa a l'`aria-label` del `Dialog`.
 - **Un destí es diu amb un nom; una acció, amb un verb**: els tabs i els ítems de navegació que
   porten a un lloc són noms (**Edició** · **Vista**, i al drawer Inici · Novetats · Configuració);
   els ítems que obren un diàleg i fan alguna cosa són verbs (Descarrega · Carrega). Els quatre tabs
@@ -41,7 +41,7 @@ Font única de veritat: `apps/web/src/components/AppTabs/`. Cobreix els tabs d'e
 - ✅ **`TabsEditView`** — 2 tabs (Edició/Vista) via `AppTab`; valor derivat de `useLocation()`.
   Les etiquetes surten de `@shared/messages/navigation.lang`, **compartides amb el drawer**: el
   mateix destí no es pot dir de dues maneres segons per on s'hi arriba (era B4 del backlog).
-- ✅ **`DefaultSettingsDialog`** — 4 tabs declarats a l'array `SETTINGS_TABS` (valor + icona + missatge) i renderitzats amb `map`, dins d'un `Tabs` scrollable.
+- ✅ **`SettingsDialog`** — 4 tabs declarats a l'array `SETTINGS_TABS` (valor + icona + missatge); qui els pinta, dins d'un `Tabs` scrollable, és `AppFullScreenDialog`.
 - ➖ **`TabsSequences`** — fora d'aquest estàndard: els seus tabs són números de seqüència, sense icona ni text traduïble; té la seva pròpia branca `isMobile` (horitzontal scrollable).
 
 ---

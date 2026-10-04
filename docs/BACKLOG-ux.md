@@ -73,7 +73,6 @@ l'entrada.
 | B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
-| C10 | La suite de tests del web no compila | Dona una falsa sensació de xarxa de seguretat. Esborrar-la és S; reviure-la és L | S / L | Sí: reviure o esborrar |
 | B23 | L'idioma desat de l'usuari sense compte no mana sobre la URL | Amb els comptes apagats, **tothom** és usuari sense compte: la regla que val és aquesta | S | Sí: mana la URL o mana la preferència |
 
 ### Més endavant
@@ -87,6 +86,7 @@ l'entrada.
 | N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
 | B30 | No hi ha historial de desfer i refer | El desfer que ja existeix cobreix els canvis d'estil, «Aplica a tots» i «Restableix», que són els que esborren més feina d'un cop | L |
 | C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. Va amb C17 | M | No |
+| C10 | Vuit fitxers de test en quarantena | El runner i l'arnès ja hi són; queda portar-los-hi o esborrar-los, un per un | S cada un | Sí: per cada fitxer, reviure o esborrar |
 
 ### Ajornades (comptes apagats)
 
@@ -558,7 +558,7 @@ valors** torna, que és on els quatre botons de debò es diferencien.
   control per veu no pot dir el que llegeix). Amb `describeChild` el tooltip és `aria-describedby` i
   el botó conserva el seu text. No aplica als botons només-icona, on el tooltip **és** el nom.
 - Resol de passada la col·lisió de `components.pictEdit.reset` que apuntava C4: la definició no
-  usada de `Modals/PictEditModal/PictEdit.lang.ts` s'ha esborrat, perquè en canviar el text les dues
+  usada de `features/sequence/components/PictEdit/PictEdit.lang.ts` s'ha esborrat, perquè en canviar el text les dues
   haurien divergit en silenci.
 
 ### B6 — Els tooltips de seqüències són català hardcodat ✅ Resolta
@@ -602,7 +602,7 @@ Ordre nou, en quatre grups separats per `Divider`:
 *(Trobada en analitzar A5 i A6, fora del seu abast.)*
 
 - **On**: `MouseActionList.tsx` (`disabled={pasteObject ? false : true}`) i
-  `Modals/PictEditModalList/PictEditModalList.tsx` (l'estat `copyPictogram`)
+  `features/sequence/components/PictEdit/PictEditModalList.tsx` (l'estat `copyPictogram`)
 - **Per què importa**: fins que no s'ha copiat res, «Enganxar» surt gris i el menú no diu per què;
   i quan sí que hi ha alguna cosa copiada, tampoc no es veu enlloc **quin** pictograma s'enganxarà.
   El porta-retalls viu en un `useState` que no es mostra mai.
@@ -1382,28 +1382,51 @@ Branca `claude/document-limit-users-sjig8o`.
   net**: si en surt un error, és nostre. No s'ha encadenat dins de `npm run lint` a propòsit —
   el lint del web ja surt vermell amb 13 errors preexistents d'ESLint i una barrera que neix
   vermella no la mira ningú.
-- **Residu**: aquests 13 errors d'ESLint segueixen oberts; 6 són a `test-utils.tsx` (vegeu C10) i la
-  resta són apòstrofs sense escapar i dos `@ts-ignore` en pàgines soltes.
+- **Residu**: en queden **7** (n'eren 13). Els 6 de `test-utils.tsx` han marxat amb el fitxer, que
+  s'ha esborrat en refer l'arnès de proves (C10). Els que queden són apòstrofs sense escapar a
+  `features/admin/` i dos `@ts-ignore` a `features/print-refactor/dpiDetector.tsx`.
 
-### C10 — La suite de tests del web no compila ni s'executa 🔴 Oberta
+### C10 — La suite de tests del web no compilava ni s'executava 🔴 Oberta (en quarantena)
 
-*(Trobada en posar la barrera de tipus de C9.)*
+*(Actualitzada el 2026-10-03: dels dotze fitxers en quarantena en queden vuit, vegeu C21.)*
 
-- **On**: `src/**/*.test.tsx`, `src/setupTests.ts` i `src/utils/test-utils.tsx`.
-- **Per què importa**: no és que els tests fallin — és que **no poden ni arrencar**. `npm test` és un
-  placeholder (`echo 'Tests: WIP'`), el workspace no té configuració de vitest, `test-utils.tsx`
-  munta un store amb un `sequenceReducer` de `app/slice/sequenceSlice` (mòdul esborrat) i una mock
-  d'`Ui` a la qual falten `lang`, `theme`, `settingsActiveTab`, `wordProfiles` i `tier`; els tests
-  passen props que ja no existeixen (`BarNavigation title`) o n'obliden d'obligatòries
-  (`PictogramAmount info`), i `setupTests.ts` importa `.private/mocks/server`, que no és al
-  repositori. Mentrestant el `CLAUDE.md` els presentava com a «tests reals».
-- **Proposta**: decidir-ho d'una: o es reviu la suite (configurar vitest al web, refer `test-utils`
-  contra l'store actual —`document`, `ui`, `auth`— i actualitzar els sis fitxers de test), o
-  s'esborra i es deixa dit que la cobertura del front són els e2e de Playwright. Mantenir-la a mig
-  camí és el pitjor dels tres: ocupa lloc, dona sensació de xarxa de seguretat i no n'és cap.
-- **Mentrestant**: exclosa del `typecheck` (`exclude` del `tsconfig.json`), com els tests de l'API.
-  L'`exclude` ja ho intentava, però tenia les dues rutes dins d'una sola cadena separades per una
-  coma, que no coincideix amb cap fitxer.
+*(Trobada en posar la barrera de tipus de C9. Mig resolta en reorganitzar `Modals/`.)*
+
+- **On**: els vuit fitxers llistats al `exclude` de `vitest.config.ts` i del `tsconfig.json`.
+- **Què s'ha fet**: el web ja té runner i arnès.
+  - `vitest` + `jsdom` al workspace (`vitest.config.ts` hereta els alias del `vite.config.ts`, així
+    no hi ha dues llistes que es puguin desalinear); `npm test` = `vitest run`.
+  - `src/test/renderWithProviders.tsx` munta la mateixa pila de proveïdors que `index.tsx` amb
+    l'store **de debò**: `app/store.ts` exporta `createAppStore`, que és l'única declaració del
+    mapa de reducers. L'arrel del problema era justament tenir-ne dues.
+  - `src/test/fixtures/document.ts` per als objectes de domini.
+  - `utils/test-utils.tsx` i `setupTests.ts`, esborrats: eren la mock paral·lela desincronitzada i
+    un `setup` que importava `.private/mocks/server`, que no és al repositori.
+  - Els tests que corren **entren al `typecheck`**. Dos fitxers de l'store (`styleSlice.test.ts`,
+    `applyAllReset.test.ts`) es muntaven el seu propi store amb quatre slices i ara fan servir
+    `createAppStore`.
+  - Estat: **140 tests verds** al web i 81 a l'API (`npx turbo test`).
+- **Què queda**: vuit fitxers en quarantena, tots del mateix motiu.
+  1. **Model d'estat anterior** (vuit): `App.test.tsx`, `BarNavigation`, `PictogramAmount`,
+     `PictogramCard`, `PictogramSearch`, `SettingCard`, `MagicSearch`, `uiSlice.test.tsx`. Escrits
+     contra un slice `sequence` que ja no existeix, amb API de Jest i props que han canviat.
+  2. ~~**Expectatives caducades** (quatre)~~ — **tancat el 2026-10-03 amb C21**.
+     `usePageFormat.test.ts` i `useScaleCalculator.test.ts` esperaven les mides `PAGE_FORMATS`
+     escrites a mà i esborrades el 2026-02-01 (975×689 per a un A4 apaïsat, quan la mida correcta
+     d'avui, derivada de l'ISO 216 menys els marges a 96 DPI, és 1047×718). Reescrits perquè
+     **derivin** el que esperen de `PAPER_DIMENSIONS_MM`, `PRINT_MARGIN_MM` i `CSS_PRINT_DPI`: així
+     el test diu la regla i no una fotografia dels números d'un dia. De passada va caure la
+     premissa d'un cas («menys marge, més escala»), que el límit d'escala a 1,0 del commit
+     `7dea37c` havia invalidat. `useScaleCalculator.oreintationFixe.test.ts` (sense cap test a
+     dins) i `loadLocaleMessage.test.ts` s'han esborrat; el segon, amb el mòdul que provava
+     (`languages/loadLocaleMessages.ts`), que no importava ningú.
+- **Per què en quarantena i no arreglats**: perquè «arreglar-los» aquí voldria dir reescriure els
+  números que s'esperen sense haver mirat si el que ha canviat és correcte, i això és convertir una
+  prova en una fotografia del bug. I deixar-los dins vol dir que `npm test` neix vermell, que és
+  tornar al punt de partida: una barrera que no mira ningú.
+- **Proposta**: per cada fitxer, portar-lo a `src/test/renderWithProviders` o esborrar-lo. Els
+  quatre d'expectatives caducades, derivant les mides de la constant de DPI en comptes de clavar-hi
+  el número. Els de la llista 1 demanen tants retocs com reescriure'ls.
 
 ### C11 — Una vora «fitzgerald» sense classificació es pinta del color del text ✅ Resolta
 
@@ -1725,3 +1748,248 @@ demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per 
 - **Proposta**: si s'escriu, demana una captura **d'abans i després** de la barra de la pàgina de
   vista, i l'«abans» obliga a construir una revisió antiga. És l'única de les sis sense compte que
   no s'ha publicat, i el motiu és aquest cost, no el contingut.
+
+### C21 — `features/print-refactor/` era la implementació de debò i es deia «refactor» ✅ Resolta
+
+*(Trobada en establir l'estàndard d'estructura de fitxers, en treure `Modals/`. Resolta el 2026-10-03.)*
+
+- **On era**: `features/print-refactor/` — 1.481 línies en cinc fitxers.
+- **Què s'hi va trobar en revisar-la**: no era un problema de nom, era una carpeta buida de feina.
+  - **Res del que calculava no s'usava.** Tots els camins vius passen el DPI explícitament
+    (`CSS_PRINT_DPI`, 96): `calculateUsableDimensions`, `useDownloadPdf` i `usePrintStyles`. El
+    commit `7dea37c` (2026-06-12, «Escala impressió: sempre 96 CSS DPI per pageFormat») va deixar
+    la detecció sense feina, i ningú no la va treure.
+  - **I la detecció era tautològica.** `detectPhysicalDPI()` mesurava un `div` d'una polzada, però
+    una polzada CSS val 96 px per definició. Comprovat amb Chromium a `deviceScaleFactor` 1, 2 i 3:
+    **96 px sempre**. La branca de «pantalla Retina = 192 DPI» no s'executava mai.
+  - **Un cost real, això sí**: `usePageFormat` cridava `useScreenDPI()` i no en llegia el valor. A
+    cada esdeveniment de `resize`, sense throttle, inseria un `div` al `document.body`, en llegia
+    l'`offsetWidth` —reflow sincrònic forçat—, el treia i feia `setState` amb un objecte nou, o
+    sigui re-render de tota la pàgina de vista amb els pictogrames a dins. El `resize` de debò ja
+    el porta `useWindowResize`.
+  - **Codi mort**: `CalibrationTool.tsx` (486 línies, ningú no l'importava, i reimplementava les
+    conversions per quarta vegada), `usePageDimmension.ts` (85, i calculava la pàgina amb el DPI
+    *de pantalla*: revifar-lo hauria trencat la coincidència entre previsualització i paper),
+    `DPISettings` i els dos `logDPIInfo`.
+  - **El `README.md`** (299 línies) enllaçava a quatre documents esborrats el 2026-02-01, descrivia
+    una estructura inexistent i donava per fetes mètriques inventades («0 bugs relacionats amb
+    càlculs d'escala en 3 mesos», «Reducció del 60% en complexitat ciclomàtica»), amb
+    `Status: ✅ Production Ready`.
+  - **Qualitat**: `import` al mig del fitxer, `React.FC` sense importar React (l'error `no-undef`),
+    textos en català clavats al codi i `grey.100` a `DPISettings`, `localStorage` directe per fora
+    de `settingsStorage`, `// @@ts-expect-error` amb dues arrobes (que no fa res),
+    `useDPIChangeListener` que es diu `use*` i no és un hook, guardes de SSR en una SPA i una
+    cache mutable a nivell de mòdul.
+- **Què s'ha fet**: esborrar-la sencera. El que calia conservar són les dues conversions, ara a
+  `features/print/utils/pageUnits.ts` (8 línies) i **amb el DPI com a argument obligatori**: abans
+  queien a un DPI «detectat» quan no se'ls passava cap, i qui escrivia `mmToPixels(210)` sortia del
+  contracte sense cap avís.
+  - `types/PageFormat.ts` → `features/print/utils/pageFormat.ts`, que era lògica del domini
+    d'impressió vivint a `types/` (8 importadors).
+  - `PageSize` es declarava dues vegades (aquí i a `shared-types`, que és la que viatja dins del
+    `.saac` i de l'API): ara es reexporta la compartida.
+  - S'ha esborrat també `PRINT_CONTAINER_PADDING` (valia 0 i no la llegia ningú) i
+    `languages/loadLocaleMessages.ts` amb el seu test, que tampoc no importava ningú.
+  - **Sense canvi de comportament**: les mides del full les segueix donant la mateixa aritmètica a
+    96 DPI. Verificat amb el `typecheck` net, 162 tests verds i l'spec
+    `e2e/download-pdf-page-format.spec.ts`, que llegeix el `/MediaBox` del PDF que surt.
+  - Dels 7 errors d'ESLint del web en queden **3** (els apòstrofs de `features/admin/`), i els
+    avisos passen de 237 a 142.
+
+### C22 — La impressió sortia més petita, i diferent amb Ctrl+P que amb el botó ✅ Resolta
+
+*(Reportada per l'usuari el 2026-10-03: amb la finestra a mitja pantalla i Ctrl+P la impressió
+sortia com la vista; amb el Mac a pantalla completa i el botó d'imprimir, més petita. L'usuari va
+insistir que la diferència entre els dos disparadors era real —i ho era.)*
+
+- **On**: `features/print/hooks/usePrintStyles.ts` (`generatePrintCSS`).
+- **La causa**: el CSS d'impressió amagava els controls amb `[class*="NotPrint"]`, però **les capes
+  que suren no són a l'arbre de l'app**: MUI les penja de `document.body` amb un portal, i
+  `NotPrint` no hi arriba mai. Mesurat amb el mitjà `print` emulat, abans del canvi:
+
+  | capa | quan hi és | mida en impressió |
+  |---|---|---|
+  | `MuiDrawer-root` | **sempre** | `display: block`, **l'amplada de la finestra** (1680 px amb la finestra a 1680) |
+  | `MuiTooltip-popper` | **només amb el ratolí damunt del botó** | `display: block`, 65 px, acabant a x = 1545 |
+
+  Les dues es colaven al paper, però **la que encongia el full és el tooltip**: el menú lateral fa
+  el 100 % de l'amplada i es replanteja amb la pàgina, mentre que el tooltip es queda clavat on era
+  a la pantalla (vegeu el punt següent). I el tooltip del botó d'imprimir **està obert justament
+  quan el cliques amb el ratolí**, mentre que **Ctrl+P no passa per cap tooltip**: d'aquí que el
+  mateix full sortís bé amb el teclat i petit amb el botó. El `blur()` de `handlePrint` tanca el
+  tooltip que ve del focus, no el que ve del ratolí.
+
+- **Per què es nota com una mida**: el tooltip no s'hi col·loca sol. MUI l'hi posa amb un
+  `transform: translate(1384px, 112px)` **en línia i en píxels, escrit per JavaScript**. Quan el
+  navegador replanteja la pàgina a l'amplada del full (1047 px) per imprimir, el tooltip es queda
+  clavat als 1384 px: queda molt fora del paper, el document passa a fer tota aquella amplada i el
+  navegador **encongeix tot el dibuix** per fer-l'hi cabre.
+- **Reproduït al pipeline d'impressió de debò** (PDF de Chromium, finestra de 1512 px):
+
+  | ratolí damunt del botó | caixa de la pàgina | escala del dibuix |
+  |---|---|---|
+  | no (com un Ctrl+P) | 1103 × 774 px | 3,125 |
+  | **sí (com quan el cliques)** | **1448 × 1016 px** | **2,379** — un **76 %** |
+
+  Les captures que va enviar l'usuari donen **71,4 %**, amb la graella i el peu de llicència
+  escalats pel **mateix** factor (graella 1163 → 831 px; peu 919 → 656 px): és un encongiment
+  uniforme de tot el document, no un canvi de disposició. La diferència amb el 76 % mesurat aquí és
+  l'amplada de la finestra —com més ampla, més lluny queda el tooltip i més encongeix.
+- **No és cosa de Safari.** Això es va escriure primer com una particularitat del WebKit, i és fals:
+  **Chromium ho fa igual**. El que amagava la troballa és que les mesures d'abans es feien sense el
+  tooltip obert, i sense tooltip no hi ha res que desbordi.
+- **Per què no es reproduïa canviant mides a les eines de desenvolupador**: perquè la mida no era
+  la variable. Calia **el ratolí damunt del botó**, i provant-ho des de les eines no s'hi arriba.
+  La mida de la finestra només hi entra perquè com més ampla és, més lluny cau el tooltip i més
+  encongeix.
+- **El primer intent, i per què no bastava**: es van amagar les capes una per una
+  (`.MuiDrawer-root`, `.MuiPopper-root`, `.MuiTooltip-popper`…) i es va lligar `html`/`body` a
+  l'amplada del full. Funcionava per a les capes conegudes, però era una **llista negra**: cada
+  capa nova de MUI hi tornava a ser una fuita. Ho va dir l'usuari, i tenia raó.
+- **Què s'ha fet**: girar-ho a **llista blanca**. `usePrintSheet` penja del `body` una còpia de
+  `.preview-content` dins de `#print-root` i marca el `body`; el CSS d'impressió amaga **tot** el
+  que penja del `body` i només deixa passar aquesta còpia. És el mateix camí que ja feia
+  l'exportació a PDF —captura `.preview-content` i prou—, i per això el PDF no ha patit mai aquest
+  problema.
+  - El botó prepara la còpia ell mateix abans d'imprimir; **Ctrl+P no passa per codi nostre**, i
+    per això el hook escolta també `beforeprint` (i el canvi de mitjà, per als Safari antics). Les
+    dues vies donen el mateix full **per construcció**.
+  - Si no hi ha full, no s'amaga res: val més imprimir la pàgina tal com surti que deixar l'usuari
+    amb un paper en blanc.
+  - El CSS d'impressió ja no anomena cap classe de MUI ni cap `NotPrint`: hi ha un test que ho
+    comprova, perquè la llista negra no hi pugui tornar.
+- **Verificació** (PDF de Chromium, amb el ratolí damunt del botó i sense):
+
+  | finestra | via | caixa de la pàgina | escala del dibuix |
+  |---|---|---|---|
+  | 1280 | Ctrl+P / botó | 1047 × 718 px | 3,125 / 3,125 |
+  | 1512 | Ctrl+P / botó | 1047 × 718 px | 3,125 / 3,125 |
+  | 2560 | Ctrl+P / botó | 1047 × 718 px | 3,125 / 3,125 |
+
+- **I una troballa que ningú no havia reportat**: la impressió sortia en **dues pàgines**, totes
+  dues amb el full sencer (128 operacions de text a cada flux de contingut). Ara n'és una.
+- **Proves de regressió**: `usePrintSheet.test.ts` (11 casos: la còpia, l'escala treta, que no es
+  toca el full de la pantalla, la idempotència, el cas sense full i els avisos del navegador) i
+  `usePrintStyles.test.ts` (9 casos: el marge, la llista blanca, les mides en mil·límetres i que no
+  hi torni a aparèixer cap llista negra).
+
+### C23 — El peu de llicència queia damunt de l'última fila de pictogrames ✅ Resolta
+
+*(Reportada per l'usuari el 2026-10-04, provant la correcció de C22: «el peu de pàgina surt sobre
+els pictogrames… i també al PDF, que també passa».)*
+
+- **On**: `components/CopyRight/CopyRight.tsx`, el full de
+  `components/ViewSequencesSettings/ViewSquenceSettings.tsx` i el CSS del clon de
+  `features/print/hooks/useDownloadPdf.ts`.
+- **Què passava**: el peu estava **tret del flux** a tots dos camins —`position: fixed` a la
+  impressió, `position: absolute` al clon del PDF— amb el comentari explícit de «sense ocupar lloc
+  a la seqüència». Mentre el full imprès era més gran que la pàgina hi havia prou aire i no es
+  notava; en fer que el full sigui exactament la pàgina (C22), el peu i l'última fila de
+  pictogrames van passar a compartir els mateixos píxels. Al PDF ja hi era des del principi.
+- **Què s'ha fet**: el peu passa a ser **l'últim bloc de la columna del full**. `.preview-content`
+  és ara una columna flex: el contingut (`flex: 1; min-height: 0`) i, a sota, el peu
+  (`flex-shrink: 0`). Així es reserva l'espai ell mateix i no cal encertar cap alçada a mà —si el
+  text fa dues línies, com pot passar en vertical, el full n'hi reserva dues.
+  - El peu també canvia de propietari: el munta qui munta el full (`ViewSquenceSettings`) i no la
+    pàgina (`ViewSequencePage`), que és on havia d'anar des del principi.
+  - Al PDF, el CSS del clon es queda només amb `display: block` i el color: la part de posicionar-lo
+    cau sencera.
+- **Verificació** (full A4 apaïsat de 718 px d'alçada):
+
+  | | contingut | peu |
+  |---|---|---|
+  | impressió | 0 – 689 px | 689 – 718 px |
+  | captura del PDF | 0 – 689 px | 689 – 718 px |
+
+  Cap encavalcament, i els dos camins donen el mateix. Els set e2e de PDF, verds.
+- **Segona passada** (l'usuari: «continuen trepitjant-se, 6 pictogrames a mida 1,6»): reservar
+  l'espai només al paper no bastava, per dues raons que es tapaven l'una a l'altra.
+  1. **La previsualització oferia 29 px que el full no tenia.** El peu només es pintava al paper,
+     de manera que a la pantalla el contingut podia arribar fins a baix de tot i en imprimir es
+     trobava el peu a sobre. Ara el peu **es veu també a la previsualització**: el full ensenya tot
+     el que s'imprimirà, i la vista i el paper tornen a ser la mateixa cosa —que és el que demana
+     `docs/fonaments/03-model-contingut-estil.md`. Amb això decau C23b.
+  2. **El contingut podia pintar-se fora de la seva caixa.** La columna li reservava l'espai, però
+     res no l'hi retenia: amb `overflow: hidden` al bloc del contingut, el que no hi cap es **talla**,
+     que és el que fa el paper. Comprovat amb 12 pictogrames a 1,6: la caixa fa 685 px i el
+     contingut en demanaria 1259; la tercera fila surt tallada i el peu queda net i llegible.
+  3. **Un espai que el delimita**: `SHEET_FOOTER_GAP_PX` (8 px) entre l'última fila i el peu, perquè
+     no es toquin mai.
+  4. El peu porta **tinta de paper** (`printColors.text`) i no la del tema: en fosc era text blanc,
+     i ara que es veu damunt del full blanc hi hauria quedat invisible.
+- **Verificació final** (full A4 apaïsat de 718 px):
+
+  | | contingut | peu |
+  |---|---|---|
+  | previsualització | 0 – 685 px | 685 – 718 px |
+  | impressió | 0 – 685 px | 685 – 718 px |
+  | captura del PDF | 0 – 685 px | 685 – 718 px |
+
+  Les tres superfícies, idèntiques. 187 tests verds i 12 e2e d'impressió i PDF.
+- **Prova de regressió**: `components/CopyRight/CopyRight.test.tsx` (6 casos), amb els que vigilen
+  que el peu no torni a sortir del flux ni a amagar-se de la previsualització.
+
+### C24 — El full deixava 10 mm de blanc a cada banda del paper ✅ Resolta
+
+*(Demanat per l'usuari el 2026-10-04, veient el resultat de C22 i C23: «podem fer que ara ocupi tota
+la pàgina».)*
+
+- **On**: `PRINT_MARGIN_MM`, a `features/print/utils/pageFormat.ts`.
+- **Context**: aquella constant mana dues coses alhora —el que es descompta del paper per calcular
+  el full, i el marge del `@page`—, i per això n'hi ha d'haver una de sola: amb els dos números
+  iguals, la caixa de la pàgina i el full fan la mateixa mida i el full queda centrat sol, sense que
+  el navegador hagi d'encongir res (C22).
+- **Què s'ha fet**: baixar-la de **10 mm a 5 mm**.
+
+  | marge | full (A4 apaïsat) | % del paper |
+  |---|---|---|
+  | 10 mm | 277 × 190 mm (1047 × 718 px) | 84,4 % |
+  | **5 mm** | **287 × 200 mm (1085 × 756 px)** | **92,1 %** |
+
+- **Per què no menys**: per sota d'aquí es trepitja el que les impressores no poden imprimir —la
+  vora de sota és la més restrictiva—, i el que passaria llavors és el que es va arreglar a C22: el
+  navegador ampliaria el marge pel seu compte i encongiria tot el full per fer-l'hi cabre. Si alguna
+  impressora retalla el peu de llicència, aquest és el número que s'ha de pujar.
+- **Verificació** (PDF de Chromium): paper 297 × 210 mm, full 287 × 200 mm, 5,0 mm per banda,
+  **92,1 %** del paper, i escala del dibuix 3,125 —o sigui 1:1, sense cap encongiment. El contingut
+  passa de 685 a **723 px** d'alçada útil i el peu es queda a la seva franja (723–756). Els nou e2e
+  d'impressió i PDF, verds.
+- **Efecte secundari a tenir present**: el full creix en píxels, de manera que a les seqüències ja
+  fetes hi cap una mica més de contingut per fila i per columna. No canvia la mida dels pictogrames
+  —aquesta la mana el control de mida—, només l'espai de què disposen.
+
+### C25 — La llicència del peu es pot treure, però no quan hi ha autor ✅ Resolta
+
+*(Demanat per l'usuari el 2026-10-04: «una propietat "llicència" per treure o posar de la impressió
+la frase, amb la norma: si hi ha autor hi ha llicència».)*
+
+- **On**: `ViewSettings.licence` (a `packages/shared-types` i a `types/ui.ts`),
+  `components/CopyRight/CopyRight.tsx` i `components/ViewSequencesSettings/PrintFooterSection.tsx`.
+- **La regla, en un sol lloc**: `showsLicence({ licence, author })` de `CopyRight`. El peu es pinta
+  si la llicència està demanada **o si hi ha autor**: qui signa una seqüència n'ha de dir també
+  d'on són els pictogrames, que no són seus. Un autor en blanc no compta com a autor.
+- **On viu l'ajust**: a `ui.viewSettings`, al costat de l'autor, que és on viu el peu del full. Es
+  desa amb «Desa com a preferències» i se sincronitza amb el compte com la resta de la vista. **No
+  toca el format `.saac`**: l'autor tampoc no s'hi escriu des de la pàgina de vista.
+- **Compatibilitat**: el camp és **opcional** a propòsit i **sense valor vol dir que sí**. El que ja
+  hi ha desat —al navegador i als comptes— no el porta, i segueix sortint amb llicència sense cap
+  migració. L'API el valida com a opcional i el model de Mongo l'accepta.
+- **A la interfície**: una fila `SettingRow` amb interruptor (variant `compact`, la dels switches) a
+  la secció «Peu d'impressió», tant a la columna de la pàgina de vista com al tab Vista del diàleg
+  de configuració, que comparteixen component. Amb autor, l'interruptor es queda encès i **no
+  respon**, amb `aria-disabled` a l'`input` —no a l'embolcall, que cap lector de pantalla no
+  llegiria— i un tooltip amb `describeChild` que diu el motiu. `aria-disabled` i no `disabled`
+  perquè la fila no surti de l'ordre de tabulació.
+- **Efecte al full**: sense peu, el contingut recupera la franja sencera —de 723 a **756 px**
+  d'alçada útil en A4 apaïsat—, perquè el peu és un bloc de la columna del full i, quan no hi és,
+  no ocupa res.
+- **Verificació**, conduint la pàgina de debò: amb la llicència encesa el contingut va de 0 a 723 i
+  el peu hi és; en treure-la, de 0 a 756 i el peu desapareix; en escriure un autor, el peu torna i
+  l'interruptor es queda encès amb `aria-disabled`; i un clic **forçat** amb autor no el mou.
+  Playwright, de fet, es nega a clicar-lo pel seu compte: llegeix l'`aria-disabled` igual que un
+  lector de pantalla.
+- **Proves de regressió**: `CopyRight.test.tsx` (13 casos, amb la taula de la regla) i
+  `PrintFooterSection.test.tsx` (7 casos: el valor per defecte, treure-la, tornar-la a posar, el
+  bloqueig amb autor, que segueixi sent accessible amb teclat i que digui **per què** no es pot
+  treure).
+- **Traduccions**: tres claus noves als cinc idiomes (`pages.viewSequence.licence.*`), compilades.

@@ -1,142 +1,95 @@
+import { describe, expect, it } from "vitest";
 import {
   calculateDisplayDimensions,
   getPrintDimensions,
-  ScaleCalculationParams,
 } from "./useScaleCalculator";
-import { createPageFormat, PageFormat } from "@/types/PageFormat";
+import { createPageFormat, FOOTER_SPACE } from "../utils/pageFormat";
 
 describe("useScaleCalculator", () => {
   describe("calculateDisplayDimensions", () => {
-    it("should calculate correct dimensions for A4 landscape on medium screen", () => {
-      const pageFormat: PageFormat = createPageFormat("A4", "landscape");
-      const params: ScaleCalculationParams = {
-        pageFormat,
+    it("no hauria de passar mai d'escala 1: la previsualització no pot sortir més gran que el full", () => {
+      const result = calculateDisplayDimensions({
+        pageFormat: createPageFormat("A4", "landscape"),
         screenWidth: 1920,
         screenHeight: 1080,
-      };
+      });
 
-      const result = calculateDisplayDimensions(params);
-
-      expect(result.displayWidth).toBeGreaterThan(0);
-      expect(result.displayHeight).toBeGreaterThan(0);
-      expect(result.scale).toBeGreaterThan(0);
-      expect(result.scale).toBeLessThan(2);
+      expect(result.scale).toBe(1);
     });
 
-    it("should calculate correct dimensions for A4 portrait on medium screen", () => {
-      const pageFormat: PageFormat = createPageFormat("A4", "portrait");
-      const params: ScaleCalculationParams = {
-        pageFormat,
-        screenWidth: 1920,
-        screenHeight: 1080,
-      };
-
-      const result = calculateDisplayDimensions(params);
-
-      expect(result.displayWidth).toBeGreaterThan(0);
-      expect(result.displayHeight).toBeGreaterThan(0);
-      expect(result.scale).toBeGreaterThan(0);
-    });
-
-    it("should calculate correct dimensions for A3 landscape on medium screen", () => {
-      const pageFormat: PageFormat = createPageFormat("A3", "landscape");
-      const params: ScaleCalculationParams = {
-        pageFormat,
-        screenWidth: 1920,
-        screenHeight: 1080,
-      };
-
-      const result = calculateDisplayDimensions(params);
-
-      expect(result.displayWidth).toBeGreaterThan(0);
-      expect(result.displayHeight).toBeGreaterThan(0);
-      expect(result.scale).toBeGreaterThan(0);
-    });
-
-    it("should use smaller margin for small screens", () => {
-      const pageFormat: PageFormat = createPageFormat("A4", "landscape");
-      const paramsSmall: ScaleCalculationParams = {
-        pageFormat,
+    it("hauria d'encongir la previsualització quan el full no hi cap", () => {
+      const result = calculateDisplayDimensions({
+        pageFormat: createPageFormat("A3", "landscape"),
         screenWidth: 800,
         screenHeight: 600,
-      };
-      const paramsMedium: ScaleCalculationParams = {
-        pageFormat,
-        screenWidth: 1920,
-        screenHeight: 1080,
-      };
+      });
 
-      const resultSmall = calculateDisplayDimensions(paramsSmall);
-      const resultMedium = calculateDisplayDimensions(paramsMedium);
-
-      // L'escala per a pantalles petites hauria de ser més gran (menys marge)
-      expect(resultSmall.scale).toBeGreaterThan(resultMedium.scale);
+      expect(result.scale).toBeGreaterThan(0);
+      expect(result.scale).toBeLessThan(1);
     });
 
-    it("should adjust height when it exceeds available space", () => {
-      const pageFormat: PageFormat = createPageFormat("A3", "landscape");
-      const params: ScaleCalculationParams = {
-        pageFormat,
+    it("hauria de deixar més escala a la pantalla que reserva menys marge", () => {
+      // Just als dos costats del llindar de `isMediumScreen` (900 px), i amb
+      // una pantalla alta perquè l'escala la decideixi el marge i no l'alçada
+      const narrow = calculateDisplayDimensions({
+        pageFormat: createPageFormat("A4", "landscape"),
+        screenWidth: 900,
+        screenHeight: 2000,
+      });
+      const wide = calculateDisplayDimensions({
+        pageFormat: createPageFormat("A4", "landscape"),
+        screenWidth: 901,
+        screenHeight: 2000,
+      });
+
+      expect(narrow.scale).toBeGreaterThan(wide.scale);
+    });
+
+    it("hauria de deixar lloc al peu quan l'alçada va justa", () => {
+      const screenHeight = 700;
+
+      const result = calculateDisplayDimensions({
+        pageFormat: createPageFormat("A3", "landscape"),
         screenWidth: 2000,
-        screenHeight: 700, // Alçada petita per forçar ajust
-      };
+        screenHeight,
+      });
 
-      const result = calculateDisplayDimensions(params);
-
-      // L'alçada + footer space no hauria de superar l'alçada de pantalla
-      expect(result.displayHeight + 150).toBeLessThanOrEqual(700);
+      expect(result.displayHeight + FOOTER_SPACE).toBeLessThanOrEqual(
+        screenHeight,
+      );
     });
 
-    it("should maintain aspect ratio", () => {
-      const pageFormat: PageFormat = createPageFormat("A4", "landscape");
-      const params: ScaleCalculationParams = {
+    it("hauria de mantenir la proporció del full", () => {
+      const pageFormat = createPageFormat("A4", "portrait");
+
+      const result = calculateDisplayDimensions({
         pageFormat,
         screenWidth: 1920,
         screenHeight: 1080,
-      };
+      });
 
-      const result = calculateDisplayDimensions(params);
-      const expectedRatio =
+      const paperRatio =
         pageFormat.dimensions.height / pageFormat.dimensions.width;
-      const actualRatio = result.displayHeight / result.displayWidth;
-
-      // Permetre una petita diferència per errors d'arrodoniment
-      expect(Math.abs(actualRatio - expectedRatio)).toBeLessThan(0.01);
+      const displayRatio = result.displayHeight / result.displayWidth;
+      expect(displayRatio).toBeCloseTo(paperRatio, 2);
     });
   });
 
   describe("getPrintDimensions", () => {
-    it("should return same dimensions for landscape", () => {
-      const pageFormat: PageFormat = createPageFormat("A4", "landscape");
-      const result = getPrintDimensions(pageFormat);
+    it("hauria d'imprimir les mides del format, que ja venen orientades", () => {
+      const landscape = createPageFormat("A3", "landscape");
+      const portrait = createPageFormat("A3", "portrait");
 
-      expect(result.width).toBe(pageFormat.dimensions.width);
-      expect(result.height).toBe(pageFormat.dimensions.height);
+      expect(getPrintDimensions(landscape)).toEqual(landscape.dimensions);
+      expect(getPrintDimensions(portrait)).toEqual(portrait.dimensions);
     });
 
-    it("should swap dimensions for portrait", () => {
-      const pageFormat: PageFormat = createPageFormat("A4", "portrait");
-      const result = getPrintDimensions(pageFormat);
+    it("hauria de girar les mides entre apaïsat i vertical", () => {
+      const landscape = getPrintDimensions(createPageFormat("A3", "landscape"));
+      const portrait = getPrintDimensions(createPageFormat("A3", "portrait"));
 
-      // En portrait, les dimensions ja estan girades en createPageFormat
-      expect(result.width).toBe(pageFormat.dimensions.width);
-      expect(result.height).toBe(pageFormat.dimensions.height);
-    });
-
-    it("should work correctly for A3", () => {
-      const pageFormat: PageFormat = createPageFormat("A3", "landscape");
-      const result = getPrintDimensions(pageFormat);
-
-      expect(result.width).toBe(1450);
-      expect(result.height).toBe(1025);
-    });
-
-    it("should work correctly for A3 portrait", () => {
-      const pageFormat: PageFormat = createPageFormat("A3", "portrait");
-      const result = getPrintDimensions(pageFormat);
-
-      expect(result.width).toBe(1025);
-      expect(result.height).toBe(1450);
+      expect(portrait.width).toBe(landscape.height);
+      expect(portrait.height).toBe(landscape.width);
     });
   });
 });

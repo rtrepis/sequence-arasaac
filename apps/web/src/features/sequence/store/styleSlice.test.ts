@@ -1,6 +1,6 @@
 import { DEFAULT_FITZGERALD_CATEGORY_COLORS } from "@features/sequence/saac/fitzgerald";
 import { describe, expect, it } from "vitest";
-import { configureStore } from "@reduxjs/toolkit";
+import { createAppStore } from "@app/store";
 import { documentReducer } from "./documentSlice";
 import {
   addPictogramActionCreator,
@@ -35,17 +35,7 @@ import { SequenceStyle } from "@/types/document";
 // Proves de l'estil a l'store: les mateixes peces que fa servir l'app, sense
 // React. Cobreixen el cicle de vida de l'estil d'un document.
 
-const makeStore = () =>
-  configureStore({
-    reducer: {
-      document: documentReducer,
-      documentStatus: documentStatusReducer,
-      ui: uiReducer,
-      style: styleReducer,
-    },
-    middleware: (getDefault) =>
-      getDefault().prepend(documentStatusListener.middleware),
-  });
+const makeStore = () => createAppStore();
 
 type TestStore = ReturnType<typeof makeStore>;
 // Els selectors són de l'store sencer; aquí n'hi ha prou amb les branques que llegeixen

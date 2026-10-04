@@ -17,6 +17,13 @@ export interface ViewSettings {
   pageSize: PageSize;
   orientation: "landscape" | "portrait";
   author: string;
+  /**
+   * Si el peu del full ha de dur la frase de llicència dels pictogrames.
+   * Opcional a propòsit: el que ja estigui desat —al navegador o al compte— no
+   * la porta, i **sense valor vol dir que sí**. Amb autor hi va sempre: qui
+   * signa la seqüència ha de dir també d'on són els pictogrames.
+   */
+  licence?: boolean;
 }
 
 export type UserTier = "free";

@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import { useAppSelector } from "../../app/hooks";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSquenceSettings";
-import CopyRight from "../../components/CopyRight/CopyRight";
 import { PictogramCardDefaults } from "../../types/sequence";
 import { ALIGN_H, ALIGN_V } from "../../shared/constants/alignmentMaps";
 import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
@@ -79,7 +78,6 @@ const ViewSequencePage = (): React.ReactElement => {
               </Box>
             );
           })}
-          <CopyRight author={author} />
         </>
       )}
     </ViewSequencesSettings>

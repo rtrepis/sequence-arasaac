@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "type": "module",
   "private": true,
   "dependencies": {
@@ -29,11 +29,11 @@
     "serve": "vite preview",
     "lint": "eslint ./src",
     "typecheck": "tsc --noEmit",
-    "test": "echo 'Tests: WIP' && exit 0",
-    "test-coverage": "echo 'Coverage: WIP' && exit 0",
+    "test": "vitest run",
     "prepare": "node scripts/compile-languages.mjs",
     "extract": "formatjs extract",
-    "compile": "formatjs compile"
+    "compile": "formatjs compile",
+    "test:watch": "vitest"
   },
   "browserslist": {
     "production": [
@@ -52,7 +52,7 @@
     "@eslint/js": "^9.39.2",
     "@formatjs/cli": "^6.0.4",
     "@playwright/test": "^1.58.2",
-    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^27.5.2",
@@ -71,25 +71,12 @@
     "eslint-plugin-react-redux": "^4.2.0",
     "globals": "^15.11.0",
     "husky": "^8.0.0",
+    "jsdom": "^26.1.0",
     "msw": "^2.4.11",
     "typescript": "^5.5.4",
     "vite": "^5.4.8",
     "vite-plugin-i18n": "^1.0.2",
-    "vite-plugin-jest": "^0.0.1"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.ts",
-      "src/**/*.tsx",
-      "!src/index.tsx",
-      "!src/reportWebVitals.ts",
-      "!src/react-app-env.d.ts",
-      "!src/setupTests.ts",
-      "!src/**/*.test.tsx",
-      "!src/app/store.ts"
-    ],
-    "moduleNameMapper": {
-      "axios": "axios/dist/node/axios.cjs"
-    }
+    "vite-plugin-jest": "^0.0.1",
+    "vitest": "^4.1.10"
   }
 }

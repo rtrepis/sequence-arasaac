@@ -26,8 +26,9 @@ import {
   usePrintStyles,
   printWithOrientation,
 } from "@features/print/hooks/usePrintStyles";
+import { usePrintSheet } from "@features/print/hooks/usePrintSheet";
+import CopyRight from "@components/CopyRight/CopyRight";
 import { useDownloadPdf } from "@features/print/hooks/useDownloadPdf";
-import { getCurrentDPI } from "@/features/print-refactor/utils/dpiManager";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
 import {
   DocumentLayout,
@@ -50,7 +51,7 @@ import ApplyUserDefaultStyleButton from "@features/sequence/components/DocumentS
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import { sheetSurface } from "@/style/palette";
 import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSaveUiSettings";
-import SettingsSaveErrorDialog from "@/Modals/DefaultSettingsModal/SettingsSaveErrorDialog";
+import SettingsSaveErrorDialog from "@features/backend/user-settings/components/SettingsSaveErrorDialog";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
@@ -197,6 +198,8 @@ const ViewSequencesSettings = ({
 
   // Gestió dels estils d'impressió dinàmics
   usePrintStyles(pageFormat);
+  // I la còpia del full, que és l'únic que arriba al paper —també amb Ctrl+P
+  usePrintSheet();
 
   // Gestió de la descàrrega de PDF
   const { downloadPdf, isGenerating } = useDownloadPdf(pageFormat);
@@ -409,6 +412,7 @@ const ViewSequencesSettings = ({
         ...documentStyle.view,
         direction,
         author,
+        licence: viewSettings.licence,
         pageSize,
         orientation,
       }),
@@ -561,7 +565,9 @@ const ViewSequencesSettings = ({
               backgroundColor: sheetSurface,
             }}
           >
-            {/* Contenidor interior: dimensions reals amb transform per visualització */}
+            {/* Contenidor interior: dimensions reals amb transform per visualització.
+                És el full sencer i l'únic que s'imprimeix (`usePrintSheet`): una
+                columna amb el contingut i, a sota, el peu de llicència */}
             <Box
               className="preview-content"
               sx={{
@@ -569,6 +575,8 @@ const ViewSequencesSettings = ({
                 height: pageFormat.dimensions.height,
                 transform: `scale(${calculatedScale})`,
                 transformOrigin: "top left",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
               <Stack
@@ -588,8 +596,14 @@ const ViewSequencesSettings = ({
                     : 0
                 }
                 width="100%"
-                height="100%"
                 sx={{
+                  flex: 1,
+                  // Sense això, un contingut alt eixamplaria el full en comptes
+                  // de quedar retallat per la vora, com fa el paper
+                  minHeight: 0,
+                  // I sense això el sobrant es pintaria damunt del peu: el que
+                  // no hi cap es talla, que és el que fa el paper
+                  overflow: "hidden",
                   padding: 2,
                   paddingInline: 1.5,
                 }}
@@ -601,6 +615,11 @@ const ViewSequencesSettings = ({
                   author,
                 })}
               </Stack>
+
+              {/* Al peu del full, dins del flux: només es pinta al paper i al
+                  PDF, i allà s'hi reserva l'espai perquè no caigui damunt de
+                  l'última fila de pictogrames */}
+              <CopyRight author={author} licence={viewSettings.licence} />
             </Box>
           </Box>
 
@@ -666,6 +685,10 @@ const ViewSequencesSettings = ({
                 <PrintFooterSection
                   author={author}
                   onAuthorChange={updateAuthor}
+                  licence={viewSettings.licence}
+                  onLicenceChange={(value) =>
+                    updateViewSetting("licence", value)
+                  }
                 />
 
                 {/* Accions de tota la columna, per això van al final: restaurar el

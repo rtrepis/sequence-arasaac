@@ -1,5 +1,8 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
-import { PageSize, PageOrientation } from "./PageFormat";
+import {
+  PageSize,
+  PageOrientation,
+} from "@features/print/utils/pageFormat";
 import { WordProfile } from "@features/word-profile/model/WordProfile";
 import type {
   ImageQuality,
@@ -74,6 +77,13 @@ export interface ViewSettings {
   pageSize: PageSize;
   orientation: PageOrientation;
   author: string;
+  /**
+   * Si el peu del full ha de dur la frase de llicència dels pictogrames.
+   * Opcional a propòsit: el que ja estigui desat —al navegador o al compte— no
+   * la porta, i **sense valor vol dir que sí**. Amb autor hi va sempre: qui
+   * signa la seqüència ha de dir també d'on són els pictogrames.
+   */
+  licence?: boolean;
 }
 
 export interface DefaultSettings {

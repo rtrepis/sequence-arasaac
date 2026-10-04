@@ -10,7 +10,7 @@ import {
   resolveSequenceViews,
 } from "./styleModel";
 import { DocumentSAAC, SequenceStyle } from "@/types/document";
-import { PictSequence } from "@/types/sequence";
+import { Font, PictSequence } from "@/types/sequence";
 import { ViewSettings } from "@/types/ui";
 
 const OLD: SequenceStyle = {
@@ -119,7 +119,11 @@ describe("canviar l'estil d'un document", () => {
   });
 
   it("els retocs manuals es conserven", () => {
-    const retouchedFont = { family: "Caveat", color: "#ff00ff", size: 1.8 };
+    const retouchedFont: Font = {
+      family: "Caveat",
+      color: "#ff00ff",
+      size: 1.8,
+    };
     const doc = docWith([
       pict(
         {

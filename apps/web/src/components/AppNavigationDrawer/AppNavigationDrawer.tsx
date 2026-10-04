@@ -29,7 +29,7 @@ import { useIntl } from "react-intl";
 import messages from "./AppNavigationDrawer.lang";
 import navigationMessages from "@shared/messages/navigation.lang";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
-import DefaultSettingsDialog from "../../Modals/DefaultSettingsModal/DefaultSettingsDialog";
+import { SettingsDialog } from "@features/user-settings/components/SettingsDialog";
 import ModalDownload from "../ButtonWithModalDownload/ModalDownload";
 import AuthModal from "@features/backend/auth/components/AuthModal";
 import LoadDocumentModal from "@features/backend/documents/components/LoadDocumentModal";
@@ -408,8 +408,8 @@ const AppNavigationDrawer = ({
           qui obre fitxers, i el menú hi és a totes les pàgines */}
       <PendingDefaultStyleDialog />
 
-      {/* Modal de configuració */}
-      <DefaultSettingsDialog
+      {/* Diàleg de configuració */}
+      <SettingsDialog
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
       />

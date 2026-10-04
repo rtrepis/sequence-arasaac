@@ -4,8 +4,7 @@ import {
   PageOrientation,
   PageFormat,
   createPageFormat,
-} from "@/types/PageFormat";
-import { useScreenDPI } from "@/features/print-refactor/components/dpiDetector";
+} from "../utils/pageFormat";
 
 /**
  * Índex de pàgina per a compatibilitat amb el codi existent
@@ -73,9 +72,6 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
     useState<PageOrientation>(initialOrientation);
   const [orientationFullscreen, setOrientationFullscreen] =
     useState<PageOrientation>("landscape");
-
-  // Detectar DPI per recalcular dimensions quan canvia zoom/monitor
-  const screenInfo = useScreenDPI();
 
   // Seleccionar l'orientació correcta segons la mida de pàgina
   const orientation =
