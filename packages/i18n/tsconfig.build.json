@@ -1,0 +1,11 @@
+{
+  // Compilació per a l'API, que s'executa amb `node dist/index.js` i no pot
+  // carregar `.ts`. El web en llegeix directament la font (vegeu ADR-004).
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "exclude": ["src/**/*.test.ts"]
+}

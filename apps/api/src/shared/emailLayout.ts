@@ -17,7 +17,7 @@
 
 import type { LangsApp } from "@sequence-arasaac/shared-types";
 import { env } from "../config/env";
-import { DEFAULT_LANGS_APP } from "./langsApp";
+import { DEFAULT_LANGS_APP } from "@sequence-arasaac/i18n";
 
 // --- Colors ---
 //

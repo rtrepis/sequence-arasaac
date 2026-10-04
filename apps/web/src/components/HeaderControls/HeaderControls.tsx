@@ -23,14 +23,14 @@ import { updateLangSettingsActionCreator } from "@features/user-settings/store/u
 import AuthModal from "@features/backend/auth/components/AuthModal";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import { ACCOUNTS_ENABLED } from "@/configs/accountsConfig";
-import { langTranslateApp } from "../../configs/languagesConfigs";
+import { LANGS_APP } from "@sequence-arasaac/i18n";
 import { LANGUAGE_NAMES } from "@shared/constants/languageNames";
 import { LangsApp } from "../../types/ui";
 import messages from "./HeaderControls.lang";
 import StyledButton from "@/style/StyledButton";
 import StyledIconButton from "@/style/StyledIconButton";
 
-const sortedLangs = [...langTranslateApp].sort();
+const sortedLangs = [...LANGS_APP].sort();
 
 /**
  * Botons d'accés (login/registre) i selector d'idioma de la pantalla

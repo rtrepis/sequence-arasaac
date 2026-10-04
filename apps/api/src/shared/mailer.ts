@@ -13,7 +13,7 @@
 import { Resend } from "resend";
 import { env } from "../config/env";
 import type { LangsApp } from "@sequence-arasaac/shared-types";
-import { DEFAULT_LANGS_APP } from "./langsApp";
+import { DEFAULT_LANGS_APP } from "@sequence-arasaac/i18n";
 import { renderEmail, type EmailDetailRow } from "./emailLayout";
 
 // Client mandrós: només es construeix si hi ha clau, perquè en desenvolupament

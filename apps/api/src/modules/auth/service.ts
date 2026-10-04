@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import type { LangsApp } from "@sequence-arasaac/shared-types";
 import { env } from "../../config/env";
-import { toLangsApp } from "../../shared/langsApp";
+import { toLangsApp } from "@sequence-arasaac/i18n";
 import { UserModel } from "./model";
 import type { IUser } from "./model";
 import type {

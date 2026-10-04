@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^6.4.1",
     "@reduxjs/toolkit": "^1.9.3",
+    "@sequence-arasaac/i18n": "*",
     "@sequence-arasaac/shared-types": "*",
     "axios": "^1.3.4",
     "html2canvas": "^1.4.1",

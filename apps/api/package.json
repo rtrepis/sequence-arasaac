@@ -17,6 +17,7 @@
     "migrate:word-images": "tsx src/scripts/migrateWordProfileImages.ts"
   },
   "dependencies": {
+    "@sequence-arasaac/i18n": "*",
     "@sequence-arasaac/shared-types": "*",
     "bcryptjs": "^3",
     "cloudinary": "^2.9.0",

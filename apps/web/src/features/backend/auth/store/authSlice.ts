@@ -22,7 +22,7 @@ import {
   getStoredUserUi,
   saveAccountUi,
 } from "@features/user-settings/storage/settingsStorage";
-import { langTranslateApp } from "../../../../configs/languagesConfigs";
+import { LANGS_APP } from "@sequence-arasaac/i18n";
 import { LangsApp } from "../../../../types/ui";
 
 export interface AuthState {
@@ -137,7 +137,7 @@ const restoreAnonymousSettings = (
 
   // Fallback: detecta l'idioma del navegador
   const localeBrowser = navigator.language.slice(0, 2);
-  const appLang = langTranslateApp.includes(localeBrowser as LangsApp)
+  const appLang = LANGS_APP.includes(localeBrowser as LangsApp)
     ? (localeBrowser as LangsApp)
     : "en";
   dispatch(updateLangSettingsActionCreator({ app: appLang, search: appLang }));
