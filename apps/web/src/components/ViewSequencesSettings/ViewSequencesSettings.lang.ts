@@ -46,6 +46,24 @@ const messages = defineMessages({
     defaultMessage: "Mark authorship",
     description: "Helper text form",
   },
+  licence: {
+    id: "pages.viewSequence.licence.label",
+    defaultMessage: "Licence",
+    description:
+      "Interruptor del peu: si el full porta la frase de llicència dels pictogrames",
+  },
+  licenceHelper: {
+    id: "pages.viewSequence.licence.helperText",
+    defaultMessage: "ARASAAC asks that the pictogram authorship and licence be stated.",
+    description: "Ajuda de l'interruptor de llicència",
+  },
+  licenceForcedHelper: {
+    id: "pages.viewSequence.licence.forcedHelperText",
+    defaultMessage:
+      "With an author, the licence always goes with it: the pictograms are not yours.",
+    description:
+      "Ajuda de l'interruptor de llicència quan hi ha autor i no es pot treure",
+  },
   fullScreen: {
     id: "pages.viewSequence.fullScreen.label",
     defaultMessage: "Full Screen",

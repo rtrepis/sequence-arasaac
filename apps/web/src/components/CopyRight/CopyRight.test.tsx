@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderWithProviders, screen } from "@/test/renderWithProviders";
-import CopyRight, { PRINT_COPYRIGHT_CLASS } from "./CopyRight";
+import CopyRight, { PRINT_COPYRIGHT_CLASS, showsLicence } from "./CopyRight";
 
 const licenceText = /ARASAAC/;
 
@@ -55,5 +55,31 @@ describe("CopyRight", () => {
     // existeix: `useDownloadPdf` el fa visible al clon per aquesta classe, que
     // no pot dependre de les que genera emotion
     expect(screen.getByText(licenceText)).toHaveClass(PRINT_COPYRIGHT_CLASS);
+  });
+
+  it("no hauria de sortir si l'usuari ha tret la llicència i no hi ha autor", () => {
+    renderWithProviders(<CopyRight author="" licence={false} />);
+
+    expect(screen.queryByText(licenceText)).not.toBeInTheDocument();
+  });
+
+  it("hauria de sortir igualment si hi ha autor, encara que la llicència estigui treta", () => {
+    renderWithProviders(<CopyRight author="Ramon" licence={false} />);
+
+    // Qui signa la seqüència ha de dir també d'on són els pictogrames
+    expect(screen.getByText(licenceText)).toBeInTheDocument();
+    expect(screen.getByText(/Ramon/)).toBeInTheDocument();
+  });
+});
+
+describe("showsLicence", () => {
+  it.each([
+    [{ licence: undefined, author: "" }, true, "sense valor desat, la llicència hi va"],
+    [{ licence: true, author: "" }, true, "demanada"],
+    [{ licence: false, author: "" }, false, "treta i sense autor"],
+    [{ licence: false, author: "Ramon" }, true, "treta però amb autor"],
+    [{ licence: false, author: "   " }, false, "un autor en blanc no és cap autor"],
+  ])("%o → %s (%s)", (input, expected, _motiu) => {
+    expect(showsLicence(input)).toBe(expected);
   });
 });

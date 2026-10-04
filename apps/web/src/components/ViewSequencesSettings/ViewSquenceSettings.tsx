@@ -412,6 +412,7 @@ const ViewSequencesSettings = ({
         ...documentStyle.view,
         direction,
         author,
+        licence: viewSettings.licence,
         pageSize,
         orientation,
       }),
@@ -618,7 +619,7 @@ const ViewSequencesSettings = ({
               {/* Al peu del full, dins del flux: només es pinta al paper i al
                   PDF, i allà s'hi reserva l'espai perquè no caigui damunt de
                   l'última fila de pictogrames */}
-              <CopyRight author={author} />
+              <CopyRight author={author} licence={viewSettings.licence} />
             </Box>
           </Box>
 
@@ -684,6 +685,10 @@ const ViewSequencesSettings = ({
                 <PrintFooterSection
                   author={author}
                   onAuthorChange={updateAuthor}
+                  licence={viewSettings.licence}
+                  onLicenceChange={(value) =>
+                    updateViewSetting("licence", value)
+                  }
                 />
 
                 {/* Accions de tota la columna, per això van al final: restaurar el

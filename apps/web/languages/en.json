@@ -991,6 +991,18 @@
     "defaultMessage": "Document author",
     "description": "Label form"
   },
+  "pages.viewSequence.licence.label": {
+    "defaultMessage": "Licence",
+    "description": "Interruptor del peu: si el full porta la frase de llicència dels pictogrames"
+  },
+  "pages.viewSequence.licence.helperText": {
+    "defaultMessage": "ARASAAC asks that the pictogram authorship and licence be stated.",
+    "description": "Ajuda de l'interruptor de llicència"
+  },
+  "pages.viewSequence.licence.forcedHelperText": {
+    "defaultMessage": "With an author, the licence always goes with it: the pictograms are not yours.",
+    "description": "Ajuda de l'interruptor de llicència quan hi ha autor i no es pot treure"
+  },
   "pages.viewSequence.direction.label": {
     "defaultMessage": "Direction"
   },

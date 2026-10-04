@@ -1957,3 +1957,39 @@ la pàgina».)*
 - **Efecte secundari a tenir present**: el full creix en píxels, de manera que a les seqüències ja
   fetes hi cap una mica més de contingut per fila i per columna. No canvia la mida dels pictogrames
   —aquesta la mana el control de mida—, només l'espai de què disposen.
+
+### C25 — La llicència del peu es pot treure, però no quan hi ha autor ✅ Resolta
+
+*(Demanat per l'usuari el 2026-10-04: «una propietat "llicència" per treure o posar de la impressió
+la frase, amb la norma: si hi ha autor hi ha llicència».)*
+
+- **On**: `ViewSettings.licence` (a `packages/shared-types` i a `types/ui.ts`),
+  `components/CopyRight/CopyRight.tsx` i `components/ViewSequencesSettings/PrintFooterSection.tsx`.
+- **La regla, en un sol lloc**: `showsLicence({ licence, author })` de `CopyRight`. El peu es pinta
+  si la llicència està demanada **o si hi ha autor**: qui signa una seqüència n'ha de dir també
+  d'on són els pictogrames, que no són seus. Un autor en blanc no compta com a autor.
+- **On viu l'ajust**: a `ui.viewSettings`, al costat de l'autor, que és on viu el peu del full. Es
+  desa amb «Desa com a preferències» i se sincronitza amb el compte com la resta de la vista. **No
+  toca el format `.saac`**: l'autor tampoc no s'hi escriu des de la pàgina de vista.
+- **Compatibilitat**: el camp és **opcional** a propòsit i **sense valor vol dir que sí**. El que ja
+  hi ha desat —al navegador i als comptes— no el porta, i segueix sortint amb llicència sense cap
+  migració. L'API el valida com a opcional i el model de Mongo l'accepta.
+- **A la interfície**: una fila `SettingRow` amb interruptor (variant `compact`, la dels switches) a
+  la secció «Peu d'impressió», tant a la columna de la pàgina de vista com al tab Vista del diàleg
+  de configuració, que comparteixen component. Amb autor, l'interruptor es queda encès i **no
+  respon**, amb `aria-disabled` a l'`input` —no a l'embolcall, que cap lector de pantalla no
+  llegiria— i un tooltip amb `describeChild` que diu el motiu. `aria-disabled` i no `disabled`
+  perquè la fila no surti de l'ordre de tabulació.
+- **Efecte al full**: sense peu, el contingut recupera la franja sencera —de 723 a **756 px**
+  d'alçada útil en A4 apaïsat—, perquè el peu és un bloc de la columna del full i, quan no hi és,
+  no ocupa res.
+- **Verificació**, conduint la pàgina de debò: amb la llicència encesa el contingut va de 0 a 723 i
+  el peu hi és; en treure-la, de 0 a 756 i el peu desapareix; en escriure un autor, el peu torna i
+  l'interruptor es queda encès amb `aria-disabled`; i un clic **forçat** amb autor no el mou.
+  Playwright, de fet, es nega a clicar-lo pel seu compte: llegeix l'`aria-disabled` igual que un
+  lector de pantalla.
+- **Proves de regressió**: `CopyRight.test.tsx` (13 casos, amb la taula de la regla) i
+  `PrintFooterSection.test.tsx` (7 casos: el valor per defecte, treure-la, tornar-la a posar, el
+  bloqueig amb autor, que segueixi sent accessible amb teclat i que digui **per què** no es pot
+  treure).
+- **Traduccions**: tres claus noves als cinc idiomes (`pages.viewSequence.licence.*`), compilades.

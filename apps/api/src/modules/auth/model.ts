@@ -197,6 +197,7 @@ const userSchema = new Schema<IUser>(
           pageSize: { type: String, enum: ["A4", "A3", "FULLSCREEN"] },
           orientation: { type: String, enum: ["landscape", "portrait"] },
           author: { type: String },
+          licence: { type: Boolean },
         },
         { _id: false }
       ),

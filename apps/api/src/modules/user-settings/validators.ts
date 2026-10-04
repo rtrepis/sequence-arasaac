@@ -13,6 +13,8 @@ const viewSettingsZodSchema = z.object({
   pageSize: z.enum(["A4", "A3", "FULLSCREEN"]),
   orientation: z.enum(["landscape", "portrait"]),
   author: z.string(),
+  // Opcional: el que ja hi ha desat no la porta, i sense valor vol dir que sí
+  licence: z.boolean().optional(),
 });
 
 const wordProfileZodSchema = z.object({

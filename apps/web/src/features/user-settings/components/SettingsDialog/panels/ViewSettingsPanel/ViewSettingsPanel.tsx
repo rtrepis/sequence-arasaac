@@ -53,6 +53,7 @@ import {
   VIEW_DEFAULT_ORIENTATION,
   VIEW_DEFAULT_ALIGNMENT_H,
   VIEW_DEFAULT_ALIGNMENT_V,
+  VIEW_DEFAULT_LICENCE,
   VIEW_DEFAULT_AUTHOR,
 } from "@/configs/viewSettingsConfig";
 import React from "react";
@@ -99,6 +100,7 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         alignmentH: VIEW_DEFAULT_ALIGNMENT_H,
         alignmentV: VIEW_DEFAULT_ALIGNMENT_V,
         author: VIEW_DEFAULT_AUTHOR,
+        licence: VIEW_DEFAULT_LICENCE,
       });
     };
 
@@ -327,6 +329,10 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         <PrintFooterSection
           author={localSettings.author}
           onAuthorChange={handleAuthorChange}
+          licence={localSettings.licence}
+          onLicenceChange={(value) =>
+            setLocalSettings((prev) => ({ ...prev, licence: value }))
+          }
         />
 
         {/* Al final i a la dreta, com el peu d'un diàleg: afecten tot el que

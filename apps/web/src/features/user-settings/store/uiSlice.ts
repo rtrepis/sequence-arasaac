@@ -19,6 +19,7 @@ import {
   VIEW_DEFAULT_DIRECTION,
   VIEW_DEFAULT_PAGE_SIZE,
   VIEW_DEFAULT_ORIENTATION,
+  VIEW_DEFAULT_LICENCE,
   VIEW_DEFAULT_ALIGNMENT_H,
   VIEW_DEFAULT_ALIGNMENT_V,
   VIEW_DEFAULT_AUTHOR,
@@ -55,6 +56,7 @@ const uiInitialState: Ui = {
     pageSize: VIEW_DEFAULT_PAGE_SIZE,
     orientation: VIEW_DEFAULT_ORIENTATION,
     author: VIEW_DEFAULT_AUTHOR,
+    licence: VIEW_DEFAULT_LICENCE,
   },
   viewSettingsFromSession: false,
   defaultSettings: {
