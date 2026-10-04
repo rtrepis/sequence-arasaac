@@ -10,7 +10,7 @@ const viewSettingsZodSchema = z.object({
   alignmentH: z.enum(["left", "center", "right"]),
   alignmentV: z.enum(["top", "center", "bottom"]),
   direction: z.enum(["row", "column"]),
-  pageSize: z.enum(["A4", "A3", "FULLSCREEN"]),
+  pageSize: z.enum(["A4", "A3", "LETTER", "TABLOID", "FULLSCREEN"]),
   orientation: z.enum(["landscape", "portrait"]),
   author: z.string(),
   // Opcional: el que ja hi ha desat no la porta, i sense valor vol dir que sí

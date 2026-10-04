@@ -69,12 +69,18 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 
   | Camp | Valors | Què és |
   |---|---|---|
-  | `size` | `"A4"`, `"A3"`, `"FULLSCREEN"` | Mida de la pàgina |
+  | `size` | `"A4"`, `"A3"`, `"LETTER"`, `"TABLOID"`, `"FULLSCREEN"` | Mida de la pàgina. `LETTER` (Carta, 8,5 × 11″) i `TABLOID` (11 × 17″) són els papers nord-americans |
   | `orientation` | `"portrait"`, `"landscape"` | Orientació |
   | `direction` | `"row"`, `"column"` | Seqüències en files o en columnes |
   | `sequenceGap` | número | Espai entre seqüències. És un **factor**, com fins ara, **no** mil·límetres |
   | `layout` | `"flow"`, `"free"` | Disposició. Avui només `"flow"`; `"free"` es reserva per al mode lliure |
 
+  - Una `size` que l'app no coneix cau a la pàgina de qui obre, com qualsevol valor fora de la
+    llista. Per això afegir una mida **no** demana una versió nova de l'esquema: una versió de l'app
+    anterior al Carta obre el document igualment, en el seu paper (fixture `15-paper-carta`).
+  - El paper de qui no ha desat preferències surt de la regió del navegador (`regionalPaperSize`):
+    Carta als EUA, el Canadà, Mèxic i bona part de l'Amèrica Llatina, A4 a la resta. És una
+    preferència, no part del document: un document desat en A4 s'obre en A4 a tot arreu.
   - **MAI** hi ha marges al fitxer: no n'hi ha a l'app.
   - Els mil·límetres **només** s'usaran a `frame`, quan hi hagi mode lliure.
 - **`style`** del document és **sempre complet**: tots els camps plens, sense heretar res de fora del

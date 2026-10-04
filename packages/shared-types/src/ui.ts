@@ -9,7 +9,10 @@ export type { LangsApp };
 
 export type ThemeMode = "light" | "dark" | "system";
 
-export type PageSize = "A4" | "A3" | "FULLSCREEN";
+// Els papers ISO (A4, A3) i els nord-americans (LETTER, TABLOID), que fan
+// servir els EUA, el Canadà, Mèxic i bona part de l'Amèrica Llatina.
+// FULLSCREEN no és cap paper: el full fa la mida de la pantalla
+export type PageSize = "A4" | "A3" | "LETTER" | "TABLOID" | "FULLSCREEN";
 
 export interface ViewSettings {
   sizePict: number;

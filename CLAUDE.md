@@ -100,7 +100,7 @@ apps/
 
 | Hook | Ubicació | Rol |
 |------|----------|-----|
-| `usePageFormat` | `features/print/hooks` | Formats de pàgina (A4, A3, FULLSCREEN) i orientació |
+| `usePageFormat` | `features/print/hooks` | Formats de pàgina (A4, A3, Carta, Tabloide, FULLSCREEN) i orientació. La llista única de mides i el paper per defecte segons la regió viuen a `utils/pageFormat.ts` |
 | `useScaleCalculator` | `features/print/hooks` | Càlcul d'escales segons DPI i dimensions |
 | `usePrintStyles` | `features/print/hooks` | Estils dinàmics per impressió |
 | `usePrintSheet` | `features/print/hooks` | La còpia del full, que és l'únic que s'imprimeix (Ctrl+P inclòs) |

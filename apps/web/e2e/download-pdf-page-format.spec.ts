@@ -16,6 +16,10 @@ const PAGE_SIZE_LABEL = "Mida de pàgina";
 
 const MM_TO_PT = 72 / 25.4;
 
+// El paper per defecte surt de la regió del navegador (Carta als EUA): sense
+// fixar-la, el Chromium de Playwright diu «en-US» i la vista no obriria en A4
+test.use({ locale: "ca-ES" });
+
 // Les fonts de Google se serveixen buides: html2canvas espera els fulls d'estil
 // externs abans de capturar i aquí no s'hi prova cap tipografia.
 test.beforeEach(async ({ page }) => {
@@ -83,6 +87,26 @@ test("amb A4, el full és un A4 i la imatge hi va centrada", async ({ page }) =>
   expect(image.x).toBeCloseTo((width - image.width) / 2, 1);
   expect(image.y).toBeCloseTo((height - image.height) / 2, 1);
   expect(image.x).toBeGreaterThan(1);
+});
+
+test.describe("on el paper de cada dia és el Carta", () => {
+  test.use({ locale: "es-MX" });
+
+  test("el full és un Carta i la imatge hi va centrada", async ({ page }) => {
+    await gotoView(page);
+    await expect(page.getByLabel(PAGE_SIZE_LABEL)).toHaveText(/Carta/);
+    const pdf = await downloadPdfSource(page);
+
+    // Carta són 8,5 × 11″ (215,9 × 279,4 mm)
+    const { width, height } = mediaBox(pdf);
+    const sides = [width, height].sort((a, b) => a - b);
+    expect(sides[0]).toBeCloseTo(8.5 * 72, 0);
+    expect(sides[1]).toBeCloseTo(11 * 72, 0);
+
+    const image = imagePlacement(pdf);
+    expect(image.x).toBeCloseTo((width - image.width) / 2, 1);
+    expect(image.y).toBeCloseTo((height - image.height) / 2, 1);
+  });
 });
 
 test("amb pantalla sencera no s'ofereix la descàrrega del PDF", async ({

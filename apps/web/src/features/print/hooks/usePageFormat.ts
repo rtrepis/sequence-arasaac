@@ -7,29 +7,6 @@ import {
 } from "../utils/pageFormat";
 
 /**
- * Índex de pàgina per a compatibilitat amb el codi existent
- */
-export type PageSizeIndex = 0 | 1 | 2;
-
-/**
- * Mapatge entre índex i PageSize
- */
-const PAGE_SIZE_MAP: Record<PageSizeIndex, PageSize> = {
-  0: "A4",
-  1: "A3",
-  2: "FULLSCREEN",
-};
-
-/**
- * Mapatge invers
- */
-const PAGE_INDEX_MAP: Record<PageSize, PageSizeIndex> = {
-  A4: 0,
-  A3: 1,
-  FULLSCREEN: 2,
-};
-
-/**
  * Configuració del hook de format de pàgina
  */
 export interface PageFormatConfig {
@@ -43,10 +20,8 @@ export interface PageFormatConfig {
 export interface PageFormatState {
   pageFormat: PageFormat;
   pageSize: PageSize;
-  pageSizeIndex: PageSizeIndex;
   orientation: PageOrientation;
   setPageSize: (size: PageSize) => void;
-  setPageSizeByIndex: (index: PageSizeIndex) => void;
   toggleOrientation: () => void;
   setOrientation: (orientation: PageOrientation) => void;
   isLandscape: boolean;
@@ -57,7 +32,7 @@ export interface PageFormatState {
  * Hook custom per gestionar el format de pàgina amb detecció de DPI
  * Segueix el principi de Single Responsibility
  *
- * Manté dues orientacions independents: una per A4/A3 i una per Full Screen
+ * Manté dues orientacions independents: una per als papers i una per Full Screen
  * Això permet que el Full Screen tingui una orientació independent dels formats de paper
  *
  * @param config - Configuració inicial
@@ -67,22 +42,21 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
   const { initialSize = "A4", initialOrientation = "landscape" } = config;
 
   const [pageSize, setPageSizeState] = useState<PageSize>(initialSize);
-  // Mantenir orientacions independents per A4/A3 vs Full Screen
-  const [orientationA4A3, setOrientationA4A3] =
+  // Mantenir orientacions independents per als papers vs Full Screen
+  const [orientationPaper, setOrientationPaper] =
     useState<PageOrientation>(initialOrientation);
   const [orientationFullscreen, setOrientationFullscreen] =
     useState<PageOrientation>("landscape");
 
   // Seleccionar l'orientació correcta segons la mida de pàgina
   const orientation =
-    pageSize === "FULLSCREEN" ? orientationFullscreen : orientationA4A3;
+    pageSize === "FULLSCREEN" ? orientationFullscreen : orientationPaper;
 
   // Les dimensions d'impressió són sempre a 96 DPI CSS — no depenen del DPI de pantalla
   const pageFormat = useMemo(() => {
     return createPageFormat(pageSize, orientation);
   }, [pageSize, orientation]);
 
-  const pageSizeIndex = PAGE_INDEX_MAP[pageSize];
   const isLandscape = orientation === "landscape";
   const isFullscreen = pageSize === "FULLSCREEN";
 
@@ -90,14 +64,6 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
    * Canvia la mida de la pàgina
    */
   const setPageSize = useCallback((size: PageSize) => {
-    setPageSizeState(size);
-  }, []);
-
-  /**
-   * Canvia la mida de la pàgina per índex (per compatibilitat)
-   */
-  const setPageSizeByIndex = useCallback((index: PageSizeIndex) => {
-    const size = PAGE_SIZE_MAP[index];
     setPageSizeState(size);
   }, []);
 
@@ -110,7 +76,7 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
       if (pageSize === "FULLSCREEN") {
         setOrientationFullscreen(newOrientation);
       } else {
-        setOrientationA4A3(newOrientation);
+        setOrientationPaper(newOrientation);
       }
     },
     [pageSize],
@@ -126,7 +92,7 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
         prev === "landscape" ? "portrait" : "landscape",
       );
     } else {
-      setOrientationA4A3((prev) =>
+      setOrientationPaper((prev) =>
         prev === "landscape" ? "portrait" : "landscape",
       );
     }
@@ -135,10 +101,8 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
   return {
     pageFormat,
     pageSize,
-    pageSizeIndex,
     orientation,
     setPageSize,
-    setPageSizeByIndex,
     toggleOrientation,
     setOrientation,
     isLandscape,

@@ -69,6 +69,11 @@ const manifest = JSON.parse(
   fs.readFileSync(path.join(FIXTURES, "manifest.json"), "utf8"),
 ) as Record<string, FixtureExpectation>;
 
+// Els documents antics s'obren amb la pàgina de qui els obre, i el paper per
+// defecte surt de la regió del navegador: sense fixar-la, el Chromium de
+// Playwright diu «en-US», obriria en Carta i les captures no serien les d'A4
+test.use({ locale: "ca-ES" });
+
 // Imatges d'ARASAAC i de Cloudinary servides des del disc: les captures no
 // poden dependre de la xarxa. Cada id cau sempre a la mateixa imatge.
 const LOCAL_IMAGES = fs

@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import {
   PageFormat,
+  CSS_PAGE_SIZE,
   CSS_PRINT_DPI,
   PRINT_MARGIN_MM,
+  regionalPaperSize,
 } from "../utils/pageFormat";
 import { pixelsToMM } from "../utils/pageUnits";
 import { printColors } from "@/style/palette";
@@ -20,11 +22,17 @@ import {
 export function generatePrintCSS(pageFormat: PageFormat): string {
   const widthMM = pixelsToMM(pageFormat.dimensions.width, CSS_PRINT_DPI);
   const heightMM = pixelsToMM(pageFormat.dimensions.height, CSS_PRINT_DPI);
+  // La pantalla sencera no és cap paper: s'imprimeix en el de cada dia de qui
+  // imprimeix, que als EUA o a Mèxic és el Carta i no l'A4
+  const paper =
+    pageFormat.size === "FULLSCREEN"
+      ? regionalPaperSize(navigator.languages)
+      : pageFormat.size;
 
   return `
     @media print {
       @page {
-        size: ${pageFormat.size === "FULLSCREEN" ? "A4" : pageFormat.size} ${pageFormat.orientation};
+        size: ${CSS_PAGE_SIZE[paper]} ${pageFormat.orientation};
         /* El mateix marge que ja es descompta del paper per calcular el full
            (\`calculateUsableDimensions\`). Així la caixa de la pàgina i el full
            fan exactament la mateixa mida i el full queda centrat sol. */

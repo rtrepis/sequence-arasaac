@@ -85,7 +85,7 @@ const ENUMS: Record<string, readonly unknown[]> = {
   textPosition: ["top", "bottom", "none"],
   alignmentH: ["left", "center", "right"],
   alignmentV: ["top", "center", "bottom"],
-  size: ["A4", "A3", "FULLSCREEN"],
+  size: ["A4", "A3", "LETTER", "TABLOID", "FULLSCREEN"],
   orientation: ["portrait", "landscape"],
   direction: ["row", "column"],
   layout: ["flow", "free"],

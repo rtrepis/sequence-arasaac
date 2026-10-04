@@ -158,6 +158,8 @@
           "enum": [
             "A4",
             "A3",
+            "LETTER",
+            "TABLOID",
             "FULLSCREEN"
           ]
         },

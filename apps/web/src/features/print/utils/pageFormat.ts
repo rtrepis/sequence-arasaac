@@ -17,6 +17,9 @@ import { mmToPixels } from "./pageUnits";
 // que puguin divergir
 export type { PageSize };
 
+/** Les mides que són un paper de debò: totes menys la pantalla sencera */
+export type PaperSize = Exclude<PageSize, "FULLSCREEN">;
+
 export type PageOrientation = "landscape" | "portrait";
 
 export interface PageDimensions {
@@ -72,15 +75,86 @@ export const FOOTER_SPACE = 150;
 export const FULLSCREEN_SCALE = 0.82;
 
 /**
- * Dimensions de paper estàndard ISO en mil·límetres
- * Font: https://en.wikipedia.org/wiki/ISO_216
+ * Dimensions del paper en mil·límetres, en vertical.
+ * ISO 216 (A4, A3): https://en.wikipedia.org/wiki/ISO_216
+ * ANSI (Carta, 8,5 × 11″; Tabloide, 11 × 17″): https://en.wikipedia.org/wiki/Paper_size
  */
 export const PAPER_DIMENSIONS_MM = {
   A4: { width: 210, height: 297 },
   A3: { width: 297, height: 420 },
   A5: { width: 148, height: 210 },
-  Letter: { width: 215.9, height: 279.4 },
+  LETTER: { width: 215.9, height: 279.4 },
+  TABLOID: { width: 279.4, height: 431.8 },
 } as const;
+
+/**
+ * Totes les mides de pàgina, en l'ordre en què les ofereix el selector.
+ * És l'única llista: el selector, el `@page` i el PDF en surten.
+ */
+export const PAGE_SIZES: readonly PageSize[] = [
+  "A4",
+  "A3",
+  "LETTER",
+  "TABLOID",
+  "FULLSCREEN",
+];
+
+/**
+ * El nom de cada paper per a `@page { size }`. El CSS no diu «tabloid»: el
+ * paper d'11 × 17″ s'hi diu `ledger` (CSS Paged Media, «page-size»).
+ */
+export const CSS_PAGE_SIZE: Record<PaperSize, string> = {
+  A4: "A4",
+  A3: "A3",
+  LETTER: "letter",
+  TABLOID: "ledger",
+};
+
+/**
+ * Regions on el paper de cada dia és el Carta i no l'A4. És la llista
+ * `paperSize` de les dades suplementàries del CLDR (Unicode), que `Intl` no
+ * exposa. Hi ha el Canadà, els EUA, Mèxic i bona part de l'Amèrica Llatina.
+ */
+const LETTER_REGIONS: ReadonlySet<string> = new Set([
+  "BZ",
+  "CA",
+  "CL",
+  "CO",
+  "CR",
+  "GT",
+  "MX",
+  "NI",
+  "PA",
+  "PH",
+  "PR",
+  "SV",
+  "US",
+  "VE",
+]);
+
+/**
+ * El paper per defecte segons les llengües del navegador (`navigator.languages`).
+ *
+ * Mana la primera que porta regió: «es-MX» diu Mèxic, i per tant Carta. Una
+ * llengua sense regió («es», «en») no diu on és ningú, i llavors és A4, que és
+ * el paper de la resta del món. No s'endevina la regió a partir de la llengua:
+ * «en» sol seria els EUA, i és també qui escriu des del Regne Unit.
+ */
+export function regionalPaperSize(languages: readonly string[]): PaperSize {
+  // La regió és la subetiqueta de dues lletres (o tres xifres, «es-419») que
+  // ve després de la llengua i, si n'hi ha, de l'escriptura: «zh-Hant-TW»
+  const region = languages
+    .map((tag) =>
+      tag
+        .split(/[-_]/)
+        .slice(1)
+        .find((subtag) => /^([A-Za-z]{2}|\d{3})$/.test(subtag)),
+    )
+    .find((subtag) => subtag !== undefined);
+  return region !== undefined && LETTER_REGIONS.has(region.toUpperCase())
+    ? "LETTER"
+    : "A4";
+}
 
 /**
  * DPI estàndard CSS — el navegador sempre imprimeix amb aquest valor,
@@ -115,7 +189,7 @@ export function calculateUsableDimensions(
 /**
  * Crea la configuració d'una pàgina.
  *
- * @param size - Mida de pàgina (A4, A3, FULLSCREEN)
+ * @param size - Mida de pàgina (un paper o FULLSCREEN)
  * @param orientation - Orientació (landscape, portrait)
  * @returns El format, amb les dimensions útils en píxels d'impressió
  */

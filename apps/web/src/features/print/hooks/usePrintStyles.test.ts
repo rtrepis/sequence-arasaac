@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { generatePrintCSS } from "./usePrintStyles";
 import { PRINTING_BODY_CLASS, PRINT_ROOT_ID } from "./usePrintSheet";
 import {
@@ -17,10 +17,35 @@ describe("generatePrintCSS", () => {
     expect(generatePrintCSS(A4_LANDSCAPE)).toContain("size: A4 landscape");
   });
 
-  it("hauria d'imprimir en A4 el que a pantalla es veu a pantalla sencera", () => {
-    const css = generatePrintCSS(createPageFormat("FULLSCREEN", "landscape"));
+  it("hauria de dir al CSS els papers nord-americans pel seu nom", () => {
+    expect(generatePrintCSS(createPageFormat("LETTER", "portrait"))).toContain(
+      "size: letter portrait",
+    );
+    // El CSS diu `ledger` al paper d'11 × 17″
+    expect(generatePrintCSS(createPageFormat("TABLOID", "landscape"))).toContain(
+      "size: ledger landscape",
+    );
+  });
 
-    expect(css).toContain("size: A4 landscape");
+  describe("pantalla sencera", () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    const fullScreenCSS = (languages: string[]) => {
+      vi.stubGlobal("navigator", { ...navigator, languages });
+      return generatePrintCSS(createPageFormat("FULLSCREEN", "landscape"));
+    };
+
+    it("hauria d'imprimir en A4 a Europa", () => {
+      expect(fullScreenCSS(["ca-ES", "ca"])).toContain("size: A4 landscape");
+    });
+
+    it("hauria d'imprimir en Carta on el paper de cada dia és el Carta", () => {
+      expect(fullScreenCSS(["es-MX", "es"])).toContain(
+        "size: letter landscape",
+      );
+    });
   });
 
   it("hauria de deixar el mateix marge que es descompta del paper", () => {
