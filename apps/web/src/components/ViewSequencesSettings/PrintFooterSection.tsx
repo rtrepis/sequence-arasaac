@@ -6,6 +6,7 @@ import messages from "./ViewSequencesSettings.lang";
 
 const AUTHOR_LABEL_ID = "print-footer-author-label";
 const LICENCE_LABEL_ID = "print-footer-licence-label";
+const LICENCE_FORCED_ID = "print-footer-licence-forced";
 
 interface PrintFooterSectionProps {
   author: string;
@@ -40,14 +41,20 @@ const PrintFooterSection = ({
         title={<FormattedMessage {...messages.licence} />}
         labelId={LICENCE_LABEL_ID}
         control="compact"
+        // Amb autor, el motiu es diu en clar sota la fila i no en un tooltip:
+        // el tooltip només surt amb el ratolí a sobre, i qui prem l'interruptor
+        // en una tauleta el veia no respondre sense cap explicació
+        helper={
+          forcedByAuthor ? (
+            <FormattedMessage {...messages.licenceForcedHelper} />
+          ) : undefined
+        }
+        helperId={LICENCE_FORCED_ID}
       >
-        {/* El motiu va al tooltip i, sobretot, a `aria-describedby`: amb autor
-            l'interruptor es queda encès i no respon, i qui el prem mereix
-            saber per què sense haver d'endevinar-ho */}
+        {/* Sense autor, el tooltip només hi afegeix context; quan l'ajust està
+            bloquejat, el motiu ja és visible i el tooltip el repetiria */}
         <Tooltip
-          title={intl.formatMessage(
-            forcedByAuthor ? messages.licenceForcedHelper : messages.licenceHelper,
-          )}
+          title={forcedByAuthor ? "" : intl.formatMessage(messages.licenceHelper)}
           describeChild
         >
           <Switch
@@ -59,7 +66,15 @@ const PrintFooterSection = ({
               // els dits sense cap avís. Va a l'`input`, que és qui porta el
               // rol: al `span` de fora, cap lector de pantalla no el llegiria
               "aria-disabled": forcedByAuthor || undefined,
+              "aria-describedby": forcedByAuthor ? LICENCE_FORCED_ID : undefined,
             }}
+            // Atenuat com un control desactivat: encès i amb tot el color,
+            // semblava que funcionava i que era el clic el que fallava
+            sx={
+              forcedByAuthor
+                ? { opacity: (theme) => theme.palette.action.disabledOpacity }
+                : undefined
+            }
             onChange={(_, value) => {
               if (forcedByAuthor) return;
               onLicenceChange(value);

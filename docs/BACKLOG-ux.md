@@ -1979,6 +1979,33 @@ la pàgina».)*
   fetes hi cap una mica més de contingut per fila i per columna. No canvia la mida dels pictogrames
   —aquesta la mana el control de mida—, només l'espai de què disposen.
 
+### C27 — Amb autor, la llicència no es pot treure i ningú no diu per què ✅ Resolta
+
+*(Detectat per l'usuari el 2026-10-04, a la 2.4.1: «la llicència, si hi ha autor, no es pot canviar
+i quan l'usuari ho intenta ningú no li diu per què». Resolta a la branca `ccr-8a95a245-qj40nw`,
+versió 2.4.2.)*
+
+- **On**: `components/ViewSequencesSettings/PrintFooterSection.tsx` i
+  `components/SettingsLayout/SettingRow.tsx`.
+- **Per què passava**: C25 posava el motiu **només en un tooltip**. Un tooltip surt amb el ratolí a
+  sobre o amb una pulsació llarga; un clic normal —i, en tauleta, qualsevol toc— no el mostra. A
+  més, l'interruptor es quedava encès **amb tot el color**, igual que un control actiu: semblava
+  que el clic fallava, no que l'ajust estigués bloquejat. És el mateix problema de fons que C1.
+- **Solució**:
+  - `SettingRow` guanya `helper?`/`helperId?`: una línia visible sota la fila. Amb autor, la de la
+    llicència diu «Amb autor, la llicència hi va sempre: els pictogrames no són teus.» **abans** que
+    ningú toqui res; sense autor, no hi surt.
+  - L'interruptor bloquejat es veu atenuat (`action.disabledOpacity`), com un control desactivat,
+    però segueix amb `aria-disabled` i no `disabled`, perquè no surti de l'ordre de tabulació.
+  - El motiu va a l'`aria-describedby` de l'`input`: el lector de pantalla el llegeix en arribar-hi.
+  - Sense autor, el tooltip d'ajuda (què demana ARASAAC) es queda: allà és context, no condició.
+- **De retruc**: «Desa com a preferències» de la columna de la pàgina de vista llegia
+  `viewSettings.licence` dins d'un `useCallback` que no el tenia a les dependències; canviar només
+  la llicència i desar podia desar el valor d'abans. Afegit a les dependències (ho avisava ESLint).
+- **Proves**: `PrintFooterSection.test.tsx` (9 casos). Els dos nous —el motiu es veu sense hover i
+  és la descripció accessible de l'interruptor— fallen contra el codi de la 2.4.1 i passen ara.
+  Verificat també a l'app: amb autor, un clic forçat no mou l'interruptor i el text és a la vista.
+
 ### C25 — La llicència del peu es pot treure, però no quan hi ha autor ✅ Resolta
 
 *(Demanat per l'usuari el 2026-10-04: «una propietat "llicència" per treure o posar de la impressió

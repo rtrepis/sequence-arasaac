@@ -25,6 +25,12 @@ Patró únic per a tots els tabs del `SettingsDialog` (Usuari, Estil del documen
   - `"wide"` — grups de toggles: amplada segons contingut (`flexShrink: 0`, mai comprimit contra el títol); apila en mòbil.
   - `"compact"` — `Switch`, `InputColor`: **sempre en línia**, també en mòbil — apilar-los només malgastaria alçada, mai els falta amplada.
 
+  Amb `helper?` (i `helperId?`, per a l'`aria-describedby` del control), la fila porta una línia
+  d'explicació **visible, sota la fila**, en `caption` i `text.secondary`. És el lloc del que
+  l'usuari **ha de** llegir per entendre l'ajust —per exemple, per què un control no respon—: un
+  tooltip només surt amb el ratolí a sobre, i en tauleta no hi ha hover (vegeu C27 a
+  `docs/BACKLOG-ux.md`). El tooltip queda per al context que és un afegit, no una condició.
+
   **Mai reescriure aquest patró a mà** amb `Box sx={settingRowInline}` + `FormLabel`.
 - **`settingsAccordion`** — sx **única** de qualsevol acordió dins d'una configuració: **pla**, sense elevació, sense fons propi i sense la línia superior de MUI (`&:before`) — el `Divider` del `SectionTitle` ja és l'únic divisor visible. Va sempre amb `disableGutters`, `elevation={0}` i un `AccordionSummary` amb `expandIcon={<MdExpandMore />}` i `px: 0`, que l'alinea amb la resta de files. **El que distingeix un acordió d'un títol és només la fletxa que gira**, mai una caixa: una llista plegable no és una zona diferent del panell. El porten els ajustos per seqüència (`SequenceControlsPanel`) i la llista d'imatges del compte (`AccountImagesList`).
 - **`IconToggleButton`** — **única manera** de declarar un botó només-icona dins d'un

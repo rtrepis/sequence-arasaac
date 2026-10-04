@@ -424,6 +424,7 @@ const ViewSequencesSettings = ({
     documentStyle.view,
     direction,
     author,
+    viewSettings.licence,
     pageSize,
     orientation,
   ]);
