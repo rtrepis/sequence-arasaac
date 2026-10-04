@@ -542,45 +542,6 @@
     "message": "Correu electrònic",
     "description": "Etiqueta del camp email"
   },
-  "features.backend.auth.error.AUTH_ERROR": {
-    "message": "S'ha produït un error en iniciar sessió. Torna-ho a intentar.",
-    "description": "Error genèric de login"
-  },
-  "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED": {
-    "message": "Avui ja s'han creat tots els comptes nous que admetem. Torna-ho a provar demà."
-  },
-  "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
-    "message": "El format del correu electrònic no és vàlid",
-    "description": "Validació: format d'email incorrecte"
-  },
-  "features.backend.auth.error.EMAIL_REQUIRED": {
-    "message": "El correu electrònic és obligatori",
-    "description": "Validació: camp email buit"
-  },
-  "features.backend.auth.error.INVALID_CREDENTIALS": {
-    "message": "Correu electrònic o contrasenya incorrectes",
-    "description": "Error de login: credencials incorrectes"
-  },
-  "features.backend.auth.error.PASSWORD_REQUIRED": {
-    "message": "La contrasenya és obligatòria",
-    "description": "Validació: camp contrasenya buit"
-  },
-  "features.backend.auth.error.PASSWORD_TOO_LONG": {
-    "message": "La contrasenya no pot superar els 128 caràcters",
-    "description": "Validació: contrasenya massa llarga (registre)"
-  },
-  "features.backend.auth.error.PASSWORD_TOO_SHORT": {
-    "message": "La contrasenya ha de tenir com a mínim 10 caràcters",
-    "description": "Validació: contrasenya massa curta (registre)"
-  },
-  "features.backend.auth.error.REGISTER_ERROR": {
-    "message": "S'ha produït un error en crear el compte. Torna-ho a intentar.",
-    "description": "Error genèric de registre"
-  },
-  "features.backend.auth.error.UNKNOWN_ERROR": {
-    "message": "S'ha produït un error inesperat. Torna-ho a intentar.",
-    "description": "Error desconegut del servidor"
-  },
   "features.backend.auth.loadAction": {
     "message": "Carrega",
     "description": "Botó per carregar un document seleccionat del backend"
@@ -1378,34 +1339,6 @@
     "message": "Peu d'impressió",
     "description": "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF"
   },
-  "features.backend.auth.error.ACCOUNT_SUSPENDED": {
-    "message": "Aquest compte està suspès. Contacta amb nosaltres si creus que és un error."
-  },
-  "features.backend.auth.error.DISPOSABLE_EMAIL": {
-    "message": "Aquesta adreça és d'un servei de correu temporal. Fes servir el teu correu habitual."
-  },
-  "features.backend.auth.error.DOCUMENT_SAVE_ERROR": {
-    "message": "No s'ha pogut desar el document. Torna-ho a provar."
-  },
-  "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
-    "message": "Aquest correu ja està verificat."
-  },
-  "features.backend.auth.error.REFRESH_TOKEN_EXPIRED": {
-    "message": "La sessió ha caducat. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
-    "description": "Error: el token de refresc ha caducat"
-  },
-  "features.backend.auth.error.REFRESH_TOKEN_MISSING": {
-    "message": "La sessió s'ha tancat en aquest navegador. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
-    "description": "Error: no hi ha galeta de sessió"
-  },
-  "features.backend.auth.error.INVALID_REFRESH_TOKEN": {
-    "message": "La sessió s'ha tancat des d'un altre dispositiu. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
-    "description": "Error: la sessió s'ha invalidat des d'un altre lloc"
-  },
-  "features.backend.auth.error.USER_NOT_FOUND": {
-    "message": "Aquest compte ja no existeix. La feina continua desada en aquest dispositiu: descarrega-la si en vols una còpia.",
-    "description": "Error: el compte de la sessió ja no hi és"
-  },
   "features.backend.auth.sessionExpired.titleExpired": {
     "message": "La sessió ha caducat",
     "description": "Títol de l'avís quan la sessió ha caducat pel pas del temps"
@@ -1442,45 +1375,6 @@
     "message": "Tanca l'avís",
     "description": "Botó per tancar l'avís de sessió caiguda"
   },
-  "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
-    "message": "Has de verificar el teu correu abans de desar al núvol. Mira la teva safata d'entrada."
-  },
-  "features.backend.auth.error.MAX_USERS_REACHED": {
-    "message": "Hem arribat al màxim de comptes disponibles. Torna-ho a provar més endavant."
-  },
-  "features.backend.auth.error.QUOTA_DOCUMENTS_EXCEEDED": {
-    "message": "Has arribat al màxim de documents desats. Esborra'n algun per desar-ne un de nou."
-  },
-  "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
-    "message": "Has arribat al màxim d'espai per a imatges. A Configuració › Usuari pots veure què ocupa cada imatge i esborrar-ne alguna."
-  },
-  "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
-    "message": "Has arribat al màxim de paraules personalitzades. Esborra'n alguna per afegir-ne més."
-  },
-  "features.backend.auth.error.REGISTRATION_CLOSED": {
-    "message": "Els registres estan tancats temporalment. Torna-ho a provar més endavant."
-  },
-  "features.backend.auth.error.TOO_MANY_ATTEMPTS": {
-    "message": "Massa intents seguits. Espera un moment i torna-ho a provar."
-  },
-  "features.backend.auth.error.TOO_MANY_REGISTRATIONS": {
-    "message": "S'han creat massa comptes des d'aquesta connexió. Prova-ho d'aquí a una estona."
-  },
-  "features.backend.auth.error.VERIFICATION_EMAIL_FAILED": {
-    "message": "No hem pogut enviar el correu de verificació. Torna-ho a provar d'aquí a una estona."
-  },
-  "features.backend.auth.error.VERIFICATION_RESEND_LIMIT": {
-    "message": "Has demanat el correu de verificació massa vegades avui. Torna-ho a provar demà."
-  },
-  "features.backend.auth.error.VERIFICATION_RESEND_TOO_SOON": {
-    "message": "Ja t'hem enviat un correu fa poc. Espera uns minuts abans de demanar-ne un altre."
-  },
-  "features.backend.auth.error.VERIFICATION_TOKEN_INVALID": {
-    "message": "Aquest enllaç de verificació no és vàlid o ha caducat. Demana'n un de nou."
-  },
-  "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
-    "message": "L'enllaç de verificació està incomplet."
-  },
   "features.backend.auth.verification.bannerPending": {
     "message": "Verifica el teu correu per poder desar al núvol. T'hem enviat un enllaç a {email}."
   },
@@ -1511,10 +1405,6 @@
   },
   "components.defaultSettings.saveError.dismiss": {
     "message": "Ara no"
-  },
-  "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
-    "message": "El servidor no ha entès el format d'aquest document. Descarrega'l al teu dispositiu per no perdre'l i avisa'ns.",
-    "description": "Error en desar: el document no ha passat la validació del servidor"
   },
   "features.backend.wakeUp.descriptionBlocking": {
     "message": "La primera connexió del dia pot trigar fins a un minut. No tanquis l'aplicació."
@@ -1547,38 +1437,6 @@
   "features.backend.auth.forgotPassword": {
     "message": "Has oblidat la contrasenya?",
     "description": "Enllaç del formulari de login cap a la recuperació de contrasenya"
-  },
-  "features.backend.auth.error.NAME_REQUIRED": {
-    "message": "El nom és obligatori",
-    "description": "Validació: camp nom buit al signup"
-  },
-  "features.backend.auth.error.NAME_TOO_LONG": {
-    "message": "El nom no pot superar els 120 caràcters",
-    "description": "Validació: nom massa llarg al signup"
-  },
-  "features.backend.auth.error.USE_CASE_REQUIRED": {
-    "message": "Cal triar com faràs servir l'aplicació",
-    "description": "Validació: selector d'ús de l'aplicació buit al signup"
-  },
-  "features.backend.auth.error.PASSWORD_MISSING_LOWERCASE": {
-    "message": "La contrasenya ha de tenir com a mínim una lletra minúscula",
-    "description": "Validació: falta una minúscula a la contrasenya"
-  },
-  "features.backend.auth.error.PASSWORD_MISSING_UPPERCASE": {
-    "message": "La contrasenya ha de tenir com a mínim una lletra majúscula",
-    "description": "Validació: falta una majúscula a la contrasenya"
-  },
-  "features.backend.auth.error.PASSWORD_MISSING_NUMBER": {
-    "message": "La contrasenya ha de tenir com a mínim un número",
-    "description": "Validació: falta un número a la contrasenya"
-  },
-  "features.backend.auth.error.PASSWORD_MISMATCH": {
-    "message": "Les contrasenyes no coincideixen",
-    "description": "Validació: la repetició no coincideix amb la contrasenya"
-  },
-  "features.backend.auth.error.SET_PASSWORD_ERROR": {
-    "message": "S'ha produït un error en establir la contrasenya. Torna-ho a intentar.",
-    "description": "Error genèric d'establiment de contrasenya"
   },
   "features.backend.auth.password.minLength": {
     "message": "Com a mínim 10 caràcters",
@@ -2228,9 +2086,6 @@
   },
   "components.uploadImageButton.cancelUpload": {
     "message": "Cancel·la"
-  },
-  "features.backend.auth.error.IMAGE_TOO_LARGE": {
-    "message": "Alguna imatge pesa massa per desar-la al núvol. Torna-la a posar amb una qualitat més baixa (Configuració › Usuari › Qualitat de les imatges)."
   },
   "components.defaultSettings.saveError.bodyQuota": {
     "message": "El teu compte s'ha quedat sense espai per a imatges, i per això la configuració no s'ha desat. A Configuració › Usuari veuràs què ocupa cada imatge del vocabulari i en podràs esborrar alguna."

@@ -31,6 +31,7 @@ import {
   sendPasswordResetEmail,
   sendAccountExistsEmail,
 } from "../../shared/mailer";
+import type { ApiErrorCode } from "@sequence-arasaac/i18n";
 
 // Durades dels tokens
 const ACCESS_TOKEN_EXPIRES_IN = "15m";
@@ -96,7 +97,7 @@ interface RefreshTokenPayload {
 }
 
 // Helper d'error semàntic — tots els errors del mòdul segueixen aquest format
-const authError = (errorCode: string, statusCode: number): AppError => {
+const authError = (errorCode: ApiErrorCode, statusCode: number): AppError => {
   const error = new Error(errorCode) as AppError;
   error.statusCode = statusCode;
   error.errorCode = errorCode;

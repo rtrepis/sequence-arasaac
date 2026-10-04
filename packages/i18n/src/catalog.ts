@@ -33,15 +33,21 @@ const loadedApp = new Map<LangsApp, Messages>();
 export const getLoadedAppMessages = (lang: LangsApp): Messages | undefined =>
   loadedApp.get(lang);
 
-// Carrega només el catàleg de l'idioma demanat: l'empaquetador en fa un
-// fragment per idioma i el navegador només baixa el que fa servir
+interface CatalogModule {
+  default: SourceCatalog | TranslationCatalog;
+}
+
+// Carrega els textos de la interfície (`app` i `errors`) només de l'idioma
+// demanat: l'empaquetador en fa un fragment per idioma i espai de noms, i el
+// navegador només baixa els que fa servir
 export const loadAppMessages = async (lang: LangsApp): Promise<Messages> => {
   const cached = loadedApp.get(lang);
   if (cached) return cached;
-  const module: { default: SourceCatalog | TranslationCatalog } = await import(
-    `../messages/app/${lang}.json`
-  );
-  const messages = toMessages(module.default);
+  const [app, errors]: [CatalogModule, CatalogModule] = await Promise.all([
+    import(`../messages/app/${lang}.json`),
+    import(`../messages/errors/${lang}.json`),
+  ]);
+  const messages = { ...toMessages(app.default), ...toMessages(errors.default) };
   loadedApp.set(lang, messages);
   return messages;
 };

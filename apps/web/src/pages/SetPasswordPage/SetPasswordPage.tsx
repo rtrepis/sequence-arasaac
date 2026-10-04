@@ -20,12 +20,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import messages from "./SetPasswordPage.lang";
 import StyledButton from "@/style/StyledButton";
 import { APP_CORNER_RADIUS } from "@/style/appShape";
-import authMessages from "@features/backend/auth/components/AuthModal.lang";
 import PasswordStrengthGuide, {
   getPasswordRequirements,
 } from "@features/backend/auth/components/PasswordStrengthGuide";
 import { setPasswordThunk } from "@features/backend/auth/store/authSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { errorMessageFor } from "@sequence-arasaac/i18n";
 
 const SetPasswordPage = (): ReactElement => {
   const intl = useIntl();
@@ -48,10 +48,7 @@ const SetPasswordPage = (): ReactElement => {
     password !== passwordConfirmation;
 
   const errorMessage = errorCode
-    ? intl.formatMessage(
-        authMessages[errorCode as keyof typeof authMessages] ??
-          authMessages.UNKNOWN_ERROR,
-      )
+    ? intl.formatMessage(errorMessageFor(errorCode, "UNKNOWN_ERROR"))
     : null;
 
   const isInvalidToken =

@@ -9,6 +9,7 @@
 
 import { cloudinary } from "./cloudinaryClient";
 import type { AppError } from "../middleware/errorHandler";
+import type { ApiErrorCode } from "@sequence-arasaac/i18n";
 
 // Pes màxim d'una imatge pujada, ja descodificada.
 //
@@ -60,7 +61,7 @@ export interface ImageSlot {
   assign: (url: string) => void;
 }
 
-const imageError = (errorCode: string, statusCode: number): AppError => {
+const imageError = (errorCode: ApiErrorCode, statusCode: number): AppError => {
   const error = new Error(errorCode) as AppError;
   error.statusCode = statusCode;
   error.errorCode = errorCode;

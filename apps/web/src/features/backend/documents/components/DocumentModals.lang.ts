@@ -1,7 +1,8 @@
 import { defineMessages } from "react-intl";
 
 // Traduccions dels diàlegs de document al núvol (desar amb nom i carregar).
-// Els codis d'error i els ítems del drawer segueixen vivint a AuthModal.lang.
+// Els ítems del drawer segueixen vivint a AuthModal.lang; els codis d'error, al
+// catàleg `errors` de @sequence-arasaac/i18n.
 const messages = defineMessages({
   saveTitle: {
     id: "features.backend.documents.saveTitle",

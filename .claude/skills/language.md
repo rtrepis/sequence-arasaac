@@ -7,7 +7,8 @@ El perquè de tot plegat és a `docs/decisions/ADR-004-traduccions-paquet-i18n.m
 
 Sempre que afegeixis o modifiquis traduccions:
 
-1. **Edita els catàlegs** a `packages/i18n/messages/<espai>/` (`app/` per a la interfície).
+1. **Edita els catàlegs** a `packages/i18n/messages/<espai>/`: `app/` per a la interfície,
+   `errors/` per als textos dels codis d'error.
    - `ca.json` és l'**idioma font**: `"clau": { "message": "text", "description": "per a qui tradueix" }`.
      La descripció va sempre en català i només aquí.
    - `es.json`, `en.json`, `fr.json`, `it.json` porten **només el text**: `"clau": "text"`.
@@ -32,15 +33,17 @@ Sempre que afegeixis o modifiquis traduccions:
 ```
 packages/i18n/
 ├── messages/
-│   └── app/            ← la interfície del web
-│       ├── ca.json     ← FONT: text + descripció
-│       ├── es.json     ← només text
-│       ├── en.json
-│       ├── fr.json
-│       └── it.json
+│   ├── app/            ← la interfície del web
+│   │   ├── ca.json     ← FONT: text + descripció
+│   │   ├── es.json     ← només text
+│   │   ├── en.json
+│   │   ├── fr.json
+│   │   └── it.json
+│   └── errors/         ← un text per codi d'error, claus `error.<CODI>`
 └── src/
     ├── locales.ts      ← LANGS_APP: l'única llista d'idiomes
-    └── catalog.ts      ← loadAppMessages, toMessages
+    ├── catalog.ts      ← loadAppMessages, toMessages
+    └── errors.ts       ← API_ERROR_CODES, errorMessageFor
 ```
 
 El web carrega només el catàleg de l'idioma actiu amb `AppIntlProvider`
@@ -66,7 +69,10 @@ noms. Les proves marquen tot el que falta.
   - `features.backend.auth.loginTitle`
   - `features.backend.auth.error.INVALID_CREDENTIALS`
   - `components.settingCard.title`
-- Les claus d'error del backend usen UPPER_SNAKE_CASE: `error.CODI_ERROR`
+- Els textos dels codis d'error van a `errors/` amb la clau `error.<CODI>` (UPPER_SNAKE_CASE), no
+  a cap `.lang.ts`. Un codi nou de l'API s'afegeix primer a `API_ERROR_CODES`
+  (`packages/i18n/src/errors.ts`); `errors.test.ts` exigeix que cada codi amb text en tingui i que
+  el catàleg no en tingui cap de sobres. Al front es fan servir amb `errorMessageFor(codi, genèric)`.
 
 ## Format `.lang.ts`
 

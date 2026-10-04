@@ -13,6 +13,7 @@ import {
   forgotPassword,
   resendVerificationEmail,
 } from "./controller";
+import type { ApiErrorBody } from "@sequence-arasaac/i18n";
 
 // Rate limiter general d'autenticació — cobreix login, refresh i set-password.
 // 30 per minut i IP deixa lloc de sobra a un ús legítim (inclosos els refresh
@@ -22,7 +23,7 @@ const authLimiter = rateLimit({
   max: 30,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { errorCode: "TOO_MANY_ATTEMPTS" },
+  message: { errorCode: "TOO_MANY_ATTEMPTS" } satisfies ApiErrorBody,
 });
 
 // Rate limiter específic del signup — molt més estricte que la resta.
@@ -33,7 +34,7 @@ const signupLimiter = rateLimit({
   max: 5,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { errorCode: "TOO_MANY_REGISTRATIONS" },
+  message: { errorCode: "TOO_MANY_REGISTRATIONS" } satisfies ApiErrorBody,
 });
 
 // Rate limiter de forgot-password i del reenviament de verificació — mateix
@@ -44,7 +45,7 @@ const emailRequestLimiter = rateLimit({
   max: 5,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { errorCode: "TOO_MANY_ATTEMPTS" },
+  message: { errorCode: "TOO_MANY_ATTEMPTS" } satisfies ApiErrorBody,
 });
 
 const authRouter = Router();

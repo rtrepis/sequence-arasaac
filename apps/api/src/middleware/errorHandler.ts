@@ -4,11 +4,13 @@
 import { Request, Response, NextFunction } from "express";
 import { hashIp } from "../shared/ipHash";
 import { recordClientError } from "../modules/client-errors/service";
+import type { ApiErrorBody, ApiErrorCode } from "@sequence-arasaac/i18n";
 
 // Interfície per a errors amb codi HTTP personalitzat i codi semàntic
+// El codi ha de ser un dels que el front sap traduir (vegeu ADR-004)
 export interface AppError extends Error {
   statusCode?: number;
-  errorCode?: string;
+  errorCode?: ApiErrorCode;
 }
 
 export const errorHandler = (
@@ -21,7 +23,7 @@ export const errorHandler = (
   const statusCode = err.statusCode ?? 500;
 
   // Els errors 500 en producció s'amaguen darrere un codi genèric
-  const errorCode =
+  const errorCode: ApiErrorCode =
     statusCode === 500 && process.env.NODE_ENV === "production"
       ? "INTERNAL_ERROR"
       : (err.errorCode ?? "UNKNOWN_ERROR");
@@ -49,5 +51,5 @@ export const errorHandler = (
     });
   }
 
-  res.status(statusCode).json({ errorCode });
+  res.status(statusCode).json({ errorCode } satisfies ApiErrorBody);
 };

@@ -1,0 +1,138 @@
+{
+  "error.ACCOUNT_SUSPENDED": {
+    "message": "Aquest compte està suspès. Contacta amb nosaltres si creus que és un error."
+  },
+  "error.AUTH_ERROR": {
+    "message": "S'ha produït un error en iniciar sessió. Torna-ho a intentar.",
+    "description": "Error genèric de login"
+  },
+  "error.DAILY_SIGNUP_LIMIT_REACHED": {
+    "message": "Avui ja s'han creat tots els comptes nous que admetem. Torna-ho a provar demà."
+  },
+  "error.DISPOSABLE_EMAIL": {
+    "message": "Aquesta adreça és d'un servei de correu temporal. Fes servir el teu correu habitual."
+  },
+  "error.DOCUMENT_INVALID_FORMAT": {
+    "message": "El servidor no ha entès el format d'aquest document. Descarrega'l al teu dispositiu per no perdre'l i avisa'ns.",
+    "description": "Error en desar: el document no ha passat la validació del servidor"
+  },
+  "error.DOCUMENT_SAVE_ERROR": {
+    "message": "No s'ha pogut desar el document. Torna-ho a provar."
+  },
+  "error.EMAIL_INVALID_FORMAT": {
+    "message": "El format del correu electrònic no és vàlid",
+    "description": "Validació: format d'email incorrecte"
+  },
+  "error.EMAIL_NOT_VERIFIED": {
+    "message": "Has de verificar el teu correu abans de desar al núvol. Mira la teva safata d'entrada."
+  },
+  "error.EMAIL_REQUIRED": {
+    "message": "El correu electrònic és obligatori",
+    "description": "Validació: camp email buit"
+  },
+  "error.IMAGE_TOO_LARGE": {
+    "message": "Alguna imatge pesa massa per desar-la al núvol. Torna-la a posar amb una qualitat més baixa (Configuració › Usuari › Qualitat de les imatges)."
+  },
+  "error.INVALID_CREDENTIALS": {
+    "message": "Correu electrònic o contrasenya incorrectes",
+    "description": "Error de login: credencials incorrectes"
+  },
+  "error.INVALID_REFRESH_TOKEN": {
+    "message": "La sessió s'ha tancat des d'un altre dispositiu. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
+    "description": "Error: la sessió s'ha invalidat des d'un altre lloc"
+  },
+  "error.MAX_USERS_REACHED": {
+    "message": "Hem arribat al màxim de comptes disponibles. Torna-ho a provar més endavant."
+  },
+  "error.NAME_REQUIRED": {
+    "message": "El nom és obligatori",
+    "description": "Validació: camp nom buit al signup"
+  },
+  "error.NAME_TOO_LONG": {
+    "message": "El nom no pot superar els 120 caràcters",
+    "description": "Validació: nom massa llarg al signup"
+  },
+  "error.PASSWORD_MISMATCH": {
+    "message": "Les contrasenyes no coincideixen",
+    "description": "Validació: la repetició no coincideix amb la contrasenya"
+  },
+  "error.PASSWORD_MISSING_LOWERCASE": {
+    "message": "La contrasenya ha de tenir com a mínim una lletra minúscula",
+    "description": "Validació: falta una minúscula a la contrasenya"
+  },
+  "error.PASSWORD_MISSING_NUMBER": {
+    "message": "La contrasenya ha de tenir com a mínim un número",
+    "description": "Validació: falta un número a la contrasenya"
+  },
+  "error.PASSWORD_MISSING_UPPERCASE": {
+    "message": "La contrasenya ha de tenir com a mínim una lletra majúscula",
+    "description": "Validació: falta una majúscula a la contrasenya"
+  },
+  "error.PASSWORD_REQUIRED": {
+    "message": "La contrasenya és obligatòria",
+    "description": "Validació: camp contrasenya buit"
+  },
+  "error.PASSWORD_TOO_LONG": {
+    "message": "La contrasenya no pot superar els 128 caràcters",
+    "description": "Validació: contrasenya massa llarga (registre)"
+  },
+  "error.PASSWORD_TOO_SHORT": {
+    "message": "La contrasenya ha de tenir com a mínim 10 caràcters",
+    "description": "Validació: contrasenya massa curta (registre)"
+  },
+  "error.QUOTA_DOCUMENTS_EXCEEDED": {
+    "message": "Has arribat al màxim de documents desats. Esborra'n algun per desar-ne un de nou."
+  },
+  "error.QUOTA_STORAGE_EXCEEDED": {
+    "message": "Has arribat al màxim d'espai per a imatges. A Configuració › Usuari pots veure què ocupa cada imatge i esborrar-ne alguna."
+  },
+  "error.QUOTA_WORD_PROFILES_EXCEEDED": {
+    "message": "Has arribat al màxim de paraules personalitzades. Esborra'n alguna per afegir-ne més."
+  },
+  "error.REFRESH_TOKEN_EXPIRED": {
+    "message": "La sessió ha caducat. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
+    "description": "Error: el token de refresc ha caducat"
+  },
+  "error.REFRESH_TOKEN_MISSING": {
+    "message": "La sessió s'ha tancat en aquest navegador. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
+    "description": "Error: no hi ha galeta de sessió"
+  },
+  "error.REGISTER_ERROR": {
+    "message": "S'ha produït un error en crear el compte. Torna-ho a intentar.",
+    "description": "Error genèric de registre"
+  },
+  "error.REGISTRATION_CLOSED": {
+    "message": "Els registres estan tancats temporalment. Torna-ho a provar més endavant."
+  },
+  "error.SET_PASSWORD_ERROR": {
+    "message": "S'ha produït un error en establir la contrasenya. Torna-ho a intentar.",
+    "description": "Error genèric d'establiment de contrasenya"
+  },
+  "error.TOO_MANY_ATTEMPTS": {
+    "message": "Massa intents seguits. Espera un moment i torna-ho a provar."
+  },
+  "error.TOO_MANY_REGISTRATIONS": {
+    "message": "S'han creat massa comptes des d'aquesta connexió. Prova-ho d'aquí a una estona."
+  },
+  "error.UNKNOWN_ERROR": {
+    "message": "S'ha produït un error inesperat. Torna-ho a intentar.",
+    "description": "Error desconegut del servidor"
+  },
+  "error.USER_NOT_FOUND": {
+    "message": "Aquest compte ja no existeix. La feina continua desada en aquest dispositiu: descarrega-la si en vols una còpia.",
+    "description": "Error: el compte de la sessió ja no hi és"
+  },
+  "error.USE_CASE_REQUIRED": {
+    "message": "Cal triar com faràs servir l'aplicació",
+    "description": "Validació: selector d'ús de l'aplicació buit al signup"
+  },
+  "error.VERIFICATION_EMAIL_FAILED": {
+    "message": "No hem pogut enviar el correu de verificació. Torna-ho a provar d'aquí a una estona."
+  },
+  "error.VERIFICATION_TOKEN_INVALID": {
+    "message": "Aquest enllaç de verificació no és vàlid o ha caducat. Demana'n un de nou."
+  },
+  "error.VERIFICATION_TOKEN_MISSING": {
+    "message": "L'enllaç de verificació està incomplet."
+  }
+}

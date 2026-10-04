@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { render, screen } from "@testing-library/react";
 import { FormattedMessage } from "react-intl";
+import { errorMessageFor } from "@sequence-arasaac/i18n";
 import ca from "@sequence-arasaac/i18n/messages/app/ca.json";
 import AppIntlProvider from "./AppIntlProvider";
 
@@ -15,6 +16,17 @@ describe("AppIntlProvider", () => {
       </AppIntlProvider>,
     );
     expect(await screen.findByText("Nouveau")).toBeInTheDocument();
+  });
+
+  it("carrega també els textos dels codis d'error", async () => {
+    render(
+      <AppIntlProvider locale="fr" defaultLocale="es">
+        <FormattedMessage {...errorMessageFor("NO_EXISTEIX", "UNKNOWN_ERROR")} />
+      </AppIntlProvider>,
+    );
+    expect(
+      await screen.findByText("Une erreur inattendue s'est produite. Veuillez réessayer."),
+    ).toBeInTheDocument();
   });
 
   it("amb un locale que no és de l'aplicació cau al defaultMessage", () => {
