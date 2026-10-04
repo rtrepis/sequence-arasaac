@@ -59,7 +59,6 @@ l'entrada.
 
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| C18 | L'spec de vídeo de `multiple-sequences` és vermell | No surt amb C17, com es pensava: és l'expressió regular de l'spec, que no casa amb «Aplicar a totes». Un canvi d'una línia, o s'esborra | S | Si el vídeo es vol |
 
 ### Després
 
@@ -1570,7 +1569,7 @@ Branca `claude/backlog-branch-master-64uh75`.
     crides: primera escriptura, gest del botó d'estat, cap crida si ja està concedit i cap canvi de
     comportament en un navegador sense l'API.
 
-### C18 — L'spec de vídeo de «multiple-sequences» no s'executa des de C5 🔴 Oberta
+### C18 — L'spec de vídeo de «multiple-sequences» no s'executa des de C5 ✅ Resolta
 
 *(Trobada regenerant les captures després de fusionar master, fora de l'abast de N2.)*
 
@@ -1587,6 +1586,8 @@ Branca `claude/backlog-branch-master-64uh75`.
   `SequenceControlsPanel`, no de `SettingCardBoolean`, i ja el posava amb `inputProps`. El que
   falla és el selector de l'spec, `/apply.*(all|tots)/i`, que no casa amb el text català
   «Aplicar a totes». Si el vídeo es vol, l'arreglament és canviar aquesta expressió regular.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`): es vol el vídeo, i el selector és ara
+  `/aplicar a totes|apply to all/i`. L'spec torna a passar sencer.
 
 ### C17 — El switch d'un ajust arriba sense nom al lector de pantalla ✅ Resolta
 
