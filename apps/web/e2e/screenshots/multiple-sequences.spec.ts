@@ -180,8 +180,10 @@ test("multiple-sequences: captures i vídeo per la guia de novetats", async ({
   // =============================================
   // VIEW PAGE - PAS 4: Ajustar una seqüència sola
   // =============================================
-  // Desactivar el switch "Apply to all" / "Aplicar tots" (el component usa clau sense traducció ca)
-  await page.getByRole("checkbox", { name: /apply.*(all|tots)/i }).click();
+  // Desactivar el switch «Aplicar a totes» («Apply to all» en anglès)
+  await page
+    .getByRole("checkbox", { name: /aplicar a totes|apply to all/i })
+    .click();
   await page.waitForTimeout(500);
 
   // Expandir l'acordió de la seqüència 2 (label: "Sequence 2" o "Seqüència 2")

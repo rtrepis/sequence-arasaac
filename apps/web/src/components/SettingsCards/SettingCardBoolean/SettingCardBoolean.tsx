@@ -1,8 +1,8 @@
 import { Switch } from "@mui/material";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { messages } from "./SettingCardBoolean.lang";
 import SettingRow from "../../SettingsLayout/SettingRow";
-import React from "react";
+import React, { useId } from "react";
 
 interface SettingCardProps {
   setting: "numbered" | "corss" | "color";
@@ -15,7 +15,9 @@ const SettingCardBoolean = ({
   state,
   setState,
 }: SettingCardProps): React.ReactElement => {
-  const intl = useIntl();
+  // Hi pot haver dues instàncies del mateix ajust alhora (formulari del
+  // pictograma i estil del document): l'id ha de ser únic a la pàgina
+  const labelId = useId();
 
   const handleSelected = (
     _event: React.ChangeEvent<HTMLInputElement>,
@@ -27,10 +29,13 @@ const SettingCardBoolean = ({
   return (
     <SettingRow
       title={<FormattedMessage {...messages[setting]} />}
+      labelId={labelId}
       control="compact"
     >
+      {/* El nom va a l'`input`, que és qui porta el rol: posat al `Switch`,
+          MUI el deixa al `span` de fora i el lector de pantalla no el llegeix */}
       <Switch
-        aria-label={`${intl.formatMessage(messages[setting])}`}
+        inputProps={{ "aria-labelledby": labelId }}
         checked={state}
         onChange={handleSelected}
       />

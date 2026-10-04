@@ -108,6 +108,20 @@ const messages = defineMessages({
     description:
       "Snackbar després d'«Aplica a tots»: el valor passa a l'estil del document i a tots els pictogrames",
   },
+  changedFitTextPictogram: {
+    id: "features.sequence.style.changed.fitTextPictogram",
+    defaultMessage:
+      "S'ha reduït la lletra d'aquest pictograma perquè el text hi càpiga.",
+    description:
+      "Snackbar després de reduir la lletra d'un sol pictograma des de l'avís «el text no hi cap» (es pot desfer)",
+  },
+  changedFitTextDocument: {
+    id: "features.sequence.style.changed.fitTextDocument",
+    defaultMessage:
+      "S'ha reduït la lletra de tot el document perquè el text hi càpiga.",
+    description:
+      "Snackbar després de reduir la lletra de l'estil del document des de l'avís «el text no hi cap» (es pot desfer)",
+  },
   changedReset: {
     id: "features.sequence.style.changed.reset",
     defaultMessage: "Estil restablert",

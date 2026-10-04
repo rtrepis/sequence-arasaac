@@ -59,17 +59,12 @@ l'entrada.
 
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| C17 | El switch d'un ajust no té nom per al lector de pantalla | Exclusió d'accessibilitat a tots els `SettingCardBoolean`; el patró ja existeix (C12) | S | No |
-| C18 | L'spec de vídeo de `multiple-sequences` és vermell | Surt de retruc amb C17 (el selector que falla és el d'aquell switch). Si no, s'esborra | S | Si el vídeo es vol |
-| B11a | Pujar una imatge congela la interfície (primera meitat) | Saltar l'escaneig d'alfa quan el fitxer és JPEG. Retalla la major part del temps en el cas més comú (fotos del mòbil) | S | No |
 
 ### Després
 
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| B29 | La previsualització del vocabulari personal sobresurt del requadre amb valors grans | Mateixa causa que el bug de la previsualització del panell d'estil, ja resolt amb `ScaleToFit`: la solució és una línia | S | No |
 | B27 | Les fonts de Google no se serveixen des de l'app | Sense connexió a Google Fonts, un document no es veu tal com es va desar (el fonament de l'estil ho promet) | M | No |
-| B28 | Una paraula llarga amb lletra gran es talla dins de la targeta | Surt així al paper i al PDF, i ningú no ho avisa | S–M | Sí: partir la paraula, o reduir-ne la lletra |
 | B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
@@ -79,13 +74,13 @@ l'entrada.
 
 | Id | Què | Per què pot esperar | Esforç |
 |---|---|---|---|
-| B11b | Pujar una imatge: conversió en un worker | Quan B11a s'hagi mesurat en una tauleta, si encara es nota | M |
+| B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
 | B14 | Sostre del canvas del PDF sense mesurar | S'espera tenir casos reals al registre d'errors (`/api/client-errors` continua obert amb els comptes apagats, i l'avís per correu també); no hi ha res a fer fins que n'arribin | — |
 | N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
 | B30 | No hi ha historial de desfer i refer | El desfer que ja existeix cobreix els canvis d'estil, «Aplica a tots» i «Restableix», que són els que esborren més feina d'un cop | L |
-| C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. Va amb C17 | M | No |
+| C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. C17 ja n'ha tret els switches | M | No |
 | C10 | Vuit fitxers de test en quarantena | El runner i l'arnès ja hi són; queda portar-los-hi o esborrar-los, un per un | S cada un | Sí: per cada fitxer, reviure o esborrar |
 
 ### Ajornades (comptes apagats)
@@ -96,6 +91,7 @@ l'entrada.
 | N1 | Les tres notícies de compte | Tornar a encendre els comptes; abans, corregir els números de `NOTICIES` i `INVENTARI` |
 | P1 | Proves de regressió del `.saac` amb compte | Tornar a encendre els comptes, o tenir l'API local amb BD en memòria |
 | C26 | 12 codis d'error de l'API no tenen text | Tornar a encendre els comptes |
+| B29 | La previsualització del vocabulari personal sobresurt del requadre | Tornar a encendre els comptes: el vocabulari personal només hi és amb compte (`ACCOUNTS_ENABLED` a `SettingsDialog`). La solució continua sent una línia (`ScaleToFit`) |
 
 ---
 
@@ -441,6 +437,30 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
     de tabulació i el lector de pantalla el llegeix com a ocupat. El `disabled` només es queda per
     als camps buits, que és validació i no espera.
 
+### B32 — La impressió del navegador no respecta la mida de la lletra ✅ Resolta
+
+*(Trobada resolent B28.)*
+
+- **On**: `PictogramCard.tsx` — les quatre `Typography` del text i del número porten
+  `"@media print": { fontSize: 20 * pictSize }`, sense `font.size` ni `numberFont.size`.
+- **Per què importa**: a la impressió (el botó i Ctrl+P), el text surt sempre a la mida 1, triï el
+  que triï qui prepara el document. Mesurat amb la lletra del document a 0,6: la pàgina de vista
+  pinta 12 px i la impressió 20 px, també a `#print-root`. El PDF sí que la respecta, perquè captura
+  la pantalla. O sigui que el paper, la pantalla i el PDF no coincideixen, i l'avís de B28 diu que
+  el tall també surt imprès, cosa que només és certa a la mida 1.
+- **Proposta**: `20 * font.size * pictSize` al text i `20 * numberFont.size * pictSize` al número.
+  La regla de `@media print` hi és per treure `printPageRatio` (l'escala de pantalla), no la mida
+  de la lletra. Cal confirmar-ho abans, perquè **canvia com surten impresos** els documents d'avui
+  que no fan servir la mida 1. Després, regenerar les captures que en depenguin.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`), confirmada abans amb l'usuari: la impressió treu
+  l'escala de pantalla però conserva la mida triada (`printTextFontSize` i `printNumberFontSize` a
+  `PictogramCard`). Prova a `e2e/text-overflow.spec.ts`: amb la lletra del document a 0,6, el text
+  imprès fa el 60 % del d'abans (sense l'arreglament, el 100 %). Cap captura del repositori no
+  depenia de la mida impresa: les vuit de `saac-fixtures` i les dues de `document-style-panel` que
+  fallen en aquest entorn ja fallaven igual sense el canvi.
+- Un document amb la lletra a mida 1 (la de per defecte) surt imprès
+  exactament igual que abans: només canvien els que en tenen una altra.
+
 ---
 
 ## Gravetat mitjana
@@ -683,6 +703,13 @@ una connexió oberta obliga a gestionar `onversionchange` i connexions tancades.
   que hi cap: dues congelacions seguides just en el moment d'avisar l'usuari. El botó ja porta
   rodet mentre dura (`isLoading`), però el rodet també es queda quiet si el fil principal està
   bloquejat.
+- **B11a ✅ resolta** (branca `ccr-8cf4cc15-vmzl85`). `encodeImage` ja no escaneja l'alfa quan
+  l'origen és JPEG (`isOpaqueFormat`, pel `file.type` o pel prefix del data URL): un JPEG no pot
+  tenir transparència. Com que la primera codificació d'una foto opaca ja surt en JPEG, la segona
+  d'`encodeToFit` i les d'`encodeSmallerVersions` també se l'estalvien. Un PNG o un WebP continuen
+  passant per l'escaneig, perquè poden tenir-ne. **No s'ha mesurat** en una tauleta: jsdom no té
+  canvas i la xifra de ~215 ms de l'escaneig és la de la mesura original. Queda oberta per **B11b**
+  (el worker).
 
 ### B12 — Els documents del núvol no es podien distingir l'un de l'altre ✅ Resolta
 
@@ -1160,7 +1187,7 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   poder enviar per correu. Cal mesurar el pes del paquet abans i després, i mirar les llicències
   (totes les de Google Fonts són OFL o Apache, que ho permeten).
 
-### B28 — Una paraula llarga amb lletra gran es talla dins de la targeta 🔴 Oberta
+### B28 — Una paraula llarga amb lletra gran es talla dins de la targeta ✅ Resolta
 
 *(Mateixa revisió.)*
 
@@ -1173,8 +1200,21 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 - **Proposta**: triar entre partir la paraula (`hyphens: auto` amb l'idioma de la cerca) o reduir-ne
   la lletra fins que hi càpiga. Cal decidir-ho: en CAA partir una paraula no és neutral per a qui
   llegeix, i reduir-la trenca la mida que ha triat qui prepara el document.
+- **Decisió (2026-10-04)**: l'app no tria. La targeta de la graella ho avisa amb una marca i qui
+  prepara el document decideix en cada cas: reduir la lletra de **tot el document** (totes les
+  targetes amb la mateixa mida), reduir-la **només d'aquell pictograma**, o editar el text.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`). `useCardTextOverflow` mesura el text de cada targeta
+  de la graella; `TextOverflowWarning` és la marca (botó de 44 px, al costat de «personalitzat»)
+  amb el tooltip i el quadre d'opcions; `fitDocumentTextThunk` i `fitPictogramTextThunk` fan els
+  canvis amb el desfer de l'estil. Regles a `docs/fonaments/03-model-contingut-estil.md` (§5 i §6).
+  Proves: `fitText.test.ts`, `useCardTextOverflow.test.ts`, `TextOverflowWarning.test.tsx` i
+  `e2e/text-overflow.spec.ts`.
+- **El que no fa**: no parteix paraules soles (`hyphens: auto`) ni guarda un «deixa-ho així»: un
+  tall acceptat continua marcat. Desar-ho voldria un camp nou al `.saac`, i no s'ha demanat.
+- Fent-ho s'ha trobat **B32**: la impressió del navegador no respectava la mida de la lletra.
+  Resolta a la mateixa branca: reduir-la ara també arregla el paper.
 
-### B29 — La previsualització del vocabulari personal sobresurt del requadre 🔴 Oberta
+### B29 — La previsualització del vocabulari personal sobresurt del requadre 🔴 Oberta (ajornada)
 
 *(Mateixa revisió.)*
 
@@ -1565,7 +1605,7 @@ Branca `claude/backlog-branch-master-64uh75`.
     crides: primera escriptura, gest del botó d'estat, cap crida si ja està concedit i cap canvi de
     comportament en un navegador sense l'API.
 
-### C18 — L'spec de vídeo de «multiple-sequences» no s'executa des de C5 🔴 Oberta
+### C18 — L'spec de vídeo de «multiple-sequences» no s'executa des de C5 ✅ Resolta
 
 *(Trobada regenerant les captures després de fusionar master, fora de l'abast de N2.)*
 
@@ -1578,8 +1618,14 @@ Branca `claude/backlog-branch-master-64uh75`.
 - **Proposta**: decidir primer si el vídeo es vol. Si es vol, el switch «Aplica a totes» és avui
   un `SettingRow control="compact"` i el seu nom no és al `checkbox` (vegeu C17); si no, esborrar
   l'spec en comptes de deixar-lo vermell fent de soroll a la suite.
+- **Correcció (en resoldre C17)**: el nom **sí** que és al `checkbox`. Aquell switch és de
+  `SequenceControlsPanel`, no de `SettingCardBoolean`, i ja el posava amb `inputProps`. El que
+  falla és el selector de l'spec, `/apply.*(all|tots)/i`, que no casa amb el text català
+  «Aplicar a totes». Si el vídeo es vol, l'arreglament és canviar aquesta expressió regular.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`): es vol el vídeo, i el selector és ara
+  `/aplicar a totes|apply to all/i`. L'spec torna a passar sencer.
 
-### C17 — El switch d'un ajust arriba sense nom al lector de pantalla 🔴 Oberta
+### C17 — El switch d'un ajust arriba sense nom al lector de pantalla ✅ Resolta
 
 *(Trobada regenerant les captures de N2, fora del seu abast.)*
 
@@ -1593,6 +1639,15 @@ Branca `claude/backlog-branch-master-64uh75`.
 - **Proposta**: seguir el patró de l'estàndard i no repetir l'etiqueta: que `SettingRow` passi el
   seu `labelId` i el `Switch` el reculli amb `inputProps={{ "aria-labelledby": labelId }}`. Així
   el nom surt del títol de la fila, com a la resta de controls.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`), tal com proposava l'entrada. `SettingCardBoolean`
+  genera el `labelId` amb `useId` —hi pot haver el mateix ajust dues vegades a la pàgina— i el
+  `Switch` el rep amb `inputProps`. Comprovat al navegador: el formulari d'«Estil del document»
+  exposa `checkbox "Numeració"` i `checkbox "Color"`. Prova a `SettingCardBoolean.test.tsx`.
+- `number-font-focused.spec.ts` localitzava el switch per l'`aria-label` del `span` i ara ho fa
+  pel nom de l'`input`. De passada s'hi ha corregit la navegació: buscava un tab «Pictogrames»
+  que ja no existeix, i era vermell d'abans.
+- Els altres `Switch` de l'app ja posaven el nom a l'`input` (`SequenceControlsPanel`,
+  `PrintFooterSection`, `AdminConfigPanel`).
 
 ### C19 — L'avís de baix i el botó flotant no compartien la mateixa base en mòbil ✅ Resolta
 

@@ -248,9 +248,11 @@ test("la marca surt a la graella només als pictogrames personalitzats", async (
 
   await customizeFirst(page);
   await expect(marks(page)).toHaveCount(1);
-  await expect(cards(page).first().getByTestId("customized-mark")).toHaveCount(
-    1,
-  );
+  // La marca és germana del botó de la targeta, no filla: l'avís de text
+  // tallat, que va a la mateixa fila, és un botó i no pot anar dins d'un altre
+  await expect(
+    cards(page).first().locator("..").getByTestId("customized-mark"),
+  ).toHaveCount(1);
   await expect(cards(page).first()).toHaveAccessibleName(
     "llevar-se, pictograma 1, personalitzat",
   );
@@ -258,7 +260,10 @@ test("la marca surt a la graella només als pictogrames personalitzats", async (
   // Informativa: fora del focus, i la captura del PDF la salta
   const mark = marks(page).first();
   await expect(mark).toHaveAttribute("aria-hidden", "true");
-  await expect(mark).toHaveAttribute("data-html2canvas-ignore", "true");
+  await expect(mark.locator("..")).toHaveAttribute(
+    "data-html2canvas-ignore",
+    "true",
+  );
 });
 
 test("la marca no surt a la vista, la pantalla completa ni el PDF", async ({

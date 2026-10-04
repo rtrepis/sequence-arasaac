@@ -73,3 +73,11 @@ export const printColors = {
  * Per això el token surt de `printColors`: full i paper són la mateixa cosa.
  */
 export const sheetSurface = printColors.background;
+
+/**
+ * Avís damunt del full: la marca «el text no hi cap» de la graella d'edició.
+ * És el `warning.dark` del tema clar de MUI, fix en tots dos temes perquè és
+ * damunt del full i el full no s'adapta al tema: 3,8:1 amb el blanc del full i
+ * amb el glif blanc que porta a dins.
+ */
+export const sheetWarning = "#e65100";

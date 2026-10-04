@@ -688,5 +688,15 @@
   "news.edit-text-on-card.step2.alt": "The same sequence with the new text saved under the second pictogram",
   "news.edit-text-on-card.step3.description": "<p>You can also get there other ways:</p><ul><li>Right-click the pictogram and choose “Edit text”.</li><li>With the keyboard: move to the card and press <b>F2</b>.</li></ul>",
   "news.edit-text-on-card.step3.alt": "A pictogram's right-click menu, with the “Edit text” option highlighted",
-  "news.edit-text-on-card.closing": "Clicking the pictogram's image still opens the edit window, with all the usual settings. And if the card shows no text, you change the word from there, with “Edit”."
+  "news.edit-text-on-card.closing": "Clicking the pictogram's image still opens the edit window, with all the usual settings. And if the card shows no text, you change the word from there, with “Edit”.",
+  "components.pictEdit.textOverflow.mark": "Pictogram {number}: the text doesn't fit",
+  "components.pictEdit.textOverflow.tooltip": "The text doesn't fit and gets cut off. Click to see what you can do.",
+  "components.pictEdit.textOverflow.title": "The text doesn't fit",
+  "components.pictEdit.textOverflow.explanation": "A word is too long for the width of the card and part of it is cut off. It will also be cut off when printed and in the PDF.",
+  "components.pictEdit.textOverflow.tooLong": "It doesn't fit even with the smallest font size: the text needs to be shorter.",
+  "components.pictEdit.textOverflow.fitDocument": "Reduce the font size of the whole document to {size}",
+  "components.pictEdit.textOverflow.fitPictogram": "Reduce the font size of this pictogram only to {size}",
+  "components.pictEdit.textOverflow.editText": "Edit the text",
+  "features.sequence.style.changed.fitTextPictogram": "The font size of this pictogram has been reduced so the text fits.",
+  "features.sequence.style.changed.fitTextDocument": "The font size of the whole document has been reduced so the text fits."
 }

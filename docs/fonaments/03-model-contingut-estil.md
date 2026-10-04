@@ -150,13 +150,15 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 | **Restableix** un pictograma | Formulari del pictograma (capçalera de «Estil del pictograma» o «Més accions»); menú contextual de la graella («Restableix l'estil») | Esborra el seu `style`. La categoria, que és contingut, es queda. Dins del formulari és una edició més i es desa en tancar-lo; des del menú contextual s'aplica al document al moment. |
 | **Aplica el meu estil per defecte** | Panell «Estil del document»; columna de la vista | Com canviar l'estil del document, amb l'estil per defecte de l'usuari. |
 | **Carrega un estil des d'un fitxer** | Panell «Estil del document» | Com canviar l'estil del document, amb l'estil del fitxer. Pregunta si es conserven els retocs; la resposta per defecte és que sí. |
+| **Redueix la lletra de tot el document** | Avís «el text no hi cap» de la graella (§6) | Com canviar l'estil del document, només amb la mida de la lletra: totes les targetes continuen amb la mateixa mida. Els retocs es conserven. |
+| **Redueix la lletra d'aquest pictograma** | Avís «el text no hi cap» de la graella (§6) | Com canviar un pictograma: un retoc de la mida de la lletra, que l'encén com a personalitzat. |
 
 - **Estil per seqüència**: en aquesta versió, una seqüència **només** té estil de vista (mida,
   espai, alineació), que es configura per seqüència a la columna de la vista. No hi ha cap acció per
   canviar la lletra o les vores de tots els pictogrames d'una seqüència: és una idea oberta, **B31**
   a `docs/BACKLOG-ux.md`.
-- **SEMPRE** «Aplica a tots», «Restableix», «Aplica el meu estil per defecte» i «Carrega un estil»
-  es poden desfer amb el **desfer que ja existeix**: un snackbar amb «Desfés» que torna el document
+- **SEMPRE** «Aplica a tots», «Restableix», «Aplica el meu estil per defecte», «Carrega un estil» i
+  les dues reduccions de lletra de l'avís «el text no hi cap» es poden desfer amb el **desfer que ja existeix**: un snackbar amb «Desfés» que torna el document
   exactament a com era, mentre no s'hagi tocat des d'aleshores. Dins del formulari del pictograma,
   el «Desfés» de «Restableix» torna l'estil d'abans **al formulari**, sense tocar les altres
   edicions que s'hi hagin fet.
@@ -205,6 +207,34 @@ una targeta no ha canviat amb «Aplica a tots».
 
 **MAI** a la vista, la pantalla completa, la impressió ni el PDF: és un estat de l'edició, no del
 document, i l'usuari de CAA no l'ha de veure.
+
+### L'avís «el text no hi cap» (B28)
+
+Una paraula que no es pot partir es fa més ampla que la targeta, i la targeta en talla un tros.
+L'app no decideix què s'hi fa: partir una paraula pot confondre qui llegeix, i reduir-la trenca la
+mida que s'havia triat. Ho avisa, i qui prepara el document tria.
+
+- **On**: a la graella d'edició, a la **mateixa fila** que la marca «personalitzat», a la seva
+  esquerra. **MAI** l'una damunt de l'altra. Com aquella, **MAI** a la vista, la pantalla completa,
+  la impressió ni el PDF.
+- **Com és**: la mateixa rodoneta, en taronja d'avís (`sheetWarning` de `palette.ts`, fix en tots
+  dos temes perquè és damunt del full) i amb un signe d'exclamació: forma i color.
+- **No és informativa**: és un **botó**, amb diana de 44 × 44 px. Per això la fila de marques és
+  **germana** del botó de la targeta i no filla: **MAI** un botó dins d'un altre. Amb el ratolí a
+  sobre, un tooltip diu què passa; amb un clic o un toc (en tauleta no hi ha hover), obre les
+  opcions.
+- **Les opcions**, en aquest ordre i només les que es poden fer:
+  1. **Redueix la lletra de tot el document a _x_**: no s'ofereix si el pictograma té mida pròpia,
+     perquè canviar la del document no el tocaria.
+  2. **Redueix la lletra només d'aquest pictograma a _x_**.
+  3. **Edita el text**: el camp damunt de la targeta, el mateix del clic al text.
+- _x_ és la mida més gran, en passos de 0,1, amb què el text hi cap. Si no hi cap ni amb la mínima
+  (0,5), només queda editar el text, i el quadre ho diu.
+- **Com es detecta**: el text de la targeta es fa més ample que la seva caixa. La lletra i la caixa
+  s'escalen igual amb la mida de la targeta, i la proporció que es mesura a la graella és la del
+  paper i la del PDF.
+- **SEMPRE** la impressió respecta la mida de la lletra triada: només en treu l'escala de pantalla
+  (B32 a `docs/BACKLOG-ux.md`).
 
 - **SEMPRE** objectius tàctils de 44 × 44 px com a mínim al mòbil (la marca no n'és cap).
 

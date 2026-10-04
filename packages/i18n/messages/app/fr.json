@@ -688,5 +688,15 @@
   "news.edit-text-on-card.step2.alt": "La même séquence avec le nouveau texte enregistré sous le deuxième pictogramme",
   "news.edit-text-on-card.step3.description": "<p>Vous pouvez aussi y accéder autrement :</p><ul><li>Avec le clic droit sur le pictogramme, option « Modifier le texte ».</li><li>Au clavier : placez-vous sur la carte et appuyez sur <b>F2</b>.</li></ul>",
   "news.edit-text-on-card.step3.alt": "Le menu du clic droit d'un pictogramme, avec l'option « Modifier le texte » en surbrillance",
-  "news.edit-text-on-card.closing": "Cliquer sur l'image du pictogramme ouvre toujours la fenêtre de modification, avec tous les réglages habituels. Et si la carte n'affiche aucun texte, le mot se modifie depuis là, avec « Modifier »."
+  "news.edit-text-on-card.closing": "Cliquer sur l'image du pictogramme ouvre toujours la fenêtre de modification, avec tous les réglages habituels. Et si la carte n'affiche aucun texte, le mot se modifie depuis là, avec « Modifier ».",
+  "components.pictEdit.textOverflow.mark": "Pictogramme {number} : le texte ne tient pas",
+  "components.pictEdit.textOverflow.tooltip": "Le texte ne tient pas et il est coupé. Cliquez pour voir ce que vous pouvez faire.",
+  "components.pictEdit.textOverflow.title": "Le texte ne tient pas",
+  "components.pictEdit.textOverflow.explanation": "Un mot est trop long pour la largeur de la carte et une partie est coupée. Il sera aussi coupé à l'impression et dans le PDF.",
+  "components.pictEdit.textOverflow.tooLong": "Même avec la plus petite taille de police, il ne tient pas : il faut raccourcir le texte.",
+  "components.pictEdit.textOverflow.fitDocument": "Réduire la police de tout le document à {size}",
+  "components.pictEdit.textOverflow.fitPictogram": "Réduire la police de ce pictogramme seulement à {size}",
+  "components.pictEdit.textOverflow.editText": "Modifier le texte",
+  "features.sequence.style.changed.fitTextPictogram": "La police de ce pictogramme a été réduite pour que le texte tienne.",
+  "features.sequence.style.changed.fitTextDocument": "La police de tout le document a été réduite pour que le texte tienne."
 }

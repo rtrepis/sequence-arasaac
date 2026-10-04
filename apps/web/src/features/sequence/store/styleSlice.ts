@@ -24,12 +24,20 @@ import {
 } from "@features/sequence/style/styleSelectors";
 import { pictStyleOf, stylesEqual } from "@features/sequence/style/styleModel";
 import { resetPictogramStyle } from "@features/sequence/style/pictogramStyle";
+import { mergeDeep } from "@features/sequence/saac/cascade";
 
 /**
  * D'on ve el canvi d'estil que es pot desfer: l'estil per defecte, un fitxer,
- * «Aplica a tots» o «Restableix» d'un pictograma.
+ * «Aplica a tots», «Restableix» d'un pictograma, o reduir la lletra perquè el
+ * text hi càpiga (d'un pictograma o de tot el document, B28).
  */
-export type StyleChangeSource = "userDefault" | "file" | "applyAll" | "reset";
+export type StyleChangeSource =
+  | "userDefault"
+  | "file"
+  | "applyAll"
+  | "reset"
+  | "fitTextPictogram"
+  | "fitTextDocument";
 
 /**
  * Bàner d'estat del document que s'acaba d'obrir: és estat, no confirmació, i
@@ -244,6 +252,58 @@ export const resetPictogramStyleThunk =
       undoableStyleChangeThunk(
         () => updatePictSequenceActionCreator(reset),
         "reset",
+      ),
+    );
+  };
+
+/**
+ * Redueix la lletra d'un sol pictograma perquè el text hi càpiga (B28). És un
+ * retoc del pictograma, com qualsevol altre: l'encén com a personalitzat i
+ * «Restableix» el treu. Es pot desfer.
+ */
+export const fitPictogramTextThunk =
+  (indexSequence: number, size: number): AppThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    const pictogram = state.document.content[state.document.activeSAAC]?.find(
+      (pict) => pict.indexSequence === indexSequence,
+    );
+    if (!pictogram) return;
+    const documentFont = pictStyleOf(selectDocumentStyle(state)).pictSequence
+      .font;
+    // La lletra resolta, perquè el retoc no perdi la família ni el color
+    const font = mergeDeep(documentFont, pictogram.settings.font);
+    dispatch(
+      undoableStyleChangeThunk(
+        () =>
+          updatePictSequenceActionCreator({
+            ...pictogram,
+            settings: { ...pictogram.settings, font: { ...font, size } },
+          }),
+        "fitTextPictogram",
+      ),
+    );
+  };
+
+/**
+ * Redueix la lletra de l'estil del document perquè el text hi càpiga i totes
+ * les targetes continuïn amb la mateixa mida (B28). És un canvi de l'estil del
+ * document: els retocs dels pictogrames es conserven. Es pot desfer.
+ */
+export const fitDocumentTextThunk =
+  (size: number): AppThunk =>
+  (dispatch, getState) => {
+    const style = selectDocumentStyle(getState());
+    dispatch(
+      changeDocumentStyleThunk(
+        {
+          ...style,
+          pictSequence: {
+            ...style.pictSequence,
+            font: { ...style.pictSequence.font, size },
+          },
+        },
+        "fitTextDocument",
       ),
     );
   };
