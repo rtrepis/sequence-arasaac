@@ -64,7 +64,6 @@ l'entrada.
 
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| B29 | La previsualització del vocabulari personal sobresurt del requadre amb valors grans | Mateixa causa que el bug de la previsualització del panell d'estil, ja resolt amb `ScaleToFit`: la solució és una línia | S | No |
 | B27 | Les fonts de Google no se serveixen des de l'app | Sense connexió a Google Fonts, un document no es veu tal com es va desar (el fonament de l'estil ho promet) | M | No |
 | B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
@@ -92,6 +91,7 @@ l'entrada.
 | N1 | Les tres notícies de compte | Tornar a encendre els comptes; abans, corregir els números de `NOTICIES` i `INVENTARI` |
 | P1 | Proves de regressió del `.saac` amb compte | Tornar a encendre els comptes, o tenir l'API local amb BD en memòria |
 | C26 | 12 codis d'error de l'API no tenen text | Tornar a encendre els comptes |
+| B29 | La previsualització del vocabulari personal sobresurt del requadre | Tornar a encendre els comptes: el vocabulari personal només hi és amb compte (`ACCOUNTS_ENABLED` a `SettingsDialog`). La solució continua sent una línia (`ScaleToFit`) |
 
 ---
 
@@ -1214,7 +1214,7 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 - Fent-ho s'ha trobat **B32**: la impressió del navegador no respectava la mida de la lletra.
   Resolta a la mateixa branca: reduir-la ara també arregla el paper.
 
-### B29 — La previsualització del vocabulari personal sobresurt del requadre 🔴 Oberta
+### B29 — La previsualització del vocabulari personal sobresurt del requadre 🔴 Oberta (ajornada)
 
 *(Mateixa revisió.)*
 
