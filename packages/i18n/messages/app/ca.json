@@ -1,2761 +1,2616 @@
 {
   "changelog.category.correccio": {
-    "defaultMessage": "Correcció"
+    "message": "Correcció"
   },
   "changelog.category.millora": {
-    "defaultMessage": "Millora"
+    "message": "Millora"
   },
   "changelog.category.nova": {
-    "defaultMessage": "Nova"
+    "message": "Nova"
   },
   "changelog.page.title": {
-    "defaultMessage": "Novetats"
+    "message": "Novetats"
   },
   "changelog.readMore": {
-    "defaultMessage": "Llegir més"
+    "message": "Llegir més"
   },
   "component.settingCardBorder.borderIn.title": {
-    "defaultMessage": "Marc interior",
-    "description": "setting title "
+    "message": "Marc interior",
+    "description": "setting title"
   },
   "component.settingCardBorder.borderOut.title": {
-    "defaultMessage": "Marc exterior",
+    "message": "Marc exterior",
     "description": "type title"
   },
   "component.settingCardFontGroup.color.title": {
-    "defaultMessage": "Color",
+    "message": "Color",
     "description": "type title"
   },
   "component.settingCardFontGroup.font.title": {
-    "defaultMessage": "Tipografia",
+    "message": "Tipografia",
     "description": "type title"
   },
   "component.settingCardFontGroup.numberFont.title": {
-    "defaultMessage": "Font dels números"
+    "message": "Font dels números"
   },
   "components.appNavigationDrawer.download": {
-    "defaultMessage": "Descarrega"
+    "message": "Descarrega"
   },
   "components.appNavigationDrawer.load": {
-    "defaultMessage": "Carrega"
+    "message": "Carrega"
   },
   "components.appNavigationDrawer.news": {
-    "defaultMessage": "Novetats"
+    "message": "Novetats"
   },
   "components.appNavigationDrawer.settings": {
-    "defaultMessage": "Configuració"
+    "message": "Configuració"
   },
   "components.appNavigationDrawer.admin": {
-    "defaultMessage": "Administració"
+    "message": "Administració"
   },
   "components.appNavigationDrawer.logoutConfirmTitle": {
-    "defaultMessage": "Tanques la sessió?",
+    "message": "Tanques la sessió?",
     "description": "Títol de la confirmació de tancar sessió amb feina sense còpia"
   },
   "components.appNavigationDrawer.logoutConfirmBody": {
-    "defaultMessage": "En sortir també es tanca el document, i el que hi ha a pantalla no és desat al núvol: es perd.",
+    "message": "En sortir també es tanca el document, i el que hi ha a pantalla no és desat al núvol: es perd.",
     "description": "Cos de la confirmació de tancar sessió amb feina sense còpia"
   },
   "components.appNavigationDrawer.logoutSaveFirst": {
-    "defaultMessage": "Desa al núvol abans",
+    "message": "Desa al núvol abans",
     "description": "Botó per desar la feina al núvol abans de tancar la sessió"
   },
   "components.appNavigationDrawer.logoutDocumentClosed": {
-    "defaultMessage": "Sessió tancada. El document també s'ha tancat: no es queda en aquest dispositiu.",
+    "message": "Sessió tancada. El document també s'ha tancat: no es queda en aquest dispositiu.",
     "description": "Confirmació de tancar sessió quan hi havia un document obert"
   },
   "components.appNavigationDrawer.welcome": {
-    "defaultMessage": "Inici"
+    "message": "Inici"
   },
   "components.barNavigation.edit.title": {
-    "defaultMessage": "Editar",
+    "message": "Editar",
     "description": "Title Page"
   },
   "components.barNavigation.mainNavigation": {
-    "defaultMessage": "Navegació principal"
+    "message": "Navegació principal"
   },
   "components.barNavigation.skipToContent": {
-    "defaultMessage": "Salta al contingut principal"
+    "message": "Salta al contingut principal"
   },
   "components.barNavigation.title": {
-    "defaultMessage": "SequenciAAC",
+    "message": "SequenciAAC",
     "description": "App title translate Sequence"
   },
   "components.barNavigation.view.title": {
-    "defaultMessage": "Vista",
+    "message": "Vista",
     "description": "Title Page"
   },
   "components.buttonWithModalDownload.filename.label": {
-    "defaultMessage": "Nom del fitxer",
+    "message": "Nom del fitxer",
     "description": "Type save checkbox"
   },
   "components.buttonWithModalDownload.save.title": {
-    "defaultMessage": "Desa",
+    "message": "Desa",
     "description": "Modal tittle"
   },
   "components.buttonWithModalDownload.saveHelper.label": {
-    "defaultMessage": "Desa totes les seqüències del document amb el seu estil. Quan l'obris, es veurà tal com ara.",
+    "message": "Desa totes les seqüències del document amb el seu estil. Quan l'obris, es veurà tal com ara.",
     "description": "Helper save modal"
   },
   "components.copyRight": {
-    "defaultMessage": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA).",
+    "message": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA).",
     "description": "License to use the pictograms"
   },
   "components.copyRightDial.auth.label": {
-    "defaultMessage": "Disseny i drets reservats: Ramon Trepat i AraSaac. seqsaac@gmail.com",
+    "message": "Disseny i drets reservats: Ramon Trepat i AraSaac. seqsaac@gmail.com",
     "description": "Page auth"
   },
   "components.copyRightDial.license.label": {
-    "defaultMessage": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA).",
-    "description": "license "
+    "message": "Fet amb: SequenciAAC - Autor dels pictogrames: Sergio Palao. Origen: ARASAAC (http://www.arasaac.org). Llicència: CC (BY-NC-SA).",
+    "description": "license"
   },
   "components.defaultSettings.close": {
-    "defaultMessage": "tancar",
-    "description": "close Settings Default "
+    "message": "tancar",
+    "description": "close Settings Default"
   },
   "components.defaultSettings.pictGuide": {
-    "defaultMessage": "Previsualització",
+    "message": "Previsualització",
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.panelHint": {
-    "defaultMessage": "S'aplica a totes les seqüències d'aquest document.",
+    "message": "S'aplica a totes les seqüències d'aquest document.",
     "description": "Guia del tab de pictogrames del modal de configuracions"
   },
   "components.defaultSettings.sectionPictogram": {
-    "defaultMessage": "Pictograma",
+    "message": "Pictograma",
     "description": "Títol de la secció de numeració i color al panell de pictogrames"
   },
   "components.defaultSettings.sectionText": {
-    "defaultMessage": "Text i numeració",
+    "message": "Text i numeració",
     "description": "Títol de la secció de posició de text i tipografies al panell de pictogrames"
   },
   "components.defaultSettings.sectionAppearance": {
-    "defaultMessage": "Aparença",
+    "message": "Aparença",
     "description": "Títol de la secció de pell i cabell al panell de pictogrames"
   },
   "components.defaultSettings.settings.loggedIn": {
-    "defaultMessage": "Configuracions · sessió iniciada com a {email}",
+    "message": "Configuracions · sessió iniciada com a {email}",
     "description": "Nom del botó de configuracions quan hi ha sessió: també diu amb quin compte"
   },
   "components.defaultSettings.settings.title": {
-    "defaultMessage": "Configuracions",
-    "description": "Settings Default "
+    "message": "Configuracions",
+    "description": "Settings Default"
   },
   "components.defaultSettings.tab.pictograms": {
-    "defaultMessage": "Estil del document",
+    "message": "Estil del document",
     "description": "Tab del panell «Estil del document»: l'estil que s'aplica a totes les seqüències del document obert"
   },
   "components.defaultSettings.tab.user": {
-    "defaultMessage": "Usuari",
+    "message": "Usuari",
     "description": "Tab d'ajustos d'usuari (idioma, compte...)"
   },
   "components.defaultSettings.tab.view": {
-    "defaultMessage": "Vista",
+    "message": "Vista",
     "description": "Tab de configuració per defecte de la visualització de seqüències"
   },
   "components.defaultSettings.tab.vocabulary": {
-    "defaultMessage": "Vocabulari personal",
+    "message": "Vocabulari personal",
     "description": "Tab de vocabulari personal (paraules personalitzades)"
   },
   "components.viewSettingsPanel.panelDescription": {
-    "defaultMessage": "Configura els valors de visualització per defecte en obrir la pàgina de vista.",
+    "message": "Configura els valors de visualització per defecte en obrir la pàgina de vista.",
     "description": "Text explicatiu del panell de configuració de la vista"
   },
   "components.viewSettingsPanel.sectionPageFormat": {
-    "defaultMessage": "Format de pàgina",
+    "message": "Format de pàgina",
     "description": "Títol de la secció de format de pàgina al panell de vista"
   },
   "components.viewSettingsPanel.sectionPictograms": {
-    "defaultMessage": "Pictogrames",
+    "message": "Pictogrames",
     "description": "Títol de la secció de mida i alineació de pictogrames al panell de vista"
   },
   "components.viewSettingsPanel.apply": {
-    "defaultMessage": "Aplicar a la vista actual",
+    "message": "Aplicar a la vista actual",
     "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
   },
   "components.viewSettingsPanel.applyHelper": {
-    "defaultMessage": "Aplica els valors a la sessió de vista activa sense tancar la configuració."
+    "message": "Aplica els valors a la sessió de vista activa sense tancar la configuració."
   },
   "components.defaultSettings.userPanel.interfaceLanguage": {
-    "defaultMessage": "Interfície",
+    "message": "Interfície",
     "description": "Etiqueta de la card de selecció d'idioma de la interfície"
   },
   "components.defaultSettings.userPanel.sectionAppearance": {
-    "defaultMessage": "Aparença",
+    "message": "Aparença",
     "description": "Títol de la secció d'aparença al panel d'usuari"
   },
   "components.defaultSettings.userPanel.saveSuccess": {
-    "defaultMessage": "Configuració d'usuari desada",
+    "message": "Configuració d'usuari desada",
     "description": "Snackbar quan els settings d'usuari s'han desat correctament"
   },
   "components.defaultSettings.userPanel.sectionTitle": {
-    "defaultMessage": "Idioma",
+    "message": "Idioma",
     "description": "Títol de la secció d'idiomes al panel d'usuari"
   },
   "components.defaultSettings.userPanel.panelHint": {
-    "defaultMessage": "Ajustos del teu compte: idiomes, tema i imatges. S'apliquen a tot arreu."
+    "message": "Ajustos del teu compte: idiomes, tema i imatges. S'apliquen a tot arreu."
   },
   "components.defaultSettings.vocabularyPanel.sectionWord": {
-    "defaultMessage": "Paraula",
+    "message": "Paraula",
     "description": "Títol de la secció de paraula i llista del panell de vocabulari"
   },
   "components.defaultSettings.vocabularyPanel.sectionPictogram": {
-    "defaultMessage": "Pictograma",
+    "message": "Pictograma",
     "description": "Títol de la secció de cerca i aparença del pictograma al panell de vocabulari"
   },
   "components.defaultSettings.vocabularyPanel.wordInputLabel": {
-    "defaultMessage": "Paraula"
+    "message": "Paraula"
   },
   "components.defaultSettings.vocabularyPanel.wordInputPlaceholder": {
-    "defaultMessage": "p.ex. Òscar, Marta..."
+    "message": "p.ex. Òscar, Marta..."
   },
   "components.defaultSettings.vocabularyPanel.addButton": {
-    "defaultMessage": "Afegir"
+    "message": "Afegir"
   },
   "components.defaultSettings.vocabularyPanel.previewLabel": {
-    "defaultMessage": "Previsualització"
+    "message": "Previsualització"
   },
   "components.defaultSettings.vocabularyPanel.duplicateWarning": {
-    "defaultMessage": "Aquesta paraula ja existeix i s'actualitzarà."
+    "message": "Aquesta paraula ja existeix i s'actualitzarà."
   },
   "components.defaultSettings.vocabularyPanel.updateButton": {
-    "defaultMessage": "Actualitzar"
+    "message": "Actualitzar"
   },
   "components.defaultSettings.vocabularyPanel.loginRequired": {
-    "defaultMessage": "Cal iniciar sessió per usar el vocabulari personal."
+    "message": "Cal iniciar sessió per usar el vocabulari personal."
   },
   "components.defaultSettings.vocabularyPanel.freeLimitReached": {
-    "defaultMessage": "Has arribat al límit de {max} paraules del pla gratuït."
+    "message": "Has arribat al límit de {max} paraules del pla gratuït."
   },
   "components.defaultSettings.vocabularyPanel.cancelButton": {
-    "defaultMessage": "Cancel·lar"
+    "message": "Cancel·lar"
   },
   "components.defaultSettings.vocabularyPanel.formHintNew": {
-    "defaultMessage": "Escriu la paraula, tria el seu pictograma i prem Afegir per desar-la al teu vocabulari."
+    "message": "Escriu la paraula, tria el seu pictograma i prem Afegir per desar-la al teu vocabulari."
   },
   "components.defaultSettings.vocabularyPanel.formHintEditing": {
-    "defaultMessage": "Estàs editant «{word}». Canvia el que calgui i prem Actualitzar."
+    "message": "Estàs editant «{word}». Canvia el que calgui i prem Actualitzar."
   },
   "components.defaultSettings.vocabularyPanel.nameCollision": {
-    "defaultMessage": "«{word}» ja existeix. Tria una altra paraula o edita-la des de la llista."
+    "message": "«{word}» ja existeix. Tria una altra paraula o edita-la des de la llista."
   },
   "components.defaultSettings.vocabularyPanel.wordAdded": {
-    "defaultMessage": "«{word}» afegida al teu vocabulari."
+    "message": "«{word}» afegida al teu vocabulari."
   },
   "components.defaultSettings.vocabularyPanel.wordUpdated": {
-    "defaultMessage": "«{word}» actualitzada."
+    "message": "«{word}» actualitzada."
   },
   "components.defaultSettings.vocabularyPanel.wordRemoved": {
-    "defaultMessage": "«{word}» eliminada del teu vocabulari."
+    "message": "«{word}» eliminada del teu vocabulari."
   },
   "features.sequence.draft.saveError": {
-    "defaultMessage": "No s'ha pogut desar el document en aquest navegador. Descarrega el fitxer per no perdre la feina.",
+    "message": "No s'ha pogut desar el document en aquest navegador. Descarrega el fitxer per no perdre la feina.",
     "description": "Avís quan el navegador no pot desar l'esborrany automàtic del document"
   },
   "features.wordProfile.list.title": {
-    "defaultMessage": "Les meves paraules ({count})"
+    "message": "Les meves paraules ({count})"
   },
   "features.wordProfile.list.empty": {
-    "defaultMessage": "Encara no hi ha paraules. Fes servir el formulari per afegir-ne la primera."
+    "message": "Encara no hi ha paraules. Fes servir el formulari per afegir-ne la primera."
   },
   "features.wordProfile.list.editLabel": {
-    "defaultMessage": "Editar {word}"
+    "message": "Editar {word}"
   },
   "features.wordProfile.list.deleteLabel": {
-    "defaultMessage": "Eliminar {word}"
+    "message": "Eliminar {word}"
   },
   "features.wordProfile.list.editingBadge": {
-    "defaultMessage": "Editant"
+    "message": "Editant"
   },
   "components.headerControls.loginButton": {
-    "defaultMessage": "Inicia sessió"
+    "message": "Inicia sessió"
   },
   "components.headerControls.registerButton": {
-    "defaultMessage": "Registra't"
+    "message": "Registra't"
   },
   "components.headerControls.languageSelector": {
-    "defaultMessage": "Selector d'idioma"
+    "message": "Selector d'idioma"
   },
   "components.headerControls.openMenu": {
-    "defaultMessage": "Obrir menú de compte i idioma"
+    "message": "Obrir menú de compte i idioma"
   },
   "components.logoMenu.download": {
-    "defaultMessage": "Descarregar"
+    "message": "Descarregar"
   },
   "components.logoMenu.editView": {
-    "defaultMessage": "Editar"
+    "message": "Editar"
   },
   "components.logoMenu.load": {
-    "defaultMessage": "Carregar"
+    "message": "Carregar"
   },
   "components.logoMenu.menuAriaLabel": {
-    "defaultMessage": "Menú principal"
+    "message": "Menú principal"
   },
   "components.logoMenu.previewView": {
-    "defaultMessage": "Previsualitzar"
+    "message": "Previsualitzar"
   },
   "components.logoMenu.settings": {
-    "defaultMessage": "Configuració"
+    "message": "Configuració"
   },
   "components.magicSearch.button.": {
-    "defaultMessage": "A cercar",
+    "message": "A cercar",
     "description": "label button field"
   },
   "components.magicSearch.helperText.": {
-    "defaultMessage": "Escriviu les paraules en la seqüència entre comes i premeu Retorn o feu clic a la lupa quan hàgiu acabat. Exemple: noi, posar, cinturó de seguretat.",
+    "message": "Escriviu les paraules en la seqüència entre comes i premeu Retorn o feu clic a la lupa quan hàgiu acabat. Exemple: noi, posar, cinturó de seguretat.",
     "description": "Helper text field"
   },
   "components.magicSearch.label": {
-    "defaultMessage": "Cerca màgica",
+    "message": "Cerca màgica",
     "description": "label text field"
   },
   "components.magicSearch.sample.": {
-    "defaultMessage": "Exemple: Nen, posar, el cinturó de seguretat.",
+    "message": "Exemple: Nen, posar, el cinturó de seguretat.",
     "description": "Helper text field"
   },
   "components.newsNavBar.mainNavigation": {
-    "defaultMessage": "Navegació principal"
+    "message": "Navegació principal"
   },
   "components.newsNavBar.news": {
-    "defaultMessage": "Novetats"
+    "message": "Novetats"
   },
   "components.newsNavBar.openMenu": {
-    "defaultMessage": "Obrir menú de navegació"
+    "message": "Obrir menú de navegació"
   },
   "components.newsNavBar.skipToContent": {
-    "defaultMessage": "Salta al contingut principal"
+    "message": "Salta al contingut principal"
   },
   "components.pictEdit.close": {
-    "defaultMessage": "Tancar",
+    "message": "Tancar",
     "description": "Close modal, edit pictogram"
   },
   "components.pictEdit.delete": {
-    "defaultMessage": "Eliminar",
+    "message": "Eliminar",
     "description": "Delete modal, edit pictogram"
   },
   "components.pictEdit.modal.label": {
-    "defaultMessage": "Editar Pictograma",
+    "message": "Editar Pictograma",
     "description": "Title modal"
   },
   "components.pictEdit.moreActions": {
-    "defaultMessage": "Més accions",
+    "message": "Més accions",
     "description": "Obre el menú d'accions del pictograma des del diàleg d'edició"
   },
   "components.pictEdit.reset": {
-    "defaultMessage": "Restableix",
+    "message": "Restableix",
     "description": "Botó que esborra els retocs d'aquest pictograma: torna a l'estil del document (es pot desfer)"
   },
   "components.pictogramAmount": {
-    "defaultMessage": "Pictogrames:",
+    "message": "Pictogrames:",
     "description": "Amount Pictogram"
   },
   "components.pictogramAmount.Subtract.label": {
-    "defaultMessage": "Treure pictograma",
+    "message": "Treure pictograma",
     "description": "Subtract a pictogram from the amounts"
   },
   "components.pictogramAmount.add.label": {
-    "defaultMessage": "Afegir pictograma buit",
+    "message": "Afegir pictograma buit",
     "description": "Add a pictogram to the amounts"
   },
   "components.pictogramAmount.helperText": {
-    "defaultMessage": "Inseriu o extreu un pictograma al final de la seqüència. Trobareu més funcions amb el botó dret del ratolí o premeu llargament als mòbils.",
+    "message": "Inseriu o extreu un pictograma al final de la seqüència. Trobareu més funcions amb el botó dret del ratolí o premeu llargament als mòbils.",
     "description": "Helper text amount pictograms"
   },
   "components.pictogramAmount.info": {
-    "defaultMessage": "Veure més informació",
+    "message": "Veure més informació",
     "description": "Toggle view or not more info"
   },
   "components.pictogramCard.pictogram": {
-    "defaultMessage": "Imatge pictograma",
+    "message": "Imatge pictograma",
     "description": "Pictogram image"
   },
   "components.pictogramSearch.alert": {
-    "defaultMessage": "No s'ha trobat cap pictograma, amb aquesta paraula - Intenta-ho amb una altra paraula!",
+    "message": "No s'ha trobat cap pictograma, amb aquesta paraula - Intenta-ho amb una altra paraula!",
     "description": "Search pictogram not founded results"
   },
   "components.pictogramSearch.empty": {
-    "defaultMessage": "Buit",
+    "message": "Buit",
     "description": "Empty pictogram"
   },
   "components.pictogramSearch.helperText": {
-    "defaultMessage": "Cercador de Pictogrames",
+    "message": "Cercador de Pictogrames",
     "description": "helper text"
   },
   "components.pictogramSearch.label": {
-    "defaultMessage": "Cercar",
+    "message": "Cercar",
     "description": "search pictograms"
   },
   "components.pictogramSearch.minus": {
-    "defaultMessage": "Treure pictograma",
+    "message": "Treure pictograma",
     "description": "Minus pictograms"
   },
   "components.pictogramSearch.pictogram": {
-    "defaultMessage": "Pictograma",
+    "message": "Pictograma",
     "description": "Pictogram"
   },
   "components.pictogramSearch.plus": {
-    "defaultMessage": "Inserir pictograma",
+    "message": "Inserir pictograma",
     "description": "Plus pictograms"
   },
   "components.uploadImageButton.upload": {
-    "defaultMessage": "Puja una imatge teva",
+    "message": "Puja una imatge teva",
     "description": "Upload own image button"
   },
   "components.uploadImageButton.replace": {
-    "defaultMessage": "Canvia la imatge pujada",
+    "message": "Canvia la imatge pujada",
     "description": "Upload button when an image is already uploaded"
   },
   "components.uploadImageButton.remove": {
-    "defaultMessage": "Treu la imatge pujada",
+    "message": "Treu la imatge pujada",
     "description": "Remove uploaded image button"
   },
   "components.uploadImageButton.loading": {
-    "defaultMessage": "S'està processant la imatge…",
+    "message": "S'està processant la imatge…",
     "description": "Image is being converted and compressed"
   },
   "components.uploadImageButton.uploaded": {
-    "defaultMessage": "Imatge afegida",
+    "message": "Imatge afegida",
     "description": "Image successfully added"
   },
   "components.uploadImageButton.removed": {
-    "defaultMessage": "Imatge treta",
+    "message": "Imatge treta",
     "description": "Image successfully removed"
   },
   "components.uploadImageButton.errorNotImage": {
-    "defaultMessage": "El fitxer no és una imatge",
+    "message": "El fitxer no és una imatge",
     "description": "Selected file is not an image"
   },
   "components.uploadImageButton.errorLoading": {
-    "defaultMessage": "No s'ha pogut carregar la imatge",
+    "message": "No s'ha pogut carregar la imatge",
     "description": "Generic image loading error"
   },
   "components.sequenceAuthor": {
-    "defaultMessage": "Autor del document:",
+    "message": "Autor del document:",
     "description": "License to use the pictograms"
   },
   "components.settingCard.Radius.title": {
-    "defaultMessage": "Radi",
+    "message": "Radi",
     "description": "Setting title"
   },
   "components.settingCard.Size.title": {
-    "defaultMessage": "Mida",
+    "message": "Mida",
     "description": "Setting title"
   },
   "components.settingCard.applyAll.label": {
-    "defaultMessage": "Aplicar tots",
+    "message": "Aplicar tots",
     "description": "apply to all pictograms"
   },
   "components.settingCard.color.title": {
-    "defaultMessage": "Color",
+    "message": "Color",
     "description": "Setting title"
   },
   "components.settingCard.corss.title": {
-    "defaultMessage": "Creu/X",
+    "message": "Creu/X",
     "description": "Setting title"
   },
   "components.settingCard.customText.label": {
-    "defaultMessage": "Text personalitzat",
+    "message": "Text personalitzat",
     "description": "Personalize text pictogram"
   },
   "components.settingCard.fontSize.label": {
-    "defaultMessage": "Mida",
+    "message": "Mida",
     "description": "Relative font size pictogram text"
   },
   "components.settingCard.numbered.title": {
-    "defaultMessage": "Numeració",
+    "message": "Numeració",
     "description": "Setting title"
   },
   "components.settingCardBorder.fitzgeraldKey.label": {
-    "defaultMessage": "Clau Fitzgerald",
-    "description": "type setting "
+    "message": "Clau Fitzgerald",
+    "description": "type setting"
   },
   "components.settingCardBorder.selected.label": {
-    "defaultMessage": "Selecció",
-    "description": "type setting "
+    "message": "Selecció",
+    "description": "type setting"
   },
   "components.settingCardBorder.type.title": {
-    "defaultMessage": "Tipus",
+    "message": "Tipus",
     "description": "Títol de la fila de tipus de vora (Fitzgerald / color triat / sense vora)"
   },
   "components.settingCardBorder.withoutBorder.label": {
-    "defaultMessage": "Sense línia",
-    "description": "type setting "
+    "message": "Sense línia",
+    "description": "type setting"
   },
   "components.settingCardLangAppToggle.ariaLabel": {
-    "defaultMessage": "Selecciona l'idioma de la interfície",
+    "message": "Selecciona l'idioma de la interfície",
     "description": "Aria label del ToggleButtonGroup d'idioma de la interfície"
   },
   "components.settingCardTheme.ariaLabel": {
-    "defaultMessage": "Selecciona el tema",
+    "message": "Selecciona el tema",
     "description": "Aria label del ToggleButtonGroup de tema"
   },
   "components.settingCardTheme.dark": {
-    "defaultMessage": "Fosc",
+    "message": "Fosc",
     "description": "Opció de tema fosc"
   },
   "components.settingCardTheme.light": {
-    "defaultMessage": "Clar",
+    "message": "Clar",
     "description": "Opció de tema clar"
   },
   "components.settingCardTheme.system": {
-    "defaultMessage": "Sistema",
+    "message": "Sistema",
     "description": "Opció de tema del sistema"
   },
   "components.settingCardTheme.title": {
-    "defaultMessage": "Tema",
+    "message": "Tema",
     "description": "Títol de la card de selecció de tema"
   },
   "context.feedback.applyAll.success": {
-    "defaultMessage": "Aplicat a {count} pictogrames"
+    "message": "Aplicat a {count} pictogrames"
   },
   "context.feedback.load.error": {
-    "defaultMessage": "Error carregant el fitxer"
+    "message": "Error carregant el fitxer"
   },
   "context.feedback.load.success": {
-    "defaultMessage": "Fitxer carregat correctament"
+    "message": "Fitxer carregat correctament"
   },
   "context.feedback.loading": {
-    "defaultMessage": "Carregant..."
+    "message": "Carregant..."
   },
   "context.feedback.save.success": {
-    "defaultMessage": "Fitxer guardat correctament"
+    "message": "Fitxer guardat correctament"
   },
   "context.feedback.search.complete": {
-    "defaultMessage": "{count} pictogrames afegits"
+    "message": "{count} pictogrames afegits"
   },
   "context.feedback.search.loading": {
-    "defaultMessage": "Cercant pictogrames..."
+    "message": "Cercant pictogrames..."
   },
   "features.backend.auth.close": {
-    "defaultMessage": "Tancar",
+    "message": "Tancar",
     "description": "Botó per tancar el modal d'autenticació"
   },
   "features.backend.auth.deleteDocument": {
-    "defaultMessage": "Eliminar",
+    "message": "Eliminar",
     "description": "Botó per eliminar un document del backend"
   },
   "features.backend.auth.documentLoaded": {
-    "defaultMessage": "Document carregat",
+    "message": "Document carregat",
     "description": "Missatge de confirmació quan es carrega un document del backend"
   },
   "features.backend.auth.email": {
-    "defaultMessage": "Correu electrònic",
+    "message": "Correu electrònic",
     "description": "Etiqueta del camp email"
   },
-  "features.backend.auth.error.AUTH_ERROR": {
-    "defaultMessage": "S'ha produït un error en iniciar sessió. Torna-ho a intentar.",
-    "description": "Error genèric de login"
-  },
-  "features.backend.auth.error.DAILY_SIGNUP_LIMIT_REACHED": {
-    "defaultMessage": "Avui ja s'han creat tots els comptes nous que admetem. Torna-ho a provar demà."
-  },
-  "features.backend.auth.error.EMAIL_INVALID_FORMAT": {
-    "defaultMessage": "El format del correu electrònic no és vàlid",
-    "description": "Validació: format d'email incorrecte"
-  },
-  "features.backend.auth.error.EMAIL_REQUIRED": {
-    "defaultMessage": "El correu electrònic és obligatori",
-    "description": "Validació: camp email buit"
-  },
-  "features.backend.auth.error.INVALID_CREDENTIALS": {
-    "defaultMessage": "Correu electrònic o contrasenya incorrectes",
-    "description": "Error de login: credencials incorrectes"
-  },
-  "features.backend.auth.error.PASSWORD_REQUIRED": {
-    "defaultMessage": "La contrasenya és obligatòria",
-    "description": "Validació: camp contrasenya buit"
-  },
-  "features.backend.auth.error.PASSWORD_TOO_LONG": {
-    "defaultMessage": "La contrasenya no pot superar els 128 caràcters",
-    "description": "Validació: contrasenya massa llarga (registre)"
-  },
-  "features.backend.auth.error.PASSWORD_TOO_SHORT": {
-    "defaultMessage": "La contrasenya ha de tenir com a mínim 10 caràcters",
-    "description": "Validació: contrasenya massa curta (registre)"
-  },
-  "features.backend.auth.error.REGISTER_ERROR": {
-    "defaultMessage": "S'ha produït un error en crear el compte. Torna-ho a intentar.",
-    "description": "Error genèric de registre"
-  },
-  "features.backend.auth.error.UNKNOWN_ERROR": {
-    "defaultMessage": "S'ha produït un error inesperat. Torna-ho a intentar.",
-    "description": "Error desconegut del servidor"
-  },
   "features.backend.auth.loadAction": {
-    "defaultMessage": "Carrega",
+    "message": "Carrega",
     "description": "Botó per carregar un document seleccionat del backend"
   },
   "features.backend.auth.loadDocument": {
-    "defaultMessage": "Carrega del núvol",
+    "message": "Carrega del núvol",
     "description": "Ítem del drawer per carregar un document del backend"
   },
   "features.backend.auth.loadDocumentTitle": {
-    "defaultMessage": "Carrega un document",
+    "message": "Carrega un document",
     "description": "Títol del modal de càrrega de documents del backend"
   },
   "features.backend.auth.loginItem": {
-    "defaultMessage": "Inicia sessió",
+    "message": "Inicia sessió",
     "description": "Ítem del drawer per obrir el modal de login"
   },
   "features.backend.auth.loginTitle": {
-    "defaultMessage": "Inicia sessió",
+    "message": "Inicia sessió",
     "description": "Títol del formulari de login"
   },
   "features.backend.auth.logout": {
-    "defaultMessage": "Tanca sessió",
+    "message": "Tanca sessió",
     "description": "Ítem del drawer per tancar la sessió"
   },
   "features.backend.auth.noDocuments": {
-    "defaultMessage": "No tens cap document desat",
+    "message": "No tens cap document desat",
     "description": "Missatge quan l'usuari no té documents al backend"
   },
   "features.backend.auth.password": {
-    "defaultMessage": "Contrasenya",
+    "message": "Contrasenya",
     "description": "Etiqueta del camp contrasenya"
   },
   "features.backend.auth.saveDocument": {
-    "defaultMessage": "Desa al núvol",
+    "message": "Desa al núvol",
     "description": "Ítem del drawer per desar el document al backend"
   },
   "features.backend.auth.showPassword": {
-    "defaultMessage": "Mostra la contrasenya",
+    "message": "Mostra la contrasenya",
     "description": "Etiqueta ARIA per al botó de mostrar/amagar contrasenya"
   },
   "features.backend.auth.submitLogin": {
-    "defaultMessage": "Entra",
+    "message": "Entra",
     "description": "Botó per enviar el formulari de login"
   },
   "features.backend.auth.toggleToRegister": {
-    "defaultMessage": "No tens compte? Registra't",
+    "message": "No tens compte? Registra't",
     "description": "Enllaç per canviar al formulari de registre"
   },
   "news.articleNavigation": {
-    "defaultMessage": "Navegació entre articles",
+    "message": "Navegació entre articles",
     "description": "Aria label navegació articles"
   },
   "news.back.button": {
-    "defaultMessage": "Tornar",
+    "message": "Tornar",
     "description": "Botó tornar de detall notícia"
   },
   "news.download-pdf.content": {
-    "defaultMessage": "Des de la pàgina de visualització, fes clic al nou botó PDF de la barra d'eines (al costat del botó d'imprimir) per generar i descarregar un fitxer PDF de la teva seqüència, llest per compartir o arxivar.",
+    "message": "Des de la pàgina de visualització, fes clic al nou botó PDF de la barra d'eines (al costat del botó d'imprimir) per generar i descarregar un fitxer PDF de la teva seqüència, llest per compartir o arxivar.",
     "description": "Contingut notícia descàrrega PDF"
   },
   "news.download-pdf.step1.alt": {
-    "defaultMessage": "Barra d'eines de la pàgina de vista amb el nou botó de PDF ressaltat",
+    "message": "Barra d'eines de la pàgina de vista amb el nou botó de PDF ressaltat",
     "description": "Alt text imatge pas 1"
   },
   "news.download-pdf.step1.description": {
-    "defaultMessage": "A la barra superior de la pàgina de vista trobaràs el nou botó PDF (icona de document) al costat dels botons d'orientació i d'imprimir. Clica'l per iniciar la descàrrega.",
+    "message": "A la barra superior de la pàgina de vista trobaràs el nou botó PDF (icona de document) al costat dels botons d'orientació i d'imprimir. Clica'l per iniciar la descàrrega.",
     "description": "Descripció pas 1"
   },
   "news.download-pdf.step2.alt": {
-    "defaultMessage": "Vista prèvia de la seqüència de pictogrames que es descarregarà com a PDF",
+    "message": "Vista prèvia de la seqüència de pictogrames que es descarregarà com a PDF",
     "description": "Alt text imatge pas 2"
   },
   "news.download-pdf.step2.description": {
-    "defaultMessage": "El PDF generat conté exactament el que veus a la previsualització: els pictogrames amb la mida, l'espaiat i l'alineació que hagis configurat. Pots compartir-lo per correu o guardar-lo al dispositiu.",
+    "message": "El PDF generat conté exactament el que veus a la previsualització: els pictogrames amb la mida, l'espaiat i l'alineació que hagis configurat. Pots compartir-lo per correu o guardar-lo al dispositiu.",
     "description": "Descripció pas 2"
   },
   "news.download-pdf.summary": {
-    "defaultMessage": "Ara pots descarregar la seqüència directament com a fitxer PDF, sense passar pel diàleg d'impressió.",
+    "message": "Ara pots descarregar la seqüència directament com a fitxer PDF, sense passar pel diàleg d'impressió.",
     "description": "Resum notícia descàrrega PDF"
   },
   "news.download-pdf.title": {
-    "defaultMessage": "Descarrega la seqüència en PDF",
+    "message": "Descarrega la seqüència en PDF",
     "description": "Títol notícia descàrrega PDF"
   },
   "news.logo-menu.content": {
-    "defaultMessage": "Sabies que el logo de SequenciAAC és un botó? Clica'l per desplegar el menú de navegació principal, des d'on pots accedir a totes les pàgines i funcions de l'aplicació.",
+    "message": "Sabies que el logo de SequenciAAC és un botó? Clica'l per desplegar el menú de navegació principal, des d'on pots accedir a totes les pàgines i funcions de l'aplicació.",
     "description": "Contingut notícia menú logo"
   },
   "news.logo-menu.step1.alt": {
-    "defaultMessage": "Secció de navegació del menú amb els accessos Inici, Novetats, Edició i Vista",
+    "message": "Secció de navegació del menú amb els accessos Inici, Novetats, Edició i Vista",
     "description": "Alt pas 1 menú logo"
   },
   "news.logo-menu.step1.description": {
-    "defaultMessage": "La primera secció del menú conté els accessos directes a totes les pàgines: Inici, Novetats (on trobaràs totes les actualitzacions), Edició (per crear les teves seqüències) i Vista (per veure-les i imprimir-les).",
+    "message": "La primera secció del menú conté els accessos directes a totes les pàgines: Inici, Novetats (on trobaràs totes les actualitzacions), Edició (per crear les teves seqüències) i Vista (per veure-les i imprimir-les).",
     "description": "Descripció pas 1 menú logo"
   },
   "news.logo-menu.step2.alt": {
-    "defaultMessage": "Secció de fitxers del menú amb les opcions Descarrega i Carrega",
+    "message": "Secció de fitxers del menú amb les opcions Descarrega i Carrega",
     "description": "Alt pas 2 menú logo"
   },
   "news.logo-menu.step2.description": {
-    "defaultMessage": "Des d'aquí pots gestionar els fitxers de les teves seqüències: Descarrega desa la seqüència actual en un fitxer al teu dispositiu, i Carrega recupera una seqüència que havies desat anteriorment.",
+    "message": "Des d'aquí pots gestionar els fitxers de les teves seqüències: Descarrega desa la seqüència actual en un fitxer al teu dispositiu, i Carrega recupera una seqüència que havies desat anteriorment.",
     "description": "Descripció pas 2 menú logo"
   },
   "news.logo-menu.step3.alt": {
-    "defaultMessage": "Secció de configuració del menú principal",
+    "message": "Secció de configuració del menú principal",
     "description": "Alt pas 3 menú logo"
   },
   "news.logo-menu.step3.description": {
-    "defaultMessage": "Configuració obre el diàleg d'ajustos, repartit en quatre pestanyes: Usuari (l'idioma de l'aplicació, l'idioma amb què es busquen els pictogrames i el tema clar o fosc), Pictogrames (tipografia, marcs i posició del text), Vista (format de pàgina) i Vocabulari personal.",
+    "message": "Configuració obre el diàleg d'ajustos, repartit en quatre pestanyes: Usuari (l'idioma de l'aplicació, l'idioma amb què es busquen els pictogrames i el tema clar o fosc), Pictogrames (tipografia, marcs i posició del text), Vista (format de pàgina) i Vocabulari personal.",
     "description": "Descripció pas 3 menú logo"
   },
   "news.logo-menu.summary": {
-    "defaultMessage": "Clica el logo per obrir el menú principal i accedir a totes les funcions de l'app.",
+    "message": "Clica el logo per obrir el menú principal i accedir a totes les funcions de l'app.",
     "description": "Resum notícia menú logo"
   },
   "news.logo-menu.title": {
-    "defaultMessage": "El menú de navegació",
+    "message": "El menú de navegació",
     "description": "Títol notícia menú logo"
   },
   "news.moreInfo.button": {
-    "defaultMessage": "Més info",
+    "message": "Més info",
     "description": "Botó més info notícia"
   },
   "news.multiple-sequences.content": {
-    "defaultMessage": "Crea tantes seqüències com necessitis! Utilitza les pestanyes per afegir noves seqüències o eliminar les que ja no necessites. Cada seqüència és independent i pots canviar entre elles fàcilment.",
+    "message": "Crea tantes seqüències com necessitis! Utilitza les pestanyes per afegir noves seqüències o eliminar les que ja no necessites. Cada seqüència és independent i pots canviar entre elles fàcilment.",
     "description": "Contingut notícia múltiples seqüències"
   },
   "news.multiple-sequences.img1.alt": {
-    "defaultMessage": "Pestanyes de seqüència",
+    "message": "Pestanyes de seqüència",
     "description": "Alt imatge 1 múltiples seqüències"
   },
   "news.multiple-sequences.img2.alt": {
-    "defaultMessage": "Afegir i eliminar seqüències",
+    "message": "Afegir i eliminar seqüències",
     "description": "Alt imatge 2 múltiples seqüències"
   },
   "news.multiple-sequences.step1.alt": {
-    "defaultMessage": "Seqüència 1 amb pictogrames i botó per afegir nova seqüència",
+    "message": "Seqüència 1 amb pictogrames i botó per afegir nova seqüència",
     "description": "Alt imatge pas 1 múltiples seqüències"
   },
   "news.multiple-sequences.step1.description": {
-    "defaultMessage": "A la pàgina d'edició, busca paraules al cercador (separades per comes) i els pictogrames apareixeran automàticament a la seqüència activa. Fes clic al botó + per crear una nova seqüència.",
+    "message": "A la pàgina d'edició, busca paraules al cercador (separades per comes) i els pictogrames apareixeran automàticament a la seqüència activa. Fes clic al botó + per crear una nova seqüència.",
     "description": "Descripció pas 1 múltiples seqüències"
   },
   "news.multiple-sequences.step2.alt": {
-    "defaultMessage": "Dues pestanyes de seqüència visibles, seqüència 2 activa",
+    "message": "Dues pestanyes de seqüència visibles, seqüència 2 activa",
     "description": "Alt imatge pas 2 múltiples seqüències"
   },
   "news.multiple-sequences.step2.description": {
-    "defaultMessage": "Fes clic a qualsevol pestanya per canviar de seqüència activa. Cada seqüència té el seu propi contingut independent. Busca noves paraules per omplir la seqüència 2.",
+    "message": "Fes clic a qualsevol pestanya per canviar de seqüència activa. Cada seqüència té el seu propi contingut independent. Busca noves paraules per omplir la seqüència 2.",
     "description": "Descripció pas 2 múltiples seqüències"
   },
   "news.multiple-sequences.step3.alt": {
-    "defaultMessage": "Vista de les dues seqüències amb mida augmentada globalment",
+    "message": "Vista de les dues seqüències amb mida augmentada globalment",
     "description": "Alt imatge pas 3 múltiples seqüències"
   },
   "news.multiple-sequences.step3.description": {
-    "defaultMessage": "A la Vista, el commutador \"Aplicar a totes\" permet ajustar la mida i l'espai de totes les seqüències alhora. Mou el control de mida per veure el canvi aplicat globalment.",
+    "message": "A la Vista, el commutador \"Aplicar a totes\" permet ajustar la mida i l'espai de totes les seqüències alhora. Mou el control de mida per veure el canvi aplicat globalment.",
     "description": "Descripció pas 3 múltiples seqüències"
   },
   "news.multiple-sequences.step4.alt": {
-    "defaultMessage": "Vista amb la seqüència 2 ajustada individualment a mida diferent",
+    "message": "Vista amb la seqüència 2 ajustada individualment a mida diferent",
     "description": "Alt imatge pas 4 múltiples seqüències"
   },
   "news.multiple-sequences.step4.description": {
-    "defaultMessage": "Desactiva \"Aplicar a totes\" per configurar cada seqüència de manera independent. Expandeix l'acordió de la seqüència que vols ajustar i modifica la seva mida o espaiament sense afectar les altres.",
+    "message": "Desactiva \"Aplicar a totes\" per configurar cada seqüència de manera independent. Expandeix l'acordió de la seqüència que vols ajustar i modifica la seva mida o espaiament sense afectar les altres.",
     "description": "Descripció pas 4 múltiples seqüències"
   },
   "news.multiple-sequences.summary": {
-    "defaultMessage": "Ara pots crear i gestionar diverses seqüències alhora amb pestanyes.",
+    "message": "Ara pots crear i gestionar diverses seqüències alhora amb pestanyes.",
     "description": "Resum notícia múltiples seqüències"
   },
   "news.multiple-sequences.title": {
-    "defaultMessage": "Múltiples seqüències",
+    "message": "Múltiples seqüències",
     "description": "Títol notícia múltiples seqüències"
   },
   "news.new-languages.content": {
-    "defaultMessage": "SequenciAAC ja és accessible en dos nous idiomes: Français (francès) i Italiano (italià). Amb aquesta incorporació, l'aplicació es pot fer servir en cinc idiomes: català, castellà, anglès, francès i italià.\n\nLes traduccions s'han realitzat de manera automàtica, per la qual cosa és possible que hi hagi alguna inexactitud o expressió poc natural. Demanem disculpes per qualsevol errada i us agraïm que ens ho feu saber per poder-ho millorar.",
+    "message": "SequenciAAC ja és accessible en dos nous idiomes: Français (francès) i Italiano (italià). Amb aquesta incorporació, l'aplicació es pot fer servir en cinc idiomes: català, castellà, anglès, francès i italià.\n\nLes traduccions s'han realitzat de manera automàtica, per la qual cosa és possible que hi hagi alguna inexactitud o expressió poc natural. Demanem disculpes per qualsevol errada i us agraïm que ens ho feu saber per poder-ho millorar.",
     "description": "Contingut notícia nous idiomes"
   },
   "news.new-languages.step1.alt": {
-    "defaultMessage": "Menú principal obert amb l'accés a Configuració",
+    "message": "Menú principal obert amb l'accés a Configuració",
     "description": "Alt text imatge pas 1"
   },
   "news.new-languages.step1.description": {
-    "defaultMessage": "Per canviar l'idioma, obre el menú principal amb el logo de SequenciAAC i entra a Configuració. Des de la pantalla d'inici també el pots canviar directament, amb el botó d'idioma de la capçalera.",
+    "message": "Per canviar l'idioma, obre el menú principal amb el logo de SequenciAAC i entra a Configuració. Des de la pantalla d'inici també el pots canviar directament, amb el botó d'idioma de la capçalera.",
     "description": "Descripció pas 1"
   },
   "news.new-languages.step2.alt": {
-    "defaultMessage": "Secció Idioma de la pestanya Usuari, amb els cinc idiomes a la vista",
+    "message": "Secció Idioma de la pestanya Usuari, amb els cinc idiomes a la vista",
     "description": "Alt text imatge pas 2"
   },
   "news.new-languages.step2.description": {
-    "defaultMessage": "A la pestanya Usuari, la fila «Interfície» té els cinc idiomes a la vista —ca, en, es, fr i it—: toca el que vulguis i tota l'aplicació hi canvia. A sota, «Cercar» tria en quin idioma es busquen els pictogrames, que pot ser un altre.",
+    "message": "A la pestanya Usuari, la fila «Interfície» té els cinc idiomes a la vista —ca, en, es, fr i it—: toca el que vulguis i tota l'aplicació hi canvia. A sota, «Cercar» tria en quin idioma es busquen els pictogrames, que pot ser un altre.",
     "description": "Descripció pas 2"
   },
   "news.new-languages.step3.alt": {
-    "defaultMessage": "L'aplicació amb la interfície en Français",
+    "message": "L'aplicació amb la interfície en Français",
     "description": "Alt text imatge pas 3"
   },
   "news.new-languages.step3.description": {
-    "defaultMessage": "La interfície s'actualitza al moment. Aquí pots veure l'aplicació en Français. Si trobes alguna traducció incorrecta, fes-nos-ho saber: ho millorarem.",
+    "message": "La interfície s'actualitza al moment. Aquí pots veure l'aplicació en Français. Si trobes alguna traducció incorrecta, fes-nos-ho saber: ho millorarem.",
     "description": "Descripció pas 3"
   },
   "news.new-languages.summary": {
-    "defaultMessage": "L'app parla cinc idiomes. T'expliquem on es canvia.",
+    "message": "L'app parla cinc idiomes. T'expliquem on es canvia.",
     "description": "Resum notícia nous idiomes"
   },
   "news.new-languages.title": {
-    "defaultMessage": "Nous idiomes: Français i Italiano",
+    "message": "Nous idiomes: Français i Italiano",
     "description": "Títol notícia nous idiomes"
   },
   "news.nextArticle": {
-    "defaultMessage": "Article següent",
+    "message": "Article següent",
     "description": "Navegació article següent"
   },
   "news.number-font.content": {
-    "defaultMessage": "Ara pots configurar de forma independent la tipografia dels números que s'afegeixen als pictogrames quan actives la numeració. Des del diàleg de Configuració per defecte, si actives el switch de Numeració, apareixerà una nova secció per escollir la família tipogràfica, la mida i el color dels números, de manera independent a la tipografia del text dels pictogrames.",
+    "message": "Ara pots configurar de forma independent la tipografia dels números que s'afegeixen als pictogrames quan actives la numeració. Des del diàleg de Configuració per defecte, si actives el switch de Numeració, apareixerà una nova secció per escollir la família tipogràfica, la mida i el color dels números, de manera independent a la tipografia del text dels pictogrames.",
     "description": "Contingut notícia font dels números"
   },
   "news.number-font.step1.alt": {
-    "defaultMessage": "Panell de configuració per defecte amb el switch de Numeració desactivat",
+    "message": "Panell de configuració per defecte amb el switch de Numeració desactivat",
     "description": "Alt pas 1 font dels números"
   },
   "news.number-font.step1.description": {
-    "defaultMessage": "Obre el diàleg de Configuració per defecte des del menú principal (clica el logo). Veuràs un switch per activar la Numeració dels pictogrames.",
+    "message": "Obre el diàleg de Configuració per defecte des del menú principal (clica el logo). Veuràs un switch per activar la Numeració dels pictogrames.",
     "description": "Descripció pas 1 font dels números"
   },
   "news.number-font.step2.alt": {
-    "defaultMessage": "Switch de Numeració activat al panell de configuració",
+    "message": "Switch de Numeració activat al panell de configuració",
     "description": "Alt pas 2 font dels números"
   },
   "news.number-font.step2.description": {
-    "defaultMessage": "Activa el switch de Numeració. Cada pictograma mostrarà el seu número d'ordre a la posició oposada al text.",
+    "message": "Activa el switch de Numeració. Cada pictograma mostrarà el seu número d'ordre a la posició oposada al text.",
     "description": "Descripció pas 2 font dels números"
   },
   "news.number-font.step3.alt": {
-    "defaultMessage": "Nova secció de configuració de la font dels números, amb selector de família, mida i color",
+    "message": "Nova secció de configuració de la font dels números, amb selector de família, mida i color",
     "description": "Alt pas 3 font dels números"
   },
   "news.number-font.step3.description": {
-    "defaultMessage": "Un cop activada la numeració, apareix una nova secció per configurar la tipografia dels números: família, mida i color, de forma independent a la font del text dels pictogrames.",
+    "message": "Un cop activada la numeració, apareix una nova secció per configurar la tipografia dels números: família, mida i color, de forma independent a la font del text dels pictogrames.",
     "description": "Descripció pas 3 font dels números"
   },
   "news.number-font.summary": {
-    "defaultMessage": "Tria una tipografia pròpia per als números que apareixen als pictogrames.",
+    "message": "Tria una tipografia pròpia per als números que apareixen als pictogrames.",
     "description": "Resum notícia font dels números"
   },
   "news.number-font.title": {
-    "defaultMessage": "Font personalitzada per als números",
+    "message": "Font personalitzada per als números",
     "description": "Títol notícia font dels números"
   },
   "news.prevArticle": {
-    "defaultMessage": "Article anterior",
+    "message": "Article anterior",
     "description": "Navegació article anterior"
   },
   "news.print-preview.content": {
-    "defaultMessage": "La vista prèvia et mostra exactament com quedarà la pàgina impresa. Pots controlar la mida dels pictogrames, l'espai entre files i columnes, i l'alineació. Tot es veu en temps real!",
+    "message": "La vista prèvia et mostra exactament com quedarà la pàgina impresa. Pots controlar la mida dels pictogrames, l'espai entre files i columnes, i l'alineació. Tot es veu en temps real!",
     "description": "Contingut notícia vista prèvia"
   },
   "news.print-preview.img1.alt": {
-    "defaultMessage": "Vista prèvia de la pàgina",
+    "message": "Vista prèvia de la pàgina",
     "description": "Alt imatge 1 vista prèvia"
   },
   "news.print-preview.img2.alt": {
-    "defaultMessage": "Controls de mida i espai",
+    "message": "Controls de mida i espai",
     "description": "Alt imatge 2 vista prèvia"
   },
   "news.print-preview.summary": {
-    "defaultMessage": "Previsualitza exactament com quedarà la teva pàgina abans d'imprimir.",
+    "message": "Previsualitza exactament com quedarà la teva pàgina abans d'imprimir.",
     "description": "Resum notícia vista prèvia"
   },
   "news.print-preview.title": {
-    "defaultMessage": "Vista prèvia d'impressió",
+    "message": "Vista prèvia d'impressió",
     "description": "Títol notícia vista prèvia"
   },
   "news.save-improvements.content": {
-    "defaultMessage": "Ara el fitxer .saac guarda les imatges personalitzades que has pujat, directament al fitxer per no perdre-les. A més, la configuració de visualització de cada seqüència —mida dels pictogrames, espaiat i alineació— també es guarda i es recupera exactament com la vas deixar.",
+    "message": "Ara el fitxer .saac guarda les imatges personalitzades que has pujat, directament al fitxer per no perdre-les. A més, la configuració de visualització de cada seqüència —mida dels pictogrames, espaiat i alineació— també es guarda i es recupera exactament com la vas deixar.",
     "description": "Contingut notícia millores guardat"
   },
   "news.save-improvements.step1.alt": {
-    "defaultMessage": "Botó per pujar una imatge pròpia al pictograma",
+    "message": "Botó per pujar una imatge pròpia al pictograma",
     "description": "Alt pas 1 millores guardat"
   },
   "news.save-improvements.step1.description": {
-    "defaultMessage": "Puja la teva pròpia imatge a qualsevol pictograma. La imatge es guarda directament al fitxer .saac, sense dependre d'internet.",
+    "message": "Puja la teva pròpia imatge a qualsevol pictograma. La imatge es guarda directament al fitxer .saac, sense dependre d'internet.",
     "description": "Descripció pas 1 millores guardat"
   },
   "news.save-improvements.step2.alt": {
-    "defaultMessage": "Diàleg de guardar amb les opcions de seqüències i configuració",
+    "message": "Diàleg de guardar amb les opcions de seqüències i configuració",
     "description": "Alt pas 2 millores guardat"
   },
   "news.save-improvements.step2.description": {
-    "defaultMessage": "En guardar el fitxer, totes les imatges personalitzades s'hi inclouen automàticament.",
+    "message": "En guardar el fitxer, totes les imatges personalitzades s'hi inclouen automàticament.",
     "description": "Descripció pas 2 millores guardat"
   },
   "news.save-improvements.step3.alt": {
-    "defaultMessage": "Controls de mida i espaiat dels pictogrames",
+    "message": "Controls de mida i espaiat dels pictogrames",
     "description": "Alt pas 3 millores guardat"
   },
   "news.save-improvements.step3.description": {
-    "defaultMessage": "La mida, l'espaiat i l'alineació de cada seqüència es guarden i es restauren automàticament en carregar el fitxer.",
+    "message": "La mida, l'espaiat i l'alineació de cada seqüència es guarden i es restauren automàticament en carregar el fitxer.",
     "description": "Descripció pas 3 millores guardat"
   },
   "news.save-improvements.summary": {
-    "defaultMessage": "El fitxer guardat ara inclou les imatges personalitzades i la configuració de mida i espaiat de cada seqüència.",
+    "message": "El fitxer guardat ara inclou les imatges personalitzades i la configuració de mida i espaiat de cada seqüència.",
     "description": "Resum notícia millores guardat"
   },
   "news.save-improvements.title": {
-    "defaultMessage": "Millores al guardat",
+    "message": "Millores al guardat",
     "description": "Títol notícia millores guardat"
   },
   "news.save-load.content": {
-    "defaultMessage": "Trobaràs les opcions de guardar i carregar al menú del logo de SequenciAAC. Quan guardes, es descarrega un fitxer amb totes les seqüències i les imatges dels pictogrames incloses. Així pots recuperar el teu treball en qualsevol moment!",
+    "message": "Trobaràs les opcions de guardar i carregar al menú del logo de SequenciAAC. Quan guardes, es descarrega un fitxer amb totes les seqüències i les imatges dels pictogrames incloses. Així pots recuperar el teu treball en qualsevol moment!",
     "description": "Contingut notícia guardar i carregar"
   },
   "news.save-load.img1.alt": {
-    "defaultMessage": "Menú amb opció de guardar",
+    "message": "Menú amb opció de guardar",
     "description": "Alt imatge 1 guardar i carregar"
   },
   "news.save-load.img2.alt": {
-    "defaultMessage": "Carregar fitxer guardat",
+    "message": "Carregar fitxer guardat",
     "description": "Alt imatge 2 guardar i carregar"
   },
   "news.save-load.summary": {
-    "defaultMessage": "Descarrega les teves seqüències amb les imatges i carrega-les quan vulguis.",
+    "message": "Descarrega les teves seqüències amb les imatges i carrega-les quan vulguis.",
     "description": "Resum notícia guardar i carregar"
   },
   "news.save-load.title": {
-    "defaultMessage": "Guarda i recupera",
+    "message": "Guarda i recupera",
     "description": "Títol notícia guardar i carregar"
   },
   "news.section.title": {
-    "defaultMessage": "Novetats",
+    "message": "Novetats",
     "description": "Títol secció novetats"
   },
   "news.seeAll": {
-    "defaultMessage": "Veure totes les novetats",
+    "message": "Veure totes les novetats",
     "description": "Botó veure totes les novetats"
   },
   "news.sequence-settings.content": {
-    "defaultMessage": "Ara pots personalitzar cada seqüència de manera independent. Canvia l'alineació dels pictogrames (esquerra, centre o dreta), configura la tipografia i el color dels números de forma independent al text, i descobreix més opcions de format per adaptar les seqüències a les teves necessitats.",
+    "message": "Ara pots personalitzar cada seqüència de manera independent. Canvia l'alineació dels pictogrames (esquerra, centre o dreta), configura la tipografia i el color dels números de forma independent al text, i descobreix més opcions de format per adaptar les seqüències a les teves necessitats.",
     "description": "Contingut notícia configuracions"
   },
   "news.sequence-settings.img1.alt": {
-    "defaultMessage": "Opcions d'alineació",
+    "message": "Opcions d'alineació",
     "description": "Alt imatge 1 configuracions"
   },
   "news.sequence-settings.img2.alt": {
-    "defaultMessage": "Configuració de tipografia dels números",
+    "message": "Configuració de tipografia dels números",
     "description": "Alt imatge 2 configuracions"
   },
   "news.sequence-settings.summary": {
-    "defaultMessage": "Personalitza cada seqüència amb alineació, tipografia dels números i més opcions.",
+    "message": "Personalitza cada seqüència amb alineació, tipografia dels números i més opcions.",
     "description": "Resum notícia configuracions"
   },
   "news.sequence-settings.title": {
-    "defaultMessage": "Noves configuracions per seqüència",
+    "message": "Noves configuracions per seqüència",
     "description": "Títol notícia configuracions"
   },
   "news.view-improvements.content": {
-    "defaultMessage": "S'han corregit errors que feien que la vista prèvia no coincidís exactament amb el resultat imprès. A més, s'han afegit nous controls d'alineació i direcció per a cada seqüència, i ara quan deses una seqüència la configuració de visualització també es desa automàticament.",
+    "message": "S'han corregit errors que feien que la vista prèvia no coincidís exactament amb el resultat imprès. A més, s'han afegit nous controls d'alineació i direcció per a cada seqüència, i ara quan deses una seqüència la configuració de visualització també es desa automàticament.",
     "description": "Contingut notícia millores vista"
   },
   "news.view-improvements.step1.alt": {
-    "defaultMessage": "Vista prèvia de la seqüència mostrant la correspondència exacta amb la impressió",
+    "message": "Vista prèvia de la seqüència mostrant la correspondència exacta amb la impressió",
     "description": "Alt pas 1 millores vista"
   },
   "news.view-improvements.step1.description": {
-    "defaultMessage": "La previsualització ara correspon exactament al resultat imprès. Un càlcul d'escala precís té en compte el format de pàgina (A4, A3) i la resolució de pantalla per mostrar amb fidelitat el que s'imprimirà.",
+    "message": "La previsualització ara correspon exactament al resultat imprès. Un càlcul d'escala precís té en compte el format de pàgina (A4, A3) i la resolució de pantalla per mostrar amb fidelitat el que s'imprimirà.",
     "description": "Descripció pas 1 millores vista"
   },
   "news.view-improvements.step2.alt": {
-    "defaultMessage": "Controls d'alineació i direcció de les seqüències",
+    "message": "Controls d'alineació i direcció de les seqüències",
     "description": "Alt pas 2 millores vista"
   },
   "news.view-improvements.step2.description": {
-    "defaultMessage": "Nous controls per personalitzar cada seqüència: tria l'alineació (esquerra, centre, dreta) i la direcció (horitzontal o vertical) per adaptar la presentació a les teves necessitats.",
+    "message": "Nous controls per personalitzar cada seqüència: tria l'alineació (esquerra, centre, dreta) i la direcció (horitzontal o vertical) per adaptar la presentació a les teves necessitats.",
     "description": "Descripció pas 2 millores vista"
   },
   "news.view-improvements.step3.alt": {
-    "defaultMessage": "Botó de desar la seqüència amb configuració de visualització inclosa",
+    "message": "Botó de desar la seqüència amb configuració de visualització inclosa",
     "description": "Alt pas 3 millores vista"
   },
   "news.view-improvements.step3.description": {
-    "defaultMessage": "Quan deses la seqüència amb el botó de descàrrega, la configuració de visualització (mides, espais, alineació i direcció) s'inclou automàticament al fitxer, de manera que quan la tornes a carregar tot quedarà tal com ho havies deixat.",
+    "message": "Quan deses la seqüència amb el botó de descàrrega, la configuració de visualització (mides, espais, alineació i direcció) s'inclou automàticament al fitxer, de manera que quan la tornes a carregar tot quedarà tal com ho havies deixat.",
     "description": "Descripció pas 3 millores vista"
   },
   "news.view-improvements.summary": {
-    "defaultMessage": "Vista prèvia fidel a la impressió, nous controls d'alineació i direcció.",
+    "message": "Vista prèvia fidel a la impressió, nous controls d'alineació i direcció.",
     "description": "Resum notícia millores vista"
   },
   "news.view-improvements.title": {
-    "defaultMessage": "Millores a la previsualització",
+    "message": "Millores a la previsualització",
     "description": "Títol notícia millores vista"
   },
   "pages.viewSequence.alignment.label": {
-    "defaultMessage": "Alineació"
+    "message": "Alineació"
   },
   "pages.viewSequence.applyAll.label": {
-    "defaultMessage": "Aplicar a totes"
+    "message": "Aplicar a totes"
   },
   "pages.viewSequence.authSequence.helperText": {
-    "defaultMessage": "Marcar l'autoria",
+    "message": "Marcar l'autoria",
     "description": "Helper text form"
   },
   "pages.viewSequence.authSequence.label": {
-    "defaultMessage": "Autor del document",
+    "message": "Autor del document",
     "description": "Label form"
   },
   "pages.viewSequence.licence.label": {
-    "defaultMessage": "Llicència",
+    "message": "Llicència",
     "description": "Interruptor del peu: si el full porta la frase de llicència dels pictogrames"
   },
   "pages.viewSequence.licence.helperText": {
-    "defaultMessage": "ARASAAC demana que consti qui ha fet els pictogrames i amb quina llicència.",
+    "message": "ARASAAC demana que consti qui ha fet els pictogrames i amb quina llicència.",
     "description": "Ajuda de l'interruptor de llicència"
   },
   "pages.viewSequence.licence.forcedHelperText": {
-    "defaultMessage": "Amb autor, la llicència hi va sempre: els pictogrames no són teus.",
+    "message": "Amb autor, la llicència hi va sempre: els pictogrames no són teus.",
     "description": "Ajuda de l'interruptor de llicència quan hi ha autor i no es pot treure"
   },
   "pages.viewSequence.direction.label": {
-    "defaultMessage": "Direcció"
+    "message": "Direcció"
   },
   "pages.viewSequence.fullScreen.label": {
-    "defaultMessage": "Pantalla sencera",
+    "message": "Pantalla sencera",
     "description": "Setting property"
   },
   "pages.viewSequence.pageSize.label": {
-    "defaultMessage": "Mida de pàgina"
+    "message": "Mida de pàgina"
   },
   "pages.viewSequence.pictSpaceBetween.label": {
-    "defaultMessage": "Espai de pictogrames",
+    "message": "Espai de pictogrames",
     "description": "Label form"
   },
   "pages.viewSequence.sequence.label": {
-    "defaultMessage": "Seqüència"
+    "message": "Seqüència"
   },
   "pages.viewSequence.sequenceSpaceBetween.label": {
-    "defaultMessage": "Espai de seqüències",
+    "message": "Espai de seqüències",
     "description": "Label form"
   },
   "pages.viewSequence.size.label": {
-    "defaultMessage": "Mida",
+    "message": "Mida",
     "description": "Label form"
   },
   "pages.viewSequence.tooltip.alignCenter": {
-    "defaultMessage": "Alinear al centre"
+    "message": "Alinear al centre"
   },
   "pages.viewSequence.tooltip.alignLeft": {
-    "defaultMessage": "Esquerra"
+    "message": "Esquerra"
   },
   "pages.viewSequence.tooltip.alignRight": {
-    "defaultMessage": "Dreta"
+    "message": "Dreta"
   },
   "pages.viewSequence.tooltip.applyAll": {
-    "defaultMessage": "Aplicar a totes les seqüències"
+    "message": "Aplicar a totes les seqüències"
   },
   "pages.viewSequence.savePreferences.label": {
-    "defaultMessage": "Desa com a preferències"
+    "message": "Desa com a preferències"
   },
   "pages.viewSequence.tooltip.savePreferencesCloud": {
-    "defaultMessage": "Desa aquests ajustos al teu compte i els fa servir per defecte als documents nous",
+    "message": "Desa aquests ajustos al teu compte i els fa servir per defecte als documents nous",
     "description": "Tooltip del botó de desar preferències amb sessió iniciada"
   },
   "pages.viewSequence.tooltip.savePreferencesLocal": {
-    "defaultMessage": "Desa aquests ajustos en aquest navegador i els fa servir per defecte als documents nous",
+    "message": "Desa aquests ajustos en aquest navegador i els fa servir per defecte als documents nous",
     "description": "Tooltip del botó de desar preferències sense sessió"
   },
   "pages.viewSequence.tooltip.orientationLandscape": {
-    "defaultMessage": "Pàgina apaïsada",
+    "message": "Pàgina apaïsada",
     "description": "Tooltip i nom accessible del botó d'orientació apaïsada de la pàgina"
   },
   "pages.viewSequence.tooltip.orientationPortrait": {
-    "defaultMessage": "Pàgina vertical",
+    "message": "Pàgina vertical",
     "description": "Tooltip i nom accessible del botó d'orientació vertical de la pàgina"
   },
   "pages.viewSequence.tooltip.directionColumn": {
-    "defaultMessage": "Seqüència en columnes",
+    "message": "Seqüència en columnes",
     "description": "Tooltip i nom accessible del botó que apila els pictogrames en columnes"
   },
   "pages.viewSequence.tooltip.directionRow": {
-    "defaultMessage": "Seqüència en files",
+    "message": "Seqüència en files",
     "description": "Tooltip i nom accessible del botó que apila els pictogrames en files"
   },
   "pages.viewSequence.tooltip.downloadPdf": {
-    "defaultMessage": "Descarregar PDF",
+    "message": "Descarregar PDF",
     "description": "Tooltip del botó de descàrrega de PDF"
   },
   "pages.viewSequence.tooltip.fullscreen": {
-    "defaultMessage": "Pantalla completa"
+    "message": "Pantalla completa"
   },
   "pages.viewSequence.tooltip.orientation": {
-    "defaultMessage": "Orientació de pàgina"
+    "message": "Orientació de pàgina"
   },
   "pages.viewSequence.tooltip.print": {
-    "defaultMessage": "Imprimir"
+    "message": "Imprimir"
   },
   "setting.font-family.title": {
-    "defaultMessage": "Família",
+    "message": "Família",
     "description": "Title setting"
   },
   "setting.lang.an.label": {
-    "defaultMessage": "Armeni",
+    "message": "Armeni",
     "description": "Type setting"
   },
   "setting.lang.app.title": {
-    "defaultMessage": "App",
+    "message": "App",
     "description": "Title setting"
   },
   "setting.lang.ar.label": {
-    "defaultMessage": "Àrab",
+    "message": "Àrab",
     "description": "Type setting"
   },
   "setting.lang.bg.label": {
-    "defaultMessage": "Búlgar",
+    "message": "Búlgar",
     "description": "Type setting"
   },
   "setting.lang.br.label": {
-    "defaultMessage": "Bretó",
+    "message": "Bretó",
     "description": "Type setting"
   },
   "setting.lang.ca.label": {
-    "defaultMessage": "Català",
+    "message": "Català",
     "description": "Type setting"
   },
   "setting.lang.cs.label": {
-    "defaultMessage": "Txec",
+    "message": "Txec",
     "description": "Type setting"
   },
   "setting.lang.da.label": {
-    "defaultMessage": "Danès",
+    "message": "Danès",
     "description": "Type setting"
   },
   "setting.lang.de.label": {
-    "defaultMessage": "Alemany",
+    "message": "Alemany",
     "description": "Type setting"
   },
   "setting.lang.el.label": {
-    "defaultMessage": "Grec",
+    "message": "Grec",
     "description": "Type setting"
   },
   "setting.lang.en.label": {
-    "defaultMessage": "Anglès",
+    "message": "Anglès",
     "description": "Type setting"
   },
   "setting.lang.es.label": {
-    "defaultMessage": "Espanyol",
+    "message": "Espanyol",
     "description": "Type setting"
   },
   "setting.lang.et.label": {
-    "defaultMessage": "Estonià",
+    "message": "Estonià",
     "description": "Type setting"
   },
   "setting.lang.eu.label": {
-    "defaultMessage": "Euskera",
+    "message": "Euskera",
     "description": "Type setting"
   },
   "setting.lang.fa.label": {
-    "defaultMessage": "Persa",
+    "message": "Persa",
     "description": "Type setting"
   },
   "setting.lang.fr.label": {
-    "defaultMessage": "Francès",
+    "message": "Francès",
     "description": "Type setting"
   },
   "setting.lang.gl.label": {
-    "defaultMessage": "Gallec",
+    "message": "Gallec",
     "description": "Type setting"
   },
   "setting.lang.he.label": {
-    "defaultMessage": "Hebreu",
+    "message": "Hebreu",
     "description": "Type setting"
   },
   "setting.lang.hr.label": {
-    "defaultMessage": "Croat",
+    "message": "Croat",
     "description": "Type setting"
   },
   "setting.lang.hu.label": {
-    "defaultMessage": "Hongarès",
+    "message": "Hongarès",
     "description": "Type setting"
   },
   "setting.lang.it.label": {
-    "defaultMessage": "Italià",
+    "message": "Italià",
     "description": "Type setting"
   },
   "setting.lang.ko.label": {
-    "defaultMessage": "Coreà",
+    "message": "Coreà",
     "description": "Type setting"
   },
   "setting.lang.lt.label": {
-    "defaultMessage": "Lituà",
+    "message": "Lituà",
     "description": "Type setting"
   },
   "setting.lang.lv.label": {
-    "defaultMessage": "Letó",
+    "message": "Letó",
     "description": "Type setting"
   },
   "setting.lang.mk.label": {
-    "defaultMessage": "Macedoni",
+    "message": "Macedoni",
     "description": "Type setting"
   },
   "setting.lang.nb.label": {
-    "defaultMessage": "Noruec Bokmål",
+    "message": "Noruec Bokmål",
     "description": "Type setting"
   },
   "setting.lang.nl.label": {
-    "defaultMessage": "Holandés",
+    "message": "Holandés",
     "description": "Type setting"
   },
   "setting.lang.pl.label": {
-    "defaultMessage": "Polonès",
+    "message": "Polonès",
     "description": "Type setting"
   },
   "setting.lang.pt.label": {
-    "defaultMessage": "Portuguès",
+    "message": "Portuguès",
     "description": "Type setting"
   },
   "setting.lang.ro.label": {
-    "defaultMessage": "Romanès",
+    "message": "Romanès",
     "description": "Type setting"
   },
   "setting.lang.ru.label": {
-    "defaultMessage": "Rus",
+    "message": "Rus",
     "description": "Type setting"
   },
   "setting.lang.search.title": {
-    "defaultMessage": "Cercar",
+    "message": "Cercar",
     "description": "Title setting"
   },
   "setting.lang.sk.label": {
-    "defaultMessage": "Eslovac",
+    "message": "Eslovac",
     "description": "Type setting"
   },
   "setting.lang.sq.label": {
-    "defaultMessage": "Albanès",
+    "message": "Albanès",
     "description": "Type setting"
   },
   "setting.lang.sr.label": {
-    "defaultMessage": "Sèrbi",
+    "message": "Sèrbi",
     "description": "Type setting"
   },
   "setting.lang.sv.label": {
-    "defaultMessage": "Suec",
+    "message": "Suec",
     "description": "Type setting"
   },
   "setting.lang.uk.label": {
-    "defaultMessage": "Ucraïnès",
+    "message": "Ucraïnès",
     "description": "Type setting"
   },
   "setting.lang.val.label": {
-    "defaultMessage": "Valencià",
+    "message": "Valencià",
     "description": "Type setting"
   },
   "setting.lang.zh.label": {
-    "defaultMessage": "Xinès",
+    "message": "Xinès",
     "description": "Type setting"
   },
   "settings.hair.black": {
-    "defaultMessage": "Negre",
+    "message": "Negre",
     "description": "Type of setting text position"
   },
   "settings.hair.blonde": {
-    "defaultMessage": "Ros",
+    "message": "Ros",
     "description": "Type of setting text position"
   },
   "settings.hair.brown": {
-    "defaultMessage": "Marró",
+    "message": "Marró",
     "description": "Type of setting text position"
   },
   "settings.hair.darkBrown": {
-    "defaultMessage": "Marró fosc",
+    "message": "Marró fosc",
     "description": "Type of setting text position"
   },
   "settings.hair.darkGray": {
-    "defaultMessage": "Gris fosc",
+    "message": "Gris fosc",
     "description": "Type of setting text position"
   },
   "settings.hair.gray": {
-    "defaultMessage": "Gris",
+    "message": "Gris",
     "description": "Type of setting text position"
   },
   "settings.hair.label": {
-    "defaultMessage": "Cabell",
+    "message": "Cabell",
     "description": "Setting Hair label"
   },
   "settings.hair.red": {
-    "defaultMessage": "Pèl-roig",
+    "message": "Pèl-roig",
     "description": "Type of setting text position"
   },
   "settings.skins.asian": {
-    "defaultMessage": "Asiàtic",
+    "message": "Asiàtic",
     "description": "Type of setting skin"
   },
   "settings.skins.aztec": {
-    "defaultMessage": "Asteca",
+    "message": "Asteca",
     "description": "Type of setting skin"
   },
   "settings.skins.black": {
-    "defaultMessage": "Negre",
+    "message": "Negre",
     "description": "Type of setting skin"
   },
   "settings.skins.label": {
-    "defaultMessage": "Pell",
+    "message": "Pell",
     "description": "Setting skin label"
   },
   "settings.skins.mulatto": {
-    "defaultMessage": "Mulat",
+    "message": "Mulat",
     "description": "Type of setting skin"
   },
   "settings.skins.white": {
-    "defaultMessage": "Blanc",
+    "message": "Blanc",
     "description": "Type of setting skin"
   },
   "settings.textPosition.bottom": {
-    "defaultMessage": "Sota",
+    "message": "Sota",
     "description": "Type of setting text position"
   },
   "settings.textPosition.label": {
-    "defaultMessage": "Posició text",
+    "message": "Posició text",
     "description": "Setting Text Position label"
   },
   "settings.textPosition.none": {
-    "defaultMessage": "Sense",
+    "message": "Sense",
     "description": "Type of setting text position"
   },
   "settings.textPosition.top": {
-    "defaultMessage": "Dalt",
+    "message": "Dalt",
     "description": "Type of setting text position"
   },
   "view.editSequences.sequences.label": {
-    "defaultMessage": "Seqüències"
+    "message": "Seqüències"
   },
   "view.welcome.arcadeLink": {
-    "defaultMessage": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
+    "message": "https://demo.arcade.software/oTarQPTesgFaBcLzXTFd?embed"
   },
   "view.welcome.footer.credits": {
-    "defaultMessage": "Crèdits"
+    "message": "Crèdits"
   },
   "view.welcome.footer.licenses": {
-    "defaultMessage": "Llicències"
+    "message": "Llicències"
   },
   "view.welcome.learning": {
-    "defaultMessage": "Aprèn l'ús...",
+    "message": "Aprèn l'ús...",
     "description": "Start button"
   },
   "view.welcome.liveMotive.title": {
-    "defaultMessage": "Crea i imprimeix o visualitza la teva pàgina de seqüències.",
+    "message": "Crea i imprimeix o visualitza la teva pàgina de seqüències.",
     "description": "Welcome live motive"
   },
   "view.welcome.start.button": {
-    "defaultMessage": "Inicia",
+    "message": "Inicia",
     "description": "Start button"
   },
   "pages.viewSequence.alignmentH.label": {
-    "defaultMessage": "Alineació H"
+    "message": "Alineació H"
   },
   "pages.viewSequence.alignmentV.label": {
-    "defaultMessage": "Alineació V"
+    "message": "Alineació V"
   },
   "pages.viewSequence.tooltip.alignHCenter": {
-    "defaultMessage": "Centre"
+    "message": "Centre"
   },
   "pages.viewSequence.tooltip.alignTop": {
-    "defaultMessage": "Dalt"
+    "message": "Dalt"
   },
   "pages.viewSequence.tooltip.alignVCenter": {
-    "defaultMessage": "Centre"
+    "message": "Centre"
   },
   "pages.viewSequence.tooltip.alignBottom": {
-    "defaultMessage": "Baix"
+    "message": "Baix"
   },
   "components.viewSettingsPanel.reset": {
-    "defaultMessage": "Restaura la vista"
+    "message": "Restaura la vista"
   },
   "components.viewSettingsPanel.tooltipReset": {
-    "defaultMessage": "Torna la configuració de vista als valors de fàbrica"
+    "message": "Torna la configuració de vista als valors de fàbrica"
   },
   "components.defaultSettings.reset": {
-    "defaultMessage": "Restaura els pictogrames"
+    "message": "Restaura els pictogrames"
   },
   "components.defaultSettings.tooltipReset": {
-    "defaultMessage": "Torna la configuració de pictogrames als valors de fàbrica"
+    "message": "Torna la configuració de pictogrames als valors de fàbrica"
   },
   "pages.viewSequence.section.pageFormat": {
-    "defaultMessage": "Format de pàgina",
+    "message": "Format de pàgina",
     "description": "Títol de la secció de format de pàgina a la columna de configuració de la vista"
   },
   "pages.viewSequence.section.sequences": {
-    "defaultMessage": "Seqüències",
+    "message": "Seqüències",
     "description": "Títol de la secció d'ajustos per seqüència a la columna de configuració de la vista"
   },
   "pages.viewSequence.section.printFooter": {
-    "defaultMessage": "Peu d'impressió",
+    "message": "Peu d'impressió",
     "description": "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF"
   },
-  "features.backend.auth.error.ACCOUNT_SUSPENDED": {
-    "defaultMessage": "Aquest compte està suspès. Contacta amb nosaltres si creus que és un error."
-  },
-  "features.backend.auth.error.DISPOSABLE_EMAIL": {
-    "defaultMessage": "Aquesta adreça és d'un servei de correu temporal. Fes servir el teu correu habitual."
-  },
-  "features.backend.auth.error.DOCUMENT_SAVE_ERROR": {
-    "defaultMessage": "No s'ha pogut desar el document. Torna-ho a provar."
-  },
-  "features.backend.auth.error.EMAIL_ALREADY_VERIFIED": {
-    "defaultMessage": "Aquest correu ja està verificat."
-  },
-  "features.backend.auth.error.REFRESH_TOKEN_EXPIRED": {
-    "defaultMessage": "La sessió ha caducat. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
-    "description": "Error: el token de refresc ha caducat"
-  },
-  "features.backend.auth.error.REFRESH_TOKEN_MISSING": {
-    "defaultMessage": "La sessió s'ha tancat en aquest navegador. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
-    "description": "Error: no hi ha galeta de sessió"
-  },
-  "features.backend.auth.error.INVALID_REFRESH_TOKEN": {
-    "defaultMessage": "La sessió s'ha tancat des d'un altre dispositiu. Torna a entrar per desar al núvol; la feina no s'ha perdut.",
-    "description": "Error: la sessió s'ha invalidat des d'un altre lloc"
-  },
-  "features.backend.auth.error.USER_NOT_FOUND": {
-    "defaultMessage": "Aquest compte ja no existeix. La feina continua desada en aquest dispositiu: descarrega-la si en vols una còpia.",
-    "description": "Error: el compte de la sessió ja no hi és"
-  },
   "features.backend.auth.sessionExpired.titleExpired": {
-    "defaultMessage": "La sessió ha caducat",
+    "message": "La sessió ha caducat",
     "description": "Títol de l'avís quan la sessió ha caducat pel pas del temps"
   },
   "features.backend.auth.sessionExpired.titleMissing": {
-    "defaultMessage": "La sessió s'ha tancat en aquest navegador",
+    "message": "La sessió s'ha tancat en aquest navegador",
     "description": "Títol de l'avís quan ja no hi ha la galeta de sessió"
   },
   "features.backend.auth.sessionExpired.titleInvalid": {
-    "defaultMessage": "La sessió s'ha tancat des d'un altre dispositiu",
+    "message": "La sessió s'ha tancat des d'un altre dispositiu",
     "description": "Títol de l'avís quan la sessió s'ha invalidat des d'un altre lloc"
   },
   "features.backend.auth.sessionExpired.titleSuspended": {
-    "defaultMessage": "Aquest compte està suspès",
+    "message": "Aquest compte està suspès",
     "description": "Títol de l'avís quan el compte ha estat suspès"
   },
   "features.backend.auth.sessionExpired.titleGone": {
-    "defaultMessage": "Aquest compte ja no existeix",
+    "message": "Aquest compte ja no existeix",
     "description": "Títol de l'avís quan el compte no es troba"
   },
   "features.backend.auth.sessionExpired.bodyCanReturn": {
-    "defaultMessage": "La feina no s'ha perdut: continua desada en aquest dispositiu. Per desar-la al núvol, torna a entrar.",
+    "message": "La feina no s'ha perdut: continua desada en aquest dispositiu. Per desar-la al núvol, torna a entrar.",
     "description": "Cos de l'avís de sessió caiguda quan es pot tornar a iniciar sessió"
   },
   "features.backend.auth.sessionExpired.bodyNoReturn": {
-    "defaultMessage": "La feina no s'ha perdut: continua desada en aquest dispositiu. Descarrega-la si en vols una còpia, i contacta amb nosaltres si creus que és un error.",
+    "message": "La feina no s'ha perdut: continua desada en aquest dispositiu. Descarrega-la si en vols una còpia, i contacta amb nosaltres si creus que és un error.",
     "description": "Cos de l'avís de sessió caiguda quan tornar a entrar no serviria de res"
   },
   "features.backend.auth.sessionExpired.action": {
-    "defaultMessage": "Torna a entrar",
+    "message": "Torna a entrar",
     "description": "Botó de l'avís que obre el formulari d'inici de sessió"
   },
   "features.backend.auth.sessionExpired.dismiss": {
-    "defaultMessage": "Tanca l'avís",
+    "message": "Tanca l'avís",
     "description": "Botó per tancar l'avís de sessió caiguda"
   },
-  "features.backend.auth.error.EMAIL_NOT_VERIFIED": {
-    "defaultMessage": "Has de verificar el teu correu abans de desar al núvol. Mira la teva safata d'entrada."
-  },
-  "features.backend.auth.error.MAX_USERS_REACHED": {
-    "defaultMessage": "Hem arribat al màxim de comptes disponibles. Torna-ho a provar més endavant."
-  },
-  "features.backend.auth.error.QUOTA_DOCUMENTS_EXCEEDED": {
-    "defaultMessage": "Has arribat al màxim de documents desats. Esborra'n algun per desar-ne un de nou."
-  },
-  "features.backend.auth.error.QUOTA_STORAGE_EXCEEDED": {
-    "defaultMessage": "Has arribat al màxim d'espai per a imatges. A Configuració › Usuari pots veure què ocupa cada imatge i esborrar-ne alguna."
-  },
-  "features.backend.auth.error.QUOTA_WORD_PROFILES_EXCEEDED": {
-    "defaultMessage": "Has arribat al màxim de paraules personalitzades. Esborra'n alguna per afegir-ne més."
-  },
-  "features.backend.auth.error.REGISTRATION_CLOSED": {
-    "defaultMessage": "Els registres estan tancats temporalment. Torna-ho a provar més endavant."
-  },
-  "features.backend.auth.error.TOO_MANY_ATTEMPTS": {
-    "defaultMessage": "Massa intents seguits. Espera un moment i torna-ho a provar."
-  },
-  "features.backend.auth.error.TOO_MANY_REGISTRATIONS": {
-    "defaultMessage": "S'han creat massa comptes des d'aquesta connexió. Prova-ho d'aquí a una estona."
-  },
-  "features.backend.auth.error.VERIFICATION_EMAIL_FAILED": {
-    "defaultMessage": "No hem pogut enviar el correu de verificació. Torna-ho a provar d'aquí a una estona."
-  },
-  "features.backend.auth.error.VERIFICATION_RESEND_LIMIT": {
-    "defaultMessage": "Has demanat el correu de verificació massa vegades avui. Torna-ho a provar demà."
-  },
-  "features.backend.auth.error.VERIFICATION_RESEND_TOO_SOON": {
-    "defaultMessage": "Ja t'hem enviat un correu fa poc. Espera uns minuts abans de demanar-ne un altre."
-  },
-  "features.backend.auth.error.VERIFICATION_TOKEN_INVALID": {
-    "defaultMessage": "Aquest enllaç de verificació no és vàlid o ha caducat. Demana'n un de nou."
-  },
-  "features.backend.auth.error.VERIFICATION_TOKEN_MISSING": {
-    "defaultMessage": "L'enllaç de verificació està incomplet."
-  },
   "features.backend.auth.verification.bannerPending": {
-    "defaultMessage": "Verifica el teu correu per poder desar al núvol. T'hem enviat un enllaç a {email}."
+    "message": "Verifica el teu correu per poder desar al núvol. T'hem enviat un enllaç a {email}."
   },
   "features.backend.auth.verification.resend": {
-    "defaultMessage": "Torna a enviar-me'l"
+    "message": "Torna a enviar-me'l"
   },
   "features.backend.auth.verification.resendSuccess": {
-    "defaultMessage": "Correu enviat. Mira la teva safata d'entrada."
+    "message": "Correu enviat. Mira la teva safata d'entrada."
   },
   "features.backend.wakeUp.title": {
-    "defaultMessage": "Connectant amb el teu compte…"
+    "message": "Connectant amb el teu compte…"
   },
   "features.backend.wakeUp.description": {
-    "defaultMessage": "La primera connexió del dia pot trigar fins a un minut. Mentrestant pots seguir editant el document.",
+    "message": "La primera connexió del dia pot trigar fins a un minut. Mentrestant pots seguir editant el document.",
     "description": "Explicació de l'espera i del que l'usuari pot fer mentrestant"
   },
   "components.defaultSettings.saveError.title": {
-    "defaultMessage": "No hem pogut desar la configuració"
+    "message": "No hem pogut desar la configuració"
   },
   "components.defaultSettings.saveError.bodyCloud": {
-    "defaultMessage": "Els canvis es veuen a la pantalla, però no s'han desat al teu compte: si tanques l'aplicació ara, els perdràs."
+    "message": "Els canvis es veuen a la pantalla, però no s'han desat al teu compte: si tanques l'aplicació ara, els perdràs."
   },
   "components.defaultSettings.saveError.bodyLocal": {
-    "defaultMessage": "Els canvis es veuen a la pantalla, però no s'han pogut desar en aquest navegador: si tanques l'aplicació ara, els perdràs."
+    "message": "Els canvis es veuen a la pantalla, però no s'han pogut desar en aquest navegador: si tanques l'aplicació ara, els perdràs."
   },
   "components.defaultSettings.saveError.retry": {
-    "defaultMessage": "Torna-ho a provar"
+    "message": "Torna-ho a provar"
   },
   "components.defaultSettings.saveError.dismiss": {
-    "defaultMessage": "Ara no"
-  },
-  "features.backend.auth.error.DOCUMENT_INVALID_FORMAT": {
-    "defaultMessage": "El servidor no ha entès el format d'aquest document. Descarrega'l al teu dispositiu per no perdre'l i avisa'ns.",
-    "description": "Error en desar: el document no ha passat la validació del servidor"
+    "message": "Ara no"
   },
   "features.backend.wakeUp.descriptionBlocking": {
-    "defaultMessage": "La primera connexió del dia pot trigar fins a un minut. No tanquis l'aplicació."
+    "message": "La primera connexió del dia pot trigar fins a un minut. No tanquis l'aplicació."
   },
   "features.backend.auth.savingDocument": {
-    "defaultMessage": "Desant el document al núvol…",
+    "message": "Desant el document al núvol…",
     "description": "Missatge del backdrop mentre es desa el document"
   },
   "features.backend.auth.loadListError": {
-    "defaultMessage": "No hem pogut recuperar els teus documents. Comprova la connexió i torna-ho a provar."
+    "message": "No hem pogut recuperar els teus documents. Comprova la connexió i torna-ho a provar."
   },
   "features.backend.auth.loadDocumentError": {
-    "defaultMessage": "No s'ha pogut carregar aquest document. Torna-ho a provar."
+    "message": "No s'ha pogut carregar aquest document. Torna-ho a provar."
   },
   "features.backend.auth.retry": {
-    "defaultMessage": "Torna-ho a provar"
+    "message": "Torna-ho a provar"
   },
   "components.defaultSettings.saveError.bodyStorageFull": {
-    "defaultMessage": "Aquest navegador s'ha quedat sense espai. Les paraules del teu vocabulari amb imatge pròpia són el que més ocupa: esborra'n alguna que ja no facis servir, o crea un compte per desar-ho tot en línia."
+    "message": "Aquest navegador s'ha quedat sense espai. Les paraules del teu vocabulari amb imatge pròpia són el que més ocupa: esborra'n alguna que ja no facis servir, o crea un compte per desar-ho tot en línia."
   },
   "components.defaultSettings.saveError.understood": {
-    "defaultMessage": "Entesos"
+    "message": "Entesos"
   },
   "components.defaultSettings.saveError.errorCode": {
-    "defaultMessage": "Codi: {code}"
+    "message": "Codi: {code}"
   },
   "features.backend.auth.errorWithCode": {
-    "defaultMessage": "{message} (Codi: {code})"
+    "message": "{message} (Codi: {code})"
   },
   "features.backend.auth.forgotPassword": {
-    "defaultMessage": "Has oblidat la contrasenya?",
+    "message": "Has oblidat la contrasenya?",
     "description": "Enllaç del formulari de login cap a la recuperació de contrasenya"
   },
-  "features.backend.auth.error.NAME_REQUIRED": {
-    "defaultMessage": "El nom és obligatori",
-    "description": "Validació: camp nom buit al signup"
-  },
-  "features.backend.auth.error.NAME_TOO_LONG": {
-    "defaultMessage": "El nom no pot superar els 120 caràcters",
-    "description": "Validació: nom massa llarg al signup"
-  },
-  "features.backend.auth.error.USE_CASE_REQUIRED": {
-    "defaultMessage": "Cal triar com faràs servir l'aplicació",
-    "description": "Validació: selector d'ús de l'aplicació buit al signup"
-  },
-  "features.backend.auth.error.PASSWORD_MISSING_LOWERCASE": {
-    "defaultMessage": "La contrasenya ha de tenir com a mínim una lletra minúscula",
-    "description": "Validació: falta una minúscula a la contrasenya"
-  },
-  "features.backend.auth.error.PASSWORD_MISSING_UPPERCASE": {
-    "defaultMessage": "La contrasenya ha de tenir com a mínim una lletra majúscula",
-    "description": "Validació: falta una majúscula a la contrasenya"
-  },
-  "features.backend.auth.error.PASSWORD_MISSING_NUMBER": {
-    "defaultMessage": "La contrasenya ha de tenir com a mínim un número",
-    "description": "Validació: falta un número a la contrasenya"
-  },
-  "features.backend.auth.error.PASSWORD_MISMATCH": {
-    "defaultMessage": "Les contrasenyes no coincideixen",
-    "description": "Validació: la repetició no coincideix amb la contrasenya"
-  },
-  "features.backend.auth.error.SET_PASSWORD_ERROR": {
-    "defaultMessage": "S'ha produït un error en establir la contrasenya. Torna-ho a intentar.",
-    "description": "Error genèric d'establiment de contrasenya"
-  },
   "features.backend.auth.password.minLength": {
-    "defaultMessage": "Com a mínim 10 caràcters",
+    "message": "Com a mínim 10 caràcters",
     "description": "Requisit de contrasenya: longitud mínima"
   },
   "features.backend.auth.password.hasLowercase": {
-    "defaultMessage": "Una lletra minúscula",
+    "message": "Una lletra minúscula",
     "description": "Requisit de contrasenya: minúscula"
   },
   "features.backend.auth.password.hasUppercase": {
-    "defaultMessage": "Una lletra majúscula",
+    "message": "Una lletra majúscula",
     "description": "Requisit de contrasenya: majúscula"
   },
   "features.backend.auth.password.hasNumber": {
-    "defaultMessage": "Un número",
+    "message": "Un número",
     "description": "Requisit de contrasenya: número"
   },
   "pages.signup.pageTitle": {
-    "defaultMessage": "Crea el teu compte",
+    "message": "Crea el teu compte",
     "description": "Títol de la pàgina de signup"
   },
   "pages.signup.hint": {
-    "defaultMessage": "Amb un compte pots desar els teus documents al núvol i recuperar-los des de qualsevol dispositiu. T'enviarem un correu per confirmar l'adreça i triar la contrasenya — encara no cal que en posis cap aquí.",
+    "message": "Amb un compte pots desar els teus documents al núvol i recuperar-los des de qualsevol dispositiu. T'enviarem un correu per confirmar l'adreça i triar la contrasenya — encara no cal que en posis cap aquí.",
     "description": "Guia inicial de la pàgina de signup"
   },
   "pages.signup.name": {
-    "defaultMessage": "Nom",
+    "message": "Nom",
     "description": "Etiqueta del camp nom"
   },
   "pages.signup.useCase": {
-    "defaultMessage": "Com faràs servir l'aplicació?",
+    "message": "Com faràs servir l'aplicació?",
     "description": "Etiqueta del selector d'ús de l'aplicació"
   },
   "pages.signup.useCaseFamily": {
-    "defaultMessage": "En família",
+    "message": "En família",
     "description": "Opció d'ús de l'aplicació: família"
   },
   "pages.signup.useCaseTeacher": {
-    "defaultMessage": "Com a docent",
+    "message": "Com a docent",
     "description": "Opció d'ús de l'aplicació: docent"
   },
   "pages.signup.useCaseProfessional": {
-    "defaultMessage": "Com a professional (logopeda, terapeuta...)",
+    "message": "Com a professional (logopeda, terapeuta...)",
     "description": "Opció d'ús de l'aplicació: professional"
   },
   "pages.signup.useCaseOther": {
-    "defaultMessage": "Altres",
+    "message": "Altres",
     "description": "Opció d'ús de l'aplicació: altres"
   },
   "pages.signup.useCaseOtherLabel": {
-    "defaultMessage": "Explica'ns breument com la faràs servir (opcional)",
+    "message": "Explica'ns breument com la faràs servir (opcional)",
     "description": "Etiqueta del camp de text lliure quan l'ús és \"altres\""
   },
   "pages.signup.email": {
-    "defaultMessage": "Correu electrònic",
+    "message": "Correu electrònic",
     "description": "Etiqueta del camp correu"
   },
   "pages.signup.submit": {
-    "defaultMessage": "Crea el compte",
+    "message": "Crea el compte",
     "description": "Botó per enviar el formulari de signup"
   },
   "pages.signup.loginLink": {
-    "defaultMessage": "Ja tens compte? Inicia sessió",
+    "message": "Ja tens compte? Inicia sessió",
     "description": "Enllaç per tornar a l'aplicació i obrir el login"
   },
   "pages.signup.successTitle": {
-    "defaultMessage": "Revisa el teu correu",
+    "message": "Revisa el teu correu",
     "description": "Títol de la pantalla d'èxit després del signup"
   },
   "pages.signup.success": {
-    "defaultMessage": "T'hem enviat un correu a {email} amb un enllaç per confirmar l'adreça i triar la contrasenya. Si no el veus a la safata d'entrada, mira també a spam.",
+    "message": "T'hem enviat un correu a {email} amb un enllaç per confirmar l'adreça i triar la contrasenya. Si no el veus a la safata d'entrada, mira també a spam.",
     "description": "Missatge d'èxit després del signup"
   },
   "pages.signup.failedTitle": {
-    "defaultMessage": "No hem pogut enviar el correu",
+    "message": "No hem pogut enviar el correu",
     "description": "Títol de la pantalla de signup quan el correu no ha sortit"
   },
   "pages.signup.failed": {
-    "defaultMessage": "El compte de {email} s'ha creat, però el correu amb l'enllaç per triar la contrasenya no ha pogut sortir. Sense aquest enllaç encara no hi pots entrar: torna a demanar-lo.",
+    "message": "El compte de {email} s'ha creat, però el correu amb l'enllaç per triar la contrasenya no ha pogut sortir. Sense aquest enllaç encara no hi pots entrar: torna a demanar-lo.",
     "description": "Missatge de signup amb el compte creat i el correu no enviat"
   },
   "pages.signup.resend": {
-    "defaultMessage": "Torna a enviar el correu",
+    "message": "Torna a enviar el correu",
     "description": "Botó per demanar de nou el correu de verificació"
   },
   "pages.signup.resendDone": {
-    "defaultMessage": "Ho hem tornat a demanar. Si al cap d'uns minuts continua sense arribar, mira també a spam i prova-ho més tard.",
+    "message": "Ho hem tornat a demanar. Si al cap d'uns minuts continua sense arribar, mira també a spam i prova-ho més tard.",
     "description": "Confirmació d'haver tornat a demanar el correu de verificació"
   },
   "pages.signup.goToApp": {
-    "defaultMessage": "Ves a l'aplicació",
+    "message": "Ves a l'aplicació",
     "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"
   },
   "pages.setPassword.pageTitle": {
-    "defaultMessage": "Tria la teva contrasenya",
+    "message": "Tria la teva contrasenya",
     "description": "Títol de la pàgina d'establiment de contrasenya"
   },
   "pages.setPassword.hint": {
-    "defaultMessage": "Aquesta contrasenya és la que faràs servir per entrar al teu compte a partir d'ara. Tria'n una que no facis servir enlloc més.",
+    "message": "Aquesta contrasenya és la que faràs servir per entrar al teu compte a partir d'ara. Tria'n una que no facis servir enlloc més.",
     "description": "Guia inicial de la pàgina d'establiment de contrasenya"
   },
   "pages.setPassword.password": {
-    "defaultMessage": "Contrasenya",
+    "message": "Contrasenya",
     "description": "Etiqueta del camp contrasenya"
   },
   "pages.setPassword.passwordConfirmation": {
-    "defaultMessage": "Repeteix la contrasenya",
+    "message": "Repeteix la contrasenya",
     "description": "Etiqueta del camp de repetició de la contrasenya"
   },
   "pages.setPassword.mismatch": {
-    "defaultMessage": "Les contrasenyes no coincideixen",
+    "message": "Les contrasenyes no coincideixen",
     "description": "Error de validació quan les dues contrasenyes no coincideixen"
   },
   "pages.setPassword.submit": {
-    "defaultMessage": "Estableix la contrasenya",
+    "message": "Estableix la contrasenya",
     "description": "Botó per enviar el formulari d'establiment de contrasenya"
   },
   "pages.setPassword.missingToken": {
-    "defaultMessage": "Aquest enllaç està incomplet.",
+    "message": "Aquest enllaç està incomplet.",
     "description": "Error quan l'enllaç no porta cap token"
   },
   "pages.setPassword.forgotPasswordLink": {
-    "defaultMessage": "He oblidat la contrasenya",
+    "message": "He oblidat la contrasenya",
     "description": "Enllaç a la pàgina de recuperació de contrasenya"
   },
   "pages.forgotPassword.pageTitle": {
-    "defaultMessage": "Recupera la contrasenya",
+    "message": "Recupera la contrasenya",
     "description": "Títol de la pàgina de recuperació de contrasenya"
   },
   "pages.forgotPassword.hint": {
-    "defaultMessage": "Escriu el correu del teu compte i t'enviarem un enllaç per triar una contrasenya nova.",
+    "message": "Escriu el correu del teu compte i t'enviarem un enllaç per triar una contrasenya nova.",
     "description": "Guia inicial de la pàgina de recuperació de contrasenya"
   },
   "pages.forgotPassword.email": {
-    "defaultMessage": "Correu electrònic",
+    "message": "Correu electrònic",
     "description": "Etiqueta del camp correu"
   },
   "pages.forgotPassword.submit": {
-    "defaultMessage": "Envia l'enllaç",
+    "message": "Envia l'enllaç",
     "description": "Botó per demanar l'enllaç de recuperació"
   },
   "pages.forgotPassword.success": {
-    "defaultMessage": "Si {email} té un compte, hi hem enviat un enllaç per triar una contrasenya nova. Revisa també la carpeta de spam.",
+    "message": "Si {email} té un compte, hi hem enviat un enllaç per triar una contrasenya nova. Revisa també la carpeta de spam.",
     "description": "Missatge sempre igual, existeixi o no el compte, per no revelar quins correus estan registrats"
   },
   "pages.forgotPassword.goToApp": {
-    "defaultMessage": "Ves a l'aplicació",
+    "message": "Ves a l'aplicació",
     "description": "Botó per tornar a l'aplicació des de la pantalla d'èxit"
   },
   "components.mouseActionList.header": {
-    "defaultMessage": "Pictograma {number}",
+    "message": "Pictograma {number}",
     "description": "Capçalera del menú contextual: quin pictograma s'està editant"
   },
   "components.mouseActionList.copy": {
-    "defaultMessage": "Copia",
+    "message": "Copia",
     "description": "Desa el pictograma al porta-retalls intern de la seqüència"
   },
   "components.mouseActionList.paste": {
-    "defaultMessage": "Enganxa (substitueix)",
+    "message": "Enganxa (substitueix)",
     "description": "Substitueix el pictograma actual pel que hi ha al porta-retalls"
   },
   "components.mouseActionList.edit": {
-    "defaultMessage": "Edita",
+    "message": "Edita",
     "description": "Obre el diàleg d'edició del pictograma"
   },
   "components.mouseActionList.delete": {
-    "defaultMessage": "Elimina",
+    "message": "Elimina",
     "description": "Treu el pictograma de la seqüència"
   },
   "components.mouseActionList.insert": {
-    "defaultMessage": "Insereix un buit a continuació",
+    "message": "Insereix un buit a continuació",
     "description": "Insereix un pictograma buit just després del pictograma actual"
   },
   "components.mouseActionList.duplicate": {
-    "defaultMessage": "Duplica a continuació",
+    "message": "Duplica a continuació",
     "description": "Insereix una còpia del pictograma just després del pictograma actual"
   },
   "features.sequence.status.fabLabel": {
-    "defaultMessage": "On es desa la feina",
+    "message": "On es desa la feina",
     "description": "Nom accessible del botó flotant d'estat del document"
   },
   "features.sequence.status.pristine": {
-    "defaultMessage": "Encara no hi ha res per desar",
+    "message": "Encara no hi ha res per desar",
     "description": "Estat quan el document és buit"
   },
   "features.sequence.status.saving": {
-    "defaultMessage": "Desant en aquest dispositiu…",
+    "message": "Desant en aquest dispositiu…",
     "description": "Estat mentre l'esborrany encara no s'ha escrit"
   },
   "features.sequence.status.local": {
-    "defaultMessage": "Només en aquest dispositiu, des de les {time}",
+    "message": "Només en aquest dispositiu, des de les {time}",
     "description": "Estat quan la feina només és a l'esborrany del navegador"
   },
   "features.sequence.status.file": {
-    "defaultMessage": "Descarregat en un fitxer a les {time}",
+    "message": "Descarregat en un fitxer a les {time}",
     "description": "Estat quan la feina té còpia en un fitxer .saac"
   },
   "features.sequence.status.cloud": {
-    "defaultMessage": "Desat al núvol a les {time}",
+    "message": "Desat al núvol a les {time}",
     "description": "Estat quan la feina té còpia al compte de l'usuari"
   },
   "features.sequence.status.localDated": {
-    "defaultMessage": "Només en aquest dispositiu, des del {date} a les {time}",
+    "message": "Només en aquest dispositiu, des del {date} a les {time}",
     "description": "Estat quan la feina només és a l'esborrany i és d'un altre dia"
   },
   "features.sequence.status.fileDated": {
-    "defaultMessage": "Descarregat en un fitxer el {date} a les {time}",
+    "message": "Descarregat en un fitxer el {date} a les {time}",
     "description": "Estat quan la còpia en fitxer és d'un altre dia"
   },
   "features.sequence.status.staleCloud": {
-    "defaultMessage": "Amb canvis nous des del desat al núvol de les {time}",
+    "message": "Amb canvis nous des del desat al núvol de les {time}",
     "description": "Estat quan hi ha canvis posteriors a l'última còpia al núvol"
   },
   "features.sequence.status.staleCloudDated": {
-    "defaultMessage": "Amb canvis nous des del desat al núvol del {date} a les {time}",
+    "message": "Amb canvis nous des del desat al núvol del {date} a les {time}",
     "description": "Estat de canvis posteriors quan la còpia és d'un altre dia"
   },
   "features.sequence.status.staleFile": {
-    "defaultMessage": "Amb canvis nous des del fitxer descarregat a les {time}",
+    "message": "Amb canvis nous des del fitxer descarregat a les {time}",
     "description": "Estat quan hi ha canvis posteriors a l'última còpia en fitxer"
   },
   "features.sequence.status.staleFileDated": {
-    "defaultMessage": "Amb canvis nous des del fitxer descarregat el {date} a les {time}",
+    "message": "Amb canvis nous des del fitxer descarregat el {date} a les {time}",
     "description": "Estat de canvis posteriors quan el fitxer és d'un altre dia"
   },
   "features.sequence.status.cloudDated": {
-    "defaultMessage": "Desat al núvol el {date} a les {time}",
+    "message": "Desat al núvol el {date} a les {time}",
     "description": "Estat quan la còpia al núvol és d'un altre dia"
   },
   "features.sequence.status.error": {
-    "defaultMessage": "Aquest navegador no ha pogut desar la feina",
+    "message": "Aquest navegador no ha pogut desar la feina",
     "description": "Estat quan l'escriptura de l'esborrany falla"
   },
   "features.sequence.status.hintLocal": {
-    "defaultMessage": "Es queda en aquest navegador i el pot esborrar sol. Descarrega-ho o desa-ho al núvol.",
+    "message": "Es queda en aquest navegador i el pot esborrar sol. Descarrega-ho o desa-ho al núvol.",
     "description": "Explicació de què vol dir tenir la feina només a l'esborrany"
   },
   "features.sequence.status.hintLocalNoCloud": {
-    "defaultMessage": "Es queda en aquest navegador i el pot esborrar sol. Descarrega-ho.",
+    "message": "Es queda en aquest navegador i el pot esborrar sol. Descarrega-ho.",
     "description": "Explicació de l'esborrany amb les funcions de compte apagades"
   },
   "features.sequence.status.hintStaleCloud": {
-    "defaultMessage": "El que hi ha a pantalla encara no és al núvol. Torna-hi a desar per actualitzar-ne la còpia.",
+    "message": "El que hi ha a pantalla encara no és al núvol. Torna-hi a desar per actualitzar-ne la còpia.",
     "description": "Explicació de l'estat de canvis posteriors a la còpia al núvol"
   },
   "features.sequence.status.hintStaleFile": {
-    "defaultMessage": "El que hi ha a pantalla encara no és al fitxer. Torna'l a descarregar per actualitzar-lo.",
+    "message": "El que hi ha a pantalla encara no és al fitxer. Torna'l a descarregar per actualitzar-lo.",
     "description": "Explicació de l'estat de canvis posteriors a la còpia en fitxer"
   },
   "features.sequence.draft.conflictError": {
-    "defaultMessage": "Una altra pestanya té feina més nova. Aquesta ha deixat de desar sola per no esborrar-la: descarrega el que hi tens si el vols conservar.",
+    "message": "Una altra pestanya té feina més nova. Aquesta ha deixat de desar sola per no esborrar-la: descarrega el que hi tens si el vols conservar.",
     "description": "Avís quan una altra pestanya ha desat l'esborrany més tard que aquesta"
   },
   "features.sequence.status.conflict": {
-    "defaultMessage": "Una altra pestanya té feina més nova",
+    "message": "Una altra pestanya té feina més nova",
     "description": "Estat quan aquesta pestanya ha deixat d'escriure l'esborrany per no trepitjar-ne una altra"
   },
   "features.sequence.status.hintConflict": {
-    "defaultMessage": "Aquesta pestanya ja no desa sola. Descarrega el que hi tens si el vols conservar.",
+    "message": "Aquesta pestanya ja no desa sola. Descarrega el que hi tens si el vols conservar.",
     "description": "Explicació quan una altra pestanya té una versió més nova de l'esborrany"
   },
   "features.sequence.status.hintError": {
-    "defaultMessage": "Descarrega el fitxer ara: és l'única manera de no perdre la feina.",
+    "message": "Descarrega el fitxer ara: és l'única manera de no perdre la feina.",
     "description": "Explicació quan el navegador no pot desar l'esborrany"
   },
   "features.sequence.status.actionCloud": {
-    "defaultMessage": "Desa al núvol",
+    "message": "Desa al núvol",
     "description": "Acció del botó flotant: desar el document al compte"
   },
   "features.sequence.status.actionDownload": {
-    "defaultMessage": "Descarrega el fitxer",
+    "message": "Descarrega el fitxer",
     "description": "Acció del botó flotant: descarregar el document"
   },
   "features.sequence.status.actionNew": {
-    "defaultMessage": "Document nou",
+    "message": "Document nou",
     "description": "Acció del botó flotant: començar un document buit"
   },
   "features.sequence.status.confirmTitle": {
-    "defaultMessage": "Comences un document nou?",
+    "message": "Comences un document nou?",
     "description": "Títol del diàleg de confirmació abans de buidar el document"
   },
   "features.sequence.status.confirmBody": {
-    "defaultMessage": "La feina d'ara només és en aquest navegador. Si comences de zero, es perd.",
+    "message": "La feina d'ara només és en aquest navegador. Si comences de zero, es perd.",
     "description": "Cos del diàleg de confirmació abans de buidar el document"
   },
   "features.sequence.status.confirmBodyStale": {
-    "defaultMessage": "La còpia desada és d'abans. Si comences de zero, es perd tot el que has fet des d'aleshores.",
+    "message": "La còpia desada és d'abans. Si comences de zero, es perd tot el que has fet des d'aleshores.",
     "description": "Cos del diàleg de confirmació quan hi ha una còpia però amb canvis posteriors"
   },
   "features.sequence.status.confirmDownloadFirst": {
-    "defaultMessage": "Descarrega-ho abans",
+    "message": "Descarrega-ho abans",
     "description": "Botó per desar la feina en un fitxer abans de buidar-la"
   },
   "features.sequence.status.confirmDiscard": {
-    "defaultMessage": "Comença de zero",
+    "message": "Comença de zero",
     "description": "Botó que buida el document i l'esborrany"
   },
   "features.backend.documents.saveTitle": {
-    "defaultMessage": "Desa al núvol",
+    "message": "Desa al núvol",
     "description": "Títol del diàleg per desar un document nou al núvol"
   },
   "features.backend.documents.updateTitle": {
-    "defaultMessage": "Actualitza al núvol",
+    "message": "Actualitza al núvol",
     "description": "Títol del diàleg quan el document ja existeix al núvol i se'n desa una versió nova"
   },
   "features.backend.documents.nameLabel": {
-    "defaultMessage": "Nom del document",
+    "message": "Nom del document",
     "description": "Etiqueta del camp de nom del document"
   },
   "features.backend.documents.nameHelper": {
-    "defaultMessage": "És el nom amb què el retrobaràs quan el tornis a carregar.",
+    "message": "És el nom amb què el retrobaràs quan el tornis a carregar.",
     "description": "Text d'ajuda del camp de nom del document"
   },
   "features.backend.documents.nameRequired": {
-    "defaultMessage": "Posa-li un nom per poder-lo retrobar.",
+    "message": "Posa-li un nom per poder-lo retrobar.",
     "description": "Validació: el nom del document és obligatori"
   },
   "features.backend.documents.nameSameAsOriginal": {
-    "defaultMessage": "La còpia necessita un nom diferent per no confondre-la amb l'original.",
+    "message": "La còpia necessita un nom diferent per no confondre-la amb l'original.",
     "description": "Validació: la còpia d'un document no pot tenir el mateix nom que l'original"
   },
   "features.backend.documents.updateHint": {
-    "defaultMessage": "Aquest document ja és al núvol: desar-lo en substituirà la versió desada.",
+    "message": "Aquest document ja és al núvol: desar-lo en substituirà la versió desada.",
     "description": "Avís del diàleg quan el document ja existeix al núvol"
   },
   "features.backend.documents.copyHint": {
-    "defaultMessage": "Amb «Desa'n una còpia» en desa un de nou i deixa l'original tal com és.",
+    "message": "Amb «Desa'n una còpia» en desa un de nou i deixa l'original tal com és.",
     "description": "Avís que explica què fa el botó de desar una còpia"
   },
   "features.backend.documents.saveAction": {
-    "defaultMessage": "Desa",
+    "message": "Desa",
     "description": "Botó per desar el document al núvol"
   },
   "features.backend.documents.updateAction": {
-    "defaultMessage": "Actualitza",
+    "message": "Actualitza",
     "description": "Botó per actualitzar el document ja desat al núvol"
   },
   "features.backend.documents.saveCopyAction": {
-    "defaultMessage": "Desa'n una còpia",
+    "message": "Desa'n una còpia",
     "description": "Botó per desar el document com un de nou sense tocar el que ja hi ha al núvol"
   },
   "features.backend.documents.cancel": {
-    "defaultMessage": "Cancel·la",
+    "message": "Cancel·la",
     "description": "Botó per tancar el diàleg sense desar"
   },
   "features.backend.documents.uploading": {
-    "defaultMessage": "Enviant el document… {percent}%",
+    "message": "Enviant el document… {percent}%",
     "description": "Progrés de la pujada del document al núvol"
   },
   "features.backend.documents.uploadingUnknown": {
-    "defaultMessage": "Enviant el document…",
+    "message": "Enviant el document…",
     "description": "Progrés de la pujada quan no se'n sap la mida total"
   },
   "features.backend.documents.downloading": {
-    "defaultMessage": "Rebent el document… {percent}%",
+    "message": "Rebent el document… {percent}%",
     "description": "Progrés de la baixada d'un document del núvol"
   },
   "features.backend.documents.downloadingUnknown": {
-    "defaultMessage": "Rebent el document…",
+    "message": "Rebent el document…",
     "description": "Progrés de la baixada quan no se'n sap la mida total"
   },
   "features.backend.documents.documentSavedNamed": {
-    "defaultMessage": "«{title}» s'ha desat al núvol",
+    "message": "«{title}» s'ha desat al núvol",
     "description": "Confirmació en desar un document amb nom"
   },
   "features.backend.documents.documentCopiedNamed": {
-    "defaultMessage": "S'ha desat la còpia «{title}»: ara hi treballes a sobre",
+    "message": "S'ha desat la còpia «{title}»: ara hi treballes a sobre",
     "description": "Confirmació en desar una còpia: avisa que el document actiu passa a ser la còpia"
   },
   "features.backend.documents.documentLoadedNamed": {
-    "defaultMessage": "«{title}» s'ha carregat",
+    "message": "«{title}» s'ha carregat",
     "description": "Confirmació en carregar un document amb nom"
   },
   "features.backend.documents.documentDeleted": {
-    "defaultMessage": "Document esborrat del núvol",
+    "message": "Document esborrat del núvol",
     "description": "Confirmació en esborrar un document del núvol"
   },
   "features.backend.documents.deleteError": {
-    "defaultMessage": "No s'ha pogut esborrar el document. Torna-ho a provar.",
+    "message": "No s'ha pogut esborrar el document. Torna-ho a provar.",
     "description": "Error en esborrar un document del núvol"
   },
   "features.backend.documents.untitled": {
-    "defaultMessage": "Sense nom",
+    "message": "Sense nom",
     "description": "Nom que es mostra per a un document desat sense títol"
   },
   "features.backend.documents.thumbnailLabel": {
-    "defaultMessage": "Primers pictogrames de «{title}»",
+    "message": "Primers pictogrames de «{title}»",
     "description": "Text alternatiu de la miniatura d'un document del llistat"
   },
   "features.print.pdf.generating": {
-    "defaultMessage": "S'està generant el PDF…",
+    "message": "S'està generant el PDF…",
     "description": "Missatge del backdrop mentre es genera el PDF"
   },
   "features.print.pdf.downloaded": {
-    "defaultMessage": "PDF descarregat",
+    "message": "PDF descarregat",
     "description": "Confirmació quan el PDF s'ha generat i descarregat"
   },
   "features.print.pdf.error": {
-    "defaultMessage": "No s'ha pogut generar el PDF. (Codi: {code})",
+    "message": "No s'ha pogut generar el PDF. (Codi: {code})",
     "description": "Error quan la generació del PDF falla; el codi permet dir què ha passat sense obrir la consola"
   },
   "shared.navigation.edit": {
-    "defaultMessage": "Edició",
+    "message": "Edició",
     "description": "Nom de la pàgina d'edició de seqüències"
   },
   "shared.navigation.view": {
-    "defaultMessage": "Vista",
+    "message": "Vista",
     "description": "Nom de la pàgina de visualització de seqüències"
   },
   "components.tabsSequences.addSequence": {
-    "defaultMessage": "Afegeix una seqüència",
+    "message": "Afegeix una seqüència",
     "description": "Tooltip del botó que afegeix una seqüència nova"
   },
   "components.tabsSequences.deleteLastSequence": {
-    "defaultMessage": "Elimina l'última seqüència",
+    "message": "Elimina l'última seqüència",
     "description": "Tooltip del botó que elimina l'última seqüència"
   },
   "components.tabsSequences.sequenceNumber": {
-    "defaultMessage": "Número de seqüència",
+    "message": "Número de seqüència",
     "description": "Nom accessible de la llista de tabs de seqüències"
   },
   "components.pictEdit.tooltipReset": {
-    "defaultMessage": "Torna aquest pictograma a l'estil del document. Es pot desfer.",
+    "message": "Torna aquest pictograma a l'estil del document. Es pot desfer.",
     "description": "Tooltip del botó «Restableix» del pictograma"
   },
   "components.confirmDialog.cancel": {
-    "defaultMessage": "Cancel·la",
+    "message": "Cancel·la",
     "description": "Botó que tanca una confirmació sense fer l'acció"
   },
   "components.tabsSequences.confirmDeleteTitle": {
-    "defaultMessage": "Esborres la seqüència {number}?",
+    "message": "Esborres la seqüència {number}?",
     "description": "Títol de la confirmació d'esborrar l'última seqüència"
   },
   "components.tabsSequences.confirmDeleteBody": {
-    "defaultMessage": "Té {count, plural, one {# pictograma} other {# pictogrames}}. Esborrar la seqüència se'ls endú tots i no es pot desfer.",
+    "message": "Té {count, plural, one {# pictograma} other {# pictogrames}}. Esborrar la seqüència se'ls endú tots i no es pot desfer.",
     "description": "Cos de la confirmació: què es perd en esborrar la seqüència"
   },
   "components.tabsSequences.confirmDelete": {
-    "defaultMessage": "Esborra la seqüència",
+    "message": "Esborra la seqüència",
     "description": "Botó que confirma l'esborrat de l'última seqüència"
   },
   "components.buttonWithModalDownload.dialogTitle": {
-    "defaultMessage": "Desa i descarrega",
+    "message": "Desa i descarrega",
     "description": "Títol del diàleg de descàrrega del fitxer .saac"
   },
   "features.backend.userSettings.usage.storageTitle": {
-    "defaultMessage": "Espai per a imatges"
+    "message": "Espai per a imatges"
   },
   "features.backend.userSettings.usage.documentsTitle": {
-    "defaultMessage": "Documents al núvol",
+    "message": "Documents al núvol",
     "description": "Títol del comptador de documents desats al núvol"
   },
   "features.backend.userSettings.usage.wordsTitle": {
-    "defaultMessage": "Paraules del vocabulari"
+    "message": "Paraules del vocabulari"
   },
   "features.backend.userSettings.usage.countOfLimit": {
-    "defaultMessage": "{used} de {limit}"
+    "message": "{used} de {limit}"
   },
   "features.backend.userSettings.usage.bytesOfLimit": {
-    "defaultMessage": "{used} de {limit}"
+    "message": "{used} de {limit}"
   },
   "features.backend.userSettings.usage.megabytes": {
-    "defaultMessage": "{value} MB"
+    "message": "{value} MB"
   },
   "features.backend.userSettings.usage.kilobytes": {
-    "defaultMessage": "{value} KB"
+    "message": "{value} KB"
   },
   "features.backend.userSettings.usage.centimeters": {
-    "defaultMessage": "{value} cm",
+    "message": "{value} cm",
     "description": "Mida impresa en centímetres"
   },
   "features.backend.userSettings.usage.sizeWithPrint": {
-    "defaultMessage": "{size} · es veu bé fins a {width}",
+    "message": "{size} · es veu bé fins a {width}",
     "description": "Pes d'una imatge i mida fins a la qual s'imprimeix nítida"
   },
   "features.backend.userSettings.usage.remainingImages": {
-    "defaultMessage": "{count, plural, =0 {No hi cap cap imatge més amb la qualitat triada} one {Hi cap # imatge més amb la qualitat triada} other {Hi caben # imatges més amb la qualitat triada}}"
+    "message": "{count, plural, =0 {No hi cap cap imatge més amb la qualitat triada} one {Hi cap # imatge més amb la qualitat triada} other {Hi caben # imatges més amb la qualitat triada}}"
   },
   "features.backend.userSettings.usage.imagesTitle": {
-    "defaultMessage": "Les teves imatges"
+    "message": "Les teves imatges"
   },
   "features.backend.userSettings.usage.imagesEmpty": {
-    "defaultMessage": "Encara no has pujat cap imatge pròpia. Els pictogrames d'ARASAAC no ocupen espai del teu compte."
+    "message": "Encara no has pujat cap imatge pròpia. Els pictogrames d'ARASAAC no ocupen espai del teu compte."
   },
   "features.backend.userSettings.usage.imagesLoadError": {
-    "defaultMessage": "No s'han pogut carregar les imatges. Torna-ho a provar d'aquí a una estona."
+    "message": "No s'han pogut carregar les imatges. Torna-ho a provar d'aquí a una estona."
   },
   "features.backend.userSettings.usage.reload": {
-    "defaultMessage": "Torna-ho a provar"
+    "message": "Torna-ho a provar"
   },
   "features.backend.userSettings.usage.inDocument": {
-    "defaultMessage": "Al document «{title}»",
+    "message": "Al document «{title}»",
     "description": "Origen d'una imatge: el document on es fa servir"
   },
   "features.backend.userSettings.usage.inUntitledDocument": {
-    "defaultMessage": "A un document sense nom",
+    "message": "A un document sense nom",
     "description": "Origen d'una imatge d'un document que no té títol"
   },
   "features.backend.userSettings.usage.inWord": {
-    "defaultMessage": "A la paraula «{word}»"
+    "message": "A la paraula «{word}»"
   },
   "features.backend.userSettings.usage.deleteImage": {
-    "defaultMessage": "Esborra la imatge"
+    "message": "Esborra la imatge"
   },
   "features.backend.userSettings.usage.deleteTitle": {
-    "defaultMessage": "Esborres la imatge?"
+    "message": "Esborres la imatge?"
   },
   "features.backend.userSettings.usage.deleteBodyDocument": {
-    "defaultMessage": "El pictograma es quedarà sense imatge al document desat al núvol, i recuperaràs {size}. La imatge no es pot recuperar.",
+    "message": "El pictograma es quedarà sense imatge al document desat al núvol, i recuperaràs {size}. La imatge no es pot recuperar.",
     "description": "Què es perd en esborrar la imatge d'un document"
   },
   "features.backend.userSettings.usage.deleteBodyWord": {
-    "defaultMessage": "La paraula es quedarà amb el seu pictograma d'ARASAAC, i recuperaràs {size}. La imatge no es pot recuperar."
+    "message": "La paraula es quedarà amb el seu pictograma d'ARASAAC, i recuperaràs {size}. La imatge no es pot recuperar."
   },
   "features.backend.userSettings.usage.deleteConfirm": {
-    "defaultMessage": "Esborra la imatge"
+    "message": "Esborra la imatge"
   },
   "features.backend.userSettings.usage.deleted": {
-    "defaultMessage": "Imatge esborrada. Has recuperat {size}."
+    "message": "Imatge esborrada. Has recuperat {size}."
   },
   "features.backend.userSettings.usage.deleteError": {
-    "defaultMessage": "No s'ha pogut esborrar la imatge. (Codi: {code})"
+    "message": "No s'ha pogut esborrar la imatge. (Codi: {code})"
   },
   "features.backend.userSettings.usage.resizeImage": {
-    "defaultMessage": "Canvia la mida de la imatge",
+    "message": "Canvia la mida de la imatge",
     "description": "Botó per reduir una imatge del compte"
   },
   "features.backend.userSettings.usage.resizeTitle": {
-    "defaultMessage": "Canvia la mida de la imatge",
+    "message": "Canvia la mida de la imatge",
     "description": "Títol del diàleg per reduir una imatge"
   },
   "features.backend.userSettings.usage.resizeCurrent": {
-    "defaultMessage": "Ara ocupa {size} i es veu bé impresa fins a {width} d'ample. El pictograma no canvia: només la mida de la imatge.",
+    "message": "Ara ocupa {size} i es veu bé impresa fins a {width} d'ample. El pictograma no canvia: només la mida de la imatge.",
     "description": "Estat actual de la imatge dins del diàleg de canvi de mida"
   },
   "features.backend.userSettings.usage.resizeCurrentUnknown": {
-    "defaultMessage": "Ara ocupa {size}. El pictograma no canvia: només la mida de la imatge.",
+    "message": "Ara ocupa {size}. El pictograma no canvia: només la mida de la imatge.",
     "description": "Estat actual de la imatge quan encara no se'n saben els píxels"
   },
   "features.backend.userSettings.usage.resizePreparing": {
-    "defaultMessage": "S'estan preparant les mides…",
+    "message": "S'estan preparant les mides…",
     "description": "Espera mentre es calculen les versions més petites"
   },
   "features.backend.userSettings.usage.resizeOption": {
-    "defaultMessage": "Es veurà bé fins a {width} d'ample i ocuparà {size}: recuperes {saved}.",
+    "message": "Es veurà bé fins a {width} d'ample i ocuparà {size}: recuperes {saved}.",
     "description": "Què passa amb la mida triada al diàleg de canvi de mida"
   },
   "features.backend.userSettings.usage.resizeNone": {
-    "defaultMessage": "Aquesta imatge ja és a la mida més petita: reduir-la més la faria borrosa impresa. Si necessites espai, esborra-la.",
+    "message": "Aquesta imatge ja és a la mida més petita: reduir-la més la faria borrosa impresa. Si necessites espai, esborra-la.",
     "description": "La imatge no es pot reduir més"
   },
   "features.backend.userSettings.usage.resizeConfirm": {
-    "defaultMessage": "Canvia la mida",
+    "message": "Canvia la mida",
     "description": "Botó que aplica la mida triada"
   },
   "features.backend.userSettings.usage.resizeCancel": {
-    "defaultMessage": "Cancel·la",
+    "message": "Cancel·la",
     "description": "Botó que tanca el diàleg de canvi de mida sense fer res"
   },
   "features.backend.userSettings.usage.resizeApplying": {
-    "defaultMessage": "S'està canviant la mida de la imatge…",
+    "message": "S'està canviant la mida de la imatge…",
     "description": "Espera mentre la imatge nova puja al núvol"
   },
   "features.backend.userSettings.usage.resizeLoadError": {
-    "defaultMessage": "No s'ha pogut preparar la imatge. Comprova la connexió i torna-ho a provar.",
+    "message": "No s'ha pogut preparar la imatge. Comprova la connexió i torna-ho a provar.",
     "description": "Error en baixar o comprimir la imatge al navegador"
   },
   "features.backend.userSettings.usage.resizeError": {
-    "defaultMessage": "No s'ha pogut canviar la mida de la imatge. (Codi: {code})",
+    "message": "No s'ha pogut canviar la mida de la imatge. (Codi: {code})",
     "description": "Error en desar la imatge reduïda"
   },
   "features.backend.userSettings.usage.resized": {
-    "defaultMessage": "La imatge ara ocupa {size}. Has recuperat {saved}.",
+    "message": "La imatge ara ocupa {size}. Has recuperat {saved}.",
     "description": "Confirmació del canvi de mida amb l'espai recuperat"
   },
   "features.backend.userSettings.usage.thumbnailAlt": {
-    "defaultMessage": "Imatge pujada"
+    "message": "Imatge pujada"
   },
   "components.settingCardImageQuality.cardTitle": {
-    "defaultMessage": "Qualitat de les imatges"
+    "message": "Qualitat de les imatges"
   },
   "components.settingCardImageQuality.ariaLabel": {
-    "defaultMessage": "Qualitat de les imatges que puges"
+    "message": "Qualitat de les imatges que puges"
   },
   "components.settingCardImageQuality.print": {
-    "defaultMessage": "Impressió"
+    "message": "Impressió"
   },
   "components.settingCardImageQuality.standard": {
-    "defaultMessage": "Estàndard"
+    "message": "Estàndard"
   },
   "components.settingCardImageQuality.compact": {
-    "defaultMessage": "Compacta"
+    "message": "Compacta"
   },
   "components.settingCardImageQuality.helper": {
-    "defaultMessage": "Les imatges noves es veuran bé impreses fins a {width} d'ample i ocuparan com a màxim {size} cadascuna. Impreses més grans, es veuran borroses.",
+    "message": "Les imatges noves es veuran bé impreses fins a {width} d'ample i ocuparan com a màxim {size} cadascuna. Impreses més grans, es veuran borroses.",
     "description": "Explicació del nivell de qualitat: fins a quina mida s'imprimeix bé i quant ocupa"
   },
   "components.settingCardImageQuality.optionHint": {
-    "defaultMessage": "Es veu bé imprès fins a {width} d'ample",
+    "message": "Es veu bé imprès fins a {width} d'ample",
     "description": "Ajuda de cada nivell: fins a quina mida impresa es veu bé"
   },
   "components.settingCardImageQuality.existingUnchanged": {
-    "defaultMessage": "Les que ja has pujat no canvien.",
+    "message": "Les que ja has pujat no canvien.",
     "description": "La qualitat només val per a les imatges noves"
   },
   "components.settingCardImageQuality.existingResizable": {
-    "defaultMessage": "Les que ja has pujat no canvien, però les pots canviar de mida a «L'espai del teu compte».",
+    "message": "Les que ja has pujat no canvien, però les pots canviar de mida a «L'espai del teu compte».",
     "description": "La qualitat només val per a les imatges noves, i on canviar les que ja hi són"
   },
   "components.defaultSettings.userPanel.sectionImages": {
-    "defaultMessage": "Imatges"
+    "message": "Imatges"
   },
   "components.defaultSettings.userPanel.sectionStorage": {
-    "defaultMessage": "L'espai del teu compte"
+    "message": "L'espai del teu compte"
   },
   "components.uploadImageButton.print": {
-    "defaultMessage": "impressió"
+    "message": "impressió"
   },
   "components.uploadImageButton.standard": {
-    "defaultMessage": "estàndard"
+    "message": "estàndard"
   },
   "components.uploadImageButton.compact": {
-    "defaultMessage": "compacta"
+    "message": "compacta"
   },
   "components.uploadImageButton.tooBigTitle": {
-    "defaultMessage": "La imatge ocupa massa"
+    "message": "La imatge ocupa massa"
   },
   "components.uploadImageButton.tooBigQuotaSmaller": {
-    "defaultMessage": "La imatge ocupa {size} i al teu compte només queden {available}. Amb la qualitat {quality} ocuparia {smallerSize}, es continuaria veient bé impresa fins a {smallerWidth} d'ample i sí que hi cabria.",
+    "message": "La imatge ocupa {size} i al teu compte només queden {available}. Amb la qualitat {quality} ocuparia {smallerSize}, es continuaria veient bé impresa fins a {smallerWidth} d'ample i sí que hi cabria.",
     "description": "No cap a l'espai del compte, però n'hi ha una de més petita"
   },
   "components.uploadImageButton.tooBigQuotaOnly": {
-    "defaultMessage": "La imatge ocupa {size} i al teu compte només queden {available}. No hi cap amb cap qualitat: la pots posar igualment i imprimir-la des d'aquest dispositiu, però per desar-la al núvol hauràs d'alliberar espai."
+    "message": "La imatge ocupa {size} i al teu compte només queden {available}. No hi cap amb cap qualitat: la pots posar igualment i imprimir-la des d'aquest dispositiu, però per desar-la al núvol hauràs d'alliberar espai."
   },
   "components.uploadImageButton.tooBigPerImageSmaller": {
-    "defaultMessage": "La imatge ocupa {size} i el màxim per imatge és {available}. Amb la qualitat {quality} ocuparia {smallerSize} i es continuaria veient bé impresa fins a {smallerWidth} d'ample.",
+    "message": "La imatge ocupa {size} i el màxim per imatge és {available}. Amb la qualitat {quality} ocuparia {smallerSize} i es continuaria veient bé impresa fins a {smallerWidth} d'ample.",
     "description": "Passa del sostre per imatge, però n'hi ha una de més petita"
   },
   "components.uploadImageButton.tooBigPerImageOnly": {
-    "defaultMessage": "La imatge ocupa {size} i el màxim per imatge és {available}. La pots posar igualment i imprimir-la des d'aquest dispositiu, però no es podrà desar al núvol."
+    "message": "La imatge ocupa {size} i el màxim per imatge és {available}. La pots posar igualment i imprimir-la des d'aquest dispositiu, però no es podrà desar al núvol."
   },
   "components.uploadImageButton.useSmaller": {
-    "defaultMessage": "Fes-la més petita"
+    "message": "Fes-la més petita"
   },
   "components.uploadImageButton.useOriginal": {
-    "defaultMessage": "Posa-la igualment"
+    "message": "Posa-la igualment"
   },
   "components.uploadImageButton.cancelUpload": {
-    "defaultMessage": "Cancel·la"
-  },
-  "features.backend.auth.error.IMAGE_TOO_LARGE": {
-    "defaultMessage": "Alguna imatge pesa massa per desar-la al núvol. Torna-la a posar amb una qualitat més baixa (Configuració › Usuari › Qualitat de les imatges)."
+    "message": "Cancel·la"
   },
   "components.defaultSettings.saveError.bodyQuota": {
-    "defaultMessage": "El teu compte s'ha quedat sense espai per a imatges, i per això la configuració no s'ha desat. A Configuració › Usuari veuràs què ocupa cada imatge del vocabulari i en podràs esborrar alguna."
+    "message": "El teu compte s'ha quedat sense espai per a imatges, i per això la configuració no s'ha desat. A Configuració › Usuari veuràs què ocupa cada imatge del vocabulari i en podràs esborrar alguna."
   },
   "components.defaultSettings.saveError.bodyImageTooLarge": {
-    "defaultMessage": "Alguna imatge del vocabulari pesa massa per desar-la al núvol. Torna-la a posar amb una qualitat més baixa: la tries a Configuració › Usuari › Qualitat de les imatges."
+    "message": "Alguna imatge del vocabulari pesa massa per desar-la al núvol. Torna-la a posar amb una qualitat més baixa: la tries a Configuració › Usuari › Qualitat de les imatges."
   },
   "news.autosave-draft.title": {
-    "defaultMessage": "La teva feina ja no es perd",
+    "message": "La teva feina ja no es perd",
     "description": "Títol de la notícia «autosave-draft»"
   },
   "news.autosave-draft.summary": {
-    "defaultMessage": "La seqüència es desa sola mentre treballes, i un botó nou et diu on és.",
+    "message": "La seqüència es desa sola mentre treballes, i un botó nou et diu on és.",
     "description": "Resum de la notícia «autosave-draft» al carrusel"
   },
   "news.autosave-draft.content": {
-    "defaultMessage": "Fins ara, recarregar la pàgina o tancar la pestanya sense voler s'enduia hores de feina sense cap avís. Ara la seqüència es desa sola en aquest navegador mentre treballes, i a baix a la dreta hi ha un botó que diu on és la teva feina i de quan és. És una xarxa de seguretat, no un desat: el navegador la pot buidar, així que per guardar de debò hi continua havent «Descarrega» —el fitxer .saac— i, amb compte, el núvol.",
+    "message": "Fins ara, recarregar la pàgina o tancar la pestanya sense voler s'enduia hores de feina sense cap avís. Ara la seqüència es desa sola en aquest navegador mentre treballes, i a baix a la dreta hi ha un botó que diu on és la teva feina i de quan és. És una xarxa de seguretat, no un desat: el navegador la pot buidar, així que per guardar de debò hi continua havent «Descarrega» —el fitxer .saac— i, amb compte, el núvol.",
     "description": "Cos de la notícia «autosave-draft»"
   },
   "news.autosave-draft.step1.alt": {
-    "defaultMessage": "Editor amb el botó rodó d'estat del document a baix a la dreta",
+    "message": "Editor amb el botó rodó d'estat del document a baix a la dreta",
     "description": "Text alternatiu de la imatge del pas 1 de «autosave-draft»"
   },
   "news.autosave-draft.step1.description": {
-    "defaultMessage": "A baix a la dreta hi ha un botó nou. El color diu com està la feina d'un cop d'ull: en verd la tens on toca, i en groc tens una còpia però s'ha quedat enrere del que hi ha a pantalla.",
+    "message": "A baix a la dreta hi ha un botó nou. El color diu com està la feina d'un cop d'ull: en verd la tens on toca, i en groc tens una còpia però s'ha quedat enrere del que hi ha a pantalla.",
     "description": "Descripció del pas 1 de «autosave-draft»"
   },
   "news.autosave-draft.step2.alt": {
-    "defaultMessage": "El botó d'estat obert, amb la frase d'estat i les accions disponibles",
+    "message": "El botó d'estat obert, amb la frase d'estat i les accions disponibles",
     "description": "Text alternatiu de la imatge del pas 2 de «autosave-draft»"
   },
   "news.autosave-draft.step2.description": {
-    "defaultMessage": "Prem-lo i s'obre la frase sencera —«Només en aquest dispositiu, des de les…»— i les accions: desar, descarregar el fitxer i començar un document nou, cosa que abans no es podia fer sense recarregar.",
+    "message": "Prem-lo i s'obre la frase sencera —«Només en aquest dispositiu, des de les…»— i les accions: desar, descarregar el fitxer i començar un document nou, cosa que abans no es podia fer sense recarregar.",
     "description": "Descripció del pas 2 de «autosave-draft»"
   },
   "news.pictogram-actions-touch.title": {
-    "defaultMessage": "Les accions del pictograma, també a la tauleta",
+    "message": "Les accions del pictograma, també a la tauleta",
     "description": "Títol de la notícia «pictogram-actions-touch»"
   },
   "news.pictogram-actions-touch.summary": {
-    "defaultMessage": "Copiar, enganxar, inserir i duplicar ja no depenen del clic dret.",
+    "message": "Copiar, enganxar, inserir i duplicar ja no depenen del clic dret.",
     "description": "Resum de la notícia «pictogram-actions-touch» al carrusel"
   },
   "news.pictogram-actions-touch.content": {
-    "defaultMessage": "Aquestes accions només s'obrien amb el clic dret, i a l'iPad i a l'iPhone aquell menú no s'obre mai. Editar i esborrar sí que hi arribaven pel diàleg del pictograma, però copiar, enganxar, inserir i duplicar hi quedaven sense cap porta: justament les quatre que serveixen per construir la seqüència. Ara també són al menú d'aquell diàleg, igual a l'ordinador i a la tauleta. De passada, el menú ha deixat d'estar en anglès i les etiquetes diuen el que fan de debò.",
+    "message": "Aquestes accions només s'obrien amb el clic dret, i a l'iPad i a l'iPhone aquell menú no s'obre mai. Editar i esborrar sí que hi arribaven pel diàleg del pictograma, però copiar, enganxar, inserir i duplicar hi quedaven sense cap porta: justament les quatre que serveixen per construir la seqüència. Ara també són al menú d'aquell diàleg, igual a l'ordinador i a la tauleta. De passada, el menú ha deixat d'estar en anglès i les etiquetes diuen el que fan de debò.",
     "description": "Cos de la notícia «pictogram-actions-touch»"
   },
   "news.pictogram-actions-touch.step1.alt": {
-    "defaultMessage": "Diàleg d'edició del pictograma amb el botó de més accions a la capçalera",
+    "message": "Diàleg d'edició del pictograma amb el botó de més accions a la capçalera",
     "description": "Text alternatiu de la imatge del pas 1 de «pictogram-actions-touch»"
   },
   "news.pictogram-actions-touch.step1.description": {
-    "defaultMessage": "Toca un pictograma per obrir-ne el diàleg d'edició. A la cantonada de dalt a la dreta hi ha el botó de més accions.",
+    "message": "Toca un pictograma per obrir-ne el diàleg d'edició. A la cantonada de dalt a la dreta hi ha el botó de més accions.",
     "description": "Descripció del pas 1 de «pictogram-actions-touch»"
   },
   "news.pictogram-actions-touch.step2.alt": {
-    "defaultMessage": "Menú desplegat amb les quatre accions de construcció del pictograma",
+    "message": "Menú desplegat amb les quatre accions de construcció del pictograma",
     "description": "Text alternatiu de la imatge del pas 2 de «pictogram-actions-touch»"
   },
   "news.pictogram-actions-touch.step2.description": {
-    "defaultMessage": "S'hi despleguen les quatre: copiar, enganxar —que substitueix el pictograma, i ara ho diu—, inserir-ne un de buit a continuació i duplicar a continuació. Esborrar-lo continua sent el botó del peu del diàleg.",
+    "message": "S'hi despleguen les quatre: copiar, enganxar —que substitueix el pictograma, i ara ho diu—, inserir-ne un de buit a continuació i duplicar a continuació. Esborrar-lo continua sent el botó del peu del diàleg.",
     "description": "Descripció del pas 2 de «pictogram-actions-touch»"
   },
   "news.search-suggestions.title": {
-    "defaultMessage": "Escriu la frase i troba els pictogrames",
+    "message": "Escriu la frase i troba els pictogrames",
     "description": "Títol de la notícia «search-suggestions»"
   },
   "news.search-suggestions.summary": {
-    "defaultMessage": "El cercador suggereix paraules mentre escrius, i d'una frase sencera en surt la seqüència.",
+    "message": "El cercador suggereix paraules mentre escrius, i d'una frase sencera en surt la seqüència.",
     "description": "Resum de la notícia «search-suggestions» al carrusel"
   },
   "news.search-suggestions.content": {
-    "defaultMessage": "Mentre escrius, el cercador et proposa paraules i les pots acceptar amb el tabulador. I no cal buscar-les d'una en una: escriu la frase sencera, separada per comes, i l'aplicació munta la seqüència anant paraula per paraula, amb una barra que va dient per on va.",
+    "message": "Mentre escrius, el cercador et proposa paraules i les pots acceptar amb el tabulador. I no cal buscar-les d'una en una: escriu la frase sencera, separada per comes, i l'aplicació munta la seqüència anant paraula per paraula, amb una barra que va dient per on va.",
     "description": "Cos de la notícia «search-suggestions»"
   },
   "news.search-suggestions.step1.alt": {
-    "defaultMessage": "Cercador amb la llista de suggeriments oberta i el xip «Tab»",
+    "message": "Cercador amb la llista de suggeriments oberta i el xip «Tab»",
     "description": "Text alternatiu de la imatge del pas 1 de «search-suggestions»"
   },
   "news.search-suggestions.step1.description": {
-    "defaultMessage": "Comença a escriure i apareixen els suggeriments. El xip «Tab» et recorda que amb el tabulador acceptes el que hi ha marcat, sense haver de escriure la paraula sencera.",
+    "message": "Comença a escriure i apareixen els suggeriments. El xip «Tab» et recorda que amb el tabulador acceptes el que hi ha marcat, sense haver de escriure la paraula sencera.",
     "description": "Descripció del pas 1 de «search-suggestions»"
   },
   "news.search-suggestions.step2.alt": {
-    "defaultMessage": "Seqüència amb tres pictogrames sortits d'una sola frase",
+    "message": "Seqüència amb tres pictogrames sortits d'una sola frase",
     "description": "Text alternatiu de la imatge del pas 2 de «search-suggestions»"
   },
   "news.search-suggestions.step2.description": {
-    "defaultMessage": "Escriu la frase sencera separada per comes i prem Enter: cada paraula es converteix en un pictograma de la seqüència, en el mateix ordre en què l'has escrita.",
+    "message": "Escriu la frase sencera separada per comes i prem Enter: cada paraula es converteix en un pictograma de la seqüència, en el mateix ordre en què l'has escrita.",
     "description": "Descripció del pas 2 de «search-suggestions»"
   },
   "news.user-preferences.title": {
-    "defaultMessage": "Tema fosc i configuració ampliada",
+    "message": "Tema fosc i configuració ampliada",
     "description": "Títol de la notícia «user-preferences»"
   },
   "news.user-preferences.summary": {
-    "defaultMessage": "L'app ja té mode fosc, i la configuració s'ha repartit en pestanyes.",
+    "message": "L'app ja té mode fosc, i la configuració s'ha repartit en pestanyes.",
     "description": "Resum de la notícia «user-preferences» al carrusel"
   },
   "news.user-preferences.content": {
-    "defaultMessage": "El diàleg de configuració s'ha repartit en pestanyes, i n'hi ha una de nova per a tu: a Usuari hi trobaràs l'idioma de l'aplicació, l'idioma amb què es busquen els pictogrames i el tema, clar o fosc. El full de la previsualització es manté blanc també en fosc, i és a propòsit: el que veus a la pantalla és el que sortirà imprès.",
+    "message": "El diàleg de configuració s'ha repartit en pestanyes, i n'hi ha una de nova per a tu: a Usuari hi trobaràs l'idioma de l'aplicació, l'idioma amb què es busquen els pictogrames i el tema, clar o fosc. El full de la previsualització es manté blanc també en fosc, i és a propòsit: el que veus a la pantalla és el que sortirà imprès.",
     "description": "Cos de la notícia «user-preferences»"
   },
   "news.user-preferences.step1.alt": {
-    "defaultMessage": "Pestanya Usuari de la configuració amb el selector de tema",
+    "message": "Pestanya Usuari de la configuració amb el selector de tema",
     "description": "Text alternatiu de la imatge del pas 1 de «user-preferences»"
   },
   "news.user-preferences.step1.description": {
-    "defaultMessage": "Obre Configuració des del menú principal. A la pestanya Usuari hi ha el selector de tema: clar, fosc o el que digui el sistema.",
+    "message": "Obre Configuració des del menú principal. A la pestanya Usuari hi ha el selector de tema: clar, fosc o el que digui el sistema.",
     "description": "Descripció del pas 1 de «user-preferences»"
   },
   "news.user-preferences.step2.alt": {
-    "defaultMessage": "L'editor en tema fosc, amb el full de la seqüència encara blanc",
+    "message": "L'editor en tema fosc, amb el full de la seqüència encara blanc",
     "description": "Text alternatiu de la imatge del pas 2 de «user-preferences»"
   },
   "news.user-preferences.step2.description": {
-    "defaultMessage": "Tota la interfície passa a fosc, però el full es manté blanc: és el que s'imprimeix, i el contrast del text sobre el paper s'ha de poder jutjar mentre el configures.",
+    "message": "Tota la interfície passa a fosc, però el full es manté blanc: és el que s'imprimeix, i el contrast del text sobre el paper s'ha de poder jutjar mentre el configures.",
     "description": "Descripció del pas 2 de «user-preferences»"
   },
   "news.pdf-quality.title": {
-    "defaultMessage": "El PDF surt com el veus",
+    "message": "El PDF surt com el veus",
     "description": "Títol de la notícia «pdf-quality»"
   },
   "news.pdf-quality.summary": {
-    "defaultMessage": "El PDF ja no perd qualitat segons com de reduïda es vegi la previsualització.",
+    "message": "El PDF ja no perd qualitat segons com de reduïda es vegi la previsualització.",
     "description": "Resum de la notícia «pdf-quality» al carrusel"
   },
   "news.pdf-quality.content": {
-    "defaultMessage": "El PDF es generava a la resolució a la qual es veia la previsualització: com més petita la pantalla, pitjor el fitxer, que és justament el pitjor cas per a qui exporta des d'una tauleta. Ara surt sempre a la resolució que toca, la imatge es centra a la pàgina en comptes d'acumular tot el marge a un costat, i ja no pot sortir cap full en blanc. Mentre es genera, l'aplicació diu què està fent.",
+    "message": "El PDF es generava a la resolució a la qual es veia la previsualització: com més petita la pantalla, pitjor el fitxer, que és justament el pitjor cas per a qui exporta des d'una tauleta. Ara surt sempre a la resolució que toca, la imatge es centra a la pàgina en comptes d'acumular tot el marge a un costat, i ja no pot sortir cap full en blanc. Mentre es genera, l'aplicació diu què està fent.",
     "description": "Cos de la notícia «pdf-quality»"
   },
   "news.pdf-quality.step1.alt": {
-    "defaultMessage": "Previsualització de la seqüència a la pàgina de vista",
+    "message": "Previsualització de la seqüència a la pàgina de vista",
     "description": "Text alternatiu de la imatge del pas 1 de «pdf-quality»"
   },
   "news.pdf-quality.step1.description": {
-    "defaultMessage": "El que veus a la previsualització és el que trobaràs al PDF: la mateixa mida, el mateix espaiat i els mateixos marges, tant si el mires en una pantalla gran com en una de petita.",
+    "message": "El que veus a la previsualització és el que trobaràs al PDF: la mateixa mida, el mateix espaiat i els mateixos marges, tant si el mires en una pantalla gran com en una de petita.",
     "description": "Descripció del pas 1 de «pdf-quality»"
   },
   "news.pdf-quality.step2.alt": {
-    "defaultMessage": "Missatge d'espera mentre es genera el PDF",
+    "message": "Missatge d'espera mentre es genera el PDF",
     "description": "Text alternatiu de la imatge del pas 2 de «pdf-quality»"
   },
   "news.pdf-quality.step2.description": {
-    "defaultMessage": "En prémer el botó de PDF, l'aplicació diu que l'està generant, i t'avisa tant quan acaba com si alguna cosa falla. Abans, l'únic senyal era que el botó es posava gris.",
+    "message": "En prémer el botó de PDF, l'aplicació diu que l'està generant, i t'avisa tant quan acaba com si alguna cosa falla. Abans, l'únic senyal era que el botó es posava gris.",
     "description": "Descripció del pas 2 de «pdf-quality»"
   },
   "news.safe-delete.title": {
-    "defaultMessage": "Ningú esborra una seqüència sense avisar",
+    "message": "Ningú esborra una seqüència sense avisar",
     "description": "Títol de la notícia «safe-delete»"
   },
   "news.safe-delete.summary": {
-    "defaultMessage": "Esborrar una seqüència ara pregunta, i diu quants pictogrames se'n van.",
+    "message": "Esborrar una seqüència ara pregunta, i diu quants pictogrames se'n van.",
     "description": "Resum de la notícia «safe-delete» al carrusel"
   },
   "news.safe-delete.content": {
-    "defaultMessage": "L'aplicació no té desfer, així que esborrar una seqüència sencera era la manera més fàcil de perdre feina: se n'anava amb tots els seus pictogrames i no preguntava res. Ara pregunta, i diu la xifra. Si la seqüència és buida no pregunta: no cal demanar permís per llençar caselles en blanc. I al menú del pictograma, «Elimina» ha sortit del mig i ha anat a l'últim lloc, sol.",
+    "message": "L'aplicació no té desfer, així que esborrar una seqüència sencera era la manera més fàcil de perdre feina: se n'anava amb tots els seus pictogrames i no preguntava res. Ara pregunta, i diu la xifra. Si la seqüència és buida no pregunta: no cal demanar permís per llençar caselles en blanc. I al menú del pictograma, «Elimina» ha sortit del mig i ha anat a l'últim lloc, sol.",
     "description": "Cos de la notícia «safe-delete»"
   },
   "news.safe-delete.step1.alt": {
-    "defaultMessage": "Diàleg de confirmació que diu quants pictogrames s'esborraran",
+    "message": "Diàleg de confirmació que diu quants pictogrames s'esborraran",
     "description": "Text alternatiu de la imatge del pas 1 de «safe-delete»"
   },
   "news.safe-delete.step1.description": {
-    "defaultMessage": "En esborrar una seqüència amb contingut, l'aplicació pregunta abans i diu quants pictogrames perdràs. Qui decideix sovint no està mirant el que perdrà.",
+    "message": "En esborrar una seqüència amb contingut, l'aplicació pregunta abans i diu quants pictogrames perdràs. Qui decideix sovint no està mirant el que perdrà.",
     "description": "Descripció del pas 1 de «safe-delete»"
   },
   "news.safe-delete.step2.alt": {
-    "defaultMessage": "Menú del pictograma amb «Elimina» separat al final",
+    "message": "Menú del pictograma amb «Elimina» separat al final",
     "description": "Text alternatiu de la imatge del pas 2 de «safe-delete»"
   },
   "news.safe-delete.step2.description": {
-    "defaultMessage": "Al menú del pictograma, «Elimina» ja no és al mig, on es premia sense voler: va a l'últim lloc, separat de la resta per una línia.",
+    "message": "Al menú del pictograma, «Elimina» ja no és al mig, on es premia sense voler: va a l'últim lloc, separat de la resta per una línia.",
     "description": "Descripció del pas 2 de «safe-delete»"
   },
   "features.sequence.style.notice.ownStyle": {
-    "defaultMessage": "Aquest document té el seu propi estil.",
+    "message": "Aquest document té el seu propi estil.",
     "description": "Bàner en obrir un document amb un estil diferent de l'estil per defecte de l'usuari"
   },
   "features.sequence.style.notice.unavailableFonts": {
-    "defaultMessage": "Algunes fonts no estan disponibles en aquest dispositiu ({fonts}): es mostren amb una font de reserva.",
+    "message": "Algunes fonts no estan disponibles en aquest dispositiu ({fonts}): es mostren amb una font de reserva.",
     "description": "Avís en obrir una seqüència que fa servir fonts que el dispositiu no té. {fonts} és la llista de noms"
   },
   "features.sequence.style.undo": {
-    "defaultMessage": "Desfés",
+    "message": "Desfés",
     "description": "Botó per desfer el canvi d'estil"
   },
   "features.sequence.style.undone": {
-    "defaultMessage": "S'ha desfet el canvi d'estil",
+    "message": "S'ha desfet el canvi d'estil",
     "description": "Confirmació després de desfer un canvi d'estil"
   },
   "features.sequence.style.setAsDefault": {
-    "defaultMessage": "Desa com a estil per defecte",
+    "message": "Desa com a estil per defecte",
     "description": "Botó que fa que un estil sigui el que reben les seqüències noves"
   },
   "features.sequence.style.setAsDefault.success": {
-    "defaultMessage": "S'ha desat com a estil per defecte",
+    "message": "S'ha desat com a estil per defecte",
     "description": "Confirmació de «Desa com a estil per defecte»"
   },
   "features.sequence.style.notice.close": {
-    "defaultMessage": "Tanca l'avís",
+    "message": "Tanca l'avís",
     "description": "Nom accessible del botó que tanca l'avís d'estil"
   },
   "features.sequence.style.pendingDefault.body": {
-    "defaultMessage": "No hi ha cap document obert a què aplicar-lo. Si el fas servir per defecte, els documents nous el rebran en lloc de l'estil que tens ara.",
+    "message": "No hi ha cap document obert a què aplicar-lo. Si el fas servir per defecte, els documents nous el rebran en lloc de l'estil que tens ara.",
     "description": "Explicació de què passa si s'accepta l'estil com a per defecte"
   },
   "features.sequence.style.panel.title": {
-    "defaultMessage": "Estil del document",
+    "message": "Estil del document",
     "description": "Títol del panell d'estil i del botó del bàner que hi porta. L'estil s'aplica a totes les seqüències del document"
   },
   "components.buttonWithModalDownload.saveStyle": {
-    "defaultMessage": "Desa l'estil",
+    "message": "Desa l'estil",
     "description": "Botó que desa només l'estil de la seqüència en un fitxer .saacstyle"
   },
   "features.sequence.style.applyUserDefault": {
-    "defaultMessage": "Aplica el meu estil per defecte",
+    "message": "Aplica el meu estil per defecte",
     "description": "Acció que aplica l'estil per defecte de l'usuari al document obert (es pot desfer)"
   },
   "features.sequence.style.applyUserDefault.tooltip": {
-    "defaultMessage": "Torna totes les seqüències del document al teu estil per defecte. Es pot desfer.",
+    "message": "Torna totes les seqüències del document al teu estil per defecte. Es pot desfer.",
     "description": "Ajuda del botó «Aplica el meu estil per defecte» de la vista"
   },
   "features.sequence.style.loadStyleFile": {
-    "defaultMessage": "Carrega un estil des d'un fitxer…",
+    "message": "Carrega un estil des d'un fitxer…",
     "description": "Acció que aplica al document l'estil d'un fitxer .saacstyle o d'un altre document .saac"
   },
   "features.sequence.style.saveStyleFile": {
-    "defaultMessage": "Desa l'estil en un fitxer…",
+    "message": "Desa l'estil en un fitxer…",
     "description": "Acció que obre el diàleg per desar només l'estil del document en un fitxer .saacstyle"
   },
   "features.sequence.style.actions": {
-    "defaultMessage": "Accions d'estil",
+    "message": "Accions d'estil",
     "description": "Nom accessible del botó «⋯» que obre el menú amb les accions d'estil en mòbil"
   },
   "features.sequence.style.changed.userDefault": {
-    "defaultMessage": "S'ha aplicat el teu estil per defecte al document.",
+    "message": "S'ha aplicat el teu estil per defecte al document.",
     "description": "Snackbar després d'aplicar l'estil per defecte al document"
   },
   "features.sequence.style.changed.file": {
-    "defaultMessage": "S'ha aplicat l'estil del fitxer al document.",
+    "message": "S'ha aplicat l'estil del fitxer al document.",
     "description": "Snackbar després d'aplicar al document l'estil d'un fitxer"
   },
   "components.buttonWithModalDownload.saveDocument": {
-    "defaultMessage": "Desa el document",
+    "message": "Desa el document",
     "description": "Botó que desa el document (totes les seqüències) amb el seu estil en un fitxer .saac"
   },
   "components.buttonWithModalDownload.styleDialogTitle": {
-    "defaultMessage": "Desa l'estil en un fitxer",
+    "message": "Desa l'estil en un fitxer",
     "description": "Títol del diàleg per desar només l'estil del document"
   },
   "components.buttonWithModalDownload.styleHelper": {
-    "defaultMessage": "Només l'aparença del document —fonts, colors, vores, mides i espais—, sense cap seqüència. Es pot aplicar a altres documents.",
+    "message": "Només l'aparença del document —fonts, colors, vores, mides i espais—, sense cap seqüència. Es pot aplicar a altres documents.",
     "description": "Explicació del diàleg per desar només l'estil"
   },
   "components.buttonWithModalDownload.whatIsSaved.title": {
-    "defaultMessage": "Què es guarda en un document?",
+    "message": "Què es guarda en un document?",
     "description": "Títol del quadre d'ajuda del diàleg de desar el document"
   },
   "components.buttonWithModalDownload.whatIsSaved.sequences": {
-    "defaultMessage": "Les seqüències i els pictogrames.",
+    "message": "Les seqüències i els pictogrames.",
     "description": "Quadre «Què es guarda»: primer element de la llista"
   },
   "components.buttonWithModalDownload.whatIsSaved.style": {
-    "defaultMessage": "Com es veuen (lletra, vores, colors, mides), inclosos els canvis fets en un sol pictograma.",
+    "message": "Com es veuen (lletra, vores, colors, mides), inclosos els canvis fets en un sol pictograma.",
     "description": "Quadre «Què es guarda»: l'estil, també el de cada pictograma"
   },
   "components.buttonWithModalDownload.whatIsSaved.page": {
-    "defaultMessage": "La pàgina: mida, orientació i direcció.",
+    "message": "La pàgina: mida, orientació i direcció.",
     "description": "Quadre «Què es guarda»: la pàgina del document"
   },
   "components.buttonWithModalDownload.whatIsSaved.images": {
-    "defaultMessage": "Les fotos pròpies.",
+    "message": "Les fotos pròpies.",
     "description": "Quadre «Què es guarda»: les imatges pujades per l'usuari"
   },
   "components.buttonWithModalDownload.whatIsSaved.not": {
-    "defaultMessage": "No es guarden les preferències de l'app, com l'idioma o l'estil per defecte.",
+    "message": "No es guarden les preferències de l'app, com l'idioma o l'estil per defecte.",
     "description": "Quadre «Què es guarda»: el que no hi va"
   },
   "components.pictEdit.styleSection": {
-    "defaultMessage": "Estil del pictograma",
+    "message": "Estil del pictograma",
     "description": "Capçalera de la configuració del pictograma: diu què s'obre"
   },
   "components.pictEdit.styleSectionSubtitle": {
-    "defaultMessage": "Personalització",
+    "message": "Personalització",
     "description": "Segona línia de la capçalera de la configuració del pictograma"
   },
   "context.feedback.load.invalidFile": {
-    "defaultMessage": "No s'ha pogut obrir. No és un document de SequenciAAC o està malmès.",
+    "message": "No s'ha pogut obrir. No és un document de SequenciAAC o està malmès.",
     "description": "Error en obrir un fitxer que no és un .saac ni un .saacstyle, o que està malmès"
   },
   "features.sequence.style.notice.legacy": {
-    "defaultMessage": "Aquest document és d'una versió anterior. L'hem adaptat; quan el desis es guardarà amb el format nou.",
+    "message": "Aquest document és d'una versió anterior. L'hem adaptat; quan el desis es guardarà amb el format nou.",
     "description": "Bàner en obrir un document desat amb una versió anterior de l'app (format antic)"
   },
   "features.sequence.style.notice.withoutStyle": {
-    "defaultMessage": "No portava estil propi, i hi hem aplicat el teu estil per defecte.",
+    "message": "No portava estil propi, i hi hem aplicat el teu estil per defecte.",
     "description": "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer)"
   },
   "features.sequence.style.notice.newerVersion": {
-    "defaultMessage": "Aquest document s'ha creat amb una versió més nova de SequenciAAC. Pot ser que alguna cosa no es vegi bé. Si el deses aquí, es podrien perdre canvis.",
+    "message": "Aquest document s'ha creat amb una versió més nova de SequenciAAC. Pot ser que alguna cosa no es vegi bé. Si el deses aquí, es podrien perdre canvis.",
     "description": "Bàner d'avís en obrir un document d'una versió de l'app més nova que la d'ara"
   },
   "features.sequence.style.changed.applyAll": {
-    "defaultMessage": "S'ha aplicat a tots els pictogrames del document.",
+    "message": "S'ha aplicat a tots els pictogrames del document.",
     "description": "Snackbar després d'«Aplica a tots»: el valor passa a l'estil del document i a tots els pictogrames"
   },
   "features.sequence.style.changed.reset": {
-    "defaultMessage": "Estil restablert",
+    "message": "Estil restablert",
     "description": "Snackbar després de «Restableix l'estil» des del menú contextual (es pot desfer)"
   },
   "features.sequence.style.styleFileOpened.title": {
-    "defaultMessage": "Aquest fitxer és un estil, no un document",
+    "message": "Aquest fitxer és un estil, no un document",
     "description": "Títol del diàleg que surt en obrir un fitxer d'estil (.saacstyle) com si fos un document"
   },
   "features.sequence.style.styleFileOpened.body": {
-    "defaultMessage": "Pots aplicar-lo al document obert, o fer-lo el teu estil per defecte, que és el que reben els documents nous.",
+    "message": "Pots aplicar-lo al document obert, o fer-lo el teu estil per defecte, que és el que reben els documents nous.",
     "description": "Explicació del diàleg de fitxer d'estil quan hi ha un document obert"
   },
   "features.sequence.style.styleFileOpened.apply": {
-    "defaultMessage": "Aplica'l a aquest document",
+    "message": "Aplica'l a aquest document",
     "description": "Botó que aplica l'estil del fitxer al document obert (es pot desfer)"
   },
   "features.sequence.style.styleFileOpened.makeDefault": {
-    "defaultMessage": "Fes-lo el meu estil per defecte",
+    "message": "Fes-lo el meu estil per defecte",
     "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
   },
   "components.pictEdit.resetDone": {
-    "defaultMessage": "Estil restablert",
+    "message": "Estil restablert",
     "description": "Snackbar després de «Restableix» un pictograma (es pot desfer)"
   },
   "components.pictEdit.undo": {
-    "defaultMessage": "Desfés",
+    "message": "Desfés",
     "description": "Botó del snackbar que desfà «Restableix» dins del formulari"
   },
   "components.pictEdit.cardName": {
-    "defaultMessage": "{text}, pictograma {number}",
+    "message": "{text}, pictograma {number}",
     "description": "Nom accessible d'una targeta de la graella d'edició: el text i el número"
   },
   "components.pictEdit.cardNameNoText": {
-    "defaultMessage": "Pictograma {number}",
+    "message": "Pictograma {number}",
     "description": "Nom accessible d'una targeta de la graella que encara no té paraula"
   },
   "components.pictEdit.cardNameCustomized": {
-    "defaultMessage": "{name}, personalitzat",
+    "message": "{name}, personalitzat",
     "description": "Nom accessible d'una targeta amb retocs propis"
   },
   "components.mouseActionList.resetStyle": {
-    "defaultMessage": "Restableix l'estil",
+    "message": "Restableix l'estil",
     "description": "Treu els retocs d'estil del pictograma: torna a l'estil del document (es pot desfer)"
   },
   "news.documents-everywhere.title": {
-    "defaultMessage": "Els documents de SequenciAAC ara es veuen igual a tot arreu",
+    "message": "Els documents de SequenciAAC ara es veuen igual a tot arreu",
     "description": "Títol de la notícia del nou model de document (octubre de 2026)"
   },
   "news.documents-everywhere.summary": {
-    "defaultMessage": "Un fitxer .saac s'obre i s'imprimeix igual a qualsevol ordinador, tauleta o mòbil. Desar és més senzill, i l'estil es pot reutilitzar.",
+    "message": "Un fitxer .saac s'obre i s'imprimeix igual a qualsevol ordinador, tauleta o mòbil. Desar és més senzill, i l'estil es pot reutilitzar.",
     "description": "Resum de la notícia del nou model de document, a la targeta del carrusel"
   },
   "news.documents-everywhere.content": {
-    "defaultMessage": "<p>Aquest octubre estrenem una nova manera de desar els documents de SequenciAAC. Ara un fitxer .saac s'obre i s'imprimeix igual a qualsevol ordinador, tauleta o mòbil. Desar és més senzill, i l'estil es pot reutilitzar en altres documents.</p><p>Fins ara, en desar calia triar entre «Seqüència» i «Configuració predeterminada». Si no es marcava la bona opció, el document s'obria en un altre ordinador amb una altra lletra, altres vores o una altra mida de pàgina. Ho hem resolt de soca-rel. No és un pedaç: hem canviat per dins la manera com es guarden els documents, perquè els que facis avui continuïn funcionant d'aquí a molts anys.</p>",
+    "message": "<p>Aquest octubre estrenem una nova manera de desar els documents de SequenciAAC. Ara un fitxer .saac s'obre i s'imprimeix igual a qualsevol ordinador, tauleta o mòbil. Desar és més senzill, i l'estil es pot reutilitzar en altres documents.</p><p>Fins ara, en desar calia triar entre «Seqüència» i «Configuració predeterminada». Si no es marcava la bona opció, el document s'obria en un altre ordinador amb una altra lletra, altres vores o una altra mida de pàgina. Ho hem resolt de soca-rel. No és un pedaç: hem canviat per dins la manera com es guarden els documents, perquè els que facis avui continuïn funcionant d'aquí a molts anys.</p>",
     "description": "Introducció de la notícia del nou model de document. Pot portar <p> i <b>"
   },
   "news.documents-everywhere.step1.title": {
-    "defaultMessage": "Un sol botó «Desa el document»",
+    "message": "Un sol botó «Desa el document»",
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step1.description": {
-    "defaultMessage": "<p>Ja no cal triar què es desa. El botó <b>Desa el document</b> guarda el document sencer en un fitxer .saac.</p><p><b>Què es guarda en un document</b></p><ul><li>Totes les seqüències del document, cadascuna amb els seus pictogrames i en el mateix ordre.</li><li>Com es veu cada targeta: la lletra, la mida, els colors, les vores, la numeració i la posició del text.</li><li>Els canvis que hagis fet només en un pictograma, com una vora d'un altre color o un pictograma ratllat.</li><li>La mida dels pictogrames, l'espai entre ells i l'alineació de cada seqüència.</li><li>La pàgina: la mida, l'orientació i si les seqüències van en files o en columnes.</li><li>Les teves imatges pròpies, dins el mateix fitxer. Si fas servir la mateixa foto diverses vegades, només es guarda un cop.</li></ul><p><b>Què no es guarda</b>: les teves preferències de l'aplicació, com l'idioma o l'estil per defecte per als documents nous. Per això, obrir el document d'una altra persona no et canvia mai la configuració.</p>",
+    "message": "<p>Ja no cal triar què es desa. El botó <b>Desa el document</b> guarda el document sencer en un fitxer .saac.</p><p><b>Què es guarda en un document</b></p><ul><li>Totes les seqüències del document, cadascuna amb els seus pictogrames i en el mateix ordre.</li><li>Com es veu cada targeta: la lletra, la mida, els colors, les vores, la numeració i la posició del text.</li><li>Els canvis que hagis fet només en un pictograma, com una vora d'un altre color o un pictograma ratllat.</li><li>La mida dels pictogrames, l'espai entre ells i l'alineació de cada seqüència.</li><li>La pàgina: la mida, l'orientació i si les seqüències van en files o en columnes.</li><li>Les teves imatges pròpies, dins el mateix fitxer. Si fas servir la mateixa foto diverses vegades, només es guarda un cop.</li></ul><p><b>Què no es guarda</b>: les teves preferències de l'aplicació, com l'idioma o l'estil per defecte per als documents nous. Per això, obrir el document d'una altra persona no et canvia mai la configuració.</p>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.step2.title": {
-    "defaultMessage": "El teu estil, reutilitzable",
+    "message": "El teu estil, reutilitzable",
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step2.description": {
-    "defaultMessage": "<p>Si has trobat un estil que funciona, com la lletra escolar, les vores del color de l'aula o la numeració grossa, ara el pots desar en un fitxer d'estil (.saacstyle) i aplicar-lo a qualsevol document.</p><p>Els fitxers d'estil també es poden compartir. Un equip docent pot fer servir el mateix estil i tots els materials de l'escola tindran el mateix aspecte.</p><p>Si obres un fitxer d'estil des de «Carrega», l'aplicació ho detecta i et pregunta què vols fer amb ell.</p>",
+    "message": "<p>Si has trobat un estil que funciona, com la lletra escolar, les vores del color de l'aula o la numeració grossa, ara el pots desar en un fitxer d'estil (.saacstyle) i aplicar-lo a qualsevol document.</p><p>Els fitxers d'estil també es poden compartir. Un equip docent pot fer servir el mateix estil i tots els materials de l'escola tindran el mateix aspecte.</p><p>Si obres un fitxer d'estil des de «Carrega», l'aplicació ho detecta i et pregunta què vols fer amb ell.</p>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.step3.title": {
-    "defaultMessage": "L'estil general i els canvis en un sol pictograma",
+    "message": "L'estil general i els canvis en un sol pictograma",
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step3.description": {
-    "defaultMessage": "<p>Cada document té un <b>estil general</b>, que és el que tenen totes les targetes. Si canvies alguna cosa en un sol pictograma, només es guarda aquell canvi, i la resta segueix l'estil general.</p><p>Un exemple: el document fa servir vores blaves, i marques en vermell la vora del pictograma «esmorzar» perquè destaqui. Si després canvies la lletra de tot el document, «esmorzar» també canvia de lletra, però manté la vora vermella.</p><p>Perquè sempre sàpigues què passa:</p><ul><li>En editar un pictograma amb canvis propis, al costat de <b>Estil del pictograma</b> hi apareix el botó <b>Restableix</b>, perquè torni a seguir l'estil general.</li><li>A la graella, els pictogrames personalitzats porten una <b>marca petita</b> a la cantonada. Només la veus tu mentre edites: no surt mai ni a la impressió, ni al PDF, ni en pantalla completa.</li><li>També pots restablir-los des del menú del pictograma, amb <b>Restableix l'estil</b>.</li><li><b>Aplicar tots</b> posa el mateix estil a totes les targetes i treu els canvis propis.</li><li>Si t'equivoques, <b>Desfés</b> ho torna a deixar com estava.</li></ul>",
+    "message": "<p>Cada document té un <b>estil general</b>, que és el que tenen totes les targetes. Si canvies alguna cosa en un sol pictograma, només es guarda aquell canvi, i la resta segueix l'estil general.</p><p>Un exemple: el document fa servir vores blaves, i marques en vermell la vora del pictograma «esmorzar» perquè destaqui. Si després canvies la lletra de tot el document, «esmorzar» també canvia de lletra, però manté la vora vermella.</p><p>Perquè sempre sàpigues què passa:</p><ul><li>En editar un pictograma amb canvis propis, al costat de <b>Estil del pictograma</b> hi apareix el botó <b>Restableix</b>, perquè torni a seguir l'estil general.</li><li>A la graella, els pictogrames personalitzats porten una <b>marca petita</b> a la cantonada. Només la veus tu mentre edites: no surt mai ni a la impressió, ni al PDF, ni en pantalla completa.</li><li>També pots restablir-los des del menú del pictograma, amb <b>Restableix l'estil</b>.</li><li><b>Aplicar tots</b> posa el mateix estil a totes les targetes i treu els canvis propis.</li><li>Si t'equivoques, <b>Desfés</b> ho torna a deixar com estava.</li></ul>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.step4.title": {
-    "defaultMessage": "Els teus documents antics i el mòbil",
+    "message": "Els teus documents antics i el mòbil",
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step4.description": {
-    "defaultMessage": "<p><b>Els documents antics continuen funcionant.</b> Quan n'obres un, l'aplicació l'adapta sola i t'avisa. El fitxer original no es toca: quan el tornis a desar, es guardarà de la manera nova.</p><ul><li>Si el document antic no portava estil propi, s'hi aplica el teu estil per defecte i t'ho diem.</li><li>Les pestanyes buides, sense cap pictograma, es treuen.</li><li>Cada targeta es continua veient com abans.</li></ul><p><b>Al mòbil, el fitxer es baixa amb el nom correcte.</b> Abans, a Android i iPhone el fitxer podia quedar com a «rutina.saac.txt». Ara es baixa com a «rutina.saac». Els fitxers que ja tinguis amb «.txt» al final també s'obren sense haver-los de reanomenar.</p>",
+    "message": "<p><b>Els documents antics continuen funcionant.</b> Quan n'obres un, l'aplicació l'adapta sola i t'avisa. El fitxer original no es toca: quan el tornis a desar, es guardarà de la manera nova.</p><ul><li>Si el document antic no portava estil propi, s'hi aplica el teu estil per defecte i t'ho diem.</li><li>Les pestanyes buides, sense cap pictograma, es treuen.</li><li>Cada targeta es continua veient com abans.</li></ul><p><b>Al mòbil, el fitxer es baixa amb el nom correcte.</b> Abans, a Android i iPhone el fitxer podia quedar com a «rutina.saac.txt». Ara es baixa com a «rutina.saac». Els fitxers que ja tinguis amb «.txt» al final també s'obren sense haver-los de reanomenar.</p>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.step5.title": {
-    "defaultMessage": "Com està pensat un document",
+    "message": "Com està pensat un document",
     "description": "Títol d'un apartat de la notícia del nou model de document"
   },
   "news.documents-everywhere.step5.description": {
-    "defaultMessage": "<p>A partir d'ara, totes les novetats de SequenciAAC seguiran aquestes sis idees.</p><ol><li><b>El document ho porta tot.</b> Les seqüències, com es veuen, la pàgina i les teves fotos van dins el mateix fitxer. Per això es veu igual a tot arreu, amb compte o sense.</li><li><b>Document, seqüències i pictogrames.</b> Un document té diverses seqüències, que són les que veus en pestanyes, i cada seqüència té els seus pictogrames.</li><li><b>Un estil general, i els canvis de cada pictograma a part.</b> El document té l'estil general. Cada seqüència pot tenir la seva mida, l'espai entre pictogrames i l'alineació. Cada pictograma només recorda allò que li has canviat. Així, canviar l'aspecte de tot el document és fàcil, i cap targeta queda diferent sense que ho sàpigues.</li><li><b>El que és teu es queda amb tu.</b> L'idioma de l'aplicació i les teves preferències no viatgen amb el document.</li><li><b>Cada fitxer, una cosa.</b> Un .saac és un document, i un .saacstyle és un estil. L'aplicació sap què és cada fitxer encara que el mòbil li hagi canviat el nom.</li><li><b>Preparats per al futur.</b> Quan SequenciAAC millori, els teus documents es continuaran obrint i s'adaptaran sols, com passa ara amb els antics, sense que perdis res. Si algun dia obres un document fet amb una versió més nova de l'aplicació, t'avisarà abans.</li></ol>",
+    "message": "<p>A partir d'ara, totes les novetats de SequenciAAC seguiran aquestes sis idees.</p><ol><li><b>El document ho porta tot.</b> Les seqüències, com es veuen, la pàgina i les teves fotos van dins el mateix fitxer. Per això es veu igual a tot arreu, amb compte o sense.</li><li><b>Document, seqüències i pictogrames.</b> Un document té diverses seqüències, que són les que veus en pestanyes, i cada seqüència té els seus pictogrames.</li><li><b>Un estil general, i els canvis de cada pictograma a part.</b> El document té l'estil general. Cada seqüència pot tenir la seva mida, l'espai entre pictogrames i l'alineació. Cada pictograma només recorda allò que li has canviat. Així, canviar l'aspecte de tot el document és fàcil, i cap targeta queda diferent sense que ho sàpigues.</li><li><b>El que és teu es queda amb tu.</b> L'idioma de l'aplicació i les teves preferències no viatgen amb el document.</li><li><b>Cada fitxer, una cosa.</b> Un .saac és un document, i un .saacstyle és un estil. L'aplicació sap què és cada fitxer encara que el mòbil li hagi canviat el nom.</li><li><b>Preparats per al futur.</b> Quan SequenciAAC millori, els teus documents es continuaran obrint i s'adaptaran sols, com passa ara amb els antics, sense que perdis res. Si algun dia obres un document fet amb una versió més nova de l'aplicació, t'avisarà abans.</li></ol>",
     "description": "Text d'un apartat de la notícia del nou model de document. Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.documents-everywhere.faq.title": {
-    "defaultMessage": "Preguntes freqüents",
+    "message": "Preguntes freqüents",
     "description": "Títol de les preguntes freqüents de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.q1": {
-    "defaultMessage": "He de fer alguna cosa amb els meus fitxers?",
+    "message": "He de fer alguna cosa amb els meus fitxers?",
     "description": "Pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.a1": {
-    "defaultMessage": "No. Obre'ls com sempre. Si vols que quedin guardats de la manera nova, torna'ls a desar.",
+    "message": "No. Obre'ls com sempre. Si vols que quedin guardats de la manera nova, torna'ls a desar.",
     "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.q2": {
-    "defaultMessage": "Quina diferència hi ha entre un .saac i un .saacstyle?",
+    "message": "Quina diferència hi ha entre un .saac i un .saacstyle?",
     "description": "Pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.a2": {
-    "defaultMessage": "El .saac és un document amb les seves seqüències. El .saacstyle només és un estil, per aplicar-lo a altres documents.",
+    "message": "El .saac és un document amb les seves seqüències. El .saacstyle només és un estil, per aplicar-lo a altres documents.",
     "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.q3": {
-    "defaultMessage": "Si envio un document a una altra família o a l'escola, el veuran igual?",
+    "message": "Si envio un document a una altra família o a l'escola, el veuran igual?",
     "description": "Pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.a3": {
-    "defaultMessage": "Sí. El document porta la lletra, les vores, les mides, la pàgina i les imatges pròpies.",
+    "message": "Sí. El document porta la lletra, les vores, les mides, la pàgina i les imatges pròpies.",
     "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.q4": {
-    "defaultMessage": "Obrir el document d'una altra persona em canviarà la configuració?",
+    "message": "Obrir el document d'una altra persona em canviarà la configuració?",
     "description": "Pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.a4": {
-    "defaultMessage": "No. Les teves preferències només canvien si tu ho tries.",
+    "message": "No. Les teves preferències només canvien si tu ho tries.",
     "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.q5": {
-    "defaultMessage": "La marca de «personalitzat» sortirà quan imprimeixi?",
+    "message": "La marca de «personalitzat» sortirà quan imprimeixi?",
     "description": "Pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.faq.a5": {
-    "defaultMessage": "No. Només es veu mentre edites.",
+    "message": "No. Només es veu mentre edites.",
     "description": "Resposta a una pregunta freqüent de la notícia del nou model de document"
   },
   "news.documents-everywhere.closing": {
-    "defaultMessage": "SequenciAAC continua sent gratuïta i funciona sense compte. Si trobes qualsevol problema amb els teus documents, explica'ns-ho.",
+    "message": "SequenciAAC continua sent gratuïta i funciona sense compte. Si trobes qualsevol problema amb els teus documents, explica'ns-ho.",
     "description": "Paràgraf final de la notícia del nou model de document"
   },
   "news.documents-everywhere.save.alt": {
-    "defaultMessage": "Diàleg «Desa i descarrega» amb el quadre «Què es guarda en un document?», que explica què es desa i què no.",
+    "message": "Diàleg «Desa i descarrega» amb el quadre «Què es guarda en un document?», que explica què es desa i què no.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.styleFile.alt": {
-    "defaultMessage": "Diàleg que surt en obrir un fitxer d'estil: «Aquest fitxer és un estil, no un document», amb els botons per aplicar-lo al document o fer-lo l'estil per defecte.",
+    "message": "Diàleg que surt en obrir un fitxer d'estil: «Aquest fitxer és un estil, no un document», amb els botons per aplicar-lo al document o fer-lo l'estil per defecte.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.styleHeader.alt": {
-    "defaultMessage": "Finestra d'edició d'un pictograma amb el botó «Restableix» al costat de «Estil del pictograma».",
+    "message": "Finestra d'edició d'un pictograma amb el botó «Restableix» al costat de «Estil del pictograma».",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.gridMark.alt": {
-    "defaultMessage": "Graella de pictogrames on un porta una marca petita a la cantonada perquè té canvis propis, al costat d'altres sense marca.",
+    "message": "Graella de pictogrames on un porta una marca petita a la cantonada perquè té canvis propis, al costat d'altres sense marca.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.resetMenu.alt": {
-    "defaultMessage": "Menú d'un pictograma amb l'opció «Restableix l'estil».",
+    "message": "Menú d'un pictograma amb l'opció «Restableix l'estil».",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.oldDocument.alt": {
-    "defaultMessage": "Avís en obrir un document d'una versió anterior: l'aplicació l'ha adaptat i quan el desis es guardarà de la manera nova.",
+    "message": "Avís en obrir un document d'una versió anterior: l'aplicació l'ha adaptat i quan el desis es guardarà de la manera nova.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "news.documents-everywhere.structure.alt": {
-    "defaultMessage": "Dibuix: un document conté seqüències, i cada seqüència conté pictogrames. Al costat, l'estil general i els canvis d'un pictograma. Dins el document, també la pàgina i les teves fotos; les teves preferències queden fora.",
+    "message": "Dibuix: un document conté seqüències, i cada seqüència conté pictogrames. Al costat, l'estil general i els canvis d'un pictograma. Dins el document, també la pàgina i les teves fotos; les teves preferències queden fora.",
     "description": "Text alternatiu d'una captura de la notícia del nou model de document"
   },
   "components.mouseActionList.editText": {
-    "defaultMessage": "Edita el text",
+    "message": "Edita el text",
     "description": "Canvia el text del pictograma directament damunt de la targeta, sense obrir el diàleg"
   },
   "components.pictEdit.cardTextInput": {
-    "defaultMessage": "Text del pictograma {number}",
+    "message": "Text del pictograma {number}",
     "description": "Nom accessible del camp que edita el text damunt de la targeta de la graella"
   },
   "news.edit-text-on-card.title": {
-    "defaultMessage": "Canvia el text del pictograma sense sortir de la graella",
+    "message": "Canvia el text del pictograma sense sortir de la graella",
     "description": "Títol de la notícia «edit-text-on-card»"
   },
   "news.edit-text-on-card.summary": {
-    "defaultMessage": "Clica la paraula de sota el pictograma i escriu-ne una altra: ja no cal obrir cap finestra.",
+    "message": "Clica la paraula de sota el pictograma i escriu-ne una altra: ja no cal obrir cap finestra.",
     "description": "Resum de la notícia «edit-text-on-card» al carrusel"
   },
   "news.edit-text-on-card.content": {
-    "defaultMessage": "Fins ara, per canviar la paraula que acompanya un pictograma calia obrir-ne la finestra d'edició, buscar-hi el text i tornar a tancar-la. Ara s'escriu directament damunt de la targeta, a la mateixa graella on construeixes la seqüència.",
+    "message": "Fins ara, per canviar la paraula que acompanya un pictograma calia obrir-ne la finestra d'edició, buscar-hi el text i tornar a tancar-la. Ara s'escriu directament damunt de la targeta, a la mateixa graella on construeixes la seqüència.",
     "description": "Cos de la notícia «edit-text-on-card»"
   },
   "news.edit-text-on-card.step1.description": {
-    "defaultMessage": "<p>Clica la paraula de la targeta i es converteix en un camp per escriure, amb el text ja seleccionat. Escriu-ne una altra.</p><p>Per desar-la, prem <b>Retorn</b> o clica a qualsevol altre lloc. Si t'ho repenses, <b>Esc</b> ho deixa tot com era.</p>",
+    "message": "<p>Clica la paraula de la targeta i es converteix en un camp per escriure, amb el text ja seleccionat. Escriu-ne una altra.</p><p>Per desar-la, prem <b>Retorn</b> o clica a qualsevol altre lloc. Si t'ho repenses, <b>Esc</b> ho deixa tot com era.</p>",
     "description": "Descripció del pas 1 de «edit-text-on-card»"
   },
   "news.edit-text-on-card.step1.alt": {
-    "defaultMessage": "Una seqüència de pictogrames: la paraula del segon s'està reescrivint damunt de la mateixa targeta",
+    "message": "Una seqüència de pictogrames: la paraula del segon s'està reescrivint damunt de la mateixa targeta",
     "description": "Text alternatiu de la imatge del pas 1 de «edit-text-on-card»"
   },
   "news.edit-text-on-card.step2.description": {
-    "defaultMessage": "La targeta ja diu el text nou. Si un dia esborres tot el text i el deixes buit, la targeta torna a dir la paraula que havies cercat.",
+    "message": "La targeta ja diu el text nou. Si un dia esborres tot el text i el deixes buit, la targeta torna a dir la paraula que havies cercat.",
     "description": "Descripció del pas 2 de «edit-text-on-card»"
   },
   "news.edit-text-on-card.step2.alt": {
-    "defaultMessage": "La mateixa seqüència amb el text nou desat a sota del segon pictograma",
+    "message": "La mateixa seqüència amb el text nou desat a sota del segon pictograma",
     "description": "Text alternatiu de la imatge del pas 2 de «edit-text-on-card»"
   },
   "news.edit-text-on-card.step3.description": {
-    "defaultMessage": "<p>També hi arribes per altres camins:</p><ul><li>Amb el clic dret damunt del pictograma, a l'opció «Edita el text».</li><li>Amb el teclat: situa't damunt de la targeta i prem <b>F2</b>.</li></ul>",
+    "message": "<p>També hi arribes per altres camins:</p><ul><li>Amb el clic dret damunt del pictograma, a l'opció «Edita el text».</li><li>Amb el teclat: situa't damunt de la targeta i prem <b>F2</b>.</li></ul>",
     "description": "Descripció del pas 3 de «edit-text-on-card»"
   },
   "news.edit-text-on-card.step3.alt": {
-    "defaultMessage": "El menú del clic dret d'un pictograma, amb l'opció «Edita el text» marcada",
+    "message": "El menú del clic dret d'un pictograma, amb l'opció «Edita el text» marcada",
     "description": "Text alternatiu de la imatge del pas 3 de «edit-text-on-card»"
   },
   "news.edit-text-on-card.closing": {
-    "defaultMessage": "Clicar la imatge del pictograma continua obrint la finestra d'edició, amb tots els ajustos de sempre. I si la targeta no mostra cap text, la paraula es canvia des d'allà, amb «Edita».",
+    "message": "Clicar la imatge del pictograma continua obrint la finestra d'edició, amb tots els ajustos de sempre. I si la targeta no mostra cap text, la paraula es canvia des d'allà, amb «Edita».",
     "description": "Paràgraf de tancament de la notícia «edit-text-on-card»"
   }
 }

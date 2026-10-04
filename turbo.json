@@ -19,9 +19,6 @@
     "test": {
       "dependsOn": ["^build"],
       "outputs": ["coverage/**"]
-    },
-    "prepare": {
-      "outputs": ["src/languages/**"]
     }
   }
 }

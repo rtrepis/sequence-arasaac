@@ -156,8 +156,10 @@ Les ordres de l'arrel les reparteix Turbo a tots els workspaces; amb
 
 ### Traduccions
 
-Els textos s'editen a `apps/web/languages/*.json` (font) i es compilen a
-`apps/web/src/languages/*.json` (generats — **mai editar-los a mà**).
+Els textos viuen a `packages/i18n/messages/` i no es compilen: `ca.json` és la font
+(text i descripció per a qui tradueix) i els altres idiomes porten només el text.
+Les proves comproven que tots els idiomes tenen les mateixes claus. Vegeu
+`docs/decisions/ADR-004-traduccions-paquet-i18n.md`.
 
 ## Documentació
 

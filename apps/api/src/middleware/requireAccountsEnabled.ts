@@ -12,6 +12,7 @@
 
 import { RequestHandler } from "express";
 import { env } from "../config/env";
+import type { ApiErrorBody } from "@sequence-arasaac/i18n";
 
 export const requireAccountsEnabled: RequestHandler = (_req, res, next) => {
   if (env.ACCOUNTS_ENABLED) {
@@ -20,5 +21,5 @@ export const requireAccountsEnabled: RequestHandler = (_req, res, next) => {
   }
 
   // 503 i no 404: el servei existeix i tornarà: no s'ha mogut de lloc.
-  res.status(503).json({ errorCode: "ACCOUNTS_DISABLED" });
+  res.status(503).json({ errorCode: "ACCOUNTS_DISABLED" } satisfies ApiErrorBody);
 };

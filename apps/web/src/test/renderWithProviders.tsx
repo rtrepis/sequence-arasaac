@@ -8,7 +8,12 @@ import { BrowserRouter } from "react-router-dom";
 import { AppStore, createAppStore, RootState } from "@app/store";
 import { buildTheme } from "@/style/themeMui";
 import { FeedbackProvider } from "@/context/FeedbackContext";
-import messages from "@/languages/en.json";
+import { toMessages } from "@sequence-arasaac/i18n";
+import enApp from "@sequence-arasaac/i18n/messages/app/en.json";
+import enErrors from "@sequence-arasaac/i18n/messages/errors/en.json";
+
+// Textos en anglès, carregats d'una vegada: els tests no esperen cap fragment
+const messages = { ...toMessages(enApp), ...toMessages(enErrors) };
 
 interface RenderWithProvidersOptions extends Omit<RenderOptions, "wrapper"> {
   /**

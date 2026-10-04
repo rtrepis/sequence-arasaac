@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^6.4.1",
     "@reduxjs/toolkit": "^1.9.3",
+    "@sequence-arasaac/i18n": "*",
     "@sequence-arasaac/shared-types": "*",
     "axios": "^1.3.4",
     "html2canvas": "^1.4.1",
@@ -25,14 +26,11 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
-    "build": "node scripts/compile-languages.mjs && vite build",
+    "build": "vite build",
     "serve": "vite preview",
     "lint": "eslint ./src",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "prepare": "node scripts/compile-languages.mjs",
-    "extract": "formatjs extract",
-    "compile": "formatjs compile",
     "test:watch": "vitest"
   },
   "browserslist": {
@@ -75,7 +73,6 @@
     "msw": "^2.4.11",
     "typescript": "^5.5.4",
     "vite": "^5.4.8",
-    "vite-plugin-i18n": "^1.0.2",
     "vite-plugin-jest": "^0.0.1",
     "vitest": "^4.1.10"
   }

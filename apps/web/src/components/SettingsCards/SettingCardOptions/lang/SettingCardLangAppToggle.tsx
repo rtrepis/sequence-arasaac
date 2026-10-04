@@ -3,14 +3,14 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { updateLangSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import { langTranslateApp } from "../../../../configs/languagesConfigs";
+import { LANGS_APP } from "@sequence-arasaac/i18n";
 import { LangsApp } from "../../../../types/ui";
 import SettingRow from "../../../SettingsLayout/SettingRow";
 import StyledToggleButtonGroup from "../../../../style/StyledToggleButtonGroup";
 import messages from "./SettingCardLangAppToggle.lang";
 import React from "react";
 
-const sortedLangs = [...langTranslateApp].sort();
+const sortedLangs = [...LANGS_APP].sort();
 
 const SettingCardLangAppToggle = (): React.ReactElement => {
   const { app: appLang, search: searchLang } = useAppSelector(

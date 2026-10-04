@@ -18,12 +18,12 @@ import { UserUseCase } from "@sequence-arasaac/shared-types";
 import messages from "./SignupPage.lang";
 import StyledButton from "@/style/StyledButton";
 import { APP_CORNER_RADIUS } from "@/style/appShape";
-import authMessages from "@features/backend/auth/components/AuthModal.lang";
 import {
   resendVerification,
   signup,
 } from "@features/backend/auth/services/authService";
 import { warmUpBackend } from "@features/backend/api/warmUpBackend";
+import { errorMessageFor } from "@sequence-arasaac/i18n";
 
 const USE_CASES: { value: UserUseCase; labelId: keyof typeof messages }[] = [
   { value: "family", labelId: "useCaseFamily" },
@@ -59,10 +59,7 @@ const SignupPage = (): React.ReactElement => {
   }, []);
 
   const errorMessage = errorCode
-    ? intl.formatMessage(
-        authMessages[errorCode as keyof typeof authMessages] ??
-          authMessages.UNKNOWN_ERROR,
-      )
+    ? intl.formatMessage(errorMessageFor(errorCode, "UNKNOWN_ERROR"))
     : null;
 
   const handleSubmit = async (

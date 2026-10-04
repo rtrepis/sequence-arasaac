@@ -5,6 +5,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
+import type { ApiErrorBody } from "@sequence-arasaac/i18n";
 
 // Extensió global de la interfície Request d'Express per afegir userId
 declare global {
@@ -30,7 +31,7 @@ export const authMiddleware = (
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    res.status(401).json({ errorCode: "AUTH_TOKEN_MISSING" });
+    res.status(401).json({ errorCode: "AUTH_TOKEN_MISSING" } satisfies ApiErrorBody);
     return;
   }
 
@@ -41,6 +42,6 @@ export const authMiddleware = (
     req.userId = decoded.userId;
     next();
   } catch {
-    res.status(401).json({ errorCode: "AUTH_TOKEN_INVALID" });
+    res.status(401).json({ errorCode: "AUTH_TOKEN_INVALID" } satisfies ApiErrorBody);
   }
 };

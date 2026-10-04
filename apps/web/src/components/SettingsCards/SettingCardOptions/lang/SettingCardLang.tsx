@@ -10,7 +10,8 @@ import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { settingCardOptions } from "./SettingCardLang.lang";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { langTranslateApp, langTranslateSearch } from "../../../../configs/languagesConfigs";
+import { LANGS_APP } from "@sequence-arasaac/i18n";
+import { langTranslateSearch } from "../../../../configs/languagesConfigs";
 import { updateLangSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { LangsApp } from "../../../../types/ui";
 
@@ -61,7 +62,7 @@ const SettingCardLang = ({ setting }: SettingCardProps): React.ReactElement => {
           ))}
 
         {setting === "languagesApp" &&
-          langTranslateApp.map((item) => (
+          LANGS_APP.map((item) => (
             <MenuItem value={item} key={item}>
               <Link
                 component={RouterLink}

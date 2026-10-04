@@ -11,6 +11,7 @@ import { UserModel } from "../modules/auth/model";
 import { resolveQuotaLimits } from "./tierLimits";
 import type { AppError } from "../middleware/errorHandler";
 import type { UserUsage } from "@sequence-arasaac/shared-types";
+import type { ApiErrorCode } from "@sequence-arasaac/i18n";
 
 // Comptadors d'un usuari, amb recanvi per als comptes creats abans que el camp
 // existís. Amb .lean() Mongoose no aplica els valors per defecte de l'esquema:
@@ -24,7 +25,7 @@ export const resolveUsage = (usage?: UserUsage): UserUsage =>
     assetsCount: 0,
   };
 
-const quotaError = (errorCode: string, statusCode: number): AppError => {
+const quotaError = (errorCode: ApiErrorCode, statusCode: number): AppError => {
   const error = new Error(errorCode) as AppError;
   error.statusCode = statusCode;
   error.errorCode = errorCode;

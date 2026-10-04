@@ -35,24 +35,11 @@ const ForgotPasswordPage = lazy(
 );
 const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
 
-import messages_en from "./languages/en.json";
-import messages_es from "./languages/es.json";
-import messages_ca from "./languages/ca.json";
-import messages_fr from "./languages/fr.json";
-import messages_it from "./languages/it.json";
-
-export const messageLocale = {
-  ca: messages_ca,
-  es: messages_es,
-  en: messages_en,
-  fr: messages_fr,
-  it: messages_it,
-};
 import { usePageTracking } from "@shared/hooks/usePageTracking";
 import { ACCOUNTS_ENABLED } from "./configs/accountsConfig";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import { useAppSelector } from "./app/hooks";
-import { langTranslateApp } from "./configs/languagesConfigs";
+import { LANGS_APP } from "@sequence-arasaac/i18n";
 import { LangsApp } from "./types/ui";
 
 // Fallback mentre es carrega un chunk de ruta
@@ -106,7 +93,7 @@ const App = (): ReactElement => {
     const segments = location.pathname.split("/").filter(Boolean);
     const urlLocale = segments[0] as LangsApp;
 
-    if (!langTranslateApp.includes(urlLocale) || urlLocale === appLang) return;
+    if (!LANGS_APP.includes(urlLocale) || urlLocale === appLang) return;
 
     const rest = segments.slice(1).join("/");
     navigate(`/${appLang}/${rest}`, { replace: true });

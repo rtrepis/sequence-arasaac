@@ -36,6 +36,7 @@ import {
 import { isMongoId } from "../services/documentService";
 import { useDocumentTransfer } from "../hooks/useDocumentTransfer";
 import { useFeedback } from "@/context/FeedbackContext";
+import { errorMessageFor } from "@sequence-arasaac/i18n";
 
 interface SaveDocumentModalProps {
   open: boolean;
@@ -146,9 +147,7 @@ const SaveDocumentModal = ({
     return intl.formatMessage(authMessages.savingDocument);
   };
 
-  const errorMessage =
-    authMessages[errorCode as keyof typeof authMessages] ??
-    authMessages.DOCUMENT_SAVE_ERROR;
+  const errorMessage = errorMessageFor(errorCode, "DOCUMENT_SAVE_ERROR");
 
   return (
     <AppDialog

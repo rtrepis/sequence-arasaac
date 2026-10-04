@@ -95,6 +95,7 @@ l'entrada.
 | B13 | El comptador de documents no surt en desar | Tornar a encendre els comptes |
 | N1 | Les tres notícies de compte | Tornar a encendre els comptes; abans, corregir els números de `NOTICIES` i `INVENTARI` |
 | P1 | Proves de regressió del `.saac` amb compte | Tornar a encendre els comptes, o tenir l'API local amb BD en memòria |
+| C26 | 12 codis d'error de l'API no tenen text | Tornar a encendre els comptes |
 
 ---
 
@@ -1612,6 +1613,26 @@ l'encavalcament horitzontal; l'alineació vertical va quedar com estava.)*
   base a 16, i el botó de `x = 319` a `x = 374` amb la mateixa base.
 - Fixat a `e2e/download-and-status.spec.ts`, que ara compara també les bases i els dos marges de
   cantó, no només l'encavalcament.
+
+### C26 — 12 codis d'error de l'API no tenen text propi 🔴 Oberta (ajornada)
+
+*(Oberta en tancar l'ADR-004, 2026-10-04. Ajornada: el back no està operatiu a la web de
+producció, amb els comptes apagats.)*
+
+- **On**: `packages/i18n/src/errors.ts`, `API_ERROR_CODES_WITHOUT_TEXT`. Són `ACCOUNTS_DISABLED`,
+  `ASSET_INVALID_ID`, `ASSET_NOT_FOUND`, `AUTH_TOKEN_INVALID`, `AUTH_TOKEN_MISSING`,
+  `CLIENT_ERROR_NOT_FOUND`, `DOCUMENT_NOT_FOUND`, `FORBIDDEN`, `IMAGE_INVALID`, `INTERNAL_ERROR`,
+  `INVALID_DATA` i `MAIL_SEND_FAILED`.
+- **Per què importa**: si un d'aquests codis arriba a l'usuari, `errorMessageFor` hi ensenya el
+  missatge genèric del context («S'ha produït un error inesperat», «No s'ha pogut desar el
+  document») en lloc de dir què ha passat. No és cap regressió: abans de l'ADR-004 passava igual,
+  perquè tampoc no tenien text. Alguns sí que poden arribar a la pantalla d'algú: `MAIL_SEND_FAILED`
+  en registrar-se, `DOCUMENT_NOT_FOUND` en obrir un document del núvol, `IMAGE_INVALID` i
+  `ASSET_*` en desar imatges, `INVALID_DATA` en un formulari. Els `AUTH_TOKEN_*` els resol el
+  refresc de sessió sol, i `FORBIDDEN` i `CLIENT_ERROR_NOT_FOUND` només els veu l'administració.
+- **Proposta**: quan es tornin a encendre els comptes, decidir quins poden arribar a l'usuari,
+  escriure'n el text als cinc idiomes de `packages/i18n/messages/errors/` i treure'ls de
+  `API_ERROR_CODES_WITHOUT_TEXT`. `errors.test.ts` obliga a fer les dues coses alhora.
 
 ---
 

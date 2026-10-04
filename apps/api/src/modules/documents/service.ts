@@ -24,6 +24,7 @@ import {
 import { applyUsageDelta, assertWithinQuota } from "../../shared/quota";
 import { buildDocumentThumbnail } from "./thumbnail";
 import { compactContent } from "./contentStorage";
+import type { ApiErrorCode } from "@sequence-arasaac/i18n";
 
 // Resum d'un document per al llistat — evita transferir content complet
 export interface DocumentSummary {
@@ -34,7 +35,7 @@ export interface DocumentSummary {
 }
 
 // Helper d'error semàntic
-const documentError = (errorCode: string, statusCode: number): AppError => {
+const documentError = (errorCode: ApiErrorCode, statusCode: number): AppError => {
   const error = new Error(errorCode) as AppError;
   error.statusCode = statusCode;
   error.errorCode = errorCode;

@@ -20,6 +20,8 @@ import {
 import { getRegistrationStatus } from "../config/service";
 import type { AppError } from "../../middleware/errorHandler";
 import { hashIp } from "../../shared/ipHash";
+import { isApiErrorCode } from "@sequence-arasaac/i18n";
+import type { ApiErrorCode } from "@sequence-arasaac/i18n";
 
 // Durada de la cookie de refresh token en mil·lisegons (7 dies)
 const REFRESH_TOKEN_COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
@@ -44,7 +46,10 @@ const respondValidationError = (
   next: NextFunction,
   parsed: { success: false; error: { errors: { message: string }[] } }
 ): void => {
-  const errorCode = parsed.error.errors[0]?.message ?? "INVALID_DATA";
+  // Els missatges dels validadors són codis; un missatge per defecte de zod no
+  // ho és, i el front no el sabria traduir
+  const message = parsed.error.errors[0]?.message;
+  const errorCode: ApiErrorCode = isApiErrorCode(message) ? message : "INVALID_DATA";
   const error = new Error(errorCode) as AppError;
   error.statusCode = 400;
   error.errorCode = errorCode;

@@ -19,6 +19,7 @@ import messages from "./AuthModal.lang";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { loginThunk } from "../store/authSlice";
 import StyledButton from "@/style/StyledButton";
+import { errorMessageFor } from "@sequence-arasaac/i18n";
 
 interface AuthFormProps {
   /** Acció posterior a un login correcte (tancar el modal, per exemple). */
@@ -47,9 +48,7 @@ const AuthForm = ({
 
   // Tradueix el codi d'error del backend al missatge de l'idioma actiu
   const errorMessage = errorCode
-    ? intl.formatMessage(
-        messages[errorCode as keyof typeof messages] ?? messages.UNKNOWN_ERROR,
-      )
+    ? intl.formatMessage(errorMessageFor(errorCode, "UNKNOWN_ERROR"))
     : null;
 
   const handleSubmit = async (

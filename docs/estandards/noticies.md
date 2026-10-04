@@ -18,7 +18,7 @@
   paraula tècnica no l'ajuda a fer res, i li fa pensar que el canvi no és per a
   ella.
 - **Els noms dels botons, els reals de cada idioma**, copiats de
-  `apps/web/languages/<idioma>.json`, no traduïts a mà. Si l'app diu «Aplicar
+  `packages/i18n/messages/app/<idioma>.json`, no traduïts a mà. Si l'app diu «Aplicar
   tots», la notícia no diu «Aplica a tots». *Per què*: la persona busca a la
   pantalla el nom que ha llegit.
 - **El català és l'idioma de referència.** Les altres versions es tradueixen, no
@@ -29,10 +29,10 @@
 - **Les dades**, a `apps/web/src/data/newsItems.ts`: una entrada per notícia, la
   més nova a dalt. `slug` en anglès i amb guions; `date` (AAAA-MM-DD) és el dia de
   publicació; `category` és `nova`, `millora` o `correccio`.
-- **Els textos**, a `apps/web/languages/*.json` (els cinc idiomes), amb claus
+- **Els textos**, a `packages/i18n/messages/app/*.json` (els cinc idiomes), amb claus
   `news.<slug>.*`: `title`, `summary` (la targeta del carrusel, una frase),
   `content` (la introducció) i, per a cada pas, `stepN.description` i
-  `stepN.alt`. Es compilen amb `npm run prepare` (vegeu la skill `language`).
+  `stepN.alt`. No es compilen; les proves comproven que hi són als cinc idiomes (vegeu la skill `language`).
 - **Les imatges**, a `apps/web/public/img/news/`.
 
 ## Com es construeix

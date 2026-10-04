@@ -1,7 +1,6 @@
 import React from "react";
-import { IntlProvider } from "react-intl";
 import { Navigate, Outlet, useParams } from "react-router-dom";
-import { messageLocale } from "@/App";
+import AppIntlProvider from "@app/providers/AppIntlProvider";
 import NewsNavBar from "./NewsNavBar";
 
 // Layout compartit per a la secció de notícies (/:locale/news i /:locale/news/:slug)
@@ -18,16 +17,15 @@ const NewsLayout = ({
   }
 
   return (
-    <IntlProvider
+    <AppIntlProvider
       locale={locale ?? localeBrowser}
       defaultLocale="es"
-      messages={messageLocale[(locale ?? localeBrowser) as keyof typeof messageLocale]}
     >
       {/* NewsNavBar ha d'estar dins IntlProvider perquè usa FormattedMessage */}
       <NewsNavBar>
         <Outlet />
       </NewsNavBar>
-    </IntlProvider>
+    </AppIntlProvider>
   );
 };
 

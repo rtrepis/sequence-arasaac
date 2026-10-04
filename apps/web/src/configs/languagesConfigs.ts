@@ -1,4 +1,5 @@
-export const langTranslateApp = ["es", "en", "ca", "fr", "it"] as const;
+// Els idiomes de l'aplicació són LANGS_APP, a @sequence-arasaac/i18n (vegeu ADR-004).
+// Aquí només hi ha els idiomes de cerca d'ARASAAC.
 export const langTranslateSearch = [
   "an",
   "ar",

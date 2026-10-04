@@ -26,6 +26,8 @@ import {
   deleteClientErrorsBefore,
 } from "../client-errors/service";
 import { hashIp } from "../../shared/ipHash";
+import { isApiErrorCode } from "@sequence-arasaac/i18n";
+import type { ApiErrorCode } from "@sequence-arasaac/i18n";
 
 // Prou per veure què està passant aquests dies sense paginar una pantalla
 // que es consulta quan alguna cosa ha anat malament
@@ -33,7 +35,8 @@ const CLIENT_ERRORS_LIMIT = 50;
 
 // Error de validació amb el mateix format que la resta de mòduls
 const invalidData = (message?: string): AppError => {
-  const errorCode = message ?? "INVALID_DATA";
+  // Com a auth: un missatge que no és un codi conegut queda en INVALID_DATA
+  const errorCode: ApiErrorCode = isApiErrorCode(message) ? message : "INVALID_DATA";
   const error = new Error(errorCode) as AppError;
   error.statusCode = 400;
   error.errorCode = errorCode;

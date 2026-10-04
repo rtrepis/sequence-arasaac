@@ -1,5 +1,4 @@
 import React from "react";
-import { IntlProvider } from "react-intl";
 import { Navigate, Outlet, useParams } from "react-router-dom";
 import BarNavigation from "@/components/BarNavigation/BarNavigation";
 import EmailVerificationBanner from "@features/backend/auth/components/EmailVerificationBanner";
@@ -9,7 +8,7 @@ import SessionExpiredNotice from "@features/backend/auth/components/SessionExpir
 import DocumentStatusFab from "@features/sequence/components/DocumentStatusFab/DocumentStatusFab";
 import DocumentStyleNotice from "@features/sequence/components/DocumentStyle/DocumentStyleNotice";
 import StyleUndoSnackbar from "@features/sequence/components/DocumentStyle/StyleUndoSnackbar";
-import { messageLocale } from "@/App";
+import AppIntlProvider from "@app/providers/AppIntlProvider";
 
 const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
   const { locale } = useParams<{ locale: string }>();
@@ -19,10 +18,9 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
   }
 
   return (
-    <IntlProvider
+    <AppIntlProvider
       locale={locale ?? localeBrowser}
       defaultLocale="es"
-      messages={messageLocale[locale as keyof typeof messageLocale]}
     >
       {/* Autodesat de l'esborrany: va al layout perquè és l'únic lloc que
           embolcalla l'editor i el visualitzador alhora, i perquè necessita
@@ -50,7 +48,7 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
       {/* Fora del Container: és una capa flotant, no contingut de la pàgina, i
           ha de quedar al racó de la finestra i no al del contenidor centrat */}
       <DocumentStatusFab />
-    </IntlProvider>
+    </AppIntlProvider>
   );
 };
 

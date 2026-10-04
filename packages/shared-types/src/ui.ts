@@ -1,7 +1,11 @@
 import { Border, Font, Hair, Skin, TextPosition } from "./sequence";
 
-// Idiomes suportats per la interfície de l'aplicació (subconjunt de Languages)
-export type LangsApp = "ca" | "en" | "es" | "fr" | "it";
+import type { LangsApp } from "@sequence-arasaac/i18n";
+
+// Idiomes suportats per la interfície de l'aplicació (subconjunt de Languages).
+// La llista viu a @sequence-arasaac/i18n (vegeu ADR-004); es reexporta perquè
+// els imports de shared-types continuïn funcionant.
+export type { LangsApp };
 
 export type ThemeMode = "light" | "dark" | "system";
 

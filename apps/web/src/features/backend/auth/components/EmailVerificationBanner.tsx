@@ -7,9 +7,9 @@ import React, { useState } from "react";
 import { Alert, Box, Button, CircularProgress } from "@mui/material";
 import { useIntl } from "react-intl";
 import messages from "./EmailVerification.lang";
-import authMessages from "./AuthModal.lang";
 import { useAppSelector } from "../../../../app/hooks";
 import { resendVerification } from "../services/authService";
+import { errorMessageFor } from "@sequence-arasaac/i18n";
 
 const EmailVerificationBanner = (): React.ReactElement | null => {
   const intl = useIntl();
@@ -47,8 +47,7 @@ const EmailVerificationBanner = (): React.ReactElement | null => {
 
   const errorMessage = errorCode
     ? intl.formatMessage(
-        authMessages[errorCode as keyof typeof authMessages] ??
-          authMessages.VERIFICATION_EMAIL_FAILED,
+        errorMessageFor(errorCode, "VERIFICATION_EMAIL_FAILED"),
       )
     : null;
 

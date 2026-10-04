@@ -8,6 +8,7 @@
 
 import { Request, Response, NextFunction } from "express";
 import { UserModel } from "../modules/auth/model";
+import type { ApiErrorBody } from "@sequence-arasaac/i18n";
 
 export const requireAdmin = async (
   req: Request,
@@ -20,7 +21,7 @@ export const requireAdmin = async (
     // Mateixa resposta si l'usuari no existeix, no és admin o està suspès:
     // qui no hi té accés no ha de poder deduir res del codi d'error
     if (!user || user.role !== "admin" || user.status === "suspended") {
-      res.status(403).json({ errorCode: "FORBIDDEN" });
+      res.status(403).json({ errorCode: "FORBIDDEN" } satisfies ApiErrorBody);
       return;
     }
 

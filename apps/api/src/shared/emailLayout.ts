@@ -17,7 +17,7 @@
 
 import type { LangsApp } from "@sequence-arasaac/shared-types";
 import { env } from "../config/env";
-import { DEFAULT_LANGS_APP } from "./langsApp";
+import { createTranslator } from "@sequence-arasaac/i18n/server";
 
 // --- Colors ---
 //
@@ -57,6 +57,8 @@ const LOGO_HEIGHT_PX = 35;
 
 const APP_NAME = "SequenciAAC";
 
+// Textos de la plantilla, iguals a tots els correus. Són al catàleg `email` de
+// @sequence-arasaac/i18n (vegeu ADR-004).
 interface LayoutStrings {
   // Motiu de la marca, el mateix que encapçala la pàgina de benvinguda
   tagline: string;
@@ -66,32 +68,13 @@ interface LayoutStrings {
   logoAlt: string;
 }
 
-const LAYOUT_STRINGS: Record<LangsApp, LayoutStrings> = {
-  ca: {
-    tagline: "Crea i imprimeix o visualitza la teva pàgina de seqüències.",
-    linkFallback: "Si el botó no funciona, copia aquest enllaç i enganxa'l al navegador:",
-    logoAlt: "Logotip de SequenciAAC",
-  },
-  es: {
-    tagline: "Crea e imprime o ve tu página de secuencia.",
-    linkFallback: "Si el botón no funciona, copia este enlace y pégalo en el navegador:",
-    logoAlt: "Logotipo de SequenciAAC",
-  },
-  en: {
-    tagline: "Create and print or view your sequence page.",
-    linkFallback: "If the button doesn't work, copy this link and paste it into your browser:",
-    logoAlt: "SequenciAAC logo",
-  },
-  fr: {
-    tagline: "Créez et imprimez ou visualisez votre page de séquences.",
-    linkFallback: "Si le bouton ne fonctionne pas, copiez ce lien et collez-le dans votre navigateur :",
-    logoAlt: "Logo de SequenciAAC",
-  },
-  it: {
-    tagline: "Crea e stampa o visualizza la tua pagina di sequenze.",
-    linkFallback: "Se il pulsante non funziona, copia questo link e incollalo nel browser:",
-    logoAlt: "Logo di SequenciAAC",
-  },
+const layoutStrings = (locale: LangsApp): LayoutStrings => {
+  const t = createTranslator(locale);
+  return {
+    tagline: t("email.layout.tagline"),
+    linkFallback: t("email.layout.linkFallback"),
+    logoAlt: t("email.layout.logoAlt"),
+  };
 };
 
 export interface EmailAction {
@@ -325,7 +308,7 @@ const renderText = (content: EmailContent, s: LayoutStrings): string => {
 
 // Dibuixa un correu complet a partir del seu contingut, en HTML i en text pla.
 export const renderEmail = (content: EmailContent): RenderedEmail => {
-  const s = LAYOUT_STRINGS[content.locale] ?? LAYOUT_STRINGS[DEFAULT_LANGS_APP];
+  const s = layoutStrings(content.locale);
 
   return { html: renderHtml(content, s), text: renderText(content, s) };
 };

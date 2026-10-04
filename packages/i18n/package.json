@@ -1,0 +1,42 @@
+{
+  "name": "@sequence-arasaac/i18n",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/src/index.js",
+  "types": "./src/index.ts",
+  "typesVersions": {
+    "*": {
+      "server": [
+        "./src/server.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "require": "./dist/src/index.js"
+    },
+    "./server": {
+      "types": "./src/server.ts",
+      "import": "./src/server.ts",
+      "require": "./dist/src/server.js"
+    },
+    "./messages/*": "./messages/*"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "prepare": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@formatjs/intl": "^2.10.15"
+  },
+  "devDependencies": {
+    "@formatjs/icu-messageformat-parser": "^2.9.4",
+    "typescript": "^5",
+    "vitest": "^4.1.10"
+  }
+}

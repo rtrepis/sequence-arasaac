@@ -17,6 +17,15 @@
 - **`BackendWakeUpNotice`** és un `Snackbar` **no bloquejant**: l'editor funciona sencer sense backend, així que enfosquir la pantalla mig minut seria pitjor que l'espera mateixa. Només si hi ha un backdrop obert (`state.backdrop.open` del `FeedbackContext`) canvia el text per avisar que allò sí que està bloquejat.
 - `REQUEST_TIMEOUT_MS` d'`apiClient` és **90 s**, deliberadament ampli perquè un desvetllament que voreja el minut no es talli i es converteixi en error just quan el servidor ja anava a respondre.
 
+## Codis d'error de l'API
+
+> Decisió i motius: `docs/decisions/ADR-004-traduccions-paquet-i18n.md` (decisió 7).
+
+- **L'API no envia mai text: envia un codi** (`{ errorCode }`, tipus `ApiErrorBody`). El front el tradueix.
+- **Tots els codis són a `API_ERROR_CODES`** (`packages/i18n/src/errors.ts`), i `AppError.errorCode` és `ApiErrorCode`: un codi que no hi és no compila. Un codi nou s'hi afegeix, i amb ell el seu text a `messages/errors/` als cinc idiomes, o bé es posa a `API_ERROR_CODES_WITHOUT_TEXT` si no ha d'arribar mai a l'usuari tal qual.
+- **El front tradueix amb `errorMessageFor(codi, genèric)`**: si el codi no té text, surt el genèric del context (`UNKNOWN_ERROR`, `DOCUMENT_SAVE_ERROR`…). Mai `messages[codi as keyof …]`.
+- Els missatges dels validadors de zod són codis. Si en surt un que no ho és (un missatge per defecte de zod), la resposta és `INVALID_DATA`.
+
 ## Classificació de fallades i reintent (`requestFailure.ts`)
 
 - Tota fallada de petició es classifica amb `classifyRequestFailure`: l'únic que importa és si **val la pena reintentar sol** (`isTransient`). Transitori = xarxa/timeout/backend engegant-se (408/425/429/502/503/504, codis axios `ECONNABORTED`/`ETIMEDOUT`/`ERR_NETWORK`); no transitori = rebuig del servidor (dades invàlides, quota) o `STORAGE_FULL` (espai del navegador exhaurit, codi propi que no ve de cap petició HTTP).
