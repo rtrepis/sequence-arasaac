@@ -13,7 +13,7 @@ import {
 // els passos de cinc notícies de Novetats però no en sobreescriuen cap
 // imatge: es desen a `e2e/linkedin/img/<idioma>/`.
 
-// Noms accessibles de cada idioma (els mateixos de `languages/*.json`)
+// Noms accessibles de cada idioma (els mateixos de `packages/i18n/messages/app/*.json`)
 const LABELS: Record<
   ShotLocale,
   {

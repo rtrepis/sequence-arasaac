@@ -2,7 +2,7 @@
 //
 // Eina interna, en català i sense react-intl: la fa servir una sola persona i
 // cinc fitxers de traducció no s'hi justifiquen (excepció documentada al CLAUDE.md).
-// Els textos d'aquí són literals; l'<IntlProvider> hi és només perquè els
+// Els textos d'aquí són literals; l'<AppIntlProvider> hi és només perquè els
 // components compartits que en depenen (ConfirmDialog, l'única confirmació de
 // l'app) funcionin fora de LanguageLayout. Reescriure'n una còpia per al panell
 // costaria molt més que aquest embolcall, i el criteri de què es confirma ha de
@@ -18,10 +18,9 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import { IntlProvider } from "react-intl";
 import { Navigate } from "react-router-dom";
 import type { AdminStats, AppConfig } from "@sequence-arasaac/shared-types";
-import { messageLocale } from "@/App";
+import AppIntlProvider from "@app/providers/AppIntlProvider";
 import { useAppSelector } from "../../app/hooks";
 import { getConfig, getStats } from "@features/admin/services/adminService";
 import AdminStatsCards from "@features/admin/components/AdminStatsCards";
@@ -77,7 +76,7 @@ const AdminPage = (): ReactElement => {
   }
 
   return (
-    <IntlProvider locale="ca" defaultLocale="ca" messages={messageLocale.ca}>
+    <AppIntlProvider locale="ca" defaultLocale="ca">
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Administració
@@ -104,7 +103,7 @@ const AdminPage = (): ReactElement => {
           </Box>
         )}
       </Container>
-    </IntlProvider>
+    </AppIntlProvider>
   );
 };
 

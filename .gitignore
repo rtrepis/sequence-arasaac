@@ -12,9 +12,6 @@
 apps/*/node_modules
 packages/*/node_modules
 
-# Languages compilades (generades per formatjs)
-apps/web/src/languages
-
 # testing
 /coverage
 apps/web/coverage

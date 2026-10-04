@@ -50,7 +50,6 @@ Funciona sencer **sense compte**: la configuració i el document en curs es guar
 ```
 apps/
 ├── web/
-│   ├── languages/           # Traduccions FONT (ca, es, en, fr, it) — editar aquí
 │   ├── e2e/                 # Tests Playwright (captures/vídeos de funcionalitats)
 │   └── src/
 │       ├── pages/            # Pàgines (WelcomePage, EditSequencesPage, ViewSequencePage, AdminPage...)
@@ -68,7 +67,6 @@ apps/
 │       ├── test/              # Arnès de proves: renderWithProviders, setup.ts, fixtures/
 │       ├── types/              # Tipus locals (estenen els de shared-types)
 │       ├── style/               # palette.ts, themeMui.ts (única font de veritat de colors)
-│       ├── languages/          # JSON COMPILATS (AST react-intl) — generats, no editar
 │       └── configs/            # Configuracions generals
 ├── api/
 │   └── src/
@@ -83,14 +81,15 @@ apps/
 │       ├── middleware/       # authMiddleware, requireAdmin, requireVerifiedEmail, errorHandler
 │       ├── shared/            # emailCanonical, ipHash, tierLimits, mailer, mongooseSchemas, zodSchemas
 │       └── config/            # env.ts (validació zod de l'entorn), database.ts
-└── packages/shared-types/    # Tipus de domini compartits pel front i el back
+├── packages/shared-types/    # Tipus de domini compartits pel front i el back
+└── packages/i18n/            # Idiomes (LANGS_APP) i catàlegs de textos (messages/) — vegeu ADR-004
 ```
 
 ## Build i compilació
 
 - Ordres a l'arrel del monorepo (`npm run dev|build|lint|test|typecheck`) les reparteix **Turbo** a tots els workspaces; `--filter=web` o `--filter=api` acota a un de sol.
 - **`npm run typecheck` és l'única barrera de tipus, i cal passar-la abans de donar res per bo.** `vite build` **no** comprova tipus: `@vitejs/plugin-react-swc` els llença sense mirar-los, i ESLint no els mira tampoc. Un `✓ built` verd al web no vol dir que el TypeScript quadri. (Aquest apartat deia el contrari fins a la branca `claude/document-limit-users-sjig8o`; hi havia codi de producció amb tipus trencats que passava el build cada dia.)
-- **Front** (`apps/web`): `npm run typecheck` = `tsc --noEmit`; `npm run lint` = `eslint ./src`; `npm run build` = compila les traduccions (`scripts/compile-languages.mjs`) i després `vite build` (que només empaqueta). `npm test` = `vitest run` (jsdom + Testing Library, config a `vitest.config.ts`, que hereta els alias del `vite.config.ts`); `npm run test:watch` per anar-hi treballant. Els tests e2e (captures/vídeos de funcionalitats) van amb **Playwright** (`apps/web/playwright.config.ts`, carpeta `e2e/`).
+- **Front** (`apps/web`): `npm run typecheck` = `tsc --noEmit`; `npm run lint` = `eslint ./src`; `npm run build` = `vite build` (que només empaqueta; les traduccions no es compilen, vegeu ADR-004). `npm test` = `vitest run` (jsdom + Testing Library, config a `vitest.config.ts`, que hereta els alias del `vite.config.ts`); `npm run test:watch` per anar-hi treballant. Els tests e2e (captures/vídeos de funcionalitats) van amb **Playwright** (`apps/web/playwright.config.ts`, carpeta `e2e/`).
 - **Back** (`apps/api`): `npm run typecheck` i `npm run lint` són tots dos `tsc --noEmit` (el nom `lint` hi era abans); `npm test` = `vitest run` (usa `mongodb-memory-server`, per això els fitxers `*.test.ts` i `src/test/` queden exclosos del `tsconfig.json` de build/producció).
 - **Els tests que corren entren al `typecheck`**: són codi del projecte i la barrera de tipus també els mira. L'única cosa que queda fora és la **quarantena**: una dotzena de fitxers heretats de Create React App que no compilen ni passen contra el codi d'avui, llistats a `vitest.config.ts` i al `exclude` del `tsconfig.json` amb el mateix comentari. Vegeu C10 de `docs/BACKLOG-ux.md`; reviure'n un vol dir portar-lo a `src/test/renderWithProviders`.
 - **`npm run lint` del web surt vermell amb errors preexistents** (3, apòstrofs sense escapar a `features/admin/`): quan s'hi passa, cal filtrar la sortida amb grep pels fitxers tocats per verificar que els errors nous no són nostres. El `typecheck`, en canvi, ha d'estar **net**: si en surt un, és nostre.
@@ -151,9 +150,10 @@ on viu el criteri complet i el motiu de cada decisió.
   Mai `disabled` per dir «s'està fent».
 - **Les preferències d'usuari només es desen quan l'usuari ho demana**: cap control
   d'una pàgina de treball dispara `saveUserUiThunk` per si sol.
-- **Traduccions**: s'editen a `apps/web/languages/*.json` (font) i es compilen a
-  `apps/web/src/languages/*.json` (generats, **mai editar-los a mà**). Vegeu la skill
-  `language` (`.claude/skills/language.md`).
+- **Traduccions**: viuen a `packages/i18n/messages/` i no es compilen. `ca.json` és la font
+  (text + descripció); els altres idiomes porten només el text. La llista d'idiomes és
+  `LANGS_APP` (`packages/i18n`). Vegeu la skill `language` (`.claude/skills/language.md`) i
+  `docs/decisions/ADR-004-traduccions-paquet-i18n.md`.
 - **`npm run typecheck` és l'única barrera de tipus**: `vite build` no comprova tipus.
   Cal passar-la neta abans de donar res per bo.
 - **Abans de proposar una millora d'UX**, mirar `docs/BACKLOG-ux.md`: si ja hi és, s'hi

@@ -35,19 +35,6 @@ const ForgotPasswordPage = lazy(
 );
 const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
 
-import messages_en from "./languages/en.json";
-import messages_es from "./languages/es.json";
-import messages_ca from "./languages/ca.json";
-import messages_fr from "./languages/fr.json";
-import messages_it from "./languages/it.json";
-
-export const messageLocale = {
-  ca: messages_ca,
-  es: messages_es,
-  en: messages_en,
-  fr: messages_fr,
-  it: messages_it,
-};
 import { usePageTracking } from "@shared/hooks/usePageTracking";
 import { ACCOUNTS_ENABLED } from "./configs/accountsConfig";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
