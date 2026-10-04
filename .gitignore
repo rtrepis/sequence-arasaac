@@ -36,6 +36,11 @@ apps/web/playwright-report
 
 # misc
 .DS_Store
+# Galetes que deixa curl en provar l'API a mà: porten tokens de sessió
+cookies.txt
+# Memòria cau del compilador de TypeScript i resultats de Playwright a l'arrel
+*.tsbuildinfo
+/test-results
 apps/api/.env
 .env
 .env.local

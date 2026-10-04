@@ -129,7 +129,8 @@ El que es va ajustar respecte de les decisions en aplicar el pla:
   `app/ca.json`.
 - **Codis d'error (decisió 7)**: hi ha 45 codis de l'API (`API_ERROR_CODES`). 12 no tenen text
   (`API_ERROR_CODES_WITHOUT_TEXT`): no arriben a l'usuari tal qual i, si n'arriba un, s'ensenya el
-  genèric del context, com abans. El front en té 5 de propis (`CLIENT_ERROR_CODES`). Es van esborrar
+  genèric del context, com abans; escriure'ls és C26 del `docs/BACKLOG-ux.md`, ajornada mentre els comptes
+  estiguin apagats. El front en té 5 de propis (`CLIENT_ERROR_CODES`). Es van esborrar
   tres textos que l'API ja no enviava (`VERIFICATION_RESEND_TOO_SOON`, `VERIFICATION_RESEND_LIMIT`,
   `EMAIL_ALREADY_VERIFIED`).
 - **El traductor del back és una entrada a part** (`@sequence-arasaac/i18n/server`), perquè el web
