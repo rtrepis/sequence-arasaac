@@ -1,7 +1,7 @@
 import { defineConfig } from "vitest/config";
 
-// Configuració pròpia: sense ella, Vitest pujaria fins al vite.config.ts de
-// l'arrel del repositori, que és del web antic i no té res a veure amb aquest paquet
+// Configuració pròpia: les proves del paquet corren a Node i no han d'heretar
+// res de cap altre workspace
 export default defineConfig({
   test: {
     environment: "node",

@@ -1,6 +1,7 @@
 # ADR-004: Traduccions en un paquet compartit, sense compilació ni Crowdin
 
-- **Estat**: acceptada (2026-10-04)
+- **Estat**: acceptada i aplicada (2026-10-04). Els cinc passos del pla són fets; el que es va
+  ajustar en implementar-los és a «Com ha quedat», al final.
 - **Substitueix**: el flux «fonts a `apps/web/languages/` → `formatjs compile` → `apps/web/src/languages/`»
   i la configuració de Crowdin (`apps/web/crowdin.yml`).
 - **Estàndard afectat**: «Traduccions» de `docs/estandards/estat-i-persistencia.md` i la skill
@@ -71,7 +72,8 @@ que trobi els errors abans de producció.**
     i l'API la versió compilada (condició `require`). Turbo ja construeix les dependències abans
     (`build` depèn de `^build`), i Render ja crida `turbo build --filter=api`: **no hi ha cap pas
     nou per a qui desplega**. No és una compilació de traduccions: els JSON es copien tal qual.
-12. **Les claus actuals de la interfície es mantenen.** No es reanomena res en migrar.
+12. **Les claus actuals de la interfície es mantenen.** No es reanomena res en migrar, llevat dels
+    textos d'error, que passen a `errors/` amb la clau `error.<CODI>` (pas 3).
 
 ## Pla de migració
 
@@ -115,3 +117,29 @@ Cada pas es pot desplegar sol i deixa l'app funcionant.
   test marquen tot el que falta.
 - **Qui tradueix** treballa amb el JSON en català (text i descripció) al costat del JSON del seu
   idioma, o amb la skill `language`.
+
+## Com ha quedat
+
+El que es va ajustar respecte de les decisions en aplicar el pla:
+
+- **Claus tipades (decisió 9), només on el codi les escriu**: als correus (`EmailMessageKey`, de
+  `messages/email/ca.json`) i als codis d'error (`ApiErrorCode`, `ErrorCodeWithText`). Les claus de
+  la interfície continuen sent text lliure als `.lang.ts`, perquè `defineMessages` de react-intl hi
+  espera un `string`; la barrera allà és el test que comprova que cada `id` del codi existeix a
+  `app/ca.json`.
+- **Codis d'error (decisió 7)**: hi ha 45 codis de l'API (`API_ERROR_CODES`). 12 no tenen text
+  (`API_ERROR_CODES_WITHOUT_TEXT`): no arriben a l'usuari tal qual i, si n'arriba un, s'ensenya el
+  genèric del context, com abans. El front en té 5 de propis (`CLIENT_ERROR_CODES`). Es van esborrar
+  tres textos que l'API ja no enviava (`VERIFICATION_RESEND_TOO_SOON`, `VERIFICATION_RESEND_LIMIT`,
+  `EMAIL_ALREADY_VERIFIED`).
+- **El traductor del back és una entrada a part** (`@sequence-arasaac/i18n/server`), perquè el web
+  no s'emporti els catàlegs de correu ni `@formatjs/intl`. L'API, amb `moduleResolution: node`, la
+  troba per `typesVersions`.
+- **La compilació del paquet (decisió 11) té l'arrel a `packages/i18n`**, no a `src/`: així els
+  catàlegs que importa `server.ts` es copien a `dist/messages/` i el camí relatiu és el mateix des de
+  `src/` i des de `dist/src/`.
+- **L'avís intern d'error** continua amb els textos en català dins de `mailer.ts`: el llegeix una
+  sola persona i no es tradueix.
+- **Es van esborrar restes del sistema antic**: `vite-plugin-i18n` (només actuava sobre els
+  compilats), i el `vite.config.ts` i els compilats `src/languages/` de l'arrel del repositori,
+  d'abans del monorepo.

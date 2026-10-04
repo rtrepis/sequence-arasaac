@@ -24,7 +24,7 @@ Funciona sencer **sense compte**: la configuració i el document en curs es guar
 
 ## Tech stack
 
-**Monorepo** (npm workspaces + Turborepo, `turbo.json`): `apps/web` (front), `apps/api` (back) i `packages/shared-types` (tipus compartits). Cada workspace té el seu propi `package.json`; les ordres `npm run dev|build|lint|test` a l'arrel les reparteix Turbo a cada workspace (`--filter=<workspace>` per acotar-ne un).
+**Monorepo** (npm workspaces + Turborepo, `turbo.json`): `apps/web` (front), `apps/api` (back), `packages/shared-types` (tipus compartits) i `packages/i18n` (idiomes i traduccions del front i del back, vegeu ADR-004). Cada workspace té el seu propi `package.json`; les ordres `npm run dev|build|lint|test` a l'arrel les reparteix Turbo a cada workspace (`--filter=<workspace>` per acotar-ne un).
 
 **Front (`apps/web`)**:
 - **React 18** + **TypeScript** (Vite, `@vitejs/plugin-react-swc`)
