@@ -3,7 +3,18 @@
 > **Quan llegir-lo:** abans de tocar `apps/api/src/shared/emailLayout.ts` o `mailer.ts`, o d'afegir cap correu nou.
 
 Tots els correus que surten de l'aplicació tenen la mateixa cara. Font única de veritat:
-`apps/api/src/shared/emailLayout.ts` (com es dibuixa) i `mailer.ts` (què diu i qui l'envia).
+`apps/api/src/shared/emailLayout.ts` (com es dibuixa) i `mailer.ts` (quins textos porta cada
+correu i qui l'envia).
+
+- **Els textos són al catàleg `email` de `@sequence-arasaac/i18n`** (`packages/i18n/messages/email/`),
+  com els de la interfície: `ca.json` amb text i descripció, els altres idiomes només amb el text, i
+  les mateixes proves (vegeu ADR-004). El back els tradueix amb `createTranslator(locale)`
+  (`@sequence-arasaac/i18n/server`), que fa servir el mateix motor ICU que el front. `mailer.ts` només
+  diu quines claus porta cada correu, i les claus són tipades (`EmailMessageKey`): una de mal escrita
+  no compila. L'única excepció és l'avís intern d'error, que va en català i amb els textos al codi
+  perquè el llegeix una sola persona i no es tradueix.
+- **La salutació és una sola clau per a tots els correus** (`email.greeting`), amb un `select`:
+  `hasName` és `yes` si se sap el nom. El nom s'hi insereix tal qual, sense interpretar-lo.
 
 - **`renderEmail` és l'única manera d'escriure un correu.** Cap altre fitxer escriu HTML de
   correu: si la marca s'ha de poder canviar, s'ha de poder canviar en un sol lloc. L'avís intern

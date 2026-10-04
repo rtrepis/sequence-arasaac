@@ -1,11 +1,13 @@
 {
-  // Compilació per a l'API, que s'executa amb `node dist/index.js` i no pot
-  // carregar `.ts`. El web en llegeix directament la font (vegeu ADR-004).
+  // Compilació per a l'API, que s'executa amb node i no pot carregar `.ts`. El
+  // web en llegeix directament la font (vegeu ADR-004). L'arrel és el paquet
+  // sencer perquè els catàlegs de correu, que server.ts importa, es copiïn a
+  // dist/messages/ i el camí relatiu sigui el mateix a src/ i a dist/src/.
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": false,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "."
   },
   "exclude": ["src/**/*.test.ts"]
 }

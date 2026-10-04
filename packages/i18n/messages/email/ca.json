@@ -1,0 +1,126 @@
+{
+  "email.layout.tagline": {
+    "message": "Crea i imprimeix o visualitza la teva pàgina de seqüències.",
+    "description": "Lema de la marca al peu de tots els correus"
+  },
+  "email.layout.linkFallback": {
+    "message": "Si el botó no funciona, copia aquest enllaç i enganxa'l al navegador:",
+    "description": "Text abans de l'enllaç escrit, per si el botó no funciona"
+  },
+  "email.layout.logoAlt": {
+    "message": "Logotip de SequenciAAC",
+    "description": "Text alternatiu del logotip del capçal"
+  },
+  "email.greeting": {
+    "message": "{hasName, select, yes {Hola, {name}!} other {Hola!}}",
+    "description": "Salutació de tots els correus. hasName és «yes» si se sap el nom de qui el rep"
+  },
+  "email.verification.subject": {
+    "message": "Benvingut/da a SequenciAAC — confirma el teu compte",
+    "description": "Correu de benvinguda i verificació: assumpte"
+  },
+  "email.verification.preheader": {
+    "message": "Confirma aquesta adreça i tria la teva contrasenya.",
+    "description": "Correu de benvinguda i verificació: text de previsualització de la safata d'entrada"
+  },
+  "email.verification.heading": {
+    "message": "Et donem la benvinguda",
+    "description": "Correu de benvinguda i verificació: títol dins del cos"
+  },
+  "email.verification.body.1": {
+    "message": "Gràcies per crear un compte a SequenciAAC.",
+    "description": "Correu de benvinguda i verificació: paràgraf 1 del cos"
+  },
+  "email.verification.body.2": {
+    "message": "Per acabar-lo de configurar i triar la teva contrasenya, confirma aquesta adreça:",
+    "description": "Correu de benvinguda i verificació: paràgraf 2 del cos"
+  },
+  "email.verification.buttonLabel": {
+    "message": "Confirma i tria la contrasenya",
+    "description": "Correu de benvinguda i verificació: text del botó"
+  },
+  "email.verification.footnote.1": {
+    "message": "L'enllaç caduca d'aquí a 24 hores.",
+    "description": "Correu de benvinguda i verificació: nota 1 de lletra petita"
+  },
+  "email.verification.footnote.2": {
+    "message": "Si no has estat tu qui ha creat el compte, pots ignorar aquest missatge.",
+    "description": "Correu de benvinguda i verificació: nota 2 de lletra petita"
+  },
+  "email.verification.reason": {
+    "message": "Reps aquest correu perquè s'ha creat un compte a SequenciAAC amb aquesta adreça.",
+    "description": "Correu de benvinguda i verificació: per què rep el correu qui el rep (peu)"
+  },
+  "email.accountExists.subject": {
+    "message": "Algú ha intentat crear un compte amb aquest correu — SequenciAAC",
+    "description": "Correu d'avís quan algú intenta registrar-se amb un correu que ja té compte: assumpte"
+  },
+  "email.accountExists.preheader": {
+    "message": "No s'ha creat cap compte nou ni s'ha canviat res del teu.",
+    "description": "Correu d'avís quan algú intenta registrar-se amb un correu que ja té compte: text de previsualització de la safata d'entrada"
+  },
+  "email.accountExists.heading": {
+    "message": "Ja tens un compte",
+    "description": "Correu d'avís quan algú intenta registrar-se amb un correu que ja té compte: títol dins del cos"
+  },
+  "email.accountExists.body.1": {
+    "message": "Algú ha intentat crear un compte a SequenciAAC amb aquesta adreça, però ja en tens un.",
+    "description": "Correu d'avís quan algú intenta registrar-se amb un correu que ja té compte: paràgraf 1 del cos"
+  },
+  "email.accountExists.body.2": {
+    "message": "Si no has estat tu, pots ignorar aquest missatge: no s'ha canviat res del teu compte.",
+    "description": "Correu d'avís quan algú intenta registrar-se amb un correu que ja té compte: paràgraf 2 del cos"
+  },
+  "email.accountExists.body.3": {
+    "message": "Si has estat tu i no recordes la contrasenya, pots triar-ne una de nova aquí:",
+    "description": "Correu d'avís quan algú intenta registrar-se amb un correu que ja té compte: paràgraf 3 del cos"
+  },
+  "email.accountExists.buttonLabel": {
+    "message": "Tria una contrasenya nova",
+    "description": "Correu d'avís quan algú intenta registrar-se amb un correu que ja té compte: text del botó"
+  },
+  "email.accountExists.footnote.1": {
+    "message": "L'enllaç caduca d'aquí a 1 hora.",
+    "description": "Correu d'avís quan algú intenta registrar-se amb un correu que ja té compte: nota 1 de lletra petita"
+  },
+  "email.accountExists.reason": {
+    "message": "Reps aquest correu perquè algú ha provat de crear un compte amb aquesta adreça.",
+    "description": "Correu d'avís quan algú intenta registrar-se amb un correu que ja té compte: per què rep el correu qui el rep (peu)"
+  },
+  "email.passwordReset.subject": {
+    "message": "Recupera la teva contrasenya — SequenciAAC",
+    "description": "Correu de recuperació de contrasenya: assumpte"
+  },
+  "email.passwordReset.preheader": {
+    "message": "Enllaç per triar una contrasenya nova. Caduca d'aquí a 1 hora.",
+    "description": "Correu de recuperació de contrasenya: text de previsualització de la safata d'entrada"
+  },
+  "email.passwordReset.heading": {
+    "message": "Recupera la contrasenya",
+    "description": "Correu de recuperació de contrasenya: títol dins del cos"
+  },
+  "email.passwordReset.body.1": {
+    "message": "Hem rebut una petició per canviar la contrasenya del teu compte a SequenciAAC.",
+    "description": "Correu de recuperació de contrasenya: paràgraf 1 del cos"
+  },
+  "email.passwordReset.body.2": {
+    "message": "Per triar-ne una de nova, obre aquest enllaç:",
+    "description": "Correu de recuperació de contrasenya: paràgraf 2 del cos"
+  },
+  "email.passwordReset.buttonLabel": {
+    "message": "Tria una contrasenya nova",
+    "description": "Correu de recuperació de contrasenya: text del botó"
+  },
+  "email.passwordReset.footnote.1": {
+    "message": "L'enllaç caduca d'aquí a 1 hora.",
+    "description": "Correu de recuperació de contrasenya: nota 1 de lletra petita"
+  },
+  "email.passwordReset.footnote.2": {
+    "message": "Si no has estat tu qui ho ha demanat, pots ignorar aquest missatge: la teva contrasenya actual continua funcionant.",
+    "description": "Correu de recuperació de contrasenya: nota 2 de lletra petita"
+  },
+  "email.passwordReset.reason": {
+    "message": "Reps aquest correu perquè s'ha demanat un canvi de contrasenya per a aquest compte.",
+    "description": "Correu de recuperació de contrasenya: per què rep el correu qui el rep (peu)"
+  }
+}

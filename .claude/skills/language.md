@@ -8,7 +8,7 @@ El perquè de tot plegat és a `docs/decisions/ADR-004-traduccions-paquet-i18n.m
 Sempre que afegeixis o modifiquis traduccions:
 
 1. **Edita els catàlegs** a `packages/i18n/messages/<espai>/`: `app/` per a la interfície,
-   `errors/` per als textos dels codis d'error.
+   `errors/` per als textos dels codis d'error, `email/` per als correus.
    - `ca.json` és l'**idioma font**: `"clau": { "message": "text", "description": "per a qui tradueix" }`.
      La descripció va sempre en català i només aquí.
    - `es.json`, `en.json`, `fr.json`, `it.json` porten **només el text**: `"clau": "text"`.
@@ -39,15 +39,19 @@ packages/i18n/
 │   │   ├── en.json
 │   │   ├── fr.json
 │   │   └── it.json
-│   └── errors/         ← un text per codi d'error, claus `error.<CODI>`
+│   ├── errors/         ← un text per codi d'error, claus `error.<CODI>`
+│   └── email/          ← els correus, claus `email.*` (només el back)
 └── src/
     ├── locales.ts      ← LANGS_APP: l'única llista d'idiomes
     ├── catalog.ts      ← loadAppMessages, toMessages
-    └── errors.ts       ← API_ERROR_CODES, errorMessageFor
+    ├── errors.ts       ← API_ERROR_CODES, errorMessageFor
+    └── server.ts       ← createTranslator per al back (`@sequence-arasaac/i18n/server`)
 ```
 
 El web carrega només el catàleg de l'idioma actiu amb `AppIntlProvider`
 (`apps/web/src/app/providers/`). Cap layout no fa servir `IntlProvider` amb catàlegs directament.
+El back tradueix els correus amb `createTranslator(locale)`; les claus que fa servir són tipades
+(`EmailMessageKey`), així que una clau de correu esborrada o mal escrita no compila.
 
 ## Idiomes del projecte
 
