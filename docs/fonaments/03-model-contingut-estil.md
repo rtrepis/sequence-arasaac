@@ -232,7 +232,9 @@ mida que s'havia triat. Ho avisa, i qui prepara el document tria.
   (0,5), només queda editar el text, i el quadre ho diu.
 - **Com es detecta**: el text de la targeta es fa més ample que la seva caixa. La lletra i la caixa
   s'escalen igual amb la mida de la targeta, i la proporció que es mesura a la graella és la del
-  PDF. **La impressió del navegador avui no la respecta** (B32 a `docs/BACKLOG-ux.md`).
+  paper i la del PDF.
+- **SEMPRE** la impressió respecta la mida de la lletra triada: només en treu l'escala de pantalla
+  (B32 a `docs/BACKLOG-ux.md`).
 
 - **SEMPRE** objectius tàctils de 44 × 44 px com a mínim al mòbil (la marca no n'és cap).
 

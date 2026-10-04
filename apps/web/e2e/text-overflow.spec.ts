@@ -106,3 +106,53 @@ test("«Edita el text» obre el camp damunt de la targeta", async ({ page }) => 
     page.getByRole("textbox", { name: "Text del pictograma 1" }),
   ).toBeFocused();
 });
+
+/** Mida de la lletra del text, en píxels, a la còpia del full que s'imprimeix. */
+const printedTextSize = async (page: Page): Promise<number> => {
+  // La còpia es fa en avisar `beforeprint`: amb el full encara per pintar,
+  // sortiria buida
+  await expect(page.locator("[data-card-text]").first()).toBeVisible();
+  await page.emulateMedia({ media: "print" });
+  await page.evaluate(() => window.dispatchEvent(new Event("beforeprint")));
+  // L'app també munta la còpia quan canvia el mitjà: si la torna a muntar
+  // mentre es llegeix, l'element queda fora del document i no té mida
+  let size = NaN;
+  await expect
+    .poll(async () => {
+      size = await page
+        .locator("#print-root [data-card-text]")
+        .first()
+        .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+      return size;
+    })
+    .toBeGreaterThan(0);
+  await page.evaluate(() => window.dispatchEvent(new Event("afterprint")));
+  await page.emulateMedia({ media: "screen" });
+  return size;
+};
+
+test("B32: la impressió respecta la mida de la lletra que s'ha triat", async ({
+  page,
+}) => {
+  await loadWithLongWord(page);
+  const viewLink = page.locator('a[href*="view-sequence"]').first();
+  const editLink = page.locator('a[href*="create-sequence"]').first();
+
+  await viewLink.click();
+  const before = await printedTextSize(page);
+
+  await editLink.click();
+  await mark(page).click();
+  const reduce = page.getByRole("button", {
+    name: /^Redueix la lletra de tot el document a/,
+  });
+  const size = Number(
+    (await reduce.textContent())!.match(/(\d+[,.]\d+)/)![1].replace(",", "."),
+  );
+  await reduce.click();
+
+  await viewLink.click();
+  const after = await printedTextSize(page);
+
+  expect(after / before).toBeCloseTo(size, 2);
+});

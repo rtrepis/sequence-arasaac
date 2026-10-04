@@ -59,7 +59,6 @@ l'entrada.
 
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| B32 | La impressió del navegador no respecta la mida de la lletra | Tot document amb una mida diferent d'1 surt imprès diferent de la pantalla i del PDF, sense cap avís; i l'avís de B28 no arregla el paper fins que això no es corregeixi | S | Sí: canvia com surten impresos els documents d'avui |
 
 ### Després
 
@@ -438,7 +437,7 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
     de tabulació i el lector de pantalla el llegeix com a ocupat. El `disabled` només es queda per
     als camps buits, que és validació i no espera.
 
-### B32 — La impressió del navegador no respecta la mida de la lletra 🔴 Oberta
+### B32 — La impressió del navegador no respecta la mida de la lletra ✅ Resolta
 
 *(Trobada resolent B28.)*
 
@@ -453,6 +452,14 @@ la prova falla: el PDF en blanc es desava amb el missatge d'èxit.
   La regla de `@media print` hi és per treure `printPageRatio` (l'escala de pantalla), no la mida
   de la lletra. Cal confirmar-ho abans, perquè **canvia com surten impresos** els documents d'avui
   que no fan servir la mida 1. Després, regenerar les captures que en depenguin.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`), confirmada abans amb l'usuari: la impressió treu
+  l'escala de pantalla però conserva la mida triada (`printTextFontSize` i `printNumberFontSize` a
+  `PictogramCard`). Prova a `e2e/text-overflow.spec.ts`: amb la lletra del document a 0,6, el text
+  imprès fa el 60 % del d'abans (sense l'arreglament, el 100 %). Cap captura del repositori no
+  depenia de la mida impresa: les vuit de `saac-fixtures` i les dues de `document-style-panel` que
+  fallen en aquest entorn ja fallaven igual sense el canvi.
+- Un document amb la lletra a mida 1 (la de per defecte) surt imprès
+  exactament igual que abans: només canvien els que en tenen una altra.
 
 ---
 
@@ -1204,8 +1211,8 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   `e2e/text-overflow.spec.ts`.
 - **El que no fa**: no parteix paraules soles (`hyphens: auto`) ni guarda un «deixa-ho així»: un
   tall acceptat continua marcat. Desar-ho voldria un camp nou al `.saac`, i no s'ha demanat.
-- Fent-ho s'ha trobat **B32**: la impressió del navegador no respecta la mida de la lletra, i fins
-  que no s'arregli, reduir-la només arregla la pantalla i el PDF.
+- Fent-ho s'ha trobat **B32**: la impressió del navegador no respectava la mida de la lletra.
+  Resolta a la mateixa branca: reduir-la ara també arregla el paper.
 
 ### B29 — La previsualització del vocabulari personal sobresurt del requadre 🔴 Oberta
 

@@ -96,6 +96,11 @@ const PictogramCard = ({
 
   const textFontSize = 20 * font.size * printPageRatio * pictSize;
   const numberFontSize = 20 * numberFont.size * printPageRatio * pictSize;
+  // A la impressió es treu l'escala de pantalla (`printPageRatio`), però no la
+  // mida triada: sense, el paper sortia sempre a la mida 1 i no coincidia amb
+  // la pantalla ni amb el PDF (B32)
+  const printTextFontSize = 20 * font.size * pictSize;
+  const printNumberFontSize = 20 * numberFont.size * pictSize;
 
   return (
     <Card
@@ -121,7 +126,7 @@ const PictogramCard = ({
               component="h3"
               sx={{
                 color: numberFont.color,
-                "@media print": { fontSize: 20 * pictSize },
+                "@media print": { fontSize: printNumberFontSize },
               }}
             >
               {indexSequence + 1}
@@ -136,7 +141,7 @@ const PictogramCard = ({
               data-card-text
               sx={{
                 color: font.color,
-                "@media print": { fontSize: 20 * pictSize },
+                "@media print": { fontSize: printTextFontSize },
               }}
             >
               {text}
@@ -198,7 +203,7 @@ const PictogramCard = ({
               data-card-text
               sx={{
                 color: font.color,
-                "@media print": { fontSize: 20 * pictSize },
+                "@media print": { fontSize: printTextFontSize },
               }}
             >
               {text}
@@ -211,7 +216,7 @@ const PictogramCard = ({
               component="h3"
               sx={{
                 color: numberFont.color,
-                "@media print": { fontSize: 20 * pictSize },
+                "@media print": { fontSize: printNumberFontSize },
               }}
             >
               {indexSequence + 1}
