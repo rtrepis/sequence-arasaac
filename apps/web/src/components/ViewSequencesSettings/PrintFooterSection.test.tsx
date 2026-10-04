@@ -69,13 +69,23 @@ describe("PrintFooterSection", () => {
     expect(licence).not.toBeDisabled();
   });
 
-  it("hauria de dir per què no es pot treure, i no només que no es pot", async () => {
+  it("hauria de dir per què no es pot treure sense haver de passar-hi el ratolí", () => {
     renderSection({ author: "Ramon" });
 
-    await userEvent.hover(screen.getByRole("checkbox"));
+    // En tauleta no hi ha hover: el motiu ha de ser a la vista des del principi,
+    // no amagat en un tooltip que només surt amb el ratolí a sobre
+    expect(screen.getByText(/pictograms are not yours/i)).toBeVisible();
+  });
 
-    expect(
-      await screen.findByText(/pictograms are not yours/i),
-    ).toBeInTheDocument();
+  it("hauria d'associar el motiu a l'interruptor per al lector de pantalla", () => {
+    const { licence } = renderSection({ author: "Ramon" });
+
+    expect(licence).toHaveAccessibleDescription(/pictograms are not yours/i);
+  });
+
+  it("no hauria de mostrar el motiu quan no hi ha autor", () => {
+    renderSection();
+
+    expect(screen.queryByText(/pictograms are not yours/i)).not.toBeInTheDocument();
   });
 });
