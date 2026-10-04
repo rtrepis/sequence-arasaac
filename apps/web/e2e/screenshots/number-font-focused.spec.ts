@@ -155,23 +155,23 @@ test(
     await page.getByRole("dialog").waitFor({ state: "visible" });
     await page.waitForTimeout(500);
 
-    // El diàleg ara té pestanyes i no obre al formulari de pictogrames: la
-    // numeració viu a «Pictogrames», i sense aquest clic la captura es
-    // buscava en un panell que no la conté.
-    await page.getByRole("tab", { name: /Pictogrames/i }).click();
+    // El diàleg té pestanyes i no obre al formulari de pictogrames: la
+    // numeració viu a «Estil del document» (abans era un tab «Pictogrames»),
+    // i sense aquest clic la captura es buscava en un panell que no la conté.
+    await page.getByRole("tab", { name: "Estil del document" }).click();
     await page.waitForTimeout(1000);
 
     // =============================================
     // PAS 1: Switch de Numeració (desactivat)
-    // Protagonista: el span clicable del switch (aria-label="Numeració").
-    // MUI posa l'aria-label al span del SwitchBase i no a l'<input>, cosa que
-    // aquí serveix i per a un lector de pantalla no (vegeu C17 al backlog).
+    // Protagonista: el span clicable del switch, pare de l'<input> que porta
+    // el nom (des de C17 el nom va a l'input i surt del títol de la fila).
     // =============================================
-    const numberedSwitch = page.locator('[aria-label="Numeració"]');
+    const numberedInput = page.getByRole("checkbox", { name: "Numeració" });
+    const numberedSwitch = numberedInput.locator("..");
     await numberedSwitch.waitFor({ state: "visible", timeout: 15000 });
 
     // Assegurar que el switch és desactivat (si estava activat, desactivar-lo)
-    const isChecked = await numberedSwitch.locator("input").isChecked();
+    const isChecked = await numberedInput.isChecked();
     if (isChecked) {
       await numberedSwitch.click();
       await page.waitForTimeout(400);

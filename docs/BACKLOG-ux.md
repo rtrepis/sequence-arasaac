@@ -59,9 +59,7 @@ l'entrada.
 
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| C17 | El switch d'un ajust no té nom per al lector de pantalla | Exclusió d'accessibilitat a tots els `SettingCardBoolean`; el patró ja existeix (C12) | S | No |
-| C18 | L'spec de vídeo de `multiple-sequences` és vermell | Surt de retruc amb C17 (el selector que falla és el d'aquell switch). Si no, s'esborra | S | Si el vídeo es vol |
-| B11a | Pujar una imatge congela la interfície (primera meitat) | Saltar l'escaneig d'alfa quan el fitxer és JPEG. Retalla la major part del temps en el cas més comú (fotos del mòbil) | S | No |
+| C18 | L'spec de vídeo de `multiple-sequences` és vermell | No surt amb C17, com es pensava: és l'expressió regular de l'spec, que no casa amb «Aplicar a totes». Un canvi d'una línia, o s'esborra | S | Si el vídeo es vol |
 
 ### Després
 
@@ -79,13 +77,13 @@ l'entrada.
 
 | Id | Què | Per què pot esperar | Esforç |
 |---|---|---|---|
-| B11b | Pujar una imatge: conversió en un worker | Quan B11a s'hagi mesurat en una tauleta, si encara es nota | M |
+| B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
 | B14 | Sostre del canvas del PDF sense mesurar | S'espera tenir casos reals al registre d'errors (`/api/client-errors` continua obert amb els comptes apagats, i l'avís per correu també); no hi ha res a fer fins que n'arribin | — |
 | N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
 | B30 | No hi ha historial de desfer i refer | El desfer que ja existeix cobreix els canvis d'estil, «Aplica a tots» i «Restableix», que són els que esborren més feina d'un cop | L |
-| C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. Va amb C17 | M | No |
+| C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. C17 ja n'ha tret els switches | M | No |
 | C10 | Vuit fitxers de test en quarantena | El runner i l'arnès ja hi són; queda portar-los-hi o esborrar-los, un per un | S cada un | Sí: per cada fitxer, reviure o esborrar |
 
 ### Ajornades (comptes apagats)
@@ -683,6 +681,13 @@ una connexió oberta obliga a gestionar `onversionchange` i connexions tancades.
   que hi cap: dues congelacions seguides just en el moment d'avisar l'usuari. El botó ja porta
   rodet mentre dura (`isLoading`), però el rodet també es queda quiet si el fil principal està
   bloquejat.
+- **B11a ✅ resolta** (branca `ccr-8cf4cc15-vmzl85`). `encodeImage` ja no escaneja l'alfa quan
+  l'origen és JPEG (`isOpaqueFormat`, pel `file.type` o pel prefix del data URL): un JPEG no pot
+  tenir transparència. Com que la primera codificació d'una foto opaca ja surt en JPEG, la segona
+  d'`encodeToFit` i les d'`encodeSmallerVersions` també se l'estalvien. Un PNG o un WebP continuen
+  passant per l'escaneig, perquè poden tenir-ne. **No s'ha mesurat** en una tauleta: jsdom no té
+  canvas i la xifra de ~215 ms de l'escaneig és la de la mesura original. Queda oberta per **B11b**
+  (el worker).
 
 ### B12 — Els documents del núvol no es podien distingir l'un de l'altre ✅ Resolta
 
@@ -1578,8 +1583,12 @@ Branca `claude/backlog-branch-master-64uh75`.
 - **Proposta**: decidir primer si el vídeo es vol. Si es vol, el switch «Aplica a totes» és avui
   un `SettingRow control="compact"` i el seu nom no és al `checkbox` (vegeu C17); si no, esborrar
   l'spec en comptes de deixar-lo vermell fent de soroll a la suite.
+- **Correcció (en resoldre C17)**: el nom **sí** que és al `checkbox`. Aquell switch és de
+  `SequenceControlsPanel`, no de `SettingCardBoolean`, i ja el posava amb `inputProps`. El que
+  falla és el selector de l'spec, `/apply.*(all|tots)/i`, que no casa amb el text català
+  «Aplicar a totes». Si el vídeo es vol, l'arreglament és canviar aquesta expressió regular.
 
-### C17 — El switch d'un ajust arriba sense nom al lector de pantalla 🔴 Oberta
+### C17 — El switch d'un ajust arriba sense nom al lector de pantalla ✅ Resolta
 
 *(Trobada regenerant les captures de N2, fora del seu abast.)*
 
@@ -1593,6 +1602,15 @@ Branca `claude/backlog-branch-master-64uh75`.
 - **Proposta**: seguir el patró de l'estàndard i no repetir l'etiqueta: que `SettingRow` passi el
   seu `labelId` i el `Switch` el reculli amb `inputProps={{ "aria-labelledby": labelId }}`. Així
   el nom surt del títol de la fila, com a la resta de controls.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`), tal com proposava l'entrada. `SettingCardBoolean`
+  genera el `labelId` amb `useId` —hi pot haver el mateix ajust dues vegades a la pàgina— i el
+  `Switch` el rep amb `inputProps`. Comprovat al navegador: el formulari d'«Estil del document»
+  exposa `checkbox "Numeració"` i `checkbox "Color"`. Prova a `SettingCardBoolean.test.tsx`.
+- `number-font-focused.spec.ts` localitzava el switch per l'`aria-label` del `span` i ara ho fa
+  pel nom de l'`input`. De passada s'hi ha corregit la navegació: buscava un tab «Pictogrames»
+  que ja no existeix, i era vermell d'abans.
+- Els altres `Switch` de l'app ja posaven el nom a l'`input` (`SequenceControlsPanel`,
+  `PrintFooterSection`, `AdminConfigPanel`).
 
 ### C19 — L'avís de baix i el botó flotant no compartien la mateixa base en mòbil ✅ Resolta
 

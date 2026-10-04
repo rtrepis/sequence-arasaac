@@ -199,10 +199,11 @@ const encode = (
   ctx: CanvasRenderingContext2D,
   dimensions: ImageDimensions,
   targetBytes: number,
+  opaque: boolean,
 ): string => {
   const { canvas } = ctx;
 
-  if (!hasTransparency(ctx, dimensions)) {
+  if (opaque || !hasTransparency(ctx, dimensions)) {
     return encodeWithTargetSize(canvas, JPEG_MIME, targetBytes);
   }
 
@@ -211,6 +212,18 @@ const encode = (
 
   return canvas.toDataURL(PNG_MIME);
 };
+
+/**
+ * Indica si el format d'origen no pot tenir transparència.
+ *
+ * Un JPEG és opac per definició: escanejar-ne els píxels buscant alfa és la part
+ * més cara de la conversió (milions de píxels al fil principal) per arribar
+ * sempre a la mateixa resposta. Les fotos del mòbil, el cas més habitual, ho són.
+ */
+const isOpaqueFormat = (source: File | string): boolean =>
+  typeof source === "string"
+    ? source.startsWith(`data:${JPEG_MIME}`)
+    : source.type === JPEG_MIME;
 
 /**
  * Converteix una imatge (un File o un data URL ja convertit) a base64, acotada
@@ -229,7 +242,7 @@ export const encodeImage = async (
   );
   const ctx = drawToCanvas(img, dimensions);
 
-  return encode(ctx, dimensions, targetBytes);
+  return encode(ctx, dimensions, targetBytes, isOpaqueFormat(source));
 };
 
 /**
