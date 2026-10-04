@@ -57,6 +57,7 @@ per pestanya, pestanya activa, si porta configuració global i què se n'espera 
 | `12-imatge-repetida` | 2.1.0 | 2 (3, 3) | no | una imatge en base64 tres cops i una de Cloudinary dues: al v3 hi ha d'haver dos `assets` |
 | `13-malmes` | — | — | — | la meitat del 02: no s'ha de poder obrir, i s'ha de dir |
 | `14-versio-99` | v3, `schemaVersion: 99` | 1 (2) | dins del document | una versió més nova: s'obre, avisa i conserva els camps que no coneix |
+| `15-paper-carta` | v3 | 1 (2) | dins del document | pàgina en paper Carta (`LETTER`): s'obre en Carta i es torna a desar igual; amb una mida desconeguda, cau a la de qui obre |
 
 Les 08 i 09 les ha escrit l'app (obrir el 02 i desar-lo), no s'han fet a mà; la 10 sí, a partir de
 la 01. La captura del 08 és idèntica, píxel a píxel, a la del 02: és la prova que una seqüència es

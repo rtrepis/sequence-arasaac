@@ -1,5 +1,5 @@
 import { Hair, Sequence, Skin } from "./sequence";
-import { DefaultSettings } from "./ui";
+import { DefaultSettings, PageSize } from "./ui";
 
 export type SequenceAlignmentH = "left" | "center" | "right";
 export type SequenceAlignmentV = "top" | "center" | "bottom";
@@ -60,7 +60,7 @@ export interface SequenceStyle extends DefaultSettings {
  */
 export interface DocumentLayout {
   direction?: "row" | "column";
-  pageSize?: "A4" | "A3" | "FULLSCREEN";
+  pageSize?: PageSize;
   orientation?: "landscape" | "portrait";
 }
 

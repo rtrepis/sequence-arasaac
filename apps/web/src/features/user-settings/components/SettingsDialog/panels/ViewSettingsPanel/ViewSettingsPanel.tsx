@@ -11,7 +11,6 @@ import {
 } from "@components/SettingsLayout";
 import { FormattedMessage, useIntl } from "react-intl";
 import { forwardRef, useImperativeHandle, useState } from "react";
-import { SelectChangeEvent } from "@mui/material";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -31,7 +30,10 @@ import {
 import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import { DefaultSettingsPanelHandle } from "../DefaultSettingsPanel/DefaultSettingsPanel";
 import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
-import { PageSize } from "@features/print/utils/pageFormat";
+import {
+  PageSize,
+  regionalPaperSize,
+} from "@features/print/utils/pageFormat";
 import { SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
 import GlobalViewControls from "@components/ViewSequencesSettings/GlobalViewControls";
 import PrintFooterSection from "@components/ViewSequencesSettings/PrintFooterSection";
@@ -49,7 +51,6 @@ import {
   VIEW_DEFAULT_PICT_SPACE,
   VIEW_DEFAULT_SEQ_SPACE,
   VIEW_DEFAULT_DIRECTION,
-  VIEW_DEFAULT_PAGE_SIZE,
   VIEW_DEFAULT_ORIENTATION,
   VIEW_DEFAULT_ALIGNMENT_H,
   VIEW_DEFAULT_ALIGNMENT_V,
@@ -57,17 +58,6 @@ import {
   VIEW_DEFAULT_AUTHOR,
 } from "@/configs/viewSettingsConfig";
 import React from "react";
-
-const PAGE_SIZE_MAP: Record<number, PageSize> = {
-  0: "A4",
-  1: "A3",
-  2: "FULLSCREEN",
-};
-const PAGE_INDEX_MAP: Record<PageSize, 0 | 1 | 2> = {
-  A4: 0,
-  A3: 1,
-  FULLSCREEN: 2,
-};
 
 // Prefix dels ids dels títols de fila, per lligar-los als controls amb aria-labelledby
 const VIEW_PANEL_LABEL_ID = "view-settings-panel";
@@ -95,7 +85,8 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         pictSpaceBetween: VIEW_DEFAULT_PICT_SPACE,
         sequenceSpaceBetween: VIEW_DEFAULT_SEQ_SPACE,
         direction: VIEW_DEFAULT_DIRECTION,
-        pageSize: VIEW_DEFAULT_PAGE_SIZE,
+        // El paper per defecte és el de cada dia a la regió de qui l'usa
+        pageSize: regionalPaperSize(navigator.languages),
         orientation: VIEW_DEFAULT_ORIENTATION,
         alignmentH: VIEW_DEFAULT_ALIGNMENT_H,
         alignmentV: VIEW_DEFAULT_ALIGNMENT_V,
@@ -104,9 +95,8 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       });
     };
 
-    const handlePageSizeChange = (event: SelectChangeEvent<number>) => {
-      const pageSize = PAGE_SIZE_MAP[Number(event.target.value)];
-      if (pageSize) setLocalSettings((prev) => ({ ...prev, pageSize }));
+    const handlePageSizeChange = (pageSize: PageSize) => {
+      setLocalSettings((prev) => ({ ...prev, pageSize }));
     };
 
     const handleDirectionChange = (
@@ -219,7 +209,7 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         >
           <GlobalViewControls
             viewSettings={localSettings}
-            pageSizeIndex={PAGE_INDEX_MAP[localSettings.pageSize]}
+            pageSize={localSettings.pageSize}
             sequenceCount={2}
             onPageSizeChange={handlePageSizeChange}
             onDirectionChange={handleDirectionChange}

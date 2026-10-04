@@ -9,6 +9,7 @@ import {
   SettingsTab,
   UserTier,
   ImageQuality,
+  PageSize,
 } from "@/types/ui";
 import { WordProfile } from "@features/word-profile/model/WordProfile";
 import { DEFAULT_IMAGE_QUALITY } from "@/utils/imageToBase64";
@@ -156,6 +157,24 @@ const uiSlice = createSlice({
       return { ...previousUi, viewSettings: action.payload };
     },
 
+    /**
+     * El paper de cada dia a la regió del navegador, per a qui no té
+     * preferències desades: el Carta als EUA, a Mèxic i a bona part de
+     * l'Amèrica Llatina, l'A4 a la resta. Com `applyUserViewSettings`, no toca
+     * el format que l'esborrany ja ha restaurat.
+     */
+    regionalPageSizeDetected: (
+      previousUi,
+      action: PayloadAction<PageSize>,
+    ) => {
+      if (previousUi.viewSettingsFromSession) return previousUi;
+
+      return {
+        ...previousUi,
+        viewSettings: { ...previousUi.viewSettings, pageSize: action.payload },
+      };
+    },
+
     updateDefaultSettings: (
       previousUi,
       action: PayloadAction<DefaultSettings>,
@@ -245,6 +264,7 @@ export const {
   viewSettings: viewSettingsActionCreator,
   sessionViewSettingsRestored: sessionViewSettingsRestoredActionCreator,
   applyUserViewSettings: applyUserViewSettingsActionCreator,
+  regionalPageSizeDetected: regionalPageSizeDetectedActionCreator,
   updateLangSetting: updateLangSettingsActionCreator,
   updateDefaultSettings: updateDefaultSettingsActionCreator,
   updateDefaultSettingPictApiAra: updateDefaultSettingPictApiAraActionCreator,

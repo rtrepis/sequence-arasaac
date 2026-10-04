@@ -100,7 +100,7 @@ apps/
 
 | Hook | Ubicació | Rol |
 |------|----------|-----|
-| `usePageFormat` | `features/print/hooks` | Formats de pàgina (A4, A3, FULLSCREEN) i orientació |
+| `usePageFormat` | `features/print/hooks` | Formats de pàgina (A4, A3, Carta, Tabloide, FULLSCREEN) i orientació. La llista única de mides i el paper per defecte segons la regió viuen a `utils/pageFormat.ts` |
 | `useScaleCalculator` | `features/print/hooks` | Càlcul d'escales segons DPI i dimensions |
 | `usePrintStyles` | `features/print/hooks` | Estils dinàmics per impressió |
 | `usePrintSheet` | `features/print/hooks` | La còpia del full, que és l'únic que s'imprimeix (Ctrl+P inclòs) |
@@ -207,6 +207,11 @@ al davant hi encaixa.
   troballes L1–L8, de les quals L1–L4 estan resoltes i L5–L8 continuen obertes. La primera de
   les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
   correus diaris de Resend.
+- `docs/ESTUDI-seo-noticies.md` és el pla perquè les notícies es trobin als cercadors i es puguin
+  compartir: què veu Google avui (una SPA buida sense JavaScript), les pàgines estàtiques, el
+  sitemap i les etiquetes per compartir (fase 1), les **guies** pensades per a cerques reals
+  (fase 2) i com mesurar-ho (fase 3). **Consultar-lo abans de tocar `index.html`, `vercel.json`,
+  `robots.txt` o la manera com es publiquen les notícies.** No s'ha començat.
 - `docs/ESTANDARD-capes-flotants.md` és l'estudi que hi ha darrere de l'estàndard de capes
   flotants: l'inventari del que hi havia, les tretze divergències numerades (F1–F13) amb fitxer i
   motiu, i el pla de migració. L'estàndard viu a `docs/estandards/capes-flotants.md`; **aquest

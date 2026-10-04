@@ -168,7 +168,7 @@ const sequenceStyleViewSchema = new Schema(
 const documentLayoutSchema = new Schema(
   {
     direction: { type: String, enum: ["row", "column"] },
-    pageSize: { type: String, enum: ["A4", "A3", "FULLSCREEN"] },
+    pageSize: { type: String, enum: ["A4", "A3", "LETTER", "TABLOID", "FULLSCREEN"] },
     orientation: { type: String, enum: ["landscape", "portrait"] },
   },
   { _id: false }

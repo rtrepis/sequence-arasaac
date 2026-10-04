@@ -194,7 +194,7 @@ const userSchema = new Schema<IUser>(
           alignmentH: { type: String, enum: ["left", "center", "right"] },
           alignmentV: { type: String, enum: ["top", "center", "bottom"] },
           direction: { type: String, enum: ["row", "column"] },
-          pageSize: { type: String, enum: ["A4", "A3", "FULLSCREEN"] },
+          pageSize: { type: String, enum: ["A4", "A3", "LETTER", "TABLOID", "FULLSCREEN"] },
           orientation: { type: String, enum: ["landscape", "portrait"] },
           author: { type: String },
           licence: { type: Boolean },

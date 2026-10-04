@@ -24,7 +24,7 @@ import type { ResolvedCardStyle, V3Style } from "./types";
 
 // Proves del model v3: migració, anada i tornada, cascada i detecció del
 // format. Les fixtures de `test/fixtures/saac/` no es toquen mai (vegeu-ne el
-// README); les 11–14 són les del format v3.
+// README); les 11–15 són les del format v3.
 
 const FIXTURES = path.resolve(__dirname, "../../../../test/fixtures/saac");
 const readText = (name: string): string =>
@@ -351,6 +351,29 @@ describe("detecció del format", () => {
     expect(again.meta.createdAt).toBe("2031-01-01T00:00:00.000Z");
     // Es desa amb la versió que coneix l'app
     expect(again.schemaVersion).toBe(3);
+  });
+
+  it("un document en paper Carta s'obre en Carta i es torna a desar igual", () => {
+    const { file, document } = parseDocument("15-paper-carta.saac");
+    expect(file.page.size).toBe("LETTER");
+    expect(document.layout?.pageSize).toBe("LETTER");
+    expect(JSON.parse(serializeSaac(file))).toEqual(
+      JSON.parse(readText("15-paper-carta.saac")),
+    );
+    expect(documentToV3(document, serializeContext).page.size).toBe("LETTER");
+  });
+
+  // És el que fa una versió de l'app anterior al paper Carta amb el 15: el
+  // document s'obre igualment, amb la pàgina de qui l'obre. Per això afegir
+  // una mida no demana una versió nova de l'esquema
+  it("una mida de pàgina que l'app no coneix cau a la de qui obre", () => {
+    const unknown = readText("15-paper-carta.saac").replace(
+      '"size":"LETTER"',
+      '"size":"B5"',
+    );
+    const parsed = parseSaac(unknown, context);
+    if (parsed.kind !== "document") throw new Error();
+    expect(parsed.file.page.size).toBe(USER_PAGE.size);
   });
 
   it("el tipus es decideix pel contingut: un estil és un estil", () => {

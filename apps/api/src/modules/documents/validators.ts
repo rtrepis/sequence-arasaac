@@ -79,7 +79,7 @@ const sequenceStyleViewZodSchema = sequenceViewSettingsZodSchema.extend({
 // no l'escriu, però l'esquema 2 ja l'admet perquè B26 no hagi d'obrir una v3.
 const documentLayoutZodSchema = z.object({
   direction: z.enum(["row", "column"]).optional(),
-  pageSize: z.enum(["A4", "A3", "FULLSCREEN"]).optional(),
+  pageSize: z.enum(["A4", "A3", "LETTER", "TABLOID", "FULLSCREEN"]).optional(),
   orientation: z.enum(["landscape", "portrait"]).optional(),
 });
 
