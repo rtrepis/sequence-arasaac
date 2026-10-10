@@ -113,16 +113,16 @@ test("a la segona càrrega, la configuració del compte hi és sense esperar el 
   await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
   await logIn(page);
 
-  // Amb la configuració del compte aplicada, la URL ja és la del seu idioma
-  await expect(page).toHaveURL(/\/en\/create-sequence/);
+  // Mana la URL (B23): l'idioma del compte no la reescriu
+  await expect(page).toHaveURL(/\/ca\/create-sequence/);
 
   // Segona càrrega amb el servidor lent: el que es vegi abans de la resposta és
-  // el que aquest pla arregla
+  // el que aquest pla arregla. Per l'arrel, que no porta idioma, mana el del
+  // compte, i ha de ser-hi sense esperar el servidor
   control.settingsDelayMs = 5000;
-  await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
 
-  await expect(page).toHaveURL(/\/en\/create-sequence/, { timeout: 3000 });
-  await expect(page.getByRole("button", { name: "Main menu" })).toBeVisible({
+  await expect(page.getByRole("button", { name: "Start" })).toBeVisible({
     timeout: 3000,
   });
 });
@@ -133,24 +133,34 @@ test("tancar sessió recupera la configuració d'abans i no deixa la del compte"
   await mockBackend(page);
   await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
   await logIn(page);
-  await expect(page).toHaveURL(/\/en\/create-sequence/);
-
-  await page.getByRole("button", { name: "Main menu" }).click();
-  await page.getByRole("button", { name: "Sign out" }).click();
-
-  // Torna l'idioma d'abans d'entrar-hi…
+  // Mana la URL (B23): entrar al compte no canvia l'idioma de la pàgina
   await expect(page).toHaveURL(/\/ca\/create-sequence/);
-  // …i el navegador no es queda la cara del compte
-  expect(
-    await page.evaluate(() => localStorage.getItem("accountUi")),
-  ).toBeNull();
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem("accountUi")))
+    .not.toBeNull();
+
+  await page.getByRole("button", { name: "Menú principal" }).click();
+  await page.getByRole("button", { name: "Tanca sessió" }).click();
+
+  await expect(page).toHaveURL(/\/ca\/create-sequence/);
+  // El navegador no es queda la cara del compte…
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem("accountUi")))
+    .toBeNull();
+  // …i per l'arrel torna a aterrar en l'idioma d'abans d'entrar-hi
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect(
+    page.getByRole("button", { name: "Inicia", exact: true }),
+  ).toBeVisible();
 });
 
 test("la caché no es queda mai el vocabulari", async ({ page }) => {
   await mockBackend(page);
   await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
   await logIn(page);
-  await expect(page).toHaveURL(/\/en\/create-sequence/);
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem("accountUi")))
+    .not.toBeNull();
 
   const cached = await page.evaluate(() =>
     JSON.parse(localStorage.getItem("accountUi") ?? "{}"),

@@ -127,6 +127,12 @@
 > Decisió i motius: `docs/decisions/ADR-004-traduccions-paquet-i18n.md`.
 
 - **Cinc idiomes**: `ca` (principal), `es`, `en`, `fr`, `it`. L'única llista és `LANGS_APP`, a `packages/i18n/src/locales.ts`; `LangsApp`, `DEFAULT_LANGS_APP` i `toLangsApp` en surten, i el front i el back la fan servir tots dos.
+- **Mana la URL** (B23): un enllaç `/fr/…` s'obre en francès, amb compte o sense, tingui desat
+  l'idioma que tingui qui l'obre. L'idioma desat (`ui.lang.app`) només decideix on aterra qui entra
+  per una adreça sense idioma: l'arrel i les adreces antigues. Canviar l'idioma a la configuració
+  porta **la mateixa pàgina** a l'idioma nou. Dins de les rutes `/:locale`, l'idioma actual és
+  `useCurrentLocale()` (`features/user-settings/hooks/`), i **MAI** `ui.lang.app`: un enllaç fet amb
+  l'idioma desat faria saltar l'usuari d'idioma a mitja feina.
 - **Els catàlegs viuen a `packages/i18n/messages/<espai>/`**: `app/` (la interfície), `errors/` (els codis d'error de l'API, vegeu `backend.md`) i `email/` (els correus, vegeu `correus.md`). `ca.json` és la font (`{ "clau": { "message": "...", "description": "..." } }`, descripció en català); els altres idiomes porten només `"clau": "text"`.
 - **No es compilen.** El web els llegeix tal qual amb `AppIntlProvider` (`app/providers/`), que només baixa el catàleg de l'idioma actiu. Abans es compilaven a AST dins del `build`, i el pas ja havia fallat en silenci: a la 2.2.0 la notícia `documents-everywhere` tenia la traducció a la font però no a producció.
 - **La barrera són les proves**, no el compilador: `packages/i18n/src/catalog.test.ts` (mateixes claus a tots els idiomes, ICU vàlid, mateixes variables que el català) i `AppIntlProvider.test.tsx` (cada `id` del codi existeix a `app/ca.json`).

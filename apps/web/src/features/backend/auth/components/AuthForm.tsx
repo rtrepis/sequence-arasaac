@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { loginThunk } from "../store/authSlice";
 import StyledButton from "@/style/StyledButton";
 import { errorMessageFor } from "@sequence-arasaac/i18n";
+import { useCurrentLocale } from "@features/user-settings/hooks/useCurrentLocale";
 
 interface AuthFormProps {
   /** Acció posterior a un login correcte (tancar el modal, per exemple). */
@@ -39,7 +40,8 @@ const AuthForm = ({
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const appLang = useAppSelector((state) => state.ui.lang.app);
+  // L'idioma de la pàgina on és el formulari, no el desat (B23)
+  const appLang = useCurrentLocale();
   const { isLoading, errorCode } = useAppSelector((state) => state.auth);
 
   const [email, setEmail] = useState("");

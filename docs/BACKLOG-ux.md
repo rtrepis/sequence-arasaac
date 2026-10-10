@@ -65,7 +65,6 @@ l'entrada.
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
-| B23 | L'idioma desat de l'usuari sense compte no mana sobre la URL | Amb els comptes apagats, **tothom** és usuari sense compte: la regla que val és aquesta | S | Sí: mana la URL o mana la preferència |
 
 ### Més endavant
 
@@ -1046,7 +1045,7 @@ d'IndexedDB i al fitxer `.saac`.
   pantalla —fer desaparèixer feina visible és pitjor que no desar-la—, així que el més probable és
   que hagi de ser un avís amb acció, no un canvi automàtic.
 
-### B23 — L'idioma desat de l'usuari sense compte no mana sobre el de la URL 🔴 Oberta
+### B23 — L'idioma desat de l'usuari sense compte no mana sobre el de la URL ✅ Resolta
 
 *(Trobada resolent B18, branca `claude/estudi-pla-execucio-2w1pzq`.)*
 
@@ -1061,6 +1060,18 @@ d'IndexedDB i al fitxer `.saac`.
   altre acabarà al seu propi idioma. L'alternativa és la contrària —que la URL mani sempre i la
   preferència només decideixi on aterra qui entra per l'arrel—, que treu el salt del tot. Cap de
   les dues és òbvia i per això no s'ha decidit dins de B18.
+- **Decisió (2026-10-10)**: **mana la URL**, amb compte o sense. L'idioma desat només decideix on
+  aterra qui entra per l'arrel o per una adreça antiga sense idioma.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`). S'ha tret l'efecte d'`App.tsx` que, amb sessió o amb
+  la caché del compte, reescrivia `/ca/…` a l'idioma del compte. `useCurrentLocale` dona l'idioma de
+  la URL dins de `/:locale` (i el desat fora). El commutador d'idioma de la configuració
+  (`SettingCardLangAppToggle`) tenia dos errors que només es veien quan URL i preferència no
+  coincidien: marcava l'idioma desat i no el que es veia (i llavors triar el desat no feia res), i
+  sempre portava a Edició. Ara marca el de la URL i canvia d'idioma **la mateixa pàgina**.
+  `AuthForm` també enllaça amb l'idioma de la URL. Regla a
+  `docs/estandards/estat-i-persistencia.md`. Proves: `e2e/url-locale.spec.ts` (nova) i
+  `e2e/account-settings-cache.spec.ts` (adaptada: el compte ja no reescriu la URL; la caché es
+  prova entrant per l'arrel). A master, tres d'aquests casos fallen.
 
 ### B24 — L'usuari no veu els seus límits ni pot fer res per no topar-hi ✅ Resolta
 
