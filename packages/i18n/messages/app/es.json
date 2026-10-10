@@ -698,5 +698,8 @@
   "components.pictEdit.textOverflow.fitPictogram": "Reduce la letra solo de este pictograma a {size}",
   "components.pictEdit.textOverflow.editText": "Edita el texto",
   "features.sequence.style.changed.fitTextPictogram": "Se ha reducido la letra de este pictograma para que el texto quepa.",
-  "features.sequence.style.changed.fitTextDocument": "Se ha reducido la letra de todo el documento para que el texto quepa."
+  "features.sequence.style.changed.fitTextDocument": "Se ha reducido la letra de todo el documento para que el texto quepa.",
+  "components.mouseActionList.pasteEmpty": "Copia antes un pictograma",
+  "components.mouseActionList.pasteSource": "Copiado: «{text}»",
+  "components.mouseActionList.pasteSourceNoText": "Copiado: un pictograma sin texto"
 }

@@ -75,24 +75,3 @@ export function useViewManager(config: ViewManagerConfig): ViewManagerState {
     persistViewSettings,
   };
 }
-
-/**
- * Hook helper per gestionar l'autor del document
- */
-export function useAuthorManager(initialAuthor = "") {
-  const [author, setAuthor] = useState(initialAuthor);
-
-  const updateAuthor = useCallback((newAuthor: string) => {
-    setAuthor(newAuthor);
-  }, []);
-
-  const clearAuthor = useCallback(() => {
-    setAuthor("");
-  }, []);
-
-  return {
-    author,
-    updateAuthor,
-    clearAuthor,
-  };
-}

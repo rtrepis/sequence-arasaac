@@ -93,9 +93,10 @@ test("el diàleg ofereix les accions que no tenen cap altra via, i no repeteix l
     .click();
 
   const items = page.locator(".MuiPopover-paper").getByRole("button");
+  // «Enganxa» porta a sota què hi ha copiat, o per què encara no es pot (B8)
   await expect(items).toHaveText([
     "Copia",
-    PASTE,
+    new RegExp(`^${PASTE.replace(/[()]/g, "\\$&")}`),
     "Insereix un buit a continuació",
     DUPLICATE,
   ]);

@@ -88,6 +88,13 @@ interface StyleSourceState {
 const userDefaultStyleOf = (state: StyleSourceState): SequenceStyle =>
   buildUserDefaultStyle(state.ui.defaultSettings, state.ui.viewSettings);
 
+/**
+ * L'autor per defecte de l'usuari: el que hereta un document nou mentre no en
+ * té cap de propi, com la pàgina (B21).
+ */
+export const userAuthorOf = (state: StyleSourceState): string =>
+  state.ui.viewSettings.author ?? "";
+
 /** La pàgina per defecte de l'usuari, amb la forma de `DocumentSAAC.layout`. */
 export const userLayoutOf = (state: StyleSourceState): DocumentLayout => {
   const { size, orientation, direction } = userPageOf(state);
@@ -401,7 +408,11 @@ const documentSlice = createSlice({
     // canvia res del que es veu, i per això no és un canvi de contingut
     documentStyleMaterialized: (
       previousDocument,
-      action: PayloadAction<{ style: SequenceStyle; layout: DocumentLayout }>,
+      action: PayloadAction<{
+        style: SequenceStyle;
+        layout: DocumentLayout;
+        author?: string;
+      }>,
     ) => {
       // Només s'omple el que falta: el que ja hi era no es reescriu, perquè
       // un canvi de referència faria creure que el document s'ha tocat (i, per
@@ -417,11 +428,26 @@ const documentSlice = createSlice({
       // La pàgina també és del document (B26): la que heretava, s'hi escriu
       if (previousDocument.layout === undefined)
         previousDocument.layout = layout;
+      // I l'autor (B21): el que heretava de les preferències, ara és seu
+      if (
+        previousDocument.author === undefined &&
+        action.payload.author !== undefined
+      )
+        previousDocument.author = action.payload.author;
       const tabBase = tabViewOf(previousDocument.styleView);
       Object.keys(previousDocument.content).forEach((key) => {
         if (previousDocument.viewSettings[Number(key)] === undefined)
           previousDocument.viewSettings[Number(key)] = { ...tabBase };
       });
+    },
+
+    // Canvia l'autor del document (B21). Buit és «sense autor», i no torna a
+    // heretar el de les preferències
+    documentAuthorChanged: (
+      previousDocument,
+      action: PayloadAction<string>,
+    ) => {
+      previousDocument.author = action.payload;
     },
 
     // Canvia la pàgina del document (B26): mida, orientació o direcció. `base`
@@ -547,12 +573,17 @@ export const takeDocumentStyleSnapshot = (
  * El document tal com s'ha d'enviar a fora: amb l'estil que fa servir. Si
  * l'heretava, a partir d'ara el té propi.
  */
-export const selectDocumentToSave = (state: StyleSourceState): DocumentSAAC =>
-  materializeDocumentStyle(
+export const selectDocumentToSave = (
+  state: StyleSourceState,
+): DocumentSAAC => ({
+  ...materializeDocumentStyle(
     state.document,
     resolveDocumentStyle(state.document, userDefaultStyleOf(state)),
     userLayoutOf(state),
-  );
+  ),
+  // L'autor que es veu: el seu, o el que hereta mentre no en té (B21)
+  author: state.document.author ?? userAuthorOf(state),
+});
 
 /**
  * Desa el document al backend: PUT si ja té id de MongoDB, POST si no.
@@ -661,6 +692,7 @@ export const {
   restoreDocumentStyle: restoreDocumentStyleActionCreator,
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
   documentLayoutChanged: documentLayoutChangedActionCreator,
+  documentAuthorChanged: documentAuthorChangedActionCreator,
   pictStyleAppliedToAll: pictStyleAppliedToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
   removeCloudImage: removeCloudImageActionCreator,

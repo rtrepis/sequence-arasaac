@@ -64,11 +64,7 @@ l'entrada.
 
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| B27 | Les fonts de Google no se serveixen des de l'app | Sense connexió a Google Fonts, un document no es veu tal com es va desar (el fonament de l'estil ho promet) | M | No |
-| B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
-| B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
-| B23 | L'idioma desat de l'usuari sense compte no mana sobre la URL | Amb els comptes apagats, **tothom** és usuari sense compte: la regla que val és aquesta | S | Sí: mana la URL o mana la preferència |
 
 ### Més endavant
 
@@ -618,7 +614,7 @@ Ordre nou, en quatre grups separats per `Divider`:
 - Un grup que es queda buit per `omit` no deixa cap separador penjat: el diàleg d'edició, que
   omet accions que ja ofereix pel seu compte, no ha de quedar amb línies de més.
 
-### B8 — El porta-retalls és invisible i «Enganxar» desactivat no s'explica 🔴 Oberta
+### B8 — El porta-retalls és invisible i «Enganxar» desactivat no s'explica ✅ Resolta
 
 *(Trobada en analitzar A5 i A6, fora del seu abast.)*
 
@@ -629,6 +625,14 @@ Ordre nou, en quatre grups separats per `Divider`:
   El porta-retalls viu en un `useState` que no es mostra mai.
 - **Proposta**: text d'ajuda a la fila desactivada («Copia abans un pictograma») o, millor, una
   miniatura del pictograma copiat a la fila «Enganxar».
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`), amb les dues coses. A `MouseActionList`, la fila
+  «Enganxa» porta a sota «Copia abans un pictograma» quan no hi ha res copiat, i «Copiat: «casa»» i
+  la miniatura del pictograma quan n'hi ha. La miniatura va sobre paper blanc, com la targeta, i
+  s'amaga si la imatge no arriba (sense xarxa).
+- La fila ja no és `disabled` sinó `aria-disabled`: desactivada, MUI l'atenuava sencera i el text
+  d'ajuda hauria quedat a 2,5:1, i sortia de l'ordre del teclat. El nom accessible continua sent
+  l'acció; el que hi ha copiat n'és la descripció (`aria-describedby`). Prova a
+  `PictEditModalList.test.tsx`.
 
 ### B9 — El PDF de la mida FULLSCREEN es desa com si fos un A4 ✅ Resolta, amb correcció
 
@@ -985,7 +989,7 @@ d'IndexedDB i al fitxer `.saac`.
     fins que el canviï o desi les preferències.
   - Fixat a `e2e/draft-restore.spec.ts`.
 
-### B21 — `ui.viewSettings` fa de preferència i de mirall de sessió alhora 🔴 Oberta
+### B21 — `ui.viewSettings` fa de preferència i de mirall de sessió alhora ✅ Resolta
 
 *(Trobada resolent B20, branca `claude/estudi-pla-execucio-2w1pzq`.)*
 
@@ -1011,6 +1015,20 @@ d'IndexedDB i al fitxer `.saac`.
 
 - **Actualització (2026-09-29, model v3)**: el mirall de sessió ja només hi escriu l'autor; la pàgina
   és del document (B26). Queda obert per l'autor, que és a `ui.viewSettings` i al document alhora.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`). En resoldre-la s'ha vist que era pitjor del que deia:
+  la vista llegia l'autor de les preferències i hi escrivia, i cap acció no tocava mai
+  `document.author`. **Un fitxer obert amb autor ensenyava el camp buit, i l'autor que s'hi escrivia
+  no arribava mai al fitxer** (comprovat a master amb `e2e/document-author.spec.ts`).
+- Ara l'autor és del document (`documentAuthorChanged`), com la pàgina amb B26: un document nou
+  hereta l'autor per defecte mentre no en té (`userAuthorOf`, `SerializeContext.userAuthor`), i en
+  desar-lo s'hi escriu. Un fitxer sense autor s'obre amb `""` (sense autor), no amb el de qui l'obre.
+  El mirall de sessió de `ViewSquenceSettings` i `useAuthorManager` s'han esborrat: les preferències
+  només canvien amb «Desa com a preferència». Proves: `documentAuthor.test.ts` i
+  `e2e/document-author.spec.ts`. Regla al fonament 03, §3.
+- **Seguiment**: `ui.viewSettingsFromSession` (el pedaç de B20) ja no protegeix res, perquè res de
+  la sessió no va a `ui.viewSettings`. Amb comptes encesos, en canvi, faria ignorar unes preferències
+  del compte més noves que l'esborrany. Treure'l toca l'esborrany (`useDocumentDraft`); avui, amb els
+  comptes apagats, no afecta ningú.
 ### B22 — Les pestanyes no es coordinen: ni es posen al dia ni comparteixen el «Document nou» 🔴 Oberta
 
 *(Trobada resolent B19, branca `claude/estudi-pla-execucio-2w1pzq`.)*
@@ -1027,7 +1045,7 @@ d'IndexedDB i al fitxer `.saac`.
   pantalla —fer desaparèixer feina visible és pitjor que no desar-la—, així que el més probable és
   que hagi de ser un avís amb acció, no un canvi automàtic.
 
-### B23 — L'idioma desat de l'usuari sense compte no mana sobre el de la URL 🔴 Oberta
+### B23 — L'idioma desat de l'usuari sense compte no mana sobre el de la URL ✅ Resolta
 
 *(Trobada resolent B18, branca `claude/estudi-pla-execucio-2w1pzq`.)*
 
@@ -1042,6 +1060,18 @@ d'IndexedDB i al fitxer `.saac`.
   altre acabarà al seu propi idioma. L'alternativa és la contrària —que la URL mani sempre i la
   preferència només decideixi on aterra qui entra per l'arrel—, que treu el salt del tot. Cap de
   les dues és òbvia i per això no s'ha decidit dins de B18.
+- **Decisió (2026-10-10)**: **mana la URL**, amb compte o sense. L'idioma desat només decideix on
+  aterra qui entra per l'arrel o per una adreça antiga sense idioma.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`). S'ha tret l'efecte d'`App.tsx` que, amb sessió o amb
+  la caché del compte, reescrivia `/ca/…` a l'idioma del compte. `useCurrentLocale` dona l'idioma de
+  la URL dins de `/:locale` (i el desat fora). El commutador d'idioma de la configuració
+  (`SettingCardLangAppToggle`) tenia dos errors que només es veien quan URL i preferència no
+  coincidien: marcava l'idioma desat i no el que es veia (i llavors triar el desat no feia res), i
+  sempre portava a Edició. Ara marca el de la URL i canvia d'idioma **la mateixa pàgina**.
+  `AuthForm` també enllaça amb l'idioma de la URL. Regla a
+  `docs/estandards/estat-i-persistencia.md`. Proves: `e2e/url-locale.spec.ts` (nova) i
+  `e2e/account-settings-cache.spec.ts` (adaptada: el compte ja no reescriu la URL; la caché es
+  prova entrant per l'arrel). A master, tres d'aquests casos fallen.
 
 ### B24 — L'usuari no veu els seus límits ni pot fer res per no topar-hi ✅ Resolta
 
@@ -1168,7 +1198,7 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   l'esquema. Ho ha de fer abans la fase 1 del mode lliure, que hi afegeix la disposició per pàgina.
   Tanca també el que queda de B21.
 
-### B27 — Les fonts de Google no se serveixen des de l'app 🔴 Oberta
+### B27 — Les fonts de Google no se serveixen des de l'app ✅ Resolta
 
 *(Obert en revisar la fase 2 de l'estil del document, branca `claude/sequencia-estil-b25-16pluv`.)*
 
@@ -1186,6 +1216,23 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   cada família i pes hi afegiria de desenes a centenars de KB, i un fitxer de seqüències s'ha de
   poder enviar per correu. Cal mesurar el pes del paquet abans i després, i mirar les llicències
   (totes les de Google Fonts són OFL o Apache, que ho permeten).
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`). `apps/web/scripts/fetch-google-fonts.ts` treu cada
+  família del seu paquet de Fontsource (`npm pack`, sense afegir-lo com a dependència) i en copia
+  només el llatí i el llatí ampliat, en `woff2`, dels gruixos 400 i 700, amb la llicència al costat:
+  `public/fonts/google/` (100 famílies, 6,6 MB). Genera `src/style/fonts-google.css` (371
+  `@font-face`), que `fonts.css` importa en lloc dels 102 `@import` a Google. Un `@font-face` no
+  baixa res fins que un text el fa servir: només es descarreguen les famílies del document obert.
+- **Mesures**: abans, 103 peticions a Google en obrir l'app; ara, cap. El CSS principal passa de 11
+  a 133 KB (4,4 KB comprimit); la carpeta publicada, de 7,8 a 17 MB, que el navegador no baixa
+  sencera. Els paquets sencers de Fontsource feien 626 MB, i per això no s'han afegit com a
+  dependències.
+- **De passada**: l'app demana «Atkinson-Hyperlegible», amb guionet, i Google la declarava
+  «Atkinson Hyperlegible»: per lectura, no casaven i es pintava la de reserva. Ara el CSS la declara
+  amb el nom de l'app. No s'ha pogut veure en directe perquè aquest entorn no arriba a Google.
+- **Fora**: Noto Color Emoji (9,4 MB, més que totes les altres juntes, i sense lletres: com a font
+  del text ja pintava la de reserva). Un document que la triï ho diu al bàner de fonts no disponibles.
+- Prova: `e2e/local-fonts.spec.ts`, amb Google bloquejat (amb el `fonts.css` d'abans, tres dels
+  quatre casos fallen).
 
 ### B28 — Una paraula llarga amb lletra gran es talla dins de la targeta ✅ Resolta
 
@@ -1273,6 +1320,18 @@ també.)*
 - **On**: `PictogramAmount`, `TabsSequences`, barra d'eines de vista
 - **Per què importa**: en tàctil el hover no existeix; el tooltip no s'obre. És decisió de producte
   (fer lloc a etiquetes visibles), no un canvi de nomenclatura.
+- **Proposta (2026-10-10)**, pendent de decidir, mirada amb captures d'escriptori i de tauleta:
+  - **Barra de la Vista** (`ViewSquenceSettings`): girar, imprimir i PDF són les accions principals
+    de la pàgina i només són icones; la de girar i la del PDF no s'endevinen, i al costat hi ha una
+    fila buida. Icona **i** text: «Gira la pàgina», «Imprimeix», «Descarrega PDF». En mòbil, el
+    text petit sota la icona.
+  - **Afegir i treure seqüències** (`TabsSequences`): no es veu que el «−» treu **l'última**, no la
+    que es té oberta. Un text petit sota cada icona, «Afegeix» i «Treu l'última», que cap tant a
+    la columna estreta de l'escriptori com a la fila de la tauleta.
+  - **`PictogramAmount`**: es deixaria com està. L'etiqueta «Pictogrames: 4» ja diu què fan el − i
+    el +, i la (i) obre l'ajuda amb un clic, que en tàctil funciona.
+  - Esforç S–M: dos components i els textos als cinc idiomes; cal adaptar els specs de captures que
+    facin servir aquests botons. Queda per decidir els textos i si val la pena.
 
 ### C2 — «Eliminar» té tres representacions d'icona ✅ Resolta
 

@@ -1,16 +1,17 @@
 // Quines fonts d'un document no es poden pintar en aquest dispositiu.
 //
-// El `.saac` només desa el nom de la família, mai la font: les sis pròpies
-// viuen dins de l'app (`style/fonts/`) i la resta arriben de Google Fonts. Una
+// El `.saac` només desa el nom de la família, mai la font. Totes les fonts de
+// la llista viuen dins de l'app: les pròpies a `style/fonts/` i les de Google a
+// `public/fonts/google/` (B27), i ja no depenen de cap servidor de fora. Una
 // família pot faltar si el fitxer ve d'una versió de l'app que en té alguna que
-// aquesta no coneix, o si el dispositiu no arriba a Google Fonts (sense
-// connexió, o una xarxa d'escola que el bloqueja). En tots dos casos el text es
-// pinta amb la font de reserva (`fontStack`), i el bàner en obrir el document ho
-// diu.
+// aquesta no coneix, si és Noto Color Emoji (que no es copia, vegeu
+// `scripts/fetch-google-fonts.ts`), o si el fitxer no arriba a carregar. En tots
+// els casos el text es pinta amb la font de reserva (`fontStack`), i el bàner
+// en obrir el document ho diu.
 import { fontList } from "@/data/fontlist";
 
-// Si Google Fonts triga més que això, no es diu que la font falta: val més no
-// avisar que avisar d'una cosa que d'aquí a un moment ja no serà certa
+// Si la font triga més que això, no es diu que falta: val més no avisar que
+// avisar d'una cosa que d'aquí a un moment ja no serà certa
 const LOAD_TIMEOUT_MS = 4000;
 
 const TIMED_OUT = Symbol("timed-out");

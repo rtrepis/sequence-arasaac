@@ -1,15 +1,7 @@
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import "./App.css";
-import { ReactElement, lazy, Suspense, useEffect, useState } from "react";
+import { ReactElement, lazy, Suspense } from "react";
 import LanguageLayout from "./pages/LanguagesLayout/LanguagesLayaut";
-import { getStoredAccountUi } from "./features/user-settings/storage/settingsStorage";
 import WelcomeLayout from "./pages/WelcomePage/WelcomeLayout";
 import AuthStandaloneLayout from "./pages/AuthStandaloneLayout/AuthStandaloneLayout";
 import { Box, CircularProgress } from "@mui/material";
@@ -37,10 +29,7 @@ const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
 
 import { usePageTracking } from "@shared/hooks/usePageTracking";
 import { ACCOUNTS_ENABLED } from "./configs/accountsConfig";
-import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import { useAppSelector } from "./app/hooks";
-import { LANGS_APP } from "@sequence-arasaac/i18n";
-import { LangsApp } from "./types/ui";
 
 // Fallback mentre es carrega un chunk de ruta
 const PageLoadingFallback = (): ReactElement => (
@@ -65,39 +54,11 @@ const App = (): ReactElement => {
   const {
     lang: { app: appLang },
   } = useAppSelector((state) => state.ui);
-  const isAuthenticated = useAppSelector(selectIsLoggedIn);
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  // Quan l'idioma del compte no és el de la URL, navega a la mateixa pàgina amb
-  // el locale correcte (ex: /ca/create-sequence → /fr/create-sequence).
-  //
-  // No espera l'autenticació si el navegador ja porta la configuració del compte
-  // desada: aquell efecte és el que feia que la URL saltés a mitja feina quan
-  // responia Render, fins a un minut després d'arrencar. Amb la caché, l'idioma
-  // bo ja hi és al primer render i la correcció passa abans que hi hagi res per
-  // llegir. Sense caché no es toca res: a l'usuari sense compte, un enllaç
-  // /ca/… continua obrint-se en català.
-  // Es llegeix un sol cop, en muntar: el que interessa és si aquest navegador ja
-  // coneixia un compte **en arrencar**. Si s'hi entra després, la condició la fa
-  // `isAuthenticated`.
-  // Amb els comptes apagats la caché del compte no mana res: el que hi ha
-  // desat és d'una sessió que ja no es pot tenir.
-  const [hasAccountSettings] = useState(
-    () => ACCOUNTS_ENABLED && getStoredAccountUi() !== null,
-  );
-
-  useEffect(() => {
-    if (!isAuthenticated && !hasAccountSettings) return;
-
-    const segments = location.pathname.split("/").filter(Boolean);
-    const urlLocale = segments[0] as LangsApp;
-
-    if (!LANGS_APP.includes(urlLocale) || urlLocale === appLang) return;
-
-    const rest = segments.slice(1).join("/");
-    navigate(`/${appLang}/${rest}`, { replace: true });
-  }, [appLang, isAuthenticated, hasAccountSettings]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Aquí hi havia un efecte que, amb sessió (o amb la caché del compte),
+  // reescrivia la URL a l'idioma desat: `/ca/…` saltava a `/en/…`. Sense compte
+  // no ho feia, i eren dues regles per a la mateixa cosa (B23). Ara mana sempre
+  // la URL, i l'idioma desat només decideix on aterra qui entra per l'arrel o
+  // per una adreça antiga sense idioma (`useCurrentLocale`).
 
   return (
     <Suspense fallback={<PageLoadingFallback />}>
