@@ -7,6 +7,7 @@ import {
   SxProps,
   Theme,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import {
   appDialogBadge,
@@ -54,6 +55,12 @@ interface AppDialogProps {
   describedById?: string;
   contentSx?: SxProps<Theme>;
   transitionProps?: DialogProps["TransitionProps"];
+  /**
+   * Ocupa tota la pantalla al mòbil (per sota de `sm`). Per a un formulari
+   * llarg que s'hi fa servir sovint, com l'edició d'un pictograma: la forma no
+   * canvia (capçalera, contingut i peu), només deixa de surar
+   */
+  fullScreenOnMobile?: boolean;
 }
 
 /**
@@ -80,14 +87,19 @@ const AppDialog = ({
   describedById,
   contentSx,
   transitionProps,
+  fullScreenOnMobile = false,
 }: AppDialogProps): ReactElement => {
   const badgeId = `${titleId}-badge`;
+  const isMobile = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down("sm"),
+  );
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
       fullWidth
+      fullScreen={fullScreenOnMobile && isMobile}
       maxWidth={maxWidth}
       // El distintiu forma part del nom: sense ell, el lector de pantalla diu
       // «Editar Pictograma» i qui l'escolta no sap quin dels vuit està editant

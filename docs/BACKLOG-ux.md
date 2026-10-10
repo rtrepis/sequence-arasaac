@@ -65,6 +65,7 @@ l'entrada.
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
+| C28 | Girar el mòbil tanca el diàleg d'edició | Es pot perdre el que s'estava editant, i girar el mòbil és habitual | S | No |
 
 ### Més endavant
 
@@ -1295,6 +1296,16 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   amb dreceres de teclat (Ctrl+Z, Ctrl+Maj+Z) i botons visibles a la barra de l'editor. Cal
   decidir-ne l'abast (quines accions en formen part, quants passos) i què passa amb el snackbar de
   «Desfés» actual.
+
+### C28 — Girar el mòbil tanca el diàleg d'edició del pictograma 🔴 Oberta
+
+- **On**: la graella d'edició (`PictEditModalList` → `PictEditModal`). Amb el diàleg obert, passar de
+  vertical a horitzontal (412 → 915 px d'amplada, per damunt de `sm`) el fa desaparèixer. Comprovat
+  amb Playwright (Pixel 7) abans i després de `fullScreenOnMobile`: passa igual, no ho causa això.
+- **Per què importa**: girar el mòbil és habitual per veure millor la targeta, i el diàleg es tanca
+  sense avís. El que s'hagués canviat al formulari i no s'hagués desat es pot perdre.
+- **Proposta**: trobar quin component de la pàgina d'edició es torna a muntar en canviar de punt de
+  ruptura (la tira de seqüències canvia de disposició a `md`) i fer que la graella conservi l'estat.
 
 ## Gravetat baixa
 

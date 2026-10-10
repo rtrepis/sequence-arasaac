@@ -62,6 +62,10 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - **Amplada**: `xs` per a una pregunta o un missatge, `sm` per a un formulari o
   una llista. Sempre `fullWidth`, perquè si no dos diàlegs germans surten de
   mides diferents.
+- **`fullScreenOnMobile`** fa que un `AppDialog` ocupi tota la pantalla per sota
+  de `sm`. És la mateixa forma (capçalera, contingut i peu amb el tancar), no un
+  `AppFullScreenDialog`: només deixa de surar. Per a formularis llargs d'ús
+  freqüent, com l'edició d'un pictograma; mai per a una pregunta o un missatge.
 - **`dividers`** (per defecte sí) es treu quan el diàleg només porta un
   missatge: sense estructura a dins, les línies només hi afegeixen pes.
 - **`statusSlot`** és per al progrés o l'error que ha de quedar visible entre el
