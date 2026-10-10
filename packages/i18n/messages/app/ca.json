@@ -1622,6 +1622,14 @@
     "message": "Duplica a continuació",
     "description": "Insereix una còpia del pictograma just després del pictograma actual"
   },
+  "components.mouseActionList.moveBefore": {
+    "message": "Mou abans",
+    "description": "Canvia el pictograma de lloc amb el que té just abans a la seqüència"
+  },
+  "components.mouseActionList.moveAfter": {
+    "message": "Mou després",
+    "description": "Canvia el pictograma de lloc amb el que té just després a la seqüència"
+  },
   "features.sequence.status.fabLabel": {
     "message": "On es desa la feina",
     "description": "Nom accessible del botó flotant d'estat del document"

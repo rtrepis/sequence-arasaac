@@ -430,6 +430,8 @@
   "components.mouseActionList.delete": "Eliminar",
   "components.mouseActionList.insert": "Insertar uno vacío a continuación",
   "components.mouseActionList.duplicate": "Duplicar a continuación",
+  "components.mouseActionList.moveBefore": "Mover antes",
+  "components.mouseActionList.moveAfter": "Mover después",
   "features.sequence.status.fabLabel": "Dónde se guarda el trabajo",
   "features.sequence.status.pristine": "Todavía no hay nada que guardar",
   "features.sequence.status.saving": "Guardando en este dispositivo…",

@@ -194,6 +194,30 @@ const documentSlice = createSlice({
       );
     },
 
+    // Canvia de lloc un pictograma dins de la seqüència activa i renumera,
+    // perquè `indexSequence` continuï sent la posició
+    movePictogram: (
+      previousDocument,
+      action: PayloadAction<{ from: number; to: number }>,
+    ) => {
+      const saac = previousDocument.activeSAAC;
+      const sequence = previousDocument.content[saac];
+      const { from, to } = action.payload;
+      if (
+        from === to ||
+        from < 0 ||
+        to < 0 ||
+        from >= sequence.length ||
+        to >= sequence.length
+      )
+        return;
+      const [moved] = sequence.splice(from, 1);
+      sequence.splice(to, 0, moved);
+      sequence.forEach((pictogram, index) => {
+        pictogram.indexSequence = index;
+      });
+    },
+
     subtractLastPict: (previousDocument) => {
       const saac = previousDocument.activeSAAC;
       previousDocument.content[saac] = previousDocument.content[saac].slice(
@@ -676,6 +700,7 @@ export const {
   addPictogram: addPictogramActionCreator,
   insertPictogram: insertPictogramActionCreator,
   subtractPictogram: subtractPictogramActionCreator,
+  movePictogram: movePictogramActionCreator,
   subtractLastPict: subtractLastPictActionCreator,
   addSequence: addSequenceActionCreator,
   renumberSequence: renumberSequenceActionCreator,

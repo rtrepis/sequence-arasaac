@@ -430,6 +430,8 @@
   "components.mouseActionList.delete": "Supprimer",
   "components.mouseActionList.insert": "Insérer un vide à la suite",
   "components.mouseActionList.duplicate": "Dupliquer à la suite",
+  "components.mouseActionList.moveBefore": "Déplacer avant",
+  "components.mouseActionList.moveAfter": "Déplacer après",
   "features.sequence.status.fabLabel": "Où le travail est enregistré",
   "features.sequence.status.pristine": "Il n'y a encore rien à enregistrer",
   "features.sequence.status.saving": "Enregistrement sur cet appareil…",
