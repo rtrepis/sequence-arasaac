@@ -43,6 +43,11 @@ export interface UserPage {
 export interface SerializeContext {
   userDefault: SequenceStyle;
   userPage: UserPage;
+  /**
+   * L'autor per defecte de l'usuari: el d'un document nou que encara no en
+   * té cap de propi (B21), com la pàgina
+   */
+  userAuthor?: string;
   /** Genera un identificador nou amb el prefix donat */
   newId: (prefix: "seq" | "p") => string;
   /** Data de desar, ISO */
@@ -354,7 +359,8 @@ export const documentToV3 = (
       ...extra.meta,
       id: document.id,
       title: document.title,
-      author: document.author,
+      // Buit vol dir «sense autor», i no s'escriu
+      author: (document.author ?? context.userAuthor) || undefined,
       createdAt:
         typeof extra.meta?.createdAt === "string"
           ? extra.meta.createdAt

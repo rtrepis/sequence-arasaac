@@ -63,11 +63,16 @@ al codi nou i als documents.
 | Pàgina (mida, orientació, direcció, espai entre seqüències) | Del document | `.saac` |
 | Estil per defecte | De l'usuari | Preferències; es pot exportar a `.saacstyle` |
 | Pàgina per defecte dels documents nous | De l'usuari | Preferències |
+| Autor del document | Del document | `.saac`, a `meta.author` |
+| Autor per defecte dels documents nous | De l'usuari | Preferències |
 | Idioma, tema clar o fosc | De l'usuari | Preferències |
 | Seqüència activa en obrir | Del document, però **no** és aparença | `.saac`, a `ui` |
 
 - **SEMPRE** el document es desa amb el seu estil i la seva pàgina. No hi ha cap manera de desar
   un document sense.
+- **SEMPRE** l'autor és el del document: la vista l'ensenya i, si s'hi escriu, el canvia al document.
+  Un document nou hereta l'autor per defecte de l'usuari mentre no en té cap, i en desar-lo s'hi
+  escriu. Un fitxer sense autor s'obre **sense autor**, no amb el de qui l'obre (B21).
 - **SEMPRE** el document s'obre tal com es va desar. Les preferències d'interfície de qui l'obre
   (idioma, tema) s'hi apliquen igualment, perquè no canvien el que surt al paper.
 - **MAI** el zoom, el contrast o el moviment reduït són ajustos de l'app: els decideixen el

@@ -94,6 +94,8 @@ const ModalDownload = ({
           orientation: file.page.orientation,
           direction: file.page.direction,
         },
+        // L'autor que s'hi ha escrit (B21): buit si el fitxer no en porta
+        author: file.meta.author ?? "",
       }),
     );
     dispatch(documentMadeDurableActionCreator({ kind: "file" }));

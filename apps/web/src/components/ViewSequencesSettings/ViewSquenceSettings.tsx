@@ -17,10 +17,7 @@ import {
   usePrintDimensions,
 } from "@features/print/hooks/useScaleCalculator";
 import { useFullscreen } from "@features/print/hooks/useFullScreen";
-import {
-  useViewManager,
-  useAuthorManager,
-} from "@features/print/hooks/useViewManager";
+import { useViewManager } from "@features/print/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import {
   usePrintStyles,
@@ -37,6 +34,7 @@ import {
   SequenceAlignmentV,
 } from "@/types/document";
 import {
+  documentAuthorChangedActionCreator,
   documentLayoutChangedActionCreator,
   updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
@@ -162,9 +160,13 @@ const ViewSequencesSettings = ({
     [layoutViewSettings, documentStyle.view.sequenceSpaceBetween],
   );
 
-  // Gestió de l'autor (usa el valor per defecte de l'usuari)
-  const { author, updateAuthor } = useAuthorManager(
-    initialViewSettings.author ?? "",
+  // L'autor és del document (B21): el seu, o el de les preferències de
+  // l'usuari si encara l'hereta (un document nou que no s'ha desat)
+  const documentAuthor = useAppSelector((state) => state.document.author);
+  const author = documentAuthor ?? initialViewSettings.author ?? "";
+  const updateAuthor = useCallback(
+    (value: string) => dispatch(documentAuthorChangedActionCreator(value)),
+    [dispatch],
   );
 
   // Càlculs d'escala
@@ -354,28 +356,12 @@ const ViewSequencesSettings = ({
     [dispatch, documentStyle.view],
   );
 
-  /**
-   * Mirall de sessió: manté `ui.viewSettings` al dia amb el que es veu, inclosos
-   * els camps que gestionen hooks externs (author, pageSize, orientation). Serveix
-   * perquè anar a Edició i tornar conservi el format de pàgina; **no desa res
-   * enlloc**. Abans ho feia l'`onBlur` del formulari, que en ser `focusout` puja:
-   * qualsevol control que perdia el focus —fins i tot els botons d'imprimir—
-   * enviava tota la configuració de l'usuari (idioma, tema, pictogrames i el
-   * vocabulari sencer, amb les imatges) al compte o al navegador. Ningú ho havia
-   * demanat, ningú n'era avisat si fallava, i de passada despertava Render.
-   */
-  // Només hi escriu l'autor. La pàgina ja no hi va: és del document (B26), i
-  // les preferències de pàgina només canvien quan l'usuari les desa. Abans el
-  // mirall copiava la pàgina i les mides i barrejava els dos rols (B21).
+  // Aquí hi havia un «mirall de sessió» que copiava a `ui.viewSettings` el que
+  // es veia: primer la pàgina i les mides, i al final només l'autor. Barrejava
+  // la preferència desada amb el document obert (B21). Ara la pàgina (B26) i
+  // l'autor són del document, i les preferències només canvien quan l'usuari
+  // les desa (`handleSavePreferences`).
   const { direction } = layoutViewSettings;
-  useEffect(() => {
-    dispatch(
-      viewSettingsActionCreator({
-        ...uiViewSettingsRef.current,
-        author,
-      }),
-    );
-  }, [dispatch, author]);
 
   // La pàgina que es toca aquí és la del document. En muntar-se coincideix amb
   // la que ja té (o hereta), i llavors no s'hi escriu res: el document no ha

@@ -215,7 +215,9 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
   return {
     id: document.meta.id ?? "",
     ...(document.meta.title !== undefined && { title: document.meta.title }),
-    ...(document.meta.author !== undefined && { author: document.meta.author }),
+    // Un document obert té sempre el seu autor: si el fitxer no en porta, és
+    // que no en té, i no hereta el de qui l'obre (B21)
+    author: document.meta.author ?? "",
     content,
     viewSettings,
     activeSAAC: activeIndex >= 0 ? activeIndex : 0,

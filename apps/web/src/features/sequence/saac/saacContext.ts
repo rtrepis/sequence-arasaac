@@ -40,6 +40,7 @@ export const serializeContextOf = (
     state.ui.viewSettings,
   ),
   userPage: userPageOf(state),
+  userAuthor: state.ui.viewSettings.author,
   newId: newSaacId,
   now: new Date().toISOString(),
 });

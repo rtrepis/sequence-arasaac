@@ -64,7 +64,6 @@ l'entrada.
 
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | B23 | L'idioma desat de l'usuari sense compte no mana sobre la URL | Amb els comptes apagats, **tothom** és usuari sense compte: la regla que val és aquesta | S | Sí: mana la URL o mana la preferència |
 
@@ -991,7 +990,7 @@ d'IndexedDB i al fitxer `.saac`.
     fins que el canviï o desi les preferències.
   - Fixat a `e2e/draft-restore.spec.ts`.
 
-### B21 — `ui.viewSettings` fa de preferència i de mirall de sessió alhora 🔴 Oberta
+### B21 — `ui.viewSettings` fa de preferència i de mirall de sessió alhora ✅ Resolta
 
 *(Trobada resolent B20, branca `claude/estudi-pla-execucio-2w1pzq`.)*
 
@@ -1017,6 +1016,20 @@ d'IndexedDB i al fitxer `.saac`.
 
 - **Actualització (2026-09-29, model v3)**: el mirall de sessió ja només hi escriu l'autor; la pàgina
   és del document (B26). Queda obert per l'autor, que és a `ui.viewSettings` i al document alhora.
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`). En resoldre-la s'ha vist que era pitjor del que deia:
+  la vista llegia l'autor de les preferències i hi escrivia, i cap acció no tocava mai
+  `document.author`. **Un fitxer obert amb autor ensenyava el camp buit, i l'autor que s'hi escrivia
+  no arribava mai al fitxer** (comprovat a master amb `e2e/document-author.spec.ts`).
+- Ara l'autor és del document (`documentAuthorChanged`), com la pàgina amb B26: un document nou
+  hereta l'autor per defecte mentre no en té (`userAuthorOf`, `SerializeContext.userAuthor`), i en
+  desar-lo s'hi escriu. Un fitxer sense autor s'obre amb `""` (sense autor), no amb el de qui l'obre.
+  El mirall de sessió de `ViewSquenceSettings` i `useAuthorManager` s'han esborrat: les preferències
+  només canvien amb «Desa com a preferència». Proves: `documentAuthor.test.ts` i
+  `e2e/document-author.spec.ts`. Regla al fonament 03, §3.
+- **Seguiment**: `ui.viewSettingsFromSession` (el pedaç de B20) ja no protegeix res, perquè res de
+  la sessió no va a `ui.viewSettings`. Amb comptes encesos, en canvi, faria ignorar unes preferències
+  del compte més noves que l'esborrany. Treure'l toca l'esborrany (`useDocumentDraft`); avui, amb els
+  comptes apagats, no afecta ningú.
 ### B22 — Les pestanyes no es coordinen: ni es posen al dia ni comparteixen el «Document nou» 🔴 Oberta
 
 *(Trobada resolent B19, branca `claude/estudi-pla-execucio-2w1pzq`.)*
