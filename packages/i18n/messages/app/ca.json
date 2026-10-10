@@ -333,6 +333,22 @@
     "message": "Eliminar",
     "description": "Delete modal, edit pictogram"
   },
+  "components.pictEdit.dragStart": {
+    "message": "S'està movent el pictograma {number}",
+    "description": "Lector de pantalla: s'ha començat a arrossegar un pictograma. {number} és la seva posició"
+  },
+  "components.pictEdit.dragOver": {
+    "message": "Posició {number}",
+    "description": "Lector de pantalla: posició on quedaria el pictograma que s'arrossega"
+  },
+  "components.pictEdit.dragEnd": {
+    "message": "Pictograma mogut a la posició {number}",
+    "description": "Lector de pantalla: el pictograma arrossegat s'ha deixat a la posició {number}"
+  },
+  "components.pictEdit.dragCancel": {
+    "message": "El pictograma no s'ha mogut",
+    "description": "Lector de pantalla: s'ha deixat anar el pictograma fora de lloc i no s'ha mogut"
+  },
   "components.pictEdit.modal.label": {
     "message": "Editar Pictograma",
     "description": "Title modal"
