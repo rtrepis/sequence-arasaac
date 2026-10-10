@@ -698,5 +698,8 @@
   "components.pictEdit.textOverflow.fitPictogram": "Réduire la police de ce pictogramme seulement à {size}",
   "components.pictEdit.textOverflow.editText": "Modifier le texte",
   "features.sequence.style.changed.fitTextPictogram": "La police de ce pictogramme a été réduite pour que le texte tienne.",
-  "features.sequence.style.changed.fitTextDocument": "La police de tout le document a été réduite pour que le texte tienne."
+  "features.sequence.style.changed.fitTextDocument": "La police de tout le document a été réduite pour que le texte tienne.",
+  "components.mouseActionList.pasteEmpty": "Copiez d'abord un pictogramme",
+  "components.mouseActionList.pasteSource": "Copié : « {text} »",
+  "components.mouseActionList.pasteSourceNoText": "Copié : un pictogramme sans texte"
 }

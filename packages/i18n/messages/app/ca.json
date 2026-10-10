@@ -2660,5 +2660,17 @@
   "features.sequence.style.changed.fitTextDocument": {
     "message": "S'ha reduït la lletra de tot el document perquè el text hi càpiga.",
     "description": "Snackbar després de reduir la lletra de l'estil del document des de l'avís «el text no hi cap» (es pot desfer)"
+  },
+  "components.mouseActionList.pasteEmpty": {
+    "message": "Copia abans un pictograma",
+    "description": "Sota «Enganxa», quan no s'ha copiat res: per què encara no es pot enganxar"
+  },
+  "components.mouseActionList.pasteSource": {
+    "message": "Copiat: «{text}»",
+    "description": "Sota «Enganxa»: quin pictograma hi ha copiat, pel seu text. {text} és la paraula"
+  },
+  "components.mouseActionList.pasteSourceNoText": {
+    "message": "Copiat: un pictograma sense text",
+    "description": "Sota «Enganxa», quan el pictograma copiat no té paraula ni text"
   }
 }

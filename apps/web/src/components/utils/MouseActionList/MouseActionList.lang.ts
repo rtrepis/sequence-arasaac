@@ -18,6 +18,24 @@ const messages = defineMessages({
     description:
       "Substitueix el pictograma actual pel que hi ha al porta-retalls",
   },
+  pasteEmpty: {
+    id: "components.mouseActionList.pasteEmpty",
+    defaultMessage: "Copia abans un pictograma",
+    description:
+      "Sota «Enganxa», quan no s'ha copiat res: per què encara no es pot enganxar",
+  },
+  pasteSource: {
+    id: "components.mouseActionList.pasteSource",
+    defaultMessage: "Copiat: «{text}»",
+    description:
+      "Sota «Enganxa»: quin pictograma hi ha copiat, pel seu text. {text} és la paraula",
+  },
+  pasteSourceNoText: {
+    id: "components.mouseActionList.pasteSourceNoText",
+    defaultMessage: "Copiat: un pictograma sense text",
+    description:
+      "Sota «Enganxa», quan el pictograma copiat no té paraula ni text",
+  },
   edit: {
     id: "components.mouseActionList.edit",
     defaultMessage: "Edit",

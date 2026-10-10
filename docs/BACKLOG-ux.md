@@ -66,7 +66,6 @@ l'entrada.
 |---|---|---|---|---|
 | B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
-| B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
 | B23 | L'idioma desat de l'usuari sense compte no mana sobre la URL | Amb els comptes apagats, **tothom** és usuari sense compte: la regla que val és aquesta | S | Sí: mana la URL o mana la preferència |
 
 ### Més endavant
@@ -617,7 +616,7 @@ Ordre nou, en quatre grups separats per `Divider`:
 - Un grup que es queda buit per `omit` no deixa cap separador penjat: el diàleg d'edició, que
   omet accions que ja ofereix pel seu compte, no ha de quedar amb línies de més.
 
-### B8 — El porta-retalls és invisible i «Enganxar» desactivat no s'explica 🔴 Oberta
+### B8 — El porta-retalls és invisible i «Enganxar» desactivat no s'explica ✅ Resolta
 
 *(Trobada en analitzar A5 i A6, fora del seu abast.)*
 
@@ -628,6 +627,14 @@ Ordre nou, en quatre grups separats per `Divider`:
   El porta-retalls viu en un `useState` que no es mostra mai.
 - **Proposta**: text d'ajuda a la fila desactivada («Copia abans un pictograma») o, millor, una
   miniatura del pictograma copiat a la fila «Enganxar».
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`), amb les dues coses. A `MouseActionList`, la fila
+  «Enganxa» porta a sota «Copia abans un pictograma» quan no hi ha res copiat, i «Copiat: «casa»» i
+  la miniatura del pictograma quan n'hi ha. La miniatura va sobre paper blanc, com la targeta, i
+  s'amaga si la imatge no arriba (sense xarxa).
+- La fila ja no és `disabled` sinó `aria-disabled`: desactivada, MUI l'atenuava sencera i el text
+  d'ajuda hauria quedat a 2,5:1, i sortia de l'ordre del teclat. El nom accessible continua sent
+  l'acció; el que hi ha copiat n'és la descripció (`aria-describedby`). Prova a
+  `PictEditModalList.test.tsx`.
 
 ### B9 — El PDF de la mida FULLSCREEN es desa com si fos un A4 ✅ Resolta, amb correcció
 

@@ -36,6 +36,10 @@ describe("PictEditModalList", () => {
     expect(
       screen.getByRole("button", { name: "Paste (replaces)" }),
     ).toHaveAttribute("aria-disabled", "true");
+    // I diu per què (B8)
+    expect(
+      screen.getByRole("button", { name: "Paste (replaces)" }),
+    ).toHaveAccessibleDescription("Copy a pictogram first");
 
     await userEvent.click(screen.getByRole("button", { name: "Copy" }));
 
@@ -43,9 +47,13 @@ describe("PictEditModalList", () => {
       target: screen.getByRole("button", { name: "pictogram 2, pictogram 2" }),
       keys: "[MouseRight]",
     });
-    await userEvent.click(
-      screen.getByRole("button", { name: "Paste (replaces)" }),
+    // Ara diu què s'hi enganxarà
+    const paste = screen.getByRole("button", { name: "Paste (replaces)" });
+    expect(paste).not.toHaveAttribute("aria-disabled");
+    expect(paste).toHaveAccessibleDescription(
+      `Copied: “${sequence[0].text || sequence[0].img.searched.word}”`,
     );
+    await userEvent.click(paste);
 
     const [first, second] = store.getState().document.content[0];
     expect(second.text).toBe(first.text);

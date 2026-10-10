@@ -698,5 +698,8 @@
   "components.pictEdit.textOverflow.fitPictogram": "Reduce the font size of this pictogram only to {size}",
   "components.pictEdit.textOverflow.editText": "Edit the text",
   "features.sequence.style.changed.fitTextPictogram": "The font size of this pictogram has been reduced so the text fits.",
-  "features.sequence.style.changed.fitTextDocument": "The font size of the whole document has been reduced so the text fits."
+  "features.sequence.style.changed.fitTextDocument": "The font size of the whole document has been reduced so the text fits.",
+  "components.mouseActionList.pasteEmpty": "Copy a pictogram first",
+  "components.mouseActionList.pasteSource": "Copied: “{text}”",
+  "components.mouseActionList.pasteSourceNoText": "Copied: a pictogram without text"
 }

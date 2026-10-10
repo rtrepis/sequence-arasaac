@@ -698,5 +698,8 @@
   "components.pictEdit.textOverflow.fitPictogram": "Riduci il carattere solo di questo pittogramma a {size}",
   "components.pictEdit.textOverflow.editText": "Modifica il testo",
   "features.sequence.style.changed.fitTextPictogram": "Il carattere di questo pittogramma è stato ridotto perché il testo ci stia.",
-  "features.sequence.style.changed.fitTextDocument": "Il carattere di tutto il documento è stato ridotto perché il testo ci stia."
+  "features.sequence.style.changed.fitTextDocument": "Il carattere di tutto il documento è stato ridotto perché il testo ci stia.",
+  "components.mouseActionList.pasteEmpty": "Copia prima un pittogramma",
+  "components.mouseActionList.pasteSource": "Copiato: «{text}»",
+  "components.mouseActionList.pasteSourceNoText": "Copiato: un pittogramma senza testo"
 }
