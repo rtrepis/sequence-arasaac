@@ -309,6 +309,13 @@ diàleg, l'enganxada que no es desfà i el duplicat amb els canvis del formulari
 **Residus**: B7 (l'esborrat al mig del menú, sense desfer) i B8 (el porta-retalls invisible)
 segueixen oberts — el menú del diàleg els hereta tots dos.
 
+**Actualització (arrossegar per reordenar).** Amb l'arrossegament tàctil de les targetes
+(`SortablePictogram`, `PictEditModalList`), la pulsació llarga ja és un gest de l'app: als 0,25 s la
+targeta s'aixeca. **Moure el dit** la mou; **deixar-lo anar sense moure'l** obre el menú contextual,
+també a l'iPhone i l'iPad. Mentre s'arrossega, el `contextmenu` que Android dispara al mig segon
+s'ignora: abans obria el menú amb la targeta a la mà. El diàleg d'edició continua sent el camí sense
+gest amagat, pels motius de més amunt. Cobert per `e2e/pictogram-reorder.spec.ts`.
+
 ### A9 — El PDF pot sortir en blanc a l'iPad sense que ningú ho digui ✅ Resolta
 
 Branca `claude/seguim-avui-v3tpm2`. Dues coses, i la segona és la que compta.

@@ -11,6 +11,7 @@ import {
   closestCenter,
   DndContext,
   DragEndEvent,
+  DragStartEvent,
   MouseSensor,
   TouchSensor,
   UniqueIdentifier,
@@ -28,6 +29,16 @@ interface PictEditModalProps {
 
 /** Id de la targeta dins de la llista ordenable: la posició, que és única */
 const sortableIdOf = (index: number): string => `pict${index}`;
+
+/**
+ * Menys que això, en píxels, és deixar anar sense haver mogut el dit: amb el
+ * tàctil, vol dir que es volia el menú i no moure la targeta
+ */
+const TOUCH_MENU_MAX_MOVE = 8;
+
+/** Si el gest ha començat amb el dit (a Firefox d'escriptori no hi ha `TouchEvent`) */
+const isTouchEvent = (event: Event | null): boolean =>
+  event?.type === "touchstart";
 
 /** La posició que correspon a un id de la llista ordenable */
 const indexOfSortableId = (id: UniqueIdentifier): number =>
@@ -80,11 +91,55 @@ const PictEditModalList = ({
     onDragCancel: () => intl.formatMessage(messages.dragCancel),
   };
 
-  const handlerDragEnd = ({ active, over }: DragEndEvent) => {
+  // Mentre s'arrossega, el menú contextual no s'obre: a Android la pulsació
+  // llarga el dispara igualment al cap de mig segon, amb la targeta a la mà
+  const dragging = useRef(false);
+
+  const handlerDragStart = ({ activatorEvent }: DragStartEvent) => {
+    dragging.current = true;
+    // Una vibració curta diu que la targeta ja es pot moure (només Android)
+    if (isTouchEvent(activatorEvent)) navigator.vibrate?.(10);
+  };
+
+  const handlerContextMenuCapture = (event: React.MouseEvent) => {
+    if (!dragging.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  /**
+   * Amb el dit, mantenir premut i deixar anar sense moure'l obre el menú de la
+   * targeta: així moure i obrir el menú són dos gestos que no es confonen. És
+   * també el menú contextual dels iPhone i iPad, on el navegador no el dispara
+   */
+  const openMenuOf = (id: UniqueIdentifier) => {
+    const button = document
+      .querySelector(`[data-sortable-id="${String(id)}"]`)
+      ?.querySelector("button");
+    button?.dispatchEvent(
+      new MouseEvent("contextmenu", { bubbles: true, cancelable: true }),
+    );
+  };
+
+  const handlerDragEnd = ({
+    active,
+    over,
+    delta,
+    activatorEvent,
+  }: DragEndEvent) => {
+    dragging.current = false;
     justDropped.current = true;
     setTimeout(() => {
       justDropped.current = false;
     });
+    if (
+      isTouchEvent(activatorEvent) &&
+      Math.hypot(delta.x, delta.y) < TOUCH_MENU_MAX_MOVE
+    ) {
+      // Després que l'arrossegament hagi acabat de netejar
+      setTimeout(() => openMenuOf(active.id));
+      return;
+    }
     if (!over || active.id === over.id) return;
     dispatch(
       movePictogramActionCreator({
@@ -104,7 +159,11 @@ const PictEditModalList = ({
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handlerDragStart}
       onDragEnd={handlerDragEnd}
+      onDragCancel={() => {
+        dragging.current = false;
+      }}
       accessibility={{ announcements }}
     >
       <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
@@ -113,6 +172,7 @@ const PictEditModalList = ({
           marginTop={0}
           flex={1}
           onClickCapture={handlerClickCapture}
+          onContextMenuCapture={handlerContextMenuCapture}
         >
           {sequence.map((pictogram) => (
             <SortablePictogram

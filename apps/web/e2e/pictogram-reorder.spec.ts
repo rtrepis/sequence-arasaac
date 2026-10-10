@@ -1,4 +1,4 @@
-import { test, expect, Page } from "@playwright/test";
+import { test, expect, devices, Page } from "@playwright/test";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -113,4 +113,71 @@ test("«Mou després» del menú canvia l'ordre", async ({ page }) => {
 
   await expect(card(page, "Pictograma 1")).toBeVisible();
   await expect(card(page, "prova, pictograma 2")).toBeVisible();
+});
+
+test.describe("amb el dit", () => {
+  // Mòbil tàctil, sense canviar de navegador (no es pot dins d'un grup)
+  const { defaultBrowserType: _browser, ...pixel } = devices["Pixel 7"];
+  test.use(pixel);
+
+  /** Gestos tàctils de debò (Playwright no en té per arrossegar) */
+  const touch = async (page: Page) => {
+    const cdp = await page.context().newCDPSession(page);
+    return (type: "touchStart" | "touchMove" | "touchEnd", x = 0, y = 0) =>
+      cdp.send("Input.dispatchTouchEvent", {
+        type,
+        touchPoints: type === "touchEnd" ? [] : [{ x, y }],
+      });
+  };
+
+  const centerOf = async (page: Page, name: string) => {
+    const box = await card(page, name).boundingBox();
+    if (!box) throw new Error("targeta no trobada");
+    return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  };
+
+  test("mantenir premut i deixar anar sense moure el dit obre el menú", async ({
+    page,
+  }) => {
+    await loadThreeCards(page);
+    const finger = await touch(page);
+    const { x, y } = await centerOf(page, "Pictograma 2");
+
+    await finger("touchStart", x, y);
+    await page.waitForTimeout(400);
+    await finger("touchEnd");
+
+    await expect(
+      page.getByRole("button", { name: "Mou després" }),
+    ).toBeVisible();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+  });
+
+  test("mantenir premut i moure el dit mou la targeta sense obrir el menú", async ({
+    page,
+  }) => {
+    await loadThreeCards(page);
+    const finger = await touch(page);
+    const from = await centerOf(page, "prova, pictograma 1");
+    const to = await centerOf(page, "Pictograma 2");
+
+    await finger("touchStart", from.x, from.y);
+    await page.waitForTimeout(400);
+    // Com Android, que dispara el menú contextual en plena pulsació llarga
+    await card(page, "prova, pictograma 1").dispatchEvent("contextmenu");
+    for (let step = 1; step <= 10; step++)
+      await finger(
+        "touchMove",
+        from.x + ((to.x - from.x) * step) / 10,
+        from.y + ((to.y - from.y) * step) / 10,
+      );
+    await finger("touchEnd");
+
+    await expect(card(page, "Pictograma 1")).toBeVisible();
+    await expect(card(page, "prova, pictograma 2")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Mou després" })).toHaveCount(
+      0,
+    );
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+  });
 });

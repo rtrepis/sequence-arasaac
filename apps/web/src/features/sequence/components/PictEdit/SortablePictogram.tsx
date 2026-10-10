@@ -48,6 +48,8 @@ const SortablePictogram = ({
     <Grid2
       ref={setNodeRef}
       {...cardListeners}
+      // Amb el dit, deixar anar sense moure'l obre el menú d'aquesta targeta
+      data-sortable-id={id}
       // Sense l'arrossegament natiu de la imatge, que es menjaria el gest
       onDragStart={(event: React.DragEvent<HTMLElement>) => {
         if (startsOnCard(event)) event.preventDefault();
@@ -56,12 +58,19 @@ const SortablePictogram = ({
       justifyContent={"flex-start"}
       alignItems={"start"}
       sx={{
-        transform: CSS.Translate.toString(transform),
+        // La que es mou s'aixeca: es fa una mica més gran i fa ombra. Amb el
+        // dit, és el senyal que ja es pot moure
+        transform: [
+          CSS.Translate.toString(transform),
+          isDragging ? "scale(1.05)" : undefined,
+        ]
+          .filter(Boolean)
+          .join(" "),
         transition,
-        // La que es mou va per damunt de les altres i es veu agafada
         position: "relative",
         zIndex: isDragging ? 1 : undefined,
-        opacity: isDragging ? 0.8 : undefined,
+        boxShadow: isDragging ? 8 : undefined,
+        borderRadius: 2,
         cursor: isDragging ? "grabbing" : undefined,
         touchAction: "manipulation",
         "& img": { WebkitUserDrag: "none" },
