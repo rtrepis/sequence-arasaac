@@ -1320,6 +1320,18 @@ també.)*
 - **On**: `PictogramAmount`, `TabsSequences`, barra d'eines de vista
 - **Per què importa**: en tàctil el hover no existeix; el tooltip no s'obre. És decisió de producte
   (fer lloc a etiquetes visibles), no un canvi de nomenclatura.
+- **Proposta (2026-10-10)**, pendent de decidir, mirada amb captures d'escriptori i de tauleta:
+  - **Barra de la Vista** (`ViewSquenceSettings`): girar, imprimir i PDF són les accions principals
+    de la pàgina i només són icones; la de girar i la del PDF no s'endevinen, i al costat hi ha una
+    fila buida. Icona **i** text: «Gira la pàgina», «Imprimeix», «Descarrega PDF». En mòbil, el
+    text petit sota la icona.
+  - **Afegir i treure seqüències** (`TabsSequences`): no es veu que el «−» treu **l'última**, no la
+    que es té oberta. Un text petit sota cada icona, «Afegeix» i «Treu l'última», que cap tant a
+    la columna estreta de l'escriptori com a la fila de la tauleta.
+  - **`PictogramAmount`**: es deixaria com està. L'etiqueta «Pictogrames: 4» ja diu què fan el − i
+    el +, i la (i) obre l'ajuda amb un clic, que en tàctil funciona.
+  - Esforç S–M: dos components i els textos als cinc idiomes; cal adaptar els specs de captures que
+    facin servir aquests botons. Queda per decidir els textos i si val la pena.
 
 ### C2 — «Eliminar» té tres representacions d'icona ✅ Resolta
 
