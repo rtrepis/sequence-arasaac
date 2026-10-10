@@ -64,7 +64,6 @@ l'entrada.
 
 | Id | Què | Per què | Esforç | Decisió prèvia |
 |---|---|---|---|---|
-| B27 | Les fonts de Google no se serveixen des de l'app | Sense connexió a Google Fonts, un document no es veu tal com es va desar (el fonament de l'estil ho promet) | M | No |
 | B21 | `ui.viewSettings` fa de preferència i de mirall de sessió | Amb el model v3 (B26) ja només hi queda l'autor, que també és del document | S | No |
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | B8 | «Enganxa» desactivat sense explicació, porta-retalls invisible | Fricció en una acció habitual; la meitat del text d'ajuda és S | S–M | No |
@@ -1168,7 +1167,7 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   l'esquema. Ho ha de fer abans la fase 1 del mode lliure, que hi afegeix la disposició per pàgina.
   Tanca també el que queda de B21.
 
-### B27 — Les fonts de Google no se serveixen des de l'app 🔴 Oberta
+### B27 — Les fonts de Google no se serveixen des de l'app ✅ Resolta
 
 *(Obert en revisar la fase 2 de l'estil del document, branca `claude/sequencia-estil-b25-16pluv`.)*
 
@@ -1186,6 +1185,23 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   cada família i pes hi afegiria de desenes a centenars de KB, i un fitxer de seqüències s'ha de
   poder enviar per correu. Cal mesurar el pes del paquet abans i després, i mirar les llicències
   (totes les de Google Fonts són OFL o Apache, que ho permeten).
+- **Resolta** (branca `ccr-8cf4cc15-vmzl85`). `apps/web/scripts/fetch-google-fonts.ts` treu cada
+  família del seu paquet de Fontsource (`npm pack`, sense afegir-lo com a dependència) i en copia
+  només el llatí i el llatí ampliat, en `woff2`, dels gruixos 400 i 700, amb la llicència al costat:
+  `public/fonts/google/` (100 famílies, 6,6 MB). Genera `src/style/fonts-google.css` (371
+  `@font-face`), que `fonts.css` importa en lloc dels 102 `@import` a Google. Un `@font-face` no
+  baixa res fins que un text el fa servir: només es descarreguen les famílies del document obert.
+- **Mesures**: abans, 103 peticions a Google en obrir l'app; ara, cap. El CSS principal passa de 11
+  a 133 KB (4,4 KB comprimit); la carpeta publicada, de 7,8 a 17 MB, que el navegador no baixa
+  sencera. Els paquets sencers de Fontsource feien 626 MB, i per això no s'han afegit com a
+  dependències.
+- **De passada**: l'app demana «Atkinson-Hyperlegible», amb guionet, i Google la declarava
+  «Atkinson Hyperlegible»: per lectura, no casaven i es pintava la de reserva. Ara el CSS la declara
+  amb el nom de l'app. No s'ha pogut veure en directe perquè aquest entorn no arriba a Google.
+- **Fora**: Noto Color Emoji (9,4 MB, més que totes les altres juntes, i sense lletres: com a font
+  del text ja pintava la de reserva). Un document que la triï ho diu al bàner de fonts no disponibles.
+- Prova: `e2e/local-fonts.spec.ts`, amb Google bloquejat (amb el `fonts.css` d'abans, tres dels
+  quatre casos fallen).
 
 ### B28 — Una paraula llarga amb lletra gran es talla dins de la targeta ✅ Resolta
 
