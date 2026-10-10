@@ -2,6 +2,7 @@ import React from "react";
 import { useAppDispatch } from "../../../app/hooks";
 import {
   insertPictogramActionCreator,
+  movePictogramActionCreator,
   renumberSequenceActionCreator,
   subtractPictogramActionCreator,
   updatePictSequenceActionCreator,
@@ -19,6 +20,8 @@ export type PictogramActionKey =
   | "delete"
   | "insert"
   | "duplicate"
+  | "moveBefore"
+  | "moveAfter"
   | "resetStyle";
 
 interface PictogramActionsParams {
@@ -83,6 +86,23 @@ export const usePictogramActions = ({
         ...pictogram,
         indexSequence: pictogram.indexSequence + 1,
       }),
+
+    // Si ja és el primer o l'últim, el reducer no fa res
+    moveBefore: () =>
+      dispatch(
+        movePictogramActionCreator({
+          from: pictogram.indexSequence,
+          to: pictogram.indexSequence - 1,
+        }),
+      ),
+
+    moveAfter: () =>
+      dispatch(
+        movePictogramActionCreator({
+          from: pictogram.indexSequence,
+          to: pictogram.indexSequence + 1,
+        }),
+      ),
 
     // Fora del formulari d'edició: s'aplica al document al moment, amb Desfés
     resetStyle: () =>

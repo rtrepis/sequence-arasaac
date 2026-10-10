@@ -5,7 +5,10 @@ import {
   userEvent,
   waitFor,
 } from "@/test/renderWithProviders";
-import { documentStateFixture, sequenceFixture } from "@/test/fixtures/document";
+import {
+  documentStateFixture,
+  sequenceFixture,
+} from "@/test/fixtures/document";
 import { Sequence } from "@/types/sequence";
 import PictEditModal from "./PictEditModal";
 
@@ -101,5 +104,25 @@ describe("PictEditModal", () => {
     );
 
     expect(store.getState().document).toBe(documentBefore);
+  });
+
+  it("hauria de moure el pictograma després des del menú contextual", async () => {
+    const sequence = sequenceFixture(3);
+    const { store } = renderCard(sequence, 0);
+
+    await userEvent.pointer({
+      keys: "[MouseRight]",
+      target: screen.getByRole("button", { name: cardName(0) }),
+    });
+
+    // El primer no es pot moure abans
+    expect(
+      screen.queryByRole("button", { name: "Move before" }),
+    ).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Move after" }));
+
+    expect(
+      store.getState().document.content[0].map(({ text }) => text),
+    ).toEqual(["pictogram 2", "pictogram 1", "pictogram 3"]);
   });
 });

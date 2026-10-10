@@ -70,6 +70,18 @@ const messages = defineMessages({
     description:
       "Insereix una còpia del pictograma just després del pictograma actual",
   },
+  moveBefore: {
+    id: "components.mouseActionList.moveBefore",
+    defaultMessage: "Move before",
+    description:
+      "Canvia el pictograma de lloc amb el que té just abans a la seqüència",
+  },
+  moveAfter: {
+    id: "components.mouseActionList.moveAfter",
+    defaultMessage: "Move after",
+    description:
+      "Canvia el pictograma de lloc amb el que té just després a la seqüència",
+  },
 });
 
 export default messages;

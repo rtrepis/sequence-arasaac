@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import { AiOutlineCopy, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import {
+  MdArrowBack,
+  MdArrowForward,
   MdOutlineContentPaste,
   MdOutlineLibraryAdd,
   MdOutlineTextFields,
@@ -25,6 +27,8 @@ import {
 import React from "react";
 import usePictogramUrl from "@features/pictogram/hooks/usePictogramUrl";
 import { sheetSurface } from "@/style/palette";
+import { useAppSelector } from "@app/hooks";
+import type { RootState } from "@app/store";
 
 interface MouseActionListProps {
   pictogram: PictSequence;
@@ -98,6 +102,11 @@ const actionGroups: ActionItem[][] = [
     // amb «Insereix buit»
     { key: "duplicate", icon: <MdOutlineLibraryAdd />, message: "duplicate" },
   ],
+  // Canviar l'ordre: el primer no es pot moure abans ni l'últim després
+  [
+    { key: "moveBefore", icon: <MdArrowBack />, message: "moveBefore" },
+    { key: "moveAfter", icon: <MdArrowForward />, message: "moveAfter" },
+  ],
   [
     {
       key: "delete",
@@ -107,6 +116,10 @@ const actionGroups: ActionItem[][] = [
     },
   ],
 ];
+
+/** Quants pictogrames té la seqüència activa */
+const selectActiveSequenceLength = ({ document }: RootState): number =>
+  document.content[document.activeSAAC]?.length ?? 0;
 
 const MouseActionList = ({
   pictogram,
@@ -121,6 +134,9 @@ const MouseActionList = ({
 }: MouseActionListProps): React.ReactElement => {
   const intl = useIntl();
   const { buildPictogramUrl } = usePictogramUrl();
+  const sequenceLength = useAppSelector(selectActiveSequenceLength);
+  const isFirst = pictogram.indexSequence <= 0;
+  const isLast = pictogram.indexSequence >= sequenceLength - 1;
   const actions = usePictogramActions({
     pictogram,
     editAction,
@@ -189,7 +205,9 @@ const MouseActionList = ({
             ({ key }) =>
               !omit.includes(key) &&
               (key !== "resetStyle" || customized) &&
-              (key !== "editText" || editTextAction !== undefined),
+              (key !== "editText" || editTextAction !== undefined) &&
+              (key !== "moveBefore" || !isFirst) &&
+              (key !== "moveAfter" || !isLast),
           ),
         )
         // Un grup que es queda buit per `omit` no ha de deixar cap separador

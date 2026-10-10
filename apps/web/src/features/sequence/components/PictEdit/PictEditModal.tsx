@@ -359,6 +359,8 @@ const PictEditModal = ({
           </Tooltip>
         }
         transitionProps={{ onExited: handleExited }}
+        // Al mòbil, el formulari és llarg i es fa servir molt: tota la pantalla
+        fullScreenOnMobile
         contentSx={{ paddingInline: 1, paddingBlock: 0, overflowX: "hidden" }}
         actions={
           <AppDialogActions

@@ -97,6 +97,30 @@ const messages = defineMessages({
     defaultMessage: "Delete",
     description: "Delete modal, edit pictogram",
   },
+  dragStart: {
+    id: "components.pictEdit.dragStart",
+    defaultMessage: "Moving pictogram {number}",
+    description:
+      "Lector de pantalla: s'ha començat a arrossegar un pictograma. {number} és la seva posició",
+  },
+  dragOver: {
+    id: "components.pictEdit.dragOver",
+    defaultMessage: "Position {number}",
+    description:
+      "Lector de pantalla: posició on quedaria el pictograma que s'arrossega",
+  },
+  dragEnd: {
+    id: "components.pictEdit.dragEnd",
+    defaultMessage: "Pictogram moved to position {number}",
+    description:
+      "Lector de pantalla: el pictograma arrossegat s'ha deixat a la posició {number}",
+  },
+  dragCancel: {
+    id: "components.pictEdit.dragCancel",
+    defaultMessage: "Pictogram not moved",
+    description:
+      "Lector de pantalla: s'ha deixat anar el pictograma fora de lloc i no s'ha mogut",
+  },
 });
 
 export default messages;
