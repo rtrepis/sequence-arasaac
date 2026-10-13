@@ -55,14 +55,20 @@ const openDocument = async (page: Page) => {
   await expect(page.getByText("Fitxer carregat correctament")).toBeVisible();
 };
 
-/** Obre el primer pictograma i en desplega la configuració. */
+/**
+ * Obre el primer pictograma i en desplega la configuració. Al mòbil ja ve
+ * desplegada: només s'hi clica si encara està plegada
+ */
 const openFirstWithSettings = async (page: Page) => {
   await cards(page).first().click();
   const dialog = page.getByRole("dialog");
   const settings = dialog.getByRole("button", {
     name: "Estil del pictograma",
   });
-  await settings.click();
+  await expect(settings).toBeVisible();
+  if ((await settings.getAttribute("aria-expanded")) !== "true") {
+    await settings.click();
+  }
   await expect(settings).toHaveAttribute("aria-expanded", "true");
   return { dialog, settings };
 };
@@ -118,13 +124,17 @@ for (const [name, viewport] of [
         return copy.count();
       })
       .toBe(1);
-    const box = (await content.boundingBox())!;
     const copyCard = copy.getByTestId("card-pictogram");
     await expect(copyCard).toBeVisible();
-    // Baixa des de dalt: es mesura quan ha acabat d'entrar
+    // Baixa des de dalt: es mesura quan ha acabat d'entrar. Al mòbil la
+    // capçalera del diàleg s'amaga alhora i la zona que es desplaça puja
     await expect
-      .poll(async () => (await copyCard.boundingBox())!.y)
-      .toBeGreaterThanOrEqual(box.y - 1);
+      .poll(
+        async () =>
+          (await copyCard.boundingBox())!.y - (await content.boundingBox())!.y,
+      )
+      .toBeGreaterThanOrEqual(-1);
+    const box = (await content.boundingBox())!;
     const cardBox = (await copyCard.boundingBox())!;
     expect(cardBox.y + cardBox.height).toBeLessThanOrEqual(box.y + box.height);
     expect(cardBox.height).toBeGreaterThan(80);
@@ -212,10 +222,16 @@ test("el que s'edita no salta quan «Restableix» apareix o desapareix", async (
   const content = scroller(page);
 
   // Acordió obert del tot i desplaçat fins al control
-  await expect(dialog.locator(".MuiCollapse-entered")).toHaveCount(1);
+  await expect(
+    dialog.locator(".MuiAccordion-root .MuiCollapse-entered"),
+  ).toHaveCount(1);
   const colorLabel = dialog.getByText("Color", { exact: true });
   await colorLabel.evaluate((el) => el.scrollIntoView({ block: "center" }));
   expect(await content.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+  // En desplaçar, la capçalera del diàleg s'amaga: es mesura quan ha acabat
+  await expect(
+    dialog.locator(":scope > .MuiCollapse-root:not(.MuiCollapse-entering)"),
+  ).toHaveClass(/MuiCollapse-(entered|hidden)/);
   const before = (await colorLabel.boundingBox())!.y;
 
   // Amb el teclat: un clic de Playwright desplaçaria per si sol
@@ -231,13 +247,24 @@ test("el que s'edita no salta quan «Restableix» apareix o desapareix", async (
     1,
   );
 
-  // I quan desapareix (Restableix des de «Més accions», sense moure res)
+  // I quan desapareix (Restableix des de «Més accions»). El menú és a la
+  // capçalera, que només torna a dalt de tot: es compara la posició del
+  // control dins del contingut, que no depèn del desplaçament
+  const offset = () =>
+    colorLabel.evaluate((el) => {
+      const scrollerEl = el.closest(".MuiDialogContent-root")!;
+      return (
+        el.getBoundingClientRect().top -
+        scrollerEl.getBoundingClientRect().top +
+        scrollerEl.scrollTop
+      );
+    });
+  const offsetBefore = await offset();
+  await content.evaluate((el) => el.scrollTo(0, 0));
   await dialog.getByRole("button", { name: "Més accions" }).click();
   await page.getByRole("button", { name: "Restableix l'estil" }).click();
   await expect(reset).toHaveCount(0);
-  expect(Math.abs((await colorLabel.boundingBox())!.y - before)).toBeLessThan(
-    1,
-  );
+  expect(Math.abs((await offset()) - offsetBefore)).toBeLessThan(1);
 });
 
 test("la marca surt a la graella només als pictogrames personalitzats", async ({
@@ -389,7 +416,9 @@ test.describe("al mòbil tàctil", () => {
   }) => {
     await openDocument(page);
     const { dialog } = await openFirstWithSettings(page);
-    await expect(dialog.locator(".MuiCollapse-entered")).toHaveCount(1);
+    await expect(
+      dialog.locator(".MuiAccordion-root .MuiCollapse-entered"),
+    ).toHaveCount(1);
     expect(
       await page.evaluate(() => matchMedia("(pointer: coarse)").matches),
     ).toBe(true);
@@ -400,6 +429,8 @@ test.describe("al mòbil tàctil", () => {
       .first();
     const slider = root.getByRole("slider");
     await root.scrollIntoViewIfNeeded();
+    // Desplaçat, la capçalera del diàleg s'amaga: es mesura quan ja no hi és
+    await expect(dialog.locator("#pict-edit-dialog-title")).toBeHidden();
     const before = await slider.getAttribute("aria-valuenow");
 
     // El dit cau a la barra, lluny del botó (com en desplaçar la pàgina)

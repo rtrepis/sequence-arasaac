@@ -1,6 +1,13 @@
-import React, { ReactElement, ReactNode } from "react";
+import React, {
+  ReactElement,
+  ReactNode,
+  UIEvent,
+  useEffect,
+  useState,
+} from "react";
 import {
   Box,
+  Collapse,
   Dialog,
   DialogContent,
   DialogProps,
@@ -10,8 +17,12 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import {
+  APP_DIALOG_HEADER_HIDE_AT,
+  APP_DIALOG_HEADER_SHOW_AT,
   appDialogBadge,
+  appDialogBadgeCompact,
   appDialogHeader,
+  appDialogHeaderCompact,
   appDialogHeaderSlot,
   appDialogTitle,
   appDialogTitleGroup,
@@ -58,7 +69,9 @@ interface AppDialogProps {
   /**
    * Ocupa tota la pantalla al mòbil (per sota de `sm`). Per a un formulari
    * llarg que s'hi fa servir sovint, com l'edició d'un pictograma: la forma no
-   * canvia (capçalera, contingut i peu), només deixa de surar
+   * canvia (capçalera, contingut i peu), només deixa de surar. La capçalera
+   * hi és més baixa i, en fer baixar el contingut, s'amaga per deixar-li lloc;
+   * torna en tornar a dalt de tot
    */
   fullScreenOnMobile?: boolean;
 }
@@ -93,13 +106,60 @@ const AppDialog = ({
   const isMobile = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down("sm"),
   );
+  const fullScreen = fullScreenOnMobile && isMobile;
+  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+
+  // Capçalera amagada perquè el contingut ha baixat. Dos llindars diferents
+  // perquè, en plegar-se, la capçalera no faci saltar el desplaçament i
+  // s'obri i es tanqui sola
+  const [headerAway, setHeaderAway] = useState(false);
+  // Cada obertura comença amb el contingut a dalt: la capçalera hi torna
+  useEffect(() => {
+    if (open) setHeaderAway(false);
+  }, [open]);
+  const handleContentScroll = (event: UIEvent<HTMLDivElement>): void => {
+    const { scrollTop } = event.currentTarget;
+    if (scrollTop > APP_DIALOG_HEADER_HIDE_AT) setHeaderAway(true);
+    else if (scrollTop < APP_DIALOG_HEADER_SHOW_AT) setHeaderAway(false);
+  };
+
+  const header = (
+    <Box sx={fullScreen ? appDialogHeaderCompact : appDialogHeader}>
+      {/* Franja buida que compensa la de l'acció */}
+      <Box sx={appDialogHeaderSlot} aria-hidden />
+
+      <Box sx={appDialogTitleGroup}>
+        <Typography
+          id={titleId}
+          variant={fullScreen ? "h6" : "h5"}
+          component="h2"
+          sx={appDialogTitle}
+        >
+          {title}
+        </Typography>
+
+        {badge !== undefined && (
+          <Typography
+            id={badgeId}
+            variant={fullScreen ? "h6" : "h4"}
+            component="span"
+            sx={fullScreen ? appDialogBadgeCompact : appDialogBadge}
+          >
+            {badge}
+          </Typography>
+        )}
+      </Box>
+
+      <Box sx={appDialogHeaderSlot}>{headerAction}</Box>
+    </Box>
+  );
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
       fullWidth
-      fullScreen={fullScreenOnMobile && isMobile}
+      fullScreen={fullScreen}
       maxWidth={maxWidth}
       // El distintiu forma part del nom: sense ell, el lector de pantalla diu
       // «Editar Pictograma» i qui l'escolta no sap quin dels vuit està editant
@@ -107,36 +167,26 @@ const AppDialog = ({
       aria-describedby={describedById}
       TransitionProps={transitionProps}
     >
-      <Box sx={appDialogHeader}>
-        {/* Franja buida que compensa la de l'acció */}
-        <Box sx={appDialogHeaderSlot} aria-hidden />
+      {fullScreen ? (
+        // `Collapse` deixa la capçalera amb `visibility: hidden` quan s'ha
+        // plegat: el teclat no hi entra, però el títol continua sent el nom
+        // del diàleg. Sense encongir-se: el contingut és qui cedeix l'alçada
+        <Collapse
+          in={!headerAway}
+          timeout={reducedMotion ? 0 : "auto"}
+          sx={{ flexShrink: 0 }}
+        >
+          {header}
+        </Collapse>
+      ) : (
+        header
+      )}
 
-        <Box sx={appDialogTitleGroup}>
-          <Typography
-            id={titleId}
-            variant="h5"
-            component="h2"
-            sx={appDialogTitle}
-          >
-            {title}
-          </Typography>
-
-          {badge !== undefined && (
-            <Typography
-              id={badgeId}
-              variant="h4"
-              component="span"
-              sx={appDialogBadge}
-            >
-              {badge}
-            </Typography>
-          )}
-        </Box>
-
-        <Box sx={appDialogHeaderSlot}>{headerAction}</Box>
-      </Box>
-
-      <DialogContent dividers={dividers} sx={contentSx}>
+      <DialogContent
+        dividers={dividers}
+        sx={contentSx}
+        onScroll={fullScreen ? handleContentScroll : undefined}
+      >
         {children}
       </DialogContent>
 

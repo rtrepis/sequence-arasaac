@@ -320,8 +320,16 @@ const PictEditForm = ({
     if (resetRequest) handleResetRef.current();
   }, [resetRequest]);
 
-  // L'acordió es controla des d'aquí
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  // Per sota de `sm` el diàleg ocupa tota la pantalla. `noSsr` perquè el
+  // primer render ja sàpiga la mida: l'estat inicial de l'acordió en depèn
+  const compact = useMediaQuery(
+    (theme: Theme) => theme.breakpoints.down(SETTINGS_MOBILE_BREAKPOINT),
+    { noSsr: true },
+  );
+
+  // L'acordió es controla des d'aquí. Al mòbil comença obert: és el que s'hi
+  // ve a fer, i amb la pantalla completa hi ha lloc per tenir-lo a la vista
+  const [settingsOpen, setSettingsOpen] = useState(compact);
   const rootRef = useRef<HTMLDivElement>(null);
 
   // La previsualització original es queda on és. Quan surt de la vista per
@@ -361,9 +369,6 @@ const PictEditForm = ({
   // «Restableix», a la capçalera de la configuració. Per sota de `sm` només hi
   // va la icona: amb el text, el títol de la capçalera es partiria en dues
   // línies justament quan apareix, i el que s'edita a sota es mouria
-  const compact = useMediaQuery((theme: Theme) =>
-    theme.breakpoints.down(SETTINGS_MOBILE_BREAKPOINT),
-  );
   const resetLabel = intl.formatMessage(messages.reset);
   const resetAction = compact ? (
     <Tooltip title={resetLabel}>

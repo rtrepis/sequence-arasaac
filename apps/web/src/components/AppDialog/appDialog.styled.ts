@@ -15,6 +15,24 @@ export const appDialogHeader: SxProps<Theme> = {
   padding: 1.5,
 };
 
+/**
+ * Capçalera del diàleg a pantalla completa (mòbil): la mateixa forma, però
+ * més baixa, perquè l'alçada és per al contingut.
+ */
+export const appDialogHeaderCompact: SxProps<Theme> = {
+  ...appDialogHeader,
+  paddingBlock: 0.5,
+  paddingInline: 1,
+};
+
+/**
+ * Llindars de desplaçament del contingut (px) per amagar i tornar a mostrar
+ * la capçalera a pantalla completa. Amb un sol llindar, plegar-la canvia
+ * l'alçada de la zona que es desplaça i la faria anar i venir.
+ */
+export const APP_DIALOG_HEADER_HIDE_AT = 48;
+export const APP_DIALOG_HEADER_SHOW_AT = 4;
+
 export const appDialogHeaderSlot: SxProps<Theme> = {
   width: APP_DIALOG_HEADER_SLOT,
   flex: `0 0 ${APP_DIALOG_HEADER_SLOT}px`,
@@ -47,6 +65,12 @@ export const appDialogBadge: SxProps<Theme> = {
   minWidth: "2.75rem",
   textAlign: "center",
   flexShrink: 0,
+};
+
+/** El distintiu a la capçalera baixa, a la mida del títol. */
+export const appDialogBadgeCompact: SxProps<Theme> = {
+  ...appDialogBadge,
+  minWidth: "2rem",
 };
 
 /**

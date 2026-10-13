@@ -66,6 +66,10 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   de `sm`. És la mateixa forma (capçalera, contingut i peu amb el tancar), no un
   `AppFullScreenDialog`: només deixa de surar. Per a formularis llargs d'ús
   freqüent, com l'edició d'un pictograma; mai per a una pregunta o un missatge.
+  Hi la capçalera és més baixa (títol `h6`) i es plega quan el contingut baixa,
+  per deixar-li l'alçada; torna en tornar a dalt de tot. Amb ella marxa el menú
+  de més accions: només ha de portar el que també s'arriba a fer d'una altra
+  manera o que es fa abans de començar a desplaçar.
 - **`dividers`** (per defecte sí) es treu quan el diàleg només porta un
   missatge: sense estructura a dins, les línies només hi afegeixen pes.
 - **`statusSlot`** és per al progrés o l'error que ha de quedar visible entre el
