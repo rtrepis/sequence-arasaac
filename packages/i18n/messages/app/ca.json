@@ -2322,8 +2322,8 @@
     "description": "Botó per desfer el canvi d'estil"
   },
   "features.sequence.style.undone": {
-    "message": "S'ha desfet el canvi d'estil",
-    "description": "Confirmació després de desfer un canvi d'estil"
+    "message": "S'ha desfet el canvi",
+    "description": "Confirmació després de desfer un canvi d'estil o de disposició de la pàgina (el snackbar «Desfés» serveix per a tots dos)"
   },
   "features.sequence.style.setAsDefault": {
     "message": "Desa com a estil per defecte",
@@ -2712,5 +2712,273 @@
   "components.mouseActionList.pasteSourceNoText": {
     "message": "Copiat: un pictograma sense text",
     "description": "Sota «Enganxa», quan el pictograma copiat no té paraula ni text"
+  },
+  "features.freeLayout.addSequence.title": {
+    "message": "Afegeix seqüències a la pàgina {number}",
+    "description": "Títol del diàleg per posar seqüències del document en una pàgina del mode lliure"
+  },
+  "features.freeLayout.addSequence.hint": {
+    "message": "Una seqüència pot sortir a més d'una pàgina. Afegir-la aquí no la treu d'on ja és.",
+    "description": "Explicació a dalt del diàleg per afegir seqüències a una pàgina"
+  },
+  "features.freeLayout.addSequence.pictograms": {
+    "message": "{count, plural, one {# pictograma} other {# pictogrames}}",
+    "description": "Quants pictogrames té una seqüència, a la llista del diàleg"
+  },
+  "features.freeLayout.addSequence.unplaced": {
+    "message": "no és a cap pàgina",
+    "description": "Al diàleg, una seqüència que encara no surt a cap pàgina"
+  },
+  "features.freeLayout.addSequence.onPages": {
+    "message": "{count, plural, one {a la pàgina {pages}} other {a les pàgines {pages}}}",
+    "description": "Al diàleg, les pàgines on ja surt una seqüència: «a les pàgines 1 i 3»"
+  },
+  "features.freeLayout.addSequence.onEveryPage": {
+    "message": "a totes les pàgines",
+    "description": "Al diàleg, una seqüència que ja surt a totes les pàgines"
+  },
+  "features.freeLayout.addSequence.nothingChosen": {
+    "message": "Tria una seqüència com a mínim.",
+    "description": "Avís del diàleg quan es prem «Afegeix» sense haver triat cap seqüència"
+  },
+  "features.freeLayout.addSequence.cancel": {
+    "message": "Cancel·la",
+    "description": "Botó per tancar el diàleg sense afegir res"
+  },
+  "features.freeLayout.addSequence.add": {
+    "message": "Afegeix",
+    "description": "Botó principal del diàleg: posa les seqüències triades a la pàgina"
+  },
+  "features.freeLayout.page.label": {
+    "message": "Pàgina {number} de {total}",
+    "description": "Capçalera de cada pàgina del mode lliure, a sobre del full; no s'imprimeix"
+  },
+  "features.freeLayout.page.addSequence": {
+    "message": "Afegeix una seqüència",
+    "description": "Botó de la capçalera d'una pàgina: obre la llista de seqüències del document per posar-ne a la pàgina"
+  },
+  "features.freeLayout.page.empty": {
+    "message": "Aquesta pàgina és buida",
+    "description": "Text al mig d'una pàgina sense cap seqüència, damunt del botó per afegir-n'hi; no s'imprimeix"
+  },
+  "features.freeLayout.page.template": {
+    "message": "Plantilla",
+    "description": "Botó de la capçalera d'una pàgina que obre les plantilles per repartir-hi les seqüències"
+  },
+  "features.freeLayout.page.templateMenuTitle": {
+    "message": "Reparteix aquesta pàgina",
+    "description": "Títol del menú de plantilles d'una pàgina"
+  },
+  "features.freeLayout.page.templateNone": {
+    "message": "Aquesta pàgina té més seqüències que cap plantilla",
+    "description": "Al menú de plantilles, quan la pàgina té més seqüències que espais té cap plantilla"
+  },
+  "features.freeLayout.template.full": {
+    "message": "Pàgina sencera",
+    "description": "Plantilla: una sola seqüència que ocupa tota la pàgina"
+  },
+  "features.freeLayout.template.rows2": {
+    "message": "Dues en files",
+    "description": "Plantilla: dues seqüències, una sota l'altra"
+  },
+  "features.freeLayout.template.columns2": {
+    "message": "Dues en columnes",
+    "description": "Plantilla: dues seqüències, l'una al costat de l'altra"
+  },
+  "features.freeLayout.template.rows3": {
+    "message": "Tres en files",
+    "description": "Plantilla: tres seqüències, una sota l'altra"
+  },
+  "features.freeLayout.template.grid2x2": {
+    "message": "Quatre (2 × 2)",
+    "description": "Plantilla: quatre seqüències en dues files i dues columnes"
+  },
+  "features.freeLayout.template.stripTop": {
+    "message": "Tira a dalt i gran a sota",
+    "description": "Plantilla: una franja estreta a dalt i un espai gran a sota"
+  },
+  "features.freeLayout.page.moreActions": {
+    "message": "Més accions de la pàgina",
+    "description": "Nom accessible i tooltip del botó de més accions d'una pàgina (duplicar, moure, esborrar)"
+  },
+  "features.freeLayout.page.duplicate": {
+    "message": "Duplica la pàgina",
+    "description": "Acció del menú d'una pàgina"
+  },
+  "features.freeLayout.page.moveUp": {
+    "message": "Mou la pàgina amunt",
+    "description": "Acció del menú d'una pàgina: la passa davant de l'anterior"
+  },
+  "features.freeLayout.page.moveDown": {
+    "message": "Mou la pàgina avall",
+    "description": "Acció del menú d'una pàgina: la passa darrere de la següent"
+  },
+  "features.freeLayout.page.delete": {
+    "message": "Esborra la pàgina",
+    "description": "Acció del menú d'una pàgina: n'esborra la pàgina, no les seqüències, i es pot desfer"
+  },
+  "features.freeLayout.page.add": {
+    "message": "Afegeix una pàgina",
+    "description": "Botó al final de les pàgines del mode lliure"
+  },
+  "features.freeLayout.placement.label": {
+    "message": "{name}, {count, plural, one {# pictograma} other {# pictogrames}}{common, select, true {, a totes les pàgines} other {}}",
+    "description": "Nom accessible d'una caixa del mode lliure, que obre el seu menú. `common` diu si surt a totes les pàgines"
+  },
+  "features.freeLayout.placement.tooSmall": {
+    "message": "Els pictogrames hi queden massa petits",
+    "description": "Avís damunt d'una caixa on els pictogrames queden per sota de la mida mínima; no s'imprimeix"
+  },
+  "features.freeLayout.placement.commonMark": {
+    "message": "A totes les pàgines",
+    "description": "Marca damunt d'una caixa que surt a totes les pàgines; no s'imprimeix"
+  },
+  "features.freeLayout.placement.onEveryPage": {
+    "message": "A totes les pàgines",
+    "description": "Opció del menú d'una caixa: la seqüència surt a totes les pàgines, al mateix lloc"
+  },
+  "features.freeLayout.placement.copyToPage": {
+    "message": "Copia a la pàgina",
+    "description": "Títol de la llista del menú d'una caixa per fer-ne una còpia independent en una altra pàgina"
+  },
+  "features.freeLayout.placement.pageNumber": {
+    "message": "Pàgina {number}",
+    "description": "Una pàgina, a les llistes del menú d'una caixa"
+  },
+  "features.freeLayout.placement.columns": {
+    "message": "Columnes",
+    "description": "Títol de la llista del menú d'una caixa per triar-ne les columnes"
+  },
+  "features.freeLayout.placement.columnsAuto": {
+    "message": "Automàtiques",
+    "description": "Columnes d'una caixa: les que fan els pictogrames més grans"
+  },
+  "features.freeLayout.placement.removeFromPage": {
+    "message": "Treu d'aquesta pàgina",
+    "description": "Acció del menú d'una caixa: la treu d'aquesta pàgina; la seqüència continua al document"
+  },
+  "features.freeLayout.placement.removeFromEveryPage": {
+    "message": "Treu de totes les pàgines",
+    "description": "Acció del menú d'una caixa que surt a totes les pàgines: la treu de totes"
+  },
+  "features.freeLayout.sequence.name": {
+    "message": "Seqüència {number}",
+    "description": "Nom d'una seqüència que no en té cap de propi: el número de la seva pestanya"
+  },
+  "features.freeLayout.feedback.pageAdded": {
+    "message": "S'ha afegit la pàgina {number}",
+    "description": "Confirmació d'haver afegit una pàgina"
+  },
+  "features.freeLayout.feedback.pageDuplicated": {
+    "message": "Pàgina duplicada com a pàgina {number}",
+    "description": "Confirmació d'haver duplicat una pàgina"
+  },
+  "features.freeLayout.feedback.pageMoved": {
+    "message": "Ara és la pàgina {number}",
+    "description": "Confirmació d'haver mogut una pàgina"
+  },
+  "features.freeLayout.feedback.copiedToPage": {
+    "message": "S'ha copiat {name} a la pàgina {number}",
+    "description": "Confirmació d'haver copiat una seqüència a una altra pàgina"
+  },
+  "features.freeLayout.feedback.madeCommon": {
+    "message": "{name} surt ara a totes les pàgines",
+    "description": "Confirmació d'haver posat una seqüència a totes les pàgines"
+  },
+  "features.freeLayout.feedback.columnsChanged": {
+    "message": "{columns, select, auto {Columnes: automàtiques} other {Columnes: {columns}}}",
+    "description": "Confirmació d'haver canviat les columnes d'una caixa"
+  },
+  "features.freeLayout.settings.section": {
+    "message": "Disposició",
+    "description": "Títol de la secció de la columna de la vista on es tria com es col·loquen les seqüències a la pàgina"
+  },
+  "features.freeLayout.settings.layout": {
+    "message": "Disposició",
+    "description": "Títol de la fila: disposició automàtica o lliure"
+  },
+  "features.freeLayout.settings.layoutFlow": {
+    "message": "Automàtica: les seqüències es col·loquen soles en una pàgina",
+    "description": "Nom accessible i tooltip de l'opció de disposició automàtica, la de sempre"
+  },
+  "features.freeLayout.settings.layoutFree": {
+    "message": "Lliure: tu tries a quina pàgina va cada seqüència",
+    "description": "Nom accessible i tooltip de l'opció de disposició lliure, amb pàgines"
+  },
+  "features.freeLayout.settings.freeOn": {
+    "message": "Disposició lliure. Afegeix pàgines, tria una plantilla o afegeix seqüències a cada pàgina.",
+    "description": "Confirmació d'haver passat a la disposició lliure"
+  },
+  "features.freeLayout.settings.paperChanged": {
+    "message": "La disposició lliure necessita paper: ara la pàgina és {paper}.",
+    "description": "Confirmació d'haver passat a disposició lliure des de pantalla completa: la pàgina passa a un paper"
+  },
+  "features.freeLayout.settings.unplaced": {
+    "message": "Sense col·locar",
+    "description": "Títol de la fila amb les seqüències del document que no surten a cap pàgina"
+  },
+  "features.freeLayout.settings.unplacedNone": {
+    "message": "Totes les seqüències són en alguna pàgina",
+    "description": "Quan no hi ha cap seqüència sense col·locar"
+  },
+  "features.freeLayout.settings.unplacedHint": {
+    "message": "Les d'aquesta llista no s'imprimeixen: afegeix-les amb «Afegeix una seqüència» a cada pàgina.",
+    "description": "Explicació sota la llista de seqüències sense col·locar"
+  },
+  "features.freeLayout.settings.sizeFromBox": {
+    "message": "En disposició lliure, la mida la decideix la caixa.",
+    "description": "Al lloc del control de mida de la seqüència, en disposició lliure: la mida dels pictogrames surt de la caixa"
+  },
+  "features.sequence.style.changed.layoutFlow": {
+    "message": "Disposició automàtica. La disposició lliure es conserva si hi tornes.",
+    "description": "Snackbar amb «Desfés» en tornar a la disposició automàtica des de la lliure (ADR-005)"
+  },
+  "features.sequence.style.changed.layoutTemplate": {
+    "message": "S'ha aplicat la plantilla a la pàgina.",
+    "description": "Snackbar amb «Desfés» en aplicar una plantilla a una pàgina del mode lliure"
+  },
+  "features.sequence.style.changed.layoutAddSequences": {
+    "message": "S'han afegit les seqüències i s'ha tornat a repartir la pàgina.",
+    "description": "Snackbar amb «Desfés» en afegir seqüències a una pàgina del mode lliure, que es torna a repartir"
+  },
+  "features.sequence.style.changed.layoutRemoveSheet": {
+    "message": "S'ha esborrat la pàgina. Les seqüències continuen al document.",
+    "description": "Snackbar amb «Desfés» en esborrar una pàgina del mode lliure"
+  },
+  "features.sequence.style.changed.layoutRemovePlacement": {
+    "message": "S'ha tret de la pàgina. La seqüència continua al document.",
+    "description": "Snackbar amb «Desfés» en treure una seqüència d'una pàgina del mode lliure"
+  },
+  "features.sequence.style.changed.layoutUncommon": {
+    "message": "Ara només surt en aquesta pàgina.",
+    "description": "Snackbar amb «Desfés» en deixar de posar una seqüència a totes les pàgines"
+  },
+  "features.print.pdf.generatingPage": {
+    "message": "S'està generant el PDF: pàgina {number} de {total}…",
+    "description": "Missatge del backdrop mentre es genera un PDF de diverses pàgines (mode lliure)"
+  },
+  "features.freeLayout.beforePrint.title": {
+    "message": "Abans d'imprimir",
+    "description": "Títol de l'avís que surt abans d'imprimir o descarregar el PDF en mode lliure, si hi ha alguna cosa que potser no s'esperava"
+  },
+  "features.freeLayout.beforePrint.unplaced": {
+    "message": "{count, plural, one {# seqüència no surt a cap pàgina i no s'imprimirà.} other {# seqüències no surten a cap pàgina i no s'imprimiran.}}",
+    "description": "Avís abans d'imprimir: quantes seqüències no surten a cap pàgina"
+  },
+  "features.freeLayout.beforePrint.emptyPages": {
+    "message": "{count, plural, one {La pàgina {pages} és buida.} other {Les pàgines {pages} són buides.}}",
+    "description": "Avís abans d'imprimir: quines pàgines no tenen res; sortiran en blanc"
+  },
+  "features.freeLayout.beforePrint.cancel": {
+    "message": "Cancel·la",
+    "description": "Tanca l'avís sense imprimir, per arreglar-ho abans"
+  },
+  "features.freeLayout.beforePrint.printAnyway": {
+    "message": "Imprimeix igualment",
+    "description": "Imprimeix tal com està, malgrat l'avís"
+  },
+  "features.freeLayout.beforePrint.downloadAnyway": {
+    "message": "Descarrega igualment",
+    "description": "Descarrega el PDF tal com està, malgrat l'avís"
   }
 }

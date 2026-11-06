@@ -122,6 +122,42 @@ const messages = defineMessages({
     description:
       "Snackbar després de reduir la lletra de l'estil del document des de l'avís «el text no hi cap» (es pot desfer)",
   },
+  changedLayoutFlow: {
+    id: "features.sequence.style.changed.layoutFlow",
+    defaultMessage: "Disposició automàtica. La disposició lliure es conserva si hi tornes.",
+    description:
+      "Snackbar amb «Desfés» en tornar a la disposició automàtica des de la lliure (ADR-005)",
+  },
+  changedLayoutTemplate: {
+    id: "features.sequence.style.changed.layoutTemplate",
+    defaultMessage: "S'ha aplicat la plantilla a la pàgina.",
+    description:
+      "Snackbar amb «Desfés» en aplicar una plantilla a una pàgina del mode lliure",
+  },
+  changedLayoutAddSequences: {
+    id: "features.sequence.style.changed.layoutAddSequences",
+    defaultMessage: "S'han afegit les seqüències i s'ha tornat a repartir la pàgina.",
+    description:
+      "Snackbar amb «Desfés» en afegir seqüències a una pàgina del mode lliure, que es torna a repartir",
+  },
+  changedLayoutRemoveSheet: {
+    id: "features.sequence.style.changed.layoutRemoveSheet",
+    defaultMessage: "S'ha esborrat la pàgina. Les seqüències continuen al document.",
+    description:
+      "Snackbar amb «Desfés» en esborrar una pàgina del mode lliure",
+  },
+  changedLayoutRemovePlacement: {
+    id: "features.sequence.style.changed.layoutRemovePlacement",
+    defaultMessage: "S'ha tret de la pàgina. La seqüència continua al document.",
+    description:
+      "Snackbar amb «Desfés» en treure una seqüència d'una pàgina del mode lliure",
+  },
+  changedLayoutUncommon: {
+    id: "features.sequence.style.changed.layoutUncommon",
+    defaultMessage: "Ara només surt en aquesta pàgina.",
+    description:
+      "Snackbar amb «Desfés» en deixar de posar una seqüència a totes les pàgines",
+  },
   changedReset: {
     id: "features.sequence.style.changed.reset",
     defaultMessage: "Estil restablert",
@@ -135,8 +171,9 @@ const messages = defineMessages({
   },
   undone: {
     id: "features.sequence.style.undone",
-    defaultMessage: "S'ha desfet el canvi d'estil",
-    description: "Confirmació després de desfer un canvi d'estil",
+    defaultMessage: "S'ha desfet el canvi",
+    description:
+      "Confirmació després de desfer un canvi d'estil o de disposició de la pàgina (el snackbar «Desfés» serveix per a tots dos)",
   },
   styleFileOpenedTitle: {
     id: "features.sequence.style.styleFileOpened.title",

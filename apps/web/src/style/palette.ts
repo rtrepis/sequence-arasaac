@@ -81,3 +81,12 @@ export const sheetSurface = printColors.background;
  * amb el glif blanc que porta a dins.
  */
 export const sheetWarning = "#e65100";
+
+/**
+ * Guia d'edició damunt del full: el contorn de cada caixa del mode lliure i
+ * les marques que diuen com és (ADR-005). És el gris 700 de Material: 6,1:1
+ * amb el blanc del full, per damunt del 3:1 que demana un contorn (WCAG
+ * 1.4.11), i fix en tots dos temes perquè és damunt del full. **Mai** surt al
+ * paper ni al PDF: és un estat de l'edició, no del document.
+ */
+export const sheetGuide = "#616161";

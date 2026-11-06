@@ -1,7 +1,8 @@
 # Pla: mode lliure de pàgina
 
-> **Estat**: pla confirmat (2026-11-06). **Fases 1 i 2 fetes**: el model (ADR-005) i l'espai del
-> full a la vista. Les fases 3–5 estan pendents.
+> **Estat**: pla confirmat (2026-11-06). **Fases 1, 2 i 3 fetes**: el model (ADR-005), l'espai del
+> full a la vista i les pàgines amb les seves seqüències (vegeu §11, «Com ha quedat la fase 3»).
+> **Ara toca provar-ho amb gent** abans de les fases 4 i 5.
 > **Encàrrec**: `docs/spec-mode-lliure.md`, a la branca `origin/feature/mode-lliure` (no fusionada).
 > **Fonaments que mana**: `docs/fonaments/03-model-contingut-estil.md`,
 > `docs/fonaments/06-compatibilitat-i-dades.md`, `docs/decisions/ADR-003-model-document-saac-v3.md`.
@@ -375,12 +376,11 @@ Cada fase deixa l'app funcionant i passa `npm run typecheck` net.
    fixture 16, i les funcions pures de `model/` amb tests. Sense interfície.
 2. ✅ **L'espai.** «Ajusta a l'amplada» i «Amaga els ajustos de la vista», també en mode automàtic,
    amb l'estàndard de configuracions actualitzat. És independent del mode lliure.
-3. **Pàgines i seqüències.** El selector «Disposició», `FreeLayoutSheet` (només lectura), les
-   pàgines, «+ Afegeix una seqüència», el calaix, les comunes, les plantilles per pàgina, la
-   impressió i el PDF de diverses pàgines. Aquí ja es pot provar de debò si les plantilles resolen la
-   necessitat.
-4. **Retoc.** Selecció, arrossegar, nanses, barra de la caixa, «Copia a la pàgina…», «Posició i
-   mida» i teclat.
+3. ✅ **Pàgines i seqüències.** El selector «Disposició», les pàgines, «+ Afegeix una seqüència»,
+   el calaix, les comunes, les plantilles per pàgina, «Copia a la pàgina…», les columnes, la
+   impressió i el PDF de diverses pàgines, i l'avís abans d'imprimir. Vegeu §11.
+4. **Retoc.** Selecció, arrossegar, nanses, barra de la caixa, «Posició i mida» i teclat. («Copia a
+   la pàgina…» i les columnes ja són al menú de cada caixa des de la fase 3.)
 5. **Núvol i proves.** Els validadors de l'API (P1, punt 5), un e2e de punta a punta (plantilla →
    comuna → retoc → `.saac` → reobrir → PDF) i una prova de regressió que les fixtures 01–15 no
    canvien.
@@ -403,7 +403,7 @@ el retoc a mà o si n'hi ha prou amb les plantilles i les comunes.
 
 | # | Pregunta | Recomanació |
 |---|---|---|
-| D1 | Com es veuen les pàgines a la vista | Una cada cop, tan gran com es pot, amb navegació a la barra i miniatures a la columna (§6) |
+| D1 | Com es veuen les pàgines a la vista | **Fet, i diferent del previst** (§11): totes una sota l'altra, a la mateixa mida, cadascuna amb la seva capçalera |
 | D2 | Pàgines buides | Es desen tal com són; abans d'imprimir, un avís |
 | D3 | `FULLSCREEN` amb mode lliure | No s'hi ofereix: en triar Lliure, el selector de mida amaga «Pantalla completa». El botó de pantalla completa de la vista ensenya les pàgines una a una |
 | D4 | Tornar a «Automàtica» | Es conserva la disposició a Redux, no s'escriu en desar, i el canvi té Desfés |
@@ -411,3 +411,52 @@ el retoc a mà o si n'hi ha prou amb les plantilles i les comunes.
 | D6 | Una seqüència pot sortir a més d'una pàgina? | **Decidit: sí.** Comuna (a totes, mateix lloc, es mou a totes alhora) o còpia independent a una pàgina concreta (§6, «Repetir una seqüència») |
 | D7 | El panell lateral també en mode automàtic | **Fet, i diferent del previst** (§6, «L'espai»): no és un panell flotant, sinó la columna de sempre, que es pot amagar, i un ajust a l'amplada. Val als dos modes |
 | D8 | Una comuna que no ha de sortir en una pàgina concreta (la portada, per exemple) | **Fora d'aquesta branca.** Es pot fer després amb una llista de pàgines on s'amaga, sense canviar la resta del model |
+
+## 11. Com ha quedat la fase 3
+
+El que s'ha fet diferent del que deia §6, i per què:
+
+- **Les pàgines van una sota l'altra**, no una cada cop amb navegació (D1). Totes a la mateixa
+  mida, la que dona el càlcul d'escala (amb «Ajusta a l'amplada», a mida real). Dues raons: es veu
+  d'una ullada què hi ha a cada pàgina, que és el que es mira quan es reparteix un document; i la
+  impressió i el PDF necessiten tots els fulls al DOM. Per això no hi ha «‹ Pàgina 1 de 3 ›» ni
+  miniatures a la columna.
+- **Cada pàgina té la seva capçalera** (que no s'imprimeix): «Pàgina N de M», «Afegeix una
+  seqüència», «Plantilla» i el menú de la pàgina (duplicar, moure amunt i avall, esborrar). Les
+  accions d'una pàgina són a la pàgina, no a la columna: no cal dir mai «aquesta pàgina».
+  «Afegeix una pàgina» va al final de totes.
+- **Cada caixa és un botó amb menú**: «A totes les pàgines», «Copia a la pàgina», «Columnes» i
+  «Treu d'aquesta pàgina». És la barra de la caixa que preveia §6 sense la selecció ni
+  l'arrossegament, que són la fase 4.
+- **El calaix «Sense col·locar»** és una fila de la columna amb el nombre i, a sota, els noms. Les
+  seqüències s'hi afegeixen des de la capçalera de cada pàgina.
+- **L'avís abans d'imprimir** surt si hi ha seqüències sense col·locar o pàgines sense res (ni
+  pròpies ni comunes), amb la xifra. És un `AppDialog` i no el `ConfirmDialog`: imprimir no esborra
+  res, i el botó vermell d'aquell diàleg diria el contrari. **Ctrl+P no hi passa**: el navegador no
+  deixa aturar-lo, i imprimeix el que es veu.
+- **El desfer és el de sempre**, ampliat: la instantània guarda també el mode de la pàgina (no la
+  pàgina sencera, perquè desar-la la fa explícita i hauria trencat el desfer) i la disposició. El
+  missatge de després de desfer ha passat de «S'ha desfet el canvi d'estil» a «S'ha desfet el
+  canvi», als cinc idiomes.
+- **La impressió** copia tots els fulls (`usePrintSheet`) i en diu quants al CSS amb
+  `--print-sheets`, que fa l'alçada del document; cada full va al seu paper amb `break-after`. De
+  passada s'ha corregit un defecte: preparar la còpia dues vegades (el botó i després
+  `beforeprint`) copiava també la còpia anterior, perquè porta la mateixa classe.
+- **El PDF** captura cada full i en fa una pàgina; el backdrop diu per quina pàgina va. Una pàgina
+  sense pictogrames pot sortir en blanc de debò, i no compta com a captura fallida.
+- **La pantalla completa** no s'ofereix en mode lliure; triar «Lliure» des d'allà passa al paper de
+  cada dia de qui la fa servir, amb un missatge que ho diu.
+- **Les marques d'edició** (el contorn de cada caixa, «A totes les pàgines», «Els pictogrames hi
+  queden massa petits») són d'un color nou, `sheetGuide` (6,1:1 amb el blanc), i no surten mai ni al
+  paper (`@media print`) ni al PDF (`data-html2canvas-ignore`). Comprovat amb Playwright: el PDF i la
+  impressió de la fixture 16 surten iguals, dues pàgines i sense marques.
+
+**Què queda obert**, a més de les fases 4 i 5:
+
+- El núvol encara perd la disposició (P1, punt 5): desar al núvol un document lliure el torna a
+  obrir en flux. Els comptes són apagats.
+- «Afegeix una seqüència» torna a repartir la pàgina sencera: si s'havia retocat a mà, es perd (amb
+  «Desfés»). Amb el retoc de la fase 4 potser caldrà col·locar la nova a l'espai lliure més gran.
+- Una caixa massa petita ho diu damunt del full, però no s'impedeix: les nanses de la fase 4 són
+  les que han d'aturar-se al mínim.
+

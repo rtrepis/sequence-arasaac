@@ -16,6 +16,7 @@ import {
 import { reportClientError } from "@features/backend/api/clientErrorReport";
 import { trackEvent } from "@shared/hooks/usePageTracking";
 import messages from "./useDownloadPdf.lang";
+import { PRINT_ROOT_ID } from "./usePrintSheet";
 
 // Un error s'ha de poder llegir i, si cal, copiar: més estona a pantalla que una
 // confirmació. Mateix criteri que les fallades de desat al núvol.
@@ -130,7 +131,9 @@ const isCanvasBlank = (canvas: HTMLCanvasElement): boolean => {
 /** Converteix un canal d'un color hex (#RRGGBB) al seu valor decimal */
 const hexChannels = (hex: string): number[] => {
   const clean = hex.replace("#", "");
-  return [0, 2, 4].map((offset) => parseInt(clean.slice(offset, offset + 2), 16));
+  return [0, 2, 4].map((offset) =>
+    parseInt(clean.slice(offset, offset + 2), 16),
+  );
 };
 
 /**
@@ -214,11 +217,15 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
   );
 
   const downloadPdf = useCallback(async () => {
-    // Localitzar el contenidor amb les dimensions reals de la pàgina (sense transform d'escala)
-    const contentEl = document.querySelector<HTMLElement>(".preview-content");
+    // Els fulls, amb les dimensions reals de la pàgina (sense transform
+    // d'escala): el flux en té un, i el mode lliure, un per pàgina (ADR-005).
+    // Les còpies de la impressió, si n'hi ha, no hi compten
+    const sheets = Array.from(
+      document.querySelectorAll<HTMLElement>(".preview-content"),
+    ).filter((sheet) => !sheet.closest(`#${PRINT_ROOT_ID}`));
     // Sense full no hi ha res a capturar. Es tracta com una fallada i no com un
     // retorn mut: per a qui ha clicat, el clic ha estat igual de real.
-    if (!contentEl) {
+    if (sheets.length === 0) {
       reportFailure({ code: PDF_NO_CONTENT, isTransient: false });
       return;
     }
@@ -235,71 +242,49 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
         import("jspdf"),
       ]);
 
-      // html2canvas mesura amb `getBoundingClientRect()`, o sigui **amb el
-      // `transform: scale()` visual del full aplicat** (el posa `ViewSquenceSettings`
-      // per encabir la previsualització a la pantalla). Sense compensar-lo, el
-      // canvas sortia a `natural × escala visual × escala de captura` i la
-      // resolució del PDF depenia de com de reduïda es veiés la previsualització:
-      // en una tauleta, on es redueix molt més, queia proporcionalment.
       const captureScale = captureScaleFor(pageFormat.dimensions);
-      const visualScale = visualScaleOf(contentEl);
-      const canvas = await html2canvas(contentEl, {
-        // Es demana l'escala inflada perquè, un cop html2canvas hi torni a
-        // aplicar la visual, en surti exactament `natural × captureScale`. Es
-        // compensa i no s'anul·la el transform al clon perquè les mides i la
-        // posició de la captura les calcula html2canvas sobre l'element
-        // **original**, abans de clonar: tocar el clon no les mouria.
-        scale: captureScale / visualScale,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        onclone: (clonedDoc) => {
-          // Normalitzar els colors del tema directament als <style> generats per
-          // emotion perquè la captura sigui sempre en clar (paper blanc, text fosc)
-          clonedDoc.documentElement.style.colorScheme = "light";
-          clonedDoc.querySelectorAll("style").forEach((el) => {
-            if (!el.textContent) return;
-            el.textContent = themeColorReplacements.reduce(
-              (css, [pattern, replacement]) => css.replace(pattern, replacement),
-              el.textContent,
-            );
-          });
-          // Xarxa de seguretat: fons blanc garantit a la zona capturada, i peu
-          // de llicència visible (vegeu COPYRIGHT_FOOTER_CSS)
-          const safetyStyle = clonedDoc.createElement("style");
-          safetyStyle.textContent = `
-            .preview-content,
-            .preview-content .MuiPaper-root {
-              background-color: ${printColors.background} !important;
-            }
-            ${COPYRIGHT_FOOTER_CSS}
-          `;
-          clonedDoc.head.appendChild(safetyStyle);
-        },
-      });
-
-      // La captura pot haver tornat en blanc sense que ningú hagi llançat res.
-      // Val més una fallada visible —la mateixa que ja reporta qualsevol altre
-      // error d'aquí— que desar un full en blanc dient que ha anat bé.
-      if (isCanvasBlank(canvas)) {
-        reportFailure({
-          code: PDF_EMPTY_CANVAS,
-          isTransient: false,
-          // Els sostres de dalt encara no s'han validat en cap dispositiu real
-          // (backlog B14) i aquests números són l'única manera de fer-ho: saber
-          // que una captura ha sortit en blanc no serveix de res si no es diu a
-          // quina mida ha passat. El `userAgent` ja el desa el servidor.
-          // Des que es compensa l'escala visual, el canvas ha de sortir
-          // exactament `full × escala`: si un informe no quadra, el problema és
-          // la captura i no el sostre.
-          detail:
-            `${pageFormat.size} ${pageFormat.orientation} ` +
-            `full ${pageFormat.dimensions.width}×${pageFormat.dimensions.height}, ` +
-            `escala ${captureScale.toFixed(2)}, ` +
-            `canvas ${canvas.width}×${canvas.height}`,
+      const captureSheet = (contentEl: HTMLElement) =>
+        // html2canvas mesura amb `getBoundingClientRect()`, o sigui **amb el
+        // `transform: scale()` visual del full aplicat** (el posa `ViewSquenceSettings`
+        // per encabir la previsualització a la pantalla). Sense compensar-lo, el
+        // canvas sortia a `natural × escala visual × escala de captura` i la
+        // resolució del PDF depenia de com de reduïda es veiés la previsualització:
+        // en una tauleta, on es redueix molt més, queia proporcionalment.
+        html2canvas(contentEl, {
+          // Es demana l'escala inflada perquè, un cop html2canvas hi torni a
+          // aplicar la visual, en surti exactament `natural × captureScale`. Es
+          // compensa i no s'anul·la el transform al clon perquè les mides i la
+          // posició de la captura les calcula html2canvas sobre l'element
+          // **original**, abans de clonar: tocar el clon no les mouria.
+          scale: captureScale / visualScaleOf(contentEl),
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          onclone: (clonedDoc) => {
+            // Normalitzar els colors del tema directament als <style> generats per
+            // emotion perquè la captura sigui sempre en clar (paper blanc, text fosc)
+            clonedDoc.documentElement.style.colorScheme = "light";
+            clonedDoc.querySelectorAll("style").forEach((el) => {
+              if (!el.textContent) return;
+              el.textContent = themeColorReplacements.reduce(
+                (css, [pattern, replacement]) =>
+                  css.replace(pattern, replacement),
+                el.textContent,
+              );
+            });
+            // Xarxa de seguretat: fons blanc garantit a la zona capturada, i peu
+            // de llicència visible (vegeu COPYRIGHT_FOOTER_CSS)
+            const safetyStyle = clonedDoc.createElement("style");
+            safetyStyle.textContent = `
+              .preview-content,
+              .preview-content .MuiPaper-root {
+                background-color: ${printColors.background} !important;
+              }
+              ${COPYRIGHT_FOOTER_CSS}
+            `;
+            clonedDoc.head.appendChild(safetyStyle);
+          },
         });
-        return;
-      }
 
       // Calcular dimensions en mil·límetres per al PDF
       const widthMM = pixelsToMM(pageFormat.dimensions.width, CSS_PRINT_DPI);
@@ -312,13 +297,14 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
       // un defecte latent; es corregeix igualment perquè el hook accepta
       // qualsevol `PageFormat` i el cas especial era una trampa per a qui
       // reobrís el botó.
+      const pdfFormat =
+        pageFormat.size === "FULLSCREEN"
+          ? [widthMM, heightMM]
+          : pageFormat.size.toLowerCase();
       const pdf = new jsPDF({
         orientation: pageFormat.orientation,
         unit: "mm",
-        format:
-          pageFormat.size === "FULLSCREEN"
-            ? [widthMM, heightMM]
-            : pageFormat.size.toLowerCase(),
+        format: pdfFormat,
       });
 
       // Les dimensions d'A4 i A3 són les útils (el paper menys els marges), de
@@ -328,14 +314,59 @@ export const useDownloadPdf = (pageFormat: PageFormat) => {
       const offsetX = (pdf.internal.pageSize.getWidth() - widthMM) / 2;
       const offsetY = (pdf.internal.pageSize.getHeight() - heightMM) / 2;
 
-      pdf.addImage(
-        canvas.toDataURL("image/png"),
-        "PNG",
-        offsetX,
-        offsetY,
-        widthMM,
-        heightMM,
-      );
+      for (let index = 0; index < sheets.length; index += 1) {
+        const contentEl = sheets[index];
+        // Amb diverses pàgines, el backdrop diu per quina va: cada captura pot
+        // trigar uns segons, i un missatge quiet semblaria penjat
+        if (sheets.length > 1)
+          showBackdrop({
+            message: intl.formatMessage(messages.generatingPage, {
+              number: index + 1,
+              total: sheets.length,
+            }),
+          });
+        const canvas = await captureSheet(contentEl);
+
+        // La captura pot haver tornat en blanc sense que ningú hagi llançat res.
+        // Val més una fallada visible —la mateixa que ja reporta qualsevol altre
+        // error d'aquí— que desar un full en blanc dient que ha anat bé. Una
+        // pàgina del mode lliure sense cap pictograma, però, pot ser en blanc de
+        // debò: l'usuari ja ho ha sabut abans de descarregar
+        const shouldHaveInk =
+          sheets.length === 1 || contentEl.querySelector(".MuiCard-root");
+        if (shouldHaveInk && isCanvasBlank(canvas)) {
+          reportFailure({
+            code: PDF_EMPTY_CANVAS,
+            isTransient: false,
+            // Els sostres de dalt encara no s'han validat en cap dispositiu real
+            // (backlog B14) i aquests números són l'única manera de fer-ho: saber
+            // que una captura ha sortit en blanc no serveix de res si no es diu a
+            // quina mida ha passat. El `userAgent` ja el desa el servidor.
+            // Des que es compensa l'escala visual, el canvas ha de sortir
+            // exactament `full × escala`: si un informe no quadra, el problema és
+            // la captura i no el sostre.
+            detail:
+              `${pageFormat.size} ${pageFormat.orientation} ` +
+              `full ${pageFormat.dimensions.width}×${pageFormat.dimensions.height}, ` +
+              `escala ${captureScale.toFixed(2)}, ` +
+              `canvas ${canvas.width}×${canvas.height}` +
+              (sheets.length > 1
+                ? `, pàgina ${index + 1}/${sheets.length}`
+                : ""),
+          });
+          return;
+        }
+
+        if (index > 0) pdf.addPage(pdfFormat, pageFormat.orientation);
+        pdf.addImage(
+          canvas.toDataURL("image/png"),
+          "PNG",
+          offsetX,
+          offsetY,
+          widthMM,
+          heightMM,
+        );
+      }
       pdf.save("sequencia.pdf");
 
       // La descàrrega la confirma el navegador de maneres molt diferents (i a

@@ -63,6 +63,11 @@ import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
 import PrintFooterSection from "./PrintFooterSection";
 import { VIEW_SETTINGS_COLUMN_WIDTH } from "./ViewSequenceSettings.styled";
+import FreeLayoutPages from "@features/free-layout/components/FreeLayoutPages";
+import FreeLayoutSettings from "@features/free-layout/components/FreeLayoutSettings";
+import freeLayoutMessages from "@features/free-layout/components/FreeLayoutSettings/FreeLayoutSettings.lang";
+import { selectIsFreeLayout } from "@features/free-layout/store/freeLayoutThunks";
+import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
 import {
   SectionTitle,
   SettingsActions,
@@ -179,6 +184,10 @@ const ViewSequencesSettings = ({
     (value: string) => dispatch(documentAuthorChangedActionCreator(value)),
     [dispatch],
   );
+
+  // Disposició lliure (ADR-005): les pàgines i les seves caixes en lloc del
+  // full del flux. La pantalla completa no l'admet: no té mil·límetres
+  const isFreeLayout = useAppSelector(selectIsFreeLayout) && !isFullscreen;
 
   // L'espai del full (`docs/PLA-mode-lliure.md`, §6, «L'espai»). A partir
   // d'escriptori, la columna d'ajustos es pot amagar perquè el full faci tota
@@ -443,24 +452,32 @@ const ViewSequencesSettings = ({
    * El botó continua sent focusable mentre genera (aria-disabled), així que el
    * clic repetit el para aquí: el backdrop del hook ja diu què està passant.
    */
+  // En mode lliure, si hi ha seqüències sense col·locar o pàgines buides, es
+  // diu abans d'imprimir o de fer el PDF (ADR-005). Ctrl+P no passa per aquí:
+  // imprimeix el que es veu, que és el que diu la columna
+  const { check: checkBeforePrint, dialog: beforePrintDialog } =
+    useBeforePrintCheck();
+
   const handleDownloadPdf = useCallback(() => {
     if (isGenerating) return;
-    void downloadPdf();
-  }, [isGenerating, downloadPdf]);
+    checkBeforePrint("pdf", () => void downloadPdf());
+  }, [isGenerating, downloadPdf, checkBeforePrint]);
 
   /**
    * Handler per imprimir amb orientació correcta
    */
   const handlePrint = useCallback(() => {
-    (document.activeElement as HTMLElement)?.blur();
-    printWithOrientation(pageFormat);
-    trackEvent({
-      event: "click-print-view",
-      event_category: "View",
-      event_label: "Print view",
-      value: `size_${viewSettings.sizePict}`,
+    checkBeforePrint("print", () => {
+      (document.activeElement as HTMLElement)?.blur();
+      printWithOrientation(pageFormat);
+      trackEvent({
+        event: "click-print-view",
+        event_category: "View",
+        event_label: "Print view",
+        value: `size_${viewSettings.sizePict}`,
+      });
     });
-  }, [pageFormat, viewSettings.sizePict]);
+  }, [pageFormat, viewSettings.sizePict, checkBeforePrint]);
 
   return (
     <>
@@ -606,82 +623,95 @@ const ViewSequencesSettings = ({
           // Sense la columna al costat, el full va al mig de l'espai que queda
           justifyContent={{ md: settingsVisible ? "flex-start" : "center" }}
         >
-          {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
-          <Box
-            className="preview-container"
-            sx={{
-              width: displayWidth,
-              height: displayHeight,
-              minWidth: 0,
-              overflow: "hidden",
-              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
-              marginBottom: 1,
-              "@media print": { marginBottom: 0, outline: "none" },
-              position: { xs: "sticky", md: "static" },
-              top: { xs: 0 },
-              zIndex: { xs: 10, md: "auto" },
-              // El full és paper en tots dos temes: aquesta previsualització ha de
-              // ser idèntica al que sortirà per impressora i al PDF
-              backgroundColor: sheetSurface,
-            }}
-          >
-            {/* Contenidor interior: dimensions reals amb transform per visualització.
-                És el full sencer i l'únic que s'imprimeix (`usePrintSheet`): una
-                columna amb el contingut i, a sota, el peu de llicència */}
-            <Box
-              className="preview-content"
-              sx={{
-                width: pageFormat.dimensions.width,
-                height: pageFormat.dimensions.height,
-                transform: `scale(${calculatedScale})`,
-                transformOrigin: "top left",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Stack
-                display={"flex"}
-                direction={viewSettings.direction}
-                flexWrap={"wrap"}
-                alignContent={blockAlign}
-                alignItems={blockAlign}
-                columnGap={
-                  viewSettings.direction === "column"
-                    ? viewSettings.sequenceSpaceBetween
-                    : 0
-                }
-                rowGap={
-                  viewSettings.direction === "row"
-                    ? viewSettings.sequenceSpaceBetween
-                    : 0
-                }
-                width="100%"
+          {isFreeLayout ? (
+            <FreeLayoutPages
+              pageDimensions={pageFormat.dimensions}
+              displayWidth={displayWidth}
+              displayHeight={displayHeight}
+              scale={calculatedScale}
+              author={author}
+              licence={viewSettings.licence}
+            />
+          ) : (
+            <>
+              {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
+              <Box
+                className="preview-container"
                 sx={{
-                  flex: 1,
-                  // Sense això, un contingut alt eixamplaria el full en comptes
-                  // de quedar retallat per la vora, com fa el paper
-                  minHeight: 0,
-                  // I sense això el sobrant es pintaria damunt del peu: el que
-                  // no hi cap es talla, que és el que fa el paper
+                  width: displayWidth,
+                  height: displayHeight,
+                  minWidth: 0,
                   overflow: "hidden",
-                  padding: 2,
-                  paddingInline: 1.5,
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                  marginBottom: 1,
+                  "@media print": { marginBottom: 0, outline: "none" },
+                  position: { xs: "sticky", md: "static" },
+                  top: { xs: 0 },
+                  zIndex: { xs: 10, md: "auto" },
+                  // El full és paper en tots dos temes: aquesta previsualització ha de
+                  // ser idèntica al que sortirà per impressora i al PDF
+                  backgroundColor: sheetSurface,
                 }}
               >
-                {children({
-                  viewSettings,
-                  sequenceViewSettings,
-                  scale: 1,
-                  author,
-                })}
-              </Stack>
+                {/* Contenidor interior: dimensions reals amb transform per visualització.
+                És el full sencer i l'únic que s'imprimeix (`usePrintSheet`): una
+                columna amb el contingut i, a sota, el peu de llicència */}
+                <Box
+                  className="preview-content"
+                  sx={{
+                    width: pageFormat.dimensions.width,
+                    height: pageFormat.dimensions.height,
+                    transform: `scale(${calculatedScale})`,
+                    transformOrigin: "top left",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Stack
+                    display={"flex"}
+                    direction={viewSettings.direction}
+                    flexWrap={"wrap"}
+                    alignContent={blockAlign}
+                    alignItems={blockAlign}
+                    columnGap={
+                      viewSettings.direction === "column"
+                        ? viewSettings.sequenceSpaceBetween
+                        : 0
+                    }
+                    rowGap={
+                      viewSettings.direction === "row"
+                        ? viewSettings.sequenceSpaceBetween
+                        : 0
+                    }
+                    width="100%"
+                    sx={{
+                      flex: 1,
+                      // Sense això, un contingut alt eixamplaria el full en comptes
+                      // de quedar retallat per la vora, com fa el paper
+                      minHeight: 0,
+                      // I sense això el sobrant es pintaria damunt del peu: el que
+                      // no hi cap es talla, que és el que fa el paper
+                      overflow: "hidden",
+                      padding: 2,
+                      paddingInline: 1.5,
+                    }}
+                  >
+                    {children({
+                      viewSettings,
+                      sequenceViewSettings,
+                      scale: 1,
+                      author,
+                    })}
+                  </Stack>
 
-              {/* Al peu del full, dins del flux: només es pinta al paper i al
+                  {/* Al peu del full, dins del flux: només es pinta al paper i al
                   PDF, i allà s'hi reserva l'espai perquè no caigui damunt de
                   l'última fila de pictogrames */}
-              <CopyRight author={author} licence={viewSettings.licence} />
-            </Box>
-          </Box>
+                  <CopyRight author={author} licence={viewSettings.licence} />
+                </Box>
+              </Box>
+            </>
+          )}
 
           {/* Grup divider + settings: empès sempre a la vora dreta en desktop.
               Amagat, continua muntat: així el botó hi pot apuntar i, en tornar,
@@ -720,10 +750,23 @@ const ViewSequencesSettings = ({
                   <GlobalViewControls
                     viewSettings={viewSettings}
                     pageSize={pageSize}
-                    sequenceCount={sequenceKeys.length}
+                    // En lliure, l'espai entre seqüències no hi diu res, i la
+                    // pantalla completa no s'hi pot triar
+                    sequenceCount={isFreeLayout ? 1 : sequenceKeys.length}
+                    paperOnly={isFreeLayout}
                     onPageSizeChange={setPageSize}
                     onDirectionChange={handleDirectionChange}
                     onSequenceSpaceChange={handleSequenceSpaceChange}
+                  />
+                </SectionTitle>
+
+                {/* Secció: disposició automàtica o lliure (ADR-005) */}
+                <SectionTitle
+                  title={<FormattedMessage {...freeLayoutMessages.section} />}
+                >
+                  <FreeLayoutSettings
+                    pageSize={pageSize}
+                    onPageSizeChange={setPageSize}
                   />
                 </SectionTitle>
 
@@ -741,6 +784,7 @@ const ViewSequencesSettings = ({
                     onSequenceSliderChange={handleSequenceSliderChange}
                     onAlignmentHChange={handleAlignmentHChange}
                     onAlignmentVChange={handleAlignmentVChange}
+                    sizeFromBox={isFreeLayout}
                   />
                 </SectionTitle>
 
@@ -788,6 +832,8 @@ const ViewSequencesSettings = ({
       </form>
 
       {/* Només apareix si el desat ha fallat també al reintent automàtic */}
+      {beforePrintDialog}
+
       <SettingsSaveErrorDialog
         failure={failure}
         isRetrying={isRetrying}

@@ -32,6 +32,7 @@ import {
   settingsAccordion,
 } from "@/components/SettingsLayout";
 import messages from "./ViewSequencesSettings.lang";
+import freeLayoutMessages from "@features/free-layout/components/FreeLayoutSettings/FreeLayoutSettings.lang";
 import {
   SEQ_VIEW_DEFAULT_SIZE_PICT,
   SEQ_VIEW_DEFAULT_PICT_SPACE,
@@ -66,6 +67,11 @@ interface SequenceControlsPanelProps {
     event: React.MouseEvent<HTMLElement>,
     value: SequenceAlignmentV | null,
   ) => void;
+  /**
+   * En disposició lliure, la mida dels pictogrames la decideix la caixa
+   * (ADR-005): el control de mida no hi faria res, i al seu lloc es diu
+   */
+  sizeFromBox?: boolean;
 }
 
 /**
@@ -83,6 +89,7 @@ const SequenceControlsPanel = ({
   onSequenceSliderChange,
   onAlignmentHChange,
   onAlignmentVChange,
+  sizeFromBox = false,
 }: SequenceControlsPanelProps): React.ReactElement => {
   const intl = useIntl();
 
@@ -98,22 +105,28 @@ const SequenceControlsPanel = ({
 
     return (
       <Stack direction="column" gap={SETTINGS_ROW_GAP}>
-        <SettingRow
-          title={<FormattedMessage {...messages.size} />}
-          labelId={`${labelId}-size`}
-        >
-          <Slider
-            name="sizePict"
-            step={SIZE_PICT_STEP}
-            min={SIZE_PICT_MIN}
-            max={SIZE_PICT_MAX}
-            value={seqView.sizePict}
-            valueLabelDisplay="auto"
-            valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
-            onChange={onSequenceSliderChange(seqKey)}
-            aria-labelledby={`${labelId}-size`}
-          />
-        </SettingRow>
+        {sizeFromBox ? (
+          <Typography variant="body2" color="text.secondary">
+            <FormattedMessage {...freeLayoutMessages.sizeFromBox} />
+          </Typography>
+        ) : (
+          <SettingRow
+            title={<FormattedMessage {...messages.size} />}
+            labelId={`${labelId}-size`}
+          >
+            <Slider
+              name="sizePict"
+              step={SIZE_PICT_STEP}
+              min={SIZE_PICT_MIN}
+              max={SIZE_PICT_MAX}
+              value={seqView.sizePict}
+              valueLabelDisplay="auto"
+              valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
+              onChange={onSequenceSliderChange(seqKey)}
+              aria-labelledby={`${labelId}-size`}
+            />
+          </SettingRow>
+        )}
 
         <SettingRow
           title={<FormattedMessage {...messages.pictSpaceBetween} />}

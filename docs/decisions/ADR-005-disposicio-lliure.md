@@ -82,3 +82,9 @@ Cap versió de l'app no ha escrit mai `frame`: canviar-lo no trenca cap fitxer.
   En desar, una col·locació d'una seqüència que ja no hi és no s'escriu.
 - **La pantalla completa** (`size: "FULLSCREEN"`) no té mil·límetres i no admet el mode lliure
   (`sheetAreaMm` en retorna `null`).
+- **El desfer és l'únic de l'app, ampliat** (fase 3): la instantània de `styleSlice` guarda també el
+  mode de la pàgina i la disposició lliure, i les accions de la disposició que substitueixen feina
+  hi tenen el seu origen (`FreeLayoutChangeSource`). De la pàgina només es desfà el mode: desar el
+  document la fa explícita, i comparar-la sencera hauria fet perdre el desfer només per desar.
+- **Imprimir i fer el PDF** treballen amb tots els fulls (`.preview-content`), un per pàgina. El
+  flux continua tenint-ne un, i no canvia.

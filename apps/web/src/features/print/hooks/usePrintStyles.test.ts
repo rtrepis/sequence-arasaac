@@ -1,6 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { generatePrintCSS } from "./usePrintStyles";
-import { PRINTING_BODY_CLASS, PRINT_ROOT_ID } from "./usePrintSheet";
+import {
+  PRINTING_BODY_CLASS,
+  PRINT_ROOT_ID,
+  PRINT_SHEETS_VAR,
+} from "./usePrintSheet";
 import {
   createPageFormat,
   CSS_PRINT_DPI,
@@ -83,23 +87,34 @@ describe("generatePrintCSS", () => {
     expect(css).not.toContain("NotPrint");
   });
 
-  it("hauria de fer el document exactament del mida del full", () => {
+  it("hauria de fer el document exactament de la mida dels fulls", () => {
     const css = generatePrintCSS(A4_LANDSCAPE);
 
-    // Res que desbordi el paper vol dir res que faci encongir el dibuix
+    // Res que desbordi el paper vol dir res que faci encongir el dibuix. Amb
+    // diversos fulls (mode lliure), l'alçada és la d'un full per cada full
     expect(css).toMatch(
       new RegExp(
-        `html,\\s*body\\s*\\{[^}]*width: ${sheetWidthMM}mm[^}]*height: ${sheetHeightMM}mm`,
+        `html,\\s*body\\s*\\{[^}]*width: ${sheetWidthMM}mm[^}]*height: calc\\(${sheetHeightMM}mm \\* var\\(${PRINT_SHEETS_VAR}, 1\\)\\)`,
       ),
     );
   });
 
-  it("hauria de donar al full les mides del paper, en mil·límetres", () => {
+  it("hauria de donar a cada full les mides del paper, en mil·límetres", () => {
     const css = generatePrintCSS(A4_LANDSCAPE);
 
     expect(css).toMatch(
       new RegExp(
-        `#${PRINT_ROOT_ID}[^{]*\\{[^}]*width: ${sheetWidthMM}mm[^}]*height: ${sheetHeightMM}mm`,
+        `#${PRINT_ROOT_ID} > \\* \\{[^}]*width: ${sheetWidthMM}mm[^}]*height: ${sheetHeightMM}mm`,
+      ),
+    );
+  });
+
+  it("hauria de posar cada full al seu paper", () => {
+    const css = generatePrintCSS(A4_LANDSCAPE);
+
+    expect(css).toMatch(
+      new RegExp(
+        `#${PRINT_ROOT_ID} > \\*:not\\(:last-child\\) \\{[^}]*break-after: page`,
       ),
     );
   });

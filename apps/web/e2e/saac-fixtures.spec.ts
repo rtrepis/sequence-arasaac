@@ -382,7 +382,7 @@ test.describe("estil del document", () => {
 
     // Desfer torna exactament al que hi havia
     await page.getByRole("button", { name: "Desfés" }).click();
-    await expect(page.getByText("S'ha desfet el canvi d'estil")).toBeVisible();
+    await expect(page.getByText("S'ha desfet el canvi", { exact: true })).toBeVisible();
     const undone = JSON.parse(await downloadSaac(page, "document")) as V3File;
     expect(undone.style).toEqual(original.style);
     expect(undone.sequences).toEqual(original.sequences);
@@ -409,7 +409,7 @@ test.describe("estil del document", () => {
     await page.keyboard.press("Tab");
     await expect(page.getByRole("button", { name: "Desfés" })).toBeFocused();
     await page.keyboard.press("Enter");
-    await expect(page.getByText("S'ha desfet el canvi d'estil")).toBeVisible();
+    await expect(page.getByText("S'ha desfet el canvi", { exact: true })).toBeVisible();
   });
 
   test("el bàner es tanca amb el teclat i té dianes de 44 px", async ({

@@ -37,6 +37,8 @@ interface GlobalViewControlsProps {
   ) => void;
   onSequenceSpaceChange: (event: Event, value: number | number[]) => void;
   onOrientationChange?: (orientation: PageOrientation) => void;
+  /** Només paper: en disposició lliure, la pantalla completa no s'hi pot triar */
+  paperOnly?: boolean;
 }
 
 /**
@@ -52,6 +54,7 @@ const GlobalViewControls = ({
   onDirectionChange,
   onSequenceSpaceChange,
   onOrientationChange,
+  paperOnly = false,
 }: GlobalViewControlsProps): React.ReactElement => (
   <>
     <SettingRow
@@ -68,7 +71,9 @@ const GlobalViewControls = ({
         fullWidth
         labelId={`${GLOBAL_CONTROLS_LABEL_ID}-page-size`}
       >
-        {PAGE_SIZES.map((size) => (
+        {PAGE_SIZES.filter(
+          (size) => !paperOnly || size !== "FULLSCREEN",
+        ).map((size) => (
           <MenuItem key={size} value={size}>
             {PAGE_SIZE_LABELS[size]}
           </MenuItem>

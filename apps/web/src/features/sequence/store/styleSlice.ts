@@ -37,7 +37,23 @@ export type StyleChangeSource =
   | "applyAll"
   | "reset"
   | "fitTextPictogram"
-  | "fitTextDocument";
+  | "fitTextDocument"
+  | FreeLayoutChangeSource;
+
+/**
+ * Els canvis de la disposició lliure que substitueixen feina i, per tant, es
+ * poden desfer amb el mateix snackbar (ADR-005): tornar a la disposició
+ * automàtica, aplicar una plantilla o afegir seqüències (que tornen a
+ * repartir la pàgina), esborrar una pàgina, treure una seqüència d'una pàgina
+ * i deixar de posar-ne una a totes les pàgines.
+ */
+export type FreeLayoutChangeSource =
+  | "layoutFlow"
+  | "layoutTemplate"
+  | "layoutAddSequences"
+  | "layoutRemoveSheet"
+  | "layoutRemovePlacement"
+  | "layoutUncommon";
 
 /**
  * Bàner d'estat del document que s'acaba d'obrir: és estat, no confirmació, i
@@ -179,7 +195,9 @@ const sameSnapshot = (
   a.viewSettings === b.viewSettings &&
   a.defaultSettings === b.defaultSettings &&
   a.styleView === b.styleView &&
-  a.fitzgeraldColors === b.fitzgeraldColors;
+  a.fitzgeraldColors === b.fitzgeraldColors &&
+  a.layoutMode === b.layoutMode &&
+  a.freeLayout === b.freeLayout;
 
 /**
  * Fa un canvi d'estil del document i el deixa a punt de desfer amb un snackbar

@@ -8,6 +8,8 @@ import {
 import {
   DocumentLayout,
   DocumentSAAC,
+  FreeLayout,
+  PageLayoutMode,
   SequenceStyle,
   SequenceStyleView,
   SequenceViewSettings,
@@ -46,6 +48,7 @@ import { classifyRequestFailure } from "@features/backend/api/requestFailure";
 import { clearDraft } from "@features/sequence/storage/draftStorage";
 import { documentStatusClearedActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { reportClientError } from "@features/backend/api/clientErrorReport";
+import { removeSequencePlacements } from "@features/free-layout/model/sheets";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);
@@ -419,12 +422,23 @@ const documentSlice = createSlice({
         defaultSettings,
         styleView,
         fitzgeraldColors,
+        layoutMode,
+        freeLayout,
       } = action.payload;
       previousDocument.content = content;
       previousDocument.viewSettings = viewSettings;
       previousDocument.defaultSettings = defaultSettings;
       previousDocument.styleView = styleView;
       previousDocument.fitzgeraldColors = fitzgeraldColors;
+      // De la pàgina només es desfà el mode: cap acció que es pugui desfer no
+      // en canvia la mida ni l'orientació, i desar el document l'haurà fet
+      // explícita mentrestant (`documentStyleMaterialized`)
+      const { mode, ...page } = previousDocument.layout ?? {};
+      if (previousDocument.layout || layoutMode)
+        previousDocument.layout = layoutMode
+          ? { ...page, mode: layoutMode }
+          : page;
+      previousDocument.freeLayout = freeLayout;
     },
 
     // Fa explícit l'estil que el document heretava, en desar-lo: el que s'ha
@@ -487,6 +501,29 @@ const documentSlice = createSlice({
         ...(previousDocument.layout ?? action.payload.base),
         ...action.payload.layout,
       };
+    },
+
+    // Disposició de la pàgina (ADR-005): automàtica (el flux de sempre) o
+    // lliure. Passar a flux no esborra la disposició lliure: tornar a «Lliure»
+    // la recupera, i en desar en flux no s'escriu. `base` és la pàgina que té
+    // ara (la seva o, si l'hereta, la de les preferències)
+    layoutModeChanged: (
+      previousDocument,
+      action: PayloadAction<{ mode: PageLayoutMode; base: DocumentLayout }>,
+    ) => {
+      const { mode, ...layout } =
+        previousDocument.layout ?? action.payload.base;
+      previousDocument.layout =
+        action.payload.mode === "free" ? { ...layout, mode: "free" } : layout;
+    },
+
+    // La disposició lliure sencera: pàgines i col·locacions. Les operacions
+    // les calcula `features/free-layout/model`, i aquí només es desa el resultat
+    freeLayoutChanged: (
+      previousDocument,
+      action: PayloadAction<FreeLayout>,
+    ) => {
+      previousDocument.freeLayout = action.payload;
     },
 
     // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
@@ -554,6 +591,12 @@ const documentSlice = createSlice({
         const lastKey = keys[keys.length - 1];
         delete previousDocument.content[Number(lastKey)];
         delete previousDocument.viewSettings[Number(lastKey)];
+        // I les seves col·locacions: no poden apuntar a una seqüència que no hi és
+        if (previousDocument.freeLayout)
+          previousDocument.freeLayout = removeSequencePlacements(
+            previousDocument.freeLayout,
+            Number(lastKey),
+          );
 
         // Si la seqüència activa és la que s'ha eliminat, canviar a la penúltima
         if (previousDocument.activeSAAC === Number(lastKey)) {
@@ -574,13 +617,19 @@ const documentSlice = createSlice({
 
 export const documentReducer = documentSlice.reducer;
 
-/** El que toca un canvi d'estil, per poder-lo desfer. */
+/**
+ * El que toca un canvi que es pot desfer: l'estil i, des del mode lliure
+ * (ADR-005), la pàgina i la disposició. És l'únic desfer de l'app.
+ */
 export interface DocumentStyleSnapshot {
   content: DocumentSAAC["content"];
   viewSettings: DocumentSAAC["viewSettings"];
   defaultSettings: DocumentSAAC["defaultSettings"];
   styleView: DocumentSAAC["styleView"];
   fitzgeraldColors: DocumentSAAC["fitzgeraldColors"];
+  /** De la pàgina, només el mode: vegeu `restoreDocumentStyle` */
+  layoutMode: PageLayoutMode | undefined;
+  freeLayout: DocumentSAAC["freeLayout"];
 }
 
 export const takeDocumentStyleSnapshot = (
@@ -591,6 +640,8 @@ export const takeDocumentStyleSnapshot = (
   defaultSettings: document.defaultSettings,
   styleView: document.styleView,
   fitzgeraldColors: document.fitzgeraldColors,
+  layoutMode: document.layout?.mode,
+  freeLayout: document.freeLayout,
 });
 
 /**
@@ -717,6 +768,8 @@ export const {
   restoreDocumentStyle: restoreDocumentStyleActionCreator,
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
   documentLayoutChanged: documentLayoutChangedActionCreator,
+  layoutModeChanged: layoutModeChangedActionCreator,
+  freeLayoutChanged: freeLayoutChangedActionCreator,
   documentAuthorChanged: documentAuthorChangedActionCreator,
   pictStyleAppliedToAll: pictStyleAppliedToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
