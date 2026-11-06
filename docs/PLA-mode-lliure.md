@@ -1,6 +1,7 @@
 # Pla: mode lliure de pàgina
 
-> **Estat**: proposta, pendent de confirmar abans d'escriure codi (pas 0 de l'encàrrec).
+> **Estat**: pla confirmat (2026-11-06). **Fase 1 feta**: model, fitxer i funcions de disposició
+> (ADR-005). Les fases 2–5 estan pendents.
 > **Encàrrec**: `docs/spec-mode-lliure.md`, a la branca `origin/feature/mode-lliure` (no fusionada).
 > **Fonaments que mana**: `docs/fonaments/03-model-contingut-estil.md`,
 > `docs/fonaments/06-compatibilitat-i-dades.md`, `docs/decisions/ADR-003-model-document-saac-v3.md`.
@@ -319,11 +320,11 @@ prou, i el codi queda al costat del de la resta de l'app.
 ```
 features/free-layout/                 # el domini: la disposició lliure del document
 ├── model/                            # funcions pures, sense React ni Redux, amb tests
-│   ├── placement.ts                  #   SequencePlacement, clampPlacement, MIN_*, MOVE_STEP_MM…
+│   ├── placement.ts                  #   àrea útil del full, clampBox, moveBox, resizeBox, constants
 │   ├── computeGrid.ts                #   (N, targeta a mida 1, espai, caixa) → columnes, files, mida
-│   ├── templates.ts                  #   les plantilles en fraccions i applyTemplate
-│   ├── sheets.ts                     #   afegir, duplicar, esborrar fulls; fer i desfer comunes
-│   ├── initialLayout.ts              #   la disposició en activar el mode (s'assembla al flux)
+│   ├── templates.ts                  #   les plantilles en fraccions, freeRegion i applyTemplate
+│   ├── sheets.ts                     #   fulls i col·locacions: afegir, duplicar, copiar, comunes…
+│   ├── distribute.ts                 #   disposició de partida, afegir seqüències a un full
 │   ├── readingOrder.ts               #   ordre de lectura de les caixes
 │   └── placementsOf.ts               #   on surt cada seqüència; les sense col·locar
 ├── store/                            # reducers a documentSlice + selectors; desfer d'un pas
@@ -368,7 +369,7 @@ components/AppSidePanel/              # capa canònica nova: el panell que entra
 
 Cada fase deixa l'app funcionant i passa `npm run typecheck` net.
 
-1. **Model.** ADR-005, tipus a `shared-types`, `toRedux`/`serialize`, esquema, fonament 06,
+1. ✅ **Model.** ADR-005, tipus a `shared-types`, `toRedux`/`serialize`, esquema, fonament 06,
    fixture 16, i les funcions pures de `model/` amb tests. Sense interfície.
 2. **L'espai.** `AppSidePanel` i la vista amb el full a tota l'amplada, també en mode automàtic,
    amb els estàndards actualitzats. És independent del mode lliure i es pot provar sol.

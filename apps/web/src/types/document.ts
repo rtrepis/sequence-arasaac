@@ -3,10 +3,22 @@ import type { FitzgeraldCategoryColors } from "@features/sequence/saac/fitzgeral
 import { DefaultSettings } from "./ui";
 import type {
   DocumentLayout,
+  FreeLayout,
+  FreeSheet,
+  PageLayoutMode,
+  PlacementColumns,
+  SequencePlacement,
   SequenceStyleView as SharedSequenceStyleView,
 } from "@sequence-arasaac/shared-types";
 
-export type { DocumentLayout };
+export type {
+  DocumentLayout,
+  FreeLayout,
+  FreeSheet,
+  PageLayoutMode,
+  PlacementColumns,
+  SequencePlacement,
+};
 
 export type SequenceAlignmentH = "left" | "center" | "right";
 export type SequenceAlignmentV = "top" | "center" | "bottom";
@@ -50,9 +62,10 @@ export interface SequenceStyle extends DefaultSettings {
 
 /**
  * Camps del `.saac` v3 que Redux no fa servir però que s'han de tornar a
- * escriure en desar: els desconeguts de cada objecte, la data de creació, la
- * disposició (`page.layout`) i les dades de cada seqüència que no són
- * pictogrames (títol, `frame`…).
+ * escriure en desar: els desconeguts de cada objecte, la data de creació i les
+ * dades de cada seqüència que no són pictogrames (el títol…). La disposició
+ * (`page.layout`, `sheets` i `common`) ja no hi va: és `layout.mode` i
+ * `freeLayout`.
  */
 export interface SaacDocumentExtras {
   root?: SaacExtraFields;
@@ -85,6 +98,13 @@ export interface DocumentSAAC {
    * pàgina o es desa.
    */
   layout?: DocumentLayout;
+  /**
+   * Disposició lliure: els fulls i on va cada seqüència. Només es fa servir si
+   * `layout.mode` és `"free"`; en tornar al flux es conserva, perquè tornar a
+   * «Lliure» la recuperi, però no s'escriu en desar. Sense valor, encara no
+   * s'ha construït (`docs/PLA-mode-lliure.md`, §5).
+   */
+  freeLayout?: FreeLayout;
   /** Colors de cada categoria de Fitzgerald. Sense valor, els de l'app. */
   fitzgeraldColors?: FitzgeraldCategoryColors;
   /** Identificador estable de cada seqüència al `.saac` v3 */

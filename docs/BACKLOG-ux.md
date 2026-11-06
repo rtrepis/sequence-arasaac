@@ -1802,8 +1802,9 @@ l'ha de desencallar.
      l'usuari ho demana.
   5. **Camps nous del mode lliure (fase 5).** Els validadors de `modules/documents/validators.ts`
      són `z.object` normals, i per tant **descarten en silenci les claus que no coneixen**. Si no
-     s'hi afegeixen `schemaVersion` i la disposició de pàgina, el núvol se la menjarà sense cap
-     error, mentre que el fitxer la conservarà. Aquesta prova és la que ho ha de detectar.
+     s'hi afegeixen `schemaVersion` i la disposició de pàgina (`layout.mode` i `freeLayout`, ADR-005),
+     el núvol se la menjarà sense cap error, mentre que el fitxer la conservarà. Aquesta prova és la
+     que ho ha de detectar.
 - **Proposta: un usuari de proves dedicat.**
   - **Entorn.** Ha de ser una base de dades de proves (una altra base dins del mateix clúster
     d'Atlas n'hi ha prou) i no la de producció. Un compte creat a producció ocupa una plaça de

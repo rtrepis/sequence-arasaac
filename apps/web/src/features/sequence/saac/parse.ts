@@ -19,7 +19,9 @@ import {
 import {
   PAGE_KEYS,
   PICTOGRAM_KEYS,
+  PLACEMENT_KEYS,
   SEQUENCE_KEYS,
+  SHEET_KEYS,
   documentFromV3,
   styleFromV3,
   unknownFields,
@@ -35,7 +37,9 @@ import {
   V3Page,
   V3Pictogram,
   V3PictogramOverride,
+  V3Placement,
   V3Sequence,
+  V3Sheet,
   V3Style,
 } from "./types";
 
@@ -228,6 +232,89 @@ const readPictogram = (
   };
 };
 
+// --- Disposició lliure ---
+
+const isFiniteNumber = (value: unknown): value is number =>
+  typeof value === "number" && Number.isFinite(value);
+
+/**
+ * Una col·locació del fitxer, o `undefined` si no es pot pintar: apunta a una
+ * seqüència que no hi és, o la caixa no és un rectangle. Les columnes que no
+ * s'entenen passen a «automàtic», i un `id` que falta o es repeteix se'n
+ * genera un de nou. La caixa no s'encaixa al full: això és feina de qui la
+ * pinta, que sap quina mida té el full.
+ */
+const readPlacement = (
+  value: unknown,
+  sequenceIds: ReadonlySet<string>,
+  usedIds: Set<string>,
+): V3Placement | undefined => {
+  if (!isPlainObject(value)) return undefined;
+  const { id, sequence, x, y, w, h, columns } = value;
+  if (typeof sequence !== "string" || !sequenceIds.has(sequence))
+    return undefined;
+  if (!isFiniteNumber(x) || !isFiniteNumber(y)) return undefined;
+  if (!isFiniteNumber(w) || !isFiniteNumber(h) || w <= 0 || h <= 0)
+    return undefined;
+
+  const placementId =
+    typeof id === "string" && id && !usedIds.has(id) ? id : newSaacId("pl");
+  usedIds.add(placementId);
+  return {
+    ...unknownFields(value, PLACEMENT_KEYS),
+    id: placementId,
+    sequence,
+    x,
+    y,
+    w,
+    h,
+    columns:
+      Number.isInteger(columns) && (columns as number) >= 1
+        ? (columns as number)
+        : "auto",
+  };
+};
+
+/**
+ * Els fulls i les col·locacions comunes d'una pàgina en mode lliure. Si no hi
+ * ha cap full que es pugui llegir, no en retorna cap: la disposició s'ha de
+ * tornar a construir en obrir-la, com la d'un document que passa a «Lliure».
+ */
+const readFreeLayout = (
+  rawPage: unknown,
+  sequences: readonly V3Sequence[],
+): Pick<V3Page, "sheets" | "common"> => {
+  if (!isPlainObject(rawPage) || !Array.isArray(rawPage.sheets)) return {};
+  const sequenceIds = new Set(sequences.map(({ id }) => id));
+  const usedPlacementIds = new Set<string>();
+  const usedSheetIds = new Set<string>();
+
+  const readPlacements = (list: unknown): V3Placement[] =>
+    Array.isArray(list)
+      ? list
+          .map((value) => readPlacement(value, sequenceIds, usedPlacementIds))
+          .filter((placement): placement is V3Placement => !!placement)
+      : [];
+
+  const sheets: V3Sheet[] = rawPage.sheets
+    .filter(isPlainObject)
+    .map((sheet) => {
+      const sheetId =
+        typeof sheet.id === "string" && sheet.id && !usedSheetIds.has(sheet.id)
+          ? sheet.id
+          : newSaacId("sh");
+      usedSheetIds.add(sheetId);
+      return {
+        ...unknownFields(sheet, SHEET_KEYS),
+        id: sheetId,
+        placements: readPlacements(sheet.placements),
+      };
+    });
+  if (sheets.length === 0) return {};
+
+  return { sheets, common: readPlacements(rawPage.common) };
+};
+
 const readAssets = (value: unknown): Record<string, V3Asset> => {
   if (!isPlainObject(value)) return {};
   const assets: Record<string, V3Asset> = {};
@@ -313,6 +400,10 @@ const readV3Document = (
       page: {
         ...(isPlainObject(raw.page) && unknownFields(raw.page, PAGE_KEYS)),
         ...page.value,
+        // Els fulls només hi són en mode lliure: en flux no es fan servir, i
+        // tornar-los a escriure contradiria el que diu `layout`
+        ...(page.value.layout === "free" &&
+          readFreeLayout(raw.page, sequences)),
       },
       style: { ...(isPlainObject(raw.style) ? raw.style : {}), ...style.value },
       sequences,

@@ -58,10 +58,16 @@ per pestanya, pestanya activa, si porta configuració global i què se n'espera 
 | `13-malmes` | — | — | — | la meitat del 02: no s'ha de poder obrir, i s'ha de dir |
 | `14-versio-99` | v3, `schemaVersion: 99` | 1 (2) | dins del document | una versió més nova: s'obre, avisa i conserva els camps que no coneix |
 | `15-paper-carta` | v3 | 1 (2) | dins del document | pàgina en paper Carta (`LETTER`): s'obre en Carta i es torna a desar igual; amb una mida desconeguda, cau a la de qui obre |
+| `16-mode-lliure` | v3 | 3 (2, 3, 4) | dins del document | disposició lliure (ADR-005): dues pàgines, una seqüència a totes les pàgines (`common`), una de repetida a dues pàgines, una caixa amb columnes fixes, i camps desconeguts en un full i en una col·locació |
 
 Les 08 i 09 les ha escrit l'app (obrir el 02 i desar-lo), no s'han fet a mà; la 10 sí, a partir de
 la 01. La captura del 08 és idèntica, píxel a píxel, a la del 02: és la prova que una seqüència es
 veu igual després de desar-la en el format nou i tornar-la a obrir.
+
+La 16 s'ha afegit amb la disposició lliure (`docs/decisions/ADR-005-disposicio-lliure.md`), a mà
+i amb la forma exacta que escriu l'app: obrir-la i tornar-la a desar en dona el mateix fitxer. No és
+al `manifest.json` perquè l'e2e en compara la vista, i el mode lliure encara no es pinta (fase 3 de
+`docs/PLA-mode-lliure.md`).
 
 Les 11–14 s'han afegit amb el format v3 (`docs/decisions/ADR-003-model-document-saac-v3.md`), a
 mà: la 11 és una còpia exacta de la 01, la 12 fa servir les imatges de la 03 i la 14 segueix

@@ -79,12 +79,38 @@ export interface ResolvedCardStyle {
   view: V3View;
 }
 
+/**
+ * Una seqüència posada en un full: `sequence` és l'`id` de la seqüència, i la
+ * caixa és en mil·límetres des del cantó superior esquerre del full.
+ */
+export interface V3Placement {
+  id: string;
+  sequence: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  columns: "auto" | number;
+  [unknown: string]: unknown;
+}
+
+/** Una pàgina del mode lliure. */
+export interface V3Sheet {
+  id: string;
+  placements: V3Placement[];
+  [unknown: string]: unknown;
+}
+
 export interface V3Page {
   size: PageSize;
   orientation: PageOrientation;
   direction: SequenceDirection;
   sequenceGap: number;
   layout: "flow" | "free";
+  /** Només amb `layout: "free"`: les pàgines, en ordre */
+  sheets?: V3Sheet[];
+  /** Només amb `layout: "free"`: el que surt a totes les pàgines */
+  common?: V3Placement[];
 }
 
 export const PICTOGRAM_VARIANTS = ["skin", "hair", "color"] as const;

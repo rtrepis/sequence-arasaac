@@ -552,3 +552,164 @@ describe("descàrrega", () => {
     );
   });
 });
+
+// La disposició lliure (`docs/decisions/ADR-005-disposicio-lliure.md`): fulls
+// amb col·locacions dins de `page`, que apunten a les seqüències. La 16 té dos
+// fulls, una comuna, una seqüència repetida en dos fulls, una caixa amb
+// columnes fixes i camps que l'app no coneix en un full i en una col·locació.
+describe("disposició lliure", () => {
+  const FREE = "16-mode-lliure.saac";
+
+  /** El 16 amb la pàgina canviada: per provar fitxers que no són a disc. */
+  const withPage = (change: (page: Record<string, unknown>) => void) => {
+    const raw = JSON.parse(readText(FREE));
+    change(raw.page);
+    const parsed = parseSaac(JSON.stringify(raw), context);
+    if (parsed.kind !== "document") throw new Error();
+    return parsed;
+  };
+
+  it("s'obre amb els fulls, les comunes i la seqüència repetida", () => {
+    const { document } = parseDocument(FREE);
+    expect(document.layout?.mode).toBe("free");
+    const free = document.freeLayout!;
+    expect(free.sheets.map(({ id }) => id)).toEqual(["sh_1", "sh_2"]);
+    // Les claus són la posició de la seqüència al fitxer
+    expect(free.common).toEqual([
+      {
+        id: "pl_9",
+        sequenceKey: 0,
+        x: 5,
+        y: 5,
+        w: 190,
+        h: 35,
+        columns: "auto",
+      },
+    ]);
+    expect(free.sheets[0].placements.map((p) => p.sequenceKey)).toEqual([1]);
+    expect(free.sheets[1].placements.map((p) => p.sequenceKey)).toEqual([2, 1]);
+    expect(free.sheets[1].placements[0].columns).toBe(4);
+  });
+
+  it("els camps que l'app no coneix es conserven", () => {
+    const { document } = parseDocument(FREE);
+    const [first, second] = document.freeLayout!.sheets;
+    expect(first.extra).toEqual({ nom: "Matí" });
+    expect(second.placements[0].extra).toEqual({ rotacio: 0 });
+    // I no es confonen amb els camps desconeguts de la pàgina
+    expect(document.saacExtra?.page).toBeUndefined();
+  });
+
+  it("es torna a desar igual", () => {
+    const { file, document } = parseDocument(FREE);
+    expect(JSON.parse(serializeSaac(file))).toEqual(JSON.parse(readText(FREE)));
+    const again = documentToV3(document, serializeContext);
+    expect(again).toEqual({ ...file, meta: { ...file.meta, updatedAt: NOW } });
+    expect(documentFromV3(again)).toEqual(document);
+  });
+
+  it("en flux, la disposició lliure es conserva a l'app però no s'escriu", () => {
+    const { document } = parseDocument(FREE);
+    const flow: DocumentSAAC = {
+      ...document,
+      layout: { ...document.layout, mode: undefined },
+    };
+    const page = documentToV3(flow, serializeContext).page;
+    expect(page.layout).toBe("flow");
+    expect(page.sheets).toBeUndefined();
+    expect(page.common).toBeUndefined();
+    // Tornar a «Lliure» la recupera tal com era
+    const back = documentToV3(
+      { ...flow, layout: { ...flow.layout, mode: "free" } },
+      serializeContext,
+    );
+    expect(back.page.sheets).toEqual(parseDocument(FREE).file.page.sheets);
+  });
+
+  it("un fitxer en flux no porta fulls, encara que n'hi hagi", () => {
+    const { document, file } = withPage((page) => {
+      page.layout = "flow";
+    });
+    expect(file.page.sheets).toBeUndefined();
+    expect(document.layout?.mode).toBeUndefined();
+    expect(document.freeLayout).toBeUndefined();
+  });
+
+  it("en lliure sense cap full, la disposició queda per construir", () => {
+    const { document } = withPage((page) => {
+      delete page.sheets;
+      delete page.common;
+    });
+    expect(document.layout?.mode).toBe("free");
+    expect(document.freeLayout).toBeUndefined();
+    const page = documentToV3(document, serializeContext).page;
+    expect(page.layout).toBe("free");
+    expect(page.sheets).toBeUndefined();
+  });
+
+  it("descarta les col·locacions que no es poden pintar i arregla la resta", () => {
+    const { file } = withPage((page) => {
+      const sheets = page.sheets as Record<string, unknown>[];
+      sheets[0].placements = [
+        // D'una seqüència que no hi és
+        { id: "a", sequence: "seq_cap", x: 0, y: 0, w: 10, h: 10 },
+        // Sense alçada
+        { id: "b", sequence: "seq_mati", x: 0, y: 0, w: 10, h: 0 },
+        // Sense posició
+        { id: "c", sequence: "seq_mati", y: 0, w: 10, h: 10 },
+        // Columnes que no s'entenen, i un id repetit
+        {
+          id: "pl_9",
+          sequence: "seq_mati",
+          x: 1,
+          y: 2,
+          w: 3,
+          h: 4,
+          columns: 0,
+        },
+        {
+          id: "d",
+          sequence: "seq_mati",
+          x: 1,
+          y: 2,
+          w: 3,
+          h: 4,
+          columns: "tres",
+        },
+      ];
+      (page.sheets as unknown[]).push("no és un full");
+    });
+    const [first] = file.page.sheets!;
+    expect(file.page.sheets).toHaveLength(2);
+    expect(first.placements.map(({ columns }) => columns)).toEqual([
+      "auto",
+      "auto",
+    ]);
+    const ids = [
+      ...first.placements.map(({ id }) => id),
+      ...file.page.common!.map(({ id }) => id),
+    ];
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids).toContain("d");
+  });
+
+  it("una col·locació d'una seqüència esborrada no s'escriu", () => {
+    const { document } = parseDocument(FREE);
+    const content = { ...document.content };
+    delete content[2];
+    const page = documentToV3({ ...document, content }, serializeContext).page;
+    expect(page.sheets![1].placements.map((p) => p.sequence)).toEqual([
+      "seq_mati",
+    ]);
+  });
+
+  it("la disposició d'un esborrany antic entre els desconeguts no mana", () => {
+    const { document } = parseDocument("15-paper-carta.saac");
+    const page = documentToV3(
+      { ...document, saacExtra: { page: { layout: "free", sheets: [] } } },
+      serializeContext,
+    ).page;
+    expect(page.layout).toBe("flow");
+    expect(page.sheets).toBeUndefined();
+  });
+});

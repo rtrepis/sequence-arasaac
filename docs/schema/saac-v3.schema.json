@@ -186,7 +186,88 @@
             "flow",
             "free"
           ],
-          "description": "\"free\" es reserva per al mode lliure; avui només s'escriu \"flow\"."
+          "description": "\"flow\": les seqüències es col·loquen soles. \"free\": mode lliure, on diuen sheets i common (docs/decisions/ADR-005-disposicio-lliure.md)."
+        },
+        "sheets": {
+          "type": "array",
+          "description": "Només amb layout = \"free\": les pàgines del document, en ordre. Sense cap full, la disposició es torna a construir en obrir-lo.",
+          "items": {
+            "$ref": "#/$defs/sheet"
+          }
+        },
+        "common": {
+          "type": "array",
+          "description": "Només amb layout = \"free\": col·locacions que surten a totes les pàgines, al mateix lloc, per sota de les de cada full.",
+          "items": {
+            "$ref": "#/$defs/placement"
+          }
+        }
+      }
+    },
+    "sheet": {
+      "type": "object",
+      "description": "Una pàgina del mode lliure.",
+      "required": [
+        "id",
+        "placements"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "placements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/placement"
+          }
+        }
+      }
+    },
+    "placement": {
+      "type": "object",
+      "description": "Una seqüència posada en una pàgina. Una seqüència pot tenir moltes col·locacions, a pàgines diferents o a la mateixa. Mil·límetres des del cantó superior esquerre del full (el paper menys el marge d'impressió).",
+      "required": [
+        "id",
+        "sequence",
+        "x",
+        "y",
+        "w",
+        "h",
+        "columns"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "sequence": {
+          "type": "string",
+          "description": "L'id de la seqüència. Una col·locació d'una seqüència que no hi és es descarta en llegir."
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "w": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "h": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "columns": {
+          "description": "Columnes de la graella: \"auto\" (les que fan els pictogrames més grans) o un nombre fix.",
+          "oneOf": [
+            {
+              "const": "auto"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
         }
       }
     },
@@ -209,35 +290,6 @@
           "properties": {
             "view": {
               "$ref": "#/$defs/partialView"
-            }
-          }
-        },
-        "frame": {
-          "type": "object",
-          "description": "Reservat per al mode lliure (page.layout = \"free\"). Mil·límetres sobre la pàgina.",
-          "required": [
-            "x",
-            "y",
-            "w",
-            "h"
-          ],
-          "properties": {
-            "x": {
-              "type": "number"
-            },
-            "y": {
-              "type": "number"
-            },
-            "w": {
-              "type": "number",
-              "minimum": 0
-            },
-            "h": {
-              "type": "number",
-              "minimum": 0
-            },
-            "z": {
-              "type": "integer"
             }
           }
         },

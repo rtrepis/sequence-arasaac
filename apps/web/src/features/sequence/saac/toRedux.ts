@@ -5,6 +5,9 @@
 // porta i l'app no fa servir es guarda a `saacExtra` per tornar-lo a escriure.
 import type {
   DocumentSAAC,
+  FreeLayout,
+  FreeSheet,
+  SequencePlacement,
   SequenceStyle,
   SequenceViewSettings,
 } from "@/types/document";
@@ -21,6 +24,7 @@ import type {
   PictogramVariant,
   SaacDocumentV3,
   V3Pictogram,
+  V3Placement,
   V3Style,
   V3View,
 } from "./types";
@@ -56,6 +60,19 @@ export const PAGE_KEYS = [
   "orientation",
   "direction",
   "sequenceGap",
+  "layout",
+  "sheets",
+  "common",
+] as const;
+export const SHEET_KEYS = ["id", "placements"] as const;
+export const PLACEMENT_KEYS = [
+  "id",
+  "sequence",
+  "x",
+  "y",
+  "w",
+  "h",
+  "columns",
 ] as const;
 const STYLE_KEYS = ["pictogram", "card", "view"] as const;
 export const SEQUENCE_KEYS = ["id", "style", "pictograms"] as const;
@@ -172,6 +189,52 @@ const pictogramToRedux = (
   };
 };
 
+const placementFromV3 = (
+  placement: V3Placement,
+  sequenceKey: number,
+): SequencePlacement => {
+  const extra = unknownFields(placement, PLACEMENT_KEYS);
+  return {
+    id: placement.id,
+    sequenceKey,
+    x: placement.x,
+    y: placement.y,
+    w: placement.w,
+    h: placement.h,
+    columns: placement.columns,
+    ...(extra && { extra }),
+  };
+};
+
+/**
+ * La disposició lliure amb la forma de Redux: cada col·locació apunta a la
+ * clau de `content`, que és la posició de la seqüència al fitxer. Només en mode
+ * lliure i si el fitxer porta fulls; si no, encara s'ha de construir.
+ */
+const freeLayoutFromV3 = (document: SaacDocumentV3): FreeLayout | undefined => {
+  const { layout, sheets, common } = document.page;
+  if (layout !== "free" || !sheets) return undefined;
+
+  const keyOf = new Map(document.sequences.map(({ id }, key) => [id, key]));
+  const placementsOf = (list: readonly V3Placement[]): SequencePlacement[] =>
+    list.flatMap((placement) => {
+      const key = keyOf.get(placement.sequence);
+      return key === undefined ? [] : [placementFromV3(placement, key)];
+    });
+
+  return {
+    sheets: sheets.map((sheet): FreeSheet => {
+      const extra = unknownFields(sheet, SHEET_KEYS);
+      return {
+        id: sheet.id,
+        placements: placementsOf(sheet.placements),
+        ...(extra && { extra }),
+      };
+    }),
+    common: placementsOf(common ?? []),
+  };
+};
+
 /**
  * El document v3 amb la forma de Redux. `document` ja ha de venir complet
  * (el lector l'ha validat i n'ha omplert el que faltava).
@@ -194,6 +257,8 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
     const extra = unknownFields(sequence, SEQUENCE_KEYS);
     if (extra) sequenceExtras[key] = extra;
   });
+
+  const freeLayout = freeLayoutFromV3(document);
 
   const activeIndex = document.sequences.findIndex(
     ({ id }) => id === document.ui?.activeSequence,
@@ -227,7 +292,10 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
       pageSize: document.page.size,
       orientation: document.page.orientation,
       direction: document.page.direction,
+      // Sense `mode`, el flux: així un document d'abans queda igual que era
+      ...(document.page.layout === "free" && { mode: "free" as const }),
     },
+    ...(freeLayout && { freeLayout }),
     fitzgeraldColors: reduxStyle.fitzgeraldColors,
     sequenceIds,
     saacExtra: {

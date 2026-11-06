@@ -73,7 +73,9 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   | `orientation` | `"portrait"`, `"landscape"` | Orientació |
   | `direction` | `"row"`, `"column"` | Seqüències en files o en columnes |
   | `sequenceGap` | número | Espai entre seqüències. És un **factor**, com fins ara, **no** mil·límetres |
-  | `layout` | `"flow"`, `"free"` | Disposició. Avui només `"flow"`; `"free"` es reserva per al mode lliure |
+  | `layout` | `"flow"`, `"free"` | Disposició. `"flow"`: les seqüències es col·loquen soles, com sempre. `"free"`: mode lliure, amb `sheets` i `common` (§1.1) |
+  | `sheets` | llista de fulls | Només amb `"free"`: les pàgines, en ordre (§1.1) |
+  | `common` | llista de col·locacions | Només amb `"free"`: el que surt a totes les pàgines (§1.1) |
 
   - Una `size` que l'app no coneix cau a la pàgina de qui obre, com qualsevol valor fora de la
     llista. Per això afegir una mida **no** demana una versió nova de l'esquema: una versió de l'app
@@ -82,13 +84,14 @@ i una fixture (`apps/web/test/fixtures/saac/`).
     Carta als EUA, el Canadà, Mèxic i bona part de l'Amèrica Llatina, A4 a la resta. És una
     preferència, no part del document: un document desat en A4 s'obre en A4 a tot arreu.
   - **MAI** hi ha marges al fitxer: no n'hi ha a l'app.
-  - Els mil·límetres **només** s'usaran a `frame`, quan hi hagi mode lliure.
+  - Els mil·límetres **només** s'usen a les col·locacions del mode lliure (§1.1).
 - **`style`** del document és **sempre complet**: tots els camps plens, sense heretar res de fora del
   fitxer.
 - **`sequences[].style`** porta **només `view`** en aquesta versió. La lletra i les vores per
   seqüència queden fora de l'abast.
-- **`sequences[].frame`** (`{ x, y, w, h, z }`, en **mm sobre la pàgina**) només existeix si
-  `page.layout` és `"free"`. Avui només es reserva: cap versió de l'app l'escriu.
+- **`sequences[].frame`** ja no està reservat. Cap versió de l'app no l'ha escrit mai, i el mode
+  lliure fa servir les col·locacions de `page` (§1.1, ADR-005). Si un fitxer en porta, és un camp
+  desconegut més: es conserva i no es fa servir.
 - **`pictograms[].style`** porta **només** les diferències amb l'estil resolt de la seqüència
   (`pictogram` i `card`).
 - **Fitzgerald** (vegeu el fonament 03, «El color de Fitzgerald»):
@@ -119,6 +122,59 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 - **`id` estables**: les seqüències i els pictogrames tenen `id`. Un `id` que ve del fitxer es
   conserva en tornar a desar. Els que no en tenen, se'ls genera.
 - **Una sola línia**: el JSON es desa sense espais ni salts de línia, com fins ara.
+
+### 1.1 Disposició lliure (`page.layout: "free"`)
+
+```json
+"page": {
+  "size": "A4", "orientation": "portrait", "direction": "row", "sequenceGap": 1,
+  "layout": "free",
+  "sheets": [
+    { "id": "sh_1", "placements": [
+      { "id": "pl_1", "sequence": "seq_2", "x": 5, "y": 40, "w": 190, "h": 120, "columns": "auto" }
+    ] },
+    { "id": "sh_2", "placements": [
+      { "id": "pl_2", "sequence": "seq_3", "x": 5, "y": 40, "w": 190, "h": 120, "columns": 4 },
+      { "id": "pl_3", "sequence": "seq_2", "x": 5, "y": 170, "w": 90, "h": 60, "columns": "auto" }
+    ] }
+  ],
+  "common": [
+    { "id": "pl_9", "sequence": "seq_1", "x": 5, "y": 5, "w": 190, "h": 30, "columns": "auto" }
+  ]
+}
+```
+
+- **Un full** (`sheets[]`) és una pàgina del document en mode lliure: `id` estable i les seves
+  col·locacions. L'ordre de la llista és el de les pàgines. Les pàgines buides es desen.
+- **Una col·locació** és una seqüència posada en un lloc: `sequence` (l'`id` de la seqüència),
+  la caixa (`x`, `y`, `w`, `h`) i `columns` (`"auto"` o un enter ≥ 1).
+- **La mateixa seqüència pot tenir moltes col·locacions**: en pàgines diferents o a la mateixa.
+  El contingut i la vista de la seqüència són els mateixos a totes; la caixa i les columnes, de
+  cada col·locació.
+- **`common`**: les col·locacions que surten a **totes** les pàgines, al mateix lloc, pintades
+  per sota de les de cada full.
+- **Unitats**: mil·límetres des del cantó superior esquerre del **full**, que és el paper menys el
+  marge d'impressió (5 mm per costat). Les caixes no trepitgen els 12 mm de baix, reservats al peu
+  de llicència, tant si el peu es pinta com si no.
+- **Una seqüència sense cap col·locació** no surt a cap pàgina: no s'imprimeix, però és al
+  document.
+- **En llegir**:
+  - `sheets` i `common` només es llegeixen amb `layout: "free"`. En flux s'ignoren i no es tornen a
+    escriure.
+  - Una col·locació que apunta a una seqüència que no hi és, o que no té una caixa de veritat (`w`
+    o `h` ≤ 0, posició que no és un número), **es descarta**.
+  - Unes `columns` que no s'entenen passen a `"auto"`. Un `id` que falta o es repeteix se'n
+    genera un de nou.
+  - La caixa **no** s'encaixa al full en llegir: la pinta qui sap la mida del full.
+  - Si `layout` és `"free"` i no hi ha cap full que es pugui llegir, la disposició es torna a
+    construir en obrir-la, com en passar un document a «Lliure».
+  - Els camps desconeguts dels fulls i de les col·locacions es conserven.
+- **En desar** en mode flux, `sheets` i `common` **no** s'escriuen, encara que l'app els conservi
+  per si es torna a «Lliure».
+- **No cal pujar `schemaVersion`**: `sheets` i `common` són camps nous de `page`, i una versió
+  anterior de l'app els conserva com a desconeguts. Obre el document en flux (es veu diferent,
+  però no perd res), i si el torna a desar, la disposició lliure hi continua.
+- Fixture: `16-mode-lliure.saac`.
 
 ## 2. Estructura del fitxer d'estil (`.saacstyle`)
 

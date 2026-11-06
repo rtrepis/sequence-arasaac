@@ -30,7 +30,8 @@ al codi nou i als documents.
 | **Estil** | Com es veu: lletra, vores, colors, mides, alineació. |
 | **Estil del document** | L'estil que s'aplica a totes les seqüències del document. |
 | **Vista d'aquesta seqüència** | Els ajustos d'estil d'una sola seqüència (mida, espai, alineació). Són un retoc sobre l'estil del document. |
-| **Pàgina** | Mida, orientació, direcció, espai entre seqüències i disposició. |
+| **Pàgina** | Mida, orientació, direcció, espai entre seqüències i disposició. En mode lliure, també cadascun dels fulls del document («pàgina 1, 2…»). |
+| **Col·locació** | En mode lliure, una seqüència posada en un lloc d'una pàgina, amb la seva caixa. Una seqüència pot tenir moltes col·locacions; la que surt a totes les pàgines és **comuna**. |
 | **Fitxer d'estil** | Un estil desat per reutilitzar-lo en altres documents: el fitxer `.saacstyle`. |
 | **Estil per defecte** | L'estil que reben els documents nous. És una preferència de l'app. |
 | **Preferències de l'app** | El que és de la persona o del dispositiu: idioma, tema clar o fosc, estil per defecte, pàgina per defecte. |
@@ -61,6 +62,7 @@ al codi nou i als documents.
 | Estil del document i vista de cada seqüència | Del document | `.saac` |
 | Retocs d'un pictograma | Del document | `.saac` |
 | Pàgina (mida, orientació, direcció, espai entre seqüències) | Del document | `.saac` |
+| Disposició lliure (pàgines i col·locacions) | Del document | `.saac`, a `page` (fonament 06, §1.1) |
 | Estil per defecte | De l'usuari | Preferències; es pot exportar a `.saacstyle` |
 | Pàgina per defecte dels documents nous | De l'usuari | Preferències |
 | Autor del document | Del document | `.saac`, a `meta.author` |

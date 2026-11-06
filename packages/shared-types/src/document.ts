@@ -53,15 +53,61 @@ export interface SequenceStyle extends DefaultSettings {
 }
 
 /**
- * Disposició del document (direcció i format de pàgina). És contingut, no
- * estil, i viatjarà al `.saac` amb B26. Avui **ningú no l'escriu**: l'esquema 2
- * l'admet ja com a opcional perquè B26 no hagi d'obrir una versió 3, i qui la
- * rep la conserva tal com arriba.
+ * Pàgina del document: format, orientació, direcció i disposició. És contingut,
+ * no estil, i viatja al `.saac` a `page` (B26). Les col·locacions del mode
+ * lliure no hi són: van a `FreeLayout`.
  */
 export interface DocumentLayout {
   direction?: "row" | "column";
   pageSize?: PageSize;
   orientation?: "landscape" | "portrait";
+  /**
+   * Disposició de les seqüències sobre la pàgina. Sense valor, `"flow"`: el
+   * mode d'abans, que és el per defecte. Amb `"free"`, les seqüències van on
+   * diu `FreeLayout` (vegeu `docs/decisions/ADR-005-disposicio-lliure.md`).
+   */
+  mode?: PageLayoutMode;
+}
+
+/** `"flow"`: les seqüències es col·loquen soles. `"free"`: on diu l'usuari. */
+export type PageLayoutMode = "flow" | "free";
+
+/** Columnes de la graella d'una caixa: les que hi caben millor, o un nombre fix. */
+export type PlacementColumns = "auto" | number;
+
+/**
+ * Una seqüència posada en un lloc d'un full, amb la seva caixa. Una mateixa
+ * seqüència pot tenir moltes col·locacions, en fulls diferents o al mateix.
+ * Les mides són en mil·límetres des del cantó superior esquerre del full.
+ */
+export interface SequencePlacement {
+  id: string;
+  /** La seqüència: la clau de `content` a l'app; al fitxer, el seu `id` */
+  sequenceKey: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  columns: PlacementColumns;
+  /** Camps del fitxer que l'app no coneix: es tornen a escriure en desar */
+  extra?: Record<string, unknown>;
+}
+
+/** Una pàgina del document en mode lliure, amb les seves col·locacions. */
+export interface FreeSheet {
+  id: string;
+  placements: SequencePlacement[];
+  /** Camps del fitxer que l'app no coneix: es tornen a escriure en desar */
+  extra?: Record<string, unknown>;
+}
+
+/**
+ * La disposició lliure: els fulls en ordre, i les col·locacions comunes, que
+ * surten a tots els fulls al mateix lloc.
+ */
+export interface FreeLayout {
+  sheets: FreeSheet[];
+  common: SequencePlacement[];
 }
 
 export interface DocumentSAAC {

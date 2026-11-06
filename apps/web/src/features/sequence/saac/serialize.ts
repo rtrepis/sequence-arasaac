@@ -4,7 +4,12 @@
 // tradueix al contracte del fitxer, amb `diffStyle` a cada nivell perquè els
 // retocs siguin mínims. Vegeu `docs/fonaments/06-compatibilitat-i-dades.md`.
 import { version as appVersion } from "../../../../package.json";
-import type { DocumentSAAC, SequenceStyle } from "@/types/document";
+import type {
+  DocumentSAAC,
+  FreeLayout,
+  SequencePlacement,
+  SequenceStyle,
+} from "@/types/document";
 import type { PictSequence } from "@/types/sequence";
 import type { PageOrientation, PageSize, SequenceDirection } from "@/types/ui";
 import { resolveDocumentStyle } from "@features/sequence/style/styleModel";
@@ -27,7 +32,9 @@ import {
   V3Page,
   V3Pictogram,
   V3PictogramOverride,
+  V3Placement,
   V3Sequence,
+  V3Sheet,
   V3Style,
   V3View,
   PICTOGRAM_VARIANTS,
@@ -54,7 +61,7 @@ export interface SerializeContext {
   now: string;
 }
 
-export const newSaacId = (prefix: "seq" | "p"): string =>
+export const newSaacId = (prefix: "seq" | "p" | "sh" | "pl"): string =>
   `${prefix}_${Math.random().toString(36).substring(2, 10)}`;
 
 // --- Estil ---
@@ -266,6 +273,51 @@ const pictogramToV3 = (
   };
 };
 
+// --- Disposició lliure ---
+
+/** Els camps de `page` que són de la disposició i no es copien com a desconeguts. */
+const FREE_LAYOUT_PAGE_KEYS: readonly string[] = ["layout", "sheets", "common"];
+
+const placementToV3 = (
+  placement: SequencePlacement,
+  sequence: string,
+): V3Placement => ({
+  ...placement.extra,
+  id: placement.id,
+  sequence,
+  x: placement.x,
+  y: placement.y,
+  w: placement.w,
+  h: placement.h,
+  columns: placement.columns,
+});
+
+/**
+ * Els fulls i les comunes amb la forma del fitxer. Una col·locació d'una
+ * seqüència que ja no existeix no s'escriu: apuntaria enlloc.
+ */
+const freeLayoutToV3 = (
+  freeLayout: FreeLayout,
+  sequenceIdOfKey: ReadonlyMap<number, string>,
+): Required<Pick<V3Page, "sheets" | "common">> => {
+  const placementsToV3 = (list: readonly SequencePlacement[]): V3Placement[] =>
+    list.flatMap((placement) => {
+      const sequence = sequenceIdOfKey.get(placement.sequenceKey);
+      return sequence === undefined ? [] : [placementToV3(placement, sequence)];
+    });
+
+  return {
+    sheets: freeLayout.sheets.map(
+      (sheet): V3Sheet => ({
+        ...sheet.extra,
+        id: sheet.id,
+        placements: placementsToV3(sheet.placements),
+      }),
+    ),
+    common: placementsToV3(freeLayout.common),
+  };
+};
+
 // --- Document ---
 
 const omitUndefined = <T extends Record<string, unknown>>(object: T): T =>
@@ -339,14 +391,28 @@ export const documentToV3 = (
   });
 
   const activeIndex = keys.indexOf(document.activeSAAC);
-  const { layout: pageLayout, ...pageExtra } = extra.page ?? {};
+  // Un esborrany d'abans d'aquesta versió pot portar la disposició entre els
+  // camps desconeguts: ara la diu `layout.mode`, i és l'única que mana
+  const pageExtra = Object.fromEntries(
+    Object.entries(extra.page ?? {}).filter(
+      ([key]) => !FREE_LAYOUT_PAGE_KEYS.includes(key),
+    ),
+  );
+  const free = document.layout?.mode === "free";
+  const sequenceIdOfKey = new Map(
+    keys.map((key, index) => [key, sequences[index].id]),
+  );
   const page: V3Page = {
     ...pageExtra,
     size: document.layout?.pageSize ?? context.userPage.size,
     orientation: document.layout?.orientation ?? context.userPage.orientation,
     direction: document.layout?.direction ?? context.userPage.direction,
     sequenceGap: reduxStyle.view.sequenceSpaceBetween,
-    layout: pageLayout === "free" ? "free" : "flow",
+    layout: free ? "free" : "flow",
+    // En flux, la disposició lliure es conserva a l'app però no s'escriu
+    ...(free &&
+      document.freeLayout &&
+      freeLayoutToV3(document.freeLayout, sequenceIdOfKey)),
   };
 
   return {

@@ -25,6 +25,11 @@ export type {
   SequenceStyleView,
   SequenceStyle,
   DocumentLayout,
+  PageLayoutMode,
+  PlacementColumns,
+  SequencePlacement,
+  FreeSheet,
+  FreeLayout,
 } from "./document";
 export type {
   DefaultSettings,
