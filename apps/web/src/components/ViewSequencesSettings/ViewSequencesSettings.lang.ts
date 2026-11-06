@@ -126,6 +126,30 @@ const messages = defineMessages({
     defaultMessage: "Full screen",
     description: "Tooltip del botó de pantalla completa",
   },
+  tooltipHideSettings: {
+    id: "pages.viewSequence.tooltip.hideSettings",
+    defaultMessage: "Hide view settings",
+    description:
+      "Tooltip i nom accessible del botó que amaga la columna d'ajustos de la pàgina de vista, perquè el full ocupi tota l'amplada",
+  },
+  tooltipShowSettings: {
+    id: "pages.viewSequence.tooltip.showSettings",
+    defaultMessage: "Show view settings",
+    description:
+      "Tooltip i nom accessible del botó que torna a mostrar la columna d'ajustos de la pàgina de vista",
+  },
+  tooltipFitWidth: {
+    id: "pages.viewSequence.tooltip.fitWidth",
+    defaultMessage: "Fit to width",
+    description:
+      "Tooltip i nom accessible del botó que amplia el full a l'amplada de la pantalla; la resta es veu baixant",
+  },
+  tooltipFitPage: {
+    id: "pages.viewSequence.tooltip.fitPage",
+    defaultMessage: "Show the whole page",
+    description:
+      "Tooltip i nom accessible del botó que torna a encabir el full sencer a la pantalla, sense haver de baixar",
+  },
   tooltipOrientationLandscape: {
     id: "pages.viewSequence.tooltip.orientationLandscape",
     defaultMessage: "Landscape page",

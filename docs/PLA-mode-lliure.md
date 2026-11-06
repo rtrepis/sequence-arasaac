@@ -1,7 +1,7 @@
 # Pla: mode lliure de pàgina
 
-> **Estat**: pla confirmat (2026-11-06). **Fase 1 feta**: model, fitxer i funcions de disposició
-> (ADR-005). Les fases 2–5 estan pendents.
+> **Estat**: pla confirmat (2026-11-06). **Fases 1 i 2 fetes**: el model (ADR-005) i l'espai del
+> full a la vista. Les fases 3–5 estan pendents.
 > **Encàrrec**: `docs/spec-mode-lliure.md`, a la branca `origin/feature/mode-lliure` (no fusionada).
 > **Fonaments que mana**: `docs/fonaments/03-model-contingut-estil.md`,
 > `docs/fonaments/06-compatibilitat-i-dades.md`, `docs/decisions/ADR-003-model-document-saac-v3.md`.
@@ -169,43 +169,47 @@ freeLayout?: FreeLayout;
 
 Tot passa a la pàgina de **Visualització**.
 
-### L'espai: la pàgina, tan gran com es pugui
+### L'espai: la pàgina, tan gran com es pugui ✅ (fase 2)
 
-Avui la columna d'ajustos de la vista reserva **380 px fixos** a partir de `md`
-(`SCREEN_MARGINS.medium`), i el full s'escala a la resta. En un portàtil de 1366 px, això vol dir
-gairebé un terç de la pantalla per als ajustos, també quan no se'n toca cap. Per treballar a mà sobre
-les caixes, aquest espai és el que més falta.
+**Mesurat abans de fer-ho** (Playwright, document en paper Carta i A4, columna visible):
 
-La proposta té tres peces:
+| Pantalla | Full apaïsat | Full vertical | Què el limita |
+|---|---|---|---|
+| 1366 × 768 | 887 × 618, escala 0,82 | 431 × 618, escala 0,57 | L'alçada |
+| 1440 × 900, 1280 × 800 | escala 0,84–0,96 | escala 0,64–0,74 | L'alçada |
+| 1920 × 1080 | escala 1 (el topall) | escala 0,86 | El topall i l'alçada |
+| 1024 × 768 (tauleta apaïsada) | escala 0,56 | escala 0,61 | **L'amplada** (la columna) |
+| Mòbil | — | — | La columna ja va a sota |
 
-1. **Els ajustos passen a un panell que entra pel costat.** Un botó «Ajustos» a la barra de la vista
-   l'obre per la dreta, **per damunt** del full, sense empènyer-lo. Quan és tancat, el full fa servir
-   tota l'amplada. El panell **no és modal en escriptori**: el full del costat continua viu, de manera
-   que es pot canviar un ajust i veure'n l'efecte, o seleccionar una altra caixa sense tancar-lo. Per
-   sota de `sm` sí que ocupa tota la pantalla (no hi ha costat on deixar el full). Es tanca amb la creu
-   i amb Esc, i el focus torna al botó.
-2. **El retoc no necessita el panell.** Amb una caixa seleccionada, una **barra petita enganxada a la
-   caixa** porta el que es fa sovint: *Columnes*, *A totes les pàgines*, *Copia a la pàgina…*,
-   *Treu d'aquesta pàgina*. Les xifres en mm («Posició i mida») viuen al panell, que és l'alternativa
-   sense arrossegar (WCAG 2.5.7).
-3. **El full s'encabeix a l'espai que queda**, amb dos modes de zoom a la barra: *Pàgina sencera* (per
-   defecte) i *Amplada*, que l'amplia i deixa desplaçar-se en vertical: útil per a les nanses en
-   tauleta.
+La suposició del pla era que la columna d'ajustos (380 px) era el que feia petit el full. No és
+així: en gairebé tots els escriptoris el limita **l'alçada**, i un panell lateral no l'hauria fet
+créixer. Per això la fase 2 ha quedat així:
 
-- **També en mode automàtic.** El panell substitueix la columna als dos modes: tenir-la fixa en un i
-  plegable en l'altre faria que l'app canviés de forma en canviar de disposició. Els ajustos de dins
-  no canvien (són els mateixos `SettingRow`); només canvia el contenidor.
-- **És una capa flotant nova.** L'estàndard de capes flotants admet dos diàlegs canònics i diu que un
-  tercer tipus seria «un tercer component canònic». Es proposa **`AppSidePanel`** a `components/`,
-  genèric, i actualitzar `docs/estandards/capes-flotants.md` i `docs/estandards/configuracions.md`
-  (que parla de «la columna de la pàgina de vista»). Cal comprovar que no surt al paper:
-  `usePrintSheet` ja imprimeix només la còpia del full, i un portal de MUI en queda fora.
+1. **«Ajusta a l'amplada» / «Mostra el full sencer»**: el full s'encabeix a l'amplada i la resta es
+   veu baixant. És el que compta de debò: un A4 vertical a 1366 px passa de 431 px a 756 (mida
+   real). L'escala continua sense passar mai d'1.
+2. **«Amaga els ajustos de la vista» / «Mostra…»**: la columna s'amaga i el full va al mig. Compta
+   en pantalles estretes: a 1024 px apaïsat, l'escala passa de 0,56 a 0,82.
+3. **La columna empeny el full, no hi sura per sobre**: mentre es toca un ajust se n'ha de veure
+   l'efecte sencer, i un panell flotant en tapava un terç. Per això **no** és una capa flotant nova,
+   no cal cap `AppSidePanel` i l'estàndard de capes flotants no canvia.
+4. **Al mòbil no canvia res**: la columna ja és sota el full, i el full ja fa tota l'amplada.
+
+Tots dos botons van a la barra de dalt, a partir de 900 px, i són estat de la pàgina: no es desen.
+La regla és a `docs/estandards/configuracions.md`.
+
+- **El retoc no necessita la columna.** Amb una caixa seleccionada, una **barra petita enganxada a
+  la caixa** porta el que es fa sovint: *Columnes*, *A totes les pàgines*, *Copia a la pàgina…*,
+  *Treu d'aquesta pàgina*. Les xifres en mm («Posició i mida») viuen a la columna, que és
+  l'alternativa sense arrossegar (WCAG 2.5.7).
 - **La navegació de pàgines** ocupa una línia a la barra: «‹ Pàgina 1 de 3 ›» i «+ Pàgina». Les
-  miniatures de totes les pàgines van al panell, a la secció «Pàgines», no al costat del full.
+  miniatures de totes les pàgines van a la columna, a la secció «Pàgines», no al costat del full.
+- **Queda per guanyar**, si cal: la fila de botons de sobre del full ocupa uns 48 px d'alçada, que
+  podrien anar a la barra de l'app.
 
 ### Activar-lo
 
-- Fila nova a la secció de pàgina del panell d'ajustos: **«Disposició: Automàtica / Lliure»**
+- Fila nova a la secció de pàgina de la columna d'ajustos: **«Disposició: Automàtica / Lliure»**
   (`SettingRow` amb un control segmentat).
 - En passar a Lliure per primer cop, totes les seqüències es col·loquen soles amb una disposició
   **que s'assembla al que hi havia**: apilades en files (o en columnes, segons `direction`) a la
@@ -226,10 +230,10 @@ Cada pàgina té les seves seqüències, i l'usuari tria quines.
   nou de caixes (1 → sencera, 2 → dues, 3 → tres, 4 → 2 × 2…), en l'ordre en què hi són. Les comunes
   no es mouen: la plantilla reparteix l'espai que deixen lliure. Si la pàgina tenia retocs a mà, se'n
   perden: **sempre amb Desfés**. Després es pot triar una altra plantilla per a aquella pàgina.
-- **«Treu d'aquesta pàgina»** (barra de la caixa, panell i Supr) treu **aquesta col·locació**, i prou.
+- **«Treu d'aquesta pàgina»** (barra de la caixa, columna i Supr) treu **aquesta col·locació**, i prou.
   Si era l'última, la seqüència torna al calaix **«Sense col·locar»**. No s'esborra res del document;
   esborrar una seqüència continua sent cosa de l'edició.
-- **El calaix «Sense col·locar»** és una secció del panell, amb un comptador a la barra quan no és
+- **El calaix «Sense col·locar»** és una secció de la columna d'ajustos, amb un comptador a la barra quan no és
   buit.
 - **Abans d'imprimir o fer el PDF**, un avís si hi ha seqüències sense col·locar o pàgines buides
   («2 seqüències no són a cap pàgina i no sortiran»), amb *Imprimeix igualment* i *Cancel·la*.
@@ -238,7 +242,7 @@ Cada pàgina té les seves seqüències, i l'usuari tria quines.
 
 Dues maneres, segons si la part repetida va sempre al mateix lloc o no:
 
-- **«A totes les pàgines»** (interruptor a la barra de la caixa i al panell): la col·locació passa a
+- **«A totes les pàgines»** (interruptor a la barra de la caixa i a la columna): la col·locació passa a
   ser **comuna**. Surt a totes les pàgines, també a les que es creïn després, i **es mou i es
   redimensiona a totes alhora**. És el cas d'una capçalera, un horari del dia o un «Avui és…». La
   caixa porta una marca discreta (forma i text, «A totes les pàgines») perquè quedi clar que
@@ -253,7 +257,7 @@ Dues maneres, segons si la part repetida va sempre al mateix lloc o no:
 ### Plantilles
 
 - Les plantilles són **per pàgina**: cada pàgina pot tenir la seva.
-- Secció **«Plantilla d'aquesta pàgina»** al panell, amb miniatures (botons amb nom accessible):
+- Secció **«Plantilla d'aquesta pàgina»** a la columna, amb miniatures (botons amb nom accessible):
   *Sencera*, *Dues en files*, *Dues en columnes*, *Tres en files*, *Quatre (2 × 2)*, *Tira a dalt i
   graella a sota*. Només s'ofereixen les que tenen almenys tants espais com caixes té la pàgina.
 - Una plantilla és una llista d'espais en **fraccions** de l'àrea útil (0–1) amb un espai fix entre
@@ -269,7 +273,7 @@ Dues maneres, segons si la part repetida va sempre al mateix lloc o no:
   `palette.ts`; damunt del full, fixos en tots dos temes).
 - **Moure**: arrossegar la caixa. **Redimensionar**: quatre nanses de cantonada, ≥ 24 × 24 px
   (44 en tàctil). Pointer Events, amb `touch-action: none` només damunt de les caixes.
-- **Sense arrossegar** (WCAG 2.5.7): secció **«Posició i mida»** al panell lateral per a la caixa
+- **Sense arrossegar** (WCAG 2.5.7): secció **«Posició i mida»** a la columna d'ajustos per a la caixa
   seleccionada: X, Y, amplada, alçada (mm) i columnes (*Automàtic* o un nombre).
 - **Teclat**: les caixes són al tabulador en ordre de lectura (dalt→baix, esquerra→dreta; les
   comunes primer). Amb el focus a una caixa: fletxes = 1 mm, Maj+fletxes = 10 mm, Alt+fletxes =
@@ -285,7 +289,7 @@ Dues maneres, segons si la part repetida va sempre al mateix lloc o no:
 
 - La vista ensenya **una pàgina cada cop**, tan gran com es pot, amb «‹ Pàgina 1 de 3 ›» a la barra.
 - **«+ Pàgina»** n'afegeix una darrere de l'actual, amb les comunes ja posades, i hi va.
-- **Al panell, secció «Pàgines»**: les miniatures, i per a cada pàgina *Duplica* (una pàgina nova amb
+- **A la columna, secció «Pàgines»**: les miniatures, i per a cada pàgina *Duplica* (una pàgina nova amb
   les mateixes col·locacions, independents), *Mou amunt/avall* i *Esborra*. Esborrar una pàgina en
   treu les col·locacions (amb Desfés); les seqüències que es quedin sense cap lloc van al calaix.
 - Les pàgines buides es desen tal com són: el document s'obre com es va desar.
@@ -295,7 +299,7 @@ Dues maneres, segons si la part repetida va sempre al mateix lloc o no:
 
 ### La mida, dins de la caixa
 
-- Mana la caixa: el panell **amaga** el control de mida de la vista de la seqüència i hi posa una
+- Mana la caixa: la columna **amaga** el control de mida de la vista de la seqüència i hi posa una
   línia: «En disposició lliure, la mida la decideix la caixa.» Una seqüència repetida pot sortir a
   mides diferents en caixes diferents.
 - L'espai entre pictogrames i l'alineació (horitzontal i vertical) **sí** que s'apliquen: són de la
@@ -342,12 +346,10 @@ features/free-layout/                 # el domini: la disposició lliure del doc
     ├── TemplatePicker/               #   les miniatures de plantilles
     └── PlacementPositionPanel/       #   «Posició i mida» (SettingRow)
 
-components/AppSidePanel/              # capa canònica nova: el panell que entra pel costat (genèric)
 ```
 
-- **`AppSidePanel`** és genèric (no sap res del document) i el fa servir la vista als dos modes. El
-  contingut del panell continua sent el d'ara (`ViewSquenceSettings`) més les seccions del mode
-  lliure.
+- La columna d'ajustos de la vista (`ViewSquenceSettings`) és la mateixa als dos modes; el mode
+  lliure hi afegeix les seves seccions.
 - **`computeGrid`**: per a cada nombre de columnes de 1 a N (o el fix), files = ⌈N / columnes⌉;
   la mida que hi cap és `min(ampladaCaixa / ampladaGraella₁, alçadaCaixa / alçadaGraella₁)`,
   on `ampladaGraella₁` i `alçadaGraella₁` són els de la graella a mida 1 amb l'espai inclòs. Es tria
@@ -371,8 +373,8 @@ Cada fase deixa l'app funcionant i passa `npm run typecheck` net.
 
 1. ✅ **Model.** ADR-005, tipus a `shared-types`, `toRedux`/`serialize`, esquema, fonament 06,
    fixture 16, i les funcions pures de `model/` amb tests. Sense interfície.
-2. **L'espai.** `AppSidePanel` i la vista amb el full a tota l'amplada, també en mode automàtic,
-   amb els estàndards actualitzats. És independent del mode lliure i es pot provar sol.
+2. ✅ **L'espai.** «Ajusta a l'amplada» i «Amaga els ajustos de la vista», també en mode automàtic,
+   amb l'estàndard de configuracions actualitzat. És independent del mode lliure.
 3. **Pàgines i seqüències.** El selector «Disposició», `FreeLayoutSheet` (només lectura), les
    pàgines, «+ Afegeix una seqüència», el calaix, les comunes, les plantilles per pàgina, la
    impressió i el PDF de diverses pàgines. Aquí ja es pot provar de debò si les plantilles resolen la
@@ -401,11 +403,11 @@ el retoc a mà o si n'hi ha prou amb les plantilles i les comunes.
 
 | # | Pregunta | Recomanació |
 |---|---|---|
-| D1 | Com es veuen les pàgines a la vista | Una cada cop, tan gran com es pot, amb navegació a la barra i miniatures al panell (§6) |
+| D1 | Com es veuen les pàgines a la vista | Una cada cop, tan gran com es pot, amb navegació a la barra i miniatures a la columna (§6) |
 | D2 | Pàgines buides | Es desen tal com són; abans d'imprimir, un avís |
 | D3 | `FULLSCREEN` amb mode lliure | No s'hi ofereix: en triar Lliure, el selector de mida amaga «Pantalla completa». El botó de pantalla completa de la vista ensenya les pàgines una a una |
 | D4 | Tornar a «Automàtica» | Es conserva la disposició a Redux, no s'escriu en desar, i el canvi té Desfés |
 | D5 | Què passa en activar-lo | Totes les seqüències es col·loquen soles amb la disposició que s'assembla al flux, perquè no desaparegui res del full |
 | D6 | Una seqüència pot sortir a més d'una pàgina? | **Decidit: sí.** Comuna (a totes, mateix lloc, es mou a totes alhora) o còpia independent a una pàgina concreta (§6, «Repetir una seqüència») |
-| D7 | El panell lateral també en mode automàtic | **Sí** (§6, «L'espai»): que la vista no canviï de forma segons la disposició. Es pot fer abans i sol (fase 2) |
+| D7 | El panell lateral també en mode automàtic | **Fet, i diferent del previst** (§6, «L'espai»): no és un panell flotant, sinó la columna de sempre, que es pot amagar, i un ajust a l'amplada. Val als dos modes |
 | D8 | Una comuna que no ha de sortir en una pàgina concreta (la portada, per exemple) | **Fora d'aquesta branca.** Es pot fer després amb una llista de pàgines on s'amaga, sense canviar la resta del model |

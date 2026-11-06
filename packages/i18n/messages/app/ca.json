@@ -1059,6 +1059,22 @@
   "pages.viewSequence.tooltip.fullscreen": {
     "message": "Pantalla completa"
   },
+  "pages.viewSequence.tooltip.hideSettings": {
+    "message": "Amaga els ajustos de la vista",
+    "description": "Tooltip i nom accessible del botó que amaga la columna d'ajustos de la pàgina de vista, perquè el full ocupi tota l'amplada"
+  },
+  "pages.viewSequence.tooltip.showSettings": {
+    "message": "Mostra els ajustos de la vista",
+    "description": "Tooltip i nom accessible del botó que torna a mostrar la columna d'ajustos de la pàgina de vista"
+  },
+  "pages.viewSequence.tooltip.fitWidth": {
+    "message": "Ajusta a l'amplada",
+    "description": "Tooltip i nom accessible del botó que amplia el full a l'amplada de la pantalla; la resta es veu baixant"
+  },
+  "pages.viewSequence.tooltip.fitPage": {
+    "message": "Mostra el full sencer",
+    "description": "Tooltip i nom accessible del botó que torna a encabir el full sencer a la pantalla, sense haver de baixar"
+  },
   "pages.viewSequence.tooltip.orientation": {
     "message": "Orientació de pàgina"
   },

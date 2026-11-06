@@ -8,12 +8,29 @@ import {
 } from "../utils/pageFormat";
 
 /**
+ * Com s'encabeix el full a la pantalla:
+ * - `"page"`: sencer, sense desplaçar-se. És el per defecte.
+ * - `"width"`: a l'amplada que hi ha, i la resta amb desplaçament vertical. Un
+ *   full vertical en un escriptori el limita l'alçada, i així es pot veure a
+ *   mida real.
+ */
+export type PreviewFit = "page" | "width";
+
+/**
  * Paràmetres per al càlcul d'escala
  */
 export interface ScaleCalculationParams {
   pageFormat: PageFormat;
   screenWidth: number;
   screenHeight: number;
+  /** Com s'encabeix el full. Per defecte, sencer */
+  fit?: PreviewFit;
+  /**
+   * Si la columna d'ajustos ocupa el costat del full. Només compta a partir de
+   * `isMediumScreen`: per sota, la columna va sota el full i no li pren
+   * amplada. Per defecte, sí.
+   */
+  settingsBeside?: boolean;
 }
 
 /**
@@ -35,13 +52,21 @@ export interface ScaleResult {
 export function calculateDisplayDimensions(
   params: ScaleCalculationParams,
 ): ScaleResult {
-  const { pageFormat, screenWidth, screenHeight } = params;
-  const { dimensions, orientation } = pageFormat;
+  const {
+    pageFormat,
+    screenWidth,
+    screenHeight,
+    fit = "page",
+    settingsBeside = true,
+  } = params;
+  const { dimensions } = pageFormat;
 
-  // Determinar el marge segons la mida de pantalla
-  const margin = isMediumScreen(screenWidth)
-    ? SCREEN_MARGINS.medium
-    : SCREEN_MARGINS.small;
+  // El marge és el de la columna d'ajustos quan és al costat del full; sense
+  // columna, o amb la columna a sota, el del mòbil
+  const margin =
+    isMediumScreen(screenWidth) && settingsBeside
+      ? SCREEN_MARGINS.medium
+      : SCREEN_MARGINS.small;
 
   // Calcular amplada disponible
   // IMPORTANT: Les dimensions ja venen girades des de createPageFormat
@@ -53,8 +78,9 @@ export function calculateDisplayDimensions(
   availableWidth = screenWidth - margin;
   availableHeight = (dimensions.height * availableWidth) / dimensions.width;
 
-  // Ajustar si l'alçada supera l'espai disponible
-  if (availableHeight + FOOTER_SPACE > screenHeight) {
+  // Ajustar si l'alçada supera l'espai disponible. A l'amplada no cal: la
+  // resta del full es veu baixant
+  if (fit === "page" && availableHeight + FOOTER_SPACE > screenHeight) {
     availableHeight = screenHeight - FOOTER_SPACE;
     availableWidth = (dimensions.width * availableHeight) / dimensions.height;
   }
@@ -90,20 +116,25 @@ export function getPrintDimensions(pageFormat: PageFormat): PageDimensions {
  * @param pageFormat - Format de pàgina actual
  * @param screenWidth - Amplada de la pantalla
  * @param screenHeight - Alçada de la pantalla
+ * @param options - Com s'encabeix el full i si la columna d'ajustos hi és al costat
  * @returns Resultat dels càlculs d'escala
  */
 export function useScaleCalculator(
   pageFormat: PageFormat,
   screenWidth: number,
   screenHeight: number,
+  options: Pick<ScaleCalculationParams, "fit" | "settingsBeside"> = {},
 ): ScaleResult {
+  const { fit, settingsBeside } = options;
   return useMemo(() => {
     return calculateDisplayDimensions({
       pageFormat,
       screenWidth,
       screenHeight,
+      fit,
+      settingsBeside,
     });
-  }, [pageFormat, screenWidth, screenHeight]);
+  }, [pageFormat, screenWidth, screenHeight, fit, settingsBeside]);
 }
 
 /**

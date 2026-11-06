@@ -4,6 +4,12 @@ import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { BsFilePdf } from "react-icons/bs";
 import { MdOutlinePushPin, MdScreenRotation } from "react-icons/md";
+import {
+  TbArrowAutofitHeight,
+  TbArrowAutofitWidth,
+  TbLayoutSidebarRightCollapse,
+  TbLayoutSidebarRightExpand,
+} from "react-icons/tb";
 import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./ViewSequencesSettings.lang";
 import StyledButton from "@/style/StyledButton";
@@ -13,9 +19,11 @@ import React from "react";
 import { trackEvent } from "@shared/hooks/usePageTracking";
 import { usePageFormat } from "@features/print/hooks/usePageFormat";
 import {
+  PreviewFit,
   useScaleCalculator,
   usePrintDimensions,
 } from "@features/print/hooks/useScaleCalculator";
+import { isMediumScreen } from "@features/print/utils/pageFormat";
 import { useFullscreen } from "@features/print/hooks/useFullScreen";
 import { useViewManager } from "@features/print/hooks/useViewManager";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
@@ -60,6 +68,9 @@ import {
   SettingsActions,
   SETTINGS_ROW_GAP,
 } from "@/components/SettingsLayout";
+
+/** La columna d'ajustos: el botó que l'amaga hi apunta amb `aria-controls`. */
+const SETTINGS_COLUMN_ID = "view-settings-column";
 
 interface ViewSequencesSettingsChildrenProps {
   viewSettings: ViewSettings;
@@ -169,12 +180,26 @@ const ViewSequencesSettings = ({
     [dispatch],
   );
 
+  // L'espai del full (`docs/PLA-mode-lliure.md`, §6, «L'espai»). A partir
+  // d'escriptori, la columna d'ajustos es pot amagar perquè el full faci tota
+  // l'amplada, i el full es pot ajustar a l'amplada en comptes d'encabir-lo
+  // sencer: un full vertical, sencer, el limita l'alçada de la pantalla. Per
+  // sota, la columna va sota el full i el full ja fa tota l'amplada: cap dels
+  // dos botons no hi és. Són estat de la pàgina, no preferències: no es desen.
+  const isWideScreen = isMediumScreen(screenWidth);
+  const [settingsOpen, setSettingsOpen] = useState(true);
+  const [fit, setFit] = useState<PreviewFit>("page");
+  const settingsVisible = !isWideScreen || settingsOpen;
+
   // Càlculs d'escala
   const {
     displayWidth,
     displayHeight,
     scale: calculatedScale,
-  } = useScaleCalculator(pageFormat, screenWidth, screenHeight);
+  } = useScaleCalculator(pageFormat, screenWidth, screenHeight, {
+    fit: isWideScreen ? fit : "page",
+    settingsBeside: isWideScreen && settingsOpen,
+  });
 
   // Dimensions d'impressió
   const printDimensions = usePrintDimensions(pageFormat);
@@ -513,6 +538,64 @@ const ViewSequencesSettings = ({
                   </Tooltip>
                 )
               )}
+              {isWideScreen && !isFullscreen && (
+                <Tooltip
+                  title={intl.formatMessage(
+                    fit === "page"
+                      ? messages.tooltipFitWidth
+                      : messages.tooltipFitPage,
+                  )}
+                >
+                  <StyledIconButton
+                    aria-label={intl.formatMessage(
+                      fit === "page"
+                        ? messages.tooltipFitWidth
+                        : messages.tooltipFitPage,
+                    )}
+                    color="inherit"
+                    sx={{ fontSize: "2rem" }}
+                    onClick={() =>
+                      setFit((current) =>
+                        current === "page" ? "width" : "page",
+                      )
+                    }
+                  >
+                    {fit === "page" ? (
+                      <TbArrowAutofitWidth />
+                    ) : (
+                      <TbArrowAutofitHeight />
+                    )}
+                  </StyledIconButton>
+                </Tooltip>
+              )}
+              {isWideScreen && (
+                <Tooltip
+                  title={intl.formatMessage(
+                    settingsOpen
+                      ? messages.tooltipHideSettings
+                      : messages.tooltipShowSettings,
+                  )}
+                >
+                  <StyledIconButton
+                    aria-label={intl.formatMessage(
+                      settingsOpen
+                        ? messages.tooltipHideSettings
+                        : messages.tooltipShowSettings,
+                    )}
+                    aria-expanded={settingsOpen}
+                    aria-controls={SETTINGS_COLUMN_ID}
+                    color="inherit"
+                    sx={{ fontSize: "2rem" }}
+                    onClick={() => setSettingsOpen((open) => !open)}
+                  >
+                    {settingsOpen ? (
+                      <TbLayoutSidebarRightCollapse />
+                    ) : (
+                      <TbLayoutSidebarRightExpand />
+                    )}
+                  </StyledIconButton>
+                </Tooltip>
+              )}
             </Stack>
           </Stack>
         </NotPrint>
@@ -520,6 +603,8 @@ const ViewSequencesSettings = ({
         <Stack
           direction={{ xs: "column", md: "row" }}
           flexWrap={{ xs: "wrap", md: "nowrap" }}
+          // Sense la columna al costat, el full va al mig de l'espai que queda
+          justifyContent={{ md: settingsVisible ? "flex-start" : "center" }}
         >
           {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
           <Box
@@ -598,11 +683,14 @@ const ViewSequencesSettings = ({
             </Box>
           </Box>
 
-          {/* Grup divider + settings: empès sempre a la vora dreta en desktop */}
+          {/* Grup divider + settings: empès sempre a la vora dreta en desktop.
+              Amagat, continua muntat: així el botó hi pot apuntar i, en tornar,
+              cada acordió és com s'havia deixat */}
           <Box
+            id={SETTINGS_COLUMN_ID}
             sx={{
               marginLeft: { md: "auto" },
-              display: { md: "flex" },
+              display: settingsVisible ? { md: "flex" } : "none",
               gap: { md: 3 },
               alignItems: "stretch",
             }}
