@@ -16,6 +16,8 @@ l'encàrrec no coincideixen, ho diu i proposa per on anar.
 | Quantes pàgines | **Diverses pàgines**: cada caixa diu a quina pàgina va |
 | Qui mana la mida del pictograma | **La caixa**: la graella de dins s'hi ajusta (columnes i mida) |
 | On viu | **Visualització** (`/view-sequence`), al costat de la mida i l'orientació del paper |
+| Espai | **La pàgina ha de quedar tan gran com es pugui**: els ajustos no li poden menjar amplada fixa (§6, «L'espai») |
+| Contingut de cada pàgina | **A cada pàgina s'hi han de poder posar les seqüències creades**: l'usuari tria quines van a cada pàgina (§6, «Posar seqüències a una pàgina») |
 
 ## 2. Premisses que no es toquen
 
@@ -77,6 +79,9 @@ l'encàrrec no coincideixen, ho diu i proposa per on anar.
 ```
 
 - `frame` existeix **només** si `page.layout` és `"free"` (fonament 06, ja ho diu).
+- **En mode lliure, una seqüència sense `frame` no és a cap pàgina**: és al calaix «Sense
+  col·locar» (§6). No s'imprimeix, però no es perd. Una seqüència va com a molt a **un** lloc (vegeu
+  D6).
 - **Camps nous dins de `frame`**: `page` (índex de pàgina, des de 0) i `columns` (`"auto"` o un
   enter ≥ 1). `z` es manté reservat i no s'escriu.
 - **Origen i unitats**: mm des del cantó superior esquerre del **full** (el `.preview-content`, que
@@ -113,25 +118,84 @@ interface SequenceFrame { page: number; x: number; y: number; w: number; h: numb
 
 ## 6. Experiència d'usuari
 
-Tot passa a la pàgina de **Visualització**. El mode flux no canvia en res.
+Tot passa a la pàgina de **Visualització**.
+
+### L'espai: la pàgina, tan gran com es pugui
+
+Avui la columna d'ajustos de la vista reserva **380 px fixos** a partir de `md`
+(`SCREEN_MARGINS.medium`), i el full s'escala a la resta. En un portàtil de 1366 px, això vol dir
+gairebé un terç de la pantalla per als ajustos, també quan no se'n toca cap. Per treballar a mà sobre
+les caixes, aquest espai és el que més falta.
+
+La proposta té tres peces:
+
+1. **Els ajustos passen a un panell que entra pel costat.** Un botó «Ajustos» a la barra de la vista
+   l'obre per la dreta, **per damunt** del full, sense empènyer-lo. Quan és tancat, el full fa servir
+   tota l'amplada. El panell **no és modal en escriptori**: el full del costat continua viu, de manera
+   que es pot canviar un ajust i veure'n l'efecte, o seleccionar una altra caixa sense tancar-lo. Per
+   sota de `sm` sí que ocupa tota la pantalla (no hi ha costat on deixar el full). Es tanca amb la creu
+   i amb Esc, i el focus torna al botó.
+2. **El retoc no necessita el panell.** Amb una caixa seleccionada, una **barra petita enganxada a la
+   caixa** porta el que es fa sovint: *Columnes*, *Mou a la pàgina…*, *Treu de la pàgina*. Les xifres
+   en mm («Posició i mida») viuen al panell, que és l'alternativa sense arrossegar (WCAG 2.5.7).
+3. **El full s'encabeix a l'espai que queda**, amb dos modes de zoom a la barra: *Pàgina sencera* (per
+   defecte) i *Amplada*, que l'amplia i deixa desplaçar-se en vertical: útil per a les nanses en
+   tauleta.
+
+- **També en mode automàtic.** El panell substitueix la columna als dos modes: tenir-la fixa en un i
+  plegable en l'altre faria que l'app canviés de forma en canviar de disposició. Els ajustos de dins
+  no canvien (són els mateixos `SettingRow`); només canvia el contenidor.
+- **És una capa flotant nova.** L'estàndard de capes flotants admet dos diàlegs canònics i diu que un
+  tercer tipus seria «un tercer component canònic». Es proposa **`AppSidePanel`** a `components/`,
+  genèric, i actualitzar `docs/estandards/capes-flotants.md` i `docs/estandards/configuracions.md`
+  (que parla de «la columna de la pàgina de vista»). Cal comprovar que no surt al paper:
+  `usePrintSheet` ja imprimeix només la còpia del full, i un portal de MUI en queda fora.
+- **La navegació de pàgines** ocupa una línia a la barra: «‹ Pàgina 1 de 3 ›» i «+ Pàgina». Les
+  miniatures de totes les pàgines van al panell, a la secció «Pàgines», no al costat del full.
 
 ### Activar-lo
 
-- Fila nova a la secció de pàgina de la columna: **«Disposició: Automàtica / Lliure»** (`SettingRow`
+- Fila nova a la secció de pàgina del panell d'ajustos: **«Disposició: Automàtica / Lliure»** (`SettingRow`
   amb un control segmentat).
 - En passar a Lliure per primer cop, s'aplica una **plantilla de partida que s'assembla al que hi
   havia**: les seqüències apilades en files (o en columnes, segons `direction`), totes a la
   pàgina 1. Si n'hi ha tantes que no hi caben a la mida mínima, es reparteixen en més pàgines.
   Missatge: «Disposició lliure. Pots triar una plantilla o moure les caixes.»
 
+### Posar seqüències a una pàgina
+
+Cada pàgina té les seves seqüències, i l'usuari tria quines.
+
+- **«+ Afegeix una seqüència»**, damunt de la pàgina (a la barra, i al mig d'una pàgina buida com a
+  botó gran), obre la llista de **totes les seqüències del document**, amb el títol de la pestanya i
+  una miniatura dels primers pictogrames:
+  - primer les **sense col·locar**;
+  - després les que ja són en una altra pàgina, amb «a la pàgina 2». Triar-ne una **la mou** aquí
+    (una seqüència és a un sol lloc, D6), i el missatge ho diu: «Rentar-se les mans s'ha mogut a la
+    pàgina 3.»
+  - La llista admet triar-ne **més d'una** de cop.
+- **On cau la que s'afegeix**: la pàgina es torna a repartir amb la plantilla que toca per al nombre
+  nou de seqüències (1 → sencera, 2 → dues, 3 → tres, 4 → 2 × 2…), en l'ordre en què hi són. Si la
+  pàgina tenia retocs a mà, se'n perden: **sempre amb Desfés**. Després es pot triar una altra
+  plantilla per a aquella pàgina.
+- **«Treu de la pàgina»** (barra de la caixa, panell i Supr) torna la seqüència al calaix **«Sense
+  col·locar»**. No s'esborra res del document; esborrar una seqüència continua sent cosa de l'edició.
+- **El calaix «Sense col·locar»** és una secció del panell, amb un comptador a la barra quan no és
+  buit. **En imprimir o fer el PDF amb seqüències sense col·locar**, un avís ho diu abans
+  («2 seqüències no són a cap pàgina i no sortiran»), amb *Imprimeix igualment* i *Cancel·la*.
+- **Una pàgina buida** ensenya el botó gran d'afegir, i no s'imprimeix ni es desa (D2).
+
 ### Plantilles
 
-- Secció **«Plantilla»** amb miniatures (botons amb nom accessible): *Una per pàgina*, *Dues en
-  files*, *Dues en columnes*, *Tres en files*, *Quatre (2 × 2)*, *Tira a dalt i graella a sota*.
+- Les plantilles són **per pàgina**: cada pàgina pot tenir la seva.
+- Secció **«Plantilla d'aquesta pàgina»** al panell, amb miniatures (botons amb nom accessible):
+  *Sencera*, *Dues en files*, *Dues en columnes*, *Tres en files*, *Quatre (2 × 2)*, *Tira a dalt i
+  graella a sota*. Només s'ofereixen les que tenen almenys tants espais com seqüències té la pàgina.
 - Una plantilla és una llista d'espais en **fraccions** de l'àrea útil (0–1) amb un espai fix entre
-  caixes. En aplicar-la, les seqüències van als espais **en l'ordre del document**; si sobren
-  seqüències, la mateixa plantilla continua a la pàgina següent.
-- Aplicar una plantilla substitueix els retocs: **sempre amb Desfés** (snackbar, com l'estil).
+  caixes. En aplicar-la, les seqüències de la pàgina hi van en ordre de lectura.
+- La plantilla no es desa: és una manera de calcular els frames, i el que es desa són els frames.
+- Aplicar una plantilla substitueix els retocs d'aquella pàgina: **sempre amb Desfés** (snackbar,
+  com l'estil).
 
 ### Retoc
 
@@ -139,7 +203,7 @@ Tot passa a la pàgina de **Visualització**. El mode flux no canvia en res.
   `palette.ts`; damunt del full, fixos en tots dos temes).
 - **Moure**: arrossegar la caixa. **Redimensionar**: quatre nanses de cantonada, ≥ 24 × 24 px
   (44 en tàctil). Pointer Events, amb `touch-action: none` només damunt de les caixes.
-- **Sense arrossegar** (WCAG 2.5.7): panell **«Posició i mida»** a la columna per a la caixa
+- **Sense arrossegar** (WCAG 2.5.7): secció **«Posició i mida»** al panell lateral per a la caixa
   seleccionada: pàgina, X, Y, amplada, alçada (mm), columnes (*Automàtic* o un nombre).
 - **Teclat**: les caixes són al tabulador en ordre de lectura (pàgina, dalt→baix, esquerra→dreta).
   Amb el focus a una caixa: fletxes = 1 mm, Maj+fletxes = 10 mm, Alt+fletxes = redimensionar.
@@ -151,18 +215,18 @@ Tot passa a la pàgina de **Visualització**. El mode flux no canvia en res.
 
 ### Pàgines
 
-- La vista ensenya **una pàgina cada cop**, amb navegació «‹ Pàgina 1 de 3 ›» a sobre del full: la
-  columna d'ajustos es queda on és i el full no s'empetiteix.
-- «Afegeix una pàgina» i, al panell «Posició i mida», el camp **Pàgina** per moure-hi una caixa.
-  Una pàgina que es queda buida desapareix en desar (no es desen pàgines buides); mentre s'hi
-  treballa, es conserva.
+- La vista ensenya **una pàgina cada cop**, tan gran com es pot, amb «‹ Pàgina 1 de 3 ›» a la barra.
+- «+ Pàgina» n'afegeix una de buida darrere de l'actual i hi va. «Esborra la pàgina» torna les seves
+  seqüències al calaix (amb Desfés).
+- Una pàgina que es queda buida no es desa (no es desen pàgines buides); mentre s'hi treballa, es
+  conserva.
 - **Impressió**: `usePrintSheet` clona **tots** els fulls, amb salt de pàgina entre cadascun.
 - **PDF**: `useDownloadPdf` captura cada full i fa `addPage` entre l'un i l'altre.
 - **El peu de llicència** surt a cada pàgina.
 
 ### La mida, dins de la caixa
 
-- Mana la caixa: la columna **amaga** el control de mida de la vista d'aquesta seqüència i hi posa
+- Mana la caixa: el panell **amaga** el control de mida de la vista d'aquesta seqüència i hi posa
   una línia: «En disposició lliure, la mida la decideix la caixa.»
 - L'espai entre pictogrames i l'alineació (horitzontal i vertical) **sí** que s'apliquen: l'espai
   entra al càlcul de la graella, i l'alineació diu on va la graella quan sobra lloc dins la caixa.
@@ -171,9 +235,9 @@ Tot passa a la pàgina de **Visualització**. El mode flux no canvia en res.
 
 ### Seqüències noves o esborrades
 
-- **Nova** (afegida a l'edició amb el document en mode lliure): no té frame. En entrar a la vista,
-  ocupa el primer espai lliure de la plantilla a l'última pàgina, o una pàgina nova. Missatge:
-  «Una seqüència nova s'ha col·locat a la pàgina 3.»
+- **Nova** (afegida a l'edició amb el document en mode lliure): no té frame, i per tant va al calaix
+  «Sense col·locar». En entrar a la vista, un avís ho diu: «Hi ha 1 seqüència sense col·locar.» No
+  es col·loca sola: decidir a quina pàgina va és de l'usuari.
 - **Esborrada**: el seu frame se'n va amb ella.
 
 ## 7. Arquitectura
@@ -197,10 +261,19 @@ features/free-layout/                 # el domini: la disposició lliure del doc
 └── components/
     ├── FreeLayoutSheet/              #   un full amb les seves caixes (pantalla, impressió i PDF)
     ├── FrameBox/                     #   la caixa: graella, selecció, nanses i teclat
-    ├── PageNavigator/                #   ‹ Pàgina 1 de 3 ›
+    ├── FrameToolbar/                 #   la barra enganxada a la caixa seleccionada
+    ├── PageNavigator/                #   ‹ Pàgina 1 de 3 ›, + Pàgina
+    ├── AddSequenceDialog/            #   triar seqüències per a aquesta pàgina (AppDialog, llista)
+    ├── UnplacedTray/                 #   el calaix «Sense col·locar»
     ├── TemplatePicker/               #   les miniatures de plantilles
     └── FramePositionPanel/           #   «Posició i mida» (SettingRow)
+
+components/AppSidePanel/              # capa canònica nova: el panell que entra pel costat (genèric)
 ```
+
+- **`AppSidePanel`** és genèric (no sap res del document) i el fa servir la vista als dos modes. El
+  contingut del panell continua sent el d'ara (`ViewSquenceSettings`) més les seccions del mode
+  lliure.
 
 - **`computeGrid`**: per a cada nombre de columnes de 1 a N (o el fix), files = ⌈N / columnes⌉;
   la mida que hi cap és `min(ampladaCaixa / ampladaGraella₁, alçadaCaixa / alçadaGraella₁)`,
@@ -223,14 +296,16 @@ Cada fase deixa l'app funcionant i passa `npm run typecheck` net.
 
 1. **Model.** Tipus a `shared-types`, `toRedux`/`serialize`, esquema, fonament 06, fixture 16, i les
    funcions pures de `model/` amb tests. Sense interfície.
-2. **Plantilles i pàgines.** El selector «Disposició», `FreeLayoutSheet` (només lectura), les
-   plantilles, la navegació de pàgines, la impressió i el PDF de diverses pàgines. Aquí ja es pot
-   provar de debò si les plantilles resolen la necessitat.
-3. **Retoc.** Selecció, arrossegar, nanses, panell «Posició i mida» i teclat.
-4. **Núvol i proves.** Els validadors de l'API (P1, punt 5), un e2e de punta a punta (plantilla →
+2. **L'espai.** `AppSidePanel` i la vista amb el full a tota l'amplada, també en mode automàtic,
+   amb els estàndards actualitzats. És independent del mode lliure i es pot provar sol.
+3. **Pàgines i seqüències.** El selector «Disposició», `FreeLayoutSheet` (només lectura), les
+   pàgines, «+ Afegeix una seqüència», el calaix, les plantilles per pàgina, la impressió i el PDF de
+   diverses pàgines. Aquí ja es pot provar de debò si les plantilles resolen la necessitat.
+4. **Retoc.** Selecció, arrossegar, nanses, barra de la caixa, «Posició i mida» i teclat.
+5. **Núvol i proves.** Els validadors de l'API (P1, punt 5), un e2e de punta a punta (plantilla →
    retoc → `.saac` → reobrir → PDF) i una prova de regressió que les fixtures 01–15 no canvien.
 
-**Després de la fase 2 cal parar i provar-ho amb gent** abans de seguir: és el punt on es veu si cal
+**Després de la fase 3 cal parar i provar-ho amb gent** abans de seguir: és el punt on es veu si cal
 el retoc a mà o si n'hi ha prou amb les plantilles.
 
 ## 9. Riscos
@@ -249,8 +324,10 @@ el retoc a mà o si n'hi ha prou amb les plantilles.
 
 | # | Pregunta | Recomanació |
 |---|---|---|
-| D1 | Com es veuen les pàgines a la vista | Una cada cop, amb navegació (§6). L'alternativa és totes una sota l'altra amb desplaçament |
+| D1 | Com es veuen les pàgines a la vista | Una cada cop, tan gran com es pot, amb navegació a la barra i miniatures al panell (§6) |
 | D2 | Pàgines buides | No es desen; existeixen mentre s'hi treballa |
 | D3 | `FULLSCREEN` amb mode lliure | No s'hi ofereix: en triar Lliure, el selector de mida amaga «Pantalla completa». El botó de pantalla completa de la vista ensenya les pàgines una a una |
 | D4 | Tornar a «Automàtica» | Es conserven els frames a Redux, no s'escriuen en desar, i el canvi té Desfés |
-| D5 | Plantilla de partida en activar-lo | La que s'assembla al flux (apilades segons `direction`) |
+| D5 | Què passa en activar-lo | Totes les seqüències es col·loquen soles amb la disposició que s'assembla al flux (apilades segons `direction`), perquè no desaparegui res del full. A partir d'aquí, l'usuari les mou, les treu o les afegeix pàgina a pàgina |
+| D6 | Una seqüència pot sortir a més d'una pàgina? | **No**: un sol lloc, que és el que permet el `frame` a la seqüència de v3. Afegir-la a una altra pàgina la mou. Si calgués repetir-la (per exemple, imprimir-ne dues còpies per retallar), el model passaria a una llista de col·locacions per pàgina i caldria pujar `schemaVersion` |
+| D7 | El panell lateral també en mode automàtic | **Sí** (§6, «L'espai»): que la vista no canviï de forma segons la disposició. Es pot fer abans i sol (fase 2) |
