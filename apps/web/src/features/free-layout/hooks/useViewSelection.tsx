@@ -41,6 +41,14 @@ interface ViewSelectionValue {
   /** Les targetes de cada seqüència a mida 1: les mesura el full, les llegeix la columna */
   cardSizes: Record<number, CardPx>;
   setCardSizes: (sizes: Record<number, CardPx>) => void;
+  /**
+   * El que l'usuari ha triat a «La mateixa configuració a tots els blocs» de
+   * cada pàgina (per l'`id` de la pàgina). Sense entrada, es dedueix dels
+   * blocs (`usePageUniform`). És un mode d'edició, com l'antic «Aplica a
+   * totes»: no es desa
+   */
+  uniformChoice: Record<string, boolean>;
+  setUniformChoice: (pageId: string, uniform: boolean) => void;
 }
 
 const noop = (): void => undefined;
@@ -54,6 +62,8 @@ const ViewSelectionContext = createContext<ViewSelectionValue>({
   setVisiblePage: noop,
   cardSizes: {},
   setCardSizes: noop,
+  uniformChoice: {},
+  setUniformChoice: noop,
 });
 
 /** El mateix element seleccionat? Serveix per saber si una caixa està marcada. */
@@ -88,6 +98,14 @@ export const ViewSelectionProvider = ({
   const [selection, setSelection] = useState<ViewSelection | null>(null);
   const [visiblePage, setVisiblePage] = useState(0);
   const [cardSizes, setCardSizes] = useState<Record<number, CardPx>>({});
+  const [uniformChoice, setUniformChoices] = useState<Record<string, boolean>>(
+    {},
+  );
+  const setUniformChoice = useCallback(
+    (pageId: string, uniform: boolean) =>
+      setUniformChoices((current) => ({ ...current, [pageId]: uniform })),
+    [],
+  );
 
   const sheetCount = isFree && pages ? pages.sheets.length : 1;
 
@@ -125,8 +143,10 @@ export const ViewSelectionProvider = ({
       setVisiblePage,
       cardSizes,
       setCardSizes,
+      uniformChoice,
+      setUniformChoice,
     }),
-    [current, clear, activePage, cardSizes],
+    [current, clear, activePage, cardSizes, uniformChoice, setUniformChoice],
   );
 
   return (

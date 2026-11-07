@@ -78,8 +78,12 @@ describe("els nivells de la columna de la vista", () => {
     expect(
       screen.getByText("Click a block on the page to see its settings."),
     ).toBeInTheDocument();
-    // La mida i l'espai dels pictogrames només són del bloc
-    expect(screen.queryAllByRole("slider")).toHaveLength(0);
+    // Els blocs de la pàgina es veuen igual: la mateixa configuració a tots,
+    // al nivell «Pàgina» (l'antic «Aplica a totes», ara per pàgina)
+    expect(
+      screen.getByRole("checkbox", { name: "Same for every block" }),
+    ).toBeChecked();
+    expect(screen.getAllByRole("slider", { name: "Size" })).toHaveLength(1);
     const crumbs = screen.getByRole("navigation", {
       name: "Where these settings apply",
     });
@@ -111,8 +115,11 @@ describe("els nivells de la columna de la vista", () => {
     ).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("el nivell «Bloc» canvia només aquell bloc, no la seqüència", async () => {
+  it("sense «la mateixa», el nivell «Bloc» canvia només aquell bloc, no la seqüència", async () => {
     const { store } = renderView(freeDocument());
+    await userEvent.click(
+      screen.getByRole("checkbox", { name: "Same for every block" }),
+    );
     await userEvent.click(
       screen.getAllByRole("button", { name: /^Sequence 2,/ })[0],
     );
@@ -129,8 +136,34 @@ describe("els nivells de la columna de la vista", () => {
     expect(viewSettings[1]?.alignmentV).not.toBe("bottom");
   });
 
-  it("a la disposició automàtica, cada seqüència es selecciona i n'ensenya la vista", async () => {
+  it("amb la mateixa configuració, la pàgina la posa a tots els blocs i el bloc no en té", async () => {
+    const { store } = renderView(freeDocument());
+
+    await userEvent.click(screen.getByRole("button", { name: "Bottom" }));
+
+    store
+      .getState()
+      .document.pages!.sheets[0].placements.forEach((placement) =>
+        expect(placement).toMatchObject({ view: { alignmentV: "bottom" } }),
+      );
+    // L'altra pàgina no canvia
+    expect(
+      store.getState().document.pages!.sheets[1].placements[0],
+    ).not.toHaveProperty("view");
+
+    await userEvent.click(
+      screen.getAllByRole("button", { name: /^Sequence 1,/ })[0],
+    );
+    expect(
+      screen.getByText(/This page uses the same size, spacing and alignment/),
+    ).toBeInTheDocument();
+  });
+
+  it("a la disposició automàtica, sense «la mateixa», cada seqüència té la seva vista", async () => {
     const { store } = renderView(baseDocument());
+    await userEvent.click(
+      screen.getByRole("checkbox", { name: "Same for every block" }),
+    );
 
     await userEvent.click(screen.getByRole("button", { name: /^Sequence 1,/ }));
 
@@ -138,9 +171,7 @@ describe("els nivells de la columna de la vista", () => {
       level(/^Block\s*Sequence 1\s*Applies only to this sequence/),
     ).toHaveAttribute("aria-expanded", "true");
 
-    await userEvent.click(
-      screen.getAllByRole("button", { name: "Bottom" }).at(-1)!,
-    );
+    await userEvent.click(screen.getByRole("button", { name: "Bottom" }));
 
     expect(store.getState().document.viewSettings[0]?.alignmentV).toBe(
       "bottom",

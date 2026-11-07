@@ -3067,5 +3067,25 @@
   "pages.viewSequence.levels.noBlock": {
     "message": "Cap bloc seleccionat",
     "description": "Nom del nivell «Bloc» de la columna de la vista quan no n'hi ha cap de seleccionat"
+  },
+  "features.freeLayout.levels.pictograms": {
+    "message": "Pictogrames",
+    "description": "Secció del nivell «Pàgina» de la columna de la vista: la mida, l'espai i l'alineació dels pictogrames dels blocs de la pàgina"
+  },
+  "features.freeLayout.levels.uniform": {
+    "message": "La mateixa a tots els blocs",
+    "description": "Interruptor del nivell «Pàgina»: tots els blocs de la pàgina amb la mateixa mida, espai i alineació (l'antic «Aplica a totes», ara per pàgina)"
+  },
+  "features.freeLayout.levels.uniformOn": {
+    "message": "Tots els blocs d'aquesta pàgina tenen la mateixa mida, espai i alineació. Desactiva-ho per ajustar cada bloc per separat.",
+    "description": "Ajuda sota «La mateixa a tots els blocs», activat"
+  },
+  "features.freeLayout.levels.uniformOff": {
+    "message": "Cada bloc té la seva mida, espai i alineació: clica un bloc del full per ajustar-lo.",
+    "description": "Ajuda sota «La mateixa a tots els blocs», desactivat"
+  },
+  "features.freeLayout.levels.uniformBlock": {
+    "message": "Aquesta pàgina fa servir la mateixa mida, espai i alineació a tots els blocs: es canvien a «Pàgina», o desactiva-ho allà per ajustar aquest bloc sol.",
+    "description": "Al nivell «Bloc», en lloc de la mida, l'espai i l'alineació, quan la pàgina té «La mateixa a tots els blocs» activat"
   }
 }

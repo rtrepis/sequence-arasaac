@@ -84,6 +84,7 @@ import {
   BlockLevel,
   PageIcon,
   PageLevel,
+  PagePictograms,
   VIEW_PAGE_LEVEL_ID,
 } from "@features/free-layout/components/ViewLevels";
 import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
@@ -865,6 +866,9 @@ const ViewSequencesSettingsContent = ({
                         onDirectionChange={handleDirectionChange}
                         onSequenceSpaceChange={handleSequenceSpaceChange}
                       />
+                      {/* L'antic «Aplica a totes»: la mateixa configuració a
+                          totes les seqüències, o cadascuna la seva */}
+                      <PagePictograms sheetIndex={0} />
                     </SettingsLevel>
                   )}
 

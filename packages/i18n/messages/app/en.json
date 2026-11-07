@@ -799,5 +799,10 @@
   "pages.viewSequence.levels.untitled": "This document",
   "pages.viewSequence.levels.kindPage": "Page",
   "pages.viewSequence.levels.kindBlock": "Block",
-  "pages.viewSequence.levels.noBlock": "No block selected"
+  "pages.viewSequence.levels.noBlock": "No block selected",
+  "features.freeLayout.levels.pictograms": "Pictograms",
+  "features.freeLayout.levels.uniform": "Same for every block",
+  "features.freeLayout.levels.uniformOn": "Every block on this page has the same size, spacing and alignment. Turn it off to adjust each block on its own.",
+  "features.freeLayout.levels.uniformOff": "Each block has its own size, spacing and alignment: click a block on the page to adjust it.",
+  "features.freeLayout.levels.uniformBlock": "This page uses the same size, spacing and alignment for every block: change them in “Page”, or turn that off there to adjust this block on its own."
 }

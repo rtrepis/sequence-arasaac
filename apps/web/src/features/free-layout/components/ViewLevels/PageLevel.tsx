@@ -15,6 +15,7 @@ import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
 import PageActionsMenu from "@features/free-layout/components/FreeLayoutPages/PageActionsMenu";
 import { TEMPLATE_NAMES } from "@features/free-layout/components/FreeLayoutPages/templateNames";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
+import PagePictograms from "./PagePictograms";
 import messages from "./ViewLevels.lang";
 
 /** L'`id` del nivell «Pàgina»: les molles hi porten. */
@@ -109,6 +110,9 @@ const PageLevel = ({
           )}
         </SettingRow>
       )}
+
+      {/* La mateixa mida, espai i alineació a tots els blocs, o cadascun la seva */}
+      <PagePictograms sheetIndex={activePage} />
 
       <SettingRow
         title={<FormattedMessage {...messages.pageActions} />}

@@ -773,6 +773,10 @@ fet encara.
     independent.
 - **Quan**: amb el pas 4b (el mode per pàgina), perquè és el mateix canvi: la pàgina automàtica
   passa a tenir ajustos propis.
+- **Decidit** (2026-11-07): **no** es fa la proposta de sobre. Es torna a l'idea de sempre, l'antic
+  «Aplica a totes», però **pàgina a pàgina**: cada pàgina tria si els seus blocs tenen **la mateixa**
+  mida, espai i alineació o **cadascun la seva**, sigui automàtica o amb plantilla. D1–D4 queden
+  sense objecte. Vegeu C13.
 
 ### Ordre proposat
 
@@ -784,8 +788,7 @@ fet encara.
    entrat també els estils amb nom (R10). Vegeu «Com ha quedat el model», a sota.
 4. ✅ **R5**, la columna que segueix la pàgina i la selecció de la caixa. Vegeu «Com ha quedat la
    columna (pas 4)».
-4b. ⏭️ **El mode per pàgina** (R1 a la interfície), amb **R12** (la configuració única de la
-   pàgina automàtica; decidir abans D1–D4): «Com es col·loquen: Automàtica / Plantilla» al
+4b. ⏭️ **El mode per pàgina** (R1 a la interfície): «Com es col·loquen: Automàtica / Plantilla» al
    nivell «Pàgina», el selector «Disposició» del document desapareix i la vista pinta cada pàgina
    automàtica sola, amb els seus blocs. Es va treure de R5 perquè toca el flux, la impressió, el PDF
    i la pantalla completa.
@@ -896,6 +899,7 @@ Primera revisió a la previsualització. Es demana simplificar els conceptes per
 | C9 | El bloc es veu seleccionat; la pàgina no prou | La pàgina activa porta la guia `sheetGuide` per fora del marc (la mateixa marca que el bloc) i un punt davant del títol, també amb una sola pàgina. A la disposició automàtica, quan hi ha una seqüència seleccionada |
 | C10 | Les mides dels pictogrames confonen | **La mida i l'espai entre pictogrames són només del bloc.** El nivell «Document» només en conserva l'alineació |
 | C12 | L'alineació també confon al nivell «Document» | Fora: el nivell «Document» ja no té cap ajust dels pictogrames. Tot és del bloc (vegeu R12 per a la pàgina automàtica) |
+| C13 | La configuració dels pictogrames, on? (R12) | **Com abans, però per pàgina**: al nivell «Pàgina», secció «Pictogrames», l'interruptor **«La mateixa a tots els blocs»**. Activat, la mida, l'espai i l'alineació són allà i s'escriuen a tots els blocs propis de la pàgina (els comuns no, que surten a totes); el nivell «Bloc» ho diu i no en té. Desactivat, cada bloc es tria al nivell «Bloc». Amb un sol bloc a la pàgina, no hi és. És un **mode d'edició**, com era «Aplica a totes»: no es desa al fitxer. Sense que l'usuari n'hagi triat res, està activat si tots els blocs de la pàgina ja es veuen igual. A la disposició automàtica d'un sol full, activat escriu l'estil del document a totes les seqüències, com feia abans |
 | C11 | La secció «Lloc» del bloc sobra | Fora. Les accions (a totes les pàgines, copiar, treure) continuen al menú del bloc, al full; les eines per copiar vindran més endavant |
 
 ### Preguntes que eren obertes

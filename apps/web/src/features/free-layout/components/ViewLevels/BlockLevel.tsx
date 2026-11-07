@@ -1,5 +1,5 @@
 import React from "react";
-import { MenuItem, Select } from "@mui/material";
+import { MenuItem, Select, Typography } from "@mui/material";
 import { MdOutlineViewQuilt } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch } from "@/app/hooks";
@@ -19,6 +19,7 @@ import {
   useViewSelection,
 } from "@features/free-layout/hooks/useViewSelection";
 import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
+import { usePageUniform } from "@features/free-layout/hooks/usePageUniform";
 import { columnChoicesFor } from "@features/free-layout/components/FreeLayoutPages/PlacementBox";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import messages from "./ViewLevels.lang";
@@ -51,7 +52,18 @@ const BlockLevel = ({
   const dispatch = useAppDispatch();
   const { cardSizes } = useViewSelection();
   const block = useSelectedBlock();
+  // Si la pàgina del bloc té «la mateixa configuració a tots els blocs», la
+  // mida, l'espai i l'alineació són al nivell «Pàgina», no aquí
+  const page = usePageUniform(block?.kind === "block" ? block.sheetIndex : 0);
+  const fromPage = page.uniform && page.blockCount > 1;
   if (!block) return null;
+
+  /** El que diu el nivell en lloc dels ajustos, quan els porta la pàgina. */
+  const pageRules = (
+    <Typography variant="body2" color="text.secondary">
+      <FormattedMessage {...messages.uniformBlock} />
+    </Typography>
+  );
 
   if (block.kind === "sequence") {
     const change = (settings: Partial<SequenceViewSettings>) =>
@@ -72,11 +84,15 @@ const BlockLevel = ({
         expanded={expanded}
         onExpandedChange={onExpandedChange}
       >
-        <SequenceViewRows
-          view={block.view}
-          labelId={LABEL_ID}
-          onChange={change}
-        />
+        {fromPage ? (
+          pageRules
+        ) : (
+          <SequenceViewRows
+            view={block.view}
+            labelId={LABEL_ID}
+            onChange={change}
+          />
+        )}
       </SettingsLevel>
     );
   }
@@ -103,17 +119,22 @@ const BlockLevel = ({
       expanded={expanded}
       onExpandedChange={onExpandedChange}
     >
-      <SequenceViewRows
-        view={view}
-        labelId={LABEL_ID}
-        onChange={(change) =>
-          dispatch(setPlacementViewThunk(placement.id, change))
-        }
-        sizeHelper={intl.formatMessage(
-          grid.belowMinimum ? messages.sizeTooSmall : messages.sizeMax,
-          { mm },
-        )}
-      />
+      {/* Un bloc comú surt a totes les pàgines: no segueix cap pàgina */}
+      {fromPage && !common ? (
+        pageRules
+      ) : (
+        <SequenceViewRows
+          view={view}
+          labelId={LABEL_ID}
+          onChange={(change) =>
+            dispatch(setPlacementViewThunk(placement.id, change))
+          }
+          sizeHelper={intl.formatMessage(
+            grid.belowMinimum ? messages.sizeTooSmall : messages.sizeMax,
+            { mm },
+          )}
+        />
+      )}
 
       <SettingRow
         title={<FormattedMessage {...pageMessages.columns} />}

@@ -280,3 +280,55 @@ export const setPlacementViewThunk =
       ),
     );
   };
+
+/**
+ * «La mateixa configuració a tots els blocs» d'una pàgina: posa els mateixos
+ * valors a tots els blocs de seqüència propis de la pàgina (els comuns no, que
+ * surten a totes). Cada bloc desa només el seu retoc, com amb
+ * `setPlacementViewThunk`; si la seqüència ja hi coincideix, no en porta cap.
+ */
+export const setSheetViewThunk =
+  (sheetIndex: number, change: Partial<SequenceViewSettings>): AppThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    const { pages, styles } = state.document;
+    const sheet = pages?.sheets[sheetIndex];
+    if (!sheet) return;
+    const views = selectResolvedSequenceViews(state);
+    const ids = new Set(
+      sheet.placements
+        .filter((placement) => placement.kind === "sequence")
+        .map(({ id }) => id),
+    );
+    if (ids.size === 0) return;
+    dispatch(
+      changeFreeLayout((layout) => ({
+        ...layout,
+        sheets: layout.sheets.map((current, index) =>
+          index !== sheetIndex
+            ? current
+            : {
+                ...current,
+                placements: current.placements.map((placement) => {
+                  if (placement.kind !== "sequence" || !ids.has(placement.id))
+                    return placement;
+                  const sequenceView = views[placement.sequenceKey];
+                  if (!sequenceView) return placement;
+                  const base = resolveBlockView(
+                    sequenceView,
+                    namedStyleOf(styles, placement.styleId),
+                    undefined,
+                  );
+                  const view = blockViewRetouch(base, {
+                    ...resolveBlockView(base, undefined, placement.view),
+                    ...change,
+                  });
+                  const next = { ...placement, view };
+                  if (!view) delete next.view;
+                  return next;
+                }),
+              },
+        ),
+      })),
+    );
+  };

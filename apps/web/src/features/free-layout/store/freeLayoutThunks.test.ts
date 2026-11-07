@@ -22,6 +22,7 @@ import {
   setLayoutModeThunk,
   setPlacementCommonThunk,
   setPlacementViewThunk,
+  setSheetViewThunk,
 } from "./freeLayoutThunks";
 
 // Les accions sobre les pàgines amb l'store de debò: el document, i el desfer
@@ -215,5 +216,23 @@ describe("la vista d'un bloc (nivell «Bloc»)", () => {
     );
 
     expect(firstBlock(store)).not.toHaveProperty("view");
+  });
+});
+
+describe("la mateixa configuració a tots els blocs d'una pàgina", () => {
+  it("posa els mateixos valors a tots els blocs de la pàgina, i les altres no canvien", () => {
+    const store = freeStore(3);
+    store.dispatch(addSheetThunk(0));
+    store.dispatch(addSequencesToSheetThunk(1, [0]));
+
+    store.dispatch(setSheetViewThunk(0, { pictSpaceBetween: 6 }));
+
+    const [first, second] = layoutOf(store).sheets;
+    first.placements.forEach((placement) =>
+      expect(placement).toMatchObject({ view: { pictSpaceBetween: 6 } }),
+    );
+    second.placements.forEach((placement) =>
+      expect(placement).not.toHaveProperty("view"),
+    );
   });
 });

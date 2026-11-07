@@ -799,5 +799,10 @@
   "pages.viewSequence.levels.untitled": "Este documento",
   "pages.viewSequence.levels.kindPage": "Página",
   "pages.viewSequence.levels.kindBlock": "Bloque",
-  "pages.viewSequence.levels.noBlock": "Ningún bloque seleccionado"
+  "pages.viewSequence.levels.noBlock": "Ningún bloque seleccionado",
+  "features.freeLayout.levels.pictograms": "Pictogramas",
+  "features.freeLayout.levels.uniform": "La misma en todos los bloques",
+  "features.freeLayout.levels.uniformOn": "Todos los bloques de esta página tienen el mismo tamaño, espacio y alineación. Desactívalo para ajustar cada bloque por separado.",
+  "features.freeLayout.levels.uniformOff": "Cada bloque tiene su tamaño, espacio y alineación: haz clic en un bloque de la hoja para ajustarlo.",
+  "features.freeLayout.levels.uniformBlock": "Esta página usa el mismo tamaño, espacio y alineación en todos los bloques: se cambian en «Página», o desactívalo allí para ajustar este bloque solo."
 }
