@@ -2990,11 +2990,7 @@
   },
   "pages.viewSequence.levels.pictograms": {
     "message": "Pictogrames",
-    "description": "Secció del nivell «Document» de la columna de la vista: la mida, l'espai i l'alineació dels pictogrames de tot el document"
-  },
-  "pages.viewSequence.levels.pictogramsHint": {
-    "message": "Per a tots els blocs. Un bloc que hagis ajustat sol conserva els seus ajustos.",
-    "description": "Ajuda sota la mida dels pictogrames del nivell «Document»: s'aplica a tots els blocs, menys el que s'hagi retocat al nivell «Bloc»"
+    "description": "Secció del nivell «Document» de la columna de la vista: l'alineació dels pictogrames de tot el document (la mida i l'espai són de cada bloc)"
   },
   "pages.viewSequence.levels.noSelection": {
     "message": "Clica un bloc del full per veure'n els ajustos.",
@@ -3052,18 +3048,6 @@
     "message": "El bloc és massa petit: en surten de {mm} mm. Fes-lo més gran o tria unes altres columnes.",
     "description": "Ajuda de la mida d'un bloc quan hi queden massa petits"
   },
-  "features.freeLayout.levels.place": {
-    "message": "Lloc",
-    "description": "Secció del nivell «Bloc»: a totes les pàgines, copiar-lo a una altra pàgina, treure'l"
-  },
-  "features.freeLayout.levels.choosePage": {
-    "message": "Tria la pàgina…",
-    "description": "Valor inicial del selector «Copia a la pàgina» del nivell «Bloc»"
-  },
-  "features.freeLayout.levels.remove": {
-    "message": "Treu",
-    "description": "Botó de la fila «Treu d'aquesta pàgina» del nivell «Bloc»: treu el bloc, amb Desfés"
-  },
   "features.freeLayout.levels.putOnPage": {
     "message": "A la pàgina {number}",
     "description": "Botó al costat de cada seqüència sense col·locar: la posa a la pàgina que segueix la columna"
@@ -3071,5 +3055,21 @@
   "features.freeLayout.levels.putOnPageLabel": {
     "message": "Posa {name} a la pàgina {number}",
     "description": "Nom accessible del botó que posa una seqüència sense col·locar a la pàgina que segueix la columna"
+  },
+  "pages.viewSequence.levels.untitled": {
+    "message": "Aquest document",
+    "description": "Nom del nivell «Document» de la columna de la vista quan el document encara no té títol"
+  },
+  "pages.viewSequence.levels.kindPage": {
+    "message": "Pàgina",
+    "description": "Tipus del segon nivell de la columna de la vista, a sobre de «Pàgina 2 de 3»"
+  },
+  "pages.viewSequence.levels.kindBlock": {
+    "message": "Bloc",
+    "description": "Tipus del tercer nivell de la columna de la vista, a sobre del nom del bloc seleccionat"
+  },
+  "pages.viewSequence.levels.noBlock": {
+    "message": "Cap bloc seleccionat",
+    "description": "Nom del nivell «Bloc» de la columna de la vista quan no n'hi ha cap de seleccionat"
   }
 }

@@ -15,6 +15,30 @@ const messages = defineMessages({
     description:
       "Títol del primer nivell de la columna de la vista: el que s'aplica a tot el document",
   },
+  untitled: {
+    id: "pages.viewSequence.levels.untitled",
+    defaultMessage: "This document",
+    description:
+      "Nom del nivell «Document» de la columna de la vista quan el document encara no té títol",
+  },
+  kindPage: {
+    id: "pages.viewSequence.levels.kindPage",
+    defaultMessage: "Page",
+    description:
+      "Tipus del segon nivell de la columna de la vista, a sobre de «Pàgina 2 de 3»",
+  },
+  kindBlock: {
+    id: "pages.viewSequence.levels.kindBlock",
+    defaultMessage: "Block",
+    description:
+      "Tipus del tercer nivell de la columna de la vista, a sobre del nom del bloc seleccionat",
+  },
+  noBlock: {
+    id: "pages.viewSequence.levels.noBlock",
+    defaultMessage: "No block selected",
+    description:
+      "Nom del nivell «Bloc» de la columna de la vista quan no n'hi ha cap de seleccionat",
+  },
   documentScope: {
     id: "pages.viewSequence.levels.documentScope",
     defaultMessage: "Applies to every page",
@@ -31,14 +55,7 @@ const messages = defineMessages({
     id: "pages.viewSequence.levels.pictograms",
     defaultMessage: "Pictograms",
     description:
-      "Secció del nivell «Document» de la columna de la vista: la mida, l'espai i l'alineació dels pictogrames de tot el document",
-  },
-  pictogramsHint: {
-    id: "pages.viewSequence.levels.pictogramsHint",
-    defaultMessage:
-      "For every block. A block you have adjusted on its own keeps its own settings.",
-    description:
-      "Ajuda sota la mida dels pictogrames del nivell «Document»: s'aplica a tots els blocs, menys el que s'hagi retocat al nivell «Bloc»",
+      "Secció del nivell «Document» de la columna de la vista: l'alineació dels pictogrames de tot el document (la mida i l'espai són de cada bloc)",
   },
   noSelection: {
     id: "pages.viewSequence.levels.noSelection",

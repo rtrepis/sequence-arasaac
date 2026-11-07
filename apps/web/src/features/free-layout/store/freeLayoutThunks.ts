@@ -70,6 +70,10 @@ export const selectSheetArea = (state: RootState): SheetArea | null => {
 export const selectPages = (state: RootState): DocumentPages | undefined =>
   state.document.pages;
 
+/** El títol del document, si en té. */
+export const selectDocumentTitle = (state: RootState): string | undefined =>
+  state.document.title;
+
 /** Els estils amb nom del document. */
 export const selectNamedStyles = (state: RootState) => state.document.styles;
 

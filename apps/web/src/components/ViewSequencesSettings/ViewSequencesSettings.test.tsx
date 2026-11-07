@@ -29,9 +29,8 @@ const renderView = () =>
 
 /** L'amplada a què es pinta el full a la pantalla. */
 const previewWidth = (container: HTMLElement): string =>
-  getComputedStyle(
-    container.querySelector(".preview-container") as HTMLElement,
-  ).width;
+  getComputedStyle(container.querySelector(".preview-container") as HTMLElement)
+    .width;
 
 afterEach(() => setWindowSize(0, 0));
 

@@ -781,7 +781,6 @@
   "pages.viewSequence.levels.documentScope": "Applies to every page",
   "pages.viewSequence.levels.pageScope": "{total, plural, one {Applies to the page} other {Applies only to page {number}}}",
   "pages.viewSequence.levels.pictograms": "Pictograms",
-  "pages.viewSequence.levels.pictogramsHint": "For every block. A block you have adjusted on its own keeps its own settings.",
   "pages.viewSequence.levels.noSelection": "Click a block on the page to see its settings.",
   "pages.viewSequence.levels.layoutFlowShort": "Automatic",
   "pages.viewSequence.levels.layoutFreeShort": "Free",
@@ -796,9 +795,10 @@
   "features.freeLayout.levels.sequenceScope": "Applies only to this sequence",
   "features.freeLayout.levels.sizeMax": "At most. Pictograms come out at {mm} mm now.",
   "features.freeLayout.levels.sizeTooSmall": "The block is too small: pictograms come out at {mm} mm. Make it bigger or choose other columns.",
-  "features.freeLayout.levels.place": "Place",
-  "features.freeLayout.levels.choosePage": "Choose a page…",
-  "features.freeLayout.levels.remove": "Remove",
   "features.freeLayout.levels.putOnPage": "To page {number}",
-  "features.freeLayout.levels.putOnPageLabel": "Put {name} on page {number}"
+  "features.freeLayout.levels.putOnPageLabel": "Put {name} on page {number}",
+  "pages.viewSequence.levels.untitled": "This document",
+  "pages.viewSequence.levels.kindPage": "Page",
+  "pages.viewSequence.levels.kindBlock": "Block",
+  "pages.viewSequence.levels.noBlock": "No block selected"
 }

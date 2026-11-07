@@ -821,7 +821,19 @@ Fet a la mateixa branca, sense interfície nova. Detall a `docs/decisions/ADR-00
   columna, `blockViewRetouch` calcula el retoc i `setPlacementViewThunk` el desa.
 - **Queda per mirar**: si `SettingsLevel` i les molles passen a l'estàndard (C1, C7); els specs de
   captures de `e2e/screenshots/multiple-sequences*.spec.ts` s'han adaptat a la columna nova però no
-  s'han tornat a executar.
+  s'han tornat a executar (el pas 3, «ajustar totes les seqüències», ja no existeix: ara ajusta la
+  seqüència 1).
+
+### Revisió de la columna (pas 4, 2026-11-07)
+
+Primera revisió a la previsualització. Es demana simplificar els conceptes per a l'usuari:
+
+| # | Vist | Fet |
+|---|---|---|
+| C8 | La distribució de l'esbós era més clara | Els nivells són **targetes** com a l'esbós (icona, tipus de nivell, nom i abast), lligades per la **línia de la cascada** (`SettingsLevels`). És una excepció a «una zona no es marca amb una caixa» (`docs/estandards/configuracions.md`), autoritzada: es pot canviar un patró si queda més clar. El nivell «Bloc» hi és sempre; sense selecció, només la capçalera |
+| C9 | El bloc es veu seleccionat; la pàgina no prou | La pàgina activa porta la guia `sheetGuide` per fora del marc (la mateixa marca que el bloc) i un punt davant del títol, també amb una sola pàgina. A la disposició automàtica, quan hi ha una seqüència seleccionada |
+| C10 | Les mides dels pictogrames confonen | **La mida i l'espai entre pictogrames són només del bloc.** El nivell «Document» només en conserva l'alineació |
+| C11 | La secció «Lloc» del bloc sobra | Fora. Les accions (a totes les pàgines, copiar, treure) continuen al menú del bloc, al full; les eines per copiar vindran més endavant |
 
 ### Preguntes que eren obertes
 

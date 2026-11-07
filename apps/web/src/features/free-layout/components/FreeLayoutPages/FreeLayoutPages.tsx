@@ -5,13 +5,20 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Theme,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { MdAdd, MdOutlineLibraryAdd } from "react-icons/md";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
 import StyledButton from "@/style/StyledButton";
-import { sheetSurface } from "@/style/palette";
+import { sheetGuide, sheetSurface } from "@/style/palette";
 import CopyRight from "@components/CopyRight/CopyRight";
 import type { PageDimensions } from "@features/print/utils/pageFormat";
 import { CSS_PRINT_DPI } from "@features/print/utils/pageFormat";
@@ -50,6 +57,22 @@ import messages from "./FreeLayoutPages.lang";
 
 /** Aire entre una pàgina i la capçalera de la següent, a la pantalla. */
 const PAGE_GAP = 3;
+
+/**
+ * El marc del full a la pantalla. La pàgina activa (la que segueix la columna)
+ * porta, a més, la guia `sheetGuide` per fora, separada del full: la mateixa
+ * marca que el bloc seleccionat. És fora del full: no surt mai al paper.
+ */
+export const pageFrameSx = (active: boolean) =>
+  active
+    ? {
+        boxShadow: (theme: Theme) => `0 0 0 2px ${theme.palette.primary.main}`,
+        outline: `3px solid ${sheetGuide}`,
+        outlineOffset: 4,
+      }
+    : {
+        outline: (theme: Theme) => `2px solid ${theme.palette.primary.main}`,
+      };
 
 /** Llindars de l'observador: prou fins per saber quina pàgina es veu més. */
 const VISIBLE_THRESHOLDS = Array.from({ length: 21 }, (_, i) => i / 20);
@@ -233,8 +256,8 @@ const FreeLayoutPages = ({
         });
         const empty =
           sheet.placements.length === 0 && freeLayout.common.length === 0;
-        // La pàgina que segueix la columna, quan n'hi ha més d'una
-        const active = sheetCount > 1 && sheetIndex === activePage;
+        // La pàgina que segueix la columna (la del nivell «Pàgina»)
+        const active = sheetIndex === activePage;
         const selectedHere =
           selection?.kind === "block" && selection.sheetIndex === sheetIndex;
         return (
@@ -270,9 +293,9 @@ const FreeLayoutPages = ({
                 width: displayWidth,
                 height: displayHeight,
                 overflow: "hidden",
-                // La pàgina activa, amb la vora més gruixuda
-                outline: (theme) =>
-                  `${active ? 4 : 2}px solid ${theme.palette.primary.main}`,
+                // La pàgina activa, ressaltada amb la guia per fora del full,
+                // com el bloc seleccionat; el marc verd hi continua
+                ...pageFrameSx(active),
                 backgroundColor: sheetSurface,
               }}
             >

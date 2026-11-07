@@ -1,5 +1,6 @@
 import React, { useId, useState } from "react";
 import {
+  Box,
   ListSubheader,
   Menu,
   MenuItem,
@@ -10,6 +11,7 @@ import { MdOutlineDashboard, MdOutlineLibraryAdd } from "react-icons/md";
 import { useIntl } from "react-intl";
 import { useAppDispatch } from "@/app/hooks";
 import StyledButton from "@/style/StyledButton";
+import { sheetGuide } from "@/style/palette";
 import { templatesFor } from "@features/free-layout/model/templates";
 import { applyTemplateThunk } from "@features/free-layout/store/freeLayoutThunks";
 import PageActionsMenu from "./PageActionsMenu";
@@ -60,6 +62,16 @@ const PageHeader = ({
         variant="subtitle1"
         sx={{ flexGrow: 1, fontWeight: active ? "bold" : undefined }}
       >
+        {/* El punt de la pàgina activa, del color de la guia que l'envolta */}
+        {active && (
+          <Box
+            component="span"
+            aria-hidden
+            sx={{ color: sheetGuide, marginInlineEnd: 0.75 }}
+          >
+            ●
+          </Box>
+        )}
         {intl.formatMessage(messages.pageLabel, {
           number,
           total: sheetCount,

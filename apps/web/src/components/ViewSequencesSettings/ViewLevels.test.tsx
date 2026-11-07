@@ -71,10 +71,15 @@ describe("els nivells de la columna de la vista", () => {
     renderView(freeDocument());
 
     expect(level(/^Document/)).toHaveAttribute("aria-expanded", "true");
-    expect(level(/^Page 1 of 2/)).toHaveAttribute("aria-expanded", "true");
+    expect(level(/^Page\s*Page 1 of 2/)).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
     expect(
       screen.getByText("Click a block on the page to see its settings."),
     ).toBeInTheDocument();
+    // La mida i l'espai dels pictogrames només són del bloc
+    expect(screen.queryAllByRole("slider")).toHaveLength(0);
     const crumbs = screen.getByRole("navigation", {
       name: "Where these settings apply",
     });
@@ -93,11 +98,17 @@ describe("els nivells de la columna de la vista", () => {
 
     expect(level(/^Document/)).toHaveAttribute("aria-expanded", "false");
     // La pàgina segueix la del bloc
-    expect(level(/^Page 2 of 2/)).toHaveAttribute("aria-expanded", "false");
-    expect(level(/^Sequence 2\s*Applies only to this block/)).toHaveAttribute(
+    expect(level(/^Page\s*Page 2 of 2/)).toHaveAttribute(
       "aria-expanded",
-      "true",
+      "false",
     );
+    // Les accions del bloc són al seu menú, no a la columna
+    expect(
+      screen.queryByRole("checkbox", { name: "On every page" }),
+    ).not.toBeInTheDocument();
+    expect(
+      level(/^Block\s*Sequence 2\s*Applies only to this block/),
+    ).toHaveAttribute("aria-expanded", "true");
   });
 
   it("el nivell «Bloc» canvia només aquell bloc, no la seqüència", async () => {
@@ -124,7 +135,7 @@ describe("els nivells de la columna de la vista", () => {
     await userEvent.click(screen.getByRole("button", { name: /^Sequence 1,/ }));
 
     expect(
-      level(/^Sequence 1\s*Applies only to this sequence/),
+      level(/^Block\s*Sequence 1\s*Applies only to this sequence/),
     ).toHaveAttribute("aria-expanded", "true");
 
     await userEvent.click(

@@ -781,7 +781,6 @@
   "pages.viewSequence.levels.documentScope": "Si applica a tutte le pagine",
   "pages.viewSequence.levels.pageScope": "{total, plural, one {Si applica alla pagina} other {Si applica solo alla pagina {number}}}",
   "pages.viewSequence.levels.pictograms": "Pittogrammi",
-  "pages.viewSequence.levels.pictogramsHint": "Per tutti i blocchi. Un blocco che hai regolato a parte mantiene le sue impostazioni.",
   "pages.viewSequence.levels.noSelection": "Fai clic su un blocco del foglio per vederne le impostazioni.",
   "pages.viewSequence.levels.layoutFlowShort": "Automatica",
   "pages.viewSequence.levels.layoutFreeShort": "Libera",
@@ -796,9 +795,10 @@
   "features.freeLayout.levels.sequenceScope": "Si applica solo a questa sequenza",
   "features.freeLayout.levels.sizeMax": "Al massimo. Ora escono di {mm} mm.",
   "features.freeLayout.levels.sizeTooSmall": "Il blocco è troppo piccolo: escono di {mm} mm. Ingrandiscilo o scegli altre colonne.",
-  "features.freeLayout.levels.place": "Posizione",
-  "features.freeLayout.levels.choosePage": "Scegli la pagina…",
-  "features.freeLayout.levels.remove": "Togli",
   "features.freeLayout.levels.putOnPage": "Alla pagina {number}",
-  "features.freeLayout.levels.putOnPageLabel": "Metti {name} nella pagina {number}"
+  "features.freeLayout.levels.putOnPageLabel": "Metti {name} nella pagina {number}",
+  "pages.viewSequence.levels.untitled": "Questo documento",
+  "pages.viewSequence.levels.kindPage": "Pagina",
+  "pages.viewSequence.levels.kindBlock": "Blocco",
+  "pages.viewSequence.levels.noBlock": "Nessun blocco selezionato"
 }

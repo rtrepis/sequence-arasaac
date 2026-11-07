@@ -781,7 +781,6 @@
   "pages.viewSequence.levels.documentScope": "S'applique à toutes les pages",
   "pages.viewSequence.levels.pageScope": "{total, plural, one {S'applique à la page} other {S'applique seulement à la page {number}}}",
   "pages.viewSequence.levels.pictograms": "Pictogrammes",
-  "pages.viewSequence.levels.pictogramsHint": "Pour tous les blocs. Un bloc que tu as réglé à part garde ses réglages.",
   "pages.viewSequence.levels.noSelection": "Clique sur un bloc de la feuille pour voir ses réglages.",
   "pages.viewSequence.levels.layoutFlowShort": "Automatique",
   "pages.viewSequence.levels.layoutFreeShort": "Libre",
@@ -796,9 +795,10 @@
   "features.freeLayout.levels.sequenceScope": "S'applique seulement à cette séquence",
   "features.freeLayout.levels.sizeMax": "Au maximum. Ils sortent maintenant à {mm} mm.",
   "features.freeLayout.levels.sizeTooSmall": "Le bloc est trop petit : ils sortent à {mm} mm. Agrandis-le ou choisis d'autres colonnes.",
-  "features.freeLayout.levels.place": "Emplacement",
-  "features.freeLayout.levels.choosePage": "Choisis la page…",
-  "features.freeLayout.levels.remove": "Retirer",
   "features.freeLayout.levels.putOnPage": "À la page {number}",
-  "features.freeLayout.levels.putOnPageLabel": "Mets {name} à la page {number}"
+  "features.freeLayout.levels.putOnPageLabel": "Mets {name} à la page {number}",
+  "pages.viewSequence.levels.untitled": "Ce document",
+  "pages.viewSequence.levels.kindPage": "Page",
+  "pages.viewSequence.levels.kindBlock": "Bloc",
+  "pages.viewSequence.levels.noBlock": "Aucun bloc sélectionné"
 }

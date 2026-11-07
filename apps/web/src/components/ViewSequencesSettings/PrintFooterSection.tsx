@@ -54,7 +54,9 @@ const PrintFooterSection = ({
         {/* Sense autor, el tooltip només hi afegeix context; quan l'ajust està
             bloquejat, el motiu ja és visible i el tooltip el repetiria */}
         <Tooltip
-          title={forcedByAuthor ? "" : intl.formatMessage(messages.licenceHelper)}
+          title={
+            forcedByAuthor ? "" : intl.formatMessage(messages.licenceHelper)
+          }
           describeChild
         >
           <Switch
@@ -66,7 +68,9 @@ const PrintFooterSection = ({
               // els dits sense cap avís. Va a l'`input`, que és qui porta el
               // rol: al `span` de fora, cap lector de pantalla no el llegiria
               "aria-disabled": forcedByAuthor || undefined,
-              "aria-describedby": forcedByAuthor ? LICENCE_FORCED_ID : undefined,
+              "aria-describedby": forcedByAuthor
+                ? LICENCE_FORCED_ID
+                : undefined,
             }}
             // Atenuat com un control desactivat: encès i amb tot el color,
             // semblava que funcionava i que era el clic el que fallava

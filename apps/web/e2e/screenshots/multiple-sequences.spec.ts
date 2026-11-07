@@ -154,17 +154,21 @@ test("multiple-sequences: captures i vídeo per la guia de novetats", async ({
   });
 
   // =============================================
-  // VIEW PAGE - PAS 3: Ajustar totes les seqüències
+  // VIEW PAGE - PAS 3: Ajustar la seqüència 1 (la mida és del bloc)
   // =============================================
   // Navegar a Vista via React Router (manté l'estat Redux de les seqüències)
   await page.getByRole("tab", { name: /Vista/i }).click();
   // Esperar que el slider "Mida" sigui visible i estable (acordió expandit per defecte)
-  // El de la secció «Pictogrames» del nivell «Document»: tot el document
-  const sizeSlider = page.getByRole("slider", { name: "Mida" }).first();
+  // La mida és del bloc: es selecciona la seqüència 1 al full i el nivell
+  // «Bloc» de la columna n'ensenya la mida (R5)
+  await page
+    .getByRole("button", { name: /^(sequence 1|seqüència 1),/i })
+    .click();
+  const sizeSlider = page.getByRole("slider", { name: "Mida" });
   await sizeSlider.waitFor({ state: "visible", timeout: 15000 });
   await page.waitForTimeout(600);
 
-  // Sense res seleccionat, només hi ha el «Mida» del nivell «Document»
+  // Només hi ha el «Mida» del bloc seleccionat
   // El MUI Slider thumb intercepta events de ratolí → usar focus() via JS + teclat
   await sizeSlider.evaluate((el: HTMLElement) => el.focus());
   for (let i = 0; i < 8; i++) {
@@ -188,8 +192,8 @@ test("multiple-sequences: captures i vídeo per la guia de novetats", async ({
     .click();
   await page.waitForTimeout(400);
 
-  // El «Mida» del nivell «Bloc», l'últim de la columna
-  const seq2SizeSlider = page.getByRole("slider", { name: "Mida" }).last();
+  // El «Mida» del nivell «Bloc», ara de la seqüència 2
+  const seq2SizeSlider = page.getByRole("slider", { name: "Mida" });
   await seq2SizeSlider.waitFor({ state: "visible", timeout: 10000 });
 
   // El MUI Slider thumb intercepta events de ratolí → usar focus() via JS + teclat

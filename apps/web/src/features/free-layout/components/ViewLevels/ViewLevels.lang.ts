@@ -46,24 +46,6 @@ const messages = defineMessages({
       "The block is too small: pictograms come out at {mm} mm. Make it bigger or choose other columns.",
     description: "Ajuda de la mida d'un bloc quan hi queden massa petits",
   },
-  place: {
-    id: "features.freeLayout.levels.place",
-    defaultMessage: "Place",
-    description:
-      "Secció del nivell «Bloc»: a totes les pàgines, copiar-lo a una altra pàgina, treure'l",
-  },
-  choosePage: {
-    id: "features.freeLayout.levels.choosePage",
-    defaultMessage: "Choose a page…",
-    description:
-      "Valor inicial del selector «Copia a la pàgina» del nivell «Bloc»",
-  },
-  remove: {
-    id: "features.freeLayout.levels.remove",
-    defaultMessage: "Remove",
-    description:
-      "Botó de la fila «Treu d'aquesta pàgina» del nivell «Bloc»: treu el bloc, amb Desfés",
-  },
   putOnPage: {
     id: "features.freeLayout.levels.putOnPage",
     defaultMessage: "To page {number}",

@@ -30,7 +30,19 @@ interface SequenceViewRowsProps {
   onChange: (change: Partial<SequenceViewSettings>) => void;
   /** La línia d'ajuda de la mida: en una plantilla, la mida que en surt (Q2) */
   sizeHelper?: React.ReactNode;
+  /** Quines files: la mida i l'espai només són del bloc; per defecte, totes */
+  rows?: readonly SequenceViewRow[];
 }
+
+/** Les files que es poden demanar. */
+export type SequenceViewRow = "size" | "space" | "alignmentH" | "alignmentV";
+
+const ALL_ROWS: readonly SequenceViewRow[] = [
+  "size",
+  "space",
+  "alignmentH",
+  "alignmentV",
+];
 
 /** El valor d'un lliscador, que MUI dona com a número o com a llista. */
 const single = (value: number | number[]): number =>
@@ -41,8 +53,9 @@ const rounded = (value: number): number => parseFloat(value.toFixed(2));
 
 /**
  * Les files de la vista dels pictogrames d'una seqüència: mida, espai i
- * alineacions. Les fan servir el nivell «Document» (l'estil del document) i el
- * nivell «Bloc» (un bloc o, a la disposició automàtica, una seqüència). Només
+ * alineacions. Les fan servir el nivell «Bloc» (totes: un bloc o, a la
+ * disposició automàtica, una seqüència) i el nivell «Document» (només les
+ * alineacions, a l'estil del document: la mida i l'espai són del bloc). Només
  * files (`SettingRow`): qui les fa servir decideix la secció i què canvien.
  */
 const SequenceViewRows = ({
@@ -50,94 +63,112 @@ const SequenceViewRows = ({
   labelId,
   onChange,
   sizeHelper,
+  rows = ALL_ROWS,
 }: SequenceViewRowsProps): React.ReactElement => (
   <>
-    <SettingRow
-      title={<FormattedMessage {...messages.size} />}
-      labelId={`${labelId}-size`}
-      helper={sizeHelper}
-      helperId={sizeHelper ? `${labelId}-size-helper` : undefined}
-    >
-      <Slider
-        name="sizePict"
-        step={SIZE_PICT_STEP}
-        min={SIZE_PICT_MIN}
-        max={SIZE_PICT_MAX}
-        value={view.sizePict}
-        valueLabelDisplay="auto"
-        valueLabelFormat={rounded}
-        onChange={(_, value) => onChange({ sizePict: single(value) })}
-        aria-labelledby={`${labelId}-size`}
-        aria-describedby={sizeHelper ? `${labelId}-size-helper` : undefined}
-      />
-    </SettingRow>
-
-    <SettingRow
-      title={<FormattedMessage {...messages.pictSpaceBetween} />}
-      labelId={`${labelId}-space`}
-    >
-      <Slider
-        name="pictSpaceBetween"
-        step={0.5}
-        min={-2}
-        max={10}
-        value={view.pictSpaceBetween}
-        valueLabelDisplay="auto"
-        valueLabelFormat={rounded}
-        onChange={(_, value) => onChange({ pictSpaceBetween: single(value) })}
-        aria-labelledby={`${labelId}-space`}
-      />
-    </SettingRow>
-
-    <SettingRow
-      title={<FormattedMessage {...messages.alignmentH} />}
-      labelId={`${labelId}-alignment-h`}
-      control="wide"
-    >
-      <StyledToggleButtonGroup
-        value={view.alignmentH}
-        exclusive
-        onChange={(_, value: SequenceAlignmentH | null) =>
-          value && onChange({ alignmentH: value })
-        }
-        aria-labelledby={`${labelId}-alignment-h`}
+    {rows.includes("size") && (
+      <SettingRow
+        title={<FormattedMessage {...messages.size} />}
+        labelId={`${labelId}-size`}
+        helper={sizeHelper}
+        helperId={sizeHelper ? `${labelId}-size-helper` : undefined}
       >
-        <IconToggleButton value="left" message={messages.tooltipAlignLeft}>
-          <MdFormatAlignLeft />
-        </IconToggleButton>
-        <IconToggleButton value="center" message={messages.tooltipAlignHCenter}>
-          <MdFormatAlignCenter />
-        </IconToggleButton>
-        <IconToggleButton value="right" message={messages.tooltipAlignRight}>
-          <MdFormatAlignRight />
-        </IconToggleButton>
-      </StyledToggleButtonGroup>
-    </SettingRow>
+        <Slider
+          name="sizePict"
+          step={SIZE_PICT_STEP}
+          min={SIZE_PICT_MIN}
+          max={SIZE_PICT_MAX}
+          value={view.sizePict}
+          valueLabelDisplay="auto"
+          valueLabelFormat={rounded}
+          onChange={(_, value) => onChange({ sizePict: single(value) })}
+          aria-labelledby={`${labelId}-size`}
+          aria-describedby={sizeHelper ? `${labelId}-size-helper` : undefined}
+        />
+      </SettingRow>
+    )}
 
-    <SettingRow
-      title={<FormattedMessage {...messages.alignmentV} />}
-      labelId={`${labelId}-alignment-v`}
-      control="wide"
-    >
-      <StyledToggleButtonGroup
-        value={view.alignmentV}
-        exclusive
-        onChange={(_, value: SequenceAlignmentV | null) =>
-          value && onChange({ alignmentV: value })
-        }
-        aria-labelledby={`${labelId}-alignment-v`}
+    {rows.includes("space") && (
+      <SettingRow
+        title={<FormattedMessage {...messages.pictSpaceBetween} />}
+        labelId={`${labelId}-space`}
       >
-        <IconToggleButton value="top" message={messages.tooltipAlignTop}>
-          <MdVerticalAlignTop />
-        </IconToggleButton>
-        <IconToggleButton value="center" message={messages.tooltipAlignVCenter}>
-          <MdVerticalAlignCenter />
-        </IconToggleButton>
-        <IconToggleButton value="bottom" message={messages.tooltipAlignBottom}>
-          <MdVerticalAlignBottom />
-        </IconToggleButton>
-      </StyledToggleButtonGroup>
-    </SettingRow>
+        <Slider
+          name="pictSpaceBetween"
+          step={0.5}
+          min={-2}
+          max={10}
+          value={view.pictSpaceBetween}
+          valueLabelDisplay="auto"
+          valueLabelFormat={rounded}
+          onChange={(_, value) => onChange({ pictSpaceBetween: single(value) })}
+          aria-labelledby={`${labelId}-space`}
+        />
+      </SettingRow>
+    )}
+
+    {rows.includes("alignmentH") && (
+      <SettingRow
+        title={<FormattedMessage {...messages.alignmentH} />}
+        labelId={`${labelId}-alignment-h`}
+        control="wide"
+      >
+        <StyledToggleButtonGroup
+          value={view.alignmentH}
+          exclusive
+          onChange={(_, value: SequenceAlignmentH | null) =>
+            value && onChange({ alignmentH: value })
+          }
+          aria-labelledby={`${labelId}-alignment-h`}
+        >
+          <IconToggleButton value="left" message={messages.tooltipAlignLeft}>
+            <MdFormatAlignLeft />
+          </IconToggleButton>
+          <IconToggleButton
+            value="center"
+            message={messages.tooltipAlignHCenter}
+          >
+            <MdFormatAlignCenter />
+          </IconToggleButton>
+          <IconToggleButton value="right" message={messages.tooltipAlignRight}>
+            <MdFormatAlignRight />
+          </IconToggleButton>
+        </StyledToggleButtonGroup>
+      </SettingRow>
+    )}
+
+    {rows.includes("alignmentV") && (
+      <SettingRow
+        title={<FormattedMessage {...messages.alignmentV} />}
+        labelId={`${labelId}-alignment-v`}
+        control="wide"
+      >
+        <StyledToggleButtonGroup
+          value={view.alignmentV}
+          exclusive
+          onChange={(_, value: SequenceAlignmentV | null) =>
+            value && onChange({ alignmentV: value })
+          }
+          aria-labelledby={`${labelId}-alignment-v`}
+        >
+          <IconToggleButton value="top" message={messages.tooltipAlignTop}>
+            <MdVerticalAlignTop />
+          </IconToggleButton>
+          <IconToggleButton
+            value="center"
+            message={messages.tooltipAlignVCenter}
+          >
+            <MdVerticalAlignCenter />
+          </IconToggleButton>
+          <IconToggleButton
+            value="bottom"
+            message={messages.tooltipAlignBottom}
+          >
+            <MdVerticalAlignBottom />
+          </IconToggleButton>
+        </StyledToggleButtonGroup>
+      </SettingRow>
+    )}
   </>
 );
 

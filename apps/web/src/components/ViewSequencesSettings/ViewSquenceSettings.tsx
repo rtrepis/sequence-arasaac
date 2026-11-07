@@ -1,9 +1,13 @@
-import { Box, Divider, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Divider, Stack, Tooltip } from "@mui/material";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { BsFilePdf } from "react-icons/bs";
-import { MdOutlinePushPin, MdScreenRotation } from "react-icons/md";
+import {
+  MdOutlineDescription,
+  MdOutlinePushPin,
+  MdScreenRotation,
+} from "react-icons/md";
 import {
   TbArrowAutofitHeight,
   TbArrowAutofitWidth,
@@ -55,15 +59,17 @@ import SettingsSaveErrorDialog from "@features/backend/user-settings/components/
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import GlobalViewControls from "./GlobalViewControls";
 import SequenceViewRows from "./SequenceViewRows";
-import SettingsLevel from "./SettingsLevel";
+import SettingsLevel, { SettingsLevels } from "./SettingsLevel";
 import LevelCrumbs, { LevelCrumb } from "./LevelCrumbs";
 import levelMessages from "./ViewLevels.lang";
 import PrintFooterSection from "./PrintFooterSection";
 import { VIEW_SETTINGS_COLUMN_WIDTH } from "./ViewSequenceSettings.styled";
 import FreeLayoutPages from "@features/free-layout/components/FreeLayoutPages";
+import { pageFrameSx } from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages";
 import FreeLayoutSettings from "@features/free-layout/components/FreeLayoutSettings";
 import freeLayoutMessages from "@features/free-layout/components/FreeLayoutSettings/FreeLayoutSettings.lang";
 import {
+  selectDocumentTitle,
   selectIsFreeLayout,
   selectPages,
 } from "@features/free-layout/store/freeLayoutThunks";
@@ -76,7 +82,9 @@ import {
 } from "@features/free-layout/hooks/useViewSelection";
 import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
 import {
+  BlockIcon,
   BlockLevel,
+  PageIcon,
   PageLevel,
   VIEW_PAGE_LEVEL_ID,
 } from "@features/free-layout/components/ViewLevels";
@@ -163,6 +171,7 @@ const ViewSequencesSettingsContent = ({
   const selectedBlock = useSelectedBlock();
   const clearOnEscape = useClearOnEscape();
   const pages = useAppSelector(selectPages);
+  const documentTitle = useAppSelector(selectDocumentTitle);
   const currentSelection = selectionKey(selection);
   // Amb un bloc seleccionat, Document i Pàgina es pleguen perquè el bloc quedi
   // a la vista (P1). Plegar-ne o desplegar-ne un a mà es respecta fins que
@@ -485,7 +494,7 @@ const ViewSequencesSettingsContent = ({
     setLevelOpen(level)(true);
     requestAnimationFrame(() => {
       const header = document.getElementById(`${levelId}-header`);
-      header?.scrollIntoView({ behavior: "smooth", block: "start" });
+      header?.scrollIntoView?.({ behavior: "smooth", block: "start" });
       header?.focus({ preventScroll: true });
     });
   };
@@ -656,9 +665,15 @@ const ViewSequencesSettingsContent = ({
                   height: displayHeight,
                   minWidth: 0,
                   overflow: "hidden",
-                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                  // Amb una seqüència seleccionada, la pàgina es ressalta com
+                  // les del mode lliure
+                  ...pageFrameSx(selection !== null),
                   marginBottom: 1,
-                  "@media print": { marginBottom: 0, outline: "none" },
+                  "@media print": {
+                    marginBottom: 0,
+                    outline: "none",
+                    boxShadow: "none",
+                  },
                   position: { xs: "sticky", md: "static" },
                   top: { xs: 0 },
                   zIndex: { xs: 10, md: "auto" },
@@ -772,116 +787,136 @@ const ViewSequencesSettingsContent = ({
                 {/* On s'és: Document › Pàgina N › el bloc. Fixes dalt de tot */}
                 <LevelCrumbs crumbs={crumbs} onGo={goToLevel} />
 
-                {/* Nivell 1: el que s'aplica a tot el document */}
-                <SettingsLevel
-                  id={VIEW_DOCUMENT_LEVEL_ID}
-                  title={<FormattedMessage {...levelMessages.document} />}
-                  scope={<FormattedMessage {...levelMessages.documentScope} />}
-                  summary={documentSummary}
-                  expanded={openLevels.document}
-                  onExpandedChange={setLevelOpen("document")}
-                >
-                  <SectionTitle
-                    title={<FormattedMessage {...messages.sectionPageFormat} />}
+                {/* Els tres nivells, lligats per la línia de la cascada */}
+                <SettingsLevels>
+                  {/* Nivell 1: el que s'aplica a tot el document */}
+                  <SettingsLevel
+                    id={VIEW_DOCUMENT_LEVEL_ID}
+                    icon={<MdOutlineDescription />}
+                    kind={<FormattedMessage {...levelMessages.document} />}
+                    title={
+                      documentTitle?.trim() || (
+                        <FormattedMessage {...levelMessages.untitled} />
+                      )
+                    }
+                    scope={
+                      <FormattedMessage {...levelMessages.documentScope} />
+                    }
+                    summary={documentSummary}
+                    expanded={openLevels.document}
+                    onExpandedChange={setLevelOpen("document")}
                   >
-                    <GlobalViewControls
-                      viewSettings={viewSettings}
-                      pageSize={pageSize}
-                      // En lliure, l'espai entre seqüències no hi diu res, i la
-                      // pantalla completa no s'hi pot triar
-                      sequenceCount={isFreeLayout ? 1 : sequenceKeys.length}
-                      paperOnly={isFreeLayout}
-                      showDirection={false}
-                      onPageSizeChange={setPageSize}
-                      onDirectionChange={handleDirectionChange}
-                      onSequenceSpaceChange={handleSequenceSpaceChange}
-                    />
-                  </SectionTitle>
+                    <SectionTitle
+                      title={
+                        <FormattedMessage {...messages.sectionPageFormat} />
+                      }
+                    >
+                      <GlobalViewControls
+                        viewSettings={viewSettings}
+                        pageSize={pageSize}
+                        // En lliure, l'espai entre seqüències no hi diu res, i la
+                        // pantalla completa no s'hi pot triar
+                        sequenceCount={isFreeLayout ? 1 : sequenceKeys.length}
+                        paperOnly={isFreeLayout}
+                        showDirection={false}
+                        onPageSizeChange={setPageSize}
+                        onDirectionChange={handleDirectionChange}
+                        onSequenceSpaceChange={handleSequenceSpaceChange}
+                      />
+                    </SectionTitle>
 
-                  {/* Disposició automàtica o lliure (ADR-005), i les
+                    {/* Disposició automàtica o lliure (ADR-005), i les
                       seqüències que no són a cap pàgina */}
-                  <SectionTitle
-                    title={<FormattedMessage {...freeLayoutMessages.section} />}
-                  >
-                    <FreeLayoutSettings
-                      pageSize={pageSize}
-                      onPageSizeChange={setPageSize}
-                    />
-                  </SectionTitle>
+                    <SectionTitle
+                      title={
+                        <FormattedMessage {...freeLayoutMessages.section} />
+                      }
+                    >
+                      <FreeLayoutSettings
+                        pageSize={pageSize}
+                        onPageSizeChange={setPageSize}
+                      />
+                    </SectionTitle>
 
-                  {/* Els pictogrames de tot el document: l'estil del document */}
-                  <SectionTitle
-                    title={<FormattedMessage {...levelMessages.pictograms} />}
-                  >
-                    <SequenceViewRows
-                      view={documentStyle.view}
-                      labelId="view-level-document"
-                      onChange={handleDocumentViewChange}
-                      sizeHelper={
-                        isFreeLayout ? (
-                          <FormattedMessage {...levelMessages.pictogramsHint} />
-                        ) : undefined
+                    {/* L'alineació dels pictogrames de tot el document (l'estil
+                      del document). La mida i l'espai només són del bloc */}
+                    <SectionTitle
+                      title={<FormattedMessage {...levelMessages.pictograms} />}
+                    >
+                      <SequenceViewRows
+                        view={documentStyle.view}
+                        labelId="view-level-document"
+                        onChange={handleDocumentViewChange}
+                        rows={["alignmentH", "alignmentV"]}
+                      />
+                    </SectionTitle>
+
+                    {/* El que només surt al peu del full imprès i del PDF */}
+                    <PrintFooterSection
+                      author={author}
+                      onAuthorChange={updateAuthor}
+                      licence={viewSettings.licence}
+                      onLicenceChange={(value) =>
+                        updateViewSetting("licence", value)
                       }
                     />
-                  </SectionTitle>
-
-                  {/* El que només surt al peu del full imprès i del PDF */}
-                  <PrintFooterSection
-                    author={author}
-                    onAuthorChange={updateAuthor}
-                    licence={viewSettings.licence}
-                    onLicenceChange={(value) =>
-                      updateViewSetting("licence", value)
-                    }
-                  />
-                </SettingsLevel>
-
-                {/* Nivell 2: la pàgina que es mira. A la disposició automàtica
-                    n'hi ha una de sola, i hi va la direcció */}
-                {isFreeLayout ? (
-                  <PageLevel
-                    expanded={openLevels.page}
-                    onExpandedChange={setLevelOpen("page")}
-                  />
-                ) : (
-                  <SettingsLevel
-                    id={VIEW_PAGE_LEVEL_ID}
-                    title={pageTitle}
-                    scope={intl.formatMessage(levelMessages.pageScope, {
-                      number: 1,
-                      total: 1,
-                    })}
-                    summary={intl.formatMessage(
-                      direction === "row"
-                        ? levelMessages.directionRowShort
-                        : levelMessages.directionColumnShort,
-                    )}
-                    expanded={openLevels.page}
-                    onExpandedChange={setLevelOpen("page")}
-                  >
-                    <GlobalViewControls
-                      viewSettings={viewSettings}
-                      pageSize={pageSize}
-                      sequenceCount={1}
-                      showPaper={false}
-                      onPageSizeChange={setPageSize}
-                      onDirectionChange={handleDirectionChange}
-                      onSequenceSpaceChange={handleSequenceSpaceChange}
-                    />
                   </SettingsLevel>
-                )}
 
-                {/* Nivell 3: el bloc seleccionat, o com s'hi arriba */}
-                {selectedBlock ? (
-                  <BlockLevel
-                    expanded={openLevels.block}
-                    onExpandedChange={setLevelOpen("block")}
-                  />
-                ) : (
-                  <Typography variant="body2" color="text.secondary">
-                    <FormattedMessage {...levelMessages.noSelection} />
-                  </Typography>
-                )}
+                  {/* Nivell 2: la pàgina que es mira. A la disposició automàtica
+                    n'hi ha una de sola, i hi va la direcció */}
+                  {isFreeLayout ? (
+                    <PageLevel
+                      expanded={openLevels.page}
+                      onExpandedChange={setLevelOpen("page")}
+                    />
+                  ) : (
+                    <SettingsLevel
+                      id={VIEW_PAGE_LEVEL_ID}
+                      icon={<PageIcon />}
+                      kind={<FormattedMessage {...levelMessages.kindPage} />}
+                      title={pageTitle}
+                      scope={intl.formatMessage(levelMessages.pageScope, {
+                        number: 1,
+                        total: 1,
+                      })}
+                      summary={intl.formatMessage(
+                        direction === "row"
+                          ? levelMessages.directionRowShort
+                          : levelMessages.directionColumnShort,
+                      )}
+                      expanded={openLevels.page}
+                      onExpandedChange={setLevelOpen("page")}
+                    >
+                      <GlobalViewControls
+                        viewSettings={viewSettings}
+                        pageSize={pageSize}
+                        sequenceCount={1}
+                        showPaper={false}
+                        onPageSizeChange={setPageSize}
+                        onDirectionChange={handleDirectionChange}
+                        onSequenceSpaceChange={handleSequenceSpaceChange}
+                      />
+                    </SettingsLevel>
+                  )}
+
+                  {/* Nivell 3: el bloc seleccionat, o com s'hi arriba */}
+                  {selectedBlock ? (
+                    <BlockLevel
+                      expanded={openLevels.block}
+                      onExpandedChange={setLevelOpen("block")}
+                    />
+                  ) : (
+                    <SettingsLevel
+                      id={VIEW_BLOCK_LEVEL_ID}
+                      icon={<BlockIcon />}
+                      kind={<FormattedMessage {...levelMessages.kindBlock} />}
+                      title={<FormattedMessage {...levelMessages.noBlock} />}
+                      scope={
+                        <FormattedMessage {...levelMessages.noSelection} />
+                      }
+                    />
+                  )}
+                </SettingsLevels>
 
                 {/* Accions de tota la columna, per això van al final: restaurar el
                     que hi ha desat i desar el que hi ha ara com a preferència.

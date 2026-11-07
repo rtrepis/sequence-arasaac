@@ -781,7 +781,6 @@
   "pages.viewSequence.levels.documentScope": "Se aplica a todas las páginas",
   "pages.viewSequence.levels.pageScope": "{total, plural, one {Se aplica a la página} other {Se aplica solo a la página {number}}}",
   "pages.viewSequence.levels.pictograms": "Pictogramas",
-  "pages.viewSequence.levels.pictogramsHint": "Para todos los bloques. Un bloque que hayas ajustado por separado conserva sus ajustes.",
   "pages.viewSequence.levels.noSelection": "Haz clic en un bloque de la hoja para ver sus ajustes.",
   "pages.viewSequence.levels.layoutFlowShort": "Automática",
   "pages.viewSequence.levels.layoutFreeShort": "Libre",
@@ -796,9 +795,10 @@
   "features.freeLayout.levels.sequenceScope": "Se aplica solo a esta secuencia",
   "features.freeLayout.levels.sizeMax": "Como máximo. Ahora salen de {mm} mm.",
   "features.freeLayout.levels.sizeTooSmall": "El bloque es demasiado pequeño: salen de {mm} mm. Hazlo más grande o elige otras columnas.",
-  "features.freeLayout.levels.place": "Lugar",
-  "features.freeLayout.levels.choosePage": "Elige la página…",
-  "features.freeLayout.levels.remove": "Quitar",
   "features.freeLayout.levels.putOnPage": "A la página {number}",
-  "features.freeLayout.levels.putOnPageLabel": "Pon {name} en la página {number}"
+  "features.freeLayout.levels.putOnPageLabel": "Pon {name} en la página {number}",
+  "pages.viewSequence.levels.untitled": "Este documento",
+  "pages.viewSequence.levels.kindPage": "Página",
+  "pages.viewSequence.levels.kindBlock": "Bloque",
+  "pages.viewSequence.levels.noBlock": "Ningún bloque seleccionado"
 }

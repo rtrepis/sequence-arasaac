@@ -1,5 +1,6 @@
 import React from "react";
 import { MenuItem, Select, Typography } from "@mui/material";
+import { MdCropPortrait } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { SettingRow } from "@/components/SettingsLayout";
@@ -18,6 +19,9 @@ import messages from "./ViewLevels.lang";
 
 /** L'`id` del nivell «Pàgina»: les molles hi porten. */
 export const VIEW_PAGE_LEVEL_ID = "view-level-page";
+
+/** La icona del nivell: un full. */
+export const PageIcon = (): React.ReactElement => <MdCropPortrait />;
 
 /** Prefix dels ids dels títols de fila, per lligar-los als controls. */
 const LABEL_ID = "view-level-page";
@@ -59,6 +63,8 @@ const PageLevel = ({
   return (
     <SettingsLevel
       id={VIEW_PAGE_LEVEL_ID}
+      icon={<PageIcon />}
+      kind={<FormattedMessage {...levelMessages.kindPage} />}
       title={intl.formatMessage(pageMessages.pageLabel, { number, total })}
       scope={intl.formatMessage(levelMessages.pageScope, { number, total })}
       summary={intl.formatMessage(messages.pageSummary, {

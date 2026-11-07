@@ -17,7 +17,7 @@ const BlockSettingsLink = (): React.ReactElement => {
   const goToBlockSettings = () => {
     const level = document.getElementById(VIEW_BLOCK_LEVEL_ID);
     if (!level) return;
-    level.scrollIntoView({ behavior: "smooth", block: "start" });
+    level.scrollIntoView?.({ behavior: "smooth", block: "start" });
     // El focus va al botó que plega el nivell, que és el seu títol
     level.querySelector<HTMLElement>("[aria-expanded]")?.focus({
       preventScroll: true,
