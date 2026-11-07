@@ -58,16 +58,19 @@ per pestanya, pestanya activa, si porta configuració global i què se n'espera 
 | `13-malmes` | — | — | — | la meitat del 02: no s'ha de poder obrir, i s'ha de dir |
 | `14-versio-99` | v3, `schemaVersion: 99` | 1 (2) | dins del document | una versió més nova: s'obre, avisa i conserva els camps que no coneix |
 | `15-paper-carta` | v3 | 1 (2) | dins del document | pàgina en paper Carta (`LETTER`): s'obre en Carta i es torna a desar igual; amb una mida desconeguda, cau a la de qui obre |
-| `16-mode-lliure` | v3 | 3 (2, 3, 4) | dins del document | disposició lliure (ADR-005): dues pàgines, una seqüència a totes les pàgines (`common`), una de repetida a dues pàgines, una caixa amb columnes fixes, i camps desconeguts en un full i en una col·locació |
+| `16-mode-lliure` | v3 | 3 (2, 3, 4) | dins del document | fases 1–3 del mode lliure (`layout: "free"`, `placements`): dues pàgines, una seqüència a totes les pàgines (`common`), una de repetida a dues pàgines, una caixa amb columnes fixes, i camps desconeguts en un full i en una col·locació. Prova la migració al model de pàgines |
+| `17-pagines-i-blocs` | v3 | 4 (2, 3, 4, 1) | dins del document | pàgines i blocs (ADR-005 revisada): una pàgina amb plantilla, una d'automàtica amb un rètol i un bloc d'un tipus desconegut, una de retocada sense plantilla, un bloc comú, un estil amb nom amb un camp desconegut, un retoc de vista en un bloc i una seqüència sense col·locar. Anada i tornada idèntica |
 
 Les 08 i 09 les ha escrit l'app (obrir el 02 i desar-lo), no s'han fet a mà; la 10 sí, a partir de
 la 01. La captura del 08 és idèntica, píxel a píxel, a la del 02: és la prova que una seqüència es
 veu igual després de desar-la en el format nou i tornar-la a obrir.
 
 La 16 s'ha afegit amb la disposició lliure (`docs/decisions/ADR-005-disposicio-lliure.md`), a mà
-i amb la forma exacta que escriu l'app: obrir-la i tornar-la a desar en dona el mateix fitxer. No és
-al `manifest.json` perquè l'e2e en compara la vista, i el mode lliure encara no es pinta (fase 3 de
-`docs/PLA-mode-lliure.md`).
+i amb la forma que escrivia l'app a les fases 1–3. Des de la revisió de l'ADR-005 és un fitxer
+antic: s'obre amb les mateixes pàgines i caixes, i en desar-lo s'escriu amb el model d'ara. La 17
+és el model d'ara, a mà i amb la forma exacta que escriu l'app: obrir-la i tornar-la a desar en dona
+el mateix fitxer. Cap de les dues és al `manifest.json`, perquè l'e2e en compara la vista i les
+pàgines encara no es pinten senceres (`docs/PLA-mode-lliure.md`).
 
 Les 11–14 s'han afegit amb el format v3 (`docs/decisions/ADR-003-model-document-saac-v3.md`), a
 mà: la 11 és una còpia exacta de la 01, la 12 fa servir les imatges de la 03 i la 14 segueix

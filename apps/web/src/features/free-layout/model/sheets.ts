@@ -1,36 +1,45 @@
-// Operacions sobre la disposició lliure: fulls i col·locacions. Totes són pures
-// (retornen una disposició nova i no toquen la que reben), i els identificadors
+// Operacions sobre les pàgines del document i els seus blocs. Totes són pures
+// (retornen unes pàgines noves i no toquen les que reben), i els identificadors
 // nous els dona qui crida, perquè les proves puguin fixar-los.
-// Vegeu `docs/PLA-mode-lliure.md`, §6.
+// Vegeu `docs/decisions/ADR-005-disposicio-lliure.md`.
 import type {
-  FreeLayout,
-  FreeSheet,
-  SequencePlacement,
+  DocumentPages,
+  DocumentSheet,
+  PagePlacement,
+  SheetMode,
 } from "@/types/document";
+import { isBoxed } from "./placement";
 
-/** Genera un identificador nou: `"sh"` per a un full, `"pl"` per a una col·locació. */
+/** Genera un identificador nou: `"sh"` per a una pàgina, `"pl"` per a un bloc. */
 export type NewLayoutId = (prefix: "sh" | "pl") => string;
 
-/** On és una col·locació: en un full (el seu índex) o a les comunes. */
+/** On és un bloc: en una pàgina (el seu índex) o als comuns. */
 export type PlacementLocation = number | "common";
 
-/** Una disposició amb un sol full buit: la d'un document sense res col·locat. */
-export const emptyFreeLayout = (newId: NewLayoutId): FreeLayout => ({
-  sheets: [{ id: newId("sh"), placements: [] }],
+/** Una pàgina buida. */
+export const emptySheet = (
+  newId: NewLayoutId,
+  mode: SheetMode,
+): DocumentSheet => ({ id: newId("sh"), mode, placements: [] });
+
+/** Unes pàgines amb una sola pàgina buida. */
+export const emptyPages = (
+  newId: NewLayoutId,
+  mode: SheetMode,
+): DocumentPages => ({
+  sheets: [emptySheet(newId, mode)],
   common: [],
 });
 
-/** La col·locació amb aquest `id`, i on és. */
+/** El bloc amb aquest `id`, i on és. */
 export const findPlacement = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   placementId: string,
-):
-  | { placement: SequencePlacement; location: PlacementLocation }
-  | undefined => {
-  const common = layout.common.find(({ id }) => id === placementId);
+): { placement: PagePlacement; location: PlacementLocation } | undefined => {
+  const common = pages.common.find(({ id }) => id === placementId);
   if (common) return { placement: common, location: "common" };
-  for (let index = 0; index < layout.sheets.length; index += 1) {
-    const placement = layout.sheets[index].placements.find(
+  for (let index = 0; index < pages.sheets.length; index += 1) {
+    const placement = pages.sheets[index].placements.find(
       ({ id }) => id === placementId,
     );
     if (placement) return { placement, location: index };
@@ -38,198 +47,225 @@ export const findPlacement = (
   return undefined;
 };
 
-const mapSheet = (
-  layout: FreeLayout,
+/** Canvia la pàgina `index` amb `change`; la resta queda igual. */
+export const mapSheet = (
+  pages: DocumentPages,
   index: number,
-  change: (sheet: FreeSheet) => FreeSheet,
-): FreeLayout => ({
-  ...layout,
-  sheets: layout.sheets.map((sheet, i) =>
-    i === index ? change(sheet) : sheet,
-  ),
+  change: (sheet: DocumentSheet) => DocumentSheet,
+): DocumentPages => ({
+  ...pages,
+  sheets: pages.sheets.map((sheet, i) => (i === index ? change(sheet) : sheet)),
 });
 
 const withoutPlacement = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   placementId: string,
-): FreeLayout => ({
-  sheets: layout.sheets.map((sheet) => ({
+): DocumentPages => ({
+  sheets: pages.sheets.map((sheet) => ({
     ...sheet,
     placements: sheet.placements.filter(({ id }) => id !== placementId),
   })),
-  common: layout.common.filter(({ id }) => id !== placementId),
+  common: pages.common.filter(({ id }) => id !== placementId),
 });
 
-// --- Fulls ---
+/**
+ * Una còpia independent d'un bloc, amb un `id` nou. Fora de la seva pàgina,
+ * l'espai de la plantilla d'on venia ja no vol dir res, i no se'l queda.
+ */
+const copyOf = (
+  placement: PagePlacement,
+  newId: NewLayoutId,
+  keepSlot: boolean,
+): PagePlacement => {
+  const id = newId("pl");
+  if (!isBoxed(placement))
+    return { ...placement, id, raw: { ...placement.raw, id } };
+  const copy = { ...placement, id };
+  if (!keepSlot) delete copy.slot;
+  return copy;
+};
 
-/** Un full buit just després de `afterIndex`. Les comunes ja hi surten soles. */
+/** El bloc sense l'espai de la plantilla: per als que surten de la seva pàgina. */
+const withoutSlot = (placement: PagePlacement): PagePlacement => {
+  if (!isBoxed(placement) || placement.slot === undefined) return placement;
+  const rest = { ...placement };
+  delete rest.slot;
+  return rest;
+};
+
+// --- Pàgines ---
+
+/** Una pàgina buida just després de `afterIndex`. Els comuns ja hi surten sols. */
 export const addSheet = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   afterIndex: number,
   newId: NewLayoutId,
-): FreeLayout => {
-  const sheets = [...layout.sheets];
-  sheets.splice(afterIndex + 1, 0, { id: newId("sh"), placements: [] });
-  return { ...layout, sheets };
+  mode: SheetMode,
+): DocumentPages => {
+  const sheets = [...pages.sheets];
+  sheets.splice(afterIndex + 1, 0, emptySheet(newId, mode));
+  return { ...pages, sheets };
 };
 
 /**
- * Una còpia del full just després de l'original, amb les mateixes caixes. Les
- * col·locacions de la còpia són noves i independents: moure'n una no mou l'altra.
+ * Una còpia de la pàgina just després de l'original, amb la mateixa plantilla
+ * i les mateixes caixes. Els blocs de la còpia són nous i independents: moure'n
+ * un no mou l'altre.
  */
 export const duplicateSheet = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   index: number,
   newId: NewLayoutId,
-): FreeLayout => {
-  const original = layout.sheets[index];
-  if (!original) return layout;
-  const copy: FreeSheet = {
+): DocumentPages => {
+  const original = pages.sheets[index];
+  if (!original) return pages;
+  const copy: DocumentSheet = {
     ...original,
     id: newId("sh"),
-    placements: original.placements.map((placement) => ({
-      ...placement,
-      id: newId("pl"),
-    })),
+    placements: original.placements.map((placement) =>
+      copyOf(placement, newId, true),
+    ),
   };
-  const sheets = [...layout.sheets];
+  const sheets = [...pages.sheets];
   sheets.splice(index + 1, 0, copy);
-  return { ...layout, sheets };
+  return { ...pages, sheets };
 };
 
 /**
- * Treu el full i les seves col·locacions. Un document en mode lliure té sempre
- * un full com a mínim: si era l'únic, en queda un de buit en el seu lloc.
+ * Treu la pàgina i els seus blocs. Un document té sempre una pàgina com a
+ * mínim: si era l'única, en queda una de buida, del mateix mode, en el seu lloc.
  */
 export const removeSheet = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   index: number,
   newId: NewLayoutId,
-): FreeLayout => {
-  if (!layout.sheets[index]) return layout;
-  const sheets = layout.sheets.filter((_, i) => i !== index);
+): DocumentPages => {
+  const removed = pages.sheets[index];
+  if (!removed) return pages;
+  const sheets = pages.sheets.filter((_, i) => i !== index);
   return {
-    ...layout,
-    sheets: sheets.length > 0 ? sheets : [{ id: newId("sh"), placements: [] }],
+    ...pages,
+    sheets: sheets.length > 0 ? sheets : [emptySheet(newId, removed.mode)],
   };
 };
 
-/** Canvia el full de lloc: el de `from` passa a ser a `to`. */
+/** Canvia la pàgina de lloc: la de `from` passa a ser a `to`. */
 export const moveSheet = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   from: number,
   to: number,
-): FreeLayout => {
-  const sheet = layout.sheets[from];
-  if (!sheet || to < 0 || to >= layout.sheets.length) return layout;
-  const sheets = layout.sheets.filter((_, i) => i !== from);
+): DocumentPages => {
+  const sheet = pages.sheets[from];
+  if (!sheet || to < 0 || to >= pages.sheets.length) return pages;
+  const sheets = pages.sheets.filter((_, i) => i !== from);
   sheets.splice(to, 0, sheet);
-  return { ...layout, sheets };
+  return { ...pages, sheets };
 };
 
-// --- Col·locacions ---
+// --- Blocs ---
 
-/** Posa la col·locació al full. Si ja era en un altre lloc, no la treu d'allà. */
+/** Posa el bloc a la pàgina. Si ja era en un altre lloc, no el treu d'allà. */
 export const addPlacement = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   sheetIndex: number,
-  placement: SequencePlacement,
-): FreeLayout =>
-  mapSheet(layout, sheetIndex, (sheet) => ({
+  placement: PagePlacement,
+): DocumentPages =>
+  mapSheet(pages, sheetIndex, (sheet) => ({
     ...sheet,
     placements: [...sheet.placements, placement],
   }));
 
-/** Canvia la col·locació allà on sigui (moure, redimensionar, columnes…). */
+/** Canvia el bloc allà on sigui (moure, redimensionar, columnes…). */
 export const updatePlacement = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   placementId: string,
-  change: (placement: SequencePlacement) => SequencePlacement,
-): FreeLayout => {
-  const apply = (list: SequencePlacement[]): SequencePlacement[] =>
+  change: (placement: PagePlacement) => PagePlacement,
+): DocumentPages => {
+  const apply = (list: PagePlacement[]): PagePlacement[] =>
     list.map((placement) =>
       placement.id === placementId ? change(placement) : placement,
     );
   return {
-    sheets: layout.sheets.map((sheet) => ({
+    sheets: pages.sheets.map((sheet) => ({
       ...sheet,
       placements: apply(sheet.placements),
     })),
-    common: apply(layout.common),
+    common: apply(pages.common),
   };
 };
 
 /**
- * Treu **aquesta** col·locació, i prou. La seqüència continua al document i a
- * les altres pàgines on surti; si era l'última, queda sense col·locar.
+ * Treu **aquest** bloc, i prou. La seqüència continua al document i a les
+ * altres pàgines on surti; si era l'últim, queda sense col·locar.
  */
 export const removePlacement = withoutPlacement;
 
 /**
- * Una còpia de la col·locació al full triat, a la mateixa posició i mida. És
+ * Una còpia del bloc a la pàgina triada, a la mateixa posició i mida. És
  * independent de l'original: «Copia a la pàgina…».
  */
 export const copyPlacementToSheet = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   placementId: string,
   sheetIndex: number,
   newId: NewLayoutId,
-): FreeLayout => {
-  const found = findPlacement(layout, placementId);
-  if (!found || !layout.sheets[sheetIndex]) return layout;
-  return addPlacement(layout, sheetIndex, {
-    ...found.placement,
-    id: newId("pl"),
-  });
+): DocumentPages => {
+  const found = findPlacement(pages, placementId);
+  if (!found || !pages.sheets[sheetIndex]) return pages;
+  return addPlacement(pages, sheetIndex, copyOf(found.placement, newId, false));
 };
 
 /**
- * «A totes les pàgines»: la col·locació passa del seu full a les comunes, i a
- * partir d'aquí surt a tots els fulls al mateix lloc.
+ * «A totes les pàgines»: el bloc passa de la seva pàgina als comuns, i a partir
+ * d'aquí surt a totes les pàgines al mateix lloc.
  */
 export const makeCommon = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   placementId: string,
-): FreeLayout => {
-  const found = findPlacement(layout, placementId);
-  if (!found || found.location === "common") return layout;
-  const without = withoutPlacement(layout, placementId);
-  return { ...without, common: [...without.common, found.placement] };
+): DocumentPages => {
+  const found = findPlacement(pages, placementId);
+  if (!found || found.location === "common") return pages;
+  const without = withoutPlacement(pages, placementId);
+  return {
+    ...without,
+    common: [...without.common, withoutSlot(found.placement)],
+  };
 };
 
 /**
- * Desfà «A totes les pàgines»: la col·locació es queda només al full on s'és, i
+ * Desfà «A totes les pàgines»: el bloc es queda només a la pàgina on s'és, i
  * desapareix de la resta.
  */
 export const makeLocal = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   placementId: string,
   sheetIndex: number,
-): FreeLayout => {
-  const found = findPlacement(layout, placementId);
-  if (!found || found.location !== "common" || !layout.sheets[sheetIndex])
-    return layout;
+): DocumentPages => {
+  const found = findPlacement(pages, placementId);
+  if (!found || found.location !== "common" || !pages.sheets[sheetIndex])
+    return pages;
   return addPlacement(
-    withoutPlacement(layout, placementId),
+    withoutPlacement(pages, placementId),
     sheetIndex,
     found.placement,
   );
 };
 
 /**
- * Treu totes les col·locacions d'una seqüència: el que cal quan s'esborra la
- * seqüència del document.
+ * Treu tots els blocs d'una seqüència: el que cal quan s'esborra la seqüència
+ * del document. Els blocs de text i els que l'app no entén es queden.
  */
 export const removeSequencePlacements = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   sequenceKey: number,
-): FreeLayout => {
-  const keep = ({ sequenceKey: key }: SequencePlacement) => key !== sequenceKey;
+): DocumentPages => {
+  const keep = (placement: PagePlacement) =>
+    placement.kind !== "sequence" || placement.sequenceKey !== sequenceKey;
   return {
-    sheets: layout.sheets.map((sheet) => ({
+    sheets: pages.sheets.map((sheet) => ({
       ...sheet,
       placements: sheet.placements.filter(keep),
     })),
-    common: layout.common.filter(keep),
+    common: pages.common.filter(keep),
   };
 };

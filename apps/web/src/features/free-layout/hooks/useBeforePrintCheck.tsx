@@ -6,7 +6,7 @@ import { AppDialog, AppDialogActions } from "@components/AppDialog";
 import StyledButton from "@/style/StyledButton";
 import { unplacedSequenceKeys } from "@features/free-layout/model/placementsOf";
 import {
-  selectFreeLayout,
+  selectPages,
   selectIsFreeLayout,
   selectSequenceKeys,
 } from "@features/free-layout/store/freeLayoutThunks";
@@ -37,7 +37,7 @@ export const useBeforePrintCheck = (): {
   const titleId = useId();
   const bodyId = useId();
   const isFree = useAppSelector(selectIsFreeLayout);
-  const freeLayout = useAppSelector(selectFreeLayout);
+  const freeLayout = useAppSelector(selectPages);
   const keys = useAppSelector(selectSequenceKeys);
   const [pending, setPending] = useState<PendingPrint | null>(null);
 

@@ -1,33 +1,49 @@
-// Repartir caixes en un full sencer: la disposició de partida en passar a
-// «Lliure», afegir seqüències a una pàgina i aplicar-hi una plantilla. Les tres
-// fan el mateix: col·locar les caixes del full a la regió que deixen lliure les
-// comunes, segons una plantilla. Vegeu `docs/PLA-mode-lliure.md`, §6.
+// Repartir els blocs d'una pàgina: aplicar-hi una plantilla, afegir-hi
+// seqüències, la disposició de partida en passar a «Lliure» i el pas d'una
+// pàgina automàtica a una amb caixes. Totes col·loquen els blocs a la regió que
+// deixen lliure els comuns, segons la plantilla de la pàgina, i la pàgina es
+// queda la plantilla (R2). Vegeu `docs/decisions/ADR-005-disposicio-lliure.md`.
 import type {
-  FreeLayout,
+  DocumentPages,
+  DocumentSheet,
   PlacementColumns,
   SequencePlacement,
 } from "@/types/document";
 import type { SequenceDirection } from "@/types/ui";
-import type { SheetArea } from "./placement";
-import { NewLayoutId } from "./sheets";
+import { SheetArea, hasBox, isBoxed } from "./placement";
+import { NewLayoutId, mapSheet } from "./sheets";
 import { sortByReadingOrder } from "./readingOrder";
 import {
   LayoutTemplate,
+  SlotBox,
   applyTemplate,
   assignSlots,
   freeRegion,
+  freeSlots,
+  slotToBox,
+  templateById,
   templateFor,
   withBoxes,
 } from "./templates";
 
-/** Quantes seqüències van a cada full de la disposició de partida. */
+/** Quantes seqüències van a cada pàgina de la disposició de partida. */
 export const INITIAL_SEQUENCES_PER_SHEET = 3;
 
-const newPlacement = (
+/** El que cal per repartir blocs. */
+export interface DistributeContext {
+  area: SheetArea;
+  /** La direcció de les pàgines automàtiques: decideix files o columnes */
+  direction: SequenceDirection;
+  newId: NewLayoutId;
+}
+
+/** Un bloc de seqüència nou, encara sense caixa. */
+export const newSequencePlacement = (
   sequenceKey: number,
   newId: NewLayoutId,
   columns: PlacementColumns = "auto",
 ): SequencePlacement => ({
+  kind: "sequence",
   id: newId("pl"),
   sequenceKey,
   x: 0,
@@ -38,95 +54,149 @@ const newPlacement = (
 });
 
 /**
- * Aplica la plantilla a un full: les seves caixes es reparteixen, en ordre de
- * lectura, a la regió que deixen lliure les comunes. Substitueix els retocs a
- * mà d'aquell full, i per això qui ho ofereix ho ha de poder desfer.
+ * La pàgina amb la plantilla aplicada: els seus blocs es reparteixen, en ordre
+ * de lectura, a la regió que deixen lliure els comuns, i la pàgina passa a
+ * tenir caixes i a recordar la plantilla. Substitueix els retocs a mà d'aquella
+ * pàgina, i per això qui ho ofereix ho ha de poder desfer.
  */
+const sheetWithTemplate = (
+  sheet: DocumentSheet,
+  template: LayoutTemplate,
+  pages: DocumentPages,
+  area: SheetArea,
+): DocumentSheet => ({
+  ...sheet,
+  mode: "template",
+  template: template.id,
+  placements: applyTemplate(
+    sheet.placements,
+    template,
+    freeRegion(area, pages.common.filter(isBoxed)),
+  ),
+});
+
+/** Aplica la plantilla a una pàgina (vegeu `sheetWithTemplate`). */
 export const applyTemplateToSheet = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   sheetIndex: number,
   template: LayoutTemplate,
   area: SheetArea,
-): FreeLayout => {
-  const sheet = layout.sheets[sheetIndex];
-  if (!sheet) return layout;
-  const region = freeRegion(area, layout.common);
-  return {
-    ...layout,
-    sheets: layout.sheets.map((current, index) =>
-      index === sheetIndex
-        ? {
-            ...current,
-            placements: applyTemplate(current.placements, template, region),
-          }
-        : current,
-    ),
-  };
-};
+): DocumentPages =>
+  pages.sheets[sheetIndex]
+    ? mapSheet(pages, sheetIndex, (sheet) =>
+        sheetWithTemplate(sheet, template, pages, area),
+      )
+    : pages;
 
 /**
- * Afegeix les seqüències al full i el torna a repartir amb la plantilla que
- * toca per al nombre nou de caixes. Les seqüències no surten d'on eren: en fa
- * una col·locació nova a aquest full, encara que ja en tinguin en un altre.
+ * Afegeix les seqüències a una pàgina. Les seqüències no surten d'on eren: en
+ * fa un bloc nou a aquesta pàgina, encara que ja en tinguin en una altra.
+ *
+ * - **Pàgina automàtica**: van al final, una darrere l'altra.
+ * - **Pàgina amb plantilla** (R2): omplen els espais lliures de la plantilla que
+ *   té, en ordre, i els blocs que ja hi eren no es mouen. Si no hi caben, o la
+ *   pàgina no té cap plantilla que l'app conegui, es torna a repartir sencera
+ *   amb la plantilla que toca per al nombre nou de blocs, que passa a ser la
+ *   seva.
  */
 export const addSequencesToSheet = (
-  layout: FreeLayout,
+  pages: DocumentPages,
   sheetIndex: number,
   sequenceKeys: readonly number[],
-  context: {
-    area: SheetArea;
-    direction: SequenceDirection;
-    newId: NewLayoutId;
-  },
-): FreeLayout => {
-  const sheet = layout.sheets[sheetIndex];
-  if (!sheet || sequenceKeys.length === 0) return layout;
-  const added = sequenceKeys.map((key) => newPlacement(key, context.newId));
-  const placements = [...sheet.placements, ...added];
-  // Les que ja hi eren, en ordre de lectura; les noves, al final
-  const ordered = [...sortByReadingOrder(sheet.placements), ...added];
-  const boxOf = assignSlots(
-    ordered,
-    templateFor(placements.length, context.direction),
-    freeRegion(context.area, layout.common),
+  context: DistributeContext,
+): DocumentPages => {
+  const sheet = pages.sheets[sheetIndex];
+  if (!sheet || sequenceKeys.length === 0) return pages;
+  const added = sequenceKeys.map((key) =>
+    newSequencePlacement(key, context.newId),
   );
-  return {
-    ...layout,
-    sheets: layout.sheets.map((current, index) =>
-      index === sheetIndex
-        ? { ...current, placements: withBoxes(placements, boxOf) }
-        : current,
-    ),
-  };
+  const placements = [...sheet.placements, ...added];
+  if (sheet.mode === "auto")
+    return mapSheet(pages, sheetIndex, () => ({ ...sheet, placements }));
+
+  const region = freeRegion(context.area, pages.common.filter(isBoxed));
+  const template = sheet.template ? templateById(sheet.template) : undefined;
+  const free = template ? freeSlots(template, sheet.placements) : [];
+  if (template && free.length >= added.length) {
+    const boxOf = new Map<string, SlotBox>(
+      added.map((placement, index) => [
+        placement.id,
+        {
+          ...slotToBox(template.slots[free[index]], region),
+          slot: free[index],
+        },
+      ]),
+    );
+    return mapSheet(pages, sheetIndex, () => ({
+      ...sheet,
+      placements: withBoxes(placements, boxOf),
+    }));
+  }
+
+  // Els que ja hi eren, en ordre de lectura; els nous, al final
+  const boxed = placements.filter(isBoxed);
+  const next = templateFor(boxed.length, context.direction);
+  const ordered = [
+    ...sortByReadingOrder(sheet.placements.filter(isBoxed)),
+    ...added,
+  ];
+  return mapSheet(pages, sheetIndex, () => ({
+    ...sheet,
+    template: next.id,
+    placements: withBoxes(placements, assignSlots(ordered, next, region)),
+  }));
 };
 
 /**
- * La disposició en passar a «Lliure» per primer cop: totes les seqüències,
- * apilades com al flux (en files o en columnes, segons la direcció de la
- * pàgina), de `INITIAL_SEQUENCES_PER_SHEET` en `INITIAL_SEQUENCES_PER_SHEET`
- * per full. Així no desapareix res del full, i a partir d'aquí l'usuari les
- * mou, les treu o n'afegeix pàgina a pàgina.
+ * La pàgina, amb caixes. Una pàgina que ja en té no canvia. Una d'automàtica:
+ * - si és buida, o si els seus blocs ja tenen caixa (la pàgina en tenia i va
+ *   passar a automàtica en aquesta sessió), la recupera tal com era;
+ * - si no, es reparteix amb la plantilla que recordava, si l'app la coneix i
+ *   hi caben tots els blocs, i si no amb la que toca pel nombre de blocs.
  */
-export const buildInitialLayout = (
+export const sheetToTemplate = (
+  sheet: DocumentSheet,
+  pages: DocumentPages,
+  context: Omit<DistributeContext, "newId">,
+): DocumentSheet => {
+  if (sheet.mode === "template") return sheet;
+  const boxed = sheet.placements.filter(isBoxed);
+  if (boxed.every(hasBox)) return { ...sheet, mode: "template" };
+  const remembered = sheet.template ? templateById(sheet.template) : undefined;
+  const template =
+    remembered && remembered.slots.length >= boxed.length
+      ? remembered
+      : templateFor(boxed.length, sheet.direction ?? context.direction);
+  return sheetWithTemplate(sheet, template, pages, context.area);
+};
+
+/**
+ * La disposició de partida en passar a «Lliure» un document que no tenia
+ * pàgines: totes les seqüències, apilades com al flux (en files o en columnes,
+ * segons la direcció de la pàgina), de `INITIAL_SEQUENCES_PER_SHEET` en
+ * `INITIAL_SEQUENCES_PER_SHEET` per pàgina. Així no desapareix res del full, i
+ * a partir d'aquí l'usuari les mou, les treu o n'afegeix pàgina a pàgina.
+ */
+export const buildInitialPages = (
   sequenceKeys: readonly number[],
-  context: {
-    area: SheetArea;
-    direction: SequenceDirection;
-    newId: NewLayoutId;
-  },
-): FreeLayout => {
+  context: DistributeContext,
+): DocumentPages => {
   const groups: number[][] = [];
   for (let i = 0; i < sequenceKeys.length; i += INITIAL_SEQUENCES_PER_SHEET)
     groups.push(sequenceKeys.slice(i, i + INITIAL_SEQUENCES_PER_SHEET));
   if (groups.length === 0) groups.push([]);
 
-  const empty: FreeLayout = {
-    sheets: groups.map(() => ({ id: context.newId("sh"), placements: [] })),
+  const empty: DocumentPages = {
+    sheets: groups.map(() => ({
+      id: context.newId("sh"),
+      mode: "template",
+      placements: [],
+    })),
     common: [],
   };
   return groups.reduce(
-    (layout, keys, sheetIndex) =>
-      addSequencesToSheet(layout, sheetIndex, keys, context),
+    (pages, keys, sheetIndex) =>
+      addSequencesToSheet(pages, sheetIndex, keys, context),
     empty,
   );
 };

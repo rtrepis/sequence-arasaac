@@ -17,9 +17,10 @@ import {
   styleToV3,
 } from "./serialize";
 import {
+  BLOCK_KEYS,
+  NAMED_STYLE_KEYS,
   PAGE_KEYS,
   PICTOGRAM_KEYS,
-  PLACEMENT_KEYS,
   SEQUENCE_KEYS,
   SHEET_KEYS,
   documentFromV3,
@@ -33,14 +34,19 @@ import {
   SAAC_V3,
   SaacDocumentV3,
   V3Asset,
+  V3Block,
+  V3BlockBase,
+  V3ForeignBlock,
   V3Image,
+  V3NamedStyle,
   V3Page,
   V3Pictogram,
   V3PictogramOverride,
-  V3Placement,
   V3Sequence,
   V3Sheet,
   V3Style,
+  V3TextStyle,
+  V3View,
 } from "./types";
 
 export interface ParseContext {
@@ -232,69 +238,148 @@ const readPictogram = (
   };
 };
 
-// --- Disposició lliure ---
+// --- Pàgines i blocs ---
 
 const isFiniteNumber = (value: unknown): value is number =>
   typeof value === "number" && Number.isFinite(value);
 
-/**
- * Una col·locació del fitxer, o `undefined` si no es pot pintar: apunta a una
- * seqüència que no hi és, o la caixa no és un rectangle. Les columnes que no
- * s'entenen passen a «automàtic», i un `id` que falta o es repeteix se'n
- * genera un de nou. La caixa no s'encaixa al full: això és feina de qui la
- * pinta, que sap quina mida té el full.
- */
-const readPlacement = (
-  value: unknown,
-  sequenceIds: ReadonlySet<string>,
-  usedIds: Set<string>,
-): V3Placement | undefined => {
-  if (!isPlainObject(value)) return undefined;
-  const { id, sequence, x, y, w, h, columns } = value;
-  if (typeof sequence !== "string" || !sequenceIds.has(sequence))
-    return undefined;
+/** La caixa d'un bloc, si n'és una de veritat: posició i mida més grans que 0. */
+const readBox = (
+  value: PlainObject,
+): Pick<V3BlockBase, "x" | "y" | "w" | "h"> | undefined => {
+  const { x, y, w, h } = value;
   if (!isFiniteNumber(x) || !isFiniteNumber(y)) return undefined;
   if (!isFiniteNumber(w) || !isFiniteNumber(h) || w <= 0 || h <= 0)
     return undefined;
+  return { x, y, w, h };
+};
 
-  const placementId =
-    typeof id === "string" && id && !usedIds.has(id) ? id : newSaacId("pl");
-  usedIds.add(placementId);
+/** El que es necessita per llegir els blocs d'un document. */
+interface BlockReader {
+  sequenceIds: ReadonlySet<string>;
+  styleIds: ReadonlySet<string>;
+  style: V3Style;
+  usedIds: Set<string>;
+}
+
+/**
+ * Un bloc del fitxer. Un bloc que l'app no entén (un `kind` d'una versió
+ * posterior, o cap `kind` i cap `sequence`) es conserva tal com és. Un bloc que
+ * sí que entén però que està trencat es descarta: el de seqüència que apunta a
+ * una seqüència que no hi és, i el que necessita caixa (`boxed`) i no en té cap
+ * de bona. Els blocs de les fases 1–3 del mode lliure no portaven `kind`: tenen
+ * `sequence`, i són blocs de seqüència.
+ */
+const readBlock = (
+  value: unknown,
+  boxed: boolean,
+  reader: BlockReader,
+): V3Block | V3ForeignBlock | undefined => {
+  if (!isPlainObject(value)) return undefined;
+  if (!isKnownBlock(value)) return { kind: "foreign", raw: value };
+  const kind = value.kind === "text" ? "text" : "sequence";
+
+  const box = readBox(value);
+  if (boxed && !box) return undefined;
+
+  const { id, slot, namedStyle } = value;
+  const blockId =
+    typeof id === "string" && id && !reader.usedIds.has(id)
+      ? id
+      : newSaacId("pl");
+  reader.usedIds.add(blockId);
+  const base = {
+    ...unknownFields(value, BLOCK_KEYS),
+    id: blockId,
+    ...box,
+    ...(Number.isInteger(slot) && (slot as number) >= 0 && { slot }),
+    // Un estil que no hi és no es pot fer servir: el bloc fa servir el del document
+    ...(typeof namedStyle === "string" &&
+      reader.styleIds.has(namedStyle) && { namedStyle }),
+  } as V3BlockBase;
+
+  if (kind === "text") {
+    const textStyle = filterLike(value.textStyle, {
+      font: reader.style.card.font,
+      bold: false,
+      alignmentH: reader.style.view.alignmentH,
+      alignmentV: reader.style.view.alignmentV,
+    }) as V3TextStyle | undefined;
+    return {
+      ...base,
+      kind: "text",
+      text: typeof value.text === "string" ? value.text : "",
+      ...(textStyle && { textStyle }),
+    };
+  }
+
+  const { sequence, columns } = value;
+  if (typeof sequence !== "string" || !reader.sequenceIds.has(sequence))
+    return undefined;
+  const view = filterLike(value.view, reader.style.view) as
+    | Partial<V3View>
+    | undefined;
   return {
-    ...unknownFields(value, PLACEMENT_KEYS),
-    id: placementId,
+    ...base,
+    kind: "sequence",
     sequence,
-    x,
-    y,
-    w,
-    h,
     columns:
       Number.isInteger(columns) && (columns as number) >= 1
         ? (columns as number)
         : "auto",
+    ...(view && { view }),
   };
 };
 
+const readBlocks = (
+  list: unknown,
+  boxed: boolean,
+  reader: BlockReader,
+): (V3Block | V3ForeignBlock)[] =>
+  Array.isArray(list)
+    ? list
+        .map((value) => readBlock(value, boxed, reader))
+        .filter((block): block is V3Block | V3ForeignBlock => !!block)
+    : [];
+
+/** Si el bloc és d'un tipus que l'app entén (els de les fases 1–3 no en deien cap). */
+const isKnownBlock = (value: PlainObject): boolean =>
+  value.kind === "sequence" ||
+  value.kind === "text" ||
+  (value.kind === undefined && typeof value.sequence === "string");
+
 /**
- * Els fulls i les col·locacions comunes d'una pàgina en mode lliure. Si no hi
- * ha cap full que es pugui llegir, no en retorna cap: la disposició s'ha de
- * tornar a construir en obrir-la, com la d'un document que passa a «Lliure».
+ * El mode d'una pàgina. Si no en diu cap que l'app conegui (els fulls de les
+ * fases 1–3 no en portaven), té plantilla si algun bloc que l'app entén té
+ * caixa, i si no és automàtica.
  */
-const readFreeLayout = (
+const readSheetMode = (sheet: PlainObject): V3Sheet["mode"] => {
+  if (sheet.mode === "auto" || sheet.mode === "template") return sheet.mode;
+  const blocks = Array.isArray(sheet.blocks)
+    ? sheet.blocks
+    : Array.isArray(sheet.placements)
+      ? sheet.placements
+      : [];
+  return blocks.some(
+    (block) => isPlainObject(block) && isKnownBlock(block) && readBox(block),
+  )
+    ? "template"
+    : "auto";
+};
+
+/**
+ * Les pàgines i els blocs comuns. Es llegeixen sempre que hi siguin, digui el
+ * que digui `layout`: una versió anterior que obre el document i el torna a
+ * desar hi escriu `"flow"` i en conserva les pàgines com a camps desconeguts.
+ * Si no hi ha cap pàgina que es pugui llegir, no en retorna cap, i el document
+ * és una sola pàgina automàtica.
+ */
+const readPages = (
   rawPage: unknown,
-  sequences: readonly V3Sequence[],
+  reader: BlockReader,
 ): Pick<V3Page, "sheets" | "common"> => {
   if (!isPlainObject(rawPage) || !Array.isArray(rawPage.sheets)) return {};
-  const sequenceIds = new Set(sequences.map(({ id }) => id));
-  const usedPlacementIds = new Set<string>();
   const usedSheetIds = new Set<string>();
-
-  const readPlacements = (list: unknown): V3Placement[] =>
-    Array.isArray(list)
-      ? list
-          .map((value) => readPlacement(value, sequenceIds, usedPlacementIds))
-          .filter((placement): placement is V3Placement => !!placement)
-      : [];
 
   const sheets: V3Sheet[] = rawPage.sheets
     .filter(isPlainObject)
@@ -304,15 +389,58 @@ const readFreeLayout = (
           ? sheet.id
           : newSaacId("sh");
       usedSheetIds.add(sheetId);
+      const mode = readSheetMode(sheet);
+      const { direction, template } = sheet;
+      // Les fases 1–3 deien `placements` el que ara són `blocks`
+      const blocks = Array.isArray(sheet.blocks)
+        ? sheet.blocks
+        : sheet.placements;
       return {
         ...unknownFields(sheet, SHEET_KEYS),
         id: sheetId,
-        placements: readPlacements(sheet.placements),
+        mode,
+        ...((direction === "row" || direction === "column") && { direction }),
+        ...(typeof template === "string" && template && { template }),
+        blocks: readBlocks(blocks, mode === "template", reader),
       };
     });
   if (sheets.length === 0) return {};
 
-  return { sheets, common: readPlacements(rawPage.common) };
+  return { sheets, common: readBlocks(rawPage.common, true, reader) };
+};
+
+/**
+ * Els estils amb nom del document. Cada un és un retoc: només hi queden els
+ * camps que l'estil complet té, amb el tipus que toca.
+ */
+const readNamedStyles = (
+  value: unknown,
+  style: V3Style,
+): V3NamedStyle[] | undefined => {
+  if (!Array.isArray(value)) return undefined;
+  const usedIds = new Set<string>();
+  const styles = value.filter(isPlainObject).map((raw): V3NamedStyle => {
+    const id =
+      typeof raw.id === "string" && raw.id && !usedIds.has(raw.id)
+        ? raw.id
+        : newSaacId("st");
+    usedIds.add(id);
+    const pictogram = filterLike(
+      raw.pictogram,
+      style.pictogram,
+    ) as V3NamedStyle["pictogram"];
+    const card = filterLike(raw.card, style.card) as V3NamedStyle["card"];
+    const view = filterLike(raw.view, style.view) as V3NamedStyle["view"];
+    return {
+      ...unknownFields(raw, NAMED_STYLE_KEYS),
+      id,
+      name: typeof raw.name === "string" ? raw.name : "",
+      ...(pictogram && { pictogram }),
+      ...(card && { card }),
+      ...(view && { view }),
+    };
+  });
+  return styles.length > 0 ? styles : undefined;
 };
 
 const readAssets = (value: unknown): Record<string, V3Asset> => {
@@ -377,6 +505,13 @@ const readV3Document = (
 
   const meta = isPlainObject(raw.meta) ? raw.meta : {};
   const ui = isPlainObject(raw.ui) ? raw.ui : undefined;
+  const styles = readNamedStyles(raw.styles, style.value);
+  const pages = readPages(raw.page, {
+    sequenceIds: new Set(sequences.map(({ id }) => id)),
+    styleIds: new Set(styles?.map(({ id }) => id)),
+    style: style.value,
+    usedIds: new Set<string>(),
+  });
 
   return {
     file: {
@@ -400,13 +535,14 @@ const readV3Document = (
       page: {
         ...(isPlainObject(raw.page) && unknownFields(raw.page, PAGE_KEYS)),
         ...page.value,
-        // Els fulls només hi són en mode lliure: en flux no es fan servir, i
-        // tornar-los a escriure contradiria el que diu `layout`
-        ...(page.value.layout === "free" &&
-          readFreeLayout(raw.page, sequences)),
+        // `"free"` només el porten els fitxers de les fases 1–3; ara les
+        // pàgines diuen com es col·loquen, i el valor és sempre `"flow"`
+        layout: "flow",
+        ...pages,
       },
       style: { ...(isPlainObject(raw.style) ? raw.style : {}), ...style.value },
       sequences,
+      ...(styles && { styles }),
       ...(Object.keys(assets).length > 0 && { assets }),
       ...(ui && { ui }),
     },

@@ -89,6 +89,13 @@
               "type": "string"
             }
           }
+        },
+        "styles": {
+          "type": "array",
+          "description": "Estils amb nom del document: retocs de l'estil del document que poden fer servir molts blocs alhora (namedStyle). És l'entrada del catàleg d'estils copiada dins del document (docs/decisions/ADR-005-disposicio-lliure.md).",
+          "items": {
+            "$ref": "#/$defs/namedStyle"
+          }
         }
       }
     },
@@ -174,100 +181,76 @@
             "row",
             "column"
           ],
-          "description": "Seqüències en files o en columnes."
+          "description": "La direcció de les pàgines automàtiques que no en diuen cap: seqüències en files o en columnes."
         },
         "sequenceGap": {
           "type": "number",
           "minimum": 0,
-          "description": "Espai entre seqüències. És un factor, no mil·límetres."
+          "description": "Espai entre blocs (entre seqüències al flux). És un factor, no mil·límetres."
         },
         "layout": {
           "enum": [
             "flow",
             "free"
           ],
-          "description": "\"flow\": les seqüències es col·loquen soles. \"free\": mode lliure, on diuen sheets i common (docs/decisions/ADR-005-disposicio-lliure.md)."
+          "description": "Obsolet: s'escriu sempre \"flow\", perquè les versions anteriors el llegeixen. \"free\" només el porten els fitxers de les fases 1–3 del mode lliure; ara és cada pàgina (sheets[].mode) la que diu com es col·loquen els blocs."
         },
         "sheets": {
           "type": "array",
-          "description": "Només amb layout = \"free\": les pàgines del document, en ordre. Sense cap full, la disposició es torna a construir en obrir-lo.",
+          "description": "Les pàgines del document, en ordre. Sense sheets, el document és una sola pàgina automàtica amb totes les seqüències. Es llegeixen sempre que hi siguin, digui el que digui layout.",
           "items": {
             "$ref": "#/$defs/sheet"
           }
         },
         "common": {
           "type": "array",
-          "description": "Només amb layout = \"free\": col·locacions que surten a totes les pàgines, al mateix lloc, per sota de les de cada full.",
+          "description": "Blocs que surten a totes les pàgines, al mateix lloc, per sota dels de cada pàgina. Sempre amb caixa.",
           "items": {
-            "$ref": "#/$defs/placement"
+            "$ref": "#/$defs/block"
           }
         }
       }
     },
     "sheet": {
       "type": "object",
-      "description": "Una pàgina del mode lliure.",
+      "description": "Una pàgina del document. L'app escriu sempre mode i blocks; els fulls de les fases 1–3 no portaven mode i deien placements els blocs.",
       "required": [
-        "id",
-        "placements"
+        "id"
       ],
       "properties": {
         "id": {
           "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "auto",
+            "template"
+          ],
+          "description": "\"auto\": els blocs un darrere l'altre, com el flux de sempre (sense caixes). \"template\": cada bloc a la seva caixa. Si falta o no s'entén, \"template\" si algun bloc que l'app entén té caixa, i si no \"auto\"."
+        },
+        "direction": {
+          "enum": [
+            "row",
+            "column"
+          ],
+          "description": "Només en automàtica. Sense valor, la de page.direction."
+        },
+        "template": {
+          "type": "string",
+          "description": "La plantilla de la pàgina (R2): \"full\", \"rows-N\", \"columns-N\", \"grid-CxR\", \"strip-top\"… Es recorda també en automàtica. Un id que l'app no coneix es conserva."
+        },
+        "blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/block"
+          }
         },
         "placements": {
           "type": "array",
+          "description": "Obsolet: el nom de blocks a les fases 1–3. Es llegeix si no hi ha blocks i no es torna a escriure.",
           "items": {
-            "$ref": "#/$defs/placement"
+            "$ref": "#/$defs/block"
           }
-        }
-      }
-    },
-    "placement": {
-      "type": "object",
-      "description": "Una seqüència posada en una pàgina. Una seqüència pot tenir moltes col·locacions, a pàgines diferents o a la mateixa. Mil·límetres des del cantó superior esquerre del full (el paper menys el marge d'impressió).",
-      "required": [
-        "id",
-        "sequence",
-        "x",
-        "y",
-        "w",
-        "h",
-        "columns"
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "sequence": {
-          "type": "string",
-          "description": "L'id de la seqüència. Una col·locació d'una seqüència que no hi és es descarta en llegir."
-        },
-        "x": {
-          "type": "number"
-        },
-        "y": {
-          "type": "number"
-        },
-        "w": {
-          "type": "number",
-          "exclusiveMinimum": 0
-        },
-        "h": {
-          "type": "number",
-          "exclusiveMinimum": 0
-        },
-        "columns": {
-          "description": "Columnes de la graella: \"auto\" (les que fan els pictogrames més grans) o un nombre fix.",
-          "oneOf": [
-            {
-              "const": "auto"
-            },
-            {
-              "type": "integer",
-              "minimum": 1
-            }
-          ]
         }
       }
     },
@@ -762,6 +745,178 @@
         },
         "alignmentV": {
           "$ref": "#/$defs/alignmentV"
+        }
+      }
+    },
+    "block": {
+      "type": "object",
+      "description": "Un bloc d'una pàgina. Un bloc d'un kind que l'app no coneix es conserva tal com és i es torna a escriure al seu lloc. Sense kind i amb sequence, és un bloc de seqüència (fases 1–3).",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "description": "\"sequence\" o \"text\". Qualsevol altre valor és d'una versió posterior."
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "w": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "h": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "slot": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "L'espai de la plantilla de la pàgina que ocupa."
+        },
+        "namedStyle": {
+          "type": "string",
+          "description": "L'id d'un estil amb nom (styles). Si no hi és, el bloc fa servir l'estil del document."
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/sequenceBlock"
+        },
+        {
+          "$ref": "#/$defs/textBlock"
+        },
+        {
+          "$ref": "#/$defs/foreignBlock"
+        }
+      ]
+    },
+    "sequenceBlock": {
+      "description": "Un bloc de seqüència. Mil·límetres des del cantó superior esquerre del full (el paper menys el marge d'impressió); la caixa només és obligatòria a les pàgines amb plantilla i als comuns. Un bloc d'una seqüència que no hi és es descarta.",
+      "required": [
+        "kind",
+        "sequence"
+      ],
+      "properties": {
+        "kind": {
+          "const": "sequence"
+        },
+        "sequence": {
+          "type": "string",
+          "description": "L'id de la seqüència."
+        },
+        "columns": {
+          "description": "Columnes de la graella: \"auto\" (les que fan els pictogrames més grans) o un nombre fix. Sense valor, \"auto\".",
+          "oneOf": [
+            {
+              "const": "auto"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        },
+        "view": {
+          "$ref": "#/$defs/partialView",
+          "description": "Retoc de la vista en aquest bloc: només el que canvia respecte de la seqüència i de l'estil amb nom."
+        }
+      }
+    },
+    "textBlock": {
+      "description": "Un bloc de text: un rètol sense pictograma. El text és contingut i no es tradueix.",
+      "required": [
+        "kind",
+        "text"
+      ],
+      "properties": {
+        "kind": {
+          "const": "text"
+        },
+        "text": {
+          "type": "string",
+          "description": "El text, amb \\n entre línies."
+        },
+        "textStyle": {
+          "type": "object",
+          "description": "Retoc sobre la lletra de les targetes (style.card.font i la de l'estil amb nom). Sense retoc, centrat i sense negreta.",
+          "properties": {
+            "font": {
+              "$ref": "#/$defs/partialFont"
+            },
+            "bold": {
+              "type": "boolean"
+            },
+            "alignmentH": {
+              "$ref": "#/$defs/alignmentH"
+            },
+            "alignmentV": {
+              "$ref": "#/$defs/alignmentV"
+            }
+          }
+        }
+      }
+    },
+    "foreignBlock": {
+      "description": "Un bloc d'una versió posterior: es conserva tal com és.",
+      "properties": {
+        "kind": {
+          "not": {
+            "enum": [
+              "sequence",
+              "text"
+            ]
+          }
+        }
+      }
+    },
+    "namedStyle": {
+      "type": "object",
+      "description": "Un estil amb nom: un retoc de l'estil del document. Cascada: document → seqüència → estil amb nom del bloc → bloc → pictograma.",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "pictogram": {
+          "type": "object",
+          "properties": {
+            "skin": {
+              "$ref": "#/$defs/skin"
+            },
+            "hair": {
+              "$ref": "#/$defs/hair"
+            },
+            "color": {
+              "type": "boolean"
+            },
+            "fitzgerald": {
+              "type": "object",
+              "description": "Taula parcial: els colors de les categories (i none) que canvia.",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "card": {
+          "$ref": "#/$defs/partialCardStyle"
+        },
+        "view": {
+          "$ref": "#/$defs/partialView"
         }
       }
     }

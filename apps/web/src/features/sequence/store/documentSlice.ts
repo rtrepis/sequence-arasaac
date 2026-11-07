@@ -7,9 +7,8 @@ import {
 } from "@/types/sequence";
 import {
   DocumentLayout,
+  DocumentPages,
   DocumentSAAC,
-  FreeLayout,
-  PageLayoutMode,
   SequenceStyle,
   SequenceStyleView,
   SequenceViewSettings,
@@ -49,6 +48,7 @@ import { clearDraft } from "@features/sequence/storage/draftStorage";
 import { documentStatusClearedActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { reportClientError } from "@features/backend/api/clientErrorReport";
 import { removeSequencePlacements } from "@features/free-layout/model/sheets";
+import { addNewSequenceToPages } from "@features/free-layout/model/pages";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);
@@ -156,10 +156,27 @@ const documentSlice = createSlice({
       return previousDocument;
     },
 
-    // Crea una nova seqüència buida amb la clau indicada sense canviar l'actiu
-    addNewSequence: (previousDocument, action: PayloadAction<number>) => {
-      previousDocument.content[action.payload] = [];
-      delete previousDocument.viewSettings[action.payload];
+    // Crea una nova seqüència buida amb la clau indicada sense canviar l'actiu.
+    // Si el document té pàgines i l'última és automàtica, hi va al final
+    // (ADR-005): l'identificador del bloc es fa fora del reductor
+    addNewSequence: {
+      reducer: (
+        previousDocument,
+        action: PayloadAction<number, string, { blockId: string }>,
+      ) => {
+        previousDocument.content[action.payload] = [];
+        delete previousDocument.viewSettings[action.payload];
+        if (previousDocument.pages)
+          previousDocument.pages = addNewSequenceToPages(
+            previousDocument.pages,
+            action.payload,
+            () => action.meta.blockId,
+          );
+      },
+      prepare: (key: number) => ({
+        payload: key,
+        meta: { blockId: newSaacId("pl") },
+      }),
     },
 
     // Els pictogrames nous reben l'identificador del fitxer v3 en néixer: així
@@ -422,23 +439,17 @@ const documentSlice = createSlice({
         defaultSettings,
         styleView,
         fitzgeraldColors,
-        layoutMode,
-        freeLayout,
+        pages,
       } = action.payload;
       previousDocument.content = content;
       previousDocument.viewSettings = viewSettings;
       previousDocument.defaultSettings = defaultSettings;
       previousDocument.styleView = styleView;
       previousDocument.fitzgeraldColors = fitzgeraldColors;
-      // De la pàgina només es desfà el mode: cap acció que es pugui desfer no
-      // en canvia la mida ni l'orientació, i desar el document l'haurà fet
-      // explícita mentrestant (`documentStyleMaterialized`)
-      const { mode, ...page } = previousDocument.layout ?? {};
-      if (previousDocument.layout || layoutMode)
-        previousDocument.layout = layoutMode
-          ? { ...page, mode: layoutMode }
-          : page;
-      previousDocument.freeLayout = freeLayout;
+      // De la pàgina del document no es desfà res: cap acció que es pugui
+      // desfer no en canvia la mida ni l'orientació. Les pàgines i els seus
+      // blocs, sí
+      previousDocument.pages = pages;
     },
 
     // Fa explícit l'estil que el document heretava, en desar-lo: el que s'ha
@@ -503,27 +514,13 @@ const documentSlice = createSlice({
       };
     },
 
-    // Disposició de la pàgina (ADR-005): automàtica (el flux de sempre) o
-    // lliure. Passar a flux no esborra la disposició lliure: tornar a «Lliure»
-    // la recupera, i en desar en flux no s'escriu. `base` és la pàgina que té
-    // ara (la seva o, si l'hereta, la de les preferències)
-    layoutModeChanged: (
+    // Les pàgines senceres, amb els seus blocs (ADR-005). Les operacions les
+    // calcula `features/free-layout/model`, i aquí només es desa el resultat
+    pagesChanged: (
       previousDocument,
-      action: PayloadAction<{ mode: PageLayoutMode; base: DocumentLayout }>,
+      action: PayloadAction<DocumentPages | undefined>,
     ) => {
-      const { mode, ...layout } =
-        previousDocument.layout ?? action.payload.base;
-      previousDocument.layout =
-        action.payload.mode === "free" ? { ...layout, mode: "free" } : layout;
-    },
-
-    // La disposició lliure sencera: pàgines i col·locacions. Les operacions
-    // les calcula `features/free-layout/model`, i aquí només es desa el resultat
-    freeLayoutChanged: (
-      previousDocument,
-      action: PayloadAction<FreeLayout>,
-    ) => {
-      previousDocument.freeLayout = action.payload;
+      previousDocument.pages = action.payload;
     },
 
     // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
@@ -591,10 +588,10 @@ const documentSlice = createSlice({
         const lastKey = keys[keys.length - 1];
         delete previousDocument.content[Number(lastKey)];
         delete previousDocument.viewSettings[Number(lastKey)];
-        // I les seves col·locacions: no poden apuntar a una seqüència que no hi és
-        if (previousDocument.freeLayout)
-          previousDocument.freeLayout = removeSequencePlacements(
-            previousDocument.freeLayout,
+        // I els seus blocs: no poden apuntar a una seqüència que no hi és
+        if (previousDocument.pages)
+          previousDocument.pages = removeSequencePlacements(
+            previousDocument.pages,
             Number(lastKey),
           );
 
@@ -619,7 +616,7 @@ export const documentReducer = documentSlice.reducer;
 
 /**
  * El que toca un canvi que es pot desfer: l'estil i, des del mode lliure
- * (ADR-005), la pàgina i la disposició. És l'únic desfer de l'app.
+ * (ADR-005), les pàgines. És l'únic desfer de l'app.
  */
 export interface DocumentStyleSnapshot {
   content: DocumentSAAC["content"];
@@ -627,9 +624,7 @@ export interface DocumentStyleSnapshot {
   defaultSettings: DocumentSAAC["defaultSettings"];
   styleView: DocumentSAAC["styleView"];
   fitzgeraldColors: DocumentSAAC["fitzgeraldColors"];
-  /** De la pàgina, només el mode: vegeu `restoreDocumentStyle` */
-  layoutMode: PageLayoutMode | undefined;
-  freeLayout: DocumentSAAC["freeLayout"];
+  pages: DocumentSAAC["pages"];
 }
 
 export const takeDocumentStyleSnapshot = (
@@ -640,8 +635,7 @@ export const takeDocumentStyleSnapshot = (
   defaultSettings: document.defaultSettings,
   styleView: document.styleView,
   fitzgeraldColors: document.fitzgeraldColors,
-  layoutMode: document.layout?.mode,
-  freeLayout: document.freeLayout,
+  pages: document.pages,
 });
 
 /**
@@ -768,8 +762,7 @@ export const {
   restoreDocumentStyle: restoreDocumentStyleActionCreator,
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
   documentLayoutChanged: documentLayoutChangedActionCreator,
-  layoutModeChanged: layoutModeChangedActionCreator,
-  freeLayoutChanged: freeLayoutChangedActionCreator,
+  pagesChanged: pagesChangedActionCreator,
   documentAuthorChanged: documentAuthorChangedActionCreator,
   pictStyleAppliedToAll: pictStyleAppliedToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,

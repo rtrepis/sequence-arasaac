@@ -169,7 +169,7 @@ si un estàndard el contradiu, és l'estàndard el que s'ha de corregir.
 | `docs/fonaments/03-model-contingut-estil.md` | Nomenclatura (document, seqüència, pictograma, estil, pàgina, preferències), de qui és cada cosa, la cascada d'estil (`resolveStyle`, `diffStyle`) i les accions sobre l'estil: `documentSlice`, `uiSlice.defaultSettings`/`viewSettings`, la targeta, el PDF, la columna de la vista i el panell «Estil del document» |
 | `docs/fonaments/06-compatibilitat-i-dades.md` | El format `.saac` v3 i `.saacstyle`, la migració dels formats antics, desar i obrir (fitxer i núvol), la descàrrega i el selector de fitxers. Esquema formal: `docs/schema/saac-v3.schema.json` |
 | `docs/decisions/ADR-003-model-document-saac-v3.md` | Per què el format és com és, i què es va descartar. `docs/fonaments/sequencia-i-estil.md` n'és l'antecessor i ara només redirigeix |
-| `docs/decisions/ADR-005-disposicio-lliure.md` | El mode lliure de pàgina: pàgines i col·locacions dins de `page`, la mateixa seqüència a diverses pàgines, i per què no cal pujar `schemaVersion`. El pla per fases és `docs/PLA-mode-lliure.md` |
+| `docs/decisions/ADR-005-disposicio-lliure.md` | Pàgines i blocs: cada pàgina automàtica o amb plantilla (desada), blocs de seqüència i de text, els estils amb nom (`styles`), el lector que conserva els blocs que no entén, i per què no cal pujar `schemaVersion`. El pla per fases és `docs/PLA-mode-lliure.md` |
 
 ## Índex d'estàndards
 

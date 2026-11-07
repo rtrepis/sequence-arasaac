@@ -1,11 +1,12 @@
-// Les plantilles de distribució d'un full. Una plantilla és una llista
-// d'espais en **fraccions** de la regió lliure (0–1); en aplicar-la, cada caixa
-// del full va a un espai, en ordre de lectura. La plantilla no es desa: és una
-// manera de calcular caixes, i el que es desa són les caixes.
-// Vegeu `docs/PLA-mode-lliure.md`, §6, «Plantilles».
+// Les plantilles de distribució d'una pàgina. Una plantilla és una llista
+// d'espais en **fraccions** de la regió lliure (0–1); en aplicar-la, cada bloc
+// de la pàgina va a un espai, en ordre de lectura. La pàgina recorda quina
+// plantilla té (`DocumentSheet.template`) i quin espai ocupa cada bloc
+// (`slot`), i afegir-hi un bloc n'omple el primer espai lliure (R2).
+// Vegeu `docs/decisions/ADR-005-disposicio-lliure.md`.
 import type { SequenceDirection } from "@/types/ui";
-import type { SequencePlacement } from "@/types/document";
-import { Box, SheetArea } from "./placement";
+import type { PagePlacement } from "@/types/document";
+import { Box, SheetArea, isBoxed } from "./placement";
 import { sortByReadingOrder } from "./readingOrder";
 
 /** Espai entre dues caixes veïnes d'una plantilla. */
@@ -137,46 +138,97 @@ export const freeRegion = (
   return { x: 0, y: top, w: area.w, h: bottom - top };
 };
 
+/** La caixa i l'espai de la plantilla que pren un bloc. */
+export type SlotBox = Box & { slot: number };
+
 /**
- * La caixa de cada col·locació, espai per espai en l'ordre de `ordered`. Les
- * que no hi caben no en reben cap.
+ * La caixa de cada bloc, espai per espai en l'ordre de `ordered`. Els que no
+ * hi caben no en reben cap.
  */
 export const assignSlots = (
-  ordered: readonly SequencePlacement[],
+  ordered: readonly { id: string }[],
   template: LayoutTemplate,
   region: Box,
-): Map<string, Box> =>
+): Map<string, SlotBox> =>
   new Map(
     ordered
       .slice(0, template.slots.length)
       .map((placement, index) => [
         placement.id,
-        slotToBox(template.slots[index], region),
+        { ...slotToBox(template.slots[index], region), slot: index },
       ]),
   );
 
-/** Les col·locacions amb la caixa nova que en tinguin; l'ordre de la llista no canvia. */
-export const withBoxes = (
-  placements: readonly SequencePlacement[],
-  boxOf: ReadonlyMap<string, Box>,
-): SequencePlacement[] =>
+/**
+ * Els blocs amb la caixa i l'espai nous que en tinguin; l'ordre de la llista
+ * no canvia. Els que l'app no entén no en tenen, i es queden com eren.
+ */
+export const withBoxes = <T extends PagePlacement>(
+  placements: readonly T[],
+  boxOf: ReadonlyMap<string, SlotBox>,
+): T[] =>
   placements.map((placement) => {
-    const box = boxOf.get(placement.id);
+    const box = isBoxed(placement) ? boxOf.get(placement.id) : undefined;
     return box ? { ...placement, ...box } : placement;
   });
 
 /**
- * Les col·locacions d'un full repartides en la plantilla, en ordre de lectura.
- * Si n'hi ha més que espais, les que sobren es queden on eren: el selector
- * només ofereix les plantilles on hi caben totes (`templatesFor`). El canvi és
- * de lloc, no d'ordre: la llista queda com era.
+ * Els blocs d'una pàgina repartits en la plantilla, en ordre de lectura. Si
+ * n'hi ha més que espais, els que sobren es queden on eren: el selector només
+ * ofereix les plantilles on hi caben tots (`templatesFor`). El canvi és de
+ * lloc, no d'ordre: la llista queda com era.
  */
-export const applyTemplate = (
-  placements: readonly SequencePlacement[],
+export const applyTemplate = <T extends PagePlacement>(
+  placements: readonly T[],
   template: LayoutTemplate,
   region: Box,
-): SequencePlacement[] =>
+): T[] =>
   withBoxes(
     placements,
-    assignSlots(sortByReadingOrder(placements), template, region),
+    assignSlots(
+      sortByReadingOrder(
+        placements.flatMap((placement) =>
+          isBoxed(placement) ? [placement] : [],
+        ),
+      ),
+      template,
+      region,
+    ),
   );
+
+/**
+ * La plantilla d'un `id`, si l'app la coneix: les del selector i les que fa
+ * `templateFor` (`rows-5`, `columns-4`, `grid-3x2`…). Una pàgina pot portar
+ * l'`id` d'una plantilla d'una versió posterior: es conserva, però no s'hi pot
+ * afegir res a l'espai lliure.
+ */
+export const templateById = (id: string): LayoutTemplate | undefined => {
+  const choice = TEMPLATE_CHOICES.find((template) => template.id === id);
+  if (choice) return choice;
+  const stack = /^(rows|columns)-([1-9][0-9]?)$/.exec(id);
+  if (stack)
+    return stackTemplate(Number(stack[2]), stack[1] as "rows" | "columns");
+  const grid = /^grid-([1-9])x([1-9])$/.exec(id);
+  if (grid) {
+    const template = gridTemplate(Number(grid[1]) * Number(grid[2]));
+    return template.id === id ? template : undefined;
+  }
+  return undefined;
+};
+
+/** Els espais de la plantilla que cap bloc no ocupa, en ordre. */
+export const freeSlots = (
+  template: LayoutTemplate,
+  placements: readonly PagePlacement[],
+): number[] => {
+  const taken = new Set(
+    placements.flatMap((placement) =>
+      isBoxed(placement) && placement.slot !== undefined
+        ? [placement.slot]
+        : [],
+    ),
+  );
+  return template.slots.flatMap((_, index) =>
+    taken.has(index) ? [] : [index],
+  );
+};

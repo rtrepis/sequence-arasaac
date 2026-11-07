@@ -13,7 +13,7 @@ import { whereIs } from "@features/free-layout/model/placementsOf";
 import {
   addSequencesToSheetThunk,
   selectDocumentContent,
-  selectFreeLayout,
+  selectPages,
   selectSequenceKeys,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { useSequenceName } from "@features/free-layout/components/FreeLayoutPages/useSequenceName";
@@ -45,7 +45,7 @@ const AddSequenceDialog = ({
   const sequenceName = useSequenceName();
   const keys = useAppSelector(selectSequenceKeys);
   const content = useAppSelector(selectDocumentContent);
-  const freeLayout = useAppSelector(selectFreeLayout);
+  const freeLayout = useAppSelector(selectPages);
   const [chosen, setChosen] = useState<number[]>([]);
   const [nothingChosen, setNothingChosen] = useState(false);
   const open = sheetIndex !== null;

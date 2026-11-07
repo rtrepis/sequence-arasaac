@@ -30,8 +30,9 @@ al codi nou i als documents.
 | **Estil** | Com es veu: lletra, vores, colors, mides, alineació. |
 | **Estil del document** | L'estil que s'aplica a totes les seqüències del document. |
 | **Vista d'aquesta seqüència** | Els ajustos d'estil d'una sola seqüència (mida, espai, alineació). Són un retoc sobre l'estil del document. |
-| **Pàgina** | Mida, orientació, direcció, espai entre seqüències i disposició. En mode lliure, també cadascun dels fulls del document («pàgina 1, 2…»). |
-| **Col·locació** | En mode lliure, una seqüència posada en un lloc d'una pàgina, amb la seva caixa. Una seqüència pot tenir moltes col·locacions; la que surt a totes les pàgines és **comuna**. |
+| **Pàgina** | Cadascun dels fulls del document («pàgina 1, 2…»). Totes tenen el paper i l'orientació del document; cadascuna diu com s'hi col·loquen els blocs: **automàtica** (un darrere l'altre, com sempre) o amb una **plantilla** (cada bloc a la seva caixa). Un document d'abans és una sola pàgina automàtica amb totes les seqüències. |
+| **Bloc** | Una cosa posada en una pàgina: una **seqüència** (amb els seus ajustos) o un **text** (un rètol sense pictograma). Una seqüència pot sortir en molts blocs; el que surt a totes les pàgines és **comú**. Al codi, el tipus és `SequencePlacement` / `TextPlacement` («col·locació»); a la interfície i a la documentació per a l'usuari, sempre «bloc» (Q1). |
+| **Estil amb nom** | Un retoc de l'estil del document, amb un nom, que poden fer servir molts blocs alhora. És una entrada del catàleg d'estils de l'usuari **copiada** dins del document. |
 | **Fitxer d'estil** | Un estil desat per reutilitzar-lo en altres documents: el fitxer `.saacstyle`. |
 | **Estil per defecte** | L'estil que reben els documents nous. És una preferència de l'app. |
 | **Preferències de l'app** | El que és de la persona o del dispositiu: idioma, tema clar o fosc, estil per defecte, pàgina per defecte. |
@@ -62,7 +63,9 @@ al codi nou i als documents.
 | Estil del document i vista de cada seqüència | Del document | `.saac` |
 | Retocs d'un pictograma | Del document | `.saac` |
 | Pàgina (mida, orientació, direcció, espai entre seqüències) | Del document | `.saac` |
-| Disposició lliure (pàgines i col·locacions) | Del document | `.saac`, a `page` (fonament 06, §1.1) |
+| Pàgines i blocs, la plantilla de cada pàgina | Del document | `.saac`, a `page` (fonament 06, §1.1) |
+| Estils amb nom que fa servir el document | Del document | `.saac`, a `styles` (fonament 06, §1.2) |
+| Catàleg d'estils de l'usuari (R10, B33) | De l'usuari | Preferències; aplicar-ne un el **copia** al document |
 | Estil per defecte | De l'usuari | Preferències; es pot exportar a `.saacstyle` |
 | Pàgina per defecte dels documents nous | De l'usuari | Preferències |
 | Autor del document | Del document | `.saac`, a `meta.author` |
@@ -82,13 +85,20 @@ al codi nou i als documents.
 
 ## 4. La cascada d'estil
 
-L'estil té tres nivells. Cada nivell és un **retoc** del de sobre.
+L'estil té cinc nivells. Cada nivell és un **retoc** del de sobre.
 
 | Nivell | Què pot portar |
 |---|---|
 | **Document** | Tot l'estil, **sempre complet**: `pictogram`, `card` i `view`. |
-| **Seqüència** | **Només `view`**: mida, espai entre pictogrames, alineació. |
+| **Seqüència** | **Només `view`**: mida, espai entre pictogrames, alineació. És la base de tots els seus blocs. |
+| **Estil amb nom** del bloc | `pictogram`, `card` i `view`. Només si el bloc en fa servir un (ADR-005). |
+| **Bloc** | **Només `view`** (el de seqüència) o l'aspecte del rètol (el de text: lletra, negreta, alineació). |
 | **Pictograma** | `pictogram` i `card`. **Mai `view`**. |
+
+- Un bloc de text agafa la lletra de les targetes del document (`card.font`), la de l'estil amb nom
+  si en té, i el seu retoc.
+- Els estils amb nom, el retoc de la vista d'un bloc i els rètols són al model des de la revisió de
+  l'ADR-005, però **encara no es pinten**: arriben amb la interfície de la columna (R5, R8) i amb R7.
 
 ### Resoldre
 

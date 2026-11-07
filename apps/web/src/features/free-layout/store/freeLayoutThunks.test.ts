@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 import { createAppStore } from "@/app/store";
 import { sequenceFixture } from "@/test/fixtures/document";
 import type { DocumentSAAC } from "@/types/document";
-import { deleteLastSequenceActionCreator } from "@features/sequence/store/documentSlice";
+import {
+  addNewSequenceActionCreator,
+  deleteLastSequenceActionCreator,
+} from "@features/sequence/store/documentSlice";
 import {
   selectCanUndoStyle,
   undoStyleChangeThunk,
@@ -19,8 +22,8 @@ import {
   setPlacementCommonThunk,
 } from "./freeLayoutThunks";
 
-// Les accions de la disposició lliure sobre l'store de debò: el document, i el
-// desfer de sempre per a les que substitueixen feina.
+// Les accions sobre les pàgines amb l'store de debò: el document, i el desfer
+// de sempre per a les que substitueixen feina.
 
 /** Un document de tres seqüències en A4 vertical, amb la pàgina pròpia. */
 const documentWith = (count: number): DocumentSAAC => ({
@@ -40,31 +43,34 @@ const freeStore = (count = 3) => {
 };
 
 const layoutOf = (store: ReturnType<typeof createAppStore>) =>
-  store.getState().document.freeLayout!;
+  store.getState().document.pages!;
+
+/** La clau de la seqüència d'un bloc, o -1 si no n'és cap. */
+const keyOf = (placement: { kind: string; sequenceKey?: number }) =>
+  placement.kind === "sequence" ? (placement.sequenceKey ?? -1) : -1;
 
 describe("passar a «Lliure» i tornar", () => {
   it("passar a lliure col·loca totes les seqüències, sense que en desaparegui cap", () => {
     const store = freeStore(3);
-    const { layout } = store.getState().document;
-    expect(layout).toMatchObject({ mode: "free", pageSize: "A4" });
-    expect(
-      layoutOf(store).sheets[0].placements.map((p) => p.sequenceKey),
-    ).toEqual([0, 1, 2]);
+    expect(layoutOf(store).sheets[0].mode).toBe("template");
+    expect(layoutOf(store).sheets[0].placements.map(keyOf)).toEqual([0, 1, 2]);
   });
 
-  it("tornar a automàtica conserva la disposició, i es pot desfer", () => {
+  it("tornar a automàtica conserva les pàgines i els blocs, i es pot desfer", () => {
     const store = freeStore(2);
     const before = layoutOf(store);
 
     store.dispatch(setLayoutModeThunk("flow"));
 
-    expect(store.getState().document.layout?.mode).toBeUndefined();
-    expect(store.getState().document.freeLayout).toBe(before);
+    expect(layoutOf(store).sheets.map(({ mode }) => mode)).toEqual(["auto"]);
+    expect(layoutOf(store).sheets[0].placements).toBe(
+      before.sheets[0].placements,
+    );
     expect(selectCanUndoStyle(store.getState())).toBe(true);
 
     store.dispatch(undoStyleChangeThunk());
 
-    expect(store.getState().document.layout?.mode).toBe("free");
+    expect(layoutOf(store)).toBe(before);
   });
 
   it("tornar a lliure recupera la disposició tal com era", () => {
@@ -75,7 +81,7 @@ describe("passar a «Lliure» i tornar", () => {
     store.dispatch(setLayoutModeThunk("flow"));
     store.dispatch(setLayoutModeThunk("free"));
 
-    expect(layoutOf(store)).toBe(before);
+    expect(layoutOf(store)).toEqual(before);
   });
 
   it("amb la pantalla completa no hi ha mil·límetres, i no es construeix res", () => {
@@ -86,7 +92,7 @@ describe("passar a «Lliure» i tornar", () => {
       },
     });
     store.dispatch(setLayoutModeThunk("free"));
-    expect(store.getState().document.freeLayout).toBeUndefined();
+    expect(store.getState().document.pages).toBeUndefined();
   });
 });
 
@@ -119,9 +125,9 @@ describe("pàgines i seqüències", () => {
     const [first] = layoutOf(store).sheets[0].placements;
 
     store.dispatch(removePlacementThunk(first.id));
-    expect(whereIs(layoutOf(store), first.sequenceKey).sheets).toEqual([]);
+    expect(whereIs(layoutOf(store), keyOf(first)).sheets).toEqual([]);
     store.dispatch(undoStyleChangeThunk());
-    expect(whereIs(layoutOf(store), first.sequenceKey).sheets).toEqual([0]);
+    expect(whereIs(layoutOf(store), keyOf(first)).sheets).toEqual([0]);
 
     store.dispatch(addSheetThunk(0));
     store.dispatch(removeSheetThunk(0));
@@ -136,7 +142,7 @@ describe("pàgines i seqüències", () => {
     const [first] = layoutOf(store).sheets[0].placements;
 
     store.dispatch(setPlacementCommonThunk(first.id, true, 0));
-    expect(whereIs(layoutOf(store), first.sequenceKey)).toEqual({
+    expect(whereIs(layoutOf(store), keyOf(first))).toEqual({
       common: true,
       sheets: [],
     });
@@ -144,14 +150,30 @@ describe("pàgines i seqüències", () => {
     expect(selectCanUndoStyle(store.getState())).toBe(false);
 
     store.dispatch(setPlacementCommonThunk(first.id, false, 1));
-    expect(whereIs(layoutOf(store), first.sequenceKey)).toEqual({
+    expect(whereIs(layoutOf(store), keyOf(first))).toEqual({
       common: false,
       sheets: [1],
     });
     expect(selectCanUndoStyle(store.getState())).toBe(true);
   });
 
-  it("esborrar l'última seqüència n'esborra les col·locacions", () => {
+  it("una seqüència nova va a l'última pàgina si és automàtica; si no, enlloc", () => {
+    const store = freeStore(2);
+    store.dispatch(addNewSequenceActionCreator(2));
+    expect(whereIs(layoutOf(store), 2)).toEqual({ common: false, sheets: [] });
+
+    store.dispatch(setLayoutModeThunk("flow"));
+    store.dispatch(addNewSequenceActionCreator(3));
+    expect(whereIs(layoutOf(store), 3)).toEqual({ common: false, sheets: [0] });
+  });
+
+  it("un document sense pàgines continua sense, encara que tingui seqüències noves", () => {
+    const store = createAppStore({ document: documentWith(1) });
+    store.dispatch(addNewSequenceActionCreator(1));
+    expect(store.getState().document.pages).toBeUndefined();
+  });
+
+  it("esborrar l'última seqüència n'esborra els blocs", () => {
     const store = freeStore(3);
     store.dispatch(deleteLastSequenceActionCreator());
     expect(whereIs(layoutOf(store), 2)).toEqual({ common: false, sheets: [] });

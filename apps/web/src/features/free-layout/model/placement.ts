@@ -1,7 +1,11 @@
 // Una caixa del mode lliure i el full on viu. Funcions pures, en mil·límetres:
 // cap píxel ni cap component. Vegeu `docs/decisions/ADR-005-disposicio-lliure.md`.
 import type { PageOrientation, PageSize } from "@/types/ui";
-import type { SequencePlacement } from "@/types/document";
+import type {
+  PagePlacement,
+  SequencePlacement,
+  TextPlacement,
+} from "@/types/document";
 import {
   PAPER_DIMENSIONS_MM,
   PRINT_MARGIN_MM,
@@ -35,8 +39,24 @@ export interface SheetArea {
   h: number;
 }
 
-/** Un rectangle en mm: la part d'una col·locació que diu on és. */
+/** Un rectangle en mm: la part d'un bloc que diu on és. */
 export type Box = Pick<SequencePlacement, "x" | "y" | "w" | "h">;
+
+/** Un bloc que l'app entén i que, per tant, té caixa: de seqüència o de text. */
+export type BoxedPlacement = SequencePlacement | TextPlacement;
+
+/** Si l'app entén el bloc. Els que no entén no tenen caixa ni es pinten. */
+export const isBoxed = (
+  placement: PagePlacement,
+): placement is BoxedPlacement => placement.kind !== "unknown";
+
+/** Si el bloc és d'una seqüència. */
+export const isSequenceBlock = (
+  placement: PagePlacement,
+): placement is SequencePlacement => placement.kind === "sequence";
+
+/** Si la caixa és de veritat: les dels blocs d'una pàgina automàtica són zero. */
+export const hasBox = (box: Box): boolean => box.w > 0 && box.h > 0;
 
 /**
  * L'àrea útil d'un full: el paper menys el marge d'impressió (el mateix

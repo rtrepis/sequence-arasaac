@@ -5,10 +5,13 @@
 // retocs siguin mínims. Vegeu `docs/fonaments/06-compatibilitat-i-dades.md`.
 import { version as appVersion } from "../../../../package.json";
 import type {
+  DocumentPages,
   DocumentSAAC,
-  FreeLayout,
-  SequencePlacement,
+  DocumentSheet,
+  NamedStyle,
+  PagePlacement,
   SequenceStyle,
+  SequenceViewSettings,
 } from "@/types/document";
 import type { PictSequence } from "@/types/sequence";
 import type { PageOrientation, PageSize, SequenceDirection } from "@/types/ui";
@@ -31,8 +34,9 @@ import {
   V3Image,
   V3Page,
   V3Pictogram,
+  V3Block,
+  V3NamedStyle,
   V3PictogramOverride,
-  V3Placement,
   V3Sequence,
   V3Sheet,
   V3Style,
@@ -61,7 +65,7 @@ export interface SerializeContext {
   now: string;
 }
 
-export const newSaacId = (prefix: "seq" | "p" | "sh" | "pl"): string =>
+export const newSaacId = (prefix: "seq" | "p" | "sh" | "pl" | "st"): string =>
   `${prefix}_${Math.random().toString(36).substring(2, 10)}`;
 
 // --- Estil ---
@@ -273,48 +277,143 @@ const pictogramToV3 = (
   };
 };
 
-// --- Disposició lliure ---
+// --- Pàgines i blocs ---
 
-/** Els camps de `page` que són de la disposició i no es copien com a desconeguts. */
-const FREE_LAYOUT_PAGE_KEYS: readonly string[] = ["layout", "sheets", "common"];
-
-const placementToV3 = (
-  placement: SequencePlacement,
-  sequence: string,
-): V3Placement => ({
-  ...placement.extra,
-  id: placement.id,
-  sequence,
-  x: placement.x,
-  y: placement.y,
-  w: placement.w,
-  h: placement.h,
-  columns: placement.columns,
-});
+/** Els camps de `page` que són de les pàgines i no es copien com a desconeguts. */
+const PAGES_PAGE_KEYS: readonly string[] = ["layout", "sheets", "common"];
 
 /**
- * Els fulls i les comunes amb la forma del fitxer. Una col·locació d'una
- * seqüència que ja no existeix no s'escriu: apuntaria enlloc.
+ * Només el que el retoc de la vista d'un bloc canvia de debò respecte del
+ * nivell de sobre (la seqüència, amb l'estil amb nom si en té): un retoc igual
+ * al de sobre deixa de ser un retoc (fonament 03, «Guardar només les diferències»).
  */
-const freeLayoutToV3 = (
-  freeLayout: FreeLayout,
-  sequenceIdOfKey: ReadonlyMap<number, string>,
-): Required<Pick<V3Page, "sheets" | "common">> => {
-  const placementsToV3 = (list: readonly SequencePlacement[]): V3Placement[] =>
-    list.flatMap((placement) => {
-      const sequence = sequenceIdOfKey.get(placement.sequenceKey);
-      return sequence === undefined ? [] : [placementToV3(placement, sequence)];
-    });
-
-  return {
-    sheets: freeLayout.sheets.map(
-      (sheet): V3Sheet => ({
-        ...sheet.extra,
-        id: sheet.id,
-        placements: placementsToV3(sheet.placements),
-      }),
+const viewOverride = (
+  view: Partial<SequenceViewSettings> | undefined,
+  parent: V3View,
+): Partial<V3View> | undefined => {
+  if (!view) return undefined;
+  const diff = Object.fromEntries(
+    Object.entries(view).filter(
+      ([key, value]) =>
+        value !== undefined && value !== parent[key as keyof V3View],
     ),
-    common: placementsToV3(freeLayout.common),
+  ) as Partial<V3View>;
+  return Object.keys(diff).length > 0 ? diff : undefined;
+};
+
+/** El que cal saber per escriure els blocs d'un document. */
+interface BlockWriter {
+  sequenceIdOfKey: ReadonlyMap<number, string>;
+  /** La vista de cada seqüència, ja resolta (estil del document i retoc) */
+  sequenceViewOfKey: ReadonlyMap<number, V3View>;
+  namedStyles: readonly NamedStyle[];
+}
+
+/**
+ * Un bloc amb la forma del fitxer. Un bloc d'una seqüència que ja no existeix
+ * no s'escriu: apuntaria enlloc. Un bloc que l'app no entén s'escriu tal com
+ * va arribar. A les pàgines automàtiques (`boxed` fals) la caixa no s'escriu.
+ */
+const blockToV3 = (
+  placement: PagePlacement,
+  boxed: boolean,
+  writer: BlockWriter,
+): V3Block | Record<string, unknown> | undefined => {
+  if (placement.kind === "unknown") return placement.raw;
+  const named = writer.namedStyles.find(({ id }) => id === placement.styleId);
+  const base = {
+    ...placement.extra,
+    id: placement.id,
+    ...(boxed && {
+      x: placement.x,
+      y: placement.y,
+      w: placement.w,
+      h: placement.h,
+    }),
+    ...(placement.slot !== undefined && { slot: placement.slot }),
+    ...(named && { namedStyle: named.id }),
+  };
+  if (placement.kind === "text")
+    return {
+      ...base,
+      kind: "text",
+      text: placement.text,
+      ...(placement.textStyle &&
+        Object.keys(placement.textStyle).length > 0 && {
+          textStyle: placement.textStyle,
+        }),
+    };
+
+  const sequence = writer.sequenceIdOfKey.get(placement.sequenceKey);
+  const sequenceView = writer.sequenceViewOfKey.get(placement.sequenceKey);
+  if (sequence === undefined || sequenceView === undefined) return undefined;
+  const view = viewOverride(placement.view, {
+    ...sequenceView,
+    ...named?.view,
+  });
+  return {
+    ...base,
+    kind: "sequence",
+    sequence,
+    columns: placement.columns,
+    ...(view && { view }),
+  };
+};
+
+const blocksToV3 = (
+  list: readonly PagePlacement[],
+  boxed: boolean,
+  writer: BlockWriter,
+): V3Block[] =>
+  list.flatMap((placement) => {
+    const block = blockToV3(placement, boxed, writer);
+    // Un bloc desconegut torna tal com era: el fitxer no en sap la forma
+    return block ? [block as V3Block] : [];
+  });
+
+/** Les pàgines i els blocs comuns amb la forma del fitxer. */
+const pagesToV3 = (
+  pages: DocumentPages,
+  writer: BlockWriter,
+): Required<Pick<V3Page, "sheets" | "common">> => ({
+  sheets: pages.sheets.map(
+    (sheet: DocumentSheet): V3Sheet => ({
+      ...sheet.extra,
+      id: sheet.id,
+      mode: sheet.mode,
+      ...(sheet.mode === "auto" &&
+        sheet.direction && { direction: sheet.direction }),
+      // La plantilla es recorda també en automàtica (R2): amb els espais de
+      // cada bloc, les caixes es tornen a calcular si la pàgina en torna a tenir
+      ...(sheet.template && { template: sheet.template }),
+      blocks: blocksToV3(sheet.placements, sheet.mode === "template", writer),
+    }),
+  ),
+  common: blocksToV3(pages.common, true, writer),
+});
+
+/** Un estil amb nom amb la forma del fitxer: la inversa de `namedStyleFromV3`. */
+const namedStyleToV3 = (style: NamedStyle): V3NamedStyle => {
+  const { fitzgerald: none, ...pictogram } = style.pictApiAra ?? {};
+  const fitzgerald = {
+    ...style.fitzgeraldColors,
+    ...(none !== undefined && { none }),
+  };
+  const pictogramPart = {
+    ...pictogram,
+    ...(Object.keys(fitzgerald).length > 0 && { fitzgerald }),
+  };
+  return {
+    ...style.extra,
+    id: style.id,
+    name: style.name,
+    ...(Object.keys(pictogramPart).length > 0 && {
+      pictogram: pictogramPart as V3NamedStyle["pictogram"],
+    }),
+    ...(style.pictSequence && {
+      card: style.pictSequence as V3NamedStyle["card"],
+    }),
+    ...(style.view && { view: style.view }),
   };
 };
 
@@ -391,28 +490,37 @@ export const documentToV3 = (
   });
 
   const activeIndex = keys.indexOf(document.activeSAAC);
-  // Un esborrany d'abans d'aquesta versió pot portar la disposició entre els
-  // camps desconeguts: ara la diu `layout.mode`, i és l'única que mana
+  // Un esborrany d'abans d'aquesta versió pot portar les pàgines entre els
+  // camps desconeguts: ara són `pages`, i són les úniques que manen
   const pageExtra = Object.fromEntries(
     Object.entries(extra.page ?? {}).filter(
-      ([key]) => !FREE_LAYOUT_PAGE_KEYS.includes(key),
+      ([key]) => !PAGES_PAGE_KEYS.includes(key),
     ),
   );
-  const free = document.layout?.mode === "free";
-  const sequenceIdOfKey = new Map(
-    keys.map((key, index) => [key, sequences[index].id]),
-  );
+  const namedStyles = document.styles ?? [];
+  const writer: BlockWriter = {
+    sequenceIdOfKey: new Map(
+      keys.map((key, index) => [key, sequences[index].id]),
+    ),
+    sequenceViewOfKey: new Map(
+      keys.map((key, index) => [
+        key,
+        { ...style.view, ...sequences[index].style?.view },
+      ]),
+    ),
+    namedStyles,
+  };
   const page: V3Page = {
     ...pageExtra,
     size: document.layout?.pageSize ?? context.userPage.size,
     orientation: document.layout?.orientation ?? context.userPage.orientation,
     direction: document.layout?.direction ?? context.userPage.direction,
     sequenceGap: reduxStyle.view.sequenceSpaceBetween,
-    layout: free ? "free" : "flow",
-    // En flux, la disposició lliure es conserva a l'app però no s'escriu
-    ...(free &&
-      document.freeLayout &&
-      freeLayoutToV3(document.freeLayout, sequenceIdOfKey)),
+    // Obsolet, però les versions anteriors el llegeixen (ADR-005)
+    layout: "flow",
+    // Sense pàgines, una sola pàgina automàtica: no cal escriure-la, i el
+    // fitxer queda igual que el de sempre
+    ...(document.pages && pagesToV3(document.pages, writer)),
   };
 
   return {
@@ -436,6 +544,9 @@ export const documentToV3 = (
     page,
     style: { ...extra.style, ...style },
     sequences,
+    ...(namedStyles.length > 0 && {
+      styles: namedStyles.map(namedStyleToV3),
+    }),
     ...(Object.keys(assets).length > 0 && { assets }),
     ui: {
       ...extra.ui,

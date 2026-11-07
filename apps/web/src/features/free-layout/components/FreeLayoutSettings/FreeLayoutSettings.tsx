@@ -6,12 +6,11 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
 import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
 import { IconToggleButton, SettingRow } from "@/components/SettingsLayout";
-import type { PageLayoutMode } from "@/types/document";
 import type { PageSize } from "@/types/ui";
 import { PaperSize, regionalPaperSize } from "@features/print/utils/pageFormat";
 import { unplacedSequenceKeys } from "@features/free-layout/model/placementsOf";
 import {
-  selectFreeLayout,
+  selectPages,
   selectIsFreeLayout,
   selectSequenceKeys,
   setLayoutModeThunk,
@@ -19,6 +18,9 @@ import {
 import { useSequenceName } from "@features/free-layout/components/FreeLayoutPages/useSequenceName";
 import viewMessages from "@components/ViewSequencesSettings/ViewSequencesSettings.lang";
 import messages from "./FreeLayoutSettings.lang";
+
+/** «Automàtica» o «Lliure», per a tot el document (ADR-005). */
+type LayoutMode = "flow" | "free";
 
 /** Prefix dels ids dels títols de fila, per lligar-los als controls. */
 const LABEL_ID = "free-layout-settings";
@@ -57,11 +59,11 @@ const FreeLayoutSettings = ({
   const { showSnackbar } = useFeedback();
   const isFree = useAppSelector(selectIsFreeLayout);
   const keys = useAppSelector(selectSequenceKeys);
-  const freeLayout = useAppSelector(selectFreeLayout);
+  const freeLayout = useAppSelector(selectPages);
   const sequenceName = useSequenceName();
   const unplaced = freeLayout ? unplacedSequenceKeys(freeLayout, keys) : [];
 
-  const handleModeChange = (mode: PageLayoutMode | null) => {
+  const handleModeChange = (mode: LayoutMode | null) => {
     if (!mode || (mode === "free") === isFree) return;
     if (mode === "flow") {
       // Surt el snackbar amb «Desfés»
@@ -91,7 +93,7 @@ const FreeLayoutSettings = ({
         <StyledToggleButtonGroup
           value={isFree ? "free" : "flow"}
           exclusive
-          onChange={(_, mode: PageLayoutMode | null) => handleModeChange(mode)}
+          onChange={(_, mode: LayoutMode | null) => handleModeChange(mode)}
           aria-labelledby={`${LABEL_ID}-mode`}
         >
           <IconToggleButton value="flow" message={messages.layoutFlow}>

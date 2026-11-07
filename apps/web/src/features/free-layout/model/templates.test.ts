@@ -5,6 +5,8 @@ import {
   TEMPLATE_GAP_MM,
   applyTemplate,
   freeRegion,
+  freeSlots,
+  templateById,
   gridTemplate,
   slotToBox,
   stackTemplate,
@@ -24,6 +26,7 @@ const placement = (
   y: number,
   sequenceKey = 0,
 ): SequencePlacement => ({
+  kind: "sequence",
   id,
   sequenceKey,
   x,
@@ -104,5 +107,49 @@ describe("aplicar una plantilla", () => {
     const placements = [placement("a", 0, 0), placement("b", 0, 50)];
     const [, b] = applyTemplate(placements, stackTemplate(1, "rows"), REGION);
     expect(b).toEqual(placements[1]);
+  });
+});
+
+describe("la plantilla de la pàgina (R2)", () => {
+  it("aplicar-la diu a cada bloc quin espai ocupa", () => {
+    const result = applyTemplate(
+      [placement("b", 0, 100), placement("a", 0, 0)],
+      stackTemplate(2, "rows"),
+      REGION,
+    );
+    // En ordre de lectura: «a» és a dalt
+    expect(result.map(({ id, slot }) => [id, slot])).toEqual([
+      ["b", 1],
+      ["a", 0],
+    ]);
+  });
+
+  it("es troba pel seu id, també les que fa `templateFor`", () => {
+    TEMPLATE_CHOICES.forEach((template) =>
+      expect(templateById(template.id)).toEqual(template),
+    );
+    expect(templateById("rows-5")).toEqual(stackTemplate(5, "rows"));
+    expect(templateById("columns-4")).toEqual(stackTemplate(4, "columns"));
+    expect(templateById(gridTemplate(6).id)).toEqual(gridTemplate(6));
+  });
+
+  it("una plantilla que l'app no coneix no es troba", () => {
+    expect(templateById("primer-despres")).toBeUndefined();
+    expect(templateById("rows-0")).toBeUndefined();
+    // Una graella que `gridTemplate` no faria mai
+    expect(templateById("grid-1x5")).toBeUndefined();
+  });
+
+  it("els espais lliures són els que cap bloc no ocupa", () => {
+    const template = stackTemplate(3, "rows");
+    expect(freeSlots(template, [])).toEqual([0, 1, 2]);
+    expect(
+      freeSlots(template, [
+        { ...placement("a", 0, 0), slot: 1 },
+        // Sense espai (retocat a mà o d'abans de R2): no n'ocupa cap
+        placement("b", 0, 0),
+        { kind: "unknown", id: "c", raw: { slot: 0 } },
+      ]),
+    ).toEqual([0, 2]);
   });
 });

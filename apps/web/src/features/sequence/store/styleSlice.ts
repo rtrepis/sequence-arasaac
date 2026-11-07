@@ -196,8 +196,7 @@ const sameSnapshot = (
   a.defaultSettings === b.defaultSettings &&
   a.styleView === b.styleView &&
   a.fitzgeraldColors === b.fitzgeraldColors &&
-  a.layoutMode === b.layoutMode &&
-  a.freeLayout === b.freeLayout;
+  a.pages === b.pages;
 
 /**
  * Fa un canvi d'estil del document i el deixa a punt de desfer amb un snackbar

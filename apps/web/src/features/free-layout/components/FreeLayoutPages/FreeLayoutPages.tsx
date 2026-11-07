@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { MdAdd, MdOutlineLibraryAdd } from "react-icons/md";
 import { useIntl } from "react-intl";
@@ -14,14 +14,16 @@ import {
   selectDocumentCardDefaults,
   selectResolvedSequenceViews,
 } from "@features/sequence/style/styleSelectors";
+import type { PagePlacement } from "@/types/document";
 import {
   addSheetThunk,
-  ensureFreeLayoutThunk,
   selectDocumentContent,
-  selectFreeLayout,
+  selectPageLayout,
+  selectPages,
   selectSequenceKeys,
   selectSheetArea,
 } from "@features/free-layout/store/freeLayoutThunks";
+import { sheetToTemplate } from "@features/free-layout/model/distribute";
 import AddSequenceDialog from "@features/free-layout/components/AddSequenceDialog";
 import CardBaseMeasurer, { CardBaseSize } from "./CardBaseMeasurer";
 import PageHeader from "./PageHeader";
@@ -63,7 +65,8 @@ const FreeLayoutPages = ({
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { showSnackbar } = useFeedback();
-  const freeLayout = useAppSelector(selectFreeLayout);
+  const freeLayout = useAppSelector(selectPages);
+  const direction = useAppSelector(selectPageLayout).direction ?? "row";
   const content = useAppSelector(selectDocumentContent);
   const area = useAppSelector(selectSheetArea);
   const keys = useAppSelector(selectSequenceKeys);
@@ -72,11 +75,6 @@ const FreeLayoutPages = ({
   const sequenceName = useSequenceName();
   const [cardSizes, setCardSizes] = useState<Record<number, CardBaseSize>>({});
   const [addingTo, setAddingTo] = useState<number | null>(null);
-
-  // Un fitxer que diu «lliure» però no porta cap pàgina: es construeix aquí
-  useEffect(() => {
-    if (!freeLayout) dispatch(ensureFreeLayoutThunk());
-  }, [dispatch, freeLayout]);
 
   const measured = useMemo(
     () => keys.map((key) => ({ key, pictograms: content[key] ?? [] })),
@@ -87,11 +85,15 @@ const FreeLayoutPages = ({
   const sheetCount = freeLayout.sheets.length;
   const areaHeightPx = mmToPixelsExact(area.h, CSS_PRINT_DPI);
 
+  // Els blocs de text i els que l'app no entén encara no es pinten: es
+  // conserven al document, i el bloc de text es pintarà amb la seva interfície
+  // (R9, `docs/PLA-mode-lliure.md`)
   const renderPlacement = (
-    placement: (typeof freeLayout.common)[number],
+    placement: PagePlacement,
     sheetIndex: number,
     common: boolean,
   ) => {
+    if (placement.kind !== "sequence") return null;
     const pictograms = content[placement.sequenceKey];
     const view = views[placement.sequenceKey];
     if (!pictograms || !view) return null;
@@ -129,7 +131,13 @@ const FreeLayoutPages = ({
         onMeasure={setCardSizes}
       />
 
-      {freeLayout.sheets.map((sheet, sheetIndex) => {
+      {freeLayout.sheets.map((pageSheet, sheetIndex) => {
+        // Una pàgina automàtica en un document amb caixes (només pot venir
+        // d'un fitxer) es pinta repartida, sense canviar-la al document
+        const sheet = sheetToTemplate(pageSheet, freeLayout, {
+          area,
+          direction,
+        });
         const empty =
           sheet.placements.length === 0 && freeLayout.common.length === 0;
         return (

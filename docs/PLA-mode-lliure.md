@@ -2,9 +2,10 @@
 
 > **Estat**: pla confirmat (2026-11-06). **Fases 1, 2 i 3 fetes**: el model (ADR-005), l'espai del
 > full a la vista i les pàgines amb les seves seqüències (vegeu §11, «Com ha quedat la fase 3»).
-> **Revisió de la fase 3** (§12, 2026-11-07): fets R3 (l'estudi dels treballs) i R8 (l'esbós de la
-> columna, `docs/esbos-columna-vista.html`). **Ara toca el pas 3 de l'ordre proposat**: el model
-> (R1 + R2 + R9), començant per revisar l'ADR-005.
+> **Revisió de la fase 3** (§12, 2026-11-07): fets R3 (l'estudi dels treballs), R8 (l'esbós de la
+> columna, `docs/esbos-columna-vista.html`) i el pas 3, **el model** (R1 + R2 + R9, i els estils amb
+> nom de R10): ADR-005 revisada, vegeu §12, «Com ha quedat el model». **Ara toca el pas 4**: R5, la
+> columna que segueix la pàgina i la selecció del bloc.
 > **Encàrrec**: `docs/spec-mode-lliure.md`, a la branca `origin/feature/mode-lliure` (no fusionada).
 > **Fonaments que mana**: `docs/fonaments/03-model-contingut-estil.md`,
 > `docs/fonaments/06-compatibilitat-i-dades.md`, `docs/decisions/ADR-003-model-document-saac-v3.md`.
@@ -716,9 +717,10 @@ fet encara.
 1. ✅ **Decisions** (les preguntes de sota) i **R3**, la investigació dels treballs reals: tot el
    que ve després en depèn.
 2. ✅ **R8**, l'esbós de la columna, ja amb R1, R5, R6 i R7 en compte.
-3. ⏭️ **R1 + R2 + R9**, el model (ADR-005 revisada, fitxer, migració dels documents de les fases 1–3):
-   pàgines a totes dues disposicions, la plantilla desada amb la pàgina, i els blocs de text.
-4. **R5**, la columna que segueix la pàgina i la selecció de la caixa.
+3. ✅ **R1 + R2 + R9**, el model (ADR-005 revisada, fitxer, migració dels documents de les fases 1–3):
+   pàgines a totes dues disposicions, la plantilla desada amb la pàgina, i els blocs de text. Hi han
+   entrat també els estils amb nom (R10). Vegeu «Com ha quedat el model», a sota.
+4. ⏭️ **R5**, la columna que segueix la pàgina i la selecció de la caixa.
 5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
 6. **R10** (B33), decidir el catàleg d'estils dels pictogrames: abans de R7, perquè en canvia les
    accions. **R11**, el panell «Vista» de la configuració per defecte, amb R1. Les plantilles
@@ -733,6 +735,46 @@ fet encara.
 | Q2 | **La mida és un màxim**: el bloc mana, però els pictogrames no passen de la mida triada. Cada bloc té els seus ajustos (mida, espai, alineació, columnes…), al nivell «Bloc» de la columna. Substitueix la decisió 9 de l'ADR-005 («la mida la mana la caixa») quan es revisi. |
 | Q3 | **Un sol model de pàgines** per a totes dues disposicions (R1). |
 | Q4 | **La investigació (R3)** es fa a la xarxa: l'entorn d'ARASAAC i, a escala internacional, escoles d'educació especial i materials de comunicació augmentativa i alternativa (CAA). Resultat a `docs/ESTUDI-treballs-amb-pictogrames.md`. |
+
+### Decisions del model (2026-11-07)
+
+| # | Pregunta | Decisió |
+|---|---|---|
+| M1 | On viuen els ajustos d'un bloc de seqüència (mida màxima, espai, alineació) | **Cascada**: la vista de la seqüència es continua escrivint i és la base de tots els seus blocs; cada bloc porta només el seu retoc (`view`). Les columnes, sempre al bloc |
+| M2 | Com entra al `.saac` el catàleg d'estils (R10) | **Una taula d'estils amb nom dins del document** (`styles`), i el bloc hi apunta (`namedStyle`). Aplicar una entrada del catàleg la copia a la taula. Cascada: document → seqüència → estil amb nom → bloc → pictograma |
+| M3 | Cal pujar `schemaVersion` | **No.** Tot és compatible, i la migració es fa en llegir |
+| M4 | L'orientació (P2) | **Continua sent del document** |
+| M5 | Un bloc de text en una pàgina automàtica (P6) | **Sí**, ocupa una línia sencera del flux |
+
+### Com ha quedat el model (pas 3)
+
+Fet a la mateixa branca, sense interfície nova. Detall a `docs/decisions/ADR-005-disposicio-lliure.md`
+(revisada) i a `docs/fonaments/06-compatibilitat-i-dades.md`, §1.1 i §1.2.
+
+- **Fitxer**: `page.sheets[]` amb `mode` (`"auto"` o `"template"`), `direction`, `template` i
+  `blocks`; cada bloc amb `kind` (`"sequence"` o `"text"`), caixa i `slot` on cal, i `namedStyle`.
+  `styles` a l'arrel. Sense `sheets`, una sola pàgina automàtica: els documents d'abans no canvien
+  ni en obrir-los ni en desar-los. `page.layout` queda obsolet i s'escriu sempre `"flow"`.
+- **Compatibilitat**: el lector conserva els blocs que no entén; les pàgines es llegeixen encara que
+  `layout` digui `"flow"` (la 2.4.2 l'hi escriu en desar); els fulls de les fases 1–3 són pàgines
+  amb caixes sense plantilla. Fixtures 16 (fases 1–3, sense tocar) i 17 (el model d'ara).
+- **Redux**: `DocumentSAAC.pages` i `DocumentSAAC.styles` substitueixen `layout.mode` i `freeLayout`.
+- **Funcions pures** (`features/free-layout/model/`): `pages.ts` (la pàgina implícita, els canvis
+  de mode de tot el document, la seqüència nova), `blockStyle.ts` (la vista d'un bloc i l'aspecte
+  d'un rètol amb la cascada), `distribute.ts` (R2: omplir el primer espai lliure; passar una pàgina
+  automàtica a caixes) i `templates.ts` (`templateById`, `freeSlots`).
+- **El pont**: fins que la columna ofereixi el mode pàgina a pàgina, «Disposició: Automàtica /
+  Lliure» el canvia a totes les pàgines (amb Desfés), i la vista pinta el flux de sempre si cap
+  pàgina té caixes. Una seqüència nova va a l'última pàgina si és automàtica.
+
+**Què queda per pintar**, i va amb les fases de la interfície:
+
+- Les pàgines automàtiques soles (cada una amb els seus blocs, no totes les seqüències juntes), i el
+  selector de mode per pàgina (R1, a la columna de R8).
+- Els rètols (R9): el model hi és, però la vista encara no els pinta.
+- El retoc de la vista d'un bloc, la mida com a màxim (Q2) i els estils amb nom (R7, R10).
+- El missatge quan afegir una seqüència fa canviar la plantilla de la pàgina (R2).
+- Els espais de les plantilles reservats a rètols (R3, R4): `TemplateSlot` encara no diu què hi va.
 
 ### Preguntes que eren obertes
 

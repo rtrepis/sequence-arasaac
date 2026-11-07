@@ -1,19 +1,18 @@
-// Les accions de la disposició lliure (ADR-005): les fan servir la columna de
-// la vista, la capçalera de cada pàgina i el menú de cada caixa. Calculen la
-// disposició nova amb les funcions pures de `model/` i la desen al document.
+// Les accions sobre les pàgines del document (ADR-005): les fan servir la
+// columna de la vista, la capçalera de cada pàgina i el menú de cada bloc.
+// Calculen les pàgines noves amb les funcions pures de `model/` i les desen al
+// document.
 // Les que substitueixen feina es poden desfer amb el snackbar de sempre
 // (`undoableStyleChangeThunk`), que és l'únic desfer de l'app.
 import type { AnyAction } from "@reduxjs/toolkit";
 import type { AppThunk, RootState } from "@/app/store";
 import type {
   DocumentLayout,
-  FreeLayout,
-  PageLayoutMode,
+  DocumentPages,
   PlacementColumns,
 } from "@/types/document";
 import {
-  freeLayoutChangedActionCreator,
-  layoutModeChangedActionCreator,
+  pagesChangedActionCreator,
   userLayoutOf,
 } from "@features/sequence/store/documentSlice";
 import {
@@ -22,11 +21,8 @@ import {
 } from "@features/sequence/store/styleSlice";
 import { newSaacId } from "@features/sequence/saac/serialize";
 import { SheetArea, sheetAreaMm } from "../model/placement";
-import {
-  addSequencesToSheet,
-  applyTemplateToSheet,
-  buildInitialLayout,
-} from "../model/distribute";
+import { addSequencesToSheet, applyTemplateToSheet } from "../model/distribute";
+import { hasTemplatePages, toAutoPages, toTemplatePages } from "../model/pages";
 import {
   NewLayoutId,
   addSheet,
@@ -49,9 +45,13 @@ const newLayoutId: NewLayoutId = (prefix) => newSaacId(prefix);
 export const selectPageLayout = (state: RootState): DocumentLayout =>
   state.document.layout ?? userLayoutOf(state);
 
-/** Si el document és en mode lliure. */
+/**
+ * «Disposició: Lliure»: si alguna pàgina del document té caixes. Mentre la
+ * vista no pinti les pàgines automàtiques soles, un document amb totes les
+ * pàgines automàtiques es pinta com sempre, amb totes les seqüències.
+ */
 export const selectIsFreeLayout = (state: RootState): boolean =>
-  state.document.layout?.mode === "free";
+  hasTemplatePages(state.document.pages);
 
 /** L'àrea útil d'un full del document, en mm. `null` amb la pantalla completa. */
 export const selectSheetArea = (state: RootState): SheetArea | null => {
@@ -59,9 +59,9 @@ export const selectSheetArea = (state: RootState): SheetArea | null => {
   return sheetAreaMm(pageSize ?? "A4", orientation ?? "landscape");
 };
 
-/** La disposició lliure del document, si en té. */
-export const selectFreeLayout = (state: RootState): FreeLayout | undefined =>
-  state.document.freeLayout;
+/** Les pàgines del document, si en té de pròpies. */
+export const selectPages = (state: RootState): DocumentPages | undefined =>
+  state.document.pages;
 
 /** Els pictogrames de cada seqüència del document. */
 export const selectDocumentContent = (state: RootState) =>
@@ -78,62 +78,59 @@ export const selectSequenceKeys = (state: RootState): number[] =>
     .sort((a, b) => a - b);
 
 /**
- * Canvia la disposició lliure amb `change`. Si es passa `source`, el canvi es
- * pot desfer i en surt el snackbar amb «Desfés»; si no, no substitueix res i
- * qui l'ha demanat diu el seu missatge.
+ * Canvia les pàgines amb `change`. Si es passa `source`, el canvi es pot
+ * desfer i en surt el snackbar amb «Desfés»; si no, no substitueix res i qui
+ * l'ha demanat diu el seu missatge.
  */
 const changeFreeLayout =
   (
-    change: (layout: FreeLayout, area: SheetArea) => FreeLayout,
+    change: (pages: DocumentPages, area: SheetArea) => DocumentPages,
     source?: FreeLayoutChangeSource,
   ): AppThunk =>
   (dispatch, getState) => {
     const state = getState();
-    const { freeLayout } = state.document;
+    const { pages } = state.document;
     const area = selectSheetArea(state);
-    if (!freeLayout || !area) return;
+    if (!pages || !area) return;
     const action = (): AnyAction =>
-      freeLayoutChangedActionCreator(change(freeLayout, area));
+      pagesChangedActionCreator(change(pages, area));
     if (source) dispatch(undoableStyleChangeThunk(action, source));
     else dispatch(action());
   };
 
 /**
- * La disposició de partida, si el document és en mode lliure i encara no en
- * té: un document que passa a «Lliure» per primer cop, o un fitxer que ho
- * diu però no porta cap pàgina.
- */
-export const ensureFreeLayoutThunk = (): AppThunk => (dispatch, getState) => {
-  const state = getState();
-  const area = selectSheetArea(state);
-  if (!selectIsFreeLayout(state) || state.document.freeLayout || !area) return;
-  dispatch(
-    freeLayoutChangedActionCreator(
-      buildInitialLayout(selectSequenceKeys(state), {
-        area,
-        direction: selectPageLayout(state).direction ?? "row",
-        newId: newLayoutId,
-      }),
-    ),
-  );
-};
-
-/**
- * «Disposició: Automàtica / Lliure». Passar a lliure no substitueix res: si ja
- * hi havia una disposició lliure, es recupera tal com era. Tornar a automàtica
- * tampoc no l'esborra, però en desar no s'escriu: per això es pot desfer.
+ * «Disposició: Automàtica / Lliure», per a tot el document mentre la columna
+ * no ho ofereixi pàgina a pàgina. «Lliure» posa caixes a totes les pàgines: les
+ * que ja en tenien les recuperen tal com eren, i un document sense pàgines rep
+ * la disposició de partida. «Automàtica» no esborra res (la plantilla i les
+ * caixes es conserven), però canvia el que es desa: per això es pot desfer.
  */
 export const setLayoutModeThunk =
-  (mode: PageLayoutMode): AppThunk =>
+  (mode: "flow" | "free"): AppThunk =>
   (dispatch, getState) => {
-    const base = selectPageLayout(getState());
-    const action = () => layoutModeChangedActionCreator({ mode, base });
+    const state = getState();
+    const { pages } = state.document;
     if (mode === "flow") {
-      dispatch(undoableStyleChangeThunk(action, "layoutFlow"));
+      if (!pages) return;
+      dispatch(
+        undoableStyleChangeThunk(
+          () => pagesChangedActionCreator(toAutoPages(pages)),
+          "layoutFlow",
+        ),
+      );
       return;
     }
-    dispatch(action());
-    dispatch(ensureFreeLayoutThunk());
+    const area = selectSheetArea(state);
+    if (!area) return;
+    dispatch(
+      pagesChangedActionCreator(
+        toTemplatePages(pages, selectSequenceKeys(state), {
+          area,
+          direction: selectPageLayout(state).direction ?? "row",
+          newId: newLayoutId,
+        }),
+      ),
+    );
   };
 
 /** Afegeix seqüències a una pàgina i la torna a repartir (es pot desfer). */
@@ -166,7 +163,9 @@ export const applyTemplateThunk = (
 
 /** Una pàgina nova, buida, darrere de `afterIndex`. */
 export const addSheetThunk = (afterIndex: number): AppThunk =>
-  changeFreeLayout((layout) => addSheet(layout, afterIndex, newLayoutId));
+  changeFreeLayout((layout) =>
+    addSheet(layout, afterIndex, newLayoutId, "template"),
+  );
 
 /** Una còpia de la pàgina, darrere de l'original. */
 export const duplicateSheetThunk = (index: number): AppThunk =>
@@ -206,8 +205,8 @@ export const copyPlacementToSheetThunk = (
 export const setPlacementCommonThunk =
   (placementId: string, common: boolean, sheetIndex: number): AppThunk =>
   (dispatch, getState) => {
-    const { freeLayout } = getState().document;
-    const found = freeLayout && findPlacement(freeLayout, placementId);
+    const { pages } = getState().document;
+    const found = pages && findPlacement(pages, placementId);
     if (!found || (found.location === "common") === common) return;
     dispatch(
       common
@@ -225,8 +224,7 @@ export const setPlacementColumnsThunk = (
   columns: PlacementColumns,
 ): AppThunk =>
   changeFreeLayout((layout) =>
-    updatePlacement(layout, placementId, (placement) => ({
-      ...placement,
-      columns,
-    })),
+    updatePlacement(layout, placementId, (placement) =>
+      placement.kind === "sequence" ? { ...placement, columns } : placement,
+    ),
   );

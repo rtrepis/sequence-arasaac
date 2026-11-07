@@ -14,6 +14,7 @@ import FreeLayoutPages from "./FreeLayoutPages";
 // s'imprimeix, amb les seves caixes i les comunes; i l'avís abans d'imprimir.
 
 const placement = (id: string, sequenceKey: number) => ({
+  kind: "sequence" as const,
   id,
   sequenceKey,
   x: 5,
@@ -37,12 +38,11 @@ const freeDocument = (): DocumentSAAC => ({
     pageSize: "A4",
     orientation: "portrait",
     direction: "row",
-    mode: "free",
   },
-  freeLayout: {
+  pages: {
     sheets: [
-      { id: "sh_1", placements: [placement("pl_1", 1)] },
-      { id: "sh_2", placements: [placement("pl_2", 1)] },
+      { id: "sh_1", mode: "template", placements: [placement("pl_1", 1)] },
+      { id: "sh_2", mode: "template", placements: [placement("pl_2", 1)] },
     ],
     common: [placement("pl_9", 0)],
   },
@@ -92,7 +92,10 @@ describe("FreeLayoutPages", () => {
     const document = freeDocument();
     renderPages({
       ...document,
-      freeLayout: { sheets: [{ id: "sh_1", placements: [] }], common: [] },
+      pages: {
+        sheets: [{ id: "sh_1", mode: "template", placements: [] }],
+        common: [],
+      },
     });
 
     expect(screen.getByText("This page is empty")).toBeInTheDocument();
