@@ -661,8 +661,8 @@ fet encara.
 - **Proposta**:
   - Les **plantilles base** (les de R3) són fixes, venen amb l'app i no es gestionen: no cal cap
     panell per a elles.
-  - Al panell «Vista», **una fila**: «Pàgines noves: Automàtica / una plantilla», perquè qui sempre
-    fa agendes no hagi de triar-la cada vegada.
+  - **Una fila** «Pàgines noves: Automàtica / una plantilla», perquè qui sempre fa agendes no hagi
+    de triar-la cada vegada. Va a la Vista (vegeu la decisió de sota).
   - Les **plantilles pròpies** («Desa aquesta pàgina com a plantilla», a la Vista) són un catàleg,
     com R10: amb comptes, al núvol, i es gestionen (canviar el nom, esborrar) a la configuració per
     defecte; sense comptes, només les base. Són dos catàlegs paral·lels: **estils dels
@@ -670,11 +670,15 @@ fet encara.
     desar).
 - **Decidit** (2026-11-07): **de moment, només les plantilles base**, que és el cas sense comptes.
   Les plantilles pròpies queden al backlog per a més endavant (**B34**).
-- **Cal decidir**: (b) si la fila
-  «Pàgines noves» va al panell «Vista» o a la Vista mateixa; (c) com es diu el panell quan deixi de
-  ser només «Vista».
+- **Decidit** (2026-11-07): la fila **«Pàgines noves» va a la Vista mateixa**, no a la configuració
+  per defecte.
+- **Queda obert**: el text explicatiu de la pestanya «Vista» de la configuració per defecte diu
+  «Configura els valors de visualització per defecte en obrir la pàgina de vista», i des de B25/B26
+  ja no és cert: un document s'obre tal com es va desar, i aquests valors només els agafen els
+  documents nous. Proposta: mantenir el nom «Vista» i canviar-ne la descripció per una com «La
+  pàgina i els pictogrames amb què comencen els documents nous».
 - **Quan**: amb R1 (el model de pàgines), perquè el panell ha de saber què és una pàgina
-  automàtica; les plantilles pròpies, amb R10.
+  automàtica. Les plantilles pròpies (B34), més endavant.
 
 ### Ordre proposat
 
