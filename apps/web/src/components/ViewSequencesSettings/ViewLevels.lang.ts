@@ -51,12 +51,6 @@ const messages = defineMessages({
     description:
       "Sota el títol «Pàgina N de M» de la columna de la vista. Amb una sola pàgina, no cal dir quina",
   },
-  pictograms: {
-    id: "pages.viewSequence.levels.pictograms",
-    defaultMessage: "Pictograms",
-    description:
-      "Secció del nivell «Document» de la columna de la vista: l'alineació dels pictogrames de tot el document (la mida i l'espai són de cada bloc)",
-  },
   noSelection: {
     id: "pages.viewSequence.levels.noSelection",
     defaultMessage: "Click a block on the page to see its settings.",

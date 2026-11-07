@@ -713,6 +713,67 @@ fet encara.
 - **Quan**: amb R1 (el model de pàgines), perquè el panell ha de saber què és una pàgina
   automàtica. Les plantilles pròpies (B34), més endavant.
 
+### R12 — La pàgina automàtica té una sola configuració
+
+- **Vist** (2026-11-07, revisant el pas 4): l'alineació, com la mida i l'espai, ha de ser del bloc i
+  no del document (C12, fet: el nivell «Document» ja no té cap ajust dels pictogrames). I cal aclarir
+  el concepte: **a la disposició automàtica, tots els blocs porten la mateixa configuració** (mida,
+  espai entre pictogrames i alineació). Només a la plantilla cada bloc té la seva.
+- **Referències** (cerca del 2026-11-07):
+  - **Figma, «auto layout»**: l'espai entre elements, el marge i l'alineació són propietats del
+    **contenidor**, no de cada element. Un element que se'n vol sortir passa a «Ignore auto layout»
+    (abans «absolute position») i llavors té lloc propi, però perd els ajustos del flux. És
+    exactament la parella automàtica / plantilla
+    ([Figma](https://help.figma.com/hc/en-us/articles/360040451373)).
+  - **CSS flexbox**: `gap`, `justify-content` i `align-items` són del contenidor; l'únic retoc per
+    element és `align-self`, i no n'hi ha cap per a l'eix principal: en un flux, la distribució és
+    compartida per força ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Aligning_items)).
+  - **Picto-Selector** (l'eina d'ARASAAC més propera a l'app): la mida i el marge dels pictogrames es
+    trien **per a tot el full** al pas de disposició de la pàgina, no pictograma a pictograma
+    ([Aula Abierta d'ARASAAC](https://aulaabierta.arasaac.org/en?p=82919),
+    [manual](https://static.arasaac.org/docs/Manual_PictoSelector.pdf)).
+  - **Grid 3 (Smartbox)**: un **estil** dona l'aspecte a totes les cel·les que el fan servir;
+    canviar-ne una sense «Update Style» és un retoc local que es marca, i «Update Style» el porta a
+    totes ([Smartbox](https://hub.thinksmartbox.com/knowledgebase/using-styles-to-change-cell-appearance-and-speed-up-editing-in-grid-3/)).
+  - **InDesign, estils d'objecte**: el retoc local es marca amb un «+» al costat de l'estil, i
+    «Clear Overrides» el treu ([manual](https://www.manualsdir.com/manuals/753853/adobe-indesign-cs5.html?page=221)).
+  - **PowerPoint, disseny de diapositiva**: la diapositiva hereta el disseny; «Restableix» treu els
+    retocs locals i la torna a fer com el disseny
+    ([Indezine](https://www.indezine.com/products/powerpoint/learn/interface/365/reset-slide.html)).
+  - **Boardmaker i Widgit InPrint**: no s'hi ha trobat documentació clara sobre mides per a tot el
+    tauler; la mida es toca cel·la a cel·la o amb plantilles. No aporten cap model millor.
+- **El que en surt**: totes les eines separen **qui distribueix** (el contenidor: la pàgina
+  automàtica) de **qui té lloc propi** (l'element posat a mà: el bloc d'una plantilla). En un flux,
+  l'espai i l'alineació no poden ser de cada element sense trencar el flux.
+- **Proposta**:
+  1. **Pàgina automàtica**: els ajustos dels pictogrames (mida, espai, alineació) són **de la pàgina**
+     i valen per a tots els seus blocs, amb la direcció i l'espai entre blocs. Van al nivell «Pàgina»
+     de la columna, en una secció «Pictogrames d'aquesta pàgina». Clicar un bloc d'una pàgina
+     automàtica el selecciona (es veu quin és) però el nivell «Bloc» no hi té ajustos de vista: diu
+     «En una pàgina automàtica, tots els blocs fan servir els ajustos de la pàgina» i ofereix
+     «Passa la pàgina a plantilla» per ajustar-lo sol (com «Ignore auto layout» de Figma).
+  2. **Pàgina amb plantilla**: cada bloc té els seus (com ara). En passar una pàgina d'automàtica a
+     plantilla, cada bloc comença amb els ajustos que tenia la pàgina; en tornar a automàtica, els
+     de cada bloc es conserven al fitxer però no es fan servir (amb Desfés), com fa ara la disposició.
+  3. **Model**: `sheets[].view` (mida, espai, alineació) per a la pàgina automàtica; el `view` de
+     cada bloc per a la plantilla. La vista de la seqüència deixa de ser la base visible (M1 es
+     revisa): es continua escrivint per a les versions anteriors.
+- **Cal decidir**:
+  - **D1**: la configuració única, **per pàgina** (cada pàgina automàtica la seva, com cada frame de
+    Figma) o **per a totes les pàgines automàtiques del document** (més simple; llavors aniria al
+    nivell «Document», com a configuració de «les pàgines automàtiques»).
+  - **D2**: els **documents d'abans** amb mides diferents per seqüència (avui es pot fer, i n'hi ha):
+    en obrir-los, (a) la pàgina agafa la mida de la primera seqüència i les altres canvien (es diu
+    amb un avís), (b) les seqüències amb mida pròpia es conserven com a excepció, o (c) el document
+    s'obre amb una pàgina per seqüència.
+  - **D3**: a la pàgina automàtica, clicar un bloc el selecciona igualment (per veure'n el nom i
+    passar a plantilla) o porta directament al nivell «Pàgina»?
+  - **D4**: si cal la marca de retoc i «Restableix» (Grid 3, InDesign, PowerPoint) per als blocs
+    d'una plantilla respecte dels ajustos que tenia la pàgina, o n'hi ha prou que cada bloc sigui
+    independent.
+- **Quan**: amb el pas 4b (el mode per pàgina), perquè és el mateix canvi: la pàgina automàtica
+  passa a tenir ajustos propis.
+
 ### Ordre proposat
 
 1. ✅ **Decisions** (les preguntes de sota) i **R3**, la investigació dels treballs reals: tot el
@@ -723,7 +784,8 @@ fet encara.
    entrat també els estils amb nom (R10). Vegeu «Com ha quedat el model», a sota.
 4. ✅ **R5**, la columna que segueix la pàgina i la selecció de la caixa. Vegeu «Com ha quedat la
    columna (pas 4)».
-4b. ⏭️ **El mode per pàgina** (R1 a la interfície): «Com es col·loquen: Automàtica / Plantilla» al
+4b. ⏭️ **El mode per pàgina** (R1 a la interfície), amb **R12** (la configuració única de la
+   pàgina automàtica; decidir abans D1–D4): «Com es col·loquen: Automàtica / Plantilla» al
    nivell «Pàgina», el selector «Disposició» del document desapareix i la vista pinta cada pàgina
    automàtica sola, amb els seus blocs. Es va treure de R5 perquè toca el flux, la impressió, el PDF
    i la pantalla completa.
@@ -833,6 +895,7 @@ Primera revisió a la previsualització. Es demana simplificar els conceptes per
 | C8 | La distribució de l'esbós era més clara | Els nivells són **targetes** com a l'esbós (icona, tipus de nivell, nom i abast), lligades per la **línia de la cascada** (`SettingsLevels`). És una excepció a «una zona no es marca amb una caixa» (`docs/estandards/configuracions.md`), autoritzada: es pot canviar un patró si queda més clar. El nivell «Bloc» hi és sempre; sense selecció, només la capçalera |
 | C9 | El bloc es veu seleccionat; la pàgina no prou | La pàgina activa porta la guia `sheetGuide` per fora del marc (la mateixa marca que el bloc) i un punt davant del títol, també amb una sola pàgina. A la disposició automàtica, quan hi ha una seqüència seleccionada |
 | C10 | Les mides dels pictogrames confonen | **La mida i l'espai entre pictogrames són només del bloc.** El nivell «Document» només en conserva l'alineació |
+| C12 | L'alineació també confon al nivell «Document» | Fora: el nivell «Document» ja no té cap ajust dels pictogrames. Tot és del bloc (vegeu R12 per a la pàgina automàtica) |
 | C11 | La secció «Lloc» del bloc sobra | Fora. Les accions (a totes les pàgines, copiar, treure) continuen al menú del bloc, al full; les eines per copiar vindran més endavant |
 
 ### Preguntes que eren obertes

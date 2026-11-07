@@ -2988,10 +2988,6 @@
     "message": "{total, plural, one {S'aplica a la pàgina} other {S'aplica només a la pàgina {number}}}",
     "description": "Sota el títol «Pàgina N de M» de la columna de la vista. Amb una sola pàgina, no cal dir quina"
   },
-  "pages.viewSequence.levels.pictograms": {
-    "message": "Pictogrames",
-    "description": "Secció del nivell «Document» de la columna de la vista: l'alineació dels pictogrames de tot el document (la mida i l'espai són de cada bloc)"
-  },
   "pages.viewSequence.levels.noSelection": {
     "message": "Clica un bloc del full per veure'n els ajustos.",
     "description": "Al final dels nivells de la columna de la vista quan no hi ha cap bloc seleccionat"

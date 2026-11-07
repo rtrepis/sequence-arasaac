@@ -780,7 +780,6 @@
   "pages.viewSequence.levels.document": "Documento",
   "pages.viewSequence.levels.documentScope": "Se aplica a todas las páginas",
   "pages.viewSequence.levels.pageScope": "{total, plural, one {Se aplica a la página} other {Se aplica solo a la página {number}}}",
-  "pages.viewSequence.levels.pictograms": "Pictogramas",
   "pages.viewSequence.levels.noSelection": "Haz clic en un bloque de la hoja para ver sus ajustes.",
   "pages.viewSequence.levels.layoutFlowShort": "Automática",
   "pages.viewSequence.levels.layoutFreeShort": "Libre",

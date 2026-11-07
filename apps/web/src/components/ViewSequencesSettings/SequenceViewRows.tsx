@@ -53,9 +53,8 @@ const rounded = (value: number): number => parseFloat(value.toFixed(2));
 
 /**
  * Les files de la vista dels pictogrames d'una seqüència: mida, espai i
- * alineacions. Les fan servir el nivell «Bloc» (totes: un bloc o, a la
- * disposició automàtica, una seqüència) i el nivell «Document» (només les
- * alineacions, a l'estil del document: la mida i l'espai són del bloc). Només
+ * alineacions. Les fa servir el nivell «Bloc» (un bloc o, a la disposició
+ * automàtica, una seqüència): la vista dels pictogrames és només del bloc. Només
  * files (`SettingRow`): qui les fa servir decideix la secció i què canvien.
  */
 const SequenceViewRows = ({

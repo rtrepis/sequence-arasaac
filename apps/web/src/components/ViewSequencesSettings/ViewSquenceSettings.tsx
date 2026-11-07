@@ -43,7 +43,6 @@ import { DocumentLayout, SequenceViewSettings } from "@/types/document";
 import {
   documentAuthorChangedActionCreator,
   documentLayoutChangedActionCreator,
-  applyViewSettingsToAllActionCreator,
   setSequenceSpaceBetweenActionCreator,
 } from "@features/sequence/store/documentSlice";
 import {
@@ -58,7 +57,6 @@ import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSave
 import SettingsSaveErrorDialog from "@features/backend/user-settings/components/SettingsSaveErrorDialog";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import GlobalViewControls from "./GlobalViewControls";
-import SequenceViewRows from "./SequenceViewRows";
 import SettingsLevel, { SettingsLevels } from "./SettingsLevel";
 import LevelCrumbs, { LevelCrumb } from "./LevelCrumbs";
 import levelMessages from "./ViewLevels.lang";
@@ -307,22 +305,6 @@ const ViewSequencesSettingsContent = ({
   const blockAlign = isRowDirection
     ? ALIGN_V[blockSource.alignmentV]
     : ALIGN_H[blockSource.alignmentH];
-
-  /**
-   * La mida, l'espai i l'alineació dels pictogrames de tot el document (nivell
-   * «Document»): és tocar l'estil del document, com feia «Aplica a totes»
-   */
-  const handleDocumentViewChange = useCallback(
-    (settings: Partial<SequenceViewSettings>) => {
-      dispatch(
-        applyViewSettingsToAllActionCreator({
-          settings,
-          styleView: documentStyle.view,
-        }),
-      );
-    },
-    [dispatch, documentStyle.view],
-  );
 
   /**
    * Handler per canviar la direcció del contenidor de seqüències (global)
@@ -835,19 +817,6 @@ const ViewSequencesSettingsContent = ({
                       <FreeLayoutSettings
                         pageSize={pageSize}
                         onPageSizeChange={setPageSize}
-                      />
-                    </SectionTitle>
-
-                    {/* L'alineació dels pictogrames de tot el document (l'estil
-                      del document). La mida i l'espai només són del bloc */}
-                    <SectionTitle
-                      title={<FormattedMessage {...levelMessages.pictograms} />}
-                    >
-                      <SequenceViewRows
-                        view={documentStyle.view}
-                        labelId="view-level-document"
-                        onChange={handleDocumentViewChange}
-                        rows={["alignmentH", "alignmentV"]}
                       />
                     </SectionTitle>
 
