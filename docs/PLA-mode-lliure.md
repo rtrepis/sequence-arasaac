@@ -504,6 +504,13 @@ fet encara.
   part es repeteix entre pàgines. Les plantilles surten d'aquí, no de les formes geomètriques
   d'avui.
 
+- **Primera versió feta** (2026-11-07): `docs/ESTUDI-treballs-amb-pictogrames.md`. Onze treballs i
+  deu plantilles amb nom de treball (agenda en tira, «Avui és» + agenda, primer/després, setmana,
+  tauler, economia de fitxes, pàgina de conte, menú…). Tres troballes que canvien el pla: **cal un
+  rètol** (un text sol, sense pictograma) per a mitja dotzena de plantilles; **les columnes fixes**
+  són tan importants com el repartiment; i les tires **per retallar** demanarien línies de tall.
+  Falta validar l'ordre amb tres o quatre usuaris reals.
+
 ### R4 — Veure la plantilla abans d'aplicar-la
 
 - **Vist**: en triar una plantilla s'ha de veure visualment com quedarà.
@@ -567,7 +574,16 @@ fet encara.
 5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
 6. **R7** (B31), els estils per grup, quan el nom i el nivell «Seqüència» de la columna ja hi siguin.
 
-### Preguntes obertes
+### Decisions (2026-11-07)
+
+| # | Decisió |
+|---|---|
+| Q1 | **«Bloc»** és el nom que veu l'usuari: una seqüència posada en una pàgina, amb la seva mida i el seu lloc. Al codi, `SequencePlacement` continua sent el tipus; a la interfície, a les traduccions i a la documentació per a l'usuari, «bloc». |
+| Q2 | **La mida és un màxim**: el bloc mana, però els pictogrames no passen de la mida triada. Cada bloc té els seus ajustos (mida, espai, alineació, columnes…), al nivell «Bloc» de la columna. Substitueix la decisió 9 de l'ADR-005 («la mida la mana la caixa») quan es revisi. |
+| Q3 | **Un sol model de pàgines** per a totes dues disposicions (R1). |
+| Q4 | **La investigació (R3)** es fa a la xarxa: l'entorn d'ARASAAC i, a escala internacional, escoles d'educació especial i materials de comunicació augmentativa i alternativa (CAA). Resultat a `docs/ESTUDI-treballs-amb-pictogrames.md`. |
+
+### Preguntes que eren obertes
 
 | # | Pregunta | Opcions |
 |---|---|---|

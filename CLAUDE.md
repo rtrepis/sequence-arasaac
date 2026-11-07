@@ -208,6 +208,11 @@ al davant hi encaixa.
   troballes L1–L8, de les quals L1–L4 estan resoltes i L5–L8 continuen obertes. La primera de
   les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
   correus diaris de Resend.
+- `docs/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
+  (agenda, passos, primer/després, setmana, taulers, normes, contes, economia de fitxes, menú), a
+  l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en
+  surten. **Consultar-lo abans de dissenyar o canviar una plantilla del mode lliure.** Primera
+  versió: falta validar-ne l'ordre amb usuaris reals.
 - `docs/ESTUDI-seo-noticies.md` és el pla perquè les notícies es trobin als cercadors i es puguin
   compartir: què veu Google avui (una SPA buida sense JavaScript), les pàgines estàtiques, el
   sitemap i les etiquetes per compartir (fase 1), les **guies** pensades per a cerques reals
