@@ -629,13 +629,50 @@ fet encara.
   03, «Fitxer d'estil»), i per tant també es pot exportar i importar. Les preferències continuen
   sense entrar mai al document: aplicar una entrada **copia** els valors al document, no hi deixa
   cap referència (fonament 03, principi 4).
-- **Cal decidir**: (a) què guarda una entrada: només l'estil, o també la pàgina (paper, orientació,
-  plantilla); (b) si una entrada es pot aplicar a un bloc sol, i aleshores què se n'aplica (l'estil
-  del bloc de R7, sense el paper); (c) el nom per a l'usuari («configuració», «estil», «model»…);
+- **Decidit** (2026-11-07): **l'estil és el dels pictogrames** (la targeta: lletra, vores, colors,
+  mida…). Una entrada del catàleg no porta ni el paper, ni l'orientació, ni la plantilla: la pàgina
+  és una altra cosa, i les plantilles es tracten a R11.
+- **Cal decidir**: (b) si una entrada es pot aplicar a un bloc sol (l'estil del bloc de R7); (c) el nom per a l'usuari («configuració», «estil», «model»…);
   (d) el sostre d'entrades amb compte (`docs/ESTUDI-limits-serveis-gratuits.md`).
 - **Al backlog**: **B33**, a «Idees».
 - **Quan**: decidir-ho **abans de R7**, perquè R7 i «Copia aquests ajustos a…» són justament el
   que el catàleg simplificaria; fer-ho, després del mode lliure o amb R7, segons el que es decideixi.
+
+### R11 — La «Vista» de la configuració per defecte, i on es gestionen les plantilles
+
+- **Vist** (2026-11-07): el panell «Vista» de la configuració per defecte (paper, orientació,
+  direcció, espai entre seqüències; mida, espai i alineació dels pictogrames; autoria i llicència)
+  passa a ser, clarament, **la configuració de la pàgina automàtica**: el que tindrà la pàgina d'un
+  document nou. Queda per pensar si és **aquí** on es gestionen les plantilles.
+- **Què canvia al panell amb R1 i Q2**, si es fa:
+  - «Format de pàgina» (paper, orientació) continua sent el de cada document nou.
+  - La direcció i l'espai passen a ser **els de les pàgines automàtiques noves** (l'espai, com a
+    «Espai entre blocs», vegeu l'esbós de R8).
+  - «Pictogrames» (mida, espai, alineació) passa a ser **el de cada bloc nou**. La mida, com a
+    màxim (Q2) quan el bloc és en una plantilla.
+  - «Aplica a la vista actual» ha de dir a què s'aplica ara que hi ha pàgines i blocs: proposta,
+    a tot el document (totes les pàgines automàtiques i tots els blocs), amb Desfés.
+- **Les plantilles són dues coses diferents**, i no van al mateix lloc:
+  1. **Aplicar-ne una a una pàgina** depèn del que hi ha a la pàgina (quants blocs, de quin tipus).
+     Va a la Vista, al nivell «Pàgina» (R8), i a la capçalera de la pàgina. No pot anar a la
+     configuració per defecte.
+  2. **Gestionar-les** (quines hi ha, les pròpies, l'ordre, les preferides) sí que és de l'usuari, i
+     pot anar a la configuració per defecte, al panell «Vista» o en un de propi.
+- **Proposta**:
+  - Les **plantilles base** (les de R3) són fixes, venen amb l'app i no es gestionen: no cal cap
+    panell per a elles.
+  - Al panell «Vista», **una fila**: «Pàgines noves: Automàtica / una plantilla», perquè qui sempre
+    fa agendes no hagi de triar-la cada vegada.
+  - Les **plantilles pròpies** («Desa aquesta pàgina com a plantilla», a la Vista) són un catàleg,
+    com R10: amb comptes, al núvol, i es gestionen (canviar el nom, esborrar) a la configuració per
+    defecte; sense comptes, només les base. Són dos catàlegs paral·lels: **estils dels
+    pictogrames** (R10) i **plantilles de pàgina** (R11), amb les mateixes dues accions (aplicar,
+    desar).
+- **Cal decidir**: (a) si hi ha plantilles pròpies, o n'hi ha prou amb les base; (b) si la fila
+  «Pàgines noves» va al panell «Vista» o a la Vista mateixa; (c) com es diu el panell quan deixi de
+  ser només «Vista».
+- **Quan**: amb R1 (el model de pàgines), perquè el panell ha de saber què és una pàgina
+  automàtica; les plantilles pròpies, amb R10.
 
 ### Ordre proposat
 
@@ -646,7 +683,9 @@ fet encara.
    pàgines a totes dues disposicions, la plantilla desada amb la pàgina, i els blocs de text.
 4. **R5**, la columna que segueix la pàgina i la selecció de la caixa.
 5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
-6. **R10** (B33), decidir el catàleg de configuracions: abans de R7, perquè en canvia les accions.
+6. **R10** (B33), decidir el catàleg d'estils dels pictogrames: abans de R7, perquè en canvia les
+   accions. **R11**, el panell «Vista» de la configuració per defecte, amb R1; les plantilles
+   pròpies, si n'hi ha, amb R10.
 7. **R7** (B31), els estils per grup, quan el nom i el nivell «Seqüència» de la columna ja hi siguin.
 
 ### Decisions (2026-11-07)

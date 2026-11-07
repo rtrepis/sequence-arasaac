@@ -127,7 +127,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
 
 *(Oberta en revisar l'esbós de la columna de la Vista, R8 del mode lliure, 2026-11-07.)*
 
-- **Què**: avui l'usuari té una sola configuració per defecte. La idea és que se'n pugui fer un
+- **Què**: l'estil dels pictogrames (la targeta), no la pàgina. Avui l'usuari té una sola configuració per defecte. La idea és que se'n pugui fer un
   catàleg i que, a tot arreu on avui s'apliquen o es copien ajustos, n'hi hagi prou amb **aplicar
   una entrada del catàleg** o **desar el que hi ha com a entrada**.
 - **Amb comptes**: catàleg al núvol. **Sense comptes**: una sola entrada (la configuració per
@@ -135,6 +135,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
 - **Cal decidir-ho abans d'implementar-ho**: què guarda una entrada, a quins nivells s'aplica
   (document, pàgina, bloc), el nom per a l'usuari i el sostre amb compte.
 - El detall és a **R10** de `docs/PLA-mode-lliure.md` (§12). S'ha de decidir abans de **B31** (R7).
+  Les plantilles de pàgina pròpies serien un catàleg paral·lel: **R11**.
 
 ## Gravetat alta
 
