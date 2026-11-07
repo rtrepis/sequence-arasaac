@@ -572,6 +572,34 @@ fet encara.
   text, amb el text a dalt del nivell). Hi ha la taula de on va cada ajust d'avui i nou preguntes
   obertes (P1–P9), entre elles si l'orientació ha de passar a ser de la pàgina i el catàleg de
   configuracions (R10).
+- **L'esbós és un esbós, no el disseny visual.** Decideix **què** hi ha a cada nivell, en quin ordre i
+  què diu cada línia; **no** decideix com es dibuixa. Els colors, les mides, les caixes de cada
+  nivell, els botons petits i les etiquetes són del fitxer HTML, no de l'app. En implementar-lo,
+  mana `docs/estandards/configuracions.md` (i colors, capes flotants i feedback), i cada peça de
+  l'esbós passa a la seva peça del projecte:
+
+  | A l'esbós | A l'app |
+  |---|---|
+  | Cada fila d'ajust (títol a l'esquerra, control a la dreta, línia d'ajuda a sota) | `SettingRow`, amb `helper` per a la línia d'ajuda i `labelId` per al nom accessible |
+  | Els grups dins d'un nivell («Paper», «Pictogrames», «Lloc»…) | `SectionTitle` |
+  | Els botons segmentats (Vertical/Apaïsat, Automàtica/Plantilla, alineacions, columnes) | `StyledToggleButtonGroup` amb `IconToggleButton` (55 × 55, `primary` en seleccionat), o amb text on ara n'hi ha |
+  | Els lliscadors | `Slider` de MUI, com els d'ara, amb `aria-labelledby` |
+  | Els botons d'acció («Desa com a preferència», «Aplica el meu estil») | `StyledButton` dins de `SettingsActions` |
+  | Les parts plegables («Estil d'aquest bloc», «Posició i mida», els nivells plegats) | Acordió amb `settingsAccordion`: només la fletxa el distingeix, mai una caixa |
+  | El missatge de baix amb «Desfés» | El snackbar de feedback de sempre (`docs/estandards/feedback-i-accions.md`) |
+  | Tots els colors (el verd, el blau de la selecció, els pictogrames esquemàtics) | `palette.ts`; la marca de selecció damunt del full, `sheetGuide` |
+  | Les miniatures de plantilla | Botons amb nom accessible; el dibuix, amb els colors de `palette.ts` |
+
+- **Peces que l'esbós fa servir i que el projecte encara no té**, i que cal resoldre dins dels
+  estàndards abans de fer-les (actualitzant `docs/estandards/configuracions.md` si cal):
+  - **La capçalera de nivell** (icona, «Document / Pàgina 2 de 3 / Bloc» i la línia «S'aplica a…»).
+    Avui el nivell més alt de la columna és `SectionTitle`, i l'estàndard diu que una zona no es
+    marca amb una caixa. Els tres nivells de l'esbós són caixes amb vora: s'hi ha de buscar la forma
+    amb el que hi ha (un `SectionTitle` de nivell superior, o el text de `SettingsPanelHint`), o
+    definir-ne una de nova a l'estàndard.
+  - **La marca «Del document» / «Retocat» i «Restableix»** de R7. És un patró nou de cascada; si
+    s'hi queda, ha de ser una sola peça compartida, no escrita a cada fila.
+  - **Les molles** de dalt de la columna.
 
 ### R9 — Blocs de text
 
@@ -677,6 +705,7 @@ fet encara.
   ja no és cert: un document s'obre tal com es va desar, i aquests valors només els agafen els
   documents nous. Proposta: mantenir el nom «Vista» i canviar-ne la descripció per una com «La
   pàgina i els pictogrames amb què comencen els documents nous».
+  **Es decideix quan es toqui el panell** (amb R1), no abans.
 - **Quan**: amb R1 (el model de pàgines), perquè el panell ha de saber què és una pàgina
   automàtica. Les plantilles pròpies (B34), més endavant.
 

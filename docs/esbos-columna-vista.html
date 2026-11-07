@@ -73,6 +73,8 @@
   }
   .lede { max-width: 70ch; color: var(--ink-soft); font-size: 16px; }
   header.top { display: grid; gap: 12px; }
+  .disclaimer { max-width: 80ch; font-size: 14px; border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 10px 14px; background: var(--surface); }
+  .disclaimer code { font-family: var(--font-mono); font-size: 12.5px; }
   .refs { display: flex; flex-wrap: wrap; gap: 6px; }
   .ref {
     font-family: var(--font-mono); font-size: 12px; border: 1px solid var(--line-strong);
@@ -302,6 +304,10 @@
     <p class="lede">Un esbós per veure i comentar abans de tocar codi. La columna diu sempre a què s'aplica cada ajust,
       segueix la pàgina que es mira i, quan es clica un bloc del full, n'ensenya els ajustos. Les pàgines, els
       pictogrames i les mides són de mostra; els pictogrames estan dibuixats esquemàticament.</p>
+    <p class="disclaimer"><b>És un esbós.</b> Decideix què hi ha a cada nivell, en quin ordre i què diu; no com es dibuixa.
+      Els colors, els botons, les caixes i les etiquetes són d'aquesta pàgina. A l'app, cada peça es fa amb els patrons del
+      projecte (<code>SettingRow</code>, <code>SectionTitle</code>, <code>StyledToggleButtonGroup</code>, <code>SettingsActions</code>,
+      <code>palette.ts</code>…), tal com diu <code>docs/estandards/configuracions.md</code>. La correspondència és a la R8 del pla.</p>
     <div class="refs" aria-label="Punts de la revisió que té en compte">
       <span class="ref"><b>R1</b> un sol model de pàgines</span>
       <span class="ref"><b>R2</b> la plantilla es desa</span>
