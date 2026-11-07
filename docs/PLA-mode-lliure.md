@@ -460,3 +460,118 @@ El que s'ha fet diferent del que deia §6, i per què:
 - Una caixa massa petita ho diu damunt del full, però no s'impedeix: les nanses de la fase 4 són
   les que han d'aturar-se al mínim.
 
+
+## 12. Revisió de la fase 3 (2026-11-07)
+
+Primera revisió a la previsualització. Són els punts a treballar **abans d'aprofundir més** (abans
+de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidir. Res d'això no està
+fet encara.
+
+### R1 — Un sol model: pàgines a totes dues disposicions
+
+- **Vist**: la disposició automàtica també ha de tenir més pàgines, i s'hi han de poder posar i
+  treure seqüències.
+- **Proposta**: deixar de tenir dos modes de document. El document és **sempre** una llista de
+  pàgines, i cada pàgina té les seves seqüències. El que canvia és **com es col·loquen dins de cada
+  pàgina**: *automàtic* (el flux d'avui: una darrere l'altra, amb la direcció i l'espai) o amb una
+  *plantilla* (caixes). Un document d'abans és una sola pàgina automàtica amb totes les seqüències,
+  i es veu i s'imprimeix igual que avui.
+- **Conseqüència**: el selector «Disposició: Automàtica / Lliure» del document desapareix i passa a
+  ser un ajust **de la pàgina**. Afecta el model del fitxer (ADR-005): `page.layout` deixaria de ser
+  del document i cada full portaria la seva manera de col·locar. Cal revisar l'ADR abans de tocar
+  codi.
+
+### R2 — La plantilla es desa amb la pàgina
+
+- **Vist (defecte)**: si es treu una seqüència d'una pàgina i se n'hi posa una altra, la pàgina no
+  conserva la plantilla que tenia.
+- **Causa**: la plantilla **no es desa** (decisió de §6: «el que es desa són les caixes»). En afegir
+  una seqüència, `addSequencesToSheet` tria la plantilla pel nombre de caixes (`templateFor`), i no
+  sap quina hi havia.
+- **Proposta**: cada pàgina recorda la seva plantilla (`sheets[].template`). Afegir una seqüència
+  omple el primer espai lliure d'aquella plantilla; només si no n'hi ha cap, es passa a una plantilla
+  més gran (i es diu). Va amb R1, perquè toca el mateix camp del fitxer.
+
+### R3 — Les plantilles base, a partir dels treballs reals
+
+- **Vist**: cal treballar els models base de plantilla, i fer-ho a partir dels treballs més comuns
+  amb pictogrames.
+- **Proposta**: una investigació curta abans de dissenyar-ne cap: quins documents fan de debò
+  famílies, mestres i logopedes amb pictogrames, i quina forma tenen. Candidats a contrastar:
+  agenda o horari del dia, seqüència de passos (rentar-se les mans, vestir-se), *primer / després*,
+  setmana (set columnes), normes de l'aula, tauler de comunicació, conte adaptat, menú del menjador.
+  De cada treball: quantes seqüències porta, en quina orientació, si hi ha capçalera comuna i quina
+  part es repeteix entre pàgines. Les plantilles surten d'aquí, no de les formes geomètriques
+  d'avui.
+
+### R4 — Veure la plantilla abans d'aplicar-la
+
+- **Vist**: en triar una plantilla s'ha de veure visualment com quedarà.
+- **Proposta**: (a) cada opció del selector porta una **miniatura** de la disposició, dibuixada
+  amb els espais de la plantilla, no només el nom; (b) mentre es passa per damunt d'una opció (o
+  s'hi va amb el teclat), la pàgina ensenya **els espais** com a guies, sense moure res; aplicar-la
+  és el clic. Depèn de R3: les miniatures es dibuixen un cop se sàpiga quines plantilles hi ha.
+
+### R5 — La columna segueix la pàgina, i la caixa
+
+- **Vist**: els ajustos de la dreta han de baixar amb les pàgines, dir a quina pàgina s'apliquen i
+  canviar sols a la pàgina que s'està mirant; i clicar una seqüència ha de posar-hi els ajustos.
+- **Proposta**:
+  - La columna es queda **enganxada** (`sticky`) mentre es baixa per les pàgines.
+  - La part de pàgina de la columna diu **«Pàgina 2»** a la capçalera i fa referència a la pàgina
+    que ocupa més pantalla en cada moment (`IntersectionObserver`). La pàgina activa es marca també
+    al full (vora més gruixuda).
+  - **Clicar una caixa la selecciona** (en comptes d'obrir directament el menú): la caixa es marca
+    i la columna mostra els ajustos **d'aquella seqüència**. El menú d'accions de la caixa queda a
+    la columna i al botó de la caixa. Això és el primer pas de la selecció de la fase 4.
+
+### R6 — Canviar la mida dels pictogrames d'una seqüència
+
+- **Vist**: els ajustos han de deixar canviar la mida dels pictogrames de la seqüència. Avui, en
+  lliure, el control de mida desapareix perquè «mana la caixa» (ADR-005, decisió 9).
+- **Cal decidir** (vegeu les preguntes): què fa el control de mida dins d'una caixa.
+
+### R7 — Estils per grup de seqüències, i un nom per a aquest grup
+
+- **Vist**: s'han de poder assignar estils a cada grup de seqüències, i cal un nom per entendre'ns
+  entre nosaltres i perquè l'usuari ho entengui.
+- **Ja era al backlog**: és **B31** («Aplicar canvis d'estil per seqüència»), i s'hi continua. Toca
+  la cascada d'estil del fonament 03 (document → seqüència → pictograma): avui una seqüència només
+  té estil de vista.
+- **Nom**: avui al codi i als documents conviuen «caixa» (el rectangle), «col·locació» (la
+  seqüència posada en una pàgina) i «calaix» (les que no són a cap pàgina). Cal **un sol nom** per
+  a l'usuari. Vegeu les preguntes.
+
+### R8 — Una estratègia d'UX per a la columna: document, pàgina, seqüència
+
+- **Vist**: la columna barreja el que s'aplica a tot el document i el que s'aplica a cada pàgina, i
+  costa d'entendre.
+- **Proposta**: tres nivells, sempre en el mateix ordre i amb el mateix aspecte, que corresponen a
+  la cascada (fonament 03):
+  1. **Document**: el paper i l'orientació, l'estil del document, el peu d'impressió. Canviar-ho
+     canvia totes les pàgines.
+  2. **Pàgina N**: com es col·loquen les seqüències (automàtic o plantilla), quines seqüències hi
+     ha, i les accions de la pàgina.
+  3. **Seqüència** (la seleccionada): mida, espai, alineació, columnes, i després (R7) l'estil.
+  Cada nivell diu a què afecta («S'aplica a tot el document», «S'aplica a la pàgina 2»). És un
+  disseny per fer **abans** de tocar codi: un esbós de la columna sencera, amb els tres nivells,
+  per validar-lo.
+
+### Ordre proposat
+
+1. **Decisions** (les preguntes de sota) i **R3**, la investigació dels treballs reals: tot el
+   que ve després en depèn.
+2. **R8**, l'esbós de la columna, ja amb R1, R5, R6 i R7 en compte.
+3. **R1 + R2**, el model (ADR-005 revisada, fitxer, migració dels documents de les fases 1–3).
+4. **R5**, la columna que segueix la pàgina i la selecció de la caixa.
+5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
+6. **R7** (B31), els estils per grup, quan el nom i el nivell «Seqüència» de la columna ja hi siguin.
+
+### Preguntes obertes
+
+| # | Pregunta | Opcions |
+|---|---|---|
+| Q1 | Quin nom veu l'usuari per a una seqüència posada en una pàgina, amb la seva mida i el seu lloc? | «bloc», «caixa», «requadre», «zona»… |
+| Q2 | Què fa el control de mida d'una seqüència dins d'una caixa (R6)? | La mida canvia la caixa (la caixa s'ajusta als pictogrames) · La mida és un màxim (la caixa mana, però no pinta més gran) · La mida mana i, si no hi cap, ho avisa |
+| Q3 | R1: un sol model de pàgines per a totes dues disposicions? | Sí (proposat) · No, la disposició automàtica té pàgines però sense plantilles |
+| Q4 | R3: la investigació, qui la fa? | Una cerca a la xarxa de materials publicats (ARASAAC, escoles, logopèdia) · Exemples reals de l'usuari i el seu entorn · Totes dues |
