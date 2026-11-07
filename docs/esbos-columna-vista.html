@@ -1,0 +1,1072 @@
+<title>Columna de la Vista en tres nivells</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Andika:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Disposició: capçalera curta, l'app simulada a sota (escriptori a l'esquerra, columna a la dreta)
+     i, després, les notes i les preguntes per comentar. Neutres amb biaix oliva, del verd de l'app. */
+  :root {
+    --ground: #F6F8F1;
+    --surface: #FFFFFF;
+    --sunk: #ECEFE4;
+    --ink: #1E2A12;
+    --ink-soft: #55604A;
+    --ink-faint: #848E7A;
+    --line: rgba(30, 42, 18, 0.14);
+    --line-strong: rgba(30, 42, 18, 0.30);
+    --accent: #557A26;
+    --accent-bright: #8AC34A;
+    --on-accent: #1E2A12;
+    --warn: #9A5B00;
+    /* L'app simulada: background.default i background.paper de palette.ts */
+    --app-desk: #FFFFFF;
+    --app-paper: #F2F5EC;
+    --app-bar: #E3E8DC;
+    /* Marca d'edició damunt del full: sheetGuide (fixa als dos temes, com el full) */
+    --sheet: #FFFFFF;
+    --sheet-ink: #1E1E1E;
+    --sheet-guide: #2F6B8A;
+    --sheet-line: rgba(0, 0, 0, 0.22);
+    --sheet-shadow: 0 1px 2px rgba(0,0,0,.10), 0 6px 18px -8px rgba(0,0,0,.30);
+    --p1: #F2B84B; --p2: #6FB1E0; --p3: #E58A7A; --p4: #8CC07A; --p5: #B79AE0; --p6: #E0C36F;
+    --font-ui: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101309; --surface: #191D12; --sunk: #0B0D06;
+      --ink: #E9EDE1; --ink-soft: #A9B39B; --ink-faint: #737E67;
+      --line: rgba(233, 237, 225, 0.15); --line-strong: rgba(233, 237, 225, 0.32);
+      --accent: #A8D46B; --accent-bright: #8AC34A; --on-accent: #1E2A12; --warn: #E3A54A;
+      --app-desk: #121212; --app-paper: #242820; --app-bar: #2E3328;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #101309; --surface: #191D12; --sunk: #0B0D06;
+    --ink: #E9EDE1; --ink-soft: #A9B39B; --ink-faint: #737E67;
+    --line: rgba(233, 237, 225, 0.15); --line-strong: rgba(233, 237, 225, 0.32);
+    --accent: #A8D46B; --accent-bright: #8AC34A; --on-accent: #1E2A12; --warn: #E3A54A;
+    --app-desk: #121212; --app-paper: #242820; --app-bar: #2E3328;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ground); color: var(--ink); font-family: var(--font-ui);
+    font-size: 15px; line-height: 1.5;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 40px; }
+  h1, h2, h3 { text-wrap: balance; line-height: 1.2; margin: 0; }
+  h1 { font-size: clamp(26px, 3.4vw, 36px); letter-spacing: -0.01em; }
+  h2 { font-size: 22px; }
+  h3 { font-size: 16px; }
+  p { margin: 0; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .lede { max-width: 70ch; color: var(--ink-soft); font-size: 16px; }
+  header.top { display: grid; gap: 12px; }
+  .refs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ref {
+    font-family: var(--font-mono); font-size: 12px; border: 1px solid var(--line-strong);
+    border-radius: 999px; padding: 2px 9px; color: var(--ink-soft); background: var(--surface);
+  }
+  .ref b { color: var(--ink); font-weight: 500; }
+  button, select, input, textarea { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Escenaris ---------- */
+  .scenarios { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .scenarios .label { font-size: 13px; color: var(--ink-soft); margin-right: 4px; }
+  .chipbtn {
+    border: 1px solid var(--line-strong); background: var(--surface); border-radius: 999px;
+    padding: 5px 12px; font-size: 13px; cursor: pointer;
+  }
+  .chipbtn:hover { border-color: var(--accent); }
+
+  /* ---------- L'app simulada ---------- */
+  .app {
+    border: 1px solid var(--line-strong); border-radius: 14px; overflow: hidden; background: var(--app-desk);
+    box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 16px 40px -24px rgba(0,0,0,.35);
+    position: relative;
+  }
+  .appbar {
+    display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--app-bar);
+    border-bottom: 1px solid var(--line); font-size: 13px; flex-wrap: wrap;
+  }
+  .appbar .title { font-weight: 700; margin-right: auto; }
+  .appbar .fake {
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 3px 9px; color: var(--ink-soft);
+    background: var(--surface);
+  }
+  .appbody { display: grid; grid-template-columns: minmax(0, 1fr) 372px; height: 760px; }
+  .desk { overflow: auto; padding: 18px 18px 40px; display: flex; flex-direction: column; align-items: center; gap: 26px; background: var(--app-desk); }
+  .column { overflow: auto; background: var(--app-paper); border-left: 1px solid var(--line); position: relative; }
+
+  /* La capçalera de cada pàgina (no s'imprimeix) */
+  .pagewrap { display: grid; gap: 6px; }
+  .pagehead {
+    display: flex; align-items: baseline; gap: 10px; font-size: 13px; color: var(--ink-soft);
+  }
+  .pagehead b { color: var(--ink); }
+  .pagehead .tpl { font-family: var(--font-mono); font-size: 11.5px; }
+  .pagewrap.active .pagehead b { color: var(--accent); }
+  .pagewrap.active .pagehead b::before { content: "● "; }
+
+  /* El full: sempre blanc, als dos temes */
+  .sheet {
+    position: relative; background: var(--sheet); color: var(--sheet-ink); box-shadow: var(--sheet-shadow);
+    outline: 1px solid var(--sheet-line); cursor: default;
+  }
+  .pagewrap.active .sheet { outline: 3px solid var(--sheet-guide); outline-offset: 3px; }
+  .footer-strip {
+    position: absolute; left: 0; right: 0; bottom: 0; text-align: center; font-size: 7px; color: #666;
+    font-family: var(--font-ui);
+  }
+  .block { position: absolute; display: flex; overflow: hidden; border-radius: 3px; cursor: pointer; }
+  .block.edit { outline: 1px dashed var(--sheet-line); }
+  .block:hover { outline: 1px solid var(--sheet-guide); }
+  .block.selected { outline: 2px solid var(--sheet-guide); outline-offset: 1px; z-index: 2; }
+  .block .badge {
+    position: absolute; top: 2px; right: 2px; font-size: 8px; background: var(--sheet-guide); color: #FFF;
+    border-radius: 3px; padding: 1px 4px; font-family: var(--font-ui); pointer-events: none;
+  }
+  .block .tiny {
+    position: absolute; left: 2px; bottom: 2px; font-size: 8px; color: #8A3B12; background: #FFF4E5;
+    border-radius: 3px; padding: 1px 4px; pointer-events: none;
+  }
+  .grid { display: grid; }
+  .card {
+    background: #FFF; border-radius: 4px; display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-start; overflow: hidden;
+  }
+  .card.bordered { border: 1px solid #333; }
+  .glyph { border-radius: 30%; margin-top: 6%; }
+  .card .lbl { line-height: 1.05; text-align: center; padding: 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .textblock { width: 100%; height: 100%; display: flex; padding: 2px 4px; }
+  .textblock span { white-space: pre-line; line-height: 1.1; }
+  .slot-empty {
+    position: absolute; border: 1.5px dashed var(--sheet-guide); border-radius: 4px; display: flex;
+    align-items: center; justify-content: center; text-align: center; font-size: 9px; color: var(--sheet-guide);
+    background: rgba(47,107,138,.05); cursor: pointer; padding: 4px; font-family: var(--font-ui);
+  }
+  .slot-guide {
+    position: absolute; border: 1.5px dashed var(--sheet-guide); border-radius: 4px; pointer-events: none;
+    background: rgba(47,107,138,.10); z-index: 3;
+  }
+  .flow { position: absolute; display: flex; overflow: hidden; }
+  .flow > .block { position: relative; flex: none; }
+
+  /* ---------- La columna ---------- */
+  .crumbs {
+    position: sticky; top: 0; z-index: 5; background: var(--app-paper); border-bottom: 1px solid var(--line);
+    padding: 9px 14px; font-size: 12.5px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+  }
+  .crumbs button {
+    border: 0; background: none; padding: 2px 4px; border-radius: 4px; cursor: pointer; color: var(--ink-soft);
+  }
+  .crumbs button:hover { color: var(--ink); text-decoration: underline; }
+  .crumbs button.cur { color: var(--ink); font-weight: 700; }
+  .crumbs .sep { color: var(--ink-faint); }
+  .levels { padding: 12px 12px 18px; display: grid; gap: 14px; position: relative; }
+  /* La línia de la cascada: lliga els tres nivells, del més ample al més concret */
+  .levels::before {
+    content: ""; position: absolute; left: 26px; top: 30px; bottom: 120px; width: 2px; background: var(--line-strong);
+  }
+  .level { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .lhead {
+    display: grid; grid-template-columns: 30px minmax(0,1fr) auto; gap: 8px; align-items: start;
+    padding: 10px 12px 8px; width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
+  }
+  .lhead .ico { width: 30px; height: 30px; border-radius: 8px; background: var(--sunk); display: grid; place-items: center; }
+  .lhead .ico svg { width: 18px; height: 18px; }
+  .lhead .kind { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  .lhead .name { font-weight: 700; font-size: 15.5px; display: block; overflow-wrap: anywhere; }
+  .lhead .scope { font-size: 12.5px; color: var(--ink-soft); display: block; }
+  .lhead .chev { color: var(--ink-faint); font-size: 13px; padding-top: 4px; }
+  .lbody { padding: 2px 12px 12px; display: grid; gap: 2px; }
+  .summary { padding: 0 12px 12px 50px; font-size: 12.5px; color: var(--ink-soft); }
+  .group { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-faint); padding: 10px 0 2px; }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--line); }
+  .group + .row { border-top: 0; }
+  .row-l { font-size: 13.5px; display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; min-width: 0; }
+  .row-c { display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+  .row-h { grid-column: 1 / -1; font-size: 12px; color: var(--ink-soft); }
+  .row-h.warn { color: var(--warn); }
+  .row.full { grid-template-columns: minmax(0, 1fr); }
+  .inh {
+    font-size: 10.5px; border-radius: 999px; padding: 0 7px; border: 1px solid var(--line-strong); color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .inh.own { border-color: var(--accent); color: var(--accent); }
+  .link { border: 0; background: none; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font-size: 12px; }
+  .seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 7px; overflow: hidden; }
+  .seg button { border: 0; background: var(--surface); padding: 4px 9px; font-size: 12.5px; cursor: pointer; min-width: 30px; }
+  .seg button + button { border-left: 1px solid var(--line-strong); }
+  .seg button[aria-pressed="true"] { background: var(--accent-bright); color: var(--on-accent); font-weight: 700; }
+  .btn { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 7px; padding: 4px 10px; font-size: 12.5px; cursor: pointer; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent-bright); color: var(--on-accent); border-color: transparent; font-weight: 700; }
+  .btn.danger { color: var(--warn); }
+  select.sel { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 7px; padding: 3px 6px; font-size: 12.5px; max-width: 170px; }
+  input[type=range] { width: 120px; accent-color: var(--accent-bright); }
+  .num { font-family: var(--font-mono); font-size: 12px; min-width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
+  textarea.txt { width: 100%; border: 1px solid var(--line-strong); border-radius: 7px; background: var(--surface); padding: 6px 8px; resize: vertical; min-height: 54px; }
+  .switch { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12.5px; }
+  .switch input { accent-color: var(--accent-bright); width: 16px; height: 16px; }
+  .blist { display: grid; gap: 4px; padding: 4px 0; }
+  .bitem {
+    display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 8px; align-items: center; text-align: left;
+    border: 1px solid var(--line); background: var(--surface); border-radius: 7px; padding: 5px 8px; cursor: pointer; font-size: 13px;
+  }
+  .bitem:hover { border-color: var(--accent); }
+  .bitem.sel { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent-bright); }
+  .bitem.empty { border-style: dashed; color: var(--ink-soft); cursor: default; }
+  .bitem .bi { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint); text-align: center; }
+  .bitem .meta { font-size: 11.5px; color: var(--ink-soft); }
+  .tpls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 4px 0; }
+  .tpl {
+    border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 4px 5px; cursor: pointer;
+    display: grid; gap: 3px; justify-items: center; font-size: 11px; line-height: 1.15; text-align: center;
+  }
+  .tpl:hover:not(:disabled), .tpl:focus-visible { border-color: var(--accent); }
+  .tpl[aria-pressed="true"] { border: 2px solid var(--accent); font-weight: 700; }
+  .tpl:disabled { opacity: .45; cursor: not-allowed; }
+  .tpl svg { width: 40px; height: 52px; }
+  .tpl.land svg { width: 52px; height: 40px; }
+  .empty-state { padding: 4px 0 4px; font-size: 13px; color: var(--ink-soft); display: grid; gap: 6px; }
+  details.more { border-top: 1px solid var(--line); padding-top: 4px; }
+  details.more > summary { cursor: pointer; font-size: 13px; padding: 5px 0; list-style-position: inside; }
+  details.more > summary .inh { margin-left: 6px; }
+  .mm { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding: 4px 0 6px; }
+  .mm label { font-size: 11px; color: var(--ink-soft); display: grid; gap: 2px; }
+  .mm input { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 3px 5px; background: var(--sunk); font-family: var(--font-mono); font-size: 12px; }
+  .prefs { margin: 0 12px 16px; padding: 10px 12px; border-top: 1px dashed var(--line-strong); display: grid; gap: 8px; }
+  .prefs .row-h { font-size: 12px; }
+  .prefs .acts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .note-tag { font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+
+  .toast {
+    position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); background: #2B3022; color: #F2F5EC;
+    border-radius: 8px; padding: 9px 12px; font-size: 13.5px; display: flex; gap: 14px; align-items: center;
+    box-shadow: 0 8px 24px -8px rgba(0,0,0,.5); z-index: 20; max-width: calc(100% - 32px);
+  }
+  .toast[hidden] { display: none; }
+  .toast button { background: none; border: 0; color: #B8E07F; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 12.5px; }
+
+  /* ---------- Les notes ---------- */
+  .notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .note { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 8px; align-content: start; }
+  .note ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+  .note .r { font-family: var(--font-mono); font-size: 11.5px; color: var(--accent); }
+  section.block-s { display: grid; gap: 14px; }
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); font-weight: 500; background: var(--sunk); }
+  tr:last-child td { border-bottom: 0; }
+  td .lv { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line-strong); white-space: nowrap; }
+  td .new { color: var(--accent); font-weight: 700; font-size: 12px; }
+  ol.qs { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: q; }
+  ol.qs li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px 12px 56px; position: relative; display: grid; gap: 4px; }
+  ol.qs li::before {
+    counter-increment: q; content: "P" counter(q); position: absolute; left: 14px; top: 12px;
+    font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--accent);
+  }
+  ol.qs .prop { font-size: 14px; color: var(--ink-soft); }
+  ol.qs .prop b { color: var(--ink); }
+
+  @media (max-width: 980px) {
+    .appbody { grid-template-columns: minmax(0, 1fr); height: auto; }
+    .desk { max-height: 640px; }
+    .column { border-left: 0; border-top: 1px solid var(--line); max-height: none; overflow: visible; }
+    .crumbs { position: static; }
+    .notes { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .level { transition: border-color .15s; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Mode lliure de pàgina · esbós R8 · 7 de novembre de 2026</span>
+    <h1>La columna de la Vista, en tres nivells: Document, Pàgina, Bloc</h1>
+    <p class="lede">Un esbós per veure i comentar abans de tocar codi. La columna diu sempre a què s'aplica cada ajust,
+      segueix la pàgina que es mira i, quan es clica un bloc del full, n'ensenya els ajustos. Les pàgines, els
+      pictogrames i les mides són de mostra; els pictogrames estan dibuixats esquemàticament.</p>
+    <div class="refs" aria-label="Punts de la revisió que té en compte">
+      <span class="ref"><b>R1</b> un sol model de pàgines</span>
+      <span class="ref"><b>R2</b> la plantilla es desa</span>
+      <span class="ref"><b>R4</b> veure la plantilla</span>
+      <span class="ref"><b>R5</b> segueix la pàgina i el bloc</span>
+      <span class="ref"><b>R6 · Q2</b> la mida és un màxim</span>
+      <span class="ref"><b>R7</b> estil per bloc</span>
+      <span class="ref"><b>R9</b> blocs de text</span>
+    </div>
+  </header>
+
+  <section class="block-s" aria-labelledby="sim-t">
+    <div style="display:grid; gap:6px">
+      <h2 id="sim-t">Prova-ho</h2>
+      <p class="lede" style="font-size:15px">Clica un bloc del full o de la llista; baixa per les pàgines i mira la capçalera de la columna;
+        passa per damunt d'una plantilla per veure-la al full abans d'aplicar-la. O comença per un escenari:</p>
+    </div>
+    <div class="scenarios">
+      <span class="label">Escenaris:</span>
+      <button class="chipbtn" data-scn="seq">Bloc de seqüència en una plantilla</button>
+      <button class="chipbtn" data-scn="text">Bloc de text («Primer»)</button>
+      <button class="chipbtn" data-scn="auto">Pàgina automàtica</button>
+      <button class="chipbtn" data-scn="none">Sense res seleccionat</button>
+      <button class="chipbtn" data-scn="reset">Torna a començar</button>
+    </div>
+
+    <div class="app" id="app">
+      <div class="appbar">
+        <span class="title">Visualització · «La meva rutina»</span>
+        <span class="fake">Ajusta a l'amplada</span>
+        <span class="fake">Amaga els ajustos</span>
+        <span class="fake">Imprimeix</span>
+        <span class="fake">PDF</span>
+      </div>
+      <div class="appbody">
+        <div class="desk" id="desk" aria-label="Escriptori amb les pàgines del document"></div>
+        <aside class="column" id="column" aria-label="Ajustos de la vista"></aside>
+      </div>
+      <div class="toast" id="toast" hidden></div>
+    </div>
+  </section>
+
+  <section class="block-s" aria-labelledby="how-t">
+    <h2 id="how-t">Com està pensada</h2>
+    <div class="notes">
+      <div class="note">
+        <span class="r">Tots tres nivells</span>
+        <h3>La mateixa forma, el mateix ordre</h3>
+        <ul>
+          <li>De dalt a baix, del més ample al més concret: <b>Document → Pàgina → Bloc</b>. És la cascada del fonament 03, i la línia de l'esquerra la fa visible.</li>
+          <li>Cada nivell té una icona, un nom i una línia que diu <b>a què s'aplica</b>: «A totes les pàgines del document», «Només a la pàgina 2 de 3», «Només a aquest bloc».</li>
+          <li>Les molles de dalt («Document › Pàgina 2 › Primer») queden fixes i porten a cada nivell.</li>
+          <li>Amb un bloc seleccionat, Document i Pàgina es pleguen a una línia de resum, perquè el bloc quedi a la vista.</li>
+          <li>Les preferències no són de cap nivell: van al peu, separades, perquè no entren mai dins del document.</li>
+        </ul>
+      </div>
+      <div class="note">
+        <span class="r">R1 · R2 · R4 · R5</span>
+        <h3>Pàgina N</h3>
+        <ul>
+          <li><b>«Com es col·loquen»</b> és de la pàgina, no del document: Automàtica (el flux d'avui) o Plantilla. Desapareix el selector «Disposició» del document.</li>
+          <li>La plantilla <b>es recorda</b>: la llista de blocs ensenya els espais buits, i afegir-ne un omple el primer espai que hi encaixa.</li>
+          <li>Passar per damunt d'una plantilla en dibuixa els espais al full; aplicar-la és el clic, amb Desfés.</li>
+          <li>El nivell segueix la pàgina que ocupa més pantalla. Amb un bloc seleccionat, segueix la pàgina del bloc.</li>
+        </ul>
+      </div>
+      <div class="note">
+        <span class="r">Q2 · R6 · R7 · R9</span>
+        <h3>Bloc</h3>
+        <ul>
+          <li>Clicar un bloc el <b>selecciona</b>; les accions del bloc (a totes les pàgines, copiar, treure) són a la part «Lloc».</li>
+          <li><b>Mida dels pictogrames, com a màxim</b>: la columna diu la mida que en surt de debò i què cal per arribar al màxim.</li>
+          <li>L'estil del bloc <b>hereta</b> el del document. Cada fila ho marca («Del document» o «Retocat») i es pot restablir.</li>
+          <li>Un bloc de text té el mateix nivell, amb el text a dalt de tot. A les plantilles, els espais de rètol es veuen com a tals.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block-s" aria-labelledby="map-t">
+    <h2 id="map-t">On va a parar cada ajust d'avui</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Ajust</th><th>On és avui</th><th>Nivell proposat</th><th>Què canvia</th></tr></thead>
+        <tbody>
+          <tr><td>Mida del paper, orientació</td><td>Format de pàgina</td><td><span class="lv">Document</span></td><td>Res. L'orientació continua sent del document (vegeu P2).</td></tr>
+          <tr><td>Espai entre seqüències</td><td>Format de pàgina</td><td><span class="lv">Document</span></td><td>Es diu «Espai entre blocs» i és de l'estil del document. Val per a les pàgines automàtiques i per a l'espai de les plantilles.</td></tr>
+          <tr><td>Direcció (files o columnes)</td><td>Format de pàgina</td><td><span class="lv">Pàgina</span></td><td>Només a les pàgines automàtiques; cada pàgina la seva.</td></tr>
+          <tr><td>Disposició Automàtica / Lliure</td><td>Secció «Disposició»</td><td><span class="lv">Pàgina</span></td><td>«Com es col·loquen»: Automàtica o Plantilla, per pàgina (R1).</td></tr>
+          <tr><td>Plantilla</td><td>Capçalera de cada pàgina, al full</td><td><span class="lv">Pàgina</span></td><td>Amb miniatures i guies al full (R4). Es desa amb la pàgina (R2).</td></tr>
+          <tr><td>Seqüències sense col·locar</td><td>Secció «Disposició»</td><td><span class="lv">Document</span></td><td>«Fora de les pàgines», amb «Posa-la a la pàgina N».</td></tr>
+          <tr><td>Mida, espai i alineació (un acordió per seqüència)</td><td>Secció «Seqüències»</td><td><span class="lv">Bloc</span></td><td>Del bloc seleccionat, no un acordió per seqüència. La mida, com a màxim (Q2).</td></tr>
+          <tr><td>«Aplica a totes»</td><td>Secció «Seqüències»</td><td><span class="lv">Bloc</span></td><td>«Copia aquests ajustos a…» tots els blocs de la pàgina o del document.</td></tr>
+          <tr><td>Columnes; a totes les pàgines; copia; treu</td><td>Menú de cada caixa, al full</td><td><span class="lv">Bloc</span></td><td>També a la columna. El menú del full es queda.</td></tr>
+          <tr><td>Autoria i llicència</td><td>Peu d'impressió</td><td><span class="lv">Document</span></td><td>Res.</td></tr>
+          <tr><td>Aplica el meu estil, desa com a preferència</td><td>Al final de la columna</td><td><span class="lv">Fora dels nivells</span></td><td>Al peu, sota «Les meves preferències».</td></tr>
+          <tr><td>Estil d'un bloc (lletra, vora)</td><td>—</td><td><span class="lv">Bloc</span></td><td><span class="new">Nou</span> R7 (B31).</td></tr>
+          <tr><td>Text d'un bloc de text</td><td>—</td><td><span class="lv">Bloc</span></td><td><span class="new">Nou</span> R9.</td></tr>
+          <tr><td>Posició i mida en mm</td><td>—</td><td><span class="lv">Bloc</span></td><td><span class="new">Nou</span> Fase 4, plegat.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block-s" aria-labelledby="q-t">
+    <h2 id="q-t">Preguntes per comentar</h2>
+    <ol class="qs">
+      <li><span>Document i Pàgina, plegats quan hi ha un bloc seleccionat?</span>
+        <span class="prop"><b>Proposta: sí.</b> Plegats, en queda una línia de resum («A4 vertical · lletra Atkinson · CC BY-NC-SA», «Plantilla Primer / Després · 4 blocs») i els ajustos del bloc no queden a sota de tot. Sense cap bloc seleccionat, tornen a estar oberts. Si l'usuari en plega o desplega un a mà, es queda com ell l'ha deixat.</span></li>
+      <li><span>L'orientació, del document o de la pàgina?</span>
+        <span class="prop"><b>Proposta: del document, de moment.</b> L'estudi diu que la setmana i «Primer / Després» volen paper apaïsat i l'agenda vertical, però barrejar orientacions complica la impressió. Una plantilla pot dir «Millor apaïsat» i oferir el canvi.</span></li>
+      <li><span>Les accions de la pàgina (duplicar, moure, esborrar), a la columna i també a la capçalera del full?</span>
+        <span class="prop"><b>Proposta: a tots dos llocs.</b> Al full, al costat de la pàgina; a la columna, per qui hi treballa amb el teclat. Són el mateix menú.</span></li>
+      <li><span>Una seqüència a dues pàgines són dos blocs amb ajustos propis (Q2). Cal «Aplica a tots els blocs d'aquesta seqüència»?</span>
+        <span class="prop"><b>Proposta: sí, dins de «Copia aquests ajustos a…»</b>, amb les opcions «d'aquesta pàgina», «d'aquesta seqüència» i «de tot el document».</span></li>
+      <li><span>En una pàgina automàtica, la «Mida dels pictogrames» no és un màxim: és la mida. Pot dur el mateix nom?</span>
+        <span class="prop"><b>Proposta: sí, amb la línia d'ajuda que canvia</b>: «com a màxim; ara en surten 38 mm» en una plantilla, cap línia en una pàgina automàtica. «Lloc» i «Posició i mida» no hi surten.</span></li>
+      <li><span>Un bloc de text en una pàgina automàtica?</span>
+        <span class="prop"><b>Proposta: sí</b>, ocupa una línia sencera del flux. És el títol de la pàgina 3 de l'esbós.</span></li>
+      <li><span>Retocar a mà un bloc d'una pàgina amb plantilla (fase 4): la pàgina continua tenint la plantilla?</span>
+        <span class="prop"><b>Proposta:</b> sí, marcada «retocada». Afegir un bloc continua omplint els espais buits; tornar a aplicar la plantilla treu els retocs, amb Desfés.</span></li>
+      <li><span>Al mòbil la columna és sota el full. Què passa en seleccionar un bloc?</span>
+        <span class="prop"><b>Proposta:</b> la pàgina no salta. Damunt del bloc surt un enllaç «Ajustos del bloc», que baixa fins al nivell Bloc.</span></li>
+    </ol>
+  </section>
+</div>
+
+<script>
+  // ---------- Dades de mostra: un document de tres pàgines ----------
+  const PAPERS = { A4: [210, 297], A3: [297, 420], Carta: [216, 279], Tabloide: [279, 432] };
+  const PX_SHORT = 300;           // amplada en px del costat curt del full a l'esbós
+  const MARGIN = 8, FOOT = 6;     // mm: marge i franja del peu de llicència
+  const MIN_PICT = 15;            // mm: per sota, avís de massa petit
+  const CARD_RATIO = 1.25;        // alçada de la targeta / amplada
+
+  const SEQS = {
+    s1: { name: "Rutina del matí", picts: ["llevar-se", "lavabo", "rentar-se", "vestir-se", "esmorzar", "dents", "motxilla", "escola"] },
+    s2: { name: "Rentar-se les mans", picts: ["aixeta", "mullar", "sabó", "fregar", "esbandir", "eixugar"] },
+    s3: { name: "Vestir-se", picts: ["calces", "samarreta", "pantalons", "mitjons", "sabates"] },
+    s4: { name: "Deures", picts: ["deures"] },
+    s5: { name: "Parc", picts: ["parc"] },
+    s6: { name: "Esmorzar", picts: ["llet", "pa", "fruita", "galetes"] },
+  };
+
+  // Plantilles en fraccions de l'àrea útil; `k` diu què hi va: un rètol (text) o una seqüència
+  const TEMPLATES = {
+    una:       { name: "Una seqüència", slots: [{ r: [0, 0, 1, 1], k: "seq" }] },
+    agenda:    { name: "Agenda en tira", slots: [{ r: [.3, 0, .4, 1], k: "seq" }] },
+    avui:      { name: "Avui és + agenda", slots: [{ r: [0, 0, 1, .12], k: "text" }, { r: [0, .12, 1, .88], k: "seq" }] },
+    primer:    { name: "Primer / Després", slots: [
+      { r: [0, 0, .5, .12], k: "text" }, { r: [.5, 0, .5, .12], k: "text" },
+      { r: [0, .12, .5, .5], k: "seq" }, { r: [.5, .12, .5, .5], k: "seq" }] },
+    conte:     { name: "Pàgina de conte", slots: [{ r: [0, 0, 1, 1/3], k: "seq" }, { r: [0, 1/3, 1, 1/3], k: "seq" }, { r: [0, 2/3, 1, 1/3], k: "seq" }] },
+    fitxes:    { name: "Economia de fitxes", slots: [{ r: [0, 0, 1, .1], k: "text" }, { r: [0, .1, 1, .22], k: "seq" }, { r: [.15, .34, .7, .62], k: "seq" }] },
+    menu:      { name: "Menú", slots: [
+      { r: [0, 0, 1, .08], k: "text" }, { r: [0, .08, 1, .253], k: "seq" },
+      { r: [0, .333, 1, .08], k: "text" }, { r: [0, .413, 1, .253], k: "seq" },
+      { r: [0, .666, 1, .08], k: "text" }, { r: [0, .746, 1, .254], k: "seq" }] },
+    setmana:   { name: "Setmana", land: true, slots: [0, 1, 2, 3, 4].flatMap((i) => [
+      { r: [i / 5, 0, 1 / 5, .1], k: "text" }, { r: [i / 5, .1, 1 / 5, .9], k: "seq" }]) },
+  };
+
+  let nextId = 20;
+  const seqView = (max) => ({ max, cols: "auto", space: 3, alignH: "center", alignV: "top", style: {} });
+  const textStyle = (size, bold) => ({ size, bold, alignH: "center", alignV: "center", style: {} });
+
+  const initial = () => ({
+    paper: "A4", orientation: "portrait",
+    style: { font: "Atkinson", border: true, gap: 6 },
+    footer: { author: "Escola Els Pins", licence: "CC BY-NC-SA" },
+    pages: [
+      { id: "p1", mode: "template", template: "avui", blocks: [
+        { id: "b1", kind: "text", text: "Avui és dilluns", slot: 0, common: true, ...textStyle(26, true) },
+        { id: "b2", kind: "seq", seq: "s1", slot: 1, ...seqView(40) } ] },
+      { id: "p2", mode: "template", template: "primer", blocks: [
+        { id: "b3", kind: "text", text: "Primer", slot: 0, ...textStyle(30, true) },
+        { id: "b4", kind: "text", text: "Després", slot: 1, ...textStyle(30, true) },
+        { id: "b5", kind: "seq", seq: "s4", slot: 2, ...seqView(60) },
+        { id: "b6", kind: "seq", seq: "s5", slot: 3, ...seqView(60) } ] },
+      { id: "p3", mode: "auto", direction: "row", blocks: [
+        { id: "b7", kind: "text", text: "Higiene i roba", ...textStyle(20, true), alignH: "left" },
+        { id: "b8", kind: "seq", seq: "s2", ...seqView(30) },
+        { id: "b9", kind: "seq", seq: "s3", ...seqView(30) } ] },
+    ],
+  });
+
+  // ---------- Estat de l'esbós ----------
+  let doc = initial();
+  let ui = { page: "p1", block: null, docOpen: true, pageOpen: true, touched: false, preview: null };
+  let undoSnap = null;
+
+  const $ = (s, el = document) => el.querySelector(s);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const pageOf = (id) => doc.pages.find((p) => p.id === id);
+  const pageIndex = (id) => doc.pages.findIndex((p) => p.id === id);
+  const findBlock = (bid) => {
+    for (const p of doc.pages) { const b = p.blocks.find((x) => x.id === bid); if (b) return { p, b }; }
+    return null;
+  };
+  const blockName = (b) => b.kind === "text" ? (b.text.split("\n")[0] || "Text buit") : SEQS[b.seq].name;
+  const fontFamily = (f) => f === "Andika" ? '"Andika", "Atkinson Hyperlegible", sans-serif' : '"Atkinson Hyperlegible", sans-serif';
+  const effFont = (b) => b.style.font || doc.style.font;
+  const effBorder = (b) => b.style.border === undefined ? doc.style.border : b.style.border;
+  const pagesWith = (seq) => doc.pages.filter((p) => p.blocks.some((b) => b.seq === seq)).map((p) => pageIndex(p.id) + 1);
+  const unplaced = () => Object.keys(SEQS).filter((s) => pagesWith(s).length === 0);
+
+  function paperMm() {
+    const [a, b] = PAPERS[doc.paper];
+    return doc.orientation === "portrait" ? [a, b] : [b, a];
+  }
+  function scale() { const [w, h] = paperMm(); return PX_SHORT / Math.min(w, h); }
+  function usable() {
+    const [w, h] = paperMm();
+    return { x: MARGIN, y: MARGIN, w: w - 2 * MARGIN, h: h - 2 * MARGIN - FOOT };
+  }
+  // Rectangle (mm) d'un espai de plantilla, amb l'espai entre blocs de l'estil del document
+  function slotRect(tpl, i) {
+    const u = usable(), g = doc.style.gap;
+    const [fx, fy, fw, fh] = TEMPLATES[tpl].slots[i].r;
+    const ex = u.x - g / 2, ey = u.y - g / 2, ew = u.w + g, eh = u.h + g;
+    return { x: ex + fx * ew + g / 2, y: ey + fy * eh + g / 2, w: fw * ew - g, h: fh * eh - g };
+  }
+
+  // La graella que hi cap més gran; després, el màxim triat (Q2)
+  function computeGrid(n, W, H, sp, cols) {
+    const cands = cols === "auto" ? Array.from({ length: n }, (_, i) => i + 1) : [Math.min(cols, n)];
+    let best = { cols: 1, rows: n, size: 0 };
+    for (const c of cands) {
+      const rows = Math.ceil(n / c);
+      const size = Math.min((W - (c - 1) * sp) / c, (H - (rows - 1) * sp) / (rows * CARD_RATIO));
+      if (size > best.size + 0.01) best = { cols: c, rows, size };
+    }
+    return best;
+  }
+  function gridFor(b, rect) {
+    const n = SEQS[b.seq].picts.length;
+    const g = computeGrid(n, rect.w - 2, rect.h - 2, b.space, b.cols);
+    return { ...g, fit: g.size, size: Math.min(g.size, b.max) };
+  }
+
+  // ---------- Dibuix del full ----------
+  const HUES = ["--p1", "--p2", "--p3", "--p4", "--p5", "--p6"];
+  function cardsHtml(b, size, s) {
+    const px = size * s, lbl = Math.max(5, px * 0.14);
+    return SEQS[b.seq].picts.map((w, i) => `
+      <div class="card ${effBorder(b) ? "bordered" : ""}" style="width:${px}px;height:${px * CARD_RATIO}px;font-family:${fontFamily(effFont(b))}">
+        <div class="glyph" style="width:${px * 0.72}px;height:${px * 0.72}px;background:var(${HUES[(w.length + i) % 6]})"></div>
+        <div class="lbl" style="font-size:${lbl}px;margin-top:${px * 0.05}px">${esc(w)}</div>
+      </div>`).join("");
+  }
+  const JUST = { left: "flex-start", center: "center", right: "flex-end", top: "flex-start", bottom: "flex-end" };
+
+  function seqInner(b, rect, s) {
+    const g = gridFor(b, rect);
+    return `<div class="grid" style="grid-template-columns:repeat(${g.cols}, ${g.size * s}px);gap:${b.space * s}px;margin:auto;
+      align-self:${JUST[b.alignV]};justify-self:${JUST[b.alignH]};${b.alignH === "left" ? "margin-left:0;" : b.alignH === "right" ? "margin-right:0;" : ""}${b.alignV === "top" ? "margin-top:0;" : b.alignV === "bottom" ? "margin-bottom:0;" : ""}">
+      ${cardsHtml(b, g.size, s)}</div>${g.size < MIN_PICT ? `<span class="tiny">Massa petits</span>` : ""}`;
+  }
+  function textInner(b, rect, s) {
+    // La lletra, com a màxim la triada (en punts), i més petita si no hi cap
+    const lines = b.text.split("\n");
+    const longest = Math.max(1, ...lines.map((l) => l.length));
+    const ptToMm = 0.3528;
+    const fitH = (rect ? rect.h : 999) / (lines.length * 1.15) / ptToMm;
+    const fitW = (rect ? rect.w - 3 : 999) / (longest * 0.55) / ptToMm;
+    const pt = Math.max(4, Math.min(b.size, fitH, fitW));
+    return `<div class="textblock" style="justify-content:${JUST[b.alignH]};align-items:${JUST[b.alignV]};text-align:${b.alignH}">
+      <span style="font-size:${pt * ptToMm * s}px;font-weight:${b.bold ? 700 : 400};font-family:${fontFamily(effFont(b))}">${esc(b.text) || "&nbsp;"}</span></div>`;
+  }
+  function blockAttrs(b, p) {
+    const sel = ui.block === b.id ? " selected" : "";
+    return `class="block edit${sel}" data-block="${b.id}" data-page="${p.id}" tabindex="0" role="button" aria-pressed="${ui.block === b.id}"
+      aria-label="${esc(blockName(b))}${b.kind === "text" ? ", bloc de text" : `, ${SEQS[b.seq].picts.length} pictogrames`}"`;
+  }
+
+  function sheetHtml(p) {
+    const s = scale(), [wmm, hmm] = paperMm(), u = usable();
+    let inner = "";
+    if (p.mode === "template") {
+      const tpl = TEMPLATES[p.template];
+      tpl.slots.forEach((slot, i) => {
+        const r = slotRect(p.template, i);
+        const box = `left:${r.x * s}px;top:${r.y * s}px;width:${r.w * s}px;height:${r.h * s}px`;
+        const b = p.blocks.find((x) => x.slot === i);
+        if (!b) {
+          inner += `<div class="slot-empty" style="${box}" data-empty="${p.id}:${i}" title="Espai buit">
+            ${slot.k === "text" ? "Espai per a un rètol<br>clica per escriure'l" : "Espai per a una seqüència"}</div>`;
+          return;
+        }
+        inner += `<div ${blockAttrs(b, p)} style="${box}">
+          ${b.kind === "text" ? textInner(b, r, s) : seqInner(b, r, s)}
+          ${b.common ? `<span class="badge">A totes les pàgines</span>` : ""}</div>`;
+      });
+    } else {
+      const dir = p.direction === "row" ? "column" : "row";
+      inner += `<div class="flow" style="left:${u.x * s}px;top:${u.y * s}px;width:${u.w * s}px;height:${u.h * s}px;flex-direction:${dir};gap:${doc.style.gap * s}px;${dir === "row" ? "flex-wrap:wrap;align-items:flex-start" : ""}">`;
+      p.blocks.forEach((b) => {
+        if (b.kind === "text") {
+          inner += `<div ${blockAttrs(b, p)} style="width:100%;height:${b.size * 0.3528 * 1.3 * s}px">${textInner(b, null, s)}</div>`;
+        } else {
+          const px = b.max * s;
+          inner += `<div ${blockAttrs(b, p)} style="${dir === "column" ? "width:100%" : ""}">
+            <div style="display:flex;flex-wrap:wrap;gap:${b.space * s}px;justify-content:${JUST[b.alignH]};width:100%">${cardsHtml(b, b.max, s)}</div></div>`;
+        }
+      });
+      inner += `</div>`;
+    }
+    // Guies de la plantilla que es previsualitza (R4): sense moure res
+    if (ui.preview && ui.preview.page === p.id) {
+      TEMPLATES[ui.preview.tpl].slots.forEach((_, i) => {
+        const r = slotRect(ui.preview.tpl, i);
+        inner += `<div class="slot-guide" style="left:${r.x * s}px;top:${r.y * s}px;width:${r.w * s}px;height:${r.h * s}px"></div>`;
+      });
+    }
+    const foot = `<div class="footer-strip" style="height:${FOOT * s}px;line-height:${FOOT * s}px">Pictogrames: Sergio Palao · ARASAAC · ${esc(doc.footer.licence)} · ${esc(doc.footer.author)}</div>`;
+    return `<div class="sheet" data-sheet="${p.id}" style="width:${wmm * s}px;height:${hmm * s}px">${inner}${foot}</div>`;
+  }
+
+  function renderDesk() {
+    const desk = $("#desk"), top = desk.scrollTop;
+    desk.innerHTML = doc.pages.map((p, i) => `
+      <div class="pagewrap ${ui.page === p.id ? "active" : ""}" data-pagewrap="${p.id}">
+        <div class="pagehead"><b>Pàgina ${i + 1} de ${doc.pages.length}</b>
+          <span class="tpl">${p.mode === "auto" ? "Automàtica" : "Plantilla: " + TEMPLATES[p.template].name}</span></div>
+        ${sheetHtml(p)}
+      </div>`).join("");
+    desk.scrollTop = top;
+    observePages();
+  }
+
+  // ---------- La columna ----------
+  const ICONS = {
+    doc: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="3" width="12" height="15" rx="1.5"/><rect x="4" y="6" width="12" height="15" rx="1.5" fill="var(--sunk)"/></svg>`,
+    page: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="1.5"/></svg>`,
+    block: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="1.5" stroke-opacity=".4"/><rect x="7.5" y="9" width="9" height="7" rx="1" fill="currentColor" fill-opacity=".25"/></svg>`,
+  };
+  const seg = (action, opts, cur, extra = "") => `<div class="seg" role="group">${opts.map(([v, l, t]) =>
+    `<button type="button" data-action="${action}" data-value="${v}" aria-pressed="${String(cur) === String(v)}" ${t ? `title="${t}" aria-label="${t}"` : ""} ${extra}>${l}</button>`).join("")}</div>`;
+  const row = (label, control, help = "", helpCls = "") =>
+    `<div class="row"><div class="row-l">${label}</div><div class="row-c">${control}</div>${help ? `<div class="row-h ${helpCls}">${help}</div>` : ""}</div>`;
+  const inh = (own, resetAction) => own
+    ? `<span class="inh own">Retocat</span><button class="link" data-action="${resetAction}">Restableix</button>`
+    : `<span class="inh">Del document</span>`;
+  const range = (id, action, min, max, step, val, unit) =>
+    `<input type="range" id="${id}" data-input="${action}" min="${min}" max="${max}" step="${step}" value="${val}" aria-label="${unit}"><span class="num" id="${id}-v">${val}${unit === "punts" ? " pt" : " mm"}</span>`;
+  const H_AL = [["left", "◧", "Esquerra"], ["center", "▣", "Centre"], ["right", "◨", "Dreta"]];
+  const V_AL = [["top", "⬒", "Dalt"], ["center", "▣", "Mig"], ["bottom", "⬓", "Baix"]];
+
+  function levelHead(kind, icon, name, scope, toggle, open) {
+    return `<button class="lhead" ${toggle ? `data-action="${toggle}" aria-expanded="${open}"` : `tabindex="-1"`} type="button">
+      <span class="ico" aria-hidden="true">${ICONS[icon]}</span>
+      <span><span class="kind">${kind}</span><span class="name">${esc(name)}</span><span class="scope">${scope}</span></span>
+      <span class="chev" aria-hidden="true">${toggle ? (open ? "▴" : "▾") : ""}</span></button>`;
+  }
+
+  function levelDocument() {
+    const [wmm, hmm] = paperMm();
+    const un = unplaced();
+    const curIdx = pageIndex(ui.page) + 1;
+    const summary = `${doc.paper} ${doc.orientation === "portrait" ? "vertical" : "apaïsat"} · lletra ${doc.style.font} · espai ${doc.style.gap} mm · ${doc.footer.licence}${un.length ? ` · ${un.length} fora de les pàgines` : ""}`;
+    let body = "";
+    if (ui.docOpen) {
+      body = `<div class="lbody">
+        <div class="group">Paper</div>
+        ${row("Mida del paper", `<select class="sel" id="paper" data-change="paper">${Object.keys(PAPERS).map((k) => `<option ${k === doc.paper ? "selected" : ""}>${k}</option>`).join("")}</select>`)}
+        ${row("Orientació", seg("orient", [["portrait", "Vertical"], ["landscape", "Apaïsat"]], doc.orientation), `${wmm} × ${hmm} mm. Canvia totes les pàgines.`)}
+        <div class="group">Estil del document</div>
+        ${row("Lletra", `<select class="sel" id="docfont" data-change="docfont"><option ${doc.style.font === "Atkinson" ? "selected" : ""} value="Atkinson">Atkinson Hyperlegible</option><option ${doc.style.font === "Andika" ? "selected" : ""} value="Andika">Andika</option></select>`)}
+        ${row("Vora de la targeta", `<label class="switch"><input type="checkbox" data-change="docborder" ${doc.style.border ? "checked" : ""}> ${doc.style.border ? "Sí" : "No"}</label>`)}
+        ${row("Espai entre blocs", range("docgap", "docgap", 0, 20, 1, doc.style.gap, "mm"), "Entre els blocs d'una pàgina automàtica i entre els espais d'una plantilla.")}
+        ${row("La resta de l'estil", `<button class="btn" data-action="noop" data-msg="Obriria el panell «Estil del document» de sempre">Obre l'estil…</button>`)}
+        <div class="group">Fora de les pàgines</div>
+        ${un.length ? un.map((s) => row(`${esc(SEQS[s].name)} <span class="meta" style="color:var(--ink-soft);font-size:12px">${SEQS[s].picts.length} pictogrames</span>`,
+          `<button class="btn" data-action="place" data-seq="${s}">Posa-la a la pàgina ${curIdx}</button>`)).join("")
+          + `<div class="row-h" style="padding:2px 0 4px">No s'imprimeix. Abans d'imprimir, un avís ho recorda.</div>`
+          : `<div class="row-h" style="padding:4px 0">Totes les seqüències són en alguna pàgina.</div>`}
+        <div class="group">Peu d'impressió</div>
+        ${row("Autoria", `<span style="font-size:13px">${esc(doc.footer.author)}</span>`)}
+        ${row("Llicència", seg("licence", [["CC BY-NC-SA", "BY-NC-SA"], ["CC BY-SA", "BY-SA"]], doc.footer.licence))}
+      </div>`;
+    } else {
+      body = `<div class="summary">${esc(summary)}</div>`;
+    }
+    return `<section class="level" id="lv-doc" aria-label="Nivell document">
+      ${levelHead("Document", "doc", "La meva rutina", `A totes les pàgines del document (${doc.pages.length})`, "toggledoc", ui.docOpen)}${body}</section>`;
+  }
+
+  function tplThumb(key) {
+    const t = TEMPLATES[key], land = doc.orientation === "landscape";
+    const W = land ? 52 : 40, H = land ? 40 : 52;
+    const rects = t.slots.map((sl) => {
+      const [x, y, w, h] = sl.r;
+      return `<rect x="${3 + x * (W - 6) + 0.8}" y="${3 + y * (H - 6) + 0.8}" width="${Math.max(1, w * (W - 6) - 1.6)}" height="${Math.max(1, h * (H - 6) - 1.6)}" rx="1"
+        fill="${sl.k === "text" ? "none" : "currentColor"}" fill-opacity=".28" stroke="currentColor" stroke-width="${sl.k === "text" ? .9 : .6}" ${sl.k === "text" ? 'stroke-dasharray="1.6 1"' : ""}/>`;
+    }).join("");
+    return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><rect x=".5" y=".5" width="${W - 1}" height="${H - 1}" rx="2" fill="var(--sheet)" stroke="var(--line-strong)"/>${rects}</svg>`;
+  }
+
+  function levelPage() {
+    const p = pageOf(ui.page), i = pageIndex(p.id) + 1;
+    const nBlocks = p.blocks.length;
+    let how = row("Com es col·loquen", seg("mode", [["auto", "Automàtica"], ["template", "Plantilla"]], p.mode),
+      p.mode === "auto" ? "Un bloc darrere l'altre, a la mida de cada bloc, com avui." : `Plantilla «${TEMPLATES[p.template].name}». Es desa amb la pàgina.`);
+    if (p.mode === "auto") {
+      how += row("Direcció", seg("direction", [["row", "Files"], ["column", "Columnes"]], p.direction));
+    } else {
+      how += `<div class="row full"><div class="row-l">Plantilla <span class="note-tag">passa-hi per damunt per veure-la al full</span></div>
+        <div class="tpls">${Object.keys(TEMPLATES).map((k) => {
+          const t = TEMPLATES[k], fits = t.slots.length >= nBlocks;
+          return `<button type="button" class="tpl ${doc.orientation === "landscape" ? "land" : ""}" data-action="tpl" data-value="${k}" data-preview="${k}" aria-pressed="${p.template === k}" ${fits ? "" : "disabled"}
+            title="${fits ? t.name + (t.land ? " · millor apaïsat" : "") : `${t.name}: té ${t.slots.length} espais i aquesta pàgina té ${nBlocks} blocs`}">${tplThumb(k)}<span>${t.name}</span></button>`;
+        }).join("")}</div></div>`;
+    }
+
+    // Els blocs de la pàgina, en ordre de lectura; a les plantilles, també els espais buits (R2)
+    let list = "";
+    if (p.mode === "template") {
+      list = TEMPLATES[p.template].slots.map((sl, si) => {
+        const b = p.blocks.find((x) => x.slot === si);
+        if (!b) {
+          return `<div class="bitem empty"><span class="bi">${si + 1}</span><span>Espai buit · ${sl.k === "text" ? "rètol" : "seqüència"}</span>
+            ${sl.k === "text" ? `<button class="btn" data-action="addtext" data-slot="${si}">Escriu-hi</button>`
+              : `<select class="sel" data-change="fillslot" data-slot="${si}" aria-label="Posa-hi una seqüència"><option value="">Posa-hi…</option>${Object.keys(SEQS).map((s) => `<option value="${s}">${esc(SEQS[s].name)}</option>`).join("")}</select>`}</div>`;
+        }
+        return bItem(b, si + 1);
+      }).join("");
+    } else {
+      list = p.blocks.map((b, bi) => bItem(b, bi + 1)).join("");
+    }
+    const addRow = `<div class="row-c" style="justify-content:flex-start;padding-top:4px">
+      <select class="sel" data-change="addseq" aria-label="Afegeix una seqüència"><option value="">+ Seqüència…</option>${Object.keys(SEQS).map((s) => `<option value="${s}">${esc(SEQS[s].name)}${pagesWith(s).length ? "" : " · fora de les pàgines"}</option>`).join("")}</select>
+      <button class="btn" data-action="addtext">+ Text</button></div>`;
+
+    const empties = p.mode === "template" ? TEMPLATES[p.template].slots.length - p.blocks.length : 0;
+    const summary = `${p.mode === "auto" ? `Automàtica, en ${p.direction === "row" ? "files" : "columnes"}` : `Plantilla «${TEMPLATES[p.template].name}»`} · ${nBlocks} bloc${nBlocks === 1 ? "" : "s"}${empties > 0 ? ` · ${empties} espai${empties > 1 ? "s" : ""} buit${empties > 1 ? "s" : ""}` : ""}`;
+    const body = !ui.pageOpen ? `<div class="summary">${esc(summary)}</div>` : `<div class="lbody">
+      <div class="group">Disposició</div>${how}
+      <div class="group">Blocs d'aquesta pàgina</div>
+      <div class="blist">${list || `<div class="row-h">Pàgina buida.</div>`}</div>${addRow}
+      <div class="group">La pàgina</div>
+      ${row("Accions", `<button class="btn" data-action="noop" data-msg="Pàgina ${i} duplicada (a l'esbós no fa res)">Duplica</button><button class="btn" data-action="noop" data-msg="Mouria la pàgina">Mou…</button><button class="btn danger" data-action="noop" data-msg="Esborraria la pàgina, amb Desfés">Esborra</button>`, "El mateix menú que la capçalera de la pàgina, al full.")}
+    </div>`;
+    const why = ui.block ? "on és el bloc seleccionat" : "la que ocupa més pantalla";
+    return `<section class="level" id="lv-page" aria-label="Nivell pàgina">
+      ${levelHead("Pàgina", "page", `Pàgina ${i} de ${doc.pages.length}`, `Només a aquesta pàgina · ${why}`, "togglepage", ui.pageOpen)}${body}</section>`;
+  }
+
+  function bItem(b, n) {
+    const where = b.kind === "seq" ? pagesWith(b.seq).filter((x) => x !== pageIndex(ui.page) + 1) : [];
+    const meta = b.kind === "text" ? "text" : `${SEQS[b.seq].picts.length} pict.${where.length ? ` · també a la pàg. ${where.join(", ")}` : ""}`;
+    return `<button type="button" class="bitem ${ui.block === b.id ? "sel" : ""}" data-action="select" data-value="${b.id}">
+      <span class="bi">${n}</span><span style="min-width:0"><span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${b.kind === "text" ? "«" + esc(blockName(b)) + "»" : esc(blockName(b))}</span><span class="meta">${meta}</span></span>
+      <span class="meta">${b.common ? "a totes" : ""}</span></button>`;
+  }
+
+  function levelBlock() {
+    if (!ui.block) {
+      return `<section class="level" id="lv-block" aria-label="Nivell bloc">
+        ${levelHead("Bloc", "block", "Cap bloc seleccionat", "Clica un bloc del full o de la llista de la pàgina")}
+        <div class="lbody"><div class="empty-state">
+          <span>Aquí hi surten els ajustos d'un sol bloc: la mida dels pictogrames, l'espai, l'alineació, les columnes, l'estil i, si és un bloc de text, el text.</span>
+        </div></div></section>`;
+    }
+    const { p, b } = findBlock(ui.block);
+    const tpl = p.mode === "template";
+    let body = "";
+    if (b.kind === "text") {
+      body += `<div class="group">Text</div>
+        <div class="row full"><textarea class="txt" id="txt-${b.id}" data-input="text" aria-label="Text del bloc">${esc(b.text)}</textarea>
+        <div class="row-h">També s'hi pot escriure damunt del full, amb doble clic o Retorn.</div></div>
+        <div class="group">Lletra</div>
+        ${row("Mida de la lletra", range("tsize", "tsize", 8, 48, 1, b.size, "punts"), tpl ? "Com a màxim: si el text no hi cap, s'encongeix." : "")}
+        ${row("Negreta", `<label class="switch"><input type="checkbox" data-change="bold" ${b.bold ? "checked" : ""}> ${b.bold ? "Sí" : "No"}</label>`)}
+        ${row("Alineació horitzontal", seg("alignH", H_AL, b.alignH))}
+        ${tpl ? row("Alineació vertical", seg("alignV", V_AL, b.alignV)) : ""}
+        ${row(`Família ${inh(!!b.style.font, "resetfont")}`, `<select class="sel" data-change="bfont"><option value="" ${!b.style.font ? "selected" : ""}>Com el document</option><option value="Atkinson" ${b.style.font === "Atkinson" ? "selected" : ""}>Atkinson Hyperlegible</option><option value="Andika" ${b.style.font === "Andika" ? "selected" : ""}>Andika</option></select>`)}`;
+    } else {
+      const rect = tpl ? slotRect(p.template, b.slot) : null;
+      const g = tpl ? gridFor(b, rect) : null;
+      let help = "";
+      let cls = "";
+      if (tpl) {
+        if (g.fit >= b.max) help = `En surten de ${b.max} mm, el màxim. Al bloc encara hi cabrien de ${Math.floor(g.fit)} mm.`;
+        else { help = `Com a màxim. Ara en surten de <b>${Math.floor(g.fit)} mm</b>: el bloc no dona per més. Per arribar a ${b.max} mm, fes el bloc més gran o tria menys columnes.`; cls = g.fit < MIN_PICT ? "warn" : ""; }
+        if (g.fit < MIN_PICT) help += " Per sota de 15 mm costen de veure.";
+      }
+      body += `<div class="group">Pictogrames</div>
+        ${row("Mida dels pictogrames", range("bmax", "bmax", 15, 80, 1, b.max, "mm"), `<span id="bmax-h">${help}</span>`, cls)}
+        ${tpl ? row("Columnes", seg("cols", [["auto", "Auto"], [1, "1"], [2, "2"], [3, "3"], [4, "4"]], b.cols), g ? `<span id="cols-h">${g.rows} ${g.rows === 1 ? "fila" : "files"} de ${g.cols}.</span>` : "") : ""}
+        ${row("Espai entre pictogrames", range("bspace", "bspace", 0, 12, 1, b.space, "mm"))}
+        ${row("Alineació horitzontal", seg("alignH", H_AL, b.alignH))}
+        ${tpl ? row("Alineació vertical", seg("alignV", V_AL, b.alignV)) : ""}
+        ${row("Contingut", `<button class="btn" data-action="noop" data-msg="Aniria a la pestanya «${esc(SEQS[b.seq].name)}» de l'edició">Edita la seqüència</button>`, pagesWith(b.seq).length > 1 ? `La seqüència també és a la pàgina ${pagesWith(b.seq).filter((x) => x !== pageIndex(p.id) + 1).join(", ")}; allà el bloc té els seus ajustos, però el contingut és el mateix.` : "")}
+        <details class="more" ${Object.keys(b.style).length ? "open" : ""}><summary>Estil d'aquest bloc ${Object.keys(b.style).length ? `<span class="inh own">${Object.keys(b.style).length} retoc${Object.keys(b.style).length > 1 ? "s" : ""}</span>` : `<span class="inh">Com el document</span>`}</summary>
+          ${row(`Lletra ${inh(!!b.style.font, "resetfont")}`, `<select class="sel" data-change="bfont"><option value="" ${!b.style.font ? "selected" : ""}>Com el document</option><option value="Atkinson" ${b.style.font === "Atkinson" ? "selected" : ""}>Atkinson Hyperlegible</option><option value="Andika" ${b.style.font === "Andika" ? "selected" : ""}>Andika</option></select>`)}
+          ${row(`Vora de la targeta ${inh(b.style.border !== undefined, "resetborder")}`, `<label class="switch"><input type="checkbox" data-change="bborder" ${effBorder(b) ? "checked" : ""}> ${effBorder(b) ? "Sí" : "No"}</label>`)}
+          <div class="row-h" style="padding:2px 0 6px">R7 (B31). Només les diferències amb l'estil del document; la resta el segueix.</div>
+        </details>`;
+    }
+    // El lloc del bloc: només té sentit amb plantilla (a la pàgina automàtica, l'ordre de la llista)
+    const others = doc.pages.filter((x) => x.id !== p.id);
+    body += `<div class="group">Lloc</div>
+      ${tpl ? row("A totes les pàgines", `<label class="switch"><input type="checkbox" data-change="common" ${b.common ? "checked" : ""}> ${b.common ? "Sí" : "No"}</label>`, b.common ? "Surt a totes les pàgines, al mateix lloc. Moure'l el mou a totes." : "") : row("Ordre a la pàgina", `<button class="btn" data-action="moveup" aria-label="Puja">↑</button><button class="btn" data-action="movedown" aria-label="Baixa">↓</button>`)}
+      ${row("Copia a una altra pàgina", `<select class="sel" data-change="copyto" aria-label="Copia a la pàgina"><option value="">Tria la pàgina…</option>${others.map((x) => `<option value="${x.id}">Pàgina ${pageIndex(x.id) + 1}</option>`).join("")}</select>`)}
+      ${row("Treu d'aquesta pàgina", `<button class="btn danger" data-action="remove">Treu</button>`, b.kind === "seq" && pagesWith(b.seq).length === 1 ? "No l'esborra: la seqüència passa a «Fora de les pàgines»." : "")}
+      <div class="row-c" style="justify-content:flex-start;padding-top:6px">${b.kind === "seq" ? `<select class="sel" data-change="copysettings" aria-label="Copia aquests ajustos a"><option value="">Copia aquests ajustos a…</option><option value="page">tots els blocs d'aquesta pàgina</option><option value="seq">tots els blocs d'aquesta seqüència</option><option value="doc">tots els blocs del document</option></select>` : ""}</div>
+      ${tpl ? (() => { const r = slotRect(p.template, b.slot); return `<details class="more"><summary>Posició i mida <span class="note-tag">fase 4</span></summary>
+        <div class="mm">${[["X", r.x], ["Y", r.y], ["Amplada", r.w], ["Alçada", r.h]].map(([l, v]) => `<label>${l}<input value="${v.toFixed(0)} mm" readonly></label>`).join("")}</div>
+        <div class="row-h" style="padding-bottom:6px">Espai ${b.slot + 1} de la plantilla «${TEMPLATES[p.template].name}». És l'alternativa a arrossegar (WCAG 2.5.7).</div></details>`; })() : ""}`;
+
+    const scope = b.kind === "text" ? "Bloc de text · només aquest bloc" : `Bloc de seqüència · ${SEQS[b.seq].picts.length} pictogrames · només aquest bloc`;
+    return `<section class="level" id="lv-block" aria-label="Nivell bloc">
+      ${levelHead("Bloc", "block", b.kind === "text" ? `«${blockName(b)}»` : blockName(b), scope)}<div class="lbody">${body}</div></section>`;
+  }
+
+  function renderColumn() {
+    const col = $("#column"), top = col.scrollTop;
+    const p = pageOf(ui.page), fb = ui.block ? findBlock(ui.block) : null;
+    const crumbs = `<nav class="crumbs" aria-label="Nivells">
+      <button data-jump="lv-doc" class="${!fb ? "" : ""}">Document</button><span class="sep">›</span>
+      <button data-jump="lv-page" class="${!fb ? "cur" : ""}">Pàgina ${pageIndex(p.id) + 1}</button>
+      ${fb ? `<span class="sep">›</span><button data-jump="lv-block" class="cur">${esc(fb.b.kind === "text" ? "«" + blockName(fb.b) + "»" : blockName(fb.b))}</button>` : ""}</nav>`;
+    const prefs = `<div class="prefs" aria-label="Les meves preferències">
+      <span class="kind" style="font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)">Les meves preferències</span>
+      <span class="row-h">No són del document: són teves, i serveixen per als documents nous.</span>
+      <div class="acts"><button class="btn" data-action="noop" data-msg="Aplicaria el teu estil al document, amb Desfés">Aplica el meu estil</button><button class="btn primary" data-action="noop" data-msg="Desaria l'estil d'aquest document com a preferència">Desa com a preferència</button></div></div>`;
+    col.innerHTML = crumbs + `<div class="levels">${levelDocument()}${levelPage()}${levelBlock()}</div>` + prefs;
+    col.scrollTop = top;
+  }
+
+  function render() { renderDesk(); renderColumn(); }
+
+  // ---------- La pàgina activa segueix el desplaçament (R5) ----------
+  let io = null;
+  const ratios = new Map();
+  function observePages() {
+    if (io) io.disconnect();
+    if (!("IntersectionObserver" in window)) return;
+    io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => ratios.set(e.target.dataset.pagewrap, e.intersectionRect.height));
+      if (ui.block) return; // amb un bloc seleccionat, mana el bloc
+      let best = ui.page, bestH = -1;
+      ratios.forEach((h, id) => { if (h > bestH && pageOf(id)) { best = id; bestH = h; } });
+      if (best !== ui.page) { ui.page = best; markActive(); renderColumn(); }
+    }, { root: $("#desk"), threshold: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1] });
+    document.querySelectorAll("[data-pagewrap]").forEach((el) => io.observe(el));
+  }
+  function markActive() {
+    document.querySelectorAll("[data-pagewrap]").forEach((el) => el.classList.toggle("active", el.dataset.pagewrap === ui.page));
+  }
+
+  // ---------- Missatges i desfer ----------
+  let toastTimer = null;
+  function toast(msg, undo) {
+    const t = $("#toast");
+    t.innerHTML = `<span>${esc(msg)}</span>${undo ? `<button data-action="undo">Desfés</button>` : ""}`;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, 5000);
+  }
+  const snapshot = () => { undoSnap = { doc: JSON.parse(JSON.stringify(doc)), ui: { ...ui } }; };
+
+  // ---------- Accions ----------
+  function select(bid) {
+    ui.block = bid;
+    if (bid) ui.page = findBlock(bid).p.id;
+    autoFold();
+    render();
+  }
+  // Amb un bloc seleccionat, Document i Pàgina es pleguen a una línia; si l'usuari n'ha tocat cap, mana ell
+  function autoFold() {
+    if (ui.touched) return;
+    ui.docOpen = !ui.block; ui.pageOpen = !ui.block;
+  }
+  function addBlockToPage(p, nb) {
+    if (p.mode === "auto") { p.blocks.push(nb); return true; }
+    const slots = TEMPLATES[p.template].slots;
+    const free = slots.map((s, i) => i).filter((i) => !p.blocks.some((b) => b.slot === i));
+    const match = free.find((i) => slots[i].k === nb.kind) ?? free[0];
+    if (match === undefined) return false;
+    nb.slot = match; p.blocks.push(nb); return true;
+  }
+  const newSeqBlock = (seq) => ({ id: "b" + nextId++, kind: "seq", seq, ...seqView(40) });
+  const newTextBlock = () => ({ id: "b" + nextId++, kind: "text", text: "Rètol", ...textStyle(24, true) });
+
+  function act(a, el) {
+    const p = pageOf(ui.page);
+    const fb = ui.block ? findBlock(ui.block) : null;
+    const b = fb && fb.b;
+    switch (a) {
+      case "toggledoc": ui.docOpen = !ui.docOpen; ui.touched = true; renderColumn(); return;
+      case "togglepage": ui.pageOpen = !ui.pageOpen; ui.touched = true; renderColumn(); return;
+      case "select": select(el.dataset.value); return;
+      case "orient": doc.orientation = el.dataset.value; render(); toast(`Totes les pàgines, ${doc.orientation === "portrait" ? "en vertical" : "apaïsades"}`); return;
+      case "licence": doc.footer.licence = el.dataset.value; render(); return;
+      case "mode": {
+        if (p.mode === el.dataset.value) return;
+        snapshot();
+        if (el.dataset.value === "auto") { p.mode = "auto"; p.direction = p.direction || "row"; p.blocks.forEach((x) => delete x.slot); }
+        else {
+          const k = Object.keys(TEMPLATES).find((t) => TEMPLATES[t].slots.length >= p.blocks.length) || "menu";
+          p.mode = "template"; p.template = k; applyTemplate(p, k);
+        }
+        render(); toast(`La pàgina ${pageIndex(p.id) + 1} ara és ${p.mode === "auto" ? "automàtica" : "amb plantilla"}`, true); return;
+      }
+      case "direction": p.direction = el.dataset.value; render(); return;
+      case "tpl": {
+        if (p.template === el.dataset.value) return;
+        snapshot(); p.template = el.dataset.value; applyTemplate(p, p.template); ui.preview = null;
+        render(); toast(`Plantilla «${TEMPLATES[p.template].name}» a la pàgina ${pageIndex(p.id) + 1}`, true); return;
+      }
+      case "addtext": {
+        const nb = newTextBlock();
+        if (el.dataset.slot !== undefined && p.mode === "template") { nb.slot = Number(el.dataset.slot); p.blocks.push(nb); }
+        else if (!addBlockToPage(p, nb)) { toast("Aquesta plantilla no té cap espai lliure. Tria'n una de més gran."); return; }
+        ui.block = nb.id; autoFold(); render();
+        const ta = document.getElementById("txt-" + nb.id); if (ta) { ta.focus(); ta.select(); }
+        return;
+      }
+      case "place": {
+        const nb = newSeqBlock(el.dataset.seq);
+        if (!addBlockToPage(p, nb)) { toast(`La pàgina ${pageIndex(p.id) + 1} no té cap espai lliure. Tria-hi una plantilla més gran.`); return; }
+        ui.block = nb.id; autoFold(); render(); toast(`«${SEQS[nb.seq].name}» a la pàgina ${pageIndex(p.id) + 1}`); return;
+      }
+      case "alignH": b.alignH = el.dataset.value; render(); return;
+      case "alignV": b.alignV = el.dataset.value; render(); return;
+      case "cols": b.cols = el.dataset.value === "auto" ? "auto" : Number(el.dataset.value); render(); return;
+      case "resetfont": delete b.style.font; render(); toast("La lletra torna a ser la del document"); return;
+      case "resetborder": delete b.style.border; render(); toast("La vora torna a ser la del document"); return;
+      case "moveup": case "movedown": {
+        const i = p.blocks.indexOf(b), j = a === "moveup" ? i - 1 : i + 1;
+        if (j < 0 || j >= p.blocks.length) return;
+        [p.blocks[i], p.blocks[j]] = [p.blocks[j], p.blocks[i]]; render(); return;
+      }
+      case "remove": {
+        snapshot(); fb.p.blocks = fb.p.blocks.filter((x) => x !== b); ui.block = null;
+        autoFold();
+        render();
+        toast(b.kind === "seq" && pagesWith(b.seq).length === 0 ? `«${SEQS[b.seq].name}» és fora de les pàgines` : `S'ha tret el bloc de la pàgina ${pageIndex(fb.p.id) + 1}`, true);
+        return;
+      }
+      case "undo": if (undoSnap) { doc = undoSnap.doc; ui = undoSnap.ui; undoSnap = null; render(); toast("S'ha desfet el canvi"); } return;
+      case "noop": toast(el.dataset.msg || "A l'esbós no fa res"); return;
+    }
+  }
+  function applyTemplate(p, k) {
+    const slots = TEMPLATES[k].slots, used = new Set();
+    // Cada bloc va al primer espai lliure del seu tipus; si no n'hi ha, al primer lliure
+    p.blocks.forEach((b) => {
+      let i = slots.findIndex((s, si) => !used.has(si) && s.k === b.kind);
+      if (i < 0) i = slots.findIndex((_, si) => !used.has(si));
+      used.add(i); b.slot = i;
+    });
+  }
+
+  function change(a, el) {
+    const p = pageOf(ui.page);
+    const fb = ui.block ? findBlock(ui.block) : null;
+    const b = fb && fb.b;
+    const v = el.value;
+    switch (a) {
+      case "paper": doc.paper = v; render(); return;
+      case "docfont": doc.style.font = v; render(); return;
+      case "docborder": doc.style.border = el.checked; render(); return;
+      case "bold": b.bold = el.checked; render(); return;
+      case "bfont": if (v) b.style.font = v; else delete b.style.font; render(); return;
+      case "bborder": b.style.border = el.checked; render(); return;
+      case "common": b.common = el.checked; render(); toast(b.common ? "A totes les pàgines, al mateix lloc" : `Només a la pàgina ${pageIndex(fb.p.id) + 1}`, !b.common); return;
+      case "fillslot": case "addseq": {
+        if (!v) return;
+        const nb = newSeqBlock(v);
+        if (a === "fillslot") { nb.slot = Number(el.dataset.slot); p.blocks.push(nb); }
+        else if (!addBlockToPage(p, nb)) { toast(`La pàgina ${pageIndex(p.id) + 1} no té cap espai lliure. Tria-hi una plantilla més gran.`); renderColumn(); return; }
+        ui.block = nb.id; autoFold(); render(); toast(`«${SEQS[v].name}» a la pàgina ${pageIndex(p.id) + 1}`); return;
+      }
+      case "copyto": {
+        if (!v) return;
+        const dest = pageOf(v), nb = { ...JSON.parse(JSON.stringify(b)), id: "b" + nextId++, common: false };
+        delete nb.slot;
+        if (!addBlockToPage(dest, nb)) { toast(`La pàgina ${pageIndex(v) + 1} no té cap espai lliure. Tria-hi una plantilla més gran.`); renderColumn(); return; }
+        render(); toast(`Copiat a la pàgina ${pageIndex(v) + 1}`); return;
+      }
+      case "copysettings": {
+        if (!v) return;
+        const targets = doc.pages.filter((x) => v === "doc" || (v === "page" && x.id === fb.p.id) || v === "seq")
+          .flatMap((x) => x.blocks).filter((x) => x.kind === "seq" && x !== b && (v !== "seq" || x.seq === b.seq));
+        snapshot();
+        targets.forEach((x) => { Object.assign(x, { max: b.max, cols: b.cols, space: b.space, alignH: b.alignH, alignV: b.alignV, style: { ...b.style } }); });
+        render(); toast(targets.length ? `Ajustos copiats a ${targets.length} bloc${targets.length > 1 ? "s" : ""}` : "No hi ha cap altre bloc on copiar-los", targets.length > 0); return;
+      }
+    }
+  }
+
+  // Els lliscadors redibuixen el full però no la columna, perquè no perdin el focus
+  function input(a, el) {
+    const fb = ui.block ? findBlock(ui.block) : null;
+    const b = fb && fb.b;
+    const n = Number(el.value);
+    if (a === "docgap") { doc.style.gap = n; $("#docgap-v").textContent = n + " mm"; renderDesk(); return; }
+    if (a === "text") { b.text = el.value; renderDesk(); return; }
+    if (a === "tsize") { b.size = n; $("#tsize-v").textContent = n + " pt"; renderDesk(); return; }
+    if (a === "bmax") b.max = n; else if (a === "bspace") b.space = n;
+    const out = document.getElementById(el.id + "-v"); if (out) out.textContent = n + " mm";
+    renderDesk();
+    if (fb.p.mode === "template") {
+      const g = gridFor(b, slotRect(fb.p.template, b.slot)), h = $("#bmax-h");
+      if (h) h.innerHTML = g.fit >= b.max ? `En surten de ${b.max} mm, el màxim. Al bloc encara hi cabrien de ${Math.floor(g.fit)} mm.`
+        : `Com a màxim. Ara en surten de <b>${Math.floor(g.fit)} mm</b>: el bloc no dona per més. Per arribar a ${b.max} mm, fes el bloc més gran o tria menys columnes.`;
+      const c = $("#cols-h"); if (c) c.textContent = `${g.rows} ${g.rows === 1 ? "fila" : "files"} de ${g.cols}.`;
+    }
+  }
+
+  // ---------- Esdeveniments ----------
+  const app = $("#app");
+  app.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-action],[data-block],[data-empty],[data-jump],[data-sheet]");
+    if (!t) return;
+    if (t.dataset.action) { act(t.dataset.action, t); return; }
+    if (t.dataset.jump) { const el = document.getElementById(t.dataset.jump); if (el) $("#column").scrollTo({ top: el.offsetTop - 44, behavior: "smooth" }); return; }
+    if (t.dataset.block) { select(t.dataset.block); return; }
+    if (t.dataset.empty) {
+      const [pid, si] = t.dataset.empty.split(":"); ui.page = pid;
+      const p = pageOf(pid), k = TEMPLATES[p.template].slots[Number(si)].k;
+      if (k === "text") { act("addtext", { dataset: { slot: si } }); }
+      else { ui.block = null; render(); toast("Tria la seqüència a «Blocs d'aquesta pàgina», a la columna"); }
+      return;
+    }
+    if (t.dataset.sheet) { ui.page = t.dataset.sheet; select(null); }
+  });
+  app.addEventListener("dblclick", (e) => {
+    const t = e.target.closest("[data-block]");
+    if (t && findBlock(t.dataset.block).b.kind === "text") { const ta = document.getElementById("txt-" + t.dataset.block); if (ta) ta.focus(); }
+  });
+  app.addEventListener("keydown", (e) => {
+    const t = e.target.closest("[data-block]");
+    if (t && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(t.dataset.block); }
+    if (e.key === "Escape" && ui.block && !e.target.matches("textarea")) { select(null); }
+  });
+  app.addEventListener("change", (e) => { const a = e.target.dataset.change; if (a) change(a, e.target); });
+  app.addEventListener("input", (e) => { const a = e.target.dataset.input; if (a) input(a, e.target); });
+  // Previsualització de la plantilla (R4): passar-hi per damunt o anar-hi amb el teclat
+  const setPreview = (e, on) => {
+    const t = e.target.closest && e.target.closest("[data-preview]");
+    if (!t || t.disabled) return;
+    const next = on ? { page: ui.page, tpl: t.dataset.preview } : null;
+    if (JSON.stringify(next) === JSON.stringify(ui.preview)) return;
+    ui.preview = next; renderDesk();
+  };
+  app.addEventListener("mouseover", (e) => setPreview(e, true));
+  app.addEventListener("mouseout", (e) => setPreview(e, false));
+  app.addEventListener("focusin", (e) => setPreview(e, true));
+  app.addEventListener("focusout", (e) => setPreview(e, false));
+
+  // ---------- Escenaris ----------
+  document.querySelectorAll("[data-scn]").forEach((btn) => btn.addEventListener("click", () => {
+    const s = btn.dataset.scn;
+    if (s === "reset") { doc = initial(); ui = { page: "p1", block: null, docOpen: true, pageOpen: true, touched: false, preview: null }; render(); return; }
+    ui.touched = false;
+    const target = { seq: "b2", text: "b3", auto: "b8", none: null }[s];
+    if (target && !findBlock(target)) { toast("Aquest bloc ja no hi és: torna a començar"); return; }
+    if (s === "auto") ui.page = "p3";
+    select(target);
+    const pw = document.querySelector(`[data-pagewrap="${ui.page}"]`);
+    if (pw) $("#desk").scrollTo({ top: pw.offsetTop - 18, behavior: "smooth" });
+  }));
+
+  render();
+</script>

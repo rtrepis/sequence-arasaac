@@ -563,6 +563,14 @@ fet encara.
   Cada nivell diu a què afecta («S'aplica a tot el document», «S'aplica a la pàgina 2»). És un
   disseny per fer **abans** de tocar codi: un esbós de la columna sencera, amb els tres nivells,
   per validar-lo.
+- **Esbós fet** (2026-11-07): `docs/esbos-columna-vista.html`, una pàgina interactiva per veure i
+  comentar, sense tocar l'app. Els nivells són **Document, Pàgina N i Bloc** (Q1), ja amb R1 (cada
+  pàgina tria Automàtica o Plantilla), R2 (la llista de blocs ensenya els espais buits de la
+  plantilla), R4 (passar per damunt d'una plantilla en dibuixa els espais al full), R5 (la pàgina
+  activa segueix el desplaçament, o el bloc seleccionat), Q2 (la mida com a màxim, amb la mida que
+  en surt de debò), R7 (l'estil del bloc hereta el del document i marca els retocs) i R9 (el bloc de
+  text, amb el text a dalt del nivell). Hi ha la taula de on va cada ajust d'avui i vuit preguntes
+  obertes (P1–P8), entre elles si l'orientació ha de passar a ser de la pàgina.
 
 ### R9 — Blocs de text
 
