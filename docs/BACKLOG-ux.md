@@ -137,6 +137,22 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
 - El detall és a **R10** de `docs/PLA-mode-lliure.md` (§12). S'ha de decidir abans de **B31** (R7).
   Les plantilles de pàgina pròpies serien un catàleg paral·lel: **R11**.
 
+### B34 — Plantilles de pàgina pròpies 💡 Idea
+
+*(Oberta en parlar de R11 del mode lliure, 2026-11-07.)*
+
+- **Què**: que l'usuari pugui desar una pàgina com a plantilla («Desa aquesta pàgina com a
+  plantilla», a la Vista) i tenir-ne un catàleg, al costat de les plantilles base.
+- **Amb comptes**: catàleg al núvol, gestionat (canviar el nom, esborrar) a la configuració per
+  defecte. **Sense comptes**: només les plantilles base.
+- **De moment no es fa**: el mode lliure surt només amb les plantilles base (R11, decisió del
+  2026-11-07). És un catàleg paral·lel al d'estils dels pictogrames (**B33**), amb les mateixes dues
+  accions (aplicar, desar), i convé pensar-los junts.
+- **Cal decidir-ho abans d'implementar-ho**: què guarda una plantilla pròpia (només els espais, o
+  també els blocs de text i els comuns), on es gestiona i el sostre d'entrades amb compte
+  (`docs/ESTUDI-limits-serveis-gratuits.md`).
+- El detall és a **R11** de `docs/PLA-mode-lliure.md` (§12).
+
 ## Gravetat alta
 
 Risc real que l'usuari prengui l'acció equivocada, o exclusió d'accessibilitat.

@@ -668,7 +668,9 @@ fet encara.
     defecte; sense comptes, només les base. Són dos catàlegs paral·lels: **estils dels
     pictogrames** (R10) i **plantilles de pàgina** (R11), amb les mateixes dues accions (aplicar,
     desar).
-- **Cal decidir**: (a) si hi ha plantilles pròpies, o n'hi ha prou amb les base; (b) si la fila
+- **Decidit** (2026-11-07): **de moment, només les plantilles base**, que és el cas sense comptes.
+  Les plantilles pròpies queden al backlog per a més endavant (**B34**).
+- **Cal decidir**: (b) si la fila
   «Pàgines noves» va al panell «Vista» o a la Vista mateixa; (c) com es diu el panell quan deixi de
   ser només «Vista».
 - **Quan**: amb R1 (el model de pàgines), perquè el panell ha de saber què és una pàgina
@@ -684,8 +686,8 @@ fet encara.
 4. **R5**, la columna que segueix la pàgina i la selecció de la caixa.
 5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
 6. **R10** (B33), decidir el catàleg d'estils dels pictogrames: abans de R7, perquè en canvia les
-   accions. **R11**, el panell «Vista» de la configuració per defecte, amb R1; les plantilles
-   pròpies, si n'hi ha, amb R10.
+   accions. **R11**, el panell «Vista» de la configuració per defecte, amb R1. Les plantilles
+   pròpies (B34), més endavant.
 7. **R7** (B31), els estils per grup, quan el nom i el nivell «Seqüència» de la columna ja hi siguin.
 
 ### Decisions (2026-11-07)
