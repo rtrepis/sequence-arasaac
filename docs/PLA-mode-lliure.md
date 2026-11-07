@@ -2,7 +2,9 @@
 
 > **Estat**: pla confirmat (2026-11-06). **Fases 1, 2 i 3 fetes**: el model (ADR-005), l'espai del
 > full a la vista i les pàgines amb les seves seqüències (vegeu §11, «Com ha quedat la fase 3»).
-> **Ara toca provar-ho amb gent** abans de les fases 4 i 5.
+> **Revisió de la fase 3** (§12, 2026-11-07): fets R3 (l'estudi dels treballs) i R8 (l'esbós de la
+> columna, `docs/esbos-columna-vista.html`). **Ara toca el pas 3 de l'ordre proposat**: el model
+> (R1 + R2 + R9), començant per revisar l'ADR-005.
 > **Encàrrec**: `docs/spec-mode-lliure.md`, a la branca `origin/feature/mode-lliure` (no fusionada).
 > **Fonaments que mana**: `docs/fonaments/03-model-contingut-estil.md`,
 > `docs/fonaments/06-compatibilitat-i-dades.md`, `docs/decisions/ADR-003-model-document-saac-v3.md`.
@@ -711,10 +713,10 @@ fet encara.
 
 ### Ordre proposat
 
-1. **Decisions** (les preguntes de sota) i **R3**, la investigació dels treballs reals: tot el
+1. ✅ **Decisions** (les preguntes de sota) i **R3**, la investigació dels treballs reals: tot el
    que ve després en depèn.
-2. **R8**, l'esbós de la columna, ja amb R1, R5, R6 i R7 en compte.
-3. **R1 + R2 + R9**, el model (ADR-005 revisada, fitxer, migració dels documents de les fases 1–3):
+2. ✅ **R8**, l'esbós de la columna, ja amb R1, R5, R6 i R7 en compte.
+3. ⏭️ **R1 + R2 + R9**, el model (ADR-005 revisada, fitxer, migració dels documents de les fases 1–3):
    pàgines a totes dues disposicions, la plantilla desada amb la pàgina, i els blocs de text.
 4. **R5**, la columna que segueix la pàgina i la selecció de la caixa.
 5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
