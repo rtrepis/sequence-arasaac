@@ -564,12 +564,46 @@ fet encara.
   disseny per fer **abans** de tocar codi: un esbós de la columna sencera, amb els tres nivells,
   per validar-lo.
 
+### R9 — Blocs de text
+
+- **Vist**: en mode lliure s'han de poder posar **blocs de text**: un text sol, sense pictograma.
+  Ja era una intenció de l'usuari, i l'estudi R3 ho confirma: «Primer» i «Després», els dies de la
+  setmana, «Avui és…», «Treballo per…», el títol d'una rutina o els plats del menú. Mitja dotzena de
+  plantilles de R3 en depenen.
+- **Proposta**:
+  - **Un bloc de text és un bloc com els altres**: té lloc i mida a la pàgina, es pot posar a totes
+    les pàgines (comú), es copia, es treu i surt a les plantilles. No és una part d'un bloc de
+    seqüència: així el mateix mecanisme serveix per a un títol de pàgina, un rètol damunt d'un bloc
+    o una frase sola.
+  - **Contingut**: el text, en una o més línies. És contingut del document, com el text d'un
+    pictograma: no es tradueix ni ve de les preferències.
+  - **Estil**: per defecte, la lletra de l'estil del document (`card.font`: família, color i mida),
+    perquè el rètol i les targetes facin joc. Ajustos propis del bloc: mida de la lletra (com a
+    màxim, igual que la mida dels pictogrames, Q2), negreta, alineació horitzontal i vertical dins
+    del bloc. Res de colors de fons: el full no s'adapta al tema i el paper és blanc.
+  - **Edició**: el text s'escriu al nivell «Bloc» de la columna (R8) i, amb doble clic o Enter, damunt
+    del mateix bloc, com el text de la targeta a la graella d'edició.
+  - **Accessibilitat**: el nom accessible del bloc és el text mateix. Al paper i al PDF, és text de
+    debò (no una imatge).
+- **Model i fitxer**: una col·locació porta **o bé** `sequence` (bloc de seqüència) **o bé** `text`
+  (bloc de text), i el text porta el seu retoc d'estil (`style`, només les diferències amb l'estil del
+  document, com la resta de la cascada). Cal decidir-ho amb R1 + R2, perquè toquen el mateix format
+  i la mateixa revisió de l'ADR-005.
+- **Compatibilitat**: el lector de les fases 1–3 descarta una col·locació sense `sequence` vàlida, i
+  per tant perdria els blocs de text en tornar a desar. Com que el mode lliure encara no s'ha
+  publicat, no hi ha fitxers d'usuari afectats; però **cal que el lector conservi les col·locacions
+  que no entén** abans de publicar res, perquè una versió futura amb un altre tipus de bloc no es
+  trobi el mateix problema.
+- **Quan**: amb el model (R1 + R2), i abans de les miniatures i les plantilles noves (R4), que ja les
+  han de poder fer servir.
+
 ### Ordre proposat
 
 1. **Decisions** (les preguntes de sota) i **R3**, la investigació dels treballs reals: tot el
    que ve després en depèn.
 2. **R8**, l'esbós de la columna, ja amb R1, R5, R6 i R7 en compte.
-3. **R1 + R2**, el model (ADR-005 revisada, fitxer, migració dels documents de les fases 1–3).
+3. **R1 + R2 + R9**, el model (ADR-005 revisada, fitxer, migració dels documents de les fases 1–3):
+   pàgines a totes dues disposicions, la plantilla desada amb la pàgina, i els blocs de text.
 4. **R5**, la columna que segueix la pàgina i la selecció de la caixa.
 5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
 6. **R7** (B31), els estils per grup, quan el nom i el nivell «Seqüència» de la columna ja hi siguin.
