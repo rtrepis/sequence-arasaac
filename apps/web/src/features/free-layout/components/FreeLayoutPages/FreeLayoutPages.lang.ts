@@ -105,7 +105,13 @@ const messages = defineMessages({
     defaultMessage:
       "{name}, {count, plural, one {# pictogram} other {# pictograms}}{common, select, true {, on every page} other {}}",
     description:
-      "Nom accessible d'una caixa del mode lliure, que obre el seu menú. `common` diu si surt a totes les pàgines",
+      "Nom accessible d'un bloc del mode lliure, que el selecciona. `common` diu si surt a totes les pàgines",
+  },
+  placementActions: {
+    id: "features.freeLayout.placement.actions",
+    defaultMessage: "Actions for {name}",
+    description:
+      "Nom accessible i tooltip del botó d'un bloc, a dalt a la dreta, que obre el seu menú",
   },
   placementTooSmall: {
     id: "features.freeLayout.placement.tooSmall",

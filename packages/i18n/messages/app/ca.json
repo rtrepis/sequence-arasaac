@@ -957,9 +957,6 @@
   "pages.viewSequence.alignment.label": {
     "message": "Alineació"
   },
-  "pages.viewSequence.applyAll.label": {
-    "message": "Aplicar a totes"
-  },
   "pages.viewSequence.authSequence.helperText": {
     "message": "Marcar l'autoria",
     "description": "Helper text form"
@@ -1002,9 +999,6 @@
     "message": "Espai de pictogrames",
     "description": "Label form"
   },
-  "pages.viewSequence.sequence.label": {
-    "message": "Seqüència"
-  },
   "pages.viewSequence.sequenceSpaceBetween.label": {
     "message": "Espai de seqüències",
     "description": "Label form"
@@ -1021,9 +1015,6 @@
   },
   "pages.viewSequence.tooltip.alignRight": {
     "message": "Dreta"
-  },
-  "pages.viewSequence.tooltip.applyAll": {
-    "message": "Aplicar a totes les seqüències"
   },
   "pages.viewSequence.savePreferences.label": {
     "message": "Desa com a preferències"
@@ -1370,10 +1361,6 @@
   "pages.viewSequence.section.pageFormat": {
     "message": "Format de pàgina",
     "description": "Títol de la secció de format de pàgina a la columna de configuració de la vista"
-  },
-  "pages.viewSequence.section.sequences": {
-    "message": "Seqüències",
-    "description": "Títol de la secció d'ajustos per seqüència a la columna de configuració de la vista"
   },
   "pages.viewSequence.section.printFooter": {
     "message": "Peu d'impressió",
@@ -2823,7 +2810,7 @@
   },
   "features.freeLayout.placement.label": {
     "message": "{name}, {count, plural, one {# pictograma} other {# pictogrames}}{common, select, true {, a totes les pàgines} other {}}",
-    "description": "Nom accessible d'una caixa del mode lliure, que obre el seu menú. `common` diu si surt a totes les pàgines"
+    "description": "Nom accessible d'un bloc del mode lliure, que el selecciona. `common` diu si surt a totes les pàgines"
   },
   "features.freeLayout.placement.tooSmall": {
     "message": "Els pictogrames hi queden massa petits",
@@ -2922,12 +2909,8 @@
     "description": "Quan no hi ha cap seqüència sense col·locar"
   },
   "features.freeLayout.settings.unplacedHint": {
-    "message": "Les d'aquesta llista no s'imprimeixen: afegeix-les amb «Afegeix una seqüència» a cada pàgina.",
-    "description": "Explicació sota la llista de seqüències sense col·locar"
-  },
-  "features.freeLayout.settings.sizeFromBox": {
-    "message": "En disposició lliure, la mida la decideix la caixa.",
-    "description": "Al lloc del control de mida de la seqüència, en disposició lliure: la mida dels pictogrames surt de la caixa"
+    "message": "No s'imprimeixen: posa-les a la pàgina que mires amb el botó de cada una, o amb «Afegeix una seqüència».",
+    "description": "Explicació sota el nombre de seqüències sense col·locar, damunt de la llista amb el botó de cada una"
   },
   "features.sequence.style.changed.layoutFlow": {
     "message": "Disposició automàtica. La disposició lliure es conserva si hi tornes.",
@@ -2980,5 +2963,113 @@
   "features.freeLayout.beforePrint.downloadAnyway": {
     "message": "Descarrega igualment",
     "description": "Descarrega el PDF tal com està, malgrat l'avís"
+  },
+  "features.freeLayout.blockSettingsLink": {
+    "message": "Ajustos del bloc",
+    "description": "Al mòbil, damunt del full amb un bloc seleccionat: baixa fins als ajustos del bloc, a la columna de sota"
+  },
+  "features.freeLayout.placement.actions": {
+    "message": "Accions de {name}",
+    "description": "Nom accessible i tooltip del botó d'un bloc, a dalt a la dreta, que obre el seu menú"
+  },
+  "pages.viewSequence.levels.crumbs": {
+    "message": "On s'apliquen aquests ajustos",
+    "description": "Nom accessible de les molles de dalt de la columna de la vista (Document › Pàgina 2 › Bloc)"
+  },
+  "pages.viewSequence.levels.document": {
+    "message": "Document",
+    "description": "Títol del primer nivell de la columna de la vista: el que s'aplica a tot el document"
+  },
+  "pages.viewSequence.levels.documentScope": {
+    "message": "S'aplica a totes les pàgines",
+    "description": "Sota el títol «Document» de la columna de la vista"
+  },
+  "pages.viewSequence.levels.pageScope": {
+    "message": "{total, plural, one {S'aplica a la pàgina} other {S'aplica només a la pàgina {number}}}",
+    "description": "Sota el títol «Pàgina N de M» de la columna de la vista. Amb una sola pàgina, no cal dir quina"
+  },
+  "pages.viewSequence.levels.pictograms": {
+    "message": "Pictogrames",
+    "description": "Secció del nivell «Document» de la columna de la vista: la mida, l'espai i l'alineació dels pictogrames de tot el document"
+  },
+  "pages.viewSequence.levels.pictogramsHint": {
+    "message": "Per a tots els blocs. Un bloc que hagis ajustat sol conserva els seus ajustos.",
+    "description": "Ajuda sota la mida dels pictogrames del nivell «Document»: s'aplica a tots els blocs, menys el que s'hagi retocat al nivell «Bloc»"
+  },
+  "pages.viewSequence.levels.noSelection": {
+    "message": "Clica un bloc del full per veure'n els ajustos.",
+    "description": "Al final dels nivells de la columna de la vista quan no hi ha cap bloc seleccionat"
+  },
+  "pages.viewSequence.levels.layoutFlowShort": {
+    "message": "Automàtica",
+    "description": "Resum del nivell «Document» plegat: la disposició és automàtica"
+  },
+  "pages.viewSequence.levels.layoutFreeShort": {
+    "message": "Lliure",
+    "description": "Resum del nivell «Document» plegat: la disposició és lliure"
+  },
+  "pages.viewSequence.levels.landscapeShort": {
+    "message": "apaïsat",
+    "description": "Resum del nivell «Document» plegat, després de la mida del paper («A4 apaïsat»)"
+  },
+  "pages.viewSequence.levels.portraitShort": {
+    "message": "vertical",
+    "description": "Resum del nivell «Document» plegat, després de la mida del paper («A4 vertical»)"
+  },
+  "pages.viewSequence.levels.directionRowShort": {
+    "message": "Automàtica, en files",
+    "description": "Resum del nivell «Pàgina» plegat, a la disposició automàtica: les seqüències van en files"
+  },
+  "pages.viewSequence.levels.directionColumnShort": {
+    "message": "Automàtica, en columnes",
+    "description": "Resum del nivell «Pàgina» plegat, a la disposició automàtica: les seqüències van en columnes"
+  },
+  "features.freeLayout.levels.pageSummary": {
+    "message": "{template} · {count, plural, one {# bloc} other {# blocs}}",
+    "description": "Resum del nivell «Pàgina» plegat: la plantilla i quants blocs té la pàgina"
+  },
+  "features.freeLayout.levels.noTemplate": {
+    "message": "Sense plantilla",
+    "description": "Al selector de plantilla de la pàgina, quan la pàgina no en té cap de les que l'app ofereix"
+  },
+  "features.freeLayout.levels.pageActions": {
+    "message": "Accions de la pàgina",
+    "description": "Títol de la fila del nivell «Pàgina» amb el menú de la pàgina (duplicar, moure, esborrar)"
+  },
+  "features.freeLayout.levels.blockScope": {
+    "message": "{common, select, true {S'aplica només a aquest bloc, a totes les pàgines} other {S'aplica només a aquest bloc}}",
+    "description": "Sota el nom del bloc seleccionat, al nivell «Bloc» de la columna de la vista"
+  },
+  "features.freeLayout.levels.sequenceScope": {
+    "message": "S'aplica només a aquesta seqüència",
+    "description": "Sota el nom de la seqüència seleccionada, al nivell «Bloc», a la disposició automàtica"
+  },
+  "features.freeLayout.levels.sizeMax": {
+    "message": "Com a màxim. Ara en surten de {mm} mm.",
+    "description": "Ajuda de la mida dels pictogrames d'un bloc en una plantilla: la mida és un màxim, i diu la que en surt de debò (mm és el costat de la imatge)"
+  },
+  "features.freeLayout.levels.sizeTooSmall": {
+    "message": "El bloc és massa petit: en surten de {mm} mm. Fes-lo més gran o tria unes altres columnes.",
+    "description": "Ajuda de la mida d'un bloc quan hi queden massa petits"
+  },
+  "features.freeLayout.levels.place": {
+    "message": "Lloc",
+    "description": "Secció del nivell «Bloc»: a totes les pàgines, copiar-lo a una altra pàgina, treure'l"
+  },
+  "features.freeLayout.levels.choosePage": {
+    "message": "Tria la pàgina…",
+    "description": "Valor inicial del selector «Copia a la pàgina» del nivell «Bloc»"
+  },
+  "features.freeLayout.levels.remove": {
+    "message": "Treu",
+    "description": "Botó de la fila «Treu d'aquesta pàgina» del nivell «Bloc»: treu el bloc, amb Desfés"
+  },
+  "features.freeLayout.levels.putOnPage": {
+    "message": "A la pàgina {number}",
+    "description": "Botó al costat de cada seqüència sense col·locar: la posa a la pàgina que segueix la columna"
+  },
+  "features.freeLayout.levels.putOnPageLabel": {
+    "message": "Posa {name} a la pàgina {number}",
+    "description": "Nom accessible del botó que posa una seqüència sense col·locar a la pàgina que segueix la columna"
   }
 }

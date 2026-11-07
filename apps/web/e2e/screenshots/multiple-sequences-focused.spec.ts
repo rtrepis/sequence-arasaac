@@ -309,11 +309,12 @@ test(
     // Navegar a Vista via React Router (manté l'estat Redux de les seqüències)
     await page.getByRole("tab", { name: /Vista/i }).click();
     // Esperar que el slider "Mida" sigui visible i estable (acordió expandit per defecte)
-    const sizeSlider = page.getByRole("slider", { name: "Mida" });
+    // El de la secció «Pictogrames» del nivell «Document»: tot el document
+  const sizeSlider = page.getByRole("slider", { name: "Mida" }).first();
     await sizeSlider.waitFor({ state: "visible", timeout: 15000 });
     await page.waitForTimeout(600);
 
-    // applyAll=true per defecte → un sol acordió visible
+    // Sense res seleccionat, només hi ha el «Mida» del nivell «Document»
     // El MUI Slider thumb intercepta events de ratolí → usar focus() via JS + teclat
     await sizeSlider.evaluate((el: HTMLElement) => el.focus());
     for (let i = 0; i < 8; i++) {
@@ -334,23 +335,15 @@ test(
     // VIEW PAGE - PAS 4: Ajustar una seqüència sola
     // Protagonista: slider de mida dins l'acordió de seqüència 2
     // =============================================
-    // Desactivar el switch "Aplicar a totes"
-    await page.getByRole("checkbox", { name: /aplicar a totes/i }).click();
-    await page.waitForTimeout(500);
-
-    // Expandir l'acordió de la seqüència 2
+    // Seleccionar la seqüència 2 al full: el nivell «Bloc» de la columna
+    // n'ensenya els ajustos (R5)
     await page
-      .getByRole("button", { name: /sequence 2|seqüència 2/i })
+      .getByRole("button", { name: /^(sequence 2|seqüència 2),/i })
       .click();
     await page.waitForTimeout(400);
 
-    // Trobar el slider "Mida" dins l'acordió de Seqüència 2
-    const seq2Accordion = page
-      .locator(".MuiAccordion-root")
-      .filter({
-        has: page.getByRole("button", { name: /sequence 2|seqüència 2/i }),
-      });
-    const seq2SizeSlider = seq2Accordion.getByRole("slider", { name: "Mida" });
+    // El «Mida» del nivell «Bloc», l'últim de la columna
+    const seq2SizeSlider = page.getByRole("slider", { name: "Mida" }).last();
     await seq2SizeSlider.waitFor({ state: "visible", timeout: 10000 });
 
     // El MUI Slider thumb intercepta events de ratolí → usar focus() via JS + teclat

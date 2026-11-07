@@ -1,53 +1,28 @@
 import React, { useId, useState } from "react";
 import {
-  Divider,
-  ListItemIcon,
-  ListItemText,
   ListSubheader,
   Menu,
   MenuItem,
   Stack,
-  Tooltip,
   Typography,
 } from "@mui/material";
-import {
-  MdArrowDownward,
-  MdArrowUpward,
-  MdContentCopy,
-  MdDeleteOutline,
-  MdMoreVert,
-  MdOutlineDashboard,
-  MdOutlineLibraryAdd,
-} from "react-icons/md";
-import { MessageDescriptor, useIntl } from "react-intl";
+import { MdOutlineDashboard, MdOutlineLibraryAdd } from "react-icons/md";
+import { useIntl } from "react-intl";
 import { useAppDispatch } from "@/app/hooks";
-import { useFeedback } from "@/context/FeedbackContext";
 import StyledButton from "@/style/StyledButton";
-import StyledIconButton from "@/style/StyledIconButton";
 import { templatesFor } from "@features/free-layout/model/templates";
-import {
-  applyTemplateThunk,
-  duplicateSheetThunk,
-  moveSheetThunk,
-  removeSheetThunk,
-} from "@features/free-layout/store/freeLayoutThunks";
+import { applyTemplateThunk } from "@features/free-layout/store/freeLayoutThunks";
+import PageActionsMenu from "./PageActionsMenu";
+import { TEMPLATE_NAMES } from "./templateNames";
 import messages from "./FreeLayoutPages.lang";
-
-/** El nom de cada plantilla del selector, per l'`id` de la plantilla. */
-const TEMPLATE_NAMES: Record<string, MessageDescriptor> = {
-  full: messages.templateFull,
-  "rows-2": messages.templateRows2,
-  "columns-2": messages.templateColumns2,
-  "rows-3": messages.templateRows3,
-  "grid-2x2": messages.templateGrid2x2,
-  "strip-top": messages.templateStripTop,
-};
 
 interface PageHeaderProps {
   sheetIndex: number;
   sheetCount: number;
   /** Les caixes pròpies de la pàgina, sense les comunes */
   placementCount: number;
+  /** La pàgina que segueix la columna (R5) */
+  active?: boolean;
   onAddSequence: () => void;
 }
 
@@ -60,33 +35,17 @@ const PageHeader = ({
   sheetIndex,
   sheetCount,
   placementCount,
+  active = false,
   onAddSequence,
 }: PageHeaderProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { showSnackbar } = useFeedback();
   const templateMenuId = useId();
-  const pageMenuId = useId();
   const [templateAnchor, setTemplateAnchor] = useState<HTMLElement | null>(
     null,
   );
-  const [pageAnchor, setPageAnchor] = useState<HTMLElement | null>(null);
   const templates = templatesFor(placementCount);
   const number = sheetIndex + 1;
-
-  const confirm = (
-    message: MessageDescriptor,
-    values: Record<string, number>,
-  ) =>
-    showSnackbar({
-      message: intl.formatMessage(message, values),
-      severity: "success",
-    });
-
-  const pageAction = (action: () => void) => () => {
-    setPageAnchor(null);
-    action();
-  };
 
   return (
     <Stack
@@ -96,7 +55,11 @@ const PageHeader = ({
       gap={1}
       sx={{ "@media print": { display: "none" } }}
     >
-      <Typography component="h2" variant="subtitle1" sx={{ flexGrow: 1 }}>
+      <Typography
+        component="h2"
+        variant="subtitle1"
+        sx={{ flexGrow: 1, fontWeight: active ? "bold" : undefined }}
+      >
         {intl.formatMessage(messages.pageLabel, {
           number,
           total: sheetCount,
@@ -151,79 +114,7 @@ const PageHeader = ({
         ))}
       </Menu>
 
-      <Tooltip title={intl.formatMessage(messages.pageMoreActions)}>
-        <StyledIconButton
-          color="inherit"
-          aria-label={intl.formatMessage(messages.pageMoreActions)}
-          aria-haspopup="menu"
-          aria-expanded={pageAnchor !== null}
-          aria-controls={pageAnchor ? pageMenuId : undefined}
-          onClick={(event) => setPageAnchor(event.currentTarget)}
-        >
-          <MdMoreVert />
-        </StyledIconButton>
-      </Tooltip>
-      <Menu
-        id={pageMenuId}
-        anchorEl={pageAnchor}
-        open={pageAnchor !== null}
-        onClose={() => setPageAnchor(null)}
-      >
-        <MenuItem
-          onClick={pageAction(() => {
-            dispatch(duplicateSheetThunk(sheetIndex));
-            confirm(messages.pageDuplicated, { number: number + 1 });
-          })}
-        >
-          <ListItemIcon>
-            <MdContentCopy />
-          </ListItemIcon>
-          <ListItemText>
-            {intl.formatMessage(messages.duplicatePage)}
-          </ListItemText>
-        </MenuItem>
-        {sheetIndex > 0 && (
-          <MenuItem
-            onClick={pageAction(() => {
-              dispatch(moveSheetThunk(sheetIndex, sheetIndex - 1));
-              confirm(messages.pageMoved, { number: number - 1 });
-            })}
-          >
-            <ListItemIcon>
-              <MdArrowUpward />
-            </ListItemIcon>
-            <ListItemText>
-              {intl.formatMessage(messages.movePageUp)}
-            </ListItemText>
-          </MenuItem>
-        )}
-        {sheetIndex < sheetCount - 1 && (
-          <MenuItem
-            onClick={pageAction(() => {
-              dispatch(moveSheetThunk(sheetIndex, sheetIndex + 1));
-              confirm(messages.pageMoved, { number: number + 1 });
-            })}
-          >
-            <ListItemIcon>
-              <MdArrowDownward />
-            </ListItemIcon>
-            <ListItemText>
-              {intl.formatMessage(messages.movePageDown)}
-            </ListItemText>
-          </MenuItem>
-        )}
-        {/* La destructiva, sola i l'última (`feedback-i-accions.md`) */}
-        <Divider />
-        <MenuItem
-          onClick={pageAction(() => dispatch(removeSheetThunk(sheetIndex)))}
-          sx={{ color: "error.main" }}
-        >
-          <ListItemIcon sx={{ color: "inherit" }}>
-            <MdDeleteOutline />
-          </ListItemIcon>
-          <ListItemText>{intl.formatMessage(messages.deletePage)}</ListItemText>
-        </MenuItem>
-      </Menu>
+      <PageActionsMenu sheetIndex={sheetIndex} sheetCount={sheetCount} />
     </Stack>
   );
 };

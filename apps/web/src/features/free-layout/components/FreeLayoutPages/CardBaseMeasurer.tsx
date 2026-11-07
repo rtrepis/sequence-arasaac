@@ -2,12 +2,10 @@ import React, { useLayoutEffect, useRef } from "react";
 import { Box } from "@mui/material";
 import PictogramCard from "@components/PictogramCard/PictogramCard";
 import type { PictogramCardDefaults, Sequence } from "@/types/sequence";
+import type { CardPx } from "@features/free-layout/model/blockGrid";
 
 /** La targeta més gran d'una seqüència a mida 1, en píxels d'impressió. */
-export interface CardBaseSize {
-  w: number;
-  h: number;
-}
+export type CardBaseSize = CardPx;
 
 interface CardBaseMeasurerProps {
   sequences: { key: number; pictograms: Sequence }[];

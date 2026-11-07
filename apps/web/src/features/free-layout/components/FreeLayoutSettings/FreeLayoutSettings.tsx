@@ -10,11 +10,15 @@ import type { PageSize } from "@/types/ui";
 import { PaperSize, regionalPaperSize } from "@features/print/utils/pageFormat";
 import { unplacedSequenceKeys } from "@features/free-layout/model/placementsOf";
 import {
+  addSequencesToSheetThunk,
   selectPages,
   selectIsFreeLayout,
   selectSequenceKeys,
   setLayoutModeThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
+import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
+import StyledButton from "@/style/StyledButton";
+import levelMessages from "@features/free-layout/components/ViewLevels/ViewLevels.lang";
 import { useSequenceName } from "@features/free-layout/components/FreeLayoutPages/useSequenceName";
 import viewMessages from "@components/ViewSequencesSettings/ViewSequencesSettings.lang";
 import messages from "./FreeLayoutSettings.lang";
@@ -43,7 +47,8 @@ interface FreeLayoutSettingsProps {
 
 /**
  * Files de la columna de la vista per a la disposició (ADR-005): automàtica
- * o lliure i, en lliure, les seqüències que no surten a cap pàgina. Només
+ * o lliure i, en lliure, les seqüències que no surten a cap pàgina, cadascuna
+ * amb el botó que la posa a la pàgina que segueix la columna (R5). Només
  * files d'ajust (`SettingRow`); la secció la posa qui el fa servir.
  *
  * La pantalla completa no té mil·límetres i no admet el mode lliure: triar
@@ -61,6 +66,7 @@ const FreeLayoutSettings = ({
   const keys = useAppSelector(selectSequenceKeys);
   const freeLayout = useAppSelector(selectPages);
   const sequenceName = useSequenceName();
+  const { activePage } = useViewSelection();
   const unplaced = freeLayout ? unplacedSequenceKeys(freeLayout, keys) : [];
 
   const handleModeChange = (mode: LayoutMode | null) => {
@@ -105,24 +111,18 @@ const FreeLayoutSettings = ({
         </StyledToggleButtonGroup>
       </SettingRow>
 
-      {/* El control és el nombre; a sota, quines són, o que no n'hi ha cap */}
+      {/* El control és el nombre; a sota, que no s'imprimeixen, o que no n'hi ha cap */}
       {isFree && (
         <SettingRow
           title={<FormattedMessage {...messages.unplaced} />}
           labelId={`${LABEL_ID}-unplaced`}
           control="compact"
           helper={
-            unplaced.length === 0 ? (
-              <FormattedMessage {...messages.unplacedNone} />
-            ) : (
-              <>
-                {intl.formatList(unplaced.map(sequenceName), {
-                  type: "conjunction",
-                })}
-                {". "}
-                <FormattedMessage {...messages.unplacedHint} />
-              </>
-            )
+            <FormattedMessage
+              {...(unplaced.length === 0
+                ? messages.unplacedNone
+                : messages.unplacedHint)}
+            />
           }
         >
           <Typography aria-labelledby={`${LABEL_ID}-unplaced`}>
@@ -130,6 +130,30 @@ const FreeLayoutSettings = ({
           </Typography>
         </SettingRow>
       )}
+
+      {/* Cadascuna, amb el botó que la posa a la pàgina que es mira (es pot desfer) */}
+      {isFree &&
+        unplaced.map((key) => {
+          const name = sequenceName(key);
+          return (
+            <SettingRow key={key} title={name} control="compact">
+              <StyledButton
+                color="inherit"
+                aria-label={intl.formatMessage(levelMessages.putOnPageLabel, {
+                  name,
+                  number: activePage + 1,
+                })}
+                onClick={() =>
+                  dispatch(addSequencesToSheetThunk(activePage, [key]))
+                }
+              >
+                {intl.formatMessage(levelMessages.putOnPage, {
+                  number: activePage + 1,
+                })}
+              </StyledButton>
+            </SettingRow>
+          );
+        })}
     </>
   );
 };

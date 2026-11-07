@@ -3,6 +3,7 @@ import type { NamedStyle, SequenceViewSettings } from "@/types/document";
 import type { Font } from "@/types/sequence";
 import {
   TEXT_BLOCK_DEFAULTS,
+  blockViewRetouch,
   namedStyleOf,
   resolveBlockView,
   resolveTextBlockStyle,
@@ -74,5 +75,23 @@ describe("l'aspecte d'un bloc de text", () => {
       alignmentV: "center",
       font: { family: "Roboto", color: "#b71c1c", size: 1.3 },
     });
+  });
+});
+
+describe("el retoc de la vista d'un bloc", () => {
+  it("només porta el que es diferencia de la base", () => {
+    expect(
+      blockViewRetouch(SEQUENCE_VIEW, {
+        ...SEQUENCE_VIEW,
+        sizePict: 0.6,
+        alignmentV: "bottom",
+      }),
+    ).toEqual({ sizePict: 0.6, alignmentV: "bottom" });
+  });
+
+  it("sense cap diferència, el bloc no porta retoc", () => {
+    expect(blockViewRetouch(SEQUENCE_VIEW, { ...SEQUENCE_VIEW })).toBe(
+      undefined,
+    );
   });
 });

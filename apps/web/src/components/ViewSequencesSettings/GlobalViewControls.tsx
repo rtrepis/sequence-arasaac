@@ -39,6 +39,10 @@ interface GlobalViewControlsProps {
   onOrientationChange?: (orientation: PageOrientation) => void;
   /** Només paper: en disposició lliure, la pantalla completa no s'hi pot triar */
   paperOnly?: boolean;
+  /** La fila de la mida del paper. A la columna de la vista és del nivell «Document» */
+  showPaper?: boolean;
+  /** La fila de la direcció. A la columna de la vista és del nivell «Pàgina» */
+  showDirection?: boolean;
 }
 
 /**
@@ -55,31 +59,35 @@ const GlobalViewControls = ({
   onSequenceSpaceChange,
   onOrientationChange,
   paperOnly = false,
+  showPaper = true,
+  showDirection = true,
 }: GlobalViewControlsProps): React.ReactElement => (
   <>
-    <SettingRow
-      title={<FormattedMessage {...messages.pageSize} />}
-      labelId={`${GLOBAL_CONTROLS_LABEL_ID}-page-size`}
-    >
-      {/* Sense InputLabel flotant: el títol de la fila ja fa d'etiqueta */}
-      <Select<PageSize>
-        value={pageSize}
-        onChange={(event: SelectChangeEvent<PageSize>) =>
-          onPageSizeChange(event.target.value as PageSize)
-        }
-        size="small"
-        fullWidth
+    {showPaper && (
+      <SettingRow
+        title={<FormattedMessage {...messages.pageSize} />}
         labelId={`${GLOBAL_CONTROLS_LABEL_ID}-page-size`}
       >
-        {PAGE_SIZES.filter(
-          (size) => !paperOnly || size !== "FULLSCREEN",
-        ).map((size) => (
-          <MenuItem key={size} value={size}>
-            {PAGE_SIZE_LABELS[size]}
-          </MenuItem>
-        ))}
-      </Select>
-    </SettingRow>
+        {/* Sense InputLabel flotant: el títol de la fila ja fa d'etiqueta */}
+        <Select<PageSize>
+          value={pageSize}
+          onChange={(event: SelectChangeEvent<PageSize>) =>
+            onPageSizeChange(event.target.value as PageSize)
+          }
+          size="small"
+          fullWidth
+          labelId={`${GLOBAL_CONTROLS_LABEL_ID}-page-size`}
+        >
+          {PAGE_SIZES.filter((size) => !paperOnly || size !== "FULLSCREEN").map(
+            (size) => (
+              <MenuItem key={size} value={size}>
+                {PAGE_SIZE_LABELS[size]}
+              </MenuItem>
+            ),
+          )}
+        </Select>
+      </SettingRow>
+    )}
 
     {onOrientationChange && (
       <SettingRow
@@ -89,7 +97,9 @@ const GlobalViewControls = ({
         <StyledToggleButtonGroup
           value={viewSettings.orientation}
           exclusive
-          onChange={(_, val: PageOrientation | null) => val && onOrientationChange(val)}
+          onChange={(_, val: PageOrientation | null) =>
+            val && onOrientationChange(val)
+          }
         >
           <IconToggleButton
             value="landscape"
@@ -120,34 +130,34 @@ const GlobalViewControls = ({
           max={10}
           value={viewSettings.sequenceSpaceBetween}
           valueLabelDisplay="auto"
-          valueLabelFormat={(value: number) =>
-            parseFloat(value.toFixed(2))
-          }
+          valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
           onChange={onSequenceSpaceChange}
         />
       </SettingRow>
     )}
 
-    <SettingRow
-      title={<FormattedMessage {...messages.direction} />}
-      control="wide"
-    >
-      <StyledToggleButtonGroup
-        value={viewSettings.direction}
-        exclusive
-        onChange={onDirectionChange}
+    {showDirection && (
+      <SettingRow
+        title={<FormattedMessage {...messages.direction} />}
+        control="wide"
       >
-        <IconToggleButton value="row" message={messages.tooltipDirectionRow}>
-          <MdTableRows />
-        </IconToggleButton>
-        <IconToggleButton
-          value="column"
-          message={messages.tooltipDirectionColumn}
+        <StyledToggleButtonGroup
+          value={viewSettings.direction}
+          exclusive
+          onChange={onDirectionChange}
         >
-          <MdViewColumn />
-        </IconToggleButton>
-      </StyledToggleButtonGroup>
-    </SettingRow>
+          <IconToggleButton value="row" message={messages.tooltipDirectionRow}>
+            <MdTableRows />
+          </IconToggleButton>
+          <IconToggleButton
+            value="column"
+            message={messages.tooltipDirectionColumn}
+          >
+            <MdViewColumn />
+          </IconToggleButton>
+        </StyledToggleButtonGroup>
+      </SettingRow>
+    )}
   </>
 );
 

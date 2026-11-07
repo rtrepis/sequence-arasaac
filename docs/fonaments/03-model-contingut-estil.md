@@ -97,8 +97,9 @@ L'estil té cinc nivells. Cada nivell és un **retoc** del de sobre.
 
 - Un bloc de text agafa la lletra de les targetes del document (`card.font`), la de l'estil amb nom
   si en té, i el seu retoc.
-- Els estils amb nom, el retoc de la vista d'un bloc i els rètols són al model des de la revisió de
-  l'ADR-005, però **encara no es pinten**: arriben amb la interfície de la columna (R5, R8) i amb R7.
+- El retoc de la vista d'un bloc **es pinta** i s'edita al nivell «Bloc» de la columna de la vista
+  (R5), i en una plantilla la mida hi és un màxim (Q2). De l'estil amb nom, es pinta la part de
+  `view`; la lletra i les vores (`pictogram`, `card`) i els rètols encara no: arriben amb R7 i R9.
 
 ### Resoldre
 
@@ -161,8 +162,9 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 | Acció | On | Efecte |
 |---|---|---|
 | **Canviar l'estil del document** | Panell «Estil del document» | Canvia l'estil del document. El que coincidia amb l'estil vell segueix el nou; els retocs es conserven. |
-| **Aplica a tots** | Panell «Estil del document»; columna de la vista | S'aplica a **tot el document**: canvia l'estil del document **i esborra aquestes propietats** de tots els retocs de seqüències i pictogrames. |
-| **Canviar la vista d'una seqüència** | Columna de la vista, sense «Aplicar a totes» | Canvia la mida, l'espai o l'alineació d'aquesta seqüència. És l'únic estil que té una seqüència en aquesta versió. |
+| **Aplica a tots** | Panell «Estil del document»; columna de la vista, nivell «Document», secció «Pictogrames» | S'aplica a **tot el document**: canvia l'estil del document **i esborra aquestes propietats** de tots els retocs de seqüències i pictogrames. El retoc d'un bloc (ADR-005) es conserva: és més concret. |
+| **Canviar la vista d'una seqüència** | Columna de la vista, nivell «Bloc», amb una seqüència seleccionada a la disposició automàtica | Canvia la mida, l'espai o l'alineació d'aquesta seqüència. És l'únic estil que té una seqüència en aquesta versió. |
+| **Canviar la vista d'un bloc** | Columna de la vista, nivell «Bloc», amb un bloc seleccionat en una pàgina amb caixes | Desa al bloc **només** el que es diferencia de la vista de la seqüència (amb l'estil amb nom). Les altres còpies de la seqüència no canvien. |
 | **Canviar un pictograma** | Formulari del pictograma | Canvia **només** el `style` d'aquell pictograma, i **només** les propietats tocades. |
 | **Restableix** un pictograma | Formulari del pictograma (capçalera de «Estil del pictograma» o «Més accions»); menú contextual de la graella («Restableix l'estil») | Esborra el seu `style`. La categoria, que és contingut, es queda. Dins del formulari és una edició més i es desa en tancar-lo; des del menú contextual s'aplica al document al moment. |
 | **Aplica el meu estil per defecte** | Panell «Estil del document»; columna de la vista | Com canviar l'estil del document, amb l'estil per defecte de l'usuari. |
@@ -171,7 +173,7 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 | **Redueix la lletra d'aquest pictograma** | Avís «el text no hi cap» de la graella (§6) | Com canviar un pictograma: un retoc de la mida de la lletra, que l'encén com a personalitzat. |
 
 - **Estil per seqüència**: en aquesta versió, una seqüència **només** té estil de vista (mida,
-  espai, alineació), que es configura per seqüència a la columna de la vista. No hi ha cap acció per
+  espai, alineació), que es configura al nivell «Bloc» de la columna de la vista. No hi ha cap acció per
   canviar la lletra o les vores de tots els pictogrames d'una seqüència: és una idea oberta, **B31**
   a `docs/BACKLOG-ux.md`.
 - **SEMPRE** «Aplica a tots», «Restableix», «Aplica el meu estil per defecte», «Carrega un estil» i

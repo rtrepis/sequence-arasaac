@@ -1,5 +1,11 @@
-import React, { useMemo, useState } from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { MdAdd, MdOutlineLibraryAdd } from "react-icons/md";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
@@ -18,14 +24,25 @@ import type { PagePlacement } from "@/types/document";
 import {
   addSheetThunk,
   selectDocumentContent,
+  selectNamedStyles,
   selectPageLayout,
   selectPages,
   selectSequenceKeys,
   selectSheetArea,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { sheetToTemplate } from "@features/free-layout/model/distribute";
+import {
+  namedStyleOf,
+  resolveBlockView,
+} from "@features/free-layout/model/blockStyle";
+import {
+  sameSelection,
+  useClearOnEscape,
+  useViewSelection,
+} from "@features/free-layout/hooks/useViewSelection";
+import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
 import AddSequenceDialog from "@features/free-layout/components/AddSequenceDialog";
-import CardBaseMeasurer, { CardBaseSize } from "./CardBaseMeasurer";
+import CardBaseMeasurer from "./CardBaseMeasurer";
 import PageHeader from "./PageHeader";
 import PlacementBox from "./PlacementBox";
 import { useSequenceName } from "./useSequenceName";
@@ -33,6 +50,49 @@ import messages from "./FreeLayoutPages.lang";
 
 /** Aire entre una pàgina i la capçalera de la següent, a la pantalla. */
 const PAGE_GAP = 3;
+
+/** Llindars de l'observador: prou fins per saber quina pàgina es veu més. */
+const VISIBLE_THRESHOLDS = Array.from({ length: 21 }, (_, i) => i / 20);
+
+/**
+ * Avisa de la pàgina que ocupa més pantalla (R5): és la que segueix la
+ * columna. Sense `IntersectionObserver` (les proves), la primera.
+ */
+const useMostVisiblePage = (
+  sections: React.MutableRefObject<(HTMLElement | null)[]>,
+  pageIds: string,
+  onVisible: (index: number) => void,
+): void => {
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const areas = new Map<Element, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) =>
+          areas.set(
+            entry.target,
+            entry.isIntersecting
+              ? entry.intersectionRect.width * entry.intersectionRect.height
+              : 0,
+          ),
+        );
+        let best = -1;
+        let bestArea = 0;
+        sections.current.forEach((section, index) => {
+          const area = (section && areas.get(section)) ?? 0;
+          if (area > bestArea) {
+            best = index;
+            bestArea = area;
+          }
+        });
+        if (best >= 0) onVisible(best);
+      },
+      { threshold: VISIBLE_THRESHOLDS },
+    );
+    sections.current.forEach((section) => section && observer.observe(section));
+    return () => observer.disconnect();
+  }, [sections, pageIds, onVisible]);
+};
 
 interface FreeLayoutPagesProps {
   /** El full a mida real, en px d'impressió */
@@ -71,10 +131,30 @@ const FreeLayoutPages = ({
   const area = useAppSelector(selectSheetArea);
   const keys = useAppSelector(selectSequenceKeys);
   const views = useAppSelector(selectResolvedSequenceViews);
+  const styles = useAppSelector(selectNamedStyles);
   const defaults = useAppSelector(selectDocumentCardDefaults);
   const sequenceName = useSequenceName();
-  const [cardSizes, setCardSizes] = useState<Record<number, CardBaseSize>>({});
+  const {
+    selection,
+    select,
+    clear,
+    activePage,
+    setVisiblePage,
+    cardSizes,
+    setCardSizes,
+  } = useViewSelection();
+  const clearOnEscape = useClearOnEscape();
+  const theme = useTheme();
+  // Al mòbil la columna és sota les pàgines: el bloc seleccionat hi porta
+  const isNarrow = useMediaQuery(theme.breakpoints.down("md"));
   const [addingTo, setAddingTo] = useState<number | null>(null);
+  const sections = useRef<(HTMLElement | null)[]>([]);
+  const pageIds = freeLayout?.sheets.map(({ id }) => id).join() ?? "";
+  const onVisible = useCallback(
+    (index: number) => setVisiblePage(index),
+    [setVisiblePage],
+  );
+  useMostVisiblePage(sections, pageIds, onVisible);
 
   const measured = useMemo(
     () => keys.map((key) => ({ key, pictograms: content[key] ?? [] })),
@@ -95,8 +175,18 @@ const FreeLayoutPages = ({
   ) => {
     if (placement.kind !== "sequence") return null;
     const pictograms = content[placement.sequenceKey];
-    const view = views[placement.sequenceKey];
-    if (!pictograms || !view) return null;
+    const sequenceView = views[placement.sequenceKey];
+    if (!pictograms || !sequenceView) return null;
+    const view = resolveBlockView(
+      sequenceView,
+      namedStyleOf(styles, placement.styleId),
+      placement.view,
+    );
+    const target = {
+      kind: "block" as const,
+      placementId: placement.id,
+      sheetIndex,
+    };
     return (
       <PlacementBox
         key={placement.id}
@@ -109,6 +199,9 @@ const FreeLayoutPages = ({
         view={view}
         cardBase={cardSizes[placement.sequenceKey]}
         defaults={defaults}
+        scale={scale}
+        selected={sameSelection(selection, target)}
+        onSelect={() => select(target)}
       />
     );
   };
@@ -124,7 +217,7 @@ const FreeLayoutPages = ({
   };
 
   return (
-    <Stack gap={PAGE_GAP} sx={{ minWidth: 0 }}>
+    <Stack gap={PAGE_GAP} sx={{ minWidth: 0 }} onKeyDown={clearOnEscape}>
       <CardBaseMeasurer
         sequences={measured}
         defaults={defaults}
@@ -140,11 +233,19 @@ const FreeLayoutPages = ({
         });
         const empty =
           sheet.placements.length === 0 && freeLayout.common.length === 0;
+        // La pàgina que segueix la columna, quan n'hi ha més d'una
+        const active = sheetCount > 1 && sheetIndex === activePage;
+        const selectedHere =
+          selection?.kind === "block" && selection.sheetIndex === sheetIndex;
         return (
           <Stack
             key={sheet.id}
+            ref={(element: HTMLElement | null) => {
+              sections.current[sheetIndex] = element;
+            }}
             component="section"
             gap={1}
+            aria-current={active ? "true" : undefined}
             aria-label={intl.formatMessage(messages.pageLabel, {
               number: sheetIndex + 1,
               total: sheetCount,
@@ -154,16 +255,24 @@ const FreeLayoutPages = ({
               sheetIndex={sheetIndex}
               sheetCount={sheetCount}
               placementCount={sheet.placements.length}
+              active={active}
               onAddSequence={() => setAddingTo(sheetIndex)}
             />
 
-            {/* El full encabit a la pantalla; a dins, a mida real i escalat */}
+            {/* Al mòbil, seleccionar no mou la pàgina (P9): l'enllaç baixa als ajustos */}
+            {isNarrow && selectedHere && <BlockSettingsLink />}
+
+            {/* El full encabit a la pantalla; a dins, a mida real i escalat.
+                Un clic fora de cap bloc treu la selecció */}
             <Box
+              onClick={clear}
               sx={{
                 width: displayWidth,
                 height: displayHeight,
                 overflow: "hidden",
-                outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                // La pàgina activa, amb la vora més gruixuda
+                outline: (theme) =>
+                  `${active ? 4 : 2}px solid ${theme.palette.primary.main}`,
                 backgroundColor: sheetSurface,
               }}
             >

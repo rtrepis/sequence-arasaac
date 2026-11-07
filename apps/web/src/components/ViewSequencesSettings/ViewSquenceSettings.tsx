@@ -1,4 +1,4 @@
-import { Box, Divider, Stack, Tooltip } from "@mui/material";
+import { Box, Divider, Stack, Tooltip, Typography } from "@mui/material";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
@@ -35,16 +35,10 @@ import { usePrintSheet } from "@features/print/hooks/usePrintSheet";
 import CopyRight from "@components/CopyRight/CopyRight";
 import { useDownloadPdf } from "@features/print/hooks/useDownloadPdf";
 import { ViewSettings, SequenceDirection } from "@/types/ui";
-import {
-  DocumentLayout,
-  SequenceViewSettings,
-  SequenceAlignmentH,
-  SequenceAlignmentV,
-} from "@/types/document";
+import { DocumentLayout, SequenceViewSettings } from "@/types/document";
 import {
   documentAuthorChangedActionCreator,
   documentLayoutChangedActionCreator,
-  updateSequenceViewSettingsActionCreator,
   applyViewSettingsToAllActionCreator,
   setSequenceSpaceBetweenActionCreator,
 } from "@features/sequence/store/documentSlice";
@@ -59,14 +53,35 @@ import { sheetSurface } from "@/style/palette";
 import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSaveUiSettings";
 import SettingsSaveErrorDialog from "@features/backend/user-settings/components/SettingsSaveErrorDialog";
 import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
-import SequenceControlsPanel from "./SequenceControlsPanel";
 import GlobalViewControls from "./GlobalViewControls";
+import SequenceViewRows from "./SequenceViewRows";
+import SettingsLevel from "./SettingsLevel";
+import LevelCrumbs, { LevelCrumb } from "./LevelCrumbs";
+import levelMessages from "./ViewLevels.lang";
 import PrintFooterSection from "./PrintFooterSection";
 import { VIEW_SETTINGS_COLUMN_WIDTH } from "./ViewSequenceSettings.styled";
 import FreeLayoutPages from "@features/free-layout/components/FreeLayoutPages";
 import FreeLayoutSettings from "@features/free-layout/components/FreeLayoutSettings";
 import freeLayoutMessages from "@features/free-layout/components/FreeLayoutSettings/FreeLayoutSettings.lang";
-import { selectIsFreeLayout } from "@features/free-layout/store/freeLayoutThunks";
+import {
+  selectIsFreeLayout,
+  selectPages,
+} from "@features/free-layout/store/freeLayoutThunks";
+import {
+  VIEW_BLOCK_LEVEL_ID,
+  ViewSelectionProvider,
+  selectionKey,
+  useClearOnEscape,
+  useViewSelection,
+} from "@features/free-layout/hooks/useViewSelection";
+import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
+import {
+  BlockLevel,
+  PageLevel,
+  VIEW_PAGE_LEVEL_ID,
+} from "@features/free-layout/components/ViewLevels";
+import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
+import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
 import {
   SectionTitle,
@@ -77,11 +92,30 @@ import {
 /** La columna d'ajustos: el botó que l'amaga hi apunta amb `aria-controls`. */
 const SETTINGS_COLUMN_ID = "view-settings-column";
 
+/** L'`id` del nivell «Document»: les molles hi porten. */
+const VIEW_DOCUMENT_LEVEL_ID = "view-level-document";
+
+/** Quins nivells de la columna són desplegats. */
+interface OpenLevels {
+  document: boolean;
+  page: boolean;
+  block: boolean;
+}
+
+/** Sense res seleccionat, tots oberts; amb un bloc, només el bloc (P1). */
+const levelsFor = (hasSelection: boolean): OpenLevels => ({
+  document: !hasSelection,
+  page: !hasSelection,
+  block: true,
+});
+
 interface ViewSequencesSettingsChildrenProps {
   viewSettings: ViewSettings;
   sequenceViewSettings: { [key: number]: SequenceViewSettings };
   scale: number;
   author: string;
+  /** Al full de la previsualització es pot seleccionar; a la pantalla completa, no */
+  selectable: boolean;
 }
 
 interface ViewSequencesSettingsProps {
@@ -93,7 +127,7 @@ interface ViewSequencesSettingsProps {
 /**
  * Orquestrador de la visualització de seqüències: gestiona hooks, handlers i composició
  */
-const ViewSequencesSettings = ({
+const ViewSequencesSettingsContent = ({
   children,
 }: ViewSequencesSettingsProps): React.ReactElement => {
   const intl = useIntl();
@@ -123,12 +157,26 @@ const ViewSequencesSettings = ({
   // document es veu sempre amb el seu estil, i les preferències només arriben
   // als documents nous, que l'hereten (`docs/fonaments/03-model-contingut-estil.md`).
 
-  // Estat local: mode aplicar a totes vs individual
-  const [applyAll, setApplyAll] = useState(true);
-  // Acordió expandit: només un a la vegada (null = tots tancats)
-  const [expandedAccordion, setExpandedAccordion] = useState<number | null>(
-    sequenceKeys[0] ?? 0,
+  // La pàgina que es mira i el bloc seleccionat (R5): els nivells de la
+  // columna els segueixen
+  const { selection, clear: clearSelection, activePage } = useViewSelection();
+  const selectedBlock = useSelectedBlock();
+  const clearOnEscape = useClearOnEscape();
+  const pages = useAppSelector(selectPages);
+  const currentSelection = selectionKey(selection);
+  // Amb un bloc seleccionat, Document i Pàgina es pleguen perquè el bloc quedi
+  // a la vista (P1). Plegar-ne o desplegar-ne un a mà es respecta fins que
+  // canvia la selecció
+  const [openLevels, setOpenLevels] = useState<OpenLevels>(() =>
+    levelsFor(currentSelection !== ""),
   );
+  useEffect(() => {
+    setOpenLevels(levelsFor(currentSelection !== ""));
+  }, [currentSelection]);
+  const setLevelOpen =
+    (level: keyof OpenLevels) =>
+    (expanded: boolean): void =>
+      setOpenLevels((current) => ({ ...current, [level]: expanded }));
 
   // La pàgina és del document (B26): la seva, o la de les preferències de
   // l'usuari si encara l'hereta (un document nou que no s'ha desat)
@@ -252,113 +300,19 @@ const ViewSequencesSettings = ({
     : ALIGN_H[blockSource.alignmentH];
 
   /**
-   * Handler per expandir/col·lapsar un acordió (només un obert a la vegada)
+   * La mida, l'espai i l'alineació dels pictogrames de tot el document (nivell
+   * «Document»): és tocar l'estil del document, com feia «Aplica a totes»
    */
-  const handleAccordionToggle = useCallback(
-    (key: number) => (_: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpandedAccordion(isExpanded ? key : null);
+  const handleDocumentViewChange = useCallback(
+    (settings: Partial<SequenceViewSettings>) => {
+      dispatch(
+        applyViewSettingsToAllActionCreator({
+          settings,
+          styleView: documentStyle.view,
+        }),
+      );
     },
-    [],
-  );
-
-  /**
-   * Handler per canviar el switch apply-all
-   * Quan es desactiva, obrir tots els acordions
-   * Quan s'activa, tancar tots menys el primer
-   */
-  const handleApplyAllChange = useCallback(
-    (_: React.SyntheticEvent, checked: boolean) => {
-      setApplyAll(checked);
-      // Obrir el primer acordió en ambdós casos
-      setExpandedAccordion(sequenceKeys[0] ?? 0);
-    },
-    [sequenceKeys],
-  );
-
-  /**
-   * Handler per canviar sizePict o pictSpaceBetween per seqüència
-   */
-  const handleSequenceSliderChange = useCallback(
-    (seqKey: number) =>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (event: any, value: number | number[]) => {
-        const name = event.target?.name as
-          | keyof SequenceViewSettings
-          | undefined;
-        if (!name) return;
-
-        if (applyAll) {
-          dispatch(
-            applyViewSettingsToAllActionCreator({
-              settings: { [name]: value as number },
-              styleView: documentStyle.view,
-            }),
-          );
-        } else {
-          dispatch(
-            updateSequenceViewSettingsActionCreator({
-              key: seqKey,
-              settings: { [name]: value as number },
-              base: sequenceViewSettings[seqKey],
-            }),
-          );
-        }
-      },
-    [applyAll, dispatch, documentStyle.view, sequenceViewSettings],
-  );
-
-  /**
-   * Handler per canviar l'alineació H d'una seqüència
-   */
-  const handleAlignmentHChange = useCallback(
-    (seqKey: number) =>
-      (_: React.MouseEvent<HTMLElement>, value: SequenceAlignmentH | null) => {
-        if (!value) return;
-        if (applyAll) {
-          dispatch(
-            applyViewSettingsToAllActionCreator({
-              settings: { alignmentH: value },
-              styleView: documentStyle.view,
-            }),
-          );
-        } else {
-          dispatch(
-            updateSequenceViewSettingsActionCreator({
-              key: seqKey,
-              settings: { alignmentH: value },
-              base: sequenceViewSettings[seqKey],
-            }),
-          );
-        }
-      },
-    [applyAll, dispatch, documentStyle.view, sequenceViewSettings],
-  );
-
-  /**
-   * Handler per canviar l'alineació V d'una seqüència
-   */
-  const handleAlignmentVChange = useCallback(
-    (seqKey: number) =>
-      (_: React.MouseEvent<HTMLElement>, value: SequenceAlignmentV | null) => {
-        if (!value) return;
-        if (applyAll) {
-          dispatch(
-            applyViewSettingsToAllActionCreator({
-              settings: { alignmentV: value },
-              styleView: documentStyle.view,
-            }),
-          );
-        } else {
-          dispatch(
-            updateSequenceViewSettingsActionCreator({
-              key: seqKey,
-              settings: { alignmentV: value },
-              base: sequenceViewSettings[seqKey],
-            }),
-          );
-        }
-      },
-    [applyAll, dispatch, documentStyle.view, sequenceViewSettings],
+    [dispatch, documentStyle.view],
   );
 
   /**
@@ -478,6 +432,63 @@ const ViewSequencesSettings = ({
       });
     });
   }, [pageFormat, viewSettings.sizePict, checkBeforePrint]);
+
+  // Els nivells de la columna (R8): Document, Pàgina N i, si n'hi ha, el bloc
+  const sheetCount = isFreeLayout && pages ? pages.sheets.length : 1;
+  const pageNumber = Math.min(activePage, sheetCount - 1) + 1;
+  const pageTitle = intl.formatMessage(pageMessages.pageLabel, {
+    number: pageNumber,
+    total: sheetCount,
+  });
+  const paperName =
+    pageSize === "A4" || pageSize === "A3"
+      ? pageSize
+      : intl.formatMessage(
+          pageSize === "LETTER"
+            ? messages.pageSizeLetter
+            : pageSize === "TABLOID"
+              ? messages.pageSizeTabloid
+              : messages.fullScreen,
+        );
+  const documentSummary = [
+    isFullscreen
+      ? paperName
+      : `${paperName} ${intl.formatMessage(
+          isLandscape
+            ? levelMessages.landscapeShort
+            : levelMessages.portraitShort,
+        )}`,
+    intl.formatMessage(
+      isFreeLayout
+        ? levelMessages.layoutFreeShort
+        : levelMessages.layoutFlowShort,
+    ),
+  ].join(" · ");
+  const crumbs: LevelCrumb[] = [
+    {
+      levelId: VIEW_DOCUMENT_LEVEL_ID,
+      label: intl.formatMessage(levelMessages.document),
+    },
+    { levelId: VIEW_PAGE_LEVEL_ID, label: pageTitle },
+    ...(selectedBlock
+      ? [{ levelId: VIEW_BLOCK_LEVEL_ID, label: selectedBlock.name }]
+      : []),
+  ];
+  // Una molla obre el seu nivell, el porta a la vista i hi deixa el focus
+  const goToLevel = (levelId: string) => {
+    const level: keyof OpenLevels =
+      levelId === VIEW_DOCUMENT_LEVEL_ID
+        ? "document"
+        : levelId === VIEW_PAGE_LEVEL_ID
+          ? "page"
+          : "block";
+    setLevelOpen(level)(true);
+    requestAnimationFrame(() => {
+      const header = document.getElementById(`${levelId}-header`);
+      header?.scrollIntoView({ behavior: "smooth", block: "start" });
+      header?.focus({ preventScroll: true });
+    });
+  };
 
   return (
     <>
@@ -635,8 +646,11 @@ const ViewSequencesSettings = ({
           ) : (
             <>
               {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
+              {/* Un clic fora de cap seqüència treu la selecció; Escape també */}
               <Box
                 className="preview-container"
+                onClick={clearSelection}
+                onKeyDown={clearOnEscape}
                 sx={{
                   width: displayWidth,
                   height: displayHeight,
@@ -701,6 +715,7 @@ const ViewSequencesSettings = ({
                       sequenceViewSettings,
                       scale: 1,
                       author,
+                      selectable: true,
                     })}
                   </Stack>
 
@@ -710,6 +725,9 @@ const ViewSequencesSettings = ({
                   <CopyRight author={author} licence={viewSettings.licence} />
                 </Box>
               </Box>
+
+              {/* Al mòbil, seleccionar no mou la pàgina (P9): l'enllaç baixa als ajustos */}
+              {!isWideScreen && selection && <BlockSettingsLink />}
             </>
           )}
 
@@ -723,7 +741,15 @@ const ViewSequencesSettings = ({
               display: settingsVisible ? { md: "flex" } : "none",
               gap: { md: 3 },
               alignItems: "stretch",
+              // Enganxada mentre es baixa per les pàgines (R5): si no hi cap,
+              // es desplaça per dins. Al mòbil va sota el full i no s'enganxa
+              position: { md: "sticky" },
+              top: { md: 0 },
+              alignSelf: { md: "flex-start" },
+              maxHeight: { md: "100vh" },
+              overflowY: { md: "auto" },
             }}
+            onKeyDown={clearOnEscape}
           >
             <NotPrint>
               <Divider orientation="vertical" />
@@ -743,60 +769,119 @@ const ViewSequencesSettings = ({
                   height: { md: "100%" },
                 }}
               >
-                {/* Secció: format i disposició de la pàgina (afecta tot el document) */}
-                <SectionTitle
-                  title={<FormattedMessage {...messages.sectionPageFormat} />}
-                >
-                  <GlobalViewControls
-                    viewSettings={viewSettings}
-                    pageSize={pageSize}
-                    // En lliure, l'espai entre seqüències no hi diu res, i la
-                    // pantalla completa no s'hi pot triar
-                    sequenceCount={isFreeLayout ? 1 : sequenceKeys.length}
-                    paperOnly={isFreeLayout}
-                    onPageSizeChange={setPageSize}
-                    onDirectionChange={handleDirectionChange}
-                    onSequenceSpaceChange={handleSequenceSpaceChange}
-                  />
-                </SectionTitle>
+                {/* On s'és: Document › Pàgina N › el bloc. Fixes dalt de tot */}
+                <LevelCrumbs crumbs={crumbs} onGo={goToLevel} />
 
-                {/* Secció: disposició automàtica o lliure (ADR-005) */}
-                <SectionTitle
-                  title={<FormattedMessage {...freeLayoutMessages.section} />}
+                {/* Nivell 1: el que s'aplica a tot el document */}
+                <SettingsLevel
+                  id={VIEW_DOCUMENT_LEVEL_ID}
+                  title={<FormattedMessage {...levelMessages.document} />}
+                  scope={<FormattedMessage {...levelMessages.documentScope} />}
+                  summary={documentSummary}
+                  expanded={openLevels.document}
+                  onExpandedChange={setLevelOpen("document")}
                 >
-                  <FreeLayoutSettings
-                    pageSize={pageSize}
-                    onPageSizeChange={setPageSize}
-                  />
-                </SectionTitle>
+                  <SectionTitle
+                    title={<FormattedMessage {...messages.sectionPageFormat} />}
+                  >
+                    <GlobalViewControls
+                      viewSettings={viewSettings}
+                      pageSize={pageSize}
+                      // En lliure, l'espai entre seqüències no hi diu res, i la
+                      // pantalla completa no s'hi pot triar
+                      sequenceCount={isFreeLayout ? 1 : sequenceKeys.length}
+                      paperOnly={isFreeLayout}
+                      showDirection={false}
+                      onPageSizeChange={setPageSize}
+                      onDirectionChange={handleDirectionChange}
+                      onSequenceSpaceChange={handleSequenceSpaceChange}
+                    />
+                  </SectionTitle>
 
-                {/* Secció: ajustos de cada seqüència (mida, separació i alineació) */}
-                <SectionTitle
-                  title={<FormattedMessage {...messages.sectionSequences} />}
-                >
-                  <SequenceControlsPanel
-                    sequenceKeys={sequenceKeys}
-                    sequenceViewSettings={sequenceViewSettings}
-                    applyAll={applyAll}
-                    expandedAccordion={expandedAccordion}
-                    onAccordionToggle={handleAccordionToggle}
-                    onApplyAllChange={handleApplyAllChange}
-                    onSequenceSliderChange={handleSequenceSliderChange}
-                    onAlignmentHChange={handleAlignmentHChange}
-                    onAlignmentVChange={handleAlignmentVChange}
-                    sizeFromBox={isFreeLayout}
-                  />
-                </SectionTitle>
+                  {/* Disposició automàtica o lliure (ADR-005), i les
+                      seqüències que no són a cap pàgina */}
+                  <SectionTitle
+                    title={<FormattedMessage {...freeLayoutMessages.section} />}
+                  >
+                    <FreeLayoutSettings
+                      pageSize={pageSize}
+                      onPageSizeChange={setPageSize}
+                    />
+                  </SectionTitle>
 
-                {/* Secció: el que només surt al peu del full imprès i del PDF */}
-                <PrintFooterSection
-                  author={author}
-                  onAuthorChange={updateAuthor}
-                  licence={viewSettings.licence}
-                  onLicenceChange={(value) =>
-                    updateViewSetting("licence", value)
-                  }
-                />
+                  {/* Els pictogrames de tot el document: l'estil del document */}
+                  <SectionTitle
+                    title={<FormattedMessage {...levelMessages.pictograms} />}
+                  >
+                    <SequenceViewRows
+                      view={documentStyle.view}
+                      labelId="view-level-document"
+                      onChange={handleDocumentViewChange}
+                      sizeHelper={
+                        isFreeLayout ? (
+                          <FormattedMessage {...levelMessages.pictogramsHint} />
+                        ) : undefined
+                      }
+                    />
+                  </SectionTitle>
+
+                  {/* El que només surt al peu del full imprès i del PDF */}
+                  <PrintFooterSection
+                    author={author}
+                    onAuthorChange={updateAuthor}
+                    licence={viewSettings.licence}
+                    onLicenceChange={(value) =>
+                      updateViewSetting("licence", value)
+                    }
+                  />
+                </SettingsLevel>
+
+                {/* Nivell 2: la pàgina que es mira. A la disposició automàtica
+                    n'hi ha una de sola, i hi va la direcció */}
+                {isFreeLayout ? (
+                  <PageLevel
+                    expanded={openLevels.page}
+                    onExpandedChange={setLevelOpen("page")}
+                  />
+                ) : (
+                  <SettingsLevel
+                    id={VIEW_PAGE_LEVEL_ID}
+                    title={pageTitle}
+                    scope={intl.formatMessage(levelMessages.pageScope, {
+                      number: 1,
+                      total: 1,
+                    })}
+                    summary={intl.formatMessage(
+                      direction === "row"
+                        ? levelMessages.directionRowShort
+                        : levelMessages.directionColumnShort,
+                    )}
+                    expanded={openLevels.page}
+                    onExpandedChange={setLevelOpen("page")}
+                  >
+                    <GlobalViewControls
+                      viewSettings={viewSettings}
+                      pageSize={pageSize}
+                      sequenceCount={1}
+                      showPaper={false}
+                      onPageSizeChange={setPageSize}
+                      onDirectionChange={handleDirectionChange}
+                      onSequenceSpaceChange={handleSequenceSpaceChange}
+                    />
+                  </SettingsLevel>
+                )}
+
+                {/* Nivell 3: el bloc seleccionat, o com s'hi arriba */}
+                {selectedBlock ? (
+                  <BlockLevel
+                    expanded={openLevels.block}
+                    onExpandedChange={setLevelOpen("block")}
+                  />
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    <FormattedMessage {...levelMessages.noSelection} />
+                  </Typography>
+                )}
 
                 {/* Accions de tota la columna, per això van al final: restaurar el
                     que hi ha desat i desar el que hi ha ara com a preferència.
@@ -873,10 +958,23 @@ const ViewSequencesSettings = ({
           sequenceViewSettings,
           scale: activeScale,
           author,
+          selectable: false,
         })}
       </Stack>
     </>
   );
 };
+
+/**
+ * La vista amb la selecció i la pàgina activa (R5), que comparteixen el full i
+ * la columna.
+ */
+const ViewSequencesSettings = (
+  props: ViewSequencesSettingsProps,
+): React.ReactElement => (
+  <ViewSelectionProvider>
+    <ViewSequencesSettingsContent {...props} />
+  </ViewSelectionProvider>
+);
 
 export default ViewSequencesSettings;

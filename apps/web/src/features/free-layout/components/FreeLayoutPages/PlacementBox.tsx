@@ -2,13 +2,19 @@ import React, { useId, useState } from "react";
 import {
   Box,
   Divider,
+  IconButton,
   ListItemIcon,
   ListItemText,
   ListSubheader,
   Menu,
   MenuItem,
+  Tooltip,
 } from "@mui/material";
-import { MdCheck, MdOutlineRemoveCircleOutline } from "react-icons/md";
+import {
+  MdCheck,
+  MdMoreVert,
+  MdOutlineRemoveCircleOutline,
+} from "react-icons/md";
 import { useIntl } from "react-intl";
 import { useAppDispatch } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
@@ -19,7 +25,7 @@ import type {
   SequencePlacement,
   SequenceViewSettings,
 } from "@/types/document";
-import { mmToPixelsExact, pixelsToMM } from "@features/print/utils/pageUnits";
+import { mmToPixelsExact } from "@features/print/utils/pageUnits";
 import { CSS_PRINT_DPI } from "@features/print/utils/pageFormat";
 import {
   printColors,
@@ -27,7 +33,7 @@ import {
   sheetSurface,
   sheetWarning,
 } from "@/style/palette";
-import { computeGrid } from "@features/free-layout/model/computeGrid";
+import { blockGrid } from "@features/free-layout/model/blockGrid";
 import {
   copyPlacementToSheetThunk,
   removePlacementThunk,
@@ -39,16 +45,10 @@ import type { CardBaseSize } from "./CardBaseMeasurer";
 import messages from "./FreeLayoutPages.lang";
 
 /** Columnes fixes que s'ofereixen, com a molt: més enllà, «Automàtic» ja ho fa. */
-const MAX_COLUMN_CHOICES = 8;
+export const MAX_COLUMN_CHOICES = 8;
 
-/**
- * La targeta a mida 1 abans que el mesurador digui res (o on no pot mesurar,
- * com a les proves): l'amplada de la targeta amb vora i una línia de text.
- */
-const FALLBACK_CARD_PX: CardBaseSize = { w: 182, h: 210 };
-
-/** L'espai entre targetes a mida 1, en px: el `pictSpaceBetween` és en unitats de 8 px, com al flux. */
-const SPACE_UNIT_PX = 8;
+/** El botó del menú, a la pantalla, en px: el full s'escala, el botó no. */
+const MENU_BUTTON_PX = 36;
 
 const px = (mm: number): number => mmToPixelsExact(mm, CSS_PRINT_DPI);
 
@@ -56,6 +56,15 @@ const px = (mm: number): number => mmToPixelsExact(mm, CSS_PRINT_DPI);
 const editMarkSx = {
   "@media print": { display: "none" },
 } as const;
+
+/** Les columnes que es poden triar per a una seqüència de `count` pictogrames. */
+export const columnChoicesFor = (count: number): PlacementColumns[] => [
+  "auto",
+  ...Array.from(
+    { length: Math.min(count, MAX_COLUMN_CHOICES) },
+    (_, i) => i + 1,
+  ),
+];
 
 interface PlacementBoxProps {
   placement: SequencePlacement;
@@ -65,19 +74,27 @@ interface PlacementBoxProps {
   common: boolean;
   name: string;
   pictograms: Sequence;
+  /** La vista del bloc, ja resolta amb la cascada: la mida hi és el màxim (Q2) */
   view: SequenceViewSettings;
   cardBase: CardBaseSize | undefined;
   defaults: PictogramCardDefaults;
+  /** L'escala del full a la pantalla: el botó del menú es pinta a mida de pantalla */
+  scale: number;
+  selected: boolean;
+  onSelect: () => void;
 }
 
 /**
- * Una seqüència posada en una pàgina: la caixa, amb la graella de pictogrames
- * que hi cap (mana la caixa, ADR-005), i el menú de les seves accions.
+ * Un bloc de seqüència en una pàgina: la caixa, amb la graella de pictogrames
+ * que hi cap sense passar de la mida del bloc (Q2, ADR-005), i el menú de les
+ * seves accions.
  *
- * La caixa és un botó que obre el menú: «A totes les pàgines», «Copia a la
- * pàgina», «Columnes» i «Treu d'aquesta pàgina». Moure-la i redimensionar-la
- * és la fase 4 (`docs/PLA-mode-lliure.md`). El contorn, les marques i el focus
- * són de l'edició: no surten mai al paper ni al PDF.
+ * Clicar la caixa (o Enter i Espai) la **selecciona** (R5): es marca i la
+ * columna n'ensenya els ajustos. El menú («A totes les pàgines», «Copia a la
+ * pàgina», «Columnes», «Treu d'aquesta pàgina») és al botó del costat, que és
+ * germà de la caixa i no fill: un botó dins d'un altre no es pot fer servir
+ * amb el teclat. El contorn, les marques i el botó són de l'edició: no surten
+ * mai al paper ni al PDF.
  */
 const PlacementBox = ({
   placement,
@@ -89,6 +106,9 @@ const PlacementBox = ({
   view,
   cardBase,
   defaults,
+  scale,
+  selected,
+  onSelect,
 }: PlacementBoxProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -96,22 +116,13 @@ const PlacementBox = ({
   const menuId = useId();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
-  const card = cardBase && cardBase.w > 0 ? cardBase : FALLBACK_CARD_PX;
-  const grid = computeGrid({
+  const { grid, gapPx } = blockGrid({
     count: pictograms.length,
-    card: {
-      w: pixelsToMM(card.w, CSS_PRINT_DPI),
-      h: pixelsToMM(card.h, CSS_PRINT_DPI),
-    },
-    gap: pixelsToMM(
-      Math.max(0, view.pictSpaceBetween) * SPACE_UNIT_PX,
-      CSS_PRINT_DPI,
-    ),
+    card: cardBase,
+    view,
     box: { w: placement.w, h: placement.h },
     columns: placement.columns,
   });
-  // L'espai negatiu del flux (fins a -2) aquí no té sentit: la graella el pren a 0
-  const gapPx = Math.max(0, view.pictSpaceBetween) * SPACE_UNIT_PX * grid.size;
 
   const close = () => setAnchor(null);
   const run = (action: () => void) => {
@@ -119,42 +130,49 @@ const PlacementBox = ({
     action();
   };
 
-  const columnChoices: PlacementColumns[] = [
-    "auto",
-    ...Array.from(
-      { length: Math.min(pictograms.length, MAX_COLUMN_CHOICES) },
-      (_, i) => i + 1,
-    ),
-  ];
+  const columnChoices = columnChoicesFor(pictograms.length);
 
   const label = intl.formatMessage(messages.placementLabel, {
     name,
     count: pictograms.length,
     common: String(common),
   });
+  // A mida de pantalla: dins del full escalat, es divideix per l'escala
+  const buttonPx = MENU_BUTTON_PX / Math.max(scale, 0.01);
 
   return (
-    <>
+    <Box
+      className="placement"
+      sx={{
+        position: "absolute",
+        left: px(placement.x),
+        top: px(placement.y),
+        width: px(placement.w),
+        height: px(placement.h),
+        "&:hover .placement-menu, &:focus-within .placement-menu": {
+          opacity: 1,
+        },
+      }}
+    >
       <Box
         role="button"
         tabIndex={0}
         aria-label={label}
-        aria-haspopup="menu"
-        aria-expanded={anchor !== null}
-        aria-controls={anchor ? menuId : undefined}
-        onClick={(event) => setAnchor(event.currentTarget)}
+        aria-pressed={selected}
+        onClick={(event) => {
+          // El clic fora de cap caixa treu la selecció: aquest no hi ha d'arribar
+          event.stopPropagation();
+          onSelect();
+        }}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            setAnchor(event.currentTarget);
+            onSelect();
           }
         }}
         sx={{
           position: "absolute",
-          left: px(placement.x),
-          top: px(placement.y),
-          width: px(placement.w),
-          height: px(placement.h),
+          inset: 0,
           display: "grid",
           gridTemplateColumns: `repeat(${Math.max(1, grid.columns)}, max-content)`,
           columnGap: `${gapPx}px`,
@@ -164,10 +182,12 @@ const PlacementBox = ({
           alignItems: "start",
           cursor: "pointer",
           outline: "none",
-          "&:hover .placement-guide, &:focus-visible .placement-guide": {
-            borderStyle: "solid",
-            borderWidth: 3,
-          },
+          ...(!selected && {
+            "&:hover .placement-guide, &:focus-visible .placement-guide": {
+              borderStyle: "solid",
+              borderWidth: 3,
+            },
+          }),
         }}
       >
         {pictograms.map((pictogram) => (
@@ -193,6 +213,11 @@ const PlacementBox = ({
             border: `1px dashed ${sheetGuide}`,
             pointerEvents: "none",
             display: "flex",
+            // El bloc seleccionat, amb la vora sencera i gruixuda
+            ...(selected && {
+              borderStyle: "solid",
+              borderWidth: 4,
+            }),
             alignItems: "flex-start",
             gap: 0.5,
             padding: 0.5,
@@ -230,6 +255,39 @@ const PlacementBox = ({
           )}
         </Box>
       </Box>
+
+      {/* El menú del bloc: es veu amb el bloc seleccionat, en passar-hi per
+          sobre o amb el focus; amb el teclat, s'hi arriba just després */}
+      <Tooltip title={intl.formatMessage(messages.placementActions, { name })}>
+        <IconButton
+          className="placement-menu"
+          data-html2canvas-ignore
+          aria-label={intl.formatMessage(messages.placementActions, { name })}
+          aria-haspopup="menu"
+          aria-expanded={anchor !== null}
+          aria-controls={anchor ? menuId : undefined}
+          onClick={(event) => {
+            event.stopPropagation();
+            setAnchor(event.currentTarget);
+          }}
+          sx={{
+            ...editMarkSx,
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: buttonPx,
+            height: buttonPx,
+            fontSize: buttonPx * 0.6,
+            opacity: selected || anchor ? 1 : 0,
+            color: sheetSurface,
+            backgroundColor: sheetGuide,
+            borderRadius: 0,
+            "&:hover, &:focus-visible": { backgroundColor: sheetGuide },
+          }}
+        >
+          <MdMoreVert />
+        </IconButton>
+      </Tooltip>
 
       <Menu
         id={menuId}
@@ -344,7 +402,7 @@ const PlacementBox = ({
           </ListItemText>
         </MenuItem>
       </Menu>
-    </>
+    </Box>
   );
 };
 

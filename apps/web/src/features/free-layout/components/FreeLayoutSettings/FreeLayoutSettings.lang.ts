@@ -50,14 +50,9 @@ const messages = defineMessages({
   unplacedHint: {
     id: "features.freeLayout.settings.unplacedHint",
     defaultMessage:
-      "The ones on this list are not printed: add them with “Add a sequence” on each page.",
-    description: "Explicació sota la llista de seqüències sense col·locar",
-  },
-  sizeFromBox: {
-    id: "features.freeLayout.settings.sizeFromBox",
-    defaultMessage: "In free layout, the box decides the size.",
+      "They are not printed: put them on the page you are looking at with the button next to each one, or with “Add a sequence”.",
     description:
-      "Al lloc del control de mida de la seqüència, en disposició lliure: la mida dels pictogrames surt de la caixa",
+      "Explicació sota el nombre de seqüències sense col·locar, damunt de la llista amb el botó de cada una",
   },
 });
 

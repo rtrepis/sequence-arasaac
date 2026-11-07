@@ -1,11 +1,11 @@
 import React from "react";
-import { Box } from "@mui/material";
 import { useAppSelector } from "../../app/hooks";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSquenceSettings";
 import { PictogramCardDefaults } from "../../types/sequence";
 import { ALIGN_H, ALIGN_V } from "../../shared/constants/alignmentMaps";
 import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
+import SelectableSequence from "@features/free-layout/components/SelectableSequence";
 
 /**
  * Pàgina de visualització de seqüències
@@ -30,7 +30,7 @@ const ViewSequencePage = (): React.ReactElement => {
     // La columna copia la pàgina del document en muntar-se: un altre document
     // (obert des del menú sense sortir d'aquí) la torna a muntar amb la seva
     <ViewSequencesSettings key={document.id}>
-      {({ viewSettings, sequenceViewSettings, scale, author }) => (
+      {({ viewSettings, sequenceViewSettings, scale, selectable }) => (
         <>
           {Object.entries(document.content).map(([key, sequence]) => {
             const seqKey = Number(key);
@@ -43,9 +43,13 @@ const ViewSequencePage = (): React.ReactElement => {
               ? ALIGN_H[seqView.alignmentH]
               : ALIGN_V[seqView.alignmentV];
 
+            // Cada seqüència és el seu únic bloc: clicar-la la selecciona (R5)
             return (
-              <Box
+              <SelectableSequence
                 key={`sequence-${key}`}
+                sequenceKey={seqKey}
+                pictogramCount={sequence.length}
+                selectable={selectable}
                 sx={{
                   display: "flex",
                   flexWrap: "wrap",
@@ -56,7 +60,8 @@ const ViewSequencePage = (): React.ReactElement => {
                   // l'alçada de tots els pictogrames de la fila. L'alineació V/H que
                   // tria l'usuari és de bloc i l'aplica `ViewSquenceSettings`.
                   alignItems: "flex-start",
-                  columnGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
+                  columnGap:
+                    seqView.pictSpaceBetween * scale * seqView.sizePict,
                   rowGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
                   height: isRow ? "auto" : "100%",
                   width: isRow ? "100%" : "auto",
@@ -75,7 +80,7 @@ const ViewSequencePage = (): React.ReactElement => {
                     key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
                   />
                 ))}
-              </Box>
+              </SelectableSequence>
             );
           })}
         </>

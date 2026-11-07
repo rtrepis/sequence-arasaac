@@ -534,6 +534,7 @@ fet encara.
   - **Clicar una caixa la selecciona** (en comptes d'obrir directament el menú): la caixa es marca
     i la columna mostra els ajustos **d'aquella seqüència**. El menú d'accions de la caixa queda a
     la columna i al botó de la caixa. Això és el primer pas de la selecció de la fase 4.
+- **Fet** (2026-11-07, pas 4). Vegeu «Com ha quedat la columna (pas 4)», a sota.
 
 ### R6 — Canviar la mida dels pictogrames d'una seqüència
 
@@ -720,7 +721,12 @@ fet encara.
 3. ✅ **R1 + R2 + R9**, el model (ADR-005 revisada, fitxer, migració dels documents de les fases 1–3):
    pàgines a totes dues disposicions, la plantilla desada amb la pàgina, i els blocs de text. Hi han
    entrat també els estils amb nom (R10). Vegeu «Com ha quedat el model», a sota.
-4. ⏭️ **R5**, la columna que segueix la pàgina i la selecció de la caixa.
+4. ✅ **R5**, la columna que segueix la pàgina i la selecció de la caixa. Vegeu «Com ha quedat la
+   columna (pas 4)».
+4b. ⏭️ **El mode per pàgina** (R1 a la interfície): «Com es col·loquen: Automàtica / Plantilla» al
+   nivell «Pàgina», el selector «Disposició» del document desapareix i la vista pinta cada pàgina
+   automàtica sola, amb els seus blocs. Es va treure de R5 perquè toca el flux, la impressió, el PDF
+   i la pantalla completa.
 5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
 6. **R10** (B33), decidir el catàleg d'estils dels pictogrames: abans de R7, perquè en canvia les
    accions. **R11**, el panell «Vista» de la configuració per defecte, amb R1. Les plantilles
@@ -770,11 +776,52 @@ Fet a la mateixa branca, sense interfície nova. Detall a `docs/decisions/ADR-00
 **Què queda per pintar**, i va amb les fases de la interfície:
 
 - Les pàgines automàtiques soles (cada una amb els seus blocs, no totes les seqüències juntes), i el
-  selector de mode per pàgina (R1, a la columna de R8).
+  selector de mode per pàgina (R1, a la columna de R8). És el pas 4b.
 - Els rètols (R9): el model hi és, però la vista encara no els pinta.
-- El retoc de la vista d'un bloc, la mida com a màxim (Q2) i els estils amb nom (R7, R10).
+- ✅ El retoc de la vista d'un bloc i la mida com a màxim (Q2): es pinten i s'editen al nivell
+  «Bloc» (pas 4). Dels estils amb nom (R7, R10) es pinta la part de `view`; la lletra i les vores,
+  encara no.
 - El missatge quan afegir una seqüència fa canviar la plantilla de la pàgina (R2).
 - Els espais de les plantilles reservats a rètols (R3, R4): `TemplateSlot` encara no diu què hi va.
+
+### Decisions de la columna (pas 4, 2026-11-07)
+
+| # | Pregunta | Decisió |
+|---|---|---|
+| C1 | La capçalera de nivell («Document / Pàgina N / Bloc» amb «S'aplica a…») | Una peça nova feta del que hi ha: **`SettingsLevel`**, un acordió amb `settingsAccordion` (pla, sense caixa) amb el títol, l'abast i, plegat, un resum. **A prova**: viu a `components/ViewSequencesSettings/` i, si funciona, passarà a l'estàndard |
+| C2 | El selector de mode per pàgina, en aquest pas? | **No**: és el pas 4b. Mentrestant, «Disposició» queda al nivell «Document» (el pont) i la direcció passa al nivell «Pàgina» |
+| C3 | P1: Document i Pàgina es pleguen amb un bloc seleccionat? | **Sí**, sols; sense selecció, tornen a estar oberts. El que l'usuari plega o desplega a mà es respecta fins que canvia la selecció |
+| C4 | El calaix «Sense col·locar» | **Al nivell «Document»**, amb el botó «A la pàgina N» a cada seqüència, que la posa a la pàgina que segueix la columna |
+| C5 | Què canvia el nivell «Bloc» | **El retoc del bloc** (M1), no la vista de la seqüència: «Només a aquest bloc» és veritat. Per això es pinten el retoc i la mida com a màxim (Q2) |
+| C6 | Les seqüències a la disposició automàtica | **També es seleccionen**: cada una és el seu únic bloc i el nivell «Bloc» n'edita la vista. L'acordió per seqüència i «Aplica a totes» desapareixen: el que feia «Aplica a totes» és ara la secció «Pictogrames» del nivell «Document» |
+| C7 | Les molles | **Sí, a prova**, com `SettingsLevel`: es miren i, si funcionen, es decideix si van a l'estàndard |
+
+### Com ha quedat la columna (pas 4)
+
+- **Selecció i pàgina activa** (`features/free-layout/hooks/useViewSelection.tsx`): estat de la
+  pàgina de vista, compartit pel full i la columna; no va a Redux ni es desa. La pàgina activa és la
+  que ocupa més pantalla (`IntersectionObserver` a `FreeLayoutPages`) o la del bloc seleccionat, i
+  es marca al full amb la vora més gruixuda i el número en negreta. Una selecció que deixa d'apuntar
+  a res (bloc tret, seqüència esborrada, canvi de disposició) es treu sola.
+- **Al full**: clicar un bloc (o Enter i Espai) el selecciona (`aria-pressed`) i el marca amb la vora
+  `sheetGuide` sencera, que no surt mai al paper ni al PDF. El menú del bloc és a un botó «⋯» al
+  seu cantó, germà de la caixa (un botó dins d'un altre no es pot fer servir amb el teclat), a mida
+  de pantalla encara que el full sigui escalat. Escape, o un clic fora de cap bloc, treu la
+  selecció; l'Escape que tanca un menú no compta. A la disposició automàtica, cada seqüència es
+  selecciona igual (`SelectableSequence`); a la pantalla completa, no.
+- **La columna**: enganxada a partir de `md` (si no hi cap, es desplaça per dins), amb les molles
+  fixes a dalt i els tres nivells. **Document**: format de pàgina, disposició i «Sense col·locar»,
+  pictogrames de tot el document (l'estil del document) i peu d'impressió. **Pàgina N de M**: la
+  plantilla i el menú de la pàgina (`PageActionsMenu`, el mateix que la capçalera del full) o, a la
+  disposició automàtica, la direcció. **Bloc**: mida (com a màxim, amb la que en surt de debò),
+  espai, alineacions, columnes i la secció «Lloc» (a totes les pàgines, copia a una pàgina, treu).
+- **Mòbil (P9)**: seleccionar no mou la pàgina; l'enllaç «Ajustos del bloc», damunt del full, baixa
+  fins al nivell «Bloc» i hi deixa el focus.
+- **Model**: `computeGrid` admet `maxSize` (Q2), `blockGrid` fa la graella d'un bloc per al full i la
+  columna, `blockViewRetouch` calcula el retoc i `setPlacementViewThunk` el desa.
+- **Queda per mirar**: si `SettingsLevel` i les molles passen a l'estàndard (C1, C7); els specs de
+  captures de `e2e/screenshots/multiple-sequences*.spec.ts` s'han adaptat a la columna nova però no
+  s'han tornat a executar.
 
 ### Preguntes que eren obertes
 

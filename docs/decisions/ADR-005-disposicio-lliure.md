@@ -123,9 +123,11 @@ fase 3 va fer veure que no n'hi ha prou:
   sense col·locar, i obrir-la i tornar-la a desar en dona el mateix fitxer. Les 01–15 no canvien.
 - **Pont fins a la interfície nova**: mentre la columna (R5, R8) no ofereix el mode pàgina a pàgina,
   el selector «Disposició: Automàtica / Lliure» el canvia a **totes** les pàgines alhora, i la vista
-  pinta el flux de sempre (un sol full amb totes les seqüències) si cap pàgina té caixes. Els rètols,
-  els estils amb nom, el retoc de la vista d'un bloc i la mida com a màxim (Q2) són al model però
-  encara no es pinten; una pàgina automàtica dins d'un document amb caixes es pinta repartida.
+  pinta el flux de sempre (un sol full amb totes les seqüències) si cap pàgina té caixes. Des de R5,
+  el retoc de la vista d'un bloc, la part de `view` dels estils amb nom i la mida com a màxim (Q2)
+  es pinten i el retoc s'edita al nivell «Bloc» de la columna; els rètols i la lletra i les vores
+  dels estils amb nom són al model però encara no es pinten. Una pàgina automàtica dins d'un
+  document amb caixes es pinta repartida.
 - **El núvol perd les pàgines** fins que els validadors de l'API les coneguin
   (`apps/api/src/modules/documents/validators.ts`, P1 punt 5 a `docs/BACKLOG-ux.md`). És la fase 5
   del pla; ara els comptes estan apagats.

@@ -1,7 +1,7 @@
 // La graella de pictogrames d'una caixa: quantes columnes i a quina mida.
 //
-// En mode lliure **mana la caixa**: la mida del pictograma no surt de l'estil,
-// sinó del que hi cap. Com que la targeta és proporcional a la seva mida
+// En una plantilla **mana la caixa**, però la mida de l'estil és un màxim (Q2,
+// ADR-005 decisió 9): la mida és la més gran que hi cap, sense passar-ne. Com que la targeta és proporcional a la seva mida
 // (amplada, vores, lletra i imatge es multipliquen totes per `sizePict`, a
 // `PictogramCard.styled.ts`), n'hi ha prou de saber què fa la targeta a mida 1:
 // la resta és una regla de tres. Vegeu `docs/PLA-mode-lliure.md`, §7.
@@ -38,12 +38,14 @@ export interface GridInput {
   columns: PlacementColumns;
   /** La mida més petita que es deixa pintar. Per defecte, la de `MIN_PICTO_MM` */
   minSize?: number;
+  /** La mida més gran que es deixa pintar (la del bloc, Q2). Sense valor, cap */
+  maxSize?: number;
 }
 
 export interface Grid {
   columns: number;
   rows: number;
-  /** La mida de les targetes (`sizePict`): la més gran que hi cap */
+  /** La mida de les targetes (`sizePict`): la més gran que hi cap, fins al màxim */
   size: number;
   /** Amplada i alçada de la graella a aquesta mida, en mm */
   w: number;
@@ -84,14 +86,17 @@ export const computeGrid = (input: GridInput): Grid => {
   const grids = candidates.map((cols): Grid => {
     const rows = Math.ceil(count / cols);
     const one = gridAtSizeOne(cols, rows, input);
-    const size = Math.min(box.w / one.w, box.h / one.h);
+    const fits = Math.min(box.w / one.w, box.h / one.h);
+    const size =
+      input.maxSize === undefined ? fits : Math.min(fits, input.maxSize);
     return {
       columns: cols,
       rows,
       size,
       w: one.w * size,
       h: one.h * size,
-      belowMinimum: size < minSize,
+      // Només avisa si és la caixa la que no deixa arribar al mínim
+      belowMinimum: fits < minSize,
     };
   });
   return grids.reduce((best, grid) =>

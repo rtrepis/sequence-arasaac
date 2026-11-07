@@ -10,6 +10,7 @@ import type {
   DocumentLayout,
   DocumentPages,
   PlacementColumns,
+  SequenceViewSettings,
 } from "@/types/document";
 import {
   pagesChangedActionCreator,
@@ -22,6 +23,12 @@ import {
 import { newSaacId } from "@features/sequence/saac/serialize";
 import { SheetArea, sheetAreaMm } from "../model/placement";
 import { addSequencesToSheet, applyTemplateToSheet } from "../model/distribute";
+import {
+  blockViewRetouch,
+  namedStyleOf,
+  resolveBlockView,
+} from "../model/blockStyle";
+import { selectResolvedSequenceViews } from "@features/sequence/style/styleSelectors";
 import { hasTemplatePages, toAutoPages, toTemplatePages } from "../model/pages";
 import {
   NewLayoutId,
@@ -62,6 +69,9 @@ export const selectSheetArea = (state: RootState): SheetArea | null => {
 /** Les pàgines del document, si en té de pròpies. */
 export const selectPages = (state: RootState): DocumentPages | undefined =>
   state.document.pages;
+
+/** Els estils amb nom del document. */
+export const selectNamedStyles = (state: RootState) => state.document.styles;
 
 /** Els pictogrames de cada seqüència del document. */
 export const selectDocumentContent = (state: RootState) =>
@@ -228,3 +238,41 @@ export const setPlacementColumnsThunk = (
       placement.kind === "sequence" ? { ...placement, columns } : placement,
     ),
   );
+
+/**
+ * Canvia la vista d'un bloc de seqüència (el nivell «Bloc» de la columna, M1).
+ * Es desa només el retoc: el que es diferencia de la vista de la seqüència
+ * retocada per l'estil amb nom del bloc. Les altres còpies de la seqüència no
+ * canvien.
+ */
+export const setPlacementViewThunk =
+  (placementId: string, change: Partial<SequenceViewSettings>): AppThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    const { pages, styles } = state.document;
+    const found = pages && findPlacement(pages, placementId);
+    if (!found || found.placement.kind !== "sequence") return;
+    const sequenceView =
+      selectResolvedSequenceViews(state)[found.placement.sequenceKey];
+    if (!sequenceView) return;
+    const base = resolveBlockView(
+      sequenceView,
+      namedStyleOf(styles, found.placement.styleId),
+      undefined,
+    );
+    const view = blockViewRetouch(base, {
+      ...resolveBlockView(base, undefined, found.placement.view),
+      ...change,
+    });
+    dispatch(
+      changeFreeLayout((layout) =>
+        updatePlacement(layout, placementId, (placement) => {
+          if (placement.kind !== "sequence") return placement;
+          const next = { ...placement, view };
+          // Sense retoc, el bloc no en porta cap: el fitxer no l'escriu
+          if (!view) delete next.view;
+          return next;
+        }),
+      ),
+    );
+  };

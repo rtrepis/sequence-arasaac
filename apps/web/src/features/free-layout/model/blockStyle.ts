@@ -32,6 +32,24 @@ export const resolveBlockView = (
   ...blockView,
 });
 
+/**
+ * El retoc que cal desar perquè un bloc es vegi amb `view`: només el que es
+ * diferencia de `base` (la vista de la seqüència amb l'estil amb nom), com la
+ * resta de la cascada. Sense cap diferència, `undefined`: el bloc no porta retoc.
+ */
+export const blockViewRetouch = (
+  base: SequenceViewSettings,
+  view: SequenceViewSettings,
+): Partial<SequenceViewSettings> | undefined => {
+  const retouch: Partial<SequenceViewSettings> = {};
+  if (view.sizePict !== base.sizePict) retouch.sizePict = view.sizePict;
+  if (view.pictSpaceBetween !== base.pictSpaceBetween)
+    retouch.pictSpaceBetween = view.pictSpaceBetween;
+  if (view.alignmentH !== base.alignmentH) retouch.alignmentH = view.alignmentH;
+  if (view.alignmentV !== base.alignmentV) retouch.alignmentV = view.alignmentV;
+  return Object.keys(retouch).length > 0 ? retouch : undefined;
+};
+
 /** L'aspecte resolt d'un bloc de text. */
 export interface ResolvedTextStyle {
   font: Font;

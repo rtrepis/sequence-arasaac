@@ -111,3 +111,30 @@ describe("computeGrid", () => {
     },
   );
 });
+
+describe("la mida com a màxim (Q2)", () => {
+  it("no passa de la mida del bloc encara que la caixa en deixi més", () => {
+    const grid = computeGrid(base({ box: { w: 3000, h: 600 }, maxSize: 0.5 }));
+    expect(grid.size).toBeCloseTo(0.5);
+    expect(grid.w).toBeCloseTo(grid.columns * 50 * 0.5);
+  });
+
+  it("si la caixa no hi arriba, mana la caixa", () => {
+    const grid = computeGrid(base({ box: { w: 150, h: 120 }, maxSize: 2 }));
+    expect(grid.size).toBeCloseTo(1);
+  });
+
+  it("amb el màxim, entre graelles igual de grans tria la de menys files", () => {
+    // Totes les graelles hi caben a 0,2: guanya una sola fila
+    expect(
+      computeGrid(base({ box: { w: 3000, h: 3000 }, maxSize: 0.2 })),
+    ).toMatchObject({ columns: 6, rows: 1 });
+  });
+
+  it("un màxim petit no és «massa petit»: l'avís és de la caixa", () => {
+    const grid = computeGrid(
+      base({ box: { w: 3000, h: 600 }, maxSize: 0.01, minSize: 0.1 }),
+    );
+    expect(grid.belowMinimum).toBe(false);
+  });
+});

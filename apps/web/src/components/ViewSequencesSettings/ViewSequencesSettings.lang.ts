@@ -4,17 +4,14 @@ const messages = defineMessages({
   sectionPageFormat: {
     id: "pages.viewSequence.section.pageFormat",
     defaultMessage: "Page format",
-    description: "Títol de la secció de format de pàgina a la columna de configuració de la vista",
-  },
-  sectionSequences: {
-    id: "pages.viewSequence.section.sequences",
-    defaultMessage: "Sequences",
-    description: "Títol de la secció d'ajustos per seqüència a la columna de configuració de la vista",
+    description:
+      "Títol de la secció de format de pàgina a la columna de configuració de la vista",
   },
   sectionPrintFooter: {
     id: "pages.viewSequence.section.printFooter",
     defaultMessage: "Print footer",
-    description: "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF",
+    description:
+      "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF",
   },
   pageSize: {
     id: "pages.viewSequence.pageSize.label",
@@ -54,7 +51,8 @@ const messages = defineMessages({
   },
   licenceHelper: {
     id: "pages.viewSequence.licence.helperText",
-    defaultMessage: "ARASAAC asks that the pictogram authorship and licence be stated.",
+    defaultMessage:
+      "ARASAAC asks that the pictogram authorship and licence be stated.",
     description: "Ajuda de l'interruptor de llicència",
   },
   licenceForcedHelper: {
@@ -80,16 +78,6 @@ const messages = defineMessages({
     id: "pages.viewSequence.fullScreen.label",
     defaultMessage: "Full Screen",
     description: "Setting property",
-  },
-  applyAll: {
-    id: "pages.viewSequence.applyAll.label",
-    defaultMessage: "Apply to all",
-    description: "Toggle to apply settings to all sequences",
-  },
-  sequence: {
-    id: "pages.viewSequence.sequence.label",
-    defaultMessage: "Sequence",
-    description: "Label for sequence selector",
   },
   alignmentH: {
     id: "pages.viewSequence.alignmentH.label",
@@ -203,11 +191,6 @@ const messages = defineMessages({
     id: "pages.viewSequence.tooltip.alignBottom",
     defaultMessage: "Bottom",
     description: "Tooltip alineació V baix",
-  },
-  tooltipApplyAll: {
-    id: "pages.viewSequence.tooltip.applyAll",
-    defaultMessage: "Apply to all sequences",
-    description: "Tooltip del switch d'aplicar a totes les seqüències",
   },
   savePreferences: {
     id: "pages.viewSequence.savePreferences.label",

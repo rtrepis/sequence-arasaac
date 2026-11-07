@@ -10,6 +10,7 @@ import {
   selectCanUndoStyle,
   undoStyleChangeThunk,
 } from "@features/sequence/store/styleSlice";
+import { selectResolvedSequenceViews } from "@features/sequence/style/styleSelectors";
 import { whereIs } from "../model/placementsOf";
 import { stackTemplate } from "../model/templates";
 import {
@@ -20,6 +21,7 @@ import {
   removeSheetThunk,
   setLayoutModeThunk,
   setPlacementCommonThunk,
+  setPlacementViewThunk,
 } from "./freeLayoutThunks";
 
 // Les accions sobre les pàgines amb l'store de debò: el document, i el desfer
@@ -178,5 +180,40 @@ describe("pàgines i seqüències", () => {
     store.dispatch(deleteLastSequenceActionCreator());
     expect(whereIs(layoutOf(store), 2)).toEqual({ common: false, sheets: [] });
     expect(whereIs(layoutOf(store), 1).sheets).toEqual([0]);
+  });
+});
+
+describe("la vista d'un bloc (nivell «Bloc»)", () => {
+  /** El primer bloc de seqüència de la primera pàgina. */
+  const firstBlock = (store: ReturnType<typeof createAppStore>) => {
+    const placement = layoutOf(store).sheets[0].placements[0];
+    if (placement.kind !== "sequence") throw new Error("no és de seqüència");
+    return placement;
+  };
+
+  it("desa només el retoc, i la seqüència i els altres blocs no canvien", () => {
+    const store = freeStore(2);
+    const before = store.getState().document.viewSettings;
+    const { id } = firstBlock(store);
+
+    store.dispatch(setPlacementViewThunk(id, { alignmentV: "bottom" }));
+
+    expect(firstBlock(store).view).toEqual({ alignmentV: "bottom" });
+    expect(layoutOf(store).sheets[0].placements[1]).not.toHaveProperty("view");
+    expect(store.getState().document.viewSettings).toEqual(before);
+  });
+
+  it("tornar al valor de la seqüència treu el retoc", () => {
+    const store = freeStore(1);
+    const { id } = firstBlock(store);
+    store.dispatch(setPlacementViewThunk(id, { pictSpaceBetween: 7 }));
+    expect(firstBlock(store).view).toEqual({ pictSpaceBetween: 7 });
+
+    const base = selectResolvedSequenceViews(store.getState())[0];
+    store.dispatch(
+      setPlacementViewThunk(id, { pictSpaceBetween: base.pictSpaceBetween }),
+    );
+
+    expect(firstBlock(store)).not.toHaveProperty("view");
   });
 });

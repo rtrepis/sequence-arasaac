@@ -8,10 +8,12 @@ import {
 import { sequenceFixture } from "@/test/fixtures/document";
 import type { DocumentSAAC } from "@/types/document";
 import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
+import { ViewSelectionProvider } from "@features/free-layout/hooks/useViewSelection";
 import FreeLayoutPages from "./FreeLayoutPages";
 
 // Les pàgines del mode lliure (ADR-005): cada pàgina és un full que
-// s'imprimeix, amb les seves caixes i les comunes; i l'avís abans d'imprimir.
+// s'imprimeix, amb les seves caixes i les comunes; la selecció d'un bloc (R5);
+// i l'avís abans d'imprimir.
 
 const placement = (id: string, sequenceKey: number) => ({
   kind: "sequence" as const,
@@ -50,13 +52,15 @@ const freeDocument = (): DocumentSAAC => ({
 
 const renderPages = (document: DocumentSAAC = freeDocument()) =>
   renderWithProviders(
-    <FreeLayoutPages
-      pageDimensions={{ width: 756, height: 1085 }}
-      displayWidth={378}
-      displayHeight={542}
-      scale={0.5}
-      author=""
-    />,
+    <ViewSelectionProvider>
+      <FreeLayoutPages
+        pageDimensions={{ width: 756, height: 1085 }}
+        displayWidth={378}
+        displayHeight={542}
+        scale={0.5}
+        author=""
+      />
+    </ViewSelectionProvider>,
     { preloadedState: { document } },
   );
 
@@ -76,11 +80,51 @@ describe("FreeLayoutPages", () => {
     ).toHaveLength(2);
   });
 
-  it("la caixa obre el seu menú, i «A totes les pàgines» hi diu com és", async () => {
+  it("clicar un bloc el selecciona sense obrir cap menú, i Escape el deixa", async () => {
+    renderPages();
+    const [block] = screen.getAllByRole("button", { name: /^Sequence 2,/ });
+    expect(block).toHaveAttribute("aria-pressed", "false");
+
+    await userEvent.click(block);
+
+    expect(block).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    // La pàgina del bloc és la que segueix la columna
+    expect(screen.getAllByRole("region")[0]).toHaveAttribute(
+      "aria-current",
+      "true",
+    );
+
+    await userEvent.keyboard("{Escape}");
+
+    expect(block).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("amb el teclat, Enter selecciona; el clic fora de cap bloc treu la selecció", async () => {
+    renderPages();
+    const [, block] = screen.getAllByRole("button", { name: /^Sequence 2,/ });
+    block.focus();
+
+    await userEvent.keyboard("{Enter}");
+
+    expect(block).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getAllByRole("region")[1]).toHaveAttribute(
+      "aria-current",
+      "true",
+    );
+
+    await userEvent.click(
+      block.closest(".preview-content")!.parentElement as HTMLElement,
+    );
+
+    expect(block).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("el menú del bloc és al seu botó, i «A totes les pàgines» hi diu com és", async () => {
     renderPages();
 
     await userEvent.click(
-      screen.getAllByRole("button", { name: /^Sequence 1,/ })[0],
+      screen.getAllByRole("button", { name: "Actions for Sequence 1" })[0],
     );
 
     expect(
