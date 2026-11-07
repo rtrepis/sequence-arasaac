@@ -119,6 +119,9 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   l'estil del document i amb les excepcions per pictograma (`docs/fonaments/03-model-contingut-estil.md`,
   §4 i §5). Avui una seqüència només té estil de vista (mida, espai, alineació).
 - Pendent de treballar-ho més endavant.
+- **2026-11-07**: torna a sortir a la revisió del mode lliure com a «estils per grup de
+  seqüències», amb la necessitat d'un nom per a l'usuari. Es continua a **R7** de
+  `docs/PLA-mode-lliure.md` (§12), que el situa al nivell «Seqüència» de la columna (R8).
 
 ## Gravetat alta
 
