@@ -425,6 +425,8 @@
         <span class="prop"><b>Proposta:</b> sí, marcada «retocada». Afegir un bloc continua omplint els espais buits; tornar a aplicar la plantilla treu els retocs, amb Desfés.</span></li>
       <li><span>Al mòbil la columna és sota el full. Què passa en seleccionar un bloc?</span>
         <span class="prop"><b>Proposta:</b> la pàgina no salta. Damunt del bloc surt un enllaç «Ajustos del bloc», que baixa fins al nivell Bloc.</span></li>
+      <li><span>I si les preferències fossin un catàleg de configuracions? (R10, B33)</span>
+        <span class="prop"><b>Idea apuntada, per decidir abans de R7.</b> «Aplica el meu estil», «Desa com a preferència» i «Copia aquests ajustos a…» es podrien reduir a dues accions: <b>aplica una del catàleg</b> i <b>desa-la al catàleg</b>. Amb compte, un catàleg sencer al núvol; sense compte, una sola entrada, la configuració per defecte d'avui, amb les mateixes dues accions.</span></li>
     </ol>
   </section>
 </div>
@@ -826,7 +828,7 @@
       ${fb ? `<span class="sep">›</span><button data-jump="lv-block" class="cur">${esc(fb.b.kind === "text" ? "«" + blockName(fb.b) + "»" : blockName(fb.b))}</button>` : ""}</nav>`;
     const prefs = `<div class="prefs" aria-label="Les meves preferències">
       <span class="kind" style="font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)">Les meves preferències</span>
-      <span class="row-h">No són del document: són teves, i serveixen per als documents nous.</span>
+      <span class="row-h">No són del document: són teves, i serveixen per als documents nous. Potser seran un catàleg (P9).</span>
       <div class="acts"><button class="btn" data-action="noop" data-msg="Aplicaria el teu estil al document, amb Desfés">Aplica el meu estil</button><button class="btn primary" data-action="noop" data-msg="Desaria l'estil d'aquest document com a preferència">Desa com a preferència</button></div></div>`;
     col.innerHTML = crumbs + `<div class="levels">${levelDocument()}${levelPage()}${levelBlock()}</div>` + prefs;
     col.scrollTop = top;

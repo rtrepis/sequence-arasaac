@@ -569,8 +569,9 @@ fet encara.
   plantilla), R4 (passar per damunt d'una plantilla en dibuixa els espais al full), R5 (la pàgina
   activa segueix el desplaçament, o el bloc seleccionat), Q2 (la mida com a màxim, amb la mida que
   en surt de debò), R7 (l'estil del bloc hereta el del document i marca els retocs) i R9 (el bloc de
-  text, amb el text a dalt del nivell). Hi ha la taula de on va cada ajust d'avui i vuit preguntes
-  obertes (P1–P8), entre elles si l'orientació ha de passar a ser de la pàgina.
+  text, amb el text a dalt del nivell). Hi ha la taula de on va cada ajust d'avui i nou preguntes
+  obertes (P1–P9), entre elles si l'orientació ha de passar a ser de la pàgina i el catàleg de
+  configuracions (R10).
 
 ### R9 — Blocs de text
 
@@ -605,6 +606,37 @@ fet encara.
 - **Quan**: amb el model (R1 + R2), i abans de les miniatures i les plantilles noves (R4), que ja les
   han de poder fer servir.
 
+### R10 — Un catàleg de configuracions de l'usuari
+
+- **Vist** (2026-11-07, en revisar l'esbós de R8): avui l'usuari té **una** configuració per
+  defecte (l'estil per defecte i la pàgina per defecte, a les preferències) i el document té la
+  seva. La idea és que l'usuari es pugui fer un **catàleg** de configuracions: la de l'agenda, la
+  dels taulers, la de l'escola…
+- **Per què encaixa aquí**: a la columna (R8) hi ha diverses maneres d'aplicar o copiar ajustos d'un
+  lloc a un altre: «Aplica el meu estil» i «Desa com a preferència» al peu, «Copia aquests ajustos
+  a…» al bloc, i a R7 l'estil per bloc. Amb un catàleg, gairebé totes es redueixen a **dues
+  accions**: **aplicar-ne una del catàleg** (al document, a una pàgina o a un bloc) i **desar el que
+  hi ha com a entrada nova** (o substituir-ne una). Pot simplificar la columna en comptes de
+  carregar-la.
+- **Amb comptes i sense** (`VITE_ACCOUNTS_ENABLED`):
+  - **Amb comptes**: el catàleg sencer, al núvol i sincronitzat entre dispositius, com la
+    configuració d'usuari d'avui.
+  - **Sense comptes**: el catàleg és d'**una sola entrada**, la configuració per defecte que ja hi
+    ha. Les dues accions són les mateixes («aplica-la» i «desa-hi el que hi ha»), i la interfície no
+    canvia de forma: només no s'hi poden afegir entrades. Així l'app continua funcionant sencera
+    sense compte (premissa 4).
+- **Lligams**: una entrada del catàleg és, en el fons, el que avui ja és un `.saacstyle` (fonament
+  03, «Fitxer d'estil»), i per tant també es pot exportar i importar. Les preferències continuen
+  sense entrar mai al document: aplicar una entrada **copia** els valors al document, no hi deixa
+  cap referència (fonament 03, principi 4).
+- **Cal decidir**: (a) què guarda una entrada: només l'estil, o també la pàgina (paper, orientació,
+  plantilla); (b) si una entrada es pot aplicar a un bloc sol, i aleshores què se n'aplica (l'estil
+  del bloc de R7, sense el paper); (c) el nom per a l'usuari («configuració», «estil», «model»…);
+  (d) el sostre d'entrades amb compte (`docs/ESTUDI-limits-serveis-gratuits.md`).
+- **Al backlog**: **B33**, a «Idees».
+- **Quan**: decidir-ho **abans de R7**, perquè R7 i «Copia aquests ajustos a…» són justament el
+  que el catàleg simplificaria; fer-ho, després del mode lliure o amb R7, segons el que es decideixi.
+
 ### Ordre proposat
 
 1. **Decisions** (les preguntes de sota) i **R3**, la investigació dels treballs reals: tot el
@@ -614,7 +646,8 @@ fet encara.
    pàgines a totes dues disposicions, la plantilla desada amb la pàgina, i els blocs de text.
 4. **R5**, la columna que segueix la pàgina i la selecció de la caixa.
 5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
-6. **R7** (B31), els estils per grup, quan el nom i el nivell «Seqüència» de la columna ja hi siguin.
+6. **R10** (B33), decidir el catàleg de configuracions: abans de R7, perquè en canvia les accions.
+7. **R7** (B31), els estils per grup, quan el nom i el nivell «Seqüència» de la columna ja hi siguin.
 
 ### Decisions (2026-11-07)
 

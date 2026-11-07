@@ -123,6 +123,19 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   seqüències», amb la necessitat d'un nom per a l'usuari. Es continua a **R7** de
   `docs/PLA-mode-lliure.md` (§12), que el situa al nivell «Seqüència» de la columna (R8).
 
+### B33 — Un catàleg de configuracions de l'usuari 💡 Idea
+
+*(Oberta en revisar l'esbós de la columna de la Vista, R8 del mode lliure, 2026-11-07.)*
+
+- **Què**: avui l'usuari té una sola configuració per defecte. La idea és que se'n pugui fer un
+  catàleg i que, a tot arreu on avui s'apliquen o es copien ajustos, n'hi hagi prou amb **aplicar
+  una entrada del catàleg** o **desar el que hi ha com a entrada**.
+- **Amb comptes**: catàleg al núvol. **Sense comptes**: una sola entrada (la configuració per
+  defecte d'avui), amb les mateixes dues accions.
+- **Cal decidir-ho abans d'implementar-ho**: què guarda una entrada, a quins nivells s'aplica
+  (document, pàgina, bloc), el nom per a l'usuari i el sostre amb compte.
+- El detall és a **R10** de `docs/PLA-mode-lliure.md` (§12). S'ha de decidir abans de **B31** (R7).
+
 ## Gravetat alta
 
 Risc real que l'usuari prengui l'acció equivocada, o exclusió d'accessibilitat.
