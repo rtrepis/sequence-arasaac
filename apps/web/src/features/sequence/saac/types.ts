@@ -143,6 +143,8 @@ export interface V3Sheet {
   mode: "auto" | "template";
   /** Només en automàtica; sense valor, la de `page.direction` */
   direction?: SequenceDirection;
+  /** Només en automàtica; sense valor, el de `page.sequenceGap` */
+  sequenceGap?: number;
   /** L'`id` de la plantilla de la pàgina, si en té */
   template?: string;
   blocks: (V3Block | V3ForeignBlock)[];
@@ -165,6 +167,8 @@ export interface V3Page {
   sheets?: V3Sheet[];
   /** Els blocs que surten a totes les pàgines, sempre amb caixa */
   common?: (V3Block | V3ForeignBlock)[];
+  /** A quines pàgines va el peu de llicència. Sense valor, a totes */
+  licenceOn?: "every" | "last";
 }
 
 /**

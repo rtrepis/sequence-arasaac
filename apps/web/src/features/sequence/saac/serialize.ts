@@ -280,7 +280,12 @@ const pictogramToV3 = (
 // --- Pàgines i blocs ---
 
 /** Els camps de `page` que són de les pàgines i no es copien com a desconeguts. */
-const PAGES_PAGE_KEYS: readonly string[] = ["layout", "sheets", "common"];
+const PAGES_PAGE_KEYS: readonly string[] = [
+  "layout",
+  "sheets",
+  "common",
+  "licenceOn",
+];
 
 /**
  * Només el que el retoc de la vista d'un bloc canvia de debò respecte del
@@ -375,7 +380,7 @@ const blocksToV3 = (
 const pagesToV3 = (
   pages: DocumentPages,
   writer: BlockWriter,
-): Required<Pick<V3Page, "sheets" | "common">> => ({
+): Pick<V3Page, "sheets" | "common" | "licenceOn"> => ({
   sheets: pages.sheets.map(
     (sheet: DocumentSheet): V3Sheet => ({
       ...sheet.extra,
@@ -383,6 +388,10 @@ const pagesToV3 = (
       mode: sheet.mode,
       ...(sheet.mode === "auto" &&
         sheet.direction && { direction: sheet.direction }),
+      ...(sheet.mode === "auto" &&
+        sheet.sequenceGap !== undefined && {
+          sequenceGap: sheet.sequenceGap,
+        }),
       // La plantilla es recorda també en automàtica (R2): amb els espais de
       // cada bloc, les caixes es tornen a calcular si la pàgina en torna a tenir
       ...(sheet.template && { template: sheet.template }),
@@ -390,6 +399,8 @@ const pagesToV3 = (
     }),
   ),
   common: blocksToV3(pages.common, true, writer),
+  // A totes les pàgines és el de sempre: només s'escriu «l'última»
+  ...(pages.licenceOn === "last" && { licenceOn: "last" }),
 });
 
 /** Un estil amb nom amb la forma del fitxer: la inversa de `namedStyleFromV3`. */

@@ -17,6 +17,7 @@ import {
   LayoutTemplate,
   SlotBox,
   applyTemplate,
+  arrangementOf,
   assignSlots,
   freeRegion,
   freeSlots,
@@ -115,7 +116,9 @@ export const addSequencesToSheet = (
     return mapSheet(pages, sheetIndex, () => ({ ...sheet, placements }));
 
   const region = freeRegion(context.area, pages.common.filter(isBoxed));
-  const template = sheet.template ? templateById(sheet.template) : undefined;
+  const template = sheet.template
+    ? templateById(sheet.template, sheet.placements.filter(isBoxed).length)
+    : undefined;
   const free = template ? freeSlots(template, sheet.placements) : [];
   if (template && free.length >= added.length) {
     const boxOf = new Map<string, SlotBox>(
@@ -135,7 +138,13 @@ export const addSequencesToSheet = (
 
   // Els que ja hi eren, en ordre de lectura; els nous, al final
   const boxed = placements.filter(isBoxed);
-  const next = templateFor(boxed.length, context.direction);
+  // «X columnes» o «Y files» creix amb els blocs nous; les altres plantilles
+  // passen a la que toca pel nombre de blocs
+  const grown =
+    sheet.template && arrangementOf(sheet.template).kind !== "template"
+      ? templateById(sheet.template, boxed.length)
+      : undefined;
+  const next = grown ?? templateFor(boxed.length, context.direction);
   const ordered = [
     ...sortByReadingOrder(sheet.placements.filter(isBoxed)),
     ...added,
@@ -162,7 +171,9 @@ export const sheetToTemplate = (
   if (sheet.mode === "template") return sheet;
   const boxed = sheet.placements.filter(isBoxed);
   if (boxed.every(hasBox)) return { ...sheet, mode: "template" };
-  const remembered = sheet.template ? templateById(sheet.template) : undefined;
+  const remembered = sheet.template
+    ? templateById(sheet.template, boxed.length)
+    : undefined;
   const template =
     remembered && remembered.slots.length >= boxed.length
       ? remembered

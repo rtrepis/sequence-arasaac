@@ -1,17 +1,16 @@
 import React from "react";
-import { MenuItem, Select, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { MdOutlineViewQuilt } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useAppDispatch } from "@/app/hooks";
-import type { PlacementColumns, SequenceViewSettings } from "@/types/document";
-import { SettingRow } from "@/components/SettingsLayout";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import type { SequenceViewSettings } from "@/types/document";
 import SettingsLevel from "@components/ViewSequencesSettings/SettingsLevel";
 import levelMessages from "@components/ViewSequencesSettings/ViewLevels.lang";
 import SequenceViewRows from "@components/ViewSequencesSettings/SequenceViewRows";
 import { updateSequenceViewSettingsActionCreator } from "@features/sequence/store/documentSlice";
 import { blockGrid } from "@features/free-layout/model/blockGrid";
 import {
-  setPlacementColumnsThunk,
+  selectPages,
   setPlacementViewThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import {
@@ -20,8 +19,6 @@ import {
 } from "@features/free-layout/hooks/useViewSelection";
 import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
 import { usePageUniform } from "@features/free-layout/hooks/usePageUniform";
-import { columnChoicesFor } from "@features/free-layout/components/FreeLayoutPages/PlacementBox";
-import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import messages from "./ViewLevels.lang";
 
 /** La icona del nivell: un bloc dins de la pàgina. */
@@ -51,6 +48,7 @@ const BlockLevel = ({
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { cardSizes } = useViewSelection();
+  const pages = useAppSelector(selectPages);
   const block = useSelectedBlock();
   // Si la pàgina del bloc té «la mateixa configuració a tots els blocs», la
   // mida, l'espai i l'alineació són al nivell «Pàgina», no aquí
@@ -97,13 +95,16 @@ const BlockLevel = ({
     );
   }
 
-  const { placement, common, name, pictograms, view } = block;
+  const { placement, common, name, pictograms, view, sheetIndex } = block;
+  // En una pàgina contínua la mida és la mida; en blocs, un màxim (Q2)
+  const continuous = pages?.sheets[sheetIndex]?.mode === "auto";
   const { grid, imageMm } = blockGrid({
     count: pictograms.length,
     card: cardSizes[placement.sequenceKey],
     view,
     box: { w: placement.w, h: placement.h },
-    columns: placement.columns,
+    // Les columnes de dins d'un bloc, de moment, sempre automàtiques
+    columns: "auto",
   });
   const mm = intl.formatNumber(imageMm, { maximumFractionDigits: 0 });
 
@@ -129,38 +130,16 @@ const BlockLevel = ({
           onChange={(change) =>
             dispatch(setPlacementViewThunk(placement.id, change))
           }
-          sizeHelper={intl.formatMessage(
-            grid.belowMinimum ? messages.sizeTooSmall : messages.sizeMax,
-            { mm },
-          )}
+          sizeHelper={
+            continuous
+              ? undefined
+              : intl.formatMessage(
+                  grid.belowMinimum ? messages.sizeTooSmall : messages.sizeMax,
+                  { mm },
+                )
+          }
         />
       )}
-
-      <SettingRow
-        title={<FormattedMessage {...pageMessages.columns} />}
-        labelId={`${LABEL_ID}-columns`}
-      >
-        <Select<string>
-          value={String(placement.columns)}
-          onChange={(event) => {
-            const value = event.target.value;
-            const columns: PlacementColumns =
-              value === "auto" ? "auto" : Number(value);
-            dispatch(setPlacementColumnsThunk(placement.id, columns));
-          }}
-          size="small"
-          fullWidth
-          labelId={`${LABEL_ID}-columns`}
-        >
-          {columnChoicesFor(pictograms.length).map((columns) => (
-            <MenuItem key={columns} value={String(columns)}>
-              {columns === "auto"
-                ? intl.formatMessage(pageMessages.columnsAuto)
-                : columns}
-            </MenuItem>
-          ))}
-        </Select>
-      </SettingRow>
     </SettingsLevel>
   );
 };

@@ -48,7 +48,6 @@ export type StyleChangeSource =
  * i deixar de posar-ne una a totes les pàgines.
  */
 export type FreeLayoutChangeSource =
-  | "layoutFlow"
   | "layoutTemplate"
   | "layoutAddSequences"
   | "layoutRemoveSheet"

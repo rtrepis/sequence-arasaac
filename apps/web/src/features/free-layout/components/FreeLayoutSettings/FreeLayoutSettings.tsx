@@ -1,160 +1,63 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { MdOutlineDashboard, MdTableRows } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { useFeedback } from "@/context/FeedbackContext";
-import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
-import { IconToggleButton, SettingRow } from "@/components/SettingsLayout";
-import type { PageSize } from "@/types/ui";
-import { PaperSize, regionalPaperSize } from "@features/print/utils/pageFormat";
+import StyledButton from "@/style/StyledButton";
+import { SectionTitle, SettingRow } from "@/components/SettingsLayout";
 import { unplacedSequenceKeys } from "@features/free-layout/model/placementsOf";
 import {
   addSequencesToSheetThunk,
   selectPages,
-  selectIsFreeLayout,
   selectSequenceKeys,
-  setLayoutModeThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
-import StyledButton from "@/style/StyledButton";
-import levelMessages from "@features/free-layout/components/ViewLevels/ViewLevels.lang";
 import { useSequenceName } from "@features/free-layout/components/FreeLayoutPages/useSequenceName";
-import viewMessages from "@components/ViewSequencesSettings/ViewSequencesSettings.lang";
+import levelMessages from "@features/free-layout/components/ViewLevels/ViewLevels.lang";
 import messages from "./FreeLayoutSettings.lang";
 
-/** «Automàtica» o «Lliure», per a tot el document (ADR-005). */
-type LayoutMode = "flow" | "free";
-
-/** Prefix dels ids dels títols de fila, per lligar-los als controls. */
-const LABEL_ID = "free-layout-settings";
-
-/** El nom de cada paper, per dir a quin s'ha passat. */
-const PAPER_NAMES: Record<
-  PaperSize,
-  string | typeof viewMessages.pageSizeLetter
-> = {
-  A4: "A4",
-  A3: "A3",
-  LETTER: viewMessages.pageSizeLetter,
-  TABLOID: viewMessages.pageSizeTabloid,
-};
-
-interface FreeLayoutSettingsProps {
-  pageSize: PageSize;
-  onPageSizeChange: (size: PageSize) => void;
-}
-
 /**
- * Files de la columna de la vista per a la disposició (ADR-005): automàtica
- * o lliure i, en lliure, les seqüències que no surten a cap pàgina, cadascuna
- * amb el botó que la posa a la pàgina que segueix la columna (R5). Només
- * files d'ajust (`SettingRow`); la secció la posa qui el fa servir.
- *
- * La pantalla completa no té mil·límetres i no admet el mode lliure: triar
- * «Lliure» des d'allà passa la pàgina al paper de cada dia de qui la fa servir,
- * i el missatge ho diu.
+ * Les seqüències que no surten a cap pàgina, al nivell «Document» de la
+ * columna de la vista: cadascuna amb el botó que la posa a la pàgina que
+ * segueix la columna (es pot desfer). No s'imprimeixen. Sense pàgines (un
+ * document com els de sempre) o sense cap seqüència fora, no hi és.
  */
-const FreeLayoutSettings = ({
-  pageSize,
-  onPageSizeChange,
-}: FreeLayoutSettingsProps): React.ReactElement => {
+const FreeLayoutSettings = (): React.ReactElement | null => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { showSnackbar } = useFeedback();
-  const isFree = useAppSelector(selectIsFreeLayout);
   const keys = useAppSelector(selectSequenceKeys);
-  const freeLayout = useAppSelector(selectPages);
+  const pages = useAppSelector(selectPages);
   const sequenceName = useSequenceName();
   const { activePage } = useViewSelection();
-  const unplaced = freeLayout ? unplacedSequenceKeys(freeLayout, keys) : [];
-
-  const handleModeChange = (mode: LayoutMode | null) => {
-    if (!mode || (mode === "free") === isFree) return;
-    if (mode === "flow") {
-      // Surt el snackbar amb «Desfés»
-      dispatch(setLayoutModeThunk("flow"));
-      return;
-    }
-    let message = intl.formatMessage(messages.freeOn);
-    if (pageSize === "FULLSCREEN") {
-      const paper = regionalPaperSize(navigator.languages);
-      onPageSizeChange(paper);
-      const name = PAPER_NAMES[paper];
-      message = intl.formatMessage(messages.paperChanged, {
-        paper: typeof name === "string" ? name : intl.formatMessage(name),
-      });
-    }
-    dispatch(setLayoutModeThunk("free"));
-    showSnackbar({ message, severity: "success" });
-  };
+  const unplaced = pages ? unplacedSequenceKeys(pages, keys) : [];
+  if (unplaced.length === 0) return null;
 
   return (
-    <>
-      <SettingRow
-        title={<FormattedMessage {...messages.layout} />}
-        labelId={`${LABEL_ID}-mode`}
-        control="wide"
-      >
-        <StyledToggleButtonGroup
-          value={isFree ? "free" : "flow"}
-          exclusive
-          onChange={(_, mode: LayoutMode | null) => handleModeChange(mode)}
-          aria-labelledby={`${LABEL_ID}-mode`}
-        >
-          <IconToggleButton value="flow" message={messages.layoutFlow}>
-            <MdTableRows />
-          </IconToggleButton>
-          <IconToggleButton value="free" message={messages.layoutFree}>
-            <MdOutlineDashboard />
-          </IconToggleButton>
-        </StyledToggleButtonGroup>
-      </SettingRow>
-
-      {/* El control és el nombre; a sota, que no s'imprimeixen, o que no n'hi ha cap */}
-      {isFree && (
-        <SettingRow
-          title={<FormattedMessage {...messages.unplaced} />}
-          labelId={`${LABEL_ID}-unplaced`}
-          control="compact"
-          helper={
-            <FormattedMessage
-              {...(unplaced.length === 0
-                ? messages.unplacedNone
-                : messages.unplacedHint)}
-            />
-          }
-        >
-          <Typography aria-labelledby={`${LABEL_ID}-unplaced`}>
-            {unplaced.length}
-          </Typography>
-        </SettingRow>
-      )}
-
-      {/* Cadascuna, amb el botó que la posa a la pàgina que es mira (es pot desfer) */}
-      {isFree &&
-        unplaced.map((key) => {
-          const name = sequenceName(key);
-          return (
-            <SettingRow key={key} title={name} control="compact">
-              <StyledButton
-                color="inherit"
-                aria-label={intl.formatMessage(levelMessages.putOnPageLabel, {
-                  name,
-                  number: activePage + 1,
-                })}
-                onClick={() =>
-                  dispatch(addSequencesToSheetThunk(activePage, [key]))
-                }
-              >
-                {intl.formatMessage(levelMessages.putOnPage, {
-                  number: activePage + 1,
-                })}
-              </StyledButton>
-            </SettingRow>
-          );
-        })}
-    </>
+    <SectionTitle title={<FormattedMessage {...messages.unplaced} />}>
+      <Typography variant="caption" color="text.secondary">
+        <FormattedMessage {...messages.unplacedHint} />
+      </Typography>
+      {unplaced.map((key) => {
+        const name = sequenceName(key);
+        return (
+          <SettingRow key={key} title={name} control="compact">
+            <StyledButton
+              color="inherit"
+              aria-label={intl.formatMessage(levelMessages.putOnPageLabel, {
+                name,
+                number: activePage + 1,
+              })}
+              onClick={() =>
+                dispatch(addSequencesToSheetThunk(activePage, [key]))
+              }
+            >
+              {intl.formatMessage(levelMessages.putOnPage, {
+                number: activePage + 1,
+              })}
+            </StyledButton>
+          </SettingRow>
+        );
+      })}
+    </SectionTitle>
   );
 };
 

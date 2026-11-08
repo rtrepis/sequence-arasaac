@@ -142,17 +142,6 @@ const messages = defineMessages({
     defaultMessage: "Page {number}",
     description: "Una pàgina, a les llistes del menú d'una caixa",
   },
-  columns: {
-    id: "features.freeLayout.placement.columns",
-    defaultMessage: "Columns",
-    description:
-      "Títol de la llista del menú d'una caixa per triar-ne les columnes",
-  },
-  columnsAuto: {
-    id: "features.freeLayout.placement.columnsAuto",
-    defaultMessage: "Automatic",
-    description: "Columnes d'una caixa: les que fan els pictogrames més grans",
-  },
   removeFromPage: {
     id: "features.freeLayout.placement.removeFromPage",
     defaultMessage: "Remove from this page",
@@ -195,12 +184,6 @@ const messages = defineMessages({
     id: "features.freeLayout.feedback.madeCommon",
     defaultMessage: "{name} is now on every page",
     description: "Confirmació d'haver posat una seqüència a totes les pàgines",
-  },
-  columnsChanged: {
-    id: "features.freeLayout.feedback.columnsChanged",
-    defaultMessage:
-      "{columns, select, auto {Columns: automatic} other {Columns: {columns}}}",
-    description: "Confirmació d'haver canviat les columnes d'una caixa",
   },
 });
 

@@ -70,6 +70,9 @@ export interface DocumentLayout {
  */
 export type SheetMode = "auto" | "template";
 
+/** A quines pàgines va el peu de llicència. */
+export type LicenceOn = "every" | "last";
+
 /** Columnes de la graella d'un bloc: les que hi caben millor, o un nombre fix. */
 export type PlacementColumns = "auto" | number;
 
@@ -144,6 +147,11 @@ export interface DocumentSheet {
   mode: SheetMode;
   /** Només en una pàgina automàtica; sense valor, la de `DocumentLayout` */
   direction?: "row" | "column";
+  /**
+   * L'espai entre seqüències d'una pàgina automàtica. Sense valor, el de
+   * l'estil del document (`sequenceSpaceBetween`)
+   */
+  sequenceGap?: number;
   /** La plantilla que té la pàgina, si en té (R2). Es recorda també en automàtica */
   template?: string;
   placements: PagePlacement[];
@@ -158,6 +166,11 @@ export interface DocumentSheet {
 export interface DocumentPages {
   sheets: DocumentSheet[];
   common: PagePlacement[];
+  /**
+   * A quines pàgines va el peu de llicència: a totes (sense valor) o només a
+   * l'última
+   */
+  licenceOn?: LicenceOn;
 }
 
 /** Lletra i vores d'un estil amb nom: només el que canvia. */

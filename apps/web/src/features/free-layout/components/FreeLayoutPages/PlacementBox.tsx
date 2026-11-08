@@ -20,11 +20,7 @@ import { useAppDispatch } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
 import PictogramCard from "@components/PictogramCard/PictogramCard";
 import type { PictogramCardDefaults, Sequence } from "@/types/sequence";
-import type {
-  PlacementColumns,
-  SequencePlacement,
-  SequenceViewSettings,
-} from "@/types/document";
+import type { SequencePlacement, SequenceViewSettings } from "@/types/document";
 import { mmToPixelsExact } from "@features/print/utils/pageUnits";
 import { CSS_PRINT_DPI } from "@features/print/utils/pageFormat";
 import {
@@ -37,15 +33,11 @@ import { blockGrid } from "@features/free-layout/model/blockGrid";
 import {
   copyPlacementToSheetThunk,
   removePlacementThunk,
-  setPlacementColumnsThunk,
   setPlacementCommonThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import type { CardBaseSize } from "./CardBaseMeasurer";
 import messages from "./FreeLayoutPages.lang";
-
-/** Columnes fixes que s'ofereixen, com a molt: més enllà, «Automàtic» ja ho fa. */
-export const MAX_COLUMN_CHOICES = 8;
 
 /** El botó del menú, a la pantalla, en px: el full s'escala, el botó no. */
 const MENU_BUTTON_PX = 36;
@@ -56,15 +48,6 @@ const px = (mm: number): number => mmToPixelsExact(mm, CSS_PRINT_DPI);
 const editMarkSx = {
   "@media print": { display: "none" },
 } as const;
-
-/** Les columnes que es poden triar per a una seqüència de `count` pictogrames. */
-export const columnChoicesFor = (count: number): PlacementColumns[] => [
-  "auto",
-  ...Array.from(
-    { length: Math.min(count, MAX_COLUMN_CHOICES) },
-    (_, i) => i + 1,
-  ),
-];
 
 interface PlacementBoxProps {
   placement: SequencePlacement;
@@ -121,7 +104,8 @@ const PlacementBox = ({
     card: cardBase,
     view,
     box: { w: placement.w, h: placement.h },
-    columns: placement.columns,
+    // Les columnes de dins d'un bloc, de moment, sempre automàtiques
+    columns: "auto",
   });
 
   const close = () => setAnchor(null);
@@ -129,8 +113,6 @@ const PlacementBox = ({
     close();
     action();
   };
-
-  const columnChoices = columnChoicesFor(pictograms.length);
 
   const label = intl.formatMessage(messages.placementLabel, {
     name,
@@ -352,37 +334,6 @@ const PlacementBox = ({
                 </ListItemText>
               </MenuItem>
             ))}
-
-        <Divider />
-        <ListSubheader>{intl.formatMessage(messages.columns)}</ListSubheader>
-        {columnChoices.map((columns) => {
-          const checked = placement.columns === columns;
-          return (
-            <MenuItem
-              key={`columns-${columns}`}
-              role="menuitemradio"
-              aria-checked={checked}
-              onClick={() =>
-                run(() => {
-                  dispatch(setPlacementColumnsThunk(placement.id, columns));
-                  showSnackbar({
-                    message: intl.formatMessage(messages.columnsChanged, {
-                      columns: String(columns),
-                    }),
-                    severity: "success",
-                  });
-                })
-              }
-            >
-              <ListItemIcon>{checked && <MdCheck />}</ListItemIcon>
-              <ListItemText>
-                {columns === "auto"
-                  ? intl.formatMessage(messages.columnsAuto)
-                  : columns}
-              </ListItemText>
-            </MenuItem>
-          );
-        })}
 
         {/* L'acció que treu, sola i l'última (`feedback-i-accions.md`) */}
         <Divider />

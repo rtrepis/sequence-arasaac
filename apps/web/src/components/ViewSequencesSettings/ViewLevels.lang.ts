@@ -3,6 +3,12 @@ import { defineMessages } from "react-intl";
 // Textos dels nivells de la columna de la vista (R5, R8): Document, Pàgina i
 // Bloc, les molles i els resums dels nivells plegats.
 const messages = defineMessages({
+  documentPages: {
+    id: "pages.viewSequence.levels.documentPages",
+    defaultMessage: "{count, plural, one {# page} other {# pages}}",
+    description:
+      "Resum del nivell «Document» plegat, després del paper: quantes pàgines té el document",
+  },
   crumbs: {
     id: "pages.viewSequence.levels.crumbs",
     defaultMessage: "Where these settings apply",
@@ -57,17 +63,6 @@ const messages = defineMessages({
     description:
       "Al final dels nivells de la columna de la vista quan no hi ha cap bloc seleccionat",
   },
-  layoutFlowShort: {
-    id: "pages.viewSequence.levels.layoutFlowShort",
-    defaultMessage: "Automatic",
-    description:
-      "Resum del nivell «Document» plegat: la disposició és automàtica",
-  },
-  layoutFreeShort: {
-    id: "pages.viewSequence.levels.layoutFreeShort",
-    defaultMessage: "Free",
-    description: "Resum del nivell «Document» plegat: la disposició és lliure",
-  },
   landscapeShort: {
     id: "pages.viewSequence.levels.landscapeShort",
     defaultMessage: "landscape",
@@ -82,15 +77,15 @@ const messages = defineMessages({
   },
   directionRowShort: {
     id: "pages.viewSequence.levels.directionRowShort",
-    defaultMessage: "Automatic, in rows",
+    defaultMessage: "Continuous, in rows",
     description:
-      "Resum del nivell «Pàgina» plegat, a la disposició automàtica: les seqüències van en files",
+      "Resum del nivell «Pàgina» plegat, en una pàgina contínua: les seqüències van en files",
   },
   directionColumnShort: {
     id: "pages.viewSequence.levels.directionColumnShort",
-    defaultMessage: "Automatic, in columns",
+    defaultMessage: "Continuous, in columns",
     description:
-      "Resum del nivell «Pàgina» plegat, a la disposició automàtica: les seqüències van en columnes",
+      "Resum del nivell «Pàgina» plegat, en una pàgina contínua: les seqüències van en columnes",
   },
 });
 

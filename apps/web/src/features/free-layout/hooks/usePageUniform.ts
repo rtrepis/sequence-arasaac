@@ -9,7 +9,7 @@ import {
 } from "@features/sequence/style/styleSelectors";
 import { namedStyleOf, resolveBlockView } from "../model/blockStyle";
 import {
-  selectIsFreeLayout,
+  selectHasPages,
   selectNamedStyles,
   selectPages,
   selectSequenceKeys,
@@ -48,7 +48,7 @@ export interface PageUniform {
  */
 export const usePageUniform = (sheetIndex: number): PageUniform => {
   const { uniformChoice, setUniformChoice } = useViewSelection();
-  const isFree = useAppSelector(selectIsFreeLayout);
+  const isFree = useAppSelector(selectHasPages);
   const pages = useAppSelector(selectPages);
   const styles = useAppSelector(selectNamedStyles);
   const keys = useAppSelector(selectSequenceKeys);

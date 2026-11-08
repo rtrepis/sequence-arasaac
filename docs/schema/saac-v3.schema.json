@@ -208,6 +208,13 @@
           "items": {
             "$ref": "#/$defs/block"
           }
+        },
+        "licenceOn": {
+          "enum": [
+            "every",
+            "last"
+          ],
+          "description": "A quines pàgines va el peu de llicència. Sense valor, a totes; l'app només escriu \"last\"."
         }
       }
     },
@@ -234,6 +241,10 @@
             "column"
           ],
           "description": "Només en automàtica. Sense valor, la de page.direction."
+        },
+        "sequenceGap": {
+          "type": "number",
+          "description": "Només en automàtica: l'espai entre seqüències d'aquesta pàgina. Sense valor, el de page.sequenceGap."
         },
         "template": {
           "type": "string",

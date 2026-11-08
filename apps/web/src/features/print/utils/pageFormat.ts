@@ -61,7 +61,11 @@ export const PRINT_MARGIN_MM = 5;
  */
 export const SCREEN_MARGINS: ScreenMargins = {
   small: 48,
-  medium: 380,
+  // La columna d'ajustos al costat del full: 350 px de columna, el separador i
+  // l'aire de cada banda, més els marges de la pàgina. Amb 380, el full
+  // apaïsat no hi cabia: el de sempre s'encongia i en perdia la vora dreta, i
+  // el de les pàgines passava per sota de la columna
+  medium: 424,
 };
 
 /**

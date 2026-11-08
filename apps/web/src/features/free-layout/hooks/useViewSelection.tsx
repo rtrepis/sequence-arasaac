@@ -13,7 +13,7 @@ import { useAppSelector } from "@/app/hooks";
 import { findPlacement } from "../model/sheets";
 import type { CardPx } from "../model/blockGrid";
 import {
-  selectIsFreeLayout,
+  selectHasPages,
   selectPages,
   selectSequenceKeys,
 } from "../store/freeLayoutThunks";
@@ -93,7 +93,7 @@ export const ViewSelectionProvider = ({
   children: React.ReactNode;
 }): React.ReactElement => {
   const pages = useAppSelector(selectPages);
-  const isFree = useAppSelector(selectIsFreeLayout);
+  const isFree = useAppSelector(selectHasPages);
   const keys = useAppSelector(selectSequenceKeys);
   const [selection, setSelection] = useState<ViewSelection | null>(null);
   const [visiblePage, setVisiblePage] = useState(0);

@@ -23,6 +23,8 @@ interface PageHeaderProps {
   sheetCount: number;
   /** Les caixes pròpies de la pàgina, sense les comunes */
   placementCount: number;
+  /** Una pàgina contínua no té plantilla */
+  continuous?: boolean;
   /** La pàgina que segueix la columna (R5) */
   active?: boolean;
   onAddSequence: () => void;
@@ -37,6 +39,7 @@ const PageHeader = ({
   sheetIndex,
   sheetCount,
   placementCount,
+  continuous = false,
   active = false,
   onAddSequence,
 }: PageHeaderProps): React.ReactElement => {
@@ -86,7 +89,7 @@ const PageHeader = ({
         {intl.formatMessage(messages.addSequence)}
       </StyledButton>
 
-      {placementCount > 0 && (
+      {placementCount > 0 && !continuous && (
         <StyledButton
           color="inherit"
           startIcon={<MdOutlineDashboard />}

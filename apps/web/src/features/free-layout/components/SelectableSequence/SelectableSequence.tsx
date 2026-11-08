@@ -3,6 +3,7 @@ import { Box, SxProps, Theme } from "@mui/material";
 import { useIntl } from "react-intl";
 import { sheetGuide } from "@/style/palette";
 import {
+  ViewSelection,
   sameSelection,
   useViewSelection,
 } from "@features/free-layout/hooks/useViewSelection";
@@ -14,13 +15,19 @@ interface SelectableSequenceProps {
   pictogramCount: number;
   /** A la pantalla completa no es selecciona res: és per mirar */
   selectable: boolean;
+  /**
+   * Què se selecciona en clicar-la. Sense valor, la seqüència (la pàgina
+   * única de sempre); en una pàgina contínua del document, el seu bloc
+   */
+  target?: ViewSelection;
   /** La disposició de la seqüència al flux (direcció, alineació, espai) */
   sx: SxProps<Theme>;
   children: React.ReactNode;
 }
 
 /**
- * Una seqüència a la disposició automàtica, que és el seu únic bloc (R5).
+ * Una seqüència d'una pàgina contínua: a la pàgina única de sempre és el seu
+ * únic bloc, i en una pàgina del document, un dels seus blocs (R5).
  * Clicar-la (o Enter i Espai) la selecciona i la columna n'ensenya els
  * ajustos. La marca és de l'edició: no surt mai al paper ni al PDF.
  */
@@ -28,6 +35,7 @@ const SelectableSequence = ({
   sequenceKey,
   pictogramCount,
   selectable,
+  target: givenTarget,
   sx,
   children,
 }: SelectableSequenceProps): React.ReactElement => {
@@ -36,7 +44,10 @@ const SelectableSequence = ({
   const { selection, select } = useViewSelection();
   if (!selectable) return <Box sx={sx}>{children}</Box>;
 
-  const target = { kind: "sequence" as const, sequenceKey };
+  const target: ViewSelection = givenTarget ?? {
+    kind: "sequence",
+    sequenceKey,
+  };
   const selected = sameSelection(selection, target);
 
   return (

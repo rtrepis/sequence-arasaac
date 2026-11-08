@@ -377,7 +377,7 @@ const readSheetMode = (sheet: PlainObject): V3Sheet["mode"] => {
 const readPages = (
   rawPage: unknown,
   reader: BlockReader,
-): Pick<V3Page, "sheets" | "common"> => {
+): Pick<V3Page, "sheets" | "common" | "licenceOn"> => {
   if (!isPlainObject(rawPage) || !Array.isArray(rawPage.sheets)) return {};
   const usedSheetIds = new Set<string>();
 
@@ -390,7 +390,7 @@ const readPages = (
           : newSaacId("sh");
       usedSheetIds.add(sheetId);
       const mode = readSheetMode(sheet);
-      const { direction, template } = sheet;
+      const { direction, template, sequenceGap } = sheet;
       // Les fases 1–3 deien `placements` el que ara són `blocks`
       const blocks = Array.isArray(sheet.blocks)
         ? sheet.blocks
@@ -400,13 +400,19 @@ const readPages = (
         id: sheetId,
         mode,
         ...((direction === "row" || direction === "column") && { direction }),
+        ...(typeof sequenceGap === "number" &&
+          Number.isFinite(sequenceGap) && { sequenceGap }),
         ...(typeof template === "string" && template && { template }),
         blocks: readBlocks(blocks, mode === "template", reader),
       };
     });
   if (sheets.length === 0) return {};
 
-  return { sheets, common: readBlocks(rawPage.common, true, reader) };
+  return {
+    sheets,
+    common: readBlocks(rawPage.common, true, reader),
+    ...(rawPage.licenceOn === "last" && { licenceOn: "last" as const }),
+  };
 };
 
 /**

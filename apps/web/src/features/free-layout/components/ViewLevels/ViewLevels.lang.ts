@@ -2,6 +2,107 @@ import { defineMessages } from "react-intl";
 
 // Textos dels nivells «Pàgina» i «Bloc» de la columna de la vista (R5).
 const messages = defineMessages({
+  pages: {
+    id: "features.freeLayout.levels.pages",
+    defaultMessage: "Pages",
+    description:
+      "Fila del nivell «Pàgina» quan el document només té la pàgina de sempre: el botó per afegir-ne una altra",
+  },
+  licenceOn: {
+    id: "features.freeLayout.levels.licenceOn",
+    defaultMessage: "On which pages",
+    description:
+      "Fila del peu d'impressió, amb diverses pàgines: si el peu de llicència va a totes les pàgines o només a l'última",
+  },
+  licenceOnEvery: {
+    id: "features.freeLayout.levels.licenceOnEvery",
+    defaultMessage: "Every page",
+    description: "Opció: el peu de llicència a totes les pàgines",
+  },
+  licenceOnLast: {
+    id: "features.freeLayout.levels.licenceOnLast",
+    defaultMessage: "Only the last one",
+    description: "Opció: el peu de llicència només a l'última pàgina",
+  },
+  mode: {
+    id: "features.freeLayout.levels.mode",
+    defaultMessage: "Layout",
+    description:
+      "Títol de la fila del nivell «Pàgina» on es tria si la pàgina és contínua (com sempre) o en blocs",
+  },
+  modeAuto: {
+    id: "features.freeLayout.levels.modeAuto",
+    defaultMessage: "Continuous: the sequences one after another, as always",
+    description: "Nom accessible i tooltip de l'opció «Contínua» de la pàgina",
+  },
+  modeBlocks: {
+    id: "features.freeLayout.levels.modeBlocks",
+    defaultMessage: "In blocks: each sequence in its own place on the page",
+    description: "Nom accessible i tooltip de l'opció «En blocs» de la pàgina",
+  },
+  modeAutoHelp: {
+    id: "features.freeLayout.levels.modeAutoHelp",
+    defaultMessage:
+      "Continuous: the sequences go one after another, as always.",
+    description: "Ajuda sota la fila de disposició de la pàgina, en contínua",
+  },
+  modeBlocksHelp: {
+    id: "features.freeLayout.levels.modeBlocksHelp",
+    defaultMessage:
+      "In blocks: each sequence is a block with its own place on the page.",
+    description: "Ajuda sota la fila de disposició de la pàgina, en blocs",
+  },
+  arrangement: {
+    id: "features.freeLayout.levels.arrangement",
+    defaultMessage: "Arrange by",
+    description:
+      "Títol de la fila del nivell «Pàgina», en blocs: per columnes, per files o amb una plantilla",
+  },
+  byColumns: {
+    id: "features.freeLayout.levels.byColumns",
+    defaultMessage: "In columns",
+    description: "Nom accessible i tooltip: els blocs de la pàgina en columnes",
+  },
+  byRows: {
+    id: "features.freeLayout.levels.byRows",
+    defaultMessage: "In rows",
+    description: "Nom accessible i tooltip: els blocs de la pàgina en files",
+  },
+  byTemplate: {
+    id: "features.freeLayout.levels.byTemplate",
+    defaultMessage: "With a template",
+    description:
+      "Nom accessible i tooltip: els blocs de la pàgina amb una plantilla",
+  },
+  columnCount: {
+    id: "features.freeLayout.levels.columnCount",
+    defaultMessage: "Columns",
+    description: "Títol de la fila amb quantes columnes de blocs té la pàgina",
+  },
+  rowCount: {
+    id: "features.freeLayout.levels.rowCount",
+    defaultMessage: "Rows",
+    description: "Títol de la fila amb quantes files de blocs té la pàgina",
+  },
+  arrangementSummary: {
+    id: "features.freeLayout.levels.arrangementSummary",
+    defaultMessage:
+      "{kind, select, columns {{n, plural, one {# column} other {# columns}}} other {{n, plural, one {# row} other {# rows}}}}",
+    description:
+      "Resum del repartiment d'una pàgina en blocs: quantes columnes o files",
+  },
+  blocksSummary: {
+    id: "features.freeLayout.levels.blocksSummary",
+    defaultMessage:
+      "In blocks, {arrangement} · {count, plural, one {# block} other {# blocks}}",
+    description:
+      "Resum del nivell «Pàgina» plegat, en blocs: el repartiment i quants blocs té",
+  },
+  gridName: {
+    id: "features.freeLayout.levels.gridName",
+    defaultMessage: "Grid {columns} × {rows}",
+    description: "Nom d'una plantilla de graella que no en té cap de propi",
+  },
   pictograms: {
     id: "features.freeLayout.levels.pictograms",
     defaultMessage: "Pictograms",
@@ -32,13 +133,6 @@ const messages = defineMessages({
       "This page uses the same size, spacing and alignment for every block: change them in “Page”, or turn that off there to adjust this block on its own.",
     description:
       "Al nivell «Bloc», en lloc de la mida, l'espai i l'alineació, quan la pàgina té «La mateixa a tots els blocs» activat",
-  },
-  pageSummary: {
-    id: "features.freeLayout.levels.pageSummary",
-    defaultMessage:
-      "{template} · {count, plural, one {# block} other {# blocks}}",
-    description:
-      "Resum del nivell «Pàgina» plegat: la plantilla i quants blocs té la pàgina",
   },
   noTemplate: {
     id: "features.freeLayout.levels.noTemplate",

@@ -2832,14 +2832,6 @@
     "message": "Pàgina {number}",
     "description": "Una pàgina, a les llistes del menú d'una caixa"
   },
-  "features.freeLayout.placement.columns": {
-    "message": "Columnes",
-    "description": "Títol de la llista del menú d'una caixa per triar-ne les columnes"
-  },
-  "features.freeLayout.placement.columnsAuto": {
-    "message": "Automàtiques",
-    "description": "Columnes d'una caixa: les que fan els pictogrames més grans"
-  },
   "features.freeLayout.placement.removeFromPage": {
     "message": "Treu d'aquesta pàgina",
     "description": "Acció del menú d'una caixa: la treu d'aquesta pàgina; la seqüència continua al document"
@@ -2872,49 +2864,13 @@
     "message": "{name} surt ara a totes les pàgines",
     "description": "Confirmació d'haver posat una seqüència a totes les pàgines"
   },
-  "features.freeLayout.feedback.columnsChanged": {
-    "message": "{columns, select, auto {Columnes: automàtiques} other {Columnes: {columns}}}",
-    "description": "Confirmació d'haver canviat les columnes d'una caixa"
-  },
-  "features.freeLayout.settings.section": {
-    "message": "Disposició",
-    "description": "Títol de la secció de la columna de la vista on es tria com es col·loquen les seqüències a la pàgina"
-  },
-  "features.freeLayout.settings.layout": {
-    "message": "Disposició",
-    "description": "Títol de la fila: disposició automàtica o lliure"
-  },
-  "features.freeLayout.settings.layoutFlow": {
-    "message": "Automàtica: les seqüències es col·loquen soles en una pàgina",
-    "description": "Nom accessible i tooltip de l'opció de disposició automàtica, la de sempre"
-  },
-  "features.freeLayout.settings.layoutFree": {
-    "message": "Lliure: tu tries a quina pàgina va cada seqüència",
-    "description": "Nom accessible i tooltip de l'opció de disposició lliure, amb pàgines"
-  },
-  "features.freeLayout.settings.freeOn": {
-    "message": "Disposició lliure. Afegeix pàgines, tria una plantilla o afegeix seqüències a cada pàgina.",
-    "description": "Confirmació d'haver passat a la disposició lliure"
-  },
-  "features.freeLayout.settings.paperChanged": {
-    "message": "La disposició lliure necessita paper: ara la pàgina és {paper}.",
-    "description": "Confirmació d'haver passat a disposició lliure des de pantalla completa: la pàgina passa a un paper"
-  },
   "features.freeLayout.settings.unplaced": {
     "message": "Sense col·locar",
     "description": "Títol de la fila amb les seqüències del document que no surten a cap pàgina"
   },
-  "features.freeLayout.settings.unplacedNone": {
-    "message": "Totes les seqüències són en alguna pàgina",
-    "description": "Quan no hi ha cap seqüència sense col·locar"
-  },
   "features.freeLayout.settings.unplacedHint": {
     "message": "No s'imprimeixen: posa-les a la pàgina que mires amb el botó de cada una, o amb «Afegeix una seqüència».",
     "description": "Explicació sota el nombre de seqüències sense col·locar, damunt de la llista amb el botó de cada una"
-  },
-  "features.sequence.style.changed.layoutFlow": {
-    "message": "Disposició automàtica. La disposició lliure es conserva si hi tornes.",
-    "description": "Snackbar amb «Desfés» en tornar a la disposició automàtica des de la lliure (ADR-005)"
   },
   "features.sequence.style.changed.layoutTemplate": {
     "message": "S'ha aplicat la plantilla a la pàgina.",
@@ -2992,14 +2948,6 @@
     "message": "Clica un bloc del full per veure'n els ajustos.",
     "description": "Al final dels nivells de la columna de la vista quan no hi ha cap bloc seleccionat"
   },
-  "pages.viewSequence.levels.layoutFlowShort": {
-    "message": "Automàtica",
-    "description": "Resum del nivell «Document» plegat: la disposició és automàtica"
-  },
-  "pages.viewSequence.levels.layoutFreeShort": {
-    "message": "Lliure",
-    "description": "Resum del nivell «Document» plegat: la disposició és lliure"
-  },
   "pages.viewSequence.levels.landscapeShort": {
     "message": "apaïsat",
     "description": "Resum del nivell «Document» plegat, després de la mida del paper («A4 apaïsat»)"
@@ -3009,16 +2957,12 @@
     "description": "Resum del nivell «Document» plegat, després de la mida del paper («A4 vertical»)"
   },
   "pages.viewSequence.levels.directionRowShort": {
-    "message": "Automàtica, en files",
-    "description": "Resum del nivell «Pàgina» plegat, a la disposició automàtica: les seqüències van en files"
+    "message": "Contínua, en files",
+    "description": "Resum del nivell «Pàgina» plegat, en una pàgina contínua: les seqüències van en files"
   },
   "pages.viewSequence.levels.directionColumnShort": {
-    "message": "Automàtica, en columnes",
-    "description": "Resum del nivell «Pàgina» plegat, a la disposició automàtica: les seqüències van en columnes"
-  },
-  "features.freeLayout.levels.pageSummary": {
-    "message": "{template} · {count, plural, one {# bloc} other {# blocs}}",
-    "description": "Resum del nivell «Pàgina» plegat: la plantilla i quants blocs té la pàgina"
+    "message": "Contínua, en columnes",
+    "description": "Resum del nivell «Pàgina» plegat, en una pàgina contínua: les seqüències van en columnes"
   },
   "features.freeLayout.levels.noTemplate": {
     "message": "Sense plantilla",
@@ -3087,5 +3031,81 @@
   "features.freeLayout.levels.uniformBlock": {
     "message": "Aquesta pàgina fa servir la mateixa mida, espai i alineació a tots els blocs: es canvien a «Pàgina», o desactiva-ho allà per ajustar aquest bloc sol.",
     "description": "Al nivell «Bloc», en lloc de la mida, l'espai i l'alineació, quan la pàgina té «La mateixa a tots els blocs» activat"
+  },
+  "features.freeLayout.levels.mode": {
+    "message": "Disposició",
+    "description": "Títol de la fila del nivell «Pàgina» on es tria si la pàgina és contínua (com sempre) o en blocs"
+  },
+  "features.freeLayout.levels.modeAuto": {
+    "message": "Contínua: les seqüències una darrere l'altra, com sempre",
+    "description": "Nom accessible i tooltip de l'opció «Contínua» de la pàgina"
+  },
+  "features.freeLayout.levels.modeBlocks": {
+    "message": "En blocs: cada seqüència al seu lloc de la pàgina",
+    "description": "Nom accessible i tooltip de l'opció «En blocs» de la pàgina"
+  },
+  "features.freeLayout.levels.modeAutoHelp": {
+    "message": "Contínua: les seqüències van una darrere l'altra, com sempre.",
+    "description": "Ajuda sota la fila de disposició de la pàgina, en contínua"
+  },
+  "features.freeLayout.levels.modeBlocksHelp": {
+    "message": "En blocs: cada seqüència és un bloc amb el seu lloc a la pàgina.",
+    "description": "Ajuda sota la fila de disposició de la pàgina, en blocs"
+  },
+  "features.freeLayout.levels.arrangement": {
+    "message": "Repartiment",
+    "description": "Títol de la fila del nivell «Pàgina», en blocs: per columnes, per files o amb una plantilla"
+  },
+  "features.freeLayout.levels.byColumns": {
+    "message": "En columnes",
+    "description": "Nom accessible i tooltip: els blocs de la pàgina en columnes"
+  },
+  "features.freeLayout.levels.byRows": {
+    "message": "En files",
+    "description": "Nom accessible i tooltip: els blocs de la pàgina en files"
+  },
+  "features.freeLayout.levels.byTemplate": {
+    "message": "Amb una plantilla",
+    "description": "Nom accessible i tooltip: els blocs de la pàgina amb una plantilla"
+  },
+  "features.freeLayout.levels.columnCount": {
+    "message": "Columnes",
+    "description": "Títol de la fila amb quantes columnes de blocs té la pàgina"
+  },
+  "features.freeLayout.levels.rowCount": {
+    "message": "Files",
+    "description": "Títol de la fila amb quantes files de blocs té la pàgina"
+  },
+  "features.freeLayout.levels.arrangementSummary": {
+    "message": "{kind, select, columns {{n, plural, one {# columna} other {# columnes}}} other {{n, plural, one {# fila} other {# files}}}}",
+    "description": "Resum del repartiment d'una pàgina en blocs: quantes columnes o files"
+  },
+  "features.freeLayout.levels.blocksSummary": {
+    "message": "En blocs, {arrangement} · {count, plural, one {# bloc} other {# blocs}}",
+    "description": "Resum del nivell «Pàgina» plegat, en blocs: el repartiment i quants blocs té"
+  },
+  "features.freeLayout.levels.gridName": {
+    "message": "Graella {columns} × {rows}",
+    "description": "Nom d'una plantilla de graella que no en té cap de propi"
+  },
+  "features.freeLayout.levels.licenceOn": {
+    "message": "A quines pàgines",
+    "description": "Fila del peu d'impressió, amb diverses pàgines: si el peu de llicència va a totes les pàgines o només a l'última"
+  },
+  "features.freeLayout.levels.licenceOnEvery": {
+    "message": "A totes",
+    "description": "Opció: el peu de llicència a totes les pàgines"
+  },
+  "features.freeLayout.levels.licenceOnLast": {
+    "message": "Només a l'última",
+    "description": "Opció: el peu de llicència només a l'última pàgina"
+  },
+  "features.freeLayout.levels.pages": {
+    "message": "Pàgines",
+    "description": "Fila del nivell «Pàgina» quan el document només té la pàgina de sempre: el botó per afegir-ne una altra"
+  },
+  "pages.viewSequence.levels.documentPages": {
+    "message": "{count, plural, one {# pàgina} other {# pàgines}}",
+    "description": "Resum del nivell «Document» plegat, després del paper: quantes pàgines té el document"
   }
 }

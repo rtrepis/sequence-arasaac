@@ -19,7 +19,10 @@ import {
   applyTemplateThunk,
   removePlacementThunk,
   removeSheetThunk,
-  setLayoutModeThunk,
+  setLicenceOnThunk,
+  setSheetDirectionThunk,
+  setSheetGapThunk,
+  setSheetModeThunk,
   setPlacementCommonThunk,
   setPlacementViewThunk,
   setSheetViewThunk,
@@ -41,7 +44,7 @@ const documentWith = (count: number): DocumentSAAC => ({
 
 const freeStore = (count = 3) => {
   const store = createAppStore({ document: documentWith(count) });
-  store.dispatch(setLayoutModeThunk("free"));
+  store.dispatch(setSheetModeThunk(0, "template"));
   return store;
 };
 
@@ -52,39 +55,64 @@ const layoutOf = (store: ReturnType<typeof createAppStore>) =>
 const keyOf = (placement: { kind: string; sequenceKey?: number }) =>
   placement.kind === "sequence" ? (placement.sequenceKey ?? -1) : -1;
 
-describe("passar a «Lliure» i tornar", () => {
-  it("passar a lliure col·loca totes les seqüències, sense que en desaparegui cap", () => {
+describe("passar una pàgina a blocs i tornar", () => {
+  it("passar a blocs fa explícita la pàgina i hi col·loca totes les seqüències", () => {
     const store = freeStore(3);
+    expect(layoutOf(store).sheets).toHaveLength(1);
     expect(layoutOf(store).sheets[0].mode).toBe("template");
     expect(layoutOf(store).sheets[0].placements.map(keyOf)).toEqual([0, 1, 2]);
   });
 
-  it("tornar a automàtica conserva les pàgines i els blocs, i es pot desfer", () => {
+  it("tornar a contínua conserva els blocs, i tornar a blocs els recupera tal com eren", () => {
     const store = freeStore(2);
     const before = layoutOf(store);
 
-    store.dispatch(setLayoutModeThunk("flow"));
+    store.dispatch(setSheetModeThunk(0, "auto"));
 
-    expect(layoutOf(store).sheets.map(({ mode }) => mode)).toEqual(["auto"]);
+    expect(layoutOf(store).sheets[0].mode).toBe("auto");
     expect(layoutOf(store).sheets[0].placements).toBe(
       before.sheets[0].placements,
     );
-    expect(selectCanUndoStyle(store.getState())).toBe(true);
 
-    store.dispatch(undoStyleChangeThunk());
-
-    expect(layoutOf(store)).toBe(before);
-  });
-
-  it("tornar a lliure recupera la disposició tal com era", () => {
-    const store = freeStore(2);
-    store.dispatch(addSheetThunk(0));
-    const before = layoutOf(store);
-
-    store.dispatch(setLayoutModeThunk("flow"));
-    store.dispatch(setLayoutModeThunk("free"));
+    store.dispatch(setSheetModeThunk(0, "template"));
 
     expect(layoutOf(store)).toEqual(before);
+  });
+
+  it("cada pàgina té el seu mode", () => {
+    const store = freeStore(2);
+    store.dispatch(addSheetThunk(0));
+    expect(layoutOf(store).sheets.map(({ mode }) => mode)).toEqual([
+      "template",
+      "auto",
+    ]);
+  });
+
+  it("afegir una pàgina a un document sense pàgines en fa explícita la primera", () => {
+    const store = createAppStore({ document: documentWith(2) });
+    store.dispatch(addSheetThunk(0));
+    const { sheets } = layoutOf(store);
+    expect(sheets.map(({ mode }) => mode)).toEqual(["auto", "auto"]);
+    expect(sheets[0].placements.map(keyOf)).toEqual([0, 1]);
+  });
+
+  it("la direcció, l'espai i la llicència són de cada pàgina o del document", () => {
+    const store = createAppStore({ document: documentWith(2) });
+    store.dispatch(addSheetThunk(0));
+    store.dispatch(setSheetDirectionThunk(1, "column"));
+    store.dispatch(setSheetGapThunk(1, 4));
+    store.dispatch(setLicenceOnThunk("last"));
+    const pages = layoutOf(store);
+    expect(pages.sheets[1]).toMatchObject({
+      direction: "column",
+      sequenceGap: 4,
+    });
+    expect(pages.sheets[0]).not.toHaveProperty("direction");
+    expect(pages.licenceOn).toBe("last");
+
+    store.dispatch(setLicenceOnThunk("every"));
+
+    expect(layoutOf(store)).not.toHaveProperty("licenceOn");
   });
 
   it("amb la pantalla completa no hi ha mil·límetres, i no es construeix res", () => {
@@ -94,7 +122,7 @@ describe("passar a «Lliure» i tornar", () => {
         layout: { pageSize: "FULLSCREEN", orientation: "landscape" },
       },
     });
-    store.dispatch(setLayoutModeThunk("free"));
+    store.dispatch(setSheetModeThunk(0, "template"));
     expect(store.getState().document.pages).toBeUndefined();
   });
 });
@@ -165,7 +193,7 @@ describe("pàgines i seqüències", () => {
     store.dispatch(addNewSequenceActionCreator(2));
     expect(whereIs(layoutOf(store), 2)).toEqual({ common: false, sheets: [] });
 
-    store.dispatch(setLayoutModeThunk("flow"));
+    store.dispatch(setSheetModeThunk(0, "auto"));
     store.dispatch(addNewSequenceActionCreator(3));
     expect(whereIs(layoutOf(store), 3)).toEqual({ common: false, sheets: [0] });
   });

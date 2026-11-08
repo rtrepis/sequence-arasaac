@@ -65,10 +65,9 @@ import { VIEW_SETTINGS_COLUMN_WIDTH } from "./ViewSequenceSettings.styled";
 import FreeLayoutPages from "@features/free-layout/components/FreeLayoutPages";
 import { pageFrameSx } from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages";
 import FreeLayoutSettings from "@features/free-layout/components/FreeLayoutSettings";
-import freeLayoutMessages from "@features/free-layout/components/FreeLayoutSettings/FreeLayoutSettings.lang";
 import {
   selectDocumentTitle,
-  selectIsFreeLayout,
+  selectHasPages,
   selectPages,
 } from "@features/free-layout/store/freeLayoutThunks";
 import {
@@ -82,9 +81,8 @@ import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
 import {
   BlockIcon,
   BlockLevel,
-  PageIcon,
   PageLevel,
-  PagePictograms,
+  LicencePagesRow,
   VIEW_PAGE_LEVEL_ID,
 } from "@features/free-layout/components/ViewLevels";
 import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
@@ -243,7 +241,7 @@ const ViewSequencesSettingsContent = ({
 
   // Disposició lliure (ADR-005): les pàgines i les seves caixes en lloc del
   // full del flux. La pantalla completa no l'admet: no té mil·límetres
-  const isFreeLayout = useAppSelector(selectIsFreeLayout) && !isFullscreen;
+  const isFreeLayout = useAppSelector(selectHasPages) && !isFullscreen;
 
   // L'espai del full (`docs/PLA-mode-lliure.md`, §6, «L'espai»). A partir
   // d'escriptori, la columna d'ajustos es pot amagar perquè el full faci tota
@@ -450,11 +448,7 @@ const ViewSequencesSettingsContent = ({
             ? levelMessages.landscapeShort
             : levelMessages.portraitShort,
         )}`,
-    intl.formatMessage(
-      isFreeLayout
-        ? levelMessages.layoutFreeShort
-        : levelMessages.layoutFlowShort,
-    ),
+    intl.formatMessage(levelMessages.documentPages, { count: sheetCount }),
   ].join(" · ");
   const crumbs: LevelCrumb[] = [
     {
@@ -794,12 +788,13 @@ const ViewSequencesSettingsContent = ({
                         <FormattedMessage {...messages.sectionPageFormat} />
                       }
                     >
+                      {/* El paper. La direcció i l'espai entre seqüències
+                          són de cada pàgina; amb pàgines pròpies, la
+                          pantalla completa no s'hi pot triar */}
                       <GlobalViewControls
                         viewSettings={viewSettings}
                         pageSize={pageSize}
-                        // En lliure, l'espai entre seqüències no hi diu res, i la
-                        // pantalla completa no s'hi pot triar
-                        sequenceCount={isFreeLayout ? 1 : sequenceKeys.length}
+                        sequenceCount={1}
                         paperOnly={isFreeLayout}
                         showDirection={false}
                         onPageSizeChange={setPageSize}
@@ -808,18 +803,8 @@ const ViewSequencesSettingsContent = ({
                       />
                     </SectionTitle>
 
-                    {/* Disposició automàtica o lliure (ADR-005), i les
-                      seqüències que no són a cap pàgina */}
-                    <SectionTitle
-                      title={
-                        <FormattedMessage {...freeLayoutMessages.section} />
-                      }
-                    >
-                      <FreeLayoutSettings
-                        pageSize={pageSize}
-                        onPageSizeChange={setPageSize}
-                      />
-                    </SectionTitle>
+                    {/* Les seqüències que no són a cap pàgina */}
+                    <FreeLayoutSettings />
 
                     {/* El que només surt al peu del full imprès i del PDF */}
                     <PrintFooterSection
@@ -829,48 +814,32 @@ const ViewSequencesSettingsContent = ({
                       onLicenceChange={(value) =>
                         updateViewSetting("licence", value)
                       }
-                    />
+                    >
+                      <LicencePagesRow />
+                    </PrintFooterSection>
                   </SettingsLevel>
 
-                  {/* Nivell 2: la pàgina que es mira. A la disposició automàtica
-                    n'hi ha una de sola, i hi va la direcció */}
-                  {isFreeLayout ? (
-                    <PageLevel
-                      expanded={openLevels.page}
-                      onExpandedChange={setLevelOpen("page")}
-                    />
-                  ) : (
-                    <SettingsLevel
-                      id={VIEW_PAGE_LEVEL_ID}
-                      icon={<PageIcon />}
-                      kind={<FormattedMessage {...levelMessages.kindPage} />}
-                      title={pageTitle}
-                      scope={intl.formatMessage(levelMessages.pageScope, {
-                        number: 1,
-                        total: 1,
-                      })}
-                      summary={intl.formatMessage(
-                        direction === "row"
-                          ? levelMessages.directionRowShort
-                          : levelMessages.directionColumnShort,
-                      )}
-                      expanded={openLevels.page}
-                      onExpandedChange={setLevelOpen("page")}
-                    >
-                      <GlobalViewControls
-                        viewSettings={viewSettings}
-                        pageSize={pageSize}
-                        sequenceCount={1}
-                        showPaper={false}
-                        onPageSizeChange={setPageSize}
-                        onDirectionChange={handleDirectionChange}
-                        onSequenceSpaceChange={handleSequenceSpaceChange}
-                      />
-                      {/* L'antic «Aplica a totes»: la mateixa configuració a
-                          totes les seqüències, o cadascuna la seva */}
-                      <PagePictograms sheetIndex={0} />
-                    </SettingsLevel>
-                  )}
+                  {/* Nivell 2: la pàgina que es mira, contínua o en blocs.
+                      Sense pàgines pròpies, la direcció i l'espai són els de
+                      sempre */}
+                  <PageLevel
+                    expanded={openLevels.page}
+                    onExpandedChange={setLevelOpen("page")}
+                    fullscreen={isFullscreen}
+                    implicit={{
+                      direction,
+                      onDirectionChange: (value) =>
+                        updateViewSetting("direction", value),
+                      gap: viewSettings.sequenceSpaceBetween,
+                      onGapChange: (value) =>
+                        dispatch(
+                          setSequenceSpaceBetweenActionCreator({
+                            value,
+                            styleView: documentStyle.view,
+                          }),
+                        ),
+                    }}
+                  />
 
                   {/* Nivell 3: el bloc seleccionat, o com s'hi arriba */}
                   {selectedBlock ? (

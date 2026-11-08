@@ -191,7 +191,7 @@ describe("afegir seqüències a una pàgina", () => {
     expect(added.y).toBeGreaterThan(b.y);
   });
 
-  it("si la plantilla ja és plena, passa a una de més gran i ho reparteix tot", () => {
+  it("si «Y files» ja és ple, hi afegeix una columna i ho reparteix tot", () => {
     const full = applyTemplateToSheet(
       {
         sheets: [sheet("sh_1", [placement("a", 1), placement("b", 2)])],
@@ -202,10 +202,33 @@ describe("afegir seqüències a una pàgina", () => {
       AREA,
     );
     const result = addSequencesToSheet(full, 0, [3], context());
-    expect(result.sheets[0].template).toBe("rows-3");
+    // Dues files es queden dues files: ara de dues columnes
+    expect(result.sheets[0].template).toBe("rows-2");
     expect(result.sheets[0].placements.map((p) => boxed(p).slot)).toEqual([
       0, 1, 2,
     ]);
+    expect(boxed(result.sheets[0].placements[1]).x).toBeGreaterThan(0);
+  });
+
+  it("si una plantilla amb forma ja és plena, passa a la que toca i ho reparteix tot", () => {
+    const full = applyTemplateToSheet(
+      {
+        sheets: [
+          sheet("sh_1", [
+            placement("a", 1),
+            placement("b", 2),
+            placement("c", 3),
+            placement("d", 4),
+          ]),
+        ],
+        common: [],
+      },
+      0,
+      gridTemplate(4),
+      AREA,
+    );
+    const result = addSequencesToSheet(full, 0, [5], context());
+    expect(result.sheets[0].template).toBe("grid-3x2");
   });
 
   it("a una pàgina automàtica, van al final i sense caixa", () => {

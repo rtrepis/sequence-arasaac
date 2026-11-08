@@ -788,11 +788,12 @@ fet encara.
    entrat també els estils amb nom (R10). Vegeu «Com ha quedat el model», a sota.
 4. ✅ **R5**, la columna que segueix la pàgina i la selecció de la caixa. Vegeu «Com ha quedat la
    columna (pas 4)».
-4b. ⏭️ **El mode per pàgina** (R1 a la interfície): «Com es col·loquen: Automàtica / Plantilla» al
+4b. ✅ **El mode per pàgina** (R1 a la interfície), replantejat el 2026-11-08: vegeu «Contínua o
+   en blocs (pas 4b)». Abans: «Com es col·loquen: Automàtica / Plantilla» al
    nivell «Pàgina», el selector «Disposició» del document desapareix i la vista pinta cada pàgina
    automàtica sola, amb els seus blocs. Es va treure de R5 perquè toca el flux, la impressió, el PDF
    i la pantalla completa.
-5. **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
+5. ⏭️ **R4**, les miniatures i la previsualització de plantilles, amb les plantilles noves de R3.
 6. **R10** (B33), decidir el catàleg d'estils dels pictogrames: abans de R7, perquè en canvia les
    accions. **R11**, el panell «Vista» de la configuració per defecte, amb R1. Les plantilles
    pròpies (B34), més endavant.
@@ -840,8 +841,8 @@ Fet a la mateixa branca, sense interfície nova. Detall a `docs/decisions/ADR-00
 
 **Què queda per pintar**, i va amb les fases de la interfície:
 
-- Les pàgines automàtiques soles (cada una amb els seus blocs, no totes les seqüències juntes), i el
-  selector de mode per pàgina (R1, a la columna de R8). És el pas 4b.
+- ✅ Les pàgines automàtiques soles (cada una amb els seus blocs, no totes les seqüències juntes), i
+  el selector de mode per pàgina (R1, a la columna de R8): pas 4b, ara «Contínua» i «En blocs».
 - Els rètols (R9): el model hi és, però la vista encara no els pinta.
 - ✅ El retoc de la vista d'un bloc i la mida com a màxim (Q2): es pinten i s'editen al nivell
   «Bloc» (pas 4). Dels estils amb nom (R7, R10) es pinta la part de `view`; la lletra i les vores,
@@ -901,6 +902,36 @@ Primera revisió a la previsualització. Es demana simplificar els conceptes per
 | C12 | L'alineació també confon al nivell «Document» | Fora: el nivell «Document» ja no té cap ajust dels pictogrames. Tot és del bloc (vegeu R12 per a la pàgina automàtica) |
 | C13 | La configuració dels pictogrames, on? (R12) | **Com abans, però per pàgina**: al nivell «Pàgina», secció «Pictogrames», l'interruptor **«La mateixa a tots els blocs»**. Activat, la mida, l'espai i l'alineació són allà i s'escriuen a tots els blocs propis de la pàgina (els comuns no, que surten a totes); el nivell «Bloc» ho diu i no en té. Desactivat, cada bloc es tria al nivell «Bloc». Amb un sol bloc a la pàgina, no hi és. És un **mode d'edició**, com era «Aplica a totes»: no es desa al fitxer. Sense que l'usuari n'hagi triat res, està activat si tots els blocs de la pàgina ja es veuen igual. A la disposició automàtica d'un sol full, activat escriu l'estil del document a totes les seqüències, com feia abans |
 | C11 | La secció «Lloc» del bloc sobra | Fora. Les accions (a totes les pàgines, copiar, treure) continuen al menú del bloc, al full; les eines per copiar vindran més endavant |
+
+### Contínua o en blocs (pas 4b, 2026-11-08)
+
+Després de moltes voltes, la idea és **treballar com abans i afegir-hi la possibilitat de treballar
+en blocs**, pàgina a pàgina. Qui ve de la versió d'abans troba el mateix d'entrada.
+
+| # | Decisió |
+|---|---|
+| C14 | **Document**: el paper, les seqüències sense col·locar i el peu d'impressió. L'espai entre seqüències en surt (és de cada pàgina). **El peu de llicència va a totes les pàgines o només a l'última** («A quines pàgines», amb més d'una pàgina; `page.licenceOn`) |
+| C15 | **Pàgina**: la fila **«Disposició»** tria **Contínua** (com sempre: les seqüències una darrere l'altra) o **En blocs** (cada seqüència és un bloc amb el seu lloc). El nom «Contínua» és provisional: **cal confirmar-lo** |
+| C16 | **Contínua**: la direcció (files o columnes) i l'espai entre seqüències, de cada pàgina (`sheets[].direction`, `sheets[].sequenceGap`) |
+| C17 | **En blocs**: «Repartiment» **En columnes** (N), **En files** (N) o **Amb una plantilla**. N columnes o N files creixen amb els blocs (ADR-005, decisió 17). Les plantilles són, de moment, la graella 2 × 2 i la tira a dalt; les de R3 vindran amb R4 |
+| C18 | **Pictogrames**, a totes dues: «La mateixa a tots els blocs» o cadascun la seva (C13) |
+| C19 | **Les columnes de dins d'un bloc** surten de la interfície (la columna i el menú del bloc): es pinten sempre automàtiques |
+
+- **Sense pàgines pròpies** (un document de sempre), la vista és la de sempre: la pàgina és contínua
+  i el nivell «Pàgina» té la direcció, l'espai, els pictogrames i «Afegeix una pàgina». Afegir una
+  pàgina o passar-la a blocs fa explícita la pàgina (`explicitPages`) i, a partir d'aquí, la vista
+  pinta cada pàgina amb els seus blocs.
+- **Pàgina nova**: contínua. **Pantalla completa**: no té mil·límetres; s'hi veu el flux de sempre
+  i no s'hi pot triar «En blocs».
+- **Fitxer**: `sheets[].sequenceGap` i `page.licenceOn`, tots dos opcionals; esquema, fixture 17 i
+  fonament 06 al dia. No cal pujar `schemaVersion`.
+- **De passada**: la columna d'ajustos ocupa uns 420 px amb els marges, i el càlcul d'escala en
+  reservava 380; el full apaïsat de sempre perdia la vora dreta i el de les pàgines passava per sota
+  de la columna. Ara se'n reserven 424 (`SCREEN_MARGINS.medium`).
+- **Queda**: els blocs comuns no es pinten a les pàgines contínues; confirmar el nom «Contínua»
+  (C15). Els specs de captures de `e2e/screenshots/multiple-sequences*.spec.ts` tornen a fer el
+  que feien (pas 3, la mida de totes amb «La mateixa a tots els blocs»; pas 4, en desactivar-ho,
+  la d'una sola), però no s'han tornat a executar.
 
 ### Preguntes que eren obertes
 

@@ -8,7 +8,7 @@ import SequenceViewRows from "@components/ViewSequencesSettings/SequenceViewRows
 import { applyViewSettingsToAllActionCreator } from "@features/sequence/store/documentSlice";
 import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import {
-  selectIsFreeLayout,
+  selectHasPages,
   setSheetViewThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { usePageUniform } from "@features/free-layout/hooks/usePageUniform";
@@ -33,7 +33,7 @@ const PagePictograms = ({
   sheetIndex,
 }: PagePictogramsProps): React.ReactElement | null => {
   const dispatch = useAppDispatch();
-  const isFree = useAppSelector(selectIsFreeLayout);
+  const isFree = useAppSelector(selectHasPages);
   const documentView = useAppSelector(selectDocumentStyle).view;
   const { uniform, setUniform, view, blockCount } = usePageUniform(sheetIndex);
   if (blockCount < 2) return null;

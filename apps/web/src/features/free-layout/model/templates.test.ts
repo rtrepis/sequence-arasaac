@@ -6,6 +6,8 @@ import {
   applyTemplate,
   freeRegion,
   freeSlots,
+  arrangementOf,
+  arrangementTemplate,
   templateById,
   gridTemplate,
   slotToBox,
@@ -136,8 +138,35 @@ describe("la plantilla de la pàgina (R2)", () => {
   it("una plantilla que l'app no coneix no es troba", () => {
     expect(templateById("primer-despres")).toBeUndefined();
     expect(templateById("rows-0")).toBeUndefined();
-    // Una graella que `gridTemplate` no faria mai
-    expect(templateById("grid-1x5")).toBeUndefined();
+  });
+
+  it("qualsevol graella es troba pel seu id, encara que `gridTemplate` no la faci", () => {
+    expect(templateById("grid-1x5")?.slots).toHaveLength(5);
+  });
+
+  it("«X columnes» i «Y files» creixen amb els blocs i es recorden pel mateix id", () => {
+    // Dues columnes amb cinc blocs: tres files
+    const columns = arrangementTemplate("columns", 2, 5);
+    expect(columns.id).toBe("columns-2");
+    expect(columns.slots).toHaveLength(6);
+    expect(columns.slots[1]).toMatchObject({ x: 0.5, y: 0 });
+    // Dues files amb tres blocs: dues columnes
+    const rows = arrangementTemplate("rows", 2, 3);
+    expect(rows.id).toBe("rows-2");
+    expect(rows.slots).toHaveLength(4);
+    // Si hi caben, és la pila de sempre
+    expect(arrangementTemplate("rows", 3, 2)).toEqual(stackTemplate(3, "rows"));
+    expect(templateById("columns-2", 5)).toEqual(columns);
+  });
+
+  it("el repartiment es llegeix de l'id de la plantilla", () => {
+    expect(arrangementOf("columns-3")).toEqual({ kind: "columns", n: 3 });
+    expect(arrangementOf("rows-2")).toEqual({ kind: "rows", n: 2 });
+    expect(arrangementOf("full")).toEqual({ kind: "columns", n: 1 });
+    expect(arrangementOf("strip-top")).toEqual({
+      kind: "template",
+      id: "strip-top",
+    });
   });
 
   it("els espais lliures són els que cap bloc no ocupa", () => {

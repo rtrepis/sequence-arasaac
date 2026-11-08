@@ -67,6 +67,7 @@ export const PAGE_KEYS = [
   "layout",
   "sheets",
   "common",
+  "licenceOn",
 ] as const;
 // `placements` és el nom que tenien els blocs a les fases 1–3: es llegeix i
 // no es torna a escriure
@@ -74,6 +75,7 @@ export const SHEET_KEYS = [
   "id",
   "mode",
   "direction",
+  "sequenceGap",
   "template",
   "blocks",
   "placements",
@@ -289,12 +291,16 @@ const pagesFromV3 = (document: SaacDocumentV3): DocumentPages | undefined => {
         id: sheet.id,
         mode: sheet.mode,
         ...(sheet.direction && { direction: sheet.direction }),
+        ...(sheet.sequenceGap !== undefined && {
+          sequenceGap: sheet.sequenceGap,
+        }),
         ...(sheet.template && { template: sheet.template }),
         placements: blocksOf(sheet.blocks),
         ...(extra && { extra }),
       };
     }),
     common: blocksOf(common ?? []),
+    ...(document.page.licenceOn === "last" && { licenceOn: "last" }),
   };
 };
 

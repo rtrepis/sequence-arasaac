@@ -9,9 +9,11 @@ import type { AppThunk, RootState } from "@/app/store";
 import type {
   DocumentLayout,
   DocumentPages,
-  PlacementColumns,
+  LicenceOn,
   SequenceViewSettings,
+  SheetMode,
 } from "@/types/document";
+import type { SequenceDirection } from "@/types/ui";
 import {
   pagesChangedActionCreator,
   userLayoutOf,
@@ -22,14 +24,18 @@ import {
 } from "@features/sequence/store/styleSlice";
 import { newSaacId } from "@features/sequence/saac/serialize";
 import { SheetArea, sheetAreaMm } from "../model/placement";
-import { addSequencesToSheet, applyTemplateToSheet } from "../model/distribute";
+import {
+  addSequencesToSheet,
+  applyTemplateToSheet,
+  sheetToTemplate,
+} from "../model/distribute";
 import {
   blockViewRetouch,
   namedStyleOf,
   resolveBlockView,
 } from "../model/blockStyle";
 import { selectResolvedSequenceViews } from "@features/sequence/style/styleSelectors";
-import { hasTemplatePages, toAutoPages, toTemplatePages } from "../model/pages";
+import { explicitPages } from "../model/pages";
 import {
   NewLayoutId,
   addSheet,
@@ -37,6 +43,7 @@ import {
   duplicateSheet,
   findPlacement,
   makeCommon,
+  mapSheet,
   makeLocal,
   moveSheet,
   removePlacement,
@@ -53,12 +60,12 @@ export const selectPageLayout = (state: RootState): DocumentLayout =>
   state.document.layout ?? userLayoutOf(state);
 
 /**
- * «Disposició: Lliure»: si alguna pàgina del document té caixes. Mentre la
- * vista no pinti les pàgines automàtiques soles, un document amb totes les
- * pàgines automàtiques es pinta com sempre, amb totes les seqüències.
+ * Si el document té pàgines pròpies. Sense, és una sola pàgina contínua amb
+ * totes les seqüències i es pinta com sempre; amb, cada pàgina es pinta amb
+ * els seus blocs, contínua o en blocs.
  */
-export const selectIsFreeLayout = (state: RootState): boolean =>
-  hasTemplatePages(state.document.pages);
+export const selectHasPages = (state: RootState): boolean =>
+  state.document.pages !== undefined;
 
 /** L'àrea útil d'un full del document, en mm. `null` amb la pantalla completa. */
 export const selectSheetArea = (state: RootState): SheetArea | null => {
@@ -103,9 +110,15 @@ const changeFreeLayout =
   ): AppThunk =>
   (dispatch, getState) => {
     const state = getState();
-    const { pages } = state.document;
     const area = selectSheetArea(state);
-    if (!pages || !area) return;
+    if (!area) return;
+    // Un document sense pàgines té la seva sense dir-ho: una de contínua amb
+    // totes les seqüències. Qualsevol canvi de pàgina la fa explícita
+    const pages = explicitPages(
+      state.document.pages,
+      selectSequenceKeys(state),
+      newLayoutId,
+    );
     const action = (): AnyAction =>
       pagesChangedActionCreator(change(pages, area));
     if (source) dispatch(undoableStyleChangeThunk(action, source));
@@ -113,39 +126,54 @@ const changeFreeLayout =
   };
 
 /**
- * «Disposició: Automàtica / Lliure», per a tot el document mentre la columna
- * no ho ofereixi pàgina a pàgina. «Lliure» posa caixes a totes les pàgines: les
- * que ja en tenien les recuperen tal com eren, i un document sense pàgines rep
- * la disposició de partida. «Automàtica» no esborra res (la plantilla i les
- * caixes es conserven), però canvia el que es desa: per això es pot desfer.
+ * Com es col·loquen els blocs d'una pàgina: «Contínua» (`auto`, com sempre: un
+ * darrere l'altre) o «En blocs» (`template`, cada bloc a la seva caixa). No
+ * esborra res: en tornar a «Contínua», les caixes i la plantilla es
+ * conserven, i tornar a «En blocs» les recupera. Un document sense pàgines
+ * passa a tenir-ne (`explicitPages`), i la pantalla completa, que no té
+ * mil·límetres, no ho admet.
  */
-export const setLayoutModeThunk =
-  (mode: "flow" | "free"): AppThunk =>
+export const setSheetModeThunk =
+  (sheetIndex: number, mode: SheetMode): AppThunk =>
   (dispatch, getState) => {
-    const state = getState();
-    const { pages } = state.document;
-    if (mode === "flow") {
-      if (!pages) return;
-      dispatch(
-        undoableStyleChangeThunk(
-          () => pagesChangedActionCreator(toAutoPages(pages)),
-          "layoutFlow",
-        ),
-      );
-      return;
-    }
-    const area = selectSheetArea(state);
-    if (!area) return;
+    const direction = selectPageLayout(getState()).direction ?? "row";
     dispatch(
-      pagesChangedActionCreator(
-        toTemplatePages(pages, selectSequenceKeys(state), {
-          area,
-          direction: selectPageLayout(state).direction ?? "row",
-          newId: newLayoutId,
-        }),
+      changeFreeLayout((layout, area) =>
+        mapSheet(layout, sheetIndex, (sheet) =>
+          mode === "template"
+            ? sheetToTemplate(sheet, layout, { area, direction })
+            : { ...sheet, mode: "auto" },
+        ),
       ),
     );
   };
+
+/** La direcció d'una pàgina contínua: les seqüències en files o en columnes. */
+export const setSheetDirectionThunk = (
+  sheetIndex: number,
+  direction: SequenceDirection,
+): AppThunk =>
+  changeFreeLayout((layout) =>
+    mapSheet(layout, sheetIndex, (sheet) => ({ ...sheet, direction })),
+  );
+
+/** L'espai entre seqüències d'una pàgina contínua. */
+export const setSheetGapThunk = (
+  sheetIndex: number,
+  sequenceGap: number,
+): AppThunk =>
+  changeFreeLayout((layout) =>
+    mapSheet(layout, sheetIndex, (sheet) => ({ ...sheet, sequenceGap })),
+  );
+
+/** A quines pàgines va el peu de llicència: a totes o només a l'última. */
+export const setLicenceOnThunk = (licenceOn: LicenceOn): AppThunk =>
+  changeFreeLayout((layout) => ({
+    sheets: layout.sheets,
+    common: layout.common,
+    // A totes és el de sempre: no cal dir-ho
+    ...(licenceOn === "last" && { licenceOn }),
+  }));
 
 /** Afegeix seqüències a una pàgina i la torna a repartir (es pot desfer). */
 export const addSequencesToSheetThunk =
@@ -175,10 +203,13 @@ export const applyTemplateThunk = (
     "layoutTemplate",
   );
 
-/** Una pàgina nova, buida, darrere de `afterIndex`. */
+/**
+ * Una pàgina nova, buida, darrere de `afterIndex`. És contínua, com la de
+ * sempre: passar-la a blocs és de l'usuari.
+ */
 export const addSheetThunk = (afterIndex: number): AppThunk =>
   changeFreeLayout((layout) =>
-    addSheet(layout, afterIndex, newLayoutId, "template"),
+    addSheet(layout, afterIndex, newLayoutId, "auto"),
   );
 
 /** Una còpia de la pàgina, darrere de l'original. */
@@ -231,17 +262,6 @@ export const setPlacementCommonThunk =
           ),
     );
   };
-
-/** Les columnes de la graella d'una caixa. */
-export const setPlacementColumnsThunk = (
-  placementId: string,
-  columns: PlacementColumns,
-): AppThunk =>
-  changeFreeLayout((layout) =>
-    updatePlacement(layout, placementId, (placement) =>
-      placement.kind === "sequence" ? { ...placement, columns } : placement,
-    ),
-  );
 
 /**
  * Canvia la vista d'un bloc de seqüència (el nivell «Bloc» de la columna, M1).

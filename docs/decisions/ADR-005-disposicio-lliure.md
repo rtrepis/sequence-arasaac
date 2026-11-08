@@ -1,6 +1,7 @@
 # ADR-005: Pàgines i blocs
 
-- **Estat**: acceptada (2026-11-06), **revisada** (2026-11-07) amb la revisió de la fase 3 del pla
+- **Estat**: acceptada (2026-11-06), **revisada** (2026-11-07, i ampliada el 2026-11-08 amb el
+  mode de cada pàgina a la interfície: vegeu les decisions 16–19) amb la revisió de la fase 3 del pla
   (`docs/PLA-mode-lliure.md`, §12): un sol model de pàgines (R1), la plantilla desada amb la pàgina
   (R2), els blocs de text (R9) i els estils amb nom del catàleg (R10). La versió primera es resumeix
   a «Història».
@@ -97,6 +98,24 @@ fase 3 va fer veure que no n'hi ha prou:
 15. **El model és fet de funcions pures** a `apps/web/src/features/free-layout/model/`, sense marc
     d'accions ni gestor de teclat propis.
 
+16. **A la interfície, «Contínua» i «En blocs»** (2026-11-08): `"auto"` és la pàgina **contínua**,
+    la de sempre (direcció i espai entre seqüències), i `"template"` la pàgina **en blocs**,
+    repartida en **N columnes**, **N files** o amb una **plantilla**. Cada pàgina tria al nivell
+    «Pàgina» de la columna de la vista; el selector «Disposició» del document, que era el pont,
+    desapareix. Una pàgina nova és contínua.
+17. **«N columnes» i «N files» creixen amb els blocs**: `columns-N` són N columnes i les files que
+    calguin (i `rows-N` al revés). Amb tants blocs com N o menys, és la pila de sempre. En afegir-hi
+    un bloc sense espai lliure, la graella creix i l'`id` no canvia; les altres plantilles, com
+    abans, passen a una de més gran (decisió 3).
+18. **L'espai entre seqüències és de cada pàgina contínua** (`sheets[].sequenceGap`; sense valor, el
+    de `page.sequenceGap`), com ja ho era la direcció. **El peu de llicència va a totes les
+    pàgines o només a l'última** (`page.licenceOn: "last"`; sense valor, a totes). Tots dos són
+    opcionals: les versions anteriors els conserven com a camps desconeguts.
+19. **Les columnes de dins d'un bloc, de moment, no es trien**: es pinten sempre automàtiques, i
+    el camp `columns` es conserva al fitxer. Un document sense pàgines (`sheets`) continua sent la
+    pàgina contínua de sempre; afegir-hi una pàgina o passar-la a blocs el fa explícit
+    (`explicitPages`).
+
 ## Alternatives descartades
 
 | Alternativa | Per què no |
@@ -121,13 +140,12 @@ fase 3 va fer veure que no n'hi ha prou:
   `17-pagines-i-blocs.saac` té una pàgina amb plantilla, una d'automàtica amb un rètol i un bloc
   d'un tipus desconegut, una de retocada sense plantilla, un comú, un estil amb nom i una seqüència
   sense col·locar, i obrir-la i tornar-la a desar en dona el mateix fitxer. Les 01–15 no canvien.
-- **Pont fins a la interfície nova**: mentre la columna (R5, R8) no ofereix el mode pàgina a pàgina,
-  el selector «Disposició: Automàtica / Lliure» el canvia a **totes** les pàgines alhora, i la vista
-  pinta el flux de sempre (un sol full amb totes les seqüències) si cap pàgina té caixes. Des de R5,
+- **El pont s'ha acabat** (2026-11-08): cada pàgina tria contínua o en blocs (decisió 16), i la
+  vista pinta cada pàgina contínua amb els seus blocs, un darrere l'altre. Els blocs comuns només
+  es pinten a les pàgines en blocs. Des de R5,
   el retoc de la vista d'un bloc, la part de `view` dels estils amb nom i la mida com a màxim (Q2)
   es pinten i el retoc s'edita al nivell «Bloc» de la columna; els rètols i la lletra i les vores
-  dels estils amb nom són al model però encara no es pinten. Una pàgina automàtica dins d'un
-  document amb caixes es pinta repartida.
+  dels estils amb nom són al model però encara no es pinten.
 - **El núvol perd les pàgines** fins que els validadors de l'API les coneguin
   (`apps/api/src/modules/documents/validators.ts`, P1 punt 5 a `docs/BACKLOG-ux.md`). És la fase 5
   del pla; ara els comptes estan apagats.

@@ -154,21 +154,18 @@ test("multiple-sequences: captures i vídeo per la guia de novetats", async ({
   });
 
   // =============================================
-  // VIEW PAGE - PAS 3: Ajustar la seqüència 1 (la mida és del bloc)
+  // VIEW PAGE - PAS 3: Ajustar totes les seqüències
   // =============================================
   // Navegar a Vista via React Router (manté l'estat Redux de les seqüències)
   await page.getByRole("tab", { name: /Vista/i }).click();
   // Esperar que el slider "Mida" sigui visible i estable (acordió expandit per defecte)
-  // La mida és del bloc: es selecciona la seqüència 1 al full i el nivell
-  // «Bloc» de la columna n'ensenya la mida (R5)
-  await page
-    .getByRole("button", { name: /^(sequence 1|seqüència 1),/i })
-    .click();
+  // «La mateixa a tots els blocs» (nivell «Pàgina») és activat: la mida
+  // d'aquí canvia totes les seqüències, com l'antic «Aplica a totes»
   const sizeSlider = page.getByRole("slider", { name: "Mida" });
   await sizeSlider.waitFor({ state: "visible", timeout: 15000 });
   await page.waitForTimeout(600);
 
-  // Només hi ha el «Mida» del bloc seleccionat
+  // «La mateixa a tots els blocs» activat: un sol «Mida», el de la pàgina
   // El MUI Slider thumb intercepta events de ratolí → usar focus() via JS + teclat
   await sizeSlider.evaluate((el: HTMLElement) => el.focus());
   for (let i = 0; i < 8; i++) {
@@ -185,8 +182,11 @@ test("multiple-sequences: captures i vídeo per la guia de novetats", async ({
   // =============================================
   // VIEW PAGE - PAS 4: Ajustar una seqüència sola
   // =============================================
-  // Seleccionar la seqüència 2 al full: el nivell «Bloc» de la columna
-  // n'ensenya els ajustos (R5)
+  // Cada seqüència la seva: es desactiva «La mateixa a tots els blocs» i
+  // es selecciona la seqüència 2 al full, que n'ensenya els ajustos (R5)
+  await page
+    .getByRole("checkbox", { name: "La mateixa a tots els blocs" })
+    .click();
   await page
     .getByRole("button", { name: /^(sequence 2|seqüència 2),/i })
     .click();

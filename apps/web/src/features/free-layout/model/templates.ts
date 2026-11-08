@@ -54,6 +54,51 @@ export const gridTemplate = (n: number): LayoutTemplate => {
   };
 };
 
+/** Una graella de `columns` × `rows` espais, d'esquerra a dreta i de dalt a baix. */
+export const fixedGrid = (columns: number, rows: number): LayoutTemplate => ({
+  id: `grid-${columns}x${rows}`,
+  slots: Array.from({ length: columns * rows }, (_, index) => ({
+    x: (index % columns) / columns,
+    y: Math.floor(index / columns) / rows,
+    w: 1 / columns,
+    h: 1 / rows,
+  })),
+});
+
+/**
+ * El repartiment «X columnes» o «Y files» d'una pàgina en blocs, per a
+ * `count` blocs. Amb `columns-N`, N columnes i les files que calguin; amb
+ * `rows-N`, N files i les columnes que calguin. Si els blocs hi caben en una
+ * fila o una columna, és la pila de sempre (`stackTemplate`), amb el mateix
+ * `id`: el repartiment es recorda encara que hi hagi més blocs, i en afegir-ne
+ * un, creix.
+ */
+export const arrangementTemplate = (
+  axis: "rows" | "columns",
+  n: number,
+  count: number,
+): LayoutTemplate => {
+  const other = Math.max(1, Math.ceil(count / n));
+  if (other === 1) return stackTemplate(n, axis);
+  const grid = axis === "columns" ? fixedGrid(n, other) : fixedGrid(other, n);
+  return { ...grid, id: `${axis}-${n}` };
+};
+
+/** El repartiment d'una pàgina en blocs, tal com el tria la columna. */
+export type Arrangement =
+  | { kind: "columns" | "rows"; n: number }
+  | { kind: "template"; id: string | undefined };
+
+/** El repartiment d'un `id` de plantilla: columnes, files o una plantilla. */
+export const arrangementOf = (templateId: string | undefined): Arrangement => {
+  const stack = /^(rows|columns)-([1-9][0-9]?)$/.exec(templateId ?? "");
+  if (stack)
+    return { kind: stack[1] as "rows" | "columns", n: Number(stack[2]) };
+  // Una sola caixa és una columna (i una fila)
+  if (templateId === "full") return { kind: "columns", n: 1 };
+  return { kind: "template", id: templateId };
+};
+
 /** Una tira estreta a dalt (un quart) i un espai gran a sota. */
 const STRIP_TOP: LayoutTemplate = {
   id: "strip-top",
@@ -69,6 +114,15 @@ export const TEMPLATE_CHOICES: readonly LayoutTemplate[] = [
   stackTemplate(2, "rows"),
   stackTemplate(2, "columns"),
   stackTemplate(3, "rows"),
+  gridTemplate(4),
+  STRIP_TOP,
+];
+
+/**
+ * Les plantilles pròpiament dites, les que no són «X columnes» o «Y files»:
+ * el selector «Plantilla» de la pàgina en blocs.
+ */
+export const SHAPED_TEMPLATES: readonly LayoutTemplate[] = [
   gridTemplate(4),
   STRIP_TOP,
 ];
@@ -202,17 +256,22 @@ export const applyTemplate = <T extends PagePlacement>(
  * l'`id` d'una plantilla d'una versió posterior: es conserva, però no s'hi pot
  * afegir res a l'espai lliure.
  */
-export const templateById = (id: string): LayoutTemplate | undefined => {
+export const templateById = (
+  id: string,
+  count = 0,
+): LayoutTemplate | undefined => {
+  const stack = /^(rows|columns)-([1-9][0-9]?)$/.exec(id);
+  // «X columnes» i «Y files» creixen amb els blocs (`arrangementTemplate`)
+  if (stack)
+    return arrangementTemplate(
+      stack[1] as "rows" | "columns",
+      Number(stack[2]),
+      count,
+    );
   const choice = TEMPLATE_CHOICES.find((template) => template.id === id);
   if (choice) return choice;
-  const stack = /^(rows|columns)-([1-9][0-9]?)$/.exec(id);
-  if (stack)
-    return stackTemplate(Number(stack[2]), stack[1] as "rows" | "columns");
   const grid = /^grid-([1-9])x([1-9])$/.exec(id);
-  if (grid) {
-    const template = gridTemplate(Number(grid[1]) * Number(grid[2]));
-    return template.id === id ? template : undefined;
-  }
+  if (grid) return fixedGrid(Number(grid[1]), Number(grid[2]));
   return undefined;
 };
 

@@ -59,7 +59,7 @@ per pestanya, pestanya activa, si porta configuració global i què se n'espera 
 | `14-versio-99` | v3, `schemaVersion: 99` | 1 (2) | dins del document | una versió més nova: s'obre, avisa i conserva els camps que no coneix |
 | `15-paper-carta` | v3 | 1 (2) | dins del document | pàgina en paper Carta (`LETTER`): s'obre en Carta i es torna a desar igual; amb una mida desconeguda, cau a la de qui obre |
 | `16-mode-lliure` | v3 | 3 (2, 3, 4) | dins del document | fases 1–3 del mode lliure (`layout: "free"`, `placements`): dues pàgines, una seqüència a totes les pàgines (`common`), una de repetida a dues pàgines, una caixa amb columnes fixes, i camps desconeguts en un full i en una col·locació. Prova la migració al model de pàgines |
-| `17-pagines-i-blocs` | v3 | 4 (2, 3, 4, 1) | dins del document | pàgines i blocs (ADR-005 revisada): una pàgina amb plantilla, una d'automàtica amb un rètol i un bloc d'un tipus desconegut, una de retocada sense plantilla, un bloc comú, un estil amb nom amb un camp desconegut, un retoc de vista en un bloc i una seqüència sense col·locar. Anada i tornada idèntica |
+| `17-pagines-i-blocs` | v3 | 4 (2, 3, 4, 1) | dins del document | pàgines i blocs (ADR-005 revisada): una pàgina amb plantilla, una d'automàtica amb un rètol i un bloc d'un tipus desconegut, una de retocada sense plantilla, el peu de llicència només a l'última pàgina, l'espai entre seqüències d'una pàgina automàtica, un bloc comú, un estil amb nom amb un camp desconegut, un retoc de vista en un bloc i una seqüència sense col·locar. Anada i tornada idèntica |
 
 Les 08 i 09 les ha escrit l'app (obrir el 02 i desar-lo), no s'han fet a mà; la 10 sí, a partir de
 la 01. La captura del 08 és idèntica, píxel a píxel, a la del 02: és la prova que una seqüència es

@@ -132,6 +132,48 @@ describe("FreeLayoutPages", () => {
     ).toHaveAttribute("aria-checked", "true");
   });
 
+  it("el peu de llicència va a totes les pàgines o només a l'última", () => {
+    const { container, unmount } = renderPages();
+    expect(container.querySelectorAll(".print-copyright")).toHaveLength(2);
+    unmount();
+
+    const document = freeDocument();
+    const last = renderPages({
+      ...document,
+      pages: { ...document.pages!, licenceOn: "last" },
+    });
+    const sheets = last.container.querySelectorAll(".preview-content");
+    expect(sheets[0].querySelector(".print-copyright")).toBeNull();
+    expect(sheets[1].querySelector(".print-copyright")).not.toBeNull();
+  });
+
+  it("una pàgina contínua pinta les seves seqüències una darrere l'altra", () => {
+    const document = freeDocument();
+    renderPages({
+      ...document,
+      pages: {
+        sheets: [
+          {
+            id: "sh_1",
+            mode: "auto",
+            placements: [placement("pl_1", 1), placement("pl_2", 2)],
+          },
+        ],
+        common: [],
+      },
+    });
+    expect(
+      screen.getByRole("button", { name: /^Sequence 2, 3 pictograms$/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /^Sequence 3, 1 pictogram$/ }),
+    ).toBeInTheDocument();
+    // Sense plantilla: el botó de la capçalera no hi és
+    expect(
+      screen.queryByRole("button", { name: "Template" }),
+    ).not.toBeInTheDocument();
+  });
+
   it("una pàgina sense res ho diu i ofereix d'afegir-hi seqüències", () => {
     const document = freeDocument();
     renderPages({

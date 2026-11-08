@@ -76,6 +76,7 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   | `layout` | `"flow"` | **Obsolet**: s'escriu sempre `"flow"`, perquè les versions anteriors el llegeixen. `"free"` només el porten els fitxers de les fases 1–3 del mode lliure (§1.1) |
   | `sheets` | llista de pàgines | Les pàgines, en ordre, i els seus blocs (§1.1). Sense `sheets`, una sola pàgina automàtica amb totes les seqüències |
   | `common` | llista de blocs | El que surt a totes les pàgines (§1.1) |
+  | `licenceOn` | `"last"` | El peu de llicència només a l'última pàgina. Sense valor, a totes, com sempre: només s'escriu `"last"` |
 
   - Una `size` que l'app no coneix cau a la pàgina de qui obre, com qualsevol valor fora de la
     llista. Per això afegir una mida **no** demana una versió nova de l'esquema: una versió de l'app
@@ -153,13 +154,16 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 - **Un document sense `sheets` és una sola pàgina automàtica amb totes les seqüències, en ordre.**
   És el de sempre: no se n'escriu cap, i el fitxer és el mateix que fins ara.
 - **`mode`** diu com es col·loquen els blocs de la pàgina:
-  - `"auto"`: un darrere l'altre, com el flux de sempre, amb la `direction` de la pàgina (sense
-    valor, la de `page.direction`) i l'espai `page.sequenceGap`. Els blocs no porten caixa. Un bloc
-    de text hi ocupa una línia sencera.
-  - `"template"`: cada bloc a la seva caixa.
+  - `"auto"` («Contínua» a la interfície): un darrere l'altre, com el flux de sempre, amb la
+    `direction` de la pàgina (sense valor, la de `page.direction`) i el seu `sequenceGap` (sense
+    valor, el de `page`). Els blocs no porten caixa. Un bloc de text hi ocupa una línia sencera.
+  - `"template"` («En blocs»): cada bloc a la seva caixa.
 - **`template`** és la plantilla de la pàgina (`"full"`, `"rows-N"`, `"columns-N"`, `"grid-CxR"`,
-  `"strip-top"`…), i **`slot`** l'espai que ocupa cada bloc. Afegir un bloc omple el primer espai
-  lliure; si no n'hi ha, la pàgina passa a una plantilla més gran. Una pàgina automàtica també pot
+  `"strip-top"`…), i **`slot`** l'espai que ocupa cada bloc. `"columns-N"` i `"rows-N"` són el
+  repartiment «N columnes» o «N files»: amb més blocs dels que hi caben en una fila o una columna,
+  la graella creix (N columnes i les files que calguin, o al revés) i l'`id` no canvia. Afegir un
+  bloc omple el primer espai lliure; si no n'hi ha, «N columnes» i «N files» creixen, i les altres
+  plantilles passen a una de més gran. Una pàgina automàtica també pot
   recordar la plantilla, i un `id` de plantilla que l'app no coneix es conserva.
 - **Un bloc** té `id`, `kind` i, on cal, caixa (`x`, `y`, `w`, `h`), `slot` i `namedStyle` (§1.2):
   - `"sequence"`: `sequence` (l'`id` de la seqüència), `columns` (`"auto"` o un enter ≥ 1; sense

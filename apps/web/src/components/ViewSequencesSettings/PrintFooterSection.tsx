@@ -14,6 +14,8 @@ interface PrintFooterSectionProps {
   /** Sense valor, la llicència hi va: és el que fa el que ja estigui desat. */
   licence?: boolean;
   onLicenceChange: (value: boolean) => void;
+  /** Files de més de la secció: a la vista, a quines pàgines va el peu */
+  children?: React.ReactNode;
 }
 
 /**
@@ -27,6 +29,7 @@ const PrintFooterSection = ({
   onAuthorChange,
   licence,
   onLicenceChange,
+  children,
 }: PrintFooterSectionProps): React.ReactElement => {
   const intl = useIntl();
 
@@ -86,6 +89,8 @@ const PrintFooterSection = ({
           />
         </Tooltip>
       </SettingRow>
+
+      {children}
 
       <SettingRow
         title={<FormattedMessage {...messages.authSequence} />}

@@ -26,6 +26,7 @@ export type {
   SequenceStyle,
   DocumentLayout,
   SheetMode,
+  LicenceOn,
   PlacementColumns,
   SequencePlacement,
   TextBlockStyle,

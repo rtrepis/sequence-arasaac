@@ -680,6 +680,19 @@ describe("pàgines i blocs", () => {
   });
 
   describe("el model d'ara (17)", () => {
+    it("llegeix l'espai d'una pàgina automàtica i el peu només a l'última", () => {
+      const { document } = parseDocument(PAGES);
+      const pages = document.pages!;
+      expect(pages.sheets[1].sequenceGap).toBe(2);
+      expect(pages.licenceOn).toBe("last");
+      // A totes les pàgines és el de sempre: no s'escriu
+      const page = documentToV3(
+        { ...document, pages: { ...pages, licenceOn: undefined } },
+        serializeContext,
+      ).page;
+      expect(page).not.toHaveProperty("licenceOn");
+    });
+
     it("s'obre amb les pàgines, els modes, la plantilla i els blocs", () => {
       const { document } = parseDocument(PAGES);
       const [first, second, third] = document.pages!.sheets;

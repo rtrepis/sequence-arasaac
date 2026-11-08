@@ -24,6 +24,7 @@ import type { PageDimensions } from "@features/print/utils/pageFormat";
 import { CSS_PRINT_DPI } from "@features/print/utils/pageFormat";
 import { mmToPixelsExact } from "@features/print/utils/pageUnits";
 import {
+  selectDocumentStyle,
   selectDocumentCardDefaults,
   selectResolvedSequenceViews,
 } from "@features/sequence/style/styleSelectors";
@@ -37,7 +38,6 @@ import {
   selectSequenceKeys,
   selectSheetArea,
 } from "@features/free-layout/store/freeLayoutThunks";
-import { sheetToTemplate } from "@features/free-layout/model/distribute";
 import {
   namedStyleOf,
   resolveBlockView,
@@ -50,6 +50,7 @@ import {
 import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
 import AddSequenceDialog from "@features/free-layout/components/AddSequenceDialog";
 import CardBaseMeasurer from "./CardBaseMeasurer";
+import AutoSheetFlow from "./AutoSheetFlow";
 import PageHeader from "./PageHeader";
 import PlacementBox from "./PlacementBox";
 import { useSequenceName } from "./useSequenceName";
@@ -150,6 +151,9 @@ const FreeLayoutPages = ({
   const { showSnackbar } = useFeedback();
   const freeLayout = useAppSelector(selectPages);
   const direction = useAppSelector(selectPageLayout).direction ?? "row";
+  // L'espai entre seqüències de les pàgines contínues que no en diuen cap
+  const documentGap =
+    useAppSelector(selectDocumentStyle).view.sequenceSpaceBetween;
   const content = useAppSelector(selectDocumentContent);
   const area = useAppSelector(selectSheetArea);
   const keys = useAppSelector(selectSequenceKeys);
@@ -247,15 +251,16 @@ const FreeLayoutPages = ({
         onMeasure={setCardSizes}
       />
 
-      {freeLayout.sheets.map((pageSheet, sheetIndex) => {
-        // Una pàgina automàtica en un document amb caixes (només pot venir
-        // d'un fitxer) es pinta repartida, sense canviar-la al document
-        const sheet = sheetToTemplate(pageSheet, freeLayout, {
-          area,
-          direction,
-        });
-        const empty =
-          sheet.placements.length === 0 && freeLayout.common.length === 0;
+      {freeLayout.sheets.map((sheet, sheetIndex) => {
+        // Contínua: les seqüències una darrere l'altra, com sempre. En blocs:
+        // cada una a la seva caixa, i les comunes a sobre
+        const continuous = sheet.mode === "auto";
+        const empty = continuous
+          ? !sheet.placements.some(({ kind }) => kind === "sequence")
+          : sheet.placements.length === 0 && freeLayout.common.length === 0;
+        // El peu de llicència, a totes les pàgines o només a l'última
+        const footer =
+          freeLayout.licenceOn !== "last" || sheetIndex === sheetCount - 1;
         // La pàgina que segueix la columna (la del nivell «Pàgina»)
         const active = sheetIndex === activePage;
         const selectedHere =
@@ -278,6 +283,7 @@ const FreeLayoutPages = ({
               sheetIndex={sheetIndex}
               sheetCount={sheetCount}
               placementCount={sheet.placements.length}
+              continuous={continuous}
               active={active}
               onAddSequence={() => setAddingTo(sheetIndex)}
             />
@@ -310,9 +316,20 @@ const FreeLayoutPages = ({
                   flexDirection: "column",
                 }}
               >
+                {continuous && !empty && (
+                  <AutoSheetFlow
+                    sheetIndex={sheetIndex}
+                    placements={sheet.placements}
+                    direction={sheet.direction ?? direction}
+                    gap={sheet.sequenceGap ?? documentGap}
+                  />
+                )}
+
                 {/* L'àrea útil: les caixes hi van en mm des del cantó de dalt */}
                 <Box
                   sx={{
+                    // Una pàgina contínua només la fa servir per dir que és buida
+                    display: continuous && !empty ? "none" : "block",
                     position: "relative",
                     width: "100%",
                     height: areaHeightPx,
@@ -321,12 +338,14 @@ const FreeLayoutPages = ({
                   }}
                 >
                   {/* Les comunes, per sota de les de la pàgina */}
-                  {freeLayout.common.map((placement) =>
-                    renderPlacement(placement, sheetIndex, true),
-                  )}
-                  {sheet.placements.map((placement) =>
-                    renderPlacement(placement, sheetIndex, false),
-                  )}
+                  {!continuous &&
+                    freeLayout.common.map((placement) =>
+                      renderPlacement(placement, sheetIndex, true),
+                    )}
+                  {!continuous &&
+                    sheet.placements.map((placement) =>
+                      renderPlacement(placement, sheetIndex, false),
+                    )}
 
                   {empty && (
                     <Stack
@@ -360,7 +379,7 @@ const FreeLayoutPages = ({
                 </Box>
 
                 <Box sx={{ marginTop: "auto" }}>
-                  <CopyRight author={author} licence={licence} />
+                  {footer && <CopyRight author={author} licence={licence} />}
                 </Box>
               </Box>
             </Box>

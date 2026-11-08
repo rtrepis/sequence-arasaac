@@ -1,15 +1,41 @@
 import React from "react";
-import { MenuItem, Select, Typography } from "@mui/material";
-import { MdCropPortrait } from "react-icons/md";
+import { MenuItem, Select, Slider, Typography } from "@mui/material";
+import {
+  MdAdd,
+  MdCropPortrait,
+  MdOutlineDashboard,
+  MdTableRows,
+  MdViewColumn,
+  MdViewStream,
+} from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { SettingRow } from "@/components/SettingsLayout";
+import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
+import StyledButton from "@/style/StyledButton";
+import { useFeedback } from "@/context/FeedbackContext";
+import type { SheetMode } from "@/types/document";
+import type { SequenceDirection } from "@/types/ui";
+import { IconToggleButton, SettingRow } from "@/components/SettingsLayout";
 import SettingsLevel from "@components/ViewSequencesSettings/SettingsLevel";
 import levelMessages from "@components/ViewSequencesSettings/ViewLevels.lang";
-import { templatesFor } from "@features/free-layout/model/templates";
+import viewMessages from "@components/ViewSequencesSettings/ViewSequencesSettings.lang";
+import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
+import { isBoxed } from "@features/free-layout/model/placement";
 import {
+  Arrangement,
+  LayoutTemplate,
+  SHAPED_TEMPLATES,
+  arrangementOf,
+  arrangementTemplate,
+} from "@features/free-layout/model/templates";
+import {
+  addSheetThunk,
   applyTemplateThunk,
+  selectPageLayout,
   selectPages,
+  setSheetDirectionThunk,
+  setSheetGapThunk,
+  setSheetModeThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
 import PageActionsMenu from "@features/free-layout/components/FreeLayoutPages/PageActionsMenu";
@@ -27,39 +53,110 @@ export const PageIcon = (): React.ReactElement => <MdCropPortrait />;
 /** Prefix dels ids dels títols de fila, per lligar-los als controls. */
 const LABEL_ID = "view-level-page";
 
+/** Quantes columnes o files com a molt es poden triar. */
+const MAX_LINES = 6;
+
+/** La disposició de sempre, quan el document encara no té pàgines pròpies. */
+export interface ImplicitPage {
+  direction: SequenceDirection;
+  onDirectionChange: (direction: SequenceDirection) => void;
+  gap: number;
+  onGapChange: (gap: number) => void;
+}
+
 interface PageLevelProps {
   expanded: boolean;
   onExpandedChange: (expanded: boolean) => void;
+  /** Sense pàgines pròpies, la direcció i l'espai són els de sempre */
+  implicit: ImplicitPage;
+  /** La pantalla completa no té mil·límetres: no s'hi pot treballar en blocs */
+  fullscreen: boolean;
 }
 
 /**
- * El nivell «Pàgina N» de la columna de la vista, en un document amb pàgines
- * (R5, R8): segueix la pàgina que es veu més, o la del bloc seleccionat. Hi
- * ha la plantilla de la pàgina i el seu menú, el mateix que a la capçalera de
- * la pàgina, al full (P3).
+ * El nivell «Pàgina N» de la columna de la vista (R5, R8), que segueix la
+ * pàgina que es veu més o la del bloc seleccionat. Cada pàgina tria com
+ * treballa:
+ * - **Contínua**, com sempre: les seqüències una darrere l'altra, amb la
+ *   direcció i l'espai entre seqüències.
+ * - **En blocs**: cada seqüència és un bloc amb el seu lloc a la pàgina,
+ *   repartits en X columnes, Y files o una plantilla.
+ * Totes dues tenen els pictogrames (la mateixa configuració a tots els blocs o
+ * cadascun la seva) i el menú de la pàgina, el mateix que a la capçalera (P3).
  */
 const PageLevel = ({
   expanded,
   onExpandedChange,
-}: PageLevelProps): React.ReactElement | null => {
+  implicit,
+  fullscreen,
+}: PageLevelProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const { showSnackbar } = useFeedback();
   const pages = useAppSelector(selectPages);
+  const layout = useAppSelector(selectPageLayout);
+  const documentGap =
+    useAppSelector(selectDocumentStyle).view.sequenceSpaceBetween;
   const { activePage } = useViewSelection();
-  const sheet = pages?.sheets[activePage];
-  if (!pages || !sheet) return null;
 
-  const total = pages.sheets.length;
-  const number = activePage + 1;
-  const count = sheet.placements.length;
-  const templates = templatesFor(count);
-  const current = templates.some(({ id }) => id === sheet.template)
-    ? (sheet.template ?? "")
-    : "";
-  const templateName = (id: string) =>
-    TEMPLATE_NAMES[id]
-      ? intl.formatMessage(TEMPLATE_NAMES[id])
-      : intl.formatMessage(messages.noTemplate);
+  const sheet = pages?.sheets[activePage];
+  const total = pages?.sheets.length ?? 1;
+  const index = sheet ? activePage : 0;
+  const number = index + 1;
+  const mode: SheetMode = sheet?.mode ?? "auto";
+  const direction = sheet
+    ? (sheet.direction ?? layout.direction ?? "row")
+    : implicit.direction;
+  const gap = sheet ? (sheet.sequenceGap ?? documentGap) : implicit.gap;
+  const count = sheet ? sheet.placements.filter(isBoxed).length : 0;
+  const arrangement: Arrangement = arrangementOf(sheet?.template);
+
+  const templateName = (id: string | undefined): string => {
+    if (id && TEMPLATE_NAMES[id]) return intl.formatMessage(TEMPLATE_NAMES[id]);
+    const grid = /^grid-(\d+)x(\d+)$/.exec(id ?? "");
+    if (grid)
+      return intl.formatMessage(messages.gridName, {
+        columns: Number(grid[1]),
+        rows: Number(grid[2]),
+      });
+    return intl.formatMessage(messages.noTemplate);
+  };
+  const arrangementName =
+    arrangement.kind === "template"
+      ? templateName(arrangement.id)
+      : intl.formatMessage(messages.arrangementSummary, {
+          kind: arrangement.kind,
+          n: arrangement.n,
+        });
+  const summary =
+    mode === "auto"
+      ? intl.formatMessage(
+          direction === "row"
+            ? levelMessages.directionRowShort
+            : levelMessages.directionColumnShort,
+        )
+      : intl.formatMessage(messages.blocksSummary, {
+          arrangement: arrangementName,
+          count,
+        });
+
+  const applyTemplate = (template: LayoutTemplate | undefined) => {
+    // Torna a repartir la pàgina: surt el snackbar amb «Desfés»
+    if (template) dispatch(applyTemplateThunk(index, template));
+  };
+  const shapedTemplates = SHAPED_TEMPLATES.filter(
+    ({ slots }) => slots.length >= count,
+  );
+  const changeArrangementKind = (kind: Arrangement["kind"]) => {
+    if (kind === arrangement.kind) return;
+    if (kind === "template") {
+      applyTemplate(shapedTemplates[0]);
+      return;
+    }
+    // De columnes a files (o al revés) es queda el nombre; si no, dues
+    const n = arrangement.kind === "template" ? 2 : arrangement.n;
+    applyTemplate(arrangementTemplate(kind, n, count));
+  };
 
   return (
     <SettingsLevel
@@ -68,58 +165,238 @@ const PageLevel = ({
       kind={<FormattedMessage {...levelMessages.kindPage} />}
       title={intl.formatMessage(pageMessages.pageLabel, { number, total })}
       scope={intl.formatMessage(levelMessages.pageScope, { number, total })}
-      summary={intl.formatMessage(messages.pageSummary, {
-        template: templateName(current),
-        count,
-      })}
+      summary={summary}
       expanded={expanded}
       onExpandedChange={onExpandedChange}
     >
-      {count > 0 && (
+      {/* Com treballa la pàgina. La pantalla completa no té mil·límetres */}
+      {!fullscreen && (
         <SettingRow
-          title={<FormattedMessage {...pageMessages.template} />}
-          labelId={`${LABEL_ID}-template`}
+          title={<FormattedMessage {...messages.mode} />}
+          labelId={`${LABEL_ID}-mode`}
+          helperId={`${LABEL_ID}-mode-helper`}
+          helper={
+            <FormattedMessage
+              {...(mode === "auto"
+                ? messages.modeAutoHelp
+                : messages.modeBlocksHelp)}
+            />
+          }
+          control="wide"
         >
-          {templates.length === 0 ? (
-            <Typography variant="body2" color="text.secondary">
-              <FormattedMessage {...pageMessages.templateNone} />
-            </Typography>
-          ) : (
-            <Select<string>
-              value={current}
-              displayEmpty
-              renderValue={templateName}
-              onChange={(event) => {
-                const template = templates.find(
-                  ({ id }) => id === event.target.value,
-                );
-                // Substitueix els retocs de la pàgina: surt el snackbar amb «Desfés»
-                if (template)
-                  dispatch(applyTemplateThunk(activePage, template));
-              }}
-              size="small"
-              fullWidth
-              labelId={`${LABEL_ID}-template`}
-            >
-              {templates.map(({ id }) => (
-                <MenuItem key={id} value={id}>
-                  {templateName(id)}
-                </MenuItem>
-              ))}
-            </Select>
-          )}
+          <StyledToggleButtonGroup
+            value={mode}
+            exclusive
+            onChange={(_, value: SheetMode | null) =>
+              value &&
+              value !== mode &&
+              dispatch(setSheetModeThunk(index, value))
+            }
+            aria-labelledby={`${LABEL_ID}-mode`}
+            aria-describedby={`${LABEL_ID}-mode-helper`}
+          >
+            <IconToggleButton value="auto" message={messages.modeAuto}>
+              <MdViewStream />
+            </IconToggleButton>
+            <IconToggleButton value="template" message={messages.modeBlocks}>
+              <MdOutlineDashboard />
+            </IconToggleButton>
+          </StyledToggleButtonGroup>
         </SettingRow>
       )}
 
-      {/* La mateixa mida, espai i alineació a tots els blocs, o cadascun la seva */}
-      <PagePictograms sheetIndex={activePage} />
+      {mode === "auto" && (
+        <>
+          <SettingRow
+            title={<FormattedMessage {...viewMessages.direction} />}
+            labelId={`${LABEL_ID}-direction`}
+            control="wide"
+          >
+            <StyledToggleButtonGroup
+              value={direction}
+              exclusive
+              onChange={(_, value: SequenceDirection | null) => {
+                if (!value) return;
+                if (sheet) dispatch(setSheetDirectionThunk(index, value));
+                else implicit.onDirectionChange(value);
+              }}
+              aria-labelledby={`${LABEL_ID}-direction`}
+            >
+              <IconToggleButton
+                value="row"
+                message={viewMessages.tooltipDirectionRow}
+              >
+                <MdTableRows />
+              </IconToggleButton>
+              <IconToggleButton
+                value="column"
+                message={viewMessages.tooltipDirectionColumn}
+              >
+                <MdViewColumn />
+              </IconToggleButton>
+            </StyledToggleButtonGroup>
+          </SettingRow>
 
-      <SettingRow
-        title={<FormattedMessage {...messages.pageActions} />}
-        control="compact"
-      >
-        <PageActionsMenu sheetIndex={activePage} sheetCount={total} />
-      </SettingRow>
+          <SettingRow
+            title={<FormattedMessage {...viewMessages.sequenceSpaceBetween} />}
+            labelId={`${LABEL_ID}-gap`}
+          >
+            <Slider
+              step={0.5}
+              min={0}
+              max={10}
+              value={gap}
+              valueLabelDisplay="auto"
+              onChange={(_, value) => {
+                const next = Array.isArray(value) ? value[0] : value;
+                if (sheet) dispatch(setSheetGapThunk(index, next));
+                else implicit.onGapChange(next);
+              }}
+              aria-labelledby={`${LABEL_ID}-gap`}
+            />
+          </SettingRow>
+        </>
+      )}
+
+      {mode === "template" && (
+        <>
+          <SettingRow
+            title={<FormattedMessage {...messages.arrangement} />}
+            labelId={`${LABEL_ID}-arrangement`}
+            control="wide"
+          >
+            <StyledToggleButtonGroup
+              value={arrangement.kind}
+              exclusive
+              onChange={(_, value: Arrangement["kind"] | null) =>
+                value && changeArrangementKind(value)
+              }
+              aria-labelledby={`${LABEL_ID}-arrangement`}
+            >
+              <IconToggleButton value="columns" message={messages.byColumns}>
+                <MdViewColumn />
+              </IconToggleButton>
+              <IconToggleButton value="rows" message={messages.byRows}>
+                <MdTableRows />
+              </IconToggleButton>
+              <IconToggleButton value="template" message={messages.byTemplate}>
+                <MdOutlineDashboard />
+              </IconToggleButton>
+            </StyledToggleButtonGroup>
+          </SettingRow>
+
+          {arrangement.kind !== "template" ? (
+            <SettingRow
+              title={
+                <FormattedMessage
+                  {...(arrangement.kind === "columns"
+                    ? messages.columnCount
+                    : messages.rowCount)}
+                />
+              }
+              labelId={`${LABEL_ID}-lines`}
+            >
+              <Select<number>
+                value={arrangement.n}
+                onChange={(event) =>
+                  applyTemplate(
+                    arrangementTemplate(
+                      arrangement.kind as "columns" | "rows",
+                      Number(event.target.value),
+                      count,
+                    ),
+                  )
+                }
+                size="small"
+                fullWidth
+                labelId={`${LABEL_ID}-lines`}
+              >
+                {Array.from(
+                  { length: Math.max(MAX_LINES, arrangement.n) },
+                  (_, i) => i + 1,
+                ).map((n) => (
+                  <MenuItem key={n} value={n}>
+                    {n}
+                  </MenuItem>
+                ))}
+              </Select>
+            </SettingRow>
+          ) : (
+            <SettingRow
+              title={<FormattedMessage {...pageMessages.template} />}
+              labelId={`${LABEL_ID}-template`}
+            >
+              {shapedTemplates.length === 0 ? (
+                <Typography variant="body2" color="text.secondary">
+                  <FormattedMessage {...pageMessages.templateNone} />
+                </Typography>
+              ) : (
+                <Select<string>
+                  value={
+                    shapedTemplates.some(({ id }) => id === arrangement.id)
+                      ? (arrangement.id ?? "")
+                      : ""
+                  }
+                  displayEmpty
+                  renderValue={templateName}
+                  onChange={(event) =>
+                    applyTemplate(
+                      shapedTemplates.find(
+                        ({ id }) => id === event.target.value,
+                      ),
+                    )
+                  }
+                  size="small"
+                  fullWidth
+                  labelId={`${LABEL_ID}-template`}
+                >
+                  {shapedTemplates.map(({ id }) => (
+                    <MenuItem key={id} value={id}>
+                      {templateName(id)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            </SettingRow>
+          )}
+        </>
+      )}
+
+      {/* La mateixa mida, espai i alineació a tots els blocs, o cadascun la seva */}
+      <PagePictograms sheetIndex={index} />
+
+      {pages ? (
+        <SettingRow
+          title={<FormattedMessage {...messages.pageActions} />}
+          control="compact"
+        >
+          <PageActionsMenu sheetIndex={index} sheetCount={total} />
+        </SettingRow>
+      ) : (
+        // Sense pàgines pròpies: la manera de passar a tenir-ne més d'una
+        !fullscreen && (
+          <SettingRow
+            title={<FormattedMessage {...messages.pages} />}
+            control="compact"
+          >
+            <StyledButton
+              color="inherit"
+              startIcon={<MdAdd />}
+              onClick={() => {
+                dispatch(addSheetThunk(0));
+                showSnackbar({
+                  message: intl.formatMessage(pageMessages.pageAdded, {
+                    number: 2,
+                  }),
+                  severity: "success",
+                });
+              }}
+            >
+              {intl.formatMessage(pageMessages.addPage)}
+            </StyledButton>
+          </SettingRow>
+        )
+      )}
     </SettingsLevel>
   );
 };
