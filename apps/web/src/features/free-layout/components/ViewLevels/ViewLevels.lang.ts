@@ -28,12 +28,6 @@ const messages = defineMessages({
     description:
       "Snackbar en activar «La mateixa…»: totes les seqüències o blocs de la pàgina passen a tenir la configuració de la més petita, que es diu (`name`)",
   },
-  pages: {
-    id: "features.freeLayout.levels.pages",
-    defaultMessage: "Pages",
-    description:
-      "Fila del nivell «Pàgina» quan el document només té la pàgina de sempre: el botó per afegir-ne una altra",
-  },
   licenceOn: {
     id: "features.freeLayout.levels.licenceOn",
     defaultMessage: "On which pages",
@@ -168,12 +162,6 @@ const messages = defineMessages({
     defaultMessage: "No template",
     description:
       "Al selector de plantilla de la pàgina, quan la pàgina no en té cap de les que l'app ofereix",
-  },
-  pageActions: {
-    id: "features.freeLayout.levels.pageActions",
-    defaultMessage: "Page actions",
-    description:
-      "Títol de la fila del nivell «Pàgina» amb el menú de la pàgina (duplicar, moure, esborrar)",
   },
   blockScope: {
     id: "features.freeLayout.levels.blockScope",

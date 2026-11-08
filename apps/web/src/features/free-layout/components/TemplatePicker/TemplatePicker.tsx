@@ -116,7 +116,8 @@ const TemplatePicker = ({
                   longPressed.current = false;
                   return;
                 }
-                if (!selected) onApply(template);
+                // També la que ja té: tornar-la a aplicar treu els retocs a mà
+                onApply(template);
               }}
               sx={{
                 flexDirection: "column",

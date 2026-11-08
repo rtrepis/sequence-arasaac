@@ -27,17 +27,6 @@ const messages = defineMessages({
     description:
       "Botó de la capçalera d'una pàgina que obre les plantilles per repartir-hi les seqüències",
   },
-  templateMenuTitle: {
-    id: "features.freeLayout.page.templateMenuTitle",
-    defaultMessage: "Distribute this page",
-    description: "Títol del menú de plantilles d'una pàgina",
-  },
-  templateNone: {
-    id: "features.freeLayout.page.templateNone",
-    defaultMessage: "This page has more sequences than any template",
-    description:
-      "Al menú de plantilles, quan la pàgina té més seqüències que espais té cap plantilla",
-  },
   templateFull: {
     id: "features.freeLayout.template.full",
     defaultMessage: "Whole page",

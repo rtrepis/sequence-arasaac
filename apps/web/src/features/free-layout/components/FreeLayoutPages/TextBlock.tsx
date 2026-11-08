@@ -6,6 +6,7 @@ import type { TextPlacement } from "@/types/document";
 import type { ResolvedTextStyle } from "@features/free-layout/model/blockStyle";
 import { fontStack } from "@features/sequence/style/styleModel";
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
+import type { SheetArea } from "@features/free-layout/model/placement";
 import PlacementBox, { editMarkSx, px } from "./PlacementBox";
 import messages from "./FreeLayoutPages.lang";
 
@@ -109,6 +110,8 @@ interface TextBlockProps {
   /** L'aspecte del rètol, ja resolt amb la cascada */
   style: ResolvedTextStyle;
   scale: number;
+  /** L'àrea útil del full: amb ella, el bloc es pot moure (fase 4) */
+  area?: SheetArea;
   selected: boolean;
   onSelect: () => void;
 }

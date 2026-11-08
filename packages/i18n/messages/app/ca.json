@@ -2756,14 +2756,6 @@
     "message": "Plantilla",
     "description": "Botó de la capçalera d'una pàgina que obre les plantilles per repartir-hi les seqüències"
   },
-  "features.freeLayout.page.templateMenuTitle": {
-    "message": "Reparteix aquesta pàgina",
-    "description": "Títol del menú de plantilles d'una pàgina"
-  },
-  "features.freeLayout.page.templateNone": {
-    "message": "Aquesta pàgina té més seqüències que cap plantilla",
-    "description": "Al menú de plantilles, quan la pàgina té més seqüències que espais té cap plantilla"
-  },
   "features.freeLayout.template.full": {
     "message": "Pàgina sencera",
     "description": "Plantilla: una sola seqüència que ocupa tota la pàgina"
@@ -3120,10 +3112,6 @@
     "message": "Sense plantilla",
     "description": "Al selector de plantilla de la pàgina, quan la pàgina no en té cap de les que l'app ofereix"
   },
-  "features.freeLayout.levels.pageActions": {
-    "message": "Accions de la pàgina",
-    "description": "Títol de la fila del nivell «Pàgina» amb el menú de la pàgina (duplicar, moure, esborrar)"
-  },
   "features.freeLayout.levels.blockScope": {
     "message": "{common, select, true {S'aplica només a aquest bloc, a totes les pàgines} other {S'aplica només a aquest bloc}}",
     "description": "Sota el nom del bloc seleccionat, al nivell «Bloc» de la columna de la vista"
@@ -3295,10 +3283,6 @@
   "features.freeLayout.levels.licenceOnLast": {
     "message": "Només a l'última",
     "description": "Opció: el peu de llicència només a l'última pàgina"
-  },
-  "features.freeLayout.levels.pages": {
-    "message": "Pàgines",
-    "description": "Fila del nivell «Pàgina» quan el document només té la pàgina de sempre: el botó per afegir-ne una altra"
   },
   "pages.viewSequence.levels.documentPages": {
     "message": "{count, plural, one {# pàgina} other {# pàgines}}",

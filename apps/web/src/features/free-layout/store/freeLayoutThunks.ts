@@ -437,3 +437,19 @@ export const setSheetViewThunk =
       })),
     );
   };
+
+/**
+ * Mou un bloc o en canvia la mida (fase 4): la caixa nova, ja enganxada a la
+ * quadrícula de punts (`grid.ts`). El bloc es queda l'espai de la plantilla
+ * que ocupava: afegir-ne un altre no omple el lloc d'on ha marxat, i tornar a
+ * aplicar la plantilla treu el retoc (amb Desfés).
+ */
+export const setPlacementBoxThunk = (
+  placementId: string,
+  box: { x: number; y: number; w: number; h: number },
+): AppThunk =>
+  changeFreeLayout((layout) =>
+    updatePlacement(layout, placementId, (placement) =>
+      placement.kind === "unknown" ? placement : { ...placement, ...box },
+    ),
+  );

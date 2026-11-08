@@ -73,6 +73,7 @@ import PageHeader from "./PageHeader";
 import SequenceBlock from "./SequenceBlock";
 import TextBlock from "./TextBlock";
 import TemplateGuides from "./TemplateGuides";
+import GridDots from "./GridDots";
 import { useSequenceName } from "./useSequenceName";
 import {
   fullscreenScale,
@@ -277,6 +278,7 @@ const FreeLayoutPages = ({
             placement,
           )}
           scale={scale}
+          area={area}
           selected={sameSelection(selection, target)}
           onSelect={() => select(target)}
         />
@@ -303,6 +305,7 @@ const FreeLayoutPages = ({
         cardBase={cardSizes[placement.sequenceKey]}
         defaults={defaults}
         scale={scale}
+        area={area}
         arrangement={arrangement}
         selected={sameSelection(selection, target)}
         onSelect={() => select(target)}
@@ -548,6 +551,10 @@ const FreeLayoutPages = ({
                           }}
                         />
                       ))}
+
+                    {/* La quadrícula de punts, amb un bloc seleccionat en aquesta
+                      pàgina: s'hi mou i s'hi enganxa (fase 4) */}
+                    {!continuous && selectedHere && <GridDots area={area} />}
 
                     {templatePreview?.sheetIndex === sheetIndex && (
                       <TemplateGuides

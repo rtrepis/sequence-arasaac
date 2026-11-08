@@ -136,6 +136,13 @@ const STRIP_TOP: LayoutTemplate = {
 /** Una sola caixa que omple la pàgina. */
 const FULL: LayoutTemplate = { ...stackTemplate(1, "rows"), id: "full" };
 
+/**
+ * `n` files de les 24 de la quadrícula de punts (`grid.ts`): les plantilles hi
+ * encaixen, i un bloc mogut a mà pot tornar a quedar on era. Les columnes són
+ * vintenes, i els cinquens, els terços de 24 i els 0,3 i 0,15 ja hi cauen.
+ */
+const row = (n: number): number => n / 24;
+
 /** Un rètol. */
 const text = (
   x: number,
@@ -157,7 +164,10 @@ const AGENDA_STRIP: LayoutTemplate = {
 /** T3 — «Avui és» + agenda: el rètol a dalt i l'agenda a sota. */
 const TODAY_AGENDA: LayoutTemplate = {
   id: "today-agenda",
-  slots: [text(0, 0, 1, 0.12, "today"), { x: 0, y: 0.12, w: 1, h: 0.88 }],
+  slots: [
+    text(0, 0, 1, row(3), "today"),
+    { x: 0, y: row(3), w: 1, h: row(21) },
+  ],
 };
 
 /** T4 — Primer / Després: dos espais iguals, cadascun amb el seu rètol. */
@@ -165,10 +175,10 @@ const FIRST_THEN: LayoutTemplate = {
   id: "first-then",
   landscape: true,
   slots: [
-    text(0, 0, 0.5, 0.15, "first"),
-    text(0.5, 0, 0.5, 0.15, "then"),
-    { x: 0, y: 0.15, w: 0.5, h: 0.85 },
-    { x: 0.5, y: 0.15, w: 0.5, h: 0.85 },
+    text(0, 0, 0.5, row(4), "first"),
+    text(0.5, 0, 0.5, row(4), "then"),
+    { x: 0, y: row(4), w: 0.5, h: row(20) },
+    { x: 0.5, y: row(4), w: 0.5, h: row(20) },
   ],
 };
 
@@ -180,8 +190,8 @@ const WEEK: LayoutTemplate = {
   id: "week",
   landscape: true,
   slots: [
-    ...WEEKDAYS.map((day, i) => text(i / 5, 0, 1 / 5, 0.1, day)),
-    ...WEEKDAYS.map((_, i) => ({ x: i / 5, y: 0.1, w: 1 / 5, h: 0.9 })),
+    ...WEEKDAYS.map((day, i) => text(i / 5, 0, 1 / 5, row(3), day)),
+    ...WEEKDAYS.map((_, i) => ({ x: i / 5, y: row(3), w: 1 / 5, h: row(21) })),
   ],
 };
 
@@ -190,9 +200,9 @@ const TOKEN_BOARD: LayoutTemplate = {
   id: "token-board",
   landscape: true,
   slots: [
-    text(0, 0, 1, 0.12, "workingFor"),
-    { x: 0, y: 0.12, w: 1, h: 0.28 },
-    { x: 0.15, y: 0.4, w: 0.7, h: 0.6 },
+    text(0, 0, 1, row(3), "workingFor"),
+    { x: 0, y: row(3), w: 1, h: row(7) },
+    { x: 0.15, y: row(10), w: 0.7, h: row(14) },
   ],
 };
 
@@ -203,8 +213,8 @@ const STORY_PAGE: LayoutTemplate = {
 };
 
 /** Una franja del menú: el rètol del plat i, a sota, els pictogrames. */
-const MENU_ROW = 1 / 3;
-const MENU_LABEL = 0.08;
+const MENU_ROW = row(8);
+const MENU_LABEL = row(2);
 
 /** T9 — Menú: primer plat, segon plat i postres, cadascun amb el seu rètol. */
 const MENU: LayoutTemplate = {

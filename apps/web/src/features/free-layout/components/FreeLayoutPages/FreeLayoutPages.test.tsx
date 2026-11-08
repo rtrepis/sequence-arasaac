@@ -381,3 +381,46 @@ describe("el menú de la pàgina i els blocs buits", () => {
     ).toHaveAttribute("aria-pressed", "true");
   });
 });
+
+describe("moure un bloc amb el teclat (fase 4)", () => {
+  it("seleccionat, les fletxes el mouen una cel·la; amb Maj, en canvien la mida", async () => {
+    const document = freeDocument();
+    if (!document.pages) throw new Error("falten les pàgines");
+    const { store } = renderPages({
+      ...document,
+      pages: {
+        sheets: [
+          {
+            id: "sh_1",
+            mode: "template",
+            placements: [{ ...placement("pl_1", 1), x: 0, y: 0, w: 40, h: 40 }],
+          },
+        ],
+        common: [],
+      },
+    });
+    const block = screen.getByRole("button", { name: /^Sequence 2,/ });
+    const box = () => {
+      const found = store.getState().document.pages?.sheets[0].placements[0];
+      if (!found || found.kind === "unknown") throw new Error("no hi és");
+      return found;
+    };
+
+    // Sense seleccionar, les fletxes no el mouen
+    block.focus();
+    await userEvent.keyboard("{ArrowRight}");
+    expect(box().x).toBe(0);
+
+    await userEvent.click(block);
+    await userEvent.keyboard("{ArrowRight}");
+    expect(box().x).toBeGreaterThan(0);
+    // Al costat esquerre del full no hi ha espai entre blocs: la vora és el full
+    const moved = box();
+
+    await userEvent.keyboard("{Shift>}{ArrowDown}{/Shift}");
+    expect(box().y).toBeCloseTo(moved.y);
+    expect(box().h).toBeGreaterThan(moved.h);
+    // Seleccionat, es veu la quadrícula de punts
+    expect(screen.getByTestId("grid-dots")).toBeInTheDocument();
+  });
+});

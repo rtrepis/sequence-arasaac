@@ -128,11 +128,22 @@ fase 3 va fer veure que no n'hi ha prou:
     plantilla sense espais de rètol, un rètol ocupa un espai com qualsevol bloc. **Aplicar una
     plantilla des de la columna estrena un rètol a cada espai de rètol buit**, amb el text de
     l'espai («Primer», «Dilluns»…) a l'idioma de la interfície, en negreta i a mida 1,25; un cop
-    creat, és contingut i no es tradueix. Una plantilla es pot triar si hi caben les seqüències de
-    la pàgina. En passar a «Amb una plantilla», la pàgina pren **la que s'hi ajusta més** (la que
-    té menys espais de seqüència on hi caben totes), perquè no n'estreni més espais ni rètols dels
-    que calen. `grid-2x2` i `strip-top` ja no s'ofereixen, però es continuen llegint. Els `id`
+    creat, és contingut i no es tradueix. **Totes les plantilles es poden triar**: si en una no hi
+    caben tots els blocs, abans d'aplicar-la es diu quins sortiran de la pàgina (`ConfirmDialog`);
+    la seqüència continua al document. En passar a «Amb una plantilla», la pàgina pren **la que
+    s'hi ajusta més** (la que té menys espais de seqüència on hi caben totes), perquè no n'estreni
+    més espais ni rètols dels que calen. `grid-2x2` i `strip-top` ja no s'ofereixen, però es continuen llegint. Els `id`
     nous són d'un camp de text lliure: el format no canvia.
+21. **Moure i canviar la mida, damunt d'una quadrícula de punts** (fase 4, 2026-11-08). A
+    qualsevol pàgina en blocs, el bloc seleccionat s'arrossega (moure) o se'n tiben les nanses
+    (mida), i amb el teclat, fletxes (moure) i Maj + fletxes (mida). Tot salta al punt més proper
+    d'una quadrícula de **20 columnes × 24 files** de l'àrea útil (`grid.ts`): com a molt 24 × 24,
+    i prou fina perquè els espais de totes les plantilles hi caiguin (els cinquens, els terços i
+    els rètols de 2/24). La caixa es calcula com un espai de plantilla (`slotToBox`), i per això
+    entre dos blocs veïns sempre queda l'espai de la plantilla. El bloc conserva l'`slot` que
+    tenia: el lloc d'on ha marxat no torna a ser un espai lliure, i **tornar a aplicar la
+    plantilla treu els retocs** (amb Desfés). Mida mínima, 2 × 2 cel·les; els blocs es poden
+    trepitjar. El format no canvia: són les caixes de sempre (`x`, `y`, `w`, `h`).
 
 ## Alternatives descartades
 
@@ -185,3 +196,6 @@ fase 3 va fer veure que no n'hi ha prou:
   publicada no va escriure aquest format.
 - **2026-11-08** (R4): les plantilles dels treballs reals i els espais de rètol (decisió 20). Els
   rètols es pinten al full, a la impressió i al PDF, i s'editen al nivell «Rètol» de la columna.
+- **2026-11-08** (fase 4): les accions de la pàgina, només al seu menú «⋯»; totes les plantilles
+  es poden triar, amb avís si se'n perden blocs; els espais lliures, blocs buits per omplir; i
+  moure i canviar la mida dels blocs damunt de la quadrícula de punts (decisió 21).

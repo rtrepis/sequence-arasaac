@@ -20,7 +20,12 @@ import { useAppDispatch } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
 import type { Theme } from "@mui/material";
 import type { SystemStyleObject } from "@mui/system";
-import type { BoxedPlacement } from "@features/free-layout/model/placement";
+import type {
+  BoxedPlacement,
+  SheetArea,
+} from "@features/free-layout/model/placement";
+import { Edges, MOVE } from "@features/free-layout/model/grid";
+import { useBlockDrag } from "@features/free-layout/hooks/useBlockDrag";
 import { mmToPixelsExact } from "@features/print/utils/pageUnits";
 import { CSS_PRINT_DPI } from "@features/print/utils/pageFormat";
 import {
@@ -38,6 +43,33 @@ import messages from "./FreeLayoutPages.lang";
 
 /** El botó del menú, a la pantalla, en px: el full s'escala, el botó no. */
 const MENU_BUTTON_PX = 36;
+
+/** Les nanses per canviar la mida, a la pantalla, en px. */
+const HANDLE_PX = 14;
+
+/** Les vuit nanses: els quatre cantons i el mig de cada vora. */
+const HANDLES: readonly Edges[] = [
+  { left: true, right: false, top: true, bottom: false },
+  { left: false, right: false, top: true, bottom: false },
+  { left: false, right: true, top: true, bottom: false },
+  { left: false, right: true, top: false, bottom: false },
+  { left: false, right: true, top: false, bottom: true },
+  { left: false, right: false, top: false, bottom: true },
+  { left: true, right: false, top: false, bottom: true },
+  { left: true, right: false, top: false, bottom: false },
+];
+
+/** El cursor de cada nansa, pel seu nom (vora de dalt o de baix, i costat). */
+const HANDLE_CURSOR: Record<string, string> = {
+  tl: "nwse-resize",
+  br: "nwse-resize",
+  tr: "nesw-resize",
+  bl: "nesw-resize",
+  tc: "ns-resize",
+  bc: "ns-resize",
+  ml: "ew-resize",
+  mr: "ew-resize",
+};
 
 export const px = (mm: number): number => mmToPixelsExact(mm, CSS_PRINT_DPI);
 
@@ -64,6 +96,11 @@ interface PlacementBoxProps {
   contentSx: SystemStyleObject<Theme>;
   /** L'escala del full a la pantalla: el botó del menú es pinta a mida de pantalla */
   scale: number;
+  /**
+   * L'àrea útil del full: amb ella, el bloc seleccionat es mou i se'n canvia
+   * la mida damunt de la quadrícula de punts (fase 4)
+   */
+  area?: SheetArea;
   selected: boolean;
   onSelect: () => void;
   /** El contingut: les targetes d'una seqüència o el text d'un rètol */
@@ -92,6 +129,7 @@ const PlacementBox = ({
   belowMinimum = false,
   contentSx,
   scale,
+  area,
   selected,
   onSelect,
   children,
@@ -110,16 +148,23 @@ const PlacementBox = ({
 
   // A mida de pantalla: dins del full escalat, es divideix per l'escala
   const buttonPx = MENU_BUTTON_PX / Math.max(scale, 0.01);
+  const handlePx = HANDLE_PX / Math.max(scale, 0.01);
+  // Seleccionat en una pàgina en blocs, el bloc es mou i se'n canvia la mida
+  const movable = selected && area !== undefined;
+  const drag = useBlockDrag(placement.id, placement, area, scale);
+  const shown = drag.live ?? placement;
 
   return (
     <Box
       className="placement"
       sx={{
         position: "absolute",
-        left: px(placement.x),
-        top: px(placement.y),
-        width: px(placement.w),
-        height: px(placement.h),
+        left: px(shown.x),
+        top: px(shown.y),
+        width: px(shown.w),
+        height: px(shown.h),
+        // Mentre s'arrossega, per damunt dels altres blocs
+        zIndex: drag.live ? 2 : undefined,
         "&:hover .placement-menu, &:focus-within .placement-menu": {
           opacity: 1,
         },
@@ -130,23 +175,35 @@ const PlacementBox = ({
         tabIndex={0}
         aria-label={label}
         aria-pressed={selected}
+        // Seleccionat, el bloc s'arrossega: es mou de punt en punt
+        onPointerDown={(event) => movable && drag.start(event, MOVE)}
+        onPointerMove={drag.onPointerMove}
+        onPointerUp={drag.onPointerUp}
+        onPointerCancel={drag.onPointerUp}
         onClick={(event) => {
           // El clic fora de cap caixa treu la selecció: aquest no hi ha d'arribar
           event.stopPropagation();
+          // El final d'un arrossegament no és un clic
+          if (drag.consumeClick()) return;
           onSelect();
         }}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             onSelect();
+            return;
           }
+          // Les fletxes mouen el bloc seleccionat; amb Maj, en canvien la mida
+          if (movable) drag.onKeyDown(event);
         }}
         sx={{
           position: "absolute",
           inset: 0,
           ...contentSx,
-          cursor: "pointer",
+          cursor: movable ? "move" : "pointer",
           outline: "none",
+          // Seleccionat, arrossegar-lo amb el dit el mou, no desplaça la pàgina
+          touchAction: movable ? "none" : undefined,
           ...(!selected && {
             "&:hover .placement-guide, &:focus-visible .placement-guide": {
               borderStyle: "solid",
@@ -211,6 +268,49 @@ const PlacementBox = ({
           )}
         </Box>
       </Box>
+
+      {/* Les nanses per canviar-ne la mida, a les vores i als cantons */}
+      {movable &&
+        HANDLES.map((edges) => {
+          const key = `${edges.top ? "t" : edges.bottom ? "b" : "m"}${
+            edges.left ? "l" : edges.right ? "r" : "c"
+          }`;
+          return (
+            <Box
+              key={key}
+              aria-hidden
+              data-html2canvas-ignore
+              data-handle={key}
+              onPointerDown={(event) => drag.start(event, edges)}
+              onPointerMove={drag.onPointerMove}
+              onPointerUp={drag.onPointerUp}
+              onPointerCancel={drag.onPointerUp}
+              onClick={(event) => event.stopPropagation()}
+              sx={{
+                ...editMarkSx,
+                position: "absolute",
+                width: handlePx,
+                height: handlePx,
+                left: edges.left
+                  ? -handlePx / 2
+                  : edges.right
+                    ? `calc(100% - ${handlePx / 2}px)`
+                    : `calc(50% - ${handlePx / 2}px)`,
+                top: edges.top
+                  ? -handlePx / 2
+                  : edges.bottom
+                    ? `calc(100% - ${handlePx / 2}px)`
+                    : `calc(50% - ${handlePx / 2}px)`,
+                backgroundColor: sheetSurface,
+                border: `${2 / Math.max(scale, 0.01)}px solid ${sheetGuide}`,
+                boxSizing: "border-box",
+                cursor: HANDLE_CURSOR[key],
+                touchAction: "none",
+                zIndex: 1,
+              }}
+            />
+          );
+        })}
 
       {/* El menú del bloc: es veu amb el bloc seleccionat, en passar-hi per
           sobre o amb el focus; amb el teclat, s'hi arriba just després */}

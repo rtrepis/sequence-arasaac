@@ -10,6 +10,7 @@ import {
 import type { Arrangement } from "@features/free-layout/model/templates";
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import type { CardBaseSize } from "./CardBaseMeasurer";
+import type { SheetArea } from "@features/free-layout/model/placement";
 import PlacementBox from "./PlacementBox";
 import messages from "./FreeLayoutPages.lang";
 
@@ -27,6 +28,8 @@ interface SequenceBlockProps {
   /** El repartiment de la pàgina: decideix les columnes automàtiques del bloc */
   arrangement?: Arrangement["kind"];
   scale: number;
+  /** L'àrea útil del full: amb ella, el bloc es pot moure (fase 4) */
+  area?: SheetArea;
   selected: boolean;
   onSelect: () => void;
 }

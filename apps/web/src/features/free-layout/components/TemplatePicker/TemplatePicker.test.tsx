@@ -44,7 +44,7 @@ describe("TemplatePicker", () => {
     ).toBeInTheDocument();
   });
 
-  it("el clic l'aplica; la que ja té la pàgina, marcada i sense efecte", async () => {
+  it("el clic l'aplica; la que ja té la pàgina, marcada, es torna a aplicar (treu els retocs)", async () => {
     const { onApply } = renderPicker("week");
     await userEvent.click(screen.getByRole("button", { name: "Menu" }));
     expect(onApply).toHaveBeenCalledWith(
@@ -53,7 +53,9 @@ describe("TemplatePicker", () => {
     const week = screen.getByRole("button", { name: "Week" });
     expect(week).toHaveAttribute("aria-pressed", "true");
     await userEvent.click(week);
-    expect(onApply).toHaveBeenCalledTimes(1);
+    expect(onApply).toHaveBeenLastCalledWith(
+      expect.objectContaining({ id: "week" }),
+    );
   });
 
   it("passar-hi per damunt o anar-hi amb el teclat l'ensenya a la pàgina", async () => {
