@@ -106,7 +106,10 @@ fase 3 va fer veure que no n'hi ha prou:
 17. **«N columnes» i «N files» creixen amb els blocs**: `columns-N` són N columnes i les files que
     calguin (i `rows-N` al revés). Amb tants blocs com N o menys, és la pila de sempre. En afegir-hi
     un bloc sense espai lliure, la graella creix i l'`id` no canvia; les altres plantilles, com
-    abans, passen a una de més gran (decisió 3).
+    abans, passen a una de més gran (decisió 3). La plantilla que l'app tria sola (`templateFor`:
+    en passar una pàgina a blocs o quan una plantilla amb forma s'omple) és **tantes files o
+    columnes com blocs**, en el sentit de la pàgina contínua; amb una sola caixa, `rows-1` o
+    `columns-1` (`full` només és la de «Pàgina sencera» del selector).
 18. **L'espai entre seqüències és de cada pàgina contínua** (`sheets[].sequenceGap`; sense valor, el
     de `page.sequenceGap`), com ja ho era la direcció. **El peu de llicència va a totes les
     pàgines o només a l'última** (`page.licenceOn: "last"`; sense valor, a totes). Tots dos són

@@ -163,7 +163,7 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   repartiment «N columnes» o «N files»: amb més blocs dels que hi caben en una fila o una columna,
   la graella creix (N columnes i les files que calguin, o al revés) i l'`id` no canvia. Afegir un
   bloc omple el primer espai lliure; si no n'hi ha, «N columnes» i «N files» creixen, i les altres
-  plantilles passen a una de més gran. Una pàgina automàtica també pot
+  plantilles passen a tantes files (o columnes) com blocs, en el sentit de la pàgina. Una pàgina automàtica també pot
   recordar la plantilla, i un `id` de plantilla que l'app no coneix es conserva.
 - **Un bloc** té `id`, `kind` i, on cal, caixa (`x`, `y`, `w`, `h`), `slot` i `namedStyle` (§1.2):
   - `"sequence"`: `sequence` (l'`id` de la seqüència), `columns` (`"auto"` o un enter ≥ 1; sense

@@ -228,7 +228,8 @@ describe("afegir seqüències a una pàgina", () => {
       AREA,
     );
     const result = addSequencesToSheet(full, 0, [5], context());
-    expect(result.sheets[0].template).toBe("grid-3x2");
+    // La que toca: tantes files com blocs, com la pàgina contínua
+    expect(result.sheets[0].template).toBe("rows-5");
   });
 
   it("a una pàgina automàtica, van al final i sense caixa", () => {
@@ -254,7 +255,7 @@ describe("afegir seqüències a una pàgina", () => {
     );
     expect(result.sheets[0]).toMatchObject({
       mode: "template",
-      template: "full",
+      template: "rows-1",
     });
     expect(result.sheets[0].placements[0]).toMatchObject({
       x: 0,

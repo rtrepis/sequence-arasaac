@@ -31,7 +31,9 @@ export const stackTemplate = (
   n: number,
   axis: "rows" | "columns",
 ): LayoutTemplate => ({
-  id: n === 1 ? "full" : `${axis}-${n}`,
+  // També amb una sola caixa: «1 fila» i «1 columna» no pinten igual els
+  // pictogrames de dins (`resolveColumns`), i l'id ha de dir quina és
+  id: `${axis}-${n}`,
   slots: Array.from({ length: n }, (_, index) =>
     axis === "rows"
       ? { x: 0, y: index / n, w: 1, h: 1 / n }
@@ -108,9 +110,12 @@ const STRIP_TOP: LayoutTemplate = {
   ],
 };
 
+/** Una sola caixa que omple la pàgina. */
+const FULL: LayoutTemplate = { ...stackTemplate(1, "rows"), id: "full" };
+
 /** Les plantilles que es poden triar, en l'ordre del selector. */
 export const TEMPLATE_CHOICES: readonly LayoutTemplate[] = [
-  stackTemplate(1, "rows"),
+  FULL,
   stackTemplate(2, "rows"),
   stackTemplate(2, "columns"),
   stackTemplate(3, "rows"),
@@ -133,19 +138,17 @@ export const templatesFor = (count: number): LayoutTemplate[] =>
 
 /**
  * La plantilla que toca per a `count` caixes, sense triar-ne cap: la que fa
- * servir afegir una seqüència a un full i la disposició de partida. Fins a
- * tres, apilades com el flux (en files o en columnes, segons la direcció de la
- * pàgina); a partir de quatre, una graella.
+ * servir passar una pàgina a blocs i afegir-hi una seqüència quan no hi cap.
+ * Totes en el sentit de la pàgina contínua, com hi eren: amb les seqüències en
+ * files, **`count` files**; en columnes, **`count` columnes**. Així, en passar
+ * a blocs, cada seqüència queda on era, i els pictogrames de dins segueixen
+ * el mateix sentit (`resolveColumns`).
  */
 export const templateFor = (
   count: number,
   direction: SequenceDirection,
-): LayoutTemplate => {
-  if (count <= 1) return stackTemplate(1, "rows");
-  if (count <= 3)
-    return stackTemplate(count, direction === "row" ? "rows" : "columns");
-  return gridTemplate(count);
-};
+): LayoutTemplate =>
+  stackTemplate(Math.max(1, count), direction === "row" ? "rows" : "columns");
 
 /**
  * Un espai de la plantilla convertit en caixa dins de la regió. Entre dos

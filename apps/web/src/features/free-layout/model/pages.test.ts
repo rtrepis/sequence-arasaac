@@ -83,10 +83,10 @@ describe("«Automàtica» i «Lliure» per a tot el document", () => {
       newId: ids(),
     });
     expect(back.sheets[0]).toEqual(two.sheets[0]);
-    // La que era automàtica i no tenia caixes, es reparteix
+    // La que era automàtica i no tenia caixes, es reparteix en el seu sentit
     expect(back.sheets[1]).toMatchObject({
       mode: "template",
-      template: "full",
+      template: "rows-1",
     });
   });
 

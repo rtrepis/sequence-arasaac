@@ -57,12 +57,12 @@ describe("de l'espai a la caixa", () => {
 });
 
 describe("quina plantilla", () => {
-  it("fins a tres, apilades com el flux; a partir de quatre, una graella", () => {
-    expect(templateFor(1, "row").id).toBe("full");
-    expect(templateFor(2, "row").id).toBe("rows-2");
+  it("tantes files o columnes com caixes, en el sentit de la pàgina contínua", () => {
+    expect(templateFor(1, "row").id).toBe("rows-1");
+    expect(templateFor(1, "column").id).toBe("columns-1");
     expect(templateFor(3, "column").id).toBe("columns-3");
-    expect(templateFor(4, "row").id).toBe("grid-2x2");
-    expect(templateFor(7, "column").id).toBe("grid-3x3");
+    expect(templateFor(4, "row").id).toBe("rows-4");
+    expect(templateFor(7, "column").id).toBe("columns-7");
   });
 
   it("el selector només ofereix les plantilles on hi caben totes les caixes", () => {

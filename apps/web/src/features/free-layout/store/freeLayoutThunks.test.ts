@@ -63,6 +63,24 @@ describe("passar una pàgina a blocs i tornar", () => {
     expect(layoutOf(store).sheets[0].placements.map(keyOf)).toEqual([0, 1, 2]);
   });
 
+  it("passar a blocs reparteix en tantes files (o columnes) com seqüències, en el sentit de la pàgina", () => {
+    const rows = freeStore(5);
+    expect(layoutOf(rows).sheets[0].template).toBe("rows-5");
+
+    const store = createAppStore({
+      document: {
+        ...documentWith(4),
+        layout: {
+          pageSize: "A4",
+          orientation: "portrait",
+          direction: "column",
+        },
+      },
+    });
+    store.dispatch(setSheetModeThunk(0, "template"));
+    expect(layoutOf(store).sheets[0].template).toBe("columns-4");
+  });
+
   it("tornar a contínua conserva els blocs, i tornar a blocs els recupera tal com eren", () => {
     const store = freeStore(2);
     const before = layoutOf(store);
