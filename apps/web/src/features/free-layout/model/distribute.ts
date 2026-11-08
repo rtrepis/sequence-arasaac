@@ -11,11 +11,14 @@ import type {
   TextPlacement,
 } from "@/types/document";
 import type { SequenceDirection } from "@/types/ui";
-import { SheetArea, hasBox, isBoxed } from "./placement";
+import { Box, SheetArea, hasBox, isBoxed } from "./placement";
+import { gridToBox, largestEmptyBox } from "./grid";
 import { NewLayoutId, mapSheet } from "./sheets";
 import { sortByReadingOrder } from "./readingOrder";
 import {
+  FREE_TEMPLATE,
   LayoutTemplate,
+  arrangementTemplate,
   SlotBox,
   applyTemplate,
   arrangementOf,
@@ -146,17 +149,19 @@ export const applyTemplateToSheet = (
     : pages;
 
 /**
- * Afegeix blocs nous (encara sense caixa) a una pàgina. Els blocs que hi eren
- * no surten d'on eren.
+ * Afegeix blocs nous (encara sense caixa) a una pàgina, de manera que l'usuari
+ * pugui saber què passarà pel repartiment de la pàgina (l'etiqueta de la
+ * capçalera). Els blocs que hi eren no surten d'on eren.
  *
- * - **Pàgina automàtica**: van al final, un darrere l'altre.
- * - **Pàgina amb plantilla** (R2): omplen els espais lliures de la plantilla que
- *   té, en ordre, i els blocs que ja hi eren no es mouen. Una seqüència només va
- *   als espais de seqüència; un rètol, primer als de rètol i després als altres.
- *   Amb `slot`, el primer bloc va a aquell espai si és lliure (un bloc buit del
- *   full, R4). Si no hi caben, o la pàgina no té cap plantilla que l'app
- *   conegui, es torna a repartir sencera amb la plantilla que toca per al
- *   nombre nou de blocs, que passa a ser la seva.
+ * - **Pàgina contínua**: van al final, un darrere l'altre.
+ * - **N columnes / N files**: omplen l'espai lliure de la graella; si no n'hi
+ *   ha, **una columna (o una fila) més**, i la pàgina es torna a repartir.
+ * - **Plantilla**: omplen els espais lliures que els toquen (una seqüència, els
+ *   de seqüència; un rètol, primer els de rètol). Amb `slot`, el primer bloc
+ *   va a aquell espai si és lliure (un bloc buit del full, R4). Si no hi
+ *   caben, la pàgina passa a **lliure** i van a l'espai buit més gran.
+ * - **Lliure** (o una plantilla que l'app no coneix): a l'espai buit més gran
+ *   del full, sense tocar cap dels altres.
  */
 export const addPlacementsToSheet = (
   pages: DocumentPages,
@@ -172,10 +177,14 @@ export const addPlacementsToSheet = (
     return mapSheet(pages, sheetIndex, () => ({ ...sheet, placements }));
 
   const region = freeRegion(context.area, pages.common.filter(isBoxed));
+  const count = sheet.placements.filter(isBoxed).length;
   const template = sheet.template
-    ? templateById(sheet.template, sheet.placements.filter(isBoxed).length)
+    ? templateById(sheet.template, count)
     : undefined;
-  if (template) {
+  const arrangement = arrangementOf(sheet.template);
+
+  // Els espais lliures de la plantilla (o de la graella de columnes o files)
+  if (template && template.slots.length > 0) {
     const taken = new Set<number>();
     const pick = (
       placement: SequencePlacement | TextPlacement,
@@ -213,25 +222,70 @@ export const addPlacementsToSheet = (
     }
   }
 
-  // Els que ja hi eren, en ordre de lectura; els nous, al final
-  const boxed = placements.filter(isBoxed);
-  // «X columnes» o «Y files» creix amb els blocs nous; les altres plantilles
-  // passen a la que toca pel nombre de blocs
-  const grown =
-    sheet.template && arrangementOf(sheet.template).kind !== "template"
-      ? templateById(sheet.template, boxed.length)
-      : undefined;
-  const next = grown ?? templateFor(boxed.length, context.direction);
-  const ordered = [
-    ...sortByReadingOrder(sheet.placements.filter(isBoxed)),
-    ...added,
-  ];
+  // Sense cap plantilla desada (els fulls de les fases 1–3, o la disposició
+  // de partida): es torna a repartir sencera, en el sentit de la pàgina
+  if (!sheet.template) {
+    const boxed = placements.filter(isBoxed);
+    const next = templateFor(boxed.length, context.direction);
+    const ordered = [
+      ...sortByReadingOrder(sheet.placements.filter(isBoxed)),
+      ...added,
+    ];
+    return mapSheet(pages, sheetIndex, () => ({
+      ...sheet,
+      template: next.id,
+      placements: withBoxes(placements, assignSlots(ordered, next, region)),
+    }));
+  }
+
+  // N columnes o N files, plenes: una columna (o una fila) més
+  if (arrangement.kind !== "template") {
+    // La graella creix pel costat de l'altre eix si cal: sempre hi caben tots
+    const next = arrangementTemplate(
+      arrangement.kind,
+      arrangement.n + 1,
+      count + added.length,
+    );
+    const ordered = [
+      ...sortByReadingOrder(sheet.placements.filter(isBoxed)),
+      ...added,
+    ];
+    return mapSheet(pages, sheetIndex, () => ({
+      ...sheet,
+      template: next.id,
+      placements: withBoxes(placements, assignSlots(ordered, next, region)),
+    }));
+  }
+
+  // Lliure: cada bloc nou, a l'espai buit més gran, sense moure'n cap
+  const occupied: Box[] = [...pages.common, ...sheet.placements].flatMap(
+    (placement) => (isBoxed(placement) && hasBox(placement) ? [placement] : []),
+  );
+  const boxOf = new Map<string, Box>();
+  added.forEach((placement) => {
+    const empty = largestEmptyBox(occupied, context.area);
+    const box = gridToBox(empty ?? FALLBACK_BOX, context.area);
+    occupied.push(box);
+    boxOf.set(placement.id, box);
+  });
   return mapSheet(pages, sheetIndex, () => ({
     ...sheet,
-    template: next.id,
-    placements: withBoxes(placements, assignSlots(ordered, next, region)),
+    template: FREE_TEMPLATE.id,
+    placements: placements.map((placement) => {
+      const box = boxOf.get(placement.id);
+      if (!box || !isBoxed(placement)) return placement;
+      const next = { ...placement, ...box };
+      delete next.slot;
+      return next;
+    }),
   }));
 };
+
+/**
+ * On va un bloc nou en una pàgina lliure plena: petit, a dalt a l'esquerra,
+ * damunt dels altres, perquè sigui fàcil d'agafar i moure.
+ */
+const FALLBACK_BOX = { column: 0, row: 0, columns: 6, rows: 4 };
 
 /**
  * Afegeix les seqüències a una pàgina (`addPlacementsToSheet`). Les seqüències

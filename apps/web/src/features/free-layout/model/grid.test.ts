@@ -7,6 +7,7 @@ import {
   cellSize,
   dragGridBox,
   gridToBox,
+  largestEmptyBox,
   snapToGrid,
 } from "./grid";
 import { SHAPED_TEMPLATES, TEMPLATE_GAP_MM, slotToBox } from "./templates";
@@ -86,5 +87,29 @@ describe("moure i canviar la mida", () => {
     expect(
       dragGridBox(start, corner, -cell.w * 10, -cell.h * 10, AREA),
     ).toEqual({ ...start, columns: MIN_CELLS, rows: MIN_CELLS });
+  });
+});
+
+describe("l'espai buit més gran", () => {
+  it("un full buit sencer; amb un bloc a l'esquerra, la resta de la dreta", () => {
+    expect(largestEmptyBox([], AREA)).toEqual({
+      column: 0,
+      row: 0,
+      columns: GRID_COLUMNS,
+      rows: GRID_ROWS,
+    });
+    const left = gridToBox({ column: 0, row: 0, columns: 8, rows: 24 }, AREA);
+    expect(largestEmptyBox([left], AREA)).toEqual({
+      column: 8,
+      row: 0,
+      columns: GRID_COLUMNS - 8,
+      rows: GRID_ROWS,
+    });
+  });
+
+  it("si no hi cap res, cap", () => {
+    expect(
+      largestEmptyBox([{ x: 0, y: 0, w: AREA.w, h: AREA.h }], AREA),
+    ).toBeUndefined();
   });
 });

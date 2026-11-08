@@ -88,12 +88,11 @@ describe("els nivells de la columna de la vista", () => {
     expect(
       screen.getByText("Click a block on the page to see its settings."),
     ).toBeInTheDocument();
-    // Els blocs de la pàgina es veuen igual: la mateixa configuració a tots,
-    // al nivell «Pàgina» (l'antic «Aplica a totes», ara per pàgina)
+    // La mida, l'espai i l'alineació són del bloc: sense cap de seleccionat,
+    // no hi són
     expect(
-      screen.getByRole("checkbox", { name: "Same for every block" }),
-    ).toBeChecked();
-    expect(screen.getAllByRole("slider", { name: "Size" })).toHaveLength(1);
+      screen.queryByRole("slider", { name: "Size" }),
+    ).not.toBeInTheDocument();
     const crumbs = screen.getByRole("navigation", {
       name: "Where these settings apply",
     });
@@ -128,10 +127,11 @@ describe("els nivells de la columna de la vista", () => {
   it("sense «la mateixa», el nivell «Bloc» canvia només aquell bloc, no la seqüència", async () => {
     const { store } = renderView(freeDocument());
     await userEvent.click(
-      screen.getByRole("checkbox", { name: "Same for every block" }),
-    );
-    await userEvent.click(
       screen.getAllByRole("button", { name: /^Sequence 2,/ })[0],
+    );
+    // «Igual a tots els blocs» és al nivell del bloc
+    await userEvent.click(
+      screen.getByRole("checkbox", { name: "Same for every block" }),
     );
 
     await userEvent.click(
@@ -149,6 +149,13 @@ describe("els nivells de la columna de la vista", () => {
   it("amb la mateixa configuració, la pàgina la posa a tots els blocs i el bloc no en té", async () => {
     const { store } = renderView(freeDocument());
 
+    // Des de qualsevol bloc, amb «Igual a tots els blocs» activat
+    await userEvent.click(
+      screen.getAllByRole("button", { name: /^Sequence 1,/ })[0],
+    );
+    expect(
+      screen.getByRole("checkbox", { name: "Same for every block" }),
+    ).toBeChecked();
     await userEvent.click(screen.getByRole("button", { name: "Bottom" }));
 
     store
@@ -161,17 +168,10 @@ describe("els nivells de la columna de la vista", () => {
       store.getState().document.pages!.sheets[1].placements[0],
     ).not.toHaveProperty("view");
 
-    await userEvent.click(
-      screen.getAllByRole("button", { name: /^Sequence 1,/ })[0],
-    );
+    // S'obre el nivell del bloc
     expect(
-      screen.getByText(/This page uses the same size, spacing and alignment/),
-    ).toBeInTheDocument();
-    // Els ajustos són a la pàgina: és la pàgina el que s'obre
-    expect(level(/^Page\s*Page 1 of 2/)).toHaveAttribute(
-      "aria-expanded",
-      "true",
-    );
+      level(/^Block\s*Sequence 1\s*Applies only to this block/),
+    ).toHaveAttribute("aria-expanded", "true");
     // En blocs, cada bloc tria les columnes de dins
     expect(
       screen.getByRole("combobox", { name: "Columns" }),
@@ -200,6 +200,9 @@ describe("els nivells de la columna de la vista", () => {
         ],
       },
     });
+    await userEvent.click(
+      screen.getAllByRole("button", { name: /^Sequence 1,/ })[0],
+    );
     const uniform = screen.getByRole("checkbox", {
       name: "Same for every block",
     });
@@ -221,12 +224,11 @@ describe("els nivells de la columna de la vista", () => {
 
   it("a la disposició automàtica, sense «la mateixa», cada seqüència té la seva vista", async () => {
     const { store } = renderView(baseDocument());
+    await userEvent.click(screen.getByRole("button", { name: /^Sequence 1,/ }));
     // A la pàgina contínua són seqüències, no blocs
     await userEvent.click(
       screen.getByRole("checkbox", { name: "Same for every sequence" }),
     );
-
-    await userEvent.click(screen.getByRole("button", { name: /^Sequence 1,/ }));
 
     expect(
       level(/^Sequence\s*Sequence 1\s*Applies only to this sequence/),

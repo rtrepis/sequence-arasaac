@@ -107,3 +107,91 @@ export const dragGridBox = (
   if (edges.bottom) bottom = clamp(bottom + stepY, top + MIN_CELLS, GRID_ROWS);
   return { column: left, row: top, columns: right - left, rows: bottom - top };
 };
+
+/**
+ * Les cel·les que ocupa una caixa en mm, sense arrodonir cap a dins: una
+ * caixa que no cau en punts (d'unes columnes o files que no són de la
+ * quadrícula) ocupa totes les cel·les que toca.
+ */
+const occupiedCells = (box: Box, area: SheetArea): GridBox => {
+  const cell = cellSize(area);
+  // Una mica de marge: l'espai entre blocs no ha de comptar com a ocupat
+  const slack = 0.25;
+  const left = clamp(Math.floor(box.x / cell.w + slack), 0, GRID_COLUMNS);
+  const top = clamp(Math.floor(box.y / cell.h + slack), 0, GRID_ROWS);
+  const right = clamp(
+    Math.ceil((box.x + box.w) / cell.w - slack),
+    left,
+    GRID_COLUMNS,
+  );
+  const bottom = clamp(
+    Math.ceil((box.y + box.h) / cell.h - slack),
+    top,
+    GRID_ROWS,
+  );
+  return { column: left, row: top, columns: right - left, rows: bottom - top };
+};
+
+/**
+ * L'espai buit més gran del full, en cel·les de la quadrícula: on va un bloc
+ * nou en una pàgina lliure, sense tocar els que hi ha. Si n'hi ha més d'un
+ * d'igual, el primer en ordre de lectura. `undefined` si no hi cap ni un bloc
+ * de la mida mínima.
+ */
+export const largestEmptyBox = (
+  occupied: readonly Box[],
+  area: SheetArea,
+): GridBox | undefined => {
+  // Taula de sumes: quantes cel·les ocupades hi ha a cada rectangle
+  const taken: number[][] = Array.from({ length: GRID_ROWS }, () =>
+    Array.from({ length: GRID_COLUMNS }, () => 0),
+  );
+  occupied.forEach((box) => {
+    const cells = occupiedCells(box, area);
+    for (let row = cells.row; row < cells.row + cells.rows; row += 1)
+      for (
+        let column = cells.column;
+        column < cells.column + cells.columns;
+        column += 1
+      )
+        taken[row][column] = 1;
+  });
+  const sum: number[][] = Array.from({ length: GRID_ROWS + 1 }, () =>
+    Array.from({ length: GRID_COLUMNS + 1 }, () => 0),
+  );
+  for (let row = 0; row < GRID_ROWS; row += 1)
+    for (let column = 0; column < GRID_COLUMNS; column += 1)
+      sum[row + 1][column + 1] =
+        taken[row][column] +
+        sum[row][column + 1] +
+        sum[row + 1][column] -
+        sum[row][column];
+  const isFree = (row: number, column: number, rows: number, columns: number) =>
+    sum[row + rows][column + columns] -
+      sum[row][column + columns] -
+      sum[row + rows][column] +
+      sum[row][column] ===
+    0;
+
+  let best: GridBox | undefined;
+  let bestArea = 0;
+  for (let row = 0; row <= GRID_ROWS - MIN_CELLS; row += 1)
+    for (let column = 0; column <= GRID_COLUMNS - MIN_CELLS; column += 1) {
+      if (!isFree(row, column, MIN_CELLS, MIN_CELLS)) continue;
+      for (let rows = MIN_CELLS; row + rows <= GRID_ROWS; rows += 1) {
+        if (!isFree(row, column, rows, MIN_CELLS)) break;
+        for (
+          let columns = MIN_CELLS;
+          column + columns <= GRID_COLUMNS;
+          columns += 1
+        ) {
+          if (!isFree(row, column, rows, columns)) break;
+          if (rows * columns > bestArea) {
+            bestArea = rows * columns;
+            best = { column, row, columns, rows };
+          }
+        }
+      }
+    }
+  return best;
+};

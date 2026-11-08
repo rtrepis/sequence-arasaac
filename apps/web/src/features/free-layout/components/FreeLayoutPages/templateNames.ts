@@ -16,6 +16,7 @@ export const TEMPLATE_NAMES: Record<string, MessageDescriptor> = {
   "token-board": messages.templateTokenBoard,
   "story-page": messages.templateStoryPage,
   menu: messages.templateMenu,
+  free: messages.templateFree,
 };
 
 /**

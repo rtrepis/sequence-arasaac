@@ -1,5 +1,5 @@
 import React from "react";
-import { MenuItem, Select, Slider } from "@mui/material";
+import { Chip, MenuItem, Select, Slider } from "@mui/material";
 import {
   MdCropPortrait,
   MdOutlineDashboard,
@@ -24,15 +24,13 @@ import {
   SHAPED_TEMPLATES,
   arrangementOf,
   arrangementTemplate,
-  closestTemplate,
-  largestTemplate,
-  templateFits,
 } from "@features/free-layout/model/templates";
 import {
   selectPageLayout,
   selectPages,
   setSheetDirectionThunk,
   setSheetGapThunk,
+  setSheetFreeThunk,
   setSheetModeThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
@@ -40,7 +38,6 @@ import { useApplyTemplate } from "@features/free-layout/hooks/useApplyTemplate";
 import { TEMPLATE_NAMES } from "@features/free-layout/components/FreeLayoutPages/templateNames";
 import TemplatePicker from "@features/free-layout/components/TemplatePicker";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
-import PagePictograms from "./PagePictograms";
 import messages from "./ViewLevels.lang";
 
 /** L'`id` del nivell «Pàgina»: les molles hi porten. */
@@ -51,6 +48,9 @@ export const PageIcon = (): React.ReactElement => <MdCropPortrait />;
 
 /** Prefix dels ids dels títols de fila, per lligar-los als controls. */
 const LABEL_ID = "view-level-page";
+
+/** Els modes del repartiment d'una pàgina en blocs. */
+type ArrangementMode = "columns" | "rows" | "free";
 
 /** Quantes columnes o files com a molt es poden triar. */
 const MAX_LINES = 6;
@@ -147,22 +147,24 @@ const PageLevel = ({
     setTemplatePreview(null);
     applyWithWarning(template);
   };
-  const shapedTemplates = SHAPED_TEMPLATES.filter((template) =>
-    templateFits(template, sheet?.placements ?? []),
-  );
-  const changeArrangementKind = (kind: Arrangement["kind"]) => {
-    if (kind === arrangement.kind) return;
-    if (kind === "template") {
-      // La que s'hi ajusta més: no n'estrena més espais (ni rètols) dels que
-      // calen. Si no n'hi cap cap, la més gran, amb l'avís del que es perd
-      applyTemplate(
-        closestTemplate(shapedTemplates) ?? largestTemplate(SHAPED_TEMPLATES),
-      );
+  // El repartiment: columnes, files o lliure. Una plantilla aplicada és
+  // lliure, amb espais per omplir
+  const arrangementMode: ArrangementMode =
+    arrangement.kind === "template" ? "free" : arrangement.kind;
+  const changeArrangementMode = (next: ArrangementMode) => {
+    if (next === arrangementMode) return;
+    // Lliure no mou res: els blocs es queden on són
+    if (next === "free") {
+      dispatch(setSheetFreeThunk(index));
       return;
     }
-    // De columnes a files (o al revés) es queda el nombre; si no, dues
-    const n = arrangement.kind === "template" ? 2 : arrangement.n;
-    applyTemplate(arrangementTemplate(kind, n, count));
+    // De columnes a files (o al revés) es queda el nombre; si no, tants com
+    // blocs (com a molt, els que es poden triar)
+    const n =
+      arrangement.kind === "template"
+        ? Math.min(Math.max(count, 1), MAX_LINES)
+        : arrangement.n;
+    applyTemplate(arrangementTemplate(next, n, count));
   };
 
   return (
@@ -179,7 +181,17 @@ const PageLevel = ({
       {/* Com treballa la pàgina. La pantalla completa no té mil·límetres */}
       {!fullscreen && (
         <SettingRow
-          title={<FormattedMessage {...messages.mode} />}
+          title={
+            <>
+              <FormattedMessage {...messages.mode} />
+              <Chip
+                label={intl.formatMessage(messages.newTag)}
+                size="small"
+                color="primary"
+                sx={{ marginInlineStart: 1, verticalAlign: "middle" }}
+              />
+            </>
+          }
           labelId={`${LABEL_ID}-mode`}
           helperId={`${LABEL_ID}-mode-helper`}
           helper={
@@ -273,10 +285,10 @@ const PageLevel = ({
             control="wide"
           >
             <StyledToggleButtonGroup
-              value={arrangement.kind}
+              value={arrangementMode}
               exclusive
-              onChange={(_, value: Arrangement["kind"] | null) =>
-                value && changeArrangementKind(value)
+              onChange={(_, value: ArrangementMode | null) =>
+                value && changeArrangementMode(value)
               }
               aria-labelledby={`${LABEL_ID}-arrangement`}
             >
@@ -286,13 +298,13 @@ const PageLevel = ({
               <IconToggleButton value="rows" message={messages.byRows}>
                 <MdTableRows />
               </IconToggleButton>
-              <IconToggleButton value="template" message={messages.byTemplate}>
+              <IconToggleButton value="free" message={messages.byFree}>
                 <MdOutlineDashboard />
               </IconToggleButton>
             </StyledToggleButtonGroup>
           </SettingRow>
 
-          {arrangement.kind !== "template" ? (
+          {arrangement.kind !== "template" && (
             <SettingRow
               title={
                 <FormattedMessage
@@ -328,34 +340,35 @@ const PageLevel = ({
                 ))}
               </Select>
             </SettingRow>
-          ) : (
-            <SettingRow
-              title={<FormattedMessage {...pageMessages.template} />}
+          )}
+
+          {/* Les plantilles, sempre a sota: aplicar-ne una és un punt de
+              partida, i la pàgina queda lliure amb els seus espais */}
+          <SettingRow
+            title={<FormattedMessage {...messages.templates} />}
+            labelId={`${LABEL_ID}-template`}
+            helperId={`${LABEL_ID}-template-helper`}
+            helper={<FormattedMessage {...messages.templateHelp} />}
+            control="block"
+          >
+            <TemplatePicker
+              templates={SHAPED_TEMPLATES}
+              value={
+                arrangement.kind === "template" ? arrangement.id : undefined
+              }
+              landscape={(layout.orientation ?? "landscape") === "landscape"}
               labelId={`${LABEL_ID}-template`}
               helperId={`${LABEL_ID}-template-helper`}
-              helper={<FormattedMessage {...messages.templateHelp} />}
-              control="block"
-            >
-              <TemplatePicker
-                templates={SHAPED_TEMPLATES}
-                value={arrangement.id}
-                landscape={(layout.orientation ?? "landscape") === "landscape"}
-                labelId={`${LABEL_ID}-template`}
-                helperId={`${LABEL_ID}-template-helper`}
-                onApply={applyTemplate}
-                onPreview={(template) =>
-                  setTemplatePreview(
-                    template ? { sheetIndex: index, template } : null,
-                  )
-                }
-              />
-            </SettingRow>
-          )}
+              onApply={applyTemplate}
+              onPreview={(template) =>
+                setTemplatePreview(
+                  template ? { sheetIndex: index, template } : null,
+                )
+              }
+            />
+          </SettingRow>
         </>
       )}
-
-      {/* La mateixa mida, espai i alineació a tots els blocs, o cadascun la seva */}
-      <PagePictograms sheetIndex={index} />
 
       {/* Les accions de la pàgina (afegir, plantilla, duplicar…) són al seu
           menú «⋯», damunt de la previsualització: no a la columna */}

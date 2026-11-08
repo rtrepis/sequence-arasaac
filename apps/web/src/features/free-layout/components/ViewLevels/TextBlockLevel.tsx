@@ -70,8 +70,6 @@ const TextBlockLevel = ({
       <SettingRow
         title={<FormattedMessage {...messages.text} />}
         labelId={`${LABEL_ID}-text`}
-        helperId={`${LABEL_ID}-text-helper`}
-        helper={<FormattedMessage {...messages.textHelp} />}
       >
         <TextField
           value={placement.text}
@@ -89,7 +87,6 @@ const TextBlockLevel = ({
           fullWidth
           inputProps={{
             "aria-labelledby": `${LABEL_ID}-text`,
-            "aria-describedby": `${LABEL_ID}-text-helper`,
           }}
         />
       </SettingRow>
@@ -97,8 +94,6 @@ const TextBlockLevel = ({
       <SettingRow
         title={<FormattedMessage {...messages.fontSize} />}
         labelId={`${LABEL_ID}-size`}
-        helperId={`${LABEL_ID}-size-helper`}
-        helper={<FormattedMessage {...messages.fontSizeHelp} />}
       >
         <Slider
           step={FONT_SIZE_STEP}
@@ -115,7 +110,6 @@ const TextBlockLevel = ({
             })
           }
           aria-labelledby={`${LABEL_ID}-size`}
-          aria-describedby={`${LABEL_ID}-size-helper`}
         />
       </SettingRow>
 

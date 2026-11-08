@@ -5,7 +5,7 @@ import { useFeedback } from "@/context/FeedbackContext";
 import { useSequenceName } from "@features/free-layout/components/FreeLayoutPages/useSequenceName";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import type { SequenceViewSettings } from "@/types/document";
-import { SectionTitle, SettingRow } from "@/components/SettingsLayout";
+import { SettingRow } from "@/components/SettingsLayout";
 import SequenceViewRows from "@components/ViewSequencesSettings/SequenceViewRows";
 import { applyViewSettingsToAllActionCreator } from "@features/sequence/store/documentSlice";
 import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
@@ -17,34 +17,46 @@ import { usePageUniform } from "@features/free-layout/hooks/usePageUniform";
 import messages from "./ViewLevels.lang";
 
 /** Prefix dels ids dels títols de fila, per lligar-los als controls. */
-const LABEL_ID = "view-level-page-pictograms";
+const LABEL_ID = "view-level-pictograms";
 
 interface PagePictogramsProps {
-  /** La pàgina; a la disposició automàtica d'un sol full, 0 */
+  /** La pàgina del bloc; a la pàgina única de sempre, 0 */
   sheetIndex: number;
+  /** La vista d'aquest bloc, amb la cascada sencera */
+  view: SequenceViewSettings;
+  /** Canvia només aquest bloc */
+  onChange: (change: Partial<SequenceViewSettings>) => void;
+  /** Un bloc comú surt a totes les pàgines: no segueix «igual a tots» */
+  common?: boolean;
+  /** Avís sota la mida (els pictogrames no hi caben), si n'hi ha */
+  sizeHelper?: React.ReactNode;
 }
 
 /**
- * Els pictogrames d'una pàgina, al nivell «Pàgina» de la columna: si tots els
- * blocs tenen la mateixa mida, espai i alineació o cadascun la seva. És
- * l'antic «Aplica a totes», ara pàgina a pàgina. Amb «la mateixa a tots», els
- * ajustos són aquí i valen per a tots els blocs de la pàgina; sense, cada bloc
- * es tria al nivell «Bloc». Amb un sol bloc no cal triar res: no hi és.
+ * Els pictogrames del bloc seleccionat, al nivell «Bloc» de la columna: la
+ * mida, l'espai i l'alineació i, a dalt, l'interruptor «Igual a tots els
+ * blocs» de la pàgina (l'antic «Aplica a totes», pàgina a pàgina). Activat,
+ * el que es canvia aquí val per a tots els blocs de la pàgina; desactivat,
+ * només per a aquest. Amb un sol bloc, l'interruptor no hi és.
  */
 const PagePictograms = ({
   sheetIndex,
-}: PagePictogramsProps): React.ReactElement | null => {
+  view,
+  onChange,
+  common = false,
+  sizeHelper,
+}: PagePictogramsProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { showSnackbar } = useFeedback();
   const sequenceName = useSequenceName();
   const isFree = useAppSelector(selectHasPages);
   const documentView = useAppSelector(selectDocumentStyle).view;
-  const { uniform, setUniform, view, blockCount, unit, smallest, differs } =
-    usePageUniform(sheetIndex);
-  if (blockCount < 2) return null;
+  const page = usePageUniform(sheetIndex);
+  const canBeUniform = page.blockCount > 1 && !common;
+  const uniform = canBeUniform && page.uniform;
 
-  const change = (settings: Partial<SequenceViewSettings>) =>
+  const changeAll = (settings: Partial<SequenceViewSettings>) =>
     dispatch(
       isFree
         ? setSheetViewThunk(sheetIndex, settings)
@@ -56,52 +68,51 @@ const PagePictograms = ({
     );
 
   /**
-   * Activar-ho posa a totes la configuració de la més petita (la que segur que
+   * Activar-ho posa a tots la configuració del més petit (la que segur que
    * hi cap), i ho diu: és un canvi que l'usuari no ha fet a mà
    */
   const handleUniformChange = (checked: boolean) => {
-    setUniform(checked);
-    if (!checked || !differs || !smallest) return;
+    page.setUniform(checked);
+    if (!checked || !page.differs || !page.smallest) return;
     const { sizePict, pictSpaceBetween, alignmentH, alignmentV } =
-      smallest.view;
-    change({ sizePict, pictSpaceBetween, alignmentH, alignmentV });
+      page.smallest.view;
+    changeAll({ sizePict, pictSpaceBetween, alignmentH, alignmentV });
     showSnackbar({
       message: intl.formatMessage(messages.uniformApplied, {
-        unit,
-        name: sequenceName(smallest.sequenceKey),
+        unit: page.unit,
+        name: sequenceName(page.smallest.sequenceKey),
       }),
       severity: "info",
     });
   };
 
   return (
-    <SectionTitle title={<FormattedMessage {...messages.pictograms} />}>
-      <SettingRow
-        title={<FormattedMessage {...messages.uniform} values={{ unit }} />}
-        labelId={`${LABEL_ID}-uniform`}
-        helperId={`${LABEL_ID}-uniform-helper`}
-        helper={
-          <FormattedMessage
-            {...(uniform ? messages.uniformOn : messages.uniformOff)}
-            values={{ unit }}
+    <>
+      {canBeUniform && (
+        <SettingRow
+          title={
+            <FormattedMessage
+              {...messages.uniform}
+              values={{ unit: page.unit }}
+            />
+          }
+          labelId={`${LABEL_ID}-uniform`}
+          control="compact"
+        >
+          <Switch
+            checked={uniform}
+            onChange={(_, checked) => handleUniformChange(checked)}
+            inputProps={{ "aria-labelledby": `${LABEL_ID}-uniform` }}
           />
-        }
-        control="compact"
-      >
-        <Switch
-          checked={uniform}
-          onChange={(_, checked) => handleUniformChange(checked)}
-          inputProps={{
-            "aria-labelledby": `${LABEL_ID}-uniform`,
-            "aria-describedby": `${LABEL_ID}-uniform-helper`,
-          }}
-        />
-      </SettingRow>
-
-      {uniform && (
-        <SequenceViewRows view={view} labelId={LABEL_ID} onChange={change} />
+        </SettingRow>
       )}
-    </SectionTitle>
+      <SequenceViewRows
+        view={uniform ? page.view : view}
+        labelId={LABEL_ID}
+        onChange={uniform ? changeAll : onChange}
+        sizeHelper={sizeHelper}
+      />
+    </>
   );
 };
 

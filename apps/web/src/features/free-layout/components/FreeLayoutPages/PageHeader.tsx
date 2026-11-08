@@ -1,6 +1,7 @@
 import React, { useId, useState } from "react";
 import {
   Box,
+  Chip,
   ListItemIcon,
   ListItemText,
   Menu,
@@ -18,11 +19,16 @@ import {
   MdTitle,
 } from "react-icons/md";
 import { useIntl } from "react-intl";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
 import StyledButton from "@/style/StyledButton";
 import StyledIconButton from "@/style/StyledIconButton";
-import { addTextBlockThunk } from "@features/free-layout/store/freeLayoutThunks";
+import {
+  addTextBlockThunk,
+  selectPages,
+} from "@features/free-layout/store/freeLayoutThunks";
+import { arrangementOf } from "@features/free-layout/model/templates";
+import { TEMPLATE_NAMES } from "./templateNames";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
 import PageActionsMenu from "./PageActionsMenu";
 import messages from "./FreeLayoutPages.lang";
@@ -98,6 +104,23 @@ const PageHeader = ({
   const addMenuId = useId();
   const [addAnchor, setAddAnchor] = useState<HTMLElement | null>(null);
   const number = sheetIndex + 1;
+  const pages = useAppSelector(selectPages);
+  const arrangement = arrangementOf(pages?.sheets[sheetIndex]?.template);
+  // L'etiqueta del repartiment: contínua, N columnes, N files, lliure o el
+  // nom de la plantilla
+  const tag = continuous
+    ? { kind: "continuous", n: 0, name: "" }
+    : arrangement.kind !== "template"
+      ? { kind: arrangement.kind, n: arrangement.n, name: "" }
+      : arrangement.id === "free" || !arrangement.id
+        ? { kind: "free", n: 0, name: "" }
+        : {
+            kind: "template",
+            n: 0,
+            name: TEMPLATE_NAMES[arrangement.id]
+              ? intl.formatMessage(TEMPLATE_NAMES[arrangement.id])
+              : arrangement.id,
+          };
   const title = intl.formatMessage(messages.pageLabel, {
     number,
     total: sheetCount,
@@ -185,6 +208,17 @@ const PageHeader = ({
         </PageArrow>
       )}
       {onPrevious && <Box sx={{ flexGrow: 1 }} />}
+
+      {/* Com es reparteix la pàgina: diu què farà afegir-hi un bloc */}
+      <Tooltip title={intl.formatMessage(messages.arrangementHint, tag)}>
+        <Chip
+          label={intl.formatMessage(messages.arrangementTag, tag)}
+          size="small"
+          variant="outlined"
+          tabIndex={0}
+          sx={{ flexShrink: 0 }}
+        />
+      </Tooltip>
 
       {narrow ? (
         // Al mòbil, només la icona; el nom, al tooltip (pressió llarga)

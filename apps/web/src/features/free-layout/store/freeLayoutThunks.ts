@@ -54,7 +54,7 @@ import {
   removeSheet,
   updatePlacement,
 } from "../model/sheets";
-import { LayoutTemplate } from "../model/templates";
+import { FREE_TEMPLATE, LayoutTemplate } from "../model/templates";
 
 /** Identificadors nous de fulls i col·locacions: els mateixos que escriu el fitxer. */
 const newLayoutId: NewLayoutId = (prefix) => newSaacId(prefix);
@@ -452,4 +452,16 @@ export const setPlacementBoxThunk = (
     updatePlacement(layout, placementId, (placement) =>
       placement.kind === "unknown" ? placement : { ...placement, ...box },
     ),
+  );
+
+/**
+ * Passa una pàgina en blocs al repartiment lliure, sense moure res: els blocs
+ * es queden on són, i un bloc nou anirà a l'espai buit més gran.
+ */
+export const setSheetFreeThunk = (sheetIndex: number): AppThunk =>
+  changeFreeLayout((layout) =>
+    mapSheet(layout, sheetIndex, (sheet) => ({
+      ...sheet,
+      template: FREE_TEMPLATE.id,
+    })),
   );

@@ -21,12 +21,6 @@ const messages = defineMessages({
     description:
       "Text al mig d'una pàgina sense cap seqüència, damunt del botó per afegir-n'hi; no s'imprimeix",
   },
-  template: {
-    id: "features.freeLayout.page.template",
-    defaultMessage: "Template",
-    description:
-      "Botó de la capçalera d'una pàgina que obre les plantilles per repartir-hi les seqüències",
-  },
   templateFull: {
     id: "features.freeLayout.template.full",
     defaultMessage: "Whole page",
@@ -386,6 +380,26 @@ const messages = defineMessages({
     defaultMessage: "Next page",
     description:
       "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina següent (també es pot lliscar)",
+  },
+  templateFree: {
+    id: "features.freeLayout.template.free",
+    defaultMessage: "Free",
+    description:
+      "Nom del repartiment lliure d'una pàgina: cada bloc on l'usuari l'ha posat",
+  },
+  arrangementTag: {
+    id: "features.freeLayout.page.arrangementTag",
+    defaultMessage:
+      "{kind, select, continuous {Continuous} columns {Columns · {n}} rows {Rows · {n}} free {Free} other {{name}}}",
+    description:
+      "Etiqueta de la capçalera d'una pàgina que diu com es reparteix: contínua, N columnes, N files, lliure o el nom de la plantilla (`name`)",
+  },
+  arrangementHint: {
+    id: "features.freeLayout.page.arrangementHint",
+    defaultMessage:
+      "{kind, select, continuous {Adding a sequence puts it at the end.} columns {Adding a block adds one more column.} rows {Adding a block adds one more row.} free {Adding a block puts it in the largest empty space, without moving the others.} other {Adding a block fills the first empty space; if there is none, the page becomes free.}}",
+    description:
+      "Tooltip de l'etiqueta del repartiment de la pàgina: què passarà en afegir-hi un bloc",
   },
 });
 

@@ -144,6 +144,17 @@ fase 3 va fer veure que no n'hi ha prou:
     tenia: el lloc d'on ha marxat no torna a ser un espai lliure, i **tornar a aplicar la
     plantilla treu els retocs** (amb Desfés). Mida mínima, 2 × 2 cel·les; els blocs es poden
     trepitjar. El format no canvia: són les caixes de sempre (`x`, `y`, `w`, `h`).
+22. **Repartiment Columnes / Files / Lliure, i afegir un bloc previsible** (2026-11-08). Una pàgina
+    en blocs es reparteix en **N columnes**, **N files** o **lliure** (`template: "free"`, una
+    plantilla sense espais); les plantilles són a sota, sempre, i n'aplicar una deixa la pàgina
+    lliure amb els espais de la plantilla. Afegir un bloc fa sempre el que diu l'etiqueta de la
+    capçalera: a **columnes**, una columna més (i a **files**, una fila més), si la graella no té
+    cap espai lliure; a una **plantilla**, el primer espai buit que li toca, i si no n'hi ha, la
+    pàgina passa a lliure; a **lliure**, el bloc va a l'**espai buit més gran** de la quadrícula,
+    sense moure'n cap (`largestEmptyBox`), i si no n'hi ha cap, petit a dalt a l'esquerra. Passar a
+    «Lliure» no mou res. Substitueix, per a «N columnes» i «N files», el creixement de la decisió
+    17 (abans hi afegia files o columnes de l'altre eix). Una pàgina sense cap plantilla desada (les
+    fases 1–3) es torna a repartir com abans.
 
 ## Alternatives descartades
 
@@ -199,3 +210,5 @@ fase 3 va fer veure que no n'hi ha prou:
 - **2026-11-08** (fase 4): les accions de la pàgina, només al seu menú «⋯»; totes les plantilles
   es poden triar, amb avís si se'n perden blocs; els espais lliures, blocs buits per omplir; i
   moure i canviar la mida dels blocs damunt de la quadrícula de punts (decisió 21).
+- **2026-11-08** (repartiment): Columnes / Files / Lliure, les plantilles a sota, afegir un bloc
+  segons l'etiqueta del repartiment (decisió 22).

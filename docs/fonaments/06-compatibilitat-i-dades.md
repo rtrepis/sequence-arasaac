@@ -160,7 +160,8 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   - `"template"` («En blocs»): cada bloc a la seva caixa.
 - **`template`** és la plantilla de la pàgina (`"full"`, `"rows-N"`, `"columns-N"`, `"grid-CxR"`,
   `"strip-top"` i, des de R4, les dels treballs reals: `"agenda-strip"`, `"today-agenda"`,
-  `"first-then"`, `"week"`, `"token-board"`, `"story-page"`, `"menu"`), i **`slot`** l'espai que
+  `"first-then"`, `"week"`, `"token-board"`, `"story-page"`, `"menu"`, i `"free"`, el repartiment
+  lliure, sense espais), i **`slot`** l'espai que
   ocupa cada bloc. Algunes plantilles tenen **espais de rètol**: hi van els blocs de text, i les
   seqüències només ocupen els espais de seqüència. Són `id` nous d'un camp que ja era de text
   lliure: el format no canvia, i una versió anterior els conserva com un `id` que no coneix. `"columns-N"` i `"rows-N"` són el

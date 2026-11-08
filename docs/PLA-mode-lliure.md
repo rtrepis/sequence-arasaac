@@ -1021,6 +1021,17 @@ en aplicar una plantilla **surt de la pàgina** (la seqüència continua al docu
   té la mateixa capçalera que les altres pàgines (`SinglePageHeader`): «Pàgina 1 de 1», afegir i
   el menú «⋯», amb «Afegeix una pàgina». A l'escriptori, també el botó de sota del full. Qualsevol
   d'aquestes accions fa explícita la pàgina.
+- **Repartiment i afegir previsible** (ADR-005, decisió 22): «Repartiment» té tres modes,
+  *Columnes*, *Files* i *Lliure*, i a sota sempre les plantilles. La capçalera de cada pàgina porta
+  una etiqueta («Columnes · 3», «Files · 2», «Lliure», el nom de la plantilla o «Contínua») amb un
+  tooltip que diu què farà afegir-hi un bloc: una columna més, una fila més, el primer espai buit
+  o l'espai buit més gran sense tocar els altres. «Disposició» porta l'etiqueta «Nou».
+- **Nivell «Bloc» amb menys text**: la mida, l'espai i l'alineació, amb l'interruptor «La mateixa
+  a tots els blocs» a dalt, hi són sempre (abans, amb l'interruptor activat, eren al nivell
+  «Pàgina»). Sense textos d'ajuda, només l'avís si els pictogrames no hi caben. Sota «Columnes»:
+  «Quants pictogrames per fila dins del bloc.»
+- **A3 a l'escriptori**: el full passava per sota de la columna en finestres més amples que el
+  contenidor de l'app; ara es mesura l'espai que deixa la columna.
 - **Moure i canviar la mida** (la fase 4; ADR-005, decisió 21): el bloc seleccionat s'arrossega
   i té vuit nanses; amb el teclat, fletxes i Maj + fletxes. Tot salta a una quadrícula de punts
   de 20 × 24 (`grid.ts`, `GridDots`, `useBlockDrag`), que es veu mentre hi ha un bloc

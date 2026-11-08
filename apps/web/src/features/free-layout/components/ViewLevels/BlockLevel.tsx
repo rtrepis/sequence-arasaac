@@ -1,12 +1,12 @@
 import React from "react";
-import { MenuItem, Select, Typography } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
 import { MdOutlineViewQuilt } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import type { SequenceViewSettings } from "@/types/document";
 import SettingsLevel from "@components/ViewSequencesSettings/SettingsLevel";
 import levelMessages from "@components/ViewSequencesSettings/ViewLevels.lang";
-import SequenceViewRows from "@components/ViewSequencesSettings/SequenceViewRows";
+import PagePictograms from "./PagePictograms";
 import { updateSequenceViewSettingsActionCreator } from "@features/sequence/store/documentSlice";
 import { SettingRow } from "@/components/SettingsLayout";
 import {
@@ -24,7 +24,6 @@ import {
   useViewSelection,
 } from "@features/free-layout/hooks/useViewSelection";
 import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
-import { usePageUniform } from "@features/free-layout/hooks/usePageUniform";
 import TextBlockLevel from "./TextBlockLevel";
 import messages from "./ViewLevels.lang";
 
@@ -60,10 +59,6 @@ const BlockLevel = ({
   const { cardSizes } = useViewSelection();
   const pages = useAppSelector(selectPages);
   const block = useSelectedBlock();
-  // Si la pàgina del bloc té «la mateixa configuració a tots els blocs», la
-  // mida, l'espai i l'alineació són al nivell «Pàgina», no aquí
-  const page = usePageUniform(block?.kind === "block" ? block.sheetIndex : 0);
-  const fromPage = page.uniform && page.blockCount > 1;
   if (!block) return null;
 
   // Un rètol té els seus ajustos: el text i la lletra
@@ -78,16 +73,6 @@ const BlockLevel = ({
         onExpandedChange={onExpandedChange}
       />
     );
-
-  /** El que diu el nivell en lloc dels ajustos, quan els porta la pàgina. */
-  const pageRules = (
-    <Typography variant="body2" color="text.secondary">
-      <FormattedMessage
-        {...messages.uniformBlock}
-        values={{ unit: page.unit }}
-      />
-    </Typography>
-  );
 
   if (block.kind === "sequence") {
     const change = (settings: Partial<SequenceViewSettings>) =>
@@ -113,15 +98,7 @@ const BlockLevel = ({
         expanded={expanded}
         onExpandedChange={onExpandedChange}
       >
-        {fromPage ? (
-          pageRules
-        ) : (
-          <SequenceViewRows
-            view={block.view}
-            labelId={LABEL_ID}
-            onChange={change}
-          />
-        )}
+        <PagePictograms sheetIndex={0} view={block.view} onChange={change} />
       </SettingsLevel>
     );
   }
@@ -163,26 +140,22 @@ const BlockLevel = ({
       expanded={expanded}
       onExpandedChange={onExpandedChange}
     >
-      {/* Un bloc comú surt a totes les pàgines: no segueix cap pàgina */}
-      {fromPage && !common ? (
-        pageRules
-      ) : (
-        <SequenceViewRows
-          view={view}
-          labelId={LABEL_ID}
-          onChange={(change) =>
-            dispatch(setPlacementViewThunk(placement.id, change))
-          }
-          sizeHelper={
-            continuous
-              ? undefined
-              : intl.formatMessage(
-                  grid.belowMinimum ? messages.sizeTooSmall : messages.sizeMax,
-                  { mm },
-                )
-          }
-        />
-      )}
+      {/* La mida, l'espai i l'alineació: d'aquest bloc, o de tots els de la
+          pàgina amb «Igual a tots els blocs» */}
+      <PagePictograms
+        sheetIndex={sheetIndex}
+        view={view}
+        common={common}
+        onChange={(change) =>
+          dispatch(setPlacementViewThunk(placement.id, change))
+        }
+        // Només es diu si els pictogrames passen per sota del mínim
+        sizeHelper={
+          !continuous && grid.belowMinimum
+            ? intl.formatMessage(messages.sizeTooSmall, { mm })
+            : undefined
+        }
+      />
 
       {/* Les columnes de dins del bloc, només en una pàgina en blocs */}
       {!continuous && (

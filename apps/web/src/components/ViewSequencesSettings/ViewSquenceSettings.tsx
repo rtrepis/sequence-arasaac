@@ -78,7 +78,6 @@ import {
   useViewSelection,
 } from "@features/free-layout/hooks/useViewSelection";
 import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
-import { usePageUniform } from "@features/free-layout/hooks/usePageUniform";
 import {
   BlockIcon,
   BlockLevel,
@@ -189,18 +188,9 @@ const ViewSequencesSettingsContent = ({
   const pages = useAppSelector(selectPages);
   const documentTitle = useAppSelector(selectDocumentTitle);
   const currentSelection = selectionKey(selection);
-  // La pàgina del que hi ha seleccionat: si té la mateixa configuració per a
-  // tots, és allà on es canvia
-  const selectedPage = usePageUniform(
-    selection?.kind === "block" ? selection.sheetIndex : 0,
-  );
-  const selectionFromPage =
-    selection !== null &&
-    selectedPage.uniform &&
-    selectedPage.blockCount > 1 &&
-    // Un rètol té els seus ajustos, que no són de la pàgina
-    selectedBlock?.kind !== "text" &&
-    !(selectedBlock?.kind === "block" && selectedBlock.common);
+  // Amb un bloc seleccionat, sempre s'obre el seu nivell: la mida, l'espai i
+  // l'alineació hi són, també amb «Igual a tots els blocs»
+  const selectionFromPage = false;
   // Com es diuen les peces de la pàgina que es mira: seqüències o blocs
   const activeUnit =
     pages?.sheets[activePage]?.mode === "template" ? "blocks" : "sequences";

@@ -424,3 +424,39 @@ describe("moure un bloc amb el teclat (fase 4)", () => {
     expect(screen.getByTestId("grid-dots")).toBeInTheDocument();
   });
 });
+
+describe("l'etiqueta del repartiment", () => {
+  it("diu com es reparteix cada pàgina, i el tooltip què farà afegir-hi un bloc", async () => {
+    const document = freeDocument();
+    renderPages({
+      ...document,
+      pages: {
+        sheets: [
+          {
+            id: "sh_1",
+            mode: "template",
+            template: "columns-2",
+            placements: [placement("pl_1", 1)],
+          },
+          {
+            id: "sh_2",
+            mode: "template",
+            template: "free",
+            placements: [placement("pl_2", 1)],
+          },
+          { id: "sh_3", mode: "auto", placements: [] },
+        ],
+        common: [],
+      },
+    });
+    expect(screen.getByText("Columns · 2")).toBeInTheDocument();
+    expect(screen.getByText("Free")).toBeInTheDocument();
+    expect(screen.getByText("Continuous")).toBeInTheDocument();
+    await userEvent.hover(screen.getByText("Free"));
+    expect(
+      await screen.findByRole("tooltip", {
+        name: "Adding a block puts it in the largest empty space, without moving the others.",
+      }),
+    ).toBeInTheDocument();
+  });
+});

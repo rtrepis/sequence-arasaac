@@ -2752,10 +2752,6 @@
     "message": "Aquesta pàgina és buida",
     "description": "Text al mig d'una pàgina sense cap seqüència, damunt del botó per afegir-n'hi; no s'imprimeix"
   },
-  "features.freeLayout.page.template": {
-    "message": "Plantilla",
-    "description": "Botó de la capçalera d'una pàgina que obre les plantilles per repartir-hi les seqüències"
-  },
   "features.freeLayout.template.full": {
     "message": "Pàgina sencera",
     "description": "Plantilla: una sola seqüència que ocupa tota la pàgina"
@@ -2807,6 +2803,10 @@
   "features.freeLayout.template.menu": {
     "message": "Menú",
     "description": "Plantilla (R3): el menú del menjador, amb tres franges (primer plat, segon plat i postres) i el seu rètol"
+  },
+  "features.freeLayout.template.free": {
+    "message": "Lliure",
+    "description": "Nom del repartiment lliure d'una pàgina: cada bloc on l'usuari l'ha posat"
   },
   "features.freeLayout.slotText.today": {
     "message": "Avui és",
@@ -2899,6 +2899,14 @@
   "features.freeLayout.page.modeBlocks": {
     "message": "En blocs",
     "description": "Opció del menú d'una pàgina: cada seqüència o text és un bloc amb el seu lloc a la pàgina"
+  },
+  "features.freeLayout.page.arrangementTag": {
+    "message": "{kind, select, continuous {Contínua} columns {Columnes · {n}} rows {Files · {n}} free {Lliure} other {{name}}}",
+    "description": "Etiqueta de la capçalera d'una pàgina que diu com es reparteix: contínua, N columnes, N files, lliure o el nom de la plantilla (`name`)"
+  },
+  "features.freeLayout.page.arrangementHint": {
+    "message": "{kind, select, continuous {Afegir una seqüència la posa al final.} columns {Afegir un bloc hi posa una columna més.} rows {Afegir un bloc hi posa una fila més.} free {Afegir un bloc el posa a l'espai buit més gran, sense moure els altres.} other {Afegir un bloc omple el primer espai buit; si no n'hi ha, la pàgina passa a lliure.}}",
+    "description": "Tooltip de l'etiqueta del repartiment de la pàgina: què passarà en afegir-hi un bloc"
   },
   "features.freeLayout.page.previousPage": {
     "message": "Pàgina anterior",
@@ -3120,10 +3128,6 @@
     "message": "S'aplica només a aquesta seqüència",
     "description": "Sota el nom de la seqüència seleccionada, al nivell «Bloc», a la disposició automàtica"
   },
-  "features.freeLayout.levels.sizeMax": {
-    "message": "Com a màxim. Ara en surten de {mm} mm.",
-    "description": "Ajuda de la mida dels pictogrames d'un bloc en una plantilla: la mida és un màxim, i diu la que en surt de debò (mm és el costat de la imatge)"
-  },
   "features.freeLayout.levels.sizeTooSmall": {
     "message": "El bloc és massa petit: en surten de {mm} mm. Fes-lo més gran o tria unes altres columnes.",
     "description": "Ajuda de la mida d'un bloc quan hi queden massa petits"
@@ -3164,17 +3168,9 @@
     "message": "Text",
     "description": "Títol de la fila on s'escriu el text d'un rètol, al nivell «Rètol» de la columna"
   },
-  "features.freeLayout.levels.textHelp": {
-    "message": "És contingut del document: no es tradueix. Cada línia, una línia del rètol.",
-    "description": "Ajuda sota el text d'un rètol"
-  },
   "features.freeLayout.levels.fontSize": {
     "message": "Mida de la lletra",
     "description": "Títol de la fila de la mida de la lletra d'un rètol"
-  },
-  "features.freeLayout.levels.fontSizeHelp": {
-    "message": "Com a màxim: si el text no hi cap, es fa més petit.",
-    "description": "Ajuda sota la mida de la lletra d'un rètol: la mida és un màxim, com la dels pictogrames"
   },
   "features.freeLayout.levels.bold": {
     "message": "Negreta",
@@ -3203,18 +3199,6 @@
   "features.freeLayout.levels.uniform": {
     "message": "La mateixa a {unit, select, sequences {totes les seqüències} other {tots els blocs}}",
     "description": "Interruptor del nivell «Pàgina»: totes les seqüències (pàgina contínua) o tots els blocs (pàgina en blocs) amb la mateixa mida, espai i alineació. `unit` és sequences o blocks"
-  },
-  "features.freeLayout.levels.uniformOn": {
-    "message": "{unit, select, sequences {Totes les seqüències d'aquesta pàgina tenen} other {Tots els blocs d'aquesta pàgina tenen}} la mateixa mida, espai i alineació. Desactiva-ho per ajustar {unit, select, sequences {cada seqüència} other {cada bloc}} per separat.",
-    "description": "Ajuda sota «La mateixa a totes les seqüències / tots els blocs», activat"
-  },
-  "features.freeLayout.levels.uniformOff": {
-    "message": "{unit, select, sequences {Cada seqüència té} other {Cada bloc té}} la seva mida, espai i alineació: clica {unit, select, sequences {una seqüència} other {un bloc}} del full per ajustar-{unit, select, sequences {la} other {lo}}.",
-    "description": "Ajuda sota «La mateixa a totes les seqüències / tots els blocs», desactivat"
-  },
-  "features.freeLayout.levels.uniformBlock": {
-    "message": "Aquesta pàgina fa servir la mateixa mida, espai i alineació a {unit, select, sequences {totes les seqüències} other {tots els blocs}}: es canvien a «Pàgina», o desactiva-ho allà per ajustar {unit, select, sequences {aquesta seqüència sola} other {aquest bloc sol}}.",
-    "description": "Al nivell «Seqüència / Bloc», en lloc de la mida, l'espai i l'alineació, quan la pàgina té «La mateixa…» activat"
   },
   "features.freeLayout.levels.mode": {
     "message": "Disposició",
@@ -3248,9 +3232,17 @@
     "message": "En files",
     "description": "Nom accessible i tooltip: els blocs de la pàgina en files"
   },
-  "features.freeLayout.levels.byTemplate": {
-    "message": "Amb una plantilla",
-    "description": "Nom accessible i tooltip: els blocs de la pàgina amb una plantilla"
+  "features.freeLayout.levels.byFree": {
+    "message": "Lliure: cada bloc on el poses",
+    "description": "Botó del repartiment d'una pàgina en blocs: els blocs no segueixen cap graella; un bloc nou va a l'espai buit més gran, sense moure els altres"
+  },
+  "features.freeLayout.levels.newTag": {
+    "message": "Nou",
+    "description": "Etiqueta al costat d'un ajust nou de la columna («Disposició»)"
+  },
+  "features.freeLayout.levels.templates": {
+    "message": "Plantilles",
+    "description": "Títol de la graella de plantilles amb miniatura, sota el repartiment d'una pàgina en blocs"
   },
   "features.freeLayout.levels.columnCount": {
     "message": "Columnes",
@@ -3301,7 +3293,7 @@
     "description": "Opció de «Columnes» del bloc: les que demana el repartiment de la pàgina"
   },
   "features.freeLayout.levels.columnsHelp": {
-    "message": "Automàtiques: en una pàgina en columnes, una columna; en files, una sola fila; amb una plantilla, les que fan els pictogrames més grans.",
-    "description": "Ajuda sota «Columnes» del bloc: què fan les automàtiques segons el repartiment de la pàgina"
+    "message": "Quants pictogrames per fila dins del bloc.",
+    "description": "Ajuda sota les columnes d'un bloc: quants pictogrames hi ha a cada fila de dins del bloc"
   }
 }

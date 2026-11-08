@@ -4,10 +4,9 @@ import { defineMessages } from "react-intl";
 const messages = defineMessages({
   columnsHelp: {
     id: "features.freeLayout.levels.columnsHelp",
-    defaultMessage:
-      "Automatic: on a page in columns, one column; in rows, a single row; with a template, whatever makes the pictograms largest.",
+    defaultMessage: "How many pictograms per row inside the block.",
     description:
-      "Ajuda sota «Columnes» del bloc: què fan les automàtiques segons el repartiment de la pàgina",
+      "Ajuda sota les columnes d'un bloc: quants pictogrames hi ha a cada fila de dins del bloc",
   },
   columnsAuto: {
     id: "features.freeLayout.levels.columnsAuto",
@@ -88,12 +87,6 @@ const messages = defineMessages({
     defaultMessage: "In rows",
     description: "Nom accessible i tooltip: els blocs de la pàgina en files",
   },
-  byTemplate: {
-    id: "features.freeLayout.levels.byTemplate",
-    defaultMessage: "With a template",
-    description:
-      "Nom accessible i tooltip: els blocs de la pàgina amb una plantilla",
-  },
   columnCount: {
     id: "features.freeLayout.levels.columnCount",
     defaultMessage: "Columns",
@@ -136,27 +129,6 @@ const messages = defineMessages({
     description:
       "Interruptor del nivell «Pàgina»: totes les seqüències (pàgina contínua) o tots els blocs (pàgina en blocs) amb la mateixa mida, espai i alineació. `unit` és sequences o blocks",
   },
-  uniformOn: {
-    id: "features.freeLayout.levels.uniformOn",
-    defaultMessage:
-      "{unit, select, sequences {Every sequence on this page has} other {Every block on this page has}} the same size, spacing and alignment. Turn it off to adjust {unit, select, sequences {each sequence} other {each block}} on its own.",
-    description:
-      "Ajuda sota «La mateixa a totes les seqüències / tots els blocs», activat",
-  },
-  uniformOff: {
-    id: "features.freeLayout.levels.uniformOff",
-    defaultMessage:
-      "{unit, select, sequences {Each sequence has} other {Each block has}} its own size, spacing and alignment: click {unit, select, sequences {a sequence} other {a block}} on the page to adjust it.",
-    description:
-      "Ajuda sota «La mateixa a totes les seqüències / tots els blocs», desactivat",
-  },
-  uniformBlock: {
-    id: "features.freeLayout.levels.uniformBlock",
-    defaultMessage:
-      "This page uses the same size, spacing and alignment for {unit, select, sequences {every sequence} other {every block}}: change them in “Page”, or turn that off there to adjust {unit, select, sequences {this sequence} other {this block}} on its own.",
-    description:
-      "Al nivell «Seqüència / Bloc», en lloc de la mida, l'espai i l'alineació, quan la pàgina té «La mateixa…» activat",
-  },
   noTemplate: {
     id: "features.freeLayout.levels.noTemplate",
     defaultMessage: "No template",
@@ -175,12 +147,6 @@ const messages = defineMessages({
     defaultMessage: "Applies only to this sequence",
     description:
       "Sota el nom de la seqüència seleccionada, al nivell «Bloc», a la disposició automàtica",
-  },
-  sizeMax: {
-    id: "features.freeLayout.levels.sizeMax",
-    defaultMessage: "At most. Pictograms come out at {mm} mm now.",
-    description:
-      "Ajuda de la mida dels pictogrames d'un bloc en una plantilla: la mida és un màxim, i diu la que en surt de debò (mm és el costat de la imatge)",
   },
   sizeTooSmall: {
     id: "features.freeLayout.levels.sizeTooSmall",
@@ -225,22 +191,10 @@ const messages = defineMessages({
     description:
       "Títol de la fila on s'escriu el text d'un rètol, al nivell «Rètol» de la columna",
   },
-  textHelp: {
-    id: "features.freeLayout.levels.textHelp",
-    defaultMessage:
-      "It's part of the document: it isn't translated. Each line is a line of the label.",
-    description: "Ajuda sota el text d'un rètol",
-  },
   fontSize: {
     id: "features.freeLayout.levels.fontSize",
     defaultMessage: "Font size",
     description: "Títol de la fila de la mida de la lletra d'un rètol",
-  },
-  fontSizeHelp: {
-    id: "features.freeLayout.levels.fontSizeHelp",
-    defaultMessage: "At most: if the text doesn't fit, it gets smaller.",
-    description:
-      "Ajuda sota la mida de la lletra d'un rètol: la mida és un màxim, com la dels pictogrames",
   },
   bold: {
     id: "features.freeLayout.levels.bold",
@@ -265,6 +219,24 @@ const messages = defineMessages({
     defaultMessage: "Apply it",
     description:
       "Botó de l'avís que aplica la plantilla tot i que alguns blocs surten de la pàgina",
+  },
+  byFree: {
+    id: "features.freeLayout.levels.byFree",
+    defaultMessage: "Free: each block where you put it",
+    description:
+      "Botó del repartiment d'una pàgina en blocs: els blocs no segueixen cap graella; un bloc nou va a l'espai buit més gran, sense moure els altres",
+  },
+  newTag: {
+    id: "features.freeLayout.levels.newTag",
+    defaultMessage: "New",
+    description:
+      "Etiqueta al costat d'un ajust nou de la columna («Disposició»)",
+  },
+  templates: {
+    id: "features.freeLayout.levels.templates",
+    defaultMessage: "Templates",
+    description:
+      "Títol de la graella de plantilles amb miniatura, sota el repartiment d'una pàgina en blocs",
   },
 });
 

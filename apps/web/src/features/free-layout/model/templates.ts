@@ -114,7 +114,10 @@ export type Arrangement =
   | { kind: "columns" | "rows"; n: number }
   | { kind: "template"; id: string | undefined };
 
-/** El repartiment d'un `id` de plantilla: columnes, files o una plantilla. */
+/**
+ * El repartiment d'un `id` de plantilla: columnes, files o una plantilla (el
+ * lliure, `free`, és una plantilla sense espais).
+ */
 export const arrangementOf = (templateId: string | undefined): Arrangement => {
   const stack = /^(rows|columns)-([1-9][0-9]?)$/.exec(templateId ?? "");
   if (stack)
@@ -132,6 +135,12 @@ const STRIP_TOP: LayoutTemplate = {
     { x: 0, y: 0.25, w: 1, h: 0.75 },
   ],
 };
+
+/**
+ * El repartiment lliure: cap espai. Els blocs són on l'usuari els ha posat, i
+ * un bloc nou va a l'espai buit més gran, sense moure'n cap (`addPlacementsToSheet`).
+ */
+export const FREE_TEMPLATE: LayoutTemplate = { id: "free", slots: [] };
 
 /** Una sola caixa que omple la pàgina. */
 const FULL: LayoutTemplate = { ...stackTemplate(1, "rows"), id: "full" };
@@ -485,7 +494,7 @@ export const templateById = (
       Number(stack[2]),
       count,
     );
-  const choice = [...TEMPLATE_CHOICES, ...SHAPED_TEMPLATES].find(
+  const choice = [...TEMPLATE_CHOICES, ...SHAPED_TEMPLATES, FREE_TEMPLATE].find(
     (template) => template.id === id,
   );
   if (choice) return choice;
