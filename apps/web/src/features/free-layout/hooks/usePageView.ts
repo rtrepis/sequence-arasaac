@@ -72,3 +72,21 @@ export const useAvailableHeight = (
   }, [ref]);
   return height;
 };
+
+/** L'amplada d'un element, en px: segueix els canvis de mida. */
+export const useElementWidth = (
+  ref: React.RefObject<HTMLElement | null>,
+): number => {
+  const [width, setWidth] = useState(0);
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const update = () => setWidth(element.getBoundingClientRect().width);
+    update();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [ref]);
+  return width;
+};

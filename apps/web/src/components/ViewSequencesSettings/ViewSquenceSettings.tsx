@@ -96,6 +96,7 @@ import {
   pageFrameId,
   scrollPageToTop,
   useAvailableHeight,
+  useElementWidth,
   useFullscreenElementId,
   fullscreenScale,
 } from "@features/free-layout/hooks/usePageView";
@@ -107,6 +108,9 @@ import {
 
 /** La columna d'ajustos: el botó que l'amaga hi apunta amb `aria-controls`. */
 const SETTINGS_COLUMN_ID = "view-settings-column";
+
+/** L'aire entre el full i la columna, a l'escriptori, en px. */
+const PREVIEW_COLUMN_GAP = 16;
 
 /** L'`id` del nivell «Document»: les molles hi porten. */
 const VIEW_DOCUMENT_LEVEL_ID = "view-level-document";
@@ -292,6 +296,16 @@ const ViewSequencesSettingsContent = ({
   // La pàgina única (sense pàgines pròpies), a pantalla completa
   const pageInFullscreen = useFullscreenElementId() === pageFrameId(0);
 
+  // L'amplada que queda per al full al costat de la columna, mesurada: la
+  // del contenidor menys la de la columna (amb el separador i l'aire)
+  const layoutRef = useRef<HTMLDivElement | null>(null);
+  const layoutWidth = useElementWidth(layoutRef);
+  const columnWidth = useElementWidth(columnRef);
+  const previewSpace =
+    layoutWidth > 0 && columnWidth > 0
+      ? layoutWidth - columnWidth - PREVIEW_COLUMN_GAP
+      : undefined;
+
   // Càlculs d'escala
   const {
     displayWidth,
@@ -300,6 +314,10 @@ const ViewSequencesSettingsContent = ({
   } = useScaleCalculator(pageFormat, screenWidth, screenHeight, {
     fit: isWideScreen ? fit : "page",
     settingsBeside: isWideScreen && settingsOpen,
+    // A l'escriptori, l'espai de debò que deixa la columna: amb finestres més
+    // amples que el contenidor de l'app, o amb paper gran, el marge estimat no
+    // n'hi ha prou i el full passava per sota de la columna
+    availableWidth: isWideScreen ? previewSpace : undefined,
   });
 
   // Dimensions d'impressió
@@ -662,6 +680,7 @@ const ViewSequencesSettingsContent = ({
         )}
 
         <Stack
+          ref={layoutRef}
           direction={{ xs: "column", md: "row" }}
           flexWrap={{ xs: "wrap", md: "nowrap" }}
           // Sense la columna al costat, el full va al mig de l'espai que queda

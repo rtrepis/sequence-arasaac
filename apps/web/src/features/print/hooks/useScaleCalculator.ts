@@ -31,6 +31,13 @@ export interface ScaleCalculationParams {
    * amplada. Per defecte, sí.
    */
   settingsBeside?: boolean;
+  /**
+   * L'amplada que el full té de debò, en px, si s'ha pogut mesurar (l'espai
+   * que deixa la columna d'ajustos dins del contenidor de l'app). Passa davant
+   * del marge estimat: en una finestra més ampla que el contenidor de l'app,
+   * l'amplada de la finestra no és la que té el full
+   */
+  availableWidth?: number;
 }
 
 /**
@@ -58,6 +65,7 @@ export function calculateDisplayDimensions(
     screenHeight,
     fit = "page",
     settingsBeside = true,
+    availableWidth: measured,
   } = params;
   const { dimensions } = pageFormat;
 
@@ -77,7 +85,8 @@ export function calculateDisplayDimensions(
   let availableHeight: number;
 
   // Sempre utilitzem les dimensions directament perquè createPageFormat ja les ha girat
-  availableWidth = screenWidth - margin;
+  availableWidth =
+    measured !== undefined && measured > 0 ? measured : screenWidth - margin;
   availableHeight = (dimensions.height * availableWidth) / dimensions.width;
 
   // Ajustar si l'alçada supera l'espai disponible. A l'amplada no cal: la
@@ -125,9 +134,12 @@ export function useScaleCalculator(
   pageFormat: PageFormat,
   screenWidth: number,
   screenHeight: number,
-  options: Pick<ScaleCalculationParams, "fit" | "settingsBeside"> = {},
+  options: Pick<
+    ScaleCalculationParams,
+    "fit" | "settingsBeside" | "availableWidth"
+  > = {},
 ): ScaleResult {
-  const { fit, settingsBeside } = options;
+  const { fit, settingsBeside, availableWidth } = options;
   return useMemo(() => {
     return calculateDisplayDimensions({
       pageFormat,
@@ -135,8 +147,16 @@ export function useScaleCalculator(
       screenHeight,
       fit,
       settingsBeside,
+      availableWidth,
     });
-  }, [pageFormat, screenWidth, screenHeight, fit, settingsBeside]);
+  }, [
+    pageFormat,
+    screenWidth,
+    screenHeight,
+    fit,
+    settingsBeside,
+    availableWidth,
+  ]);
 }
 
 /**
