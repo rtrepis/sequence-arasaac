@@ -210,6 +210,12 @@ const messages = defineMessages({
       "Save these settings in this browser and use them by default in new sequences",
     description: "Tooltip del botó de desar preferències sense sessió",
   },
+  tooltipFullscreenPage: {
+    id: "pages.viewSequence.tooltipFullscreenPage",
+    defaultMessage: "This page full screen",
+    description:
+      "Botó de la vista que posa la pàgina que es mira (la marcada) a pantalla completa, tan gran com hi càpiga; Esc en surt",
+  },
 });
 
 export default messages;

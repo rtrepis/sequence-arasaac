@@ -386,6 +386,18 @@ const messages = defineMessages({
     description:
       "Opció del menú d'una pàgina: cada seqüència o text és un bloc amb el seu lloc a la pàgina",
   },
+  previousPage: {
+    id: "features.freeLayout.page.previousPage",
+    defaultMessage: "Previous page",
+    description:
+      "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina anterior (també es pot lliscar)",
+  },
+  nextPage: {
+    id: "features.freeLayout.page.nextPage",
+    defaultMessage: "Next page",
+    description:
+      "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina següent (també es pot lliscar)",
+  },
 });
 
 export default messages;

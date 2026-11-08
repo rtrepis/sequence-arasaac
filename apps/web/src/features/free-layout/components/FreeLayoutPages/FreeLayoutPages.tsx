@@ -9,11 +9,18 @@ import {
   Box,
   Stack,
   Theme,
+  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { MdAdd, MdOutlineLibraryAdd } from "react-icons/md";
+import {
+  MdAdd,
+  MdChevronLeft,
+  MdChevronRight,
+  MdOutlineLibraryAdd,
+} from "react-icons/md";
+import StyledIconButton from "@/style/StyledIconButton";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
@@ -67,7 +74,16 @@ import SequenceBlock from "./SequenceBlock";
 import TextBlock from "./TextBlock";
 import TemplateGuides from "./TemplateGuides";
 import { useSequenceName } from "./useSequenceName";
+import {
+  fullscreenScale,
+  pageFrameId,
+  pageSectionId,
+  useFullscreenElementId,
+} from "@features/free-layout/hooks/usePageView";
 import messages from "./FreeLayoutPages.lang";
+
+/** Quant ha de lliscar el dit, en px, per passar de pàgina al mòbil. */
+const SWIPE_PX = 60;
 
 /** Aire entre una pàgina i la capçalera de la següent, a la pantalla. */
 const PAGE_GAP = 3;
@@ -99,9 +115,10 @@ const useMostVisiblePage = (
   sections: React.MutableRefObject<(HTMLElement | null)[]>,
   pageIds: string,
   onVisible: (index: number) => void,
+  enabled: boolean,
 ): void => {
   useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") return;
+    if (!enabled || typeof IntersectionObserver === "undefined") return;
     const areas = new Map<Element, number>();
     const observer = new IntersectionObserver(
       (entries) => {
@@ -128,7 +145,7 @@ const useMostVisiblePage = (
     );
     sections.current.forEach((section) => section && observer.observe(section));
     return () => observer.disconnect();
-  }, [sections, pageIds, onVisible]);
+  }, [sections, pageIds, onVisible, enabled]);
 };
 
 interface FreeLayoutPagesProps {
@@ -140,6 +157,8 @@ interface FreeLayoutPagesProps {
   scale: number;
   author: string;
   licence?: boolean;
+  /** Clicar el títol d'una pàgina: a dalt de tot i tan gran com hi càpiga */
+  onFocusPage?: (index: number) => void;
 }
 
 /**
@@ -158,6 +177,7 @@ const FreeLayoutPages = ({
   scale,
   author,
   licence,
+  onFocusPage,
 }: FreeLayoutPagesProps): React.ReactElement | null => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -199,7 +219,10 @@ const FreeLayoutPages = ({
     (index: number) => setVisiblePage(index),
     [setVisiblePage],
   );
-  useMostVisiblePage(sections, pageIds, onVisible);
+  // Al mòbil la pàgina que es mira la tria qui llisca, no l'observador
+  useMostVisiblePage(sections, pageIds, onVisible, !isNarrow);
+  const fullscreenId = useFullscreenElementId();
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const measured = useMemo(
     () => keys.map((key) => ({ key, pictograms: content[key] ?? [] })),
@@ -297,8 +320,73 @@ const FreeLayoutPages = ({
     });
   };
 
+  // Al mòbil: passar a la pàgina anterior o la següent. La selecció d'un
+  // bloc fixa la pàgina activa, i per això es treu
+  const goToPage = (index: number) => {
+    if (index < 0 || index >= sheetCount) return;
+    clear();
+    setVisiblePage(index);
+  };
+  const swipe = isNarrow
+    ? {
+        onTouchStart: (event: React.TouchEvent) => {
+          const touch = event.touches[0];
+          touchStart.current = { x: touch.clientX, y: touch.clientY };
+        },
+        onTouchEnd: (event: React.TouchEvent) => {
+          const start = touchStart.current;
+          touchStart.current = null;
+          const touch = event.changedTouches[0];
+          if (!start || !touch) return;
+          const dx = touch.clientX - start.x;
+          const dy = touch.clientY - start.y;
+          // Un lliscament horitzontal clar; el vertical és desplaçar-se
+          if (Math.abs(dx) < SWIPE_PX || Math.abs(dx) < Math.abs(dy) * 1.5)
+            return;
+          goToPage(activePage + (dx < 0 ? 1 : -1));
+        },
+      }
+    : {};
+
   return (
-    <Stack gap={PAGE_GAP} sx={{ minWidth: 0 }} onKeyDown={clearOnEscape}>
+    <Stack
+      gap={PAGE_GAP}
+      sx={{ minWidth: 0 }}
+      onKeyDown={clearOnEscape}
+      {...swipe}
+    >
+      {isNarrow && sheetCount > 1 && (
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          sx={{ "@media print": { display: "none" } }}
+        >
+          <Tooltip title={intl.formatMessage(messages.previousPage)}>
+            <span>
+              <StyledIconButton
+                color="inherit"
+                aria-label={intl.formatMessage(messages.previousPage)}
+                disabled={activePage === 0}
+                onClick={() => goToPage(activePage - 1)}
+              >
+                <MdChevronLeft />
+              </StyledIconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title={intl.formatMessage(messages.nextPage)}>
+            <span>
+              <StyledIconButton
+                color="inherit"
+                aria-label={intl.formatMessage(messages.nextPage)}
+                disabled={activePage === sheetCount - 1}
+                onClick={() => goToPage(activePage + 1)}
+              >
+                <MdChevronRight />
+              </StyledIconButton>
+            </span>
+          </Tooltip>
+        </Stack>
+      )}
       <CardBaseMeasurer
         sequences={measured}
         defaults={defaults}
@@ -317,6 +405,13 @@ const FreeLayoutPages = ({
           freeLayout.licenceOn !== "last" || sheetIndex === sheetCount - 1;
         // La pàgina que segueix la columna (la del nivell «Pàgina»)
         const active = sheetIndex === activePage;
+        const isFullscreen = fullscreenId === pageFrameId(sheetIndex);
+        const sheetScale = isFullscreen
+          ? fullscreenScale(pageDimensions)
+          : scale;
+        // Al mòbil, una pàgina cada vegada: les altres hi són (s'imprimeixen
+        // totes), però amagades; es passa d'una a l'altra lliscant
+        const hidden = isNarrow && !active;
         const selectedHere =
           selection?.kind === "block" && selection.sheetIndex === sheetIndex;
         return (
@@ -326,7 +421,9 @@ const FreeLayoutPages = ({
               sections.current[sheetIndex] = element;
             }}
             component="section"
+            id={pageSectionId(sheetIndex)}
             gap={1}
+            sx={{ display: hidden ? "none" : undefined }}
             aria-current={active ? "true" : undefined}
             aria-label={intl.formatMessage(messages.pageLabel, {
               number: sheetIndex + 1,
@@ -339,132 +436,160 @@ const FreeLayoutPages = ({
               continuous={continuous}
               active={active}
               onAddSequence={() => setAddingTo({ sheetIndex })}
+              onFocusPage={
+                onFocusPage ? () => onFocusPage(sheetIndex) : undefined
+              }
             />
 
             {/* Al mòbil, seleccionar no mou la pàgina (P9): l'enllaç baixa als ajustos */}
             {isNarrow && selectedHere && <BlockSettingsLink />}
 
             {/* El full encabit a la pantalla; a dins, a mida real i escalat.
-                Un clic fora de cap bloc treu la selecció */}
+                Un clic fora de cap bloc treu la selecció. A pantalla completa,
+                el full tan gran com hi càpiga, al mig i sense marques
+                d'edició */}
             <Box
+              id={pageFrameId(sheetIndex)}
               onClick={clear}
               sx={{
                 width: displayWidth,
                 height: displayHeight,
-                overflow: "hidden",
                 // La pàgina activa, ressaltada amb la guia per fora del full,
                 // com el bloc seleccionat; el marc verd hi continua
                 ...pageFrameSx(active),
-                backgroundColor: sheetSurface,
+                "&:fullscreen": {
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  outline: "none",
+                  boxShadow: "none",
+                  backgroundColor: "background.default",
+                },
+                "&:fullscreen [data-html2canvas-ignore]": { display: "none" },
               }}
             >
               <Box
-                className="preview-content"
                 sx={{
-                  width: pageDimensions.width,
-                  height: pageDimensions.height,
-                  transform: `scale(${scale})`,
-                  transformOrigin: "top left",
-                  display: "flex",
-                  flexDirection: "column",
+                  width: isFullscreen
+                    ? pageDimensions.width * sheetScale
+                    : displayWidth,
+                  height: isFullscreen
+                    ? pageDimensions.height * sheetScale
+                    : displayHeight,
+                  overflow: "hidden",
+                  backgroundColor: sheetSurface,
                 }}
               >
-                {continuous && !empty && (
-                  <AutoSheetFlow
-                    sheetIndex={sheetIndex}
-                    placements={sheet.placements}
-                    direction={sheet.direction ?? direction}
-                    gap={sheet.sequenceGap ?? documentGap}
-                  />
-                )}
-
-                {/* L'àrea útil: les caixes hi van en mm des del cantó de dalt */}
                 <Box
+                  className="preview-content"
                   sx={{
-                    // Una pàgina contínua només la fa servir per dir que és buida
-                    display: continuous && !empty ? "none" : "block",
-                    position: "relative",
-                    width: "100%",
-                    height: areaHeightPx,
-                    flexShrink: 0,
-                    overflow: "hidden",
+                    width: pageDimensions.width,
+                    height: pageDimensions.height,
+                    transform: `scale(${sheetScale})`,
+                    transformOrigin: "top left",
+                    display: "flex",
+                    flexDirection: "column",
                   }}
                 >
-                  {/* Les comunes, per sota de les de la pàgina */}
-                  {!continuous &&
-                    freeLayout.common.map((placement) =>
-                      renderPlacement(placement, sheetIndex, true),
-                    )}
-                  {!continuous &&
-                    sheet.placements.map((placement) =>
-                      renderPlacement(placement, sheetIndex, false),
-                    )}
-
-                  {/* Els espais lliures del repartiment: blocs buits per omplir */}
-                  {!continuous &&
-                    emptySlotsOf(sheet).map(({ slot, box }) => (
-                      <EmptySlot
-                        key={`empty-${slot}`}
-                        box={box}
-                        number={slot + 1}
-                        scale={scale}
-                        onAddSequence={() => setAddingTo({ sheetIndex, slot })}
-                        onAddText={() => {
-                          const placementId = dispatch(
-                            addTextBlockThunk(sheetIndex, slot),
-                          );
-                          select({ kind: "block", placementId, sheetIndex });
-                          showSnackbar({
-                            message: intl.formatMessage(
-                              messages.textBlockAdded,
-                              { number: sheetIndex + 1 },
-                            ),
-                            severity: "success",
-                          });
-                        }}
-                      />
-                    ))}
-
-                  {templatePreview?.sheetIndex === sheetIndex && (
-                    <TemplateGuides
-                      template={templatePreview.template}
-                      region={region}
+                  {continuous && !empty && (
+                    <AutoSheetFlow
+                      sheetIndex={sheetIndex}
+                      placements={sheet.placements}
+                      direction={sheet.direction ?? direction}
+                      gap={sheet.sequenceGap ?? documentGap}
                     />
                   )}
 
-                  {empty && (
-                    <Stack
-                      data-html2canvas-ignore
-                      alignItems="center"
-                      justifyContent="center"
-                      gap={2}
-                      sx={{
-                        position: "absolute",
-                        inset: 0,
-                        "@media print": { display: "none" },
-                      }}
-                    >
-                      <Typography
-                        variant="h5"
-                        component="p"
-                        sx={{ color: "text.secondary" }}
-                      >
-                        {intl.formatMessage(messages.emptyPage)}
-                      </Typography>
-                      <StyledButton
-                        variant="contained"
-                        size="large"
-                        startIcon={<MdOutlineLibraryAdd />}
-                        onClick={() => setAddingTo({ sheetIndex })}
-                      >
-                        {intl.formatMessage(messages.addSequence)}
-                      </StyledButton>
-                    </Stack>
-                  )}
-                </Box>
+                  {/* L'àrea útil: les caixes hi van en mm des del cantó de dalt */}
+                  <Box
+                    sx={{
+                      // Una pàgina contínua només la fa servir per dir que és buida
+                      display: continuous && !empty ? "none" : "block",
+                      position: "relative",
+                      width: "100%",
+                      height: areaHeightPx,
+                      flexShrink: 0,
+                      overflow: "hidden",
+                    }}
+                  >
+                    {/* Les comunes, per sota de les de la pàgina */}
+                    {!continuous &&
+                      freeLayout.common.map((placement) =>
+                        renderPlacement(placement, sheetIndex, true),
+                      )}
+                    {!continuous &&
+                      sheet.placements.map((placement) =>
+                        renderPlacement(placement, sheetIndex, false),
+                      )}
 
-                <Box sx={{ marginTop: "auto" }}>
-                  {footer && <CopyRight author={author} licence={licence} />}
+                    {/* Els espais lliures del repartiment: blocs buits per omplir */}
+                    {!continuous &&
+                      emptySlotsOf(sheet).map(({ slot, box }) => (
+                        <EmptySlot
+                          key={`empty-${slot}`}
+                          box={box}
+                          number={slot + 1}
+                          scale={scale}
+                          onAddSequence={() =>
+                            setAddingTo({ sheetIndex, slot })
+                          }
+                          onAddText={() => {
+                            const placementId = dispatch(
+                              addTextBlockThunk(sheetIndex, slot),
+                            );
+                            select({ kind: "block", placementId, sheetIndex });
+                            showSnackbar({
+                              message: intl.formatMessage(
+                                messages.textBlockAdded,
+                                { number: sheetIndex + 1 },
+                              ),
+                              severity: "success",
+                            });
+                          }}
+                        />
+                      ))}
+
+                    {templatePreview?.sheetIndex === sheetIndex && (
+                      <TemplateGuides
+                        template={templatePreview.template}
+                        region={region}
+                      />
+                    )}
+
+                    {empty && (
+                      <Stack
+                        data-html2canvas-ignore
+                        alignItems="center"
+                        justifyContent="center"
+                        gap={2}
+                        sx={{
+                          position: "absolute",
+                          inset: 0,
+                          "@media print": { display: "none" },
+                        }}
+                      >
+                        <Typography
+                          variant="h5"
+                          component="p"
+                          sx={{ color: "text.secondary" }}
+                        >
+                          {intl.formatMessage(messages.emptyPage)}
+                        </Typography>
+                        <StyledButton
+                          variant="contained"
+                          size="large"
+                          startIcon={<MdOutlineLibraryAdd />}
+                          onClick={() => setAddingTo({ sheetIndex })}
+                        >
+                          {intl.formatMessage(messages.addSequence)}
+                        </StyledButton>
+                      </Stack>
+                    )}
+                  </Box>
+
+                  <Box sx={{ marginTop: "auto" }}>
+                    {footer && <CopyRight author={author} licence={licence} />}
+                  </Box>
                 </Box>
               </Box>
             </Box>

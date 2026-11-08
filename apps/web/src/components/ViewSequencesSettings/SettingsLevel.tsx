@@ -14,7 +14,8 @@ import { SETTINGS_ROW_GAP } from "@/components/SettingsLayout";
 export const LEVEL_ICON_PX = 30;
 
 /** Marge de dins de la targeta d'un nivell, en unitats del tema. */
-const LEVEL_PADDING = 1.5;
+// Al mòbil, el marge de les targetes és petit: s'hi guanya amplada
+const LEVEL_PADDING = { xs: 1, md: 1.5 };
 
 interface SettingsLevelProps {
   id: string;
@@ -177,17 +178,19 @@ export const SettingsLevels = ({
     gap={1.5}
     sx={{
       position: "relative",
-      "&::before": {
+      // Pel mig de les icones: el marge de la targeta, la vora i mitja icona
+      "&::before": (theme) => ({
         content: '""',
         position: "absolute",
-        // Pel mig de les icones: el marge de la targeta, la vora i mitja icona
-        left: (theme) =>
-          `calc(${theme.spacing(LEVEL_PADDING)} + 1px + ${LEVEL_ICON_PX / 2 - 1}px)`,
+        left: `calc(${theme.spacing(LEVEL_PADDING.xs)} + 1px + ${LEVEL_ICON_PX / 2 - 1}px)`,
+        [theme.breakpoints.up("md")]: {
+          left: `calc(${theme.spacing(LEVEL_PADDING.md)} + 1px + ${LEVEL_ICON_PX / 2 - 1}px)`,
+        },
         top: 24,
         bottom: 24,
         width: 2,
-        backgroundColor: "divider",
-      },
+        backgroundColor: theme.palette.divider,
+      }),
     }}
   >
     {children}

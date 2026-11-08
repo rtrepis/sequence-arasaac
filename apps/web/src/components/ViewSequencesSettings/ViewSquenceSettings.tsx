@@ -90,6 +90,14 @@ import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLin
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
 import {
+  enterPageFullscreen,
+  pageFrameId,
+  scrollPageToTop,
+  useAvailableHeight,
+  useFullscreenElementId,
+  fullscreenScale,
+} from "@features/free-layout/hooks/usePageView";
+import {
   SectionTitle,
   SettingsActions,
   SETTINGS_ROW_GAP,
@@ -276,6 +284,11 @@ const ViewSequencesSettingsContent = ({
   const [settingsOpen, setSettingsOpen] = useState(true);
   const [fit, setFit] = useState<PreviewFit>("page");
   const settingsVisible = !isWideScreen || settingsOpen;
+  // L'alçada de la columna: de la seva vora de dalt al peu de la finestra
+  const columnRef = useRef<HTMLDivElement | null>(null);
+  const columnHeight = useAvailableHeight(columnRef);
+  // La pàgina única (sense pàgines pròpies), a pantalla completa
+  const pageInFullscreen = useFullscreenElementId() === pageFrameId(0);
 
   // Càlculs d'escala
   const {
@@ -499,143 +512,152 @@ const ViewSequencesSettingsContent = ({
     });
   };
 
+  /**
+   * Els botons de la vista: girar el full, imprimir, PDF, pantalla completa,
+   * ajustar i amagar la columna. A l'escriptori són a dalt de la columna (i
+   * en columna quan la columna és amagada); al mòbil, a sobre del full.
+   */
+  // Botons només-icona: l'aria-label sempre repeteix el mateix missatge
+  // que el tooltip. El tooltip no s'obre en tàctil, així que l'aria-label
+  // és l'únic nom del botó; i fer-los coincidir compleix el criteri WCAG
+  // 2.5.3 (el nom llegit conté el text visible).
+  const renderToolbar = (vertical: boolean): React.ReactElement => (
+    <Stack direction={vertical ? "column" : "row"}>
+      {!isFullscreen ? (
+        <>
+          <Tooltip title={intl.formatMessage(messages.tooltipOrientation)}>
+            <StyledIconButton
+              aria-label={intl.formatMessage(messages.tooltipOrientation)}
+              color="inherit"
+              sx={{ fontSize: "2rem" }}
+              onClick={toggleOrientation}
+            >
+              <MdScreenRotation />
+            </StyledIconButton>
+          </Tooltip>
+          <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
+            <StyledIconButton
+              aria-label={intl.formatMessage(messages.tooltipPrint)}
+              color="inherit"
+              sx={{ fontSize: "2rem" }}
+              onClick={handlePrint}
+            >
+              <AiFillPrinter />
+            </StyledIconButton>
+          </Tooltip>
+          <Tooltip title={intl.formatMessage(messages.tooltipDownloadPdf)}>
+            {/* aria-disabled i no `disabled`: un botó desactivat surt de
+                  l'ordre de tabulació i qui hi navega amb teclat el perd
+                  de sota els dits sense cap avís. Sense `disabled` tampoc
+                  cal el <span> embolcall: el Tooltip ja rep els events del
+                  Button i l'aria-label es queda on ha de ser. */}
+            <StyledIconButton
+              aria-label={intl.formatMessage(messages.tooltipDownloadPdf)}
+              aria-disabled={isGenerating}
+              aria-busy={isGenerating}
+              color="inherit"
+              sx={{ fontSize: "2rem" }}
+              onClick={handleDownloadPdf}
+            >
+              <BsFilePdf />
+            </StyledIconButton>
+          </Tooltip>
+          {/* La pàgina que es mira, a pantalla completa */}
+          <Tooltip title={intl.formatMessage(messages.tooltipFullscreenPage)}>
+            <StyledIconButton
+              aria-label={intl.formatMessage(messages.tooltipFullscreenPage)}
+              color="inherit"
+              sx={{ fontSize: "2rem" }}
+              onClick={() => enterPageFullscreen(isFreeLayout ? activePage : 0)}
+            >
+              <AiOutlineFullscreen />
+            </StyledIconButton>
+          </Tooltip>
+        </>
+      ) : (
+        !isInFullscreen && (
+          <Tooltip title={intl.formatMessage(messages.tooltipFullscreen)}>
+            <StyledIconButton
+              aria-label={intl.formatMessage(messages.tooltipFullscreen)}
+              color="inherit"
+              sx={{ fontSize: "2rem" }}
+              onClick={enterFullscreen}
+            >
+              <AiOutlineFullscreen />
+            </StyledIconButton>
+          </Tooltip>
+        )
+      )}
+      {isWideScreen && !isFullscreen && (
+        <Tooltip
+          title={intl.formatMessage(
+            fit === "page" ? messages.tooltipFitWidth : messages.tooltipFitPage,
+          )}
+        >
+          <StyledIconButton
+            aria-label={intl.formatMessage(
+              fit === "page"
+                ? messages.tooltipFitWidth
+                : messages.tooltipFitPage,
+            )}
+            color="inherit"
+            sx={{ fontSize: "2rem" }}
+            onClick={() => {
+              // I la pàgina, a dalt de tot amb la mida nova
+              setFit((current) => (current === "page" ? "width" : "page"));
+              scrollPageToTop(isFreeLayout ? activePage : 0);
+            }}
+          >
+            {fit === "page" ? (
+              <TbArrowAutofitWidth />
+            ) : (
+              <TbArrowAutofitHeight />
+            )}
+          </StyledIconButton>
+        </Tooltip>
+      )}
+      {isWideScreen && (
+        <Tooltip
+          title={intl.formatMessage(
+            settingsOpen
+              ? messages.tooltipHideSettings
+              : messages.tooltipShowSettings,
+          )}
+        >
+          <StyledIconButton
+            aria-label={intl.formatMessage(
+              settingsOpen
+                ? messages.tooltipHideSettings
+                : messages.tooltipShowSettings,
+            )}
+            aria-expanded={settingsOpen}
+            aria-controls={SETTINGS_COLUMN_ID}
+            color="inherit"
+            sx={{ fontSize: "2rem" }}
+            onClick={() => setSettingsOpen((open) => !open)}
+          >
+            {settingsOpen ? (
+              <TbLayoutSidebarRightCollapse />
+            ) : (
+              <TbLayoutSidebarRightExpand />
+            )}
+          </StyledIconButton>
+        </Tooltip>
+      )}
+    </Stack>
+  );
+
   return (
     <>
       <form onSubmit={(event) => event.preventDefault()}>
-        <NotPrint>
-          <Stack direction={"row"} justifyContent={"end"} alignItems={"end"}>
-            {/* Botons només-icona: l'aria-label sempre repeteix el mateix missatge
-                que el tooltip. El tooltip no s'obre en tàctil, així que l'aria-label
-                és l'únic nom del botó; i fer-los coincidir compleix el criteri WCAG
-                2.5.3 (el nom llegit conté el text visible). */}
-            <Stack direction={"row"}>
-              {!isFullscreen ? (
-                <>
-                  <Tooltip
-                    title={intl.formatMessage(messages.tooltipOrientation)}
-                  >
-                    <StyledIconButton
-                      aria-label={intl.formatMessage(
-                        messages.tooltipOrientation,
-                      )}
-                      color="inherit"
-                      sx={{ fontSize: "2rem" }}
-                      onClick={toggleOrientation}
-                    >
-                      <MdScreenRotation />
-                    </StyledIconButton>
-                  </Tooltip>
-                  <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
-                    <StyledIconButton
-                      aria-label={intl.formatMessage(messages.tooltipPrint)}
-                      color="inherit"
-                      sx={{ fontSize: "2rem" }}
-                      onClick={handlePrint}
-                    >
-                      <AiFillPrinter />
-                    </StyledIconButton>
-                  </Tooltip>
-                  <Tooltip
-                    title={intl.formatMessage(messages.tooltipDownloadPdf)}
-                  >
-                    {/* aria-disabled i no `disabled`: un botó desactivat surt de
-                        l'ordre de tabulació i qui hi navega amb teclat el perd
-                        de sota els dits sense cap avís. Sense `disabled` tampoc
-                        cal el <span> embolcall: el Tooltip ja rep els events del
-                        Button i l'aria-label es queda on ha de ser. */}
-                    <StyledIconButton
-                      aria-label={intl.formatMessage(
-                        messages.tooltipDownloadPdf,
-                      )}
-                      aria-disabled={isGenerating}
-                      aria-busy={isGenerating}
-                      color="inherit"
-                      sx={{ fontSize: "2rem" }}
-                      onClick={handleDownloadPdf}
-                    >
-                      <BsFilePdf />
-                    </StyledIconButton>
-                  </Tooltip>
-                </>
-              ) : (
-                !isInFullscreen && (
-                  <Tooltip
-                    title={intl.formatMessage(messages.tooltipFullscreen)}
-                  >
-                    <StyledIconButton
-                      aria-label={intl.formatMessage(
-                        messages.tooltipFullscreen,
-                      )}
-                      color="inherit"
-                      sx={{ fontSize: "2rem" }}
-                      onClick={enterFullscreen}
-                    >
-                      <AiOutlineFullscreen />
-                    </StyledIconButton>
-                  </Tooltip>
-                )
-              )}
-              {isWideScreen && !isFullscreen && (
-                <Tooltip
-                  title={intl.formatMessage(
-                    fit === "page"
-                      ? messages.tooltipFitWidth
-                      : messages.tooltipFitPage,
-                  )}
-                >
-                  <StyledIconButton
-                    aria-label={intl.formatMessage(
-                      fit === "page"
-                        ? messages.tooltipFitWidth
-                        : messages.tooltipFitPage,
-                    )}
-                    color="inherit"
-                    sx={{ fontSize: "2rem" }}
-                    onClick={() =>
-                      setFit((current) =>
-                        current === "page" ? "width" : "page",
-                      )
-                    }
-                  >
-                    {fit === "page" ? (
-                      <TbArrowAutofitWidth />
-                    ) : (
-                      <TbArrowAutofitHeight />
-                    )}
-                  </StyledIconButton>
-                </Tooltip>
-              )}
-              {isWideScreen && (
-                <Tooltip
-                  title={intl.formatMessage(
-                    settingsOpen
-                      ? messages.tooltipHideSettings
-                      : messages.tooltipShowSettings,
-                  )}
-                >
-                  <StyledIconButton
-                    aria-label={intl.formatMessage(
-                      settingsOpen
-                        ? messages.tooltipHideSettings
-                        : messages.tooltipShowSettings,
-                    )}
-                    aria-expanded={settingsOpen}
-                    aria-controls={SETTINGS_COLUMN_ID}
-                    color="inherit"
-                    sx={{ fontSize: "2rem" }}
-                    onClick={() => setSettingsOpen((open) => !open)}
-                  >
-                    {settingsOpen ? (
-                      <TbLayoutSidebarRightCollapse />
-                    ) : (
-                      <TbLayoutSidebarRightExpand />
-                    )}
-                  </StyledIconButton>
-                </Tooltip>
-              )}
+        {/* Al mòbil, els botons a sobre del full; a l'escriptori, a la columna */}
+        {!isWideScreen && (
+          <NotPrint>
+            <Stack direction="row" justifyContent="end">
+              {renderToolbar(false)}
             </Stack>
-          </Stack>
-        </NotPrint>
+          </NotPrint>
+        )}
 
         <Stack
           direction={{ xs: "column", md: "row" }}
@@ -651,6 +673,11 @@ const ViewSequencesSettingsContent = ({
               scale={calculatedScale}
               author={author}
               licence={viewSettings.licence}
+              onFocusPage={(index) => {
+                // La pàgina sencera, a dalt de tot i tan gran com hi càpiga
+                setFit("page");
+                scrollPageToTop(index);
+              }}
             />
           ) : (
             <>
@@ -658,6 +685,7 @@ const ViewSequencesSettingsContent = ({
               {/* Un clic fora de cap seqüència treu la selecció; Escape també */}
               <Box
                 className="preview-container"
+                id={pageFrameId(0)}
                 onClick={clearSelection}
                 onKeyDown={clearOnEscape}
                 sx={{
@@ -680,6 +708,15 @@ const ViewSequencesSettingsContent = ({
                   // El full és paper en tots dos temes: aquesta previsualització ha de
                   // ser idèntica al que sortirà per impressora i al PDF
                   backgroundColor: sheetSurface,
+                  // A pantalla completa, el full al mig i tan gran com hi càpiga
+                  "&:fullscreen": {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    outline: "none",
+                    boxShadow: "none",
+                  },
+                  "&:fullscreen [data-html2canvas-ignore]": { display: "none" },
                 }}
               >
                 {/* Contenidor interior: dimensions reals amb transform per visualització.
@@ -690,8 +727,13 @@ const ViewSequencesSettingsContent = ({
                   sx={{
                     width: pageFormat.dimensions.width,
                     height: pageFormat.dimensions.height,
-                    transform: `scale(${calculatedScale})`,
-                    transformOrigin: "top left",
+                    transform: `scale(${
+                      pageInFullscreen
+                        ? fullscreenScale(pageFormat.dimensions)
+                        : calculatedScale
+                    })`,
+                    transformOrigin: pageInFullscreen ? "center" : "top left",
+                    flexShrink: 0,
                     display: "flex",
                     flexDirection: "column",
                   }}
@@ -746,185 +788,213 @@ const ViewSequencesSettingsContent = ({
             </>
           )}
 
-          {/* Grup divider + settings: empès sempre a la vora dreta en desktop.
-              Amagat, continua muntat: així el botó hi pot apuntar i, en tornar,
-              cada acordió és com s'havia deixat */}
+          {/* La columna: empesa sempre a la vora dreta a l'escriptori, amb els
+              botons de la vista a dalt i, a sota, els ajustos (el verd), que
+              fan tota l'alçada de la finestra i es desplacen per dins.
+              Amagada, la columna continua muntada: així el botó hi pot apuntar
+              i, en tornar, cada nivell és com s'havia deixat */}
           <Box
-            id={SETTINGS_COLUMN_ID}
+            ref={columnRef}
             sx={{
               marginLeft: { md: "auto" },
-              display: settingsVisible ? { md: "flex" } : "none",
+              display: { xs: "block", md: "flex" },
               gap: { md: 3 },
               alignItems: "stretch",
-              // Enganxada mentre es baixa per les pàgines (R5): si no hi cap,
-              // es desplaça per dins. Al mòbil va sota el full i no s'enganxa
+              flexShrink: 0,
+              // Enganxada mentre es baixa per les pàgines (R5). Al mòbil va
+              // sota el full i no s'enganxa
               position: { md: "sticky" },
               top: { md: 0 },
               alignSelf: { md: "flex-start" },
-              maxHeight: { md: "100vh" },
-              overflowY: { md: "auto" },
+              height: { md: columnHeight },
             }}
-            onKeyDown={clearOnEscape}
           >
-            <NotPrint>
-              <Divider orientation="vertical" />
-            </NotPrint>
-
-            <NotPrint>
-              <Stack
-                maxWidth={{ md: VIEW_SETTINGS_COLUMN_WIDTH }}
-                width={{ xs: "100%", md: "auto" }}
-                flexShrink={0}
-                spacing={SETTINGS_ROW_GAP}
+            {settingsVisible && (
+              <NotPrint>
+                <Divider orientation="vertical" />
+              </NotPrint>
+            )}
+            <Stack sx={{ height: { md: "100%" }, minHeight: 0 }}>
+              {isWideScreen && (
+                <NotPrint>
+                  <Stack direction="row" justifyContent="end">
+                    {renderToolbar(!settingsOpen)}
+                  </Stack>
+                </NotPrint>
+              )}
+              <Box
+                id={SETTINGS_COLUMN_ID}
+                onKeyDown={clearOnEscape}
                 sx={{
-                  // Zona de configuració: fons paper a tota la columna de controls
-                  backgroundColor: "background.paper",
-                  borderRadius: 2,
-                  padding: 1.5,
-                  height: { md: "100%" },
+                  display: settingsVisible ? "block" : "none",
+                  flex: { md: 1 },
+                  minHeight: 0,
+                  overflowY: { md: "auto" },
                 }}
               >
-                {/* On s'és: Document › Pàgina N › el bloc. Fixes dalt de tot */}
-                <LevelCrumbs crumbs={crumbs} onGo={goToLevel} />
-
-                {/* Els tres nivells, lligats per la línia de la cascada */}
-                <SettingsLevels>
-                  {/* Nivell 1: el que s'aplica a tot el document */}
-                  <SettingsLevel
-                    id={VIEW_DOCUMENT_LEVEL_ID}
-                    icon={<MdOutlineDescription />}
-                    kind={<FormattedMessage {...levelMessages.document} />}
-                    title={
-                      documentTitle?.trim() || (
-                        <FormattedMessage {...levelMessages.untitled} />
-                      )
-                    }
-                    scope={
-                      <FormattedMessage {...levelMessages.documentScope} />
-                    }
-                    summary={documentSummary}
-                    expanded={openLevels.document}
-                    onExpandedChange={setLevelOpen("document")}
+                <NotPrint>
+                  <Stack
+                    maxWidth={{ md: VIEW_SETTINGS_COLUMN_WIDTH }}
+                    width={{ xs: "calc(100% + 28px)", md: "auto" }}
+                    flexShrink={0}
+                    spacing={SETTINGS_ROW_GAP}
+                    sx={{
+                      // Zona de configuració: fons paper a tota la columna de
+                      // controls, i com a mínim tota l'alçada que hi ha. Al mòbil,
+                      // amb el marge més petit, per guanyar amplada
+                      backgroundColor: "background.paper",
+                      borderRadius: 2,
+                      padding: { xs: "2px", md: 1.5 },
+                      // El Container de l'app deixa 16 px a cada costat al mòbil
+                      // (`theme.spacing(2)`): en queden 2
+                      marginInline: { xs: "-14px", md: 0 },
+                      minHeight: { md: "100%" },
+                      boxSizing: "border-box",
+                    }}
                   >
-                    <SectionTitle
-                      title={
-                        <FormattedMessage {...messages.sectionPageFormat} />
-                      }
-                    >
-                      {/* El paper. La direcció i l'espai entre seqüències
+                    {/* On s'és: Document › Pàgina N › el bloc. Fixes dalt de tot */}
+                    <LevelCrumbs crumbs={crumbs} onGo={goToLevel} />
+
+                    {/* Els tres nivells, lligats per la línia de la cascada */}
+                    <SettingsLevels>
+                      {/* Nivell 1: el que s'aplica a tot el document */}
+                      <SettingsLevel
+                        id={VIEW_DOCUMENT_LEVEL_ID}
+                        icon={<MdOutlineDescription />}
+                        kind={<FormattedMessage {...levelMessages.document} />}
+                        title={
+                          documentTitle?.trim() || (
+                            <FormattedMessage {...levelMessages.untitled} />
+                          )
+                        }
+                        scope={
+                          <FormattedMessage {...levelMessages.documentScope} />
+                        }
+                        summary={documentSummary}
+                        expanded={openLevels.document}
+                        onExpandedChange={setLevelOpen("document")}
+                      >
+                        <SectionTitle
+                          title={
+                            <FormattedMessage {...messages.sectionPageFormat} />
+                          }
+                        >
+                          {/* El paper. La direcció i l'espai entre seqüències
                           són de cada pàgina; amb pàgines pròpies, la
                           pantalla completa no s'hi pot triar */}
-                      <GlobalViewControls
-                        viewSettings={viewSettings}
-                        pageSize={pageSize}
-                        sequenceCount={1}
-                        paperOnly={isFreeLayout}
-                        showDirection={false}
-                        onPageSizeChange={setPageSize}
-                        onDirectionChange={handleDirectionChange}
-                        onSequenceSpaceChange={handleSequenceSpaceChange}
-                      />
-                    </SectionTitle>
+                          <GlobalViewControls
+                            viewSettings={viewSettings}
+                            pageSize={pageSize}
+                            sequenceCount={1}
+                            paperOnly={isFreeLayout}
+                            showDirection={false}
+                            onPageSizeChange={setPageSize}
+                            onDirectionChange={handleDirectionChange}
+                            onSequenceSpaceChange={handleSequenceSpaceChange}
+                          />
+                        </SectionTitle>
 
-                    {/* Les seqüències que no són a cap pàgina */}
-                    <FreeLayoutSettings />
+                        {/* Les seqüències que no són a cap pàgina */}
+                        <FreeLayoutSettings />
 
-                    {/* El que només surt al peu del full imprès i del PDF */}
-                    <PrintFooterSection
-                      author={author}
-                      onAuthorChange={updateAuthor}
-                      licence={viewSettings.licence}
-                      onLicenceChange={(value) =>
-                        updateViewSetting("licence", value)
-                      }
-                    >
-                      <LicencePagesRow />
-                    </PrintFooterSection>
-                  </SettingsLevel>
+                        {/* El que només surt al peu del full imprès i del PDF */}
+                        <PrintFooterSection
+                          author={author}
+                          onAuthorChange={updateAuthor}
+                          licence={viewSettings.licence}
+                          onLicenceChange={(value) =>
+                            updateViewSetting("licence", value)
+                          }
+                        >
+                          <LicencePagesRow />
+                        </PrintFooterSection>
+                      </SettingsLevel>
 
-                  {/* Nivell 2: la pàgina que es mira, contínua o en blocs.
+                      {/* Nivell 2: la pàgina que es mira, contínua o en blocs.
                       Sense pàgines pròpies, la direcció i l'espai són els de
                       sempre */}
-                  <PageLevel
-                    expanded={openLevels.page}
-                    onExpandedChange={setLevelOpen("page")}
-                    fullscreen={isFullscreen}
-                    implicit={{
-                      direction,
-                      onDirectionChange: (value) =>
-                        updateViewSetting("direction", value),
-                      gap: viewSettings.sequenceSpaceBetween,
-                      onGapChange: (value) =>
-                        dispatch(
-                          setSequenceSpaceBetweenActionCreator({
-                            value,
-                            styleView: documentStyle.view,
-                          }),
-                        ),
-                    }}
-                  />
+                      <PageLevel
+                        expanded={openLevels.page}
+                        onExpandedChange={setLevelOpen("page")}
+                        fullscreen={isFullscreen}
+                        implicit={{
+                          direction,
+                          onDirectionChange: (value) =>
+                            updateViewSetting("direction", value),
+                          gap: viewSettings.sequenceSpaceBetween,
+                          onGapChange: (value) =>
+                            dispatch(
+                              setSequenceSpaceBetweenActionCreator({
+                                value,
+                                styleView: documentStyle.view,
+                              }),
+                            ),
+                        }}
+                      />
 
-                  {/* Nivell 3: el bloc seleccionat, o com s'hi arriba */}
-                  {selectedBlock ? (
-                    <BlockLevel
-                      expanded={openLevels.block}
-                      onExpandedChange={setLevelOpen("block")}
-                    />
-                  ) : (
-                    <SettingsLevel
-                      id={VIEW_BLOCK_LEVEL_ID}
-                      icon={<BlockIcon />}
-                      kind={
-                        <FormattedMessage
-                          {...levelMessages.kindBlock}
-                          values={{ unit: activeUnit }}
+                      {/* Nivell 3: el bloc seleccionat, o com s'hi arriba */}
+                      {selectedBlock ? (
+                        <BlockLevel
+                          expanded={openLevels.block}
+                          onExpandedChange={setLevelOpen("block")}
                         />
-                      }
-                      title={
-                        <FormattedMessage
-                          {...levelMessages.noBlock}
-                          values={{ unit: activeUnit }}
+                      ) : (
+                        <SettingsLevel
+                          id={VIEW_BLOCK_LEVEL_ID}
+                          icon={<BlockIcon />}
+                          kind={
+                            <FormattedMessage
+                              {...levelMessages.kindBlock}
+                              values={{ unit: activeUnit }}
+                            />
+                          }
+                          title={
+                            <FormattedMessage
+                              {...levelMessages.noBlock}
+                              values={{ unit: activeUnit }}
+                            />
+                          }
+                          scope={
+                            <FormattedMessage
+                              {...levelMessages.noSelection}
+                              values={{ unit: activeUnit }}
+                            />
+                          }
                         />
-                      }
-                      scope={
-                        <FormattedMessage
-                          {...levelMessages.noSelection}
-                          values={{ unit: activeUnit }}
-                        />
-                      }
-                    />
-                  )}
-                </SettingsLevels>
+                      )}
+                    </SettingsLevels>
 
-                {/* Accions de tota la columna, per això van al final: restaurar el
+                    {/* Accions de tota la columna, per això van al final: restaurar el
                     que hi ha desat i desar el que hi ha ara com a preferència.
                     Amb `floatingClearance` perquè aquesta columna acaba al mateix
                     racó on sura el botó d'estat */}
-                <SettingsActions floatingClearance>
-                  {/* Substitueix «Restaura les seqüències»: fa el mateix, amb tot
+                    <SettingsActions floatingClearance>
+                      {/* Substitueix «Restaura les seqüències»: fa el mateix, amb tot
                       l'estil del document i amb desfer */}
-                  <ApplyUserDefaultStyleButton />
-                  {/* El tooltip diu on van a parar els ajustos, que no és el mateix
+                      <ApplyUserDefaultStyleButton />
+                      {/* El tooltip diu on van a parar els ajustos, que no és el mateix
                       lloc amb sessió que sense */}
-                  <Tooltip
-                    title={intl.formatMessage(
-                      isAuthenticated
-                        ? messages.tooltipSavePreferencesCloud
-                        : messages.tooltipSavePreferencesLocal,
-                    )}
-                    describeChild
-                  >
-                    <StyledButton
-                      variant="contained"
-                      endIcon={<MdOutlinePushPin />}
-                      onClick={handleSavePreferences}
-                    >
-                      <FormattedMessage {...messages.savePreferences} />
-                    </StyledButton>
-                  </Tooltip>
-                </SettingsActions>
-              </Stack>
-            </NotPrint>
+                      <Tooltip
+                        title={intl.formatMessage(
+                          isAuthenticated
+                            ? messages.tooltipSavePreferencesCloud
+                            : messages.tooltipSavePreferencesLocal,
+                        )}
+                        describeChild
+                      >
+                        <StyledButton
+                          variant="contained"
+                          endIcon={<MdOutlinePushPin />}
+                          onClick={handleSavePreferences}
+                        >
+                          <FormattedMessage {...messages.savePreferences} />
+                        </StyledButton>
+                      </Tooltip>
+                    </SettingsActions>
+                  </Stack>
+                </NotPrint>
+              </Box>
+            </Stack>
           </Box>
         </Stack>
       </form>

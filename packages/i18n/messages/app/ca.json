@@ -1050,6 +1050,10 @@
   "pages.viewSequence.tooltip.fullscreen": {
     "message": "Pantalla completa"
   },
+  "pages.viewSequence.tooltipFullscreenPage": {
+    "message": "Aquesta pàgina a pantalla completa",
+    "description": "Botó de la vista que posa la pàgina que es mira (la marcada) a pantalla completa, tan gran com hi càpiga; Esc en surt"
+  },
   "pages.viewSequence.tooltip.hideSettings": {
     "message": "Amaga els ajustos de la vista",
     "description": "Tooltip i nom accessible del botó que amaga la columna d'ajustos de la pàgina de vista, perquè el full ocupi tota l'amplada"
@@ -2903,6 +2907,14 @@
   "features.freeLayout.page.modeBlocks": {
     "message": "En blocs",
     "description": "Opció del menú d'una pàgina: cada seqüència o text és un bloc amb el seu lloc a la pàgina"
+  },
+  "features.freeLayout.page.previousPage": {
+    "message": "Pàgina anterior",
+    "description": "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina anterior (també es pot lliscar)"
+  },
+  "features.freeLayout.page.nextPage": {
+    "message": "Pàgina següent",
+    "description": "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina següent (també es pot lliscar)"
   },
   "features.freeLayout.page.chooseTemplate": {
     "message": "Plantilla…",
