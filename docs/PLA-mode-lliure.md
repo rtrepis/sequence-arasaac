@@ -1013,11 +1013,10 @@ en aplicar una plantilla **surt de la pàgina** (la seqüència continua al docu
   dels ajustos amb 2 px de marge i les targetes amb menys marge.
 - **Mòbil, segona volta** (2026-11-08): les fletxes ‹ › són a la capçalera de la pàgina, a banda i
   banda de «Pàgina N de M», i «Afegeix una pàgina» és al menú «⋯». La previsualització fa
-  l'amplada del verd (`SCREEN_MARGINS.phone`, 4 px) i queda **enganxada a dalt**: la barra de l'app
-  i els botons se'n van en baixar i tornen en pujar (la barra s'amaga a partir de la seva alçada,
-  42 px, a tota l'app: `useAppBarHidden`). El verd fa l'alçada que queda sota la previsualització
-  i les targetes s'hi desplacen per dins, amb les molles fixes a dalt i 12 px de marge. L'enllaç
-  «Ajustos del bloc» ja no hi surt.
+  l'amplada del verd (`SCREEN_MARGINS.phone`, 4 px). El verd fa tota l'alçada de la pantalla
+  (`100dvh`) i les targetes s'hi desplacen per dins, amb les molles fixes a dalt i 12 px de marge.
+  L'enllaç «Ajustos del bloc» ja no hi surt. **Es va provar d'enganxar la previsualització a dalt**
+  i es va descartar: amb el full vertical, als ajustos només els quedaven uns 200 px.
 - **Moure i canviar la mida** (la fase 4; ADR-005, decisió 21): el bloc seleccionat s'arrossega
   i té vuit nanses; amb el teclat, fletxes i Maj + fletxes. Tot salta a una quadrícula de punts
   de 20 × 24 (`grid.ts`, `GridDots`, `useBlockDrag`), que es veu mentre hi ha un bloc

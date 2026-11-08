@@ -88,10 +88,6 @@ import {
 } from "@features/free-layout/components/ViewLevels";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import { FLOATING_BOTTOM_INSET } from "@/style/appShape";
-import {
-  APP_BAR_HEIGHT,
-  useAppBarHidden,
-} from "@components/utils/HiddenOnScroll/HiddenOnScroll";
 import { FLOATING_INSET_VARIABLE } from "@components/FloatingLayer";
 import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
 import {
@@ -99,7 +95,6 @@ import {
   pageFrameId,
   scrollPageToTop,
   useAvailableHeight,
-  useElementHeight,
   useFullscreenElementId,
   fullscreenScale,
 } from "@features/free-layout/hooks/usePageView";
@@ -293,10 +288,6 @@ const ViewSequencesSettingsContent = ({
   // L'alçada de la columna: de la seva vora de dalt al peu de la finestra
   const columnRef = useRef<HTMLDivElement | null>(null);
   const columnHeight = useAvailableHeight(columnRef);
-  // Al mòbil: l'alçada de la previsualització enganxada, que el verd descompta
-  const previewRef = useRef<HTMLDivElement | null>(null);
-  const previewHeight = useElementHeight(previewRef, !isWideScreen);
-  const appBarHidden = useAppBarHidden();
   // La pàgina única (sense pàgines pròpies), a pantalla completa
   const pageInFullscreen = useFullscreenElementId() === pageFrameId(0);
 
@@ -675,31 +666,19 @@ const ViewSequencesSettingsContent = ({
           // Sense la columna al costat, el full va al mig de l'espai que queda
           justifyContent={{ md: settingsVisible ? "flex-start" : "center" }}
         >
-          {/* Al mòbil, la previsualització queda enganxada a dalt, amb l'amplada
-              del verd dels ajustos; la barra de l'app i els botons se'n van en
-              baixar i tornen en pujar. A l'escriptori, l'embolcall no hi és */}
+          {/* Al mòbil, la previsualització fa l'amplada del verd dels ajustos
+              i hi queda alineada. No s'enganxa a dalt: un full vertical
+              deixaria sense lloc els ajustos. A l'escriptori, l'embolcall no hi és */}
           <Box
-            ref={previewRef}
             sx={
               isWideScreen
                 ? { display: "contents" }
                 : {
-                    position: "sticky",
-                    // Just a sota de la barra de l'app quan es veu; a dalt de
-                    // tot quan, en baixar, se n'ha anat
-                    top: appBarHidden ? 0 : APP_BAR_HEIGHT,
-                    transition: "top 225ms",
-                    zIndex: 10,
-                    backgroundColor: "background.default",
                     // El Container de l'app deixa 16 px a cada costat: en queden 2
                     marginInline: "-14px",
                     paddingInline: "2px",
                     paddingBlock: 1,
-                    "@media print": {
-                      position: "static",
-                      margin: 0,
-                      padding: 0,
-                    },
+                    "@media print": { margin: 0, padding: 0 },
                   }
             }
           >
@@ -885,18 +864,15 @@ const ViewSequencesSettingsContent = ({
                       marginInline: { xs: "-14px", md: 0 },
                       minHeight: { md: "100%" },
                       boxSizing: "border-box",
-                      // Al mòbil, tota l'alçada que deixa la previsualització
-                      // enganxada, i les targetes es desplacen per dins; les
-                      // molles hi queden fixes a dalt
-                      height: {
-                        xs: `calc(100dvh - ${previewHeight + (appBarHidden ? 0 : APP_BAR_HEIGHT)}px)`,
-                        md: "auto",
-                      },
+                      // Al mòbil, tota l'alçada de la pantalla quan s'hi baixa,
+                      // i les targetes es desplacen per dins; les molles hi
+                      // queden fixes a dalt
+                      height: { xs: "100dvh", md: "auto" },
                       overflowY: { xs: "auto", md: "visible" },
                       // El Container de l'app deixa a sota l'espai del botó
                       // flotant; aquí el verd ja s'hi desplaça per dins, i
-                      // aquell espai faria pujar la pàgina i perdre les molles
-                      // per sota de la previsualització
+                      // aquell espai faria pujar la pàgina més enllà del verd i
+                      // en tallaria la part de dalt, amb les molles
                       marginBottom: {
                         xs: `calc(-1 * max(${FLOATING_BOTTOM_INSET}px, var(${FLOATING_INSET_VARIABLE}, 0px)))`,
                         md: 0,
