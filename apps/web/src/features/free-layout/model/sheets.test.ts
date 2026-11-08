@@ -258,3 +258,14 @@ describe("col·locacions", () => {
     expect(JSON.stringify(original)).toBe(before);
   });
 });
+
+describe("el peu de llicència es conserva", () => {
+  it("tocar o treure un bloc no oblida a quines pàgines va la llicència", () => {
+    const withLicence: FreeLayout = { ...layout(), licenceOn: "last" };
+    const firstId = withLicence.sheets[0].placements[0].id;
+    expect(updatePlacement(withLicence, firstId, (p) => p).licenceOn).toBe(
+      "last",
+    );
+    expect(removePlacement(withLicence, firstId).licenceOn).toBe("last");
+  });
+});

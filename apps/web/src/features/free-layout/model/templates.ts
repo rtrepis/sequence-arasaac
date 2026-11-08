@@ -12,19 +12,42 @@ import { sortByReadingOrder } from "./readingOrder";
 /** Espai entre dues caixes veïnes d'una plantilla. */
 export const TEMPLATE_GAP_MM = 5;
 
+/**
+ * Què va a un espai: un bloc de seqüència o un rètol (un bloc de text, R9).
+ * Sense valor, de seqüència.
+ */
+export type SlotKind = "sequence" | "text";
+
 /** Un espai de la plantilla, en fraccions de la regió (0–1). */
 export interface TemplateSlot {
   x: number;
   y: number;
   w: number;
   h: number;
+  kind?: SlotKind;
+  /**
+   * El text amb què neix el rètol d'aquest espai («Primer», «Dilluns»…): la
+   * clau del text traduït (`TEMPLATE_SLOT_TEXTS`). Un cop creat, és contingut
+   * del document i ja no es tradueix
+   */
+  label?: string;
 }
 
 export interface LayoutTemplate {
   /** Identificador estable: és la clau del nom traduït de la plantilla */
   id: string;
   slots: TemplateSlot[];
+  /** Si queda millor en paper apaïsat (R3: la setmana, «Primer / Després») */
+  landscape?: boolean;
 }
+
+/** Què va a l'espai. */
+export const slotKind = (slot: TemplateSlot): SlotKind =>
+  slot.kind ?? "sequence";
+
+/** Si la plantilla té espais de rètol. */
+export const hasTextSlots = (template: LayoutTemplate): boolean =>
+  template.slots.some((slot) => slotKind(slot) === "text");
 
 /** `n` caixes apilades: en files (una sota l'altra) o en columnes. */
 export const stackTemplate = (
@@ -113,6 +136,85 @@ const STRIP_TOP: LayoutTemplate = {
 /** Una sola caixa que omple la pàgina. */
 const FULL: LayoutTemplate = { ...stackTemplate(1, "rows"), id: "full" };
 
+/** Un rètol. */
+const text = (
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  label: string,
+): TemplateSlot => ({ x, y, w, h, kind: "text", label });
+
+// Les plantilles dels treballs reals (R3, `docs/ESTUDI-treballs-amb-pictogrames.md`).
+// Es diuen pel treball, no per la forma, i els espais van en ordre de lectura
+
+/** T2 — Agenda en tira: una tira estreta i llarga al mig del full. */
+const AGENDA_STRIP: LayoutTemplate = {
+  id: "agenda-strip",
+  slots: [{ x: 0.3, y: 0, w: 0.4, h: 1 }],
+};
+
+/** T3 — «Avui és» + agenda: el rètol a dalt i l'agenda a sota. */
+const TODAY_AGENDA: LayoutTemplate = {
+  id: "today-agenda",
+  slots: [text(0, 0, 1, 0.12, "today"), { x: 0, y: 0.12, w: 1, h: 0.88 }],
+};
+
+/** T4 — Primer / Després: dos espais iguals, cadascun amb el seu rètol. */
+const FIRST_THEN: LayoutTemplate = {
+  id: "first-then",
+  landscape: true,
+  slots: [
+    text(0, 0, 0.5, 0.15, "first"),
+    text(0.5, 0, 0.5, 0.15, "then"),
+    { x: 0, y: 0.15, w: 0.5, h: 0.85 },
+    { x: 0.5, y: 0.15, w: 0.5, h: 0.85 },
+  ],
+};
+
+/** Els dies de la setmana de la plantilla «Setmana», de dilluns a divendres. */
+const WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday"];
+
+/** T5 — Setmana: cinc columnes, amb el nom del dia a dalt de cadascuna. */
+const WEEK: LayoutTemplate = {
+  id: "week",
+  landscape: true,
+  slots: [
+    ...WEEKDAYS.map((day, i) => text(i / 5, 0, 1 / 5, 0.1, day)),
+    ...WEEKDAYS.map((_, i) => ({ x: i / 5, y: 0.1, w: 1 / 5, h: 0.9 })),
+  ],
+};
+
+/** T7 — Economia de fitxes: «Treballo per…», la tira de fitxes i el premi gran. */
+const TOKEN_BOARD: LayoutTemplate = {
+  id: "token-board",
+  landscape: true,
+  slots: [
+    text(0, 0, 1, 0.12, "workingFor"),
+    { x: 0, y: 0.12, w: 1, h: 0.28 },
+    { x: 0.15, y: 0.4, w: 0.7, h: 0.6 },
+  ],
+};
+
+/** T8 — Pàgina de conte: tres frases, una sota l'altra. */
+const STORY_PAGE: LayoutTemplate = {
+  ...stackTemplate(3, "rows"),
+  id: "story-page",
+};
+
+/** Una franja del menú: el rètol del plat i, a sota, els pictogrames. */
+const MENU_ROW = 1 / 3;
+const MENU_LABEL = 0.08;
+
+/** T9 — Menú: primer plat, segon plat i postres, cadascun amb el seu rètol. */
+const MENU: LayoutTemplate = {
+  id: "menu",
+  slots: ["firstCourse", "secondCourse", "dessert"].flatMap((label, i) => [
+    text(0, i * MENU_ROW, 1, MENU_LABEL, label),
+    { x: 0, y: i * MENU_ROW + MENU_LABEL, w: 1, h: MENU_ROW - MENU_LABEL },
+  ]),
+};
+
 /** Les plantilles que es poden triar, en l'ordre del selector. */
 export const TEMPLATE_CHOICES: readonly LayoutTemplate[] = [
   FULL,
@@ -125,12 +227,57 @@ export const TEMPLATE_CHOICES: readonly LayoutTemplate[] = [
 
 /**
  * Les plantilles pròpiament dites, les que no són «X columnes» o «Y files»:
- * el selector «Plantilla» de la pàgina en blocs.
+ * el selector «Plantilla» de la pàgina en blocs, en l'ordre de l'estudi (de més
+ * a menys esmentades). La graella 2 × 2 i la tira a dalt (`grid-2x2`,
+ * `strip-top`) ja no s'hi ofereixen, però les pàgines que les porten les
+ * continuen tenint (`templateById`).
  */
 export const SHAPED_TEMPLATES: readonly LayoutTemplate[] = [
-  gridTemplate(4),
-  STRIP_TOP,
+  AGENDA_STRIP,
+  TODAY_AGENDA,
+  FIRST_THEN,
+  WEEK,
+  TOKEN_BOARD,
+  STORY_PAGE,
+  MENU,
 ];
+
+/**
+ * Si els blocs de la pàgina caben a la plantilla. Amb espais de rètol, les
+ * seqüències només van als espais de seqüència; els rètols van als seus i, si
+ * en sobren, als de seqüència que quedin.
+ */
+export const templateFits = (
+  template: LayoutTemplate,
+  placements: readonly PagePlacement[],
+): boolean => {
+  const boxed = placements.filter(isBoxed);
+  if (boxed.length > template.slots.length) return false;
+  if (!hasTextSlots(template)) return true;
+  const sequences = boxed.filter(({ kind }) => kind === "sequence").length;
+  const sequenceSlots = template.slots.filter(
+    (slot) => slotKind(slot) === "sequence",
+  ).length;
+  return sequences <= sequenceSlots;
+};
+
+/**
+ * De les plantilles on caben els blocs, la que s'hi ajusta més: la que té
+ * menys espais de seqüència (i, si n'hi ha més d'una, la primera). És la que
+ * pren una pàgina en passar a «Amb una plantilla», perquè no n'estreni més
+ * espais buits ni més rètols dels que calen.
+ */
+export const closestTemplate = (
+  fitting: readonly LayoutTemplate[],
+): LayoutTemplate | undefined => {
+  const sequenceSlots = (template: LayoutTemplate) =>
+    template.slots.filter((slot) => slotKind(slot) === "sequence").length;
+  return fitting.reduce<LayoutTemplate | undefined>(
+    (best, template) =>
+      !best || sequenceSlots(template) < sequenceSlots(best) ? template : best,
+    undefined,
+  );
+};
 
 /** Les plantilles del selector on caben `count` caixes. */
 export const templatesFor = (count: number): LayoutTemplate[] =>
@@ -199,21 +346,52 @@ export const freeRegion = (
 export type SlotBox = Box & { slot: number };
 
 /**
- * La caixa de cada bloc, espai per espai en l'ordre de `ordered`. Els que no
- * hi caben no en reben cap.
+ * L'espai de cada bloc, en l'ordre de `ordered`. Sense espais de rètol, un
+ * darrere l'altre. Amb, les seqüències van als espais de seqüència i els
+ * rètols als seus; els rètols que no hi caben, als de seqüència que quedin.
+ * Els que no hi caben no en reben cap.
+ */
+const slotIndexes = (
+  ordered: readonly { id: string; kind?: string }[],
+  template: LayoutTemplate,
+): Map<string, number> => {
+  if (!hasTextSlots(template))
+    return new Map(
+      ordered
+        .slice(0, template.slots.length)
+        .map((placement, index) => [placement.id, index]),
+    );
+  const free: Record<SlotKind, number[]> = { sequence: [], text: [] };
+  template.slots.forEach((slot, index) => free[slotKind(slot)].push(index));
+  const result = new Map<string, number>();
+  const take = (id: string, kind: SlotKind) => {
+    const index = free[kind].shift();
+    if (index !== undefined) result.set(id, index);
+    return index !== undefined;
+  };
+  ordered
+    .filter(({ kind }) => kind !== "text")
+    .forEach(({ id }) => take(id, "sequence"));
+  ordered
+    .filter(({ kind }) => kind === "text")
+    .forEach(({ id }) => take(id, "text") || take(id, "sequence"));
+  return result;
+};
+
+/**
+ * La caixa de cada bloc, espai per espai en l'ordre de `ordered` (vegeu
+ * `slotIndexes`). Els que no hi caben no en reben cap.
  */
 export const assignSlots = (
-  ordered: readonly { id: string }[],
+  ordered: readonly { id: string; kind?: string }[],
   template: LayoutTemplate,
   region: Box,
 ): Map<string, SlotBox> =>
   new Map(
-    ordered
-      .slice(0, template.slots.length)
-      .map((placement, index) => [
-        placement.id,
-        { ...slotToBox(template.slots[index], region), slot: index },
-      ]),
+    Array.from(slotIndexes(ordered, template)).map(([id, index]) => [
+      id,
+      { ...slotToBox(template.slots[index], region), slot: index },
+    ]),
   );
 
 /**
@@ -271,17 +449,23 @@ export const templateById = (
       Number(stack[2]),
       count,
     );
-  const choice = TEMPLATE_CHOICES.find((template) => template.id === id);
+  const choice = [...TEMPLATE_CHOICES, ...SHAPED_TEMPLATES].find(
+    (template) => template.id === id,
+  );
   if (choice) return choice;
   const grid = /^grid-([1-9])x([1-9])$/.exec(id);
   if (grid) return fixedGrid(Number(grid[1]), Number(grid[2]));
   return undefined;
 };
 
-/** Els espais de la plantilla que cap bloc no ocupa, en ordre. */
+/**
+ * Els espais de la plantilla que cap bloc no ocupa, en ordre. Amb `kind`,
+ * només els d'aquell tipus.
+ */
 export const freeSlots = (
   template: LayoutTemplate,
   placements: readonly PagePlacement[],
+  kind?: SlotKind,
 ): number[] => {
   const taken = new Set(
     placements.flatMap((placement) =>
@@ -290,7 +474,7 @@ export const freeSlots = (
         : [],
     ),
   );
-  return template.slots.flatMap((_, index) =>
-    taken.has(index) ? [] : [index],
+  return template.slots.flatMap((slot, index) =>
+    taken.has(index) || (kind && slotKind(slot) !== kind) ? [] : [index],
   );
 };

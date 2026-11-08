@@ -159,7 +159,11 @@ i una fixture (`apps/web/test/fixtures/saac/`).
     valor, el de `page`). Els blocs no porten caixa. Un bloc de text hi ocupa una línia sencera.
   - `"template"` («En blocs»): cada bloc a la seva caixa.
 - **`template`** és la plantilla de la pàgina (`"full"`, `"rows-N"`, `"columns-N"`, `"grid-CxR"`,
-  `"strip-top"`…), i **`slot`** l'espai que ocupa cada bloc. `"columns-N"` i `"rows-N"` són el
+  `"strip-top"` i, des de R4, les dels treballs reals: `"agenda-strip"`, `"today-agenda"`,
+  `"first-then"`, `"week"`, `"token-board"`, `"story-page"`, `"menu"`), i **`slot`** l'espai que
+  ocupa cada bloc. Algunes plantilles tenen **espais de rètol**: hi van els blocs de text, i les
+  seqüències només ocupen els espais de seqüència. Són `id` nous d'un camp que ja era de text
+  lliure: el format no canvia, i una versió anterior els conserva com un `id` que no coneix. `"columns-N"` i `"rows-N"` són el
   repartiment «N columnes» o «N files»: amb més blocs dels que hi caben en una fila o una columna,
   la graella creix (N columnes i les files que calguin, o al revés) i l'`id` no canvia. Afegir un
   bloc omple el primer espai lliure; si no n'hi ha, «N columnes» i «N files» creixen, i les altres

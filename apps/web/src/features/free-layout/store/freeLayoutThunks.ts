@@ -13,6 +13,7 @@ import type {
   PlacementColumns,
   SequenceViewSettings,
   SheetMode,
+  TextBlockStyle,
 } from "@/types/document";
 import type { SequenceDirection } from "@/types/ui";
 import {
@@ -194,14 +195,51 @@ export const addSequencesToSheetThunk =
     );
   };
 
-/** Aplica una plantilla a una pàgina (es pot desfer). */
+/**
+ * Aplica una plantilla a una pàgina (es pot desfer). Amb `labelText`, els
+ * espais de rètol que queden buits n'estrenen un amb aquell text («Primer»,
+ * «Dilluns»…), que és qui crida el que el tradueix.
+ */
 export const applyTemplateThunk = (
   sheetIndex: number,
   template: LayoutTemplate,
+  labelText?: (label: string) => string,
 ): AppThunk =>
   changeFreeLayout(
-    (layout, area) => applyTemplateToSheet(layout, sheetIndex, template, area),
+    (layout, area) =>
+      applyTemplateToSheet(
+        layout,
+        sheetIndex,
+        template,
+        area,
+        labelText && { text: labelText, newId: newLayoutId },
+      ),
     "layoutTemplate",
+  );
+
+/** El que es pot canviar d'un rètol des de la columna. */
+export interface TextPlacementChange {
+  text?: string;
+  textStyle?: TextBlockStyle;
+}
+
+/**
+ * Canvia el text o l'aspecte d'un rètol (el nivell «Bloc» de la columna). Del
+ * retoc d'aspecte, només es desa el que porta: sense res, el rètol pren la
+ * lletra del document, centrat i sense negreta.
+ */
+export const setTextPlacementThunk = (
+  placementId: string,
+  change: TextPlacementChange,
+): AppThunk =>
+  changeFreeLayout((layout) =>
+    updatePlacement(layout, placementId, (placement) => {
+      if (placement.kind !== "text") return placement;
+      const next = { ...placement, ...change };
+      if (next.textStyle && Object.keys(next.textStyle).length === 0)
+        delete next.textStyle;
+      return next;
+    }),
   );
 
 /**

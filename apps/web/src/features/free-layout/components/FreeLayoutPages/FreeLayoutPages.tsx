@@ -41,6 +41,7 @@ import {
 import {
   namedStyleOf,
   resolveBlockView,
+  resolveTextBlockStyle,
 } from "@features/free-layout/model/blockStyle";
 import {
   sameSelection,
@@ -50,10 +51,16 @@ import {
 import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
 import AddSequenceDialog from "@features/free-layout/components/AddSequenceDialog";
 import CardBaseMeasurer from "./CardBaseMeasurer";
-import { arrangementOf } from "@features/free-layout/model/templates";
+import {
+  arrangementOf,
+  freeRegion,
+} from "@features/free-layout/model/templates";
+import { isBoxed } from "@features/free-layout/model/placement";
 import AutoSheetFlow from "./AutoSheetFlow";
 import PageHeader from "./PageHeader";
-import PlacementBox from "./PlacementBox";
+import SequenceBlock from "./SequenceBlock";
+import TextBlock from "./TextBlock";
+import TemplateGuides from "./TemplateGuides";
 import { useSequenceName } from "./useSequenceName";
 import messages from "./FreeLayoutPages.lang";
 
@@ -170,6 +177,7 @@ const FreeLayoutPages = ({
     setVisiblePage,
     cardSizes,
     setCardSizes,
+    templatePreview,
   } = useViewSelection();
   const clearOnEscape = useClearOnEscape();
   const theme = useTheme();
@@ -193,9 +201,11 @@ const FreeLayoutPages = ({
   const sheetCount = freeLayout.sheets.length;
   const areaHeightPx = mmToPixelsExact(area.h, CSS_PRINT_DPI);
 
-  // Els blocs de text i els que l'app no entén encara no es pinten: es
-  // conserven al document, i el bloc de text es pintarà amb la seva interfície
-  // (R9, `docs/PLA-mode-lliure.md`)
+  // La part del full que deixen lliure els comuns: hi van els espais de les
+  // plantilles, i també les guies de la que es previsualitza
+  const region = freeRegion(area, freeLayout.common.filter(isBoxed));
+
+  // Els blocs que l'app no entén no es pinten: es conserven al document
   const renderPlacement = (
     placement: PagePlacement,
     sheetIndex: number,
@@ -204,6 +214,29 @@ const FreeLayoutPages = ({
     // Un bloc comú surt a totes les pàgines: no segueix el repartiment de cap
     const template = freeLayout.sheets[sheetIndex]?.template;
     const arrangement = common ? undefined : arrangementOf(template).kind;
+    const target = {
+      kind: "block" as const,
+      placementId: placement.id,
+      sheetIndex,
+    };
+    if (placement.kind === "text")
+      return (
+        <TextBlock
+          key={placement.id}
+          placement={placement}
+          sheetIndex={sheetIndex}
+          sheetCount={sheetCount}
+          common={common}
+          style={resolveTextBlockStyle(
+            defaults.font,
+            namedStyleOf(styles, placement.styleId),
+            placement,
+          )}
+          scale={scale}
+          selected={sameSelection(selection, target)}
+          onSelect={() => select(target)}
+        />
+      );
     if (placement.kind !== "sequence") return null;
     const pictograms = content[placement.sequenceKey];
     const sequenceView = views[placement.sequenceKey];
@@ -213,13 +246,8 @@ const FreeLayoutPages = ({
       namedStyleOf(styles, placement.styleId),
       placement.view,
     );
-    const target = {
-      kind: "block" as const,
-      placementId: placement.id,
-      sheetIndex,
-    };
     return (
-      <PlacementBox
+      <SequenceBlock
         key={placement.id}
         placement={placement}
         sheetIndex={sheetIndex}
@@ -351,6 +379,13 @@ const FreeLayoutPages = ({
                     sheet.placements.map((placement) =>
                       renderPlacement(placement, sheetIndex, false),
                     )}
+
+                  {templatePreview?.sheetIndex === sheetIndex && (
+                    <TemplateGuides
+                      template={templatePreview.template}
+                      region={region}
+                    />
+                  )}
 
                   {empty && (
                     <Stack

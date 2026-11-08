@@ -12,6 +12,7 @@ import type { DocumentSAAC } from "@/types/document";
 import { draftRestoreSettledActionCreator } from "@features/sequence/store/documentStatusSlice";
 import ViewSequencePage from "@/pages/ViewSequencePage/ViewSequencePage";
 import { FeedbackSnackbar } from "@/context/FeedbackContext";
+import StyleUndoSnackbar from "@features/sequence/components/DocumentStyle/StyleUndoSnackbar";
 
 // La columna de la vista en tres nivells (R5, R8): Document, Pàgina N i el
 // bloc seleccionat al full. Amb un bloc, Document i Pàgina es pleguen (P1) i
@@ -259,5 +260,55 @@ describe("els nivells de la columna de la vista", () => {
     );
 
     expect(level(/^Document/)).toHaveAttribute("aria-expanded", "true");
+  });
+});
+
+describe("plantilles amb rètols a la columna (R4, R9)", () => {
+  it("triar «Primer / Després» reparteix la pàgina, n'estrena els rètols i es pot desfer", async () => {
+    const store = createAppStore({ document: freeDocument() });
+    store.dispatch(draftRestoreSettledActionCreator());
+    // El «Desfés» el pinta el layout de l'app
+    renderWithProviders(
+      <>
+        <ViewSequencePage />
+        <StyleUndoSnackbar placement="layout" />
+      </>,
+      { store },
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: "First / Then" }));
+
+    expect(
+      screen.getByRole("button", { name: "Label: First" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Label: Then" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "First / Then" }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await userEvent.click(await screen.findByRole("button", { name: "Undo" }));
+    expect(
+      screen.queryByRole("button", { name: "Label: First" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("seleccionar un rètol n'ensenya el text i la lletra, i canviar-lo canvia el full", async () => {
+    renderView(freeDocument());
+    await userEvent.click(screen.getByRole("button", { name: "First / Then" }));
+    await userEvent.click(screen.getByRole("button", { name: "Label: First" }));
+
+    expect(level(/^Label\s*First/)).toHaveAttribute("aria-expanded", "true");
+    const field = screen.getByRole("textbox", { name: "Text" });
+    await userEvent.clear(field);
+    await userEvent.type(field, "Now");
+
+    expect(
+      screen.getByRole("button", { name: "Label: Now" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: "Bold" })).toBeChecked();
+    expect(screen.getByRole("slider", { name: "Font size" })).toHaveValue(
+      "1.25",
+    );
   });
 });

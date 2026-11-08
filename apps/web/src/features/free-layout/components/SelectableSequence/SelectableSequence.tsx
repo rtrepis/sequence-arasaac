@@ -13,6 +13,8 @@ import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeL
 interface SelectableSequenceProps {
   sequenceKey: number;
   pictogramCount: number;
+  /** El nom accessible, si no és el de la seqüència (un rètol, R9) */
+  label?: string;
   /** A la pantalla completa no es selecciona res: és per mirar */
   selectable: boolean;
   /**
@@ -34,6 +36,7 @@ interface SelectableSequenceProps {
 const SelectableSequence = ({
   sequenceKey,
   pictogramCount,
+  label,
   selectable,
   target: givenTarget,
   sx,
@@ -55,11 +58,14 @@ const SelectableSequence = ({
       role="button"
       tabIndex={0}
       aria-pressed={selected}
-      aria-label={intl.formatMessage(pageMessages.placementLabel, {
-        name: sequenceName(sequenceKey),
-        count: pictogramCount,
-        common: "false",
-      })}
+      aria-label={
+        label ??
+        intl.formatMessage(pageMessages.placementLabel, {
+          name: sequenceName(sequenceKey),
+          count: pictogramCount,
+          common: "false",
+        })
+      }
       onClick={(event) => {
         // El clic fora de cap seqüència treu la selecció: aquest no hi ha d'arribar
         event.stopPropagation();

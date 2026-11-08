@@ -8,6 +8,7 @@ import type {
 } from "@/types/document";
 import {
   INITIAL_SEQUENCES_PER_SHEET,
+  NEW_LABEL_FONT_SIZE,
   addSequencesToSheet,
   applyTemplateToSheet,
   buildInitialPages,
@@ -15,7 +16,12 @@ import {
 } from "./distribute";
 import { isPlaced, unplacedSequenceKeys, whereIs } from "./placementsOf";
 import type { NewLayoutId } from "./sheets";
-import { TEMPLATE_GAP_MM, gridTemplate, stackTemplate } from "./templates";
+import {
+  TEMPLATE_GAP_MM,
+  gridTemplate,
+  stackTemplate,
+  templateById,
+} from "./templates";
 
 // Repartir els blocs d'una pàgina (`distribute.ts`) i saber on surt cada
 // seqüència (`placementsOf.ts`).
@@ -327,5 +333,77 @@ describe("on surt cada seqüència", () => {
   it("les que no surten enlloc són al calaix, en l'ordre del document", () => {
     expect(isPlaced(pages, 0)).toBe(true);
     expect(unplacedSequenceKeys(pages, [3, 0, 1, 2])).toEqual([3, 2]);
+  });
+});
+
+describe("les plantilles amb rètols (R3, R4)", () => {
+  const firstThen = templateById("first-then");
+  if (!firstThen) throw new Error("falta «Primer / Després»");
+  const labels = { text: (label: string) => `«${label}»`, newId: ids() };
+  const twoSequences: DocumentPages = {
+    sheets: [sheet("sh_1", [placement("a", 0), placement("b", 1, { x: 60 })])],
+    common: [],
+  };
+
+  it("aplicar-la estrena un rètol a cada espai de rètol buit, amb el seu text", () => {
+    const result = applyTemplateToSheet(
+      twoSequences,
+      0,
+      firstThen,
+      AREA,
+      labels,
+    );
+    const placements = result.sheets[0].placements;
+    const texts = placements.filter(
+      (p): p is TextPlacement => p.kind === "text",
+    );
+    expect(texts.map(({ text: t, slot }) => [t, slot])).toEqual([
+      ["«first»", 0],
+      ["«then»", 1],
+    ]);
+    // Neixen en negreta i més grans que el text de les targetes
+    expect(texts[0].textStyle).toEqual({
+      bold: true,
+      font: { size: NEW_LABEL_FONT_SIZE },
+    });
+    expect(
+      placements.filter((p) => p.kind === "sequence").map(boxed),
+    ).toMatchObject([{ slot: 2 }, { slot: 3 }]);
+    expect(insideArea(result)).toBe(true);
+  });
+
+  it("els rètols que ja hi són no es dupliquen", () => {
+    const once = applyTemplateToSheet(twoSequences, 0, firstThen, AREA, labels);
+    const twice = applyTemplateToSheet(once, 0, firstThen, AREA, labels);
+    expect(
+      twice.sheets[0].placements.filter((p) => p.kind === "text"),
+    ).toHaveLength(2);
+  });
+
+  it("sense textos, no n'estrena cap", () => {
+    const result = applyTemplateToSheet(twoSequences, 0, firstThen, AREA);
+    expect(result.sheets[0].placements.some((p) => p.kind === "text")).toBe(
+      false,
+    );
+  });
+
+  it("una seqüència nova omple un espai de seqüència, no el d'un rètol", () => {
+    const oneSequence: DocumentPages = {
+      sheets: [sheet("sh_1", [placement("a", 0)])],
+      common: [],
+    };
+    const applied = applyTemplateToSheet(
+      oneSequence,
+      0,
+      firstThen,
+      AREA,
+      labels,
+    );
+    const result = addSequencesToSheet(applied, 0, [5], context());
+    const added = result.sheets[0].placements.find(
+      (p) => p.kind === "sequence" && p.sequenceKey === 5,
+    );
+    expect(added && boxed(added).slot).toBe(3);
+    expect(result.sheets[0].template).toBe("first-then");
   });
 });

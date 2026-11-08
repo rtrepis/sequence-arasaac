@@ -8,6 +8,7 @@ import type {
   DocumentSheet,
   PlacementColumns,
   SequencePlacement,
+  TextPlacement,
 } from "@/types/document";
 import type { SequenceDirection } from "@/types/ui";
 import { SheetArea, hasBox, isBoxed } from "./placement";
@@ -55,26 +56,72 @@ export const newSequencePlacement = (
 });
 
 /**
+ * La mida de la lletra amb què neix el rètol d'una plantilla, sobre la de les
+ * targetes: un rètol és un títol, i a la mida del text d'una targeta es perdria.
+ */
+export const NEW_LABEL_FONT_SIZE = 1.25;
+
+/** Un rètol nou, encara sense caixa: en negreta i més gran que el text de les targetes. */
+export const newTextPlacement = (
+  text: string,
+  newId: NewLayoutId,
+): TextPlacement => ({
+  kind: "text",
+  id: newId("pl"),
+  text,
+  x: 0,
+  y: 0,
+  w: 0,
+  h: 0,
+  textStyle: { bold: true, font: { size: NEW_LABEL_FONT_SIZE } },
+});
+
+/**
+ * El que cal per omplir els espais de rètol buits d'una plantilla: el text
+ * amb què neix cada rètol (per la clau de l'espai, ja traduït a l'idioma de la
+ * interfície) i els identificadors nous.
+ */
+export interface LabelContext {
+  text: (label: string) => string;
+  newId: NewLayoutId;
+}
+
+/**
  * La pàgina amb la plantilla aplicada: els seus blocs es reparteixen, en ordre
  * de lectura, a la regió que deixen lliure els comuns, i la pàgina passa a
  * tenir caixes i a recordar la plantilla. Substitueix els retocs a mà d'aquella
- * pàgina, i per això qui ho ofereix ho ha de poder desfer.
+ * pàgina, i per això qui ho ofereix ho ha de poder desfer. Amb `labels`, els
+ * espais de rètol que queden buits n'estrenen un («Primer», «Dilluns»…).
  */
 const sheetWithTemplate = (
   sheet: DocumentSheet,
   template: LayoutTemplate,
   pages: DocumentPages,
   area: SheetArea,
-): DocumentSheet => ({
-  ...sheet,
-  mode: "template",
-  template: template.id,
-  placements: applyTemplate(
-    sheet.placements,
-    template,
-    freeRegion(area, pages.common.filter(isBoxed)),
-  ),
-});
+  labels?: LabelContext,
+): DocumentSheet => {
+  const region = freeRegion(area, pages.common.filter(isBoxed));
+  const placements = applyTemplate(sheet.placements, template, region);
+  const created: TextPlacement[] = labels
+    ? freeSlots(template, placements, "text").map((index) => {
+        const slot = template.slots[index];
+        return {
+          ...newTextPlacement(
+            slot.label ? labels.text(slot.label) : "",
+            labels.newId,
+          ),
+          ...slotToBox(slot, region),
+          slot: index,
+        };
+      })
+    : [];
+  return {
+    ...sheet,
+    mode: "template",
+    template: template.id,
+    placements: [...placements, ...created],
+  };
+};
 
 /** Aplica la plantilla a una pàgina (vegeu `sheetWithTemplate`). */
 export const applyTemplateToSheet = (
@@ -82,10 +129,11 @@ export const applyTemplateToSheet = (
   sheetIndex: number,
   template: LayoutTemplate,
   area: SheetArea,
+  labels?: LabelContext,
 ): DocumentPages =>
   pages.sheets[sheetIndex]
     ? mapSheet(pages, sheetIndex, (sheet) =>
-        sheetWithTemplate(sheet, template, pages, area),
+        sheetWithTemplate(sheet, template, pages, area, labels),
       )
     : pages;
 
@@ -119,7 +167,10 @@ export const addSequencesToSheet = (
   const template = sheet.template
     ? templateById(sheet.template, sheet.placements.filter(isBoxed).length)
     : undefined;
-  const free = template ? freeSlots(template, sheet.placements) : [];
+  // Les seqüències només omplen espais de seqüència: els de rètol són dels rètols
+  const free = template
+    ? freeSlots(template, sheet.placements, "sequence")
+    : [];
   if (template && free.length >= added.length) {
     const boxOf = new Map<string, SlotBox>(
       added.map((placement, index) => [

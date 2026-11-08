@@ -185,6 +185,135 @@ const messages = defineMessages({
     defaultMessage: "{name} is now on every page",
     description: "Confirmació d'haver posat una seqüència a totes les pàgines",
   },
+  templateAgendaStrip: {
+    id: "features.freeLayout.template.agendaStrip",
+    defaultMessage: "Schedule strip",
+    description:
+      "Plantilla (R3): una tira estreta i llarga al mig del full, per a l'agenda del dia",
+  },
+  templateTodayAgenda: {
+    id: "features.freeLayout.template.todayAgenda",
+    defaultMessage: "Today is + schedule",
+    description:
+      "Plantilla (R3): un rètol a dalt («Avui és…») i l'agenda del dia a sota",
+  },
+  templateFirstThen: {
+    id: "features.freeLayout.template.firstThen",
+    defaultMessage: "First / Then",
+    description:
+      "Plantilla (R3): dos espais iguals, l'un al costat de l'altre, amb els rètols «Primer» i «Després»",
+  },
+  templateWeek: {
+    id: "features.freeLayout.template.week",
+    defaultMessage: "Week",
+    description:
+      "Plantilla (R3): cinc columnes, de dilluns a divendres, amb el nom del dia a dalt",
+  },
+  templateTokenBoard: {
+    id: "features.freeLayout.template.tokenBoard",
+    defaultMessage: "Token board",
+    description:
+      "Plantilla (R3): el rètol «Treballo per…», una tira per a les fitxes i un espai gran per al premi",
+  },
+  templateStoryPage: {
+    id: "features.freeLayout.template.storyPage",
+    defaultMessage: "Story page",
+    description:
+      "Plantilla (R3): tres frases d'un conte o d'una història social, una sota l'altra",
+  },
+  templateMenu: {
+    id: "features.freeLayout.template.menu",
+    defaultMessage: "Menu",
+    description:
+      "Plantilla (R3): el menú del menjador, amb tres franges (primer plat, segon plat i postres) i el seu rètol",
+  },
+  slotTextToday: {
+    id: "features.freeLayout.slotText.today",
+    defaultMessage: "Today is",
+    description:
+      "Text amb què neix el rètol de la plantilla «Avui és + agenda». Després l'usuari el pot canviar",
+  },
+  slotTextFirst: {
+    id: "features.freeLayout.slotText.first",
+    defaultMessage: "First",
+    description:
+      "Text amb què neix el primer rètol de la plantilla «Primer / Després»",
+  },
+  slotTextThen: {
+    id: "features.freeLayout.slotText.then",
+    defaultMessage: "Then",
+    description:
+      "Text amb què neix el segon rètol de la plantilla «Primer / Després»",
+  },
+  slotTextMonday: {
+    id: "features.freeLayout.slotText.monday",
+    defaultMessage: "Monday",
+    description: "Rètol d'un dia a la plantilla «Setmana»",
+  },
+  slotTextTuesday: {
+    id: "features.freeLayout.slotText.tuesday",
+    defaultMessage: "Tuesday",
+    description: "Rètol d'un dia a la plantilla «Setmana»",
+  },
+  slotTextWednesday: {
+    id: "features.freeLayout.slotText.wednesday",
+    defaultMessage: "Wednesday",
+    description: "Rètol d'un dia a la plantilla «Setmana»",
+  },
+  slotTextThursday: {
+    id: "features.freeLayout.slotText.thursday",
+    defaultMessage: "Thursday",
+    description: "Rètol d'un dia a la plantilla «Setmana»",
+  },
+  slotTextFriday: {
+    id: "features.freeLayout.slotText.friday",
+    defaultMessage: "Friday",
+    description: "Rètol d'un dia a la plantilla «Setmana»",
+  },
+  slotTextWorkingFor: {
+    id: "features.freeLayout.slotText.workingFor",
+    defaultMessage: "I'm working for…",
+    description:
+      "Text amb què neix el rètol de la plantilla «Economia de fitxes», damunt del premi",
+  },
+  slotTextFirstCourse: {
+    id: "features.freeLayout.slotText.firstCourse",
+    defaultMessage: "First course",
+    description: "Rètol de la primera franja de la plantilla «Menú»",
+  },
+  slotTextSecondCourse: {
+    id: "features.freeLayout.slotText.secondCourse",
+    defaultMessage: "Main course",
+    description: "Rètol de la segona franja de la plantilla «Menú»",
+  },
+  slotTextDessert: {
+    id: "features.freeLayout.slotText.dessert",
+    defaultMessage: "Dessert",
+    description: "Rètol de la tercera franja de la plantilla «Menú»",
+  },
+  textBlockLabel: {
+    id: "features.freeLayout.textBlock.label",
+    defaultMessage:
+      "Label: {text}{common, select, true {, on every page} other {}}",
+    description:
+      "Nom accessible d'un rètol (bloc de text) damunt del full, que el selecciona. `common` diu si surt a totes les pàgines",
+  },
+  textBlockEmpty: {
+    id: "features.freeLayout.textBlock.empty",
+    defaultMessage: "Empty label",
+    description: "Nom d'un rètol sense text, a la columna i al full",
+  },
+  textBlockActions: {
+    id: "features.freeLayout.textBlock.actions",
+    defaultMessage: "Actions for the label “{text}”",
+    description: "Nom accessible del botó «⋯» d'un rètol damunt del full",
+  },
+  guideText: {
+    id: "features.freeLayout.guide.text",
+    defaultMessage: "Label",
+    description:
+      "Marca damunt d'un espai de rètol, mentre es previsualitza una plantilla a la pàgina; no s'imprimeix",
+  },
 });
 
 export default messages;

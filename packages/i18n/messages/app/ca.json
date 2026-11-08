@@ -2784,6 +2784,98 @@
     "message": "Tira a dalt i gran a sota",
     "description": "Plantilla: una franja estreta a dalt i un espai gran a sota"
   },
+  "features.freeLayout.template.agendaStrip": {
+    "message": "Agenda en tira",
+    "description": "Plantilla (R3): una tira estreta i llarga al mig del full, per a l'agenda del dia"
+  },
+  "features.freeLayout.template.todayAgenda": {
+    "message": "Avui és + agenda",
+    "description": "Plantilla (R3): un rètol a dalt («Avui és…») i l'agenda del dia a sota"
+  },
+  "features.freeLayout.template.firstThen": {
+    "message": "Primer / Després",
+    "description": "Plantilla (R3): dos espais iguals, l'un al costat de l'altre, amb els rètols «Primer» i «Després»"
+  },
+  "features.freeLayout.template.week": {
+    "message": "Setmana",
+    "description": "Plantilla (R3): cinc columnes, de dilluns a divendres, amb el nom del dia a dalt"
+  },
+  "features.freeLayout.template.tokenBoard": {
+    "message": "Economia de fitxes",
+    "description": "Plantilla (R3): el rètol «Treballo per…», una tira per a les fitxes i un espai gran per al premi"
+  },
+  "features.freeLayout.template.storyPage": {
+    "message": "Pàgina de conte",
+    "description": "Plantilla (R3): tres frases d'un conte o d'una història social, una sota l'altra"
+  },
+  "features.freeLayout.template.menu": {
+    "message": "Menú",
+    "description": "Plantilla (R3): el menú del menjador, amb tres franges (primer plat, segon plat i postres) i el seu rètol"
+  },
+  "features.freeLayout.slotText.today": {
+    "message": "Avui és",
+    "description": "Text amb què neix el rètol de la plantilla «Avui és + agenda». Després l'usuari el pot canviar"
+  },
+  "features.freeLayout.slotText.first": {
+    "message": "Primer",
+    "description": "Text amb què neix el primer rètol de la plantilla «Primer / Després»"
+  },
+  "features.freeLayout.slotText.then": {
+    "message": "Després",
+    "description": "Text amb què neix el segon rètol de la plantilla «Primer / Després»"
+  },
+  "features.freeLayout.slotText.monday": {
+    "message": "Dilluns",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.tuesday": {
+    "message": "Dimarts",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.wednesday": {
+    "message": "Dimecres",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.thursday": {
+    "message": "Dijous",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.friday": {
+    "message": "Divendres",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.workingFor": {
+    "message": "Treballo per…",
+    "description": "Text amb què neix el rètol de la plantilla «Economia de fitxes», damunt del premi"
+  },
+  "features.freeLayout.slotText.firstCourse": {
+    "message": "Primer plat",
+    "description": "Rètol de la primera franja de la plantilla «Menú»"
+  },
+  "features.freeLayout.slotText.secondCourse": {
+    "message": "Segon plat",
+    "description": "Rètol de la segona franja de la plantilla «Menú»"
+  },
+  "features.freeLayout.slotText.dessert": {
+    "message": "Postres",
+    "description": "Rètol de la tercera franja de la plantilla «Menú»"
+  },
+  "features.freeLayout.textBlock.label": {
+    "message": "Rètol: {text}{common, select, true {, a totes les pàgines} other {}}",
+    "description": "Nom accessible d'un rètol (bloc de text) damunt del full, que el selecciona. `common` diu si surt a totes les pàgines"
+  },
+  "features.freeLayout.textBlock.empty": {
+    "message": "Rètol buit",
+    "description": "Nom d'un rètol sense text, a la columna i al full"
+  },
+  "features.freeLayout.textBlock.actions": {
+    "message": "Accions del rètol «{text}»",
+    "description": "Nom accessible del botó «⋯» d'un rètol damunt del full"
+  },
+  "features.freeLayout.guide.text": {
+    "message": "Rètol",
+    "description": "Marca damunt d'un espai de rètol, mentre es previsualitza una plantilla a la pàgina; no s'imprimeix"
+  },
   "features.freeLayout.page.moreActions": {
     "message": "Més accions de la pàgina",
     "description": "Nom accessible i tooltip del botó de més accions d'una pàgina (duplicar, moure, esborrar)"
@@ -2995,6 +3087,42 @@
   "features.freeLayout.levels.putOnPageLabel": {
     "message": "Posa {name} a la pàgina {number}",
     "description": "Nom accessible del botó que posa una seqüència sense col·locar a la pàgina que segueix la columna"
+  },
+  "features.freeLayout.levels.templateHelp": {
+    "message": "Passa per damunt d'una plantilla, o mantén-la premuda, per veure-la a la pàgina. El clic l'aplica.",
+    "description": "Ajuda sota el selector de plantilles del nivell «Pàgina»: com es previsualitza i com s'aplica"
+  },
+  "features.freeLayout.levels.templateLandscape": {
+    "message": "Millor apaïsat",
+    "description": "Al selector de plantilles, al costat del nom d'una plantilla que queda millor en paper apaïsat (la setmana, «Primer / Després»)"
+  },
+  "features.freeLayout.levels.templateTooSmall": {
+    "message": "{name}: hi caben {slots, plural, one {# seqüència} other {# seqüències}}, i aquesta pàgina en té {count}",
+    "description": "Al selector de plantilles, per què una plantilla no es pot triar: té menys espais de seqüència que seqüències té la pàgina"
+  },
+  "features.freeLayout.levels.kindText": {
+    "message": "Rètol",
+    "description": "Tipus del tercer nivell de la columna de la vista quan el que hi ha seleccionat és un rètol (un text sol, sense pictograma)"
+  },
+  "features.freeLayout.levels.text": {
+    "message": "Text",
+    "description": "Títol de la fila on s'escriu el text d'un rètol, al nivell «Rètol» de la columna"
+  },
+  "features.freeLayout.levels.textHelp": {
+    "message": "És contingut del document: no es tradueix. Cada línia, una línia del rètol.",
+    "description": "Ajuda sota el text d'un rètol"
+  },
+  "features.freeLayout.levels.fontSize": {
+    "message": "Mida de la lletra",
+    "description": "Títol de la fila de la mida de la lletra d'un rètol"
+  },
+  "features.freeLayout.levels.fontSizeHelp": {
+    "message": "Com a màxim: si el text no hi cap, es fa més petit.",
+    "description": "Ajuda sota la mida de la lletra d'un rètol: la mida és un màxim, com la dels pictogrames"
+  },
+  "features.freeLayout.levels.bold": {
+    "message": "Negreta",
+    "description": "Títol de la fila de l'interruptor de negreta d'un rètol"
   },
   "pages.viewSequence.levels.untitled": {
     "message": "Aquest document",

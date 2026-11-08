@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { SequencePlacement } from "@/types/document";
+import type { SequencePlacement, TextPlacement } from "@/types/document";
 import {
+  SHAPED_TEMPLATES,
   TEMPLATE_CHOICES,
+  closestTemplate,
+  hasTextSlots,
+  slotKind,
+  templateFits,
   TEMPLATE_GAP_MM,
   applyTemplate,
   freeRegion,
@@ -180,5 +185,127 @@ describe("la plantilla de la pàgina (R2)", () => {
         { kind: "unknown", id: "c", raw: { slot: 0 } },
       ]),
     ).toEqual([0, 2]);
+  });
+});
+
+describe("les plantilles dels treballs reals (R3)", () => {
+  const text = (id: string, x: number, y: number): TextPlacement => ({
+    kind: "text" as const,
+    id,
+    text: id,
+    x,
+    y,
+    w: 10,
+    h: 10,
+  });
+
+  it("tots els espais són dins de la regió, i se'n troben per l'id", () => {
+    SHAPED_TEMPLATES.forEach((template) => {
+      template.slots.forEach(({ x, y, w, h }) => {
+        expect(x).toBeGreaterThanOrEqual(0);
+        expect(y).toBeGreaterThanOrEqual(0);
+        expect(x + w).toBeLessThanOrEqual(1 + 1e-9);
+        expect(y + h).toBeLessThanOrEqual(1 + 1e-9);
+      });
+      expect(templateById(template.id)).toBe(template);
+    });
+  });
+
+  it("la setmana té cinc rètols i cinc espais de seqüència, i és apaïsada", () => {
+    const week = templateById("week");
+    expect(week?.landscape).toBe(true);
+    expect(week && hasTextSlots(week)).toBe(true);
+    expect(
+      week?.slots.filter((slot) => slotKind(slot) === "text"),
+    ).toHaveLength(5);
+    expect(
+      week?.slots.filter((slot) => slotKind(slot) === "sequence"),
+    ).toHaveLength(5);
+  });
+
+  it("la graella 2 × 2 i la tira a dalt ja no s'ofereixen, però es continuen llegint", () => {
+    const offered = SHAPED_TEMPLATES.map(({ id }) => id);
+    expect(offered).not.toContain("grid-2x2");
+    expect(offered).not.toContain("strip-top");
+    expect(templateById("grid-2x2")?.slots).toHaveLength(4);
+    expect(templateById("strip-top")?.slots).toHaveLength(2);
+  });
+
+  it("les seqüències només hi caben als espais de seqüència", () => {
+    const firstThen = templateById("first-then");
+    if (!firstThen) throw new Error("falta «Primer / Després»");
+    expect(templateFits(firstThen, [placement("a", 0, 0)])).toBe(true);
+    expect(
+      templateFits(firstThen, [placement("a", 0, 0), placement("b", 0, 50)]),
+    ).toBe(true);
+    // Tres seqüències: hi ha quatre espais, però només dos de seqüència
+    expect(
+      templateFits(firstThen, [
+        placement("a", 0, 0),
+        placement("b", 0, 50),
+        placement("c", 0, 100),
+      ]),
+    ).toBe(false);
+  });
+
+  it("cada bloc va al seu tipus d'espai, i els rètols que sobren, als de seqüència", () => {
+    const firstThen = templateById("first-then");
+    if (!firstThen) throw new Error("falta «Primer / Després»");
+    // En ordre de lectura: un rètol, una seqüència, un altre rètol i un tercer
+    const placed = applyTemplate(
+      [
+        text("t1", 0, 0),
+        placement("s1", 0, 20),
+        text("t2", 0, 40),
+        text("t3", 0, 60),
+      ],
+      firstThen,
+      REGION,
+    );
+    const slotOf = (id: string) =>
+      placed.find((item) => item.id === id && "slot" in item)?.slot;
+    expect(slotOf("s1")).toBe(2);
+    expect(slotOf("t1")).toBe(0);
+    expect(slotOf("t2")).toBe(1);
+    // No hi ha més espais de rètol: va al de seqüència que queda
+    expect(slotOf("t3")).toBe(3);
+  });
+
+  it("sense espais de rètol, els rètols ocupen espais com qualsevol bloc", () => {
+    const placed = applyTemplate(
+      [text("t1", 0, 0), placement("s1", 0, 50)],
+      stackTemplate(2, "rows"),
+      REGION,
+    );
+    expect(placed.map((item) => ("slot" in item ? item.slot : null))).toEqual([
+      0, 1,
+    ]);
+  });
+
+  it("els espais lliures, de tots els tipus o només d'un", () => {
+    const menu = templateById("menu");
+    if (!menu) throw new Error("falta «Menú»");
+    expect(freeSlots(menu, [])).toEqual([0, 1, 2, 3, 4, 5]);
+    expect(freeSlots(menu, [], "text")).toEqual([0, 2, 4]);
+    expect(
+      freeSlots(menu, [{ ...placement("a", 0, 0), slot: 1 }], "sequence"),
+    ).toEqual([3, 5]);
+  });
+});
+
+describe("la plantilla que s'hi ajusta més", () => {
+  const fitting = (count: number) =>
+    SHAPED_TEMPLATES.filter((template) =>
+      templateFits(
+        template,
+        Array.from({ length: count }, (_, i) => placement(`s${i}`, 0, i * 20)),
+      ),
+    );
+
+  it("una seqüència, l'agenda en tira; dues, «Primer / Després»; tres, la pàgina de conte", () => {
+    expect(closestTemplate(fitting(1))?.id).toBe("agenda-strip");
+    expect(closestTemplate(fitting(2))?.id).toBe("first-then");
+    expect(closestTemplate(fitting(3))?.id).toBe("story-page");
+    expect(closestTemplate(fitting(6))).toBeUndefined();
   });
 });

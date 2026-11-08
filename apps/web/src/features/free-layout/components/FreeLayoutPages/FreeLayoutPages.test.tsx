@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   renderWithProviders,
   screen,
@@ -8,7 +8,11 @@ import {
 import { sequenceFixture } from "@/test/fixtures/document";
 import type { DocumentSAAC } from "@/types/document";
 import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
-import { ViewSelectionProvider } from "@features/free-layout/hooks/useViewSelection";
+import {
+  ViewSelectionProvider,
+  useViewSelection,
+} from "@features/free-layout/hooks/useViewSelection";
+import { templateById } from "@features/free-layout/model/templates";
 import FreeLayoutPages from "./FreeLayoutPages";
 
 // Les pàgines del mode lliure (ADR-005): cada pàgina és un full que
@@ -234,5 +238,82 @@ describe("useBeforePrintCheck", () => {
 
     expect(onPrint).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+});
+
+describe("rètols i previsualització de plantilles (R4, R9)", () => {
+  const withLabel = (): DocumentSAAC => {
+    const document = freeDocument();
+    if (!document.pages) throw new Error("falten les pàgines");
+    return {
+      ...document,
+      pages: {
+        ...document.pages,
+        sheets: [
+          {
+            ...document.pages.sheets[0],
+            placements: [
+              ...document.pages.sheets[0].placements,
+              {
+                kind: "text",
+                id: "pl_t",
+                text: "First\nthen",
+                x: 5,
+                y: 70,
+                w: 100,
+                h: 30,
+              },
+            ],
+          },
+          document.pages.sheets[1],
+        ],
+      },
+    };
+  };
+
+  it("un rètol es pinta com a text de debò, i es pot seleccionar", async () => {
+    renderPages(withLabel());
+    const label = screen.getByRole("button", { name: "Label: First" });
+    expect(label).toHaveTextContent("First");
+    expect(label).toHaveTextContent("then");
+    await userEvent.click(label);
+    expect(label).toHaveAttribute("aria-pressed", "true");
+  });
+
+  /** Posa una plantilla a previsualitzar, com ho fa el selector de la columna. */
+  const Preview = ({ sheetIndex }: { sheetIndex: number }) => {
+    const { setTemplatePreview } = useViewSelection();
+    useEffect(() => {
+      const template = templateById("first-then");
+      if (template) setTemplatePreview({ sheetIndex, template });
+    }, [sheetIndex, setTemplatePreview]);
+    return null;
+  };
+
+  it("la plantilla que es previsualitza es dibuixa només a la seva pàgina, sense moure res", () => {
+    renderWithProviders(
+      <ViewSelectionProvider>
+        <Preview sheetIndex={1} />
+        <FreeLayoutPages
+          pageDimensions={{ width: 756, height: 1085 }}
+          displayWidth={378}
+          displayHeight={542}
+          scale={0.5}
+          author=""
+        />
+      </ViewSelectionProvider>,
+      { preloadedState: { document: freeDocument() } },
+    );
+    const guides = screen.getAllByTestId("template-guides");
+    expect(guides).toHaveLength(1);
+    const sheets = document.querySelectorAll(".preview-content");
+    expect(sheets[1]).toContainElement(guides[0]);
+    // Quatre espais, dos dels quals de rètol
+    expect(guides[0].children).toHaveLength(4);
+    expect(guides[0]).toHaveTextContent("LabelLabel");
+    // Els blocs no s'han mogut
+    expect(
+      screen.getAllByRole("button", { name: /^Sequence 2, 3 pictograms$/ }),
+    ).toHaveLength(2);
   });
 });

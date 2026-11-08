@@ -212,6 +212,60 @@ const messages = defineMessages({
     description:
       "Nom accessible del botó que posa una seqüència sense col·locar a la pàgina que segueix la columna",
   },
+  templateHelp: {
+    id: "features.freeLayout.levels.templateHelp",
+    defaultMessage:
+      "Hover over a template, or press and hold it, to see it on the page. Clicking applies it.",
+    description:
+      "Ajuda sota el selector de plantilles del nivell «Pàgina»: com es previsualitza i com s'aplica",
+  },
+  templateLandscape: {
+    id: "features.freeLayout.levels.templateLandscape",
+    defaultMessage: "Best in landscape",
+    description:
+      "Al selector de plantilles, al costat del nom d'una plantilla que queda millor en paper apaïsat (la setmana, «Primer / Després»)",
+  },
+  templateTooSmall: {
+    id: "features.freeLayout.levels.templateTooSmall",
+    defaultMessage:
+      "{name}: it fits {slots, plural, one {# sequence} other {# sequences}}, and this page has {count}",
+    description:
+      "Al selector de plantilles, per què una plantilla no es pot triar: té menys espais de seqüència que seqüències té la pàgina",
+  },
+  kindText: {
+    id: "features.freeLayout.levels.kindText",
+    defaultMessage: "Label",
+    description:
+      "Tipus del tercer nivell de la columna de la vista quan el que hi ha seleccionat és un rètol (un text sol, sense pictograma)",
+  },
+  text: {
+    id: "features.freeLayout.levels.text",
+    defaultMessage: "Text",
+    description:
+      "Títol de la fila on s'escriu el text d'un rètol, al nivell «Rètol» de la columna",
+  },
+  textHelp: {
+    id: "features.freeLayout.levels.textHelp",
+    defaultMessage:
+      "It's part of the document: it isn't translated. Each line is a line of the label.",
+    description: "Ajuda sota el text d'un rètol",
+  },
+  fontSize: {
+    id: "features.freeLayout.levels.fontSize",
+    defaultMessage: "Font size",
+    description: "Títol de la fila de la mida de la lletra d'un rètol",
+  },
+  fontSizeHelp: {
+    id: "features.freeLayout.levels.fontSizeHelp",
+    defaultMessage: "At most: if the text doesn't fit, it gets smaller.",
+    description:
+      "Ajuda sota la mida de la lletra d'un rètol: la mida és un màxim, com la dels pictogrames",
+  },
+  bold: {
+    id: "features.freeLayout.levels.bold",
+    defaultMessage: "Bold",
+    description: "Títol de la fila de l'interruptor de negreta d'un rètol",
+  },
 });
 
 export default messages;

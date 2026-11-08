@@ -24,6 +24,7 @@ Patró únic per a tots els tabs del `SettingsDialog` (Usuari, Estil del documen
   - `"sized"` (per defecte) — slider, select, textfield: amplada acotada amb `settingControlWidth`; apila en mòbil.
   - `"wide"` — grups de toggles: amplada segons contingut (`flexShrink: 0`, mai comprimit contra el títol); apila en mòbil.
   - `"compact"` — `Switch`, `InputColor`: **sempre en línia**, també en mòbil — apilar-los només malgastaria alçada, mai els falta amplada.
+  - `"block"` — una **graella d'opcions** (les miniatures del selector de plantilles, `TemplatePicker`): **sempre apilada**, títol a dalt i control a tota l'amplada. Al costat del títol no hi cabria més d'una opció per fila. No és per a un control sol: un select o un slider continuen sent `"sized"`.
 
   Amb `helper?` (i `helperId?`, per a l'`aria-describedby` del control), la fila porta una línia
   d'explicació **visible, sota la fila**, en `caption` i `text.secondary`. És el lloc del que

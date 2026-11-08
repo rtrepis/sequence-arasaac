@@ -184,6 +184,8 @@ const ViewSequencesSettingsContent = ({
     selection !== null &&
     selectedPage.uniform &&
     selectedPage.blockCount > 1 &&
+    // Un rètol té els seus ajustos, que no són de la pàgina
+    selectedBlock?.kind !== "text" &&
     !(selectedBlock?.kind === "block" && selectedBlock.common);
   // Com es diuen les peces de la pàgina que es mira: seqüències o blocs
   const activeUnit =

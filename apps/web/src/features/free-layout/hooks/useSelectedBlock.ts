@@ -1,10 +1,22 @@
 // El bloc seleccionat a la vista, amb el que en necessiten la columna i les
 // molles: el nom, on és i la vista que se li aplica amb la cascada.
 import { useAppSelector } from "@/app/hooks";
-import type { SequencePlacement, SequenceViewSettings } from "@/types/document";
+import type {
+  SequencePlacement,
+  SequenceViewSettings,
+  TextPlacement,
+} from "@/types/document";
 import type { Sequence } from "@/types/sequence";
-import { selectResolvedSequenceViews } from "@features/sequence/style/styleSelectors";
-import { namedStyleOf, resolveBlockView } from "../model/blockStyle";
+import {
+  selectDocumentCardDefaults,
+  selectResolvedSequenceViews,
+} from "@features/sequence/style/styleSelectors";
+import {
+  ResolvedTextStyle,
+  namedStyleOf,
+  resolveBlockView,
+  resolveTextBlockStyle,
+} from "../model/blockStyle";
 import { findPlacement } from "../model/sheets";
 import {
   selectDocumentContent,
@@ -12,6 +24,7 @@ import {
   selectPages,
 } from "../store/freeLayoutThunks";
 import { useSequenceName } from "../components/FreeLayoutPages/useSequenceName";
+import { useTextBlockName } from "../components/FreeLayoutPages/TextBlock";
 import { useViewSelection } from "./useViewSelection";
 
 export type SelectedBlock =
@@ -30,6 +43,16 @@ export type SelectedBlock =
       sequenceKey: number;
       name: string;
       view: SequenceViewSettings;
+    }
+  | {
+      /** Un rètol (R9) */
+      kind: "text";
+      placement: TextPlacement;
+      sheetIndex: number;
+      common: boolean;
+      name: string;
+      /** L'aspecte del rètol, amb la cascada sencera */
+      style: ResolvedTextStyle;
     };
 
 /** El bloc seleccionat, o `null` si no n'hi ha cap (o ja no hi és). */
@@ -39,7 +62,9 @@ export const useSelectedBlock = (): SelectedBlock | null => {
   const content = useAppSelector(selectDocumentContent);
   const views = useAppSelector(selectResolvedSequenceViews);
   const styles = useAppSelector(selectNamedStyles);
+  const defaults = useAppSelector(selectDocumentCardDefaults);
   const sequenceName = useSequenceName();
+  const textName = useTextBlockName();
   if (!selection) return null;
 
   if (selection.kind === "sequence") {
@@ -54,6 +79,19 @@ export const useSelectedBlock = (): SelectedBlock | null => {
   }
 
   const found = pages && findPlacement(pages, selection.placementId);
+  if (found?.placement.kind === "text")
+    return {
+      kind: "text",
+      placement: found.placement,
+      sheetIndex: selection.sheetIndex,
+      common: found.location === "common",
+      name: textName(found.placement.text),
+      style: resolveTextBlockStyle(
+        defaults.font,
+        namedStyleOf(styles, found.placement.styleId),
+        found.placement,
+      ),
+    };
   if (!found || found.placement.kind !== "sequence") return null;
   const { placement } = found;
   const sequenceView = views[placement.sequenceKey];

@@ -25,6 +25,7 @@ import {
 } from "@features/free-layout/hooks/useViewSelection";
 import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
 import { usePageUniform } from "@features/free-layout/hooks/usePageUniform";
+import TextBlockLevel from "./TextBlockLevel";
 import messages from "./ViewLevels.lang";
 
 /** La icona del nivell: un bloc dins de la pàgina. */
@@ -64,6 +65,19 @@ const BlockLevel = ({
   const page = usePageUniform(block?.kind === "block" ? block.sheetIndex : 0);
   const fromPage = page.uniform && page.blockCount > 1;
   if (!block) return null;
+
+  // Un rètol té els seus ajustos: el text i la lletra
+  if (block.kind === "text")
+    return (
+      <TextBlockLevel
+        placement={block.placement}
+        name={block.name}
+        common={block.common}
+        style={block.style}
+        expanded={expanded}
+        onExpandedChange={onExpandedChange}
+      />
+    );
 
   /** El que diu el nivell en lloc dels ajustos, quan els porta la pàgina. */
   const pageRules = (

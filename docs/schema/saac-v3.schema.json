@@ -248,7 +248,7 @@
         },
         "template": {
           "type": "string",
-          "description": "La plantilla de la pàgina (R2): \"full\", \"rows-N\", \"columns-N\", \"grid-CxR\", \"strip-top\"… Es recorda també en automàtica. Un id que l'app no coneix es conserva."
+          "description": "La plantilla de la pàgina (R2): \"full\", \"rows-N\", \"columns-N\", \"grid-CxR\", \"strip-top\" o les dels treballs reals (R3): \"agenda-strip\", \"today-agenda\", \"first-then\", \"week\", \"token-board\", \"story-page\", \"menu\". Algunes tenen espais de rètol, on van els blocs de text. Es recorda també en automàtica. Un id que l'app no coneix es conserva."
         },
         "blocks": {
           "type": "array",

@@ -18,9 +18,9 @@ import {
 import { useIntl } from "react-intl";
 import { useAppDispatch } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
-import PictogramCard from "@components/PictogramCard/PictogramCard";
-import type { PictogramCardDefaults, Sequence } from "@/types/sequence";
-import type { SequencePlacement, SequenceViewSettings } from "@/types/document";
+import type { Theme } from "@mui/material";
+import type { SystemStyleObject } from "@mui/system";
+import type { BoxedPlacement } from "@features/free-layout/model/placement";
 import { mmToPixelsExact } from "@features/print/utils/pageUnits";
 import { CSS_PRINT_DPI } from "@features/print/utils/pageFormat";
 import {
@@ -30,53 +30,49 @@ import {
   sheetWarning,
 } from "@/style/palette";
 import {
-  blockGrid,
-  resolveColumns,
-} from "@features/free-layout/model/blockGrid";
-import type { Arrangement } from "@features/free-layout/model/templates";
-import {
   copyPlacementToSheetThunk,
   removePlacementThunk,
   setPlacementCommonThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
-import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
-import type { CardBaseSize } from "./CardBaseMeasurer";
 import messages from "./FreeLayoutPages.lang";
 
 /** El botó del menú, a la pantalla, en px: el full s'escala, el botó no. */
 const MENU_BUTTON_PX = 36;
 
-const px = (mm: number): number => mmToPixelsExact(mm, CSS_PRINT_DPI);
+export const px = (mm: number): number => mmToPixelsExact(mm, CSS_PRINT_DPI);
 
 /** Marques d'edició damunt del full: mai al paper ni al PDF. */
-const editMarkSx = {
+export const editMarkSx = {
   "@media print": { display: "none" },
 } as const;
 
 interface PlacementBoxProps {
-  placement: SequencePlacement;
+  placement: BoxedPlacement;
   /** La pàgina on es pinta (una comuna es pinta a totes) */
   sheetIndex: number;
   sheetCount: number;
   common: boolean;
+  /** El nom del bloc als missatges: el de la seqüència o el text del rètol */
   name: string;
-  pictograms: Sequence;
-  /** La vista del bloc, ja resolta amb la cascada: la mida hi és el màxim (Q2) */
-  view: SequenceViewSettings;
-  cardBase: CardBaseSize | undefined;
-  defaults: PictogramCardDefaults;
-  /** El repartiment de la pàgina: decideix les columnes automàtiques del bloc */
-  arrangement?: Arrangement["kind"];
+  /** El nom accessible de la caixa, que la selecciona */
+  label: string;
+  /** El nom accessible del botó del menú */
+  actionsLabel: string;
+  /** La marca «no hi cap»: els pictogrames passarien per sota del mínim */
+  belowMinimum?: boolean;
+  /** Com es col·loca el contingut dins de la caixa */
+  contentSx: SystemStyleObject<Theme>;
   /** L'escala del full a la pantalla: el botó del menú es pinta a mida de pantalla */
   scale: number;
   selected: boolean;
   onSelect: () => void;
+  /** El contingut: les targetes d'una seqüència o el text d'un rètol */
+  children: React.ReactNode;
 }
 
 /**
- * Un bloc de seqüència en una pàgina: la caixa, amb la graella de pictogrames
- * que hi cap sense passar de la mida del bloc (Q2, ADR-005), i el menú de les
- * seves accions.
+ * Un bloc en una pàgina: la caixa, amb el seu contingut (`SequenceBlock`,
+ * `TextBlock`), i el menú de les seves accions.
  *
  * Clicar la caixa (o Enter i Espai) la **selecciona** (R5): es marca i la
  * columna n'ensenya els ajustos. El menú («A totes les pàgines», «Copia a la
@@ -91,14 +87,14 @@ const PlacementBox = ({
   sheetCount,
   common,
   name,
-  pictograms,
-  view,
-  cardBase,
-  defaults,
+  label,
+  actionsLabel,
+  belowMinimum = false,
+  contentSx,
   scale,
-  arrangement,
   selected,
   onSelect,
+  children,
 }: PlacementBoxProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -106,25 +102,12 @@ const PlacementBox = ({
   const menuId = useId();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
-  const { grid, gapPx } = blockGrid({
-    count: pictograms.length,
-    card: cardBase,
-    view,
-    box: { w: placement.w, h: placement.h },
-    columns: resolveColumns(placement.columns, arrangement, pictograms.length),
-  });
-
   const close = () => setAnchor(null);
   const run = (action: () => void) => {
     close();
     action();
   };
 
-  const label = intl.formatMessage(messages.placementLabel, {
-    name,
-    count: pictograms.length,
-    common: String(common),
-  });
   // A mida de pantalla: dins del full escalat, es divideix per l'escala
   const buttonPx = MENU_BUTTON_PX / Math.max(scale, 0.01);
 
@@ -161,13 +144,7 @@ const PlacementBox = ({
         sx={{
           position: "absolute",
           inset: 0,
-          display: "grid",
-          gridTemplateColumns: `repeat(${Math.max(1, grid.columns)}, max-content)`,
-          columnGap: `${gapPx}px`,
-          rowGap: `${gapPx}px`,
-          justifyContent: ALIGN_H[view.alignmentH],
-          alignContent: ALIGN_V[view.alignmentV],
-          alignItems: "start",
+          ...contentSx,
           cursor: "pointer",
           outline: "none",
           ...(!selected && {
@@ -178,16 +155,7 @@ const PlacementBox = ({
           }),
         }}
       >
-        {pictograms.map((pictogram) => (
-          <PictogramCard
-            key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
-            pictogram={pictogram}
-            view="complete"
-            defaults={defaults}
-            variant="plane"
-            size={{ pictSize: grid.size, scale: 1 }}
-          />
-        ))}
+        {children}
 
         {/* El contorn i les marques, per damunt de les targetes */}
         <Box
@@ -226,7 +194,7 @@ const PlacementBox = ({
               {intl.formatMessage(messages.commonMark)}
             </Box>
           )}
-          {grid.belowMinimum && (
+          {belowMinimum && (
             <Box
               component="span"
               sx={{
@@ -246,11 +214,11 @@ const PlacementBox = ({
 
       {/* El menú del bloc: es veu amb el bloc seleccionat, en passar-hi per
           sobre o amb el focus; amb el teclat, s'hi arriba just després */}
-      <Tooltip title={intl.formatMessage(messages.placementActions, { name })}>
+      <Tooltip title={actionsLabel}>
         <IconButton
           className="placement-menu"
           data-html2canvas-ignore
-          aria-label={intl.formatMessage(messages.placementActions, { name })}
+          aria-label={actionsLabel}
           aria-haspopup="menu"
           aria-expanded={anchor !== null}
           aria-controls={anchor ? menuId : undefined}

@@ -61,6 +61,7 @@ const withoutPlacement = (
   pages: DocumentPages,
   placementId: string,
 ): DocumentPages => ({
+  ...pages,
   sheets: pages.sheets.map((sheet) => ({
     ...sheet,
     placements: sheet.placements.filter(({ id }) => id !== placementId),
@@ -186,6 +187,7 @@ export const updatePlacement = (
       placement.id === placementId ? change(placement) : placement,
     );
   return {
+    ...pages,
     sheets: pages.sheets.map((sheet) => ({
       ...sheet,
       placements: apply(sheet.placements),
@@ -262,6 +264,7 @@ export const removeSequencePlacements = (
   const keep = (placement: PagePlacement) =>
     placement.kind !== "sequence" || placement.sequenceKey !== sequenceKey;
   return {
+    ...pages,
     sheets: pages.sheets.map((sheet) => ({
       ...sheet,
       placements: sheet.placements.filter(keep),

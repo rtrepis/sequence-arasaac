@@ -1,5 +1,5 @@
 import React from "react";
-import { MenuItem, Select, Slider, Typography } from "@mui/material";
+import { MenuItem, Select, Slider } from "@mui/material";
 import {
   MdAdd,
   MdCropPortrait,
@@ -27,6 +27,8 @@ import {
   SHAPED_TEMPLATES,
   arrangementOf,
   arrangementTemplate,
+  closestTemplate,
+  templateFits,
 } from "@features/free-layout/model/templates";
 import {
   addSheetThunk,
@@ -39,7 +41,11 @@ import {
 } from "@features/free-layout/store/freeLayoutThunks";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
 import PageActionsMenu from "@features/free-layout/components/FreeLayoutPages/PageActionsMenu";
-import { TEMPLATE_NAMES } from "@features/free-layout/components/FreeLayoutPages/templateNames";
+import {
+  TEMPLATE_NAMES,
+  TEMPLATE_SLOT_TEXTS,
+} from "@features/free-layout/components/FreeLayoutPages/templateNames";
+import TemplatePicker from "@features/free-layout/components/TemplatePicker";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import PagePictograms from "./PagePictograms";
 import messages from "./ViewLevels.lang";
@@ -97,7 +103,7 @@ const PageLevel = ({
   const layout = useAppSelector(selectPageLayout);
   const documentGap =
     useAppSelector(selectDocumentStyle).view.sequenceSpaceBetween;
-  const { activePage } = useViewSelection();
+  const { activePage, setTemplatePreview } = useViewSelection();
 
   const sheet = pages?.sheets[activePage];
   const total = pages?.sheets.length ?? 1;
@@ -140,17 +146,32 @@ const PageLevel = ({
           count,
         });
 
+  // El text amb què neixen els rètols d'una plantilla, a l'idioma de la interfície
+  const labelText = (label: string): string =>
+    TEMPLATE_SLOT_TEXTS[label]
+      ? intl.formatMessage(TEMPLATE_SLOT_TEXTS[label])
+      : "";
   const applyTemplate = (template: LayoutTemplate | undefined) => {
-    // Torna a repartir la pàgina: surt el snackbar amb «Desfés»
-    if (template) dispatch(applyTemplateThunk(index, template));
+    // Torna a repartir la pàgina: surt el snackbar amb «Desfés». Les guies de
+    // la previsualització ja no fan falta
+    if (!template) return;
+    setTemplatePreview(null);
+    dispatch(applyTemplateThunk(index, template, labelText));
   };
-  const shapedTemplates = SHAPED_TEMPLATES.filter(
-    ({ slots }) => slots.length >= count,
+  const shapedTemplates = SHAPED_TEMPLATES.filter((template) =>
+    templateFits(template, sheet?.placements ?? []),
   );
   const changeArrangementKind = (kind: Arrangement["kind"]) => {
     if (kind === arrangement.kind) return;
     if (kind === "template") {
-      applyTemplate(shapedTemplates[0]);
+      // Cap plantilla no té lloc per a totes les seqüències: es diu, i no canvia res
+      if (shapedTemplates.length === 0)
+        showSnackbar({
+          message: intl.formatMessage(pageMessages.templateNone),
+          severity: "info",
+        });
+      // La que s'hi ajusta més: no n'estrena més espais (ni rètols) dels que calen
+      applyTemplate(closestTemplate(shapedTemplates));
       return;
     }
     // De columnes a files (o al revés) es queda el nombre; si no, dues
@@ -325,38 +346,24 @@ const PageLevel = ({
             <SettingRow
               title={<FormattedMessage {...pageMessages.template} />}
               labelId={`${LABEL_ID}-template`}
+              helperId={`${LABEL_ID}-template-helper`}
+              helper={<FormattedMessage {...messages.templateHelp} />}
+              control="block"
             >
-              {shapedTemplates.length === 0 ? (
-                <Typography variant="body2" color="text.secondary">
-                  <FormattedMessage {...pageMessages.templateNone} />
-                </Typography>
-              ) : (
-                <Select<string>
-                  value={
-                    shapedTemplates.some(({ id }) => id === arrangement.id)
-                      ? (arrangement.id ?? "")
-                      : ""
-                  }
-                  displayEmpty
-                  renderValue={templateName}
-                  onChange={(event) =>
-                    applyTemplate(
-                      shapedTemplates.find(
-                        ({ id }) => id === event.target.value,
-                      ),
-                    )
-                  }
-                  size="small"
-                  fullWidth
-                  labelId={`${LABEL_ID}-template`}
-                >
-                  {shapedTemplates.map(({ id }) => (
-                    <MenuItem key={id} value={id}>
-                      {templateName(id)}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
+              <TemplatePicker
+                templates={SHAPED_TEMPLATES}
+                value={arrangement.id}
+                placements={sheet?.placements ?? []}
+                landscape={(layout.orientation ?? "landscape") === "landscape"}
+                labelId={`${LABEL_ID}-template`}
+                helperId={`${LABEL_ID}-template-helper`}
+                onApply={applyTemplate}
+                onPreview={(template) =>
+                  setTemplatePreview(
+                    template ? { sheetIndex: index, template } : null,
+                  )
+                }
+              />
             </SettingRow>
           )}
         </>

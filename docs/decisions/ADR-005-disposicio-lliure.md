@@ -120,6 +120,19 @@ fase 3 va fer veure que no n'hi ha prou:
     una plantilla. Un bloc comú no segueix el repartiment de cap pàgina. Un document sense pàgines (`sheets`) continua sent la
     pàgina contínua de sempre; afegir-hi una pàgina o passar-la a blocs el fa explícit
     (`explicitPages`).
+20. **Plantilles dels treballs reals, amb espais de rètol** (R3, R4; 2026-11-08). El selector
+    «Amb una plantilla» ofereix les plantilles de l'estudi (`agenda-strip`, `today-agenda`,
+    `first-then`, `week`, `token-board`, `story-page`, `menu`), cadascuna amb el nom del treball i
+    una miniatura. Un espai pot ser de **rètol** (`kind: "text"`): les seqüències només van als
+    espais de seqüència, els rètols als seus i, si en sobren, als de seqüència que quedin; en una
+    plantilla sense espais de rètol, un rètol ocupa un espai com qualsevol bloc. **Aplicar una
+    plantilla des de la columna estrena un rètol a cada espai de rètol buit**, amb el text de
+    l'espai («Primer», «Dilluns»…) a l'idioma de la interfície, en negreta i a mida 1,25; un cop
+    creat, és contingut i no es tradueix. Una plantilla es pot triar si hi caben les seqüències de
+    la pàgina. En passar a «Amb una plantilla», la pàgina pren **la que s'hi ajusta més** (la que
+    té menys espais de seqüència on hi caben totes), perquè no n'estreni més espais ni rètols dels
+    que calen. `grid-2x2` i `strip-top` ja no s'ofereixen, però es continuen llegint. Els `id`
+    nous són d'un camp de text lliure: el format no canvia.
 
 ## Alternatives descartades
 
@@ -170,3 +183,5 @@ fase 3 va fer veure que no n'hi ha prou:
   col·locacions `{ id, sequence, x, y, w, h, columns }`; la plantilla no es desava; la mida la manava
   la caixa; en flux, la disposició lliure es conservava a l'app però no s'escrivia. Cap versió
   publicada no va escriure aquest format.
+- **2026-11-08** (R4): les plantilles dels treballs reals i els espais de rètol (decisió 20). Els
+  rètols es pinten al full, a la impressió i al PDF, i s'editen al nivell «Rètol» de la columna.

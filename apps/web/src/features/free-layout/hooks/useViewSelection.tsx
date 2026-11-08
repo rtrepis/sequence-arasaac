@@ -12,6 +12,7 @@ import React, {
 import { useAppSelector } from "@/app/hooks";
 import { findPlacement } from "../model/sheets";
 import type { CardPx } from "../model/blockGrid";
+import type { LayoutTemplate } from "../model/templates";
 import {
   selectHasPages,
   selectPages,
@@ -29,6 +30,16 @@ export const VIEW_BLOCK_LEVEL_ID = "view-level-block";
 export type ViewSelection =
   | { kind: "block"; placementId: string; sheetIndex: number }
   | { kind: "sequence"; sequenceKey: number };
+
+/**
+ * La plantilla que es previsualitza a una pàgina (R4): en passar per damunt
+ * d'una opció del selector, en anar-hi amb el teclat o en mantenir-la premuda.
+ * La pàgina en dibuixa els espais com a guies, sense moure res.
+ */
+export interface TemplatePreview {
+  sheetIndex: number;
+  template: LayoutTemplate;
+}
 
 interface ViewSelectionValue {
   selection: ViewSelection | null;
@@ -49,6 +60,8 @@ interface ViewSelectionValue {
    */
   uniformChoice: Record<string, boolean>;
   setUniformChoice: (pageId: string, uniform: boolean) => void;
+  templatePreview: TemplatePreview | null;
+  setTemplatePreview: (preview: TemplatePreview | null) => void;
 }
 
 const noop = (): void => undefined;
@@ -64,6 +77,8 @@ const ViewSelectionContext = createContext<ViewSelectionValue>({
   setCardSizes: noop,
   uniformChoice: {},
   setUniformChoice: noop,
+  templatePreview: null,
+  setTemplatePreview: noop,
 });
 
 /** El mateix element seleccionat? Serveix per saber si una caixa està marcada. */
@@ -107,6 +122,9 @@ export const ViewSelectionProvider = ({
     [],
   );
 
+  const [templatePreview, setTemplatePreview] =
+    useState<TemplatePreview | null>(null);
+
   const sheetCount = isFree && pages ? pages.sheets.length : 1;
 
   // Un bloc tret, una seqüència esborrada o un canvi de disposició deixen la
@@ -145,8 +163,18 @@ export const ViewSelectionProvider = ({
       setCardSizes,
       uniformChoice,
       setUniformChoice,
+      templatePreview,
+      setTemplatePreview,
     }),
-    [current, clear, activePage, cardSizes, uniformChoice, setUniformChoice],
+    [
+      current,
+      clear,
+      activePage,
+      cardSizes,
+      uniformChoice,
+      setUniformChoice,
+      templatePreview,
+    ],
   );
 
   return (
