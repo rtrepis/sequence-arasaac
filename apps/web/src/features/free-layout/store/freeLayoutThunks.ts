@@ -27,8 +27,10 @@ import {
 import { newSaacId } from "@features/sequence/saac/serialize";
 import { SheetArea, sheetAreaMm } from "../model/placement";
 import {
+  addPlacementsToSheet,
   addSequencesToSheet,
   applyTemplateToSheet,
+  newTextPlacement,
   sheetToTemplate,
 } from "../model/distribute";
 import {
@@ -177,22 +179,55 @@ export const setLicenceOnThunk = (licenceOn: LicenceOn): AppThunk =>
     ...(licenceOn === "last" && { licenceOn }),
   }));
 
-/** Afegeix seqüències a una pàgina i la torna a repartir (es pot desfer). */
+/**
+ * Afegeix seqüències a una pàgina i la torna a repartir (es pot desfer). Amb
+ * `slot`, la primera va a aquell espai si és lliure (un bloc buit del full).
+ */
 export const addSequencesToSheetThunk =
-  (sheetIndex: number, sequenceKeys: readonly number[]): AppThunk =>
+  (
+    sheetIndex: number,
+    sequenceKeys: readonly number[],
+    slot?: number,
+  ): AppThunk =>
   (dispatch, getState) => {
     const direction = selectPageLayout(getState()).direction ?? "row";
     dispatch(
       changeFreeLayout(
         (layout, area) =>
-          addSequencesToSheet(layout, sheetIndex, sequenceKeys, {
-            area,
-            direction,
-            newId: newLayoutId,
-          }),
+          addSequencesToSheet(
+            layout,
+            sheetIndex,
+            sequenceKeys,
+            { area, direction, newId: newLayoutId },
+            slot,
+          ),
         "layoutAddSequences",
       ),
     );
+  };
+
+/**
+ * Afegeix un rètol buit a una pàgina (un bloc de text, R9): al primer espai de
+ * rètol lliure o, amb `slot`, a aquell espai. Torna l'`id` del rètol nou, per
+ * seleccionar-lo i escriure-hi a la columna.
+ */
+export const addTextBlockThunk =
+  (sheetIndex: number, slot?: number): AppThunk<string> =>
+  (dispatch, getState) => {
+    const direction = selectPageLayout(getState()).direction ?? "row";
+    const placement = newTextPlacement("", newLayoutId);
+    dispatch(
+      changeFreeLayout((layout, area) =>
+        addPlacementsToSheet(
+          layout,
+          sheetIndex,
+          [placement],
+          { area, direction, newId: newLayoutId },
+          slot,
+        ),
+      ),
+    );
+    return placement.id;
   };
 
 /**

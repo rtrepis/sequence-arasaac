@@ -22,6 +22,8 @@ import messages from "./AddSequenceDialog.lang";
 interface AddSequenceDialogProps {
   /** La pàgina on s'afegeixen; `null`, tancat */
   sheetIndex: number | null;
+  /** L'espai de la plantilla on va la primera (un bloc buit del full) */
+  slot?: number;
   onClose: () => void;
 }
 
@@ -36,6 +38,7 @@ interface AddSequenceDialogProps {
  */
 const AddSequenceDialog = ({
   sheetIndex,
+  slot,
   onClose,
 }: AddSequenceDialogProps): React.ReactElement => {
   const intl = useIntl();
@@ -104,6 +107,7 @@ const AddSequenceDialog = ({
       addSequencesToSheetThunk(
         sheetIndex,
         keys.filter((key) => chosen.includes(key)),
+        slot,
       ),
     );
     onClose();

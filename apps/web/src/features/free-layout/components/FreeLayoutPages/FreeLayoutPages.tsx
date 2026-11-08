@@ -28,9 +28,10 @@ import {
   selectDocumentCardDefaults,
   selectResolvedSequenceViews,
 } from "@features/sequence/style/styleSelectors";
-import type { PagePlacement } from "@/types/document";
+import type { DocumentSheet, PagePlacement } from "@/types/document";
 import {
   addSheetThunk,
+  addTextBlockThunk,
   selectDocumentContent,
   selectNamedStyles,
   selectPageLayout,
@@ -54,7 +55,11 @@ import CardBaseMeasurer from "./CardBaseMeasurer";
 import {
   arrangementOf,
   freeRegion,
+  freeSlots,
+  slotToBox,
+  templateById,
 } from "@features/free-layout/model/templates";
+import EmptySlot from "./EmptySlot";
 import { isBoxed } from "@features/free-layout/model/placement";
 import AutoSheetFlow from "./AutoSheetFlow";
 import PageHeader from "./PageHeader";
@@ -183,7 +188,11 @@ const FreeLayoutPages = ({
   const theme = useTheme();
   // Al mòbil la columna és sota les pàgines: el bloc seleccionat hi porta
   const isNarrow = useMediaQuery(theme.breakpoints.down("md"));
-  const [addingTo, setAddingTo] = useState<number | null>(null);
+  // On s'afegeixen seqüències: la pàgina i, des d'un bloc buit, l'espai
+  const [addingTo, setAddingTo] = useState<{
+    sheetIndex: number;
+    slot?: number;
+  } | null>(null);
   const sections = useRef<(HTMLElement | null)[]>([]);
   const pageIds = freeLayout?.sheets.map(({ id }) => id).join() ?? "";
   const onVisible = useCallback(
@@ -204,6 +213,18 @@ const FreeLayoutPages = ({
   // La part del full que deixen lliure els comuns: hi van els espais de les
   // plantilles, i també les guies de la que es previsualitza
   const region = freeRegion(area, freeLayout.common.filter(isBoxed));
+
+  // Els espais de la plantilla que cap bloc no ocupa, amb la seva caixa
+  const emptySlotsOf = (sheet: DocumentSheet) => {
+    const template = sheet.template
+      ? templateById(sheet.template, sheet.placements.filter(isBoxed).length)
+      : undefined;
+    if (!template) return [];
+    return freeSlots(template, sheet.placements).map((slot) => ({
+      slot,
+      box: slotToBox(template.slots[slot], region),
+    }));
+  };
 
   // Els blocs que l'app no entén no es pinten: es conserven al document
   const renderPlacement = (
@@ -315,10 +336,9 @@ const FreeLayoutPages = ({
             <PageHeader
               sheetIndex={sheetIndex}
               sheetCount={sheetCount}
-              placementCount={sheet.placements.length}
               continuous={continuous}
               active={active}
-              onAddSequence={() => setAddingTo(sheetIndex)}
+              onAddSequence={() => setAddingTo({ sheetIndex })}
             />
 
             {/* Al mòbil, seleccionar no mou la pàgina (P9): l'enllaç baixa als ajustos */}
@@ -380,6 +400,31 @@ const FreeLayoutPages = ({
                       renderPlacement(placement, sheetIndex, false),
                     )}
 
+                  {/* Els espais lliures del repartiment: blocs buits per omplir */}
+                  {!continuous &&
+                    emptySlotsOf(sheet).map(({ slot, box }) => (
+                      <EmptySlot
+                        key={`empty-${slot}`}
+                        box={box}
+                        number={slot + 1}
+                        scale={scale}
+                        onAddSequence={() => setAddingTo({ sheetIndex, slot })}
+                        onAddText={() => {
+                          const placementId = dispatch(
+                            addTextBlockThunk(sheetIndex, slot),
+                          );
+                          select({ kind: "block", placementId, sheetIndex });
+                          showSnackbar({
+                            message: intl.formatMessage(
+                              messages.textBlockAdded,
+                              { number: sheetIndex + 1 },
+                            ),
+                            severity: "success",
+                          });
+                        }}
+                      />
+                    ))}
+
                   {templatePreview?.sheetIndex === sheetIndex && (
                     <TemplateGuides
                       template={templatePreview.template}
@@ -410,7 +455,7 @@ const FreeLayoutPages = ({
                         variant="contained"
                         size="large"
                         startIcon={<MdOutlineLibraryAdd />}
-                        onClick={() => setAddingTo(sheetIndex)}
+                        onClick={() => setAddingTo({ sheetIndex })}
                       >
                         {intl.formatMessage(messages.addSequence)}
                       </StyledButton>
@@ -438,7 +483,8 @@ const FreeLayoutPages = ({
       </Box>
 
       <AddSequenceDialog
-        sheetIndex={addingTo}
+        sheetIndex={addingTo?.sheetIndex ?? null}
+        slot={addingTo?.slot}
         onClose={() => setAddingTo(null)}
       />
     </Stack>

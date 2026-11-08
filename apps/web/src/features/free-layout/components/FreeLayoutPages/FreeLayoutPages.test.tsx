@@ -4,6 +4,7 @@ import {
   renderWithProviders,
   screen,
   userEvent,
+  within,
 } from "@/test/renderWithProviders";
 import { sequenceFixture } from "@/test/fixtures/document";
 import type { DocumentSAAC } from "@/types/document";
@@ -315,5 +316,68 @@ describe("rètols i previsualització de plantilles (R4, R9)", () => {
     expect(
       screen.getAllByRole("button", { name: /^Sequence 2, 3 pictograms$/ }),
     ).toHaveLength(2);
+  });
+});
+
+describe("el menú de la pàgina i els blocs buits", () => {
+  const storyPage = (): DocumentSAAC => {
+    const document = freeDocument();
+    if (!document.pages) throw new Error("falten les pàgines");
+    return {
+      ...document,
+      pages: {
+        sheets: [
+          {
+            id: "sh_1",
+            mode: "template",
+            template: "story-page",
+            placements: [{ ...placement("pl_1", 1), slot: 0 }],
+          },
+        ],
+        common: [],
+      },
+    };
+  };
+
+  it("els espais lliures de la plantilla ofereixen un text o una seqüència", async () => {
+    renderPages(storyPage());
+    expect(screen.getByRole("group", { name: "Empty space 2" })).toBeVisible();
+    expect(screen.getByRole("group", { name: "Empty space 3" })).toBeVisible();
+
+    const empty = screen.getByRole("group", { name: "Empty space 2" });
+    await userEvent.click(
+      within(empty).getByRole("button", { name: "Add text" }),
+    );
+
+    // El rètol nou ocupa l'espai i queda seleccionat
+    expect(
+      screen.queryByRole("group", { name: "Empty space 2" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Label: Empty label" }),
+    ).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("el menú «⋯» té la disposició, afegir un bloc i les plantilles", async () => {
+    renderPages(storyPage());
+    await userEvent.click(
+      screen.getByRole("button", { name: "More page actions" }),
+    );
+    const menu = screen.getByRole("menu");
+    expect(
+      within(menu).getByRole("menuitemradio", { name: "In blocks" }),
+    ).toHaveAttribute("aria-checked", "true");
+    expect(
+      within(menu).getByRole("menuitem", { name: "Text block" }),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      within(menu).getByRole("menuitem", { name: "Template…" }),
+    );
+    const templates = screen.getByRole("dialog", {
+      name: "Templates for page 1",
+    });
+    expect(
+      within(templates).getByRole("button", { name: "Story page" }),
+    ).toHaveAttribute("aria-pressed", "true");
   });
 });

@@ -6,25 +6,13 @@ import {
   screen,
   userEvent,
 } from "@/test/renderWithProviders";
-import type { SequencePlacement } from "@/types/document";
 import { SHAPED_TEMPLATES } from "@features/free-layout/model/templates";
 import TemplatePicker, { LONG_PRESS_MS } from "./TemplatePicker";
 
 // El selector de plantilles amb miniatures (R4): aplicar amb el clic, veure-la
 // a la pàgina en passar-hi per damunt, amb el teclat o mantenint-la premuda.
 
-const sequence = (id: string): SequencePlacement => ({
-  kind: "sequence",
-  id,
-  sequenceKey: 0,
-  x: 0,
-  y: 0,
-  w: 10,
-  h: 10,
-  columns: "auto",
-});
-
-const renderPicker = (count = 1, value?: string) => {
+const renderPicker = (value?: string) => {
   const onApply = vi.fn();
   const onPreview = vi.fn();
   renderWithProviders(
@@ -33,7 +21,6 @@ const renderPicker = (count = 1, value?: string) => {
       <TemplatePicker
         templates={SHAPED_TEMPLATES}
         value={value}
-        placements={Array.from({ length: count }, (_, i) => sequence(`s${i}`))}
         landscape={false}
         labelId="tpl-label"
         onApply={onApply}
@@ -58,7 +45,7 @@ describe("TemplatePicker", () => {
   });
 
   it("el clic l'aplica; la que ja té la pàgina, marcada i sense efecte", async () => {
-    const { onApply } = renderPicker(1, "week");
+    const { onApply } = renderPicker("week");
     await userEvent.click(screen.getByRole("button", { name: "Menu" }));
     expect(onApply).toHaveBeenCalledWith(
       expect.objectContaining({ id: "menu" }),
@@ -82,15 +69,18 @@ describe("TemplatePicker", () => {
     );
   });
 
-  it("on no caben les seqüències, no es pot triar ni s'ensenya", async () => {
-    // Tres seqüències: «Primer / Després» només en té dos espais
-    const { onApply, onPreview } = renderPicker(3);
+  it("cap plantilla no està apagada: totes es poden veure i triar", async () => {
+    const { onApply, onPreview } = renderPicker();
+    screen
+      .getAllByRole("button")
+      .forEach((button) => expect(button).not.toHaveAttribute("aria-disabled"));
     const firstThen = screen.getByRole("button", { name: "First / Then" });
-    expect(firstThen).toHaveAttribute("aria-disabled", "true");
     await userEvent.hover(firstThen);
+    expect(onPreview).toHaveBeenLastCalledWith(
+      expect.objectContaining({ id: "first-then" }),
+    );
     await userEvent.click(firstThen);
-    expect(onApply).not.toHaveBeenCalled();
-    expect(onPreview).not.toHaveBeenCalledWith(
+    expect(onApply).toHaveBeenCalledWith(
       expect.objectContaining({ id: "first-then" }),
     );
   });

@@ -22,6 +22,7 @@ import {
   assignSlots,
   freeRegion,
   freeSlots,
+  overflowOf,
   slotToBox,
   templateById,
   templateFor,
@@ -101,7 +102,14 @@ const sheetWithTemplate = (
   labels?: LabelContext,
 ): DocumentSheet => {
   const region = freeRegion(area, pages.common.filter(isBoxed));
-  const placements = applyTemplate(sheet.placements, template, region);
+  // Els que no hi caben surten de la pàgina: qui ho ofereix ho ha avisat abans
+  // (`overflowOf`). La seqüència continua al document
+  const dropped = new Set(overflowOf(template, sheet.placements));
+  const placements = applyTemplate(
+    sheet.placements.filter(({ id }) => !dropped.has(id)),
+    template,
+    region,
+  );
   const created: TextPlacement[] = labels
     ? freeSlots(template, placements, "text").map((index) => {
         const slot = template.slots[index];
@@ -138,27 +146,27 @@ export const applyTemplateToSheet = (
     : pages;
 
 /**
- * Afegeix les seqüències a una pàgina. Les seqüències no surten d'on eren: en
- * fa un bloc nou a aquesta pàgina, encara que ja en tinguin en una altra.
+ * Afegeix blocs nous (encara sense caixa) a una pàgina. Els blocs que hi eren
+ * no surten d'on eren.
  *
- * - **Pàgina automàtica**: van al final, una darrere l'altra.
+ * - **Pàgina automàtica**: van al final, un darrere l'altre.
  * - **Pàgina amb plantilla** (R2): omplen els espais lliures de la plantilla que
- *   té, en ordre, i els blocs que ja hi eren no es mouen. Si no hi caben, o la
- *   pàgina no té cap plantilla que l'app conegui, es torna a repartir sencera
- *   amb la plantilla que toca per al nombre nou de blocs, que passa a ser la
- *   seva.
+ *   té, en ordre, i els blocs que ja hi eren no es mouen. Una seqüència només va
+ *   als espais de seqüència; un rètol, primer als de rètol i després als altres.
+ *   Amb `slot`, el primer bloc va a aquell espai si és lliure (un bloc buit del
+ *   full, R4). Si no hi caben, o la pàgina no té cap plantilla que l'app
+ *   conegui, es torna a repartir sencera amb la plantilla que toca per al
+ *   nombre nou de blocs, que passa a ser la seva.
  */
-export const addSequencesToSheet = (
+export const addPlacementsToSheet = (
   pages: DocumentPages,
   sheetIndex: number,
-  sequenceKeys: readonly number[],
+  added: readonly (SequencePlacement | TextPlacement)[],
   context: DistributeContext,
+  slot?: number,
 ): DocumentPages => {
   const sheet = pages.sheets[sheetIndex];
-  if (!sheet || sequenceKeys.length === 0) return pages;
-  const added = sequenceKeys.map((key) =>
-    newSequencePlacement(key, context.newId),
-  );
+  if (!sheet || added.length === 0) return pages;
   const placements = [...sheet.placements, ...added];
   if (sheet.mode === "auto")
     return mapSheet(pages, sheetIndex, () => ({ ...sheet, placements }));
@@ -167,24 +175,42 @@ export const addSequencesToSheet = (
   const template = sheet.template
     ? templateById(sheet.template, sheet.placements.filter(isBoxed).length)
     : undefined;
-  // Les seqüències només omplen espais de seqüència: els de rètol són dels rètols
-  const free = template
-    ? freeSlots(template, sheet.placements, "sequence")
-    : [];
-  if (template && free.length >= added.length) {
-    const boxOf = new Map<string, SlotBox>(
-      added.map((placement, index) => [
-        placement.id,
-        {
-          ...slotToBox(template.slots[free[index]], region),
-          slot: free[index],
-        },
-      ]),
-    );
-    return mapSheet(pages, sheetIndex, () => ({
-      ...sheet,
-      placements: withBoxes(placements, boxOf),
-    }));
+  if (template) {
+    const taken = new Set<number>();
+    const pick = (
+      placement: SequencePlacement | TextPlacement,
+      index: number,
+    ): number | undefined => {
+      const free = (kind?: "sequence" | "text") =>
+        freeSlots(template, sheet.placements, kind).filter(
+          (candidate) => !taken.has(candidate),
+        );
+      if (index === 0 && slot !== undefined && free().includes(slot))
+        return slot;
+      return placement.kind === "text"
+        ? (free("text")[0] ?? free("sequence")[0])
+        : free("sequence")[0];
+    };
+    const chosen = added.map((placement, index) => {
+      const found = pick(placement, index);
+      if (found !== undefined) taken.add(found);
+      return found;
+    });
+    if (chosen.every((found) => found !== undefined)) {
+      const boxOf = new Map<string, SlotBox>(
+        added.map((placement, index) => {
+          const found = chosen[index] as number;
+          return [
+            placement.id,
+            { ...slotToBox(template.slots[found], region), slot: found },
+          ];
+        }),
+      );
+      return mapSheet(pages, sheetIndex, () => ({
+        ...sheet,
+        placements: withBoxes(placements, boxOf),
+      }));
+    }
   }
 
   // Els que ja hi eren, en ordre de lectura; els nous, al final
@@ -206,6 +232,26 @@ export const addSequencesToSheet = (
     placements: withBoxes(placements, assignSlots(ordered, next, region)),
   }));
 };
+
+/**
+ * Afegeix les seqüències a una pàgina (`addPlacementsToSheet`). Les seqüències
+ * no surten d'on eren: en fa un bloc nou a aquesta pàgina, encara que ja en
+ * tinguin en una altra.
+ */
+export const addSequencesToSheet = (
+  pages: DocumentPages,
+  sheetIndex: number,
+  sequenceKeys: readonly number[],
+  context: DistributeContext,
+  slot?: number,
+): DocumentPages =>
+  addPlacementsToSheet(
+    pages,
+    sheetIndex,
+    sequenceKeys.map((key) => newSequencePlacement(key, context.newId)),
+    context,
+    slot,
+  );
 
 /**
  * La pàgina, amb caixes. Una pàgina que ja en té no canvia. Una d'automàtica:

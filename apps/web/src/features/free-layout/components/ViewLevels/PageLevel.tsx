@@ -1,7 +1,6 @@
 import React from "react";
 import { MenuItem, Select, Slider } from "@mui/material";
 import {
-  MdAdd,
   MdCropPortrait,
   MdOutlineDashboard,
   MdTableRows,
@@ -11,8 +10,6 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
-import StyledButton from "@/style/StyledButton";
-import { useFeedback } from "@/context/FeedbackContext";
 import type { SheetMode } from "@/types/document";
 import type { SequenceDirection } from "@/types/ui";
 import { IconToggleButton, SettingRow } from "@/components/SettingsLayout";
@@ -28,11 +25,10 @@ import {
   arrangementOf,
   arrangementTemplate,
   closestTemplate,
+  largestTemplate,
   templateFits,
 } from "@features/free-layout/model/templates";
 import {
-  addSheetThunk,
-  applyTemplateThunk,
   selectPageLayout,
   selectPages,
   setSheetDirectionThunk,
@@ -40,11 +36,8 @@ import {
   setSheetModeThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
-import PageActionsMenu from "@features/free-layout/components/FreeLayoutPages/PageActionsMenu";
-import {
-  TEMPLATE_NAMES,
-  TEMPLATE_SLOT_TEXTS,
-} from "@features/free-layout/components/FreeLayoutPages/templateNames";
+import { useApplyTemplate } from "@features/free-layout/hooks/useApplyTemplate";
+import { TEMPLATE_NAMES } from "@features/free-layout/components/FreeLayoutPages/templateNames";
 import TemplatePicker from "@features/free-layout/components/TemplatePicker";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import PagePictograms from "./PagePictograms";
@@ -98,7 +91,6 @@ const PageLevel = ({
 }: PageLevelProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { showSnackbar } = useFeedback();
   const pages = useAppSelector(selectPages);
   const layout = useAppSelector(selectPageLayout);
   const documentGap =
@@ -146,17 +138,14 @@ const PageLevel = ({
           count,
         });
 
-  // El text amb què neixen els rètols d'una plantilla, a l'idioma de la interfície
-  const labelText = (label: string): string =>
-    TEMPLATE_SLOT_TEXTS[label]
-      ? intl.formatMessage(TEMPLATE_SLOT_TEXTS[label])
-      : "";
+  // Aplicar una plantilla: si no hi caben tots els blocs, abans es pregunta
+  const { apply: applyWithWarning, dialog: lossDialog } =
+    useApplyTemplate(index);
   const applyTemplate = (template: LayoutTemplate | undefined) => {
-    // Torna a repartir la pàgina: surt el snackbar amb «Desfés». Les guies de
-    // la previsualització ja no fan falta
+    // Les guies de la previsualització ja no fan falta
     if (!template) return;
     setTemplatePreview(null);
-    dispatch(applyTemplateThunk(index, template, labelText));
+    applyWithWarning(template);
   };
   const shapedTemplates = SHAPED_TEMPLATES.filter((template) =>
     templateFits(template, sheet?.placements ?? []),
@@ -164,14 +153,11 @@ const PageLevel = ({
   const changeArrangementKind = (kind: Arrangement["kind"]) => {
     if (kind === arrangement.kind) return;
     if (kind === "template") {
-      // Cap plantilla no té lloc per a totes les seqüències: es diu, i no canvia res
-      if (shapedTemplates.length === 0)
-        showSnackbar({
-          message: intl.formatMessage(pageMessages.templateNone),
-          severity: "info",
-        });
-      // La que s'hi ajusta més: no n'estrena més espais (ni rètols) dels que calen
-      applyTemplate(closestTemplate(shapedTemplates));
+      // La que s'hi ajusta més: no n'estrena més espais (ni rètols) dels que
+      // calen. Si no n'hi cap cap, la més gran, amb l'avís del que es perd
+      applyTemplate(
+        closestTemplate(shapedTemplates) ?? largestTemplate(SHAPED_TEMPLATES),
+      );
       return;
     }
     // De columnes a files (o al revés) es queda el nombre; si no, dues
@@ -353,7 +339,6 @@ const PageLevel = ({
               <TemplatePicker
                 templates={SHAPED_TEMPLATES}
                 value={arrangement.id}
-                placements={sheet?.placements ?? []}
                 landscape={(layout.orientation ?? "landscape") === "landscape"}
                 labelId={`${LABEL_ID}-template`}
                 helperId={`${LABEL_ID}-template-helper`}
@@ -372,38 +357,9 @@ const PageLevel = ({
       {/* La mateixa mida, espai i alineació a tots els blocs, o cadascun la seva */}
       <PagePictograms sheetIndex={index} />
 
-      {pages ? (
-        <SettingRow
-          title={<FormattedMessage {...messages.pageActions} />}
-          control="compact"
-        >
-          <PageActionsMenu sheetIndex={index} sheetCount={total} />
-        </SettingRow>
-      ) : (
-        // Sense pàgines pròpies: la manera de passar a tenir-ne més d'una
-        !fullscreen && (
-          <SettingRow
-            title={<FormattedMessage {...messages.pages} />}
-            control="compact"
-          >
-            <StyledButton
-              color="inherit"
-              startIcon={<MdAdd />}
-              onClick={() => {
-                dispatch(addSheetThunk(0));
-                showSnackbar({
-                  message: intl.formatMessage(pageMessages.pageAdded, {
-                    number: 2,
-                  }),
-                  severity: "success",
-                });
-              }}
-            >
-              {intl.formatMessage(pageMessages.addPage)}
-            </StyledButton>
-          </SettingRow>
-        )
-      )}
+      {/* Les accions de la pàgina (afegir, plantilla, duplicar…) són al seu
+          menú «⋯», damunt de la previsualització: no a la columna */}
+      {lossDialog}
     </SettingsLevel>
   );
 };

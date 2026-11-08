@@ -279,6 +279,19 @@ export const closestTemplate = (
   );
 };
 
+/** La plantilla amb més espais de seqüència (la primera, si n'hi ha més d'una). */
+export const largestTemplate = (
+  templates: readonly LayoutTemplate[],
+): LayoutTemplate | undefined => {
+  const sequenceSlots = (template: LayoutTemplate) =>
+    template.slots.filter((slot) => slotKind(slot) === "sequence").length;
+  return templates.reduce<LayoutTemplate | undefined>(
+    (best, template) =>
+      !best || sequenceSlots(template) > sequenceSlots(best) ? template : best,
+    undefined,
+  );
+};
+
 /** Les plantilles del selector on caben `count` caixes. */
 export const templatesFor = (count: number): LayoutTemplate[] =>
   TEMPLATE_CHOICES.filter(({ slots }) => slots.length >= count);
@@ -376,6 +389,19 @@ const slotIndexes = (
     .filter(({ kind }) => kind === "text")
     .forEach(({ id }) => take(id, "text") || take(id, "sequence"));
   return result;
+};
+
+/**
+ * Els blocs que no caben a la plantilla, en ordre de lectura: els que
+ * aplicar-la trauria de la pàgina. Buit si hi caben tots.
+ */
+export const overflowOf = (
+  template: LayoutTemplate,
+  placements: readonly PagePlacement[],
+): string[] => {
+  const ordered = sortByReadingOrder(placements.filter(isBoxed));
+  const placed = slotIndexes(ordered, template);
+  return ordered.flatMap(({ id }) => (placed.has(id) ? [] : [id]));
 };
 
 /**

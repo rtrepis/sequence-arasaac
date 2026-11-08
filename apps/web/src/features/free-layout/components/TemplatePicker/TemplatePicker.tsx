@@ -1,13 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Box, ButtonBase, Tooltip, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
-import type { PagePlacement } from "@/types/document";
-import {
-  LayoutTemplate,
-  slotKind,
-  templateFits,
-} from "@features/free-layout/model/templates";
-import { isBoxed } from "@features/free-layout/model/placement";
+import type { LayoutTemplate } from "@features/free-layout/model/templates";
 import { TEMPLATE_NAMES } from "@features/free-layout/components/FreeLayoutPages/templateNames";
 import levelMessages from "@features/free-layout/components/ViewLevels/ViewLevels.lang";
 import TemplateThumbnail from "./TemplateThumbnail";
@@ -19,8 +13,6 @@ interface TemplatePickerProps {
   templates: readonly LayoutTemplate[];
   /** La plantilla que té la pàgina, si és una d'aquestes */
   value: string | undefined;
-  /** Els blocs de la pàgina: decideixen quines plantilles hi caben */
-  placements: readonly PagePlacement[];
   /** L'orientació del paper: les miniatures la segueixen */
   landscape: boolean;
   /** El títol de la fila, per al nom del grup */
@@ -36,13 +28,12 @@ interface TemplatePickerProps {
  * cadascun amb la miniatura de la plantilla i el nom. Passar per damunt d'un
  * botó, anar-hi amb el teclat o, en una pantalla tàctil, mantenir-lo premut
  * fa que la pàgina n'ensenyi els espais, sense moure res; el clic l'aplica
- * (amb «Desfés»). Les plantilles on no caben les seqüències de la pàgina hi
- * són, però no es poden triar, i diuen per què.
+ * (amb «Desfés»). Totes es poden triar: si en una no hi caben tots els blocs,
+ * qui l'aplica ho avisa abans (`useApplyTemplate`).
  */
 const TemplatePicker = ({
   templates,
   value,
-  placements,
   landscape,
   labelId,
   helperId,
@@ -65,10 +56,6 @@ const TemplatePicker = ({
     [],
   );
 
-  const sequences = placements.filter(
-    (placement) => isBoxed(placement) && placement.kind === "sequence",
-  ).length;
-
   const cancelPress = () => {
     window.clearTimeout(pressTimer.current);
     pressTimer.current = undefined;
@@ -88,27 +75,16 @@ const TemplatePicker = ({
     >
       {templates.map((template) => {
         const name = intl.formatMessage(TEMPLATE_NAMES[template.id]);
-        const fits = templateFits(template, placements);
         const selected = template.id === value;
-        const landscapeHint = template.landscape
+        const reason = template.landscape
           ? intl.formatMessage(levelMessages.templateLandscape)
           : undefined;
-        const reason = fits
-          ? landscapeHint
-          : intl.formatMessage(levelMessages.templateTooSmall, {
-              name,
-              slots: template.slots.filter(
-                (slot) => slotKind(slot) === "sequence",
-              ).length,
-              count: sequences,
-            });
-        const show = () => fits && onPreview(template);
+        const show = () => onPreview(template);
         const hide = () => onPreview(null);
         return (
           <Tooltip key={template.id} title={reason ?? ""} describeChild>
             <ButtonBase
               aria-pressed={selected}
-              aria-disabled={!fits || undefined}
               aria-label={name}
               data-template={template.id}
               onMouseEnter={show}
@@ -116,7 +92,7 @@ const TemplatePicker = ({
               onBlur={hide}
               onPointerDown={(event) => {
                 // Amb el ratolí ja hi ha el «passar per damunt»
-                if (event.pointerType === "mouse" || !fits) return;
+                if (event.pointerType === "mouse") return;
                 longPressed.current = false;
                 cancelPress();
                 pressTimer.current = window.setTimeout(() => {
@@ -140,7 +116,7 @@ const TemplatePicker = ({
                   longPressed.current = false;
                   return;
                 }
-                if (fits && !selected) onApply(template);
+                if (!selected) onApply(template);
               }}
               sx={{
                 flexDirection: "column",
@@ -158,10 +134,9 @@ const TemplatePicker = ({
                   borderColor: "primary.main",
                   padding: "7px",
                 }),
-                ...(!fits && { opacity: 0.45, cursor: "not-allowed" }),
-                "&:hover, &.Mui-focusVisible": fits
-                  ? { backgroundColor: "action.hover" }
-                  : {},
+                "&:hover, &.Mui-focusVisible": {
+                  backgroundColor: "action.hover",
+                },
                 "&.Mui-focusVisible": {
                   outline: 2,
                   outlineColor: "primary.main",

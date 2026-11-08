@@ -4,6 +4,7 @@ import {
   renderWithProviders,
   screen,
   userEvent,
+  waitForElementToBeRemoved,
   within,
 } from "@/test/renderWithProviders";
 import { sequenceFixture } from "@/test/fixtures/document";
@@ -310,5 +311,39 @@ describe("plantilles amb rètols a la columna (R4, R9)", () => {
     expect(screen.getByRole("slider", { name: "Font size" })).toHaveValue(
       "1.25",
     );
+  });
+});
+
+describe("una plantilla on no hi cap tot (R4)", () => {
+  it("abans d'aplicar-la diu què sortirà de la pàgina, i només ho fa si s'accepta", async () => {
+    renderView(freeDocument());
+
+    // L'agenda en tira té un sol espai, i la pàgina 1 té dues seqüències
+    await userEvent.click(
+      screen.getByRole("button", { name: "Schedule strip" }),
+    );
+    const dialog = screen.getByRole("dialog", {
+      name: "Apply “Schedule strip” to page 1?",
+    });
+    expect(dialog).toHaveTextContent(
+      "One block doesn't fit and will leave this page: Sequence 2.",
+    );
+    await userEvent.click(
+      within(dialog).getByRole("button", { name: "Cancel" }),
+    );
+    await waitForElementToBeRemoved(() => screen.queryByRole("dialog"));
+    expect(
+      screen.getAllByRole("button", { name: /^Sequence 2,/ }),
+    ).toHaveLength(2);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Schedule strip" }),
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Apply it" }));
+    await waitForElementToBeRemoved(() => screen.queryByRole("dialog"));
+    // A la pàgina 1 només hi queda la seqüència 1; la 2 continua a la pàgina 2
+    expect(
+      screen.getAllByRole("button", { name: /^Sequence 2,/ }),
+    ).toHaveLength(1);
   });
 });

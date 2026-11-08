@@ -2876,6 +2876,54 @@
     "message": "Rètol",
     "description": "Marca damunt d'un espai de rètol, mentre es previsualitza una plantilla a la pàgina; no s'imprimeix"
   },
+  "features.freeLayout.page.addBlock": {
+    "message": "Afegeix un bloc",
+    "description": "Botó de la capçalera d'una pàgina en blocs, i títol del grup del menú de la pàgina, per afegir-hi un bloc de seqüència o de text"
+  },
+  "features.freeLayout.page.addSequenceBlock": {
+    "message": "Bloc de seqüència…",
+    "description": "Opció per afegir un bloc amb una seqüència del document a la pàgina; obre la llista de seqüències"
+  },
+  "features.freeLayout.page.addTextBlock": {
+    "message": "Bloc de text",
+    "description": "Opció per afegir un rètol (un text sol, sense pictograma) a la pàgina"
+  },
+  "features.freeLayout.page.textBlockAdded": {
+    "message": "S'ha afegit un bloc de text a la pàgina {number}. Escriu-hi a la columna.",
+    "description": "Missatge després d'afegir un rètol a una pàgina: queda seleccionat i el text s'escriu a la columna d'ajustos"
+  },
+  "features.freeLayout.page.layoutSection": {
+    "message": "Disposició",
+    "description": "Títol del grup del menú d'una pàgina on es tria si és contínua o en blocs"
+  },
+  "features.freeLayout.page.modeContinuous": {
+    "message": "Contínua",
+    "description": "Opció del menú d'una pàgina: les seqüències una darrere l'altra, com sempre"
+  },
+  "features.freeLayout.page.modeBlocks": {
+    "message": "En blocs",
+    "description": "Opció del menú d'una pàgina: cada seqüència o text és un bloc amb el seu lloc a la pàgina"
+  },
+  "features.freeLayout.page.chooseTemplate": {
+    "message": "Plantilla…",
+    "description": "Opció del menú d'una pàgina que obre les plantilles amb miniatura"
+  },
+  "features.freeLayout.page.templatesTitle": {
+    "message": "Plantilles de la pàgina {number}",
+    "description": "Títol de la finestra de plantilles que s'obre des del menú d'una pàgina"
+  },
+  "features.freeLayout.emptySlot.label": {
+    "message": "Espai buit {number}",
+    "description": "Nom d'un espai lliure de la plantilla, damunt del full, amb els botons per omplir-lo; no s'imprimeix"
+  },
+  "features.freeLayout.emptySlot.addText": {
+    "message": "Afegeix text",
+    "description": "Botó d'un espai buit del full que hi posa un rètol"
+  },
+  "features.freeLayout.emptySlot.addSequence": {
+    "message": "Afegeix una seqüència",
+    "description": "Botó d'un espai buit del full que hi posa una seqüència del document"
+  },
   "features.freeLayout.page.moreActions": {
     "message": "Més accions de la pàgina",
     "description": "Nom accessible i tooltip del botó de més accions d'una pàgina (duplicar, moure, esborrar)"
@@ -3088,6 +3136,18 @@
     "message": "Posa {name} a la pàgina {number}",
     "description": "Nom accessible del botó que posa una seqüència sense col·locar a la pàgina que segueix la columna"
   },
+  "features.freeLayout.levels.templateLossTitle": {
+    "message": "Apliques «{name}» a la pàgina {number}?",
+    "description": "Títol de l'avís abans d'aplicar una plantilla on no hi caben tots els blocs de la pàgina"
+  },
+  "features.freeLayout.levels.templateLossBody": {
+    "message": "{count, plural, one {Un bloc no hi cap i sortirà d'aquesta pàgina} other {# blocs no hi caben i sortiran d'aquesta pàgina}}: {blocks}. Les seqüències continuen al document, i es pot desfer.",
+    "description": "Cos de l'avís abans d'aplicar una plantilla: quins blocs (noms de seqüència o text de rètols) surten de la pàgina"
+  },
+  "features.freeLayout.levels.templateLossConfirm": {
+    "message": "Aplica-la",
+    "description": "Botó de l'avís que aplica la plantilla tot i que alguns blocs surten de la pàgina"
+  },
   "features.freeLayout.levels.templateHelp": {
     "message": "Passa per damunt d'una plantilla, o mantén-la premuda, per veure-la a la pàgina. El clic l'aplica.",
     "description": "Ajuda sota el selector de plantilles del nivell «Pàgina»: com es previsualitza i com s'aplica"
@@ -3095,10 +3155,6 @@
   "features.freeLayout.levels.templateLandscape": {
     "message": "Millor apaïsat",
     "description": "Al selector de plantilles, al costat del nom d'una plantilla que queda millor en paper apaïsat (la setmana, «Primer / Després»)"
-  },
-  "features.freeLayout.levels.templateTooSmall": {
-    "message": "{name}: hi caben {slots, plural, one {# seqüència} other {# seqüències}}, i aquesta pàgina en té {count}",
-    "description": "Al selector de plantilles, per què una plantilla no es pot triar: té menys espais de seqüència que seqüències té la pàgina"
   },
   "features.freeLayout.levels.kindText": {
     "message": "Rètol",

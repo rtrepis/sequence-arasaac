@@ -314,6 +314,78 @@ const messages = defineMessages({
     description:
       "Marca damunt d'un espai de rètol, mentre es previsualitza una plantilla a la pàgina; no s'imprimeix",
   },
+  addBlock: {
+    id: "features.freeLayout.page.addBlock",
+    defaultMessage: "Add a block",
+    description:
+      "Botó de la capçalera d'una pàgina en blocs, i títol del grup del menú de la pàgina, per afegir-hi un bloc de seqüència o de text",
+  },
+  addSequenceBlock: {
+    id: "features.freeLayout.page.addSequenceBlock",
+    defaultMessage: "Sequence block…",
+    description:
+      "Opció per afegir un bloc amb una seqüència del document a la pàgina; obre la llista de seqüències",
+  },
+  addTextBlock: {
+    id: "features.freeLayout.page.addTextBlock",
+    defaultMessage: "Text block",
+    description:
+      "Opció per afegir un rètol (un text sol, sense pictograma) a la pàgina",
+  },
+  textBlockAdded: {
+    id: "features.freeLayout.page.textBlockAdded",
+    defaultMessage:
+      "A text block has been added to page {number}. Type it in the side panel.",
+    description:
+      "Missatge després d'afegir un rètol a una pàgina: queda seleccionat i el text s'escriu a la columna d'ajustos",
+  },
+  layoutSection: {
+    id: "features.freeLayout.page.layoutSection",
+    defaultMessage: "Layout",
+    description:
+      "Títol del grup del menú d'una pàgina on es tria si és contínua o en blocs",
+  },
+  chooseTemplate: {
+    id: "features.freeLayout.page.chooseTemplate",
+    defaultMessage: "Template…",
+    description:
+      "Opció del menú d'una pàgina que obre les plantilles amb miniatura",
+  },
+  templatesTitle: {
+    id: "features.freeLayout.page.templatesTitle",
+    defaultMessage: "Templates for page {number}",
+    description:
+      "Títol de la finestra de plantilles que s'obre des del menú d'una pàgina",
+  },
+  emptySlotLabel: {
+    id: "features.freeLayout.emptySlot.label",
+    defaultMessage: "Empty space {number}",
+    description:
+      "Nom d'un espai lliure de la plantilla, damunt del full, amb els botons per omplir-lo; no s'imprimeix",
+  },
+  emptySlotAddText: {
+    id: "features.freeLayout.emptySlot.addText",
+    defaultMessage: "Add text",
+    description: "Botó d'un espai buit del full que hi posa un rètol",
+  },
+  emptySlotAddSequence: {
+    id: "features.freeLayout.emptySlot.addSequence",
+    defaultMessage: "Add a sequence",
+    description:
+      "Botó d'un espai buit del full que hi posa una seqüència del document",
+  },
+  modeContinuous: {
+    id: "features.freeLayout.page.modeContinuous",
+    defaultMessage: "Continuous",
+    description:
+      "Opció del menú d'una pàgina: les seqüències una darrere l'altra, com sempre",
+  },
+  modeBlocks: {
+    id: "features.freeLayout.page.modeBlocks",
+    defaultMessage: "In blocks",
+    description:
+      "Opció del menú d'una pàgina: cada seqüència o text és un bloc amb el seu lloc a la pàgina",
+  },
 });
 
 export default messages;

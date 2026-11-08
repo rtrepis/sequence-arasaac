@@ -9,6 +9,8 @@ import type {
 import {
   INITIAL_SEQUENCES_PER_SHEET,
   NEW_LABEL_FONT_SIZE,
+  addPlacementsToSheet,
+  newTextPlacement,
   addSequencesToSheet,
   applyTemplateToSheet,
   buildInitialPages,
@@ -19,6 +21,7 @@ import type { NewLayoutId } from "./sheets";
 import {
   TEMPLATE_GAP_MM,
   gridTemplate,
+  overflowOf,
   stackTemplate,
   templateById,
 } from "./templates";
@@ -405,5 +408,55 @@ describe("les plantilles amb rètols (R3, R4)", () => {
     );
     expect(added && boxed(added).slot).toBe(3);
     expect(result.sheets[0].template).toBe("first-then");
+  });
+});
+
+describe("plantilles on no hi cap tot, i blocs buits (R4)", () => {
+  const firstThen = templateById("first-then");
+  if (!firstThen) throw new Error("falta «Primer / Després»");
+  const three: DocumentPages = {
+    sheets: [
+      sheet("sh_1", [
+        placement("a", 0, { y: 0 }),
+        placement("b", 1, { y: 60 }),
+        placement("c", 2, { y: 120 }),
+      ]),
+    ],
+    common: [],
+  };
+
+  it("diu quins blocs no hi caben, en ordre de lectura", () => {
+    expect(overflowOf(firstThen, three.sheets[0].placements)).toEqual(["c"]);
+    expect(
+      overflowOf(stackTemplate(3, "rows"), three.sheets[0].placements),
+    ).toEqual([]);
+  });
+
+  it("aplicar-la treu de la pàgina els que no hi caben", () => {
+    const result = applyTemplateToSheet(three, 0, firstThen, AREA);
+    expect(result.sheets[0].placements.map(({ id }) => id)).toEqual(["a", "b"]);
+  });
+
+  it("una seqüència afegida a un espai buit concret hi va", () => {
+    const empty: DocumentPages = {
+      sheets: [sheet("sh_1", [], { template: "story-page" })],
+      common: [],
+    };
+    const result = addSequencesToSheet(empty, 0, [4], context(), 2);
+    expect(boxed(result.sheets[0].placements[0]).slot).toBe(2);
+  });
+
+  it("un rètol va primer a un espai de rètol", () => {
+    const menu: DocumentPages = {
+      sheets: [sheet("sh_1", [], { template: "menu" })],
+      common: [],
+    };
+    const result = addPlacementsToSheet(
+      menu,
+      0,
+      [newTextPlacement("", ids())],
+      context(),
+    );
+    expect(boxed(result.sheets[0].placements[0]).slot).toBe(0);
   });
 });

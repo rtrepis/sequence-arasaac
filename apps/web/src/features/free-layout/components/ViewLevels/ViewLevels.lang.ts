@@ -225,13 +225,6 @@ const messages = defineMessages({
     description:
       "Al selector de plantilles, al costat del nom d'una plantilla que queda millor en paper apaïsat (la setmana, «Primer / Després»)",
   },
-  templateTooSmall: {
-    id: "features.freeLayout.levels.templateTooSmall",
-    defaultMessage:
-      "{name}: it fits {slots, plural, one {# sequence} other {# sequences}}, and this page has {count}",
-    description:
-      "Al selector de plantilles, per què una plantilla no es pot triar: té menys espais de seqüència que seqüències té la pàgina",
-  },
   kindText: {
     id: "features.freeLayout.levels.kindText",
     defaultMessage: "Label",
@@ -265,6 +258,25 @@ const messages = defineMessages({
     id: "features.freeLayout.levels.bold",
     defaultMessage: "Bold",
     description: "Títol de la fila de l'interruptor de negreta d'un rètol",
+  },
+  templateLossTitle: {
+    id: "features.freeLayout.levels.templateLossTitle",
+    defaultMessage: "Apply “{name}” to page {number}?",
+    description:
+      "Títol de l'avís abans d'aplicar una plantilla on no hi caben tots els blocs de la pàgina",
+  },
+  templateLossBody: {
+    id: "features.freeLayout.levels.templateLossBody",
+    defaultMessage:
+      "{count, plural, one {One block doesn't fit and will leave this page} other {# blocks don't fit and will leave this page}}: {blocks}. The sequences stay in the document, and it can be undone.",
+    description:
+      "Cos de l'avís abans d'aplicar una plantilla: quins blocs (noms de seqüència o text de rètols) surten de la pàgina",
+  },
+  templateLossConfirm: {
+    id: "features.freeLayout.levels.templateLossConfirm",
+    defaultMessage: "Apply it",
+    description:
+      "Botó de l'avís que aplica la plantilla tot i que alguns blocs surten de la pàgina",
   },
 });
 
