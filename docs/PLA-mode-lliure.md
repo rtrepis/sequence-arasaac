@@ -4,8 +4,10 @@
 > full a la vista i les pàgines amb les seves seqüències (vegeu §11, «Com ha quedat la fase 3»).
 > **Revisió de la fase 3** (§12, 2026-11-07): fets R3 (l'estudi dels treballs), R8 (l'esbós de la
 > columna, `docs/esbos-columna-vista.html`) i el pas 3, **el model** (R1 + R2 + R9, i els estils amb
-> nom de R10): ADR-005 revisada, vegeu §12, «Com ha quedat el model». **Ara toca el pas 4**: R5, la
-> columna que segueix la pàgina i la selecció del bloc.
+> nom de R10): ADR-005 revisada, vegeu §12, «Com ha quedat el model». **Pas 4 i 4b fets**
+> (2026-11-08): la columna en tres nivells que segueix la pàgina i la selecció (R5), i cada pàgina
+> **contínua** (com sempre) o **en blocs**. **Per continuar, comenceu per §13, «Estat a 2026-11-08
+> i com continuar»**: hi ha el recull, el que queda obert i l'encàrrec del pas següent (R4).
 > **Encàrrec**: `docs/spec-mode-lliure.md`, a la branca `origin/feature/mode-lliure` (no fusionada).
 > **Fonaments que mana**: `docs/fonaments/03-model-contingut-estil.md`,
 > `docs/fonaments/06-compatibilitat-i-dades.md`, `docs/decisions/ADR-003-model-document-saac-v3.md`.
@@ -467,8 +469,8 @@ El que s'ha fet diferent del que deia §6, i per què:
 ## 12. Revisió de la fase 3 (2026-11-07)
 
 Primera revisió a la previsualització. Són els punts a treballar **abans d'aprofundir més** (abans
-de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidir. Res d'això no està
-fet encara.
+de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidir. L'estat de cada punt
+és a l'«Ordre proposat» i el recull, a §13.
 
 ### R1 — Un sol model: pàgines a totes dues disposicions
 
@@ -946,3 +948,107 @@ en blocs**, pàgina a pàgina. Qui ve de la versió d'abans troba el mateix d'en
 | Q2 | Què fa el control de mida d'una seqüència dins d'una caixa (R6)? | La mida canvia la caixa (la caixa s'ajusta als pictogrames) · La mida és un màxim (la caixa mana, però no pinta més gran) · La mida mana i, si no hi cap, ho avisa |
 | Q3 | R1: un sol model de pàgines per a totes dues disposicions? | Sí (proposat) · No, la disposició automàtica té pàgines però sense plantilles |
 | Q4 | R3: la investigació, qui la fa? | Una cerca a la xarxa de materials publicats (ARASAAC, escoles, logopèdia) · Exemples reals de l'usuari i el seu entorn · Totes dues |
+
+## 13. Estat a 2026-11-08 i com continuar
+
+Recull de les sessions del 7 i el 8 de novembre (passos 4 i 4b, PR #304, branca
+`ccr-2207a706-ksozpj`). **És el lloc per on començar una sessió nova.** El detall i el perquè de
+cada decisió són a §12 (C1–C24, R12) i a l'ADR-005 (decisions 16–19).
+
+### Com funciona ara (el que veu l'usuari)
+
+La idea de fons, després de moltes voltes: **es treballa com abans, i cada pàgina pot passar a
+treballar en blocs**. Qui ve de la versió d'abans troba el mateix d'entrada.
+
+La columna de la Vista té tres nivells (targetes lligades per la línia de la cascada), que segueixen
+la pàgina que es veu més o la de la peça seleccionada:
+
+| Nivell | Què hi ha |
+|---|---|
+| **Document** | El paper; les seqüències **sense col·locar**, amb «A la pàgina N»; el **peu d'impressió**, amb «A quines pàgines» va la llicència (totes o l'última) quan n'hi ha més d'una |
+| **Pàgina N de M** | **Disposició**: *Contínua* o *En blocs*. Contínua: direcció i espai entre seqüències. En blocs: repartiment *en columnes* (N), *en files* (N) o *amb una plantilla*. Totes dues: **Pictogrames**, amb «La mateixa a totes les seqüències / a tots els blocs» i, activat, la mida, l'espai i l'alineació. I el menú de la pàgina, o «Afegeix una pàgina» si el document encara no en té de pròpies |
+| **Seqüència** (contínua) o **Bloc** (en blocs) | El que hi ha seleccionat al full: mida, espai i alineació (si la pàgina no les comparteix) i, en blocs, les **columnes** de dins del bloc |
+
+- **Seleccionar**: clicar una seqüència o un bloc del full (o Enter i Espai); Escape o un clic fora
+  ho treuen. La peça i la pàgina es marquen amb `sheetGuide`, mai al paper. El menú del bloc és al
+  seu botó «⋯». Al mòbil la pàgina no salta: l'enllaç «Ajustos del bloc» hi porta.
+- **«La mateixa…»**: activar-ho posa a totes la configuració de la més petita, amb un avís. Amb això
+  activat, seleccionar una peça obre el nivell «Pàgina». És un mode d'edició: no es desa.
+- **Passar a blocs** amb X seqüències fa X files o X columnes, en el sentit de la pàgina contínua; les
+  columnes automàtiques del bloc segueixen el mateix sentit (una fila o una columna).
+- **Un document sense pàgines pròpies** es veu i es desa com sempre. Afegir una pàgina o passar-la a
+  blocs el fa explícit.
+
+### On és el codi
+
+| Peça | Fitxer |
+|---|---|
+| Selecció, pàgina activa, mesures de les targetes, tria de «La mateixa…» | `features/free-layout/hooks/useViewSelection.tsx`, `usePageUniform.ts`, `useSelectedBlock.ts` |
+| Nivells de la columna | `components/ViewSequencesSettings/` (`SettingsLevel`, `SettingsLevels`, `LevelCrumbs`, `SequenceViewRows`, `ViewSquenceSettings`) i `features/free-layout/components/ViewLevels/` (`PageLevel`, `BlockLevel`, `PagePictograms`, `LicencePagesRow`) |
+| Pàgines al full | `features/free-layout/components/FreeLayoutPages/` (`FreeLayoutPages`, `AutoSheetFlow` per a les contínues, `PlacementBox` per als blocs, `PageHeader`, `PageActionsMenu`) i `SelectableSequence` |
+| Model | `features/free-layout/model/` (`templates.ts`: `arrangementTemplate`, `arrangementOf`, `templateFor`; `blockGrid.ts`: `blockGrid`, `resolveColumns`; `computeGrid.ts` amb `maxSize`; `blockStyle.ts`) i `store/freeLayoutThunks.ts` |
+| Fitxer | `sheets[].sequenceGap` i `page.licenceOn` (opcionals): `features/sequence/saac/`, `docs/schema/saac-v3.schema.json`, fixture 17, fonament 06 |
+| Proves | `ViewLevels.test.tsx`, `FreeLayoutPages.test.tsx`, els de `model/` i `store/`, `saac.test.ts` |
+
+### Què queda obert
+
+- **El nom «Contínua»** és provisional (C15): cal confirmar-lo.
+- **Peces a prova** que encara no són a l'estàndard: `SettingsLevel` i `SettingsLevels` (targeta
+  amb vora: és una **excepció** a «una zona no es marca amb una caixa», C8) i les molles
+  (`LevelCrumbs`, C7). Decidir si passen a «Components compartits» de
+  `docs/estandards/configuracions.md`.
+- **Els blocs comuns** («A totes les pàgines») només es pinten a les pàgines en blocs, no a les
+  contínues.
+- **Els rètols** (R9) són al model però no es pinten ni es poden crear. Mitja dotzena de plantilles
+  de R3 en depenen.
+- **El missatge** quan afegir una seqüència fa créixer o canviar la plantilla (R2).
+- **Captures de la notícia de diverses seqüències** (`e2e/screenshots/multiple-sequences*.spec.ts`):
+  adaptades a la columna nova, però no s'han tornat a executar.
+- **El núvol** encara no coneix les pàgines (fase 5; els comptes estan apagats).
+- Preexistent: `printDimensions` sense ús a `ViewSquenceSettings.tsx` (avís del lint).
+
+### El pas següent: R4, veure la plantilla abans d'aplicar-la
+
+Segons l'«Ordre proposat» (pas 5). Què demana (vegeu R4 a §12):
+
+- Al selector «Amb una plantilla» del nivell «Pàgina», cada opció amb una **miniatura** dibuixada
+  amb els espais de la plantilla (colors de `palette.ts`, botons amb nom accessible).
+- Mentre es passa per damunt d'una opció (o s'hi va amb el teclat), la pàgina ensenya **els
+  espais** com a guies `sheetGuide`, sense moure res; aplicar-la és el clic (amb Desfés).
+- **Les plantilles noves de R3** (`docs/ESTUDI-treballs-amb-pictogrames.md`): avui només hi ha la
+  graella 2 × 2 i la tira a dalt (`SHAPED_TEMPLATES`).
+
+Cal decidir abans de tocar codi:
+
+1. **Rètols**: moltes plantilles de R3 porten un espai de rètol («Primer», «Avui és…»). Es pinten
+   els rètols (R9) en aquest pas, o les plantilles noves surten primer sense els espais de rètol?
+2. **Quines plantilles** de R3 entren ara, i amb quin ordre al selector.
+3. **La miniatura**: on es dibuixa (a la llista del `Select` o en una graella de botons, com
+   l'esbós) i si també mostra «X columnes» i «X files».
+4. **La previsualització a la pàgina**: només amb el ratolí i el teclat, o també al mòbil (on no hi
+   ha «passar per damunt»).
+
+### Encàrrec per obrir la sessió següent
+
+> Continuem el mode lliure de pàgina. Treballa sobre la branca `ccr-2207a706-ksozpj` (PR #304): fes-ne
+> checkout i continua-hi, no en creïs cap altra.
+>
+> Llegeix primer `docs/PLA-mode-lliure.md`, **§13** (estat, on és el codi, què queda obert i el pas
+> següent) i, de §12, R3, R4 i R9. Després `docs/decisions/ADR-005-disposicio-lliure.md` (decisions
+> 16–19), `docs/ESTUDI-treballs-amb-pictogrames.md` (les plantilles) i
+> `docs/esbos-columna-vista.html` (R4, la miniatura i les guies al full). Abans de tocar la columna,
+> `docs/estandards/configuracions.md`; si hi entren diàlegs o missatges, `capes-flotants.md` i
+> `feedback-i-accions.md`; per als colors, `colors.md`.
+>
+> La tasca és **R4**: les miniatures del selector de plantilles i la previsualització dels espais a la
+> pàgina, amb les plantilles noves de R3. Abans de tocar codi, proposa com queda i fes-me les
+> preguntes de §13, «El pas següent» (rètols, quines plantilles, on va la miniatura, mòbil).
+>
+> Normes: `npm run typecheck` net i els tests passant; textos nous a `packages/i18n/messages/` en els
+> cinc idiomes; cap color fora de `palette.ts`; si canvia el format `.saac`, esquema, fixture i
+> fonament 06; actualitza el pla (§13 i l'«Ordre proposat») en acabar.
+>
+> Entorn: cal `npm ci` a l'arrel. Per provar amb Playwright, `launchOptions.executablePath:
+> "/opt/pw-browsers/chromium"`. Per arribar a la Vista, clica la pestanya «Vista»: un `page.goto`
+> recarrega la pàgina i perd el document obert.
+
