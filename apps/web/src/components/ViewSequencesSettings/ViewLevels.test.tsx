@@ -178,7 +178,7 @@ describe("els nivells de la columna de la vista", () => {
 
   it("activar «la mateixa» posa a tots la configuració del més petit, i ho diu", async () => {
     const document = freeDocument();
-    const [first, second] = document.pages!.sheets[0].placements;
+    const [first] = document.pages!.sheets[0].placements;
     const { store } = renderView({
       ...document,
       pages: {
@@ -188,7 +188,10 @@ describe("els nivells de la columna de la vista", () => {
             ...document.pages!.sheets[0],
             placements: [
               first,
-              { ...second, view: { sizePict: 0.5, alignmentH: "left" } },
+              {
+                ...placement("pl_2", 1),
+                view: { sizePict: 0.5, alignmentH: "left" as const },
+              },
             ],
           },
           document.pages!.sheets[1],
