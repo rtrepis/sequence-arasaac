@@ -159,13 +159,13 @@ test("multiple-sequences: captures i vídeo per la guia de novetats", async ({
   // Navegar a Vista via React Router (manté l'estat Redux de les seqüències)
   await page.getByRole("tab", { name: /Vista/i }).click();
   // Esperar que el slider "Mida" sigui visible i estable (acordió expandit per defecte)
-  // «La mateixa a tots els blocs» (nivell «Pàgina») és activat: la mida
+  // «La mateixa a totes les seqüències» (nivell «Pàgina») és activat: la mida
   // d'aquí canvia totes les seqüències, com l'antic «Aplica a totes»
   const sizeSlider = page.getByRole("slider", { name: "Mida" });
   await sizeSlider.waitFor({ state: "visible", timeout: 15000 });
   await page.waitForTimeout(600);
 
-  // «La mateixa a tots els blocs» activat: un sol «Mida», el de la pàgina
+  // «La mateixa a totes les seqüències» activat: un sol «Mida», el de la pàgina
   // El MUI Slider thumb intercepta events de ratolí → usar focus() via JS + teclat
   await sizeSlider.evaluate((el: HTMLElement) => el.focus());
   for (let i = 0; i < 8; i++) {
@@ -182,10 +182,10 @@ test("multiple-sequences: captures i vídeo per la guia de novetats", async ({
   // =============================================
   // VIEW PAGE - PAS 4: Ajustar una seqüència sola
   // =============================================
-  // Cada seqüència la seva: es desactiva «La mateixa a tots els blocs» i
+  // Cada seqüència la seva: es desactiva «La mateixa a totes les seqüències» i
   // es selecciona la seqüència 2 al full, que n'ensenya els ajustos (R5)
   await page
-    .getByRole("checkbox", { name: "La mateixa a tots els blocs" })
+    .getByRole("checkbox", { name: "La mateixa a totes les seqüències" })
     .click();
   await page
     .getByRole("button", { name: /^(sequence 2|seqüència 2),/i })

@@ -29,13 +29,22 @@ export const sameViews = (views: readonly SequenceViewSettings[]): boolean =>
       view.alignmentV === views[0].alignmentV,
   );
 
+/** Com es diuen les peces de la pàgina: seqüències (contínua) o blocs. */
+export type PageUnit = "sequences" | "blocks";
+
 export interface PageUniform {
+  /** Seqüències en una pàgina contínua; blocs en una pàgina en blocs */
+  unit: PageUnit;
+  /** La vista amb la mida més petita, i de quina seqüència és */
+  smallest: { view: SequenceViewSettings; sequenceKey: number } | undefined;
   /** La clau de la pàgina (el seu `id`, o la de la pàgina automàtica única) */
   pageKey: string;
   uniform: boolean;
   setUniform: (uniform: boolean) => void;
   /** Els valors que es mostren amb «la mateixa a tots»: els del primer bloc */
   view: SequenceViewSettings;
+  /** Si ara mateix algun bloc es veu diferent dels altres */
+  differs: boolean;
   /** Quants blocs de seqüència té la pàgina (sense els comuns) */
   blockCount: number;
 }
@@ -57,23 +66,39 @@ export const usePageUniform = (sheetIndex: number): PageUniform => {
 
   const sheet = isFree ? pages?.sheets[sheetIndex] : undefined;
   const pageKey = sheet?.id ?? AUTO_PAGE_KEY;
-  const views: SequenceViewSettings[] = sheet
+  const entries: { view: SequenceViewSettings; sequenceKey: number }[] = sheet
     ? sheet.placements.flatMap((placement) => {
         if (placement.kind !== "sequence") return [];
         const sequenceView = sequenceViews[placement.sequenceKey];
         if (!sequenceView) return [];
         return [
-          resolveBlockView(
-            sequenceView,
-            namedStyleOf(styles, placement.styleId),
-            placement.view,
-          ),
+          {
+            view: resolveBlockView(
+              sequenceView,
+              namedStyleOf(styles, placement.styleId),
+              placement.view,
+            ),
+            sequenceKey: placement.sequenceKey,
+          },
         ];
       })
-    : keys.flatMap((key) => (sequenceViews[key] ? [sequenceViews[key]] : []));
+    : keys.flatMap((key) =>
+        sequenceViews[key]
+          ? [{ view: sequenceViews[key], sequenceKey: key }]
+          : [],
+      );
+  const views = entries.map(({ view }) => view);
+  const smallest = entries.reduce<(typeof entries)[number] | undefined>(
+    (min, entry) =>
+      !min || entry.view.sizePict < min.view.sizePict ? entry : min,
+    undefined,
+  );
 
   return {
+    unit: sheet?.mode === "template" ? "blocks" : "sequences",
+    smallest,
     pageKey,
+    differs: !sameViews(views),
     uniform: uniformChoice[pageKey] ?? sameViews(views),
     setUniform: (uniform) => setUniformChoice(pageKey, uniform),
     view: views[0] ?? documentView,

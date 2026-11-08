@@ -2,6 +2,32 @@ import { defineMessages } from "react-intl";
 
 // Textos dels nivells «Pàgina» i «Bloc» de la columna de la vista (R5).
 const messages = defineMessages({
+  columnsHelp: {
+    id: "features.freeLayout.levels.columnsHelp",
+    defaultMessage:
+      "Automatic: on a page in columns, one column; in rows, a single row; with a template, whatever makes the pictograms largest.",
+    description:
+      "Ajuda sota «Columnes» del bloc: què fan les automàtiques segons el repartiment de la pàgina",
+  },
+  columnsAuto: {
+    id: "features.freeLayout.levels.columnsAuto",
+    defaultMessage: "Automatic",
+    description:
+      "Opció de «Columnes» del bloc: les que demana el repartiment de la pàgina",
+  },
+  columns: {
+    id: "features.freeLayout.levels.columns",
+    defaultMessage: "Columns",
+    description:
+      "Títol de la fila del nivell «Bloc»: en quantes columnes van els pictogrames de dins del bloc",
+  },
+  uniformApplied: {
+    id: "features.freeLayout.levels.uniformApplied",
+    defaultMessage:
+      "{unit, select, sequences {Every sequence} other {Every block}} on the page now has the size, spacing and alignment of the smallest one: {name}.",
+    description:
+      "Snackbar en activar «La mateixa…»: totes les seqüències o blocs de la pàgina passen a tenir la configuració de la més petita, que es diu (`name`)",
+  },
   pages: {
     id: "features.freeLayout.levels.pages",
     defaultMessage: "Pages",
@@ -111,28 +137,31 @@ const messages = defineMessages({
   },
   uniform: {
     id: "features.freeLayout.levels.uniform",
-    defaultMessage: "Same for every block",
+    defaultMessage:
+      "Same for {unit, select, sequences {every sequence} other {every block}}",
     description:
-      "Interruptor del nivell «Pàgina»: tots els blocs de la pàgina amb la mateixa mida, espai i alineació (l'antic «Aplica a totes», ara per pàgina)",
+      "Interruptor del nivell «Pàgina»: totes les seqüències (pàgina contínua) o tots els blocs (pàgina en blocs) amb la mateixa mida, espai i alineació. `unit` és sequences o blocks",
   },
   uniformOn: {
     id: "features.freeLayout.levels.uniformOn",
     defaultMessage:
-      "Every block on this page has the same size, spacing and alignment. Turn it off to adjust each block on its own.",
-    description: "Ajuda sota «La mateixa a tots els blocs», activat",
+      "{unit, select, sequences {Every sequence on this page has} other {Every block on this page has}} the same size, spacing and alignment. Turn it off to adjust {unit, select, sequences {each sequence} other {each block}} on its own.",
+    description:
+      "Ajuda sota «La mateixa a totes les seqüències / tots els blocs», activat",
   },
   uniformOff: {
     id: "features.freeLayout.levels.uniformOff",
     defaultMessage:
-      "Each block has its own size, spacing and alignment: click a block on the page to adjust it.",
-    description: "Ajuda sota «La mateixa a tots els blocs», desactivat",
+      "{unit, select, sequences {Each sequence has} other {Each block has}} its own size, spacing and alignment: click {unit, select, sequences {a sequence} other {a block}} on the page to adjust it.",
+    description:
+      "Ajuda sota «La mateixa a totes les seqüències / tots els blocs», desactivat",
   },
   uniformBlock: {
     id: "features.freeLayout.levels.uniformBlock",
     defaultMessage:
-      "This page uses the same size, spacing and alignment for every block: change them in “Page”, or turn that off there to adjust this block on its own.",
+      "This page uses the same size, spacing and alignment for {unit, select, sequences {every sequence} other {every block}}: change them in “Page”, or turn that off there to adjust {unit, select, sequences {this sequence} other {this block}} on its own.",
     description:
-      "Al nivell «Bloc», en lloc de la mida, l'espai i l'alineació, quan la pàgina té «La mateixa a tots els blocs» activat",
+      "Al nivell «Seqüència / Bloc», en lloc de la mida, l'espai i l'alineació, quan la pàgina té «La mateixa…» activat",
   },
   noTemplate: {
     id: "features.freeLayout.levels.noTemplate",

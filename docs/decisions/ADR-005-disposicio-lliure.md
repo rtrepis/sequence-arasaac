@@ -111,8 +111,10 @@ fase 3 va fer veure que no n'hi ha prou:
     de `page.sequenceGap`), com ja ho era la direcció. **El peu de llicència va a totes les
     pàgines o només a l'última** (`page.licenceOn: "last"`; sense valor, a totes). Tots dos són
     opcionals: les versions anteriors els conserven com a camps desconeguts.
-19. **Les columnes de dins d'un bloc, de moment, no es trien**: es pinten sempre automàtiques, i
-    el camp `columns` es conserva al fitxer. Un document sense pàgines (`sheets`) continua sent la
+19. **Les columnes de dins d'un bloc** (`columns`) només es trien a les pàgines en blocs. En
+    `"auto"`, les decideix el repartiment de la pàgina (`resolveColumns`): **una** en una pàgina
+    «en columnes», **una sola fila** en una «en files» i les que fan els pictogrames més grans amb
+    una plantilla. Un bloc comú no segueix el repartiment de cap pàgina. Un document sense pàgines (`sheets`) continua sent la
     pàgina contínua de sempre; afegir-hi una pàgina o passar-la a blocs el fa explícit
     (`explicitPages`).
 

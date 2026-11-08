@@ -11,6 +11,7 @@ import { createAppStore } from "@/app/store";
 import type { DocumentSAAC } from "@/types/document";
 import { draftRestoreSettledActionCreator } from "@features/sequence/store/documentStatusSlice";
 import ViewSequencePage from "@/pages/ViewSequencePage/ViewSequencePage";
+import { FeedbackSnackbar } from "@/context/FeedbackContext";
 
 // La columna de la vista en tres nivells (R5, R8): Document, Pàgina N i el
 // bloc seleccionat al full. Amb un bloc, Document i Pàgina es pleguen (P1) i
@@ -54,7 +55,14 @@ const freeDocument = (): DocumentSAAC => ({
 const renderView = (document: DocumentSAAC) => {
   const store = createAppStore({ document });
   store.dispatch(draftRestoreSettledActionCreator());
-  return renderWithProviders(<ViewSequencePage />, { store });
+  // L'avís de les accions el pinta l'app (`FeedbackSnackbar`), no la pàgina
+  return renderWithProviders(
+    <>
+      <ViewSequencePage />
+      <FeedbackSnackbar />
+    </>,
+    { store },
+  );
 };
 
 /** El botó que plega o desplega un nivell (el títol i l'abast), pel seu nom. */
@@ -157,19 +165,71 @@ describe("els nivells de la columna de la vista", () => {
     expect(
       screen.getByText(/This page uses the same size, spacing and alignment/),
     ).toBeInTheDocument();
+    // Els ajustos són a la pàgina: és la pàgina el que s'obre
+    expect(level(/^Page\s*Page 1 of 2/)).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+    // En blocs, cada bloc tria les columnes de dins
+    expect(
+      screen.getByRole("combobox", { name: "Columns" }),
+    ).toBeInTheDocument();
+  });
+
+  it("activar «la mateixa» posa a tots la configuració del més petit, i ho diu", async () => {
+    const document = freeDocument();
+    const [first, second] = document.pages!.sheets[0].placements;
+    const { store } = renderView({
+      ...document,
+      pages: {
+        ...document.pages!,
+        sheets: [
+          {
+            ...document.pages!.sheets[0],
+            placements: [
+              first,
+              { ...second, view: { sizePict: 0.5, alignmentH: "left" } },
+            ],
+          },
+          document.pages!.sheets[1],
+        ],
+      },
+    });
+    const uniform = screen.getByRole("checkbox", {
+      name: "Same for every block",
+    });
+    expect(uniform).not.toBeChecked();
+
+    await userEvent.click(uniform);
+
+    store
+      .getState()
+      .document.pages!.sheets[0].placements.forEach((placement) =>
+        expect(placement).toMatchObject({ view: { sizePict: 0.5 } }),
+      );
+    expect(
+      await screen.findByText(
+        "Every block on the page now has the size, spacing and alignment of the smallest one: Sequence 2.",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("a la disposició automàtica, sense «la mateixa», cada seqüència té la seva vista", async () => {
     const { store } = renderView(baseDocument());
+    // A la pàgina contínua són seqüències, no blocs
     await userEvent.click(
-      screen.getByRole("checkbox", { name: "Same for every block" }),
+      screen.getByRole("checkbox", { name: "Same for every sequence" }),
     );
 
     await userEvent.click(screen.getByRole("button", { name: /^Sequence 1,/ }));
 
     expect(
-      level(/^Block\s*Sequence 1\s*Applies only to this sequence/),
+      level(/^Sequence\s*Sequence 1\s*Applies only to this sequence/),
     ).toHaveAttribute("aria-expanded", "true");
+    // Les columnes de dins només són de les pàgines en blocs
+    expect(
+      screen.queryByRole("combobox", { name: "Columns" }),
+    ).not.toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Bottom" }));
 

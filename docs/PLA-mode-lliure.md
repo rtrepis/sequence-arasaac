@@ -915,7 +915,11 @@ en blocs**, pàgina a pàgina. Qui ve de la versió d'abans troba el mateix d'en
 | C16 | **Contínua**: la direcció (files o columnes) i l'espai entre seqüències, de cada pàgina (`sheets[].direction`, `sheets[].sequenceGap`) |
 | C17 | **En blocs**: «Repartiment» **En columnes** (N), **En files** (N) o **Amb una plantilla**. N columnes o N files creixen amb els blocs (ADR-005, decisió 17). Les plantilles són, de moment, la graella 2 × 2 i la tira a dalt; les de R3 vindran amb R4 |
 | C18 | **Pictogrames**, a totes dues: «La mateixa a tots els blocs» o cadascun la seva (C13) |
-| C19 | **Les columnes de dins d'un bloc** surten de la interfície (la columna i el menú del bloc): es pinten sempre automàtiques |
+| C19 | ~~Les columnes de dins d'un bloc surten de la interfície~~. Substituït per C23 |
+| C20 | **Dos noms per a dues coses**: a una pàgina contínua, les peces són **seqüències**; a una pàgina en blocs, **blocs**. Ho diuen l'interruptor («La mateixa a totes les seqüències / a tots els blocs»), el tercer nivell de la columna («Seqüència» o «Bloc»), les ajudes i els avisos |
+| C21 | Amb **la mateixa configuració** a la pàgina, seleccionar una seqüència o un bloc **obre el nivell «Pàgina»**, que és on es canvia; el tercer nivell ho diu |
+| C22 | **Activar «La mateixa…»** posa a totes la configuració (mida, espai i alineació) **de la més petita**, que segur que hi cap, i **ho diu** amb un avís que en dona el nom. Si ja eren iguals, no canvia res |
+| C23 | **Les columnes de dins d'un bloc tornen**, només a les pàgines en blocs (nivell «Bloc»). Per defecte, **automàtiques**: en una pàgina en columnes, cada bloc posa els pictogrames **en una columna**; en files, **en una sola fila** (el «0 columnes» de l'encàrrec: sense límit); amb una plantilla, les que fan els pictogrames més grans. Es pot triar un nombre fix |
 
 - **Sense pàgines pròpies** (un document de sempre), la vista és la de sempre: la pàgina és contínua
   i el nivell «Pàgina» té la direcció, l'espai, els pictogrames i «Afegeix una pàgina». Afegir una

@@ -5,6 +5,7 @@ import type { PlacementColumns, SequenceViewSettings } from "@/types/document";
 import { pixelsToMM } from "@features/print/utils/pageUnits";
 import { CSS_PRINT_DPI } from "@features/print/utils/pageFormat";
 import { CARD_IMAGE_MM, Grid, computeGrid } from "./computeGrid";
+import type { Arrangement } from "./templates";
 
 /** Una targeta a mida 1, en píxels d'impressió (la mesura `CardBaseMeasurer`). */
 export interface CardPx {
@@ -67,4 +68,22 @@ export const blockGrid = ({
     gapPx: space * grid.size,
     imageMm: grid.size * CARD_IMAGE_MM,
   };
+};
+
+/**
+ * Les columnes de dins d'un bloc. Amb un nombre triat, aquest. En
+ * automàtiques, les que demana el repartiment de la pàgina: en una pàgina «en
+ * columnes», els blocs són estrets i els pictogrames van **en una columna**;
+ * «en files», els blocs són amples i van **en una sola fila**; amb una
+ * plantilla, les que fan els pictogrames més grans.
+ */
+export const resolveColumns = (
+  columns: PlacementColumns,
+  arrangement: Arrangement["kind"] | undefined,
+  count: number,
+): PlacementColumns => {
+  if (columns !== "auto") return columns;
+  if (arrangement === "columns") return 1;
+  if (arrangement === "rows") return Math.max(1, count);
+  return "auto";
 };

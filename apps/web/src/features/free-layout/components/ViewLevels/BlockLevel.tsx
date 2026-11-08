@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import { MenuItem, Select, Typography } from "@mui/material";
 import { MdOutlineViewQuilt } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
@@ -8,9 +8,15 @@ import SettingsLevel from "@components/ViewSequencesSettings/SettingsLevel";
 import levelMessages from "@components/ViewSequencesSettings/ViewLevels.lang";
 import SequenceViewRows from "@components/ViewSequencesSettings/SequenceViewRows";
 import { updateSequenceViewSettingsActionCreator } from "@features/sequence/store/documentSlice";
-import { blockGrid } from "@features/free-layout/model/blockGrid";
+import { SettingRow } from "@/components/SettingsLayout";
+import {
+  blockGrid,
+  resolveColumns,
+} from "@features/free-layout/model/blockGrid";
+import { arrangementOf } from "@features/free-layout/model/templates";
 import {
   selectPages,
+  setPlacementColumnsThunk,
   setPlacementViewThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import {
@@ -23,6 +29,9 @@ import messages from "./ViewLevels.lang";
 
 /** La icona del nivell: un bloc dins de la pàgina. */
 export const BlockIcon = (): React.ReactElement => <MdOutlineViewQuilt />;
+
+/** Quantes columnes fixes s'ofereixen, com a molt. */
+const MAX_COLUMNS = 8;
 
 /** Prefix dels ids dels títols de fila, per lligar-los als controls. */
 const LABEL_ID = "view-level-block";
@@ -59,7 +68,10 @@ const BlockLevel = ({
   /** El que diu el nivell en lloc dels ajustos, quan els porta la pàgina. */
   const pageRules = (
     <Typography variant="body2" color="text.secondary">
-      <FormattedMessage {...messages.uniformBlock} />
+      <FormattedMessage
+        {...messages.uniformBlock}
+        values={{ unit: page.unit }}
+      />
     </Typography>
   );
 
@@ -76,7 +88,12 @@ const BlockLevel = ({
       <SettingsLevel
         id={VIEW_BLOCK_LEVEL_ID}
         icon={<BlockIcon />}
-        kind={<FormattedMessage {...levelMessages.kindBlock} />}
+        kind={
+          <FormattedMessage
+            {...levelMessages.kindBlock}
+            values={{ unit: "sequences" }}
+          />
+        }
         title={block.name}
         scope={intl.formatMessage(messages.sequenceScope)}
         expanded={expanded}
@@ -98,13 +115,16 @@ const BlockLevel = ({
   const { placement, common, name, pictograms, view, sheetIndex } = block;
   // En una pàgina contínua la mida és la mida; en blocs, un màxim (Q2)
   const continuous = pages?.sheets[sheetIndex]?.mode === "auto";
+  // Un bloc comú surt a totes les pàgines: no segueix el repartiment de cap
+  const arrangement = common
+    ? undefined
+    : arrangementOf(pages?.sheets[sheetIndex]?.template).kind;
   const { grid, imageMm } = blockGrid({
     count: pictograms.length,
     card: cardSizes[placement.sequenceKey],
     view,
     box: { w: placement.w, h: placement.h },
-    // Les columnes de dins d'un bloc, de moment, sempre automàtiques
-    columns: "auto",
+    columns: resolveColumns(placement.columns, arrangement, pictograms.length),
   });
   const mm = intl.formatNumber(imageMm, { maximumFractionDigits: 0 });
 
@@ -112,11 +132,20 @@ const BlockLevel = ({
     <SettingsLevel
       id={VIEW_BLOCK_LEVEL_ID}
       icon={<BlockIcon />}
-      kind={<FormattedMessage {...levelMessages.kindBlock} />}
+      kind={
+        <FormattedMessage
+          {...levelMessages.kindBlock}
+          values={{ unit: continuous ? "sequences" : "blocks" }}
+        />
+      }
       title={name}
-      scope={intl.formatMessage(messages.blockScope, {
-        common: String(common),
-      })}
+      scope={
+        continuous
+          ? intl.formatMessage(messages.sequenceScope)
+          : intl.formatMessage(messages.blockScope, {
+              common: String(common),
+            })
+      }
       expanded={expanded}
       onExpandedChange={onExpandedChange}
     >
@@ -139,6 +168,45 @@ const BlockLevel = ({
                 )
           }
         />
+      )}
+
+      {/* Les columnes de dins del bloc, només en una pàgina en blocs */}
+      {!continuous && (
+        <SettingRow
+          title={<FormattedMessage {...messages.columns} />}
+          labelId={`${LABEL_ID}-columns`}
+          helperId={`${LABEL_ID}-columns-helper`}
+          helper={<FormattedMessage {...messages.columnsHelp} />}
+        >
+          <Select<string>
+            value={String(placement.columns)}
+            onChange={(event) => {
+              const { value } = event.target;
+              dispatch(
+                setPlacementColumnsThunk(
+                  placement.id,
+                  value === "auto" ? "auto" : Number(value),
+                ),
+              );
+            }}
+            size="small"
+            fullWidth
+            labelId={`${LABEL_ID}-columns`}
+            aria-describedby={`${LABEL_ID}-columns-helper`}
+          >
+            <MenuItem value="auto">
+              {intl.formatMessage(messages.columnsAuto)}
+            </MenuItem>
+            {Array.from(
+              { length: Math.min(pictograms.length, MAX_COLUMNS) },
+              (_, i) => i + 1,
+            ).map((n) => (
+              <MenuItem key={n} value={String(n)}>
+                {n}
+              </MenuItem>
+            ))}
+          </Select>
+        </SettingRow>
       )}
     </SettingsLevel>
   );

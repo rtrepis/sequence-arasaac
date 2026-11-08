@@ -2945,8 +2945,8 @@
     "description": "Sota el títol «Pàgina N de M» de la columna de la vista. Amb una sola pàgina, no cal dir quina"
   },
   "pages.viewSequence.levels.noSelection": {
-    "message": "Clica un bloc del full per veure'n els ajustos.",
-    "description": "Al final dels nivells de la columna de la vista quan no hi ha cap bloc seleccionat"
+    "message": "Clica {unit, select, sequences {una seqüència} other {un bloc}} del full per veure'n els ajustos.",
+    "description": "Sota «Cap seqüència / bloc seleccionat»: com s'hi arriba"
   },
   "pages.viewSequence.levels.landscapeShort": {
     "message": "apaïsat",
@@ -3005,32 +3005,32 @@
     "description": "Tipus del segon nivell de la columna de la vista, a sobre de «Pàgina 2 de 3»"
   },
   "pages.viewSequence.levels.kindBlock": {
-    "message": "Bloc",
-    "description": "Tipus del tercer nivell de la columna de la vista, a sobre del nom del bloc seleccionat"
+    "message": "{unit, select, sequences {Seqüència} other {Bloc}}",
+    "description": "Tipus del tercer nivell de la columna de la vista: seqüència en una pàgina contínua, bloc en una pàgina en blocs"
   },
   "pages.viewSequence.levels.noBlock": {
-    "message": "Cap bloc seleccionat",
-    "description": "Nom del nivell «Bloc» de la columna de la vista quan no n'hi ha cap de seleccionat"
+    "message": "{unit, select, sequences {Cap seqüència seleccionada} other {Cap bloc seleccionat}}",
+    "description": "Nom del tercer nivell quan no hi ha res seleccionat: seqüència (pàgina contínua) o bloc (pàgina en blocs)"
   },
   "features.freeLayout.levels.pictograms": {
     "message": "Pictogrames",
     "description": "Secció del nivell «Pàgina» de la columna de la vista: la mida, l'espai i l'alineació dels pictogrames dels blocs de la pàgina"
   },
   "features.freeLayout.levels.uniform": {
-    "message": "La mateixa a tots els blocs",
-    "description": "Interruptor del nivell «Pàgina»: tots els blocs de la pàgina amb la mateixa mida, espai i alineació (l'antic «Aplica a totes», ara per pàgina)"
+    "message": "La mateixa a {unit, select, sequences {totes les seqüències} other {tots els blocs}}",
+    "description": "Interruptor del nivell «Pàgina»: totes les seqüències (pàgina contínua) o tots els blocs (pàgina en blocs) amb la mateixa mida, espai i alineació. `unit` és sequences o blocks"
   },
   "features.freeLayout.levels.uniformOn": {
-    "message": "Tots els blocs d'aquesta pàgina tenen la mateixa mida, espai i alineació. Desactiva-ho per ajustar cada bloc per separat.",
-    "description": "Ajuda sota «La mateixa a tots els blocs», activat"
+    "message": "{unit, select, sequences {Totes les seqüències d'aquesta pàgina tenen} other {Tots els blocs d'aquesta pàgina tenen}} la mateixa mida, espai i alineació. Desactiva-ho per ajustar {unit, select, sequences {cada seqüència} other {cada bloc}} per separat.",
+    "description": "Ajuda sota «La mateixa a totes les seqüències / tots els blocs», activat"
   },
   "features.freeLayout.levels.uniformOff": {
-    "message": "Cada bloc té la seva mida, espai i alineació: clica un bloc del full per ajustar-lo.",
-    "description": "Ajuda sota «La mateixa a tots els blocs», desactivat"
+    "message": "{unit, select, sequences {Cada seqüència té} other {Cada bloc té}} la seva mida, espai i alineació: clica {unit, select, sequences {una seqüència} other {un bloc}} del full per ajustar-{unit, select, sequences {la} other {lo}}.",
+    "description": "Ajuda sota «La mateixa a totes les seqüències / tots els blocs», desactivat"
   },
   "features.freeLayout.levels.uniformBlock": {
-    "message": "Aquesta pàgina fa servir la mateixa mida, espai i alineació a tots els blocs: es canvien a «Pàgina», o desactiva-ho allà per ajustar aquest bloc sol.",
-    "description": "Al nivell «Bloc», en lloc de la mida, l'espai i l'alineació, quan la pàgina té «La mateixa a tots els blocs» activat"
+    "message": "Aquesta pàgina fa servir la mateixa mida, espai i alineació a {unit, select, sequences {totes les seqüències} other {tots els blocs}}: es canvien a «Pàgina», o desactiva-ho allà per ajustar {unit, select, sequences {aquesta seqüència sola} other {aquest bloc sol}}.",
+    "description": "Al nivell «Seqüència / Bloc», en lloc de la mida, l'espai i l'alineació, quan la pàgina té «La mateixa…» activat"
   },
   "features.freeLayout.levels.mode": {
     "message": "Disposició",
@@ -3107,5 +3107,21 @@
   "pages.viewSequence.levels.documentPages": {
     "message": "{count, plural, one {# pàgina} other {# pàgines}}",
     "description": "Resum del nivell «Document» plegat, després del paper: quantes pàgines té el document"
+  },
+  "features.freeLayout.levels.uniformApplied": {
+    "message": "Ara {unit, select, sequences {totes les seqüències} other {tots els blocs}} de la pàgina tenen la mida, l'espai i l'alineació {unit, select, sequences {de la més petita} other {del més petit}}: {name}.",
+    "description": "Snackbar en activar «La mateixa…»: totes les seqüències o blocs de la pàgina passen a tenir la configuració de la més petita, que es diu (`name`)"
+  },
+  "features.freeLayout.levels.columns": {
+    "message": "Columnes",
+    "description": "Títol de la fila del nivell «Bloc»: en quantes columnes van els pictogrames de dins del bloc"
+  },
+  "features.freeLayout.levels.columnsAuto": {
+    "message": "Automàtiques",
+    "description": "Opció de «Columnes» del bloc: les que demana el repartiment de la pàgina"
+  },
+  "features.freeLayout.levels.columnsHelp": {
+    "message": "Automàtiques: en una pàgina en columnes, una columna; en files, una sola fila; amb una plantilla, les que fan els pictogrames més grans.",
+    "description": "Ajuda sota «Columnes» del bloc: què fan les automàtiques segons el repartiment de la pàgina"
   }
 }

@@ -50,6 +50,7 @@ import {
 import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
 import AddSequenceDialog from "@features/free-layout/components/AddSequenceDialog";
 import CardBaseMeasurer from "./CardBaseMeasurer";
+import { arrangementOf } from "@features/free-layout/model/templates";
 import AutoSheetFlow from "./AutoSheetFlow";
 import PageHeader from "./PageHeader";
 import PlacementBox from "./PlacementBox";
@@ -200,6 +201,9 @@ const FreeLayoutPages = ({
     sheetIndex: number,
     common: boolean,
   ) => {
+    // Un bloc comú surt a totes les pàgines: no segueix el repartiment de cap
+    const template = freeLayout.sheets[sheetIndex]?.template;
+    const arrangement = common ? undefined : arrangementOf(template).kind;
     if (placement.kind !== "sequence") return null;
     const pictograms = content[placement.sequenceKey];
     const sequenceView = views[placement.sequenceKey];
@@ -227,6 +231,7 @@ const FreeLayoutPages = ({
         cardBase={cardSizes[placement.sequenceKey]}
         defaults={defaults}
         scale={scale}
+        arrangement={arrangement}
         selected={sameSelection(selection, target)}
         onSelect={() => select(target)}
       />

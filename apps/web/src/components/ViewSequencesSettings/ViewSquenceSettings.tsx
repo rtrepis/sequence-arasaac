@@ -78,6 +78,7 @@ import {
   useViewSelection,
 } from "@features/free-layout/hooks/useViewSelection";
 import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
+import { usePageUniform } from "@features/free-layout/hooks/usePageUniform";
 import {
   BlockIcon,
   BlockLevel,
@@ -107,10 +108,14 @@ interface OpenLevels {
   block: boolean;
 }
 
-/** Sense res seleccionat, tots oberts; amb un bloc, només el bloc (P1). */
-const levelsFor = (hasSelection: boolean): OpenLevels => ({
+/**
+ * Sense res seleccionat, tots oberts; amb una seqüència o un bloc, només el
+ * seu nivell (P1). Si la pàgina té la mateixa configuració per a tots, els
+ * ajustos són a la pàgina: llavors s'obre la pàgina.
+ */
+const levelsFor = (hasSelection: boolean, fromPage: boolean): OpenLevels => ({
   document: !hasSelection,
-  page: !hasSelection,
+  page: !hasSelection || fromPage,
   block: true,
 });
 
@@ -170,14 +175,30 @@ const ViewSequencesSettingsContent = ({
   const pages = useAppSelector(selectPages);
   const documentTitle = useAppSelector(selectDocumentTitle);
   const currentSelection = selectionKey(selection);
+  // La pàgina del que hi ha seleccionat: si té la mateixa configuració per a
+  // tots, és allà on es canvia
+  const selectedPage = usePageUniform(
+    selection?.kind === "block" ? selection.sheetIndex : 0,
+  );
+  const selectionFromPage =
+    selection !== null &&
+    selectedPage.uniform &&
+    selectedPage.blockCount > 1 &&
+    !(selectedBlock?.kind === "block" && selectedBlock.common);
+  // Com es diuen les peces de la pàgina que es mira: seqüències o blocs
+  const activeUnit =
+    pages?.sheets[activePage]?.mode === "template" ? "blocks" : "sequences";
   // Amb un bloc seleccionat, Document i Pàgina es pleguen perquè el bloc quedi
   // a la vista (P1). Plegar-ne o desplegar-ne un a mà es respecta fins que
   // canvia la selecció
   const [openLevels, setOpenLevels] = useState<OpenLevels>(() =>
-    levelsFor(currentSelection !== ""),
+    levelsFor(currentSelection !== "", selectionFromPage),
   );
+  // Només quan canvia la selecció: el que l'usuari plega a mà es respecta
+  const fromPageRef = useRef(selectionFromPage);
+  fromPageRef.current = selectionFromPage;
   useEffect(() => {
-    setOpenLevels(levelsFor(currentSelection !== ""));
+    setOpenLevels(levelsFor(currentSelection !== "", fromPageRef.current));
   }, [currentSelection]);
   const setLevelOpen =
     (level: keyof OpenLevels) =>
@@ -851,10 +872,23 @@ const ViewSequencesSettingsContent = ({
                     <SettingsLevel
                       id={VIEW_BLOCK_LEVEL_ID}
                       icon={<BlockIcon />}
-                      kind={<FormattedMessage {...levelMessages.kindBlock} />}
-                      title={<FormattedMessage {...levelMessages.noBlock} />}
+                      kind={
+                        <FormattedMessage
+                          {...levelMessages.kindBlock}
+                          values={{ unit: activeUnit }}
+                        />
+                      }
+                      title={
+                        <FormattedMessage
+                          {...levelMessages.noBlock}
+                          values={{ unit: activeUnit }}
+                        />
+                      }
                       scope={
-                        <FormattedMessage {...levelMessages.noSelection} />
+                        <FormattedMessage
+                          {...levelMessages.noSelection}
+                          values={{ unit: activeUnit }}
+                        />
                       }
                     />
                   )}

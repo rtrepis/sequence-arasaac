@@ -35,15 +35,16 @@ const messages = defineMessages({
   },
   kindBlock: {
     id: "pages.viewSequence.levels.kindBlock",
-    defaultMessage: "Block",
+    defaultMessage: "{unit, select, sequences {Sequence} other {Block}}",
     description:
-      "Tipus del tercer nivell de la columna de la vista, a sobre del nom del bloc seleccionat",
+      "Tipus del tercer nivell de la columna de la vista: seqüència en una pàgina contínua, bloc en una pàgina en blocs",
   },
   noBlock: {
     id: "pages.viewSequence.levels.noBlock",
-    defaultMessage: "No block selected",
+    defaultMessage:
+      "{unit, select, sequences {No sequence selected} other {No block selected}}",
     description:
-      "Nom del nivell «Bloc» de la columna de la vista quan no n'hi ha cap de seleccionat",
+      "Nom del tercer nivell quan no hi ha res seleccionat: seqüència (pàgina contínua) o bloc (pàgina en blocs)",
   },
   documentScope: {
     id: "pages.viewSequence.levels.documentScope",
@@ -59,9 +60,9 @@ const messages = defineMessages({
   },
   noSelection: {
     id: "pages.viewSequence.levels.noSelection",
-    defaultMessage: "Click a block on the page to see its settings.",
-    description:
-      "Al final dels nivells de la columna de la vista quan no hi ha cap bloc seleccionat",
+    defaultMessage:
+      "Click {unit, select, sequences {a sequence} other {a block}} on the page to see its settings.",
+    description: "Sota «Cap seqüència / bloc seleccionat»: com s'hi arriba",
   },
   landscapeShort: {
     id: "pages.viewSequence.levels.landscapeShort",

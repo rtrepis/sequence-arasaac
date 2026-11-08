@@ -29,7 +29,11 @@ import {
   sheetSurface,
   sheetWarning,
 } from "@/style/palette";
-import { blockGrid } from "@features/free-layout/model/blockGrid";
+import {
+  blockGrid,
+  resolveColumns,
+} from "@features/free-layout/model/blockGrid";
+import type { Arrangement } from "@features/free-layout/model/templates";
 import {
   copyPlacementToSheetThunk,
   removePlacementThunk,
@@ -61,6 +65,8 @@ interface PlacementBoxProps {
   view: SequenceViewSettings;
   cardBase: CardBaseSize | undefined;
   defaults: PictogramCardDefaults;
+  /** El repartiment de la pàgina: decideix les columnes automàtiques del bloc */
+  arrangement?: Arrangement["kind"];
   /** L'escala del full a la pantalla: el botó del menú es pinta a mida de pantalla */
   scale: number;
   selected: boolean;
@@ -90,6 +96,7 @@ const PlacementBox = ({
   cardBase,
   defaults,
   scale,
+  arrangement,
   selected,
   onSelect,
 }: PlacementBoxProps): React.ReactElement => {
@@ -104,8 +111,7 @@ const PlacementBox = ({
     card: cardBase,
     view,
     box: { w: placement.w, h: placement.h },
-    // Les columnes de dins d'un bloc, de moment, sempre automàtiques
-    columns: "auto",
+    columns: resolveColumns(placement.columns, arrangement, pictograms.length),
   });
 
   const close = () => setAnchor(null);

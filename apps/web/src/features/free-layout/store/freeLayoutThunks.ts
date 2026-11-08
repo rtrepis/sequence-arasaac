@@ -10,6 +10,7 @@ import type {
   DocumentLayout,
   DocumentPages,
   LicenceOn,
+  PlacementColumns,
   SequenceViewSettings,
   SheetMode,
 } from "@/types/document";
@@ -262,6 +263,17 @@ export const setPlacementCommonThunk =
           ),
     );
   };
+
+/** Les columnes de dins d'un bloc: automàtiques o un nombre fix. */
+export const setPlacementColumnsThunk = (
+  placementId: string,
+  columns: PlacementColumns,
+): AppThunk =>
+  changeFreeLayout((layout) =>
+    updatePlacement(layout, placementId, (placement) =>
+      placement.kind === "sequence" ? { ...placement, columns } : placement,
+    ),
+  );
 
 /**
  * Canvia la vista d'un bloc de seqüència (el nivell «Bloc» de la columna, M1).
