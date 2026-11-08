@@ -72,3 +72,22 @@ export const useAvailableHeight = (
   }, [ref]);
   return height;
 };
+
+/** L'alçada d'un element, en px, mentre `enabled`: segueix els canvis de mida. */
+export const useElementHeight = (
+  ref: React.RefObject<HTMLElement | null>,
+  enabled: boolean,
+): number => {
+  const [height, setHeight] = useState(0);
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!enabled || !element) return;
+    const update = () => setHeight(element.getBoundingClientRect().height);
+    update();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [ref, enabled]);
+  return height;
+};

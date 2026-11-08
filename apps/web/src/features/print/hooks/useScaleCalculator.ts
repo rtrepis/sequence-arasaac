@@ -63,8 +63,10 @@ export function calculateDisplayDimensions(
 
   // El marge és el de la columna d'ajustos quan és al costat del full; sense
   // columna, o amb la columna a sota, el del mòbil
-  const margin =
-    isMediumScreen(screenWidth) && settingsBeside
+  // Al mòbil, el de la vora de la finestra: el full fa l'amplada del verd
+  const margin = !isMediumScreen(screenWidth)
+    ? SCREEN_MARGINS.phone
+    : settingsBeside
       ? SCREEN_MARGINS.medium
       : SCREEN_MARGINS.small;
 

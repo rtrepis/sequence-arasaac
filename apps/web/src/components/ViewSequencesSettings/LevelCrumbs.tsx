@@ -30,7 +30,9 @@ const LevelCrumbs = ({
       aria-label={intl.formatMessage(messages.crumbs)}
       sx={{
         position: "sticky",
-        top: 0,
+        // Al mòbil el verd és qui es desplaça, i té marge: les molles s'hi
+        // enganxen a la vora, no a dins del marge, perquè no s'hi vegi res a sobre
+        top: { xs: -12, md: 0 },
         zIndex: 1,
         // Opac: la columna passa per sota
         backgroundColor: "background.paper",

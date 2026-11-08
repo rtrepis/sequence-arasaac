@@ -153,3 +153,15 @@ describe("useScaleCalculator", () => {
     });
   });
 });
+
+describe("al mòbil", () => {
+  it("el full fa l'amplada del verd dels ajustos: la finestra menys 2 px a cada costat", () => {
+    const result = calculateDisplayDimensions({
+      pageFormat: createPageFormat("A4", "landscape"),
+      screenWidth: 390,
+      screenHeight: 844,
+    });
+    expect(result.displayWidth).toBeCloseTo(390 - SCREEN_MARGINS.phone);
+    expect(SCREEN_MARGINS.phone).toBe(4);
+  });
+});

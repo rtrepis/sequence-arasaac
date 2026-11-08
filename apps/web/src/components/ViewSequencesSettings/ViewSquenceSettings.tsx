@@ -86,14 +86,20 @@ import {
   LicencePagesRow,
   VIEW_PAGE_LEVEL_ID,
 } from "@features/free-layout/components/ViewLevels";
-import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
+import { FLOATING_BOTTOM_INSET } from "@/style/appShape";
+import {
+  APP_BAR_HEIGHT,
+  useAppBarHidden,
+} from "@components/utils/HiddenOnScroll/HiddenOnScroll";
+import { FLOATING_INSET_VARIABLE } from "@components/FloatingLayer";
 import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
 import {
   enterPageFullscreen,
   pageFrameId,
   scrollPageToTop,
   useAvailableHeight,
+  useElementHeight,
   useFullscreenElementId,
   fullscreenScale,
 } from "@features/free-layout/hooks/usePageView";
@@ -287,6 +293,10 @@ const ViewSequencesSettingsContent = ({
   // L'alçada de la columna: de la seva vora de dalt al peu de la finestra
   const columnRef = useRef<HTMLDivElement | null>(null);
   const columnHeight = useAvailableHeight(columnRef);
+  // Al mòbil: l'alçada de la previsualització enganxada, que el verd descompta
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const previewHeight = useElementHeight(previewRef, !isWideScreen);
+  const appBarHidden = useAppBarHidden();
   // La pàgina única (sense pàgines pròpies), a pantalla completa
   const pageInFullscreen = useFullscreenElementId() === pageFrameId(0);
 
@@ -665,128 +675,153 @@ const ViewSequencesSettingsContent = ({
           // Sense la columna al costat, el full va al mig de l'espai que queda
           justifyContent={{ md: settingsVisible ? "flex-start" : "center" }}
         >
-          {isFreeLayout ? (
-            <FreeLayoutPages
-              pageDimensions={pageFormat.dimensions}
-              displayWidth={displayWidth}
-              displayHeight={displayHeight}
-              scale={calculatedScale}
-              author={author}
-              licence={viewSettings.licence}
-              onFocusPage={(index) => {
-                // La pàgina sencera, a dalt de tot i tan gran com hi càpiga
-                setFit("page");
-                scrollPageToTop(index);
-              }}
-            />
-          ) : (
-            <>
-              {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
-              {/* Un clic fora de cap seqüència treu la selecció; Escape també */}
-              <Box
-                className="preview-container"
-                id={pageFrameId(0)}
-                onClick={clearSelection}
-                onKeyDown={clearOnEscape}
-                sx={{
-                  width: displayWidth,
-                  height: displayHeight,
-                  minWidth: 0,
-                  overflow: "hidden",
-                  // Amb una seqüència seleccionada, la pàgina es ressalta com
-                  // les del mode lliure
-                  ...pageFrameSx(selection !== null),
-                  marginBottom: 1,
-                  "@media print": {
-                    marginBottom: 0,
-                    outline: "none",
-                    boxShadow: "none",
-                  },
-                  position: { xs: "sticky", md: "static" },
-                  top: { xs: 0 },
-                  zIndex: { xs: 10, md: "auto" },
-                  // El full és paper en tots dos temes: aquesta previsualització ha de
-                  // ser idèntica al que sortirà per impressora i al PDF
-                  backgroundColor: sheetSurface,
-                  // A pantalla completa, el full al mig i tan gran com hi càpiga
-                  "&:fullscreen": {
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    outline: "none",
-                    boxShadow: "none",
-                  },
-                  "&:fullscreen [data-html2canvas-ignore]": { display: "none" },
+          {/* Al mòbil, la previsualització queda enganxada a dalt, amb l'amplada
+              del verd dels ajustos; la barra de l'app i els botons se'n van en
+              baixar i tornen en pujar. A l'escriptori, l'embolcall no hi és */}
+          <Box
+            ref={previewRef}
+            sx={
+              isWideScreen
+                ? { display: "contents" }
+                : {
+                    position: "sticky",
+                    // Just a sota de la barra de l'app quan es veu; a dalt de
+                    // tot quan, en baixar, se n'ha anat
+                    top: appBarHidden ? 0 : APP_BAR_HEIGHT,
+                    transition: "top 225ms",
+                    zIndex: 10,
+                    backgroundColor: "background.default",
+                    // El Container de l'app deixa 16 px a cada costat: en queden 2
+                    marginInline: "-14px",
+                    paddingInline: "2px",
+                    paddingBlock: 1,
+                    "@media print": {
+                      position: "static",
+                      margin: 0,
+                      padding: 0,
+                    },
+                  }
+            }
+          >
+            {isFreeLayout ? (
+              <FreeLayoutPages
+                pageDimensions={pageFormat.dimensions}
+                displayWidth={displayWidth}
+                displayHeight={displayHeight}
+                scale={calculatedScale}
+                author={author}
+                licence={viewSettings.licence}
+                onFocusPage={(index) => {
+                  // La pàgina sencera, a dalt de tot i tan gran com hi càpiga
+                  setFit("page");
+                  scrollPageToTop(index);
                 }}
-              >
-                {/* Contenidor interior: dimensions reals amb transform per visualització.
-                És el full sencer i l'únic que s'imprimeix (`usePrintSheet`): una
-                columna amb el contingut i, a sota, el peu de llicència */}
+              />
+            ) : (
+              <>
+                {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
+                {/* Un clic fora de cap seqüència treu la selecció; Escape també */}
                 <Box
-                  className="preview-content"
+                  className="preview-container"
+                  id={pageFrameId(0)}
+                  onClick={clearSelection}
+                  onKeyDown={clearOnEscape}
                   sx={{
-                    width: pageFormat.dimensions.width,
-                    height: pageFormat.dimensions.height,
-                    transform: `scale(${
-                      pageInFullscreen
-                        ? fullscreenScale(pageFormat.dimensions)
-                        : calculatedScale
-                    })`,
-                    transformOrigin: pageInFullscreen ? "center" : "top left",
-                    flexShrink: 0,
-                    display: "flex",
-                    flexDirection: "column",
+                    width: displayWidth,
+                    height: displayHeight,
+                    minWidth: 0,
+                    overflow: "hidden",
+                    // Amb una seqüència seleccionada, la pàgina es ressalta com
+                    // les del mode lliure
+                    ...pageFrameSx(selection !== null),
+                    marginBottom: { md: 1 },
+                    "@media print": {
+                      marginBottom: 0,
+                      outline: "none",
+                      boxShadow: "none",
+                    },
+                    // El full és paper en tots dos temes: aquesta previsualització ha de
+                    // ser idèntica al que sortirà per impressora i al PDF
+                    backgroundColor: sheetSurface,
+                    // A pantalla completa, el full al mig i tan gran com hi càpiga
+                    "&:fullscreen": {
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      outline: "none",
+                      boxShadow: "none",
+                    },
+                    "&:fullscreen [data-html2canvas-ignore]": {
+                      display: "none",
+                    },
                   }}
                 >
-                  <Stack
-                    display={"flex"}
-                    direction={viewSettings.direction}
-                    flexWrap={"wrap"}
-                    alignContent={blockAlign}
-                    alignItems={blockAlign}
-                    columnGap={
-                      viewSettings.direction === "column"
-                        ? viewSettings.sequenceSpaceBetween
-                        : 0
-                    }
-                    rowGap={
-                      viewSettings.direction === "row"
-                        ? viewSettings.sequenceSpaceBetween
-                        : 0
-                    }
-                    width="100%"
+                  {/* Contenidor interior: dimensions reals amb transform per visualització.
+                És el full sencer i l'únic que s'imprimeix (`usePrintSheet`): una
+                columna amb el contingut i, a sota, el peu de llicència */}
+                  <Box
+                    className="preview-content"
                     sx={{
-                      flex: 1,
-                      // Sense això, un contingut alt eixamplaria el full en comptes
-                      // de quedar retallat per la vora, com fa el paper
-                      minHeight: 0,
-                      // I sense això el sobrant es pintaria damunt del peu: el que
-                      // no hi cap es talla, que és el que fa el paper
-                      overflow: "hidden",
-                      padding: 2,
-                      paddingInline: 1.5,
+                      width: pageFormat.dimensions.width,
+                      height: pageFormat.dimensions.height,
+                      transform: `scale(${
+                        pageInFullscreen
+                          ? fullscreenScale(pageFormat.dimensions)
+                          : calculatedScale
+                      })`,
+                      transformOrigin: pageInFullscreen ? "center" : "top left",
+                      flexShrink: 0,
+                      display: "flex",
+                      flexDirection: "column",
                     }}
                   >
-                    {children({
-                      viewSettings,
-                      sequenceViewSettings,
-                      scale: 1,
-                      author,
-                      selectable: true,
-                    })}
-                  </Stack>
+                    <Stack
+                      display={"flex"}
+                      direction={viewSettings.direction}
+                      flexWrap={"wrap"}
+                      alignContent={blockAlign}
+                      alignItems={blockAlign}
+                      columnGap={
+                        viewSettings.direction === "column"
+                          ? viewSettings.sequenceSpaceBetween
+                          : 0
+                      }
+                      rowGap={
+                        viewSettings.direction === "row"
+                          ? viewSettings.sequenceSpaceBetween
+                          : 0
+                      }
+                      width="100%"
+                      sx={{
+                        flex: 1,
+                        // Sense això, un contingut alt eixamplaria el full en comptes
+                        // de quedar retallat per la vora, com fa el paper
+                        minHeight: 0,
+                        // I sense això el sobrant es pintaria damunt del peu: el que
+                        // no hi cap es talla, que és el que fa el paper
+                        overflow: "hidden",
+                        padding: 2,
+                        paddingInline: 1.5,
+                      }}
+                    >
+                      {children({
+                        viewSettings,
+                        sequenceViewSettings,
+                        scale: 1,
+                        author,
+                        selectable: true,
+                      })}
+                    </Stack>
 
-                  {/* Al peu del full, dins del flux: només es pinta al paper i al
+                    {/* Al peu del full, dins del flux: només es pinta al paper i al
                   PDF, i allà s'hi reserva l'espai perquè no caigui damunt de
                   l'última fila de pictogrames */}
-                  <CopyRight author={author} licence={viewSettings.licence} />
+                    <CopyRight author={author} licence={viewSettings.licence} />
+                  </Box>
                 </Box>
-              </Box>
-
-              {/* Al mòbil, seleccionar no mou la pàgina (P9): l'enllaç baixa als ajustos */}
-              {!isWideScreen && selection && <BlockSettingsLink />}
-            </>
-          )}
+              </>
+            )}
+          </Box>
 
           {/* La columna: empesa sempre a la vora dreta a l'escriptori, amb els
               botons de la vista a dalt i, a sota, els ajustos (el verd), que
@@ -844,12 +879,30 @@ const ViewSequencesSettingsContent = ({
                       // amb el marge més petit, per guanyar amplada
                       backgroundColor: "background.paper",
                       borderRadius: 2,
-                      padding: { xs: "2px", md: 1.5 },
+                      padding: 1.5,
                       // El Container de l'app deixa 16 px a cada costat al mòbil
                       // (`theme.spacing(2)`): en queden 2
                       marginInline: { xs: "-14px", md: 0 },
                       minHeight: { md: "100%" },
                       boxSizing: "border-box",
+                      // Al mòbil, tota l'alçada que deixa la previsualització
+                      // enganxada, i les targetes es desplacen per dins; les
+                      // molles hi queden fixes a dalt
+                      height: {
+                        xs: `calc(100dvh - ${previewHeight + (appBarHidden ? 0 : APP_BAR_HEIGHT)}px)`,
+                        md: "auto",
+                      },
+                      overflowY: { xs: "auto", md: "visible" },
+                      // El Container de l'app deixa a sota l'espai del botó
+                      // flotant; aquí el verd ja s'hi desplaça per dins, i
+                      // aquell espai faria pujar la pàgina i perdre les molles
+                      // per sota de la previsualització
+                      marginBottom: {
+                        xs: `calc(-1 * max(${FLOATING_BOTTOM_INSET}px, var(${FLOATING_INSET_VARIABLE}, 0px)))`,
+                        md: 0,
+                      },
+                      overscrollBehavior: { xs: "contain", md: "auto" },
+                      "@media print": { height: "auto", overflow: "visible" },
                     }}
                   >
                     {/* On s'és: Document › Pàgina N › el bloc. Fixes dalt de tot */}

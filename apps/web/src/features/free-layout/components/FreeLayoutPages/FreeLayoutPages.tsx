@@ -9,18 +9,11 @@ import {
   Box,
   Stack,
   Theme,
-  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  MdAdd,
-  MdChevronLeft,
-  MdChevronRight,
-  MdOutlineLibraryAdd,
-} from "react-icons/md";
-import StyledIconButton from "@/style/StyledIconButton";
+import { MdAdd, MdOutlineLibraryAdd } from "react-icons/md";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
@@ -56,7 +49,6 @@ import {
   useClearOnEscape,
   useViewSelection,
 } from "@features/free-layout/hooks/useViewSelection";
-import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
 import AddSequenceDialog from "@features/free-layout/components/AddSequenceDialog";
 import CardBaseMeasurer from "./CardBaseMeasurer";
 import {
@@ -358,38 +350,6 @@ const FreeLayoutPages = ({
       onKeyDown={clearOnEscape}
       {...swipe}
     >
-      {isNarrow && sheetCount > 1 && (
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          sx={{ "@media print": { display: "none" } }}
-        >
-          <Tooltip title={intl.formatMessage(messages.previousPage)}>
-            <span>
-              <StyledIconButton
-                color="inherit"
-                aria-label={intl.formatMessage(messages.previousPage)}
-                disabled={activePage === 0}
-                onClick={() => goToPage(activePage - 1)}
-              >
-                <MdChevronLeft />
-              </StyledIconButton>
-            </span>
-          </Tooltip>
-          <Tooltip title={intl.formatMessage(messages.nextPage)}>
-            <span>
-              <StyledIconButton
-                color="inherit"
-                aria-label={intl.formatMessage(messages.nextPage)}
-                disabled={activePage === sheetCount - 1}
-                onClick={() => goToPage(activePage + 1)}
-              >
-                <MdChevronRight />
-              </StyledIconButton>
-            </span>
-          </Tooltip>
-        </Stack>
-      )}
       <CardBaseMeasurer
         sequences={measured}
         defaults={defaults}
@@ -442,10 +402,18 @@ const FreeLayoutPages = ({
               onFocusPage={
                 onFocusPage ? () => onFocusPage(sheetIndex) : undefined
               }
+              // Al mòbil, una pàgina cada vegada: les fletxes, al costat del títol
+              onPrevious={
+                isNarrow && sheetCount > 1
+                  ? () => goToPage(sheetIndex - 1)
+                  : undefined
+              }
+              onNext={
+                isNarrow && sheetCount > 1
+                  ? () => goToPage(sheetIndex + 1)
+                  : undefined
+              }
             />
-
-            {/* Al mòbil, seleccionar no mou la pàgina (P9): l'enllaç baixa als ajustos */}
-            {isNarrow && selectedHere && <BlockSettingsLink />}
 
             {/* El full encabit a la pantalla; a dins, a mida real i escalat.
                 Un clic fora de cap bloc treu la selecció. A pantalla completa,
@@ -459,7 +427,9 @@ const FreeLayoutPages = ({
                 height: displayHeight,
                 // La pàgina activa, ressaltada amb la guia per fora del full,
                 // com el bloc seleccionat; el marc verd hi continua
-                ...pageFrameSx(active),
+                // Al mòbil no hi ha marge per a la guia de fora, i la pàgina
+                // que es veu és sempre l'activa
+                ...pageFrameSx(active && !isNarrow),
                 "&:fullscreen": {
                   display: "flex",
                   alignItems: "center",
@@ -604,7 +574,13 @@ const FreeLayoutPages = ({
         );
       })}
 
-      <Box sx={{ "@media print": { display: "none" } }}>
+      {/* Al mòbil, «Afegeix una pàgina» és al menú «⋯» de la pàgina */}
+      <Box
+        sx={{
+          display: isNarrow ? "none" : undefined,
+          "@media print": { display: "none" },
+        }}
+      >
         <StyledButton
           color="inherit"
           startIcon={<MdAdd />}

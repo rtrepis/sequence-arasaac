@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import {
+  MdAdd,
   MdArrowDownward,
   MdArrowUpward,
   MdCheck,
@@ -28,6 +29,7 @@ import { useFeedback } from "@/context/FeedbackContext";
 import StyledIconButton from "@/style/StyledIconButton";
 import type { SheetMode } from "@/types/document";
 import {
+  addSheetThunk,
   addTextBlockThunk,
   duplicateSheetThunk,
   moveSheetThunk,
@@ -67,7 +69,7 @@ const PageActionsMenu = ({
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { showSnackbar } = useFeedback();
-  const { select, setTemplatePreview } = useViewSelection();
+  const { select, setTemplatePreview, setVisiblePage } = useViewSelection();
   const pages = useAppSelector(selectPages);
   const orientation = useAppSelector(selectPageLayout).orientation;
   const pageMenuId = useId();
@@ -203,6 +205,19 @@ const PageActionsMenu = ({
         </MenuItem>
 
         <Divider />
+        <MenuItem
+          onClick={pageAction(() => {
+            // Una pàgina nova, darrere d'aquesta, i s'hi va
+            dispatch(addSheetThunk(sheetIndex));
+            setVisiblePage(sheetIndex + 1);
+            confirm(messages.pageAdded, { number: number + 1 });
+          })}
+        >
+          <ListItemIcon>
+            <MdAdd />
+          </ListItemIcon>
+          <ListItemText>{intl.formatMessage(messages.addPage)}</ListItemText>
+        </MenuItem>
         <MenuItem
           onClick={pageAction(() => {
             dispatch(duplicateSheetThunk(sheetIndex));
