@@ -89,6 +89,7 @@ import {
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import { FLOATING_BOTTOM_INSET } from "@/style/appShape";
 import { FLOATING_INSET_VARIABLE } from "@components/FloatingLayer";
+import SinglePageHeader from "@features/free-layout/components/FreeLayoutPages/SinglePageHeader";
 import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
 import {
   enterPageFullscreen,
@@ -697,8 +698,20 @@ const ViewSequencesSettingsContent = ({
                 }}
               />
             ) : (
-              <>
-                {/* Contenidor exterior: dimensions visuals de pantalla, sticky en mòbil */}
+              <Stack sx={{ minWidth: 0 }}>
+                {/* La capçalera de la pàgina única, com la de les pàgines del
+                    document: des de l'inici s'hi poden afegir pàgines. La pantalla
+                    completa com a paper no en té */}
+                {!isFullscreen && (
+                  <SinglePageHeader
+                    slot="header"
+                    onFocusPage={() => {
+                      setFit("page");
+                      scrollPageToTop(0);
+                    }}
+                  />
+                )}
+                {/* Contenidor exterior: dimensions visuals de pantalla */}
                 {/* Un clic fora de cap seqüència treu la selecció; Escape també */}
                 <Box
                   className="preview-container"
@@ -798,7 +811,13 @@ const ViewSequencesSettingsContent = ({
                     <CopyRight author={author} licence={viewSettings.licence} />
                   </Box>
                 </Box>
-              </>
+
+                {/* A l'escriptori, «Afegeix una pàgina» sota el full; al mòbil
+                    és al menú «⋯» de la capçalera */}
+                {!isFullscreen && isWideScreen && (
+                  <SinglePageHeader slot="footer" />
+                )}
+              </Stack>
             )}
           </Box>
 

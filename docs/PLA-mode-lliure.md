@@ -1017,6 +1017,10 @@ en aplicar una plantilla **surt de la pàgina** (la seqüència continua al docu
   (`100dvh`) i les targetes s'hi desplacen per dins, amb les molles fixes a dalt i 12 px de marge.
   L'enllaç «Ajustos del bloc» ja no hi surt. **Es va provar d'enganxar la previsualització a dalt**
   i es va descartar: amb el full vertical, als ajustos només els quedaven uns 200 px.
+- **Afegir pàgines des de l'inici**: un document sense pàgines pròpies (la pàgina única de sempre)
+  té la mateixa capçalera que les altres pàgines (`SinglePageHeader`): «Pàgina 1 de 1», afegir i
+  el menú «⋯», amb «Afegeix una pàgina». A l'escriptori, també el botó de sota del full. Qualsevol
+  d'aquestes accions fa explícita la pàgina.
 - **Moure i canviar la mida** (la fase 4; ADR-005, decisió 21): el bloc seleccionat s'arrossega
   i té vuit nanses; amb el teclat, fletxes i Maj + fletxes. Tot salta a una quadrícula de punts
   de 20 × 24 (`grid.ts`, `GridDots`, `useBlockDrag`), que es veu mentre hi ha un bloc

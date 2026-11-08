@@ -347,3 +347,21 @@ describe("una plantilla on no hi cap tot (R4)", () => {
     ).toHaveLength(1);
   });
 });
+
+describe("afegir pàgines des de l'inici", () => {
+  it("un document sense pàgines pròpies té la capçalera de la pàgina, i el menú hi afegeix una pàgina", async () => {
+    renderView(baseDocument());
+
+    expect(
+      screen.getByRole("heading", { name: "Page 1 of 1" }),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: "More page actions" }),
+    );
+    await userEvent.click(screen.getByRole("menuitem", { name: "Add a page" }));
+
+    expect(
+      await screen.findByRole("heading", { name: "Page 2 of 2" }),
+    ).toBeInTheDocument();
+  });
+});
