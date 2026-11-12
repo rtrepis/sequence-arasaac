@@ -1,13 +1,12 @@
 import { Font } from "../../../types/sequence";
 import SettingCardNumber from "../SettingCardNumber/SettingCardNumber";
 import SettingCardFont from "../SettingCardOptions/font/SettingCardFont";
-import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import SectionTitle from "../../SettingsLayout/SectionTitle";
 import SettingRow from "../../SettingsLayout/SettingRow";
 import { messages } from "./SettingCardFontGroup.lang";
 import InputColor from "../InputColor/InputColor";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 interface SettingCardFontGroupProps {
   state: Font;
@@ -24,13 +23,24 @@ const SettingCardFontGroup = ({
   setState,
   title,
 }: SettingCardFontGroupProps): React.ReactElement => {
-  const [family, setFamily] = useState(state.family);
-  const [size, setSize] = useState(state.size);
-  const [color, setColor] = useState(state.color);
-
-  useEffect(() => {
-    setState({ color: color, family: family, size: size });
-  }, [color, family, setState, size]);
+  // Controlat del tot: abans en guardava una còpia pròpia i, si la lletra
+  // canviava des de fora (carregar un estil d'un fitxer), els controls
+  // continuaven ensenyant la d'abans
+  const { family, size, color } = state;
+  // Cada control canvia només el seu camp, sobre la lletra d'aquell moment
+  const fieldSetter =
+    <K extends keyof Font>(field: K): Dispatch<SetStateAction<Font[K]>> =>
+    (value) =>
+      setState((previous) => ({
+        ...previous,
+        [field]:
+          typeof value === "function"
+            ? (value as (current: Font[K]) => Font[K])(previous[field])
+            : value,
+      }));
+  const setFamily = fieldSetter("family");
+  const setSize = fieldSetter("size");
+  const setColor = fieldSetter("color");
 
   return (
     <SectionTitle title={title ?? <FormattedMessage {...messages.font} />}>
@@ -42,7 +52,10 @@ const SettingCardFontGroup = ({
 
       <SettingCardNumber setting="fontSize" state={size} setState={setSize} />
 
-      <SettingRow title={<FormattedMessage {...messages.color} />} control="compact">
+      <SettingRow
+        title={<FormattedMessage {...messages.color} />}
+        control="compact"
+      >
         <InputColor
           inputBorder={4}
           inputSize={45}

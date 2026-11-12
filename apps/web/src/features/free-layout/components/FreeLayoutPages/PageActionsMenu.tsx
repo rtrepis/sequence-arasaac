@@ -21,6 +21,7 @@ import {
   MdMoreVert,
   MdOutlineDashboard,
   MdOutlineLibraryAdd,
+  MdOutlinePalette,
   MdTitle,
 } from "react-icons/md";
 import { MessageDescriptor, useIntl } from "react-intl";
@@ -31,6 +32,7 @@ import type { SheetMode } from "@/types/document";
 import {
   addSheetThunk,
   addTextBlockThunk,
+  applyMyStyleThunk,
   duplicateSheetThunk,
   moveSheetThunk,
   removeSheetThunk,
@@ -59,7 +61,8 @@ interface PageActionsMenuProps {
  * previsualització: és l'únic lloc de les accions de la pàgina (la columna
  * no les repeteix). Hi ha la disposició (contínua o en blocs), afegir-hi una
  * seqüència o un bloc segons la disposició, les plantilles (les mateixes que
- * a la columna, amb miniatura) i duplicar, moure i esborrar la pàgina.
+ * a la columna, amb miniatura), «Aplica el meu estil» a tots els seus blocs
+ * (R10) i duplicar, moure i esborrar la pàgina.
  */
 const PageActionsMenu = ({
   sheetIndex,
@@ -201,6 +204,25 @@ const PageActionsMenu = ({
           </ListItemIcon>
           <ListItemText>
             {intl.formatMessage(messages.chooseTemplate)}
+          </ListItemText>
+        </MenuItem>
+        {/* El meu estil, a tots els blocs propis de la pàgina: el missatge és
+            el snackbar amb «Desfés» */}
+        <MenuItem
+          onClick={pageAction(() =>
+            dispatch(
+              applyMyStyleThunk(
+                { kind: "sheet", sheetIndex },
+                intl.formatMessage(messages.myStyleName),
+              ),
+            ),
+          )}
+        >
+          <ListItemIcon>
+            <MdOutlinePalette />
+          </ListItemIcon>
+          <ListItemText>
+            {intl.formatMessage(messages.applyMyStyle)}
           </ListItemText>
         </MenuItem>
 

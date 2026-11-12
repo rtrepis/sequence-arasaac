@@ -3,7 +3,7 @@
 > **Quan llegir-lo:** abans de tocar qualsevol cosa que **desi**, **carregui** o **apliqui estils**
 > a un document: el `.saac` i el `.saacstyle`, el desat al núvol, `documentSlice`,
 > `uiSlice.defaultSettings` i `ui.viewSettings`, la targeta del pictograma, el PDF, la columna de la
-> pàgina de vista i el panell «Estil del document».
+> pàgina de vista, els menús «⋯» de pàgina i bloc i el panell «El meu estil» de la configuració.
 >
 > Un **fonament** no és un estàndard: no diu com s'escriu el codi, sinó **què és cada cosa i de qui
 > és**. Si un estàndard de `docs/estandards/` el contradiu, mana aquest, i l'estàndard s'ha de
@@ -30,12 +30,12 @@ al codi nou i als documents.
 | **Estil** | Com es veu: lletra, vores, colors, mides, alineació. |
 | **Estil del document** | L'estil que s'aplica a totes les seqüències del document. |
 | **Vista d'aquesta seqüència** | Els ajustos d'estil d'una sola seqüència (mida, espai, alineació). Són un retoc sobre l'estil del document. |
-| **Pàgina** | Cadascun dels fulls del document («pàgina 1, 2…»). Totes tenen el paper i l'orientació del document; cadascuna diu com s'hi col·loquen els blocs: **automàtica** (un darrere l'altre, com sempre) o amb una **plantilla** (cada bloc a la seva caixa). Un document d'abans és una sola pàgina automàtica amb totes les seqüències. |
+| **Pàgina** | Cadascun dels fulls del document («pàgina 1, 2…»). Totes tenen el paper i l'orientació del document; cadascuna diu com s'hi col·loquen els blocs: **simple** (un darrere l'altre, com sempre; al codi, `"auto"`) o **en blocs** (cada bloc a la seva caixa: columnes, files, lliure o una plantilla). Un document d'abans és una sola pàgina simple amb totes les seqüències. |
 | **Bloc** | Una cosa posada en una pàgina: una **seqüència** (amb els seus ajustos) o un **text** (un rètol sense pictograma). Una seqüència pot sortir en molts blocs; el que surt a totes les pàgines és **comú**. Al codi, el tipus és `SequencePlacement` / `TextPlacement` («col·locació»); a la interfície i a la documentació per a l'usuari, sempre «bloc» (Q1). |
-| **Estil amb nom** | Un retoc de l'estil del document, amb un nom, que poden fer servir molts blocs alhora. És una entrada del catàleg d'estils de l'usuari **copiada** dins del document. |
-| **Fitxer d'estil** | Un estil desat per reutilitzar-lo en altres documents: el fitxer `.saacstyle`. |
-| **Estil per defecte** | L'estil que reben els documents nous. És una preferència de l'app. |
-| **Preferències de l'app** | El que és de la persona o del dispositiu: idioma, tema clar o fosc, estil per defecte, pàgina per defecte. |
+| **Estil amb nom** | Un retoc de l'estil del document, amb un nom, que poden fer servir molts blocs alhora. És una entrada del catàleg d'estils de l'usuari **copiada** dins del document («Aplica el meu estil»). |
+| **Fitxer d'estil** | El meu estil desat en un fitxer per dur-lo a un altre dispositiu o passar-lo a algú: el fitxer `.saacstyle`. |
+| **El meu estil** | L'estil dels pictogrames de l'usuari: el reben els documents nous i el copia «Aplica el meu estil». És una preferència de l'app. Abans es deia «estil per defecte», i al codi encara ho és (`ui.defaultSettings`, `selectUserDefaultStyle`). Amb comptes, n'hi haurà un catàleg (R10, B33). |
+| **Preferències de l'app** | El que és de la persona o del dispositiu: idioma, tema clar o fosc, el meu estil, pàgina per defecte. |
 
 - **MAI** «seqüència» per dir el fitxer sencer.
 - **MAI** «tema» per dir un estil desat. «Tema» només vol dir clar, fosc o el del sistema.
@@ -65,8 +65,8 @@ al codi nou i als documents.
 | Pàgina (mida, orientació, direcció, espai entre seqüències) | Del document | `.saac` |
 | Pàgines i blocs, la plantilla de cada pàgina | Del document | `.saac`, a `page` (fonament 06, §1.1) |
 | Estils amb nom que fa servir el document | Del document | `.saac`, a `styles` (fonament 06, §1.2) |
-| Catàleg d'estils de l'usuari (R10, B33) | De l'usuari | Preferències; aplicar-ne un el **copia** al document |
-| Estil per defecte | De l'usuari | Preferències; es pot exportar a `.saacstyle` |
+| Catàleg d'estils de l'usuari (R10, B33) | De l'usuari | Preferències; aplicar-ne un el **copia** al document. Sense comptes, és d'una sola entrada: el meu estil |
+| El meu estil | De l'usuari | Preferències; s'exporta i s'importa amb un `.saacstyle` |
 | Pàgina per defecte dels documents nous | De l'usuari | Preferències |
 | Autor del document | Del document | `.saac`, a `meta.author` |
 | Autor per defecte dels documents nous | De l'usuari | Preferències |
@@ -82,6 +82,11 @@ al codi nou i als documents.
   (idioma, tema) s'hi apliquen igualment, perquè no canvien el que surt al paper.
 - **MAI** el zoom, el contrast o el moviment reduït són ajustos de l'app: els decideixen el
   navegador i el sistema, i l'app els respecta.
+- **SEMPRE** els estils van en **una sola direcció**: es fan a la configuració («El meu estil» i
+  «Vista») i es porten al document des de la vista («Aplica el meu estil», al menú «⋯» d'una
+  pàgina o d'un bloc). **MAI** hi ha una acció que porti res del document cap a les preferències
+  (R10, 2026-11-12). Abans n'hi havia tres («Desa com a estil per defecte», «Desa com a
+  preferència» i «Aplicar a la vista actual», que anava al revés), i es confonien.
 
 ## 4. La cascada d'estil
 
@@ -98,8 +103,11 @@ L'estil té cinc nivells. Cada nivell és un **retoc** del de sobre.
 - Un bloc de text agafa la lletra de les targetes del document (`card.font`), la de l'estil amb nom
   si en té, i el seu retoc.
 - El retoc de la vista d'un bloc **es pinta** i s'edita al nivell «Bloc» de la columna de la vista
-  (R5), i en una plantilla la mida hi és un màxim (Q2). De l'estil amb nom, es pinta la part de
-  `view`; la lletra i les vores (`pictogram`, `card`) i els rètols encara no: arriben amb R7 i R9.
+  (R5), i en una plantilla la mida hi és un màxim (Q2). L'estil amb nom es pinta sencer: la vista,
+  la lletra, les vores, la posició del text i el color o la pell i el cabell dels pictogrames. El
+  que un pictograma heretava de l'estil del document passa a ser el de l'estil amb nom, i els seus
+  retocs es conserven (la mateixa regla que canviar l'estil del document, `followStyle`). La mida
+  de la targeta es mesura per seqüència **i** estil amb nom (`cardMeasureKey`).
 
 ### Resoldre
 
@@ -161,14 +169,16 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 
 | Acció | On | Efecte |
 |---|---|---|
-| **Canviar l'estil del document** | Panell «Estil del document» | Canvia l'estil del document. El que coincidia amb l'estil vell segueix el nou; els retocs es conserven. |
-| **Aplica a tots** | Panell «Estil del document». A la columna de la vista, «La mateixa a tots els blocs» del nivell «Pàgina» fa el mateix per a la vista dels pictogrames a la disposició automàtica d'un sol full; amb pàgines, escriu el mateix retoc a tots els blocs de la pàgina | S'aplica a **tot el document**: canvia l'estil del document **i esborra aquestes propietats** de tots els retocs de seqüències i pictogrames. El retoc d'un bloc (ADR-005) es conserva: és més concret. |
+| **Canviar l'estil del document** | Cap lloc de la interfície des de R10 (2026-11-12) | Un document neix amb el meu estil i, un cop desat, el té propi. Es retoca per blocs («Aplica el meu estil») i per pictograma. La regla, per a qui el canvia per codi (`applyStyleToDocument`, «Redueix la lletra de tot el document»): el que coincidia amb l'estil vell segueix el nou; els retocs es conserven. |
+| **Aplica el meu estil** | Menú «⋯» d'una pàgina (tots els seus blocs propis, no els comuns) o d'un bloc | **Copia** el meu estil al document com a estil amb nom (`styles`; si n'hi ha un d'igual, el reaprofita) i hi apunta els blocs. Treu el retoc de la vista dels blocs, que manaria sobre l'estil; els retocs dels pictogrames i l'aspecte propi de cada rètol es conserven. L'estil del document no canvia. |
+| **Aplica a tots** | Cap lloc de la interfície des de R10: vivia al panell «Estil del document», que ara és «El meu estil». A la columna de la vista, «La mateixa a tots els blocs» del nivell «Pàgina» escriu el mateix retoc a tots els blocs de la pàgina | S'aplicava a **tot el document**: canviava l'estil del document **i esborrava aquestes propietats** de tots els retocs de seqüències i pictogrames. L'acció (`applyToAllPictogramsThunk`) es conserva per si torna; vegeu R10 a `docs/PLA-mode-lliure.md`. |
 | **Canviar la vista d'una seqüència** | Columna de la vista, nivell «Bloc», amb una seqüència seleccionada a la disposició automàtica | Canvia la mida, l'espai o l'alineació d'aquesta seqüència. És l'únic estil que té una seqüència en aquesta versió. |
 | **Canviar la vista d'un bloc** | Columna de la vista, nivell «Bloc», amb un bloc seleccionat en una pàgina amb caixes | Desa al bloc **només** el que es diferencia de la vista de la seqüència (amb l'estil amb nom). Les altres còpies de la seqüència no canvien. |
 | **Canviar un pictograma** | Formulari del pictograma | Canvia **només** el `style` d'aquell pictograma, i **només** les propietats tocades. |
 | **Restableix** un pictograma | Formulari del pictograma (capçalera de «Estil del pictograma» o «Més accions»); menú contextual de la graella («Restableix l'estil») | Esborra el seu `style`. La categoria, que és contingut, es queda. Dins del formulari és una edició més i es desa en tancar-lo; des del menú contextual s'aplica al document al moment. |
-| **Aplica el meu estil per defecte** | Panell «Estil del document»; columna de la vista | Com canviar l'estil del document, amb l'estil per defecte de l'usuari. |
-| **Carrega un estil des d'un fitxer** | Panell «Estil del document» | Com canviar l'estil del document, amb l'estil del fitxer. Pregunta si es conserven els retocs; la resposta per defecte és que sí. |
+| **Canviar el meu estil** | Configuració, panell «El meu estil» (la targeta) i panell «Vista» (mida, espai i alineació dels pictogrames) | Canvia la preferència. Es desa en tancar la configuració. No toca cap document desat; un document nou encara sense desar l'hereta en viu (§7). |
+| **Carrega un estil des d'un fitxer** | Panell «El meu estil» | L'estil del fitxer (un `.saacstyle`, o el d'un `.saac`) passa a ser el meu estil. Obrir un `.saacstyle` des del menú pregunta si es fa el meu estil. Cap dels dos camins toca el document obert. |
+| **Desa el meu estil en un fitxer** | Panell «El meu estil» | Desa el meu estil en un `.saacstyle`. |
 | **Redueix la lletra de tot el document** | Avís «el text no hi cap» de la graella (§6) | Com canviar l'estil del document, només amb la mida de la lletra: totes les targetes continuen amb la mateixa mida. Els retocs es conserven. |
 | **Redueix la lletra d'aquest pictograma** | Avís «el text no hi cap» de la graella (§6) | Com canviar un pictograma: un retoc de la mida de la lletra, que l'encén com a personalitzat. |
 
@@ -176,7 +186,7 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
   espai, alineació), que es configura al nivell «Bloc» de la columna de la vista. No hi ha cap acció per
   canviar la lletra o les vores de tots els pictogrames d'una seqüència: és una idea oberta, **B31**
   a `docs/BACKLOG-ux.md`.
-- **SEMPRE** «Aplica a tots», «Restableix», «Aplica el meu estil per defecte», «Carrega un estil» i
+- **SEMPRE** «Aplica el meu estil», «Restableix» i
   les dues reduccions de lletra de l'avís «el text no hi cap» es poden desfer amb el **desfer que ja existeix**: un snackbar amb «Desfés» que torna el document
   exactament a com era, mentre no s'hagi tocat des d'aleshores. Dins del formulari del pictograma,
   el «Desfés» de «Restableix» torna l'estil d'abans **al formulari**, sense tocar les altres
@@ -259,8 +269,8 @@ mida que s'havia triat. Ho avisa, i qui prepara el document tria.
 
 ## 7. Documents nous
 
-- Un document nou neix amb l'**estil per defecte** i la **pàgina per defecte** de l'usuari.
-- Mentre no es desa, **hereta** l'estil per defecte en viu: si les preferències del compte arriben
+- Un document nou neix amb **el meu estil** i la **pàgina per defecte** de l'usuari.
+- Mentre no es desa, **hereta** el meu estil en viu: si les preferències del compte arriben
   tard, el document nou se les emporta igualment.
 - En desar-lo, l'estil i la pàgina s'hi **escriuen**, i a partir d'aleshores són seus.
 

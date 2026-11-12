@@ -98,7 +98,7 @@ fase 3 va fer veure que no n'hi ha prou:
 15. **El model és fet de funcions pures** a `apps/web/src/features/free-layout/model/`, sense marc
     d'accions ni gestor de teclat propis.
 
-16. **A la interfície, «Contínua» i «En blocs»** (2026-11-08): `"auto"` és la pàgina **contínua**,
+16. **A la interfície, «Contínua» (des de la decisió 23, «Simple») i «En blocs»** (2026-11-08): `"auto"` és la pàgina **contínua**,
     la de sempre (direcció i espai entre seqüències), i `"template"` la pàgina **en blocs**,
     repartida en **N columnes**, **N files** o amb una **plantilla**. Cada pàgina tria al nivell
     «Pàgina» de la columna de la vista; el selector «Disposició» del document, que era el pont,
@@ -155,6 +155,19 @@ fase 3 va fer veure que no n'hi ha prou:
     «Lliure» no mou res. Substitueix, per a «N columnes» i «N files», el creixement de la decisió
     17 (abans hi afegia files o columnes de l'altre eix). Una pàgina sense cap plantilla desada (les
     fases 1–3) es torna a repartir com abans.
+23. **«Aplica el meu estil», i els estils en una sola direcció** (R10, 2026-11-12). El menú «⋯»
+    d'una pàgina (tots els seus blocs propis) i el d'un bloc tenen «Aplica el meu estil»: copia el
+    meu estil (la targeta i la vista dels pictogrames, sense l'espai entre seqüències) a `styles`
+    com a estil amb nom, amb el nom «El meu estil» a l'idioma de la interfície, i hi apunta els
+    blocs (`namedStyle`). Si el document ja en té un d'igual, el reaprofita. Treu el retoc de la
+    vista dels blocs, que si no manaria sobre l'estil; els retocs dels pictogrames i l'aspecte
+    propi dels rètols es conserven. Es desfà sencer (la instantània del desfer guarda també
+    `styles`). **L'estil amb nom es pinta sencer**: la vista, la lletra, les vores, la posició del
+    text i el color, la pell i el cabell (`styleWithNamed`, `blockSequence`), i la targeta es
+    mesura per seqüència i estil (`cardMeasureKey`). Els estils van **només** de la configuració
+    cap al document: cap acció no porta res del document a les preferències. A la interfície, la
+    pàgina `"auto"` es diu **«Simple»** (abans «Contínua», C15). El format no canvia: `styles` i
+    `namedStyle` ja hi eren (decisió 6).
 
 ## Alternatives descartades
 
@@ -184,8 +197,8 @@ fase 3 va fer veure que no n'hi ha prou:
   vista pinta cada pàgina contínua amb els seus blocs, un darrere l'altre. Els blocs comuns només
   es pinten a les pàgines en blocs. Des de R5,
   el retoc de la vista d'un bloc, la part de `view` dels estils amb nom i la mida com a màxim (Q2)
-  es pinten i el retoc s'edita al nivell «Bloc» de la columna; els rètols i la lletra i les vores
-  dels estils amb nom són al model però encara no es pinten.
+  es pinten i el retoc s'edita al nivell «Bloc» de la columna. Des de R4 es pinten els rètols, i
+  des de R10 (decisió 23) els estils amb nom sencers.
 - **El núvol perd les pàgines** fins que els validadors de l'API les coneguin
   (`apps/api/src/modules/documents/validators.ts`, P1 punt 5 a `docs/BACKLOG-ux.md`). És la fase 5
   del pla; ara els comptes estan apagats.
@@ -197,7 +210,7 @@ fase 3 va fer veure que no n'hi ha prou:
 - **La pantalla completa** (`size: "FULLSCREEN"`) no té mil·límetres i no admet pàgines amb caixes
   (`sheetAreaMm` en retorna `null`).
 - **El desfer és l'únic de l'app, ampliat**: la instantània de `styleSlice` guarda també les
-  pàgines.
+  pàgines i, des de R10, els estils amb nom.
 
 ## Història
 
@@ -212,3 +225,6 @@ fase 3 va fer veure que no n'hi ha prou:
   moure i canviar la mida dels blocs damunt de la quadrícula de punts (decisió 21).
 - **2026-11-08** (repartiment): Columnes / Files / Lliure, les plantilles a sota, afegir un bloc
   segons l'etiqueta del repartiment (decisió 22).
+- **2026-11-12** (R10): «Aplica el meu estil» al menú «⋯» de la pàgina i del bloc, els estils amb
+  nom pintats sencers, els estils en una sola direcció i «Simple» per a la pàgina `"auto"`
+  (decisió 23).

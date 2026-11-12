@@ -20,6 +20,7 @@ type FlowBlock =
       placement: SequencePlacement;
       pictograms: Sequence;
       view: SequenceViewSettings;
+      defaults: PictogramCardDefaults;
     }
   | { kind: "text"; placement: TextPlacement };
 import {
@@ -33,10 +34,11 @@ import type {
   SequenceViewSettings,
   TextPlacement,
 } from "@/types/document";
-import type { Sequence } from "@/types/sequence";
+import type { PictogramCardDefaults, Sequence } from "@/types/sequence";
 import { useIntl } from "react-intl";
 import { resolveTextBlockStyle } from "@features/free-layout/model/blockStyle";
 import { TextContent, useTextBlockName } from "./TextBlock";
+import { useBlockLooks } from "@features/free-layout/hooks/useBlockLooks";
 import messages from "./FreeLayoutPages.lang";
 
 interface AutoSheetFlowProps {
@@ -66,19 +68,26 @@ const AutoSheetFlow = ({
   const defaults = useAppSelector(selectDocumentCardDefaults);
   const intl = useIntl();
   const textName = useTextBlockName();
+  const lookOf = useBlockLooks();
 
   const blocks = placements.flatMap((placement): FlowBlock[] => {
     if (placement.kind === "text") return [{ kind: "text", placement }];
     if (placement.kind !== "sequence") return [];
-    const pictograms = content[placement.sequenceKey];
     const sequenceView = views[placement.sequenceKey];
-    if (!pictograms || !sequenceView) return [];
+    if (!content[placement.sequenceKey] || !sequenceView) return [];
     const view = resolveBlockView(
       sequenceView,
       namedStyleOf(styles, placement.styleId),
       placement.view,
     );
-    return [{ kind: "sequence", placement, pictograms, view }];
+    // Les targetes, amb l'estil amb nom del bloc si en té (R10)
+    const { pictograms, defaults: cardDefaults } = lookOf(
+      placement.sequenceKey,
+      placement.styleId,
+    );
+    return [
+      { kind: "sequence", placement, pictograms, view, defaults: cardDefaults },
+    ];
   });
 
   const isRow = direction === "row";
@@ -138,7 +147,7 @@ const AutoSheetFlow = ({
             </SelectableSequence>
           );
         }
-        const { placement, pictograms, view } = block;
+        const { placement, pictograms, view, defaults: cardDefaults } = block;
         return (
           <SelectableSequence
             key={placement.id}
@@ -166,7 +175,7 @@ const AutoSheetFlow = ({
                 key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
                 pictogram={pictogram}
                 view="complete"
-                defaults={defaults}
+                defaults={cardDefaults}
                 variant="plane"
                 size={{ pictSize: view.sizePict, scale: 1 }}
               />

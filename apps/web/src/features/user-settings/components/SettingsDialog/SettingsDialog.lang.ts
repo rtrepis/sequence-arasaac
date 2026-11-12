@@ -29,9 +29,9 @@ const messages = defineMessages({
   },
   tabPictograms: {
     id: "components.defaultSettings.tab.pictograms",
-    defaultMessage: "Estil del document",
+    defaultMessage: "El meu estil",
     description:
-      "Tab del panell «Estil del document»: l'estil que s'aplica a totes les seqüències del document obert",
+      "Tab del panell «El meu estil»: l'estil dels pictogrames amb què neixen els documents nous i que s'aplica des del menú «⋯» de la vista",
   },
   tabView: {
     id: "components.defaultSettings.tab.view",

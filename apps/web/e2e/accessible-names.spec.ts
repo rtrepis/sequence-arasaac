@@ -54,11 +54,10 @@ test("la columna de la pàgina de vista té tots els controls amb nom", async ({
   await expect(page.getByRole("button", { name: "Dalt" })).toBeVisible();
   await expectNoEnglishOrphans(page);
 
-  // B5: el botó diu el seu àmbit, i el tooltip (describeChild) no li pren el nom.
-  // «Restaura les seqüències» és ara «Aplica el meu estil per defecte», amb
-  // desfer (docs/fonaments/03-model-contingut-estil.md)
+  // B5 deia que el botó del peu digués el seu àmbit. Des de R10 la columna ja no
+  // té peu: «Aplica el meu estil» és al menú «⋯» de la pàgina, que diu de quina
   await expect(
-    page.getByRole("button", { name: "Aplica el meu estil per defecte" }),
+    page.getByRole("button", { name: "Més accions de la pàgina" }),
   ).toBeVisible();
 });
 
@@ -69,7 +68,7 @@ test("els botons de restaurar del modal diuen cadascun el seu àmbit", async ({
   await page.getByRole("button", { name: "Menú principal" }).click();
   await page.getByRole("button", { name: "Configuració" }).click();
 
-  await page.getByRole("tab", { name: "Estil del document" }).click();
+  await page.getByRole("tab", { name: "El meu estil" }).click();
   await expect(
     page.getByRole("button", { name: "Restaura els pictogrames" }),
   ).toBeVisible();

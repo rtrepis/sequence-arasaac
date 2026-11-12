@@ -70,8 +70,8 @@ interface StyleUndoSnackbarProps {
  * missatge no compila.
  */
 const CHANGED_MESSAGE: Record<StyleChangeSource, MessageDescriptor> = {
-  file: messages.changedFile,
-  userDefault: messages.changedUserDefault,
+  myStyleSheet: messages.changedMyStyleSheet,
+  myStyleBlock: messages.changedMyStyleBlock,
   applyAll: messages.changedApplyAll,
   reset: messages.changedReset,
   fitTextPictogram: messages.changedFitTextPictogram,

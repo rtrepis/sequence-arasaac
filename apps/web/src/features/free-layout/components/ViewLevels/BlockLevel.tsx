@@ -14,6 +14,7 @@ import {
   resolveColumns,
 } from "@features/free-layout/model/blockGrid";
 import { arrangementOf } from "@features/free-layout/model/templates";
+import { cardSizeOf } from "@features/free-layout/model/blockStyle";
 import {
   selectPages,
   setPlacementColumnsThunk,
@@ -112,7 +113,7 @@ const BlockLevel = ({
     : arrangementOf(pages?.sheets[sheetIndex]?.template).kind;
   const { grid, imageMm } = blockGrid({
     count: pictograms.length,
-    card: cardSizes[placement.sequenceKey],
+    card: cardSizeOf(cardSizes, placement.sequenceKey, placement.styleId),
     view,
     box: { w: placement.w, h: placement.h },
     columns: resolveColumns(placement.columns, arrangement, pictograms.length),

@@ -451,7 +451,7 @@ describe("l'etiqueta del repartiment", () => {
     });
     expect(screen.getByText("Columns · 2")).toBeInTheDocument();
     expect(screen.getByText("Free")).toBeInTheDocument();
-    expect(screen.getByText("Continuous")).toBeInTheDocument();
+    expect(screen.getByText("Simple")).toBeInTheDocument();
     await userEvent.hover(screen.getByText("Free"));
     expect(
       await screen.findByRole("tooltip", {

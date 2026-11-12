@@ -40,6 +40,7 @@ import {
   selectSheetArea,
 } from "@features/free-layout/store/freeLayoutThunks";
 import {
+  cardSizeOf,
   namedStyleOf,
   resolveBlockView,
   resolveTextBlockStyle,
@@ -50,7 +51,8 @@ import {
   useViewSelection,
 } from "@features/free-layout/hooks/useViewSelection";
 import AddSequenceDialog from "@features/free-layout/components/AddSequenceDialog";
-import CardBaseMeasurer from "./CardBaseMeasurer";
+import CardBaseMeasurer, { MeasuredSequence } from "./CardBaseMeasurer";
+import { useBlockLooks } from "@features/free-layout/hooks/useBlockLooks";
 import {
   arrangementOf,
   freeRegion,
@@ -217,10 +219,34 @@ const FreeLayoutPages = ({
   const fullscreenId = useFullscreenElementId();
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
-  const measured = useMemo(
-    () => keys.map((key) => ({ key, pictograms: content[key] ?? [] })),
-    [keys, content],
-  );
+  // Es mesura cada seqüència tal com es veu: sola, i amb cada estil amb nom
+  // que hi fa servir algun bloc, que en pot canviar la lletra i les vores
+  const lookOf = useBlockLooks();
+  const measured = useMemo((): MeasuredSequence[] => {
+    const looks = new Map<string, MeasuredSequence>();
+    const add = (sequenceKey: number, styleId: string | undefined) => {
+      const {
+        measureKey,
+        pictograms,
+        defaults: cardDefaults,
+      } = lookOf(sequenceKey, styleId);
+      if (!looks.has(measureKey))
+        looks.set(measureKey, {
+          key: measureKey,
+          pictograms,
+          defaults: cardDefaults,
+        });
+    };
+    keys.forEach((key) => add(key, undefined));
+    [
+      ...(freeLayout?.sheets.flatMap(({ placements }) => placements) ?? []),
+      ...(freeLayout?.common ?? []),
+    ].forEach((placement) => {
+      if (placement.kind === "sequence" && placement.styleId !== undefined)
+        add(placement.sequenceKey, placement.styleId);
+    });
+    return Array.from(looks.values());
+  }, [keys, lookOf, freeLayout]);
 
   if (!freeLayout || !area) return null;
   const sheetCount = freeLayout.sheets.length;
@@ -276,9 +302,10 @@ const FreeLayoutPages = ({
         />
       );
     if (placement.kind !== "sequence") return null;
-    const pictograms = content[placement.sequenceKey];
     const sequenceView = views[placement.sequenceKey];
-    if (!pictograms || !sequenceView) return null;
+    if (!content[placement.sequenceKey] || !sequenceView) return null;
+    // Les targetes, amb l'estil amb nom del bloc si en té (R10)
+    const look = lookOf(placement.sequenceKey, placement.styleId);
     const view = resolveBlockView(
       sequenceView,
       namedStyleOf(styles, placement.styleId),
@@ -292,10 +319,14 @@ const FreeLayoutPages = ({
         sheetCount={sheetCount}
         common={common}
         name={sequenceName(placement.sequenceKey)}
-        pictograms={pictograms}
+        pictograms={look.pictograms}
         view={view}
-        cardBase={cardSizes[placement.sequenceKey]}
-        defaults={defaults}
+        cardBase={cardSizeOf(
+          cardSizes,
+          placement.sequenceKey,
+          placement.styleId,
+        )}
+        defaults={look.defaults}
         scale={scale}
         area={area}
         arrangement={arrangement}
@@ -350,11 +381,7 @@ const FreeLayoutPages = ({
       onKeyDown={clearOnEscape}
       {...swipe}
     >
-      <CardBaseMeasurer
-        sequences={measured}
-        defaults={defaults}
-        onMeasure={setCardSizes}
-      />
+      <CardBaseMeasurer sequences={measured} onMeasure={setCardSizes} />
 
       {freeLayout.sheets.map((sheet, sheetIndex) => {
         // Contínua: les seqüències una darrere l'altra, com sempre. En blocs:

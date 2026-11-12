@@ -66,6 +66,7 @@ l'entrada.
 |---|---|---|---|---|
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | C28 | Girar el mòbil tanca el diàleg d'edició | Es pot perdre el que s'estava editant, i girar el mòbil és habitual | S | No |
+| B35 | «Aplica a tots» no és a cap lloc de la interfície | Des de R10 no hi ha manera de treure d'un cop els retocs de tots els pictogrames d'un document | S | Sí: on va (menú «⋯» de la pàgina, del document…) i si es torna a oferir |
 
 ### Més endavant
 
@@ -78,6 +79,7 @@ l'entrada.
 | N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
 | B30 | No hi ha historial de desfer i refer | El desfer que ja existeix cobreix els canvis d'estil, «Aplica a tots» i «Restableix», que són els que esborren més feina d'un cop | L |
 | C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. C17 ja n'ha tret els switches | M | No |
+| B36 | «Pàgines noves»: com neix una pàgina nova | Hi ha «Duplica la pàgina», que cobreix qui sempre fa la mateixa pàgina | S | Sí: si cal, i quines opcions |
 | C10 | Vuit fitxers de test en quarantena | El runner i l'arnès ja hi són; queda portar-los-hi o esborrar-los, un per un | S cada un | Sí: per cada fitxer, reviure o esborrar |
 
 ### Ajornades (comptes apagats)
@@ -123,7 +125,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   seqüències», amb la necessitat d'un nom per a l'usuari. Es continua a **R7** de
   `docs/PLA-mode-lliure.md` (§12), que el situa al nivell «Seqüència» de la columna (R8).
 
-### B33 — Un catàleg de configuracions de l'usuari 💡 Idea
+### B33 — Un catàleg de configuracions de l'usuari 🚧 Sense comptes, fet
 
 *(Oberta en revisar l'esbós de la columna de la Vista, R8 del mode lliure, 2026-11-07.)*
 
@@ -136,6 +138,15 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   (document, pàgina, bloc), el nom per a l'usuari i el sostre amb compte.
 - El detall és a **R10** de `docs/PLA-mode-lliure.md` (§12). S'ha de decidir abans de **B31** (R7).
   Les plantilles de pàgina pròpies serien un catàleg paral·lel: **R11**.
+- **2026-11-12 (R10, pas 6 del mode lliure)**: decidit i fet el cas sense comptes. Una entrada és
+  l'estil de la targeta i la vista dels pictogrames, sense paper ni plantilla. El nom per a l'usuari
+  és **«El meu estil»** («Els meus estils» amb comptes). S'aplica a una **pàgina** o a un **bloc**
+  des del seu menú «⋯» («Aplica el meu estil»), i mai al document sencer. Els estils van en **una
+  sola direcció**, de la configuració cap al document: han desaparegut «Desa com a estil per
+  defecte», «Desa com a preferència» i «Aplicar a la vista actual». El panell «Estil del document»
+  és ara «El meu estil». **Sostre amb compte: 20 entrades** (una entrada fa uns 2 KB, sense
+  imatges; vegeu `docs/ESTUDI-limits-serveis-gratuits.md`). Queda obert: el catàleg de diverses
+  entrades, amb comptes, quan es tornin a encendre.
 
 ### B34 — Plantilles de pàgina pròpies 💡 Idea
 
@@ -152,6 +163,30 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   també els blocs de text i els comuns), on es gestiona i el sostre d'entrades amb compte
   (`docs/ESTUDI-limits-serveis-gratuits.md`).
 - El detall és a **R11** de `docs/PLA-mode-lliure.md` (§12).
+
+### B35 — «Aplica a tots» no és a cap lloc de la interfície 💡 Decisió pendent
+
+*(Oberta en fer R10, 2026-11-12.)*
+
+- **On**: `applyToAllPictogramsThunk` (`features/sequence/store/styleSlice.ts`). Els botons «Aplica a
+  tots» eren a les seccions del panell «Estil del document». Aquell panell és ara «El meu estil» i
+  edita una preferència, i l'acció no hi té sentit.
+- **Per què importa**: era l'única manera de treure d'un cop un retoc (el color, la posició del
+  text, les vores…) de tots els pictogrames d'un document. Ara cal fer-ho pictograma a pictograma
+  («Restableix»). L'acció es conserva al codi, amb les seves proves.
+- **Cal decidir**: si es torna a oferir i on (el menú «⋯» de la pàgina, «Restableix els
+  pictogrames d'aquesta pàgina», o el nivell «Document» de la columna).
+
+### B36 — «Pàgines noves»: com neix una pàgina nova 💡 Idea
+
+*(Oberta en fer R11, 2026-11-12.)*
+
+- **Què**: una fila «Pàgines noves» al nivell «Document» de la columna, amb «Les seqüències una
+  darrere l'altra» (simple) o «Com la pàgina d'on s'afegeix», perquè qui sempre fa la mateixa
+  agenda no l'hagi de triar a cada pàgina. Seria un camp del document (canvi de format sense pujar
+  `schemaVersion`).
+- **De moment no es fa**: «Duplica la pàgina», al menú «⋯», ja ho cobreix. El detall és a **R11** de
+  `docs/PLA-mode-lliure.md` (§12).
 
 ## Gravetat alta
 

@@ -359,7 +359,7 @@ const messages = defineMessages({
   },
   modeContinuous: {
     id: "features.freeLayout.page.modeContinuous",
-    defaultMessage: "Continuous",
+    defaultMessage: "Simple",
     description:
       "Opció del menú d'una pàgina: les seqüències una darrere l'altra, com sempre",
   },
@@ -390,7 +390,7 @@ const messages = defineMessages({
   arrangementTag: {
     id: "features.freeLayout.page.arrangementTag",
     defaultMessage:
-      "{kind, select, continuous {Continuous} columns {Columns · {n}} rows {Rows · {n}} free {Free} other {{name}}}",
+      "{kind, select, continuous {Simple} columns {Columns · {n}} rows {Rows · {n}} free {Free} other {{name}}}",
     description:
       "Etiqueta de la capçalera d'una pàgina que diu com es reparteix: contínua, N columnes, N files, lliure o el nom de la plantilla (`name`)",
   },
@@ -400,6 +400,18 @@ const messages = defineMessages({
       "{kind, select, continuous {Adding a sequence puts it at the end.} columns {Adding a block adds one more column.} rows {Adding a block adds one more row.} free {Adding a block puts it in the largest empty space, without moving the others.} other {Adding a block fills the first empty space; if there is none, the page becomes free.}}",
     description:
       "Tooltip de l'etiqueta del repartiment de la pàgina: què passarà en afegir-hi un bloc",
+  },
+  applyMyStyle: {
+    id: "features.freeLayout.applyMyStyle",
+    defaultMessage: "Apply my style",
+    description:
+      "Acció del menú «⋯» d'una pàgina o d'un bloc: hi copia el meu estil de pictogrames (es pot desfer)",
+  },
+  myStyleName: {
+    id: "features.freeLayout.myStyleName",
+    defaultMessage: "My style",
+    description:
+      "Nom de l'estil que «Aplica el meu estil» copia al document. Queda escrit al fitxer com a contingut i no es torna a traduir",
   },
 });
 

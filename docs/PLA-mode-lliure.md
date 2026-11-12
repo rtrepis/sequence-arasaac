@@ -667,8 +667,14 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
 - **Decidit** (2026-11-07): **l'estil és el dels pictogrames** (la targeta: lletra, vores, colors,
   mida…). Una entrada del catàleg no porta ni el paper, ni l'orientació, ni la plantilla: la pàgina
   és una altra cosa, i les plantilles es tracten a R11.
-- **Cal decidir**: (b) si una entrada es pot aplicar a un bloc sol (l'estil del bloc de R7); (c) el nom per a l'usuari («configuració», «estil», «model»…);
-  (d) el sostre d'entrades amb compte (`docs/ESTUDI-limits-serveis-gratuits.md`).
+- **Decidit** (2026-11-12, pas 6): (b) **sí**, una entrada s'aplica a una **pàgina** (tots els seus
+  blocs propis) o a un **bloc**, des del seu menú «⋯» («Aplica el meu estil»); **no** al document
+  sencer. (c) El nom és **«El meu estil»** («Els meus estils» amb comptes). (d) **20 entrades** per
+  compte. I una decisió de fons: els estils van en **una sola direcció**, de la configuració cap
+  al document. Cap acció porta res del document cap a les preferències: desapareixen «Desa com a
+  estil per defecte», «Desa com a preferència» i «Aplicar a la vista actual». El panell «Estil del
+  document» passa a ser **«El meu estil»** i edita la preferència (opció A; la C, portar l'editor de
+  l'estil del document a la columna, queda per si es troba a faltar). Vegeu «Com ha quedat el pas 6».
 - **Al backlog**: **B33**, a «Idees».
 - **Quan**: decidir-ho **abans de R7**, perquè R7 i «Copia aquests ajustos a…» són justament el
   que el catàleg simplificaria; fer-ho, després del mode lliure o amb R7, segons el que es decideixi.
@@ -707,7 +713,10 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
   Les plantilles pròpies queden al backlog per a més endavant (**B34**).
 - **Decidit** (2026-11-07): la fila **«Pàgines noves» va a la Vista mateixa**, no a la configuració
   per defecte.
-- **Queda obert**: el text explicatiu de la pestanya «Vista» de la configuració per defecte diu
+- **Decidit** (2026-11-12): la fila «Pàgines noves» **no es fa** de moment («Duplica la pàgina» ja
+  ho cobreix); queda a **B36**. El text de la pestanya és el proposat, i «Aplicar a la vista actual»
+  desapareix (direcció única, R10). Vegeu «Com ha quedat el pas 6».
+- **Era obert**: el text explicatiu de la pestanya «Vista» de la configuració per defecte diu
   «Configura els valors de visualització per defecte en obrir la pàgina de vista», i des de B25/B26
   ja no és cert: un document s'obre tal com es va desar, i aquests valors només els agafen els
   documents nous. Proposta: mantenir el nom «Vista» i canviar-ne la descripció per una com «La
@@ -804,10 +813,12 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
    dels blocs** damunt d'una quadrícula de punts (la fase 4); i, del 8 al 12, el mòbil, afegir
    pàgines des de l'inici, el full A3 i el repartiment Columnes / Files / Lliure (ADR-005,
    decisió 22). Vegeu «Com ha quedat el pas 5b».
-6. ⏭️ **R10** (B33), decidir el catàleg d'estils dels pictogrames: abans de R7, perquè en canvia les
-   accions. **R11**, el panell «Vista» de la configuració per defecte, amb R1. Les plantilles
-   pròpies (B34), més endavant.
-7. **R7** (B31), els estils per grup, quan el nom i el nivell «Seqüència» de la columna ja hi siguin.
+6. ✅ **R10** (B33) i **R11** (2026-11-12): «El meu estil», «Aplica el meu estil» al menú «⋯» de la
+   pàgina i del bloc, els estils amb nom pintats sencers, els estils en una sola direcció, el panell
+   «Vista» com a configuració dels documents nous i «Simple» per a la pàgina contínua. Vegeu «Com
+   ha quedat el pas 6». Les plantilles pròpies (B34) i «Pàgines noves» (B36), més endavant.
+7. ⏭️ **R7** (B31), els estils per grup: ara un estil amb nom ja es pinta sencer i es crea amb
+   «Aplica el meu estil»; falta poder-lo veure, canviar i anomenar des de la columna.
 
 ### Decisions (2026-11-07)
 
@@ -1039,6 +1050,39 @@ en aplicar una plantilla **surt de la pàgina** (la seqüència continua al docu
   de 20 × 24 (`grid.ts`, `GridDots`, `useBlockDrag`), que es veu mentre hi ha un bloc
   seleccionat. Les plantilles s'han ajustat perquè hi caiguin exactament.
 
+### Com ha quedat el pas 6 (R10 i R11, 2026-11-12)
+
+**Les decisions** (de la conversa del 12 de novembre):
+
+- **Una sola direcció.** Els estils i la pàgina es fan a la configuració i es porten al document
+  des de la vista. Res no va del document cap a les preferències. És el que simplifica: amb el
+  catàleg, «aplicar-ne un a una pàgina o a un bloc» ja ho cobreix tot.
+- **«El meu estil»** (R10 c) és el nom de la preferència i del panell (abans «Estil del document»,
+  que editava el document obert). Opció **A**: el panell edita la preferència, i ja no hi ha cap
+  editor de l'estil del document en si.
+- **«Aplica el meu estil»** (R10 b) va al menú «⋯» de la **pàgina** i del **bloc**, no al
+  document.
+- **Sostre** (R10 d): 20 entrades amb compte.
+- **R11**: el panell «Vista» de la configuració diu «La pàgina i els pictogrames amb què comencen
+  els documents nous» i perd «Aplicar a la vista actual». «Pàgines noves» no es fa (B36).
+- **«Simple»** substitueix «Contínua» (C15) a la interfície. Al codi i al fitxer continua sent
+  `"auto"`.
+
+**Què s'ha fet**:
+
+| Peça | Canvi |
+|---|---|
+| Configuració, «El meu estil» | `DefaultSettingsPanel` edita `ui.defaultSettings` i ho desa en tancar la configuració. La capçalera (`MyStyleHeader`, abans `DocumentStyleHeader`) només té «Carrega un estil des d'un fitxer…» (passa a ser el meu estil) i «Desa el meu estil en un fitxer…». Les seccions ja no tenen «Aplica a tots» (B35) |
+| Configuració, «Vista» | Descripció nova; fora «Aplicar a la vista actual»; només «Restaura la vista» |
+| Columna de la vista | Sense peu: fora «Aplica el meu estil per defecte» (`ApplyUserDefaultStyleButton`, esborrat) i «Desa com a preferència» |
+| Menú «⋯» de la pàgina i del bloc | «Aplica el meu estil» (`applyMyStyleThunk`): copia el meu estil a `styles` (o en reaprofita un d'igual) i hi apunta els blocs, treu el retoc de la vista dels blocs, es desfà sencer (la instantània del desfer guarda `styles`). Un document sense pàgines les fa explícites |
+| L'estil amb nom, pintat sencer | `styleWithNamed`, `blockSequence` (la regla dels retocs, `followStyle`, extreta d'`applyStyleToDocument`), `useBlockLooks`. La targeta es mesura per seqüència i estil (`cardMeasureKey`, `cardSizeOf`) |
+| Obrir un `.saacstyle` | El diàleg només ofereix «Fes-lo el meu estil». El bàner d'obrir un document ja no porta al panell (s'ha tret `stylePanelRequested`) |
+| `SettingCardFontGroup` | Controlat del tot: abans no es resincronitzava quan la lletra canviava des de fora (carregar un estil) |
+| Textos | «Simple», «El meu estil» i els missatges nous, en els cinc idiomes; fora els que ja no es fan servir |
+| Format | Sense canvis: `styles` i `namedStyle` ja hi eren (ADR-005, decisió 6). Decisió 23 a l'ADR |
+| Proves | `blockStyle.test.ts` i `freeLayoutThunks.test.ts` («Aplica el meu estil»); e2e `document-style-panel`, `saac-fixtures` i `accessible-names` adaptats |
+
 ### Preguntes que eren obertes
 
 | # | Pregunta | Opcions |
@@ -1048,27 +1092,31 @@ en aplicar una plantilla **surt de la pàgina** (la seqüència continua al docu
 | Q3 | R1: un sol model de pàgines per a totes dues disposicions? | Sí (proposat) · No, la disposició automàtica té pàgines però sense plantilles |
 | Q4 | R3: la investigació, qui la fa? | Una cerca a la xarxa de materials publicats (ARASAAC, escoles, logopèdia) · Exemples reals de l'usuari i el seu entorn · Totes dues |
 
-## 13. Estat a 2026-11-12 i com continuar
+## 13. Estat a 2026-11-12 (pas 6) i com continuar
 
-Recull de les sessions del 7 al 12 de novembre (passos 4, 4b, 5 i 5b, PR #304, branca
-`ccr-2207a706-ksozpj`, últim commit `f07e34d`). **És el lloc per on començar una sessió nova.** El
-detall i el perquè de cada decisió són a §12 (C1–C24, R12, «Com ha quedat R4» i «Com ha quedat el
-pas 5b») i a l'ADR-005 (decisions 16–22).
+Recull de les sessions del 7 al 12 de novembre (passos 4, 4b, 5, 5b i 6, PR #304, branca
+`ccr-2207a706-ksozpj`). **És el lloc per on començar una sessió nova.** El detall i el perquè de
+cada decisió són a §12 (C1–C24, R10–R12, «Com ha quedat R4», «Com ha quedat el pas 5b» i «Com ha
+quedat el pas 6») i a l'ADR-005 (decisions 16–23).
 
 ### Com funciona ara (el que veu l'usuari)
 
 La idea de fons: **es treballa com abans, i cada pàgina pot passar a treballar en blocs**. Qui ve de
-la versió d'abans troba el mateix d'entrada.
+la versió d'abans troba el mateix d'entrada. I **els estils van en una sola direcció**: es fan a la
+configuració i es porten al document des de la vista.
 
 **Al full** (la previsualització):
 
 - **Cada pàgina té la seva capçalera**, també la pàgina única d'un document sense pàgines pròpies:
   «Pàgina N de M» (el punt verd marca l'activa; clicar el títol la porta a dalt de tot, sencera), una
-  **etiqueta del repartiment** («Contínua», «Columnes · 3», «Files · 2», «Lliure», el nom de la
+  **etiqueta del repartiment** («Simple», «Columnes · 3», «Files · 2», «Lliure», el nom de la
   plantilla) amb un tooltip que diu què farà afegir-hi un bloc, el botó d'afegir (una seqüència a una
-  pàgina contínua; un bloc de seqüència o de text a una en blocs) i el **menú «⋯»**, l'únic lloc de
-  les accions de la pàgina: la disposició, afegir una seqüència o un bloc, «Plantilla…», i afegir,
-  duplicar, moure i esborrar pàgines.
+  pàgina simple; un bloc de seqüència o de text a una en blocs) i el **menú «⋯»**, l'únic lloc de
+  les accions de la pàgina: la disposició, afegir una seqüència o un bloc, «Plantilla…», **«Aplica
+  el meu estil»** (a tots els blocs propis de la pàgina), i afegir, duplicar, moure i esborrar
+  pàgines.
+- **El menú «⋯» d'un bloc** (pàgines en blocs): a totes les pàgines, **«Aplica el meu estil»** (només
+  a aquell bloc), copiar a una altra pàgina i treure'l.
 - **Afegir un bloc** fa el que diu l'etiqueta: a columnes, una columna més; a files, una fila més;
   a una plantilla, el primer espai buit (si no n'hi ha, la pàgina passa a lliure); a lliure, l'espai
   buit més gran, sense moure els altres.
@@ -1079,20 +1127,29 @@ la versió d'abans troba el mateix d'entrada.
   fletxes), enganxat a una quadrícula de punts de 20 × 24 que es veu mentre està seleccionat.
 - **Rètols** (blocs de text): neixen d'una plantilla, del menú d'afegir o d'un bloc buit; es pinten
   al full, a la impressió i al PDF, i s'editen a la columna.
+- **Un bloc amb el meu estil** es pinta sencer amb aquell estil (lletra, vores, posició del text,
+  color, mida i alineació); els retocs de cada pictograma es conserven.
 - **Botons de la vista** (girar, imprimir, PDF, pantalla completa de la pàgina activa, ajustar,
   amagar la columna): a dalt de la columna a l'escriptori; a sobre del full al mòbil.
 - **Mòbil**: una pàgina cada vegada (fletxes ‹ › a la capçalera o lliscant); la previsualització fa
   l'amplada del verd; el verd fa tota l'alçada de la pantalla i les targetes s'hi desplacen per dins,
-  amb les molles fixes. **L'enganxat de la previsualització es va provar i es va descartar**: amb el
-  full vertical no hi quedava lloc per als ajustos.
+  amb les molles fixes.
 
-**A la columna** (tres nivells lligats per la línia de la cascada, que segueixen la pàgina activa):
+**A la columna** (tres nivells lligats per la línia de la cascada, que segueixen la pàgina activa;
+**sense peu d'accions** des del pas 6):
 
 | Nivell | Què hi ha |
 |---|---|
 | **Document** | El paper; les seqüències **sense col·locar**; el **peu d'impressió**, amb «A quines pàgines» va la llicència |
-| **Pàgina N de M** | **Disposició** (etiqueta «Nou»): *Contínua* (direcció i espai entre seqüències) o *En blocs*. En blocs, **Repartiment**: *Columnes* (N), *Files* (N) o *Lliure*, i a sota sempre les **Plantilles** amb miniatura (passar-hi per damunt en dibuixa els espais al full; si no hi cap tot, avisa abans de què sortirà de la pàgina) |
+| **Pàgina N de M** | **Disposició** (etiqueta «Nou»): *Simple* (direcció i espai entre seqüències) o *En blocs*. En blocs, **Repartiment**: *Columnes* (N), *Files* (N) o *Lliure*, i a sota sempre les **Plantilles** amb miniatura (passar-hi per damunt en dibuixa els espais al full; si no hi cap tot, avisa abans de què sortirà de la pàgina) |
 | **Bloc** / **Seqüència** / **Rètol** | El que hi ha seleccionat. Bloc i seqüència: «La mateixa a tots els blocs» a dalt, i mida, espai i alineació (d'aquest o de tots); en blocs, les columnes de dins. Rètol: text, mida de la lletra, negreta i alineacions |
+
+**A la configuració**:
+
+| Pestanya | Què és |
+|---|---|
+| **El meu estil** | L'estil dels pictogrames de l'usuari (abans «Estil del document»): el reben els documents nous i el copia «Aplica el meu estil». «Carrega un estil des d'un fitxer…» i «Desa el meu estil en un fitxer…». Es desa en tancar la configuració |
+| **Vista** | «La pàgina i els pictogrames amb què comencen els documents nous»: paper, orientació, direcció i espai entre seqüències, i mida, espai i alineació dels pictogrames (que formen part del meu estil). Només «Restaura la vista» |
 
 ### On és el codi
 
@@ -1100,27 +1157,36 @@ la versió d'abans troba el mateix d'entrada.
 |---|---|
 | Selecció, pàgina activa, «La mateixa…», previsualització de plantilla | `features/free-layout/hooks/useViewSelection.tsx`, `usePageUniform.ts`, `useSelectedBlock.ts` |
 | Aplicar plantilles amb avís, moure blocs, vista de la pàgina | `features/free-layout/hooks/useApplyTemplate.tsx`, `useBlockDrag.ts`, `usePageView.ts` (pantalla completa, portar a dalt, mides mesurades) |
+| Com es veuen les targetes d'un bloc (estil amb nom) | `features/free-layout/hooks/useBlockLooks.ts`; `model/blockStyle.ts` (`styleWithNamed`, `blockSequence`, `cardMeasureKey`, `cardSizeOf`, `namedStyleFrom`, `applyNamedStyle`) |
 | La vista i la columna | `components/ViewSequencesSettings/ViewSquenceSettings.tsx` (maqueta, botons, escala amb l'amplada mesurada), `SettingsLevel`, `LevelCrumbs`, `SequenceViewRows` |
 | Nivells | `features/free-layout/components/ViewLevels/` (`PageLevel`, `BlockLevel`, `TextBlockLevel`, `PagePictograms`, `LicencePagesRow`) |
-| Pàgines al full | `features/free-layout/components/FreeLayoutPages/` (`FreeLayoutPages`, `PageHeader`, `SinglePageHeader`, `PageActionsMenu`, `AutoSheetFlow`, `PlacementBox` com a closca de `SequenceBlock` i `TextBlock`, `EmptySlot`, `TemplateGuides`, `GridDots`, `templateNames.ts`) |
+| Pàgines al full | `features/free-layout/components/FreeLayoutPages/` (`FreeLayoutPages`, `PageHeader`, `SinglePageHeader`, `PageActionsMenu`, `AutoSheetFlow`, `PlacementBox` com a closca de `SequenceBlock` i `TextBlock`, `CardBaseMeasurer`, `EmptySlot`, `TemplateGuides`, `GridDots`, `templateNames.ts`) |
 | Selector de plantilles | `features/free-layout/components/TemplatePicker/` |
-| Model | `features/free-layout/model/`: `templates.ts` (plantilles, `FREE_TEMPLATE`, `arrangementOf`, `overflowOf`, `closestTemplate`), `distribute.ts` (`addPlacementsToSheet`: les regles d'afegir), `grid.ts` (quadrícula, `largestEmptyBox`), `blockGrid.ts`, `blockStyle.ts`; i `store/freeLayoutThunks.ts` |
+| Model | `features/free-layout/model/`: `templates.ts` (plantilles, `FREE_TEMPLATE`, `arrangementOf`, `overflowOf`, `closestTemplate`), `distribute.ts` (`addPlacementsToSheet`: les regles d'afegir), `grid.ts` (quadrícula, `largestEmptyBox`), `blockGrid.ts`, `blockStyle.ts`; i `store/freeLayoutThunks.ts` (`applyMyStyleThunk` inclòs) |
+| El meu estil | `features/user-settings/components/SettingsDialog/panels/DefaultSettingsPanel/` (`DefaultSettingsPanel`, `MyStyleHeader`, `DefaultForm`); `features/sequence/hooks/useOpenSaacFile.ts` (carregar-lo d'un fitxer); `features/sequence/components/DocumentStyle/PendingDefaultStyleDialog.tsx` (obrir un `.saacstyle`) |
 | Escala | `features/print/hooks/useScaleCalculator.ts` (`availableWidth`; `SCREEN_MARGINS.phone` a `utils/pageFormat.ts`) |
-| Fitxer | Sense canvis de format en aquests passos: només `id` nous de `sheets[].template` (les plantilles de R3 i `"free"`), a l'esquema, al fonament 06 i a l'ADR-005 |
-| Proves | `ViewLevels.test.tsx`, `FreeLayoutPages.test.tsx`, `TemplatePicker.test.tsx`, `model/*.test.ts` (`grid`, `distribute`, `templates`…), `useScaleCalculator.test.ts`. Avui: 449 del web i 67 d'i18n |
+| Fitxer | Sense canvis de format en aquests passos: només `id` nous de `sheets[].template` (les plantilles de R3 i `"free"`), a l'esquema, al fonament 06 i a l'ADR-005. «Aplica el meu estil» fa servir `styles` i `namedStyle`, que ja hi eren |
+| Proves | `ViewLevels.test.tsx`, `FreeLayoutPages.test.tsx`, `TemplatePicker.test.tsx`, `model/*.test.ts` (`grid`, `distribute`, `templates`, `blockStyle`…), `freeLayoutThunks.test.ts`, `useScaleCalculator.test.ts`. Avui: 455 del web i 67 d'i18n |
 
 ### Què queda obert
 
 Decisions petites, per si es volen fer abans del pas següent:
 
+- **«Aplica a tots»** ja no és a cap lloc de la interfície (**B35**): vivia al panell «Estil del
+  document». Cal decidir si torna i on.
+- **«Pàgines noves»** (**B36**): no es fa; «Duplica la pàgina» ho cobreix.
+- **Un document nou encara sense desar** hereta el meu estil en viu (fonament 03, §7): canviar el
+  meu estil a la configuració el canvia també. És el comportament de sempre, però ara que els
+  estils «van en una sola direcció» potser sorprèn.
+- **Els estils amb nom no es veuen ni s'editen a la columna**: un bloc amb el meu estil no ho diu
+  enlloc. És R7.
 - **Moure blocs**: es poden trepitjar, i res no diu que una pàgina té retocs a mà. No es poden moure
   entre pàgines arrossegant (per a això, «Copia a la pàgina»). Si el full lliure és ple, un bloc nou
   es posa petit a dalt a l'esquerra, a sobre dels altres.
 - **Els rètols no s'editen damunt del full** (doble clic o Enter, com proposava R9); a les pàgines
-  contínues no tenen menú.
+  simples no tenen menú, i les seqüències tampoc (per a «Aplica el meu estil», el de la pàgina).
 - **Al mòbil, les guies de les plantilles de la columna queden fora de la vista** (la pàgina és més
   amunt); des del menú «⋯» sí que es veuen.
-- **El nom «Contínua»** és provisional (C15).
 - **Peces a prova** que no són a l'estàndard: `SettingsLevel` (targeta amb vora, excepció a C8),
   `LevelCrumbs` (C7), l'etiqueta del repartiment i l'etiqueta «Nou». Decidir si passen a
   `docs/estandards/configuracions.md`, i **quan es treu l'etiqueta «Nou»**.
@@ -1131,26 +1197,31 @@ Decisions petites, per si es volen fer abans del pas següent:
 
 Pendents de més abast:
 
+- **Les captures dels e2e no coincideixen** en aquest entorn, ja abans del pas 6 (comprovat a la
+  base, amb els mateixos píxels): `saac-fixtures` («la vista es pinta igual que abans», totes) i
+  `document-style-panel` («la previsualització hi cap»). També falla `accessible-names` («la
+  columna… té tots els controls amb nom»): busca «Esquerra» sense cap bloc seleccionat, i des del
+  pas 4 l'alineació és al nivell «Bloc». Cal regenerar-les i adaptar la prova, en un entorn de
+  referència.
 - **Captures de la notícia de diverses seqüències** (`e2e/screenshots/multiple-sequences*.spec.ts`):
-  la vista ha canviat molt (botons, capçaleres, columna); cal adaptar-les i tornar-les a executar.
+  la vista ha canviat molt (botons, capçaleres, columna, sense peu); cal adaptar-les i tornar-les a
+  executar.
 - **Una notícia** per al mode de pàgines (`docs/estandards/noticies.md`), quan es publiqui.
-- **El núvol** encara no coneix les pàgines (fase 5; els comptes estan apagats).
+- **El núvol** encara no coneix les pàgines ni els estils amb nom (fase 5; els comptes estan apagats).
+  El catàleg de diversos estils, amb comptes, també és d'aleshores (B33).
 - Preexistent: `printDimensions` sense ús a `ViewSquenceSettings.tsx` (avís del lint).
 
 ### El pas següent
 
-Segons l'«Ordre proposat», el **pas 6**:
+Segons l'«Ordre proposat», el **pas 7**: **R7** (B31), els estils per grup. El terreny ja hi és: un
+estil amb nom (`styles`) es pinta sencer i «Aplica el meu estil» en crea un. Falta:
 
-1. **R10** (B33), el catàleg d'estils dels pictogrames. Decidit: l'estil és el de la targeta (lletra,
-   vores, colors, mida), sense paper ni plantilla. **Cal decidir** (vegeu R10 a §12): (b) si una
-   entrada es pot aplicar a un bloc sol; (c) el nom per a l'usuari («configuració», «estil»,
-   «model»…); (d) el sostre d'entrades amb compte. Com que els comptes estan apagats, el catàleg és
-   d'una sola entrada (la configuració per defecte) i la interfície no ha de canviar de forma.
-2. **R11**, el panell «Vista» de la configuració per defecte: ara és la configuració de les pàgines
-   noves; la fila «Pàgines noves: Contínua / una plantilla» va a la Vista mateixa; el text de la
-   pestanya s'ha de corregir. Les plantilles pròpies (B34), més endavant.
-
-Després, el **pas 7**: **R7** (B31), els estils per grup.
+1. **Veure'l**: que un bloc digui quin estil fa servir (al nivell «Bloc» i potser a la capçalera
+   del bloc), i el **nom** per a l'usuari del grup de blocs que el comparteixen (R7 de §12:
+   «caixa», «col·locació», «calaix» han de quedar en un sol nom).
+2. **Canviar-lo**: editar un estil amb nom del document (lletra, vores, mida…) i que canviïn tots
+   els blocs que el fan servir; canviar-li el nom; treure'l d'un bloc.
+3. **Decidir** si cal B35 («Aplica a tots») abans o dins de R7.
 
 ### Encàrrec per obrir la sessió següent
 
@@ -1158,15 +1229,16 @@ Després, el **pas 7**: **R7** (B31), els estils per grup.
 > checkout i continua-hi, no en creïs cap altra.
 >
 > Llegeix primer `docs/PLA-mode-lliure.md`, **§13** (estat, on és el codi, què queda obert i el pas
-> següent) i, de §12, **R10**, **R11** i **R7**. Després `docs/decisions/ADR-005-disposicio-lliure.md`
-> (decisions 6, 7 i 16–22) i `docs/fonaments/03-model-contingut-estil.md` (fitxer d'estil, principi
-> 4: les preferències no entren mai al document). Abans de tocar la columna o la configuració,
-> `docs/estandards/configuracions.md`; si hi entren diàlegs o missatges, `capes-flotants.md` i
-> `feedback-i-accions.md`; per als colors, `colors.md`; per al núvol, `backend.md` i
-> `docs/ESTUDI-limits-serveis-gratuits.md`.
+> següent) i, de §12, **R7**, **R10** i «Com ha quedat el pas 6». Després
+> `docs/decisions/ADR-005-disposicio-lliure.md` (decisions 6, 7 i 16–23) i
+> `docs/fonaments/03-model-contingut-estil.md` (§4 i §5: la cascada i les accions sobre l'estil, i
+> la direcció única). Abans de tocar la columna o la configuració, `docs/estandards/configuracions.md`;
+> si hi entren diàlegs o missatges, `capes-flotants.md` i `feedback-i-accions.md`; per als colors,
+> `colors.md`.
 >
-> La tasca és el **pas 6** de §13 («El pas següent»): R10 i R11. Abans de tocar codi, proposa com
-> queda i fes-me les preguntes que hi ha obertes a R10 (b, c, d) i a R11.
+> La tasca és el **pas 7** de §13 («El pas següent»): R7, els estils per grup. Abans de tocar codi,
+> proposa com queda i fes-me les preguntes que hi ha obertes (el nom per a l'usuari, on es veu i
+> s'edita un estil amb nom, i B35).
 >
 > Normes: `npm run typecheck` net i els tests passant; textos nous a `packages/i18n/messages/` en els
 > cinc idiomes; cap color fora de `palette.ts`; si canvia el format `.saac` o `.saacstyle`, esquema,
@@ -1174,7 +1246,9 @@ Després, el **pas 7**: **R7** (B31), els estils per grup.
 > només als fitxers tocats, mai a carpetes senceres.
 >
 > Entorn: cal `npm ci` a l'arrel. Per provar amb Playwright, `launchOptions.executablePath:
-> "/opt/pw-browsers/chromium"`. Per arribar a la Vista, clica la pestanya «Vista»: un `page.goto`
-> recarrega la pàgina i perd el document obert. Hi ha un document de prova a
+> "/opt/pw-browsers/chromium"`. Si el servidor de Vite ja era en marxa quan s'han canviat les
+> traduccions, cal tornar-lo a arrencar amb `--force`: el catàleg d'idiomes queda pre-empaquetat i
+> la pàgina ensenya els textos d'abans. Per arribar a la Vista, clica la pestanya «Vista»: un
+> `page.goto` recarrega la pàgina i perd el document obert. Hi ha un document de prova a
 > `apps/web/test/fixtures/saac/02-diverses-pestanyes.saac` (s'obre amb el menú principal i el
 > `input[type=file]`).

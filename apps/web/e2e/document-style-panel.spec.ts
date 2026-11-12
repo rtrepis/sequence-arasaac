@@ -2,11 +2,12 @@ import { test, expect, type Page } from "@playwright/test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-// El panell «Estil del document» (docs/fonaments/03-model-contingut-estil.md):
+// El panell «El meu estil» de la configuració (docs/fonaments/03-model-contingut-estil.md;
+// abans «Estil del document», R10):
 //
-// - Les quatre accions d'estil, en l'ordre dels fonaments: botons en
-//   escriptori, menú «⋯» («Accions d'estil») en mòbil, tot amb el teclat i
-//   dianes de 44 px, i el focus on toca en obrir i tancar el menú.
+// - Les dues accions de fitxer: botons en escriptori, menú «⋯» («Accions del
+//   meu estil») en mòbil, tot amb el teclat i dianes de 44 px, i el focus on
+//   toca en obrir i tancar el menú.
 // - La previsualització hi cap sempre, també amb els valors màxims de vora,
 //   mida de lletra i numeració: abans el pictograma sobresortia del requadre.
 
@@ -25,10 +26,8 @@ const DESKTOP = { width: 1280, height: 800 };
 const MOBILE = { width: 360, height: 740 };
 
 const ACTIONS = [
-  "Aplica el meu estil per defecte",
   "Carrega un estil des d'un fitxer…",
-  "Desa com a estil per defecte",
-  "Desa l'estil en un fitxer…",
+  "Desa el meu estil en un fitxer…",
 ];
 
 test.beforeEach(async ({ page }) => {
@@ -48,27 +47,27 @@ const openFile = async (page: Page, file: string) => {
 const openStylePanel = async (page: Page) => {
   await page.getByRole("button", { name: "Menú principal" }).click();
   await page.getByRole("button", { name: "Configuració" }).click();
-  await page.getByRole("tab", { name: "Estil del document" }).click();
+  await page.getByRole("tab", { name: "El meu estil" }).click();
   await expect(
-    page.getByRole("heading", { name: "Estil del document" }),
+    page.getByRole("heading", { name: "El meu estil" }),
   ).toBeVisible();
 };
 
-test("escriptori: les quatre accions són botons, en ordre i de 44 px", async ({
+test("escriptori: les dues accions són botons, en ordre i de 44 px", async ({
   page,
 }) => {
   await page.setViewportSize(DESKTOP);
   await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
   await openStylePanel(page);
 
-  const region = page.getByRole("region", { name: "Estil del document" });
+  const region = page.getByRole("region", { name: "El meu estil" });
   const buttons = region.getByRole("button");
   await expect(buttons).toHaveText(ACTIONS);
   for (const button of await buttons.all()) {
     expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   }
   await expect(
-    page.getByRole("button", { name: "Accions d'estil" }),
+    page.getByRole("button", { name: "Accions del meu estil" }),
   ).toHaveCount(0);
 
   // Amb el teclat, en l'ordre en què es llegeixen
@@ -86,7 +85,7 @@ test("mòbil: menú «⋯» amb el teclat, i el focus hi torna", async ({ page }
   await expect(page.getByText("Fitxer carregat correctament")).toBeVisible();
   await openStylePanel(page);
 
-  const more = page.getByRole("button", { name: "Accions d'estil" });
+  const more = page.getByRole("button", { name: "Accions del meu estil" });
   const box = (await more.boundingBox())!;
   expect(box.width).toBeGreaterThanOrEqual(44);
   expect(box.height).toBeGreaterThanOrEqual(44);
@@ -118,16 +117,17 @@ test("mòbil: menú «⋯» amb el teclat, i el focus hi torna", async ({ page }
   await expect(menu).toBeHidden();
   await expect(more).toBeFocused();
 
-  // Triar una acció també el torna al «⋯», i el «Desfés» és el següent tabulador
+  // Triar una acció també el torna al «⋯» quan es tanca el que obre
   await page.keyboard.press("Enter");
-  await expect(menu.getByRole("menuitem").first()).toBeFocused();
+  await page.keyboard.press("ArrowDown");
   await page.keyboard.press("Enter");
-  await expect(
-    page.getByText("S'ha aplicat el teu estil per defecte al document."),
-  ).toBeVisible();
+  const save = page.getByRole("dialog", {
+    name: "Desa el meu estil en un fitxer",
+  });
+  await expect(save).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(save).toBeHidden();
   await expect(more).toBeFocused();
-  await page.keyboard.press("Tab");
-  await expect(page.getByRole("button", { name: "Desfés" })).toBeFocused();
 });
 
 for (const [name, viewport] of [
@@ -143,16 +143,14 @@ for (const [name, viewport] of [
     await expect(page.getByText("Fitxer carregat correctament")).toBeVisible();
     // Vores de 10, lletra i números a mida 2, numerat i text a dalt
     await openFile(page, EXTREME_STYLE);
-    // Obert com a document, pregunta què se'n fa (model v3)
+    // Obert com a document, pregunta si es fa el meu estil (R10)
     await page
       .getByRole("dialog", {
         name: "Aquest fitxer és un estil, no un document",
       })
-      .getByRole("button", { name: "Aplica'l a aquest document" })
+      .getByRole("button", { name: "Fes-lo el meu estil" })
       .click();
-    await expect(
-      page.getByText("S'ha aplicat l'estil del fitxer al document."),
-    ).toBeVisible();
+    await expect(page.getByText("Ara és el teu estil.")).toBeVisible();
     await openStylePanel(page);
 
     const frame = page.getByTestId("settings-preview-frame");

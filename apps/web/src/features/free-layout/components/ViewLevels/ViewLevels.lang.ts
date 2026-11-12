@@ -51,8 +51,8 @@ const messages = defineMessages({
   },
   modeAuto: {
     id: "features.freeLayout.levels.modeAuto",
-    defaultMessage: "Continuous: the sequences one after another, as always",
-    description: "Nom accessible i tooltip de l'opció «Contínua» de la pàgina",
+    defaultMessage: "Simple: the sequences one after another, as always",
+    description: "Nom accessible i tooltip de l'opció «Simple» de la pàgina",
   },
   modeBlocks: {
     id: "features.freeLayout.levels.modeBlocks",
@@ -61,8 +61,7 @@ const messages = defineMessages({
   },
   modeAutoHelp: {
     id: "features.freeLayout.levels.modeAutoHelp",
-    defaultMessage:
-      "Continuous: the sequences go one after another, as always.",
+    defaultMessage: "Simple: the sequences go one after another, as always.",
     description: "Ajuda sota la fila de disposició de la pàgina, en contínua",
   },
   modeBlocksHelp: {

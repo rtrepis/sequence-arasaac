@@ -49,9 +49,13 @@ interface ViewSelectionValue {
   activePage: number;
   /** La pàgina que ocupa més pantalla, segons l'`IntersectionObserver` */
   setVisiblePage: (index: number) => void;
-  /** Les targetes de cada seqüència a mida 1: les mesura el full, les llegeix la columna */
-  cardSizes: Record<number, CardPx>;
-  setCardSizes: (sizes: Record<number, CardPx>) => void;
+  /**
+   * Les targetes de cada seqüència a mida 1, per `cardMeasureKey` (la
+   * seqüència, o la seqüència amb un estil amb nom): les mesura el full, les
+   * llegeix la columna
+   */
+  cardSizes: Record<string, CardPx>;
+  setCardSizes: (sizes: Record<string, CardPx>) => void;
   /**
    * El que l'usuari ha triat a «La mateixa configuració a tots els blocs» de
    * cada pàgina (per l'`id` de la pàgina). Sense entrada, es dedueix dels
@@ -112,7 +116,7 @@ export const ViewSelectionProvider = ({
   const keys = useAppSelector(selectSequenceKeys);
   const [selection, setSelection] = useState<ViewSelection | null>(null);
   const [visiblePage, setVisiblePage] = useState(0);
-  const [cardSizes, setCardSizes] = useState<Record<number, CardPx>>({});
+  const [cardSizes, setCardSizes] = useState<Record<string, CardPx>>({});
   const [uniformChoice, setUniformChoices] = useState<Record<string, boolean>>(
     {},
   );

@@ -154,7 +154,7 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 - **Un document sense `sheets` és una sola pàgina automàtica amb totes les seqüències, en ordre.**
   És el de sempre: no se n'escriu cap, i el fitxer és el mateix que fins ara.
 - **`mode`** diu com es col·loquen els blocs de la pàgina:
-  - `"auto"` («Contínua» a la interfície): un darrere l'altre, com el flux de sempre, amb la
+  - `"auto"` («Simple» a la interfície; abans «Contínua»): un darrere l'altre, com el flux de sempre, amb la
     `direction` de la pàgina (sense valor, la de `page.direction`) i el seu `sequenceGap` (sense
     valor, el de `page`). Els blocs no porten caixa. Un bloc de text hi ocupa una línia sencera.
   - `"template"` («En blocs»): cada bloc a la seva caixa.
@@ -321,11 +321,14 @@ mateixes preferències. Les fixtures `apps/web/test/fixtures/saac/` ho proven.
 
 - **«Desa el document»** escriu el document complet: contingut, estil, pàgina i imatges. **No hi ha
   cap opció per desar-lo sense estil.**
-- **«Desa l'estil en un fitxer…»** escriu un `.saacstyle`. Viu al panell «Estil del document».
+- **«Desa el meu estil en un fitxer…»** escriu un `.saacstyle` amb el meu estil. Viu al panell «El
+  meu estil» de la configuració (R10). L'estil del document obert no es desa sol: va sempre dins
+  del document.
 - En desar, **SEMPRE** s'aplica `diffStyle` a cada seqüència i pictograma, perquè els retocs siguin
   mínims.
-- **L'estil per defecte** de l'usuari es tria a les preferències, amb el nom **«Estil per defecte
-  per a documents nous»**. **MAI** viatja dins d'un document.
+- **El meu estil** (l'antic estil per defecte) es tria a les preferències, al panell «El meu
+  estil». **MAI** viatja dins d'un document com a referència: «Aplica el meu estil» en **copia** els
+  valors a `styles` (§1.2).
 
 ### Descàrrega
 
@@ -347,11 +350,11 @@ a.download = `${nom}.saac`; // o `.saacstyle`
 - **SEMPRE** el tipus es decideix pel contingut (§3).
 - **SEMPRE** obrir un document **no modifica les preferències**. La pàgina i l'estil del fitxer són
   del document; les preferències de qui l'obre continuen igual.
-- **Un fitxer d'estil obert com a document** obre un diàleg amb tres botons: *Aplica'l a aquest
-  document* · *Fes-lo el meu estil per defecte* · *Cancel·la*. Si no hi ha cap document amb
-  contingut, el primer botó no hi és.
-- **Un fitxer d'estil carregat des del panell «Estil del document»** s'aplica directament, amb
-  desfer.
+- **Un fitxer d'estil obert com a document** obre un diàleg amb dos botons: *Fes-lo el meu estil* ·
+  *Cancel·la*. No s'aplica mai al document obert (R10, 2026-11-12): els estils van de la
+  configuració cap al document, i al document s'hi porten amb «Aplica el meu estil».
+- **Un fitxer d'estil (o un `.saac`) carregat des del panell «El meu estil»** passa a ser el meu
+  estil directament; es desa en tancar la configuració.
 
 ## 7. Núvol
 

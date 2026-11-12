@@ -11,7 +11,10 @@ import type { RootState } from "@/app/store";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { documentStyleMaterializedActionCreator } from "@features/sequence/store/documentSlice";
-import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
+import {
+  selectDocumentStyle,
+  selectUserDefaultStyle,
+} from "@features/sequence/style/styleSelectors";
 import {
   DOCUMENT_FILE_EXTENSION,
   STYLE_FILE_EXTENSION,
@@ -45,8 +48,9 @@ interface ModalDownloadProps {
  * punt 2): «Desa el document» se n'endú sempre l'estil. Abans hi havia dues
  * caselles —seqüència i configuració— que donaven tres combinacions, i la del
  * document sense estil feia que en obrir-lo es veiés amb les preferències de
- * qui l'obria. Desar només l'estil és una altra acció i viu al panell «Estil
- * del document», que obre aquest mateix diàleg amb `kind="style"`.
+ * qui l'obria. Desar un estil és una altra acció i viu al panell «El meu
+ * estil» de la configuració, que obre aquest mateix diàleg amb `kind="style"`:
+ * el que es desa és el meu estil, no el del document obert (R10).
  */
 const ModalDownload = ({
   open,
@@ -55,6 +59,7 @@ const ModalDownload = ({
 }: ModalDownloadProps): React.ReactElement => {
   const documentSaac = useAppSelector((state) => state.document);
   const style = useAppSelector(selectDocumentStyle);
+  const myStyle = useAppSelector(selectUserDefaultStyle);
   const store = useStore<RootState>();
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -109,7 +114,7 @@ const ModalDownload = ({
 
   const onSaveStyle = () => {
     // Desar l'estil no salva cap feina: no compta com a còpia del document
-    download(serializeSaac(buildStyleFileV3(style)), STYLE_FILE_EXTENSION);
+    download(serializeSaac(buildStyleFileV3(myStyle)), STYLE_FILE_EXTENSION);
     trackEvent({
       event: "safe-event",
       event_category: "file",

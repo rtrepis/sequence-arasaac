@@ -22,18 +22,9 @@ import {
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import {
-  applyViewSettingsToAllActionCreator,
-  documentLayoutChangedActionCreator,
-  setSequenceSpaceBetweenActionCreator,
-} from "@features/sequence/store/documentSlice";
-import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import { DefaultSettingsPanelHandle } from "../DefaultSettingsPanel/DefaultSettingsPanel";
 import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
-import {
-  PageSize,
-  regionalPaperSize,
-} from "@features/print/utils/pageFormat";
+import { PageSize, regionalPaperSize } from "@features/print/utils/pageFormat";
 import { SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
 import GlobalViewControls from "@components/ViewSequencesSettings/GlobalViewControls";
 import PrintFooterSection from "@components/ViewSequencesSettings/PrintFooterSection";
@@ -67,9 +58,6 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     const dispatch = useAppDispatch();
     const intl = useIntl();
     const reduxViewSettings = useAppSelector((store) => store.ui.viewSettings);
-    const documentStyleView = useAppSelector(
-      (store) => selectDocumentStyle(store).view,
-    );
     const [localSettings, setLocalSettings] =
       useState<ViewSettings>(reduxViewSettings);
 
@@ -147,50 +135,6 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     ) => {
       if (!value) return;
       setLocalSettings((prev) => ({ ...prev, alignmentV: value }));
-    };
-
-    // «Aplica a la vista actual» porta aquests valors al document obert:
-    // tocar-ne les mides i els espaiats és tocar-ne l'estil, i la pàgina també
-    // és seva (B26)
-    const handleApply = () => {
-      dispatch(viewSettingsActionCreator(localSettings));
-      dispatch(
-        documentLayoutChangedActionCreator({
-          layout: {
-            direction: localSettings.direction,
-            pageSize: localSettings.pageSize,
-            orientation: localSettings.orientation,
-          },
-          base: {
-            direction: localSettings.direction,
-            pageSize: localSettings.pageSize,
-            orientation: localSettings.orientation,
-          },
-        }),
-      );
-      dispatch(
-        applyViewSettingsToAllActionCreator({
-          settings: {
-            sizePict: localSettings.sizePict,
-            pictSpaceBetween: localSettings.pictSpaceBetween,
-            alignmentH: localSettings.alignmentH,
-            alignmentV: localSettings.alignmentV,
-          },
-          styleView: documentStyleView,
-        }),
-      );
-      dispatch(
-        setSequenceSpaceBetweenActionCreator({
-          value: localSettings.sequenceSpaceBetween,
-          styleView: {
-            ...documentStyleView,
-            sizePict: localSettings.sizePict,
-            pictSpaceBetween: localSettings.pictSpaceBetween,
-            alignmentH: localSettings.alignmentH,
-            alignmentV: localSettings.alignmentV,
-          },
-        }),
-      );
     };
 
     return (
@@ -325,11 +269,11 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           }
         />
 
-        {/* Al final i a la dreta, com el peu d'un diàleg: afecten tot el que
-              hi ha a sobre. «Aplica» és la principal i per això va plena */}
-        <SettingsActions
-          helper={<FormattedMessage {...messages.applyHelper} />}
-        >
+        {/* Al final i a la dreta, com el peu d'un diàleg. Només hi ha
+              «Restaura»: aquests valors van cap als documents nous, i un
+              document obert no en rep res (els estils van en una sola
+              direcció, de la configuració cap al document, R10 i R11) */}
+        <SettingsActions>
           <Tooltip
             title={intl.formatMessage(messages.tooltipReset)}
             describeChild
@@ -342,9 +286,6 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
               <FormattedMessage {...messages.reset} />
             </StyledButton>
           </Tooltip>
-          <StyledButton variant="contained" onClick={handleApply}>
-            <FormattedMessage {...messages.apply} />
-          </StyledButton>
         </SettingsActions>
       </SettingsPanelLayout>
     );

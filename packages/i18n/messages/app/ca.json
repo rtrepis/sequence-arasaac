@@ -118,8 +118,8 @@
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.panelHint": {
-    "message": "S'aplica a totes les seqüències d'aquest document.",
-    "description": "Guia del tab de pictogrames del modal de configuracions"
+    "message": "L'estil dels pictogrames amb què neixen els documents nous. Per portar-lo a un document obert, fes servir «Aplica el meu estil» al menú «⋯» d'una pàgina o d'un bloc.",
+    "description": "Ajuda del panell «El meu estil»: és una preferència de l'usuari, no l'estil del document obert, i al document s'hi porta des del menú «⋯» de la vista"
   },
   "components.defaultSettings.sectionPictogram": {
     "message": "Pictograma",
@@ -142,8 +142,8 @@
     "description": "Settings Default"
   },
   "components.defaultSettings.tab.pictograms": {
-    "message": "Estil del document",
-    "description": "Tab del panell «Estil del document»: l'estil que s'aplica a totes les seqüències del document obert"
+    "message": "El meu estil",
+    "description": "Tab del panell «El meu estil»: l'estil dels pictogrames amb què neixen els documents nous i que s'aplica des del menú «⋯» de la vista"
   },
   "components.defaultSettings.tab.user": {
     "message": "Usuari",
@@ -158,8 +158,8 @@
     "description": "Tab de vocabulari personal (paraules personalitzades)"
   },
   "components.viewSettingsPanel.panelDescription": {
-    "message": "Configura els valors de visualització per defecte en obrir la pàgina de vista.",
-    "description": "Text explicatiu del panell de configuració de la vista"
+    "message": "La pàgina i els pictogrames amb què comencen els documents nous.",
+    "description": "Text explicatiu del panell «Vista» de la configuració: aquests valors només els agafen els documents nous; un document obert no en rep res"
   },
   "components.viewSettingsPanel.sectionPageFormat": {
     "message": "Format de pàgina",
@@ -168,13 +168,6 @@
   "components.viewSettingsPanel.sectionPictograms": {
     "message": "Pictogrames",
     "description": "Títol de la secció de mida i alineació de pictogrames al panell de vista"
-  },
-  "components.viewSettingsPanel.apply": {
-    "message": "Aplicar a la vista actual",
-    "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
-  },
-  "components.viewSettingsPanel.applyHelper": {
-    "message": "Aplica els valors a la sessió de vista activa sense tancar la configuració."
   },
   "components.defaultSettings.userPanel.interfaceLanguage": {
     "message": "Interfície",
@@ -1015,17 +1008,6 @@
   },
   "pages.viewSequence.tooltip.alignRight": {
     "message": "Dreta"
-  },
-  "pages.viewSequence.savePreferences.label": {
-    "message": "Desa com a preferències"
-  },
-  "pages.viewSequence.tooltip.savePreferencesCloud": {
-    "message": "Desa aquests ajustos al teu compte i els fa servir per defecte als documents nous",
-    "description": "Tooltip del botó de desar preferències amb sessió iniciada"
-  },
-  "pages.viewSequence.tooltip.savePreferencesLocal": {
-    "message": "Desa aquests ajustos en aquest navegador i els fa servir per defecte als documents nous",
-    "description": "Tooltip del botó de desar preferències sense sessió"
   },
   "pages.viewSequence.tooltip.orientationLandscape": {
     "message": "Pàgina apaïsada",
@@ -2316,69 +2298,29 @@
     "message": "S'ha desfet el canvi",
     "description": "Confirmació després de desfer un canvi d'estil o de disposició de la pàgina (el snackbar «Desfés» serveix per a tots dos)"
   },
-  "features.sequence.style.setAsDefault": {
-    "message": "Desa com a estil per defecte",
-    "description": "Botó que fa que un estil sigui el que reben les seqüències noves"
-  },
   "features.sequence.style.setAsDefault.success": {
-    "message": "S'ha desat com a estil per defecte",
-    "description": "Confirmació de «Desa com a estil per defecte»"
+    "message": "Ara és el teu estil.",
+    "description": "Confirmació de «Fes-lo el meu estil», en obrir un fitxer d'estil"
   },
   "features.sequence.style.notice.close": {
     "message": "Tanca l'avís",
     "description": "Nom accessible del botó que tanca l'avís d'estil"
   },
-  "features.sequence.style.pendingDefault.body": {
-    "message": "No hi ha cap document obert a què aplicar-lo. Si el fas servir per defecte, els documents nous el rebran en lloc de l'estil que tens ara.",
-    "description": "Explicació de què passa si s'accepta l'estil com a per defecte"
-  },
-  "features.sequence.style.panel.title": {
-    "message": "Estil del document",
-    "description": "Títol del panell d'estil i del botó del bàner que hi porta. L'estil s'aplica a totes les seqüències del document"
-  },
   "components.buttonWithModalDownload.saveStyle": {
     "message": "Desa l'estil",
     "description": "Botó que desa només l'estil de la seqüència en un fitxer .saacstyle"
-  },
-  "features.sequence.style.applyUserDefault": {
-    "message": "Aplica el meu estil per defecte",
-    "description": "Acció que aplica l'estil per defecte de l'usuari al document obert (es pot desfer)"
-  },
-  "features.sequence.style.applyUserDefault.tooltip": {
-    "message": "Torna totes les seqüències del document al teu estil per defecte. Es pot desfer.",
-    "description": "Ajuda del botó «Aplica el meu estil per defecte» de la vista"
-  },
-  "features.sequence.style.loadStyleFile": {
-    "message": "Carrega un estil des d'un fitxer…",
-    "description": "Acció que aplica al document l'estil d'un fitxer .saacstyle o d'un altre document .saac"
-  },
-  "features.sequence.style.saveStyleFile": {
-    "message": "Desa l'estil en un fitxer…",
-    "description": "Acció que obre el diàleg per desar només l'estil del document en un fitxer .saacstyle"
-  },
-  "features.sequence.style.actions": {
-    "message": "Accions d'estil",
-    "description": "Nom accessible del botó «⋯» que obre el menú amb les accions d'estil en mòbil"
-  },
-  "features.sequence.style.changed.userDefault": {
-    "message": "S'ha aplicat el teu estil per defecte al document.",
-    "description": "Snackbar després d'aplicar l'estil per defecte al document"
-  },
-  "features.sequence.style.changed.file": {
-    "message": "S'ha aplicat l'estil del fitxer al document.",
-    "description": "Snackbar després d'aplicar al document l'estil d'un fitxer"
   },
   "components.buttonWithModalDownload.saveDocument": {
     "message": "Desa el document",
     "description": "Botó que desa el document (totes les seqüències) amb el seu estil en un fitxer .saac"
   },
   "components.buttonWithModalDownload.styleDialogTitle": {
-    "message": "Desa l'estil en un fitxer",
-    "description": "Títol del diàleg per desar només l'estil del document"
+    "message": "Desa el meu estil en un fitxer",
+    "description": "Títol del diàleg per desar el meu estil en un fitxer .saacstyle"
   },
   "components.buttonWithModalDownload.styleHelper": {
-    "message": "Només l'aparença del document —fonts, colors, vores, mides i espais—, sense cap seqüència. Es pot aplicar a altres documents.",
-    "description": "Explicació del diàleg per desar només l'estil"
+    "message": "El teu estil —lletra, colors, vores, mides i espais—, sense cap seqüència. El pots carregar en un altre dispositiu o passar-lo a algú altre.",
+    "description": "Explicació del diàleg per desar el meu estil"
   },
   "components.buttonWithModalDownload.whatIsSaved.title": {
     "message": "Què es guarda en un document?",
@@ -2421,8 +2363,8 @@
     "description": "Bàner en obrir un document desat amb una versió anterior de l'app (format antic)"
   },
   "features.sequence.style.notice.withoutStyle": {
-    "message": "No portava estil propi, i hi hem aplicat el teu estil per defecte.",
-    "description": "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer)"
+    "message": "No portava estil propi, i hi hem aplicat el teu estil.",
+    "description": "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer): hi va el meu estil"
   },
   "features.sequence.style.notice.newerVersion": {
     "message": "Aquest document s'ha creat amb una versió més nova de SequenciAAC. Pot ser que alguna cosa no es vegi bé. Si el deses aquí, es podrien perdre canvis.",
@@ -2441,16 +2383,12 @@
     "description": "Títol del diàleg que surt en obrir un fitxer d'estil (.saacstyle) com si fos un document"
   },
   "features.sequence.style.styleFileOpened.body": {
-    "message": "Pots aplicar-lo al document obert, o fer-lo el teu estil per defecte, que és el que reben els documents nous.",
-    "description": "Explicació del diàleg de fitxer d'estil quan hi ha un document obert"
-  },
-  "features.sequence.style.styleFileOpened.apply": {
-    "message": "Aplica'l a aquest document",
-    "description": "Botó que aplica l'estil del fitxer al document obert (es pot desfer)"
+    "message": "Pots fer-lo el teu estil: el reben els documents nous, i el porta a un document «Aplica el meu estil», al menú «⋯» d'una pàgina o d'un bloc.",
+    "description": "Explicació del diàleg que surt en obrir un fitxer d'estil com si fos un document: només es pot fer el meu estil"
   },
   "features.sequence.style.styleFileOpened.makeDefault": {
-    "message": "Fes-lo el meu estil per defecte",
-    "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
+    "message": "Fes-lo el meu estil",
+    "description": "Botó que fa de l'estil del fitxer el meu estil (substitueix el que hi havia)"
   },
   "components.pictEdit.resetDone": {
     "message": "Estil restablert",
@@ -2890,10 +2828,10 @@
   },
   "features.freeLayout.page.layoutSection": {
     "message": "Disposició",
-    "description": "Títol del grup del menú d'una pàgina on es tria si és contínua o en blocs"
+    "description": "Títol del grup del menú d'una pàgina on es tria si és simple o en blocs"
   },
   "features.freeLayout.page.modeContinuous": {
-    "message": "Contínua",
+    "message": "Simple",
     "description": "Opció del menú d'una pàgina: les seqüències una darrere l'altra, com sempre"
   },
   "features.freeLayout.page.modeBlocks": {
@@ -2901,8 +2839,8 @@
     "description": "Opció del menú d'una pàgina: cada seqüència o text és un bloc amb el seu lloc a la pàgina"
   },
   "features.freeLayout.page.arrangementTag": {
-    "message": "{kind, select, continuous {Contínua} columns {Columnes · {n}} rows {Files · {n}} free {Lliure} other {{name}}}",
-    "description": "Etiqueta de la capçalera d'una pàgina que diu com es reparteix: contínua, N columnes, N files, lliure o el nom de la plantilla (`name`)"
+    "message": "{kind, select, continuous {Simple} columns {Columnes · {n}} rows {Files · {n}} free {Lliure} other {{name}}}",
+    "description": "Etiqueta de la capçalera d'una pàgina que diu com es reparteix: simple, N columnes, N files, lliure o el nom de la plantilla (`name`)"
   },
   "features.freeLayout.page.arrangementHint": {
     "message": "{kind, select, continuous {Afegir una seqüència la posa al final.} columns {Afegir un bloc hi posa una columna més.} rows {Afegir un bloc hi posa una fila més.} free {Afegir un bloc el posa a l'espai buit més gran, sense moure els altres.} other {Afegir un bloc omple el primer espai buit; si no n'hi ha, la pàgina passa a lliure.}}",
@@ -3109,12 +3047,12 @@
     "description": "Resum del nivell «Document» plegat, després de la mida del paper («A4 vertical»)"
   },
   "pages.viewSequence.levels.directionRowShort": {
-    "message": "Contínua, en files",
-    "description": "Resum del nivell «Pàgina» plegat, en una pàgina contínua: les seqüències van en files"
+    "message": "Simple, en files",
+    "description": "Resum del nivell «Pàgina» plegat, en una pàgina simple: les seqüències van en files"
   },
   "pages.viewSequence.levels.directionColumnShort": {
-    "message": "Contínua, en columnes",
-    "description": "Resum del nivell «Pàgina» plegat, en una pàgina contínua: les seqüències van en columnes"
+    "message": "Simple, en columnes",
+    "description": "Resum del nivell «Pàgina» plegat, en una pàgina simple: les seqüències van en columnes"
   },
   "features.freeLayout.levels.noTemplate": {
     "message": "Sense plantilla",
@@ -3186,11 +3124,11 @@
   },
   "pages.viewSequence.levels.kindBlock": {
     "message": "{unit, select, sequences {Seqüència} other {Bloc}}",
-    "description": "Tipus del tercer nivell de la columna de la vista: seqüència en una pàgina contínua, bloc en una pàgina en blocs"
+    "description": "Tipus del tercer nivell de la columna de la vista: seqüència en una pàgina simple, bloc en una pàgina en blocs"
   },
   "pages.viewSequence.levels.noBlock": {
     "message": "{unit, select, sequences {Cap seqüència seleccionada} other {Cap bloc seleccionat}}",
-    "description": "Nom del tercer nivell quan no hi ha res seleccionat: seqüència (pàgina contínua) o bloc (pàgina en blocs)"
+    "description": "Nom del tercer nivell quan no hi ha res seleccionat: seqüència (pàgina simple) o bloc (pàgina en blocs)"
   },
   "features.freeLayout.levels.pictograms": {
     "message": "Pictogrames",
@@ -3198,23 +3136,23 @@
   },
   "features.freeLayout.levels.uniform": {
     "message": "La mateixa a {unit, select, sequences {totes les seqüències} other {tots els blocs}}",
-    "description": "Interruptor del nivell «Pàgina»: totes les seqüències (pàgina contínua) o tots els blocs (pàgina en blocs) amb la mateixa mida, espai i alineació. `unit` és sequences o blocks"
+    "description": "Interruptor del nivell «Pàgina»: totes les seqüències (pàgina simple) o tots els blocs (pàgina en blocs) amb la mateixa mida, espai i alineació. `unit` és sequences o blocks"
   },
   "features.freeLayout.levels.mode": {
     "message": "Disposició",
-    "description": "Títol de la fila del nivell «Pàgina» on es tria si la pàgina és contínua (com sempre) o en blocs"
+    "description": "Títol de la fila del nivell «Pàgina» on es tria si la pàgina és simple (com sempre) o en blocs"
   },
   "features.freeLayout.levels.modeAuto": {
-    "message": "Contínua: les seqüències una darrere l'altra, com sempre",
-    "description": "Nom accessible i tooltip de l'opció «Contínua» de la pàgina"
+    "message": "Simple: les seqüències una darrere l'altra, com sempre",
+    "description": "Nom accessible i tooltip de l'opció «Simple» de la pàgina"
   },
   "features.freeLayout.levels.modeBlocks": {
     "message": "En blocs: cada seqüència al seu lloc de la pàgina",
     "description": "Nom accessible i tooltip de l'opció «En blocs» de la pàgina"
   },
   "features.freeLayout.levels.modeAutoHelp": {
-    "message": "Contínua: les seqüències van una darrere l'altra, com sempre.",
-    "description": "Ajuda sota la fila de disposició de la pàgina, en contínua"
+    "message": "Simple: les seqüències van una darrere l'altra, com sempre.",
+    "description": "Ajuda sota la fila de disposició de la pàgina, en simple"
   },
   "features.freeLayout.levels.modeBlocksHelp": {
     "message": "En blocs: cada seqüència és un bloc amb el seu lloc a la pàgina.",
@@ -3295,5 +3233,41 @@
   "features.freeLayout.levels.columnsHelp": {
     "message": "Quants pictogrames per fila dins del bloc.",
     "description": "Ajuda sota les columnes d'un bloc: quants pictogrames hi ha a cada fila de dins del bloc"
+  },
+  "components.defaultSettings.myStyle.title": {
+    "message": "El meu estil",
+    "description": "Títol del panell «El meu estil» de la configuració: l'estil dels pictogrames de l'usuari"
+  },
+  "components.defaultSettings.myStyle.loadFile": {
+    "message": "Carrega un estil des d'un fitxer…",
+    "description": "Acció del panell «El meu estil»: l'estil d'un fitxer .saacstyle (o d'un document .saac) passa a ser el meu estil"
+  },
+  "components.defaultSettings.myStyle.saveFile": {
+    "message": "Desa el meu estil en un fitxer…",
+    "description": "Acció del panell «El meu estil»: desa el meu estil en un fitxer .saacstyle"
+  },
+  "components.defaultSettings.myStyle.actions": {
+    "message": "Accions del meu estil",
+    "description": "Nom accessible del botó «⋯» que obre el menú amb les accions del panell «El meu estil» al mòbil"
+  },
+  "features.sequence.style.loadedMyStyle": {
+    "message": "S'ha carregat l'estil del fitxer com el teu estil.",
+    "description": "Snackbar després de «Carrega un estil des d'un fitxer…» al panell «El meu estil»"
+  },
+  "features.sequence.style.changed.myStyleSheet": {
+    "message": "S'ha aplicat el teu estil a la pàgina.",
+    "description": "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'una pàgina"
+  },
+  "features.sequence.style.changed.myStyleBlock": {
+    "message": "S'ha aplicat el teu estil al bloc.",
+    "description": "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'un bloc"
+  },
+  "features.freeLayout.applyMyStyle": {
+    "message": "Aplica el meu estil",
+    "description": "Acció del menú «⋯» d'una pàgina o d'un bloc: hi copia el meu estil de pictogrames (es pot desfer)"
+  },
+  "features.freeLayout.myStyleName": {
+    "message": "El meu estil",
+    "description": "Nom de l'estil que «Aplica el meu estil» copia al document. Queda escrit al fitxer com a contingut i no es torna a traduir"
   }
 }

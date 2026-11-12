@@ -46,11 +46,6 @@ interface DefaultFormProps {
   setColor: Dispatch<SetStateAction<boolean>>;
   numbered: boolean;
   setNumbered: Dispatch<SetStateAction<boolean>>;
-  onApplyAllColor: () => void;
-  onApplyAllTextPosition: () => void;
-  onApplyAllAppearance: () => void;
-  onApplyAllBorderIn: () => void;
-  onApplyAllBorderOut: () => void;
   onSubmit: () => void;
   onReset?: () => void;
   /**
@@ -83,11 +78,6 @@ const DefaultForm = ({
   setColor,
   numbered,
   setNumbered,
-  onApplyAllColor,
-  onApplyAllTextPosition,
-  onApplyAllAppearance,
-  onApplyAllBorderIn,
-  onApplyAllBorderOut,
   onSubmit,
   onReset,
   header,
@@ -161,7 +151,6 @@ const DefaultForm = ({
       >
         <SectionTitle
           title={<FormattedMessage {...messages.sectionPictogram} />}
-          onApplyAll={onApplyAllColor}
         >
           <SettingCardBoolean
             setting={"numbered"}
@@ -175,10 +164,7 @@ const DefaultForm = ({
           />
         </SectionTitle>
 
-        <SectionTitle
-          title={<FormattedMessage {...messages.sectionText} />}
-          onApplyAll={onApplyAllTextPosition}
-        >
+        <SectionTitle title={<FormattedMessage {...messages.sectionText} />}>
           <SettingCard
             setting={"textPosition"}
             state={textPosition}
@@ -200,19 +186,16 @@ const DefaultForm = ({
           border="borderOut"
           state={borderOut}
           setState={setBorderOut}
-          onApplyAll={onApplyAllBorderOut}
         />
         <SettingCardBorder
           border="borderIn"
           state={borderIn}
           setState={setBorderIn}
-          onApplyAll={onApplyAllBorderIn}
         />
 
         {color && (
           <SectionTitle
             title={<FormattedMessage {...messages.sectionAppearance} />}
-            onApplyAll={onApplyAllAppearance}
           >
             <SettingCard setting={"skin"} state={skin} setState={setSkin} />
             <SettingCard setting={"hair"} state={hair} setState={setHair} />

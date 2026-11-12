@@ -9,6 +9,7 @@ import {
   DocumentLayout,
   DocumentPages,
   DocumentSAAC,
+  NamedStyle,
   SequenceStyle,
   SequenceStyleView,
   SequenceViewSettings,
@@ -440,6 +441,7 @@ const documentSlice = createSlice({
         styleView,
         fitzgeraldColors,
         pages,
+        styles,
       } = action.payload;
       previousDocument.content = content;
       previousDocument.viewSettings = viewSettings;
@@ -450,6 +452,7 @@ const documentSlice = createSlice({
       // desfer no en canvia la mida ni l'orientació. Les pàgines i els seus
       // blocs, sí
       previousDocument.pages = pages;
+      previousDocument.styles = styles;
     },
 
     // Fa explícit l'estil que el document heretava, en desar-lo: el que s'ha
@@ -521,6 +524,17 @@ const documentSlice = createSlice({
       action: PayloadAction<DocumentPages | undefined>,
     ) => {
       previousDocument.pages = action.payload;
+    },
+
+    // Les pàgines i els estils amb nom alhora: «Aplica el meu estil» copia
+    // l'estil al document i hi apunta els blocs en un sol pas, i en un sol
+    // desfer (R10)
+    pagesAndStylesChanged: (
+      previousDocument,
+      action: PayloadAction<{ pages: DocumentPages; styles: NamedStyle[] }>,
+    ) => {
+      previousDocument.pages = action.payload.pages;
+      previousDocument.styles = action.payload.styles;
     },
 
     // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
@@ -625,6 +639,8 @@ export interface DocumentStyleSnapshot {
   styleView: DocumentSAAC["styleView"];
   fitzgeraldColors: DocumentSAAC["fitzgeraldColors"];
   pages: DocumentSAAC["pages"];
+  /** Els estils amb nom: «Aplica el meu estil» n'hi copia un (R10) */
+  styles: DocumentSAAC["styles"];
 }
 
 export const takeDocumentStyleSnapshot = (
@@ -636,6 +652,7 @@ export const takeDocumentStyleSnapshot = (
   styleView: document.styleView,
   fitzgeraldColors: document.fitzgeraldColors,
   pages: document.pages,
+  styles: document.styles,
 });
 
 /**
@@ -763,6 +780,7 @@ export const {
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
   documentLayoutChanged: documentLayoutChangedActionCreator,
   pagesChanged: pagesChangedActionCreator,
+  pagesAndStylesChanged: pagesAndStylesChangedActionCreator,
   documentAuthorChanged: documentAuthorChangedActionCreator,
   pictStyleAppliedToAll: pictStyleAppliedToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,

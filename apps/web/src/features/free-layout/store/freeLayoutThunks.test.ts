@@ -10,12 +10,17 @@ import {
   selectCanUndoStyle,
   undoStyleChangeThunk,
 } from "@features/sequence/store/styleSlice";
-import { selectResolvedSequenceViews } from "@features/sequence/style/styleSelectors";
+import {
+  selectResolvedSequenceViews,
+  selectUserDefaultStyle,
+} from "@features/sequence/style/styleSelectors";
+import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { whereIs } from "../model/placementsOf";
 import { stackTemplate } from "../model/templates";
 import {
   addSequencesToSheetThunk,
   addSheetThunk,
+  applyMyStyleThunk,
   applyTemplateThunk,
   removePlacementThunk,
   removeSheetThunk,
@@ -280,5 +285,99 @@ describe("la mateixa configuració a tots els blocs d'una pàgina", () => {
     second.placements.forEach((placement) =>
       expect(placement).not.toHaveProperty("view"),
     );
+  });
+});
+
+describe("«Aplica el meu estil» (R10)", () => {
+  /** Un document en blocs i el meu estil amb una mida que no és la del document. */
+  const storeWithMyStyle = () => {
+    const store = freeStore(3);
+    const ui = store.getState().ui.viewSettings;
+    store.dispatch(viewSettingsActionCreator({ ...ui, sizePict: 1.7 }));
+    return store;
+  };
+
+  it("a una pàgina: copia el meu estil al document i hi apunta tots els blocs propis", () => {
+    const store = storeWithMyStyle();
+    const [first] = layoutOf(store).sheets[0].placements;
+    store.dispatch(setPlacementViewThunk(first.id, { sizePict: 0.5 }));
+
+    store.dispatch(
+      applyMyStyleThunk({ kind: "sheet", sheetIndex: 0 }, "El meu estil"),
+    );
+
+    const styles = store.getState().document.styles ?? [];
+    expect(styles).toHaveLength(1);
+    expect(styles[0].name).toBe("El meu estil");
+    expect(styles[0].view?.sizePict).toBe(1.7);
+    const mine = selectUserDefaultStyle(store.getState());
+    expect(styles[0].pictSequence).toEqual(mine.pictSequence);
+    layoutOf(store).sheets[0].placements.forEach((placement) => {
+      expect(placement.kind === "sequence" && placement.styleId).toBe(
+        styles[0].id,
+      );
+      // El retoc de la vista del bloc manaria sobre l'estil: es treu
+      expect(placement.kind === "sequence" && placement.view).toBeUndefined();
+    });
+    expect(store.getState().style.undoSnackbar).toMatchObject({
+      source: "myStyleSheet",
+    });
+  });
+
+  it("a un bloc: només aquell, i tornar-lo a aplicar reaprofita l'estil", () => {
+    const store = storeWithMyStyle();
+    const [first, second] = layoutOf(store).sheets[0].placements;
+
+    store.dispatch(
+      applyMyStyleThunk(
+        { kind: "block", placementId: first.id },
+        "El meu estil",
+      ),
+    );
+    store.dispatch(
+      applyMyStyleThunk(
+        { kind: "block", placementId: second.id },
+        "El meu estil",
+      ),
+    );
+
+    const styles = store.getState().document.styles ?? [];
+    expect(styles).toHaveLength(1);
+    const [a, b, c] = layoutOf(store).sheets[0].placements;
+    expect(a.kind === "sequence" && a.styleId).toBe(styles[0].id);
+    expect(b.kind === "sequence" && b.styleId).toBe(styles[0].id);
+    expect(c.kind === "sequence" && c.styleId).toBeUndefined();
+    expect(store.getState().style.undoSnackbar).toMatchObject({
+      source: "myStyleBlock",
+    });
+  });
+
+  it("es desfà sencer: els blocs i l'estil copiat", () => {
+    const store = storeWithMyStyle();
+    const before = store.getState().document;
+
+    store.dispatch(
+      applyMyStyleThunk({ kind: "sheet", sheetIndex: 0 }, "El meu estil"),
+    );
+    expect(selectCanUndoStyle(store.getState())).toBe(true);
+    store.dispatch(undoStyleChangeThunk());
+
+    expect(store.getState().document.pages).toEqual(before.pages);
+    expect(store.getState().document.styles).toEqual(before.styles);
+  });
+
+  it("un document sense pàgines pròpies les fa explícites", () => {
+    const store = createAppStore({ document: documentWith(2) });
+    store.dispatch(
+      applyMyStyleThunk({ kind: "sheet", sheetIndex: 0 }, "El meu estil"),
+    );
+    const { sheets } = layoutOf(store);
+    expect(sheets).toHaveLength(1);
+    expect(sheets[0].mode).toBe("auto");
+    expect(
+      sheets[0].placements.every(
+        (placement) => placement.kind === "sequence" && placement.styleId,
+      ),
+    ).toBe(true);
   });
 });

@@ -78,13 +78,13 @@ const messages = defineMessages({
   },
   directionRowShort: {
     id: "pages.viewSequence.levels.directionRowShort",
-    defaultMessage: "Continuous, in rows",
+    defaultMessage: "Simple, in rows",
     description:
       "Resum del nivell «Pàgina» plegat, en una pàgina contínua: les seqüències van en files",
   },
   directionColumnShort: {
     id: "pages.viewSequence.levels.directionColumnShort",
-    defaultMessage: "Continuous, in columns",
+    defaultMessage: "Simple, in columns",
     description:
       "Resum del nivell «Pàgina» plegat, en una pàgina contínua: les seqüències van en columnes",
   },

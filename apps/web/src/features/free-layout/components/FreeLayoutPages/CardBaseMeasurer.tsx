@@ -7,10 +7,17 @@ import type { CardPx } from "@features/free-layout/model/blockGrid";
 /** La targeta més gran d'una seqüència a mida 1, en píxels d'impressió. */
 export type CardBaseSize = CardPx;
 
-interface CardBaseMeasurerProps {
-  sequences: { key: number; pictograms: Sequence }[];
+/** Una cosa per mesurar: una seqüència, amb les targetes com es veuen al bloc. */
+export interface MeasuredSequence {
+  /** `cardMeasureKey`: la seqüència, o la seqüència amb un estil amb nom */
+  key: string;
+  pictograms: Sequence;
   defaults: PictogramCardDefaults;
-  onMeasure: (sizes: Record<number, CardBaseSize>) => void;
+}
+
+interface CardBaseMeasurerProps {
+  sequences: MeasuredSequence[];
+  onMeasure: (sizes: Record<string, CardBaseSize>) => void;
 }
 
 /**
@@ -27,7 +34,6 @@ interface CardBaseMeasurerProps {
  */
 const CardBaseMeasurer = ({
   sequences,
-  defaults,
   onMeasure,
 }: CardBaseMeasurerProps): React.ReactElement => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,12 +45,12 @@ const CardBaseMeasurer = ({
     if (!container) return undefined;
 
     const measure = () => {
-      const sizes: Record<number, CardBaseSize> = {};
+      const sizes: Record<string, CardBaseSize> = {};
       container
         .querySelectorAll<HTMLElement>("[data-measure-key]")
         .forEach((group) => {
           const cards = Array.from(group.children) as HTMLElement[];
-          sizes[Number(group.dataset.measureKey)] = {
+          sizes[group.dataset.measureKey ?? ""] = {
             w: Math.max(0, ...cards.map((card) => card.offsetWidth)),
             h: Math.max(0, ...cards.map((card) => card.offsetHeight)),
           };
@@ -60,7 +66,7 @@ const CardBaseMeasurer = ({
       .querySelectorAll<HTMLElement>("[data-measure-key] > *")
       .forEach((card) => observer.observe(card));
     return () => observer.disconnect();
-  }, [sequences, defaults]);
+  }, [sequences]);
 
   return (
     <Box
@@ -76,7 +82,7 @@ const CardBaseMeasurer = ({
         "@media print": { display: "none" },
       }}
     >
-      {sequences.map(({ key, pictograms }) => (
+      {sequences.map(({ key, pictograms, defaults }) => (
         <Box
           key={key}
           data-measure-key={key}

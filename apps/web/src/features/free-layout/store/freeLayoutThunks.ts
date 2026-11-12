@@ -17,6 +17,7 @@ import type {
 } from "@/types/document";
 import type { SequenceDirection } from "@/types/ui";
 import {
+  pagesAndStylesChangedActionCreator,
   pagesChangedActionCreator,
   userLayoutOf,
 } from "@features/sequence/store/documentSlice";
@@ -34,11 +35,17 @@ import {
   sheetToTemplate,
 } from "../model/distribute";
 import {
+  MyStyleTarget,
+  applyNamedStyle,
   blockViewRetouch,
+  namedStyleFrom,
   namedStyleOf,
   resolveBlockView,
 } from "../model/blockStyle";
-import { selectResolvedSequenceViews } from "@features/sequence/style/styleSelectors";
+import {
+  selectResolvedSequenceViews,
+  selectUserDefaultStyle,
+} from "@features/sequence/style/styleSelectors";
 import { explicitPages } from "../model/pages";
 import {
   NewLayoutId,
@@ -465,3 +472,35 @@ export const setSheetFreeThunk = (sheetIndex: number): AppThunk =>
       template: FREE_TEMPLATE.id,
     })),
   );
+
+/**
+ * «Aplica el meu estil» del menú «⋯» d'una pàgina o d'un bloc (R10): el meu
+ * estil es copia al document com a estil amb nom i hi apunta els blocs. Es pot
+ * desfer, i el snackbar amb «Desfés» n'és el missatge. Els estils van en una
+ * sola direcció: res del document no torna mai cap a les preferències.
+ * `name` és «El meu estil» a l'idioma de la interfície, i queda escrit al
+ * document com a contingut.
+ */
+export const applyMyStyleThunk =
+  (target: MyStyleTarget, name: string): AppThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    const pages = explicitPages(
+      state.document.pages,
+      selectSequenceKeys(state),
+      newLayoutId,
+    );
+    const entry = namedStyleFrom(selectUserDefaultStyle(state), {
+      id: newSaacId("st"),
+      name,
+    });
+    dispatch(
+      undoableStyleChangeThunk(
+        () =>
+          pagesAndStylesChangedActionCreator(
+            applyNamedStyle(pages, state.document.styles, entry, target),
+          ),
+        target.kind === "sheet" ? "myStyleSheet" : "myStyleBlock",
+      ),
+    );
+  };

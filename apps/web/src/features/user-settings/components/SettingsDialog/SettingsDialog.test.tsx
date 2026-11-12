@@ -9,7 +9,7 @@ import { createAppStore } from "@app/store";
 import { updateSettingsActiveTabActionCreator } from "@features/user-settings/store/uiSlice";
 import SettingsDialog from "./SettingsDialog";
 
-const TAB_NAMES = ["User", "Document style", "View", "Personal vocabulary"];
+const TAB_NAMES = ["User", "My style", "View", "Personal vocabulary"];
 
 describe("SettingsDialog", () => {
   it("hauria de pintar un tab per cada àrea de configuració", () => {
@@ -76,6 +76,8 @@ describe("SettingsDialog", () => {
   it("hauria de tenir nom accessible, que és el que anuncia el lector de pantalla", () => {
     renderWithProviders(<SettingsDialog open onClose={vi.fn()} />);
 
-    expect(screen.getByRole("dialog", { name: "Settings" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("dialog", { name: "Settings" }),
+    ).toBeInTheDocument();
   });
 });

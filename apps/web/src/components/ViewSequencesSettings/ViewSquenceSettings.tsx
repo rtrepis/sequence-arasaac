@@ -3,11 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
 import { BsFilePdf } from "react-icons/bs";
-import {
-  MdOutlineDescription,
-  MdOutlinePushPin,
-  MdScreenRotation,
-} from "react-icons/md";
+import { MdOutlineDescription, MdScreenRotation } from "react-icons/md";
 import {
   TbArrowAutofitHeight,
   TbArrowAutofitWidth,
@@ -49,13 +45,8 @@ import {
   selectDocumentStyle,
   selectResolvedSequenceViews,
 } from "@features/sequence/style/styleSelectors";
-import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import ApplyUserDefaultStyleButton from "@features/sequence/components/DocumentStyle/ApplyUserDefaultStyleButton";
 import { ALIGN_H, ALIGN_V } from "@shared/constants/alignmentMaps";
 import { sheetSurface } from "@/style/palette";
-import { useSaveUiSettings } from "@features/backend/user-settings/hooks/useSaveUiSettings";
-import SettingsSaveErrorDialog from "@features/backend/user-settings/components/SettingsSaveErrorDialog";
-import { selectIsLoggedIn } from "@features/backend/auth/store/authSelectors";
 import GlobalViewControls from "./GlobalViewControls";
 import SettingsLevel, { SettingsLevels } from "./SettingsLevel";
 import LevelCrumbs, { LevelCrumb } from "./LevelCrumbs";
@@ -99,11 +90,7 @@ import {
   useFullscreenElementId,
   fullscreenScale,
 } from "@features/free-layout/hooks/usePageView";
-import {
-  SectionTitle,
-  SettingsActions,
-  SETTINGS_ROW_GAP,
-} from "@/components/SettingsLayout";
+import { SectionTitle, SETTINGS_ROW_GAP } from "@/components/SettingsLayout";
 
 /** La columna d'ajustos: el botó que l'amaga hi apunta amb `aria-controls`. */
 const SETTINGS_COLUMN_ID = "view-settings-column";
@@ -166,13 +153,6 @@ const ViewSequencesSettingsContent = ({
   const sequenceKeys = useAppSelector((state) =>
     Object.keys(state.document.content).map(Number),
   );
-  // El desat de preferències va al compte o al navegador segons si hi ha
-  // sessió, i el botó ho ha de dir abans de prémer-lo, no després.
-  const isAuthenticated = useAppSelector(selectIsLoggedIn);
-
-  // Desat de preferències: en segon pla, amb reintent i diàleg d'error
-  const { saveInBackground, retry, failure, isRetrying, dismissError } =
-    useSaveUiSettings();
 
   // Aquí hi havia un efecte que, en muntar-se la columna, posava les
   // preferències de l'usuari a totes les pestanyes: el `.saac` no es veia mai
@@ -246,9 +226,6 @@ const ViewSequencesSettingsContent = ({
       },
       persistToStore: false,
     });
-  // Les preferències tal com són ara a l'store, per al mirall de sessió
-  const uiViewSettingsRef = useRef(initialViewSettings);
-  uiViewSettingsRef.current = initialViewSettings;
   const viewSettings = useMemo(
     () => ({
       ...layoutViewSettings,
@@ -383,8 +360,8 @@ const ViewSequencesSettingsContent = ({
   // Aquí hi havia un «mirall de sessió» que copiava a `ui.viewSettings` el que
   // es veia: primer la pàgina i les mides, i al final només l'autor. Barrejava
   // la preferència desada amb el document obert (B21). Ara la pàgina (B26) i
-  // l'autor són del document, i les preferències només canvien quan l'usuari
-  // les desa (`handleSavePreferences`).
+  // l'autor són del document, i les preferències només canvien a la
+  // configuració.
   const { direction } = layoutViewSettings;
 
   // La pàgina que es toca aquí és la del document. En muntar-se coincideix amb
@@ -405,37 +382,6 @@ const ViewSequencesSettingsContent = ({
       }),
     );
   }, [dispatch, direction, pageSize, orientation]);
-
-  /**
-   * Desa aquests ajustos com a preferències de l'usuari: al compte si hi ha
-   * sessió, al navegador si no n'hi ha. Passa per `useSaveUiSettings` perquè
-   * tingui reintent, confirmació i diàleg d'error, com el modal de configuracions.
-   */
-  const handleSavePreferences = useCallback(() => {
-    // Les mides i els espaiats del document passen a ser els de l'estil per
-    // defecte; la pàgina, la direcció i l'autor, les preferències de disposició
-    dispatch(
-      viewSettingsActionCreator({
-        ...uiViewSettingsRef.current,
-        ...documentStyle.view,
-        direction,
-        author,
-        licence: viewSettings.licence,
-        pageSize,
-        orientation,
-      }),
-    );
-    saveInBackground();
-  }, [
-    dispatch,
-    saveInBackground,
-    documentStyle.view,
-    direction,
-    author,
-    viewSettings.licence,
-    pageSize,
-    orientation,
-  ]);
 
   /**
    * Handler de la descàrrega del PDF.
@@ -1021,33 +967,11 @@ const ViewSequencesSettingsContent = ({
                       )}
                     </SettingsLevels>
 
-                    {/* Accions de tota la columna, per això van al final: restaurar el
-                    que hi ha desat i desar el que hi ha ara com a preferència.
-                    Amb `floatingClearance` perquè aquesta columna acaba al mateix
-                    racó on sura el botó d'estat */}
-                    <SettingsActions floatingClearance>
-                      {/* Substitueix «Restaura les seqüències»: fa el mateix, amb tot
-                      l'estil del document i amb desfer */}
-                      <ApplyUserDefaultStyleButton />
-                      {/* El tooltip diu on van a parar els ajustos, que no és el mateix
-                      lloc amb sessió que sense */}
-                      <Tooltip
-                        title={intl.formatMessage(
-                          isAuthenticated
-                            ? messages.tooltipSavePreferencesCloud
-                            : messages.tooltipSavePreferencesLocal,
-                        )}
-                        describeChild
-                      >
-                        <StyledButton
-                          variant="contained"
-                          endIcon={<MdOutlinePushPin />}
-                          onClick={handleSavePreferences}
-                        >
-                          <FormattedMessage {...messages.savePreferences} />
-                        </StyledButton>
-                      </Tooltip>
-                    </SettingsActions>
+                    {/* Aquí hi havia el peu de la columna: «Aplica el meu estil»
+                    i «Desa com a preferència». Els estils van en una sola
+                    direcció, de la configuració cap al document (R10): el meu
+                    estil s'aplica des del menú «⋯» de la pàgina i del bloc, i la
+                    pàgina dels documents nous es tria a la configuració */}
                   </Stack>
                 </NotPrint>
               </Box>
@@ -1056,15 +980,7 @@ const ViewSequencesSettingsContent = ({
         </Stack>
       </form>
 
-      {/* Només apareix si el desat ha fallat també al reintent automàtic */}
       {beforePrintDialog}
-
-      <SettingsSaveErrorDialog
-        failure={failure}
-        isRetrying={isRetrying}
-        onRetry={retry}
-        onDismiss={dismissError}
-      />
 
       {/* Contenidor per a fullscreen: mateix layout de blocs que la
           previsualització (direcció, wrap i separació entre seqüències) */}

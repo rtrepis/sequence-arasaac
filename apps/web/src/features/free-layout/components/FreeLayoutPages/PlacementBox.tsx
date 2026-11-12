@@ -13,6 +13,7 @@ import {
 import {
   MdCheck,
   MdMoreVert,
+  MdOutlinePalette,
   MdOutlineRemoveCircleOutline,
 } from "react-icons/md";
 import { useIntl } from "react-intl";
@@ -35,6 +36,7 @@ import {
   sheetWarning,
 } from "@/style/palette";
 import {
+  applyMyStyleThunk,
   copyPlacementToSheetThunk,
   removePlacementThunk,
   setPlacementCommonThunk,
@@ -372,6 +374,28 @@ const PlacementBox = ({
           <ListItemIcon>{common && <MdCheck />}</ListItemIcon>
           <ListItemText>
             {intl.formatMessage(messages.onEveryPage)}
+          </ListItemText>
+        </MenuItem>
+
+        {/* El meu estil, només a aquest bloc: el missatge és el snackbar amb
+            «Desfés» (R10) */}
+        <MenuItem
+          onClick={() =>
+            run(() =>
+              dispatch(
+                applyMyStyleThunk(
+                  { kind: "block", placementId: placement.id },
+                  intl.formatMessage(messages.myStyleName),
+                ),
+              ),
+            )
+          }
+        >
+          <ListItemIcon>
+            <MdOutlinePalette />
+          </ListItemIcon>
+          <ListItemText>
+            {intl.formatMessage(messages.applyMyStyle)}
           </ListItemText>
         </MenuItem>
 
