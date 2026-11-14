@@ -437,6 +437,12 @@ const messages = defineMessages({
     description:
       "Acció del menú «⋯» d'un bloc amb estil de bloc: el bloc torna a l'estil del document (es pot desfer)",
   },
+  resetSequencePictograms: {
+    id: "features.freeLayout.resetSequencePictograms",
+    defaultMessage: "Reset this sequence's pictograms",
+    description:
+      "Acció del menú «⋯» d'un bloc de seqüència: treu els retocs de tots els pictogrames de la seqüència (com «Restableix» a cadascun); canvia tots els blocs on surt (es pot desfer)",
+  },
 });
 
 export default messages;

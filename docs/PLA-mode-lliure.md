@@ -831,10 +831,14 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
 7c. ✅ **Valors per defecte, mostra i Lliure** (2026-11-14): els valors per defecte nous, la
    disposició en 2 × 2, la mostra de «Pàgina i distribució» amb tres seqüències de colors i els
    blocs de debò, i a Lliure el bloc que s'adapta a la seqüència. Vegeu «Com ha quedat el pas 7c».
-8. ⏭️ **Tancar la columna**: les peces a prova (`SettingsLevel`, `LevelCrumbs`, l'etiqueta de la
-   disposició) a l'estàndard, treure l'etiqueta «Nou» i el vocabulari que
-   queda de «vista» («Restaura la vista»). Després, **B35** redefinit («Restableix els pictogrames
-   d'aquesta seqüència»). Vegeu §13, «El pas següent».
+8. ◐ **Tancar la columna** (2026-11-14): fets els dos petits, **B35** («Restableix els
+   pictogrames d'aquesta seqüència», al menú «⋯» del bloc) i «Restaura la vista» → «Restaura la
+   pàgina i la distribució». **La resta passa al final del pla següent** (§13, «Pendent del pas
+   8»): la columna rebrà una secció d'estil i blocs d'imatge, i s'ha de redissenyar i documentar
+   una sola vegada.
+9. ⏭️ **Pla nou: estil i contingut dels blocs** (lletra, color del text i color de fons del bloc a
+   la columna; blocs d'imatge). Després de provar aquesta branca al servidor de proves. Vegeu §13,
+   «El pas següent».
 
 ### Decisions (2026-11-07)
 
@@ -1210,7 +1214,7 @@ bloc que no hi cap es fa més petit, amb l'avís «hi queden massa petits» a la
 | Q3 | R1: un sol model de pàgines per a totes dues disposicions? | Sí (proposat) · No, la disposició automàtica té pàgines però sense plantilles |
 | Q4 | R3: la investigació, qui la fa? | Una cerca a la xarxa de materials publicats (ARASAAC, escoles, logopèdia) · Exemples reals de l'usuari i el seu entorn · Totes dues |
 
-## 13. Estat a 2026-11-14 (passos 7, 7b i 7c) i com continuar
+## 13. Estat a 2026-11-14 (passos 7, 7b, 7c i part del 8) i com continuar
 
 Recull de les sessions del 7 al 14 de novembre (passos 4, 4b, 5, 5b, 6 i 7, PR #304, branca
 `ccr-2207a706-ksozpj`). **És el lloc per on començar una sessió nova.** El detall i el perquè de
@@ -1297,17 +1301,14 @@ documents nous i les pàgines noves hi neixen.
 | El meu estil | `features/user-settings/components/SettingsDialog/panels/DefaultSettingsPanel/` (`DefaultSettingsPanel`, `MyStyleHeader`, `DefaultForm`); `features/sequence/hooks/useOpenSaacFile.ts` (carregar-lo d'un fitxer); `features/sequence/components/DocumentStyle/PendingDefaultStyleDialog.tsx` (obrir un `.saacstyle`) |
 | Escala | `features/print/hooks/useScaleCalculator.ts` (`availableWidth`; `SCREEN_MARGINS.phone` a `utils/pageFormat.ts`) |
 | Fitxer | Sense canvis de format en aquests passos: només `id` nous de `sheets[].template` (les plantilles de R3 i `"free"`), a l'esquema, al fonament 06 i a l'ADR-005. «Aplica el meu estil» fa servir `styles` i `namedStyle`, que ja hi eren; des del pas 7 no hi escriu `view` |
-| Proves | `ViewLevels.test.tsx`, `FreeLayoutPages.test.tsx`, `TemplatePicker.test.tsx`, `model/*.test.ts` (`grid`, `distribute`, `templates`, `blockStyle`…), `freeLayoutThunks.test.ts`, `useScaleCalculator.test.ts`, `naturalBox.test.ts`. Avui: 485 del web i 67 d'i18n |
+| Proves | `ViewLevels.test.tsx`, `FreeLayoutPages.test.tsx`, `TemplatePicker.test.tsx`, `model/*.test.ts` (`grid`, `distribute`, `templates`, `blockStyle`…), `freeLayoutThunks.test.ts`, `useScaleCalculator.test.ts`, `naturalBox.test.ts`. Avui: 484 del web i 67 d'i18n |
 
 ### Què queda obert
 
 Decisions petites, per si es volen fer abans del pas següent:
 
-- **B35**, redefinit al pas 7 com a «Restableix els pictogrames d'aquesta seqüència» i ajornat: els
-  retocs són de la seqüència, i després d'«Aplica el meu estil» un pictograma retocat ho continua
-  sent.
-- **«Vista» encara surt** al botó «Restaura la vista» del panell «Pàgina i distribució» i en alguns
-  textos d'ajuda antics: ja no és cap terme del vocabulari (fonament 03).
+- **B35** és fet: «Restableix els pictogrames d'aquesta seqüència», al menú «⋯» dels blocs de
+  seqüència (no a les pàgines simples, que no tenen menú de seqüència).
 - **Un document buit segueix la disposició** de les preferències en viu; amb la primera feina (un
   pictograma, una segona seqüència, un estil de bloc) ja no. Si l'usuari ha canviat la disposició
   a la vista d'un document encara buit i després canvia la preferència, mana la preferència.
@@ -1354,48 +1355,75 @@ Pendents de més abast:
 
 ### El pas següent
 
-R7 (pas 7), la disposició per defecte (pas 7b) i els valors per defecte, la mostra i Lliure (pas
-7c) són fets. Segons l'«Ordre proposat», el **pas 8** és **tancar la columna** abans de
-seguir afegint-hi coses. Cal triar-ne l'abast amb l'usuari:
+Els passos 7, 7b, 7c i els dos petits del 8 són fets (2026-11-14). El que ve ara:
 
-1. **Les peces a prova a l'estàndard** (`docs/estandards/configuracions.md`): `SettingsLevel`,
-   `LevelCrumbs` i l'etiqueta de la disposició. I **treure l'etiqueta
-   «Nou»** de la disposició, o decidir quan.
-2. **El vocabulari que queda de «vista»**: «Restaura la vista» i els textos d'ajuda que encara en
-   parlen.
-3. **B35** redefinit, «Restableix els pictogrames d'aquesta seqüència»: on va (el menú «⋯» del bloc
-   o de la seqüència) i el missatge que diu que canvia tots els blocs on surt.
+1. **Provar aquesta branca al servidor de proves** (PR #304) i apuntar el que es trobi a faltar en
+   treballar-hi de debò. L'etiqueta «Nou» de la disposició es queda mentrestant.
+2. **Un pla nou, «Estil i contingut dels blocs»**, en una branca nova i amb el seu propi document
+   de pla i el seu ADR. Parteix de dues idees de l'usuari:
+   - **L'estil a la columna**: si la columna de la vista parla de disposició i distribució, també
+     ha de poder parlar d'estil, amb ajustos per canviar la lletra, el color del text i el color de
+     fons d'un bloc. Seria un **retoc del bloc** (com la mida i la negreta dels rètols): no trenca
+     la direcció única (decisió 23), perquè res no torna a les preferències, però cal decidir com
+     conviu amb l'estil de bloc («Aplica el meu estil», «Actualitza amb el meu estil»): què mana
+     sobre què, i què fa actualitzar un estil de bloc amb un bloc retocat. El fons del bloc
+     s'imprimeix: toca l'estàndard de colors i el PDF.
+   - **Blocs d'imatge**, al costat dels de seqüència i de text: un tipus de bloc nou al `.saac`
+     (esquema, fixture, fonament 06), on es guarden les imatges (dins del fitxer, a l'esborrany i,
+     amb compte, al núvol, amb els límits de `docs/ESTUDI-limits-serveis-gratuits.md`) i com es
+     trien, es retallen i s'ajusten a la caixa.
 
-Fora d'això, els pendents de més abast (captures dels e2e en un entorn de referència, la notícia,
-el núvol) continuen a «Què queda obert».
+   Primer les decisions, després l'esbós de la columna i finalment la implementació per passos.
+3. **Al final del pla nou, el que queda del pas 8** (a sota).
+
+### Pendent del pas 8: va al final del pla següent
+
+Es va decidir no fer-ho ara (2026-11-14) perquè la columna canviarà amb el pla nou i s'ha de
+documentar una sola vegada, ja redissenyada:
+
+- **Les peces a prova, a l'estàndard** (`docs/estandards/configuracions.md`, «Components
+  compartits»): `SettingsLevel` (la targeta amb vora de cada nivell, excepció a «una zona no es
+  marca amb una caixa», C8), `SettingsLevels` i la línia de la cascada, `LevelCrumbs` (les molles,
+  C7) i l'etiqueta de la disposició (el `Chip` de la capçalera de la pàgina i de la mostra de
+  «Pàgina i distribució»). Decidir si passen tal com són o es retoquen.
+- **Treure l'etiqueta «Nou»** de la fila «Disposició», o decidir quan (proposta: quan es publiqui,
+  amb la notícia).
+- **Les pàgines simples no tenen menú de seqüència**: «Aplica el meu estil», «Restableix els
+  pictogrames d'aquesta seqüència» i la resta només s'hi arriben des del menú de la pàgina o en
+  blocs. Decidir-ho amb el disseny nou de la columna.
+- Revisar que cap text d'ajuda de la columna o de la configuració parli encara de «vista» en el
+  sentit antic (la pàgina «Vista» sí que es diu així).
 
 ### Encàrrec per obrir la sessió següent
 
-> Continuem el mode lliure de pàgina. Treballa sobre la branca `ccr-2207a706-ksozpj` (PR #304): fes-ne
-> checkout i continua-hi, no en creïs cap altra.
+> Comencem un pla nou: **estil i contingut dels blocs**, la continuació del mode lliure de pàgina.
+> Crea una branca nova des de la del PR #304 (`ccr-2207a706-ksozpj`) o des de `main` si ja s'ha
+> fusionat; pregunta'm quina abans de començar.
 >
-> Llegeix primer `docs/PLA-mode-lliure.md`, **§13** (estat, on és el codi, què queda obert i el pas
-> següent) i, de §12, «Com ha quedat el pas 6», «Com ha quedat el pas 7» i «Com ha quedat el pas
-> 7b» i «Com ha quedat el pas 7c». Després `docs/decisions/ADR-005-disposicio-lliure.md`
-> (decisions 6, 7, 14 i 16–26) i
-> `docs/fonaments/03-model-contingut-estil.md` (§1, el vocabulari: estil, distribució, estil de
-> bloc i disposició; §4 i §5: la cascada i les accions sobre l'estil, i la direcció única). Abans de tocar la columna o la configuració, `docs/estandards/configuracions.md`;
-> si hi entren diàlegs o missatges, `capes-flotants.md` i `feedback-i-accions.md`; per als colors,
+> Llegeix primer `docs/PLA-mode-lliure.md`, **§13** (com funciona ara, on és el codi, què queda
+> obert, «El pas següent» i «Pendent del pas 8») i, de §12, «Com ha quedat el pas 7» i «Com ha
+> quedat el pas 7c». Després `docs/decisions/ADR-005-disposicio-lliure.md` (decisions 4–7, 9, 20,
+> 23, 24 i 26) i `docs/fonaments/03-model-contingut-estil.md` (§1, el vocabulari; §4 i §5, la
+> cascada, les accions sobre l'estil i la direcció única). Per als blocs d'imatge,
+> `docs/fonaments/06-compatibilitat-i-dades.md` (el format i els blocs que el lector no entén) i
+> `docs/ESTUDI-limits-serveis-gratuits.md`. Abans de dissenyar la columna,
+> `docs/estandards/configuracions.md`; per als colors (el fons del bloc s'imprimeix),
 > `colors.md`.
 >
-> La tasca és el **pas 8** de §13 («El pas següent»): tancar la columna. Abans de tocar codi,
-> proposa l'abast (les peces a prova a l'estàndard i l'etiqueta «Nou», el vocabulari que queda de
-> «vista» i B35) i fes-me les preguntes que hi hagi obertes.
+> La tasca d'aquesta sessió és **només el pla**: escriu `docs/PLA-estil-i-contingut-dels-blocs.md`
+> amb les decisions que cal prendre i les teves propostes —l'estil del bloc a la columna (lletra,
+> color del text, color de fons) com a retoc del bloc i com conviu amb l'estil de bloc; els blocs
+> d'imatge (format, on es guarden, com es trien i s'ajusten)—, l'ordre dels passos i, com a
+> **últim pas, el «Pendent del pas 8»** del pla del mode lliure. Fes-me les preguntes abans
+> d'escriure cap codi.
 >
 > Normes: `npm run typecheck` net i els tests passant; textos nous a `packages/i18n/messages/` en els
 > cinc idiomes; cap color fora de `palette.ts`; si canvia el format `.saac` o `.saacstyle`, esquema,
-> fixture i fonament 06; actualitza el pla (§13 i l'«Ordre proposat») en acabar. Passa `prettier`
-> només als fitxers tocats, mai a carpetes senceres.
+> fixture i fonament 06. Passa `prettier` només als fitxers tocats, mai a carpetes senceres.
 >
 > Entorn: cal `npm ci` a l'arrel. Per provar amb Playwright, `launchOptions.executablePath:
 > "/opt/pw-browsers/chromium"`. Si el servidor de Vite ja era en marxa quan s'han canviat les
-> traduccions, cal tornar-lo a arrencar amb `--force`: el catàleg d'idiomes queda pre-empaquetat i
-> la pàgina ensenya els textos d'abans. Per arribar a la Vista, clica la pestanya «Vista»: un
-> `page.goto` recarrega la pàgina i perd el document obert. Hi ha un document de prova a
-> `apps/web/test/fixtures/saac/02-diverses-pestanyes.saac` (s'obre amb el menú principal i el
+> traduccions, cal tornar-lo a arrencar amb `--force`. Per arribar a la Vista, clica la pestanya
+> «Vista»: un `page.goto` recarrega la pàgina i perd el document obert. Hi ha un document de prova
+> a `apps/web/test/fixtures/saac/02-diverses-pestanyes.saac` (s'obre amb el menú principal i el
 > `input[type=file]`).

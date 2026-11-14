@@ -170,6 +170,13 @@ const messages = defineMessages({
     description:
       "Snackbar amb «Desfés» després de treure l'estil de bloc d'un bloc, al nivell «Bloc» de la columna de la vista",
   },
+  changedResetSequence: {
+    id: "features.sequence.style.changed.resetSequence",
+    defaultMessage:
+      "S'han restablert els pictogrames de la seqüència, a tots els blocs on surt.",
+    description:
+      "Snackbar amb «Desfés» després de «Restableix els pictogrames d'aquesta seqüència» del menú «⋯» d'un bloc: se'n treuen els retocs, i canvien tots els blocs on surt la seqüència",
+  },
 });
 
 export default messages;

@@ -71,7 +71,6 @@ l'entrada.
 
 | Id | Què | Per què pot esperar | Esforç |
 |---|---|---|---|
-| B35 | «Restableix els pictogrames d'aquesta seqüència» (l'antic «Aplica a tots») | Redefinit al pas 7: els retocs són de la seqüència, no del bloc ni de la pàgina, i treure'ls des d'una pàgina canviaria les altres on surt. Es fa després de R7 | S |
 | B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
@@ -169,7 +168,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   (`docs/ESTUDI-limits-serveis-gratuits.md`).
 - El detall és a **R11** de `docs/PLA-mode-lliure.md` (§12).
 
-### B35 — «Aplica a tots» no és a cap lloc de la interfície ⏸️ Ajornada (redefinida)
+### B35 — «Aplica a tots» no és a cap lloc de la interfície ✅ Resolta (redefinida)
 
 *(Oberta en fer R10, 2026-11-12.)*
 
@@ -187,6 +186,11 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   els pictogrames d'aquesta seqüència»**, amb un missatge que digui que canvia tots els blocs on
   surt, i s'ajorna fins després de R7. Lligam: després d'«Aplica el meu estil», un pictograma
   retocat continua retocat; és el cas en què més es trobarà a faltar.
+- **2026-11-14 (fet)**: **«Restableix els pictogrames d'aquesta seqüència»** al menú «⋯» de cada
+  bloc de seqüència (`resetSequencePictogramsThunk`): treu els retocs de tots els pictogrames de la
+  seqüència, com «Restableix» a cadascun; la categoria es queda. Es desfà amb el snackbar de
+  sempre, que diu que canvia tots els blocs on surt. Les pàgines simples no tenen menú de seqüència
+  (§13 del pla): allà encara no s'hi arriba.
 
 ### B36 — «Pàgines noves»: com neix una pàgina nova ✅ Resolta (pas 7b)
 

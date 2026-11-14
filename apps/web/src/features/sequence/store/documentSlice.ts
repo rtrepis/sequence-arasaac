@@ -301,6 +301,15 @@ const documentSlice = createSlice({
       );
     },
 
+    // Els pictogrames d'una seqüència, sencers (B35: «Restableix els
+    // pictogrames d'aquesta seqüència», que no ha de ser l'activa)
+    sequencePictogramsReplaced: (
+      previousDocument,
+      action: PayloadAction<{ key: number; pictograms: PictSequence[] }>,
+    ) => {
+      previousDocument.content[action.payload.key] = action.payload.pictograms;
+    },
+
     settingsPictApiAra: (
       previousDocument,
       action: PayloadAction<PictApiAraForEdit>,
@@ -779,6 +788,7 @@ export const {
   renumberSequence: renumberSequenceActionCreator,
   sortSequence: sortSequenceActionCreator,
   updatePictSequence: updatePictSequenceActionCreator,
+  sequencePictogramsReplaced: sequencePictogramsReplacedActionCreator,
   selectedId: selectedIdActionCreator,
   searched: searchedActionCreator,
   settingsPictApiAra: settingsPictApiAraActionCreator,

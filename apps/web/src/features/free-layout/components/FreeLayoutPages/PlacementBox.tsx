@@ -16,6 +16,7 @@ import {
   MdOutlinePalette,
   MdOutlineRemoveCircleOutline,
   MdOutlineFormatColorReset,
+  MdSettingsBackupRestore,
   MdSync,
 } from "react-icons/md";
 import { useIntl } from "react-intl";
@@ -47,6 +48,7 @@ import {
   updateMyStyleThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { namedStyleOf } from "@features/free-layout/model/blockStyle";
+import { resetSequencePictogramsThunk } from "@features/sequence/store/styleSlice";
 import messages from "./FreeLayoutPages.lang";
 
 /** El botó del menú, a la pantalla, en px: el full s'escala, el botó no. */
@@ -427,6 +429,24 @@ const PlacementBox = ({
             </ListItemIcon>
             <ListItemText>
               {intl.formatMessage(messages.updateMyStyle)}
+            </ListItemText>
+          </MenuItem>
+        )}
+        {/* Treu els retocs dels pictogrames de la seqüència (B35). Són de la
+            seqüència: canvien tots els blocs on surt, i el missatge ho diu */}
+        {placement.kind === "sequence" && (
+          <MenuItem
+            onClick={() =>
+              run(() =>
+                dispatch(resetSequencePictogramsThunk(placement.sequenceKey)),
+              )
+            }
+          >
+            <ListItemIcon>
+              <MdSettingsBackupRestore />
+            </ListItemIcon>
+            <ListItemText>
+              {intl.formatMessage(messages.resetSequencePictograms)}
             </ListItemText>
           </MenuItem>
         )}

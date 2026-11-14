@@ -181,6 +181,7 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 | **Canviar la distribució d'un bloc** | Columna de la vista, nivell «Bloc», amb un bloc seleccionat en una pàgina en blocs | Desa al bloc **només** el que es diferencia de la distribució de la seqüència (amb la de l'estil de bloc, als documents d'abans que en porten). Les altres còpies de la seqüència no canvien. |
 | **Canviar un pictograma** | Formulari del pictograma | Canvia **només** el `style` d'aquell pictograma, i **només** les propietats tocades. |
 | **Restableix** un pictograma | Formulari del pictograma (capçalera de «Estil del pictograma» o «Més accions»); menú contextual de la graella («Restableix l'estil») | Esborra el seu `style`. La categoria, que és contingut, es queda. Dins del formulari és una edició més i es desa en tancar-lo; des del menú contextual s'aplica al document al moment. |
+| **Restableix els pictogrames d'aquesta seqüència** | Menú «⋯» d'un bloc de seqüència (B35) | Com «Restableix» a tots els pictogrames de la seqüència: se n'esborren els retocs i la categoria es queda. Els retocs són de la seqüència, així que canvien **tots els blocs on surt**, i el missatge ho diu. |
 | **Canviar el meu estil** i la distribució per defecte | Configuració, panell «El meu estil» (l'estil) i panell «Pàgina i distribució» (la pàgina i la distribució dels pictogrames amb què comencen els documents nous) | Canvia la preferència. Es desa en tancar la configuració. No toca cap document desat; un document nou encara sense desar l'hereta en viu (§7). |
 | **Carrega un estil des d'un fitxer** | Panell «El meu estil» | L'estil del fitxer (un `.saacstyle`, o el d'un `.saac`) passa a ser el meu estil. Obrir un `.saacstyle` des del menú pregunta si es fa el meu estil. Cap dels dos camins toca el document obert. |
 | **Desa el meu estil en un fitxer** | Panell «El meu estil» | Desa el meu estil en un `.saacstyle`. |
@@ -192,7 +193,8 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
   amb el meu estil» i es treu d'un bloc amb «Treu l'estil de bloc». Al document no hi ha cap editor
   d'estils: es fa al panell «El meu estil» i es porta al document (direcció única). La columna de
   la vista no en diu res: és per a la disposició i la distribució.
-- **SEMPRE** «Aplica el meu estil», «Actualitza amb el meu estil», «Treu l'estil de bloc», «Restableix» i
+- **SEMPRE** «Aplica el meu estil», «Actualitza amb el meu estil», «Treu l'estil de bloc», «Restableix»,
+  «Restableix els pictogrames d'aquesta seqüència» i
   les dues reduccions de lletra de l'avís «el text no hi cap» es poden desfer amb el **desfer que ja existeix**: un snackbar amb «Desfés» que torna el document
   exactament a com era, mentre no s'hagi tocat des d'aleshores. Dins del formulari del pictograma,
   el «Desfés» de «Restableix» torna l'estil d'abans **al formulari**, sense tocar les altres

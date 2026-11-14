@@ -14,6 +14,7 @@ import {
   DocumentStyleSnapshot,
   pictStyleAppliedToAllActionCreator,
   updatePictSequenceActionCreator,
+  sequencePictogramsReplacedActionCreator,
   restoreDocumentStyleActionCreator,
   takeDocumentStyleSnapshot,
 } from "./documentSlice";
@@ -38,6 +39,7 @@ export type StyleChangeSource =
   | "blockStyleRemove"
   | "applyAll"
   | "reset"
+  | "resetSequence"
   | "fitTextPictogram"
   | "fitTextDocument"
   | FreeLayoutChangeSource;
@@ -260,6 +262,34 @@ export const resetPictogramStyleThunk =
       undoableStyleChangeThunk(
         () => updatePictSequenceActionCreator(reset),
         "reset",
+      ),
+    );
+  };
+
+/**
+ * «Restableix els pictogrames d'aquesta seqüència» (B35), al menú «⋯» d'un
+ * bloc: treu els retocs de tots els pictogrames de la seqüència, com
+ * «Restableix» a cadascun. Els retocs són de la seqüència, no del bloc: canvia
+ * tots els blocs on surt, i el missatge ho diu. La categoria es queda. Es pot
+ * desfer.
+ */
+export const resetSequencePictogramsThunk =
+  (sequenceKey: number): AppThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    const pictograms = state.document.content[sequenceKey];
+    if (!pictograms) return;
+    const style = selectDocumentStyle(state);
+    dispatch(
+      undoableStyleChangeThunk(
+        () =>
+          sequencePictogramsReplacedActionCreator({
+            key: sequenceKey,
+            pictograms: pictograms.map((pict) =>
+              resetPictogramStyle(pict, style),
+            ),
+          }),
+        "resetSequence",
       ),
     );
   };

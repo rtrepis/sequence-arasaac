@@ -75,7 +75,9 @@ test("els botons de restaurar del modal diuen cadascun el seu àmbit", async ({
 
   await page.getByRole("tab", { name: "Pàgina i distribució" }).click();
   await expect(
-    page.getByRole("button", { name: "Restaura la vista" }),
+    page.getByRole("button", {
+      name: "Restaura la pàgina i la distribució",
+    }),
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "Esquerra" })).toBeVisible();
   await expectNoEnglishOrphans(page);

@@ -1333,10 +1333,12 @@
     "message": "Baix"
   },
   "components.viewSettingsPanel.reset": {
-    "message": "Restaura la vista"
+    "message": "Restaura la pàgina i la distribució",
+    "description": "Botó del panell «Pàgina i distribució»: torna la pàgina i la distribució dels pictogrames dels documents nous als valors de fàbrica"
   },
   "components.viewSettingsPanel.tooltipReset": {
-    "message": "Torna la configuració de vista als valors de fàbrica"
+    "message": "Torna la pàgina i la distribució dels pictogrames dels documents nous als valors de fàbrica",
+    "description": "Tooltip del botó «Restaura la pàgina i la distribució» del panell «Pàgina i distribució»: diu a quins valors torna"
   },
   "components.defaultSettings.reset": {
     "message": "Restaura els pictogrames"
@@ -3293,5 +3295,13 @@
   "components.viewSettingsPanel.previewSequences": {
     "message": "Seqüències de la mostra",
     "description": "Nom accessible del grup de caselles, sota la mostra del panell «Pàgina i distribució», que mostren o amaguen cadascuna de les tres seqüències de la mostra (no es desa)"
+  },
+  "features.freeLayout.resetSequencePictograms": {
+    "message": "Restableix els pictogrames d'aquesta seqüència",
+    "description": "Acció del menú «⋯» d'un bloc de seqüència: treu els retocs de tots els pictogrames de la seqüència (com «Restableix» a cadascun); canvia tots els blocs on surt (es pot desfer)"
+  },
+  "features.sequence.style.changed.resetSequence": {
+    "message": "S'han restablert els pictogrames de la seqüència, a tots els blocs on surt.",
+    "description": "Snackbar amb «Desfés» després de «Restableix els pictogrames d'aquesta seqüència» del menú «⋯» d'un bloc: se'n treuen els retocs, i canvien tots els blocs on surt la seqüència"
   }
 }

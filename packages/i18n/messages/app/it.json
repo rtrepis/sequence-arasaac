@@ -351,8 +351,8 @@
   "pages.viewSequence.tooltip.alignTop": "Alto",
   "pages.viewSequence.tooltip.alignVCenter": "Centro",
   "pages.viewSequence.tooltip.alignBottom": "Basso",
-  "components.viewSettingsPanel.reset": "Ripristina la vista",
-  "components.viewSettingsPanel.tooltipReset": "Riporta le impostazioni di vista ai valori di fabbrica",
+  "components.viewSettingsPanel.reset": "Ripristina la pagina e la distribuzione",
+  "components.viewSettingsPanel.tooltipReset": "Riporta la pagina e la distribuzione dei pittogrammi dei nuovi documenti ai valori di fabbrica",
   "components.defaultSettings.reset": "Ripristina i pittogrammi",
   "components.defaultSettings.tooltipReset": "Riporta le impostazioni dei pittogrammi ai valori di fabbrica",
   "pages.viewSequence.section.pageFormat": "Formato pagina",
@@ -855,5 +855,7 @@
   "features.sequence.style.changed.myStyleUpdate": "Lo stile del blocco è stato aggiornato con il tuo stile, in tutti i blocchi che lo usano.",
   "features.sequence.style.changed.blockStyleRemove": "Lo stile del blocco è stato tolto: il blocco torna allo stile del documento.",
   "components.viewSettingsPanel.dispositionHelp": "Come inizia la prima pagina di un nuovo documento, e le pagine che vi si aggiungono.",
-  "components.viewSettingsPanel.previewSequences": "Sequenze dell'anteprima"
+  "components.viewSettingsPanel.previewSequences": "Sequenze dell'anteprima",
+  "features.freeLayout.resetSequencePictograms": "Reimposta i pittogrammi di questa sequenza",
+  "features.sequence.style.changed.resetSequence": "I pittogrammi della sequenza sono stati reimpostati, in tutti i blocchi in cui compare."
 }

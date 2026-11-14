@@ -351,8 +351,8 @@
   "pages.viewSequence.tooltip.alignTop": "Arriba",
   "pages.viewSequence.tooltip.alignVCenter": "Centro",
   "pages.viewSequence.tooltip.alignBottom": "Abajo",
-  "components.viewSettingsPanel.reset": "Restaura la vista",
-  "components.viewSettingsPanel.tooltipReset": "Devuelve la configuración de vista a los valores de fábrica",
+  "components.viewSettingsPanel.reset": "Restaura la página y la distribución",
+  "components.viewSettingsPanel.tooltipReset": "Devuelve la página y la distribución de los pictogramas de los documentos nuevos a los valores de fábrica",
   "components.defaultSettings.reset": "Restaura los pictogramas",
   "components.defaultSettings.tooltipReset": "Devuelve la configuración de pictogramas a los valores de fábrica",
   "pages.viewSequence.section.pageFormat": "Formato de página",
@@ -855,5 +855,7 @@
   "features.sequence.style.changed.myStyleUpdate": "Se ha actualizado el estilo de bloque con tu estilo, en todos los bloques que lo usan.",
   "features.sequence.style.changed.blockStyleRemove": "Se ha quitado el estilo de bloque: el bloque vuelve al estilo del documento.",
   "components.viewSettingsPanel.dispositionHelp": "Cómo empieza la primera página de un documento nuevo, y las páginas que se le añaden.",
-  "components.viewSettingsPanel.previewSequences": "Secuencias de la muestra"
+  "components.viewSettingsPanel.previewSequences": "Secuencias de la muestra",
+  "features.freeLayout.resetSequencePictograms": "Restablece los pictogramas de esta secuencia",
+  "features.sequence.style.changed.resetSequence": "Se han restablecido los pictogramas de la secuencia, en todos los bloques donde aparece."
 }

@@ -9,6 +9,7 @@ import {
 } from "@features/sequence/store/documentSlice";
 import { pictogramFixture } from "@/test/fixtures/document";
 import {
+  resetSequencePictogramsThunk,
   selectCanUndoStyle,
   undoStyleChangeThunk,
 } from "@features/sequence/store/styleSlice";
@@ -561,5 +562,36 @@ describe("els blocs de les pàgines lliures (pas 7c)", () => {
       }),
     );
     expect(boxOf(store)).toEqual(grown);
+  });
+});
+
+describe("«Restableix els pictogrames d'aquesta seqüència» (B35)", () => {
+  it("treu els retocs de tots els pictogrames de la seqüència, encara que no sigui l'activa, i es desfà", () => {
+    const document = documentWith(2);
+    const style = createAppStore({ document }).getState();
+    const textPosition =
+      selectUserDefaultStyle(style).pictSequence.textPosition === "top"
+        ? "bottom"
+        : "top";
+    document.content[1] = document.content[1].map((pict) => ({
+      ...pict,
+      settings: { ...pict.settings, textPosition },
+    }));
+    const store = createAppStore({ document });
+    const before = store.getState().document.content;
+
+    store.dispatch(resetSequencePictogramsThunk(1));
+
+    const after = store.getState().document.content;
+    after[1].forEach((pict) =>
+      expect(pict.settings.textPosition).not.toBe(textPosition),
+    );
+    // L'altra seqüència no es toca
+    expect(after[0]).toEqual(before[0]);
+    expect(store.getState().style.undoSnackbar).toMatchObject({
+      source: "resetSequence",
+    });
+    store.dispatch(undoStyleChangeThunk());
+    expect(store.getState().document.content[1]).toEqual(before[1]);
   });
 });

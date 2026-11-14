@@ -351,8 +351,8 @@
   "pages.viewSequence.tooltip.alignTop": "Top",
   "pages.viewSequence.tooltip.alignVCenter": "Center",
   "pages.viewSequence.tooltip.alignBottom": "Bottom",
-  "components.viewSettingsPanel.reset": "Restore view",
-  "components.viewSettingsPanel.tooltipReset": "Return view settings to factory values",
+  "components.viewSettingsPanel.reset": "Restore the page and arrangement",
+  "components.viewSettingsPanel.tooltipReset": "Return the page and pictogram arrangement for new documents to factory values",
   "components.defaultSettings.reset": "Restore pictograms",
   "components.defaultSettings.tooltipReset": "Return pictogram settings to factory values",
   "pages.viewSequence.section.pageFormat": "Page format",
@@ -855,5 +855,7 @@
   "features.sequence.style.changed.myStyleUpdate": "The block style has been updated with your style, in every block that uses it.",
   "features.sequence.style.changed.blockStyleRemove": "The block style has been removed: the block goes back to the document's style.",
   "components.viewSettingsPanel.dispositionHelp": "How the first page of a new document starts, and the pages you add to it.",
-  "components.viewSettingsPanel.previewSequences": "Sequences in the preview"
+  "components.viewSettingsPanel.previewSequences": "Sequences in the preview",
+  "features.freeLayout.resetSequencePictograms": "Reset this sequence's pictograms",
+  "features.sequence.style.changed.resetSequence": "The sequence's pictograms have been reset, in every block where it appears."
 }

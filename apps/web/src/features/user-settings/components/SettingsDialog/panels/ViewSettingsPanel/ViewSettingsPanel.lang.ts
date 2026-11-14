@@ -21,14 +21,16 @@ const messages = defineMessages({
   },
   reset: {
     id: "components.viewSettingsPanel.reset",
-    defaultMessage: "Restore view",
+    defaultMessage: "Restore the page and arrangement",
     description:
-      "Botó per restablir els valors de fàbrica de la configuració de vista",
+      "Botó del panell «Pàgina i distribució»: torna la pàgina i la distribució dels pictogrames dels documents nous als valors de fàbrica",
   },
   tooltipReset: {
     id: "components.viewSettingsPanel.tooltipReset",
-    defaultMessage: "Return view settings to factory values",
-    description: "Tooltip del botó de restaurar la configuració de vista",
+    defaultMessage:
+      "Return the page and pictogram arrangement for new documents to factory values",
+    description:
+      "Tooltip del botó «Restaura la pàgina i la distribució» del panell «Pàgina i distribució»",
   },
   dispositionHelp: {
     id: "components.viewSettingsPanel.dispositionHelp",

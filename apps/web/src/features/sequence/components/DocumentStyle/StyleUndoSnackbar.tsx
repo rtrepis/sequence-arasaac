@@ -76,6 +76,7 @@ const CHANGED_MESSAGE: Record<StyleChangeSource, MessageDescriptor> = {
   blockStyleRemove: messages.changedBlockStyleRemove,
   applyAll: messages.changedApplyAll,
   reset: messages.changedReset,
+  resetSequence: messages.changedResetSequence,
   fitTextPictogram: messages.changedFitTextPictogram,
   fitTextDocument: messages.changedFitTextDocument,
   layoutTemplate: messages.changedLayoutTemplate,
