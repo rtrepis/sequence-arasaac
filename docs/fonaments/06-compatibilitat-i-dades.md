@@ -71,9 +71,12 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   |---|---|---|
   | `size` | `"A4"`, `"A3"`, `"LETTER"`, `"TABLOID"`, `"FULLSCREEN"` | Mida de la pàgina. `LETTER` (Carta, 8,5 × 11″) i `TABLOID` (11 × 17″) són els papers nord-americans |
   | `orientation` | `"portrait"`, `"landscape"` | Orientació |
-  | `direction` | `"row"`, `"column"` | Seqüències en files o en columnes |
-  | `sequenceGap` | número | Espai entre seqüències. És un **factor**, com fins ara, **no** mil·límetres |
-  | `layout` | `"flow"`, `"free"` | Disposició. Avui només `"flow"`; `"free"` es reserva per al mode lliure |
+  | `direction` | `"row"`, `"column"` | Seqüències en files o en columnes, a les pàgines automàtiques que no en diuen cap |
+  | `sequenceGap` | número | Espai entre blocs (entre seqüències, al flux). És un **factor**, com fins ara, **no** mil·límetres |
+  | `layout` | `"flow"` | **Obsolet**: s'escriu sempre `"flow"`, perquè les versions anteriors el llegeixen. `"free"` només el porten els fitxers de les fases 1–3 del mode lliure (§1.1) |
+  | `sheets` | llista de pàgines | Les pàgines, en ordre, i els seus blocs (§1.1). Sense `sheets`, una sola pàgina automàtica amb totes les seqüències |
+  | `common` | llista de blocs | El que surt a totes les pàgines (§1.1) |
+  | `licenceOn` | `"last"` | El peu de llicència només a l'última pàgina. Sense valor, a totes, com sempre: només s'escriu `"last"` |
 
   - Una `size` que l'app no coneix cau a la pàgina de qui obre, com qualsevol valor fora de la
     llista. Per això afegir una mida **no** demana una versió nova de l'esquema: una versió de l'app
@@ -82,13 +85,15 @@ i una fixture (`apps/web/test/fixtures/saac/`).
     Carta als EUA, el Canadà, Mèxic i bona part de l'Amèrica Llatina, A4 a la resta. És una
     preferència, no part del document: un document desat en A4 s'obre en A4 a tot arreu.
   - **MAI** hi ha marges al fitxer: no n'hi ha a l'app.
-  - Els mil·límetres **només** s'usaran a `frame`, quan hi hagi mode lliure.
+  - Els mil·límetres **només** s'usen a les caixes dels blocs (§1.1).
 - **`style`** del document és **sempre complet**: tots els camps plens, sense heretar res de fora del
   fitxer.
 - **`sequences[].style`** porta **només `view`** en aquesta versió. La lletra i les vores per
   seqüència queden fora de l'abast.
-- **`sequences[].frame`** (`{ x, y, w, h, z }`, en **mm sobre la pàgina**) només existeix si
-  `page.layout` és `"free"`. Avui només es reserva: cap versió de l'app l'escriu.
+- **`sequences[].frame`** ja no està reservat. Cap versió de l'app no l'ha escrit mai, i les
+  pàgines fan servir els blocs de `page` (§1.1, ADR-005). Si un fitxer en porta, és un camp
+  desconegut més: es conserva i no es fa servir.
+- **`styles`** són els estils amb nom del document (§1.2). Només hi són si n'hi ha cap.
 - **`pictograms[].style`** porta **només** les diferències amb l'estil resolt de la seqüència
   (`pictogram` i `card`).
 - **Fitzgerald** (vegeu el fonament 03, «El color de Fitzgerald»):
@@ -113,12 +118,118 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 - **`ui`** guarda l'estat d'edició que val la pena conservar (la seqüència activa). **MAI** afecta
   l'aspecte ni la impressió.
 - **Camps desconeguts**: es conserven tal com vénen i es tornen a escriure en desar. Valen per a
-  l'arrel, `meta`, `page`, `style`, `ui`, cada seqüència, cada pictograma i cada imatge. Dins de
+  l'arrel, `meta`, `page`, `style`, `ui`, cada seqüència, cada pictograma, cada imatge, cada pàgina,
+  cada bloc i cada estil amb nom. Els **blocs** d'un tipus desconegut es conserven sencers (§1.1). Dins de
   l'estil (`style.card.font`, per exemple) no es conserven: allà un camp desconegut no es pot
   pintar.
 - **`id` estables**: les seqüències i els pictogrames tenen `id`. Un `id` que ve del fitxer es
   conserva en tornar a desar. Els que no en tenen, se'ls genera.
 - **Una sola línia**: el JSON es desa sense espais ni salts de línia, com fins ara.
+
+### 1.1 Pàgines i blocs
+
+```json
+"page": {
+  "size": "A4", "orientation": "portrait", "direction": "row", "sequenceGap": 1, "layout": "flow",
+  "sheets": [
+    { "id": "sh_1", "mode": "template", "template": "rows-2", "blocks": [
+      { "id": "pl_1", "x": 0, "y": 42.5, "w": 200, "h": 105, "slot": 0,
+        "kind": "text", "text": "Avui és dilluns", "textStyle": { "bold": true } },
+      { "id": "pl_2", "x": 0, "y": 152.5, "w": 200, "h": 127.5, "slot": 1, "namedStyle": "st_gran",
+        "kind": "sequence", "sequence": "seq_mati", "columns": "auto", "view": { "alignmentH": "left" } }
+    ] },
+    { "id": "sh_2", "mode": "auto", "direction": "column", "blocks": [
+      { "id": "pl_3", "kind": "text", "text": "Tarda" },
+      { "id": "pl_4", "kind": "sequence", "sequence": "seq_tarda", "columns": "auto" }
+    ] }
+  ],
+  "common": [
+    { "id": "pl_9", "x": 0, "y": 0, "w": 200, "h": 37.5, "kind": "sequence", "sequence": "seq_avui", "columns": "auto" }
+  ]
+}
+```
+
+- **El document és una llista de pàgines** (`sheets`, en ordre, amb `id` estables). Les pàgines
+  buides es desen.
+- **Un document sense `sheets` és una sola pàgina automàtica amb totes les seqüències, en ordre.**
+  És el de sempre: no se n'escriu cap, i el fitxer és el mateix que fins ara.
+- **`mode`** diu com es col·loquen els blocs de la pàgina:
+  - `"auto"` («Simple» a la interfície; abans «Contínua»): un darrere l'altre, com el flux de sempre, amb la
+    `direction` de la pàgina (sense valor, la de `page.direction`) i el seu `sequenceGap` (sense
+    valor, el de `page`). Els blocs no porten caixa. Un bloc de text hi ocupa una línia sencera.
+  - `"template"` («En blocs»): cada bloc a la seva caixa.
+- **`template`** és la plantilla de la pàgina (`"full"`, `"rows-N"`, `"columns-N"`, `"grid-CxR"`,
+  `"strip-top"` i, des de R4, les dels treballs reals: `"agenda-strip"`, `"today-agenda"`,
+  `"first-then"`, `"week"`, `"token-board"`, `"story-page"`, `"menu"`, i `"free"`, el repartiment
+  lliure, sense espais), i **`slot`** l'espai que
+  ocupa cada bloc. Algunes plantilles tenen **espais de rètol**: hi van els blocs de text, i les
+  seqüències només ocupen els espais de seqüència. Són `id` nous d'un camp que ja era de text
+  lliure: el format no canvia, i una versió anterior els conserva com un `id` que no coneix. `"columns-N"` i `"rows-N"` són el
+  repartiment «N columnes» o «N files»: amb més blocs dels que hi caben en una fila o una columna,
+  la graella creix (N columnes i les files que calguin, o al revés) i l'`id` no canvia. Afegir un
+  bloc omple el primer espai lliure; si no n'hi ha, «N columnes» i «N files» creixen, i les altres
+  plantilles passen a tantes files (o columnes) com blocs, en el sentit de la pàgina. Una pàgina automàtica també pot
+  recordar la plantilla, i un `id` de plantilla que l'app no coneix es conserva.
+- **Un bloc** té `id`, `kind` i, on cal, caixa (`x`, `y`, `w`, `h`), `slot` i `namedStyle` (§1.2):
+  - `"sequence"`: `sequence` (l'`id` de la seqüència), `columns` (`"auto"` o un enter ≥ 1; sense
+    valor, `"auto"`) i `view`, el retoc de la vista en aquest bloc.
+  - `"text"`: `text` (amb `\n` entre línies; és contingut i no es tradueix) i `textStyle`: `font`
+    (parcial, sobre la lletra de les targetes), `bold`, `alignmentH` i `alignmentV`. Sense retoc,
+    centrat i sense negreta.
+- **La mateixa seqüència pot tenir molts blocs**, en pàgines diferents o a la mateixa. El contingut
+  és un de sol; la caixa, les columnes i el retoc de la vista són de cada bloc.
+- **`common`**: els blocs que surten a **totes** les pàgines, al mateix lloc, pintats per sota dels
+  de cada pàgina. Sempre amb caixa i sense `slot`.
+- **Unitats**: mil·límetres des del cantó superior esquerre del **full**, que és el paper menys el
+  marge d'impressió (5 mm per costat). Les caixes no trepitgen els 12 mm de baix, reservats al peu
+  de llicència, tant si el peu es pinta com si no.
+- **Una seqüència sense cap bloc de seqüència** no surt a cap pàgina: no s'imprimeix, però és al
+  document.
+- **En llegir**:
+  - Les pàgines **es llegeixen sempre que hi siguin**, digui el que digui `layout`: una versió
+    anterior que obre el document i el desa hi escriu `"flow"` i en conserva les pàgines com a camps
+    desconeguts.
+  - **Un bloc que l'app no entén** (un `kind` que no coneix, o cap `kind` i cap `sequence`) es
+    conserva tal com és i es torna a escriure al seu lloc. No es pinta.
+  - Es descarta un bloc de seqüència que apunta a una seqüència que no hi és, i un bloc que
+    necessita caixa (en una pàgina amb plantilla o als comuns) i no en té cap de veritat (`w` o `h`
+    ≤ 0, posició que no és un número).
+  - Unes `columns` que no s'entenen passen a `"auto"`, un `text` que no és text passa a buit, i el
+    que no es pot pintar d'un retoc (`view`, `textStyle`) se'n treu. Un `namedStyle` que no és a
+    `styles` se'n treu. Un `id` que falta o es repeteix se'n genera un de nou.
+  - Un `mode` que falta o que l'app no coneix: `"template"` si algun bloc que l'app entén té caixa,
+    i si no `"auto"`.
+  - La caixa **no** s'encaixa al full en llegir: la pinta qui sap la mida del full.
+  - Si no hi ha cap pàgina que es pugui llegir, el document és una sola pàgina automàtica.
+- **Fitxers de les fases 1–3** (`layout: "free"`, `sheets[].placements`, sense `mode` ni `kind`):
+  cada full és una pàgina amb caixes i sense plantilla, i cada col·locació, un bloc de seqüència. En
+  desar-los s'escriuen amb la forma d'ara. Cap versió publicada no els va escriure.
+- **No cal pujar `schemaVersion`**: tot és nou dins de `page` o a l'arrel, i una versió anterior de
+  l'app ho conserva com a desconegut. Obre el document com a una sola pàgina automàtica amb totes
+  les seqüències i sense els rètols (es veu diferent, però no perd res), i si el torna a desar, les
+  pàgines hi continuen.
+- Fixtures: `16-mode-lliure.saac` (fases 1–3) i `17-pagines-i-blocs.saac`.
+
+### 1.2 Estils amb nom (`styles`)
+
+```json
+"styles": [
+  { "id": "st_gran", "name": "Agenda gran", "view": { "sizePict": 1.5 }, "card": { "font": { "size": 1.2 } } }
+]
+```
+
+- Un **estil amb nom** és un retoc de l'estil del document, amb la forma dels retocs: `pictogram`
+  (amb `fitzgerald` com a taula parcial, com al document), `card` i `view`. Porta `id` i `name`.
+- Un bloc el fa servir amb `namedStyle`. Canviar-lo canvia tots els blocs que el fan servir.
+- Des del pas 7 (2026-11-14) l'app hi escriu **només l'estil** (`pictogram` i `card`): la mida,
+  l'espai i l'alineació són la distribució del bloc. Un estil amb nom amb `view`, dels documents
+  d'abans, es llegeix i es pinta igual i es torna a escriure tal com era. El format no canvia.
+- **És l'entrada del catàleg d'estils de l'usuari copiada dins del document** (R10): el document no
+  apunta mai a les preferències de ningú, i s'obre igual a qualsevol lloc.
+- **La cascada**: document → seqüència → estil amb nom del bloc → bloc → pictograma
+  (`docs/fonaments/03-model-contingut-estil.md`, §4).
+- En llegir, de cada estil només queda el que té la forma i el valor que toca; un `id` que falta o
+  es repeteix se'n genera un de nou.
 
 ## 2. Estructura del fitxer d'estil (`.saacstyle`)
 
@@ -213,11 +324,14 @@ mateixes preferències. Les fixtures `apps/web/test/fixtures/saac/` ho proven.
 
 - **«Desa el document»** escriu el document complet: contingut, estil, pàgina i imatges. **No hi ha
   cap opció per desar-lo sense estil.**
-- **«Desa l'estil en un fitxer…»** escriu un `.saacstyle`. Viu al panell «Estil del document».
+- **«Desa el meu estil en un fitxer…»** escriu un `.saacstyle` amb el meu estil. Viu al panell «El
+  meu estil» de la configuració (R10). L'estil del document obert no es desa sol: va sempre dins
+  del document.
 - En desar, **SEMPRE** s'aplica `diffStyle` a cada seqüència i pictograma, perquè els retocs siguin
   mínims.
-- **L'estil per defecte** de l'usuari es tria a les preferències, amb el nom **«Estil per defecte
-  per a documents nous»**. **MAI** viatja dins d'un document.
+- **El meu estil** (l'antic estil per defecte) es tria a les preferències, al panell «El meu
+  estil». **MAI** viatja dins d'un document com a referència: «Aplica el meu estil» en **copia** els
+  valors a `styles` (§1.2).
 
 ### Descàrrega
 
@@ -239,11 +353,11 @@ a.download = `${nom}.saac`; // o `.saacstyle`
 - **SEMPRE** el tipus es decideix pel contingut (§3).
 - **SEMPRE** obrir un document **no modifica les preferències**. La pàgina i l'estil del fitxer són
   del document; les preferències de qui l'obre continuen igual.
-- **Un fitxer d'estil obert com a document** obre un diàleg amb tres botons: *Aplica'l a aquest
-  document* · *Fes-lo el meu estil per defecte* · *Cancel·la*. Si no hi ha cap document amb
-  contingut, el primer botó no hi és.
-- **Un fitxer d'estil carregat des del panell «Estil del document»** s'aplica directament, amb
-  desfer.
+- **Un fitxer d'estil obert com a document** obre un diàleg amb dos botons: *Fes-lo el meu estil* ·
+  *Cancel·la*. No s'aplica mai al document obert (R10, 2026-11-12): els estils van de la
+  configuració cap al document, i al document s'hi porten amb «Aplica el meu estil».
+- **Un fitxer d'estil (o un `.saac`) carregat des del panell «El meu estil»** passa a ser el meu
+  estil directament; es desa en tancar la configuració.
 
 ## 7. Núvol
 

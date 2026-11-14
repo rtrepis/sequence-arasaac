@@ -1,11 +1,14 @@
 // Un fitxer d'estil obert com si fos un document (`docs/fonaments/
-// 06-compatibilitat-i-dades.md`, §6): es diu què és i es pregunta què se'n fa.
+// 06-compatibilitat-i-dades.md`, §6): es diu què és i es pregunta si es fa el
+// meu estil.
 //
-// - **Aplica'l a aquest document**: com «Carrega un estil», amb desfer. No hi
-//   és si no hi ha cap document amb contingut: no tindria on aplicar-se.
-// - **Fes-lo el meu estil per defecte**: substitueix el que l'usuari tenia, i
-//   per això és una tria explícita, mai la que es fa per omissió.
+// - **Fes-lo el meu estil**: substitueix el que l'usuari tenia, i per això és
+//   una tria explícita, mai la que es fa per omissió.
 // - **Cancel·la**: no en fa res.
+//
+// No s'aplica mai al document obert: els estils van en una sola direcció, de
+// la configuració cap al document, i al document s'hi porta des del menú «⋯» de
+// la pàgina o del bloc (R10).
 //
 // `AppDialog` atrapa el focus, es tanca amb Esc i té títol accessible.
 import React from "react";
@@ -16,47 +19,24 @@ import StyledButton from "@/style/StyledButton";
 import confirmMessages from "@components/ConfirmDialog/ConfirmDialog.lang";
 import SettingsSaveErrorDialog from "@features/backend/user-settings/components/SettingsSaveErrorDialog";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import {
-  changeDocumentStyleThunk,
-  pendingDefaultStyleSetActionCreator,
-} from "@features/sequence/store/styleSlice";
+import { pendingDefaultStyleSetActionCreator } from "@features/sequence/store/styleSlice";
 import { useSetDefaultStyle } from "@features/sequence/hooks/useSetDefaultStyle";
-import { isPristineDocument } from "@features/sequence/utils/isPristineDocument";
 import messages from "./DocumentStyle.lang";
 
 const PendingDefaultStyleDialog = (): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const pending = useAppSelector((state) => state.style.pendingDefaultStyle);
-  const canApply = useAppSelector(
-    (state) => !isPristineDocument(state.document),
-  );
   const { setAsDefault, retry, failure, isRetrying, dismissError } =
     useSetDefaultStyle();
 
   const handleCancel = () =>
     dispatch(pendingDefaultStyleSetActionCreator(null));
 
-  const handleApply = () => {
-    // L'avís del canvi, amb «Desfés», és el missatge d'aquesta acció
-    if (pending) dispatch(changeDocumentStyleThunk(pending, "file"));
-    handleCancel();
-  };
-
   const handleMakeDefault = () => {
     if (pending) setAsDefault(pending);
     handleCancel();
   };
-
-  const makeDefaultButton = (
-    <StyledButton
-      onClick={handleMakeDefault}
-      variant={canApply ? "outlined" : "contained"}
-      color={canApply ? "inherit" : "primary"}
-    >
-      {intl.formatMessage(messages.styleFileMakeDefault)}
-    </StyledButton>
-  );
 
   return (
     <>
@@ -69,28 +49,20 @@ const PendingDefaultStyleDialog = (): React.ReactElement => {
         maxWidth="xs"
         dividers={false}
         actions={
-          <AppDialogActions startAction={canApply && makeDefaultButton}>
+          <AppDialogActions>
             {/* `inherit` i no el primary: el verd sobre el paper de
                 configuració no es llegeix (F11) */}
             <StyledButton onClick={handleCancel} color="inherit">
               {intl.formatMessage(confirmMessages.cancel)}
             </StyledButton>
-            {canApply ? (
-              <StyledButton onClick={handleApply} variant="contained">
-                {intl.formatMessage(messages.styleFileApply)}
-              </StyledButton>
-            ) : (
-              makeDefaultButton
-            )}
+            <StyledButton onClick={handleMakeDefault} variant="contained">
+              {intl.formatMessage(messages.styleFileMakeDefault)}
+            </StyledButton>
           </AppDialogActions>
         }
       >
         <DialogContentText id="style-file-opened-body">
-          {intl.formatMessage(
-            canApply
-              ? messages.styleFileOpenedBody
-              : messages.pendingDefaultBody,
-          )}
+          {intl.formatMessage(messages.styleFileOpenedBody)}
         </DialogContentText>
       </AppDialog>
       <SettingsSaveErrorDialog

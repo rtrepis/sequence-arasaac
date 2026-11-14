@@ -81,9 +81,10 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 
 ## El paper
 
-- **Al paper hi va el full, i res més.** No s'amaga el que sobra: es pinta
-  **només** la còpia del full que `usePrintSheet` penja del `body`
-  (`#print-root`), i tota la resta queda fora per defecte —l'app sencera i les
+- **Al paper hi van els fulls, i res més.** No s'amaga el que sobra: es pinta
+  **només** la còpia dels fulls que `usePrintSheet` penja del `body`
+  (`#print-root`): un en el flux, un per pàgina en el mode lliure, cadascun al
+  seu paper (`break-after: page`), i tota la resta queda fora per defecte —l'app sencera i les
   capes que MUI posa a `document.body` amb un portal: menú lateral, tooltips,
   menús, avisos i diàlegs. És el mateix camí que fa l'exportació a PDF, que
   captura `.preview-content` i prou.

@@ -4,12 +4,18 @@ import {
   screen,
   userEvent,
   waitFor,
+  within,
 } from "@/test/renderWithProviders";
 import { createAppStore } from "@app/store";
 import { updateSettingsActiveTabActionCreator } from "@features/user-settings/store/uiSlice";
 import SettingsDialog from "./SettingsDialog";
 
-const TAB_NAMES = ["User", "Document style", "View", "Personal vocabulary"];
+const TAB_NAMES = [
+  "User",
+  "My style",
+  "Page and arrangement",
+  "Personal vocabulary",
+];
 
 describe("SettingsDialog", () => {
   it("hauria de pintar un tab per cada àrea de configuració", () => {
@@ -28,10 +34,9 @@ describe("SettingsDialog", () => {
       store,
     });
 
-    expect(screen.getByRole("tab", { name: "View" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
+    expect(
+      screen.getByRole("tab", { name: "Page and arrangement" }),
+    ).toHaveAttribute("aria-selected", "true");
   });
 
   it("hauria de recordar a la interfície el tab que s'ha triat", async () => {
@@ -40,13 +45,14 @@ describe("SettingsDialog", () => {
       store,
     });
 
-    await userEvent.click(screen.getByRole("tab", { name: "View" }));
+    await userEvent.click(
+      screen.getByRole("tab", { name: "Page and arrangement" }),
+    );
 
     expect(store.getState().ui.settingsActiveTab).toBe("view");
-    expect(screen.getByRole("tab", { name: "View" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
+    expect(
+      screen.getByRole("tab", { name: "Page and arrangement" }),
+    ).toHaveAttribute("aria-selected", "true");
   });
 
   it("hauria de tancar-se amb la creu de la barra", async () => {
@@ -76,6 +82,31 @@ describe("SettingsDialog", () => {
   it("hauria de tenir nom accessible, que és el que anuncia el lector de pantalla", () => {
     renderWithProviders(<SettingsDialog open onClose={vi.fn()} />);
 
-    expect(screen.getByRole("dialog", { name: "Settings" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("dialog", { name: "Settings" }),
+    ).toBeInTheDocument();
+  });
+
+  it("la disposició dels documents nous es tria a «Pàgina i distribució» i es desa en tancar", async () => {
+    const store = createAppStore();
+    store.dispatch(updateSettingsActiveTabActionCreator("view"));
+    renderWithProviders(<SettingsDialog open onClose={vi.fn()} />, {
+      store,
+    });
+
+    const group = screen.getByRole("group", { name: "Layout" });
+    expect(
+      within(group).getByRole("button", { name: /^Simple/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Direction")).toBeInTheDocument();
+
+    await userEvent.click(
+      within(group).getByRole("button", { name: "In columns" }),
+    );
+    // La direcció només és d'una pàgina simple
+    expect(screen.queryByText("Direction")).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "close" }));
+    expect(store.getState().ui.viewSettings.disposition).toBe("columns");
   });
 });

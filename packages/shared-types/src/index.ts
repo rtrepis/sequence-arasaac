@@ -25,6 +25,18 @@ export type {
   SequenceStyleView,
   SequenceStyle,
   DocumentLayout,
+  SheetMode,
+  LicenceOn,
+  PlacementColumns,
+  SequencePlacement,
+  TextBlockStyle,
+  TextPlacement,
+  UnknownPlacement,
+  PagePlacement,
+  DocumentSheet,
+  DocumentPages,
+  PartialCardStyle,
+  NamedStyle,
 } from "./document";
 export type {
   DefaultSettings,

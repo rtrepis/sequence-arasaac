@@ -20,14 +20,15 @@ const messages = defineMessages({
   },
   styleDialogTitle: {
     id: "components.buttonWithModalDownload.styleDialogTitle",
-    defaultMessage: "Desa l'estil en un fitxer",
-    description: "Títol del diàleg per desar només l'estil del document",
+    defaultMessage: "Desa el meu estil en un fitxer",
+    description:
+      "Títol del diàleg per desar el meu estil en un fitxer .saacstyle",
   },
   styleHelper: {
     id: "components.buttonWithModalDownload.styleHelper",
     defaultMessage:
-      "Només l'aparença del document —fonts, colors, vores, mides i espais—, sense cap seqüència. Es pot aplicar a altres documents.",
-    description: "Explicació del diàleg per desar només l'estil",
+      "El teu estil —lletra, colors, vores, mides i espais—, sense cap seqüència. El pots carregar en un altre dispositiu o passar-lo a algú altre.",
+    description: "Explicació del diàleg per desar el meu estil",
   },
   save: {
     id: "components.buttonWithModalDownload.save.title",

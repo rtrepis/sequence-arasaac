@@ -7,7 +7,9 @@ import {
 } from "@/types/sequence";
 import {
   DocumentLayout,
+  DocumentPages,
   DocumentSAAC,
+  NamedStyle,
   SequenceStyle,
   SequenceStyleView,
   SequenceViewSettings,
@@ -46,6 +48,8 @@ import { classifyRequestFailure } from "@features/backend/api/requestFailure";
 import { clearDraft } from "@features/sequence/storage/draftStorage";
 import { documentStatusClearedActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { reportClientError } from "@features/backend/api/clientErrorReport";
+import { removeSequencePlacements } from "@features/free-layout/model/sheets";
+import { addNewSequenceToPages } from "@features/free-layout/model/pages";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);
@@ -153,10 +157,27 @@ const documentSlice = createSlice({
       return previousDocument;
     },
 
-    // Crea una nova seqüència buida amb la clau indicada sense canviar l'actiu
-    addNewSequence: (previousDocument, action: PayloadAction<number>) => {
-      previousDocument.content[action.payload] = [];
-      delete previousDocument.viewSettings[action.payload];
+    // Crea una nova seqüència buida amb la clau indicada sense canviar l'actiu.
+    // Si el document té pàgines i l'última és automàtica, hi va al final
+    // (ADR-005): l'identificador del bloc es fa fora del reductor
+    addNewSequence: {
+      reducer: (
+        previousDocument,
+        action: PayloadAction<number, string, { blockId: string }>,
+      ) => {
+        previousDocument.content[action.payload] = [];
+        delete previousDocument.viewSettings[action.payload];
+        if (previousDocument.pages)
+          previousDocument.pages = addNewSequenceToPages(
+            previousDocument.pages,
+            action.payload,
+            () => action.meta.blockId,
+          );
+      },
+      prepare: (key: number) => ({
+        payload: key,
+        meta: { blockId: newSaacId("pl") },
+      }),
     },
 
     // Els pictogrames nous reben l'identificador del fitxer v3 en néixer: així
@@ -419,17 +440,35 @@ const documentSlice = createSlice({
         defaultSettings,
         styleView,
         fitzgeraldColors,
+        pages,
+        styles,
       } = action.payload;
       previousDocument.content = content;
       previousDocument.viewSettings = viewSettings;
       previousDocument.defaultSettings = defaultSettings;
       previousDocument.styleView = styleView;
       previousDocument.fitzgeraldColors = fitzgeraldColors;
+      // De la pàgina del document no es desfà res: cap acció que es pugui
+      // desfer no en canvia la mida ni l'orientació. Les pàgines i els seus
+      // blocs, sí
+      previousDocument.pages = pages;
+      previousDocument.styles = styles;
     },
 
     // Fa explícit l'estil que el document heretava, en desar-lo: el que s'ha
     // desat ja no ha de canviar si després canvia l'estil per defecte. No
     // canvia res del que es veu, i per això no és un canvi de contingut
+    // Les pàgines amb què comença un document nou, segons la disposició de les
+    // preferències (pas 7b). No és un canvi de l'usuari: el document encara
+    // hereta la pàgina de les preferències, com l'estil
+    newDocumentPagesInherited: (
+      previousDocument,
+      action: PayloadAction<DocumentPages | undefined>,
+    ) => {
+      if (action.payload) previousDocument.pages = action.payload;
+      else delete previousDocument.pages;
+    },
+
     documentStyleMaterialized: (
       previousDocument,
       action: PayloadAction<{
@@ -487,6 +526,26 @@ const documentSlice = createSlice({
         ...(previousDocument.layout ?? action.payload.base),
         ...action.payload.layout,
       };
+    },
+
+    // Les pàgines senceres, amb els seus blocs (ADR-005). Les operacions les
+    // calcula `features/free-layout/model`, i aquí només es desa el resultat
+    pagesChanged: (
+      previousDocument,
+      action: PayloadAction<DocumentPages | undefined>,
+    ) => {
+      previousDocument.pages = action.payload;
+    },
+
+    // Les pàgines i els estils amb nom alhora: «Aplica el meu estil» copia
+    // l'estil al document i hi apunta els blocs en un sol pas, i en un sol
+    // desfer (R10)
+    pagesAndStylesChanged: (
+      previousDocument,
+      action: PayloadAction<{ pages: DocumentPages; styles: NamedStyle[] }>,
+    ) => {
+      previousDocument.pages = action.payload.pages;
+      previousDocument.styles = action.payload.styles;
     },
 
     // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
@@ -554,6 +613,12 @@ const documentSlice = createSlice({
         const lastKey = keys[keys.length - 1];
         delete previousDocument.content[Number(lastKey)];
         delete previousDocument.viewSettings[Number(lastKey)];
+        // I els seus blocs: no poden apuntar a una seqüència que no hi és
+        if (previousDocument.pages)
+          previousDocument.pages = removeSequencePlacements(
+            previousDocument.pages,
+            Number(lastKey),
+          );
 
         // Si la seqüència activa és la que s'ha eliminat, canviar a la penúltima
         if (previousDocument.activeSAAC === Number(lastKey)) {
@@ -574,13 +639,19 @@ const documentSlice = createSlice({
 
 export const documentReducer = documentSlice.reducer;
 
-/** El que toca un canvi d'estil, per poder-lo desfer. */
+/**
+ * El que toca un canvi que es pot desfer: l'estil i, des del mode lliure
+ * (ADR-005), les pàgines. És l'únic desfer de l'app.
+ */
 export interface DocumentStyleSnapshot {
   content: DocumentSAAC["content"];
   viewSettings: DocumentSAAC["viewSettings"];
   defaultSettings: DocumentSAAC["defaultSettings"];
   styleView: DocumentSAAC["styleView"];
   fitzgeraldColors: DocumentSAAC["fitzgeraldColors"];
+  pages: DocumentSAAC["pages"];
+  /** Els estils amb nom: «Aplica el meu estil» n'hi copia un (R10) */
+  styles: DocumentSAAC["styles"];
 }
 
 export const takeDocumentStyleSnapshot = (
@@ -591,6 +662,8 @@ export const takeDocumentStyleSnapshot = (
   defaultSettings: document.defaultSettings,
   styleView: document.styleView,
   fitzgeraldColors: document.fitzgeraldColors,
+  pages: document.pages,
+  styles: document.styles,
 });
 
 /**
@@ -716,7 +789,10 @@ export const {
   applyDocumentStyle: applyDocumentStyleActionCreator,
   restoreDocumentStyle: restoreDocumentStyleActionCreator,
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
+  newDocumentPagesInherited: newDocumentPagesInheritedActionCreator,
   documentLayoutChanged: documentLayoutChangedActionCreator,
+  pagesChanged: pagesChangedActionCreator,
+  pagesAndStylesChanged: pagesAndStylesChangedActionCreator,
   documentAuthorChanged: documentAuthorChangedActionCreator,
   pictStyleAppliedToAll: pictStyleAppliedToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,

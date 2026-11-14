@@ -86,6 +86,8 @@ describe("PrintFooterSection", () => {
   it("no hauria de mostrar el motiu quan no hi ha autor", () => {
     renderSection();
 
-    expect(screen.queryByText(/pictograms are not yours/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/pictograms are not yours/i),
+    ).not.toBeInTheDocument();
   });
 });

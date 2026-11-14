@@ -8,6 +8,12 @@ const messages = defineMessages({
     defaultMessage: "S'està generant el PDF…",
     description: "Missatge del backdrop mentre es genera el PDF",
   },
+  generatingPage: {
+    id: "features.print.pdf.generatingPage",
+    defaultMessage: "S'està generant el PDF: pàgina {number} de {total}…",
+    description:
+      "Missatge del backdrop mentre es genera un PDF de diverses pàgines (mode lliure)",
+  },
   downloaded: {
     id: "features.print.pdf.downloaded",
     defaultMessage: "PDF descarregat",

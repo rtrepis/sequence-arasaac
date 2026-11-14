@@ -3,10 +3,36 @@ import type { FitzgeraldCategoryColors } from "@features/sequence/saac/fitzgeral
 import { DefaultSettings } from "./ui";
 import type {
   DocumentLayout,
+  DocumentPages,
+  DocumentSheet,
+  LicenceOn,
+  NamedStyle,
+  PagePlacement,
+  PartialCardStyle,
+  PlacementColumns,
+  SequencePlacement,
   SequenceStyleView as SharedSequenceStyleView,
+  SheetMode,
+  TextBlockStyle,
+  TextPlacement,
+  UnknownPlacement,
 } from "@sequence-arasaac/shared-types";
 
-export type { DocumentLayout };
+export type {
+  DocumentLayout,
+  DocumentPages,
+  DocumentSheet,
+  LicenceOn,
+  NamedStyle,
+  PagePlacement,
+  PartialCardStyle,
+  PlacementColumns,
+  SequencePlacement,
+  SheetMode,
+  TextBlockStyle,
+  TextPlacement,
+  UnknownPlacement,
+};
 
 export type SequenceAlignmentH = "left" | "center" | "right";
 export type SequenceAlignmentV = "top" | "center" | "bottom";
@@ -50,9 +76,10 @@ export interface SequenceStyle extends DefaultSettings {
 
 /**
  * Camps del `.saac` v3 que Redux no fa servir però que s'han de tornar a
- * escriure en desar: els desconeguts de cada objecte, la data de creació, la
- * disposició (`page.layout`) i les dades de cada seqüència que no són
- * pictogrames (títol, `frame`…).
+ * escriure en desar: els desconeguts de cada objecte, la data de creació i les
+ * dades de cada seqüència que no són pictogrames (el títol…). Les pàgines
+ * (`page.sheets` i `page.common`) i els estils amb nom (`styles`) no hi van:
+ * són `pages` i `styles`.
  */
 export interface SaacDocumentExtras {
   root?: SaacExtraFields;
@@ -85,6 +112,14 @@ export interface DocumentSAAC {
    * pàgina o es desa.
    */
   layout?: DocumentLayout;
+  /**
+   * Les pàgines del document i els seus blocs (ADR-005). Sense valor, el
+   * document és una sola pàgina automàtica amb totes les seqüències en ordre:
+   * el de sempre, i el de tots els documents d'abans.
+   */
+  pages?: DocumentPages;
+  /** Els estils amb nom del document, que els blocs fan servir per `styleId` */
+  styles?: NamedStyle[];
   /** Colors de cada categoria de Fitzgerald. Sense valor, els de l'app. */
   fitzgeraldColors?: FitzgeraldCategoryColors;
   /** Identificador estable de cada seqüència al `.saac` v3 */

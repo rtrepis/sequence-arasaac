@@ -32,12 +32,29 @@ import { mergeDeep } from "@features/sequence/saac/cascade";
  * text hi càpiga (d'un pictograma o de tot el document, B28).
  */
 export type StyleChangeSource =
-  | "userDefault"
-  | "file"
+  | "myStyleSheet"
+  | "myStyleBlock"
+  | "myStyleUpdate"
+  | "blockStyleRemove"
   | "applyAll"
   | "reset"
   | "fitTextPictogram"
-  | "fitTextDocument";
+  | "fitTextDocument"
+  | FreeLayoutChangeSource;
+
+/**
+ * Els canvis de la disposició lliure que substitueixen feina i, per tant, es
+ * poden desfer amb el mateix snackbar (ADR-005): tornar a la disposició
+ * automàtica, aplicar una plantilla o afegir seqüències (que tornen a
+ * repartir la pàgina), esborrar una pàgina, treure una seqüència d'una pàgina
+ * i deixar de posar-ne una a totes les pàgines.
+ */
+export type FreeLayoutChangeSource =
+  | "layoutTemplate"
+  | "layoutAddSequences"
+  | "layoutRemoveSheet"
+  | "layoutRemovePlacement"
+  | "layoutUncommon";
 
 /**
  * Bàner d'estat del document que s'acaba d'obrir: és estat, no confirmació, i
@@ -83,8 +100,6 @@ export interface StyleUiState {
   notice: StyleNotice | null;
   undo: StyleUndo | null;
   undoSnackbar: StyleUndoSnackbar | null;
-  /** Algú (el bàner) ha demanat obrir el panell «Estil del document» */
-  stylePanelRequested: boolean;
   /**
    * El diàleg de configuració és obert. Mentre ho és, el snackbar de desfer
    * es pinta a dins del panell i no al layout: el diàleg atrapa el focus, i un
@@ -99,7 +114,6 @@ const initialState: StyleUiState = {
   notice: null,
   undo: null,
   undoSnackbar: null,
-  stylePanelRequested: false,
   settingsDialogOpen: false,
   pendingDefaultStyle: null,
 };
@@ -138,12 +152,6 @@ const styleSlice = createSlice({
     styleUndoSnackbarClosed: (state) => {
       state.undoSnackbar = null;
     },
-    stylePanelRequested: (state) => {
-      state.stylePanelRequested = true;
-    },
-    stylePanelRequestHandled: (state) => {
-      state.stylePanelRequested = false;
-    },
     settingsDialogOpenChanged: (state, action: PayloadAction<boolean>) => {
       state.settingsDialogOpen = action.payload;
     },
@@ -165,8 +173,6 @@ export const {
   styleUndoRecorded: styleUndoRecordedActionCreator,
   styleUndoSnackbarShown: styleUndoSnackbarShownActionCreator,
   styleUndoSnackbarClosed: styleUndoSnackbarClosedActionCreator,
-  stylePanelRequested: stylePanelRequestedActionCreator,
-  stylePanelRequestHandled: stylePanelRequestHandledActionCreator,
   settingsDialogOpenChanged: settingsDialogOpenChangedActionCreator,
   pendingDefaultStyleSet: pendingDefaultStyleSetActionCreator,
 } = styleSlice.actions;
@@ -179,7 +185,9 @@ const sameSnapshot = (
   a.viewSettings === b.viewSettings &&
   a.defaultSettings === b.defaultSettings &&
   a.styleView === b.styleView &&
-  a.fitzgeraldColors === b.fitzgeraldColors;
+  a.fitzgeraldColors === b.fitzgeraldColors &&
+  a.pages === b.pages &&
+  a.styles === b.styles;
 
 /**
  * Fa un canvi d'estil del document i el deixa a punt de desfer amb un snackbar

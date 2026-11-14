@@ -1,7 +1,7 @@
 import { defineMessages } from "react-intl";
 
-// Missatges de l'estil del document: el panell «Estil del document» i les seves
-// accions, el bàner en obrir un document i el snackbar de desfer. Vegeu
+// Missatges de l'estil: el bàner en obrir un document, el diàleg d'obrir un
+// fitxer d'estil i el snackbar de desfer (el panell «El meu estil» té els seus). Vegeu
 // `docs/fonaments/03-model-contingut-estil.md` (nomenclatura inclosa: «document» és el
 // fitxer sencer, «seqüència» cadascuna de les que conté).
 const messages = defineMessages({
@@ -14,10 +14,9 @@ const messages = defineMessages({
   },
   noticeWithoutStyle: {
     id: "features.sequence.style.notice.withoutStyle",
-    defaultMessage:
-      "No portava estil propi, i hi hem aplicat el teu estil per defecte.",
+    defaultMessage: "No portava estil propi, i hi hem aplicat el teu estil.",
     description:
-      "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer)",
+      "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer): hi va el meu estil",
   },
   noticeNewerVersion: {
     id: "features.sequence.style.notice.newerVersion",
@@ -26,52 +25,11 @@ const messages = defineMessages({
     description:
       "Bàner d'avís en obrir un document d'una versió de l'app més nova que la d'ara",
   },
-  panelTitle: {
-    id: "features.sequence.style.panel.title",
-    defaultMessage: "Estil del document",
-    description:
-      "Títol del panell d'estil i del botó del bàner que hi porta. L'estil s'aplica a totes les seqüències del document",
-  },
-  applyUserDefault: {
-    id: "features.sequence.style.applyUserDefault",
-    defaultMessage: "Aplica el meu estil per defecte",
-    description:
-      "Acció que aplica l'estil per defecte de l'usuari al document obert (es pot desfer)",
-  },
-  applyUserDefaultTooltip: {
-    id: "features.sequence.style.applyUserDefault.tooltip",
-    defaultMessage:
-      "Torna totes les seqüències del document al teu estil per defecte. Es pot desfer.",
-    description: "Ajuda del botó «Aplica el meu estil per defecte» de la vista",
-  },
-  loadStyleFile: {
-    id: "features.sequence.style.loadStyleFile",
-    defaultMessage: "Carrega un estil des d'un fitxer…",
-    description:
-      "Acció que aplica al document l'estil d'un fitxer .saacstyle o d'un altre document .saac",
-  },
-  setAsDefault: {
-    id: "features.sequence.style.setAsDefault",
-    defaultMessage: "Desa com a estil per defecte",
-    description:
-      "Acció que fa que l'estil del document sigui el que reben els documents nous",
-  },
   setAsDefaultSuccess: {
     id: "features.sequence.style.setAsDefault.success",
-    defaultMessage: "S'ha desat com a estil per defecte",
-    description: "Confirmació de «Desa com a estil per defecte»",
-  },
-  saveStyleFile: {
-    id: "features.sequence.style.saveStyleFile",
-    defaultMessage: "Desa l'estil en un fitxer…",
+    defaultMessage: "Ara és el teu estil.",
     description:
-      "Acció que obre el diàleg per desar només l'estil del document en un fitxer .saacstyle",
-  },
-  styleActions: {
-    id: "features.sequence.style.actions",
-    defaultMessage: "Accions d'estil",
-    description:
-      "Nom accessible del botó «⋯» que obre el menú amb les accions d'estil en mòbil",
+      "Confirmació de «Fes-lo el meu estil», en obrir un fitxer d'estil",
   },
   noticeOwnStyle: {
     id: "features.sequence.style.notice.ownStyle",
@@ -91,16 +49,6 @@ const messages = defineMessages({
     defaultMessage: "Tanca l'avís",
     description:
       "Nom accessible del botó que tanca el bàner o el snackbar d'estil",
-  },
-  changedUserDefault: {
-    id: "features.sequence.style.changed.userDefault",
-    defaultMessage: "S'ha aplicat el teu estil per defecte al document.",
-    description: "Snackbar després d'aplicar l'estil per defecte al document",
-  },
-  changedFile: {
-    id: "features.sequence.style.changed.file",
-    defaultMessage: "S'ha aplicat l'estil del fitxer al document.",
-    description: "Snackbar després d'aplicar al document l'estil d'un fitxer",
   },
   changedApplyAll: {
     id: "features.sequence.style.changed.applyAll",
@@ -122,6 +70,38 @@ const messages = defineMessages({
     description:
       "Snackbar després de reduir la lletra de l'estil del document des de l'avís «el text no hi cap» (es pot desfer)",
   },
+  changedLayoutTemplate: {
+    id: "features.sequence.style.changed.layoutTemplate",
+    defaultMessage: "S'ha aplicat la plantilla a la pàgina.",
+    description:
+      "Snackbar amb «Desfés» en aplicar una plantilla a una pàgina del mode lliure",
+  },
+  changedLayoutAddSequences: {
+    id: "features.sequence.style.changed.layoutAddSequences",
+    defaultMessage:
+      "S'han afegit les seqüències i s'ha tornat a repartir la pàgina.",
+    description:
+      "Snackbar amb «Desfés» en afegir seqüències a una pàgina del mode lliure, que es torna a repartir",
+  },
+  changedLayoutRemoveSheet: {
+    id: "features.sequence.style.changed.layoutRemoveSheet",
+    defaultMessage:
+      "S'ha esborrat la pàgina. Les seqüències continuen al document.",
+    description: "Snackbar amb «Desfés» en esborrar una pàgina del mode lliure",
+  },
+  changedLayoutRemovePlacement: {
+    id: "features.sequence.style.changed.layoutRemovePlacement",
+    defaultMessage:
+      "S'ha tret de la pàgina. La seqüència continua al document.",
+    description:
+      "Snackbar amb «Desfés» en treure una seqüència d'una pàgina del mode lliure",
+  },
+  changedLayoutUncommon: {
+    id: "features.sequence.style.changed.layoutUncommon",
+    defaultMessage: "Ara només surt en aquesta pàgina.",
+    description:
+      "Snackbar amb «Desfés» en deixar de posar una seqüència a totes les pàgines",
+  },
   changedReset: {
     id: "features.sequence.style.changed.reset",
     defaultMessage: "Estil restablert",
@@ -135,8 +115,9 @@ const messages = defineMessages({
   },
   undone: {
     id: "features.sequence.style.undone",
-    defaultMessage: "S'ha desfet el canvi d'estil",
-    description: "Confirmació després de desfer un canvi d'estil",
+    defaultMessage: "S'ha desfet el canvi",
+    description:
+      "Confirmació després de desfer un canvi d'estil o de disposició de la pàgina (el snackbar «Desfés» serveix per a tots dos)",
   },
   styleFileOpenedTitle: {
     id: "features.sequence.style.styleFileOpened.title",
@@ -147,28 +128,47 @@ const messages = defineMessages({
   styleFileOpenedBody: {
     id: "features.sequence.style.styleFileOpened.body",
     defaultMessage:
-      "Pots aplicar-lo al document obert, o fer-lo el teu estil per defecte, que és el que reben els documents nous.",
+      "Pots fer-lo el teu estil: el reben els documents nous, i el porta a un document «Aplica el meu estil», al menú «⋯» d'una pàgina o d'un bloc.",
     description:
-      "Explicació del diàleg de fitxer d'estil quan hi ha un document obert",
-  },
-  styleFileApply: {
-    id: "features.sequence.style.styleFileOpened.apply",
-    defaultMessage: "Aplica'l a aquest document",
-    description:
-      "Botó que aplica l'estil del fitxer al document obert (es pot desfer)",
+      "Explicació del diàleg que surt en obrir un fitxer d'estil com si fos un document: només es pot fer el meu estil",
   },
   styleFileMakeDefault: {
     id: "features.sequence.style.styleFileOpened.makeDefault",
-    defaultMessage: "Fes-lo el meu estil per defecte",
+    defaultMessage: "Fes-lo el meu estil",
     description:
-      "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari",
+      "Botó que fa de l'estil del fitxer el meu estil (substitueix el que hi havia)",
   },
-  pendingDefaultBody: {
-    id: "features.sequence.style.pendingDefault.body",
-    defaultMessage:
-      "No hi ha cap document obert a què aplicar-lo. Si el fas servir per defecte, els documents nous el rebran en lloc de l'estil que tens ara.",
+  loadedMyStyle: {
+    id: "features.sequence.style.loadedMyStyle",
+    defaultMessage: "S'ha carregat l'estil del fitxer com el teu estil.",
     description:
-      "Explicació de què passa si s'accepta l'estil com a per defecte",
+      "Snackbar després de «Carrega un estil des d'un fitxer…» al panell «El meu estil»",
+  },
+  changedMyStyleSheet: {
+    id: "features.sequence.style.changed.myStyleSheet",
+    defaultMessage: "S'ha aplicat el teu estil a la pàgina.",
+    description:
+      "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'una pàgina",
+  },
+  changedMyStyleBlock: {
+    id: "features.sequence.style.changed.myStyleBlock",
+    defaultMessage: "S'ha aplicat el teu estil al bloc.",
+    description:
+      "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'un bloc",
+  },
+  changedMyStyleUpdate: {
+    id: "features.sequence.style.changed.myStyleUpdate",
+    defaultMessage:
+      "S'ha actualitzat l'estil de bloc amb el teu estil, a tots els blocs que el fan servir.",
+    description:
+      "Snackbar amb «Desfés» després d'«Actualitza amb el meu estil» del menú «⋯» d'una pàgina o d'un bloc",
+  },
+  changedBlockStyleRemove: {
+    id: "features.sequence.style.changed.blockStyleRemove",
+    defaultMessage:
+      "S'ha tret l'estil de bloc: el bloc torna a l'estil del document.",
+    description:
+      "Snackbar amb «Desfés» després de treure l'estil de bloc d'un bloc, al nivell «Bloc» de la columna de la vista",
   },
 });
 

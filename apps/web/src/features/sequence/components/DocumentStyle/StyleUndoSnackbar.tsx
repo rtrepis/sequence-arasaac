@@ -13,7 +13,7 @@
 import React, { RefObject, SyntheticEvent } from "react";
 import { Theme } from "@mui/material/styles";
 import { Alert, Snackbar } from "@mui/material";
-import { useIntl } from "react-intl";
+import { MessageDescriptor, useIntl } from "react-intl";
 import StyledButton from "@/style/StyledButton";
 import { APP_TOUCH_TARGET_MIN, FLOATING_EDGE_GAP } from "@/style/appShape";
 import {
@@ -24,6 +24,7 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
 import {
   selectCanUndoStyle,
+  StyleChangeSource,
   styleUndoSnackbarClosedActionCreator,
   undoStyleChangeThunk,
 } from "@features/sequence/store/styleSlice";
@@ -64,15 +65,25 @@ interface StyleUndoSnackbarProps {
   returnFocusRef?: RefObject<HTMLElement>;
 }
 
-/** Què s'ha fet, segons d'on ve el canvi. */
-const CHANGED_MESSAGE = {
-  file: messages.changedFile,
-  userDefault: messages.changedUserDefault,
+/**
+ * Què s'ha fet, segons d'on ve el canvi. Tipat per origen: un origen nou sense
+ * missatge no compila.
+ */
+const CHANGED_MESSAGE: Record<StyleChangeSource, MessageDescriptor> = {
+  myStyleSheet: messages.changedMyStyleSheet,
+  myStyleBlock: messages.changedMyStyleBlock,
+  myStyleUpdate: messages.changedMyStyleUpdate,
+  blockStyleRemove: messages.changedBlockStyleRemove,
   applyAll: messages.changedApplyAll,
   reset: messages.changedReset,
   fitTextPictogram: messages.changedFitTextPictogram,
   fitTextDocument: messages.changedFitTextDocument,
-} as const;
+  layoutTemplate: messages.changedLayoutTemplate,
+  layoutAddSequences: messages.changedLayoutAddSequences,
+  layoutRemoveSheet: messages.changedLayoutRemoveSheet,
+  layoutRemovePlacement: messages.changedLayoutRemovePlacement,
+  layoutUncommon: messages.changedLayoutUncommon,
+};
 
 const StyleUndoSnackbar = ({
   placement,

@@ -71,6 +71,7 @@ l'entrada.
 
 | Id | Què | Per què pot esperar | Esforç |
 |---|---|---|---|
+| B35 | «Restableix els pictogrames d'aquesta seqüència» (l'antic «Aplica a tots») | Redefinit al pas 7: els retocs són de la seqüència, no del bloc ni de la pàgina, i treure'ls des d'una pàgina canviaria les altres on surt. Es fa després de R7 | S |
 | B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
@@ -109,7 +110,7 @@ no es toquen; les que sí, porten una nota amb la data de la revisió.
 Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posar-les a
 *Prioritats*.
 
-### B31 — Aplicar canvis d'estil per seqüència 💡 Idea
+### B31 — Aplicar canvis d'estil per seqüència ✅ Resolta (com a estils de bloc, R7)
 
 *(Oberta en treure «Aplica a aquesta seqüència» dels fonaments, 2026-09-29.)*
 
@@ -119,6 +120,88 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   l'estil del document i amb les excepcions per pictograma (`docs/fonaments/03-model-contingut-estil.md`,
   §4 i §5). Avui una seqüència només té estil de vista (mida, espai, alineació).
 - Pendent de treballar-ho més endavant.
+- **2026-11-07**: torna a sortir a la revisió del mode lliure com a «estils per grup de
+  seqüències», amb la necessitat d'un nom per a l'usuari. Es continua a **R7** de
+  `docs/PLA-mode-lliure.md` (§12), que el situa al nivell «Seqüència» de la columna (R8).
+- **2026-11-14 (pas 7)**: resolta com a **estils de bloc**. L'estil d'un grup de blocs és el seu
+  estil de bloc (el meu estil copiat al document): «Aplica el meu estil» el dona, «Actualitza amb
+  el meu estil» el canvia a tots els blocs que el fan servir i «Treu l'estil de bloc» el treu d'un
+  bloc. No hi ha cap editor d'estils al document (direcció única). A més, **estil** i
+  **distribució** (mida, espai, alineació) es separen: un estil de bloc no porta distribució.
+  Vegeu la decisió 24 de l'ADR-005.
+
+### B33 — Un catàleg de configuracions de l'usuari 🚧 Sense comptes, fet
+
+*(Oberta en revisar l'esbós de la columna de la Vista, R8 del mode lliure, 2026-11-07.)*
+
+- **Què**: l'estil dels pictogrames (la targeta), no la pàgina. Avui l'usuari té una sola configuració per defecte. La idea és que se'n pugui fer un
+  catàleg i que, a tot arreu on avui s'apliquen o es copien ajustos, n'hi hagi prou amb **aplicar
+  una entrada del catàleg** o **desar el que hi ha com a entrada**.
+- **Amb comptes**: catàleg al núvol. **Sense comptes**: una sola entrada (la configuració per
+  defecte d'avui), amb les mateixes dues accions.
+- **Cal decidir-ho abans d'implementar-ho**: què guarda una entrada, a quins nivells s'aplica
+  (document, pàgina, bloc), el nom per a l'usuari i el sostre amb compte.
+- El detall és a **R10** de `docs/PLA-mode-lliure.md` (§12). S'ha de decidir abans de **B31** (R7).
+  Les plantilles de pàgina pròpies serien un catàleg paral·lel: **R11**.
+- **2026-11-12 (R10, pas 6 del mode lliure)**: decidit i fet el cas sense comptes. Una entrada és
+  l'estil de la targeta i la vista dels pictogrames, sense paper ni plantilla. El nom per a l'usuari
+  és **«El meu estil»** («Els meus estils» amb comptes). S'aplica a una **pàgina** o a un **bloc**
+  des del seu menú «⋯» («Aplica el meu estil»), i mai al document sencer. Els estils van en **una
+  sola direcció**, de la configuració cap al document: han desaparegut «Desa com a estil per
+  defecte», «Desa com a preferència» i «Aplicar a la vista actual». El panell «Estil del document»
+  és ara «El meu estil». **Sostre amb compte: 20 entrades** (una entrada fa uns 2 KB, sense
+  imatges; vegeu `docs/ESTUDI-limits-serveis-gratuits.md`). Queda obert: el catàleg de diverses
+  entrades, amb comptes, quan es tornin a encendre.
+
+### B34 — Plantilles de pàgina pròpies 💡 Idea
+
+*(Oberta en parlar de R11 del mode lliure, 2026-11-07.)*
+
+- **Què**: que l'usuari pugui desar una pàgina com a plantilla («Desa aquesta pàgina com a
+  plantilla», a la Vista) i tenir-ne un catàleg, al costat de les plantilles base.
+- **Amb comptes**: catàleg al núvol, gestionat (canviar el nom, esborrar) a la configuració per
+  defecte. **Sense comptes**: només les plantilles base.
+- **De moment no es fa**: el mode lliure surt només amb les plantilles base (R11, decisió del
+  2026-11-07). És un catàleg paral·lel al d'estils dels pictogrames (**B33**), amb les mateixes dues
+  accions (aplicar, desar), i convé pensar-los junts.
+- **Cal decidir-ho abans d'implementar-ho**: què guarda una plantilla pròpia (només els espais, o
+  també els blocs de text i els comuns), on es gestiona i el sostre d'entrades amb compte
+  (`docs/ESTUDI-limits-serveis-gratuits.md`).
+- El detall és a **R11** de `docs/PLA-mode-lliure.md` (§12).
+
+### B35 — «Aplica a tots» no és a cap lloc de la interfície ⏸️ Ajornada (redefinida)
+
+*(Oberta en fer R10, 2026-11-12.)*
+
+- **On**: `applyToAllPictogramsThunk` (`features/sequence/store/styleSlice.ts`). Els botons «Aplica a
+  tots» eren a les seccions del panell «Estil del document». Aquell panell és ara «El meu estil» i
+  edita una preferència, i l'acció no hi té sentit.
+- **Per què importa**: era l'única manera de treure d'un cop un retoc (el color, la posició del
+  text, les vores…) de tots els pictogrames d'un document. Ara cal fer-ho pictograma a pictograma
+  («Restableix»). L'acció es conserva al codi, amb les seves proves.
+- **Cal decidir**: si es torna a oferir i on (el menú «⋯» de la pàgina, «Restableix els
+  pictogrames d'aquesta pàgina», o el nivell «Document» de la columna).
+- **2026-11-14 (pas 7)**: no estava ben definida. Els retocs dels pictogrames són de la
+  **seqüència**, no del bloc ni de la pàgina: treure'ls des del menú d'una pàgina canviaria també
+  les altres pàgines on surt la mateixa seqüència, i sorprendria. Es redefineix com a **«Restableix
+  els pictogrames d'aquesta seqüència»**, amb un missatge que digui que canvia tots els blocs on
+  surt, i s'ajorna fins després de R7. Lligam: després d'«Aplica el meu estil», un pictograma
+  retocat continua retocat; és el cas en què més es trobarà a faltar.
+
+### B36 — «Pàgines noves»: com neix una pàgina nova ✅ Resolta (pas 7b)
+
+*(Oberta en fer R11, 2026-11-12.)*
+
+- **Què**: una fila «Pàgines noves» al nivell «Document» de la columna, amb «Les seqüències una
+  darrere l'altra» (simple) o «Com la pàgina d'on s'afegeix», perquè qui sempre fa la mateixa
+  agenda no l'hagi de triar a cada pàgina. Seria un camp del document (canvi de format sense pujar
+  `schemaVersion`).
+- **De moment no es fa**: «Duplica la pàgina», al menú «⋯», ja ho cobreix. El detall és a **R11** de
+  `docs/PLA-mode-lliure.md` (§12).
+- **2026-11-14 (pas 7b)**: resolta d'una altra manera, a les preferències i no al document. El
+  panell «Pàgina i distribució» té la **disposició** amb què comencen els documents nous, i les
+  pàgines que s'afegeixen neixen amb aquesta disposició. No cal cap camp nou al `.saac`. Vegeu la
+  decisió 25 de l'ADR-005.
 
 ## Gravetat alta
 
@@ -1802,8 +1885,9 @@ l'ha de desencallar.
      l'usuari ho demana.
   5. **Camps nous del mode lliure (fase 5).** Els validadors de `modules/documents/validators.ts`
      són `z.object` normals, i per tant **descarten en silenci les claus que no coneixen**. Si no
-     s'hi afegeixen `schemaVersion` i la disposició de pàgina, el núvol se la menjarà sense cap
-     error, mentre que el fitxer la conservarà. Aquesta prova és la que ho ha de detectar.
+     s'hi afegeixen `schemaVersion` i la disposició de pàgina (`layout.mode` i `freeLayout`, ADR-005),
+     el núvol se la menjarà sense cap error, mentre que el fitxer la conservarà. Aquesta prova és la
+     que ho ha de detectar.
 - **Proposta: un usuari de proves dedicat.**
   - **Entorn.** Ha de ser una base de dades de proves (una altra base dins del mateix clúster
     d'Atlas n'hi ha prou) i no la de producció. Un compte creat a producció ocupa una plaça de

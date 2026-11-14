@@ -15,9 +15,17 @@ interface IconToggleButtonProps extends Omit<ToggleButtonProps, "aria-label"> {
  * pantalla i, escrivint-ho a mà a cada botó, l'`aria-label` acabava en anglès
  * mentre el tooltip anava traduït.
  */
+/**
+ * La icona, més gran que la lletra del botó: el botó fa 55 px i, amb la mida
+ * per defecte de MUI, la icona en feia 14 i costava de distingir. El botó no
+ * canvia de mida.
+ */
+const ICON_SIZE = 26;
+
 const IconToggleButton = ({
   message,
   children,
+  sx,
   ...toggleButtonProps
 }: IconToggleButtonProps): React.ReactElement => {
   const intl = useIntl();
@@ -25,7 +33,14 @@ const IconToggleButton = ({
 
   return (
     <Tooltip title={label}>
-      <ToggleButton {...toggleButtonProps} aria-label={label}>
+      <ToggleButton
+        {...toggleButtonProps}
+        aria-label={label}
+        sx={[
+          { "& > svg": { fontSize: ICON_SIZE } },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
+      >
         {children}
       </ToggleButton>
     </Tooltip>

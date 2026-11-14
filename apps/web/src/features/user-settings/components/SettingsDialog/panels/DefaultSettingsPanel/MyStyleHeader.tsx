@@ -1,15 +1,17 @@
-// Capçalera del panell «Estil del document»: títol, ajuda i les quatre accions
-// d'estil, en l'ordre dels fonaments (`docs/fonaments/03-model-contingut-estil.md`):
+// Capçalera del panell «El meu estil»: títol, ajuda i les dues accions de
+// fitxer, que són la manera d'exportar i importar el meu estil
+// (`docs/fonaments/03-model-contingut-estil.md`):
 //
-//   1. Aplica el meu estil per defecte
-//   2. Carrega un estil des d'un fitxer…
-//   3. Desa com a estil per defecte
-//   4. Desa l'estil en un fitxer…
+//   1. Carrega un estil des d'un fitxer…
+//   2. Desa el meu estil en un fitxer…
+//
+// No hi ha cap acció sobre el document obert: el meu estil s'hi aplica des del
+// menú «⋯» de la pàgina i del bloc, a la vista (R10).
 //
 // Ocupa el lloc de la guia del tab (`SettingsPanelHint`), que és la columna
 // lateral en escriptori. En escriptori i tauleta les accions són botons; per
 // sota de `md`, on el panell passa a una sola columna, van a un menú «⋯» a la
-// capçalera, amb l'etiqueta accessible «Accions d'estil».
+// capçalera, amb l'etiqueta accessible «Accions del meu estil».
 import React, { ChangeEvent, useId, useRef, useState } from "react";
 import {
   Alert,
@@ -26,33 +28,25 @@ import {
   MdMoreHoriz,
   MdOutlineFileDownload,
   MdOutlineFileOpen,
-  MdOutlinePerson,
-  MdOutlinePushPin,
 } from "react-icons/md";
 import { useIntl } from "react-intl";
 import StyledButton from "@/style/StyledButton";
 import StyledIconButton from "@/style/StyledIconButton";
 import { APP_TOUCH_TARGET_MIN } from "@/style/appShape";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { SETTINGS_TWO_COLUMN_BREAKPOINT } from "@components/SettingsLayout/settingsLayout.styled";
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
-import { changeDocumentStyleThunk } from "@features/sequence/store/styleSlice";
-import { selectUserDefaultStyle } from "@features/sequence/style/styleSelectors";
 import { SAAC_FILE_ACCEPT } from "@features/sequence/saac/types";
 import { useOpenSaacFile } from "@features/sequence/hooks/useOpenSaacFile";
-import StyleUndoSnackbar from "./StyleUndoSnackbar";
-import messages from "./DocumentStyle.lang";
+import messages from "./DefaultForm.lang";
 
-interface DocumentStyleHeaderProps {
+interface MyStyleHeaderProps {
   /** Ajuda del panell, sota el títol */
   help: React.ReactNode;
   /**
-   * Porta al document el que hi ha al formulari. Es crida abans de cada acció,
-   * perquè el que s'aplica, es desa o es desfà sigui el que es veu.
+   * Porta a les preferències el que hi ha al formulari. Es crida abans de cada
+   * acció, perquè el que es desa en un fitxer sigui el que es veu.
    */
   onBeforeAction: () => void;
-  /** «Desa com a estil per defecte»: el panell sap quin és l'estil del formulari */
-  onSetAsDefault: () => void;
 }
 
 interface StyleAction {
@@ -62,14 +56,11 @@ interface StyleAction {
   run: () => void;
 }
 
-const DocumentStyleHeader = ({
+const MyStyleHeader = ({
   help,
   onBeforeAction,
-  onSetAsDefault,
-}: DocumentStyleHeaderProps): React.ReactElement => {
+}: MyStyleHeaderProps): React.ReactElement => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
-  const userDefault = useAppSelector(selectUserDefaultStyle);
   const { openFile } = useOpenSaacFile();
   const compact = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down(SETTINGS_TWO_COLUMN_BREAKPOINT),
@@ -77,7 +68,6 @@ const DocumentStyleHeader = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const firstActionRef = useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [saveStyleOpen, setSaveStyleOpen] = useState(false);
   const menuId = useId();
@@ -86,15 +76,6 @@ const DocumentStyleHeader = ({
 
   const actions: StyleAction[] = [
     {
-      key: "applyUserDefault",
-      label: intl.formatMessage(messages.applyUserDefault),
-      icon: <MdOutlinePerson aria-hidden />,
-      run: () => {
-        onBeforeAction();
-        dispatch(changeDocumentStyleThunk(userDefault, "userDefault"));
-      },
-    },
-    {
       key: "loadStyleFile",
       label: intl.formatMessage(messages.loadStyleFile),
       icon: <MdOutlineFileOpen aria-hidden />,
@@ -102,12 +83,6 @@ const DocumentStyleHeader = ({
         onBeforeAction();
         fileInputRef.current?.click();
       },
-    },
-    {
-      key: "setAsDefault",
-      label: intl.formatMessage(messages.setAsDefault),
-      icon: <MdOutlinePushPin aria-hidden />,
-      run: onSetAsDefault,
     },
     {
       key: "saveStyleFile",
@@ -162,16 +137,15 @@ const DocumentStyleHeader = ({
         }
       >
         <AlertTitle component="h2" id={titleId}>
-          {intl.formatMessage(messages.panelTitle)}
+          {intl.formatMessage(messages.myStyleTitle)}
         </AlertTitle>
         {help}
 
         {!compact && (
           <Stack gap={1} sx={{ mt: 1.5, mb: 1 }}>
-            {actions.map((action, index) => (
+            {actions.map((action) => (
               <StyledButton
                 key={action.key}
-                ref={index === 0 ? firstActionRef : undefined}
                 variant="outlined"
                 color="inherit"
                 fullWidth
@@ -190,12 +164,6 @@ const DocumentStyleHeader = ({
           </Stack>
         )}
       </Alert>
-
-      {/* Al DOM just després de les accions: el tabulador hi arriba tot seguit */}
-      <StyleUndoSnackbar
-        placement="panel"
-        returnFocusRef={compact ? menuButtonRef : firstActionRef}
-      />
 
       {compact && (
         <Menu
@@ -239,4 +207,4 @@ const DocumentStyleHeader = ({
   );
 };
 
-export default DocumentStyleHeader;
+export default MyStyleHeader;

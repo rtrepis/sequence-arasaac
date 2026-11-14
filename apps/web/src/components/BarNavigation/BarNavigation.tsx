@@ -7,7 +7,9 @@ import { FormattedMessage, useIntl } from "react-intl";
 import messages from "./BarNavigation.lang";
 import { Box, Stack } from "@mui/material";
 import NotPrint from "../utils/NotPrint/NotPrint";
-import HideOnScroll from "../utils/HiddenOnScroll/HiddenOnScroll";
+import HideOnScroll, {
+  APP_BAR_HEIGHT,
+} from "../utils/HiddenOnScroll/HiddenOnScroll";
 import React, { useEffect, useState } from "react";
 import TabsEditView from "../TabsEditView/TabsEditView";
 import LogoMenu from "../LogoMenu/LogoMenu";
@@ -76,7 +78,7 @@ const BarNavigation = ({ children }: BarProps): React.ReactElement => {
         {/* HideOnScroll només consumeix el seu propi fill (l'AppBar); escampar-hi
             els children del layout no hi arribava a fer res */}
         <HideOnScroll>
-          <AppBar elevation={1} sx={{ height: "42px" }}>
+          <AppBar elevation={1} sx={{ height: `${APP_BAR_HEIGHT}px` }}>
             <Toolbar
               style={{ minHeight: "50px" }}
               sx={{

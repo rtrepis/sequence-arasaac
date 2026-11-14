@@ -166,9 +166,10 @@ si un estàndard el contradiu, és l'estàndard el que s'ha de corregir.
 
 | Document | Llegir-lo abans de tocar |
 |---|---|
-| `docs/fonaments/03-model-contingut-estil.md` | Nomenclatura (document, seqüència, pictograma, estil, pàgina, preferències), de qui és cada cosa, la cascada d'estil (`resolveStyle`, `diffStyle`) i les accions sobre l'estil: `documentSlice`, `uiSlice.defaultSettings`/`viewSettings`, la targeta, el PDF, la columna de la vista i el panell «Estil del document» |
+| `docs/fonaments/03-model-contingut-estil.md` | Nomenclatura (document, seqüència, pictograma, estil, pàgina, preferències), de qui és cada cosa, la cascada d'estil (`resolveStyle`, `diffStyle`) i les accions sobre l'estil: `documentSlice`, `uiSlice.defaultSettings`/`viewSettings`, la targeta, el PDF, la columna de la vista, els menús «⋯» de pàgina i bloc i el panell «El meu estil» |
 | `docs/fonaments/06-compatibilitat-i-dades.md` | El format `.saac` v3 i `.saacstyle`, la migració dels formats antics, desar i obrir (fitxer i núvol), la descàrrega i el selector de fitxers. Esquema formal: `docs/schema/saac-v3.schema.json` |
 | `docs/decisions/ADR-003-model-document-saac-v3.md` | Per què el format és com és, i què es va descartar. `docs/fonaments/sequencia-i-estil.md` n'és l'antecessor i ara només redirigeix |
+| `docs/decisions/ADR-005-disposicio-lliure.md` | Pàgines i blocs: cada pàgina automàtica o amb plantilla (desada), blocs de seqüència i de text, els estils amb nom (`styles`), el lector que conserva els blocs que no entén, i per què no cal pujar `schemaVersion`. El pla per fases és `docs/PLA-mode-lliure.md` |
 
 ## Índex d'estàndards
 
@@ -207,6 +208,11 @@ al davant hi encaixa.
   troballes L1–L8, de les quals L1–L4 estan resoltes i L5–L8 continuen obertes. La primera de
   les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
   correus diaris de Resend.
+- `docs/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
+  (agenda, passos, primer/després, setmana, taulers, normes, contes, economia de fitxes, menú), a
+  l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en
+  surten. **Consultar-lo abans de dissenyar o canviar una plantilla del mode lliure.** Primera
+  versió: falta validar-ne l'ordre amb usuaris reals.
 - `docs/ESTUDI-seo-noticies.md` és el pla perquè les notícies es trobin als cercadors i es puguin
   compartir: què veu Google avui (una SPA buida sense JavaScript), les pàgines estàtiques, el
   sitemap i les etiquetes per compartir (fase 1), les **guies** pensades per a cerques reals

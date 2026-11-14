@@ -18,3 +18,11 @@ export const mmToPixels = (mm: number, dpi: number): number =>
 /** Píxels a mil·límetres. */
 export const pixelsToMM = (pixels: number, dpi: number): number =>
   (pixels * MM_PER_INCH) / dpi;
+
+/**
+ * Mil·límetres a píxels **sense arrodonir**. Per col·locar caixes dins del
+ * full, on arrodonir cada vora al píxel faria que dues caixes amb el mateix
+ * espai entre elles no quedessin igual separades.
+ */
+export const mmToPixelsExact = (mm: number, dpi: number): number =>
+  (mm * dpi) / MM_PER_INCH;

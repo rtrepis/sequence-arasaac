@@ -4,17 +4,14 @@ const messages = defineMessages({
   sectionPageFormat: {
     id: "pages.viewSequence.section.pageFormat",
     defaultMessage: "Page format",
-    description: "Títol de la secció de format de pàgina a la columna de configuració de la vista",
-  },
-  sectionSequences: {
-    id: "pages.viewSequence.section.sequences",
-    defaultMessage: "Sequences",
-    description: "Títol de la secció d'ajustos per seqüència a la columna de configuració de la vista",
+    description:
+      "Títol de la secció de format de pàgina a la columna de configuració de la vista",
   },
   sectionPrintFooter: {
     id: "pages.viewSequence.section.printFooter",
     defaultMessage: "Print footer",
-    description: "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF",
+    description:
+      "Títol de la secció de l'autor, que només surt al peu del full imprès i del PDF",
   },
   pageSize: {
     id: "pages.viewSequence.pageSize.label",
@@ -54,7 +51,8 @@ const messages = defineMessages({
   },
   licenceHelper: {
     id: "pages.viewSequence.licence.helperText",
-    defaultMessage: "ARASAAC asks that the pictogram authorship and licence be stated.",
+    defaultMessage:
+      "ARASAAC asks that the pictogram authorship and licence be stated.",
     description: "Ajuda de l'interruptor de llicència",
   },
   licenceForcedHelper: {
@@ -80,16 +78,6 @@ const messages = defineMessages({
     id: "pages.viewSequence.fullScreen.label",
     defaultMessage: "Full Screen",
     description: "Setting property",
-  },
-  applyAll: {
-    id: "pages.viewSequence.applyAll.label",
-    defaultMessage: "Apply to all",
-    description: "Toggle to apply settings to all sequences",
-  },
-  sequence: {
-    id: "pages.viewSequence.sequence.label",
-    defaultMessage: "Sequence",
-    description: "Label for sequence selector",
   },
   alignmentH: {
     id: "pages.viewSequence.alignmentH.label",
@@ -125,6 +113,30 @@ const messages = defineMessages({
     id: "pages.viewSequence.tooltip.fullscreen",
     defaultMessage: "Full screen",
     description: "Tooltip del botó de pantalla completa",
+  },
+  tooltipHideSettings: {
+    id: "pages.viewSequence.tooltip.hideSettings",
+    defaultMessage: "Hide view settings",
+    description:
+      "Tooltip i nom accessible del botó que amaga la columna d'ajustos de la pàgina de vista, perquè el full ocupi tota l'amplada",
+  },
+  tooltipShowSettings: {
+    id: "pages.viewSequence.tooltip.showSettings",
+    defaultMessage: "Show view settings",
+    description:
+      "Tooltip i nom accessible del botó que torna a mostrar la columna d'ajustos de la pàgina de vista",
+  },
+  tooltipFitWidth: {
+    id: "pages.viewSequence.tooltip.fitWidth",
+    defaultMessage: "Fit to width",
+    description:
+      "Tooltip i nom accessible del botó que amplia el full a l'amplada de la pantalla; la resta es veu baixant",
+  },
+  tooltipFitPage: {
+    id: "pages.viewSequence.tooltip.fitPage",
+    defaultMessage: "Show the whole page",
+    description:
+      "Tooltip i nom accessible del botó que torna a encabir el full sencer a la pantalla, sense haver de baixar",
   },
   tooltipOrientationLandscape: {
     id: "pages.viewSequence.tooltip.orientationLandscape",
@@ -180,28 +192,11 @@ const messages = defineMessages({
     defaultMessage: "Bottom",
     description: "Tooltip alineació V baix",
   },
-  tooltipApplyAll: {
-    id: "pages.viewSequence.tooltip.applyAll",
-    defaultMessage: "Apply to all sequences",
-    description: "Tooltip del switch d'aplicar a totes les seqüències",
-  },
-  savePreferences: {
-    id: "pages.viewSequence.savePreferences.label",
-    defaultMessage: "Save as preferences",
+  tooltipFullscreenPage: {
+    id: "pages.viewSequence.tooltipFullscreenPage",
+    defaultMessage: "This page full screen",
     description:
-      "Botó que desa els ajustos de la vista com a preferències de l'usuari",
-  },
-  tooltipSavePreferencesCloud: {
-    id: "pages.viewSequence.tooltip.savePreferencesCloud",
-    defaultMessage:
-      "Save these settings to your account and use them by default in new sequences",
-    description: "Tooltip del botó de desar preferències amb sessió iniciada",
-  },
-  tooltipSavePreferencesLocal: {
-    id: "pages.viewSequence.tooltip.savePreferencesLocal",
-    defaultMessage:
-      "Save these settings in this browser and use them by default in new sequences",
-    description: "Tooltip del botó de desar preferències sense sessió",
+      "Botó de la vista que posa la pàgina que es mira (la marcada) a pantalla completa, tan gran com hi càpiga; Esc en surt",
   },
 });
 

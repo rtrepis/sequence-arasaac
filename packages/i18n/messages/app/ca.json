@@ -118,8 +118,8 @@
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.panelHint": {
-    "message": "S'aplica a totes les seqüències d'aquest document.",
-    "description": "Guia del tab de pictogrames del modal de configuracions"
+    "message": "L'estil dels pictogrames amb què neixen els documents nous. Per portar-lo a un document obert, fes servir «Aplica el meu estil» al menú «⋯» d'una pàgina o d'un bloc.",
+    "description": "Ajuda del panell «El meu estil»: és una preferència de l'usuari, no l'estil del document obert, i al document s'hi porta des del menú «⋯» de la vista"
   },
   "components.defaultSettings.sectionPictogram": {
     "message": "Pictograma",
@@ -142,39 +142,32 @@
     "description": "Settings Default"
   },
   "components.defaultSettings.tab.pictograms": {
-    "message": "Estil del document",
-    "description": "Tab del panell «Estil del document»: l'estil que s'aplica a totes les seqüències del document obert"
+    "message": "El meu estil",
+    "description": "Tab del panell «El meu estil»: l'estil dels pictogrames amb què neixen els documents nous i que s'aplica des del menú «⋯» de la vista"
   },
   "components.defaultSettings.tab.user": {
     "message": "Usuari",
     "description": "Tab d'ajustos d'usuari (idioma, compte...)"
   },
   "components.defaultSettings.tab.view": {
-    "message": "Vista",
-    "description": "Tab de configuració per defecte de la visualització de seqüències"
+    "message": "Pàgina i distribució",
+    "description": "Tab de les preferències amb què comencen els documents nous: la pàgina (paper, orientació, disposició) i la distribució dels pictogrames (mida, espai i alineació)"
   },
   "components.defaultSettings.tab.vocabulary": {
     "message": "Vocabulari personal",
     "description": "Tab de vocabulari personal (paraules personalitzades)"
   },
   "components.viewSettingsPanel.panelDescription": {
-    "message": "Configura els valors de visualització per defecte en obrir la pàgina de vista.",
-    "description": "Text explicatiu del panell de configuració de la vista"
+    "message": "La pàgina i la distribució dels pictogrames amb què comencen els documents nous.",
+    "description": "Text explicatiu del panell «Vista» de la configuració: aquests valors només els agafen els documents nous; un document obert no en rep res"
   },
   "components.viewSettingsPanel.sectionPageFormat": {
     "message": "Format de pàgina",
     "description": "Títol de la secció de format de pàgina al panell de vista"
   },
   "components.viewSettingsPanel.sectionPictograms": {
-    "message": "Pictogrames",
-    "description": "Títol de la secció de mida i alineació de pictogrames al panell de vista"
-  },
-  "components.viewSettingsPanel.apply": {
-    "message": "Aplicar a la vista actual",
-    "description": "Botó per aplicar els canvis de visualització a Redux immediatament"
-  },
-  "components.viewSettingsPanel.applyHelper": {
-    "message": "Aplica els valors a la sessió de vista activa sense tancar la configuració."
+    "message": "Distribució dels pictogrames",
+    "description": "Títol de la secció de la distribució dels pictogrames (mida, espai i alineació) al panell «Pàgina i distribució»"
   },
   "components.defaultSettings.userPanel.interfaceLanguage": {
     "message": "Interfície",
@@ -957,9 +950,6 @@
   "pages.viewSequence.alignment.label": {
     "message": "Alineació"
   },
-  "pages.viewSequence.applyAll.label": {
-    "message": "Aplicar a totes"
-  },
   "pages.viewSequence.authSequence.helperText": {
     "message": "Marcar l'autoria",
     "description": "Helper text form"
@@ -1002,9 +992,6 @@
     "message": "Espai de pictogrames",
     "description": "Label form"
   },
-  "pages.viewSequence.sequence.label": {
-    "message": "Seqüència"
-  },
   "pages.viewSequence.sequenceSpaceBetween.label": {
     "message": "Espai de seqüències",
     "description": "Label form"
@@ -1021,20 +1008,6 @@
   },
   "pages.viewSequence.tooltip.alignRight": {
     "message": "Dreta"
-  },
-  "pages.viewSequence.tooltip.applyAll": {
-    "message": "Aplicar a totes les seqüències"
-  },
-  "pages.viewSequence.savePreferences.label": {
-    "message": "Desa com a preferències"
-  },
-  "pages.viewSequence.tooltip.savePreferencesCloud": {
-    "message": "Desa aquests ajustos al teu compte i els fa servir per defecte als documents nous",
-    "description": "Tooltip del botó de desar preferències amb sessió iniciada"
-  },
-  "pages.viewSequence.tooltip.savePreferencesLocal": {
-    "message": "Desa aquests ajustos en aquest navegador i els fa servir per defecte als documents nous",
-    "description": "Tooltip del botó de desar preferències sense sessió"
   },
   "pages.viewSequence.tooltip.orientationLandscape": {
     "message": "Pàgina apaïsada",
@@ -1058,6 +1031,26 @@
   },
   "pages.viewSequence.tooltip.fullscreen": {
     "message": "Pantalla completa"
+  },
+  "pages.viewSequence.tooltipFullscreenPage": {
+    "message": "Aquesta pàgina a pantalla completa",
+    "description": "Botó de la vista que posa la pàgina que es mira (la marcada) a pantalla completa, tan gran com hi càpiga; Esc en surt"
+  },
+  "pages.viewSequence.tooltip.hideSettings": {
+    "message": "Amaga els ajustos de la vista",
+    "description": "Tooltip i nom accessible del botó que amaga la columna d'ajustos de la pàgina de vista, perquè el full ocupi tota l'amplada"
+  },
+  "pages.viewSequence.tooltip.showSettings": {
+    "message": "Mostra els ajustos de la vista",
+    "description": "Tooltip i nom accessible del botó que torna a mostrar la columna d'ajustos de la pàgina de vista"
+  },
+  "pages.viewSequence.tooltip.fitWidth": {
+    "message": "Ajusta a l'amplada",
+    "description": "Tooltip i nom accessible del botó que amplia el full a l'amplada de la pantalla; la resta es veu baixant"
+  },
+  "pages.viewSequence.tooltip.fitPage": {
+    "message": "Mostra el full sencer",
+    "description": "Tooltip i nom accessible del botó que torna a encabir el full sencer a la pantalla, sense haver de baixar"
   },
   "pages.viewSequence.tooltip.orientation": {
     "message": "Orientació de pàgina"
@@ -1354,10 +1347,6 @@
   "pages.viewSequence.section.pageFormat": {
     "message": "Format de pàgina",
     "description": "Títol de la secció de format de pàgina a la columna de configuració de la vista"
-  },
-  "pages.viewSequence.section.sequences": {
-    "message": "Seqüències",
-    "description": "Títol de la secció d'ajustos per seqüència a la columna de configuració de la vista"
   },
   "pages.viewSequence.section.printFooter": {
     "message": "Peu d'impressió",
@@ -2306,72 +2295,32 @@
     "description": "Botó per desfer el canvi d'estil"
   },
   "features.sequence.style.undone": {
-    "message": "S'ha desfet el canvi d'estil",
-    "description": "Confirmació després de desfer un canvi d'estil"
-  },
-  "features.sequence.style.setAsDefault": {
-    "message": "Desa com a estil per defecte",
-    "description": "Botó que fa que un estil sigui el que reben les seqüències noves"
+    "message": "S'ha desfet el canvi",
+    "description": "Confirmació després de desfer un canvi d'estil o de disposició de la pàgina (el snackbar «Desfés» serveix per a tots dos)"
   },
   "features.sequence.style.setAsDefault.success": {
-    "message": "S'ha desat com a estil per defecte",
-    "description": "Confirmació de «Desa com a estil per defecte»"
+    "message": "Ara és el teu estil.",
+    "description": "Confirmació de «Fes-lo el meu estil», en obrir un fitxer d'estil"
   },
   "features.sequence.style.notice.close": {
     "message": "Tanca l'avís",
     "description": "Nom accessible del botó que tanca l'avís d'estil"
   },
-  "features.sequence.style.pendingDefault.body": {
-    "message": "No hi ha cap document obert a què aplicar-lo. Si el fas servir per defecte, els documents nous el rebran en lloc de l'estil que tens ara.",
-    "description": "Explicació de què passa si s'accepta l'estil com a per defecte"
-  },
-  "features.sequence.style.panel.title": {
-    "message": "Estil del document",
-    "description": "Títol del panell d'estil i del botó del bàner que hi porta. L'estil s'aplica a totes les seqüències del document"
-  },
   "components.buttonWithModalDownload.saveStyle": {
     "message": "Desa l'estil",
     "description": "Botó que desa només l'estil de la seqüència en un fitxer .saacstyle"
-  },
-  "features.sequence.style.applyUserDefault": {
-    "message": "Aplica el meu estil per defecte",
-    "description": "Acció que aplica l'estil per defecte de l'usuari al document obert (es pot desfer)"
-  },
-  "features.sequence.style.applyUserDefault.tooltip": {
-    "message": "Torna totes les seqüències del document al teu estil per defecte. Es pot desfer.",
-    "description": "Ajuda del botó «Aplica el meu estil per defecte» de la vista"
-  },
-  "features.sequence.style.loadStyleFile": {
-    "message": "Carrega un estil des d'un fitxer…",
-    "description": "Acció que aplica al document l'estil d'un fitxer .saacstyle o d'un altre document .saac"
-  },
-  "features.sequence.style.saveStyleFile": {
-    "message": "Desa l'estil en un fitxer…",
-    "description": "Acció que obre el diàleg per desar només l'estil del document en un fitxer .saacstyle"
-  },
-  "features.sequence.style.actions": {
-    "message": "Accions d'estil",
-    "description": "Nom accessible del botó «⋯» que obre el menú amb les accions d'estil en mòbil"
-  },
-  "features.sequence.style.changed.userDefault": {
-    "message": "S'ha aplicat el teu estil per defecte al document.",
-    "description": "Snackbar després d'aplicar l'estil per defecte al document"
-  },
-  "features.sequence.style.changed.file": {
-    "message": "S'ha aplicat l'estil del fitxer al document.",
-    "description": "Snackbar després d'aplicar al document l'estil d'un fitxer"
   },
   "components.buttonWithModalDownload.saveDocument": {
     "message": "Desa el document",
     "description": "Botó que desa el document (totes les seqüències) amb el seu estil en un fitxer .saac"
   },
   "components.buttonWithModalDownload.styleDialogTitle": {
-    "message": "Desa l'estil en un fitxer",
-    "description": "Títol del diàleg per desar només l'estil del document"
+    "message": "Desa el meu estil en un fitxer",
+    "description": "Títol del diàleg per desar el meu estil en un fitxer .saacstyle"
   },
   "components.buttonWithModalDownload.styleHelper": {
-    "message": "Només l'aparença del document —fonts, colors, vores, mides i espais—, sense cap seqüència. Es pot aplicar a altres documents.",
-    "description": "Explicació del diàleg per desar només l'estil"
+    "message": "El teu estil —lletra, colors, vores, mides i espais—, sense cap seqüència. El pots carregar en un altre dispositiu o passar-lo a algú altre.",
+    "description": "Explicació del diàleg per desar el meu estil"
   },
   "components.buttonWithModalDownload.whatIsSaved.title": {
     "message": "Què es guarda en un document?",
@@ -2414,8 +2363,8 @@
     "description": "Bàner en obrir un document desat amb una versió anterior de l'app (format antic)"
   },
   "features.sequence.style.notice.withoutStyle": {
-    "message": "No portava estil propi, i hi hem aplicat el teu estil per defecte.",
-    "description": "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer)"
+    "message": "No portava estil propi, i hi hem aplicat el teu estil.",
+    "description": "S'afegeix al bàner de document antic quan el fitxer no portava estil (o no sencer): hi va el meu estil"
   },
   "features.sequence.style.notice.newerVersion": {
     "message": "Aquest document s'ha creat amb una versió més nova de SequenciAAC. Pot ser que alguna cosa no es vegi bé. Si el deses aquí, es podrien perdre canvis.",
@@ -2434,16 +2383,12 @@
     "description": "Títol del diàleg que surt en obrir un fitxer d'estil (.saacstyle) com si fos un document"
   },
   "features.sequence.style.styleFileOpened.body": {
-    "message": "Pots aplicar-lo al document obert, o fer-lo el teu estil per defecte, que és el que reben els documents nous.",
-    "description": "Explicació del diàleg de fitxer d'estil quan hi ha un document obert"
-  },
-  "features.sequence.style.styleFileOpened.apply": {
-    "message": "Aplica'l a aquest document",
-    "description": "Botó que aplica l'estil del fitxer al document obert (es pot desfer)"
+    "message": "Pots fer-lo el teu estil: el reben els documents nous, i el porta a un document «Aplica el meu estil», al menú «⋯» d'una pàgina o d'un bloc.",
+    "description": "Explicació del diàleg que surt en obrir un fitxer d'estil com si fos un document: només es pot fer el meu estil"
   },
   "features.sequence.style.styleFileOpened.makeDefault": {
-    "message": "Fes-lo el meu estil per defecte",
-    "description": "Botó que fa de l'estil del fitxer l'estil per defecte de l'usuari"
+    "message": "Fes-lo el meu estil",
+    "description": "Botó que fa de l'estil del fitxer el meu estil (substitueix el que hi havia)"
   },
   "components.pictEdit.resetDone": {
     "message": "Estil restablert",
@@ -2696,5 +2641,673 @@
   "components.mouseActionList.pasteSourceNoText": {
     "message": "Copiat: un pictograma sense text",
     "description": "Sota «Enganxa», quan el pictograma copiat no té paraula ni text"
+  },
+  "features.freeLayout.addSequence.title": {
+    "message": "Afegeix seqüències a la pàgina {number}",
+    "description": "Títol del diàleg per posar seqüències del document en una pàgina del mode lliure"
+  },
+  "features.freeLayout.addSequence.hint": {
+    "message": "Una seqüència pot sortir a més d'una pàgina. Afegir-la aquí no la treu d'on ja és.",
+    "description": "Explicació a dalt del diàleg per afegir seqüències a una pàgina"
+  },
+  "features.freeLayout.addSequence.pictograms": {
+    "message": "{count, plural, one {# pictograma} other {# pictogrames}}",
+    "description": "Quants pictogrames té una seqüència, a la llista del diàleg"
+  },
+  "features.freeLayout.addSequence.unplaced": {
+    "message": "no és a cap pàgina",
+    "description": "Al diàleg, una seqüència que encara no surt a cap pàgina"
+  },
+  "features.freeLayout.addSequence.onPages": {
+    "message": "{count, plural, one {a la pàgina {pages}} other {a les pàgines {pages}}}",
+    "description": "Al diàleg, les pàgines on ja surt una seqüència: «a les pàgines 1 i 3»"
+  },
+  "features.freeLayout.addSequence.onEveryPage": {
+    "message": "a totes les pàgines",
+    "description": "Al diàleg, una seqüència que ja surt a totes les pàgines"
+  },
+  "features.freeLayout.addSequence.nothingChosen": {
+    "message": "Tria una seqüència com a mínim.",
+    "description": "Avís del diàleg quan es prem «Afegeix» sense haver triat cap seqüència"
+  },
+  "features.freeLayout.addSequence.cancel": {
+    "message": "Cancel·la",
+    "description": "Botó per tancar el diàleg sense afegir res"
+  },
+  "features.freeLayout.addSequence.add": {
+    "message": "Afegeix",
+    "description": "Botó principal del diàleg: posa les seqüències triades a la pàgina"
+  },
+  "features.freeLayout.page.label": {
+    "message": "Pàgina {number} de {total}",
+    "description": "Capçalera de cada pàgina del mode lliure, a sobre del full; no s'imprimeix"
+  },
+  "features.freeLayout.page.addSequence": {
+    "message": "Afegeix una seqüència",
+    "description": "Botó de la capçalera d'una pàgina: obre la llista de seqüències del document per posar-ne a la pàgina"
+  },
+  "features.freeLayout.page.empty": {
+    "message": "Aquesta pàgina és buida",
+    "description": "Text al mig d'una pàgina sense cap seqüència, damunt del botó per afegir-n'hi; no s'imprimeix"
+  },
+  "features.freeLayout.template.full": {
+    "message": "Pàgina sencera",
+    "description": "Plantilla: una sola seqüència que ocupa tota la pàgina"
+  },
+  "features.freeLayout.template.rows2": {
+    "message": "Dues en files",
+    "description": "Plantilla: dues seqüències, una sota l'altra"
+  },
+  "features.freeLayout.template.columns2": {
+    "message": "Dues en columnes",
+    "description": "Plantilla: dues seqüències, l'una al costat de l'altra"
+  },
+  "features.freeLayout.template.rows3": {
+    "message": "Tres en files",
+    "description": "Plantilla: tres seqüències, una sota l'altra"
+  },
+  "features.freeLayout.template.grid2x2": {
+    "message": "Quatre (2 × 2)",
+    "description": "Plantilla: quatre seqüències en dues files i dues columnes"
+  },
+  "features.freeLayout.template.stripTop": {
+    "message": "Tira a dalt i gran a sota",
+    "description": "Plantilla: una franja estreta a dalt i un espai gran a sota"
+  },
+  "features.freeLayout.template.agendaStrip": {
+    "message": "Agenda en tira",
+    "description": "Plantilla (R3): una tira estreta i llarga al mig del full, per a l'agenda del dia"
+  },
+  "features.freeLayout.template.todayAgenda": {
+    "message": "Avui és + agenda",
+    "description": "Plantilla (R3): un rètol a dalt («Avui és…») i l'agenda del dia a sota"
+  },
+  "features.freeLayout.template.firstThen": {
+    "message": "Primer / Després",
+    "description": "Plantilla (R3): dos espais iguals, l'un al costat de l'altre, amb els rètols «Primer» i «Després»"
+  },
+  "features.freeLayout.template.week": {
+    "message": "Setmana",
+    "description": "Plantilla (R3): cinc columnes, de dilluns a divendres, amb el nom del dia a dalt"
+  },
+  "features.freeLayout.template.tokenBoard": {
+    "message": "Economia de fitxes",
+    "description": "Plantilla (R3): el rètol «Treballo per…», una tira per a les fitxes i un espai gran per al premi"
+  },
+  "features.freeLayout.template.storyPage": {
+    "message": "Pàgina de conte",
+    "description": "Plantilla (R3): tres frases d'un conte o d'una història social, una sota l'altra"
+  },
+  "features.freeLayout.template.menu": {
+    "message": "Menú",
+    "description": "Plantilla (R3): el menú del menjador, amb tres franges (primer plat, segon plat i postres) i el seu rètol"
+  },
+  "features.freeLayout.template.free": {
+    "message": "Lliure",
+    "description": "Nom del repartiment lliure d'una pàgina: cada bloc on l'usuari l'ha posat"
+  },
+  "features.freeLayout.slotText.today": {
+    "message": "Avui és",
+    "description": "Text amb què neix el rètol de la plantilla «Avui és + agenda». Després l'usuari el pot canviar"
+  },
+  "features.freeLayout.slotText.first": {
+    "message": "Primer",
+    "description": "Text amb què neix el primer rètol de la plantilla «Primer / Després»"
+  },
+  "features.freeLayout.slotText.then": {
+    "message": "Després",
+    "description": "Text amb què neix el segon rètol de la plantilla «Primer / Després»"
+  },
+  "features.freeLayout.slotText.monday": {
+    "message": "Dilluns",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.tuesday": {
+    "message": "Dimarts",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.wednesday": {
+    "message": "Dimecres",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.thursday": {
+    "message": "Dijous",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.friday": {
+    "message": "Divendres",
+    "description": "Rètol d'un dia a la plantilla «Setmana»"
+  },
+  "features.freeLayout.slotText.workingFor": {
+    "message": "Treballo per…",
+    "description": "Text amb què neix el rètol de la plantilla «Economia de fitxes», damunt del premi"
+  },
+  "features.freeLayout.slotText.firstCourse": {
+    "message": "Primer plat",
+    "description": "Rètol de la primera franja de la plantilla «Menú»"
+  },
+  "features.freeLayout.slotText.secondCourse": {
+    "message": "Segon plat",
+    "description": "Rètol de la segona franja de la plantilla «Menú»"
+  },
+  "features.freeLayout.slotText.dessert": {
+    "message": "Postres",
+    "description": "Rètol de la tercera franja de la plantilla «Menú»"
+  },
+  "features.freeLayout.textBlock.label": {
+    "message": "Rètol: {text}{common, select, true {, a totes les pàgines} other {}}",
+    "description": "Nom accessible d'un rètol (bloc de text) damunt del full, que el selecciona. `common` diu si surt a totes les pàgines"
+  },
+  "features.freeLayout.textBlock.empty": {
+    "message": "Rètol buit",
+    "description": "Nom d'un rètol sense text, a la columna i al full"
+  },
+  "features.freeLayout.textBlock.actions": {
+    "message": "Accions del rètol «{text}»",
+    "description": "Nom accessible del botó «⋯» d'un rètol damunt del full"
+  },
+  "features.freeLayout.guide.text": {
+    "message": "Rètol",
+    "description": "Marca damunt d'un espai de rètol, mentre es previsualitza una plantilla a la pàgina; no s'imprimeix"
+  },
+  "features.freeLayout.page.addBlock": {
+    "message": "Afegeix un bloc",
+    "description": "Botó de la capçalera d'una pàgina en blocs, i títol del grup del menú de la pàgina, per afegir-hi un bloc de seqüència o de text"
+  },
+  "features.freeLayout.page.addSequenceBlock": {
+    "message": "Bloc de seqüència…",
+    "description": "Opció per afegir un bloc amb una seqüència del document a la pàgina; obre la llista de seqüències"
+  },
+  "features.freeLayout.page.addTextBlock": {
+    "message": "Bloc de text",
+    "description": "Opció per afegir un rètol (un text sol, sense pictograma) a la pàgina"
+  },
+  "features.freeLayout.page.textBlockAdded": {
+    "message": "S'ha afegit un bloc de text a la pàgina {number}. Escriu-hi a la columna.",
+    "description": "Missatge després d'afegir un rètol a una pàgina: queda seleccionat i el text s'escriu a la columna d'ajustos"
+  },
+  "features.freeLayout.page.layoutSection": {
+    "message": "Disposició",
+    "description": "Títol del grup del menú d'una pàgina on es tria la disposició: simple, columnes, files o lliure"
+  },
+  "features.freeLayout.page.modeContinuous": {
+    "message": "Simple",
+    "description": "Opció del menú d'una pàgina: les seqüències una darrere l'altra, com sempre"
+  },
+  "features.freeLayout.page.arrangementTag": {
+    "message": "{kind, select, continuous {Simple} columns {Columnes · {n}} rows {Files · {n}} free {Lliure} other {{name}}}",
+    "description": "Etiqueta de la capçalera d'una pàgina que diu com es reparteix: simple, N columnes, N files, lliure o el nom de la plantilla (`name`)"
+  },
+  "features.freeLayout.page.arrangementHint": {
+    "message": "{kind, select, continuous {Afegir una seqüència la posa al final.} columns {Afegir un bloc hi posa una columna més.} rows {Afegir un bloc hi posa una fila més.} free {Afegir un bloc el posa a l'espai buit més gran, sense moure els altres.} other {Afegir un bloc omple el primer espai buit; si no n'hi ha, la pàgina passa a lliure.}}",
+    "description": "Tooltip de l'etiqueta del repartiment de la pàgina: què passarà en afegir-hi un bloc"
+  },
+  "features.freeLayout.page.previousPage": {
+    "message": "Pàgina anterior",
+    "description": "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina anterior (també es pot lliscar)"
+  },
+  "features.freeLayout.page.nextPage": {
+    "message": "Pàgina següent",
+    "description": "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina següent (també es pot lliscar)"
+  },
+  "features.freeLayout.page.chooseTemplate": {
+    "message": "Plantilla…",
+    "description": "Opció del menú d'una pàgina que obre les plantilles amb miniatura"
+  },
+  "features.freeLayout.page.templatesTitle": {
+    "message": "Plantilles de la pàgina {number}",
+    "description": "Títol de la finestra de plantilles que s'obre des del menú d'una pàgina"
+  },
+  "features.freeLayout.emptySlot.label": {
+    "message": "Espai buit {number}",
+    "description": "Nom d'un espai lliure de la plantilla, damunt del full, amb els botons per omplir-lo; no s'imprimeix"
+  },
+  "features.freeLayout.emptySlot.addText": {
+    "message": "Afegeix text",
+    "description": "Botó d'un espai buit del full que hi posa un rètol"
+  },
+  "features.freeLayout.emptySlot.addSequence": {
+    "message": "Afegeix una seqüència",
+    "description": "Botó d'un espai buit del full que hi posa una seqüència del document"
+  },
+  "features.freeLayout.page.moreActions": {
+    "message": "Més accions de la pàgina",
+    "description": "Nom accessible i tooltip del botó de més accions d'una pàgina (duplicar, moure, esborrar)"
+  },
+  "features.freeLayout.page.duplicate": {
+    "message": "Duplica la pàgina",
+    "description": "Acció del menú d'una pàgina"
+  },
+  "features.freeLayout.page.moveUp": {
+    "message": "Mou la pàgina amunt",
+    "description": "Acció del menú d'una pàgina: la passa davant de l'anterior"
+  },
+  "features.freeLayout.page.moveDown": {
+    "message": "Mou la pàgina avall",
+    "description": "Acció del menú d'una pàgina: la passa darrere de la següent"
+  },
+  "features.freeLayout.page.delete": {
+    "message": "Esborra la pàgina",
+    "description": "Acció del menú d'una pàgina: n'esborra la pàgina, no les seqüències, i es pot desfer"
+  },
+  "features.freeLayout.page.add": {
+    "message": "Afegeix una pàgina",
+    "description": "Botó al final de les pàgines del mode lliure"
+  },
+  "features.freeLayout.placement.label": {
+    "message": "{name}, {count, plural, one {# pictograma} other {# pictogrames}}{common, select, true {, a totes les pàgines} other {}}",
+    "description": "Nom accessible d'un bloc del mode lliure, que el selecciona. `common` diu si surt a totes les pàgines"
+  },
+  "features.freeLayout.placement.tooSmall": {
+    "message": "Els pictogrames hi queden massa petits",
+    "description": "Avís damunt d'una caixa on els pictogrames queden per sota de la mida mínima; no s'imprimeix"
+  },
+  "features.freeLayout.placement.commonMark": {
+    "message": "A totes les pàgines",
+    "description": "Marca damunt d'una caixa que surt a totes les pàgines; no s'imprimeix"
+  },
+  "features.freeLayout.placement.onEveryPage": {
+    "message": "A totes les pàgines",
+    "description": "Opció del menú d'una caixa: la seqüència surt a totes les pàgines, al mateix lloc"
+  },
+  "features.freeLayout.placement.copyToPage": {
+    "message": "Copia a la pàgina",
+    "description": "Títol de la llista del menú d'una caixa per fer-ne una còpia independent en una altra pàgina"
+  },
+  "features.freeLayout.placement.pageNumber": {
+    "message": "Pàgina {number}",
+    "description": "Una pàgina, a les llistes del menú d'una caixa"
+  },
+  "features.freeLayout.placement.removeFromPage": {
+    "message": "Treu d'aquesta pàgina",
+    "description": "Acció del menú d'una caixa: la treu d'aquesta pàgina; la seqüència continua al document"
+  },
+  "features.freeLayout.placement.removeFromEveryPage": {
+    "message": "Treu de totes les pàgines",
+    "description": "Acció del menú d'una caixa que surt a totes les pàgines: la treu de totes"
+  },
+  "features.freeLayout.sequence.name": {
+    "message": "Seqüència {number}",
+    "description": "Nom d'una seqüència que no en té cap de propi: el número de la seva pestanya"
+  },
+  "features.freeLayout.feedback.pageAdded": {
+    "message": "S'ha afegit la pàgina {number}",
+    "description": "Confirmació d'haver afegit una pàgina"
+  },
+  "features.freeLayout.feedback.pageDuplicated": {
+    "message": "Pàgina duplicada com a pàgina {number}",
+    "description": "Confirmació d'haver duplicat una pàgina"
+  },
+  "features.freeLayout.feedback.pageMoved": {
+    "message": "Ara és la pàgina {number}",
+    "description": "Confirmació d'haver mogut una pàgina"
+  },
+  "features.freeLayout.feedback.copiedToPage": {
+    "message": "S'ha copiat {name} a la pàgina {number}",
+    "description": "Confirmació d'haver copiat una seqüència a una altra pàgina"
+  },
+  "features.freeLayout.feedback.madeCommon": {
+    "message": "{name} surt ara a totes les pàgines",
+    "description": "Confirmació d'haver posat una seqüència a totes les pàgines"
+  },
+  "features.freeLayout.settings.unplaced": {
+    "message": "Sense col·locar",
+    "description": "Títol de la fila amb les seqüències del document que no surten a cap pàgina"
+  },
+  "features.freeLayout.settings.unplacedHint": {
+    "message": "No s'imprimeixen: posa-les a la pàgina que mires amb el botó de cada una, o amb «Afegeix una seqüència».",
+    "description": "Explicació sota el nombre de seqüències sense col·locar, damunt de la llista amb el botó de cada una"
+  },
+  "features.sequence.style.changed.layoutTemplate": {
+    "message": "S'ha aplicat la plantilla a la pàgina.",
+    "description": "Snackbar amb «Desfés» en aplicar una plantilla a una pàgina del mode lliure"
+  },
+  "features.sequence.style.changed.layoutAddSequences": {
+    "message": "S'han afegit les seqüències i s'ha tornat a repartir la pàgina.",
+    "description": "Snackbar amb «Desfés» en afegir seqüències a una pàgina del mode lliure, que es torna a repartir"
+  },
+  "features.sequence.style.changed.layoutRemoveSheet": {
+    "message": "S'ha esborrat la pàgina. Les seqüències continuen al document.",
+    "description": "Snackbar amb «Desfés» en esborrar una pàgina del mode lliure"
+  },
+  "features.sequence.style.changed.layoutRemovePlacement": {
+    "message": "S'ha tret de la pàgina. La seqüència continua al document.",
+    "description": "Snackbar amb «Desfés» en treure una seqüència d'una pàgina del mode lliure"
+  },
+  "features.sequence.style.changed.layoutUncommon": {
+    "message": "Ara només surt en aquesta pàgina.",
+    "description": "Snackbar amb «Desfés» en deixar de posar una seqüència a totes les pàgines"
+  },
+  "features.print.pdf.generatingPage": {
+    "message": "S'està generant el PDF: pàgina {number} de {total}…",
+    "description": "Missatge del backdrop mentre es genera un PDF de diverses pàgines (mode lliure)"
+  },
+  "features.freeLayout.beforePrint.title": {
+    "message": "Abans d'imprimir",
+    "description": "Títol de l'avís que surt abans d'imprimir o descarregar el PDF en mode lliure, si hi ha alguna cosa que potser no s'esperava"
+  },
+  "features.freeLayout.beforePrint.unplaced": {
+    "message": "{count, plural, one {# seqüència no surt a cap pàgina i no s'imprimirà.} other {# seqüències no surten a cap pàgina i no s'imprimiran.}}",
+    "description": "Avís abans d'imprimir: quantes seqüències no surten a cap pàgina"
+  },
+  "features.freeLayout.beforePrint.emptyPages": {
+    "message": "{count, plural, one {La pàgina {pages} és buida.} other {Les pàgines {pages} són buides.}}",
+    "description": "Avís abans d'imprimir: quines pàgines no tenen res; sortiran en blanc"
+  },
+  "features.freeLayout.beforePrint.cancel": {
+    "message": "Cancel·la",
+    "description": "Tanca l'avís sense imprimir, per arreglar-ho abans"
+  },
+  "features.freeLayout.beforePrint.printAnyway": {
+    "message": "Imprimeix igualment",
+    "description": "Imprimeix tal com està, malgrat l'avís"
+  },
+  "features.freeLayout.beforePrint.downloadAnyway": {
+    "message": "Descarrega igualment",
+    "description": "Descarrega el PDF tal com està, malgrat l'avís"
+  },
+  "features.freeLayout.blockSettingsLink": {
+    "message": "Ajustos del bloc",
+    "description": "Al mòbil, damunt del full amb un bloc seleccionat: baixa fins als ajustos del bloc, a la columna de sota"
+  },
+  "features.freeLayout.placement.actions": {
+    "message": "Accions de {name}",
+    "description": "Nom accessible i tooltip del botó d'un bloc, a dalt a la dreta, que obre el seu menú"
+  },
+  "pages.viewSequence.levels.crumbs": {
+    "message": "On s'apliquen aquests ajustos",
+    "description": "Nom accessible de les molles de dalt de la columna de la vista (Document › Pàgina 2 › Bloc)"
+  },
+  "pages.viewSequence.levels.document": {
+    "message": "Document",
+    "description": "Títol del primer nivell de la columna de la vista: el que s'aplica a tot el document"
+  },
+  "pages.viewSequence.levels.documentScope": {
+    "message": "S'aplica a totes les pàgines",
+    "description": "Sota el títol «Document» de la columna de la vista"
+  },
+  "pages.viewSequence.levels.pageScope": {
+    "message": "{total, plural, one {S'aplica a la pàgina} other {S'aplica només a la pàgina {number}}}",
+    "description": "Sota el títol «Pàgina N de M» de la columna de la vista. Amb una sola pàgina, no cal dir quina"
+  },
+  "pages.viewSequence.levels.noSelection": {
+    "message": "Clica {unit, select, sequences {una seqüència} other {un bloc}} del full per veure'n els ajustos.",
+    "description": "Sota «Cap seqüència / bloc seleccionat»: com s'hi arriba"
+  },
+  "pages.viewSequence.levels.landscapeShort": {
+    "message": "apaïsat",
+    "description": "Resum del nivell «Document» plegat, després de la mida del paper («A4 apaïsat»)"
+  },
+  "pages.viewSequence.levels.portraitShort": {
+    "message": "vertical",
+    "description": "Resum del nivell «Document» plegat, després de la mida del paper («A4 vertical»)"
+  },
+  "pages.viewSequence.levels.directionRowShort": {
+    "message": "Simple, en files",
+    "description": "Resum del nivell «Pàgina» plegat, en una pàgina simple: les seqüències van en files"
+  },
+  "pages.viewSequence.levels.directionColumnShort": {
+    "message": "Simple, en columnes",
+    "description": "Resum del nivell «Pàgina» plegat, en una pàgina simple: les seqüències van en columnes"
+  },
+  "features.freeLayout.levels.noTemplate": {
+    "message": "Sense plantilla",
+    "description": "Al selector de plantilla de la pàgina, quan la pàgina no en té cap de les que l'app ofereix"
+  },
+  "features.freeLayout.levels.blockScope": {
+    "message": "{common, select, true {S'aplica només a aquest bloc, a totes les pàgines} other {S'aplica només a aquest bloc}}",
+    "description": "Sota el nom del bloc seleccionat, al nivell «Bloc» de la columna de la vista"
+  },
+  "features.freeLayout.levels.sequenceScope": {
+    "message": "S'aplica només a aquesta seqüència",
+    "description": "Sota el nom de la seqüència seleccionada, al nivell «Bloc», a la disposició automàtica"
+  },
+  "features.freeLayout.levels.sizeTooSmall": {
+    "message": "El bloc és massa petit: en surten de {mm} mm. Fes-lo més gran o tria unes altres columnes.",
+    "description": "Ajuda de la mida d'un bloc quan hi queden massa petits"
+  },
+  "features.freeLayout.levels.putOnPage": {
+    "message": "A la pàgina {number}",
+    "description": "Botó al costat de cada seqüència sense col·locar: la posa a la pàgina que segueix la columna"
+  },
+  "features.freeLayout.levels.putOnPageLabel": {
+    "message": "Posa {name} a la pàgina {number}",
+    "description": "Nom accessible del botó que posa una seqüència sense col·locar a la pàgina que segueix la columna"
+  },
+  "features.freeLayout.levels.templateLossTitle": {
+    "message": "Apliques «{name}» a la pàgina {number}?",
+    "description": "Títol de l'avís abans d'aplicar una plantilla on no hi caben tots els blocs de la pàgina"
+  },
+  "features.freeLayout.levels.templateLossBody": {
+    "message": "{count, plural, one {Un bloc no hi cap i sortirà d'aquesta pàgina} other {# blocs no hi caben i sortiran d'aquesta pàgina}}: {blocks}. Les seqüències continuen al document, i es pot desfer.",
+    "description": "Cos de l'avís abans d'aplicar una plantilla: quins blocs (noms de seqüència o text de rètols) surten de la pàgina"
+  },
+  "features.freeLayout.levels.templateLossConfirm": {
+    "message": "Aplica-la",
+    "description": "Botó de l'avís que aplica la plantilla tot i que alguns blocs surten de la pàgina"
+  },
+  "features.freeLayout.levels.templateHelp": {
+    "message": "Passa per damunt d'una plantilla, o mantén-la premuda, per veure-la a la pàgina. El clic l'aplica.",
+    "description": "Ajuda sota el selector de plantilles del nivell «Pàgina»: com es previsualitza i com s'aplica"
+  },
+  "features.freeLayout.levels.templateLandscape": {
+    "message": "Millor apaïsat",
+    "description": "Al selector de plantilles, al costat del nom d'una plantilla que queda millor en paper apaïsat (la setmana, «Primer / Després»)"
+  },
+  "features.freeLayout.levels.kindText": {
+    "message": "Rètol",
+    "description": "Tipus del tercer nivell de la columna de la vista quan el que hi ha seleccionat és un rètol (un text sol, sense pictograma)"
+  },
+  "features.freeLayout.levels.text": {
+    "message": "Text",
+    "description": "Títol de la fila on s'escriu el text d'un rètol, al nivell «Rètol» de la columna"
+  },
+  "features.freeLayout.levels.fontSize": {
+    "message": "Mida de la lletra",
+    "description": "Títol de la fila de la mida de la lletra d'un rètol"
+  },
+  "features.freeLayout.levels.bold": {
+    "message": "Negreta",
+    "description": "Títol de la fila de l'interruptor de negreta d'un rètol"
+  },
+  "pages.viewSequence.levels.untitled": {
+    "message": "Aquest document",
+    "description": "Nom del nivell «Document» de la columna de la vista quan el document encara no té títol"
+  },
+  "pages.viewSequence.levels.kindPage": {
+    "message": "Pàgina",
+    "description": "Tipus del segon nivell de la columna de la vista, a sobre de «Pàgina 2 de 3»"
+  },
+  "pages.viewSequence.levels.kindBlock": {
+    "message": "{unit, select, sequences {Seqüència} other {Bloc}}",
+    "description": "Tipus del tercer nivell de la columna de la vista: seqüència en una pàgina simple, bloc en una pàgina en blocs"
+  },
+  "pages.viewSequence.levels.noBlock": {
+    "message": "{unit, select, sequences {Cap seqüència seleccionada} other {Cap bloc seleccionat}}",
+    "description": "Nom del tercer nivell quan no hi ha res seleccionat: seqüència (pàgina simple) o bloc (pàgina en blocs)"
+  },
+  "features.freeLayout.levels.pictograms": {
+    "message": "Distribució dels pictogrames",
+    "description": "Secció del nivell «Pàgina» de la columna de la vista: la distribució dels pictogrames (mida, espai i alineació) dels blocs de la pàgina"
+  },
+  "features.freeLayout.levels.uniform": {
+    "message": "La mateixa a {unit, select, sequences {totes les seqüències} other {tots els blocs}}",
+    "description": "Interruptor del nivell «Pàgina»: totes les seqüències (pàgina simple) o tots els blocs (pàgina en blocs) amb la mateixa mida, espai i alineació. `unit` és sequences o blocks"
+  },
+  "features.freeLayout.levels.mode": {
+    "message": "Disposició",
+    "description": "Títol de la fila del nivell «Pàgina» on es tria la disposició: simple (com sempre), columnes, files o lliure"
+  },
+  "features.freeLayout.levels.modeAuto": {
+    "message": "Simple: les seqüències una darrere l'altra, com sempre",
+    "description": "Nom accessible i tooltip de l'opció «Simple» de la pàgina"
+  },
+  "features.freeLayout.levels.modeAutoHelp": {
+    "message": "Simple: les seqüències van una darrere l'altra, com sempre.",
+    "description": "Ajuda sota la fila de disposició de la pàgina, en simple"
+  },
+  "features.freeLayout.levels.modeBlocksHelp": {
+    "message": "Columnes, files o lliure: cada seqüència és un bloc amb el seu lloc a la pàgina.",
+    "description": "Ajuda sota la fila «Disposició» de la pàgina, quan va en blocs (columnes, files o lliure)"
+  },
+  "features.freeLayout.levels.byColumns": {
+    "message": "En columnes",
+    "description": "Nom accessible i tooltip: els blocs de la pàgina en columnes"
+  },
+  "features.freeLayout.levels.byRows": {
+    "message": "En files",
+    "description": "Nom accessible i tooltip: els blocs de la pàgina en files"
+  },
+  "features.freeLayout.levels.byFree": {
+    "message": "Lliure: cada bloc on el poses",
+    "description": "Botó del repartiment d'una pàgina en blocs: els blocs no segueixen cap graella; un bloc nou va a l'espai buit més gran, sense moure els altres"
+  },
+  "features.freeLayout.levels.newTag": {
+    "message": "Nou",
+    "description": "Etiqueta al costat d'un ajust nou de la columna («Disposició»)"
+  },
+  "features.freeLayout.levels.templates": {
+    "message": "Plantilles",
+    "description": "Títol de la graella de plantilles amb miniatura, sota el repartiment d'una pàgina en blocs"
+  },
+  "features.freeLayout.levels.columnCount": {
+    "message": "Columnes",
+    "description": "Títol de la fila amb quantes columnes de blocs té la pàgina"
+  },
+  "features.freeLayout.levels.rowCount": {
+    "message": "Files",
+    "description": "Títol de la fila amb quantes files de blocs té la pàgina"
+  },
+  "features.freeLayout.levels.arrangementSummary": {
+    "message": "{kind, select, columns {{n, plural, one {# columna} other {# columnes}}} other {{n, plural, one {# fila} other {# files}}}}",
+    "description": "Resum del repartiment d'una pàgina en blocs: quantes columnes o files"
+  },
+  "features.freeLayout.levels.blocksSummary": {
+    "message": "{arrangement} · {count, plural, one {# bloc} other {# blocs}}",
+    "description": "Resum del nivell «Pàgina» plegat, en blocs: la disposició (columnes, files, lliure o la plantilla) i quants blocs té"
+  },
+  "features.freeLayout.levels.gridName": {
+    "message": "Graella {columns} × {rows}",
+    "description": "Nom d'una plantilla de graella que no en té cap de propi"
+  },
+  "features.freeLayout.levels.licenceOn": {
+    "message": "A quines pàgines",
+    "description": "Fila del peu d'impressió, amb diverses pàgines: si el peu de llicència va a totes les pàgines o només a l'última"
+  },
+  "features.freeLayout.levels.licenceOnEvery": {
+    "message": "A totes",
+    "description": "Opció: el peu de llicència a totes les pàgines"
+  },
+  "features.freeLayout.levels.licenceOnLast": {
+    "message": "Només a l'última",
+    "description": "Opció: el peu de llicència només a l'última pàgina"
+  },
+  "pages.viewSequence.levels.documentPages": {
+    "message": "{count, plural, one {# pàgina} other {# pàgines}}",
+    "description": "Resum del nivell «Document» plegat, després del paper: quantes pàgines té el document"
+  },
+  "features.freeLayout.levels.uniformApplied": {
+    "message": "Ara {unit, select, sequences {totes les seqüències} other {tots els blocs}} de la pàgina tenen la mida, l'espai i l'alineació {unit, select, sequences {de la més petita} other {del més petit}}: {name}.",
+    "description": "Snackbar en activar «La mateixa…»: totes les seqüències o blocs de la pàgina passen a tenir la configuració de la més petita, que es diu (`name`)"
+  },
+  "features.freeLayout.levels.columns": {
+    "message": "Columnes",
+    "description": "Títol de la fila del nivell «Bloc»: en quantes columnes van els pictogrames de dins del bloc"
+  },
+  "features.freeLayout.levels.columnsAuto": {
+    "message": "Automàtiques",
+    "description": "Opció de «Columnes» del bloc: les que demana el repartiment de la pàgina"
+  },
+  "features.freeLayout.levels.columnsHelp": {
+    "message": "Quants pictogrames per fila dins del bloc.",
+    "description": "Ajuda sota les columnes d'un bloc: quants pictogrames hi ha a cada fila de dins del bloc"
+  },
+  "components.defaultSettings.myStyle.title": {
+    "message": "El meu estil",
+    "description": "Títol del panell «El meu estil» de la configuració: l'estil dels pictogrames de l'usuari"
+  },
+  "components.defaultSettings.myStyle.loadFile": {
+    "message": "Carrega un estil des d'un fitxer…",
+    "description": "Acció del panell «El meu estil»: l'estil d'un fitxer .saacstyle (o d'un document .saac) passa a ser el meu estil"
+  },
+  "components.defaultSettings.myStyle.saveFile": {
+    "message": "Desa el meu estil en un fitxer…",
+    "description": "Acció del panell «El meu estil»: desa el meu estil en un fitxer .saacstyle"
+  },
+  "components.defaultSettings.myStyle.actions": {
+    "message": "Accions del meu estil",
+    "description": "Nom accessible del botó «⋯» que obre el menú amb les accions del panell «El meu estil» al mòbil"
+  },
+  "features.sequence.style.loadedMyStyle": {
+    "message": "S'ha carregat l'estil del fitxer com el teu estil.",
+    "description": "Snackbar després de «Carrega un estil des d'un fitxer…» al panell «El meu estil»"
+  },
+  "features.sequence.style.changed.myStyleSheet": {
+    "message": "S'ha aplicat el teu estil a la pàgina.",
+    "description": "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'una pàgina"
+  },
+  "features.sequence.style.changed.myStyleBlock": {
+    "message": "S'ha aplicat el teu estil al bloc.",
+    "description": "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'un bloc"
+  },
+  "features.freeLayout.applyMyStyle": {
+    "message": "Aplica el meu estil",
+    "description": "Acció del menú «⋯» d'una pàgina o d'un bloc: hi copia el meu estil de pictogrames (es pot desfer)"
+  },
+  "features.freeLayout.myStyleName": {
+    "message": "El meu estil",
+    "description": "Nom de l'estil que «Aplica el meu estil» copia al document. Queda escrit al fitxer com a contingut i no es torna a traduir"
+  },
+  "features.freeLayout.page.modeColumns": {
+    "message": "Columnes",
+    "description": "Opció de la disposició al menú d'una pàgina: els blocs repartits en columnes"
+  },
+  "features.freeLayout.page.modeRows": {
+    "message": "Files",
+    "description": "Opció de la disposició al menú d'una pàgina: els blocs repartits en files"
+  },
+  "features.freeLayout.page.modeFree": {
+    "message": "Lliure",
+    "description": "Opció de la disposició al menú d'una pàgina: cada bloc on l'usuari el posa"
+  },
+  "features.freeLayout.updateMyStyle": {
+    "message": "Actualitza amb el meu estil",
+    "description": "Acció del menú «⋯» d'una pàgina o d'un bloc que ja fan servir un estil de bloc: aquell estil passa a ser el meu estil d'ara, i canvien tots els blocs que el fan servir (es pot desfer)"
+  },
+  "features.freeLayout.removeBlockStyle": {
+    "message": "Treu l'estil de bloc",
+    "description": "Acció del menú «⋯» d'un bloc amb estil de bloc: el bloc torna a l'estil del document (es pot desfer)"
+  },
+  "features.freeLayout.levels.blockStyle": {
+    "message": "Estil de bloc",
+    "description": "Títol de la fila del nivell «Bloc»: quin estil de bloc (l'estil dels pictogrames que poden compartir diversos blocs) fa servir el bloc"
+  },
+  "features.freeLayout.levels.blockStyleNone": {
+    "message": "L'estil del document",
+    "description": "Valor de la fila «Estil de bloc» quan el bloc no en fa servir cap: es pinta amb l'estil del document"
+  },
+  "features.freeLayout.levels.blockStyleNoneHelp": {
+    "message": "Per donar-li el teu estil, «Aplica el meu estil», al menú del bloc.",
+    "description": "Ajuda sota «Estil de bloc» quan el bloc no en té: on es fa (el menú «⋯» del bloc, al full)"
+  },
+  "features.freeLayout.levels.blockStyleShared": {
+    "message": "{count, plural, one {Només el fa servir aquest bloc.} other {El fan servir # blocs: «Actualitza amb el meu estil», al menú del bloc, els canvia tots.}}",
+    "description": "Ajuda sota «Estil de bloc» quan el bloc en té un: quants blocs el comparteixen (`count`) i, si són més d'un, que «Actualitza amb el meu estil» els canvia tots"
+  },
+  "features.sequence.style.changed.myStyleUpdate": {
+    "message": "S'ha actualitzat l'estil de bloc amb el teu estil, a tots els blocs que el fan servir.",
+    "description": "Snackbar amb «Desfés» després d'«Actualitza amb el meu estil» del menú «⋯» d'una pàgina o d'un bloc"
+  },
+  "features.sequence.style.changed.blockStyleRemove": {
+    "message": "S'ha tret l'estil de bloc: el bloc torna a l'estil del document.",
+    "description": "Snackbar amb «Desfés» després de «Treu l'estil de bloc» del menú «⋯» d'un bloc"
+  },
+  "components.viewSettingsPanel.dispositionHelp": {
+    "message": "Com comença la primera pàgina d'un document nou, i les pàgines que s'hi afegeixen.",
+    "description": "Ajuda sota la fila «Disposició» del panell «Pàgina i distribució»: és la disposició (simple, columnes, files o lliure) de la primera pàgina dels documents nous i de les pàgines que s'hi afegeixen"
+  },
+  "components.viewSettingsPanel.previewSequences": {
+    "message": "Seqüències de la mostra",
+    "description": "Nom accessible del grup de caselles, sota la mostra del panell «Pàgina i distribució», que mostren o amaguen cadascuna de les tres seqüències de la mostra (no es desa)"
   }
 }

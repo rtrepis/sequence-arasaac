@@ -4,7 +4,11 @@
 // resolen amb la mateixa cascada que fa servir la targeta, i el que el fitxer
 // porta i l'app no fa servir es guarda a `saacExtra` per tornar-lo a escriure.
 import type {
+  DocumentPages,
   DocumentSAAC,
+  DocumentSheet,
+  NamedStyle,
+  PagePlacement,
   SequenceStyle,
   SequenceViewSettings,
 } from "@/types/document";
@@ -14,12 +18,15 @@ import type {
   SaacExtraFields,
 } from "@/types/sequence";
 import type { DefaultSettings } from "@/types/ui";
-import { mergeDeep, resolveCardStyle } from "./cascade";
+import { isPlainObject, mergeDeep, resolveCardStyle } from "./cascade";
 import type { FitzgeraldCategoryColors } from "./fitzgerald";
 import { PICTOGRAM_VARIANTS } from "./types";
 import type {
   PictogramVariant,
   SaacDocumentV3,
+  V3Block,
+  V3ForeignBlock,
+  V3NamedStyle,
   V3Pictogram,
   V3Style,
   V3View,
@@ -47,6 +54,7 @@ const ROOT_KEYS = [
   "page",
   "style",
   "sequences",
+  "styles",
   "assets",
   "ui",
 ] as const;
@@ -56,6 +64,43 @@ export const PAGE_KEYS = [
   "orientation",
   "direction",
   "sequenceGap",
+  "layout",
+  "sheets",
+  "common",
+  "licenceOn",
+] as const;
+// `placements` és el nom que tenien els blocs a les fases 1–3: es llegeix i
+// no es torna a escriure
+export const SHEET_KEYS = [
+  "id",
+  "mode",
+  "direction",
+  "sequenceGap",
+  "template",
+  "blocks",
+  "placements",
+] as const;
+export const BLOCK_KEYS = [
+  "id",
+  "kind",
+  "x",
+  "y",
+  "w",
+  "h",
+  "slot",
+  "namedStyle",
+  "sequence",
+  "columns",
+  "view",
+  "text",
+  "textStyle",
+] as const;
+export const NAMED_STYLE_KEYS = [
+  "id",
+  "name",
+  "pictogram",
+  "card",
+  "view",
 ] as const;
 const STYLE_KEYS = ["pictogram", "card", "view"] as const;
 export const SEQUENCE_KEYS = ["id", "style", "pictograms"] as const;
@@ -172,6 +217,119 @@ const pictogramToRedux = (
   };
 };
 
+/** Un bloc del fitxer amb la forma de Redux. */
+const blockFromV3 = (
+  block: V3Block | V3ForeignBlock,
+  sequenceKeyOf: ReadonlyMap<string, number>,
+): PagePlacement | undefined => {
+  if (block.kind !== "sequence" && block.kind !== "text") {
+    // El lector l'embolcalla; un fitxer escrit per l'app el porta tal com era
+    const raw: Record<string, unknown> =
+      block.kind === "foreign" && isPlainObject(block.raw)
+        ? block.raw
+        : (block as unknown as Record<string, unknown>);
+    return {
+      kind: "unknown",
+      id: typeof raw.id === "string" ? raw.id : "",
+      raw,
+    };
+  }
+  const extra = unknownFields(block, BLOCK_KEYS);
+  const base = {
+    id: block.id,
+    // Una pàgina automàtica no en porta: el bloc no en té fins que en té una
+    x: block.x ?? 0,
+    y: block.y ?? 0,
+    w: block.w ?? 0,
+    h: block.h ?? 0,
+    ...(block.slot !== undefined && { slot: block.slot }),
+    ...(block.namedStyle !== undefined && { styleId: block.namedStyle }),
+    ...(extra && { extra }),
+  };
+  if (block.kind === "text")
+    return {
+      ...base,
+      kind: "text",
+      text: block.text,
+      ...(block.textStyle && { textStyle: block.textStyle }),
+    };
+  const sequenceKey = sequenceKeyOf.get(block.sequence);
+  if (sequenceKey === undefined) return undefined;
+  return {
+    ...base,
+    kind: "sequence",
+    sequenceKey,
+    columns: block.columns ?? "auto",
+    ...(block.view && { view: block.view }),
+  };
+};
+
+/**
+ * Les pàgines amb la forma de Redux: cada bloc de seqüència apunta a la clau
+ * de `content`, que és la posició de la seqüència al fitxer. Sense pàgines al
+ * fitxer, `undefined`: una sola pàgina automàtica, la de sempre.
+ */
+const pagesFromV3 = (document: SaacDocumentV3): DocumentPages | undefined => {
+  const { sheets, common } = document.page;
+  if (!sheets) return undefined;
+
+  const sequenceKeyOf = new Map(
+    document.sequences.map(({ id }, key) => [id, key]),
+  );
+  const blocksOf = (
+    list: readonly (V3Block | V3ForeignBlock)[],
+  ): PagePlacement[] =>
+    list.flatMap((block) => {
+      const placement = blockFromV3(block, sequenceKeyOf);
+      return placement ? [placement] : [];
+    });
+
+  return {
+    sheets: sheets.map((sheet): DocumentSheet => {
+      const extra = unknownFields(sheet, SHEET_KEYS);
+      return {
+        id: sheet.id,
+        mode: sheet.mode,
+        ...(sheet.direction && { direction: sheet.direction }),
+        ...(sheet.sequenceGap !== undefined && {
+          sequenceGap: sheet.sequenceGap,
+        }),
+        ...(sheet.template && { template: sheet.template }),
+        placements: blocksOf(sheet.blocks),
+        ...(extra && { extra }),
+      };
+    }),
+    common: blocksOf(common ?? []),
+    ...(document.page.licenceOn === "last" && { licenceOn: "last" }),
+  };
+};
+
+/**
+ * Els estils amb nom amb la forma de Redux, la mateixa que `SequenceStyle`:
+ * el color dels pictogrames sense categoria és `pictApiAra.fitzgerald`, i el
+ * de les categories, `fitzgeraldColors`.
+ */
+export const namedStyleFromV3 = (style: V3NamedStyle): NamedStyle => {
+  const extra = unknownFields(style, NAMED_STYLE_KEYS);
+  const { fitzgerald, ...pictogram } = style.pictogram ?? {};
+  const { none, ...categoryColors } = fitzgerald ?? {};
+  const pictApiAra = {
+    ...pictogram,
+    ...(none !== undefined && { fitzgerald: none }),
+  };
+  return {
+    id: style.id,
+    name: style.name,
+    ...(Object.keys(pictApiAra).length > 0 && { pictApiAra }),
+    ...(style.card && { pictSequence: style.card }),
+    ...(style.view && { view: style.view }),
+    ...(Object.keys(categoryColors).length > 0 && {
+      fitzgeraldColors: categoryColors as Record<string, string>,
+    }),
+    ...(extra && { extra }),
+  };
+};
+
 /**
  * El document v3 amb la forma de Redux. `document` ja ha de venir complet
  * (el lector l'ha validat i n'ha omplert el que faltava).
@@ -194,6 +352,8 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
     const extra = unknownFields(sequence, SEQUENCE_KEYS);
     if (extra) sequenceExtras[key] = extra;
   });
+
+  const pages = pagesFromV3(document);
 
   const activeIndex = document.sequences.findIndex(
     ({ id }) => id === document.ui?.activeSequence,
@@ -228,6 +388,8 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
       orientation: document.page.orientation,
       direction: document.page.direction,
     },
+    ...(pages && { pages }),
+    ...(document.styles && { styles: document.styles.map(namedStyleFromV3) }),
     fitzgeraldColors: reduxStyle.fitzgeraldColors,
     sequenceIds,
     saacExtra: {
