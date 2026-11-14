@@ -124,7 +124,7 @@ L'estàndard és **un de sol** per a totes les amplades: no hi ha components mò
 
 ## Estat de migració
 
-- ✅ **Pàgina i distribució** (`ViewSettingsPanel`; abans «Vista», pas 7) — la pàgina i la distribució dels pictogrames amb què comencen els documents nous, com les altres pestanyes de preferències; totes les files via `SettingRow`; els botons, via `SettingsActions`.
+- ✅ **Pàgina i distribució** (`ViewSettingsPanel`; abans «Vista», pas 7) — la pàgina (paper, orientació i **disposició**: Simple · Columnes · Files · Lliure, amb `DispositionToggle`, la mateixa peça que la columna de la vista; la direcció i l'espai entre seqüències només hi surten en simple) i la distribució dels pictogrames amb què comencen els documents nous, com les altres pestanyes de preferències; totes les files via `SettingRow`; els botons, via `SettingsActions`.
 - ✅ **Usuari** (`UserSettingsPanel`) — `SettingsPanelLayout` **sense mostra** (la columna esquerra
   queda reservada i buida, perquè els ajustos caiguin on cauen als altres tabs) + `SectionTitle` +
   `SettingRow`: idiomes, tema, **Imatges**

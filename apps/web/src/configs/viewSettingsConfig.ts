@@ -16,6 +16,8 @@ export const VIEW_DEFAULT_PAGE_SIZE = "A4" as const;
 export const VIEW_DEFAULT_ORIENTATION = "landscape" as const;
 /** El peu amb la llicència dels pictogrames surt per defecte (ho demana ARASAAC). */
 export const VIEW_DEFAULT_LICENCE = true;
+/** Els documents nous comencen simples, com sempre: les seqüències una darrere l'altra. */
+export const VIEW_DEFAULT_DISPOSITION = "auto" as const;
 export const VIEW_DEFAULT_ALIGNMENT_H = "left" as const;
 export const VIEW_DEFAULT_ALIGNMENT_V = "top" as const;
 export const VIEW_DEFAULT_AUTHOR = "";

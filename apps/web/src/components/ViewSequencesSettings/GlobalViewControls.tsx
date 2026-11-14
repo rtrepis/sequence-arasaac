@@ -43,6 +43,11 @@ interface GlobalViewControlsProps {
   showPaper?: boolean;
   /** La fila de la direcció. A la columna de la vista és del nivell «Pàgina» */
   showDirection?: boolean;
+  /**
+   * Files que van després de l'orientació i abans de l'espai entre
+   * seqüències i la direcció: la disposició, al panell de la configuració
+   */
+  afterOrientation?: React.ReactNode;
 }
 
 /**
@@ -61,6 +66,7 @@ const GlobalViewControls = ({
   paperOnly = false,
   showPaper = true,
   showDirection = true,
+  afterOrientation,
 }: GlobalViewControlsProps): React.ReactElement => (
   <>
     {showPaper && (
@@ -116,6 +122,8 @@ const GlobalViewControls = ({
         </StyledToggleButtonGroup>
       </SettingRow>
     )}
+
+    {afterOrientation}
 
     {sequenceCount > 1 && (
       <SettingRow

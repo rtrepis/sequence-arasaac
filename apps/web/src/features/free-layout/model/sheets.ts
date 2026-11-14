@@ -22,6 +22,17 @@ export const emptySheet = (
   mode: SheetMode,
 ): DocumentSheet => ({ id: newId("sh"), mode, placements: [] });
 
+/** Posa una pàgina just després de `afterIndex`. */
+export const insertSheet = (
+  pages: DocumentPages,
+  afterIndex: number,
+  sheet: DocumentSheet,
+): DocumentPages => {
+  const sheets = [...pages.sheets];
+  sheets.splice(afterIndex + 1, 0, sheet);
+  return { ...pages, sheets };
+};
+
 /** Unes pàgines amb una sola pàgina buida. */
 export const emptyPages = (
   newId: NewLayoutId,

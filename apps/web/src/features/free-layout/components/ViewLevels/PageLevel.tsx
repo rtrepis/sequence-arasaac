@@ -1,12 +1,6 @@
 import React from "react";
 import { Chip, MenuItem, Select, Slider } from "@mui/material";
-import {
-  MdCropPortrait,
-  MdOutlineDashboard,
-  MdTableRows,
-  MdViewColumn,
-  MdViewStream,
-} from "react-icons/md";
+import { MdCropPortrait, MdTableRows, MdViewColumn } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import type { SheetMode } from "@/types/document";
@@ -21,6 +15,7 @@ import { isBoxed } from "@features/free-layout/model/placement";
 import {
   Arrangement,
   LayoutTemplate,
+  MAX_LINES,
   SHAPED_TEMPLATES,
   arrangementOf,
   arrangementTemplate,
@@ -33,13 +28,10 @@ import {
 } from "@features/free-layout/store/freeLayoutThunks";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
 import { useApplyTemplate } from "@features/free-layout/hooks/useApplyTemplate";
-import {
-  Disposition,
-  MAX_LINES,
-  useSheetDisposition,
-} from "@features/free-layout/hooks/useSheetDisposition";
+import { useSheetDisposition } from "@features/free-layout/hooks/useSheetDisposition";
 import { TEMPLATE_NAMES } from "@features/free-layout/components/FreeLayoutPages/templateNames";
 import TemplatePicker from "@features/free-layout/components/TemplatePicker";
+import DispositionToggle from "@features/free-layout/components/DispositionToggle/DispositionToggle";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import messages from "./ViewLevels.lang";
 
@@ -186,28 +178,12 @@ const PageLevel = ({
           }
           control="wide"
         >
-          <StyledToggleButtonGroup
+          <DispositionToggle
             value={disposition}
-            exclusive
-            onChange={(_, value: Disposition | null) =>
-              value && changeDisposition(value)
-            }
-            aria-labelledby={`${LABEL_ID}-mode`}
-            aria-describedby={`${LABEL_ID}-mode-helper`}
-          >
-            <IconToggleButton value="auto" message={messages.modeAuto}>
-              <MdViewStream />
-            </IconToggleButton>
-            <IconToggleButton value="columns" message={messages.byColumns}>
-              <MdViewColumn />
-            </IconToggleButton>
-            <IconToggleButton value="rows" message={messages.byRows}>
-              <MdTableRows />
-            </IconToggleButton>
-            <IconToggleButton value="free" message={messages.byFree}>
-              <MdOutlineDashboard />
-            </IconToggleButton>
-          </StyledToggleButtonGroup>
+            onChange={changeDisposition}
+            labelId={`${LABEL_ID}-mode`}
+            helperId={`${LABEL_ID}-mode-helper`}
+          />
         </SettingRow>
       )}
 

@@ -3301,5 +3301,9 @@
   "features.sequence.style.changed.blockStyleRemove": {
     "message": "S'ha tret l'estil de bloc: el bloc torna a l'estil del document.",
     "description": "Snackbar amb «Desfés» després de «Treu l'estil de bloc» del menú «⋯» d'un bloc"
+  },
+  "components.viewSettingsPanel.dispositionHelp": {
+    "message": "Com comença la primera pàgina d'un document nou, i les pàgines que s'hi afegeixen.",
+    "description": "Ajuda sota la fila «Disposició» del panell «Pàgina i distribució»: és la disposició (simple, columnes, files o lliure) de la primera pàgina dels documents nous i de les pàgines que s'hi afegeixen"
   }
 }

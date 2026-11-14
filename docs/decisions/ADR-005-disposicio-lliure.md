@@ -93,8 +93,11 @@ fase 3 va fer veure que no n'hi ha prou:
     automàtica és zero (o la que tenia abans de passar a automàtica) i no s'escriu. `parse` i
     `serialize` en fan la conversió a la frontera (ADR-003, decisió 10). Sense `pages`, el document
     és la pàgina automàtica implícita de la decisió 2.
-14. **Una seqüència nova** (creada a l'edició) va al final de l'última pàgina si és automàtica; si
-    té plantilla, queda sense col·locar.
+14. **Una seqüència nova** (creada a l'edició) va a l'**última pàgina**: al final si és simple, i
+    si va en blocs, com «Afegeix un bloc» (decisió 22: una columna o una fila més, el primer espai
+    buit d'una plantilla o l'espai buit més gran). Fins al pas 7b, a una pàgina amb plantilla
+    quedava sense col·locar; amb la disposició per defecte (decisió 25), un document que comença en
+    columnes hauria deixat totes les seqüències noves fora del full.
 15. **El model és fet de funcions pures** a `apps/web/src/features/free-layout/model/`, sense marc
     d'accions ni gestor de teclat propis.
 
@@ -191,6 +194,19 @@ fase 3 va fer veure que no n'hi ha prou:
       columna i al menú «⋯» de la pàgina (`useSheetDisposition`). Desapareixen «En blocs» i la
       fila «Repartiment». Al codi i al fitxer no canvia res (`mode` i `template`).
     - El format no canvia.
+25. **La disposició per defecte** (pas 7b, 2026-11-14). El panell de preferències «Pàgina i
+    distribució» té la fila **«Disposició»** (Simple · Columnes · Files · Lliure, la mateixa peça
+    que la columna, `DispositionToggle`), desada a `viewSettings.disposition` (opcional; sense
+    valor, simple). En columnes, files o lliure, la direcció i l'espai entre seqüències no hi surten.
+    - Un **document nou i buit** (sense `layout` propi, una sola seqüència buida i cap estil de
+      bloc) comença amb aquesta disposició i la segueix en viu mentre és buit
+      (`NewDocumentPagesSync`, `syncNewDocumentPagesThunk`). L'acció
+      (`newDocumentPagesInherited`) no marca el document com a canviat.
+    - **Les pàgines noves** neixen amb la disposició de les preferències (`newSheetWith`): en
+      columnes o files, amb una que creix amb cada bloc. Resol B36.
+    - **Una seqüència nova** va a l'última pàgina segons la seva disposició (decisió 14 revisada).
+    - El `.saac` no canvia: la disposició és una preferència, i el document desa les seves pàgines
+      com sempre. Al servidor, el validador i l'esquema de l'usuari accepten el camp nou.
 
 ## Alternatives descartades
 
@@ -253,3 +269,5 @@ fase 3 va fer veure que no n'hi ha prou:
   (decisió 23).
 - **2026-11-14** (R7, pas 7): estil i distribució separats, estils de bloc amb «Actualitza amb el
   meu estil» i «Treu l'estil de bloc», i la disposició de la pàgina en una sola tria (decisió 24).
+- **2026-11-14** (pas 7b): la disposició per defecte a les preferències, les pàgines noves amb
+  aquesta disposició i les seqüències noves col·locades a l'última pàgina (decisions 25 i 14).

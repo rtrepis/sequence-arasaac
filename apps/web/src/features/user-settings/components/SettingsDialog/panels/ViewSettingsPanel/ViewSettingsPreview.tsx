@@ -38,7 +38,14 @@ const ViewSettingsPreview = ({
   const pictSizePx = basePictPx * settings.sizePict;
   // Gap en unitats MUI spacing (×8px), igual que columnGap/rowGap a ViewSequencePage.tsx
   const pictGapMui = settings.pictSpaceBetween * settings.sizePict;
-  const isRow = settings.direction === "row";
+  // En columnes, les seqüències van una al costat de l'altra; en files, una
+  // sota l'altra; simple i lliure, segons la direcció
+  const isRow =
+    settings.disposition === "columns"
+      ? false
+      : settings.disposition === "rows"
+        ? true
+        : settings.direction === "row";
   // Eix principal: alineació per seqüència (H si row, V si column) — ja funcionava
   const justifyContent = isRow
     ? ALIGN_H[settings.alignmentH]

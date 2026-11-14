@@ -458,6 +458,17 @@ const documentSlice = createSlice({
     // Fa explícit l'estil que el document heretava, en desar-lo: el que s'ha
     // desat ja no ha de canviar si després canvia l'estil per defecte. No
     // canvia res del que es veu, i per això no és un canvi de contingut
+    // Les pàgines amb què comença un document nou, segons la disposició de les
+    // preferències (pas 7b). No és un canvi de l'usuari: el document encara
+    // hereta la pàgina de les preferències, com l'estil
+    newDocumentPagesInherited: (
+      previousDocument,
+      action: PayloadAction<DocumentPages | undefined>,
+    ) => {
+      if (action.payload) previousDocument.pages = action.payload;
+      else delete previousDocument.pages;
+    },
+
     documentStyleMaterialized: (
       previousDocument,
       action: PayloadAction<{
@@ -778,6 +789,7 @@ export const {
   applyDocumentStyle: applyDocumentStyleActionCreator,
   restoreDocumentStyle: restoreDocumentStyleActionCreator,
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
+  newDocumentPagesInherited: newDocumentPagesInheritedActionCreator,
   documentLayoutChanged: documentLayoutChangedActionCreator,
   pagesChanged: pagesChangedActionCreator,
   pagesAndStylesChanged: pagesAndStylesChangedActionCreator,

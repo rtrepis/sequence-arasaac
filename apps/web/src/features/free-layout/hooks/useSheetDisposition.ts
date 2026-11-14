@@ -1,12 +1,15 @@
 import type { RootState } from "@/app/store";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { isBoxed } from "@features/free-layout/model/placement";
+import type { PageDisposition } from "@/types/ui";
 import {
   Arrangement,
   LayoutTemplate,
+  MAX_LINES,
   arrangementOf,
   arrangementTemplate,
 } from "@features/free-layout/model/templates";
+import { dispositionOf } from "@features/free-layout/model/pages";
 import {
   selectPages,
   setSheetFreeThunk,
@@ -17,18 +20,13 @@ import {
 const selectSequenceCount = (state: RootState): number =>
   Object.keys(state.document.content).length;
 
-/** Quantes columnes o files com a molt es poden triar. */
-export const MAX_LINES = 6;
-
 /** Els modes del repartiment d'una pàgina en blocs. */
-export type ArrangementMode = "columns" | "rows" | "free";
+export type ArrangementMode = Exclude<Disposition, "auto">;
 
 /**
- * La disposició d'una pàgina, en una sola tria: simple (`auto`, les
- * seqüències una darrere l'altra) o en blocs repartits en columnes, en files
- * o lliures. Una plantilla aplicada és lliure, amb espais per omplir.
+ * La disposició d'una pàgina, en una sola tria (vegeu `dispositionOf`).
  */
-export type Disposition = "auto" | ArrangementMode;
+export type Disposition = PageDisposition;
 
 export interface SheetDisposition {
   disposition: Disposition;
@@ -61,7 +59,7 @@ export const useSheetDisposition = (
   const arrangement = arrangementOf(sheet?.template);
   const arrangementMode: ArrangementMode =
     arrangement.kind === "template" ? "free" : arrangement.kind;
-  const disposition: Disposition = mode === "auto" ? "auto" : arrangementMode;
+  const disposition = dispositionOf(sheet);
   // Tants com blocs, com a molt els que es poden triar
   const lines = Math.min(Math.max(count, 1), MAX_LINES);
 

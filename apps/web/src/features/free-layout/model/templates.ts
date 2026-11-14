@@ -50,6 +50,9 @@ export const hasTextSlots = (template: LayoutTemplate): boolean =>
   template.slots.some((slot) => slotKind(slot) === "text");
 
 /** `n` caixes apilades: en files (una sota l'altra) o en columnes. */
+/** Quantes columnes o files com a molt es poden triar. */
+export const MAX_LINES = 6;
+
 export const stackTemplate = (
   n: number,
   axis: "rows" | "columns",

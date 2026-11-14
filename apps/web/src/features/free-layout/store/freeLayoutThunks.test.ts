@@ -18,6 +18,7 @@ import {
   updateDefaultSettingPictSequenceActionCreator,
   viewSettingsActionCreator,
 } from "@features/user-settings/store/uiSlice";
+import type { PageDisposition } from "@/types/ui";
 import { whereIs } from "../model/placementsOf";
 import { stackTemplate } from "../model/templates";
 import {
@@ -35,6 +36,8 @@ import {
   setPlacementCommonThunk,
   setPlacementViewThunk,
   setSheetViewThunk,
+  addNewSequenceThunk,
+  syncNewDocumentPagesThunk,
   updateMyStyleThunk,
 } from "./freeLayoutThunks";
 
@@ -455,5 +458,67 @@ describe("«Actualitza amb el meu estil» i treure l'estil de bloc (R7)", () => 
     store.dispatch(undoStyleChangeThunk());
     expect(store.getState().document.pages).toEqual(applied.pages);
     expect(store.getState().document.styles).toEqual(applied.styles);
+  });
+});
+
+describe("la disposició de les preferències (pas 7b)", () => {
+  /** Un document nou i buit, i les preferències amb aquesta disposició. */
+  const blankStore = (disposition: PageDisposition) => {
+    const store = createAppStore({
+      document: {
+        id: "nou",
+        content: { 0: [] },
+        viewSettings: {},
+        activeSAAC: 0,
+      },
+    });
+    const ui = store.getState().ui.viewSettings;
+    store.dispatch(
+      viewSettingsActionCreator({ ...ui, pageSize: "A4", disposition }),
+    );
+    return store;
+  };
+
+  it("un document nou i buit comença amb la disposició, i la segueix en viu", () => {
+    const store = blankStore("columns");
+    store.dispatch(syncNewDocumentPagesThunk());
+    const [sheet] = layoutOf(store).sheets;
+    expect(sheet).toMatchObject({ mode: "template", template: "columns-1" });
+    // No és un canvi de l'usuari: el document no queda «sense desar»
+    expect(store.getState().documentStatus.changedAt).toBeNull();
+
+    const ui = store.getState().ui.viewSettings;
+    store.dispatch(viewSettingsActionCreator({ ...ui, disposition: "auto" }));
+    store.dispatch(syncNewDocumentPagesThunk());
+    expect(store.getState().document.pages).toBeUndefined();
+  });
+
+  it("un document amb feina no canvia", () => {
+    const store = createAppStore({ document: documentWith(2) });
+    const ui = store.getState().ui.viewSettings;
+    store.dispatch(viewSettingsActionCreator({ ...ui, disposition: "rows" }));
+    store.dispatch(syncNewDocumentPagesThunk());
+    expect(store.getState().document.pages).toBeUndefined();
+  });
+
+  it("una pàgina nova neix amb la disposició de les preferències", () => {
+    const store = freeStore(2);
+    const ui = store.getState().ui.viewSettings;
+    store.dispatch(viewSettingsActionCreator({ ...ui, disposition: "rows" }));
+    store.dispatch(addSheetThunk(0));
+    expect(layoutOf(store).sheets[1]).toMatchObject({
+      mode: "template",
+      template: "rows-1",
+      placements: [],
+    });
+  });
+
+  it("una seqüència nova va a l'última pàgina en columnes: una columna més", () => {
+    const store = blankStore("columns");
+    store.dispatch(syncNewDocumentPagesThunk());
+    store.dispatch(addNewSequenceThunk(1));
+    const [sheet] = layoutOf(store).sheets;
+    expect(sheet.template).toBe("columns-2");
+    expect(sheet.placements.map(keyOf)).toEqual([0, 1]);
   });
 });

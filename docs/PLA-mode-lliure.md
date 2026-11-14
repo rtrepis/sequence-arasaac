@@ -826,6 +826,9 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
    bloc («Actualitza amb el meu estil», «Treu l'estil de bloc», la fila «Estil de bloc» del nivell
    «Bloc») i la disposició de la pàgina en una sola tria (Simple · Columnes · Files · Lliure). Vegeu
    «Com ha quedat el pas 7».
+7b. ✅ **La disposició per defecte** (2026-11-14): la fila «Disposició» al panell «Pàgina i
+   distribució», el document nou i buit que la segueix, les pàgines noves amb aquesta disposició
+   (B36) i les seqüències noves col·locades a l'última pàgina. Vegeu «Com ha quedat el pas 7b».
 8. ⏭️ **Tancar la columna**: les peces a prova (`SettingsLevel`, `LevelCrumbs`, l'etiqueta de la
    disposició, la fila «Estil de bloc») a l'estàndard, treure l'etiqueta «Nou» i el vocabulari que
    queda de «vista» («Restaura la vista»). Després, **B35** redefinit («Restableix els pictogrames
@@ -1130,6 +1133,28 @@ en aplicar una plantilla **surt de la pàgina** (la seqüència continua al docu
 S'ha trobat i corregit de passada: en un document sense pàgines pròpies, passar a «Columnes» feia
 una sola columna (comptava zero blocs) en comptes d'una per seqüència.
 
+### Com ha quedat el pas 7b (la disposició per defecte, 2026-11-14)
+
+**Les decisions**: el panell «Pàgina i distribució» guarda com vol l'usuari que comenci un document
+nou, igual que «El meu estil», i la disposició n'és part. Les pàgines noves d'un document també
+neixen amb aquesta disposició (B36). Sense plantilla per defecte: les plantilles depenen del que hi
+ha a la pàgina (R11). Es fa abans del pas 8.
+
+**Què s'ha fet**:
+
+| Peça | Canvi |
+|---|---|
+| Preferència | `viewSettings.disposition` (`PageDisposition`: `auto`, `columns`, `rows`, `free`), opcional: sense valor, simple. A `shared-types`, a `types/ui.ts`, al validador de l'API i a l'esquema de Mongoose de l'usuari |
+| Panell «Pàgina i distribució» | Fila «Disposició» després de l'orientació (`afterOrientation` de `GlobalViewControls`), amb l'ajuda «Com comença la primera pàgina d'un document nou, i les pàgines que s'hi afegeixen». La direcció i l'espai entre seqüències només en simple. La mostra posa les seqüències en columnes o en files. «Restaura» la torna a simple |
+| La tria | `components/DispositionToggle/`, la mateixa peça a la columna (nivell «Pàgina») i al panell |
+| Model (`model/pages.ts`) | `dispositionOf` (la disposició d'una pàgina), `newSheetWith` (una pàgina buida amb una disposició) i `initialPagesFor` (les pàgines d'un document nou); `insertSheet` a `sheets.ts`; `MAX_LINES` a `templates.ts` |
+| Document nou | `NewDocumentPagesSync` (al layout, al costat de `DocumentDraftSync`) i `syncNewDocumentPagesThunk`: un document buit (sense `layout` propi, una seqüència buida, cap estil de bloc) pren la disposició quan s'ha restaurat l'esborrany, i la segueix si canvia la preferència. L'acció `newDocumentPagesInherited` no marca el document com a canviat |
+| Pàgines noves | `addSheetThunk` fa servir `newSheetWith` amb la disposició de les preferències |
+| Seqüències noves | `addNewSequenceThunk` (de `TabsSequences`): a l'última pàgina, com «Afegeix un bloc» si va en blocs. Revisa la decisió 14 de l'ADR-005, que les deixava sense col·locar |
+| Textos | L'ajuda de la fila, en els cinc idiomes |
+| Documents | Fonament 03 (§7), ADR-005 (decisions 14 i 25), `configuracions.md`, B36 resolta |
+| Proves | `pages.test.ts`, `freeLayoutThunks.test.ts` (document buit en viu, document amb feina, pàgina nova, seqüència nova), `SettingsDialog.test.tsx` (la fila i el desat en tancar) |
+
 ### Preguntes que eren obertes
 
 | # | Pregunta | Opcions |
@@ -1139,12 +1164,13 @@ una sola columna (comptava zero blocs) en comptes d'una per seqüència.
 | Q3 | R1: un sol model de pàgines per a totes dues disposicions? | Sí (proposat) · No, la disposició automàtica té pàgines però sense plantilles |
 | Q4 | R3: la investigació, qui la fa? | Una cerca a la xarxa de materials publicats (ARASAAC, escoles, logopèdia) · Exemples reals de l'usuari i el seu entorn · Totes dues |
 
-## 13. Estat a 2026-11-14 (pas 7) i com continuar
+## 13. Estat a 2026-11-14 (passos 7 i 7b) i com continuar
 
 Recull de les sessions del 7 al 14 de novembre (passos 4, 4b, 5, 5b, 6 i 7, PR #304, branca
 `ccr-2207a706-ksozpj`). **És el lloc per on començar una sessió nova.** El detall i el perquè de
 cada decisió són a §12 (C1–C24, R10–R12, «Com ha quedat R4», «Com ha quedat el pas 5b» i «Com ha
-quedat el pas 6» i «Com ha quedat el pas 7») i a l'ADR-005 (decisions 16–24).
+quedat el pas 6», «Com ha quedat el pas 7» i «Com ha quedat el pas 7b») i a l'ADR-005 (decisions
+16–25).
 
 ### Com funciona ara (el que veu l'usuari)
 
@@ -1152,6 +1178,8 @@ La idea de fons: **es treballa com abans, i cada pàgina pot passar a treballar 
 la versió d'abans troba el mateix d'entrada. I **els estils van en una sola direcció**: es fan a la
 configuració i es porten al document des de la vista. I **estil** (com és cada pictograma) i
 **distribució** (mida, espai i alineació) són dues coses: un estil de bloc no porta distribució.
+Qui vol començar sempre en columnes (o en files, o lliure) ho tria a «Pàgina i distribució»: els
+documents nous i les pàgines noves hi neixen.
 
 **Al full** (la previsualització):
 
@@ -1201,7 +1229,7 @@ configuració i es porten al document des de la vista. I **estil** (com és cada
 | Pestanya | Què és |
 |---|---|
 | **El meu estil** | L'estil dels pictogrames de l'usuari (abans «Estil del document»): el reben els documents nous i el copia «Aplica el meu estil». «Carrega un estil des d'un fitxer…» i «Desa el meu estil en un fitxer…». Es desa en tancar la configuració |
-| **Pàgina i distribució** (abans «Vista») | «La pàgina i la distribució dels pictogrames amb què comencen els documents nous»: paper, orientació, direcció i espai entre seqüències, i la distribució dels pictogrames (mida, espai i alineació). Només «Restaura la vista» |
+| **Pàgina i distribució** (abans «Vista») | «La pàgina i la distribució dels pictogrames amb què comencen els documents nous»: paper, orientació, **disposició** (Simple · Columnes · Files · Lliure; també la de les pàgines que s'afegeixen), direcció i espai entre seqüències (en simple), i la distribució dels pictogrames (mida, espai i alineació). Només «Restaura la vista» |
 
 ### On és el codi
 
@@ -1212,14 +1240,15 @@ configuració i es porten al document des de la vista. I **estil** (com és cada
 | Com es veuen les targetes d'un bloc (estil de bloc) i les seves accions | `features/free-layout/hooks/useBlockLooks.ts`; `model/blockStyle.ts` (`styleWithNamed`, `blockSequence`, `cardMeasureKey`, `cardSizeOf`, `namedStyleFrom`, `applyNamedStyle`, `updateNamedStyles`, `removeNamedStyle`, `styleUseCount`, `targetStyleIds`) |
 | La vista i la columna | `components/ViewSequencesSettings/ViewSquenceSettings.tsx` (maqueta, botons, escala amb l'amplada mesurada), `SettingsLevel`, `LevelCrumbs`, `SequenceViewRows` |
 | Nivells | `features/free-layout/components/ViewLevels/` (`PageLevel`, `BlockLevel`, `TextBlockLevel`, `BlockStyleRow`, `PagePictograms`, `LicencePagesRow`) |
-| La disposició d'una pàgina (columna i menú) | `features/free-layout/hooks/useSheetDisposition.ts` |
+| La disposició d'una pàgina (columna i menú) | `features/free-layout/hooks/useSheetDisposition.ts`, `components/DispositionToggle/` |
+| La disposició dels documents nous | `features/free-layout/components/NewDocumentPagesSync/`; `store/freeLayoutThunks.ts` (`selectDefaultDisposition`, `syncNewDocumentPagesThunk`, `addNewSequenceThunk`); `model/pages.ts` (`dispositionOf`, `newSheetWith`, `initialPagesFor`); el panell, `features/user-settings/components/SettingsDialog/panels/ViewSettingsPanel/` |
 | Pàgines al full | `features/free-layout/components/FreeLayoutPages/` (`FreeLayoutPages`, `PageHeader`, `SinglePageHeader`, `PageActionsMenu`, `AutoSheetFlow`, `PlacementBox` com a closca de `SequenceBlock` i `TextBlock`, `CardBaseMeasurer`, `EmptySlot`, `TemplateGuides`, `GridDots`, `templateNames.ts`) |
 | Selector de plantilles | `features/free-layout/components/TemplatePicker/` |
 | Model | `features/free-layout/model/`: `templates.ts` (plantilles, `FREE_TEMPLATE`, `arrangementOf`, `overflowOf`, `closestTemplate`), `distribute.ts` (`addPlacementsToSheet`: les regles d'afegir), `grid.ts` (quadrícula, `largestEmptyBox`), `blockGrid.ts`, `blockStyle.ts`; i `store/freeLayoutThunks.ts` (`applyMyStyleThunk`, `updateMyStyleThunk` i `removeBlockStyleThunk` inclosos) |
 | El meu estil | `features/user-settings/components/SettingsDialog/panels/DefaultSettingsPanel/` (`DefaultSettingsPanel`, `MyStyleHeader`, `DefaultForm`); `features/sequence/hooks/useOpenSaacFile.ts` (carregar-lo d'un fitxer); `features/sequence/components/DocumentStyle/PendingDefaultStyleDialog.tsx` (obrir un `.saacstyle`) |
 | Escala | `features/print/hooks/useScaleCalculator.ts` (`availableWidth`; `SCREEN_MARGINS.phone` a `utils/pageFormat.ts`) |
 | Fitxer | Sense canvis de format en aquests passos: només `id` nous de `sheets[].template` (les plantilles de R3 i `"free"`), a l'esquema, al fonament 06 i a l'ADR-005. «Aplica el meu estil» fa servir `styles` i `namedStyle`, que ja hi eren; des del pas 7 no hi escriu `view` |
-| Proves | `ViewLevels.test.tsx`, `FreeLayoutPages.test.tsx`, `TemplatePicker.test.tsx`, `model/*.test.ts` (`grid`, `distribute`, `templates`, `blockStyle`…), `freeLayoutThunks.test.ts`, `useScaleCalculator.test.ts`. Avui: 468 del web i 67 d'i18n |
+| Proves | `ViewLevels.test.tsx`, `FreeLayoutPages.test.tsx`, `TemplatePicker.test.tsx`, `model/*.test.ts` (`grid`, `distribute`, `templates`, `blockStyle`…), `freeLayoutThunks.test.ts`, `useScaleCalculator.test.ts`. Avui: 477 del web i 67 d'i18n |
 
 ### Què queda obert
 
@@ -1230,7 +1259,9 @@ Decisions petites, per si es volen fer abans del pas següent:
   sent.
 - **«Vista» encara surt** al botó «Restaura la vista» del panell «Pàgina i distribució» i en alguns
   textos d'ajuda antics: ja no és cap terme del vocabulari (fonament 03).
-- **«Pàgines noves»** (**B36**): no es fa; «Duplica la pàgina» ho cobreix.
+- **Un document buit segueix la disposició** de les preferències en viu; amb la primera feina (un
+  pictograma, una segona seqüència, un estil de bloc) ja no. Si l'usuari ha canviat la disposició
+  a la vista d'un document encara buit i després canvia la preferència, mana la preferència.
 - **Un document nou encara sense desar** hereta el meu estil en viu (fonament 03, §7): canviar el
   meu estil a la configuració el canvia també. És el comportament de sempre, però ara que els
   estils «van en una sola direcció» potser sorprèn.
@@ -1242,6 +1273,8 @@ Decisions petites, per si es volen fer abans del pas següent:
   es posa petit a dalt a l'esquerra, a sobre dels altres.
 - **Els rètols no s'editen damunt del full** (doble clic o Enter, com proposava R9); a les pàgines
   simples no tenen menú, i les seqüències tampoc (per a «Aplica el meu estil», el de la pàgina).
+- **Les seqüències noves** van a l'última pàgina, també si és en blocs (decisió 14 revisada): en un
+  document de moltes pàgines potser l'usuari esperaria la pàgina que mira.
 - **Al mòbil, les guies de les plantilles de la columna queden fora de la vista** (la pàgina és més
   amunt); des del menú «⋯» sí que es veuen.
 - **Peces a prova** que no són a l'estàndard: `SettingsLevel` (targeta amb vora, excepció a C8),
@@ -1271,7 +1304,7 @@ Pendents de més abast:
 
 ### El pas següent
 
-R7 és fet (pas 7). Segons l'«Ordre proposat», el **pas 8** és **tancar la columna** abans de
+R7 (pas 7) i la disposició per defecte (pas 7b) són fets. Segons l'«Ordre proposat», el **pas 8** és **tancar la columna** abans de
 seguir afegint-hi coses. Cal triar-ne l'abast amb l'usuari:
 
 1. **Les peces a prova a l'estàndard** (`docs/estandards/configuracions.md`): `SettingsLevel`,
@@ -1291,8 +1324,8 @@ el núvol) continuen a «Què queda obert».
 > checkout i continua-hi, no en creïs cap altra.
 >
 > Llegeix primer `docs/PLA-mode-lliure.md`, **§13** (estat, on és el codi, què queda obert i el pas
-> següent) i, de §12, «Com ha quedat el pas 6» i «Com ha quedat el pas 7». Després
-> `docs/decisions/ADR-005-disposicio-lliure.md` (decisions 6, 7 i 16–24) i
+> següent) i, de §12, «Com ha quedat el pas 6», «Com ha quedat el pas 7» i «Com ha quedat el pas
+> 7b». Després `docs/decisions/ADR-005-disposicio-lliure.md` (decisions 6, 7, 14 i 16–25) i
 > `docs/fonaments/03-model-contingut-estil.md` (§1, el vocabulari: estil, distribució, estil de
 > bloc i disposició; §4 i §5: la cascada i les accions sobre l'estil, i la direcció única). Abans de tocar la columna o la configuració, `docs/estandards/configuracions.md`;
 > si hi entren diàlegs o missatges, `capes-flotants.md` i `feedback-i-accions.md`; per als colors,

@@ -79,7 +79,6 @@ l'entrada.
 | N3 | Notícia de llegibilitat | Prioritat baixa i cost alt (captura d'«abans») | M |
 | B30 | No hi ha historial de desfer i refer | El desfer que ja existeix cobreix els canvis d'estil, «Aplica a tots» i «Restableix», que són els que esborren més feina d'un cop | L |
 | C20 | Errors d'axe als controls del formulari d'edició del pictograma | Són d'abans; surten ara que la prova desplega la configuració. C17 ja n'ha tret els switches | M | No |
-| B36 | «Pàgines noves»: com neix una pàgina nova | Hi ha «Duplica la pàgina», que cobreix qui sempre fa la mateixa pàgina | S | Sí: si cal, i quines opcions |
 | C10 | Vuit fitxers de test en quarantena | El runner i l'arnès ja hi són; queda portar-los-hi o esborrar-los, un per un | S cada un | Sí: per cada fitxer, reviure o esborrar |
 
 ### Ajornades (comptes apagats)
@@ -189,7 +188,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   surt, i s'ajorna fins després de R7. Lligam: després d'«Aplica el meu estil», un pictograma
   retocat continua retocat; és el cas en què més es trobarà a faltar.
 
-### B36 — «Pàgines noves»: com neix una pàgina nova 💡 Idea
+### B36 — «Pàgines noves»: com neix una pàgina nova ✅ Resolta (pas 7b)
 
 *(Oberta en fer R11, 2026-11-12.)*
 
@@ -199,6 +198,10 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   `schemaVersion`).
 - **De moment no es fa**: «Duplica la pàgina», al menú «⋯», ja ho cobreix. El detall és a **R11** de
   `docs/PLA-mode-lliure.md` (§12).
+- **2026-11-14 (pas 7b)**: resolta d'una altra manera, a les preferències i no al document. El
+  panell «Pàgina i distribució» té la **disposició** amb què comencen els documents nous, i les
+  pàgines que s'afegeixen neixen amb aquesta disposició. No cal cap camp nou al `.saac`. Vegeu la
+  decisió 25 de l'ADR-005.
 
 ## Gravetat alta
 

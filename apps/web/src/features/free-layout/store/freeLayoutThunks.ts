@@ -15,8 +15,10 @@ import type {
   SheetMode,
   TextBlockStyle,
 } from "@/types/document";
-import type { SequenceDirection } from "@/types/ui";
+import type { PageDisposition, SequenceDirection } from "@/types/ui";
 import {
+  addNewSequenceActionCreator,
+  newDocumentPagesInheritedActionCreator,
   pagesAndStylesChangedActionCreator,
   pagesChangedActionCreator,
   userLayoutOf,
@@ -49,13 +51,18 @@ import {
   selectResolvedSequenceViews,
   selectUserDefaultStyle,
 } from "@features/sequence/style/styleSelectors";
-import { explicitPages } from "../model/pages";
+import {
+  dispositionOf,
+  explicitPages,
+  initialPagesFor,
+  newSheetWith,
+} from "../model/pages";
 import {
   NewLayoutId,
-  addSheet,
   copyPlacementToSheet,
   duplicateSheet,
   findPlacement,
+  insertSheet,
   makeCommon,
   mapSheet,
   makeLocal,
@@ -291,10 +298,17 @@ export const setTextPlacementThunk = (
  * Una pàgina nova, buida, darrere de `afterIndex`. És contínua, com la de
  * sempre: passar-la a blocs és de l'usuari.
  */
-export const addSheetThunk = (afterIndex: number): AppThunk =>
-  changeFreeLayout((layout) =>
-    addSheet(layout, afterIndex, newLayoutId, "auto"),
-  );
+export const addSheetThunk =
+  (afterIndex: number): AppThunk =>
+  (dispatch, getState) => {
+    // Neix amb la disposició de les preferències (pas 7b)
+    const disposition = selectDefaultDisposition(getState());
+    dispatch(
+      changeFreeLayout((layout) =>
+        insertSheet(layout, afterIndex, newSheetWith(newLayoutId, disposition)),
+      ),
+    );
+  };
 
 /** Una còpia de la pàgina, darrere de l'original. */
 export const duplicateSheetThunk = (index: number): AppThunk =>
@@ -554,6 +568,93 @@ export const removeBlockStyleThunk =
             removeNamedStyle(pages, styles, placementId),
           ),
         "blockStyleRemove",
+      ),
+    );
+  };
+
+// --- La disposició de les preferències (pas 7b) ---
+
+/**
+ * La disposició amb què comencen els documents nous i les pàgines noves, de
+ * les preferències («Pàgina i distribució»). Sense valor, simple.
+ */
+export const selectDefaultDisposition = (state: RootState): PageDisposition =>
+  state.ui.viewSettings.disposition ?? "auto";
+
+/**
+ * Un document nou i buit: encara hereta la pàgina de les preferències (no té
+ * `layout` propi), té una sola seqüència i cap pictograma ni estil de bloc.
+ * És el que pot canviar de disposició quan canvien les preferències sense
+ * que l'usuari perdi res.
+ */
+export const selectIsBlankNewDocument = (state: RootState): boolean => {
+  const { layout, content, styles } = state.document;
+  const sequences = Object.values(content);
+  return (
+    layout === undefined &&
+    sequences.length === 1 &&
+    sequences[0].length === 0 &&
+    (styles === undefined || styles.length === 0)
+  );
+};
+
+/**
+ * Dona a un document nou i buit la disposició de les preferències: una sola
+ * pàgina, simple (sense pàgines pròpies) o en columnes, files o lliure. Si el
+ * document ja té feina, o ja té aquesta disposició, no fa res. Amb la pantalla
+ * completa no hi ha mil·límetres, i la pàgina es queda simple.
+ */
+export const syncNewDocumentPagesThunk =
+  (): AppThunk => (dispatch, getState) => {
+    const state = getState();
+    if (!selectIsBlankNewDocument(state)) return;
+    const { pages } = state.document;
+    const wanted = selectDefaultDisposition(state);
+    const current =
+      pages === undefined
+        ? "auto"
+        : pages.sheets.length === 1 && pages.common.length === 0
+          ? dispositionOf(pages.sheets[0])
+          : undefined;
+    if (current === wanted) return;
+    const area = selectSheetArea(state);
+    if (wanted !== "auto" && !area) return;
+    const direction = selectPageLayout(state).direction ?? "row";
+    dispatch(
+      newDocumentPagesInheritedActionCreator(
+        area
+          ? initialPagesFor(wanted, selectSequenceKeys(state), {
+              area,
+              direction,
+              newId: newLayoutId,
+            })
+          : undefined,
+      ),
+    );
+  };
+
+/**
+ * Una seqüència nova, creada a l'edició (una pestanya més). Va a l'última
+ * pàgina: al final si és simple, i si va en blocs, com «Afegeix un bloc»
+ * (una columna o una fila més, o l'espai buit més gran). Així un document que
+ * comença en columnes no deixa les seqüències noves sense col·locar.
+ */
+export const addNewSequenceThunk =
+  (sequenceKey: number): AppThunk =>
+  (dispatch, getState) => {
+    // La pàgina simple ja la té al final (el reductor)
+    dispatch(addNewSequenceActionCreator(sequenceKey));
+    const pages = getState().document.pages;
+    const last = pages ? pages.sheets.length - 1 : -1;
+    if (!pages || pages.sheets[last]?.mode !== "template") return;
+    const direction = selectPageLayout(getState()).direction ?? "row";
+    dispatch(
+      changeFreeLayout((layout, area) =>
+        addSequencesToSheet(layout, last, [sequenceKey], {
+          area,
+          direction,
+          newId: newLayoutId,
+        }),
       ),
     );
   };

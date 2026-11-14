@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 import type { DocumentPages, SequencePlacement } from "@/types/document";
 import {
   addNewSequenceToPages,
+  dispositionOf,
   explicitPages,
+  initialPagesFor,
+  newSheetWith,
   hasTemplatePages,
   toAutoPages,
   toTemplatePages,
@@ -122,5 +125,60 @@ describe("una seqüència nova", () => {
       common: [],
     };
     expect(addNewSequenceToPages(pages, 1, () => "pl_nou")).toBe(pages);
+  });
+});
+
+/** La clau de la seqüència d'un bloc, o -1 si no n'és cap. */
+const keyOf = (block: { kind: string; sequenceKey?: number }) =>
+  block.kind === "sequence" ? (block.sequenceKey ?? -1) : -1;
+
+describe("la disposició d'una pàgina i la dels documents nous (pas 7b)", () => {
+  const context = () => ({
+    area: AREA,
+    direction: "row" as const,
+    newId: ids(),
+  });
+
+  it("cada pàgina diu la seva: simple, columnes, files o lliure", () => {
+    expect(dispositionOf(undefined)).toBe("auto");
+    expect(dispositionOf({ id: "s", mode: "auto", placements: [] })).toBe(
+      "auto",
+    );
+    const sheet = (template: string) => ({
+      id: "s",
+      mode: "template" as const,
+      template,
+      placements: [],
+    });
+    expect(dispositionOf(sheet("columns-3"))).toBe("columns");
+    expect(dispositionOf(sheet("rows-2"))).toBe("rows");
+    expect(dispositionOf(sheet("free"))).toBe("free");
+    // Una plantilla aplicada és lliure, amb espais per omplir
+    expect(dispositionOf(sheet("week"))).toBe("free");
+  });
+
+  it("una pàgina nova neix buida amb la disposició que se li demana", () => {
+    for (const disposition of ["auto", "columns", "rows", "free"] as const)
+      expect(dispositionOf(newSheetWith(ids(), disposition))).toBe(disposition);
+    expect(newSheetWith(ids(), "columns").placements).toEqual([]);
+  });
+
+  it("un document nou en columnes té una pàgina amb una columna per seqüència", () => {
+    const pages = initialPagesFor("columns", [0, 1], context());
+    expect(pages?.sheets).toHaveLength(1);
+    const [sheet] = pages?.sheets ?? [];
+    expect(sheet.template).toBe("columns-2");
+    expect(sheet.placements.map(keyOf)).toEqual([0, 1]);
+    expect(dispositionOf(sheet)).toBe("columns");
+  });
+
+  it("en files, lliure, i simple sense pàgines pròpies", () => {
+    expect(
+      dispositionOf(initialPagesFor("rows", [0], context())?.sheets[0]),
+    ).toBe("rows");
+    const free = initialPagesFor("free", [0], context())?.sheets[0];
+    expect(dispositionOf(free)).toBe("free");
+    expect(free?.placements).toHaveLength(1);
+    expect(initialPagesFor("auto", [0], context())).toBeUndefined();
   });
 });

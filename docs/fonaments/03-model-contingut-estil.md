@@ -279,6 +279,12 @@ mida que s'havia triat. Ho avisa, i qui prepara el document tria.
 - Mentre no es desa, **hereta** el meu estil en viu: si les preferències del compte arriben
   tard, el document nou se les emporta igualment.
 - En desar-lo, l'estil i la pàgina s'hi **escriuen**, i a partir d'aleshores són seus.
+- **La disposició** (pas 7b): la primera pàgina d'un document nou neix amb la de les preferències
+  («Pàgina i distribució»: simple, columnes, files o lliure), i la segueix en viu **mentre el
+  document és buit** (una sola seqüència, sense pictogrames ni estils de bloc, i sense pàgina
+  pròpia). Amb feina, ja no canvia mai sola. Les pàgines que s'hi afegeixen («Afegeix una pàgina»)
+  també neixen amb la disposició de les preferències, a qualsevol document. Donar la disposició a
+  un document buit no el marca com a canviat.
 
 ## 8. Per què
 

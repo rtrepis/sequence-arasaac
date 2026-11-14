@@ -23,12 +23,19 @@ import {
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
 import { DefaultSettingsPanelHandle } from "../DefaultSettingsPanel/DefaultSettingsPanel";
-import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
+import {
+  ViewSettings,
+  SequenceDirection,
+  PageOrientation,
+  PageDisposition,
+} from "@/types/ui";
 import { PageSize, regionalPaperSize } from "@features/print/utils/pageFormat";
 import { SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
 import GlobalViewControls from "@components/ViewSequencesSettings/GlobalViewControls";
 import PrintFooterSection from "@components/ViewSequencesSettings/PrintFooterSection";
 import viewMessages from "@components/ViewSequencesSettings/ViewSequencesSettings.lang";
+import DispositionToggle from "@features/free-layout/components/DispositionToggle/DispositionToggle";
+import levelMessages from "@features/free-layout/components/ViewLevels/ViewLevels.lang";
 import ViewSettingsPreview from "./ViewSettingsPreview";
 import messages from "./ViewSettingsPanel.lang";
 import {
@@ -47,6 +54,7 @@ import {
   VIEW_DEFAULT_ALIGNMENT_V,
   VIEW_DEFAULT_LICENCE,
   VIEW_DEFAULT_AUTHOR,
+  VIEW_DEFAULT_DISPOSITION,
 } from "@/configs/viewSettingsConfig";
 import React from "react";
 
@@ -80,8 +88,13 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         alignmentV: VIEW_DEFAULT_ALIGNMENT_V,
         author: VIEW_DEFAULT_AUTHOR,
         licence: VIEW_DEFAULT_LICENCE,
+        disposition: VIEW_DEFAULT_DISPOSITION,
       });
     };
+
+    // Sense valor (el que ja estava desat), simple
+    const disposition: PageDisposition = localSettings.disposition ?? "auto";
+    const simple = disposition === "auto";
 
     const handlePageSizeChange = (pageSize: PageSize) => {
       setLocalSettings((prev) => ({ ...prev, pageSize }));
@@ -154,11 +167,35 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           <GlobalViewControls
             viewSettings={localSettings}
             pageSize={localSettings.pageSize}
-            sequenceCount={2}
+            // La direcció i l'espai entre seqüències només són d'una
+            // pàgina simple
+            sequenceCount={simple ? 2 : 1}
+            showDirection={simple}
             onPageSizeChange={handlePageSizeChange}
             onDirectionChange={handleDirectionChange}
             onSequenceSpaceChange={handleSequenceSpaceChange}
             onOrientationChange={handleOrientationChange}
+            afterOrientation={
+              <SettingRow
+                title={<FormattedMessage {...levelMessages.mode} />}
+                labelId={`${VIEW_PANEL_LABEL_ID}-disposition`}
+                helperId={`${VIEW_PANEL_LABEL_ID}-disposition-helper`}
+                helper={<FormattedMessage {...messages.dispositionHelp} />}
+                control="wide"
+              >
+                <DispositionToggle
+                  value={disposition}
+                  onChange={(next) =>
+                    setLocalSettings((prev) => ({
+                      ...prev,
+                      disposition: next,
+                    }))
+                  }
+                  labelId={`${VIEW_PANEL_LABEL_ID}-disposition`}
+                  helperId={`${VIEW_PANEL_LABEL_ID}-disposition-helper`}
+                />
+              </SettingRow>
+            }
           />
         </SectionTitle>
 

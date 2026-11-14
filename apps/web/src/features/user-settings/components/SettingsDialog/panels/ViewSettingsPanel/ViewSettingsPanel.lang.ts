@@ -30,6 +30,13 @@ const messages = defineMessages({
     defaultMessage: "Return view settings to factory values",
     description: "Tooltip del botó de restaurar la configuració de vista",
   },
+  dispositionHelp: {
+    id: "components.viewSettingsPanel.dispositionHelp",
+    defaultMessage:
+      "How the first page of a new document starts, and the pages you add to it.",
+    description:
+      "Ajuda sota la fila «Disposició» del panell «Pàgina i distribució»: és la disposició (simple, columnes, files o lliure) de la primera pàgina dels documents nous i de les pàgines que s'hi afegeixen",
+  },
 });
 
 export default messages;

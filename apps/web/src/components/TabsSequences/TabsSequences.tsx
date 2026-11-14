@@ -12,9 +12,9 @@ import TabPanelSequence from "../TabPanelSecuence/TabPanelSecuence";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import {
   changeActiveSAACActionCreator,
-  addNewSequenceActionCreator,
   deleteLastSequenceActionCreator,
 } from "@features/sequence/store/documentSlice";
+import { addNewSequenceThunk } from "@features/free-layout/store/freeLayoutThunks";
 import { BsFileEarmarkPlus, BsFileEarmarkMinus } from "react-icons/bs";
 import StyledIconButton from "@/style/StyledIconButton";
 import { useIntl } from "react-intl";
@@ -47,7 +47,8 @@ const TabsSequences = (): React.ReactElement => {
   };
 
   const handleAddSequence = () => {
-    dispatch(addNewSequenceActionCreator(amount));
+    // Va a l'última pàgina, segons la seva disposició
+    dispatch(addNewSequenceThunk(amount));
     dispatch(changeActiveSAACActionCreator(amount));
   };
 

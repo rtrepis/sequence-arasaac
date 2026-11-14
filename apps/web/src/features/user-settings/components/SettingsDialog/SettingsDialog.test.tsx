@@ -4,6 +4,7 @@ import {
   screen,
   userEvent,
   waitFor,
+  within,
 } from "@/test/renderWithProviders";
 import { createAppStore } from "@app/store";
 import { updateSettingsActiveTabActionCreator } from "@features/user-settings/store/uiSlice";
@@ -84,5 +85,28 @@ describe("SettingsDialog", () => {
     expect(
       screen.getByRole("dialog", { name: "Settings" }),
     ).toBeInTheDocument();
+  });
+
+  it("la disposició dels documents nous es tria a «Pàgina i distribució» i es desa en tancar", async () => {
+    const store = createAppStore();
+    store.dispatch(updateSettingsActiveTabActionCreator("view"));
+    renderWithProviders(<SettingsDialog open onClose={vi.fn()} />, {
+      store,
+    });
+
+    const group = screen.getByRole("group", { name: "Layout" });
+    expect(
+      within(group).getByRole("button", { name: /^Simple/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Direction")).toBeInTheDocument();
+
+    await userEvent.click(
+      within(group).getByRole("button", { name: "In columns" }),
+    );
+    // La direcció només és d'una pàgina simple
+    expect(screen.queryByText("Direction")).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "close" }));
+    expect(store.getState().ui.viewSettings.disposition).toBe("columns");
   });
 });

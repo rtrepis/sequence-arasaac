@@ -14,6 +14,12 @@ export type ThemeMode = "light" | "dark" | "system";
 // FULLSCREEN no és cap paper: el full fa la mida de la pantalla
 export type PageSize = "A4" | "A3" | "LETTER" | "TABLOID" | "FULLSCREEN";
 
+/**
+ * Com van els blocs d'una pàgina: simple (les seqüències una darrere l'altra,
+ * `auto`) o en blocs repartits en columnes, en files o lliures.
+ */
+export type PageDisposition = "auto" | "columns" | "rows" | "free";
+
 export interface ViewSettings {
   sizePict: number;
   pictSpaceBetween: number;
@@ -31,6 +37,12 @@ export interface ViewSettings {
    * signa la seqüència ha de dir també d'on són els pictogrames.
    */
   licence?: boolean;
+  /**
+   * La disposició de la primera pàgina d'un document nou i de les pàgines
+   * que s'hi afegeixen: simple, columnes, files o lliure. Opcional a propòsit:
+   * el que ja està desat no la porta, i **sense valor vol dir simple**.
+   */
+  disposition?: PageDisposition;
 }
 
 export type UserTier = "free";
@@ -136,7 +148,12 @@ export interface RegistrationStatus {
 
 export interface WordProfile {
   word: string;
-  overrides: Partial<Pick<import("./sequence").PictApiAraSettings, "skin" | "hair" | "color" | "fitzgerald">>;
+  overrides: Partial<
+    Pick<
+      import("./sequence").PictApiAraSettings,
+      "skin" | "hair" | "color" | "fitzgerald"
+    >
+  >;
   selectedId?: number;
   customImageUrl?: string;
 }

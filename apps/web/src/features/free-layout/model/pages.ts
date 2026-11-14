@@ -4,13 +4,21 @@
 // els documents d'abans. Funcions pures; vegeu
 // `docs/decisions/ADR-005-disposicio-lliure.md`.
 import type { DocumentPages, DocumentSheet } from "@/types/document";
+import type { PageDisposition } from "@/types/ui";
 import { NewLayoutId, emptySheet } from "./sheets";
 import {
   DistributeContext,
+  applyTemplateToSheet,
   buildInitialPages,
   newSequencePlacement,
   sheetToTemplate,
 } from "./distribute";
+import {
+  FREE_TEMPLATE,
+  MAX_LINES,
+  arrangementOf,
+  arrangementTemplate,
+} from "./templates";
 
 /**
  * Les pàgines del document. Sense pàgines, la que el document fa servir sense
@@ -96,4 +104,63 @@ export const addNewSequenceToPages = (
         : sheet,
     ),
   };
+};
+
+// --- La disposició d'una pàgina (pas 7) ---
+
+/**
+ * La disposició d'una pàgina, tal com la tria l'usuari: simple, columnes,
+ * files o lliure. Una plantilla aplicada és lliure, amb espais per omplir.
+ * Sense pàgina (un document sense pàgines pròpies), simple.
+ */
+export const dispositionOf = (
+  sheet: DocumentSheet | undefined,
+): PageDisposition => {
+  if (!sheet || sheet.mode === "auto") return "auto";
+  const arrangement = arrangementOf(sheet.template);
+  return arrangement.kind === "template" ? "free" : arrangement.kind;
+};
+
+/**
+ * Una pàgina buida amb una disposició: en columnes o en files, n'hi ha una
+ * que creix amb cada bloc que s'hi afegeix (ADR-005, decisió 22).
+ */
+export const newSheetWith = (
+  newId: NewLayoutId,
+  disposition: PageDisposition,
+): DocumentSheet => {
+  if (disposition === "auto") return emptySheet(newId, "auto");
+  return {
+    ...emptySheet(newId, "template"),
+    template: disposition === "free" ? FREE_TEMPLATE.id : `${disposition}-1`,
+  };
+};
+
+/**
+ * Les pàgines amb què comença un document nou amb la disposició de les
+ * preferències: una sola pàgina amb totes les seqüències. Simple és la de
+ * sempre, sense pàgines pròpies (`undefined`).
+ */
+export const initialPagesFor = (
+  disposition: PageDisposition,
+  sequenceKeys: readonly number[],
+  context: DistributeContext,
+): DocumentPages | undefined => {
+  if (disposition === "auto") return undefined;
+  const simple = explicitPages(undefined, sequenceKeys, context.newId);
+  if (disposition === "free") {
+    const sheet = sheetToTemplate(simple.sheets[0], simple, context);
+    return { ...simple, sheets: [{ ...sheet, template: FREE_TEMPLATE.id }] };
+  }
+  const count = sequenceKeys.length;
+  return applyTemplateToSheet(
+    simple,
+    0,
+    arrangementTemplate(
+      disposition,
+      Math.min(Math.max(count, 1), MAX_LINES),
+      count,
+    ),
+    context.area,
+  );
 };
