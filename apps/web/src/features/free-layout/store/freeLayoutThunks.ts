@@ -72,6 +72,8 @@ import {
   updatePlacement,
 } from "../model/sheets";
 import { FREE_TEMPLATE, LayoutTemplate } from "../model/templates";
+import { fitSheetBlocks } from "../model/naturalBox";
+import { naturalBoxOfState } from "./blockGrowth";
 
 /** Identificadors nous de fulls i col·locacions: els mateixos que escriu el fitxer. */
 const newLayoutId: NewLayoutId = (prefix) => newSaacId(prefix);
@@ -482,13 +484,23 @@ export const setPlacementBoxThunk = (
  * Passa una pàgina en blocs al repartiment lliure, sense moure res: els blocs
  * es queden on són, i un bloc nou anirà a l'espai buit més gran.
  */
-export const setSheetFreeThunk = (sheetIndex: number): AppThunk =>
-  changeFreeLayout((layout) =>
-    mapSheet(layout, sheetIndex, (sheet) => ({
-      ...sheet,
-      template: FREE_TEMPLATE.id,
-    })),
-  );
+export const setSheetFreeThunk =
+  (sheetIndex: number): AppThunk =>
+  (dispatch, getState) => {
+    // Les caixes prenen la mida justa dels seus pictogrames (pas 7c)
+    const naturalOf = naturalBoxOfState(getState());
+    dispatch(
+      changeFreeLayout((layout, area) => {
+        const free = mapSheet(layout, sheetIndex, (sheet) => ({
+          ...sheet,
+          template: FREE_TEMPLATE.id,
+        }));
+        return naturalOf
+          ? fitSheetBlocks(free, sheetIndex, naturalOf, area)
+          : free;
+      }),
+    );
+  };
 
 /**
  * «Aplica el meu estil» del menú «⋯» d'una pàgina o d'un bloc (R10): el meu
@@ -620,15 +632,20 @@ export const syncNewDocumentPagesThunk =
     const area = selectSheetArea(state);
     if (wanted !== "auto" && !area) return;
     const direction = selectPageLayout(state).direction ?? "row";
+    const initial = area
+      ? initialPagesFor(wanted, selectSequenceKeys(state), {
+          area,
+          direction,
+          newId: newLayoutId,
+        })
+      : undefined;
+    // En lliure, la caixa fa la mida justa dels pictogrames (pas 7c)
+    const naturalOf = naturalBoxOfState(state);
     dispatch(
       newDocumentPagesInheritedActionCreator(
-        area
-          ? initialPagesFor(wanted, selectSequenceKeys(state), {
-              area,
-              direction,
-              newId: newLayoutId,
-            })
-          : undefined,
+        initial && area && naturalOf && wanted === "free"
+          ? fitSheetBlocks(initial, 0, naturalOf, area)
+          : initial,
       ),
     );
   };

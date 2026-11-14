@@ -858,5 +858,6 @@
   "features.freeLayout.levels.blockStyleShared": "{count, plural, one {Only this block uses it.} other {# blocks use it: “Update with my style”, in the block's menu, changes them all.}}",
   "features.sequence.style.changed.myStyleUpdate": "The block style has been updated with your style, in every block that uses it.",
   "features.sequence.style.changed.blockStyleRemove": "The block style has been removed: the block goes back to the document's style.",
-  "components.viewSettingsPanel.dispositionHelp": "How the first page of a new document starts, and the pages you add to it."
+  "components.viewSettingsPanel.dispositionHelp": "How the first page of a new document starts, and the pages you add to it.",
+  "components.viewSettingsPanel.previewSequences": "Sequences in the preview"
 }

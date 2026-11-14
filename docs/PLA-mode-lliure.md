@@ -829,6 +829,9 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
 7b. ✅ **La disposició per defecte** (2026-11-14): la fila «Disposició» al panell «Pàgina i
    distribució», el document nou i buit que la segueix, les pàgines noves amb aquesta disposició
    (B36) i les seqüències noves col·locades a l'última pàgina. Vegeu «Com ha quedat el pas 7b».
+7c. ✅ **Valors per defecte, mostra i Lliure** (2026-11-14): els valors per defecte nous, la
+   disposició en 2 × 2, la mostra de «Pàgina i distribució» amb tres seqüències de colors i els
+   blocs de debò, i a Lliure el bloc que s'adapta a la seqüència. Vegeu «Com ha quedat el pas 7c».
 8. ⏭️ **Tancar la columna**: les peces a prova (`SettingsLevel`, `LevelCrumbs`, l'etiqueta de la
    disposició, la fila «Estil de bloc») a l'estàndard, treure l'etiqueta «Nou» i el vocabulari que
    queda de «vista» («Restaura la vista»). Després, **B35** redefinit («Restableix els pictogrames
@@ -904,7 +907,10 @@ Fet a la mateixa branca, sense interfície nova. Detall a `docs/decisions/ADR-00
   que ocupa més pantalla (`IntersectionObserver` a `FreeLayoutPages`) o la del bloc seleccionat, i
   es marca al full amb la vora més gruixuda i el número en negreta. Una selecció que deixa d'apuntar
   a res (bloc tret, seqüència esborrada, canvi de disposició) es treu sola.
-- **Al full**: clicar un bloc (o Enter i Espai) el selecciona (`aria-pressed`) i el marca amb la vora
+- **Lliure**: en passar-hi, cada bloc fa la mida dels seus pictogrames (sense trepitjar-ne cap; si
+  no hi cap, més petit), i després creix si la seqüència creix.
+
+**Al full**: clicar un bloc (o Enter i Espai) el selecciona (`aria-pressed`) i el marca amb la vora
   `sheetGuide` sencera, que no surt mai al paper ni al PDF. El menú del bloc és a un botó «⋯» al
   seu cantó, germà de la caixa (un botó dins d'un altre no es pot fer servir amb el teclat), a mida
   de pantalla encara que el full sigui escalat. Escape, o un clic fora de cap bloc, treu la
@@ -1155,6 +1161,38 @@ ha a la pàgina (R11). Es fa abans del pas 8.
 | Documents | Fonament 03 (§7), ADR-005 (decisions 14 i 25), `configuracions.md`, B36 resolta |
 | Proves | `pages.test.ts`, `freeLayoutThunks.test.ts` (document buit en viu, document amb feina, pàgina nova, seqüència nova), `SettingsDialog.test.tsx` (la fila i el desat en tancar) |
 
+### Com ha quedat el pas 7c (2026-11-14)
+
+**Les decisions**:
+
+- **Valors per defecte**: simple, mida 0,95, espai entre seqüències 7, espai entre pictogrames 1,5,
+  alineació centrada en totes dues direccions. La mida i l'espai entre pictogrames demanats (0,92 i
+  1,2) s'arrodoneixen a l'alça al pas dels lliscadors.
+- **La mostra**: tres seqüències de colors diferents (4, 5 i 6 pictogrames, numerats), amb una
+  casella per amagar-ne cadascuna; l'etiqueta de la disposició a dalt; en columnes i files, tantes
+  com seqüències visibles (automàtic: el nombre fix es va descartar), amb el requadre de cada
+  bloc. **Sense números als blocs.**
+- **La disposició, en 2 × 2**: Simple i Lliure a dalt, Files i Columnes a sota.
+- **Lliure**: en passar-hi, les caixes fan la mida dels pictogrames. Després, si la seqüència es fa
+  més gran que el bloc, el bloc creix; si es fa més petita, no; si l'usuari fa la caixa més petita,
+  la seqüència s'hi adapta.
+
+**Què s'ha fet**:
+
+| Peça | Canvi |
+|---|---|
+| Valors per defecte | `configs/viewSettingsConfig.ts` (`VIEW_DEFAULT_*`). Només per a qui no té preferències desades i per a «Restaura» |
+| La tria | `DispositionToggle` en una graella de dos per dos |
+| La mostra | `ViewSettingsPreview` nou: fa els blocs amb `initialPagesFor` (i `fitSheetBlocks` en lliure) i la graella de cada bloc amb `blockGrid`; la pàgina simple, en flux com a la vista. Les caselles, al `previewAside` del panell. Els colors, `previewSequenceColors` a `palette.ts` |
+| Lliure | `model/naturalBox.ts` (`naturalBoxMm`, `fitSheetBlocks`, `grownBox`); `setSheetFreeThunk` i el document nou en lliure fan les caixes a mida; `store/blockGrowth.ts` (`blockGrowthListener`, a `app/store.ts`) fa créixer els blocs, també des de l'edició; la vista hi deixa les targetes mesurades (`rememberCardSizes`, des de `useViewSelection`) |
+| Textos | El nom del grup de caselles, en els cinc idiomes |
+| Documents | ADR-005 (decisió 26), `configuracions.md`, `colors.md` |
+| Proves | `naturalBox.test.ts`; `freeLayoutThunks.test.ts` (passar a lliure, créixer i no encongir) |
+
+**Vist en provar-ho**: amb els valors nous, les tres seqüències de la mostra no caben senceres en
+un full Carta apaïsat ni en simple ni en lliure; la mostra ho ensenya tal com seria (en lliure, el
+bloc que no hi cap es fa més petit, amb l'avís «hi queden massa petits» a la vista).
+
 ### Preguntes que eren obertes
 
 | # | Pregunta | Opcions |
@@ -1164,13 +1202,13 @@ ha a la pàgina (R11). Es fa abans del pas 8.
 | Q3 | R1: un sol model de pàgines per a totes dues disposicions? | Sí (proposat) · No, la disposició automàtica té pàgines però sense plantilles |
 | Q4 | R3: la investigació, qui la fa? | Una cerca a la xarxa de materials publicats (ARASAAC, escoles, logopèdia) · Exemples reals de l'usuari i el seu entorn · Totes dues |
 
-## 13. Estat a 2026-11-14 (passos 7 i 7b) i com continuar
+## 13. Estat a 2026-11-14 (passos 7, 7b i 7c) i com continuar
 
 Recull de les sessions del 7 al 14 de novembre (passos 4, 4b, 5, 5b, 6 i 7, PR #304, branca
 `ccr-2207a706-ksozpj`). **És el lloc per on començar una sessió nova.** El detall i el perquè de
 cada decisió són a §12 (C1–C24, R10–R12, «Com ha quedat R4», «Com ha quedat el pas 5b» i «Com ha
-quedat el pas 6», «Com ha quedat el pas 7» i «Com ha quedat el pas 7b») i a l'ADR-005 (decisions
-16–25).
+quedat el pas 6», «Com ha quedat el pas 7», «Com ha quedat el pas 7b» i «Com ha quedat el pas 7c»)
+i a l'ADR-005 (decisions 16–26).
 
 ### Com funciona ara (el que veu l'usuari)
 
@@ -1195,6 +1233,8 @@ documents nous i les pàgines noves hi neixen.
 - **El menú «⋯» d'un bloc** (pàgines en blocs): a totes les pàgines, **«Aplica el meu estil»** (només
   a aquell bloc), **«Actualitza amb el meu estil»** i **«Treu l'estil de bloc»** (si en té un),
   copiar a una altra pàgina i treure'l.
+- **Lliure**: en passar-hi, cada bloc fa la mida dels seus pictogrames (sense trepitjar-ne cap; si
+  no hi cap, més petit). Després, si la seqüència es fa més gran que el bloc, el bloc creix.
 - **Afegir un bloc** fa el que diu l'etiqueta: a columnes, una columna més; a files, una fila més;
   a una plantilla, el primer espai buit (si no n'hi ha, la pàgina passa a lliure); a lliure, l'espai
   buit més gran, sense moure els altres.
@@ -1241,6 +1281,7 @@ documents nous i les pàgines noves hi neixen.
 | La vista i la columna | `components/ViewSequencesSettings/ViewSquenceSettings.tsx` (maqueta, botons, escala amb l'amplada mesurada), `SettingsLevel`, `LevelCrumbs`, `SequenceViewRows` |
 | Nivells | `features/free-layout/components/ViewLevels/` (`PageLevel`, `BlockLevel`, `TextBlockLevel`, `BlockStyleRow`, `PagePictograms`, `LicencePagesRow`) |
 | La disposició d'una pàgina (columna i menú) | `features/free-layout/hooks/useSheetDisposition.ts`, `components/DispositionToggle/` |
+| La mida dels blocs lliures | `features/free-layout/model/naturalBox.ts`, `store/blockGrowth.ts` |
 | La disposició dels documents nous | `features/free-layout/components/NewDocumentPagesSync/`; `store/freeLayoutThunks.ts` (`selectDefaultDisposition`, `syncNewDocumentPagesThunk`, `addNewSequenceThunk`); `model/pages.ts` (`dispositionOf`, `newSheetWith`, `initialPagesFor`); el panell, `features/user-settings/components/SettingsDialog/panels/ViewSettingsPanel/` |
 | Pàgines al full | `features/free-layout/components/FreeLayoutPages/` (`FreeLayoutPages`, `PageHeader`, `SinglePageHeader`, `PageActionsMenu`, `AutoSheetFlow`, `PlacementBox` com a closca de `SequenceBlock` i `TextBlock`, `CardBaseMeasurer`, `EmptySlot`, `TemplateGuides`, `GridDots`, `templateNames.ts`) |
 | Selector de plantilles | `features/free-layout/components/TemplatePicker/` |
@@ -1248,7 +1289,7 @@ documents nous i les pàgines noves hi neixen.
 | El meu estil | `features/user-settings/components/SettingsDialog/panels/DefaultSettingsPanel/` (`DefaultSettingsPanel`, `MyStyleHeader`, `DefaultForm`); `features/sequence/hooks/useOpenSaacFile.ts` (carregar-lo d'un fitxer); `features/sequence/components/DocumentStyle/PendingDefaultStyleDialog.tsx` (obrir un `.saacstyle`) |
 | Escala | `features/print/hooks/useScaleCalculator.ts` (`availableWidth`; `SCREEN_MARGINS.phone` a `utils/pageFormat.ts`) |
 | Fitxer | Sense canvis de format en aquests passos: només `id` nous de `sheets[].template` (les plantilles de R3 i `"free"`), a l'esquema, al fonament 06 i a l'ADR-005. «Aplica el meu estil» fa servir `styles` i `namedStyle`, que ja hi eren; des del pas 7 no hi escriu `view` |
-| Proves | `ViewLevels.test.tsx`, `FreeLayoutPages.test.tsx`, `TemplatePicker.test.tsx`, `model/*.test.ts` (`grid`, `distribute`, `templates`, `blockStyle`…), `freeLayoutThunks.test.ts`, `useScaleCalculator.test.ts`. Avui: 477 del web i 67 d'i18n |
+| Proves | `ViewLevels.test.tsx`, `FreeLayoutPages.test.tsx`, `TemplatePicker.test.tsx`, `model/*.test.ts` (`grid`, `distribute`, `templates`, `blockStyle`…), `freeLayoutThunks.test.ts`, `useScaleCalculator.test.ts`, `naturalBox.test.ts`. Avui: 485 del web i 67 d'i18n |
 
 ### Què queda obert
 
@@ -1273,6 +1314,8 @@ Decisions petites, per si es volen fer abans del pas següent:
   es posa petit a dalt a l'esquerra, a sobre dels altres.
 - **Els rètols no s'editen damunt del full** (doble clic o Enter, com proposava R9); a les pàgines
   simples no tenen menú, i les seqüències tampoc (per a «Aplica el meu estil», el de la pàgina).
+- **Un bloc lliure que creix** pot trepitjar-ne un altre (decisió 26); en passar a lliure no, però
+  un bloc que no hi cap es fa més petit.
 - **Les seqüències noves** van a l'última pàgina, també si és en blocs (decisió 14 revisada): en un
   document de moltes pàgines potser l'usuari esperaria la pàgina que mira.
 - **Al mòbil, les guies de les plantilles de la columna queden fora de la vista** (la pàgina és més
@@ -1304,7 +1347,8 @@ Pendents de més abast:
 
 ### El pas següent
 
-R7 (pas 7) i la disposició per defecte (pas 7b) són fets. Segons l'«Ordre proposat», el **pas 8** és **tancar la columna** abans de
+R7 (pas 7), la disposició per defecte (pas 7b) i els valors per defecte, la mostra i Lliure (pas
+7c) són fets. Segons l'«Ordre proposat», el **pas 8** és **tancar la columna** abans de
 seguir afegint-hi coses. Cal triar-ne l'abast amb l'usuari:
 
 1. **Les peces a prova a l'estàndard** (`docs/estandards/configuracions.md`): `SettingsLevel`,
@@ -1325,7 +1369,8 @@ el núvol) continuen a «Què queda obert».
 >
 > Llegeix primer `docs/PLA-mode-lliure.md`, **§13** (estat, on és el codi, què queda obert i el pas
 > següent) i, de §12, «Com ha quedat el pas 6», «Com ha quedat el pas 7» i «Com ha quedat el pas
-> 7b». Després `docs/decisions/ADR-005-disposicio-lliure.md` (decisions 6, 7, 14 i 16–25) i
+> 7b» i «Com ha quedat el pas 7c». Després `docs/decisions/ADR-005-disposicio-lliure.md`
+> (decisions 6, 7, 14 i 16–26) i
 > `docs/fonaments/03-model-contingut-estil.md` (§1, el vocabulari: estil, distribució, estil de
 > bloc i disposició; §4 i §5: la cascada i les accions sobre l'estil, i la direcció única). Abans de tocar la columna o la configuració, `docs/estandards/configuracions.md`;
 > si hi entren diàlegs o missatges, `capes-flotants.md` i `feedback-i-accions.md`; per als colors,

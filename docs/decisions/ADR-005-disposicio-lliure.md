@@ -207,6 +207,24 @@ fase 3 va fer veure que no n'hi ha prou:
     - **Una seqüència nova** va a l'última pàgina segons la seva disposició (decisió 14 revisada).
     - El `.saac` no canvia: la disposició és una preferència, i el document desa les seves pàgines
       com sempre. Al servidor, el validador i l'esquema de l'usuari accepten el camp nou.
+26. **A les pàgines lliures, el bloc s'adapta a la seqüència** (pas 7c, 2026-11-14).
+    - **En passar una pàgina a «Lliure»**, cada bloc de seqüència pren la **mida justa** dels seus
+      pictogrames a la distribució del bloc (`naturalBoxMm`: en una fila, o en més repartides a
+      parts iguals si no caben en l'amplada del full; amb columnes triades, aquestes). Es queda al
+      seu lloc si hi cap sense trepitjar cap altre bloc; si no, va al primer lloc lliure en ordre
+      de lectura; i si a la mida justa no hi cap enlloc, es fa més petit (els pictogrames s'hi
+      adapten, Q2) fins que hi càpiga (`fitSheetBlocks`). Els rètols no canvien. També un document
+      nou que comença en lliure (decisió 25).
+    - **Després, a una pàgina lliure**: si la seqüència es fa més gran que el bloc (més
+      pictogrames, més mida o espai, menys columnes), **el bloc creix** fins a la mida justa, pel
+      costat que cal i dins del full (`blockGrowthListener`, `grownBox`). Si la seqüència es fa
+      més petita, la caixa no canvia. Si l'usuari fa la caixa més petita que la seqüència, la
+      seqüència s'hi adapta, com sempre (decisió 9, Q2).
+    - Ho fa un `listener` de Redux que compara la mida justa d'abans i la de després de cada canvi
+      del document, i per això també passa quan es treballa a l'edició i la vista no hi és. La
+      targeta mesurada la deixa la vista (`rememberCardSizes`); sense, la de reserva.
+    - Créixer pot fer que un bloc en trepitgi un altre, com ja passa en moure'ls (§13 del pla).
+    - El format no canvia.
 
 ## Alternatives descartades
 
@@ -271,3 +289,4 @@ fase 3 va fer veure que no n'hi ha prou:
   meu estil» i «Treu l'estil de bloc», i la disposició de la pàgina en una sola tria (decisió 24).
 - **2026-11-14** (pas 7b): la disposició per defecte a les preferències, les pàgines noves amb
   aquesta disposició i les seqüències noves col·locades a l'última pàgina (decisions 25 i 14).
+- **2026-11-14** (pas 7c): a les pàgines lliures, el bloc s'adapta a la seqüència (decisió 26).

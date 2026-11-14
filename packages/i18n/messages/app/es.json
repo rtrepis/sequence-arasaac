@@ -858,5 +858,6 @@
   "features.freeLayout.levels.blockStyleShared": "{count, plural, one {Solo lo usa este bloque.} other {Lo usan # bloques: «Actualiza con mi estilo», en el menú del bloque, los cambia todos.}}",
   "features.sequence.style.changed.myStyleUpdate": "Se ha actualizado el estilo de bloque con tu estilo, en todos los bloques que lo usan.",
   "features.sequence.style.changed.blockStyleRemove": "Se ha quitado el estilo de bloque: el bloque vuelve al estilo del documento.",
-  "components.viewSettingsPanel.dispositionHelp": "Cómo empieza la primera página de un documento nuevo, y las páginas que se le añaden."
+  "components.viewSettingsPanel.dispositionHelp": "Cómo empieza la primera página de un documento nuevo, y las páginas que se le añaden.",
+  "components.viewSettingsPanel.previewSequences": "Secuencias de la muestra"
 }

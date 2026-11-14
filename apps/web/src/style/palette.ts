@@ -90,3 +90,12 @@ export const sheetWarning = "#e65100";
  * paper ni al PDF: és un estat de l'edició, no del document.
  */
 export const sheetGuide = "#616161";
+
+/**
+ * Les tres seqüències de la mostra del panell «Pàgina i distribució» (pas
+ * 7c): tres colors clars ben diferents perquè es vegi on va cadascuna, amb el
+ * número de cada pictograma en `printColors.text` (més de 10:1 amb tots tres).
+ * Són damunt del full, que no s'adapta al tema: fixos en tots dos. No són
+ * colors de contingut: no surten mai a cap document.
+ */
+export const previewSequenceColors = ["#C5E1A5", "#90CAF9", "#FFCC80"] as const;

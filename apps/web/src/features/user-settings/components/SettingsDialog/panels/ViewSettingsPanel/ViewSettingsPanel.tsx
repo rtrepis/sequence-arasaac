@@ -1,4 +1,11 @@
-import { Slider, Tooltip } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Slider,
+  Tooltip,
+} from "@mui/material";
 import StyledButton from "@/style/StyledButton";
 import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
 import {
@@ -36,7 +43,11 @@ import PrintFooterSection from "@components/ViewSequencesSettings/PrintFooterSec
 import viewMessages from "@components/ViewSequencesSettings/ViewSequencesSettings.lang";
 import DispositionToggle from "@features/free-layout/components/DispositionToggle/DispositionToggle";
 import levelMessages from "@features/free-layout/components/ViewLevels/ViewLevels.lang";
-import ViewSettingsPreview from "./ViewSettingsPreview";
+import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
+import { previewSequenceColors } from "@/style/palette";
+import ViewSettingsPreview, {
+  PREVIEW_SEQUENCE_LENGTHS,
+} from "./ViewSettingsPreview";
 import messages from "./ViewSettingsPanel.lang";
 import {
   SIZE_PICT_MIN,
@@ -68,6 +79,10 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     const reduxViewSettings = useAppSelector((store) => store.ui.viewSettings);
     const [localSettings, setLocalSettings] =
       useState<ViewSettings>(reduxViewSettings);
+    // Quines seqüències de la mostra es veuen. Només és de la mostra: no es desa
+    const [shown, setShown] = useState<boolean[]>(
+      PREVIEW_SEQUENCE_LENGTHS.map(() => true),
+    );
 
     useImperativeHandle(ref, () => ({
       syncToRedux: () => {
@@ -152,7 +167,51 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
 
     return (
       <SettingsPanelLayout
-        preview={<ViewSettingsPreview settings={localSettings} />}
+        preview={<ViewSettingsPreview settings={localSettings} shown={shown} />}
+        previewAside={
+          <FormGroup aria-label={intl.formatMessage(messages.previewSequences)}>
+            {PREVIEW_SEQUENCE_LENGTHS.map((_, index) => (
+              <FormControlLabel
+                key={index}
+                control={
+                  <Checkbox
+                    checked={shown[index]}
+                    onChange={(_, checked) =>
+                      setShown((prev) =>
+                        prev.map((value, i) => (i === index ? checked : value)),
+                      )
+                    }
+                  />
+                }
+                label={
+                  <Box
+                    component="span"
+                    sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    {/* El color de la seqüència a la mostra */}
+                    <Box
+                      component="span"
+                      aria-hidden
+                      sx={{
+                        width: 14,
+                        height: 14,
+                        borderRadius: "3px",
+                        backgroundColor: previewSequenceColors[index],
+                      }}
+                    />
+                    {intl.formatMessage(pageMessages.sequenceName, {
+                      number: index + 1,
+                    })}
+                  </Box>
+                }
+              />
+            ))}
+          </FormGroup>
+        }
         hint={
           // Guia del tab: què s'ajusta aquí
           <SettingsPanelHint>

@@ -37,6 +37,12 @@ const messages = defineMessages({
     description:
       "Ajuda sota la fila «Disposició» del panell «Pàgina i distribució»: és la disposició (simple, columnes, files o lliure) de la primera pàgina dels documents nous i de les pàgines que s'hi afegeixen",
   },
+  previewSequences: {
+    id: "components.viewSettingsPanel.previewSequences",
+    defaultMessage: "Sequences in the preview",
+    description:
+      "Nom accessible del grup de caselles, sota la mostra del panell «Pàgina i distribució», que mostren o amaguen cadascuna de les tres seqüències de la mostra (no es desa)",
+  },
 });
 
 export default messages;

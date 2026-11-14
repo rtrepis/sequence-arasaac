@@ -3305,5 +3305,9 @@
   "components.viewSettingsPanel.dispositionHelp": {
     "message": "Com comença la primera pàgina d'un document nou, i les pàgines que s'hi afegeixen.",
     "description": "Ajuda sota la fila «Disposició» del panell «Pàgina i distribució»: és la disposició (simple, columnes, files o lliure) de la primera pàgina dels documents nous i de les pàgines que s'hi afegeixen"
+  },
+  "components.viewSettingsPanel.previewSequences": {
+    "message": "Seqüències de la mostra",
+    "description": "Nom accessible del grup de caselles, sota la mostra del panell «Pàgina i distribució», que mostren o amaguen cadascuna de les tres seqüències de la mostra (no es desa)"
   }
 }

@@ -8,9 +8,12 @@ export const SEQ_VIEW_DEFAULT_ALIGNMENT_H = "left" as const;
 export const SEQ_VIEW_DEFAULT_ALIGNMENT_V = "top" as const;
 
 // --- Valors per defecte globals de visualització (uiSlice) ---
-export const VIEW_DEFAULT_SIZE_PICT = 1;
-export const VIEW_DEFAULT_PICT_SPACE = 1;
-export const VIEW_DEFAULT_SEQ_SPACE = 1;
+// Els de qui encara no té preferències desades i els de «Restaura» (pas 7c,
+// 2026-11-14): simple, mida 0,95, espai entre pictogrames 1,5, espai entre
+// seqüències 7 i tot centrat. Els documents desats porten els seus.
+export const VIEW_DEFAULT_SIZE_PICT = 0.95;
+export const VIEW_DEFAULT_PICT_SPACE = 1.5;
+export const VIEW_DEFAULT_SEQ_SPACE = 7;
 export const VIEW_DEFAULT_DIRECTION = "row" as const;
 export const VIEW_DEFAULT_PAGE_SIZE = "A4" as const;
 export const VIEW_DEFAULT_ORIENTATION = "landscape" as const;
@@ -18,8 +21,8 @@ export const VIEW_DEFAULT_ORIENTATION = "landscape" as const;
 export const VIEW_DEFAULT_LICENCE = true;
 /** Els documents nous comencen simples, com sempre: les seqüències una darrere l'altra. */
 export const VIEW_DEFAULT_DISPOSITION = "auto" as const;
-export const VIEW_DEFAULT_ALIGNMENT_H = "left" as const;
-export const VIEW_DEFAULT_ALIGNMENT_V = "top" as const;
+export const VIEW_DEFAULT_ALIGNMENT_H = "center" as const;
+export const VIEW_DEFAULT_ALIGNMENT_V = "center" as const;
 export const VIEW_DEFAULT_AUTHOR = "";
 
 // --- Rangs del slider: mida del pictograma (per seqüència) ---

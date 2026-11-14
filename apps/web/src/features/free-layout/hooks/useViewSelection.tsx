@@ -18,6 +18,7 @@ import {
   selectPages,
   selectSequenceKeys,
 } from "../store/freeLayoutThunks";
+import { rememberCardSizes } from "@features/free-layout/store/blockGrowth";
 
 /** L'`id` del nivell «Bloc» de la columna: l'enllaç del mòbil hi porta. */
 export const VIEW_BLOCK_LEVEL_ID = "view-level-block";
@@ -116,7 +117,13 @@ export const ViewSelectionProvider = ({
   const keys = useAppSelector(selectSequenceKeys);
   const [selection, setSelection] = useState<ViewSelection | null>(null);
   const [visiblePage, setVisiblePage] = useState(0);
-  const [cardSizes, setCardSizes] = useState<Record<string, CardPx>>({});
+  const [cardSizes, setMeasuredCards] = useState<Record<string, CardPx>>({});
+  // Les targetes mesurades també serveixen per fer créixer els blocs lliures
+  // quan la vista no hi és (pas 7c)
+  const setCardSizes = useCallback((sizes: Record<string, CardPx>) => {
+    rememberCardSizes(sizes);
+    setMeasuredCards(sizes);
+  }, []);
   const [uniformChoice, setUniformChoices] = useState<Record<string, boolean>>(
     {},
   );

@@ -4,8 +4,10 @@ import { sequenceFixture } from "@/test/fixtures/document";
 import type { DocumentSAAC } from "@/types/document";
 import {
   addNewSequenceActionCreator,
+  addPictogramActionCreator,
   deleteLastSequenceActionCreator,
 } from "@features/sequence/store/documentSlice";
+import { pictogramFixture } from "@/test/fixtures/document";
 import {
   selectCanUndoStyle,
   undoStyleChangeThunk,
@@ -38,6 +40,7 @@ import {
   setSheetViewThunk,
   addNewSequenceThunk,
   syncNewDocumentPagesThunk,
+  setSheetFreeThunk,
   updateMyStyleThunk,
 } from "./freeLayoutThunks";
 
@@ -520,5 +523,43 @@ describe("la disposició de les preferències (pas 7b)", () => {
     const [sheet] = layoutOf(store).sheets;
     expect(sheet.template).toBe("columns-2");
     expect(sheet.placements.map(keyOf)).toEqual([0, 1]);
+  });
+});
+
+describe("els blocs de les pàgines lliures (pas 7c)", () => {
+  const boxOf = (store: ReturnType<typeof createAppStore>, index = 0) => {
+    const placement = layoutOf(store).sheets[0].placements[index];
+    return {
+      w: placement.kind !== "unknown" ? placement.w : 0,
+      h: placement.kind !== "unknown" ? placement.h : 0,
+    };
+  };
+
+  it("en passar a lliure, les caixes fan la mida dels pictogrames", () => {
+    const store = freeStore(2);
+    const before = boxOf(store);
+    store.dispatch(setSheetFreeThunk(0));
+    const after = boxOf(store);
+    // En columnes, cada caixa feia tota l'alçada del full; ara, la d'una fila
+    expect(after.h).toBeLessThan(before.h);
+    expect(layoutOf(store).sheets[0].template).toBe("free");
+  });
+
+  it("si la seqüència creix per sobre de la caixa, la caixa creix; si es fa petita, no", () => {
+    const store = freeStore(2);
+    store.dispatch(setSheetFreeThunk(0));
+    const fitted = boxOf(store);
+    // Un pictograma més a la primera seqüència (l'activa)
+    store.dispatch(addPictogramActionCreator(pictogramFixture()));
+    const grown = boxOf(store);
+    expect(grown.w).toBeGreaterThan(fitted.w);
+
+    store.dispatch(deleteLastSequenceActionCreator());
+    store.dispatch(
+      setPlacementViewThunk(layoutOf(store).sheets[0].placements[0].id, {
+        sizePict: 0.5,
+      }),
+    );
+    expect(boxOf(store)).toEqual(grown);
   });
 });
