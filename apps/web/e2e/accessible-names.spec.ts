@@ -73,7 +73,7 @@ test("els botons de restaurar del modal diuen cadascun el seu àmbit", async ({
     page.getByRole("button", { name: "Restaura els pictogrames" }),
   ).toBeVisible();
 
-  await page.getByRole("tab", { name: "Vista" }).click();
+  await page.getByRole("tab", { name: "Pàgina i distribució" }).click();
   await expect(
     page.getByRole("button", { name: "Restaura la vista" }),
   ).toBeVisible();

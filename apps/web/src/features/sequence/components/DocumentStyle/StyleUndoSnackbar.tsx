@@ -72,6 +72,8 @@ interface StyleUndoSnackbarProps {
 const CHANGED_MESSAGE: Record<StyleChangeSource, MessageDescriptor> = {
   myStyleSheet: messages.changedMyStyleSheet,
   myStyleBlock: messages.changedMyStyleBlock,
+  myStyleUpdate: messages.changedMyStyleUpdate,
+  blockStyleRemove: messages.changedBlockStyleRemove,
   applyAll: messages.changedApplyAll,
   reset: messages.changedReset,
   fitTextPictogram: messages.changedFitTextPictogram,

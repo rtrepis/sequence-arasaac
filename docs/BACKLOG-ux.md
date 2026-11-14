@@ -66,12 +66,12 @@ l'entrada.
 |---|---|---|---|---|
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | C28 | Girar el mòbil tanca el diàleg d'edició | Es pot perdre el que s'estava editant, i girar el mòbil és habitual | S | No |
-| B35 | «Aplica a tots» no és a cap lloc de la interfície | Des de R10 no hi ha manera de treure d'un cop els retocs de tots els pictogrames d'un document | S | Sí: on va (menú «⋯» de la pàgina, del document…) i si es torna a oferir |
 
 ### Més endavant
 
 | Id | Què | Per què pot esperar | Esforç |
 |---|---|---|---|
+| B35 | «Restableix els pictogrames d'aquesta seqüència» (l'antic «Aplica a tots») | Redefinit al pas 7: els retocs són de la seqüència, no del bloc ni de la pàgina, i treure'ls des d'una pàgina canviaria les altres on surt. Es fa després de R7 | S |
 | B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
@@ -111,7 +111,7 @@ no es toquen; les que sí, porten una nota amb la data de la revisió.
 Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posar-les a
 *Prioritats*.
 
-### B31 — Aplicar canvis d'estil per seqüència 💡 Idea
+### B31 — Aplicar canvis d'estil per seqüència ✅ Resolta (com a estils de bloc, R7)
 
 *(Oberta en treure «Aplica a aquesta seqüència» dels fonaments, 2026-09-29.)*
 
@@ -124,6 +124,12 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
 - **2026-11-07**: torna a sortir a la revisió del mode lliure com a «estils per grup de
   seqüències», amb la necessitat d'un nom per a l'usuari. Es continua a **R7** de
   `docs/PLA-mode-lliure.md` (§12), que el situa al nivell «Seqüència» de la columna (R8).
+- **2026-11-14 (pas 7)**: resolta com a **estils de bloc**. L'estil d'un grup de blocs és el seu
+  estil de bloc (el meu estil copiat al document): «Aplica el meu estil» el dona, «Actualitza amb
+  el meu estil» el canvia a tots els blocs que el fan servir i «Treu l'estil de bloc» el treu d'un
+  bloc. No hi ha cap editor d'estils al document (direcció única). A més, **estil** i
+  **distribució** (mida, espai, alineació) es separen: un estil de bloc no porta distribució.
+  Vegeu la decisió 24 de l'ADR-005.
 
 ### B33 — Un catàleg de configuracions de l'usuari 🚧 Sense comptes, fet
 
@@ -164,7 +170,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   (`docs/ESTUDI-limits-serveis-gratuits.md`).
 - El detall és a **R11** de `docs/PLA-mode-lliure.md` (§12).
 
-### B35 — «Aplica a tots» no és a cap lloc de la interfície 💡 Decisió pendent
+### B35 — «Aplica a tots» no és a cap lloc de la interfície ⏸️ Ajornada (redefinida)
 
 *(Oberta en fer R10, 2026-11-12.)*
 
@@ -176,6 +182,12 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   («Restableix»). L'acció es conserva al codi, amb les seves proves.
 - **Cal decidir**: si es torna a oferir i on (el menú «⋯» de la pàgina, «Restableix els
   pictogrames d'aquesta pàgina», o el nivell «Document» de la columna).
+- **2026-11-14 (pas 7)**: no estava ben definida. Els retocs dels pictogrames són de la
+  **seqüència**, no del bloc ni de la pàgina: treure'ls des del menú d'una pàgina canviaria també
+  les altres pàgines on surt la mateixa seqüència, i sorprendria. Es redefineix com a **«Restableix
+  els pictogrames d'aquesta seqüència»**, amb un missatge que digui que canvia tots els blocs on
+  surt, i s'ajorna fins després de R7. Lligam: després d'«Aplica el meu estil», un pictograma
+  retocat continua retocat; és el cas en què més es trobarà a faltar.
 
 ### B36 — «Pàgines noves»: com neix una pàgina nova 💡 Idea
 

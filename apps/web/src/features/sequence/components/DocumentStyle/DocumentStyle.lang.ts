@@ -156,6 +156,20 @@ const messages = defineMessages({
     description:
       "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'un bloc",
   },
+  changedMyStyleUpdate: {
+    id: "features.sequence.style.changed.myStyleUpdate",
+    defaultMessage:
+      "S'ha actualitzat l'estil de bloc amb el teu estil, a tots els blocs que el fan servir.",
+    description:
+      "Snackbar amb «Desfés» després d'«Actualitza amb el meu estil» del menú «⋯» d'una pàgina o d'un bloc",
+  },
+  changedBlockStyleRemove: {
+    id: "features.sequence.style.changed.blockStyleRemove",
+    defaultMessage:
+      "S'ha tret l'estil de bloc: el bloc torna a l'estil del document.",
+    description:
+      "Snackbar amb «Desfés» després de treure l'estil de bloc d'un bloc, al nivell «Bloc» de la columna de la vista",
+  },
 });
 
 export default messages;

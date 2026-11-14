@@ -365,7 +365,7 @@ describe("el menú de la pàgina i els blocs buits", () => {
     );
     const menu = screen.getByRole("menu");
     expect(
-      within(menu).getByRole("menuitemradio", { name: "In blocks" }),
+      within(menu).getByRole("menuitemradio", { name: "Free" }),
     ).toHaveAttribute("aria-checked", "true");
     expect(
       within(menu).getByRole("menuitem", { name: "Text block" }),

@@ -9,8 +9,8 @@ import {
 } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
 import type { SheetMode } from "@/types/document";
+import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
 import type { SequenceDirection } from "@/types/ui";
 import { IconToggleButton, SettingRow } from "@/components/SettingsLayout";
 import SettingsLevel from "@components/ViewSequencesSettings/SettingsLevel";
@@ -30,11 +30,14 @@ import {
   selectPages,
   setSheetDirectionThunk,
   setSheetGapThunk,
-  setSheetFreeThunk,
-  setSheetModeThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
 import { useApplyTemplate } from "@features/free-layout/hooks/useApplyTemplate";
+import {
+  Disposition,
+  MAX_LINES,
+  useSheetDisposition,
+} from "@features/free-layout/hooks/useSheetDisposition";
 import { TEMPLATE_NAMES } from "@features/free-layout/components/FreeLayoutPages/templateNames";
 import TemplatePicker from "@features/free-layout/components/TemplatePicker";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
@@ -48,12 +51,6 @@ export const PageIcon = (): React.ReactElement => <MdCropPortrait />;
 
 /** Prefix dels ids dels títols de fila, per lligar-los als controls. */
 const LABEL_ID = "view-level-page";
-
-/** Els modes del repartiment d'una pàgina en blocs. */
-type ArrangementMode = "columns" | "rows" | "free";
-
-/** Quantes columnes o files com a molt es poden triar. */
-const MAX_LINES = 6;
 
 /** La disposició de sempre, quan el document encara no té pàgines pròpies. */
 export interface ImplicitPage {
@@ -147,25 +144,11 @@ const PageLevel = ({
     setTemplatePreview(null);
     applyWithWarning(template);
   };
-  // El repartiment: columnes, files o lliure. Una plantilla aplicada és
-  // lliure, amb espais per omplir
-  const arrangementMode: ArrangementMode =
-    arrangement.kind === "template" ? "free" : arrangement.kind;
-  const changeArrangementMode = (next: ArrangementMode) => {
-    if (next === arrangementMode) return;
-    // Lliure no mou res: els blocs es queden on són
-    if (next === "free") {
-      dispatch(setSheetFreeThunk(index));
-      return;
-    }
-    // De columnes a files (o al revés) es queda el nombre; si no, tants com
-    // blocs (com a molt, els que es poden triar)
-    const n =
-      arrangement.kind === "template"
-        ? Math.min(Math.max(count, 1), MAX_LINES)
-        : arrangement.n;
-    applyTemplate(arrangementTemplate(next, n, count));
-  };
+  // La disposició: simple, o en blocs per columnes, per files o lliures
+  const { disposition, change: changeDisposition } = useSheetDisposition(
+    index,
+    applyTemplate,
+  );
 
   return (
     <SettingsLevel
@@ -204,12 +187,10 @@ const PageLevel = ({
           control="wide"
         >
           <StyledToggleButtonGroup
-            value={mode}
+            value={disposition}
             exclusive
-            onChange={(_, value: SheetMode | null) =>
-              value &&
-              value !== mode &&
-              dispatch(setSheetModeThunk(index, value))
+            onChange={(_, value: Disposition | null) =>
+              value && changeDisposition(value)
             }
             aria-labelledby={`${LABEL_ID}-mode`}
             aria-describedby={`${LABEL_ID}-mode-helper`}
@@ -217,7 +198,13 @@ const PageLevel = ({
             <IconToggleButton value="auto" message={messages.modeAuto}>
               <MdViewStream />
             </IconToggleButton>
-            <IconToggleButton value="template" message={messages.modeBlocks}>
+            <IconToggleButton value="columns" message={messages.byColumns}>
+              <MdViewColumn />
+            </IconToggleButton>
+            <IconToggleButton value="rows" message={messages.byRows}>
+              <MdTableRows />
+            </IconToggleButton>
+            <IconToggleButton value="free" message={messages.byFree}>
               <MdOutlineDashboard />
             </IconToggleButton>
           </StyledToggleButtonGroup>
@@ -279,31 +266,6 @@ const PageLevel = ({
 
       {mode === "template" && (
         <>
-          <SettingRow
-            title={<FormattedMessage {...messages.arrangement} />}
-            labelId={`${LABEL_ID}-arrangement`}
-            control="wide"
-          >
-            <StyledToggleButtonGroup
-              value={arrangementMode}
-              exclusive
-              onChange={(_, value: ArrangementMode | null) =>
-                value && changeArrangementMode(value)
-              }
-              aria-labelledby={`${LABEL_ID}-arrangement`}
-            >
-              <IconToggleButton value="columns" message={messages.byColumns}>
-                <MdViewColumn />
-              </IconToggleButton>
-              <IconToggleButton value="rows" message={messages.byRows}>
-                <MdTableRows />
-              </IconToggleButton>
-              <IconToggleButton value="free" message={messages.byFree}>
-                <MdOutlineDashboard />
-              </IconToggleButton>
-            </StyledToggleButtonGroup>
-          </SettingRow>
-
           {arrangement.kind !== "template" && (
             <SettingRow
               title={

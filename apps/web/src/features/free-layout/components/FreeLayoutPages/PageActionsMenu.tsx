@@ -22,6 +22,7 @@ import {
   MdOutlineDashboard,
   MdOutlineLibraryAdd,
   MdOutlinePalette,
+  MdSync,
   MdTitle,
 } from "react-icons/md";
 import { MessageDescriptor, useIntl } from "react-intl";
@@ -37,15 +38,21 @@ import {
   moveSheetThunk,
   removeSheetThunk,
   selectPageLayout,
+  selectNamedStyles,
   selectPages,
-  setSheetModeThunk,
+  updateMyStyleThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
+import { targetStyleIds } from "@features/free-layout/model/blockStyle";
 import {
   SHAPED_TEMPLATES,
   arrangementOf,
 } from "@features/free-layout/model/templates";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
 import { useApplyTemplate } from "@features/free-layout/hooks/useApplyTemplate";
+import {
+  Disposition,
+  useSheetDisposition,
+} from "@features/free-layout/hooks/useSheetDisposition";
 import TemplatePicker from "@features/free-layout/components/TemplatePicker";
 import messages from "./FreeLayoutPages.lang";
 
@@ -74,6 +81,10 @@ const PageActionsMenu = ({
   const { showSnackbar } = useFeedback();
   const { select, setTemplatePreview, setVisiblePage } = useViewSelection();
   const pages = useAppSelector(selectPages);
+  const styles = useAppSelector(selectNamedStyles);
+  // Els blocs de la pàgina ja tenen algun estil de bloc: es pot actualitzar
+  const hasBlockStyle =
+    targetStyleIds(pages, styles, { kind: "sheet", sheetIndex }).length > 0;
   const orientation = useAppSelector(selectPageLayout).orientation;
   const pageMenuId = useId();
   const templatesTitleId = useId();
@@ -101,10 +112,17 @@ const PageActionsMenu = ({
     action();
   };
 
-  const changeMode = (next: SheetMode) =>
-    pageAction(() => {
-      if (next !== mode) dispatch(setSheetModeThunk(sheetIndex, next));
-    });
+  // La disposició, la mateixa tria que la del nivell «Pàgina» de la columna
+  const { disposition, change: changeDisposition } = useSheetDisposition(
+    sheetIndex,
+    apply,
+  );
+  const DISPOSITIONS: readonly [Disposition, MessageDescriptor][] = [
+    ["auto", messages.modeContinuous],
+    ["columns", messages.modeColumns],
+    ["rows", messages.modeRows],
+    ["free", messages.modeFree],
+  ];
 
   const closeTemplates = () => {
     setTemplatesAnchor(null);
@@ -134,21 +152,15 @@ const PageActionsMenu = ({
         <ListSubheader>
           {intl.formatMessage(messages.layoutSection)}
         </ListSubheader>
-        {(["auto", "template"] as const).map((value) => (
+        {DISPOSITIONS.map(([value, label]) => (
           <MenuItem
             key={value}
             role="menuitemradio"
-            aria-checked={mode === value}
-            onClick={changeMode(value)}
+            aria-checked={disposition === value}
+            onClick={pageAction(() => changeDisposition(value))}
           >
-            <ListItemIcon>{mode === value && <MdCheck />}</ListItemIcon>
-            <ListItemText>
-              {intl.formatMessage(
-                value === "auto"
-                  ? messages.modeContinuous
-                  : messages.modeBlocks,
-              )}
-            </ListItemText>
+            <ListItemIcon>{disposition === value && <MdCheck />}</ListItemIcon>
+            <ListItemText>{intl.formatMessage(label)}</ListItemText>
           </MenuItem>
         ))}
 
@@ -225,6 +237,22 @@ const PageActionsMenu = ({
             {intl.formatMessage(messages.applyMyStyle)}
           </ListItemText>
         </MenuItem>
+        {/* Els estils de bloc de la pàgina, amb el meu estil d'ara: canvien
+            tots els blocs que els fan servir, també a altres pàgines (R7) */}
+        {hasBlockStyle && (
+          <MenuItem
+            onClick={pageAction(() =>
+              dispatch(updateMyStyleThunk({ kind: "sheet", sheetIndex })),
+            )}
+          >
+            <ListItemIcon>
+              <MdSync />
+            </ListItemIcon>
+            <ListItemText>
+              {intl.formatMessage(messages.updateMyStyle)}
+            </ListItemText>
+          </MenuItem>
+        )}
 
         <Divider />
         <MenuItem

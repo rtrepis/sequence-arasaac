@@ -363,11 +363,23 @@ const messages = defineMessages({
     description:
       "Opció del menú d'una pàgina: les seqüències una darrere l'altra, com sempre",
   },
-  modeBlocks: {
-    id: "features.freeLayout.page.modeBlocks",
-    defaultMessage: "In blocks",
+  modeColumns: {
+    id: "features.freeLayout.page.modeColumns",
+    defaultMessage: "Columns",
     description:
-      "Opció del menú d'una pàgina: cada seqüència o text és un bloc amb el seu lloc a la pàgina",
+      "Opció de la disposició al menú d'una pàgina: els blocs repartits en columnes",
+  },
+  modeRows: {
+    id: "features.freeLayout.page.modeRows",
+    defaultMessage: "Rows",
+    description:
+      "Opció de la disposició al menú d'una pàgina: els blocs repartits en files",
+  },
+  modeFree: {
+    id: "features.freeLayout.page.modeFree",
+    defaultMessage: "Free",
+    description:
+      "Opció de la disposició al menú d'una pàgina: cada bloc on l'usuari el posa",
   },
   previousPage: {
     id: "features.freeLayout.page.previousPage",
@@ -412,6 +424,18 @@ const messages = defineMessages({
     defaultMessage: "My style",
     description:
       "Nom de l'estil que «Aplica el meu estil» copia al document. Queda escrit al fitxer com a contingut i no es torna a traduir",
+  },
+  updateMyStyle: {
+    id: "features.freeLayout.updateMyStyle",
+    defaultMessage: "Update with my style",
+    description:
+      "Acció del menú «⋯» d'una pàgina o d'un bloc que ja fan servir un estil de bloc: aquell estil passa a ser el meu estil d'ara, i canvien tots els blocs que el fan servir (es pot desfer)",
+  },
+  removeBlockStyle: {
+    id: "features.freeLayout.removeBlockStyle",
+    defaultMessage: "Remove the block style",
+    description:
+      "Acció del menú «⋯» d'un bloc amb estil de bloc: el bloc torna a l'estil del document (es pot desfer)",
   },
 });
 

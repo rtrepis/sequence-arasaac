@@ -15,9 +15,11 @@ import {
   MdMoreVert,
   MdOutlinePalette,
   MdOutlineRemoveCircleOutline,
+  MdOutlineFormatColorReset,
+  MdSync,
 } from "react-icons/md";
 import { useIntl } from "react-intl";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
 import type { Theme } from "@mui/material";
 import type { SystemStyleObject } from "@mui/system";
@@ -38,9 +40,13 @@ import {
 import {
   applyMyStyleThunk,
   copyPlacementToSheetThunk,
+  removeBlockStyleThunk,
   removePlacementThunk,
+  selectNamedStyles,
   setPlacementCommonThunk,
+  updateMyStyleThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
+import { namedStyleOf } from "@features/free-layout/model/blockStyle";
 import messages from "./FreeLayoutPages.lang";
 
 /** El botó del menú, a la pantalla, en px: el full s'escala, el botó no. */
@@ -141,6 +147,9 @@ const PlacementBox = ({
   const { showSnackbar } = useFeedback();
   const menuId = useId();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  // Si el bloc ja té un estil de bloc, es pot actualitzar amb el meu estil (R7)
+  const styles = useAppSelector(selectNamedStyles);
+  const hasBlockStyle = namedStyleOf(styles, placement.styleId) !== undefined;
 
   const close = () => setAnchor(null);
   const run = (action: () => void) => {
@@ -398,6 +407,44 @@ const PlacementBox = ({
             {intl.formatMessage(messages.applyMyStyle)}
           </ListItemText>
         </MenuItem>
+        {/* L'estil de bloc que ja té, amb el meu estil d'ara: canvien tots
+            els blocs que el fan servir (R7) */}
+        {hasBlockStyle && (
+          <MenuItem
+            onClick={() =>
+              run(() =>
+                dispatch(
+                  updateMyStyleThunk({
+                    kind: "block",
+                    placementId: placement.id,
+                  }),
+                ),
+              )
+            }
+          >
+            <ListItemIcon>
+              <MdSync />
+            </ListItemIcon>
+            <ListItemText>
+              {intl.formatMessage(messages.updateMyStyle)}
+            </ListItemText>
+          </MenuItem>
+        )}
+        {/* Torna a l'estil del document; es pot desfer */}
+        {hasBlockStyle && (
+          <MenuItem
+            onClick={() =>
+              run(() => dispatch(removeBlockStyleThunk(placement.id)))
+            }
+          >
+            <ListItemIcon>
+              <MdOutlineFormatColorReset />
+            </ListItemIcon>
+            <ListItemText>
+              {intl.formatMessage(messages.removeBlockStyle)}
+            </ListItemText>
+          </MenuItem>
+        )}
 
         {!common && sheetCount > 1 && <Divider />}
         {!common && sheetCount > 1 && (

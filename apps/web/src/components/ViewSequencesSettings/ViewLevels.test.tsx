@@ -367,3 +367,104 @@ describe("afegir pàgines des de l'inici", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("els estils de bloc (R7)", () => {
+  /** Els blocs 1 i 3 fan servir l'estil de bloc «Agenda». */
+  const styledDocument = (): DocumentSAAC => {
+    const document = freeDocument();
+    const [first, second] = document.pages?.sheets ?? [];
+    first.placements[0] = { ...placement("pl_1", 0), styleId: "st_1" };
+    second.placements[0] = { ...placement("pl_3", 1), styleId: "st_1" };
+    return {
+      ...document,
+      styles: [
+        {
+          id: "st_1",
+          name: "Agenda",
+          pictSequence: { textPosition: "top" },
+        },
+      ],
+    };
+  };
+
+  it("el nivell «Bloc» diu quin estil de bloc fa servir i quants blocs el comparteixen", async () => {
+    renderView(styledDocument());
+
+    await userEvent.click(
+      screen.getAllByRole("button", { name: /^Sequence 1,/ })[0],
+    );
+    expect(screen.getByText("Agenda")).toBeInTheDocument();
+    expect(
+      screen.getByText(/^2 blocks use it: “Update with my style”/),
+    ).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getAllByRole("button", { name: /^Sequence 2,/ })[0],
+    );
+    expect(screen.getByText("The document's style")).toBeInTheDocument();
+  });
+
+  it("el menú del bloc el treu, i només a aquell bloc", async () => {
+    const { store } = renderView(styledDocument());
+
+    await userEvent.click(
+      screen.getAllByRole("button", { name: "Actions for Sequence 1" })[0],
+    );
+    expect(
+      screen.getByRole("menuitem", { name: "Update with my style" }),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("menuitem", { name: "Remove the block style" }),
+    );
+
+    const [first, second] = store.getState().document.pages?.sheets ?? [];
+    expect(first.placements[0]).not.toHaveProperty("styleId");
+    expect(second.placements[0]).toMatchObject({ styleId: "st_1" });
+    expect(store.getState().document.styles).toHaveLength(1);
+    // El missatge és el snackbar amb «Desfés»
+    expect(store.getState().style.undoSnackbar).toMatchObject({
+      source: "blockStyleRemove",
+    });
+  });
+
+  it("un bloc sense estil de bloc no ofereix actualitzar-lo ni treure'l", async () => {
+    renderView(styledDocument());
+    await userEvent.click(
+      screen.getAllByRole("button", { name: "Actions for Sequence 2" })[0],
+    );
+    expect(
+      screen.getByRole("menuitem", { name: "Apply my style" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("menuitem", { name: "Update with my style" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("menuitem", { name: "Remove the block style" }),
+    ).not.toBeInTheDocument();
+  });
+});
+
+describe("la disposició de la pàgina, en una sola fila", () => {
+  it("simple, columnes, files o lliure, sense cap fila de repartiment a part", async () => {
+    const { store } = renderView(baseDocument());
+    const group = screen.getByRole("group", { name: /^Layout/ });
+    expect(
+      within(group).getByRole("button", { name: /^Simple/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByRole("group", { name: "Arrange by" })).toBeNull();
+
+    await userEvent.click(
+      within(group).getByRole("button", { name: "In columns" }),
+    );
+
+    const [sheet] = store.getState().document.pages?.sheets ?? [];
+    expect(sheet.mode).toBe("template");
+    expect(sheet.template).toBe("columns-2");
+    expect(
+      within(screen.getByRole("group", { name: /^Layout/ })).getByRole(
+        "button",
+        { name: "In columns" },
+      ),
+    ).toHaveAttribute("aria-pressed", "true");
+  });
+});

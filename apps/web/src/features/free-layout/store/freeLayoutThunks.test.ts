@@ -14,7 +14,10 @@ import {
   selectResolvedSequenceViews,
   selectUserDefaultStyle,
 } from "@features/sequence/style/styleSelectors";
-import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
+import {
+  updateDefaultSettingPictSequenceActionCreator,
+  viewSettingsActionCreator,
+} from "@features/user-settings/store/uiSlice";
 import { whereIs } from "../model/placementsOf";
 import { stackTemplate } from "../model/templates";
 import {
@@ -22,6 +25,7 @@ import {
   addSheetThunk,
   applyMyStyleThunk,
   applyTemplateThunk,
+  removeBlockStyleThunk,
   removePlacementThunk,
   removeSheetThunk,
   setLicenceOnThunk,
@@ -31,6 +35,7 @@ import {
   setPlacementCommonThunk,
   setPlacementViewThunk,
   setSheetViewThunk,
+  updateMyStyleThunk,
 } from "./freeLayoutThunks";
 
 // Les accions sobre les pàgines amb l'store de debò: el document, i el desfer
@@ -309,15 +314,17 @@ describe("«Aplica el meu estil» (R10)", () => {
     const styles = store.getState().document.styles ?? [];
     expect(styles).toHaveLength(1);
     expect(styles[0].name).toBe("El meu estil");
-    expect(styles[0].view?.sizePict).toBe(1.7);
+    // La distribució no és de l'estil: el bloc es queda la seva
+    expect(styles[0]).not.toHaveProperty("view");
     const mine = selectUserDefaultStyle(store.getState());
     expect(styles[0].pictSequence).toEqual(mine.pictSequence);
     layoutOf(store).sheets[0].placements.forEach((placement) => {
       expect(placement.kind === "sequence" && placement.styleId).toBe(
         styles[0].id,
       );
-      // El retoc de la vista del bloc manaria sobre l'estil: es treu
-      expect(placement.kind === "sequence" && placement.view).toBeUndefined();
+    });
+    expect(layoutOf(store).sheets[0].placements[0]).toMatchObject({
+      view: { sizePict: 0.5 },
     });
     expect(store.getState().style.undoSnackbar).toMatchObject({
       source: "myStyleSheet",
@@ -379,5 +386,74 @@ describe("«Aplica el meu estil» (R10)", () => {
         (placement) => placement.kind === "sequence" && placement.styleId,
       ),
     ).toBe(true);
+  });
+});
+
+describe("«Actualitza amb el meu estil» i treure l'estil de bloc (R7)", () => {
+  it("canvia tots els blocs amb aquell estil, també els d'altres pàgines, i es desfà", () => {
+    const store = freeStore(3);
+    const [first, second] = layoutOf(store).sheets[0].placements;
+    store.dispatch(
+      applyMyStyleThunk(
+        { kind: "block", placementId: first.id },
+        "El meu estil",
+      ),
+    );
+    store.dispatch(
+      applyMyStyleThunk(
+        { kind: "block", placementId: second.id },
+        "El meu estil",
+      ),
+    );
+    const [before] = store.getState().document.styles ?? [];
+    store.dispatch(
+      updateDefaultSettingPictSequenceActionCreator({ textPosition: "top" }),
+    );
+
+    store.dispatch(
+      updateMyStyleThunk({ kind: "block", placementId: first.id }),
+    );
+
+    const styles = store.getState().document.styles ?? [];
+    expect(styles).toHaveLength(1);
+    expect(styles[0]).toMatchObject({ id: before.id, name: before.name });
+    expect(styles[0].pictSequence?.textPosition).toBe("top");
+    expect(store.getState().style.undoSnackbar).toMatchObject({
+      source: "myStyleUpdate",
+    });
+    store.dispatch(undoStyleChangeThunk());
+    expect(store.getState().document.styles).toEqual([before]);
+  });
+
+  it("sense cap estil de bloc no fa res", () => {
+    const store = freeStore(2);
+    const before = store.getState().document;
+    store.dispatch(updateMyStyleThunk({ kind: "sheet", sheetIndex: 0 }));
+    expect(store.getState().document).toBe(before);
+  });
+
+  it("treure'l torna el bloc a l'estil del document, i es desfà", () => {
+    const store = freeStore(2);
+    const [first] = layoutOf(store).sheets[0].placements;
+    store.dispatch(
+      applyMyStyleThunk(
+        { kind: "block", placementId: first.id },
+        "El meu estil",
+      ),
+    );
+    const applied = store.getState().document;
+
+    store.dispatch(removeBlockStyleThunk(first.id));
+
+    expect(layoutOf(store).sheets[0].placements[0]).not.toHaveProperty(
+      "styleId",
+    );
+    expect(store.getState().document.styles).toEqual([]);
+    expect(store.getState().style.undoSnackbar).toMatchObject({
+      source: "blockStyleRemove",
+    });
+    store.dispatch(undoStyleChangeThunk());
+    expect(store.getState().document.pages).toEqual(applied.pages);
+    expect(store.getState().document.styles).toEqual(applied.styles);
   });
 });

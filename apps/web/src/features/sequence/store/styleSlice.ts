@@ -34,6 +34,8 @@ import { mergeDeep } from "@features/sequence/saac/cascade";
 export type StyleChangeSource =
   | "myStyleSheet"
   | "myStyleBlock"
+  | "myStyleUpdate"
+  | "blockStyleRemove"
   | "applyAll"
   | "reset"
   | "fitTextPictogram"

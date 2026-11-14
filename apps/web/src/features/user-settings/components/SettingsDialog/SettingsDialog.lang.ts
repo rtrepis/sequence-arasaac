@@ -35,9 +35,9 @@ const messages = defineMessages({
   },
   tabView: {
     id: "components.defaultSettings.tab.view",
-    defaultMessage: "Vista",
+    defaultMessage: "Pàgina i distribució",
     description:
-      "Tab de configuració per defecte de la visualització de seqüències",
+      "Tab de les preferències amb què comencen els documents nous: la pàgina i la distribució dels pictogrames",
   },
   tabVocabulary: {
     id: "components.defaultSettings.tab.vocabulary",

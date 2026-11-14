@@ -27,17 +27,20 @@ al codi nou i als documents.
 | **Document** | El fitxer `.saac`. Conté totes les seqüències, el seu estil i la seva pàgina. És el que es desa, s'obre i es comparteix. |
 | **Seqüència** | El que la interfície mostra com a **pestanya**. Un document en té una o més. |
 | **Pictograma** | Una targeta d'una seqüència. |
-| **Estil** | Com es veu: lletra, vores, colors, mides, alineació. |
+| **Estil** | Com és cada pictograma: lletra, vores, colors, posició del text, pell i cabell, numeració. **No** la mida, l'espai ni l'alineació, que són la distribució (pas 7, 2026-11-14). Al codi, `pictogram` i `card` (`pictApiAra`, `pictSequence`). |
+| **Distribució** (dels pictogrames) | Com es posen els pictogrames dins d'una seqüència o d'un bloc: la mida, l'espai entre pictogrames i l'alineació. És del lloc on surten (la seqüència, el bloc o la pàgina amb «La mateixa a tots els blocs»), no de l'estil. A la interfície, «Distribució dels pictogrames» on hi ha espai i, si no, «Distribució». Al codi, `view` (`SequenceViewSettings`). |
 | **Estil del document** | L'estil que s'aplica a totes les seqüències del document. |
-| **Vista d'aquesta seqüència** | Els ajustos d'estil d'una sola seqüència (mida, espai, alineació). Són un retoc sobre l'estil del document. |
-| **Pàgina** | Cadascun dels fulls del document («pàgina 1, 2…»). Totes tenen el paper i l'orientació del document; cadascuna diu com s'hi col·loquen els blocs: **simple** (un darrere l'altre, com sempre; al codi, `"auto"`) o **en blocs** (cada bloc a la seva caixa: columnes, files, lliure o una plantilla). Un document d'abans és una sola pàgina simple amb totes les seqüències. |
+| **Distribució d'aquesta seqüència** | La distribució d'una sola seqüència (mida, espai, alineació), que és la base de tots els seus blocs. Abans es deia «vista d'aquesta seqüència»; al codi és `sequences[].style.view`. |
+| **Pàgina** | Cadascun dels fulls del document («pàgina 1, 2…»). Totes tenen el paper i l'orientació del document; cadascuna té la seva **disposició**, una sola tria: **simple** (les seqüències una darrere l'altra, com sempre; al codi, `"auto"`), **columnes**, **files** o **lliure** (cada bloc a la seva caixa; una plantilla aplicada és lliure, amb espais per omplir). Al codi, les tres últimes són `mode: "template"` amb el seu `template`; a la interfície ja no hi ha «En blocs» ni «Repartiment» (pas 7). Un document d'abans és una sola pàgina simple amb totes les seqüències. |
 | **Bloc** | Una cosa posada en una pàgina: una **seqüència** (amb els seus ajustos) o un **text** (un rètol sense pictograma). Una seqüència pot sortir en molts blocs; el que surt a totes les pàgines és **comú**. Al codi, el tipus és `SequencePlacement` / `TextPlacement` («col·locació»); a la interfície i a la documentació per a l'usuari, sempre «bloc» (Q1). |
-| **Estil amb nom** | Un retoc de l'estil del document, amb un nom, que poden fer servir molts blocs alhora. És una entrada del catàleg d'estils de l'usuari **copiada** dins del document («Aplica el meu estil»). |
+| **Estil de bloc** | Un estil amb un nom que poden fer servir molts blocs alhora: el grup són «els blocs amb aquest estil». És el meu estil **copiat** dins del document («Aplica el meu estil»), i porta només estil, no distribució. Al codi i a l'ADR-005, «estil amb nom» (`NamedStyle`, `styles`, `styleId`). |
 | **Fitxer d'estil** | El meu estil desat en un fitxer per dur-lo a un altre dispositiu o passar-lo a algú: el fitxer `.saacstyle`. |
-| **El meu estil** | L'estil dels pictogrames de l'usuari: el reben els documents nous i el copia «Aplica el meu estil». És una preferència de l'app. Abans es deia «estil per defecte», i al codi encara ho és (`ui.defaultSettings`, `selectUserDefaultStyle`). Amb comptes, n'hi haurà un catàleg (R10, B33). |
+| **El meu estil** | L'estil dels pictogrames de l'usuari: el reben els documents nous i el copia «Aplica el meu estil». La distribució amb què comencen els documents nous és a part, al panell «Pàgina i distribució». És una preferència de l'app. Abans es deia «estil per defecte», i al codi encara ho és (`ui.defaultSettings`, `selectUserDefaultStyle`). Amb comptes, n'hi haurà un catàleg (R10, B33). |
 | **Preferències de l'app** | El que és de la persona o del dispositiu: idioma, tema clar o fosc, el meu estil, pàgina per defecte. |
 
 - **MAI** «seqüència» per dir el fitxer sencer.
+- **MAI** «estil» per dir la mida, l'espai o l'alineació dels pictogrames: és la **distribució**. I
+  **MAI** «distribució» per dir com van els blocs a la pàgina: és la **disposició**.
 - **MAI** «tema» per dir un estil desat. «Tema» només vol dir clar, fosc o el del sistema.
 
 ## 2. Principis
@@ -83,7 +86,7 @@ al codi nou i als documents.
 - **MAI** el zoom, el contrast o el moviment reduït són ajustos de l'app: els decideixen el
   navegador i el sistema, i l'app els respecta.
 - **SEMPRE** els estils van en **una sola direcció**: es fan a la configuració («El meu estil» i
-  «Vista») i es porten al document des de la vista («Aplica el meu estil», al menú «⋯» d'una
+  «Pàgina i distribució») i es porten al document des de la vista («Aplica el meu estil», al menú «⋯» d'una
   pàgina o d'un bloc). **MAI** hi ha una acció que porti res del document cap a les preferències
   (R10, 2026-11-12). Abans n'hi havia tres («Desa com a estil per defecte», «Desa com a
   preferència» i «Aplicar a la vista actual», que anava al revés), i es confonien.
@@ -96,15 +99,15 @@ L'estil té cinc nivells. Cada nivell és un **retoc** del de sobre.
 |---|---|
 | **Document** | Tot l'estil, **sempre complet**: `pictogram`, `card` i `view`. |
 | **Seqüència** | **Només `view`**: mida, espai entre pictogrames, alineació. És la base de tots els seus blocs. |
-| **Estil amb nom** del bloc | `pictogram`, `card` i `view`. Només si el bloc en fa servir un (ADR-005). |
+| **Estil de bloc** («estil amb nom») | `pictogram` i `card`. Només si el bloc en fa servir un (ADR-005). Els dels documents fets abans del pas 7 poden portar també `view`, que es continua pintant; l'app ja no n'hi escriu. |
 | **Bloc** | **Només `view`** (el de seqüència) o l'aspecte del rètol (el de text: lletra, negreta, alineació). |
 | **Pictograma** | `pictogram` i `card`. **Mai `view`**. |
 
-- Un bloc de text agafa la lletra de les targetes del document (`card.font`), la de l'estil amb nom
-  si en té, i el seu retoc.
-- El retoc de la vista d'un bloc **es pinta** i s'edita al nivell «Bloc» de la columna de la vista
-  (R5), i en una plantilla la mida hi és un màxim (Q2). L'estil amb nom es pinta sencer: la vista,
-  la lletra, les vores, la posició del text i el color o la pell i el cabell dels pictogrames. El
+- Un bloc de text agafa la lletra de les targetes del document (`card.font`), la del seu estil de
+  bloc si en té, i el seu retoc.
+- La distribució d'un bloc (el seu retoc de `view`) **es pinta** i s'edita al nivell «Bloc» de la
+  columna de la vista (R5), i en una plantilla la mida hi és un màxim (Q2). L'estil de bloc es pinta
+  sencer: la lletra, les vores, la posició del text i el color o la pell i el cabell dels pictogrames. El
   que un pictograma heretava de l'estil del document passa a ser el de l'estil amb nom, i els seus
   retocs es conserven (la mateixa regla que canviar l'estil del document, `followStyle`). La mida
   de la targeta es mesura per seqüència **i** estil amb nom (`cardMeasureKey`).
@@ -170,23 +173,26 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 | Acció | On | Efecte |
 |---|---|---|
 | **Canviar l'estil del document** | Cap lloc de la interfície des de R10 (2026-11-12) | Un document neix amb el meu estil i, un cop desat, el té propi. Es retoca per blocs («Aplica el meu estil») i per pictograma. La regla, per a qui el canvia per codi (`applyStyleToDocument`, «Redueix la lletra de tot el document»): el que coincidia amb l'estil vell segueix el nou; els retocs es conserven. |
-| **Aplica el meu estil** | Menú «⋯» d'una pàgina (tots els seus blocs propis, no els comuns) o d'un bloc | **Copia** el meu estil al document com a estil amb nom (`styles`; si n'hi ha un d'igual, el reaprofita) i hi apunta els blocs. Treu el retoc de la vista dels blocs, que manaria sobre l'estil; els retocs dels pictogrames i l'aspecte propi de cada rètol es conserven. L'estil del document no canvia. |
+| **Aplica el meu estil** | Menú «⋯» d'una pàgina (tots els seus blocs propis, no els comuns) o d'un bloc | **Copia** el meu estil al document com a estil de bloc (`styles`; si n'hi ha un d'igual, el reaprofita; si el nom ja hi és, hi afegeix un número: «El meu estil 2») i hi apunta els blocs. Només porta estil: la distribució de cada bloc, els retocs dels pictogrames i l'aspecte propi de cada rètol es conserven. L'estil del document no canvia. |
+| **Actualitza amb el meu estil** | Menú «⋯» d'una pàgina o d'un bloc, quan ja fan servir un estil de bloc | Els estils de bloc que fan servir passen a tenir el meu estil d'ara, amb el mateix nom; canvien **tots** els blocs que els fan servir, a qualsevol pàgina. És l'«estil per grup» (R7). No toca la distribució. |
+| **Treu l'estil de bloc** | Menú «⋯» d'un bloc que en té un | El bloc torna a l'estil del document. Si cap altre bloc no el fa servir, l'estil de bloc surt del document. |
 | **Aplica a tots** | Cap lloc de la interfície des de R10: vivia al panell «Estil del document», que ara és «El meu estil». A la columna de la vista, «La mateixa a tots els blocs» del nivell «Pàgina» escriu el mateix retoc a tots els blocs de la pàgina | S'aplicava a **tot el document**: canviava l'estil del document **i esborrava aquestes propietats** de tots els retocs de seqüències i pictogrames. L'acció (`applyToAllPictogramsThunk`) es conserva per si torna; vegeu R10 a `docs/PLA-mode-lliure.md`. |
-| **Canviar la vista d'una seqüència** | Columna de la vista, nivell «Bloc», amb una seqüència seleccionada a la disposició automàtica | Canvia la mida, l'espai o l'alineació d'aquesta seqüència. És l'únic estil que té una seqüència en aquesta versió. |
-| **Canviar la vista d'un bloc** | Columna de la vista, nivell «Bloc», amb un bloc seleccionat en una pàgina amb caixes | Desa al bloc **només** el que es diferencia de la vista de la seqüència (amb l'estil amb nom). Les altres còpies de la seqüència no canvien. |
+| **Canviar la distribució d'una seqüència** | Columna de la vista, nivell «Seqüència», amb una seqüència seleccionada en una pàgina simple | Canvia la mida, l'espai o l'alineació d'aquesta seqüència. |
+| **Canviar la distribució d'un bloc** | Columna de la vista, nivell «Bloc», amb un bloc seleccionat en una pàgina en blocs | Desa al bloc **només** el que es diferencia de la distribució de la seqüència (amb la de l'estil de bloc, als documents d'abans que en porten). Les altres còpies de la seqüència no canvien. |
 | **Canviar un pictograma** | Formulari del pictograma | Canvia **només** el `style` d'aquell pictograma, i **només** les propietats tocades. |
 | **Restableix** un pictograma | Formulari del pictograma (capçalera de «Estil del pictograma» o «Més accions»); menú contextual de la graella («Restableix l'estil») | Esborra el seu `style`. La categoria, que és contingut, es queda. Dins del formulari és una edició més i es desa en tancar-lo; des del menú contextual s'aplica al document al moment. |
-| **Canviar el meu estil** | Configuració, panell «El meu estil» (la targeta) i panell «Vista» (mida, espai i alineació dels pictogrames) | Canvia la preferència. Es desa en tancar la configuració. No toca cap document desat; un document nou encara sense desar l'hereta en viu (§7). |
+| **Canviar el meu estil** i la distribució per defecte | Configuració, panell «El meu estil» (l'estil) i panell «Pàgina i distribució» (la pàgina i la distribució dels pictogrames amb què comencen els documents nous) | Canvia la preferència. Es desa en tancar la configuració. No toca cap document desat; un document nou encara sense desar l'hereta en viu (§7). |
 | **Carrega un estil des d'un fitxer** | Panell «El meu estil» | L'estil del fitxer (un `.saacstyle`, o el d'un `.saac`) passa a ser el meu estil. Obrir un `.saacstyle` des del menú pregunta si es fa el meu estil. Cap dels dos camins toca el document obert. |
 | **Desa el meu estil en un fitxer** | Panell «El meu estil» | Desa el meu estil en un `.saacstyle`. |
 | **Redueix la lletra de tot el document** | Avís «el text no hi cap» de la graella (§6) | Com canviar l'estil del document, només amb la mida de la lletra: totes les targetes continuen amb la mateixa mida. Els retocs es conserven. |
 | **Redueix la lletra d'aquest pictograma** | Avís «el text no hi cap» de la graella (§6) | Com canviar un pictograma: un retoc de la mida de la lletra, que l'encén com a personalitzat. |
 
-- **Estil per seqüència**: en aquesta versió, una seqüència **només** té estil de vista (mida,
-  espai, alineació), que es configura al nivell «Bloc» de la columna de la vista. No hi ha cap acció per
-  canviar la lletra o les vores de tots els pictogrames d'una seqüència: és una idea oberta, **B31**
-  a `docs/BACKLOG-ux.md`.
-- **SEMPRE** «Aplica el meu estil», «Restableix» i
+- **Estil per grup** (B31, R7): una seqüència només té distribució. L'estil d'un grup de blocs és
+  el seu **estil de bloc**: es dona amb «Aplica el meu estil», es canvia per a tots amb «Actualitza
+  amb el meu estil» i es treu d'un bloc amb «Treu l'estil de bloc». Al document no hi ha cap editor
+  d'estils: es fa al panell «El meu estil» i es porta al document (direcció única). El nivell «Bloc»
+  de la columna diu quin fa servir el bloc i quants blocs el comparteixen.
+- **SEMPRE** «Aplica el meu estil», «Actualitza amb el meu estil», «Treu l'estil de bloc», «Restableix» i
   les dues reduccions de lletra de l'avís «el text no hi cap» es poden desfer amb el **desfer que ja existeix**: un snackbar amb «Desfés» que torna el document
   exactament a com era, mentre no s'hagi tocat des d'aleshores. Dins del formulari del pictograma,
   el «Desfés» de «Restableix» torna l'estil d'abans **al formulari**, sense tocar les altres

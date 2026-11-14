@@ -10,6 +10,7 @@ import SequenceViewRows from "@components/ViewSequencesSettings/SequenceViewRows
 import type { ResolvedTextStyle } from "@features/free-layout/model/blockStyle";
 import { setTextPlacementThunk } from "@features/free-layout/store/freeLayoutThunks";
 import { VIEW_BLOCK_LEVEL_ID } from "@features/free-layout/hooks/useViewSelection";
+import BlockStyleRow from "./BlockStyleRow";
 import messages from "./ViewLevels.lang";
 
 /** Prefix dels ids dels títols de fila, per lligar-los als controls. */
@@ -90,6 +91,9 @@ const TextBlockLevel = ({
           }}
         />
       </SettingRow>
+
+      {/* Quin estil de bloc fa servir (R7): en dona la lletra */}
+      <BlockStyleRow styleId={placement.styleId} labelId={LABEL_ID} />
 
       <SettingRow
         title={<FormattedMessage {...messages.fontSize} />}

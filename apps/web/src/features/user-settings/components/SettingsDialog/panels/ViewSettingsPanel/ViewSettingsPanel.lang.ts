@@ -3,7 +3,8 @@ import { defineMessages } from "react-intl";
 const messages = defineMessages({
   panelDescription: {
     id: "components.viewSettingsPanel.panelDescription",
-    defaultMessage: "The page and pictograms that new documents start with.",
+    defaultMessage:
+      "The page and pictogram arrangement that new documents start with.",
     description:
       "Text explicatiu del panell «Vista» de la configuració: aquests valors només els agafen els documents nous",
   },
@@ -14,7 +15,7 @@ const messages = defineMessages({
   },
   sectionPictograms: {
     id: "components.viewSettingsPanel.sectionPictograms",
-    defaultMessage: "Pictograms",
+    defaultMessage: "Pictogram arrangement",
     description:
       "Títol de la secció de mida i alineació de pictogrames al panell de vista",
   },

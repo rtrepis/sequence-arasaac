@@ -155,8 +155,10 @@ export interface MyStyleCopy {
 }
 
 /**
- * Un estil sencer com a estil amb nom: la targeta i la vista dels pictogrames.
- * L'espai entre seqüències no hi va, perquè és de la pàgina.
+ * Un estil sencer com a estil de bloc: l'**estil** dels pictogrames (la
+ * targeta, el color, la pell i el cabell). La **distribució** (mida, espai i
+ * alineació) no hi va: és del bloc o de la pàgina, i aplicar un estil no la
+ * toca. Els estils de bloc d'abans que en porten es continuen pintant.
  */
 export const namedStyleFrom = (
   style: SequenceStyle,
@@ -168,16 +170,25 @@ export const namedStyleFrom = (
   pictSequence: JSON.parse(
     JSON.stringify(style.pictSequence),
   ) as NamedStyle["pictSequence"],
-  view: {
-    sizePict: style.view.sizePict,
-    pictSpaceBetween: style.view.pictSpaceBetween,
-    alignmentH: style.view.alignmentH,
-    alignmentV: style.view.alignmentV,
-  },
   ...(style.fitzgeraldColors && {
     fitzgeraldColors: { ...style.fitzgeraldColors },
   }),
 });
+
+/**
+ * Un nom que cap altre estil de bloc del document no fa servir: el nom, o el
+ * nom amb un número («El meu estil 2»).
+ */
+export const uniqueStyleName = (
+  styles: readonly NamedStyle[] | undefined,
+  name: string,
+): string => {
+  const taken = new Set((styles ?? []).map((style) => style.name));
+  if (!taken.has(name)) return name;
+  let n = 2;
+  while (taken.has(`${name} ${n}`)) n += 1;
+  return `${name} ${n}`;
+};
 
 /** Dos estils amb nom diuen el mateix (el nom i l'`id` no compten). */
 const sameNamedContent = (a: NamedStyle, b: NamedStyle): boolean =>
@@ -192,12 +203,11 @@ export type MyStyleTarget =
   | { kind: "block"; placementId: string };
 
 /**
- * Aplica un estil a una pàgina o a un bloc: el copia als estils amb nom del
- * document (o en reaprofita un d'igual) i hi apunta els blocs. El retoc de la
- * vista de cada bloc es treu, perquè si no manaria sobre l'estil i
- * l'aplicació no es veuria; els retocs de cada pictograma i l'aspecte propi
- * de cada rètol es conserven. En una pàgina, els blocs comuns no hi entren:
- * surten a totes les pàgines.
+ * Aplica un estil a una pàgina o a un bloc: el copia als estils de bloc del
+ * document (o en reaprofita un d'igual) i hi apunta els blocs. La distribució
+ * de cada bloc (el seu retoc de mida, espai i alineació), els retocs de cada
+ * pictograma i l'aspecte propi de cada rètol es conserven. En una pàgina, els
+ * blocs comuns no hi entren: surten a totes les pàgines.
  */
 export const applyNamedStyle = (
   pages: DocumentPages,
@@ -209,51 +219,152 @@ export const applyNamedStyle = (
   const styleId = existing?.id ?? entry.id;
   const nextStyles = existing
     ? [...(styles ?? [])]
-    : [...(styles ?? []), entry];
-
-  const restyle = (placement: PagePlacement): PagePlacement => {
-    if (placement.kind === "sequence") {
-      const next = { ...placement, styleId };
-      delete next.view;
-      return next;
-    }
-    if (placement.kind === "text") return { ...placement, styleId };
-    return placement;
-  };
-
-  if (target.kind === "sheet")
-    return {
-      styles: nextStyles,
-      pages: {
-        ...pages,
-        sheets: pages.sheets.map((sheet, index) =>
-          index === target.sheetIndex
-            ? { ...sheet, placements: sheet.placements.map(restyle) }
-            : sheet,
-        ),
-      },
-    };
-
-  const matches = (placement: PagePlacement) =>
-    placement.kind !== "unknown" && placement.id === target.placementId;
+    : [
+        ...(styles ?? []),
+        { ...entry, name: uniqueStyleName(styles, entry.name) },
+      ];
   return {
     styles: nextStyles,
-    pages: {
+    pages: mapTargetPlacements(pages, target, (placement) => ({
+      ...placement,
+      styleId,
+    })),
+  };
+};
+
+/** Els blocs que poden fer servir un estil de bloc: de seqüència i de text. */
+type StyledPlacement = Exclude<PagePlacement, { kind: "unknown" }>;
+
+const isStyled = (placement: PagePlacement): placement is StyledPlacement =>
+  placement.kind === "sequence" || placement.kind === "text";
+
+/** Canvia els blocs d'on s'aplica (una pàgina, sense els comuns, o un bloc). */
+const mapTargetPlacements = (
+  pages: DocumentPages,
+  target: MyStyleTarget,
+  change: (placement: StyledPlacement) => StyledPlacement,
+): DocumentPages => {
+  const apply = (placement: PagePlacement): PagePlacement =>
+    isStyled(placement) ? change(placement) : placement;
+  if (target.kind === "sheet")
+    return {
       ...pages,
-      sheets: pages.sheets.map((sheet) =>
-        sheet.placements.some(matches)
-          ? {
-              ...sheet,
-              placements: sheet.placements.map((placement) =>
-                matches(placement) ? restyle(placement) : placement,
-              ),
-            }
+      sheets: pages.sheets.map((sheet, index) =>
+        index === target.sheetIndex
+          ? { ...sheet, placements: sheet.placements.map(apply) }
           : sheet,
       ),
-      common: pages.common.map((placement) =>
-        matches(placement) ? restyle(placement) : placement,
-      ),
+    };
+  const matches = (placement: PagePlacement) =>
+    isStyled(placement) && placement.id === target.placementId;
+  const applyIfMatches = (placement: PagePlacement) =>
+    matches(placement) ? apply(placement) : placement;
+  return {
+    ...pages,
+    sheets: pages.sheets.map((sheet) =>
+      sheet.placements.some(matches)
+        ? { ...sheet, placements: sheet.placements.map(applyIfMatches) }
+        : sheet,
+    ),
+    common: pages.common.map(applyIfMatches),
+  };
+};
+
+/** Tots els blocs del document que poden portar estil, comuns inclosos. */
+const allStyledPlacements = (pages: DocumentPages): StyledPlacement[] =>
+  [
+    ...pages.sheets.flatMap((sheet) => sheet.placements),
+    ...pages.common,
+  ].filter(isStyled);
+
+/**
+ * Quants blocs fan servir cada estil de bloc. Un bloc comú compta una vegada,
+ * encara que surti a totes les pàgines.
+ */
+export const styleUseCount = (
+  pages: DocumentPages | undefined,
+  styleId: string,
+): number =>
+  pages
+    ? allStyledPlacements(pages).filter(
+        (placement) => placement.styleId === styleId,
+      ).length
+    : 0;
+
+/**
+ * Els estils de bloc que fan servir els blocs d'on s'aplica (els que existeixen
+ * al document), sense repetir.
+ */
+export const targetStyleIds = (
+  pages: DocumentPages | undefined,
+  styles: readonly NamedStyle[] | undefined,
+  target: MyStyleTarget,
+): string[] => {
+  if (!pages) return [];
+  const placements =
+    target.kind === "sheet"
+      ? (pages.sheets[target.sheetIndex]?.placements ?? []).filter(isStyled)
+      : allStyledPlacements(pages).filter(
+          (placement) => placement.id === target.placementId,
+        );
+  const ids = placements.flatMap((placement) =>
+    placement.styleId !== undefined &&
+    namedStyleOf(styles, placement.styleId) !== undefined
+      ? [placement.styleId]
+      : [],
+  );
+  return ids.filter((id, index) => ids.indexOf(id) === index);
+};
+
+/**
+ * «Actualitza amb el meu estil»: els estils de bloc `ids` passen a tenir
+ * l'estil de `entry`, i canvien tots els blocs que els fan servir, siguin a
+ * la pàgina que siguin. Es queden el seu `id` i el seu nom, i la distribució
+ * que portessin (dels documents d'abans): l'estil no la toca.
+ */
+export const updateNamedStyles = (
+  styles: readonly NamedStyle[] | undefined,
+  ids: readonly string[],
+  entry: NamedStyle,
+): NamedStyle[] =>
+  (styles ?? []).map((style) => {
+    if (!ids.includes(style.id)) return style;
+    const next: NamedStyle = {
+      id: style.id,
+      name: style.name,
+      pictApiAra: entry.pictApiAra,
+      pictSequence: entry.pictSequence,
+    };
+    if (entry.fitzgeraldColors) next.fitzgeraldColors = entry.fitzgeraldColors;
+    if (style.view) next.view = style.view;
+    if (style.extra) next.extra = style.extra;
+    return next;
+  });
+
+/**
+ * Treu l'estil de bloc d'un bloc: torna a l'estil del document. Si cap altre
+ * bloc no el fa servir, l'estil surt del document.
+ */
+export const removeNamedStyle = (
+  pages: DocumentPages,
+  styles: readonly NamedStyle[] | undefined,
+  placementId: string,
+): { pages: DocumentPages; styles: NamedStyle[] } => {
+  const nextPages = mapTargetPlacements(
+    pages,
+    { kind: "block", placementId },
+    (placement) => {
+      const next = { ...placement };
+      delete next.styleId;
+      return next;
     },
+  );
+  const used = new Set(
+    allStyledPlacements(nextPages).map((placement) => placement.styleId),
+  );
+  return {
+    pages: nextPages,
+    styles: (styles ?? []).filter((style) => used.has(style.id)),
   };
 };
 

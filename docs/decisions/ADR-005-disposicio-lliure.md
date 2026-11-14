@@ -168,6 +168,29 @@ fase 3 va fer veure que no n'hi ha prou:
     cap al document: cap acció no porta res del document a les preferències. A la interfície, la
     pàgina `"auto"` es diu **«Simple»** (abans «Contínua», C15). El format no canvia: `styles` i
     `namedStyle` ja hi eren (decisió 6).
+24. **Estil i distribució; estils de bloc; la disposició en una sola tria** (R7, B31, pas 7,
+    2026-11-14).
+    - **Dues paraules**: l'**estil** és com és cada pictograma (lletra, vores, colors, posició del
+      text, pell, cabell, numeració); la **distribució** és com es posen dins d'una seqüència o
+      d'un bloc (mida, espai, alineació). A la interfície, «Distribució dels pictogrames» o, si no
+      hi ha espai, «Distribució». El panell de preferències «Vista» passa a dir-se **«Pàgina i
+      distribució»**.
+    - **Un estil amb nom porta només estil**, i a la interfície es diu **«estil de bloc»**.
+      «Aplica el meu estil» ja no treu la distribució dels blocs (corregeix la decisió 23). Si el
+      nom ja hi és, s'hi afegeix un número. Els estils amb nom d'abans amb `view` es continuen
+      pintant i escrivint igual.
+    - **L'estil per grup** és el grup de blocs amb el mateix estil de bloc. Es canvia amb
+      **«Actualitza amb el meu estil»** (menú «⋯» de la pàgina o del bloc, quan ja en fan servir
+      un): l'estil de bloc passa a ser el meu estil d'ara, amb el mateix `id` i el mateix nom, i
+      canvien tots els blocs que el fan servir. **«Treu l'estil de bloc»** (menú «⋯» del bloc)
+      torna el bloc a l'estil del document; un estil que ja no fa servir ningú surt del document.
+      Totes dues es desfan. El nivell «Bloc» de la columna té la fila **«Estil de bloc»**, que
+      només ho diu (nom i quants blocs). **No hi ha cap editor d'estils al document**: es mantenen
+      la direcció única de la decisió 23.
+    - **La disposició d'una pàgina és una sola tria**: Simple · Columnes · Files · Lliure, a la
+      columna i al menú «⋯» de la pàgina (`useSheetDisposition`). Desapareixen «En blocs» i la
+      fila «Repartiment». Al codi i al fitxer no canvia res (`mode` i `template`).
+    - El format no canvia.
 
 ## Alternatives descartades
 
@@ -228,3 +251,5 @@ fase 3 va fer veure que no n'hi ha prou:
 - **2026-11-12** (R10): «Aplica el meu estil» al menú «⋯» de la pàgina i del bloc, els estils amb
   nom pintats sencers, els estils en una sola direcció i «Simple» per a la pàgina `"auto"`
   (decisió 23).
+- **2026-11-14** (R7, pas 7): estil i distribució separats, estils de bloc amb «Actualitza amb el
+  meu estil» i «Treu l'estil de bloc», i la disposició de la pàgina en una sola tria (decisió 24).

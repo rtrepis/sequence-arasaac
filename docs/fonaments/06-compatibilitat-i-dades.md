@@ -221,6 +221,9 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 - Un **estil amb nom** és un retoc de l'estil del document, amb la forma dels retocs: `pictogram`
   (amb `fitzgerald` com a taula parcial, com al document), `card` i `view`. Porta `id` i `name`.
 - Un bloc el fa servir amb `namedStyle`. Canviar-lo canvia tots els blocs que el fan servir.
+- Des del pas 7 (2026-11-14) l'app hi escriu **només l'estil** (`pictogram` i `card`): la mida,
+  l'espai i l'alineació són la distribució del bloc. Un estil amb nom amb `view`, dels documents
+  d'abans, es llegeix i es pinta igual i es torna a escriure tal com era. El format no canvia.
 - **És l'entrada del catàleg d'estils de l'usuari copiada dins del document** (R10): el document no
   apunta mai a les preferències de ningú, i s'obre igual a qualsevol lloc.
 - **La cascada**: document → seqüència → estil amb nom del bloc → bloc → pictograma

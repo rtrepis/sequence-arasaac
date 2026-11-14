@@ -9,7 +9,12 @@ import { createAppStore } from "@app/store";
 import { updateSettingsActiveTabActionCreator } from "@features/user-settings/store/uiSlice";
 import SettingsDialog from "./SettingsDialog";
 
-const TAB_NAMES = ["User", "My style", "View", "Personal vocabulary"];
+const TAB_NAMES = [
+  "User",
+  "My style",
+  "Page and arrangement",
+  "Personal vocabulary",
+];
 
 describe("SettingsDialog", () => {
   it("hauria de pintar un tab per cada àrea de configuració", () => {
@@ -28,10 +33,9 @@ describe("SettingsDialog", () => {
       store,
     });
 
-    expect(screen.getByRole("tab", { name: "View" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
+    expect(
+      screen.getByRole("tab", { name: "Page and arrangement" }),
+    ).toHaveAttribute("aria-selected", "true");
   });
 
   it("hauria de recordar a la interfície el tab que s'ha triat", async () => {
@@ -40,13 +44,14 @@ describe("SettingsDialog", () => {
       store,
     });
 
-    await userEvent.click(screen.getByRole("tab", { name: "View" }));
+    await userEvent.click(
+      screen.getByRole("tab", { name: "Page and arrangement" }),
+    );
 
     expect(store.getState().ui.settingsActiveTab).toBe("view");
-    expect(screen.getByRole("tab", { name: "View" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
+    expect(
+      screen.getByRole("tab", { name: "Page and arrangement" }),
+    ).toHaveAttribute("aria-selected", "true");
   });
 
   it("hauria de tancar-se amb la creu de la barra", async () => {
