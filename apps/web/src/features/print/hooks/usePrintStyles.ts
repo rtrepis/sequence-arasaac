@@ -11,6 +11,7 @@ import { printColors } from "@/style/palette";
 import {
   mountPrintSheet,
   PRINT_ROOT_ID,
+  PRINT_SHEETS_VAR,
   PRINTING_BODY_CLASS,
 } from "./usePrintSheet";
 
@@ -55,24 +56,37 @@ export function generatePrintCSS(pageFormat: PageFormat): string {
         display: block !important;
       }
 
-      /* El document fa exactament el full: no hi ha res que desbordi el paper
-         i, per tant, res que faci encongir el dibuix per fer-l'hi cabre */
+      /* El document fa exactament els fulls: no hi ha res que desbordi el
+         paper i, per tant, res que faci encongir el dibuix per fer-l'hi cabre.
+         L'alçada és la d'un full per cada full que hi ha (el mode lliure en
+         pot tenir més d'un): \`mountPrintSheet\` diu quants n'hi ha */
       html,
       body {
         width: ${widthMM}mm !important;
-        height: ${heightMM}mm !important;
+        height: calc(${heightMM}mm * var(${PRINT_SHEETS_VAR}, 1)) !important;
         margin: 0 !important;
         padding: 0 !important;
         overflow: hidden !important;
       }
 
-      #${PRINT_ROOT_ID},
+      #${PRINT_ROOT_ID} {
+        width: ${widthMM}mm !important;
+        height: calc(${heightMM}mm * var(${PRINT_SHEETS_VAR}, 1)) !important;
+        overflow: hidden !important;
+      }
+
       #${PRINT_ROOT_ID} > * {
         width: ${widthMM}mm !important;
         height: ${heightMM}mm !important;
         overflow: hidden !important;
         /* L'escala de la previsualització és per encabir el full a la pantalla */
         transform: none !important;
+      }
+
+      /* Cada full, al seu paper */
+      #${PRINT_ROOT_ID} > *:not(:last-child) {
+        break-after: page;
+        page-break-after: always;
       }
 
       /* La impressió sempre és sobre paper blanc, també en tema fosc */

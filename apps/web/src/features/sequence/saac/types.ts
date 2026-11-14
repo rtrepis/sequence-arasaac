@@ -79,12 +79,111 @@ export interface ResolvedCardStyle {
   view: V3View;
 }
 
+/** El que tenen tots els blocs: la caixa només hi és on fa falta. */
+export interface V3BlockBase {
+  id: string;
+  /**
+   * La caixa, en mil·límetres des del cantó superior esquerre del full. Només
+   * a les pàgines amb plantilla i als blocs comuns
+   */
+  x?: number;
+  y?: number;
+  w?: number;
+  h?: number;
+  /** L'espai de la plantilla de la pàgina que ocupa */
+  slot?: number;
+  /** L'`id` d'un estil amb nom del document (`styles`) */
+  namedStyle?: string;
+  [unknown: string]: unknown;
+}
+
+/** Un bloc de seqüència: `sequence` és l'`id` de la seqüència. */
+export interface V3SequenceBlock extends V3BlockBase {
+  kind: "sequence";
+  sequence: string;
+  /** Sense valor, `"auto"` */
+  columns?: "auto" | number;
+  /** Retoc de la vista en aquest bloc, sobre la de la seqüència */
+  view?: Partial<V3View>;
+}
+
+/** Retoc de l'aspecte d'un bloc de text, sobre `style.card.font`. */
+export interface V3TextStyle {
+  font?: Partial<Font>;
+  bold?: boolean;
+  alignmentH?: SequenceAlignmentH;
+  alignmentV?: SequenceAlignmentV;
+}
+
+/** Un bloc de text: un rètol sense pictograma. */
+export interface V3TextBlock extends V3BlockBase {
+  kind: "text";
+  text: string;
+  textStyle?: V3TextStyle;
+}
+
+/**
+ * Un bloc que l'app no entén, **només a la lectura**: `raw` és el bloc tal
+ * com era al fitxer, i és el que es torna a escriure. Al fitxer no hi ha mai
+ * cap `kind: "foreign"`; si n'hi hagués un, seria un bloc desconegut més.
+ */
+export interface V3ForeignBlock {
+  kind: "foreign";
+  raw: Record<string, unknown>;
+}
+
+export type V3Block = V3SequenceBlock | V3TextBlock;
+
+/**
+ * Una pàgina del document. A la lectura, `blocks` també pot portar els blocs
+ * que l'app no entén (`V3ForeignBlock`).
+ */
+export interface V3Sheet {
+  id: string;
+  mode: "auto" | "template";
+  /** Només en automàtica; sense valor, la de `page.direction` */
+  direction?: SequenceDirection;
+  /** Només en automàtica; sense valor, el de `page.sequenceGap` */
+  sequenceGap?: number;
+  /** L'`id` de la plantilla de la pàgina, si en té */
+  template?: string;
+  blocks: (V3Block | V3ForeignBlock)[];
+  [unknown: string]: unknown;
+}
+
 export interface V3Page {
   size: PageSize;
   orientation: PageOrientation;
+  /** La de les pàgines automàtiques que no en diuen cap */
   direction: SequenceDirection;
   sequenceGap: number;
+  /**
+   * Obsolet: s'escriu sempre `"flow"`, perquè les versions anteriors el
+   * llegeixen. Només els fitxers de les fases 1–3 del mode lliure hi deien
+   * `"free"`; ara és cada pàgina la que diu com es col·loquen els blocs
+   */
   layout: "flow" | "free";
+  /** Les pàgines, en ordre. Sense valor, una sola pàgina automàtica */
+  sheets?: V3Sheet[];
+  /** Els blocs que surten a totes les pàgines, sempre amb caixa */
+  common?: (V3Block | V3ForeignBlock)[];
+  /** A quines pàgines va el peu de llicència. Sense valor, a totes */
+  licenceOn?: "every" | "last";
+}
+
+/**
+ * Un estil amb nom: un retoc de l'estil del document, amb la mateixa forma que
+ * els retocs (`pictogram.fitzgerald` hi és una taula parcial, com al document).
+ */
+export interface V3NamedStyle {
+  id: string;
+  name: string;
+  pictogram?: Partial<Omit<V3PictogramStyle, "fitzgerald">> & {
+    fitzgerald?: Partial<FitzgeraldColors>;
+  };
+  card?: DeepPartial<V3CardStyle>;
+  view?: Partial<V3View>;
+  [unknown: string]: unknown;
 }
 
 export const PICTOGRAM_VARIANTS = ["skin", "hair", "color"] as const;
@@ -153,6 +252,8 @@ export interface SaacDocumentV3 {
   page: V3Page;
   style: V3Style;
   sequences: V3Sequence[];
+  /** Els estils amb nom, que els blocs fan servir per `namedStyle` */
+  styles?: V3NamedStyle[];
   assets?: Record<string, V3Asset>;
   ui?: { activeSequence?: string; [unknown: string]: unknown };
   [unknown: string]: unknown;

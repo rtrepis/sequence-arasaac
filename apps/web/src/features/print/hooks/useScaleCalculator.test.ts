@@ -3,7 +3,11 @@ import {
   calculateDisplayDimensions,
   getPrintDimensions,
 } from "./useScaleCalculator";
-import { createPageFormat, FOOTER_SPACE } from "../utils/pageFormat";
+import {
+  createPageFormat,
+  FOOTER_SPACE,
+  SCREEN_MARGINS,
+} from "../utils/pageFormat";
 
 describe("useScaleCalculator", () => {
   describe("calculateDisplayDimensions", () => {
@@ -59,6 +63,62 @@ describe("useScaleCalculator", () => {
       );
     });
 
+    it("a l'amplada, un full vertical no queda limitat per l'alçada", () => {
+      // Un portàtil de 1366 × 768 amb un A4 vertical: sencer, l'alçada el deixa
+      // a ~0,6; a l'amplada hi cap a mida real
+      const params = {
+        pageFormat: createPageFormat("A4", "portrait"),
+        screenWidth: 1366,
+        screenHeight: 768,
+      };
+      const page = calculateDisplayDimensions(params);
+      const width = calculateDisplayDimensions({ ...params, fit: "width" });
+
+      expect(page.displayHeight + FOOTER_SPACE).toBeLessThanOrEqual(768);
+      expect(page.scale).toBeLessThan(0.7);
+      expect(width.scale).toBe(1);
+      expect(width.displayHeight).toBeGreaterThan(768);
+    });
+
+    it("a l'amplada tampoc no passa mai d'escala 1", () => {
+      const result = calculateDisplayDimensions({
+        pageFormat: createPageFormat("A4", "portrait"),
+        screenWidth: 3000,
+        screenHeight: 500,
+        fit: "width",
+      });
+
+      expect(result.scale).toBe(1);
+    });
+
+    it("sense la columna d'ajustos al costat, el full guanya amplada", () => {
+      // Una tauleta apaïsada: aquí el que limita és l'amplada
+      const params = {
+        pageFormat: createPageFormat("A4", "landscape"),
+        screenWidth: 1024,
+        screenHeight: 2000,
+      };
+      const beside = calculateDisplayDimensions(params);
+      const hidden = calculateDisplayDimensions({
+        ...params,
+        settingsBeside: false,
+      });
+
+      expect(hidden.scale).toBeGreaterThan(beside.scale);
+      expect(hidden.displayWidth).toBeCloseTo(1024 - SCREEN_MARGINS.small);
+    });
+
+    it("al mòbil, amagar la columna no canvia res: ja és a sota del full", () => {
+      const params = {
+        pageFormat: createPageFormat("A4", "portrait"),
+        screenWidth: 412,
+        screenHeight: 915,
+      };
+      expect(
+        calculateDisplayDimensions({ ...params, settingsBeside: false }),
+      ).toEqual(calculateDisplayDimensions(params));
+    });
+
     it("hauria de mantenir la proporció del full", () => {
       const pageFormat = createPageFormat("A4", "portrait");
 
@@ -91,5 +151,17 @@ describe("useScaleCalculator", () => {
       expect(portrait.width).toBe(landscape.height);
       expect(portrait.height).toBe(landscape.width);
     });
+  });
+});
+
+describe("al mòbil", () => {
+  it("el full fa l'amplada del verd dels ajustos: la finestra menys 2 px a cada costat", () => {
+    const result = calculateDisplayDimensions({
+      pageFormat: createPageFormat("A4", "landscape"),
+      screenWidth: 390,
+      screenHeight: 844,
+    });
+    expect(result.displayWidth).toBeCloseTo(390 - SCREEN_MARGINS.phone);
+    expect(SCREEN_MARGINS.phone).toBe(4);
   });
 });

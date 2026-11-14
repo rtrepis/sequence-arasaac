@@ -62,7 +62,15 @@ Dos llocs per a dues coses diferents. **El criteri és què diu el missatge, no 
 L'app **no té desfer**, amb una sola excepció: **aplicar un estil al document** («Aplica el meu
 estil per defecte», «Carrega un estil des d'un fitxer…», o obrir un fitxer d'estil amb un document
 obert) es pot desfer des del snackbar que en surt, mentre el document no s'hagi tocat des d'aleshores (`features/sequence/store/styleSlice.ts`;
-vegeu `docs/fonaments/03-model-contingut-estil.md`). La resta de `features/sequence` no té `undo`, i per
+vegeu `docs/fonaments/03-model-contingut-estil.md`).
+
+El mateix desfer —**un de sol**, amb el mateix snackbar— cobreix les accions de la **disposició
+lliure** que substitueixen feina (ADR-005): tornar a la disposició automàtica, aplicar una plantilla
+o afegir seqüències a una pàgina (que la tornen a repartir), esborrar una pàgina, treure una
+seqüència d'una pàgina i deixar de posar-ne una a totes les pàgines. Cada origen hi té el seu
+missatge (`StyleChangeSource`, tipat: un origen sense missatge no compila). Les que no substitueixen
+res —afegir, duplicar o moure una pàgina, copiar una seqüència a una altra pàgina, posar-la a totes,
+canviar-ne les columnes— acaben amb un snackbar sense «Desfés». La resta de `features/sequence` no té `undo`, i per
 això el que protegeix la feina és on viu cada acció i quan demana permís.
 
 - **El criteri és quant costa refer-ho, mai com sona l'acció.** Treure un pictograma es repeteix

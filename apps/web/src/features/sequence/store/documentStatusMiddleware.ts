@@ -18,6 +18,8 @@ import { documentChangedActionCreator } from "./documentStatusSlice";
  * - `documentStyleMaterialized` només fa explícit, en desar, l'estil que el
  *   document ja heretava: el que es veu no canvia, i marcar-lo just després de
  *   desar faria que el document desat semblés no desat.
+ * - `newDocumentPagesInherited` dona a un document nou i buit la disposició de
+ *   les preferències: el document encara no té res de l'usuari.
  */
 const NOT_A_CONTENT_CHANGE = new Set([
   "document/changeActiveSAAC",
@@ -26,6 +28,7 @@ const NOT_A_CONTENT_CHANGE = new Set([
   "document/removeCloudImage",
   "document/replaceCloudImage",
   "document/documentStyleMaterialized",
+  "document/newDocumentPagesInherited",
 ]);
 
 /**

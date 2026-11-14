@@ -102,9 +102,19 @@ pictogrames d'ARASAAC (el cas normal) no hi pesen res: hi caben tots.
 
 **Altres notes:** les 100 operacions/segon són folgades per al volum previst,
 però `saveUserUiThunk` reescriu **tota** la llista de vocabulari a cada desat,
-de manera que cada «Desa com a preferències» d'un usuari amb imatges mou
+de manera que cada desat de la configuració d'un usuari amb imatges mou
 megabytes contra els 10 GB/setmana de transferència. La pausa als 60 dies
 d'inactivitat és el que ha de vigilar un projecte amb poc trànsit.
+
+**El catàleg d'estils (R10, B33; 2026-11-12):** quan es tornin a encendre els
+comptes, «Els meus estils» viatjaran amb la configuració d'usuari, al mateix
+document de MongoDB. Una entrada és un estil sense imatges (lletra, vores,
+colors, mides): uns **2 KB**. Amb el sostre decidit, **20 entrades per compte**,
+són uns 40 KB per usuari i uns **8 MB per a 200 comptes**: no es nota ni als 16 MB
+de BSON ni als 512 MB d'Atlas. El sostre és per mantenir el desat petit
+(`saveUserUiThunk` ho reescriu tot a cada desat), no per l'espai. Va a
+`shared/tierLimits.ts` quan es faci. Sense comptes, el catàleg és d'una sola
+entrada, al navegador.
 
 ---
 

@@ -11,7 +11,7 @@
 - **Tot el que entra d'un fitxer o del núvol passa per `features/sequence/style/saacFile.ts`**, que coneix tots els formats i hi fa la fusió camp a camp. Cap altre lloc no ha de fer `JSON.parse` d'un `.saac`.
 - El reducer `updateDefaultSettingPictSequence` fa un spread shallow sobre `pictSequence`, per tant qualsevol nou camp al nivell de `pictSequence` es pot actualitzar sense canviar el reducer.
 - El reducer `updateDefaultSettings` reemplaça tot el `defaultSettings` — el que usa `handlerSubmit` de `DefaultForm`.
-- **Persistència de l'estil per defecte**: va amb la resta de preferències (`userUi` al navegador, o el compte), i només quan l'usuari ho demana («Desa com a estil per defecte», «Desa com a preferències» o tancar la configuració). Si un usuari té dades antigues sense un camp nou, el fallback es gestiona al nivell de lectura (no hi ha migració).
+- **Persistència del meu estil** (l'antic «estil per defecte», `ui.defaultSettings` i la part de pictogrames de `ui.viewSettings`): va amb la resta de preferències (`userUi` al navegador, o el compte), i només quan l'usuari ho demana (tancar la configuració, o «Fes-lo el meu estil» en obrir un `.saacstyle`). Cap acció de la vista no hi escriu (R10). Si un usuari té dades antigues sense un camp nou, el fallback es gestiona al nivell de lectura (no hi ha migració).
 
 ## Esborrany del document i imatges pujades
 
@@ -116,7 +116,7 @@
 
 ## Default Settings Modal i DefaultForm
 
-- **El tab «Estil del document» edita l'estil del document obert** (el que s'aplica a totes les seves seqüències), no l'estil per defecte: en tancar la configuració l'aplica al document amb la regla dels retocs (si no ha canviat res, no toca el document). Per als documents nous hi ha «Desa com a estil per defecte» a la capçalera del panell.
+- **El tab «El meu estil» edita el meu estil** (`ui.defaultSettings`), no el document obert: en tancar la configuració el desa a les preferències (si no ha canviat res, no hi escriu). Al document s'hi porta amb «Aplica el meu estil», al menú «⋯» d'una pàgina o d'un bloc (R10).
 - `SettingsDialogButton` obrir un `AppFullScreenDialog` que conté `<DefaultForm submit={open} />`.
 - `DefaultForm` usa estat local per a tots els camps que es configuren amb sub-components (font, borders, textPosition, skin, hair, color, numberFont). El pattern és: `useState(initialValue)` → passar `state` i `setState` al component filho → a `handlerSubmit` construir el payload sencer i dispatch + guardar.
 - El render condicional de sections segon un boolean del Redux (ex: `{numbered && (...)}`, `{color && (...)}`) és el pattern establert per mostrar/amagar configuradors.

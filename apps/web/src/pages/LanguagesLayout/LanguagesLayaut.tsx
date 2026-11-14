@@ -4,6 +4,7 @@ import BarNavigation from "@/components/BarNavigation/BarNavigation";
 import EmailVerificationBanner from "@features/backend/auth/components/EmailVerificationBanner";
 import BackendWakeUpNotice from "@features/backend/api/BackendWakeUpNotice";
 import DocumentDraftSync from "@features/sequence/components/DocumentDraftSync";
+import NewDocumentPagesSync from "@features/free-layout/components/NewDocumentPagesSync/NewDocumentPagesSync";
 import SessionExpiredNotice from "@features/backend/auth/components/SessionExpiredNotice";
 import DocumentStatusFab from "@features/sequence/components/DocumentStatusFab/DocumentStatusFab";
 import DocumentStyleNotice from "@features/sequence/components/DocumentStyle/DocumentStyleNotice";
@@ -18,14 +19,13 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
   }
 
   return (
-    <AppIntlProvider
-      locale={locale ?? localeBrowser}
-      defaultLocale="es"
-    >
+    <AppIntlProvider locale={locale ?? localeBrowser} defaultLocale="es">
       {/* Autodesat de l'esborrany: va al layout perquè és l'únic lloc que
           embolcalla l'editor i el visualitzador alhora, i perquè necessita
           l'IntlProvider per poder avisar si el navegador no pot desar */}
       <DocumentDraftSync />
+      {/* Un document nou i buit comença amb la disposició de les preferències */}
+      <NewDocumentPagesSync />
       <BarNavigation>
         {/* L'avís de verificació va aquí i no dins de cada pàgina: així apareix
             tant a l'editor com al visualitzador sense duplicar-lo */}

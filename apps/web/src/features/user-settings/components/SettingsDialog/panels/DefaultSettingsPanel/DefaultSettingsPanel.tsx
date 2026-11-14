@@ -22,13 +22,9 @@ import {
   DEFAULT_BORDER_OUT_RADIUS,
   DEFAULT_BORDER_OUT_SIZE,
 } from "@/configs/defaultSettingsConfig";
-import { applyToAllPictogramsThunk } from "@features/sequence/store/styleSlice";
-import { applyDocumentStyleActionCreator } from "@features/sequence/store/documentSlice";
-import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
-import { deepEqual, pictStyleOf } from "@features/sequence/style/styleModel";
-import { useSetDefaultStyle } from "@features/sequence/hooks/useSetDefaultStyle";
-import SettingsSaveErrorDialog from "@features/backend/user-settings/components/SettingsSaveErrorDialog";
-import DocumentStyleHeader from "@features/sequence/components/DocumentStyle/DocumentStyleHeader";
+import { updateDefaultSettingsActionCreator } from "@features/user-settings/store/uiSlice";
+import { deepEqual } from "@features/sequence/style/styleModel";
+import MyStyleHeader from "./MyStyleHeader";
 import { FormattedMessage } from "react-intl";
 import formMessages from "./DefaultForm.lang";
 import React from "react";
@@ -42,11 +38,12 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
   (_, ref): React.ReactElement => {
     const dispatch = useAppDispatch();
 
-    // Aquest panell edita l'estil del document obert —el que s'aplica a totes
-    // les seves seqüències—, no les preferències de l'usuari: per als documents
-    // nous hi ha «Desa com a estil per defecte»
-    // (`docs/fonaments/03-model-contingut-estil.md`)
-    const documentStyle = useAppSelector(selectDocumentStyle);
+    // Aquest panell edita «el meu estil»: l'estil dels pictogrames amb què
+    // neixen els documents nous i el que aplica «Aplica el meu estil» des del
+    // menú «⋯» de la pàgina i del bloc. No toca mai el document obert: els
+    // estils van en una sola direcció, de la configuració cap al document
+    // (R10, `docs/fonaments/03-model-contingut-estil.md`)
+    const myStyle = useAppSelector((state) => state.ui.defaultSettings);
     const {
       pictApiAra: {
         fitzgerald,
@@ -62,9 +59,7 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         numbered: initialNumbered,
         textPosition: initialTextPosition,
       },
-    } = documentStyle;
-    const { setAsDefault, retry, failure, isRetrying, dismissError } =
-      useSetDefaultStyle();
+    } = myStyle;
 
     const [font, setFont] = useState(initialFont);
     const [numberFont, setNumberFont] = useState(
@@ -104,11 +99,10 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       ],
     );
 
-    // Quan l'estil del document canvia des de fora del formulari —les accions
-    // de la capçalera: aplicar l'estil per defecte, carregar-ne un, desfer—, el
-    // formulari passa a ensenyar el que té ara el document
+    // Quan el meu estil canvia des de fora del formulari —«Carrega un estil
+    // des d'un fitxer»—, el formulari passa a ensenyar el que hi ha ara
     useEffect(() => {
-      const { pictSequence, pictApiAra } = documentStyle;
+      const { pictSequence, pictApiAra } = myStyle;
       setFont(pictSequence.font);
       setNumberFont(pictSequence.numberFont ?? pictSequence.font);
       setTextPosition(pictSequence.textPosition);
@@ -118,36 +112,18 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       setHair(pictApiAra.hair);
       setColor(pictApiAra.color);
       setNumbered(pictSequence.numbered);
-    }, [documentStyle]);
+    }, [myStyle]);
 
-    // Porta el formulari a l'estil del document, amb la regla dels retocs:
-    // els pictogrames que tenien el mateix que l'estil el segueixen. Si no ha
-    // canviat res no es toca el document, que si no quedaria com a canviat
-    // només per haver obert la configuració
-    const applyToDocument = useCallback(() => {
+    // Porta el formulari a les preferències. Si no ha canviat res no es toca
+    // res. El SettingsDialog el crida en tancar, i el desat (al compte o al
+    // navegador) el fa ell, en segon pla
+    const syncToRedux = useCallback(() => {
       const settings = buildSettings();
-      if (deepEqual(settings, pictStyleOf(documentStyle))) return;
-      dispatch(
-        applyDocumentStyleActionCreator({
-          from: documentStyle,
-          to: { ...documentStyle, ...settings },
-        }),
-      );
-    }, [dispatch, buildSettings, documentStyle]);
+      if (deepEqual(settings, myStyle)) return;
+      dispatch(updateDefaultSettingsActionCreator(settings));
+    }, [dispatch, buildSettings, myStyle]);
 
-    // Cridat pel SettingsDialog en tancar
-    useImperativeHandle(
-      ref,
-      () => ({
-        syncToRedux: applyToDocument,
-      }),
-      [applyToDocument],
-    );
-
-    const handleSetAsDefault = useCallback(() => {
-      applyToDocument();
-      setAsDefault({ ...documentStyle, ...buildSettings() });
-    }, [applyToDocument, setAsDefault, documentStyle, buildSettings]);
+    useImperativeHandle(ref, () => ({ syncToRedux }), [syncToRedux]);
 
     const handleReset = useCallback(() => {
       const defaultFont = {
@@ -175,62 +151,34 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     }, []);
 
     return (
-      <>
-        <DefaultForm
-          font={font}
-          setFont={setFont}
-          numberFont={numberFont}
-          setNumberFont={setNumberFont}
-          textPosition={textPosition}
-          setTextPosition={setTextPosition}
-          skin={skin}
-          setSkin={setSkin}
-          borderIn={borderIn}
-          setBorderIn={setBorderIn}
-          borderOut={borderOut}
-          setBorderOut={setBorderOut}
-          hair={hair}
-          setHair={setHair}
-          color={color}
-          setColor={setColor}
-          numbered={numbered}
-          setNumbered={setNumbered}
-          // «Aplica a tots» canvia l'estil del document i treu el retoc de
-          // tots els pictogrames; el snackbar amb «Desfés» n'és el missatge
-          onApplyAllColor={() =>
-            dispatch(applyToAllPictogramsThunk({ pictApiAra: { color } }))
-          }
-          onApplyAllTextPosition={() =>
-            dispatch(
-              applyToAllPictogramsThunk({ pictSequence: { textPosition } }),
-            )
-          }
-          onApplyAllAppearance={() =>
-            dispatch(applyToAllPictogramsThunk({ pictApiAra: { skin, hair } }))
-          }
-          onApplyAllBorderIn={() =>
-            dispatch(applyToAllPictogramsThunk({ pictSequence: { borderIn } }))
-          }
-          onApplyAllBorderOut={() =>
-            dispatch(applyToAllPictogramsThunk({ pictSequence: { borderOut } }))
-          }
-          onSubmit={applyToDocument}
-          onReset={handleReset}
-          header={
-            <DocumentStyleHeader
-              help={<FormattedMessage {...formMessages.panelHint} />}
-              onBeforeAction={applyToDocument}
-              onSetAsDefault={handleSetAsDefault}
-            />
-          }
-        />
-        <SettingsSaveErrorDialog
-          failure={failure}
-          isRetrying={isRetrying}
-          onRetry={retry}
-          onDismiss={dismissError}
-        />
-      </>
+      <DefaultForm
+        font={font}
+        setFont={setFont}
+        numberFont={numberFont}
+        setNumberFont={setNumberFont}
+        textPosition={textPosition}
+        setTextPosition={setTextPosition}
+        skin={skin}
+        setSkin={setSkin}
+        borderIn={borderIn}
+        setBorderIn={setBorderIn}
+        borderOut={borderOut}
+        setBorderOut={setBorderOut}
+        hair={hair}
+        setHair={setHair}
+        color={color}
+        setColor={setColor}
+        numbered={numbered}
+        setNumbered={setNumbered}
+        onSubmit={syncToRedux}
+        onReset={handleReset}
+        header={
+          <MyStyleHeader
+            help={<FormattedMessage {...formMessages.panelHint} />}
+            onBeforeAction={syncToRedux}
+          />
+        }
+      />
     );
   },
 );

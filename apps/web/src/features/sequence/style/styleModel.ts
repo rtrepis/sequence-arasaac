@@ -185,6 +185,49 @@ const VIEW_KEYS = [
 ] as const;
 
 /**
+ * Un pictograma passa de l'estil `from` a l'estil `to` amb la regla dels
+ * retocs: el que tenia igual que `from` (l'heretava) pren el de `to`, i el que
+ * hi era diferent (un retoc) es queda. Modifica el pictograma: qui la crida en
+ * passa una còpia si no vol tocar l'original. La fan servir canviar l'estil del
+ * document i pintar un bloc amb un estil amb nom (R10, `blockSequence`).
+ */
+export const followStyle = (
+  pict: PictSequence,
+  from: SequenceStyle,
+  to: SequenceStyle,
+): void => {
+  PICT_SEQUENCE_KEYS.forEach((key) => {
+    const current = pict.settings[key];
+    if (current !== undefined && deepEqual(current, from.pictSequence[key]))
+      // Còpia i no referència: si no, tots els pictogrames compartirien
+      // l'objecte de lletra de l'estil
+      (pict.settings as Record<string, unknown>)[key] = structuredCopy(
+        to.pictSequence[key],
+      );
+  });
+
+  PICT_API_ARA_KEYS.forEach((key) => {
+    const current = pict.img.settings[key];
+    if (current !== undefined && current === from.pictApiAra[key])
+      (pict.img.settings as Record<string, unknown>)[key] = to.pictApiAra[key];
+  });
+
+  const category = categoryOf(pict);
+  const oldColor = colorForCategory(
+    category,
+    from.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
+    from.pictApiAra.fitzgerald,
+  );
+  const { fitzgerald } = pict.img.settings;
+  if (fitzgerald === undefined || sameColor(fitzgerald, oldColor))
+    pict.img.settings.fitzgerald = colorForCategory(
+      category,
+      to.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
+      to.pictApiAra.fitzgerald,
+    );
+};
+
+/**
  * Aplica un estil nou **sobre el document que rep** (el fan servir els reducers,
  * amb Immer). La regla és la dels fonaments:
  *
@@ -205,38 +248,7 @@ export const applyStyleToDocument = (
   to: SequenceStyle,
 ): void => {
   Object.values(document.content).forEach((sequence) =>
-    sequence.forEach((pict: PictSequence) => {
-      PICT_SEQUENCE_KEYS.forEach((key) => {
-        const current = pict.settings[key];
-        if (current !== undefined && deepEqual(current, from.pictSequence[key]))
-          // Còpia i no referència: si no, tots els pictogrames compartirien
-          // l'objecte de lletra de l'estil
-          (pict.settings as Record<string, unknown>)[key] = structuredCopy(
-            to.pictSequence[key],
-          );
-      });
-
-      PICT_API_ARA_KEYS.forEach((key) => {
-        const current = pict.img.settings[key];
-        if (current !== undefined && current === from.pictApiAra[key])
-          (pict.img.settings as Record<string, unknown>)[key] =
-            to.pictApiAra[key];
-      });
-
-      const category = categoryOf(pict);
-      const oldColor = colorForCategory(
-        category,
-        from.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
-        from.pictApiAra.fitzgerald,
-      );
-      const { fitzgerald } = pict.img.settings;
-      if (fitzgerald === undefined || sameColor(fitzgerald, oldColor))
-        pict.img.settings.fitzgerald = colorForCategory(
-          category,
-          to.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
-          to.pictApiAra.fitzgerald,
-        );
-    }),
+    sequence.forEach((pict: PictSequence) => followStyle(pict, from, to)),
   );
 
   Object.keys(document.viewSettings ?? {}).forEach((key) => {

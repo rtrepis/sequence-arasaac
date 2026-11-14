@@ -81,3 +81,21 @@ export const sheetSurface = printColors.background;
  * amb el glif blanc que porta a dins.
  */
 export const sheetWarning = "#e65100";
+
+/**
+ * Guia d'edició damunt del full: el contorn de cada caixa del mode lliure i
+ * les marques que diuen com és (ADR-005). És el gris 700 de Material: 6,1:1
+ * amb el blanc del full, per damunt del 3:1 que demana un contorn (WCAG
+ * 1.4.11), i fix en tots dos temes perquè és damunt del full. **Mai** surt al
+ * paper ni al PDF: és un estat de l'edició, no del document.
+ */
+export const sheetGuide = "#616161";
+
+/**
+ * Les tres seqüències de la mostra del panell «Pàgina i distribució» (pas
+ * 7c): tres colors clars ben diferents perquè es vegi on va cadascuna, amb el
+ * número de cada pictograma en `printColors.text` (més de 10:1 amb tots tres).
+ * Són damunt del full, que no s'adapta al tema: fixos en tots dos. No són
+ * colors de contingut: no surten mai a cap document.
+ */
+export const previewSequenceColors = ["#C5E1A5", "#90CAF9", "#FFCC80"] as const;

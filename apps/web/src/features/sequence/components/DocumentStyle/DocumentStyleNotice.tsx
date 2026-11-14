@@ -7,19 +7,16 @@
 // contingut, a dalt, com l'avís de verificar el correu; es queda fins que es
 // tanca (creu, o Esc des de dins), no s'imprimeix, i el contenidor de la regió
 // viva hi és sempre perquè el lector de pantalla l'anunciï quan hi aparegui
-// (`aria-live="polite"`: no interromp). El botó porta al panell «Estil del
-// document», que és on es canvia.
+// (`aria-live="polite"`: no interromp). Abans portava un botó al panell «Estil
+// del document»; aquell panell ara és «El meu estil» i no toca el document
+// (R10), i el bàner és només informació.
 import React from "react";
 import { Alert, Box, Stack } from "@mui/material";
 import { useIntl } from "react-intl";
-import StyledButton from "@/style/StyledButton";
 import { APP_TOUCH_TARGET_MIN } from "@/style/appShape";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import NotPrint from "@components/utils/NotPrint/NotPrint";
-import {
-  styleNoticeClosedActionCreator,
-  stylePanelRequestedActionCreator,
-} from "@features/sequence/store/styleSlice";
+import { styleNoticeClosedActionCreator } from "@features/sequence/store/styleSlice";
 import messages from "./DocumentStyle.lang";
 
 const touchTarget = { minHeight: APP_TOUCH_TARGET_MIN };
@@ -87,13 +84,6 @@ const DocumentStyleNotice = (): React.ReactElement => {
                     </div>
                   )}
                 </Box>
-                <StyledButton
-                  color="inherit"
-                  sx={touchTarget}
-                  onClick={() => dispatch(stylePanelRequestedActionCreator())}
-                >
-                  {intl.formatMessage(messages.panelTitle)}
-                </StyledButton>
               </Stack>
             </Alert>
           </Box>

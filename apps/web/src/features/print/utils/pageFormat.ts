@@ -35,6 +35,11 @@ export interface PageFormat {
 
 export interface ScreenMargins {
   small: number; // xs/sm screens
+  /**
+   * Mòbil (la columna va sota el full): el full fa la mateixa amplada que el
+   * verd dels ajustos, que deixa 2 px a cada costat de la finestra
+   */
+  phone: number;
   medium: number; // md+ screens
 }
 
@@ -61,7 +66,12 @@ export const PRINT_MARGIN_MM = 5;
  */
 export const SCREEN_MARGINS: ScreenMargins = {
   small: 48,
-  medium: 380,
+  phone: 4,
+  // La columna d'ajustos al costat del full: 350 px de columna, el separador i
+  // l'aire de cada banda, més els marges de la pàgina. Amb 380, el full
+  // apaïsat no hi cabia: el de sempre s'encongia i en perdia la vora dreta, i
+  // el de les pàgines passava per sota de la columna
+  medium: 424,
 };
 
 /**
@@ -242,4 +252,3 @@ export function createPageFormat(
 export function isMediumScreen(screenWidth: number): boolean {
   return screenWidth > 900;
 }
-

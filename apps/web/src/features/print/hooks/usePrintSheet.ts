@@ -28,6 +28,13 @@ export const PRINTING_BODY_CLASS = "printing-sheet";
 /** El full a mida real, sense l'escala que l'encabeix a la pantalla. */
 const SHEET_SELECTOR = ".preview-content";
 
+/**
+ * Quants fulls s'imprimeixen. El CSS d'impressió (`generatePrintCSS`) en treu
+ * l'alçada del document: és l'única cosa que no pot saber quan es genera,
+ * perquè el mode lliure en pot tenir més d'un (ADR-005).
+ */
+export const PRINT_SHEETS_VAR = "--print-sheets";
+
 const printRoot = (): HTMLElement => {
   const existing = document.getElementById(PRINT_ROOT_ID);
   if (existing) return existing;
@@ -46,21 +53,33 @@ const printRoot = (): HTMLElement => {
  * `beforeprint`.
  */
 export const mountPrintSheet = (): void => {
-  const sheet = document.querySelector<HTMLElement>(SHEET_SELECTOR);
+  // Primer es treu la còpia anterior: els fulls copiats porten la mateixa
+  // classe, i si no, en tornar-la a preparar també es copiarien
   const root = printRoot();
   root.replaceChildren();
+  // Tots els fulls, en ordre: el flux en té un, i el mode lliure, un per pàgina
+  const sheets = Array.from(
+    document.querySelectorAll<HTMLElement>(SHEET_SELECTOR),
+  );
 
   // Sense full no s'amaga res: val més imprimir la pàgina tal com surti que
   // deixar l'usuari amb un paper en blanc i cap explicació
-  if (!sheet) {
+  if (sheets.length === 0) {
     document.body.classList.remove(PRINTING_BODY_CLASS);
+    document.documentElement.style.removeProperty(PRINT_SHEETS_VAR);
     return;
   }
 
-  const clone = sheet.cloneNode(true) as HTMLElement;
-  // L'escala és per encabir el full a la pantalla; al paper hi va a mida real
-  clone.style.transform = "none";
-  root.appendChild(clone);
+  sheets.forEach((sheet) => {
+    const clone = sheet.cloneNode(true) as HTMLElement;
+    // L'escala és per encabir el full a la pantalla; al paper hi va a mida real
+    clone.style.transform = "none";
+    root.appendChild(clone);
+  });
+  document.documentElement.style.setProperty(
+    PRINT_SHEETS_VAR,
+    String(sheets.length),
+  );
   document.body.classList.add(PRINTING_BODY_CLASS);
 };
 
@@ -68,6 +87,7 @@ export const mountPrintSheet = (): void => {
 export const unmountPrintSheet = (): void => {
   document.getElementById(PRINT_ROOT_ID)?.replaceChildren();
   document.body.classList.remove(PRINTING_BODY_CLASS);
+  document.documentElement.style.removeProperty(PRINT_SHEETS_VAR);
 };
 
 /**

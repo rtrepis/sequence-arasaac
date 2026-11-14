@@ -155,7 +155,7 @@ describe("document nou", () => {
     store.dispatch(
       changeDocumentStyleThunk(
         OTHER_STYLE(selectUserDefaultStyle(state(store))),
-        "file",
+        "fitTextDocument",
       ),
     );
     expect(selectDocumentHasOwnStyle(state(store))).toBe(true);
@@ -241,7 +241,7 @@ describe("«Canvia l'estil»", () => {
     const before = state(store).document;
     const target = OTHER_STYLE(userDefault);
 
-    store.dispatch(changeDocumentStyleThunk(target, "file"));
+    store.dispatch(changeDocumentStyleThunk(target, "fitTextDocument"));
 
     const after = state(store).document;
     // L'espai entre seqüències és de la pàgina: aplicar un estil no el toca
@@ -258,7 +258,9 @@ describe("«Canvia l'estil»", () => {
     expect(after.content[0][0].settings.textPosition).toBe("top");
     expect(selectResolvedSequenceViews(state(store))[0].sizePict).toBe(2.2);
     // La confirmació és un snackbar amb «Desfés», no un bàner
-    expect(state(store).style.undoSnackbar).toMatchObject({ source: "file" });
+    expect(state(store).style.undoSnackbar).toMatchObject({
+      source: "fitTextDocument",
+    });
     expect(state(store).style.notice).toBeNull();
     // No toca cap fitxer: el document queda amb canvis sense desar
     expect(state(store).documentStatus.changedAt).not.toBeNull();
@@ -270,10 +272,12 @@ describe("«Canvia l'estil»", () => {
     expect(state(store).style.undoSnackbar).toBeNull();
   });
 
-  it("«El meu estil per defecte» torna a l'estil de l'usuari", () => {
+  it("tornar a aplicar l'estil de l'usuari el recupera i conserva els retocs", () => {
     const { store, userDefault } = openedStore();
-    store.dispatch(changeDocumentStyleThunk(OTHER_STYLE(userDefault), "file"));
-    store.dispatch(changeDocumentStyleThunk(userDefault, "userDefault"));
+    store.dispatch(
+      changeDocumentStyleThunk(OTHER_STYLE(userDefault), "fitTextDocument"),
+    );
+    store.dispatch(changeDocumentStyleThunk(userDefault, "fitTextDocument"));
     expect(selectDocumentStyle(state(store))).toEqual(userDefault);
     expect(state(store).document.content[0][1].settings.font.family).toBe(
       "Caveat",
@@ -283,7 +287,7 @@ describe("«Canvia l'estil»", () => {
   it("desar el document no li treu el desfer", () => {
     const { store, userDefault } = openedStore();
     store.dispatch(
-      changeDocumentStyleThunk(OTHER_STYLE(userDefault), "userDefault"),
+      changeDocumentStyleThunk(OTHER_STYLE(userDefault), "fitTextDocument"),
     );
     store.dispatch(
       documentStyleMaterializedActionCreator({
@@ -301,7 +305,7 @@ describe("«Canvia l'estil»", () => {
   it("si el document s'ha tocat després, el desfer ja no s'ofereix", () => {
     const { store, userDefault } = openedStore();
     store.dispatch(
-      changeDocumentStyleThunk(OTHER_STYLE(userDefault), "userDefault"),
+      changeDocumentStyleThunk(OTHER_STYLE(userDefault), "fitTextDocument"),
     );
     store.dispatch(addPictogramActionCreator(pict()));
 

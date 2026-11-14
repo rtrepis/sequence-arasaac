@@ -1,0 +1,284 @@
+import React, { useId, useState } from "react";
+import {
+  Box,
+  Chip,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Stack,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import {
+  MdChevronLeft,
+  MdChevronRight,
+  MdOutlineLibraryAdd,
+  MdTitle,
+} from "react-icons/md";
+import { useIntl } from "react-intl";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { useFeedback } from "@/context/FeedbackContext";
+import StyledButton from "@/style/StyledButton";
+import StyledIconButton from "@/style/StyledIconButton";
+import {
+  addTextBlockThunk,
+  selectPages,
+} from "@features/free-layout/store/freeLayoutThunks";
+import { arrangementOf } from "@features/free-layout/model/templates";
+import { TEMPLATE_NAMES } from "./templateNames";
+import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
+import PageActionsMenu from "./PageActionsMenu";
+import messages from "./FreeLayoutPages.lang";
+
+interface PageHeaderProps {
+  sheetIndex: number;
+  sheetCount: number;
+  /** Una pàgina contínua s'omple amb seqüències; una en blocs, amb blocs */
+  continuous?: boolean;
+  /** La pàgina que segueix la columna (R5) */
+  active?: boolean;
+  onAddSequence: () => void;
+  /** Clicar el títol: la pàgina, a dalt de tot i tan gran com hi càpiga */
+  onFocusPage?: () => void;
+  /**
+   * Al mòbil, on es veu una pàgina cada vegada: passar a l'anterior o a la
+   * següent, a banda i banda del títol. Sense valor, no hi ha la fletxa
+   */
+  onPrevious?: () => void;
+  onNext?: () => void;
+}
+
+/** Una fletxa per passar de pàgina, al mòbil. */
+const PageArrow = ({
+  label,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string;
+  disabled: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}): React.ReactElement => (
+  <Tooltip title={label}>
+    {/* L'embolcall: un botó desactivat no rep els esdeveniments del tooltip */}
+    <span>
+      <StyledIconButton
+        color="inherit"
+        aria-label={label}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        {children}
+      </StyledIconButton>
+    </span>
+  </Tooltip>
+);
+
+/**
+ * La capçalera d'una pàgina del mode lliure, a sobre del full: quina pàgina
+ * és, el botó d'afegir (una seqüència a una pàgina contínua, un bloc a una en
+ * blocs) i el menú de la pàgina, on hi ha totes les seves accions. Al mòbil
+ * el botó d'afegir només porta la icona, amb el tooltip. No s'imprimeix: és
+ * fora del full.
+ */
+const PageHeader = ({
+  sheetIndex,
+  sheetCount,
+  continuous = false,
+  active = false,
+  onAddSequence,
+  onFocusPage,
+  onPrevious,
+  onNext,
+}: PageHeaderProps): React.ReactElement => {
+  const intl = useIntl();
+  const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const narrow = useMediaQuery(theme.breakpoints.down("sm"));
+  const { showSnackbar } = useFeedback();
+  const { select } = useViewSelection();
+  const addMenuId = useId();
+  const [addAnchor, setAddAnchor] = useState<HTMLElement | null>(null);
+  const number = sheetIndex + 1;
+  const pages = useAppSelector(selectPages);
+  const arrangement = arrangementOf(pages?.sheets[sheetIndex]?.template);
+  // L'etiqueta del repartiment: contínua, N columnes, N files, lliure o el
+  // nom de la plantilla
+  const tag = continuous
+    ? { kind: "continuous", n: 0, name: "" }
+    : arrangement.kind !== "template"
+      ? { kind: arrangement.kind, n: arrangement.n, name: "" }
+      : arrangement.id === "free" || !arrangement.id
+        ? { kind: "free", n: 0, name: "" }
+        : {
+            kind: "template",
+            n: 0,
+            name: TEMPLATE_NAMES[arrangement.id]
+              ? intl.formatMessage(TEMPLATE_NAMES[arrangement.id])
+              : arrangement.id,
+          };
+  const title = intl.formatMessage(messages.pageLabel, {
+    number,
+    total: sheetCount,
+  });
+
+  const addLabel = intl.formatMessage(
+    continuous ? messages.addSequence : messages.addBlock,
+  );
+  const handleAdd = (event: React.MouseEvent<HTMLElement>) => {
+    if (continuous) onAddSequence();
+    else setAddAnchor(event.currentTarget);
+  };
+  const addProps = {
+    color: "inherit" as const,
+    "aria-haspopup": continuous ? undefined : ("menu" as const),
+    "aria-expanded": continuous ? undefined : addAnchor !== null,
+    "aria-controls": addAnchor ? addMenuId : undefined,
+    onClick: handleAdd,
+  };
+
+  return (
+    <Stack
+      direction="row"
+      alignItems="center"
+      gap={1}
+      sx={{ "@media print": { display: "none" } }}
+    >
+      {onPrevious && (
+        <PageArrow
+          label={intl.formatMessage(messages.previousPage)}
+          disabled={sheetIndex === 0}
+          onClick={onPrevious}
+        >
+          <MdChevronLeft />
+        </PageArrow>
+      )}
+      <Typography
+        component="h2"
+        variant="subtitle1"
+        sx={{ flexGrow: onPrevious ? 0 : 1, minWidth: 0 }}
+      >
+        <Box
+          component="button"
+          type="button"
+          onClick={onFocusPage}
+          sx={{
+            all: "unset",
+            cursor: onFocusPage ? "pointer" : "default",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 0.75,
+            fontWeight: active ? "bold" : undefined,
+            borderRadius: 1,
+            "&:focus-visible": {
+              outline: 2,
+              outlineStyle: "solid",
+              outlineColor: "primary.main",
+            },
+          }}
+        >
+          {/* El punt de la pàgina activa, del verd primari del marc que l'envolta */}
+          {active && (
+            <Box
+              component="span"
+              aria-hidden
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                backgroundColor: "primary.main",
+              }}
+            />
+          )}
+          {title}
+        </Box>
+      </Typography>
+
+      {onNext && (
+        <PageArrow
+          label={intl.formatMessage(messages.nextPage)}
+          disabled={sheetIndex === sheetCount - 1}
+          onClick={onNext}
+        >
+          <MdChevronRight />
+        </PageArrow>
+      )}
+      {onPrevious && <Box sx={{ flexGrow: 1 }} />}
+
+      {/* Com es reparteix la pàgina: diu què farà afegir-hi un bloc */}
+      <Tooltip title={intl.formatMessage(messages.arrangementHint, tag)}>
+        <Chip
+          label={intl.formatMessage(messages.arrangementTag, tag)}
+          size="small"
+          variant="outlined"
+          tabIndex={0}
+          sx={{ flexShrink: 0 }}
+        />
+      </Tooltip>
+
+      {narrow ? (
+        // Al mòbil, només la icona; el nom, al tooltip (pressió llarga)
+        <Tooltip title={addLabel}>
+          <StyledIconButton aria-label={addLabel} {...addProps}>
+            <MdOutlineLibraryAdd />
+          </StyledIconButton>
+        </Tooltip>
+      ) : (
+        <StyledButton startIcon={<MdOutlineLibraryAdd />} {...addProps}>
+          {addLabel}
+        </StyledButton>
+      )}
+      <Menu
+        id={addMenuId}
+        anchorEl={addAnchor}
+        open={addAnchor !== null}
+        onClose={() => setAddAnchor(null)}
+        MenuListProps={{ "aria-label": addLabel }}
+      >
+        <MenuItem
+          onClick={() => {
+            setAddAnchor(null);
+            onAddSequence();
+          }}
+        >
+          <ListItemIcon>
+            <MdOutlineLibraryAdd />
+          </ListItemIcon>
+          <ListItemText>
+            {intl.formatMessage(messages.addSequenceBlock)}
+          </ListItemText>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setAddAnchor(null);
+            const placementId = dispatch(addTextBlockThunk(sheetIndex));
+            select({ kind: "block", placementId, sheetIndex });
+            showSnackbar({
+              message: intl.formatMessage(messages.textBlockAdded, { number }),
+              severity: "success",
+            });
+          }}
+        >
+          <ListItemIcon>
+            <MdTitle />
+          </ListItemIcon>
+          <ListItemText>
+            {intl.formatMessage(messages.addTextBlock)}
+          </ListItemText>
+        </MenuItem>
+      </Menu>
+
+      <PageActionsMenu
+        sheetIndex={sheetIndex}
+        sheetCount={sheetCount}
+        onAddSequence={onAddSequence}
+      />
+    </Stack>
+  );
+};
+
+export default PageHeader;

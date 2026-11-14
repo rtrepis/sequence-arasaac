@@ -1,4 +1,11 @@
-import { Slider, Tooltip } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Slider,
+  Tooltip,
+} from "@mui/material";
 import StyledButton from "@/style/StyledButton";
 import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
 import {
@@ -22,23 +29,25 @@ import {
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { viewSettingsActionCreator } from "@features/user-settings/store/uiSlice";
-import {
-  applyViewSettingsToAllActionCreator,
-  documentLayoutChangedActionCreator,
-  setSequenceSpaceBetweenActionCreator,
-} from "@features/sequence/store/documentSlice";
-import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import { DefaultSettingsPanelHandle } from "../DefaultSettingsPanel/DefaultSettingsPanel";
-import { ViewSettings, SequenceDirection, PageOrientation } from "@/types/ui";
 import {
-  PageSize,
-  regionalPaperSize,
-} from "@features/print/utils/pageFormat";
+  ViewSettings,
+  SequenceDirection,
+  PageOrientation,
+  PageDisposition,
+} from "@/types/ui";
+import { PageSize, regionalPaperSize } from "@features/print/utils/pageFormat";
 import { SequenceAlignmentH, SequenceAlignmentV } from "@/types/document";
 import GlobalViewControls from "@components/ViewSequencesSettings/GlobalViewControls";
 import PrintFooterSection from "@components/ViewSequencesSettings/PrintFooterSection";
 import viewMessages from "@components/ViewSequencesSettings/ViewSequencesSettings.lang";
-import ViewSettingsPreview from "./ViewSettingsPreview";
+import DispositionToggle from "@features/free-layout/components/DispositionToggle/DispositionToggle";
+import levelMessages from "@features/free-layout/components/ViewLevels/ViewLevels.lang";
+import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
+import { previewSequenceColors } from "@/style/palette";
+import ViewSettingsPreview, {
+  PREVIEW_SEQUENCE_LENGTHS,
+} from "./ViewSettingsPreview";
 import messages from "./ViewSettingsPanel.lang";
 import {
   SIZE_PICT_MIN,
@@ -56,6 +65,7 @@ import {
   VIEW_DEFAULT_ALIGNMENT_V,
   VIEW_DEFAULT_LICENCE,
   VIEW_DEFAULT_AUTHOR,
+  VIEW_DEFAULT_DISPOSITION,
 } from "@/configs/viewSettingsConfig";
 import React from "react";
 
@@ -67,11 +77,12 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     const dispatch = useAppDispatch();
     const intl = useIntl();
     const reduxViewSettings = useAppSelector((store) => store.ui.viewSettings);
-    const documentStyleView = useAppSelector(
-      (store) => selectDocumentStyle(store).view,
-    );
     const [localSettings, setLocalSettings] =
       useState<ViewSettings>(reduxViewSettings);
+    // Quines seqüències de la mostra es veuen. Només és de la mostra: no es desa
+    const [shown, setShown] = useState<boolean[]>(
+      PREVIEW_SEQUENCE_LENGTHS.map(() => true),
+    );
 
     useImperativeHandle(ref, () => ({
       syncToRedux: () => {
@@ -92,8 +103,13 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
         alignmentV: VIEW_DEFAULT_ALIGNMENT_V,
         author: VIEW_DEFAULT_AUTHOR,
         licence: VIEW_DEFAULT_LICENCE,
+        disposition: VIEW_DEFAULT_DISPOSITION,
       });
     };
+
+    // Sense valor (el que ja estava desat), simple
+    const disposition: PageDisposition = localSettings.disposition ?? "auto";
+    const simple = disposition === "auto";
 
     const handlePageSizeChange = (pageSize: PageSize) => {
       setLocalSettings((prev) => ({ ...prev, pageSize }));
@@ -149,53 +165,53 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
       setLocalSettings((prev) => ({ ...prev, alignmentV: value }));
     };
 
-    // «Aplica a la vista actual» porta aquests valors al document obert:
-    // tocar-ne les mides i els espaiats és tocar-ne l'estil, i la pàgina també
-    // és seva (B26)
-    const handleApply = () => {
-      dispatch(viewSettingsActionCreator(localSettings));
-      dispatch(
-        documentLayoutChangedActionCreator({
-          layout: {
-            direction: localSettings.direction,
-            pageSize: localSettings.pageSize,
-            orientation: localSettings.orientation,
-          },
-          base: {
-            direction: localSettings.direction,
-            pageSize: localSettings.pageSize,
-            orientation: localSettings.orientation,
-          },
-        }),
-      );
-      dispatch(
-        applyViewSettingsToAllActionCreator({
-          settings: {
-            sizePict: localSettings.sizePict,
-            pictSpaceBetween: localSettings.pictSpaceBetween,
-            alignmentH: localSettings.alignmentH,
-            alignmentV: localSettings.alignmentV,
-          },
-          styleView: documentStyleView,
-        }),
-      );
-      dispatch(
-        setSequenceSpaceBetweenActionCreator({
-          value: localSettings.sequenceSpaceBetween,
-          styleView: {
-            ...documentStyleView,
-            sizePict: localSettings.sizePict,
-            pictSpaceBetween: localSettings.pictSpaceBetween,
-            alignmentH: localSettings.alignmentH,
-            alignmentV: localSettings.alignmentV,
-          },
-        }),
-      );
-    };
-
     return (
       <SettingsPanelLayout
-        preview={<ViewSettingsPreview settings={localSettings} />}
+        preview={<ViewSettingsPreview settings={localSettings} shown={shown} />}
+        previewAside={
+          <FormGroup aria-label={intl.formatMessage(messages.previewSequences)}>
+            {PREVIEW_SEQUENCE_LENGTHS.map((_, index) => (
+              <FormControlLabel
+                key={index}
+                control={
+                  <Checkbox
+                    checked={shown[index]}
+                    onChange={(_, checked) =>
+                      setShown((prev) =>
+                        prev.map((value, i) => (i === index ? checked : value)),
+                      )
+                    }
+                  />
+                }
+                label={
+                  <Box
+                    component="span"
+                    sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    {/* El color de la seqüència a la mostra */}
+                    <Box
+                      component="span"
+                      aria-hidden
+                      sx={{
+                        width: 14,
+                        height: 14,
+                        borderRadius: "3px",
+                        backgroundColor: previewSequenceColors[index],
+                      }}
+                    />
+                    {intl.formatMessage(pageMessages.sequenceName, {
+                      number: index + 1,
+                    })}
+                  </Box>
+                }
+              />
+            ))}
+          </FormGroup>
+        }
         hint={
           // Guia del tab: què s'ajusta aquí
           <SettingsPanelHint>
@@ -210,11 +226,35 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           <GlobalViewControls
             viewSettings={localSettings}
             pageSize={localSettings.pageSize}
-            sequenceCount={2}
+            // La direcció i l'espai entre seqüències només són d'una
+            // pàgina simple
+            sequenceCount={simple ? 2 : 1}
+            showDirection={simple}
             onPageSizeChange={handlePageSizeChange}
             onDirectionChange={handleDirectionChange}
             onSequenceSpaceChange={handleSequenceSpaceChange}
             onOrientationChange={handleOrientationChange}
+            afterOrientation={
+              <SettingRow
+                title={<FormattedMessage {...levelMessages.mode} />}
+                labelId={`${VIEW_PANEL_LABEL_ID}-disposition`}
+                helperId={`${VIEW_PANEL_LABEL_ID}-disposition-helper`}
+                helper={<FormattedMessage {...messages.dispositionHelp} />}
+                control="wrap"
+              >
+                <DispositionToggle
+                  value={disposition}
+                  onChange={(next) =>
+                    setLocalSettings((prev) => ({
+                      ...prev,
+                      disposition: next,
+                    }))
+                  }
+                  labelId={`${VIEW_PANEL_LABEL_ID}-disposition`}
+                  helperId={`${VIEW_PANEL_LABEL_ID}-disposition-helper`}
+                />
+              </SettingRow>
+            }
           />
         </SectionTitle>
 
@@ -325,11 +365,11 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
           }
         />
 
-        {/* Al final i a la dreta, com el peu d'un diàleg: afecten tot el que
-              hi ha a sobre. «Aplica» és la principal i per això va plena */}
-        <SettingsActions
-          helper={<FormattedMessage {...messages.applyHelper} />}
-        >
+        {/* Al final i a la dreta, com el peu d'un diàleg. Només hi ha
+              «Restaura»: aquests valors van cap als documents nous, i un
+              document obert no en rep res (els estils van en una sola
+              direcció, de la configuració cap al document, R10 i R11) */}
+        <SettingsActions>
           <Tooltip
             title={intl.formatMessage(messages.tooltipReset)}
             describeChild
@@ -342,9 +382,6 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
               <FormattedMessage {...messages.reset} />
             </StyledButton>
           </Tooltip>
-          <StyledButton variant="contained" onClick={handleApply}>
-            <FormattedMessage {...messages.apply} />
-          </StyledButton>
         </SettingsActions>
       </SettingsPanelLayout>
     );

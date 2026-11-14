@@ -7,7 +7,6 @@ import {
   act,
 } from "@/test/renderWithProviders";
 import { createAppStore } from "@app/store";
-import { stylePanelRequestedActionCreator } from "@features/sequence/store/styleSlice";
 import SettingsDialogButton from "./SettingsDialogButton";
 
 describe("SettingsDialogButton", () => {
@@ -24,7 +23,9 @@ describe("SettingsDialogButton", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Settings" }));
 
-    expect(screen.getByRole("dialog", { name: "Settings" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("dialog", { name: "Settings" }),
+    ).toBeInTheDocument();
   });
 
   it("hauria de dir amb quin compte s'ha entrat al nom del botó", () => {
@@ -56,24 +57,5 @@ describe("SettingsDialogButton", () => {
     await userEvent.click(screen.getByRole("button", { name: "close" }));
 
     await waitFor(() => expect(trigger).toHaveFocus());
-  });
-
-  it("hauria d'obrir-se al panell d'estil del document quan el bàner el demana", async () => {
-    const store = createAppStore();
-    renderWithProviders(<SettingsDialogButton />, { store });
-
-    // El bàner d'obrir un document demana el panell «Estil del document»
-    act(() => {
-      store.dispatch(stylePanelRequestedActionCreator());
-    });
-
-    await waitFor(() =>
-      expect(
-        screen.getByRole("dialog", { name: "Settings" }),
-      ).toBeInTheDocument(),
-    );
-    expect(store.getState().ui.settingsActiveTab).toBe("pictograms");
-    // La petició es marca atesa: en tornar a obrir el modal no s'ha de repetir
-    expect(store.getState().style.stylePanelRequested).toBe(false);
   });
 });

@@ -40,6 +40,8 @@ mòbil, amb compte o sense.**
    `orientation`, `direction` (`row` o `column`, seqüències en files o en columnes), `sequenceGap`
    (un factor, com ara) i `layout`. No hi ha marges. Tanca **B26**, i el que quedava de **B21**.
 7. **Les unitats són mil·límetres només a `frame`**, i `frame` només es reserva per al mode lliure.
+   *Substituïda per l'ADR-005*: el mode lliure fa servir col·locacions dins de `page`, i `frame` deixa
+   d'estar reservat.
 8. **L'estil per seqüència només és `view`** en aquesta versió.
 9. **L'espai entre seqüències passa de l'estil a la pàgina.** A l'esquema 2 era part de
    l'estil (`styleView.sequenceSpaceBetween`), amb una nota de «pendent de confirmar»; ara és

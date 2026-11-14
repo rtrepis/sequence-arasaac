@@ -6,6 +6,7 @@ import {
   usePrintSheet,
   PRINTING_BODY_CLASS,
   PRINT_ROOT_ID,
+  PRINT_SHEETS_VAR,
 } from "./usePrintSheet";
 
 /** Un full com el de la pàgina de vista: mida real i l'escala de pantalla. */
@@ -58,6 +59,38 @@ describe("mountPrintSheet", () => {
     mountPrintSheet();
 
     expect(document.body).toHaveClass(PRINTING_BODY_CLASS);
+  });
+
+  it("hauria d'imprimir tots els fulls, en ordre, i dir quants n'hi ha", () => {
+    // El mode lliure té un full per pàgina (ADR-005)
+    givenASheet("matí");
+    givenASheet("tarda");
+
+    mountPrintSheet();
+
+    expect(
+      Array.from(printRoot()?.children ?? []).map((sheet) => sheet.textContent),
+    ).toEqual(["matí", "tarda"]);
+    expect(
+      document.documentElement.style.getPropertyValue(PRINT_SHEETS_VAR),
+    ).toBe("2");
+
+    unmountPrintSheet();
+
+    expect(
+      document.documentElement.style.getPropertyValue(PRINT_SHEETS_VAR),
+    ).toBe("");
+  });
+
+  it("preparar-la dues vegades no copia la còpia anterior", () => {
+    // El botó la prepara i després el navegador avisa amb `beforeprint`
+    givenASheet("matí");
+    givenASheet("tarda");
+
+    mountPrintSheet();
+    mountPrintSheet();
+
+    expect(printRoot()?.children).toHaveLength(2);
   });
 
   it("hauria de poder-se cridar dues vegades sense duplicar el full", () => {

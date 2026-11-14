@@ -15,6 +15,8 @@ const viewSettingsZodSchema = z.object({
   author: z.string(),
   // Opcional: el que ja hi ha desat no la porta, i sense valor vol dir que sí
   licence: z.boolean().optional(),
+  // Opcional: el que ja hi ha desat no la porta, i sense valor vol dir simple
+  disposition: z.enum(["auto", "columns", "rows", "free"]).optional(),
 });
 
 const wordProfileZodSchema = z.object({

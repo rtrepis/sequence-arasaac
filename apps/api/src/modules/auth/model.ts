@@ -198,6 +198,7 @@ const userSchema = new Schema<IUser>(
           orientation: { type: String, enum: ["landscape", "portrait"] },
           author: { type: String },
           licence: { type: Boolean },
+          disposition: { type: String, enum: ["auto", "columns", "rows", "free"] },
         },
         { _id: false }
       ),
