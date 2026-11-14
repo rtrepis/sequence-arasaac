@@ -1165,9 +1165,9 @@ ha a la pàgina (R11). Es fa abans del pas 8.
 
 **Les decisions**:
 
-- **Valors per defecte**: simple, mida 0,95, espai entre seqüències 7, espai entre pictogrames 1,5,
-  alineació centrada en totes dues direccions. La mida i l'espai entre pictogrames demanats (0,92 i
-  1,2) s'arrodoneixen a l'alça al pas dels lliscadors.
+- **Valors per defecte**: simple, mida 0,90, espai entre seqüències 7, espai entre pictogrames 1,5,
+  alineació centrada en totes dues direccions. L'espai entre pictogrames demanat (1,2) s'arrodoneix
+  a l'alça al pas del lliscador; la mida, primer 0,92 (0,95 arrodonida), es va baixar a 0,90.
 - **La mostra**: tres seqüències de colors diferents (4, 5 i 6 pictogrames, numerats), amb una
   casella per amagar-ne cadascuna; l'etiqueta de la disposició a dalt; en columnes i files, tantes
   com seqüències visibles (automàtic: el nombre fix es va descartar), amb el requadre de cada
