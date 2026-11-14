@@ -3278,22 +3278,6 @@
     "message": "Treu l'estil de bloc",
     "description": "Acció del menú «⋯» d'un bloc amb estil de bloc: el bloc torna a l'estil del document (es pot desfer)"
   },
-  "features.freeLayout.levels.blockStyle": {
-    "message": "Estil de bloc",
-    "description": "Títol de la fila del nivell «Bloc»: quin estil de bloc (l'estil dels pictogrames que poden compartir diversos blocs) fa servir el bloc"
-  },
-  "features.freeLayout.levels.blockStyleNone": {
-    "message": "L'estil del document",
-    "description": "Valor de la fila «Estil de bloc» quan el bloc no en fa servir cap: es pinta amb l'estil del document"
-  },
-  "features.freeLayout.levels.blockStyleNoneHelp": {
-    "message": "Per donar-li el teu estil, «Aplica el meu estil», al menú del bloc.",
-    "description": "Ajuda sota «Estil de bloc» quan el bloc no en té: on es fa (el menú «⋯» del bloc, al full)"
-  },
-  "features.freeLayout.levels.blockStyleShared": {
-    "message": "{count, plural, one {Només el fa servir aquest bloc.} other {El fan servir # blocs: «Actualitza amb el meu estil», al menú del bloc, els canvia tots.}}",
-    "description": "Ajuda sota «Estil de bloc» quan el bloc en té un: quants blocs el comparteixen (`count`) i, si són més d'un, que «Actualitza amb el meu estil» els canvia tots"
-  },
   "features.sequence.style.changed.myStyleUpdate": {
     "message": "S'ha actualitzat l'estil de bloc amb el teu estil, a tots els blocs que el fan servir.",
     "description": "Snackbar amb «Desfés» després d'«Actualitza amb el meu estil» del menú «⋯» d'una pàgina o d'un bloc"

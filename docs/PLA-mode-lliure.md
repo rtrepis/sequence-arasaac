@@ -823,8 +823,7 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
    «Vista» com a configuració dels documents nous i «Simple» per a la pàgina contínua. Vegeu «Com
    ha quedat el pas 6». Les plantilles pròpies (B34) i «Pàgines noves» (B36), més endavant.
 7. ✅ **R7** (B31), els estils per grup (2026-11-14): estil i distribució separats, estils de
-   bloc («Actualitza amb el meu estil», «Treu l'estil de bloc», la fila «Estil de bloc» del nivell
-   «Bloc») i la disposició de la pàgina en una sola tria (Simple · Columnes · Files · Lliure). Vegeu
+   bloc («Actualitza amb el meu estil», «Treu l'estil de bloc») i la disposició de la pàgina en una sola tria (Simple · Columnes · Files · Lliure). Vegeu
    «Com ha quedat el pas 7».
 7b. ✅ **La disposició per defecte** (2026-11-14): la fila «Disposició» al panell «Pàgina i
    distribució», el document nou i buit que la segueix, les pàgines noves amb aquesta disposició
@@ -833,7 +832,7 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
    disposició en 2 × 2, la mostra de «Pàgina i distribució» amb tres seqüències de colors i els
    blocs de debò, i a Lliure el bloc que s'adapta a la seqüència. Vegeu «Com ha quedat el pas 7c».
 8. ⏭️ **Tancar la columna**: les peces a prova (`SettingsLevel`, `LevelCrumbs`, l'etiqueta de la
-   disposició, la fila «Estil de bloc») a l'estàndard, treure l'etiqueta «Nou» i el vocabulari que
+   disposició) a l'estàndard, treure l'etiqueta «Nou» i el vocabulari que
    queda de «vista» («Restaura la vista»). Després, **B35** redefinit («Restableix els pictogrames
    d'aquesta seqüència»). Vegeu §13, «El pas següent».
 
@@ -1114,7 +1113,7 @@ en aplicar una plantilla **surt de la pàgina** (la seqüència continua al docu
 - **Estil de bloc** és el nom per a l'usuari de l'estil amb nom (al codi, `NamedStyle`). Porta
   **només estil**: «Aplica el meu estil» ja no toca la distribució del bloc.
 - **On**: no hi ha cap editor d'estils al document, perquè els estils van en una sola direcció
-  (pas 6). El nivell «Bloc» ho **diu**; les accions són al menú «⋯», com totes les del bloc.
+  (pas 6). Les accions són al menú «⋯», com totes les del bloc.
 - **La disposició** de la pàgina passa de dos termes (Disposició: Simple / En blocs, i
   Repartiment: Columnes / Files / Lliure) a **una sola tria**: Simple · Columnes · Files · Lliure.
 - El panell «Vista» de la configuració es diu **«Pàgina i distribució»**: com «El meu estil», guarda
@@ -1129,7 +1128,7 @@ en aplicar una plantilla **surt de la pàgina** (la seqüència continua al docu
 | Model (`model/blockStyle.ts`) | `namedStyleFrom` sense `view`; `applyNamedStyle` conserva la distribució del bloc i numera el nom si ja hi és (`uniqueStyleName`); nous `styleUseCount`, `targetStyleIds`, `updateNamedStyles` (es queda l'`id`, el nom i la `view` d'abans) i `removeNamedStyle` (un estil que no fa servir ningú surt del document) |
 | Accions (`store/freeLayoutThunks.ts`) | `updateMyStyleThunk` («Actualitza amb el meu estil», origen `myStyleUpdate`) i `removeBlockStyleThunk` («Treu l'estil de bloc», origen `blockStyleRemove`); totes dues es desfan amb el snackbar de sempre |
 | Menús «⋯» | Pàgina: «Actualitza amb el meu estil» si algun bloc seu té estil de bloc. Bloc: «Actualitza amb el meu estil» i «Treu l'estil de bloc» si en té. La disposició del menú de la pàgina, les quatre opcions |
-| Columna | Fila «Estil de bloc» (`ViewLevels/BlockStyleRow.tsx`) als nivells «Bloc» i «Rètol»: el nom (o «L'estil del document») i quants blocs el comparteixen. Nivell «Pàgina»: la fila «Disposició» amb quatre botons i sense la fila «Repartiment»; la secció «Distribució dels pictogrames». La tria és `hooks/useSheetDisposition.ts`, compartida amb el menú |
+| Columna | Nivell «Pàgina»: la fila «Disposició» amb quatre botons i sense la fila «Repartiment»; la secció «Distribució dels pictogrames». La tria és `hooks/useSheetDisposition.ts`, compartida amb el menú |
 | Configuració | La pestanya «Vista» és «Pàgina i distribució»; la secció «Distribució dels pictogrames» |
 | Textos | Els nous i els canviats en els cinc idiomes; fora «En blocs» (menú i columna) i «Repartiment» |
 | Format | Sense canvis. Un estil amb nom amb `view` (dels documents d'abans) es continua llegint, pintant i escrivint igual (fonament 06) |
@@ -1194,6 +1193,9 @@ ha a la pàgina (R11). Es fa abans del pas 8.
 línia si hi cap i en dues files si no (`control="wrap"` de `SettingRow`: en línia al panell de la
 configuració, en dues files a la columna de la vista, amb el títol a dalt); i les icones dels
 botons de tria (`IconToggleButton`), de 26 px en un botó que continua fent 55.
+
+**La fila «Estil de bloc» es treu** (revisió del 14): la columna se centra en la disposició i la
+distribució. Les accions de l'estil de bloc continuen al menú «⋯» del bloc i de la pàgina.
 
 **Vist en provar-ho**: amb els valors nous, les tres seqüències de la mostra no caben senceres en
 un full Carta apaïsat ni en simple ni en lliure; la mostra ho ensenya tal com seria (en lliure, el
@@ -1268,7 +1270,7 @@ documents nous i les pàgines noves hi neixen.
 |---|---|
 | **Document** | El paper; les seqüències **sense col·locar**; el **peu d'impressió**, amb «A quines pàgines» va la llicència |
 | **Pàgina N de M** | **Disposició** (etiqueta «Nou»), una sola tria: *Simple* (direcció i espai entre seqüències), *Columnes* (N), *Files* (N) o *Lliure*. En blocs, a sota sempre les **Plantilles** amb miniatura (passar-hi per damunt en dibuixa els espais al full; si no hi cap tot, avisa abans de què sortirà de la pàgina). La secció **Distribució dels pictogrames** |
-| **Bloc** / **Seqüència** / **Rètol** | El que hi ha seleccionat. Bloc i rètol: **Estil de bloc** (quin, o «L'estil del document», i quants blocs el comparteixen). Bloc i seqüència: «La mateixa a tots els blocs» a dalt, i la distribució (mida, espai i alineació, d'aquest o de tots); en blocs, les columnes de dins. Rètol: text, mida de la lletra, negreta i alineacions |
+| **Bloc** / **Seqüència** / **Rètol** | El que hi ha seleccionat. Bloc i seqüència: «La mateixa a tots els blocs» a dalt, i la distribució (mida, espai i alineació, d'aquest o de tots); en blocs, les columnes de dins. Rètol: text, mida de la lletra, negreta i alineacions |
 
 **A la configuració**:
 
@@ -1285,7 +1287,7 @@ documents nous i les pàgines noves hi neixen.
 | Aplicar plantilles amb avís, moure blocs, vista de la pàgina | `features/free-layout/hooks/useApplyTemplate.tsx`, `useBlockDrag.ts`, `usePageView.ts` (pantalla completa, portar a dalt, mides mesurades) |
 | Com es veuen les targetes d'un bloc (estil de bloc) i les seves accions | `features/free-layout/hooks/useBlockLooks.ts`; `model/blockStyle.ts` (`styleWithNamed`, `blockSequence`, `cardMeasureKey`, `cardSizeOf`, `namedStyleFrom`, `applyNamedStyle`, `updateNamedStyles`, `removeNamedStyle`, `styleUseCount`, `targetStyleIds`) |
 | La vista i la columna | `components/ViewSequencesSettings/ViewSquenceSettings.tsx` (maqueta, botons, escala amb l'amplada mesurada), `SettingsLevel`, `LevelCrumbs`, `SequenceViewRows` |
-| Nivells | `features/free-layout/components/ViewLevels/` (`PageLevel`, `BlockLevel`, `TextBlockLevel`, `BlockStyleRow`, `PagePictograms`, `LicencePagesRow`) |
+| Nivells | `features/free-layout/components/ViewLevels/` (`PageLevel`, `BlockLevel`, `TextBlockLevel`, `PagePictograms`, `LicencePagesRow`) |
 | La disposició d'una pàgina (columna i menú) | `features/free-layout/hooks/useSheetDisposition.ts`, `components/DispositionToggle/` |
 | La mida dels blocs lliures | `features/free-layout/model/naturalBox.ts`, `store/blockGrowth.ts` |
 | La disposició dels documents nous | `features/free-layout/components/NewDocumentPagesSync/`; `store/freeLayoutThunks.ts` (`selectDefaultDisposition`, `syncNewDocumentPagesThunk`, `addNewSequenceThunk`); `model/pages.ts` (`dispositionOf`, `newSheetWith`, `initialPagesFor`); el panell, `features/user-settings/components/SettingsDialog/panels/ViewSettingsPanel/` |
@@ -1327,8 +1329,7 @@ Decisions petites, per si es volen fer abans del pas següent:
 - **Al mòbil, les guies de les plantilles de la columna queden fora de la vista** (la pàgina és més
   amunt); des del menú «⋯» sí que es veuen.
 - **Peces a prova** que no són a l'estàndard: `SettingsLevel` (targeta amb vora, excepció a C8),
-  `LevelCrumbs` (C7), l'etiqueta de la disposició, la fila «Estil de bloc» (un valor sense control)
-  i l'etiqueta «Nou». Decidir si passen a
+  `LevelCrumbs` (C7), l'etiqueta de la disposició i l'etiqueta «Nou». Decidir si passen a
   `docs/estandards/configuracions.md`, i **quan es treu l'etiqueta «Nou»**.
 - **Els blocs comuns** («A totes les pàgines») només es pinten a les pàgines en blocs.
 - **«Millor apaïsat»** només es diu al tooltip (P2).
@@ -1358,7 +1359,7 @@ R7 (pas 7), la disposició per defecte (pas 7b) i els valors per defecte, la mos
 seguir afegint-hi coses. Cal triar-ne l'abast amb l'usuari:
 
 1. **Les peces a prova a l'estàndard** (`docs/estandards/configuracions.md`): `SettingsLevel`,
-   `LevelCrumbs`, l'etiqueta de la disposició i la fila «Estil de bloc». I **treure l'etiqueta
+   `LevelCrumbs` i l'etiqueta de la disposició. I **treure l'etiqueta
    «Nou»** de la disposició, o decidir quan.
 2. **El vocabulari que queda de «vista»**: «Restaura la vista» i els textos d'ajuda que encara en
    parlen.

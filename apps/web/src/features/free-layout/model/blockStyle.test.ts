@@ -20,7 +20,6 @@ import {
   namedStyleOf,
   removeNamedStyle,
   resolveBlockView,
-  styleUseCount,
   targetStyleIds,
   uniqueStyleName,
   updateNamedStyles,
@@ -234,12 +233,6 @@ describe("els estils de bloc (R7)", () => {
       },
     );
     expect(result.styles[2].name).toBe("Agenda 2");
-  });
-
-  it("compta els blocs de cada estil, els comuns una vegada", () => {
-    expect(styleUseCount(pages(), "st_1")).toBe(2);
-    expect(styleUseCount(pages(), "st_2")).toBe(1);
-    expect(styleUseCount(undefined, "st_1")).toBe(0);
   });
 
   it("els estils d'una pàgina o d'un bloc, sense repetir ni els que no hi són", () => {

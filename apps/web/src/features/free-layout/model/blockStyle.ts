@@ -278,20 +278,6 @@ const allStyledPlacements = (pages: DocumentPages): StyledPlacement[] =>
   ].filter(isStyled);
 
 /**
- * Quants blocs fan servir cada estil de bloc. Un bloc comú compta una vegada,
- * encara que surti a totes les pàgines.
- */
-export const styleUseCount = (
-  pages: DocumentPages | undefined,
-  styleId: string,
-): number =>
-  pages
-    ? allStyledPlacements(pages).filter(
-        (placement) => placement.styleId === styleId,
-      ).length
-    : 0;
-
-/**
  * Els estils de bloc que fan servir els blocs d'on s'aplica (els que existeixen
  * al document), sense repetir.
  */

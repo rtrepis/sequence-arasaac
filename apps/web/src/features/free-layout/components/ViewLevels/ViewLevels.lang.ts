@@ -226,32 +226,6 @@ const messages = defineMessages({
     description:
       "Títol de la graella de plantilles amb miniatura, sota el repartiment d'una pàgina en blocs",
   },
-  blockStyle: {
-    id: "features.freeLayout.levels.blockStyle",
-    defaultMessage: "Block style",
-    description:
-      "Títol de la fila del nivell «Bloc»: quin estil de bloc (l'estil dels pictogrames que comparteixen diversos blocs) fa servir el bloc",
-  },
-  blockStyleNone: {
-    id: "features.freeLayout.levels.blockStyleNone",
-    defaultMessage: "The document's style",
-    description:
-      "Valor de la fila «Estil de bloc» quan el bloc no en fa servir cap: es pinta amb l'estil del document",
-  },
-  blockStyleNoneHelp: {
-    id: "features.freeLayout.levels.blockStyleNoneHelp",
-    defaultMessage:
-      "To give it your style, use “Apply my style” in the block's menu.",
-    description:
-      "Ajuda sota «Estil de bloc» quan el bloc no en té: on es fa (el menú «⋯» del bloc, al full)",
-  },
-  blockStyleShared: {
-    id: "features.freeLayout.levels.blockStyleShared",
-    defaultMessage:
-      "{count, plural, one {Only this block uses it.} other {# blocks use it: “Update with my style”, in the block's menu, changes them all.}}",
-    description:
-      "Ajuda sota «Estil de bloc» quan el bloc en té un: quants blocs el comparteixen, i que «Actualitza amb el meu estil» els canvia tots",
-  },
 });
 
 export default messages;

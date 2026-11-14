@@ -387,23 +387,6 @@ describe("els estils de bloc (R7)", () => {
     };
   };
 
-  it("el nivell «Bloc» diu quin estil de bloc fa servir i quants blocs el comparteixen", async () => {
-    renderView(styledDocument());
-
-    await userEvent.click(
-      screen.getAllByRole("button", { name: /^Sequence 1,/ })[0],
-    );
-    expect(screen.getByText("Agenda")).toBeInTheDocument();
-    expect(
-      screen.getByText(/^2 blocks use it: “Update with my style”/),
-    ).toBeInTheDocument();
-
-    await userEvent.click(
-      screen.getAllByRole("button", { name: /^Sequence 2,/ })[0],
-    );
-    expect(screen.getByText("The document's style")).toBeInTheDocument();
-  });
-
   it("el menú del bloc el treu, i només a aquell bloc", async () => {
     const { store } = renderView(styledDocument());
 

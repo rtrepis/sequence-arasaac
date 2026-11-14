@@ -190,8 +190,8 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 - **Estil per grup** (B31, R7): una seqüència només té distribució. L'estil d'un grup de blocs és
   el seu **estil de bloc**: es dona amb «Aplica el meu estil», es canvia per a tots amb «Actualitza
   amb el meu estil» i es treu d'un bloc amb «Treu l'estil de bloc». Al document no hi ha cap editor
-  d'estils: es fa al panell «El meu estil» i es porta al document (direcció única). El nivell «Bloc»
-  de la columna diu quin fa servir el bloc i quants blocs el comparteixen.
+  d'estils: es fa al panell «El meu estil» i es porta al document (direcció única). La columna de
+  la vista no en diu res: és per a la disposició i la distribució.
 - **SEMPRE** «Aplica el meu estil», «Actualitza amb el meu estil», «Treu l'estil de bloc», «Restableix» i
   les dues reduccions de lletra de l'avís «el text no hi cap» es poden desfer amb el **desfer que ja existeix**: un snackbar amb «Desfés» que torna el document
   exactament a com era, mentre no s'hagi tocat des d'aleshores. Dins del formulari del pictograma,

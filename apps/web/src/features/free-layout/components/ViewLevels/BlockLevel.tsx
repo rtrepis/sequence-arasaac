@@ -26,7 +26,6 @@ import {
 } from "@features/free-layout/hooks/useViewSelection";
 import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
 import TextBlockLevel from "./TextBlockLevel";
-import BlockStyleRow from "./BlockStyleRow";
 import messages from "./ViewLevels.lang";
 
 /** La icona del nivell: un bloc dins de la pàgina. */
@@ -142,9 +141,6 @@ const BlockLevel = ({
       expanded={expanded}
       onExpandedChange={onExpandedChange}
     >
-      {/* Quin estil de bloc fa servir (R7) */}
-      <BlockStyleRow styleId={placement.styleId} labelId={LABEL_ID} />
-
       {/* La mida, l'espai i l'alineació: d'aquest bloc, o de tots els de la
           pàgina amb «Igual a tots els blocs» */}
       <PagePictograms

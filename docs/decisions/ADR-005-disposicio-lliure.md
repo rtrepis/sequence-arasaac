@@ -187,9 +187,10 @@ fase 3 va fer veure que no n'hi ha prou:
       un): l'estil de bloc passa a ser el meu estil d'ara, amb el mateix `id` i el mateix nom, i
       canvien tots els blocs que el fan servir. **«Treu l'estil de bloc»** (menú «⋯» del bloc)
       torna el bloc a l'estil del document; un estil que ja no fa servir ningú surt del document.
-      Totes dues es desfan. El nivell «Bloc» de la columna té la fila **«Estil de bloc»**, que
-      només ho diu (nom i quants blocs). **No hi ha cap editor d'estils al document**: es mantenen
-      la direcció única de la decisió 23.
+      Totes dues es desfan. A la columna no hi ha res de l'estil de bloc: la fila «Estil de bloc»
+      que deia quin feia servir el bloc es va treure el mateix dia, perquè la columna se centri en
+      la disposició i la distribució. **No hi ha cap editor d'estils al document**: es manté la
+      direcció única de la decisió 23.
     - **La disposició d'una pàgina és una sola tria**: Simple · Columnes · Files · Lliure, a la
       columna i al menú «⋯» de la pàgina (`useSheetDisposition`). Desapareixen «En blocs» i la
       fila «Repartiment». Al codi i al fitxer no canvia res (`mode` i `template`).
