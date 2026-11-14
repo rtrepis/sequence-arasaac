@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { settingRowInline, settingControlWidth } from "./settingsLayout.styled";
 import { cardTitle } from "../SettingsCards/SettingsCards.styled";
+import { APP_CONTROL_SIZE } from "@/style/appShape";
 
 /**
  * Com es dimensiona el control d'una fila:
@@ -19,8 +20,16 @@ import { cardTitle } from "../SettingsCards/SettingsCards.styled";
  * - `block` — una graella d'opcions (les miniatures de les plantilles): el
  *   títol a dalt i el control a tota l'amplada, sempre apilats. Al costat del
  *   títol no hi cabria mai més d'una opció per fila.
+ * - `wrap` — un grup de botons que va en línia si hi cap al costat del títol i,
+ *   si no, en dues files de dos (la disposició de la pàgina). Aleshores el
+ *   títol s'alinea a dalt, amb la primera fila.
  */
-export type SettingControlVariant = "sized" | "wide" | "compact" | "block";
+export type SettingControlVariant =
+  | "sized"
+  | "wide"
+  | "compact"
+  | "block"
+  | "wrap";
 
 interface SettingRowProps {
   /** Títol de l'ajust: a l'esquerra en tauleta/escriptori, a dalt en mòbil. */
@@ -50,6 +59,22 @@ const controlStyles: Record<SettingControlVariant, SxProps<Theme>> = {
   wide: wideControl,
   compact: wideControl,
   block: { width: "100%" },
+  // Un grup de botons que, si no hi cap en línia, passa a dues files (la
+  // disposició, `DispositionToggle`): pot encongir-se fins a dos botons
+  wrap: {
+    flexShrink: 1,
+    minWidth: 2 * (APP_CONTROL_SIZE + 2),
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+};
+
+// Amb `wrap`, el títol va a dalt (amb els botons de la primera fila, si en
+// són dues), centrat amb una fila de botons
+const wrapRow: SxProps<Theme> = {
+  ...settingRowInline,
+  alignItems: { xs: "flex-start", sm: "flex-start" },
+  "& > legend": { paddingTop: { sm: "16px" } },
 };
 
 /**
@@ -76,7 +101,9 @@ const SettingRow = ({
                 flexDirection: "column",
                 alignItems: "stretch",
               }
-            : settingRowInline
+            : control === "wrap"
+              ? wrapRow
+              : settingRowInline
       }
     >
       <FormLabel component="legend" id={labelId} sx={cardTitle}>

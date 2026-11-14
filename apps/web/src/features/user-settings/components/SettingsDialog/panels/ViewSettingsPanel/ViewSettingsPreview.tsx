@@ -207,11 +207,13 @@ const ViewSettingsPreview = ({
   );
 
   return (
-    <Stack spacing={1} alignItems="flex-start">
+    <Stack spacing={1} sx={{ width: PREVIEW_WIDTH }}>
+      {/* A la dreta, com a la capçalera de la pàgina de la vista */}
       <Chip
         label={intl.formatMessage(pageMessages.arrangementTag, tag)}
         size="small"
         variant="outlined"
+        sx={{ alignSelf: "flex-end" }}
       />
       <SettingsPreviewFrame
         background="default"

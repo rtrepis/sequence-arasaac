@@ -240,7 +240,7 @@ const ViewSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
                 labelId={`${VIEW_PANEL_LABEL_ID}-disposition`}
                 helperId={`${VIEW_PANEL_LABEL_ID}-disposition-helper`}
                 helper={<FormattedMessage {...messages.dispositionHelp} />}
-                control="wide"
+                control="wrap"
               >
                 <DispositionToggle
                   value={disposition}

@@ -1172,7 +1172,8 @@ ha a la pàgina (R11). Es fa abans del pas 8.
   casella per amagar-ne cadascuna; l'etiqueta de la disposició a dalt; en columnes i files, tantes
   com seqüències visibles (automàtic: el nombre fix es va descartar), amb el requadre de cada
   bloc. **Sense números als blocs.**
-- **La disposició, en 2 × 2**: Simple i Lliure a dalt, Files i Columnes a sota.
+- **La disposició, en 2 × 2 on no hi cap en línia**: Simple i Lliure a dalt, Files i Columnes a
+  sota.
 - **Lliure**: en passar-hi, les caixes fan la mida dels pictogrames. Després, si la seqüència es fa
   més gran que el bloc, el bloc creix; si es fa més petita, no; si l'usuari fa la caixa més petita,
   la seqüència s'hi adapta.
@@ -1188,6 +1189,11 @@ ha a la pàgina (R11). Es fa abans del pas 8.
 | Textos | El nom del grup de caselles, en els cinc idiomes |
 | Documents | ADR-005 (decisió 26), `configuracions.md`, `colors.md` |
 | Proves | `naturalBox.test.ts`; `freeLayoutThunks.test.ts` (passar a lliure, créixer i no encongir) |
+
+**Retocs de la revisió** (el mateix dia): l'etiqueta de la mostra, a la dreta; la disposició, en
+línia si hi cap i en dues files si no (`control="wrap"` de `SettingRow`: en línia al panell de la
+configuració, en dues files a la columna de la vista, amb el títol a dalt); i les icones dels
+botons de tria (`IconToggleButton`), de 26 px en un botó que continua fent 55.
 
 **Vist en provar-ho**: amb els valors nous, les tres seqüències de la mostra no caben senceres en
 un full Carta apaïsat ni en simple ni en lliure; la mostra ho ensenya tal com seria (en lliure, el

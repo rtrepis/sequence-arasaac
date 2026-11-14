@@ -176,7 +176,7 @@ const PageLevel = ({
                 : messages.modeBlocksHelp)}
             />
           }
-          control="wide"
+          control="wrap"
         >
           <DispositionToggle
             value={disposition}

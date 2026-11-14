@@ -25,6 +25,7 @@ Patró únic per a tots els tabs del `SettingsDialog` (Usuari, Estil del documen
   - `"wide"` — grups de toggles: amplada segons contingut (`flexShrink: 0`, mai comprimit contra el títol); apila en mòbil.
   - `"compact"` — `Switch`, `InputColor`: **sempre en línia**, també en mòbil — apilar-los només malgastaria alçada, mai els falta amplada.
   - `"block"` — una **graella d'opcions** (les miniatures del selector de plantilles, `TemplatePicker`): **sempre apilada**, títol a dalt i control a tota l'amplada. Al costat del títol no hi cabria més d'una opció per fila. No és per a un control sol: un select o un slider continuen sent `"sized"`.
+  - `"wrap"` — un grup de botons que va **en línia si hi cap** al costat del títol i, si no, **en dues files** (la disposició de la pàgina, `DispositionToggle`, que agrupa els quatre botons en dues parelles que no es parteixen). Es pot encongir fins a dos botons d'amplada. El títol s'alinea **a dalt**, centrat amb la primera fila de botons. Al panell de configuració hi cap en línia; a la columna de la vista (350 px) va en dues files; en mòbil, apilat com els altres.
 
   Amb `helper?` (i `helperId?`, per a l'`aria-describedby` del control), la fila porta una línia
   d'explicació **visible, sota la fila**, en `caption` i `text.secondary`. És el lloc del que
@@ -39,7 +40,10 @@ Patró únic per a tots els tabs del `SettingsDialog` (Usuari, Estil del documen
   `Tooltip` i l'`aria-label`. Mai escriure `<Tooltip title={intl.formatMessage(x)}><ToggleButton
   aria-label="left">`: amb dues fonts, el text traduït i el nom accessible se separen i el segon
   acaba en anglès (era la troballa C5 del backlog). Funciona sense reenviar cap prop perquè el
-  `ToggleButtonGroup` de MUI v6 passa la selecció per **context**, no clonant els fills.
+  `ToggleButtonGroup` de MUI v6 passa la selecció per **context**, no clonant els fills (per
+  això també funciona amb els botons agrupats dins d'una `Box`, com a `DispositionToggle`). La
+  **icona fa 26 px** dins del botó de 55: amb la mida per defecte de MUI en feia 14 i costava de
+  distingir. El botó no canvia de mida.
 
 ## Regles
 
@@ -124,7 +128,7 @@ L'estàndard és **un de sol** per a totes les amplades: no hi ha components mò
 
 ## Estat de migració
 
-- ✅ **Pàgina i distribució** (`ViewSettingsPanel`; abans «Vista», pas 7) — la pàgina (paper, orientació i **disposició**: Simple · Columnes · Files · Lliure, amb `DispositionToggle`, la mateixa peça que la columna de la vista, en **dues files de dos** —Simple i Lliure a dalt, Files i Columnes a sota— perquè quatre en línia no cabien a la columna; la direcció i l'espai entre seqüències només hi surten en simple) i la distribució dels pictogrames amb què comencen els documents nous, com les altres pestanyes de preferències. Per defecte (pas 7c): simple, mida 0,95, espai entre pictogrames 1,5, espai entre seqüències 7 i tot centrat. **La mostra** són tres seqüències de colors (4, 5 i 6 pictogrames, numerats) amb l'etiqueta de la disposició a dalt, la mateixa de la capçalera de la pàgina; en blocs, els fa el mateix model que les pàgines de debò, amb el requadre de cada bloc. Sota la mostra (`previewAside`), una casella per seqüència la mostra o l'amaga; és de la mostra i no es desa; totes les files via `SettingRow`; els botons, via `SettingsActions`.
+- ✅ **Pàgina i distribució** (`ViewSettingsPanel`; abans «Vista», pas 7) — la pàgina (paper, orientació i **disposició**: Simple · Columnes · Files · Lliure, amb `DispositionToggle`, la mateixa peça que la columna de la vista, en línia, i en **dues files de dos** —Simple i Lliure a dalt, Files i Columnes a sota— on no hi cap (la columna de la vista; `control="wrap"`); la direcció i l'espai entre seqüències només hi surten en simple) i la distribució dels pictogrames amb què comencen els documents nous, com les altres pestanyes de preferències. Per defecte (pas 7c): simple, mida 0,95, espai entre pictogrames 1,5, espai entre seqüències 7 i tot centrat. **La mostra** són tres seqüències de colors (4, 5 i 6 pictogrames, numerats) amb l'etiqueta de la disposició a dalt a la dreta, la mateixa de la capçalera de la pàgina; en blocs, els fa el mateix model que les pàgines de debò, amb el requadre de cada bloc. Sota la mostra (`previewAside`), una casella per seqüència la mostra o l'amaga; és de la mostra i no es desa; totes les files via `SettingRow`; els botons, via `SettingsActions`.
 - ✅ **Usuari** (`UserSettingsPanel`) — `SettingsPanelLayout` **sense mostra** (la columna esquerra
   queda reservada i buida, perquè els ajustos caiguin on cauen als altres tabs) + `SectionTitle` +
   `SettingRow`: idiomes, tema, **Imatges**
