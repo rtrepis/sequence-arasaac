@@ -79,6 +79,67 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - Drawer, menús i popovers són capes de navegació i queden fora d'aquest
   estàndard.
 
+## Panell de baix — ⏳ Proposta
+
+> **Pendent d'aprovació** (C29 de `docs/BACKLOG-ux.md`; el pla i les decisions, a
+> `docs/PLA-vista-mobil.md`; l'esbós, a `docs/esbos-vista-mobil.html`). Fins que
+> s'aprovi, la vista al mòbil continua com la descriu `configuracions.md`. La raó,
+> a F14 de `docs/ESTANDARD-capes-flotants.md`.
+
+- **`AppBottomSheet` és l'únic panell de baix**: el tercer component canònic de
+  capes flotants, al costat dels dos diàlegs, i no una variant de cap. Viu a
+  `components/AppBottomSheet/` i no sap res de qui el fa servir. **Només per
+  sota de `md`**; a partir de `md`, el mateix contingut és una columna.
+- **No és modal.** El que queda a sobre continua viu: sense fons que tapi, sense
+  trampa de focus, `role="region"` amb nom. Si una cosa ha de bloquejar la
+  pàgina, és un diàleg, no un panell.
+- **Tres alçades**: **plegat** (només la capçalera), **mig** (el 50 % de la
+  pantalla) i **sencer** (tot menys una franja de 64 px a dalt). Mai el 100 %:
+  la franja és un **botó que torna a mig**, no un tros del contingut, i no s'hi
+  pot arrossegar res.
+- **Es mou per la nansa i la capçalera, mai pel contingut**, que es desplaça per
+  dins (`overscroll-behavior: contain`). A la capçalera, un botó alterna plegat ↔
+  mig, diu què farà i porta `aria-expanded`.
+- **A sencer només s'hi arriba arrossegant; per això cap funció no pot dependre
+  de sencer.** A mig hi ha d'haver tot, amb el seu scroll: sencer és comoditat.
+  És el que fa que arrossegar no trenqui el criteri WCAG 2.5.7.
+- **La pàgina de sota no es desplaça.** El que hi ha a sobre del panell s'encongeix
+  per cabre a l'espai que queda (fins a l'alçada de mig). Una pàgina amb scroll
+  sota un panell amb scroll torna a ser el problema que el panell resol (F14).
+- **Declara la seva alçada** amb `useFloatingInset`: el botó d'estat i els avisos
+  s'hi posen damunt. El botó d'estat llegeix la reserva com ja fan els avisos.
+- **La barra de l'app s'amaga a mig i a sencer i torna a plegat.** El panell ho
+  diu amb un senyal genèric; no toca la barra ni en sap el nom.
+- **Les alçades són estat de la pantalla**: no van a Redux, ni al document, ni a
+  les preferències. I el panell no arriba mai al paper (`usePrintSheet`).
+
+## La capa del mòbil girat — ⏳ Proposta
+
+- Per sota de `md`, una pàgina que **només es treballa amb el mòbil dret** ho diu
+  amb una capa: **blanca translúcida** (un token de `palette.ts`, igual en tots
+  dos temes), una **icona animada** de girar el mòbil i el text que ho explica.
+- **No es tanca**: desapareix en tornar a posar el mòbil dret. No és un avís que
+  es pugui despatxar, perquè la pàgina de sota no funciona girada.
+- **No surt a la pantalla completa**, que en horitzontal sí que té sentit.
+- Amb `prefers-reduced-motion`, la icona no es mou. La capa es llegeix com a
+  `role="status"`.
+- Avui només la porta la vista (M6 del pla). Una altra pàgina que la vulgui l'ha
+  de justificar: girar el mòbil és un gest normal i no s'ha de prohibir per
+  defecte.
+
+## La fletxa de la vora — ⏳ Proposta
+
+- **Passar de pàgina és lliscar**, a la vista i a la pantalla completa. La fletxa
+  n'és l'**alternativa d'un toc**, mai l'única manera.
+- **Tocar la vora** (el 15 % de l'amplada de cada costat, fora dels blocs) fa
+  sortir una fletxa **semitransparent** (un token de `palette.ts`) de 44 px
+  durant **2 segons**. Cada pas de pàgina torna a comptar el temps, per passar-ne
+  diverses seguides. Sense pàgina en aquella direcció, no surt.
+- **Amagada només a la vista**: les dues fletxes són sempre a l'arbre
+  d'accessibilitat i a l'ordre de tabulació, i es mostren quan reben el focus.
+  Qui fa servir el teclat o el lector de pantalla no ha de saber que hi ha una
+  vora per tocar.
+
 ## El paper
 
 - **Al paper hi van els fulls, i res més.** No s'amaga el que sobra: es pinta
@@ -167,3 +228,5 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   seva creu escrites a dins. Ara la forma viu a `AppFullScreenDialog` i el
   diàleg de configuració només hi posa els tabs i els panells. **Ja no hi ha cap
   excepció: zero `Dialog` de MUI fora dels dos components canònics.**
+- ⏳ **Vista al mòbil** — `AppBottomSheet`, la capa del mòbil girat i la fletxa
+  de la vora. Proposta: vegeu `docs/PLA-vista-mobil.md`.

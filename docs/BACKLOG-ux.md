@@ -1396,6 +1396,8 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 - **Proposta**: el full sencer a la pantalla, sense scroll de pàgina, i els ajustos en un panell de
   baix amb tres alçades (`AppBottomSheet`, una capa nova de l'estàndard). El pla, amb les fases i les
   portes d'aprovació, és `docs/PLA-vista-mobil.md`.
+- **Estat** (2026-11-15): fase 0 feta (seleccionar ja no mou la pàgina), fase 1 tancada (esbós i
+  decisions) i fase 2 escrita, pendent d'aprovació.
 
 ### C28 — Girar el mòbil tanca el diàleg d'edició del pictograma 🔴 Oberta
 

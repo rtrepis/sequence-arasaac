@@ -2,8 +2,9 @@
 
 > **Estat**: proposta (2026-11-15), **pendent d'aprovació**. **Fase 0 feta** (2026-11-15): la
 > release no fa saltar la pàgina en seleccionar i té l'enllaç «Ajustos del bloc». De la resta del
-> pla no s'ha escrit cap línia de codi. **Decisions de la fase 1 preses** (2026-11-15, §9): queden
-> per confirmar a l'esbós v3 les dues de §9c. Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
+> pla no s'ha escrit cap línia de codi. **Fase 1 tancada** (2026-11-15): totes les decisions són a §9.
+> **Fase 2 escrita, pendent d'aprovació**: la proposta d'estàndard és a `capes-flotants.md`,
+> `configuracions.md` i F14 de `ESTANDARD-capes-flotants.md`, marcada «⏳ Proposta». Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
 > tanca és presa i apuntada a §9.
 > **Entrada del backlog**: C29 de `docs/BACKLOG-ux.md`.
 > **Estàndards que toca**: `docs/estandards/capes-flotants.md` (una capa nova),
@@ -103,9 +104,11 @@ paper.
 **Passar de pàgina** es fa **lliscant en horitzontal** sobre el full, com avui, **i també a la
 pantalla completa**, que avui no ho permet (N1). L'alternativa d'un toc: **tocar a la vora** del
 mòbil (el 15 % de l'amplada de cada costat, fora dels blocs) fa aparèixer una fletxa
-**semitransparent** (‹ o ›, de 44 px) durant uns segons (N4). Si es toca, passa de pàgina i la fletxa
+**semitransparent** (‹ o ›, de 44 px) durant **2 segons** (N4). Si es toca, passa de pàgina i la fletxa
 continua a la vista uns segons més, per passar-ne diverses seguides; si no, desapareix. Amb una sola
-pàgina, o a la primera i a l'última cap a fora, no surt res.
+pàgina, o a la primera i a l'última cap a fora, no surt res. **Amagades només a la vista**: les
+fletxes són sempre a l'arbre d'accessibilitat i a l'ordre de tabulació, i es mostren quan reben el
+focus; el teclat i el lector de pantalla no han de saber que hi ha una vora per tocar.
 
 ### La pàgina no es desplaça
 
@@ -153,7 +156,8 @@ bloc.
   sigui on sigui de la pàgina (problema 3). El verd porta la targeta a dalt amb el seu scroll de dins,
   mai amb el de la pàgina.
 - Escape treu la selecció i no mou el panell.
-- **A la pantalla completa no es selecciona res**, com avui: només es passa de pàgina.
+- **A la pantalla completa només es passa de pàgina** (lliscant o amb la fletxa de la vora), com
+  avui: no s'hi selecciona res, no hi ha panell, i se'n surt amb el gest del sistema.
 
 ### El mòbil girat (M6 i N3)
 
@@ -228,7 +232,7 @@ dues coses i en sobra una:
 **Fet quan**: seleccionar no mou la pàgina, i amb un bloc seleccionat hi ha l'enllaç «Ajustos del
 bloc».
 
-### Fase 1 — Esbós i decisions · porta: §9 respost
+### Fase 1 — Esbós i decisions · porta: §9 respost ✅ Tancada (2026-11-15)
 
 **Esbós fet** (2026-11-15): `docs/esbos-vista-mobil.html`. Obert al mòbil ocupa tota la pantalla;
 a l'escriptori, un marc de telèfon que es pot girar. Té els tres casos de §1, controls que canvien el
@@ -237,7 +241,7 @@ l'esbós marcades «en viu», i un botó que en copia les respostes. **§9 respo
 **Esbós v2** (mateix dia): amb les decisions aplicades (fila de sortides, fletxes als costats, girar a
 «Document», barra que s'amaga, sense «Amplia», sense disposició horitzontal) i les tres preguntes de
 §9b. **§9b respost** (mateix dia), amb dues decisions noves (D1, D2). **Esbós v3**: les aplica i hi
-deixa les dues preguntes de §9c. **Falta**: provar la v3 i respondre §9c.
+deixa les dues preguntes de §9c, **respostes** el mateix dia.
 
 - `docs/esbos-vista-mobil.html`: un esbós interactiu (com `esbos-columna-vista.html`) amb el full,
   el panell i les tres alçades, que es pugui obrir **al mòbil i a la tauleta** i provar amb el dit.
@@ -247,6 +251,11 @@ deixa les dues preguntes de §9c. **Falta**: provar la v3 i respondre §9c.
 **Fet quan**: l'esbós s'ha provat en un telèfon i en una tauleta reals i §9 té les respostes.
 
 ### Fase 2 — L'estàndard, escrit · porta: aprovació del text
+
+**Escrit** (2026-11-15), pendent d'aprovació: tres seccions noves a `capes-flotants.md` (panell de
+baix, capa del mòbil girat, fletxa de la vora), F14 a `ESTANDARD-capes-flotants.md` i dues notes
+a `configuracions.md`, totes marcades «⏳ Proposta». **El `CLAUDE.md` no es toca fins a l'aprovació**:
+és l'índex que llegeix cada sessió, i una regla en proposta hi semblaria una regla en vigor.
 
 - Els canvis de §5, marcats «Proposta».
 - C29 del backlog passa a «En curs».
@@ -296,7 +305,11 @@ amb el full vertical) passen en un e2e de mòbil.
   completa hi funciona sense capa.
 - **El doble toc**: que el navegador no hi faci zoom (`touch-action`) i que amb TalkBack i VoiceOver es
   pugui arribar als ajustos pel botó.
-- **Pantalla completa d'una pàgina**: el panell no hi ha de sortir.
+- **Pantalla completa d'una pàgina**: el panell no hi ha de sortir. **A l'iPhone, verificar si
+  funciona**: el Safari de l'iPhone només deixa posar a pantalla completa un vídeo, i la de la vista
+  es basa en `requestFullscreen` del marc del full. A l'iPad sí que funciona. Si a l'iPhone no fa res
+  (probablement ja passa avui), cal una pantalla completa simulada: una capa fixa que ocupi tota la
+  finestra.
 - **Imprimir i PDF des del mòbil**: el panell no surt al paper (ho ha de garantir `usePrintSheet`,
   però es comprova).
 - **Lector de pantalla** (TalkBack i VoiceOver): el panell s'anuncia com a regió i el botó diu què
@@ -319,6 +332,7 @@ amb el full vertical) passen en un e2e de mòbil.
 | Gestos que es barallen | Nansa, scroll del panell, lliscament de pàgina i arrossegament de blocs | Cada gest té el seu lloc: la nansa només a la capçalera, el lliscament de pàgina només sobre el full |
 | Teclat virtual | `dvh` i `visualViewport` no es comporten igual a iOS i Android | Fase 5, amb dispositius reals |
 | El codi de la columna, ja molt gran | `ViewSquenceSettings.tsx` passa de mil línies | El panell és un component a part; la columna no ha de saber on la munten |
+| La pantalla completa no existeix a l'iPhone | El Safari de l'iPhone no admet `requestFullscreen` fora dels vídeos | Verificar-ho a la fase 5; si és així, una capa fixa que en faci el paper |
 | Una capa nova que trenca la regla «dos diàlegs i cap més» | Algú la podria fer servir de diàleg | L'estàndard diu que és no modal i només per sota de `md` |
 
 ## 8. Fora d'abast
@@ -356,9 +370,11 @@ amb el full vertical) passen en un e2e de mòbil.
 | D1 | Tocar un bloc a la disposició lliure | **Un toc el selecciona (per moure'l); un doble toc obre els ajustos.** Només a la lliure: a les altres, un toc ja els obre |
 | D2 | Tocar el full fora dels blocs | **Porta al nivell «Pàgina»** del panell |
 
-### 9c. Per confirmar a l'esbós v3
+### 9c. Decisions de l'esbós v3 — preses el 2026-11-15
 
-| Id | Pregunta | Proposta |
+| Id | Pregunta | Decisió |
 |---|---|---|
-| N4 | Quant de temps es veu la fletxa de la vora | **3 segons**, i es torna a comptar cada cop que es passa de pàgina |
-| N5 | Tocar el full (D2) puja el panell, com tocar un bloc? | **Sí**, amb la mateixa regla: un toc, i a la disposició lliure, doble toc. Alternativa: el panell no es mou i només canvia el nivell obert |
+| N4 | Quant de temps es veu la fletxa de la vora | **2 segons**, i es torna a comptar cada cop que es passa de pàgina |
+| N5 | Tocar el full (D2) puja el panell, com tocar un bloc? | **Sí**, amb la mateixa regla: un toc; a la disposició lliure, doble toc |
+
+**Precisió** (2026-11-15): a la pantalla completa, l'única cosa que es fa és passar de pàgina.

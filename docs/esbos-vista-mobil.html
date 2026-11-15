@@ -428,7 +428,7 @@
     caseIdx: 0, page: 0, selection: null, snap: "collapsed", sheetH: 0,
     licence: true, author: "Aula de Suport", pageGap: 30,
     open: { document: true, page: true, block: true },
-    opts: { mid: 0.5, raise: true, shrink: true, autoHide: true, arrowMs: 3000, pageRaise: true },
+    opts: { mid: 0.5, raise: true, shrink: true, autoHide: true, arrowMs: 2000, pageRaise: true },
     barShown: false, fs: false, rotSim: false,
   };
   const cur = () => CASES[state.caseIdx];
@@ -813,7 +813,7 @@
   }));
   // ---------- Les decisions ----------
   const DECISIONS = [
-    { id: "N4", q: "Quant de temps es veu la fletxa de la vora (prova-ho al cas 3)", opts: ["3 segons (proposta)", "2 segons", "5 segons"], live: "arrowMs", values: [3000, 2000, 5000] },
+    { id: "N4", q: "Quant de temps es veu la fletxa de la vora (prova-ho al cas 3)", opts: ["2 segons (decidit)", "3 segons", "5 segons"], live: "arrowMs", values: [2000, 3000, 5000] },
     { id: "N5", q: "Tocar el full fora dels blocs puja el panell, com tocar un bloc", opts: ["Sí, amb la mateixa regla: un toc; a la disposició lliure, doble toc (proposta)", "No: el panell no es mou, només canvia el nivell obert"], live: "pageRaise", values: [true, false] },
   ];
   const STORE = "esbos-vista-mobil-respostes-v3";
