@@ -1,7 +1,8 @@
 # Pla: la vista al mòbil — el full a la pantalla i els ajustos en un panell de baix
 
-> **Estat**: proposta (2026-11-15), **pendent d'aprovació**. No s'ha escrit cap línia de codi
-> d'aquest pla. Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
+> **Estat**: proposta (2026-11-15), **pendent d'aprovació**. **Fase 0 feta** (2026-11-15): la
+> release no fa saltar la pàgina en seleccionar i té l'enllaç «Ajustos del bloc». De la resta del
+> pla no s'ha escrit cap línia de codi. Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
 > tanca és presa i apuntada a §9.
 > **Entrada del backlog**: C29 de `docs/BACKLOG-ux.md`.
 > **Estàndards que toca**: `docs/estandards/capes-flotants.md` (una capa nova),
@@ -155,7 +156,15 @@ perd la marca quan l'esbós (fase 1) s'ha provat en un mòbil i una tauleta de d
 
 ## 6. Fases
 
-### Fase 0 — Deixar la release com ha de ser (abans de publicar)
+### Fase 0 — Deixar la release com ha de ser (abans de publicar) ✅ Feta (2026-11-15)
+
+**Com ha quedat**: el salt de pàgina és fora; el verd encara porta la targeta a dalt per dins, que
+no mou res de la pàgina. `BlockSettingsLink` és a l'esquerra de la fila de botons de sobre el full,
+només amb un bloc seleccionat. La franja de 96 px es queda (M9). Comprovat amb un mòbil emulat
+(390 × 844): seleccionar deixa la pàgina a lloc i el bloc a la vista, i l'enllaç baixa fins a la
+targeta amb el full a la franja de dalt. **Queda una incoherència**: a les pàgines simples el nivell
+es diu «Seqüència», i l'enllaç continua dient «Ajustos del bloc». Es resol a la fase 4, en esborrar
+l'enllaç, o abans si es vol amb un text nou als cinc idiomes.
 
 El commit d'aquesta branca (`Vista al mòbil: seleccionar un bloc porta a la seva targeta…`) va fer
 dues coses i en sobra una:

@@ -79,6 +79,7 @@ import {
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
 import { FLOATING_BOTTOM_INSET } from "@/style/appShape";
 import { FLOATING_INSET_VARIABLE } from "@components/FloatingLayer";
+import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
 import SinglePageHeader from "@features/free-layout/components/FreeLayoutPages/SinglePageHeader";
 import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
 import {
@@ -215,15 +216,9 @@ const ViewSequencesSettingsContent = ({
         scroller.getBoundingClientRect().top -
         marginTop;
       scroller.scrollTo?.({ top: Math.max(0, top), behavior: "smooth" });
-      // I la pàgina, fins al verd: a dalt hi queda el tros del full que s'ha
-      // tocat, per on es torna a pujar
-      window.scrollTo?.({
-        top:
-          window.scrollY +
-          scroller.getBoundingClientRect().top -
-          MOBILE_PREVIEW_PEEK,
-        behavior: "smooth",
-      });
+      // La pàgina no es mou: el bloc que s'acaba de tocar continua a la vista.
+      // Qui baixa fins als ajustos és l'enllaç «Ajustos del bloc», damunt del
+      // full (`configuracions.md`; C29 de `docs/BACKLOG-ux.md`)
     }, theme.transitions.duration.standard);
     return () => window.clearTimeout(timer);
   }, [currentSelection, theme.transitions.duration.standard]);
@@ -647,10 +642,22 @@ const ViewSequencesSettingsContent = ({
   return (
     <>
       <form onSubmit={(event) => event.preventDefault()}>
-        {/* Al mòbil, els botons a sobre del full; a l'escriptori, a la columna */}
+        {/* Al mòbil, els botons a sobre del full; a l'escriptori, a la columna.
+            Amb un bloc seleccionat, a l'esquerra, l'enllaç que baixa fins als
+            seus ajustos: seleccionar no mou la pàgina */}
         {!isWideScreen && (
           <NotPrint>
-            <Stack direction="row" justifyContent="end">
+            <Stack
+              direction="row"
+              justifyContent="end"
+              alignItems="center"
+              flexWrap="wrap"
+            >
+              {selectedBlock && (
+                <Box sx={{ marginRight: "auto" }}>
+                  <BlockSettingsLink />
+                </Box>
+              )}
               {renderToolbar(false)}
             </Stack>
           </NotPrint>
