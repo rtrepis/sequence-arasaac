@@ -1,4 +1,4 @@
-import { Box, Divider, Stack, Tooltip } from "@mui/material";
+import { Box, Divider, Stack, Tooltip, useTheme } from "@mui/material";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
@@ -98,6 +98,14 @@ const SETTINGS_COLUMN_ID = "view-settings-column";
 /** L'aire entre el full i la columna, a l'escriptori, en px. */
 const PREVIEW_COLUMN_GAP = 16;
 
+/**
+ * Al mòbil, el que queda a la vista del full quan s'ha baixat fins al final,
+ * en px. El verd es desplaça per dins i no deixa passar el gest a la pàgina:
+ * si ocupés tota la pantalla, no quedaria cap lloc on arrossegar per tornar a
+ * pujar fins al full. Amb la barra de dalt a la vista (42 px), en queden 54.
+ */
+const MOBILE_PREVIEW_PEEK = 96;
+
 /** L'`id` del nivell «Document»: les molles hi porten. */
 const VIEW_DOCUMENT_LEVEL_ID = "view-level-document";
 
@@ -186,6 +194,39 @@ const ViewSequencesSettingsContent = ({
   useEffect(() => {
     setOpenLevels(levelsFor(currentSelection !== "", fromPageRef.current));
   }, [currentSelection]);
+  // Al mòbil, el verd que es desplaça per dins: en seleccionar un bloc, hi
+  // porta la seva targeta, que és on hi ha els seus ajustos
+  const mobileSettingsRef = useRef<HTMLDivElement | null>(null);
+  const theme = useTheme();
+  useEffect(() => {
+    if (currentSelection === "" || isMediumScreen(window.innerWidth)) return;
+    // Després que Document i Pàgina s'hagin plegat: abans, la targeta encara
+    // no és al seu lloc
+    const timer = window.setTimeout(() => {
+      const scroller = mobileSettingsRef.current;
+      const card = document.getElementById(VIEW_BLOCK_LEVEL_ID);
+      if (!scroller || !card) return;
+      // Dins del verd, la targeta a dalt; el marge de dalt de la targeta deixa
+      // lloc a les molles
+      const marginTop = parseFloat(getComputedStyle(card).scrollMarginTop) || 0;
+      const top =
+        scroller.scrollTop +
+        card.getBoundingClientRect().top -
+        scroller.getBoundingClientRect().top -
+        marginTop;
+      scroller.scrollTo?.({ top: Math.max(0, top), behavior: "smooth" });
+      // I la pàgina, fins al verd: a dalt hi queda el tros del full que s'ha
+      // tocat, per on es torna a pujar
+      window.scrollTo?.({
+        top:
+          window.scrollY +
+          scroller.getBoundingClientRect().top -
+          MOBILE_PREVIEW_PEEK,
+        behavior: "smooth",
+      });
+    }, theme.transitions.duration.standard);
+    return () => window.clearTimeout(timer);
+  }, [currentSelection, theme.transitions.duration.standard]);
   const setLevelOpen =
     (level: keyof OpenLevels) =>
     (expanded: boolean): void =>
@@ -822,6 +863,7 @@ const ViewSequencesSettingsContent = ({
               >
                 <NotPrint>
                   <Stack
+                    ref={mobileSettingsRef}
                     maxWidth={{ md: VIEW_SETTINGS_COLUMN_WIDTH }}
                     width={{ xs: "calc(100% + 28px)", md: "auto" }}
                     flexShrink={0}
@@ -838,10 +880,14 @@ const ViewSequencesSettingsContent = ({
                       marginInline: { xs: "-14px", md: 0 },
                       minHeight: { md: "100%" },
                       boxSizing: "border-box",
-                      // Al mòbil, tota l'alçada de la pantalla quan s'hi baixa,
-                      // i les targetes es desplacen per dins; les molles hi
-                      // queden fixes a dalt
-                      height: { xs: "100dvh", md: "auto" },
+                      // Al mòbil, gairebé tota l'alçada de la pantalla quan
+                      // s'hi baixa, i les targetes es desplacen per dins; les
+                      // molles hi queden fixes a dalt. A dalt sempre en queda
+                      // un tros del full, per on es torna a pujar
+                      height: {
+                        xs: `calc(100dvh - ${MOBILE_PREVIEW_PEEK}px)`,
+                        md: "auto",
+                      },
                       overflowY: { xs: "auto", md: "visible" },
                       // El Container de l'app deixa a sota l'espai del botó
                       // flotant; aquí el verd ja s'hi desplaça per dins, i
