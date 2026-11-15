@@ -1150,7 +1150,8 @@ const ViewSequencesSettingsContent = ({
                 sx={{ flexShrink: 0 }}
               >
                 <NotPrint>
-                  <Stack direction="row" justifyContent="end">
+                  {/* Aire a sobre: sota la barra verda no hi ha de quedar enganxada */}
+                  <Stack direction="row" justifyContent="end" sx={{ pt: 1.5 }}>
                     {renderToolbar(false, false)}
                   </Stack>
                 </NotPrint>
