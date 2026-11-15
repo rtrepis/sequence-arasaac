@@ -5,9 +5,11 @@ const useWindowResize = () => {
 
   useLayoutEffect(() => {
     const updateSize = () => {
+      // Sense maquetació (jsdom, a les proves), `clientWidth` és zero: llavors,
+      // la finestra. Zero voldria dir «mòbil», i la vista canvia de disposició
       setSize([
-        document.documentElement.clientWidth,
-        document.documentElement.clientHeight,
+        document.documentElement.clientWidth || window.innerWidth,
+        document.documentElement.clientHeight || window.innerHeight,
       ]);
     };
     window.addEventListener("resize", updateSize);

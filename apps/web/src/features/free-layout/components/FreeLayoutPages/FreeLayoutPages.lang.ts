@@ -385,13 +385,13 @@ const messages = defineMessages({
     id: "features.freeLayout.page.previousPage",
     defaultMessage: "Previous page",
     description:
-      "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina anterior (també es pot lliscar)",
+      "Fletxa de la vora del full, al mòbil i a la pantalla completa: ensenya la pàgina anterior (també es pot lliscar)",
   },
   nextPage: {
     id: "features.freeLayout.page.nextPage",
     defaultMessage: "Next page",
     description:
-      "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina següent (també es pot lliscar)",
+      "Fletxa de la vora del full, al mòbil i a la pantalla completa: ensenya la pàgina següent (també es pot lliscar)",
   },
   templateFree: {
     id: "features.freeLayout.template.free",

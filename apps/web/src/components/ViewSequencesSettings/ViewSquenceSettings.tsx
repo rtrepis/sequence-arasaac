@@ -1,4 +1,11 @@
-import { Box, Divider, Stack, Tooltip, useTheme } from "@mui/material";
+import {
+  Box,
+  Divider,
+  GlobalStyles,
+  Stack,
+  Tooltip,
+  useTheme,
+} from "@mui/material";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import NotPrint from "../utils/NotPrint/NotPrint";
 import { AiFillPrinter, AiOutlineFullscreen } from "react-icons/ai";
@@ -77,9 +84,10 @@ import {
   VIEW_PAGE_LEVEL_ID,
 } from "@features/free-layout/components/ViewLevels";
 import pageMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
-import { FLOATING_BOTTOM_INSET } from "@/style/appShape";
-import { FLOATING_INSET_VARIABLE } from "@components/FloatingLayer";
-import BlockSettingsLink from "@features/free-layout/components/BlockSettingsLink";
+import { floatingFloorCss, useFloatingRaised } from "@components/FloatingLayer";
+import { AppBottomSheet, BottomSheetSnap } from "@components/AppBottomSheet";
+import RotatePhoneOverlay from "@components/RotatePhoneOverlay";
+import { APP_BAR_HEIGHT } from "../utils/HiddenOnScroll/HiddenOnScroll";
 import SinglePageHeader from "@features/free-layout/components/FreeLayoutPages/SinglePageHeader";
 import { useBeforePrintCheck } from "@features/free-layout/hooks/useBeforePrintCheck";
 import {
@@ -87,6 +95,7 @@ import {
   pageFrameId,
   scrollPageToTop,
   useAvailableHeight,
+  useElementSize,
   useElementWidth,
   useFullscreenElementId,
   fullscreenScale,
@@ -100,12 +109,34 @@ const SETTINGS_COLUMN_ID = "view-settings-column";
 const PREVIEW_COLUMN_GAP = 16;
 
 /**
- * Al mòbil, el que queda a la vista del full quan s'ha baixat fins al final,
- * en px. El verd es desplaça per dins i no deixa passar el gest a la pàgina:
- * si ocupés tota la pantalla, no quedaria cap lloc on arrossegar per tornar a
- * pujar fins al full. Amb la barra de dalt a la vista (42 px), en queden 54.
+ * Al mòbil, el que queda a sobre del panell de baix no passa mai de la meitat
+ * de la pantalla: a sencer, el full es queda a la mida de mig i el panell el
+ * tapa, deixant-ne la franja que torna a mig (`docs/PLA-vista-mobil.md`, §4).
  */
-const MOBILE_PREVIEW_PEEK = 96;
+const MOBILE_STAGE_BOTTOM = `min(${floatingFloorCss}, 50dvh)`;
+
+/**
+ * Porta un element a dalt del contenidor que es desplaça i el conté (al mòbil,
+ * el contingut del panell de baix). No fa servir `scrollIntoView`: aquell
+ * també podria desplaçar la pàgina, que al mòbil no s'ha de moure. El marge de
+ * dalt de l'element (`scroll-margin-top`) es respecta.
+ */
+const scrollToTopOfScroller = (element: HTMLElement): void => {
+  let scroller = element.parentElement;
+  while (
+    scroller &&
+    !/(auto|scroll)/.test(getComputedStyle(scroller).overflowY)
+  )
+    scroller = scroller.parentElement;
+  if (!scroller) return;
+  const marginTop = parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
+  const top =
+    scroller.scrollTop +
+    element.getBoundingClientRect().top -
+    scroller.getBoundingClientRect().top -
+    marginTop;
+  scroller.scrollTo?.({ top: Math.max(0, top), behavior: "smooth" });
+};
 
 /** L'`id` del nivell «Document»: les molles hi porten. */
 const VIEW_DOCUMENT_LEVEL_ID = "view-level-document";
@@ -195,33 +226,10 @@ const ViewSequencesSettingsContent = ({
   useEffect(() => {
     setOpenLevels(levelsFor(currentSelection !== "", fromPageRef.current));
   }, [currentSelection]);
-  // Al mòbil, el verd que es desplaça per dins: en seleccionar un bloc, hi
-  // porta la seva targeta, que és on hi ha els seus ajustos
-  const mobileSettingsRef = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
-  useEffect(() => {
-    if (currentSelection === "" || isMediumScreen(window.innerWidth)) return;
-    // Després que Document i Pàgina s'hagin plegat: abans, la targeta encara
-    // no és al seu lloc
-    const timer = window.setTimeout(() => {
-      const scroller = mobileSettingsRef.current;
-      const card = document.getElementById(VIEW_BLOCK_LEVEL_ID);
-      if (!scroller || !card) return;
-      // Dins del verd, la targeta a dalt; el marge de dalt de la targeta deixa
-      // lloc a les molles
-      const marginTop = parseFloat(getComputedStyle(card).scrollMarginTop) || 0;
-      const top =
-        scroller.scrollTop +
-        card.getBoundingClientRect().top -
-        scroller.getBoundingClientRect().top -
-        marginTop;
-      scroller.scrollTo?.({ top: Math.max(0, top), behavior: "smooth" });
-      // La pàgina no es mou: el bloc que s'acaba de tocar continua a la vista.
-      // Qui baixa fins als ajustos és l'enllaç «Ajustos del bloc», damunt del
-      // full (`configuracions.md`; C29 de `docs/BACKLOG-ux.md`)
-    }, theme.transitions.duration.standard);
-    return () => window.clearTimeout(timer);
-  }, [currentSelection, theme.transitions.duration.standard]);
+  // Al mòbil, els ajustos van al panell de baix, i la seva alçada és estat
+  // d'aquesta pantalla (no va a Redux ni enlloc)
+  const [sheetSnap, setSheetSnap] = useState<BottomSheetSnap>("collapsed");
   const setLevelOpen =
     (level: keyof OpenLevels) =>
     (expanded: boolean): void =>
@@ -290,6 +298,12 @@ const ViewSequencesSettingsContent = ({
   // sota, la columna va sota el full i el full ja fa tota l'amplada: cap dels
   // dos botons no hi és. Són estat de la pàgina, no preferències: no es desen.
   const isWideScreen = isMediumScreen(screenWidth);
+  // Al mòbil, l'espai que té el full per cabre-hi sencer: el que queda entre
+  // la fila de dalt i el panell de baix
+  const [sheetAreaRef, sheetArea] = useElementSize();
+  // Amb el panell a mig o a sencer, la barra de l'app s'amaga i el full en
+  // guanya l'alçada (M5)
+  const panelRaised = useFloatingRaised();
   const [settingsOpen, setSettingsOpen] = useState(true);
   const [fit, setFit] = useState<PreviewFit>("page");
   const settingsVisible = !isWideScreen || settingsOpen;
@@ -320,7 +334,14 @@ const ViewSequencesSettingsContent = ({
     // A l'escriptori, l'espai de debò que deixa la columna: amb finestres més
     // amples que el contenidor de l'app, o amb paper gran, el marge estimat no
     // n'hi ha prou i el full passava per sota de la columna
-    availableWidth: isWideScreen ? previewSpace : undefined,
+    availableWidth: isWideScreen
+      ? previewSpace
+      : sheetArea.width > 0
+        ? sheetArea.width
+        : undefined,
+    // Al mòbil, el full s'encongeix per cabre sencer a sobre del panell (E1)
+    availableHeight:
+      !isWideScreen && sheetArea.height > 0 ? sheetArea.height : undefined,
   });
 
   // Dimensions d'impressió
@@ -497,12 +518,42 @@ const ViewSequencesSettingsContent = ({
           ? "page"
           : "block";
     setLevelOpen(level)(true);
+    // Al mòbil, el panell plegat puja a mig: les molles també hi porten
+    if (!isWideScreen && sheetSnap === "collapsed") setSheetSnap("half");
     requestAnimationFrame(() => {
       const header = document.getElementById(`${levelId}-header`);
-      header?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+      if (isWideScreen)
+        header?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+      else {
+        const levelElement = document.getElementById(levelId);
+        if (levelElement) scrollToTopOfScroller(levelElement);
+      }
       header?.focus({ preventScroll: true });
     });
   };
+
+  // El full demana obrir uns ajustos (un toc a un bloc o al full, D1 i D2): al
+  // mòbil, el panell va a mig amb el nivell obert i a dalt. Després de
+  // l'efecte de la selecció, que ja ha plegat o obert els nivells
+  const { settingsRequest } = useViewSelection();
+  const isWideRef = useRef(isWideScreen);
+  isWideRef.current = isWideScreen;
+  useEffect(() => {
+    if (!settingsRequest || isWideRef.current) return;
+    if (settingsRequest.level === "page")
+      setOpenLevels({ document: false, page: true, block: false });
+    setSheetSnap("half");
+    // Quan els nivells s'han plegat i el contingut del panell es veu
+    const timer = window.setTimeout(() => {
+      const level = document.getElementById(
+        settingsRequest.level === "page"
+          ? VIEW_PAGE_LEVEL_ID
+          : VIEW_BLOCK_LEVEL_ID,
+      );
+      if (level) scrollToTopOfScroller(level);
+    }, theme.transitions.duration.standard);
+    return () => window.clearTimeout(timer);
+  }, [settingsRequest, theme.transitions.duration.standard]);
 
   /**
    * Els botons de la vista: girar el full, imprimir, PDF, pantalla completa,
@@ -513,20 +564,27 @@ const ViewSequencesSettingsContent = ({
   // que el tooltip. El tooltip no s'obre en tàctil, així que l'aria-label
   // és l'únic nom del botó; i fer-los coincidir compleix el criteri WCAG
   // 2.5.3 (el nom llegit conté el text visible).
-  const renderToolbar = (vertical: boolean): React.ReactElement => (
-    <Stack direction={vertical ? "column" : "row"}>
+  // Al mòbil, girar el full no és una sortida: és un ajust del nivell
+  // «Document» (M4). Allà la fila només porta imprimir, PDF i pantalla completa
+  const renderToolbar = (
+    vertical: boolean,
+    withRotate = true,
+  ): React.ReactElement => (
+    <Stack direction={vertical ? "column" : "row"} sx={{ flexShrink: 0 }}>
       {!isFullscreen ? (
         <>
-          <Tooltip title={intl.formatMessage(messages.tooltipOrientation)}>
-            <StyledIconButton
-              aria-label={intl.formatMessage(messages.tooltipOrientation)}
-              color="inherit"
-              sx={{ fontSize: "2rem" }}
-              onClick={toggleOrientation}
-            >
-              <MdScreenRotation />
-            </StyledIconButton>
-          </Tooltip>
+          {withRotate && (
+            <Tooltip title={intl.formatMessage(messages.tooltipOrientation)}>
+              <StyledIconButton
+                aria-label={intl.formatMessage(messages.tooltipOrientation)}
+                color="inherit"
+                sx={{ fontSize: "2rem" }}
+                onClick={toggleOrientation}
+              >
+                <MdScreenRotation />
+              </StyledIconButton>
+            </Tooltip>
+          )}
           <Tooltip title={intl.formatMessage(messages.tooltipPrint)}>
             <StyledIconButton
               aria-label={intl.formatMessage(messages.tooltipPrint)}
@@ -639,400 +697,443 @@ const ViewSequencesSettingsContent = ({
     </Stack>
   );
 
+  // Al mòbil, un toc a l'espai de la pàgina única, fora de les seqüències
+  // (que aturen el seu): treu la selecció i obre el nivell «Pàgina» (D2). Les
+  // seqüències no es mouen: un toc ja hi porta
+  const { requestSettings } = useViewSelection();
+  const handleSingleSheetTap = (event: React.MouseEvent<HTMLElement>) => {
+    const interactive = (event.target as Element).closest?.(
+      "button, a, input, [role='button']",
+    );
+    if (interactive && event.currentTarget.contains(interactive)) return;
+    clearSelection();
+    requestSettings("page");
+  };
+
+  // La pàgina única (sense pàgines pròpies): la capçalera, el full i, a
+  // l'escriptori, «Afegeix una pàgina» a sota
+  const singlePage = (
+    <Stack sx={{ minWidth: 0, height: isWideScreen ? undefined : "100%" }}>
+      {/* La capçalera de la pàgina única, com la de les pàgines del
+          document: des de l'inici s'hi poden afegir pàgines. La pantalla
+          completa com a paper no en té. Al mòbil, hi van les sortides */}
+      {!isFullscreen && (
+        <SinglePageHeader
+          slot="header"
+          onFocusPage={() => {
+            setFit("page");
+            scrollPageToTop(0);
+          }}
+          actions={isWideScreen ? undefined : renderToolbar(false, false)}
+        />
+      )}
+      {/* Al mòbil, l'espai que té el full: s'hi encongeix sencer (E1) */}
+      <Box
+        ref={isWideScreen ? undefined : sheetAreaRef}
+        data-testid={isWideScreen ? undefined : "view-sheet-area"}
+        onClick={isWideScreen ? undefined : handleSingleSheetTap}
+        sx={
+          isWideScreen
+            ? { display: "contents" }
+            : {
+                flex: 1,
+                minHeight: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }
+        }
+      >
+        {/* Contenidor exterior: dimensions visuals de pantalla */}
+        {/* Un clic fora de cap seqüència treu la selecció; Escape també */}
+        <Box
+          className="preview-container"
+          id={pageFrameId(0)}
+          onClick={isWideScreen ? clearSelection : undefined}
+          onKeyDown={clearOnEscape}
+          sx={{
+            width: displayWidth,
+            height: displayHeight,
+            minWidth: 0,
+            flexShrink: 0,
+            overflow: "hidden",
+            // Amb una seqüència seleccionada, la pàgina es ressalta com
+            // les del mode lliure
+            ...pageFrameSx(selection !== null),
+            marginBottom: { md: 1 },
+            "@media print": {
+              marginBottom: 0,
+              outline: "none",
+              boxShadow: "none",
+            },
+            // El full és paper en tots dos temes: aquesta previsualització ha de
+            // ser idèntica al que sortirà per impressora i al PDF
+            backgroundColor: sheetSurface,
+            // A pantalla completa, el full al mig i tan gran com hi càpiga
+            "&:fullscreen": {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              outline: "none",
+              boxShadow: "none",
+            },
+            "&:fullscreen [data-html2canvas-ignore]": {
+              display: "none",
+            },
+          }}
+        >
+          {/* Contenidor interior: dimensions reals amb transform per visualització.
+              És el full sencer i l'únic que s'imprimeix (`usePrintSheet`): una
+              columna amb el contingut i, a sota, el peu de llicència */}
+          <Box
+            className="preview-content"
+            sx={{
+              width: pageFormat.dimensions.width,
+              height: pageFormat.dimensions.height,
+              transform: `scale(${
+                pageInFullscreen
+                  ? fullscreenScale(pageFormat.dimensions)
+                  : calculatedScale
+              })`,
+              transformOrigin: pageInFullscreen ? "center" : "top left",
+              flexShrink: 0,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Stack
+              display={"flex"}
+              direction={viewSettings.direction}
+              flexWrap={"wrap"}
+              alignContent={blockAlign}
+              alignItems={blockAlign}
+              columnGap={
+                viewSettings.direction === "column"
+                  ? viewSettings.sequenceSpaceBetween
+                  : 0
+              }
+              rowGap={
+                viewSettings.direction === "row"
+                  ? viewSettings.sequenceSpaceBetween
+                  : 0
+              }
+              width="100%"
+              sx={{
+                flex: 1,
+                // Sense això, un contingut alt eixamplaria el full en comptes
+                // de quedar retallat per la vora, com fa el paper
+                minHeight: 0,
+                // I sense això el sobrant es pintaria damunt del peu: el que
+                // no hi cap es talla, que és el que fa el paper
+                overflow: "hidden",
+                padding: 2,
+                paddingInline: 1.5,
+              }}
+            >
+              {children({
+                viewSettings,
+                sequenceViewSettings,
+                scale: 1,
+                author,
+                selectable: true,
+              })}
+            </Stack>
+
+            {/* Al peu del full, dins del flux: només es pinta al paper i al
+                PDF, i allà s'hi reserva l'espai perquè no caigui damunt de
+                l'última fila de pictogrames */}
+            <CopyRight author={author} licence={viewSettings.licence} />
+          </Box>
+        </Box>
+      </Box>
+
+      {/* A l'escriptori, «Afegeix una pàgina» sota el full; al mòbil
+          és al menú «⋯» de la capçalera */}
+      {!isFullscreen && isWideScreen && <SinglePageHeader slot="footer" />}
+    </Stack>
+  );
+
+  // El full: les pàgines del document, o la pàgina única de sempre
+  const sheets = isFreeLayout ? (
+    <FreeLayoutPages
+      pageDimensions={pageFormat.dimensions}
+      displayWidth={displayWidth}
+      displayHeight={displayHeight}
+      scale={calculatedScale}
+      author={author}
+      licence={viewSettings.licence}
+      onFocusPage={(index) => {
+        // La pàgina sencera, a dalt de tot i tan gran com hi càpiga
+        setFit("page");
+        scrollPageToTop(index);
+      }}
+      headerActions={isWideScreen ? undefined : renderToolbar(false, false)}
+      sheetAreaRef={isWideScreen ? undefined : sheetAreaRef}
+    />
+  ) : (
+    singlePage
+  );
+
+  // On s'és: Document › Pàgina N › el bloc. A l'escriptori, fixes a dalt de
+  // la columna; al mòbil, a la capçalera del panell, on es veuen sempre
+  const crumbsNode = <LevelCrumbs crumbs={crumbs} onGo={goToLevel} />;
+
+  // Els tres nivells, lligats per la línia de la cascada. La columna no sap
+  // on la munten: a l'escriptori, al costat del full; al mòbil, al panell
+  const settingsLevels = (
+    <SettingsLevels>
+      {/* Nivell 1: el que s'aplica a tot el document */}
+      <SettingsLevel
+        id={VIEW_DOCUMENT_LEVEL_ID}
+        icon={<MdOutlineDescription />}
+        kind={<FormattedMessage {...levelMessages.document} />}
+        title={
+          documentTitle?.trim() || (
+            <FormattedMessage {...levelMessages.untitled} />
+          )
+        }
+        scope={<FormattedMessage {...levelMessages.documentScope} />}
+        summary={documentSummary}
+        expanded={openLevels.document}
+        onExpandedChange={setLevelOpen("document")}
+      >
+        <SectionTitle
+          title={<FormattedMessage {...messages.sectionPageFormat} />}
+        >
+          {/* El paper. La direcció i l'espai entre seqüències són de cada
+              pàgina; amb pàgines pròpies, la pantalla completa no s'hi pot
+              triar. Al mòbil, girar el full també és aquí (M4) */}
+          <GlobalViewControls
+            viewSettings={{ ...viewSettings, orientation }}
+            pageSize={pageSize}
+            sequenceCount={1}
+            paperOnly={isFreeLayout}
+            showDirection={false}
+            onPageSizeChange={setPageSize}
+            onDirectionChange={handleDirectionChange}
+            onSequenceSpaceChange={handleSequenceSpaceChange}
+            onOrientationChange={
+              !isWideScreen && !isFullscreen
+                ? (value) => {
+                    if (value !== orientation) toggleOrientation();
+                  }
+                : undefined
+            }
+          />
+        </SectionTitle>
+
+        {/* Les seqüències que no són a cap pàgina */}
+        <FreeLayoutSettings />
+
+        {/* El que només surt al peu del full imprès i del PDF */}
+        <PrintFooterSection
+          author={author}
+          onAuthorChange={updateAuthor}
+          licence={viewSettings.licence}
+          onLicenceChange={(value) => updateViewSetting("licence", value)}
+        >
+          <LicencePagesRow />
+        </PrintFooterSection>
+      </SettingsLevel>
+
+      {/* Nivell 2: la pàgina que es mira, contínua o en blocs. Sense
+          pàgines pròpies, la direcció i l'espai són els de sempre */}
+      <PageLevel
+        expanded={openLevels.page}
+        onExpandedChange={setLevelOpen("page")}
+        fullscreen={isFullscreen}
+        implicit={{
+          direction,
+          onDirectionChange: (value) => updateViewSetting("direction", value),
+          gap: viewSettings.sequenceSpaceBetween,
+          onGapChange: (value) =>
+            dispatch(
+              setSequenceSpaceBetweenActionCreator({
+                value,
+                styleView: documentStyle.view,
+              }),
+            ),
+        }}
+      />
+
+      {/* Nivell 3: el bloc seleccionat, o com s'hi arriba */}
+      {selectedBlock ? (
+        <BlockLevel
+          expanded={openLevels.block}
+          onExpandedChange={setLevelOpen("block")}
+        />
+      ) : (
+        <SettingsLevel
+          id={VIEW_BLOCK_LEVEL_ID}
+          icon={<BlockIcon />}
+          kind={
+            <FormattedMessage
+              {...levelMessages.kindBlock}
+              values={{ unit: activeUnit }}
+            />
+          }
+          title={
+            <FormattedMessage
+              {...levelMessages.noBlock}
+              values={{ unit: activeUnit }}
+            />
+          }
+          scope={
+            <FormattedMessage
+              {...levelMessages.noSelection}
+              values={{ unit: activeUnit }}
+            />
+          }
+        />
+      )}
+    </SettingsLevels>
+    // Aquí hi havia el peu de la columna: «Aplica el meu estil» i «Desa com
+    // a preferència». Els estils van en una sola direcció, de la configuració
+    // cap al document (R10): el meu estil s'aplica des del menú «⋯» de la
+    // pàgina i del bloc, i la pàgina dels documents nous es tria a la
+    // configuració
+  );
+
   return (
     <>
       <form onSubmit={(event) => event.preventDefault()}>
-        {/* Al mòbil, els botons a sobre del full; a l'escriptori, a la columna.
-            Amb un bloc seleccionat, a l'esquerra, l'enllaç que baixa fins als
-            seus ajustos: seleccionar no mou la pàgina */}
-        {!isWideScreen && (
-          <NotPrint>
-            <Stack
-              direction="row"
-              justifyContent="end"
-              alignItems="center"
-              flexWrap="wrap"
+        {isWideScreen ? (
+          <Stack
+            ref={layoutRef}
+            direction="row"
+            flexWrap="nowrap"
+            // Sense la columna al costat, el full va al mig de l'espai que queda
+            justifyContent={settingsVisible ? "flex-start" : "center"}
+          >
+            {sheets}
+
+            {/* La columna: empesa sempre a la vora dreta, amb els botons de la
+                vista a dalt i, a sota, els ajustos (el verd), que fan tota
+                l'alçada de la finestra i es desplacen per dins. Amagada, la
+                columna continua muntada: així el botó hi pot apuntar i, en
+                tornar, cada nivell és com s'havia deixat */}
+            <Box
+              ref={columnRef}
+              sx={{
+                marginLeft: "auto",
+                display: "flex",
+                gap: 3,
+                alignItems: "stretch",
+                flexShrink: 0,
+                // Enganxada mentre es baixa per les pàgines (R5)
+                position: "sticky",
+                top: 0,
+                alignSelf: "flex-start",
+                height: columnHeight,
+              }}
             >
-              {selectedBlock && (
-                <Box sx={{ marginRight: "auto" }}>
-                  <BlockSettingsLink />
-                </Box>
+              {settingsVisible && (
+                <NotPrint>
+                  <Divider orientation="vertical" />
+                </NotPrint>
               )}
-              {renderToolbar(false)}
-            </Stack>
-          </NotPrint>
-        )}
-
-        <Stack
-          ref={layoutRef}
-          direction={{ xs: "column", md: "row" }}
-          flexWrap={{ xs: "wrap", md: "nowrap" }}
-          // Sense la columna al costat, el full va al mig de l'espai que queda
-          justifyContent={{ md: settingsVisible ? "flex-start" : "center" }}
-        >
-          {/* Al mòbil, la previsualització fa l'amplada del verd dels ajustos
-              i hi queda alineada. No s'enganxa a dalt: un full vertical
-              deixaria sense lloc els ajustos. A l'escriptori, l'embolcall no hi és */}
-          <Box
-            sx={
-              isWideScreen
-                ? { display: "contents" }
-                : {
-                    // El Container de l'app deixa 16 px a cada costat: en queden 2
-                    marginInline: "-14px",
-                    paddingInline: "2px",
-                    paddingBlock: 1,
-                    "@media print": { margin: 0, padding: 0 },
-                  }
-            }
-          >
-            {isFreeLayout ? (
-              <FreeLayoutPages
-                pageDimensions={pageFormat.dimensions}
-                displayWidth={displayWidth}
-                displayHeight={displayHeight}
-                scale={calculatedScale}
-                author={author}
-                licence={viewSettings.licence}
-                onFocusPage={(index) => {
-                  // La pàgina sencera, a dalt de tot i tan gran com hi càpiga
-                  setFit("page");
-                  scrollPageToTop(index);
-                }}
-              />
-            ) : (
-              <Stack sx={{ minWidth: 0 }}>
-                {/* La capçalera de la pàgina única, com la de les pàgines del
-                    document: des de l'inici s'hi poden afegir pàgines. La pantalla
-                    completa com a paper no en té */}
-                {!isFullscreen && (
-                  <SinglePageHeader
-                    slot="header"
-                    onFocusPage={() => {
-                      setFit("page");
-                      scrollPageToTop(0);
-                    }}
-                  />
-                )}
-                {/* Contenidor exterior: dimensions visuals de pantalla */}
-                {/* Un clic fora de cap seqüència treu la selecció; Escape també */}
-                <Box
-                  className="preview-container"
-                  id={pageFrameId(0)}
-                  onClick={clearSelection}
-                  onKeyDown={clearOnEscape}
-                  sx={{
-                    width: displayWidth,
-                    height: displayHeight,
-                    minWidth: 0,
-                    overflow: "hidden",
-                    // Amb una seqüència seleccionada, la pàgina es ressalta com
-                    // les del mode lliure
-                    ...pageFrameSx(selection !== null),
-                    marginBottom: { md: 1 },
-                    "@media print": {
-                      marginBottom: 0,
-                      outline: "none",
-                      boxShadow: "none",
-                    },
-                    // El full és paper en tots dos temes: aquesta previsualització ha de
-                    // ser idèntica al que sortirà per impressora i al PDF
-                    backgroundColor: sheetSurface,
-                    // A pantalla completa, el full al mig i tan gran com hi càpiga
-                    "&:fullscreen": {
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      outline: "none",
-                      boxShadow: "none",
-                    },
-                    "&:fullscreen [data-html2canvas-ignore]": {
-                      display: "none",
-                    },
-                  }}
-                >
-                  {/* Contenidor interior: dimensions reals amb transform per visualització.
-                És el full sencer i l'únic que s'imprimeix (`usePrintSheet`): una
-                columna amb el contingut i, a sota, el peu de llicència */}
-                  <Box
-                    className="preview-content"
-                    sx={{
-                      width: pageFormat.dimensions.width,
-                      height: pageFormat.dimensions.height,
-                      transform: `scale(${
-                        pageInFullscreen
-                          ? fullscreenScale(pageFormat.dimensions)
-                          : calculatedScale
-                      })`,
-                      transformOrigin: pageInFullscreen ? "center" : "top left",
-                      flexShrink: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Stack
-                      display={"flex"}
-                      direction={viewSettings.direction}
-                      flexWrap={"wrap"}
-                      alignContent={blockAlign}
-                      alignItems={blockAlign}
-                      columnGap={
-                        viewSettings.direction === "column"
-                          ? viewSettings.sequenceSpaceBetween
-                          : 0
-                      }
-                      rowGap={
-                        viewSettings.direction === "row"
-                          ? viewSettings.sequenceSpaceBetween
-                          : 0
-                      }
-                      width="100%"
-                      sx={{
-                        flex: 1,
-                        // Sense això, un contingut alt eixamplaria el full en comptes
-                        // de quedar retallat per la vora, com fa el paper
-                        minHeight: 0,
-                        // I sense això el sobrant es pintaria damunt del peu: el que
-                        // no hi cap es talla, que és el que fa el paper
-                        overflow: "hidden",
-                        padding: 2,
-                        paddingInline: 1.5,
-                      }}
-                    >
-                      {children({
-                        viewSettings,
-                        sequenceViewSettings,
-                        scale: 1,
-                        author,
-                        selectable: true,
-                      })}
-                    </Stack>
-
-                    {/* Al peu del full, dins del flux: només es pinta al paper i al
-                  PDF, i allà s'hi reserva l'espai perquè no caigui damunt de
-                  l'última fila de pictogrames */}
-                    <CopyRight author={author} licence={viewSettings.licence} />
-                  </Box>
-                </Box>
-
-                {/* A l'escriptori, «Afegeix una pàgina» sota el full; al mòbil
-                    és al menú «⋯» de la capçalera */}
-                {!isFullscreen && isWideScreen && (
-                  <SinglePageHeader slot="footer" />
-                )}
-              </Stack>
-            )}
-          </Box>
-
-          {/* La columna: empesa sempre a la vora dreta a l'escriptori, amb els
-              botons de la vista a dalt i, a sota, els ajustos (el verd), que
-              fan tota l'alçada de la finestra i es desplacen per dins.
-              Amagada, la columna continua muntada: així el botó hi pot apuntar
-              i, en tornar, cada nivell és com s'havia deixat */}
-          <Box
-            ref={columnRef}
-            sx={{
-              marginLeft: { md: "auto" },
-              display: { xs: "block", md: "flex" },
-              gap: { md: 3 },
-              alignItems: "stretch",
-              flexShrink: 0,
-              // Enganxada mentre es baixa per les pàgines (R5). Al mòbil va
-              // sota el full i no s'enganxa
-              position: { md: "sticky" },
-              top: { md: 0 },
-              alignSelf: { md: "flex-start" },
-              height: { md: columnHeight },
-            }}
-          >
-            {settingsVisible && (
-              <NotPrint>
-                <Divider orientation="vertical" />
-              </NotPrint>
-            )}
-            <Stack sx={{ height: { md: "100%" }, minHeight: 0 }}>
-              {isWideScreen && (
+              <Stack sx={{ height: "100%", minHeight: 0 }}>
                 <NotPrint>
                   <Stack direction="row" justifyContent="end">
                     {renderToolbar(!settingsOpen)}
                   </Stack>
                 </NotPrint>
-              )}
-              <Box
-                id={SETTINGS_COLUMN_ID}
-                onKeyDown={clearOnEscape}
-                sx={{
-                  display: settingsVisible ? "block" : "none",
-                  flex: { md: 1 },
-                  minHeight: 0,
-                  overflowY: { md: "auto" },
-                }}
+                <Box
+                  id={SETTINGS_COLUMN_ID}
+                  onKeyDown={clearOnEscape}
+                  sx={{
+                    display: settingsVisible ? "block" : "none",
+                    flex: 1,
+                    minHeight: 0,
+                    overflowY: "auto",
+                  }}
+                >
+                  <NotPrint>
+                    <Stack
+                      maxWidth={VIEW_SETTINGS_COLUMN_WIDTH}
+                      flexShrink={0}
+                      spacing={SETTINGS_ROW_GAP}
+                      sx={{
+                        // Zona de configuració: fons paper a tota la columna
+                        // de controls, i com a mínim tota l'alçada que hi ha
+                        backgroundColor: "background.paper",
+                        borderRadius: 2,
+                        padding: 1.5,
+                        minHeight: "100%",
+                        boxSizing: "border-box",
+                      }}
+                    >
+                      {crumbsNode}
+                      {settingsLevels}
+                    </Stack>
+                  </NotPrint>
+                </Box>
+              </Stack>
+            </Box>
+          </Stack>
+        ) : (
+          <>
+            {/* Al mòbil la pàgina no es desplaça: el full ocupa l'espai entre
+                la barra de dalt (que s'amaga quan el panell puja) i el panell
+                de baix, i s'hi encongeix sencer (`docs/PLA-vista-mobil.md`).
+                Sense scroll de pàgina, no hi ha res a perdre (§1) */}
+            <GlobalStyles
+              styles={{
+                "@media screen": {
+                  "html, body": {
+                    overflow: "hidden",
+                    overscrollBehavior: "none",
+                  },
+                },
+              }}
+            />
+            <Box
+              data-testid="view-mobile-stage"
+              sx={(muiTheme) => ({
+                position: "fixed",
+                left: 0,
+                right: 0,
+                top: panelRaised ? 0 : APP_BAR_HEIGHT,
+                bottom: MOBILE_STAGE_BOTTOM,
+                display: "flex",
+                flexDirection: "column",
+                paddingInline: 0.5,
+                paddingBottom: 1,
+                transition: `top ${muiTheme.transitions.duration.standard}ms`,
+                "@media print": { position: "static" },
+              })}
+            >
+              {sheets}
+            </Box>
+
+            <NotPrint>
+              <AppBottomSheet
+                snap={sheetSnap}
+                onSnapChange={setSheetSnap}
+                label={intl.formatMessage(messages.mobileSettings)}
+                showLabel={intl.formatMessage(messages.mobileShowSettings)}
+                hideLabel={intl.formatMessage(messages.mobileHideSettings)}
+                returnLabel={intl.formatMessage(messages.mobileBackToSheet)}
+                header={crumbsNode}
               >
-                <NotPrint>
-                  <Stack
-                    ref={mobileSettingsRef}
-                    maxWidth={{ md: VIEW_SETTINGS_COLUMN_WIDTH }}
-                    width={{ xs: "calc(100% + 28px)", md: "auto" }}
-                    flexShrink={0}
-                    spacing={SETTINGS_ROW_GAP}
-                    sx={{
-                      // Zona de configuració: fons paper a tota la columna de
-                      // controls, i com a mínim tota l'alçada que hi ha. Al mòbil,
-                      // amb el marge més petit, per guanyar amplada
-                      backgroundColor: "background.paper",
-                      borderRadius: 2,
-                      padding: 1.5,
-                      // El Container de l'app deixa 16 px a cada costat al mòbil
-                      // (`theme.spacing(2)`): en queden 2
-                      marginInline: { xs: "-14px", md: 0 },
-                      minHeight: { md: "100%" },
-                      boxSizing: "border-box",
-                      // Al mòbil, gairebé tota l'alçada de la pantalla quan
-                      // s'hi baixa, i les targetes es desplacen per dins; les
-                      // molles hi queden fixes a dalt. A dalt sempre en queda
-                      // un tros del full, per on es torna a pujar
-                      height: {
-                        xs: `calc(100dvh - ${MOBILE_PREVIEW_PEEK}px)`,
-                        md: "auto",
-                      },
-                      overflowY: { xs: "auto", md: "visible" },
-                      // El Container de l'app deixa a sota l'espai del botó
-                      // flotant; aquí el verd ja s'hi desplaça per dins, i
-                      // aquell espai faria pujar la pàgina més enllà del verd i
-                      // en tallaria la part de dalt, amb les molles
-                      marginBottom: {
-                        xs: `calc(-1 * max(${FLOATING_BOTTOM_INSET}px, var(${FLOATING_INSET_VARIABLE}, 0px)))`,
-                        md: 0,
-                      },
-                      overscrollBehavior: { xs: "contain", md: "auto" },
-                      "@media print": { height: "auto", overflow: "visible" },
-                    }}
-                  >
-                    {/* On s'és: Document › Pàgina N › el bloc. Fixes dalt de tot */}
-                    <LevelCrumbs crumbs={crumbs} onGo={goToLevel} />
-
-                    {/* Els tres nivells, lligats per la línia de la cascada */}
-                    <SettingsLevels>
-                      {/* Nivell 1: el que s'aplica a tot el document */}
-                      <SettingsLevel
-                        id={VIEW_DOCUMENT_LEVEL_ID}
-                        icon={<MdOutlineDescription />}
-                        kind={<FormattedMessage {...levelMessages.document} />}
-                        title={
-                          documentTitle?.trim() || (
-                            <FormattedMessage {...levelMessages.untitled} />
-                          )
-                        }
-                        scope={
-                          <FormattedMessage {...levelMessages.documentScope} />
-                        }
-                        summary={documentSummary}
-                        expanded={openLevels.document}
-                        onExpandedChange={setLevelOpen("document")}
-                      >
-                        <SectionTitle
-                          title={
-                            <FormattedMessage {...messages.sectionPageFormat} />
-                          }
-                        >
-                          {/* El paper. La direcció i l'espai entre seqüències
-                          són de cada pàgina; amb pàgines pròpies, la
-                          pantalla completa no s'hi pot triar */}
-                          <GlobalViewControls
-                            viewSettings={viewSettings}
-                            pageSize={pageSize}
-                            sequenceCount={1}
-                            paperOnly={isFreeLayout}
-                            showDirection={false}
-                            onPageSizeChange={setPageSize}
-                            onDirectionChange={handleDirectionChange}
-                            onSequenceSpaceChange={handleSequenceSpaceChange}
-                          />
-                        </SectionTitle>
-
-                        {/* Les seqüències que no són a cap pàgina */}
-                        <FreeLayoutSettings />
-
-                        {/* El que només surt al peu del full imprès i del PDF */}
-                        <PrintFooterSection
-                          author={author}
-                          onAuthorChange={updateAuthor}
-                          licence={viewSettings.licence}
-                          onLicenceChange={(value) =>
-                            updateViewSetting("licence", value)
-                          }
-                        >
-                          <LicencePagesRow />
-                        </PrintFooterSection>
-                      </SettingsLevel>
-
-                      {/* Nivell 2: la pàgina que es mira, contínua o en blocs.
-                      Sense pàgines pròpies, la direcció i l'espai són els de
-                      sempre */}
-                      <PageLevel
-                        expanded={openLevels.page}
-                        onExpandedChange={setLevelOpen("page")}
-                        fullscreen={isFullscreen}
-                        implicit={{
-                          direction,
-                          onDirectionChange: (value) =>
-                            updateViewSetting("direction", value),
-                          gap: viewSettings.sequenceSpaceBetween,
-                          onGapChange: (value) =>
-                            dispatch(
-                              setSequenceSpaceBetweenActionCreator({
-                                value,
-                                styleView: documentStyle.view,
-                              }),
-                            ),
-                        }}
-                      />
-
-                      {/* Nivell 3: el bloc seleccionat, o com s'hi arriba */}
-                      {selectedBlock ? (
-                        <BlockLevel
-                          expanded={openLevels.block}
-                          onExpandedChange={setLevelOpen("block")}
-                        />
-                      ) : (
-                        <SettingsLevel
-                          id={VIEW_BLOCK_LEVEL_ID}
-                          icon={<BlockIcon />}
-                          kind={
-                            <FormattedMessage
-                              {...levelMessages.kindBlock}
-                              values={{ unit: activeUnit }}
-                            />
-                          }
-                          title={
-                            <FormattedMessage
-                              {...levelMessages.noBlock}
-                              values={{ unit: activeUnit }}
-                            />
-                          }
-                          scope={
-                            <FormattedMessage
-                              {...levelMessages.noSelection}
-                              values={{ unit: activeUnit }}
-                            />
-                          }
-                        />
-                      )}
-                    </SettingsLevels>
-
-                    {/* Aquí hi havia el peu de la columna: «Aplica el meu estil»
-                    i «Desa com a preferència». Els estils van en una sola
-                    direcció, de la configuració cap al document (R10): el meu
-                    estil s'aplica des del menú «⋯» de la pàgina i del bloc, i la
-                    pàgina dels documents nous es tria a la configuració */}
-                  </Stack>
-                </NotPrint>
-              </Box>
-            </Stack>
-          </Box>
-        </Stack>
+                <Stack
+                  id={SETTINGS_COLUMN_ID}
+                  onKeyDown={clearOnEscape}
+                  spacing={SETTINGS_ROW_GAP}
+                  sx={{ paddingInline: 1, paddingBottom: 1.5 }}
+                >
+                  {settingsLevels}
+                </Stack>
+              </AppBottomSheet>
+            </NotPrint>
+          </>
+        )}
       </form>
 
+      {/* Al mòbil girat, la vista no es treballa (M6, N3) */}
+      <RotatePhoneOverlay
+        message={intl.formatMessage(messages.mobileRotatePhone)}
+      />
       {beforePrintDialog}
 
       {/* Contenidor per a fullscreen: mateix layout de blocs que la

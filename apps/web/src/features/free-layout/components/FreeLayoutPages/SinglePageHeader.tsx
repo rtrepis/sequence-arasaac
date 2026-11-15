@@ -15,6 +15,8 @@ interface SinglePageHeaderProps {
   slot: "header" | "footer";
   /** Clicar el títol: la pàgina, a dalt de tot i tan gran com hi càpiga */
   onFocusPage?: () => void;
+  /** Al mòbil, les sortides del document, al final de la fila */
+  actions?: React.ReactNode;
 }
 
 /**
@@ -27,6 +29,7 @@ interface SinglePageHeaderProps {
 const SinglePageHeader = ({
   slot,
   onFocusPage,
+  actions,
 }: SinglePageHeaderProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -53,13 +56,14 @@ const SinglePageHeader = ({
     );
 
   return (
-    <Box sx={{ marginBottom: 1 }}>
+    <Box sx={{ marginBottom: 1, flexShrink: 0 }}>
       <PageHeader
         sheetIndex={0}
         sheetCount={1}
         continuous
         onAddSequence={() => setAdding(true)}
         onFocusPage={onFocusPage}
+        actions={actions}
       />
       <AddSequenceDialog
         sheetIndex={adding ? 0 : null}

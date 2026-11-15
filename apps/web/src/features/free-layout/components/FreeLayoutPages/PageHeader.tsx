@@ -12,12 +12,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  MdChevronLeft,
-  MdChevronRight,
-  MdOutlineLibraryAdd,
-  MdTitle,
-} from "react-icons/md";
+import { MdOutlineLibraryAdd, MdTitle } from "react-icons/md";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
@@ -44,39 +39,12 @@ interface PageHeaderProps {
   /** Clicar el títol: la pàgina, a dalt de tot i tan gran com hi càpiga */
   onFocusPage?: () => void;
   /**
-   * Al mòbil, on es veu una pàgina cada vegada: passar a l'anterior o a la
-   * següent, a banda i banda del títol. Sense valor, no hi ha la fletxa
+   * El que va al final de la fila, després del menú de la pàgina: al mòbil, les
+   * sortides del document (M4 de `docs/PLA-vista-mobil.md`). Passar de pàgina
+   * és lliscar o les fletxes de la vora
    */
-  onPrevious?: () => void;
-  onNext?: () => void;
+  actions?: React.ReactNode;
 }
-
-/** Una fletxa per passar de pàgina, al mòbil. */
-const PageArrow = ({
-  label,
-  disabled,
-  onClick,
-  children,
-}: {
-  label: string;
-  disabled: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}): React.ReactElement => (
-  <Tooltip title={label}>
-    {/* L'embolcall: un botó desactivat no rep els esdeveniments del tooltip */}
-    <span>
-      <StyledIconButton
-        color="inherit"
-        aria-label={label}
-        disabled={disabled}
-        onClick={onClick}
-      >
-        {children}
-      </StyledIconButton>
-    </span>
-  </Tooltip>
-);
 
 /**
  * La capçalera d'una pàgina del mode lliure, a sobre del full: quina pàgina
@@ -92,8 +60,7 @@ const PageHeader = ({
   active = false,
   onAddSequence,
   onFocusPage,
-  onPrevious,
-  onNext,
+  actions,
 }: PageHeaderProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -148,19 +115,10 @@ const PageHeader = ({
       gap={1}
       sx={{ "@media print": { display: "none" } }}
     >
-      {onPrevious && (
-        <PageArrow
-          label={intl.formatMessage(messages.previousPage)}
-          disabled={sheetIndex === 0}
-          onClick={onPrevious}
-        >
-          <MdChevronLeft />
-        </PageArrow>
-      )}
       <Typography
         component="h2"
         variant="subtitle1"
-        sx={{ flexGrow: onPrevious ? 0 : 1, minWidth: 0 }}
+        sx={{ flexGrow: 1, minWidth: 0 }}
       >
         <Box
           component="button"
@@ -197,17 +155,6 @@ const PageHeader = ({
           {title}
         </Box>
       </Typography>
-
-      {onNext && (
-        <PageArrow
-          label={intl.formatMessage(messages.nextPage)}
-          disabled={sheetIndex === sheetCount - 1}
-          onClick={onNext}
-        >
-          <MdChevronRight />
-        </PageArrow>
-      )}
-      {onPrevious && <Box sx={{ flexGrow: 1 }} />}
 
       {/* Com es reparteix la pàgina: diu què farà afegir-hi un bloc */}
       <Tooltip title={intl.formatMessage(messages.arrangementHint, tag)}>
@@ -277,6 +224,7 @@ const PageHeader = ({
         sheetCount={sheetCount}
         onAddSequence={onAddSequence}
       />
+      {actions}
     </Stack>
   );
 };

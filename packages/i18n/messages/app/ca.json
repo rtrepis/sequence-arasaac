@@ -2846,11 +2846,11 @@
   },
   "features.freeLayout.page.previousPage": {
     "message": "Pàgina anterior",
-    "description": "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina anterior (també es pot lliscar)"
+    "description": "Fletxa de la vora del full, al mòbil i a la pantalla completa: ensenya la pàgina anterior (també es pot lliscar)"
   },
   "features.freeLayout.page.nextPage": {
     "message": "Pàgina següent",
-    "description": "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina següent (també es pot lliscar)"
+    "description": "Fletxa de la vora del full, al mòbil i a la pantalla completa: ensenya la pàgina següent (també es pot lliscar)"
   },
   "features.freeLayout.page.chooseTemplate": {
     "message": "Plantilla…",
@@ -3008,10 +3008,6 @@
     "message": "Descarrega igualment",
     "description": "Descarrega el PDF tal com està, malgrat l'avís"
   },
-  "features.freeLayout.blockSettingsLink": {
-    "message": "Ajustos del bloc",
-    "description": "Al mòbil, damunt del full amb un bloc seleccionat: baixa fins als ajustos del bloc, a la columna de sota"
-  },
   "features.freeLayout.placement.actions": {
     "message": "Accions de {name}",
     "description": "Nom accessible i tooltip del botó d'un bloc, a dalt a la dreta, que obre el seu menú"
@@ -3019,6 +3015,26 @@
   "pages.viewSequence.levels.crumbs": {
     "message": "On s'apliquen aquests ajustos",
     "description": "Nom accessible de les molles de dalt de la columna de la vista (Document › Pàgina 2 › Bloc)"
+  },
+  "pages.viewSequence.mobile.settings": {
+    "message": "Ajustos",
+    "description": "Al mòbil, nom del panell de baix amb els ajustos de la vista (el llegeix el lector de pantalla)"
+  },
+  "pages.viewSequence.mobile.showSettings": {
+    "message": "Mostra els ajustos",
+    "description": "Al mòbil, botó de la capçalera del panell de baix plegat: el puja a mitja pantalla"
+  },
+  "pages.viewSequence.mobile.hideSettings": {
+    "message": "Amaga els ajustos",
+    "description": "Al mòbil, botó de la capçalera del panell de baix obert: el plega i el full torna a ocupar la pantalla"
+  },
+  "pages.viewSequence.mobile.backToSheet": {
+    "message": "Torna al full",
+    "description": "Al mòbil, franja de dalt quan el panell d'ajustos ocupa gairebé tota la pantalla: el torna a mitja pantalla"
+  },
+  "pages.viewSequence.mobile.rotatePhone": {
+    "message": "Gira el mòbil: la vista es treballa amb el mòbil dret",
+    "description": "Al mòbil girat, capa que tapa la vista fins que es torna a posar dret (a la pantalla completa no surt)"
   },
   "pages.viewSequence.levels.document": {
     "message": "Document",

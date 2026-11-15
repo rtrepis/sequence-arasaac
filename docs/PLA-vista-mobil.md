@@ -1,7 +1,8 @@
 # Pla: la vista al mòbil — el full a la pantalla i els ajustos en un panell de baix
 
 > **Estat**: pla aprovat (2026-11-15). **Per continuar, comenceu per §10, «Encàrrec per a la sessió
-> següent»**: és la fase 4. **Fase 0 feta** (2026-11-15): la
+> següent»**: és la fase 5. **Fase 4 feta** (2026-11-15): la vista ja va al panell de baix, amb els
+> tres casos de §1 en un e2e de mòbil. **Fase 0 feta** (2026-11-15): la
 > release no fa saltar la pàgina en seleccionar i té l'enllaç «Ajustos del bloc». **Fase 3 feta**
 > (2026-11-15): `AppBottomSheet` existeix i passa les proves, però la vista encara no el munta.
 > **Fase 1 tancada** (2026-11-15): totes les decisions són a §9.
@@ -309,7 +310,56 @@ a `configuracions.md`, totes marcades «⏳ Proposta». **El `CLAUDE.md` no es t
 
 **Fet quan**: el component passa les proves sol i el `typecheck` és net.
 
-### Fase 4 — La vista, migrada
+### Fase 4 — La vista, migrada ✅ Feta (2026-11-15)
+
+**Com ha quedat**:
+
+- **L'escenari del mòbil** (`ViewSquenceSettings`, per sota de `md`): una capa fixa entre la barra de
+  dalt i el panell, amb la capçalera de la pàgina i l'espai del full. El que hi ha a sota no fa
+  scroll (`html, body { overflow: hidden }` mentre la vista és muntada, només a pantalla). La vora de
+  baix és `min(terra del panell, 50dvh)`: a sencer, el full es queda a la mida de mig i el panell el
+  tapa. L'espai del full es mesura (`useElementSize`, a `usePageView`) i `useScaleCalculator` té un
+  camí nou, `availableHeight`, que hi encongeix el full sencer.
+- **La columna no sap on la munten**: els nivells són un sol fragment que va a la columna de
+  l'escriptori o dins d'`AppBottomSheet`, amb les molles a la capçalera del panell. L'escriptori no
+  canvia (s'hi ha comprovat el mateix e2e de captures que abans).
+- **La fila de dalt** és la capçalera de la pàgina (`PageHeader`, amb el títol «Pàgina N de M», el
+  repartiment, afegir i el menú) amb les sortides al final (`actions`). Girar el full és una fila
+  d'orientació al nivell «Document», a *Format de pàgina*, només al mòbil. Les fletxes que la
+  capçalera portava al costat del títol s'han tret: les substitueixen les de la vora.
+- **El toc**: el context de selecció té un senyal nou, `requestSettings` («obre els ajustos d'aquest
+  nivell»), que la vista escolta per portar el panell a mig. `PlacementBox` el demana amb un toc, o
+  amb un doble toc a la disposició lliure (`useOpenOnTap`, 350 ms); `SelectableSequence`, sempre amb
+  un toc; Enter i Espai, sempre. Tocar l'espai del full fora dels blocs treu la selecció i obre el
+  nivell «Pàgina» (D2, N5).
+- **La vora i la pantalla completa**: `EdgePageArrows` (fora del full, a `FreeLayoutPages`) surt en
+  tocar el 15 % de cada costat i s'amaga als 2 s; és sempre a l'ordre de tabulació. **La pantalla
+  completa ara és del contenidor de totes les pàgines** (`PAGES_FULLSCREEN_ID`), que n'ensenya
+  l'activa: així s'hi llisca i s'hi toca la vora (N1). La pàgina única continua posant a pantalla
+  completa el seu marc.
+- **La barra de l'app**: `HideOnScroll` també escolta `useFloatingRaised`.
+- **La capa del mòbil girat**: `components/RotatePhoneOverlay/`, genèrica (el text el posa qui la
+  munta). Es mostra amb `(orientation: landscape) and (pointer: coarse) and (max-height: 500px)`, no
+  amb `md`: un mòbil girat pot passar de 900 px. Dos colors nous a `palette.ts`: `rotateVeil` i
+  `edgeArrow`.
+- **Esborrat**: `MOBILE_PREVIEW_PEEK`, el verd amb alçada pròpia i el seu `marginBottom` negatiu,
+  l'`overscrollBehavior`, el `top: -12` de les molles, `BlockSettingsLink` i el seu text.
+- **De pas**: `useWindowResize` cau a `innerWidth` quan `clientWidth` és zero (jsdom). Abans, les
+  proves de la vista corrien sense voler-ho amb la disposició del mòbil.
+- **Proves**: `ViewSequencesSettings.test.tsx` (el panell plegat, mostrar-lo, les sortides, girar a
+  «Document», tocar el full) i `e2e/mobile-view.spec.ts` al Pixel 7 i l'iPad Mini: els tres casos de
+  §1, la fila de dalt i la barra, la fletxa de la vora, lliscar a la pantalla completa (N1) i la capa
+  del mòbil girat.
+
+**Troballes per a la fase 5**:
+
+- **Els avisos tapen la franja de sencer.** Suren damunt del terra del panell; a sencer, el terra és
+  a 64 px de dalt i un avís («Fitxer carregat correctament») cau damunt de «Torna al full». L'e2e
+  espera que marxi.
+- **El zoom del doble toc** no s'ha tocat (`touch-action`), com diu la fase 5.
+- **Amb el teclat, la fletxa de la vora que es prem pot desaparèixer** en arribar a la primera o
+  l'última pàgina, i el focus es perd.
+
 
 - Per sota de `md`, la columna va dins d'`AppBottomSheet`. Les molles, a la capçalera del panell.
 - La pàgina de vista deixa de desplaçar-se al mòbil; el full s'escala per cabre a sobre del panell
@@ -418,8 +468,10 @@ amb el full vertical) passen en un e2e de mòbil.
 
 ## 10. Encàrrec per a la sessió següent
 
-**Què**: la fase 4, la vista migrada al panell (§6, «Fase 4»). La fase 3 és feta: el component ja
-existeix i no cal tocar-lo si no és per un error.
+**Què**: la fase 5, els casos difícils (§6, «Fase 5»), més les tres troballes que va deixar la
+fase 4 (al final de la fase 4 a §6). La vista ja va al panell: `e2e/mobile-view.spec.ts` és la xarxa.
+
+> L'encàrrec de sota era el de la fase 4; es deixa com a referència del que ja hi ha.
 
 **On**: **a partir de la branca on es va fer la fase 3** (que parteix de
 `claude/release-before-new-plan-8x1xhp`). **El panell forma part de la release** (§11): no va en una
@@ -470,7 +522,8 @@ servidor de proves, i per tant cada pas es pot provar allà a mesura que s'acaba
 |---|---|---|
 | Seleccionar no mou la pàgina, enllaç «Ajustos del bloc» | ✅ Fet | Fase 0 d'aquest pla |
 | `AppBottomSheet`, sol i amb proves | ✅ Fet | Fase 3 d'aquest pla |
-| La vista al mòbil: la migració de la vista i els casos difícils | ⏳ Per fer | Fases 4 i 5 d'aquest pla |
+| La vista al mòbil: la migració de la vista | ✅ Fet | Fase 4 d'aquest pla |
+| La vista al mòbil: els casos difícils | ⏳ Per fer | Fase 5 d'aquest pla |
 | L'estàndard sense la marca «Proposta» i la regla al `CLAUDE.md` | ⏳ Per fer | Fase 6 d'aquest pla |
 | **Notícia de les pàgines i la disposició** (simple, columnes, files, lliure) | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13, «Què queda obert»; en publicar-la, es treu l'etiqueta «Nou» de la fila «Disposició» (pas 8) |
 | **Notícia de la vista al mòbil** | ⏳ Per fer | Fase 6 d'aquest pla |

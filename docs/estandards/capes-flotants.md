@@ -238,5 +238,7 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   seva creu escrites a dins. Ara la forma viu a `AppFullScreenDialog` i el
   diàleg de configuració només hi posa els tabs i els panells. **Ja no hi ha cap
   excepció: zero `Dialog` de MUI fora dels dos components canònics.**
-- ⏳ **Vista al mòbil** — `AppBottomSheet`, la capa del mòbil girat i la fletxa
-  de la vora. Proposta: vegeu `docs/PLA-vista-mobil.md`.
+- ⏳ **Vista al mòbil** — `AppBottomSheet`, la capa del mòbil girat
+  (`RotatePhoneOverlay`) i la fletxa de la vora (`EdgePageArrows`). **Ja hi són,
+  a la vista** (fase 4); continuen en proposta fins que es tanquin els casos
+  difícils (fase 5 de `docs/PLA-vista-mobil.md`).

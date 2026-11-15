@@ -198,6 +198,36 @@ const messages = defineMessages({
     description:
       "Botó de la vista que posa la pàgina que es mira (la marcada) a pantalla completa, tan gran com hi càpiga; Esc en surt",
   },
+  mobileSettings: {
+    id: "pages.viewSequence.mobile.settings",
+    defaultMessage: "Settings",
+    description:
+      "Al mòbil, nom del panell de baix amb els ajustos de la vista (el llegeix el lector de pantalla)",
+  },
+  mobileShowSettings: {
+    id: "pages.viewSequence.mobile.showSettings",
+    defaultMessage: "Show settings",
+    description:
+      "Al mòbil, botó de la capçalera del panell de baix plegat: el puja a mitja pantalla",
+  },
+  mobileHideSettings: {
+    id: "pages.viewSequence.mobile.hideSettings",
+    defaultMessage: "Hide settings",
+    description:
+      "Al mòbil, botó de la capçalera del panell de baix obert: el plega i el full torna a ocupar la pantalla",
+  },
+  mobileBackToSheet: {
+    id: "pages.viewSequence.mobile.backToSheet",
+    defaultMessage: "Back to the sheet",
+    description:
+      "Al mòbil, franja de dalt quan el panell d'ajustos ocupa gairebé tota la pantalla: el torna a mitja pantalla",
+  },
+  mobileRotatePhone: {
+    id: "pages.viewSequence.mobile.rotatePhone",
+    defaultMessage: "Turn your phone: the view works with the phone upright",
+    description:
+      "Al mòbil girat, capa que tapa la vista fins que es torna a posar dret (a la pantalla completa no surt)",
+  },
 });
 
 export default messages;

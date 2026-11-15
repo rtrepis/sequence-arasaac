@@ -3,6 +3,7 @@ import {
   renderWithProviders,
   screen,
   userEvent,
+  waitFor,
 } from "@/test/renderWithProviders";
 import ViewSequencesSettings from "./ViewSquenceSettings";
 
@@ -71,7 +72,7 @@ describe("l'espai del full a la vista", () => {
     expect(parseFloat(previewWidth(container))).toBeCloseTo(before);
   });
 
-  it("al mòbil no hi ha cap dels dos botons, i la columna hi és sempre", () => {
+  it("al mòbil no hi ha cap dels dos botons, i els ajustos són al panell de baix", async () => {
     setWindowSize(412, 915);
     renderView();
     expect(
@@ -80,6 +81,63 @@ describe("l'espai del full a la vista", () => {
     expect(
       screen.queryByRole("button", { name: "Fit to width" }),
     ).not.toBeInTheDocument();
+    // El panell, plegat: només les molles i el botó (M1)
+    const panel = screen.getByRole("region", { name: "Settings" });
+    expect(panel).toHaveAttribute("data-snap", "collapsed");
+    const show = screen.getByRole("button", { name: "Show settings" });
+    expect(show).toHaveAttribute("aria-expanded", "false");
+
+    await userEvent.click(show);
+
+    expect(panel).toHaveAttribute("data-snap", "half");
     expect(document.getElementById("view-settings-column")).toBeVisible();
+  });
+});
+
+// La vista al mòbil (fase 4 de `docs/PLA-vista-mobil.md`)
+describe("la vista al mòbil", () => {
+  it("a sobre del full només hi ha les sortides; girar el full és al nivell «Document»", async () => {
+    setWindowSize(412, 915);
+    renderView();
+    expect(screen.getByRole("button", { name: "Print" })).toBeInTheDocument();
+    // Girar el full ja no és un botó de la fila (M4)
+    expect(
+      screen.queryByRole("button", { name: "Page orientation" }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Show settings" }),
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Portrait page" }),
+    ).toBeInTheDocument();
+  });
+
+  it("tocar el full fora de les seqüències porta el panell a mig, amb el nivell «Pàgina» obert", async () => {
+    setWindowSize(412, 915);
+    renderView();
+    const panel = screen.getByRole("region", { name: "Settings" });
+
+    await userEvent.click(screen.getByTestId("view-sheet-area"));
+
+    expect(panel).toHaveAttribute("data-snap", "half");
+    // Document, plegat; Pàgina, obert (D2)
+    await waitFor(() =>
+      expect(
+        screen
+          .getAllByRole("button", { name: /^Document|^Page/ })
+          .filter((button) => button.hasAttribute("aria-expanded"))
+          .map((button) => button.getAttribute("aria-expanded")),
+      ).toEqual(["false", "true"]),
+    );
+  });
+
+  it("a l'escriptori no hi ha panell de baix", () => {
+    setWindowSize(1366, 768);
+    renderView();
+    expect(
+      screen.queryByRole("region", { name: "Settings" }),
+    ).not.toBeInTheDocument();
   });
 });

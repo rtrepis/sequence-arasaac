@@ -114,3 +114,25 @@ export const bottomSheetStrip: Record<
   light: { background: "rgba(20, 26, 12, 0.72)", text: "#FFFFFF" },
   dark: { background: "rgba(0, 0, 0, 0.72)", text: "#FFFFFF" },
 };
+
+/**
+ * La fletxa de la vora (`docs/estandards/capes-flotants.md`, «La fletxa de la
+ * vora»): semitransparent, perquè sura damunt del full sense amagar-lo. Igual
+ * en tots dos temes, perquè a sota hi ha el full, que és blanc sempre: el fons
+ * blanc al 80 % i la fletxa fosca de `primary.contrastText` fan 12:1.
+ */
+export const edgeArrow = {
+  background: "rgba(255, 255, 255, 0.8)",
+  icon: appPalette.primary.contrastText,
+} as const;
+
+/**
+ * La capa del mòbil girat (`docs/estandards/capes-flotants.md`): blanca
+ * translúcida, igual en tots dos temes, amb el text fosc de
+ * `primary.contrastText`. Al 92 %, el que hi ha a sota s'endevina però no
+ * distreu, i el text hi fa més de 12:1.
+ */
+export const rotateVeil = {
+  background: "rgba(255, 255, 255, 0.92)",
+  text: appPalette.primary.contrastText,
+} as const;

@@ -20,7 +20,7 @@ import {
 } from "../store/freeLayoutThunks";
 import { rememberCardSizes } from "@features/free-layout/store/blockGrowth";
 
-/** L'`id` del nivell «Bloc» de la columna: l'enllaç del mòbil hi porta. */
+/** L'`id` del nivell «Bloc» de la columna: les molles hi porten. */
 export const VIEW_BLOCK_LEVEL_ID = "view-level-block";
 
 /**
@@ -40,6 +40,18 @@ export type ViewSelection =
 export interface TemplatePreview {
   sheetIndex: number;
   template: LayoutTemplate;
+}
+
+/**
+ * El que ha demanat el toc al full: obrir els ajustos d'un nivell. Al mòbil, la
+ * vista hi porta el panell de baix (`docs/PLA-vista-mobil.md`, §4,
+ * «Seleccionar»); a l'escriptori, la columna ja hi és i no cal fer res. El
+ * número canvia a cada petició, perquè tocar dues vegades el mateix nivell
+ * també compti.
+ */
+export interface SettingsRequest {
+  level: "page" | "block";
+  n: number;
 }
 
 interface ViewSelectionValue {
@@ -67,6 +79,10 @@ interface ViewSelectionValue {
   setUniformChoice: (pageId: string, uniform: boolean) => void;
   templatePreview: TemplatePreview | null;
   setTemplatePreview: (preview: TemplatePreview | null) => void;
+  /** L'última petició d'obrir els ajustos, si n'hi ha hagut cap */
+  settingsRequest: SettingsRequest | null;
+  /** El full demana obrir els ajustos d'un nivell (un toc, o un doble toc) */
+  requestSettings: (level: SettingsRequest["level"]) => void;
 }
 
 const noop = (): void => undefined;
@@ -84,6 +100,8 @@ const ViewSelectionContext = createContext<ViewSelectionValue>({
   setUniformChoice: noop,
   templatePreview: null,
   setTemplatePreview: noop,
+  settingsRequest: null,
+  requestSettings: noop,
 });
 
 /** El mateix element seleccionat? Serveix per saber si una caixa està marcada. */
@@ -136,6 +154,17 @@ export const ViewSelectionProvider = ({
   const [templatePreview, setTemplatePreview] =
     useState<TemplatePreview | null>(null);
 
+  const [settingsRequest, setSettingsRequest] =
+    useState<SettingsRequest | null>(null);
+  const requestSettings = useCallback(
+    (level: SettingsRequest["level"]) =>
+      setSettingsRequest((current) => ({
+        level,
+        n: (current?.n ?? 0) + 1,
+      })),
+    [],
+  );
+
   const sheetCount = isFree && pages ? pages.sheets.length : 1;
 
   // Un bloc tret, una seqüència esborrada o un canvi de disposició deixen la
@@ -176,6 +205,8 @@ export const ViewSelectionProvider = ({
       setUniformChoice,
       templatePreview,
       setTemplatePreview,
+      settingsRequest,
+      requestSettings,
     }),
     [
       current,
@@ -185,6 +216,8 @@ export const ViewSelectionProvider = ({
       uniformChoice,
       setUniformChoice,
       templatePreview,
+      settingsRequest,
+      requestSettings,
     ],
   );
 
