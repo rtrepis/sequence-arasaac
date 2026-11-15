@@ -326,8 +326,8 @@ amb el full vertical) passen en un e2e de mòbil.
 - **El `CLAUDE.md`**, a «Regles transversals», a la regla dels diàlegs: «Al mòbil, els ajustos de la
   vista van a `AppBottomSheet`, l'únic panell de baix. No és modal, i cap funció no pot dependre
   d'arribar a sencer.» Fins aquí no hi entra: una regla que el codi no compleix hi semblaria en vigor.
-- Si es decideix publicar-ho, una notícia a Novetats seguint `docs/estandards/noticies.md`, amb
-  captures de mòbil fetes amb `e2e/screenshots/`.
+- **Una notícia a Novetats** (decidit el 2026-11-15: la release no surt sense), seguint
+  `docs/estandards/noticies.md`, amb captures de mòbil fetes amb `e2e/screenshots/`. Vegeu §11.
 
 ## 7. Riscos
 
@@ -388,9 +388,10 @@ amb el full vertical) passen en un e2e de mòbil.
 
 **Què**: la fase 3, `AppBottomSheet` sol, sense tocar encara la vista.
 
-**On**: una **branca nova**, no `claude/release-before-new-plan-*`. Aquella branca és la de la release
-publicable (fase 0 i la documentació d'aquest pla); el panell és la feina següent i no ha d'endarrerir
-la release ni sortir-hi a mig fer.
+**On**: **a partir de la branca `claude/release-before-new-plan-8x1xhp`**, que ja té la fase 0 i
+tota la documentació d'aquest pla. **El panell forma part de la release** (§11): no va en una branca
+que surti després. Si la sessió nova té assignada una altra branca, ha de partir d'aquesta, no de
+`main`. Cada fase es pot provar al servidor de proves en acabar-la.
 
 **Què cal llegir abans**, i res més:
 
@@ -426,4 +427,26 @@ errors nous als fitxers tocats.
 **Avís**: a l'entorn del núvol, Playwright necessita
 `launchOptions: { executablePath: "/opt/pw-browsers/chromium" }`, perquè la versió del projecte no
 troba el navegador preinstal·lat.
+
+## 11. La release
+
+**Decidit el 2026-11-15**: la release que ve **no surt sense la vista al mòbil i sense les novetats al
+dia**. És la release d'abans del pla següent, «Estil i contingut dels blocs» (`docs/PLA-mode-lliure.md`,
+§13, «El pas següent»), que no es comença fins que aquesta és publicada. El desplegament és al
+servidor de proves, i per tant cada pas es pot provar allà a mesura que s'acaba.
+
+| Què | Estat | On és el detall |
+|---|---|---|
+| Seleccionar no mou la pàgina, enllaç «Ajustos del bloc» | ✅ Fet | Fase 0 d'aquest pla |
+| La vista al mòbil: `AppBottomSheet` i la migració de la vista | ⏳ Per fer | Fases 3 a 5 d'aquest pla |
+| L'estàndard sense la marca «Proposta» i la regla al `CLAUDE.md` | ⏳ Per fer | Fase 6 d'aquest pla |
+| **Notícia de les pàgines i la disposició** (simple, columnes, files, lliure) | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13, «Què queda obert»; en publicar-la, es treu l'etiqueta «Nou» de la fila «Disposició» (pas 8) |
+| **Notícia de la vista al mòbil** | ⏳ Per fer | Fase 6 d'aquest pla |
+| **Captures de la notícia de diverses seqüències** (`multiple-sequences`), que ensenyen una vista que ja no és així | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13 |
+| Les tres notícies de compte (N1 del backlog) | Fora | Ajornades mentre els comptes siguin apagats |
+
+**Proposta d'ordre**: primer la vista al mòbil (fases 3 a 6), i després les notícies, perquè les
+captures de totes dues notícies han de mostrar la vista ja acabada. Les dues notícies es poden
+publicar juntes, o una sola que ho expliqui tot; ho decideix `docs/estandards/noticies.md` i qui les
+escrigui, amb `docs/NOTICIES-candidates-des-de-2.0.2.md` com a referència de to.
 
