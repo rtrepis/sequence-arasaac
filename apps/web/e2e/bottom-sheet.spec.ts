@@ -109,7 +109,8 @@ const runSuite = (): void => {
 
     const show = page.getByRole("button", { name: "Mostra els ajustos" });
     await expect(show).toHaveAttribute("aria-expanded", "false");
-    await show.tap();
+    // Amagat a la vista, però a l'ordre de tabulació: s'hi arriba amb el teclat
+    await show.press("Enter");
 
     await expectSnap(page, "half");
     expect(Math.abs((await sheetTop(page)) - viewport.height / 2)).toBeLessThan(
@@ -132,7 +133,9 @@ const runSuite = (): void => {
     await expectSnap(page, "collapsed");
     expect((await fabBox()).bottom).toBeLessThanOrEqual(await sheetTop(page));
 
-    await page.getByRole("button", { name: "Mostra els ajustos" }).tap();
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
     await expectSnap(page, "half");
     await expect
       .poll(async () => (await sheetTop(page)) - (await fabBox()).bottom)
@@ -174,7 +177,9 @@ const runSuite = (): void => {
   });
 
   test("arrossegant la nansa cap avall, de mig a plegat", async ({ page }) => {
-    await page.getByRole("button", { name: "Mostra els ajustos" }).tap();
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
     await expectSnap(page, "half");
 
     const drag = await finger(page);
@@ -193,7 +198,9 @@ const runSuite = (): void => {
   test("el contingut fa scroll per dins i no mou el panell", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "Mostra els ajustos" }).tap();
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
     await expectSnap(page, "half");
     const before = await sheetTop(page);
 
@@ -214,7 +221,9 @@ const runSuite = (): void => {
   });
 
   test("res del panell no surt al paper", async ({ page }) => {
-    await page.getByRole("button", { name: "Mostra els ajustos" }).tap();
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
     await expectSnap(page, "half");
     await page.emulateMedia({ media: "print" });
 

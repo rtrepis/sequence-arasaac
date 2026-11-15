@@ -126,13 +126,38 @@ export const edgeArrow = {
   icon: appPalette.primary.contrastText,
 } as const;
 
+/** Un color `#RRGGBB` de la paleta amb transparència. */
+const translucent = (hex: string, opacity: number): string => {
+  const [r, g, b] = [1, 3, 5].map((start) =>
+    parseInt(hex.slice(start, start + 2), 16),
+  );
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+};
+
 /**
- * La capa del mòbil girat (`docs/estandards/capes-flotants.md`): blanca
- * translúcida, igual en tots dos temes, amb el text fosc de
- * `primary.contrastText`. Al 92 %, el que hi ha a sota s'endevina però no
- * distreu, i el text hi fa més de 12:1.
+ * La capa del mòbil girat (`docs/estandards/capes-flotants.md`): el fons de
+ * l'escriptori del tema (`appBackgrounds.*.default`, blanc en clar i negre en
+ * fosc) translúcid. Al 92 %, el que hi ha a sota s'endevina però no distreu. El
+ * text, el del contrast de cada tema: el fosc de `primary.contrastText` sobre
+ * blanc (més de 12:1) i el blanc del paper sobre negre (més de 15:1).
  */
-export const rotateVeil = {
-  background: "rgba(255, 255, 255, 0.92)",
-  text: appPalette.primary.contrastText,
-} as const;
+export const rotateVeil: Record<
+  "light" | "dark",
+  { background: string; text: string }
+> = {
+  light: {
+    background: translucent(appBackgrounds.light.default, 0.92),
+    text: appPalette.primary.contrastText ?? printColors.text,
+  },
+  dark: {
+    background: translucent(appBackgrounds.dark.default, 0.92),
+    text: printColors.background,
+  },
+};
+
+/**
+ * Els punts de la quadrícula del mode lliure (`GridDots`): la guia del full
+ * (`sheetGuide`) translúcida, perquè es vegin per moure-hi els blocs sense
+ * competir amb els pictogrames. Fixos en tots dos temes: són damunt del full.
+ */
+export const sheetGridDot = translucent(sheetGuide, 0.35);

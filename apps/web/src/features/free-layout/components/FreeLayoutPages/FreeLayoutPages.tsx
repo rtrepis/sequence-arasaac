@@ -171,12 +171,6 @@ interface FreeLayoutPagesProps {
   /** Clicar el títol d'una pàgina: a dalt de tot i tan gran com hi càpiga */
   onFocusPage?: (index: number) => void;
   /**
-   * Al mòbil, el que va a la capçalera de la pàgina que es mira, després de
-   * les seves accions: les sortides del document (imprimir, PDF, pantalla
-   * completa), M4 de `docs/PLA-vista-mobil.md`
-   */
-  headerActions?: React.ReactNode;
-  /**
    * Al mòbil, l'espai on ha de cabre el full de la pàgina que es mira: qui el
    * munta el mesura per encongir-hi el full (E1)
    */
@@ -200,7 +194,6 @@ const FreeLayoutPages = ({
   author,
   licence,
   onFocusPage,
-  headerActions,
   sheetAreaRef,
 }: FreeLayoutPagesProps): React.ReactElement | null => {
   const intl = useIntl();
@@ -487,7 +480,7 @@ const FreeLayoutPages = ({
         minWidth: 0,
         position: "relative",
         // Al mòbil, l'alçada que li dona la vista: el full s'hi encongeix
-        height: isNarrow ? "100%" : undefined,
+        ...(isNarrow && { flex: 1, minHeight: 0 }),
         "&:fullscreen": {
           justifyContent: "center",
           alignItems: "center",
@@ -552,8 +545,6 @@ const FreeLayoutPages = ({
                 onFocusPage={
                   onFocusPage ? () => onFocusPage(sheetIndex) : undefined
                 }
-                // Al mòbil, les sortides del document, a la mateixa fila
-                actions={isNarrow ? headerActions : undefined}
               />
             )}
 
@@ -759,10 +750,12 @@ const FreeLayoutPages = ({
         </Box>
       )}
 
-      {/* Al mòbil, «Afegeix una pàgina» és al menú «⋯» de la pàgina */}
+      {/* «Afegeix una pàgina», sota el full, també al mòbil; a la pantalla
+          completa, no */}
       <Box
         sx={{
-          display: onePage ? "none" : undefined,
+          display: inFullscreen ? "none" : undefined,
+          flexShrink: 0,
           "@media print": { display: "none" },
         }}
       >

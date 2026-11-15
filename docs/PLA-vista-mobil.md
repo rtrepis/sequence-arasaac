@@ -351,6 +351,22 @@ a `configuracions.md`, totes marcades «⏳ Proposta». **El `CLAUDE.md` no es t
   §1, la fila de dalt i la barra, la fletxa de la vora, lliscar a la pantalla completa (N1) i la capa
   del mòbil girat.
 
+**Retocs després de provar-la** (mateix dia):
+
+- **Les sortides van en una fila pròpia, a dalt de tot**, per damunt de la capçalera de la pàgina
+  (títol, repartiment, afegir, menú). **S'amaguen amb la barra de l'app** quan el panell puja, i el
+  full en guanya l'alçada. La capçalera de la pàgina torna a ser la de sempre.
+- **«Afegeix una pàgina» és sota el full**, com a l'escriptori.
+- **El botó del panell («Mostra / Amaga els ajustos») és amagat a la vista**: hi és per al teclat i
+  el lector de pantalla, i es veu quan rep el focus.
+- **La capa del mòbil girat segueix el tema**: el fons de l'escriptori translúcid, blanc en clar i
+  negre en fosc (`rotateVeil`).
+- **Els punts de la quadrícula del mode lliure són translúcids** (`sheetGridDot`), perquè es vegin
+  menys.
+- **L'escenari comença sota els bàners de l'app** (l'estil propi del document, verificar el correu…):
+  són al flux de la pàgina i l'escenari, fix, els tapava. Quan el panell puja, l'escenari (opac)
+  hi passa per damunt fins que torna a baixar.
+
 **Troballes per a la fase 5**:
 
 - **Els avisos tapen la franja de sencer.** Suren damunt del terra del panell; a sencer, el terra és

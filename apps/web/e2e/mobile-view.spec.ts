@@ -155,7 +155,9 @@ const runSuite = (): void => {
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
 
     // A mig, el full s'encongeix i hi cap sencer a sobre (E1)
-    await page.getByRole("button", { name: "Mostra els ajustos" }).tap();
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
     await expectSnap(page, "half");
     await expect
       .poll(async () => {
@@ -241,11 +243,19 @@ const runSuite = (): void => {
     await expect(levelHeader).toBeInViewport();
   });
 
-  test("a sobre del full només hi ha les sortides; la barra s'amaga amb el panell", async ({
+  test("les sortides, a dalt, s'amaguen amb la barra quan el panell puja", async ({
     page,
   }) => {
     await openInView(page, FREE_PORTRAIT);
-    await expect(page.getByRole("button", { name: "Imprimir" })).toBeVisible();
+    const print = page.getByRole("button", { name: "Imprimir" });
+    await expect(print).toBeVisible();
+    // A dalt de tot, per damunt de la capçalera de la pàgina
+    const pageTitle = page.getByRole("button", { name: "Pàgina 1 de 2" });
+    expect((await boxOf(print)).y).toBeLessThan((await boxOf(pageTitle)).y);
+    // I sota del full, «Afegeix una pàgina», com a l'escriptori
+    await expect(
+      page.getByRole("button", { name: "Afegeix una pàgina" }),
+    ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Orientació de pàgina" }),
     ).toHaveCount(0);
@@ -255,12 +265,18 @@ const runSuite = (): void => {
 
     const bar = page.locator("header.MuiAppBar-root");
     await expect(bar).toBeInViewport();
-    await page.getByRole("button", { name: "Mostra els ajustos" }).tap();
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
     await expectSnap(page, "half");
     await expect(bar).not.toBeInViewport();
-    await page.getByRole("button", { name: "Amaga els ajustos" }).tap();
+    await expect(print).toBeHidden();
+    await page
+      .getByRole("button", { name: "Amaga els ajustos" })
+      .press("Enter");
     await expectSnap(page, "collapsed");
     await expect(bar).toBeInViewport();
+    await expect(print).toBeVisible();
   });
 
   test("tocar la vora fa sortir la fletxa, que passa de pàgina", async ({

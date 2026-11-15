@@ -1,5 +1,6 @@
 import {
   Box,
+  Collapse,
   Divider,
   GlobalStyles,
   Stack,
@@ -114,6 +115,36 @@ const PREVIEW_COLUMN_GAP = 16;
  * tapa, deixant-ne la franja que torna a mig (`docs/PLA-vista-mobil.md`, §4).
  */
 const MOBILE_STAGE_BOTTOM = `min(${floatingFloorCss}, 50dvh)`;
+
+/**
+ * Al mòbil, el que ocupen els bàners que l'app posa a dalt del contingut (l'estil
+ * propi del document, verificar el correu…), en px: van al flux de la pàgina, i
+ * l'escenari del full, que és fix, ha de començar a sota perquè no els tapi.
+ * Retorna on acaben (la vora de dalt de l'element `ref`, que va al flux just on
+ * comença la vista), o zero si no n'hi ha cap; se segueix quan un bàner surt o
+ * es tanca.
+ */
+const useBannersBottom = (): [(node: HTMLElement | null) => void, number] => {
+  const [node, setNode] = useState<HTMLElement | null>(null);
+  const [height, setHeight] = useState(0);
+  useEffect(() => {
+    const main = node?.closest("main");
+    if (!node || !main) return undefined;
+    const update = () => {
+      const top = node.getBoundingClientRect().top;
+      // Res entre el començament del contingut i la vista: no hi ha bàners
+      setHeight(
+        top - main.getBoundingClientRect().top > 0 ? Math.round(top) : 0,
+      );
+    };
+    update();
+    if (typeof ResizeObserver === "undefined") return undefined;
+    const observer = new ResizeObserver(update);
+    observer.observe(main);
+    return () => observer.disconnect();
+  }, [node]);
+  return [setNode, height];
+};
 
 /**
  * Porta un element a dalt del contenidor que es desplaça i el conté (al mòbil,
@@ -304,6 +335,7 @@ const ViewSequencesSettingsContent = ({
   // Amb el panell a mig o a sencer, la barra de l'app s'amaga i el full en
   // guanya l'alçada (M5)
   const panelRaised = useFloatingRaised();
+  const [bannersRef, bannersBottom] = useBannersBottom();
   const [settingsOpen, setSettingsOpen] = useState(true);
   const [fit, setFit] = useState<PreviewFit>("page");
   const settingsVisible = !isWideScreen || settingsOpen;
@@ -710,13 +742,15 @@ const ViewSequencesSettingsContent = ({
     requestSettings("page");
   };
 
-  // La pàgina única (sense pàgines pròpies): la capçalera, el full i, a
-  // l'escriptori, «Afegeix una pàgina» a sota
+  // La pàgina única (sense pàgines pròpies): la capçalera, el full i
+  // «Afegeix una pàgina» a sota
   const singlePage = (
-    <Stack sx={{ minWidth: 0, height: isWideScreen ? undefined : "100%" }}>
+    <Stack
+      sx={{ minWidth: 0, ...(!isWideScreen && { flex: 1, minHeight: 0 }) }}
+    >
       {/* La capçalera de la pàgina única, com la de les pàgines del
           document: des de l'inici s'hi poden afegir pàgines. La pantalla
-          completa com a paper no en té. Al mòbil, hi van les sortides */}
+          completa com a paper no en té */}
       {!isFullscreen && (
         <SinglePageHeader
           slot="header"
@@ -724,7 +758,6 @@ const ViewSequencesSettingsContent = ({
             setFit("page");
             scrollPageToTop(0);
           }}
-          actions={isWideScreen ? undefined : renderToolbar(false, false)}
         />
       )}
       {/* Al mòbil, l'espai que té el full: s'hi encongeix sencer (E1) */}
@@ -847,9 +880,8 @@ const ViewSequencesSettingsContent = ({
         </Box>
       </Box>
 
-      {/* A l'escriptori, «Afegeix una pàgina» sota el full; al mòbil
-          és al menú «⋯» de la capçalera */}
-      {!isFullscreen && isWideScreen && <SinglePageHeader slot="footer" />}
+      {/* «Afegeix una pàgina» sota el full, com a les pàgines del document */}
+      {!isFullscreen && <SinglePageHeader slot="footer" />}
     </Stack>
   );
 
@@ -867,7 +899,6 @@ const ViewSequencesSettingsContent = ({
         setFit("page");
         scrollPageToTop(index);
       }}
-      headerActions={isWideScreen ? undefined : renderToolbar(false, false)}
       sheetAreaRef={isWideScreen ? undefined : sheetAreaRef}
     />
   ) : (
@@ -1087,22 +1118,43 @@ const ViewSequencesSettingsContent = ({
                 },
               }}
             />
+            {/* On comença la vista al flux: sota els bàners de l'app */}
+            <Box ref={bannersRef} aria-hidden />
             <Box
               data-testid="view-mobile-stage"
               sx={(muiTheme) => ({
                 position: "fixed",
                 left: 0,
                 right: 0,
-                top: panelRaised ? 0 : APP_BAR_HEIGHT,
+                // Sota la barra i els bàners de l'app; amb el panell a mig o a
+                // sencer, la barra s'amaga i el full en guanya l'alçada (els
+                // bàners hi queden sota fins que el panell baixa)
+                top: panelRaised ? 0 : Math.max(APP_BAR_HEIGHT, bannersBottom),
                 bottom: MOBILE_STAGE_BOTTOM,
                 display: "flex",
                 flexDirection: "column",
+                // Opac: quan puja per damunt dels bàners, no s'hi han de veure
+                backgroundColor: "background.default",
                 paddingInline: 0.5,
                 paddingBottom: 1,
                 transition: `top ${muiTheme.transitions.duration.standard}ms`,
                 "@media print": { position: "static" },
               })}
             >
+              {/* Les sortides del document, a dalt de tot (M4): s'amaguen
+                  amb la barra de l'app quan el panell puja, i el full en
+                  guanya l'alçada */}
+              <Collapse
+                in={!panelRaised}
+                timeout={theme.transitions.duration.standard}
+                sx={{ flexShrink: 0 }}
+              >
+                <NotPrint>
+                  <Stack direction="row" justifyContent="end">
+                    {renderToolbar(false, false)}
+                  </Stack>
+                </NotPrint>
+              </Collapse>
               {sheets}
             </Box>
 

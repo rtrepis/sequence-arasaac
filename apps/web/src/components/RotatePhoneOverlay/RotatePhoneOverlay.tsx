@@ -66,8 +66,9 @@ const RotatePhoneOverlay = ({
         gap: 2,
         padding: 3,
         textAlign: "center",
-        backgroundColor: rotateVeil.background,
-        color: rotateVeil.text,
+        // El fons de l'escriptori del tema, translúcid: blanc en clar, negre en fosc
+        backgroundColor: rotateVeil[theme.palette.mode].background,
+        color: rotateVeil[theme.palette.mode].text,
         "@media print": { display: "none" },
       })}
     >

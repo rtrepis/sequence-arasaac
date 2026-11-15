@@ -38,12 +38,6 @@ interface PageHeaderProps {
   onAddSequence: () => void;
   /** Clicar el títol: la pàgina, a dalt de tot i tan gran com hi càpiga */
   onFocusPage?: () => void;
-  /**
-   * El que va al final de la fila, després del menú de la pàgina: al mòbil, les
-   * sortides del document (M4 de `docs/PLA-vista-mobil.md`). Passar de pàgina
-   * és lliscar o les fletxes de la vora
-   */
-  actions?: React.ReactNode;
 }
 
 /**
@@ -60,7 +54,6 @@ const PageHeader = ({
   active = false,
   onAddSequence,
   onFocusPage,
-  actions,
 }: PageHeaderProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -224,7 +217,6 @@ const PageHeader = ({
         sheetCount={sheetCount}
         onAddSequence={onAddSequence}
       />
-      {actions}
     </Stack>
   );
 };

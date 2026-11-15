@@ -46,6 +46,22 @@ import { useVisibleViewport } from "./useVisibleViewport";
  */
 const DRAG_THRESHOLD = 6;
 
+/**
+ * Amagat només a la vista: continua a l'arbre d'accessibilitat i a l'ordre de
+ * tabulació (el patró «visually hidden»).
+ */
+const VISUALLY_HIDDEN = {
+  border: 0,
+  clip: "rect(0 0 0 0)",
+  height: "1px",
+  width: "1px",
+  margin: "-1px",
+  padding: 0,
+  overflow: "hidden",
+  position: "absolute",
+  whiteSpace: "nowrap",
+} as const;
+
 /** Durada de la transició entre parades, en ms. */
 const SNAP_TRANSITION_MS = 250;
 
@@ -356,7 +372,10 @@ const AppBottomSheet = ({
           >
             <Box sx={{ flex: 1, minWidth: 0 }}>{header}</Box>
             {/* Plegat ↔ mig, i diu què farà. A sencer no hi porta cap botó:
-                sencer no dona res que mig no tingui (M3) */}
+                sencer no dona res que mig no tingui (M3). **Amagat només a la
+                vista**: és a l'arbre d'accessibilitat i a l'ordre de
+                tabulació, i es veu quan rep el focus. Amb el dit, el panell
+                es mou per la nansa, i el toc al full o a les molles el puja */}
             <StyledButton
               color="inherit"
               size="small"
@@ -370,7 +389,11 @@ const AppBottomSheet = ({
                   <MdExpandLess aria-hidden />
                 )
               }
-              sx={{ flexShrink: 0, minHeight: APP_TOUCH_TARGET_MIN }}
+              sx={{
+                flexShrink: 0,
+                minHeight: APP_TOUCH_TARGET_MIN,
+                "&:not(:focus-visible)": VISUALLY_HIDDEN,
+              }}
             >
               {isExpanded ? hideLabel : showLabel}
             </StyledButton>

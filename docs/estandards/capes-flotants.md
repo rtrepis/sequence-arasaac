@@ -99,7 +99,10 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   pot arrossegar res.
 - **Es mou per la nansa i la capçalera, mai pel contingut**, que es desplaça per
   dins (`overscroll-behavior: contain`). A la capçalera, un botó alterna plegat ↔
-  mig, diu què farà i porta `aria-expanded`.
+  mig, diu què farà i porta `aria-expanded`. **El botó és amagat només a la
+  vista**: és a l'arbre d'accessibilitat i a l'ordre de tabulació, i es veu quan
+  rep el focus. Amb el dit, el panell es mou per la nansa, i qui el munta l'ha de
+  poder pujar d'un toc d'una altra manera (a la vista, tocar el full o les molles).
 - **A sencer només s'hi arriba arrossegant; per això cap funció no pot dependre
   de sencer.** A mig hi ha d'haver tot, amb el seu scroll: sencer és comoditat.
   És el que fa que arrossegar no trenqui el criteri WCAG 2.5.7.
@@ -126,8 +129,9 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 ## La capa del mòbil girat — ⏳ Proposta
 
 - Per sota de `md`, una pàgina que **només es treballa amb el mòbil dret** ho diu
-  amb una capa: **blanca translúcida** (un token de `palette.ts`, igual en tots
-  dos temes), una **icona animada** de girar el mòbil i el text que ho explica.
+  amb una capa: **el fons de l'escriptori del tema, translúcid** (blanc en clar,
+  negre en fosc; `rotateVeil` de `palette.ts`), una **icona animada** de girar el
+  mòbil i el text que ho explica.
 - **No es tanca**: desapareix en tornar a posar el mòbil dret. No és un avís que
   es pugui despatxar, perquè la pàgina de sota no funciona girada.
 - **No surt a la pantalla completa**, que en horitzontal sí que té sentit.

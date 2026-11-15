@@ -15,8 +15,6 @@ interface SinglePageHeaderProps {
   slot: "header" | "footer";
   /** Clicar el títol: la pàgina, a dalt de tot i tan gran com hi càpiga */
   onFocusPage?: () => void;
-  /** Al mòbil, les sortides del document, al final de la fila */
-  actions?: React.ReactNode;
 }
 
 /**
@@ -24,12 +22,11 @@ interface SinglePageHeaderProps {
  * sempre): la mateixa que la de les altres pàgines, perquè des de l'inici es
  * puguin afegir pàgines, passar-la a blocs o afegir-hi seqüències. Qualsevol
  * d'aquestes accions fa explícita la pàgina (`explicitPages`). A sota del
- * full, a l'escriptori, «Afegeix una pàgina», com a les pàgines del document.
+ * full, «Afegeix una pàgina», com a les pàgines del document.
  */
 const SinglePageHeader = ({
   slot,
   onFocusPage,
-  actions,
 }: SinglePageHeaderProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -38,7 +35,7 @@ const SinglePageHeader = ({
 
   if (slot === "footer")
     return (
-      <Box sx={{ "@media print": { display: "none" } }}>
+      <Box sx={{ flexShrink: 0, "@media print": { display: "none" } }}>
         <StyledButton
           color="inherit"
           startIcon={<MdAdd />}
@@ -63,7 +60,6 @@ const SinglePageHeader = ({
         continuous
         onAddSequence={() => setAdding(true)}
         onFocusPage={onFocusPage}
-        actions={actions}
       />
       <AddSequenceDialog
         sheetIndex={adding ? 0 : null}
