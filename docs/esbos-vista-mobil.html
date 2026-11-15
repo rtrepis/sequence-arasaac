@@ -24,6 +24,10 @@
     --app-bar: #8AC34A;
     --app-bar-ink: #1E2A12;
     --scrim: rgba(20, 26, 12, 0.55);
+    /* N4: la fletxa de la vora, semitransparent; N3: la capa del mòbil girat, blanca als dos temes */
+    --arrow-veil: rgba(242, 245, 236, 0.55);
+    --rotate-veil: rgba(255, 255, 255, 0.88);
+    --rotate-ink: #1E2A12;
     --sheet: #FFFFFF;
     --sheet-ink: #1E1E1E;
     --sheet-soft: #6B6B6B;
@@ -42,7 +46,7 @@
       --line: rgba(233, 237, 225, 0.15); --line-strong: rgba(233, 237, 225, 0.32);
       --accent: #A8D46B; --accent-bright: #8AC34A; --on-accent: #1E2A12;
       --app-desk: #121212; --app-paper: #242820; --app-bar: #8AC34A; --app-bar-ink: #1E2A12;
-      --scrim: rgba(0, 0, 0, 0.6);
+      --scrim: rgba(0, 0, 0, 0.6); --arrow-veil: rgba(36, 40, 32, 0.55);
       color-scheme: dark;
     }
   }
@@ -52,7 +56,7 @@
     --line: rgba(233, 237, 225, 0.15); --line-strong: rgba(233, 237, 225, 0.32);
     --accent: #A8D46B; --accent-bright: #8AC34A; --on-accent: #1E2A12;
     --app-desk: #121212; --app-paper: #242820; --app-bar: #8AC34A; --app-bar-ink: #1E2A12;
-    --scrim: rgba(0, 0, 0, 0.6);
+    --scrim: rgba(0, 0, 0, 0.6); --arrow-veil: rgba(36, 40, 32, 0.55);
     color-scheme: dark;
   }
 
@@ -150,13 +154,34 @@
   .cases button[aria-pressed="true"] { background: var(--accent-bright); color: var(--on-accent); border-color: transparent; font-weight: 700; }
   .ibtn { width: 38px; height: 38px; border: 0; background: transparent; border-radius: 19px; display: grid; place-items: center; color: var(--ink); }
   .ibtn svg { width: 22px; height: 22px; }
-  /* N1: passar de pàgina tocant als costats */
-  .side { position: absolute; z-index: 3; border: 0; display: grid; place-items: center; color: var(--ink); }
+  /* N1 i N4: tocar la vora fa sortir una fletxa semitransparent uns segons */
+  .side {
+    position: absolute; z-index: 4; width: 44px; height: 44px; top: 50%; margin-top: -22px; border: 0;
+    border-radius: 22px; background: var(--arrow-veil); color: var(--ink); font-size: 26px; line-height: 1;
+    display: grid; place-items: center;
+  }
   .side[hidden] { display: none; }
-  .side.arrow { width: 44px; height: 44px; top: 50%; margin-top: -22px; border-radius: 22px; background: var(--app-paper); box-shadow: 0 1px 6px rgba(0,0,0,.25); font-size: 26px; line-height: 1; }
-  .side.zone { top: 0; bottom: 0; width: 18%; background: transparent; font-size: 0; }
-  .side.prev.arrow { left: 4px; } .side.next.arrow { right: 4px; }
-  .side.prev.zone { left: 0; } .side.next.zone { right: 0; }
+  .side.prev { left: 6px; } .side.next { right: 6px; }
+
+  /* La pantalla completa: només el full; s'hi passa de pàgina, no s'hi selecciona */
+  .sim.fs .appbar, .sim.fs .toolbar, .sim.fs .panel, .sim.fs .fab, .sim.fs .strip { display: none !important; }
+  .sim.fs .stage { z-index: 20; background: var(--app-desk); }
+  .fsexit {
+    position: absolute; top: calc(10px + env(safe-area-inset-top, 0px)); right: 10px; z-index: 21; border: 0;
+    border-radius: 16px; padding: 6px 12px; background: var(--arrow-veil); color: var(--ink); font-size: 13px; font-weight: 700;
+  }
+  .fsexit[hidden] { display: none; }
+
+  /* N3: el mòbil girat */
+  .veil {
+    position: absolute; inset: 0; z-index: 60; background: var(--rotate-veil); color: var(--rotate-ink);
+    display: grid; place-content: center; justify-items: center; gap: 14px; text-align: center; padding: 24px; font-weight: 700;
+  }
+  .veil[hidden] { display: none; }
+  .veil svg { width: 72px; height: 72px; animation: turn 2.4s ease-in-out infinite; }
+  @keyframes turn { 0%, 20% { transform: rotate(-90deg); } 45%, 80% { transform: rotate(0deg); } 100% { transform: rotate(-90deg); } }
+  .rotate-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  body.device .rotate-row { display: none; }
 
   .stage { position: absolute; left: 0; right: 0; z-index: 1; display: grid; place-items: center; overflow: hidden; touch-action: pan-y; }
   .paperbox { position: relative; }
@@ -230,14 +255,15 @@
 
   @media (prefers-reduced-motion: reduce) {
     .panel, .fab, .phone, .chev { transition: none; }
+    .veil svg { animation: none; }
   }
 </style>
 
 <div class="wrap">
   <header class="top">
-    <p class="eyebrow">Esbós v2 · docs/PLA-vista-mobil.md · fase 1</p>
+    <p class="eyebrow">Esbós v3 · docs/PLA-vista-mobil.md · fase 1</p>
     <h1>La vista al mòbil, amb els ajustos en un panell de baix</h1>
-    <p class="lede">La versió 2 ja porta les decisions del 15 de novembre. Prova-ho amb el dit: obre aquesta pàgina al mòbil o a la tauleta i ocuparà tota la pantalla, com l'app. Els botons 1, 2 i 3 de la barra verda són els casos que fallaven. A «Notes» hi ha què cal provar i les tres preguntes que queden.</p>
+    <p class="lede">La versió 3 ja porta totes les decisions del 15 de novembre. Prova-ho amb el dit: obre aquesta pàgina al mòbil o a la tauleta i ocuparà tota la pantalla, com l'app. Els botons 1, 2 i 3 de la barra verda són els casos que fallaven. A «Notes» hi ha què cal provar i les dues preguntes que queden.</p>
   </header>
 
   <div class="layout">
@@ -262,15 +288,16 @@
             <button class="ibtn" type="button" aria-label="Descarrega PDF" title="Descarrega PDF (a l'esbós no fa res)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><path d="M9 14h6M9 17h4"/></svg>
             </button>
-            <button class="ibtn" type="button" aria-label="Pantalla completa" title="Pantalla completa (a l'esbós no fa res)">
+            <button class="ibtn" id="fsBtn" type="button" aria-label="Pantalla completa" title="Pantalla completa">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
             </button>
           </div>
           <div class="stage" id="stage">
             <div class="paperbox" id="paperbox"><div class="paper" id="paper"></div></div>
-            <button class="side prev arrow" id="pgPrev" type="button" aria-label="Pàgina anterior" hidden>‹</button>
-            <button class="side next arrow" id="pgNext" type="button" aria-label="Pàgina següent" hidden>›</button>
+            <button class="side prev" id="pgPrev" type="button" aria-label="Pàgina anterior" hidden>‹</button>
+            <button class="side next" id="pgNext" type="button" aria-label="Pàgina següent" hidden>›</button>
           </div>
+          <button class="fsexit" id="fsExit" type="button" hidden>Surt de la pantalla completa</button>
 
           <button class="strip" id="strip" type="button" hidden>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 15l6-6 6 6" transform="rotate(180 12 12)"/></svg>
@@ -288,10 +315,18 @@
             <div class="pbody" id="pbody"></div>
           </section>
 
+          <div class="veil" id="veil" role="status" hidden>
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="20" y="6" width="24" height="44" rx="5"/><path d="M29 43h6"/><path d="M50 56a22 22 0 0 0 8-14" /><path d="M54 40l4 2 2-4"/></svg>
+            <p>Gira el mòbil: la vista es treballa amb el mòbil dret</p>
+          </div>
+
           <div class="fab" id="fab" aria-hidden="true" title="El botó d'estat del document: puja damunt del panell">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
           </div>
         </div>
+      </div>
+      <div class="rotate-row">
+        <button class="chip" id="simRot" type="button" aria-pressed="false">Simula el mòbil girat</button>
       </div>
     </div>
 
@@ -302,13 +337,16 @@
         <h2>Què cal provar</h2>
         <ol>
           <li><b>Cas 1, dues files.</b> Toca la fila de dalt. El panell puja a mig, la barra verda s'amaga i la fila continua a la vista. Mou «Mida» i mira com canvia.</li>
+          <li><b>Tocar el full.</b> Toca el full fora de les seqüències: el panell porta a «Pàgina» (D2, N5).</li>
           <li><b>Cas 2, full vertical.</b> Toca la seqüència de dalt i la de baix. Cap de les dues no ha de sortir de la pantalla.</li>
-          <li><b>Cas 3, blocs i pàgines.</b> Arrossega un bloc pel full: es mou el bloc. Passa de pàgina amb les fletxes dels costats i lliscant en horitzontal fora dels blocs (N1).</li>
-          <li><b>Tornar la barra.</b> Amb el panell a mig, llisca cap avall sobre el full, fora dels blocs (N2).</li>
-          <li><b>Girar el full.</b> Ara és un ajust: «Document» › «Orientació».</li>
+          <li><b>Cas 3, disposició lliure.</b> Un toc a un bloc el selecciona i el panell no es mou; arrossega'l. Un doble toc obre els seus ajustos (D1).</li>
+          <li><b>Passar de pàgina</b> (cas 3). Llisca en horitzontal fora dels blocs. O toca a la vora del mòbil: surt la fletxa uns segons (N1, N4).</li>
+          <li><b>Pantalla completa</b> (cas 3). L'últim botó de dalt. Llisca o toca la vora per passar de pàgina.</li>
+          <li><b>La barra verda.</b> Amb el panell a mig s'amaga, i torna en baixar-lo a plegat (N2).</li>
+          <li><b>Girar el full.</b> És un ajust: «Document» › «Orientació».</li>
           <li><b>Perdre el full.</b> Arrossega la nansa fins a dalt de tot. La franja fosca de dalt el torna a mig.</li>
           <li><b>Escriure.</b> A «Document», toca «Autor del document»: el teclat no ha de tapar el camp.</li>
-          <li><b>Gira el mòbil.</b> No és una manera de treballar (M6): només cal que no es trenqui res (N3).</li>
+          <li><b>Gira el mòbil.</b> Surt la capa que demana tornar-lo a posar dret (N3). A la pantalla completa, no.</li>
         </ol>
         <p class="hint">Les opcions marcades <span class="live">en viu</span> canvien l'esbós: es poden comparar abans de decidir.</p>
       </section>
@@ -322,11 +360,16 @@
           <li><b>M4</b> A dalt, la pàgina on s'és i les sortides: imprimir, PDF, pantalla completa. Girar el full va a «Document». Es passa de pàgina tocant als costats i lliscant.</li>
           <li><b>M6</b> El mòbil en horitzontal no és una manera de treballar.</li>
           <li><b>M7, M8, M9 i E1</b> Panell a la tauleta en vertical; tocar un bloc puja el panell a mig; la franja de la fase 0 es queda; el full s'encongeix.</li>
+          <li><b>N1</b> Es passa de pàgina lliscant, també a la pantalla completa. Tocar la vora fa sortir una fletxa semitransparent uns segons.</li>
+          <li><b>N2</b> La barra verda només torna baixant el panell a plegat.</li>
+          <li><b>N3</b> El mòbil girat mostra una capa blanca translúcida amb una icona de girar-lo.</li>
+          <li><b>D1</b> A la disposició lliure, un toc selecciona un bloc i un doble toc n'obre els ajustos.</li>
+          <li><b>D2</b> Tocar el full fora dels blocs porta al nivell «Pàgina».</li>
         </ul>
       </section>
 
       <section class="card" id="decisions">
-        <h2>Per confirmar (§9b del pla)</h2>
+        <h2>Per confirmar (§9c del pla)</h2>
         <div id="decisionList"></div>
         <div class="copyrow">
           <button class="btn" id="copyBtn" type="button">Copia les respostes</button>
@@ -385,8 +428,8 @@
     caseIdx: 0, page: 0, selection: null, snap: "collapsed", sheetH: 0,
     licence: true, author: "Aula de Suport", pageGap: 30,
     open: { document: true, page: true, block: true },
-    opts: { mid: 0.5, raise: true, shrink: true, autoHide: true, sides: "arrow", swipeBar: true },
-    barShown: false,
+    opts: { mid: 0.5, raise: true, shrink: true, autoHide: true, arrowMs: 3000, pageRaise: true },
+    barShown: false, fs: false, rotSim: false,
   };
   const cur = () => CASES[state.caseIdx];
   const curPage = () => cur().pages[state.page];
@@ -462,10 +505,27 @@
     sim.dataset.appbar = hide ? "hide" : "show";
   };
 
+  // N3: la capa del mòbil girat; a la pantalla completa no surt
+  const applyVeil = () => {
+    const turned = document.body.classList.contains("device") && window.innerWidth > window.innerHeight;
+    $("veil").hidden = state.fs || !(turned || state.rotSim);
+  };
+
   const layout = () => {
     applyBar();
+    applyVeil();
     const m = metrics();
     const stageW = m.simW;
+    if (state.fs) {
+      stage.style.top = "0px"; stage.style.height = m.simH + "px";
+      const { w, h } = paperSize();
+      const sc = Math.min((stageW - 20) / w, (m.simH - 20) / h);
+      paper.style.transform = `scale(${sc})`;
+      paperbox.style.width = w * sc + "px"; paperbox.style.height = h * sc + "px";
+      paper.dataset.scale = sc;
+      $("pgLabel").textContent = `Pàgina ${state.page + 1} de ${cur().pages.length}`;
+      return;
+    }
     if (!panel.classList.contains("dragging")) state.sheetH = snapHeight(state.snap, m);
     panel.style.height = state.sheetH + "px";
     // Amb «s'encongeix», el full es fa lloc a sobre del panell fins a mig; amb «tapa», només el plegat
@@ -482,14 +542,6 @@
     paper.dataset.scale = scale;
     toggleBtn.textContent = state.snap === "collapsed" ? "Mostra els ajustos" : "Amaga els ajustos";
     toggleBtn.setAttribute("aria-expanded", String(state.snap !== "collapsed"));
-    // N1: les fletxes (o les zones) dels costats, només amb més d'una pàgina
-    const many = cur().pages.length > 1;
-    for (const [id, on] of [["pgPrev", state.page > 0], ["pgNext", state.page < cur().pages.length - 1]]) {
-      const b = $(id);
-      b.hidden = !many || !on;
-      b.classList.toggle("arrow", state.opts.sides === "arrow");
-      b.classList.toggle("zone", state.opts.sides === "zone");
-    }
     $("pgLabel").textContent = `Pàgina ${state.page + 1} de ${cur().pages.length}`;
   };
 
@@ -558,16 +610,36 @@
   };
 
   // ---------- Seleccionar ----------
-  const select = (id) => {
-    if (state.selection === id) return;
+  // `raise`: si el toc ha de portar el panell a mig (M8; a la disposició lliure, només el doble toc, D1)
+  const select = (id, raise) => {
+    if (state.selection === id && !raise) return;
     state.selection = id;
     // Amb una selecció, Document i Pàgina es pleguen (P1); sense, tot obert
     state.open = id ? { document: false, page: false, block: true } : { document: true, page: true, block: true };
-    // Plegat o sencer, el panell va a mig: el bloc tocat ha de quedar a la vista (M8)
-    if (id && state.opts.raise && state.snap !== "mid") { state.snap = "mid"; state.barShown = false; }
+    // Plegat o sencer, el panell va a mig: el bloc tocat ha de quedar a la vista
+    if (id && raise && state.opts.raise && state.snap !== "mid") { state.snap = "mid"; state.barShown = false; }
     renderPaper(); renderLevels(); layout();
     if (id) requestAnimationFrame(() => scrollToLevel("block"));
   };
+  // D2: tocar el full fora dels blocs porta al nivell «Pàgina» (N5: i, si es vol, puja el panell)
+  const focusPage = (raise) => {
+    state.selection = null;
+    state.open = { document: false, page: true, block: false };
+    if (raise && state.opts.pageRaise && state.snap !== "mid") { state.snap = "mid"; state.barShown = false; }
+    renderPaper(); renderLevels(); layout();
+    requestAnimationFrame(() => scrollToLevel("page"));
+  };
+
+  // N1 i N4: la fletxa de la vora surt uns segons, i cada pas de pàgina torna a comptar
+  const arrowTimers = {};
+  const reveal = (side) => {
+    const ok = cur().pages.length > 1 && (side === "prev" ? state.page > 0 : state.page < cur().pages.length - 1);
+    const id = side === "prev" ? "pgPrev" : "pgNext";
+    clearTimeout(arrowTimers[id]);
+    $(id).hidden = !ok;
+    if (ok) arrowTimers[id] = setTimeout(() => { $(id).hidden = true; }, state.opts.arrowMs);
+  };
+  const hideArrows = () => { for (const id of ["pgPrev", "pgNext"]) { clearTimeout(arrowTimers[id]); $(id).hidden = true; } };
 
   // ---------- Gestos sobre el full: seleccionar, arrossegar blocs, lliscar de pàgina ----------
   let gesture = null;
@@ -597,23 +669,40 @@
       g.el.style.left = g.b.x + "px"; g.el.style.top = g.b.y + "px";
     }
   });
+  let lastTap = { key: null, t: 0 };
   const endGesture = (e) => {
     if (!gesture) return;
     const g = gesture; gesture = null;
     const dx = e.clientX - g.x, dy = e.clientY - g.y;
-    if (g.block && g.moved) { select(g.block.b.id); return; }
-    if (!g.moved) { select(g.id); return; }
-    // Lliscament horitzontal clar, fora dels blocs: canvia de pàgina
+    // Arrossegar un bloc el selecciona sense pujar el panell
+    if (g.block && g.moved) { if (!state.fs) select(g.block.b.id, false); return; }
+    if (!g.moved) {
+      const r = stage.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const side = x < r.width * 0.15 ? "prev" : x > r.width * 0.85 ? "next" : null;
+      // A la pantalla completa no es selecciona: només la fletxa de la vora
+      if (state.fs) { if (side) reveal(side); return; }
+      // La vora, fora dels blocs i amb més d'una pàgina: només la fletxa
+      if (!g.id && side && cur().pages.length > 1) { reveal(side); return; }
+      // D1: a la disposició lliure, un toc selecciona i el doble toc obre els ajustos
+      const free = curPage().kind === "blocks";
+      const key = g.id || "page";
+      const now = performance.now();
+      const double = lastTap.key === key && now - lastTap.t < 350;
+      lastTap = { key, t: now };
+      const raise = free ? double : true;
+      if (g.id) select(g.id, raise); else focusPage(raise);
+      return;
+    }
+    // Lliscament horitzontal clar, fora dels blocs: canvia de pàgina (també a la pantalla completa)
     if (!g.block && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) goPage(state.page + (dx < 0 ? 1 : -1));
-    // N2: un lliscament cap avall sobre el full torna la barra de l'app
-    else if (!g.block && state.opts.swipeBar && dy > 50 && dy > Math.abs(dx) * 1.5 && !state.barShown) { state.barShown = true; layout(); }
   };
   stage.addEventListener("pointerup", endGesture);
   stage.addEventListener("pointercancel", () => { gesture = null; });
   stage.addEventListener("keydown", (e) => {
     const t = e.target.closest("[data-id]");
-    if (t && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(t.dataset.id); }
-    if (e.key === "Escape") select(null);
+    if (t && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(t.dataset.id, true); }
+    if (e.key === "Escape") { if (state.fs) exitFs(); else select(null, false); }
   });
 
   const goPage = (i) => {
@@ -621,8 +710,22 @@
     state.page = i; state.selection = null; state.open = { document: true, page: true, block: true };
     renderPaper(); renderLevels(); layout();
   };
-  $("pgPrev").addEventListener("click", () => goPage(state.page - 1));
-  $("pgNext").addEventListener("click", () => goPage(state.page + 1));
+  // Passar de pàgina torna a comptar el temps de la fletxa, per passar-ne diverses seguides
+  $("pgPrev").addEventListener("click", () => { goPage(state.page - 1); reveal("prev"); });
+  $("pgNext").addEventListener("click", () => { goPage(state.page + 1); reveal("next"); });
+
+  // La pantalla completa
+  const exitFs = () => { state.fs = false; sim.classList.remove("fs"); $("fsExit").hidden = true; hideArrows(); layout(); };
+  $("fsBtn").addEventListener("click", () => {
+    state.fs = true; state.selection = null; sim.classList.add("fs"); $("fsExit").hidden = false;
+    hideArrows(); renderPaper(); renderLevels(); layout();
+  });
+  $("fsExit").addEventListener("click", exitFs);
+  $("simRot").addEventListener("click", (e) => {
+    state.rotSim = !state.rotSim;
+    e.currentTarget.setAttribute("aria-pressed", String(state.rotSim));
+    layout();
+  });
 
   // ---------- El panell: nansa, botons i franja ----------
   let drag = null;
@@ -703,18 +806,17 @@
 
   // ---------- Casos, girar el full i girar el telèfon ----------
   document.querySelectorAll("[data-case]").forEach((b) => b.addEventListener("click", () => {
-    state.caseIdx = Number(b.dataset.case); state.page = 0; state.selection = null;
+    state.caseIdx = Number(b.dataset.case); state.page = 0; state.selection = null; hideArrows();
     state.open = { document: true, page: true, block: true };
     document.querySelectorAll("[data-case]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     renderPaper(); renderLevels(); layout();
   }));
   // ---------- Les decisions ----------
   const DECISIONS = [
-    { id: "N1", q: "Com és «tocar als costats» per passar de pàgina (prova-ho al cas 3)", opts: ["Una fletxa visible a cada costat, de 44 px (proposta)", "Tota la franja del costat, sense fletxa"], live: "sides", values: ["arrow", "zone"] },
-    { id: "N2", q: "Què torna la barra de l'app quan el panell és a mig o a sencer", opts: ["Lliscar cap avall sobre el full, i baixar el panell a plegat (proposta)", "Només baixar el panell a plegat"], live: "swipeBar", values: [true, false] },
-    { id: "N3", q: "Què passa si es gira el mòbil", opts: ["Res d'especial: la mateixa disposició, sense avís (proposta)", "Un avís: «La vista es treballa amb el mòbil dret»"] },
+    { id: "N4", q: "Quant de temps es veu la fletxa de la vora (prova-ho al cas 3)", opts: ["3 segons (proposta)", "2 segons", "5 segons"], live: "arrowMs", values: [3000, 2000, 5000] },
+    { id: "N5", q: "Tocar el full fora dels blocs puja el panell, com tocar un bloc", opts: ["Sí, amb la mateixa regla: un toc; a la disposició lliure, doble toc (proposta)", "No: el panell no es mou, només canvia el nivell obert"], live: "pageRaise", values: [true, false] },
   ];
-  const STORE = "esbos-vista-mobil-respostes-v2";
+  const STORE = "esbos-vista-mobil-respostes-v3";
   let answers = {};
   try { answers = JSON.parse(localStorage.getItem(STORE) || "{}") || {}; } catch (_) { answers = {}; }
   const save = () => { try { localStorage.setItem(STORE, JSON.stringify(answers)); } catch (_) { /* sense emmagatzematge */ } };
@@ -748,7 +850,7 @@
     if (r) r.checked = true;
     save(); applyLive();
   });
-  const answersText = () => "Decisions de l'esbós v2 de la vista al mòbil:\n" + DECISIONS.map((d) => {
+  const answersText = () => "Decisions de l'esbós v3 de la vista al mòbil:\n" + DECISIONS.map((d) => {
     const a = answers[d.id] || {};
     const val = a.choice === "other" ? `Una altra: ${a.text || "(sense text)"}` : d.opts[a.choice ?? 0];
     return `- ${d.id} ${d.q}: ${val}`;

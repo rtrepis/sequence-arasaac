@@ -3,7 +3,7 @@
 > **Estat**: proposta (2026-11-15), **pendent d'aprovació**. **Fase 0 feta** (2026-11-15): la
 > release no fa saltar la pàgina en seleccionar i té l'enllaç «Ajustos del bloc». De la resta del
 > pla no s'ha escrit cap línia de codi. **Decisions de la fase 1 preses** (2026-11-15, §9): queden
-> per confirmar a l'esbós les tres de §9b. Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
+> per confirmar a l'esbós v3 les dues de §9c. Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
 > tanca és presa i apuntada a §9.
 > **Entrada del backlog**: C29 de `docs/BACKLOG-ux.md`.
 > **Estàndards que toca**: `docs/estandards/capes-flotants.md` (una capa nova),
@@ -100,10 +100,12 @@ pantalla completa) i **la pàgina on s'és** («Pàgina 1 de 2»). **Girar el fu
 un ajust**: passa al nivell «Document» del panell, a *Format de pàgina*, al costat de la mida del
 paper.
 
-**Passar de pàgina** es fa lliscant en horitzontal sobre el full, com avui, i també **tocant als
-costats**: a cada costat del full hi ha una zona amb una fletxa (‹ ›) que porta a l'anterior o a la
-següent. Les fletxes són visibles (un gest amagat no es descobreix) i fan el mínim de 44 px que demana
-un objectiu tàctil. Amb una sola pàgina no hi són. La manera exacta és N1 (§9b).
+**Passar de pàgina** es fa **lliscant en horitzontal** sobre el full, com avui, **i també a la
+pantalla completa**, que avui no ho permet (N1). L'alternativa d'un toc: **tocar a la vora** del
+mòbil (el 15 % de l'amplada de cada costat, fora dels blocs) fa aparèixer una fletxa
+**semitransparent** (‹ o ›, de 44 px) durant uns segons (N4). Si es toca, passa de pàgina i la fletxa
+continua a la vista uns segons més, per passar-ne diverses seguides; si no, desapareix. Amb una sola
+pàgina, o a la primera i a l'última cap a fora, no surt res.
 
 ### La pàgina no es desplaça
 
@@ -114,8 +116,7 @@ hi ha res a perdre: els problemes 1 i 2 de §1 desapareixen, no s'arreglen.
 ### La barra de l'app (M5 i M2)
 
 Quan el panell puja a **mig** o a **sencer**, la barra de dalt de l'app s'amaga, i aquells 42 px són
-per al full. Torna a sortir quan el panell baixa a **plegat** i amb un **moviment cap avall** sobre el
-full, com fa avui en tornar a pujar la pàgina. La manera exacta és N2 (§9b). Així **mig** continua sent
+per al full. **Només torna quan el panell baixa a plegat** (N2). Així **mig** continua sent
 el 50 % de la pantalla, però el full hi guanya la barra.
 
 ### Tres alçades
@@ -132,12 +133,35 @@ bloc.
 
 ### Seleccionar
 
-- Tocar un bloc del full: si el panell és **plegat**, puja a **mig**; si és **sencer**, baixa a
-  **mig**, perquè el bloc es vegi. El verd porta la targeta del bloc a dalt (scroll de dins del
-  panell, mai de la pàgina).
+**Tocar una cosa del full la porta al panell**, i el panell la segueix:
+
+| Es toca | Al panell | El panell, si és plegat o sencer |
+|---|---|---|
+| Un bloc o una seqüència | El seu nivell, obert i a dalt; Document i Pàgina, plegats | Va a **mig** |
+| El full, fora dels blocs | El nivell **Pàgina**, obert i a dalt (D2) | Va a **mig** (N5) |
+| La vora del mòbil (15 %) | Res: només surt la fletxa de passar pàgina (N4) | No es mou |
+
+- **A la disposició lliure, un toc no puja el panell; un doble toc, sí** (D1). En aquesta disposició,
+  tocar un bloc sovint vol dir moure'l, i el panell pujant faria nosa: un toc el selecciona (i el
+  deixa a punt d'arrossegar), i un doble toc obre els seus ajustos. Tocar el full fora dels blocs
+  segueix la mateixa regla. A les altres disposicions (simple, columnes, files) els blocs no es
+  mouen, i un sol toc ja obre els ajustos.
+- **El doble toc no és l'única porta**: el botó «Mostra els ajustos» i les molles hi arriben amb un toc.
+  Cal, perquè **amb el lector de pantalla el doble toc és el gest d'activar**: qui fa servir TalkBack
+  o VoiceOver selecciona amb un doble toc i obre els ajustos amb el botó.
 - Com que a **mig** el full sencer cap a la meitat de dalt, **el bloc tocat sempre és a la vista**,
-  sigui on sigui de la pàgina i sigui quina sigui l'orientació (problema 3).
-- Treure la selecció (tocar fora, Escape) no mou el panell.
+  sigui on sigui de la pàgina (problema 3). El verd porta la targeta a dalt amb el seu scroll de dins,
+  mai amb el de la pàgina.
+- Escape treu la selecció i no mou el panell.
+- **A la pantalla completa no es selecciona res**, com avui: només es passa de pàgina.
+
+### El mòbil girat (M6 i N3)
+
+Girar el mòbil no canvia la disposició: a sobre hi surt una **capa blanca translúcida amb una icona
+animada de girar el mòbil** i el text «Gira el mòbil: la vista es treballa amb el mòbil dret». No es
+pot tancar, i desapareix en tornar a posar el mòbil dret. **No surt a la pantalla completa**, que en
+horitzontal sí que té sentit per mirar el full. Amb `prefers-reduced-motion`, la icona no es mou. El
+blanc translúcid és un color nou: va a `palette.ts`, com tots.
 
 ### Moure el panell
 
@@ -168,7 +192,7 @@ tercera forma, i per tant un **tercer component canònic**, no una excepció.
 
 | Document | Què hi canvia |
 |---|---|
-| `docs/estandards/capes-flotants.md` | Secció nova **«Panell de baix»**: `AppBottomSheet` (a `components/`, genèric, sense domini) és l'única manera de fer-ne un. Tres alçades; mai tapa el full sencer; no modal (`role="region"` amb nom); es mou amb la nansa, amb un botó i amb el teclat; declara l'alçada amb `useFloatingInset`; el botó d'estat i els avisos s'hi posen damunt. Només per sota de `md`. A «Estat de migració», la vista |
+| `docs/estandards/capes-flotants.md` | Secció nova **«Panell de baix»**: `AppBottomSheet` (a `components/`, genèric, sense domini) és l'única manera de fer-ne un. Tres alçades; mai tapa el full sencer; no modal (`role="region"` amb nom); es mou amb la nansa, amb un botó i amb el teclat; declara l'alçada amb `useFloatingInset`; el botó d'estat i els avisos s'hi posen damunt. Només per sota de `md`. **Cap ajust no pot dependre d'arribar a sencer** (M3). També hi entren **la capa del mòbil girat** (no es tanca, no surt a la pantalla completa) i **la fletxa de la vora** (semitransparent, temporal, mai l'única manera: el lliscament hi és sempre). A «Estat de migració», la vista |
 | `docs/ESTANDARD-capes-flotants.md` | Una troballa nova, **F14**, amb el que hi ha a §1: és la raó de la regla |
 | `docs/estandards/configuracions.md` | La columna de la vista: «al mòbil va sota el full» passa a «al mòbil va al panell de baix». La frase «Al mòbil, seleccionar no mou la pàgina: l'enllaç "Ajustos del bloc" hi porta» passa a «seleccionar porta el panell a mig, i el full sencer hi queda a sobre» |
 | `docs/estandards/estructura-de-fitxers.md` | Res de nou: un component genèric va a `components/`. Només s'hi comprova |
@@ -212,7 +236,8 @@ full en viu, les decisions M1–M9 (i E1: si el full s'encongeix o queda tapat) 
 l'esbós marcades «en viu», i un botó que en copia les respostes. **§9 respost** (2026-11-15).
 **Esbós v2** (mateix dia): amb les decisions aplicades (fila de sortides, fletxes als costats, girar a
 «Document», barra que s'amaga, sense «Amplia», sense disposició horitzontal) i les tres preguntes de
-§9b. **Falta**: provar la v2 amb el dit i respondre §9b.
+§9b. **§9b respost** (mateix dia), amb dues decisions noves (D1, D2). **Esbós v3**: les aplica i hi
+deixa les dues preguntes de §9c. **Falta**: provar la v3 i respondre §9c.
 
 - `docs/esbos-vista-mobil.html`: un esbós interactiu (com `esbos-columna-vista.html`) amb el full,
   el panell i les tres alçades, que es pugui obrir **al mòbil i a la tauleta** i provar amb el dit.
@@ -249,7 +274,11 @@ l'esbós marcades «en viu», i un botó que en copia les respostes. **§9 respo
 - Seleccionar porta el panell a mig i la targeta a dalt del panell.
 - **La fila de sobre del full** (M4): imprimir, PDF, pantalla completa i «Pàgina N de M». **Girar el
   full** passa a una fila d'orientació al nivell «Document», a *Format de pàgina*. Les **fletxes dels
-  costats** del full (N1) s'afegeixen al lliscament que ja fa `FreeLayoutPages`.
+  costats** del full (N4) s'afegeixen al lliscament que ja fa `FreeLayoutPages`, i el lliscament
+  arriba a la **pantalla completa** (N1), que avui és només un `requestFullscreen` del marc del full.
+- **Un toc i doble toc** (D1) a `PlacementBox` i `SelectableSequence`, i **tocar el full** porta al
+  nivell «Pàgina» (D2).
+- **La capa del mòbil girat** (N3).
 - **La barra de l'app** (M5): `HideOnScroll` (`BarNavigation`) avui només escolta l'scroll de la
   finestra. Cal que també la pugui amagar el panell, sense que la vista sàpiga res de la barra: un
   senyal genèric (com `useFloatingInset` per a les capes) i no una crida directa.
@@ -263,7 +292,10 @@ amb el full vertical) passen en un e2e de mòbil.
 ### Fase 5 — Els casos difícils
 
 - **Teclat virtual**: escriure l'autor del document. El panell no pot quedar tapat pel teclat.
-- ~~**Mòbil en horitzontal**~~: fora d'abast (M6). Només es comprova que no es trenca res (N3).
+- **Mòbil en horitzontal**: no es treballa (M6). Es comprova que surt la capa (N3) i que la pantalla
+  completa hi funciona sense capa.
+- **El doble toc**: que el navegador no hi faci zoom (`touch-action`) i que amb TalkBack i VoiceOver es
+  pugui arribar als ajustos pel botó.
 - **Pantalla completa d'una pàgina**: el panell no hi ha de sortir.
 - **Imprimir i PDF des del mòbil**: el panell no surt al paper (ho ha de garantir `usePrintSheet`,
   però es comprova).
@@ -307,19 +339,26 @@ amb el full vertical) passen en un e2e de mòbil.
 | M2 | Les alçades exactes | Plegat: la capçalera. **Mig: el 50 % de la pantalla, però guanyant-hi la barra de l'app**, que s'amaga (M5). Sencer: tot menys 64 px de franja |
 | M3 | Com s'arriba a «sencer» sense arrossegar | **Només arrossegant.** No hi ha botó «Amplia». És accessible perquè sencer no dona res que mig no tingui (§4, «Moure el panell») |
 | M4 | On van girar, imprimir, PDF i pantalla completa | **A sobre del full, però només les sortides del document**: imprimir, PDF i pantalla completa, amb la pàgina on s'és. **Passar de pàgina tocant als costats i lliscant. Girar el full va als ajustos** («Document», *Format de pàgina*) |
-| M5 | La barra de dalt de l'app | **S'amaga quan el panell puja a mig o a sencer**, i torna amb un moviment cap avall (N2) |
-| M6 | El mòbil en horitzontal | **No és una manera de treballar al mòbil**: no es dissenya (N3) |
+| M5 | La barra de dalt de l'app | **S'amaga quan el panell puja a mig o a sencer**, i torna quan baixa a plegat (N2) |
+| M6 | El mòbil en horitzontal | **No és una manera de treballar al mòbil**: surt una capa que demana girar-lo (N3) |
 | M7 | Tauleta en vertical (768–900 px): panell o columna? | **Panell**, com el telèfon |
-| M8 | Seleccionar quan el panell és plegat: puja sol a mig? | **Sí** |
+| M8 | Seleccionar quan el panell és plegat: puja sol a mig? | **Sí, amb un toc; a la disposició lliure, amb un doble toc** (D1) |
 | M9 | Fase 0: la franja de 96 px, es deixa o es treu? | **Es queda** fins a la fase 4 |
 | E1 | Quan el panell puja, el full s'encongeix o queda tapat? | **S'encongeix** per cabre sencer a sobre del panell |
 
-### 9b. Per confirmar a l'esbós v2
+### 9b. Decisions de l'esbós v2 — preses el 2026-11-15
 
-Les decisions M4, M5 i M6 obren tres preguntes de detall. La proposta ja és a l'esbós v2.
+| Id | Pregunta | Decisió |
+|---|---|---|
+| N1 | Com es passa de pàgina | **Lliscant**, com avui, **i també a la pantalla completa**. A més, **tocar a la vora** del mòbil fa sortir una fletxa **semitransparent** uns segons: si es toca, passa de pàgina; si no, desapareix |
+| N2 | Què torna la barra de l'app | **Només baixar el panell a plegat** |
+| N3 | Què passa si es gira el mòbil | **Una capa blanca translúcida amb una icona animada de girar el mòbil** |
+| D1 | Tocar un bloc a la disposició lliure | **Un toc el selecciona (per moure'l); un doble toc obre els ajustos.** Només a la lliure: a les altres, un toc ja els obre |
+| D2 | Tocar el full fora dels blocs | **Porta al nivell «Pàgina»** del panell |
+
+### 9c. Per confirmar a l'esbós v3
 
 | Id | Pregunta | Proposta |
 |---|---|---|
-| N1 | Com és «tocar als costats» per passar de pàgina | Una fletxa visible a cada costat del full, a mitja alçada, de 44 px. Tocar el full fora de les fletxes continua seleccionant. Alternativa: tota la franja del costat, sense fletxa, que és més gran però xoca amb els blocs de la vora |
-| N2 | Què és el «moviment cap avall» que torna la barra | Lliscar cap avall sobre el full (fora dels blocs) i baixar el panell a plegat. Alternativa: només baixar el panell |
-| N3 | Què passa si es gira el mòbil | Res d'especial: la mateixa disposició que dret, sense avís. Alternativa: un avís «La vista es treballa amb el mòbil dret» |
+| N4 | Quant de temps es veu la fletxa de la vora | **3 segons**, i es torna a comptar cada cop que es passa de pàgina |
+| N5 | Tocar el full (D2) puja el panell, com tocar un bloc? | **Sí**, amb la mateixa regla: un toc, i a la disposició lliure, doble toc. Alternativa: el panell no es mou i només canvia el nivell obert |
