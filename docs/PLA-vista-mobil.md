@@ -1,10 +1,12 @@
 # Pla: la vista al mòbil — el full a la pantalla i els ajustos en un panell de baix
 
-> **Estat**: proposta (2026-11-15), **pendent d'aprovació**. **Fase 0 feta** (2026-11-15): la
+> **Estat**: pla aprovat (2026-11-15). **Per continuar, comenceu per §10, «Encàrrec per a la sessió
+> següent»**: és la fase 3. **Fase 0 feta** (2026-11-15): la
 > release no fa saltar la pàgina en seleccionar i té l'enllaç «Ajustos del bloc». De la resta del
 > pla no s'ha escrit cap línia de codi. **Fase 1 tancada** (2026-11-15): totes les decisions són a §9.
-> **Fase 2 escrita, pendent d'aprovació**: la proposta d'estàndard és a `capes-flotants.md`,
-> `configuracions.md` i F14 de `ESTANDARD-capes-flotants.md`, marcada «⏳ Proposta». Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
+> **Fase 2 aprovada** (2026-11-15): l'estàndard és a `capes-flotants.md`, `configuracions.md` i F14
+> de `ESTANDARD-capes-flotants.md`. Continua marcat «⏳ Proposta» perquè el codi encara no el
+> compleix; la marca es treu a la fase 6. Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
 > tanca és presa i apuntada a §9.
 > **Entrada del backlog**: C29 de `docs/BACKLOG-ux.md`.
 > **Estàndards que toca**: `docs/estandards/capes-flotants.md` (una capa nova),
@@ -252,7 +254,7 @@ deixa les dues preguntes de §9c, **respostes** el mateix dia.
 
 ### Fase 2 — L'estàndard, escrit · porta: aprovació del text
 
-**Escrit** (2026-11-15), pendent d'aprovació: tres seccions noves a `capes-flotants.md` (panell de
+✅ **Aprovat** (2026-11-15). **Escrit** el mateix dia: tres seccions noves a `capes-flotants.md` (panell de
 baix, capa del mòbil girat, fletxa de la vora), F14 a `ESTANDARD-capes-flotants.md` i dues notes
 a `configuracions.md`, totes marcades «⏳ Proposta». **El `CLAUDE.md` no es toca fins a l'aprovació**:
 és l'índex que llegeix cada sessió, i una regla en proposta hi semblaria una regla en vigor.
@@ -321,6 +323,9 @@ amb el full vertical) passen en un e2e de mòbil.
 ### Fase 6 — Tancar
 
 - L'estàndard perd la marca «Proposta». C29 es marca `✅ Resolta`.
+- **El `CLAUDE.md`**, a «Regles transversals», a la regla dels diàlegs: «Al mòbil, els ajustos de la
+  vista van a `AppBottomSheet`, l'únic panell de baix. No és modal, i cap funció no pot dependre
+  d'arribar a sencer.» Fins aquí no hi entra: una regla que el codi no compleix hi semblaria en vigor.
 - Si es decideix publicar-ho, una notícia a Novetats seguint `docs/estandards/noticies.md`, amb
   captures de mòbil fetes amb `e2e/screenshots/`.
 
@@ -378,3 +383,47 @@ amb el full vertical) passen en un e2e de mòbil.
 | N5 | Tocar el full (D2) puja el panell, com tocar un bloc? | **Sí**, amb la mateixa regla: un toc; a la disposició lliure, doble toc |
 
 **Precisió** (2026-11-15): a la pantalla completa, l'única cosa que es fa és passar de pàgina.
+
+## 10. Encàrrec per a la sessió següent
+
+**Què**: la fase 3, `AppBottomSheet` sol, sense tocar encara la vista.
+
+**On**: una **branca nova**, no `claude/release-before-new-plan-*`. Aquella branca és la de la release
+publicable (fase 0 i la documentació d'aquest pla); el panell és la feina següent i no ha d'endarrerir
+la release ni sortir-hi a mig fer.
+
+**Què cal llegir abans**, i res més:
+
+1. Aquest pla: §4 (el model), §9 (totes les decisions) i la fase 3 de §6.
+2. `docs/estandards/capes-flotants.md`: «Panell de baix», «La capa del mòbil girat» i «La fletxa de
+   la vora». És el que el component ha de complir.
+3. `docs/estandards/estructura-de-fitxers.md`: el component és genèric i va a `components/`.
+4. Per veure com s'ha de comportar: `docs/esbos-vista-mobil.html` (també publicat com a esbós).
+   **És una referència de comportament, no de codi**: és JavaScript sense tipus i amb colors escrits
+   a mà, i res no s'hi ha de copiar tal com és.
+
+**Què ha de fer `AppBottomSheet`** (fase 3):
+
+- Tres alçades (plegat, mig al 50 %, sencer menys 64 px), la nansa i la capçalera per arrossegar, el
+  contingut amb scroll propi, la franja de sencer que torna a mig.
+- Un botó a la capçalera que alterna plegat ↔ mig, amb `aria-expanded`. Cap botó per anar a sencer
+  (M3).
+- No modal: `role="region"` amb nom, sense trampa de focus.
+- Declara la seva alçada amb `useFloatingInset`; `DocumentStatusFab` passa a llegir la reserva.
+- Avisa quan és a mig o a sencer amb un senyal genèric, perquè la barra de l'app s'hi pugui amagar
+  (fase 4); el component no sap res de la barra.
+- Teclat virtual: segueix `visualViewport`.
+- Controlat des de fora (l'alçada és una prop i un `onChange`), perquè la vista el pugui portar a mig
+  en seleccionar.
+
+**Fora de la fase 3**: la vista, la fletxa de la vora i la capa del mòbil girat (fase 4), i els
+textos nous, que s'afegeixen als cinc idiomes quan el component tingui qui els faci servir.
+
+**Fet quan**: proves unitàries amb `renderWithProviders` (alçades, botó, `aria-expanded`, teclat,
+reserva) i un e2e de Playwright amb un mòbil emulat; `npm run typecheck` net; `npm run lint` sense
+errors nous als fitxers tocats.
+
+**Avís**: a l'entorn del núvol, Playwright necessita
+`launchOptions: { executablePath: "/opt/pw-browsers/chromium" }`, perquè la versió del projecte no
+troba el navegador preinstal·lat.
+
