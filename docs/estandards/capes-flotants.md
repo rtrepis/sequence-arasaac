@@ -109,17 +109,22 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - **La pàgina de sota no es desplaça.** El que hi ha a sobre del panell s'encongeix
   per cabre a l'espai que queda (fins a l'alçada de mig). Una pàgina amb scroll
   sota un panell amb scroll torna a ser el problema que el panell resol (F14).
-- **Declara la seva alçada** a `FloatingLayer`, de dues maneres: com a **reserva**
-  (`setFloatingInset`, el que el contingut deixa al final) i com a **terra**
-  (`setFloatingFloor`, la variable `--app-floating-floor`). El botó d'estat i els
-  avisos llegeixen el terra i s'hi posen damunt. Són dues coses i no una: si el
-  botó d'estat llegís la reserva, saltaria amunt cada cop que surt un avís al seu
-  costat, perquè els avisos també en declaren. El terra només el declara qui fa
-  de terra. Es declaren amb el panell quiet, no a cada píxel de l'arrossegament.
+- **Declara la seva alçada** a `FloatingLayer`, de tres maneres: com a **reserva**
+  (`setFloatingInset`, el que el contingut deixa al final), com a **terra**
+  (`setFloatingFloor`, la variable `--app-floating-floor`) i com a **sòcol**
+  (`setFloatingBase`, `--app-floating-base`: l'alçada del panell plegat). Els
+  avisos llegeixen el terra i s'hi posen damunt: són de pas i s'han de veure.
+  **El botó d'estat llegeix el sòcol**: es queda fix just per damunt del panell
+  plegat, el panell (que és per damunt seu) el tapa quan puja a mig o a sencer, i
+  es torna a veure quan baixa. Qui obre els ajustos els mira a ells, no el desat,
+  i les accions del botó també són al menú lateral. Si el botó d'estat llegís la
+  reserva, saltaria amunt cada cop que surt un avís al seu costat, perquè els
+  avisos també en declaren. Es declaren amb el panell quiet, no a cada píxel de
+  l'arrossegament.
   **El terra no passa mai de mig**: a sencer, damunt del panell només hi ha la
   franja que torna a mig, i un avís que s'hi posés damunt la taparia. A sencer,
-  doncs, els avisos i el botó d'estat suren damunt del contingut a l'alçada de
-  mig (la reserva, en canvi, és la de debò).
+  doncs, els avisos suren damunt del contingut a l'alçada de mig (la reserva,
+  en canvi, és la de debò).
 - **El que rep el focus dins del panell, el panell el porta a la vista.** El
   navegador no ho sap fer: el panell baixa amb un `transform`, i per a ell un
   camp de la part de baix «ja es veu» encara que sigui sota la pantalla. Es

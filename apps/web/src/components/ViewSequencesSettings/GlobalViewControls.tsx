@@ -1,5 +1,11 @@
-import { MenuItem, Select, SelectChangeEvent, Slider } from "@mui/material";
-import React from "react";
+import {
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Slider,
+  Switch,
+} from "@mui/material";
+import React, { useRef } from "react";
 import { FormattedMessage } from "react-intl";
 import { MdTableRows, MdViewColumn } from "react-icons/md";
 import { MdScreenRotation } from "react-icons/md";
@@ -9,7 +15,11 @@ import {
   PageOrientation,
   PageSize,
 } from "@/types/ui";
-import { PAGE_SIZES } from "@features/print/utils/pageFormat";
+import {
+  PAGE_SIZES,
+  PaperSize,
+  regionalPaperSize,
+} from "@features/print/utils/pageFormat";
 import StyledToggleButtonGroup from "@/style/StyledToggleButtonGroup";
 import { SettingRow, IconToggleButton } from "@/components/SettingsLayout";
 import messages from "./ViewSequencesSettings.lang";
@@ -37,7 +47,11 @@ interface GlobalViewControlsProps {
   ) => void;
   onSequenceSpaceChange: (event: Event, value: number | number[]) => void;
   onOrientationChange?: (orientation: PageOrientation) => void;
-  /** Només paper: en disposició lliure, la pantalla completa no s'hi pot triar */
+  /**
+   * Només paper: amb pàgines en blocs, la pantalla sencera no s'hi pot triar
+   * (els blocs es col·loquen en mil·límetres de paper). L'interruptor hi és,
+   * però apagat i dient per què
+   */
   paperOnly?: boolean;
   /** La fila de la mida del paper. A la columna de la vista és del nivell «Document» */
   showPaper?: boolean;
@@ -67,106 +81,152 @@ const GlobalViewControls = ({
   showPaper = true,
   showDirection = true,
   afterOrientation,
-}: GlobalViewControlsProps): React.ReactElement => (
-  <>
-    {showPaper && (
-      <SettingRow
-        title={<FormattedMessage {...messages.pageSize} />}
-        labelId={`${GLOBAL_CONTROLS_LABEL_ID}-page-size`}
-      >
-        {/* Sense InputLabel flotant: el títol de la fila ja fa d'etiqueta */}
-        <Select<PageSize>
-          value={pageSize}
-          onChange={(event: SelectChangeEvent<PageSize>) =>
-            onPageSizeChange(event.target.value as PageSize)
-          }
-          size="small"
-          fullWidth
+}: GlobalViewControlsProps): React.ReactElement => {
+  const isFullscreen = pageSize === "FULLSCREEN";
+  // El paper d'abans de la pantalla sencera: el selector el continua
+  // ensenyant (apagat), i en treure la pantalla sencera s'hi torna. Si el
+  // document ja venia a pantalla sencera, el paper de la regió
+  const lastPaper = useRef<PaperSize | null>(null);
+  if (!isFullscreen) lastPaper.current = pageSize;
+  const paper: PaperSize =
+    lastPaper.current ?? regionalPaperSize(navigator.languages ?? []);
+
+  return (
+    <>
+      {showPaper && (
+        <SettingRow
+          title={<FormattedMessage {...messages.pageSize} />}
           labelId={`${GLOBAL_CONTROLS_LABEL_ID}-page-size`}
         >
-          {PAGE_SIZES.filter((size) => !paperOnly || size !== "FULLSCREEN").map(
-            (size) => (
+          {/* Sense InputLabel flotant: el títol de la fila ja fa d'etiqueta.
+              Amb la pantalla sencera no hi ha paper: el selector s'apaga */}
+          <Select<PaperSize>
+            value={paper}
+            disabled={isFullscreen}
+            onChange={(event: SelectChangeEvent<PaperSize>) =>
+              onPageSizeChange(event.target.value as PaperSize)
+            }
+            size="small"
+            fullWidth
+            labelId={`${GLOBAL_CONTROLS_LABEL_ID}-page-size`}
+          >
+            {PAGE_SIZES.filter(
+              (size): size is PaperSize => size !== "FULLSCREEN",
+            ).map((size) => (
               <MenuItem key={size} value={size}>
                 {PAGE_SIZE_LABELS[size]}
               </MenuItem>
-            ),
-          )}
-        </Select>
-      </SettingRow>
-    )}
+            ))}
+          </Select>
+        </SettingRow>
+      )}
 
-    {onOrientationChange && (
-      <SettingRow
-        title={<FormattedMessage {...messages.tooltipOrientation} />}
-        control="wide"
-      >
-        <StyledToggleButtonGroup
-          value={viewSettings.orientation}
-          exclusive
-          onChange={(_, val: PageOrientation | null) =>
-            val && onOrientationChange(val)
+      {/* La pantalla sencera, sota la mida: la previsualització segueix la
+          proporció de la pantalla en comptes de la d'un paper */}
+      {showPaper && (
+        <SettingRow
+          title={<FormattedMessage {...messages.fullScreen} />}
+          labelId={`${GLOBAL_CONTROLS_LABEL_ID}-fullscreen`}
+          helperId={`${GLOBAL_CONTROLS_LABEL_ID}-fullscreen-helper`}
+          helper={
+            <FormattedMessage
+              {...(paperOnly && !isFullscreen
+                ? messages.fullScreenBlocked
+                : messages.fullScreenHelper)}
+            />
           }
         >
-          <IconToggleButton
-            value="landscape"
-            message={messages.tooltipOrientationLandscape}
-          >
-            <MdScreenRotation style={{ transform: "rotate(90deg)" }} />
-          </IconToggleButton>
-          <IconToggleButton
-            value="portrait"
-            message={messages.tooltipOrientationPortrait}
-          >
-            <MdScreenRotation />
-          </IconToggleButton>
-        </StyledToggleButtonGroup>
-      </SettingRow>
-    )}
+          <Switch
+            checked={isFullscreen}
+            disabled={paperOnly && !isFullscreen}
+            onChange={(_, checked) =>
+              onPageSizeChange(checked ? "FULLSCREEN" : paper)
+            }
+            inputProps={{
+              "aria-labelledby": `${GLOBAL_CONTROLS_LABEL_ID}-fullscreen`,
+              "aria-describedby": `${GLOBAL_CONTROLS_LABEL_ID}-fullscreen-helper`,
+            }}
+          />
+        </SettingRow>
+      )}
 
-    {afterOrientation}
-
-    {sequenceCount > 1 && (
-      <SettingRow
-        title={<FormattedMessage {...messages.sequenceSpaceBetween} />}
-        labelId={`${GLOBAL_CONTROLS_LABEL_ID}-sequence-space`}
-      >
-        <Slider
-          aria-labelledby={`${GLOBAL_CONTROLS_LABEL_ID}-sequence-space`}
-          name="sequenceSpaceBetween"
-          step={0.5}
-          min={0}
-          max={10}
-          value={viewSettings.sequenceSpaceBetween}
-          valueLabelDisplay="auto"
-          valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
-          onChange={onSequenceSpaceChange}
-        />
-      </SettingRow>
-    )}
-
-    {showDirection && (
-      <SettingRow
-        title={<FormattedMessage {...messages.direction} />}
-        control="wide"
-      >
-        <StyledToggleButtonGroup
-          value={viewSettings.direction}
-          exclusive
-          onChange={onDirectionChange}
+      {/* Amb la pantalla sencera, l'orientació és la de la pantalla */}
+      {onOrientationChange && !isFullscreen && (
+        <SettingRow
+          title={<FormattedMessage {...messages.tooltipOrientation} />}
+          control="wide"
         >
-          <IconToggleButton value="row" message={messages.tooltipDirectionRow}>
-            <MdTableRows />
-          </IconToggleButton>
-          <IconToggleButton
-            value="column"
-            message={messages.tooltipDirectionColumn}
+          <StyledToggleButtonGroup
+            value={viewSettings.orientation}
+            exclusive
+            onChange={(_, val: PageOrientation | null) =>
+              val && onOrientationChange(val)
+            }
           >
-            <MdViewColumn />
-          </IconToggleButton>
-        </StyledToggleButtonGroup>
-      </SettingRow>
-    )}
-  </>
-);
+            <IconToggleButton
+              value="landscape"
+              message={messages.tooltipOrientationLandscape}
+            >
+              <MdScreenRotation style={{ transform: "rotate(90deg)" }} />
+            </IconToggleButton>
+            <IconToggleButton
+              value="portrait"
+              message={messages.tooltipOrientationPortrait}
+            >
+              <MdScreenRotation />
+            </IconToggleButton>
+          </StyledToggleButtonGroup>
+        </SettingRow>
+      )}
+
+      {afterOrientation}
+
+      {sequenceCount > 1 && (
+        <SettingRow
+          title={<FormattedMessage {...messages.sequenceSpaceBetween} />}
+          labelId={`${GLOBAL_CONTROLS_LABEL_ID}-sequence-space`}
+        >
+          <Slider
+            aria-labelledby={`${GLOBAL_CONTROLS_LABEL_ID}-sequence-space`}
+            name="sequenceSpaceBetween"
+            step={0.5}
+            min={0}
+            max={10}
+            value={viewSettings.sequenceSpaceBetween}
+            valueLabelDisplay="auto"
+            valueLabelFormat={(value: number) => parseFloat(value.toFixed(2))}
+            onChange={onSequenceSpaceChange}
+          />
+        </SettingRow>
+      )}
+
+      {showDirection && (
+        <SettingRow
+          title={<FormattedMessage {...messages.direction} />}
+          control="wide"
+        >
+          <StyledToggleButtonGroup
+            value={viewSettings.direction}
+            exclusive
+            onChange={onDirectionChange}
+          >
+            <IconToggleButton
+              value="row"
+              message={messages.tooltipDirectionRow}
+            >
+              <MdTableRows />
+            </IconToggleButton>
+            <IconToggleButton
+              value="column"
+              message={messages.tooltipDirectionColumn}
+            >
+              <MdViewColumn />
+            </IconToggleButton>
+          </StyledToggleButtonGroup>
+        </SettingRow>
+      )}
+    </>
+  );
+};
 
 export default GlobalViewControls;

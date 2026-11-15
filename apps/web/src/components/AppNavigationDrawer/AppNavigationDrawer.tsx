@@ -9,7 +9,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Tooltip,
 } from "@mui/material";
 import {
   AiOutlineCloudDownload,
@@ -21,15 +20,21 @@ import {
   AiOutlineFolderOpen,
   AiOutlineHome,
   AiOutlineRead,
+  AiOutlineFileAdd,
   AiOutlineSafety,
-  AiOutlineSetting,
   AiOutlineUser,
 } from "react-icons/ai";
 import { useIntl } from "react-intl";
 import messages from "./AppNavigationDrawer.lang";
 import navigationMessages from "@shared/messages/navigation.lang";
 import authMessages from "@features/backend/auth/components/AuthModal.lang";
-import { SettingsDialog } from "@features/user-settings/components/SettingsDialog";
+import {
+  SettingsDialog,
+  VISIBLE_SETTINGS_TABS,
+} from "@features/user-settings/components/SettingsDialog";
+import { updateSettingsActiveTabActionCreator } from "@features/user-settings/store/uiSlice";
+import { SettingsTab } from "@/types/ui";
+import statusFabMessages from "@features/sequence/components/DocumentStatusFab/DocumentStatusFab.lang";
 import ModalDownload from "../ButtonWithModalDownload/ModalDownload";
 import AuthModal from "@features/backend/auth/components/AuthModal";
 import LoadDocumentModal from "@features/backend/documents/components/LoadDocumentModal";
@@ -84,6 +89,7 @@ const AppNavigationDrawer = ({
   const [saveDocModalOpen, setSaveDocModalOpen] = useState(false);
   const [loadDocModalOpen, setLoadDocModalOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+  const [newDocumentConfirmOpen, setNewDocumentConfirmOpen] = useState(false);
 
   // Estat de durabilitat del document: tancar la sessió també el tanca, i el
   // que decideix si això s'ha de confirmar és si la feina té còpia enlloc
@@ -183,6 +189,35 @@ const AppNavigationDrawer = ({
     announceOpenedDocument();
   };
 
+  // Cada apartat de la configuració és una entrada: obre el diàleg directament
+  // en aquell apartat
+  const handleSettingsOpen = (tab: SettingsTab) => {
+    onClose();
+    dispatch(updateSettingsActiveTabActionCreator(tab));
+    setSettingsOpen(true);
+  };
+
+  // «Document nou», com al botó d'estat: si la feina no té còpia enlloc, es
+  // pregunta abans, amb la mateixa confirmació i la sortida de descarregar-la
+  const startNewDocument = () => {
+    setNewDocumentConfirmOpen(false);
+    void dispatch(startNewDocumentThunk());
+  };
+
+  const handleNewDocument = () => {
+    onClose();
+    if (isWorkAtRisk(durability)) {
+      setNewDocumentConfirmOpen(true);
+      return;
+    }
+    startNewDocument();
+  };
+
+  const handleDownloadBeforeNew = () => {
+    setNewDocumentConfirmOpen(false);
+    setDownloadOpen(true);
+  };
+
   // Obrir descàrrega: tanca el drawer i obre el modal
   const handleDownloadOpen = () => {
     onClose();
@@ -269,8 +304,21 @@ const AppNavigationDrawer = ({
 
           <Divider />
 
-          {/* Secció 2: Operacions de fitxer */}
+          {/* Secció 2: Operacions de fitxer, amb les del botó d'estat */}
           <List>
+            {/* Amb el document buit no hi ha res a buidar, com al botó d'estat */}
+            <ListItemButton
+              onClick={handleNewDocument}
+              disabled={durability === "pristine"}
+            >
+              <ListItemIcon>
+                <AiOutlineFileAdd />
+              </ListItemIcon>
+              <ListItemText
+                primary={intl.formatMessage(statusFabMessages.actionNew)}
+              />
+            </ListItemButton>
+
             <ListItemButton onClick={handleDownloadOpen}>
               <ListItemIcon>
                 <AiOutlineDownload />
@@ -288,24 +336,17 @@ const AppNavigationDrawer = ({
 
           <Divider />
 
-          {/* Secció 3: Configuració */}
+          {/* Secció 3: Configuració, un apartat per entrada */}
           <List>
-            <Tooltip
-              title={intl.formatMessage(messages.settings)}
-              placement="right"
-            >
+            {VISIBLE_SETTINGS_TABS.map(({ value, icon, message }) => (
               <ListItemButton
-                onClick={() => {
-                  onClose();
-                  setSettingsOpen(true);
-                }}
+                key={value}
+                onClick={() => handleSettingsOpen(value)}
               >
-                <ListItemIcon>
-                  <AiOutlineSetting />
-                </ListItemIcon>
-                <ListItemText primary={intl.formatMessage(messages.settings)} />
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={intl.formatMessage(message)} />
               </ListItemButton>
-            </Tooltip>
+            ))}
           </List>
 
           {/* Espai flexible: empeny autenticació al fons */}
@@ -407,6 +448,25 @@ const AppNavigationDrawer = ({
       {/* La pregunta d'un fitxer d'estil obert sense cap document: és el menú
           qui obre fitxers, i el menú hi és a totes les pàgines */}
       <PendingDefaultStyleDialog />
+
+      {/* Document nou amb feina sense còpia: la mateixa pregunta que el
+          botó d'estat */}
+      <ConfirmDialog
+        open={newDocumentConfirmOpen}
+        title={intl.formatMessage(statusFabMessages.confirmTitle)}
+        body={intl.formatMessage(
+          durability === "stale"
+            ? statusFabMessages.confirmBodyStale
+            : statusFabMessages.confirmBody,
+        )}
+        confirmLabel={intl.formatMessage(statusFabMessages.confirmDiscard)}
+        onConfirm={startNewDocument}
+        onCancel={() => setNewDocumentConfirmOpen(false)}
+        alternative={{
+          label: intl.formatMessage(statusFabMessages.confirmDownloadFirst),
+          onClick: handleDownloadBeforeNew,
+        }}
+      />
 
       {/* Diàleg de configuració */}
       <SettingsDialog

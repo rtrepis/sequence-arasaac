@@ -22,11 +22,6 @@ const messages = defineMessages({
     defaultMessage: "Carrega",
     description: "Ítem per carregar una seqüència des d'un fitxer",
   },
-  settings: {
-    id: "components.appNavigationDrawer.settings",
-    defaultMessage: "Configuració",
-    description: "Ítem per obrir la configuració per defecte",
-  },
   admin: {
     id: "components.appNavigationDrawer.admin",
     defaultMessage: "Administració",

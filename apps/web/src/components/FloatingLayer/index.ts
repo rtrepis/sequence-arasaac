@@ -10,3 +10,8 @@ export {
 } from "./floatingFloor";
 export { setFloatingRaised, isFloatingRaised } from "./floatingRaised";
 export { useFloatingRaised } from "./useFloatingRaised";
+export {
+  setFloatingBase,
+  floatingBaseCss,
+  FLOATING_BASE_VARIABLE,
+} from "./floatingBase";

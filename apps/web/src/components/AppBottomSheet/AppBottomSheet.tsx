@@ -27,6 +27,7 @@ import StyledButton from "@/style/StyledButton";
 import { APP_CORNER_RADIUS, APP_TOUCH_TARGET_MIN } from "@/style/appShape";
 import { bottomSheetStrip } from "@/style/palette";
 import {
+  setFloatingBase,
   setFloatingFloor,
   setFloatingInset,
   setFloatingRaised,
@@ -201,6 +202,13 @@ const AppBottomSheet = ({
     setFloatingInset(layerId, settledVisible);
   }, [layerId, floor, settledVisible, viewport.bottom]);
 
+  // El sòcol: on es queda el botó d'estat, que no segueix el panell quan puja
+  // (el panell el tapa a mig i a sencer). Només depèn de l'alçada plegat
+  useEffect(() => {
+    if (headerHeight === 0) return;
+    setFloatingBase(layerId, heights.collapsed + viewport.bottom);
+  }, [layerId, headerHeight, heights.collapsed, viewport.bottom]);
+
   useEffect(() => {
     setFloatingRaised(layerId, snap !== "collapsed");
   }, [layerId, snap]);
@@ -208,6 +216,7 @@ const AppBottomSheet = ({
   useEffect(
     () => () => {
       setFloatingFloor(layerId, null);
+      setFloatingBase(layerId, null);
       setFloatingInset(layerId, null);
       setFloatingRaised(layerId, false);
     },

@@ -371,6 +371,64 @@ const runSuite = (): void => {
     await expect(panel(page)).toHaveAttribute("data-snap", "collapsed");
   });
 
+  test("pantalla sencera: sota la mida de pàgina, i el full pren la forma de la pantalla", async ({
+    page,
+  }) => {
+    await openInView(page, SIMPLE);
+    const viewport = page.viewportSize();
+    if (!viewport) throw new Error("sense viewport");
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
+    await expectSnap(page, "half");
+
+    const size = page.getByRole("combobox", { name: "Mida de pàgina" });
+    const fullscreen = page.getByRole("checkbox", { name: "Pantalla sencera" });
+    await expect(size).toHaveText("A4");
+    await fullscreen.check();
+    // El paper s'apaga i continua dient quin era
+    await expect(size).toHaveAttribute("aria-disabled", "true");
+    await expect(size).toHaveText("A4");
+
+    // El full, amb la forma de la pantalla (un mòbil dret, un full dret)
+    await page
+      .getByRole("button", { name: "Amaga els ajustos" })
+      .press("Enter");
+    await expectSnap(page, "collapsed");
+    const screen = await page.evaluate(() => ({
+      width: Math.min(window.screen.width, window.screen.height),
+      height: Math.max(window.screen.width, window.screen.height),
+    }));
+    await expect
+      .poll(async () => {
+        const box = await boxOf(sheet(page));
+        return Math.abs(box.width / box.height - screen.width / screen.height);
+      })
+      .toBeLessThan(0.02);
+
+    // En treure-la, torna el paper d'abans
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
+    await expectSnap(page, "half");
+    await fullscreen.uncheck();
+    await expect(size).not.toHaveAttribute("aria-disabled", "true");
+    await expect(size).toHaveText("A4");
+  });
+
+  test("amb pàgines en blocs, la pantalla sencera hi és però apagada, i diu per què", async ({
+    page,
+  }) => {
+    await openInView(page, FREE_PORTRAIT);
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
+    await expectSnap(page, "half");
+    const fullscreen = page.getByRole("checkbox", { name: "Pantalla sencera" });
+    await expect(fullscreen).toBeDisabled();
+    await expect(fullscreen).toHaveAccessibleDescription(/pàgines en blocs/);
+  });
+
   // ---- Fase 5: els casos difícils ----
 
   test("a sencer, els avisos no tapen la franja que torna al full", async ({

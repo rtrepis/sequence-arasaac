@@ -79,6 +79,19 @@ const messages = defineMessages({
     defaultMessage: "Full Screen",
     description: "Setting property",
   },
+  fullScreenHelper: {
+    id: "pages.viewSequence.fullScreen.helper",
+    defaultMessage: "The preview follows the shape of the screen",
+    description:
+      "Ajuda de l'interruptor «Pantalla sencera», sota la mida de pàgina: en activar-lo, el full deixa de ser un paper i pren la proporció de la pantalla",
+  },
+  fullScreenBlocked: {
+    id: "pages.viewSequence.fullScreen.blocked",
+    defaultMessage:
+      "Not available with pages in blocks: blocks are placed on paper",
+    description:
+      "Per què l'interruptor «Pantalla sencera» és apagat: el document té pàgines en blocs, que es col·loquen en mil·límetres d'un paper",
+  },
   alignmentH: {
     id: "pages.viewSequence.alignmentH.label",
     defaultMessage: "H Alignment",

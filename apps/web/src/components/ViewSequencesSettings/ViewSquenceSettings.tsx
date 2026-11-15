@@ -321,6 +321,13 @@ const ViewSequencesSettingsContent = ({
   // Disposició lliure (ADR-005): les pàgines i les seves caixes en lloc del
   // full del flux. La pantalla completa no l'admet: no té mil·límetres
   const isFreeLayout = useAppSelector(selectHasPages) && !isFullscreen;
+  // Les pàgines en blocs es col·loquen en mil·límetres de paper: amb alguna,
+  // la pantalla sencera no s'hi pot triar. Les contínues, sí: s'hi veu el flux
+  const hasBlockPages = useAppSelector(
+    (state) =>
+      state.document.pages?.sheets.some(({ mode }) => mode === "template") ??
+      false,
+  );
 
   // L'espai del full (`docs/PLA-mode-lliure.md`, §6, «L'espai»). A partir
   // d'escriptori, la columna d'ajustos es pot amagar perquè el full faci tota
@@ -931,14 +938,15 @@ const ViewSequencesSettingsContent = ({
         <SectionTitle
           title={<FormattedMessage {...messages.sectionPageFormat} />}
         >
-          {/* El paper. La direcció i l'espai entre seqüències són de cada
-              pàgina; amb pàgines pròpies, la pantalla completa no s'hi pot
-              triar. Al mòbil, girar el full també és aquí (M4) */}
+          {/* El paper, i a sota la pantalla sencera. La direcció i l'espai
+              entre seqüències són de cada pàgina; amb pàgines en blocs, la
+              pantalla sencera no s'hi pot triar. Al mòbil, girar el full
+              també és aquí (M4) */}
           <GlobalViewControls
             viewSettings={{ ...viewSettings, orientation }}
             pageSize={pageSize}
             sequenceCount={1}
-            paperOnly={isFreeLayout}
+            paperOnly={hasBlockPages}
             showDirection={false}
             onPageSizeChange={setPageSize}
             onDirectionChange={handleDirectionChange}

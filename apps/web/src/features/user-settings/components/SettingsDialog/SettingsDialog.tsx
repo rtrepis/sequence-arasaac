@@ -29,7 +29,7 @@ interface SettingsDialogProps {
   onClose: () => void;
 }
 
-interface SettingsTabDefinition {
+export interface SettingsTabDefinition {
   value: SettingsTab;
   icon: React.ReactElement;
   message: MessageDescriptor;
@@ -58,7 +58,7 @@ const SETTINGS_TABS: SettingsTabDefinition[] = [
  * dispositius—, de manera que amb les funcions de compte apagades el tab només
  * podria oferir la porta d'entrada a un compte que aquella compilació no té.
  */
-const VISIBLE_SETTINGS_TABS: SettingsTabDefinition[] = ACCOUNTS_ENABLED
+export const VISIBLE_SETTINGS_TABS: SettingsTabDefinition[] = ACCOUNTS_ENABLED
   ? SETTINGS_TABS
   : SETTINGS_TABS.filter(({ value }) => value !== "vocabulary");
 

@@ -40,7 +40,7 @@ import {
   FLOATING_EDGE_GAP,
 } from "@/style/appShape";
 import { floatingControlSx } from "@/style/floatingControl";
-import { floatingFloorCss, useFloatingCorner } from "@components/FloatingLayer";
+import { floatingBaseCss, useFloatingCorner } from "@components/FloatingLayer";
 import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
@@ -279,9 +279,10 @@ const DocumentStatusFab = (): ReactElement => {
       <Box
         sx={{
           position: "fixed",
-          // Damunt del panell de baix, si n'hi ha cap d'obert (el terra que
-          // declara `AppBottomSheet`); sense panell, el terra val zero
-          bottom: `calc(${FLOATING_EDGE_GAP}px + ${floatingFloorCss})`,
+          // Just per damunt del panell de baix plegat (el sòcol que declara
+          // `AppBottomSheet`), i no el segueix quan puja: a mig i a sencer el
+          // panell el tapa, i es torna a veure quan baixa. Sense panell, zero
+          bottom: `calc(${FLOATING_EDGE_GAP}px + ${floatingBaseCss})`,
           right: FLOATING_EDGE_GAP,
           // Columna alineada a la dreta i ancorada a baix: el que s'hi afegeix
           // creix cap amunt, de manera que la frase d'estat queda per sobre de
@@ -290,7 +291,9 @@ const DocumentStatusFab = (): ReactElement => {
           flexDirection: "column",
           alignItems: "flex-end",
           gap: 1,
-          zIndex: (theme) => theme.zIndex.speedDial,
+          // Per sota del panell de baix (`mobileStepper`), que el tapa quan
+          // puja; per damunt de tota la resta de la pàgina
+          zIndex: (theme) => theme.zIndex.mobileStepper - 1,
           "@media print": { display: "none" },
         }}
       >

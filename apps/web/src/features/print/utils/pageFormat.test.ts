@@ -98,14 +98,35 @@ describe("pageFormat", () => {
       expect(landscape.dimensions.height).toBe(portrait.dimensions.width);
     });
 
-    it("hauria de prendre la mida de la pantalla en pantalla completa", () => {
-      const landscape = createPageFormat("FULLSCREEN", "landscape");
-      const portrait = createPageFormat("FULLSCREEN", "portrait");
+    it("en pantalla completa, segueix la pantalla tal com es té, no l'orientació desada", () => {
       const long = Math.max(window.screen.width, window.screen.height);
       const short = Math.min(window.screen.width, window.screen.height);
+      const matchMedia = window.matchMedia;
 
-      expect(landscape.dimensions).toEqual({ width: long, height: short });
-      expect(portrait.dimensions).toEqual({ width: short, height: long });
+      const withScreen = (portrait: boolean) => {
+        window.matchMedia = ((query: string) => ({
+          matches: query === "(orientation: portrait)" && portrait,
+        })) as unknown as typeof window.matchMedia;
+        return [
+          createPageFormat("FULLSCREEN", "landscape"),
+          createPageFormat("FULLSCREEN", "portrait"),
+        ];
+      };
+
+      try {
+        // Pantalla dreta: el full és dret, digui el que digui l'orientació
+        for (const format of withScreen(true)) {
+          expect(format.dimensions).toEqual({ width: short, height: long });
+          expect(format.orientation).toBe("portrait");
+        }
+        // Pantalla apaïsada
+        for (const format of withScreen(false)) {
+          expect(format.dimensions).toEqual({ width: long, height: short });
+          expect(format.orientation).toBe("landscape");
+        }
+      } finally {
+        window.matchMedia = matchMedia;
+      }
     });
   });
 

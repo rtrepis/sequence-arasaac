@@ -122,24 +122,44 @@ const runSuite = (): void => {
     await expect(page.getByLabel("Ajust 1", { exact: true })).toBeVisible();
   });
 
-  test("el botó d'estat puja damunt del panell", async ({ page }) => {
+  test("el botó d'estat es queda damunt del panell plegat, i el panell el tapa quan puja", async ({
+    page,
+  }) => {
     const fab = page.getByRole("button", { name: /^On es desa la feina/ });
-    const fabBox = async (): Promise<{ bottom: number }> => {
+    const fabBox = async (): Promise<{ y: number; bottom: number }> => {
       const box = await fab.boundingBox();
       if (!box) throw new Error("botó d'estat no trobat");
-      return { bottom: box.y + box.height };
+      return { y: box.y, bottom: box.y + box.height };
     };
 
     await expectSnap(page, "collapsed");
-    expect((await fabBox()).bottom).toBeLessThanOrEqual(await sheetTop(page));
+    const collapsed = await fabBox();
+    expect(collapsed.bottom).toBeLessThanOrEqual(await sheetTop(page));
 
     await page
       .getByRole("button", { name: "Mostra els ajustos" })
       .press("Enter");
     await expectSnap(page, "half");
-    await expect
-      .poll(async () => (await sheetTop(page)) - (await fabBox()).bottom)
-      .toBeGreaterThanOrEqual(0);
+    // No es mou, i el panell hi passa per damunt: el dit hi toca el panell
+    expect((await fabBox()).y).toBe(collapsed.y);
+    expect(collapsed.y).toBeGreaterThan(await sheetTop(page));
+    const box = await fab.boundingBox();
+    if (!box) throw new Error("botó d'estat no trobat");
+    const onPanel = await page.evaluate(
+      ([x, y]) =>
+        Boolean(
+          document.elementFromPoint(x, y)?.closest("[role=region][data-snap]"),
+        ),
+      [box.x + box.width / 2, box.y + box.height / 2] as const,
+    );
+    expect(onPanel).toBe(true);
+
+    // En baixar el panell, torna a ser a la vista
+    await page
+      .getByRole("button", { name: "Amaga els ajustos" })
+      .press("Enter");
+    await expectSnap(page, "collapsed");
+    await expect(fab).toBeInViewport();
   });
 
   test("arrossegant la nansa fins a dalt va a sencer, i la franja torna a mig", async ({

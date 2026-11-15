@@ -428,6 +428,18 @@ amb el full vertical) passen en un e2e de mòbil.
 - **Imprimir i PDF**: ni el panell, ni la fila de sortides, ni les fletxes de la vora no són dins dels
   fulls que captura el PDF (`.preview-content`) ni a la còpia que s'imprimeix (`#print-root`), i al
   paper no es veuen (e2e, amb el panell a mig i la fletxa a la vista).
+- **Retocs demanats després** (2026-11-15):
+  - **El botó d'estat ja no puja amb el panell**: es queda fix damunt del panell plegat (el
+    sòcol, `setFloatingBase`) i el panell el tapa a mig i a sencer. Els avisos continuen pujant
+    (el terra). Prova: `bottom-sheet.spec.ts`.
+  - **«Pantalla sencera» és un interruptor sota la mida de pàgina** (`GlobalViewControls`, a la
+    vista i al panell «Pàgina i distribució» de la configuració): encès, el selector de paper
+    s'apaga (i continua dient quin era, per tornar-hi) i el full pren la forma de la pantalla **tal
+    com es té**, dreta o girada, no una orientació desada. Amb pàgines en blocs és apagat i diu
+    per què; amb pàgines contínues, s'hi pot. Proves: `pageFormat.test.ts` i `mobile-view.spec.ts`.
+  - **Menú lateral**: «Configuració» passa a ser una entrada per apartat, que obre el diàleg en
+    aquell apartat, i hi ha «Document nou», amb la mateixa confirmació que el botó d'estat. Prova:
+    `navigation-drawer.spec.ts`.
 - **De pas**: el cas 3 de l'e2e fallava de tant en tant amb diversos treballadors alhora. Entre els
   dos `tap` de Playwright hi havia més dels 350 ms del doble toc; no era cap zoom (l'escala era 1).
   Ara el doble toc es torna a provar si no obre els ajustos (`doubleTapToOpen`).
