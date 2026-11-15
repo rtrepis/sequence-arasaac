@@ -488,9 +488,10 @@ amb el full vertical) passen en un e2e de mòbil.
 fase 4 (al final de la fase 4 a §6, «Troballes per a la fase 5»). La vista ja va al panell, i
 `e2e/mobile-view.spec.ts` és la xarxa: no s'ha de trencar.
 
-**On**: **a partir de `claude/fase-4-vista-mobil-4875d1`**, on hi ha la fase 4 (i, a sota, la 3 i
-la release, `claude/release-before-new-plan-8x1xhp`). **El panell forma part de la release** (§11).
-Si la sessió nova té assignada una altra branca, ha de partir d'aquesta, no de `main`.
+**On**: **a la branca de la release, `claude/release-before-new-plan-8x1xhp`**, que ja porta les
+fases 3 i 4 (s'hi va integrar `claude/fase-4-vista-mobil-4875d1` el 2026-11-15). **El panell forma
+part de la release** (§11). Si la sessió nova té assignada una altra branca, ha de partir de la de
+la release, no de `main`.
 
 **Què cal llegir abans**, i res més:
 
