@@ -181,6 +181,12 @@ bloc».
 
 ### Fase 1 — Esbós i decisions · porta: §9 respost
 
+**Esbós fet** (2026-11-15): `docs/esbos-vista-mobil.html`. Obert al mòbil ocupa tota la pantalla;
+a l'escriptori, un marc de telèfon que es pot girar. Té els tres casos de §1, controls que canvien el
+full en viu, les decisions M1–M9 (i E1: si el full s'encongeix o queda tapat) amb les que canvien
+l'esbós marcades «en viu», i un botó que en copia les respostes. **Falta**: provar-lo amb el dit i
+respondre §9.
+
 - `docs/esbos-vista-mobil.html`: un esbós interactiu (com `esbos-columna-vista.html`) amb el full,
   el panell i les tres alçades, que es pugui obrir **al mòbil i a la tauleta** i provar amb el dit.
   Ha de tenir una pàgina de dues files i una de vertical, que són els casos de §1.
