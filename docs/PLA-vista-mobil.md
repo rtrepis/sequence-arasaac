@@ -485,47 +485,59 @@ amb el full vertical) passen en un e2e de mòbil.
 ## 10. Encàrrec per a la sessió següent
 
 **Què**: la fase 5, els casos difícils (§6, «Fase 5»), més les tres troballes que va deixar la
-fase 4 (al final de la fase 4 a §6). La vista ja va al panell: `e2e/mobile-view.spec.ts` és la xarxa.
+fase 4 (al final de la fase 4 a §6, «Troballes per a la fase 5»). La vista ja va al panell, i
+`e2e/mobile-view.spec.ts` és la xarxa: no s'ha de trencar.
 
-> L'encàrrec de sota era el de la fase 4; es deixa com a referència del que ja hi ha.
-
-**On**: **a partir de la branca on es va fer la fase 3** (que parteix de
-`claude/release-before-new-plan-8x1xhp`). **El panell forma part de la release** (§11): no va en una
-branca que surti després. Si la sessió nova té assignada una altra branca, ha de partir d'aquesta,
-no de `main`.
+**On**: **a partir de `claude/fase-4-vista-mobil-4875d1`**, on hi ha la fase 4 (i, a sota, la 3 i
+la release, `claude/release-before-new-plan-8x1xhp`). **El panell forma part de la release** (§11).
+Si la sessió nova té assignada una altra branca, ha de partir d'aquesta, no de `main`.
 
 **Què cal llegir abans**, i res més:
 
-1. Aquest pla: §4 (el model), §9 (totes les decisions), la fase 3 tal com ha quedat i la fase 4 de §6.
+1. Aquest pla: §4 (el model), §9 (les decisions), la fase 4 tal com ha quedat (amb els retocs i les
+   troballes) i la fase 5 de §6.
 2. `docs/estandards/capes-flotants.md`: «Panell de baix», «La capa del mòbil girat» i «La fletxa de
    la vora».
-3. `docs/estandards/configuracions.md`: la columna de la vista.
-4. `docs/fonaments/03-model-contingut-estil.md`, només la part de la columna de la vista i els nivells.
-5. Per veure com s'ha de comportar: `docs/esbos-vista-mobil.html`. **Referència de comportament, no
-   de codi.**
+3. El codi de la vista al mòbil: `components/ViewSequencesSettings/ViewSquenceSettings.tsx` (la
+   branca `!isWideScreen` del `return`), `features/free-layout/components/FreeLayoutPages/`
+   (`FreeLayoutPages.tsx`, `EdgePageArrows.tsx`) i `components/AppBottomSheet/`.
 
-**Què ja hi ha i s'ha de fer servir**:
+**Què es pot fer aquí** (amb proves, unitàries o e2e):
 
-- `AppBottomSheet` (`@components/AppBottomSheet`): `snap`, `onSnapChange`, `label`, `showLabel`,
-  `hideLabel`, `returnLabel`, `header` (les molles) i el contingut. L'alçada és estat de la pàgina de
-  vista (`useState`), mai Redux.
-- `useFloatingRaised` (`@components/FloatingLayer`): el senyal per amagar la barra de l'app
-  (`HideOnScroll` de `BarNavigation`), sense que la vista en sàpiga res.
-- L'arnès `e2e/harness/bottom-sheet.html` es pot esborrar quan la vista tingui el seu e2e de mòbil, o
-  deixar-lo per provar el component sol.
+- **Els avisos tapen la franja de sencer** («Torna al full»): que no ho facin, sense trencar la regla
+  del terra (el botó d'estat i els avisos s'hi posen damunt).
+- **El zoom del doble toc**: `touch-action` al full perquè el navegador no hi faci zoom.
+- **El focus de la fletxa de la vora**: que no es perdi quan la fletxa desapareix en arribar a la
+  primera o l'última pàgina.
+- **El teclat virtual** (escriure l'autor del document), en emulació: el camp no pot quedar tapat.
+- **Pantalla completa**: el panell no hi surt (ja ho cobreix l'e2e de N1; comprovar-ho per a la
+  pàgina única).
+- **Imprimir i PDF des del mòbil**: el panell, la fila de sortides i les fletxes no surten al paper.
 
-**Textos nous** (als cinc idiomes, `packages/i18n`): «Ajustos» (nom de la regió, M1), «Mostra els
-ajustos», «Amaga els ajustos» i «Torna al full», a més dels de la fletxa de la vora i la capa del
-mòbil girat.
+**Què necessita dispositius de debò** (ho prova l'usuari al servidor de proves; la sessió prepara
+el que calgui i apunta el resultat a §9):
 
-**Fet quan**: el que diu la fase 4 a §6 (els tres casos de §1 en un e2e de mòbil); `npm run
-typecheck` net; `npm run lint` sense errors nous als fitxers tocats.
+- **iPhone**: si la pantalla completa funciona. Si no, una pantalla completa simulada (una capa fixa
+  que ocupi tota la finestra), que també ha de deixar lliscar i tocar la vora.
+- **TalkBack i VoiceOver**: el panell s'anuncia com a regió, i el botó amagat «Mostra els ajustos»
+  s'hi troba i funciona.
+- **El teclat virtual a iOS i Android**.
+- **La franja després d'arrossegar**: si respon al primer toc (a Chromium emulat, no).
+- **La tauleta en vertical** (768–900 px): si el panell hi té sentit (M7).
 
-**Avís**: a l'entorn del núvol, Playwright necessita
-`launchOptions: { executablePath: "/opt/pw-browsers/chromium" }`, perquè la versió del projecte no
-troba el navegador preinstal·lat. Es pot posar en un fitxer de configuració local que estengui
-`playwright.config.ts`, sense pujar-lo. Els e2e esperen el servidor de desenvolupament a
-`localhost:5173` (`npx vite`).
+**Fet quan**: cada cas de la fase 5 té una prova o una nota a §9 que diu per què no cal; `npm run
+typecheck` net; `npm run lint` sense errors nous als fitxers tocats; `e2e/mobile-view.spec.ts` i
+`e2e/bottom-sheet.spec.ts` en verd.
+
+**Avisos de l'entorn del núvol**:
+
+- Playwright necessita `launchOptions: { executablePath: "/opt/pw-browsers/chromium" }`: un fitxer de
+  configuració local que estengui `playwright.config.ts`, sense pujar-lo. Els e2e esperen
+  `npx vite` a `localhost:5173`, i cal llançar-los amb `--timeout 90000` (el config en té 10 minuts).
+- **Si es fa `git stash` amb el servidor engegat, cal reiniciar-lo**: es queda amb els catàlegs de
+  `packages/i18n` d'abans i els textos nous surten en anglès.
+- Les 8 captures de `saac-fixtures.spec.ts` («la vista es pinta igual que abans») ja fallen a
+  l'entorn del núvol sense cap canvi: no són d'aquesta feina.
 
 ## 11. La release
 
