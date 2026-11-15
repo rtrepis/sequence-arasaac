@@ -208,6 +208,9 @@ al davant hi encaixa.
   troballes L1–L8, de les quals L1–L4 estan resoltes i L5–L8 continuen obertes. La primera de
   les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
   correus diaris de Resend.
+- `docs/PLA-vista-mobil.md` és el pla per a la vista al mòbil: el full sencer a la pantalla i els
+  ajustos en un panell de baix (`AppBottomSheet`, una capa flotant nova). **Proposta pendent
+  d'aprovació**: cada fase té una porta, i l'estàndard es canvia abans que el codi (C29 del backlog).
 - `docs/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
   (agenda, passos, primer/després, setmana, taulers, normes, contes, economia de fitxes, menú), a
   l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en

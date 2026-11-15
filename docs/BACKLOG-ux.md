@@ -59,6 +59,7 @@ l'entrada.
 
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
+| C29 | Al mòbil, el full i els ajustos de la vista es disputen el mateix scroll | El full es perd i no es recupera, i seleccionar un bloc el fa fugir: passa a cada sessió de vista al mòbil | L | Sí: les de §9 de `docs/PLA-vista-mobil.md` |
 
 ### Després
 
@@ -1383,6 +1384,18 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   amb dreceres de teclat (Ctrl+Z, Ctrl+Maj+Z) i botons visibles a la barra de l'editor. Cal
   decidir-ne l'abast (quines accions en formen part, quants passos) i què passa amb el snackbar de
   «Desfés» actual.
+
+### C29 — Al mòbil, el full i els ajustos de la vista es disputen el mateix scroll 🔴 Oberta
+
+- **On**: `ViewSquenceSettings` per sota de `md`. La columna va sota el full, el verd fa l'alçada de
+  la pantalla i es desplaça per dins.
+- **Per què importa**: un cop s'ha baixat fins als ajustos, el dit només mou el verd i no hi ha manera
+  de tornar al full. Una franja del full a dalt no ho arregla, perquè als fulls amb blocs el dit hi
+  arrossega el bloc. Fer baixar la pàgina en seleccionar un bloc el fa sortir de la pantalla (provat
+  el 2026-11-15 i desfet).
+- **Proposta**: el full sencer a la pantalla, sense scroll de pàgina, i els ajustos en un panell de
+  baix amb tres alçades (`AppBottomSheet`, una capa nova de l'estàndard). El pla, amb les fases i les
+  portes d'aprovació, és `docs/PLA-vista-mobil.md`.
 
 ### C28 — Girar el mòbil tanca el diàleg d'edició del pictograma 🔴 Oberta
 
