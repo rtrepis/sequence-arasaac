@@ -65,6 +65,30 @@ const VISUALLY_HIDDEN = {
 /** Durada de la transició entre parades, en ms. */
 const SNAP_TRANSITION_MS = 250;
 
+/** Aire que es deixa entre el camp enfocat i la vora del que es veu, en px. */
+const REVEAL_MARGIN = 16;
+
+/** Els camps on s'escriu: tocar-los obre el teclat virtual. */
+const TEXT_ENTRY =
+  "textarea, [contenteditable=''], [contenteditable='true'], " +
+  "input:not([type=range]):not([type=checkbox]):not([type=radio])" +
+  ":not([type=button]):not([type=submit]):not([type=reset])";
+
+/**
+ * Si el que rep el focus s'ha de portar a la vista: el que s'hi arriba amb el
+ * teclat (`:focus-visible`) i els camps de text, que en tocar-los obren el
+ * teclat virtual.
+ */
+const needsReveal = (element: Element): boolean => {
+  if (element.matches(TEXT_ENTRY)) return true;
+  try {
+    return element.matches(":focus-visible");
+  } catch {
+    // Navegadors sense `:focus-visible` (i jsdom): només els camps de text
+    return false;
+  }
+};
+
 export interface AppBottomSheetProps {
   /** La parada actual. El panell no la canvia sol: ho demana amb `onSnapChange`. */
   snap: BottomSheetSnap;
@@ -164,11 +188,18 @@ const AppBottomSheet = ({
   // El botó d'estat i els avisos s'hi posen damunt (el terra), el contingut
   // de sota en reserva l'alçada (la reserva), i qui s'hagi d'apartar quan el
   // panell puja ho sap pel senyal. Amb el panell quiet: mentre s'arrossega,
-  // fer saltar el botó d'estat a cada píxel no ajudaria ningú
+  // fer saltar el botó d'estat a cada píxel no ajudaria ningú.
+  //
+  // **El terra no passa de mig.** A sencer, damunt del panell només hi ha la
+  // franja que torna a mig, i un avís que s'hi posés damunt la taparia: hi
+  // queia a sobre el «Fitxer carregat correctament» en obrir un document. A
+  // sencer, doncs, els avisos suren damunt del contingut a l'alçada de mig,
+  // que és on és el botó d'estat quan el panell no és plegat
+  const floor = Math.min(settledVisible, heights.half);
   useEffect(() => {
-    setFloatingFloor(layerId, settledVisible + viewport.bottom);
+    setFloatingFloor(layerId, floor + viewport.bottom);
     setFloatingInset(layerId, settledVisible);
-  }, [layerId, settledVisible, viewport.bottom]);
+  }, [layerId, floor, settledVisible, viewport.bottom]);
 
   useEffect(() => {
     setFloatingRaised(layerId, snap !== "collapsed");
@@ -182,6 +213,57 @@ const AppBottomSheet = ({
     },
     [layerId],
   );
+
+  // ---- El camp enfocat, a la vista ----
+
+  // El navegador porta a la vista el que rep el focus, però no sap que el
+  // panell baixa amb un `transform`: per a ell, el contingut fa sempre
+  // l'alçada de sencer, i un camp de la part de baixa «ja es veu» encara que
+  // sigui sota la pantalla. I quan s'obre el teclat virtual, el panell
+  // s'encongeix i el camp on s'escriu hi pot quedar a sota. Aquí es mira amb
+  // les mides de debò: el que es veu del contingut és el que queda entre la
+  // capçalera i la vora de baix del que es veu de la pantalla
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const roomRef = useRef(0);
+  roomRef.current = settledVisible - headerHeight;
+
+  const reveal = useCallback((element: Element): void => {
+    const content = contentRef.current;
+    if (!content || !content.contains(element)) return;
+
+    // Les dues mides passen pel mateix `transform`: la diferència no en depèn,
+    // i així val també a mitja transició
+    const box = content.getBoundingClientRect();
+    const target = element.getBoundingClientRect();
+    const top = target.top - box.top;
+    const bottom = target.bottom - box.top;
+    const room = roomRef.current;
+    if (room <= 0) return;
+
+    if (top < REVEAL_MARGIN || bottom - top > room - 2 * REVEAL_MARGIN)
+      content.scrollTop += top - REVEAL_MARGIN;
+    else if (bottom > room - REVEAL_MARGIN)
+      content.scrollTop += bottom - room + REVEAL_MARGIN;
+  }, []);
+
+  // En rebre el focus: amb el teclat, o en tocar un camp de text (que obre el
+  // teclat virtual). Un toc a un lliscador no fa moure res: el contingut
+  // saltaria sota el dit que l'arrossega
+  const handleFocusIn = (event: React.FocusEvent<HTMLDivElement>): void => {
+    const element = event.target;
+    if (!needsReveal(element)) return;
+    window.requestAnimationFrame(() => reveal(element));
+  };
+
+  // I quan el panell canvia d'alçada amb el focus a dins: és el que passa en
+  // obrir-se el teclat virtual, que encongeix el que es veu de la pantalla
+  useEffect(() => {
+    const focused = document.activeElement;
+    if (!focused || !contentRef.current?.contains(focused)) return undefined;
+
+    const frame = window.requestAnimationFrame(() => reveal(focused));
+    return () => window.cancelAnimationFrame(frame);
+  }, [reveal, settledVisible, viewport.height, viewport.top]);
 
   // ---- Arrossegar la nansa o la capçalera ----
 
@@ -401,8 +483,10 @@ const AppBottomSheet = ({
         </Box>
 
         <Box
+          ref={contentRef}
           id={contentId}
           hidden={contentHidden}
+          onFocus={handleFocusIn}
           sx={{
             flex: 1,
             minHeight: 0,

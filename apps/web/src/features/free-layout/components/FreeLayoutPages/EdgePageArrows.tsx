@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { Box, ButtonBase } from "@mui/material";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { useIntl } from "react-intl";
@@ -11,6 +11,8 @@ export interface EdgeArrowsShown {
   previous: boolean;
   next: boolean;
 }
+
+type Side = keyof EdgeArrowsShown;
 
 interface EdgePageArrowsProps {
   /** Si hi ha pàgina a cada costat: sense, aquella fletxa no hi és */
@@ -36,21 +38,45 @@ const EdgePageArrows = ({
   onNext,
 }: EdgePageArrowsProps): React.ReactElement => {
   const intl = useIntl();
+  const refs = useRef<Record<Side, HTMLButtonElement | null>>({
+    previous: null,
+    next: null,
+  });
+  // La fletxa que s'acaba de prémer amb el focus a sobre (teclat o lector de
+  // pantalla). Si en arribar a la primera o l'última pàgina desapareix, el
+  // focus aniria a parar al `body` i caldria tornar a començar a tabular.
+  // Es mira a cada pintada, i es buida, perquè no quedi pendent d'un altre toc
+  const pressedWithFocus = useRef<Side | null>(null);
+
+  useLayoutEffect(() => {
+    const pressed = pressedWithFocus.current;
+    pressedWithFocus.current = null;
+    if (!pressed) return;
+    const stillThere = pressed === "previous" ? hasPrevious : hasNext;
+    if (stillThere) return;
+    // Passa a l'altra fletxa, que és la que ara té pàgina
+    refs.current[pressed === "previous" ? "next" : "previous"]?.focus();
+  });
 
   const arrow = (
-    side: "previous" | "next",
+    side: Side,
     label: string,
     onClick: () => void,
     icon: React.ReactNode,
   ) => (
     <ButtonBase
       key={side}
+      ref={(element: HTMLButtonElement | null) => {
+        refs.current[side] = element;
+      }}
       aria-label={label}
       data-edge-arrow={side}
       data-shown={shown[side]}
       onClick={(event) => {
         // El toc no ha d'arribar a la vora, que el prendria per un toc al full
         event.stopPropagation();
+        if (event.currentTarget === document.activeElement)
+          pressedWithFocus.current = side;
         onClick();
       }}
       sx={{

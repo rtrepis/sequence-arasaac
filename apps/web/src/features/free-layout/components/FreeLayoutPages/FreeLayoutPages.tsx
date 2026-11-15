@@ -565,6 +565,11 @@ const FreeLayoutPages = ({
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      // El doble toc obre els ajustos (D1): el navegador no
+                      // hi ha de fer zoom (el Safari de l'iPhone en fa, encara
+                      // que la pàgina sigui per a mòbil). Lliscar per passar
+                      // de pàgina i pessigar per ampliar continuen
+                      touchAction: "manipulation",
                     }
                   : { display: "contents" }
               }

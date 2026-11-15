@@ -1,8 +1,10 @@
 # Pla: la vista al mòbil — el full a la pantalla i els ajustos en un panell de baix
 
 > **Estat**: pla aprovat (2026-11-15). **Per continuar, comenceu per §10, «Encàrrec per a la sessió
-> següent»**: és la fase 5. **Fase 4 feta** (2026-11-15): la vista ja va al panell de baix, amb els
-> tres casos de §1 en un e2e de mòbil. **Fase 0 feta** (2026-11-15): la
+> següent»**: les proves en dispositius de debò (§9d) i la fase 6. **Fase 5 feta en emulació**
+> (2026-11-15): els casos difícils que es poden provar aquí tenen prova; els que necessiten un
+> mòbil de debò són a §9d, pendents. **Fase 4 feta** (2026-11-15): la vista ja va al panell de baix,
+> amb els tres casos de §1 en un e2e de mòbil. **Fase 0 feta** (2026-11-15): la
 > release no fa saltar la pàgina en seleccionar i té l'enllaç «Ajustos del bloc». **Fase 3 feta**
 > (2026-11-15): `AppBottomSheet` existeix i passa les proves, però la vista encara no el munta.
 > **Fase 1 tancada** (2026-11-15): totes les decisions són a §9.
@@ -367,7 +369,7 @@ a `configuracions.md`, totes marcades «⏳ Proposta». **El `CLAUDE.md` no es t
   són al flux de la pàgina i l'escenari, fix, els tapava. Quan el panell puja, l'escenari (opac)
   hi passa per damunt fins que torna a baixar.
 
-**Troballes per a la fase 5**:
+**Troballes per a la fase 5** (totes tres resoltes a la fase 5):
 
 - **Els avisos tapen la franja de sencer.** Suren damunt del terra del panell; a sencer, el terra és
   a 64 px de dalt i un avís («Fitxer carregat correctament») cau damunt de «Torna al full». L'e2e
@@ -398,7 +400,37 @@ a `configuracions.md`, totes marcades «⏳ Proposta». **El `CLAUDE.md` no es t
 **Fet quan**: els tres casos de §1 (tornar al full, arrossegar un bloc, seleccionar la fila de dalt
 amb el full vertical) passen en un e2e de mòbil.
 
-### Fase 5 — Els casos difícils
+### Fase 5 — Els casos difícils ✅ Feta en emulació (2026-11-15) · ⏳ dispositius de debò
+
+**Com ha quedat** (cada cas, amb la prova o la nota de §9d):
+
+- **Els avisos ja no tapen la franja de sencer.** El terra que declara `AppBottomSheet` no passa
+  mai de mig: a sencer, els avisos i el botó d'estat suren damunt del contingut a l'alçada de mig, i
+  «Torna al full» queda a l'abast. La reserva continua sent la de debò. L'estàndard ho diu
+  («Panell de baix»). Proves: unitària a `AppBottomSheet.test.tsx` i e2e amb l'avís de «Fitxer
+  carregat» a la vista mentre el panell va a sencer.
+- **El que rep el focus dins del panell, el panell el porta a la vista** (`AppBottomSheet`). Era un
+  error de debò, no només del teclat virtual: el panell baixa amb un `transform`, i per al navegador
+  un camp de la part de baix «ja es veu» encara que sigui sota la pantalla. Es mira en rebre el
+  focus (amb el teclat, o en un camp de text) i quan el panell canvia d'alçada amb el focus a dins
+  (el teclat virtual en obrir-se). Prova e2e: l'autor del document, enfocat a mig, i després amb la
+  finestra encongida com fa Android en obrir el teclat. Sense l'arreglo, el camp queda sota la
+  pantalla tant en enfocar-lo com en obrir el teclat (comprovat).
+- **El doble toc no fa zoom**: `touch-action: manipulation` a l'espai del full (`FreeLayoutPages`).
+  El Chromium d'Android ja no en fa a les pàgines amb `width=device-width`; el Safari de l'iPhone,
+  sí. Prova e2e: el valor al full i l'escala del `visualViewport` després d'un doble toc.
+- **El focus de la fletxa de la vora**: si la fletxa que es prem amb el focus desapareix (primera o
+  última pàgina), el focus passa a l'altra (`EdgePageArrows`). Si el focus era en un altre lloc, no
+  l'hi pren. Prova unitària: `EdgePageArrows.test.tsx`.
+- **Pantalla completa**: el panell no hi és, tampoc a la pàgina única (e2e: el que hi ha on era el
+  panell és la pantalla completa). **Girat**, la pantalla completa funciona, la capa del mòbil girat
+  no hi surt, s'hi llisca, i en sortir-ne la capa torna (e2e al Pixel 7).
+- **Imprimir i PDF**: ni el panell, ni la fila de sortides, ni les fletxes de la vora no són dins dels
+  fulls que captura el PDF (`.preview-content`) ni a la còpia que s'imprimeix (`#print-root`), i al
+  paper no es veuen (e2e, amb el panell a mig i la fletxa a la vista).
+- **De pas**: el cas 3 de l'e2e fallava de tant en tant amb diversos treballadors alhora. Entre els
+  dos `tap` de Playwright hi havia més dels 350 ms del doble toc; no era cap zoom (l'escala era 1).
+  Ara el doble toc es torna a provar si no obre els ajustos (`doubleTapToOpen`).
 
 - **Teclat virtual**: escriure l'autor del document. El panell no pot quedar tapat pel teclat.
 - **Mòbil en horitzontal**: no es treballa (M6). Es comprova que surt la capa (N3) i que la pantalla
@@ -482,53 +514,48 @@ amb el full vertical) passen en un e2e de mòbil.
 
 **Precisió** (2026-11-15): a la pantalla completa, l'única cosa que es fa és passar de pàgina.
 
+### 9d. Fase 5: el que necessita un dispositiu de debò — ⏳ pendent (2026-11-15)
+
+L'emulació de Chromium no ho pot dir. Cada fila, quan es provi al servidor de proves, s'omple amb el
+resultat i la data.
+
+| Id | Cas | Què cal fer al dispositiu | Què s'espera | Resultat |
+|---|---|---|---|---|
+| F5a | **Pantalla completa a l'iPhone** | A la vista, «Aquesta pàgina a pantalla completa» | **Probablement no fa res**: el Safari de l'iPhone només deixa posar a pantalla completa un vídeo, i `enterPageFullscreen` crida `requestFullscreen` amb `?.`, que en falta no fa res i no diu res. Si es confirma, el botó trenca «tota acció acaba amb un missatge», i la proposta és la pantalla completa simulada (una capa fixa que ocupi tota la finestra, on també es llisqui i es toqui la vora). **Cal decidir-ho abans de la fase 6** | ⏳ |
+| F5b | **TalkBack (Android) i VoiceOver (iOS)** | Recórrer la vista amb el lector; trobar el botó «Mostra els ajustos»; activar-lo; selecciona un bloc amb el doble toc del lector | El panell s'anuncia com a regió «Ajustos»; el botó amagat s'hi troba, diu si és desplegat, i puja el panell; les fletxes de la vora s'hi troben | ⏳ |
+| F5c | **Teclat virtual a iOS i Android** | Escriure l'autor del document amb el panell a mig i a sencer | El camp no queda mai sota el teclat. A Android ho cobreix l'e2e (la finestra s'encongeix); al Safari d'iOS la finestra no s'encongeix i el panell segueix el `visualViewport`, que l'emulació no reprodueix | ⏳ |
+| F5d | **La franja després d'arrossegar** | Arrossegar el panell a sencer d'un gest ràpid i tocar de seguida «Torna al full» | Respon al primer toc. A Chromium emulat no (es menja el toc que segueix un «fling»); els e2e aturen el dit abans d'aixecar-lo | ⏳ |
+| F5e | **Tauleta en vertical** (768–900 px, M7) | Treballar una estona amb la vista en una tauleta dreta | El panell hi té sentit (amb el full prou gran a mig). Si no, es pot proposar la columna per a la tauleta, en un pas a part | ⏳ |
+| F5f | **El doble toc a l'iPhone** | Doble toc a un bloc de la disposició lliure | Obre els ajustos i la pàgina no s'amplia (`touch-action: manipulation`) | ⏳ |
+
 ## 10. Encàrrec per a la sessió següent
 
-**Què**: la fase 5, els casos difícils (§6, «Fase 5»), més les tres troballes que va deixar la
-fase 4 (al final de la fase 4 a §6, «Troballes per a la fase 5»). La vista ja va al panell, i
-`e2e/mobile-view.spec.ts` és la xarxa: no s'ha de trencar.
+**Què**: dues coses, en aquest ordre.
+
+1. **Les proves en dispositius de debò** (§9d). Les fa l'usuari al servidor de proves; la sessió
+   n'apunta el resultat a §9d amb data. **F5a (la pantalla completa a l'iPhone) demana una decisió**:
+   si es confirma que no fa res, cal decidir si es fa la pantalla completa simulada (i fer-la, amb
+   prova) o si el botó no surt allà on no funciona. Les altres, si van bé, només s'apunten; si no,
+   cada una és una troballa nova al backlog o un retoc amb prova.
+2. **La fase 6** (§6): treure la marca «⏳ Proposta» de `capes-flotants.md`, `configuracions.md` i
+   F14; la regla al `CLAUDE.md`; C29 a `✅ Resolta`. Les notícies (§11) van després.
 
 **On**: **a la branca de la release, `claude/release-before-new-plan-8x1xhp`**, que ja porta les
-fases 3 i 4 (s'hi va integrar `claude/fase-4-vista-mobil-4875d1` el 2026-11-15). **El panell forma
-part de la release** (§11). Si la sessió nova té assignada una altra branca, ha de partir de la de
-la release, no de `main`.
+fases 3, 4 i 5. Si la sessió nova té assignada una altra branca, ha de partir de la de la release,
+no de `main`.
 
 **Què cal llegir abans**, i res més:
 
-1. Aquest pla: §4 (el model), §9 (les decisions), la fase 4 tal com ha quedat (amb els retocs i les
-   troballes) i la fase 5 de §6.
+1. Aquest pla: §4 (el model), §9 (les decisions, i §9d, el que queda per provar) i la fase 5 de §6
+   tal com ha quedat.
 2. `docs/estandards/capes-flotants.md`: «Panell de baix», «La capa del mòbil girat» i «La fletxa de
    la vora».
-3. El codi de la vista al mòbil: `components/ViewSequencesSettings/ViewSquenceSettings.tsx` (la
-   branca `!isWideScreen` del `return`), `features/free-layout/components/FreeLayoutPages/`
-   (`FreeLayoutPages.tsx`, `EdgePageArrows.tsx`) i `components/AppBottomSheet/`.
+3. Per a F5a, `features/free-layout/hooks/usePageView.ts` (`enterPageFullscreen`,
+   `useFullscreenElementId`) i `FreeLayoutPages.tsx`.
 
-**Què es pot fer aquí** (amb proves, unitàries o e2e):
-
-- **Els avisos tapen la franja de sencer** («Torna al full»): que no ho facin, sense trencar la regla
-  del terra (el botó d'estat i els avisos s'hi posen damunt).
-- **El zoom del doble toc**: `touch-action` al full perquè el navegador no hi faci zoom.
-- **El focus de la fletxa de la vora**: que no es perdi quan la fletxa desapareix en arribar a la
-  primera o l'última pàgina.
-- **El teclat virtual** (escriure l'autor del document), en emulació: el camp no pot quedar tapat.
-- **Pantalla completa**: el panell no hi surt (ja ho cobreix l'e2e de N1; comprovar-ho per a la
-  pàgina única).
-- **Imprimir i PDF des del mòbil**: el panell, la fila de sortides i les fletxes no surten al paper.
-
-**Què necessita dispositius de debò** (ho prova l'usuari al servidor de proves; la sessió prepara
-el que calgui i apunta el resultat a §9):
-
-- **iPhone**: si la pantalla completa funciona. Si no, una pantalla completa simulada (una capa fixa
-  que ocupi tota la finestra), que també ha de deixar lliscar i tocar la vora.
-- **TalkBack i VoiceOver**: el panell s'anuncia com a regió, i el botó amagat «Mostra els ajustos»
-  s'hi troba i funciona.
-- **El teclat virtual a iOS i Android**.
-- **La franja després d'arrossegar**: si respon al primer toc (a Chromium emulat, no).
-- **La tauleta en vertical** (768–900 px): si el panell hi té sentit (M7).
-
-**Fet quan**: cada cas de la fase 5 té una prova o una nota a §9 que diu per què no cal; `npm run
-typecheck` net; `npm run lint` sense errors nous als fitxers tocats; `e2e/mobile-view.spec.ts` i
-`e2e/bottom-sheet.spec.ts` en verd.
+**Fet quan**: §9d té tots els resultats; F5a té decisió i, si cal, codi amb prova; la fase 6 és
+feta; `npm run typecheck` net; `npm run lint` sense errors nous als fitxers tocats;
+`e2e/mobile-view.spec.ts` i `e2e/bottom-sheet.spec.ts` en verd.
 
 **Avisos de l'entorn del núvol**:
 
@@ -539,6 +566,7 @@ typecheck` net; `npm run lint` sense errors nous als fitxers tocats; `e2e/mobile
   `packages/i18n` d'abans i els textos nous surten en anglès.
 - Les 8 captures de `saac-fixtures.spec.ts` («la vista es pinta igual que abans») ja fallen a
   l'entorn del núvol sense cap canvi: no són d'aquesta feina.
+- Les proves unitàries corren en anglès (els noms accessibles, «Next page»…); els e2e, en català.
 
 ## 11. La release
 
@@ -552,7 +580,7 @@ servidor de proves, i per tant cada pas es pot provar allà a mesura que s'acaba
 | Seleccionar no mou la pàgina, enllaç «Ajustos del bloc» | ✅ Fet | Fase 0 d'aquest pla |
 | `AppBottomSheet`, sol i amb proves | ✅ Fet | Fase 3 d'aquest pla |
 | La vista al mòbil: la migració de la vista | ✅ Fet | Fase 4 d'aquest pla |
-| La vista al mòbil: els casos difícils | ⏳ Per fer | Fase 5 d'aquest pla |
+| La vista al mòbil: els casos difícils | ✅ Fet en emulació · ⏳ dispositius de debò (§9d) | Fase 5 d'aquest pla |
 | L'estàndard sense la marca «Proposta» i la regla al `CLAUDE.md` | ⏳ Per fer | Fase 6 d'aquest pla |
 | **Notícia de les pàgines i la disposició** (simple, columnes, files, lliure) | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13, «Què queda obert»; en publicar-la, es treu l'etiqueta «Nou» de la fila «Disposició» (pas 8) |
 | **Notícia de la vista al mòbil** | ⏳ Per fer | Fase 6 d'aquest pla |

@@ -193,6 +193,20 @@ describe("AppBottomSheet", () => {
     expect(rootVariable(FLOATING_INSET_VARIABLE)).toBe("0px");
   });
 
+  it("a sencer, el terra es queda a mig: els avisos no tapen la franja que torna", () => {
+    const { unmount } = renderWithProviders(<Harness initial="full" />);
+
+    // jsdom: finestra de 768 px i capçalera sense alçada
+    const half = Math.round(window.innerHeight / 2);
+    const full = window.innerHeight - 64;
+
+    expect(rootVariable(FLOATING_FLOOR_VARIABLE)).toBe(`${half}px`);
+    // La reserva, en canvi, és la de debò
+    expect(rootVariable(FLOATING_INSET_VARIABLE)).toBe(`${full}px`);
+
+    unmount();
+  });
+
   it("avisa amb el senyal genèric quan és a mig o a sencer", async () => {
     const user = userEvent.setup();
     renderWithProviders(<Harness />);

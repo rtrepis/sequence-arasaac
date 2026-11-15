@@ -41,18 +41,28 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-/** Obre un document de les fixtures i va a la vista. */
-const openInView = async (page: Page, name: string): Promise<void> => {
+/** L'avís que surt en obrir un document. */
+const loadedNotice = (page: Page): Locator =>
+  page.getByText("Fitxer carregat correctament");
+
+/**
+ * Obre un document de les fixtures i va a la vista. Per defecte, espera que
+ * marxi l'avís de «Fitxer carregat», perquè no tapi res del que es prova.
+ */
+const openInView = async (
+  page: Page,
+  name: string,
+  { waitNotice = true }: { waitNotice?: boolean } = {},
+): Promise<void> => {
   await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
   await page
     .locator('input[type="file"]')
     .first()
     .setInputFiles(path.join(FIXTURES, name));
-  const loaded = page.getByText("Fitxer carregat correctament");
-  await expect(loaded).toBeVisible();
+  await expect(loadedNotice(page)).toBeVisible();
   await page.locator('a[href$="view-sequence"]').first().click();
-  // L'avís sura damunt del panell: a sencer, taparia la franja de dalt
-  await expect(loaded).toBeHidden({ timeout: 15000 });
+  if (waitNotice)
+    await expect(loadedNotice(page)).toBeHidden({ timeout: 15000 });
   await expect(panel(page)).toBeVisible();
   await expectSnap(page, "collapsed");
 };
@@ -132,6 +142,38 @@ const doubleTapCenter = async (page: Page, locator: Locator): Promise<void> => {
   await page.waitForTimeout(80);
   await page.touchscreen.tap(x, y);
 };
+
+/**
+ * Un doble toc que ha d'obrir els ajustos. Amb la màquina carregada (diversos
+ * treballadors alhora), entre un `tap` i l'altre de Playwright hi pot haver
+ * més dels 350 ms que separen un doble toc de dos tocs: si passa, es torna a
+ * provar, que és el que faria la persona.
+ */
+const doubleTapToOpen = async (page: Page, locator: Locator): Promise<void> => {
+  await expect(async () => {
+    await doubleTapCenter(page, locator);
+    await expect(panel(page)).toHaveAttribute("data-snap", "half", {
+      timeout: 1500,
+    });
+  }).toPass({ timeout: 15000 });
+};
+
+/** L'element que hi ha de debò en un punt de la pantalla (el que rep el dit). */
+const hitAt = (page: Page, x: number, y: number) =>
+  page.evaluate(
+    ([px, py]) => {
+      const hit = document.elementFromPoint(px, py);
+      return {
+        inFullscreen: Boolean(hit && document.fullscreenElement?.contains(hit)),
+        inPanel: Boolean(hit?.closest("[role=region][data-snap]")),
+        label:
+          hit?.closest("button")?.textContent?.trim() ??
+          hit?.textContent?.trim().slice(0, 40) ??
+          "",
+      };
+    },
+    [x, y] as const,
+  );
 
 const runSuite = (): void => {
   test("cas 1: la pàgina no es desplaça i el full no es perd mai", async ({
@@ -226,7 +268,7 @@ const runSuite = (): void => {
       .first();
 
     // A la disposició lliure, el doble toc obre els ajustos (D1)
-    await doubleTapCenter(page, top);
+    await doubleTapToOpen(page, top);
     await expectSnap(page, "half");
     await expect(top).toHaveAttribute("aria-pressed", "true");
 
@@ -328,6 +370,179 @@ const runSuite = (): void => {
     await page.touchscreen.tap(viewport.width / 2, y);
     await expect(panel(page)).toHaveAttribute("data-snap", "collapsed");
   });
+
+  // ---- Fase 5: els casos difícils ----
+
+  test("a sencer, els avisos no tapen la franja que torna al full", async ({
+    page,
+  }) => {
+    // Sense esperar que marxi l'avís de «Fitxer carregat»
+    await openInView(page, SIMPLE, { waitNotice: false });
+    const notice = loadedNotice(page);
+    await expect(notice).toBeVisible();
+
+    const drag = await finger(page);
+    const headerBox = await boxOf(page.getByTestId("app-bottom-sheet-header"));
+    await drag(
+      { x: headerBox.x + 40, y: headerBox.y + 8 },
+      { x: headerBox.x + 40, y: 20 },
+    );
+    await expectSnap(page, "full");
+    await expect(notice).toBeVisible();
+
+    // L'avís, per sota de la franja; i la franja, a l'abast del dit
+    const strip = page.getByRole("button", { name: "Torna al full" });
+    const stripBox = await boxOf(strip);
+    expect((await boxOf(notice)).y).toBeGreaterThanOrEqual(
+      stripBox.y + stripBox.height,
+    );
+    const hit = await hitAt(
+      page,
+      stripBox.x + stripBox.width / 2,
+      stripBox.y + stripBox.height / 2,
+    );
+    expect(hit.label).toBe("Torna al full");
+
+    await strip.tap();
+    await expectSnap(page, "half");
+  });
+
+  test("el doble toc al full no hi fa zoom", async ({ page }) => {
+    await openInView(page, FREE_PORTRAIT);
+    // `manipulation`: el navegador no espera el segon toc ni amplia, i
+    // lliscar i pessigar continuen funcionant
+    await expect(page.getByTestId("view-sheet-area")).toHaveCSS(
+      "touch-action",
+      "manipulation",
+    );
+
+    const top = page
+      .getByTestId("view-sheet-area")
+      .locator(".placement [role=button]")
+      .first();
+    await doubleTapToOpen(page, top);
+    expect(await page.evaluate(() => window.visualViewport?.scale ?? 1)).toBe(
+      1,
+    );
+  });
+
+  test("amb el teclat virtual obert, el camp de l'autor no queda tapat", async ({
+    page,
+  }) => {
+    await openInView(page, SIMPLE);
+    const viewport = page.viewportSize();
+    if (!viewport) throw new Error("sense viewport");
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
+    await expectSnap(page, "half");
+
+    const author = page.getByRole("textbox", { name: /autor/i }).first();
+    /** El camp, sencer entre la capçalera del panell i la vora de baix. */
+    const fieldIsVisible = async (bottom: number): Promise<boolean> => {
+      const box = await boxOf(author);
+      const header = await boxOf(page.getByTestId("app-bottom-sheet-header"));
+      return (
+        box.y >= header.y + header.height - 1 && box.y + box.height <= bottom
+      );
+    };
+
+    // En rebre el focus, el panell el porta a la part que es veu: el
+    // navegador sol no ho fa, perquè el panell baixa amb un `transform`
+    await author.focus();
+    await expect.poll(() => fieldIsVisible(viewport.height)).toBe(true);
+
+    // S'obre el teclat: a Android la finestra s'encongeix (el Safari d'iOS
+    // no, i ho diu `visualViewport`; vegeu §9 del pla)
+    const keyboard = Math.round(viewport.height * 0.4);
+    await page.setViewportSize({
+      width: viewport.width,
+      height: viewport.height - keyboard,
+    });
+    await expect
+      .poll(() => fieldIsVisible(viewport.height - keyboard))
+      .toBe(true);
+    await expect(author).toBeFocused();
+
+    // I s'hi escriu
+    await page.keyboard.type(" i família");
+    await expect(author).toHaveValue(/ i família$/);
+  });
+
+  test("a la pantalla completa de la pàgina única, el panell no hi és", async ({
+    page,
+  }) => {
+    await openInView(page, SIMPLE);
+    const viewport = page.viewportSize();
+    if (!viewport) throw new Error("sense viewport");
+    await page
+      .getByRole("button", { name: "Aquesta pàgina a pantalla completa" })
+      .tap();
+    await expect
+      .poll(() => page.evaluate(() => Boolean(document.fullscreenElement)))
+      .toBe(true);
+
+    // On era el panell, ara hi ha la pantalla completa
+    const hit = await hitAt(page, viewport.width / 2, viewport.height - 10);
+    expect(hit.inPanel).toBe(false);
+    expect(hit.inFullscreen).toBe(true);
+  });
+
+  test("al paper i al PDF no hi ha ni el panell, ni les sortides, ni les fletxes", async ({
+    page,
+  }) => {
+    await openInView(page, FREE_PORTRAIT);
+    const viewport = page.viewportSize();
+    if (!viewport) throw new Error("sense viewport");
+    // Amb el panell a mig i la fletxa de la vora a la vista
+    await page
+      .getByRole("button", { name: "Mostra els ajustos" })
+      .press("Enter");
+    await expectSnap(page, "half");
+    const box = await boxOf(sheet(page));
+    await page.touchscreen.tap(viewport.width - 8, box.y + box.height - 8);
+    await expect(
+      page.getByRole("button", { name: "Pàgina següent" }),
+    ).toHaveAttribute("data-shown", "true");
+
+    // El PDF captura els fulls (`.preview-content`): cap d'aquestes coses no
+    // hi és a dins. Les marques d'edició dels blocs (el menú «⋯») sí, però
+    // porten `data-html2canvas-ignore` i no es capturen; al paper, no es veuen
+    const leaked = (root: string) =>
+      page.evaluate(
+        (selector) =>
+          Array.from(document.querySelectorAll(selector)).flatMap((node) =>
+            Array.from(
+              node.querySelectorAll(
+                "[role=region], [data-edge-arrow], [data-testid=app-bottom-sheet-header], button",
+              ),
+            )
+              .filter(
+                (found) =>
+                  !found.closest("[data-html2canvas-ignore]") &&
+                  getComputedStyle(found).display !== "none" &&
+                  found.getClientRects().length > 0,
+              )
+              .map((found) => found.outerHTML.slice(0, 60)),
+          ),
+        root,
+      );
+    expect(await page.locator(".preview-content").count()).toBe(2);
+    expect(await leaked(".preview-content")).toEqual([]);
+
+    // El paper: Ctrl+P avisa amb `beforeprint`, i s'imprimeix només la còpia
+    await page.evaluate(() => window.dispatchEvent(new Event("beforeprint")));
+    await page.emulateMedia({ media: "print" });
+    await expect(page.locator("#print-root")).toBeVisible();
+    expect(await leaked("#print-root")).toEqual([]);
+    await expect(panel(page)).toBeHidden();
+    await expect(page.getByRole("button", { name: "Imprimir" })).toBeHidden();
+    await expect(page.locator("[data-edge-arrow]")).toHaveCount(1);
+    await expect(page.locator("[data-edge-arrow]")).toBeHidden();
+    await expect(
+      page.getByRole("button", { name: "Torna al full" }),
+    ).toHaveCount(0);
+  });
 };
 
 test.use({ locale: "ca-ES" });
@@ -351,6 +566,51 @@ test.describe("al telèfon girat (Pixel 7 apaïsat)", () => {
 
   test("surt la capa que demana posar el mòbil dret (N3)", async ({ page }) => {
     await page.goto("/ca/view-sequence", { waitUntil: "domcontentloaded" });
+    await expect(
+      page.getByRole("status").filter({ hasText: "Gira el mòbil" }),
+    ).toBeVisible();
+  });
+});
+
+test.describe("al telèfon, de dret a girat a la pantalla completa", () => {
+  const { defaultBrowserType: _browser, ...pixel } = devices["Pixel 7"];
+  test.use(pixel);
+
+  test("girat, la pantalla completa funciona i la capa no hi surt (M6, N3)", async ({
+    page,
+  }) => {
+    await openInView(page, FREE_PORTRAIT);
+    const upright = page.viewportSize();
+    if (!upright) throw new Error("sense viewport");
+    await page
+      .getByRole("button", { name: "Aquesta pàgina a pantalla completa" })
+      .tap();
+    await expect
+      .poll(() => page.evaluate(() => document.fullscreenElement?.id ?? ""))
+      .toBe("view-pages");
+
+    // Es gira el mòbil
+    await page.setViewportSize({
+      width: upright.height,
+      height: upright.width,
+    });
+    await expect(
+      page.getByRole("status").filter({ hasText: "Gira el mòbil" }),
+    ).toHaveCount(0);
+
+    // El full, sencer a la pantalla girada, i s'hi passa de pàgina lliscant
+    const frame = page.locator("#view-page-frame-0");
+    const box = await boxOf(frame);
+    expect(box.y).toBeGreaterThanOrEqual(0);
+    expect(box.y + box.height).toBeLessThanOrEqual(upright.width + 1);
+    const drag = await finger(page);
+    const y = upright.width / 2;
+    await drag({ x: upright.height * 0.8, y }, { x: upright.height * 0.2, y });
+    await expect(page.locator("#view-page-1")).toBeVisible();
+    await expect(page.locator("#view-page-0")).toBeHidden();
+
+    // En sortir de la pantalla completa, girat, la capa hi torna
+    await page.evaluate(() => document.exitFullscreen());
     await expect(
       page.getByRole("status").filter({ hasText: "Gira el mòbil" }),
     ).toBeVisible();

@@ -1399,7 +1399,11 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 - **Estat** (2026-11-15): fase 0 feta (seleccionar ja no mou la pàgina), fase 1 tancada (esbós i
   decisions), fase 2 aprovada i fase 3 feta (`AppBottomSheet` sol, amb proves). **Fase 4 feta**: la
   vista ja hi va, amb els tres casos de §1 del pla en un e2e de mòbil (`e2e/mobile-view.spec.ts`).
-  Falten els casos difícils (fase 5) i treure la marca «Proposta» de l'estàndard (fase 6).
+  **Fase 5 feta en emulació**: els avisos ja no tapen la franja de sencer, el panell porta a la vista
+  el camp enfocat (també amb el teclat virtual), el full no fa zoom amb el doble toc, el focus de la
+  fletxa de la vora no es perd, i la pantalla completa i el paper estan provats. Falten les proves en
+  dispositius de debò (§9d del pla; la pantalla completa a l'iPhone demana una decisió) i treure la
+  marca «Proposta» de l'estàndard (fase 6).
 
 ### C28 — Girar el mòbil tanca el diàleg d'edició del pictograma 🔴 Oberta
 
