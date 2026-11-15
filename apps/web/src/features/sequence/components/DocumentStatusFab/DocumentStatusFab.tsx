@@ -40,7 +40,7 @@ import {
   FLOATING_EDGE_GAP,
 } from "@/style/appShape";
 import { floatingControlSx } from "@/style/floatingControl";
-import { useFloatingCorner } from "@components/FloatingLayer";
+import { floatingFloorCss, useFloatingCorner } from "@components/FloatingLayer";
 import SaveDocumentModal from "@features/backend/documents/components/SaveDocumentModal";
 import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
@@ -279,7 +279,9 @@ const DocumentStatusFab = (): ReactElement => {
       <Box
         sx={{
           position: "fixed",
-          bottom: FLOATING_EDGE_GAP,
+          // Damunt del panell de baix, si n'hi ha cap d'obert (el terra que
+          // declara `AppBottomSheet`); sense panell, el terra val zero
+          bottom: `calc(${FLOATING_EDGE_GAP}px + ${floatingFloorCss})`,
           right: FLOATING_EDGE_GAP,
           // Columna alineada a la dreta i ancorada a baix: el que s'hi afegeix
           // creix cap amunt, de manera que la frase d'estat queda per sobre de

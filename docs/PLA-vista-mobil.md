@@ -1,9 +1,10 @@
 # Pla: la vista al mòbil — el full a la pantalla i els ajustos en un panell de baix
 
 > **Estat**: pla aprovat (2026-11-15). **Per continuar, comenceu per §10, «Encàrrec per a la sessió
-> següent»**: és la fase 3. **Fase 0 feta** (2026-11-15): la
-> release no fa saltar la pàgina en seleccionar i té l'enllaç «Ajustos del bloc». De la resta del
-> pla no s'ha escrit cap línia de codi. **Fase 1 tancada** (2026-11-15): totes les decisions són a §9.
+> següent»**: és la fase 4. **Fase 0 feta** (2026-11-15): la
+> release no fa saltar la pàgina en seleccionar i té l'enllaç «Ajustos del bloc». **Fase 3 feta**
+> (2026-11-15): `AppBottomSheet` existeix i passa les proves, però la vista encara no el munta.
+> **Fase 1 tancada** (2026-11-15): totes les decisions són a §9.
 > **Fase 2 aprovada** (2026-11-15): l'estàndard és a `capes-flotants.md`, `configuracions.md` i F14
 > de `ESTANDARD-capes-flotants.md`. Continua marcat «⏳ Proposta» perquè el codi encara no el
 > compleix; la marca es treu a la fase 6. Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
@@ -264,7 +265,38 @@ a `configuracions.md`, totes marcades «⏳ Proposta». **El `CLAUDE.md` no es t
 
 **Fet quan**: el text és aprovat. A partir d'aquí, el codi segueix l'estàndard, no al revés.
 
-### Fase 3 — `AppBottomSheet`, sol
+### Fase 3 — `AppBottomSheet`, sol ✅ Feta (2026-11-15)
+
+**Com ha quedat**:
+
+- `components/AppBottomSheet/`: el component (`AppBottomSheet.tsx`), les parades i el gest
+  (`bottomSheetSnap.ts`, lògica pura) i el que queda visible amb el teclat virtual
+  (`useVisibleViewport.ts`, sobre `visualViewport`). Controlat des de fora (`snap` i
+  `onSnapChange`), i **sense cap text propi**: el nom de la regió, el botó i la franja els passa qui
+  el munta, de manera que els textos nous als cinc idiomes arriben a la fase 4 amb la vista.
+- **Panell sempre de l'alçada de sencer, baixat amb un `transform`**; el contingut reserva al final
+  el tros que queda sota la pantalla, perquè l'últim ajust s'hi pugui arribar a mig. Plegat, el
+  contingut s'amaga (`hidden`) en acabar la transició: no es tabula ni es llegeix el que no es veu.
+- **Un gest ràpid** (més de 0,5 px/ms) va a la parada següent en aquella direcció; un de lent, a la
+  més propera (el criteri de l'esbós). Tocar la capçalera sense moure el dit més de 6 px és un toc, i
+  el botó el rep; després d'arrossegar, el `click` que en surt no prem res.
+- **Una peça nova a `FloatingLayer`, el terra** (`setFloatingFloor`, `--app-floating-floor`), a més
+  de la reserva (`setFloatingInset`) que demanava el pla. El botó d'estat i els avisos (via
+  `floatingSnackbarSx`) llegeixen el terra, no la reserva: la reserva també la declaren els avisos, i
+  el botó d'estat hauria saltat amunt cada cop que en sortís un. L'estàndard ja ho diu.
+- **El senyal per a la barra**: `setFloatingRaised` i `useFloatingRaised`, també a `FloatingLayer`.
+  Ningú no l'escolta encara (fase 4).
+- **La franja de sencer** porta un vel fosc nou de `palette.ts` (`bottomSheetStrip`), al 72 % perquè
+  el text blanc hi faci 7,3:1 damunt del full; el 55 % de l'esbós es quedava a 4:1.
+- **Proves**: `AppBottomSheet.test.tsx` i `bottomSheetSnap.test.ts` (alçades, botó, `aria-expanded`,
+  teclat, Escape que no el mou, no modal, reserva, terra i senyal) i `e2e/bottom-sheet.spec.ts`, amb
+  el dit de debò (CDP) en un Pixel 7 i un iPad Mini emulats: plegat, mig al 50 %, el botó d'estat
+  damunt, arrossegar a sencer i la franja que torna, el gest lent, baixar a plegat, l'scroll de dins
+  que no mou el panell, i res al paper. L'e2e munta el panell en un arnès,
+  `e2e/harness/bottom-sheet.html`, que serveix el servidor de desenvolupament i no entra al build.
+- **Per a la fase 5**: Chromium emulat es menja el primer toc que segueix un arrossegament ràpid (el
+  pren per un toc per aturar el «fling»). L'e2e ho evita aturant el dit abans d'aixecar-lo; cal
+  mirar en un mòbil de debò si la franja respon al primer toc després d'arrossegar.
 
 - `components/AppBottomSheet/`: el component genèric, sense saber res de la vista. Alçades,
   nansa, botó, teclat, `useFloatingInset`, `dvh` i `visualViewport` (el teclat virtual).
@@ -386,47 +418,46 @@ amb el full vertical) passen en un e2e de mòbil.
 
 ## 10. Encàrrec per a la sessió següent
 
-**Què**: la fase 3, `AppBottomSheet` sol, sense tocar encara la vista.
+**Què**: la fase 4, la vista migrada al panell (§6, «Fase 4»). La fase 3 és feta: el component ja
+existeix i no cal tocar-lo si no és per un error.
 
-**On**: **a partir de la branca `claude/release-before-new-plan-8x1xhp`**, que ja té la fase 0 i
-tota la documentació d'aquest pla. **El panell forma part de la release** (§11): no va en una branca
-que surti després. Si la sessió nova té assignada una altra branca, ha de partir d'aquesta, no de
-`main`. Cada fase es pot provar al servidor de proves en acabar-la.
+**On**: **a partir de la branca on es va fer la fase 3** (que parteix de
+`claude/release-before-new-plan-8x1xhp`). **El panell forma part de la release** (§11): no va en una
+branca que surti després. Si la sessió nova té assignada una altra branca, ha de partir d'aquesta,
+no de `main`.
 
 **Què cal llegir abans**, i res més:
 
-1. Aquest pla: §4 (el model), §9 (totes les decisions) i la fase 3 de §6.
+1. Aquest pla: §4 (el model), §9 (totes les decisions), la fase 3 tal com ha quedat i la fase 4 de §6.
 2. `docs/estandards/capes-flotants.md`: «Panell de baix», «La capa del mòbil girat» i «La fletxa de
-   la vora». És el que el component ha de complir.
-3. `docs/estandards/estructura-de-fitxers.md`: el component és genèric i va a `components/`.
-4. Per veure com s'ha de comportar: `docs/esbos-vista-mobil.html` (també publicat com a esbós).
-   **És una referència de comportament, no de codi**: és JavaScript sense tipus i amb colors escrits
-   a mà, i res no s'hi ha de copiar tal com és.
+   la vora».
+3. `docs/estandards/configuracions.md`: la columna de la vista.
+4. `docs/fonaments/03-model-contingut-estil.md`, només la part de la columna de la vista i els nivells.
+5. Per veure com s'ha de comportar: `docs/esbos-vista-mobil.html`. **Referència de comportament, no
+   de codi.**
 
-**Què ha de fer `AppBottomSheet`** (fase 3):
+**Què ja hi ha i s'ha de fer servir**:
 
-- Tres alçades (plegat, mig al 50 %, sencer menys 64 px), la nansa i la capçalera per arrossegar, el
-  contingut amb scroll propi, la franja de sencer que torna a mig.
-- Un botó a la capçalera que alterna plegat ↔ mig, amb `aria-expanded`. Cap botó per anar a sencer
-  (M3).
-- No modal: `role="region"` amb nom, sense trampa de focus.
-- Declara la seva alçada amb `useFloatingInset`; `DocumentStatusFab` passa a llegir la reserva.
-- Avisa quan és a mig o a sencer amb un senyal genèric, perquè la barra de l'app s'hi pugui amagar
-  (fase 4); el component no sap res de la barra.
-- Teclat virtual: segueix `visualViewport`.
-- Controlat des de fora (l'alçada és una prop i un `onChange`), perquè la vista el pugui portar a mig
-  en seleccionar.
+- `AppBottomSheet` (`@components/AppBottomSheet`): `snap`, `onSnapChange`, `label`, `showLabel`,
+  `hideLabel`, `returnLabel`, `header` (les molles) i el contingut. L'alçada és estat de la pàgina de
+  vista (`useState`), mai Redux.
+- `useFloatingRaised` (`@components/FloatingLayer`): el senyal per amagar la barra de l'app
+  (`HideOnScroll` de `BarNavigation`), sense que la vista en sàpiga res.
+- L'arnès `e2e/harness/bottom-sheet.html` es pot esborrar quan la vista tingui el seu e2e de mòbil, o
+  deixar-lo per provar el component sol.
 
-**Fora de la fase 3**: la vista, la fletxa de la vora i la capa del mòbil girat (fase 4), i els
-textos nous, que s'afegeixen als cinc idiomes quan el component tingui qui els faci servir.
+**Textos nous** (als cinc idiomes, `packages/i18n`): «Ajustos» (nom de la regió, M1), «Mostra els
+ajustos», «Amaga els ajustos» i «Torna al full», a més dels de la fletxa de la vora i la capa del
+mòbil girat.
 
-**Fet quan**: proves unitàries amb `renderWithProviders` (alçades, botó, `aria-expanded`, teclat,
-reserva) i un e2e de Playwright amb un mòbil emulat; `npm run typecheck` net; `npm run lint` sense
-errors nous als fitxers tocats.
+**Fet quan**: el que diu la fase 4 a §6 (els tres casos de §1 en un e2e de mòbil); `npm run
+typecheck` net; `npm run lint` sense errors nous als fitxers tocats.
 
 **Avís**: a l'entorn del núvol, Playwright necessita
 `launchOptions: { executablePath: "/opt/pw-browsers/chromium" }`, perquè la versió del projecte no
-troba el navegador preinstal·lat.
+troba el navegador preinstal·lat. Es pot posar en un fitxer de configuració local que estengui
+`playwright.config.ts`, sense pujar-lo. Els e2e esperen el servidor de desenvolupament a
+`localhost:5173` (`npx vite`).
 
 ## 11. La release
 
@@ -438,7 +469,8 @@ servidor de proves, i per tant cada pas es pot provar allà a mesura que s'acaba
 | Què | Estat | On és el detall |
 |---|---|---|
 | Seleccionar no mou la pàgina, enllaç «Ajustos del bloc» | ✅ Fet | Fase 0 d'aquest pla |
-| La vista al mòbil: `AppBottomSheet` i la migració de la vista | ⏳ Per fer | Fases 3 a 5 d'aquest pla |
+| `AppBottomSheet`, sol i amb proves | ✅ Fet | Fase 3 d'aquest pla |
+| La vista al mòbil: la migració de la vista i els casos difícils | ⏳ Per fer | Fases 4 i 5 d'aquest pla |
 | L'estàndard sense la marca «Proposta» i la regla al `CLAUDE.md` | ⏳ Per fer | Fase 6 d'aquest pla |
 | **Notícia de les pàgines i la disposició** (simple, columnes, files, lliure) | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13, «Què queda obert»; en publicar-la, es treu l'etiqueta «Nou» de la fila «Disposició» (pas 8) |
 | **Notícia de la vista al mòbil** | ⏳ Per fer | Fase 6 d'aquest pla |

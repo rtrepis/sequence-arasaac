@@ -1397,7 +1397,8 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   baix amb tres alçades (`AppBottomSheet`, una capa nova de l'estàndard). El pla, amb les fases i les
   portes d'aprovació, és `docs/PLA-vista-mobil.md`.
 - **Estat** (2026-11-15): fase 0 feta (seleccionar ja no mou la pàgina), fase 1 tancada (esbós i
-  decisions) i fase 2 escrita, pendent d'aprovació.
+  decisions), fase 2 aprovada i fase 3 feta (`AppBottomSheet` sol, amb proves). Falta muntar-lo a la
+  vista (fase 4).
 
 ### C28 — Girar el mòbil tanca el diàleg d'edició del pictograma 🔴 Oberta
 

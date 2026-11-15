@@ -1,6 +1,7 @@
 import { SxProps, Theme } from "@mui/material";
 import { APP_CORNER_RADIUS, FLOATING_EDGE_GAP } from "@/style/appShape";
 import { FLOATING_CORNER_VARIABLE } from "./floatingCorner";
+import { floatingFloorCss } from "./floatingFloor";
 
 /**
  * Posició de qualsevol `Snackbar` de l'app.
@@ -22,8 +23,14 @@ import { FLOATING_CORNER_VARIABLE } from "./floatingCorner";
  * baix, i amb dues bases separades per 8 px es veien desalineats —l'avís queia
  * més avall i més a prop del cantó esquerre que el botó del dret— sense que la
  * diferència volgués dir res.
+ *
+ * Amb un panell de baix obert (`AppBottomSheet`), l'avís puja damunt del panell:
+ * el marge surt del terra que el panell declara (`floatingFloor`), i sense
+ * panell val zero. Un marge i no el `bottom`, perquè per damunt de `sm` el
+ * `bottom` el posa MUI i així no s'ha de copiar.
  */
 export const floatingSnackbarSx: SxProps<Theme> = (theme) => ({
+  marginBottom: floatingFloorCss,
   [theme.breakpoints.down("sm")]: {
     bottom: FLOATING_EDGE_GAP,
     left: FLOATING_EDGE_GAP,

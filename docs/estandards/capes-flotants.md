@@ -106,10 +106,20 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - **La pàgina de sota no es desplaça.** El que hi ha a sobre del panell s'encongeix
   per cabre a l'espai que queda (fins a l'alçada de mig). Una pàgina amb scroll
   sota un panell amb scroll torna a ser el problema que el panell resol (F14).
-- **Declara la seva alçada** amb `useFloatingInset`: el botó d'estat i els avisos
-  s'hi posen damunt. El botó d'estat llegeix la reserva com ja fan els avisos.
+- **Declara la seva alçada** a `FloatingLayer`, de dues maneres: com a **reserva**
+  (`setFloatingInset`, el que el contingut deixa al final) i com a **terra**
+  (`setFloatingFloor`, la variable `--app-floating-floor`). El botó d'estat i els
+  avisos llegeixen el terra i s'hi posen damunt. Són dues coses i no una: si el
+  botó d'estat llegís la reserva, saltaria amunt cada cop que surt un avís al seu
+  costat, perquè els avisos també en declaren. El terra només el declara qui fa
+  de terra. Es declaren amb el panell quiet, no a cada píxel de l'arrossegament.
 - **La barra de l'app s'amaga a mig i a sencer i torna a plegat.** El panell ho
-  diu amb un senyal genèric; no toca la barra ni en sap el nom.
+  diu amb un senyal genèric (`setFloatingRaised`, que es llegeix amb
+  `useFloatingRaised`); no toca la barra ni en sap el nom.
+- **Controlat des de fora**: l'alçada és una prop (`snap`) i el panell la demana
+  amb `onSnapChange`, perquè qui el munta l'ha de poder portar a mig (en
+  seleccionar, a la vista). Els textos (el nom de la regió, el botó i la franja)
+  també els posa qui el munta: el component no en té cap de propi.
 - **Les alçades són estat de la pantalla**: no van a Redux, ni al document, ni a
   les preferències. I el panell no arriba mai al paper (`usePrintSheet`).
 

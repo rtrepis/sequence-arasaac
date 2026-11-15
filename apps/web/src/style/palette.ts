@@ -99,3 +99,18 @@ export const sheetGuide = "#616161";
  * colors de contingut: no surten mai a cap document.
  */
 export const previewSequenceColors = ["#C5E1A5", "#90CAF9", "#FFCC80"] as const;
+
+/**
+ * Franja de dalt del panell de baix (`AppBottomSheet`) quan és a sencer: un vel
+ * fosc sobre el que hi ha a sota, que diu «això no és el full, és un botó que
+ * torna a mig». Fosc en tots dos temes, perquè sota hi ha el full, que és blanc
+ * sempre; el text hi va en blanc: amb el vel al 72 % damunt del blanc del full, fa
+ * 7,3:1 (al 55 % de l'esbós, es quedava a 4:1).
+ */
+export const bottomSheetStrip: Record<
+  "light" | "dark",
+  { background: string; text: string }
+> = {
+  light: { background: "rgba(20, 26, 12, 0.72)", text: "#FFFFFF" },
+  dark: { background: "rgba(0, 0, 0, 0.72)", text: "#FFFFFF" },
+};
