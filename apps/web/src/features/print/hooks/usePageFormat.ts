@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useState, useMemo } from "react";
 import {
   PageSize,
   PageOrientation,
@@ -52,27 +52,10 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
   const orientation =
     pageSize === "FULLSCREEN" ? orientationFullscreen : orientationPaper;
 
-  // La pantalla sencera segueix la pantalla: girar-la (o canviar de pantalla)
-  // la torna a calcular
-  const [screenTick, setScreenTick] = useState(0);
-  const followsScreen = pageSize === "FULLSCREEN";
-  useEffect(() => {
-    if (!followsScreen) return undefined;
-    const update = () => setScreenTick((tick) => tick + 1);
-    window.addEventListener("resize", update);
-    window.addEventListener("orientationchange", update);
-    return () => {
-      window.removeEventListener("resize", update);
-      window.removeEventListener("orientationchange", update);
-    };
-  }, [followsScreen]);
-
   // Les dimensions d'impressió són sempre a 96 DPI CSS — no depenen del DPI de pantalla
   const pageFormat = useMemo(() => {
-    // `screenTick` només hi és perquè es torni a calcular en girar la pantalla
-    void screenTick;
     return createPageFormat(pageSize, orientation);
-  }, [pageSize, orientation, screenTick]);
+  }, [pageSize, orientation]);
 
   const isLandscape = orientation === "landscape";
   const isFullscreen = pageSize === "FULLSCREEN";

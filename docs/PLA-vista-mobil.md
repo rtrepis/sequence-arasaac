@@ -434,9 +434,11 @@ amb el full vertical) passen en un e2e de mòbil.
     (el terra). Prova: `bottom-sheet.spec.ts`.
   - **«Pantalla sencera» és un interruptor sota la mida de pàgina** (`GlobalViewControls`, a la
     vista i al panell «Pàgina i distribució» de la configuració): encès, el selector de paper
-    s'apaga (i continua dient quin era, per tornar-hi) i el full pren la forma de la pantalla **tal
-    com es té**, dreta o girada, no una orientació desada. Amb pàgines en blocs és apagat i diu
-    per què; amb pàgines contínues, s'hi pot. Proves: `pageFormat.test.ts` i `mobile-view.spec.ts`.
+    s'apaga (i continua dient quin era, per tornar-hi) i el full pren la forma de la pantalla,
+    **sempre apaïsada**, també amb el mòbil dret (decisió de l'usuari, 2026-11-18: als mòbils i a
+    les tauletes es mira girada). Amb pàgines en blocs és apagat i diu per què; amb pàgines
+    contínues, s'hi pot. Treballar-hi amb blocs és una proposta a part: `docs/PLA-mode-lliure.md`,
+    §13, «La pantalla sencera amb blocs». Proves: `pageFormat.test.ts` i `mobile-view.spec.ts`.
   - **Menú lateral**: «Configuració» passa a ser una entrada per apartat, que obre el diàleg en
     aquell apartat, i hi ha «Document nou», amb la mateixa confirmació que el botó d'estat. Prova:
     `navigation-drawer.spec.ts`.

@@ -197,19 +197,10 @@ export function calculateUsableDimensions(
 }
 
 /**
- * Com es té la pantalla ara. Sense `matchMedia` (jsdom), per les mides.
- */
-export function currentScreenOrientation(): PageOrientation {
-  const query = window.matchMedia?.("(orientation: portrait)");
-  if (query) return query.matches ? "portrait" : "landscape";
-  return window.innerHeight > window.innerWidth ? "portrait" : "landscape";
-}
-
-/**
  * Crea la configuració d'una pàgina.
  *
  * @param size - Mida de pàgina (un paper o FULLSCREEN)
- * @param orientation - Orientació del paper (la pantalla sencera segueix la de la pantalla)
+ * @param orientation - Orientació del paper (la pantalla sencera és sempre apaïsada)
  * @returns El format, amb les dimensions útils en píxels d'impressió
  */
 export function createPageFormat(
@@ -219,19 +210,17 @@ export function createPageFormat(
   let baseDimensions: PageDimensions;
 
   if (size === "FULLSCREEN") {
-    // La pantalla sencera segueix la pantalla **tal com es té ara**: un mòbil
-    // dret dona un full dret, i girat, un d'apaïsat. L'orientació desada no hi
-    // compta, perquè no és un paper que es pugui girar. Max/min perquè el
-    // Safari d'iOS dona sempre les mides de la pantalla dreta, i l'orientació
-    // la diu el `matchMedia`
+    // La pantalla sencera és **sempre apaïsada**: és per mirar el document a
+    // pantalla completa, i als mòbils i a les tauletes es mira girat. Max/min
+    // perquè el Safari d'iOS dona sempre les mides de la pantalla dreta, i
+    // perquè la forma no depengui de com es tingui l'aparell en aquell moment
     const maxDim = Math.max(window.screen.width, window.screen.height);
     const minDim = Math.min(window.screen.width, window.screen.height);
-    const screenOrientation = currentScreenOrientation();
-    const dimensions: PageDimensions =
-      screenOrientation === "landscape"
-        ? { width: maxDim, height: minDim }
-        : { width: minDim, height: maxDim };
-    return { size, orientation: screenOrientation, dimensions };
+    return {
+      size,
+      orientation: "landscape",
+      dimensions: { width: maxDim, height: minDim },
+    };
   } else {
     // Les mides del paper, menys els marges, en píxels d'impressió
     const paperDimensions = PAPER_DIMENSIONS_MM[size];

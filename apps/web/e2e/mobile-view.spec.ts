@@ -371,7 +371,7 @@ const runSuite = (): void => {
     await expect(panel(page)).toHaveAttribute("data-snap", "collapsed");
   });
 
-  test("pantalla sencera: sota la mida de pàgina, i el full pren la forma de la pantalla", async ({
+  test("pantalla sencera: sota la mida de pàgina, i el full és la pantalla apaïsada", async ({
     page,
   }) => {
     await openInView(page, SIMPLE);
@@ -390,14 +390,15 @@ const runSuite = (): void => {
     await expect(size).toHaveAttribute("aria-disabled", "true");
     await expect(size).toHaveText("A4");
 
-    // El full, amb la forma de la pantalla (un mòbil dret, un full dret)
+    // El full, amb la forma de la pantalla apaïsada, també amb el mòbil dret:
+    // la pantalla sencera es mira girada
     await page
       .getByRole("button", { name: "Amaga els ajustos" })
       .press("Enter");
     await expectSnap(page, "collapsed");
     const screen = await page.evaluate(() => ({
-      width: Math.min(window.screen.width, window.screen.height),
-      height: Math.max(window.screen.width, window.screen.height),
+      width: Math.max(window.screen.width, window.screen.height),
+      height: Math.min(window.screen.width, window.screen.height),
     }));
     await expect
       .poll(async () => {
