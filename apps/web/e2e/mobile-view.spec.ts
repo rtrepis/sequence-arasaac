@@ -158,6 +158,20 @@ const doubleTapToOpen = async (page: Page, locator: Locator): Promise<void> => {
   }).toPass({ timeout: 15000 });
 };
 
+/**
+ * A pantalla completa. Només s'hi va amb la pantalla sencera, que és per
+ * mirar el document a la pantalla: s'encén al panell i es fa servir el botó
+ * de dalt, que amb un paper no hi és.
+ */
+const goFullscreen = async (page: Page): Promise<void> => {
+  await page.getByRole("button", { name: "Mostra els ajustos" }).press("Enter");
+  await expectSnap(page, "half");
+  await page.getByRole("checkbox", { name: "Pantalla sencera" }).check();
+  await page.getByRole("button", { name: "Amaga els ajustos" }).press("Enter");
+  await expectSnap(page, "collapsed");
+  await page.getByRole("button", { name: "Pantalla completa" }).tap();
+};
+
 /** L'element que hi ha de debò en un punt de la pantalla (el que rep el dit). */
 const hitAt = (page: Page, x: number, y: number) =>
   page.evaluate(
@@ -291,6 +305,10 @@ const runSuite = (): void => {
     await openInView(page, FREE_PORTRAIT);
     const print = page.getByRole("button", { name: "Imprimir" });
     await expect(print).toBeVisible();
+    // Amb un paper, la pantalla completa no hi és: és de la pantalla sencera
+    await expect(
+      page.getByRole("button", { name: "Pantalla completa" }),
+    ).toHaveCount(0);
     // A dalt de tot, per damunt de la capçalera de la pàgina
     const pageTitle = page.getByRole("button", { name: "Pàgina 1 de 2" });
     expect((await boxOf(print)).y).toBeLessThan((await boxOf(pageTitle)).y);
@@ -352,9 +370,7 @@ const runSuite = (): void => {
     await openInView(page, FREE_PORTRAIT);
     const viewport = page.viewportSize();
     if (!viewport) throw new Error("sense viewport");
-    await page
-      .getByRole("button", { name: "Aquesta pàgina a pantalla completa" })
-      .tap();
+    await goFullscreen(page);
     await expect
       .poll(() => page.evaluate(() => document.fullscreenElement?.id ?? ""))
       .toBe("view-pages");
@@ -521,9 +537,7 @@ const runSuite = (): void => {
     await openInView(page, SIMPLE);
     const viewport = page.viewportSize();
     if (!viewport) throw new Error("sense viewport");
-    await page
-      .getByRole("button", { name: "Aquesta pàgina a pantalla completa" })
-      .tap();
+    await goFullscreen(page);
     await expect
       .poll(() => page.evaluate(() => Boolean(document.fullscreenElement)))
       .toBe(true);
@@ -628,9 +642,7 @@ test.describe("al telèfon, de dret a girat a la pantalla completa", () => {
     await openInView(page, FREE_PORTRAIT);
     const upright = page.viewportSize();
     if (!upright) throw new Error("sense viewport");
-    await page
-      .getByRole("button", { name: "Aquesta pàgina a pantalla completa" })
-      .tap();
+    await goFullscreen(page);
     await expect
       .poll(() => page.evaluate(() => document.fullscreenElement?.id ?? ""))
       .toBe("view-pages");

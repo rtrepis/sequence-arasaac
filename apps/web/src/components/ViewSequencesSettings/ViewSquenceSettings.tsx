@@ -598,7 +598,9 @@ const ViewSequencesSettingsContent = ({
   // és l'únic nom del botó; i fer-los coincidir compleix el criteri WCAG
   // 2.5.3 (el nom llegit conté el text visible).
   // Al mòbil, girar el full no és una sortida: és un ajust del nivell
-  // «Document» (M4). Allà la fila només porta imprimir, PDF i pantalla completa
+  // «Document» (M4). Amb un paper, les sortides són imprimir i PDF; la
+  // pantalla completa només hi és amb la pantalla sencera, que és per mirar el
+  // document a la pantalla i no s'imprimeix (decisió de l'usuari, 2026-11-19)
   const renderToolbar = (
     vertical: boolean,
     withRotate = true,
@@ -643,17 +645,6 @@ const ViewSequencesSettingsContent = ({
               onClick={handleDownloadPdf}
             >
               <BsFilePdf />
-            </StyledIconButton>
-          </Tooltip>
-          {/* La pàgina que es mira, a pantalla completa */}
-          <Tooltip title={intl.formatMessage(messages.tooltipFullscreenPage)}>
-            <StyledIconButton
-              aria-label={intl.formatMessage(messages.tooltipFullscreenPage)}
-              color="inherit"
-              sx={{ fontSize: "2rem" }}
-              onClick={() => enterPageFullscreen(isFreeLayout ? activePage : 0)}
-            >
-              <AiOutlineFullscreen />
             </StyledIconButton>
           </Tooltip>
         </>

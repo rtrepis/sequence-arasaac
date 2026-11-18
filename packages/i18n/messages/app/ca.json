@@ -975,8 +975,8 @@
     "description": "Setting property"
   },
   "pages.viewSequence.fullScreen.helper": {
-    "message": "La previsualització segueix la proporció de la pantalla",
-    "description": "Ajuda de l'interruptor «Pantalla sencera», sota la mida de pàgina: en activar-lo, el full deixa de ser un paper i pren la proporció de la pantalla"
+    "message": "Per mostrar el document a pantalla completa, no per imprimir-lo: el full pren la forma d'aquesta pantalla",
+    "description": "Ajuda de l'interruptor «Pantalla sencera», sota la mida de pàgina: diu per a què serveix (mostrar el document a pantalla completa) i què canvia (el full pren la forma d'aquesta pantalla, apaïsada, i no hi ha ni imprimir ni PDF)"
   },
   "pages.viewSequence.pageSize.label": {
     "message": "Mida de pàgina"
@@ -1032,10 +1032,6 @@
   },
   "pages.viewSequence.tooltip.fullscreen": {
     "message": "Pantalla completa"
-  },
-  "pages.viewSequence.tooltipFullscreenPage": {
-    "message": "Aquesta pàgina a pantalla completa",
-    "description": "Botó de la vista que posa la pàgina que es mira (la marcada) a pantalla completa, tan gran com hi càpiga; Esc en surt"
   },
   "pages.viewSequence.tooltip.hideSettings": {
     "message": "Amaga els ajustos de la vista",

@@ -440,6 +440,10 @@ amb el full vertical) passen en un e2e de mòbil.
     paper virtual amb la forma de la pantalla on s'encén; vegeu `docs/PLA-mode-lliure.md`, §13,
     «La pantalla sencera amb blocs». Proves: `pageFormat.test.ts`, `mobile-view.spec.ts` i
     `fullscreen-blocks.spec.ts`.
+  - **La pantalla completa, només amb la pantalla sencera** (2026-11-19): amb un paper, la fila
+    de sortides és imprimir i PDF. L'ajuda de l'interruptor diu per a què és: «Per mostrar el
+    document a pantalla completa, no per imprimir-lo: el full pren la forma d'aquesta pantalla».
+    Els e2e que hi entren (N1, la pàgina única, el mòbil girat) primer encenen la pantalla sencera.
   - **Menú lateral**: «Configuració» passa a ser una entrada per apartat, que obre el diàleg en
     aquell apartat, i hi ha «Document nou», amb la mateixa confirmació que el botó d'estat. Prova:
     `navigation-drawer.spec.ts`.
@@ -502,7 +506,7 @@ amb el full vertical) passen en un e2e de mòbil.
 | M1 | Com es diu, a la interfície i al codi | **«Ajustos»** a la interfície (el botó i el nom de la regió); `AppBottomSheet` al codi |
 | M2 | Les alçades exactes | Plegat: la capçalera. **Mig: el 50 % de la pantalla, però guanyant-hi la barra de l'app**, que s'amaga (M5). Sencer: tot menys 64 px de franja |
 | M3 | Com s'arriba a «sencer» sense arrossegar | **Només arrossegant.** No hi ha botó «Amplia». És accessible perquè sencer no dona res que mig no tingui (§4, «Moure el panell») |
-| M4 | On van girar, imprimir, PDF i pantalla completa | **A sobre del full, però només les sortides del document**: imprimir, PDF i pantalla completa, amb la pàgina on s'és. **Passar de pàgina tocant als costats i lliscant. Girar el full va als ajustos** («Document», *Format de pàgina*) |
+| M4 | On van girar, imprimir, PDF i pantalla completa | **A sobre del full, però només les sortides del document**: imprimir, PDF i pantalla completa, amb la pàgina on s'és. **Passar de pàgina tocant als costats i lliscant. Girar el full va als ajustos** («Document», *Format de pàgina*). **Revisada el 2026-11-19**: amb un paper, la pantalla completa no hi és (ni al mòbil ni a l'escriptori); només amb la pantalla sencera, que és per mirar el document a la pantalla, i allà és l'única sortida |
 | M5 | La barra de dalt de l'app | **S'amaga quan el panell puja a mig o a sencer**, i torna quan baixa a plegat (N2) |
 | M6 | El mòbil en horitzontal | **No és una manera de treballar al mòbil**: surt una capa que demana girar-lo (N3) |
 | M7 | Tauleta en vertical (768–900 px): panell o columna? | **Panell**, com el telèfon |

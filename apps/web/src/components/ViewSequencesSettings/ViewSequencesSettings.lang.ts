@@ -81,9 +81,10 @@ const messages = defineMessages({
   },
   fullScreenHelper: {
     id: "pages.viewSequence.fullScreen.helper",
-    defaultMessage: "The preview follows the shape of the screen",
+    defaultMessage:
+      "To show the document full screen, not to print it: the sheet takes the shape of this screen",
     description:
-      "Ajuda de l'interruptor «Pantalla sencera», sota la mida de pàgina: en activar-lo, el full deixa de ser un paper i pren la proporció de la pantalla",
+      "Ajuda de l'interruptor «Pantalla sencera», sota la mida de pàgina: diu per a què serveix (mostrar el document a pantalla completa) i què canvia (el full pren la forma d'aquesta pantalla, apaïsada, i no hi ha ni imprimir ni PDF)",
   },
   alignmentH: {
     id: "pages.viewSequence.alignmentH.label",
@@ -197,12 +198,6 @@ const messages = defineMessages({
     id: "pages.viewSequence.tooltip.alignBottom",
     defaultMessage: "Bottom",
     description: "Tooltip alineació V baix",
-  },
-  tooltipFullscreenPage: {
-    id: "pages.viewSequence.tooltipFullscreenPage",
-    defaultMessage: "This page full screen",
-    description:
-      "Botó de la vista que posa la pàgina que es mira (la marcada) a pantalla completa, tan gran com hi càpiga; Esc en surt",
   },
   mobileSettings: {
     id: "pages.viewSequence.mobile.settings",
