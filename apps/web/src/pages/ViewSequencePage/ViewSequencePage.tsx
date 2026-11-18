@@ -6,6 +6,7 @@ import { PictogramCardDefaults } from "../../types/sequence";
 import { ALIGN_H, ALIGN_V } from "../../shared/constants/alignmentMaps";
 import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
 import SelectableSequence from "@features/free-layout/components/SelectableSequence";
+import ScreenShapeNotice from "@features/free-layout/components/ScreenShapeNotice";
 
 /**
  * Pàgina de visualització de seqüències
@@ -27,65 +28,72 @@ const ViewSequencePage = (): React.ReactElement => {
   if (!documentStatus.draftRestoreSettled) return <></>;
 
   return (
-    // La columna copia la pàgina del document en muntar-se: un altre document
-    // (obert des del menú sense sortir d'aquí) la torna a muntar amb la seva
-    <ViewSequencesSettings key={document.id}>
-      {({ viewSettings, sequenceViewSettings, scale, selectable }) => (
-        <>
-          {Object.entries(document.content).map(([key, sequence]) => {
-            const seqKey = Number(key);
-            // Totes les pestanyes en porten: la columna de vista les resol
-            // amb la de l'estil quan no en tenen de pròpia
-            const seqView = sequenceViewSettings[seqKey];
+    <>
+      {/* Pantalla sencera feta en una pantalla d'una altra forma: es pregunta
+          si s'adapta (PS2). Va abans de la vista, al flux, com els altres
+          bàners: al mòbil, l'escenari del full comença a sota */}
+      <ScreenShapeNotice />
+      {/* La columna copia la pàgina del document en muntar-se: un altre
+          document (obert des del menú sense sortir d'aquí) la torna a muntar
+          amb la seva */}
+      <ViewSequencesSettings key={document.id}>
+        {({ viewSettings, sequenceViewSettings, scale, selectable }) => (
+          <>
+            {Object.entries(document.content).map(([key, sequence]) => {
+              const seqKey = Number(key);
+              // Totes les pestanyes en porten: la columna de vista les resol
+              // amb la de l'estil quan no en tenen de pròpia
+              const seqView = sequenceViewSettings[seqKey];
 
-            const isRow = viewSettings.direction === "row";
-            const justifyContent = isRow
-              ? ALIGN_H[seqView.alignmentH]
-              : ALIGN_V[seqView.alignmentV];
+              const isRow = viewSettings.direction === "row";
+              const justifyContent = isRow
+                ? ALIGN_H[seqView.alignmentH]
+                : ALIGN_V[seqView.alignmentV];
 
-            // Cada seqüència és el seu únic bloc: clicar-la la selecciona (R5)
-            return (
-              <SelectableSequence
-                key={`sequence-${key}`}
-                sequenceKey={seqKey}
-                pictogramCount={sequence.length}
-                selectable={selectable}
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  flexDirection: isRow ? "row" : "column",
-                  justifyContent,
-                  // Eix creuat sempre a l'inici (dalt si és horitzontal, esquerra si és
-                  // vertical): evita el `stretch` per defecte de flex, que igualava
-                  // l'alçada de tots els pictogrames de la fila. L'alineació V/H que
-                  // tria l'usuari és de bloc i l'aplica `ViewSquenceSettings`.
-                  alignItems: "flex-start",
-                  columnGap:
-                    seqView.pictSpaceBetween * scale * seqView.sizePict,
-                  rowGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
-                  height: isRow ? "auto" : "100%",
-                  width: isRow ? "100%" : "auto",
-                }}
-              >
-                {sequence.map((pictogram) => (
-                  <PictogramCard
-                    pictogram={pictogram}
-                    view={"complete"}
-                    defaults={defaults}
-                    variant="plane"
-                    size={{
-                      pictSize: seqView.sizePict,
-                      scale: scale,
-                    }}
-                    key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
-                  />
-                ))}
-              </SelectableSequence>
-            );
-          })}
-        </>
-      )}
-    </ViewSequencesSettings>
+              // Cada seqüència és el seu únic bloc: clicar-la la selecciona (R5)
+              return (
+                <SelectableSequence
+                  key={`sequence-${key}`}
+                  sequenceKey={seqKey}
+                  pictogramCount={sequence.length}
+                  selectable={selectable}
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    flexDirection: isRow ? "row" : "column",
+                    justifyContent,
+                    // Eix creuat sempre a l'inici (dalt si és horitzontal, esquerra si és
+                    // vertical): evita el `stretch` per defecte de flex, que igualava
+                    // l'alçada de tots els pictogrames de la fila. L'alineació V/H que
+                    // tria l'usuari és de bloc i l'aplica `ViewSquenceSettings`.
+                    alignItems: "flex-start",
+                    columnGap:
+                      seqView.pictSpaceBetween * scale * seqView.sizePict,
+                    rowGap: seqView.pictSpaceBetween * scale * seqView.sizePict,
+                    height: isRow ? "auto" : "100%",
+                    width: isRow ? "100%" : "auto",
+                  }}
+                >
+                  {sequence.map((pictogram) => (
+                    <PictogramCard
+                      pictogram={pictogram}
+                      view={"complete"}
+                      defaults={defaults}
+                      variant="plane"
+                      size={{
+                        pictSize: seqView.sizePict,
+                        scale: scale,
+                      }}
+                      key={`${pictogram.indexSequence}_${pictogram.img.selectedId}`}
+                    />
+                  ))}
+                </SelectableSequence>
+              );
+            })}
+          </>
+        )}
+      </ViewSequencesSettings>
+    </>
   );
 };
 

@@ -56,7 +56,8 @@ export type FreeLayoutChangeSource =
   | "layoutAddSequences"
   | "layoutRemoveSheet"
   | "layoutRemovePlacement"
-  | "layoutUncommon";
+  | "layoutUncommon"
+  | "adaptScreen";
 
 /**
  * Bàner d'estat del document que s'acaba d'obrir: és estat, no confirmació, i
@@ -189,7 +190,9 @@ const sameSnapshot = (
   a.styleView === b.styleView &&
   a.fitzgeraldColors === b.fitzgeraldColors &&
   a.pages === b.pages &&
-  a.styles === b.styles;
+  a.styles === b.styles &&
+  // La pàgina del document només compta si la instantània la porta
+  (!("layout" in a) || a.layout === b.layout);
 
 /**
  * Fa un canvi d'estil del document i el deixa a punt de desfer amb un snackbar
@@ -352,10 +355,10 @@ export const selectCanUndoStyle = (state: {
   document: Parameters<typeof takeDocumentStyleSnapshot>[0];
 }): boolean =>
   state.style.undo !== null &&
-  sameSnapshot(
-    state.style.undo.after,
-    takeDocumentStyleSnapshot(state.document),
-  );
+  sameSnapshot(state.style.undo.after, {
+    ...takeDocumentStyleSnapshot(state.document),
+    layout: state.document.layout,
+  });
 
 export const undoStyleChangeThunk = (): AppThunk => (dispatch, getState) => {
   const state = getState();

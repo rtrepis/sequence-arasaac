@@ -258,7 +258,6 @@
   "pages.viewSequence.direction.label": "Direzione",
   "pages.viewSequence.fullScreen.label": "Schermo intero",
   "pages.viewSequence.fullScreen.helper": "L'anteprima segue le proporzioni dello schermo",
-  "pages.viewSequence.fullScreen.blocked": "Non è possibile con pagine a blocchi: i blocchi si collocano su un foglio",
   "pages.viewSequence.pageSize.label": "Dimensione pagina",
   "pages.viewSequence.pageSize.letter": "Lettera (8,5 × 11″)",
   "pages.viewSequence.pageSize.tabloid": "Tabloid (11 × 17″)",
@@ -862,5 +861,8 @@
   "components.viewSettingsPanel.dispositionHelp": "Come inizia la prima pagina di un nuovo documento, e le pagine che vi si aggiungono.",
   "components.viewSettingsPanel.previewSequences": "Sequenze dell'anteprima",
   "features.freeLayout.resetSequencePictograms": "Reimposta i pittogrammi di questa sequenza",
-  "features.sequence.style.changed.resetSequence": "I pittogrammi della sequenza sono stati reimpostati, in tutti i blocchi in cui compare."
+  "features.sequence.style.changed.resetSequence": "I pittogrammi della sequenza sono stati reimpostati, in tutti i blocchi in cui compare.",
+  "features.sequence.style.changed.adaptScreen": "Il foglio è stato adattato a questo schermo.",
+  "features.freeLayout.screenShape.notice": "Questo documento è stato creato per uno schermo di un'altra forma. Il foglio si vede intero, con margini.",
+  "features.freeLayout.screenShape.adapt": "Adattalo a questo schermo"
 }

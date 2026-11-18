@@ -417,19 +417,6 @@ const runSuite = (): void => {
     await expect(size).toHaveText("A4");
   });
 
-  test("amb pàgines en blocs, la pantalla sencera hi és però apagada, i diu per què", async ({
-    page,
-  }) => {
-    await openInView(page, FREE_PORTRAIT);
-    await page
-      .getByRole("button", { name: "Mostra els ajustos" })
-      .press("Enter");
-    await expectSnap(page, "half");
-    const fullscreen = page.getByRole("checkbox", { name: "Pantalla sencera" });
-    await expect(fullscreen).toBeDisabled();
-    await expect(fullscreen).toHaveAccessibleDescription(/pàgines en blocs/);
-  });
-
   // ---- Fase 5: els casos difícils ----
 
   test("a sencer, els avisos no tapen la franja que torna al full", async ({

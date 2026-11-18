@@ -18,17 +18,24 @@ import type {
 import type { PageDisposition, SequenceDirection } from "@/types/ui";
 import {
   addNewSequenceActionCreator,
+  documentLayoutAndPagesChangedActionCreator,
+  documentLayoutChangedActionCreator,
   newDocumentPagesInheritedActionCreator,
+  takeDocumentStyleSnapshot,
   pagesAndStylesChangedActionCreator,
   pagesChangedActionCreator,
   userLayoutOf,
 } from "@features/sequence/store/documentSlice";
 import {
   FreeLayoutChangeSource,
+  styleUndoRecordedActionCreator,
+  styleUndoSnackbarShownActionCreator,
   undoableStyleChangeThunk,
 } from "@features/sequence/store/styleSlice";
+import { currentScreen } from "@features/print/utils/pageFormat";
+import { rescalePages, sameArea } from "../model/rescale";
 import { newSaacId } from "@features/sequence/saac/serialize";
-import { SheetArea, sheetAreaMm } from "../model/placement";
+import { SheetArea, layoutAreaMm } from "../model/placement";
 import {
   addPlacementsToSheet,
   addSequencesToSheet,
@@ -90,10 +97,84 @@ export const selectPageLayout = (state: RootState): DocumentLayout =>
 export const selectHasPages = (state: RootState): boolean =>
   state.document.pages !== undefined;
 
-/** L'àrea útil d'un full del document, en mm. `null` amb la pantalla completa. */
-export const selectSheetArea = (state: RootState): SheetArea | null => {
-  const { pageSize, orientation } = selectPageLayout(state);
-  return sheetAreaMm(pageSize ?? "A4", orientation ?? "landscape");
+/**
+ * L'àrea útil d'un full del document, en mm. Amb la pantalla sencera, la del
+ * paper virtual de la pantalla desada (`layoutAreaMm`).
+ */
+export const selectSheetArea = (state: RootState): SheetArea =>
+  layoutAreaMm(selectPageLayout(state));
+
+/**
+ * Canvia la pàgina del document (mida, orientació, direcció). Amb la pantalla
+ * sencera, el full és la pantalla on s'encén (`docs/PLA-mode-lliure.md`, §13,
+ * «La pantalla sencera amb blocs»): en passar-hi, es desa la d'ara; en tornar
+ * al paper, s'oblida. I com que el full canvia de mida, els blocs s'hi
+ * recol·loquen (`rescalePages`). Entre dos papers no es recol·loquen: és com
+ * era abans.
+ */
+export const changePageLayoutThunk =
+  (change: Partial<DocumentLayout>, base: DocumentLayout): AppThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    const previous = state.document.layout ?? base;
+    const toFullscreen =
+      change.pageSize === "FULLSCREEN" && previous.pageSize !== "FULLSCREEN";
+    const fromFullscreen =
+      change.pageSize !== undefined &&
+      change.pageSize !== "FULLSCREEN" &&
+      previous.pageSize === "FULLSCREEN";
+
+    if (!toFullscreen && !fromFullscreen) {
+      dispatch(documentLayoutChangedActionCreator({ layout: change, base }));
+      return;
+    }
+
+    const { screen: _screen, ...rest } = { ...previous, ...change };
+    const layout: DocumentLayout = toFullscreen
+      ? { ...rest, screen: currentScreen() }
+      : rest;
+    const pages = state.document.pages;
+    dispatch(
+      documentLayoutAndPagesChangedActionCreator({
+        layout,
+        pages:
+          pages &&
+          rescalePages(pages, layoutAreaMm(previous), layoutAreaMm(layout)),
+      }),
+    );
+  };
+
+/**
+ * «Adapta-ho a aquesta pantalla» (PS2): el full de pantalla sencera passa a ser
+ * la pantalla d'ara, i els blocs s'hi recol·loquen. Es pot desfer amb el
+ * snackbar de sempre: la instantània porta també la pàgina del document.
+ */
+export const adaptToScreenThunk = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  const previous = selectPageLayout(state);
+  if (previous.pageSize !== "FULLSCREEN") return;
+  const layout: DocumentLayout = { ...previous, screen: currentScreen() };
+  const from = layoutAreaMm(previous);
+  const to = layoutAreaMm(layout);
+  const pages = state.document.pages;
+
+  const before = {
+    ...takeDocumentStyleSnapshot(state.document),
+    layout: state.document.layout,
+  };
+  dispatch(
+    documentLayoutAndPagesChangedActionCreator({
+      layout,
+      pages:
+        pages && !sameArea(from, to) ? rescalePages(pages, from, to) : pages,
+    }),
+  );
+  const after = {
+    ...takeDocumentStyleSnapshot(getState().document),
+    layout: getState().document.layout,
+  };
+  dispatch(styleUndoRecordedActionCreator({ before, after }));
+  dispatch(styleUndoSnackbarShownActionCreator("adaptScreen"));
 };
 
 /** Les pàgines del document, si en té de pròpies. */

@@ -436,9 +436,10 @@ amb el full vertical) passen en un e2e de mòbil.
     vista i al panell «Pàgina i distribució» de la configuració): encès, el selector de paper
     s'apaga (i continua dient quin era, per tornar-hi) i el full pren la forma de la pantalla,
     **sempre apaïsada**, també amb el mòbil dret (decisió de l'usuari, 2026-11-18: als mòbils i a
-    les tauletes es mira girada). Amb pàgines en blocs és apagat i diu per què; amb pàgines
-    contínues, s'hi pot. Treballar-hi amb blocs és una proposta a part: `docs/PLA-mode-lliure.md`,
-    §13, «La pantalla sencera amb blocs». Proves: `pageFormat.test.ts` i `mobile-view.spec.ts`.
+    les tauletes es mira girada). **També amb pàgines en blocs** (2026-11-18): el full és un
+    paper virtual amb la forma de la pantalla on s'encén; vegeu `docs/PLA-mode-lliure.md`, §13,
+    «La pantalla sencera amb blocs». Proves: `pageFormat.test.ts`, `mobile-view.spec.ts` i
+    `fullscreen-blocks.spec.ts`.
   - **Menú lateral**: «Configuració» passa a ser una entrada per apartat, que obre el diàleg en
     aquell apartat, i hi ha «Document nou», amb la mateixa confirmació que el botó d'estat. Prova:
     `navigation-drawer.spec.ts`.
@@ -595,6 +596,7 @@ servidor de proves, i per tant cada pas es pot provar allà a mesura que s'acaba
 | `AppBottomSheet`, sol i amb proves | ✅ Fet | Fase 3 d'aquest pla |
 | La vista al mòbil: la migració de la vista | ✅ Fet | Fase 4 d'aquest pla |
 | La vista al mòbil: els casos difícils | ✅ Fet en emulació · ⏳ dispositius de debò (§9d) | Fase 5 d'aquest pla |
+| La pantalla sencera amb blocs (paper virtual, adaptar a una altra pantalla) | ✅ Fet (2026-11-18) | `docs/PLA-mode-lliure.md`, §13 |
 | L'estàndard sense la marca «Proposta» i la regla al `CLAUDE.md` | ⏳ Per fer | Fase 6 d'aquest pla |
 | **Notícia de les pàgines i la disposició** (simple, columnes, files, lliure) | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13, «Què queda obert»; en publicar-la, es treu l'etiqueta «Nou» de la fila «Disposició» (pas 8) |
 | **Notícia de la vista al mòbil** | ⏳ Per fer | Fase 6 d'aquest pla |

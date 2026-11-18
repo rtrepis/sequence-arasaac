@@ -47,12 +47,6 @@ interface GlobalViewControlsProps {
   ) => void;
   onSequenceSpaceChange: (event: Event, value: number | number[]) => void;
   onOrientationChange?: (orientation: PageOrientation) => void;
-  /**
-   * Només paper: amb pàgines en blocs, la pantalla sencera no s'hi pot triar
-   * (els blocs es col·loquen en mil·límetres de paper). L'interruptor hi és,
-   * però apagat i dient per què
-   */
-  paperOnly?: boolean;
   /** La fila de la mida del paper. A la columna de la vista és del nivell «Document» */
   showPaper?: boolean;
   /** La fila de la direcció. A la columna de la vista és del nivell «Pàgina» */
@@ -77,7 +71,6 @@ const GlobalViewControls = ({
   onDirectionChange,
   onSequenceSpaceChange,
   onOrientationChange,
-  paperOnly = false,
   showPaper = true,
   showDirection = true,
   afterOrientation,
@@ -128,17 +121,10 @@ const GlobalViewControls = ({
           title={<FormattedMessage {...messages.fullScreen} />}
           labelId={`${GLOBAL_CONTROLS_LABEL_ID}-fullscreen`}
           helperId={`${GLOBAL_CONTROLS_LABEL_ID}-fullscreen-helper`}
-          helper={
-            <FormattedMessage
-              {...(paperOnly && !isFullscreen
-                ? messages.fullScreenBlocked
-                : messages.fullScreenHelper)}
-            />
-          }
+          helper={<FormattedMessage {...messages.fullScreenHelper} />}
         >
           <Switch
             checked={isFullscreen}
-            disabled={paperOnly && !isFullscreen}
             onChange={(_, checked) =>
               onPageSizeChange(checked ? "FULLSCREEN" : paper)
             }

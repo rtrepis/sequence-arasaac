@@ -169,6 +169,11 @@ export interface V3Page {
   common?: (V3Block | V3ForeignBlock)[];
   /** A quines pàgines va el peu de llicència. Sense valor, a totes */
   licenceOn?: "every" | "last";
+  /**
+   * Amb `size: "FULLSCREEN"`, la pantalla on es va encendre, en píxels CSS i
+   * apaïsada: és la forma i la mida del full. Sense, la pantalla on s'obre
+   */
+  screen?: { width: number; height: number };
 }
 
 /**

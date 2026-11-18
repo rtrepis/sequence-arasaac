@@ -3,6 +3,7 @@ import {
   PageSize,
   PageOrientation,
   PageFormat,
+  ScreenSize,
   createPageFormat,
 } from "../utils/pageFormat";
 
@@ -12,6 +13,8 @@ import {
 export interface PageFormatConfig {
   initialSize?: PageSize;
   initialOrientation?: PageOrientation;
+  /** Amb la pantalla sencera, la pantalla desada al document (on s'encén) */
+  screen?: ScreenSize;
 }
 
 /**
@@ -39,7 +42,11 @@ export interface PageFormatState {
  * @returns Estat i funcions per gestionar el format de pàgina
  */
 export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
-  const { initialSize = "A4", initialOrientation = "landscape" } = config;
+  const {
+    initialSize = "A4",
+    initialOrientation = "landscape",
+    screen,
+  } = config;
 
   const [pageSize, setPageSizeState] = useState<PageSize>(initialSize);
   // Mantenir orientacions independents per als papers vs Full Screen
@@ -53,9 +60,17 @@ export function usePageFormat(config: PageFormatConfig = {}): PageFormatState {
     pageSize === "FULLSCREEN" ? orientationFullscreen : orientationPaper;
 
   // Les dimensions d'impressió són sempre a 96 DPI CSS — no depenen del DPI de pantalla
+  const screenWidth = screen?.width;
+  const screenHeight = screen?.height;
   const pageFormat = useMemo(() => {
-    return createPageFormat(pageSize, orientation);
-  }, [pageSize, orientation]);
+    return createPageFormat(
+      pageSize,
+      orientation,
+      screenWidth !== undefined && screenHeight !== undefined
+        ? { width: screenWidth, height: screenHeight }
+        : undefined,
+    );
+  }, [pageSize, orientation, screenWidth, screenHeight]);
 
   const isLandscape = orientation === "landscape";
   const isFullscreen = pageSize === "FULLSCREEN";

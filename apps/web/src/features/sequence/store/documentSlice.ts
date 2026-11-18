@@ -457,9 +457,12 @@ const documentSlice = createSlice({
       previousDocument.defaultSettings = defaultSettings;
       previousDocument.styleView = styleView;
       previousDocument.fitzgeraldColors = fitzgeraldColors;
-      // De la pàgina del document no es desfà res: cap acció que es pugui
-      // desfer no en canvia la mida ni l'orientació. Les pàgines i els seus
-      // blocs, sí
+      // La pàgina del document només es desfà si la instantània la porta:
+      // adaptar la pantalla sencera a una altra pantalla (la resta d'accions
+      // que es poden desfer no en canvien la mida). Les pàgines i els seus
+      // blocs, sempre
+      if ("layout" in action.payload)
+        previousDocument.layout = action.payload.layout;
       previousDocument.pages = pages;
       previousDocument.styles = styles;
     },
@@ -535,6 +538,20 @@ const documentSlice = createSlice({
         ...(previousDocument.layout ?? action.payload.base),
         ...action.payload.layout,
       };
+    },
+
+    // La pàgina del document i els blocs recol·locats alhora: en passar a la
+    // pantalla sencera o tornar-ne, i en adaptar-la a una altra pantalla, el
+    // full canvia de mida i els blocs s'hi recol·loquen (`rescalePages`)
+    documentLayoutAndPagesChanged: (
+      previousDocument,
+      action: PayloadAction<{
+        layout: DocumentLayout;
+        pages: DocumentPages | undefined;
+      }>,
+    ) => {
+      previousDocument.layout = action.payload.layout;
+      previousDocument.pages = action.payload.pages;
     },
 
     // Les pàgines senceres, amb els seus blocs (ADR-005). Les operacions les
@@ -661,6 +678,11 @@ export interface DocumentStyleSnapshot {
   pages: DocumentSAAC["pages"];
   /** Els estils amb nom: «Aplica el meu estil» n'hi copia un (R10) */
   styles: DocumentSAAC["styles"];
+  /**
+   * La pàgina del document, només quan el canvi la toca (adaptar la pantalla
+   * sencera). Sense la clau, desfer no la toca
+   */
+  layout?: DocumentSAAC["layout"];
 }
 
 export const takeDocumentStyleSnapshot = (
@@ -801,6 +823,7 @@ export const {
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
   newDocumentPagesInherited: newDocumentPagesInheritedActionCreator,
   documentLayoutChanged: documentLayoutChangedActionCreator,
+  documentLayoutAndPagesChanged: documentLayoutAndPagesChangedActionCreator,
   pagesChanged: pagesChangedActionCreator,
   pagesAndStylesChanged: pagesAndStylesChangedActionCreator,
   documentAuthorChanged: documentAuthorChangedActionCreator,

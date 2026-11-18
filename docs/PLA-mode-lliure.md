@@ -410,7 +410,7 @@ el retoc a mà o si n'hi ha prou amb les plantilles i les comunes.
 |---|---|---|
 | D1 | Com es veuen les pàgines a la vista | **Fet, i diferent del previst** (§11): totes una sota l'altra, a la mateixa mida, cadascuna amb la seva capçalera |
 | D2 | Pàgines buides | Es desen tal com són; abans d'imprimir, un avís |
-| D3 | `FULLSCREEN` amb mode lliure | No s'hi ofereix: en triar Lliure, el selector de mida amaga «Pantalla completa». El botó de pantalla completa de la vista ensenya les pàgines una a una. **En revisió** (2026-11-18): vegeu §13, «La pantalla sencera amb blocs» |
+| D3 | `FULLSCREEN` amb mode lliure | ~~No s'hi ofereix~~. **Revisada el 2026-11-18**: la pantalla sencera és un paper virtual amb la forma de la pantalla on s'encén, i s'hi treballa en blocs com en un paper. Vegeu §13, «La pantalla sencera amb blocs» |
 | D4 | Tornar a «Automàtica» | Es conserva la disposició a Redux, no s'escriu en desar, i el canvi té Desfés |
 | D5 | Què passa en activar-lo | Totes les seqüències es col·loquen soles amb la disposició que s'assembla al flux, perquè no desaparegui res del full |
 | D6 | Una seqüència pot sortir a més d'una pàgina? | **Decidit: sí.** Comuna (a totes, mateix lloc, es mou a totes alhora) o còpia independent a una pàgina concreta (§6, «Repetir una seqüència») |
@@ -1353,7 +1353,34 @@ Pendents de més abast:
   El catàleg de diversos estils, amb comptes, també és d'aleshores (B33).
 - Preexistent: `printDimensions` sense ús a `ViewSquenceSettings.tsx` (avís del lint).
 
-### La pantalla sencera amb blocs — proposta (2026-11-18)
+### La pantalla sencera amb blocs — ✅ feta (2026-11-18)
+
+**Com ha quedat** (va a la release de la vista al mòbil; decidit per l'usuari el 2026-11-18):
+
+- **El model**: `DocumentLayout.screen` (shared-types) i `page.screen` al `.saac` (esquema, lector,
+  escriptor, fonament 06 i fixture 18). `sheetAreaMm` ja no torna mai `null`: per a `FULLSCREEN`,
+  la pantalla desada (o la d'ara) passada a mil·límetres, sense marge d'impressió i amb la franja
+  del peu. `layoutAreaMm(layout)` és l'àrea de la pàgina d'un document, i la fan servir
+  `selectSheetArea` i el creixement dels blocs. `createPageFormat` rep la pantalla desada.
+- **Encendre-la** (`changePageLayoutThunk`): l'interruptor «Pantalla sencera» ja no s'apaga amb
+  pàgines en blocs. En passar-hi es desa la pantalla d'ara (`currentScreen`, apaïsada) i els blocs
+  es recol·loquen (`rescalePages`: els d'una plantilla, al seu espai; els moguts a mà, en
+  proporció); en tornar al paper, la pantalla s'oblida i els blocs tornen al paper igual. Entre
+  dos papers no es recol·loquen, com abans. No es desfà, com canviar de paper.
+- **La pregunta** (`ScreenShapeNotice`, a la pàgina de vista): si la forma de la pantalla d'ara
+  difereix més d'un 2 % de la desada (`differentShape`), un bàner ho diu i ofereix «Adapta'l a
+  aquesta pantalla» (`adaptToScreenThunk`). Es desfà amb el snackbar de sempre: la instantània
+  porta, només aquí, la pàgina del document. Tancar-lo el deixa tancat fins que es torna a obrir el
+  document.
+- **La pantalla completa** d'un document amb pàgines a pantalla sencera ensenya les pàgines una a
+  una, amb els blocs (abans hi anava el flux de sempre). Sense pàgines pròpies, com abans.
+- **Imprimir**: el botó no hi és, ni el PDF. **Ctrl+P no s'ha tocat**: surt el que ja sortia (el
+  paper per defecte de la regió, apaïsat, `generatePrintCSS`); no s'ha comprovat si hi cap sencer.
+- **Proves**: `rescale.test.ts`, `placement.test.ts`, `pageFormat.test.ts`, les accions a
+  `freeLayoutThunks.test.ts` (encendre, tornar, adaptar i desfer), el format a `saac.test.ts`
+  (fixture 18), i `e2e/fullscreen-blocks.spec.ts` a l'escriptori i al mòbil.
+
+La proposta, tal com es va escriure:
 
 **Què es vol**: poder treballar amb pàgines en blocs (plantilles i disposició lliure) en un document
 de **pantalla sencera**, el que es fa per mirar-lo a pantalla completa i no per imprimir-lo. Avui

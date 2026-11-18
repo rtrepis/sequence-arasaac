@@ -46,7 +46,6 @@ import { ViewSettings, SequenceDirection } from "@/types/ui";
 import { DocumentLayout, SequenceViewSettings } from "@/types/document";
 import {
   documentAuthorChangedActionCreator,
-  documentLayoutChangedActionCreator,
   setSequenceSpaceBetweenActionCreator,
 } from "@features/sequence/store/documentSlice";
 import {
@@ -65,6 +64,7 @@ import FreeLayoutPages from "@features/free-layout/components/FreeLayoutPages";
 import { pageFrameSx } from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages";
 import FreeLayoutSettings from "@features/free-layout/components/FreeLayoutSettings";
 import {
+  changePageLayoutThunk,
   selectDocumentTitle,
   selectHasPages,
   selectPages,
@@ -289,6 +289,7 @@ const ViewSequencesSettingsContent = ({
   } = usePageFormat({
     initialSize: pageLayout.pageSize ?? "A4",
     initialOrientation: pageLayout.orientation ?? "landscape",
+    screen: pageLayout.screen,
   });
 
   // Gestió de la disposició de la pàgina (direcció). L'espai entre seqüències
@@ -319,15 +320,9 @@ const ViewSequencesSettingsContent = ({
   );
 
   // Disposició lliure (ADR-005): les pàgines i les seves caixes en lloc del
-  // full del flux. La pantalla completa no l'admet: no té mil·límetres
-  const isFreeLayout = useAppSelector(selectHasPages) && !isFullscreen;
-  // Les pàgines en blocs es col·loquen en mil·límetres de paper: amb alguna,
-  // la pantalla sencera no s'hi pot triar. Les contínues, sí: s'hi veu el flux
-  const hasBlockPages = useAppSelector(
-    (state) =>
-      state.document.pages?.sheets.some(({ mode }) => mode === "template") ??
-      false,
-  );
+  // full del flux. També a la pantalla sencera, que és un paper virtual amb la
+  // forma de la pantalla on es va encendre (`layoutAreaMm`)
+  const isFreeLayout = useAppSelector(selectHasPages);
 
   // L'espai del full (`docs/PLA-mode-lliure.md`, §6, «L'espai»). A partir
   // d'escriptori, la columna d'ajustos es pot amagar perquè el full faci tota
@@ -471,11 +466,10 @@ const ViewSequencesSettingsContent = ({
       current.orientation === orientation
     )
       return;
+    // Amb la pantalla sencera, el full canvia de mida i els blocs s'hi
+    // recol·loquen (`changePageLayoutThunk`)
     dispatch(
-      documentLayoutChangedActionCreator({
-        layout: { direction, pageSize, orientation },
-        base: current,
-      }),
+      changePageLayoutThunk({ direction, pageSize, orientation }, current),
     );
   }, [dispatch, direction, pageSize, orientation]);
 
@@ -670,7 +664,13 @@ const ViewSequencesSettingsContent = ({
               aria-label={intl.formatMessage(messages.tooltipFullscreen)}
               color="inherit"
               sx={{ fontSize: "2rem" }}
-              onClick={enterFullscreen}
+              // Amb pàgines pròpies, les pàgines una a una, amb els seus
+              // blocs i lliscant (com amb un paper); sense, el flux de sempre
+              onClick={
+                isFreeLayout
+                  ? () => enterPageFullscreen(activePage)
+                  : enterFullscreen
+              }
             >
               <AiOutlineFullscreen />
             </StyledIconButton>
@@ -756,17 +756,15 @@ const ViewSequencesSettingsContent = ({
       sx={{ minWidth: 0, ...(!isWideScreen && { flex: 1, minHeight: 0 }) }}
     >
       {/* La capçalera de la pàgina única, com la de les pàgines del
-          document: des de l'inici s'hi poden afegir pàgines. La pantalla
-          completa com a paper no en té */}
-      {!isFullscreen && (
-        <SinglePageHeader
-          slot="header"
-          onFocusPage={() => {
-            setFit("page");
-            scrollPageToTop(0);
-          }}
-        />
-      )}
+          document: des de l'inici s'hi poden afegir pàgines, també a la
+          pantalla sencera */}
+      <SinglePageHeader
+        slot="header"
+        onFocusPage={() => {
+          setFit("page");
+          scrollPageToTop(0);
+        }}
+      />
       {/* Al mòbil, l'espai que té el full: s'hi encongeix sencer (E1) */}
       <Box
         ref={isWideScreen ? undefined : sheetAreaRef}
@@ -888,7 +886,7 @@ const ViewSequencesSettingsContent = ({
       </Box>
 
       {/* «Afegeix una pàgina» sota el full, com a les pàgines del document */}
-      {!isFullscreen && <SinglePageHeader slot="footer" />}
+      <SinglePageHeader slot="footer" />
     </Stack>
   );
 
@@ -939,14 +937,12 @@ const ViewSequencesSettingsContent = ({
           title={<FormattedMessage {...messages.sectionPageFormat} />}
         >
           {/* El paper, i a sota la pantalla sencera. La direcció i l'espai
-              entre seqüències són de cada pàgina; amb pàgines en blocs, la
-              pantalla sencera no s'hi pot triar. Al mòbil, girar el full
+              entre seqüències són de cada pàgina. Al mòbil, girar el full
               també és aquí (M4) */}
           <GlobalViewControls
             viewSettings={{ ...viewSettings, orientation }}
             pageSize={pageSize}
             sequenceCount={1}
-            paperOnly={hasBlockPages}
             showDirection={false}
             onPageSizeChange={setPageSize}
             onDirectionChange={handleDirectionChange}
@@ -980,7 +976,6 @@ const ViewSequencesSettingsContent = ({
       <PageLevel
         expanded={openLevels.page}
         onExpandedChange={setLevelOpen("page")}
-        fullscreen={isFullscreen}
         implicit={{
           direction,
           onDirectionChange: (value) => updateViewSetting("direction", value),

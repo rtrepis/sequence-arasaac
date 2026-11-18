@@ -258,7 +258,6 @@
   "pages.viewSequence.direction.label": "Dirección",
   "pages.viewSequence.fullScreen.label": "Pantalla completa",
   "pages.viewSequence.fullScreen.helper": "La previsualización sigue la proporción de la pantalla",
-  "pages.viewSequence.fullScreen.blocked": "No es posible con páginas en bloques: los bloques se colocan sobre un papel",
   "pages.viewSequence.pageSize.label": "Tamaño de página",
   "pages.viewSequence.pageSize.letter": "Carta (8,5 × 11″)",
   "pages.viewSequence.pageSize.tabloid": "Tabloide (11 × 17″)",
@@ -862,5 +861,8 @@
   "components.viewSettingsPanel.dispositionHelp": "Cómo empieza la primera página de un documento nuevo, y las páginas que se le añaden.",
   "components.viewSettingsPanel.previewSequences": "Secuencias de la muestra",
   "features.freeLayout.resetSequencePictograms": "Restablece los pictogramas de esta secuencia",
-  "features.sequence.style.changed.resetSequence": "Se han restablecido los pictogramas de la secuencia, en todos los bloques donde aparece."
+  "features.sequence.style.changed.resetSequence": "Se han restablecido los pictogramas de la secuencia, en todos los bloques donde aparece.",
+  "features.sequence.style.changed.adaptScreen": "Se ha adaptado la hoja a esta pantalla.",
+  "features.freeLayout.screenShape.notice": "Este documento se hizo para una pantalla de otra forma. La hoja se ve entera, con márgenes.",
+  "features.freeLayout.screenShape.adapt": "Adáptalo a esta pantalla"
 }

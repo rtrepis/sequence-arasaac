@@ -265,10 +265,15 @@ fase 3 va fer veure que no n'hi ha prou:
   no s'ha publicat mai.
 - **Esborrar una seqüència** n'esborra tots els blocs (`removeSequencePlacements`); els de text i
   els desconeguts es queden.
-- **La pantalla completa** (`size: "FULLSCREEN"`) no té mil·límetres i no admet pàgines amb caixes
-  (`sheetAreaMm` en retorna `null`).
+- **La pantalla sencera** (`size: "FULLSCREEN"`) és un **paper virtual** des del 2026-11-18: la
+  pantalla on es va encendre, desada a `page.screen` (píxels CSS, apaïsada), passada a mil·límetres
+  sense marge d'impressió (`sheetAreaMm`, `layoutAreaMm`). Els blocs hi funcionen com en un paper.
+  En passar-hi o tornar-ne, i en adaptar-la a una pantalla d'una altra forma, els blocs es
+  recol·loquen (`rescalePages`). Abans no admetia pàgines amb caixes. Vegeu
+  `docs/PLA-mode-lliure.md`, §13, «La pantalla sencera amb blocs».
 - **El desfer és l'únic de l'app, ampliat**: la instantània de `styleSlice` guarda també les
-  pàgines i, des de R10, els estils amb nom.
+  pàgines i, des de R10, els estils amb nom. Adaptar la pantalla sencera hi afegeix la pàgina del
+  document (`layout`), només en aquella instantània.
 
 ## Història
 

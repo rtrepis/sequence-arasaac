@@ -6,10 +6,17 @@ import type {
   SequencePlacement,
   TextPlacement,
 } from "@/types/document";
+import type {
+  DocumentLayout,
+  ScreenSize,
+} from "@sequence-arasaac/shared-types";
 import {
+  CSS_PRINT_DPI,
   PAPER_DIMENSIONS_MM,
   PRINT_MARGIN_MM,
+  currentScreen,
 } from "@features/print/utils/pageFormat";
+import { pixelsToMM } from "@features/print/utils/pageUnits";
 
 /** Pas de les fletxes del teclat. */
 export const MOVE_STEP_MM = 1;
@@ -60,14 +67,26 @@ export const hasBox = (box: Box): boolean => box.w > 0 && box.h > 0;
 
 /**
  * L'àrea útil d'un full: el paper menys el marge d'impressió (el mateix
- * `.preview-content` de la vista) i menys la franja del peu. La pantalla
- * completa no en té: no té mil·límetres, i no admet el mode lliure.
+ * `.preview-content` de la vista) i menys la franja del peu.
+ *
+ * La pantalla sencera és un **paper virtual**: la pantalla on es va encendre
+ * (`screen`, desada al document) o, si no n'hi ha, la d'ara, en píxels CSS
+ * passats a mil·límetres. No té marge d'impressió, perquè no s'imprimeix (el
+ * full de la vista tampoc no el té), però sí la franja del peu. Així els blocs
+ * continuen en mil·límetres i tot el mode lliure hi funciona igual.
  */
 export const sheetAreaMm = (
   size: PageSize,
   orientation: PageOrientation,
-): SheetArea | null => {
-  if (size === "FULLSCREEN") return null;
+  screen?: ScreenSize,
+): SheetArea => {
+  if (size === "FULLSCREEN") {
+    const { width, height } = screen ?? currentScreen();
+    return {
+      w: pixelsToMM(width, CSS_PRINT_DPI),
+      h: pixelsToMM(height, CSS_PRINT_DPI) - SHEET_FOOTER_RESERVE_MM,
+    };
+  }
   const paper = PAPER_DIMENSIONS_MM[size];
   const [paperW, paperH] =
     orientation === "landscape"
@@ -78,6 +97,14 @@ export const sheetAreaMm = (
     h: paperH - PRINT_MARGIN_MM * 2 - SHEET_FOOTER_RESERVE_MM,
   };
 };
+
+/** L'àrea útil del full d'una pàgina de document (`DocumentLayout`). */
+export const layoutAreaMm = (layout: DocumentLayout): SheetArea =>
+  sheetAreaMm(
+    layout.pageSize ?? "A4",
+    layout.orientation ?? "landscape",
+    layout.screen,
+  );
 
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);

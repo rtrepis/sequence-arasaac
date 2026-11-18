@@ -468,6 +468,36 @@ const readAssets = (value: unknown): Record<string, V3Asset> => {
   return assets;
 };
 
+/**
+ * La pantalla d'un document de pantalla sencera: dues mides positives. S'hi
+ * desa apaïsada, però se n'accepta una de dreta (es gira). Amb un paper, o mal
+ * formada, no hi és: el full serà la pantalla on s'obri.
+ */
+const readScreen = (
+  rawPage: unknown,
+  size: V3Page["size"],
+): Pick<V3Page, "screen"> => {
+  if (size !== "FULLSCREEN" || !isPlainObject(rawPage)) return {};
+  const screen = rawPage.screen;
+  if (!isPlainObject(screen)) return {};
+  const { width, height } = screen;
+  if (
+    typeof width !== "number" ||
+    typeof height !== "number" ||
+    !Number.isFinite(width) ||
+    !Number.isFinite(height) ||
+    width <= 0 ||
+    height <= 0
+  )
+    return {};
+  return {
+    screen: {
+      width: Math.max(width, height),
+      height: Math.min(width, height),
+    },
+  };
+};
+
 /** Document v3, completat i validat. `null` si no té la forma d'un document. */
 const readV3Document = (
   raw: PlainObject,
@@ -541,6 +571,7 @@ const readV3Document = (
       page: {
         ...(isPlainObject(raw.page) && unknownFields(raw.page, PAGE_KEYS)),
         ...page.value,
+        ...readScreen(raw.page, page.value.size),
         // `"free"` només el porten els fitxers de les fases 1–3; ara les
         // pàgines diuen com es col·loquen, i el valor és sempre `"flow"`
         layout: "flow",

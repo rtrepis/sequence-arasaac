@@ -258,7 +258,6 @@
   "pages.viewSequence.direction.label": "Direction",
   "pages.viewSequence.fullScreen.label": "Plein écran",
   "pages.viewSequence.fullScreen.helper": "L'aperçu suit les proportions de l'écran",
-  "pages.viewSequence.fullScreen.blocked": "Impossible avec des pages en blocs : les blocs sont placés sur un papier",
   "pages.viewSequence.pageSize.label": "Taille de page",
   "pages.viewSequence.pageSize.letter": "Lettre US (8,5 × 11″)",
   "pages.viewSequence.pageSize.tabloid": "Tabloïd (11 × 17″)",
@@ -862,5 +861,8 @@
   "components.viewSettingsPanel.dispositionHelp": "Comment commence la première page d'un nouveau document, et les pages qu'on y ajoute.",
   "components.viewSettingsPanel.previewSequences": "Séquences de l'aperçu",
   "features.freeLayout.resetSequencePictograms": "Réinitialiser les pictogrammes de cette séquence",
-  "features.sequence.style.changed.resetSequence": "Les pictogrammes de la séquence ont été réinitialisés, dans tous les blocs où elle apparaît."
+  "features.sequence.style.changed.resetSequence": "Les pictogrammes de la séquence ont été réinitialisés, dans tous les blocs où elle apparaît.",
+  "features.sequence.style.changed.adaptScreen": "La feuille a été adaptée à cet écran.",
+  "features.freeLayout.screenShape.notice": "Ce document a été créé pour un écran d'une autre forme. La feuille s'affiche en entier, avec des marges.",
+  "features.freeLayout.screenShape.adapt": "L'adapter à cet écran"
 }

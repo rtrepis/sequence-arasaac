@@ -209,6 +209,24 @@
             "$ref": "#/$defs/block"
           }
         },
+        "screen": {
+          "type": "object",
+          "description": "Només amb size \"FULLSCREEN\": la pantalla on es va encendre la pantalla sencera, en píxels CSS i apaïsada (width ≥ height). És la forma i la mida del full, un paper virtual on els blocs es col·loquen en mil·límetres com en un paper. Sense, el full és la pantalla on s'obre el document.",
+          "required": [
+            "width",
+            "height"
+          ],
+          "properties": {
+            "width": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "height": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        },
         "licenceOn": {
           "enum": [
             "every",

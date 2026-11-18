@@ -77,6 +77,7 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   | `sheets` | llista de pàgines | Les pàgines, en ordre, i els seus blocs (§1.1). Sense `sheets`, una sola pàgina automàtica amb totes les seqüències |
   | `common` | llista de blocs | El que surt a totes les pàgines (§1.1) |
   | `licenceOn` | `"last"` | El peu de llicència només a l'última pàgina. Sense valor, a totes, com sempre: només s'escriu `"last"` |
+  | `screen` | `{ width, height }` | Només amb `size: "FULLSCREEN"`: la pantalla on es va encendre la pantalla sencera, en píxels CSS i apaïsada. És la forma i la mida del full (un paper virtual, ADR-005). Sense, el full és la pantalla on s'obre el document, com abans. Una de dreta es llegeix girada; una de mal formada o amb un paper, no hi és. Opcional: no puja `schemaVersion` |
 
   - Una `size` que l'app no coneix cau a la pàgina de qui obre, com qualsevol valor fora de la
     llista. Per això afegir una mida **no** demana una versió nova de l'esquema: una versió de l'app

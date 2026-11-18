@@ -258,7 +258,6 @@
   "pages.viewSequence.direction.label": "Direction",
   "pages.viewSequence.fullScreen.label": "Full Screen",
   "pages.viewSequence.fullScreen.helper": "The preview follows the shape of the screen",
-  "pages.viewSequence.fullScreen.blocked": "Not available with pages in blocks: blocks are placed on paper",
   "pages.viewSequence.pageSize.label": "Page Size",
   "pages.viewSequence.pageSize.letter": "Letter (8.5 × 11″)",
   "pages.viewSequence.pageSize.tabloid": "Tabloid (11 × 17″)",
@@ -862,5 +861,8 @@
   "components.viewSettingsPanel.dispositionHelp": "How the first page of a new document starts, and the pages you add to it.",
   "components.viewSettingsPanel.previewSequences": "Sequences in the preview",
   "features.freeLayout.resetSequencePictograms": "Reset this sequence's pictograms",
-  "features.sequence.style.changed.resetSequence": "The sequence's pictograms have been reset, in every block where it appears."
+  "features.sequence.style.changed.resetSequence": "The sequence's pictograms have been reset, in every block where it appears.",
+  "features.sequence.style.changed.adaptScreen": "The sheet has been adapted to this screen.",
+  "features.freeLayout.screenShape.notice": "This document was made for a screen with a different shape. The sheet is shown whole, with margins.",
+  "features.freeLayout.screenShape.adapt": "Adapt it to this screen"
 }

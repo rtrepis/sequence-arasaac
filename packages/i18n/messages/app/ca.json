@@ -978,10 +978,6 @@
     "message": "La previsualització segueix la proporció de la pantalla",
     "description": "Ajuda de l'interruptor «Pantalla sencera», sota la mida de pàgina: en activar-lo, el full deixa de ser un paper i pren la proporció de la pantalla"
   },
-  "pages.viewSequence.fullScreen.blocked": {
-    "message": "No es pot amb pàgines en blocs: els blocs es col·loquen sobre un paper",
-    "description": "Per què l'interruptor «Pantalla sencera» és apagat: el document té pàgines en blocs, que es col·loquen en mil·límetres d'un paper"
-  },
   "pages.viewSequence.pageSize.label": {
     "message": "Mida de pàgina"
   },
@@ -3324,5 +3320,17 @@
   "features.sequence.style.changed.resetSequence": {
     "message": "S'han restablert els pictogrames de la seqüència, a tots els blocs on surt.",
     "description": "Snackbar amb «Desfés» després de «Restableix els pictogrames d'aquesta seqüència» del menú «⋯» d'un bloc: se'n treuen els retocs, i canvien tots els blocs on surt la seqüència"
+  },
+  "features.sequence.style.changed.adaptScreen": {
+    "message": "S'ha adaptat el full a aquesta pantalla.",
+    "description": "Snackbar amb «Desfés» en adaptar un document de pantalla sencera a la pantalla d'ara, d'una altra forma: el full canvia de forma i els blocs s'hi recol·loquen"
+  },
+  "features.freeLayout.screenShape.notice": {
+    "message": "Aquest document es va fer per a una pantalla d'una altra forma. El full es veu sencer, amb vores.",
+    "description": "Bàner de la vista: el document és de pantalla sencera i es va fer en una pantalla d'una altra forma (proporció) que la d'ara. El full es veu sencer i encongit, amb vores als costats o a dalt i a baix"
+  },
+  "features.freeLayout.screenShape.adapt": {
+    "message": "Adapta'l a aquesta pantalla",
+    "description": "Botó del bàner de la pantalla d'una altra forma: el full passa a tenir la forma d'aquesta pantalla i els blocs s'hi recol·loquen (es pot desfer)"
   }
 }

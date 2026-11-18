@@ -24,6 +24,7 @@ import {
 import type { PageDisposition } from "@/types/ui";
 import { whereIs } from "../model/placementsOf";
 import { stackTemplate } from "../model/templates";
+import { layoutAreaMm } from "../model/placement";
 import {
   addSequencesToSheetThunk,
   addSheetThunk,
@@ -40,6 +41,8 @@ import {
   setPlacementViewThunk,
   setSheetViewThunk,
   addNewSequenceThunk,
+  adaptToScreenThunk,
+  changePageLayoutThunk,
   syncNewDocumentPagesThunk,
   setSheetFreeThunk,
   updateMyStyleThunk,
@@ -150,15 +153,22 @@ describe("passar una pàgina a blocs i tornar", () => {
     expect(layoutOf(store)).not.toHaveProperty("licenceOn");
   });
 
-  it("amb la pantalla completa no hi ha mil·límetres, i no es construeix res", () => {
+  it("a la pantalla sencera també es treballa en blocs, sobre el paper virtual de la pantalla", () => {
     const store = createAppStore({
       document: {
         ...documentWith(1),
-        layout: { pageSize: "FULLSCREEN", orientation: "landscape" },
+        layout: {
+          pageSize: "FULLSCREEN",
+          orientation: "landscape",
+          screen: { width: 1280, height: 720 },
+        },
       },
     });
     store.dispatch(setSheetModeThunk(0, "template"));
-    expect(store.getState().document.pages).toBeUndefined();
+    const [block] = layoutOf(store).sheets[0].placements;
+    // Una sola seqüència: tot el full virtual (338,67 mm d'ample)
+    expect(block).toMatchObject({ x: 0, y: 0 });
+    expect((block as { w: number }).w).toBeCloseTo(338.667, 2);
   });
 });
 
@@ -593,5 +603,89 @@ describe("«Restableix els pictogrames d'aquesta seqüència» (B35)", () => {
     });
     store.dispatch(undoStyleChangeThunk());
     expect(store.getState().document.content[1]).toEqual(before[1]);
+  });
+});
+
+describe("la pantalla sencera amb blocs", () => {
+  const SCREEN = { width: 1280, height: 720 };
+  const box = (placement: unknown) =>
+    placement as { x: number; y: number; w: number; h: number };
+
+  it("passar-hi desa la pantalla d'ara i hi recol·loca els blocs; tornar al paper l'oblida", () => {
+    const store = freeStore(2);
+    const base = store.getState().document.layout!;
+    const [first] = layoutOf(store).sheets[0].placements;
+    expect(box(first).w).toBeCloseTo(200, 3);
+
+    store.dispatch(
+      changePageLayoutThunk(
+        { pageSize: "FULLSCREEN", orientation: "landscape" },
+        base,
+      ),
+    );
+    const layout = store.getState().document.layout!;
+    // jsdom no té pantalla: la de 1280 × 720
+    expect(layout).toMatchObject({ pageSize: "FULLSCREEN", screen: SCREEN });
+    // El bloc de la plantilla fa tot l'ample del full virtual
+    const [moved] = layoutOf(store).sheets[0].placements;
+    expect(box(moved).w).toBeCloseTo(layoutAreaMm(layout).w, 3);
+
+    store.dispatch(changePageLayoutThunk({ pageSize: "A4" }, layout));
+    const paper = store.getState().document.layout!;
+    expect(paper).not.toHaveProperty("screen");
+    expect(box(layoutOf(store).sheets[0].placements[0]).w).toBeCloseTo(
+      layoutAreaMm(paper).w,
+      3,
+    );
+  });
+
+  it("entre dos papers, els blocs no es mouen, com sempre", () => {
+    const store = freeStore(2);
+    const before = layoutOf(store);
+    store.dispatch(
+      changePageLayoutThunk(
+        { pageSize: "A3" },
+        store.getState().document.layout!,
+      ),
+    );
+    expect(layoutOf(store)).toBe(before);
+  });
+
+  it("adaptar-la a una altra pantalla recol·loca els blocs, i es pot desfer", () => {
+    const store = createAppStore({
+      document: {
+        ...documentWith(2),
+        layout: {
+          pageSize: "FULLSCREEN",
+          orientation: "landscape",
+          // Feta en una pantalla 4:3
+          screen: { width: 1024, height: 768 },
+        },
+      },
+    });
+    store.dispatch(setSheetModeThunk(0, "template"));
+    const before = store.getState().document;
+
+    store.dispatch(adaptToScreenThunk());
+    const adapted = store.getState().document;
+    expect(adapted.layout?.screen).toEqual(SCREEN);
+    expect(adapted.pages).not.toBe(before.pages);
+    expect(box(adapted.pages!.sheets[0].placements[0]).w).toBeCloseTo(
+      layoutAreaMm(adapted.layout!).w,
+      3,
+    );
+    expect(store.getState().style.undoSnackbar?.source).toBe("adaptScreen");
+    expect(selectCanUndoStyle(store.getState())).toBe(true);
+
+    store.dispatch(undoStyleChangeThunk());
+    expect(store.getState().document.layout).toBe(before.layout);
+    expect(store.getState().document.pages).toBe(before.pages);
+  });
+
+  it("la pantalla desada no fa res amb un paper: adaptar no hi fa res", () => {
+    const store = freeStore(1);
+    const before = store.getState().document;
+    store.dispatch(adaptToScreenThunk());
+    expect(store.getState().document).toBe(before);
   });
 });
