@@ -216,7 +216,7 @@ al davant hi encaixa.
 - `docs/PLA-noticies.md` és el pla de les notícies de Novetats de la release: les noves des del 3
   d'octubre (pàgines, el meu estil, la vista al mòbil, la pantalla sencera…) i les velles que ja no
   són certes, que surten del carrusel i es queden a Novetats amb una marca. **Aprovat**
-  (2026-11-19); obertes D5 i D8. **Consultar-lo abans d'escriure o tocar cap notícia.**
+  (2026-11-19); oberta D5. **Consultar-lo abans d'escriure o tocar cap notícia.**
 - `docs/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
   (agenda, passos, primer/després, setmana, taulers, normes, contes, economia de fitxes, menú), a
   l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en

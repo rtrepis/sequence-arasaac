@@ -2,7 +2,7 @@
 
 > **Estat**: **aprovat** (2026-11-19), amb les decisions de §8. Es fan **cinc notícies** (N-1, N-3,
 > N-5, N-6 i N-7); les velles que ja no són certes **surten del carrusel i es queden a Novetats amb
-> una marca**. Queden obertes **D5** (l'etiqueta «Nou») i **D8** (com es diu la marca). Cada fase
+> una marca, «Superada»**. Queda oberta **D5** (l'etiqueta «Nou»). Cada fase
 > té una **porta**: no es passa a la següent fins que la decisió que la tanca és presa i apuntada a
 > §8. **Per continuar, §11.**
 > **Ve de**: §11 de `docs/PLA-vista-mobil.md` («la release no surt sense la vista al mòbil i sense
@@ -187,7 +187,7 @@ taula era la de la primera versió del pla; ara, cada fila que no sigui «correc
     `multiple-sequences` → N-1).
   - Les fletxes d'anterior i següent de les notícies continuen passant-hi: és un registre, i
     saltar-les-hi trencaria l'ordre.
-- **Com es diu (D8, obert)**. Opcions per a l'etiqueta, en català:
+- **Com es diu (D8, decidit: «Superada»)**. Les opcions que es van mirar:
   - **«Superada»**: curta i clara; la que es proposa.
   - «Ja no és vigent»: més explícita, però més llarga per a una etiqueta.
   - «Versió anterior»: suau, però pot fer pensar en una versió que es pot descarregar.
@@ -238,13 +238,13 @@ taula era la de la primera versió del pla; ara, cada fila que no sigui «correc
 | D5 | L'etiqueta «Nou» de la fila «Disposició» | ⏳ **Oberta** («ja veurem»). Es decideix a la fase 5 |
 | D6 | La data de les notícies | **La mateixa per a totes**, el dia de la release |
 | D7 | L'ordre i quan es publica | **Tot es publica amb la release**: les cinc notícies i la marca de les velles, alhora |
-| D8 | Com es diu la marca de les velles | ⏳ **Oberta**. Proposta: l'etiqueta **«Superada»** i l'avís a la pàgina de la notícia (§5). Cal tancar-la abans de la fase 3 |
+| D8 | Com es diu la marca de les velles | **«Superada»** (2026-11-19). A la pàgina de la notícia, l'avís diu la data de la notícia (la que ja porta, `date`) i **enllaça a la notícia nova** que la substitueix |
 
 ## 9. Fases
 
-### Fase 0 — Decisions · porta: §8 respost ✅ Tancada (2026-11-19), menys D5 i D8
+### Fase 0 — Decisions · porta: §8 respost ✅ Tancada (2026-11-19), menys D5
 
-D5 es decideix a la fase 5; D8, abans de la fase 3.
+D5 es decideix a la fase 5.
 
 ### Fase 1 — L'auditoria de les velles · porta: la llista de §5 tancada
 
@@ -261,7 +261,7 @@ D5 es decideix a la fase 5; D8, abans de la fase 3.
 - **Fet quan**: un spec de prova en treu una captura d'escriptori de les pàgines i una de mòbil, i
   totes dues es veuen bé a la pàgina d'una notícia.
 
-### Fase 3 — La marca de les velles · porta: D8 tancada
+### Fase 3 — La marca de les velles
 
 El camp a `NewsItem`, el carrusel que les filtra, l'etiqueta a Novetats i l'avís a la pàgina de la
 notícia (§5, «La marca»), amb els textos als cinc idiomes i proves. Es marquen les de la fase 1.
@@ -301,7 +301,7 @@ tecnicisme; els noms dels botons són els de la pantalla; `npm run typecheck` ne
 ## 11. Encàrrec per a la sessió següent
 
 **Què**: la fase 1 (l'auditoria de les velles) i la fase 2 (la fixture de N-1 i el marc de
-telèfon). Abans de la fase 3, tancar **D8** amb l'usuari (el nom de la marca).
+telèfon).
 
 **On**: a la branca de la release, `claude/release-before-new-plan-8x1xhp`, un cop hi hagi les
 fases 5 i 6 de la vista al mòbil (branques `ccr-d6733228-d9h9t0` i `ccr-f5fab69a-xv8xmg`).
