@@ -288,7 +288,16 @@ D5 es decideix a la fase 5.
 - **Fet quan**: un spec de prova en treu una captura d'escriptori de les pàgines i una de mòbil, i
   totes dues es veuen bé a la pàgina d'una notícia.
 
-### Fase 3 — La marca de les velles, i les captures velles · ✅ la marca (2026-11-19) · ⏳ les captures
+### Fase 3 — La marca de les velles, i les captures velles ✅ Feta (2026-11-19)
+
+**Les captures** (2026-11-19): regenerades les de les set notícies amb captures velles, totes les
+imatges de cada notícia (perquè no hi convisquin dues lletres), i mirades una per una. Els specs
+que ho necessitaven: `save-improvements` selecciona la seqüència abans de buscar el lliscador
+«Mida» i retalla el nivell «Seqüència»; `pdf-quality` espera que marxi l'avís de «pictogrames
+afegits»; `documents-everywhere` retalla només l'avís del document antic. `pdf-quality`,
+`download-pdf` i `save-improvements` fan servir un navegador de Catalunya (`locale: "ca-ES"`): el
+Chromium de proves diu que és dels Estats Units i el paper per defecte sortia Carta. `autosave-draft`
+i `search-suggestions` no s'han tocat (correctes).
 
 **Fet** (2026-11-19): l'usuari confirma que les set amb captures velles es regeneren i que
 `new-languages` i `user-preferences` porten la marca. La marca ja hi és: `superseded` a

@@ -161,8 +161,10 @@ for (const locale of LOCALES) {
     await expect(cards).toHaveCount(ROUTINE[locale].length);
     await expect(page.getByTestId("customized-mark")).toHaveCount(1);
     await waitNoSnackbar(page);
+    // Només l'avís: ara que ja no porta el botó «Estil del document», més alt
+    // agafaria mitja barra de dalt
     await shot(page, notice, out(locale, "avis-antic"), {
-      size: { width: 1100, height: 150 },
+      size: { width: 1100, height: 110 },
       noCursor: true,
     });
 

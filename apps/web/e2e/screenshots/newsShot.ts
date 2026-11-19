@@ -1,4 +1,4 @@
-import { type Page, type Locator } from "@playwright/test";
+import { expect, type Page, type Locator } from "@playwright/test";
 import path from "node:path";
 import fs from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -292,4 +292,11 @@ export const searchWord = async (page: Page, word: string): Promise<void> => {
 
 export const ensureImgDir = (): void => {
   fs.mkdirSync(IMG_DIR, { recursive: true });
+};
+
+/** Espera que marxin els avisos flotants, que taparien les captures */
+export const waitNoSnackbar = async (page: Page): Promise<void> => {
+  await expect(page.locator(".MuiSnackbar-root")).toHaveCount(0, {
+    timeout: 15000,
+  });
 };

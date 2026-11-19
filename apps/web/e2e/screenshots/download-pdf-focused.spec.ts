@@ -156,6 +156,10 @@ const focusedScreenshot = async (
   });
 };
 
+// Un navegador de Catalunya: el paper per defecte surt de la regió, i el
+// Chromium de proves diu que és dels Estats Units (paper Carta)
+test.use({ locale: "ca-ES" });
+
 test.beforeAll(() => {
   fs.mkdirSync(IMG_DIR, { recursive: true });
   fs.mkdirSync(VIDEO_DIR, { recursive: true });
