@@ -27,16 +27,23 @@ const messages = Object.fromEntries(
     locale,
     JSON.parse(
       fs.readFileSync(
-        path.join(process.cwd(), "languages", `${locale}.json`),
+        path.join(
+          process.cwd(),
+          "../../packages/i18n/messages/app",
+          `${locale}.json`,
+        ),
         "utf8",
       ),
-    ) as Record<string, { defaultMessage: string }>,
+    ) as Record<string, string | { message: string }>,
   ]),
-) as Record<Locale, Record<string, { defaultMessage: string }>>;
+) as Record<Locale, Record<string, string | { message: string }>>;
 
 /** El text real de l'app, en aquest idioma */
-const t = (locale: Locale, key: string): string =>
-  messages[locale][key].defaultMessage;
+const t = (locale: Locale, key: string): string => {
+  // El català porta text i descripció; els altres idiomes, només el text
+  const entry = messages[locale][key];
+  return typeof entry === "string" ? entry : entry.message;
+};
 
 // Una rutina del matí amb els sis pictogrames que el repositori serveix sense
 // xarxa (`newsShot.ts`), en l'idioma de cada captura

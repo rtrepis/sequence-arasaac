@@ -2,7 +2,8 @@
 
 > **Estat**: **aprovat** (2026-11-19), amb les decisions de §8. Es fan **cinc notícies** (N-1, N-3,
 > N-5, N-6 i N-7); les velles que ja no són certes **surten del carrusel i es queden a Novetats amb
-> una marca, «Superada»**. Queda oberta **D5** (l'etiqueta «Nou»). Cada fase
+> una marca, «Superada»**. Queda oberta **D5** (l'etiqueta «Nou»).
+> **Fase 1 feta** (2026-11-19): sis notícies superades i set amb captures velles (§5). Cada fase
 > té una **porta**: no es passa a la següent fins que la decisió que la tanca és presa i apuntada a
 > §8. **Per continuar, §11.**
 > **Ve de**: §11 de `docs/PLA-vista-mobil.md` («la release no surt sense la vista al mòbil i sense
@@ -165,19 +166,45 @@ pantalla d'inici i es queden a Novetats com a registre de canvis, **amb una marc
 expliquen com era l'app aleshores (vegeu «La marca», a sota, i D8). La columna «Proposta» de la
 taula era la de la primera versió del pla; ara, cada fila que no sigui «correcta» rep la marca.
 
-| Notícia | Què ja no és cert | Proposta |
-|---|---|---|
-| `multiple-sequences` (02-15) | Els passos 3 i 4: «Aplicar a totes» i l'acordió de cada seqüència no existeixen; la columna és en tres nivells | **Reescriure els passos 3 i 4** («La mateixa a tots els blocs», el nivell «Seqüència») i regenerar les captures (`multiple-sequences*.spec.ts`, que ja no corren: §13 del pla del mode lliure) |
-| `view-improvements` (02-24) | El pas 2: l'alineació i la direcció ja no són «de cada seqüència» a la mateixa columna | **Retocar el pas 2** i regenerar les captures. Alternativa: deixar-la com a història (és de febrer) amb una línia que remeti a N-1 |
-| `logo-menu` (02-24) | El pas 3: «Configuració» ja no és una entrada sola, les pestanyes han canviat de nom («El meu estil», «Pàgina i distribució»); hi ha «Document nou» | **Reescriure el pas 3** i regenerar-ne la captura |
-| `number-font` (02-27) | Parla del «diàleg de Configuració per defecte», que ja no es diu així; la numeració deu ser a «El meu estil» (cal comprovar-ho a la fase 1) | **Retocar el text** (on és) i regenerar |
-| `documents-everywhere` (10-01) | L'apartat 3 parla de l'«estil general»; ara es diu «El meu estil» i s'hi arriba diferent | **Revisar** l'apartat 3 i la FAQ contra la interfície d'avui; si ja no són certs, la marca |
-| `autosave-draft`, `user-preferences`, `new-languages`, `download-pdf`, `pdf-quality`, `safe-delete`, `search-suggestions`, `pictogram-actions-touch`, `save-improvements`, `edit-text-on-card` | No s'hi ha vist res de fals en llegir-ne els textos | **Auditar-les a la fase 1**: tornar a executar el seu `*-focused.spec.ts` i mirar si la captura canvia. Un spec que ja no corre és una troballa |
+### L'auditoria (fase 1, 2026-11-19)
+
+S'han executat els 18 specs de `e2e/screenshots/` contra la interfície d'avui i s'han llegit els
+textos de les 15 notícies, amb els noms dels botons de `ca.json`. Tres classes:
+
+- **Superada**: el text explica un camí que ja no existeix. Porta la marca (D2).
+- **Captures velles**: el text continua sent cert, però les imatges ensenyen una interfície que ja
+  no és així. Proposta: **regenerar-ne les captures** (fase 3), sense tocar el text. No és
+  automàtic: cal que el spec corri i mirar cada imatge (a `pdf-quality`, la captura nova surt pitjor
+  enquadrada que la vella, i el spec s'ha d'ajustar).
+- **Correcta**: el text és cert i les captures canvien només per soroll de l'entorn (menys del 2 %
+  dels píxels, lletra i suavitzat).
+
+| Notícia | Spec | Què hi ha | Classe | Substituïda per |
+|---|---|---|---|---|
+| `multiple-sequences` (02-15) | No corre (busca el lliscador «Mida» sense bloc seleccionat) | Passos 3 i 4: «Aplicar a totes» i l'acordió de cada seqüència ja no existeixen | **Superada** | N-1 |
+| `view-improvements` (02-24) | No corre (el mateix) | Pas 2: l'alineació i la direcció «de cada seqüència», a la columna d'abans | **Superada** | N-1 |
+| `logo-menu` (02-24) | No corre (busca l'entrada «Configuració» del menú) | Pas 3: el menú té una entrada per apartat («El meu estil», «Pàgina i distribució», «Usuari») i «Document nou» | **Superada** | — |
+| `number-font` (02-27) | No corre (el mateix) | «Diàleg de Configuració per defecte» des del menú: ja no hi és | **Superada** | — |
+| `new-languages` (03-13) | No corre (el mateix) | Pas 1: «entra a Configuració» (ara és l'entrada «Usuari»); la resta és certa | **Superada** | — |
+| `user-preferences` (09-04) | No corre (el mateix) | Pas 1: «Obre Configuració des del menú principal» (el mateix) | **Superada** | — |
+| `save-improvements` (02-28) | No corre (el lliscador «Mida») | El text és cert (la mida, l'espai i l'alineació es desen); la captura del pas 3 és la columna d'abans | Captures velles | — |
+| `download-pdf` (03-13) | Corre | El botó PDF continua al costat de girar i imprimir; les captures ensenyen la columna d'abans | Captures velles | — |
+| `pdf-quality` (09-04) | Corre | Text cert; captures de la vista d'abans (i la nova surt mal enquadrada) | Captures velles | — |
+| `documents-everywhere` (10-01) | Corria amb errors: llegia els textos de `languages/`, que ja no existeix. **Arreglat** | El diàleg del fitxer d'estil ja no té «Aplica'l a aquest document» (ara «Fes-lo el meu estil»), i l'avís del document antic ja no té el botó «Estil del document». El text del pas 2 («aplicar-lo a qualsevol document») continua sent cert pel camí d'«Aplica el meu estil» | Captures velles | — |
+| `edit-text-on-card` (10-03) | El mateix error de `languages/`. **Arreglat** | El menú del pictograma té més entrades («Mou abans», «Mou després»); el text és cert | Captures velles (només `menu`) | — |
+| `pictogram-actions-touch` (09-04) | Corre | El menú porta «Copia abans un pictograma» sota «Enganxa»; text cert | Captures velles (pas 2) | — |
+| `safe-delete` (09-04) | Corre | «Elimina» continua sol a l'últim lloc; el menú té més entrades | Captures velles (pas 2) | — |
+| `autosave-draft` (09-04) | Corre | Canvis de soroll (< 2 %) | Correcta | — |
+| `search-suggestions` (09-04) | Corre | Canvis de soroll (< 2 %) | Correcta | — |
+
+**Sis superades**, set amb captures velles, dues correctes. Les de «Configuració» del menú
+(`new-languages`, `user-preferences`, `number-font`, `logo-menu`) ho són per un sol pas, però el pas
+és el camí per arribar-hi, i és el que la gent segueix.
 
 ### La marca
 
-- **Qui la porta**: les notícies que la fase 1 trobi que ja no són certes. Segur, `multiple-sequences`,
-  `view-improvements` i `logo-menu`; per veure, `number-font` i `documents-everywhere`.
+- **Qui la porta**: les sis superades de l'auditoria: `multiple-sequences` i `view-improvements`
+  (enllaç a N-1), `logo-menu`, `number-font`, `new-languages` i `user-preferences` (sense enllaç).
 - **Què fa**:
   - **Al carrusel** de la pantalla d'inici, no hi surt.
   - **A Novetats** (la llista per mesos), s'hi queda al seu lloc, amb una etiqueta al costat de la
@@ -246,7 +273,7 @@ taula era la de la primera versió del pla; ara, cada fila que no sigui «correc
 
 D5 es decideix a la fase 5.
 
-### Fase 1 — L'auditoria de les velles · porta: la llista de §5 tancada
+### Fase 1 — L'auditoria de les velles · porta: la llista de §5 tancada ✅ Feta (2026-11-19)
 
 - Executar els `*-focused.spec.ts` de les notícies publicades, un per un, i apuntar a §5 quins ja no
   corren i quines captures canvien (sense desar-les: `git checkout` de les imatges que no toquen).
@@ -261,9 +288,12 @@ D5 es decideix a la fase 5.
 - **Fet quan**: un spec de prova en treu una captura d'escriptori de les pàgines i una de mòbil, i
   totes dues es veuen bé a la pàgina d'una notícia.
 
-### Fase 3 — La marca de les velles
+### Fase 3 — La marca de les velles, i les captures velles
 
-El camp a `NewsItem`, el carrusel que les filtra, l'etiqueta a Novetats i l'avís a la pàgina de la
+**Les captures velles** (§5, set notícies): ajustar els specs que no corren o que enquadren
+malament, regenerar-les i mirar-les una per una. Només les imatges: el text no es toca.
+
+**La marca**: el camp a `NewsItem`, el carrusel que les filtra, l'etiqueta a Novetats i l'avís a la pàgina de la
 notícia (§5, «La marca»), amb els textos als cinc idiomes i proves. Es marquen les de la fase 1.
 L'enllaç a la notícia que la substitueix s'hi posa quan aquesta existeixi (fase 4).
 
@@ -300,8 +330,8 @@ tecnicisme; els noms dels botons són els de la pantalla; `npm run typecheck` ne
 
 ## 11. Encàrrec per a la sessió següent
 
-**Què**: la fase 1 (l'auditoria de les velles) i la fase 2 (la fixture de N-1 i el marc de
-telèfon).
+**Què**: la fase 2 (la fixture de N-1 i el marc de telèfon) i la fase 3 (la marca i les captures
+velles). La fase 1 és feta (§5).
 
 **On**: a la branca de la release, `claude/release-before-new-plan-8x1xhp`, un cop hi hagi les
 fases 5 i 6 de la vista al mòbil (branques `ccr-d6733228-d9h9t0` i `ccr-f5fab69a-xv8xmg`).
