@@ -141,7 +141,9 @@ on viu el criteri complet i el motiu de cada decisió.
 - **Dos diàlegs canònics i cap més**: `AppDialog` (centrat, accions al peu) i
   `AppFullScreenDialog` (pantalla completa, barra amb tabs i creu). Cap `Dialog` de
   MUI fora d'aquestes dues carpetes. `ConfirmDialog` és l'única confirmació de l'app;
-  `AppTab`, l'única manera de declarar un tab amb icona i text.
+  `AppTab`, l'única manera de declarar un tab amb icona i text. Al mòbil, els ajustos de la
+  vista van a `AppBottomSheet`, l'únic panell de baix. No és modal, i cap funció no pot dependre
+  d'arribar a sencer.
 - **S'agrupa per domini, mai per mecanisme**: un component viu a `features/<domini>/components/`
   si parla d'un domini i a `components/` només si no en sap de cap. Cap carpeta
   `Modals/`, `Dialogs/` ni `Forms/`. Imports sempre per alias, i les dependències en un
@@ -209,8 +211,8 @@ al davant hi encaixa.
   les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
   correus diaris de Resend.
 - `docs/PLA-vista-mobil.md` és el pla per a la vista al mòbil: el full sencer a la pantalla i els
-  ajustos en un panell de baix (`AppBottomSheet`, una capa flotant nova). **Proposta pendent
-  d'aprovació**: cada fase té una porta, i l'estàndard es canvia abans que el codi (C29 del backlog).
+  ajustos en un panell de baix (`AppBottomSheet`). **Fet fins a la fase 6** (C29 resolta,
+  2026-11-19); queden les proves en dispositius de debò (P2 del backlog) i la notícia de Novetats.
 - `docs/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
   (agenda, passos, primer/després, setmana, taulers, normes, contes, economia de fitxes, menú), a
   l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en

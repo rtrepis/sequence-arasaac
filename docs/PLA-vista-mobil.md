@@ -1,7 +1,9 @@
 # Pla: la vista al mòbil — el full a la pantalla i els ajustos en un panell de baix
 
-> **Estat**: pla aprovat (2026-11-15). **Per continuar, comenceu per §10, «Encàrrec per a la sessió
-> següent»**: les proves en dispositius de debò (§9d) i la fase 6. **Fase 5 feta en emulació**
+> **Estat**: pla aprovat (2026-11-15). **Fase 6 feta** (2026-11-19): l'estàndard ja no porta la
+> marca «Proposta», la regla és al `CLAUDE.md` i C29 és resolta. **Per continuar, comenceu per §10,
+> «Encàrrec per a la sessió següent»**: les proves en dispositius de debò (§9d, P2 del backlog) i
+> la notícia. **Fase 5 feta en emulació**
 > (2026-11-15): els casos difícils que es poden provar aquí tenen prova; els que necessiten un
 > mòbil de debò són a §9d, pendents. **Fase 4 feta** (2026-11-15): la vista ja va al panell de baix,
 > amb els tres casos de §1 en un e2e de mòbil. **Fase 0 feta** (2026-11-15): la
@@ -9,8 +11,7 @@
 > (2026-11-15): `AppBottomSheet` existeix i passa les proves, però la vista encara no el munta.
 > **Fase 1 tancada** (2026-11-15): totes les decisions són a §9.
 > **Fase 2 aprovada** (2026-11-15): l'estàndard és a `capes-flotants.md`, `configuracions.md` i F14
-> de `ESTANDARD-capes-flotants.md`. Continua marcat «⏳ Proposta» perquè el codi encara no el
-> compleix; la marca es treu a la fase 6. Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
+> de `ESTANDARD-capes-flotants.md`. La marca «⏳ Proposta» s'hi va treure a la fase 6. Cada fase té una **porta**: no es passa a la següent fins que la decisió que la
 > tanca és presa i apuntada a §9.
 > **Entrada del backlog**: C29 de `docs/BACKLOG-ux.md`.
 > **Estàndards que toca**: `docs/estandards/capes-flotants.md` (una capa nova),
@@ -469,7 +470,21 @@ amb el full vertical) passen en un e2e de mòbil.
 
 **Fet quan**: cada cas té una prova o una nota a §9 que diu per què no cal.
 
-### Fase 6 — Tancar
+### Fase 6 — Tancar ✅ Feta (2026-11-19) · ⏳ la notícia
+
+**Com ha quedat**:
+
+- `capes-flotants.md`: «Panell de baix», «La capa del mòbil girat» i «La fletxa de la vora» ja no
+  porten la marca, i l'estat de migració diu ✅. `configuracions.md` descriu la vista al mòbil tal
+  com és (el panell, girar el full a *Format de pàgina*, les sortides a sobre del full); de pas, la
+  frase que deia que la pantalla completa no admet pàgines pròpies, caducada el 2026-11-18.
+- La regla és al `CLAUDE.md`, a la dels diàlegs, amb el text de sota.
+- C29 és `✅ Resolta`. Les proves en dispositius de debò (§9d) no es perden: són **P2** del backlog,
+  a «Ara», amb la decisió de F5a.
+- **La notícia no s'ha fet**: §11 diu que les notícies es decideixen quan la vista és acabada, i
+  les captures han de mostrar la vista definitiva. Va a la sessió següent (§10).
+
+El que demanava la fase:
 
 - L'estàndard perd la marca «Proposta». C29 es marca `✅ Resolta`.
 - **El `CLAUDE.md`**, a «Regles transversals», a la regla dels diàlegs: «Al mòbil, els ajustos de la
@@ -556,11 +571,13 @@ resultat i la data.
    si es confirma que no fa res, cal decidir si es fa la pantalla completa simulada (i fer-la, amb
    prova) o si el botó no surt allà on no funciona. Les altres, si van bé, només s'apunten; si no,
    cada una és una troballa nova al backlog o un retoc amb prova.
-2. **La fase 6** (§6): treure la marca «⏳ Proposta» de `capes-flotants.md`, `configuracions.md` i
-   F14; la regla al `CLAUDE.md`; C29 a `✅ Resolta`. Les notícies (§11) van després.
+2. **Les notícies** (§11): decidir quines i com, seguint `docs/estandards/noticies.md` i
+   `docs/NOTICIES-candidates-des-de-2.0.2.md`, amb captures de mòbil fetes amb `e2e/screenshots/`.
+   La fase 6 ja és feta (2026-11-19).
 
-**On**: **a la branca de la release, `claude/release-before-new-plan-8x1xhp`**, que ja porta les
-fases 3, 4 i 5. Si la sessió nova té assignada una altra branca, ha de partir de la de la release,
+**On**: a la branca de la release, `claude/release-before-new-plan-8x1xhp`. **Ull**: les fases 5 i
+6 són a les branques `ccr-d6733228-d9h9t0` i `ccr-f5fab69a-xv8xmg` (la segona porta la primera), i
+cal integrar-les a la de la release abans de continuar. Si la sessió nova té assignada una altra branca, ha de partir de la de la release,
 no de `main`.
 
 **Què cal llegir abans**, i res més:
@@ -572,8 +589,8 @@ no de `main`.
 3. Per a F5a, `features/free-layout/hooks/usePageView.ts` (`enterPageFullscreen`,
    `useFullscreenElementId`) i `FreeLayoutPages.tsx`.
 
-**Fet quan**: §9d té tots els resultats; F5a té decisió i, si cal, codi amb prova; la fase 6 és
-feta; `npm run typecheck` net; `npm run lint` sense errors nous als fitxers tocats;
+**Fet quan**: §9d té tots els resultats (i P2 del backlog es tanca); F5a té decisió i, si cal, codi
+amb prova; les notícies són decidides i, les que es facin, publicades; `npm run typecheck` net; `npm run lint` sense errors nous als fitxers tocats;
 `e2e/mobile-view.spec.ts` i `e2e/bottom-sheet.spec.ts` en verd.
 
 **Avisos de l'entorn del núvol**:
@@ -601,7 +618,7 @@ servidor de proves, i per tant cada pas es pot provar allà a mesura que s'acaba
 | La vista al mòbil: la migració de la vista | ✅ Fet | Fase 4 d'aquest pla |
 | La vista al mòbil: els casos difícils | ✅ Fet en emulació · ⏳ dispositius de debò (§9d) | Fase 5 d'aquest pla |
 | La pantalla sencera amb blocs (paper virtual, adaptar a una altra pantalla) | ✅ Fet (2026-11-18) | `docs/PLA-mode-lliure.md`, §13 |
-| L'estàndard sense la marca «Proposta» i la regla al `CLAUDE.md` | ⏳ Per fer | Fase 6 d'aquest pla |
+| L'estàndard sense la marca «Proposta» i la regla al `CLAUDE.md` | ✅ Fet (2026-11-19) | Fase 6 d'aquest pla |
 | **Notícia de les pàgines i la disposició** (simple, columnes, files, lliure) | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13, «Què queda obert»; en publicar-la, es treu l'etiqueta «Nou» de la fila «Disposició» (pas 8) |
 | **Notícia de la vista al mòbil** | ⏳ Per fer | Fase 6 d'aquest pla |
 | **Captures de la notícia de diverses seqüències** (`multiple-sequences`), que ensenyen una vista que ja no és així | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13 |

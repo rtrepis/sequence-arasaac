@@ -79,12 +79,11 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - Drawer, menús i popovers són capes de navegació i queden fora d'aquest
   estàndard.
 
-## Panell de baix — ⏳ Proposta
+## Panell de baix
 
-> **Pendent d'aprovació** (C29 de `docs/BACKLOG-ux.md`; el pla i les decisions, a
-> `docs/PLA-vista-mobil.md`; l'esbós, a `docs/esbos-vista-mobil.html`). Fins que
-> s'aprovi, la vista al mòbil continua com la descriu `configuracions.md`. La raó,
-> a F14 de `docs/ESTANDARD-capes-flotants.md`.
+> Ve de C29 de `docs/BACKLOG-ux.md` (resolta el 2026-11-19). El pla i les
+> decisions, a `docs/PLA-vista-mobil.md`; l'esbós, a `docs/esbos-vista-mobil.html`.
+> La raó, a F14 de `docs/ESTANDARD-capes-flotants.md`.
 
 - **`AppBottomSheet` és l'únic panell de baix**: el tercer component canònic de
   capes flotants, al costat dels dos diàlegs, i no una variant de cap. Viu a
@@ -143,7 +142,7 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - **Les alçades són estat de la pantalla**: no van a Redux, ni al document, ni a
   les preferències. I el panell no arriba mai al paper (`usePrintSheet`).
 
-## La capa del mòbil girat — ⏳ Proposta
+## La capa del mòbil girat
 
 - Per sota de `md`, una pàgina que **només es treballa amb el mòbil dret** ho diu
   amb una capa: **el fons de l'escriptori del tema, translúcid** (blanc en clar,
@@ -158,7 +157,7 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   de justificar: girar el mòbil és un gest normal i no s'ha de prohibir per
   defecte.
 
-## La fletxa de la vora — ⏳ Proposta
+## La fletxa de la vora
 
 - **Passar de pàgina és lliscar**, a la vista i a la pantalla completa. La fletxa
   n'és l'**alternativa d'un toc**, mai l'única manera.
@@ -265,7 +264,7 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   seva creu escrites a dins. Ara la forma viu a `AppFullScreenDialog` i el
   diàleg de configuració només hi posa els tabs i els panells. **Ja no hi ha cap
   excepció: zero `Dialog` de MUI fora dels dos components canònics.**
-- ⏳ **Vista al mòbil** — `AppBottomSheet`, la capa del mòbil girat
-  (`RotatePhoneOverlay`) i la fletxa de la vora (`EdgePageArrows`). **Ja hi són,
-  a la vista** (fase 4); continuen en proposta fins que es tanquin els casos
-  difícils (fase 5 de `docs/PLA-vista-mobil.md`).
+- ✅ **Vista al mòbil** — `AppBottomSheet`, la capa del mòbil girat
+  (`RotatePhoneOverlay`) i la fletxa de la vora (`EdgePageArrows`). Fet a les
+  fases 3 a 5 de `docs/PLA-vista-mobil.md` i tancat a la fase 6 (2026-11-19).
+  Les proves en dispositius de debò són a P2 de `docs/BACKLOG-ux.md`.
