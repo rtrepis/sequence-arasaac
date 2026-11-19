@@ -288,7 +288,16 @@ D5 es decideix a la fase 5.
 - **Fet quan**: un spec de prova en treu una captura d'escriptori de les pàgines i una de mòbil, i
   totes dues es veuen bé a la pàgina d'una notícia.
 
-### Fase 3 — La marca de les velles, i les captures velles
+### Fase 3 — La marca de les velles, i les captures velles · ✅ la marca (2026-11-19) · ⏳ les captures
+
+**Fet** (2026-11-19): l'usuari confirma que les set amb captures velles es regeneren i que
+`new-languages` i `user-preferences` porten la marca. La marca ja hi és: `superseded` a
+`NewsItem` (amb `replacedBy` opcional), `carouselNews()` al carrusel, l'etiqueta «Superada» a
+Novetats i `SupersededNotice` a la pàgina de la notícia (`role="note"`: és part de la pàgina, no un
+avís urgent). Les sis superades la porten; l'enllaç de `multiple-sequences` i `view-improvements`
+a N-1 s'hi posa quan N-1 existeixi. Proves: `data/newsItems.test.ts` i
+`SupersededNotice.test.tsx`. El carrusel passa de 15 notícies a 9.
+
 
 **Les captures velles** (§5, set notícies): ajustar els specs que no corren o que enquadren
 malament, regenerar-les i mirar-les una per una. Només les imatges: el text no es toca.

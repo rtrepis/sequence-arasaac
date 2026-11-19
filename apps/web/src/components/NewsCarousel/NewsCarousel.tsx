@@ -13,7 +13,7 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { localizedNewsSrc, newsItems } from "../../data/newsItems";
+import { carouselNews, localizedNewsSrc } from "../../data/newsItems";
 import messages from "./NewsCarousel.lang";
 
 const NewsCarousel = (): React.ReactElement => {
@@ -57,7 +57,7 @@ const NewsCarousel = (): React.ReactElement => {
               scrollbarWidth: "none",
             }}
           >
-            {newsItems.map((item) => (
+            {carouselNews().map((item) => (
               <Card
                 key={item.slug}
                 elevation={4}

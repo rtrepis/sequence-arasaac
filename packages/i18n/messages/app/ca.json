@@ -14,6 +14,10 @@
   "changelog.readMore": {
     "message": "Llegir més"
   },
+  "changelog.superseded": {
+    "message": "Superada",
+    "description": "Etiqueta d'una notícia que explica com era l'app abans i que ja no és del tot certa"
+  },
   "component.settingCardBorder.borderIn.title": {
     "message": "Marc interior",
     "description": "setting title"
@@ -2588,6 +2592,14 @@
   "news.edit-text-on-card.closing": {
     "message": "Clicar la imatge del pictograma continua obrint la finestra d'edició, amb tots els ajustos de sempre. I si la targeta no mostra cap text, la paraula es canvia des d'allà, amb «Edita».",
     "description": "Paràgraf de tancament de la notícia «edit-text-on-card»"
+  },
+  "news.superseded.notice": {
+    "message": "Aquesta notícia es va publicar el {date} i explica com era SequenciAAC aleshores. Des de llavors l'app ha canviat, i alguna cosa ja no és com aquí es diu.",
+    "description": "Avís a dalt d'una notícia superada. {date} és el dia que es va publicar, amb el mes en lletres"
+  },
+  "news.superseded.replacedBy": {
+    "message": "Com funciona ara:",
+    "description": "Abans de l'enllaç a la notícia nova que substitueix una de superada"
   },
   "components.pictEdit.textOverflow.mark": {
     "message": "Pictograma {number}: el text no hi cap",

@@ -42,6 +42,17 @@ export interface NewsItem {
   faq?: { titleId: string; questions: NewsQuestion[] };
   /** Paràgraf de tancament, després de tot */
   closingId?: string;
+  /**
+   * La notícia explica un camí que ja no existeix: surt del carrusel i es
+   * queda a Novetats amb l'etiqueta «Superada» i un avís (`docs/PLA-noticies.md`, §5)
+   */
+  superseded?: NewsSuperseded;
+}
+
+/** Com queda una notícia que l'app ja ha deixat enrere */
+export interface NewsSuperseded {
+  /** El `slug` de la notícia que explica com és ara, si n'hi ha */
+  replacedBy?: string;
 }
 
 /** La ruta d'una imatge de notícia en l'idioma de qui la llegeix */
@@ -240,6 +251,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-09-04",
     category: "nova",
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
   {
     slug: "pdf-quality",
@@ -351,6 +364,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-03-13",
     category: "nova",
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
   {
     slug: "save-improvements",
@@ -417,6 +432,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-27",
     category: "millora",
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
   {
     slug: "logo-menu",
@@ -450,6 +467,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-24",
     category: "nova",
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
   {
     slug: "view-improvements",
@@ -483,6 +502,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-24",
     category: "millora",
+    // Superada: explica la columna de la vista d'abans (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
   {
     slug: "multiple-sequences",
@@ -532,5 +553,14 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-15",
     category: "nova",
+    // Superada: explica la columna de la vista d'abans (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
 ];
+
+/**
+ * Les notícies del carrusel de la pantalla d'inici: les superades no hi
+ * surten, perquè hi semblarien vigents
+ */
+export const carouselNews = (items: NewsItem[] = newsItems): NewsItem[] =>
+  items.filter((item) => !item.superseded);
