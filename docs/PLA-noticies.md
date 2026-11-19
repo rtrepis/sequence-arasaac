@@ -1,8 +1,10 @@
 # Pla: les notícies de Novetats de la release
 
-> **Estat**: proposta (2026-11-19), **pendent d'aprovació**. Cada fase té una **porta**: no es passa
-> a la següent fins que la decisió que la tanca és presa i apuntada a §8. **Per començar, §8**: són
-> les decisions que calen abans d'escriure res.
+> **Estat**: **aprovat** (2026-11-19), amb les decisions de §8. Es fan **cinc notícies** (N-1, N-3,
+> N-5, N-6 i N-7); les velles que ja no són certes **surten del carrusel i es queden a Novetats amb
+> una marca**. Queden obertes **D5** (l'etiqueta «Nou») i **D8** (com es diu la marca). Cada fase
+> té una **porta**: no es passa a la següent fins que la decisió que la tanca és presa i apuntada a
+> §8. **Per continuar, §11.**
 > **Ve de**: §11 de `docs/PLA-vista-mobil.md` («la release no surt sense la vista al mòbil i sense
 > les novetats al dia») i §13 de `docs/PLA-mode-lliure.md` («Una notícia per al mode de pàgines»,
 > «Captures de la notícia de diverses seqüències»).
@@ -34,11 +36,11 @@ de `NOTICIES-candidates` (ho veu l'usuari? cap en una captura? explicar-ho gener
 | Què | Quan | Notícia? | On va |
 |---|---|---|---|
 | **Pàgines**: cada pàgina tria la disposició (Simple, Columnes, Files, Lliure), plantilles, blocs de seqüència i de text (rètols), moure'ls i canviar-ne la mida, afegir, duplicar i moure pàgines, «Sense col·locar», blocs a totes les pàgines | 11-07 → 11-14 | **Sí**, la més gran | N-1 |
-| **El meu estil** a la configuració, «Aplica el meu estil», «Actualitza amb el meu estil», estils de bloc, «Restableix els pictogrames d'aquesta seqüència» | 11-12 → 11-14 | **Sí** | N-2 |
+| **El meu estil** a la configuració, «Aplica el meu estil», «Actualitza amb el meu estil», estils de bloc, «Restableix els pictogrames d'aquesta seqüència» | 11-12 → 11-14 | **Sí** | N-2 (no es fa, D1) |
 | **La columna de la vista** en tres nivells (Document, Pàgina, Bloc), amb les molles | 11-07 | Dins de N-1 | N-1 |
 | **«Pàgina i distribució»** (abans «Vista») a la configuració: amb quina disposició neixen els documents i les pàgines noves; mida per defecte 0,90 | 11-14 | Dins de N-1 | N-1 |
 | **La vista al mòbil**: el full sencer a la pantalla, els ajustos al panell de baix, passar de pàgina lliscant o tocant la vora, tocar un bloc obre els seus ajustos, la capa del mòbil girat | 11-15 | **Sí** | N-3 |
-| **Pantalla sencera**: un interruptor sota la mida de pàgina; el full pren la forma de la pantalla, sempre apaïsat, també amb blocs; **la pantalla completa només hi és amb la pantalla sencera** | 11-18 → 11-19 | **Sí**: canvia un camí que la gent ja coneixia | N-4 |
+| **Pantalla sencera**: un interruptor sota la mida de pàgina; el full pren la forma de la pantalla, sempre apaïsat, també amb blocs; **la pantalla completa només hi és amb la pantalla sencera** | 11-18 → 11-19 | **Sí**: canvia un camí que la gent ja coneixia | N-4 (no es fa, D1) |
 | **Ordenar pictogrames arrossegant** a l'edició, també amb el dit (moure'l mou la targeta; deixar-lo anar obre el menú) | 10-10 | **Sí** | N-5 |
 | «Enganxa» diu què hi ha copiat o per què encara no es pot | 10-10 | De passada | N-5 |
 | El diàleg d'edició del pictograma ocupa tota la pantalla al mòbil | 10-10 | De passada | N-5 |
@@ -52,8 +54,8 @@ de `NOTICIES-candidates` (ho veu l'usuari? cap en una captura? explicar-ho gener
 
 ## 4. Les notícies noves (proposta)
 
-Set notícies, de més a menys pes. **Quantes i com s'agrupen és la decisió D1** (§8): aquí hi ha la
-proposta i l'alternativa.
+Se'n van proposar set; **se'n fan cinc** (D1): N-1, N-3, N-5, N-6 i N-7. N-2 i N-4 es queden
+escrites aquí, marcades «no es fa», per si un dia es recuperen.
 
 ### N-1 · Pàgines a la teva manera · `pages-and-blocks` · `nova` · **Alta**
 
@@ -81,7 +83,7 @@ paraules són les de la pantalla (l'etiqueta «Lliure», el menú «⋯», «Sen
 **En publicar-la**: es treu l'etiqueta «Nou» de la fila «Disposició» (pendent del pas 8 de
 `docs/PLA-mode-lliure.md`, decisió D5).
 
-### N-2 · El teu estil, a tot el document d'un cop · `my-style` · `nova` · **Alta**
+### N-2 · El teu estil, a tot el document d'un cop · `my-style` · ~~`nova`~~ · **No es fa (D1)**
 
 **Què explica.** L'estil dels pictogrames es fa una vegada, a **El meu estil** de la configuració,
 i els documents nous el reben. Per portar-lo a un document que ja existeix: «Aplica el meu estil»,
@@ -96,8 +98,7 @@ document, i que «Desa com a preferències» de la columna ja no hi és. Qui el 
 buscarà. **Relació amb `documents-everywhere`**: aquella notícia parla d'«estil general» i de
 `.saacstyle`; N-2 n'és la continuació i l'hauria de citar, no contradir-la (vegeu §5).
 
-**Alternativa (D1)**: un apartat de N-1 en comptes d'una notícia pròpia. En contra: N-1 ja és
-llarga, i l'estil és el que fa servir més gent.
+**Decidit (D1)**: no es fa. Vegeu el risc «Canvis que no explica cap notícia» (§10).
 
 ### N-3 · La vista, també al mòbil · `mobile-view` · `nova` · **Alta**
 
@@ -113,7 +114,7 @@ la disposició lliure, un doble toc). La vista es treballa amb el mòbil dret.
 **El que no s'hi diu**: «panell de baix», «sencer», «plegat», «mig». El panell es diu **«Ajustos»**
 (M1 del pla de la vista al mòbil).
 
-### N-4 · Pantalla sencera · `full-screen-sheet` · `millora` · **Alta**
+### N-4 · Pantalla sencera · `full-screen-sheet` · ~~`millora`~~ · **No es fa (D1)**
 
 **Què explica.** Un interruptor nou, sota la mida de pàgina: el full pren la forma de la pantalla,
 per mostrar el document a pantalla completa en una tauleta o un projector, **no per imprimir-lo**.
@@ -126,8 +127,7 @@ ara, al primer paràgraf.
 **Passos**: (1) L'interruptor a la columna. (2) El full apaïsat de pantalla. (3) La pantalla
 completa, passant de pàgina.
 
-**Alternativa (D1)**: un apartat de N-3. En contra: la pantalla sencera és sobretot de tauleta i
-d'escriptori, no de mòbil.
+**Decidit (D1)**: no es fa. Vegeu el risc «Canvis que no explica cap notícia» (§10).
 
 ### N-5 · Canvia l'ordre dels pictogrames arrossegant-los · `reorder-pictograms` · `nova` · **Mitjana**
 
@@ -142,7 +142,7 @@ mòbil el diàleg d'edició ocupa tota la pantalla.
 **Què explica.** Si el text d'un pictograma no hi cap a la targeta, l'app ho avisa i proposa com
 fer-l'hi cabre. Continua `edit-text-on-card`.
 
-**Alternativa (D1)**: un pas de N-5 («millores a l'edició»), o no publicar-la.
+**Decidit (D1)**: es fa, com a notícia pròpia.
 
 ### N-7 · El que imprimeixes és el que veus · `print-matches-preview` · `correccio` · **Mitjana**
 
@@ -159,9 +159,11 @@ l'usuari havia pogut notar: «si alguna vegada t'havia sortit més petit».
 
 ## 5. Les notícies publicades que ja no són certes
 
-Una notícia vella que ensenya un camí que ja no hi és **es corregeix o es retira abans de la
-release**: és el defecte de N2 del backlog. Per a cadascuna, la proposta. **Què es fa amb les velles
-és la decisió D2.**
+Una notícia vella que ensenya un camí que ja no hi és no pot quedar com si fos vigent: és el
+defecte de N2 del backlog. **Decidit (D2)**: **no es reescriuen**. Surten del carrusel de la
+pantalla d'inici i es queden a Novetats com a registre de canvis, **amb una marca** que diu que
+expliquen com era l'app aleshores (vegeu «La marca», a sota, i D8). La columna «Proposta» de la
+taula era la de la primera versió del pla; ara, cada fila que no sigui «correcta» rep la marca.
 
 | Notícia | Què ja no és cert | Proposta |
 |---|---|---|
@@ -169,11 +171,34 @@ release**: és el defecte de N2 del backlog. Per a cadascuna, la proposta. **Qu�
 | `view-improvements` (02-24) | El pas 2: l'alineació i la direcció ja no són «de cada seqüència» a la mateixa columna | **Retocar el pas 2** i regenerar les captures. Alternativa: deixar-la com a història (és de febrer) amb una línia que remeti a N-1 |
 | `logo-menu` (02-24) | El pas 3: «Configuració» ja no és una entrada sola, les pestanyes han canviat de nom («El meu estil», «Pàgina i distribució»); hi ha «Document nou» | **Reescriure el pas 3** i regenerar-ne la captura |
 | `number-font` (02-27) | Parla del «diàleg de Configuració per defecte», que ja no es diu així; la numeració deu ser a «El meu estil» (cal comprovar-ho a la fase 1) | **Retocar el text** (on és) i regenerar |
-| `documents-everywhere` (10-01) | L'apartat 3 parla de l'«estil general»; ara es diu «El meu estil» i s'hi arriba diferent | **Revisar** l'apartat 3 i la FAQ contra la interfície d'avui; enllaçar-hi N-2 en comptes de reescriure |
+| `documents-everywhere` (10-01) | L'apartat 3 parla de l'«estil general»; ara es diu «El meu estil» i s'hi arriba diferent | **Revisar** l'apartat 3 i la FAQ contra la interfície d'avui; si ja no són certs, la marca |
 | `autosave-draft`, `user-preferences`, `new-languages`, `download-pdf`, `pdf-quality`, `safe-delete`, `search-suggestions`, `pictogram-actions-touch`, `save-improvements`, `edit-text-on-card` | No s'hi ha vist res de fals en llegir-ne els textos | **Auditar-les a la fase 1**: tornar a executar el seu `*-focused.spec.ts` i mirar si la captura canvia. Un spec que ja no corre és una troballa |
 
-**Regla per a les reescriptures**: es canvia **el text que ha deixat de ser cert i res més**, als
-cinc idiomes, i es manté la data original. Una notícia vella no es converteix en una notícia nova.
+### La marca
+
+- **Qui la porta**: les notícies que la fase 1 trobi que ja no són certes. Segur, `multiple-sequences`,
+  `view-improvements` i `logo-menu`; per veure, `number-font` i `documents-everywhere`.
+- **Què fa**:
+  - **Al carrusel** de la pantalla d'inici, no hi surt.
+  - **A Novetats** (la llista per mesos), s'hi queda al seu lloc, amb una etiqueta al costat de la
+    categoria.
+  - **A la pàgina de la notícia**, un avís a dalt, abans del text: que explica com era l'app en
+    aquella data, i, si n'hi ha, l'enllaç a la notícia que la substitueix (per exemple,
+    `multiple-sequences` → N-1).
+  - Les fletxes d'anterior i següent de les notícies continuen passant-hi: és un registre, i
+    saltar-les-hi trencaria l'ordre.
+- **Com es diu (D8, obert)**. Opcions per a l'etiqueta, en català:
+  - **«Superada»**: curta i clara; la que es proposa.
+  - «Ja no és vigent»: més explícita, però més llarga per a una etiqueta.
+  - «Versió anterior»: suau, però pot fer pensar en una versió que es pot descarregar.
+  - «Història»: amable, però no diu que el que explica ha canviat.
+
+  I l'avís de la pàgina, per exemple: «Aquesta notícia explica com era SequenciAAC el febrer de
+  2026. Des d'aleshores ha canviat: vegeu *Pàgines a la teva manera*.»
+- **Al codi**: un camp opcional a `NewsItem` (`newsItems.ts`), amb la data des de quan i la notícia
+  que la substitueix, si n'hi ha; el carrusel la filtra; `ChangelogPage` i `NewsDetailPage` la
+  mostren. Textos nous als cinc idiomes. Amb proves (la notícia marcada no és al carrusel, i
+  l'avís hi és). **No toca el text de les notícies velles**, que es queden com es van publicar.
 
 ## 6. Fora d'abast
 
@@ -188,61 +213,63 @@ cinc idiomes, i es manté la data original. Una notícia vella no es converteix 
 - **Cada notícia nova, el seu spec** a `e2e/screenshots/<slug>-focused.spec.ts`, sobre `newsShot.ts`,
   amb **captures per idioma** (`public/img/news/<slug>/<idioma>/`, `{locale}` a la ruta), com les
   dues darreres. Els textos dels botons es llegeixen dels catàlegs, no s'escriuen al spec.
-- **Un document de demostració** per a N-1, N-2 i N-4: el mateix per a totes tres, amb dues o tres
-  pàgines (simple, columnes, lliure amb un rètol), creat pel spec o carregat d'una fixture de
-  `apps/web/test/fixtures/saac/` (D4). Pictogrames servits des del repositori (`mockArasaac`).
-- **Captures de mòbil (N-3, i potser N-4 i N-5)**: `shot` retalla a l'amplada de la finestra, i un
+- **Un document de demostració** per a N-1 (D4): una fixture de `apps/web/test/fixtures/saac/` amb
+  dues o tres pàgines (simple, columnes, lliure amb un rètol). Pictogrames servits des del
+  repositori (`mockArasaac`).
+- **Captures de mòbil (N-3, i potser N-5)**: `shot` retalla a l'amplada de la finestra, i un
   mòbil fa 412 px, menys que els 700 de `STEP`. Cal decidir com es presenten (D3):
-  - **(a) un marc de telèfon**: una plantilla HTML a `e2e/screenshots/templates/` (com
-    `documentStructure.ts`) que posa la captura del mòbil dins d'un telèfon dibuixat, centrat a
-    700 × 560, amb els colors de `palette.ts`. Proposta.
+  - **(a) un marc de telèfon** — **decidit (D3)**: una plantilla HTML a `e2e/screenshots/templates/`
+    (com `documentStructure.ts`) que posa la captura del mòbil dins d'un telèfon dibuixat, centrat
+    a 700 × 560, amb els colors de `palette.ts`.
   - (b) la captura tal qual, més estreta, centrada per la pàgina de la notícia: més senzill, però
     canvia com es veuen les notícies i cal mirar-ho a `NewsPage`.
 - **Res de l'entorn de proves a la imatge** (`noticies.md`). A l'entorn del núvol, Playwright
   necessita `executablePath: "/opt/pw-browsers/chromium"` en un config local que no es puja.
 - **Regenerar una notícia no toca les altres**: s'executen els specs un per un.
 
-## 8. Decisions (porta de la fase 0)
+## 8. Decisions (porta de la fase 0) — preses el 2026-11-19
 
-| Id | Pregunta | Proposta |
+| Id | Pregunta | Decisió |
 |---|---|---|
-| D1 | **Quantes notícies noves** i com s'agrupen | **Set**, com a §4. Si en volem menys: N-2 dins de N-1, N-4 dins de N-3 i N-6 dins de N-5, i en queden **quatre** |
-| D2 | **Les notícies velles** que ja no són certes (§5): es corregeixen, es retiren o s'hi posa una línia que remeti a la nova? | **Corregir** el text que ha deixat de ser cert, als cinc idiomes, amb la data original. Retirar-ne cap només si corregir-la vol dir reescriure-la sencera |
-| D3 | **Les captures de mòbil**: marc de telèfon o captura estreta | **Marc de telèfon** (plantilla HTML) |
-| D4 | **El document de demostració** de les pàgines: el crea cada spec o és una fixture compartida | **Una fixture** a `apps/web/test/fixtures/saac/`, la mateixa per a N-1, N-2 i N-4 |
-| D5 | **L'etiqueta «Nou»** de la fila «Disposició» | **Es treu el dia que es publica N-1** (el commit de la notícia la treu) |
-| D6 | **La data** de les notícies | **La mateixa per a totes**, el dia de la release; l'ordre dins del dia, el de §4 |
-| D7 | **L'ordre** de la feina | De més pes a menys (N-1, N-2, N-3, N-4…), i les correccions de §5 **abans** de les noves que hi fan referència. **N-3 no es publica fins que les proves en dispositius de debò** (P2 del backlog) **no surtin bé**, almenys F5b i F5c |
+| D1 | Quantes notícies noves | **Cinc**: N-1 (pàgines), N-3 (vista al mòbil), N-5 (ordenar arrossegant), N-6 (el text que no hi cap) i N-7 (impressió). **N-2 i N-4 no es fan** |
+| D2 | Les notícies velles que ja no són certes | **No es reescriuen**: surten del carrusel i es queden a Novetats com a registre de canvis, **amb una marca** que diu que són d'una versió anterior (§5, «La marca») |
+| D3 | Les captures de mòbil | **Marc de telèfon** (plantilla HTML) |
+| D4 | El document de demostració | **Una fixture**, només per a N-1 |
+| D5 | L'etiqueta «Nou» de la fila «Disposició» | ⏳ **Oberta** («ja veurem»). Es decideix a la fase 5 |
+| D6 | La data de les notícies | **La mateixa per a totes**, el dia de la release |
+| D7 | L'ordre i quan es publica | **Tot es publica amb la release**: les cinc notícies i la marca de les velles, alhora |
+| D8 | Com es diu la marca de les velles | ⏳ **Oberta**. Proposta: l'etiqueta **«Superada»** i l'avís a la pàgina de la notícia (§5). Cal tancar-la abans de la fase 3 |
 
 ## 9. Fases
 
-### Fase 0 — Decisions · porta: §8 respost
+### Fase 0 — Decisions · porta: §8 respost ✅ Tancada (2026-11-19), menys D5 i D8
 
-Les set decisions de §8. Sense D1 no se sap quantes notícies s'escriuen, i sense D3 no es pot fer
-cap captura de mòbil.
+D5 es decideix a la fase 5; D8, abans de la fase 3.
 
 ### Fase 1 — L'auditoria de les velles · porta: la llista de §5 tancada
 
 - Executar els `*-focused.spec.ts` de les notícies publicades, un per un, i apuntar a §5 quins ja no
   corren i quines captures canvien (sense desar-les: `git checkout` de les imatges que no toquen).
 - Llegir cada notícia contra la interfície d'avui, als noms dels botons de `ca.json`.
-- **Fet quan**: cada fila de §5 té «correcta», «cal retocar el text», «cal regenerar» o «es retira».
+- **Fet quan**: cada fila de §5 diu «correcta» o «porta la marca», i, si porta la marca, quina
+  notícia nova la substitueix (si n'hi ha).
 
 ### Fase 2 — Les eines · porta: una captura de prova de cada mena
 
-- La fixture de demostració (D4), amb la seva entrada al `README.md` de fixtures.
-- La plantilla del marc de telèfon (D3), si s'aprova.
+- La fixture de demostració per a N-1 (D4), amb la seva entrada al `README.md` de fixtures.
+- La plantilla del marc de telèfon (D3).
 - **Fet quan**: un spec de prova en treu una captura d'escriptori de les pàgines i una de mòbil, i
   totes dues es veuen bé a la pàgina d'una notícia.
 
-### Fase 3 — Corregir les velles
+### Fase 3 — La marca de les velles · porta: D8 tancada
 
-Les correccions de §5, als cinc idiomes, amb les captures regenerades. **Abans de les noves**,
-perquè N-1 i N-2 hi remeten.
+El camp a `NewsItem`, el carrusel que les filtra, l'etiqueta a Novetats i l'avís a la pàgina de la
+notícia (§5, «La marca»), amb els textos als cinc idiomes i proves. Es marquen les de la fase 1.
+L'enllaç a la notícia que la substitueix s'hi posa quan aquesta existeixi (fase 4).
 
 ### Fase 4 — Les notícies noves, una per commit
 
-En l'ordre de D7. Cada una: l'entrada a `newsItems.ts`, les claus `news.<slug>.*` als cinc idiomes
+N-1, N-3, N-5, N-6 i N-7. Cada una: l'entrada a `newsItems.ts`, les claus `news.<slug>.*` als cinc idiomes
 (`ca.json` amb descripció; els altres, només el text, traduït del català i no reescrit), el spec
 i les captures per idioma.
 
@@ -252,7 +279,8 @@ tecnicisme; els noms dels botons són els de la pantalla; `npm run typecheck` ne
 
 ### Fase 5 — Tancar
 
-- L'etiqueta «Nou» fora (D5), i el pas 8 del pla del mode lliure ho diu.
+- **D5**: decidir què es fa amb l'etiqueta «Nou», i apuntar-ho al pas 8 del pla del mode lliure.
+- **Tot es publica amb la release** (D7): les cinc notícies i les marques, amb la mateixa data (D6).
 - `docs/PLA-vista-mobil.md` §11 i `docs/PLA-mode-lliure.md` §13: les files de les notícies, ✅.
 - `docs/NOTICIES-candidates-des-de-2.0.2.md` i `docs/INVENTARI-funcionalitats-des-de-2.0.2.md`: una
   línia que digui que les notícies des del 3 d'octubre són en aquest pla. **O bé** un inventari
@@ -264,15 +292,16 @@ tecnicisme; els noms dels botons són els de la pantalla; `npm run typecheck` ne
 | Risc | Per què | Què s'hi fa |
 |---|---|---|
 | Les captures envelleixen abans de publicar | El pla «Estil i contingut dels blocs» canviarà la columna | Aquest pla va **abans** (§11 del pla de la vista al mòbil): la release surt, i després el pla nou. Si la columna canvia, els specs regeneren les captures |
-| Set notícies d'un cop | Novetats s'omple el mateix dia i les petites tapen les grans | L'ordre de D6 posa N-1 i N-3 a dalt; D1 permet agrupar-ne |
-| Traduccions | 7 notícies × ~10 claus × 5 idiomes ≈ 350 textos | Traduir del català, sense reescriure; la prova de claus als cinc idiomes ho vigila |
+| Cinc notícies d'un cop | Novetats s'omple el mateix dia i les petites tapen les grans | Dins del dia, l'ordre de §4: N-1 i N-3 a dalt |
+| Traduccions | 5 notícies × ~10 claus × 5 idiomes ≈ 250 textos, més els de la marca | Traduir del català, sense reescriure; la prova de claus als cinc idiomes ho vigila |
+| **Canvis que no explica cap notícia** | Sense N-2 i N-4, ningú no explica que el botó de pantalla completa ara només surt amb la pantalla sencera encesa, ni que «Desa com a preferències» ja no és a la columna | Acceptat (D1). Si arriben preguntes, una línia a la FAQ de N-1 ho pot dir sense una notícia nova |
 | Les captures no coincideixen a l'entorn del núvol | Ja passa amb `saac-fixtures` | Les captures de notícia no comparen píxels, només es generen; si una surt amb un defecte de l'entorn, s'arregla l'entorn |
-| Notícies de funcions que encara no s'han provat en dispositius de debò | P2 del backlog (la vista al mòbil) | N-3 no es publica fins que P2 no surti bé, o almenys F5b i F5c (D7) |
+| Notícies de funcions que encara no s'han provat en dispositius de debò | P2 del backlog (la vista al mòbil) | Tot surt amb la release (D7), i la release no surt sense la vista al mòbil provada (§11 del pla de la vista al mòbil) |
 
 ## 11. Encàrrec per a la sessió següent
 
-**Què**: la fase 0. Portar les set decisions de §8 a l'usuari i apuntar-les. Si ho aprova tal com
-és, començar la fase 1.
+**Què**: la fase 1 (l'auditoria de les velles) i la fase 2 (la fixture de N-1 i el marc de
+telèfon). Abans de la fase 3, tancar **D8** amb l'usuari (el nom de la marca).
 
 **On**: a la branca de la release, `claude/release-before-new-plan-8x1xhp`, un cop hi hagi les
 fases 5 i 6 de la vista al mòbil (branques `ccr-d6733228-d9h9t0` i `ccr-f5fab69a-xv8xmg`).

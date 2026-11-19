@@ -215,8 +215,8 @@ al davant hi encaixa.
   2026-11-19); queden les proves en dispositius de debò (P2 del backlog) i la notícia de Novetats.
 - `docs/PLA-noticies.md` és el pla de les notícies de Novetats de la release: les noves des del 3
   d'octubre (pàgines, el meu estil, la vista al mòbil, la pantalla sencera…) i les velles que ja no
-  són certes. **Proposta pendent d'aprovació** (§8, decisions D1–D7). **Consultar-lo abans
-  d'escriure o corregir cap notícia.**
+  són certes, que surten del carrusel i es queden a Novetats amb una marca. **Aprovat**
+  (2026-11-19); obertes D5 i D8. **Consultar-lo abans d'escriure o tocar cap notícia.**
 - `docs/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
   (agenda, passos, primer/després, setmana, taulers, normes, contes, economia de fitxes, menú), a
   l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en
