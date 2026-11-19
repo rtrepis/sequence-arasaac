@@ -1348,7 +1348,9 @@ Pendents de més abast:
 - **Captures de la notícia de diverses seqüències** (`e2e/screenshots/multiple-sequences*.spec.ts`):
   la vista ha canviat molt (botons, capçaleres, columna, sense peu); cal adaptar-les i tornar-les a
   executar.
-- **Una notícia** per al mode de pàgines (`docs/estandards/noticies.md`), quan es publiqui.
+- **Una notícia** per al mode de pàgines (`docs/estandards/noticies.md`), quan es publiqui. Ara és
+  N-1 (i N-2, «El meu estil») de `docs/PLA-noticies.md`, que també recull les captures de
+  `multiple-sequences` (§5).
 - **El núvol** encara no coneix les pàgines ni els estils amb nom (fase 5; els comptes estan apagats).
   El catàleg de diversos estils, amb comptes, també és d'aleshores (B33).
 - Preexistent: `printDimensions` sense ús a `ViewSquenceSettings.tsx` (avís del lint).

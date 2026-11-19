@@ -624,6 +624,9 @@ servidor de proves, i per tant cada pas es pot provar allà a mesura que s'acaba
 | **Captures de la notícia de diverses seqüències** (`multiple-sequences`), que ensenyen una vista que ja no és així | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13 |
 | Les tres notícies de compte (N1 del backlog) | Fora | Ajornades mentre els comptes siguin apagats |
 
+**Totes les notícies de la release són ara a `docs/PLA-noticies.md`** (2026-11-19), amb la de la
+vista al mòbil (N-3) i la de les pàgines (N-1).
+
 **Les notícies es decideixen al seu moment** (2026-11-15): quines, quantes i com, quan la vista al
 mòbil sigui acabada. Les files de la taula són el punt de partida, no una decisió.
 

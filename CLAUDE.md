@@ -213,6 +213,10 @@ al davant hi encaixa.
 - `docs/PLA-vista-mobil.md` és el pla per a la vista al mòbil: el full sencer a la pantalla i els
   ajustos en un panell de baix (`AppBottomSheet`). **Fet fins a la fase 6** (C29 resolta,
   2026-11-19); queden les proves en dispositius de debò (P2 del backlog) i la notícia de Novetats.
+- `docs/PLA-noticies.md` és el pla de les notícies de Novetats de la release: les noves des del 3
+  d'octubre (pàgines, el meu estil, la vista al mòbil, la pantalla sencera…) i les velles que ja no
+  són certes. **Proposta pendent d'aprovació** (§8, decisions D1–D7). **Consultar-lo abans
+  d'escriure o corregir cap notícia.**
 - `docs/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
   (agenda, passos, primer/després, setmana, taulers, normes, contes, economia de fitxes, menú), a
   l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en
