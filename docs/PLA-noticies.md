@@ -87,6 +87,11 @@ paraules són les de la pantalla (l'etiqueta «Lliure», el menú «⋯», «Sen
 
 ### N-2 · El teu estil, a tot el document d'un cop · `my-style` · `nova` · **Alta**
 
+> **Aturada (2026-11-20)**: canvia amb `docs/PLA-estils.md`. Un estil ja no s'aplica a una pàgina
+> ni a tot el document, sinó a un bloc des de la Galeria d'estils, i «Actualitza amb el meu estil»
+> desapareix. **El títol i els passos d'aquí sota ja no són certs**: es reescriuen al pas 9 d'aquell
+> pla.
+
 **Què explica.** L'estil dels pictogrames es fa una vegada, a **El meu estil** de la configuració,
 i els documents nous el reben. Per portar-lo a un document que ja existeix: «Aplica el meu estil»,
 al menú «⋯» de la pàgina o del bloc. Si després canvies el teu estil, «Actualitza amb el meu estil»

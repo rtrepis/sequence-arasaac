@@ -215,7 +215,8 @@ al davant hi encaixa.
   2026-11-19); queden les proves en dispositius de debò (P2 del backlog) i la notícia de Novetats.
 - `docs/PLA-estils.md` és el pla dels estils: la solució A (el pictograma només guarda els seus
   retocs), les divuit troballes del que avui confon (E1–E18) i la feature d'estils predefinits que
-  completa El meu estil abans de la release. **Esborrany per decidir** (2026-11-20, B37).
+  completa El meu estil abans de la release (Galeria d'estils, només a un bloc). **Decisions preses**
+  (2026-11-20, B37); obertes Q1–Q3.
   **Consultar-lo abans de tocar res que creï, apliqui o restableixi un estil.**
 - `docs/PLA-noticies.md` és el pla de les notícies de Novetats de la release: les noves des del 3
   d'octubre (pàgines, el meu estil, la vista al mòbil, la pantalla sencera…) i les velles que ja no

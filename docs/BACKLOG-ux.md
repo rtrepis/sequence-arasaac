@@ -60,7 +60,7 @@ l'entrada.
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
 | P2 | La vista al mòbil en dispositius de debò | La release no surt sense la vista al mòbil, i l'emulació no ho pot dir tot | S | Sí: F5a, si la pantalla completa no funciona a l'iPhone |
-| B37 | Els estils: pictogrames que copien l'estil (E1) i accions que acaben igual a la pantalla | E1 grava retocs falsos al `.saac`; la feature d'estils predefinits és abans de la release i no ha d'heretar el desordre | L | Sí: D1–D9 de `docs/PLA-estils.md` |
+| B37 | Els estils: pictogrames que copien l'estil (E1) i accions que acaben igual a la pantalla | E1 grava retocs falsos al `.saac`; la galeria d'estils és abans de la release i no ha d'heretar el desordre | L | D1–D9 preses; queden Q1–Q3 de `docs/PLA-estils.md` |
 
 ### Després
 
@@ -225,6 +225,11 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   plantilles de pàgina.
 - El detall (divuit troballes, E1–E18), les decisions D1–D9 i l'ordre dels passos són a
   `docs/PLA-estils.md`.
+- **2026-11-20 (decisions)**: el document nou neix amb una còpia d'El meu estil i no el segueix
+  (D1); un estil s'aplica **només a un bloc**, des d'una **Galeria d'estils** que té com a primera
+  opció «L'estil del document» (D2, D8); fora «Aplica el meu estil» i «Actualitza amb el meu
+  estil» dels menús; els estils de l'app són fixos (D7). Obertes Q1–Q3 (pàgines simples, canviar
+  un document sencer, blocs comuns).
 
 ## Gravetat alta
 

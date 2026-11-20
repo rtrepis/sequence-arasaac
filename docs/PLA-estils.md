@@ -1,6 +1,6 @@
 # Pla: els estils, sense sorpreses
 
-> **Estat**: esborrany per decidir (2026-11-20). Cap codi fet.
+> **Estat**: decisions preses (2026-11-20), amb tres qüestions obertes (§6, Q1–Q3). Cap codi fet.
 >
 > **Quan llegir-lo**: abans de tocar res que creï, apliqui, restableixi o compari l'estil d'un
 > pictograma, d'un bloc o del document; abans de tocar el panell «El meu estil», els menús «⋯» de
@@ -103,6 +103,8 @@ amb ⚠️ són errors; la resta són de comprensió.
 
 ### E4 Un document nou segueix El meu estil fins que es **descarrega**, i només aleshores
 
+> **Decidit (D1)**: el document nou neix amb una còpia d'El meu estil i no el segueix mai.
+
 - **Què passa**: el document neix sense estil propi (`defaultSettings: undefined`) i l'estil es
   resol en viu amb El meu estil (`resolveDocumentStyle`). Només es fa propi en un lloc:
   `documentStyleMaterialized`, que es crida **només** des de `ModalDownload.tsx` (descarregar el fitxer).
@@ -128,6 +130,8 @@ amb ⚠️ són errors; la resta són de comprensió.
   avís.
 
 ### E5 «Aplica» i «Actualitza» deixen el bloc igual
+
+> **Decidit (D2, D8)**: una sola acció, «Tria un estil…», només a un bloc. Fora «Actualitza».
 
 - **Què passa**: al bloc que tens davant totes dues hi posen El meu estil d'ara. La diferència és
   què passa amb els altres blocs:
@@ -160,6 +164,8 @@ amb ⚠️ són errors; la resta són de comprensió.
 
 ### E7 Aplicar un estil no toca els retocs, i l'usuari no ho sap
 
+> **Decidit (D3)**: el snackbar diu quants retocs es conserven i ofereix «Treu els retocs».
+
 - **Què passa**: després d'«Aplica el meu estil», un pictograma retocat continua retocat (és la
   regla de sempre, i és bona). Però la vista no té la marca «personalitzat» (només és a l'edició,
   fonament 03 §6), i des de la vista no hi ha manera de saber per què una targeta no ha canviat.
@@ -174,6 +180,9 @@ amb ⚠️ són errors; la resta són de comprensió.
 
 ### E8 No es pot aplicar a tot el document, i la notícia diu que sí
 
+> **Decidit (D8, D9)**: no s'aplica a tot el document; es canvia el títol de la notícia. El cost de
+> canviar un document gran és Q2.
+
 - **Què passa**: «Aplica el meu estil» només és al menú d'una pàgina (sense els blocs comuns) o
   d'un bloc. Les pàgines simples no tenen menú de bloc. Un document de cinc pàgines són cinc clics,
   i els blocs comuns un a un.
@@ -184,6 +193,8 @@ amb ⚠️ són errors; la resta són de comprensió.
   la notícia diu la veritat. Si no es fa, **cal canviar el títol de la notícia abans de publicar-la**.
 
 ### E9 «L'estil del document» és invisible
+
+> **Decidit (D4)**: una fila «Estil» al nivell Document de la columna, amb el nom.
 
 - **Què passa**: des de R10 no es pot veure ni editar enlloc. Però:
   - «Treu l'estil de bloc» diu «el bloc torna a l'estil del document»;
@@ -247,6 +258,8 @@ amb ⚠️ són errors; la resta són de comprensió.
 
 ### E15 El vocabulari personal encén la marca «personalitzat» sense que l'usuari hagi editat res
 
+> **Decidit (D5)**: es manté marcat i el tooltip ho diu.
+
 - Un color del vocabulari personal és un retoc (fonament 03 §4). Però l'usuari tria un pictograma i
   li surt marcat. **Decisió D5**: es manté (és cert que és un retoc), però el tooltip de la marca ho
   diu («color del teu vocabulari»), o el vocabulari no compta com a «personalitzat». **Proposta**: es
@@ -261,6 +274,8 @@ amb ⚠️ són errors; la resta són de comprensió.
 
 ### E17 Els blocs comuns i les pàgines simples queden fora
 
+> **Decidit (D8)**: només blocs. Les pàgines simples són Q1; els blocs comuns, Q3.
+
 - «Aplica el meu estil» d'una pàgina no toca els blocs comuns («A totes les pàgines»). Les pàgines
   simples no tenen menú de bloc ni de seqüència, i «Restableix els pictogrames d'aquesta
   seqüència» no s'hi arriba (pendent del pas 8 del mode lliure).
@@ -268,6 +283,8 @@ amb ⚠️ són errors; la resta són de comprensió.
   selector: «Aquesta pàgina (els blocs de totes les pàgines, no)».
 
 ### E18 El desfer es perd en silenci
+
+> **Decidit**: sense confirmació; n'hi ha prou amb Desfés (l'abast és un sol bloc).
 
 - El «Desfés» del snackbar només funciona «mentre no s'hagi tocat des d'aleshores». Si l'usuari
   aplica un estil a tot el document, toca un pictograma i vol desfer, no pot, i no hi ha historial
@@ -342,21 +359,20 @@ del fonament 03 (§2.3 i §4) aplicada també a Redux, no només al fitxer.
 
 ## 4. La feature nova: estils per triar
 
-### 4.1 El nom — decisió D6
+### 4.1 El nom — D6, decidit: «Galeria d'estils»
 
-Han de quedar clares dues paraules: la **col·lecció** i **cadascun**.
-
+- La col·lecció és la **Galeria d'estils**. Cada estil, pel seu nom («Contorn gruixut», «Text a
+  dalt, en majúscules»…). Dins, dos grups: **«El meu estil»** (o «Els meus estils» amb comptes,
+  B33) i els estils de l'app (nom del grup per decidir en escriure els textos: «De l'app»,
+  «Proposats»…).
+- L'acció del menú del bloc: **«Tria un estil…»** (obre la galeria). El nom final, amb els textos.
 - **Prohibit**: «tema» (fonament 03 §1: només clar/fosc) i «plantilla» (és de la pàgina: «Tria
-  una plantilla»). Fer-les servir faria creure que un estil canvia la pàgina.
-- **Proposta**: **«Estils»** per a la col·lecció, i cadascun pel seu nom («Contorn gruixut»,
-  «Text a dalt, en majúscules»…). Dins, dos grups: **«El meu estil»** (o «Els meus estils» amb
-  comptes, B33) i **«Estils de l'app»** (els predefinits). L'acció és **«Aplica un estil…»**.
-- Alternatives: «Galeria d'estils», «Estils proposats», «Models d'estil», «Estils predeterminats»
-  (aquest es confon amb «per defecte», que és el nom vell d'El meu estil al codi).
-- El nom s'ha de provar en els cinc idiomes abans de decidir (cal que «estil» i «plantilla» no es
-  confonguin en cap; vegeu C30, que va passar amb «pantalla completa»).
+  una plantilla»). Fer-les servir faria creure que un estil canvia la pàgina. «Predeterminat»
+  tampoc: es confon amb «per defecte», el nom vell d'El meu estil.
+- Cal provar «galeria d'estils» en els cinc idiomes abans d'escriure les claus, perquè «estil» i
+  «plantilla» no es confonguin en cap (vegeu C30, que va passar amb «pantalla completa»).
 
-### 4.2 Què porta un estil — decisió D7
+### 4.2 Què porta un estil — D7, decidit: fix, i «Fes-lo el meu estil»
 
 - **Només estil** (`pictogram` i `card`, i els colors de Fitzgerald): lletra, vores, posició del
   text, numeració, pell i cabell. **Mai** distribució ni pàgina (fonament 03 §1), com El meu estil.
@@ -369,21 +385,27 @@ Han de quedar clares dues paraules: la **col·lecció** i **cadascun**.
 - **Si l'app canvia un predefinit**, els documents no canvien: aplicar-lo en copia els valors (com
   els colors de Fitzgerald, fonament 03 §4).
 
-### 4.3 On s'aplica i com — decisió D8 (lligada a D2)
+### 4.3 On s'aplica i com — D2 i D8, decidit: només a un bloc
 
-- **Una entrada**: «Aplica un estil…» al menú «⋯» de la pàgina i del bloc, i (D4 a) a la fila
-  «Estil» del nivell Document de la columna.
-- **Un selector** amb la mostra de cada estil (la mateixa targeta d'exemple que la mostra d'«El meu
-  estil», amb un pictograma de debò del document si n'hi ha), i **l'abast**:
-  - **Tot el document** — canvia l'estil del document (`applyStyleToDocument`). Treu els estils de
-    bloc (la pregunta de E18). Els retocs dels pictogrames es queden, i el missatge diu quants.
-  - **Aquesta pàgina** — estil de bloc als blocs de la pàgina (dir si els comuns hi entren, E17).
-  - **Aquest bloc** — estil de bloc al bloc.
-- L'abast per defecte: **tot el document** des de la columna; **aquesta pàgina** o **aquest bloc**
-  des del menú d'on s'obre.
-- Un **sol** snackbar amb Desfés, que diu l'abast («S'ha aplicat “Contorn gruixut” a tot el
-  document. 3 pictogrames conserven els seus retocs.» + Desfés + «Treu els retocs», D3).
-- **El document nou**: neix amb El meu estil (com ara) i, amb D1 (a), en té una còpia.
+- **Un estil s'aplica sempre a un bloc, i a un de sol.** No hi ha abast de pàgina ni de document.
+  L'estil del document no el canvia cap acció de la interfície: neix amb El meu estil (D1) i és
+  seu.
+- **Una sola entrada**: «Tria un estil…» al menú «⋯» del bloc. Obre la galeria, amb la mostra de
+  cada estil (la mateixa targeta d'exemple que la mostra d'«El meu estil», amb un pictograma del
+  bloc si en té).
+- **La primera opció de la galeria és «L'estil del document»** (substitueix «Treu l'estil de
+  bloc», decidit 2026-11-20). Després, El meu estil, i després els de l'app. La que fa servir el
+  bloc surt marcada.
+- **Fora del menú de la pàgina**: «Aplica el meu estil» i «Actualitza amb el meu estil». **Fora del
+  menú del bloc**: «Aplica el meu estil», «Actualitza amb el meu estil» i «Treu l'estil de bloc».
+  «Restableix els pictogrames d'aquesta seqüència» es queda.
+- **Sense grups invisibles**: aplicar un estil a un bloc mai no en canvia cap altre. Si dos blocs
+  tenen el mateix estil, a `styles` comparteixen entrada (com ara, `sameNamedContent`), però és un
+  detall del fitxer: canviar-ne un no toca l'altre.
+- **El missatge** (D3): un snackbar amb Desfés que diu quin estil s'ha aplicat i, si n'hi ha,
+  quants pictogrames conserven els seus retocs, amb **«Treu els retocs»**. Com que els retocs són de
+  la seqüència, el text diu que canvien a tots els blocs on surt (la regla de B35).
+- **Sense confirmació** (E18, decidit): n'hi ha prou amb Desfés, perquè l'abast és un sol bloc.
 
 ### 4.4 L'estudi — abans de fer la llista
 
@@ -417,45 +439,68 @@ Com l'estudi de plantilles (`docs/ESTUDI-treballs-amb-pictogrames.md`), un docum
 | Solució A | Cap (Redux i esborrany) | Versió a l'esborrany i lectura dels vells (§3.3) |
 | D1 (a): el document nou té estil propi de seguida | Cap | — |
 | D4 (b): nom de l'estil del document | Camp opcional `style.name` al `.saac` | Esquema, fixture, fonament 06. No trenca: un lector vell el conserva com a camp desconegut |
-| D2 (a): estils de bloc amb el nom de l'estil aplicat | Cap (el nom ja hi és) | — |
+| D2/D8: estils de bloc amb el nom de l'estil aplicat | Cap (el nom ja hi és) | — |
 | E13: `styles` sense orfes en desar | Cap | Prova |
 | Estils predefinits | Cap (es copien) | Les traduccions dels noms |
 | `.saacstyle` d'un predefinit («Desa en un fitxer») | Cap | — |
 
 ---
 
-## 6. Decisions per prendre
+## 6. Decisions
 
-| # | Pregunta | Proposta |
+Preses el 2026-11-20.
+
+| # | Pregunta | Decisió |
 |---|---|---|
-| D1 | Quan deixa un document nou de seguir El meu estil? | (a) Mai el segueix: neix amb una còpia |
-| D2 | «Aplica» i «Actualitza»: com es resol que acabin igual a la pantalla? | (a) Una sola acció, «Aplica un estil…», amb l'abast a la vista; fora «Actualitza» i els grups invisibles |
-| D3 | Aplicar un estil ofereix treure els retocs? | Sí, al snackbar, només si n'hi ha, i dient que és a tots els blocs de la seqüència |
-| D4 | Com es fa visible l'estil del document? | (a) Una fila «Estil» al nivell Document de la columna, amb (b) el nom |
-| D5 | El color del vocabulari personal encén la marca «personalitzat»? | Sí, i el tooltip ho diu |
-| D6 | El nom de la col·lecció | «Estils», amb «El meu estil» i «Estils de l'app» |
-| D7 | Què porta un estil predefinit i si es pot editar | Només estil; fix; «Fes-lo el meu estil» per retocar-lo |
-| D8 | Abasts del selector i per defecte | Document, pàgina, bloc; per defecte, el lloc d'on s'obre |
-| D9 | La notícia N-2 | Esperar aquest pla. Amb D2 (a), el títol és cert; si no, canviar-lo |
+| D1 | Quan deixa un document nou de seguir El meu estil? | **Mai el segueix**: neix amb una còpia. Treu E4, E6 i E16 |
+| D2 | «Aplica» i «Actualitza» acaben igual a la pantalla | **Una sola acció**, «Tria un estil…», i cap grup invisible. Fora «Actualitza» |
+| D3 | Aplicar un estil ofereix treure els retocs? | **Sí**: el snackbar diu quants n'hi ha i ofereix «Treu els retocs», dient que canvien a tots els blocs on surt la seqüència |
+| D4 | Com es fa visible l'estil del document? | **Una fila «Estil» al nivell Document de la columna, amb el nom** (camp `style.name`, §5). Amb D8, la fila **només informa**: vegeu Q2 |
+| D5 | El color del vocabulari personal encén la marca «personalitzat»? | **Sí, i ho diu**: el tooltip i el nom accessible de la marca diuen «color del teu vocabulari» |
+| D6 | El nom de la col·lecció | **Galeria d'estils** (§4.1) |
+| D7 | Un estil de l'app es pot retocar? | **No**: és fix. «Fes-lo el meu estil» per partir-ne i retocar-lo a la configuració. Mai porta distribució ni pàgina |
+| D8 | On s'aplica un estil | **Només a un bloc**, d'un en un. Ni pàgina ni document |
+| — | «Treu l'estil de bloc» | **Passa a ser la primera opció de la galeria**, «L'estil del document» |
+| E18 | Confirmació abans d'aplicar | **No**: n'hi ha prou amb Desfés |
+| D9 | La notícia N-2 | **Cal canviar-ne el títol**: amb D8, l'estil ja no va «a tot el document d'un cop». Es reescriu al pas 9 |
 
----
+### Qüestions obertes que surten de D8
+
+- **Q1 — Les pàgines simples no tenen blocs amb menú.** Un document fet abans del mode de pàgines,
+  o qualsevol pàgina «Simple», no té cap menú «⋯» de bloc. Amb D8, en aquestes pàgines **no es pot
+  triar cap estil**. Opcions: (a) acceptar-ho, i per triar estil cal passar la pàgina a columnes,
+  files o lliure; (b) donar a cada seqüència d'una pàgina simple el seu menú «⋯» (és el
+  «Pendent del pas 8» del pla del mode lliure, que ja ho deixava obert); (c) a les pàgines simples,
+  «Tria un estil…» al menú de la pàgina i s'aplica a totes les seves seqüències. **Proposta: (b)**,
+  perquè ja era pendent i és el mateix menú que els blocs.
+- **Q2 — Canviar l'estil d'un document sencer ja fet.** Amb D1 i D8, un document que ja té estil
+  propi (el d'un altre, o el meu de fa un mes) només canvia bloc a bloc. Per a un document gran
+  són molts clics. Opcions: (a) acceptar-ho per a aquesta release i apuntar-ho al backlog; (b) que
+  la fila «Estil» del nivell Document (D4) tingui «Canvia…», que és l'única excepció a D8.
+  **Proposta: (a)**, i mirar-ho amb usuaris després de la release.
+- **Q3 — Els blocs comuns** («A totes les pàgines») tenen menú propi i se'ls pot triar estil com a
+  qualsevol bloc. Cal comprovar que la galeria s'obre també des d'ells i que el missatge diu que
+  canvia a totes les pàgines.
 
 ## 7. Ordre dels passos
 
-1. **Decisions** D1–D9 (aquest document). Actualitzar el fonament 03 (§1 vocabulari, §5 accions,
-   §6 marca, §7 documents nous) **abans** del codi: mana el fonament.
+1. **Actualitzar el fonament 03** (§1 vocabulari, §5 accions, §6 marca, §7 documents nous) i la
+   decisió 24 de l'ADR-005 amb D1–D9, **abans** del codi: mana el fonament. Decidir Q1–Q3.
 2. **Solució A** (§3), sola, amb les seves proves. És un canvi de model sense canvi de pantalla
    (excepte que E1 deixa de passar). Inclou E3, E12, E14 i la lectura dels esborranys vells.
-3. **D1**: el document nou amb estil propi. Treu E4, E6 i E16.
+3. **D1**: el document nou amb estil propi des que neix. Treu E4, E6 i E16.
 4. **L'estudi** d'estils de targetes (§4.4), en paral·lel amb 2 i 3.
-5. **El selector «Aplica un estil…»** amb El meu estil sol i els tres abasts (D2, D3, D8). Treu
-   «Actualitza amb el meu estil» i, si es decideix, «Treu l'estil de bloc». E5, E7, E8, E17, E18.
-6. **L'estil del document visible** a la columna (D4). E9; revisar E11.
-7. **Els estils de l'app** dins del selector (D6, D7), amb els resultats de l'estudi.
-8. **Textos i vocabulari** (E10, E15): revisar totes les claus de `features.freeLayout.*`,
+5. **La galeria al menú del bloc** («Tria un estil…»), amb «L'estil del document» i El meu estil
+   (D2, D3, D8). Treu «Aplica el meu estil», «Actualitza amb el meu estil» i «Treu l'estil de bloc»
+   dels menús de pàgina i de bloc. E5, E7, E13. Q1 i Q3, segons el que s'hagi decidit.
+6. **L'estil del document visible** a la columna (D4), amb el nom. E9; revisar E11.
+7. **Els estils de l'app** dins de la galeria (D6, D7), amb els resultats de l'estudi, i «Fes-lo el
+   meu estil».
+8. **Textos i vocabulari** (E10, E15, D5): revisar totes les claus de `features.freeLayout.*`,
    `features.sequence.style.changed.*`, `components.pictEdit.*` i `components.defaultSettings.*` en
-   els cinc idiomes.
-9. **La notícia N-2** (D9), amb captures noves, i actualitzar `docs/PLA-noticies.md`.
+   els cinc idiomes, i el text d'ajuda d'«El meu estil» (`components.defaultSettings.panelHint`), que
+   parla del menú de la pàgina.
+9. **La notícia N-2** (D9): títol nou, passos nous i captures, i actualitzar `docs/PLA-noticies.md`.
 
 Normes de cada pas: `npm run typecheck` net i tests passant; textos a `packages/i18n/messages/`
 en els cinc idiomes; cap color fora de `palette.ts`; `ConfirmDialog` i `AppDialog` per a les
