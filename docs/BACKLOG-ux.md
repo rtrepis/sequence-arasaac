@@ -67,6 +67,7 @@ l'entrada.
 |---|---|---|---|---|
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | C28 | Girar el mòbil tanca el diàleg d'edició | Es pot perdre el que s'estava editant, i girar el mòbil és habitual | S | No |
+| C30 | «Pantalla sencera» i «Pantalla completa» es diuen igual fora del català | La notícia de la pantalla sencera ja ho ha de rodejar; com més tard, més textos el citen | S | Sí: el nom de l'interruptor en cada idioma |
 
 ### Més endavant
 
@@ -1423,6 +1424,21 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 ## Gravetat baixa
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.
+
+### C30 — «Pantalla sencera» i «Pantalla completa» es diuen igual fora del català 🔴 Oberta
+
+*(Trobada en escriure la notícia `full-screen-sheet`, 2026-11-20.)*
+
+- **On**: `pages.viewSequence.fullScreen.label` (l'interruptor de sota la mida de pàgina) i
+  `pages.viewSequence.tooltip.fullscreen` (el botó de dalt de la columna). En català són dues
+  paraules; en castellà totes dues són «Pantalla completa», en francès «Plein écran», en italià
+  «Schermo intero», i en anglès només canvia la majúscula («Full Screen» / «Full screen»).
+- **Per què importa**: ara el botó de pantalla completa només surt amb l'interruptor encès, i en
+  quatre idiomes l'app diu «encén Pantalla completa per tenir el botó de Pantalla completa». La
+  notícia se'n surt descrivint el botó per la icona (les quatre fletxes).
+- **Proposta**: un nom propi per a l'interruptor en cada idioma, que digui que el full pren la forma
+  de la pantalla (per exemple, «Full de pantalla» / «Hoja de pantalla»), i actualitzar la notícia
+  `full-screen-sheet`, que el cita.
 
 ### C20 — Errors d'axe als controls del formulari d'edició del pictograma 🔴 Oberta
 

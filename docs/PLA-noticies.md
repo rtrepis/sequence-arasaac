@@ -3,7 +3,8 @@
 > **Estat**: **aprovat** (2026-11-19), amb les decisions de §8. Es fan **les set notícies** (N-1 a
 > N-7); les velles que ja no són certes **surten del carrusel i es queden a Novetats amb
 > una marca, «Superada»**. Queda oberta **D5** (l'etiqueta «Nou»).
-> **Fase 1 feta** (2026-11-19): sis notícies superades i set amb captures velles (§5). Cada fase
+> **Fase 1 feta** (2026-11-19): sis notícies superades i set amb captures velles (§5). **Fases 2 i
+> 4 fetes** (2026-11-20): les set notícies hi són, amb captures als cinc idiomes. Cada fase
 > té una **porta**: no es passa a la següent fins que la decisió que la tanca és presa i apuntada a
 > §8. **Per continuar, §11.**
 > **Ve de**: §11 de `docs/PLA-vista-mobil.md` («la release no surt sense la vista al mòbil i sense
@@ -325,7 +326,32 @@ malament, regenerar-les i mirar-les una per una. Només les imatges: el text no 
 notícia (§5, «La marca»), amb els textos als cinc idiomes i proves. Es marquen les de la fase 1.
 L'enllaç a la notícia que la substitueix s'hi posa quan aquesta existeixi (fase 4).
 
-### Fase 4 — Les notícies noves, una per commit
+### Fase 4 — Les notícies noves, una per commit ✅ Feta (2026-11-20)
+
+**Fet**: les set, un commit cadascuna, amb el seu spec (`e2e/screenshots/<slug>-focused.spec.ts`)
+i les captures per idioma. Slugs: `pages-and-blocks`, `my-style`, `mobile-view`,
+`full-screen-sheet`, `reorder-pictograms`, `text-fit` i `print-matches-preview`.
+`multiple-sequences` i `view-improvements` enllacen a `pages-and-blocks`. Comprovat en els cinc
+idiomes: les pàgines de les set notícies, sense claus perdudes ni imatges trencades, i el carrusel.
+Com s'han resolt les fitxes de §4:
+
+- **N-1**: set apartats, com la proposta; tres preguntes freqüents. Les captures de la pàgina
+  lliure es fan amb el teclat (les fletxes), perquè arrossegar amb el ratolí sobre una pàgina que
+  s'acaba de desplaçar movia el bloc a un lloc imprevisible.
+- **N-2**: quatre passos. El canvi d'estil que s'ensenya en actualitzar és el marc del color de la
+  categoria: el blanc i negre no es veu amb les imatges de prova. El tancament diu que l'estil va
+  en una sola direcció i que la columna ja no desa preferències, sense el nom del botó vell.
+- **N-3**: quatre passos, tots dins del marc de telèfon (la portada, tres telèfons). La capa del
+  mòbil girat es fa amb un telèfon ajagut.
+- **N-4**: el primer paràgraf diu on és ara el botó de pantalla completa. Fora del català,
+  l'interruptor i el botó tenen el mateix nom (C30 del backlog): la notícia descriu el botó per la
+  icona.
+- **N-5**: tres passos; «Enganxa» i el diàleg d'edició a pantalla completa, de passada.
+- **N-6** i **N-7**: tres passos cadascuna. N-7 no diu les causes, només el que es podia notar.
+
+**Pendent per a la fase 5**: la **data** de les set és `2026-11-20`, provisional; s'ha de posar la
+del dia de la release (D6). (Els specs tanquen l'avís «Aquest document té el seu propi estil», que
+surt perquè el document de demostració no té l'estil de fàbrica: no és cap error.)
 
 Les set, de N-1 a N-7. Cada una: l'entrada a `newsItems.ts`, les claus `news.<slug>.*` als cinc idiomes
 (`ca.json` amb descripció; els altres, només el text, traduït del català i no reescrit), el spec
@@ -357,26 +383,25 @@ tecnicisme; els noms dels botons són els de la pantalla; `npm run typecheck` ne
 
 ## 11. Encàrrec per a la sessió següent
 
-**On som** (2026-11-20): fases 0, 1 i 3 fetes. Hi ha la marca «Superada» a les sis velles i les
-captures noves de les set que encara són certes. Queda oberta D5 (l'etiqueta «Nou»).
+**On som** (2026-11-20): fases 0 a 4 fetes. Les set notícies són a `newsItems.ts` amb la data
+provisional `2026-11-20`, i les sis velles porten la marca «Superada». Queda oberta D5 (l'etiqueta
+«Nou»).
 
-**Què**, en aquest ordre:
+**Què**: **la fase 5** (§9), en aquest ordre:
 
-1. **La fase 2**: la fixture de demostració per a N-1, N-2 i N-4 (D4), a
-   `apps/web/test/fixtures/saac/` amb la seva entrada al `README.md`, i la plantilla del marc de
-   telèfon per a les captures de mòbil (D3), a `e2e/screenshots/templates/`.
-2. **La fase 4**: les set notícies, una per commit, en l'ordre de §4 (N-1 primer). En fer N-1,
-   posar `replacedBy: "<slug de N-1>"` a `multiple-sequences` i `view-improvements`.
-3. **La fase 5**: tancar (D5 amb l'usuari, els altres plans, el backlog).
+1. **D5 amb l'usuari**: què es fa amb l'etiqueta «Nou» de la fila «Disposició», i apuntar-ho al pas
+   8 de `docs/PLA-mode-lliure.md`.
+2. **La data** de les set notícies, la del dia de la release (D6): `date` a `newsItems.ts` (set
+   entrades, i el comentari que ho diu).
+3. Els altres plans: `docs/PLA-vista-mobil.md` §11 i `docs/PLA-mode-lliure.md` §13, les files de
+   les notícies a ✅; la línia a `NOTICIES-candidates-des-de-2.0.2.md` i
+   `INVENTARI-funcionalitats-des-de-2.0.2.md`.
+4. El backlog: a «Novetats pendents de publicar», el que s'ha deixat fora. **C30** (el nom de
+   l'interruptor de pantalla sencera fora del català) és nova i toca la notícia N-4.
 
-**On**: a la branca `ccr-f5fab69a-xv8xmg`, que porta les fases 5 i 6 de la vista al mòbil i tota
-la feina d'aquest pla. Si la sessió nova té assignada una altra branca, ha de partir d'aquesta. Cal
-integrar-la a la de la release (`claude/release-before-new-plan-8x1xhp`) abans de publicar.
-
-**Què cal llegir abans**: aquest pla (§4, les fitxes; §7, les captures; §8, les decisions);
-`docs/estandards/noticies.md`; `e2e/screenshots/newsShot.ts` (el que tenen en comú els specs nous);
-i, per al to, una notícia llarga (`documents-everywhere`) i una de curta (`edit-text-on-card`) a
-`packages/i18n/messages/app/ca.json`.
+**On**: la feina d'aquest pla és a la branca `ccr-8761bdb3-cwk5f5`, que parteix de
+`ccr-f5fab69a-xv8xmg` (fases 5 i 6 de la vista al mòbil). Cal integrar-la a la de la release
+(`claude/release-before-new-plan-8x1xhp`) abans de publicar.
 
 **Avisos de l'entorn del núvol** (après en aquesta feina):
 
@@ -384,11 +409,16 @@ i, per al to, una notícia llarga (`documents-everywhere`) i una de curta (`edit
 - Playwright necessita el Chromium de `/opt/pw-browsers/chromium`: un config local, sense pujar-lo,
   que estengui `playwright.config.ts` amb `launchOptions: { executablePath }` també a cada projecte.
   El servidor és `npx vite` a `apps/web` (port 5173). Llançar els specs amb `--timeout 90000`.
+- **El servidor de desenvolupament no sempre veu els canvis dels catàlegs** de
+  `packages/i18n/messages/app/`: després d'afegir-hi claus, si una pàgina diu que en falten,
+  reiniciar `npx vite` abans de buscar l'error.
 - **El paper per defecte surt de la regió del navegador**, i el Chromium de proves diu que és dels
   Estats Units (Carta). Un spec que ensenyi el paper ha de fer `test.use({ locale: "ca-ES" })`.
-- Els catàlegs: `ca.json` porta `{ message, description }`; els altres idiomes, el text pla. Un
-  spec que en llegeixi els textos ha d'acceptar totes dues formes (com `edit-text-on-card`).
-- Regenerar una notícia no ha de tocar les altres: executar els specs un per un i descartar
-  (`git checkout`) les imatges que canviïn i no siguin seves. Mirar cada imatge abans de desar-la.
-- Les captures noves es fan **per idioma** (`public/img/news/<slug>/<idioma>/`, `{locale}` a la
-  ruta), com `documents-everywhere` i `edit-text-on-card`.
+- Els specs nous comparteixen `e2e/screenshots/demoDocument.ts` (el document de demostració
+  traduït, i `t()` per als textos dels catàlegs) i, per al mòbil, `phoneScreen` i `phoneShot` de
+  `newsShot.ts`.
+- **Un apòstrof just abans d'una etiqueta** (`l'<b>`) trenca el formatador; la prova de variables
+  de `packages/i18n` ho detecta. Passar-la (`npx vitest run` a `packages/i18n`) després d'afegir
+  textos.
+- Regenerar una notícia no ha de tocar les altres: executar els specs un per un. Mirar cada imatge
+  abans de desar-la.
