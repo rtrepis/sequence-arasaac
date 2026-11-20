@@ -80,6 +80,13 @@ const pagesImage = (name: string, alt: string): NewsImage => ({
 });
 const pagesId = (key: string): string => `news.pages-and-blocks.${key}`;
 
+const MY_STYLE = "/img/news/my-style/{locale}";
+const myStyleImage = (name: string, alt: string): NewsImage => ({
+  src: `${MY_STYLE}/${name}.png`,
+  altId: `news.my-style.${alt}.alt`,
+});
+const myStyleId = (key: string): string => `news.my-style.${key}`;
+
 export const newsItems: NewsItem[] = [
   {
     slug: "pages-and-blocks",
@@ -135,6 +142,37 @@ export const newsItems: NewsItem[] = [
       })),
     },
     closingId: pagesId("closing"),
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "nova",
+  },
+  {
+    slug: "my-style",
+    titleId: myStyleId("title"),
+    summaryId: myStyleId("summary"),
+    contentId: myStyleId("content"),
+    coverImage: `${MY_STYLE}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: myStyleId("step1.description"),
+        image: myStyleImage("configuracio", "step1"),
+      },
+      {
+        descriptionId: myStyleId("step2.description"),
+        image: myStyleImage("menu-pagina", "step2"),
+      },
+      {
+        descriptionId: myStyleId("step3.description"),
+        image: myStyleImage("bloc-diferent", "step3"),
+      },
+      {
+        descriptionId: myStyleId("step4.description"),
+        image: myStyleImage("menu-actualitza", "step4"),
+        moreImages: [myStyleImage("actualitzat", "step4.updated")],
+      },
+    ],
+    closingId: myStyleId("closing"),
     // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "nova",

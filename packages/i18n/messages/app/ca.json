@@ -2733,6 +2733,58 @@
     "message": "La configuració, a l'apartat de la pàgina i la distribució: la fila Disposició, amb què comencen els documents nous, al costat d'una mostra.",
     "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
   },
+  "news.my-style.title": {
+    "message": "El teu estil, a tot el document d'un cop",
+    "description": "Títol de la notícia «my-style» (El meu estil i portar-lo als documents)"
+  },
+  "news.my-style.summary": {
+    "message": "Fes l'estil dels pictogrames una sola vegada, a «El meu estil», i porta'l a qualsevol document amb un clic.",
+    "description": "Resum de la notícia «my-style» a la targeta del carrusel"
+  },
+  "news.my-style.content": {
+    "message": "<p>La lletra, els marcs, la numeració, la posició del text: ara l'estil que t'agrada es fa una sola vegada, a la configuració, i els documents nous el reben. Per portar-lo a un document que ja tens, n'hi ha prou amb un clic.</p><p>És la continuació dels fitxers d'estil que vam estrenar a l'octubre: un fitxer .saacstyle es pot carregar com el teu estil, i d'allà passa als documents.</p>",
+    "description": "Introducció de la notícia «my-style». Pot portar <p> i <b>"
+  },
+  "news.my-style.step1.description": {
+    "message": "<p>Obre la configuració amb la roda dentada de dalt a la dreta i ves a <b>El meu estil</b>. Hi tries com són els pictogrames: la numeració, la posició del text, la lletra i els marcs. La mostra de l'esquerra t'ensenya com quedaran.</p><p>Des d'aquí també pots carregar un estil d'un fitxer o desar el teu per compartir-lo.</p>",
+    "description": "Descripció d'un pas de la notícia «my-style». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.my-style.step1.alt": {
+    "message": "La configuració oberta a «El meu estil»: a l'esquerra, la mostra d'un pictograma; al mig, la numeració, la posició del text, la lletra i els marcs; a la dreta, carregar i desar l'estil en un fitxer.",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.step2.description": {
+    "message": "<p>Per portar el teu estil a un document obert, ves a la <b>Vista</b> i obre el menú de tres punts d'una pàgina: <b>Aplica el meu estil</b> el posa a tots els blocs de la pàgina.</p>",
+    "description": "Descripció d'un pas de la notícia «my-style». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.my-style.step2.alt": {
+    "message": "El menú de tres punts d'una pàgina, amb el cursor damunt de «Aplica el meu estil».",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.step3.description": {
+    "message": "<p>També es pot aplicar a un sol bloc, des del menú del bloc. Aquí, la seqüència de dalt ja té el teu estil, sense numeració, i la de baix continua amb l'estil del document.</p>",
+    "description": "Descripció d'un pas de la notícia «my-style». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.my-style.step3.alt": {
+    "message": "Una pàgina amb dues seqüències: la de dalt amb el meu estil, sense números, i la de baix amb l'estil del document, numerada.",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.step4.description": {
+    "message": "<p>Si després canvies el teu estil, els blocs no canvien sols. Al menú del bloc, <b>Actualitza amb el meu estil</b> el posa al dia, a ell i a tots els blocs que el fan servir. Si el vols tornar a l'estil del document, <b>Treu l'estil de bloc</b>.</p><p>A la segona imatge, el marc del teu estil ja és del color de la categoria de cada pictograma.</p>",
+    "description": "Descripció d'un pas de la notícia «my-style». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.my-style.step4.alt": {
+    "message": "El menú d'un bloc, amb el cursor damunt de «Actualitza amb el meu estil»; a sota hi ha «Treu l'estil de bloc».",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.step4.updated.alt": {
+    "message": "La mateixa pàgina després d'actualitzar: la seqüència de dalt té el marc exterior verd, del color de la categoria.",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.closing": {
+    "message": "L'estil va sempre en una sola direcció: de la configuració cap al document. Per això la columna de la vista ja no té el botó per desar-hi les preferències: el que retoques en un document es queda en aquell document, i el teu estil només canvia quan tu el canvies a la configuració.",
+    "description": "Paràgraf de tancament de la notícia «my-style»"
+  },
   "news.superseded.notice": {
     "message": "Aquesta notícia es va publicar el {date} i explica com era SequenciAAC aleshores. Des de llavors l'app ha canviat, i alguna cosa ja no és com aquí es diu.",
     "description": "Avís a dalt d'una notícia superada. {date} és el dia que es va publicar, amb el mes en lletres"
