@@ -54,6 +54,7 @@ const WORDS: Record<string, Record<Locale, string>> = {
   córrer: { ca: "córrer", es: "correr", en: "run", fr: "courir", it: "correre" },
   saltar: { ca: "saltar", es: "saltar", en: "jump", fr: "sauter", it: "saltare" },
   nedar: { ca: "nedar", es: "nadar", en: "swim", fr: "nager", it: "nuotare" },
+  Nit: { ca: "Nit", es: "Noche", en: "Night", fr: "Nuit", it: "Notte" },
 };
 
 /** Una paraula del document, en aquest idioma */
@@ -71,22 +72,54 @@ interface DemoBlock {
   kind: string;
   text?: string;
 }
-interface DemoFile {
+interface DemoFilePictogram extends DemoPictogram {
+  id: string;
+  category: string;
+  cross: boolean;
+  image: Record<string, unknown>;
+}
+export interface DemoFile {
   meta: { title: string };
   page: { sheets: { blocks: DemoBlock[] }[] } & Record<string, unknown>;
-  sequences: DemoSequence[];
+  sequences: (DemoSequence & { id?: string })[];
 }
+
+const pictogram = (id: string, catalan: string, image: number): DemoFilePictogram => ({
+  id,
+  word: catalan,
+  category: "verb",
+  cross: false,
+  image: {
+    source: "arasaac",
+    id: image,
+    alternatives: [image],
+    variants: ["skin", "hair", "color"],
+  },
+});
+
+/**
+ * Afegeix al document una seqüència que no és a cap pàgina («Nit»), per
+ * ensenyar «Sense col·locar». Va abans de traduir: les paraules en català.
+ */
+export const withUnplaced = (document: DemoFile): void => {
+  document.sequences.push({
+    id: "seq_nit",
+    title: "Nit",
+    pictograms: [pictogram("p_8", "menjar", 2349), pictogram("p_9", "dormir", 6479)],
+  });
+};
 
 /**
  * El document en aquest idioma. `edit` en permet retocar una còpia abans de
- * desar-la (una notícia que necessita el document en pantalla sencera, per
- * exemple).
+ * traduir-la (una notícia que necessita el document en pantalla sencera, per
+ * exemple): les paraules que hi afegeixi, en català.
  */
 export const demoDocument = (
   locale: Locale,
   edit: (document: DemoFile) => void = () => undefined,
 ): string => {
   const document = JSON.parse(fs.readFileSync(FIXTURE, "utf8")) as DemoFile;
+  edit(document);
   document.meta.title = word(locale, document.meta.title);
   document.sequences.forEach((sequence) => {
     sequence.title = word(locale, sequence.title);
@@ -100,7 +133,6 @@ export const demoDocument = (
         block.text = word(locale, block.text);
     }),
   );
-  edit(document);
   // Fora de la carpeta del test: amb accents a la ruta, el selector de
   // fitxers no rebia el fitxer
   const file = path.join(os.tmpdir(), `sequenciaac-demo-${locale}.saac`);

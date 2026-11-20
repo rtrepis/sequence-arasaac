@@ -73,7 +73,72 @@ const editTextImage = (name: string, step: number): NewsImage => ({
 });
 const editTextId = (key: string): string => `news.edit-text-on-card.${key}`;
 
+const PAGES = "/img/news/pages-and-blocks/{locale}";
+const pagesImage = (name: string, alt: string): NewsImage => ({
+  src: `${PAGES}/${name}.png`,
+  altId: `news.pages-and-blocks.${alt}.alt`,
+});
+const pagesId = (key: string): string => `news.pages-and-blocks.${key}`;
+
 export const newsItems: NewsItem[] = [
+  {
+    slug: "pages-and-blocks",
+    titleId: pagesId("title"),
+    summaryId: pagesId("summary"),
+    contentId: pagesId("content"),
+    coverImage: `${PAGES}/portada.png`,
+    images: [],
+    steps: [
+      {
+        titleId: pagesId("step1.title"),
+        descriptionId: pagesId("step1.description"),
+        image: pagesImage("menu-pagina", "pageMenu"),
+      },
+      {
+        titleId: pagesId("step2.title"),
+        descriptionId: pagesId("step2.description"),
+        image: pagesImage("columnes", "columns"),
+        moreImages: [pagesImage("files", "rows"), pagesImage("lliure", "free")],
+      },
+      {
+        titleId: pagesId("step3.title"),
+        descriptionId: pagesId("step3.description"),
+        image: pagesImage("plantilles", "templates"),
+      },
+      {
+        titleId: pagesId("step4.title"),
+        descriptionId: pagesId("step4.description"),
+        image: pagesImage("moure-bloc", "moveBlock"),
+      },
+      {
+        titleId: pagesId("step5.title"),
+        descriptionId: pagesId("step5.description"),
+        image: pagesImage("retol", "label"),
+      },
+      {
+        titleId: pagesId("step6.title"),
+        descriptionId: pagesId("step6.description"),
+        image: pagesImage("menu-bloc", "blockMenu"),
+        moreImages: [pagesImage("sense-collocar", "unplaced")],
+      },
+      {
+        titleId: pagesId("step7.title"),
+        descriptionId: pagesId("step7.description"),
+        image: pagesImage("configuracio", "settings"),
+      },
+    ],
+    faq: {
+      titleId: pagesId("faq.title"),
+      questions: [1, 2, 3].map((n) => ({
+        questionId: pagesId(`faq.q${n}`),
+        answerId: pagesId(`faq.a${n}`),
+      })),
+    },
+    closingId: pagesId("closing"),
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "nova",
+  },
   {
     slug: "edit-text-on-card",
     titleId: editTextId("title"),
@@ -503,7 +568,7 @@ export const newsItems: NewsItem[] = [
     date: "2026-02-24",
     category: "millora",
     // Superada: explica la columna de la vista d'abans (`docs/PLA-noticies.md`, §5)
-    superseded: {},
+    superseded: { replacedBy: "pages-and-blocks" },
   },
   {
     slug: "multiple-sequences",
@@ -554,7 +619,7 @@ export const newsItems: NewsItem[] = [
     date: "2026-02-15",
     category: "nova",
     // Superada: explica la columna de la vista d'abans (`docs/PLA-noticies.md`, §5)
-    superseded: {},
+    superseded: { replacedBy: "pages-and-blocks" },
   },
 ];
 

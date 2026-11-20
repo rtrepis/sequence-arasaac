@@ -2593,6 +2593,146 @@
     "message": "Clicar la imatge del pictograma continua obrint la finestra d'edició, amb tots els ajustos de sempre. I si la targeta no mostra cap text, la paraula es canvia des d'allà, amb «Edita».",
     "description": "Paràgraf de tancament de la notícia «edit-text-on-card»"
   },
+  "news.pages-and-blocks.title": {
+    "message": "Pàgines a la teva manera",
+    "description": "Títol de la notícia «pages-and-blocks» (pàgines, disposicions, plantilles i blocs)"
+  },
+  "news.pages-and-blocks.summary": {
+    "message": "Cada pàgina pot repartir les seqüències en columnes, en files o on vulguis, amb plantilles i rètols de text.",
+    "description": "Resum de la notícia «pages-and-blocks» a la targeta del carrusel"
+  },
+  "news.pages-and-blocks.content": {
+    "message": "<p>Fins ara, totes les seqüències d'un document anaven una darrere l'altra, i el full s'omplia sol. Si no toques res, continua sent així. Però ara un document pot tenir diverses pàgines, i cada pàgina tria com es reparteix: en columnes, en files o lliure, amb cada seqüència al lloc on la vulguis.</p><p>Així es pot fer, per exemple, una agenda amb el dia a dalt, un «Primer / Després» o tota la setmana en un sol full.</p>",
+    "description": "Introducció de la notícia «pages-and-blocks». Pot portar <p> i <b>"
+  },
+  "news.pages-and-blocks.step1.title": {
+    "message": "Res no canvia si no vols",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step1.description": {
+    "message": "<p>Els documents comencen com sempre, amb la disposició <b>Simple</b>: les seqüències una darrere l'altra.</p><p>A la <b>Vista</b>, cada pàgina té a dalt el seu nom i un menú amb tres punts. A <b>Disposició</b> hi tries com es reparteix: <b>Simple</b>, <b>Columnes</b>, <b>Files</b> o <b>Lliure</b>. També ho pots triar a la columna de la dreta, quan hi tens la pàgina oberta.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step2.title": {
+    "message": "Columnes, files o lliure",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step2.description": {
+    "message": "<p>Amb <b>Columnes</b> o <b>Files</b>, cada seqüència és un bloc amb el seu lloc a la pàgina, i l'app els reparteix perquè hi càpiguen tots. Amb <b>Lliure</b>, cada bloc va on el poses.</p><p>Les tres imatges són la mateixa pàgina: en columnes, en files i lliure.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step3.title": {
+    "message": "Plantilles",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step3.description": {
+    "message": "<p>Al menú de la pàgina, <b>Plantilla…</b> obre les plantilles pensades per als usos més habituals: l'agenda en tira, «Avui és» amb l'agenda, «Primer / Després», la setmana, l'economia de fitxes, la pàgina de conte o el menú del menjador.</p><p>Passa per damunt d'una plantilla i en veuràs els espais dibuixats al full, abans d'aplicar-la. Un clic l'aplica.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step4.title": {
+    "message": "Moure un bloc i canviar-ne la mida",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step4.description": {
+    "message": "<p>En una pàgina lliure, clica o toca un bloc per seleccionar-lo. Arrossega'l per moure'l, o estira els quadrets de les vores per fer-lo més gran o més petit. Els blocs s'ajusten a la quadrícula de punts, i així queden ben alineats.</p><p>També es pot fer amb el teclat: les fletxes mouen el bloc seleccionat i, amb <b>Maj</b>, en canvien la mida.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step5.title": {
+    "message": "Text al full",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step5.description": {
+    "message": "<p>A més de seqüències, una pàgina pot portar <b>rètols</b>: un títol com «Dissabte», «Primer» o el dia de la setmana. Se n'afegeix un amb <b>Afegeix un bloc</b> i <b>Bloc de text</b>.</p><p>Quan el selecciones, a la columna de la dreta hi escrius el text i en tries la mida de la lletra, la negreta i l'alineació.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step6.title": {
+    "message": "Més d'una pàgina",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step6.description": {
+    "message": "<p>Al menú de la pàgina hi ha <b>Afegeix una pàgina</b>, <b>Duplica la pàgina</b> i les opcions per moure-la amunt o avall. Una mateixa seqüència pot sortir a més d'una pàgina.</p><p>Cada bloc té també el seu menú: <b>A totes les pàgines</b> el posa a totes, al mateix lloc, com una capçalera; <b>Copia a la pàgina</b> el porta a una altra.</p><p>Si una seqüència no és a cap pàgina, surt a la columna de la dreta, a <b>Sense col·locar</b>, amb un botó per posar-la a la pàgina que mires. Abans d'imprimir, l'app t'avisa si en queda alguna.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step7.title": {
+    "message": "Amb quina disposició comencen els documents nous",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step7.description": {
+    "message": "<p>Si vols que els documents nous comencin en columnes, en files o lliures, obre la configuració amb la roda dentada de dalt a la dreta i ves a <b>Pàgina i distribució</b>, a la fila <b>Disposició</b>. Els documents que ja tens no canvien.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.faq.title": {
+    "message": "Preguntes freqüents",
+    "description": "Títol de les preguntes freqüents de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.q1": {
+    "message": "S'imprimeix igual?",
+    "description": "Pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.a1": {
+    "message": "Sí. Cada pàgina és un full, i s'imprimeix i es desa en PDF tal com la veus.",
+    "description": "Resposta a una pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.q2": {
+    "message": "I els documents que ja tenia?",
+    "description": "Pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.a2": {
+    "message": "S'obren com sempre, en una sola pàgina simple. Només canvien si tu els canvies la disposició.",
+    "description": "Resposta a una pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.q3": {
+    "message": "Es pot fer al mòbil?",
+    "description": "Pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.a3": {
+    "message": "Sí. Al mòbil, els ajustos de la pàgina i dels blocs són al panell Ajustos, a baix de la pantalla.",
+    "description": "Resposta a una pregunta freqüent de la notícia «pages-and-blocks». «Ajustos» és el nom del panell de baix de la vista al mòbil"
+  },
+  "news.pages-and-blocks.closing": {
+    "message": "Les pàgines es desen dins del mateix fitxer .saac, i el document s'obre igual a qualsevol ordinador, tauleta o mòbil.",
+    "description": "Paràgraf de tancament de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.pageMenu.alt": {
+    "message": "El menú de tres punts d'una pàgina, obert: a dalt, la disposició (Simple, Columnes, Files, Lliure); a sota, afegir una seqüència, triar una plantilla i les accions de la pàgina.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.columns.alt": {
+    "message": "Una pàgina amb dues seqüències en columnes, una al costat de l'altra.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.rows.alt": {
+    "message": "La mateixa pàgina en files: una seqüència a dalt i l'altra a sota.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.free.alt": {
+    "message": "La mateixa pàgina lliure: la segona seqüència s'ha mogut cap a la dreta, damunt de la quadrícula de punts.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.templates.alt": {
+    "message": "Les plantilles de la pàgina obertes, amb el cursor damunt de «Primer / Després»: al full es veuen dibuixats els espais de la plantilla, amb dos rètols a dalt.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.moveBlock.alt": {
+    "message": "Una pàgina lliure amb un títol i dos blocs de seqüència sobre una quadrícula de punts; un bloc està seleccionat, amb quadrets a les vores per canviar-ne la mida.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.label.alt": {
+    "message": "El rètol de dalt de la pàgina seleccionat i, a la columna de la dreta, els seus ajustos: el text, la mida de la lletra, la negreta i l'alineació.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.blockMenu.alt": {
+    "message": "El menú d'un bloc, obert: a totes les pàgines, aplicar el meu estil, copiar-lo a una altra pàgina o treure'l d'aquesta.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.unplaced.alt": {
+    "message": "A la columna de la dreta, l'apartat de les seqüències que no són a cap pàgina, amb la seqüència «Nit» i el botó per posar-la a la pàgina 1.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.settings.alt": {
+    "message": "La configuració, a l'apartat de la pàgina i la distribució: la fila Disposició, amb què comencen els documents nous, al costat d'una mostra.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
   "news.superseded.notice": {
     "message": "Aquesta notícia es va publicar el {date} i explica com era SequenciAAC aleshores. Des de llavors l'app ha canviat, i alguna cosa ja no és com aquí es diu.",
     "description": "Avís a dalt d'una notícia superada. {date} és el dia que es va publicar, amb el mes en lletres"
