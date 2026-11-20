@@ -982,3 +982,31 @@ describe("la pantalla sencera (18)", () => {
     );
   });
 });
+
+// El document de demostració de les notícies (`docs/PLA-noticies.md`, D4): el
+// fan servir els specs de les captures, i si deixés d'obrir-se igual, les
+// captures canviarien sense que ningú ho hagués demanat.
+describe("el document de demostració (19)", () => {
+  const DEMO = "19-demostracio-noticies.saac";
+
+  it("tres pàgines: una de simple, una en columnes i una de lliure amb un rètol", () => {
+    const { document } = parseDocument(DEMO);
+    const sheets = document.pages?.sheets ?? [];
+    expect(sheets.map((sheet) => [sheet.mode, sheet.template])).toEqual([
+      ["auto", undefined],
+      ["template", "columns-2"],
+      ["template", "free"],
+    ]);
+    expect(sheets[2].placements.map((block) => block.kind)).toEqual([
+      "text",
+      "sequence",
+      "sequence",
+    ]);
+    expect(Object.keys(document.content)).toHaveLength(3);
+  });
+
+  it("anada i tornada idèntica de les pàgines", () => {
+    const { file, document } = parseDocument(DEMO);
+    expect(documentToV3(document, serializeContext).page).toEqual(file.page);
+  });
+});

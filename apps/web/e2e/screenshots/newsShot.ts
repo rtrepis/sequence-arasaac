@@ -2,6 +2,7 @@ import { expect, type Page, type Locator } from "@playwright/test";
 import path from "node:path";
 import fs from "node:fs";
 import { execFileSync } from "node:child_process";
+import { phoneFrameHtml, type PhoneScreen } from "./templates/phoneFrame";
 
 // Utillatge compartit de les captures de Novetats.
 //
@@ -299,4 +300,45 @@ export const waitNoSnackbar = async (page: Page): Promise<void> => {
   await expect(page.locator(".MuiSnackbar-root")).toHaveCount(0, {
     timeout: 15000,
   });
+};
+
+/** Mida de la finestra d'un mòbil a les captures: la d'un Pixel 7 */
+export const PHONE = { width: 412, height: 839 };
+
+/** Una captura de tota la finestra del mòbil, per posar-la dins del marc. */
+export const phoneScreen = async (page: Page): Promise<PhoneScreen> => {
+  const viewport = page.viewportSize()!;
+  const buffer = await page.screenshot();
+  return {
+    src: `data:image/png;base64,${buffer.toString("base64")}`,
+    width: viewport.width,
+    height: viewport.height,
+  };
+};
+
+/**
+ * Desa una o dues captures de mòbil dins del marc de telèfon (D3 de
+ * `docs/PLA-noticies.md`), a la mida de la notícia. Es pinta en una pestanya
+ * a part, perquè la de l'app no perdi l'estat.
+ */
+export const phoneShot = async (
+  page: Page,
+  screens: PhoneScreen[],
+  fileName: string,
+  size: { width: number; height: number } = STEP,
+): Promise<void> => {
+  // A doble densitat: el telèfon queda petit dins de la notícia, i la lletra
+  // de l'app s'ha de poder llegir en una pantalla nítida
+  const browser = page.context().browser();
+  if (!browser) throw new Error("Sense navegador per pintar el marc");
+  const context = await browser.newContext({
+    viewport: size,
+    deviceScaleFactor: 2,
+  });
+  const canvas = await context.newPage();
+  await canvas.setContent(phoneFrameHtml(screens, size));
+  await canvas.locator("#frame").screenshot({
+    path: path.join(IMG_DIR, fileName),
+  });
+  await context.close();
 };

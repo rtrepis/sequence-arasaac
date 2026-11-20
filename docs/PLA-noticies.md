@@ -281,7 +281,17 @@ D5 es decideix a la fase 5.
 - **Fet quan**: cada fila de §5 diu «correcta» o «porta la marca», i, si porta la marca, quina
   notícia nova la substitueix (si n'hi ha).
 
-### Fase 2 — Les eines · porta: una captura de prova de cada mena
+### Fase 2 — Les eines · porta: una captura de prova de cada mena ✅ Feta (2026-11-20)
+
+**Fet**: la fixture `19-demostracio-noticies.saac` (A4 apaïsat: una pàgina simple, una en dues
+columnes i una de lliure amb el rètol «Dissabte»; només les sis paraules que el repositori serveix),
+amb la seva fila al `README.md` i una prova a `saac.test.ts`. `e2e/screenshots/demoDocument.ts`
+l'obre traduïda a l'idioma de la captura (els títols, les paraules i el rètol) i porta el `t()` dels
+catàlegs que fins ara cada spec es copiava. El marc de telèfon és `templates/phoneFrame.ts`, amb
+`phoneScreen` i `phoneShot` a `newsShot.ts`: un o dos telèfons centrats a la mida de la notícia,
+pintats a doble densitat perquè la lletra de l'app es llegeixi. Un spec de prova (esborrat després)
+en va treure les tres pàgines a l'escriptori i el full al mòbil dins del marc.
+
 
 - La fixture de demostració per a N-1, N-2 i N-4 (D4), amb la seva entrada al `README.md` de fixtures.
 - La plantilla del marc de telèfon (D3).
