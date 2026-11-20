@@ -94,6 +94,13 @@ const mobileImage = (name: string, step: number): NewsImage => ({
 });
 const mobileId = (key: string): string => `news.mobile-view.${key}`;
 
+const SCREEN = "/img/news/full-screen-sheet/{locale}";
+const screenImage = (name: string, alt: string): NewsImage => ({
+  src: `${SCREEN}/${name}.png`,
+  altId: `news.full-screen-sheet.${alt}.alt`,
+});
+const screenId = (key: string): string => `news.full-screen-sheet.${key}`;
+
 export const newsItems: NewsItem[] = [
   {
     slug: "pages-and-blocks",
@@ -213,6 +220,33 @@ export const newsItems: NewsItem[] = [
     // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "nova",
+  },
+  {
+    slug: "full-screen-sheet",
+    titleId: screenId("title"),
+    summaryId: screenId("summary"),
+    contentId: screenId("content"),
+    coverImage: `${SCREEN}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: screenId("step1.description"),
+        image: screenImage("interruptor", "step1"),
+      },
+      {
+        descriptionId: screenId("step2.description"),
+        image: screenImage("full", "step2"),
+      },
+      {
+        descriptionId: screenId("step3.description"),
+        image: screenImage("boto", "step3"),
+        moreImages: [screenImage("pantalla-completa", "step3.screen")],
+      },
+    ],
+    closingId: screenId("closing"),
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "millora",
   },
   {
     slug: "edit-text-on-card",

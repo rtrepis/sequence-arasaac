@@ -2833,6 +2833,50 @@
     "message": "A la tauleta en vertical funciona igual. I en una pantalla gran, la vista continua com sempre, amb la columna d'ajustos a la dreta.",
     "description": "Paràgraf de tancament de la notícia «mobile-view»"
   },
+  "news.full-screen-sheet.title": {
+    "message": "Pantalla sencera: el full amb la forma de la pantalla",
+    "description": "Títol de la notícia «full-screen-sheet» (l'interruptor «Pantalla sencera»)"
+  },
+  "news.full-screen-sheet.summary": {
+    "message": "Per mostrar el document en una tauleta o un projector: el full pren la forma de la pantalla. El botó de pantalla completa ara és aquí.",
+    "description": "Resum de la notícia «full-screen-sheet» a la targeta del carrusel"
+  },
+  "news.full-screen-sheet.content": {
+    "message": "<p><b>Si buscaves el botó de pantalla completa</b>: ara surt quan encens <b>Pantalla sencera</b>, a la columna de la <b>Vista</b>, sota la mida de pàgina. Amb un paper (A4, Carta…), ja no hi és.</p><p>El motiu és que un full de paper no s'assembla a una pantalla: un A4 a pantalla completa deixava franges buides als costats i els pictogrames petits. Amb la pantalla sencera, el full pren la forma de la teva pantalla, i el document s'hi veu sencer i tan gran com es pot.</p>",
+    "description": "Introducció de la notícia «full-screen-sheet». Pot portar <p> i <b>. Ha de dir al primer paràgraf on és ara el botó de pantalla completa"
+  },
+  "news.full-screen-sheet.step1.description": {
+    "message": "<p>A la columna de la <b>Vista</b>, al document, sota <b>Mida de pàgina</b>, encén <b>Pantalla sencera</b>. És per mostrar el document en una tauleta, un projector o una pissarra digital, no per imprimir-lo: amb la pantalla sencera, no s'imprimeix ni es desa en PDF.</p>",
+    "description": "Descripció d'un pas de la notícia «full-screen-sheet». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.full-screen-sheet.step1.alt": {
+    "message": "La columna de la vista, amb l'interruptor «Pantalla sencera» encès sota la mida de pàgina, i l'ajuda que diu que és per mostrar el document, no per imprimir-lo.",
+    "description": "Text alternatiu d'una captura de la notícia «full-screen-sheet»"
+  },
+  "news.full-screen-sheet.step2.description": {
+    "message": "<p>El full es torna apaïsat i pren la forma de la pantalla, també a les pàgines en columnes, en files o lliures: els blocs s'hi recol·loquen. Si després obres el document en una pantalla d'una altra forma, l'app et pregunta si l'adapta.</p>",
+    "description": "Descripció d'un pas de la notícia «full-screen-sheet». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.full-screen-sheet.step2.alt": {
+    "message": "Una pàgina lliure amb el full apaïsat, de la forma d'una pantalla: el títol a dalt i dues seqüències.",
+    "description": "Text alternatiu d'una captura de la notícia «full-screen-sheet»"
+  },
+  "news.full-screen-sheet.step3.description": {
+    "message": "<p>Amb la pantalla sencera encesa, a dalt de la columna apareix el botó de pantalla completa, el de les quatre fletxes. La pantalla completa ensenya les pàgines una a una: es passa de pàgina amb les fletxes de les vores o, a la tauleta, lliscant el dit.</p>",
+    "description": "Descripció d'un pas de la notícia «full-screen-sheet». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.full-screen-sheet.step3.alt": {
+    "message": "Dalt de la columna de la vista, el botó de pantalla completa, amb quatre fletxes, assenyalat pel cursor.",
+    "description": "Text alternatiu d'una captura de la notícia «full-screen-sheet»"
+  },
+  "news.full-screen-sheet.step3.screen.alt": {
+    "message": "La pantalla completa: la pàgina lliure ocupa tota la pantalla, amb la fletxa per tornar a la pàgina anterior a l'esquerra.",
+    "description": "Text alternatiu d'una captura de la notícia «full-screen-sheet»"
+  },
+  "news.full-screen-sheet.closing": {
+    "message": "Per imprimir, apaga la pantalla sencera i tria un paper: el document torna a la mida de pàgina que tenia.",
+    "description": "Paràgraf de tancament de la notícia «full-screen-sheet»"
+  },
   "news.superseded.notice": {
     "message": "Aquesta notícia es va publicar el {date} i explica com era SequenciAAC aleshores. Des de llavors l'app ha canviat, i alguna cosa ja no és com aquí es diu.",
     "description": "Avís a dalt d'una notícia superada. {date} és el dia que es va publicar, amb el mes en lletres"
