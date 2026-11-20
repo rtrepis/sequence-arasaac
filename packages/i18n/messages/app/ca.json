@@ -2917,6 +2917,42 @@
     "message": "El menú d'un pictograma: sota «Enganxa (substitueix)» diu «Copiat: «menjar»», amb la imatge del pictograma copiat.",
     "description": "Text alternatiu d'una captura de la notícia «reorder-pictograms»"
   },
+  "news.text-fit.title": {
+    "message": "Quan el text no hi cap, t'ho diu",
+    "description": "Títol de la notícia «text-fit» (l'avís quan el text no cap a la targeta)"
+  },
+  "news.text-fit.summary": {
+    "message": "Si una paraula és massa llarga per a la targeta, l'app ho marca i et proposa com fer-la cabre.",
+    "description": "Resum de la notícia «text-fit» a la targeta del carrusel"
+  },
+  "news.text-fit.content": {
+    "message": "<p>Ara que el text es pot canviar damunt de la mateixa targeta, és fàcil escriure-hi una paraula llarga. Si no hi cap, se'n talla un tros, i fins ara no te n'adonaves fins que ho veies imprès. Ja no: la targeta t'avisa mentre l'edites.</p>",
+    "description": "Introducció de la notícia «text-fit». Pot portar <p> i <b>"
+  },
+  "news.text-fit.step1.description": {
+    "message": "<p>Quan una paraula no hi cap, a la cantonada de la targeta hi surt una marca taronja. Només la veus a la pestanya <b>Edició</b>: no surt ni a la impressió ni al PDF.</p>",
+    "description": "Descripció d'un pas de la notícia «text-fit». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.text-fit.step1.alt": {
+    "message": "Tres targetes; la tercera té una paraula llarga tallada i una marca taronja a la cantonada, amb l'ajuda «El text no hi cap i es talla».",
+    "description": "Text alternatiu d'una captura de la notícia «text-fit»"
+  },
+  "news.text-fit.step2.description": {
+    "message": "<p>Clica la marca i l'app et proposa tres sortides:</p><ul><li><b>Redueix la lletra de tot el document</b> fins a la mida on la paraula hi cap.</li><li>Redueix-la <b>només d'aquest pictograma</b>, i la resta es queden com eren.</li><li><b>Edita el text</b>, per escriure'n un de més curt.</li></ul><p>Si ni amb la lletra més petita no hi cap, t'ho diu: llavors cal escurçar el text.</p>",
+    "description": "Descripció d'un pas de la notícia «text-fit». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.text-fit.step2.alt": {
+    "message": "La finestra «El text no hi cap», amb l'explicació i tres botons: reduir la lletra de tot el document, reduir-la només d'aquest pictograma o editar el text.",
+    "description": "Text alternatiu d'una captura de la notícia «text-fit»"
+  },
+  "news.text-fit.step3.description": {
+    "message": "<p>Amb la lletra reduïda, la paraula hi cap sencera i la marca desapareix. Si t'ho repenses, <b>Desfés</b> ho torna a deixar com era.</p>",
+    "description": "Descripció d'un pas de la notícia «text-fit». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.text-fit.step3.alt": {
+    "message": "Les mateixes tres targetes amb la lletra més petita: la paraula llarga hi cap sencera i ja no hi ha cap marca.",
+    "description": "Text alternatiu d'una captura de la notícia «text-fit»"
+  },
   "news.superseded.notice": {
     "message": "Aquesta notícia es va publicar el {date} i explica com era SequenciAAC aleshores. Des de llavors l'app ha canviat, i alguna cosa ja no és com aquí es diu.",
     "description": "Avís a dalt d'una notícia superada. {date} és el dia que es va publicar, amb el mes en lletres"

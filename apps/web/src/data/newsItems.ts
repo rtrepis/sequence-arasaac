@@ -108,6 +108,13 @@ const reorderImage = (name: string, alt: string): NewsImage => ({
 });
 const reorderId = (key: string): string => `news.reorder-pictograms.${key}`;
 
+const TEXT_FIT = "/img/news/text-fit/{locale}";
+const textFitImage = (name: string, step: number): NewsImage => ({
+  src: `${TEXT_FIT}/${name}.png`,
+  altId: `news.text-fit.step${step}.alt`,
+});
+const textFitId = (key: string): string => `news.text-fit.${key}`;
+
 export const newsItems: NewsItem[] = [
   {
     slug: "pages-and-blocks",
@@ -280,6 +287,31 @@ export const newsItems: NewsItem[] = [
     // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "nova",
+  },
+  {
+    slug: "text-fit",
+    titleId: textFitId("title"),
+    summaryId: textFitId("summary"),
+    contentId: textFitId("content"),
+    coverImage: `${TEXT_FIT}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: textFitId("step1.description"),
+        image: textFitImage("marca", 1),
+      },
+      {
+        descriptionId: textFitId("step2.description"),
+        image: textFitImage("opcions", 2),
+      },
+      {
+        descriptionId: textFitId("step3.description"),
+        image: textFitImage("cap", 3),
+      },
+    ],
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "millora",
   },
   {
     slug: "edit-text-on-card",
