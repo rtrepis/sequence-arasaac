@@ -2890,7 +2890,7 @@
     "description": "Introducció de la notícia «reorder-pictograms». Pot portar <p> i <b>"
   },
   "news.reorder-pictograms.step1.description": {
-    "message": "<p>A l'<b>Edició</b>, agafa un pictograma amb el ratolí i arrossega'l fins al seu lloc nou. Els altres es fan a un costat, i la numeració es posa al dia sola.</p><p>Un clic, sense arrossegar, continua obrint la finestra d'edició del pictograma.</p>",
+    "message": "<p>A la pestanya <b>Edició</b>, agafa un pictograma amb el ratolí i arrossega'l fins al seu lloc nou. Els altres es fan a un costat, i la numeració es posa al dia sola.</p><p>Un clic, sense arrossegar, continua obrint la finestra d'edició del pictograma.</p>",
     "description": "Descripció d'un pas de la notícia «reorder-pictograms». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
   },
   "news.reorder-pictograms.step1.alt": {
