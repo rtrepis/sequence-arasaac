@@ -2877,6 +2877,46 @@
     "message": "Per imprimir, apaga la pantalla sencera i tria un paper: el document torna a la mida de pàgina que tenia.",
     "description": "Paràgraf de tancament de la notícia «full-screen-sheet»"
   },
+  "news.reorder-pictograms.title": {
+    "message": "Canvia l'ordre dels pictogrames arrossegant-los",
+    "description": "Títol de la notícia «reorder-pictograms» (canviar l'ordre arrossegant)"
+  },
+  "news.reorder-pictograms.summary": {
+    "message": "A l'edició, porta un pictograma al seu lloc nou amb el ratolí o amb el dit.",
+    "description": "Resum de la notícia «reorder-pictograms» a la targeta del carrusel"
+  },
+  "news.reorder-pictograms.content": {
+    "message": "<p>Fins ara, per canviar l'ordre d'una seqüència calia esborrar pictogrames i tornar-los a posar. Ara n'hi ha prou amb agafar-ne un i deixar-lo on toca.</p>",
+    "description": "Introducció de la notícia «reorder-pictograms». Pot portar <p> i <b>"
+  },
+  "news.reorder-pictograms.step1.description": {
+    "message": "<p>A l'<b>Edició</b>, agafa un pictograma amb el ratolí i arrossega'l fins al seu lloc nou. Els altres es fan a un costat, i la numeració es posa al dia sola.</p><p>Un clic, sense arrossegar, continua obrint la finestra d'edició del pictograma.</p>",
+    "description": "Descripció d'un pas de la notícia «reorder-pictograms». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.reorder-pictograms.step1.alt": {
+    "message": "El pictograma «dormir» arrossegat amb el ratolí cap al final de la seqüència, per damunt dels altres.",
+    "description": "Text alternatiu d'una captura de la notícia «reorder-pictograms»"
+  },
+  "news.reorder-pictograms.step1.after.alt": {
+    "message": "La seqüència després de deixar-lo anar: «dormir» ara és el tercer, i la numeració ha canviat.",
+    "description": "Text alternatiu d'una captura de la notícia «reorder-pictograms»"
+  },
+  "news.reorder-pictograms.step2.description": {
+    "message": "<p>A la tauleta i al mòbil, mantén premut el pictograma: si mous el dit, el pictograma el segueix i el deixes on vulguis. Si l'aixeques sense moure'l, s'obre el menú del pictograma, amb <b>Mou abans</b> i <b>Mou després</b> per moure'l d'un en un.</p><p>Al mòbil, a més, la finestra d'edició del pictograma ara ocupa tota la pantalla.</p>",
+    "description": "Descripció d'un pas de la notícia «reorder-pictograms». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.reorder-pictograms.step2.alt": {
+    "message": "Dos mòbils: al primer, el dit arrossega el pictograma «dormir»; al segon, el menú d'un pictograma obert després de mantenir-lo premut, amb «Mou abans».",
+    "description": "Text alternatiu d'una captura de la notícia «reorder-pictograms»"
+  },
+  "news.reorder-pictograms.step3.description": {
+    "message": "<p>De passada, el menú del pictograma diu més coses: sota <b>Enganxa (substitueix)</b> hi ha el pictograma que tens copiat, perquè sàpigues què hi posaràs. Si encara no n'has copiat cap, t'ho diu.</p>",
+    "description": "Descripció d'un pas de la notícia «reorder-pictograms». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.reorder-pictograms.step3.alt": {
+    "message": "El menú d'un pictograma: sota «Enganxa (substitueix)» diu «Copiat: «menjar»», amb la imatge del pictograma copiat.",
+    "description": "Text alternatiu d'una captura de la notícia «reorder-pictograms»"
+  },
   "news.superseded.notice": {
     "message": "Aquesta notícia es va publicar el {date} i explica com era SequenciAAC aleshores. Des de llavors l'app ha canviat, i alguna cosa ja no és com aquí es diu.",
     "description": "Avís a dalt d'una notícia superada. {date} és el dia que es va publicar, amb el mes en lletres"

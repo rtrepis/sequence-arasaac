@@ -101,6 +101,13 @@ const screenImage = (name: string, alt: string): NewsImage => ({
 });
 const screenId = (key: string): string => `news.full-screen-sheet.${key}`;
 
+const REORDER = "/img/news/reorder-pictograms/{locale}";
+const reorderImage = (name: string, alt: string): NewsImage => ({
+  src: `${REORDER}/${name}.png`,
+  altId: `news.reorder-pictograms.${alt}.alt`,
+});
+const reorderId = (key: string): string => `news.reorder-pictograms.${key}`;
+
 export const newsItems: NewsItem[] = [
   {
     slug: "pages-and-blocks",
@@ -247,6 +254,32 @@ export const newsItems: NewsItem[] = [
     // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "millora",
+  },
+  {
+    slug: "reorder-pictograms",
+    titleId: reorderId("title"),
+    summaryId: reorderId("summary"),
+    contentId: reorderId("content"),
+    coverImage: `${REORDER}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: reorderId("step1.description"),
+        image: reorderImage("arrossegant", "step1"),
+        moreImages: [reorderImage("nou-ordre", "step1.after")],
+      },
+      {
+        descriptionId: reorderId("step2.description"),
+        image: reorderImage("amb-el-dit", "step2"),
+      },
+      {
+        descriptionId: reorderId("step3.description"),
+        image: reorderImage("enganxa", "step3"),
+      },
+    ],
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "nova",
   },
   {
     slug: "edit-text-on-card",
