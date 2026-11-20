@@ -213,6 +213,10 @@ al davant hi encaixa.
 - `docs/PLA-vista-mobil.md` és el pla per a la vista al mòbil: el full sencer a la pantalla i els
   ajustos en un panell de baix (`AppBottomSheet`). **Fet fins a la fase 6** (C29 resolta,
   2026-11-19); queden les proves en dispositius de debò (P2 del backlog) i la notícia de Novetats.
+- `docs/PLA-estils.md` és el pla dels estils: la solució A (el pictograma només guarda els seus
+  retocs), les divuit troballes del que avui confon (E1–E18) i la feature d'estils predefinits que
+  completa El meu estil abans de la release. **Esborrany per decidir** (2026-11-20, B37).
+  **Consultar-lo abans de tocar res que creï, apliqui o restableixi un estil.**
 - `docs/PLA-noticies.md` és el pla de les notícies de Novetats de la release: les noves des del 3
   d'octubre (pàgines, el meu estil, la vista al mòbil, la pantalla sencera…) i les velles que ja no
   són certes, que surten del carrusel i es queden a Novetats amb una marca. **Aprovat**

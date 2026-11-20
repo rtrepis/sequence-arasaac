@@ -60,6 +60,7 @@ l'entrada.
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
 | P2 | La vista al mòbil en dispositius de debò | La release no surt sense la vista al mòbil, i l'emulació no ho pot dir tot | S | Sí: F5a, si la pantalla completa no funciona a l'iPhone |
+| B37 | Els estils: pictogrames que copien l'estil (E1) i accions que acaben igual a la pantalla | E1 grava retocs falsos al `.saac`; la feature d'estils predefinits és abans de la release i no ha d'heretar el desordre | L | Sí: D1–D9 de `docs/PLA-estils.md` |
 
 ### Després
 
@@ -208,6 +209,22 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   panell «Pàgina i distribució» té la **disposició** amb què comencen els documents nous, i les
   pàgines que s'afegeixen neixen amb aquesta disposició. No cal cap camp nou al `.saac`. Vegeu la
   decisió 25 de l'ADR-005.
+
+### B37 — Els estils: el que fa l'app i el que entén l'usuari no coincideixen 🔴 Oberta
+
+*(Oberta en revisar la notícia N-2, 2026-11-20.)*
+
+- **Què**: dues coses. (1) **Error**: un pictograma nou copia l'estil del document en lloc
+  d'heretar-lo. En un document nou, canviar El meu estil deixa els pictogrames d'abans amb l'estil
+  vell i marcats com a «personalitzats», i en desar s'hi graven retocs que ningú no ha fet.
+  (2) **Comprensió**: «Aplica el meu estil» i «Actualitza amb el meu estil» deixen el bloc igual i
+  només es diferencien en blocs que no es veuen; l'estil del document no es veu enlloc; no es pot
+  aplicar a tot el document, i la notícia N-2 diu que sí.
+- **Decidit (2026-11-20)**: l'error es resol d'arrel (solució A: el pictograma només guarda els
+  seus retocs). Abans de la release, El meu estil es completa amb estils predefinits, com les
+  plantilles de pàgina.
+- El detall (divuit troballes, E1–E18), les decisions D1–D9 i l'ordre dels passos són a
+  `docs/PLA-estils.md`.
 
 ## Gravetat alta
 
