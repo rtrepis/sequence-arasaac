@@ -2785,6 +2785,54 @@
     "message": "L'estil va sempre en una sola direcció: de la configuració cap al document. Per això la columna de la vista ja no té el botó per desar-hi les preferències: el que retoques en un document es queda en aquell document, i el teu estil només canvia quan tu el canvies a la configuració.",
     "description": "Paràgraf de tancament de la notícia «my-style»"
   },
+  "news.mobile-view.title": {
+    "message": "La vista, també al mòbil",
+    "description": "Títol de la notícia «mobile-view» (la vista al mòbil)"
+  },
+  "news.mobile-view.summary": {
+    "message": "Al mòbil, el full es veu sencer i els ajustos són en un panell que puges i baixes amb el dit.",
+    "description": "Resum de la notícia «mobile-view» a la targeta del carrusel"
+  },
+  "news.mobile-view.content": {
+    "message": "<p>Fins ara, la <b>Vista</b> s'havia pensat per a una pantalla gran: al mòbil, el full i els ajustos es disputaven el lloc. Ara el mòbil té la seva manera de treballar: el full a dalt, sencer, i els ajustos a baix, en un panell que només puja quan el necessites.</p>",
+    "description": "Introducció de la notícia «mobile-view». Pot portar <p> i <b>"
+  },
+  "news.mobile-view.step1.description": {
+    "message": "<p>En obrir la <b>Vista</b>, el full es veu sencer, tal com s'imprimirà. A baix hi ha el panell <b>Ajustos</b>, plegat: només se'n veu on ets (el document, la pàgina o el bloc).</p>",
+    "description": "Descripció d'un pas de la notícia «mobile-view». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.mobile-view.step1.alt": {
+    "message": "Un mòbil amb la vista: el full sencer al mig de la pantalla i, a baix, el panell d'ajustos plegat.",
+    "description": "Text alternatiu d'una captura de la notícia «mobile-view»"
+  },
+  "news.mobile-view.step2.description": {
+    "message": "<p>Toca una seqüència o un bloc i el panell puja fins a mitja pantalla amb els seus ajustos: la mida, l'espai, l'alineació. El full es queda a dalt, i el que has tocat continua a la vista mentre el canvies.</p><p>El panell també es puja i es baixa arrossegant-lo amb el dit. En una pàgina lliure, on els blocs es mouen amb el dit, els ajustos s'obren amb un doble toc.</p>",
+    "description": "Descripció d'un pas de la notícia «mobile-view». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.mobile-view.step2.alt": {
+    "message": "El mateix mòbil després de tocar la seqüència «Matí»: el full a dalt, amb la seqüència marcada, i el panell a mitja pantalla amb la mida i l'espai.",
+    "description": "Text alternatiu d'una captura de la notícia «mobile-view»"
+  },
+  "news.mobile-view.step3.description": {
+    "message": "<p>Si el document té més d'una pàgina, toca la vora dreta o esquerra del full i hi apareix una fletxa: tocant-la, passes a la pàgina següent o a l'anterior. A la pantalla completa, es passa de pàgina lliscant el dit.</p>",
+    "description": "Descripció d'un pas de la notícia «mobile-view». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.mobile-view.step3.alt": {
+    "message": "Dos mòbils: al primer, la fletxa de la vora dreta del full; al segon, la pàgina 2 del document, amb dues seqüències en columnes.",
+    "description": "Text alternatiu d'una captura de la notícia «mobile-view»"
+  },
+  "news.mobile-view.step4.description": {
+    "message": "<p>La vista es treballa amb el mòbil dret. Si el gires, una capa t'ho recorda, perquè apaïsat no hi cabrien el full i el panell alhora. La pantalla completa sí que es pot fer servir girada.</p>",
+    "description": "Descripció d'un pas de la notícia «mobile-view». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.mobile-view.step4.alt": {
+    "message": "Un mòbil girat, amb el missatge que demana posar-lo dret per treballar a la vista.",
+    "description": "Text alternatiu d'una captura de la notícia «mobile-view»"
+  },
+  "news.mobile-view.closing": {
+    "message": "A la tauleta en vertical funciona igual. I en una pantalla gran, la vista continua com sempre, amb la columna d'ajustos a la dreta.",
+    "description": "Paràgraf de tancament de la notícia «mobile-view»"
+  },
   "news.superseded.notice": {
     "message": "Aquesta notícia es va publicar el {date} i explica com era SequenciAAC aleshores. Des de llavors l'app ha canviat, i alguna cosa ja no és com aquí es diu.",
     "description": "Avís a dalt d'una notícia superada. {date} és el dia que es va publicar, amb el mes en lletres"

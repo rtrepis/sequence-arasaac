@@ -87,6 +87,13 @@ const myStyleImage = (name: string, alt: string): NewsImage => ({
 });
 const myStyleId = (key: string): string => `news.my-style.${key}`;
 
+const MOBILE = "/img/news/mobile-view/{locale}";
+const mobileImage = (name: string, step: number): NewsImage => ({
+  src: `${MOBILE}/${name}.png`,
+  altId: `news.mobile-view.step${step}.alt`,
+});
+const mobileId = (key: string): string => `news.mobile-view.${key}`;
+
 export const newsItems: NewsItem[] = [
   {
     slug: "pages-and-blocks",
@@ -173,6 +180,36 @@ export const newsItems: NewsItem[] = [
       },
     ],
     closingId: myStyleId("closing"),
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "nova",
+  },
+  {
+    slug: "mobile-view",
+    titleId: mobileId("title"),
+    summaryId: mobileId("summary"),
+    contentId: mobileId("content"),
+    coverImage: `${MOBILE}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: mobileId("step1.description"),
+        image: mobileImage("full", 1),
+      },
+      {
+        descriptionId: mobileId("step2.description"),
+        image: mobileImage("ajustos", 2),
+      },
+      {
+        descriptionId: mobileId("step3.description"),
+        image: mobileImage("passar-pagina", 3),
+      },
+      {
+        descriptionId: mobileId("step4.description"),
+        image: mobileImage("girat", 4),
+      },
+    ],
+    closingId: mobileId("closing"),
     // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "nova",
