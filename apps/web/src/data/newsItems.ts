@@ -115,6 +115,13 @@ const textFitImage = (name: string, step: number): NewsImage => ({
 });
 const textFitId = (key: string): string => `news.text-fit.${key}`;
 
+const PRINT = "/img/news/print-matches-preview/{locale}";
+const printImage = (name: string, step: number): NewsImage => ({
+  src: `${PRINT}/${name}.png`,
+  altId: `news.print-matches-preview.step${step}.alt`,
+});
+const printId = (key: string): string => `news.print-matches-preview.${key}`;
+
 export const newsItems: NewsItem[] = [
   {
     slug: "pages-and-blocks",
@@ -312,6 +319,31 @@ export const newsItems: NewsItem[] = [
     // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "millora",
+  },
+  {
+    slug: "print-matches-preview",
+    titleId: printId("title"),
+    summaryId: printId("summary"),
+    contentId: printId("content"),
+    coverImage: `${PRINT}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: printId("step1.description"),
+        image: printImage("full", 1),
+      },
+      {
+        descriptionId: printId("step2.description"),
+        image: printImage("paper", 2),
+      },
+      {
+        descriptionId: printId("step3.description"),
+        image: printImage("llicencia", 3),
+      },
+    ],
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "correccio",
   },
   {
     slug: "edit-text-on-card",

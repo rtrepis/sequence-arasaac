@@ -2953,6 +2953,42 @@
     "message": "Les mateixes tres targetes amb la lletra més petita: la paraula llarga hi cap sencera i ja no hi ha cap marca.",
     "description": "Text alternatiu d'una captura de la notícia «text-fit»"
   },
+  "news.print-matches-preview.title": {
+    "message": "El que imprimeixes és el que veus",
+    "description": "Títol de la notícia «print-matches-preview» (correccions d'impressió)"
+  },
+  "news.print-matches-preview.summary": {
+    "message": "El full imprès és el de la vista, amb el botó o amb Ctrl+P. I hi ha paper Carta i Tabloide.",
+    "description": "Resum de la notícia «print-matches-preview» a la targeta del carrusel"
+  },
+  "news.print-matches-preview.content": {
+    "message": "<p>Si alguna vegada t'havia sortit el full imprès més petit que a la pantalla, amb el peu damunt de l'última fila o amb la lletra d'una altra mida, ja està arreglat. Ara el full que veus a la <b>Vista</b> és exactament el que surt de la impressora.</p>",
+    "description": "Introducció de la notícia «print-matches-preview». Pot portar <p> i <b>. Sense explicar les causes tècniques"
+  },
+  "news.print-matches-preview.step1.description": {
+    "message": "<ul><li>El botó d'imprimir i <b>Ctrl+P</b> donen el mateix full, el de la vista.</li><li>El full aprofita més el paper: els marges són de 5 mm.</li><li>El peu de llicència ja no trepitja l'última fila de pictogrames.</li><li>El text imprès surt a la mida de lletra que has triat.</li></ul>",
+    "description": "Descripció d'un pas de la notícia «print-matches-preview». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.print-matches-preview.step1.alt": {
+    "message": "La vista amb el full d'una pàgina i el cursor damunt del botó d'imprimir, a dalt de la columna.",
+    "description": "Text alternatiu d'una captura de la notícia «print-matches-preview»"
+  },
+  "news.print-matches-preview.step2.description": {
+    "message": "<p>A <b>Mida de pàgina</b>, a més d'A4 i A3, hi ha <b>Carta</b> i <b>Tabloide</b>, els papers d'Amèrica. El paper amb què comencen els documents nous depèn d'on ets: A4 a Europa, Carta als Estats Units o a Mèxic.</p>",
+    "description": "Descripció d'un pas de la notícia «print-matches-preview». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.print-matches-preview.step2.alt": {
+    "message": "La llista de la mida de pàgina oberta: A4, A3, Carta i Tabloide.",
+    "description": "Text alternatiu d'una captura de la notícia «print-matches-preview»"
+  },
+  "news.print-matches-preview.step3.description": {
+    "message": "<p>El peu de llicència es pot treure amb l'interruptor <b>Llicència</b>, si el document no té autor. Si n'hi ha, la llicència hi va sempre, i l'ajuda de sota t'explica per què: els pictogrames són d'ARASAAC, i el seu autor ha de constar.</p>",
+    "description": "Descripció d'un pas de la notícia «print-matches-preview». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.print-matches-preview.step3.alt": {
+    "message": "El peu d'impressió amb un autor escrit: l'interruptor de la llicència està encès i no es pot apagar, i l'ajuda diu que amb autor la llicència hi va sempre.",
+    "description": "Text alternatiu d'una captura de la notícia «print-matches-preview»"
+  },
   "news.superseded.notice": {
     "message": "Aquesta notícia es va publicar el {date} i explica com era SequenciAAC aleshores. Des de llavors l'app ha canviat, i alguna cosa ja no és com aquí es diu.",
     "description": "Avís a dalt d'una notícia superada. {date} és el dia que es va publicar, amb el mes en lletres"
