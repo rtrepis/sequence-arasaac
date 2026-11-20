@@ -347,11 +347,38 @@ tecnicisme; els noms dels botons són els de la pantalla; `npm run typecheck` ne
 
 ## 11. Encàrrec per a la sessió següent
 
-**Què**: la fase 2 (la fixture de N-1 i el marc de telèfon) i la fase 3 (la marca i les captures
-velles). La fase 1 és feta (§5).
+**On som** (2026-11-20): fases 0, 1 i 3 fetes. Hi ha la marca «Superada» a les sis velles i les
+captures noves de les set que encara són certes. Queda oberta D5 (l'etiqueta «Nou»).
 
-**On**: a la branca de la release, `claude/release-before-new-plan-8x1xhp`, un cop hi hagi les
-fases 5 i 6 de la vista al mòbil (branques `ccr-d6733228-d9h9t0` i `ccr-f5fab69a-xv8xmg`).
+**Què**, en aquest ordre:
 
-**Què cal llegir abans**: aquest pla; `docs/estandards/noticies.md`; i, per al to, una notícia
-llarga (`documents-everywhere`) i una de curta (`edit-text-on-card`) a `ca.json`.
+1. **La fase 2**: la fixture de demostració per a N-1, N-2 i N-4 (D4), a
+   `apps/web/test/fixtures/saac/` amb la seva entrada al `README.md`, i la plantilla del marc de
+   telèfon per a les captures de mòbil (D3), a `e2e/screenshots/templates/`.
+2. **La fase 4**: les set notícies, una per commit, en l'ordre de §4 (N-1 primer). En fer N-1,
+   posar `replacedBy: "<slug de N-1>"` a `multiple-sequences` i `view-improvements`.
+3. **La fase 5**: tancar (D5 amb l'usuari, els altres plans, el backlog).
+
+**On**: a la branca `ccr-f5fab69a-xv8xmg`, que porta les fases 5 i 6 de la vista al mòbil i tota
+la feina d'aquest pla. Si la sessió nova té assignada una altra branca, ha de partir d'aquesta. Cal
+integrar-la a la de la release (`claude/release-before-new-plan-8x1xhp`) abans de publicar.
+
+**Què cal llegir abans**: aquest pla (§4, les fitxes; §7, les captures; §8, les decisions);
+`docs/estandards/noticies.md`; `e2e/screenshots/newsShot.ts` (el que tenen en comú els specs nous);
+i, per al to, una notícia llarga (`documents-everywhere`) i una de curta (`edit-text-on-card`) a
+`packages/i18n/messages/app/ca.json`.
+
+**Avisos de l'entorn del núvol** (après en aquesta feina):
+
+- `npm ci` a l'arrel abans de res.
+- Playwright necessita el Chromium de `/opt/pw-browsers/chromium`: un config local, sense pujar-lo,
+  que estengui `playwright.config.ts` amb `launchOptions: { executablePath }` també a cada projecte.
+  El servidor és `npx vite` a `apps/web` (port 5173). Llançar els specs amb `--timeout 90000`.
+- **El paper per defecte surt de la regió del navegador**, i el Chromium de proves diu que és dels
+  Estats Units (Carta). Un spec que ensenyi el paper ha de fer `test.use({ locale: "ca-ES" })`.
+- Els catàlegs: `ca.json` porta `{ message, description }`; els altres idiomes, el text pla. Un
+  spec que en llegeixi els textos ha d'acceptar totes dues formes (com `edit-text-on-card`).
+- Regenerar una notícia no ha de tocar les altres: executar els specs un per un i descartar
+  (`git checkout`) les imatges que canviïn i no siguin seves. Mirar cada imatge abans de desar-la.
+- Les captures noves es fan **per idioma** (`public/img/news/<slug>/<idioma>/`, `{locale}` a la
+  ruta), com `documents-everywhere` i `edit-text-on-card`.
