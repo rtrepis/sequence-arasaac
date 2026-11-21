@@ -1,7 +1,7 @@
 # Pla: els estils, sense sorpreses
 
-> **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**: l'estil va amb la
-> seqüència i el bloc, i la pantalla d'edició canvia. Falta el pla d'execució (§9). Cap codi fet.
+> **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**, i **pla d'execució
+> escrit el 2026-11-21 (§10)**. Cap codi fet: es comença pel pas 1 de §10.3.
 
 > **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
 >
@@ -9,7 +9,10 @@
 >   les troballes E1–E18 (§2), **la solució A** (§3) i les decisions D1, D3, D5, D6 i D7.
 > - **§8** és la revisió del 2026-11-21 i **mana sobre tot el que la contradigui**. En concret,
 >   **queden superats**: D8 i §4.3 («només a un bloc»), Q1, la fila de D4, i l'**ordre dels passos de
->   §7**, que el pla d'execució (§9) ha de substituir.
+>   §7**.
+> - **§10** és el pla d'execució (2026-11-21): les decisions D10–D24 i els passos. **Mana sobre
+>   §0–§8** i **substitueix §7**. Per treballar, es llegeix §10 i s'hi va a buscar el detall que
+>   cita (§3 per a la solució A, §4.4 per a l'estudi).
 > - Les seccions superades porten la marca **«⚠️ Superat per §8»**. No s'esborren perquè expliquen
 >   d'on venen les decisions.
 >
@@ -473,7 +476,7 @@ Preses el 2026-11-20.
 | D1 | Quan deixa un document nou de seguir El meu estil? | **Mai el segueix**: neix amb una còpia. Treu E4, E6 i E16 |
 | D2 | «Aplica» i «Actualitza» acaben igual a la pantalla | **Una sola acció**, «Tria un estil…», i cap grup invisible. Fora «Actualitza» |
 | D3 | Aplicar un estil ofereix treure els retocs? | **Sí**: el snackbar diu quants n'hi ha i ofereix «Treu els retocs», dient que canvien a tots els blocs on surt la seqüència |
-| D4 | Com es fa visible l'estil del document? **⚠️ A revisar (§8.1)** | **Una fila «Estil» al nivell Document de la columna, amb el nom** (camp `style.name`, §5). Amb D8, la fila **només informa**: vegeu Q2 |
+| D4 | Com es fa visible l'estil del document? **⚠️ Substituïda per §10.1**: sense fila al nivell Document; és la primera opció de la galeria | **Una fila «Estil» al nivell Document de la columna, amb el nom** (camp `style.name`, §5). Amb D8, la fila **només informa**: vegeu Q2 |
 | D5 | El color del vocabulari personal encén la marca «personalitzat»? | **Sí, i ho diu**: el tooltip i el nom accessible de la marca diuen «color del teu vocabulari» |
 | D6 | El nom de la col·lecció | **Galeria d'estils** (§4.1) |
 | D7 | Un estil de l'app es pot retocar? | **No**: és fix. «Fes-lo el meu estil» per partir-ne i retocar-lo a la configuració. Mai porta distribució ni pàgina |
@@ -505,8 +508,8 @@ Preses el 2026-11-20.
 
 ## 7. Ordre dels passos
 
-> **⚠️ Superat per §8 i §9**: aquest ordre és d'abans de la revisió. El pla d'execució de la
-> sessió següent el substitueix. Només continua valent que **la solució A va primer**.
+> **⚠️ Substituït per §10** (2026-11-21): l'ordre dels passos és el de §10.3. Es conserva només
+> per explicar d'on surt; d'aquí, continua valent que **la solució A va primer**.
 
 1. **Actualitzar el fonament 03** (§1 vocabulari, §5 accions, §6 marca, §7 documents nous) i la
    decisió 24 de l'ADR-005 amb D1–D9, **abans** del codi: mana el fonament. Decidir Q1–Q3.
@@ -534,8 +537,8 @@ capes; tota acció acaba amb un missatge.
 
 ## 8. Revisió del 2026-11-21: l'estil va amb la seqüència i el bloc, i la pantalla d'edició nova
 
-> **Estat**: idees de l'usuari, recollides tal com les ha explicat. **Encara no és un pla
-> d'execució**: el pla es fa a la sessió següent (vegeu l'encàrrec, §9). Aquesta revisió **mana
+> **Estat**: idees de l'usuari, recollides tal com les ha explicat. Les preguntes s'han respost i
+> el pla d'execució és **§10**, que mana sobre aquesta secció. Aquesta revisió **mana
 > sobre D8 i sobre Q1–Q3** (§6) allà on es contradiuen.
 
 ### 8.1 Els estils van amb la seqüència i amb el bloc
@@ -686,6 +689,8 @@ canviar i calia documentar-la una sola vegada; aquest pla és el que la canvia:
 
 ## 9. Encàrrec per obrir la sessió següent
 
+> **✅ Fet** (2026-11-21): les preguntes s'han fet i el pla d'execució és §10.
+
 > Branca: **`estils-seqüencia-i-edicio`**, sortida de `master` després del PR #310 (2026-11-21).
 >
 > La tasca d'aquesta sessió és **fer el pla d'execució**, no el codi. Llegeix primer aquest
@@ -706,3 +711,200 @@ canviar i calia documentar-la una sola vegada; aquest pla és el que la canvia:
 > fixture i fonament 06. Entorn: cal `npm ci` a l'arrel; per a Playwright,
 > `launchOptions.executablePath: "/opt/pw-browsers/chromium"`. **`master` està protegida**: s'hi
 > arriba amb una PR i el control de GitGuardian.
+
+---
+
+## 10. Pla d'execució (2026-11-21)
+
+> **Estat**: aprovat per l'usuari a la sessió del 2026-11-21. **Substitueix §7.** Les decisions
+> d'aquesta secció (D10–D21) manen sobre §0–§8 allà on es contradiuen; de §0–§7 continua valent
+> el que diu la nota del capdamunt.
+
+### 10.1 Decisions de la sessió
+
+Preses a partir de les preguntes de §8.1, §8.2, §8.3 i §8.5.
+
+| # | Pregunta | Decisió |
+|---|---|---|
+| D10 | §8.5: com conviuen l'estil de la galeria i els retocs del bloc a la columna? | **Un bloc de seqüència té un sol estil**: el de la seva seqüència o un que se li **reassigna** de la galeria. **No hi ha retocs d'estil del bloc** (lletra, color del text, fons): no hi ha dos camins per a la mateixa cosa (E5). |
+| D11 | Què pot retocar un bloc de seqüència a la columna en aquesta release? | **Res més que la distribució**, que ja té. La lletra, el color del text i el fons del bloc se'n van al backlog (**B39**). |
+| D12 | D'on s'obre la galeria per a un bloc? | **De la columna i del menú «⋯» del bloc**: una fila «Estil» al nivell Bloc, amb el nom i «Canvia…», i «Tria un estil…» al «⋯». Totes dues obren la mateixa galeria i fan la mateixa acció. |
+| D13 | Què s'ensenya quan una seqüència o un bloc té pictogrames retocats? | En lloc del nom de l'estil surt **«Personalitzat»**, amb la **mateixa marca** que els pictogrames (fonament 03 §6), i una ajuda (icona d'ajuda amb tooltip) que diu què vol dir i quin és l'estil de base. Lliga les dues coses amb un sol símbol. |
+| D14 | E11, redefinit: com se sap que un bloc no té l'estil de la seva seqüència? | A la fila «Estil» del bloc, una **marca de «reassignat»** (diferent de la de «Personalitzat») i un botó **«Torna a l'estil de la seqüència»**, que treu la reassignació. L'edició no avisa dels blocs reassignats: la marca és al bloc, que és on es va fer. |
+| D15 | Canviar l'estil d'una seqüència quan algun bloc en té un de reassignat | **El bloc reassignat es queda el seu.** El snackbar de l'edició ho diu: «_n_ blocs tenen un altre estil i no han canviat». |
+| D16 | Una seqüència sense nom; s'imprimeix el nom? | Sense nom surt **«Seqüència _N_»**, com la pestanya d'avui. El nom **no s'imprimeix**: és per a qui edita (edició, columna, menús, galeria). Per imprimir un títol hi ha els blocs de text. |
+| D17 | §8.2: un estil carregat d'un fitxer, es queda a la galeria? | **No**: «Carrega d'un fitxer…» l'aplica a la seqüència o al bloc i prou. Per tenir-lo sempre, «Fes-lo el meu estil». Un grup «Carregats» seria cosa de B33 (comptes). |
+| D18 | §8.2: què es pot desar en un fitxer des de la galeria? | **Qualsevol estil** (El meu estil, el del document i els de l'app): «Desa en un fitxer» en fa un `.saacstyle`. El format no canvia. |
+| D19 | §8.3: com es passa de seqüència al mòbil i com se sap quantes n'hi ha? | **Lliscant** sobre la graella (com la vista al mòbil), amb **«2 de 5»** al costat del nom, que obre la llista de seqüències. Fletxes ‹ › com a alternativa a lliscar (accessibilitat). |
+| D20 | §8.3: el «+» de baix a l'esquerra | **Un menú curt** que s'obre cap amunt: «Afegeix un pictograma» i «Afegeix una seqüència». No és `AppBottomSheet`, que continua sent només dels ajustos. |
+| D21 | §8.3: on van «Treu aquesta seqüència» i l'estil de la seqüència | **Menú «⋯» al costat del nom**: «Estil: _nom_ — Canvia…», «Canvia el nom», «Restableix els pictogrames» i «Treu aquesta seqüència» (amb `ConfirmDialog`). Es treu **la seqüència oberta**, no l'última. |
+| D22 | §8.3: el teclat del mòbil amb la cerca a baix | **La barra de baix puja amb el teclat** (viewport visible, `useVisibleViewport`), i els suggeriments s'obren cap amunt. |
+| D23 | §8.3: l'escriptori | **A decidir després de l'esbós** (pas 7 de §10.3). L'usuari s'inclina per la pantalla nova a totes les mides, però vol poder comparar-la: (a) la pantalla nova a totes les mides, (b) la nova com a vista alternativa durant un temps, o (c) un pla a part. Fins aleshores, l'escriptori conserva les pestanyes i rep el mateix «⋯» de la seqüència (pas 5 de §10.3), perquè l'estil s'hi pugui triar. |
+| D24 | §8.5, «Pendent del pas 8»: peces a prova de la columna | `SettingsLevel`, `SettingsLevels` amb la línia de la cascada, `LevelCrumbs` i l'etiqueta de la disposició **passen a l'estàndard tal com són** (`docs/estandards/configuracions.md`). L'etiqueta «Nou» i la revisió dels textos de «vista» no s'han triat: no entren en aquest pla. |
+
+**Què queda superat**:
+
+- **D4** (fila «Estil» al nivell Document): **substituïda**. L'estil del document és l'estil de
+  partida de les seqüències noves; es veu com la **primera opció de la galeria** («L'estil del
+  document», amb el seu nom) i al nom de l'estil de cada seqüència que no n'ha triat cap. No hi ha
+  fila al nivell Document.
+- **§4.3**: «Tria un estil…» ja no és l'única entrada (D12), i la galeria també serveix la
+  seqüència. La primera opció del bloc ja no és «L'estil del document», sinó **«L'estil de la
+  seqüència»** (D14); la de la seqüència sí que és «L'estil del document».
+- **Q1**: resolta. L'estil es tria a la seqüència, i una pàgina simple el pinta. «Restableix els
+  pictogrames» arriba a tothom des del «⋯» de la seqüència a l'edició (D21).
+- **Q2**: continua oberta, i ara són tants clics com seqüències. Es mira amb usuaris després de la
+  release.
+- **Q3**: continua valent (pas 6 de §10.3).
+
+### 10.2 El model resultant
+
+**La cascada** (fonament 03 §4):
+
+```
+document → estil de la seqüència → (si el bloc en té un de reassignat, aquest en lloc del de la seqüència) → pictograma
+```
+
+- L'estil de la seqüència i el reassignat d'un bloc són **estils amb nom** (`styles`), copiats de la
+  galeria (direcció única, decisió 23 de l'ADR-005). El reassignat **substitueix** el de la
+  seqüència, no s'hi suma: un bloc té un sol estil (D10).
+- Cap nivell intermedi no té retocs propis d'estil: només el document (sencer), els estils amb
+  nom (retocs del document, com ara) i els pictogrames (solució A).
+- La distribució (`view`) no canvia: seqüència → bloc, com ara.
+
+**El format** (fonament 06 §1 i §1.2; `docs/schema/saac-v3.schema.json`):
+
+| Camp | Nou? | Què és |
+|---|---|---|
+| `sequences[].namedStyle` | **Nou**, opcional | L'`id` de l'estil amb nom de la seqüència. Sense valor, l'estil del document |
+| `page…blocks[].namedStyle` | Ja hi era | Ara vol dir «reassignat»: substitueix el de la seqüència. Als documents d'avui cap seqüència no en porta, i per tant es pinten igual |
+| `sequences[].title` | Ja hi era (esquema v3) | El nom de la seqüència. Avui Redux no el llegeix però es conserva com a camp desconegut (`SEQUENCE_KEYS` de `toRedux.ts` no el porta). Passa a ser un camp conegut |
+| `style.name` | **Nou**, opcional | El nom de l'estil del document (D4 b, §5): el de l'estil del qual surt («El meu estil», «Sense vores»…) |
+
+- **No cal pujar `schemaVersion`**: tots dos camps són opcionals i una versió anterior els
+  conserva com a desconeguts. Una versió anterior pinta la seqüència amb l'estil del document (es
+  veu diferent, no es perd res), com ja passa amb les pàgines.
+- `.saacstyle`: no canvia. Ja porta `meta.title`, que és el nom de l'estil.
+- Fixture nova: `20-estil-de-sequencia.saac` (seqüència amb estil, bloc reassignat, seqüència
+  amb nom, `style.name`).
+
+### 10.3 Els passos
+
+Normes de tots els passos: `npm run typecheck` net i tests passant; textos a
+`packages/i18n/messages/` en els cinc idiomes; cap color fora de `palette.ts`; només `AppDialog`,
+`AppFullScreenDialog`, `ConfirmDialog` i `AppBottomSheet` com a capes; tota acció acaba amb un
+missatge i es pot desfer amb el desfer de sempre. Cada pas és una PR a `master`.
+
+**Pas 1 — Fonaments, abans del codi.** Fonament 03: §1 (vocabulari: «estil de la seqüència»,
+«reassignat», «Personalitzat» per a seqüència i bloc; E10), §3, §4 (la cascada nova), §5 (les
+accions noves i les que se'n van), §6 (la marca a la fila «Estil» i l'ajuda), §7 (D1: el document
+neix amb una còpia d'El meu estil i no el segueix). Fonament 06: §1 i §1.2 amb els camps de §10.2.
+Decisió nova a l'ADR-005 (o ADR-006) que substitueixi la 24 en el que toca als estils de bloc.
+Esquema `saac-v3.schema.json`. **Cap codi.**
+
+**Pas 2 — Solució A (§3) i D1.** Tal com és a §3: E1, E2, E3, E12, E14, la lectura dels
+esborranys vells amb versió. Amb D1, el document nou porta l'estil copiat des que neix (treu E4, E6
+i E16), amb `style.name` = «El meu estil». Proves de §3.4.
+
+**Pas 3 — L'estudi** d'estils de targetes (§4.4), en paral·lel als passos 2–5. Inclou **«Sense
+vores»** (decidit) i la comprovació del text i el número sense vora. Surt
+`docs/estudis/ESTUDI-estils-de-targetes.md` i s'afegeix a l'índex.
+
+**Pas 4 — El format i el model de la seqüència.** Llegir i escriure `sequences[].title`,
+`sequences[].namedStyle` i `style.name` (`toRedux.ts`, `serialize.ts`, `shared-types`). La
+resolució de la cascada (`resolveStyle`, `cardMeasureKey`) amb el nivell de la seqüència i el
+bloc reassignat que el substitueix. E13: en desar, `styles` només porta els estils que fa servir
+alguna seqüència o algun bloc. Fixture 20 i viatge d'anada i tornada de totes les fixtures. Sense
+canvi de pantalla.
+
+**Pas 5 — La galeria i l'estil de la seqüència a l'edició.** La **Galeria d'estils** (`AppDialog`;
+a pantalla completa al mòbil si ho diu `capes-flotants.md`) a `features/sequence/components/`, amb:
+la primera opció (la de damunt: «L'estil del document» per a una seqüència, «L'estil de la
+seqüència» per a un bloc), El meu estil, i el lloc dels estils de l'app (buit fins al pas 9); la
+mostra de cada estil amb un pictograma de la seqüència; «Carrega d'un fitxer…» (D17), «Desa en un
+fitxer» (D18) i «Fes-lo el meu estil» (D7). A l'edició, el **menú «⋯» de la seqüència** (D21) a la
+pestanya activa, també a l'escriptori (D23), amb el nom editable (D16), l'estil i
+«Personalitzat» amb la marca i l'ajuda (D13). Snackbar de D3 i de D15. «Treu aquesta seqüència»
+treu l'oberta.
+
+**Pas 6 — L'estil del bloc a la vista.** La fila **«Estil»** al nivell Bloc de la columna (amb
+`SettingRow`), el nom, «Personalitzat» (D13), la marca de **reassignat** i «Torna a l'estil de la
+seqüència» (D14). «Tria un estil…» al «⋯» del bloc (D12). **Fora** dels menús de pàgina i de bloc:
+«Aplica el meu estil», «Actualitza amb el meu estil» i «Treu l'estil de bloc» (E5). Q3: la galeria
+s'obre des dels blocs comuns i el missatge diu que canvia a totes les pàgines. Al mòbil, la fila
+és al panell de baix de la vista (`AppBottomSheet`), com la resta de la columna.
+
+**Pas 7 — L'esbós de la pantalla d'edició al mòbil.** `docs/esbossos/esbos-edicio-mobil.html`, com
+`esbos-vista-mobil.html`, a partir de §10.4, amb les **captures d'avui** per comparar (Playwright,
+amplada de mòbil). Inclou també l'amplada d'escriptori, perquè l'usuari decideixi D23. **L'usuari
+el revisa abans del pas 8.**
+
+**Pas 8 — La pantalla d'edició nova al mòbil.** La capçalera (nom editable, «2 de 5», llista, «⋯»),
+el lliscar entre seqüències amb fletxes ‹ › (D19), la barra de baix amb el «+» (D20), la cerca, la
+cerca màgica i `DocumentStatusFab`, que puja amb el teclat (D22). Les accions de
+`PictogramAmount` (afegir i treure l'últim) se'n van: afegir és al «+», i treure un pictograma és a
+la graella. Cobreix C1 (cap botó només amb hover) i C28 (girar el mòbil) per a aquesta pantalla.
+
+**Pas 9 — Els estils de l'app a la galeria** (D6, D7), amb el que surti de l'estudi, «Sense vores»
+inclòs. Els noms, traduïts; al document s'hi escriu el nom en l'idioma de qui l'aplica.
+
+**Pas 10 — L'escriptori** (D23), segons el que l'usuari decideixi després de l'esbós. Si és (c),
+s'obre un pla a part i aquest pas es tanca aquí.
+
+**Pas 11 — La columna a l'estàndard** (D24): `SettingsLevel`, `SettingsLevels`, `LevelCrumbs` i
+l'etiqueta de la disposició a `docs/estandards/configuracions.md`, «Components compartits».
+
+**Pas 12 — Textos i vocabulari**: com l'antic pas 8 de §7 (E10, E15, D5), més les claus noves
+(«Personalitzat» per a seqüència i bloc, «reassignat», «Torna a l'estil de la seqüència»), provades
+en els cinc idiomes, i el text d'ajuda d'«El meu estil» (`components.defaultSettings.panelHint`).
+
+**Pas 13 — La notícia N-2** (D9): títol nou, passos i captures; `docs/plans/PLA-noticies.md`.
+
+En tancar el pla: B37 resolta al backlog, Q2 apuntada al backlog si continua oberta, i el pla a
+`plans/fets/`.
+
+### 10.4 L'esbós de la pantalla d'edició al mòbil
+
+És el punt de partida del pas 7, no el disseny final.
+
+```
+┌─────────────────────────────────┐
+│ ☰  SequenciAAC            ⚙  👤 │  barra de l'app (no canvia)
+├─────────────────────────────────┤
+│ ‹  Matí ✎       2 de 5 ▾   ⋯  › │  nom editable · llista · menú de la seqüència
+│    Estil: Contorn gruixut  ●ⓘ   │  ● = marca «Personalitzat» si n'hi ha (D13)
+├─────────────────────────────────┤
+│  ┌────┐ ┌────┐ ┌────┐           │
+│  │ 1  │ │ 2  │ │ 3 ●│           │  la graella de sempre
+│  └────┘ └────┘ └────┘           │  ← lliscar → canvia de seqüència
+│  ┌────┐ ┌────┐                  │
+│  │ 4  │ │ 5  │                  │
+│  └────┘ └────┘                  │
+│                                 │
+├─────────────────────────────────┤
+│ (+)  [ Cerca un pictograma… ✨ ] (⬤)│  + · cerca · cerca màgica · estat del document
+└─────────────────────────────────┘
+      ▲ puja amb el teclat (D22)
+
+Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
+  ▸ Afegeix un pictograma               ▸ Estil: Contorn gruixut — Canvia…
+  ▸ Afegeix una seqüència               ▸ Canvia el nom
+                                        ▸ Restableix els pictogrames
+                                        ▸ Treu aquesta seqüència
+```
+
+- Objectius tàctils de 44 × 44 px com a mínim; les fletxes ‹ › també.
+- La línia «Estil» pot anar a dins del «⋯» si l'esbós demostra que no hi cap: és a decidir en
+  revisar-lo.
+
+### 10.5 Les proves
+
+| Pas | Proves |
+|---|---|
+| 2 | Les de §3.4; un document nou no canvia en canviar El meu estil (D1) |
+| 4 | Fixture 20 d'anada i tornada; totes les fixtures iguals; una seqüència amb estil es pinta amb el seu estil i un bloc reassignat amb el seu; un document d'avui (sense `sequences[].namedStyle`) es pinta igual que abans; `styles` sense orfes; `sequences[].title` es llegeix i es desa |
+| 5 | Triar un estil a la seqüència canvia tots els seus blocs no reassignats i no els reassignats (D15); el snackbar diu els retocs (D3) i els blocs que no han canviat; Desfés ho torna tot; «Personalitzat» surt només amb retocs; carregar d'un fitxer no deixa res a la galeria; desar un estil de l'app fa un `.saacstyle` vàlid; treure la seqüència oberta |
+| 6 | Reassignar un bloc no toca l'altre bloc de la mateixa seqüència (l'exemple del bloc comú de §8.1); «Torna a l'estil de la seqüència»; les tres accions velles ja no hi són; la marca i «Personalitzat» no surten a la impressió, la pantalla completa ni el PDF |
+| 8 | e2e a amplada de mòbil: lliscar i fletxes, «2 de 5» i la llista, el «+», el «⋯»; la barra visible amb el teclat (viewport visible simulat); objectius de 44 px |
+| 9 | La mostra de cada estil de l'app, «Sense vores» inclòs, damunt del full blanc i en tots dos temes |
+| Tots | `npm run typecheck` net; les captures dels e2e de la vista no canvien (amb la precaució de §13 del pla del mode lliure) |
