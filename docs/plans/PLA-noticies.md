@@ -7,11 +7,11 @@
 > 4 fetes** (2026-11-20): les set notícies hi són, amb captures als cinc idiomes. Cada fase
 > té una **porta**: no es passa a la següent fins que la decisió que la tanca és presa i apuntada a
 > §8. **Per continuar, §11.**
-> **Ve de**: §11 de `docs/PLA-vista-mobil.md` («la release no surt sense la vista al mòbil i sense
-> les novetats al dia») i §13 de `docs/PLA-mode-lliure.md` («Una notícia per al mode de pàgines»,
+> **Ve de**: §11 de `docs/plans/fets/PLA-vista-mobil.md` («la release no surt sense la vista al mòbil i sense
+> les novetats al dia») i §13 de `docs/plans/fets/PLA-mode-lliure.md` («Una notícia per al mode de pàgines»,
 > «Captures de la notícia de diverses seqüències»).
 > **Estàndard**: `docs/estandards/noticies.md` (com s'escriu). **Referència de to**:
-> `docs/NOTICIES-candidates-des-de-2.0.2.md` (com es tria i què no s'hi diu).
+> `docs/estudis/NOTICIES-candidates-des-de-2.0.2.md` (com es tria i què no s'hi diu).
 
 ## 1. L'objectiu
 
@@ -23,8 +23,8 @@ pesen igual: una notícia vella que no és certa fa pensar que l'app està trenc
 
 - **Publicades**: 15 entrades a `apps/web/src/data/newsItems.ts`. La darrera és del **2026-10-03**
   (`edit-text-on-card`). Des d'aleshores no se n'ha publicat cap.
-- **Des del 3 d'octubre** hi ha hagut el mode de pàgines (`docs/PLA-mode-lliure.md`), «El meu estil»,
-  la vista al mòbil (`docs/PLA-vista-mobil.md`), la pantalla sencera, ordenar pictogrames arrossegant
+- **Des del 3 d'octubre** hi ha hagut el mode de pàgines (`docs/plans/fets/PLA-mode-lliure.md`), «El meu estil»,
+  la vista al mòbil (`docs/plans/fets/PLA-vista-mobil.md`), la pantalla sencera, ordenar pictogrames arrossegant
   i un grapat de correccions d'impressió. La vista de la pàgina **Vista** ha canviat tant que almenys
   tres notícies velles l'ensenyen com ja no és (§5).
 - **Fora d'aquest pla**: les tres notícies de compte (N1 del backlog, ajornades mentre els comptes
@@ -83,11 +83,11 @@ en una pàgina simple, com eren); i al mòbil? (sí, vegeu N-3).
 paraules són les de la pantalla (l'etiqueta «Lliure», el menú «⋯», «Sense col·locar»).
 
 **En publicar-la**: es treu l'etiqueta «Nou» de la fila «Disposició» (pendent del pas 8 de
-`docs/PLA-mode-lliure.md`, decisió D5).
+`docs/plans/fets/PLA-mode-lliure.md`, decisió D5).
 
 ### N-2 · El teu estil, a tot el document d'un cop · `my-style` · `nova` · **Alta**
 
-> **Aturada (2026-11-20)**: canvia amb `docs/PLA-estils.md`. Un estil ja no s'aplica a una pàgina
+> **Aturada (2026-11-20)**: canvia amb `docs/plans/PLA-estils.md`. Un estil ja no s'aplica a una pàgina
 > ni a tot el document, sinó a un bloc des de la Galeria d'estils, i «Actualitza amb el meu estil»
 > desapareix. **El títol i els passos d'aquí sota ja no són certs**: es reescriuen al pas 9 d'aquell
 > pla.
@@ -237,7 +237,7 @@ textos de les 15 notícies, amb els noms dels botons de `ca.json`. Tres classes:
 
 - **N1** (les tres de compte): ajornades fins que s'encenguin els comptes. No s'escriuen ara.
 - **N3** (llegibilitat): continua amb prioritat baixa.
-- Les guies i el SEO de les notícies (`docs/ESTUDI-seo-noticies.md`): és un pla a part.
+- Les guies i el SEO de les notícies (`docs/estudis/ESTUDI-seo-noticies.md`): és un pla a part.
 - Canviar com es pinta una notícia (`NewsPage`, el carrusel) més enllà del que calgui per a les
   captures de mòbil (D3).
 
@@ -370,8 +370,8 @@ tecnicisme; els noms dels botons són els de la pantalla; `npm run typecheck` ne
 
 - **D5**: decidir què es fa amb l'etiqueta «Nou», i apuntar-ho al pas 8 del pla del mode lliure.
 - **Tot es publica amb la release** (D7): les set notícies i les marques, amb la mateixa data (D6).
-- `docs/PLA-vista-mobil.md` §11 i `docs/PLA-mode-lliure.md` §13: les files de les notícies, ✅.
-- `docs/NOTICIES-candidates-des-de-2.0.2.md` i `docs/INVENTARI-funcionalitats-des-de-2.0.2.md`: una
+- `docs/plans/fets/PLA-vista-mobil.md` §11 i `docs/plans/fets/PLA-mode-lliure.md` §13: les files de les notícies, ✅.
+- `docs/estudis/NOTICIES-candidates-des-de-2.0.2.md` i `docs/estudis/INVENTARI-funcionalitats-des-de-2.0.2.md`: una
   línia que digui que les notícies des del 3 d'octubre són en aquest pla. **O bé** un inventari
   nou des de la darrera release, si es decideix que cal (no és d'aquest pla).
 - Al backlog, a «Novetats pendents de publicar», el que s'hagi deixat fora i per què.
@@ -395,10 +395,10 @@ provisional `2026-11-20`, i les sis velles porten la marca «Superada». Queda o
 **Què**: **la fase 5** (§9), en aquest ordre:
 
 1. **D5 amb l'usuari**: què es fa amb l'etiqueta «Nou» de la fila «Disposició», i apuntar-ho al pas
-   8 de `docs/PLA-mode-lliure.md`.
+   8 de `docs/plans/fets/PLA-mode-lliure.md`.
 2. **La data** de les set notícies, la del dia de la release (D6): `date` a `newsItems.ts` (set
    entrades, i el comentari que ho diu).
-3. Els altres plans: `docs/PLA-vista-mobil.md` §11 i `docs/PLA-mode-lliure.md` §13, les files de
+3. Els altres plans: `docs/plans/fets/PLA-vista-mobil.md` §11 i `docs/plans/fets/PLA-mode-lliure.md` §13, les files de
    les notícies a ✅; la línia a `NOTICIES-candidates-des-de-2.0.2.md` i
    `INVENTARI-funcionalitats-des-de-2.0.2.md`.
 4. El backlog: a «Novetats pendents de publicar», el que s'ha deixat fora. **C30** (el nom de

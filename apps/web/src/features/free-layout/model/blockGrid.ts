@@ -1,6 +1,6 @@
 // La graella d'un bloc de seqüència tal com es pinta: la fan servir la caixa
 // del full i el nivell «Bloc» de la columna, que ha de dir la mida que en surt
-// de debò (Q2, `docs/PLA-mode-lliure.md`).
+// de debò (Q2, `docs/plans/fets/PLA-mode-lliure.md`).
 import type { PlacementColumns, SequenceViewSettings } from "@/types/document";
 import { pixelsToMM } from "@features/print/utils/pageUnits";
 import { CSS_PRINT_DPI } from "@features/print/utils/pageFormat";

@@ -4,7 +4,7 @@
 // ADR-005 decisió 9): la mida és la més gran que hi cap, sense passar-ne. Com que la targeta és proporcional a la seva mida
 // (amplada, vores, lletra i imatge es multipliquen totes per `sizePict`, a
 // `PictogramCard.styled.ts`), n'hi ha prou de saber què fa la targeta a mida 1:
-// la resta és una regla de tres. Vegeu `docs/PLA-mode-lliure.md`, §7.
+// la resta és una regla de tres. Vegeu `docs/plans/fets/PLA-mode-lliure.md`, §7.
 import type { PlacementColumns } from "@/types/document";
 import { pixelsToMM } from "@features/print/utils/pageUnits";
 import { CSS_PRINT_DPI } from "@features/print/utils/pageFormat";

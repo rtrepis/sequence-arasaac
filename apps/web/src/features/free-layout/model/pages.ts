@@ -41,7 +41,7 @@ export const explicitPages = (
 
 /**
  * Si alguna pàgina té caixes. Mentre la vista no pinta pàgines automàtiques
- * soles (vegeu `docs/PLA-mode-lliure.md`), és el que decideix si la vista
+ * soles (vegeu `docs/plans/fets/PLA-mode-lliure.md`), és el que decideix si la vista
  * pinta les pàgines o el flux de sempre, amb totes les seqüències.
  */
 export const hasTemplatePages = (pages: DocumentPages | undefined): boolean =>

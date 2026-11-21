@@ -1,6 +1,6 @@
 import { test, expect, devices, Page, Locator } from "@playwright/test";
 
-// `AppBottomSheet` sol (fase 3 de `docs/PLA-vista-mobil.md`), amb el dit de
+// `AppBottomSheet` sol (fase 3 de `docs/plans/fets/PLA-vista-mobil.md`), amb el dit de
 // debò, en un telèfon i en una tauleta emulats. El munta l'arnès
 // `e2e/harness/bottom-sheet.html`: la vista encara no el fa servir (fase 4).
 

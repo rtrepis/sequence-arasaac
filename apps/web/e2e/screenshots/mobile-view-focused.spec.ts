@@ -19,7 +19,7 @@ import {
   word,
 } from "./demoDocument";
 
-// Captures de la notícia «mobile-view» (N-3 de `docs/PLA-noticies.md`): la
+// Captures de la notícia «mobile-view» (N-3 de `docs/plans/PLA-noticies.md`): la
 // vista al mòbil, amb el full sencer, el panell «Ajustos», passar de pàgina i
 // la capa del mòbil girat. Són les primeres captures de mòbil: van dins del
 // marc de telèfon (D3). Una tanda per idioma, sobre el document de

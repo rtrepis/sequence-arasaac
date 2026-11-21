@@ -12,7 +12,7 @@ import type { QuotaLimits, UserTier } from "@sequence-arasaac/shared-types";
 const MEGABYTE = 1024 * 1024;
 
 // Els números del pla gratuït surten del pressupost de Cloudinary i d'Atlas, no
-// d'una intuïció (vegeu docs/ESTUDI-limits-serveis-gratuits.md):
+// d'una intuïció (vegeu docs/estudis/ESTUDI-limits-serveis-gratuits.md):
 //
 // - storageBytes de 5 MB amb el sostre de MAX_IMAGE_BYTES vol dir **10 imatges
 //   pròpies garantides** per compte, entre documents i vocabulari. És el número

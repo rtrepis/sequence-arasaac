@@ -1,4 +1,4 @@
-// Quan un toc al full obre els ajustos (D1 de `docs/PLA-vista-mobil.md`): a la
+// Quan un toc al full obre els ajustos (D1 de `docs/plans/fets/PLA-vista-mobil.md`): a la
 // disposició lliure, tocar un bloc sovint vol dir moure'l, i el panell pujant
 // hi faria nosa. Allà, un toc només selecciona i el doble toc obre els ajustos;
 // a la resta, un toc ja els obre.

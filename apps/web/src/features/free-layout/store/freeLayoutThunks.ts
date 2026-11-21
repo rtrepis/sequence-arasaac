@@ -106,7 +106,7 @@ export const selectSheetArea = (state: RootState): SheetArea =>
 
 /**
  * Canvia la pàgina del document (mida, orientació, direcció). Amb la pantalla
- * sencera, el full és la pantalla on s'encén (`docs/PLA-mode-lliure.md`, §13,
+ * sencera, el full és la pantalla on s'encén (`docs/plans/fets/PLA-mode-lliure.md`, §13,
  * «La pantalla sencera amb blocs»): en passar-hi, es desa la d'ara; en tornar
  * al paper, s'oblida. I com que el full canvia de mida, els blocs s'hi
  * recol·loquen (`rescalePages`). Entre dos papers no es recol·loquen: és com

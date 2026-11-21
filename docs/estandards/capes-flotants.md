@@ -6,7 +6,7 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 `components/AppDialog/`, `components/AppFullScreenDialog/`,
 `components/FloatingLayer/`, `style/appShape.ts` i
 `style/floatingControl.ts`. La raó de cada regla és a
-`docs/ESTANDARD-capes-flotants.md` (inventari, troballes F1–F13 i pla).
+`docs/estudis/ESTANDARD-capes-flotants.md` (inventari, troballes F1–F13 i pla).
 
 ## La forma
 
@@ -82,8 +82,8 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 ## Panell de baix
 
 > Ve de C29 de `docs/BACKLOG-ux.md` (resolta el 2026-11-19). El pla i les
-> decisions, a `docs/PLA-vista-mobil.md`; l'esbós, a `docs/esbos-vista-mobil.html`.
-> La raó, a F14 de `docs/ESTANDARD-capes-flotants.md`.
+> decisions, a `docs/plans/fets/PLA-vista-mobil.md`; l'esbós, a `docs/esbossos/esbos-vista-mobil.html`.
+> La raó, a F14 de `docs/estudis/ESTANDARD-capes-flotants.md`.
 
 - **`AppBottomSheet` és l'únic panell de baix**: el tercer component canònic de
   capes flotants, al costat dels dos diàlegs, i no una variant de cap. Viu a
@@ -266,5 +266,5 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   excepció: zero `Dialog` de MUI fora dels dos components canònics.**
 - ✅ **Vista al mòbil** — `AppBottomSheet`, la capa del mòbil girat
   (`RotatePhoneOverlay`) i la fletxa de la vora (`EdgePageArrows`). Fet a les
-  fases 3 a 5 de `docs/PLA-vista-mobil.md` i tancat a la fase 6 (2026-11-19).
+  fases 3 a 5 de `docs/plans/fets/PLA-vista-mobil.md` i tancat a la fase 6 (2026-11-19).
   Les proves en dispositius de debò són a P2 de `docs/BACKLOG-ux.md`.

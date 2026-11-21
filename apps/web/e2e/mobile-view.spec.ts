@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-// La vista al mòbil (fase 4 de `docs/PLA-vista-mobil.md`): el full a la
+// La vista al mòbil (fase 4 de `docs/plans/fets/PLA-vista-mobil.md`): el full a la
 // pantalla i els ajustos al panell de baix. Els tres casos de §1 del pla, amb
 // el dit de debò, en un telèfon i en una tauleta en vertical emulats:
 //

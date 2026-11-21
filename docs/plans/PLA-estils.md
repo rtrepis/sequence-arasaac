@@ -22,7 +22,7 @@
 
 ## 0. D'on surt i què vol
 
-Revisant la notícia N-2 («El teu estil, a tot el document d'un cop», `docs/PLA-noticies.md`) van
+Revisant la notícia N-2 («El teu estil, a tot el document d'un cop», `docs/plans/PLA-noticies.md`) van
 sortir dues coses:
 
 1. **Accions que al `.saac` són diferents i per a l'usuari són iguals.** «Aplica el meu estil» i
@@ -423,8 +423,8 @@ del fonament 03 (§2.3 i §4) aplicada també a Redux, no només al fitxer.
 
 ### 4.4 L'estudi — abans de fer la llista
 
-Com l'estudi de plantilles (`docs/ESTUDI-treballs-amb-pictogrames.md`), un document a part,
-`docs/ESTUDI-estils-de-targetes.md`, que respongui:
+Com l'estudi de plantilles (`docs/estudis/ESTUDI-treballs-amb-pictogrames.md`), un document a part,
+`docs/estudis/ESTUDI-estils-de-targetes.md`, que respongui:
 
 - Quines formes de targeta es fan de debò: amb vora o sense, gruix, cantonades, text a dalt o a
   baix, majúscules o minúscules, lletra escolar, numeració, color de Fitzgerald com a vora o com a
@@ -520,7 +520,7 @@ Preses el 2026-11-20.
    `features.sequence.style.changed.*`, `components.pictEdit.*` i `components.defaultSettings.*` en
    els cinc idiomes, i el text d'ajuda d'«El meu estil» (`components.defaultSettings.panelHint`), que
    parla del menú de la pàgina.
-9. **La notícia N-2** (D9): títol nou, passos nous i captures, i actualitzar `docs/PLA-noticies.md`.
+9. **La notícia N-2** (D9): títol nou, passos nous i captures, i actualitzar `docs/plans/PLA-noticies.md`.
 
 Normes de cada pas: `npm run typecheck` net i tests passant; textos a `packages/i18n/messages/`
 en els cinc idiomes; cap color fora de `palette.ts`; `ConfirmDialog` i `AppDialog` per a les
@@ -617,18 +617,49 @@ dependre d'arribar a sencer).
 - Amb el camp de cerca a baix, què passa quan surt el teclat del mòbil?
 - On van «Treu aquesta seqüència» i les accions que avui són a les pestanyes?
 - L'escriptori: es queda com ara fins que l'usuari l'expliqui, o es fa el mateix?
-- Abans del codi: **un esbós** com els de la vista al mòbil (`docs/esbos-vista-mobil.html`) i les
+- Abans del codi: **un esbós** com els de la vista al mòbil (`docs/esbossos/esbos-vista-mobil.html`) i les
   captures d'avui per comparar.
 
 ### 8.4 Lligams amb altres plans
 
-- **`docs/PLA-mode-lliure.md`**, §13: «Pendent del pas 8» (les pàgines simples sense menú de
-  seqüència) i el pla següent «Estil i contingut dels blocs» (lletra, color del text i fons d'un
-  bloc com a retoc del bloc). Cal decidir si aquest pla l'absorbeix o el deixa per després.
-- **`docs/PLA-vista-mobil.md`**: el patró del panell de baix i el lliscar per passar de pàgina.
-- **`docs/PLA-noticies.md`**: la N-2 continua aturada; amb aquesta revisió, canvia encara més.
+- **`docs/plans/fets/PLA-mode-lliure.md`** (tancat): el que en quedava obert ve a §8.5.
+- **`docs/plans/fets/PLA-vista-mobil.md`**: el patró del panell de baix i el lliscar per passar de pàgina.
+- **`docs/plans/PLA-noticies.md`**: la N-2 continua aturada; amb aquesta revisió, canvia encara més.
 - **`docs/BACKLOG-ux.md`**: B37 (aquest pla), C1 (botons que només es diuen amb el hover; al
   mòbil no n'hi ha), C28 (girar el mòbil tanca el diàleg d'edició).
+
+### 8.5 Heretat del mode lliure (2026-11-21)
+
+El pla del mode lliure es tanca i aquest pla n'absorbeix dues coses, perquè totes dues toquen
+l'estil del bloc o la columna que aquest pla redissenya.
+
+**L'estil d'un bloc a la columna de la vista** (era «Estil i contingut dels blocs», punt 1, de §13
+del pla del mode lliure; mai no es va escriure). La idea de l'usuari era: si la columna parla de
+disposició i distribució, també ha de poder parlar d'**estil**, amb la **lletra**, el **color del
+text** i el **color de fons** d'un bloc, com a retoc del bloc (com la mida i la negreta dels
+rètols). Es trepitja amb §8.1: totes dues coses canvien l'estil d'un bloc.
+
+- **Primera pregunta del pla d'execució**: com conviuen **l'estil triat de la galeria** (seqüència
+  i bloc, §8.1) i **els retocs d'un bloc a la columna**? Què mana sobre què, què passa amb els
+  retocs quan es tria un altre estil, i si cal que existeixin tots dos camins (cal evitar el duplicat
+  que va obrir aquest pla, E5).
+- **El fons del bloc s'imprimeix**: toca l'estàndard de colors (`docs/estandards/colors.md`; el
+  que és damunt del full no s'adapta al tema) i el PDF.
+- **Els blocs d'imatge** (el punt 2 d'aquell pla) **no** venen aquí: són contingut, no estil. Són
+  **B38** del backlog.
+
+**El «Pendent del pas 8»** del pla del mode lliure (§13). Es va ajornar perquè la columna havia de
+canviar i calia documentar-la una sola vegada; aquest pla és el que la canvia:
+
+- **Les peces a prova, a l'estàndard** (`docs/estandards/configuracions.md`, «Components
+  compartits»): `SettingsLevel` (targeta amb vora, excepció a C8), `SettingsLevels` i la línia de
+  la cascada, `LevelCrumbs` (C7) i l'etiqueta de la disposició. Decidir si passen tal com són.
+- **Treure l'etiqueta «Nou»** de la fila «Disposició» (proposta: amb la notícia N-1).
+- **Les pàgines simples no tenen menú de seqüència**: amb §8.1 (l'estil es tria a la seqüència,
+  des de l'edició) queda en part resolt; cal decidir si «Restableix els pictogrames d'aquesta
+  seqüència» hi ha d'arribar.
+- **Revisar els textos** d'ajuda de la columna i de la configuració que encara parlin de «vista» en
+  el sentit antic (la pàgina «Vista» sí que es diu així).
 
 ## 9. Encàrrec per obrir la sessió següent
 
@@ -638,10 +669,11 @@ dependre d'arribar a sencer).
 > document sencer, en especial **§8** (la revisió del 2026-11-21, que mana sobre D8 i Q1–Q3) i §3
 > (la solució A, que ja està decidida i és el primer pas de codi). Després el fonament 03 (§1, §4,
 > §5, §6 i §7), el fonament 06 (§1, el format de les seqüències), la decisió 24 de l'ADR-005,
-> `docs/PLA-vista-mobil.md` (el patró del panell de baix) i, abans de dissenyar res,
+> `docs/plans/fets/PLA-vista-mobil.md` (el patró del panell de baix) i, abans de dissenyar res,
 > `docs/estandards/configuracions.md`, `navegacio.md` i `capes-flotants.md`.
 >
-> Fes-me **les preguntes de §8.1, §8.2 i §8.3 abans d'escriure el pla**, d'una en una o en grups
+> Fes-me **les preguntes de §8.1, §8.2, §8.3 i §8.5 abans d'escriure el pla** (la primera, la de §8.5:
+> l'estil de la galeria i els retocs del bloc a la columna), d'una en una o en grups
 > petits. Després escriu el pla: l'ordre dels passos (la solució A primer), què canvia al
 > fonament i al format a cada pas, l'esbós de la pantalla d'edició al mòbil i les proves.
 >

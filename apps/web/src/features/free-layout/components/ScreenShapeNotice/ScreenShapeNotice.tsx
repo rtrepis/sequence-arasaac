@@ -1,5 +1,5 @@
 // La pregunta de la pantalla sencera en una pantalla d'una altra forma (PS2 de
-// `docs/PLA-mode-lliure.md`, §13, «La pantalla sencera amb blocs»).
+// `docs/plans/fets/PLA-mode-lliure.md`, §13, «La pantalla sencera amb blocs»).
 //
 // El full de pantalla sencera és la pantalla on es va encendre. En una altra
 // forma el full es veu sencer, amb vores, i aquí es pregunta si s'adapta a la

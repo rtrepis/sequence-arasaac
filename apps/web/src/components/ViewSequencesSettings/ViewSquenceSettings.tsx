@@ -112,7 +112,7 @@ const PREVIEW_COLUMN_GAP = 16;
 /**
  * Al mòbil, el que queda a sobre del panell de baix no passa mai de la meitat
  * de la pantalla: a sencer, el full es queda a la mida de mig i el panell el
- * tapa, deixant-ne la franja que torna a mig (`docs/PLA-vista-mobil.md`, §4).
+ * tapa, deixant-ne la franja que torna a mig (`docs/plans/fets/PLA-vista-mobil.md`, §4).
  */
 const MOBILE_STAGE_BOTTOM = `min(${floatingFloorCss}, 50dvh)`;
 
@@ -324,7 +324,7 @@ const ViewSequencesSettingsContent = ({
   // forma de la pantalla on es va encendre (`layoutAreaMm`)
   const isFreeLayout = useAppSelector(selectHasPages);
 
-  // L'espai del full (`docs/PLA-mode-lliure.md`, §6, «L'espai»). A partir
+  // L'espai del full (`docs/plans/fets/PLA-mode-lliure.md`, §6, «L'espai»). A partir
   // d'escriptori, la columna d'ajustos es pot amagar perquè el full faci tota
   // l'amplada, i el full es pot ajustar a l'amplada en comptes d'encabir-lo
   // sencer: un full vertical, sencer, el limita l'alçada de la pantalla. Per
@@ -1100,7 +1100,7 @@ const ViewSequencesSettingsContent = ({
           <>
             {/* Al mòbil la pàgina no es desplaça: el full ocupa l'espai entre
                 la barra de dalt (que s'amaga quan el panell puja) i el panell
-                de baix, i s'hi encongeix sencer (`docs/PLA-vista-mobil.md`).
+                de baix, i s'hi encongeix sencer (`docs/plans/fets/PLA-vista-mobil.md`).
                 Sense scroll de pàgina, no hi ha res a perdre (§1) */}
             <GlobalStyles
               styles={{

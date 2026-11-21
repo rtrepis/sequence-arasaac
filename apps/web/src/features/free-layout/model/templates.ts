@@ -164,7 +164,7 @@ const text = (
   label: string,
 ): TemplateSlot => ({ x, y, w, h, kind: "text", label });
 
-// Les plantilles dels treballs reals (R3, `docs/ESTUDI-treballs-amb-pictogrames.md`).
+// Les plantilles dels treballs reals (R3, `docs/estudis/ESTUDI-treballs-amb-pictogrames.md`).
 // Es diuen pel treball, no per la forma, i els espais van en ordre de lectura
 
 /** T2 — Agenda en tira: una tira estreta i llarga al mig del full. */

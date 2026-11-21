@@ -44,7 +44,7 @@ export interface NewsItem {
   closingId?: string;
   /**
    * La notícia explica un camí que ja no existeix: surt del carrusel i es
-   * queda a Novetats amb l'etiqueta «Superada» i un avís (`docs/PLA-noticies.md`, §5)
+   * queda a Novetats amb l'etiqueta «Superada» i un avís (`docs/plans/PLA-noticies.md`, §5)
    */
   superseded?: NewsSuperseded;
 }
@@ -177,7 +177,7 @@ export const newsItems: NewsItem[] = [
       })),
     },
     closingId: pagesId("closing"),
-    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    // El dia de la release (D6 de `docs/plans/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "nova",
   },
@@ -208,7 +208,7 @@ export const newsItems: NewsItem[] = [
       },
     ],
     closingId: myStyleId("closing"),
-    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    // El dia de la release (D6 de `docs/plans/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "nova",
   },
@@ -238,7 +238,7 @@ export const newsItems: NewsItem[] = [
       },
     ],
     closingId: mobileId("closing"),
-    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    // El dia de la release (D6 de `docs/plans/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "nova",
   },
@@ -265,7 +265,7 @@ export const newsItems: NewsItem[] = [
       },
     ],
     closingId: screenId("closing"),
-    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    // El dia de la release (D6 de `docs/plans/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "millora",
   },
@@ -291,7 +291,7 @@ export const newsItems: NewsItem[] = [
         image: reorderImage("enganxa", "step3"),
       },
     ],
-    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    // El dia de la release (D6 de `docs/plans/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "nova",
   },
@@ -316,7 +316,7 @@ export const newsItems: NewsItem[] = [
         image: textFitImage("cap", 3),
       },
     ],
-    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    // El dia de la release (D6 de `docs/plans/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "millora",
   },
@@ -341,7 +341,7 @@ export const newsItems: NewsItem[] = [
         image: printImage("llicencia", 3),
       },
     ],
-    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    // El dia de la release (D6 de `docs/plans/PLA-noticies.md`): es fixa en publicar
     date: "2026-11-20",
     category: "correccio",
   },
@@ -522,7 +522,7 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-09-04",
     category: "nova",
-    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/plans/PLA-noticies.md`, §5)
     superseded: {},
   },
   {
@@ -635,7 +635,7 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-03-13",
     category: "nova",
-    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/plans/PLA-noticies.md`, §5)
     superseded: {},
   },
   {
@@ -703,7 +703,7 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-27",
     category: "millora",
-    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/plans/PLA-noticies.md`, §5)
     superseded: {},
   },
   {
@@ -738,7 +738,7 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-24",
     category: "nova",
-    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/plans/PLA-noticies.md`, §5)
     superseded: {},
   },
   {
@@ -773,7 +773,7 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-24",
     category: "millora",
-    // Superada: explica la columna de la vista d'abans (`docs/PLA-noticies.md`, §5)
+    // Superada: explica la columna de la vista d'abans (`docs/plans/PLA-noticies.md`, §5)
     superseded: { replacedBy: "pages-and-blocks" },
   },
   {
@@ -824,7 +824,7 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-15",
     category: "nova",
-    // Superada: explica la columna de la vista d'abans (`docs/PLA-noticies.md`, §5)
+    // Superada: explica la columna de la vista d'abans (`docs/plans/PLA-noticies.md`, §5)
     superseded: { replacedBy: "pages-and-blocks" },
   },
 ];

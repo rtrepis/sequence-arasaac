@@ -1,5 +1,11 @@
 # Pla: la vista al mòbil — el full a la pantalla i els ajustos en un panell de baix
 
+> **🗄️ Tancat i arxivat (2026-11-21).** Fet fins a la fase 6. El que quedava de l'encàrrec de §10
+> ha anat a un altre lloc: les **proves en dispositius de debò** (§9d) són **P2** de
+> `docs/BACKLOG-ux.md`, i **la notícia** és N-3 de `docs/plans/PLA-noticies.md`. El patró del panell
+> de baix (`AppBottomSheet`) i el lliscar per passar de pàgina són referència per a la pantalla
+> d'edició al mòbil (`docs/plans/PLA-estils.md`, §8.3).
+
 > **Estat**: pla aprovat (2026-11-15). **Fase 6 feta** (2026-11-19): l'estàndard ja no porta la
 > marca «Proposta», la regla és al `CLAUDE.md` i C29 és resolta. **Per continuar, comenceu per §10,
 > «Encàrrec per a la sessió següent»**: les proves en dispositius de debò (§9d, P2 del backlog) i
@@ -204,11 +210,11 @@ tercera forma, i per tant un **tercer component canònic**, no una excepció.
 | Document | Què hi canvia |
 |---|---|
 | `docs/estandards/capes-flotants.md` | Secció nova **«Panell de baix»**: `AppBottomSheet` (a `components/`, genèric, sense domini) és l'única manera de fer-ne un. Tres alçades; mai tapa el full sencer; no modal (`role="region"` amb nom); es mou amb la nansa, amb un botó i amb el teclat; declara l'alçada amb `useFloatingInset`; el botó d'estat i els avisos s'hi posen damunt. Només per sota de `md`. **Cap ajust no pot dependre d'arribar a sencer** (M3). També hi entren **la capa del mòbil girat** (no es tanca, no surt a la pantalla completa) i **la fletxa de la vora** (semitransparent, temporal, mai l'única manera: el lliscament hi és sempre). A «Estat de migració», la vista |
-| `docs/ESTANDARD-capes-flotants.md` | Una troballa nova, **F14**, amb el que hi ha a §1: és la raó de la regla |
+| `docs/estudis/ESTANDARD-capes-flotants.md` | Una troballa nova, **F14**, amb el que hi ha a §1: és la raó de la regla |
 | `docs/estandards/configuracions.md` | La columna de la vista: «al mòbil va sota el full» passa a «al mòbil va al panell de baix». La frase «Al mòbil, seleccionar no mou la pàgina: l'enllaç "Ajustos del bloc" hi porta» passa a «seleccionar porta el panell a mig, i el full sencer hi queda a sobre» |
 | `docs/estandards/estructura-de-fitxers.md` | Res de nou: un component genèric va a `components/`. Només s'hi comprova |
 | `CLAUDE.md` | A «Regles transversals», a la regla dels diàlegs: «al mòbil, els ajustos de la vista van a `AppBottomSheet`, l'únic panell de baix» |
-| `docs/esbos-columna-vista.html` | La pregunta «Al mòbil la columna és sota el full. Què passa en seleccionar un bloc?» passa a apuntar a aquest pla |
+| `docs/esbossos/esbos-columna-vista.html` | La pregunta «Al mòbil la columna és sota el full. Què passa en seleccionar un bloc?» passa a apuntar a aquest pla |
 
 **Com s'aprova**: el text de l'estàndard s'escriu primer marcat **«Proposta»** (fase 2) i només
 perd la marca quan l'esbós (fase 1) s'ha provat en un mòbil i una tauleta de debò i les decisions de
@@ -241,7 +247,7 @@ bloc».
 
 ### Fase 1 — Esbós i decisions · porta: §9 respost ✅ Tancada (2026-11-15)
 
-**Esbós fet** (2026-11-15): `docs/esbos-vista-mobil.html`. Obert al mòbil ocupa tota la pantalla;
+**Esbós fet** (2026-11-15): `docs/esbossos/esbos-vista-mobil.html`. Obert al mòbil ocupa tota la pantalla;
 a l'escriptori, un marc de telèfon que es pot girar. Té els tres casos de §1, controls que canvien el
 full en viu, les decisions M1–M9 (i E1: si el full s'encongeix o queda tapat) amb les que canvien
 l'esbós marcades «en viu», i un botó que en copia les respostes. **§9 respost** (2026-11-15).
@@ -250,7 +256,7 @@ l'esbós marcades «en viu», i un botó que en copia les respostes. **§9 respo
 §9b. **§9b respost** (mateix dia), amb dues decisions noves (D1, D2). **Esbós v3**: les aplica i hi
 deixa les dues preguntes de §9c, **respostes** el mateix dia.
 
-- `docs/esbos-vista-mobil.html`: un esbós interactiu (com `esbos-columna-vista.html`) amb el full,
+- `docs/esbossos/esbos-vista-mobil.html`: un esbós interactiu (com `esbos-columna-vista.html`) amb el full,
   el panell i les tres alçades, que es pugui obrir **al mòbil i a la tauleta** i provar amb el dit.
   Ha de tenir una pàgina de dues files i una de vertical, que són els casos de §1.
 - Respondre les preguntes de §9 i apuntar-les allà amb data.
@@ -438,7 +444,7 @@ amb el full vertical) passen en un e2e de mòbil.
     s'apaga (i continua dient quin era, per tornar-hi) i el full pren la forma de la pantalla,
     **sempre apaïsada**, també amb el mòbil dret (decisió de l'usuari, 2026-11-18: als mòbils i a
     les tauletes es mira girada). **També amb pàgines en blocs** (2026-11-18): el full és un
-    paper virtual amb la forma de la pantalla on s'encén; vegeu `docs/PLA-mode-lliure.md`, §13,
+    paper virtual amb la forma de la pantalla on s'encén; vegeu `docs/plans/fets/PLA-mode-lliure.md`, §13,
     «La pantalla sencera amb blocs». Proves: `pageFormat.test.ts`, `mobile-view.spec.ts` i
     `fullscreen-blocks.spec.ts`.
   - **La pantalla completa, només amb la pantalla sencera** (2026-11-19): amb un paper, la fila
@@ -572,7 +578,7 @@ resultat i la data.
    prova) o si el botó no surt allà on no funciona. Les altres, si van bé, només s'apunten; si no,
    cada una és una troballa nova al backlog o un retoc amb prova.
 2. **Les notícies** (§11): decidir quines i com, seguint `docs/estandards/noticies.md` i
-   `docs/NOTICIES-candidates-des-de-2.0.2.md`, amb captures de mòbil fetes amb `e2e/screenshots/`.
+   `docs/estudis/NOTICIES-candidates-des-de-2.0.2.md`, amb captures de mòbil fetes amb `e2e/screenshots/`.
    La fase 6 ja és feta (2026-11-19).
 
 **On**: a la branca de la release, `claude/release-before-new-plan-8x1xhp`. **Ull**: les fases 5 i
@@ -607,7 +613,7 @@ amb prova; les notícies són decidides i, les que es facin, publicades; `npm ru
 ## 11. La release
 
 **Decidit el 2026-11-15**: la release que ve **no surt sense la vista al mòbil i sense les novetats al
-dia**. És la release d'abans del pla següent, «Estil i contingut dels blocs» (`docs/PLA-mode-lliure.md`,
+dia**. És la release d'abans del pla següent, «Estil i contingut dels blocs» (`docs/plans/fets/PLA-mode-lliure.md`,
 §13, «El pas següent»), que no es comença fins que aquesta és publicada. El desplegament és al
 servidor de proves, i per tant cada pas es pot provar allà a mesura que s'acaba.
 
@@ -617,14 +623,14 @@ servidor de proves, i per tant cada pas es pot provar allà a mesura que s'acaba
 | `AppBottomSheet`, sol i amb proves | ✅ Fet | Fase 3 d'aquest pla |
 | La vista al mòbil: la migració de la vista | ✅ Fet | Fase 4 d'aquest pla |
 | La vista al mòbil: els casos difícils | ✅ Fet en emulació · ⏳ dispositius de debò (§9d) | Fase 5 d'aquest pla |
-| La pantalla sencera amb blocs (paper virtual, adaptar a una altra pantalla) | ✅ Fet (2026-11-18) | `docs/PLA-mode-lliure.md`, §13 |
+| La pantalla sencera amb blocs (paper virtual, adaptar a una altra pantalla) | ✅ Fet (2026-11-18) | `docs/plans/fets/PLA-mode-lliure.md`, §13 |
 | L'estàndard sense la marca «Proposta» i la regla al `CLAUDE.md` | ✅ Fet (2026-11-19) | Fase 6 d'aquest pla |
-| **Notícia de les pàgines i la disposició** (simple, columnes, files, lliure) | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13, «Què queda obert»; en publicar-la, es treu l'etiqueta «Nou» de la fila «Disposició» (pas 8) |
+| **Notícia de les pàgines i la disposició** (simple, columnes, files, lliure) | ⏳ Per fer | `docs/plans/fets/PLA-mode-lliure.md`, §13, «Què queda obert»; en publicar-la, es treu l'etiqueta «Nou» de la fila «Disposició» (pas 8) |
 | **Notícia de la vista al mòbil** | ⏳ Per fer | Fase 6 d'aquest pla |
-| **Captures de la notícia de diverses seqüències** (`multiple-sequences`), que ensenyen una vista que ja no és així | ⏳ Per fer | `docs/PLA-mode-lliure.md`, §13 |
+| **Captures de la notícia de diverses seqüències** (`multiple-sequences`), que ensenyen una vista que ja no és així | ⏳ Per fer | `docs/plans/fets/PLA-mode-lliure.md`, §13 |
 | Les tres notícies de compte (N1 del backlog) | Fora | Ajornades mentre els comptes siguin apagats |
 
-**Totes les notícies de la release són ara a `docs/PLA-noticies.md`** (2026-11-19), amb la de la
+**Totes les notícies de la release són ara a `docs/plans/PLA-noticies.md`** (2026-11-19), amb la de la
 vista al mòbil (N-3) i la de les pàgines (N-1).
 
 **Les notícies es decideixen al seu moment** (2026-11-15): quines, quantes i com, quan la vista al
@@ -633,5 +639,5 @@ mòbil sigui acabada. Les files de la taula són el punt de partida, no una deci
 **Proposta d'ordre**: primer la vista al mòbil (fases 3 a 6), i després les notícies, perquè les
 captures de totes dues notícies han de mostrar la vista ja acabada. Les dues notícies es poden
 publicar juntes, o una sola que ho expliqui tot; ho decideix `docs/estandards/noticies.md` i qui les
-escrigui, amb `docs/NOTICIES-candidates-des-de-2.0.2.md` com a referència de to.
+escrigui, amb `docs/estudis/NOTICIES-candidates-des-de-2.0.2.md` com a referència de to.
 

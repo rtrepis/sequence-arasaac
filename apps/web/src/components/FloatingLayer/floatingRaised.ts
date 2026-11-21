@@ -2,7 +2,7 @@
 //
 // Quan el panell de baix (`AppBottomSheet`) puja a mig o a sencer, la barra de
 // dalt de l'app s'ha d'amagar perquè el que queda a sobre del panell guanyi
-// aquells píxels (M5 de `docs/PLA-vista-mobil.md`). El panell no sap res de la
+// aquells píxels (M5 de `docs/plans/fets/PLA-vista-mobil.md`). El panell no sap res de la
 // barra, i la barra no sap res del panell: el panell ho declara aquí i qui vulgui
 // fer-ne cas s'hi subscriu amb `useFloatingRaised`.
 //

@@ -13,7 +13,7 @@ import {
 import { LOCALES, type Locale, gotoView, openDemo, t } from "./demoDocument";
 
 // Captures de la notícia «print-matches-preview» (N-7 de
-// `docs/PLA-noticies.md`): el full de la vista és el que s'imprimeix, el
+// `docs/plans/PLA-noticies.md`): el full de la vista és el que s'imprimeix, el
 // paper Carta i Tabloide, i la llicència del peu, que no es pot treure si el
 // document té autor. Una tanda per idioma, sobre el document de demostració
 // (fixture 19).

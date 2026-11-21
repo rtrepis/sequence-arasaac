@@ -89,7 +89,7 @@ const LevelHead = ({
 
 /**
  * Un nivell de la columna de la vista (R8: Document, Pàgina, Bloc), del més
- * ample al més concret, com a l'esbós (`docs/esbos-columna-vista.html`): una
+ * ample al més concret, com a l'esbós (`docs/esbossos/esbos-columna-vista.html`): una
  * targeta amb la icona, el tipus de nivell, el nom i la línia que diu a què
  * s'aplica (o, plegat, el resum). A dins, les seccions de sempre
  * (`SectionTitle`) i les files (`SettingRow`).

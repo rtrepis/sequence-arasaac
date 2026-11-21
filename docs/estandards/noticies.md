@@ -4,7 +4,7 @@
 > `apps/web/src/data/newsItems.ts`, les claus `news.*` dels fitxers de traducció,
 > les captures de `apps/web/public/img/news/` i els specs de
 > `apps/web/e2e/screenshots/`. **Què** es publica ho decideix
-> `docs/NOTICIES-candidates-des-de-2.0.2.md`; aquest document diu **com**.
+> `docs/estudis/NOTICIES-candidates-des-de-2.0.2.md`; aquest document diu **com**.
 
 ## A qui va adreçada
 

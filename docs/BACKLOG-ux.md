@@ -60,7 +60,7 @@ l'entrada.
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
 | P2 | La vista al mòbil en dispositius de debò | La release no surt sense la vista al mòbil, i l'emulació no ho pot dir tot | S | Sí: F5a, si la pantalla completa no funciona a l'iPhone |
-| B37 | Els estils: pictogrames que copien l'estil (E1) i accions que acaben igual a la pantalla | E1 grava retocs falsos al `.saac`; la galeria d'estils és abans de la release i no ha d'heretar el desordre | L | D1–D9 preses; queden Q1–Q3 de `docs/PLA-estils.md` |
+| B37 | Els estils: pictogrames que copien l'estil (E1) i accions que acaben igual a la pantalla | E1 grava retocs falsos al `.saac`; la galeria d'estils és abans de la release i no ha d'heretar el desordre | L | D1–D9 preses; queden Q1–Q3 de `docs/plans/PLA-estils.md` |
 
 ### Després
 
@@ -74,6 +74,7 @@ l'entrada.
 
 | Id | Què | Per què pot esperar | Esforç |
 |---|---|---|---|
+| B38 | Blocs d'imatge a les pàgines | Idea sense decidir; abans, el pla dels estils (B37) | L |
 | B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
@@ -112,6 +113,21 @@ no es toquen; les que sí, porten una nota amb la data de la revisió.
 Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posar-les a
 *Prioritats*.
 
+### B38 — Blocs d'imatge a les pàgines 💡 Idea
+
+*(Ve del pla del mode lliure, tancat el 2026-11-21: era el punt 2 de «Estil i contingut dels
+blocs», un pla que es proposava a §13 i no es va arribar a escriure.)*
+
+- **Què**: un tipus de bloc nou, al costat dels de seqüència i de text: una imatge posada a la
+  pàgina (un logotip, una foto, un dibuix).
+- **Cal decidir-ho abans d'implementar-ho**: el format (un bloc nou al `.saac`: esquema, fixture,
+  fonament 06, i el lector que conserva els blocs que no entén, ADR-005), on es guarden les imatges
+  (dins del fitxer, a l'esborrany i, amb compte, al núvol, amb els límits de
+  `docs/estudis/ESTUDI-limits-serveis-gratuits.md`) i com es trien, es retallen i s'ajusten a la
+  caixa.
+- **Després del pla dels estils** (B37): la part d'estil dels blocs (lletra, color, fons) ha anat
+  allà (`docs/plans/PLA-estils.md`, §8.5).
+
 ### B31 — Aplicar canvis d'estil per seqüència ✅ Resolta (com a estils de bloc, R7)
 
 *(Oberta en treure «Aplica a aquesta seqüència» dels fonaments, 2026-09-29.)*
@@ -124,7 +140,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
 - Pendent de treballar-ho més endavant.
 - **2026-11-07**: torna a sortir a la revisió del mode lliure com a «estils per grup de
   seqüències», amb la necessitat d'un nom per a l'usuari. Es continua a **R7** de
-  `docs/PLA-mode-lliure.md` (§12), que el situa al nivell «Seqüència» de la columna (R8).
+  `docs/plans/fets/PLA-mode-lliure.md` (§12), que el situa al nivell «Seqüència» de la columna (R8).
 - **2026-11-14 (pas 7)**: resolta com a **estils de bloc**. L'estil d'un grup de blocs és el seu
   estil de bloc (el meu estil copiat al document): «Aplica el meu estil» el dona, «Actualitza amb
   el meu estil» el canvia a tots els blocs que el fan servir i «Treu l'estil de bloc» el treu d'un
@@ -143,7 +159,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   defecte d'avui), amb les mateixes dues accions.
 - **Cal decidir-ho abans d'implementar-ho**: què guarda una entrada, a quins nivells s'aplica
   (document, pàgina, bloc), el nom per a l'usuari i el sostre amb compte.
-- El detall és a **R10** de `docs/PLA-mode-lliure.md` (§12). S'ha de decidir abans de **B31** (R7).
+- El detall és a **R10** de `docs/plans/fets/PLA-mode-lliure.md` (§12). S'ha de decidir abans de **B31** (R7).
   Les plantilles de pàgina pròpies serien un catàleg paral·lel: **R11**.
 - **2026-11-12 (R10, pas 6 del mode lliure)**: decidit i fet el cas sense comptes. Una entrada és
   l'estil de la targeta i la vista dels pictogrames, sense paper ni plantilla. El nom per a l'usuari
@@ -152,7 +168,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   sola direcció**, de la configuració cap al document: han desaparegut «Desa com a estil per
   defecte», «Desa com a preferència» i «Aplicar a la vista actual». El panell «Estil del document»
   és ara «El meu estil». **Sostre amb compte: 20 entrades** (una entrada fa uns 2 KB, sense
-  imatges; vegeu `docs/ESTUDI-limits-serveis-gratuits.md`). Queda obert: el catàleg de diverses
+  imatges; vegeu `docs/estudis/ESTUDI-limits-serveis-gratuits.md`). Queda obert: el catàleg de diverses
   entrades, amb comptes, quan es tornin a encendre.
 
 ### B34 — Plantilles de pàgina pròpies 💡 Idea
@@ -168,8 +184,8 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   accions (aplicar, desar), i convé pensar-los junts.
 - **Cal decidir-ho abans d'implementar-ho**: què guarda una plantilla pròpia (només els espais, o
   també els blocs de text i els comuns), on es gestiona i el sostre d'entrades amb compte
-  (`docs/ESTUDI-limits-serveis-gratuits.md`).
-- El detall és a **R11** de `docs/PLA-mode-lliure.md` (§12).
+  (`docs/estudis/ESTUDI-limits-serveis-gratuits.md`).
+- El detall és a **R11** de `docs/plans/fets/PLA-mode-lliure.md` (§12).
 
 ### B35 — «Aplica a tots» no és a cap lloc de la interfície ✅ Resolta (redefinida)
 
@@ -204,7 +220,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   agenda no l'hagi de triar a cada pàgina. Seria un camp del document (canvi de format sense pujar
   `schemaVersion`).
 - **De moment no es fa**: «Duplica la pàgina», al menú «⋯», ja ho cobreix. El detall és a **R11** de
-  `docs/PLA-mode-lliure.md` (§12).
+  `docs/plans/fets/PLA-mode-lliure.md` (§12).
 - **2026-11-14 (pas 7b)**: resolta d'una altra manera, a les preferències i no al document. El
   panell «Pàgina i distribució» té la **disposició** amb què comencen els documents nous, i les
   pàgines que s'afegeixen neixen amb aquesta disposició. No cal cap camp nou al `.saac`. Vegeu la
@@ -224,7 +240,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   seus retocs). Abans de la release, El meu estil es completa amb estils predefinits, com les
   plantilles de pàgina.
 - El detall (divuit troballes, E1–E18), les decisions D1–D9 i l'ordre dels passos són a
-  `docs/PLA-estils.md`.
+  `docs/plans/PLA-estils.md`.
 - **2026-11-20 (decisions)**: el document nou neix amb una còpia d'El meu estil i no el segueix
   (D1); un estil s'aplica **només a un bloc**, des d'una **Galeria d'estils** que té com a primera
   opció «L'estil del document» (D2, D8); fora «Aplica el meu estil» i «Actualitza amb el meu
@@ -233,7 +249,7 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
 - **2026-11-21 (revisió)**: l'estil va amb la **seqüència** (des de l'edició, que també li posa
   nom) i amb el **bloc** (a la vista, només aquell bloc). La pantalla d'edició canvia al mòbil: el
   nom de la seqüència editable a dalt, la cerca a baix i el «+» que obre un panell. Es poden
-  carregar estils, no només desar-los. Detall a §8 de `docs/PLA-estils.md`; el pla d'execució és la
+  carregar estils, no només desar-los. Detall a §8 de `docs/plans/PLA-estils.md`; el pla d'execució és la
   feina següent (§9).
 
 ## Gravetat alta
@@ -1423,7 +1439,7 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   el 2026-11-15 i desfet).
 - **Proposta**: el full sencer a la pantalla, sense scroll de pàgina, i els ajustos en un panell de
   baix amb tres alçades (`AppBottomSheet`, una capa nova de l'estàndard). El pla, amb les fases i les
-  portes d'aprovació, és `docs/PLA-vista-mobil.md`.
+  portes d'aprovació, és `docs/plans/fets/PLA-vista-mobil.md`.
 - **Estat** (2026-11-15): fase 0 feta (seleccionar ja no mou la pàgina), fase 1 tancada (esbós i
   decisions), fase 2 aprovada i fase 3 feta (`AppBottomSheet` sol, amb proves). **Fase 4 feta**: la
   vista ja hi va, amb els tres casos de §1 del pla en un e2e de mòbil (`e2e/mobile-view.spec.ts`).
@@ -1968,7 +1984,7 @@ l'ha de desencallar.
     imatges amb les de la gent.
   - **Compte.** Una adreça que controli el mantenidor (un àlies `+proves` de la seva), verificada
     des del panell d'administració (estat `active`) per no gastar cap dels 100 correus diaris de Resend (L5 de
-    `docs/ESTUDI-limits-serveis-gratuits.md`), amb rol `user` i no `admin`: ha de veure el que veu
+    `docs/estudis/ESTUDI-limits-serveis-gratuits.md`), amb rol `user` i no `admin`: ha de veure el que veu
     la gent.
   - **Quotes.** El pla gratuït té 10 documents i 5 MB. Les set fixtures hi caben, però una prova
     que falli a mitges deixa documents i imatges penjats. Les proves han d'esborrar el que creen en
@@ -1986,7 +2002,7 @@ l'ha de desencallar.
 
 ### P2 — La vista al mòbil en dispositius de debò 🔴 Oberta
 
-*(Fase 5 de `docs/PLA-vista-mobil.md`, 2026-11-15. Ve de C29, resolta.)*
+*(Fase 5 de `docs/plans/fets/PLA-vista-mobil.md`, 2026-11-15. Ve de C29, resolta.)*
 
 - **Per què s'ajorna**: l'emulació de Chromium no ho pot dir. Ho prova l'usuari al servidor de
   proves amb un iPhone, un Android i una tauleta.
@@ -2002,7 +2018,7 @@ l'ha de desencallar.
 
 ## Novetats pendents de publicar
 
-Surten de la tria de `docs/NOTICIES-candidates-des-de-2.0.2.md`. Les sis notícies que no
+Surten de la tria de `docs/estudis/NOTICIES-candidates-des-de-2.0.2.md`. Les sis notícies que no
 demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per què.
 
 ### N1 — Les tres notícies de compte no estan escrites 🔴 Oberta (ajornada)
@@ -2020,8 +2036,8 @@ demanen compte ja són publicades; aquí queda el que se'n va deixar fora i per 
   deixar-lo descobrir al quart document.
 - **Revisió 2026-09-27 — continua oberta, amb dues correccions:**
   - **El sostre és ara de 10 documents** (`a166e4b`), no de 3; el de vocabulari, de 3 paraules, i
-    l'espai d'imatges, de 5 MB. La fitxa de `docs/NOTICIES-candidates-des-de-2.0.2.md` (§ notícia 4 i
-    decisió 2) i `docs/INVENTARI-funcionalitats-des-de-2.0.2.md` (§ quotes: «3 documents, 200
+    l'espai d'imatges, de 5 MB. La fitxa de `docs/estudis/NOTICIES-candidates-des-de-2.0.2.md` (§ notícia 4 i
+    decisió 2) i `docs/estudis/INVENTARI-funcionalitats-des-de-2.0.2.md` (§ quotes: «3 documents, 200
     paraules, 50 MB») encara porten els números vells. **Cal corregir-los abans d'escriure la
     notícia**, o es publicarà un límit que no és cert.
   - **Depèn de l'interruptor de comptes.** Des de la 2.1.0 hi ha compilacions amb

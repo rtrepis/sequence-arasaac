@@ -19,7 +19,7 @@ import {
   word,
 } from "./demoDocument";
 
-// Captures de la notícia «pages-and-blocks» (N-1 de `docs/PLA-noticies.md`):
+// Captures de la notícia «pages-and-blocks» (N-1 de `docs/plans/PLA-noticies.md`):
 // les pàgines i la seva disposició, les plantilles, els blocs i els rètols.
 // Una tanda per idioma, sobre el document de demostració (fixture 19) amb una
 // seqüència sense col·locar.

@@ -238,7 +238,7 @@ control, es queda als 8 px que MUI li posa per defecte.
 ### F14 — Al mòbil, el full i els ajustos de la vista es disputen el mateix scroll
 
 *(Trobada el 2026-11-15 provant la vista al mòbil. És C29 de `docs/BACKLOG-ux.md`; el pla és
-`docs/PLA-vista-mobil.md`.)*
+`docs/plans/fets/PLA-vista-mobil.md`.)*
 
 Per sota de `md`, la columna d'ajustos de la vista va sota el full, i el verd fa l'alçada de la
 pantalla amb el seu propi scroll. Un cop s'hi ha baixat, el dit només mou el verd i **no queda cap

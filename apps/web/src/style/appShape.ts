@@ -8,7 +8,7 @@
  * hi ha a sota. Fins ara el 20 vivia copiat a `StyledToggleButtonGroup`, a
  * `StyledButton` i dins d'un `sx` del modal d'edició.
  *
- * Vegeu `docs/ESTANDARD-capes-flotants.md`.
+ * Vegeu `docs/estudis/ESTANDARD-capes-flotants.md`.
  */
 
 /** Radi de cantonada de la casa, en píxels. */

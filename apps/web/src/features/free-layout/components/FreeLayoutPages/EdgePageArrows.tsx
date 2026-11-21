@@ -24,7 +24,7 @@ interface EdgePageArrowsProps {
 }
 
 /**
- * Les fletxes de la vora (N4 de `docs/PLA-vista-mobil.md`): l'alternativa d'un
+ * Les fletxes de la vora (N4 de `docs/plans/fets/PLA-vista-mobil.md`): l'alternativa d'un
  * toc a lliscar per passar de pàgina. Tocar la vora del full en fa sortir una,
  * semitransparent, uns segons. **Amagades només a la vista**: són sempre a
  * l'arbre d'accessibilitat i a l'ordre de tabulació, i es veuen quan reben el

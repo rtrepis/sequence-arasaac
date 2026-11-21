@@ -2,7 +2,7 @@
 
 - **Estat**: acceptada (2026-11-06), **revisada** (2026-11-07, i ampliada el 2026-11-08 amb el
   mode de cada pàgina a la interfície: vegeu les decisions 16–19) amb la revisió de la fase 3 del pla
-  (`docs/PLA-mode-lliure.md`, §12): un sol model de pàgines (R1), la plantilla desada amb la pàgina
+  (`docs/plans/fets/PLA-mode-lliure.md`, §12): un sol model de pàgines (R1), la plantilla desada amb la pàgina
   (R2), els blocs de text (R9) i els estils amb nom del catàleg (R10). La versió primera es resumeix
   a «Història».
 - **Substitueix**: la decisió 7 de l'ADR-003 («les unitats són mil·límetres només a `frame`, i
@@ -23,7 +23,7 @@ fase 3 va fer veure que no n'hi ha prou:
   blocs **dins de cada pàgina**.
 - **R2**: la plantilla no es desava («el que es desa són les caixes»), i afegir una seqüència a una
   pàgina en triava una altra pel nombre de caixes. La pàgina ha de recordar la seva plantilla.
-- **R9**: l'estudi dels treballs amb pictogrames (`docs/ESTUDI-treballs-amb-pictogrames.md`) demana
+- **R9**: l'estudi dels treballs amb pictogrames (`docs/estudis/ESTUDI-treballs-amb-pictogrames.md`) demana
   **rètols**: un text sol, sense pictograma («Primer», «Després», «Avui és…»).
 - **Q2**: cada bloc té els seus ajustos (mida com a màxim, espai, alineació, columnes).
 - **R10**: l'usuari tindrà un catàleg d'estils, i el que se n'aplica a un document hi ha d'anar
@@ -270,7 +270,7 @@ fase 3 va fer veure que no n'hi ha prou:
   sense marge d'impressió (`sheetAreaMm`, `layoutAreaMm`). Els blocs hi funcionen com en un paper.
   En passar-hi o tornar-ne, i en adaptar-la a una pantalla d'una altra forma, els blocs es
   recol·loquen (`rescalePages`). Abans no admetia pàgines amb caixes. Vegeu
-  `docs/PLA-mode-lliure.md`, §13, «La pantalla sencera amb blocs».
+  `docs/plans/fets/PLA-mode-lliure.md`, §13, «La pantalla sencera amb blocs».
 - **El desfer és l'únic de l'app, ampliat**: la instantània de `styleSlice` guarda també les
   pàgines i, des de R10, els estils amb nom. Adaptar la pantalla sencera hi afegeix la pàgina del
   document (`layout`), només en aquella instantània.

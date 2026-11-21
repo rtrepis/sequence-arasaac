@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { carouselNews, NewsItem, newsItems } from "./newsItems";
 
-// Les notícies que la fase 1 de `docs/PLA-noticies.md` va trobar superades
+// Les notícies que la fase 1 de `docs/plans/PLA-noticies.md` va trobar superades
 const SUPERSEDED = [
   "multiple-sequences",
   "view-improvements",

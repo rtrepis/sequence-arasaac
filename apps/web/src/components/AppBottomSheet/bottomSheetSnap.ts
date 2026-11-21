@@ -2,7 +2,7 @@
 // dit. Lògica pura, sense React ni DOM: el component hi passa les mides i en
 // rep la parada.
 
-/** Les tres parades del panell (M2 de `docs/PLA-vista-mobil.md`). */
+/** Les tres parades del panell (M2 de `docs/plans/fets/PLA-vista-mobil.md`). */
 export type BottomSheetSnap = "collapsed" | "half" | "full";
 
 /** Ordre de baix a dalt: el que fa servir el gest ràpid per buscar la següent. */

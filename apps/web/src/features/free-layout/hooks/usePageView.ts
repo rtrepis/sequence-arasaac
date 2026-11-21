@@ -28,7 +28,7 @@ export const scrollPageToTop = (index: number): void => {
 /**
  * L'`id` del contenidor de totes les pàgines pròpies: és el que va a pantalla
  * completa, perquè s'hi pugui passar de pàgina lliscant (N1 de
- * `docs/PLA-vista-mobil.md`). S'hi veu la pàgina que es mira.
+ * `docs/plans/fets/PLA-vista-mobil.md`). S'hi veu la pàgina que es mira.
  */
 export const PAGES_FULLSCREEN_ID = "view-pages";
 

@@ -70,7 +70,7 @@ interface AppDialogProps {
  * l'acció d'icona— perquè el títol quedi centrat tant si hi ha acció com si no.
  * El radi el posa el tema (`MuiDialog`), no aquest component.
  *
- * Vegeu `docs/ESTANDARD-capes-flotants.md`.
+ * Vegeu `docs/estudis/ESTANDARD-capes-flotants.md`.
  */
 const AppDialog = ({
   open,

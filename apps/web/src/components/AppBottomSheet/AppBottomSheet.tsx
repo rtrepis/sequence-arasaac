@@ -1,6 +1,6 @@
 // El panell de baix: el tercer component canònic de capes flotants, al costat
 // dels dos diàlegs (vegeu «Panell de baix» a `docs/estandards/capes-flotants.md`
-// i el pla, `docs/PLA-vista-mobil.md`).
+// i el pla, `docs/plans/fets/PLA-vista-mobil.md`).
 //
 // Fet a mà i no amb el `SwipeableDrawer` de MUI: aquell és un drawer temporal,
 // amb un fons que tapa i bloqueja la pàgina, i la seva variant persistent no

@@ -171,7 +171,7 @@ si un estàndard el contradiu, és l'estàndard el que s'ha de corregir.
 | `docs/fonaments/03-model-contingut-estil.md` | Nomenclatura (document, seqüència, pictograma, estil, pàgina, preferències), de qui és cada cosa, la cascada d'estil (`resolveStyle`, `diffStyle`) i les accions sobre l'estil: `documentSlice`, `uiSlice.defaultSettings`/`viewSettings`, la targeta, el PDF, la columna de la vista, els menús «⋯» de pàgina i bloc i el panell «El meu estil» |
 | `docs/fonaments/06-compatibilitat-i-dades.md` | El format `.saac` v3 i `.saacstyle`, la migració dels formats antics, desar i obrir (fitxer i núvol), la descàrrega i el selector de fitxers. Esquema formal: `docs/schema/saac-v3.schema.json` |
 | `docs/decisions/ADR-003-model-document-saac-v3.md` | Per què el format és com és, i què es va descartar. `docs/fonaments/sequencia-i-estil.md` n'és l'antecessor i ara només redirigeix |
-| `docs/decisions/ADR-005-disposicio-lliure.md` | Pàgines i blocs: cada pàgina automàtica o amb plantilla (desada), blocs de seqüència i de text, els estils amb nom (`styles`), el lector que conserva els blocs que no entén, i per què no cal pujar `schemaVersion`. El pla per fases és `docs/PLA-mode-lliure.md` |
+| `docs/decisions/ADR-005-disposicio-lliure.md` | Pàgines i blocs: cada pàgina automàtica o amb plantilla (desada), blocs de seqüència i de text, els estils amb nom (`styles`), el lector que conserva els blocs que no entén, i per què no cal pujar `schemaVersion`. El pla per fases, ja tancat, és `docs/plans/fets/PLA-mode-lliure.md` |
 
 ## Índex d'estàndards
 
@@ -198,49 +198,54 @@ Els estàndards diuen **què** s'ha de fer; aquests documents diuen **per què**
 queda obert**. Cap d'ells és de lectura habitual: s'hi va quan la pregunta que es té
 al davant hi encaixa.
 
+**L'índex és `docs/README.md`**: la taula amb l'estat de cada pla i estudi i on es continua. Els
+plans en curs són a `docs/plans/`, els tancats a `docs/plans/fets/` (arxiu: no s'hi continua),
+els estudis a `docs/estudis/` i els esbossos HTML a `docs/esbossos/`. **Quan un pla s'obre o es
+tanca, s'actualitza l'índex en el mateix commit.**
+
 - `docs/BACKLOG-ux.md` recull les troballes obertes de la revisió d'UX, icones i accessibilitat, amb
   fitxer, motiu i proposta. **Consultar-lo abans de proposar una millora d'UX**: si ja hi és, cal
   continuar-hi (marcar-la resolta o caducada), no obrir-la de nou. Una troballa detectada i no
   resolta al moment s'hi apunta; no es deixa només a la conversa.
   La secció **Prioritats**, al capdamunt, diu per on començar (Ara · Després · Més endavant ·
   Ajornades); una entrada nova s'hi afegeix en obrir-la.
-- `docs/ESTUDI-limits-serveis-gratuits.md` inventaria els límits del pla gratuït de cada servei
+- `docs/estudis/ESTUDI-limits-serveis-gratuits.md` inventaria els límits del pla gratuït de cada servei
   (Atlas, Cloudinary, Render, Vercel, Resend, ARASAAC, GA4) i els contrasta amb el que l'app en
   consumeix de debò. **Consultar-lo abans d'afegir res que desi, pugi o enviï correu**: hi ha les
   troballes L1–L8, de les quals L1–L4 estan resoltes i L5–L8 continuen obertes. La primera de
   les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
   correus diaris de Resend.
-- `docs/PLA-vista-mobil.md` és el pla per a la vista al mòbil: el full sencer a la pantalla i els
-  ajustos en un panell de baix (`AppBottomSheet`). **Fet fins a la fase 6** (C29 resolta,
-  2026-11-19); queden les proves en dispositius de debò (P2 del backlog) i la notícia de Novetats.
-- `docs/PLA-estils.md` és el pla dels estils: la solució A (el pictograma només guarda els seus
+- `docs/plans/fets/PLA-vista-mobil.md` és el pla per a la vista al mòbil: el full sencer a la pantalla i els
+  ajustos en un panell de baix (`AppBottomSheet`). **Tancat** (2026-11-21): les proves en
+  dispositius de debò són P2 del backlog. Referència del patró del panell de baix.
+- `docs/plans/PLA-estils.md` és el pla dels estils: la solució A (el pictograma només guarda els seus
   retocs), les divuit troballes del que avui confon (E1–E18) i la feature d'estils predefinits que
   completa El meu estil abans de la release (Galeria d'estils). **Revisat el 2026-11-21 (§8)**: l'estil
   va amb la seqüència i el bloc, la seqüència té nom i la pantalla d'edició canvia al mòbil. Falta el
   pla d'execució (§9, encàrrec de la sessió següent). B37.
   **Consultar-lo abans de tocar res que creï, apliqui o restableixi un estil.**
-- `docs/PLA-noticies.md` és el pla de les notícies de Novetats de la release: les noves des del 3
+- `docs/plans/PLA-noticies.md` és el pla de les notícies de Novetats de la release: les noves des del 3
   d'octubre (pàgines, el meu estil, la vista al mòbil, la pantalla sencera…) i les velles que ja no
   són certes, que surten del carrusel i es queden a Novetats amb una marca. **Aprovat**
   (2026-11-19); oberta D5. **Consultar-lo abans d'escriure o tocar cap notícia.**
-- `docs/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
+- `docs/estudis/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
   (agenda, passos, primer/després, setmana, taulers, normes, contes, economia de fitxes, menú), a
   l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en
   surten. **Consultar-lo abans de dissenyar o canviar una plantilla del mode lliure.** Primera
   versió: falta validar-ne l'ordre amb usuaris reals.
-- `docs/ESTUDI-seo-noticies.md` és el pla perquè les notícies es trobin als cercadors i es puguin
+- `docs/estudis/ESTUDI-seo-noticies.md` és el pla perquè les notícies es trobin als cercadors i es puguin
   compartir: què veu Google avui (una SPA buida sense JavaScript), les pàgines estàtiques, el
   sitemap i les etiquetes per compartir (fase 1), les **guies** pensades per a cerques reals
   (fase 2) i com mesurar-ho (fase 3). **Consultar-lo abans de tocar `index.html`, `vercel.json`,
   `robots.txt` o la manera com es publiquen les notícies.** No s'ha començat.
-- `docs/ESTANDARD-capes-flotants.md` és l'estudi que hi ha darrere de l'estàndard de capes
+- `docs/estudis/ESTANDARD-capes-flotants.md` és l'estudi que hi ha darrere de l'estàndard de capes
   flotants: l'inventari del que hi havia, les tretze divergències numerades (F1–F13) amb fitxer i
   motiu, i el pla de migració. L'estàndard viu a `docs/estandards/capes-flotants.md`; **aquest
   document és la raó de cada regla**, i s'hi va a mirar quan una regla sembla arbitrària o quan
   se'n vol canviar alguna.
-- `docs/INVENTARI-funcionalitats-des-de-2.0.2.md` recull, per blocs, tot el que l'app fa avui i no
+- `docs/estudis/INVENTARI-funcionalitats-des-de-2.0.2.md` recull, per blocs, tot el que l'app fa avui i no
   feia a la 2.0.2. **Consultar-lo quan cal explicar la versió a algú de fora** —una nota de
   llançament, un resum a l'equip— en comptes de tornar a recórrer el registre de commits.
-- `docs/NOTICIES-candidates-des-de-2.0.2.md` és la tria editorial que en surt: què d'aquell
+- `docs/estudis/NOTICIES-candidates-des-de-2.0.2.md` és la tria editorial que en surt: què d'aquell
   inventari es publica a Novetats i què no, amb la fitxa de cada notícia i el que **no** s'hi ha
   de dir. **Consultar-lo abans d'escriure una entrada de `newsItems.ts`**; com s'escriu, a `docs/estandards/noticies.md`.

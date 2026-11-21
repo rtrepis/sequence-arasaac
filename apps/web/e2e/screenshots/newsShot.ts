@@ -318,7 +318,7 @@ export const phoneScreen = async (page: Page): Promise<PhoneScreen> => {
 
 /**
  * Desa una o dues captures de mòbil dins del marc de telèfon (D3 de
- * `docs/PLA-noticies.md`), a la mida de la notícia. Es pinta en una pestanya
+ * `docs/plans/PLA-noticies.md`), a la mida de la notícia. Es pinta en una pestanya
  * a part, perquè la de l'app no perdi l'estat.
  */
 export const phoneShot = async (

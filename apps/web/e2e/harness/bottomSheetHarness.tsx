@@ -1,4 +1,4 @@
-// Arnès de l'e2e d'`AppBottomSheet` (fase 3 de `docs/PLA-vista-mobil.md`): el
+// Arnès de l'e2e d'`AppBottomSheet` (fase 3 de `docs/plans/fets/PLA-vista-mobil.md`): el
 // panell sol, abans que la vista el munti, amb el botó d'estat de debò al
 // costat per comprovar que s'hi posa damunt. No és part de l'app: el serveix
 // el servidor de desenvolupament i el build no el veu.
