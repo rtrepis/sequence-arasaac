@@ -19,7 +19,7 @@ import {
   usePictogramActions,
   type PictogramActionKey,
 } from "@components/utils/MouseActionList/usePictogramActions";
-import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
+import { selectActiveSequenceCardDefaults } from "@features/sequence/style/styleSelectors";
 import { isPictogramCustomized } from "@features/sequence/style/pictogramStyle";
 import { cardMarks, customizedMark } from "./PictEditModal.styled";
 import TextOverflowWarning from "./TextOverflowWarning";
@@ -53,9 +53,10 @@ const PictEditModal = ({
 }: PictEditProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  // L'estil del document, no les preferències de qui el mira
+  // L'estil de la seqüència (o el del document), no les preferències de qui
+  // el mira
   const defaults: PictogramCardDefaults = useAppSelector(
-    selectDocumentCardDefaults,
+    selectActiveSequenceCardDefaults,
   );
   // Té retocs propis? Ho diuen la marca de la targeta, el seu nom accessible i
   // el menú contextual, que llavors ofereix «Restableix l'estil»

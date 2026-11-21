@@ -37,6 +37,7 @@ import {
   selectPageLayout,
   selectPages,
   selectSequenceKeys,
+  selectSequenceStyleIds,
   selectSheetArea,
 } from "@features/free-layout/store/freeLayoutThunks";
 import {
@@ -209,6 +210,7 @@ const FreeLayoutPages = ({
   const keys = useAppSelector(selectSequenceKeys);
   const views = useAppSelector(selectResolvedSequenceViews);
   const styles = useAppSelector(selectNamedStyles);
+  const sequenceStyleIds = useAppSelector(selectSequenceStyleIds);
   const defaults = useAppSelector(selectDocumentCardDefaults);
   const sequenceName = useSequenceName();
   const {
@@ -273,8 +275,9 @@ const FreeLayoutPages = ({
     };
   }, []);
 
-  // Es mesura cada seqüència tal com es veu: sola, i amb cada estil amb nom
-  // que hi fa servir algun bloc, que en pot canviar la lletra i les vores
+  // Es mesura cada seqüència tal com es veu: amb el seu estil, i amb cada
+  // estil reassignat que hi fa servir algun bloc, que en poden canviar la
+  // lletra i les vores
   const lookOf = useBlockLooks();
   const measured = useMemo((): MeasuredSequence[] => {
     const looks = new Map<string, MeasuredSequence>();
@@ -377,6 +380,7 @@ const FreeLayoutPages = ({
         view={view}
         cardBase={cardSizeOf(
           cardSizes,
+          { styles, sequenceStyleIds },
           placement.sequenceKey,
           placement.styleId,
         )}

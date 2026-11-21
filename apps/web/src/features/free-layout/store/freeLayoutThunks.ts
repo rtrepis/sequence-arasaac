@@ -188,13 +188,17 @@ export const selectDocumentTitle = (state: RootState): string | undefined =>
 /** Els estils amb nom del document. */
 export const selectNamedStyles = (state: RootState) => state.document.styles;
 
+/** L'estil de cada seqüència que en té un (`sequences[].namedStyle`). */
+export const selectSequenceStyleIds = (state: RootState) =>
+  state.document.sequenceStyleIds;
+
 /** Els pictogrames de cada seqüència del document. */
 export const selectDocumentContent = (state: RootState) =>
   state.document.content;
 
-/** El que el fitxer portava de cada seqüència i l'app no fa servir (el títol…). */
-export const selectSequenceExtras = (state: RootState) =>
-  state.document.saacExtra?.sequences;
+/** El nom de cada seqüència que en té (`sequences[].title`). */
+export const selectSequenceNames = (state: RootState) =>
+  state.document.sequenceNames;
 
 /** Les claus de les seqüències del document, en l'ordre de les pestanyes. */
 export const selectSequenceKeys = (state: RootState): number[] =>

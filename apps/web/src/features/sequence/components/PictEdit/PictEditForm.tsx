@@ -30,7 +30,7 @@ import SettingCardBoolean from "@components/SettingsCards/SettingCardBoolean/Set
 import React from "react";
 import SettingCardBorder from "@components/SettingsCards/SettingCardBorder/SettingCardBorder";
 import { MdSettingsBackupRestore, MdTune } from "react-icons/md";
-import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
+import { selectActiveSequenceCardDefaults } from "@features/sequence/style/styleSelectors";
 import {
   isPictogramCustomized,
   resetPictogramStyle,
@@ -104,10 +104,10 @@ const PictEditForm = ({
     skin: defaultSkin,
     hair: defaultHair,
     color: defaultColor,
-    // L'estil que hereta el pictograma (el del document), no les preferències
-    // de qui l'edita
-  } = useAppSelector(selectDocumentCardDefaults);
-  const inherited = useAppSelector(selectDocumentCardDefaults);
+    // L'estil que hereta el pictograma (el de la seva seqüència, o el del
+    // document), no les preferències de qui l'edita
+  } = useAppSelector(selectActiveSequenceCardDefaults);
+  const inherited = useAppSelector(selectActiveSequenceCardDefaults);
   // El formulari ensenya els valors resolts: el retoc si n'hi ha, i si no el
   // de l'estil. En desar, només s'escriu el que es diferencia (solució A)
   const resolvedStart = resolvePictogram(pictogram, inherited);

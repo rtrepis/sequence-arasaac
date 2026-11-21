@@ -9,6 +9,7 @@ import {
   Sequence,
   PictSequenceSettingsForEdit,
   PictApiAraForEdit,
+  SaacExtraFields,
 } from "@/types/sequence";
 import {
   DocumentLayout,
@@ -176,6 +177,9 @@ const documentSlice = createSlice({
       ) => {
         previousDocument.content[action.payload] = [];
         delete previousDocument.viewSettings[action.payload];
+        // Una seqüència nova no té nom ni estil propi: fa servir el del document
+        delete previousDocument.sequenceNames?.[action.payload];
+        delete previousDocument.sequenceStyleIds?.[action.payload];
         if (previousDocument.pages)
           previousDocument.pages = addNewSequenceToPages(
             previousDocument.pages,
@@ -667,6 +671,8 @@ const documentSlice = createSlice({
         const lastKey = keys[keys.length - 1];
         delete previousDocument.content[Number(lastKey)];
         delete previousDocument.viewSettings[Number(lastKey)];
+        delete previousDocument.sequenceNames?.[Number(lastKey)];
+        delete previousDocument.sequenceStyleIds?.[Number(lastKey)];
         // I els seus blocs: no poden apuntar a una seqüència que no hi és
         if (previousDocument.pages)
           previousDocument.pages = removeSequencePlacements(
@@ -845,6 +851,35 @@ export const adoptMyStyleThunk =
   };
 
 /**
+ * Els esborranys d'abans del pas 4 del pla dels estils porten el nom de cada
+ * seqüència (`title`) entre els camps desconeguts: passa a `sequenceNames`.
+ */
+export const withSequenceNamesFromExtras = (
+  document: DocumentSAAC,
+): DocumentSAAC => {
+  const extras = document.saacExtra?.sequences;
+  if (!extras) return document;
+  const names: { [key: number]: string } = { ...document.sequenceNames };
+  const sequences: { [key: number]: SaacExtraFields } = {};
+  let moved = false;
+  Object.entries(extras).forEach(([key, extra]) => {
+    const { title, ...rest } = extra;
+    if (typeof title !== "string") {
+      sequences[Number(key)] = extra;
+      return;
+    }
+    moved = true;
+    if (names[Number(key)] === undefined) names[Number(key)] = title;
+    if (Object.keys(rest).length > 0) sequences[Number(key)] = rest;
+  });
+  if (!moved) return document;
+  const saacExtra = { ...document.saacExtra };
+  if (Object.keys(sequences).length > 0) saacExtra.sequences = sequences;
+  else delete saacExtra.sequences;
+  return { ...document, sequenceNames: names, saacExtra };
+};
+
+/**
  * Obre l'esborrany del navegador. Els d'abans de la solució A porten l'estil
  * copiat a cada pictograma: es queden només amb els retocs, una sola vegada,
  * comparant amb l'estil del document en aquell moment (pla dels estils, §3.3).
@@ -854,12 +889,17 @@ export const adoptMyStyleThunk =
 export const restoreDraftDocumentThunk =
   (draft: { document: DocumentSAAC; retouchesOnly: boolean }) =>
   (dispatch: Dispatch, getState: () => StyleSourceState): DocumentSAAC => {
-    const document = draft.retouchesOnly
-      ? draft.document
-      : documentFromLegacyPictograms(
-          draft.document,
-          resolveDocumentStyle(draft.document, userDefaultStyleOf(getState())),
-        );
+    const document = withSequenceNamesFromExtras(
+      draft.retouchesOnly
+        ? draft.document
+        : documentFromLegacyPictograms(
+            draft.document,
+            resolveDocumentStyle(
+              draft.document,
+              userDefaultStyleOf(getState()),
+            ),
+          ),
+    );
     dispatch(documentSlice.actions.loadDocumentSaac(document));
     return document;
   };

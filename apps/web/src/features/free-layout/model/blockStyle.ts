@@ -1,6 +1,7 @@
-// L'aspecte d'un bloc, amb la cascada del fonament 03 ampliada amb els estils
-// amb nom: document → seqüència → estil amb nom del bloc → bloc → pictograma.
-// Cada nivell només porta el que canvia. Vegeu
+// L'aspecte d'un bloc, amb la cascada del fonament 03: per a l'estil,
+// document → estil de la seqüència, o el reassignat del bloc → pictograma; per
+// a la distribució, document → seqüència → estil reassignat del bloc (els
+// d'abans en porten) → bloc. Cada nivell només porta el que canvia. Vegeu
 // `docs/decisions/ADR-005-disposicio-lliure.md`.
 import type {
   DocumentPages,
@@ -13,16 +14,20 @@ import type {
   TextPlacement,
 } from "@/types/document";
 import type { Font } from "@/types/sequence";
-import { mergeDeep } from "@features/sequence/saac/cascade";
-import { DEFAULT_FITZGERALD_CATEGORY_COLORS } from "@features/sequence/saac/fitzgerald";
 import { deepEqual } from "@features/sequence/style/styleModel";
+import {
+  cardNamedStyleOf,
+  namedStyleOf,
+  type SequenceStyleSource,
+} from "@features/sequence/style/namedStyle";
 
-/** L'estil amb nom que fa servir el bloc, si en fa servir cap que existeixi. */
-export const namedStyleOf = (
-  styles: readonly NamedStyle[] | undefined,
-  styleId: string | undefined,
-): NamedStyle | undefined =>
-  styleId === undefined ? undefined : styles?.find(({ id }) => id === styleId);
+// La resolució dels estils amb nom (el de la seqüència i el reassignat del
+// bloc) viu amb l'estil, a `features/sequence/style/namedStyle.ts`
+export {
+  cardNamedStyleOf,
+  namedStyleOf,
+  styleWithNamed,
+} from "@features/sequence/style/namedStyle";
 
 /**
  * La vista d'un bloc de seqüència: la de la seqüència (que ja porta la del
@@ -89,35 +94,13 @@ export const resolveTextBlockStyle = (
   };
 };
 
-// --- L'aspecte de les targetes d'un bloc amb estil amb nom ---
-
-/**
- * L'estil del document retocat per un estil amb nom: és el que es fa servir
- * per pintar les targetes dels blocs que el fan servir.
- */
-export const styleWithNamed = (
-  style: SequenceStyle,
-  named: NamedStyle | undefined,
-): SequenceStyle =>
-  named === undefined
-    ? style
-    : {
-        ...style,
-        pictApiAra: { ...style.pictApiAra, ...named.pictApiAra },
-        pictSequence: mergeDeep(style.pictSequence, named.pictSequence),
-        view: { ...style.view, ...named.view },
-        fitzgeraldColors: named.fitzgeraldColors
-          ? {
-              ...(style.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS),
-              ...named.fitzgeraldColors,
-            }
-          : style.fitzgeraldColors,
-      };
+// --- L'aspecte de les targetes d'un bloc ---
 
 /**
  * La clau amb què es mesura la targeta d'una seqüència en un bloc: la
- * seqüència sola, o la seqüència amb l'estil amb nom, que en pot canviar la
- * lletra i les vores i, per tant, la mida.
+ * seqüència sola, o la seqüència amb l'estil amb nom que la pinta (el seu o el
+ * reassignat del bloc, `cardNamedStyleOf`), que en pot canviar la lletra i les
+ * vores i, per tant, la mida.
  */
 export const cardMeasureKey = (
   sequenceKey: number,
@@ -334,13 +317,19 @@ export const removeNamedStyle = (
 };
 
 /**
- * La mida mesurada de la targeta d'un bloc: la de la seqüència amb el seu
- * estil amb nom, o la de la seqüència sola si aquesta no s'ha mesurat (encara,
- * o perquè l'estil amb nom ja no hi és).
+ * La mida mesurada de la targeta d'un bloc: la de la seqüència amb l'estil amb
+ * nom que la pinta (`cardNamedStyleOf`), o la de la seqüència sola si aquesta
+ * no s'ha mesurat (encara, o perquè l'estil amb nom ja no hi és).
  */
 export const cardSizeOf = <T>(
   sizes: Record<string, T>,
+  document: SequenceStyleSource,
   sequenceKey: number,
   styleId: string | undefined,
 ): T | undefined =>
-  sizes[cardMeasureKey(sequenceKey, styleId)] ?? sizes[String(sequenceKey)];
+  sizes[
+    cardMeasureKey(
+      sequenceKey,
+      cardNamedStyleOf(document, sequenceKey, styleId)?.id,
+    )
+  ] ?? sizes[String(sequenceKey)];

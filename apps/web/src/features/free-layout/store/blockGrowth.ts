@@ -43,7 +43,12 @@ export const naturalBoxOfState = (state: RootState): NaturalBoxOf | null => {
   return (placement: SequencePlacement) =>
     naturalBoxMm({
       count: content[placement.sequenceKey]?.length ?? 0,
-      card: cardSizeOf(measuredCards, placement.sequenceKey, placement.styleId),
+      card: cardSizeOf(
+        measuredCards,
+        state.document,
+        placement.sequenceKey,
+        placement.styleId,
+      ),
       view: resolveBlockView(
         views[placement.sequenceKey],
         namedStyleOf(styles, placement.styleId),

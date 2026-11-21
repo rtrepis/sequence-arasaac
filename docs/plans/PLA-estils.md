@@ -871,7 +871,8 @@ i E16), amb `style.name` = «El meu estil». Proves de §3.4.
 vores»** (decidit) i la comprovació del text i el número sense vora. Surt
 `docs/estudis/ESTUDI-estils-de-targetes.md` i s'afegeix a l'índex.
 
-**Pas 4 — El format i el model de la seqüència.** Llegir i escriure `sequences[].title`,
+**Pas 4 — El format i el model de la seqüència.** ✅ **Fet** (2026-11-21): com s'ha fet i què queda
+per al pas 5, a §12.1. Llegir i escriure `sequences[].title`,
 `sequences[].namedStyle` i `style.name` (`toRedux.ts`, `serialize.ts`, `shared-types`). La
 resolució de la cascada (`resolveStyle`, `cardMeasureKey`) amb el nivell de la seqüència i el
 bloc reassignat que el substitueix. E13: en desar, `styles` només porta els estils que fa servir
@@ -1000,6 +1001,8 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 
 ## 12. Encàrrec per obrir la sessió següent (pas 4: el format i el model de la seqüència)
 
+> **✅ Fet** (2026-11-21): vegeu §12.1.
+
 > Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
 >
 > La tasca és el **pas 4 de §10.3**: llegir i escriure `sequences[].title` i
@@ -1012,3 +1015,71 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 >
 > Normes: les de §11. No facis res de la galeria (pas 5) ni de la vista (pas 6). En acabar, marca
 > el pas 4 com a fet a §10.3 i actualitza `docs/README.md` en el mateix commit.
+
+### 12.1 Com s'ha fet (pas 4, 2026-11-21)
+
+> El que el codi d'avui ha obligat a concretar respecte de §10.2. Cap d'aquests punts no canvia cap
+> decisió ni el format del fitxer.
+
+- **Redux**: dos camps nous de `DocumentSAAC`, per clau de seqüència com `sequenceIds`:
+  `sequenceNames` (`sequences[].title`) i `sequenceStyleIds` (`sequences[].namedStyle`). Treure
+  l'última seqüència n'esborra el nom i l'estil, i una de nova no en té. `title` i `namedStyle`
+  passen a ser camps coneguts (`SEQUENCE_KEYS`); el lector descarta un `namedStyle` que apunta a un
+  estil que no hi és, com ja feia amb els blocs.
+- **Els esborranys d'abans** portaven el nom entre els camps desconeguts de la seqüència
+  (`saacExtra.sequences[].title`): en obrir-los passa a `sequenceNames`
+  (`withSequenceNamesFromExtras`, a `restoreDraftDocumentThunk`). `useSequenceName` llegeix el camp
+  nou.
+- **La resolució viu a `features/sequence/style/namedStyle.ts`**: `namedStyleOf` i
+  `styleWithNamed` (abans a `blockStyle.ts`, que els reexporta), `cardNamedStyleOf` (el reassignat
+  del bloc si existeix, si no el de la seqüència) i `sequenceStyleOf` (l'estil amb què es pinten els
+  pictogrames d'una seqüència sense bloc). Al fitxer, `cascade.ts`: `styleWithNamedV3`,
+  `sequenceStyleOfV3` i `resolveStyle(doc, seqüència, pictograma, bloc?)`.
+- **L'estil de la seqüència no porta distribució**: el `view` d'un estil amb nom només es pinta
+  quan és el reassignat d'un bloc (els estils de bloc d'abans en porten), com diu la taula del
+  fonament 03 §4. Per això `resolveBlockView` i tot el que mira la distribució no han canviat.
+- **On es pinten les targetes**: `useBlockLooks` i la mesura (`cardMeasureKey` amb l'estil que
+  pinta, el de la seqüència inclòs), `cardSizeOf` (ara rep el document per saber-lo), la pàgina
+  simple de la vista (`selectSequenceCardDefaults`) i l'edició (`selectActiveSequenceCardDefaults`
+  i companyia: el formulari, el menú del pictograma, la cerca, enganxar i «el text no hi cap»). Una
+  seqüència sense estil rep el mateix objecte que abans: els documents d'avui es pinten igual.
+- **Els retocs dels pictogrames són respecte de l'estil de la seva seqüència**, en llegir
+  (`pictogramToRedux`) i en desar (`pictogramToV3`), com diu el fonament 06 §1. Redux continua
+  guardant sencers els objectes retocats (la lletra, les vores), resolts amb l'estil de la seqüència.
+- **E13**: en desar, `styles` només porta els estils que fa servir alguna seqüència o algun bloc,
+  també els blocs que l'app no entén (es tornen a escriure tal com eren, i el seu estil hi ha de
+  ser). Redux no els treu: en desar, simplement no s'escriuen.
+- **`shared-types` no s'ha tocat**: el núvol no passa per `serialize.ts` i l'API no guarda ni
+  `styles`, ni `pages`, ni `styleName` (§3.5). El nom i l'estil de la seqüència hi arribaran amb la
+  resta, quan es tornin a encendre els comptes (B33).
+- **Proves**: `saac.test.ts` («l'estil de la seqüència (20)»), `namedStyle.test.ts` (Redux) i
+  `blockStyle.test.ts` (`cardSizeOf`); la fixture 20 s'afegeix al viatge per Redux de
+  `pictogramStyle.test.ts`. La 17 ara llegeix els noms de les seqüències com a camp conegut i fa el
+  viatge igual.
+
+**Queda per al pas 5** (no són errors d'avui: cap acció no posa encara un estil a una seqüència):
+
+- El desfer de l'estil (`takeDocumentStyleSnapshot`) no porta `sequenceStyleIds` ni
+  `sequenceNames`: triar l'estil d'una seqüència i canviar-ne el nom s'hi han d'afegir.
+- Canviar l'estil d'una seqüència no toca els objectes retocats sencers dels seus pictogrames (una
+  lletra retocada es queda amb la família de l'estil d'abans). És el mateix que passa avui en
+  canviar l'estil del document, i el snackbar de D3 ha de comptar-los igual.
+- «Aplica a tots» (`applyToAllPictogramsThunk`) porta el valor a l'estil del document: en una
+  seqüència amb estil que defineix aquella propietat, no s'hi veuria. Cal decidir-ho amb la galeria.
+- La marca d'«estil de bloc» del full (`PlacementBox`) mira només el reassignat: és el pas 6.
+
+## 13. Encàrrec per obrir la sessió següent (pas 5: la galeria i l'estil de la seqüència a l'edició)
+
+> Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
+>
+> La tasca és el **pas 5 de §10.3**: la Galeria d'estils i el menú «⋯» de la seqüència a l'edició
+> (D12, D13, D15–D18, D21, D23), amb les proves de §10.5. **És codi i pantalla.** Llegeix primer
+> §10.1, §10.3 (pas 5), §12.1 (sobretot «Queda per al pas 5»), §4, el fonament 03 (§5 i §6),
+> `docs/estandards/capes-flotants.md` i `docs/estandards/configuracions.md`.
+>
+> El model ja hi és (§12.1): l'acció de triar un estil per a una seqüència escriu
+> `sequenceStyleIds` i copia l'estil a `styles` (o en reaprofita un d'igual, com
+> `applyNamedStyle`), i el nom, `sequenceNames`.
+>
+> Normes: les de §11. No facis res de la vista (pas 6). En acabar, marca el pas 5 com a fet a §10.3
+> i actualitza `docs/README.md` en el mateix commit.

@@ -15,28 +15,29 @@ import {
   extractPictVariants,
 } from "../api/arasaacClient";
 import {
-  selectDocumentCardDefaults,
-  selectDocumentPictStyle,
-  selectDocumentStyle,
+  selectActiveSequenceCardDefaults,
+  selectActiveSequencePictStyle,
+  selectActiveSequenceStyle,
 } from "@features/sequence/style/styleSelectors";
 import { stripInherited } from "@features/sequence/style/pictogramStyle";
 
 const useSearchPictogram = () => {
-  // L'estil que hereten els pictogrames nous: no se'ls copia (solució A), però
-  // el vocabulari personal només hi deixa un retoc si en canvia alguna cosa
-  const inherited = useAppSelector(selectDocumentCardDefaults);
+  // L'estil que hereten els pictogrames nous (el de la seqüència activa, o el
+  // del document): no se'ls copia (solució A), però el vocabulari personal
+  // només hi deixa un retoc si en canvia alguna cosa
+  const inherited = useAppSelector(selectActiveSequenceCardDefaults);
 
   const getActiveSaacAmountPict = (state) =>
     state.document.content[state.document.activeSAAC].length;
   const amountSequence = useAppSelector(getActiveSaacAmountPict);
 
   const defaultSettingsPictApiAra = useAppSelector(
-    (state) => selectDocumentPictStyle(state).pictApiAra,
+    (state) => selectActiveSequencePictStyle(state).pictApiAra,
   );
-  // Colors de Fitzgerald de l'estil del document: el pictograma nou pren el de
-  // la seva categoria
+  // Colors de Fitzgerald de l'estil de la seqüència: el pictograma nou pren el
+  // de la seva categoria
   const categoryColors = useAppSelector(
-    (state) => selectDocumentStyle(state).fitzgeraldColors,
+    (state) => selectActiveSequenceStyle(state).fitzgeraldColors,
   );
 
   const wordProfiles = useAppSelector((state) => state.ui.wordProfiles);

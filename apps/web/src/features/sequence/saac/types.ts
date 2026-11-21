@@ -94,7 +94,10 @@ export interface V3BlockBase {
   h?: number;
   /** L'espai de la plantilla de la pàgina que ocupa */
   slot?: number;
-  /** L'`id` d'un estil amb nom del document (`styles`) */
+  /**
+   * L'`id` d'un estil amb nom del document (`styles`): l'estil reassignat del
+   * bloc, que substitueix el de la seqüència
+   */
   namedStyle?: string;
   [unknown: string]: unknown;
 }
@@ -229,7 +232,10 @@ export interface V3Pictogram {
 
 export interface V3Sequence {
   id: string;
+  /** El nom de la seqüència: per a qui edita, no s'imprimeix */
   title?: string;
+  /** L'estil de la seqüència: l'`id` d'un estil de `styles` */
+  namedStyle?: string;
   style?: { view?: Partial<V3View> };
   pictograms: V3Pictogram[];
   [unknown: string]: unknown;

@@ -325,6 +325,7 @@ describe("les fixtures v3 fan el viatge d'anada i tornada iguals", () => {
     "17-pagines-i-blocs.saac",
     "18-pantalla-sencera.saac",
     "19-demostracio-noticies.saac",
+    "20-estil-de-sequencia.saac",
   ];
 
   const roundTrip = (name: string) => {

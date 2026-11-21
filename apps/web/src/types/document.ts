@@ -76,8 +76,8 @@ export interface SequenceStyle extends DefaultSettings {
 
 /**
  * Camps del `.saac` v3 que Redux no fa servir però que s'han de tornar a
- * escriure en desar: els desconeguts de cada objecte, la data de creació i les
- * dades de cada seqüència que no són pictogrames (el títol…). Les pàgines
+ * escriure en desar: els desconeguts de cada objecte (també de cada
+ * seqüència) i la data de creació. Les pàgines
  * (`page.sheets` i `page.common`) i els estils amb nom (`styles`) no hi van:
  * són `pages` i `styles`.
  */
@@ -124,12 +124,26 @@ export interface DocumentSAAC {
    * el de sempre, i el de tots els documents d'abans.
    */
   pages?: DocumentPages;
-  /** Els estils amb nom del document, que els blocs fan servir per `styleId` */
+  /**
+   * Els estils amb nom del document: els fan servir les seqüències
+   * (`sequenceStyleIds`) i els blocs que en tenen un de reassignat (`styleId`)
+   */
   styles?: NamedStyle[];
   /** Colors de cada categoria de Fitzgerald. Sense valor, els de l'app. */
   fitzgeraldColors?: FitzgeraldCategoryColors;
   /** Identificador estable de cada seqüència al `.saac` v3 */
   sequenceIds?: { [key: number]: string };
+  /**
+   * El nom de cada seqüència que en té (`sequences[].title`). És per a qui
+   * edita i no s'imprimeix; sense, la interfície diu «Seqüència _N_»
+   */
+  sequenceNames?: { [key: number]: string };
+  /**
+   * L'estil de cada seqüència que en té un (`sequences[].namedStyle`): l'`id`
+   * d'un estil de `styles`. Sense, la seqüència fa servir l'estil del
+   * document. El reben tots els seus blocs que no en tenen un de reassignat
+   */
+  sequenceStyleIds?: { [key: number]: string };
   /** El que el fitxer portava i l'app no fa servir: vegeu `SaacDocumentExtras` */
   saacExtra?: SaacDocumentExtras;
 }

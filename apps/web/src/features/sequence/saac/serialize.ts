@@ -17,7 +17,7 @@ import type { PictSequence } from "@/types/sequence";
 import type { PageOrientation, PageSize, SequenceDirection } from "@/types/ui";
 import { resolveDocumentStyle } from "@features/sequence/style/styleModel";
 import { variantsOf } from "@features/sequence/style/pictogramStyle";
-import { diffDeep, diffStyle } from "./cascade";
+import { diffDeep, diffStyle, styleWithNamedV3 } from "./cascade";
 import {
   DEFAULT_FITZGERALD_CATEGORY_COLORS,
   FitzgeraldCategory,
@@ -471,7 +471,20 @@ export const documentToV3 = (
       usedIds.has(`seq_${key + 1}`) ? context.newId("seq") : `seq_${key + 1}`,
     );
 
+  // Els estils amb nom amb la forma del fitxer, per `id`
+  const namedStyles = document.styles ?? [];
+  const namedV3 = new Map(
+    namedStyles.map((named) => [named.id, namedStyleToV3(named)]),
+  );
+
   const sequences: V3Sequence[] = keys.map((key) => {
+    const title = document.sequenceNames?.[key];
+    // Un estil que no hi és no es pot fer servir: la seqüència fa servir el
+    // del document
+    const styleId = document.sequenceStyleIds?.[key];
+    const named = styleId === undefined ? undefined : namedV3.get(styleId);
+    // Els retocs de cada pictograma són respecte de l'estil de la seqüència
+    const sequenceStyle = styleWithNamedV3(style, named);
     const view = document.viewSettings?.[key];
     const viewDiff = view
       ? diffStyle<V3View>(style.view, {
@@ -486,7 +499,7 @@ export const documentToV3 = (
       .map((pict) =>
         pictogramToV3(
           pict,
-          style,
+          sequenceStyle,
           uniqueId(pict.id, () => context.newId("p")),
           addAsset,
         ),
@@ -495,6 +508,8 @@ export const documentToV3 = (
     return {
       ...extra.sequences?.[key],
       id: sequenceIdOf(key),
+      ...(title !== undefined && { title }),
+      ...(named && { namedStyle: named.id }),
       ...(viewDiff && { style: { view: viewDiff } }),
       pictograms,
     };
@@ -508,7 +523,6 @@ export const documentToV3 = (
       ([key]) => !PAGES_PAGE_KEYS.includes(key),
     ),
   );
-  const namedStyles = document.styles ?? [];
   const writer: BlockWriter = {
     sequenceIdOfKey: new Map(
       keys.map((key, index) => [key, sequences[index].id]),
@@ -537,6 +551,21 @@ export const documentToV3 = (
     ...(document.pages && pagesToV3(document.pages, writer)),
   };
 
+  // E13: només els estils que fa servir alguna seqüència o algun bloc, també
+  // els blocs que l'app no entén, que es tornen a escriure tal com eren
+  const usedStyleIds = new Set<string>();
+  sequences.forEach(({ namedStyle }) => {
+    if (namedStyle !== undefined) usedStyleIds.add(namedStyle);
+  });
+  [
+    ...(page.sheets?.flatMap(({ blocks }) => blocks) ?? []),
+    ...(page.common ?? []),
+  ].forEach((block) => {
+    const { namedStyle } = block as { namedStyle?: unknown };
+    if (typeof namedStyle === "string") usedStyleIds.add(namedStyle);
+  });
+  const usedStyles = namedStyles.filter(({ id }) => usedStyleIds.has(id));
+
   return {
     ...extra.root,
     format: SAAC_FORMAT,
@@ -562,8 +591,8 @@ export const documentToV3 = (
       ...style,
     },
     sequences,
-    ...(namedStyles.length > 0 && {
-      styles: namedStyles.map(namedStyleToV3),
+    ...(usedStyles.length > 0 && {
+      styles: usedStyles.map(({ id }) => namedV3.get(id) as V3NamedStyle),
     }),
     ...(Object.keys(assets).length > 0 && { assets }),
     ui: {

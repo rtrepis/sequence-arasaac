@@ -20,6 +20,7 @@ import {
 } from "./documentSlice";
 import type { AppThunk } from "@/app/store";
 import {
+  selectActiveSequenceStyle,
   selectDocumentStyle,
   selectUserDefaultStyle,
 } from "@features/sequence/style/styleSelectors";
@@ -307,10 +308,10 @@ export const fitPictogramTextThunk =
       (pict) => pict.indexSequence === indexSequence,
     );
     if (!pictogram) return;
-    const documentFont = pictStyleOf(selectDocumentStyle(state)).pictSequence
-      .font;
+    // La de la seqüència del pictograma, que és la que hereta
+    const sequenceFont = selectActiveSequenceStyle(state).pictSequence.font;
     // La lletra resolta, perquè el retoc no perdi la família ni el color
-    const font = mergeDeep(documentFont, pictogram.settings.font);
+    const font = mergeDeep(sequenceFont, pictogram.settings.font);
     dispatch(
       undoableStyleChangeThunk(
         () =>

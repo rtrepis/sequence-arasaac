@@ -20,7 +20,12 @@ import type {
   SaacExtraFields,
 } from "@/types/sequence";
 import type { DefaultSettings } from "@/types/ui";
-import { isPlainObject, mergeDeep, resolveCardStyle } from "./cascade";
+import {
+  isPlainObject,
+  mergeDeep,
+  resolveCardStyle,
+  sequenceStyleOfV3,
+} from "./cascade";
 import type { FitzgeraldCategoryColors } from "./fitzgerald";
 import { PICTOGRAM_VARIANTS } from "./types";
 import type {
@@ -106,7 +111,13 @@ export const NAMED_STYLE_KEYS = [
   "view",
 ] as const;
 const STYLE_KEYS = ["name", "pictogram", "card", "view"] as const;
-export const SEQUENCE_KEYS = ["id", "style", "pictograms"] as const;
+export const SEQUENCE_KEYS = [
+  "id",
+  "title",
+  "namedStyle",
+  "style",
+  "pictograms",
+] as const;
 export const PICTOGRAM_KEYS = [
   "id",
   "word",
@@ -148,8 +159,11 @@ const pictogramToRedux = (
   pictogram: V3Pictogram,
   indexSequence: number,
   document: SaacDocumentV3,
+  sequenceStyle: V3Style,
 ): PictSequence => {
-  const resolved = resolveCardStyle(document.style, undefined, pictogram);
+  // Els retocs són respecte de l'estil de la seva seqüència (el del document,
+  // o el de la seqüència si en té)
+  const resolved = resolveCardStyle(sequenceStyle, undefined, pictogram);
   const { image, style } = pictogram;
   const card = style?.card;
   const retouch = style?.pictogram;
@@ -355,13 +369,20 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
   const viewSettings: { [key: number]: SequenceViewSettings } = {};
   const sequenceIds: { [key: number]: string } = {};
   const sequenceExtras: { [key: number]: SaacExtraFields } = {};
+  const sequenceNames: { [key: number]: string } = {};
+  const sequenceStyleIds: { [key: number]: string } = {};
 
   document.sequences.forEach((sequence, key) => {
+    const sequenceStyle = sequenceStyleOfV3(document, sequence.id);
     content[key] = sequence.pictograms.map((pictogram, index) =>
-      pictogramToRedux(pictogram, index, document),
+      pictogramToRedux(pictogram, index, document, sequenceStyle),
     );
     viewSettings[key] = mergeDeep(tabBase, sequence.style?.view);
     sequenceIds[key] = sequence.id;
+    if (sequence.title !== undefined) sequenceNames[key] = sequence.title;
+    // El lector ja n'ha tret els que apunten a un estil que no hi és
+    if (sequence.namedStyle !== undefined)
+      sequenceStyleIds[key] = sequence.namedStyle;
     const extra = unknownFields(sequence, SEQUENCE_KEYS);
     if (extra) sequenceExtras[key] = extra;
   });
@@ -411,6 +432,8 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
     ...(document.styles && { styles: document.styles.map(namedStyleFromV3) }),
     fitzgeraldColors: reduxStyle.fitzgeraldColors,
     sequenceIds,
+    ...(Object.keys(sequenceNames).length > 0 && { sequenceNames }),
+    ...(Object.keys(sequenceStyleIds).length > 0 && { sequenceStyleIds }),
     saacExtra: {
       ...(rootExtra && { root: rootExtra }),
       ...(metaExtra && { meta: metaExtra }),

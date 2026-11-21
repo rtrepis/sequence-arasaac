@@ -518,6 +518,8 @@ const readV3Document = (
     layout: "flow",
   });
   const assets = readAssets(raw.assets);
+  const styles = readNamedStyles(raw.styles, style.value);
+  const styleIds = new Set(styles?.map(({ id }) => id));
 
   const sequences: V3Sequence[] = raw.sequences.map((value: unknown) => {
     const sequence = isPlainObject(value) ? value : {};
@@ -526,12 +528,18 @@ const readV3Document = (
           | V3Sequence["style"]
           | undefined)
       : undefined;
+    const { title, namedStyle } = sequence;
     return {
       ...unknownFields(sequence, SEQUENCE_KEYS),
       id:
         typeof sequence.id === "string" && sequence.id
           ? sequence.id
           : newSaacId("seq"),
+      ...(typeof title === "string" && { title }),
+      // Un estil que no hi és no es pot fer servir: la seqüència fa servir el
+      // del document
+      ...(typeof namedStyle === "string" &&
+        styleIds.has(namedStyle) && { namedStyle }),
       ...(view && { style: { view } }),
       pictograms: Array.isArray(sequence.pictograms)
         ? sequence.pictograms.map((pictogram: unknown) =>
@@ -546,10 +554,9 @@ const readV3Document = (
 
   const meta = isPlainObject(raw.meta) ? raw.meta : {};
   const ui = isPlainObject(raw.ui) ? raw.ui : undefined;
-  const styles = readNamedStyles(raw.styles, style.value);
   const pages = readPages(raw.page, {
     sequenceIds: new Set(sequences.map(({ id }) => id)),
-    styleIds: new Set(styles?.map(({ id }) => id)),
+    styleIds,
     style: style.value,
     usedIds: new Set<string>(),
   });

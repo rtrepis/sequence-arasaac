@@ -222,9 +222,11 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 
 ### 1.2 Estils amb nom (`styles`)
 
-> **Model del pla dels estils** (`docs/plans/PLA-estils.md` §10, ADR-006, 2026-11-21). El codi hi
-> arriba als passos 4–6 del pla; fins aleshores, cap seqüència no porta `namedStyle` i els blocs el
-> fan servir com a «estil de bloc» (ADR-005, decisió 24).
+> **Model del pla dels estils** (`docs/plans/PLA-estils.md` §10, ADR-006, 2026-11-21). El format i
+> la cascada hi són des del pas 4 del pla: l'app llegeix i escriu `sequences[].namedStyle` i
+> `sequences[].title`, i pinta cada seqüència amb el seu estil. Les accions que el trien (la
+> galeria, «Torna a l'estil de la seqüència») arriben als passos 5 i 6; fins aleshores, només un
+> fitxer pot portar un estil de seqüència.
 
 ```json
 "styles": [
@@ -257,7 +259,7 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 - **No cal pujar `schemaVersion`**: `sequences[].namedStyle` i `style.name` són opcionals, i una
   versió anterior els conserva com a camps desconeguts. Aquella versió pinta la seqüència amb
   l'estil del document (es veu diferent, no es perd res), com ja passa amb les pàgines (§1.1).
-  Fixture prevista: `20-estil-de-sequencia.saac` (pas 4 del pla).
+  Fixture: `20-estil-de-sequencia.saac`.
 - En llegir, de cada estil només queda el que té la forma i el valor que toca; un `id` que falta o
   es repeteix se'n genera un de nou.
 

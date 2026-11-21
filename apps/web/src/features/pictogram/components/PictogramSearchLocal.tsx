@@ -21,7 +21,7 @@ import messages from "./PictogramSearchLocal.lang";
 import usePersonalKeywords from "@features/word-profile/hooks/usePersonalKeywords";
 import UploadImageButton from "../../../components/UploadImageButton";
 import React from "react";
-import { selectDocumentPictStyle } from "@features/sequence/style/styleSelectors";
+import { selectActiveSequencePictStyle } from "@features/sequence/style/styleSelectors";
 import { TbMinus, TbPlus } from "react-icons/tb";
 import { searchToggleIcon } from "@components/PictogramSearch/PictogramSearch.styled";
 
@@ -55,7 +55,7 @@ const PictogramSearchLocal = ({
   const locale = useAppSelector((state) => state.ui.lang.search);
   const keywords = usePersonalKeywords();
   const defaultPictApiAra = useAppSelector(
-    (state) => selectDocumentPictStyle(state).pictApiAra,
+    (state) => selectActiveSequencePictStyle(state).pictApiAra,
   );
 
   const [newWord, setNewWord] = useState("");

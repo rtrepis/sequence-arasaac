@@ -165,8 +165,29 @@ describe("les targetes d'un bloc amb estil amb nom (R10)", () => {
     expect(cardMeasureKey(2, undefined)).toBe("2");
     expect(cardMeasureKey(2, "st_9")).toBe("2@st_9");
     const sizes = { "2": { w: 1, h: 1 }, "2@st_9": { w: 2, h: 2 } };
-    expect(cardSizeOf(sizes, 2, "st_9")).toEqual({ w: 2, h: 2 });
-    expect(cardSizeOf(sizes, 2, "st_x")).toEqual({ w: 1, h: 1 });
+    const document = { styles: [{ id: "st_9", name: "Gran" }] };
+    expect(cardSizeOf(sizes, document, 2, "st_9")).toEqual({ w: 2, h: 2 });
+    expect(cardSizeOf(sizes, document, 2, "st_x")).toEqual({ w: 1, h: 1 });
+  });
+
+  it("sense estil reassignat, es mesura amb l'estil de la seqüència", () => {
+    const sizes = {
+      "2": { w: 1, h: 1 },
+      "2@st_seq": { w: 3, h: 3 },
+      "2@st_9": { w: 2, h: 2 },
+    };
+    const document = {
+      styles: [
+        { id: "st_seq", name: "De la seqüència" },
+        { id: "st_9", name: "Gran" },
+      ],
+      sequenceStyleIds: { 2: "st_seq" },
+    };
+    expect(cardSizeOf(sizes, document, 2, undefined)).toEqual({ w: 3, h: 3 });
+    // El reassignat substitueix el de la seqüència
+    expect(cardSizeOf(sizes, document, 2, "st_9")).toEqual({ w: 2, h: 2 });
+    // Un reassignat que ja no hi és: el de la seqüència
+    expect(cardSizeOf(sizes, document, 2, "st_x")).toEqual({ w: 3, h: 3 });
   });
 });
 

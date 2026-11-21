@@ -62,6 +62,7 @@ per pestanya, pestanya activa, si porta configuració global i què se n'espera 
 | `17-pagines-i-blocs` | v3 | 4 (2, 3, 4, 1) | dins del document | pàgines i blocs (ADR-005 revisada): una pàgina amb plantilla, una d'automàtica amb un rètol i un bloc d'un tipus desconegut, una de retocada sense plantilla, el peu de llicència només a l'última pàgina, l'espai entre seqüències d'una pàgina automàtica, un bloc comú, un estil amb nom amb un camp desconegut, un retoc de vista en un bloc i una seqüència sense col·locar. Anada i tornada idèntica |
 | `18-pantalla-sencera` | v3 | 2 (3, 4) | dins del document | pantalla sencera amb blocs (`size: "FULLSCREEN"`, `screen` de 1280 × 720): una pàgina amb la plantilla de dues files i una de lliure amb un bloc mogut a mà i un rètol. Anada i tornada idèntica de la pàgina; en una pantalla d'una altra forma, la vista pregunta si s'adapta |
 | `19-demostracio-noticies` | v3 | 3 (3, 2, 2) | dins del document | el document de demostració de les notícies de Novetats (`docs/plans/PLA-noticies.md`, D4): A4 apaïsat, una pàgina simple, una en dues columnes i una de lliure amb un rètol. Només pictogrames que el repositori serveix sense xarxa (`e2e/screenshots/newsShot.ts`); els specs de les captures en tradueixen el contingut a cada idioma (`e2e/screenshots/demoDocument.ts`). Anada i tornada idèntica de les pàgines |
+| `20-estil-de-sequencia` | v3 | 3 (2, 2, 2) | dins del document | l'estil de la seqüència (`docs/plans/PLA-estils.md`, pas 4): una seqüència amb nom i estil («Sense vores»), una sense cap dels dos, una altra amb nom i un estil que canvia la pell, la lletra i un color de Fitzgerald, un bloc reassignat a un altre estil i un que fa servir el de la seqüència, i el nom de l'estil del document (`style.name`). Els retocs dels pictogrames són respecte de l'estil de la seva seqüència. Anada i tornada idèntica |
 
 Les 08 i 09 les ha escrit l'app (obrir el 02 i desar-lo), no s'han fet a mà; la 10 sí, a partir de
 la 01. La captura del 08 és idèntica, píxel a píxel, a la del 02: és la prova que una seqüència es
@@ -73,6 +74,9 @@ antic: s'obre amb les mateixes pàgines i caixes, i en desar-lo s'escriu amb el 
 és el model d'ara, a mà i amb la forma exacta que escriu l'app: obrir-la i tornar-la a desar en dona
 el mateix fitxer. Cap de les dues és al `manifest.json`, perquè l'e2e en compara la vista i les
 pàgines encara no es pinten senceres (`docs/plans/fets/PLA-mode-lliure.md`).
+
+La 20 s'ha afegit amb el pas 4 del pla dels estils (`docs/plans/PLA-estils.md`, §10), a mà i amb
+la forma que escriu l'app. Com la 16 i la 17, no és al `manifest.json`.
 
 Les 11–14 s'han afegit amb el format v3 (`docs/decisions/ADR-003-model-document-saac-v3.md`), a
 mà: la 11 és una còpia exacta de la 01, la 12 fa servir les imatges de la 03 i la 14 segueix

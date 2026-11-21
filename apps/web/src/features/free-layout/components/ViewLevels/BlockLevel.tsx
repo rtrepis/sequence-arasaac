@@ -16,7 +16,9 @@ import {
 import { arrangementOf } from "@features/free-layout/model/templates";
 import { cardSizeOf } from "@features/free-layout/model/blockStyle";
 import {
+  selectNamedStyles,
   selectPages,
+  selectSequenceStyleIds,
   setPlacementColumnsThunk,
   setPlacementViewThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
@@ -59,6 +61,8 @@ const BlockLevel = ({
   const dispatch = useAppDispatch();
   const { cardSizes } = useViewSelection();
   const pages = useAppSelector(selectPages);
+  const styles = useAppSelector(selectNamedStyles);
+  const sequenceStyleIds = useAppSelector(selectSequenceStyleIds);
   const block = useSelectedBlock();
   if (!block) return null;
 
@@ -113,7 +117,12 @@ const BlockLevel = ({
     : arrangementOf(pages?.sheets[sheetIndex]?.template).kind;
   const { grid, imageMm } = blockGrid({
     count: pictograms.length,
-    card: cardSizeOf(cardSizes, placement.sequenceKey, placement.styleId),
+    card: cardSizeOf(
+      cardSizes,
+      { styles, sequenceStyleIds },
+      placement.sequenceKey,
+      placement.styleId,
+    ),
     view,
     box: { w: placement.w, h: placement.h },
     columns: resolveColumns(placement.columns, arrangement, pictograms.length),

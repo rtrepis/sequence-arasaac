@@ -29,7 +29,7 @@ import usePictogramUrl from "@features/pictogram/hooks/usePictogramUrl";
 import { sheetSurface } from "@/style/palette";
 import { useAppSelector } from "@app/hooks";
 import type { RootState } from "@app/store";
-import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
+import { selectActiveSequenceCardDefaults } from "@features/sequence/style/styleSelectors";
 import { resolvePictogram } from "@features/sequence/style/pictogramStyle";
 
 interface MouseActionListProps {
@@ -138,7 +138,7 @@ const MouseActionList = ({
   const { buildPictogramUrl } = usePictogramUrl();
   const sequenceLength = useAppSelector(selectActiveSequenceLength);
   // El pictograma només porta els seus retocs: la resta, de l'estil
-  const inherited = useAppSelector(selectDocumentCardDefaults);
+  const inherited = useAppSelector(selectActiveSequenceCardDefaults);
   const isFirst = pictogram.indexSequence <= 0;
   const isLast = pictogram.indexSequence >= sequenceLength - 1;
   const actions = usePictogramActions({
