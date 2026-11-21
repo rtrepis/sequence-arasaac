@@ -2,7 +2,7 @@ import { test, expect, devices, Page } from "@playwright/test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-// La pantalla sencera amb blocs (`docs/PLA-mode-lliure.md`, §13): el full és
+// La pantalla sencera amb blocs (`docs/plans/fets/PLA-mode-lliure.md`, §13): el full és
 // la pantalla on es va encendre, un paper virtual on els blocs funcionen com
 // en un paper; en una pantalla d'una altra forma, es pregunta si s'adapta.
 

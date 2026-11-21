@@ -179,9 +179,9 @@ es llegeixen quan es toca l'àrea corresponent:
 | [`correus.md`](docs/estandards/correus.md) | Plantilles i enviament de correu |
 
 I els estudis de fons: [`BACKLOG-ux.md`](docs/BACKLOG-ux.md) (troballes d'UX
-obertes), [`ESTUDI-limits-serveis-gratuits.md`](docs/ESTUDI-limits-serveis-gratuits.md)
+obertes), [`ESTUDI-limits-serveis-gratuits.md`](docs/estudis/ESTUDI-limits-serveis-gratuits.md)
 (què consumeix l'app de cada pla gratuït) i
-[`ESTANDARD-capes-flotants.md`](docs/ESTANDARD-capes-flotants.md).
+[`ESTANDARD-capes-flotants.md`](docs/estudis/ESTANDARD-capes-flotants.md).
 
 ## Crèdits i llicència
 

@@ -1,7 +1,7 @@
 // La capa del mòbil girat (`docs/estandards/capes-flotants.md`, «La capa del
 // mòbil girat»). Genèrica: el text el posa qui la munta, que és una pàgina que
 // només es treballa amb el mòbil dret (avui, la vista: M6 i N3 de
-// `docs/PLA-vista-mobil.md`).
+// `docs/plans/fets/PLA-vista-mobil.md`).
 import React, { useEffect, useState } from "react";
 import { Box, Typography, keyframes, useMediaQuery } from "@mui/material";
 import { MdScreenRotation } from "react-icons/md";

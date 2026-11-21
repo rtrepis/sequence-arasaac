@@ -6,7 +6,7 @@ import path from "node:path";
 // El document de demostració de les notícies de pàgines (N-1), el meu estil
 // (N-2), la vista al mòbil (N-3) i la pantalla sencera (N-4): la fixture
 // `19-demostracio-noticies.saac`, la mateixa per a totes (D4 de
-// `docs/PLA-noticies.md`). El contingut del document no es tradueix a l'app,
+// `docs/plans/PLA-noticies.md`). El contingut del document no es tradueix a l'app,
 // però cada versió de la notícia l'ha d'ensenyar en el seu idioma: aquí se'n
 // tradueixen els títols, les paraules i el rètol abans d'obrir-lo.
 

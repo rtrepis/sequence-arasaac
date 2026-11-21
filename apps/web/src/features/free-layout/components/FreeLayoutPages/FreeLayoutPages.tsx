@@ -86,7 +86,7 @@ const SWIPE_PX = 60;
 
 /**
  * La vora de la pantalla, en fracció de l'amplada de cada costat: tocar-hi fora
- * dels blocs fa sortir la fletxa de passar pàgina (N4 de `docs/PLA-vista-mobil.md`).
+ * dels blocs fa sortir la fletxa de passar pàgina (N4 de `docs/plans/fets/PLA-vista-mobil.md`).
  */
 const EDGE_FRACTION = 0.15;
 

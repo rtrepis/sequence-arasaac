@@ -1,6 +1,6 @@
 // Recol·locar els blocs quan el full canvia de mida o de forma: en passar a la
 // pantalla sencera (o tornar-ne al paper) i en adaptar-la a una altra pantalla
-// (`docs/PLA-mode-lliure.md`, §13, «La pantalla sencera amb blocs»). Funcions
+// (`docs/plans/fets/PLA-mode-lliure.md`, §13, «La pantalla sencera amb blocs»). Funcions
 // pures, en mil·límetres.
 import type { DocumentPages, PagePlacement } from "@/types/document";
 import { SheetArea, clampBox, hasBox, isBoxed } from "./placement";

@@ -925,7 +925,7 @@ describe("pàgines i blocs", () => {
   });
 });
 
-// La pantalla sencera amb blocs (`docs/PLA-mode-lliure.md`, §13): el full és
+// La pantalla sencera amb blocs (`docs/plans/fets/PLA-mode-lliure.md`, §13): el full és
 // la pantalla on es va encendre, desada a `page.screen`.
 describe("la pantalla sencera (18)", () => {
   const SCREEN = "18-pantalla-sencera.saac";
@@ -983,7 +983,7 @@ describe("la pantalla sencera (18)", () => {
   });
 });
 
-// El document de demostració de les notícies (`docs/PLA-noticies.md`, D4): el
+// El document de demostració de les notícies (`docs/plans/PLA-noticies.md`, D4): el
 // fan servir els specs de les captures, i si deixés d'obrir-se igual, les
 // captures canviarien sense que ningú ho hagués demanat.
 describe("el document de demostració (19)", () => {

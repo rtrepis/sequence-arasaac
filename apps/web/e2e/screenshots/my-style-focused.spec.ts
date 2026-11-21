@@ -19,7 +19,7 @@ import {
   word,
 } from "./demoDocument";
 
-// Captures de la notícia «my-style» (N-2 de `docs/PLA-noticies.md`): el meu
+// Captures de la notícia «my-style» (N-2 de `docs/plans/PLA-noticies.md`): el meu
 // estil a la configuració, portar-lo a una pàgina o a un bloc, i posar-lo al
 // dia quan canvia. Una tanda per idioma, sobre el document de demostració
 // (fixture 19), que té un estil diferent del de fàbrica: numerat i amb el text

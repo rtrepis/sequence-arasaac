@@ -11,7 +11,7 @@ import {
 } from "./newsShot";
 import { LOCALES, type Locale, gotoView, openDemo, t } from "./demoDocument";
 
-// Captures de la notícia «full-screen-sheet» (N-4 de `docs/PLA-noticies.md`):
+// Captures de la notícia «full-screen-sheet» (N-4 de `docs/plans/PLA-noticies.md`):
 // l'interruptor «Pantalla sencera», el full amb la forma de la pantalla i la
 // pantalla completa, que ara només hi és amb la pantalla sencera. Una tanda
 // per idioma, sobre el document de demostració (fixture 19).

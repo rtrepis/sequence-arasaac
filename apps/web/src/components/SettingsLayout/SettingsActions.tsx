@@ -36,7 +36,7 @@ interface SettingsActionsProps {
  *
  * És el mateix criteri que `AppDialogActions` —secundària en text a l'esquerra
  * de la principal plena, i el que no és cap de les dues, sol a l'esquerra—, en
- * un panell en comptes d'un diàleg. Vegeu `docs/ESTANDARD-capes-flotants.md`.
+ * un panell en comptes d'un diàleg. Vegeu `docs/estudis/ESTANDARD-capes-flotants.md`.
  */
 const SettingsActions = ({
   startAction,

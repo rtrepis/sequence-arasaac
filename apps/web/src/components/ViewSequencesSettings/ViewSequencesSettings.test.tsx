@@ -7,7 +7,7 @@ import {
 } from "@/test/renderWithProviders";
 import ViewSequencesSettings from "./ViewSquenceSettings";
 
-// L'espai del full a la pàgina de vista (`docs/PLA-mode-lliure.md`, §6,
+// L'espai del full a la pàgina de vista (`docs/plans/fets/PLA-mode-lliure.md`, §6,
 // «L'espai»): a partir d'escriptori, la columna d'ajustos es pot amagar i el
 // full es pot ajustar a l'amplada. Al mòbil no hi ha cap dels dos botons.
 
@@ -94,7 +94,7 @@ describe("l'espai del full a la vista", () => {
   });
 });
 
-// La vista al mòbil (fase 4 de `docs/PLA-vista-mobil.md`)
+// La vista al mòbil (fase 4 de `docs/plans/fets/PLA-vista-mobil.md`)
 describe("la vista al mòbil", () => {
   it("a sobre del full només hi ha les sortides; girar el full és al nivell «Document»", async () => {
     setWindowSize(412, 915);

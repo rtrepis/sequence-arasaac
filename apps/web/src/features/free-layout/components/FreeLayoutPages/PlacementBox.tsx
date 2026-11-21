@@ -156,7 +156,7 @@ const PlacementBox = ({
   // Si el bloc ja té un estil de bloc, es pot actualitzar amb el meu estil (R7)
   const styles = useAppSelector(selectNamedStyles);
   // Tocar el bloc obre els seus ajustos; a la disposició lliure, amb un doble
-  // toc, perquè un toc sol és per moure'l (D1 de `docs/PLA-vista-mobil.md`)
+  // toc, perquè un toc sol és per moure'l (D1 de `docs/plans/fets/PLA-vista-mobil.md`)
   const { requestSettings } = useViewSelection();
   const openOnTap = useOpenOnTap();
   const pages = useAppSelector(selectPages);

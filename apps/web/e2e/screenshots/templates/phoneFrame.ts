@@ -5,7 +5,7 @@ import {
 } from "../../../src/style/palette";
 
 // Plantilla del marc de telèfon de les captures de mòbil (D3 de
-// `docs/PLA-noticies.md`). Una captura de mòbil fa 412 px d'ample, molt menys
+// `docs/plans/PLA-noticies.md`). Una captura de mòbil fa 412 px d'ample, molt menys
 // que els 700 de `STEP`: tal qual, la pàgina de la notícia l'estiraria o la
 // deixaria perduda en un costat. Dins d'un telèfon dibuixat, centrat a la mida
 // de la notícia, es llegeix com el que és. Hi caben un o dos telèfons (abans i

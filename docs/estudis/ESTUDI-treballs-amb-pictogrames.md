@@ -1,6 +1,6 @@
 # Estudi: els treballs que es fan amb pictogrames, i les plantilles que en surten
 
-> **Per a què serveix**: R3 de `docs/PLA-mode-lliure.md` (§12). Les plantilles de pàgina han de
+> **Per a què serveix**: R3 de `docs/plans/fets/PLA-mode-lliure.md` (§12). Les plantilles de pàgina han de
 > sortir dels documents que fan de debò famílies, mestres i logopedes, no de formes geomètriques.
 > **Abast**: entorn d'ARASAAC (Aula Abierta, CATEDU, guies de centres i administracions de parla
 > hispana) i, internacionalment, guies d'educació especial i de comunicació augmentativa i

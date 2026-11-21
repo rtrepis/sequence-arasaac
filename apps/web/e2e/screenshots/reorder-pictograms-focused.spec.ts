@@ -13,7 +13,7 @@ import {
 } from "./newsShot";
 import { LOCALES, type Locale, openDemo, t, word } from "./demoDocument";
 
-// Captures de la notícia «reorder-pictograms» (N-5 de `docs/PLA-noticies.md`):
+// Captures de la notícia «reorder-pictograms» (N-5 de `docs/plans/PLA-noticies.md`):
 // canviar l'ordre dels pictogrames arrossegant-los a l'edició, amb el ratolí i
 // amb el dit, i el menú amb «Enganxa», que diu què hi ha copiat. Una tanda per
 // idioma, sobre la primera seqüència del document de demostració (fixture 19).

@@ -1,6 +1,6 @@
 # Quines funcionalitats poden ser notícia
 
-Tria editorial sobre l'inventari de `docs/INVENTARI-funcionalitats-des-de-2.0.2.md`.
+Tria editorial sobre l'inventari de `docs/estudis/INVENTARI-funcionalitats-des-de-2.0.2.md`.
 Diu **què es publica a Novetats, què no, i per què**; no escriu cap notícia.
 
 ## El criteri

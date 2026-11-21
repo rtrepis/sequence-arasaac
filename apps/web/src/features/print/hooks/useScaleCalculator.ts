@@ -40,7 +40,7 @@ export interface ScaleCalculationParams {
   availableWidth?: number;
   /**
    * L'alçada que el full té de debò, en px, si s'ha pogut mesurar. És el camí
-   * del mòbil (`docs/PLA-vista-mobil.md`, E1): la pàgina no es desplaça i el
+   * del mòbil (`docs/plans/fets/PLA-vista-mobil.md`, E1): la pàgina no es desplaça i el
    * full s'encongeix per cabre sencer a l'espai que queda a sobre del panell de
    * baix. Amb aquesta alçada, el full sempre hi cap sencer, sigui quin sigui
    * `fit`, i no hi ha cap marge estimat per al peu

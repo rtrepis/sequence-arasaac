@@ -1,9 +1,21 @@
 # Pla: mode lliure de pàgina
 
+> **🗄️ Tancat i arxivat (2026-11-21).** Fet fins al pas 8 (vegeu §13). El que quedava obert ha
+> anat a un altre lloc, i **aquí ja no s'hi continua**:
+>
+> - **«Estil i contingut dels blocs»**, el pla següent que es proposava a §13 i que no es va arribar
+>   a escriure (`PLA-estil-i-contingut-dels-blocs.md` no existeix): la part d'**estil** (lletra,
+>   color del text i fons d'un bloc) passa a `docs/plans/PLA-estils.md`, §8.5; els **blocs
+>   d'imatge**, a **B38** de `docs/BACKLOG-ux.md`.
+> - **«Pendent del pas 8»** (§13): passa a `docs/plans/PLA-estils.md`, §8.5, perquè aquell pla
+>   redissenya la columna.
+> - **Els altres oberts** de §13, «Què queda obert», es queden aquí com a registre; els que
+>   continuïn sent un problema s'han d'obrir al backlog.
+
 > **Estat**: pla confirmat (2026-11-06). **Fases 1, 2 i 3 fetes**: el model (ADR-005), l'espai del
 > full a la vista i les pàgines amb les seves seqüències (vegeu §11, «Com ha quedat la fase 3»).
 > **Revisió de la fase 3** (§12, 2026-11-07): fets R3 (l'estudi dels treballs), R8 (l'esbós de la
-> columna, `docs/esbos-columna-vista.html`) i el pas 3, **el model** (R1 + R2 + R9, i els estils amb
+> columna, `docs/esbossos/esbos-columna-vista.html`) i el pas 3, **el model** (R1 + R2 + R9, i els estils amb
 > nom de R10): ADR-005 revisada, vegeu §12, «Com ha quedat el model». **Pas 4 i 4b fets**
 > (2026-11-08): la columna en tres nivells que segueix la pàgina i la selecció (R5), i cada pàgina
 > **contínua** (com sempre) o **en blocs**. **Per continuar, comenceu per §13, «Estat a 2026-11-08
@@ -509,7 +521,7 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
   part es repeteix entre pàgines. Les plantilles surten d'aquí, no de les formes geomètriques
   d'avui.
 
-- **Primera versió feta** (2026-11-07): `docs/ESTUDI-treballs-amb-pictogrames.md`. Onze treballs i
+- **Primera versió feta** (2026-11-07): `docs/estudis/ESTUDI-treballs-amb-pictogrames.md`. Onze treballs i
   deu plantilles amb nom de treball (agenda en tira, «Avui és» + agenda, primer/després, setmana,
   tauler, economia de fitxes, pàgina de conte, menú…). Tres troballes que canvien el pla: **cal un
   rètol** (un text sol, sense pictograma) per a mitja dotzena de plantilles; **les columnes fixes**
@@ -575,7 +587,7 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
   Cada nivell diu a què afecta («S'aplica a tot el document», «S'aplica a la pàgina 2»). És un
   disseny per fer **abans** de tocar codi: un esbós de la columna sencera, amb els tres nivells,
   per validar-lo.
-- **Esbós fet** (2026-11-07): `docs/esbos-columna-vista.html`, una pàgina interactiva per veure i
+- **Esbós fet** (2026-11-07): `docs/esbossos/esbos-columna-vista.html`, una pàgina interactiva per veure i
   comentar, sense tocar l'app. Els nivells són **Document, Pàgina N i Bloc** (Q1), ja amb R1 (cada
   pàgina tria Automàtica o Plantilla), R2 (la llista de blocs ensenya els espais buits de la
   plantilla), R4 (passar per damunt d'una plantilla en dibuixa els espais al full), R5 (la pàgina
@@ -847,7 +859,7 @@ de la fase 4). Per a cadascun: què s'ha vist, què es proposa i què cal decidi
 | Q1 | **«Bloc»** és el nom que veu l'usuari: una seqüència posada en una pàgina, amb la seva mida i el seu lloc. Al codi, `SequencePlacement` continua sent el tipus; a la interfície, a les traduccions i a la documentació per a l'usuari, «bloc». |
 | Q2 | **La mida és un màxim**: el bloc mana, però els pictogrames no passen de la mida triada. Cada bloc té els seus ajustos (mida, espai, alineació, columnes…), al nivell «Bloc» de la columna. Substitueix la decisió 9 de l'ADR-005 («la mida la mana la caixa») quan es revisi. |
 | Q3 | **Un sol model de pàgines** per a totes dues disposicions (R1). |
-| Q4 | **La investigació (R3)** es fa a la xarxa: l'entorn d'ARASAAC i, a escala internacional, escoles d'educació especial i materials de comunicació augmentativa i alternativa (CAA). Resultat a `docs/ESTUDI-treballs-amb-pictogrames.md`. |
+| Q4 | **La investigació (R3)** es fa a la xarxa: l'entorn d'ARASAAC i, a escala internacional, escoles d'educació especial i materials de comunicació augmentativa i alternativa (CAA). Resultat a `docs/estudis/ESTUDI-treballs-amb-pictogrames.md`. |
 
 ### Decisions del model (2026-11-07)
 
@@ -1349,7 +1361,7 @@ Pendents de més abast:
   la vista ha canviat molt (botons, capçaleres, columna, sense peu); cal adaptar-les i tornar-les a
   executar.
 - **Una notícia** per al mode de pàgines (`docs/estandards/noticies.md`), quan es publiqui. Ara és
-  N-1 (i N-2, «El meu estil») de `docs/PLA-noticies.md`, que també recull les captures de
+  N-1 (i N-2, «El meu estil») de `docs/plans/PLA-noticies.md`, que també recull les captures de
   `multiple-sequences` (§5).
 - **El núvol** encara no coneix les pàgines ni els estils amb nom (fase 5; els comptes estan apagats).
   El catàleg de diversos estils, amb comptes, també és d'aleshores (B33).
@@ -1452,7 +1464,7 @@ Els passos 7, 7b, 7c i els dos petits del 8 són fets (2026-11-14). El que ve ar
      s'imprimeix: toca l'estàndard de colors i el PDF.
    - **Blocs d'imatge**, al costat dels de seqüència i de text: un tipus de bloc nou al `.saac`
      (esquema, fixture, fonament 06), on es guarden les imatges (dins del fitxer, a l'esborrany i,
-     amb compte, al núvol, amb els límits de `docs/ESTUDI-limits-serveis-gratuits.md`) i com es
+     amb compte, al núvol, amb els límits de `docs/estudis/ESTUDI-limits-serveis-gratuits.md`) i com es
      trien, es retallen i s'ajusten a la caixa.
 
    Primer les decisions, després l'esbós de la columna i finalment la implementació per passos.
@@ -1482,13 +1494,13 @@ documentar una sola vegada, ja redissenyada:
 > Crea una branca nova des de la del PR #304 (`ccr-2207a706-ksozpj`) o des de `main` si ja s'ha
 > fusionat; pregunta'm quina abans de començar.
 >
-> Llegeix primer `docs/PLA-mode-lliure.md`, **§13** (com funciona ara, on és el codi, què queda
+> Llegeix primer `docs/plans/fets/PLA-mode-lliure.md`, **§13** (com funciona ara, on és el codi, què queda
 > obert, «El pas següent» i «Pendent del pas 8») i, de §12, «Com ha quedat el pas 7» i «Com ha
 > quedat el pas 7c». Després `docs/decisions/ADR-005-disposicio-lliure.md` (decisions 4–7, 9, 20,
 > 23, 24 i 26) i `docs/fonaments/03-model-contingut-estil.md` (§1, el vocabulari; §4 i §5, la
 > cascada, les accions sobre l'estil i la direcció única). Per als blocs d'imatge,
 > `docs/fonaments/06-compatibilitat-i-dades.md` (el format i els blocs que el lector no entén) i
-> `docs/ESTUDI-limits-serveis-gratuits.md`. Abans de dissenyar la columna,
+> `docs/estudis/ESTUDI-limits-serveis-gratuits.md`. Abans de dissenyar la columna,
 > `docs/estandards/configuracions.md`; per als colors (el fons del bloc s'imprimeix),
 > `colors.md`.
 >

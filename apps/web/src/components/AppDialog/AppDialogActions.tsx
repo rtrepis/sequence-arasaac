@@ -20,7 +20,7 @@ interface AppDialogActionsProps {
 
 /**
  * Peu canònic de tot diàleg de l'app. Vegeu
- * `docs/ESTANDARD-capes-flotants.md`.
+ * `docs/estudis/ESTANDARD-capes-flotants.md`.
  */
 const AppDialogActions = ({
   startAction,

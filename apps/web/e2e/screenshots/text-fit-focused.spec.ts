@@ -12,7 +12,7 @@ import {
 } from "./newsShot";
 import { LOCALES, type Locale, openDemo, t, word } from "./demoDocument";
 
-// Captures de la notícia «text-fit» (N-6 de `docs/PLA-noticies.md`): la marca
+// Captures de la notícia «text-fit» (N-6 de `docs/plans/PLA-noticies.md`): la marca
 // de la targeta quan el text no hi cap, les maneres de fer-l'hi cabre i la
 // targeta arreglada. Una tanda per idioma, sobre la primera seqüència del
 // document de demostració (fixture 19).

@@ -292,7 +292,7 @@ El canvi de comportament més visible per a qui fa servir l'app cada dia. A la
   paper, quan el mínim és 4,5:1. Corregits els botons de la barra de vista, els de
   la portada, els peus de diàleg, els rètols i —a 1,15:1— **els botons d'afegir
   pictograma i afegir seqüència**, que són les dues accions amb què comença tot.
-- **Estàndard de capes flotants** (`docs/ESTANDARD-capes-flotants.md`): inventari,
+- **Estàndard de capes flotants** (`docs/estudis/ESTANDARD-capes-flotants.md`): inventari,
   dotze divergències numerades i migració completa.
   - **`AppDialog`**: capçalera de tres franges amb el títol centrat i el distintiu
     que diu sobre què actua (i que forma part del nom accessible), i peu únic. Els

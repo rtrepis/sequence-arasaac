@@ -1,5 +1,5 @@
 // La pàgina que segueix la columna de la vista i el bloc seleccionat (R5,
-// `docs/PLA-mode-lliure.md`). Són estat de la pàgina de vista: no van a Redux,
+// `docs/plans/fets/PLA-mode-lliure.md`). Són estat de la pàgina de vista: no van a Redux,
 // no es desen i no surten mai al paper ni al PDF.
 import React, {
   createContext,
@@ -44,7 +44,7 @@ export interface TemplatePreview {
 
 /**
  * El que ha demanat el toc al full: obrir els ajustos d'un nivell. Al mòbil, la
- * vista hi porta el panell de baix (`docs/PLA-vista-mobil.md`, §4,
+ * vista hi porta el panell de baix (`docs/plans/fets/PLA-vista-mobil.md`, §4,
  * «Seleccionar»); a l'escriptori, la columna ja hi és i no cal fer res. El
  * número canvia a cada petició, perquè tocar dues vegades el mateix nivell
  * també compti.
