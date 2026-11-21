@@ -433,6 +433,10 @@ Com l'estudi de plantilles (`docs/estudis/ESTUDI-treballs-amb-pictogrames.md`), 
   d'educació especial i CAA d'altres països (Boardmaker, TEACCH, PECS, les guies de colors de
   Fitzgerald i de Goossens).
 - Quantes n'hi posem (proposta: **entre quatre i sis**; amb més, triar costa més que fer-se'l).
+- **Un dels estils ha de ser «Sense vores»** (decidit per l'usuari el 2026-11-21): el pictograma
+  sol, sense marc exterior ni interior. La targeta ja ho admet (vora de gruix 0,
+  `PictogramCard.styled.ts`); cal comprovar com queda el text i el número sense vora, i que la
+  mostra de la galeria es vegi bé damunt del full blanc.
 - Quines **no** es poden fer amb l'app d'avui (p. ex. el color de fons de la targeta per categoria),
   i si s'apunten al backlog o es descarten.
 
@@ -578,6 +582,25 @@ o si avui es perd.
   altre a la vista? Proposta per discutir: es queden amb el seu, perquè és un retoc del bloc.
 - Com s'ensenya a la vista que un bloc té un estil **diferent** del de la seva seqüència?
 
+**Una seqüència amb diversos estils** (afegit el 2026-11-21). Paraules de l'usuari: comptant que
+una seqüència pot tenir pictogrames amb estils diferents, i que a la columna de la vista es podrà
+aplicar a un bloc un estil diferent del de la seqüència, cal trobar una manera d'**indicar que hi
+ha diversos estils**.
+
+- **Els casos**, de més petit a més gran:
+  1. Una seqüència amb **pictogrames retocats** (la marca «personalitzat», fonament 03 §6): l'estil
+     de la seqüència és un, però no tots els pictogrames el segueixen.
+  2. **Un bloc amb un estil diferent** del de la seva seqüència (§8.1).
+  3. Tots dos alhora: un bloc amb estil propi i pictogrames retocats a dins.
+- **On s'ha de veure**: al selector d'estil de la seqüència (edició), al del bloc (columna de la
+  vista) i, potser, a la pestanya o el nom de la seqüència. Ha de ser **informatiu**, com la marca
+  «personalitzat», i **mai** a la impressió, la pantalla completa ni el PDF.
+- **Preguntes per al pla**: com es diu («Estil: Contorn gruixut + 3 retocats», «Diversos estils»,
+  una marca al costat del nom…)? Des d'aquella indicació es pot arribar a «Restableix els
+  pictogrames d'aquesta seqüència» o a «Treu els retocs» (D3)? Quan un bloc té estil propi, el
+  selector de la seqüència a l'edició ho ha de dir («a la pàgina 2 surt amb un altre estil»,
+  E11)?
+
 ### 8.2 Carregar estils
 
 Paraules de l'usuari: «com que donem la possibilitat de guardar, també de càrrega».
@@ -672,7 +695,8 @@ canviar i calia documentar-la una sola vegada; aquest pla és el que la canvia:
 > `docs/plans/fets/PLA-vista-mobil.md` (el patró del panell de baix) i, abans de dissenyar res,
 > `docs/estandards/configuracions.md`, `navegacio.md` i `capes-flotants.md`.
 >
-> Fes-me **les preguntes de §8.1, §8.2, §8.3 i §8.5 abans d'escriure el pla** (la primera, la de §8.5:
+> Fes-me **les preguntes de §8.1 (també «Una seqüència amb diversos estils»), §8.2, §8.3 i §8.5
+> abans d'escriure el pla** (la primera, la de §8.5:
 > l'estil de la galeria i els retocs del bloc a la columna), d'una en una o en grups
 > petits. Després escriu el pla: l'ordre dels passos (la solució A primer), què canvia al
 > fonament i al format a cada pas, l'esbós de la pantalla d'edició al mòbil i les proves.
