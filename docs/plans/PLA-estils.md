@@ -1,7 +1,8 @@
 # Pla: els estils, sense sorpreses
 
 > **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**, i **pla d'execució
-> escrit el 2026-11-21 (§10)**. Cap codi fet: es comença pel pas 1 de §10.3.
+> escrit el 2026-11-21 (§10)**. Pas 1 (fonaments) fet; cap codi: es continua pel pas 2 de §10.3,
+> amb l'encàrrec de §11.
 
 > **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
 >
@@ -795,11 +796,14 @@ Normes de tots els passos: `npm run typecheck` net i tests passant; textos a
 `AppFullScreenDialog`, `ConfirmDialog` i `AppBottomSheet` com a capes; tota acció acaba amb un
 missatge i es pot desfer amb el desfer de sempre. Cada pas és una PR a `master`.
 
-**Pas 1 — Fonaments, abans del codi.** Fonament 03: §1 (vocabulari: «estil de la seqüència»,
+**Pas 1 — Fonaments, abans del codi.** ✅ **Fet** (2026-11-21): fonament 03 (§1, §2, §3, §4, §5, §6,
+§7), fonament 06 (§1, §1.2, §5, §6), esquema i **ADR-006**, que substitueix la part d'estils de les
+decisions 23 i 24 de l'ADR-005. Els fonaments porten una nota que diu que descriuen el model cap on
+va el codi. Fonament 03: §1 (vocabulari: «estil de la seqüència»,
 «reassignat», «Personalitzat» per a seqüència i bloc; E10), §3, §4 (la cascada nova), §5 (les
 accions noves i les que se'n van), §6 (la marca a la fila «Estil» i l'ajuda), §7 (D1: el document
 neix amb una còpia d'El meu estil i no el segueix). Fonament 06: §1 i §1.2 amb els camps de §10.2.
-Decisió nova a l'ADR-005 (o ADR-006) que substitueixi la 24 en el que toca als estils de bloc.
+ADR nova que substitueixi la 24 en el que toca als estils de bloc.
 Esquema `saac-v3.schema.json`. **Cap codi.**
 
 **Pas 2 — Solució A (§3) i D1.** Tal com és a §3: E1, E2, E3, E12, E14, la lectura dels
@@ -908,3 +912,29 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 | 8 | e2e a amplada de mòbil: lliscar i fletxes, «2 de 5» i la llista, el «+», el «⋯»; la barra visible amb el teclat (viewport visible simulat); objectius de 44 px |
 | 9 | La mostra de cada estil de l'app, «Sense vores» inclòs, damunt del full blanc i en tots dos temes |
 | Tots | `npm run typecheck` net; les captures dels e2e de la vista no canvien (amb la precaució de §13 del pla del mode lliure) |
+
+## 11. Encàrrec per obrir la sessió següent (pas 2: la solució A)
+
+> Branca: **`estils-seqüencia-i-edicio`**. Es porta a `master` amb una PR **en acabar el pla**, no
+> pas a pas (decisió de l'usuari, 2026-11-21). `master` està protegida (PR i GitGuardian).
+>
+> La tasca és el **pas 2 de §10.3**: la solució A (§3) i D1. **És codi.** Llegeix primer, per
+> aquest ordre: §10.1 i §10.2 d'aquest document; §3 sencer (la regla, on es toca, la compatibilitat
+> i les proves); el fonament 03, §2, §4, §6 i §7 (ja descriuen el model nou, amb la nota del
+> capdamunt); el fonament 06, §1 i §4; i `docs/estandards/estat-i-persistencia.md` (l'esborrany
+> d'IndexedDB).
+>
+> Comença per les proves de §3.4 que fallen avui (E1: un pictograma nou no hi escriu cap estil;
+> E3: «sense text» explícit), i després el codi de la taula de §3.2. Compte amb E3: `textPosition`
+> buit ha de passar a voler dir «hereta», i `"none"` s'ha d'escriure sempre explícit. La versió de
+> l'esborrany i la lectura dels vells (§3.3) són part del pas. D1: el document nou porta l'estil
+> copiat des que neix, amb `style.name` = «El meu estil» en l'idioma de la interfície; treu la
+> materialització de `ModalDownload.tsx`.
+>
+> **No** facis encara res del pas 4 (`sequences[].namedStyle`) ni de la galeria. Si trobes que §3
+> no encaixa amb el codi d'avui, apunta-ho a §3 i pregunta abans de canviar el pla.
+>
+> Normes: `npm run typecheck` net i tests passant (`npm ci` a l'arrel si cal); les fixtures `.saac`
+> han de fer el viatge d'anada i tornada iguals; textos a `packages/i18n/messages/` en els cinc
+> idiomes; cap color fora de `palette.ts`. En acabar, marca el pas 2 com a fet a §10.3 i actualitza
+> `docs/README.md` en el mateix commit.

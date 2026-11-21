@@ -172,6 +172,7 @@ si un estàndard el contradiu, és l'estàndard el que s'ha de corregir.
 | `docs/fonaments/06-compatibilitat-i-dades.md` | El format `.saac` v3 i `.saacstyle`, la migració dels formats antics, desar i obrir (fitxer i núvol), la descàrrega i el selector de fitxers. Esquema formal: `docs/schema/saac-v3.schema.json` |
 | `docs/decisions/ADR-003-model-document-saac-v3.md` | Per què el format és com és, i què es va descartar. `docs/fonaments/sequencia-i-estil.md` n'és l'antecessor i ara només redirigeix |
 | `docs/decisions/ADR-005-disposicio-lliure.md` | Pàgines i blocs: cada pàgina automàtica o amb plantilla (desada), blocs de seqüència i de text, els estils amb nom (`styles`), el lector que conserva els blocs que no entén, i per què no cal pujar `schemaVersion`. El pla per fases, ja tancat, és `docs/plans/fets/PLA-mode-lliure.md` |
+| `docs/decisions/ADR-006-estil-de-sequencia-i-galeria.md` | L'estil va amb la seqüència, el bloc en té un de sol (el de la seqüència o un de reassignat), la Galeria d'estils, i per què se'n van «Aplica el meu estil», «Actualitza» i «Treu l'estil de bloc». Substitueix la part d'estils de les decisions 23 i 24 de l'ADR-005 |
 
 ## Índex d'estàndards
 

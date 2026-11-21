@@ -22,6 +22,7 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   "meta": { "id": "…", "title": "…", "author": "…", "createdAt": "ISO", "updatedAt": "ISO" },
   "page": { "size": "A4", "orientation": "portrait", "direction": "row", "sequenceGap": 1, "layout": "flow" },
   "style": {
+    "name": "El meu estil",
     "pictogram": {
       "skin": "mulatto", "hair": "black", "color": true,
       "fitzgerald": {
@@ -40,7 +41,7 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   },
   "sequences": [
     {
-      "id": "seq_…", "title": "…",
+      "id": "seq_…", "title": "Matí", "namedStyle": "st_vores",
       "style": { "view": { "sizePict": 1.5 } },
       "pictograms": [
         {
@@ -89,8 +90,16 @@ i una fixture (`apps/web/test/fixtures/saac/`).
   - Els mil·límetres **només** s'usen a les caixes dels blocs (§1.1).
 - **`style`** del document és **sempre complet**: tots els camps plens, sense heretar res de fora del
   fitxer.
-- **`sequences[].style`** porta **només `view`** en aquesta versió. La lletra i les vores per
-  seqüència queden fora de l'abast.
+  - **`style.name`** (opcional) és el nom de l'estil del qual surt el del document: «El meu estil»
+    en un document nou, o el de l'estil de la galeria triat. És contingut, en l'idioma de qui
+    l'aplica. Sense valor, la interfície diu «L'estil del document».
+- **`sequences[].title`** (opcional) és el **nom de la seqüència**. És per a qui edita: **no
+  s'imprimeix**. Sense valor, la interfície diu «Seqüència _N_», com la pestanya.
+- **`sequences[].namedStyle`** (opcional) és l'**estil de la seqüència**: l'`id` d'un estil amb nom
+  (§1.2). El reben tots els blocs de la seqüència que no en tenen un de reassignat. Sense valor, la
+  seqüència fa servir l'estil del document.
+- **`sequences[].style`** porta **només `view`**, la distribució. L'estil de la seqüència no hi va:
+  va a `namedStyle`, perquè és sempre un estil sencer de la galeria, amb nom, i no un retoc.
 - **`sequences[].frame`** ja no està reservat. Cap versió de l'app no l'ha escrit mai, i les
   pàgines fan servir els blocs de `page` (§1.1, ADR-005). Si un fitxer en porta, és un camp
   desconegut més: es conserva i no es fa servir.
@@ -213,22 +222,42 @@ i una fixture (`apps/web/test/fixtures/saac/`).
 
 ### 1.2 Estils amb nom (`styles`)
 
+> **Model del pla dels estils** (`docs/plans/PLA-estils.md` §10, ADR-006, 2026-11-21). El codi hi
+> arriba als passos 4–6 del pla; fins aleshores, cap seqüència no porta `namedStyle` i els blocs el
+> fan servir com a «estil de bloc» (ADR-005, decisió 24).
+
 ```json
 "styles": [
-  { "id": "st_gran", "name": "Agenda gran", "view": { "sizePict": 1.5 }, "card": { "font": { "size": 1.2 } } }
+  { "id": "st_gran", "name": "Agenda gran", "view": { "sizePict": 1.5 }, "card": { "font": { "size": 1.2 } } },
+  { "id": "st_vores", "name": "Sense vores", "card": { "borderIn": { "size": 0 }, "borderOut": { "size": 0 } } }
 ]
 ```
 
 - Un **estil amb nom** és un retoc de l'estil del document, amb la forma dels retocs: `pictogram`
   (amb `fitzgerald` com a taula parcial, com al document), `card` i `view`. Porta `id` i `name`.
-- Un bloc el fa servir amb `namedStyle`. Canviar-lo canvia tots els blocs que el fan servir.
+- **Qui el fa servir**:
+  - **Una seqüència**, amb `sequences[].namedStyle`: és l'**estil de la seqüència**.
+  - **Un bloc de seqüència**, amb `namedStyle`: és un estil **reassignat** al bloc. **Substitueix**
+    el de la seqüència, no s'hi suma: un bloc té un sol estil. Els documents d'abans del pla dels
+    estils en porten (eren «estils de bloc») i, com que cap seqüència no en tenia, es pinten igual.
+- **Cap acció no canvia un estil amb nom al seu lloc.** Triar un estil de la galeria en copia els
+  valors: si el document ja en té un d'igual (mateix nom i mateix contingut), el reaprofita; si no,
+  n'afegeix un. Dues seqüències o dos blocs poden compartir entrada, però és un detall del fitxer:
+  canviar l'estil d'un no toca mai l'altre.
+- **En desar**, `styles` només porta els estils que fa servir alguna seqüència o algun bloc (E13
+  del pla dels estils). Si no en queda cap, `styles` no s'escriu.
 - Des del pas 7 (2026-11-14) l'app hi escriu **només l'estil** (`pictogram` i `card`): la mida,
   l'espai i l'alineació són la distribució del bloc. Un estil amb nom amb `view`, dels documents
   d'abans, es llegeix i es pinta igual i es torna a escriure tal com era. El format no canvia.
 - **És l'entrada del catàleg d'estils de l'usuari copiada dins del document** (R10): el document no
   apunta mai a les preferències de ningú, i s'obre igual a qualsevol lloc.
-- **La cascada**: document → seqüència → estil amb nom del bloc → bloc → pictograma
-  (`docs/fonaments/03-model-contingut-estil.md`, §4).
+- **La cascada**: document → estil de la seqüència (o, si el bloc en té, el reassignat) → pictograma,
+  per a l'estil; seqüència → bloc, per a la distribució (`docs/fonaments/03-model-contingut-estil.md`,
+  §4).
+- **No cal pujar `schemaVersion`**: `sequences[].namedStyle` i `style.name` són opcionals, i una
+  versió anterior els conserva com a camps desconeguts. Aquella versió pinta la seqüència amb
+  l'estil del document (es veu diferent, no es perd res), com ja passa amb les pàgines (§1.1).
+  Fixture prevista: `20-estil-de-sequencia.saac` (pas 4 del pla).
 - En llegir, de cada estil només queda el que té la forma i el valor que toca; un `id` que falta o
   es repeteix se'n genera un de nou.
 
@@ -326,13 +355,14 @@ mateixes preferències. Les fixtures `apps/web/test/fixtures/saac/` ho proven.
 - **«Desa el document»** escriu el document complet: contingut, estil, pàgina i imatges. **No hi ha
   cap opció per desar-lo sense estil.**
 - **«Desa el meu estil en un fitxer…»** escriu un `.saacstyle` amb el meu estil. Viu al panell «El
-  meu estil» de la configuració (R10). L'estil del document obert no es desa sol: va sempre dins
+  meu estil» de la configuració (R10). Des de la Galeria d'estils, **«Desa en un fitxer»** fa el
+  mateix amb qualsevol estil de la galeria (pla dels estils, D18). L'estil del document obert no es desa sol: va sempre dins
   del document.
 - En desar, **SEMPRE** s'aplica `diffStyle` a cada seqüència i pictograma, perquè els retocs siguin
   mínims.
 - **El meu estil** (l'antic estil per defecte) es tria a les preferències, al panell «El meu
-  estil». **MAI** viatja dins d'un document com a referència: «Aplica el meu estil» en **copia** els
-  valors a `styles` (§1.2).
+  estil». **MAI** viatja dins d'un document com a referència: triar-lo a la Galeria d'estils en
+  **copia** els valors a `styles` (§1.2), igual que qualsevol altre estil de la galeria.
 
 ### Descàrrega
 
@@ -356,9 +386,13 @@ a.download = `${nom}.saac`; // o `.saacstyle`
   del document; les preferències de qui l'obre continuen igual.
 - **Un fitxer d'estil obert com a document** obre un diàleg amb dos botons: *Fes-lo el meu estil* ·
   *Cancel·la*. No s'aplica mai al document obert (R10, 2026-11-12): els estils van de la
-  configuració cap al document, i al document s'hi porten amb «Aplica el meu estil».
+  configuració cap al document, i al document s'hi porten des de la Galeria d'estils.
 - **Un fitxer d'estil (o un `.saac`) carregat des del panell «El meu estil»** passa a ser el meu
   estil directament; es desa en tancar la configuració.
+- **Un fitxer d'estil (o un `.saac`) carregat des de la Galeria d'estils** («Carrega d'un
+  fitxer…») s'aplica a la seqüència o al bloc des d'on s'ha obert la galeria, com qualsevol estil
+  de la galeria, i **no es queda** a la galeria (pla dels estils, D17). El nom és `meta.title` del
+  `.saacstyle` o, d'un `.saac`, `style.name`; si no en té, el nom del fitxer.
 
 ## 7. Núvol
 

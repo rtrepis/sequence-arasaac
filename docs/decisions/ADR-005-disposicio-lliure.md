@@ -158,7 +158,10 @@ fase 3 va fer veure que no n'hi ha prou:
     «Lliure» no mou res. Substitueix, per a «N columnes» i «N files», el creixement de la decisió
     17 (abans hi afegia files o columnes de l'altre eix). Una pàgina sense cap plantilla desada (les
     fases 1–3) es torna a repartir com abans.
-23. **«Aplica el meu estil», i els estils en una sola direcció** (R10, 2026-11-12). El menú «⋯»
+23. **«Aplica el meu estil», i els estils en una sola direcció** (R10, 2026-11-12). **⚠️ La part
+    d'estils, substituïda per l'ADR-006** (2026-11-21): «Aplica el meu estil» desapareix i l'estil
+    es tria a la seqüència o al bloc des de la Galeria d'estils. La direcció única continua valent.
+    El menú «⋯»
     d'una pàgina (tots els seus blocs propis) i el d'un bloc tenen «Aplica el meu estil»: copia el
     meu estil (la targeta i la vista dels pictogrames, sense l'espai entre seqüències) a `styles`
     com a estil amb nom, amb el nom «El meu estil» a l'idioma de la interfície, i hi apunta els
@@ -172,7 +175,10 @@ fase 3 va fer veure que no n'hi ha prou:
     pàgina `"auto"` es diu **«Simple»** (abans «Contínua», C15). El format no canvia: `styles` i
     `namedStyle` ja hi eren (decisió 6).
 24. **Estil i distribució; estils de bloc; la disposició en una sola tria** (R7, B31, pas 7,
-    2026-11-14).
+    2026-11-14). **⚠️ Els estils de bloc, «Actualitza amb el meu estil» i «Treu l'estil de bloc»,
+    substituïts per l'ADR-006** (2026-11-21): un bloc té l'estil de la seqüència o un de
+    reassignat. Les dues paraules (estil i distribució) i la disposició en una sola tria continuen
+    valent.
     - **Dues paraules**: l'**estil** és com és cada pictograma (lletra, vores, colors, posició del
       text, pell, cabell, numeració); la **distribució** és com es posen dins d'una seqüència o
       d'un bloc (mida, espai, alineació). A la interfície, «Distribució dels pictogrames» o, si no
