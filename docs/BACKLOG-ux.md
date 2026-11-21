@@ -60,7 +60,7 @@ l'entrada.
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
 | P2 | La vista al mòbil en dispositius de debò | La release no surt sense la vista al mòbil, i l'emulació no ho pot dir tot | S | Sí: F5a, si la pantalla completa no funciona a l'iPhone |
-| B37 | Els estils: pictogrames que copien l'estil (E1) i accions que acaben igual a la pantalla | E1 grava retocs falsos al `.saac`; la galeria d'estils és abans de la release i no ha d'heretar el desordre | L | D1–D9 preses; queden Q1–Q3 de `docs/plans/PLA-estils.md` |
+| B37 | Els estils: pictogrames que copien l'estil (E1) i accions que acaben igual a la pantalla | E1 grava retocs falsos al `.saac`; la galeria d'estils és abans de la release i no ha d'heretar el desordre | L | Preses (D1–D24); pla d'execució a `docs/plans/PLA-estils.md` §10. Queda D23 (l'escriptori) |
 
 ### Després
 
@@ -75,6 +75,7 @@ l'entrada.
 | Id | Què | Per què pot esperar | Esforç |
 |---|---|---|---|
 | B38 | Blocs d'imatge a les pàgines | Idea sense decidir; abans, el pla dels estils (B37) | L |
+| B39 | Retocs d'estil d'un bloc a la columna: lletra, color del text i color de fons | Decidit fora d'aquesta release (D10–D11 de `docs/plans/PLA-estils.md`): un bloc té un sol estil, el de la seqüència o un de reassignat. Si torna, el fons s'imprimeix i toca l'estàndard de colors | M |
 | B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
