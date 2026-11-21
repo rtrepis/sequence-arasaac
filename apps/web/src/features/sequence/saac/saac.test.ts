@@ -924,3 +924,89 @@ describe("pàgines i blocs", () => {
     expect(page.sheets).toBeUndefined();
   });
 });
+
+// La pantalla sencera amb blocs (`docs/PLA-mode-lliure.md`, §13): el full és
+// la pantalla on es va encendre, desada a `page.screen`.
+describe("la pantalla sencera (18)", () => {
+  const SCREEN = "18-pantalla-sencera.saac";
+  const withPage = (change: (page: Record<string, unknown>) => void) => {
+    const raw = JSON.parse(readText(SCREEN));
+    change(raw.page);
+    const parsed = parseSaac(JSON.stringify(raw), context);
+    if (parsed.kind !== "document") throw new Error();
+    return parsed;
+  };
+
+  it("la pantalla desada és la del full, i les pàgines en blocs s'hi llegeixen", () => {
+    const { document } = parseDocument(SCREEN);
+    expect(document.layout).toMatchObject({
+      pageSize: "FULLSCREEN",
+      screen: { width: 1280, height: 720 },
+    });
+    expect(document.pages?.sheets).toHaveLength(2);
+    expect(document.pages?.sheets[0].mode).toBe("template");
+  });
+
+  it("anada i tornada idèntica", () => {
+    const { file, document } = parseDocument(SCREEN);
+    expect(JSON.parse(serializeSaac(file))).toEqual(
+      JSON.parse(readText(SCREEN)),
+    );
+    // La pàgina es torna a escriure tal com era, amb la pantalla i els blocs
+    const again = documentToV3(document, serializeContext);
+    expect(again.page).toEqual(file.page);
+    expect(documentFromV3(again).layout).toEqual(document.layout);
+    expect(documentFromV3(again).pages).toEqual(document.pages);
+  });
+
+  it("una pantalla dreta es desa apaïsada; una de mal formada no hi és", () => {
+    expect(
+      withPage((page) => {
+        page.screen = { width: 720, height: 1280 };
+      }).document.layout?.screen,
+    ).toEqual({ width: 1280, height: 720 });
+    expect(
+      withPage((page) => {
+        page.screen = { width: 0, height: "gran" };
+      }).document.layout,
+    ).not.toHaveProperty("screen");
+  });
+
+  it("amb un paper, la pantalla no s'hi llegeix ni s'hi escriu", () => {
+    const { document } = withPage((page) => {
+      page.size = "A4";
+    });
+    expect(document.layout).not.toHaveProperty("screen");
+    expect(documentToV3(document, serializeContext).page).not.toHaveProperty(
+      "screen",
+    );
+  });
+});
+
+// El document de demostració de les notícies (`docs/PLA-noticies.md`, D4): el
+// fan servir els specs de les captures, i si deixés d'obrir-se igual, les
+// captures canviarien sense que ningú ho hagués demanat.
+describe("el document de demostració (19)", () => {
+  const DEMO = "19-demostracio-noticies.saac";
+
+  it("tres pàgines: una de simple, una en columnes i una de lliure amb un rètol", () => {
+    const { document } = parseDocument(DEMO);
+    const sheets = document.pages?.sheets ?? [];
+    expect(sheets.map((sheet) => [sheet.mode, sheet.template])).toEqual([
+      ["auto", undefined],
+      ["template", "columns-2"],
+      ["template", "free"],
+    ]);
+    expect(sheets[2].placements.map((block) => block.kind)).toEqual([
+      "text",
+      "sequence",
+      "sequence",
+    ]);
+    expect(Object.keys(document.content)).toHaveLength(3);
+  });
+
+  it("anada i tornada idèntica de les pàgines", () => {
+    const { file, document } = parseDocument(DEMO);
+    expect(documentToV3(document, serializeContext).page).toEqual(file.page);
+  });
+});

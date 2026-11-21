@@ -70,7 +70,9 @@ const imagePlacement = (
   };
 };
 
-test("amb A4, el full és un A4 i la imatge hi va centrada", async ({ page }) => {
+test("amb A4, el full és un A4 i la imatge hi va centrada", async ({
+  page,
+}) => {
   await gotoView(page);
   const pdf = await downloadPdfSource(page);
 
@@ -116,8 +118,8 @@ test("amb pantalla sencera no s'ofereix la descàrrega del PDF", async ({
 
   // El desplegable ja té nom accessible: `GlobalViewControls` lliga el `labelId`
   // del `SettingRow` amb l'`aria-labelledby` del `Select` (backlog C12).
-  await page.getByLabel(PAGE_SIZE_LABEL).click();
-  await page.getByRole("option", { name: FULLSCREEN_OPTION }).click();
+  // La pantalla sencera és un interruptor sota la mida de pàgina
+  await page.getByRole("checkbox", { name: FULLSCREEN_OPTION }).check();
 
   // Amb aquesta mida la barra només ofereix «pantalla completa»: ni imprimir ni
   // PDF. És la raó per la qual el full mal dimensionat que descrivia B9 no
@@ -169,7 +171,9 @@ test("una captura en blanc es diu, i no es desa cap full buit", async ({
   await expect(page.getByText("PDF descarregat")).toBeHidden();
   expect(downloaded).toBe(false);
 
-  await expect.poll(() => reported.length, { timeout: 5000 }).toBeGreaterThan(0);
+  await expect
+    .poll(() => reported.length, { timeout: 5000 })
+    .toBeGreaterThan(0);
   expect(reported[0]).toMatchObject({
     code: "PDF_EMPTY_CANVAS",
     context: "pdf-export",

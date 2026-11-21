@@ -25,6 +25,7 @@ export type {
   SequenceStyleView,
   SequenceStyle,
   DocumentLayout,
+  ScreenSize,
   SheetMode,
   LicenceOn,
   PlacementColumns,

@@ -57,8 +57,6 @@ interface PageLevelProps {
   onExpandedChange: (expanded: boolean) => void;
   /** Sense pàgines pròpies, la direcció i l'espai són els de sempre */
   implicit: ImplicitPage;
-  /** La pantalla completa no té mil·límetres: no s'hi pot treballar en blocs */
-  fullscreen: boolean;
 }
 
 /**
@@ -76,7 +74,6 @@ const PageLevel = ({
   expanded,
   onExpandedChange,
   implicit,
-  fullscreen,
 }: PageLevelProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -153,39 +150,37 @@ const PageLevel = ({
       expanded={expanded}
       onExpandedChange={onExpandedChange}
     >
-      {/* Com treballa la pàgina. La pantalla completa no té mil·límetres */}
-      {!fullscreen && (
-        <SettingRow
-          title={
-            <>
-              <FormattedMessage {...messages.mode} />
-              <Chip
-                label={intl.formatMessage(messages.newTag)}
-                size="small"
-                color="primary"
-                sx={{ marginInlineStart: 1, verticalAlign: "middle" }}
-              />
-            </>
-          }
+      {/* Com treballa la pàgina, també a la pantalla sencera */}
+      <SettingRow
+        title={
+          <>
+            <FormattedMessage {...messages.mode} />
+            <Chip
+              label={intl.formatMessage(messages.newTag)}
+              size="small"
+              color="primary"
+              sx={{ marginInlineStart: 1, verticalAlign: "middle" }}
+            />
+          </>
+        }
+        labelId={`${LABEL_ID}-mode`}
+        helperId={`${LABEL_ID}-mode-helper`}
+        helper={
+          <FormattedMessage
+            {...(mode === "auto"
+              ? messages.modeAutoHelp
+              : messages.modeBlocksHelp)}
+          />
+        }
+        control="wrap"
+      >
+        <DispositionToggle
+          value={disposition}
+          onChange={changeDisposition}
           labelId={`${LABEL_ID}-mode`}
           helperId={`${LABEL_ID}-mode-helper`}
-          helper={
-            <FormattedMessage
-              {...(mode === "auto"
-                ? messages.modeAutoHelp
-                : messages.modeBlocksHelp)}
-            />
-          }
-          control="wrap"
-        >
-          <DispositionToggle
-            value={disposition}
-            onChange={changeDisposition}
-            labelId={`${LABEL_ID}-mode`}
-            helperId={`${LABEL_ID}-mode-helper`}
-          />
-        </SettingRow>
-      )}
+        />
+      </SettingRow>
 
       {mode === "auto" && (
         <>

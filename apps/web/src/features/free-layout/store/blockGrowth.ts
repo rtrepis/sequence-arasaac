@@ -16,7 +16,7 @@ import {
 } from "../model/blockStyle";
 import { NaturalBoxOf, grownBox, naturalBoxMm } from "../model/naturalBox";
 import { dispositionOf } from "../model/pages";
-import { sheetAreaMm } from "../model/placement";
+import { layoutAreaMm } from "../model/placement";
 import { userLayoutOf } from "@features/sequence/store/documentSlice";
 
 // --- Les targetes mesurades ---
@@ -37,10 +37,7 @@ export const rememberCardSizes = (sizes: Record<string, CardPx>): void => {
  * full no té mil·límetres (la pantalla completa).
  */
 export const naturalBoxOfState = (state: RootState): NaturalBoxOf | null => {
-  const { pageSize, orientation } =
-    state.document.layout ?? userLayoutOf(state);
-  const area = sheetAreaMm(pageSize ?? "A4", orientation ?? "landscape");
-  if (!area) return null;
+  const area = layoutAreaMm(state.document.layout ?? userLayoutOf(state));
   const views = selectResolvedSequenceViews(state);
   const { content, styles } = state.document;
   return (placement: SequencePlacement) =>
@@ -77,9 +74,7 @@ blockGrowthListener.startListening({
     const naturalNow = naturalBoxOfState(now);
     const naturalBefore = naturalBoxOfState(before);
     if (!naturalNow || !naturalBefore) return;
-    const { pageSize, orientation } = now.document.layout ?? userLayoutOf(now);
-    const area = sheetAreaMm(pageSize ?? "A4", orientation ?? "landscape");
-    if (!area) return;
+    const area = layoutAreaMm(now.document.layout ?? userLayoutOf(now));
 
     const previous = new Map(
       previousPages.sheets

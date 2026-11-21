@@ -44,7 +44,7 @@ const SelectableSequence = ({
 }: SelectableSequenceProps): React.ReactElement => {
   const intl = useIntl();
   const sequenceName = useSequenceName();
-  const { selection, select } = useViewSelection();
+  const { selection, select, requestSettings } = useViewSelection();
   if (!selectable) return <Box sx={sx}>{children}</Box>;
 
   const target: ViewSelection = givenTarget ?? {
@@ -70,11 +70,14 @@ const SelectableSequence = ({
         // El clic fora de cap seqüència treu la selecció: aquest no hi ha d'arribar
         event.stopPropagation();
         select(target);
+        // Aquí els blocs no es mouen: un toc ja n'obre els ajustos (D1)
+        requestSettings("block");
       }}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           select(target);
+          requestSettings("block");
         }
       }}
       sx={[

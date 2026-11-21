@@ -38,6 +38,14 @@ export interface ScaleCalculationParams {
    * l'amplada de la finestra no és la que té el full
    */
   availableWidth?: number;
+  /**
+   * L'alçada que el full té de debò, en px, si s'ha pogut mesurar. És el camí
+   * del mòbil (`docs/PLA-vista-mobil.md`, E1): la pàgina no es desplaça i el
+   * full s'encongeix per cabre sencer a l'espai que queda a sobre del panell de
+   * baix. Amb aquesta alçada, el full sempre hi cap sencer, sigui quin sigui
+   * `fit`, i no hi ha cap marge estimat per al peu
+   */
+  availableHeight?: number;
 }
 
 /**
@@ -66,6 +74,7 @@ export function calculateDisplayDimensions(
     fit = "page",
     settingsBeside = true,
     availableWidth: measured,
+    availableHeight: measuredHeight,
   } = params;
   const { dimensions } = pageFormat;
 
@@ -89,9 +98,15 @@ export function calculateDisplayDimensions(
     measured !== undefined && measured > 0 ? measured : screenWidth - margin;
   availableHeight = (dimensions.height * availableWidth) / dimensions.width;
 
-  // Ajustar si l'alçada supera l'espai disponible. A l'amplada no cal: la
-  // resta del full es veu baixant
-  if (fit === "page" && availableHeight + FOOTER_SPACE > screenHeight) {
+  // Al mòbil, l'espai mesurat sobre el panell: el full hi cap sencer
+  if (measuredHeight !== undefined && measuredHeight > 0) {
+    if (availableHeight > measuredHeight) {
+      availableHeight = measuredHeight;
+      availableWidth = (dimensions.width * availableHeight) / dimensions.height;
+    }
+  } else if (fit === "page" && availableHeight + FOOTER_SPACE > screenHeight) {
+    // Ajustar si l'alçada supera l'espai disponible. A l'amplada no cal: la
+    // resta del full es veu baixant
     availableHeight = screenHeight - FOOTER_SPACE;
     availableWidth = (dimensions.width * availableHeight) / dimensions.height;
   }
@@ -136,10 +151,10 @@ export function useScaleCalculator(
   screenHeight: number,
   options: Pick<
     ScaleCalculationParams,
-    "fit" | "settingsBeside" | "availableWidth"
+    "fit" | "settingsBeside" | "availableWidth" | "availableHeight"
   > = {},
 ): ScaleResult {
-  const { fit, settingsBeside, availableWidth } = options;
+  const { fit, settingsBeside, availableWidth, availableHeight } = options;
   return useMemo(() => {
     return calculateDisplayDimensions({
       pageFormat,
@@ -148,6 +163,7 @@ export function useScaleCalculator(
       fit,
       settingsBeside,
       availableWidth,
+      availableHeight,
     });
   }, [
     pageFormat,
@@ -156,6 +172,7 @@ export function useScaleCalculator(
     fit,
     settingsBeside,
     availableWidth,
+    availableHeight,
   ]);
 }
 

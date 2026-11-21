@@ -17,8 +17,8 @@ interface LevelCrumbsProps {
 
 /**
  * Les molles de dalt de la columna de la vista: «Document › Pàgina 2 ›
- * Rutina». Queden fixes mentre es baixa per la columna i porten a cada
- * nivell; l'últim és on s'és. A prova: si funcionen, passaran a l'estàndard.
+ * Rutina». Queden fixes mentre es baixa per la columna (al mòbil, a la
+ * capçalera del panell de baix) i porten a cada nivell; l'últim és on s'és. A prova: si funcionen, passaran a l'estàndard.
  */
 const LevelCrumbs = ({
   crumbs,
@@ -29,10 +29,10 @@ const LevelCrumbs = ({
     <Breadcrumbs
       aria-label={intl.formatMessage(messages.crumbs)}
       sx={{
-        position: "sticky",
-        // Al mòbil el verd és qui es desplaça, i té marge: les molles s'hi
-        // enganxen a la vora, no a dins del marge, perquè no s'hi vegi res a sobre
-        top: { xs: -12, md: 0 },
+        // A l'escriptori, enganxades a dalt de la columna. Al mòbil van a la
+        // capçalera del panell de baix, que no es desplaça
+        position: { md: "sticky" },
+        top: { md: 0 },
         zIndex: 1,
         // Opac: la columna passa per sota
         backgroundColor: "background.paper",

@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   calculateUsableDimensions,
   createPageFormat,
+  currentScreen,
+  differentShape,
   isMediumScreen,
   CSS_PRINT_DPI,
   PAPER_DIMENSIONS_MM,
@@ -98,14 +100,28 @@ describe("pageFormat", () => {
       expect(landscape.dimensions.height).toBe(portrait.dimensions.width);
     });
 
-    it("hauria de prendre la mida de la pantalla en pantalla completa", () => {
-      const landscape = createPageFormat("FULLSCREEN", "landscape");
-      const portrait = createPageFormat("FULLSCREEN", "portrait");
-      const long = Math.max(window.screen.width, window.screen.height);
-      const short = Math.min(window.screen.width, window.screen.height);
+    it("en pantalla completa, és sempre la pantalla apaïsada, digui el que digui l'orientació", () => {
+      // jsdom no té pantalla: la d'ara és la de 1280 × 720
+      expect(currentScreen()).toEqual({ width: 1280, height: 720 });
+      for (const orientation of ["landscape", "portrait"] as const) {
+        const format = createPageFormat("FULLSCREEN", orientation);
+        expect(format.dimensions).toEqual({ width: 1280, height: 720 });
+        expect(format.orientation).toBe("landscape");
+      }
+    });
 
-      expect(landscape.dimensions).toEqual({ width: long, height: short });
-      expect(portrait.dimensions).toEqual({ width: short, height: long });
+    it("en pantalla completa, fa servir la pantalla desada al document", () => {
+      const format = createPageFormat("FULLSCREEN", "portrait", {
+        width: 1024,
+        height: 768,
+      });
+      expect(format.dimensions).toEqual({ width: 1024, height: 768 });
+    });
+
+    it("dues pantalles tenen una altra forma si la proporció canvia més d'un 2 %", () => {
+      const wide = { width: 1920, height: 1080 };
+      expect(differentShape(wide, { width: 1280, height: 720 })).toBe(false);
+      expect(differentShape(wide, { width: 1024, height: 768 })).toBe(true);
     });
   });
 

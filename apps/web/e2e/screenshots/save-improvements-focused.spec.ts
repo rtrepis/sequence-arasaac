@@ -161,6 +161,10 @@ const focusedScreenshot = async (
   });
 };
 
+// Un navegador de Catalunya: el paper per defecte surt de la regió, i el
+// Chromium de proves diu que és dels Estats Units (paper Carta)
+test.use({ locale: "ca-ES" });
+
 test.beforeAll(() => {
   fs.mkdirSync(IMG_DIR, { recursive: true });
   fs.mkdirSync(VIDEO_DIR, { recursive: true });
@@ -349,21 +353,29 @@ test(
 
     // =============================================
     // PAS 3: Controls de mida i espaiat a la pàgina de vista
-    // Protagonista: Accordion amb els sliders de sizePict i pictSpaceBetween
+    // Protagonista: el nivell «Seqüència» de la columna, amb la mida, l'espai
+    // i l'alineació
     // =============================================
 
     // Navegar a la pàgina de vista mantenint l'estat Redux
     await page.getByRole("tab", { name: /Vista/i }).click();
 
-    // Esperar que el slider de mida sigui visible (indica que la pàgina ha carregat)
+    // La distribució és del nivell «Seqüència»: només hi és amb la seqüència
+    // seleccionada al full
+    const sequence = page.locator('[aria-pressed][aria-label^="Seqüència 1"]');
+    await sequence.waitFor({ state: "visible", timeout: 15000 });
+    await sequence.click();
+
     const sizeSlider = page.getByRole("slider", { name: /Mida/i });
     await sizeSlider.waitFor({ state: "visible", timeout: 15000 });
     await page.waitForTimeout(1000);
 
-    // L'acordió obert per defecte conté els sliders i botons d'alineació
+    // El contenidor més petit que té la mida i l'alineació: el nivell sencer
     const accordion = page
-      .locator(".MuiAccordionDetails-root")
-      .filter({ has: page.getByRole("slider", { name: /Mida/i }) });
+      .locator("div")
+      .filter({ has: sizeSlider })
+      .filter({ hasText: /Alineació/ })
+      .last();
     await accordion.waitFor({ state: "visible", timeout: 10000 });
 
     // Pas 3: crop ~700×560 centrat en l'acordió de configuració

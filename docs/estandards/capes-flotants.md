@@ -79,6 +79,103 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
 - Drawer, menús i popovers són capes de navegació i queden fora d'aquest
   estàndard.
 
+## Panell de baix
+
+> Ve de C29 de `docs/BACKLOG-ux.md` (resolta el 2026-11-19). El pla i les
+> decisions, a `docs/PLA-vista-mobil.md`; l'esbós, a `docs/esbos-vista-mobil.html`.
+> La raó, a F14 de `docs/ESTANDARD-capes-flotants.md`.
+
+- **`AppBottomSheet` és l'únic panell de baix**: el tercer component canònic de
+  capes flotants, al costat dels dos diàlegs, i no una variant de cap. Viu a
+  `components/AppBottomSheet/` i no sap res de qui el fa servir. **Només per
+  sota de `md`**; a partir de `md`, el mateix contingut és una columna.
+- **No és modal.** El que queda a sobre continua viu: sense fons que tapi, sense
+  trampa de focus, `role="region"` amb nom. Si una cosa ha de bloquejar la
+  pàgina, és un diàleg, no un panell.
+- **Tres alçades**: **plegat** (només la capçalera), **mig** (el 50 % de la
+  pantalla) i **sencer** (tot menys una franja de 64 px a dalt). Mai el 100 %:
+  la franja és un **botó que torna a mig**, no un tros del contingut, i no s'hi
+  pot arrossegar res.
+- **Es mou per la nansa i la capçalera, mai pel contingut**, que es desplaça per
+  dins (`overscroll-behavior: contain`). A la capçalera, un botó alterna plegat ↔
+  mig, diu què farà i porta `aria-expanded`. **El botó és amagat només a la
+  vista**: és a l'arbre d'accessibilitat i a l'ordre de tabulació, i es veu quan
+  rep el focus. Amb el dit, el panell es mou per la nansa, i qui el munta l'ha de
+  poder pujar d'un toc d'una altra manera (a la vista, tocar el full o les molles).
+- **A sencer només s'hi arriba arrossegant; per això cap funció no pot dependre
+  de sencer.** A mig hi ha d'haver tot, amb el seu scroll: sencer és comoditat.
+  És el que fa que arrossegar no trenqui el criteri WCAG 2.5.7.
+- **La pàgina de sota no es desplaça.** El que hi ha a sobre del panell s'encongeix
+  per cabre a l'espai que queda (fins a l'alçada de mig). Una pàgina amb scroll
+  sota un panell amb scroll torna a ser el problema que el panell resol (F14).
+- **Declara la seva alçada** a `FloatingLayer`, de tres maneres: com a **reserva**
+  (`setFloatingInset`, el que el contingut deixa al final), com a **terra**
+  (`setFloatingFloor`, la variable `--app-floating-floor`) i com a **sòcol**
+  (`setFloatingBase`, `--app-floating-base`: l'alçada del panell plegat). Els
+  avisos llegeixen el terra i s'hi posen damunt: són de pas i s'han de veure.
+  **El botó d'estat llegeix el sòcol**: es queda fix just per damunt del panell
+  plegat, el panell (que és per damunt seu) el tapa quan puja a mig o a sencer, i
+  es torna a veure quan baixa. Qui obre els ajustos els mira a ells, no el desat,
+  i les accions del botó també són al menú lateral. Si el botó d'estat llegís la
+  reserva, saltaria amunt cada cop que surt un avís al seu costat, perquè els
+  avisos també en declaren. Es declaren amb el panell quiet, no a cada píxel de
+  l'arrossegament.
+  **El terra no passa mai de mig**: a sencer, damunt del panell només hi ha la
+  franja que torna a mig, i un avís que s'hi posés damunt la taparia. A sencer,
+  doncs, els avisos suren damunt del contingut a l'alçada de mig (la reserva,
+  en canvi, és la de debò).
+- **El que rep el focus dins del panell, el panell el porta a la vista.** El
+  navegador no ho sap fer: el panell baixa amb un `transform`, i per a ell un
+  camp de la part de baix «ja es veu» encara que sigui sota la pantalla. Es
+  porta a la vista el que s'hi arriba amb el teclat (`:focus-visible`) i els
+  camps de text, que obren el teclat virtual; un lliscador tocat amb el dit,
+  no, perquè saltaria sota el dit que l'arrossega. I es torna a mirar quan el
+  panell canvia d'alçada amb el focus a dins, que és el que fa el teclat
+  virtual en obrir-se.
+- **La barra de l'app s'amaga a mig i a sencer i torna a plegat.** El panell ho
+  diu amb un senyal genèric (`setFloatingRaised`, que es llegeix amb
+  `useFloatingRaised`); no toca la barra ni en sap el nom.
+- **Controlat des de fora**: l'alçada és una prop (`snap`) i el panell la demana
+  amb `onSnapChange`, perquè qui el munta l'ha de poder portar a mig (en
+  seleccionar, a la vista). Els textos (el nom de la regió, el botó i la franja)
+  també els posa qui el munta: el component no en té cap de propi.
+- **Les alçades són estat de la pantalla**: no van a Redux, ni al document, ni a
+  les preferències. I el panell no arriba mai al paper (`usePrintSheet`).
+
+## La capa del mòbil girat
+
+- Per sota de `md`, una pàgina que **només es treballa amb el mòbil dret** ho diu
+  amb una capa: **el fons de l'escriptori del tema, translúcid** (blanc en clar,
+  negre en fosc; `rotateVeil` de `palette.ts`), una **icona animada** de girar el
+  mòbil i el text que ho explica.
+- **No es tanca**: desapareix en tornar a posar el mòbil dret. No és un avís que
+  es pugui despatxar, perquè la pàgina de sota no funciona girada.
+- **No surt a la pantalla completa**, que en horitzontal sí que té sentit.
+- Amb `prefers-reduced-motion`, la icona no es mou. La capa es llegeix com a
+  `role="status"`.
+- Avui només la porta la vista (M6 del pla). Una altra pàgina que la vulgui l'ha
+  de justificar: girar el mòbil és un gest normal i no s'ha de prohibir per
+  defecte.
+
+## La fletxa de la vora
+
+- **Passar de pàgina és lliscar**, a la vista i a la pantalla completa. La fletxa
+  n'és l'**alternativa d'un toc**, mai l'única manera.
+- **Tocar la vora** (el 15 % de l'amplada de cada costat, fora dels blocs) fa
+  sortir una fletxa **semitransparent** (un token de `palette.ts`) de 44 px
+  durant **2 segons**. Cada pas de pàgina torna a comptar el temps, per passar-ne
+  diverses seguides. Sense pàgina en aquella direcció, no surt.
+- **Amagada només a la vista**: les dues fletxes són sempre a l'arbre
+  d'accessibilitat i a l'ordre de tabulació, i es mostren quan reben el focus.
+  Qui fa servir el teclat o el lector de pantalla no ha de saber que hi ha una
+  vora per tocar.
+- **El focus no es perd en arribar a la vora del document**: la fletxa que es
+  prem amb el focus i desapareix (a la primera o l'última pàgina) el passa a
+  l'altra, que és la que ara té pàgina.
+- **El full no fa zoom amb el doble toc** (`touch-action: manipulation` a l'espai
+  del full): a la disposició lliure, el doble toc obre els ajustos. Lliscar i
+  pessigar continuen funcionant.
+
 ## El paper
 
 - **Al paper hi van els fulls, i res més.** No s'amaga el que sobra: es pinta
@@ -167,3 +264,7 @@ Tot el que sura per damunt de la pàgina. Font única de veritat:
   seva creu escrites a dins. Ara la forma viu a `AppFullScreenDialog` i el
   diàleg de configuració només hi posa els tabs i els panells. **Ja no hi ha cap
   excepció: zero `Dialog` de MUI fora dels dos components canònics.**
+- ✅ **Vista al mòbil** — `AppBottomSheet`, la capa del mòbil girat
+  (`RotatePhoneOverlay`) i la fletxa de la vora (`EdgePageArrows`). Fet a les
+  fases 3 a 5 de `docs/PLA-vista-mobil.md` i tancat a la fase 6 (2026-11-19).
+  Les proves en dispositius de debò són a P2 de `docs/BACKLOG-ux.md`.

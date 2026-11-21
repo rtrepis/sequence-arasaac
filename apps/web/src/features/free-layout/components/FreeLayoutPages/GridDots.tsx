@@ -1,5 +1,5 @@
 import React from "react";
-import { sheetGuide } from "@/style/palette";
+import { sheetGridDot } from "@/style/palette";
 import type { SheetArea } from "@features/free-layout/model/placement";
 import { GRID_COLUMNS, GRID_ROWS } from "@features/free-layout/model/grid";
 import { editMarkSx, px } from "./PlacementBox";
@@ -42,8 +42,8 @@ const GridDots = ({ area }: { area: SheetArea }): React.ReactElement => {
         height: "100%",
         overflow: "visible",
         pointerEvents: "none",
-        fill: sheetGuide,
-        fillOpacity: 0.6,
+        // Translúcids: es veuen sense competir amb els pictogrames
+        fill: sheetGridDot,
       }}
     >
       {dots}

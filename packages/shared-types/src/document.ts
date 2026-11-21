@@ -57,11 +57,22 @@ export interface SequenceStyle extends DefaultSettings {
  * i viatja al `.saac` a `page` (B26). Les pàgines amb els seus blocs no hi
  * són: van a `DocumentPages` (ADR-005).
  */
+/** Una pantalla, en píxels CSS, apaïsada (amplada ≥ alçada). */
+export interface ScreenSize {
+  width: number;
+  height: number;
+}
+
 export interface DocumentLayout {
   /** La de les pàgines automàtiques que no en diuen cap de pròpia */
   direction?: "row" | "column";
   pageSize?: PageSize;
   orientation?: "landscape" | "portrait";
+  /**
+   * Amb `pageSize: "FULLSCREEN"`, la pantalla on es va encendre: és la forma
+   * i la mida del full. Sense, la pantalla on s'obre (els documents d'abans)
+   */
+  screen?: ScreenSize;
 }
 
 /**

@@ -235,6 +235,23 @@ La sortida és la mateixa que ja es fa servir per a l'alçada del peu (F12):
 el control a la pantalla, l'avís s'aparta exactament com fins ara; sense
 control, es queda als 8 px que MUI li posa per defecte.
 
+### F14 — Al mòbil, el full i els ajustos de la vista es disputen el mateix scroll
+
+*(Trobada el 2026-11-15 provant la vista al mòbil. És C29 de `docs/BACKLOG-ux.md`; el pla és
+`docs/PLA-vista-mobil.md`.)*
+
+Per sota de `md`, la columna d'ajustos de la vista va sota el full, i el verd fa l'alçada de la
+pantalla amb el seu propi scroll. Un cop s'hi ha baixat, el dit només mou el verd i **no queda cap
+tros de pàgina on arrossegar per tornar al full**. Es van provar dos pegats i tots dos van fallar:
+deixar una franja del full a dalt (als fulls amb blocs, el dit hi arrossega el bloc en lloc de pujar
+la pàgina) i fer baixar la pàgina en seleccionar un bloc (el bloc tocat sortia de la pantalla, i amb
+el full vertical, pitjor).
+
+El problema no és cap scroll concret: són **dues coses que es fan alhora** (mirar el full i tocar-ne
+els ajustos) **en un sol scroll**. D'aquí surten les regles del panell de baix: la pàgina deixa de
+desplaçar-se, el full s'encongeix per cabre a sobre del panell, i el panell té el seu scroll i les
+seves alçades. Cap de les dues coses no pot fer fora l'altra de la pantalla.
+
 ---
 
 ## 4. El patró

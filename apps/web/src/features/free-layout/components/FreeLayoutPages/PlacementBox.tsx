@@ -44,10 +44,14 @@ import {
   removeBlockStyleThunk,
   removePlacementThunk,
   selectNamedStyles,
+  selectPages,
   setPlacementCommonThunk,
   updateMyStyleThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
 import { namedStyleOf } from "@features/free-layout/model/blockStyle";
+import { dispositionOf } from "@features/free-layout/model/pages";
+import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
+import { useOpenOnTap } from "@features/free-layout/hooks/useOpenOnTap";
 import { resetSequencePictogramsThunk } from "@features/sequence/store/styleSlice";
 import messages from "./FreeLayoutPages.lang";
 
@@ -151,6 +155,12 @@ const PlacementBox = ({
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   // Si el bloc ja té un estil de bloc, es pot actualitzar amb el meu estil (R7)
   const styles = useAppSelector(selectNamedStyles);
+  // Tocar el bloc obre els seus ajustos; a la disposició lliure, amb un doble
+  // toc, perquè un toc sol és per moure'l (D1 de `docs/PLA-vista-mobil.md`)
+  const { requestSettings } = useViewSelection();
+  const openOnTap = useOpenOnTap();
+  const pages = useAppSelector(selectPages);
+  const isFreePage = dispositionOf(pages?.sheets[sheetIndex]) === "free";
   const hasBlockStyle = namedStyleOf(styles, placement.styleId) !== undefined;
 
   const close = () => setAnchor(null);
@@ -199,11 +209,14 @@ const PlacementBox = ({
           // El final d'un arrossegament no és un clic
           if (drag.consumeClick()) return;
           onSelect();
+          if (openOnTap(placement.id, isFreePage)) requestSettings("block");
         }}
         onKeyDown={(event) => {
+          // Amb el teclat no hi ha res a moure amb el dit: obre els ajustos
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             onSelect();
+            requestSettings("block");
             return;
           }
           // Les fletxes mouen el bloc seleccionat; amb Maj, en canvien la mida

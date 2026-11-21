@@ -46,8 +46,12 @@ const openFile = async (page: Page, file: string) => {
 
 const openStylePanel = async (page: Page) => {
   await page.getByRole("button", { name: "Menú principal" }).click();
-  await page.getByRole("button", { name: "Configuració" }).click();
-  await page.getByRole("tab", { name: "El meu estil" }).click();
+  // Cada apartat de la configuració és una entrada del menú, que hi va directe
+  await page.getByRole("button", { name: "El meu estil", exact: true }).click();
+  await expect(page.getByRole("tab", { name: "El meu estil" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
   await expect(
     page.getByRole("heading", { name: "El meu estil" }),
   ).toBeVisible();

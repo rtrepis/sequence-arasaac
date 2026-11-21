@@ -14,6 +14,10 @@
   "changelog.readMore": {
     "message": "Llegir més"
   },
+  "changelog.superseded": {
+    "message": "Superada",
+    "description": "Etiqueta d'una notícia que explica com era l'app abans i que ja no és del tot certa"
+  },
   "component.settingCardBorder.borderIn.title": {
     "message": "Marc interior",
     "description": "setting title"
@@ -41,9 +45,6 @@
   },
   "components.appNavigationDrawer.news": {
     "message": "Novetats"
-  },
-  "components.appNavigationDrawer.settings": {
-    "message": "Configuració"
   },
   "components.appNavigationDrawer.admin": {
     "message": "Administració"
@@ -977,6 +978,10 @@
     "message": "Pantalla sencera",
     "description": "Setting property"
   },
+  "pages.viewSequence.fullScreen.helper": {
+    "message": "Per mostrar el document a pantalla completa, no per imprimir-lo: el full pren la forma d'aquesta pantalla",
+    "description": "Ajuda de l'interruptor «Pantalla sencera», sota la mida de pàgina: diu per a què serveix (mostrar el document a pantalla completa) i què canvia (el full pren la forma d'aquesta pantalla, apaïsada, i no hi ha ni imprimir ni PDF)"
+  },
   "pages.viewSequence.pageSize.label": {
     "message": "Mida de pàgina"
   },
@@ -1031,10 +1036,6 @@
   },
   "pages.viewSequence.tooltip.fullscreen": {
     "message": "Pantalla completa"
-  },
-  "pages.viewSequence.tooltipFullscreenPage": {
-    "message": "Aquesta pàgina a pantalla completa",
-    "description": "Botó de la vista que posa la pàgina que es mira (la marcada) a pantalla completa, tan gran com hi càpiga; Esc en surt"
   },
   "pages.viewSequence.tooltip.hideSettings": {
     "message": "Amaga els ajustos de la vista",
@@ -2592,6 +2593,410 @@
     "message": "Clicar la imatge del pictograma continua obrint la finestra d'edició, amb tots els ajustos de sempre. I si la targeta no mostra cap text, la paraula es canvia des d'allà, amb «Edita».",
     "description": "Paràgraf de tancament de la notícia «edit-text-on-card»"
   },
+  "news.pages-and-blocks.title": {
+    "message": "Pàgines a la teva manera",
+    "description": "Títol de la notícia «pages-and-blocks» (pàgines, disposicions, plantilles i blocs)"
+  },
+  "news.pages-and-blocks.summary": {
+    "message": "Cada pàgina pot repartir les seqüències en columnes, en files o on vulguis, amb plantilles i rètols de text.",
+    "description": "Resum de la notícia «pages-and-blocks» a la targeta del carrusel"
+  },
+  "news.pages-and-blocks.content": {
+    "message": "<p>Fins ara, totes les seqüències d'un document anaven una darrere l'altra, i el full s'omplia sol. Si no toques res, continua sent així. Però ara un document pot tenir diverses pàgines, i cada pàgina tria com es reparteix: en columnes, en files o lliure, amb cada seqüència al lloc on la vulguis.</p><p>Així es pot fer, per exemple, una agenda amb el dia a dalt, un «Primer / Després» o tota la setmana en un sol full.</p>",
+    "description": "Introducció de la notícia «pages-and-blocks». Pot portar <p> i <b>"
+  },
+  "news.pages-and-blocks.step1.title": {
+    "message": "Res no canvia si no vols",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step1.description": {
+    "message": "<p>Els documents comencen com sempre, amb la disposició <b>Simple</b>: les seqüències una darrere l'altra.</p><p>A la <b>Vista</b>, cada pàgina té a dalt el seu nom i un menú amb tres punts. A <b>Disposició</b> hi tries com es reparteix: <b>Simple</b>, <b>Columnes</b>, <b>Files</b> o <b>Lliure</b>. També ho pots triar a la columna de la dreta, quan hi tens la pàgina oberta.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step2.title": {
+    "message": "Columnes, files o lliure",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step2.description": {
+    "message": "<p>Amb <b>Columnes</b> o <b>Files</b>, cada seqüència és un bloc amb el seu lloc a la pàgina, i l'app els reparteix perquè hi càpiguen tots. Amb <b>Lliure</b>, cada bloc va on el poses.</p><p>Les tres imatges són la mateixa pàgina: en columnes, en files i lliure.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step3.title": {
+    "message": "Plantilles",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step3.description": {
+    "message": "<p>Al menú de la pàgina, <b>Plantilla…</b> obre les plantilles pensades per als usos més habituals: l'agenda en tira, «Avui és» amb l'agenda, «Primer / Després», la setmana, l'economia de fitxes, la pàgina de conte o el menú del menjador.</p><p>Passa per damunt d'una plantilla i en veuràs els espais dibuixats al full, abans d'aplicar-la. Un clic l'aplica.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step4.title": {
+    "message": "Moure un bloc i canviar-ne la mida",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step4.description": {
+    "message": "<p>En una pàgina lliure, clica o toca un bloc per seleccionar-lo. Arrossega'l per moure'l, o estira els quadrets de les vores per fer-lo més gran o més petit. Els blocs s'ajusten a la quadrícula de punts, i així queden ben alineats.</p><p>També es pot fer amb el teclat: les fletxes mouen el bloc seleccionat i, amb <b>Maj</b>, en canvien la mida.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step5.title": {
+    "message": "Text al full",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step5.description": {
+    "message": "<p>A més de seqüències, una pàgina pot portar <b>rètols</b>: un títol com «Dissabte», «Primer» o el dia de la setmana. Se n'afegeix un amb <b>Afegeix un bloc</b> i <b>Bloc de text</b>.</p><p>Quan el selecciones, a la columna de la dreta hi escrius el text i en tries la mida de la lletra, la negreta i l'alineació.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step6.title": {
+    "message": "Més d'una pàgina",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step6.description": {
+    "message": "<p>Al menú de la pàgina hi ha <b>Afegeix una pàgina</b>, <b>Duplica la pàgina</b> i les opcions per moure-la amunt o avall. Una mateixa seqüència pot sortir a més d'una pàgina.</p><p>Cada bloc té també el seu menú: <b>A totes les pàgines</b> el posa a totes, al mateix lloc, com una capçalera; <b>Copia a la pàgina</b> el porta a una altra.</p><p>Si una seqüència no és a cap pàgina, surt a la columna de la dreta, a <b>Sense col·locar</b>, amb un botó per posar-la a la pàgina que mires. Abans d'imprimir, l'app t'avisa si en queda alguna.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.step7.title": {
+    "message": "Amb quina disposició comencen els documents nous",
+    "description": "Títol d'un apartat de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.step7.description": {
+    "message": "<p>Si vols que els documents nous comencin en columnes, en files o lliures, obre la configuració amb la roda dentada de dalt a la dreta i ves a <b>Pàgina i distribució</b>, a la fila <b>Disposició</b>. Els documents que ja tens no canvien.</p>",
+    "description": "Text d'un apartat de la notícia «pages-and-blocks». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.pages-and-blocks.faq.title": {
+    "message": "Preguntes freqüents",
+    "description": "Títol de les preguntes freqüents de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.q1": {
+    "message": "S'imprimeix igual?",
+    "description": "Pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.a1": {
+    "message": "Sí. Cada pàgina és un full, i s'imprimeix i es desa en PDF tal com la veus.",
+    "description": "Resposta a una pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.q2": {
+    "message": "I els documents que ja tenia?",
+    "description": "Pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.a2": {
+    "message": "S'obren com sempre, en una sola pàgina simple. Només canvien si tu els canvies la disposició.",
+    "description": "Resposta a una pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.q3": {
+    "message": "Es pot fer al mòbil?",
+    "description": "Pregunta freqüent de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.faq.a3": {
+    "message": "Sí. Al mòbil, els ajustos de la pàgina i dels blocs són al panell Ajustos, a baix de la pantalla.",
+    "description": "Resposta a una pregunta freqüent de la notícia «pages-and-blocks». «Ajustos» és el nom del panell de baix de la vista al mòbil"
+  },
+  "news.pages-and-blocks.closing": {
+    "message": "Les pàgines es desen dins del mateix fitxer .saac, i el document s'obre igual a qualsevol ordinador, tauleta o mòbil.",
+    "description": "Paràgraf de tancament de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.pageMenu.alt": {
+    "message": "El menú de tres punts d'una pàgina, obert: a dalt, la disposició (Simple, Columnes, Files, Lliure); a sota, afegir una seqüència, triar una plantilla i les accions de la pàgina.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.columns.alt": {
+    "message": "Una pàgina amb dues seqüències en columnes, una al costat de l'altra.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.rows.alt": {
+    "message": "La mateixa pàgina en files: una seqüència a dalt i l'altra a sota.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.free.alt": {
+    "message": "La mateixa pàgina lliure: la segona seqüència s'ha mogut cap a la dreta, damunt de la quadrícula de punts.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.templates.alt": {
+    "message": "Les plantilles de la pàgina obertes, amb el cursor damunt de «Primer / Després»: al full es veuen dibuixats els espais de la plantilla, amb dos rètols a dalt.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.moveBlock.alt": {
+    "message": "Una pàgina lliure amb un títol i dos blocs de seqüència sobre una quadrícula de punts; un bloc està seleccionat, amb quadrets a les vores per canviar-ne la mida.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.label.alt": {
+    "message": "El rètol de dalt de la pàgina seleccionat i, a la columna de la dreta, els seus ajustos: el text, la mida de la lletra, la negreta i l'alineació.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.blockMenu.alt": {
+    "message": "El menú d'un bloc, obert: a totes les pàgines, aplicar el meu estil, copiar-lo a una altra pàgina o treure'l d'aquesta.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.unplaced.alt": {
+    "message": "A la columna de la dreta, l'apartat de les seqüències que no són a cap pàgina, amb la seqüència «Nit» i el botó per posar-la a la pàgina 1.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.pages-and-blocks.settings.alt": {
+    "message": "La configuració, a l'apartat de la pàgina i la distribució: la fila Disposició, amb què comencen els documents nous, al costat d'una mostra.",
+    "description": "Text alternatiu d'una captura de la notícia «pages-and-blocks»"
+  },
+  "news.my-style.title": {
+    "message": "El teu estil, a tot el document d'un cop",
+    "description": "Títol de la notícia «my-style» (El meu estil i portar-lo als documents)"
+  },
+  "news.my-style.summary": {
+    "message": "Fes l'estil dels pictogrames una sola vegada, a «El meu estil», i porta'l a qualsevol document amb un clic.",
+    "description": "Resum de la notícia «my-style» a la targeta del carrusel"
+  },
+  "news.my-style.content": {
+    "message": "<p>La lletra, els marcs, la numeració, la posició del text: ara l'estil que t'agrada es fa una sola vegada, a la configuració, i els documents nous el reben. Per portar-lo a un document que ja tens, n'hi ha prou amb un clic.</p><p>És la continuació dels fitxers d'estil que vam estrenar a l'octubre: un fitxer .saacstyle es pot carregar com el teu estil, i d'allà passa als documents.</p>",
+    "description": "Introducció de la notícia «my-style». Pot portar <p> i <b>"
+  },
+  "news.my-style.step1.description": {
+    "message": "<p>Obre la configuració amb la roda dentada de dalt a la dreta i ves a <b>El meu estil</b>. Hi tries com són els pictogrames: la numeració, la posició del text, la lletra i els marcs. La mostra de l'esquerra t'ensenya com quedaran.</p><p>Des d'aquí també pots carregar un estil d'un fitxer o desar el teu per compartir-lo.</p>",
+    "description": "Descripció d'un pas de la notícia «my-style». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.my-style.step1.alt": {
+    "message": "La configuració oberta a «El meu estil»: a l'esquerra, la mostra d'un pictograma; al mig, la numeració, la posició del text, la lletra i els marcs; a la dreta, carregar i desar l'estil en un fitxer.",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.step2.description": {
+    "message": "<p>Per portar el teu estil a un document obert, ves a la <b>Vista</b> i obre el menú de tres punts d'una pàgina: <b>Aplica el meu estil</b> el posa a tots els blocs de la pàgina.</p>",
+    "description": "Descripció d'un pas de la notícia «my-style». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.my-style.step2.alt": {
+    "message": "El menú de tres punts d'una pàgina, amb el cursor damunt de «Aplica el meu estil».",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.step3.description": {
+    "message": "<p>També es pot aplicar a un sol bloc, des del menú del bloc. Aquí, la seqüència de dalt ja té el teu estil, sense numeració, i la de baix continua amb l'estil del document.</p>",
+    "description": "Descripció d'un pas de la notícia «my-style». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.my-style.step3.alt": {
+    "message": "Una pàgina amb dues seqüències: la de dalt amb el meu estil, sense números, i la de baix amb l'estil del document, numerada.",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.step4.description": {
+    "message": "<p>Si després canvies el teu estil, els blocs no canvien sols. Al menú del bloc, <b>Actualitza amb el meu estil</b> el posa al dia, a ell i a tots els blocs que el fan servir. Si el vols tornar a l'estil del document, <b>Treu l'estil de bloc</b>.</p><p>A la segona imatge, el marc del teu estil ja és del color de la categoria de cada pictograma.</p>",
+    "description": "Descripció d'un pas de la notícia «my-style». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.my-style.step4.alt": {
+    "message": "El menú d'un bloc, amb el cursor damunt de «Actualitza amb el meu estil»; a sota hi ha «Treu l'estil de bloc».",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.step4.updated.alt": {
+    "message": "La mateixa pàgina després d'actualitzar: la seqüència de dalt té el marc exterior verd, del color de la categoria.",
+    "description": "Text alternatiu d'una captura de la notícia «my-style»"
+  },
+  "news.my-style.closing": {
+    "message": "L'estil va sempre en una sola direcció: de la configuració cap al document. Per això la columna de la vista ja no té el botó per desar-hi les preferències: el que retoques en un document es queda en aquell document, i el teu estil només canvia quan tu el canvies a la configuració.",
+    "description": "Paràgraf de tancament de la notícia «my-style»"
+  },
+  "news.mobile-view.title": {
+    "message": "La vista, també al mòbil",
+    "description": "Títol de la notícia «mobile-view» (la vista al mòbil)"
+  },
+  "news.mobile-view.summary": {
+    "message": "Al mòbil, el full es veu sencer i els ajustos són en un panell que puges i baixes amb el dit.",
+    "description": "Resum de la notícia «mobile-view» a la targeta del carrusel"
+  },
+  "news.mobile-view.content": {
+    "message": "<p>Fins ara, la <b>Vista</b> s'havia pensat per a una pantalla gran: al mòbil, el full i els ajustos es disputaven el lloc. Ara el mòbil té la seva manera de treballar: el full a dalt, sencer, i els ajustos a baix, en un panell que només puja quan el necessites.</p>",
+    "description": "Introducció de la notícia «mobile-view». Pot portar <p> i <b>"
+  },
+  "news.mobile-view.step1.description": {
+    "message": "<p>En obrir la <b>Vista</b>, el full es veu sencer, tal com s'imprimirà. A baix hi ha el panell <b>Ajustos</b>, plegat: només se'n veu on ets (el document, la pàgina o el bloc).</p>",
+    "description": "Descripció d'un pas de la notícia «mobile-view». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.mobile-view.step1.alt": {
+    "message": "Un mòbil amb la vista: el full sencer al mig de la pantalla i, a baix, el panell d'ajustos plegat.",
+    "description": "Text alternatiu d'una captura de la notícia «mobile-view»"
+  },
+  "news.mobile-view.step2.description": {
+    "message": "<p>Toca una seqüència o un bloc i el panell puja fins a mitja pantalla amb els seus ajustos: la mida, l'espai, l'alineació. El full es queda a dalt, i el que has tocat continua a la vista mentre el canvies.</p><p>El panell també es puja i es baixa arrossegant-lo amb el dit. En una pàgina lliure, on els blocs es mouen amb el dit, els ajustos s'obren amb un doble toc.</p>",
+    "description": "Descripció d'un pas de la notícia «mobile-view». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.mobile-view.step2.alt": {
+    "message": "El mateix mòbil després de tocar la seqüència «Matí»: el full a dalt, amb la seqüència marcada, i el panell a mitja pantalla amb la mida i l'espai.",
+    "description": "Text alternatiu d'una captura de la notícia «mobile-view»"
+  },
+  "news.mobile-view.step3.description": {
+    "message": "<p>Si el document té més d'una pàgina, toca la vora dreta o esquerra del full i hi apareix una fletxa: tocant-la, passes a la pàgina següent o a l'anterior. A la pantalla completa, es passa de pàgina lliscant el dit.</p>",
+    "description": "Descripció d'un pas de la notícia «mobile-view». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.mobile-view.step3.alt": {
+    "message": "Dos mòbils: al primer, la fletxa de la vora dreta del full; al segon, la pàgina 2 del document, amb dues seqüències en columnes.",
+    "description": "Text alternatiu d'una captura de la notícia «mobile-view»"
+  },
+  "news.mobile-view.step4.description": {
+    "message": "<p>La vista es treballa amb el mòbil dret. Si el gires, una capa t'ho recorda, perquè apaïsat no hi cabrien el full i el panell alhora. La pantalla completa sí que es pot fer servir girada.</p>",
+    "description": "Descripció d'un pas de la notícia «mobile-view». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.mobile-view.step4.alt": {
+    "message": "Un mòbil girat, amb el missatge que demana posar-lo dret per treballar a la vista.",
+    "description": "Text alternatiu d'una captura de la notícia «mobile-view»"
+  },
+  "news.mobile-view.closing": {
+    "message": "A la tauleta en vertical funciona igual. I en una pantalla gran, la vista continua com sempre, amb la columna d'ajustos a la dreta.",
+    "description": "Paràgraf de tancament de la notícia «mobile-view»"
+  },
+  "news.full-screen-sheet.title": {
+    "message": "Pantalla sencera: el full amb la forma de la pantalla",
+    "description": "Títol de la notícia «full-screen-sheet» (l'interruptor «Pantalla sencera»)"
+  },
+  "news.full-screen-sheet.summary": {
+    "message": "Per mostrar el document en una tauleta o un projector: el full pren la forma de la pantalla. El botó de pantalla completa ara és aquí.",
+    "description": "Resum de la notícia «full-screen-sheet» a la targeta del carrusel"
+  },
+  "news.full-screen-sheet.content": {
+    "message": "<p><b>Si buscaves el botó de pantalla completa</b>: ara surt quan encens <b>Pantalla sencera</b>, a la columna de la <b>Vista</b>, sota la mida de pàgina. Amb un paper (A4, Carta…), ja no hi és.</p><p>El motiu és que un full de paper no s'assembla a una pantalla: un A4 a pantalla completa deixava franges buides als costats i els pictogrames petits. Amb la pantalla sencera, el full pren la forma de la teva pantalla, i el document s'hi veu sencer i tan gran com es pot.</p>",
+    "description": "Introducció de la notícia «full-screen-sheet». Pot portar <p> i <b>. Ha de dir al primer paràgraf on és ara el botó de pantalla completa"
+  },
+  "news.full-screen-sheet.step1.description": {
+    "message": "<p>A la columna de la <b>Vista</b>, al document, sota <b>Mida de pàgina</b>, encén <b>Pantalla sencera</b>. És per mostrar el document en una tauleta, un projector o una pissarra digital, no per imprimir-lo: amb la pantalla sencera, no s'imprimeix ni es desa en PDF.</p>",
+    "description": "Descripció d'un pas de la notícia «full-screen-sheet». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.full-screen-sheet.step1.alt": {
+    "message": "La columna de la vista, amb l'interruptor «Pantalla sencera» encès sota la mida de pàgina, i l'ajuda que diu que és per mostrar el document, no per imprimir-lo.",
+    "description": "Text alternatiu d'una captura de la notícia «full-screen-sheet»"
+  },
+  "news.full-screen-sheet.step2.description": {
+    "message": "<p>El full es torna apaïsat i pren la forma de la pantalla, també a les pàgines en columnes, en files o lliures: els blocs s'hi recol·loquen. Si després obres el document en una pantalla d'una altra forma, l'app et pregunta si l'adapta.</p>",
+    "description": "Descripció d'un pas de la notícia «full-screen-sheet». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.full-screen-sheet.step2.alt": {
+    "message": "Una pàgina lliure amb el full apaïsat, de la forma d'una pantalla: el títol a dalt i dues seqüències.",
+    "description": "Text alternatiu d'una captura de la notícia «full-screen-sheet»"
+  },
+  "news.full-screen-sheet.step3.description": {
+    "message": "<p>Amb la pantalla sencera encesa, a dalt de la columna apareix el botó de pantalla completa, el de les quatre fletxes. La pantalla completa ensenya les pàgines una a una: es passa de pàgina amb les fletxes de les vores o, a la tauleta, lliscant el dit.</p>",
+    "description": "Descripció d'un pas de la notícia «full-screen-sheet». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.full-screen-sheet.step3.alt": {
+    "message": "Dalt de la columna de la vista, el botó de pantalla completa, amb quatre fletxes, assenyalat pel cursor.",
+    "description": "Text alternatiu d'una captura de la notícia «full-screen-sheet»"
+  },
+  "news.full-screen-sheet.step3.screen.alt": {
+    "message": "La pantalla completa: la pàgina lliure ocupa tota la pantalla, amb la fletxa per tornar a la pàgina anterior a l'esquerra.",
+    "description": "Text alternatiu d'una captura de la notícia «full-screen-sheet»"
+  },
+  "news.full-screen-sheet.closing": {
+    "message": "Per imprimir, apaga la pantalla sencera i tria un paper: el document torna a la mida de pàgina que tenia.",
+    "description": "Paràgraf de tancament de la notícia «full-screen-sheet»"
+  },
+  "news.reorder-pictograms.title": {
+    "message": "Canvia l'ordre dels pictogrames arrossegant-los",
+    "description": "Títol de la notícia «reorder-pictograms» (canviar l'ordre arrossegant)"
+  },
+  "news.reorder-pictograms.summary": {
+    "message": "A l'edició, porta un pictograma al seu lloc nou amb el ratolí o amb el dit.",
+    "description": "Resum de la notícia «reorder-pictograms» a la targeta del carrusel"
+  },
+  "news.reorder-pictograms.content": {
+    "message": "<p>Fins ara, per canviar l'ordre d'una seqüència calia esborrar pictogrames i tornar-los a posar. Ara n'hi ha prou amb agafar-ne un i deixar-lo on toca.</p>",
+    "description": "Introducció de la notícia «reorder-pictograms». Pot portar <p> i <b>"
+  },
+  "news.reorder-pictograms.step1.description": {
+    "message": "<p>A la pestanya <b>Edició</b>, agafa un pictograma amb el ratolí i arrossega'l fins al seu lloc nou. Els altres es fan a un costat, i la numeració es posa al dia sola.</p><p>Un clic, sense arrossegar, continua obrint la finestra d'edició del pictograma.</p>",
+    "description": "Descripció d'un pas de la notícia «reorder-pictograms». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.reorder-pictograms.step1.alt": {
+    "message": "El pictograma «dormir» arrossegat amb el ratolí cap al final de la seqüència, per damunt dels altres.",
+    "description": "Text alternatiu d'una captura de la notícia «reorder-pictograms»"
+  },
+  "news.reorder-pictograms.step1.after.alt": {
+    "message": "La seqüència després de deixar-lo anar: «dormir» ara és el tercer, i la numeració ha canviat.",
+    "description": "Text alternatiu d'una captura de la notícia «reorder-pictograms»"
+  },
+  "news.reorder-pictograms.step2.description": {
+    "message": "<p>A la tauleta i al mòbil, mantén premut el pictograma: si mous el dit, el pictograma el segueix i el deixes on vulguis. Si l'aixeques sense moure'l, s'obre el menú del pictograma, amb <b>Mou abans</b> i <b>Mou després</b> per moure'l d'un en un.</p><p>Al mòbil, a més, la finestra d'edició del pictograma ara ocupa tota la pantalla.</p>",
+    "description": "Descripció d'un pas de la notícia «reorder-pictograms». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.reorder-pictograms.step2.alt": {
+    "message": "Dos mòbils: al primer, el dit arrossega el pictograma «dormir»; al segon, el menú d'un pictograma obert després de mantenir-lo premut, amb «Mou abans».",
+    "description": "Text alternatiu d'una captura de la notícia «reorder-pictograms»"
+  },
+  "news.reorder-pictograms.step3.description": {
+    "message": "<p>De passada, el menú del pictograma diu més coses: sota <b>Enganxa (substitueix)</b> hi ha el pictograma que tens copiat, perquè sàpigues què hi posaràs. Si encara no n'has copiat cap, t'ho diu.</p>",
+    "description": "Descripció d'un pas de la notícia «reorder-pictograms». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.reorder-pictograms.step3.alt": {
+    "message": "El menú d'un pictograma: sota «Enganxa (substitueix)» diu «Copiat: «menjar»», amb la imatge del pictograma copiat.",
+    "description": "Text alternatiu d'una captura de la notícia «reorder-pictograms»"
+  },
+  "news.text-fit.title": {
+    "message": "Quan el text no hi cap, t'ho diu",
+    "description": "Títol de la notícia «text-fit» (l'avís quan el text no cap a la targeta)"
+  },
+  "news.text-fit.summary": {
+    "message": "Si una paraula és massa llarga per a la targeta, l'app ho marca i et proposa com fer-la cabre.",
+    "description": "Resum de la notícia «text-fit» a la targeta del carrusel"
+  },
+  "news.text-fit.content": {
+    "message": "<p>Ara que el text es pot canviar damunt de la mateixa targeta, és fàcil escriure-hi una paraula llarga. Si no hi cap, se'n talla un tros, i fins ara no te n'adonaves fins que ho veies imprès. Ja no: la targeta t'avisa mentre l'edites.</p>",
+    "description": "Introducció de la notícia «text-fit». Pot portar <p> i <b>"
+  },
+  "news.text-fit.step1.description": {
+    "message": "<p>Quan una paraula no hi cap, a la cantonada de la targeta hi surt una marca taronja. Només la veus a la pestanya <b>Edició</b>: no surt ni a la impressió ni al PDF.</p>",
+    "description": "Descripció d'un pas de la notícia «text-fit». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.text-fit.step1.alt": {
+    "message": "Tres targetes; la tercera té una paraula llarga tallada i una marca taronja a la cantonada, amb l'ajuda «El text no hi cap i es talla».",
+    "description": "Text alternatiu d'una captura de la notícia «text-fit»"
+  },
+  "news.text-fit.step2.description": {
+    "message": "<p>Clica la marca i l'app et proposa tres sortides:</p><ul><li><b>Redueix la lletra de tot el document</b> fins a la mida on la paraula hi cap.</li><li>Redueix-la <b>només d'aquest pictograma</b>, i la resta es queden com eren.</li><li><b>Edita el text</b>, per escriure'n un de més curt.</li></ul><p>Si ni amb la lletra més petita no hi cap, t'ho diu: llavors cal escurçar el text.</p>",
+    "description": "Descripció d'un pas de la notícia «text-fit». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.text-fit.step2.alt": {
+    "message": "La finestra «El text no hi cap», amb l'explicació i tres botons: reduir la lletra de tot el document, reduir-la només d'aquest pictograma o editar el text.",
+    "description": "Text alternatiu d'una captura de la notícia «text-fit»"
+  },
+  "news.text-fit.step3.description": {
+    "message": "<p>Amb la lletra reduïda, la paraula hi cap sencera i la marca desapareix. Si t'ho repenses, <b>Desfés</b> ho torna a deixar com era.</p>",
+    "description": "Descripció d'un pas de la notícia «text-fit». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.text-fit.step3.alt": {
+    "message": "Les mateixes tres targetes amb la lletra més petita: la paraula llarga hi cap sencera i ja no hi ha cap marca.",
+    "description": "Text alternatiu d'una captura de la notícia «text-fit»"
+  },
+  "news.print-matches-preview.title": {
+    "message": "El que imprimeixes és el que veus",
+    "description": "Títol de la notícia «print-matches-preview» (correccions d'impressió)"
+  },
+  "news.print-matches-preview.summary": {
+    "message": "El full imprès és el de la vista, amb el botó o amb Ctrl+P. I hi ha paper Carta i Tabloide.",
+    "description": "Resum de la notícia «print-matches-preview» a la targeta del carrusel"
+  },
+  "news.print-matches-preview.content": {
+    "message": "<p>Si alguna vegada t'havia sortit el full imprès més petit que a la pantalla, amb el peu damunt de l'última fila o amb la lletra d'una altra mida, ja està arreglat. Ara el full que veus a la <b>Vista</b> és exactament el que surt de la impressora.</p>",
+    "description": "Introducció de la notícia «print-matches-preview». Pot portar <p> i <b>. Sense explicar les causes tècniques"
+  },
+  "news.print-matches-preview.step1.description": {
+    "message": "<ul><li>El botó d'imprimir i <b>Ctrl+P</b> donen el mateix full, el de la vista.</li><li>El full aprofita més el paper: els marges són de 5 mm.</li><li>El peu de llicència ja no trepitja l'última fila de pictogrames.</li><li>El text imprès surt a la mida de lletra que has triat.</li></ul>",
+    "description": "Descripció d'un pas de la notícia «print-matches-preview». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.print-matches-preview.step1.alt": {
+    "message": "La vista amb el full d'una pàgina i el cursor damunt del botó d'imprimir, a dalt de la columna.",
+    "description": "Text alternatiu d'una captura de la notícia «print-matches-preview»"
+  },
+  "news.print-matches-preview.step2.description": {
+    "message": "<p>A <b>Mida de pàgina</b>, a més d'A4 i A3, hi ha <b>Carta</b> i <b>Tabloide</b>, els papers d'Amèrica. El paper amb què comencen els documents nous depèn d'on ets: A4 a Europa, Carta als Estats Units o a Mèxic.</p>",
+    "description": "Descripció d'un pas de la notícia «print-matches-preview». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.print-matches-preview.step2.alt": {
+    "message": "La llista de la mida de pàgina oberta: A4, A3, Carta i Tabloide.",
+    "description": "Text alternatiu d'una captura de la notícia «print-matches-preview»"
+  },
+  "news.print-matches-preview.step3.description": {
+    "message": "<p>El peu de llicència es pot treure amb l'interruptor <b>Llicència</b>, si el document no té autor. Si n'hi ha, la llicència hi va sempre, i l'ajuda de sota t'explica per què: els pictogrames són d'ARASAAC, i el seu autor ha de constar.</p>",
+    "description": "Descripció d'un pas de la notícia «print-matches-preview». Pot portar <p>, <b>, <ul>, <ol> i <li>. Els noms de botons han de ser els reals de l'app"
+  },
+  "news.print-matches-preview.step3.alt": {
+    "message": "El peu d'impressió amb un autor escrit: l'interruptor de la llicència està encès i no es pot apagar, i l'ajuda diu que amb autor la llicència hi va sempre.",
+    "description": "Text alternatiu d'una captura de la notícia «print-matches-preview»"
+  },
+  "news.superseded.notice": {
+    "message": "Aquesta notícia es va publicar el {date} i explica com era SequenciAAC aleshores. Des de llavors l'app ha canviat, i alguna cosa ja no és com aquí es diu.",
+    "description": "Avís a dalt d'una notícia superada. {date} és el dia que es va publicar, amb el mes en lletres"
+  },
+  "news.superseded.replacedBy": {
+    "message": "Com funciona ara:",
+    "description": "Abans de l'enllaç a la notícia nova que substitueix una de superada"
+  },
   "components.pictEdit.textOverflow.mark": {
     "message": "Pictograma {number}: el text no hi cap",
     "description": "Nom accessible de la marca d'avís de la graella quan el text de la targeta es talla. Obre les opcions"
@@ -2846,11 +3251,11 @@
   },
   "features.freeLayout.page.previousPage": {
     "message": "Pàgina anterior",
-    "description": "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina anterior (també es pot lliscar)"
+    "description": "Fletxa de la vora del full, al mòbil i a la pantalla completa: ensenya la pàgina anterior (també es pot lliscar)"
   },
   "features.freeLayout.page.nextPage": {
     "message": "Pàgina següent",
-    "description": "Botó del mòbil, a sobre de la pàgina, que ensenya la pàgina següent (també es pot lliscar)"
+    "description": "Fletxa de la vora del full, al mòbil i a la pantalla completa: ensenya la pàgina següent (també es pot lliscar)"
   },
   "features.freeLayout.page.chooseTemplate": {
     "message": "Plantilla…",
@@ -3008,10 +3413,6 @@
     "message": "Descarrega igualment",
     "description": "Descarrega el PDF tal com està, malgrat l'avís"
   },
-  "features.freeLayout.blockSettingsLink": {
-    "message": "Ajustos del bloc",
-    "description": "Al mòbil, damunt del full amb un bloc seleccionat: baixa fins als ajustos del bloc, a la columna de sota"
-  },
   "features.freeLayout.placement.actions": {
     "message": "Accions de {name}",
     "description": "Nom accessible i tooltip del botó d'un bloc, a dalt a la dreta, que obre el seu menú"
@@ -3019,6 +3420,26 @@
   "pages.viewSequence.levels.crumbs": {
     "message": "On s'apliquen aquests ajustos",
     "description": "Nom accessible de les molles de dalt de la columna de la vista (Document › Pàgina 2 › Bloc)"
+  },
+  "pages.viewSequence.mobile.settings": {
+    "message": "Ajustos",
+    "description": "Al mòbil, nom del panell de baix amb els ajustos de la vista (el llegeix el lector de pantalla)"
+  },
+  "pages.viewSequence.mobile.showSettings": {
+    "message": "Mostra els ajustos",
+    "description": "Al mòbil, botó de la capçalera del panell de baix plegat: el puja a mitja pantalla"
+  },
+  "pages.viewSequence.mobile.hideSettings": {
+    "message": "Amaga els ajustos",
+    "description": "Al mòbil, botó de la capçalera del panell de baix obert: el plega i el full torna a ocupar la pantalla"
+  },
+  "pages.viewSequence.mobile.backToSheet": {
+    "message": "Torna al full",
+    "description": "Al mòbil, franja de dalt quan el panell d'ajustos ocupa gairebé tota la pantalla: el torna a mitja pantalla"
+  },
+  "pages.viewSequence.mobile.rotatePhone": {
+    "message": "Gira el mòbil: la vista es treballa amb el mòbil dret",
+    "description": "Al mòbil girat, capa que tapa la vista fins que es torna a posar dret (a la pantalla completa no surt)"
   },
   "pages.viewSequence.levels.document": {
     "message": "Document",
@@ -3303,5 +3724,17 @@
   "features.sequence.style.changed.resetSequence": {
     "message": "S'han restablert els pictogrames de la seqüència, a tots els blocs on surt.",
     "description": "Snackbar amb «Desfés» després de «Restableix els pictogrames d'aquesta seqüència» del menú «⋯» d'un bloc: se'n treuen els retocs, i canvien tots els blocs on surt la seqüència"
+  },
+  "features.sequence.style.changed.adaptScreen": {
+    "message": "S'ha adaptat el full a aquesta pantalla.",
+    "description": "Snackbar amb «Desfés» en adaptar un document de pantalla sencera a la pantalla d'ara, d'una altra forma: el full canvia de forma i els blocs s'hi recol·loquen"
+  },
+  "features.freeLayout.screenShape.notice": {
+    "message": "Aquest document es va fer per a una pantalla d'una altra forma. El full es veu sencer, amb vores.",
+    "description": "Bàner de la vista: el document és de pantalla sencera i es va fer en una pantalla d'una altra forma (proporció) que la d'ara. El full es veu sencer i encongit, amb vores als costats o a dalt i a baix"
+  },
+  "features.freeLayout.screenShape.adapt": {
+    "message": "Adapta'l a aquesta pantalla",
+    "description": "Botó del bàner de la pantalla d'una altra forma: el full passa a tenir la forma d'aquesta pantalla i els blocs s'hi recol·loquen (es pot desfer)"
   }
 }

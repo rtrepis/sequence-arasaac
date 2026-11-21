@@ -25,10 +25,22 @@ export const scrollPageToTop = (index: number): void => {
   );
 };
 
-/** Posa a pantalla completa el full d'una pàgina. */
+/**
+ * L'`id` del contenidor de totes les pàgines pròpies: és el que va a pantalla
+ * completa, perquè s'hi pugui passar de pàgina lliscant (N1 de
+ * `docs/PLA-vista-mobil.md`). S'hi veu la pàgina que es mira.
+ */
+export const PAGES_FULLSCREEN_ID = "view-pages";
+
+/**
+ * Posa a pantalla completa la pàgina que es mira: amb pàgines pròpies, el
+ * contenidor de totes (que ensenya la pàgina activa); sense, el marc del full.
+ */
 export const enterPageFullscreen = (index: number): void => {
-  const frame = document.getElementById(pageFrameId(index));
-  void frame?.requestFullscreen?.().catch(() => undefined);
+  const target =
+    document.getElementById(PAGES_FULLSCREEN_ID) ??
+    document.getElementById(pageFrameId(index));
+  void target?.requestFullscreen?.().catch(() => undefined);
 };
 
 /** L'`id` de l'element que és a pantalla completa, si n'hi ha cap. */
@@ -89,4 +101,65 @@ export const useElementWidth = (
     return () => observer.disconnect();
   }, [ref]);
   return width;
+};
+
+/** L'amplada i l'alçada d'un element, en px. */
+export interface ElementSize {
+  width: number;
+  height: number;
+}
+
+/**
+ * La mida d'un element, en px: segueix els canvis de mida. Retorna la `ref`
+ * (de funció, perquè l'element pot canviar) i la mida, zero fins que es mesura.
+ */
+export const useElementSize = (): [
+  (node: HTMLElement | null) => void,
+  ElementSize,
+] => {
+  const [size, setSize] = useState<ElementSize>({ width: 0, height: 0 });
+  const observer = React.useRef<ResizeObserver | null>(null);
+  const observed = React.useRef<HTMLElement | null>(null);
+
+  // Observa un element: el mesura ara i cada cop que canvia de mida
+  const observe = React.useCallback((node: HTMLElement) => {
+    observer.current?.disconnect();
+    observer.current = null;
+    const update = () => {
+      const rect = node.getBoundingClientRect();
+      setSize((current) =>
+        current.width === rect.width && current.height === rect.height
+          ? current
+          : { width: rect.width, height: rect.height },
+      );
+    };
+    update();
+    if (typeof ResizeObserver === "undefined") return;
+    observer.current = new ResizeObserver(update);
+    observer.current.observe(node);
+  }, []);
+
+  // En muntar-se (també la segona vegada del `StrictMode`, que desmunta i
+  // torna a muntar els efectes) es torna a observar el que ja hi havia
+  useEffect(() => {
+    if (observed.current) observe(observed.current);
+    return () => {
+      observer.current?.disconnect();
+      observer.current = null;
+    };
+  }, [observe]);
+
+  // Un `null` no desconnecta res: React el passa en treure la `ref` d'un
+  // element, i pot ser després de posar-la a un altre (la ref va d'una pàgina
+  // a l'altra). Es deixa d'observar només quan arriba un element nou
+  const ref = React.useCallback(
+    (node: HTMLElement | null) => {
+      if (!node || node === observed.current) return;
+      observed.current = node;
+      observe(node);
+    },
+    [observe],
+  );
+
+  return [ref, size];
 };

@@ -129,6 +129,14 @@ const ChangelogPage = (): React.ReactElement => {
                         size="small"
                         variant="outlined"
                       />
+                      {/* Una notícia superada s'hi queda, però diu que és d'abans */}
+                      {item.superseded && (
+                        <Chip
+                          label={<FormattedMessage {...messages.superseded} />}
+                          size="small"
+                          variant="outlined"
+                        />
+                      )}
                       <Typography variant="h6" component="h2" fontWeight={600}>
                         <FormattedMessage id={item.titleId} />
                       </Typography>

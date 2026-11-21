@@ -70,15 +70,31 @@ import TemplateGuides from "./TemplateGuides";
 import GridDots from "./GridDots";
 import { useSequenceName } from "./useSequenceName";
 import {
+  PAGES_FULLSCREEN_ID,
   fullscreenScale,
   pageFrameId,
   pageSectionId,
   useFullscreenElementId,
 } from "@features/free-layout/hooks/usePageView";
+import { useOpenOnTap } from "@features/free-layout/hooks/useOpenOnTap";
+import { dispositionOf } from "@features/free-layout/model/pages";
+import EdgePageArrows, { EdgeArrowsShown } from "./EdgePageArrows";
 import messages from "./FreeLayoutPages.lang";
 
 /** Quant ha de lliscar el dit, en px, per passar de pàgina al mòbil. */
 const SWIPE_PX = 60;
+
+/**
+ * La vora de la pantalla, en fracció de l'amplada de cada costat: tocar-hi fora
+ * dels blocs fa sortir la fletxa de passar pàgina (N4 de `docs/PLA-vista-mobil.md`).
+ */
+const EDGE_FRACTION = 0.15;
+
+/** Quant de temps es veu la fletxa de la vora, en ms (N4). */
+const EDGE_ARROW_MS = 2000;
+
+/** Els elements que reben el toc ells mateixos: no són un toc al full. */
+const INTERACTIVE = "button, a, input, textarea, select, [role='button']";
 
 /** Aire entre una pàgina i la capçalera de la següent, a la pantalla. */
 const PAGE_GAP = 3;
@@ -154,6 +170,11 @@ interface FreeLayoutPagesProps {
   licence?: boolean;
   /** Clicar el títol d'una pàgina: a dalt de tot i tan gran com hi càpiga */
   onFocusPage?: (index: number) => void;
+  /**
+   * Al mòbil, l'espai on ha de cabre el full de la pàgina que es mira: qui el
+   * munta el mesura per encongir-hi el full (E1)
+   */
+  sheetAreaRef?: (node: HTMLElement | null) => void;
 }
 
 /**
@@ -173,6 +194,7 @@ const FreeLayoutPages = ({
   author,
   licence,
   onFocusPage,
+  sheetAreaRef,
 }: FreeLayoutPagesProps): React.ReactElement | null => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -198,6 +220,7 @@ const FreeLayoutPages = ({
     cardSizes,
     setCardSizes,
     templatePreview,
+    requestSettings,
   } = useViewSelection();
   const clearOnEscape = useClearOnEscape();
   const theme = useTheme();
@@ -214,10 +237,41 @@ const FreeLayoutPages = ({
     (index: number) => setVisiblePage(index),
     [setVisiblePage],
   );
-  // Al mòbil la pàgina que es mira la tria qui llisca, no l'observador
-  useMostVisiblePage(sections, pageIds, onVisible, !isNarrow);
+  // A la pantalla completa hi van totes les pàgines, i s'hi veu la que es
+  // mira: així s'hi pot passar de pàgina lliscant (N1)
   const fullscreenId = useFullscreenElementId();
+  const inFullscreen = fullscreenId === PAGES_FULLSCREEN_ID;
+  // Al mòbil i a la pantalla completa, una pàgina cada vegada
+  const onePage = isNarrow || inFullscreen;
+  // Al mòbil la pàgina que es mira la tria qui llisca, no l'observador
+  useMostVisiblePage(sections, pageIds, onVisible, !onePage);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const openOnTap = useOpenOnTap();
+
+  // Les fletxes de la vora: tocar la vora en fa sortir una uns segons
+  const [arrows, setArrows] = useState<EdgeArrowsShown>({
+    previous: false,
+    next: false,
+  });
+  const arrowTimers = useRef<Record<keyof EdgeArrowsShown, number>>({
+    previous: 0,
+    next: 0,
+  });
+  const revealArrow = useCallback((side: keyof EdgeArrowsShown) => {
+    window.clearTimeout(arrowTimers.current[side]);
+    setArrows((current) => ({ ...current, [side]: true }));
+    arrowTimers.current[side] = window.setTimeout(
+      () => setArrows((current) => ({ ...current, [side]: false })),
+      EDGE_ARROW_MS,
+    );
+  }, []);
+  useEffect(() => {
+    const timers = arrowTimers.current;
+    return () => {
+      window.clearTimeout(timers.previous);
+      window.clearTimeout(timers.next);
+    };
+  }, []);
 
   // Es mesura cada seqüència tal com es veu: sola, i amb cada estil amb nom
   // que hi fa servir algun bloc, que en pot canviar la lletra i les vores
@@ -353,11 +407,18 @@ const FreeLayoutPages = ({
     clear();
     setVisiblePage(index);
   };
-  const swipe = isNarrow
+  const swipe = onePage
     ? {
         onTouchStart: (event: React.TouchEvent) => {
+          // Sobre un bloc, el dit el mou o el selecciona: no passa de pàgina.
+          // A la pantalla completa no hi ha res a moure
+          const onBlock =
+            !inFullscreen &&
+            (event.target as Element).closest?.(".placement") !== null;
           const touch = event.touches[0];
-          touchStart.current = { x: touch.clientX, y: touch.clientY };
+          touchStart.current = onBlock
+            ? null
+            : { x: touch.clientX, y: touch.clientY };
         },
         onTouchEnd: (event: React.TouchEvent) => {
           const start = touchStart.current;
@@ -374,10 +435,60 @@ const FreeLayoutPages = ({
       }
     : {};
 
+  // Passar de pàgina amb la fletxa torna a comptar el temps que es veu, per
+  // passar-ne diverses seguides
+  const stepPage = (side: keyof EdgeArrowsShown) => {
+    goToPage(activePage + (side === "next" ? 1 : -1));
+    revealArrow(side);
+  };
+
+  // Un toc a l'espai del full, al mòbil o a la pantalla completa, fora dels
+  // blocs (que aturen el seu): a la vora, la fletxa; si no, el nivell
+  // «Pàgina» (D2), amb la mateixa regla que els blocs (N5)
+  const handleSheetTap = (
+    event: React.MouseEvent<HTMLElement>,
+    sheetIndex: number,
+  ) => {
+    if (!onePage) return;
+    const target = event.target as Element;
+    const interactive = target.closest?.(INTERACTIVE);
+    if (interactive && event.currentTarget.contains(interactive)) return;
+    const width = window.innerWidth;
+    const side =
+      event.clientX < width * EDGE_FRACTION
+        ? "previous"
+        : event.clientX > width * (1 - EDGE_FRACTION)
+          ? "next"
+          : null;
+    if (side && sheetCount > 1) {
+      revealArrow(side);
+      return;
+    }
+    // A la pantalla completa només es passa de pàgina
+    if (inFullscreen) return;
+    clear();
+    const sheet = freeLayout.sheets[sheetIndex];
+    if (openOnTap(`page-${sheetIndex}`, dispositionOf(sheet) === "free"))
+      requestSettings("page");
+  };
+
   return (
     <Stack
-      gap={PAGE_GAP}
-      sx={{ minWidth: 0 }}
+      id={PAGES_FULLSCREEN_ID}
+      gap={onePage ? 1 : PAGE_GAP}
+      sx={{
+        minWidth: 0,
+        position: "relative",
+        // Al mòbil, l'alçada que li dona la vista: el full s'hi encongeix
+        ...(isNarrow && { flex: 1, minHeight: 0 }),
+        "&:fullscreen": {
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "background.default",
+        },
+        // Les marques d'edició no hi surten; les fletxes de la vora, sí
+        "&:fullscreen [data-html2canvas-ignore]": { display: "none" },
+      }}
       onKeyDown={clearOnEscape}
       {...swipe}
     >
@@ -395,13 +506,13 @@ const FreeLayoutPages = ({
           freeLayout.licenceOn !== "last" || sheetIndex === sheetCount - 1;
         // La pàgina que segueix la columna (la del nivell «Pàgina»)
         const active = sheetIndex === activePage;
-        const isFullscreen = fullscreenId === pageFrameId(sheetIndex);
+        const isFullscreen = inFullscreen && active;
         const sheetScale = isFullscreen
           ? fullscreenScale(pageDimensions)
           : scale;
         // Al mòbil, una pàgina cada vegada: les altres hi són (s'imprimeixen
         // totes), però amagades; es passa d'una a l'altra lliscant
-        const hidden = isNarrow && !active;
+        const hidden = onePage && !active;
         const selectedHere =
           selection?.kind === "block" && selection.sheetIndex === sheetIndex;
         return (
@@ -413,62 +524,64 @@ const FreeLayoutPages = ({
             component="section"
             id={pageSectionId(sheetIndex)}
             gap={1}
-            sx={{ display: hidden ? "none" : undefined }}
+            sx={{
+              display: hidden ? "none" : undefined,
+              // Al mòbil, la pàgina que es mira omple l'espai de la vista
+              ...(isNarrow && { flex: 1, minHeight: 0 }),
+            }}
             aria-current={active ? "true" : undefined}
             aria-label={intl.formatMessage(messages.pageLabel, {
               number: sheetIndex + 1,
               total: sheetCount,
             })}
           >
-            <PageHeader
-              sheetIndex={sheetIndex}
-              sheetCount={sheetCount}
-              continuous={continuous}
-              active={active}
-              onAddSequence={() => setAddingTo({ sheetIndex })}
-              onFocusPage={
-                onFocusPage ? () => onFocusPage(sheetIndex) : undefined
-              }
-              // Al mòbil, una pàgina cada vegada: les fletxes, al costat del títol
-              onPrevious={
-                isNarrow && sheetCount > 1
-                  ? () => goToPage(sheetIndex - 1)
-                  : undefined
-              }
-              onNext={
-                isNarrow && sheetCount > 1
-                  ? () => goToPage(sheetIndex + 1)
-                  : undefined
-              }
-            />
+            {!inFullscreen && (
+              <PageHeader
+                sheetIndex={sheetIndex}
+                sheetCount={sheetCount}
+                continuous={continuous}
+                active={active}
+                onAddSequence={() => setAddingTo({ sheetIndex })}
+                onFocusPage={
+                  onFocusPage ? () => onFocusPage(sheetIndex) : undefined
+                }
+              />
+            )}
 
-            {/* El full encabit a la pantalla; a dins, a mida real i escalat.
+            {/* L'espai del full: al mòbil i a la pantalla completa, el que el
+                full té per cabre-hi, i on el toc fora dels blocs va a la vora
+                o a la pàgina. A l'escriptori no hi és */}
+            <Box
+              ref={
+                isNarrow && active && !inFullscreen ? sheetAreaRef : undefined
+              }
+              data-testid={onePage && active ? "view-sheet-area" : undefined}
+              onClick={(event) => handleSheetTap(event, sheetIndex)}
+              sx={
+                onePage
+                  ? {
+                      flex: 1,
+                      minHeight: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      // El doble toc obre els ajustos (D1): el navegador no
+                      // hi ha de fer zoom (el Safari de l'iPhone en fa, encara
+                      // que la pàgina sigui per a mòbil). Lliscar per passar
+                      // de pàgina i pessigar per ampliar continuen
+                      touchAction: "manipulation",
+                    }
+                  : { display: "contents" }
+              }
+            >
+              {/* El full encabit a la pantalla; a dins, a mida real i escalat.
                 Un clic fora de cap bloc treu la selecció. A pantalla completa,
                 el full tan gran com hi càpiga, al mig i sense marques
                 d'edició */}
-            <Box
-              id={pageFrameId(sheetIndex)}
-              onClick={clear}
-              sx={{
-                width: displayWidth,
-                height: displayHeight,
-                // La pàgina activa, ressaltada amb la guia per fora del full,
-                // com el bloc seleccionat; el marc verd hi continua
-                // Al mòbil no hi ha marge per a la guia de fora, i la pàgina
-                // que es veu és sempre l'activa
-                ...pageFrameSx(active && !isNarrow),
-                "&:fullscreen": {
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  outline: "none",
-                  boxShadow: "none",
-                  backgroundColor: "background.default",
-                },
-                "&:fullscreen [data-html2canvas-ignore]": { display: "none" },
-              }}
-            >
               <Box
+                id={pageFrameId(sheetIndex)}
+                // Al mòbil, el toc fora dels blocs el rep l'espai del full
+                onClick={onePage ? undefined : clear}
                 sx={{
                   width: isFullscreen
                     ? pageDimensions.width * sheetScale
@@ -476,123 +589,151 @@ const FreeLayoutPages = ({
                   height: isFullscreen
                     ? pageDimensions.height * sheetScale
                     : displayHeight,
-                  overflow: "hidden",
-                  backgroundColor: sheetSurface,
+                  flexShrink: 0,
+                  // La pàgina activa, ressaltada amb la guia per fora del full,
+                  // com el bloc seleccionat; el marc verd hi continua
+                  // Al mòbil no hi ha marge per a la guia de fora, i la pàgina
+                  // que es veu és sempre l'activa
+                  ...(isFullscreen
+                    ? { outline: "none", boxShadow: "none" }
+                    : pageFrameSx(active && !isNarrow)),
                 }}
               >
                 <Box
-                  className="preview-content"
                   sx={{
-                    width: pageDimensions.width,
-                    height: pageDimensions.height,
-                    transform: `scale(${sheetScale})`,
-                    transformOrigin: "top left",
-                    display: "flex",
-                    flexDirection: "column",
+                    width: isFullscreen
+                      ? pageDimensions.width * sheetScale
+                      : displayWidth,
+                    height: isFullscreen
+                      ? pageDimensions.height * sheetScale
+                      : displayHeight,
+                    overflow: "hidden",
+                    backgroundColor: sheetSurface,
                   }}
                 >
-                  {continuous && !empty && (
-                    <AutoSheetFlow
-                      sheetIndex={sheetIndex}
-                      placements={sheet.placements}
-                      direction={sheet.direction ?? direction}
-                      gap={sheet.sequenceGap ?? documentGap}
-                    />
-                  )}
-
-                  {/* L'àrea útil: les caixes hi van en mm des del cantó de dalt */}
                   <Box
+                    className="preview-content"
                     sx={{
-                      // Una pàgina contínua només la fa servir per dir que és buida
-                      display: continuous && !empty ? "none" : "block",
-                      position: "relative",
-                      width: "100%",
-                      height: areaHeightPx,
-                      flexShrink: 0,
-                      overflow: "hidden",
+                      width: pageDimensions.width,
+                      height: pageDimensions.height,
+                      // A la pantalla completa no es selecciona res: el toc va a
+                      // l'espai del full, que només en mira la vora
+                      pointerEvents: isFullscreen ? "none" : undefined,
+                      transform: `scale(${sheetScale})`,
+                      transformOrigin: "top left",
+                      display: "flex",
+                      flexDirection: "column",
                     }}
                   >
-                    {/* Les comunes, per sota de les de la pàgina */}
-                    {!continuous &&
-                      freeLayout.common.map((placement) =>
-                        renderPlacement(placement, sheetIndex, true),
-                      )}
-                    {!continuous &&
-                      sheet.placements.map((placement) =>
-                        renderPlacement(placement, sheetIndex, false),
-                      )}
-
-                    {/* Els espais lliures del repartiment: blocs buits per omplir */}
-                    {!continuous &&
-                      emptySlotsOf(sheet).map(({ slot, box }) => (
-                        <EmptySlot
-                          key={`empty-${slot}`}
-                          box={box}
-                          number={slot + 1}
-                          scale={scale}
-                          onAddSequence={() =>
-                            setAddingTo({ sheetIndex, slot })
-                          }
-                          onAddText={() => {
-                            const placementId = dispatch(
-                              addTextBlockThunk(sheetIndex, slot),
-                            );
-                            select({ kind: "block", placementId, sheetIndex });
-                            showSnackbar({
-                              message: intl.formatMessage(
-                                messages.textBlockAdded,
-                                { number: sheetIndex + 1 },
-                              ),
-                              severity: "success",
-                            });
-                          }}
-                        />
-                      ))}
-
-                    {/* La quadrícula de punts, amb un bloc seleccionat en aquesta
-                      pàgina: s'hi mou i s'hi enganxa (fase 4) */}
-                    {!continuous && selectedHere && <GridDots area={area} />}
-
-                    {templatePreview?.sheetIndex === sheetIndex && (
-                      <TemplateGuides
-                        template={templatePreview.template}
-                        region={region}
+                    {continuous && !empty && (
+                      <AutoSheetFlow
+                        sheetIndex={sheetIndex}
+                        placements={sheet.placements}
+                        direction={sheet.direction ?? direction}
+                        gap={sheet.sequenceGap ?? documentGap}
                       />
                     )}
 
-                    {empty && (
-                      <Stack
-                        data-html2canvas-ignore
-                        alignItems="center"
-                        justifyContent="center"
-                        gap={2}
-                        sx={{
-                          position: "absolute",
-                          inset: 0,
-                          "@media print": { display: "none" },
-                        }}
-                      >
-                        <Typography
-                          variant="h5"
-                          component="p"
-                          sx={{ color: "text.secondary" }}
-                        >
-                          {intl.formatMessage(messages.emptyPage)}
-                        </Typography>
-                        <StyledButton
-                          variant="contained"
-                          size="large"
-                          startIcon={<MdOutlineLibraryAdd />}
-                          onClick={() => setAddingTo({ sheetIndex })}
-                        >
-                          {intl.formatMessage(messages.addSequence)}
-                        </StyledButton>
-                      </Stack>
-                    )}
-                  </Box>
+                    {/* L'àrea útil: les caixes hi van en mm des del cantó de dalt */}
+                    <Box
+                      sx={{
+                        // Una pàgina contínua només la fa servir per dir que és buida
+                        display: continuous && !empty ? "none" : "block",
+                        position: "relative",
+                        width: "100%",
+                        height: areaHeightPx,
+                        flexShrink: 0,
+                        overflow: "hidden",
+                      }}
+                    >
+                      {/* Les comunes, per sota de les de la pàgina */}
+                      {!continuous &&
+                        freeLayout.common.map((placement) =>
+                          renderPlacement(placement, sheetIndex, true),
+                        )}
+                      {!continuous &&
+                        sheet.placements.map((placement) =>
+                          renderPlacement(placement, sheetIndex, false),
+                        )}
 
-                  <Box sx={{ marginTop: "auto" }}>
-                    {footer && <CopyRight author={author} licence={licence} />}
+                      {/* Els espais lliures del repartiment: blocs buits per omplir */}
+                      {!continuous &&
+                        emptySlotsOf(sheet).map(({ slot, box }) => (
+                          <EmptySlot
+                            key={`empty-${slot}`}
+                            box={box}
+                            number={slot + 1}
+                            scale={scale}
+                            onAddSequence={() =>
+                              setAddingTo({ sheetIndex, slot })
+                            }
+                            onAddText={() => {
+                              const placementId = dispatch(
+                                addTextBlockThunk(sheetIndex, slot),
+                              );
+                              select({
+                                kind: "block",
+                                placementId,
+                                sheetIndex,
+                              });
+                              showSnackbar({
+                                message: intl.formatMessage(
+                                  messages.textBlockAdded,
+                                  { number: sheetIndex + 1 },
+                                ),
+                                severity: "success",
+                              });
+                            }}
+                          />
+                        ))}
+
+                      {/* La quadrícula de punts, amb un bloc seleccionat en aquesta
+                      pàgina: s'hi mou i s'hi enganxa (fase 4) */}
+                      {!continuous && selectedHere && <GridDots area={area} />}
+
+                      {templatePreview?.sheetIndex === sheetIndex && (
+                        <TemplateGuides
+                          template={templatePreview.template}
+                          region={region}
+                        />
+                      )}
+
+                      {empty && (
+                        <Stack
+                          data-html2canvas-ignore
+                          alignItems="center"
+                          justifyContent="center"
+                          gap={2}
+                          sx={{
+                            position: "absolute",
+                            inset: 0,
+                            "@media print": { display: "none" },
+                          }}
+                        >
+                          <Typography
+                            variant="h5"
+                            component="p"
+                            sx={{ color: "text.secondary" }}
+                          >
+                            {intl.formatMessage(messages.emptyPage)}
+                          </Typography>
+                          <StyledButton
+                            variant="contained"
+                            size="large"
+                            startIcon={<MdOutlineLibraryAdd />}
+                            onClick={() => setAddingTo({ sheetIndex })}
+                          >
+                            {intl.formatMessage(messages.addSequence)}
+                          </StyledButton>
+                        </Stack>
+                      )}
+                    </Box>
+
+                    <Box sx={{ marginTop: "auto" }}>
+                      {footer && (
+                        <CopyRight author={author} licence={licence} />
+                      )}
+                    </Box>
                   </Box>
                 </Box>
               </Box>
@@ -601,10 +742,25 @@ const FreeLayoutPages = ({
         );
       })}
 
-      {/* Al mòbil, «Afegeix una pàgina» és al menú «⋯» de la pàgina */}
+      {/* Les fletxes de la vora, al mòbil i a la pantalla completa (N4) */}
+      {onePage && sheetCount > 1 && (
+        <Box sx={{ display: "contents", "@media print": { display: "none" } }}>
+          <EdgePageArrows
+            hasPrevious={activePage > 0}
+            hasNext={activePage < sheetCount - 1}
+            shown={arrows}
+            onPrevious={() => stepPage("previous")}
+            onNext={() => stepPage("next")}
+          />
+        </Box>
+      )}
+
+      {/* «Afegeix una pàgina», sota el full, també al mòbil; a la pantalla
+          completa, no */}
       <Box
         sx={{
-          display: isNarrow ? "none" : undefined,
+          display: inFullscreen ? "none" : undefined,
+          flexShrink: 0,
           "@media print": { display: "none" },
         }}
       >

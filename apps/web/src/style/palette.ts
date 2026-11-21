@@ -99,3 +99,65 @@ export const sheetGuide = "#616161";
  * colors de contingut: no surten mai a cap document.
  */
 export const previewSequenceColors = ["#C5E1A5", "#90CAF9", "#FFCC80"] as const;
+
+/**
+ * Franja de dalt del panell de baix (`AppBottomSheet`) quan és a sencer: un vel
+ * fosc sobre el que hi ha a sota, que diu «això no és el full, és un botó que
+ * torna a mig». Fosc en tots dos temes, perquè sota hi ha el full, que és blanc
+ * sempre; el text hi va en blanc: amb el vel al 72 % damunt del blanc del full, fa
+ * 7,3:1 (al 55 % de l'esbós, es quedava a 4:1).
+ */
+export const bottomSheetStrip: Record<
+  "light" | "dark",
+  { background: string; text: string }
+> = {
+  light: { background: "rgba(20, 26, 12, 0.72)", text: "#FFFFFF" },
+  dark: { background: "rgba(0, 0, 0, 0.72)", text: "#FFFFFF" },
+};
+
+/**
+ * La fletxa de la vora (`docs/estandards/capes-flotants.md`, «La fletxa de la
+ * vora»): semitransparent, perquè sura damunt del full sense amagar-lo. Igual
+ * en tots dos temes, perquè a sota hi ha el full, que és blanc sempre: el fons
+ * blanc al 80 % i la fletxa fosca de `primary.contrastText` fan 12:1.
+ */
+export const edgeArrow = {
+  background: "rgba(255, 255, 255, 0.8)",
+  icon: appPalette.primary.contrastText,
+} as const;
+
+/** Un color `#RRGGBB` de la paleta amb transparència. */
+const translucent = (hex: string, opacity: number): string => {
+  const [r, g, b] = [1, 3, 5].map((start) =>
+    parseInt(hex.slice(start, start + 2), 16),
+  );
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+};
+
+/**
+ * La capa del mòbil girat (`docs/estandards/capes-flotants.md`): el fons de
+ * l'escriptori del tema (`appBackgrounds.*.default`, blanc en clar i negre en
+ * fosc) translúcid. Al 92 %, el que hi ha a sota s'endevina però no distreu. El
+ * text, el del contrast de cada tema: el fosc de `primary.contrastText` sobre
+ * blanc (més de 12:1) i el blanc del paper sobre negre (més de 15:1).
+ */
+export const rotateVeil: Record<
+  "light" | "dark",
+  { background: string; text: string }
+> = {
+  light: {
+    background: translucent(appBackgrounds.light.default, 0.92),
+    text: appPalette.primary.contrastText ?? printColors.text,
+  },
+  dark: {
+    background: translucent(appBackgrounds.dark.default, 0.92),
+    text: printColors.background,
+  },
+};
+
+/**
+ * Els punts de la quadrícula del mode lliure (`GridDots`): la guia del full
+ * (`sheetGuide`) translúcida, perquè es vegin per moure-hi els blocs sense
+ * competir amb els pictogrames. Fixos en tots dos temes: són damunt del full.
+ */
+export const sheetGridDot = translucent(sheetGuide, 0.35);

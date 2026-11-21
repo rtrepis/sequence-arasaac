@@ -59,6 +59,8 @@ l'entrada.
 
 | Id | Què | Per què ara | Esforç | Decisió prèvia |
 |---|---|---|---|---|
+| P2 | La vista al mòbil en dispositius de debò | La release no surt sense la vista al mòbil, i l'emulació no ho pot dir tot | S | Sí: F5a, si la pantalla completa no funciona a l'iPhone |
+| B37 | Els estils: pictogrames que copien l'estil (E1) i accions que acaben igual a la pantalla | E1 grava retocs falsos al `.saac`; la galeria d'estils és abans de la release i no ha d'heretar el desordre | L | D1–D9 preses; queden Q1–Q3 de `docs/PLA-estils.md` |
 
 ### Després
 
@@ -66,6 +68,7 @@ l'entrada.
 |---|---|---|---|---|
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | C28 | Girar el mòbil tanca el diàleg d'edició | Es pot perdre el que s'estava editant, i girar el mòbil és habitual | S | No |
+| C30 | «Pantalla sencera» i «Pantalla completa» es diuen igual fora del català | La notícia de la pantalla sencera ja ho ha de rodejar; com més tard, més textos el citen | S | Sí: el nom de l'interruptor en cada idioma |
 
 ### Més endavant
 
@@ -206,6 +209,27 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   panell «Pàgina i distribució» té la **disposició** amb què comencen els documents nous, i les
   pàgines que s'afegeixen neixen amb aquesta disposició. No cal cap camp nou al `.saac`. Vegeu la
   decisió 25 de l'ADR-005.
+
+### B37 — Els estils: el que fa l'app i el que entén l'usuari no coincideixen 🔴 Oberta
+
+*(Oberta en revisar la notícia N-2, 2026-11-20.)*
+
+- **Què**: dues coses. (1) **Error**: un pictograma nou copia l'estil del document en lloc
+  d'heretar-lo. En un document nou, canviar El meu estil deixa els pictogrames d'abans amb l'estil
+  vell i marcats com a «personalitzats», i en desar s'hi graven retocs que ningú no ha fet.
+  (2) **Comprensió**: «Aplica el meu estil» i «Actualitza amb el meu estil» deixen el bloc igual i
+  només es diferencien en blocs que no es veuen; l'estil del document no es veu enlloc; no es pot
+  aplicar a tot el document, i la notícia N-2 diu que sí.
+- **Decidit (2026-11-20)**: l'error es resol d'arrel (solució A: el pictograma només guarda els
+  seus retocs). Abans de la release, El meu estil es completa amb estils predefinits, com les
+  plantilles de pàgina.
+- El detall (divuit troballes, E1–E18), les decisions D1–D9 i l'ordre dels passos són a
+  `docs/PLA-estils.md`.
+- **2026-11-20 (decisions)**: el document nou neix amb una còpia d'El meu estil i no el segueix
+  (D1); un estil s'aplica **només a un bloc**, des d'una **Galeria d'estils** que té com a primera
+  opció «L'estil del document» (D2, D8); fora «Aplica el meu estil» i «Actualitza amb el meu
+  estil» dels menús; els estils de l'app són fixos (D7). Obertes Q1–Q3 (pàgines simples, canviar
+  un document sencer, blocs comuns).
 
 ## Gravetat alta
 
@@ -1384,6 +1408,31 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
   decidir-ne l'abast (quines accions en formen part, quants passos) i què passa amb el snackbar de
   «Desfés» actual.
 
+### C29 — Al mòbil, el full i els ajustos de la vista es disputen el mateix scroll ✅ Resolta
+
+- **On**: `ViewSquenceSettings` per sota de `md`. La columna va sota el full, el verd fa l'alçada de
+  la pantalla i es desplaça per dins.
+- **Per què importa**: un cop s'ha baixat fins als ajustos, el dit només mou el verd i no hi ha manera
+  de tornar al full. Una franja del full a dalt no ho arregla, perquè als fulls amb blocs el dit hi
+  arrossega el bloc. Fer baixar la pàgina en seleccionar un bloc el fa sortir de la pantalla (provat
+  el 2026-11-15 i desfet).
+- **Proposta**: el full sencer a la pantalla, sense scroll de pàgina, i els ajustos en un panell de
+  baix amb tres alçades (`AppBottomSheet`, una capa nova de l'estàndard). El pla, amb les fases i les
+  portes d'aprovació, és `docs/PLA-vista-mobil.md`.
+- **Estat** (2026-11-15): fase 0 feta (seleccionar ja no mou la pàgina), fase 1 tancada (esbós i
+  decisions), fase 2 aprovada i fase 3 feta (`AppBottomSheet` sol, amb proves). **Fase 4 feta**: la
+  vista ja hi va, amb els tres casos de §1 del pla en un e2e de mòbil (`e2e/mobile-view.spec.ts`).
+  **Fase 5 feta en emulació**: els avisos ja no tapen la franja de sencer, el panell porta a la vista
+  el camp enfocat (també amb el teclat virtual), el full no fa zoom amb el doble toc, el focus de la
+  fletxa de la vora no es perd, i la pantalla completa i el paper estan provats. Falten les proves en
+  dispositius de debò (§9d del pla; la pantalla completa a l'iPhone demana una decisió) i treure la
+  marca «Proposta» de l'estàndard (fase 6).
+- **Resolta** (2026-11-19, fase 6, branca `ccr-f5fab69a-xv8xmg`, que parteix de la release
+  `claude/release-before-new-plan-8x1xhp`): l'estàndard (`capes-flotants.md`, `configuracions.md`)
+  ja no porta la marca «Proposta» i la regla del panell és al `CLAUDE.md`. Les proves en
+  dispositius de debò continuen a **P2** («Proves pendents»), perquè no es perdin en tancar
+  aquesta entrada.
+
 ### C28 — Girar el mòbil tanca el diàleg d'edició del pictograma 🔴 Oberta
 
 - **On**: la graella d'edició (`PictEditModalList` → `PictEditModal`). Amb el diàleg obert, passar de
@@ -1397,6 +1446,21 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 ## Gravetat baixa
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.
+
+### C30 — «Pantalla sencera» i «Pantalla completa» es diuen igual fora del català 🔴 Oberta
+
+*(Trobada en escriure la notícia `full-screen-sheet`, 2026-11-20.)*
+
+- **On**: `pages.viewSequence.fullScreen.label` (l'interruptor de sota la mida de pàgina) i
+  `pages.viewSequence.tooltip.fullscreen` (el botó de dalt de la columna). En català són dues
+  paraules; en castellà totes dues són «Pantalla completa», en francès «Plein écran», en italià
+  «Schermo intero», i en anglès només canvia la majúscula («Full Screen» / «Full screen»).
+- **Per què importa**: ara el botó de pantalla completa només surt amb l'interruptor encès, i en
+  quatre idiomes l'app diu «encén Pantalla completa per tenir el botó de Pantalla completa». La
+  notícia se'n surt descrivint el botó per la icona (les quatre fletxes).
+- **Proposta**: un nom propi per a l'interruptor en cada idioma, que digui que el full pren la forma
+  de la pantalla (per exemple, «Full de pantalla» / «Hoja de pantalla»), i actualitzar la notícia
+  `full-screen-sheet`, que el cita.
 
 ### C20 — Errors d'axe als controls del formulari d'edició del pictograma 🔴 Oberta
 
@@ -1914,6 +1978,22 @@ l'ha de desencallar.
     tornar a encendre els comptes.
 - **Desencalla**: tornar a encendre els comptes, o bé tenir l'API local amb base de dades en
   memòria.
+
+### P2 — La vista al mòbil en dispositius de debò 🔴 Oberta
+
+*(Fase 5 de `docs/PLA-vista-mobil.md`, 2026-11-15. Ve de C29, resolta.)*
+
+- **Per què s'ajorna**: l'emulació de Chromium no ho pot dir. Ho prova l'usuari al servidor de
+  proves amb un iPhone, un Android i una tauleta.
+- **El que falta**: les sis files de §9d del pla (F5a–F5f): la pantalla completa a l'iPhone,
+  TalkBack i VoiceOver, el teclat virtual a iOS i Android, la franja de sencer després d'un
+  arrossegament ràpid, la tauleta en vertical i el doble toc a l'iPhone. El resultat de cada una
+  s'apunta a §9d amb la data.
+- **F5a demana una decisió**: si a l'iPhone la pantalla completa no fa res, el botó trenca «tota
+  acció acaba amb un missatge». Cal triar entre una pantalla completa simulada (una capa fixa que
+  ocupi tota la finestra, amb prova) o no mostrar el botó allà on no funciona. Des del 2026-11-19
+  el botó només hi és amb la pantalla sencera encesa, però el cas continua sent el mateix.
+- **Desencalla**: tenir els dispositius a mà amb el servidor de proves desplegat.
 
 ## Novetats pendents de publicar
 

@@ -42,6 +42,17 @@ export interface NewsItem {
   faq?: { titleId: string; questions: NewsQuestion[] };
   /** Paràgraf de tancament, després de tot */
   closingId?: string;
+  /**
+   * La notícia explica un camí que ja no existeix: surt del carrusel i es
+   * queda a Novetats amb l'etiqueta «Superada» i un avís (`docs/PLA-noticies.md`, §5)
+   */
+  superseded?: NewsSuperseded;
+}
+
+/** Com queda una notícia que l'app ja ha deixat enrere */
+export interface NewsSuperseded {
+  /** El `slug` de la notícia que explica com és ara, si n'hi ha */
+  replacedBy?: string;
 }
 
 /** La ruta d'una imatge de notícia en l'idioma de qui la llegeix */
@@ -62,7 +73,278 @@ const editTextImage = (name: string, step: number): NewsImage => ({
 });
 const editTextId = (key: string): string => `news.edit-text-on-card.${key}`;
 
+const PAGES = "/img/news/pages-and-blocks/{locale}";
+const pagesImage = (name: string, alt: string): NewsImage => ({
+  src: `${PAGES}/${name}.png`,
+  altId: `news.pages-and-blocks.${alt}.alt`,
+});
+const pagesId = (key: string): string => `news.pages-and-blocks.${key}`;
+
+const MY_STYLE = "/img/news/my-style/{locale}";
+const myStyleImage = (name: string, alt: string): NewsImage => ({
+  src: `${MY_STYLE}/${name}.png`,
+  altId: `news.my-style.${alt}.alt`,
+});
+const myStyleId = (key: string): string => `news.my-style.${key}`;
+
+const MOBILE = "/img/news/mobile-view/{locale}";
+const mobileImage = (name: string, step: number): NewsImage => ({
+  src: `${MOBILE}/${name}.png`,
+  altId: `news.mobile-view.step${step}.alt`,
+});
+const mobileId = (key: string): string => `news.mobile-view.${key}`;
+
+const SCREEN = "/img/news/full-screen-sheet/{locale}";
+const screenImage = (name: string, alt: string): NewsImage => ({
+  src: `${SCREEN}/${name}.png`,
+  altId: `news.full-screen-sheet.${alt}.alt`,
+});
+const screenId = (key: string): string => `news.full-screen-sheet.${key}`;
+
+const REORDER = "/img/news/reorder-pictograms/{locale}";
+const reorderImage = (name: string, alt: string): NewsImage => ({
+  src: `${REORDER}/${name}.png`,
+  altId: `news.reorder-pictograms.${alt}.alt`,
+});
+const reorderId = (key: string): string => `news.reorder-pictograms.${key}`;
+
+const TEXT_FIT = "/img/news/text-fit/{locale}";
+const textFitImage = (name: string, step: number): NewsImage => ({
+  src: `${TEXT_FIT}/${name}.png`,
+  altId: `news.text-fit.step${step}.alt`,
+});
+const textFitId = (key: string): string => `news.text-fit.${key}`;
+
+const PRINT = "/img/news/print-matches-preview/{locale}";
+const printImage = (name: string, step: number): NewsImage => ({
+  src: `${PRINT}/${name}.png`,
+  altId: `news.print-matches-preview.step${step}.alt`,
+});
+const printId = (key: string): string => `news.print-matches-preview.${key}`;
+
 export const newsItems: NewsItem[] = [
+  {
+    slug: "pages-and-blocks",
+    titleId: pagesId("title"),
+    summaryId: pagesId("summary"),
+    contentId: pagesId("content"),
+    coverImage: `${PAGES}/portada.png`,
+    images: [],
+    steps: [
+      {
+        titleId: pagesId("step1.title"),
+        descriptionId: pagesId("step1.description"),
+        image: pagesImage("menu-pagina", "pageMenu"),
+      },
+      {
+        titleId: pagesId("step2.title"),
+        descriptionId: pagesId("step2.description"),
+        image: pagesImage("columnes", "columns"),
+        moreImages: [pagesImage("files", "rows"), pagesImage("lliure", "free")],
+      },
+      {
+        titleId: pagesId("step3.title"),
+        descriptionId: pagesId("step3.description"),
+        image: pagesImage("plantilles", "templates"),
+      },
+      {
+        titleId: pagesId("step4.title"),
+        descriptionId: pagesId("step4.description"),
+        image: pagesImage("moure-bloc", "moveBlock"),
+      },
+      {
+        titleId: pagesId("step5.title"),
+        descriptionId: pagesId("step5.description"),
+        image: pagesImage("retol", "label"),
+      },
+      {
+        titleId: pagesId("step6.title"),
+        descriptionId: pagesId("step6.description"),
+        image: pagesImage("menu-bloc", "blockMenu"),
+        moreImages: [pagesImage("sense-collocar", "unplaced")],
+      },
+      {
+        titleId: pagesId("step7.title"),
+        descriptionId: pagesId("step7.description"),
+        image: pagesImage("configuracio", "settings"),
+      },
+    ],
+    faq: {
+      titleId: pagesId("faq.title"),
+      questions: [1, 2, 3].map((n) => ({
+        questionId: pagesId(`faq.q${n}`),
+        answerId: pagesId(`faq.a${n}`),
+      })),
+    },
+    closingId: pagesId("closing"),
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "nova",
+  },
+  {
+    slug: "my-style",
+    titleId: myStyleId("title"),
+    summaryId: myStyleId("summary"),
+    contentId: myStyleId("content"),
+    coverImage: `${MY_STYLE}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: myStyleId("step1.description"),
+        image: myStyleImage("configuracio", "step1"),
+      },
+      {
+        descriptionId: myStyleId("step2.description"),
+        image: myStyleImage("menu-pagina", "step2"),
+      },
+      {
+        descriptionId: myStyleId("step3.description"),
+        image: myStyleImage("bloc-diferent", "step3"),
+      },
+      {
+        descriptionId: myStyleId("step4.description"),
+        image: myStyleImage("menu-actualitza", "step4"),
+        moreImages: [myStyleImage("actualitzat", "step4.updated")],
+      },
+    ],
+    closingId: myStyleId("closing"),
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "nova",
+  },
+  {
+    slug: "mobile-view",
+    titleId: mobileId("title"),
+    summaryId: mobileId("summary"),
+    contentId: mobileId("content"),
+    coverImage: `${MOBILE}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: mobileId("step1.description"),
+        image: mobileImage("full", 1),
+      },
+      {
+        descriptionId: mobileId("step2.description"),
+        image: mobileImage("ajustos", 2),
+      },
+      {
+        descriptionId: mobileId("step3.description"),
+        image: mobileImage("passar-pagina", 3),
+      },
+      {
+        descriptionId: mobileId("step4.description"),
+        image: mobileImage("girat", 4),
+      },
+    ],
+    closingId: mobileId("closing"),
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "nova",
+  },
+  {
+    slug: "full-screen-sheet",
+    titleId: screenId("title"),
+    summaryId: screenId("summary"),
+    contentId: screenId("content"),
+    coverImage: `${SCREEN}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: screenId("step1.description"),
+        image: screenImage("interruptor", "step1"),
+      },
+      {
+        descriptionId: screenId("step2.description"),
+        image: screenImage("full", "step2"),
+      },
+      {
+        descriptionId: screenId("step3.description"),
+        image: screenImage("boto", "step3"),
+        moreImages: [screenImage("pantalla-completa", "step3.screen")],
+      },
+    ],
+    closingId: screenId("closing"),
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "millora",
+  },
+  {
+    slug: "reorder-pictograms",
+    titleId: reorderId("title"),
+    summaryId: reorderId("summary"),
+    contentId: reorderId("content"),
+    coverImage: `${REORDER}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: reorderId("step1.description"),
+        image: reorderImage("arrossegant", "step1"),
+        moreImages: [reorderImage("nou-ordre", "step1.after")],
+      },
+      {
+        descriptionId: reorderId("step2.description"),
+        image: reorderImage("amb-el-dit", "step2"),
+      },
+      {
+        descriptionId: reorderId("step3.description"),
+        image: reorderImage("enganxa", "step3"),
+      },
+    ],
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "nova",
+  },
+  {
+    slug: "text-fit",
+    titleId: textFitId("title"),
+    summaryId: textFitId("summary"),
+    contentId: textFitId("content"),
+    coverImage: `${TEXT_FIT}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: textFitId("step1.description"),
+        image: textFitImage("marca", 1),
+      },
+      {
+        descriptionId: textFitId("step2.description"),
+        image: textFitImage("opcions", 2),
+      },
+      {
+        descriptionId: textFitId("step3.description"),
+        image: textFitImage("cap", 3),
+      },
+    ],
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "millora",
+  },
+  {
+    slug: "print-matches-preview",
+    titleId: printId("title"),
+    summaryId: printId("summary"),
+    contentId: printId("content"),
+    coverImage: `${PRINT}/portada.png`,
+    images: [],
+    steps: [
+      {
+        descriptionId: printId("step1.description"),
+        image: printImage("full", 1),
+      },
+      {
+        descriptionId: printId("step2.description"),
+        image: printImage("paper", 2),
+      },
+      {
+        descriptionId: printId("step3.description"),
+        image: printImage("llicencia", 3),
+      },
+    ],
+    // El dia de la release (D6 de `docs/PLA-noticies.md`): es fixa en publicar
+    date: "2026-11-20",
+    category: "correccio",
+  },
   {
     slug: "edit-text-on-card",
     titleId: editTextId("title"),
@@ -240,6 +522,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-09-04",
     category: "nova",
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
   {
     slug: "pdf-quality",
@@ -351,6 +635,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-03-13",
     category: "nova",
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
   {
     slug: "save-improvements",
@@ -417,6 +703,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-27",
     category: "millora",
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
   {
     slug: "logo-menu",
@@ -450,6 +738,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-24",
     category: "nova",
+    // Superada: «Configuració» ja no és una entrada del menú (`docs/PLA-noticies.md`, §5)
+    superseded: {},
   },
   {
     slug: "view-improvements",
@@ -483,6 +773,8 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-24",
     category: "millora",
+    // Superada: explica la columna de la vista d'abans (`docs/PLA-noticies.md`, §5)
+    superseded: { replacedBy: "pages-and-blocks" },
   },
   {
     slug: "multiple-sequences",
@@ -532,5 +824,14 @@ export const newsItems: NewsItem[] = [
     ],
     date: "2026-02-15",
     category: "nova",
+    // Superada: explica la columna de la vista d'abans (`docs/PLA-noticies.md`, §5)
+    superseded: { replacedBy: "pages-and-blocks" },
   },
 ];
+
+/**
+ * Les notícies del carrusel de la pantalla d'inici: les superades no hi
+ * surten, perquè hi semblarien vigents
+ */
+export const carouselNews = (items: NewsItem[] = newsItems): NewsItem[] =>
+  items.filter((item) => !item.superseded);

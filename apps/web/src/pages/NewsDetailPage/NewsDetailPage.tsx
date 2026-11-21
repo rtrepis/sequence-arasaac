@@ -4,6 +4,7 @@ import { Box, Container, Divider, Stack, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { localizedNewsSrc, NewsImage, newsItems } from "../../data/newsItems";
 import { newsRichText } from "./newsRichText";
+import SupersededNotice from "./SupersededNotice";
 
 const stepNumber = {
   minWidth: 40,
@@ -83,6 +84,9 @@ const NewsDetailPage = (): React.ReactElement => {
           <Typography variant="h4" component="h1" fontWeight={700}>
             <FormattedMessage id={newsItem.titleId} />
           </Typography>
+
+          {/* Abans del text: qui la llegeix ha de saber d'entrada que és d'abans */}
+          <SupersededNotice item={newsItem} locale={locale ?? intl.locale} />
 
           <Typography
             component="div"

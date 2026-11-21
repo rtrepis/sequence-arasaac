@@ -70,6 +70,12 @@ const messages = defineMessages({
     description:
       "Snackbar després de reduir la lletra de l'estil del document des de l'avís «el text no hi cap» (es pot desfer)",
   },
+  changedAdaptScreen: {
+    id: "features.sequence.style.changed.adaptScreen",
+    defaultMessage: "S'ha adaptat el full a aquesta pantalla.",
+    description:
+      "Snackbar amb «Desfés» en adaptar un document de pantalla sencera a la pantalla d'ara, d'una altra forma: el full canvia de forma i els blocs s'hi recol·loquen",
+  },
   changedLayoutTemplate: {
     id: "features.sequence.style.changed.layoutTemplate",
     defaultMessage: "S'ha aplicat la plantilla a la pàgina.",

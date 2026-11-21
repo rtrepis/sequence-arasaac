@@ -84,6 +84,7 @@ const CHANGED_MESSAGE: Record<StyleChangeSource, MessageDescriptor> = {
   layoutRemoveSheet: messages.changedLayoutRemoveSheet,
   layoutRemovePlacement: messages.changedLayoutRemovePlacement,
   layoutUncommon: messages.changedLayoutUncommon,
+  adaptScreen: messages.changedAdaptScreen,
 };
 
 const StyleUndoSnackbar = ({

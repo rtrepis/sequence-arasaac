@@ -141,7 +141,9 @@ on viu el criteri complet i el motiu de cada decisió.
 - **Dos diàlegs canònics i cap més**: `AppDialog` (centrat, accions al peu) i
   `AppFullScreenDialog` (pantalla completa, barra amb tabs i creu). Cap `Dialog` de
   MUI fora d'aquestes dues carpetes. `ConfirmDialog` és l'única confirmació de l'app;
-  `AppTab`, l'única manera de declarar un tab amb icona i text.
+  `AppTab`, l'única manera de declarar un tab amb icona i text. Al mòbil, els ajustos de la
+  vista van a `AppBottomSheet`, l'únic panell de baix. No és modal, i cap funció no pot dependre
+  d'arribar a sencer.
 - **S'agrupa per domini, mai per mecanisme**: un component viu a `features/<domini>/components/`
   si parla d'un domini i a `components/` només si no en sap de cap. Cap carpeta
   `Modals/`, `Dialogs/` ni `Forms/`. Imports sempre per alias, i les dependències en un
@@ -208,6 +210,18 @@ al davant hi encaixa.
   troballes L1–L8, de les quals L1–L4 estan resoltes i L5–L8 continuen obertes. La primera de
   les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
   correus diaris de Resend.
+- `docs/PLA-vista-mobil.md` és el pla per a la vista al mòbil: el full sencer a la pantalla i els
+  ajustos en un panell de baix (`AppBottomSheet`). **Fet fins a la fase 6** (C29 resolta,
+  2026-11-19); queden les proves en dispositius de debò (P2 del backlog) i la notícia de Novetats.
+- `docs/PLA-estils.md` és el pla dels estils: la solució A (el pictograma només guarda els seus
+  retocs), les divuit troballes del que avui confon (E1–E18) i la feature d'estils predefinits que
+  completa El meu estil abans de la release (Galeria d'estils, només a un bloc). **Decisions preses**
+  (2026-11-20, B37); obertes Q1–Q3.
+  **Consultar-lo abans de tocar res que creï, apliqui o restableixi un estil.**
+- `docs/PLA-noticies.md` és el pla de les notícies de Novetats de la release: les noves des del 3
+  d'octubre (pàgines, el meu estil, la vista al mòbil, la pantalla sencera…) i les velles que ja no
+  són certes, que surten del carrusel i es queden a Novetats amb una marca. **Aprovat**
+  (2026-11-19); oberta D5. **Consultar-lo abans d'escriure o tocar cap notícia.**
 - `docs/ESTUDI-treballs-amb-pictogrames.md` recull quins documents es fan de debò amb pictogrames
   (agenda, passos, primer/després, setmana, taulers, normes, contes, economia de fitxes, menú), a
   l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en

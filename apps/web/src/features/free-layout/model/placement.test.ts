@@ -26,8 +26,21 @@ describe("l'àrea útil del full", () => {
     });
   });
 
-  it("la pantalla completa no en té: no té mil·límetres", () => {
-    expect(sheetAreaMm("FULLSCREEN", "landscape")).toBeNull();
+  it("la pantalla sencera és un paper virtual: la pantalla desada, sense marge i amb el peu", () => {
+    // 1280 × 720 px a 96 DPI: 338,67 × 190,5 mm
+    const area = sheetAreaMm("FULLSCREEN", "portrait", {
+      width: 1280,
+      height: 720,
+    });
+    expect(area.w).toBeCloseTo(338.667, 2);
+    expect(area.h).toBeCloseTo(190.5 - SHEET_FOOTER_RESERVE_MM, 2);
+  });
+
+  it("sense pantalla desada, la pantalla sencera és la d'ara", () => {
+    // jsdom no té pantalla: es fa servir la de 1280 × 720
+    expect(sheetAreaMm("FULLSCREEN", "landscape")).toEqual(
+      sheetAreaMm("FULLSCREEN", "landscape", { width: 1280, height: 720 }),
+    );
   });
 });
 

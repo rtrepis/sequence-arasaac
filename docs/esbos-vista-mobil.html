@@ -1,0 +1,887 @@
+<title>Vista al mòbil amb panell</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Esbós de docs/PLA-vista-mobil.md (fase 1). Al mòbil, el simulador ocupa tota la pantalla, com
+     l'app; a l'escriptori, un marc de telèfon a l'esquerra i les notes i decisions a la dreta.
+     Mateixos neutres oliva que esbos-columna-vista.html; el full és blanc en tots dos temes. */
+  :root {
+    --ground: #F6F8F1;
+    --surface: #FFFFFF;
+    --sunk: #ECEFE4;
+    --ink: #1E2A12;
+    --ink-soft: #55604A;
+    --ink-faint: #848E7A;
+    --line: rgba(30, 42, 18, 0.14);
+    --line-strong: rgba(30, 42, 18, 0.30);
+    --accent: #557A26;
+    --accent-bright: #8AC34A;
+    --on-accent: #1E2A12;
+    --app-desk: #FFFFFF;
+    --app-paper: #F2F5EC;
+    --app-bar: #8AC34A;
+    --app-bar-ink: #1E2A12;
+    --scrim: rgba(20, 26, 12, 0.55);
+    /* N4: la fletxa de la vora, semitransparent; N3: la capa del mòbil girat, blanca als dos temes */
+    --arrow-veil: rgba(242, 245, 236, 0.55);
+    --rotate-veil: rgba(255, 255, 255, 0.88);
+    --rotate-ink: #1E2A12;
+    --sheet: #FFFFFF;
+    --sheet-ink: #1E1E1E;
+    --sheet-soft: #6B6B6B;
+    --sheet-guide: #2F6B8A;
+    --sheet-line: rgba(0, 0, 0, 0.22);
+    --sheet-shadow: 0 1px 2px rgba(0,0,0,.10), 0 6px 18px -8px rgba(0,0,0,.30);
+    --p1: #F2B84B; --p2: #6FB1E0; --p3: #E58A7A; --p4: #8CC07A; --p5: #B79AE0; --p6: #E0C36F;
+    --font-ui: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101309; --surface: #191D12; --sunk: #0B0D06;
+      --ink: #E9EDE1; --ink-soft: #A9B39B; --ink-faint: #737E67;
+      --line: rgba(233, 237, 225, 0.15); --line-strong: rgba(233, 237, 225, 0.32);
+      --accent: #A8D46B; --accent-bright: #8AC34A; --on-accent: #1E2A12;
+      --app-desk: #121212; --app-paper: #242820; --app-bar: #8AC34A; --app-bar-ink: #1E2A12;
+      --scrim: rgba(0, 0, 0, 0.6); --arrow-veil: rgba(36, 40, 32, 0.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #101309; --surface: #191D12; --sunk: #0B0D06;
+    --ink: #E9EDE1; --ink-soft: #A9B39B; --ink-faint: #737E67;
+    --line: rgba(233, 237, 225, 0.15); --line-strong: rgba(233, 237, 225, 0.32);
+    --accent: #A8D46B; --accent-bright: #8AC34A; --on-accent: #1E2A12;
+    --app-desk: #121212; --app-paper: #242820; --app-bar: #8AC34A; --app-bar-ink: #1E2A12;
+    --scrim: rgba(0, 0, 0, 0.6); --arrow-veil: rgba(36, 40, 32, 0.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--ground); color: var(--ink); font-family: var(--font-ui);
+    font-size: 15px; line-height: 1.5; margin: 0;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 24px 48px;
+  }
+  h1, h2, h3 { text-wrap: balance; line-height: 1.2; margin: 0; }
+  p { margin: 0; }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--sheet-guide); outline-offset: 2px; }
+
+  /* ---------- Pàgina d'escriptori: telèfon + notes ---------- */
+  .wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 28px; }
+  .top { display: grid; gap: 10px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  h1 { font-size: clamp(24px, 3vw, 32px); }
+  .lede { max-width: 68ch; color: var(--ink-soft); }
+  .layout { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 32px; align-items: start; }
+  .stagecol { display: grid; gap: 12px; justify-items: center; position: sticky; top: 16px; }
+  .phone {
+    width: 390px; height: 780px; border-radius: 34px; border: 10px solid var(--ink);
+    overflow: hidden; background: var(--app-desk); box-shadow: 0 20px 50px -24px rgba(0,0,0,.45);
+    transition: width .3s, height .3s;
+  }
+  .chip {
+    border: 1px solid var(--line-strong); background: var(--surface); border-radius: 999px;
+    padding: 6px 14px; font-size: 14px;
+  }
+  .chip[aria-pressed="true"] { background: var(--accent-bright); color: var(--on-accent); border-color: transparent; font-weight: 700; }
+
+  /* ---------- Les notes i les decisions ---------- */
+  .notes { display: grid; gap: 24px; min-width: 0; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: grid; gap: 10px; }
+  .card h2 { font-size: 19px; }
+  .card ol, .card ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+  .card code { font-family: var(--font-mono); font-size: 13px; }
+  .try li b { color: var(--ink); }
+  .decision { display: grid; gap: 6px; padding-block: 10px; border-top: 1px solid var(--line); }
+  .decision:first-of-type { border-top: 0; }
+  .decision .q { font-weight: 700; }
+  .decision .id { font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); margin-right: 6px; }
+  .opts { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  .opts label { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; }
+  .opts input[type="text"] { border: 1px solid var(--line-strong); border-radius: 8px; padding: 3px 8px; background: var(--surface); min-width: 0; width: 14em; max-width: 100%; }
+  .live { font-family: var(--font-mono); font-size: 11px; color: var(--accent); border: 1px solid currentColor; border-radius: 4px; padding: 0 4px; }
+  .copyrow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn { border: 0; border-radius: 20px; padding: 8px 18px; background: var(--accent-bright); color: var(--on-accent); font-weight: 700; }
+  .status { font-size: 14px; color: var(--ink-soft); }
+  .notes-close { display: none; }
+
+  @media (max-width: 1000px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    .stagecol { position: static; }
+  }
+
+  /* ---------- Al mòbil: el simulador és la pantalla ---------- */
+  body.device { padding: 0; overflow: hidden; }
+  body.device .top { display: none; }
+  body.device .wrap, body.device .layout { display: block; max-width: none; }
+  body.device .phone {
+    position: fixed; inset: 0; width: auto; height: auto; border: 0; border-radius: 0; box-shadow: none;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  body.device .notes {
+    position: fixed; inset: 0; z-index: 50; overflow-y: auto; background: var(--ground);
+    padding: calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px));
+    display: none;
+  }
+  body.device.notes-open .notes { display: grid; }
+  body.device .notes-close { display: inline-flex; justify-self: start; }
+
+  /* ---------- El simulador ---------- */
+  .sim { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--app-desk); color: var(--ink); touch-action: manipulation; }
+  .appbar {
+    height: 42px; display: flex; align-items: center; gap: 10px; padding-inline: 12px;
+    background: var(--app-bar); color: var(--app-bar-ink); font-weight: 700;
+  }
+  .appbar .brand { font-size: 17px; margin-right: auto; }
+  .appbar .notes-btn { border: 1px solid var(--app-bar-ink); background: transparent; border-radius: 14px; padding: 1px 10px; font-size: 13px; font-weight: 700; display: none; }
+  body.device .appbar .notes-btn { display: inline-block; }
+  .sim[data-appbar="hide"] .appbar { display: none; }
+  .appbar .cases button { border-color: var(--app-bar-ink); background: transparent; color: var(--app-bar-ink); }
+  .appbar .cases button[aria-pressed="true"] { background: var(--app-bar-ink); color: var(--app-bar); }
+  .toolbar { height: 44px; display: flex; align-items: center; gap: 2px; padding-inline: 6px; }
+  .cases { display: flex; gap: 4px; }
+  .pglabel { margin-right: auto; padding-left: 6px; font-weight: 700; font-size: 14px; }
+  .cases button { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 14px; padding: 2px 10px; font-size: 13px; }
+  .cases button[aria-pressed="true"] { background: var(--accent-bright); color: var(--on-accent); border-color: transparent; font-weight: 700; }
+  .ibtn { width: 38px; height: 38px; border: 0; background: transparent; border-radius: 19px; display: grid; place-items: center; color: var(--ink); }
+  .ibtn svg { width: 22px; height: 22px; }
+  /* N1 i N4: tocar la vora fa sortir una fletxa semitransparent uns segons */
+  .side {
+    position: absolute; z-index: 4; width: 44px; height: 44px; top: 50%; margin-top: -22px; border: 0;
+    border-radius: 22px; background: var(--arrow-veil); color: var(--ink); font-size: 26px; line-height: 1;
+    display: grid; place-items: center;
+  }
+  .side[hidden] { display: none; }
+  .side.prev { left: 6px; } .side.next { right: 6px; }
+
+  /* La pantalla completa: només el full; s'hi passa de pàgina, no s'hi selecciona */
+  .sim.fs .appbar, .sim.fs .toolbar, .sim.fs .panel, .sim.fs .fab, .sim.fs .strip { display: none !important; }
+  .sim.fs .stage { z-index: 20; background: var(--app-desk); }
+  .fsexit {
+    position: absolute; top: calc(10px + env(safe-area-inset-top, 0px)); right: 10px; z-index: 21; border: 0;
+    border-radius: 16px; padding: 6px 12px; background: var(--arrow-veil); color: var(--ink); font-size: 13px; font-weight: 700;
+  }
+  .fsexit[hidden] { display: none; }
+
+  /* N3: el mòbil girat */
+  .veil {
+    position: absolute; inset: 0; z-index: 60; background: var(--rotate-veil); color: var(--rotate-ink);
+    display: grid; place-content: center; justify-items: center; gap: 14px; text-align: center; padding: 24px; font-weight: 700;
+  }
+  .veil[hidden] { display: none; }
+  .veil svg { width: 72px; height: 72px; animation: turn 2.4s ease-in-out infinite; }
+  @keyframes turn { 0%, 20% { transform: rotate(-90deg); } 45%, 80% { transform: rotate(0deg); } 100% { transform: rotate(-90deg); } }
+  .rotate-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  body.device .rotate-row { display: none; }
+
+  .stage { position: absolute; left: 0; right: 0; z-index: 1; display: grid; place-items: center; overflow: hidden; touch-action: pan-y; }
+  .paperbox { position: relative; }
+  .paper {
+    position: absolute; left: 0; top: 0; transform-origin: top left; background: var(--sheet); color: var(--sheet-ink);
+    box-shadow: var(--sheet-shadow); outline: 1px solid var(--sheet-line); font-family: var(--font-ui);
+  }
+  .flow { position: absolute; inset: 30px 30px 50px; display: flex; flex-direction: column; }
+  .seq { display: flex; flex-wrap: wrap; align-items: flex-start; border-radius: 12px; cursor: pointer; padding: 6px; }
+  .pict { display: grid; justify-items: center; flex-shrink: 0; }
+  .pict .num { font-size: 18px; color: var(--sheet-soft); line-height: 1.2; }
+  .pict .img { border-radius: 14px; border: 3px solid var(--sheet-line); }
+  .pict .lbl { font-size: 18px; font-weight: 700; text-align: center; line-height: 1.2; }
+  .sel { outline: 6px solid var(--sheet-guide); outline-offset: 6px; }
+  .block { position: absolute; border: 2px dashed var(--sheet-line); border-radius: 12px; padding: 10px; cursor: move; touch-action: none; display: flex; flex-wrap: wrap; align-content: flex-start; overflow: hidden; }
+  .block.text { font-size: 44px; font-weight: 700; align-items: center; justify-content: center; }
+  .foot { position: absolute; left: 30px; right: 30px; bottom: 16px; font-size: 13px; color: var(--sheet-soft); }
+
+  .strip {
+    position: absolute; left: 0; right: 0; z-index: 6; border: 0; background: var(--scrim); color: #FFFFFF;
+    font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .strip[hidden] { display: none; }
+
+  .panel {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 7; background: var(--app-paper);
+    border-radius: 18px 18px 0 0; box-shadow: 0 -6px 24px -10px rgba(0,0,0,.35);
+    display: flex; flex-direction: column; transition: height .28s cubic-bezier(.2,.8,.2,1), width .28s;
+  }
+  .panel.dragging { transition: none; }
+  .phead { flex-shrink: 0; padding: 6px 10px 6px; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+  .grab { width: 40px; height: 5px; border-radius: 3px; background: var(--line-strong); margin: 0 auto 6px; }
+  .phead-row { display: flex; align-items: center; gap: 6px; }
+  .crumbs { display: flex; flex-wrap: wrap; gap: 2px 6px; font-size: 14px; min-width: 0; flex: 1; }
+  .crumbs button { border: 0; background: transparent; padding: 0; text-decoration: underline; color: var(--ink-soft); }
+  .crumbs .here { font-weight: 700; }
+  .crumbs .sep { color: var(--ink-faint); }
+  .pbtn { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 16px; padding: 3px 10px; font-size: 13px; white-space: nowrap; }
+  .pbody { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 10px 90px; display: grid; gap: 10px; align-content: start; }
+
+  .level { background: var(--app-desk); border: 1px solid var(--line); border-radius: 14px; }
+  .lhead { width: 100%; border: 0; background: transparent; display: flex; gap: 10px; align-items: flex-start; text-align: left; padding: 10px; }
+  .licon { width: 30px; height: 30px; border-radius: 8px; background: var(--app-paper); display: grid; place-items: center; flex-shrink: 0; color: var(--ink-soft); }
+  .licon svg { width: 18px; height: 18px; }
+  .ltext { display: grid; min-width: 0; flex: 1; }
+  .kind { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  .ltitle { font-weight: 700; font-size: 16px; }
+  .lscope { font-size: 12px; color: var(--ink-soft); }
+  .chev { color: var(--ink-soft); transition: transform .2s; }
+  .lhead[aria-expanded="false"] .chev { transform: rotate(-90deg); }
+  .lbody { padding: 0 12px 14px; display: grid; gap: 12px; }
+  .lbody[hidden] { display: none; }
+  .row { display: grid; gap: 4px; }
+  .row > span { font-weight: 700; }
+  .row input[type="range"] { width: 100%; accent-color: var(--accent-bright); }
+  .row select, .row input[type="text"] { border: 1px solid var(--line-strong); border-radius: 10px; padding: 8px 10px; background: var(--surface); width: 100%; }
+  .row.inline { grid-template-columns: 1fr auto; align-items: center; }
+  .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+  .seg button { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 18px; padding: 6px 12px; font-size: 13px; }
+  .seg button[aria-pressed="true"] { background: var(--accent-bright); color: var(--on-accent); border-color: transparent; font-weight: 700; }
+  .hint { font-size: 13px; color: var(--ink-soft); }
+
+  .fab {
+    position: absolute; right: 16px; z-index: 8; width: 48px; height: 48px; border-radius: 20px;
+    border: 1.75px solid var(--accent-bright); background: var(--app-paper); display: grid; place-items: center;
+    transition: bottom .28s cubic-bezier(.2,.8,.2,1); color: var(--ink);
+  }
+  .fab svg { width: 20px; height: 20px; }
+  .panel.dragging ~ .fab { transition: none; }
+
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel, .fab, .phone, .chev { transition: none; }
+    .veil svg { animation: none; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Esbós v3 · docs/PLA-vista-mobil.md · fase 1</p>
+    <h1>La vista al mòbil, amb els ajustos en un panell de baix</h1>
+    <p class="lede">La versió 3 ja porta totes les decisions del 15 de novembre. Prova-ho amb el dit: obre aquesta pàgina al mòbil o a la tauleta i ocuparà tota la pantalla, com l'app. Els botons 1, 2 i 3 de la barra verda són els casos que fallaven. A «Notes» hi ha què cal provar i les dues preguntes que queden.</p>
+  </header>
+
+  <div class="layout">
+    <div class="stagecol">
+      <div class="phone" id="phone">
+        <div class="sim" id="sim">
+          <div class="appbar">
+            <span class="brand">SqAAC</span>
+            <div class="cases" role="group" aria-label="Cas de prova">
+              <button type="button" data-case="0" aria-pressed="true" title="Dues files, full horitzontal">1</button>
+              <button type="button" data-case="1" aria-pressed="false" title="Full vertical, tres seqüències">2</button>
+              <button type="button" data-case="2" aria-pressed="false" title="Blocs arrossegables, dues pàgines">3</button>
+            </div>
+            <button class="notes-btn" id="openNotes" type="button">Notes</button>
+          </div>
+          <!-- M4: a dalt, la pàgina on s'és i les sortides del document -->
+          <div class="toolbar" id="toolbar">
+            <span class="pglabel" id="pgLabel">Pàgina 1 de 1</span>
+            <button class="ibtn" type="button" aria-label="Imprimeix" title="Imprimeix (a l'esbós no fa res)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>
+            </button>
+            <button class="ibtn" type="button" aria-label="Descarrega PDF" title="Descarrega PDF (a l'esbós no fa res)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><path d="M9 14h6M9 17h4"/></svg>
+            </button>
+            <button class="ibtn" id="fsBtn" type="button" aria-label="Pantalla completa" title="Pantalla completa">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+            </button>
+          </div>
+          <div class="stage" id="stage">
+            <div class="paperbox" id="paperbox"><div class="paper" id="paper"></div></div>
+            <button class="side prev" id="pgPrev" type="button" aria-label="Pàgina anterior" hidden>‹</button>
+            <button class="side next" id="pgNext" type="button" aria-label="Pàgina següent" hidden>›</button>
+          </div>
+          <button class="fsexit" id="fsExit" type="button" hidden>Surt de la pantalla completa</button>
+
+          <button class="strip" id="strip" type="button" hidden>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 15l6-6 6 6" transform="rotate(180 12 12)"/></svg>
+            Torna al full
+          </button>
+
+          <section class="panel" id="panel" role="region" aria-label="Ajustos">
+            <div class="phead" id="phead">
+              <div class="grab" aria-hidden="true"></div>
+              <div class="phead-row">
+                <nav class="crumbs" id="crumbs" aria-label="On ets"></nav>
+                <button class="pbtn" id="toggleBtn" type="button" aria-expanded="false" aria-controls="pbody">Mostra els ajustos</button>
+              </div>
+            </div>
+            <div class="pbody" id="pbody"></div>
+          </section>
+
+          <div class="veil" id="veil" role="status" hidden>
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="20" y="6" width="24" height="44" rx="5"/><path d="M29 43h6"/><path d="M50 56a22 22 0 0 0 8-14" /><path d="M54 40l4 2 2-4"/></svg>
+            <p>Gira el mòbil: la vista es treballa amb el mòbil dret</p>
+          </div>
+
+          <div class="fab" id="fab" aria-hidden="true" title="El botó d'estat del document: puja damunt del panell">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="rotate-row">
+        <button class="chip" id="simRot" type="button" aria-pressed="false">Simula el mòbil girat</button>
+      </div>
+    </div>
+
+    <div class="notes" id="notes">
+      <button class="chip notes-close" id="closeNotes" type="button">‹ Torna a l'esbós</button>
+
+      <section class="card try">
+        <h2>Què cal provar</h2>
+        <ol>
+          <li><b>Cas 1, dues files.</b> Toca la fila de dalt. El panell puja a mig, la barra verda s'amaga i la fila continua a la vista. Mou «Mida» i mira com canvia.</li>
+          <li><b>Tocar el full.</b> Toca el full fora de les seqüències: el panell porta a «Pàgina» (D2, N5).</li>
+          <li><b>Cas 2, full vertical.</b> Toca la seqüència de dalt i la de baix. Cap de les dues no ha de sortir de la pantalla.</li>
+          <li><b>Cas 3, disposició lliure.</b> Un toc a un bloc el selecciona i el panell no es mou; arrossega'l. Un doble toc obre els seus ajustos (D1).</li>
+          <li><b>Passar de pàgina</b> (cas 3). Llisca en horitzontal fora dels blocs. O toca a la vora del mòbil: surt la fletxa uns segons (N1, N4).</li>
+          <li><b>Pantalla completa</b> (cas 3). L'últim botó de dalt. Llisca o toca la vora per passar de pàgina.</li>
+          <li><b>La barra verda.</b> Amb el panell a mig s'amaga, i torna en baixar-lo a plegat (N2).</li>
+          <li><b>Girar el full.</b> És un ajust: «Document» › «Orientació».</li>
+          <li><b>Perdre el full.</b> Arrossega la nansa fins a dalt de tot. La franja fosca de dalt el torna a mig.</li>
+          <li><b>Escriure.</b> A «Document», toca «Autor del document»: el teclat no ha de tapar el camp.</li>
+          <li><b>Gira el mòbil.</b> Surt la capa que demana tornar-lo a posar dret (N3). A la pantalla completa, no.</li>
+        </ol>
+        <p class="hint">Les opcions marcades <span class="live">en viu</span> canvien l'esbós: es poden comparar abans de decidir.</p>
+      </section>
+
+      <section class="card">
+        <h2>Decidit el 15 de novembre</h2>
+        <ul>
+          <li><b>M1</b> El panell es diu «Ajustos».</li>
+          <li><b>M2 i M5</b> Mig és el 50 % de la pantalla, i a mig i a sencer la barra de l'app s'amaga: el full hi guanya aquell espai.</li>
+          <li><b>M3</b> A sencer només s'hi arriba arrossegant: no hi ha botó «Amplia».</li>
+          <li><b>M4</b> A dalt, la pàgina on s'és i les sortides: imprimir, PDF, pantalla completa. Girar el full va a «Document». Es passa de pàgina tocant als costats i lliscant.</li>
+          <li><b>M6</b> El mòbil en horitzontal no és una manera de treballar.</li>
+          <li><b>M7, M8, M9 i E1</b> Panell a la tauleta en vertical; tocar un bloc puja el panell a mig; la franja de la fase 0 es queda; el full s'encongeix.</li>
+          <li><b>N1</b> Es passa de pàgina lliscant, també a la pantalla completa. Tocar la vora fa sortir una fletxa semitransparent uns segons.</li>
+          <li><b>N2</b> La barra verda només torna baixant el panell a plegat.</li>
+          <li><b>N3</b> El mòbil girat mostra una capa blanca translúcida amb una icona de girar-lo.</li>
+          <li><b>D1</b> A la disposició lliure, un toc selecciona un bloc i un doble toc n'obre els ajustos.</li>
+          <li><b>D2</b> Tocar el full fora dels blocs porta al nivell «Pàgina».</li>
+        </ul>
+      </section>
+
+      <section class="card" id="decisions">
+        <h2>Per confirmar (§9c del pla)</h2>
+        <div id="decisionList"></div>
+        <div class="copyrow">
+          <button class="btn" id="copyBtn" type="button">Copia les respostes</button>
+          <span class="status" id="copyStatus" role="status"></span>
+        </div>
+        <textarea id="copyFallback" hidden rows="8" style="width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:8px;background:var(--surface);font-family:var(--font-mono);font-size:12px"></textarea>
+      </section>
+
+      <section class="card">
+        <h2>Què no és aquest esbós</h2>
+        <ul>
+          <li>Els pictogrames són quadres de color: les imatges d'ARASAAC no s'hi carreguen.</li>
+          <li>Imprimir, PDF i pantalla completa no fan res.</li>
+          <li>Els nivells són una mostra: no hi ha tots els ajustos de l'app.</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const sim = $("sim"), phone = $("phone"), stage = $("stage"), paper = $("paper"), paperbox = $("paperbox");
+  const panel = $("panel"), phead = $("phead"), pbody = $("pbody"), crumbs = $("crumbs");
+  const toggleBtn = $("toggleBtn"), strip = $("strip"), fab = $("fab");
+  const PX_PER_MM = 3;
+  const COLORS = ["--p1", "--p2", "--p3", "--p4", "--p5", "--p6"];
+
+  // ---------- Els casos ----------
+  const words = {
+    mati: ["llevar-se", "rentar-se", "vestir-se", "esmorzar", "motxilla"],
+    tarda: ["escola", "dinar", "jugar", "pati", "casa"],
+    nit: ["sopar", "dutxa", "pijama", "conte", "dormir", "llum"],
+    passos: ["rentar mans", "sabó", "esbandir", "eixugar"],
+  };
+  const mkSeq = (id, name, list) => ({ id, name, picts: list, size: 1, gap: 14, alignH: "start" });
+  const CASES = [
+    { name: "Dues files", orient: "landscape", pages: [{ kind: "flow", seqs: [mkSeq("s1", "Matí", words.mati), mkSeq("s2", "Tarda", words.tarda)] }] },
+    { name: "Full vertical", orient: "portrait", pages: [{ kind: "flow", seqs: [mkSeq("s1", "Matí", words.mati), mkSeq("s2", "Tarda", words.tarda), mkSeq("s3", "Nit", words.nit)] }] },
+    { name: "Blocs", orient: "portrait", pages: [
+      { kind: "blocks", blocks: [
+        { id: "t1", kind: "text", name: "Títol", text: "La meva rutina", x: 30, y: 30, w: 570, h: 110 },
+        { id: "b1", kind: "seq", seq: mkSeq("b1", "Matí", words.mati), x: 30, y: 170, w: 570, h: 300 },
+        { id: "b2", kind: "seq", seq: mkSeq("b2", "Passos", words.passos), x: 30, y: 500, w: 570, h: 300 },
+      ] },
+      { kind: "blocks", blocks: [
+        { id: "b3", kind: "seq", seq: mkSeq("b3", "Nit", words.nit), x: 30, y: 30, w: 570, h: 420 },
+      ] },
+    ] },
+  ];
+
+  // ---------- Estat de la pantalla ----------
+  const state = {
+    caseIdx: 0, page: 0, selection: null, snap: "collapsed", sheetH: 0,
+    licence: true, author: "Aula de Suport", pageGap: 30,
+    open: { document: true, page: true, block: true },
+    opts: { mid: 0.5, raise: true, shrink: true, autoHide: true, arrowMs: 2000, pageRaise: true },
+    barShown: false, fs: false, rotSim: false,
+  };
+  const cur = () => CASES[state.caseIdx];
+  const curPage = () => cur().pages[state.page];
+  const findSel = () => {
+    if (!state.selection) return null;
+    const pg = curPage();
+    if (pg.kind === "flow") return pg.seqs.find((s) => s.id === state.selection) || null;
+    const b = pg.blocks.find((x) => x.id === state.selection);
+    return b ? (b.kind === "seq" ? b.seq : { id: b.id, name: b.name, text: true, block: b }) : null;
+  };
+
+  // ---------- El full ----------
+  const paperSize = () => {
+    const portrait = cur().orient === "portrait";
+    return portrait ? { w: 210 * PX_PER_MM, h: 297 * PX_PER_MM } : { w: 297 * PX_PER_MM, h: 210 * PX_PER_MM };
+  };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const pictHtml = (word, i, size) => {
+    const side = Math.round(86 * size);
+    const col = `var(${COLORS[i % COLORS.length]})`;
+    return `<div class="pict" style="width:${side + 8}px"><span class="num" style="font-size:${18 * size}px">${i + 1}</span>` +
+      `<div class="img" style="width:${side}px;height:${side}px;background:${col}"></div>` +
+      `<span class="lbl" style="font-size:${18 * size}px">${esc(word)}</span></div>`;
+  };
+  const justify = { start: "flex-start", center: "center", end: "flex-end" };
+  const seqInner = (s) => s.picts.map((w, i) => pictHtml(w, i, s.size)).join("");
+  const renderPaper = () => {
+    const { w, h } = paperSize();
+    paper.style.width = w + "px"; paper.style.height = h + "px";
+    const pg = curPage();
+    let html = "";
+    if (pg.kind === "flow") {
+      html += `<div class="flow" style="gap:${state.pageGap}px">`;
+      for (const s of pg.seqs) {
+        html += `<div class="seq${state.selection === s.id ? " sel" : ""}" data-id="${s.id}" role="button" tabindex="0" aria-pressed="${state.selection === s.id}" aria-label="Seqüència ${esc(s.name)}" ` +
+          `style="gap:${s.gap * s.size}px;justify-content:${justify[s.alignH]}">${seqInner(s)}</div>`;
+      }
+      html += `</div>`;
+    } else {
+      for (const b of pg.blocks) {
+        const sel = state.selection === b.id ? " sel" : "";
+        const style = `left:${b.x}px;top:${b.y}px;width:${b.w}px;height:${b.h}px`;
+        if (b.kind === "text") {
+          html += `<div class="block text${sel}" data-id="${b.id}" role="button" tabindex="0" aria-pressed="${!!sel}" aria-label="Bloc ${esc(b.name)}" style="${style}">${esc(b.text)}</div>`;
+        } else {
+          const s = b.seq;
+          html += `<div class="block${sel}" data-id="${b.id}" role="button" tabindex="0" aria-pressed="${!!sel}" aria-label="Bloc ${esc(s.name)}" style="${style};gap:${s.gap * s.size}px;justify-content:${justify[s.alignH]}">${seqInner(s)}</div>`;
+        }
+      }
+    }
+    if (state.licence) {
+      html += `<div class="foot">Pictogrames: Sergio Palao. Origen: ARASAAC. Llicència: CC BY-NC-SA.${state.author ? " Autor del document: " + esc(state.author) + "." : ""}</div>`;
+    }
+    paper.innerHTML = html;
+  };
+
+  // ---------- La disposició: el full a sobre del panell ----------
+  const metrics = () => {
+    const simH = sim.clientHeight, simW = sim.clientWidth;
+    const topEl = $("toolbar");
+    const top = topEl.offsetTop + topEl.offsetHeight;
+    const headH = phead.offsetHeight;
+    const midH = Math.round(simH * state.opts.mid);
+    const STRIP = 64;
+    const fullH = simH - top - STRIP;
+    return { simH, simW, top, headH, midH, fullH, STRIP };
+  };
+  const snapHeight = (snap, m) => snap === "collapsed" ? m.headH : snap === "mid" ? m.midH : m.fullH;
+
+  // M5: a mig i a sencer, la barra de l'app s'amaga; torna a plegat o amb un lliscament cap avall (N2)
+  const applyBar = () => {
+    const hide = state.opts.autoHide && state.snap !== "collapsed" && !state.barShown;
+    sim.dataset.appbar = hide ? "hide" : "show";
+  };
+
+  // N3: la capa del mòbil girat; a la pantalla completa no surt
+  const applyVeil = () => {
+    const turned = document.body.classList.contains("device") && window.innerWidth > window.innerHeight;
+    $("veil").hidden = state.fs || !(turned || state.rotSim);
+  };
+
+  const layout = () => {
+    applyBar();
+    applyVeil();
+    const m = metrics();
+    const stageW = m.simW;
+    if (state.fs) {
+      stage.style.top = "0px"; stage.style.height = m.simH + "px";
+      const { w, h } = paperSize();
+      const sc = Math.min((stageW - 20) / w, (m.simH - 20) / h);
+      paper.style.transform = `scale(${sc})`;
+      paperbox.style.width = w * sc + "px"; paperbox.style.height = h * sc + "px";
+      paper.dataset.scale = sc;
+      $("pgLabel").textContent = `Pàgina ${state.page + 1} de ${cur().pages.length}`;
+      return;
+    }
+    if (!panel.classList.contains("dragging")) state.sheetH = snapHeight(state.snap, m);
+    panel.style.height = state.sheetH + "px";
+    // Amb «s'encongeix», el full es fa lloc a sobre del panell fins a mig; amb «tapa», només el plegat
+    const reserve = state.opts.shrink ? Math.min(state.sheetH, m.midH) : m.headH;
+    const stageH = Math.max(80, m.simH - m.top - reserve);
+    stage.style.top = m.top + "px"; stage.style.height = stageH + "px";
+    strip.hidden = state.snap !== "full";
+    strip.style.top = m.top + "px"; strip.style.height = m.STRIP + "px";
+    fab.style.bottom = state.sheetH + 16 + "px";
+    const { w, h } = paperSize();
+    const scale = Math.min((stageW - 20) / w, (stageH - 20) / h);
+    paper.style.transform = `scale(${scale})`;
+    paperbox.style.width = w * scale + "px"; paperbox.style.height = h * scale + "px";
+    paper.dataset.scale = scale;
+    toggleBtn.textContent = state.snap === "collapsed" ? "Mostra els ajustos" : "Amaga els ajustos";
+    toggleBtn.setAttribute("aria-expanded", String(state.snap !== "collapsed"));
+    $("pgLabel").textContent = `Pàgina ${state.page + 1} de ${cur().pages.length}`;
+  };
+
+  const setSnap = (snap) => {
+    // Pujar el panell torna a amagar la barra; baixar-lo a plegat la mostra
+    if (snap !== state.snap) state.barShown = false;
+    state.snap = snap; panel.classList.remove("dragging"); layout();
+  };
+
+  // ---------- Els nivells de la columna ----------
+  const ICONS = {
+    doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></svg>',
+    page: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="3" width="12" height="18" rx="2"/></svg>',
+    block: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="10" height="5" rx="1.5"/></svg>',
+  };
+  const unit = () => curPage().kind === "blocks" ? "bloc" : "seqüència";
+  const level = (key, icon, kind, title, scope, body) => {
+    const open = body !== null && state.open[key];
+    return `<section class="level" id="lvl-${key}">` +
+      `<button class="lhead" type="button" data-level="${key}" aria-expanded="${open}" ${body === null ? "disabled" : ""}>` +
+      `<span class="licon">${ICONS[icon]}</span><span class="ltext"><span class="kind">${kind}</span><span class="ltitle">${title}</span><span class="lscope">${scope}</span></span>` +
+      (body === null ? "" : `<span class="chev" aria-hidden="true">▾</span>`) + `</button>` +
+      (body === null ? "" : `<div class="lbody" ${open ? "" : "hidden"}>${body}</div>`) + `</section>`;
+  };
+  const renderLevels = () => {
+    const sel = findSel();
+    const pages = cur().pages.length;
+    const docBody =
+      `<label class="row"><span>Mida de pàgina</span><select id="c-size"><option>A4</option><option>A3</option><option>Carta (8,5 × 11″)</option></select></label>` +
+      `<div class="row"><span>Orientació</span><div class="seg" id="c-orient">` +
+      [["landscape", "Horitzontal"], ["portrait", "Vertical"]].map(([v, l]) => `<button type="button" data-orient="${v}" aria-pressed="${cur().orient === v}">${l}</button>`).join("") +
+      `</div></div>` +
+      `<label class="row inline"><span>Llicència al peu</span><input type="checkbox" id="c-lic" ${state.licence ? "checked" : ""}></label>` +
+      `<label class="row"><span>Autor del document</span><input type="text" id="c-author" value="${esc(state.author)}"></label>`;
+    const pageBody =
+      `<div class="row"><span>Disposició</span><div class="seg"><button type="button" aria-pressed="${curPage().kind === "flow"}">Simple</button><button type="button" aria-pressed="false">Columnes</button><button type="button" aria-pressed="false">Files</button><button type="button" aria-pressed="${curPage().kind === "blocks"}">Lliure</button></div></div>` +
+      (curPage().kind === "flow" ? `<label class="row"><span>Espai entre seqüències</span><input type="range" id="c-pgap" min="0" max="120" value="${state.pageGap}"></label>` : `<p class="hint">Els blocs es mouen arrossegant-los pel full.</p>`);
+    let blockBody = null, blockTitle = `Cap ${unit()} seleccionat${unit() === "seqüència" ? "a" : ""}`, blockScope = `Toca'n ${unit() === "seqüència" ? "una" : "un"} al full`;
+    if (sel && sel.text) {
+      blockTitle = esc(sel.name); blockScope = "Només aquest bloc";
+      blockBody = `<label class="row"><span>Text</span><input type="text" id="c-text" value="${esc(sel.block.text)}"></label>`;
+    } else if (sel) {
+      blockTitle = esc(sel.name); blockScope = `S'aplica només a aquest${unit() === "seqüència" ? "a seqüència" : " bloc"}`;
+      blockBody =
+        `<label class="row"><span>Mida</span><input type="range" id="c-size-p" min="0.5" max="1.5" step="0.05" value="${sel.size}"></label>` +
+        `<label class="row"><span>Espai de pictogrames</span><input type="range" id="c-gap" min="0" max="50" value="${sel.gap}"></label>` +
+        `<div class="row"><span>Alineació H</span><div class="seg" id="c-align">` +
+        ["start", "center", "end"].map((a, i) => `<button type="button" data-align="${a}" aria-pressed="${sel.alignH === a}">${["Esquerra", "Centre", "Dreta"][i]}</button>`).join("") +
+        `</div></div>`;
+    }
+    pbody.innerHTML =
+      level("document", "doc", "Document", "La meva rutina", "S'aplica a totes les pàgines", docBody) +
+      level("page", "page", "Pàgina", `Pàgina ${state.page + 1} de ${pages}`, "S'aplica a la pàgina", pageBody) +
+      level("block", "block", unit() === "bloc" ? "Bloc" : "Seqüència", blockTitle, blockScope, blockBody);
+    // Les molles
+    const c = [["document", "Document"], ["page", `Pàgina ${state.page + 1} de ${pages}`]];
+    if (sel) c.push(["block", sel.name]);
+    crumbs.innerHTML = c.map(([k, l], i) => i === c.length - 1
+      ? `<span class="here" aria-current="location">${esc(l)}</span>`
+      : `<button type="button" data-go="${k}">${esc(l)}</button><span class="sep" aria-hidden="true">/</span>`).join("");
+  };
+  const scrollToLevel = (key) => {
+    const el = $("lvl-" + key);
+    if (!el) return;
+    pbody.scrollTo({ top: el.offsetTop - pbody.offsetTop - 4, behavior: "smooth" });
+  };
+
+  // ---------- Seleccionar ----------
+  // `raise`: si el toc ha de portar el panell a mig (M8; a la disposició lliure, només el doble toc, D1)
+  const select = (id, raise) => {
+    if (state.selection === id && !raise) return;
+    state.selection = id;
+    // Amb una selecció, Document i Pàgina es pleguen (P1); sense, tot obert
+    state.open = id ? { document: false, page: false, block: true } : { document: true, page: true, block: true };
+    // Plegat o sencer, el panell va a mig: el bloc tocat ha de quedar a la vista
+    if (id && raise && state.opts.raise && state.snap !== "mid") { state.snap = "mid"; state.barShown = false; }
+    renderPaper(); renderLevels(); layout();
+    if (id) requestAnimationFrame(() => scrollToLevel("block"));
+  };
+  // D2: tocar el full fora dels blocs porta al nivell «Pàgina» (N5: i, si es vol, puja el panell)
+  const focusPage = (raise) => {
+    state.selection = null;
+    state.open = { document: false, page: true, block: false };
+    if (raise && state.opts.pageRaise && state.snap !== "mid") { state.snap = "mid"; state.barShown = false; }
+    renderPaper(); renderLevels(); layout();
+    requestAnimationFrame(() => scrollToLevel("page"));
+  };
+
+  // N1 i N4: la fletxa de la vora surt uns segons, i cada pas de pàgina torna a comptar
+  const arrowTimers = {};
+  const reveal = (side) => {
+    const ok = cur().pages.length > 1 && (side === "prev" ? state.page > 0 : state.page < cur().pages.length - 1);
+    const id = side === "prev" ? "pgPrev" : "pgNext";
+    clearTimeout(arrowTimers[id]);
+    $(id).hidden = !ok;
+    if (ok) arrowTimers[id] = setTimeout(() => { $(id).hidden = true; }, state.opts.arrowMs);
+  };
+  const hideArrows = () => { for (const id of ["pgPrev", "pgNext"]) { clearTimeout(arrowTimers[id]); $(id).hidden = true; } };
+
+  // ---------- Gestos sobre el full: seleccionar, arrossegar blocs, lliscar de pàgina ----------
+  let gesture = null;
+  stage.addEventListener("pointerdown", (e) => {
+    if (e.target.closest(".side")) return;
+    const target = e.target.closest("[data-id]");
+    gesture = { x: e.clientX, y: e.clientY, id: target ? target.dataset.id : null, moved: false, block: null };
+    if (target && target.classList.contains("block")) {
+      const b = curPage().blocks.find((x) => x.id === target.dataset.id);
+      gesture.block = { el: target, b, x0: b.x, y0: b.y };
+      target.setPointerCapture(e.pointerId);
+    } else {
+      // El lliscament acaba on acaba el dit, encara que sigui fora del full
+      stage.setPointerCapture(e.pointerId);
+    }
+  });
+  stage.addEventListener("pointermove", (e) => {
+    if (!gesture) return;
+    const dx = e.clientX - gesture.x, dy = e.clientY - gesture.y;
+    if (!gesture.moved && Math.hypot(dx, dy) > 6) gesture.moved = true;
+    if (gesture.moved && gesture.block) {
+      const s = Number(paper.dataset.scale) || 1;
+      const { w, h } = paperSize();
+      const g = gesture.block;
+      g.b.x = Math.max(0, Math.min(w - g.b.w, g.x0 + dx / s));
+      g.b.y = Math.max(0, Math.min(h - g.b.h, g.y0 + dy / s));
+      g.el.style.left = g.b.x + "px"; g.el.style.top = g.b.y + "px";
+    }
+  });
+  let lastTap = { key: null, t: 0 };
+  const endGesture = (e) => {
+    if (!gesture) return;
+    const g = gesture; gesture = null;
+    const dx = e.clientX - g.x, dy = e.clientY - g.y;
+    // Arrossegar un bloc el selecciona sense pujar el panell
+    if (g.block && g.moved) { if (!state.fs) select(g.block.b.id, false); return; }
+    if (!g.moved) {
+      const r = stage.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const side = x < r.width * 0.15 ? "prev" : x > r.width * 0.85 ? "next" : null;
+      // A la pantalla completa no es selecciona: només la fletxa de la vora
+      if (state.fs) { if (side) reveal(side); return; }
+      // La vora, fora dels blocs i amb més d'una pàgina: només la fletxa
+      if (!g.id && side && cur().pages.length > 1) { reveal(side); return; }
+      // D1: a la disposició lliure, un toc selecciona i el doble toc obre els ajustos
+      const free = curPage().kind === "blocks";
+      const key = g.id || "page";
+      const now = performance.now();
+      const double = lastTap.key === key && now - lastTap.t < 350;
+      lastTap = { key, t: now };
+      const raise = free ? double : true;
+      if (g.id) select(g.id, raise); else focusPage(raise);
+      return;
+    }
+    // Lliscament horitzontal clar, fora dels blocs: canvia de pàgina (també a la pantalla completa)
+    if (!g.block && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) goPage(state.page + (dx < 0 ? 1 : -1));
+  };
+  stage.addEventListener("pointerup", endGesture);
+  stage.addEventListener("pointercancel", () => { gesture = null; });
+  stage.addEventListener("keydown", (e) => {
+    const t = e.target.closest("[data-id]");
+    if (t && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(t.dataset.id, true); }
+    if (e.key === "Escape") { if (state.fs) exitFs(); else select(null, false); }
+  });
+
+  const goPage = (i) => {
+    if (i < 0 || i >= cur().pages.length) return;
+    state.page = i; state.selection = null; state.open = { document: true, page: true, block: true };
+    renderPaper(); renderLevels(); layout();
+  };
+  // Passar de pàgina torna a comptar el temps de la fletxa, per passar-ne diverses seguides
+  $("pgPrev").addEventListener("click", () => { goPage(state.page - 1); reveal("prev"); });
+  $("pgNext").addEventListener("click", () => { goPage(state.page + 1); reveal("next"); });
+
+  // La pantalla completa
+  const exitFs = () => { state.fs = false; sim.classList.remove("fs"); $("fsExit").hidden = true; hideArrows(); layout(); };
+  $("fsBtn").addEventListener("click", () => {
+    state.fs = true; state.selection = null; sim.classList.add("fs"); $("fsExit").hidden = false;
+    hideArrows(); renderPaper(); renderLevels(); layout();
+  });
+  $("fsExit").addEventListener("click", exitFs);
+  $("simRot").addEventListener("click", (e) => {
+    state.rotSim = !state.rotSim;
+    e.currentTarget.setAttribute("aria-pressed", String(state.rotSim));
+    layout();
+  });
+
+  // ---------- El panell: nansa, botons i franja ----------
+  let drag = null;
+  phead.addEventListener("pointerdown", (e) => {
+    if (e.target.closest("button")) return;
+    drag = { y: e.clientY, h0: state.sheetH, t: performance.now(), lastY: e.clientY, lastT: performance.now(), v: 0 };
+    phead.setPointerCapture(e.pointerId);
+    panel.classList.add("dragging");
+  });
+  phead.addEventListener("pointermove", (e) => {
+    if (!drag) return;
+    const m = metrics();
+    const now = performance.now();
+    drag.v = (e.clientY - drag.lastY) / Math.max(1, now - drag.lastT);
+    drag.lastY = e.clientY; drag.lastT = now;
+    state.sheetH = Math.max(m.headH, Math.min(m.fullH, drag.h0 - (e.clientY - drag.y)));
+    layout();
+  });
+  const endDrag = () => {
+    if (!drag) return;
+    const m = metrics();
+    const v = drag.v; drag = null;
+    const order = ["collapsed", "mid", "full"];
+    let best;
+    if (Math.abs(v) > 0.5) {
+      // Un gest ràpid: a la parada següent en aquella direcció
+      const hs = order.map((s) => snapHeight(s, m));
+      best = v < 0 ? order.find((s, i) => hs[i] > state.sheetH + 4) || "full" : [...order].reverse().find((s) => snapHeight(s, m) < state.sheetH - 4) || "collapsed";
+    } else {
+      best = order.reduce((a, s) => Math.abs(snapHeight(s, m) - state.sheetH) < Math.abs(snapHeight(a, m) - state.sheetH) ? s : a, "collapsed");
+    }
+    setSnap(best);
+  };
+  phead.addEventListener("pointerup", endDrag);
+  phead.addEventListener("pointercancel", endDrag);
+  toggleBtn.addEventListener("click", () => setSnap(state.snap === "collapsed" ? "mid" : "collapsed"));
+  strip.addEventListener("click", () => setSnap("mid"));
+  crumbs.addEventListener("click", (e) => {
+    const k = e.target.closest("[data-go]")?.dataset.go;
+    if (!k) return;
+    state.open[k] = true; renderLevels();
+    if (state.snap === "collapsed") setSnap("mid");
+    requestAnimationFrame(() => scrollToLevel(k));
+  });
+
+  // ---------- Els controls de dins del panell ----------
+  pbody.addEventListener("click", (e) => {
+    const head = e.target.closest(".lhead");
+    if (head && !head.disabled) {
+      const k = head.dataset.level;
+      state.open[k] = !state.open[k];
+      renderLevels(); return;
+    }
+    const or = e.target.closest("[data-orient]");
+    if (or) { cur().orient = or.dataset.orient; renderPaper(); renderLevels(); layout(); return; }
+    const al = e.target.closest("[data-align]");
+    if (al) { const s = findSel(); if (s && !s.text) { s.alignH = al.dataset.align; renderPaper(); renderLevels(); } }
+  });
+  pbody.addEventListener("input", (e) => {
+    const s = findSel();
+    const t = e.target;
+    if (t.id === "c-size-p" && s) { s.size = Number(t.value); renderPaper(); }
+    else if (t.id === "c-gap" && s) { s.gap = Number(t.value); renderPaper(); }
+    else if (t.id === "c-pgap") { state.pageGap = Number(t.value); renderPaper(); }
+    else if (t.id === "c-author") { state.author = t.value; renderPaper(); }
+    else if (t.id === "c-text" && s) { s.block.text = t.value; renderPaper(); }
+  });
+  pbody.addEventListener("change", (e) => {
+    if (e.target.id === "c-lic") { state.licence = e.target.checked; renderPaper(); }
+  });
+  // Escriure: el panell a dalt, perquè el teclat no tapi el camp (fase 5 del pla)
+  pbody.addEventListener("focusin", (e) => {
+    if (e.target.matches('input[type="text"]') && document.body.classList.contains("device")) {
+      setSnap("full");
+      setTimeout(() => e.target.scrollIntoView({ block: "center", behavior: "smooth" }), 320);
+    }
+  });
+
+  // ---------- Casos, girar el full i girar el telèfon ----------
+  document.querySelectorAll("[data-case]").forEach((b) => b.addEventListener("click", () => {
+    state.caseIdx = Number(b.dataset.case); state.page = 0; state.selection = null; hideArrows();
+    state.open = { document: true, page: true, block: true };
+    document.querySelectorAll("[data-case]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    renderPaper(); renderLevels(); layout();
+  }));
+  // ---------- Les decisions ----------
+  const DECISIONS = [
+    { id: "N4", q: "Quant de temps es veu la fletxa de la vora (prova-ho al cas 3)", opts: ["2 segons (decidit)", "3 segons", "5 segons"], live: "arrowMs", values: [2000, 3000, 5000] },
+    { id: "N5", q: "Tocar el full fora dels blocs puja el panell, com tocar un bloc", opts: ["Sí, amb la mateixa regla: un toc; a la disposició lliure, doble toc (proposta)", "No: el panell no es mou, només canvia el nivell obert"], live: "pageRaise", values: [true, false] },
+  ];
+  const STORE = "esbos-vista-mobil-respostes-v3";
+  let answers = {};
+  try { answers = JSON.parse(localStorage.getItem(STORE) || "{}") || {}; } catch (_) { answers = {}; }
+  const save = () => { try { localStorage.setItem(STORE, JSON.stringify(answers)); } catch (_) { /* sense emmagatzematge */ } };
+  const applyLive = () => {
+    for (const d of DECISIONS) {
+      if (!d.live) continue;
+      const i = answers[d.id]?.choice ?? 0;
+      const v = d.values[i] ?? d.values[0];
+      state.opts[d.live] = v;
+    }
+    layout();
+  };
+  $("decisionList").innerHTML = DECISIONS.map((d) => {
+    const a = answers[d.id] || {};
+    const radios = d.opts.map((o, i) => `<label><input type="radio" name="${d.id}" value="${i}" ${(a.choice ?? 0) === i && a.choice !== "other" ? "checked" : ""}> ${o}</label>`).join("");
+    const other = `<label><input type="radio" name="${d.id}" value="other" ${a.choice === "other" ? "checked" : ""}> Una altra: <input type="text" data-other="${d.id}" value="${esc(a.text || "")}" aria-label="${d.id}: una altra resposta"></label>`;
+    return `<div class="decision"><p class="q"><span class="id">${d.id}</span>${d.q} ${d.live ? '<span class="live">en viu</span>' : ""}</p><div class="opts">${radios}${other}</div></div>`;
+  }).join("");
+  $("decisionList").addEventListener("change", (e) => {
+    const t = e.target;
+    if (t.type === "radio") {
+      answers[t.name] = { ...(answers[t.name] || {}), choice: t.value === "other" ? "other" : Number(t.value) };
+      save(); applyLive();
+    }
+  });
+  $("decisionList").addEventListener("input", (e) => {
+    const id = e.target.dataset.other;
+    if (!id) return;
+    answers[id] = { ...(answers[id] || {}), text: e.target.value, choice: "other" };
+    const r = document.querySelector(`input[name="${id}"][value="other"]`);
+    if (r) r.checked = true;
+    save(); applyLive();
+  });
+  const answersText = () => "Decisions de l'esbós v3 de la vista al mòbil:\n" + DECISIONS.map((d) => {
+    const a = answers[d.id] || {};
+    const val = a.choice === "other" ? `Una altra: ${a.text || "(sense text)"}` : d.opts[a.choice ?? 0];
+    return `- ${d.id} ${d.q}: ${val}`;
+  }).join("\n");
+  $("copyBtn").addEventListener("click", () => {
+    const text = answersText();
+    const fb = $("copyFallback");
+    const done = (ok) => {
+      $("copyStatus").textContent = ok ? "Copiades. Enganxa-les al xat." : "No s'han pogut copiar: selecciona el text de sota i copia'l.";
+      fb.hidden = ok; if (!ok) { fb.value = text; fb.select(); }
+    };
+    try { navigator.clipboard.writeText(text).then(() => done(true), () => done(false)); } catch (_) { done(false); }
+  });
+
+  // ---------- Al mòbil, el simulador és la pantalla ----------
+  const deviceQuery = window.matchMedia("(max-width: 640px), (pointer: coarse) and (max-height: 520px)");
+  const applyDevice = () => {
+    document.body.classList.toggle("device", deviceQuery.matches);
+    layout();
+  };
+  deviceQuery.addEventListener?.("change", applyDevice);
+  $("openNotes").addEventListener("click", () => { document.body.classList.add("notes-open"); $("notes").scrollTop = 0; });
+  $("closeNotes").addEventListener("click", () => document.body.classList.remove("notes-open"));
+  // El teclat virtual encongeix la pantalla visible: el simulador la segueix
+  window.visualViewport?.addEventListener("resize", () => {
+    if (document.body.classList.contains("device")) phone.style.height = window.visualViewport.height + "px";
+    layout();
+  });
+  window.addEventListener("resize", layout);
+  if (window.ResizeObserver) new ResizeObserver(() => layout()).observe(sim);
+
+  renderPaper(); renderLevels(); applyDevice(); applyLive();
+})();
+</script>

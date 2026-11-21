@@ -9,13 +9,13 @@
  * píxels per definició.
  */
 
-import type { PageSize } from "@sequence-arasaac/shared-types";
+import type { PageSize, ScreenSize } from "@sequence-arasaac/shared-types";
 import { mmToPixels } from "./pageUnits";
 
 // La mida de pàgina viatja dins del document i de l'API: la declara
 // `shared-types` i aquí només es reexporta, perquè no n'hi hagi dues versions
 // que puguin divergir
-export type { PageSize };
+export type { PageSize, ScreenSize };
 
 /** Les mides que són un paper de debò: totes menys la pantalla sencera */
 export type PaperSize = Exclude<PageSize, "FULLSCREEN">;
@@ -197,30 +197,56 @@ export function calculateUsableDimensions(
 }
 
 /**
+ * La pantalla d'ara, apaïsada, en píxels CSS. Max/min perquè el Safari d'iOS
+ * dona sempre les mides de la pantalla dreta, i perquè la forma no depengui de
+ * com es tingui l'aparell en aquell moment. Sense pantalla (jsdom), una de
+ * 1280 × 720, perquè el full no faci mai zero.
+ */
+export function currentScreen(): ScreenSize {
+  const long = Math.max(window.screen?.width ?? 0, window.screen?.height ?? 0);
+  const short = Math.min(window.screen?.width ?? 0, window.screen?.height ?? 0);
+  return long > 0 && short > 0
+    ? { width: long, height: short }
+    : { width: 1280, height: 720 };
+}
+
+/**
+ * Si dues pantalles tenen una altra forma: més d'un 2 % de diferència de
+ * proporció. La mida sola no compta: el full s'encongeix o s'amplia sense
+ * deformar-se.
+ */
+export function differentShape(a: ScreenSize, b: ScreenSize): boolean {
+  const ratioA = a.width / a.height;
+  const ratioB = b.width / b.height;
+  return Math.abs(ratioA - ratioB) / ratioB > 0.02;
+}
+
+/**
  * Crea la configuració d'una pàgina.
  *
  * @param size - Mida de pàgina (un paper o FULLSCREEN)
- * @param orientation - Orientació (landscape, portrait)
+ * @param orientation - Orientació del paper (la pantalla sencera és sempre apaïsada)
+ * @param screen - Amb la pantalla sencera, la pantalla desada al document
  * @returns El format, amb les dimensions útils en píxels d'impressió
  */
 export function createPageFormat(
   size: PageSize,
   orientation: PageOrientation,
+  screen?: ScreenSize,
 ): PageFormat {
   let baseDimensions: PageDimensions;
 
   if (size === "FULLSCREEN") {
-    const screenW = window.screen.width;
-    const screenH = window.screen.height;
-    // Les dimensions de pantalla ja reflecteixen l'orientació física
-    // Usem max/min per garantir landscape=horitzontal, portrait=vertical
-    const maxDim = Math.max(screenW, screenH);
-    const minDim = Math.min(screenW, screenH);
-    const dimensions: PageDimensions =
-      orientation === "landscape"
-        ? { width: maxDim, height: minDim }
-        : { width: minDim, height: maxDim };
-    return { size, orientation, dimensions };
+    // La pantalla sencera és **sempre apaïsada**: és per mirar el document a
+    // pantalla completa, i als mòbils i a les tauletes es mira girat. És la
+    // pantalla desada al document (on es va encendre) o, si no en porta, la
+    // d'ara
+    const { width, height } = screen ?? currentScreen();
+    return {
+      size,
+      orientation: "landscape",
+      dimensions: { width, height },
+    };
   } else {
     // Les mides del paper, menys els marges, en píxels d'impressió
     const paperDimensions = PAPER_DIMENSIONS_MM[size];

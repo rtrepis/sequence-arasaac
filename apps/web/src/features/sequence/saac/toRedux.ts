@@ -68,6 +68,7 @@ export const PAGE_KEYS = [
   "sheets",
   "common",
   "licenceOn",
+  "screen",
 ] as const;
 // `placements` és el nom que tenien els blocs a les fases 1–3: es llegeix i
 // no es torna a escriure
@@ -387,6 +388,9 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
       pageSize: document.page.size,
       orientation: document.page.orientation,
       direction: document.page.direction,
+      // La pantalla només val amb la pantalla sencera
+      ...(document.page.size === "FULLSCREEN" &&
+        document.page.screen && { screen: document.page.screen }),
     },
     ...(pages && { pages }),
     ...(document.styles && { styles: document.styles.map(namedStyleFromV3) }),

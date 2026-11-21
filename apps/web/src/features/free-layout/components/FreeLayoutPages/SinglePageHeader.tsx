@@ -22,7 +22,7 @@ interface SinglePageHeaderProps {
  * sempre): la mateixa que la de les altres pàgines, perquè des de l'inici es
  * puguin afegir pàgines, passar-la a blocs o afegir-hi seqüències. Qualsevol
  * d'aquestes accions fa explícita la pàgina (`explicitPages`). A sota del
- * full, a l'escriptori, «Afegeix una pàgina», com a les pàgines del document.
+ * full, «Afegeix una pàgina», com a les pàgines del document.
  */
 const SinglePageHeader = ({
   slot,
@@ -35,7 +35,7 @@ const SinglePageHeader = ({
 
   if (slot === "footer")
     return (
-      <Box sx={{ "@media print": { display: "none" } }}>
+      <Box sx={{ flexShrink: 0, "@media print": { display: "none" } }}>
         <StyledButton
           color="inherit"
           startIcon={<MdAdd />}
@@ -53,7 +53,7 @@ const SinglePageHeader = ({
     );
 
   return (
-    <Box sx={{ marginBottom: 1 }}>
+    <Box sx={{ marginBottom: 1, flexShrink: 0 }}>
       <PageHeader
         sheetIndex={0}
         sheetCount={1}

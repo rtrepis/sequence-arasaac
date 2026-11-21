@@ -281,6 +281,7 @@ const pictogramToV3 = (
 
 /** Els camps de `page` que són de les pàgines i no es copien com a desconeguts. */
 const PAGES_PAGE_KEYS: readonly string[] = [
+  "screen",
   "layout",
   "sheets",
   "common",
@@ -526,6 +527,9 @@ export const documentToV3 = (
     size: document.layout?.pageSize ?? context.userPage.size,
     orientation: document.layout?.orientation ?? context.userPage.orientation,
     direction: document.layout?.direction ?? context.userPage.direction,
+    // La pantalla on es va encendre la pantalla sencera, i només amb aquesta
+    ...(document.layout?.pageSize === "FULLSCREEN" &&
+      document.layout.screen && { screen: document.layout.screen }),
     sequenceGap: reduxStyle.view.sequenceSpaceBetween,
     // Obsolet, però les versions anteriors el llegeixen (ADR-005)
     layout: "flow",

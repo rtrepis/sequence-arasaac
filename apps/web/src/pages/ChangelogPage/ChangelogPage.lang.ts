@@ -21,6 +21,12 @@ const messages = defineMessages({
     defaultMessage: "Correcció",
     description: "Badge de categoria: correcció d'un error",
   },
+  superseded: {
+    id: "changelog.superseded",
+    defaultMessage: "Superada",
+    description:
+      "Etiqueta d'una notícia que explica com era l'app abans i que ja no és del tot certa",
+  },
   readMore: {
     id: "changelog.readMore",
     defaultMessage: "Llegir més",
