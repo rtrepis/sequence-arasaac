@@ -5,13 +5,15 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/app/store";
 import { DefaultSettings } from "@/types/ui";
-import { PictogramCardDefaults } from "@/types/sequence";
 import {
   buildUserDefaultStyle,
   pictStyleOf,
   resolveDocumentStyle,
   resolveSequenceViews,
 } from "./styleModel";
+import { cardDefaultsOf } from "./pictogramStyle";
+
+export { cardDefaultsOf };
 
 export const selectUserDefaultStyle = createSelector(
   [
@@ -48,20 +50,8 @@ export const selectResolvedSequenceViews = createSelector(
     resolveSequenceViews({ content, viewSettings }, style.view),
 );
 
-/** Els valors de reserva que `PictogramCard` necessita, a partir d'un estil. */
-export const cardDefaultsOf = ({
-  pictSequence,
-  pictApiAra,
-}: DefaultSettings): PictogramCardDefaults => ({
-  numbered: pictSequence.numbered,
-  fitzgerald: pictApiAra.fitzgerald,
-  font: pictSequence.font,
-  numberFont: pictSequence.numberFont,
-  borderIn: pictSequence.borderIn,
-  borderOut: pictSequence.borderOut,
-});
-
+/** L'estil que hereten els pictogrames del document, per a `PictogramCard`. */
 export const selectDocumentCardDefaults = createSelector(
-  [selectDocumentPictStyle],
+  [selectDocumentStyle],
   cardDefaultsOf,
 );

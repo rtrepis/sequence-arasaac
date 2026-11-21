@@ -3681,6 +3681,10 @@
     "message": "El meu estil",
     "description": "Nom de l'estil que «Aplica el meu estil» copia al document. Queda escrit al fitxer com a contingut i no es torna a traduir"
   },
+  "features.sequence.style.myStyleName": {
+    "message": "El meu estil",
+    "description": "Nom de l'estil amb què neix un document nou, que és una còpia del meu estil (style.name del .saac). Queda escrit al fitxer com a contingut i no es torna a traduir"
+  },
   "features.freeLayout.page.modeColumns": {
     "message": "Columnes",
     "description": "Opció de la disposició al menú d'una pàgina: els blocs repartits en columnes"

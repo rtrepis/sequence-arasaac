@@ -27,16 +27,13 @@ const pict = (
   img: {
     searched: { word: "previsualització", bestIdPicts: [6456] },
     selectedId: 6456,
-    settings: {
-      fitzgerald: "#4CAf50",
-      skin: "white",
-      hair: "brown",
-      color: true,
-    },
+    // Sense retocs (solució A del pla dels estils): ho hereta tot
+    settings: {},
+    variants: ["skin", "hair", "color"],
     category: "verb",
   },
   cross: false,
-  settings: { textPosition: "bottom", ...settings },
+  settings: { ...settings },
 });
 
 describe("reduir la lletra d'un pictograma", () => {
@@ -50,9 +47,7 @@ describe("reduir la lletra d'un pictograma", () => {
 
     const [fitted, other] = state(store).document.content[0];
     expect(fitted.settings.font).toEqual({ ...documentFont, size: 0.7 });
-    expect(
-      isPictogramCustomized(fitted, selectDocumentStyle(state(store))),
-    ).toBe(true);
+    expect(isPictogramCustomized(fitted)).toBe(true);
     // Els altres i l'estil del document no es toquen
     expect(other.settings.font).toBeUndefined();
     expect(selectDocumentStyle(state(store)).pictSequence.font).toEqual(
@@ -87,7 +82,7 @@ describe("reduir la lletra de tot el document", () => {
     const style = selectDocumentStyle(state(store));
     expect(style.pictSequence.font).toEqual({ ...before, size: 0.8 });
     state(store).document.content[0].forEach((p: PictSequence) =>
-      expect(isPictogramCustomized(p, style)).toBe(false),
+      expect(isPictogramCustomized(p)).toBe(false),
     );
     expect(state(store).style.undoSnackbar).toMatchObject({
       source: "fitTextDocument",

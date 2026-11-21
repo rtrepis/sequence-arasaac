@@ -12,10 +12,10 @@ import type {
   SequenceViewSettings,
   TextPlacement,
 } from "@/types/document";
-import type { Font, Sequence } from "@/types/sequence";
+import type { Font } from "@/types/sequence";
 import { mergeDeep } from "@features/sequence/saac/cascade";
 import { DEFAULT_FITZGERALD_CATEGORY_COLORS } from "@features/sequence/saac/fitzgerald";
-import { deepEqual, followStyle } from "@features/sequence/style/styleModel";
+import { deepEqual } from "@features/sequence/style/styleModel";
 
 /** L'estil amb nom que fa servir el bloc, si en fa servir cap que existeixi. */
 export const namedStyleOf = (
@@ -113,27 +113,6 @@ export const styleWithNamed = (
             }
           : style.fitzgeraldColors,
       };
-
-/**
- * Els pictogrames d'una seqüència tal com es veuen en un bloc amb estil amb
- * nom: el que heretaven de l'estil del document passa a ser el de l'estil amb
- * nom, i els retocs de cada pictograma es conserven (la mateixa regla que
- * canviar l'estil del document, `followStyle`). No toca la seqüència: en torna
- * una còpia, o la mateixa si el bloc no en fa servir cap.
- */
-export const blockSequence = (
-  pictograms: Sequence,
-  documentStyle: SequenceStyle,
-  named: NamedStyle | undefined,
-): Sequence => {
-  if (named === undefined) return pictograms;
-  const to = styleWithNamed(documentStyle, named);
-  return pictograms.map((pict) => {
-    const copy = JSON.parse(JSON.stringify(pict)) as typeof pict;
-    followStyle(copy, documentStyle, to);
-    return copy;
-  });
-};
 
 /**
  * La clau amb què es mesura la targeta d'una seqüència en un bloc: la

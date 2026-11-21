@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Hair, PictApiAraSettings, Skin } from "../../../types/sequence";
+import type { PictogramVariant } from "@features/sequence/saac/types";
 import {
   DEFAULT_FITZGERALD_CATEGORY_COLORS,
   FITZGERALD_NONE_COLOR,
@@ -89,6 +90,17 @@ export const extractPictCategory = (
 // Extreu les settings d'aparença de les dades brutes de l'API ARASAAC. El color
 // de Fitzgerald és el de la categoria a l'estil del document; sense categoria,
 // el dels que no en tenen (abans hi havia un taronja fix, `#FFCD94`).
+// Quines variants admet un pictograma d'ARASAAC: el color, sempre; la pell i el
+// cabell, només si ARASAAC diu que en té
+export const extractPictVariants = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any,
+): PictogramVariant[] => [
+  ...(data?.skin ? (["skin"] as const) : []),
+  ...(data?.hair ? (["hair"] as const) : []),
+  "color",
+];
+
 export const extractPictSettings = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any,

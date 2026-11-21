@@ -7,6 +7,11 @@
 // només s'escriu quan l'usuari desa.
 import type { DocumentSAAC, SequenceStyle } from "@/types/document";
 import { parseSaacFile } from "@features/sequence/style/saacFile";
+import { resolveDocumentStyle } from "@features/sequence/style/styleModel";
+import {
+  cardDefaultsOf,
+  pictogramFromLegacy,
+} from "@features/sequence/style/pictogramStyle";
 import { isPlainObject } from "./cascade";
 import { FITZGERALD_NONE_COLOR, isFitzgeraldCategory } from "./fitzgerald";
 import {
@@ -629,6 +634,18 @@ export const legacyDocumentToV3 = (
         fitzgerald: FITZGERALD_NONE_COLOR,
       },
     };
+
+  // Els pictogrames antics porten l'estil copiat: es queden només amb els
+  // seus retocs, com els d'ara (solució A del pla dels estils). Sense posició
+  // del text, no se'n pintava cap: és el retoc «sense text» (E3)
+  const inherited = cardDefaultsOf(
+    resolveDocumentStyle(document, context.userDefault),
+  );
+  kept.forEach((key) => {
+    document.content[key] = document.content[key].map((pict) =>
+      pictogramFromLegacy(pict, inherited),
+    );
+  });
 
   // Identificadors deterministes: el mateix fitxer antic dona sempre el mateix
   // document, i no poden coincidir amb els aleatoris (`p_` + 8 caràcters)

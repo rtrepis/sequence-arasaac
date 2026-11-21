@@ -11,7 +11,6 @@ import { buildUserDefaultStyle } from "@features/sequence/style/styleModel";
 import { createAppStore } from "@/app/store";
 import {
   TEXT_BLOCK_DEFAULTS,
-  blockSequence,
   blockViewRetouch,
   cardMeasureKey,
   cardSizeOf,
@@ -26,6 +25,10 @@ import {
   resolveTextBlockStyle,
   styleWithNamed,
 } from "./blockStyle";
+import {
+  cardDefaultsOf,
+  resolvePictogram,
+} from "@features/sequence/style/pictogramStyle";
 
 // L'aspecte d'un bloc: document → seqüència → estil amb nom → bloc
 // (`blockStyle.ts`).
@@ -137,33 +140,25 @@ describe("les targetes d'un bloc amb estil amb nom (R10)", () => {
     expect(styleWithNamed(DOCUMENT, undefined)).toBe(DOCUMENT);
   });
 
-  it("el que els pictogrames heretaven segueix l'estil amb nom; els retocs, no", () => {
+  it("el que els pictogrames hereten ve de l'estil amb nom; els retocs, no", () => {
     const pictograms = sequenceFixture(2).map((pict) => ({
       ...pict,
-      settings: {
-        ...pict.settings,
-        textPosition: DOCUMENT.pictSequence.textPosition,
-      },
-      img: {
-        ...pict.img,
-        settings: { ...pict.img.settings, color: DOCUMENT.pictApiAra.color },
-      },
+      img: { ...pict.img, variants: ["color" as const] },
     }));
     // El segon té la posició del text retocada
     pictograms[1].settings.textPosition =
-      DOCUMENT.pictSequence.textPosition === "bottom" ? "top" : "bottom";
+      BIG_TEXT.pictSequence.textPosition === "bottom" ? "top" : "bottom";
     const retouched = pictograms[1].settings.textPosition;
 
-    const result = blockSequence(pictograms, DOCUMENT, named);
-
-    expect(result[0].settings.textPosition).toBe("top");
-    expect(result[0].img.settings.color).toBe(BIG_TEXT.pictApiAra.color);
-    expect(result[1].settings.textPosition).toBe(retouched);
-    // No toca la seqüència del document
-    expect(pictograms[0].settings.textPosition).toBe(
-      DOCUMENT.pictSequence.textPosition,
+    // Sense còpies: la targeta resol amb l'estil amb nom (solució A)
+    const defaults = cardDefaultsOf(styleWithNamed(DOCUMENT, named));
+    const [plain, own] = pictograms.map((pict) =>
+      resolvePictogram(pict, defaults),
     );
-    expect(blockSequence(pictograms, DOCUMENT, undefined)).toBe(pictograms);
+
+    expect(plain.settings.textPosition).toBe("top");
+    expect(plain.img.settings.color).toBe(BIG_TEXT.pictApiAra.color);
+    expect(own.settings.textPosition).toBe(retouched);
   });
 
   it("es mesura per seqüència i estil, i si no hi és, la de la seqüència", () => {

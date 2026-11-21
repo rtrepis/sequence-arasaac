@@ -50,8 +50,17 @@ export interface DraftMeta {
   durableKind: DurableKind | null;
 }
 
+/**
+ * Com guarden els pictogrames l'estil. `"retouches"`: només els seus retocs
+ * (solució A del pla dels estils). Els esborranys d'abans no porten el camp i
+ * tenen l'estil copiat a cada pictograma: es llegeixen un sol cop amb la
+ * conversió, i el desat següent ja els escriu amb la marca.
+ */
+export const DRAFT_PICTOGRAM_MODEL = "retouches";
+
 export interface DocumentDraft extends DraftMeta {
   document: DocumentSAAC;
+  pictogramModel?: typeof DRAFT_PICTOGRAM_MODEL;
   /**
    * Format de pàgina i ajustos globals de la vista (mida, orientació, direcció,
    * separació entre seqüències, autor). Van **al costat** del document i mai a
@@ -257,7 +266,12 @@ export const saveDraft = async (
   if (!db) return "error";
 
   const { document: skeleton, images } = externalizeImages(document);
-  const draft: DocumentDraft = { document: skeleton, ...meta, viewSettings };
+  const draft: DocumentDraft = {
+    document: skeleton,
+    pictogramModel: DRAFT_PICTOGRAM_MODEL,
+    ...meta,
+    viewSettings,
+  };
 
   let isConflict = false;
 

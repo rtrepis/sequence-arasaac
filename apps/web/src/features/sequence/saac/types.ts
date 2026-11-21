@@ -59,6 +59,8 @@ export interface V3View {
 
 /** Estil complet: el del document i el d'un fitxer d'estil. */
 export interface V3Style {
+  /** El nom de l'estil del qual surt el del document (opcional) */
+  name?: string;
   pictogram: V3PictogramStyle;
   card: V3CardStyle;
   view: V3View;

@@ -3,6 +3,7 @@ import { useIntl } from "react-intl";
 import usePictogramUrl from "../../features/pictogram/hooks/usePictogramUrl";
 import {
   Border,
+  Font,
   PictogramCardDefaults,
   PictSequence,
 } from "../../types/sequence";
@@ -18,7 +19,7 @@ import { EMPTY_PICTOGRAM_URL } from "@features/pictogram/api/arasaacClient";
 // Amb reserva: si el dispositiu no té la font del document, sans-serif i no
 // la serif per defecte del navegador (vegeu `fontAvailability.ts`)
 import { fontStack } from "@features/sequence/style/styleModel";
-import { mergeDeep } from "@features/sequence/saac/cascade";
+import { resolvePictogram } from "@features/sequence/style/pictogramStyle";
 
 interface PictogramCardProps {
   pictogram: PictSequence;
@@ -29,24 +30,7 @@ interface PictogramCardProps {
 }
 
 const PictogramCard = ({
-  pictogram: {
-    indexSequence,
-    img: {
-      selectedId,
-      settings: { skin, fitzgerald, hair, color },
-      searched: { word },
-      url,
-    },
-    settings: {
-      font: pictFont,
-      numberFont: pictNumberFont,
-      textPosition,
-      borderIn: pictBorderIn,
-      borderOut: pictBorderOut,
-    },
-    text: customText,
-    cross,
-  },
+  pictogram,
   view,
   defaults,
   variant,
@@ -55,31 +39,40 @@ const PictogramCard = ({
   const { buildPictogramUrl } = usePictogramUrl();
   const intl = useIntl();
 
+  // La cascada sencera (fonament 03, «Resoldre»): el pictograma només porta
+  // els seus retocs, i la resta és de l'estil que li toca (`defaults`). El
+  // Fitzgerald és el del retoc o el de la seva categoria
+  const {
+    indexSequence,
+    img: {
+      selectedId,
+      searched: { word },
+      url,
+    },
+    text: customText,
+    cross,
+  } = pictogram;
+  const { settings: resolved, img } = resolvePictogram(pictogram, defaults);
+  const resolvedImage = img.settings;
+  const textPosition = resolved.textPosition;
+
   const text = customText ? customText : word;
 
-  // La cascada (`features/sequence/saac/cascade.ts`): el que retoca el
-  // pictograma, propietat a propietat, sobre l'estil del document. Un
-  // pictograma sense Fitzgerald pren el dels que no tenen categoria (C11)
-  const fitzgeraldColor = fitzgerald ?? defaults.fitzgerald;
-
   const borderIn: Border = fitzgeraldToBorder(
-    fitzgeraldColor,
-    mergeDeep(defaults.borderIn, pictBorderIn),
+    resolvedImage.fitzgerald,
+    resolved.borderIn as Border,
   );
 
   const borderOut: Border = fitzgeraldToBorder(
-    fitzgeraldColor,
-    mergeDeep(defaults.borderOut, pictBorderOut),
+    resolvedImage.fitzgerald,
+    resolved.borderOut as Border,
   );
 
   const pictSize = size?.pictSize ?? 1;
   const printPageRatio = size?.scale ?? 1;
-  const font = mergeDeep(defaults.font, pictFont);
+  const font = resolved.font as Font;
   // Tipografia dels números: per-pictograma → per defecte → tipografia del text
-  const numberFont = mergeDeep(
-    defaults.numberFont ?? defaults.font,
-    pictNumberFont,
-  );
+  const numberFont = resolved.numberFont as Font;
 
   // Imatge personalitzada de l'usuari (les URLs blob són temporals i s'ignoren)
   const customImageUrl = url && !url.startsWith("blob:") ? url : undefined;
@@ -91,7 +84,13 @@ const PictogramCard = ({
   // booleà, perquè en canviar-la (un altre pictograma, un altre color) es
   // torni a provar
   const imageUrl =
-    customImageUrl ?? buildPictogramUrl(selectedId, skin, hair, color);
+    customImageUrl ??
+    buildPictogramUrl(
+      selectedId,
+      resolvedImage.skin,
+      resolvedImage.hair,
+      resolvedImage.color,
+    );
   const [failedUrl, setFailedUrl] = useState<string | undefined>(undefined);
 
   const textFontSize = 20 * font.size * printPageRatio * pictSize;

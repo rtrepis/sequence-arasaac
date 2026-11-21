@@ -28,7 +28,7 @@ mou a `plans/fets/`.
 
 | Document | Estat | Per continuar |
 |---|---|---|
-| `plans/PLA-estils.md` | 🟢 **Pla d'execució escrit, codi per començar** (2026-11-21). L'estil va amb la seqüència i el bloc (un sol estil per bloc, reassignable), la seqüència té nom, la Galeria d'estils, la pantalla d'edició nova al mòbil, i el que ha heretat del mode lliure. Pendent D23 (l'escriptori), després de l'esbós. B37 | §11, l'encàrrec del pas 2 (el pas 1, els fonaments i l'ADR-006, és fet). §10 mana sobre §0–§8 i substitueix §7 |
+| `plans/PLA-estils.md` | 🟢 **En curs** (2026-11-21): passos 1 (fonaments i ADR-006) i 2 (la solució A i D1) fets. L'estil va amb la seqüència i el bloc (un sol estil per bloc, reassignable), la seqüència té nom, la Galeria d'estils, la pantalla d'edició nova al mòbil, i el que ha heretat del mode lliure. Pendent D23 (l'escriptori), després de l'esbós. B37 | §12, l'encàrrec del pas 4 (el format i el model de la seqüència); el pas 3 (l'estudi) pot anar en paral·lel. §10 mana sobre §0–§8 i substitueix §7 |
 | `plans/PLA-noticies.md` | 🟡 **Fases 1, 2 i 4 fetes** (2026-11-20). La N-2 és aturada pel pla dels estils. Oberta D5 | §11 |
 | `plans/fets/PLA-mode-lliure.md` | ✅ **Tancat** (2026-11-21), fet fins al pas 8. L'estil dels blocs i el pas 8 → `PLA-estils.md` §8.5; els blocs d'imatge → B38 | — |
 | `plans/fets/PLA-vista-mobil.md` | ✅ **Tancat** (2026-11-21), fet fins a la fase 6. Les proves en dispositius → P2; la notícia → N-3 | — |

@@ -19,10 +19,7 @@ import {
   usePictogramActions,
   type PictogramActionKey,
 } from "@components/utils/MouseActionList/usePictogramActions";
-import {
-  selectDocumentCardDefaults,
-  selectDocumentStyle,
-} from "@features/sequence/style/styleSelectors";
+import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
 import { isPictogramCustomized } from "@features/sequence/style/pictogramStyle";
 import { cardMarks, customizedMark } from "./PictEditModal.styled";
 import TextOverflowWarning from "./TextOverflowWarning";
@@ -60,10 +57,9 @@ const PictEditModal = ({
   const defaults: PictogramCardDefaults = useAppSelector(
     selectDocumentCardDefaults,
   );
-  const documentStyle = useAppSelector(selectDocumentStyle);
   // Té retocs propis? Ho diuen la marca de la targeta, el seu nom accessible i
   // el menú contextual, que llavors ofereix «Restableix l'estil»
-  const customized = isPictogramCustomized(pictogram, documentStyle);
+  const customized = isPictogramCustomized(pictogram);
   // El mateix, però del formulari obert, que encara no s'ha desat
   const [formCustomized, setFormCustomized] = useState(customized);
   // «Restableix l'estil» triat al menú del diàleg: el fa el formulari
@@ -101,7 +97,8 @@ const PictEditModal = ({
 
   // El text s'edita damunt de la targeta allà on la targeta el pinta: a dalt
   // o a baix. Sense text visible, no hi ha on editar-lo (queda el diàleg)
-  const { textPosition } = pictogram.settings;
+  // La posició resolta: sense retoc, la de l'estil
+  const textPosition = pictogram.settings.textPosition ?? defaults.textPosition;
   const textEditPosition =
     textPosition === "top" || textPosition === "bottom"
       ? textPosition

@@ -10,13 +10,11 @@ import {
   selectDocumentCardDefaults,
   selectDocumentStyle,
 } from "@features/sequence/style/styleSelectors";
-import { pictStyleOf } from "@features/sequence/style/styleModel";
 import {
   selectDocumentContent,
   selectNamedStyles,
 } from "../store/freeLayoutThunks";
 import {
-  blockSequence,
   cardMeasureKey,
   namedStyleOf,
   styleWithNamed,
@@ -56,10 +54,10 @@ export const useBlockLooks = (): ((
       const look: BlockLook = named
         ? {
             measureKey,
-            pictograms: blockSequence(pictograms, documentStyle, named),
-            defaults: cardDefaultsOf(
-              pictStyleOf(styleWithNamed(documentStyle, named)),
-            ),
+            // Els pictogrames només porten els seus retocs: la resta la
+            // prenen de l'estil amb nom, sense còpies (solució A)
+            pictograms,
+            defaults: cardDefaultsOf(styleWithNamed(documentStyle, named)),
           }
         : { measureKey, pictograms, defaults };
       cache.set(measureKey, look);

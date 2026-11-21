@@ -180,16 +180,12 @@ describe("migració dels formats antics", () => {
               expect(now.pictogram.hair).toBe(old.hair);
             if (old.color !== undefined)
               expect(now.pictogram.color).toBe(old.color);
-            // I Redux continua sabent quines opcions admet
+            // I Redux continua sabent quines opcions admet (abans ho deia que
+            // en portés el valor; ara, `variants`)
             const loaded = sortedPicts(document.content[s])[p];
-            expect(Object.keys(loaded.img.settings).sort()).toEqual(
-              Object.keys(pict.img.settings)
-                .filter((k) => pict.img.settings[k as "skin"] !== undefined)
-                .concat(
-                  pict.img.settings.fitzgerald === undefined
-                    ? ["fitzgerald"]
-                    : [],
-                )
+            expect([...(loaded.img.variants ?? [])].sort()).toEqual(
+              (["skin", "hair", "color"] as const)
+                .filter((k) => pict.img.settings[k] !== undefined)
                 .sort(),
             );
           }

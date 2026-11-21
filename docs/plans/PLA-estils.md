@@ -1,8 +1,8 @@
 # Pla: els estils, sense sorpreses
 
 > **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**, i **pla d'execució
-> escrit el 2026-11-21 (§10)**. Pas 1 (fonaments) fet; cap codi: es continua pel pas 2 de §10.3,
-> amb l'encàrrec de §11.
+> escrit el 2026-11-21 (§10)**. Passos 1 (fonaments) i 2 (solució A i D1, §3.5) fets: es continua
+> pel pas 4 de §10.3, amb l'encàrrec de §12 (el pas 3, l'estudi, pot anar en paral·lel).
 
 > **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
 >
@@ -369,6 +369,62 @@ del fonament 03 (§2.3 i §4) aplicada també a Redux, no només al fitxer.
 - Un esborrany vell (fixture d'IndexedDB) es llegeix sense marques falses.
 - Les captures dels e2e de la vista no canvien (amb la precaució de §13 del pla del mode lliure: en
   aquest entorn ja no coincidien abans).
+
+### 3.5 Com s'ha fet (pas 2, 2026-11-21)
+
+> El que el codi d'avui ha obligat a afinar respecte de §3.2 i §3.3. Cap d'aquests punts no canvia
+> cap decisió ni el format del fitxer.
+
+- **Quines variants admet un pictograma** (pell, cabell, color): abans ho deia que el pictograma
+  en portés el valor copiat. Amb només retocs, això ja no serveix, i Redux té un camp nou,
+  `img.variants` (el mateix que `image.variants` del `.saac`). Sense el camp (un pictograma
+  d'abans), es dedueix com abans, del que porta (`variantsOf`).
+- **Tot viu a `features/sequence/style/pictogramStyle.ts`**: `resolvePictogram` (la cascada que fa
+  servir la targeta; `PictogramCardDefaults` porta ara la posició del text, la pell, el cabell, el
+  color i els colors de Fitzgerald), `stripInherited` (treu el que és igual al que heretaria),
+  `pictogramFromLegacy` (el mateix, amb «sense posició» → `"none"`, E3), `isPictogramCustomized`
+  (té retocs?) i `resetPictogramStyle` (els buida).
+- **El formulari d'edició** ensenya els valors resolts i, en desar, escriu la diferència amb el que
+  hereta (`stripInherited`). Cobreix «només escriu el que es toca»: el que no es toca és igual al
+  que hereta.
+- **El vocabulari personal** (D5) només deixa un retoc si canvia alguna cosa respecte de l'estil:
+  una paraula del vocabulari amb la pell de l'estil no encén la marca.
+- **`followStyle` i `blockSequence` se'n van**: canviar l'estil del document ja no toca cap
+  pictograma, i un bloc amb estil amb nom pinta els pictogrames tal com són amb els valors de
+  l'estil amb nom (`cardDefaultsOf(styleWithNamed(…))`).
+- **«Aplica a tots»** (`pictStyleAppliedToAll`) esborra la propietat dels retocs en lloc d'escriure-hi
+  el valor nou.
+- **El núvol no passa per `serialize.ts`** (§3.3 deia que sí): `saveDocumentThunk` envia el
+  `documentState` de Redux tal com és, i l'API i la lectura del núvol (el lector dels formats antics)
+  esperen l'estil copiat. Per no canviar el contracte de l'API, en desar s'hi envien els pictogrames
+  amb l'estil resolt (`documentToLegacyPictograms`) i el que torna es redueix als retocs
+  (`documentFromLegacyPictograms`). Els comptes estan apagats; quan tornin, és aquí.
+- **Els fitxers antics** (2.1.0, `sequence`, esquema 2) passen per `pictogramFromLegacy` abans de
+  `documentToV3`. Les deu fixtures antigues continuen donant la mateixa targeta.
+- **L'esborrany** porta `pictogramModel: "retouches"`. Un esborrany sense la marca es converteix en
+  obrir-lo (`restoreDraftDocumentThunk`) amb l'estil del document en aquell moment, i el desat
+  següent ja el reescriu amb la marca: no es converteix mai dues vegades.
+- **D1, quan neix el document**: les preferències es llegeixen del navegador en arrencar, i el
+  document nou en rep la còpia (`NewDocumentStyleSync`, `documentStyleAdopted`) quan s'ha resolt
+  l'esborrany, com la disposició. També en reben un esborrany d'abans sense estil propi (amb el meu
+  estil d'ara: no hi ha manera de saber el de quan es va fer, §3.3) i cada document que es comença
+  de nou. **Queda obert**: amb els comptes tornats, si les preferències del compte arriben després
+  que el document hagi nascut, el document es queda amb les del navegador. Cal mirar-ho quan es
+  tornin a encendre (B33).
+- **`style.name`** es llegeix i s'escriu ja en aquest pas (Redux: `styleName`), perquè D1 el
+  necessita; la resta de camps del pas 4 (`sequences[].title`, `sequences[].namedStyle`) no s'han
+  tocat. Clau nova: `features.sequence.style.myStyleName`, en els cinc idiomes.
+- **«Desa el document»** (`ModalDownload.tsx`) ja no hi escriu l'estil (el document el té des que
+  neix), però continua escrivint-hi la pàgina i l'autor, que segueixen les preferències fins que es
+  desa (fonament 03, §7).
+- **Proves**: `features/sequence/style/pictogramStyle.test.ts` (les de §3.4). La fixture 15, escrita
+  a mà, no porta `variants` ni `alternatives`, i l'app els escriu explícits (com abans): d'aquella
+  es comparen els retocs; les 16–19 fan el viatge idèntic.
+- **e2e** (Playwright, `draft-restore`, `pictogram-customized`, `card-text-edit`, `saac-v3`,
+  `pictogram-actions`, `download-and-status`, `document-style-panel`): 32 de 35 passen. Les tres que
+  fallen (`pictogram-customized` «la marca no surt a la vista…», `saac-v3` «un document antic ho
+  diu…» i «un estil obert com a document…») ja fallaven igual sense aquests canvis, en aquest entorn.
+  Les captures de la previsualització d'`document-style-panel` coincideixen abans i després.
 
 ---
 
@@ -806,7 +862,8 @@ neix amb una còpia d'El meu estil i no el segueix). Fonament 06: §1 i §1.2 am
 ADR nova que substitueixi la 24 en el que toca als estils de bloc.
 Esquema `saac-v3.schema.json`. **Cap codi.**
 
-**Pas 2 — Solució A (§3) i D1.** Tal com és a §3: E1, E2, E3, E12, E14, la lectura dels
+**Pas 2 — Solució A (§3) i D1.** ✅ **Fet** (2026-11-21): com s'ha fet i què ha calgut afinar, a
+§3.5. Tal com és a §3: E1, E2, E3, E12, E14, la lectura dels
 esborranys vells amb versió. Amb D1, el document nou porta l'estil copiat des que neix (treu E4, E6
 i E16), amb `style.name` = «El meu estil». Proves de §3.4.
 
@@ -915,6 +972,8 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 
 ## 11. Encàrrec per obrir la sessió següent (pas 2: la solució A)
 
+> **✅ Fet** (2026-11-21): vegeu §3.5.
+
 > Branca: **`estils-seqüencia-i-edicio`**. Es porta a `master` amb una PR **en acabar el pla**, no
 > pas a pas (decisió de l'usuari, 2026-11-21). `master` està protegida (PR i GitGuardian).
 >
@@ -938,3 +997,18 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 > han de fer el viatge d'anada i tornada iguals; textos a `packages/i18n/messages/` en els cinc
 > idiomes; cap color fora de `palette.ts`. En acabar, marca el pas 2 com a fet a §10.3 i actualitza
 > `docs/README.md` en el mateix commit.
+
+## 12. Encàrrec per obrir la sessió següent (pas 4: el format i el model de la seqüència)
+
+> Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
+>
+> La tasca és el **pas 4 de §10.3**: llegir i escriure `sequences[].title` i
+> `sequences[].namedStyle` (`toRedux.ts`, `serialize.ts`, `shared-types`; `style.name` ja hi és,
+> §3.5), la cascada amb el nivell de la seqüència i el bloc reassignat que el substitueix
+> (`resolveStyle`, `cardMeasureKey`, i a Redux `styleWithNamed` i `cardDefaultsOf`, que ara ja són
+> el lloc on es resol: la targeta no rep còpies), E13 (`styles` sense orfes en desar), la fixture
+> 20 i el viatge d'anada i tornada de totes les fixtures. **Sense canvi de pantalla.** Llegeix
+> primer §10.2, §3.5, el fonament 03 (§4) i el fonament 06 (§1 i §1.2).
+>
+> Normes: les de §11. No facis res de la galeria (pas 5) ni de la vista (pas 6). En acabar, marca
+> el pas 4 com a fet a §10.3 i actualitza `docs/README.md` en el mateix commit.

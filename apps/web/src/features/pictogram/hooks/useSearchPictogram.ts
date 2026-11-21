@@ -12,19 +12,19 @@ import {
   fetchPictogramData,
   extractPictCategory,
   extractPictSettings,
+  extractPictVariants,
 } from "../api/arasaacClient";
 import {
+  selectDocumentCardDefaults,
   selectDocumentPictStyle,
   selectDocumentStyle,
 } from "@features/sequence/style/styleSelectors";
+import { stripInherited } from "@features/sequence/style/pictogramStyle";
 
 const useSearchPictogram = () => {
-  const {
-    textPosition,
-    borderIn: defaultBorderIn,
-    borderOut: defaultBorderOut,
-    // Els pictogrames nous reben l'estil del document on entren
-  } = useAppSelector((state) => selectDocumentPictStyle(state).pictSequence);
+  // L'estil que hereten els pictogrames nous: no se'ls copia (solució A), però
+  // el vocabulari personal només hi deixa un retoc si en canvia alguna cosa
+  const inherited = useAppSelector(selectDocumentCardDefaults);
 
   const getActiveSaacAmountPict = (state) =>
     state.document.content[state.document.activeSAAC].length;
@@ -75,31 +75,28 @@ const useSearchPictogram = () => {
         }
 
         if (!isUpdate) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const baseSettings = extractPictSettings(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (data as any[])[0],
-            defaultSettingsPictApiAra,
-            categoryColors,
+          const newPict: PictSequence = stripInherited(
+            {
+              indexSequence: amountSequence + indexSequence,
+              img: {
+                searched: { word: wordAraSaac, bestIdPicts: findBestPict },
+                selectedId: profile?.selectedId ?? findBestPict[0],
+                // Només el vocabulari personal hi pot posar retocs (D5)
+                settings: { ...profile?.overrides },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                variants: extractPictVariants((data as any[])[0]),
+                ...(profile?.customImageUrl
+                  ? { url: profile.customImageUrl }
+                  : {}),
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                category: extractPictCategory((data as any[])[0]),
+              },
+              settings: {},
+              ...(typeof word === "object" && { text: word.text }),
+              cross: false,
+            },
+            inherited,
           );
-          const newPict: PictSequence = {
-            indexSequence: amountSequence + indexSequence,
-            img: {
-              searched: { word: wordAraSaac, bestIdPicts: findBestPict },
-              selectedId: profile?.selectedId ?? findBestPict[0],
-              settings: { ...baseSettings, ...profile?.overrides },
-              ...(profile?.customImageUrl ? { url: profile.customImageUrl } : {}),
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              category: extractPictCategory((data as any[])[0]),
-            },
-            settings: {
-              textPosition,
-              borderIn: defaultBorderIn,
-              borderOut: defaultBorderOut,
-            },
-            ...(typeof word === "object" && { text: word.text }),
-            cross: false,
-          };
           dispatch(addPictogramActionCreator(newPict));
           dispatch(sortSequenceActionCreator());
         }
@@ -114,43 +111,31 @@ const useSearchPictogram = () => {
         }
 
         if (!isUpdate) {
-          const toPictNotFound: PictSequence = {
-            indexSequence: amountSequence + indexSequence,
-            img: {
-              searched: { word: wordAraSaac, bestIdPicts: [0] },
-              selectedId: profile?.selectedId ?? 0,
-              // Sense categoria: el color dels que no en tenen, de l'estil
-              settings: {
-                fitzgerald: defaultSettingsPictApiAra.fitzgerald,
-                ...profile?.overrides,
+          // Sense categoria: el color dels que no en tenen, de l'estil
+          const toPictNotFound: PictSequence = stripInherited(
+            {
+              indexSequence: amountSequence + indexSequence,
+              img: {
+                searched: { word: wordAraSaac, bestIdPicts: [0] },
+                selectedId: profile?.selectedId ?? 0,
+                settings: { ...profile?.overrides },
+                ...(profile?.customImageUrl
+                  ? { url: profile.customImageUrl }
+                  : {}),
+                category: "none",
               },
-              ...(profile?.customImageUrl ? { url: profile.customImageUrl } : {}),
-              category: "none",
+              settings: {},
+              ...(typeof word === "object" && { text: word.text }),
+              cross: false,
             },
-            settings: {
-              textPosition,
-              borderIn: defaultBorderIn,
-              borderOut: defaultBorderOut,
-            },
-            ...(typeof word === "object" && { text: word.text }),
-            cross: false,
-          };
+            inherited,
+          );
           dispatch(addPictogramActionCreator(toPictNotFound));
           dispatch(sortSequenceActionCreator());
         }
       }
     },
-    [
-      locale,
-      dispatch,
-      amountSequence,
-      defaultSettingsPictApiAra,
-      categoryColors,
-      wordProfiles,
-      textPosition,
-      defaultBorderIn,
-      defaultBorderOut,
-    ],
+    [locale, dispatch, amountSequence, wordProfiles, inherited],
   );
 
   // Obté les settings d'un pictograma per ID i actualitza la seqüència.
@@ -166,10 +151,13 @@ const useSearchPictogram = () => {
 
         const category = extractPictCategory(data);
 
+        // Al document, cap estil: un altre pictograma no porta retocs, i
+        // n'hereta les variants que admet. Al formulari, els valors resolts
         dispatch(
           settingsPictApiAraActionCreator({
             indexSequence: indexSequence,
-            settings: findSettings,
+            settings: {},
+            variants: extractPictVariants(data),
             category,
           }),
         );

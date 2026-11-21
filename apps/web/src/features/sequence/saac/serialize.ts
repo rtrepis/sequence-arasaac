@@ -1,8 +1,8 @@
 // De Redux al fitxer v3: «Desa el document» i «Desa l'estil en un fitxer…».
 //
-// Redux conserva la forma de sempre (valors sencers a cada pictograma); aquí es
-// tradueix al contracte del fitxer, amb `diffStyle` a cada nivell perquè els
-// retocs siguin mínims. Vegeu `docs/fonaments/06-compatibilitat-i-dades.md`.
+// Redux porta només els retocs de cada pictograma, com el fitxer (solució A del
+// pla dels estils); aquí es tradueix al contracte del fitxer, amb `diffStyle` a
+// cada nivell perquè un retoc igual a l'estil deixi de ser-ho. Vegeu `docs/fonaments/06-compatibilitat-i-dades.md`.
 import { version as appVersion } from "../../../../package.json";
 import type {
   DocumentPages,
@@ -16,6 +16,7 @@ import type {
 import type { PictSequence } from "@/types/sequence";
 import type { PageOrientation, PageSize, SequenceDirection } from "@/types/ui";
 import { resolveDocumentStyle } from "@features/sequence/style/styleModel";
+import { variantsOf } from "@features/sequence/style/pictogramStyle";
 import { diffDeep, diffStyle } from "./cascade";
 import {
   DEFAULT_FITZGERALD_CATEGORY_COLORS,
@@ -41,7 +42,6 @@ import {
   V3Sheet,
   V3Style,
   V3View,
-  PICTOGRAM_VARIANTS,
 } from "./types";
 
 /** Pàgina per defecte de qui desa: la que hereta un document sense pàgina. */
@@ -175,7 +175,7 @@ const imageOf = (
   pict: PictSequence,
   addAsset: (url: string) => string,
 ): V3Image => {
-  const { url, selectedId, searched, settings } = pict.img;
+  const { url, selectedId, searched } = pict.img;
   // Les URL `blob:` són temporals: la targeta tampoc no les pinta
   if (url && !url.startsWith("blob:"))
     return {
@@ -193,9 +193,8 @@ const imageOf = (
         alternatives: searched.bestIdPicts,
       }),
       ...(searched.keyWords && { keywords: searched.keyWords }),
-      // Redux diu quines opcions admet el pictograma perquè només hi posa les
-      // que ARASAAC li dona
-      variants: PICTOGRAM_VARIANTS.filter((key) => settings[key] !== undefined),
+      // Les opcions que admet el pictograma, les que ARASAAC li dona
+      variants: variantsOf(pict.img),
     };
 
   return { source: "none" };
@@ -229,8 +228,8 @@ const pictogramOverride = (
 
   const { settings } = pict;
   const card = diffDeep(style.card, {
-    // Sense posició, la targeta no pintava el text: és «none»
-    textPosition: settings.textPosition ?? "none",
+    // Sense posició, l'hereta; «sense text» és el retoc «none» (E3)
+    textPosition: settings.textPosition,
     font: settings.font,
     numberFont: settings.numberFont,
     borderIn: settings.borderIn,
@@ -557,7 +556,11 @@ export const documentToV3 = (
       updatedAt: context.now,
     }),
     page,
-    style: { ...extra.style, ...style },
+    style: {
+      ...extra.style,
+      ...(document.styleName !== undefined && { name: document.styleName }),
+      ...style,
+    },
     sequences,
     ...(namedStyles.length > 0 && {
       styles: namedStyles.map(namedStyleToV3),

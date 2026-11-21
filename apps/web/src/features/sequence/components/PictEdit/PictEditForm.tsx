@@ -30,13 +30,12 @@ import SettingCardBoolean from "@components/SettingsCards/SettingCardBoolean/Set
 import React from "react";
 import SettingCardBorder from "@components/SettingsCards/SettingCardBorder/SettingCardBorder";
 import { MdSettingsBackupRestore, MdTune } from "react-icons/md";
-import {
-  selectDocumentPictStyle,
-  selectDocumentStyle,
-} from "@features/sequence/style/styleSelectors";
+import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
 import {
   isPictogramCustomized,
   resetPictogramStyle,
+  resolvePictogram,
+  stripInherited,
 } from "@features/sequence/style/pictogramStyle";
 import { APP_TOUCH_TARGET_MIN } from "@/style/appShape";
 import {
@@ -99,23 +98,19 @@ const PictEditForm = ({
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const {
-    pictSequence: {
-      textPosition: defaultTextPosition,
-      borderIn: defaultBorderIn,
-      borderOut: defaultBorderOut,
-      numbered: defaultNumbered,
-      font: defaultFont,
-      numberFont: defaultNumberFont,
-    },
-    pictApiAra: {
-      skin: defaultSkin,
-      hair: defaultHair,
-      color: defaultColor,
-      fitzgerald: noCategoryColor,
-    },
-    // L'estil del document, no les preferències de qui l'edita
-  } = useAppSelector(selectDocumentPictStyle);
-  const documentStyle = useAppSelector(selectDocumentStyle);
+    textPosition: defaultTextPosition,
+    borderIn: defaultBorderIn,
+    borderOut: defaultBorderOut,
+    skin: defaultSkin,
+    hair: defaultHair,
+    color: defaultColor,
+    // L'estil que hereta el pictograma (el del document), no les preferències
+    // de qui l'edita
+  } = useAppSelector(selectDocumentCardDefaults);
+  const inherited = useAppSelector(selectDocumentCardDefaults);
+  // El formulari ensenya els valors resolts: el retoc si n'hi ha, i si no el
+  // de l'estil. En desar, només s'escriu el que es diferencia (solució A)
+  const resolvedStart = resolvePictogram(pictogram, inherited);
 
   // «Restableix» és una edició més del formulari: es desa en tancar-lo, com
   // tota la resta (fonament 03, §5). També treu la lletra, que el formulari no
@@ -137,13 +132,14 @@ const PictEditForm = ({
   const initialHair = pictogram.img.settings.hair ?? defaultHair;
   const [hair, setHair] = useState(initialHair);
 
+  // Pell, cabell i color només hi són si el pictograma els admet
   const initialSearch = {
     selectedId: pictogram.img.selectedId,
-    fitzgerald: pictogram.img.settings.fitzgerald,
+    fitzgerald: resolvedStart.img.settings.fitzgerald,
     url: pictogram.img.url,
-    color: pictogram.img.settings.color,
-    hair: pictogram.img.settings.hair,
-    skin: pictogram.img.settings.skin,
+    color: resolvedStart.img.settings.color,
+    hair: resolvedStart.img.settings.hair,
+    skin: resolvedStart.img.settings.skin,
     category: pictogram.img.category,
   };
   const [search, setSearch] = useState(initialSearch);
@@ -158,21 +154,14 @@ const PictEditForm = ({
   const initialColor = pictogram.img.settings.color ?? defaultColor;
   const [color, setColor] = useState(initialColor);
 
-  const initialBorderIn = pictogram.settings.borderIn ?? defaultBorderIn;
+  const initialBorderIn = resolvedStart.settings.borderIn ?? defaultBorderIn;
   const [borderIn, setBorderIn] = useState(initialBorderIn);
 
-  const initialBorderOut = pictogram.settings.borderOut ?? defaultBorderOut;
+  const initialBorderOut = resolvedStart.settings.borderOut ?? defaultBorderOut;
   const [borderOut, setBorderOut] = useState(initialBorderOut);
 
-  // Valors per defecte globals per al fallback de PictogramCard
-  const defaults: PictogramCardDefaults = {
-    numbered: defaultNumbered,
-    fitzgerald: noCategoryColor,
-    font: defaultFont,
-    numberFont: defaultNumberFont,
-    borderIn,
-    borderOut,
-  };
+  // La previsualització hereta el mateix estil que el pictograma
+  const defaults: PictogramCardDefaults = inherited;
 
   // Pell, cabell i color només si el pictograma els admet: ARASAAC no en dona
   // a tots, i el que no admet no s'ha d'escriure
@@ -190,19 +179,25 @@ const PictEditForm = ({
       ? { textPosition, borderIn, borderOut }
       : { ...settings, textPosition, borderIn, borderOut };
 
-  const pictogramGuide: PictSequence = {
-    ...pictogram,
-    img: {
-      ...pictogram.img,
-      url,
-      selectedId,
-      settings: variantSettings,
-      category,
+  // Les variants surten del pictograma triat al formulari (`search`), que pot
+  // ser un altre; i només es queden els retocs
+  const pictogramGuide: PictSequence = stripInherited(
+    {
+      ...pictogram,
+      img: {
+        ...pictogram.img,
+        url,
+        selectedId,
+        settings: variantSettings,
+        variants: undefined,
+        category,
+      },
+      settings: resetSettings(pictogram.settings),
+      text,
+      cross,
     },
-    settings: resetSettings(pictogram.settings),
-    text,
-    cross,
-  };
+    inherited,
+  );
 
   // El pictograma tal com és ara, per a l'hora de desar. En una ref i no a les
   // dependències: desar-lo el canvia, i tornaria a disparar el desat
@@ -214,21 +209,25 @@ const PictEditForm = ({
     // Canviar un pictograma només en canvia el que s'ha tocat: l'identificador,
     // els camps del fitxer i els retocs que aquest formulari no edita (la
     // lletra) es conserven
-    const newPictogram: PictSequence = {
-      ...pictogram,
-      indexSequence: pictogram.indexSequence,
-      img: {
-        ...pictogram.img,
-        searched: pictogram.img.searched,
-        url,
-        selectedId,
-        settings: variantSettings,
-        category,
+    const newPictogram: PictSequence = stripInherited(
+      {
+        ...pictogram,
+        indexSequence: pictogram.indexSequence,
+        img: {
+          ...pictogram.img,
+          searched: pictogram.img.searched,
+          url,
+          selectedId,
+          settings: variantSettings,
+          variants: undefined,
+          category,
+        },
+        settings: resetSettings(pictogram.settings),
+        text,
+        cross,
       },
-      settings: resetSettings(pictogram.settings),
-      text,
-      cross,
-    };
+      inherited,
+    );
 
     dispatch(updatePictSequenceActionCreator(newPictogram));
     // `variantSettings` i `resetSettings` es tornen a crear a cada render: les
@@ -252,14 +251,15 @@ const PictEditForm = ({
     url,
     borderIn,
     borderOut,
+    inherited,
   ]);
 
   useEffect(() => {
     if (submit) handlerSubmit();
   }, [submit, handlerSubmit]);
 
-  // Té retocs propis respecte de l'estil del document?
-  const isCustomized = isPictogramCustomized(pictogramGuide, documentStyle);
+  // Té retocs propis?
+  const isCustomized = isPictogramCustomized(pictogramGuide);
   useEffect(() => {
     onCustomizedChange?.(isCustomized);
   }, [isCustomized, onCustomizedChange]);
@@ -278,10 +278,14 @@ const PictEditForm = ({
       fitzgerald,
       resetDone,
     });
-    const reset = resetPictogramStyle(pictogramGuide, documentStyle);
-    setTextPosition(reset.settings.textPosition ?? defaultTextPosition);
-    setBorderIn(reset.settings.borderIn ?? defaultBorderIn);
-    setBorderOut(reset.settings.borderOut ?? defaultBorderOut);
+    // Sense retocs, el formulari ensenya el que hereta
+    const reset = resolvePictogram(
+      resetPictogramStyle(pictogramGuide),
+      inherited,
+    );
+    setTextPosition(defaultTextPosition);
+    setBorderIn(defaultBorderIn);
+    setBorderOut(defaultBorderOut);
     setSkin(defaultSkin);
     setHair(defaultHair);
     setColor(defaultColor);
@@ -508,7 +512,7 @@ const PictEditForm = ({
                 />
               </li>
 
-              {isColorizable && pictogram.settings.textPosition && (
+              {isColorizable && textPosition && (
                 <li>
                   <SettingCard
                     setting="textPosition"
@@ -526,7 +530,7 @@ const PictEditForm = ({
                 rowGap={2}
                 columnGap={2}
               >
-                {!isColorizable && pictogram.settings.textPosition && (
+                {!isColorizable && textPosition && (
                   <li>
                     <SettingCard
                       setting="textPosition"

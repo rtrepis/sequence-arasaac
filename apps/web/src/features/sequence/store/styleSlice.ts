@@ -260,7 +260,7 @@ export const resetPictogramStyleThunk =
       (pict) => pict.indexSequence === indexSequence,
     );
     if (!pictogram) return;
-    const reset = resetPictogramStyle(pictogram, selectDocumentStyle(state));
+    const reset = resetPictogramStyle(pictogram);
     dispatch(
       undoableStyleChangeThunk(
         () => updatePictSequenceActionCreator(reset),
@@ -282,15 +282,12 @@ export const resetSequencePictogramsThunk =
     const state = getState();
     const pictograms = state.document.content[sequenceKey];
     if (!pictograms) return;
-    const style = selectDocumentStyle(state);
     dispatch(
       undoableStyleChangeThunk(
         () =>
           sequencePictogramsReplacedActionCreator({
             key: sequenceKey,
-            pictograms: pictograms.map((pict) =>
-              resetPictogramStyle(pict, style),
-            ),
+            pictograms: pictograms.map(resetPictogramStyle),
           }),
         "resetSequence",
       ),

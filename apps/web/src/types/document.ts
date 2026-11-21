@@ -100,10 +100,16 @@ export interface DocumentSAAC {
   author?: string;
   /**
    * Estil dels pictogrames. Sense valor, el document encara no en té de propi i
-   * **hereta l'estil per defecte** de l'usuari: és el cas d'un document nou fins
-   * que es desa o se n'edita l'estil (`docs/fonaments/03-model-contingut-estil.md`).
+   * **hereta l'estil per defecte** de l'usuari: només ho és un document nou
+   * mentre neix, que de seguida en rep una còpia (pla dels estils, D1; vegeu
+   * `docs/fonaments/03-model-contingut-estil.md`, §7).
    */
   defaultSettings?: DefaultSettings;
+  /**
+   * El nom de l'estil del document: el de l'estil del qual surt («El meu
+   * estil»…). És contingut, en l'idioma de qui l'ha aplicat (`style.name`)
+   */
+  styleName?: string;
   /** Mides i espaiats de l'estil. Sense valor, hereta com `defaultSettings`. */
   styleView?: SequenceStyleView;
   /**

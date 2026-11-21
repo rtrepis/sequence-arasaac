@@ -952,6 +952,7 @@
   "features.sequence.style.changed.myStyleBlock": "Il tuo stile è stato applicato al blocco.",
   "features.freeLayout.applyMyStyle": "Applica il mio stile",
   "features.freeLayout.myStyleName": "Il mio stile",
+  "features.sequence.style.myStyleName": "Il mio stile",
   "features.freeLayout.page.modeColumns": "Colonne",
   "features.freeLayout.page.modeRows": "Righe",
   "features.freeLayout.page.modeFree": "Libero",

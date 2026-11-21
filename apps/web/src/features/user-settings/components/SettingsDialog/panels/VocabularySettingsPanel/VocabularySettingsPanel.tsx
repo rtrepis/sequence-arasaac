@@ -163,6 +163,10 @@ const VocabularySettingsPanel = (): React.ReactElement => {
 
   const defaults: PictogramCardDefaults = {
     numbered: defaultSettings.pictSequence.numbered,
+    textPosition: defaultSettings.pictSequence.textPosition,
+    skin: defaultSettings.pictApiAra.skin,
+    hair: defaultSettings.pictApiAra.hair,
+    color: defaultSettings.pictApiAra.color,
     font: defaultSettings.pictSequence.font,
     numberFont: defaultSettings.pictSequence.numberFont,
     borderIn: defaultSettings.pictSequence.borderIn,
