@@ -230,6 +230,11 @@ Propostes que encara no són tasques: cal pensar-les i decidir-les abans de posa
   opció «L'estil del document» (D2, D8); fora «Aplica el meu estil» i «Actualitza amb el meu
   estil» dels menús; els estils de l'app són fixos (D7). Obertes Q1–Q3 (pàgines simples, canviar
   un document sencer, blocs comuns).
+- **2026-11-21 (revisió)**: l'estil va amb la **seqüència** (des de l'edició, que també li posa
+  nom) i amb el **bloc** (a la vista, només aquell bloc). La pantalla d'edició canvia al mòbil: el
+  nom de la seqüència editable a dalt, la cerca a baix i el «+» que obre un panell. Es poden
+  carregar estils, no només desar-los. Detall a §8 de `docs/PLA-estils.md`; el pla d'execució és la
+  feina següent (§9).
 
 ## Gravetat alta
 

@@ -1,6 +1,7 @@
 # Pla: els estils, sense sorpreses
 
-> **Estat**: decisions preses (2026-11-20), amb tres qüestions obertes (§6, Q1–Q3). Cap codi fet.
+> **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**: l'estil va amb la
+> seqüència i el bloc, i la pantalla d'edició canvia. Falta el pla d'execució (§9). Cap codi fet.
 >
 > **Quan llegir-lo**: abans de tocar res que creï, apliqui, restableixi o compari l'estil d'un
 > pictograma, d'un bloc o del document; abans de tocar el panell «El meu estil», els menús «⋯» de
@@ -505,3 +506,128 @@ Preses el 2026-11-20.
 Normes de cada pas: `npm run typecheck` net i tests passant; textos a `packages/i18n/messages/`
 en els cinc idiomes; cap color fora de `palette.ts`; `ConfirmDialog` i `AppDialog` per a les
 capes; tota acció acaba amb un missatge.
+
+---
+
+## 8. Revisió del 2026-11-21: l'estil va amb la seqüència i el bloc, i la pantalla d'edició nova
+
+> **Estat**: idees de l'usuari, recollides tal com les ha explicat. **Encara no és un pla
+> d'execució**: el pla es fa a la sessió següent (vegeu l'encàrrec, §9). Aquesta revisió **mana
+> sobre D8 i sobre Q1–Q3** (§6) allà on es contradiuen.
+
+### 8.1 Els estils van amb la seqüència i amb el bloc
+
+Paraules de l'usuari: «Els estils aniran amb les seqüències/bloc».
+
+- **Des de la pantalla d'edició** es podrà **aplicar un estil a una seqüència** (de la Galeria
+  d'estils) i **posar-li nom**. Quan la seqüència es posa a la vista, el bloc **ensenya aquest
+  nom**.
+- **A la vista**, cada bloc ensenya **el nom de l'estil** que fa servir, i es pot canviar. El
+  canvi és **només d'aquell bloc**. Exemple de l'usuari: la mateixa seqüència en dos blocs, un dels
+  quals és comú; al comú es pot canviar la mida i l'espai (ja es fa, és la distribució del bloc) i
+  també l'estil, i **només canvia aquell bloc**, no tots dos.
+- Per tant, la cascada passa a ser: **document → estil de la seqüència → estil del bloc →
+  pictograma**. L'estil de la seqüència és el que reben tots els seus blocs mentre no en triïn un
+  altre.
+
+**Què canvia respecte del que hi havia decidit**:
+
+- **D8** («només a un bloc») s'amplia: també a la **seqüència**, des de l'edició.
+- **Fonament 03, §4**: avui el nivell «Seqüència» porta **només `view`** (la distribució). Ara
+  portarà també estil (o una referència a un estil amb nom). Cal revisar el fonament i el format
+  (fonament 06, §1; `docs/schema/saac-v3.schema.json`, `sequences[].style`) abans del codi.
+- **Q1** (pàgines simples sense menú de bloc) queda **resolta en gran part**: l'estil es tria a la
+  seqüència, des de l'edició, i una pàgina simple el pinta.
+- **Q2** (canviar l'estil d'un document sencer) **continua oberta**: ara són tants clics com
+  seqüències, no com blocs.
+- **E11** (l'edició i la vista no ensenyen el mateix) **millora**: l'edició ensenya l'estil de la
+  seqüència. Continua passant quan un bloc en tria un altre.
+- **D4** (l'estil del document visible): cal tornar-hi. Si cada seqüència ensenya el seu estil,
+  potser l'estil del document només és el de partida de les seqüències noves.
+
+**El nom de la seqüència ja existeix al format**: `sequences[].title` és a l'esquema v3
+(`saac-v3.schema.json`, i fonament 06 §1), però **Redux no el llegeix** (`toRedux.ts` només llegeix
+`meta.title`, el títol del document). Cal comprovar si es conserva com a camp desconegut en desar,
+o si avui es perd.
+
+**Preguntes per al pla**:
+
+- Si una seqüència no té nom, què ensenya el bloc a la vista? «Seqüència 1», com la pestanya?
+- El nom de la seqüència **s'imprimeix** o és només per a qui edita? (Avui els rètols són blocs de
+  text a part.)
+- Canviar l'estil d'una seqüència a l'edició: què passa amb els blocs que ja n'havien triat un
+  altre a la vista? Proposta per discutir: es queden amb el seu, perquè és un retoc del bloc.
+- Com s'ensenya a la vista que un bloc té un estil **diferent** del de la seva seqüència?
+
+### 8.2 Carregar estils
+
+Paraules de l'usuari: «com que donem la possibilitat de guardar, també de càrrega».
+
+- Avui El meu estil es pot **desar** en un `.saacstyle` i **carregar** d'un fitxer
+  (panell «El meu estil»), i obrir un `.saacstyle` pregunta «Fes-lo el meu estil».
+- La idea nova: que des de la **Galeria d'estils** també es pugui **carregar un estil d'un fitxer**
+  i aplicar-lo a una seqüència o a un bloc, i que un estil de la galeria es pugui **desar** en un
+  fitxer.
+- **Preguntes**: un estil carregat a la galeria, s'hi queda (com un tercer grup, «Carregats») o
+  només s'aplica un cop? On es guarda (preferències del navegador; amb comptes, al núvol, B33)?
+
+### 8.3 La pantalla d'edició nova, al mòbil
+
+L'usuari l'explica **de moment per al mòbil**; l'escriptori, més endavant.
+
+| Zona | Avui | Nou |
+|---|---|---|
+| **Dalt** | Les pestanyes de les seqüències (`TabsSequences`), amb els botons d'afegir i treure seqüència | **«Seqüència 1»**, el nom de la seqüència activa, **editable** al mateix lloc |
+| **Dalt** (a decidir) | Les pestanyes diuen quantes seqüències hi ha | Una manera de saber **quantes seqüències** té el document i de **passar d'una a l'altra** |
+| **Dalt** (a decidir) | — | Una manera de **triar l'estil de la seqüència** (la Galeria d'estils, §8.1) |
+| **Baix** | El camp de cerca de pictogrames és a dalt (`EditSequencesPage`, `PictogramAmount`, `MagicSearch`) | **El camp de cerca baixa a baix**, amb la **cerca màgica** (`MagicSearch`) al costat de la icona de l'estat del document (`DocumentStatusFab`) |
+| **Baix a l'esquerra** | — | El **«+»** de sempre, que obre un **panell de baix** per **afegir un pictograma** o **una seqüència** |
+
+**Peces d'avui que hi entren** (per al pla): `apps/web/src/pages/EditSequencesPage/`,
+`components/TabsSequences/`, `components/PictogramAmount/`,
+`features/pictogram/components/MagicSearch/`, `features/sequence/components/DocumentStatusFab/` i
+`components/AppBottomSheet/` (l'únic panell de baix de l'app; no és modal, i cap funció pot
+dependre d'arribar a sencer).
+
+**Preguntes per al pla**:
+
+- El panell del «+» és `AppBottomSheet` (que avui és el dels ajustos de la vista) o un menú? Què
+  hi ha exactament: afegir un pictograma (buit? per cerca?), afegir una seqüència… i res més?
+- Com es passa de seqüència: lliscar, fletxes, un selector amb la llista, punts com un carrusel?
+  (La vista al mòbil ja passa de pàgina lliscant: convé que s'hi assembli.)
+- Amb el camp de cerca a baix, què passa quan surt el teclat del mòbil?
+- On van «Treu aquesta seqüència» i les accions que avui són a les pestanyes?
+- L'escriptori: es queda com ara fins que l'usuari l'expliqui, o es fa el mateix?
+- Abans del codi: **un esbós** com els de la vista al mòbil (`docs/esbos-vista-mobil.html`) i les
+  captures d'avui per comparar.
+
+### 8.4 Lligams amb altres plans
+
+- **`docs/PLA-mode-lliure.md`**, §13: «Pendent del pas 8» (les pàgines simples sense menú de
+  seqüència) i el pla següent «Estil i contingut dels blocs» (lletra, color del text i fons d'un
+  bloc com a retoc del bloc). Cal decidir si aquest pla l'absorbeix o el deixa per després.
+- **`docs/PLA-vista-mobil.md`**: el patró del panell de baix i el lliscar per passar de pàgina.
+- **`docs/PLA-noticies.md`**: la N-2 continua aturada; amb aquesta revisió, canvia encara més.
+- **`docs/BACKLOG-ux.md`**: B37 (aquest pla), C1 (botons que només es diuen amb el hover; al
+  mòbil no n'hi ha), C28 (girar el mòbil tanca el diàleg d'edició).
+
+## 9. Encàrrec per obrir la sessió següent
+
+> Branca: **`estils-seqüencia-i-edicio`**, sortida de `master` després del PR #310 (2026-11-21).
+>
+> La tasca d'aquesta sessió és **fer el pla d'execució**, no el codi. Llegeix primer aquest
+> document sencer, en especial **§8** (la revisió del 2026-11-21, que mana sobre D8 i Q1–Q3) i §3
+> (la solució A, que ja està decidida i és el primer pas de codi). Després el fonament 03 (§1, §4,
+> §5, §6 i §7), el fonament 06 (§1, el format de les seqüències), la decisió 24 de l'ADR-005,
+> `docs/PLA-vista-mobil.md` (el patró del panell de baix) i, abans de dissenyar res,
+> `docs/estandards/configuracions.md`, `navegacio.md` i `capes-flotants.md`.
+>
+> Fes-me **les preguntes de §8.1, §8.2 i §8.3 abans d'escriure el pla**, d'una en una o en grups
+> petits. Després escriu el pla: l'ordre dels passos (la solució A primer), què canvia al
+> fonament i al format a cada pas, l'esbós de la pantalla d'edició al mòbil i les proves.
+>
+> Normes: `npm run typecheck` net i tests passant; textos a `packages/i18n/messages/` en els cinc
+> idiomes; cap color fora de `palette.ts`; si canvia el format `.saac` o `.saacstyle`, esquema,
+> fixture i fonament 06. Entorn: cal `npm ci` a l'arrel; per a Playwright,
+> `launchOptions.executablePath: "/opt/pw-browsers/chromium"`. **`master` està protegida**: s'hi
+> arriba amb una PR i el control de GitGuardian.
