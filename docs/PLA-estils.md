@@ -2,6 +2,16 @@
 
 > **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**: l'estil va amb la
 > seqüència i el bloc, i la pantalla d'edició canvia. Falta el pla d'execució (§9). Cap codi fet.
+
+> **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
+>
+> - **§0–§7** són l'anàlisi i les decisions del 2026-11-20. **Continuen valent** l'inventari (§1),
+>   les troballes E1–E18 (§2), **la solució A** (§3) i les decisions D1, D3, D5, D6 i D7.
+> - **§8** és la revisió del 2026-11-21 i **mana sobre tot el que la contradigui**. En concret,
+>   **queden superats**: D8 i §4.3 («només a un bloc»), Q1, la fila de D4, i l'**ordre dels passos de
+>   §7**, que el pla d'execució (§9) ha de substituir.
+> - Les seccions superades porten la marca **«⚠️ Superat per §8»**. No s'esborren perquè expliquen
+>   d'on venen les decisions.
 >
 > **Quan llegir-lo**: abans de tocar res que creï, apliqui, restableixi o compari l'estil d'un
 > pictograma, d'un bloc o del document; abans de tocar el panell «El meu estil», els menús «⋯» de
@@ -388,6 +398,9 @@ del fonament 03 (§2.3 i §4) aplicada també a Redux, no només al fitxer.
 
 ### 4.3 On s'aplica i com — D2 i D8, decidit: només a un bloc
 
+> **⚠️ Superat per §8.1**: l'estil també es tria a la **seqüència**, des de l'edició. El que
+> segueix val per a l'estil d'un bloc a la vista.
+
 - **Un estil s'aplica sempre a un bloc, i a un de sol.** No hi ha abast de pàgina ni de document.
   L'estil del document no el canvia cap acció de la interfície: neix amb El meu estil (D1) i és
   seu.
@@ -456,16 +469,19 @@ Preses el 2026-11-20.
 | D1 | Quan deixa un document nou de seguir El meu estil? | **Mai el segueix**: neix amb una còpia. Treu E4, E6 i E16 |
 | D2 | «Aplica» i «Actualitza» acaben igual a la pantalla | **Una sola acció**, «Tria un estil…», i cap grup invisible. Fora «Actualitza» |
 | D3 | Aplicar un estil ofereix treure els retocs? | **Sí**: el snackbar diu quants n'hi ha i ofereix «Treu els retocs», dient que canvien a tots els blocs on surt la seqüència |
-| D4 | Com es fa visible l'estil del document? | **Una fila «Estil» al nivell Document de la columna, amb el nom** (camp `style.name`, §5). Amb D8, la fila **només informa**: vegeu Q2 |
+| D4 | Com es fa visible l'estil del document? **⚠️ A revisar (§8.1)** | **Una fila «Estil» al nivell Document de la columna, amb el nom** (camp `style.name`, §5). Amb D8, la fila **només informa**: vegeu Q2 |
 | D5 | El color del vocabulari personal encén la marca «personalitzat»? | **Sí, i ho diu**: el tooltip i el nom accessible de la marca diuen «color del teu vocabulari» |
 | D6 | El nom de la col·lecció | **Galeria d'estils** (§4.1) |
 | D7 | Un estil de l'app es pot retocar? | **No**: és fix. «Fes-lo el meu estil» per partir-ne i retocar-lo a la configuració. Mai porta distribució ni pàgina |
-| D8 | On s'aplica un estil | **Només a un bloc**, d'un en un. Ni pàgina ni document |
+| D8 | On s'aplica un estil | ~~**Només a un bloc**, d'un en un. Ni pàgina ni document~~ **⚠️ Superat per §8.1**: a la seqüència (des de l'edició) i al bloc (a la vista, només aquell bloc). Ni pàgina ni document |
 | — | «Treu l'estil de bloc» | **Passa a ser la primera opció de la galeria**, «L'estil del document» |
 | E18 | Confirmació abans d'aplicar | **No**: n'hi ha prou amb Desfés |
 | D9 | La notícia N-2 | **Cal canviar-ne el títol**: amb D8, l'estil ja no va «a tot el document d'un cop». Es reescriu al pas 9 |
 
 ### Qüestions obertes que surten de D8
+
+> **⚠️ Superat en part per §8.1**: Q1 queda gairebé resolta (l'estil es tria a la seqüència); Q2
+> continua oberta; Q3 continua valent.
 
 - **Q1 — Les pàgines simples no tenen blocs amb menú.** Un document fet abans del mode de pàgines,
   o qualsevol pàgina «Simple», no té cap menú «⋯» de bloc. Amb D8, en aquestes pàgines **no es pot
@@ -484,6 +500,9 @@ Preses el 2026-11-20.
   canvia a totes les pàgines.
 
 ## 7. Ordre dels passos
+
+> **⚠️ Superat per §8 i §9**: aquest ordre és d'abans de la revisió. El pla d'execució de la
+> sessió següent el substitueix. Només continua valent que **la solució A va primer**.
 
 1. **Actualitzar el fonament 03** (§1 vocabulari, §5 accions, §6 marca, §7 documents nous) i la
    decisió 24 de l'ADR-005 amb D1–D9, **abans** del codi: mana el fonament. Decidir Q1–Q3.
