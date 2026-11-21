@@ -43,6 +43,9 @@ mou a `plans/fets/`.
 | `estudis/ESTANDARD-capes-flotants.md` | L'estudi darrere de `estandards/capes-flotants.md` (F1–F14). Migració feta | Quan una regla de capes sembla arbitrària o se'n vol canviar una |
 | `estudis/INVENTARI-funcionalitats-des-de-2.0.2.md` | Tot el que l'app fa i no feia a la 2.0.2 | Per explicar la versió a algú de fora |
 | `estudis/NOTICIES-candidates-des-de-2.0.2.md` | Quines funcionalitats són notícia i què no s'hi ha de dir | Abans d'escriure una entrada de `newsItems.ts` |
+| `estudis/ESTUDI-aprimar-arquitectura.md` | Quants dels cinc proveïdors (Vercel, Render, Atlas, Cloudinary, Resend) calen de debò i què costaria treure'n cadascun (A1–A10, E1–E3). Del setembre; recuperat d'una branca no fusionada el 2026-11-21 | Abans de proposar cap canvi d'allotjament o de proveïdor |
+| `estudis/ESTUDI-servidor-propi.md` | Què es pot muntar en una màquina pròpia, què costa i què s'hi perd (S1–S10, H1–H3). Mateix origen | Abans de plantejar qualsevol autoallotjament |
+| `estudis/COMPARATIVA-opcions-infraestructura.md` | El full de decisió: les sis opcions d'infraestructura de costat, amb cost en diners i hores. Resum dels dos anteriors | Per decidir l'allotjament |
 | `estudis/ESTUDI-estils-de-targetes.md` | *Encara no existeix*: el preveu `PLA-estils.md` §4.4 per triar els estils de la galeria | — |
 
 ## Esbossos

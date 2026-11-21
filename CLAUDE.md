@@ -215,6 +215,11 @@ tanca, s'actualitza l'índex en el mateix commit.**
   troballes L1–L8, de les quals L1–L4 estan resoltes i L5–L8 continuen obertes. La primera de
   les que queden és que els avisos d'error i els correus de verificació comparteixen els 100
   correus diaris de Resend.
+- `docs/estudis/ESTUDI-aprimar-arquitectura.md`, `docs/estudis/ESTUDI-servidor-propi.md` i
+  `docs/estudis/COMPARATIVA-opcions-infraestructura.md` (setembre, recuperats el 2026-11-21) estudien
+  quants proveïdors calen de debò, què es podria muntar en un servidor propi i les sis opcions
+  d'infraestructura de costat. **Consultar-los abans de proposar cap canvi d'allotjament o de
+  proveïdor.** Les xifres són de setembre: cal contrastar-les amb `ESTUDI-limits-serveis-gratuits.md`.
 - `docs/plans/fets/PLA-vista-mobil.md` és el pla per a la vista al mòbil: el full sencer a la pantalla i els
   ajustos en un panell de baix (`AppBottomSheet`). **Tancat** (2026-11-21): les proves en
   dispositius de debò són P2 del backlog. Referència del patró del panell de baix.
