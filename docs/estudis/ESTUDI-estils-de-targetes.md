@@ -7,7 +7,8 @@
 > PictoSelector, PictogramAgenda, els manuals de CATEDU) i, fora, programes i guies de comunicació
 > augmentativa i alternativa (Boardmaker, Widgit, PECS, TEACCH, els codis de colors de Fitzgerald i
 > de Goossens, Crain i Elder, les guies per a la discapacitat visual cerebral).
-> **Data**: 2026-11-22. Primera versió. **L'usuari la revisa abans del pas 9** (§6, les decisions).
+> **Data**: 2026-11-22. **Revisat per l'usuari el mateix dia**: les decisions són a §6 (D30–D32 del
+> pla). On el que proposava §3 no coincideix amb el que s'ha decidit, mana §6.
 
 ## Com s'ha fet, i què no diu
 
@@ -71,10 +72,10 @@ a 1, text negre, pell i cabell per defecte).
 
 | # | Nom (proposta) | Forma | Text | Número | Vora exterior | Vora interior | Lletra |
 |---|---|---|---|---|---|---|---|
-| 1 | **Sense vores** | F1 | A baix | No | Cap | Cap | La del document |
-| 2 | **Color de la categoria** | F2 | A baix | No | Cap | Fitzgerald, gruix 6, radi 12 | La del document |
-| 3 | **Per retallar** | F3 | A baix | No | Tinta (negre), gruix 4, radi 4 | Cap | La del document |
-| 4 | **Passos numerats** | F4 | A baix | Sí, a 1,4 | Gris, gruix 2, radi 12 | Cap | La del document |
+| 1 | **Sense vores** | F1 | A baix | No | Cap | Cap | Atkinson Hyperlegible (D31) |
+| 2 | **Color de la categoria** | F2 | A baix | No | Cap | Fitzgerald, gruix 6, radi 12 | Atkinson Hyperlegible (D31) |
+| 3 | **Per retallar** | F3 | A baix | No | Tinta (negre), gruix 4, radi 4 | Cap | Atkinson Hyperlegible (D31) |
+| 4 | **Passos numerats** | F4 | A baix | Sí, a 1,4 | Gris, gruix 2, radi 12 | Cap | Atkinson Hyperlegible (D31) |
 | 5 | **Lletra gran i clara** | F5 | A baix | No | Tinta (negre), gruix 3, radi 8 | Cap | Atkinson Hyperlegible a 1,3 (també el número) |
 | 6 | *Lletra d'escola* (per decidir, §6) | F6 | A dalt | No | Gris, gruix 2, radi 20 | Fitzgerald, gruix 2 | Massallera a 1,6 |
 
@@ -147,25 +148,27 @@ qui triï «Per retallar» i posi el text a dalt s'hi trobarà.
 | N3 | **Fons fosc** (discapacitat visual cerebral) | Algunes guies de CVI | **Descartar**: va contra la regla del full blanc i de la impressió en clar. Les guies no hi estan d'acord, i proposen sobretot pocs colors i separació, que l'estil 5 ja dona |
 | N4 | **Vora discontínua** | Boardmaker, Widgit | **Descartar**: cap font no la fa servir per a res en concret |
 
-## 6. El que l'usuari ha de decidir abans del pas 9
+## 6. Decidit (2026-11-22)
 
-1. **La llista**: els cinc estils de §3 (1–5), o amb algun canvi. Si se'n vol un de menys, el que
-   sobra és «Per retallar» (s'assembla a «Lletra gran i clara»).
-2. **L'estil 6, «Lletra d'escola»**: entra o no. Arguments en contra: la lletra d'escola **depèn de
-   l'idioma** (Massallera és la de Catalunya; Escolar, la de bona part de l'escola en castellà; en
-   anglès, francès i italià no n'hi ha cap a l'app), i un estil és fix (D7). Si entra, cal triar una
-   lletra per a tothom o fer un estil per idioma.
-3. **Els estils que no canvien la lletra**: confirmar que 1–4 prenen la lletra de la base (la del
-   document o la de la seqüència) i no la fixen. És el que proposa §3; demana comprovar al pas 9 que
-   un estil de l'app pot no portar lletra.
-4. **Les majúscules (N1)**: s'apunten al backlog com a feature futura, o es descarten.
-5. **Els noms**, que són provisionals: es fixen amb els textos (pas 12), en els cinc idiomes.
+L'usuari ho va revisar amb les captures de §4. Les decisions passen al pla com a D30–D32.
 
-**Per al pas 9, a més** (no cal decidir-ho, però cal fer-ho): la mostra de la galeria en una caixa
-fixa amb marge (V7), B40 (§4.3), i on viuen els colors dels estils. Avui els valors per defecte de la
-targeta són hexadecimals a `configs/defaultSettingsConfig.ts`; la regla és que cap color no surti de
-`style/palette.ts`, així que la tinta i el gris dels estils 3–6 hi han d'anar com a colors de paper
-(com `printColors`).
+| # | Pregunta | Decisió |
+|---|---|---|
+| 1 | La llista | **Els cinc estils de §3** (1–5): Sense vores, Color de la categoria, Per retallar, Passos numerats i Lletra gran i clara (D30) |
+| 2 | L'estil 6, «Lletra d'escola» | **No entra** (D30). Qui la vulgui la tria a El meu estil |
+| 3 | La lletra dels estils | **Un estil de l'app és tot el que es pot configurar a El meu estil**: complet i fix (D7, confirmada). I **tots porten Atkinson Hyperlegible**, al text i al número (D31). Això substitueix el que proposava §3 («la lletra del document» per als estils 1–4). La diferència és la mida: Lletra gran i clara la porta a 1,3; els altres, a 1 |
+| 4 | Aplicar un estil a una seqüència amb retocs | **Es pregunta** si es volen perdre els retocs dels pictogrames o conservar-los, abans d'aplicar-lo (D32). Substitueix el «Treu els retocs» del snackbar (D3 del pla) |
+| 5 | Les majúscules (N1) | **Al backlog** (B41), fora d'aquesta release |
+| 6 | Els noms | Provisionals; es fixen amb els textos (pas 12) |
+
+**Per al pas 9, a més**: la mostra de la galeria en una caixa fixa amb marge (V7), B40 (§4.3), i on
+viuen els colors dels estils. Avui els valors per defecte de la targeta són hexadecimals a
+`configs/defaultSettingsConfig.ts`; la regla és que cap color no surti de `style/palette.ts`, així que
+la tinta i el gris dels estils hi han d'anar com a colors de paper (com `printColors`).
+
+**A vigilar**: amb la mateixa lletra a tots, «Per retallar» i «Lletra gran i clara» només es
+diferencien en la mida del text (1 i 1,3) i el gruix del contorn (4 i 3). Si a la galeria es veuen
+massa iguals, es pot revisar quan es vegin les mostres al pas 9.
 
 ## 7. Fonts
 

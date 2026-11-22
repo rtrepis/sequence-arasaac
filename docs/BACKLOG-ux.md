@@ -77,6 +77,7 @@ l'entrada.
 |---|---|---|---|
 | B38 | Blocs d'imatge a les pàgines | Idea sense decidir; abans, el pla dels estils (B37) | L |
 | B39 | Retocs d'estil d'un bloc a la columna: lletra, color del text i color de fons | Decidit fora d'aquesta release (D10–D11 de `docs/plans/PLA-estils.md`): un bloc té un sol estil, el de la seqüència o un de reassignat. Si torna, el fons s'imprimeix i toca l'estàndard de colors | M |
+| B41 | El text de la targeta no es pot posar en majúscules | Decidit fora d'aquesta release; demana un camp nou al `.saac` | M |
 | B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
@@ -1483,6 +1484,22 @@ Inconsistència de forma o deute intern, sense un moment concret d'acció equivo
   aquestes vores; qui hi posi el text a dalt s'hi trobarà.
 - **Proposta**: el peu ha de mirar la vora exterior, com la capçalera. Una línia, amb una prova de
   la targeta. Es fa al pas 9 de `docs/plans/PLA-estils.md`.
+
+### B41 — El text de la targeta no es pot posar en majúscules 🔴 Oberta
+
+*(Trobada a l'estudi d'estils de targetes, `docs/estudis/ESTUDI-estils-de-targetes.md` §5 (N1),
+2026-11-22. L'usuari decideix deixar-la per a més endavant.)*
+
+- **Què**: el web d'ARASAAC té un botó per passar el text del pictograma a majúscules, i a l'agenda
+  d'alumnat amb TEA es comença pel text en majúscules i després en minúscules. A l'app, el text
+  surt com s'ha teclejat.
+- **Per què importa**: qui fa primeres lectures ha de reescriure cada paraula a mà, i ho perd en
+  canviar de paraula.
+- **Proposta**: una opció de la targeta (majúscules / com s'escriu) a El meu estil i al pictograma.
+  Demana un camp nou al `.saac` (esquema, fixture, lector que el conservi; opcional, sense pujar
+  `schemaVersion`, fonament 06). Amb aquest camp hi podria haver un estil de l'app de «primeres
+  lectures».
+- **Fora d'aquesta release** (decidit el 2026-11-22).
 
 ### C30 — «Pantalla sencera» i «Pantalla completa» es diuen igual fora del català 🔴 Oberta
 
