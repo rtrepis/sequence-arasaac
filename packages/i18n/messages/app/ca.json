@@ -3781,13 +3781,25 @@
     "message": "Treu els retocs",
     "description": "Botó del snackbar de triar l'estil d'una seqüència: treu els retocs de tots els seus pictogrames"
   },
-  "features.sequence.styleGallery.appStylesEmpty": {
-    "message": "Aviat n'hi haurà.",
-    "description": "Text del grup «Estils de l'app» de la Galeria d'estils mentre encara no n'hi ha cap"
-  },
   "features.sequence.styleGallery.appStylesGroup": {
     "message": "Estils de l'app",
     "description": "Encapçalament del grup de la Galeria d'estils amb els estils que porta l'app"
+  },
+  "features.sequence.styleGallery.appStyle.noBorders": {
+    "message": "Sense vores",
+    "description": "Nom d'un estil de l'app a la Galeria d'estils: el pictograma sol, amb el text a baix, sense cap marc. També s'escriu al document com a nom de l'estil"
+  },
+  "features.sequence.styleGallery.appStyle.categoryColor": {
+    "message": "Color de la categoria",
+    "description": "Nom d'un estil de l'app a la Galeria d'estils: un marc gruixut del color de Fitzgerald de cada paraula. També s'escriu al document"
+  },
+  "features.sequence.styleGallery.appStyle.toCut": {
+    "message": "Per retallar",
+    "description": "Nom d'un estil de l'app a la Galeria d'estils: targetes amb un contorn negre gruixut, per retallar-les (agenda, targetes d'intercanvi). També s'escriu al document"
+  },
+  "features.sequence.styleGallery.appStyle.numberedSteps": {
+    "message": "Passos numerats",
+    "description": "Nom d'un estil de l'app a la Galeria d'estils: cada pictograma amb el seu número, gran, per a seqüències de passos. També s'escriu al document"
   },
   "features.sequence.styleGallery.documentStyle": {
     "message": "L'estil del document",

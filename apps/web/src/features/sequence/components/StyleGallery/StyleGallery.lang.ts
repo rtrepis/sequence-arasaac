@@ -51,11 +51,29 @@ const messages = defineMessages({
     description:
       "Encapçalament del grup de la Galeria d'estils amb els estils que porta l'app",
   },
-  appStylesEmpty: {
-    id: "features.sequence.styleGallery.appStylesEmpty",
-    defaultMessage: "Aviat n'hi haurà.",
+  noBorders: {
+    id: "features.sequence.styleGallery.appStyle.noBorders",
+    defaultMessage: "Sense vores",
     description:
-      "Text del grup «Estils de l'app» de la Galeria d'estils mentre encara no n'hi ha cap",
+      "Nom d'un estil de l'app a la Galeria d'estils: el pictograma sol, amb el text a baix, sense cap marc. També s'escriu al document com a nom de l'estil",
+  },
+  categoryColor: {
+    id: "features.sequence.styleGallery.appStyle.categoryColor",
+    defaultMessage: "Color de la categoria",
+    description:
+      "Nom d'un estil de l'app a la Galeria d'estils: un marc gruixut del color de Fitzgerald de cada paraula. També s'escriu al document",
+  },
+  toCut: {
+    id: "features.sequence.styleGallery.appStyle.toCut",
+    defaultMessage: "Per retallar",
+    description:
+      "Nom d'un estil de l'app a la Galeria d'estils: targetes amb un contorn negre gruixut, per retallar-les (agenda, targetes d'intercanvi). També s'escriu al document",
+  },
+  numberedSteps: {
+    id: "features.sequence.styleGallery.appStyle.numberedSteps",
+    defaultMessage: "Passos numerats",
+    description:
+      "Nom d'un estil de l'app a la Galeria d'estils: cada pictograma amb el seu número, gran, per a seqüències de passos. També s'escriu al document",
   },
   inUse: {
     id: "features.sequence.styleGallery.inUse",

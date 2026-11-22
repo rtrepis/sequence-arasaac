@@ -104,6 +104,71 @@ describe("SequenceHeader", () => {
     });
   });
 
+  it("tria un estil de l'app (pas 9): es copia sencer, amb Atkinson Hyperlegible, i surt marcat", async () => {
+    const store = storeWith20();
+    renderWithProviders(<SequenceHeader sequenceKey={1} />, { store });
+    const openGallery = async () => {
+      await userEvent.click(
+        screen.getByRole("button", { name: "Actions for “Sequence 2”" }),
+      );
+      await userEvent.click(
+        screen.getByRole("menuitem", { name: /Style: .* — Change…/ }),
+      );
+      return screen.getByRole("dialog", { name: /Style gallery/ });
+    };
+
+    // Els quatre estils de l'app (D30), en l'ordre de l'estudi
+    const gallery = await openGallery();
+    const appGroup = within(gallery)
+      .getByText("App styles")
+      .closest("ul") as HTMLElement;
+    expect(
+      within(appGroup)
+        .getAllByRole("button", { name: /^(?!More actions)/ })
+        .map(
+          (button) =>
+            button.querySelector(".MuiListItemText-primary")?.textContent,
+        ),
+    ).toEqual([
+      "No borders",
+      "Category colour",
+      "For cutting out",
+      "Numbered steps",
+    ]);
+
+    await userEvent.click(
+      within(gallery).getByRole("button", { name: /^No borders/ }),
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+    );
+    const { document } = store.getState();
+    const id = document.sequenceStyleIds?.[1];
+    const named = document.styles?.find((style) => style.id === id);
+    // El nom és en l'idioma de qui el tria, i l'estil és complet (D31)
+    expect(named?.name).toBe("No borders");
+    expect(named?.pictSequence).toMatchObject({
+      numbered: false,
+      textPosition: "bottom",
+      font: { family: "Atkinson-Hyperlegible" },
+      numberFont: { family: "Atkinson-Hyperlegible" },
+      borderOut: { size: 0 },
+      borderIn: { size: 0 },
+    });
+    // Els retocs es conserven, i el snackbar ho diu (D32: no es pregunta)
+    expect(store.getState().style.undoSnackbar?.details).toMatchObject({
+      styleName: "No borders",
+      retouched: 1,
+    });
+
+    // Tornant-hi, és el marcat, i no surt com un estil de fora («El d'ara»)
+    const again = await openGallery();
+    const current = within(again).getAllByRole("button", { current: true });
+    expect(current).toHaveLength(1);
+    expect(current[0]).toHaveTextContent("No borders");
+    expect(within(again).queryByText("Current")).not.toBeInTheDocument();
+  });
+
   it("«Carrega d'un fitxer…» aplica l'estil i no el deixa a la galeria (D17)", async () => {
     const store = storeWith20();
     renderWithProviders(<SequenceHeader sequenceKey={1} />, { store });

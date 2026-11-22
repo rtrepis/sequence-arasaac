@@ -927,7 +927,7 @@ mòbil girat (D28). Les accions de
 la graella. Cobreix C1 (cap botó només amb hover) i C28 (girar el mòbil) per a aquesta pantalla.
 
 **Pas 9 — Els estils de l'app a la galeria** (D6, D7), amb el que surti de l'estudi, «Sense vores»
-inclòs. Els noms, traduïts; al document s'hi escriu el nom en l'idioma de qui l'aplica.
+inclòs. Els noms, traduïts; al document s'hi escriu el nom en l'idioma de qui l'aplica. ✅ **Fet** (2026-11-22): vegeu §17.1.
 
 **Pas 10 — L'escriptori** (D23, decidit a D26: la pantalla nova com a vista alternativa durant un
 temps). Queda per decidir (**Q4**): com es passa d'una vista a l'altra (un interruptor a l'edició?
@@ -1368,3 +1368,44 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 >
 > **El pas 9 ha de fer**: els quatre estils amb els valors de §3 de l'estudi; la mostra de la galeria
 > en una caixa fixa amb marge (V7 de l'estudi); B40; i els colors dels estils a `palette.ts`.
+
+### 17.1 Com s'ha fet (pas 9, 2026-11-22)
+
+- **Els quatre estils** (D30) són a `features/sequence/style/appStyles.ts`: `APP_STYLE_KEYS` (l'ordre
+  de la galeria) i `appStyleOf(key, view)`, que en torna l'estil sencer (D31): la targeta de §3 de
+  l'estudi, amb **Atkinson Hyperlegible** al text i al número, i la pell, el cabell, el color i els
+  colors de Fitzgerald d'origen de l'app. La `view` és la de la base, només perquè la mostra es
+  pinti com la resta: en triar-lo no es copia (`namedStyleFrom`).
+- **Els colors** de les vores són a `palette.ts` com a `appStyleBorderColors` (`ink`, que és
+  `printColors.text`, i `grey`). Són contingut: es copien al document en triar l'estil.
+- **La galeria** (`StyleGallery.tsx`) els posa al grup «Estils de l'app», amb «Desa en un fitxer» i
+  «Fes-lo el meu estil». El nom es tradueix (claus `features.sequence.styleGallery.appStyle.*`, als
+  cinc idiomes) i s'escriu al document en l'idioma de qui el tria. Se'n va el text «Aviat n'hi
+  haurà» (`appStylesEmpty`). Si la seqüència o el bloc ja fa servir un estil de l'app, aquest surt
+  **marcat al seu lloc** i no al grup «El d'ara» (es compara el contingut; el nom no compta, perquè
+  pot ser d'un altre idioma).
+- **D32**: triar-lo no pregunta res; els retocs es conserven i el snackbar de D3 ho diu, com ja feia.
+- **La mostra** (V7 de l'estudi) va dins d'una caixa blanca d'amplada fixa (`SAMPLE_BOX_WIDTH`, 96
+  px) amb marge, i sense l'ombra de la graella (`variant="plane"`): a «Sense vores» l'ombra feia de
+  marc. Comprovat amb captures en clar, en fosc i al mòbil (Pixel 7).
+- **B40, resolta**: el peu de la targeta calcula el farciment amb la vora exterior, com la
+  capçalera (`PictogramCard.tsx`).
+- **Proves**: `SequenceHeader.test.tsx` (els quatre estils i l'ordre, triar «Sense vores»: es copia
+  sencer amb Atkinson Hyperlegible, el snackbar diu els retocs que es conserven, i tornant-hi surt
+  marcat) i `PictogramCardPadding.test.tsx` (B40; falla amb el codi d'abans). Typecheck net; web
+  588 proves i i18n 67, verdes.
+
+## 18. Encàrrec per obrir la sessió següent (pas 10: l'escriptori)
+
+> Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
+>
+> La tasca és el **pas 10 de §10.3**: a l'escriptori, la pantalla d'edició nova com a **vista
+> alternativa durant un temps** (D26), al costat de les pestanyes. **Primer cal decidir Q4 amb
+> l'usuari**: com es passa d'una vista a l'altra (un interruptor a l'edició, desat com a
+> preferència d'interfície, que no entra al document?) i quan es retira la vella. Llegeix §10.1
+> (D23, D26), §16.1 (com és la pantalla nova al mòbil) i `docs/estandards/navegacio.md`.
+>
+> Després: els passos 11 (la columna a l'estàndard), 12 (textos: inclou D33, «restablir torna a
+> l'estil de la seqüència») i 13 (la notícia N-2).
+>
+> Normes: les de §11.

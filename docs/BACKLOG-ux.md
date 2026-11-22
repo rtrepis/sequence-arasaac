@@ -68,7 +68,6 @@ l'entrada.
 |---|---|---|---|---|
 | C1 | Botons que només diuen què fan amb el hover | En tauleta no hi ha hover, i la tauleta és el dispositiu habitual en AAC | M | Sí: on es fa lloc a les etiquetes visibles |
 | C28 | Girar el mòbil tanca el diàleg d'edició | Es pot perdre el que s'estava editant, i girar el mòbil és habitual | S | No |
-| B40 | Amb el text a dalt i sense vora interior, la imatge toca la vora de sota | Els estils de l'app del pas 9 fan servir aquestes vores; es resol amb el pas 9 | S | No |
 | C30 | «Pantalla sencera» i «Pantalla completa» es diuen igual fora del català | La notícia de la pantalla sencera ja ho ha de rodejar; com més tard, més textos el citen | S | Sí: el nom de l'interruptor en cada idioma |
 
 ### Més endavant
@@ -1471,7 +1470,7 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.
 
-### B40 — Amb el text a dalt i sense vora interior, la imatge toca la vora de sota 🔴 Oberta
+### B40 — Amb el text a dalt i sense vora interior, la imatge toca la vora de sota ✅ Resolta
 
 *(Trobada a l'estudi d'estils de targetes, `docs/estudis/ESTUDI-estils-de-targetes.md` §4.3,
 2026-11-22.)*
@@ -1484,6 +1483,8 @@ Inconsistència de forma o deute intern, sense un moment concret d'acció equivo
   aquestes vores; qui hi posi el text a dalt s'hi trobarà.
 - **Proposta**: el peu ha de mirar la vora exterior, com la capçalera. Una línia, amb una prova de
   la targeta. Es fa al pas 9 de `docs/plans/PLA-estils.md`.
+- **Resolta** (2026-11-22, pas 9 del pla dels estils): el peu mira la vora exterior. Prova:
+  `PictogramCardPadding.test.tsx`.
 
 ### B41 — El text de la targeta no es pot posar en majúscules 🔴 Oberta
 

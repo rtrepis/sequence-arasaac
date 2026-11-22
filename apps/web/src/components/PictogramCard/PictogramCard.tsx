@@ -187,7 +187,9 @@ const PictogramCard = ({
             textContent(
               textPosition,
               defaults.numbered,
-              borderIn.size,
+              // La vora exterior, com la capçalera: és la que tanca la
+              // targeta, i sense farciment la imatge la tocaria (B40)
+              borderOut.size,
               pictSize,
               printPageRatio,
             )

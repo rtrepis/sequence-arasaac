@@ -5,9 +5,11 @@
 // - **La primera opció** treu l'estil propi: «L'estil del document» per a una
 //   seqüència, «L'estil de la seqüència» per a un bloc (el mateix que «Torna a
 //   l'estil de la seqüència»).
-// - **El meu estil**, i el lloc dels **estils de l'app**, buit fins al pas 9.
+// - **El meu estil**, i els **estils de l'app** (pas 9, `appStyles.ts`).
 // - Cada estil, amb una **mostra**: un pictograma de la seqüència, sense els
-//   seus retocs, pintat amb aquell estil.
+//   seus retocs, pintat amb aquell estil, dins d'una caixa de mida fixa perquè
+//   les mostres sense vora no quedin enganxades ni descasades (V7 de
+//   `docs/estudis/ESTUDI-estils-de-targetes.md`).
 // - A cada estil, «Desa en un fitxer» (D18) i, si no és el meu, «Fes-lo el meu
 //   estil» (D7).
 // - «Carrega d'un fitxer…» aplica l'estil d'un `.saacstyle` (o d'un `.saac`) a
@@ -67,6 +69,8 @@ import {
   resetPictogramStyle,
 } from "@features/sequence/style/pictogramStyle";
 import { resolveDocumentStyle } from "@features/sequence/style/styleModel";
+import { APP_STYLE_KEYS, appStyleOf } from "@features/sequence/style/appStyles";
+import { sheetSurface } from "@/style/palette";
 import {
   selectDocumentStyle,
   selectUserDefaultStyle,
@@ -85,6 +89,12 @@ const SAMPLE_PICTOGRAM_ID = 6009;
 
 /** La mida de la targeta de mostra, respecte de la de la graella */
 const SAMPLE_PICT_SIZE = 0.45;
+
+/**
+ * La caixa de la mostra: la targeta més ampla (182 px a mida 1, amb vora) a la
+ * mida de la mostra, amb marge. Totes fan el mateix, amb vora o sense
+ */
+const SAMPLE_BOX_WIDTH = 96;
 
 /**
  * A qui es tria l'estil: una seqüència (a l'edició) o un bloc de seqüència (a
@@ -178,18 +188,35 @@ const StyleGallery = ({
       ? (sequenceNamed?.name ?? documentStyleName)
       : documentStyleName;
   const myStyleName = intl.formatMessage(messages.myStyle);
-  const isMyStyleCurrent =
+  // Fa el mateix que l'estil d'ara? (El nom no compta: el d'un estil de
+  // l'app és en l'idioma de qui el va triar)
+  const isCurrent = (style: SequenceStyle): boolean =>
     current !== undefined &&
     sameNamedContent(
       current,
-      namedStyleFrom(myStyle, { id: current.id, name: current.name }),
+      namedStyleFrom(style, { id: current.id, name: current.name }),
     );
+  const isMyStyleCurrent = isCurrent(myStyle);
+
+  // Els estils de l'app, amb la distribució de la base (que no es copia)
+  const appStyles: GalleryOption[] = APP_STYLE_KEYS.map((key) => {
+    const style = appStyleOf(key, baseStyle.view);
+    return {
+      key: `app-${key}`,
+      name: intl.formatMessage(messages[key]),
+      style,
+      isBase: false,
+      selected: !isMyStyleCurrent && isCurrent(style),
+      canMakeMine: true,
+    };
+  });
+  const isAppStyleCurrent = appStyles.some(({ selected }) => selected);
 
   // L'estil que fa servir la seqüència, si no és cap dels de la galeria (un de
   // carregat d'un fitxer, o un d'un altre document): surt a dalt i marcat,
   // perquè s'hi vegi d'on es parteix
   const currentOutside: GalleryOption[] =
-    current !== undefined && !isMyStyleCurrent
+    current !== undefined && !isMyStyleCurrent && !isAppStyleCurrent
       ? [
           {
             key: "current",
@@ -242,6 +269,7 @@ const StyleGallery = ({
         },
       ],
     },
+    { group: intl.formatMessage(messages.appStylesGroup), items: appStyles },
   ];
 
   // La mostra: el primer pictograma amb imatge de la seqüència, sense els
@@ -354,11 +382,26 @@ const StyleGallery = ({
         >
           {/* La mostra és damunt del full: no s'adapta al tema, i el lector
               de pantalla no l'ha de llegir (el nom ja diu l'estil) */}
-          <Box aria-hidden sx={{ flexShrink: 0, pointerEvents: "none" }}>
+          <Box
+            aria-hidden
+            sx={{
+              flexShrink: 0,
+              pointerEvents: "none",
+              width: SAMPLE_BOX_WIDTH,
+              p: 1,
+              display: "flex",
+              justifyContent: "center",
+              bgcolor: sheetSurface,
+              borderRadius: 1,
+            }}
+          >
             <PictogramCard
               pictogram={sample}
               defaults={defaults}
               view="complete"
+              // Sense l'ombra de la graella: com al full, perquè a «Sense
+              // vores» l'ombra no faci de marc
+              variant="plane"
               size={{ pictSize: SAMPLE_PICT_SIZE }}
             />
           </Box>
@@ -439,22 +482,6 @@ const StyleGallery = ({
             {items.map(optionRow)}
           </List>
         ))}
-
-        {/* Els estils de l'app arriben al pas 9 del pla: el lloc ja hi és */}
-        <List
-          dense
-          subheader={
-            <ListSubheader disableSticky sx={{ bgcolor: "transparent" }}>
-              {intl.formatMessage(messages.appStylesGroup)}
-            </ListSubheader>
-          }
-        >
-          <ListItem>
-            <Typography variant="body2" color="text.secondary">
-              {intl.formatMessage(messages.appStylesEmpty)}
-            </Typography>
-          </ListItem>
-        </List>
 
         <input
           ref={fileInputRef}
