@@ -874,7 +874,10 @@ Esquema `saac-v3.schema.json`. **Cap codi.**
 esborranys vells amb versió. Amb D1, el document nou porta l'estil copiat des que neix (treu E4, E6
 i E16), amb `style.name` = «El meu estil». Proves de §3.4.
 
-**Pas 3 — L'estudi** d'estils de targetes (§4.4), en paral·lel als passos 2–5. Inclou **«Sense
+**Pas 3 — L'estudi** d'estils de targetes (§4.4), en paral·lel als passos 2–5. ✅ **Fet** (2026-11-22):
+`docs/estudis/ESTUDI-estils-de-targetes.md`. Proposa cinc estils (Sense vores, Color de la
+categoria, Per retallar, Passos numerats, Lletra gran i clara) i un sisè per decidir (Lletra d'escola);
+les decisions per a l'usuari, a §6 de l'estudi. Troballa de pas: B40. Inclou **«Sense
 vores»** (decidit) i la comprovació del text i el número sense vora. Surt
 `docs/estudis/ESTUDI-estils-de-targetes.md` i s'afegeix a l'índex.
 
@@ -1350,3 +1353,10 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 > passos 11–13.
 >
 > Normes: les de §11.
+>
+> **Fet** (2026-11-22): l'estudi és a `docs/estudis/ESTUDI-estils-de-targetes.md`, amb les captures a
+> `docs/estudis/img/estils-de-targetes/`. **Abans del pas 9, l'usuari decideix el que diu §6 de
+> l'estudi**: la llista (cinc estils), si entra el sisè (Lletra d'escola, que depèn de l'idioma), que
+> els estils 1–4 no fixin la lletra, què es fa amb les majúscules (no es poden fer avui) i els noms.
+> El pas 9 també ha de fer: la mostra de la galeria en una caixa fixa amb marge (V7 de l'estudi), B40,
+> i els colors dels estils a `palette.ts`.
