@@ -119,22 +119,23 @@ describe("SequenceHeader", () => {
 
     // Els quatre estils de l'app (D30), en l'ordre de l'estudi
     const gallery = await openGallery();
-    const appGroup = within(gallery)
-      .getByText("App styles")
-      .closest("ul") as HTMLElement;
-    expect(
-      within(appGroup)
-        .getAllByRole("button", { name: /^(?!More actions)/ })
-        .map(
-          (button) =>
-            button.querySelector(".MuiListItemText-primary")?.textContent,
-        ),
-    ).toEqual([
+    // Una sola graella, sense grups: els de l'app, després del meu estil
+    expect(within(gallery).queryByText("App styles")).not.toBeInTheDocument();
+    const tiles = gallery.querySelectorAll<HTMLElement>(
+      '[data-style-option^="app-"]',
+    );
+    // El nom accessible no compta la mostra, que és amagada al lector
+    [
       "No borders",
       "Category color",
       "For cutting out",
       "Numbered steps",
-    ]);
+    ].forEach((name, index) =>
+      expect(
+        within(tiles[index]).getByRole("button", { name }),
+      ).toBeInTheDocument(),
+    );
+    expect(tiles).toHaveLength(4);
 
     await userEvent.click(
       within(gallery).getByRole("button", { name: /^No borders/ }),

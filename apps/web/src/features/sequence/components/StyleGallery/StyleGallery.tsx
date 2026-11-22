@@ -6,6 +6,8 @@
 //   seqüència, «L'estil de la seqüència» per a un bloc (el mateix que «Torna a
 //   l'estil de la seqüència»).
 // - **El meu estil**, i els **estils de l'app** (pas 9, `appStyles.ts`).
+// - Totes en **una sola graella**, sense grups: només cal veure quin és el
+//   triat (la vora i la ✓) i quins hi ha.
 // - Cada estil, amb una **mostra**: un pictograma de la seqüència, sense els
 //   seus retocs, pintat amb aquell estil, dins d'una caixa de mida fixa perquè
 //   les mostres sense vora no quedin enganxades ni descasades (V7 de
@@ -16,22 +18,21 @@
 //   la seqüència o al bloc i prou: **no es queda** a la galeria (D17).
 //
 // Triar un estil el **copia** al document: si el meu estil canvia després, la
-// seqüència no canvia (direcció única). És una llista, i per això és un
+// seqüència no canvia (direcció única). És una graella curta, i per això és un
 // `AppDialog` d'amplada `sm` (`docs/estandards/capes-flotants.md`).
 import React, { ChangeEvent, useId, useRef, useState } from "react";
 import {
   Box,
+  ButtonBase,
   IconButton,
-  List,
-  ListItem,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
-  ListSubheader,
   Menu,
   MenuItem,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   MdCheck,
@@ -87,14 +88,24 @@ import messages from "./StyleGallery.lang";
 /** El pictograma de mostra quan la seqüència no en té cap amb imatge */
 const SAMPLE_PICTOGRAM_ID = 6009;
 
-/** La mida de la targeta de mostra, respecte de la de la graella */
-const SAMPLE_PICT_SIZE = 0.45;
+/**
+ * La mida de la targeta de mostra, respecte de la de la graella. Al mòbil, més
+ * petita: la galeria hi ha de cabre sencera, sense desplaçar-se
+ */
+const SAMPLE_PICT_SIZE = { mobile: 0.36, desktop: 0.45 };
 
 /**
- * La caixa de la mostra: la targeta més ampla (182 px a mida 1, amb vora) a la
- * mida de la mostra, amb marge. Totes fan el mateix, amb vora o sense
+ * L'amplada mínima d'una rajola: la mostra i el nom, amb lloc per al «⋮» a la
+ * dreta del nom. Al mòbil, dues per fila (amb tres, el «⋮» tapava el nom); a
+ * l'escriptori, quatre, perquè els noms llargs no s'esmicolin
  */
-const SAMPLE_BOX_WIDTH = 96;
+const TILE_MIN_WIDTH = { xs: 128, sm: 116 };
+
+/**
+ * L'alçada de la caixa de la mostra: totes iguals, amb vora o sense, perquè
+ * els noms quedin alineats (V7 de `docs/estudis/ESTUDI-estils-de-targetes.md`)
+ */
+const SAMPLE_BOX_HEIGHT = { xs: 92, sm: 112 };
 
 /**
  * A qui es tria l'estil: una seqüència (a l'edició) o un bloc de seqüència (a
@@ -141,6 +152,11 @@ const StyleGallery = ({
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const store = useStore<RootState>();
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const samplePictSize = mobile
+    ? SAMPLE_PICT_SIZE.mobile
+    : SAMPLE_PICT_SIZE.desktop;
   const { showSnackbar } = useFeedback();
   const titleId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -213,7 +229,7 @@ const StyleGallery = ({
   const isAppStyleCurrent = appStyles.some(({ selected }) => selected);
 
   // L'estil que fa servir la seqüència, si no és cap dels de la galeria (un de
-  // carregat d'un fitxer, o un d'un altre document): surt a dalt i marcat,
+  // carregat d'un fitxer, o un d'un altre document): surt el primer i marcat,
   // perquè s'hi vegi d'on es parteix
   const currentOutside: GalleryOption[] =
     current !== undefined && !isMyStyleCurrent && !isAppStyleCurrent
@@ -229,47 +245,31 @@ const StyleGallery = ({
         ]
       : [];
 
-  const options: { group?: string; items: GalleryOption[] }[] = [
-    ...(currentOutside.length > 0
-      ? [
-          {
-            group: intl.formatMessage(messages.currentGroup),
-            items: currentOutside,
-          },
-        ]
-      : []),
+  const options: GalleryOption[] = [
+    ...currentOutside,
     {
-      items: [
-        {
-          key: "base",
-          name: intl.formatMessage(
-            target.kind === "block"
-              ? messages.sequenceStyle
-              : messages.documentStyle,
-          ),
-          // El nom de l'estil de la base, si en té («El meu estil»…)
-          ...(baseStyleName && { description: baseStyleName }),
-          style: baseStyle,
-          isBase: true,
-          selected: current === undefined,
-          canMakeMine: true,
-        },
-      ],
+      key: "base",
+      name: intl.formatMessage(
+        target.kind === "block"
+          ? messages.sequenceStyle
+          : messages.documentStyle,
+      ),
+      // El nom de l'estil de la base, si en té («El meu estil»…)
+      ...(baseStyleName && { description: baseStyleName }),
+      style: baseStyle,
+      isBase: true,
+      selected: current === undefined,
+      canMakeMine: true,
     },
     {
-      group: intl.formatMessage(messages.myStyleGroup),
-      items: [
-        {
-          key: "mine",
-          name: myStyleName,
-          style: myStyle,
-          isBase: false,
-          selected: isMyStyleCurrent,
-          canMakeMine: false,
-        },
-      ],
+      key: "mine",
+      name: myStyleName,
+      style: myStyle,
+      isBase: false,
+      selected: isMyStyleCurrent,
+      canMakeMine: false,
     },
-    { group: intl.formatMessage(messages.appStylesGroup), items: appStyles },
+    ...appStyles,
   ];
 
   // La mostra: el primer pictograma amb imatge de la seqüència, sense els
@@ -346,50 +346,57 @@ const StyleGallery = ({
 
   const closeMenu = () => setMenu(null);
 
-  const optionRow = (option: GalleryOption) => {
+  // Una rajola de la graella: la mostra i el nom. La triada porta la vora
+  // gruixuda i la marca ✓, com les plantilles de la pàgina (`TemplatePicker`)
+  const optionTile = (option: GalleryOption) => {
     const defaults = cardDefaultsOf(option.style);
     const actionsLabel = intl.formatMessage(messages.styleActions, {
       name: option.name,
     });
     return (
-      <ListItem
+      <Box
         key={option.key}
-        disablePadding
-        secondaryAction={
-          <Tooltip title={actionsLabel}>
-            <IconButton
-              edge="end"
-              aria-label={actionsLabel}
-              aria-haspopup="menu"
-              onClick={(event) =>
-                setMenu({ anchor: event.currentTarget, option })
-              }
-              sx={{
-                minWidth: APP_TOUCH_TARGET_MIN,
-                minHeight: APP_TOUCH_TARGET_MIN,
-              }}
-            >
-              <MdMoreVert aria-hidden />
-            </IconButton>
-          </Tooltip>
-        }
+        data-style-option={option.key}
+        sx={{ position: "relative", display: "flex" }}
       >
-        <ListItemButton
-          selected={option.selected}
+        <ButtonBase
           aria-current={option.selected ? "true" : undefined}
           onClick={() => handleChoose(option)}
-          sx={{ gap: 2, borderRadius: 1, pr: 7 }}
+          sx={{
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "stretch",
+            gap: 0.5,
+            padding: 0.5,
+            borderRadius: 1,
+            border: 1,
+            borderColor: "divider",
+            ...(option.selected && {
+              borderWidth: 2,
+              borderColor: "primary.main",
+              padding: "3px",
+            }),
+            "&:hover, &.Mui-focusVisible": {
+              backgroundColor: "action.hover",
+            },
+            "&.Mui-focusVisible": {
+              outline: 2,
+              outlineColor: "primary.main",
+              outlineOffset: 2,
+            },
+          }}
         >
           {/* La mostra és damunt del full: no s'adapta al tema, i el lector
               de pantalla no l'ha de llegir (el nom ja diu l'estil) */}
           <Box
             aria-hidden
             sx={{
-              flexShrink: 0,
+              flex: 1,
               pointerEvents: "none",
-              width: SAMPLE_BOX_WIDTH,
-              p: 1,
+              minHeight: SAMPLE_BOX_HEIGHT,
+              py: 0.5,
               display: "flex",
+              alignItems: "center",
               justifyContent: "center",
               bgcolor: sheetSurface,
               borderRadius: 1,
@@ -402,31 +409,75 @@ const StyleGallery = ({
               // Sense l'ombra de la graella: com al full, perquè a «Sense
               // vores» l'ombra no faci de marc
               variant="plane"
-              size={{ pictSize: SAMPLE_PICT_SIZE }}
+              size={{ pictSize: samplePictSize }}
             />
           </Box>
-          <ListItemText
-            primary={option.name}
-            // Marcada, diu que és la d'ara (seqüència o bloc), i el nom de la
-            // base si en té
-            secondary={
-              option.selected
-                ? [
-                    option.description,
-                    intl.formatMessage(messages.inUse, { kind: target.kind }),
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")
-                : option.description
-            }
-          />
+          {/* El nom deixa lloc al «⋮», que és a la seva altura */}
+          <Box sx={{ pl: 0.5, pr: 4, textAlign: "left", minHeight: 40 }}>
+            <Typography
+              component="span"
+              variant="body2"
+              sx={{
+                display: "block",
+                lineHeight: 1.2,
+                fontWeight: option.selected ? "bold" : undefined,
+              }}
+            >
+              {option.name}
+            </Typography>
+            {/* El nom de l'estil de la base, si en té («El meu estil»…) */}
+            {option.description && (
+              <Typography
+                component="span"
+                variant="caption"
+                color="text.secondary"
+                sx={{ display: "block", lineHeight: 1.2 }}
+              >
+                {option.description}
+              </Typography>
+            )}
+          </Box>
           {option.selected && (
-            <ListItemIcon sx={{ minWidth: 0 }}>
-              <MdCheck aria-hidden size={24} />
-            </ListItemIcon>
+            // Sobre el verd, sempre el color de contrast (colors.md)
+            <Box
+              aria-hidden
+              sx={{
+                position: "absolute",
+                top: 4,
+                left: 4,
+                width: 22,
+                height: 22,
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                bgcolor: "primary.main",
+                color: "primary.contrastText",
+              }}
+            >
+              <MdCheck size={16} />
+            </Box>
           )}
-        </ListItemButton>
-      </ListItem>
+        </ButtonBase>
+        <Tooltip title={actionsLabel}>
+          <IconButton
+            aria-label={actionsLabel}
+            aria-haspopup="menu"
+            onClick={(event) =>
+              setMenu({ anchor: event.currentTarget, option })
+            }
+            sx={{
+              position: "absolute",
+              right: 0,
+              bottom: 0,
+              minWidth: APP_TOUCH_TARGET_MIN,
+              minHeight: APP_TOUCH_TARGET_MIN,
+            }}
+          >
+            <MdMoreVert aria-hidden />
+          </IconButton>
+        </Tooltip>
+      </Box>
     );
   };
 
@@ -467,21 +518,20 @@ const StyleGallery = ({
             kind: target.kind,
           })}
         </Typography>
-        {options.map(({ group, items }, index) => (
-          <List
-            key={group ?? `group-${index}`}
-            dense
-            subheader={
-              group ? (
-                <ListSubheader disableSticky sx={{ bgcolor: "transparent" }}>
-                  {group}
-                </ListSubheader>
-              ) : undefined
-            }
-          >
-            {items.map(optionRow)}
-          </List>
-        ))}
+        {/* Totes les opcions en una sola graella, sense grups: la triada es
+            veu per la vora i la ✓ */}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: `repeat(auto-fill, minmax(${TILE_MIN_WIDTH.xs}px, 1fr))`,
+              sm: `repeat(auto-fill, minmax(${TILE_MIN_WIDTH.sm}px, 1fr))`,
+            },
+            gap: 1,
+          }}
+        >
+          {options.map(optionTile)}
+        </Box>
 
         <input
           ref={fileInputRef}

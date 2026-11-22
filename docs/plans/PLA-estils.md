@@ -810,6 +810,7 @@ Preses a partir de les preguntes de §8.1, §8.2, §8.3 i §8.5.
 | D32 | Aplicar un estil a una seqüència (o un bloc) que té pictogrames retocats | ~~Es pregunta abans~~ **Revisada el mateix dia: no es pregunta.** L'estil s'aplica i els pictogrames retocats conserven els seus retocs (solució A, com ja fa el pas 5); **D3 continua valent**: el snackbar diu quants en conserven, amb Desfés i «Treu els retocs». Per treure la personalització n'hi ha prou amb el que ja hi ha: «Treu els retocs» del snackbar, «Restableix els pictogrames» del «⋯» de la seqüència i «Restableix l'estil» de cada pictograma. 2026-11-22. |
 | D33 | Treure la personalització d'un pictograma | **Queda amb l'estil de la seva seqüència** (o del bloc, si en té un de reassignat), no amb el del document. És el que ja fa el codi (solució A i cascada del pas 4), comprovat amb la fixture 20 el 2026-11-22. Els textos que diuen «torna a l'estil del document» (la descripció de `components.mouseActionList.resetStyle` i l'ajuda d'El meu estil) es corregeixen al pas 12. |
 | D34 | Q4: com es passa a la pantalla d'edició nova a l'escriptori, i quan es retira la vella | Un **interruptor a l'edició** («Prova l'edició nova» / «Torna a l'edició d'abans»), recordat **en aquest navegador** com a preferència d'interfície: no entra al document ni va al compte. La vella **es retira quan ho decideixi l'usuari**, sense data (B42). Decidit el 2026-11-22. |
+| D35 | La Galeria d'estils, massa separada (revisió de l'usuari, 2026-11-22) | **Una sola graella de mostres**, sense els grups «El d'ara», «El meu estil» i «Estils de l'app» ni la línia «El fa servir…»: només cal veure quin és el triat (vora i ✓) i quins hi ha. Quatre per fila a l'escriptori, dos al mòbil amb la mostra més petita, perquè hi càpiga sencera. |
 
 **Què queda superat**:
 
@@ -1507,3 +1508,7 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 >
 > Normes: les de §11. Recorda que els specs de captures (`e2e/screenshots`) reescriuen imatges del
 > repositori: puja només les de la notícia.
+>
+> **2026-11-22, abans de la notícia**: l'usuari revisa la galeria i la vol compacta (D35, feta). Es
+> porta a `master` en una PR (passos 1–12 i D35) perquè l'usuari ho provi; la notícia N-2 i el
+> tancament del pla, en una PR a part. Les captures de la notícia s'han de fer amb la galeria nova.

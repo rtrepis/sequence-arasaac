@@ -15,12 +15,6 @@ const messages = defineMessages({
     description:
       "Primera línia de la Galeria d'estils: per a quina seqüència, o per a quin bloc d'una seqüència, es tria l'estil",
   },
-  currentGroup: {
-    id: "features.sequence.styleGallery.currentGroup",
-    defaultMessage: "El d'ara",
-    description:
-      "Encapçalament de la Galeria d'estils sobre l'estil que fa servir la seqüència, quan no és cap dels altres de la galeria (p. ex. un de carregat d'un fitxer)",
-  },
   documentStyle: {
     id: "features.sequence.styleGallery.documentStyle",
     defaultMessage: "L'estil del document",
@@ -38,18 +32,6 @@ const messages = defineMessages({
     defaultMessage: "El meu estil",
     description:
       "Nom de l'estil de l'usuari a la Galeria d'estils; també s'escriu al document com a nom de l'estil copiat",
-  },
-  myStyleGroup: {
-    id: "features.sequence.styleGallery.myStyleGroup",
-    defaultMessage: "El meu estil",
-    description:
-      "Encapçalament del grup de la Galeria d'estils amb l'estil de l'usuari",
-  },
-  appStylesGroup: {
-    id: "features.sequence.styleGallery.appStylesGroup",
-    defaultMessage: "Estils de l'app",
-    description:
-      "Encapçalament del grup de la Galeria d'estils amb els estils que porta l'app",
   },
   noBorders: {
     id: "features.sequence.styleGallery.appStyle.noBorders",
@@ -74,13 +56,6 @@ const messages = defineMessages({
     defaultMessage: "Passos numerats",
     description:
       "Nom d'un estil de l'app a la Galeria d'estils: cada pictograma amb el seu número, gran, per a seqüències de passos. També s'escriu al document",
-  },
-  inUse: {
-    id: "features.sequence.styleGallery.inUse",
-    defaultMessage:
-      "{kind, select, block {El fa servir aquest bloc} other {El fa servir aquesta seqüència}}",
-    description:
-      "Segona línia de l'estil que fa servir la seqüència, a la Galeria d'estils",
   },
   sampleWord: {
     id: "features.sequence.styleGallery.sampleWord",

@@ -3789,10 +3789,6 @@
     "message": "Treu els retocs",
     "description": "Botó del snackbar de triar l'estil d'una seqüència: treu els retocs de tots els seus pictogrames"
   },
-  "features.sequence.styleGallery.appStylesGroup": {
-    "message": "Estils de l'app",
-    "description": "Encapçalament del grup de la Galeria d'estils amb els estils que porta l'app"
-  },
   "features.sequence.styleGallery.appStyle.noBorders": {
     "message": "Sense vores",
     "description": "Nom d'un estil de l'app a la Galeria d'estils: el pictograma sol, amb el text a baix, sense cap marc. També s'escriu al document com a nom de l'estil"
@@ -3821,10 +3817,6 @@
     "message": "L'estil del document",
     "description": "Primera opció de la Galeria d'estils: la seqüència torna a fer servir l'estil del document"
   },
-  "features.sequence.styleGallery.inUse": {
-    "message": "{kind, select, block {El fa servir aquest bloc} other {El fa servir aquesta seqüència}}",
-    "description": "Segona línia de l'estil que fa servir la seqüència, a la Galeria d'estils"
-  },
   "features.sequence.styleGallery.loadFromFile": {
     "message": "Carrega d'un fitxer…",
     "description": "Botó de la Galeria d'estils: aplica a la seqüència l'estil d'un fitxer. L'estil no es queda a la galeria"
@@ -3836,10 +3828,6 @@
   "features.sequence.styleGallery.myStyle": {
     "message": "El meu estil",
     "description": "Nom de l'estil de l'usuari a la Galeria d'estils; també s'escriu al document com a nom de l'estil copiat"
-  },
-  "features.sequence.styleGallery.myStyleGroup": {
-    "message": "El meu estil",
-    "description": "Encapçalament del grup de la Galeria d'estils amb l'estil de l'usuari"
   },
   "features.sequence.styleGallery.sampleWord": {
     "message": "exemple",
@@ -3856,10 +3844,6 @@
   "features.sequence.styleGallery.title": {
     "message": "Galeria d'estils",
     "description": "Títol del diàleg d'on es tria l'estil d'una seqüència. Mai «tema» ni «plantilla»"
-  },
-  "features.sequence.styleGallery.currentGroup": {
-    "message": "El d'ara",
-    "description": "Encapçalament de la Galeria d'estils sobre l'estil que fa servir la seqüència, quan no és cap dels altres de la galeria (p. ex. un de carregat d'un fitxer)"
   },
   "features.freeLayout.chooseStyle": {
     "message": "Tria un estil…",
