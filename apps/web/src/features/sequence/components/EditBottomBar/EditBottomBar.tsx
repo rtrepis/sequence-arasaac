@@ -1,7 +1,8 @@
-// La barra de baix de l'edició al mòbil (pla dels estils, pas 8; D22, D27,
-// D29): la cerca de pictogrames, que és també la cerca màgica, a l'abast del
-// polze. Afegir un pictograma és cercar-lo; afegir una seqüència és a la
-// llista «2 de 5» de la capçalera. Per això no hi ha cap «+» (D29).
+// La barra de baix de l'edició al mòbil (pla dels estils, pas 8; D20, D22,
+// D27): el «+» i la cerca de pictogrames, que és també la cerca màgica, a
+// l'abast del polze. El «+» és un menú curt que s'obre cap amunt: «Afegeix un
+// pictograma» (una targeta buida, com el «+» del comptador d'abans) i «Afegeix
+// una seqüència». No és un panell de baix: aquest és només dels ajustos.
 //
 // És fixa a baix de la pantalla i **puja amb el teclat**: amb el teclat virtual
 // obert, el Safari d'iOS no encongeix la finestra i una barra fixa hi quedaria
@@ -12,7 +13,30 @@
 //
 // No surt mai al paper: la impressió només pinta el full (`usePrintSheet`).
 import React, { useEffect, useId, useRef, useState } from "react";
-import { Box } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Stack,
+  Tooltip,
+} from "@mui/material";
+import { MdAdd, MdOutlineAddBox, MdOutlinePostAdd } from "react-icons/md";
+import { useIntl } from "react-intl";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { useFeedback } from "@/context/FeedbackContext";
+import { APP_CORNER_RADIUS, APP_TOUCH_TARGET_MIN } from "@/style/appShape";
+import useNewPictogram from "@features/pictogram/hooks/useNewPictogram";
+import {
+  addPictogramActionCreator,
+  changeActiveSAACActionCreator,
+} from "@features/sequence/store/documentSlice";
+import { addNewSequenceThunk } from "@features/free-layout/store/freeLayoutThunks";
+import tabsMessages from "@components/TabsSequences/TabsSequences.lang";
+import headerMessages from "@features/sequence/components/SequenceHeader/SequenceHeader.lang";
+import messages from "./EditBottomBar.lang";
 import MagicSearch from "@features/pictogram/components/MagicSearch";
 import {
   setFloatingBase,
@@ -21,11 +45,58 @@ import {
 } from "@components/FloatingLayer";
 import { useVisibleViewport } from "@components/AppBottomSheet/useVisibleViewport";
 
+/** Com a molt, els pictogrames d'una seqüència (el límit del comptador d'abans) */
+const MAX_PICTOGRAMS = 60;
+
 const EditBottomBar = (): React.ReactElement => {
   const layerId = `edit-bottom-bar-${useId()}`;
   const barRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
   const viewport = useVisibleViewport();
+  const intl = useIntl();
+  const dispatch = useAppDispatch();
+  const { showSnackbar } = useFeedback();
+  const menuId = useId();
+  const plusId = useId();
+  const plusRef = useRef<HTMLButtonElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { getPictogramEmptyWithDefaultSettings: pictogramEmpty } =
+    useNewPictogram();
+  const amount = useAppSelector(
+    (state) => Object.keys(state.document.content).length,
+  );
+  const pictogramCount = useAppSelector(
+    (state) => state.document.content[state.document.activeSAAC]?.length ?? 0,
+  );
+
+  const addPictogram = () => {
+    setMenuOpen(false);
+    if (pictogramCount >= MAX_PICTOGRAMS) {
+      showSnackbar({
+        message: intl.formatMessage(messages.full, { max: MAX_PICTOGRAMS }),
+        severity: "warning",
+      });
+      return;
+    }
+    dispatch(addPictogramActionCreator(pictogramEmpty(pictogramCount)));
+    showSnackbar({
+      message: intl.formatMessage(messages.pictogramAdded),
+      severity: "success",
+    });
+  };
+
+  const addSequence = () => {
+    setMenuOpen(false);
+    // Va a l'última pàgina, segons la seva disposició
+    dispatch(addNewSequenceThunk(amount));
+    dispatch(changeActiveSAACActionCreator(amount));
+    showSnackbar({
+      message: intl.formatMessage(headerMessages.added),
+      severity: "success",
+    });
+  };
+
+  const addLabel = intl.formatMessage(messages.add);
 
   // L'alçada es mesura: el camp pot fer dues línies en un idioma llarg
   useEffect(() => {
@@ -76,7 +147,68 @@ const EditBottomBar = (): React.ReactElement => {
         "@media print": { display: "none" },
       }}
     >
-      <MagicSearch showHelperText={false} bottomBar />
+      <Stack direction="row" alignItems="center" gap={1}>
+        <Tooltip title={addLabel}>
+          <IconButton
+            ref={plusRef}
+            id={plusId}
+            aria-label={addLabel}
+            aria-haspopup="menu"
+            aria-controls={menuOpen ? menuId : undefined}
+            aria-expanded={menuOpen ? "true" : undefined}
+            onClick={() => setMenuOpen(true)}
+            sx={{
+              flexShrink: 0,
+              width: 48,
+              height: 48,
+              minWidth: APP_TOUCH_TARGET_MIN,
+              borderRadius: `${APP_CORNER_RADIUS}px`,
+              bgcolor: "primary.main",
+              color: "primary.contrastText",
+              "&:hover": { bgcolor: "primary.dark" },
+            }}
+          >
+            <MdAdd aria-hidden size={28} />
+          </IconButton>
+        </Tooltip>
+        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+          <MagicSearch showHelperText={false} bottomBar />
+        </Box>
+      </Stack>
+
+      {/* S'obre cap amunt: a sota no hi ha res */}
+      <Menu
+        id={menuId}
+        anchorEl={plusRef.current}
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        slotProps={{ list: { "aria-labelledby": plusId } }}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <MenuItem
+          sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+          onClick={addPictogram}
+        >
+          <ListItemIcon>
+            <MdOutlineAddBox aria-hidden />
+          </ListItemIcon>
+          <ListItemText>
+            {intl.formatMessage(messages.addPictogram)}
+          </ListItemText>
+        </MenuItem>
+        <MenuItem
+          sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+          onClick={addSequence}
+        >
+          <ListItemIcon>
+            <MdOutlinePostAdd aria-hidden />
+          </ListItemIcon>
+          <ListItemText>
+            {intl.formatMessage(tabsMessages.addSequence)}
+          </ListItemText>
+        </MenuItem>
+      </Menu>
     </Box>
   );
 };

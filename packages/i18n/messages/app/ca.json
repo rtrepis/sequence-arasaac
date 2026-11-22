@@ -3892,5 +3892,21 @@
   "features.sequence.header.added": {
     "message": "S'ha afegit una seqüència.",
     "description": "Confirmació després d'«Afegeix una seqüència» a la llista de seqüències del mòbil"
+  },
+  "features.sequence.bottomBar.add": {
+    "message": "Afegeix",
+    "description": "Nom accessible i tooltip del botó «+» de la barra de baix de l'edició al mòbil: obre el menú per afegir un pictograma o una seqüència"
+  },
+  "features.sequence.bottomBar.addPictogram": {
+    "message": "Afegeix un pictograma",
+    "description": "Opció del menú «+»: afegeix una targeta buida al final de la seqüència oberta"
+  },
+  "features.sequence.bottomBar.pictogramAdded": {
+    "message": "S'ha afegit un pictograma buit al final.",
+    "description": "Confirmació d'«Afegeix un pictograma» del menú «+»"
+  },
+  "features.sequence.bottomBar.full": {
+    "message": "Una seqüència pot tenir {max} pictogrames com a molt.",
+    "description": "Avís d'«Afegeix un pictograma» quan la seqüència ja té el màxim de pictogrames"
   }
 }

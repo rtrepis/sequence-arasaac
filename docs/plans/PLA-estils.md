@@ -3,7 +3,7 @@
 > **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**, i **pla d'execució
 > escrit el 2026-11-21 (§10)**. Passos 1 (fonaments), 2 (solució A i D1, §3.5), 4 (el format, §12.1),
 > 5 (la galeria i l'estil de la seqüència a l'edició, §13.1), 6 (l'estil del bloc a la vista,
-> §14.1), 7 (l'esbós, §15.1, revisat: D25–D29) i 8 (l'edició nova al mòbil, §16.1) fets, el
+> §14.1), 7 (l'esbós, §15.1, revisat: D25–D28) i 8 (l'edició nova al mòbil, §16.1) fets, el
 > 2026-11-22. Es continua amb l'encàrrec de §17: el pas 3 (l'estudi), del qual depèn el pas 9.
 
 > **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
@@ -804,7 +804,7 @@ Preses a partir de les preguntes de §8.1, §8.2, §8.3 i §8.5.
 | D26 | E2 / D23: l'escriptori | **(b)**: la pantalla nova com a **vista alternativa durant un temps**, al costat de les pestanyes de sempre. Com s'hi passa i quan s'acaba el temps, al pas 10 (Q4). Decidit el 2026-11-22. |
 | D27 | E3: la cerca màgica | **Dins del camp de cerca** (✨), a la barra de baix. Decidit el 2026-11-22. |
 | D28 | E4: el mòbil girat | L'edició **funciona girada**, amb més columnes a la graella: no porta la capa de «posa el mòbil dret» (`RotatePhoneOverlay`) que porta la vista. Decidit el 2026-11-22. |
-| D29 | El «+» de la barra de baix (D20) | **No hi és**: les seves dues accions ja són a fora. Afegir un pictograma és cercar-lo a la barra de baix, i afegir una seqüència és al final de la llista «2 de 5». **Substitueix D20.** Decidit el 2026-11-22. |
+| D29 | El «+» de la barra de baix (D20) | ~~Sense «+»~~ **Revertida el mateix dia**: era un malentès (la proposta de treure un menú es referia al «⋯»), i finalment l'usuari va triar deixar-ho tot com era. **D20 continua valent**: el «+» hi és, amb «Afegeix un pictograma» i «Afegeix una seqüència», i el «⋯» de la seqüència es queda. 2026-11-22. |
 
 **Què queda superat**:
 
@@ -913,10 +913,10 @@ el revisa abans del pas 8.**
 
 **Pas 8 — La pantalla d'edició nova al mòbil.** ✅ **Fet** (2026-11-22): com s'ha fet, a §16.1. La capçalera (nom editable, el botó d'estil amb la
 marca de «Personalitzat» (D25), «2 de 5», llista, «⋯»),
-el lliscar entre seqüències amb fletxes ‹ › (D19), la barra de baix sense «+» (D29), la cerca, la
+el lliscar entre seqüències amb fletxes ‹ › (D19), la barra de baix amb el «+» (D20), la cerca, la
 cerca màgica dins del camp (D27) i `DocumentStatusFab`, que puja amb el teclat (D22). Funciona amb el
 mòbil girat (D28). Les accions de
-`PictogramAmount` (afegir i treure l'últim) se'n van: afegir és cercar, i treure un pictograma és a
+`PictogramAmount` (afegir i treure l'últim) se'n van: afegir és al «+», i treure un pictograma és a
 la graella. Cobreix C1 (cap botó només amb hover) i C28 (girar el mòbil) per a aquesta pantalla.
 
 **Pas 9 — Els estils de l'app a la galeria** (D6, D7), amb el que surti de l'estudi, «Sense vores»
@@ -1307,13 +1307,16 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
   amb la marca de «Personalitzat» a la cantonada si hi ha retocs; el nom de l'estil i l'ajuda van al
   tooltip i al nom accessible. La línia «Estil: …» se'n va **també a l'escriptori**, per tenir una
   sola capçalera. Al mòbil, a més, les fletxes ‹ › (desactivades a les puntes), «2 de 5» (botó que
-  obre la llista de seqüències, amb quants pictogrames té cadascuna i «Afegeix una seqüència» al
-  final, D29) i el «⋯» de sempre. Tots els controls, 44 × 44 px.
+  obre la llista de seqüències, amb quants pictogrames té cadascuna i també «Afegeix una seqüència»
+  al final) i el «⋯» de sempre. Tots els controls, 44 × 44 px.
 - **Lliscar** sobre la graella (`TabsSequences`, al mòbil) canvia de seqüència amb un gest
   horitzontal clar (60 px, i més horitzontal que vertical), com a la vista. Moure una targeta demana
   mantenir el dit 250 ms, i un lliscament ràpid no hi arriba: no es trepitgen.
-- **La barra de baix** (`features/sequence/components/EditBottomBar/`) és la cerca màgica de sempre
-  (D27), sense la línia d'ajuda i amb els suggeriments cap amunt (`MagicSearch` amb `bottomBar`). És
+- **La barra de baix** (`features/sequence/components/EditBottomBar/`) porta el **«+»** (D20): un
+  menú curt que s'obre cap amunt amb «Afegeix un pictograma» (una targeta buida al final, com el «+»
+  del comptador d'abans, amb el mateix límit de 60) i «Afegeix una seqüència». Al costat, la cerca
+  màgica de sempre (D27), sense la línia d'ajuda i amb els suggeriments cap amunt (`MagicSearch` amb
+  `bottomBar`). És
   fixa a baix i **puja amb el teclat** amb `useVisibleViewport`, el mateix del panell de baix de la
   vista. Declara la seva alçada a `FloatingLayer` (sòcol, terra i reserva): **el botó d'estat
   queda just a sobre de la barra**, al racó de sempre, i no a dins com a l'esbós; els avisos també

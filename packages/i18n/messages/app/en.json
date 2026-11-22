@@ -1004,5 +1004,9 @@
   "features.sequence.header.sequenceCount": "{number} of {total}",
   "features.sequence.header.sequenceListLabel": "Sequence {number} of {total}. All sequences",
   "features.sequence.header.pictogramCount": "{count, plural, =0 {No pictograms} one {# pictogram} other {# pictograms}}",
-  "features.sequence.header.added": "A sequence has been added."
+  "features.sequence.header.added": "A sequence has been added.",
+  "features.sequence.bottomBar.add": "Add",
+  "features.sequence.bottomBar.addPictogram": "Add a pictogram",
+  "features.sequence.bottomBar.pictogramAdded": "An empty pictogram has been added at the end.",
+  "features.sequence.bottomBar.full": "A sequence can have at most {max} pictograms."
 }

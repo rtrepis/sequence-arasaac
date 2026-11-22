@@ -176,13 +176,14 @@
   .empty { color: var(--ink-faint); text-align: center; padding: 40px 16px; }
 
   /* La barra de baix: + · cerca · cerca màgica · estat. Puja amb el teclat (D22) */
-  .bottom { flex-shrink: 0; position: relative; z-index: 5; display: grid; grid-template-columns: minmax(0, 1fr) 48px; gap: 8px; align-items: center; padding: 8px 10px; background: var(--app-desk); border-top: 1px solid var(--line); }
+  .bottom { flex-shrink: 0; position: relative; z-index: 5; display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 8px; align-items: center; padding: 8px 10px; background: var(--app-desk); border-top: 1px solid var(--line); }
+  .plus { width: 48px; height: 48px; border-radius: 20px; border: 0; background: var(--accent-bright); color: var(--on-accent); font-size: 28px; line-height: 1; display: grid; place-items: center; }
   .search { display: flex; align-items: center; gap: 4px; border: 1px solid var(--line-strong); border-radius: 24px; height: 48px; padding: 0 6px 0 14px; background: var(--surface); min-width: 0; }
   .search input { border: 0; outline: 0; background: transparent; flex: 1; min-width: 0; font-size: 16px; }
   .search .magic { width: 40px; height: 40px; border: 0; background: transparent; border-radius: 20px; font-size: 18px; }
   .status-fab { width: 48px; height: 48px; border-radius: 20px; border: 1.75px solid var(--accent-bright); background: var(--app-paper); display: grid; place-items: center; }
   .status-fab svg { width: 20px; height: 20px; }
-  .suggest { position: absolute; left: 10px; right: 66px; bottom: calc(100% + 4px); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 12px; box-shadow: 0 -8px 20px -12px rgba(0,0,0,.4); overflow: hidden; }
+  .suggest { position: absolute; left: 66px; right: 66px; bottom: calc(100% + 4px); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 12px; box-shadow: 0 -8px 20px -12px rgba(0,0,0,.4); overflow: hidden; }
   .suggest[hidden] { display: none; }
   .suggest button { display: block; width: 100%; text-align: left; border: 0; background: transparent; padding: 10px 14px; min-height: 44px; }
   .suggest button + button { border-top: 1px solid var(--line); }
@@ -204,6 +205,7 @@
   .menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
   .menu .cur { font-weight: 700; }
   .menu .sub { font-size: 13px; color: var(--ink-soft); }
+  #plusMenu { left: 10px; bottom: 72px; }
   #moreMenu { right: 10px; top: 96px; }
   #listMenu { right: 54px; top: 96px; }
   .toast { position: absolute; left: 10px; right: 10px; bottom: 76px; z-index: 30; background: var(--app-paper); border: 1px solid var(--accent-bright); border-radius: 20px; padding: 10px 14px; font-size: 14px; box-shadow: 0 10px 24px -14px rgba(0,0,0,.5); }
@@ -216,7 +218,7 @@
 
 <div class="wrap">
   <header class="top">
-    <p class="eyebrow">Esbós v3 · docs/plans/PLA-estils.md · pas 7 (§10.4)</p>
+    <p class="eyebrow">Esbós v2 · docs/plans/PLA-estils.md · pas 7 (§10.4)</p>
     <h1>L'edició al mòbil: una seqüència per pantalla</h1>
     <p class="lede">La pantalla d'edició nova que proposa el pla per al mòbil: el nom i l'estil de la seqüència a dalt, la graella al mig i la cerca a baix, a l'abast del polze. Es passa de seqüència lliscant sobre la graella o amb les fletxes ‹ ›. Toca la cerca per veure com puja la barra amb el teclat. El botó de la paleta, al costat del nom, és l'estil de la seqüència. A sota hi ha les captures de com és avui i les decisions del 22 de novembre.</p>
   </header>
@@ -261,6 +263,7 @@
 
           <div class="bottom" id="bottom">
             <div class="suggest" id="suggest" hidden role="listbox" aria-label="Suggeriments"></div>
+            <button class="plus" id="plus" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Afegeix">+</button>
             <label class="search">
               <input id="search" type="text" placeholder="Cerca un pictograma…" autocomplete="off" aria-label="Cerca un pictograma">
               <button class="magic" type="button" aria-label="Cerca màgica">✨</button>
@@ -272,6 +275,10 @@
           <div class="keyboard" id="keyboard" aria-hidden="true"></div>
 
           <div class="scrim" id="scrim" hidden></div>
+          <div class="menu" id="plusMenu" role="menu" hidden>
+            <button type="button" role="menuitem" data-act="addPict">＋ Afegeix un pictograma</button>
+            <button type="button" role="menuitem" data-act="addSeq">＋ Afegeix una seqüència</button>
+          </div>
           <div class="menu" id="moreMenu" role="menu" hidden></div>
           <div class="menu" id="listMenu" role="menu" hidden></div>
           <div class="toast" id="toast" role="status" hidden></div>
@@ -294,7 +301,7 @@
           <li><b>«1 de 5»</b> obre la llista de seqüències: s'hi salta directament a qualsevol.</li>
           <li>La <b>paleta</b> del costat del nom obre la galeria; a «Matí» i «Nit» porta la marca de «Personalitzat» (D25).</li>
           <li>El <b>«⋯»</b> porta l'estil (obre la galeria), canviar el nom, restablir els pictogrames i treure la seqüència oberta (D21). És el mateix menú que ja hi ha avui (pas 5).</li>
-          <li>No hi ha cap <b>«+»</b> (D29): afegir un pictograma és cercar-lo, i afegir una seqüència és al final de la llista «1 de 5».</li>
+          <li>El <b>«+»</b> s'obre cap amunt: afegir un pictograma o una seqüència (D20).</li>
           <li>Toca la <b>cerca</b>: la barra puja amb el teclat i els suggeriments s'obren cap amunt (D22). La graella s'encongeix, però la capçalera no es mou.</li>
           <li>Prova <b>Escriptori</b>: la mateixa pantalla a tota l'amplada, que serà la vista alternativa de D26.</li>
         </ol>
@@ -318,7 +325,7 @@
         <h2>Ja decidit (§10.1)</h2>
         <ul>
           <li><b>D19</b>: es passa de seqüència lliscant, amb «2 de 5» al costat del nom, que obre la llista. Fletxes ‹ › com a alternativa.</li>
-          <li><b>D20</b>: <s>el «+» és un menú curt que s'obre cap amunt</s>. Substituïda per D29: sense «+».</li>
+          <li><b>D20</b>: el «+» és un menú curt que s'obre cap amunt, no un panell de baix.</li>
           <li><b>D21</b>: el «⋯» al costat del nom, amb l'estil, el nom, restablir i treure l'oberta.</li>
           <li><b>D22</b>: la barra de baix puja amb el teclat; els suggeriments, cap amunt.</li>
           <li>Les accions de <code>PictogramAmount</code> (afegir i treure l'últim) se'n van: afegir és al «+», i treure un pictograma és a la graella.</li>
@@ -331,7 +338,6 @@
           <li><b>D25</b> (E1): sense línia «Estil: …» sota la capçalera; l'estil ja es veu a les targetes. Al seu lloc, un <b>botó d'estil al costat del nom</b>, que obre la galeria. Si algun pictograma té retocs, el botó porta la marca de «Personalitzat». El «⋯» continua portant l'estil.</li>
           <li><b>D26</b> (E2): a l'escriptori, la pantalla nova com a <b>vista alternativa durant un temps</b>, al costat de les pestanyes de sempre.</li>
           <li><b>D27</b> (E3): la cerca màgica, <b>dins del camp</b> de cerca.</li>
-          <li><b>D29</b>: <b>sense «+»</b> a la barra de baix: les seves dues accions ja hi són a fora (la cerca afegeix pictogrames, la llista «1 de 5» afegeix seqüències).</li>
           <li><b>D28</b> (E4): l'edició <b>funciona amb el mòbil girat</b>, amb més columnes a la graella.</li>
         </ul>
       </section>
@@ -420,8 +426,8 @@
   viewport.addEventListener("pointercancel", end);
 
   // Menús
-  const menus = ["moreMenu", "listMenu"];
-  const openers = { moreMenu: "more", listMenu: "count" };
+  const menus = ["plusMenu", "moreMenu", "listMenu"];
+  const openers = { plusMenu: "plus", moreMenu: "more", listMenu: "count" };
   const closeMenus = () => {
     menus.forEach((m) => { $(m).hidden = true; $(openers[m]).setAttribute("aria-expanded", "false"); });
     $("scrim").hidden = true;
@@ -440,9 +446,17 @@
     clearTimeout(toastTimer); toastTimer = setTimeout(() => { $("toast").hidden = true; }, 2600);
   };
 
-  const addSequence = () => {
-    sequences.push({ name: `Seqüència ${sequences.length + 1}`, style: "L'estil del document", picts: [], retouched: [] });
-    render(); go(sequences.length - 1); toast("S'ha afegit una seqüència.");
+  $("plus").onclick = () => openMenu("plusMenu");
+  $("plusMenu").onclick = (e) => {
+    const act = e.target.closest("button")?.dataset.act;
+    if (!act) return;
+    closeMenus();
+    if (act === "addSeq") {
+      sequences.push({ name: `Seqüència ${sequences.length + 1}`, style: "L'estil del document", picts: [], retouched: [] });
+      render(); go(sequences.length - 1); toast("S'ha afegit una seqüència.");
+    } else {
+      $("search").focus();
+    }
   };
 
   $("more").onclick = () => {
@@ -505,7 +519,7 @@
   $("listMenu").onclick = (e) => {
     const b = e.target.closest("button"); if (!b) return;
     closeMenus();
-    if (b.dataset.i === "new") { addSequence(); return; }
+    if (b.dataset.i === "new") { $("plusMenu").querySelector('[data-act="addSeq"]').click(); return; }
     go(Number(b.dataset.i));
   };
 

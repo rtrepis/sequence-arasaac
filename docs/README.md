@@ -54,5 +54,5 @@ mou a `plans/fets/`.
 |---|---|
 | `esbossos/esbos-columna-vista.html` | La columna de la vista (R8 del mode lliure) |
 | `esbossos/esbos-vista-mobil.html` | La vista al mòbil (fase 1) |
-| `esbossos/esbos-edicio-mobil.html` | L'edició al mòbil (pas 7 del pla dels estils), amb les captures d'avui a `esbossos/img/edicio-mobil/`. Revisat el 2026-11-22 (D25–D29 del pla) |
+| `esbossos/esbos-edicio-mobil.html` | L'edició al mòbil (pas 7 del pla dels estils), amb les captures d'avui a `esbossos/img/edicio-mobil/`. Revisat el 2026-11-22 (D25–D28 del pla) |
 | `esbossos/simulacio-capes-flotants.html` | L'estudi de capes flotants |

@@ -143,3 +143,30 @@ test("tots els controls de la capçalera fan 44 px com a mínim", async ({
     expect(box.height).toBeGreaterThanOrEqual(44);
   }
 });
+
+test("el «+» s'obre cap amunt i afegeix un pictograma buit o una seqüència", async ({
+  page,
+}) => {
+  await open(page);
+  const bar = page.getByTestId("edit-bottom-bar");
+  const plus = bar.getByRole("button", { name: "Afegeix" });
+  const plusBox = (await plus.boundingBox())!;
+  expect(plusBox.width).toBeGreaterThanOrEqual(44);
+
+  // Amb el menú obert, la resta és aria-hidden: es compta abans
+  // «Matí» té dos pictogrames
+  const cards = page
+    .getByTestId("sequence-swipe")
+    .getByRole("button", { name: /pictograma \d+/i });
+  await expect(cards).toHaveCount(2);
+  await plus.click();
+  const menu = page.getByRole("menu");
+  const menuBox = (await menu.boundingBox())!;
+  expect(menuBox.y + menuBox.height).toBeLessThanOrEqual(plusBox.y + 1);
+  await menu.getByRole("menuitem", { name: "Afegeix un pictograma" }).click();
+  await expect(cards).toHaveCount(3);
+
+  await plus.click();
+  await page.getByRole("menuitem", { name: "Afegeix una seqüència" }).click();
+  await expect(heading(page)).toHaveText("Seqüència 4");
+});

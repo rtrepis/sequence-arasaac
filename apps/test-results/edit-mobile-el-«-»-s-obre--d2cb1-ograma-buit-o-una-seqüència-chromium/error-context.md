@@ -1,0 +1,102 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e3]: Editar
+  - link "Salta al contingut principal" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e6]:
+    - generic [ref=e7]:
+      - navigation "Navegació principal" [ref=e8]:
+        - button "Menú principal" [ref=e9] [cursor=pointer]:
+          - img "logo" [ref=e10]
+        - heading "SequenciAAC" [level=1] [ref=e11]: SqAAC
+        - tablist [ref=e14]:
+          - tab "Edició" [selected] [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e18]: Edició
+          - tab "Vista" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+      - button "Configuracions" [ref=e24] [cursor=pointer]:
+        - img [ref=e25]
+  - main [ref=e28]:
+    - status [ref=e30]:
+      - generic [ref=e31]:
+        - img [ref=e33]
+        - generic [ref=e38]: Aquest document té el seu propi estil.
+        - button "Tanca l'avís" [ref=e40] [cursor=pointer]:
+          - img [ref=e41]
+    - generic [ref=e43]:
+      - generic [ref=e45]:
+        - generic "Seqüència anterior" [ref=e46]:
+          - button "Seqüència anterior" [disabled]:
+            - img
+        - generic [ref=e47]:
+          - button "Matí. Canvia el nom" [ref=e48] [cursor=pointer]:
+            - heading "Matí" [level=2] [ref=e49]
+            - img [ref=e50]
+          - 'button "Estil: Personalitzat. L''estil de base és «Sense vores». 1 pictograma té retocs propis." [ref=e53] [cursor=pointer]':
+            - img [ref=e54]
+            - generic:
+              - img
+        - button "Seqüència 1 de 3. Totes les seqüències" [ref=e61] [cursor=pointer]:
+          - text: 1 de 3
+          - img [ref=e63]
+        - button "Accions de «Matí»" [ref=e66] [cursor=pointer]:
+          - img [ref=e67]
+        - generic "Seqüència següent" [ref=e70]:
+          - button "Seqüència següent" [ref=e71] [cursor=pointer]:
+            - img [ref=e72]
+      - generic [ref=e75]:
+        - generic [ref=e76]:
+          - button "llevar-se, pictograma 1" [ref=e79] [cursor=pointer]:
+            - generic [ref=e81]:
+              - heading "1" [level=3] [ref=e83]
+              - img "Imatge pictograma" [ref=e85]
+              - heading "llevar-se" [level=3] [ref=e87]
+          - generic [ref=e89]:
+            - button "esmorzar, pictograma 2, personalitzat" [ref=e90] [cursor=pointer]:
+              - generic [ref=e92]:
+                - heading "2" [level=3] [ref=e94]
+                - img "Imatge pictograma" [ref=e96]
+                - heading "esmorzar" [level=3] [ref=e98]
+            - generic [ref=e99]:
+              - generic:
+                - img
+          - button "Pictograma 3" [ref=e102] [cursor=pointer]:
+            - generic [ref=e104]:
+              - heading "3" [level=3] [ref=e106]
+              - img "Imatge pictograma" [ref=e108]
+              - generic [ref=e109]:
+                - heading [level=3]
+        - status [ref=e110]
+    - generic [ref=e112]:
+      - button "Afegeix" [active] [ref=e113] [cursor=pointer]:
+        - img [ref=e114]
+      - generic [ref=e121]:
+        - generic: Cerca màgica
+        - generic [ref=e122]:
+          - combobox "Cerca màgica" [ref=e123]
+          - button "A cercar" [ref=e124] [cursor=pointer]:
+            - img [ref=e125]
+          - group:
+            - generic: Cerca màgica
+  - generic [ref=e127]:
+    - 'button "On es desa la feina: Amb canvis nous des del fitxer descarregat a les 13:08" [ref=e128] [cursor=pointer]':
+      - img [ref=e129]
+    - menu:
+      - generic:
+        - generic: Descarrega el fitxer
+        - menuitem "Descarrega el fitxer":
+          - img
+      - generic:
+        - generic: Document nou
+        - menuitem "Document nou":
+          - img
+  - generic [ref=e132]: Amb canvis nous des del fitxer descarregat a les 13:08
+  - alert [ref=e133]:
+    - img [ref=e135]
+    - generic [ref=e137]: S'ha afegit un pictograma buit al final.
+    - button "Close" [ref=e139] [cursor=pointer]:
+      - img [ref=e140]
+```
