@@ -28,7 +28,7 @@ mou a `plans/fets/`.
 
 | Document | Estat | Per continuar |
 |---|---|---|
-| `plans/PLA-estils.md` | 🟢 **En curs** (2026-11-21): passos 1 (fonaments i ADR-006), 2 (la solució A i D1), 4 (el format i la cascada amb l'estil de la seqüència) 5 (la Galeria d'estils i el «⋯» de la seqüència a l'edició), 6 (l'estil del bloc a la vista) i 7 (l'esbós de l'edició al mòbil) fets, 2026-11-22. L'estil va amb la seqüència i el bloc (un sol estil per bloc, reassignable), la seqüència té nom, la Galeria d'estils, la pantalla d'edició nova al mòbil, i el que ha heretat del mode lliure. Pendent D23 (l'escriptori), després de l'esbós. B37 | §16: **l'usuari revisa l'esbós** (`esbossos/esbos-edicio-mobil.html`, preguntes E1–E4) abans del pas 8; el pas 3 (l'estudi) pot anar en paral·lel; el pas 3 (l'estudi) pot anar en paral·lel. §10 mana sobre §0–§8 i substitueix §7 |
+| `plans/PLA-estils.md` | 🟢 **En curs** (2026-11-21): passos 1 (fonaments i ADR-006), 2 (la solució A i D1), 4 (el format i la cascada amb l'estil de la seqüència) 5 (la Galeria d'estils i el «⋯» de la seqüència a l'edició), 6 (l'estil del bloc a la vista) i 7 (l'esbós de l'edició al mòbil) fets, 2026-11-22. L'estil va amb la seqüència i el bloc (un sol estil per bloc, reassignable), la seqüència té nom, la Galeria d'estils, la pantalla d'edició nova al mòbil, i el que ha heretat del mode lliure. Pendent D23 (l'escriptori), després de l'esbós. B37 | §16, l'encàrrec del pas 8 (la pantalla d'edició nova al mòbil; l'esbós ja està revisat, D25–D28); el pas 3 (l'estudi) pot anar en paral·lel; el pas 3 (l'estudi) pot anar en paral·lel. §10 mana sobre §0–§8 i substitueix §7 |
 | `plans/PLA-noticies.md` | 🟡 **Fases 1, 2 i 4 fetes** (2026-11-20). La N-2 és aturada pel pla dels estils. Oberta D5 | §11 |
 | `plans/fets/PLA-mode-lliure.md` | ✅ **Tancat** (2026-11-21), fet fins al pas 8. L'estil dels blocs i el pas 8 → `PLA-estils.md` §8.5; els blocs d'imatge → B38 | — |
 | `plans/fets/PLA-vista-mobil.md` | ✅ **Tancat** (2026-11-21), fet fins a la fase 6. Les proves en dispositius → P2; la notícia → N-3 | — |
@@ -54,5 +54,5 @@ mou a `plans/fets/`.
 |---|---|
 | `esbossos/esbos-columna-vista.html` | La columna de la vista (R8 del mode lliure) |
 | `esbossos/esbos-vista-mobil.html` | La vista al mòbil (fase 1) |
-| `esbossos/esbos-edicio-mobil.html` | L'edició al mòbil (pas 7 del pla dels estils), amb les captures d'avui a `esbossos/img/edicio-mobil/`. **Pendent de revisar** (E1–E4) |
+| `esbossos/esbos-edicio-mobil.html` | L'edició al mòbil (pas 7 del pla dels estils), amb les captures d'avui a `esbossos/img/edicio-mobil/`. Revisat el 2026-11-22 (D25–D28 del pla) |
 | `esbossos/simulacio-capes-flotants.html` | L'estudi de capes flotants |

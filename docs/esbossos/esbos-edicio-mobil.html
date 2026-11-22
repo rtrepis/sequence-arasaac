@@ -108,7 +108,6 @@
   .shots figure { margin: 0; display: grid; gap: 4px; }
   .shots img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: #FFFFFF; }
   .shots figcaption { font-size: 13px; color: var(--ink-soft); }
-  .copyrow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .btn { border: 0; border-radius: 20px; padding: 8px 18px; background: var(--accent-bright); color: var(--on-accent); font-weight: 700; min-height: 40px; }
   .status { font-size: 14px; color: var(--ink-soft); }
   .notes-close { display: none; }
@@ -148,13 +147,17 @@
   .ibtn:disabled { opacity: .35; cursor: default; }
 
   /* La capçalera de la seqüència: ‹ nom ✎ · 2 de 5 ▾ · ⋯ › */
-  .shead { flex-shrink: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto auto 44px; align-items: center; gap: 2px; padding: 4px 4px 0; }
+  .shead { flex-shrink: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto 44px 44px; align-items: center; gap: 2px; padding: 4px 4px 0; }
   .sname { cursor: pointer; display: flex; align-items: center; gap: 2px; min-width: 0; border: 0; background: transparent; padding: 0 4px; height: 44px; border-radius: 10px; text-align: left; }
   .sname b { font-size: 19px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sname svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--ink-soft); }
   .count { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 18px; height: 36px; padding: 0 10px; font-size: 14px; white-space: nowrap; display: inline-flex; align-items: center; gap: 2px; }
-  .sstyle { flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 16px 6px 52px; font-size: 14px; color: var(--ink-soft); min-height: 30px; }
-  .sstyle[hidden] { display: none; }
+  /* D25: el botó d'estil, al costat del nom; amb retocs, porta la marca de «Personalitzat» */
+  .namegroup { display: flex; align-items: center; min-width: 0; }
+  .namegroup .sname { flex: 0 1 auto; }
+  .stylebtn { position: relative; flex-shrink: 0; }
+  .stylebtn .dot { position: absolute; right: 2px; bottom: 4px; width: 16px; height: 16px; font-size: 10px; }
+  .stylebtn .dot[hidden] { display: none; }
   .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--mark); color: #FFFFFF; display: inline-grid; place-items: center; font-size: 11px; box-shadow: 0 0 0 2px #FFFFFF; flex-shrink: 0; }
   .help { width: 30px; height: 30px; border: 0; background: transparent; border-radius: 15px; color: var(--ink-soft); display: inline-grid; place-items: center; }
 
@@ -215,9 +218,9 @@
 
 <div class="wrap">
   <header class="top">
-    <p class="eyebrow">Esbós v1 · docs/plans/PLA-estils.md · pas 7 (§10.4)</p>
+    <p class="eyebrow">Esbós v2 · docs/plans/PLA-estils.md · pas 7 (§10.4)</p>
     <h1>L'edició al mòbil: una seqüència per pantalla</h1>
-    <p class="lede">La pantalla d'edició nova que proposa el pla per al mòbil: el nom i l'estil de la seqüència a dalt, la graella al mig i la cerca a baix, a l'abast del polze. Es passa de seqüència lliscant sobre la graella o amb les fletxes ‹ ›. Toca la cerca per veure com puja la barra amb el teclat. A sota hi ha les captures de com és avui i les preguntes que queden abans del pas 8.</p>
+    <p class="lede">La pantalla d'edició nova que proposa el pla per al mòbil: el nom i l'estil de la seqüència a dalt, la graella al mig i la cerca a baix, a l'abast del polze. Es passa de seqüència lliscant sobre la graella o amb les fletxes ‹ ›. Toca la cerca per veure com puja la barra amb el teclat. El botó de la paleta, al costat del nom, és l'estil de la seqüència. A sota hi ha les captures de com és avui i les decisions del 22 de novembre.</p>
   </header>
 
   <div class="layout">
@@ -235,9 +238,15 @@
             <button class="ibtn" id="prev" type="button" aria-label="Seqüència anterior">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
             </button>
+            <div class="namegroup">
             <div class="sname" id="sname" role="button" tabindex="0" aria-label="Canvia el nom">
               <b id="nameText">Matí</b>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16v4z"/></svg>
+            </div>
+            <button class="ibtn stylebtn" id="stylebtn" type="button" aria-haspopup="dialog">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.9-.7-1.3-.7-2.2 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10" cy="7" r="1.2"/><circle cx="14.5" cy="7" r="1.2"/></svg>
+              <span class="dot" id="styleDot" aria-hidden="true" hidden>≡</span>
+            </button>
             </div>
             <button class="count" id="count" type="button" aria-haspopup="menu" aria-expanded="false"><span id="countText">1 de 5</span> <span aria-hidden="true">▾</span></button>
             <button class="ibtn" id="more" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Accions de la seqüència">
@@ -247,7 +256,6 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
-          <div class="sstyle" id="sstyle"></div>
 
           <div class="viewport" id="viewport">
             <div class="track" id="track"></div>
@@ -278,7 +286,7 @@
       </div>
       <div class="chips" role="group" aria-label="Mida de la pantalla">
         <button class="chip" type="button" data-size="phone" aria-pressed="true">Mòbil</button>
-        <button class="chip" type="button" data-size="desk" aria-pressed="false">Escriptori (D23, opció a)</button>
+        <button class="chip" type="button" data-size="desk" aria-pressed="false">Escriptori (D26)</button>
         <button class="chip" type="button" id="kbdChip" aria-pressed="false">Teclat obert</button>
       </div>
     </div>
@@ -291,10 +299,11 @@
         <ol>
           <li><b>Llisca</b> la graella cap a l'esquerra o la dreta: canvia de seqüència, i el nom i «1 de 5» canvien amb ella. Les fletxes ‹ › fan el mateix (D19).</li>
           <li><b>«1 de 5»</b> obre la llista de seqüències: s'hi salta directament a qualsevol.</li>
+          <li>La <b>paleta</b> del costat del nom obre la galeria; a «Matí» i «Nit» porta la marca de «Personalitzat» (D25).</li>
           <li>El <b>«⋯»</b> porta l'estil (obre la galeria), canviar el nom, restablir els pictogrames i treure la seqüència oberta (D21). És el mateix menú que ja hi ha avui (pas 5).</li>
           <li>El <b>«+»</b> s'obre cap amunt: afegir un pictograma o una seqüència (D20).</li>
           <li>Toca la <b>cerca</b>: la barra puja amb el teclat i els suggeriments s'obren cap amunt (D22). La graella s'encongeix, però la capçalera no es mou.</li>
-          <li>Prova <b>Escriptori</b>: és l'opció (a) de D23, la mateixa pantalla a tota l'amplada, per comparar-la amb la captura d'avui.</li>
+          <li>Prova <b>Escriptori</b>: la mateixa pantalla a tota l'amplada, que serà la vista alternativa de D26.</li>
         </ol>
       </section>
 
@@ -324,41 +333,13 @@
       </section>
 
       <section class="card" id="decisions">
-        <h2>Per decidir abans del pas 8</h2>
-        <div class="decision">
-          <p class="q"><span class="id">E1</span>La línia «Estil: …» sota la capçalera, o només dins del «⋯»?</p>
-          <p class="status">A 390 px hi cap, però es menja 30 px de graella. Dins del «⋯» ja hi és sempre.</p>
-          <div class="opts">
-            <label><input type="radio" name="e1" value="linia" checked> Es queda a la línia de sota, com a l'esbós</label>
-            <label><input type="radio" name="e1" value="menu"> Només al «⋯» (amaga la línia a l'esbós)</label>
-          </div>
-        </div>
-        <div class="decision">
-          <p class="q"><span class="id">E2</span>D23: l'escriptori</p>
-          <div class="opts">
-            <label><input type="radio" name="e2" value="a"> (a) La pantalla nova a totes les mides</label>
-            <label><input type="radio" name="e2" value="b"> (b) La nova com a vista alternativa durant un temps</label>
-            <label><input type="radio" name="e2" value="c"> (c) Un pla a part; l'escriptori es queda amb les pestanyes</label>
-          </div>
-        </div>
-        <div class="decision">
-          <p class="q"><span class="id">E3</span>La cerca màgica, dins del camp (✨) o com a botó a part?</p>
-          <div class="opts">
-            <label><input type="radio" name="e3" value="dins" checked> Dins del camp, com a l'esbós</label>
-            <label><input type="radio" name="e3" value="apart"> Un botó a part a la barra</label>
-          </div>
-        </div>
-        <div class="decision">
-          <p class="q"><span class="id">E4</span>Al mòbil girat, l'edició</p>
-          <div class="opts">
-            <label><input type="radio" name="e4" value="lliure" checked> Funciona girada (més columnes a la graella)</label>
-            <label><input type="radio" name="e4" value="capa"> Demana posar el mòbil dret, com la vista</label>
-          </div>
-        </div>
-        <div class="copyrow">
-          <button class="btn" id="copy" type="button">Copia les respostes</button>
-          <span class="status" id="copyStatus" role="status"></span>
-        </div>
+        <h2>Decidit el 22 de novembre</h2>
+        <ul>
+          <li><b>D25</b> (E1): sense línia «Estil: …» sota la capçalera; l'estil ja es veu a les targetes. Al seu lloc, un <b>botó d'estil al costat del nom</b>, que obre la galeria. Si algun pictograma té retocs, el botó porta la marca de «Personalitzat». El «⋯» continua portant l'estil.</li>
+          <li><b>D26</b> (E2): a l'escriptori, la pantalla nova com a <b>vista alternativa durant un temps</b>, al costat de les pestanyes de sempre.</li>
+          <li><b>D27</b> (E3): la cerca màgica, <b>dins del camp</b> de cerca.</li>
+          <li><b>D28</b> (E4): l'edició <b>funciona amb el mòbil girat</b>, amb més columnes a la graella.</li>
+        </ul>
       </section>
 
       <section class="card">
@@ -402,7 +383,6 @@
     update();
   };
 
-  const showStyleLine = () => document.querySelector('input[name="e1"]:checked').value === "linia";
 
   const update = () => {
     const seq = sequences[current];
@@ -413,9 +393,13 @@
     $("prev").disabled = current === 0;
     $("next").disabled = current === sequences.length - 1;
     const custom = seq.retouched.length > 0;
-    $("sstyle").hidden = !showStyleLine();
-    $("sstyle").innerHTML = `Estil: <b>${custom ? "Personalitzat" : seq.style}</b>` +
-      (custom ? ` <span class="dot" aria-hidden="true">≡</span><button class="help" type="button" aria-label="L'estil de base és «${seq.style}». ${seq.retouched.length} pictograma té retocs propis." title="L'estil de base és «${seq.style}». ${seq.retouched.length} pictograma té retocs propis.">?</button>` : "");
+    // D25: sense línia d'estil; el botó del costat del nom diu l'estil al seu nom
+    $("styleDot").hidden = !custom;
+    const label = custom
+      ? `Estil: Personalitzat (a partir de «${seq.style}», ${seq.retouched.length} pictograma amb retocs). Canvia…`
+      : `Estil: ${seq.style}. Canvia…`;
+    $("stylebtn").setAttribute("aria-label", label);
+    $("stylebtn").title = label;
   };
 
   const go = (index) => { current = Math.max(0, Math.min(sequences.length - 1, index)); update(); };
@@ -565,23 +549,13 @@
     $("phone").classList.toggle("desk", chip.dataset.size === "desk");
   });
 
-  document.querySelectorAll('input[name="e1"]').forEach((r) => r.onchange = update);
+  $("stylebtn").onclick = () => toast("Aquí s'obre la Galeria d'estils (la del pas 5).");
 
   // Al mòbil de debò, el simulador és la pantalla
   const isDevice = matchMedia("(max-width: 700px) and (pointer: coarse)").matches;
   document.body.classList.toggle("device", isDevice);
   $("notesBtn").onclick = () => document.body.classList.add("notes-open");
   $("notesClose").onclick = () => document.body.classList.remove("notes-open");
-
-  // Les respostes, per enganxar-les a la conversa
-  $("copy").onclick = async () => {
-    const picked = ["e1", "e2", "e3", "e4"].map((q) => {
-      const input = document.querySelector(`input[name="${q}"]:checked`);
-      return `${q.toUpperCase()}: ${input ? input.parentElement.textContent.trim() : "(sense resposta)"}`;
-    }).join("\n");
-    try { await navigator.clipboard.writeText(picked); $("copyStatus").textContent = "Copiat."; }
-    catch { $("copyStatus").textContent = picked; }
-  };
 
   render();
 </script>

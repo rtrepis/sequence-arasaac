@@ -3,8 +3,8 @@
 > **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**, i **pla d'execució
 > escrit el 2026-11-21 (§10)**. Passos 1 (fonaments), 2 (solució A i D1, §3.5), 4 (el format, §12.1),
 > 5 (la galeria i l'estil de la seqüència a l'edició, §13.1), 6 (l'estil del bloc a la vista,
-> §14.1) i 7 (l'esbós, §15.1) fets. **Ara toca que l'usuari revisi l'esbós** (§16) abans del pas 8.
-> El pas 3 (l'estudi) encara no s'ha fet, i el pas 9 en depèn.
+> §14.1) i 7 (l'esbós, §15.1) fets, i l'esbós revisat (D25–D28, 2026-11-22). Es continua pel pas 8,
+> amb l'encàrrec de §16. El pas 3 (l'estudi) encara no s'ha fet, i el pas 9 en depèn.
 
 > **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
 >
@@ -800,6 +800,10 @@ Preses a partir de les preguntes de §8.1, §8.2, §8.3 i §8.5.
 | D22 | §8.3: el teclat del mòbil amb la cerca a baix | **La barra de baix puja amb el teclat** (viewport visible, `useVisibleViewport`), i els suggeriments s'obren cap amunt. |
 | D23 | §8.3: l'escriptori | **A decidir després de l'esbós** (pas 7 de §10.3). L'usuari s'inclina per la pantalla nova a totes les mides, però vol poder comparar-la: (a) la pantalla nova a totes les mides, (b) la nova com a vista alternativa durant un temps, o (c) un pla a part. Fins aleshores, l'escriptori conserva les pestanyes i rep el mateix «⋯» de la seqüència (pas 5 de §10.3), perquè l'estil s'hi pugui triar. |
 | D24 | §8.5, «Pendent del pas 8»: peces a prova de la columna | `SettingsLevel`, `SettingsLevels` amb la línia de la cascada, `LevelCrumbs` i l'etiqueta de la disposició **passen a l'estàndard tal com són** (`docs/estandards/configuracions.md`). L'etiqueta «Nou» i la revisió dels textos de «vista» no s'han triat: no entren en aquest pla. |
+| D25 | E1 de l'esbós (§15.1): la línia «Estil: …» sota la capçalera de l'edició al mòbil | **No hi és**: l'estil ja es veu a les targetes. Al seu lloc, un **botó d'estil al costat del nom** (icona de paleta), que obre la Galeria d'estils. Si algun pictograma té retocs, el botó porta la **marca de «Personalitzat»** (D13). El nom de l'estil va al nom accessible i al tooltip. El «⋯» continua portant «Estil: _nom_ — Canvia…». Decidit el 2026-11-22. |
+| D26 | E2 / D23: l'escriptori | **(b)**: la pantalla nova com a **vista alternativa durant un temps**, al costat de les pestanyes de sempre. Com s'hi passa i quan s'acaba el temps, al pas 10 (Q4). Decidit el 2026-11-22. |
+| D27 | E3: la cerca màgica | **Dins del camp de cerca** (✨), a la barra de baix. Decidit el 2026-11-22. |
+| D28 | E4: el mòbil girat | L'edició **funciona girada**, amb més columnes a la graella: no porta la capa de «posa el mòbil dret» (`RotatePhoneOverlay`) que porta la vista. Decidit el 2026-11-22. |
 
 **Què queda superat**:
 
@@ -906,17 +910,20 @@ de l'usuari: §15.1. `docs/esbossos/esbos-edicio-mobil.html`, com
 amplada de mòbil). Inclou també l'amplada d'escriptori, perquè l'usuari decideixi D23. **L'usuari
 el revisa abans del pas 8.**
 
-**Pas 8 — La pantalla d'edició nova al mòbil.** La capçalera (nom editable, «2 de 5», llista, «⋯»),
+**Pas 8 — La pantalla d'edició nova al mòbil.** La capçalera (nom editable, el botó d'estil amb la
+marca de «Personalitzat» (D25), «2 de 5», llista, «⋯»),
 el lliscar entre seqüències amb fletxes ‹ › (D19), la barra de baix amb el «+» (D20), la cerca, la
-cerca màgica i `DocumentStatusFab`, que puja amb el teclat (D22). Les accions de
+cerca màgica dins del camp (D27) i `DocumentStatusFab`, que puja amb el teclat (D22). Funciona amb el
+mòbil girat (D28). Les accions de
 `PictogramAmount` (afegir i treure l'últim) se'n van: afegir és al «+», i treure un pictograma és a
 la graella. Cobreix C1 (cap botó només amb hover) i C28 (girar el mòbil) per a aquesta pantalla.
 
 **Pas 9 — Els estils de l'app a la galeria** (D6, D7), amb el que surti de l'estudi, «Sense vores»
 inclòs. Els noms, traduïts; al document s'hi escriu el nom en l'idioma de qui l'aplica.
 
-**Pas 10 — L'escriptori** (D23), segons el que l'usuari decideixi després de l'esbós. Si és (c),
-s'obre un pla a part i aquest pas es tanca aquí.
+**Pas 10 — L'escriptori** (D23, decidit a D26: la pantalla nova com a vista alternativa durant un
+temps). Queda per decidir (**Q4**): com es passa d'una vista a l'altra (un interruptor a l'edició?
+desat com a preferència d'interfície, que no entra al document?) i quan es retira la vista vella.
 
 **Pas 11 — La columna a l'estàndard** (D24): `SettingsLevel`, `SettingsLevels`, `LevelCrumbs` i
 l'etiqueta de la disposició a `docs/estandards/configuracions.md`, «Components compartits».
@@ -1273,11 +1280,10 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 
 > Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
 >
-> **Primer, l'usuari revisa l'esbós** (`docs/esbossos/esbos-edicio-mobil.html`) i respon E1–E4
-> (§15.1). Les respostes s'apunten com a decisions a §10.1 (D25…) i, si E2 tria (a) o (b), el pas 10
-> es concreta. **Sense aquestes respostes no es comença el pas 8.**
+> **L'esbós ja està revisat** (2026-11-22): les respostes són D25–D28 a §10.1, i l'esbós
+> (`docs/esbossos/esbos-edicio-mobil.html`, v2) ja les porta.
 >
-> Després, el **pas 8 de §10.3** (la pantalla d'edició nova al mòbil), amb les proves de §10.5.
+> La tasca és el **pas 8 de §10.3** (la pantalla d'edició nova al mòbil), amb les proves de §10.5.
 > Llegeix primer §10.1, §10.3 (pas 8), §10.4, §15.1, `docs/estandards/capes-flotants.md` (sobretot
 > el panell de baix i els botons flotants) i `docs/plans/fets/PLA-vista-mobil.md`, que va fer el
 > mateix camí per a la vista.
