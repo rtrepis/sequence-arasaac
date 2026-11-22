@@ -76,8 +76,8 @@ export interface SequenceStyle extends DefaultSettings {
 
 /**
  * Camps del `.saac` v3 que Redux no fa servir però que s'han de tornar a
- * escriure en desar: els desconeguts de cada objecte, la data de creació i les
- * dades de cada seqüència que no són pictogrames (el títol…). Les pàgines
+ * escriure en desar: els desconeguts de cada objecte (també de cada
+ * seqüència) i la data de creació. Les pàgines
  * (`page.sheets` i `page.common`) i els estils amb nom (`styles`) no hi van:
  * són `pages` i `styles`.
  */
@@ -100,10 +100,16 @@ export interface DocumentSAAC {
   author?: string;
   /**
    * Estil dels pictogrames. Sense valor, el document encara no en té de propi i
-   * **hereta l'estil per defecte** de l'usuari: és el cas d'un document nou fins
-   * que es desa o se n'edita l'estil (`docs/fonaments/03-model-contingut-estil.md`).
+   * **hereta l'estil per defecte** de l'usuari: només ho és un document nou
+   * mentre neix, que de seguida en rep una còpia (pla dels estils, D1; vegeu
+   * `docs/fonaments/03-model-contingut-estil.md`, §7).
    */
   defaultSettings?: DefaultSettings;
+  /**
+   * El nom de l'estil del document: el de l'estil del qual surt («El meu
+   * estil»…). És contingut, en l'idioma de qui l'ha aplicat (`style.name`)
+   */
+  styleName?: string;
   /** Mides i espaiats de l'estil. Sense valor, hereta com `defaultSettings`. */
   styleView?: SequenceStyleView;
   /**
@@ -118,12 +124,26 @@ export interface DocumentSAAC {
    * el de sempre, i el de tots els documents d'abans.
    */
   pages?: DocumentPages;
-  /** Els estils amb nom del document, que els blocs fan servir per `styleId` */
+  /**
+   * Els estils amb nom del document: els fan servir les seqüències
+   * (`sequenceStyleIds`) i els blocs que en tenen un de reassignat (`styleId`)
+   */
   styles?: NamedStyle[];
   /** Colors de cada categoria de Fitzgerald. Sense valor, els de l'app. */
   fitzgeraldColors?: FitzgeraldCategoryColors;
   /** Identificador estable de cada seqüència al `.saac` v3 */
   sequenceIds?: { [key: number]: string };
+  /**
+   * El nom de cada seqüència que en té (`sequences[].title`). És per a qui
+   * edita i no s'imprimeix; sense, la interfície diu «Seqüència _N_»
+   */
+  sequenceNames?: { [key: number]: string };
+  /**
+   * L'estil de cada seqüència que en té un (`sequences[].namedStyle`): l'`id`
+   * d'un estil de `styles`. Sense, la seqüència fa servir l'estil del
+   * document. El reben tots els seus blocs que no en tenen un de reassignat
+   */
+  sequenceStyleIds?: { [key: number]: string };
   /** El que el fitxer portava i l'app no fa servir: vegeu `SaacDocumentExtras` */
   saacExtra?: SaacDocumentExtras;
 }

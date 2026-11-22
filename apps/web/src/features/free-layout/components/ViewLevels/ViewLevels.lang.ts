@@ -2,6 +2,31 @@ import { defineMessages } from "react-intl";
 
 // Textos dels nivells «Pàgina» i «Bloc» de la columna de la vista (R5).
 const messages = defineMessages({
+  blockStyle: {
+    id: "features.freeLayout.levels.blockStyle",
+    defaultMessage: "Style",
+    description:
+      "Títol de la fila «Estil» del nivell «Bloc»: l'estil que pinta aquest bloc (el de la seqüència o un de reassignat)",
+  },
+  blockStyleChange: {
+    id: "features.freeLayout.levels.blockStyleChange",
+    defaultMessage: "Change…",
+    description:
+      "Botó de la fila «Estil» del nivell «Bloc»: obre la Galeria d'estils per a aquest bloc",
+  },
+  blockStyleBackToSequence: {
+    id: "features.freeLayout.levels.blockStyleBackToSequence",
+    defaultMessage: "Back to the sequence style",
+    description:
+      "Botó de la fila «Estil» d'un bloc amb un estil reassignat: el bloc torna a fer servir l'estil de la seqüència (es pot desfer)",
+  },
+  blockStyleReassigned: {
+    id: "features.freeLayout.levels.blockStyleReassigned",
+    defaultMessage:
+      "Only this block has this style. The sequence uses “{name}”.",
+    description:
+      "Marca «reassignat» (tooltip i nom accessible) i ajuda sota la fila «Estil» d'un bloc amb un estil que no és el de la seva seqüència; {name} és l'estil de la seqüència",
+  },
   columnsHelp: {
     id: "features.freeLayout.levels.columnsHelp",
     defaultMessage: "How many pictograms per row inside the block.",

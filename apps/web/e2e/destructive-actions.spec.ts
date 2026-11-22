@@ -34,14 +34,21 @@ const loadFixture = async (page: Page): Promise<void> => {
   await expect(page.getByRole("tab", { name: "2" })).toBeVisible();
 };
 
+/**
+ * «Treu aquesta seqüència», del menú «⋯» de la seqüència oberta (pla dels
+ * estils, D21): treu l'oberta, no l'última.
+ */
+const removeOpenSequence = async (page: Page): Promise<void> => {
+  await page.getByRole("button", { name: /^Accions de «/ }).click();
+  await page.getByRole("menuitem", { name: "Treu aquesta seqüència" }).click();
+};
+
 test("una seqüència buida s'esborra sense preguntar res", async ({ page }) => {
   await page.goto("/ca/create-sequence", { waitUntil: "domcontentloaded" });
   await page.getByRole("button", { name: "Afegeix una seqüència" }).click();
   await expect(page.getByRole("tab", { name: "2" })).toBeVisible();
 
-  await page
-    .getByRole("button", { name: "Elimina l'última seqüència" })
-    .click();
+  await removeOpenSequence(page);
 
   // Sense res a perdre, la confirmació només seria fricció
   await expect(page.getByRole("dialog")).toHaveCount(0);
@@ -52,12 +59,11 @@ test("una seqüència amb pictogrames confirma, i diu quants en perd", async ({
   page,
 }) => {
   await loadFixture(page);
+  await page.getByRole("tab", { name: "2" }).click();
 
-  await page
-    .getByRole("button", { name: "Elimina l'última seqüència" })
-    .click();
+  await removeOpenSequence(page);
   const dialog = page.getByRole("dialog");
-  await expect(dialog).toContainText("Esborres la seqüència 2?");
+  await expect(dialog).toContainText("Vols treure «Seqüència 2»?");
   // El cos diu la xifra concreta, no un avís genèric
   await expect(dialog).toContainText("2 pictogrames");
 
@@ -65,18 +71,15 @@ test("una seqüència amb pictogrames confirma, i diu quants en perd", async ({
   await dialog.getByRole("button", { name: "Cancel·la" }).click();
   await expect(page.getByRole("tab", { name: "2" })).toBeVisible();
 
-  await page
-    .getByRole("button", { name: "Elimina l'última seqüència" })
-    .click();
-  await page.getByRole("button", { name: "Esborra la seqüència" }).click();
+  await removeOpenSequence(page);
+  await page.getByRole("button", { name: "Treu la seqüència" }).click();
   await expect(page.getByRole("tab", { name: "2" })).toHaveCount(0);
 });
 
 test("cap botó no queda armat en obrir la confirmació", async ({ page }) => {
   await loadFixture(page);
-  await page
-    .getByRole("button", { name: "Elimina l'última seqüència" })
-    .click();
+  await page.getByRole("tab", { name: "2" }).click();
+  await removeOpenSequence(page);
   await expect(page.getByRole("dialog")).toBeVisible();
 
   // El focus se'l queda el diàleg: el lector de pantalla llegeix què es perd i
@@ -102,7 +105,12 @@ test("al menú contextual, esborrar va l'últim i separat de la resta", async ({
 }) => {
   await loadFixture(page);
   await page.getByRole("tab", { name: "1" }).click();
-  await page.locator("button:has(> div)").first().click({ button: "right" });
+  // La targeta pel seu nom: el botó d'estil de la capçalera també porta una
+  // marca a dins, i un selector per estructura l'agafava a ell
+  await page
+    .getByRole("button", { name: /pictograma 1/ })
+    .first()
+    .click({ button: "right" });
 
   const menu = page.getByRole("navigation");
   await expect(menu).toBeVisible();

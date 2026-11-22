@@ -7,9 +7,13 @@ import { FeedbackProgress } from "@/context/FeedbackContext";
 import { FormattedMessage } from "react-intl";
 import useArasaacKeywords from "../../features/pictogram/hooks/useArasaacKeywords";
 import { messages } from "./EditSequencesPage.lang";
+import EditBottomBar from "@features/sequence/components/EditBottomBar/EditBottomBar";
+import EditLayoutSwitch from "@features/sequence/components/EditLayoutSwitch/EditLayoutSwitch";
+import useEditLayout from "@features/sequence/hooks/useEditLayout";
 
 const EditSequencesPage = (): React.ReactElement => {
   const [info, setInfo] = useState(false);
+  const { isNew, canChoose, choose } = useEditLayout();
 
   // Manté les paraules clau de l'ARASAAC sincronitzades amb l'idioma de cerca
   useArasaacKeywords();
@@ -17,6 +21,23 @@ const EditSequencesPage = (): React.ReactElement => {
   const toggleValue = () => {
     setInfo((previous) => !previous);
   };
+  // La pantalla nova (pas 8 del pla dels estils): la capçalera de la
+  // seqüència, la graella i la barra de baix. Al mòbil sempre; a l'escriptori,
+  // si l'usuari la tria, amb el botó per tornar a la d'abans (pas 10)
+  if (isNew)
+    return (
+      <>
+        {canChoose && (
+          <Stack direction="row" justifyContent="flex-end" marginBlockEnd={1}>
+            <EditLayoutSwitch current="new" onChoose={choose} />
+          </Stack>
+        )}
+        <FeedbackProgress />
+        <TabsSequences newLayout />
+        <EditBottomBar />
+      </>
+    );
+
   return (
     <>
       <Stack
@@ -27,6 +48,12 @@ const EditSequencesPage = (): React.ReactElement => {
       >
         <PictogramAmount info={{ value: info, toggleValue: toggleValue }} />
         <MagicSearch showHelperText={info} />
+        {/* A l'escriptori, la pantalla nova es prova d'aquí (pas 10) */}
+        {canChoose && (
+          <Stack justifyContent="flex-start" flexShrink={0}>
+            <EditLayoutSwitch current="classic" onChoose={choose} />
+          </Stack>
+        )}
       </Stack>
       <Divider />
       <FeedbackProgress />

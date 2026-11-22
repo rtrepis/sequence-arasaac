@@ -2,28 +2,28 @@ import { useCallback } from "react";
 import { useIntl } from "react-intl";
 import { useAppSelector } from "@/app/hooks";
 import {
-  selectSequenceExtras,
+  selectSequenceNames,
   selectSequenceKeys,
 } from "@features/free-layout/store/freeLayoutThunks";
 import messages from "./FreeLayoutPages.lang";
 
 /**
- * El nom d'una seqüència: el títol que porta el fitxer, si en té, o «Seqüència
+ * El nom d'una seqüència: el seu (`sequences[].title`), si en té, o «Seqüència
  * N», amb el número de la seva pestanya. És el que diuen les caixes, la llista
  * per afegir-ne i el calaix.
  */
 export const useSequenceName = (): ((sequenceKey: number) => string) => {
   const intl = useIntl();
   const keys = useAppSelector(selectSequenceKeys);
-  const extras = useAppSelector(selectSequenceExtras);
+  const names = useAppSelector(selectSequenceNames);
   return useCallback(
     (sequenceKey: number) => {
-      const title = extras?.[sequenceKey]?.title;
-      if (typeof title === "string" && title.trim()) return title;
+      const title = names?.[sequenceKey];
+      if (title !== undefined && title.trim()) return title;
       return intl.formatMessage(messages.sequenceName, {
         number: keys.indexOf(sequenceKey) + 1,
       });
     },
-    [extras, intl, keys],
+    [names, intl, keys],
   );
 };

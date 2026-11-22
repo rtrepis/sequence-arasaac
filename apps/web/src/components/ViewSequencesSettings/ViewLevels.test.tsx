@@ -387,42 +387,52 @@ describe("els estils de bloc (R7)", () => {
     };
   };
 
-  it("el menú del bloc el treu, i només a aquell bloc", async () => {
+  it("el menú del bloc ja no porta les accions velles, i «Tria un estil…» obre la galeria del bloc (E5, D12)", async () => {
     const { store } = renderView(styledDocument());
 
     await userEvent.click(
       screen.getAllByRole("button", { name: "Actions for Sequence 1" })[0],
     );
-    expect(
-      screen.getByRole("menuitem", { name: "Update with my style" }),
-    ).toBeInTheDocument();
+    for (const old of [
+      "Apply my style",
+      "Update with my style",
+      "Remove the block style",
+    ])
+      expect(
+        screen.queryByRole("menuitem", { name: old }),
+      ).not.toBeInTheDocument();
     await userEvent.click(
-      screen.getByRole("menuitem", { name: "Remove the block style" }),
+      screen.getByRole("menuitem", { name: "Choose a style…" }),
     );
 
+    const gallery = screen.getByRole("dialog", { name: /Style gallery/ });
+    // El bloc té «Agenda», que no és cap estil de la galeria: surt a dalt
+    const [current] = within(gallery).getAllByRole("button", { current: true });
+    expect(current).toHaveTextContent("Agenda");
+    // «L'estil de la seqüència» li treu la reassignació, només a aquell bloc
+    await userEvent.click(
+      within(gallery).getByRole("button", { name: /^The sequence style/ }),
+    );
     const [first, second] = store.getState().document.pages?.sheets ?? [];
     expect(first.placements[0]).not.toHaveProperty("styleId");
     expect(second.placements[0]).toMatchObject({ styleId: "st_1" });
     expect(store.getState().document.styles).toHaveLength(1);
-    // El missatge és el snackbar amb «Desfés»
     expect(store.getState().style.undoSnackbar).toMatchObject({
-      source: "blockStyleRemove",
+      source: "blockStyle",
+      details: { toBase: true },
     });
   });
 
-  it("un bloc sense estil de bloc no ofereix actualitzar-lo ni treure'l", async () => {
+  it("el menú de la pàgina no porta cap acció d'estil (E5)", async () => {
     renderView(styledDocument());
     await userEvent.click(
-      screen.getAllByRole("button", { name: "Actions for Sequence 2" })[0],
+      screen.getAllByRole("button", { name: "More page actions" })[0],
     );
     expect(
-      screen.getByRole("menuitem", { name: "Apply my style" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("menuitem", { name: "Update with my style" }),
+      screen.queryByRole("menuitem", { name: "Apply my style" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("menuitem", { name: "Remove the block style" }),
+      screen.queryByRole("menuitem", { name: "Update with my style" }),
     ).not.toBeInTheDocument();
   });
 });

@@ -12,12 +12,7 @@ import {
 import { DefaultSettings, ViewSettings } from "@/types/ui";
 import { DocumentLayout } from "@/types/document";
 import { PictSequence } from "@/types/sequence";
-import {
-  DEFAULT_FITZGERALD_CATEGORY_COLORS,
-  categoryOf,
-  colorForCategory,
-  sameColor,
-} from "@features/sequence/saac/fitzgerald";
+import { DEFAULT_FITZGERALD_CATEGORY_COLORS } from "@features/sequence/saac/fitzgerald";
 
 // --- Estil per defecte de l'usuari ---
 
@@ -161,22 +156,6 @@ export const stylesEqual = (a: SequenceStyle, b: SequenceStyle): boolean =>
 
 // --- Aplicar un estil a un document ---
 
-// Ajustos de cada pictograma que formen part de l'estil. `fontSize` i
-// `fontFamily` no hi són: són camps antics sense equivalent a l'estil, o sigui
-// que no hi ha res amb què comparar-los.
-const PICT_SEQUENCE_KEYS = [
-  "numbered",
-  "textPosition",
-  "font",
-  "numberFont",
-  "borderOut",
-  "borderIn",
-] as const;
-
-// El Fitzgerald va a part: el que segueix l'estil és el color de la categoria
-// del pictograma, no un color fix
-const PICT_API_ARA_KEYS = ["skin", "hair", "color"] as const;
-
 const VIEW_KEYS = [
   "sizePict",
   "pictSpaceBetween",
@@ -185,61 +164,15 @@ const VIEW_KEYS = [
 ] as const;
 
 /**
- * Un pictograma passa de l'estil `from` a l'estil `to` amb la regla dels
- * retocs: el que tenia igual que `from` (l'heretava) pren el de `to`, i el que
- * hi era diferent (un retoc) es queda. Modifica el pictograma: qui la crida en
- * passa una còpia si no vol tocar l'original. La fan servir canviar l'estil del
- * document i pintar un bloc amb un estil amb nom (R10, `blockSequence`).
- */
-export const followStyle = (
-  pict: PictSequence,
-  from: SequenceStyle,
-  to: SequenceStyle,
-): void => {
-  PICT_SEQUENCE_KEYS.forEach((key) => {
-    const current = pict.settings[key];
-    if (current !== undefined && deepEqual(current, from.pictSequence[key]))
-      // Còpia i no referència: si no, tots els pictogrames compartirien
-      // l'objecte de lletra de l'estil
-      (pict.settings as Record<string, unknown>)[key] = structuredCopy(
-        to.pictSequence[key],
-      );
-  });
-
-  PICT_API_ARA_KEYS.forEach((key) => {
-    const current = pict.img.settings[key];
-    if (current !== undefined && current === from.pictApiAra[key])
-      (pict.img.settings as Record<string, unknown>)[key] = to.pictApiAra[key];
-  });
-
-  const category = categoryOf(pict);
-  const oldColor = colorForCategory(
-    category,
-    from.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
-    from.pictApiAra.fitzgerald,
-  );
-  const { fitzgerald } = pict.img.settings;
-  if (fitzgerald === undefined || sameColor(fitzgerald, oldColor))
-    pict.img.settings.fitzgerald = colorForCategory(
-      category,
-      to.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS,
-      to.pictApiAra.fitzgerald,
-    );
-};
-
-/**
  * Aplica un estil nou **sobre el document que rep** (el fan servir els reducers,
  * amb Immer). La regla és la dels fonaments:
  *
- * - El que un pictograma o una pestanya tenia **igual** que l'estil vell,
- *   segueix el nou.
- * - El que tenia **diferent** és un retoc manual i es conserva.
- * - Un retoc que casualment era igual a l'estil vell es tracta com a no
- *   retocat: no hi ha manera de distingir-los, i el desfer cobreix l'error.
- * - El que no hi era (el pictograma o la pestanya l'heretaven) continua sense
- *   ser-hi, i per tant hereta el nou.
- * - El Fitzgerald: si el pictograma tenia el color de la seva categoria a
- *   l'estil vell, pren el de l'estil nou. Un color triat a mà es conserva.
+ * - Els pictogrames no es toquen: només porten els seus retocs, que es
+ *   conserven, i la resta l'hereten del nou (solució A del pla dels estils).
+ * - La vista d'una pestanya **igual** a la de l'estil vell segueix la nova; la
+ *   **diferent** és un retoc i es conserva. Un retoc que casualment era igual a
+ *   l'estil vell es tracta com a no retocat: no hi ha manera de distingir-los,
+ *   i el desfer cobreix l'error.
  * - L'espai entre seqüències no canvia: és de la pàgina (ADR-003, decisió 9).
  */
 export const applyStyleToDocument = (
@@ -247,10 +180,6 @@ export const applyStyleToDocument = (
   from: SequenceStyle,
   to: SequenceStyle,
 ): void => {
-  Object.values(document.content).forEach((sequence) =>
-    sequence.forEach((pict: PictSequence) => followStyle(pict, from, to)),
-  );
-
   Object.keys(document.viewSettings ?? {}).forEach((key) => {
     const view = document.viewSettings[Number(key)];
     VIEW_KEYS.forEach((field) => {

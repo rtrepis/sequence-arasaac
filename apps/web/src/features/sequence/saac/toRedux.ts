@@ -1,8 +1,10 @@
 // Del fitxer v3 a Redux: el que es carrega en obrir un document.
 //
-// Redux guarda els valors sencers a cada pictograma (com sempre). Aquí es
-// resolen amb la mateixa cascada que fa servir la targeta, i el que el fitxer
-// porta i l'app no fa servir es guarda a `saacExtra` per tornar-lo a escriure.
+// Un pictograma de Redux porta només els seus retocs, com el fitxer (solució A
+// del pla dels estils). Els objectes retocats (lletra, vores) es resolen amb la
+// mateixa cascada que fa servir la targeta, perquè Redux els vol sencers, i el
+// que el fitxer porta i l'app no fa servir es guarda a `saacExtra` per
+// tornar-lo a escriure.
 import type {
   DocumentPages,
   DocumentSAAC,
@@ -18,7 +20,12 @@ import type {
   SaacExtraFields,
 } from "@/types/sequence";
 import type { DefaultSettings } from "@/types/ui";
-import { isPlainObject, mergeDeep, resolveCardStyle } from "./cascade";
+import {
+  isPlainObject,
+  mergeDeep,
+  resolveCardStyle,
+  sequenceStyleOfV3,
+} from "./cascade";
 import type { FitzgeraldCategoryColors } from "./fitzgerald";
 import { PICTOGRAM_VARIANTS } from "./types";
 import type {
@@ -103,8 +110,14 @@ export const NAMED_STYLE_KEYS = [
   "card",
   "view",
 ] as const;
-const STYLE_KEYS = ["pictogram", "card", "view"] as const;
-export const SEQUENCE_KEYS = ["id", "style", "pictograms"] as const;
+const STYLE_KEYS = ["name", "pictogram", "card", "view"] as const;
+export const SEQUENCE_KEYS = [
+  "id",
+  "title",
+  "namedStyle",
+  "style",
+  "pictograms",
+] as const;
 export const PICTOGRAM_KEYS = [
   "id",
   "word",
@@ -146,15 +159,21 @@ const pictogramToRedux = (
   pictogram: V3Pictogram,
   indexSequence: number,
   document: SaacDocumentV3,
+  sequenceStyle: V3Style,
 ): PictSequence => {
-  const resolved = resolveCardStyle(document.style, undefined, pictogram);
+  // Els retocs són respecte de l'estil de la seva seqüència (el del document,
+  // o el de la seqüència si en té)
+  const resolved = resolveCardStyle(sequenceStyle, undefined, pictogram);
   const { image, style } = pictogram;
   const card = style?.card;
+  const retouch = style?.pictogram;
 
-  // Els objectes (lletra, vores) només hi van si el pictograma els retoca: la
-  // targeta fa servir els de l'estil quan no n'hi ha
+  // Només el que el pictograma retoca: la resta l'hereta. Els objectes (lletra,
+  // vores) hi van sencers
   const settings: PictSequenceSettings = {
-    textPosition: resolved.card.textPosition,
+    ...(card?.textPosition !== undefined && {
+      textPosition: card.textPosition,
+    }),
     ...(card?.font && { font: resolved.card.font }),
     ...(card?.numberFont && { numberFont: resolved.card.numberFont }),
     ...(card?.borderIn && { borderIn: resolved.card.borderIn }),
@@ -194,15 +213,22 @@ const pictogramToRedux = (
           image.keywords && { keyWords: image.keywords }),
       },
       selectedId,
-      // Només les opcions que admet el pictograma: el formulari d'edició ho
-      // mira per saber quins ajustos ensenya, i la URL d'ARASAAC per saber
-      // quins paràmetres hi posa
+      // Només els retocs, i de pell, cabell i color només els que el
+      // pictograma admet. Quines admet ho diu `variants`: el formulari
+      // d'edició ho mira per saber quins ajustos ensenya, i la targeta per
+      // saber quins paràmetres posa a la URL d'ARASAAC
       settings: {
-        ...(variants.includes("skin") && { skin: resolved.pictogram.skin }),
-        ...(variants.includes("hair") && { hair: resolved.pictogram.hair }),
-        ...(variants.includes("color") && { color: resolved.pictogram.color }),
-        fitzgerald: resolved.pictogram.fitzgerald,
+        ...(variants.includes("skin") &&
+          retouch?.skin !== undefined && { skin: retouch.skin }),
+        ...(variants.includes("hair") &&
+          retouch?.hair !== undefined && { hair: retouch.hair }),
+        ...(variants.includes("color") &&
+          retouch?.color !== undefined && { color: retouch.color }),
+        ...(retouch?.fitzgerald !== undefined && {
+          fitzgerald: retouch.fitzgerald,
+        }),
       },
+      variants: [...variants],
       ...(url && { url }),
       category: pictogram.category ?? "none",
     },
@@ -343,13 +369,20 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
   const viewSettings: { [key: number]: SequenceViewSettings } = {};
   const sequenceIds: { [key: number]: string } = {};
   const sequenceExtras: { [key: number]: SaacExtraFields } = {};
+  const sequenceNames: { [key: number]: string } = {};
+  const sequenceStyleIds: { [key: number]: string } = {};
 
   document.sequences.forEach((sequence, key) => {
+    const sequenceStyle = sequenceStyleOfV3(document, sequence.id);
     content[key] = sequence.pictograms.map((pictogram, index) =>
-      pictogramToRedux(pictogram, index, document),
+      pictogramToRedux(pictogram, index, document, sequenceStyle),
     );
     viewSettings[key] = mergeDeep(tabBase, sequence.style?.view);
     sequenceIds[key] = sequence.id;
+    if (sequence.title !== undefined) sequenceNames[key] = sequence.title;
+    // El lector ja n'ha tret els que apunten a un estil que no hi és
+    if (sequence.namedStyle !== undefined)
+      sequenceStyleIds[key] = sequence.namedStyle;
     const extra = unknownFields(sequence, SEQUENCE_KEYS);
     if (extra) sequenceExtras[key] = extra;
   });
@@ -383,6 +416,9 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
     viewSettings,
     activeSAAC: activeIndex >= 0 ? activeIndex : 0,
     defaultSettings,
+    ...(typeof document.style.name === "string" && {
+      styleName: document.style.name,
+    }),
     styleView: reduxStyle.view,
     layout: {
       pageSize: document.page.size,
@@ -396,6 +432,8 @@ export const documentFromV3 = (document: SaacDocumentV3): DocumentSAAC => {
     ...(document.styles && { styles: document.styles.map(namedStyleFromV3) }),
     fitzgeraldColors: reduxStyle.fitzgeraldColors,
     sequenceIds,
+    ...(Object.keys(sequenceNames).length > 0 && { sequenceNames }),
+    ...(Object.keys(sequenceStyleIds).length > 0 && { sequenceStyleIds }),
     saacExtra: {
       ...(rootExtra && { root: rootExtra }),
       ...(metaExtra && { meta: metaExtra }),

@@ -335,7 +335,7 @@ test.describe("estil del document", () => {
     await expect(banner(page).getByRole("button")).toHaveCount(1);
   });
 
-  test("«Aplica el meu estil» del menú de la pàgina es pot desfer", async ({
+  test("triar el meu estil a la Galeria d'estils de la seqüència es pot desfer", async ({
     page,
   }) => {
     await openFixture(page, "02-diverses-pestanyes.saac");
@@ -343,30 +343,30 @@ test.describe("estil del document", () => {
     // Com era abans del canvi (desar no s'endú el desfer)
     const original = JSON.parse(await downloadSaac(page, "document")) as V3File;
 
-    await page.getByRole("tab", { name: "Vista" }).click();
-    await page
-      .getByRole("button", { name: "Més accions de la pàgina" })
-      .click();
-    await page.getByRole("menuitem", { name: "Aplica el meu estil" }).click();
+    // El menú «⋯» de la seqüència oberta, a l'edició (pla dels estils, pas 5)
+    await page.getByRole("tab", { name: "1", exact: true }).click();
+    await page.getByRole("button", { name: /^Accions de «/ }).click();
+    await page.getByRole("menuitem", { name: /— Canvia…$/ }).click();
+    const gallery = page.getByRole("dialog", { name: "Galeria d'estils" });
+    await gallery.getByRole("button", { name: /^El meu estil/ }).click();
     await expect(
-      page.getByText("S'ha aplicat el teu estil a la pàgina."),
+      page.getByText("La seqüència fa servir «El meu estil».", {
+        exact: false,
+      }),
     ).toBeVisible();
 
-    // El meu estil va al document com a estil amb nom, i els blocs hi apunten.
-    // L'estil del document no canvia
+    // El meu estil va al document com a estil amb nom, i la seqüència hi
+    // apunta. L'estil del document no canvia
     const changed = JSON.parse(
       await downloadSaac(page, "document"),
     ) as V3File & {
-      styles?: { id: string; name: string; card?: { numbered?: boolean } }[];
-      page: { sheets?: { blocks: { namedStyle?: string }[] }[] };
+      styles?: { id: string; name: string }[];
+      sequences: { namedStyle?: string }[];
     };
     expect(changed.styles).toHaveLength(1);
     expect(changed.styles![0].name).toBe("El meu estil");
-    expect(
-      changed.page.sheets![0].blocks.every(
-        (block) => block.namedStyle === changed.styles![0].id,
-      ),
-    ).toBe(true);
+    expect(changed.sequences[0].namedStyle).toBe(changed.styles![0].id);
+    expect(changed.sequences[1].namedStyle).toBeUndefined();
     expect(changed.style).toEqual(original.style);
 
     // Desfer torna exactament al que hi havia

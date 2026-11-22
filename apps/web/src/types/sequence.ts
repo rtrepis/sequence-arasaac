@@ -1,6 +1,10 @@
 import { langTranslateSearch } from "../configs/languagesConfigs";
 import { FontFamily } from "./FontFamily";
-import type { FitzgeraldCategory } from "@features/sequence/saac/fitzgerald";
+import type {
+  FitzgeraldCategory,
+  FitzgeraldCategoryColors,
+} from "@features/sequence/saac/fitzgerald";
+import type { PictogramVariant } from "@features/sequence/saac/types";
 
 export type Sequence = PictSequence[];
 
@@ -25,6 +29,11 @@ export type SaacExtraFields = Record<string, unknown>;
 export interface PictImg {
   url: string;
 }
+/**
+ * Els retocs de la targeta d'un pictograma: **només** el que l'usuari ha
+ * canviat (solució A del pla dels estils). Sense valor, s'hereta de l'estil.
+ * `textPosition: "none"` és el retoc «sense text», sempre explícit.
+ */
 export interface PictSequenceSettings {
   numbered?: boolean;
   textPosition?: TextPosition;
@@ -36,11 +45,18 @@ export interface PictSequenceSettings {
   borderIn?: Border;
 }
 
-// Valors per defecte que PictogramCard necessita per al fallback (sense Redux)
+// L'estil que hereten els pictogrames: el que la targeta fa servir per a tot
+// el que el pictograma no retoca (sense Redux)
 export interface PictogramCardDefaults {
   numbered: boolean;
-  /** Color de Fitzgerald dels pictogrames que no en porten cap */
+  textPosition: TextPosition;
+  skin: Skin;
+  hair: Hair;
+  color: boolean;
+  /** Color de Fitzgerald dels pictogrames que no tenen categoria */
   fitzgerald?: string;
+  /** Color de Fitzgerald de cada categoria; sense, els de l'app */
+  fitzgeraldColors?: FitzgeraldCategoryColors;
   font: Font;
   numberFont?: Font;
   borderIn: Border;
@@ -83,7 +99,13 @@ export interface Font {
 export interface PictApiAra {
   searched: Word;
   selectedId: number;
+  /** Els retocs de la imatge (pell, cabell, color, Fitzgerald): només els de l'usuari */
   settings: PictApiAraSettings;
+  /**
+   * Quines variants d'ARASAAC admet el pictograma. Sense valor (un pictograma
+   * d'abans de la solució A), les que porta a `settings`
+   */
+  variants?: PictogramVariant[];
   url?: string;
   /**
    * Categoria de Fitzgerald de la paraula, que dona ARASAAC. És contingut, no

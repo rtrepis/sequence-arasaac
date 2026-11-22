@@ -2,9 +2,8 @@ import React from "react";
 import { useAppSelector } from "../../app/hooks";
 import PictogramCard from "../../components/PictogramCard/PictogramCard";
 import ViewSequencesSettings from "../../components/ViewSequencesSettings/ViewSquenceSettings";
-import { PictogramCardDefaults } from "../../types/sequence";
 import { ALIGN_H, ALIGN_V } from "../../shared/constants/alignmentMaps";
-import { selectDocumentCardDefaults } from "@features/sequence/style/styleSelectors";
+import { selectSequenceCardDefaults } from "@features/sequence/style/styleSelectors";
 import SelectableSequence from "@features/free-layout/components/SelectableSequence";
 import ScreenShapeNotice from "@features/free-layout/components/ScreenShapeNotice";
 
@@ -16,10 +15,9 @@ import ScreenShapeNotice from "@features/free-layout/components/ScreenShapeNotic
 const ViewSequencePage = (): React.ReactElement => {
   const { document, documentStatus } = useAppSelector((state) => state);
   // El document es veu sempre amb el seu estil, no amb les preferències de
-  // qui el mira (`docs/fonaments/03-model-contingut-estil.md`)
-  const defaults: PictogramCardDefaults = useAppSelector(
-    selectDocumentCardDefaults,
-  );
+  // qui el mira, i cada seqüència amb el seu si en té
+  // (`docs/fonaments/03-model-contingut-estil.md`)
+  const defaultsOf = useAppSelector(selectSequenceCardDefaults);
 
   // La columna d'ajustos copia el format de pàgina a un estat local en muntar-se
   // i ja no el torna a mirar: muntar-la abans que la restauració de l'esborrany
@@ -78,7 +76,7 @@ const ViewSequencePage = (): React.ReactElement => {
                     <PictogramCard
                       pictogram={pictogram}
                       view={"complete"}
-                      defaults={defaults}
+                      defaults={defaultsOf(seqKey)}
                       variant="plane"
                       size={{
                         pictSize: seqView.sizePict,

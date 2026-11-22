@@ -19,10 +19,7 @@ import {
   usePictogramActions,
   type PictogramActionKey,
 } from "@components/utils/MouseActionList/usePictogramActions";
-import {
-  selectDocumentCardDefaults,
-  selectDocumentStyle,
-} from "@features/sequence/style/styleSelectors";
+import { selectActiveSequenceCardDefaults } from "@features/sequence/style/styleSelectors";
 import { isPictogramCustomized } from "@features/sequence/style/pictogramStyle";
 import { cardMarks, customizedMark } from "./PictEditModal.styled";
 import TextOverflowWarning from "./TextOverflowWarning";
@@ -34,6 +31,7 @@ import {
   fitDocumentTextThunk,
   fitPictogramTextThunk,
 } from "@features/sequence/store/styleSlice";
+import { fitSequenceTextThunk } from "@features/sequence/store/sequenceStyleThunks";
 import React from "react";
 
 interface PictEditProps {
@@ -56,14 +54,14 @@ const PictEditModal = ({
 }: PictEditProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  // L'estil del document, no les preferències de qui el mira
+  // L'estil de la seqüència (o el del document), no les preferències de qui
+  // el mira
   const defaults: PictogramCardDefaults = useAppSelector(
-    selectDocumentCardDefaults,
+    selectActiveSequenceCardDefaults,
   );
-  const documentStyle = useAppSelector(selectDocumentStyle);
   // Té retocs propis? Ho diuen la marca de la targeta, el seu nom accessible i
   // el menú contextual, que llavors ofereix «Restableix l'estil»
-  const customized = isPictogramCustomized(pictogram, documentStyle);
+  const customized = isPictogramCustomized(pictogram);
   // El mateix, però del formulari obert, que encara no s'ha desat
   const [formCustomized, setFormCustomized] = useState(customized);
   // «Restableix l'estil» triat al menú del diàleg: el fa el formulari
@@ -94,6 +92,12 @@ const PictEditModal = ({
   // Amb mida pròpia, reduir la del document no el tocaria: no s'ofereix
   const canFitDocument =
     pictFontSize === undefined || pictFontSize === defaults.font.size;
+  // Si la seqüència té estil propi, la lletra és la seva: reduir la del
+  // document no la tocaria, i es redueix la de l'estil de la seqüència (B43)
+  const sequenceKey = useAppSelector((state) => state.document.activeSAAC);
+  const hasSequenceStyle = useAppSelector(
+    (state) => state.document.sequenceStyleIds?.[sequenceKey] !== undefined,
+  );
 
   const handlerClickOpen = () => {
     setOpen(true);
@@ -101,7 +105,8 @@ const PictEditModal = ({
 
   // El text s'edita damunt de la targeta allà on la targeta el pinta: a dalt
   // o a baix. Sense text visible, no hi ha on editar-lo (queda el diàleg)
-  const { textPosition } = pictogram.settings;
+  // La posició resolta: sense retoc, la de l'estil
+  const textPosition = pictogram.settings.textPosition ?? defaults.textPosition;
   const textEditPosition =
     textPosition === "top" || textPosition === "bottom"
       ? textPosition
@@ -286,7 +291,14 @@ const PictEditModal = ({
                 onFitPictogram={(size) =>
                   dispatch(fitPictogramTextThunk(pictogram.indexSequence, size))
                 }
-                onFitDocument={(size) => dispatch(fitDocumentTextThunk(size))}
+                fitScope={hasSequenceStyle ? "sequence" : "document"}
+                onFitDocument={(size) =>
+                  dispatch(
+                    hasSequenceStyle
+                      ? fitSequenceTextThunk(sequenceKey, size)
+                      : fitDocumentTextThunk(size),
+                  )
+                }
                 onEditText={textEditPosition ? handlerEditText : undefined}
               />
             )}

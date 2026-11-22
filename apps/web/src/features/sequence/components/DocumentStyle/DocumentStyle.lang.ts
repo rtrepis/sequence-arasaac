@@ -63,6 +63,13 @@ const messages = defineMessages({
     description:
       "Snackbar després de reduir la lletra d'un sol pictograma des de l'avís «el text no hi cap» (es pot desfer)",
   },
+  changedFitTextSequence: {
+    id: "features.sequence.style.changed.fitTextSequence",
+    defaultMessage:
+      "S'ha reduït la lletra de l'estil d'aquesta seqüència perquè el text hi càpiga.",
+    description:
+      "Snackbar després de reduir la lletra de l'estil propi de la seqüència des de l'avís «el text no hi cap» (es pot desfer)",
+  },
   changedFitTextDocument: {
     id: "features.sequence.style.changed.fitTextDocument",
     defaultMessage:
@@ -134,7 +141,7 @@ const messages = defineMessages({
   styleFileOpenedBody: {
     id: "features.sequence.style.styleFileOpened.body",
     defaultMessage:
-      "Pots fer-lo el teu estil: el reben els documents nous, i el porta a un document «Aplica el meu estil», al menú «⋯» d'una pàgina o d'un bloc.",
+      "Pots fer-lo el teu estil: el reben els documents nous, i el pots triar a la Galeria d'estils d'un document obert.",
     description:
       "Explicació del diàleg que surt en obrir un fitxer d'estil com si fos un document: només es pot fer el meu estil",
   },
@@ -150,38 +157,65 @@ const messages = defineMessages({
     description:
       "Snackbar després de «Carrega un estil des d'un fitxer…» al panell «El meu estil»",
   },
-  changedMyStyleSheet: {
-    id: "features.sequence.style.changed.myStyleSheet",
-    defaultMessage: "S'ha aplicat el teu estil a la pàgina.",
-    description:
-      "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'una pàgina",
-  },
-  changedMyStyleBlock: {
-    id: "features.sequence.style.changed.myStyleBlock",
-    defaultMessage: "S'ha aplicat el teu estil al bloc.",
-    description:
-      "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'un bloc",
-  },
-  changedMyStyleUpdate: {
-    id: "features.sequence.style.changed.myStyleUpdate",
-    defaultMessage:
-      "S'ha actualitzat l'estil de bloc amb el teu estil, a tots els blocs que el fan servir.",
-    description:
-      "Snackbar amb «Desfés» després d'«Actualitza amb el meu estil» del menú «⋯» d'una pàgina o d'un bloc",
-  },
-  changedBlockStyleRemove: {
-    id: "features.sequence.style.changed.blockStyleRemove",
-    defaultMessage:
-      "S'ha tret l'estil de bloc: el bloc torna a l'estil del document.",
-    description:
-      "Snackbar amb «Desfés» després de treure l'estil de bloc d'un bloc, al nivell «Bloc» de la columna de la vista",
-  },
   changedResetSequence: {
     id: "features.sequence.style.changed.resetSequence",
     defaultMessage:
       "S'han restablert els pictogrames de la seqüència, a tots els blocs on surt.",
     description:
       "Snackbar amb «Desfés» després de «Restableix els pictogrames d'aquesta seqüència» del menú «⋯» d'un bloc: se'n treuen els retocs, i canvien tots els blocs on surt la seqüència",
+  },
+  changedSequenceStyle: {
+    id: "features.sequence.style.changed.sequenceStyle",
+    defaultMessage: "La seqüència fa servir «{name}».",
+    description:
+      "Snackbar amb «Desfés» després de triar un estil per a una seqüència a la Galeria d'estils",
+  },
+  changedSequenceStyleDocument: {
+    id: "features.sequence.style.changed.sequenceStyleDocument",
+    defaultMessage: "La seqüència torna a l'estil del document («{name}»).",
+    description:
+      "Snackbar amb «Desfés» després de triar «L'estil del document» a la Galeria d'estils; {name} és el nom de l'estil del document",
+  },
+  changedBlockStyle: {
+    id: "features.sequence.style.changed.blockStyle",
+    defaultMessage:
+      "{common, select, true {El bloc fa servir «{name}», a totes les pàgines.} other {El bloc fa servir «{name}».}}",
+    description:
+      "Snackbar amb «Desfés» després de triar un estil per a un bloc a la Galeria d'estils (només aquell bloc). Si el bloc és comú, el canvi es veu a totes les pàgines",
+  },
+  changedBlockStyleSequence: {
+    id: "features.sequence.style.changed.blockStyleSequence",
+    defaultMessage:
+      "{common, select, true {El bloc torna a l'estil de la seqüència («{name}»), a totes les pàgines.} other {El bloc torna a l'estil de la seqüència («{name}»).}}",
+    description:
+      "Snackbar amb «Desfés» després de «Torna a l'estil de la seqüència» (o la primera opció de la galeria) d'un bloc; {name} és l'estil de la seqüència",
+  },
+  changedSequenceStyleRetouched: {
+    id: "features.sequence.style.changed.sequenceStyleRetouched",
+    defaultMessage:
+      "{count, plural, one {# pictograma conserva els seus retocs.} other {# pictogrames conserven els seus retocs.}}",
+    description:
+      "Segona frase del snackbar de triar l'estil d'una seqüència: els pictogrames amb retocs propis no canvien en el que han retocat",
+  },
+  changedSequenceStyleUnchangedBlocks: {
+    id: "features.sequence.style.changed.sequenceStyleUnchangedBlocks",
+    defaultMessage:
+      "{count, plural, one {# bloc té un altre estil i no ha canviat.} other {# blocs tenen un altre estil i no han canviat.}}",
+    description:
+      "Frase del snackbar de triar l'estil d'una seqüència: els blocs amb un estil reassignat es queden el seu",
+  },
+  removeRetouches: {
+    id: "features.sequence.style.removeRetouches",
+    defaultMessage: "Treu els retocs",
+    description:
+      "Botó del snackbar de triar l'estil d'una seqüència: treu els retocs de tots els seus pictogrames",
+  },
+  changedSequenceRetouchesRemoved: {
+    id: "features.sequence.style.changed.sequenceRetouchesRemoved",
+    defaultMessage:
+      "S'han tret els retocs dels pictogrames de la seqüència, a tots els blocs on surt.",
+    description:
+      "Snackbar amb «Desfés» després de «Treu els retocs»: el «Desfés» torna també l'estil d'abans",
   },
 });
 

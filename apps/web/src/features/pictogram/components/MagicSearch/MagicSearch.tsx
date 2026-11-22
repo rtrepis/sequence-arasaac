@@ -20,6 +20,7 @@ import { MagicSearchProps } from "./MagicSearch.types";
 
 const MagicSearch = ({
   showHelperText,
+  bottomBar = false,
 }: MagicSearchProps): React.ReactElement => {
   const intl = useIntl();
   const { app: appLang, search: searchLang } = useAppSelector(
@@ -69,6 +70,21 @@ const MagicSearch = ({
           options={keywords}
           filterOptions={filterByCurrentWord}
           sx={{ width: "100%" }}
+          // A la barra de baix, els suggeriments s'obren cap amunt: a sota hi
+          // ha el teclat (D22)
+          slotProps={
+            bottomBar
+              ? {
+                  popper: {
+                    placement: "top-start",
+                    // Per damunt de l'etiqueta del camp, que fa de vora
+                    modifiers: [
+                      { name: "offset", options: { offset: [0, 12] } },
+                    ],
+                  },
+                }
+              : undefined
+          }
           renderInput={(params) => (
             <TextField
               {...params}
@@ -77,9 +93,11 @@ const MagicSearch = ({
               label={`${intl.formatMessage({ ...messages.field })}${languagesSearchTitle}`}
               variant="outlined"
               helperText={
-                showHelperText
-                  ? intl.formatMessage({ ...messages.helperText })
-                  : intl.formatMessage({ ...messages.sample })
+                bottomBar
+                  ? undefined
+                  : showHelperText
+                    ? intl.formatMessage({ ...messages.helperText })
+                    : intl.formatMessage({ ...messages.sample })
               }
               size="small"
               slotProps={{

@@ -1,19 +1,9 @@
-import { useAppSelector } from "@/app/hooks";
 import { PictSequence } from "@/types/sequence";
-import { selectDocumentPictStyle } from "@features/sequence/style/styleSelectors";
 
+// Un pictograma nou no porta cap estil: l'hereta tot de l'estil que li toca
+// (solució A del pla dels estils). Buit no té categoria, i per tant pren el
+// color de Fitzgerald dels que no en tenen
 const useNewPictogram = () => {
-  const {
-    textPosition,
-    borderIn: defaultBorderIn,
-    borderOut: defaultBorderOut,
-    // Els pictogrames nous reben l'estil del document on entren
-  } = useAppSelector((state) => selectDocumentPictStyle(state).pictSequence);
-  // Un pictograma buit no té categoria: pren el color dels que no en tenen
-  const noCategoryColor = useAppSelector(
-    (state) => selectDocumentPictStyle(state).pictApiAra.fitzgerald,
-  );
-
   const getPictogramEmptyWithDefaultSettings = (indexSequence: number) => {
     const pictogramEmpty: PictSequence = {
       indexSequence: indexSequence,
@@ -23,14 +13,11 @@ const useNewPictogram = () => {
           bestIdPicts: [],
         },
         selectedId: 0,
-        settings: { fitzgerald: noCategoryColor },
+        settings: {},
+        variants: [],
         category: "none",
       },
-      settings: {
-        textPosition,
-        borderIn: defaultBorderIn,
-        borderOut: defaultBorderOut,
-      },
+      settings: {},
       cross: false,
     };
 

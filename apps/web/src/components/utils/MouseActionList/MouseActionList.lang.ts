@@ -62,7 +62,7 @@ const messages = defineMessages({
     id: "components.mouseActionList.resetStyle",
     defaultMessage: "Restableix l'estil",
     description:
-      "Treu els retocs d'estil del pictograma: torna a l'estil del document (es pot desfer)",
+      "Treu els retocs d'estil del pictograma: torna a l'estil de la seva seqüència (es pot desfer)",
   },
   duplicate: {
     id: "components.mouseActionList.duplicate",

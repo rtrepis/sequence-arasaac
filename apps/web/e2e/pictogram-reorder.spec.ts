@@ -32,7 +32,8 @@ const loadThreeCards = async (page: Page): Promise<void> => {
   await page.getByRole("button", { name: "Menú principal" }).click();
   await page.setInputFiles('input[type="file"]', FIXTURE);
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("tab", { name: "2" })).toBeVisible();
+  // Al mòbil no hi ha pestanyes (pla dels estils, pas 8): s'espera la targeta
+  await expect(card(page, "prova, pictograma 1")).toBeVisible();
 
   await card(page, "prova, pictograma 1").click({ button: "right" });
   await page.getByRole("button", { name: "Duplica a continuació" }).click();

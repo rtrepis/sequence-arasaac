@@ -20,6 +20,8 @@ import { documentChangedActionCreator } from "./documentStatusSlice";
  *   desar faria que el document desat semblés no desat.
  * - `newDocumentPagesInherited` dona a un document nou i buit la disposició de
  *   les preferències: el document encara no té res de l'usuari.
+ * - `documentStyleAdopted` dona a un document nou la còpia del meu estil amb
+ *   què neix (pla dels estils, D1): tampoc no és res que l'usuari hi hagi fet.
  */
 const NOT_A_CONTENT_CHANGE = new Set([
   "document/changeActiveSAAC",
@@ -29,6 +31,7 @@ const NOT_A_CONTENT_CHANGE = new Set([
   "document/replaceCloudImage",
   "document/documentStyleMaterialized",
   "document/newDocumentPagesInherited",
+  "document/documentStyleAdopted",
 ]);
 
 /**

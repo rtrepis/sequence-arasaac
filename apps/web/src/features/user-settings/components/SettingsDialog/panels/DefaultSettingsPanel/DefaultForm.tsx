@@ -86,6 +86,10 @@ const DefaultForm = ({
 
   const defaults: PictogramCardDefaults = {
     numbered,
+    textPosition,
+    skin,
+    hair,
+    color,
     font,
     numberFont,
     borderIn,

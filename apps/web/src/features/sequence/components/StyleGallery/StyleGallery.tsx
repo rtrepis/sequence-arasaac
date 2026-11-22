@@ -1,0 +1,606 @@
+// La Galeria d'estils (pla dels estils, passos 5 i 6; fonament 03, §1 i §5):
+// d'on es tria l'estil d'una seqüència (a l'edició) o el d'un bloc (a la
+// vista, on el **reassigna**: només canvia aquell bloc).
+//
+// - **La primera opció** treu l'estil propi: «L'estil del document» per a una
+//   seqüència, «L'estil de la seqüència» per a un bloc (el mateix que «Torna a
+//   l'estil de la seqüència»).
+// - **El meu estil**, i els **estils de l'app** (pas 9, `appStyles.ts`).
+// - Totes en **una sola graella**, sense grups: només cal veure quin és el
+//   triat (la vora i la ✓) i quins hi ha.
+// - Cada estil, amb una **mostra**: un pictograma de la seqüència, sense els
+//   seus retocs, pintat amb aquell estil, dins d'una caixa de mida fixa perquè
+//   les mostres sense vora no quedin enganxades ni descasades (V7 de
+//   `docs/estudis/ESTUDI-estils-de-targetes.md`).
+// - A cada estil, «Desa en un fitxer» (D18) i, si no és el meu, «Fes-lo el meu
+//   estil» (D7).
+// - «Carrega d'un fitxer…» aplica l'estil d'un `.saacstyle` (o d'un `.saac`) a
+//   la seqüència o al bloc i prou: **no es queda** a la galeria (D17).
+//
+// Triar un estil el **copia** al document: si el meu estil canvia després, la
+// seqüència no canvia (direcció única). És una graella curta, i per això és un
+// `AppDialog` d'amplada `sm` (`docs/estandards/capes-flotants.md`).
+import React, { ChangeEvent, useId, useRef, useState } from "react";
+import {
+  Box,
+  ButtonBase,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import {
+  MdCheck,
+  MdMoreVert,
+  MdOutlineFileDownload,
+  MdOutlineFileOpen,
+  MdOutlinePalette,
+} from "react-icons/md";
+import { useIntl } from "react-intl";
+import { useStore } from "react-redux";
+import type { RootState } from "@/app/store";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { AppDialog, AppDialogActions } from "@components/AppDialog";
+import StyledButton from "@/style/StyledButton";
+import { APP_TOUCH_TARGET_MIN } from "@/style/appShape";
+import PictogramCard from "@components/PictogramCard/PictogramCard";
+import ModalDownload from "@components/ButtonWithModalDownload/ModalDownload";
+import confirmMessages from "@components/ConfirmDialog/ConfirmDialog.lang";
+import { useFeedback } from "@/context/FeedbackContext";
+import feedbackMessages from "@/context/FeedbackContext/FeedbackContext.lang";
+import SettingsSaveErrorDialog from "@features/backend/user-settings/components/SettingsSaveErrorDialog";
+import type { SequenceStyle } from "@/types/document";
+import type { PictSequence } from "@/types/sequence";
+import { SAAC_FILE_ACCEPT } from "@features/sequence/saac/types";
+import { parseSaac } from "@features/sequence/saac/parse";
+import { parseContextOf } from "@features/sequence/saac/saacContext";
+import {
+  namedStyleFrom,
+  namedStyleOf,
+  sameNamedContent,
+  styleWithNamed,
+} from "@features/sequence/style/namedStyle";
+import {
+  cardDefaultsOf,
+  resetPictogramStyle,
+} from "@features/sequence/style/pictogramStyle";
+import { resolveDocumentStyle } from "@features/sequence/style/styleModel";
+import { APP_STYLE_KEYS, appStyleOf } from "@features/sequence/style/appStyles";
+import { sheetSurface } from "@/style/palette";
+import {
+  selectDocumentStyle,
+  selectUserDefaultStyle,
+} from "@features/sequence/style/styleSelectors";
+import {
+  chooseBlockStyleThunk,
+  chooseSequenceStyleThunk,
+} from "@features/sequence/store/sequenceStyleThunks";
+import { findPlacement } from "@features/free-layout/model/sheets";
+import { useSetDefaultStyle } from "@features/sequence/hooks/useSetDefaultStyle";
+import { readText } from "@features/sequence/hooks/useOpenSaacFile";
+import messages from "./StyleGallery.lang";
+
+/** El pictograma de mostra quan la seqüència no en té cap amb imatge */
+const SAMPLE_PICTOGRAM_ID = 6009;
+
+/**
+ * La mida de la targeta de mostra, respecte de la de la graella. Al mòbil, més
+ * petita: la galeria hi ha de cabre sencera, sense desplaçar-se
+ */
+const SAMPLE_PICT_SIZE = { mobile: 0.36, desktop: 0.45 };
+
+/**
+ * L'amplada mínima d'una rajola: la mostra i el nom, amb lloc per al «⋮» a la
+ * dreta del nom. Al mòbil, dues per fila (amb tres, el «⋮» tapava el nom); a
+ * l'escriptori, quatre, perquè els noms llargs no s'esmicolin
+ */
+const TILE_MIN_WIDTH = { xs: 128, sm: 116 };
+
+/**
+ * L'alçada de la caixa de la mostra: totes iguals, amb vora o sense, perquè
+ * els noms quedin alineats (V7 de `docs/estudis/ESTUDI-estils-de-targetes.md`)
+ */
+const SAMPLE_BOX_HEIGHT = { xs: 92, sm: 112 };
+
+/**
+ * A qui es tria l'estil: una seqüència (a l'edició) o un bloc de seqüència (a
+ * la vista), que el reassigna. `name` és el nom de la seqüència o del bloc.
+ */
+export type GalleryTarget =
+  | { kind: "sequence"; sequenceKey: number; name: string }
+  | { kind: "block"; placementId: string; sequenceKey: number; name: string };
+
+interface StyleGalleryProps {
+  open: boolean;
+  onClose: () => void;
+  target: GalleryTarget;
+}
+
+/** Una opció de la galeria. */
+interface GalleryOption {
+  key: string;
+  /** El nom que veu l'usuari, que és el que s'escriu al document */
+  name: string;
+  /** Segona línia, si cal dir d'on ve */
+  description?: string;
+  /** L'estil que es pinta i es copia */
+  style: SequenceStyle;
+  /**
+   * És la primera opció: triar-la treu l'estil propi («L'estil del document»
+   * per a una seqüència, «L'estil de la seqüència» per a un bloc)
+   */
+  isBase: boolean;
+  selected: boolean;
+  /** S'hi ofereix «Fes-lo el meu estil» */
+  canMakeMine: boolean;
+}
+
+/** Nom del fitxer sense l'extensió: el nom d'un estil carregat sense títol */
+const fileBaseName = (name: string): string =>
+  name.replace(/\.[^.]+$/, "").trim();
+
+const StyleGallery = ({
+  open,
+  onClose,
+  target,
+}: StyleGalleryProps): React.ReactElement => {
+  const intl = useIntl();
+  const dispatch = useAppDispatch();
+  const store = useStore<RootState>();
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const samplePictSize = mobile
+    ? SAMPLE_PICT_SIZE.mobile
+    : SAMPLE_PICT_SIZE.desktop;
+  const { showSnackbar } = useFeedback();
+  const titleId = useId();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { setAsDefault, retry, failure, isRetrying, dismissError } =
+    useSetDefaultStyle();
+
+  const documentStyle = useAppSelector(selectDocumentStyle);
+  const myStyle = useAppSelector(selectUserDefaultStyle);
+  const documentStyleName = useAppSelector((state) => state.document.styleName);
+  const { sequenceKey } = target;
+  const styles = useAppSelector((state) => state.document.styles);
+  const sequenceStyleId = useAppSelector(
+    (state) => state.document.sequenceStyleIds?.[sequenceKey],
+  );
+  // El reassignat del bloc, si en té
+  const blockStyleId = useAppSelector((state) => {
+    if (target.kind !== "block" || !state.document.pages) return undefined;
+    const found = findPlacement(state.document.pages, target.placementId);
+    return found?.placement.kind === "sequence"
+      ? found.placement.styleId
+      : undefined;
+  });
+  const currentId = target.kind === "block" ? blockStyleId : sequenceStyleId;
+  const pictograms = useAppSelector(
+    (state) => state.document.content[sequenceKey],
+  );
+
+  // El menú de més accions d'un estil, i l'estil que es desa en un fitxer
+  const [menu, setMenu] = useState<{
+    anchor: HTMLElement;
+    option: GalleryOption;
+  } | null>(null);
+  const [saving, setSaving] = useState<GalleryOption | null>(null);
+
+  const current = namedStyleOf(styles, currentId);
+  // L'estil de la seqüència, la base d'un bloc: el seu, o el del document
+  const sequenceNamed = namedStyleOf(styles, sequenceStyleId);
+  const baseStyle =
+    target.kind === "block" && sequenceNamed
+      ? styleWithNamed(documentStyle, sequenceNamed)
+      : documentStyle;
+  // El nom de la base, que és el que diu el snackbar en tornar-hi
+  const baseStyleName =
+    target.kind === "block"
+      ? (sequenceNamed?.name ?? documentStyleName)
+      : documentStyleName;
+  const myStyleName = intl.formatMessage(messages.myStyle);
+  // Fa el mateix que l'estil d'ara? (El nom no compta: el d'un estil de
+  // l'app és en l'idioma de qui el va triar)
+  const isCurrent = (style: SequenceStyle): boolean =>
+    current !== undefined &&
+    sameNamedContent(
+      current,
+      namedStyleFrom(style, { id: current.id, name: current.name }),
+    );
+  const isMyStyleCurrent = isCurrent(myStyle);
+
+  // Els estils de l'app, amb la distribució de la base (que no es copia)
+  const appStyles: GalleryOption[] = APP_STYLE_KEYS.map((key) => {
+    const style = appStyleOf(key, baseStyle.view);
+    return {
+      key: `app-${key}`,
+      name: intl.formatMessage(messages[key]),
+      style,
+      isBase: false,
+      selected: !isMyStyleCurrent && isCurrent(style),
+      canMakeMine: true,
+    };
+  });
+  const isAppStyleCurrent = appStyles.some(({ selected }) => selected);
+
+  // L'estil que fa servir la seqüència, si no és cap dels de la galeria (un de
+  // carregat d'un fitxer, o un d'un altre document): surt el primer i marcat,
+  // perquè s'hi vegi d'on es parteix
+  const currentOutside: GalleryOption[] =
+    current !== undefined && !isMyStyleCurrent && !isAppStyleCurrent
+      ? [
+          {
+            key: "current",
+            name: current.name,
+            style: styleWithNamed(documentStyle, current),
+            isBase: false,
+            selected: true,
+            canMakeMine: true,
+          },
+        ]
+      : [];
+
+  const options: GalleryOption[] = [
+    ...currentOutside,
+    {
+      key: "base",
+      name: intl.formatMessage(
+        target.kind === "block"
+          ? messages.sequenceStyle
+          : messages.documentStyle,
+      ),
+      // El nom de l'estil de la base, si en té («El meu estil»…)
+      ...(baseStyleName && { description: baseStyleName }),
+      style: baseStyle,
+      isBase: true,
+      selected: current === undefined,
+      canMakeMine: true,
+    },
+    {
+      key: "mine",
+      name: myStyleName,
+      style: myStyle,
+      isBase: false,
+      selected: isMyStyleCurrent,
+      canMakeMine: false,
+    },
+    ...appStyles,
+  ];
+
+  // La mostra: el primer pictograma amb imatge de la seqüència, sense els
+  // seus retocs, perquè s'hi vegi l'estil i no el que s'ha retocat
+  const sourcePictogram = pictograms?.find(
+    (pict) => pict.img.selectedId > 0 || pict.img.url,
+  );
+  const sample: PictSequence = sourcePictogram
+    ? { ...resetPictogramStyle(sourcePictogram), indexSequence: 0 }
+    : {
+        indexSequence: 0,
+        img: {
+          searched: {
+            word: intl.formatMessage(messages.sampleWord),
+            bestIdPicts: [],
+          },
+          selectedId: SAMPLE_PICTOGRAM_ID,
+          settings: {},
+        },
+        settings: {},
+        cross: false,
+      };
+
+  const choose = (name: string, style?: SequenceStyle) => {
+    const choice = { name, ...(style && { style }) };
+    dispatch(
+      target.kind === "block"
+        ? chooseBlockStyleThunk(target.placementId, choice)
+        : chooseSequenceStyleThunk(sequenceKey, choice),
+    );
+    onClose();
+  };
+
+  const handleChoose = (option: GalleryOption) => {
+    // El d'ara ja és el que té: tornar-lo a copiar només en faria una còpia
+    // sencera amb un altre nom
+    if (option.key === "current") onClose();
+    else if (option.isBase) choose(baseStyleName ?? option.name);
+    else choose(option.name, option.style);
+  };
+
+  const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    // Es buida perquè es pugui tornar a triar el mateix fitxer
+    event.target.value = "";
+    if (!file) return;
+    const context = parseContextOf(store.getState());
+    let parsed: ReturnType<typeof parseSaac>;
+    try {
+      parsed = parseSaac(await readText(file), context);
+    } catch (error) {
+      console.error(error);
+      parsed = { kind: "invalid" };
+    }
+    if (parsed.kind === "invalid") {
+      showSnackbar({
+        message: intl.formatMessage(feedbackMessages.loadInvalidFile),
+        severity: "error",
+      });
+      return;
+    }
+    // D'un document, només l'estil: el seu, amb el nom que porti
+    const style =
+      parsed.kind === "style"
+        ? parsed.style
+        : resolveDocumentStyle(parsed.document, context.userDefault);
+    const name =
+      (parsed.kind === "style"
+        ? parsed.title
+        : (parsed.document.styleName ?? parsed.document.title)) ||
+      fileBaseName(file.name);
+    choose(name, style);
+  };
+
+  const closeMenu = () => setMenu(null);
+
+  // Una rajola de la graella: la mostra i el nom. La triada porta la vora
+  // gruixuda i la marca ✓, com les plantilles de la pàgina (`TemplatePicker`)
+  const optionTile = (option: GalleryOption) => {
+    const defaults = cardDefaultsOf(option.style);
+    const actionsLabel = intl.formatMessage(messages.styleActions, {
+      name: option.name,
+    });
+    return (
+      <Box
+        key={option.key}
+        data-style-option={option.key}
+        sx={{ position: "relative", display: "flex" }}
+      >
+        <ButtonBase
+          aria-current={option.selected ? "true" : undefined}
+          onClick={() => handleChoose(option)}
+          sx={{
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "stretch",
+            gap: 0.5,
+            padding: 0.5,
+            borderRadius: 1,
+            border: 1,
+            borderColor: "divider",
+            ...(option.selected && {
+              borderWidth: 2,
+              borderColor: "primary.main",
+              padding: "3px",
+            }),
+            "&:hover, &.Mui-focusVisible": {
+              backgroundColor: "action.hover",
+            },
+            "&.Mui-focusVisible": {
+              outline: 2,
+              outlineColor: "primary.main",
+              outlineOffset: 2,
+            },
+          }}
+        >
+          {/* La mostra és damunt del full: no s'adapta al tema, i el lector
+              de pantalla no l'ha de llegir (el nom ja diu l'estil) */}
+          <Box
+            aria-hidden
+            sx={{
+              flex: 1,
+              pointerEvents: "none",
+              minHeight: SAMPLE_BOX_HEIGHT,
+              py: 0.5,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: sheetSurface,
+              borderRadius: 1,
+            }}
+          >
+            <PictogramCard
+              pictogram={sample}
+              defaults={defaults}
+              view="complete"
+              // Sense l'ombra de la graella: com al full, perquè a «Sense
+              // vores» l'ombra no faci de marc
+              variant="plane"
+              size={{ pictSize: samplePictSize }}
+            />
+          </Box>
+          {/* El nom deixa lloc al «⋮», que és a la seva altura */}
+          <Box sx={{ pl: 0.5, pr: 4, textAlign: "left", minHeight: 40 }}>
+            <Typography
+              component="span"
+              variant="body2"
+              sx={{
+                display: "block",
+                lineHeight: 1.2,
+                fontWeight: option.selected ? "bold" : undefined,
+              }}
+            >
+              {option.name}
+            </Typography>
+            {/* El nom de l'estil de la base, si en té («El meu estil»…) */}
+            {option.description && (
+              <Typography
+                component="span"
+                variant="caption"
+                color="text.secondary"
+                sx={{ display: "block", lineHeight: 1.2 }}
+              >
+                {option.description}
+              </Typography>
+            )}
+          </Box>
+          {option.selected && (
+            // Sobre el verd, sempre el color de contrast (colors.md)
+            <Box
+              aria-hidden
+              sx={{
+                position: "absolute",
+                top: 4,
+                left: 4,
+                width: 22,
+                height: 22,
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                bgcolor: "primary.main",
+                color: "primary.contrastText",
+              }}
+            >
+              <MdCheck size={16} />
+            </Box>
+          )}
+        </ButtonBase>
+        <Tooltip title={actionsLabel}>
+          <IconButton
+            aria-label={actionsLabel}
+            aria-haspopup="menu"
+            onClick={(event) =>
+              setMenu({ anchor: event.currentTarget, option })
+            }
+            sx={{
+              position: "absolute",
+              right: 0,
+              bottom: 0,
+              minWidth: APP_TOUCH_TARGET_MIN,
+              minHeight: APP_TOUCH_TARGET_MIN,
+            }}
+          >
+            <MdMoreVert aria-hidden />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    );
+  };
+
+  return (
+    <>
+      <AppDialog
+        open={open}
+        onClose={onClose}
+        title={intl.formatMessage(messages.title)}
+        titleId={titleId}
+        describedById={`${titleId}-for`}
+        maxWidth="sm"
+        actions={
+          <AppDialogActions
+            // L'acció que no és ni acceptar ni cancel·lar, sola a l'esquerra
+            startAction={
+              <StyledButton
+                variant="outlined"
+                color="inherit"
+                startIcon={<MdOutlineFileOpen aria-hidden />}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                {intl.formatMessage(messages.loadFromFile)}
+              </StyledButton>
+            }
+          >
+            <StyledButton color="inherit" onClick={onClose}>
+              {intl.formatMessage(confirmMessages.cancel)}
+            </StyledButton>
+          </AppDialogActions>
+        }
+      >
+        {/* Per a quina seqüència: el distintiu del títol és per a un número,
+            i el nom d'una seqüència pot ser llarg */}
+        <Typography id={`${titleId}-for`} variant="body2" sx={{ mb: 1 }}>
+          {intl.formatMessage(messages.forTarget, {
+            name: target.name,
+            kind: target.kind,
+          })}
+        </Typography>
+        {/* Totes les opcions en una sola graella, sense grups: la triada es
+            veu per la vora i la ✓ */}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: `repeat(auto-fill, minmax(${TILE_MIN_WIDTH.xs}px, 1fr))`,
+              sm: `repeat(auto-fill, minmax(${TILE_MIN_WIDTH.sm}px, 1fr))`,
+            },
+            gap: 1,
+          }}
+        >
+          {options.map(optionTile)}
+        </Box>
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          hidden
+          accept={SAAC_FILE_ACCEPT}
+          onChange={(event) => void handleFile(event)}
+          data-testid="style-gallery-file"
+        />
+      </AppDialog>
+
+      <Menu
+        anchorEl={menu?.anchor}
+        open={menu !== null}
+        onClose={closeMenu}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MenuItem
+          sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+          onClick={() => {
+            if (menu) setSaving(menu.option);
+            closeMenu();
+          }}
+        >
+          <ListItemIcon>
+            <MdOutlineFileDownload aria-hidden />
+          </ListItemIcon>
+          <ListItemText>{intl.formatMessage(messages.saveToFile)}</ListItemText>
+        </MenuItem>
+        {menu?.option.canMakeMine && (
+          <MenuItem
+            sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+            onClick={() => {
+              // No toca el document obert: només el meu estil
+              setAsDefault(menu.option.style, { withView: false });
+              closeMenu();
+            }}
+          >
+            <ListItemIcon>
+              <MdOutlinePalette aria-hidden />
+            </ListItemIcon>
+            <ListItemText>
+              {intl.formatMessage(messages.makeMyStyle)}
+            </ListItemText>
+          </MenuItem>
+        )}
+      </Menu>
+
+      {saving && (
+        <ModalDownload
+          kind="style"
+          open
+          style={saving.style}
+          styleTitle={
+            saving.isBase ? (baseStyleName ?? saving.name) : saving.name
+          }
+          onClose={() => setSaving(null)}
+        />
+      )}
+
+      <SettingsSaveErrorDialog
+        failure={failure}
+        isRetrying={isRetrying}
+        onRetry={retry}
+        onDismiss={dismissError}
+      />
+    </>
+  );
+};
+
+export default StyleGallery;

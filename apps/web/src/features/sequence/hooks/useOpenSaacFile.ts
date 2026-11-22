@@ -58,7 +58,8 @@ import styleMessages from "@features/sequence/components/DocumentStyle/DocumentS
  */
 export type OpenFileIntent = "open" | "style";
 
-const readText = (file: File): Promise<string> =>
+/** El text d'un fitxer triat. `FileReader`, i no `file.text()`, que no hi és a tot arreu */
+export const readText = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result ?? ""));

@@ -11,21 +11,21 @@ import { buildUserDefaultStyle } from "@features/sequence/style/styleModel";
 import { createAppStore } from "@/app/store";
 import {
   TEXT_BLOCK_DEFAULTS,
-  blockSequence,
   blockViewRetouch,
   cardMeasureKey,
   cardSizeOf,
-  applyNamedStyle,
   namedStyleFrom,
   namedStyleOf,
-  removeNamedStyle,
   resolveBlockView,
-  targetStyleIds,
   uniqueStyleName,
-  updateNamedStyles,
+  withPlacementStyle,
   resolveTextBlockStyle,
   styleWithNamed,
 } from "./blockStyle";
+import {
+  cardDefaultsOf,
+  resolvePictogram,
+} from "@features/sequence/style/pictogramStyle";
 
 // L'aspecte d'un bloc: document → seqüència → estil amb nom → bloc
 // (`blockStyle.ts`).
@@ -137,41 +137,54 @@ describe("les targetes d'un bloc amb estil amb nom (R10)", () => {
     expect(styleWithNamed(DOCUMENT, undefined)).toBe(DOCUMENT);
   });
 
-  it("el que els pictogrames heretaven segueix l'estil amb nom; els retocs, no", () => {
+  it("el que els pictogrames hereten ve de l'estil amb nom; els retocs, no", () => {
     const pictograms = sequenceFixture(2).map((pict) => ({
       ...pict,
-      settings: {
-        ...pict.settings,
-        textPosition: DOCUMENT.pictSequence.textPosition,
-      },
-      img: {
-        ...pict.img,
-        settings: { ...pict.img.settings, color: DOCUMENT.pictApiAra.color },
-      },
+      img: { ...pict.img, variants: ["color" as const] },
     }));
     // El segon té la posició del text retocada
     pictograms[1].settings.textPosition =
-      DOCUMENT.pictSequence.textPosition === "bottom" ? "top" : "bottom";
+      BIG_TEXT.pictSequence.textPosition === "bottom" ? "top" : "bottom";
     const retouched = pictograms[1].settings.textPosition;
 
-    const result = blockSequence(pictograms, DOCUMENT, named);
-
-    expect(result[0].settings.textPosition).toBe("top");
-    expect(result[0].img.settings.color).toBe(BIG_TEXT.pictApiAra.color);
-    expect(result[1].settings.textPosition).toBe(retouched);
-    // No toca la seqüència del document
-    expect(pictograms[0].settings.textPosition).toBe(
-      DOCUMENT.pictSequence.textPosition,
+    // Sense còpies: la targeta resol amb l'estil amb nom (solució A)
+    const defaults = cardDefaultsOf(styleWithNamed(DOCUMENT, named));
+    const [plain, own] = pictograms.map((pict) =>
+      resolvePictogram(pict, defaults),
     );
-    expect(blockSequence(pictograms, DOCUMENT, undefined)).toBe(pictograms);
+
+    expect(plain.settings.textPosition).toBe("top");
+    expect(plain.img.settings.color).toBe(BIG_TEXT.pictApiAra.color);
+    expect(own.settings.textPosition).toBe(retouched);
   });
 
   it("es mesura per seqüència i estil, i si no hi és, la de la seqüència", () => {
     expect(cardMeasureKey(2, undefined)).toBe("2");
     expect(cardMeasureKey(2, "st_9")).toBe("2@st_9");
     const sizes = { "2": { w: 1, h: 1 }, "2@st_9": { w: 2, h: 2 } };
-    expect(cardSizeOf(sizes, 2, "st_9")).toEqual({ w: 2, h: 2 });
-    expect(cardSizeOf(sizes, 2, "st_x")).toEqual({ w: 1, h: 1 });
+    const document = { styles: [{ id: "st_9", name: "Gran" }] };
+    expect(cardSizeOf(sizes, document, 2, "st_9")).toEqual({ w: 2, h: 2 });
+    expect(cardSizeOf(sizes, document, 2, "st_x")).toEqual({ w: 1, h: 1 });
+  });
+
+  it("sense estil reassignat, es mesura amb l'estil de la seqüència", () => {
+    const sizes = {
+      "2": { w: 1, h: 1 },
+      "2@st_seq": { w: 3, h: 3 },
+      "2@st_9": { w: 2, h: 2 },
+    };
+    const document = {
+      styles: [
+        { id: "st_seq", name: "De la seqüència" },
+        { id: "st_9", name: "Gran" },
+      ],
+      sequenceStyleIds: { 2: "st_seq" },
+    };
+    expect(cardSizeOf(sizes, document, 2, undefined)).toEqual({ w: 3, h: 3 });
+    // El reassignat substitueix el de la seqüència
+    expect(cardSizeOf(sizes, document, 2, "st_9")).toEqual({ w: 2, h: 2 });
+    // Un reassignat que ja no hi és: el de la seqüència
+    expect(cardSizeOf(sizes, document, 2, "st_x")).toEqual({ w: 3, h: 3 });
   });
 });
 
@@ -208,13 +221,24 @@ describe("els estils de bloc (R7)", () => {
   });
   const styles = [style("st_1", "Agenda", 1), style("st_2", "Menú", 2)];
 
-  it("aplicar-lo conserva la distribució del bloc", () => {
-    const result = applyNamedStyle(pages(), styles, style("st_3", "Nou", 3), {
-      kind: "block",
-      placementId: "b",
+  it("reassignar-lo a un bloc conserva la seva distribució i no toca els altres", () => {
+    const next = withPlacementStyle(pages(), "b", "st_2");
+    expect(next.sheets[0].placements[1]).toMatchObject({
+      styleId: "st_2",
+      view: { sizePict: 0.5 },
     });
-    const b = result.pages.sheets[0].placements[1];
-    expect(b).toMatchObject({ styleId: "st_3", view: { sizePict: 0.5 } });
+    expect(next.sheets[0].placements[0]).toEqual(
+      pages().sheets[0].placements[0],
+    );
+    expect(next.sheets[1]).toEqual(pages().sheets[1]);
+  });
+
+  it("un bloc comú també, i treure'l el torna a l'estil de la seqüència", () => {
+    const common = withPlacementStyle(pages(), "d", "st_1");
+    expect(common.common[0]).toMatchObject({ styleId: "st_1" });
+    const back = withPlacementStyle(common, "d", undefined);
+    expect(back.common[0]).not.toHaveProperty("styleId");
+    expect(back.common[0]).toMatchObject({ view: { sizePict: 0.5 } });
   });
 
   it("un nom que ja hi és porta un número", () => {
@@ -223,56 +247,5 @@ describe("els estils de bloc (R7)", () => {
       uniqueStyleName([...styles, style("x", "Agenda 2", 9)], "Agenda"),
     ).toBe("Agenda 3");
     expect(uniqueStyleName(styles, "Contes")).toBe("Contes");
-    const result = applyNamedStyle(
-      pages(),
-      styles,
-      style("st_3", "Agenda", 3),
-      {
-        kind: "block",
-        placementId: "b",
-      },
-    );
-    expect(result.styles[2].name).toBe("Agenda 2");
-  });
-
-  it("els estils d'una pàgina o d'un bloc, sense repetir ni els que no hi són", () => {
-    const withGhost = pages();
-    withGhost.sheets[0].placements.push(block("e", "st_x"), block("f", "st_1"));
-    expect(
-      targetStyleIds(withGhost, styles, { kind: "sheet", sheetIndex: 0 }),
-    ).toEqual(["st_1"]);
-    expect(
-      targetStyleIds(withGhost, styles, { kind: "block", placementId: "d" }),
-    ).toEqual(["st_2"]);
-    expect(
-      targetStyleIds(withGhost, styles, { kind: "block", placementId: "b" }),
-    ).toEqual([]);
-  });
-
-  it("actualitzar-lo canvia l'estil i es queda el nom, l'id i la distribució d'abans", () => {
-    const old = { ...style("st_1", "Agenda", 1), view: { sizePict: 0.8 } };
-    const [updated, other] = updateNamedStyles(
-      [old, styles[1]],
-      ["st_1"],
-      style("", "", 4),
-    );
-    expect(updated).toEqual({
-      id: "st_1",
-      name: "Agenda",
-      pictSequence: card(4),
-      view: { sizePict: 0.8 },
-    });
-    expect(other).toBe(styles[1]);
-  });
-
-  it("treure'l d'un bloc el torna a l'estil del document; sense ningú, l'estil surt", () => {
-    const once = removeNamedStyle(pages(), styles, "a");
-    expect(once.pages.sheets[0].placements[0]).not.toHaveProperty("styleId");
-    expect(once.styles.map(({ id }) => id)).toEqual(["st_1", "st_2"]);
-    const twice = removeNamedStyle(once.pages, once.styles, "c");
-    expect(twice.styles.map(({ id }) => id)).toEqual(["st_2"]);
-    const common = removeNamedStyle(twice.pages, twice.styles, "d");
-    expect(common.pages.common[0]).not.toHaveProperty("styleId");
-    expect(common.styles).toEqual([]);
   });
 });

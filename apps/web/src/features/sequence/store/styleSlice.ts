@@ -20,6 +20,7 @@ import {
 } from "./documentSlice";
 import type { AppThunk } from "@/app/store";
 import {
+  selectActiveSequenceStyle,
   selectDocumentStyle,
   selectUserDefaultStyle,
 } from "@features/sequence/style/styleSelectors";
@@ -30,18 +31,19 @@ import { mergeDeep } from "@features/sequence/saac/cascade";
 /**
  * D'on ve el canvi d'estil que es pot desfer: l'estil per defecte, un fitxer,
  * «Aplica a tots», «Restableix» d'un pictograma, o reduir la lletra perquè el
- * text hi càpiga (d'un pictograma o de tot el document, B28).
+ * text hi càpiga (d'un pictograma, de tot el document o de l'estil de la
+ * seqüència, B28 i B43).
  */
 export type StyleChangeSource =
-  | "myStyleSheet"
-  | "myStyleBlock"
-  | "myStyleUpdate"
-  | "blockStyleRemove"
   | "applyAll"
   | "reset"
   | "resetSequence"
   | "fitTextPictogram"
   | "fitTextDocument"
+  | "fitTextSequence"
+  | "sequenceStyle"
+  | "blockStyle"
+  | "sequenceRetouchesRemoved"
   | FreeLayoutChangeSource;
 
 /**
@@ -92,11 +94,36 @@ interface StyleUndo {
   after: DocumentStyleSnapshot;
 }
 
+/**
+ * El que diu el snackbar en triar l'estil d'una seqüència o d'un bloc (pla dels
+ * estils, D3 i D15): quin estil, quants pictogrames conserven els seus retocs
+ * (amb «Treu els retocs») i, per a una seqüència, quants blocs tenen un altre
+ * estil i no han canviat.
+ */
+export interface StyleChoiceDetails {
+  sequenceKey: number;
+  /** El nom de l'estil triat, tal com el veu l'usuari */
+  styleName: string;
+  /**
+   * S'ha triat la primera opció de la galeria: la seqüència torna a l'estil
+   * del document, o el bloc al de la seqüència
+   */
+  toBase: boolean;
+  /** Pictogrames de la seqüència amb retocs propis */
+  retouched: number;
+  /** Blocs de la seqüència amb un estil reassignat */
+  unchangedBlocks: number;
+  /** El bloc és comú: el canvi es veu a totes les pàgines (Q3) */
+  common?: boolean;
+}
+
 /** Confirmació del canvi d'estil que s'acaba de fer, amb «Desfés». */
 export interface StyleUndoSnackbar {
   source: StyleChangeSource;
   /** Cada canvi n'obre un de nou, encara que el text sigui el mateix */
   id: number;
+  /** Només en triar l'estil d'una seqüència */
+  details?: StyleChoiceDetails;
 }
 
 export interface StyleUiState {
@@ -143,14 +170,23 @@ const styleSlice = createSlice({
     styleUndoRecorded: (state, action: PayloadAction<StyleUndo | null>) => {
       state.undo = action.payload;
     },
-    styleUndoSnackbarShown: (
-      state,
-      action: PayloadAction<StyleChangeSource>,
-    ) => {
-      state.undoSnackbar = {
-        source: action.payload,
-        id: (state.undoSnackbar?.id ?? 0) + 1,
-      };
+    styleUndoSnackbarShown: {
+      reducer: (
+        state,
+        action: PayloadAction<{
+          source: StyleChangeSource;
+          details?: StyleChoiceDetails;
+        }>,
+      ) => {
+        state.undoSnackbar = {
+          source: action.payload.source,
+          id: (state.undoSnackbar?.id ?? 0) + 1,
+          ...(action.payload.details && { details: action.payload.details }),
+        };
+      },
+      prepare: (source: StyleChangeSource, details?: StyleChoiceDetails) => ({
+        payload: { source, ...(details && { details }) },
+      }),
     },
     styleUndoSnackbarClosed: (state) => {
       state.undoSnackbar = null;
@@ -191,6 +227,8 @@ const sameSnapshot = (
   a.fitzgeraldColors === b.fitzgeraldColors &&
   a.pages === b.pages &&
   a.styles === b.styles &&
+  a.sequenceStyleIds === b.sequenceStyleIds &&
+  a.sequenceNames === b.sequenceNames &&
   // La pàgina del document només compta si la instantània la porta
   (!("layout" in a) || a.layout === b.layout);
 
@@ -200,7 +238,11 @@ const sameSnapshot = (
  * servir també «Aplica a tots» i «Restableix» (ADR-003, decisió 12).
  */
 export const undoableStyleChangeThunk =
-  (change: () => AnyAction, source: StyleChangeSource): AppThunk =>
+  (
+    change: () => AnyAction,
+    source: StyleChangeSource,
+    details?: StyleChoiceDetails,
+  ): AppThunk =>
   (dispatch, getState) => {
     const before = takeDocumentStyleSnapshot(getState().document);
 
@@ -208,7 +250,7 @@ export const undoableStyleChangeThunk =
 
     const after = takeDocumentStyleSnapshot(getState().document);
     dispatch(styleUndoRecordedActionCreator({ before, after }));
-    dispatch(styleUndoSnackbarShownActionCreator(source));
+    dispatch(styleUndoSnackbarShownActionCreator(source, details));
   };
 
 /**
@@ -260,7 +302,7 @@ export const resetPictogramStyleThunk =
       (pict) => pict.indexSequence === indexSequence,
     );
     if (!pictogram) return;
-    const reset = resetPictogramStyle(pictogram, selectDocumentStyle(state));
+    const reset = resetPictogramStyle(pictogram);
     dispatch(
       undoableStyleChangeThunk(
         () => updatePictSequenceActionCreator(reset),
@@ -282,15 +324,12 @@ export const resetSequencePictogramsThunk =
     const state = getState();
     const pictograms = state.document.content[sequenceKey];
     if (!pictograms) return;
-    const style = selectDocumentStyle(state);
     dispatch(
       undoableStyleChangeThunk(
         () =>
           sequencePictogramsReplacedActionCreator({
             key: sequenceKey,
-            pictograms: pictograms.map((pict) =>
-              resetPictogramStyle(pict, style),
-            ),
+            pictograms: pictograms.map(resetPictogramStyle),
           }),
         "resetSequence",
       ),
@@ -310,10 +349,10 @@ export const fitPictogramTextThunk =
       (pict) => pict.indexSequence === indexSequence,
     );
     if (!pictogram) return;
-    const documentFont = pictStyleOf(selectDocumentStyle(state)).pictSequence
-      .font;
+    // La de la seqüència del pictograma, que és la que hereta
+    const sequenceFont = selectActiveSequenceStyle(state).pictSequence.font;
     // La lletra resolta, perquè el retoc no perdi la família ni el color
-    const font = mergeDeep(documentFont, pictogram.settings.font);
+    const font = mergeDeep(sequenceFont, pictogram.settings.font);
     dispatch(
       undoableStyleChangeThunk(
         () =>

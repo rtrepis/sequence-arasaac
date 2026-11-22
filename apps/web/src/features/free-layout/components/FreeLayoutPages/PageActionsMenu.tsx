@@ -21,8 +21,6 @@ import {
   MdMoreVert,
   MdOutlineDashboard,
   MdOutlineLibraryAdd,
-  MdOutlinePalette,
-  MdSync,
   MdTitle,
 } from "react-icons/md";
 import { MessageDescriptor, useIntl } from "react-intl";
@@ -33,16 +31,12 @@ import type { SheetMode } from "@/types/document";
 import {
   addSheetThunk,
   addTextBlockThunk,
-  applyMyStyleThunk,
   duplicateSheetThunk,
   moveSheetThunk,
   removeSheetThunk,
   selectPageLayout,
-  selectNamedStyles,
   selectPages,
-  updateMyStyleThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
-import { targetStyleIds } from "@features/free-layout/model/blockStyle";
 import {
   SHAPED_TEMPLATES,
   arrangementOf,
@@ -68,8 +62,9 @@ interface PageActionsMenuProps {
  * previsualització: és l'únic lloc de les accions de la pàgina (la columna
  * no les repeteix). Hi ha la disposició (contínua o en blocs), afegir-hi una
  * seqüència o un bloc segons la disposició, les plantilles (les mateixes que
- * a la columna, amb miniatura), «Aplica el meu estil» a tots els seus blocs
- * (R10) i duplicar, moure i esborrar la pàgina.
+ * a la columna, amb miniatura) i duplicar, moure i esborrar la pàgina. Cap
+ * acció d'estil: l'estil es tria a la seqüència (edició) o al bloc (pla dels
+ * estils, E5).
  */
 const PageActionsMenu = ({
   sheetIndex,
@@ -81,10 +76,6 @@ const PageActionsMenu = ({
   const { showSnackbar } = useFeedback();
   const { select, setTemplatePreview, setVisiblePage } = useViewSelection();
   const pages = useAppSelector(selectPages);
-  const styles = useAppSelector(selectNamedStyles);
-  // Els blocs de la pàgina ja tenen algun estil de bloc: es pot actualitzar
-  const hasBlockStyle =
-    targetStyleIds(pages, styles, { kind: "sheet", sheetIndex }).length > 0;
   const orientation = useAppSelector(selectPageLayout).orientation;
   const pageMenuId = useId();
   const templatesTitleId = useId();
@@ -218,42 +209,6 @@ const PageActionsMenu = ({
             {intl.formatMessage(messages.chooseTemplate)}
           </ListItemText>
         </MenuItem>
-        {/* El meu estil, a tots els blocs propis de la pàgina: el missatge és
-            el snackbar amb «Desfés» */}
-        <MenuItem
-          onClick={pageAction(() =>
-            dispatch(
-              applyMyStyleThunk(
-                { kind: "sheet", sheetIndex },
-                intl.formatMessage(messages.myStyleName),
-              ),
-            ),
-          )}
-        >
-          <ListItemIcon>
-            <MdOutlinePalette />
-          </ListItemIcon>
-          <ListItemText>
-            {intl.formatMessage(messages.applyMyStyle)}
-          </ListItemText>
-        </MenuItem>
-        {/* Els estils de bloc de la pàgina, amb el meu estil d'ara: canvien
-            tots els blocs que els fan servir, també a altres pàgines (R7) */}
-        {hasBlockStyle && (
-          <MenuItem
-            onClick={pageAction(() =>
-              dispatch(updateMyStyleThunk({ kind: "sheet", sheetIndex })),
-            )}
-          >
-            <ListItemIcon>
-              <MdSync />
-            </ListItemIcon>
-            <ListItemText>
-              {intl.formatMessage(messages.updateMyStyle)}
-            </ListItemText>
-          </MenuItem>
-        )}
-
         <Divider />
         <MenuItem
           onClick={pageAction(() => {

@@ -172,6 +172,7 @@ si un estàndard el contradiu, és l'estàndard el que s'ha de corregir.
 | `docs/fonaments/06-compatibilitat-i-dades.md` | El format `.saac` v3 i `.saacstyle`, la migració dels formats antics, desar i obrir (fitxer i núvol), la descàrrega i el selector de fitxers. Esquema formal: `docs/schema/saac-v3.schema.json` |
 | `docs/decisions/ADR-003-model-document-saac-v3.md` | Per què el format és com és, i què es va descartar. `docs/fonaments/sequencia-i-estil.md` n'és l'antecessor i ara només redirigeix |
 | `docs/decisions/ADR-005-disposicio-lliure.md` | Pàgines i blocs: cada pàgina automàtica o amb plantilla (desada), blocs de seqüència i de text, els estils amb nom (`styles`), el lector que conserva els blocs que no entén, i per què no cal pujar `schemaVersion`. El pla per fases, ja tancat, és `docs/plans/fets/PLA-mode-lliure.md` |
+| `docs/decisions/ADR-006-estil-de-sequencia-i-galeria.md` | L'estil va amb la seqüència, el bloc en té un de sol (el de la seqüència o un de reassignat), la Galeria d'estils, i per què se'n van «Aplica el meu estil», «Actualitza» i «Treu l'estil de bloc». Substitueix la part d'estils de les decisions 23 i 24 de l'ADR-005 |
 
 ## Índex d'estàndards
 
@@ -238,6 +239,10 @@ tanca, s'actualitza l'índex en el mateix commit.**
   l'entorn d'ARASAAC i en educació especial i CAA d'altres països, i les plantilles de pàgina que en
   surten. **Consultar-lo abans de dissenyar o canviar una plantilla del mode lliure.** Primera
   versió: falta validar-ne l'ordre amb usuaris reals.
+- `docs/estudis/ESTUDI-estils-de-targetes.md` recull les formes de targeta que es fan de debò (vores,
+  text, lletra, número, color de Fitzgerald) i en treu la llista d'estils de l'app de la Galeria
+  d'estils, amb «Sense vores» comprovat a la pantalla. **Consultar-lo abans d'afegir o canviar un estil
+  de l'app.** Revisat per l'usuari el 2026-11-22: quatre estils, tots amb Atkinson Hyperlegible (§6).
 - `docs/estudis/ESTUDI-seo-noticies.md` és el pla perquè les notícies es trobin als cercadors i es puguin
   compartir: què veu Google avui (una SPA buida sense JavaScript), les pàgines estàtiques, el
   sitemap i les etiquetes per compartir (fase 1), les **guies** pensades per a cerques reals

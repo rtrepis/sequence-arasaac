@@ -28,7 +28,7 @@ mou a `plans/fets/`.
 
 | Document | Estat | Per continuar |
 |---|---|---|
-| `plans/PLA-estils.md` | 🟢 **Pla d'execució escrit, codi per començar** (2026-11-21). L'estil va amb la seqüència i el bloc (un sol estil per bloc, reassignable), la seqüència té nom, la Galeria d'estils, la pantalla d'edició nova al mòbil, i el que ha heretat del mode lliure. Pendent D23 (l'escriptori), després de l'esbós. B37 | §10.3, pas 1. §10 mana sobre §0–§8 i substitueix §7 |
+| `plans/PLA-estils.md` | 🟢 **En curs** (2026-11-21): passos 1 (fonaments i ADR-006), 2 (la solució A i D1), 3 (l'estudi d'estils de targetes, `estudis/ESTUDI-estils-de-targetes.md`), 4 (el format i la cascada amb l'estil de la seqüència), 5 (la Galeria d'estils i el «⋯» de la seqüència a l'edició), 6 (l'estil del bloc a la vista), 7 (l'esbós de l'edició al mòbil, revisat), 8 (l'edició nova al mòbil), 9 (els quatre estils de l'app a la galeria) 10 (l'edició nova a l'escriptori, amb un interruptor) 11 (la columna de la vista a l'estàndard) i 12 (textos, i B43) fets, 2026-11-22. L'estil va amb la seqüència i el bloc (un sol estil per bloc, reassignable), la seqüència té nom, la Galeria d'estils, la pantalla d'edició nova al mòbil, i el que ha heretat del mode lliure. B37 | §20: el pas 13 (la notícia N-2), i tancar el pla §10 mana sobre §0–§8 i substitueix §7 |
 | `plans/PLA-noticies.md` | 🟡 **Fases 1, 2 i 4 fetes** (2026-11-20). La N-2 és aturada pel pla dels estils. Oberta D5 | §11 |
 | `plans/fets/PLA-mode-lliure.md` | ✅ **Tancat** (2026-11-21), fet fins al pas 8. L'estil dels blocs i el pas 8 → `PLA-estils.md` §8.5; els blocs d'imatge → B38 | — |
 | `plans/fets/PLA-vista-mobil.md` | ✅ **Tancat** (2026-11-21), fet fins a la fase 6. Les proves en dispositius → P2; la notícia → N-3 | — |
@@ -46,7 +46,7 @@ mou a `plans/fets/`.
 | `estudis/ESTUDI-aprimar-arquitectura.md` | Quants dels cinc proveïdors (Vercel, Render, Atlas, Cloudinary, Resend) calen de debò i què costaria treure'n cadascun (A1–A10, E1–E3). Del setembre; recuperat d'una branca no fusionada el 2026-11-21 | Abans de proposar cap canvi d'allotjament o de proveïdor |
 | `estudis/ESTUDI-servidor-propi.md` | Què es pot muntar en una màquina pròpia, què costa i què s'hi perd (S1–S10, H1–H3). Mateix origen | Abans de plantejar qualsevol autoallotjament |
 | `estudis/COMPARATIVA-opcions-infraestructura.md` | El full de decisió: les sis opcions d'infraestructura de costat, amb cost en diners i hores. Resum dels dos anteriors | Per decidir l'allotjament |
-| `estudis/ESTUDI-estils-de-targetes.md` | *Encara no existeix*: el preveu `PLA-estils.md` §4.4 per triar els estils de la galeria | — |
+| `estudis/ESTUDI-estils-de-targetes.md` | Quines formes de targeta es fan de debò (vores, text, lletra, número, color de Fitzgerald), com queda «Sense vores», i la llista d'estils de l'app per a la galeria: quatre, tots amb Atkinson Hyperlegible (2026-11-22, **revisat per l'usuari**: §6, D30–D33 del pla) | Abans d'afegir, treure o canviar un estil de l'app de la Galeria d'estils |
 
 ## Esbossos
 
@@ -54,4 +54,5 @@ mou a `plans/fets/`.
 |---|---|
 | `esbossos/esbos-columna-vista.html` | La columna de la vista (R8 del mode lliure) |
 | `esbossos/esbos-vista-mobil.html` | La vista al mòbil (fase 1) |
+| `esbossos/esbos-edicio-mobil.html` | L'edició al mòbil (pas 7 del pla dels estils), amb les captures d'avui a `esbossos/img/edicio-mobil/`. Revisat el 2026-11-22 (D25–D28 del pla) |
 | `esbossos/simulacio-capes-flotants.html` | L'estudi de capes flotants |

@@ -5,6 +5,7 @@ import EmailVerificationBanner from "@features/backend/auth/components/EmailVeri
 import BackendWakeUpNotice from "@features/backend/api/BackendWakeUpNotice";
 import DocumentDraftSync from "@features/sequence/components/DocumentDraftSync";
 import NewDocumentPagesSync from "@features/free-layout/components/NewDocumentPagesSync/NewDocumentPagesSync";
+import NewDocumentStyleSync from "@features/sequence/components/NewDocumentStyleSync/NewDocumentStyleSync";
 import SessionExpiredNotice from "@features/backend/auth/components/SessionExpiredNotice";
 import DocumentStatusFab from "@features/sequence/components/DocumentStatusFab/DocumentStatusFab";
 import DocumentStyleNotice from "@features/sequence/components/DocumentStyle/DocumentStyleNotice";
@@ -26,6 +27,8 @@ const LanguageLayout = ({ localeBrowser }: { localeBrowser: string }) => {
       <DocumentDraftSync />
       {/* Un document nou i buit comença amb la disposició de les preferències */}
       <NewDocumentPagesSync />
+      {/* I amb una còpia del meu estil, que no segueix mai (D1) */}
+      <NewDocumentStyleSync />
       <BarNavigation>
         {/* L'avís de verificació va aquí i no dins de cada pàgina: així apareix
             tant a l'editor com al visualitzador sense duplicar-lo */}

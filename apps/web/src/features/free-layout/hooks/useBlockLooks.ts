@@ -1,6 +1,6 @@
 // Com es veuen les targetes de cada bloc: les de la seqüència amb l'estil del
-// document, o, si el bloc fa servir un estil amb nom (R10, «Aplica el meu
-// estil»), amb aquell estil per sobre. Ho fan servir el full (les pàgines en
+// document i, a sobre, l'estil amb nom que li toca: el reassignat del bloc si
+// en té, i si no el de la seqüència (fonament 03, §4). Ho fan servir el full (les pàgines en
 // blocs i les simples) i el mesurador de targetes.
 import { useMemo } from "react";
 import { useAppSelector } from "@/app/hooks";
@@ -10,15 +10,14 @@ import {
   selectDocumentCardDefaults,
   selectDocumentStyle,
 } from "@features/sequence/style/styleSelectors";
-import { pictStyleOf } from "@features/sequence/style/styleModel";
 import {
   selectDocumentContent,
   selectNamedStyles,
+  selectSequenceStyleIds,
 } from "../store/freeLayoutThunks";
 import {
-  blockSequence,
   cardMeasureKey,
-  namedStyleOf,
+  cardNamedStyleOf,
   styleWithNamed,
 } from "../model/blockStyle";
 
@@ -32,7 +31,7 @@ export interface BlockLook {
 
 /**
  * Torna una funció que diu com es veu una seqüència en un bloc amb (o sense)
- * estil amb nom. Guarda el que ha calculat mentre no canvien el contingut, els
+ * estil reassignat (`styleId`). Guarda el que ha calculat mentre no canvien el contingut, els
  * estils ni l'estil del document: el mesurador torna a mesurar cada vegada
  * que rep pictogrames nous, i no ho ha de fer a cada pintada.
  */
@@ -42,13 +41,18 @@ export const useBlockLooks = (): ((
 ) => BlockLook) => {
   const content = useAppSelector(selectDocumentContent);
   const styles = useAppSelector(selectNamedStyles);
+  const sequenceStyleIds = useAppSelector(selectSequenceStyleIds);
   const documentStyle = useAppSelector(selectDocumentStyle);
   const defaults = useAppSelector(selectDocumentCardDefaults);
 
   return useMemo(() => {
     const cache = new Map<string, BlockLook>();
     return (sequenceKey: number, styleId: string | undefined): BlockLook => {
-      const named = namedStyleOf(styles, styleId);
+      const named = cardNamedStyleOf(
+        { styles, sequenceStyleIds },
+        sequenceKey,
+        styleId,
+      );
       const measureKey = cardMeasureKey(sequenceKey, named?.id);
       const cached = cache.get(measureKey);
       if (cached) return cached;
@@ -56,14 +60,15 @@ export const useBlockLooks = (): ((
       const look: BlockLook = named
         ? {
             measureKey,
-            pictograms: blockSequence(pictograms, documentStyle, named),
-            defaults: cardDefaultsOf(
-              pictStyleOf(styleWithNamed(documentStyle, named)),
-            ),
+            // Els pictogrames només porten els seus retocs: la resta la
+            // prenen de l'estil amb nom, sense còpies (solució A). La
+            // distribució no surt d'aquí: les targetes no la fan servir
+            pictograms,
+            defaults: cardDefaultsOf(styleWithNamed(documentStyle, named)),
           }
         : { measureKey, pictograms, defaults };
       cache.set(measureKey, look);
       return look;
     };
-  }, [content, styles, documentStyle, defaults]);
+  }, [content, styles, sequenceStyleIds, documentStyle, defaults]);
 };

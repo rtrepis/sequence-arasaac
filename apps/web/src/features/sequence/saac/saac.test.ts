@@ -180,16 +180,12 @@ describe("migració dels formats antics", () => {
               expect(now.pictogram.hair).toBe(old.hair);
             if (old.color !== undefined)
               expect(now.pictogram.color).toBe(old.color);
-            // I Redux continua sabent quines opcions admet
+            // I Redux continua sabent quines opcions admet (abans ho deia que
+            // en portés el valor; ara, `variants`)
             const loaded = sortedPicts(document.content[s])[p];
-            expect(Object.keys(loaded.img.settings).sort()).toEqual(
-              Object.keys(pict.img.settings)
-                .filter((k) => pict.img.settings[k as "skin"] !== undefined)
-                .concat(
-                  pict.img.settings.fitzgerald === undefined
-                    ? ["fitzgerald"]
-                    : [],
-                )
+            expect([...(loaded.img.variants ?? [])].sort()).toEqual(
+              (["skin", "hair", "color"] as const)
+                .filter((k) => pict.img.settings[k] !== undefined)
                 .sort(),
             );
           }
@@ -1008,5 +1004,170 @@ describe("el document de demostració (19)", () => {
   it("anada i tornada idèntica de les pàgines", () => {
     const { file, document } = parseDocument(DEMO);
     expect(documentToV3(document, serializeContext).page).toEqual(file.page);
+  });
+});
+
+// L'estil de la seqüència i el bloc reassignat (`docs/plans/PLA-estils.md`,
+// pas 4): document → estil de la seqüència, o el reassignat del bloc →
+// pictograma.
+describe("l'estil de la seqüència (20)", () => {
+  const SEQUENCE_STYLE = "20-estil-de-sequencia.saac";
+  const withRaw = (change: (raw: Record<string, unknown>) => void) => {
+    const raw = JSON.parse(readText(SEQUENCE_STYLE));
+    change(raw);
+    const parsed = parseSaac(JSON.stringify(raw), context);
+    if (parsed.kind !== "document") throw new Error();
+    return parsed;
+  };
+
+  it("anada i tornada idèntica", () => {
+    const { file, document } = parseDocument(SEQUENCE_STYLE);
+    expect(JSON.parse(serializeSaac(file))).toEqual(
+      JSON.parse(readText(SEQUENCE_STYLE)),
+    );
+    const again = documentToV3(document, serializeContext);
+    expect(again).toEqual({ ...file, meta: { ...file.meta, updatedAt: NOW } });
+    expect(documentFromV3(again)).toEqual(document);
+  });
+
+  it("el nom i l'estil de cada seqüència es llegeixen", () => {
+    const { document } = parseDocument(SEQUENCE_STYLE);
+    expect(document.sequenceNames).toEqual({ 0: "Matí", 2: "Nit" });
+    expect(document.sequenceStyleIds).toEqual({ 0: "st_vores", 2: "st_gran" });
+    expect(document.styleName).toBe("El meu estil");
+    // Ja no són camps desconeguts
+    expect(document.saacExtra?.sequences).toBeUndefined();
+  });
+
+  it("una seqüència es pinta amb el seu estil, i un bloc reassignat amb el seu", () => {
+    const { file } = parseDocument(SEQUENCE_STYLE);
+    const plain = resolveStyle(file, "seq_mati", "p_1")!;
+    expect(plain.card.borderIn.size).toBe(0);
+    expect(plain.card.borderOut.size).toBe(0);
+    expect(plain.card.textPosition).toBe("bottom");
+
+    // El reassignat substitueix el de la seqüència: les vores tornen a ser
+    // les del document
+    const reassigned = resolveStyle(file, "seq_mati", "p_1", "pl_1")!;
+    expect(reassigned.card.borderIn.size).toBe(2);
+    expect(reassigned.card.textPosition).toBe("top");
+    expect(reassigned.card.font).toEqual({
+      family: "Roboto",
+      color: "#000000",
+      size: 1.4,
+    });
+    expect(resolveStyle(file, "seq_mati", "p_1", "pl_2")).toEqual(plain);
+
+    // El retoc del pictograma, a sobre de l'estil de la seqüència
+    const retouched = resolveStyle(file, "seq_mati", "p_2")!;
+    expect(retouched.card.borderOut).toEqual({
+      color: "#b71c1c",
+      radius: 20,
+      size: 0,
+    });
+  });
+
+  it("l'estil de la seqüència porta la pell, la lletra i el Fitzgerald", () => {
+    const { file } = parseDocument(SEQUENCE_STYLE);
+    const plain = resolveStyle(file, "seq_nit", "p_5")!;
+    expect(plain.pictogram.skin).toBe("black");
+    expect(plain.pictogram.fitzgerald).toBe("#00796B");
+    const retouched = resolveStyle(file, "seq_nit", "p_6")!;
+    expect(retouched.card.font).toEqual({
+      family: "Roboto",
+      color: "#b71c1c",
+      size: 1.4,
+    });
+    // Sense estil, la del document
+    expect(resolveStyle(file, "seq_tarda", "p_3")?.pictogram.skin).toBe(
+      "white",
+    );
+  });
+
+  it("un estil de seqüència que no hi és no es fa servir", () => {
+    const { document, file } = withRaw((raw) => {
+      (raw.sequences as Record<string, unknown>[])[0].namedStyle = "st_res";
+    });
+    expect(file.sequences[0]).not.toHaveProperty("namedStyle");
+    expect(document.sequenceStyleIds).toEqual({ 2: "st_gran" });
+  });
+
+  it("en desar, `styles` només porta els estils que es fan servir (E13)", () => {
+    const { document } = parseDocument(SEQUENCE_STYLE);
+    const orphan = { id: "st_orfe", name: "Ningú" };
+    const withOrphan = documentToV3(
+      { ...document, styles: [...(document.styles ?? []), orphan] },
+      serializeContext,
+    );
+    expect(withOrphan.styles?.map(({ id }) => id)).toEqual([
+      "st_vores",
+      "st_gran",
+    ]);
+
+    // Sense la seqüència «Matí», «Sense vores» ja no el fa servir ningú
+    const { 0: _mati, ...sequenceStyleIds } = document.sequenceStyleIds ?? {};
+    const withoutMati = documentToV3(
+      { ...document, sequenceStyleIds },
+      serializeContext,
+    );
+    expect(withoutMati.styles?.map(({ id }) => id)).toEqual(["st_gran"]);
+    expect(withoutMati.sequences[0]).not.toHaveProperty("namedStyle");
+
+    // Un bloc que l'app no entén es torna a escriure tal com era, i el seu
+    // estil hi ha de continuar
+    const foreign = documentToV3(
+      {
+        ...document,
+        styles: [...(document.styles ?? []), orphan],
+        pages: {
+          ...document.pages!,
+          common: [
+            {
+              kind: "unknown",
+              id: "pl_x",
+              raw: { id: "pl_x", kind: "imatge", namedStyle: "st_orfe" },
+            },
+          ],
+        },
+      },
+      serializeContext,
+    );
+    expect(foreign.styles?.map(({ id }) => id)).toContain("st_orfe");
+
+    // Si no en queda cap, `styles` no s'escriu
+    const none = documentToV3(
+      { ...document, sequenceStyleIds: undefined, pages: undefined },
+      serializeContext,
+    );
+    expect(none).not.toHaveProperty("styles");
+  });
+
+  it("els retocs es desen respecte de l'estil de la seqüència", () => {
+    const { document } = parseDocument(SEQUENCE_STYLE);
+    // Sense l'estil, el retoc de la lletra de «dormir» es manté sencer: la
+    // mida 1,4 era de l'estil i ara és un retoc
+    const again = documentToV3(
+      { ...document, sequenceStyleIds: { 0: "st_vores" } },
+      serializeContext,
+    );
+    expect(again.sequences[2].pictograms[1].style).toEqual({
+      card: { font: { color: "#b71c1c", size: 1.4 } },
+    });
+  });
+
+  it("un document d'abans (17) no té estils de seqüència i es pinta igual", () => {
+    const { document, file } = parseDocument("17-pagines-i-blocs.saac");
+    expect(document.sequenceStyleIds).toBeUndefined();
+    expect(document.sequenceNames).toEqual({
+      0: "Avui és",
+      1: "Matí",
+      2: "Tarda",
+      3: "Nit",
+    });
+    const plain = resolveStyle(file, "seq_mati", file.sequences[1].pictograms[0].id);
+    expect(plain?.card).toEqual(
+      resolveCardStyle(file.style, undefined, file.sequences[1].pictograms[0])
+        .card,
+    );
   });
 });

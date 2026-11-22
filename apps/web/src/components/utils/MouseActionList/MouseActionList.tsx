@@ -29,6 +29,8 @@ import usePictogramUrl from "@features/pictogram/hooks/usePictogramUrl";
 import { sheetSurface } from "@/style/palette";
 import { useAppSelector } from "@app/hooks";
 import type { RootState } from "@app/store";
+import { selectActiveSequenceCardDefaults } from "@features/sequence/style/styleSelectors";
+import { resolvePictogram } from "@features/sequence/style/pictogramStyle";
 
 interface MouseActionListProps {
   pictogram: PictSequence;
@@ -135,6 +137,8 @@ const MouseActionList = ({
   const intl = useIntl();
   const { buildPictogramUrl } = usePictogramUrl();
   const sequenceLength = useAppSelector(selectActiveSequenceLength);
+  // El pictograma només porta els seus retocs: la resta, de l'estil
+  const inherited = useAppSelector(selectActiveSequenceCardDefaults);
   const isFirst = pictogram.indexSequence <= 0;
   const isLast = pictogram.indexSequence >= sequenceLength - 1;
   const actions = usePictogramActions({
@@ -158,14 +162,17 @@ const MouseActionList = ({
     : intl.formatMessage(messages.pasteEmpty);
   // La mateixa imatge que la targeta: la pròpia si n'hi ha (les `blob:` són
   // temporals i no valen), si no la d'ARASAAC amb la pell, el cabell i el color
+  const pasteLook = pasteObject
+    ? resolvePictogram(pasteObject, inherited).img.settings
+    : undefined;
   const pasteImage = pasteObject
     ? pasteObject.img.url && !pasteObject.img.url.startsWith("blob:")
       ? pasteObject.img.url
       : buildPictogramUrl(
           pasteObject.img.selectedId,
-          pasteObject.img.settings.skin,
-          pasteObject.img.settings.hair,
-          pasteObject.img.settings.color,
+          pasteLook?.skin,
+          pasteLook?.hair,
+          pasteLook?.color,
         )
     : undefined;
 

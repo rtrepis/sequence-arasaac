@@ -24,7 +24,7 @@ test("els controls de seqüències es diuen en l'idioma de l'app", async ({
   // B6: els dos botons eren català hardcodat, sense passar per react-intl
   await page.getByRole("button", { name: "Afegeix una seqüència" }).click();
   await expect(
-    page.getByRole("button", { name: "Elimina l'última seqüència" }),
+    page.getByRole("button", { name: "Accions de «Seqüència 2»" }),
   ).toBeVisible();
   await expect(
     page.getByRole("tablist", { name: "Número de seqüència" }),
@@ -55,7 +55,7 @@ test("la columna de la pàgina de vista té tots els controls amb nom", async ({
   await expectNoEnglishOrphans(page);
 
   // B5 deia que el botó del peu digués el seu àmbit. Des de R10 la columna ja no
-  // té peu: «Aplica el meu estil» és al menú «⋯» de la pàgina, que diu de quina
+  // té peu: les accions de la pàgina són al seu menú «⋯», que diu de quina
   await expect(
     page.getByRole("button", { name: "Més accions de la pàgina" }),
   ).toBeVisible();

@@ -1,9 +1,15 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  Dispatch,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import {
   PictSequence,
   Sequence,
   PictSequenceSettingsForEdit,
   PictApiAraForEdit,
+  SaacExtraFields,
 } from "@/types/sequence";
 import {
   DocumentLayout,
@@ -29,6 +35,10 @@ import {
   userPageOf,
 } from "@features/sequence/saac/saacContext";
 import { newSaacId } from "@features/sequence/saac/serialize";
+import {
+  documentFromLegacyPictograms,
+  documentToLegacyPictograms,
+} from "@features/sequence/style/pictogramStyle";
 import { DEFAULT_FITZGERALD_CATEGORY_COLORS } from "@features/sequence/saac/fitzgerald";
 import {
   SEQ_VIEW_DEFAULT_SIZE_PICT,
@@ -50,6 +60,7 @@ import { documentStatusClearedActionCreator } from "@features/sequence/store/doc
 import { reportClientError } from "@features/backend/api/clientErrorReport";
 import { removeSequencePlacements } from "@features/free-layout/model/sheets";
 import { addNewSequenceToPages } from "@features/free-layout/model/pages";
+import { removeSequenceFromDocument } from "@features/sequence/utils/removeSequence";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);
@@ -167,6 +178,9 @@ const documentSlice = createSlice({
       ) => {
         previousDocument.content[action.payload] = [];
         delete previousDocument.viewSettings[action.payload];
+        // Una seqüència nova no té nom ni estil propi: fa servir el del document
+        delete previousDocument.sequenceNames?.[action.payload];
+        delete previousDocument.sequenceStyleIds?.[action.payload];
         if (previousDocument.pages)
           previousDocument.pages = addNewSequenceToPages(
             previousDocument.pages,
@@ -318,6 +332,8 @@ const documentSlice = createSlice({
       previousDocument.content[saac].forEach((pictogram, index) => {
         if (index !== action.payload.indexSequence) return;
         pictogram.img.settings = action.payload.settings!;
+        if (action.payload.variants !== undefined)
+          pictogram.img.variants = action.payload.variants;
         // Un altre pictograma d'ARASAAC pot ser d'una altra categoria
         if (action.payload.category !== undefined)
           pictogram.img.category = action.payload.category;
@@ -337,11 +353,8 @@ const documentSlice = createSlice({
     },
 
     // «Aplica a tots»: canvia l'estil del document i treu aquestes propietats
-    // dels retocs de tots els pictogrames (fonament 03, §5). `base` és l'estil
-    // que té ara el document (el seu o l'heretat).
-    //
-    // Pell, cabell i color només es posen als pictogrames que els admeten: no
-    // tots els pictogrames d'ARASAAC tenen pell o cabell
+    // dels retocs de tots els pictogrames (fonament 03, §5), que així les
+    // hereten. `base` és l'estil que té ara el document (el seu o l'heretat)
     pictStyleAppliedToAll: (
       previousDocument,
       action: PayloadAction<{
@@ -361,16 +374,12 @@ const documentSlice = createSlice({
       Object.values(previousDocument.content).forEach((sequence) =>
         sequence.forEach((pict: PictSequence) => {
           Object.entries(patch.pictApiAra ?? {}).forEach(([key, value]) => {
-            const settings = pict.img.settings as Record<string, unknown>;
-            if (value !== undefined && settings[key] !== undefined)
-              settings[key] = value;
+            if (value !== undefined)
+              delete (pict.img.settings as Record<string, unknown>)[key];
           });
           Object.entries(patch.pictSequence ?? {}).forEach(([key, value]) => {
             if (value !== undefined)
-              (pict.settings as Record<string, unknown>)[key] =
-                typeof value === "object"
-                  ? JSON.parse(JSON.stringify(value))
-                  : value;
+              delete (pict.settings as Record<string, unknown>)[key];
           });
         }),
       );
@@ -451,6 +460,8 @@ const documentSlice = createSlice({
         fitzgeraldColors,
         pages,
         styles,
+        sequenceStyleIds,
+        sequenceNames,
       } = action.payload;
       previousDocument.content = content;
       previousDocument.viewSettings = viewSettings;
@@ -465,6 +476,8 @@ const documentSlice = createSlice({
         previousDocument.layout = action.payload.layout;
       previousDocument.pages = pages;
       previousDocument.styles = styles;
+      previousDocument.sequenceStyleIds = sequenceStyleIds;
+      previousDocument.sequenceNames = sequenceNames;
     },
 
     // Fa explícit l'estil que el document heretava, en desar-lo: el que s'ha
@@ -484,7 +497,11 @@ const documentSlice = createSlice({
     documentStyleMaterialized: (
       previousDocument,
       action: PayloadAction<{
-        style: SequenceStyle;
+        /**
+         * L'estil que heretava. «Desa el document» ja no en passa: el document
+         * en té des que neix (pla dels estils, D1). El desat al núvol, sí
+         */
+        style?: SequenceStyle;
         layout: DocumentLayout;
         author?: string;
       }>,
@@ -493,11 +510,11 @@ const documentSlice = createSlice({
       // un canvi de referència faria creure que el document s'ha tocat (i, per
       // exemple, ja no es podria desfer l'últim canvi d'estil)
       const { style, layout } = action.payload;
-      if (previousDocument.defaultSettings === undefined)
+      if (style && previousDocument.defaultSettings === undefined)
         previousDocument.defaultSettings = pictStyleOf(style);
-      if (previousDocument.styleView === undefined)
+      if (style && previousDocument.styleView === undefined)
         previousDocument.styleView = style.view;
-      if (previousDocument.fitzgeraldColors === undefined)
+      if (style && previousDocument.fitzgeraldColors === undefined)
         previousDocument.fitzgeraldColors =
           style.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS;
       // La pàgina també és del document (B26): la que heretava, s'hi escriu
@@ -509,11 +526,31 @@ const documentSlice = createSlice({
         action.payload.author !== undefined
       )
         previousDocument.author = action.payload.author;
+      if (previousDocument.styleView === undefined) return;
       const tabBase = tabViewOf(previousDocument.styleView);
       Object.keys(previousDocument.content).forEach((key) => {
         if (previousDocument.viewSettings[Number(key)] === undefined)
           previousDocument.viewSettings[Number(key)] = { ...tabBase };
       });
+    },
+
+    // Un document nou neix amb una còpia del meu estil, amb el seu nom, i no
+    // el segueix mai (pla dels estils, D1; fonament 03, §7). No és un canvi de
+    // l'usuari: el document encara no té res seu. Només si no en té cap
+    documentStyleAdopted: (
+      previousDocument,
+      action: PayloadAction<{ style: SequenceStyle; name: string }>,
+    ) => {
+      if (previousDocument.defaultSettings !== undefined) return;
+      const { style, name } = action.payload;
+      previousDocument.defaultSettings = JSON.parse(
+        JSON.stringify(pictStyleOf(style)),
+      ) as DefaultSettings;
+      previousDocument.styleView = { ...style.view };
+      previousDocument.fitzgeraldColors = {
+        ...(style.fitzgeraldColors ?? DEFAULT_FITZGERALD_CATEGORY_COLORS),
+      };
+      previousDocument.styleName = name;
     },
 
     // Canvia l'autor del document (B21). Buit és «sense autor», i no torna a
@@ -573,6 +610,45 @@ const documentSlice = createSlice({
       previousDocument.pages = action.payload.pages;
       previousDocument.styles = action.payload.styles;
     },
+
+    // L'estil d'una seqüència, triat a la Galeria d'estils (pla dels estils,
+    // pas 5): l'estil ja és a `styles` (copiat o reaprofitat). Sense `styleId`,
+    // la seqüència torna a l'estil del document. Els blocs amb un estil
+    // reassignat no canvien: el reassignat substitueix el de la seqüència
+    sequenceStyleChanged: (
+      previousDocument,
+      action: PayloadAction<{
+        key: number;
+        styleId?: string;
+        styles: NamedStyle[];
+      }>,
+    ) => {
+      const { key, styleId, styles } = action.payload;
+      const ids = { ...previousDocument.sequenceStyleIds };
+      if (styleId === undefined) delete ids[key];
+      else ids[key] = styleId;
+      previousDocument.sequenceStyleIds = ids;
+      previousDocument.styles = styles;
+    },
+
+    // El nom d'una seqüència: és per a qui edita i no s'imprimeix (D16). Buit,
+    // la seqüència torna a dir-se «Seqüència N»
+    sequenceRenamed: (
+      previousDocument,
+      action: PayloadAction<{ key: number; name: string }>,
+    ) => {
+      const { key } = action.payload;
+      const name = action.payload.name.trim();
+      const names = { ...previousDocument.sequenceNames };
+      if (name === "") delete names[key];
+      else names[key] = name;
+      previousDocument.sequenceNames = names;
+    },
+
+    // Treu una seqüència qualsevol, no només l'última (D21): les de després
+    // baixen una clau, i amb elles tot el que hi apunta
+    removeSequence: (previousDocument, action: PayloadAction<number>) =>
+      removeSequenceFromDocument(previousDocument, action.payload),
 
     // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
     // Treu una imatge del núvol del document obert.
@@ -639,6 +715,8 @@ const documentSlice = createSlice({
         const lastKey = keys[keys.length - 1];
         delete previousDocument.content[Number(lastKey)];
         delete previousDocument.viewSettings[Number(lastKey)];
+        delete previousDocument.sequenceNames?.[Number(lastKey)];
+        delete previousDocument.sequenceStyleIds?.[Number(lastKey)];
         // I els seus blocs: no poden apuntar a una seqüència que no hi és
         if (previousDocument.pages)
           previousDocument.pages = removeSequencePlacements(
@@ -676,8 +754,15 @@ export interface DocumentStyleSnapshot {
   styleView: DocumentSAAC["styleView"];
   fitzgeraldColors: DocumentSAAC["fitzgeraldColors"];
   pages: DocumentSAAC["pages"];
-  /** Els estils amb nom: «Aplica el meu estil» n'hi copia un (R10) */
+  /** Els estils amb nom: triar un estil n'hi copia un */
   styles: DocumentSAAC["styles"];
+  /** L'estil de cada seqüència: triar-ne un a la galeria el canvia */
+  sequenceStyleIds: DocumentSAAC["sequenceStyleIds"];
+  /**
+   * El nom de cada seqüència: canviar-lo després d'un canvi d'estil fa que ja
+   * no es pugui desfer, perquè desfer el tornaria enrere
+   */
+  sequenceNames: DocumentSAAC["sequenceNames"];
   /**
    * La pàgina del document, només quan el canvi la toca (adaptar la pantalla
    * sencera). Sense la clau, desfer no la toca
@@ -695,6 +780,8 @@ export const takeDocumentStyleSnapshot = (
   fitzgeraldColors: document.fitzgeraldColors,
   pages: document.pages,
   styles: document.styles,
+  sequenceStyleIds: document.sequenceStyleIds,
+  sequenceNames: document.sequenceNames,
 });
 
 /**
@@ -743,14 +830,22 @@ export const saveDocumentThunk = createAsyncThunk<
         resolveDocumentStyle(requested, userDefaultStyleOf(state)),
         userLayoutOf(state),
       );
-      const { id, ...payload } = doc;
+      // El núvol guarda la forma d'abans (els pictogrames amb l'estil
+      // resolt), i el que torna es redueix als retocs, com un fitxer antic
+      const style = resolveDocumentStyle(doc, userDefaultStyleOf(state));
+      const { id, ...payload } = documentToLegacyPictograms(doc, style);
+      const fromCloud = (returned: DocumentSAAC): DocumentSAAC =>
+        documentFromLegacyPictograms(
+          returned,
+          resolveDocumentStyle(returned, userDefaultStyleOf(state)),
+        );
       if (isMongoId(id) && !asCopy) {
         const updated = await updateDocument(id, payload);
-        dispatch(documentSlice.actions.loadDocumentSaac(updated));
+        dispatch(documentSlice.actions.loadDocumentSaac(fromCloud(updated)));
         return id;
       } else {
         const saved = await createDocument(payload);
-        dispatch(documentSlice.actions.loadDocumentSaac(saved));
+        dispatch(documentSlice.actions.loadDocumentSaac(fromCloud(saved)));
         return saved.id;
       }
     } catch (error: unknown) {
@@ -783,6 +878,84 @@ export const startNewDocumentThunk = createAsyncThunk<void, void>(
     await clearDraft();
   },
 );
+
+/** El que fan servir els thunks plans d'aquest fitxer (sense `AppThunk`, que és de l'store). */
+type PlainThunk = (
+  dispatch: Dispatch,
+  getState: () => StyleSourceState,
+) => void;
+
+/**
+ * Dona a un document nou la còpia del meu estil amb què neix (pla dels
+ * estils, D1), amb el nom `name` («El meu estil», en l'idioma de la
+ * interfície). Si el document ja té estil, no fa res.
+ */
+export const adoptMyStyleThunk =
+  (name: string): PlainThunk =>
+  (dispatch, getState) => {
+    const state = getState();
+    if (state.document.defaultSettings !== undefined) return;
+    dispatch(
+      documentSlice.actions.documentStyleAdopted({
+        style: userDefaultStyleOf(state),
+        name,
+      }),
+    );
+  };
+
+/**
+ * Els esborranys d'abans del pas 4 del pla dels estils porten el nom de cada
+ * seqüència (`title`) entre els camps desconeguts: passa a `sequenceNames`.
+ */
+export const withSequenceNamesFromExtras = (
+  document: DocumentSAAC,
+): DocumentSAAC => {
+  const extras = document.saacExtra?.sequences;
+  if (!extras) return document;
+  const names: { [key: number]: string } = { ...document.sequenceNames };
+  const sequences: { [key: number]: SaacExtraFields } = {};
+  let moved = false;
+  Object.entries(extras).forEach(([key, extra]) => {
+    const { title, ...rest } = extra;
+    if (typeof title !== "string") {
+      sequences[Number(key)] = extra;
+      return;
+    }
+    moved = true;
+    if (names[Number(key)] === undefined) names[Number(key)] = title;
+    if (Object.keys(rest).length > 0) sequences[Number(key)] = rest;
+  });
+  if (!moved) return document;
+  const saacExtra = { ...document.saacExtra };
+  if (Object.keys(sequences).length > 0) saacExtra.sequences = sequences;
+  else delete saacExtra.sequences;
+  return { ...document, sequenceNames: names, saacExtra };
+};
+
+/**
+ * Obre l'esborrany del navegador. Els d'abans de la solució A porten l'estil
+ * copiat a cada pictograma: es queden només amb els retocs, una sola vegada,
+ * comparant amb l'estil del document en aquell moment (pla dels estils, §3.3).
+ * Un document sense estil propi es compara amb el meu estil d'ara: no hi ha
+ * manera de saber el de quan es va fer. Retorna el document que s'ha obert.
+ */
+export const restoreDraftDocumentThunk =
+  (draft: { document: DocumentSAAC; retouchesOnly: boolean }) =>
+  (dispatch: Dispatch, getState: () => StyleSourceState): DocumentSAAC => {
+    const document = withSequenceNamesFromExtras(
+      draft.retouchesOnly
+        ? draft.document
+        : documentFromLegacyPictograms(
+            draft.document,
+            resolveDocumentStyle(
+              draft.document,
+              userDefaultStyleOf(getState()),
+            ),
+          ),
+    );
+    dispatch(documentSlice.actions.loadDocumentSaac(document));
+    return document;
+  };
 
 // Thunk: obté la llista de documents de l'usuari del backend
 export const listDocumentsThunk = createAsyncThunk<
@@ -821,6 +994,7 @@ export const {
   applyDocumentStyle: applyDocumentStyleActionCreator,
   restoreDocumentStyle: restoreDocumentStyleActionCreator,
   documentStyleMaterialized: documentStyleMaterializedActionCreator,
+  documentStyleAdopted: documentStyleAdoptedActionCreator,
   newDocumentPagesInherited: newDocumentPagesInheritedActionCreator,
   documentLayoutChanged: documentLayoutChangedActionCreator,
   documentLayoutAndPagesChanged: documentLayoutAndPagesChangedActionCreator,
@@ -829,6 +1003,9 @@ export const {
   documentAuthorChanged: documentAuthorChangedActionCreator,
   pictStyleAppliedToAll: pictStyleAppliedToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
+  sequenceStyleChanged: sequenceStyleChangedActionCreator,
+  sequenceRenamed: sequenceRenamedActionCreator,
+  removeSequence: removeSequenceActionCreator,
   removeCloudImage: removeCloudImageActionCreator,
   replaceCloudImage: replaceCloudImageActionCreator,
   setDocumentId: setDocumentIdActionCreator,

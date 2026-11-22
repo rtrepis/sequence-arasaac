@@ -69,6 +69,27 @@ export const customizedMark: SxProps<Theme> = {
 };
 
 /**
+ * Marca «reassignat» de la fila «Estil» d'un bloc (pla dels estils, D14): el
+ * bloc fa servir un estil que no és el de la seva seqüència. Els mateixos
+ * colors que «personalitzat», però **una altra forma** (un quadrat i no una
+ * rodona), perquè no es confonguin quan surten totes dues. Informativa: el
+ * text de la fila ja ho diu.
+ */
+export const reassignedMark: SxProps<Theme> = {
+  width: MARK_SIZE,
+  height: MARK_SIZE,
+  borderRadius: "3px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: 12,
+  color: sheetSurface,
+  backgroundColor: printColors.text,
+  boxShadow: `0 0 0 2px ${sheetSurface}`,
+  flexShrink: 0,
+};
+
+/**
  * Diana de l'avís de text tallat: els 44 px de qualsevol objectiu tàctil, amb
  * marges negatius perquè a la fila només ocupi el que es veu (la rodoneta). La
  * part de més cau damunt de la cantonada buida de la targeta.

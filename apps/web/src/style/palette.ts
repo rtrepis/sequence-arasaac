@@ -66,6 +66,17 @@ export const printColors = {
 } as const;
 
 /**
+ * Les vores dels estils de l'app de la Galeria d'estils (pla dels estils, pas
+ * 9; `docs/estudis/ESTUDI-estils-de-targetes.md`): la tinta del paper i el gris
+ * de la vora d'origen de la targeta. Són contingut: en triar l'estil es copien
+ * al document i s'imprimeixen tal qual, en tots dos temes.
+ */
+export const appStyleBorderColors = {
+  ink: printColors.text,
+  grey: "#999999",
+} as const;
+
+/**
  * Superfície de full: tota zona on es veu un pictograma (targetes d'edició,
  * full de la pàgina de vista, fullscreen i mostres de configuració) és sempre
  * paper blanc, en tema clar i en fosc — el que es veu és el que s'imprimeix.

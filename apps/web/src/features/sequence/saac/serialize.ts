@@ -1,8 +1,8 @@
 // De Redux al fitxer v3: «Desa el document» i «Desa l'estil en un fitxer…».
 //
-// Redux conserva la forma de sempre (valors sencers a cada pictograma); aquí es
-// tradueix al contracte del fitxer, amb `diffStyle` a cada nivell perquè els
-// retocs siguin mínims. Vegeu `docs/fonaments/06-compatibilitat-i-dades.md`.
+// Redux porta només els retocs de cada pictograma, com el fitxer (solució A del
+// pla dels estils); aquí es tradueix al contracte del fitxer, amb `diffStyle` a
+// cada nivell perquè un retoc igual a l'estil deixi de ser-ho. Vegeu `docs/fonaments/06-compatibilitat-i-dades.md`.
 import { version as appVersion } from "../../../../package.json";
 import type {
   DocumentPages,
@@ -16,7 +16,8 @@ import type {
 import type { PictSequence } from "@/types/sequence";
 import type { PageOrientation, PageSize, SequenceDirection } from "@/types/ui";
 import { resolveDocumentStyle } from "@features/sequence/style/styleModel";
-import { diffDeep, diffStyle } from "./cascade";
+import { variantsOf } from "@features/sequence/style/pictogramStyle";
+import { diffDeep, diffStyle, styleWithNamedV3 } from "./cascade";
 import {
   DEFAULT_FITZGERALD_CATEGORY_COLORS,
   FitzgeraldCategory,
@@ -41,7 +42,6 @@ import {
   V3Sheet,
   V3Style,
   V3View,
-  PICTOGRAM_VARIANTS,
 } from "./types";
 
 /** Pàgina per defecte de qui desa: la que hereta un document sense pàgina. */
@@ -175,7 +175,7 @@ const imageOf = (
   pict: PictSequence,
   addAsset: (url: string) => string,
 ): V3Image => {
-  const { url, selectedId, searched, settings } = pict.img;
+  const { url, selectedId, searched } = pict.img;
   // Les URL `blob:` són temporals: la targeta tampoc no les pinta
   if (url && !url.startsWith("blob:"))
     return {
@@ -193,9 +193,8 @@ const imageOf = (
         alternatives: searched.bestIdPicts,
       }),
       ...(searched.keyWords && { keywords: searched.keyWords }),
-      // Redux diu quines opcions admet el pictograma perquè només hi posa les
-      // que ARASAAC li dona
-      variants: PICTOGRAM_VARIANTS.filter((key) => settings[key] !== undefined),
+      // Les opcions que admet el pictograma, les que ARASAAC li dona
+      variants: variantsOf(pict.img),
     };
 
   return { source: "none" };
@@ -229,8 +228,8 @@ const pictogramOverride = (
 
   const { settings } = pict;
   const card = diffDeep(style.card, {
-    // Sense posició, la targeta no pintava el text: és «none»
-    textPosition: settings.textPosition ?? "none",
+    // Sense posició, l'hereta; «sense text» és el retoc «none» (E3)
+    textPosition: settings.textPosition,
     font: settings.font,
     numberFont: settings.numberFont,
     borderIn: settings.borderIn,
@@ -472,7 +471,20 @@ export const documentToV3 = (
       usedIds.has(`seq_${key + 1}`) ? context.newId("seq") : `seq_${key + 1}`,
     );
 
+  // Els estils amb nom amb la forma del fitxer, per `id`
+  const namedStyles = document.styles ?? [];
+  const namedV3 = new Map(
+    namedStyles.map((named) => [named.id, namedStyleToV3(named)]),
+  );
+
   const sequences: V3Sequence[] = keys.map((key) => {
+    const title = document.sequenceNames?.[key];
+    // Un estil que no hi és no es pot fer servir: la seqüència fa servir el
+    // del document
+    const styleId = document.sequenceStyleIds?.[key];
+    const named = styleId === undefined ? undefined : namedV3.get(styleId);
+    // Els retocs de cada pictograma són respecte de l'estil de la seqüència
+    const sequenceStyle = styleWithNamedV3(style, named);
     const view = document.viewSettings?.[key];
     const viewDiff = view
       ? diffStyle<V3View>(style.view, {
@@ -487,7 +499,7 @@ export const documentToV3 = (
       .map((pict) =>
         pictogramToV3(
           pict,
-          style,
+          sequenceStyle,
           uniqueId(pict.id, () => context.newId("p")),
           addAsset,
         ),
@@ -496,6 +508,8 @@ export const documentToV3 = (
     return {
       ...extra.sequences?.[key],
       id: sequenceIdOf(key),
+      ...(title !== undefined && { title }),
+      ...(named && { namedStyle: named.id }),
       ...(viewDiff && { style: { view: viewDiff } }),
       pictograms,
     };
@@ -509,7 +523,6 @@ export const documentToV3 = (
       ([key]) => !PAGES_PAGE_KEYS.includes(key),
     ),
   );
-  const namedStyles = document.styles ?? [];
   const writer: BlockWriter = {
     sequenceIdOfKey: new Map(
       keys.map((key, index) => [key, sequences[index].id]),
@@ -538,6 +551,21 @@ export const documentToV3 = (
     ...(document.pages && pagesToV3(document.pages, writer)),
   };
 
+  // E13: només els estils que fa servir alguna seqüència o algun bloc, també
+  // els blocs que l'app no entén, que es tornen a escriure tal com eren
+  const usedStyleIds = new Set<string>();
+  sequences.forEach(({ namedStyle }) => {
+    if (namedStyle !== undefined) usedStyleIds.add(namedStyle);
+  });
+  [
+    ...(page.sheets?.flatMap(({ blocks }) => blocks) ?? []),
+    ...(page.common ?? []),
+  ].forEach((block) => {
+    const { namedStyle } = block as { namedStyle?: unknown };
+    if (typeof namedStyle === "string") usedStyleIds.add(namedStyle);
+  });
+  const usedStyles = namedStyles.filter(({ id }) => usedStyleIds.has(id));
+
   return {
     ...extra.root,
     format: SAAC_FORMAT,
@@ -557,10 +585,14 @@ export const documentToV3 = (
       updatedAt: context.now,
     }),
     page,
-    style: { ...extra.style, ...style },
+    style: {
+      ...extra.style,
+      ...(document.styleName !== undefined && { name: document.styleName }),
+      ...style,
+    },
     sequences,
-    ...(namedStyles.length > 0 && {
-      styles: namedStyles.map(namedStyleToV3),
+    ...(usedStyles.length > 0 && {
+      styles: usedStyles.map(({ id }) => namedV3.get(id) as V3NamedStyle),
     }),
     ...(Object.keys(assets).length > 0 && { assets }),
     ui: {

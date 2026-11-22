@@ -8,9 +8,13 @@ import { useCallback, useEffect, useRef } from "react";
 import { MessageDescriptor, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { RootState } from "@app/store";
-import { loadDocumentSaacActionCreator } from "@features/sequence/store/documentSlice";
+import { restoreDraftDocumentThunk } from "@features/sequence/store/documentSlice";
 import { isPristineDocument } from "@features/sequence/utils/isPristineDocument";
-import { readDraft, saveDraft } from "@features/sequence/storage/draftStorage";
+import {
+  DRAFT_PICTOGRAM_MODEL,
+  readDraft,
+  saveDraft,
+} from "@features/sequence/storage/draftStorage";
 import { requestPersistentStorage } from "@features/sequence/storage/persistentStorage";
 import {
   documentStatusRestoredActionCreator,
@@ -165,7 +169,13 @@ export const useDocumentDraft = (): void => {
         !isPristineDocument(draft.document) &&
         isPristineDocument(documentRef.current)
       ) {
-        dispatch(loadDocumentSaacActionCreator(draft.document));
+        // Un esborrany d'abans de la solució A es converteix en obrir-lo
+        dispatch(
+          restoreDraftDocumentThunk({
+            document: draft.document,
+            retouchesOnly: draft.pictogramModel === DRAFT_PICTOGRAM_MODEL,
+          }),
+        );
         dispatch(
           documentStatusRestoredActionCreator({
             // Els esborranys escrits abans que hi hagués el camp no en porten:
@@ -191,6 +201,8 @@ export const useDocumentDraft = (): void => {
         // el primer flush el tornaria a escriure tal qual, i amb una altra
         // pestanya pel mig aquella escriptura innecessària és justament la que
         // es carrega la feina bona
+        // Si s'ha convertit, el document de l'store ja és un altre: el desat
+        // següent l'escriu amb la marca nova, i no es torna a convertir
         persistedRef.current = {
           document: draft.document,
           viewSettings: restoredView ?? viewSettingsRef.current,

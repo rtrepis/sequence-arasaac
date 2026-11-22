@@ -294,11 +294,16 @@
           "type": "string"
         },
         "title": {
-          "type": "string"
+          "type": "string",
+          "description": "El nom de la seqüència, per a qui edita: no s'imprimeix. Sense valor, la interfície diu «Seqüència N» (docs/plans/PLA-estils.md, D16)."
+        },
+        "namedStyle": {
+          "type": "string",
+          "description": "L'id de l'estil amb nom (styles) de la seqüència: el reben tots els seus blocs que no en tenen un de reassignat. Sense valor, l'estil del document. Opcional: no puja schemaVersion (docs/plans/PLA-estils.md §10.2)."
         },
         "style": {
           "type": "object",
-          "description": "En aquesta versió, només view. Només les diferències amb l'estil del document.",
+          "description": "Només view (la distribució). L'estil de la seqüència va a namedStyle. Només les diferències amb l'estil del document.",
           "properties": {
             "view": {
               "$ref": "#/$defs/partialView"
@@ -636,6 +641,10 @@
         "view"
       ],
       "properties": {
+        "name": {
+          "type": "string",
+          "description": "Només a l'estil del document: el nom de l'estil del qual surt («El meu estil», «Sense vores»…). És contingut, en l'idioma de qui l'aplica. Opcional: no puja schemaVersion. Un .saacstyle porta el nom a meta.title."
+        },
         "pictogram": {
           "type": "object",
           "required": [
@@ -812,7 +821,7 @@
         },
         "namedStyle": {
           "type": "string",
-          "description": "L'id d'un estil amb nom (styles). Si no hi és, el bloc fa servir l'estil del document."
+          "description": "Només als blocs de seqüència: l'id de l'estil amb nom (styles) reassignat al bloc. Substitueix el de la seqüència, no s'hi suma. Si no hi és, el bloc fa servir l'estil de la seqüència (namedStyle de la seqüència) o, si no en té, el del document."
         }
       },
       "oneOf": [

@@ -101,10 +101,9 @@ test("mòbil: menú «⋯» amb el teclat, i el focus hi torna", async ({ page }
   const menu = page.getByRole("menu");
   await expect(menu).toBeVisible();
   // Amb el menú obert, la resta queda `aria-hidden`: es busca pel selector
-  await expect(page.locator('[aria-haspopup="menu"]')).toHaveAttribute(
-    "aria-expanded",
-    "true",
-  );
+  await expect(
+    page.locator('[aria-haspopup="menu"][aria-label="Accions del meu estil"]'),
+  ).toHaveAttribute("aria-expanded", "true");
   await expect(menu.getByRole("menuitem")).toHaveText(ACTIONS);
   await expect(menu.getByRole("menuitem").first()).toBeFocused();
   await page.keyboard.press("ArrowDown");

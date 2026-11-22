@@ -19,8 +19,10 @@ import { uiReducer } from "@features/user-settings/store/uiSlice";
 import { selectDocumentStyle } from "@features/sequence/style/styleSelectors";
 import { pictogramStyleOverride } from "@features/sequence/saac/serialize";
 import {
+  cardDefaultsOf,
   isPictogramCustomized,
   resetPictogramStyle,
+  resolvePictogram,
 } from "@features/sequence/style/pictogramStyle";
 import type { PictSequence } from "@/types/sequence";
 
@@ -33,26 +35,24 @@ type TestStore = ReturnType<typeof makeStore>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const state = (store: TestStore) => store.getState() as any;
 
+// Un pictograma porta només els seus retocs (solució A del pla dels estils):
+// `settings` i `img` són els que demana cada cas
 const pict = (
   index: number,
   settings: Partial<PictSequence["settings"]> = {},
   img: Partial<PictSequence["img"]["settings"]> = {},
+  variants: PictSequence["img"]["variants"] = ["skin", "hair", "color"],
 ): PictSequence => ({
   indexSequence: index,
   img: {
     searched: { word: "menjar", bestIdPicts: [6456] },
     selectedId: 6456,
-    settings: {
-      fitzgerald: "#4CAf50",
-      skin: "white",
-      hair: "brown",
-      color: true,
-      ...img,
-    },
+    settings: { ...img },
+    variants,
     category: "verb",
   },
   cross: false,
-  settings: { textPosition: "bottom", ...settings },
+  settings: { ...settings },
 });
 
 describe("Aplica a tots", () => {
@@ -72,8 +72,8 @@ describe("Aplica a tots", () => {
     expect(style.pictSequence.borderOut).toEqual(borderOut);
     const picts: PictSequence[] = state(store).document.content[0];
     picts.forEach((p) => {
-      expect(p.settings.borderOut).toEqual(borderOut);
-      // Ja no és un retoc
+      // Ja no és un retoc: l'hereta de l'estil
+      expect(p.settings.borderOut).toBeUndefined();
       expect(pictogramStyleOverride(p, style)?.card?.borderOut).toBeUndefined();
     });
     expect(state(store).style.undoSnackbar).toMatchObject({
@@ -81,10 +81,12 @@ describe("Aplica a tots", () => {
     });
   });
 
-  it("només posa la pell als pictogrames que en tenen", () => {
+  it("la pell es pinta només als pictogrames que en tenen", () => {
     const store = makeStore();
-    store.dispatch(addPictogramActionCreator(pict(0)));
-    store.dispatch(addPictogramActionCreator(pict(1, {}, { skin: undefined })));
+    store.dispatch(addPictogramActionCreator(pict(0, {}, { skin: "asian" })));
+    store.dispatch(
+      addPictogramActionCreator(pict(1, {}, {}, ["hair", "color"])),
+    );
 
     store.dispatch(
       applyToAllPictogramsThunk({ pictApiAra: { skin: "black" } }),
@@ -92,8 +94,14 @@ describe("Aplica a tots", () => {
 
     const [withSkin, withoutSkin]: PictSequence[] =
       state(store).document.content[0];
-    expect(withSkin.img.settings.skin).toBe("black");
-    expect(withoutSkin.img.settings.skin).toBeUndefined();
+    const defaults = cardDefaultsOf(selectDocumentStyle(state(store)));
+    expect(withSkin.img.settings.skin).toBeUndefined();
+    expect(resolvePictogram(withSkin, defaults).img.settings.skin).toBe(
+      "black",
+    );
+    expect(
+      resolvePictogram(withoutSkin, defaults).img.settings,
+    ).not.toHaveProperty("skin");
   });
 
   it("es pot desfer", () => {
@@ -132,24 +140,7 @@ describe("Restableix i l'indicador «personalitzat»", () => {
     const style = selectDocumentStyle(state(store));
     const { id } = state(store).document.content[0][0];
 
-    const reset: PictSequence = {
-      ...pict(0),
-      id,
-      settings: {
-        textPosition: style.pictSequence.textPosition,
-        borderIn: style.pictSequence.borderIn,
-        borderOut: style.pictSequence.borderOut,
-      },
-      img: {
-        ...pict(0).img,
-        settings: {
-          ...pict(0).img.settings,
-          skin: style.pictApiAra.skin,
-          hair: style.pictApiAra.hair,
-          color: style.pictApiAra.color,
-        },
-      },
-    };
+    const reset: PictSequence = { ...pict(0), id };
     store.dispatch(
       undoableStyleChangeThunk(
         () => updatePictSequenceActionCreator(reset),
@@ -180,42 +171,42 @@ describe("Restableix l'estil", () => {
     const store = makeStore();
     const style = selectDocumentStyle(state(store));
     const before = { ...retouched(), text: "L'escola", cross: true };
-    expect(isPictogramCustomized(before, style)).toBe(true);
+    expect(isPictogramCustomized(before)).toBe(true);
 
-    const after = resetPictogramStyle(before, style);
-    expect(isPictogramCustomized(after, style)).toBe(false);
+    const after = resetPictogramStyle(before);
+    expect(isPictogramCustomized(after)).toBe(false);
     expect(after.text).toBe("L'escola");
     expect(after.cross).toBe(true);
     expect(after.img.category).toBe("verb");
     expect(after.img.selectedId).toBe(before.img.selectedId);
     // El Fitzgerald torna al color de la categoria, no al gris de l'estil
-    expect(after.img.settings.fitzgerald).toBe("#4CAf50");
+    expect(after.img.settings.fitzgerald).toBeUndefined();
+    expect(
+      resolvePictogram(after, cardDefaultsOf(style)).img.settings.fitzgerald,
+    ).toBe(style.fitzgeraldColors?.verb ?? "#4CAf50");
     expect(after.settings.font).toBeUndefined();
   });
 
-  it("no hi posa pell si el pictograma no en té", () => {
-    const store = makeStore();
-    const style = selectDocumentStyle(state(store));
-    const withoutSkin = pict(0, {}, { skin: undefined });
-    expect(
-      resetPictogramStyle(withoutSkin, style).img.settings,
-    ).not.toHaveProperty("skin");
+  it("conserva quines variants admet el pictograma", () => {
+    const withoutSkin = pict(0, {}, { hair: "red" }, ["hair", "color"]);
+    const reset = resetPictogramStyle(withoutSkin);
+    expect(reset.img.settings).toEqual({});
+    expect(reset.img.variants).toEqual(["hair", "color"]);
   });
 
   it("des del menú contextual s'aplica al moment, i Desfés el recupera", () => {
     const store = makeStore();
     store.dispatch(addPictogramActionCreator(retouched()));
     const before = state(store).document.content[0][0];
-    const style = selectDocumentStyle(state(store));
 
     store.dispatch(resetPictogramStyleThunk(0));
     const reset = state(store).document.content[0][0];
-    expect(isPictogramCustomized(reset, style)).toBe(false);
+    expect(isPictogramCustomized(reset)).toBe(false);
     expect(reset.id).toBe(before.id);
     expect(state(store).style.undoSnackbar).toMatchObject({ source: "reset" });
 
     store.dispatch(undoStyleChangeThunk());
     expect(state(store).document.content[0][0]).toBe(before);
-    expect(isPictogramCustomized(before, style)).toBe(true);
+    expect(isPictogramCustomized(before)).toBe(true);
   });
 });

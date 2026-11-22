@@ -9,6 +9,7 @@ import {
   resolveDocumentStyle,
   resolveSequenceViews,
 } from "./styleModel";
+import { cardDefaultsOf, resolvePictogram } from "./pictogramStyle";
 import { DocumentSAAC, SequenceStyle } from "@/types/document";
 import { Font, PictSequence } from "@/types/sequence";
 import { ViewSettings } from "@/types/ui";
@@ -92,20 +93,12 @@ const docWith = (
 });
 
 describe("canviar l'estil d'un document", () => {
-  it("el que coincidia amb l'estil vell segueix el nou", () => {
-    const doc = docWith([
-      pict(
-        {
-          textPosition: "bottom",
-          borderIn: { ...OLD.pictSequence.borderIn },
-          font: { ...OLD.pictSequence.font },
-        },
-        { skin: "white", hair: "brown", color: true },
-      ),
-    ]);
+  it("un pictograma sense retocs ho hereta tot del nou (solució A)", () => {
+    const doc = docWith([pict({}, {})]);
+    doc.content[0][0].img.variants = ["skin", "hair", "color"];
     applyStyleToDocument(doc, OLD, NEW);
 
-    const p = doc.content[0][0];
+    const p = resolvePictogram(doc.content[0][0], cardDefaultsOf(NEW));
     expect(p.settings.textPosition).toBe("top");
     expect(p.settings.borderIn).toEqual(NEW.pictSequence.borderIn);
     expect(p.settings.font).toEqual(NEW.pictSequence.font);
@@ -114,7 +107,7 @@ describe("canviar l'estil d'un document", () => {
       hair: "red",
       color: false,
     });
-    // El color de la categoria no és una tria d'aparença: no es toca
+    // El color triat a mà es conserva
     expect(p.img.settings.fitzgerald).toBe("#ff0000");
   });
 
@@ -147,14 +140,13 @@ describe("canviar l'estil d'un document", () => {
     expect(p.img.settings.skin).toBe("asian");
   });
 
-  it("cas límit: un retoc igual a l'estil vell es tracta com a no retocat", () => {
-    // L'usuari va triar a mà Roboto negre de mida 1 en aquest pictograma, que
-    // resulta ser el mateix que l'estil: no es pot distingir d'un heretat
+  it("els pictogrames no es toquen: només porten els seus retocs", () => {
     const doc = docWith([
       pict({ font: { family: "Roboto", color: "#000000", size: 1 } }),
     ]);
+    const before = doc.content[0][0];
     applyStyleToDocument(doc, OLD, NEW);
-    expect(doc.content[0][0].settings.font).toEqual(NEW.pictSequence.font);
+    expect(doc.content[0][0]).toEqual(before);
   });
 
   it("el que el pictograma no tenia continua heretant", () => {

@@ -76,6 +76,8 @@ l'entrada.
 |---|---|---|---|
 | B38 | Blocs d'imatge a les pàgines | Idea sense decidir; abans, el pla dels estils (B37) | L |
 | B39 | Retocs d'estil d'un bloc a la columna: lletra, color del text i color de fons | Decidit fora d'aquesta release (D10–D11 de `docs/plans/PLA-estils.md`): un bloc té un sol estil, el de la seqüència o un de reassignat. Si torna, el fons s'imprimeix i toca l'estàndard de colors | M |
+| B41 | El text de la targeta no es pot posar en majúscules | Decidit fora d'aquesta release; demana un camp nou al `.saac` | M |
+| B42 | Retirar la pantalla d'edició d'abans a l'escriptori | Quan ho decideixi l'usuari (D34): fins aleshores conviuen amb l'interruptor | S |
 | B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
@@ -94,6 +96,7 @@ l'entrada.
 | P1 | Proves de regressió del `.saac` amb compte | Tornar a encendre els comptes, o tenir l'API local amb BD en memòria |
 | C26 | 12 codis d'error de l'API no tenen text | Tornar a encendre els comptes |
 | B29 | La previsualització del vocabulari personal sobresurt del requadre | Tornar a encendre els comptes: el vocabulari personal només hi és amb compte (`ACCOUNTS_ENABLED` a `SettingsDialog`). La solució continua sent una línia (`ScaleToFit`) |
+| B44 | La marca «personalitzat» no diu que el retoc és del vocabulari personal (D5) | Tornar a encendre els comptes: el vocabulari personal només hi és amb compte |
 
 ---
 
@@ -1468,6 +1471,74 @@ sistema**: ningú endevina res i no depèn de l'ordre. El que continua sent cert
 ## Gravetat baixa
 
 Inconsistència de forma o deute intern, sense un moment concret d'acció equivocada.
+
+### B40 — Amb el text a dalt i sense vora interior, la imatge toca la vora de sota ✅ Resolta
+
+*(Trobada a l'estudi d'estils de targetes, `docs/estudis/ESTUDI-estils-de-targetes.md` §4.3,
+2026-11-22.)*
+
+- **Què**: `PictogramCard.tsx` calcula el farciment de la capçalera de la targeta amb el gruix de la
+  vora **exterior** i el del peu amb el de la vora **interior**. Amb vora exterior, sense vora
+  interior, el text a dalt i sense número, el peu queda sense farciment i la imatge toca la vora de
+  sota. Captura: `docs/estudis/img/estils-de-targetes/text-a-dalt-sense-vora-interior.png`.
+- **Per què**: els estils «Per retallar» i «Lletra gran i clara» de l'estudi tenen justament
+  aquestes vores; qui hi posi el text a dalt s'hi trobarà.
+- **Proposta**: el peu ha de mirar la vora exterior, com la capçalera. Una línia, amb una prova de
+  la targeta. Es fa al pas 9 de `docs/plans/PLA-estils.md`.
+- **Resolta** (2026-11-22, pas 9 del pla dels estils): el peu mira la vora exterior. Prova:
+  `PictogramCardPadding.test.tsx`.
+
+### B41 — El text de la targeta no es pot posar en majúscules 🔴 Oberta
+
+*(Trobada a l'estudi d'estils de targetes, `docs/estudis/ESTUDI-estils-de-targetes.md` §5 (N1),
+2026-11-22. L'usuari decideix deixar-la per a més endavant.)*
+
+- **Què**: el web d'ARASAAC té un botó per passar el text del pictograma a majúscules, i a l'agenda
+  d'alumnat amb TEA es comença pel text en majúscules i després en minúscules. A l'app, el text
+  surt com s'ha teclejat.
+- **Per què importa**: qui fa primeres lectures ha de reescriure cada paraula a mà, i ho perd en
+  canviar de paraula.
+- **Proposta**: una opció de la targeta (majúscules / com s'escriu) a El meu estil i al pictograma.
+  Demana un camp nou al `.saac` (esquema, fixture, lector que el conservi; opcional, sense pujar
+  `schemaVersion`, fonament 06). Amb aquest camp hi podria haver un estil de l'app de «primeres
+  lectures».
+- **Fora d'aquesta release** (decidit el 2026-11-22).
+
+### B42 — Retirar la pantalla d'edició d'abans a l'escriptori 🔴 Oberta
+
+*(Oberta amb el pas 10 de `docs/plans/PLA-estils.md`, D34, 2026-11-22.)*
+
+- **Què**: a l'escriptori conviuen dues pantalles d'edició: la d'abans (pestanyes, comptador de
+  pictogrames, cerca a dalt) i la nova (la del mòbil: capçalera de la seqüència i barra de baix). Es
+  passa d'una a l'altra amb l'interruptor de l'edició (`EditLayoutSwitch`, `useEditLayout`).
+- **Per què és una entrada**: dues pantalles són el doble de codi i de proves, i la d'abans manté
+  `PictogramAmount` i les pestanyes verticals de `TabsSequences` només per a ella.
+- **Quan**: **quan ho decideixi l'usuari** (D34), sense data. En retirar-la: treure l'interruptor,
+  la clau `editLayout` del navegador, la branca d'escriptori de `EditSequencesPage` i de
+  `TabsSequences`, i `PictogramAmount` si no el fa servir ningú més.
+
+### B43 — «Redueix la lletra de tot el document» no fa res si la seqüència té estil propi ✅ Resolta
+
+*(Trobada en revisar els textos, pas 12 de `docs/plans/PLA-estils.md`, 2026-11-22.)*
+
+- **Què**: l'avís «el text no hi cap» oferia reduir la lletra de l'estil del document. Amb els estils
+  de seqüència (pas 4) i els de l'app (pas 9, que porten la seva lletra), la lletra d'una seqüència
+  amb estil propi és la del seu estil: el snackbar deia que s'havia reduït i la targeta no canviava.
+- **Resolta** el mateix dia: si la seqüència té estil propi, l'opció és «Redueix la lletra de tota
+  la seqüència a _x_» (`fitSequenceTextThunk`), que en fa una còpia amb la mida nova; vegeu el
+  fonament 03, §5 i §6. Proves: `sequenceStyle.test.ts` i `TextOverflowWarning.test.tsx`.
+
+### B44 — La marca «personalitzat» no diu que el retoc és del vocabulari personal (D5) 🔴 Oberta
+
+*(Del pla dels estils, D5 i E15. Ajornada en fer el pas 12, 2026-11-22.)*
+
+- **Què**: un color del vocabulari personal és un retoc, i el pictograma surt amb la marca
+  «personalitzat» sense que l'usuari l'hagi editat. D5 va decidir mantenir la marca i dir-ho al
+  tooltip i al nom accessible («color del teu vocabulari»).
+- **Per què s'ajorna**: el vocabulari personal només hi és amb compte, i els comptes estan apagats
+  (`ACCOUNTS_ENABLED`). Avui no hi ha cap pictograma que en surti.
+- **Què el desencalla**: tornar a encendre els comptes. Cal saber, en pintar la marca, si el retoc
+  és el del vocabulari (comparar-lo amb el perfil de la paraula).
 
 ### C30 — «Pantalla sencera» i «Pantalla completa» es diuen igual fora del català 🔴 Oberta
 

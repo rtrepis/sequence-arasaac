@@ -18,6 +18,10 @@ import {
   styleReducer,
   undoStyleChangeThunk,
 } from "./styleSlice";
+import {
+  cardDefaultsOf,
+  resolvePictogram,
+} from "@features/sequence/style/pictogramStyle";
 import { uiReducer } from "@features/user-settings/store/uiSlice";
 import {
   updateDefaultSettingsActionCreator,
@@ -49,15 +53,12 @@ const pict = (
   img: {
     searched: { word: "casa", bestIdPicts: [1] },
     selectedId: 1,
-    settings: {
-      fitzgerald: "#ff0000",
-      skin: "white",
-      hair: "brown",
-      color: true,
-    },
+    // Només els retocs (solució A del pla dels estils)
+    settings: { fitzgerald: "#ff0000" },
+    variants: ["skin", "hair", "color"],
   },
   cross: false,
-  settings: { textPosition: "bottom", ...overrides },
+  settings: { ...overrides },
 });
 
 const OTHER_STYLE = (base: SequenceStyle): SequenceStyle => ({
@@ -220,7 +221,7 @@ describe("«Canvia l'estil»", () => {
         id: "d",
         content: {
           0: [
-            pict({ font: { ...userDefault.pictSequence.font } }),
+            pict(),
             pict({ font: { family: "Caveat", color: "#ff00ff", size: 2 } }),
           ],
         },
@@ -253,9 +254,15 @@ describe("«Canvia l'estil»", () => {
       },
       fitzgeraldColors: DEFAULT_FITZGERALD_CATEGORY_COLORS,
     });
-    expect(after.content[0][0].settings.font).toEqual(target.pictSequence.font);
-    expect(after.content[0][1].settings.font.family).toBe("Caveat"); // retoc conservat
-    expect(after.content[0][0].settings.textPosition).toBe("top");
+    // Els pictogrames no es toquen: el que no retoquen ho hereten del nou
+    expect(after.content).toBe(before.content);
+    const defaults = cardDefaultsOf(selectDocumentStyle(state(store)));
+    const [plain, retouched] = after.content[0].map((p: PictSequence) =>
+      resolvePictogram(p, defaults),
+    );
+    expect(plain.settings.font).toEqual(target.pictSequence.font);
+    expect(plain.settings.textPosition).toBe("top");
+    expect(retouched.settings.font.family).toBe("Caveat"); // retoc conservat
     expect(selectResolvedSequenceViews(state(store))[0].sizePict).toBe(2.2);
     // La confirmació és un snackbar amb «Desfés», no un bàner
     expect(state(store).style.undoSnackbar).toMatchObject({

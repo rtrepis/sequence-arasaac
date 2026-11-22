@@ -3,7 +3,7 @@ import { PictSequence, Sequence } from "@/types/sequence";
 
 /**
  * Un pictograma de la seqüència, amb el mínim per pintar-se i els retocs que
- * demani el cas. Els tests no escriuen l'objecte sencer: així, quan
+ * demani el cas (d'entrada, cap). Els tests no escriuen l'objecte sencer: així, quan
  * `PictSequence` creixi, només canvia aquest fitxer.
  */
 export const pictogramFixture = (
@@ -17,7 +17,8 @@ export const pictogramFixture = (
     selectedId: 26527,
     settings: {},
   },
-  settings: { numbered: true, textPosition: "bottom" },
+  // Sense retocs: ho hereta tot de l'estil (solució A del pla dels estils)
+  settings: {},
   ...overrides,
 });
 

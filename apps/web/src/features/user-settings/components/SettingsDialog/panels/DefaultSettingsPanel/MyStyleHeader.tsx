@@ -5,8 +5,8 @@
 //   1. Carrega un estil des d'un fitxer…
 //   2. Desa el meu estil en un fitxer…
 //
-// No hi ha cap acció sobre el document obert: el meu estil s'hi aplica des del
-// menú «⋯» de la pàgina i del bloc, a la vista (R10).
+// No hi ha cap acció sobre el document obert: el meu estil s'hi porta des de la
+// Galeria d'estils, a una seqüència o a un bloc.
 //
 // Ocupa el lloc de la guia del tab (`SettingsPanelHint`), que és la columna
 // lateral en escriptori. En escriptori i tauleta les accions són botons; per

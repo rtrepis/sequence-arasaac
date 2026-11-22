@@ -21,11 +21,16 @@ export const useSetDefaultStyle = () => {
     useSaveUiSettings();
 
   const setAsDefault = useCallback(
-    (style: SequenceStyle) => {
+    (
+      style: SequenceStyle,
+      { withView = true }: { withView?: boolean } = {},
+    ) => {
       dispatch(updateDefaultSettingsActionCreator(pictStyleOf(style)));
       // Només els camps d'estil: la pàgina, la direcció i l'autor són
-      // preferències de disposició i no venen amb cap estil
-      dispatch(viewSettingsActionCreator({ ...viewSettings, ...style.view }));
+      // preferències de disposició i no venen amb cap estil. Des de la Galeria
+      // d'estils, tampoc la distribució: un estil de la galeria no en porta (D7)
+      if (withView)
+        dispatch(viewSettingsActionCreator({ ...viewSettings, ...style.view }));
       saveInBackground({
         successMessage: intl.formatMessage(messages.setAsDefaultSuccess),
       });

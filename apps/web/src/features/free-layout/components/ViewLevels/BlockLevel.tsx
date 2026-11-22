@@ -16,7 +16,9 @@ import {
 import { arrangementOf } from "@features/free-layout/model/templates";
 import { cardSizeOf } from "@features/free-layout/model/blockStyle";
 import {
+  selectNamedStyles,
   selectPages,
+  selectSequenceStyleIds,
   setPlacementColumnsThunk,
   setPlacementViewThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
@@ -26,6 +28,7 @@ import {
 } from "@features/free-layout/hooks/useViewSelection";
 import { useSelectedBlock } from "@features/free-layout/hooks/useSelectedBlock";
 import TextBlockLevel from "./TextBlockLevel";
+import BlockStyleRow from "./BlockStyleRow";
 import messages from "./ViewLevels.lang";
 
 /** La icona del nivell: un bloc dins de la pàgina. */
@@ -59,6 +62,8 @@ const BlockLevel = ({
   const dispatch = useAppDispatch();
   const { cardSizes } = useViewSelection();
   const pages = useAppSelector(selectPages);
+  const styles = useAppSelector(selectNamedStyles);
+  const sequenceStyleIds = useAppSelector(selectSequenceStyleIds);
   const block = useSelectedBlock();
   if (!block) return null;
 
@@ -113,7 +118,12 @@ const BlockLevel = ({
     : arrangementOf(pages?.sheets[sheetIndex]?.template).kind;
   const { grid, imageMm } = blockGrid({
     count: pictograms.length,
-    card: cardSizeOf(cardSizes, placement.sequenceKey, placement.styleId),
+    card: cardSizeOf(
+      cardSizes,
+      { styles, sequenceStyleIds },
+      placement.sequenceKey,
+      placement.styleId,
+    ),
     view,
     box: { w: placement.w, h: placement.h },
     columns: resolveColumns(placement.columns, arrangement, pictograms.length),
@@ -141,6 +151,10 @@ const BlockLevel = ({
       expanded={expanded}
       onExpandedChange={onExpandedChange}
     >
+      {/* L'estil que pinta aquest bloc: el de la seqüència o un de
+          reassignat (pla dels estils, pas 6) */}
+      <BlockStyleRow placement={placement} name={name} />
+
       {/* La mida, l'espai i l'alineació: d'aquest bloc, o de tots els de la
           pàgina amb «Igual a tots els blocs» */}
       <PagePictograms
