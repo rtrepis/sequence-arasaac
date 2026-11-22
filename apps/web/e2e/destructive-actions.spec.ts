@@ -105,7 +105,12 @@ test("al menú contextual, esborrar va l'últim i separat de la resta", async ({
 }) => {
   await loadFixture(page);
   await page.getByRole("tab", { name: "1" }).click();
-  await page.locator("button:has(> div)").first().click({ button: "right" });
+  // La targeta pel seu nom: el botó d'estil de la capçalera també porta una
+  // marca a dins, i un selector per estructura l'agafava a ell
+  await page
+    .getByRole("button", { name: /pictograma 1/ })
+    .first()
+    .click({ button: "right" });
 
   const menu = page.getByRole("navigation");
   await expect(menu).toBeVisible();
