@@ -46,13 +46,12 @@ describe("SequenceHeader", () => {
       { store },
     );
     expect(screen.getByRole("heading", { name: "Nit" })).toBeInTheDocument();
-    // «Nit» té un pictograma retocat
-    expect(screen.getByTestId("sequence-style")).toHaveTextContent(
-      "Style: Customized",
+    // «Nit» té un pictograma retocat: el botó d'estil porta la marca i diu
+    // l'estil de base (D25)
+    expect(screen.getByTestId("sequence-style")).toHaveAccessibleName(
+      /^Style: Customized\. The base style is “Agenda gran”/,
     );
-    expect(
-      screen.getByRole("button", { name: /The base style is “Agenda gran”/ }),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("sequence-customized-mark")).toBeInTheDocument();
     unmount();
 
     // Sense retocs, el nom de l'estil (el del document, que no en té de propi)
@@ -67,11 +66,11 @@ describe("SequenceHeader", () => {
     });
     renderWithProviders(<SequenceHeader sequenceKey={1} />, { store });
     expect(screen.getByRole("heading", { name: "Sequence 2" })).toBeVisible();
-    expect(screen.getByTestId("sequence-style")).toHaveTextContent(
+    expect(screen.getByTestId("sequence-style")).toHaveAccessibleName(
       "Style: El meu estil",
     );
     expect(
-      screen.queryByRole("button", { name: /The base style/ }),
+      screen.queryByTestId("sequence-customized-mark"),
     ).not.toBeInTheDocument();
   });
 
@@ -164,7 +163,9 @@ describe("SequenceHeader", () => {
   it("canvia el nom", async () => {
     const store = storeWith20();
     renderWithProviders(<SequenceHeader sequenceKey={1} />, { store });
-    await userEvent.click(screen.getByRole("button", { name: "Rename" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Sequence 2. Rename" }),
+    );
     await userEvent.type(
       screen.getByRole("textbox", { name: "Sequence name" }),
       "Tarda{Enter}",
@@ -173,5 +174,42 @@ describe("SequenceHeader", () => {
     expect(
       await screen.findByRole("heading", { name: "Tarda" }),
     ).toBeInTheDocument();
+  });
+
+  it("al mòbil, les fletxes i la llista «2 de 3» canvien de seqüència, i s'hi afegeix una seqüència", async () => {
+    const store = storeWith20();
+    const { rerender } = renderWithProviders(
+      <SequenceHeader sequenceKey={0} compact />,
+      { store },
+    );
+    expect(
+      screen.getByRole("button", { name: "Previous sequence" }),
+    ).toBeDisabled();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Next sequence" }),
+    );
+    expect(store.getState().document.activeSAAC).toBe(1);
+
+    rerender(<SequenceHeader sequenceKey={1} compact />);
+    await userEvent.click(
+      screen.getByRole("button", { name: "Sequence 2 of 3. All sequences" }),
+    );
+    const list = screen.getByRole("menu");
+    expect(within(list).getAllByRole("menuitem")).toHaveLength(4);
+    await userEvent.click(
+      within(list).getByRole("menuitem", { name: /^3\. Nit/ }),
+    );
+    expect(store.getState().document.activeSAAC).toBe(2);
+
+    await userEvent.click(
+      await screen.findByRole("button", {
+        name: "Sequence 2 of 3. All sequences",
+      }),
+    );
+    await userEvent.click(
+      screen.getByRole("menuitem", { name: "Add sequence" }),
+    );
+    expect(Object.keys(store.getState().document.content)).toHaveLength(4);
+    expect(store.getState().document.activeSAAC).toBe(3);
   });
 });

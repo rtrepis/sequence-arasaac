@@ -15,6 +15,7 @@
 import React, { FormEvent, useId, useRef, useState } from "react";
 import {
   Box,
+  ButtonBase,
   DialogContentText,
   Divider,
   IconButton,
@@ -28,8 +29,11 @@ import {
   Typography,
 } from "@mui/material";
 import {
+  MdAdd,
+  MdArrowDropDown,
+  MdChevronLeft,
+  MdChevronRight,
   MdEdit,
-  MdHelpOutline,
   MdMoreHoriz,
   MdOutlineDriveFileRenameOutline,
   MdOutlinePalette,
@@ -38,6 +42,7 @@ import {
   MdTune,
 } from "react-icons/md";
 import { useIntl } from "react-intl";
+import { shallowEqual } from "react-redux";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useFeedback } from "@/context/FeedbackContext";
 import { APP_TOUCH_TARGET_MIN } from "@/style/appShape";
@@ -46,6 +51,7 @@ import { AppDialog, AppDialogActions } from "@components/AppDialog";
 import ConfirmDialog from "@components/ConfirmDialog/ConfirmDialog";
 import confirmMessages from "@components/ConfirmDialog/ConfirmDialog.lang";
 import {
+  changeActiveSAACActionCreator,
   removeSequenceActionCreator,
   sequenceRenamedActionCreator,
 } from "@features/sequence/store/documentSlice";
@@ -56,15 +62,24 @@ import { customizedMark } from "@features/sequence/components/PictEdit/PictEditM
 import StyleGallery from "@features/sequence/components/StyleGallery/StyleGallery";
 import galleryMessages from "@features/sequence/components/StyleGallery/StyleGallery.lang";
 import freeLayoutMessages from "@features/free-layout/components/FreeLayoutPages/FreeLayoutPages.lang";
+import tabsMessages from "@components/TabsSequences/TabsSequences.lang";
+import { useSequenceName } from "@features/free-layout/components/FreeLayoutPages/useSequenceName";
+import { addNewSequenceThunk } from "@features/free-layout/store/freeLayoutThunks";
 import messages from "./SequenceHeader.lang";
 
 interface SequenceHeaderProps {
   /** La clau de la seqüència oberta */
   sequenceKey: number;
+  /**
+   * La capçalera del mòbil (pas 8): amb les fletxes ‹ ›, «2 de 5» i la llista
+   * de seqüències, perquè no hi ha pestanyes (D19)
+   */
+  compact?: boolean;
 }
 
 const SequenceHeader = ({
   sequenceKey,
+  compact = false,
 }: SequenceHeaderProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -73,6 +88,10 @@ const SequenceHeader = ({
   const menuButtonId = useId();
   const renameTitleId = useId();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const listId = useId();
+  const listButtonId = useId();
+  const listButtonRef = useRef<HTMLButtonElement>(null);
+  const [listOpen, setListOpen] = useState(false);
 
   const amount = useAppSelector(
     (state) => Object.keys(state.document.content).length,
@@ -80,6 +99,20 @@ const SequenceHeader = ({
   const savedName = useAppSelector(
     (state) => state.document.sequenceNames?.[sequenceKey],
   );
+  // La llista de seqüències del mòbil: el nom i quants pictogrames té cadascuna
+  const sequenceName = useSequenceName();
+  const counts = useAppSelector(
+    (state) =>
+      Object.keys(state.document.content).map(
+        (key) => state.document.content[Number(key)].length,
+      ),
+    shallowEqual,
+  );
+  const sequenceList = counts.map((count, key) => ({
+    key,
+    count,
+    label: sequenceName(key),
+  }));
   const styleName = useAppSelector((state) => {
     const named = namedStyleOf(
       state.document.styles,
@@ -165,76 +198,142 @@ const SequenceHeader = ({
   const renameLabel = intl.formatMessage(messages.rename);
   const actionsLabel = intl.formatMessage(messages.sequenceActions, { name });
 
+  // D25: l'estil és un botó al costat del nom, amb la marca de
+  // «Personalitzat» si hi ha retocs. El nom de l'estil, al tooltip i al nom
+  // accessible: a les targetes ja es veu aplicat
+  const styleLabel = customized
+    ? `${intl.formatMessage(messages.styleLabel, { name: shownStyleName })}. ${customizedHelp}`
+    : intl.formatMessage(messages.styleLabel, { name: shownStyleName });
+
+  const touchTarget = {
+    minWidth: APP_TOUCH_TARGET_MIN,
+    minHeight: APP_TOUCH_TARGET_MIN,
+  };
+
+  const arrow = (direction: -1 | 1) => {
+    const target = sequenceKey + direction;
+    const label = intl.formatMessage(
+      direction < 0 ? messages.previous : messages.next,
+    );
+    return (
+      <Tooltip title={label}>
+        <span>
+          <IconButton
+            aria-label={label}
+            disabled={target < 0 || target >= amount}
+            onClick={() => dispatch(changeActiveSAACActionCreator(target))}
+            sx={touchTarget}
+          >
+            {direction < 0 ? (
+              <MdChevronLeft aria-hidden />
+            ) : (
+              <MdChevronRight aria-hidden />
+            )}
+          </IconButton>
+        </span>
+      </Tooltip>
+    );
+  };
+
   return (
     <Box
       component="header"
       data-testid="sequence-header"
-      sx={{ px: 1, py: 0.5, "@media print": { display: "none" } }}
+      sx={{ px: compact ? 0 : 1, py: 0.5, "@media print": { display: "none" } }}
     >
-      {/* El «⋯» sempre a la dreta de la primera línia; el nom i l'estil es
-          parteixen en dues línies si no hi caben */}
-      <Stack direction="row" alignItems="flex-start" gap={0.5}>
+      <Stack direction="row" alignItems="center" gap={0.25}>
+        {compact && arrow(-1)}
+        {/* El nom, que es canvia tocant-lo, i el botó d'estil al costat */}
         <Stack
           direction="row"
           alignItems="center"
-          gap={0.5}
-          flexWrap="wrap"
           sx={{ flexGrow: 1, minWidth: 0 }}
         >
-          <Typography
-            component="h2"
-            variant="h6"
-            sx={{ overflowWrap: "anywhere", minWidth: 0 }}
-          >
-            {name}
-          </Typography>
           <Tooltip title={renameLabel}>
-            <IconButton
-              aria-label={renameLabel}
+            <ButtonBase
               onClick={openRename}
+              aria-label={`${name}. ${renameLabel}`}
               sx={{
-                minWidth: APP_TOUCH_TARGET_MIN,
+                minWidth: 0,
                 minHeight: APP_TOUCH_TARGET_MIN,
+                px: 0.5,
+                gap: 0.5,
+                borderRadius: 1,
+                justifyContent: "flex-start",
               }}
             >
-              <MdEdit aria-hidden size={20} />
-            </IconButton>
+              <Typography
+                component="h2"
+                variant="h6"
+                noWrap
+                sx={{ minWidth: 0 }}
+              >
+                {name}
+              </Typography>
+              <MdEdit aria-hidden size={18} style={{ flexShrink: 0 }} />
+            </ButtonBase>
           </Tooltip>
-
-          <Stack
-            direction="row"
-            alignItems="center"
-            gap={0.75}
-            sx={{ ml: { xs: 0, sm: 1 } }}
-          >
-            <Typography color="text.secondary" data-testid="sequence-style">
-              {intl.formatMessage(messages.styleLabel, {
-                name: shownStyleName,
-              })}
-            </Typography>
-            {customized && (
-              <>
-                {/* La mateixa marca que la targeta: un sol símbol per a la
-                  mateixa cosa. Informativa: el text ja ho diu */}
-                <Box aria-hidden sx={customizedMark}>
+          <Tooltip title={styleLabel} enterTouchDelay={0}>
+            <IconButton
+              aria-label={styleLabel}
+              aria-haspopup="dialog"
+              data-testid="sequence-style"
+              onClick={() => setGalleryOpen(true)}
+              sx={{ ...touchTarget, position: "relative", flexShrink: 0 }}
+            >
+              <MdOutlinePalette aria-hidden />
+              {customized && (
+                // La mateixa marca que la targeta: un sol símbol per a la
+                // mateixa cosa
+                <Box
+                  aria-hidden
+                  data-testid="sequence-customized-mark"
+                  sx={{
+                    ...customizedMark,
+                    position: "absolute",
+                    right: 4,
+                    bottom: 4,
+                    width: 15,
+                    height: 15,
+                    fontSize: 9,
+                  }}
+                >
                   <MdTune />
                 </Box>
-                <Tooltip title={customizedHelp} enterTouchDelay={0}>
-                  <IconButton
-                    aria-label={customizedHelp}
-                    size="small"
-                    sx={{
-                      minWidth: APP_TOUCH_TARGET_MIN,
-                      minHeight: APP_TOUCH_TARGET_MIN,
-                    }}
-                  >
-                    <MdHelpOutline aria-hidden />
-                  </IconButton>
-                </Tooltip>
-              </>
-            )}
-          </Stack>
+              )}
+            </IconButton>
+          </Tooltip>
         </Stack>
+
+        {/* Al mòbil, «2 de 5» obre la llista de seqüències (D19) */}
+        {compact && (
+          <StyledButton
+            ref={listButtonRef}
+            id={listButtonId}
+            variant="outlined"
+            color="inherit"
+            aria-haspopup="menu"
+            aria-controls={listOpen ? listId : undefined}
+            aria-expanded={listOpen ? "true" : undefined}
+            aria-label={intl.formatMessage(messages.sequenceListLabel, {
+              number: sequenceKey + 1,
+              total: amount,
+            })}
+            onClick={() => setListOpen(true)}
+            endIcon={<MdArrowDropDown aria-hidden />}
+            sx={{
+              minHeight: 36,
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+              px: 1.25,
+            }}
+          >
+            {intl.formatMessage(messages.sequenceCount, {
+              number: sequenceKey + 1,
+              total: amount,
+            })}
+          </StyledButton>
+        )}
 
         <Tooltip title={actionsLabel}>
           <IconButton
@@ -245,15 +344,66 @@ const SequenceHeader = ({
             aria-controls={menuOpen ? menuId : undefined}
             aria-expanded={menuOpen ? "true" : undefined}
             onClick={() => setMenuOpen(true)}
-            sx={{
-              minWidth: APP_TOUCH_TARGET_MIN,
-              minHeight: APP_TOUCH_TARGET_MIN,
-            }}
+            sx={{ ...touchTarget, flexShrink: 0 }}
           >
             <MdMoreHoriz aria-hidden />
           </IconButton>
         </Tooltip>
+        {compact && arrow(1)}
       </Stack>
+
+      {compact && (
+        <Menu
+          id={listId}
+          anchorEl={listButtonRef.current}
+          open={listOpen}
+          onClose={() => setListOpen(false)}
+          slotProps={{ list: { "aria-labelledby": listButtonId } }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          {sequenceList.map(({ key, label, count }) => (
+            <MenuItem
+              key={key}
+              selected={key === sequenceKey}
+              aria-current={key === sequenceKey ? "true" : undefined}
+              sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+              onClick={() => {
+                setListOpen(false);
+                dispatch(changeActiveSAACActionCreator(key));
+              }}
+            >
+              <ListItemText
+                primary={`${key + 1}. ${label}`}
+                secondary={intl.formatMessage(messages.pictogramCount, {
+                  count,
+                })}
+              />
+            </MenuItem>
+          ))}
+          <Divider />
+          <MenuItem
+            sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+            onClick={() => {
+              setListOpen(false);
+              // Va a l'última pàgina, segons la seva disposició
+              dispatch(addNewSequenceThunk(amount));
+              dispatch(changeActiveSAACActionCreator(amount));
+              showSnackbar({
+                message: intl.formatMessage(messages.added),
+                severity: "success",
+              });
+            }}
+          >
+            <ListItemIcon>
+              <MdAdd aria-hidden />
+            </ListItemIcon>
+            <ListItemText>
+              {intl.formatMessage(tabsMessages.addSequence)}
+            </ListItemText>
+          </MenuItem>
+        </Menu>
+      )}
 
       <Menu
         id={menuId}

@@ -3868,5 +3868,29 @@
   "features.freeLayout.levels.blockStyleReassigned": {
     "message": "Només aquest bloc té aquest estil. La seqüència fa servir «{name}».",
     "description": "Marca «reassignat» (tooltip i nom accessible) i ajuda sota la fila «Estil» d'un bloc amb un estil que no és el de la seva seqüència; {name} és l'estil de la seqüència"
+  },
+  "features.sequence.header.previous": {
+    "message": "Seqüència anterior",
+    "description": "Fletxa ‹ de la capçalera de l'edició al mòbil: va a la seqüència anterior (alternativa a lliscar)"
+  },
+  "features.sequence.header.next": {
+    "message": "Seqüència següent",
+    "description": "Fletxa › de la capçalera de l'edició al mòbil: va a la seqüència següent (alternativa a lliscar)"
+  },
+  "features.sequence.header.sequenceCount": {
+    "message": "{number} de {total}",
+    "description": "Botó de la capçalera de l'edició al mòbil: quina seqüència és la oberta i quantes n'hi ha. Obre la llista"
+  },
+  "features.sequence.header.sequenceListLabel": {
+    "message": "Seqüència {number} de {total}. Totes les seqüències",
+    "description": "Nom accessible del botó «2 de 5»: diu on ets i que obre la llista de seqüències"
+  },
+  "features.sequence.header.pictogramCount": {
+    "message": "{count, plural, =0 {Sense pictogrames} one {# pictograma} other {# pictogrames}}",
+    "description": "Segona línia de cada seqüència a la llista de seqüències del mòbil"
+  },
+  "features.sequence.header.added": {
+    "message": "S'ha afegit una seqüència.",
+    "description": "Confirmació després d'«Afegeix una seqüència» a la llista de seqüències del mòbil"
   }
 }

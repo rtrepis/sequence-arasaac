@@ -3,6 +3,43 @@ import { defineMessages } from "react-intl";
 // Textos de la capçalera de la seqüència oberta a l'edició i del seu menú «⋯»
 // (pla dels estils, pas 5)
 const messages = defineMessages({
+  previous: {
+    id: "features.sequence.header.previous",
+    defaultMessage: "Seqüència anterior",
+    description:
+      "Fletxa ‹ de la capçalera de l'edició al mòbil: va a la seqüència anterior (alternativa a lliscar)",
+  },
+  next: {
+    id: "features.sequence.header.next",
+    defaultMessage: "Seqüència següent",
+    description:
+      "Fletxa › de la capçalera de l'edició al mòbil: va a la seqüència següent (alternativa a lliscar)",
+  },
+  sequenceCount: {
+    id: "features.sequence.header.sequenceCount",
+    defaultMessage: "{number} de {total}",
+    description:
+      "Botó de la capçalera de l'edició al mòbil: quina seqüència és la oberta i quantes n'hi ha. Obre la llista",
+  },
+  sequenceListLabel: {
+    id: "features.sequence.header.sequenceListLabel",
+    defaultMessage: "Seqüència {number} de {total}. Totes les seqüències",
+    description:
+      "Nom accessible del botó «2 de 5»: diu on ets i que obre la llista de seqüències",
+  },
+  pictogramCount: {
+    id: "features.sequence.header.pictogramCount",
+    defaultMessage:
+      "{count, plural, =0 {Sense pictogrames} one {# pictograma} other {# pictogrames}}",
+    description:
+      "Segona línia de cada seqüència a la llista de seqüències del mòbil",
+  },
+  added: {
+    id: "features.sequence.header.added",
+    defaultMessage: "S'ha afegit una seqüència.",
+    description:
+      "Confirmació després d'«Afegeix una seqüència» a la llista de seqüències del mòbil",
+  },
   styleLabel: {
     id: "features.sequence.header.styleLabel",
     defaultMessage: "Estil: {name}",

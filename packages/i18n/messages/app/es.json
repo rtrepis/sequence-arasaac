@@ -998,5 +998,11 @@
   "features.freeLayout.levels.blockStyle": "Estilo",
   "features.freeLayout.levels.blockStyleChange": "Cambia…",
   "features.freeLayout.levels.blockStyleBackToSequence": "Vuelve al estilo de la secuencia",
-  "features.freeLayout.levels.blockStyleReassigned": "Solo este bloque tiene este estilo. La secuencia usa «{name}»."
+  "features.freeLayout.levels.blockStyleReassigned": "Solo este bloque tiene este estilo. La secuencia usa «{name}».",
+  "features.sequence.header.previous": "Secuencia anterior",
+  "features.sequence.header.next": "Secuencia siguiente",
+  "features.sequence.header.sequenceCount": "{number} de {total}",
+  "features.sequence.header.sequenceListLabel": "Secuencia {number} de {total}. Todas las secuencias",
+  "features.sequence.header.pictogramCount": "{count, plural, =0 {Sin pictogramas} one {# pictograma} other {# pictogramas}}",
+  "features.sequence.header.added": "Se ha añadido una secuencia."
 }

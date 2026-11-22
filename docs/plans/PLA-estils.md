@@ -3,8 +3,8 @@
 > **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**, i **pla d'execució
 > escrit el 2026-11-21 (§10)**. Passos 1 (fonaments), 2 (solució A i D1, §3.5), 4 (el format, §12.1),
 > 5 (la galeria i l'estil de la seqüència a l'edició, §13.1), 6 (l'estil del bloc a la vista,
-> §14.1) i 7 (l'esbós, §15.1) fets, i l'esbós revisat (D25–D28, 2026-11-22). Es continua pel pas 8,
-> amb l'encàrrec de §16. El pas 3 (l'estudi) encara no s'ha fet, i el pas 9 en depèn.
+> §14.1), 7 (l'esbós, §15.1, revisat: D25–D29) i 8 (l'edició nova al mòbil, §16.1) fets, el
+> 2026-11-22. Es continua amb l'encàrrec de §17: el pas 3 (l'estudi), del qual depèn el pas 9.
 
 > **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
 >
@@ -804,6 +804,7 @@ Preses a partir de les preguntes de §8.1, §8.2, §8.3 i §8.5.
 | D26 | E2 / D23: l'escriptori | **(b)**: la pantalla nova com a **vista alternativa durant un temps**, al costat de les pestanyes de sempre. Com s'hi passa i quan s'acaba el temps, al pas 10 (Q4). Decidit el 2026-11-22. |
 | D27 | E3: la cerca màgica | **Dins del camp de cerca** (✨), a la barra de baix. Decidit el 2026-11-22. |
 | D28 | E4: el mòbil girat | L'edició **funciona girada**, amb més columnes a la graella: no porta la capa de «posa el mòbil dret» (`RotatePhoneOverlay`) que porta la vista. Decidit el 2026-11-22. |
+| D29 | El «+» de la barra de baix (D20) | **No hi és**: les seves dues accions ja són a fora. Afegir un pictograma és cercar-lo a la barra de baix, i afegir una seqüència és al final de la llista «2 de 5». **Substitueix D20.** Decidit el 2026-11-22. |
 
 **Què queda superat**:
 
@@ -910,12 +911,12 @@ de l'usuari: §15.1. `docs/esbossos/esbos-edicio-mobil.html`, com
 amplada de mòbil). Inclou també l'amplada d'escriptori, perquè l'usuari decideixi D23. **L'usuari
 el revisa abans del pas 8.**
 
-**Pas 8 — La pantalla d'edició nova al mòbil.** La capçalera (nom editable, el botó d'estil amb la
+**Pas 8 — La pantalla d'edició nova al mòbil.** ✅ **Fet** (2026-11-22): com s'ha fet, a §16.1. La capçalera (nom editable, el botó d'estil amb la
 marca de «Personalitzat» (D25), «2 de 5», llista, «⋯»),
-el lliscar entre seqüències amb fletxes ‹ › (D19), la barra de baix amb el «+» (D20), la cerca, la
+el lliscar entre seqüències amb fletxes ‹ › (D19), la barra de baix sense «+» (D29), la cerca, la
 cerca màgica dins del camp (D27) i `DocumentStatusFab`, que puja amb el teclat (D22). Funciona amb el
 mòbil girat (D28). Les accions de
-`PictogramAmount` (afegir i treure l'últim) se'n van: afegir és al «+», i treure un pictograma és a
+`PictogramAmount` (afegir i treure l'últim) se'n van: afegir és cercar, i treure un pictograma és a
 la graella. Cobreix C1 (cap botó només amb hover) i C28 (girar el mòbil) per a aquesta pantalla.
 
 **Pas 9 — Els estils de l'app a la galeria** (D6, D7), amb el que surti de l'estudi, «Sense vores»
@@ -1278,6 +1279,8 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 
 ## 16. Encàrrec per obrir la sessió següent (revisió de l'esbós i pas 8)
 
+> **✅ Fet** (2026-11-22): vegeu §16.1.
+
 > Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
 >
 > **L'esbós ja està revisat** (2026-11-22): les respostes són D25–D28 a §10.1, i l'esbós
@@ -1289,5 +1292,58 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 > mateix camí per a la vista.
 >
 > En paral·lel, i abans del pas 9: el **pas 3** (l'estudi d'estils de targetes, §4.4).
+>
+> Normes: les de §11.
+
+### 16.1 Com s'ha fet (pas 8, 2026-11-22)
+
+> El que el codi d'avui ha obligat a concretar respecte de §10.3, §10.4 i D25–D29.
+
+- **Només per sota de `md`**: l'escriptori es queda amb les pestanyes fins al pas 10 (D26). Al
+  mòbil, `EditSequencesPage` no pinta el comptador de pictogrames (`PictogramAmount`), ni la cerca de
+  dalt, ni la tira de pestanyes: només la capçalera, la graella i la barra de baix.
+- **La capçalera** (`SequenceHeader`, amb `compact` al mòbil) és la mateixa a totes les mides, amb
+  D25: el nom (tocar-lo el canvia, en el diàleg del pas 5) i al costat el **botó d'estil** (paleta),
+  amb la marca de «Personalitzat» a la cantonada si hi ha retocs; el nom de l'estil i l'ajuda van al
+  tooltip i al nom accessible. La línia «Estil: …» se'n va **també a l'escriptori**, per tenir una
+  sola capçalera. Al mòbil, a més, les fletxes ‹ › (desactivades a les puntes), «2 de 5» (botó que
+  obre la llista de seqüències, amb quants pictogrames té cadascuna i «Afegeix una seqüència» al
+  final, D29) i el «⋯» de sempre. Tots els controls, 44 × 44 px.
+- **Lliscar** sobre la graella (`TabsSequences`, al mòbil) canvia de seqüència amb un gest
+  horitzontal clar (60 px, i més horitzontal que vertical), com a la vista. Moure una targeta demana
+  mantenir el dit 250 ms, i un lliscament ràpid no hi arriba: no es trepitgen.
+- **La barra de baix** (`features/sequence/components/EditBottomBar/`) és la cerca màgica de sempre
+  (D27), sense la línia d'ajuda i amb els suggeriments cap amunt (`MagicSearch` amb `bottomBar`). És
+  fixa a baix i **puja amb el teclat** amb `useVisibleViewport`, el mateix del panell de baix de la
+  vista. Declara la seva alçada a `FloatingLayer` (sòcol, terra i reserva): **el botó d'estat
+  queda just a sobre de la barra**, al racó de sempre, i no a dins com a l'esbós; els avisos també
+  s'hi posen a sobre, i la graella en reserva l'alçada.
+- **Girat (D28)**: no hi ha capa de «posa el mòbil dret». Un Pixel 7 girat fa 915 px d'ample, més que
+  `md` (900): hi surt la pantalla d'escriptori, amb pestanyes, que hi cap. Els mòbils més estrets
+  girats es queden amb la pantalla nova, amb més columnes a la graella.
+- **C1** (cap botó només amb hover): la pantalla nova no en té cap. **C28** (girar el mòbil): vegeu
+  D28.
+- **Proves**: `SequenceHeader.test.tsx` (el botó d'estil amb la marca i el nom accessible; les
+  fletxes, la llista i afegir-hi una seqüència) i el nou `e2e/edit-mobile.spec.ts` a Pixel 7 (sense
+  pestanyes ni comptador, la barra a baix; fletxes, lliscar i la llista; el «⋯»; la barra puja amb
+  un teclat simulat de 300 px; dianes de 44 px). `pictogram-reorder.spec.ts` (el grup «amb el dit»,
+  que és a Pixel 7) ja no espera les pestanyes.
+
+**Queda per a més endavant**:
+
+- **Q4** (pas 10): com es passa a la vista nova a l'escriptori i quan es retira la vella.
+- La notícia de la pantalla nova del mòbil (amb el pas 13 o en una de pròpia, `PLA-noticies.md`).
+
+## 17. Encàrrec per obrir la sessió següent (pas 3: l'estudi d'estils de targetes)
+
+> Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
+>
+> La tasca és el **pas 3 de §10.3**: l'estudi de §4.4, `docs/estudis/ESTUDI-estils-de-targetes.md`,
+> amb «Sense vores» (decidit) i la comprovació del text i el número sense vora. **És un document,
+> amb recerca a la web.** Surt la llista d'estils de l'app (entre quatre i sis) que farà servir el
+> pas 9, i s'afegeix a l'índex (`docs/README.md`). L'usuari el revisa abans del pas 9.
+>
+> Després: el pas 9 (els estils de l'app a la galeria), el pas 10 (l'escriptori, amb Q4), i els
+> passos 11–13.
 >
 > Normes: les de §11.

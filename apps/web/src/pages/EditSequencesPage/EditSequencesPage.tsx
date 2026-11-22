@@ -1,4 +1,10 @@
-import { Divider, Stack, Typography } from "@mui/material";
+import {
+  Divider,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import PictogramAmount from "../../components/PictogramAmount/PictogramAmount";
 import MagicSearch from "@features/pictogram/components/MagicSearch";
 import React, { useState } from "react";
@@ -7,9 +13,12 @@ import { FeedbackProgress } from "@/context/FeedbackContext";
 import { FormattedMessage } from "react-intl";
 import useArasaacKeywords from "../../features/pictogram/hooks/useArasaacKeywords";
 import { messages } from "./EditSequencesPage.lang";
+import EditBottomBar from "@features/sequence/components/EditBottomBar/EditBottomBar";
 
 const EditSequencesPage = (): React.ReactElement => {
   const [info, setInfo] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   // Manté les paraules clau de l'ARASAAC sincronitzades amb l'idioma de cerca
   useArasaacKeywords();
@@ -17,6 +26,17 @@ const EditSequencesPage = (): React.ReactElement => {
   const toggleValue = () => {
     setInfo((previous) => !previous);
   };
+  // Mòbil (pas 8 del pla dels estils): la capçalera de la seqüència, la
+  // graella i la cerca a baix. Afegir un pictograma és cercar-lo (D29)
+  if (isMobile)
+    return (
+      <>
+        <FeedbackProgress />
+        <TabsSequences />
+        <EditBottomBar />
+      </>
+    );
+
   return (
     <>
       <Stack
