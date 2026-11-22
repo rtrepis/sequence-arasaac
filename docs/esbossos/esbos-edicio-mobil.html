@@ -149,7 +149,7 @@
 
   /* La capçalera de la seqüència: ‹ nom ✎ · 2 de 5 ▾ · ⋯ › */
   .shead { flex-shrink: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto auto 44px; align-items: center; gap: 2px; padding: 4px 4px 0; }
-  .sname { display: flex; align-items: center; gap: 2px; min-width: 0; border: 0; background: transparent; padding: 0 4px; height: 44px; border-radius: 10px; text-align: left; }
+  .sname { cursor: pointer; display: flex; align-items: center; gap: 2px; min-width: 0; border: 0; background: transparent; padding: 0 4px; height: 44px; border-radius: 10px; text-align: left; }
   .sname b { font-size: 19px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sname svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--ink-soft); }
   .count { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 18px; height: 36px; padding: 0 10px; font-size: 14px; white-space: nowrap; display: inline-flex; align-items: center; gap: 2px; }
@@ -235,10 +235,10 @@
             <button class="ibtn" id="prev" type="button" aria-label="Seqüència anterior">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
             </button>
-            <button class="sname" id="sname" type="button" aria-label="Canvia el nom">
+            <div class="sname" id="sname" role="button" tabindex="0" aria-label="Canvia el nom">
               <b id="nameText">Matí</b>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16v4z"/></svg>
-            </button>
+            </div>
             <button class="count" id="count" type="button" aria-haspopup="menu" aria-expanded="false"><span id="countText">1 de 5</span> <span aria-hidden="true">▾</span></button>
             <button class="ibtn" id="more" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Accions de la seqüència">
               <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
@@ -495,13 +495,36 @@
     if (act === "reset") { seq.retouched = []; render(); toast("S'han restablert els pictogrames. Desfés"); }
     if (act === "remove") { const name = seq.name; sequences.splice(current, 1); current = Math.min(current, sequences.length - 1); render(); toast(`S'ha tret «${name}».`); }
   };
+  // El nom s'edita al seu lloc: Retorn el desa, Esc el deixa com era
   const rename = () => {
-    const name = window.prompt("Nom de la seqüència", sequences[current].name);
-    if (name === null) return;
-    sequences[current].name = name.trim() || `Seqüència ${current + 1}`;
-    update(); toast("S'ha canviat el nom de la seqüència.");
+    const box = $("sname");
+    if (box.querySelector("input")) return;
+    const field = document.createElement("input");
+    field.id = "nameField";
+    field.value = sequences[current].name;
+    field.setAttribute("aria-label", "Nom de la seqüència");
+    field.style.cssText = "font-size:17px;font-weight:700;width:100%;min-width:0;border:1px solid var(--line-strong);border-radius:8px;padding:4px 8px;background:var(--surface)";
+    $("nameText").hidden = true;
+    box.prepend(field);
+    field.focus(); field.select();
+    let done = false;
+    const finish = (save) => {
+      if (done) return; done = true;
+      if (save) {
+        sequences[current].name = field.value.trim() || `Seqüència ${current + 1}`;
+        toast("S'ha canviat el nom de la seqüència.");
+      }
+      field.remove(); $("nameText").hidden = false; update();
+    };
+    field.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { e.preventDefault(); finish(true); }
+      if (e.key === "Escape") { e.stopPropagation(); finish(false); }
+    });
+    field.addEventListener("blur", () => finish(true));
+    field.addEventListener("click", (e) => e.stopPropagation());
   };
   $("sname").onclick = rename;
+  $("sname").addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target === $("sname")) { e.preventDefault(); rename(); } });
 
   $("count").onclick = () => {
     $("listMenu").innerHTML = sequences.map((seq, i) =>
