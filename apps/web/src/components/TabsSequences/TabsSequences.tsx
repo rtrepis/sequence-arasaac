@@ -20,7 +20,18 @@ import SequenceHeader from "@features/sequence/components/SequenceHeader/Sequenc
 /** Quant ha de lliscar el dit, en horitzontal, per passar de seqüència. */
 const SWIPE_PX = 60;
 
-const TabsSequences = (): React.ReactElement => {
+interface TabsSequencesProps {
+  /**
+   * La pantalla d'edició nova (pas 8 del pla dels estils): una seqüència per
+   * pantalla, amb la capçalera. Al mòbil sempre; a l'escriptori, si l'usuari
+   * la tria (pas 10, `useEditLayout`)
+   */
+  newLayout?: boolean;
+}
+
+const TabsSequences = ({
+  newLayout = false,
+}: TabsSequencesProps): React.ReactElement => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const theme = useTheme();
@@ -77,10 +88,10 @@ const TabsSequences = (): React.ReactElement => {
     </Tooltip>
   );
 
-  // Mòbil (pas 8 del pla dels estils): una seqüència per pantalla. Sense
-  // pestanyes: es passa de seqüència lliscant sobre la graella, amb les
+  // La pantalla nova (pas 8 del pla dels estils): una seqüència per pantalla.
+  // Sense pestanyes: es passa de seqüència lliscant sobre la graella, amb les
   // fletxes ‹ › o amb la llista «2 de 5» de la capçalera (D19)
-  if (isMobile) {
+  if (newLayout) {
     const swipe = {
       onTouchStart: (event: React.TouchEvent) => {
         const touch = event.touches[0];

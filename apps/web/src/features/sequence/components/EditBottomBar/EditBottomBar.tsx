@@ -147,7 +147,14 @@ const EditBottomBar = (): React.ReactElement => {
         "@media print": { display: "none" },
       }}
     >
-      <Stack direction="row" alignItems="center" gap={1}>
+      {/* A l'escriptori (pas 10), centrada i amb l'amplada d'un mòbil
+          apaïsat: una cerca de punta a punta d'una pantalla gran no es llegeix */}
+      <Stack
+        direction="row"
+        alignItems="center"
+        gap={1}
+        sx={{ maxWidth: (theme) => theme.breakpoints.values.md, mx: "auto" }}
+      >
         <Tooltip title={addLabel}>
           <IconButton
             ref={plusRef}

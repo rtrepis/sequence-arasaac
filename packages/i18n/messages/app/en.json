@@ -982,6 +982,8 @@
   "features.sequence.styleGallery.appStyle.categoryColor": "Category colour",
   "features.sequence.styleGallery.appStyle.toCut": "For cutting out",
   "features.sequence.styleGallery.appStyle.numberedSteps": "Numbered steps",
+  "features.sequence.editLayout.tryNew": "Try the new editor",
+  "features.sequence.editLayout.backToClassic": "Back to the previous editor",
   "features.sequence.styleGallery.documentStyle": "The document style",
   "features.sequence.styleGallery.inUse": "{kind, select, block {Used by this block} other {Used by this sequence}}",
   "features.sequence.styleGallery.loadFromFile": "Load from a file…",

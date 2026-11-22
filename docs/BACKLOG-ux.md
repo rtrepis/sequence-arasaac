@@ -77,6 +77,7 @@ l'entrada.
 | B38 | Blocs d'imatge a les pàgines | Idea sense decidir; abans, el pla dels estils (B37) | L |
 | B39 | Retocs d'estil d'un bloc a la columna: lletra, color del text i color de fons | Decidit fora d'aquesta release (D10–D11 de `docs/plans/PLA-estils.md`): un bloc té un sol estil, el de la seqüència o un de reassignat. Si torna, el fons s'imprimeix i toca l'estàndard de colors | M |
 | B41 | El text de la targeta no es pot posar en majúscules | Decidit fora d'aquesta release; demana un camp nou al `.saac` | M |
+| B42 | Retirar la pantalla d'edició d'abans a l'escriptori | Quan ho decideixi l'usuari (D34): fins aleshores conviuen amb l'interruptor | S |
 | B11b | Pujar una imatge: conversió en un worker | B11a ja és fet: queda mesurar-lo en una tauleta i decidir si encara es nota | M |
 | B22 | Les pestanyes no es coordinen | B19 ja evita la pèrdua; ara és només incomoditat | M |
 | C3 | Set famílies d'icones sense estàndard | Forma. Victòria ràpida possible: `IoIosColorPalette` → `ai`/`md` | M |
@@ -1501,6 +1502,19 @@ Inconsistència de forma o deute intern, sense un moment concret d'acció equivo
   `schemaVersion`, fonament 06). Amb aquest camp hi podria haver un estil de l'app de «primeres
   lectures».
 - **Fora d'aquesta release** (decidit el 2026-11-22).
+
+### B42 — Retirar la pantalla d'edició d'abans a l'escriptori 🔴 Oberta
+
+*(Oberta amb el pas 10 de `docs/plans/PLA-estils.md`, D34, 2026-11-22.)*
+
+- **Què**: a l'escriptori conviuen dues pantalles d'edició: la d'abans (pestanyes, comptador de
+  pictogrames, cerca a dalt) i la nova (la del mòbil: capçalera de la seqüència i barra de baix). Es
+  passa d'una a l'altra amb l'interruptor de l'edició (`EditLayoutSwitch`, `useEditLayout`).
+- **Per què és una entrada**: dues pantalles són el doble de codi i de proves, i la d'abans manté
+  `PictogramAmount` i les pestanyes verticals de `TabsSequences` només per a ella.
+- **Quan**: **quan ho decideixi l'usuari** (D34), sense data. En retirar-la: treure l'interruptor,
+  la clau `editLayout` del navegador, la branca d'escriptori de `EditSequencesPage` i de
+  `TabsSequences`, i `PictogramAmount` si no el fa servir ningú més.
 
 ### C30 — «Pantalla sencera» i «Pantalla completa» es diuen igual fora del català 🔴 Oberta
 

@@ -3801,6 +3801,14 @@
     "message": "Passos numerats",
     "description": "Nom d'un estil de l'app a la Galeria d'estils: cada pictograma amb el seu número, gran, per a seqüències de passos. També s'escriu al document"
   },
+  "features.sequence.editLayout.tryNew": {
+    "message": "Prova l'edició nova",
+    "description": "Botó de l'edició, a l'escriptori: passa a la pantalla d'edició nova (la del mòbil: capçalera amb el nom de la seqüència i barra de baix). Es pot tornar enrere"
+  },
+  "features.sequence.editLayout.backToClassic": {
+    "message": "Torna a l'edició d'abans",
+    "description": "Botó de l'edició nova, a l'escriptori: torna a la pantalla d'edició d'abans, amb les pestanyes de les seqüències"
+  },
   "features.sequence.styleGallery.documentStyle": {
     "message": "L'estil del document",
     "description": "Primera opció de la Galeria d'estils: la seqüència torna a fer servir l'estil del document"

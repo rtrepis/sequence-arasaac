@@ -809,6 +809,7 @@ Preses a partir de les preguntes de §8.1, §8.2, §8.3 i §8.5.
 | D31 | Pas 3: què porta un estil de l'app | **Tot el que es pot configurar a El meu estil** (D7 confirmada): un estil de l'app és complet i fix. **Tots porten Atkinson Hyperlegible** (text i número). Decidit el 2026-11-22. |
 | D32 | Aplicar un estil a una seqüència (o un bloc) que té pictogrames retocats | ~~Es pregunta abans~~ **Revisada el mateix dia: no es pregunta.** L'estil s'aplica i els pictogrames retocats conserven els seus retocs (solució A, com ja fa el pas 5); **D3 continua valent**: el snackbar diu quants en conserven, amb Desfés i «Treu els retocs». Per treure la personalització n'hi ha prou amb el que ja hi ha: «Treu els retocs» del snackbar, «Restableix els pictogrames» del «⋯» de la seqüència i «Restableix l'estil» de cada pictograma. 2026-11-22. |
 | D33 | Treure la personalització d'un pictograma | **Queda amb l'estil de la seva seqüència** (o del bloc, si en té un de reassignat), no amb el del document. És el que ja fa el codi (solució A i cascada del pas 4), comprovat amb la fixture 20 el 2026-11-22. Els textos que diuen «torna a l'estil del document» (la descripció de `components.mouseActionList.resetStyle` i l'ajuda d'El meu estil) es corregeixen al pas 12. |
+| D34 | Q4: com es passa a la pantalla d'edició nova a l'escriptori, i quan es retira la vella | Un **interruptor a l'edició** («Prova l'edició nova» / «Torna a l'edició d'abans»), recordat **en aquest navegador** com a preferència d'interfície: no entra al document ni va al compte. La vella **es retira quan ho decideixi l'usuari**, sense data (B42). Decidit el 2026-11-22. |
 
 **Què queda superat**:
 
@@ -931,7 +932,7 @@ inclòs. Els noms, traduïts; al document s'hi escriu el nom en l'idioma de qui 
 
 **Pas 10 — L'escriptori** (D23, decidit a D26: la pantalla nova com a vista alternativa durant un
 temps). Queda per decidir (**Q4**): com es passa d'una vista a l'altra (un interruptor a l'edició?
-desat com a preferència d'interfície, que no entra al document?) i quan es retira la vista vella.
+desat com a preferència d'interfície, que no entra al document?) i quan es retira la vista vella. ✅ **Fet** (2026-11-22, amb D34): vegeu §18.1.
 
 **Pas 11 — La columna a l'estàndard** (D24): `SettingsLevel`, `SettingsLevels`, `LevelCrumbs` i
 l'etiqueta de la disposició a `docs/estandards/configuracions.md`, «Components compartits».
@@ -1407,5 +1408,41 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 >
 > Després: els passos 11 (la columna a l'estàndard), 12 (textos: inclou D33, «restablir torna a
 > l'estil de la seqüència») i 13 (la notícia N-2).
+>
+> Normes: les de §11.
+>
+> **✅ Fet** (2026-11-22): Q4 decidida (D34) i pas 10 fet, vegeu §18.1.
+
+### 18.1 Com s'ha fet (pas 10, 2026-11-22)
+
+- **`useEditLayout`** (`features/sequence/hooks/`) diu quina pantalla es pinta: al mòbil, sempre la
+  nova; a l'escriptori, la que l'usuari ha triat, desada a `localStorage` (`editLayout`: `new` o
+  `classic`; sense tria, la d'abans). Si el navegador no hi deixa escriure, la tria val per a la
+  visita. No passa pel compte ni per `saveUserUiThunk`: és la tria d'aquest dispositiu, i se'n va
+  amb la vista vella (B42).
+- **`EditLayoutSwitch`** (`features/sequence/components/`) és el botó: a la vista d'abans, al
+  costat de la cerca («Prova l'edició nova»); a la nova, a dalt a la dreta («Torna a l'edició
+  d'abans»). Al mòbil no hi és. Es diu «edició», no «vista», perquè «Vista» és l'altra pàgina.
+- **`TabsSequences`** pinta la pantalla nova amb la prop `newLayout`, i no pel breakpoint: és
+  `EditSequencesPage` qui decideix. **`EditBottomBar`** a l'escriptori queda centrada, amb
+  l'amplada de `md`: una cerca de punta a punta d'una pantalla gran no es llegeix.
+- **Sense snackbar** en canviar: el canvi de pantalla és la resposta, i el botó per tornar-hi és al
+  mateix lloc.
+- **Proves**: `EditSequencesPage.test.tsx` (a l'escriptori: passa a la nova, ho recorda en tornar a
+  obrir l'edició, i torna a la d'abans). Comprovat també amb captures a 1280 px i recarregant la
+  pàgina. Typecheck net; web 589 proves i i18n 67, verdes.
+
+## 19. Encàrrec per obrir la sessió següent (pas 11: la columna a l'estàndard)
+
+> Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
+>
+> La tasca és el **pas 11 de §10.3** (D24): `SettingsLevel`, `SettingsLevels` amb la línia de la
+> cascada, `LevelCrumbs` i l'etiqueta de la disposició passen a `docs/estandards/configuracions.md`,
+> «Components compartits», tal com són. És documentació: llegeix-los al codi i escriu-ne la regla i
+> el perquè, com la resta de l'estàndard.
+>
+> Després: el pas 12 (textos i vocabulari, amb D33: «restablir torna a l'estil de la seqüència», i
+> els noms dels estils de l'app als cinc idiomes) i el 13 (la notícia N-2). En tancar el pla: B37
+> resolta, Q2 al backlog si continua oberta, el pla a `plans/fets/` i la PR a `master`.
 >
 > Normes: les de §11.
