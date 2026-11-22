@@ -413,29 +413,11 @@ const messages = defineMessages({
     description:
       "Tooltip de l'etiqueta del repartiment de la pàgina: què passarà en afegir-hi un bloc",
   },
-  applyMyStyle: {
-    id: "features.freeLayout.applyMyStyle",
-    defaultMessage: "Apply my style",
+  chooseStyle: {
+    id: "features.freeLayout.chooseStyle",
+    defaultMessage: "Choose a style…",
     description:
-      "Acció del menú «⋯» d'una pàgina o d'un bloc: hi copia el meu estil de pictogrames (es pot desfer)",
-  },
-  myStyleName: {
-    id: "features.freeLayout.myStyleName",
-    defaultMessage: "My style",
-    description:
-      "Nom de l'estil que «Aplica el meu estil» copia al document. Queda escrit al fitxer com a contingut i no es torna a traduir",
-  },
-  updateMyStyle: {
-    id: "features.freeLayout.updateMyStyle",
-    defaultMessage: "Update with my style",
-    description:
-      "Acció del menú «⋯» d'una pàgina o d'un bloc que ja fan servir un estil de bloc: aquell estil passa a ser el meu estil d'ara, i canvien tots els blocs que el fan servir (es pot desfer)",
-  },
-  removeBlockStyle: {
-    id: "features.freeLayout.removeBlockStyle",
-    defaultMessage: "Remove the block style",
-    description:
-      "Acció del menú «⋯» d'un bloc amb estil de bloc: el bloc torna a l'estil del document (es pot desfer)",
+      "Acció del menú «⋯» d'un bloc de seqüència: obre la Galeria d'estils per reassignar l'estil d'aquest bloc (només aquest bloc; es pot desfer)",
   },
   resetSequencePictograms: {
     id: "features.freeLayout.resetSequencePictograms",

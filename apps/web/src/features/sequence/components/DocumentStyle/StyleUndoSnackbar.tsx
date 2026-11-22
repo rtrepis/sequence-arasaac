@@ -72,16 +72,13 @@ interface StyleUndoSnackbarProps {
  * missatge no compila.
  */
 const CHANGED_MESSAGE: Record<StyleChangeSource, MessageDescriptor> = {
-  myStyleSheet: messages.changedMyStyleSheet,
-  myStyleBlock: messages.changedMyStyleBlock,
-  myStyleUpdate: messages.changedMyStyleUpdate,
-  blockStyleRemove: messages.changedBlockStyleRemove,
   applyAll: messages.changedApplyAll,
   reset: messages.changedReset,
   resetSequence: messages.changedResetSequence,
   fitTextPictogram: messages.changedFitTextPictogram,
   fitTextDocument: messages.changedFitTextDocument,
   sequenceStyle: messages.changedSequenceStyle,
+  blockStyle: messages.changedBlockStyle,
   sequenceRetouchesRemoved: messages.changedSequenceRetouchesRemoved,
   layoutTemplate: messages.changedLayoutTemplate,
   layoutAddSequences: messages.changedLayoutAddSequences,
@@ -92,24 +89,31 @@ const CHANGED_MESSAGE: Record<StyleChangeSource, MessageDescriptor> = {
 };
 
 /**
- * El text del snackbar. Triar l'estil d'una seqüència diu quin estil, quants
- * pictogrames conserven els seus retocs i quants blocs no han canviat (D3 i
- * D15): són frases senceres, cadascuna amb el seu plural.
+ * El text del snackbar. Triar l'estil d'una seqüència o d'un bloc diu quin
+ * estil, quants pictogrames conserven els seus retocs i, per a una seqüència,
+ * quants blocs no han canviat (D3 i D15); per a un bloc comú, que canvia a
+ * totes les pàgines (Q3). Són frases senceres, cadascuna amb el seu plural.
  */
 const changedText = (
   intl: ReturnType<typeof useIntl>,
   snackbar: StyleUndoSnackbarState,
 ): string => {
-  const { details } = snackbar;
-  if (snackbar.source !== "sequenceStyle" || !details)
-    return intl.formatMessage(CHANGED_MESSAGE[snackbar.source]);
-  const parts = [
-    intl.formatMessage(
-      details.toDocument
+  const { details, source } = snackbar;
+  if ((source !== "sequenceStyle" && source !== "blockStyle") || !details)
+    return intl.formatMessage(CHANGED_MESSAGE[source]);
+  const first =
+    source === "sequenceStyle"
+      ? details.toBase
         ? messages.changedSequenceStyleDocument
-        : messages.changedSequenceStyle,
-      { name: details.styleName },
-    ),
+        : messages.changedSequenceStyle
+      : details.toBase
+        ? messages.changedBlockStyleSequence
+        : messages.changedBlockStyle;
+  const parts = [
+    intl.formatMessage(first, {
+      name: details.styleName,
+      common: String(Boolean(details.common)),
+    }),
   ];
   if (details.retouched > 0)
     parts.push(
@@ -155,7 +159,7 @@ const StyleUndoSnackbar = ({
 
   // «Treu els retocs» (D3): només si n'hi ha, en triar l'estil d'una seqüència
   const retouchedSequence =
-    snackbar.source === "sequenceStyle" &&
+    (snackbar.source === "sequenceStyle" || snackbar.source === "blockStyle") &&
     snackbar.details &&
     snackbar.details.retouched > 0
       ? snackbar.details.sequenceKey

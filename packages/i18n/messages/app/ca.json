@@ -119,8 +119,8 @@
     "description": "Pictogram pictogram for default settings"
   },
   "components.defaultSettings.panelHint": {
-    "message": "L'estil dels pictogrames amb què neixen els documents nous. Per portar-lo a un document obert, fes servir «Aplica el meu estil» al menú «⋯» d'una pàgina o d'un bloc.",
-    "description": "Ajuda del panell «El meu estil»: és una preferència de l'usuari, no l'estil del document obert, i al document s'hi porta des del menú «⋯» de la vista"
+    "message": "L'estil dels pictogrames amb què neixen els documents nous. Per portar-lo a un document obert, tria'l a la Galeria d'estils: des del menú «⋯» de la seqüència, a l'edició, o del d'un bloc, a la vista.",
+    "description": "Ajuda del panell «El meu estil»: és una preferència de l'usuari, no l'estil del document obert, i al document s'hi porta des de la Galeria d'estils"
   },
   "components.defaultSettings.sectionPictogram": {
     "message": "Pictograma",
@@ -2370,7 +2370,7 @@
     "description": "Títol del diàleg que surt en obrir un fitxer d'estil (.saacstyle) com si fos un document"
   },
   "features.sequence.style.styleFileOpened.body": {
-    "message": "Pots fer-lo el teu estil: el reben els documents nous, i el porta a un document «Aplica el meu estil», al menú «⋯» d'una pàgina o d'un bloc.",
+    "message": "Pots fer-lo el teu estil: el reben els documents nous, i el pots triar a la Galeria d'estils d'un document obert.",
     "description": "Explicació del diàleg que surt en obrir un fitxer d'estil com si fos un document: només es pot fer el meu estil"
   },
   "features.sequence.style.styleFileOpened.makeDefault": {
@@ -3649,22 +3649,6 @@
     "message": "S'ha carregat l'estil del fitxer com el teu estil.",
     "description": "Snackbar després de «Carrega un estil des d'un fitxer…» al panell «El meu estil»"
   },
-  "features.sequence.style.changed.myStyleSheet": {
-    "message": "S'ha aplicat el teu estil a la pàgina.",
-    "description": "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'una pàgina"
-  },
-  "features.sequence.style.changed.myStyleBlock": {
-    "message": "S'ha aplicat el teu estil al bloc.",
-    "description": "Snackbar amb «Desfés» després d'«Aplica el meu estil» del menú «⋯» d'un bloc"
-  },
-  "features.freeLayout.applyMyStyle": {
-    "message": "Aplica el meu estil",
-    "description": "Acció del menú «⋯» d'una pàgina o d'un bloc: hi copia el meu estil de pictogrames (es pot desfer)"
-  },
-  "features.freeLayout.myStyleName": {
-    "message": "El meu estil",
-    "description": "Nom de l'estil que «Aplica el meu estil» copia al document. Queda escrit al fitxer com a contingut i no es torna a traduir"
-  },
   "features.sequence.style.myStyleName": {
     "message": "El meu estil",
     "description": "Nom de l'estil amb què neix un document nou, que és una còpia del meu estil (style.name del .saac). Queda escrit al fitxer com a contingut i no es torna a traduir"
@@ -3680,22 +3664,6 @@
   "features.freeLayout.page.modeFree": {
     "message": "Lliure",
     "description": "Opció de la disposició al menú d'una pàgina: cada bloc on l'usuari el posa"
-  },
-  "features.freeLayout.updateMyStyle": {
-    "message": "Actualitza amb el meu estil",
-    "description": "Acció del menú «⋯» d'una pàgina o d'un bloc que ja fan servir un estil de bloc: aquell estil passa a ser el meu estil d'ara, i canvien tots els blocs que el fan servir (es pot desfer)"
-  },
-  "features.freeLayout.removeBlockStyle": {
-    "message": "Treu l'estil de bloc",
-    "description": "Acció del menú «⋯» d'un bloc amb estil de bloc: el bloc torna a l'estil del document (es pot desfer)"
-  },
-  "features.sequence.style.changed.myStyleUpdate": {
-    "message": "S'ha actualitzat l'estil de bloc amb el teu estil, a tots els blocs que el fan servir.",
-    "description": "Snackbar amb «Desfés» després d'«Actualitza amb el meu estil» del menú «⋯» d'una pàgina o d'un bloc"
-  },
-  "features.sequence.style.changed.blockStyleRemove": {
-    "message": "S'ha tret l'estil de bloc: el bloc torna a l'estil del document.",
-    "description": "Snackbar amb «Desfés» després de «Treu l'estil de bloc» del menú «⋯» d'un bloc"
   },
   "components.viewSettingsPanel.dispositionHelp": {
     "message": "Com comença la primera pàgina d'un document nou, i les pàgines que s'hi afegeixen.",
@@ -3826,7 +3794,7 @@
     "description": "Primera opció de la Galeria d'estils: la seqüència torna a fer servir l'estil del document"
   },
   "features.sequence.styleGallery.inUse": {
-    "message": "El fa servir aquesta seqüència",
+    "message": "{kind, select, block {El fa servir aquest bloc} other {El fa servir aquesta seqüència}}",
     "description": "Segona línia de l'estil que fa servir la seqüència, a la Galeria d'estils"
   },
   "features.sequence.styleGallery.loadFromFile": {
@@ -3861,12 +3829,44 @@
     "message": "Galeria d'estils",
     "description": "Títol del diàleg d'on es tria l'estil d'una seqüència. Mai «tema» ni «plantilla»"
   },
-  "features.sequence.styleGallery.forSequence": {
-    "message": "Tria l'estil de «{name}».",
-    "description": "Primera línia de la Galeria d'estils: per a quina seqüència es tria l'estil"
-  },
   "features.sequence.styleGallery.currentGroup": {
     "message": "El d'ara",
     "description": "Encapçalament de la Galeria d'estils sobre l'estil que fa servir la seqüència, quan no és cap dels altres de la galeria (p. ex. un de carregat d'un fitxer)"
+  },
+  "features.freeLayout.chooseStyle": {
+    "message": "Tria un estil…",
+    "description": "Acció del menú «⋯» d'un bloc de seqüència: obre la Galeria d'estils per reassignar l'estil d'aquest bloc (només aquest bloc; es pot desfer)"
+  },
+  "features.sequence.styleGallery.forTarget": {
+    "message": "{kind, select, block {Tria l'estil d'aquest bloc de «{name}». Només canvia aquest bloc.} other {Tria l'estil de «{name}».}}",
+    "description": "Primera línia de la Galeria d'estils: per a quina seqüència, o per a quin bloc d'una seqüència, es tria l'estil"
+  },
+  "features.sequence.styleGallery.sequenceStyle": {
+    "message": "L'estil de la seqüència",
+    "description": "Primera opció de la Galeria d'estils per a un bloc: el bloc torna a fer servir l'estil de la seva seqüència"
+  },
+  "features.sequence.style.changed.blockStyle": {
+    "message": "{common, select, true {El bloc fa servir «{name}», a totes les pàgines.} other {El bloc fa servir «{name}».}}",
+    "description": "Snackbar amb «Desfés» després de triar un estil per a un bloc a la Galeria d'estils (només aquell bloc). Si el bloc és comú, el canvi es veu a totes les pàgines"
+  },
+  "features.sequence.style.changed.blockStyleSequence": {
+    "message": "{common, select, true {El bloc torna a l'estil de la seqüència («{name}»), a totes les pàgines.} other {El bloc torna a l'estil de la seqüència («{name}»).}}",
+    "description": "Snackbar amb «Desfés» després de «Torna a l'estil de la seqüència» (o la primera opció de la galeria) d'un bloc; {name} és l'estil de la seqüència"
+  },
+  "features.freeLayout.levels.blockStyle": {
+    "message": "Estil",
+    "description": "Títol de la fila «Estil» del nivell «Bloc»: l'estil que pinta aquest bloc (el de la seqüència o un de reassignat)"
+  },
+  "features.freeLayout.levels.blockStyleChange": {
+    "message": "Canvia…",
+    "description": "Botó de la fila «Estil» del nivell «Bloc»: obre la Galeria d'estils per a aquest bloc"
+  },
+  "features.freeLayout.levels.blockStyleBackToSequence": {
+    "message": "Torna a l'estil de la seqüència",
+    "description": "Botó de la fila «Estil» d'un bloc amb un estil reassignat: el bloc torna a fer servir l'estil de la seqüència (es pot desfer)"
+  },
+  "features.freeLayout.levels.blockStyleReassigned": {
+    "message": "Només aquest bloc té aquest estil. La seqüència fa servir «{name}».",
+    "description": "Marca «reassignat» (tooltip i nom accessible) i ajuda sota la fila «Estil» d'un bloc amb un estil que no és el de la seva seqüència; {name} és l'estil de la seqüència"
   }
 }

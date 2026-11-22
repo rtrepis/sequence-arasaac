@@ -22,7 +22,6 @@ import {
   documentLayoutChangedActionCreator,
   newDocumentPagesInheritedActionCreator,
   takeDocumentStyleSnapshot,
-  pagesAndStylesChangedActionCreator,
   pagesChangedActionCreator,
   userLayoutOf,
 } from "@features/sequence/store/documentSlice";
@@ -44,20 +43,11 @@ import {
   sheetToTemplate,
 } from "../model/distribute";
 import {
-  MyStyleTarget,
-  applyNamedStyle,
   blockViewRetouch,
-  namedStyleFrom,
   namedStyleOf,
-  removeNamedStyle,
   resolveBlockView,
-  targetStyleIds,
-  updateNamedStyles,
 } from "../model/blockStyle";
-import {
-  selectResolvedSequenceViews,
-  selectUserDefaultStyle,
-} from "@features/sequence/style/styleSelectors";
+import { selectResolvedSequenceViews } from "@features/sequence/style/styleSelectors";
 import {
   dispositionOf,
   explicitPages,
@@ -584,88 +574,6 @@ export const setSheetFreeThunk =
           ? fitSheetBlocks(free, sheetIndex, naturalOf, area)
           : free;
       }),
-    );
-  };
-
-/**
- * «Aplica el meu estil» del menú «⋯» d'una pàgina o d'un bloc (R10): el meu
- * estil es copia al document com a estil amb nom i hi apunta els blocs. Es pot
- * desfer, i el snackbar amb «Desfés» n'és el missatge. Els estils van en una
- * sola direcció: res del document no torna mai cap a les preferències.
- * `name` és «El meu estil» a l'idioma de la interfície, i queda escrit al
- * document com a contingut.
- */
-export const applyMyStyleThunk =
-  (target: MyStyleTarget, name: string): AppThunk =>
-  (dispatch, getState) => {
-    const state = getState();
-    const pages = explicitPages(
-      state.document.pages,
-      selectSequenceKeys(state),
-      newLayoutId,
-    );
-    const entry = namedStyleFrom(selectUserDefaultStyle(state), {
-      id: newSaacId("st"),
-      name,
-    });
-    dispatch(
-      undoableStyleChangeThunk(
-        () =>
-          pagesAndStylesChangedActionCreator(
-            applyNamedStyle(pages, state.document.styles, entry, target),
-          ),
-        target.kind === "sheet" ? "myStyleSheet" : "myStyleBlock",
-      ),
-    );
-  };
-
-/**
- * «Actualitza amb el meu estil» del menú «⋯» d'una pàgina o d'un bloc (R7): els
- * estils de bloc que fan servir passen a tenir el meu estil, i canvien tots els
- * blocs que els comparteixen, a qualsevol pàgina. És l'estil per grup: el grup
- * són els blocs amb el mateix estil de bloc. Es pot desfer, i el snackbar amb
- * «Desfés» n'és el missatge. Sense cap estil de bloc, no fa res.
- */
-export const updateMyStyleThunk =
-  (target: MyStyleTarget): AppThunk =>
-  (dispatch, getState) => {
-    const state = getState();
-    const { pages, styles } = state.document;
-    const ids = targetStyleIds(pages, styles, target);
-    if (!pages || ids.length === 0) return;
-    const entry = namedStyleFrom(selectUserDefaultStyle(state), {
-      id: "",
-      name: "",
-    });
-    dispatch(
-      undoableStyleChangeThunk(
-        () =>
-          pagesAndStylesChangedActionCreator({
-            pages,
-            styles: updateNamedStyles(styles, ids, entry),
-          }),
-        "myStyleUpdate",
-      ),
-    );
-  };
-
-/**
- * Treu l'estil de bloc d'un bloc (el nivell «Bloc» de la columna): torna a
- * l'estil del document. Es pot desfer.
- */
-export const removeBlockStyleThunk =
-  (placementId: string): AppThunk =>
-  (dispatch, getState) => {
-    const { pages, styles } = getState().document;
-    if (!pages) return;
-    dispatch(
-      undoableStyleChangeThunk(
-        () =>
-          pagesAndStylesChangedActionCreator(
-            removeNamedStyle(pages, styles, placementId),
-          ),
-        "blockStyleRemove",
-      ),
     );
   };
 

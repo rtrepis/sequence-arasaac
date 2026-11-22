@@ -16,11 +16,10 @@
 > `docs/fonaments/sequencia-i-estil.md` (B25), que queda com a índex de redirecció.
 
 > **Revisat el 2026-11-21 amb el pla dels estils** (`docs/plans/PLA-estils.md` §10, ADR-006). §1,
-> §3, §4, §5, §6 i §7 descriuen el model **cap on va** el codi: l'estil de la seqüència, el bloc
-> amb un sol estil, la Galeria d'estils i la solució A. El codi hi arriba als passos 2–6 del pla:
-> la solució A (pas 2), la cascada amb l'estil de la seqüència (pas 4) i la galeria amb el «⋯» de la
-> seqüència a l'edició (pas 5) ja hi són; l'estil del bloc a la vista (pas 6), encara no. Mentre no hi arriba, el comportament d'avui és el de la versió anterior d'aquest document (a
-> l'historial de git) i el de les decisions 23 i 24 de l'ADR-005.
+> §3, §4, §5, §6 i §7 descriuen el model de l'estil de la seqüència, el bloc amb un sol estil, la
+> Galeria d'estils i la solució A. **El codi ja hi és** (passos 2, 4, 5 i 6 del pla, fets el
+> 2026-11-22), llevat dels estils de l'app a la galeria (pas 9). La versió anterior d'aquest
+> document (a l'historial de git) i les decisions 23 i 24 de l'ADR-005 expliquen d'on ve.
 
 L'objectiu que ho guia tot: **un `.saac` s'obre, es veu i s'imprimeix igual a qualsevol ordinador,
 tauleta o mòbil, amb compte o sense.**

@@ -23,7 +23,10 @@ import {
   isPictogramCustomized,
   resetPictogramStyle,
 } from "@features/sequence/style/pictogramStyle";
+import { findPlacement } from "@features/free-layout/model/sheets";
+import { withPlacementStyle } from "@features/free-layout/model/blockStyle";
 import {
+  pagesAndStylesChangedActionCreator,
   sequencePictogramsReplacedActionCreator,
   sequenceStyleChangedActionCreator,
   takeDocumentStyleSnapshot,
@@ -94,6 +97,24 @@ const withoutUnused = (
   return used ? styles : styles.filter(({ id }) => id !== styleId);
 };
 
+/**
+ * L'estil triat, copiat als estils amb nom del document (o reaprofitat). Sense
+ * `style`, cap: la primera opció de la galeria treu l'estil propi.
+ */
+const copyChoice = (
+  styles: NamedStyle[] | undefined,
+  choice: GalleryChoice,
+): { styles: NamedStyle[]; styleId: string | undefined } =>
+  choice.style
+    ? addNamedStyle(
+        styles,
+        namedStyleFrom(choice.style, {
+          id: newSaacId("st"),
+          name: choice.name,
+        }),
+      )
+    : { styles: [...(styles ?? [])], styleId: undefined };
+
 /** Tria l'estil d'una seqüència. Es pot desfer. */
 export const chooseSequenceStyleThunk =
   (sequenceKey: number, choice: GalleryChoice): AppThunk =>
@@ -102,15 +123,7 @@ export const chooseSequenceStyleThunk =
     if (document.content[sequenceKey] === undefined) return;
 
     const previousId = document.sequenceStyleIds?.[sequenceKey];
-    const added = choice.style
-      ? addNamedStyle(
-          document.styles,
-          namedStyleFrom(choice.style, {
-            id: newSaacId("st"),
-            name: choice.name,
-          }),
-        )
-      : { styles: [...(document.styles ?? [])], styleId: undefined };
+    const added = copyChoice(document.styles, choice);
 
     const sequenceStyleIds = { ...document.sequenceStyleIds };
     if (added.styleId === undefined) delete sequenceStyleIds[sequenceKey];
@@ -134,12 +147,57 @@ export const chooseSequenceStyleThunk =
         {
           sequenceKey,
           styleName: namedStyleOf(styles, added.styleId)?.name ?? choice.name,
-          toDocument: added.styleId === undefined,
+          toBase: added.styleId === undefined,
           retouched: retouchedCountOf(document, sequenceKey),
           unchangedBlocks: reassignedBlocksOf(
             { ...document, styles },
             sequenceKey,
           ),
+        },
+      ),
+    );
+  };
+
+/**
+ * Tria l'estil d'un bloc de seqüència, a la vista (D12, D14): el **reassigna**.
+ * Només canvia aquell bloc, encara que la seqüència surti en d'altres; si és
+ * comú, canvia a totes les pàgines, i el missatge ho diu (Q3). Sense `style`
+ * («L'estil de la seqüència»), treu la reassignació: és el mateix que «Torna a
+ * l'estil de la seqüència». Es pot desfer.
+ */
+export const chooseBlockStyleThunk =
+  (placementId: string, choice: GalleryChoice): AppThunk =>
+  (dispatch, getState) => {
+    const { document } = getState();
+    const found = document.pages && findPlacement(document.pages, placementId);
+    if (!document.pages || !found || found.placement.kind !== "sequence")
+      return;
+    const { placement } = found;
+
+    const added = copyChoice(document.styles, choice);
+    const pages = withPlacementStyle(
+      document.pages,
+      placementId,
+      added.styleId,
+    );
+    const styles = withoutUnused(
+      added.styles,
+      placement.styleId,
+      document.sequenceStyleIds ?? {},
+      pages,
+    );
+
+    dispatch(
+      undoableStyleChangeThunk(
+        () => pagesAndStylesChangedActionCreator({ pages, styles }),
+        "blockStyle",
+        {
+          sequenceKey: placement.sequenceKey,
+          styleName: namedStyleOf(styles, added.styleId)?.name ?? choice.name,
+          toBase: added.styleId === undefined,
+          retouched: retouchedCountOf(document, placement.sequenceKey),
+          unchangedBlocks: 0,
+          common: found.location === "common",
         },
       ),
     );

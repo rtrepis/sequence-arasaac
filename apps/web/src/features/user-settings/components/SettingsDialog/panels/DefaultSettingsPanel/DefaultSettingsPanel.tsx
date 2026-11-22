@@ -39,8 +39,8 @@ const DefaultSettingsPanel = forwardRef<DefaultSettingsPanelHandle>(
     const dispatch = useAppDispatch();
 
     // Aquest panell edita «el meu estil»: l'estil dels pictogrames amb què
-    // neixen els documents nous i el que aplica «Aplica el meu estil» des del
-    // menú «⋯» de la pàgina i del bloc. No toca mai el document obert: els
+    // neixen els documents nous i el que porta «El meu estil» de la Galeria
+    // d'estils a una seqüència o a un bloc. No toca mai el document obert: els
     // estils van en una sola direcció, de la configuració cap al document
     // (R10, `docs/fonaments/03-model-contingut-estil.md`)
     const myStyle = useAppSelector((state) => state.ui.defaultSettings);

@@ -1,9 +1,10 @@
 # Pla: els estils, sense sorpreses
 
 > **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**, i **pla d'execució
-> escrit el 2026-11-21 (§10)**. Passos 1 (fonaments), 2 (solució A i D1, §3.5), 4 (el format, §12.1)
-> i 5 (la galeria i l'estil de la seqüència a l'edició, §13.1) fets: es continua pel pas 6 de
-> §10.3, amb l'encàrrec de §14 (el pas 3, l'estudi, pot anar en paral·lel).
+> escrit el 2026-11-21 (§10)**. Passos 1 (fonaments), 2 (solució A i D1, §3.5), 4 (el format, §12.1),
+> 5 (la galeria i l'estil de la seqüència a l'edició, §13.1) i 6 (l'estil del bloc a la vista,
+> §14.1) fets: es continua pel pas 7 de §10.3 (l'esbós, que l'usuari revisa abans del pas 8), amb
+> l'encàrrec de §15. El pas 3 (l'estudi) encara no s'ha fet, i el pas 9 en depèn.
 
 > **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
 >
@@ -891,7 +892,8 @@ pestanya activa, també a l'escriptori (D23), amb el nom editable (D16), l'estil
 «Personalitzat» amb la marca i l'ajuda (D13). Snackbar de D3 i de D15. «Treu aquesta seqüència»
 treu l'oberta.
 
-**Pas 6 — L'estil del bloc a la vista.** La fila **«Estil»** al nivell Bloc de la columna (amb
+**Pas 6 — L'estil del bloc a la vista.** ✅ **Fet** (2026-11-22): com s'ha fet i què queda, a §14.1. La
+fila **«Estil»** al nivell Bloc de la columna (amb
 `SettingRow`), el nom, «Personalitzat» (D13), la marca de **reassignat** i «Torna a l'estil de la
 seqüència» (D14). «Tria un estil…» al «⋯» del bloc (D12). **Fora** dels menús de pàgina i de bloc:
 «Aplica el meu estil», «Actualitza amb el meu estil» i «Treu l'estil de bloc» (E5). Q3: la galeria
@@ -1157,6 +1159,8 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 
 ## 14. Encàrrec per obrir la sessió següent (pas 6: l'estil del bloc a la vista)
 
+> **✅ Fet** (2026-11-22): vegeu §14.1.
+
 > Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
 >
 > La tasca és el **pas 6 de §10.3**: la fila «Estil» al nivell Bloc de la columna, «Personalitzat»
@@ -1169,4 +1173,74 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 > La galeria (`StyleGallery`) i el snackbar ja hi són: el bloc hi ha d'arribar com un altre destí.
 >
 > Normes: les de §11. En acabar, marca el pas 6 com a fet a §10.3 i actualitza `docs/README.md` en
+> el mateix commit.
+
+### 14.1 Com s'ha fet (pas 6, 2026-11-22)
+
+> El que el codi d'avui ha obligat a concretar respecte de §10.3. Cap d'aquests punts no canvia cap
+> decisió ni el format del fitxer.
+
+- **La fila «Estil»** (`features/free-layout/components/ViewLevels/BlockStyleRow.tsx`) és la
+  primera del nivell «Bloc» d'un bloc de seqüència, amb `SettingRow` i `control="block"` (el valor
+  i dos botons no hi cabien al costat del títol a 350 px). Diu el nom de l'estil que pinta el bloc
+  (el reassignat, o el de la seqüència, o el del document) o «Personalitzat» amb la marca de la
+  targeta i la mateixa ajuda que la capçalera de l'edició (D13). Amb un estil reassignat, la
+  **marca de reassignat** (`reassignedMark`, al costat de `customizedMark`: els mateixos colors i
+  un quadrat en lloc d'una rodona, amb tooltip i nom accessible), el botó **«Torna a l'estil de la
+  seqüència»** i una ajuda sota la fila que diu quin estil fa servir la seqüència (D14).
+  «Canvia…» obre la galeria per a aquest bloc. Al mòbil va al panell de baix, com la resta de la
+  columna, sense cap canvi.
+- **Les pàgines simples d'un document sense pàgines** (el nivell «Seqüència» de la columna) no
+  tenen fila «Estil»: no hi ha bloc a reassignar, i l'estil de la seqüència es tria a l'edició.
+- **El menú «⋯» del bloc** porta **«Tria un estil…»** (només als blocs de seqüència; un rètol no té
+  estil de pictogrames) i ja no porta «Aplica el meu estil», «Actualitza amb el meu estil» ni «Treu
+  l'estil de bloc». **El de la pàgina** ja no porta cap acció d'estil (E5). Se'n van també els
+  thunks (`applyMyStyleThunk`, `updateMyStyleThunk`, `removeBlockStyleThunk`), les funcions del
+  model que només feien servir ells (`applyNamedStyle`, `targetStyleIds`, `updateNamedStyles`,
+  `removeNamedStyle`), els seus orígens del snackbar i les seves claus de traducció.
+- **La galeria** rep ara un destí (`GalleryTarget`: seqüència o bloc). Per a un bloc, la primera
+  opció és **«L'estil de la seqüència»** (amb el nom de l'estil de la seqüència a sota), que fa el
+  mateix que «Torna a l'estil de la seqüència»; un bloc reassignat a un estil que no és a la galeria
+  (els «estils de bloc» d'abans) surt a dalt, a «El d'ara». La línia de sota el títol diu que només
+  canvia aquell bloc. L'opció marcada diu «El fa servir aquest bloc» o «… aquesta seqüència».
+- **L'acció** (`chooseBlockStyleThunk`, a `store/sequenceStyleThunks.ts`) copia l'estil com la de la
+  seqüència, hi apunta el bloc (`withPlacementStyle`, a `blockStyle.ts`, que en conserva la
+  distribució) i treu l'estil d'abans si ja no el fa servir ningú. **Q3**: un bloc comú canvia a
+  totes les pàgines perquè és un sol bloc; el snackbar ho diu («…, a totes les pàgines.»). El
+  snackbar porta «Treu els retocs» com el de la seqüència, i el text del resultat ja diu que canvia
+  tots els blocs on surt la seqüència (D3).
+- **Textos que enviaven a «Aplica el meu estil»**: l'ajuda del panell «El meu estil»
+  (`components.defaultSettings.panelHint`) i la del diàleg d'un fitxer d'estil obert com a document
+  (`features.sequence.style.styleFileOpened.body`) ara diuen la Galeria d'estils. El pas 12 els pot
+  tornar a mirar.
+- **«Aplica a tots»** continua sense tocar-se (§13.1).
+- **Proves**: `sequenceStyle.test.ts` (reassignar només un bloc i conservar-ne la distribució,
+  «Torna a l'estil de la seqüència» amb Desfés, el bloc comú), `BlockStyleRow.test.tsx` (la fila,
+  la marca, tornar, «Canvia…» i «Personalitzat»), `ViewLevels.test.tsx` (el menú del bloc sense
+  les accions velles i «Tria un estil…» fins a la galeria; el menú de la pàgina sense cap acció
+  d'estil) i `blockStyle.test.ts` (`withPlacementStyle`). E2E: la prova de `saac-fixtures` que
+  provava «Aplica el meu estil» ara tria el meu estil a la galeria des del «⋯» de la seqüència, a
+  l'edició, i el desfà. Que la marca no surti al paper no necessita prova nova: la columna no hi
+  arriba mai (`usePrintSheet`).
+
+**Queda per a més endavant** (no són errors d'avui):
+
+- **`e2e/screenshots/my-style-focused.spec.ts` queda trencada**: fa les captures de la notícia N-2
+  amb «Aplica el meu estil» i «Actualitza amb el meu estil», que ja no hi són. El pas 13 refà la
+  notícia, els passos i les captures; s'hi ha de reescriure (o treure) aquest spec.
+- `deleteLastSequence` (§13.1) continua viu només per a les proves.
+
+## 15. Encàrrec per obrir la sessió següent (pas 7: l'esbós de la pantalla d'edició al mòbil)
+
+> Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
+>
+> La tasca és el **pas 7 de §10.3**: `docs/esbossos/esbos-edicio-mobil.html`, com
+> `esbos-vista-mobil.html`, a partir de §10.4, amb les **captures d'avui** per comparar (Playwright,
+> amplada de mòbil i d'escriptori, perquè l'usuari decideixi D23). **És un document, no codi.** La
+> capçalera de la seqüència del pas 5 (§13.1: nom, estil, «⋯») és el punt de partida de la del
+> mòbil. **L'usuari el revisa abans del pas 8**: en acabar, s'atura i ho diu.
+>
+> En paral·lel, i abans del pas 9: el **pas 3** (l'estudi d'estils de targetes, §4.4).
+>
+> Normes: les de §11. En acabar, marca el pas 7 com a fet a §10.3 i actualitza `docs/README.md` en
 > el mateix commit.

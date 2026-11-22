@@ -320,8 +320,7 @@ const SequenceHeader = ({
         <StyleGallery
           open
           onClose={() => setGalleryOpen(false)}
-          sequenceKey={sequenceKey}
-          sequenceName={name}
+          target={{ kind: "sequence", sequenceKey, name }}
         />
       )}
 

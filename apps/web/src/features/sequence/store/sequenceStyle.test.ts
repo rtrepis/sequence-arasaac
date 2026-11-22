@@ -27,9 +27,13 @@ import {
   sequenceRenamedActionCreator,
 } from "./documentSlice";
 import {
+  chooseBlockStyleThunk,
   chooseSequenceStyleThunk,
   removeSequenceRetouchesThunk,
 } from "./sequenceStyleThunks";
+import { findPlacement } from "@features/free-layout/model/sheets";
+import { setPlacementCommonThunk } from "@features/free-layout/store/freeLayoutThunks";
+import type { DocumentSAAC } from "@/types/document";
 import { selectCanUndoStyle, undoStyleChangeThunk } from "./styleSlice";
 
 const FIXTURES = path.resolve(__dirname, "../../../../test/fixtures/saac");
@@ -85,7 +89,7 @@ describe("triar l'estil d'una seqüència", () => {
       details: {
         sequenceKey: 0,
         styleName: MY_STYLE,
-        toDocument: false,
+        toBase: false,
         retouched: 1,
         unchangedBlocks: 1,
       },
@@ -99,7 +103,7 @@ describe("triar l'estil d'una seqüència", () => {
     expect(document.sequenceStyleIds?.[2]).toBeUndefined();
     // «Agenda gran» encara el fa servir un bloc: no surt del document
     expect(document.styles?.map(({ id }) => id)).toContain("st_gran");
-    expect(style.undoSnackbar?.details?.toDocument).toBe(true);
+    expect(style.undoSnackbar?.details?.toBase).toBe(true);
   });
 
   it("el mateix estil dues vegades no en fa dues còpies", () => {
@@ -164,6 +168,77 @@ describe("triar l'estil d'una seqüència", () => {
     expect(file.styles?.find(({ id }) => id === tarda.namedStyle)?.name).toBe(
       MY_STYLE,
     );
+  });
+});
+
+/** L'estil reassignat d'un bloc de la fixture 20. */
+const styleIdOf = (document: DocumentSAAC, placementId: string) => {
+  const found = document.pages && findPlacement(document.pages, placementId);
+  return found && found.placement.kind === "sequence"
+    ? found.placement.styleId
+    : undefined;
+};
+
+describe("triar l'estil d'un bloc (pas 6)", () => {
+  it("el reassigna només a aquell bloc, i no toca l'altre de la mateixa seqüència", () => {
+    const store = storeWith20();
+    store.dispatch(
+      chooseBlockStyleThunk("pl_2", {
+        name: MY_STYLE,
+        style: selectUserDefaultStyle(store.getState()),
+      }),
+    );
+    const { document, style } = store.getState();
+    const id = styleIdOf(document, "pl_2");
+    expect(document.styles?.find((named) => named.id === id)?.name).toBe(
+      MY_STYLE,
+    );
+    // L'altre bloc i la seqüència, com eren
+    expect(styleIdOf(document, "pl_1")).toBe("st_gran");
+    expect(document.sequenceStyleIds?.[0]).toBe("st_vores");
+    // La distribució del bloc es queda
+    const found = document.pages && findPlacement(document.pages, "pl_2");
+    expect(found?.placement).toMatchObject({ view: { alignmentH: "left" } });
+    expect(style.undoSnackbar).toMatchObject({
+      source: "blockStyle",
+      details: {
+        styleName: MY_STYLE,
+        toBase: false,
+        retouched: 1,
+        common: false,
+      },
+    });
+  });
+
+  it("«Torna a l'estil de la seqüència» treu la reassignació, i es desfà", () => {
+    const store = storeWith20();
+    const before = store.getState().document;
+    store.dispatch(chooseBlockStyleThunk("pl_1", { name: "Sense vores" }));
+    const { document, style } = store.getState();
+    expect(styleIdOf(document, "pl_1")).toBeUndefined();
+    // «Agenda gran» encara és de la «Nit»
+    expect(document.styles?.map(({ id }) => id)).toContain("st_gran");
+    expect(style.undoSnackbar?.details).toMatchObject({
+      styleName: "Sense vores",
+      toBase: true,
+    });
+    store.dispatch(undoStyleChangeThunk());
+    expect(store.getState().document).toEqual(before);
+  });
+
+  it("un bloc comú: canvia a totes les pàgines, i el missatge ho diu (Q3)", () => {
+    const store = storeWith20();
+    store.dispatch(setPlacementCommonThunk("pl_2", true, 0));
+    store.dispatch(
+      chooseBlockStyleThunk("pl_2", {
+        name: MY_STYLE,
+        style: selectUserDefaultStyle(store.getState()),
+      }),
+    );
+    const { document, style } = store.getState();
+    expect(document.pages?.common[0]).toMatchObject({ id: "pl_2" });
+    expect(styleIdOf(document, "pl_2")).toBeDefined();
+    expect(style.undoSnackbar?.details?.common).toBe(true);
   });
 });
 

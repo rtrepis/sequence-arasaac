@@ -7,8 +7,8 @@
 // - **Cancel·la**: no en fa res.
 //
 // No s'aplica mai al document obert: els estils van en una sola direcció, de
-// la configuració cap al document, i al document s'hi porta des del menú «⋯» de
-// la pàgina o del bloc (R10).
+// la configuració cap al document, i al document s'hi porta des de la Galeria
+// d'estils, a la seqüència o al bloc (pla dels estils).
 //
 // `AppDialog` atrapa el focus, es tanca amb Esc i té títol accessible.
 import React from "react";

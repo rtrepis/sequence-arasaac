@@ -34,16 +34,13 @@ import { mergeDeep } from "@features/sequence/saac/cascade";
  * text hi càpiga (d'un pictograma o de tot el document, B28).
  */
 export type StyleChangeSource =
-  | "myStyleSheet"
-  | "myStyleBlock"
-  | "myStyleUpdate"
-  | "blockStyleRemove"
   | "applyAll"
   | "reset"
   | "resetSequence"
   | "fitTextPictogram"
   | "fitTextDocument"
   | "sequenceStyle"
+  | "blockStyle"
   | "sequenceRetouchesRemoved"
   | FreeLayoutChangeSource;
 
@@ -96,20 +93,26 @@ interface StyleUndo {
 }
 
 /**
- * El que diu el snackbar en triar l'estil d'una seqüència (pla dels estils, D3
- * i D15): quin estil, quants pictogrames conserven els seus retocs (amb «Treu
- * els retocs») i quants blocs tenen un altre estil i no han canviat.
+ * El que diu el snackbar en triar l'estil d'una seqüència o d'un bloc (pla dels
+ * estils, D3 i D15): quin estil, quants pictogrames conserven els seus retocs
+ * (amb «Treu els retocs») i, per a una seqüència, quants blocs tenen un altre
+ * estil i no han canviat.
  */
-export interface SequenceStyleChangeDetails {
+export interface StyleChoiceDetails {
   sequenceKey: number;
   /** El nom de l'estil triat, tal com el veu l'usuari */
   styleName: string;
-  /** S'ha triat «L'estil del document»: la seqüència ja no en té de propi */
-  toDocument: boolean;
+  /**
+   * S'ha triat la primera opció de la galeria: la seqüència torna a l'estil
+   * del document, o el bloc al de la seqüència
+   */
+  toBase: boolean;
   /** Pictogrames de la seqüència amb retocs propis */
   retouched: number;
   /** Blocs de la seqüència amb un estil reassignat */
   unchangedBlocks: number;
+  /** El bloc és comú: el canvi es veu a totes les pàgines (Q3) */
+  common?: boolean;
 }
 
 /** Confirmació del canvi d'estil que s'acaba de fer, amb «Desfés». */
@@ -118,7 +121,7 @@ export interface StyleUndoSnackbar {
   /** Cada canvi n'obre un de nou, encara que el text sigui el mateix */
   id: number;
   /** Només en triar l'estil d'una seqüència */
-  details?: SequenceStyleChangeDetails;
+  details?: StyleChoiceDetails;
 }
 
 export interface StyleUiState {
@@ -170,7 +173,7 @@ const styleSlice = createSlice({
         state,
         action: PayloadAction<{
           source: StyleChangeSource;
-          details?: SequenceStyleChangeDetails;
+          details?: StyleChoiceDetails;
         }>,
       ) => {
         state.undoSnackbar = {
@@ -179,10 +182,9 @@ const styleSlice = createSlice({
           ...(action.payload.details && { details: action.payload.details }),
         };
       },
-      prepare: (
-        source: StyleChangeSource,
-        details?: SequenceStyleChangeDetails,
-      ) => ({ payload: { source, ...(details && { details }) } }),
+      prepare: (source: StyleChangeSource, details?: StyleChoiceDetails) => ({
+        payload: { source, ...(details && { details }) },
+      }),
     },
     styleUndoSnackbarClosed: (state) => {
       state.undoSnackbar = null;
@@ -237,7 +239,7 @@ export const undoableStyleChangeThunk =
   (
     change: () => AnyAction,
     source: StyleChangeSource,
-    details?: SequenceStyleChangeDetails,
+    details?: StyleChoiceDetails,
   ): AppThunk =>
   (dispatch, getState) => {
     const before = takeDocumentStyleSnapshot(getState().document);

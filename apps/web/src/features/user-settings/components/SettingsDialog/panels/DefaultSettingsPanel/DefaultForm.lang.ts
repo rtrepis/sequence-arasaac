@@ -4,9 +4,9 @@ const messages = defineMessages({
   panelHint: {
     id: "components.defaultSettings.panelHint",
     defaultMessage:
-      "L'estil dels pictogrames amb què neixen els documents nous. Per portar-lo a un document obert, fes servir «Aplica el meu estil» al menú «⋯» d'una pàgina o d'un bloc.",
+      "L'estil dels pictogrames amb què neixen els documents nous. Per portar-lo a un document obert, tria'l a la Galeria d'estils: des del menú «⋯» de la seqüència, a l'edició, o del d'un bloc, a la vista.",
     description:
-      "Ajuda del panell «El meu estil»: és una preferència de l'usuari, no l'estil del document obert, i al document s'hi porta des del menú «⋯» de la vista",
+      "Ajuda del panell «El meu estil»: és una preferència de l'usuari, no l'estil del document obert, i al document s'hi porta des de la Galeria d'estils",
   },
   pictGuide: {
     id: "components.defaultSettings.pictGuide",

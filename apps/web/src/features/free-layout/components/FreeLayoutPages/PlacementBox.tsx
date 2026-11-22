@@ -15,9 +15,7 @@ import {
   MdMoreVert,
   MdOutlinePalette,
   MdOutlineRemoveCircleOutline,
-  MdOutlineFormatColorReset,
   MdSettingsBackupRestore,
-  MdSync,
 } from "react-icons/md";
 import { useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
@@ -39,20 +37,16 @@ import {
   sheetWarning,
 } from "@/style/palette";
 import {
-  applyMyStyleThunk,
   copyPlacementToSheetThunk,
-  removeBlockStyleThunk,
   removePlacementThunk,
-  selectNamedStyles,
   selectPages,
   setPlacementCommonThunk,
-  updateMyStyleThunk,
 } from "@features/free-layout/store/freeLayoutThunks";
-import { namedStyleOf } from "@features/free-layout/model/blockStyle";
 import { dispositionOf } from "@features/free-layout/model/pages";
 import { useViewSelection } from "@features/free-layout/hooks/useViewSelection";
 import { useOpenOnTap } from "@features/free-layout/hooks/useOpenOnTap";
 import { resetSequencePictogramsThunk } from "@features/sequence/store/styleSlice";
+import StyleGallery from "@features/sequence/components/StyleGallery/StyleGallery";
 import messages from "./FreeLayoutPages.lang";
 
 /** El botó del menú, a la pantalla, en px: el full s'escala, el botó no. */
@@ -153,15 +147,14 @@ const PlacementBox = ({
   const { showSnackbar } = useFeedback();
   const menuId = useId();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
-  // Si el bloc ja té un estil de bloc, es pot actualitzar amb el meu estil (R7)
-  const styles = useAppSelector(selectNamedStyles);
+  // La Galeria d'estils, per a aquest bloc
+  const [galleryOpen, setGalleryOpen] = useState(false);
   // Tocar el bloc obre els seus ajustos; a la disposició lliure, amb un doble
   // toc, perquè un toc sol és per moure'l (D1 de `docs/plans/fets/PLA-vista-mobil.md`)
   const { requestSettings } = useViewSelection();
   const openOnTap = useOpenOnTap();
   const pages = useAppSelector(selectPages);
   const isFreePage = dispositionOf(pages?.sheets[sheetIndex]) === "free";
-  const hasBlockStyle = namedStyleOf(styles, placement.styleId) !== undefined;
 
   const close = () => setAnchor(null);
   const run = (action: () => void) => {
@@ -401,47 +394,18 @@ const PlacementBox = ({
           </ListItemText>
         </MenuItem>
 
-        {/* El meu estil, només a aquest bloc: el missatge és el snackbar amb
-            «Desfés» (R10) */}
-        <MenuItem
-          onClick={() =>
-            run(() =>
-              dispatch(
-                applyMyStyleThunk(
-                  { kind: "block", placementId: placement.id },
-                  intl.formatMessage(messages.myStyleName),
-                ),
-              ),
-            )
-          }
-        >
-          <ListItemIcon>
-            <MdOutlinePalette />
-          </ListItemIcon>
-          <ListItemText>
-            {intl.formatMessage(messages.applyMyStyle)}
-          </ListItemText>
-        </MenuItem>
-        {/* L'estil de bloc que ja té, amb el meu estil d'ara: canvien tots
-            els blocs que el fan servir (R7) */}
-        {hasBlockStyle && (
+        {/* Tria un estil per a aquest bloc: el reassigna (D12). Només als
+            blocs de seqüència; un rètol no té estil de pictogrames */}
+        {placement.kind === "sequence" && (
           <MenuItem
-            onClick={() =>
-              run(() =>
-                dispatch(
-                  updateMyStyleThunk({
-                    kind: "block",
-                    placementId: placement.id,
-                  }),
-                ),
-              )
-            }
+            aria-haspopup="dialog"
+            onClick={() => run(() => setGalleryOpen(true))}
           >
             <ListItemIcon>
-              <MdSync />
+              <MdOutlinePalette />
             </ListItemIcon>
             <ListItemText>
-              {intl.formatMessage(messages.updateMyStyle)}
+              {intl.formatMessage(messages.chooseStyle)}
             </ListItemText>
           </MenuItem>
         )}
@@ -463,22 +427,6 @@ const PlacementBox = ({
             </ListItemText>
           </MenuItem>
         )}
-        {/* Torna a l'estil del document; es pot desfer */}
-        {hasBlockStyle && (
-          <MenuItem
-            onClick={() =>
-              run(() => dispatch(removeBlockStyleThunk(placement.id)))
-            }
-          >
-            <ListItemIcon>
-              <MdOutlineFormatColorReset />
-            </ListItemIcon>
-            <ListItemText>
-              {intl.formatMessage(messages.removeBlockStyle)}
-            </ListItemText>
-          </MenuItem>
-        )}
-
         {!common && sheetCount > 1 && <Divider />}
         {!common && sheetCount > 1 && (
           <ListSubheader>
@@ -531,6 +479,19 @@ const PlacementBox = ({
           </ListItemText>
         </MenuItem>
       </Menu>
+
+      {galleryOpen && placement.kind === "sequence" && (
+        <StyleGallery
+          open
+          onClose={() => setGalleryOpen(false)}
+          target={{
+            kind: "block",
+            placementId: placement.id,
+            sequenceKey: placement.sequenceKey,
+            name,
+          }}
+        />
+      )}
     </Box>
   );
 };

@@ -1,15 +1,17 @@
-// La Galeria d'estils (pla dels estils, pas 5; fonament 03, §1 i §5): d'on es
-// tria l'estil d'una seqüència.
+// La Galeria d'estils (pla dels estils, passos 5 i 6; fonament 03, §1 i §5):
+// d'on es tria l'estil d'una seqüència (a l'edició) o el d'un bloc (a la
+// vista, on el **reassigna**: només canvia aquell bloc).
 //
-// - **La primera opció és «L'estil del document»**: treu l'estil de la
-//   seqüència, que torna a fer servir el del document.
+// - **La primera opció** treu l'estil propi: «L'estil del document» per a una
+//   seqüència, «L'estil de la seqüència» per a un bloc (el mateix que «Torna a
+//   l'estil de la seqüència»).
 // - **El meu estil**, i el lloc dels **estils de l'app**, buit fins al pas 9.
 // - Cada estil, amb una **mostra**: un pictograma de la seqüència, sense els
 //   seus retocs, pintat amb aquell estil.
 // - A cada estil, «Desa en un fitxer» (D18) i, si no és el meu, «Fes-lo el meu
 //   estil» (D7).
 // - «Carrega d'un fitxer…» aplica l'estil d'un `.saacstyle` (o d'un `.saac`) a
-//   la seqüència i prou: **no es queda** a la galeria (D17).
+//   la seqüència o al bloc i prou: **no es queda** a la galeria (D17).
 //
 // Triar un estil el **copia** al document: si el meu estil canvia després, la
 // seqüència no canvia (direcció única). És una llista, i per això és un
@@ -69,7 +71,11 @@ import {
   selectDocumentStyle,
   selectUserDefaultStyle,
 } from "@features/sequence/style/styleSelectors";
-import { chooseSequenceStyleThunk } from "@features/sequence/store/sequenceStyleThunks";
+import {
+  chooseBlockStyleThunk,
+  chooseSequenceStyleThunk,
+} from "@features/sequence/store/sequenceStyleThunks";
+import { findPlacement } from "@features/free-layout/model/sheets";
 import { useSetDefaultStyle } from "@features/sequence/hooks/useSetDefaultStyle";
 import { readText } from "@features/sequence/hooks/useOpenSaacFile";
 import messages from "./StyleGallery.lang";
@@ -80,13 +86,18 @@ const SAMPLE_PICTOGRAM_ID = 6009;
 /** La mida de la targeta de mostra, respecte de la de la graella */
 const SAMPLE_PICT_SIZE = 0.45;
 
+/**
+ * A qui es tria l'estil: una seqüència (a l'edició) o un bloc de seqüència (a
+ * la vista), que el reassigna. `name` és el nom de la seqüència o del bloc.
+ */
+export type GalleryTarget =
+  | { kind: "sequence"; sequenceKey: number; name: string }
+  | { kind: "block"; placementId: string; sequenceKey: number; name: string };
+
 interface StyleGalleryProps {
   open: boolean;
   onClose: () => void;
-  /** La seqüència a qui es tria l'estil */
-  sequenceKey: number;
-  /** El nom de la seqüència, que és el distintiu del títol */
-  sequenceName: string;
+  target: GalleryTarget;
 }
 
 /** Una opció de la galeria. */
@@ -98,8 +109,11 @@ interface GalleryOption {
   description?: string;
   /** L'estil que es pinta i es copia */
   style: SequenceStyle;
-  /** Triar-lo treu l'estil de la seqüència («L'estil del document») */
-  isDocument: boolean;
+  /**
+   * És la primera opció: triar-la treu l'estil propi («L'estil del document»
+   * per a una seqüència, «L'estil de la seqüència» per a un bloc)
+   */
+  isBase: boolean;
   selected: boolean;
   /** S'hi ofereix «Fes-lo el meu estil» */
   canMakeMine: boolean;
@@ -112,8 +126,7 @@ const fileBaseName = (name: string): string =>
 const StyleGallery = ({
   open,
   onClose,
-  sequenceKey,
-  sequenceName,
+  target,
 }: StyleGalleryProps): React.ReactElement => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -127,10 +140,20 @@ const StyleGallery = ({
   const documentStyle = useAppSelector(selectDocumentStyle);
   const myStyle = useAppSelector(selectUserDefaultStyle);
   const documentStyleName = useAppSelector((state) => state.document.styleName);
+  const { sequenceKey } = target;
   const styles = useAppSelector((state) => state.document.styles);
-  const currentId = useAppSelector(
+  const sequenceStyleId = useAppSelector(
     (state) => state.document.sequenceStyleIds?.[sequenceKey],
   );
+  // El reassignat del bloc, si en té
+  const blockStyleId = useAppSelector((state) => {
+    if (target.kind !== "block" || !state.document.pages) return undefined;
+    const found = findPlacement(state.document.pages, target.placementId);
+    return found?.placement.kind === "sequence"
+      ? found.placement.styleId
+      : undefined;
+  });
+  const currentId = target.kind === "block" ? blockStyleId : sequenceStyleId;
   const pictograms = useAppSelector(
     (state) => state.document.content[sequenceKey],
   );
@@ -143,6 +166,17 @@ const StyleGallery = ({
   const [saving, setSaving] = useState<GalleryOption | null>(null);
 
   const current = namedStyleOf(styles, currentId);
+  // L'estil de la seqüència, la base d'un bloc: el seu, o el del document
+  const sequenceNamed = namedStyleOf(styles, sequenceStyleId);
+  const baseStyle =
+    target.kind === "block" && sequenceNamed
+      ? styleWithNamed(documentStyle, sequenceNamed)
+      : documentStyle;
+  // El nom de la base, que és el que diu el snackbar en tornar-hi
+  const baseStyleName =
+    target.kind === "block"
+      ? (sequenceNamed?.name ?? documentStyleName)
+      : documentStyleName;
   const myStyleName = intl.formatMessage(messages.myStyle);
   const isMyStyleCurrent =
     current !== undefined &&
@@ -161,7 +195,7 @@ const StyleGallery = ({
             key: "current",
             name: current.name,
             style: styleWithNamed(documentStyle, current),
-            isDocument: false,
+            isBase: false,
             selected: true,
             canMakeMine: true,
           },
@@ -180,12 +214,16 @@ const StyleGallery = ({
     {
       items: [
         {
-          key: "document",
-          name: intl.formatMessage(messages.documentStyle),
-          // El nom de l'estil del document, si en té («El meu estil»…)
-          ...(documentStyleName && { description: documentStyleName }),
-          style: documentStyle,
-          isDocument: true,
+          key: "base",
+          name: intl.formatMessage(
+            target.kind === "block"
+              ? messages.sequenceStyle
+              : messages.documentStyle,
+          ),
+          // El nom de l'estil de la base, si en té («El meu estil»…)
+          ...(baseStyleName && { description: baseStyleName }),
+          style: baseStyle,
+          isBase: true,
           selected: current === undefined,
           canMakeMine: true,
         },
@@ -198,7 +236,7 @@ const StyleGallery = ({
           key: "mine",
           name: myStyleName,
           style: myStyle,
-          isDocument: false,
+          isBase: false,
           selected: isMyStyleCurrent,
           canMakeMine: false,
         },
@@ -228,17 +266,20 @@ const StyleGallery = ({
       };
 
   const choose = (name: string, style?: SequenceStyle) => {
+    const choice = { name, ...(style && { style }) };
     dispatch(
-      chooseSequenceStyleThunk(sequenceKey, { name, ...(style && { style }) }),
+      target.kind === "block"
+        ? chooseBlockStyleThunk(target.placementId, choice)
+        : chooseSequenceStyleThunk(sequenceKey, choice),
     );
     onClose();
   };
 
   const handleChoose = (option: GalleryOption) => {
-    // El d'ara ja és el de la seqüència: tornar-lo a copiar només en faria
-    // una còpia sencera amb un altre nom
+    // El d'ara ja és el que té: tornar-lo a copiar només en faria una còpia
+    // sencera amb un altre nom
     if (option.key === "current") onClose();
-    else if (option.isDocument) choose(documentStyleName ?? option.name);
+    else if (option.isBase) choose(baseStyleName ?? option.name);
     else choose(option.name, option.style);
   };
 
@@ -323,9 +364,16 @@ const StyleGallery = ({
           </Box>
           <ListItemText
             primary={option.name}
+            // Marcada, diu que és la d'ara (seqüència o bloc), i el nom de la
+            // base si en té
             secondary={
               option.selected
-                ? intl.formatMessage(messages.inUse)
+                ? [
+                    option.description,
+                    intl.formatMessage(messages.inUse, { kind: target.kind }),
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")
                 : option.description
             }
           />
@@ -371,7 +419,10 @@ const StyleGallery = ({
         {/* Per a quina seqüència: el distintiu del títol és per a un número,
             i el nom d'una seqüència pot ser llarg */}
         <Typography id={`${titleId}-for`} variant="body2" sx={{ mb: 1 }}>
-          {intl.formatMessage(messages.forSequence, { name: sequenceName })}
+          {intl.formatMessage(messages.forTarget, {
+            name: target.name,
+            kind: target.kind,
+          })}
         </Typography>
         {options.map(({ group, items }, index) => (
           <List
@@ -459,7 +510,7 @@ const StyleGallery = ({
           open
           style={saving.style}
           styleTitle={
-            saving.isDocument ? (documentStyleName ?? saving.name) : saving.name
+            saving.isBase ? (baseStyleName ?? saving.name) : saving.name
           }
           onClose={() => setSaving(null)}
         />

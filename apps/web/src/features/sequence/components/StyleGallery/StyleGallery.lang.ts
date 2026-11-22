@@ -8,11 +8,12 @@ const messages = defineMessages({
     description:
       "Títol del diàleg d'on es tria l'estil d'una seqüència. Mai «tema» ni «plantilla»",
   },
-  forSequence: {
-    id: "features.sequence.styleGallery.forSequence",
-    defaultMessage: "Tria l'estil de «{name}».",
+  forTarget: {
+    id: "features.sequence.styleGallery.forTarget",
+    defaultMessage:
+      "{kind, select, block {Tria l'estil d'aquest bloc de «{name}». Només canvia aquest bloc.} other {Tria l'estil de «{name}».}}",
     description:
-      "Primera línia de la Galeria d'estils: per a quina seqüència es tria l'estil",
+      "Primera línia de la Galeria d'estils: per a quina seqüència, o per a quin bloc d'una seqüència, es tria l'estil",
   },
   currentGroup: {
     id: "features.sequence.styleGallery.currentGroup",
@@ -25,6 +26,12 @@ const messages = defineMessages({
     defaultMessage: "L'estil del document",
     description:
       "Primera opció de la Galeria d'estils: la seqüència torna a fer servir l'estil del document",
+  },
+  sequenceStyle: {
+    id: "features.sequence.styleGallery.sequenceStyle",
+    defaultMessage: "L'estil de la seqüència",
+    description:
+      "Primera opció de la Galeria d'estils per a un bloc: el bloc torna a fer servir l'estil de la seva seqüència",
   },
   myStyle: {
     id: "features.sequence.styleGallery.myStyle",
@@ -52,7 +59,8 @@ const messages = defineMessages({
   },
   inUse: {
     id: "features.sequence.styleGallery.inUse",
-    defaultMessage: "El fa servir aquesta seqüència",
+    defaultMessage:
+      "{kind, select, block {El fa servir aquest bloc} other {El fa servir aquesta seqüència}}",
     description:
       "Segona línia de l'estil que fa servir la seqüència, a la Galeria d'estils",
   },
