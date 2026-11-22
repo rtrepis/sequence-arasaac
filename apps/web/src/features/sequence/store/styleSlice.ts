@@ -43,6 +43,8 @@ export type StyleChangeSource =
   | "resetSequence"
   | "fitTextPictogram"
   | "fitTextDocument"
+  | "sequenceStyle"
+  | "sequenceRetouchesRemoved"
   | FreeLayoutChangeSource;
 
 /**
@@ -93,11 +95,30 @@ interface StyleUndo {
   after: DocumentStyleSnapshot;
 }
 
+/**
+ * El que diu el snackbar en triar l'estil d'una seqüència (pla dels estils, D3
+ * i D15): quin estil, quants pictogrames conserven els seus retocs (amb «Treu
+ * els retocs») i quants blocs tenen un altre estil i no han canviat.
+ */
+export interface SequenceStyleChangeDetails {
+  sequenceKey: number;
+  /** El nom de l'estil triat, tal com el veu l'usuari */
+  styleName: string;
+  /** S'ha triat «L'estil del document»: la seqüència ja no en té de propi */
+  toDocument: boolean;
+  /** Pictogrames de la seqüència amb retocs propis */
+  retouched: number;
+  /** Blocs de la seqüència amb un estil reassignat */
+  unchangedBlocks: number;
+}
+
 /** Confirmació del canvi d'estil que s'acaba de fer, amb «Desfés». */
 export interface StyleUndoSnackbar {
   source: StyleChangeSource;
   /** Cada canvi n'obre un de nou, encara que el text sigui el mateix */
   id: number;
+  /** Només en triar l'estil d'una seqüència */
+  details?: SequenceStyleChangeDetails;
 }
 
 export interface StyleUiState {
@@ -144,14 +165,24 @@ const styleSlice = createSlice({
     styleUndoRecorded: (state, action: PayloadAction<StyleUndo | null>) => {
       state.undo = action.payload;
     },
-    styleUndoSnackbarShown: (
-      state,
-      action: PayloadAction<StyleChangeSource>,
-    ) => {
-      state.undoSnackbar = {
-        source: action.payload,
-        id: (state.undoSnackbar?.id ?? 0) + 1,
-      };
+    styleUndoSnackbarShown: {
+      reducer: (
+        state,
+        action: PayloadAction<{
+          source: StyleChangeSource;
+          details?: SequenceStyleChangeDetails;
+        }>,
+      ) => {
+        state.undoSnackbar = {
+          source: action.payload.source,
+          id: (state.undoSnackbar?.id ?? 0) + 1,
+          ...(action.payload.details && { details: action.payload.details }),
+        };
+      },
+      prepare: (
+        source: StyleChangeSource,
+        details?: SequenceStyleChangeDetails,
+      ) => ({ payload: { source, ...(details && { details }) } }),
     },
     styleUndoSnackbarClosed: (state) => {
       state.undoSnackbar = null;
@@ -192,6 +223,8 @@ const sameSnapshot = (
   a.fitzgeraldColors === b.fitzgeraldColors &&
   a.pages === b.pages &&
   a.styles === b.styles &&
+  a.sequenceStyleIds === b.sequenceStyleIds &&
+  a.sequenceNames === b.sequenceNames &&
   // La pàgina del document només compta si la instantània la porta
   (!("layout" in a) || a.layout === b.layout);
 
@@ -201,7 +234,11 @@ const sameSnapshot = (
  * servir també «Aplica a tots» i «Restableix» (ADR-003, decisió 12).
  */
 export const undoableStyleChangeThunk =
-  (change: () => AnyAction, source: StyleChangeSource): AppThunk =>
+  (
+    change: () => AnyAction,
+    source: StyleChangeSource,
+    details?: SequenceStyleChangeDetails,
+  ): AppThunk =>
   (dispatch, getState) => {
     const before = takeDocumentStyleSnapshot(getState().document);
 
@@ -209,7 +246,7 @@ export const undoableStyleChangeThunk =
 
     const after = takeDocumentStyleSnapshot(getState().document);
     dispatch(styleUndoRecordedActionCreator({ before, after }));
-    dispatch(styleUndoSnackbarShownActionCreator(source));
+    dispatch(styleUndoSnackbarShownActionCreator(source, details));
   };
 
 /**

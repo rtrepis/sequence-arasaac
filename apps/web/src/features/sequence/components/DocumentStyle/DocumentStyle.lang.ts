@@ -183,6 +183,45 @@ const messages = defineMessages({
     description:
       "Snackbar amb «Desfés» després de «Restableix els pictogrames d'aquesta seqüència» del menú «⋯» d'un bloc: se'n treuen els retocs, i canvien tots els blocs on surt la seqüència",
   },
+  changedSequenceStyle: {
+    id: "features.sequence.style.changed.sequenceStyle",
+    defaultMessage: "La seqüència fa servir «{name}».",
+    description:
+      "Snackbar amb «Desfés» després de triar un estil per a una seqüència a la Galeria d'estils",
+  },
+  changedSequenceStyleDocument: {
+    id: "features.sequence.style.changed.sequenceStyleDocument",
+    defaultMessage: "La seqüència torna a l'estil del document («{name}»).",
+    description:
+      "Snackbar amb «Desfés» després de triar «L'estil del document» a la Galeria d'estils; {name} és el nom de l'estil del document",
+  },
+  changedSequenceStyleRetouched: {
+    id: "features.sequence.style.changed.sequenceStyleRetouched",
+    defaultMessage:
+      "{count, plural, one {# pictograma conserva els seus retocs.} other {# pictogrames conserven els seus retocs.}}",
+    description:
+      "Segona frase del snackbar de triar l'estil d'una seqüència: els pictogrames amb retocs propis no canvien en el que han retocat",
+  },
+  changedSequenceStyleUnchangedBlocks: {
+    id: "features.sequence.style.changed.sequenceStyleUnchangedBlocks",
+    defaultMessage:
+      "{count, plural, one {# bloc té un altre estil i no ha canviat.} other {# blocs tenen un altre estil i no han canviat.}}",
+    description:
+      "Frase del snackbar de triar l'estil d'una seqüència: els blocs amb un estil reassignat es queden el seu",
+  },
+  removeRetouches: {
+    id: "features.sequence.style.removeRetouches",
+    defaultMessage: "Treu els retocs",
+    description:
+      "Botó del snackbar de triar l'estil d'una seqüència: treu els retocs de tots els seus pictogrames",
+  },
+  changedSequenceRetouchesRemoved: {
+    id: "features.sequence.style.changed.sequenceRetouchesRemoved",
+    defaultMessage:
+      "S'han tret els retocs dels pictogrames de la seqüència, a tots els blocs on surt.",
+    description:
+      "Snackbar amb «Desfés» després de «Treu els retocs»: el «Desfés» torna també l'estil d'abans",
+  },
 });
 
 export default messages;

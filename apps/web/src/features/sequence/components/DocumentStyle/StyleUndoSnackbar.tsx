@@ -12,7 +12,7 @@
 // arriba tot seguit, encara que es pinti a baix.
 import React, { RefObject, SyntheticEvent } from "react";
 import { Theme } from "@mui/material/styles";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, Snackbar, Stack } from "@mui/material";
 import { MessageDescriptor, useIntl } from "react-intl";
 import StyledButton from "@/style/StyledButton";
 import { APP_TOUCH_TARGET_MIN, FLOATING_EDGE_GAP } from "@/style/appShape";
@@ -25,9 +25,11 @@ import { useFeedback } from "@/context/FeedbackContext";
 import {
   selectCanUndoStyle,
   StyleChangeSource,
+  StyleUndoSnackbar as StyleUndoSnackbarState,
   styleUndoSnackbarClosedActionCreator,
   undoStyleChangeThunk,
 } from "@features/sequence/store/styleSlice";
+import { removeSequenceRetouchesThunk } from "@features/sequence/store/sequenceStyleThunks";
 import messages from "./DocumentStyle.lang";
 
 /** Prou temps per llegir-lo i arribar a «Desfés» amb el teclat */
@@ -79,12 +81,49 @@ const CHANGED_MESSAGE: Record<StyleChangeSource, MessageDescriptor> = {
   resetSequence: messages.changedResetSequence,
   fitTextPictogram: messages.changedFitTextPictogram,
   fitTextDocument: messages.changedFitTextDocument,
+  sequenceStyle: messages.changedSequenceStyle,
+  sequenceRetouchesRemoved: messages.changedSequenceRetouchesRemoved,
   layoutTemplate: messages.changedLayoutTemplate,
   layoutAddSequences: messages.changedLayoutAddSequences,
   layoutRemoveSheet: messages.changedLayoutRemoveSheet,
   layoutRemovePlacement: messages.changedLayoutRemovePlacement,
   layoutUncommon: messages.changedLayoutUncommon,
   adaptScreen: messages.changedAdaptScreen,
+};
+
+/**
+ * El text del snackbar. Triar l'estil d'una seqüència diu quin estil, quants
+ * pictogrames conserven els seus retocs i quants blocs no han canviat (D3 i
+ * D15): són frases senceres, cadascuna amb el seu plural.
+ */
+const changedText = (
+  intl: ReturnType<typeof useIntl>,
+  snackbar: StyleUndoSnackbarState,
+): string => {
+  const { details } = snackbar;
+  if (snackbar.source !== "sequenceStyle" || !details)
+    return intl.formatMessage(CHANGED_MESSAGE[snackbar.source]);
+  const parts = [
+    intl.formatMessage(
+      details.toDocument
+        ? messages.changedSequenceStyleDocument
+        : messages.changedSequenceStyle,
+      { name: details.styleName },
+    ),
+  ];
+  if (details.retouched > 0)
+    parts.push(
+      intl.formatMessage(messages.changedSequenceStyleRetouched, {
+        count: details.retouched,
+      }),
+    );
+  if (details.unchangedBlocks > 0)
+    parts.push(
+      intl.formatMessage(messages.changedSequenceStyleUnchangedBlocks, {
+        count: details.unchangedBlocks,
+      }),
+    );
+  return parts.join(" ");
 };
 
 const StyleUndoSnackbar = ({
@@ -114,6 +153,19 @@ const StyleUndoSnackbar = ({
     dispatch(styleUndoSnackbarClosedActionCreator());
   };
 
+  // «Treu els retocs» (D3): només si n'hi ha, en triar l'estil d'una seqüència
+  const retouchedSequence =
+    snackbar.source === "sequenceStyle" &&
+    snackbar.details &&
+    snackbar.details.retouched > 0
+      ? snackbar.details.sequenceKey
+      : undefined;
+
+  const handleRemoveRetouches = () => {
+    if (retouchedSequence === undefined) return;
+    dispatch(removeSequenceRetouchesThunk(retouchedSequence));
+  };
+
   const handleUndo = () => {
     dispatch(undoStyleChangeThunk());
     returnFocusRef?.current?.focus();
@@ -122,6 +174,16 @@ const StyleUndoSnackbar = ({
       severity: "success",
     });
   };
+
+  const undoButton = (
+    <StyledButton
+      color="inherit"
+      onClick={handleUndo}
+      sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+    >
+      {intl.formatMessage(messages.undo)}
+    </StyledButton>
+  );
 
   return (
     <Snackbar
@@ -148,17 +210,30 @@ const StyleUndoSnackbar = ({
             },
           },
         }}
-        action={
-          <StyledButton
-            color="inherit"
-            onClick={handleUndo}
-            sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
-          >
-            {intl.formatMessage(messages.undo)}
-          </StyledButton>
-        }
+        // Amb una sola acció, al costat del text; amb «Treu els retocs» també,
+        // a sota: dues al costat deixaven el text en una columna d'una paraula
+        // al mòbil. Sense acció al costat, l'avís porta la creu de tancar
+        action={retouchedSequence === undefined ? undoButton : undefined}
       >
-        {intl.formatMessage(CHANGED_MESSAGE[snackbar.source])}
+        {changedText(intl, snackbar)}
+        {retouchedSequence !== undefined && (
+          <Stack
+            direction="row"
+            justifyContent="flex-end"
+            flexWrap="wrap"
+            gap={1}
+            sx={{ mt: 1 }}
+          >
+            <StyledButton
+              color="inherit"
+              onClick={handleRemoveRetouches}
+              sx={{ minHeight: APP_TOUCH_TARGET_MIN }}
+            >
+              {intl.formatMessage(messages.removeRetouches)}
+            </StyledButton>
+            {undoButton}
+          </Stack>
+        )}
       </Alert>
     </Snackbar>
   );

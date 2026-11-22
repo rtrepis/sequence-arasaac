@@ -9,13 +9,12 @@ import type {
   PagePlacement,
   SequenceAlignmentH,
   SequenceAlignmentV,
-  SequenceStyle,
   SequenceViewSettings,
   TextPlacement,
 } from "@/types/document";
 import type { Font } from "@/types/sequence";
-import { deepEqual } from "@features/sequence/style/styleModel";
 import {
+  addNamedStyle,
   cardNamedStyleOf,
   namedStyleOf,
   type SequenceStyleSource,
@@ -25,8 +24,11 @@ import {
 // bloc) viu amb l'estil, a `features/sequence/style/namedStyle.ts`
 export {
   cardNamedStyleOf,
+  namedStyleFrom,
   namedStyleOf,
   styleWithNamed,
+  uniqueStyleName,
+  type MyStyleCopy,
 } from "@features/sequence/style/namedStyle";
 
 /**
@@ -110,55 +112,6 @@ export const cardMeasureKey = (
 
 // --- «Aplica el meu estil» (R10) ---
 
-/** L'`id` i el nom de l'estil amb nom que es copia al document. */
-export interface MyStyleCopy {
-  id: string;
-  name: string;
-}
-
-/**
- * Un estil sencer com a estil de bloc: l'**estil** dels pictogrames (la
- * targeta, el color, la pell i el cabell). La **distribució** (mida, espai i
- * alineació) no hi va: és del bloc o de la pàgina, i aplicar un estil no la
- * toca. Els estils de bloc d'abans que en porten es continuen pintant.
- */
-export const namedStyleFrom = (
-  style: SequenceStyle,
-  { id, name }: MyStyleCopy,
-): NamedStyle => ({
-  id,
-  name,
-  pictApiAra: { ...style.pictApiAra },
-  pictSequence: JSON.parse(
-    JSON.stringify(style.pictSequence),
-  ) as NamedStyle["pictSequence"],
-  ...(style.fitzgeraldColors && {
-    fitzgeraldColors: { ...style.fitzgeraldColors },
-  }),
-});
-
-/**
- * Un nom que cap altre estil de bloc del document no fa servir: el nom, o el
- * nom amb un número («El meu estil 2»).
- */
-export const uniqueStyleName = (
-  styles: readonly NamedStyle[] | undefined,
-  name: string,
-): string => {
-  const taken = new Set((styles ?? []).map((style) => style.name));
-  if (!taken.has(name)) return name;
-  let n = 2;
-  while (taken.has(`${name} ${n}`)) n += 1;
-  return `${name} ${n}`;
-};
-
-/** Dos estils amb nom diuen el mateix (el nom i l'`id` no compten). */
-const sameNamedContent = (a: NamedStyle, b: NamedStyle): boolean =>
-  deepEqual(
-    { ...a, id: "", name: "", extra: undefined },
-    { ...b, id: "", name: "", extra: undefined },
-  );
-
 /** On s'aplica: tots els blocs propis d'una pàgina, o un sol bloc. */
 export type MyStyleTarget =
   | { kind: "sheet"; sheetIndex: number }
@@ -177,14 +130,7 @@ export const applyNamedStyle = (
   entry: NamedStyle,
   target: MyStyleTarget,
 ): { pages: DocumentPages; styles: NamedStyle[] } => {
-  const existing = styles?.find((style) => sameNamedContent(style, entry));
-  const styleId = existing?.id ?? entry.id;
-  const nextStyles = existing
-    ? [...(styles ?? [])]
-    : [
-        ...(styles ?? []),
-        { ...entry, name: uniqueStyleName(styles, entry.name) },
-      ];
+  const { styles: nextStyles, styleId } = addNamedStyle(styles, entry);
   return {
     styles: nextStyles,
     pages: mapTargetPlacements(pages, target, (placement) => ({

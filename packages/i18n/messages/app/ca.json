@@ -1874,10 +1874,6 @@
     "message": "Afegeix una seqüència",
     "description": "Tooltip del botó que afegeix una seqüència nova"
   },
-  "components.tabsSequences.deleteLastSequence": {
-    "message": "Elimina l'última seqüència",
-    "description": "Tooltip del botó que elimina l'última seqüència"
-  },
   "components.tabsSequences.sequenceNumber": {
     "message": "Número de seqüència",
     "description": "Nom accessible de la llista de tabs de seqüències"
@@ -1889,18 +1885,6 @@
   "components.confirmDialog.cancel": {
     "message": "Cancel·la",
     "description": "Botó que tanca una confirmació sense fer l'acció"
-  },
-  "components.tabsSequences.confirmDeleteTitle": {
-    "message": "Esborres la seqüència {number}?",
-    "description": "Títol de la confirmació d'esborrar l'última seqüència"
-  },
-  "components.tabsSequences.confirmDeleteBody": {
-    "message": "Té {count, plural, one {# pictograma} other {# pictogrames}}. Esborrar la seqüència se'ls endú tots i no es pot desfer.",
-    "description": "Cos de la confirmació: què es perd en esborrar la seqüència"
-  },
-  "components.tabsSequences.confirmDelete": {
-    "message": "Esborra la seqüència",
-    "description": "Botó que confirma l'esborrat de l'última seqüència"
   },
   "components.buttonWithModalDownload.dialogTitle": {
     "message": "Desa i descarrega",
@@ -3740,5 +3724,149 @@
   "features.freeLayout.screenShape.adapt": {
     "message": "Adapta'l a aquesta pantalla",
     "description": "Botó del bàner de la pantalla d'una altra forma: el full passa a tenir la forma d'aquesta pantalla i els blocs s'hi recol·loquen (es pot desfer)"
+  },
+  "features.sequence.header.changeStyle": {
+    "message": "Estil: {name} — Canvia…",
+    "description": "Primera acció del menú «⋯» de la seqüència: diu l'estil i obre la Galeria d'estils"
+  },
+  "features.sequence.header.confirmRemove": {
+    "message": "Treu la seqüència",
+    "description": "Botó que confirma treure una seqüència"
+  },
+  "features.sequence.header.confirmRemoveBody": {
+    "message": "Té {count, plural, one {# pictograma} other {# pictogrames}}. Si treus la seqüència, se'ls endú tots i no es pot desfer.",
+    "description": "Cos de la confirmació: què es perd en treure la seqüència"
+  },
+  "features.sequence.header.confirmRemoveTitle": {
+    "message": "Vols treure «{name}»?",
+    "description": "Títol de la confirmació de treure una seqüència"
+  },
+  "features.sequence.header.customized": {
+    "message": "Personalitzat",
+    "description": "En lloc del nom de l'estil, quan algun pictograma de la seqüència té retocs propis"
+  },
+  "features.sequence.header.customizedHelp": {
+    "message": "L'estil de base és «{name}». {count, plural, one {# pictograma té retocs propis.} other {# pictogrames tenen retocs propis.}}",
+    "description": "Ajuda (tooltip i nom accessible) al costat de «Personalitzat»: quin és l'estil de base i quants pictogrames tenen retocs"
+  },
+  "features.sequence.header.nameField": {
+    "message": "Nom de la seqüència",
+    "description": "Etiqueta del camp del diàleg «Canvia el nom»"
+  },
+  "features.sequence.header.remove": {
+    "message": "Treu aquesta seqüència",
+    "description": "Acció del menú «⋯» de la seqüència: treu la seqüència oberta del document"
+  },
+  "features.sequence.header.removed": {
+    "message": "S'ha tret «{name}».",
+    "description": "Confirmació després de treure una seqüència del document"
+  },
+  "features.sequence.header.rename": {
+    "message": "Canvia el nom",
+    "description": "Acció que canvia el nom de la seqüència (menú «⋯» i llapis al costat del nom), i títol del diàleg"
+  },
+  "features.sequence.header.renameHelp": {
+    "message": "El nom és per a tu: no s'imprimeix. Si el deixes buit, es dirà «Seqüència {number}».",
+    "description": "Ajuda del diàleg «Canvia el nom» d'una seqüència"
+  },
+  "features.sequence.header.renameSave": {
+    "message": "Desa el nom",
+    "description": "Botó principal del diàleg «Canvia el nom»"
+  },
+  "features.sequence.header.renamed": {
+    "message": "S'ha canviat el nom de la seqüència.",
+    "description": "Confirmació després de canviar el nom d'una seqüència"
+  },
+  "features.sequence.header.resetPictograms": {
+    "message": "Restableix els pictogrames",
+    "description": "Acció del menú «⋯» de la seqüència: treu els retocs de tots els seus pictogrames (es pot desfer)"
+  },
+  "features.sequence.header.sequenceActions": {
+    "message": "Accions de «{name}»",
+    "description": "Nom accessible i tooltip del botó «⋯» de la seqüència oberta, a l'edició"
+  },
+  "features.sequence.header.styleLabel": {
+    "message": "Estil: {name}",
+    "description": "L'estil de la seqüència oberta, a l'edició: el nom de l'estil, o «Personalitzat» si algun pictograma té retocs"
+  },
+  "features.sequence.style.changed.sequenceRetouchesRemoved": {
+    "message": "S'han tret els retocs dels pictogrames de la seqüència, a tots els blocs on surt.",
+    "description": "Snackbar amb «Desfés» després de «Treu els retocs»: el «Desfés» torna també l'estil d'abans"
+  },
+  "features.sequence.style.changed.sequenceStyle": {
+    "message": "La seqüència fa servir «{name}».",
+    "description": "Snackbar amb «Desfés» després de triar un estil per a una seqüència a la Galeria d'estils"
+  },
+  "features.sequence.style.changed.sequenceStyleDocument": {
+    "message": "La seqüència torna a l'estil del document («{name}»).",
+    "description": "Snackbar amb «Desfés» després de triar «L'estil del document» a la Galeria d'estils; {name} és el nom de l'estil del document"
+  },
+  "features.sequence.style.changed.sequenceStyleRetouched": {
+    "message": "{count, plural, one {# pictograma conserva els seus retocs.} other {# pictogrames conserven els seus retocs.}}",
+    "description": "Segona frase del snackbar de triar l'estil d'una seqüència: els pictogrames amb retocs propis no canvien en el que han retocat"
+  },
+  "features.sequence.style.changed.sequenceStyleUnchangedBlocks": {
+    "message": "{count, plural, one {# bloc té un altre estil i no ha canviat.} other {# blocs tenen un altre estil i no han canviat.}}",
+    "description": "Frase del snackbar de triar l'estil d'una seqüència: els blocs amb un estil reassignat es queden el seu"
+  },
+  "features.sequence.style.removeRetouches": {
+    "message": "Treu els retocs",
+    "description": "Botó del snackbar de triar l'estil d'una seqüència: treu els retocs de tots els seus pictogrames"
+  },
+  "features.sequence.styleGallery.appStylesEmpty": {
+    "message": "Aviat n'hi haurà.",
+    "description": "Text del grup «Estils de l'app» de la Galeria d'estils mentre encara no n'hi ha cap"
+  },
+  "features.sequence.styleGallery.appStylesGroup": {
+    "message": "Estils de l'app",
+    "description": "Encapçalament del grup de la Galeria d'estils amb els estils que porta l'app"
+  },
+  "features.sequence.styleGallery.documentStyle": {
+    "message": "L'estil del document",
+    "description": "Primera opció de la Galeria d'estils: la seqüència torna a fer servir l'estil del document"
+  },
+  "features.sequence.styleGallery.inUse": {
+    "message": "El fa servir aquesta seqüència",
+    "description": "Segona línia de l'estil que fa servir la seqüència, a la Galeria d'estils"
+  },
+  "features.sequence.styleGallery.loadFromFile": {
+    "message": "Carrega d'un fitxer…",
+    "description": "Botó de la Galeria d'estils: aplica a la seqüència l'estil d'un fitxer. L'estil no es queda a la galeria"
+  },
+  "features.sequence.styleGallery.makeMyStyle": {
+    "message": "Fes-lo el meu estil",
+    "description": "Acció d'un estil de la Galeria d'estils: passa a ser l'estil de l'usuari. No toca el document obert"
+  },
+  "features.sequence.styleGallery.myStyle": {
+    "message": "El meu estil",
+    "description": "Nom de l'estil de l'usuari a la Galeria d'estils; també s'escriu al document com a nom de l'estil copiat"
+  },
+  "features.sequence.styleGallery.myStyleGroup": {
+    "message": "El meu estil",
+    "description": "Encapçalament del grup de la Galeria d'estils amb l'estil de l'usuari"
+  },
+  "features.sequence.styleGallery.sampleWord": {
+    "message": "exemple",
+    "description": "Paraula del pictograma de mostra de la Galeria d'estils, quan la seqüència encara no en té cap"
+  },
+  "features.sequence.styleGallery.saveToFile": {
+    "message": "Desa en un fitxer",
+    "description": "Acció d'un estil de la Galeria d'estils: el desa en un fitxer d'estil (.saacstyle)"
+  },
+  "features.sequence.styleGallery.styleActions": {
+    "message": "Més accions de «{name}»",
+    "description": "Nom accessible i tooltip del botó «⋯» de cada estil de la Galeria d'estils"
+  },
+  "features.sequence.styleGallery.title": {
+    "message": "Galeria d'estils",
+    "description": "Títol del diàleg d'on es tria l'estil d'una seqüència. Mai «tema» ni «plantilla»"
+  },
+  "features.sequence.styleGallery.forSequence": {
+    "message": "Tria l'estil de «{name}».",
+    "description": "Primera línia de la Galeria d'estils: per a quina seqüència es tria l'estil"
+  },
+  "features.sequence.styleGallery.currentGroup": {
+    "message": "El d'ara",
+    "description": "Encapçalament de la Galeria d'estils sobre l'estil que fa servir la seqüència, quan no és cap dels altres de la galeria (p. ex. un de carregat d'un fitxer)"
   }
 }

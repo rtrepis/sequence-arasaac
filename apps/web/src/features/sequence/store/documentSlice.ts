@@ -60,6 +60,7 @@ import { documentStatusClearedActionCreator } from "@features/sequence/store/doc
 import { reportClientError } from "@features/backend/api/clientErrorReport";
 import { removeSequencePlacements } from "@features/free-layout/model/sheets";
 import { addNewSequenceToPages } from "@features/free-layout/model/pages";
+import { removeSequenceFromDocument } from "@features/sequence/utils/removeSequence";
 
 const getUniqueId = () => {
   const randomString = Math.random().toString(36).substring(2, 9);
@@ -459,6 +460,8 @@ const documentSlice = createSlice({
         fitzgeraldColors,
         pages,
         styles,
+        sequenceStyleIds,
+        sequenceNames,
       } = action.payload;
       previousDocument.content = content;
       previousDocument.viewSettings = viewSettings;
@@ -473,6 +476,8 @@ const documentSlice = createSlice({
         previousDocument.layout = action.payload.layout;
       previousDocument.pages = pages;
       previousDocument.styles = styles;
+      previousDocument.sequenceStyleIds = sequenceStyleIds;
+      previousDocument.sequenceNames = sequenceNames;
     },
 
     // Fa explícit l'estil que el document heretava, en desar-lo: el que s'ha
@@ -606,6 +611,45 @@ const documentSlice = createSlice({
       previousDocument.styles = action.payload.styles;
     },
 
+    // L'estil d'una seqüència, triat a la Galeria d'estils (pla dels estils,
+    // pas 5): l'estil ja és a `styles` (copiat o reaprofitat). Sense `styleId`,
+    // la seqüència torna a l'estil del document. Els blocs amb un estil
+    // reassignat no canvien: el reassignat substitueix el de la seqüència
+    sequenceStyleChanged: (
+      previousDocument,
+      action: PayloadAction<{
+        key: number;
+        styleId?: string;
+        styles: NamedStyle[];
+      }>,
+    ) => {
+      const { key, styleId, styles } = action.payload;
+      const ids = { ...previousDocument.sequenceStyleIds };
+      if (styleId === undefined) delete ids[key];
+      else ids[key] = styleId;
+      previousDocument.sequenceStyleIds = ids;
+      previousDocument.styles = styles;
+    },
+
+    // El nom d'una seqüència: és per a qui edita i no s'imprimeix (D16). Buit,
+    // la seqüència torna a dir-se «Seqüència N»
+    sequenceRenamed: (
+      previousDocument,
+      action: PayloadAction<{ key: number; name: string }>,
+    ) => {
+      const { key } = action.payload;
+      const name = action.payload.name.trim();
+      const names = { ...previousDocument.sequenceNames };
+      if (name === "") delete names[key];
+      else names[key] = name;
+      previousDocument.sequenceNames = names;
+    },
+
+    // Treu una seqüència qualsevol, no només l'última (D21): les de després
+    // baixen una clau, i amb elles tot el que hi apunta
+    removeSequence: (previousDocument, action: PayloadAction<number>) =>
+      removeSequenceFromDocument(previousDocument, action.payload),
+
     // Actualitza l'id del document (s'usa després de desar per primera vegada al backend)
     // Treu una imatge del núvol del document obert.
     //
@@ -710,8 +754,15 @@ export interface DocumentStyleSnapshot {
   styleView: DocumentSAAC["styleView"];
   fitzgeraldColors: DocumentSAAC["fitzgeraldColors"];
   pages: DocumentSAAC["pages"];
-  /** Els estils amb nom: «Aplica el meu estil» n'hi copia un (R10) */
+  /** Els estils amb nom: triar un estil n'hi copia un */
   styles: DocumentSAAC["styles"];
+  /** L'estil de cada seqüència: triar-ne un a la galeria el canvia */
+  sequenceStyleIds: DocumentSAAC["sequenceStyleIds"];
+  /**
+   * El nom de cada seqüència: canviar-lo després d'un canvi d'estil fa que ja
+   * no es pugui desfer, perquè desfer el tornaria enrere
+   */
+  sequenceNames: DocumentSAAC["sequenceNames"];
   /**
    * La pàgina del document, només quan el canvi la toca (adaptar la pantalla
    * sencera). Sense la clau, desfer no la toca
@@ -729,6 +780,8 @@ export const takeDocumentStyleSnapshot = (
   fitzgeraldColors: document.fitzgeraldColors,
   pages: document.pages,
   styles: document.styles,
+  sequenceStyleIds: document.sequenceStyleIds,
+  sequenceNames: document.sequenceNames,
 });
 
 /**
@@ -950,6 +1003,9 @@ export const {
   documentAuthorChanged: documentAuthorChangedActionCreator,
   pictStyleAppliedToAll: pictStyleAppliedToAllActionCreator,
   deleteLastSequence: deleteLastSequenceActionCreator,
+  sequenceStyleChanged: sequenceStyleChangedActionCreator,
+  sequenceRenamed: sequenceRenamedActionCreator,
+  removeSequence: removeSequenceActionCreator,
   removeCloudImage: removeCloudImageActionCreator,
   replaceCloudImage: replaceCloudImageActionCreator,
   setDocumentId: setDocumentIdActionCreator,

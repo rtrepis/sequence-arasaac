@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { documentMadeDurableActionCreator } from "@features/sequence/store/documentStatusSlice";
 import { documentStyleMaterializedActionCreator } from "@features/sequence/store/documentSlice";
 import { selectUserDefaultStyle } from "@features/sequence/style/styleSelectors";
+import type { SequenceStyle } from "@/types/document";
 import {
   DOCUMENT_FILE_EXTENSION,
   STYLE_FILE_EXTENSION,
@@ -38,6 +39,12 @@ interface ModalDownloadProps {
    * l'estil. El segon només s'obre des del panell «Estil del document».
    */
   kind?: "document" | "style";
+  /**
+   * Amb `kind="style"`, l'estil que es desa i el seu nom (`meta.title`). Sense,
+   * el meu estil. La Galeria d'estils hi desa qualsevol dels seus (D18)
+   */
+  style?: SequenceStyle;
+  styleTitle?: string;
 }
 
 /**
@@ -53,6 +60,8 @@ const ModalDownload = ({
   open,
   onClose,
   kind = "document",
+  style,
+  styleTitle,
 }: ModalDownloadProps): React.ReactElement => {
   const documentSaac = useAppSelector((state) => state.document);
   const myStyle = useAppSelector(selectUserDefaultStyle);
@@ -109,7 +118,10 @@ const ModalDownload = ({
 
   const onSaveStyle = () => {
     // Desar l'estil no salva cap feina: no compta com a còpia del document
-    download(serializeSaac(buildStyleFileV3(myStyle)), STYLE_FILE_EXTENSION);
+    download(
+      serializeSaac(buildStyleFileV3(style ?? myStyle, styleTitle)),
+      STYLE_FILE_EXTENSION,
+    );
     trackEvent({
       event: "safe-event",
       event_category: "file",

@@ -1,8 +1,9 @@
 # Pla: els estils, sense sorpreses
 
 > **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**, i **pla d'execució
-> escrit el 2026-11-21 (§10)**. Passos 1 (fonaments) i 2 (solució A i D1, §3.5) fets: es continua
-> pel pas 4 de §10.3, amb l'encàrrec de §12 (el pas 3, l'estudi, pot anar en paral·lel).
+> escrit el 2026-11-21 (§10)**. Passos 1 (fonaments), 2 (solució A i D1, §3.5), 4 (el format, §12.1)
+> i 5 (la galeria i l'estil de la seqüència a l'edició, §13.1) fets: es continua pel pas 6 de
+> §10.3, amb l'encàrrec de §14 (el pas 3, l'estudi, pot anar en paral·lel).
 
 > **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
 >
@@ -879,7 +880,8 @@ bloc reassignat que el substitueix. E13: en desar, `styles` només porta els est
 alguna seqüència o algun bloc. Fixture 20 i viatge d'anada i tornada de totes les fixtures. Sense
 canvi de pantalla.
 
-**Pas 5 — La galeria i l'estil de la seqüència a l'edició.** La **Galeria d'estils** (`AppDialog`;
+**Pas 5 — La galeria i l'estil de la seqüència a l'edició.** ✅ **Fet** (2026-11-22): com s'ha fet i
+què queda per al pas 6, a §13.1. La **Galeria d'estils** (`AppDialog`;
 a pantalla completa al mòbil si ho diu `capes-flotants.md`) a `features/sequence/components/`, amb:
 la primera opció (la de damunt: «L'estil del document» per a una seqüència, «L'estil de la
 seqüència» per a un bloc), El meu estil, i el lloc dels estils de l'app (buit fins al pas 9); la
@@ -1070,6 +1072,8 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 
 ## 13. Encàrrec per obrir la sessió següent (pas 5: la galeria i l'estil de la seqüència a l'edició)
 
+> **✅ Fet** (2026-11-22): vegeu §13.1.
+
 > Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
 >
 > La tasca és el **pas 5 de §10.3**: la Galeria d'estils i el menú «⋯» de la seqüència a l'edició
@@ -1083,3 +1087,86 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 >
 > Normes: les de §11. No facis res de la vista (pas 6). En acabar, marca el pas 5 com a fet a §10.3
 > i actualitza `docs/README.md` en el mateix commit.
+
+### 13.1 Com s'ha fet (pas 5, 2026-11-22)
+
+> El que el codi d'avui ha obligat a concretar respecte de §10.3. Cap d'aquests punts no canvia cap
+> decisió ni el format del fitxer.
+
+- **La capçalera de la seqüència** (`features/sequence/components/SequenceHeader/`) va damunt de la
+  graella de la seqüència oberta, a totes les mides (D23): el nom (amb un llapis per canviar-lo),
+  «Estil: _nom_» o «Estil: Personalitzat» amb la marca de la targeta (`customizedMark`) i una
+  ajuda (icona amb tooltip i el mateix text al nom accessible), i el «⋯». El nom es canvia en un
+  `AppDialog` petit, no al lloc: l'edició en línia és cosa del pas 8, amb la capçalera del mòbil.
+  Sense nom de l'estil (un document d'abans), «L'estil del document».
+- **El «⋯»** porta «Estil: _nom_ — Canvia…», «Canvia el nom», «Restableix els pictogrames» (només
+  si n'hi ha de retocats, com «Restableix l'estil» del pictograma) i «Treu aquesta seqüència»
+  (només si n'hi ha més d'una, amb `ConfirmDialog` si té pictogrames). **El botó «Elimina l'última
+  seqüència» de les pestanyes se'n va**: el substitueix aquesta acció.
+- **Treure una seqüència qualsevol** (`removeSequence`, `utils/removeSequence.ts`): les claus són
+  la posició de la pestanya, i en treure'n una les de després baixen una clau amb tot el que hi
+  apunta (vista, nom, estil, `sequenceIds`, camps desconeguts, `order` i els blocs). La seqüència
+  oberta passa a ser la que n'ocupa el lloc. Treure-la acaba amb un snackbar; com abans, no es
+  pot desfer.
+- **La galeria** (`features/sequence/components/StyleGallery/`) és un `AppDialog` d'amplada `sm`
+  (una llista; no és un formulari d'ús freqüent, per això no és `fullScreenOnMobile`). Les
+  opcions: «L'estil del document» (amb el seu nom a la segona línia), el grup «El meu estil» i el
+  grup «Estils de l'app», que diu «Aviat n'hi haurà.» fins al pas 9. **Si la seqüència fa servir
+  un estil que no és cap d'aquests** (un de carregat d'un fitxer, o un de la fixture 20), surt a
+  dalt en un grup «El d'ara», marcat: sense, no es veia d'on es partia. Triar-lo no fa res.
+  La mostra és el primer pictograma amb imatge de la seqüència **sense els seus retocs** (o un
+  d'exemple si no en té cap), pintat amb cada estil. Cada estil té un «⋯» amb «Desa en un fitxer»
+  (D18; `ModalDownload` rep ara l'estil i el nom que desa) i, si no és el meu, «Fes-lo el meu
+  estil» (D7; `useSetDefaultStyle` sense la distribució, que un estil de la galeria no porta).
+  «Carrega d'un fitxer…» és l'acció sola de l'esquerra del peu.
+- **El nom del distintiu**: l'`AppDialog` té el distintiu per a un número (el del pictograma); el
+  nom d'una seqüència hi quedava malament, i va en una línia sota el títol («Tria l'estil de
+  «Matí».»), que és la descripció del diàleg.
+- **L'acció** (`store/sequenceStyleThunks.ts`, `chooseSequenceStyleThunk`): copia l'estil amb
+  `namedStyleFrom` i `addNamedStyle` (que ara viuen a `style/namedStyle.ts`, amb
+  `uniqueStyleName` i `sameNamedContent`; `blockStyle.ts` els reexporta i `applyNamedStyle` fa
+  servir el mateix camí), hi apunta la seqüència i **treu l'estil d'abans si ja no el fa servir
+  ningú** (cap seqüència, cap bloc, cap bloc desconegut amb `namedStyle`): sense, canviar d'estil
+  diverses vegades deixava còpies que feien sortir «El meu estil 2».
+- **El desfer** porta ara `sequenceStyleIds` i `sequenceNames` (§12.1, «Queda per al pas 5»).
+  Canviar el nom no és un canvi d'estil i no té «Desfés», però sí que fa que el canvi d'estil
+  d'abans ja no es pugui desfer.
+- **El snackbar** (D3 i D15) diu l'estil triat, quants pictogrames conserven els seus retocs i
+  quants blocs tenen un altre estil i no han canviat, cada cosa en una frase amb el seu plural.
+  Amb retocs, porta **«Treu els retocs»** al costat de «Desfés»; totes dues van sota el text (al
+  costat, el text quedava en una columna d'una paraula al mòbil). «Treu els retocs» fa el mateix
+  que «Restableix els pictogrames» i **el seu «Desfés» torna també l'estil d'abans**: l'usuari ho
+  ha fet com una sola cosa (`removeSequenceRetouchesThunk`).
+- **«Aplica a tots»** (`applyToAllPictogramsThunk`) no s'ha tocat: no és a la interfície des de R10,
+  i la galeria no l'ha necessitat. Si torna, ha de saber que una seqüència amb estil no veu el que
+  porta a l'estil del document.
+- **Proves**: `store/sequenceStyle.test.ts` (triar, D15, el snackbar, «L'estil del document»,
+  sense còpies, Desfés, «Treu els retocs», el fitxer, el nom, treure la seqüència del mig i el
+  document que en queda) i `SequenceHeader.test.tsx` («Personalitzat» només amb retocs, la galeria
+  des del «⋯», carregar d'un fitxer no deixa res a la galeria, treure l'oberta i canviar el nom).
+  E2E: `destructive-actions` i `accessible-names` fan servir el «⋯» en lloc del botó que se'n va.
+
+**Queda per al pas 6** (no són errors d'avui):
+
+- La galeria només sap triar per a una seqüència (`sequenceKey`). Per al bloc, la primera opció és
+  «L'estil de la seqüència» i l'acció és reassignar (D12, D14): cal donar-li un destí.
+- `applyMyStyleThunk`, `updateMyStyleThunk` i `removeBlockStyleThunk` (i els seus orígens del
+  snackbar) continuen vius per als menús de pàgina i de bloc, que el pas 6 treu (E5).
+- `deleteLastSequence` ja no el fa servir la interfície; només les proves. Es pot treure quan es
+  toquin.
+
+## 14. Encàrrec per obrir la sessió següent (pas 6: l'estil del bloc a la vista)
+
+> Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
+>
+> La tasca és el **pas 6 de §10.3**: la fila «Estil» al nivell Bloc de la columna, «Personalitzat»
+> (D13), la marca de reassignat i «Torna a l'estil de la seqüència» (D14), «Tria un estil…» al «⋯»
+> del bloc (D12), i fora dels menús de pàgina i de bloc «Aplica el meu estil», «Actualitza amb el
+> meu estil» i «Treu l'estil de bloc» (E5). Q3 (els blocs comuns). Amb les proves de §10.5. **És
+> codi i pantalla.** Llegeix primer §10.1, §10.3 (pas 6), §13.1 (sobretot «Queda per al pas 6»), el
+> fonament 03 (§5 i §6), `docs/estandards/configuracions.md` i `docs/estandards/capes-flotants.md`.
+>
+> La galeria (`StyleGallery`) i el snackbar ja hi són: el bloc hi ha d'arribar com un altre destí.
+>
+> Normes: les de §11. En acabar, marca el pas 6 com a fet a §10.3 i actualitza `docs/README.md` en
+> el mateix commit.
