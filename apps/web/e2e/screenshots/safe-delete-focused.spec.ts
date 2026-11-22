@@ -29,7 +29,9 @@ test("safe-delete: captures de la confirmació i del menú del pictograma", asyn
   await searchWord(page, "beure");
   await page.waitForTimeout(800);
 
-  await page.getByRole("button", { name: "Elimina l'última seqüència" }).click();
+  // «Treu aquesta seqüència», al menú «⋯» de la seqüència oberta
+  await page.getByRole("button", { name: /^Accions de «/ }).click();
+  await page.getByRole("menuitem", { name: "Treu aquesta seqüència" }).click();
   const dialog = page.getByRole("dialog");
   await dialog.waitFor({ state: "visible", timeout: 15000 });
   await page.waitForTimeout(600);

@@ -24,7 +24,8 @@ const LABELS: Record<
     settings: string;
     theme: string;
     addSequence: string;
-    deleteLast: string;
+    sequenceActions: RegExp;
+    removeSequence: string;
     suggestion: string;
   }
 > = {
@@ -36,7 +37,8 @@ const LABELS: Record<
     settings: "Configuración",
     theme: "Selecciona el tema",
     addSequence: "Añadir secuencia",
-    deleteLast: "Eliminar la última secuencia",
+    sequenceActions: /^Acciones de «/,
+    removeSequence: "Quita esta secuencia",
     suggestion: "casa",
   },
   en: {
@@ -47,14 +49,18 @@ const LABELS: Record<
     settings: "Settings",
     theme: "Select theme",
     addSequence: "Add sequence",
-    deleteLast: "Delete last sequence",
+    sequenceActions: /^Actions for “/,
+    removeSequence: "Remove this sequence",
     suggestion: "house",
   },
 };
 
 const LOCALES: ShotLocale[] = ["es", "en"];
 
-test.use({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: DEVICE_SCALE });
+test.use({
+  viewport: { width: 1280, height: 800 },
+  deviceScaleFactor: DEVICE_SCALE,
+});
 
 for (const locale of LOCALES) {
   const labels = LABELS[locale];
@@ -100,14 +106,23 @@ for (const locale of LOCALES) {
       await page.waitForTimeout(500);
       // El diàleg sencer amb el menú obert a sobre
       const dialogPaper = page.locator(".MuiDialog-paper");
-      await postShot(browser, page, dialogPaper, locale, "pictogram-actions-touch-step2.png", {
-        width: 620,
-        height: 560,
-      });
+      await postShot(
+        browser,
+        page,
+        dialogPaper,
+        locale,
+        "pictogram-actions-touch-step2.png",
+        {
+          width: 620,
+          height: 560,
+        },
+      );
     });
 
     test("search-suggestions-step1", async ({ page, browser }) => {
-      await page.goto(`/${locale}/create-sequence`, { waitUntil: "domcontentloaded" });
+      await page.goto(`/${locale}/create-sequence`, {
+        waitUntil: "domcontentloaded",
+      });
       const search = page.locator("#search");
       await search.waitFor({ state: "visible", timeout: 20000 });
       await page.waitForTimeout(1500);
@@ -121,17 +136,26 @@ for (const locale of LOCALES) {
       // Centrat entre el camp i la llista, perquè hi surtin tots dos
       const firstOption = page.getByRole("option").first();
       await firstOption.hover();
-      await postShot(browser, page, listbox, locale, "search-suggestions-step1.png", {
-        width: 640,
-        height: 420,
-      });
+      await postShot(
+        browser,
+        page,
+        listbox,
+        locale,
+        "search-suggestions-step1.png",
+        {
+          width: 640,
+          height: 420,
+        },
+      );
     });
 
     test("user-preferences-step1", async ({ page, browser }) => {
       const openSettings = async (target: Page) => {
         await target.getByRole("button", { name: labels.mainMenu }).click();
         await target.getByRole("button", { name: labels.settings }).click();
-        await target.getByRole("dialog").waitFor({ state: "visible", timeout: 15000 });
+        await target
+          .getByRole("dialog")
+          .waitFor({ state: "visible", timeout: 15000 });
         await target.waitForTimeout(1200);
       };
 
@@ -147,7 +171,8 @@ for (const locale of LOCALES) {
       // idioma (B23 del backlog): es marca el que s'hi llegeix
       await page.getByRole("button", { name: locale, exact: true }).click();
       await page.waitForTimeout(1500);
-      if (!(await page.getByRole("dialog").isVisible())) await openSettings(page);
+      if (!(await page.getByRole("dialog").isVisible()))
+        await openSettings(page);
 
       // L'idioma de cerca també arrenca en anglès: es posa el de la captura
       await page.locator("#languagesSearch").click();
@@ -174,7 +199,9 @@ for (const locale of LOCALES) {
     });
 
     test("safe-delete-step1", async ({ page, browser }) => {
-      await page.goto(`/${locale}/create-sequence`, { waitUntil: "domcontentloaded" });
+      await page.goto(`/${locale}/create-sequence`, {
+        waitUntil: "domcontentloaded",
+      });
       await page.waitForTimeout(2000);
       await searchWord(page, firstWord);
       await page.waitForTimeout(800);
@@ -185,7 +212,9 @@ for (const locale of LOCALES) {
       await searchWord(page, secondWord);
       await page.waitForTimeout(800);
 
-      await page.getByRole("button", { name: labels.deleteLast }).click();
+      // «Treu aquesta seqüència», al menú «⋯» de la seqüència oberta
+      await page.getByRole("button", { name: labels.sequenceActions }).click();
+      await page.getByRole("menuitem", { name: labels.removeSequence }).click();
       const dialog = page.getByRole("dialog");
       await dialog.waitFor({ state: "visible", timeout: 15000 });
       await page.waitForTimeout(600);
