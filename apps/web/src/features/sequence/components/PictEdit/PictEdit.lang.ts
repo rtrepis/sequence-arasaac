@@ -58,6 +58,12 @@ const messages = defineMessages({
     description:
       "Opció del text tallat: redueix la mida de la lletra de l'estil del document, i totes les targetes la mantenen igual. {size} és la mida nova (p. ex. 0,8)",
   },
+  textOverflowFitSequence: {
+    id: "components.pictEdit.textOverflow.fitSequence",
+    defaultMessage: "Redueix la lletra de tota la seqüència a {size}",
+    description:
+      "Opció del text tallat, quan la seqüència té un estil propi: redueix la mida de la lletra de l'estil de la seqüència, i totes les seves targetes la mantenen igual. {size} és la mida nova (p. ex. 0,8)",
+  },
   textOverflowFitPictogram: {
     id: "components.pictEdit.textOverflow.fitPictogram",
     defaultMessage: "Redueix la lletra només d'aquest pictograma a {size}",

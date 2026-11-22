@@ -36,6 +36,11 @@ interface TextOverflowWarningProps {
    * mida pròpia: si en té, canviar la del document no el tocaria.
    */
   canFitDocument: boolean;
+  /**
+   * D'on surt la lletra de la targeta: de l'estil del document, o de l'estil
+   * propi de la seqüència (B43). Diu quin text porta l'opció de reduir-la
+   */
+  fitScope?: "document" | "sequence";
   onFitPictogram: (size: number) => void;
   onFitDocument: (size: number) => void;
   /** Editar el text a la targeta; sense, no s'ofereix */
@@ -46,6 +51,7 @@ const TextOverflowWarning = ({
   number,
   fittingSize,
   canFitDocument,
+  fitScope = "document",
   onFitPictogram,
   onFitDocument,
   onEditText,
@@ -135,9 +141,12 @@ const TextOverflowWarning = ({
                 <MdOutlineTextDecrease />
               </ListItemIcon>
               <ListItemText
-                primary={intl.formatMessage(messages.textOverflowFitDocument, {
-                  size,
-                })}
+                primary={intl.formatMessage(
+                  fitScope === "sequence"
+                    ? messages.textOverflowFitSequence
+                    : messages.textOverflowFitDocument,
+                  { size },
+                )}
               />
             </ListItemButton>
           )}

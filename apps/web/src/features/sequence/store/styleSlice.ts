@@ -31,7 +31,8 @@ import { mergeDeep } from "@features/sequence/saac/cascade";
 /**
  * D'on ve el canvi d'estil que es pot desfer: l'estil per defecte, un fitxer,
  * «Aplica a tots», «Restableix» d'un pictograma, o reduir la lletra perquè el
- * text hi càpiga (d'un pictograma o de tot el document, B28).
+ * text hi càpiga (d'un pictograma, de tot el document o de l'estil de la
+ * seqüència, B28 i B43).
  */
 export type StyleChangeSource =
   | "applyAll"
@@ -39,6 +40,7 @@ export type StyleChangeSource =
   | "resetSequence"
   | "fitTextPictogram"
   | "fitTextDocument"
+  | "fitTextSequence"
   | "sequenceStyle"
   | "blockStyle"
   | "sequenceRetouchesRemoved"

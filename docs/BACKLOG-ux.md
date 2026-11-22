@@ -96,6 +96,7 @@ l'entrada.
 | P1 | Proves de regressió del `.saac` amb compte | Tornar a encendre els comptes, o tenir l'API local amb BD en memòria |
 | C26 | 12 codis d'error de l'API no tenen text | Tornar a encendre els comptes |
 | B29 | La previsualització del vocabulari personal sobresurt del requadre | Tornar a encendre els comptes: el vocabulari personal només hi és amb compte (`ACCOUNTS_ENABLED` a `SettingsDialog`). La solució continua sent una línia (`ScaleToFit`) |
+| B44 | La marca «personalitzat» no diu que el retoc és del vocabulari personal (D5) | Tornar a encendre els comptes: el vocabulari personal només hi és amb compte |
 
 ---
 
@@ -1515,6 +1516,29 @@ Inconsistència de forma o deute intern, sense un moment concret d'acció equivo
 - **Quan**: **quan ho decideixi l'usuari** (D34), sense data. En retirar-la: treure l'interruptor,
   la clau `editLayout` del navegador, la branca d'escriptori de `EditSequencesPage` i de
   `TabsSequences`, i `PictogramAmount` si no el fa servir ningú més.
+
+### B43 — «Redueix la lletra de tot el document» no fa res si la seqüència té estil propi ✅ Resolta
+
+*(Trobada en revisar els textos, pas 12 de `docs/plans/PLA-estils.md`, 2026-11-22.)*
+
+- **Què**: l'avís «el text no hi cap» oferia reduir la lletra de l'estil del document. Amb els estils
+  de seqüència (pas 4) i els de l'app (pas 9, que porten la seva lletra), la lletra d'una seqüència
+  amb estil propi és la del seu estil: el snackbar deia que s'havia reduït i la targeta no canviava.
+- **Resolta** el mateix dia: si la seqüència té estil propi, l'opció és «Redueix la lletra de tota
+  la seqüència a _x_» (`fitSequenceTextThunk`), que en fa una còpia amb la mida nova; vegeu el
+  fonament 03, §5 i §6. Proves: `sequenceStyle.test.ts` i `TextOverflowWarning.test.tsx`.
+
+### B44 — La marca «personalitzat» no diu que el retoc és del vocabulari personal (D5) 🔴 Oberta
+
+*(Del pla dels estils, D5 i E15. Ajornada en fer el pas 12, 2026-11-22.)*
+
+- **Què**: un color del vocabulari personal és un retoc, i el pictograma surt amb la marca
+  «personalitzat» sense que l'usuari l'hagi editat. D5 va decidir mantenir la marca i dir-ho al
+  tooltip i al nom accessible («color del teu vocabulari»).
+- **Per què s'ajorna**: el vocabulari personal només hi és amb compte, i els comptes estan apagats
+  (`ACCOUNTS_ENABLED`). Avui no hi ha cap pictograma que en surti.
+- **Què el desencalla**: tornar a encendre els comptes. Cal saber, en pintar la marca, si el retoc
+  és el del vocabulari (comparar-lo amb el perfil de la paraula).
 
 ### C30 — «Pantalla sencera» i «Pantalla completa» es diuen igual fora del català 🔴 Oberta
 

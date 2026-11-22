@@ -939,7 +939,7 @@ l'etiqueta de la disposició a `docs/estandards/configuracions.md`, «Components
 
 **Pas 12 — Textos i vocabulari**: com l'antic pas 8 de §7 (E10, E15, D5), més les claus noves
 («Personalitzat» per a seqüència i bloc, «reassignat», «Torna a l'estil de la seqüència»), provades
-en els cinc idiomes, i el text d'ajuda d'«El meu estil» (`components.defaultSettings.panelHint`).
+en els cinc idiomes, i el text d'ajuda d'«El meu estil» (`components.defaultSettings.panelHint`). ✅ **Fet** (2026-11-22): vegeu §19.2.
 
 **Pas 13 — La notícia N-2** (D9): títol nou, passos i captures; `docs/plans/PLA-noticies.md`.
 
@@ -1461,3 +1461,49 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
   `LevelCrumbs.tsx` diuen el mateix.
 - Cap canvi de codi més enllà dels comentaris. L'etiqueta «Nou» de la fila «Disposició» no és del
   pas (D24): va amb la notícia.
+
+### 19.2 Com s'ha fet (pas 12, 2026-11-22)
+
+- **Revisió** de les claus de `features.freeLayout.*`, `features.sequence.*`, `components.pictEdit.*`,
+  `components.mouseActionList.*` i `components.defaultSettings.*` als cinc idiomes, buscant el
+  vocabulari d'abans («estil del document» on ara és la seqüència, «estil general», «Aplica el meu
+  estil», «Actualitza», «Treu l'estil de bloc», «Restaura» fora de la configuració). Les claus noves
+  del pla («Personalitzat», la marca de reassignat, «Torna a l'estil de la seqüència», els noms dels
+  estils de l'app i l'interruptor de l'edició) són als cinc idiomes i diuen el mateix.
+- **D33**: el tooltip de «Restableix» del pictograma (`components.pictEdit.tooltipReset`) diu ara
+  que torna a l'estil **de la seva seqüència**, als cinc idiomes; les descripcions de
+  `components.pictEdit.reset` i `components.mouseActionList.resetStyle`, també.
+- **E10** ja era al fonament 03, §1 (pas 1). «Restaura els pictogrames» es queda: és de la
+  configuració (El meu estil), que és on E10 reserva «Restaura». L'ajuda d'El meu estil (`panelHint`)
+  ja parlava de la Galeria d'estils (pas 5).
+- **En anglès**, «Category colour» passa a «Category color», com la resta de l'app.
+- **B43, trobada i resolta**: «Redueix la lletra de tot el document» no feia res en una seqüència
+  amb estil propi (tots els de l'app porten lletra). Ara l'avís ofereix «Redueix la lletra de tota la
+  seqüència», que fa una còpia de l'estil de la seqüència amb la mida nova (`fitSequenceTextThunk`,
+  snackbar `fitTextSequence`). Fonament 03, §5 i §6.
+- **D5 / E15, ajornada** (B44): el vocabulari personal només hi és amb compte, i els comptes estan
+  apagats.
+- **Queda per al pas 13**: els textos de les notícies que parlen de l'«estil general» (`news.*`,
+  p. ex. la notícia dels pictogrames personalitzats i la dels principis): són de `PLA-noticies.md`.
+- **Proves**: `sequenceStyle.test.ts` (B43: redueix la de la seqüència, no toca la que compartia
+  l'estil, es desfà; i la còpia es queda el nom si ningú més el feia servir),
+  `TextOverflowWarning.test.tsx` (el text de l'opció) i `SequenceHeader.test.tsx` (el nom en anglès).
+  Typecheck net; web 592 proves i i18n 67, verdes.
+
+## 20. Encàrrec per obrir la sessió següent (pas 13: la notícia N-2)
+
+> Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
+>
+> La tasca és el **pas 13 de §10.3** (D9): la notícia N-2 amb títol nou, passos i captures, segons
+> `docs/plans/PLA-noticies.md` i `docs/estandards/noticies.md` (la regla «sense tecnicismes»).
+> Llegeix-los primer, i `docs/estudis/NOTICIES-candidates-des-de-2.0.2.md`. Han d'entrar-hi la
+> Galeria d'estils (els quatre estils de l'app, El meu estil), l'estil de cada seqüència i el nom, i
+> l'edició nova (mòbil i, a l'escriptori, l'interruptor). Les notícies velles que parlen de
+> l'«estil general» o d'«Aplica el meu estil» passen a ser no certes (`PLA-noticies.md`, la marca).
+> L'etiqueta «Nou» de la fila «Disposició» se'n va amb la notícia N-1 (D24).
+>
+> **En tancar el pla**: B37 resolta al backlog, Q2 al backlog si continua oberta, el pla a
+> `plans/fets/`, l'índex al dia i la PR a `master`.
+>
+> Normes: les de §11. Recorda que els specs de captures (`e2e/screenshots`) reescriuen imatges del
+> repositori: puja només les de la notícia.

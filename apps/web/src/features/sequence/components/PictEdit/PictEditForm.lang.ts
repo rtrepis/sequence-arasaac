@@ -5,12 +5,12 @@ const messages = defineMessages({
     id: "components.pictEdit.reset",
     defaultMessage: "Restableix",
     description:
-      "Botó que esborra els retocs d'aquest pictograma: torna a l'estil del document (es pot desfer)",
+      "Botó que esborra els retocs d'aquest pictograma: torna a l'estil de la seva seqüència (es pot desfer)",
   },
   tooltipReset: {
     id: "components.pictEdit.tooltipReset",
     defaultMessage:
-      "Torna aquest pictograma a l'estil del document. Es pot desfer.",
+      "Torna aquest pictograma a l'estil de la seva seqüència. Es pot desfer.",
     description: "Tooltip del botó «Restableix» del pictograma",
   },
   styleSection: {

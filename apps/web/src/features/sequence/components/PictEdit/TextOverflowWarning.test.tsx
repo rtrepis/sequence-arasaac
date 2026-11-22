@@ -68,6 +68,19 @@ describe("TextOverflowWarning", () => {
     );
   });
 
+  it("si la seqüència té estil propi, l'opció diu la seqüència (B43)", async () => {
+    const { onFitDocument } = renderWarning({ fitScope: "sequence" });
+    await openOptions();
+
+    expect(screen.queryByRole("button", { name: /whole document/ })).toBeNull();
+    await userEvent.click(
+      screen.getByRole("button", {
+        name: "Reduce the font size of the whole sequence to 0.8",
+      }),
+    );
+    expect(onFitDocument).toHaveBeenCalledWith(0.8);
+  });
+
   it("no ofereix la del document si el pictograma té mida pròpia", async () => {
     renderWarning({ canFitDocument: false });
     await openOptions();

@@ -29,8 +29,11 @@ import {
 import {
   chooseBlockStyleThunk,
   chooseSequenceStyleThunk,
+  fitSequenceTextThunk,
   removeSequenceRetouchesThunk,
 } from "./sequenceStyleThunks";
+import { appStyleOf } from "@features/sequence/style/appStyles";
+import { selectSequenceCardDefaults } from "@features/sequence/style/styleSelectors";
 import { findPlacement } from "@features/free-layout/model/sheets";
 import { setPlacementCommonThunk } from "@features/free-layout/store/freeLayoutThunks";
 import type { DocumentSAAC } from "@/types/document";
@@ -56,6 +59,10 @@ const storeWith20 = () => {
 };
 
 const MY_STYLE = "El meu estil";
+
+/** L'estil amb nom d'un `id` del document. */
+const namedStyleOfId = (document: DocumentSAAC, id: string | undefined) =>
+  document.styles?.find((style) => style.id === id);
 
 describe("triar l'estil d'una seqüència", () => {
   it("canvia tots els blocs de la seqüència llevat dels reassignats (D15)", () => {
@@ -178,6 +185,57 @@ const styleIdOf = (document: DocumentSAAC, placementId: string) => {
     ? found.placement.styleId
     : undefined;
 };
+
+describe("reduir la lletra d'una seqüència amb estil propi (B43)", () => {
+  it("la redueix a l'estil de la seqüència, no toca les altres, i es desfà", () => {
+    const store = storeWith20();
+    const view = selectDocumentStyle(store.getState()).view;
+    // «Tarda» (1) i «Nit» (2) amb el mateix estil de l'app: comparteixen entrada
+    for (const key of [1, 2])
+      store.dispatch(
+        chooseSequenceStyleThunk(key, {
+          name: "Per retallar",
+          style: appStyleOf("toCut", view),
+        }),
+      );
+    const before = store.getState().document;
+    expect(before.sequenceStyleIds?.[1]).toBe(before.sequenceStyleIds?.[2]);
+
+    store.dispatch(fitSequenceTextThunk(1, 0.7));
+    const state = store.getState();
+    const defaultsOf = selectSequenceCardDefaults(state);
+    expect(defaultsOf(1).font.size).toBe(0.7);
+    // L'altra seqüència es queda com era, i l'estil es diu igual
+    expect(defaultsOf(2).font.size).toBe(1);
+    const tarda = namedStyleOfId(
+      state.document,
+      state.document.sequenceStyleIds?.[1],
+    );
+    expect(tarda?.name).toBe("Per retallar 2");
+    expect(state.style.undoSnackbar?.source).toBe("fitTextSequence");
+
+    store.dispatch(undoStyleChangeThunk());
+    expect(store.getState().document).toEqual(before);
+  });
+
+  it("si ningú més la feia servir, l'estil nou es queda el nom", () => {
+    const store = storeWith20();
+    const view = selectDocumentStyle(store.getState()).view;
+    store.dispatch(
+      chooseSequenceStyleThunk(1, {
+        name: "Per retallar",
+        style: appStyleOf("toCut", view),
+      }),
+    );
+    store.dispatch(fitSequenceTextThunk(1, 0.7));
+    const { document } = store.getState();
+    const tarda = namedStyleOfId(document, document.sequenceStyleIds?.[1]);
+    expect(tarda?.name).toBe("Per retallar");
+    expect(
+      document.styles?.filter(({ name }) => name.startsWith("Per retallar ")),
+    ).toEqual([]);
+  });
+});
 
 describe("triar l'estil d'un bloc (pas 6)", () => {
   it("el reassigna només a aquell bloc, i no toca l'altre de la mateixa seqüència", () => {

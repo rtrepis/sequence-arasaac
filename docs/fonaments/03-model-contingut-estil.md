@@ -227,7 +227,8 @@ El color de Fitzgerald té dues parts, i cadascuna és d'un lloc diferent:
 | **Canviar el meu estil** i la distribució per defecte | Configuració, panell «El meu estil» (l'estil) i panell «Pàgina i distribució» (la pàgina i la distribució dels pictogrames amb què comencen els documents nous) | Canvia la preferència. Es desa en tancar la configuració. **No toca cap document**, tampoc el que s'està fent (§7). |
 | **Carrega un estil des d'un fitxer** | Panell «El meu estil» | L'estil del fitxer (un `.saacstyle`, o el d'un `.saac`) passa a ser el meu estil. Obrir un `.saacstyle` des del menú pregunta si es fa el meu estil. Cap dels dos camins toca el document obert. |
 | **Desa el meu estil en un fitxer** | Panell «El meu estil» | Desa el meu estil en un `.saacstyle`. |
-| **Redueix la lletra de tot el document** | Avís «el text no hi cap» de la graella (§6) | Com canviar l'estil del document, només amb la mida de la lletra: totes les targetes continuen amb la mateixa mida. Els retocs es conserven. |
+| **Redueix la lletra de tot el document** | Avís «el text no hi cap» de la graella (§6), si la seqüència no té estil propi | Com canviar l'estil del document, només amb la mida de la lletra: totes les targetes continuen amb la mateixa mida. Els retocs es conserven. |
+| **Redueix la lletra de tota la seqüència** | Avís «el text no hi cap» de la graella (§6), si la seqüència té estil propi | La lletra és la de l'estil de la seqüència, i reduir la del document no la tocaria (B43). Es fa una **còpia** de l'estil de la seqüència amb la mida nova i la seqüència hi apunta: una altra seqüència o un bloc que compartia l'entrada no canvia. Si ningú més la feia servir, la còpia es queda el nom. Es pot desfer. |
 | **Redueix la lletra d'aquest pictograma** | Avís «el text no hi cap» de la graella (§6) | Com canviar un pictograma: un retoc de la mida de la lletra, que l'encén com a personalitzat. |
 
 - **Ja no hi són** (pla dels estils, E5): «Aplica el meu estil», «Actualitza amb el meu estil» i
@@ -323,8 +324,9 @@ mida que s'havia triat. Ho avisa, i qui prepara el document tria.
   sobre, un tooltip diu què passa; amb un clic o un toc (en tauleta no hi ha hover), obre les
   opcions.
 - **Les opcions**, en aquest ordre i només les que es poden fer:
-  1. **Redueix la lletra de tot el document a _x_**: no s'ofereix si el pictograma té mida pròpia,
-     perquè canviar la del document no el tocaria.
+  1. **Redueix la lletra de tot el document a _x_**, o **de tota la seqüència** si la seqüència té
+     estil propi (la lletra és la del seu estil, B43): no s'ofereix si el pictograma té mida pròpia,
+     perquè canviar-la no el tocaria.
   2. **Redueix la lletra només d'aquest pictograma a _x_**.
   3. **Edita el text**: el camp damunt de la targeta, el mateix del clic al text.
 - _x_ és la mida més gran, en passos de 0,1, amb què el text hi cap. Si no hi cap ni amb la mínima

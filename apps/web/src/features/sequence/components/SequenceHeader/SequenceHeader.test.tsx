@@ -131,7 +131,7 @@ describe("SequenceHeader", () => {
         ),
     ).toEqual([
       "No borders",
-      "Category colour",
+      "Category color",
       "For cutting out",
       "Numbered steps",
     ]);

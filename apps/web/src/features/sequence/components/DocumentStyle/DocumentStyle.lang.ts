@@ -63,6 +63,13 @@ const messages = defineMessages({
     description:
       "Snackbar després de reduir la lletra d'un sol pictograma des de l'avís «el text no hi cap» (es pot desfer)",
   },
+  changedFitTextSequence: {
+    id: "features.sequence.style.changed.fitTextSequence",
+    defaultMessage:
+      "S'ha reduït la lletra de l'estil d'aquesta seqüència perquè el text hi càpiga.",
+    description:
+      "Snackbar després de reduir la lletra de l'estil propi de la seqüència des de l'avís «el text no hi cap» (es pot desfer)",
+  },
   changedFitTextDocument: {
     id: "features.sequence.style.changed.fitTextDocument",
     defaultMessage:

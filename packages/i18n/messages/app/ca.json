@@ -353,7 +353,7 @@
   },
   "components.pictEdit.reset": {
     "message": "Restableix",
-    "description": "Botó que esborra els retocs d'aquest pictograma: torna a l'estil del document (es pot desfer)"
+    "description": "Botó que esborra els retocs d'aquest pictograma: torna a l'estil de la seva seqüència (es pot desfer)"
   },
   "components.pictogramAmount": {
     "message": "Pictogrames:",
@@ -1879,7 +1879,7 @@
     "description": "Nom accessible de la llista de tabs de seqüències"
   },
   "components.pictEdit.tooltipReset": {
-    "message": "Torna aquest pictograma a l'estil del document. Es pot desfer.",
+    "message": "Torna aquest pictograma a l'estil de la seva seqüència. Es pot desfer.",
     "description": "Tooltip del botó «Restableix» del pictograma"
   },
   "components.confirmDialog.cancel": {
@@ -2399,7 +2399,7 @@
   },
   "components.mouseActionList.resetStyle": {
     "message": "Restableix l'estil",
-    "description": "Treu els retocs d'estil del pictograma: torna a l'estil del document (es pot desfer)"
+    "description": "Treu els retocs d'estil del pictograma: torna a l'estil de la seva seqüència (es pot desfer)"
   },
   "news.documents-everywhere.title": {
     "message": "Els documents de SequenciAAC ara es veuen igual a tot arreu",
@@ -3005,6 +3005,10 @@
     "message": "Redueix la lletra de tot el document a {size}",
     "description": "Opció del text tallat: redueix la mida de la lletra de l'estil del document, i totes les targetes la mantenen igual. {size} és la mida nova (p. ex. 0,8)"
   },
+  "components.pictEdit.textOverflow.fitSequence": {
+    "message": "Redueix la lletra de tota la seqüència a {size}",
+    "description": "Opció del text tallat, quan la seqüència té un estil propi: redueix la mida de la lletra de l'estil de la seqüència, i totes les seves targetes la mantenen igual. {size} és la mida nova (p. ex. 0,8)"
+  },
   "components.pictEdit.textOverflow.fitPictogram": {
     "message": "Redueix la lletra només d'aquest pictograma a {size}",
     "description": "Opció del text tallat: redueix la mida de la lletra només d'aquesta targeta. {size} és la mida nova (p. ex. 0,8)"
@@ -3020,6 +3024,10 @@
   "features.sequence.style.changed.fitTextDocument": {
     "message": "S'ha reduït la lletra de tot el document perquè el text hi càpiga.",
     "description": "Snackbar després de reduir la lletra de l'estil del document des de l'avís «el text no hi cap» (es pot desfer)"
+  },
+  "features.sequence.style.changed.fitTextSequence": {
+    "message": "S'ha reduït la lletra de l'estil d'aquesta seqüència perquè el text hi càpiga.",
+    "description": "Snackbar després de reduir la lletra de l'estil propi de la seqüència des de l'avís «el text no hi cap» (es pot desfer)"
   },
   "components.mouseActionList.pasteEmpty": {
     "message": "Copia abans un pictograma",

@@ -31,6 +31,7 @@ import {
   fitDocumentTextThunk,
   fitPictogramTextThunk,
 } from "@features/sequence/store/styleSlice";
+import { fitSequenceTextThunk } from "@features/sequence/store/sequenceStyleThunks";
 import React from "react";
 
 interface PictEditProps {
@@ -91,6 +92,12 @@ const PictEditModal = ({
   // Amb mida pròpia, reduir la del document no el tocaria: no s'ofereix
   const canFitDocument =
     pictFontSize === undefined || pictFontSize === defaults.font.size;
+  // Si la seqüència té estil propi, la lletra és la seva: reduir la del
+  // document no la tocaria, i es redueix la de l'estil de la seqüència (B43)
+  const sequenceKey = useAppSelector((state) => state.document.activeSAAC);
+  const hasSequenceStyle = useAppSelector(
+    (state) => state.document.sequenceStyleIds?.[sequenceKey] !== undefined,
+  );
 
   const handlerClickOpen = () => {
     setOpen(true);
@@ -284,7 +291,14 @@ const PictEditModal = ({
                 onFitPictogram={(size) =>
                   dispatch(fitPictogramTextThunk(pictogram.indexSequence, size))
                 }
-                onFitDocument={(size) => dispatch(fitDocumentTextThunk(size))}
+                fitScope={hasSequenceStyle ? "sequence" : "document"}
+                onFitDocument={(size) =>
+                  dispatch(
+                    hasSequenceStyle
+                      ? fitSequenceTextThunk(sequenceKey, size)
+                      : fitDocumentTextThunk(size),
+                  )
+                }
                 onEditText={textEditPosition ? handlerEditText : undefined}
               />
             )}

@@ -204,6 +204,54 @@ export const chooseBlockStyleThunk =
   };
 
 /**
+ * Redueix la lletra de l'estil de la seqüència perquè el text hi càpiga (B28,
+ * B43): és el «Redueix la lletra de tot el document» d'una seqüència que té
+ * estil propi, on reduir la del document no la tocaria. L'estil de la
+ * seqüència és una còpia (direcció única), i per això se'n fa una de nova amb
+ * la lletra canviada: si un altre bloc o una altra seqüència compartia
+ * l'entrada, no canvia. Es pot desfer.
+ */
+export const fitSequenceTextThunk =
+  (sequenceKey: number, size: number): AppThunk =>
+  (dispatch, getState) => {
+    const { document } = getState();
+    const currentId = document.sequenceStyleIds?.[sequenceKey];
+    const current = namedStyleOf(document.styles, currentId);
+    if (currentId === undefined || current === undefined) return;
+
+    const otherIds = { ...document.sequenceStyleIds };
+    delete otherIds[sequenceKey];
+    // Primer es treu la d'ara si ja no la fa servir ningú: així la nova es
+    // queda el nom
+    const remaining = withoutUnused(
+      [...(document.styles ?? [])],
+      currentId,
+      otherIds,
+      document.pages,
+    );
+    const added = addNamedStyle(remaining, {
+      ...current,
+      id: newSaacId("st"),
+      pictSequence: {
+        ...current.pictSequence,
+        font: { ...current.pictSequence?.font, size },
+      },
+    });
+
+    dispatch(
+      undoableStyleChangeThunk(
+        () =>
+          sequenceStyleChangedActionCreator({
+            key: sequenceKey,
+            styleId: added.styleId,
+            styles: added.styles,
+          }),
+        "fitTextSequence",
+      ),
+    );
+  };
+
+/**
  * «Treu els retocs» del snackbar de triar un estil (D3): treu els retocs de
  * tots els pictogrames de la seqüència, com «Restableix els pictogrames
  * d'aquesta seqüència». Si l'estil encara es pot desfer, el «Desfés» d'ara
