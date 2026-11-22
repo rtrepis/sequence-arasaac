@@ -2,9 +2,9 @@
 
 > **Estat**: decisions preses (2026-11-20), **revisades el 2026-11-21 (§8)**, i **pla d'execució
 > escrit el 2026-11-21 (§10)**. Passos 1 (fonaments), 2 (solució A i D1, §3.5), 4 (el format, §12.1),
-> 5 (la galeria i l'estil de la seqüència a l'edició, §13.1) i 6 (l'estil del bloc a la vista,
-> §14.1) fets: es continua pel pas 7 de §10.3 (l'esbós, que l'usuari revisa abans del pas 8), amb
-> l'encàrrec de §15. El pas 3 (l'estudi) encara no s'ha fet, i el pas 9 en depèn.
+> 5 (la galeria i l'estil de la seqüència a l'edició, §13.1), 6 (l'estil del bloc a la vista,
+> §14.1) i 7 (l'esbós, §15.1) fets. **Ara toca que l'usuari revisi l'esbós** (§16) abans del pas 8.
+> El pas 3 (l'estudi) encara no s'ha fet, i el pas 9 en depèn.
 
 > **⚠️ Com llegir aquest document (2026-11-21).** És un document **en dues capes**:
 >
@@ -900,7 +900,8 @@ seqüència» (D14). «Tria un estil…» al «⋯» del bloc (D12). **Fora** de
 s'obre des dels blocs comuns i el missatge diu que canvia a totes les pàgines. Al mòbil, la fila
 és al panell de baix de la vista (`AppBottomSheet`), com la resta de la columna.
 
-**Pas 7 — L'esbós de la pantalla d'edició al mòbil.** `docs/esbossos/esbos-edicio-mobil.html`, com
+**Pas 7 — L'esbós de la pantalla d'edició al mòbil.** ✅ **Fet** (2026-11-22), pendent de la revisió
+de l'usuari: §15.1. `docs/esbossos/esbos-edicio-mobil.html`, com
 `esbos-vista-mobil.html`, a partir de §10.4, amb les **captures d'avui** per comparar (Playwright,
 amplada de mòbil). Inclou també l'amplada d'escriptori, perquè l'usuari decideixi D23. **L'usuari
 el revisa abans del pas 8.**
@@ -1232,6 +1233,8 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 
 ## 15. Encàrrec per obrir la sessió següent (pas 7: l'esbós de la pantalla d'edició al mòbil)
 
+> **✅ Fet** (2026-11-22): vegeu §15.1.
+
 > Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
 >
 > La tasca és el **pas 7 de §10.3**: `docs/esbossos/esbos-edicio-mobil.html`, com
@@ -1244,3 +1247,41 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 >
 > Normes: les de §11. En acabar, marca el pas 7 com a fet a §10.3 i actualitza `docs/README.md` en
 > el mateix commit.
+
+### 15.1 Com s'ha fet (pas 7, 2026-11-22)
+
+- **L'esbós** és `docs/esbossos/esbos-edicio-mobil.html`, amb la mateixa base que
+  `esbos-vista-mobil.html` (al mòbil de debò, el simulador ocupa la pantalla i les notes s'obren a
+  sobre). Simula la capçalera de §10.4 (‹ nom ✎ · «1 de 5» ▾ · ⋯ ›, i la línia «Estil: …» amb
+  «Personalitzat»), la graella que es llisca, la llista de seqüències, el «⋯» (el mateix menú del
+  pas 5), el «+» cap amunt, i la barra de baix que puja amb un teclat simulat amb els suggeriments
+  cap amunt. Un botó en mostra la mateixa pantalla a amplada d'escriptori (D23, opció a).
+- **Les captures d'avui** són a `docs/esbossos/img/edicio-mobil/` (mòbil Pixel 7 i escriptori
+  1280 px, amb el document de demostració i les imatges d'ARASAAC servides des del repositori, com
+  les captures de les notícies). S'han fet amb un spec temporal fora del repositori, que no es desa:
+  quan calgui tornar-les a fer, el pas 8 en farà les de la pantalla nova.
+- **Preguntes que planteja l'esbós** (amb un botó per copiar les respostes):
+  - **E1**: la línia «Estil: …» sota la capçalera, o només dins del «⋯» (§10.4 ho deixava obert).
+  - **E2**: D23, l'escriptori: (a), (b) o (c).
+  - **E3**: la cerca màgica dins del camp de cerca o com a botó a part.
+  - **E4**: si l'edició funciona amb el mòbil girat o demana posar-lo dret, com la vista.
+- **Una troballa de les captures**: un document sense `style.name` (el de demostració, i qualsevol
+  d'abans de D1) diu «Estil: L'estil del document» a la capçalera. És correcte però sona redundant;
+  el pas 12 (textos) ho pot mirar.
+
+## 16. Encàrrec per obrir la sessió següent (revisió de l'esbós i pas 8)
+
+> Branca: **`estils-seqüencia-i-edicio`**, com §11 (la PR a `master`, en acabar el pla).
+>
+> **Primer, l'usuari revisa l'esbós** (`docs/esbossos/esbos-edicio-mobil.html`) i respon E1–E4
+> (§15.1). Les respostes s'apunten com a decisions a §10.1 (D25…) i, si E2 tria (a) o (b), el pas 10
+> es concreta. **Sense aquestes respostes no es comença el pas 8.**
+>
+> Després, el **pas 8 de §10.3** (la pantalla d'edició nova al mòbil), amb les proves de §10.5.
+> Llegeix primer §10.1, §10.3 (pas 8), §10.4, §15.1, `docs/estandards/capes-flotants.md` (sobretot
+> el panell de baix i els botons flotants) i `docs/plans/fets/PLA-vista-mobil.md`, que va fer el
+> mateix camí per a la vista.
+>
+> En paral·lel, i abans del pas 9: el **pas 3** (l'estudi d'estils de targetes, §4.4).
+>
+> Normes: les de §11.

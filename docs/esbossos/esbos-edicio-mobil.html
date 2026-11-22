@@ -1,0 +1,564 @@
+<title>Edició al mòbil</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Esbós del pas 7 de docs/plans/PLA-estils.md (§10.3 i §10.4): la pantalla
+     d'edició nova al mòbil, amb les captures d'avui per comparar. Mateixos
+     neutres oliva que esbos-vista-mobil.html; el full i les targetes són blancs
+     en tots dos temes. Al mòbil, el simulador ocupa tota la pantalla. */
+  :root {
+    --ground: #F6F8F1;
+    --surface: #FFFFFF;
+    --sunk: #ECEFE4;
+    --ink: #1E2A12;
+    --ink-soft: #55604A;
+    --ink-faint: #848E7A;
+    --line: rgba(30, 42, 18, 0.14);
+    --line-strong: rgba(30, 42, 18, 0.30);
+    --accent: #557A26;
+    --accent-bright: #8AC34A;
+    --on-accent: #1E2A12;
+    --app-desk: #FFFFFF;
+    --app-paper: #F2F5EC;
+    --app-bar: #8AC34A;
+    --app-bar-ink: #1E2A12;
+    --scrim: rgba(20, 26, 12, 0.45);
+    --keyboard: #D3D7CC;
+    --key: #FFFFFF;
+    --sheet: #FFFFFF;
+    --sheet-ink: #1E1E1E;
+    --sheet-soft: #6B6B6B;
+    --sheet-line: rgba(0, 0, 0, 0.22);
+    --mark: #1E1E1E;
+    --p1: #F2B84B; --p2: #6FB1E0; --p3: #E58A7A; --p4: #8CC07A; --p5: #B79AE0; --p6: #E0C36F;
+    --font-ui: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101309; --surface: #191D12; --sunk: #0B0D06;
+      --ink: #E9EDE1; --ink-soft: #A9B39B; --ink-faint: #737E67;
+      --line: rgba(233, 237, 225, 0.15); --line-strong: rgba(233, 237, 225, 0.32);
+      --accent: #A8D46B; --accent-bright: #8AC34A; --on-accent: #1E2A12;
+      --app-desk: #121212; --app-paper: #242820; --app-bar: #8AC34A; --app-bar-ink: #1E2A12;
+      --scrim: rgba(0, 0, 0, 0.6); --keyboard: #2B2E27; --key: #464A40;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #101309; --surface: #191D12; --sunk: #0B0D06;
+    --ink: #E9EDE1; --ink-soft: #A9B39B; --ink-faint: #737E67;
+    --line: rgba(233, 237, 225, 0.15); --line-strong: rgba(233, 237, 225, 0.32);
+    --accent: #A8D46B; --accent-bright: #8AC34A; --on-accent: #1E2A12;
+    --app-desk: #121212; --app-paper: #242820; --app-bar: #8AC34A; --app-bar-ink: #1E2A12;
+    --scrim: rgba(0, 0, 0, 0.6); --keyboard: #2B2E27; --key: #464A40;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--ground); color: var(--ink); font-family: var(--font-ui);
+    font-size: 15px; line-height: 1.5; margin: 0;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 24px 48px;
+  }
+  h1, h2, h3 { text-wrap: balance; line-height: 1.2; margin: 0; }
+  p { margin: 0; }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- La pàgina: simulador + notes ---------- */
+  .wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 28px; }
+  .top { display: grid; gap: 10px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  h1 { font-size: clamp(24px, 3vw, 32px); }
+  .lede { max-width: 70ch; color: var(--ink-soft); }
+  .layout { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 32px; align-items: start; }
+  .stagecol { display: grid; gap: 12px; justify-items: center; position: sticky; top: 16px; }
+  .phone {
+    width: 390px; height: 780px; border-radius: 34px; border: 10px solid var(--ink);
+    overflow: hidden; background: var(--app-desk); box-shadow: 0 20px 50px -24px rgba(0,0,0,.45);
+    transition: width .3s, height .3s, border-radius .3s;
+  }
+  .phone.desk { width: min(860px, calc(100vw - 32px)); height: 600px; border-radius: 14px; border-width: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .chip { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 999px; padding: 6px 14px; font-size: 14px; min-height: 36px; }
+  .chip[aria-pressed="true"] { background: var(--accent-bright); color: var(--on-accent); border-color: transparent; font-weight: 700; }
+
+  .notes { display: grid; gap: 24px; min-width: 0; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: grid; gap: 10px; }
+  .card h2 { font-size: 19px; }
+  .card ol, .card ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+  .card code { font-family: var(--font-mono); font-size: 13px; }
+  .decision { display: grid; gap: 6px; padding-block: 10px; border-top: 1px solid var(--line); }
+  .decision:first-of-type { border-top: 0; }
+  .decision .q { font-weight: 700; }
+  .decision .id { font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); margin-right: 6px; }
+  .opts { display: grid; gap: 4px; }
+  .opts label { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; }
+  .opts input { margin-top: 4px; }
+  .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .shots.wide { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .shots figure { margin: 0; display: grid; gap: 4px; }
+  .shots img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: #FFFFFF; }
+  .shots figcaption { font-size: 13px; color: var(--ink-soft); }
+  .copyrow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn { border: 0; border-radius: 20px; padding: 8px 18px; background: var(--accent-bright); color: var(--on-accent); font-weight: 700; min-height: 40px; }
+  .status { font-size: 14px; color: var(--ink-soft); }
+  .notes-close { display: none; }
+
+  @media (max-width: 1000px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    .stagecol { position: static; }
+  }
+
+  /* Al mòbil: el simulador és la pantalla, i les notes s'obren a sobre */
+  body.device { padding: 0; overflow: hidden; }
+  body.device .top, body.device .chips { display: none; }
+  body.device .wrap, body.device .layout { display: block; max-width: none; }
+  body.device .phone {
+    position: fixed; inset: 0; width: auto; height: auto; border: 0; border-radius: 0; box-shadow: none;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  body.device .notes {
+    position: fixed; inset: 0; z-index: 50; overflow-y: auto; background: var(--ground);
+    padding: calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px));
+    display: none;
+  }
+  body.device.notes-open .notes { display: grid; }
+  body.device .notes-close { display: inline-flex; justify-self: start; }
+
+  /* ---------- El simulador ---------- */
+  .sim { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--app-desk); color: var(--ink); display: flex; flex-direction: column; }
+  .appbar { height: 46px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding-inline: 12px; background: var(--app-bar); color: var(--app-bar-ink); font-weight: 700; }
+  .appbar .brand { font-size: 17px; margin-right: auto; }
+  .appbar .tab { font-size: 14px; padding: 2px 6px; border-bottom: 3px solid transparent; }
+  .appbar .tab.on { border-color: var(--app-bar-ink); }
+  .appbar .notes-btn { border: 1px solid var(--app-bar-ink); background: transparent; border-radius: 14px; padding: 1px 10px; font-size: 13px; font-weight: 700; display: none; }
+  body.device .appbar .notes-btn { display: inline-block; }
+
+  .ibtn { min-width: 44px; height: 44px; border: 0; background: transparent; border-radius: 22px; display: inline-grid; place-items: center; color: var(--ink); padding: 0 6px; }
+  .ibtn svg { width: 22px; height: 22px; }
+  .ibtn:disabled { opacity: .35; cursor: default; }
+
+  /* La capçalera de la seqüència: ‹ nom ✎ · 2 de 5 ▾ · ⋯ › */
+  .shead { flex-shrink: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto auto 44px; align-items: center; gap: 2px; padding: 4px 4px 0; }
+  .sname { display: flex; align-items: center; gap: 2px; min-width: 0; border: 0; background: transparent; padding: 0 4px; height: 44px; border-radius: 10px; text-align: left; }
+  .sname b { font-size: 19px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sname svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--ink-soft); }
+  .count { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 18px; height: 36px; padding: 0 10px; font-size: 14px; white-space: nowrap; display: inline-flex; align-items: center; gap: 2px; }
+  .sstyle { flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 16px 6px 52px; font-size: 14px; color: var(--ink-soft); min-height: 30px; }
+  .sstyle[hidden] { display: none; }
+  .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--mark); color: #FFFFFF; display: inline-grid; place-items: center; font-size: 11px; box-shadow: 0 0 0 2px #FFFFFF; flex-shrink: 0; }
+  .help { width: 30px; height: 30px; border: 0; background: transparent; border-radius: 15px; color: var(--ink-soft); display: inline-grid; place-items: center; }
+
+  /* La graella: es llisca d'una seqüència a l'altra */
+  .viewport { flex: 1; min-height: 0; position: relative; overflow: hidden; touch-action: pan-y; }
+  .track { display: flex; height: 100%; transition: transform .28s cubic-bezier(.2,.8,.2,1); }
+  .track.dragging { transition: none; }
+  .pane { flex: 0 0 100%; height: 100%; overflow-y: auto; padding: 10px 14px 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 12px; }
+  .phone.desk .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 140px)); }
+  .pcard { position: relative; background: var(--sheet); color: var(--sheet-ink); border: 2px solid var(--sheet-line); border-radius: 14px; padding: 6px 6px 8px; display: grid; justify-items: center; gap: 4px; }
+  .pcard .num { font-size: 13px; color: var(--sheet-soft); }
+  .pcard .img { width: 78%; aspect-ratio: 1; border-radius: 10px; border: 3px solid var(--sheet-line); }
+  .pcard .lbl { font-weight: 700; font-size: 14px; text-align: center; }
+  .pcard .dot { position: absolute; right: -7px; bottom: -7px; }
+  .empty { color: var(--ink-faint); text-align: center; padding: 40px 16px; }
+
+  /* La barra de baix: + · cerca · cerca màgica · estat. Puja amb el teclat (D22) */
+  .bottom { flex-shrink: 0; position: relative; z-index: 5; display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 8px; align-items: center; padding: 8px 10px; background: var(--app-desk); border-top: 1px solid var(--line); }
+  .plus { width: 48px; height: 48px; border-radius: 20px; border: 0; background: var(--accent-bright); color: var(--on-accent); font-size: 28px; line-height: 1; display: grid; place-items: center; }
+  .search { display: flex; align-items: center; gap: 4px; border: 1px solid var(--line-strong); border-radius: 24px; height: 48px; padding: 0 6px 0 14px; background: var(--surface); min-width: 0; }
+  .search input { border: 0; outline: 0; background: transparent; flex: 1; min-width: 0; font-size: 16px; }
+  .search .magic { width: 40px; height: 40px; border: 0; background: transparent; border-radius: 20px; font-size: 18px; }
+  .status-fab { width: 48px; height: 48px; border-radius: 20px; border: 1.75px solid var(--accent-bright); background: var(--app-paper); display: grid; place-items: center; }
+  .status-fab svg { width: 20px; height: 20px; }
+  .suggest { position: absolute; left: 66px; right: 66px; bottom: calc(100% + 4px); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 12px; box-shadow: 0 -8px 20px -12px rgba(0,0,0,.4); overflow: hidden; }
+  .suggest[hidden] { display: none; }
+  .suggest button { display: block; width: 100%; text-align: left; border: 0; background: transparent; padding: 10px 14px; min-height: 44px; }
+  .suggest button + button { border-top: 1px solid var(--line); }
+  .keyboard { flex-shrink: 0; height: 0; background: var(--keyboard); overflow: hidden; transition: height .25s; display: grid; align-content: start; gap: 6px; padding-inline: 4px; }
+  .sim.kbd .keyboard { height: 230px; padding-block: 8px; }
+  .krow { display: flex; gap: 5px; justify-content: center; }
+  .krow span { flex: 0 0 8.4%; height: 40px; border-radius: 6px; background: var(--key); display: grid; place-items: center; font-size: 15px; color: var(--ink); }
+
+  /* Menús: el del «+» s'obre cap amunt; el «⋯» i la llista, a sota de la capçalera */
+  .scrim { position: absolute; inset: 0; z-index: 20; background: var(--scrim); }
+  .scrim[hidden] { display: none; }
+  .menu { position: absolute; z-index: 21; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 12px 30px -12px rgba(0,0,0,.5); padding: 6px 0; min-width: 230px; max-width: calc(100% - 20px); }
+  .menu[hidden] { display: none; }
+  .menu button { display: flex; width: 100%; gap: 10px; align-items: center; border: 0; background: transparent; text-align: left; padding: 8px 16px; min-height: 44px; }
+  .menu button:hover { background: var(--sunk); }
+  .menu .danger { color: #B3261E; }
+  :root[data-theme="dark"] .menu .danger { color: #F2B8B5; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .menu .danger { color: #F2B8B5; } }
+  .menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
+  .menu .cur { font-weight: 700; }
+  .menu .sub { font-size: 13px; color: var(--ink-soft); }
+  #plusMenu { left: 10px; bottom: 72px; }
+  #moreMenu { right: 10px; top: 96px; }
+  #listMenu { right: 54px; top: 96px; }
+  .toast { position: absolute; left: 10px; right: 10px; bottom: 76px; z-index: 30; background: var(--app-paper); border: 1px solid var(--accent-bright); border-radius: 20px; padding: 10px 14px; font-size: 14px; box-shadow: 0 10px 24px -14px rgba(0,0,0,.5); }
+  .toast[hidden] { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .track, .phone, .keyboard { transition: none; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Esbós v1 · docs/plans/PLA-estils.md · pas 7 (§10.4)</p>
+    <h1>L'edició al mòbil: una seqüència per pantalla</h1>
+    <p class="lede">La pantalla d'edició nova que proposa el pla per al mòbil: el nom i l'estil de la seqüència a dalt, la graella al mig i la cerca a baix, a l'abast del polze. Es passa de seqüència lliscant sobre la graella o amb les fletxes ‹ ›. Toca la cerca per veure com puja la barra amb el teclat. A sota hi ha les captures de com és avui i les preguntes que queden abans del pas 8.</p>
+  </header>
+
+  <div class="layout">
+    <div class="stagecol">
+      <div class="phone" id="phone">
+        <div class="sim" id="sim">
+          <div class="appbar">
+            <span class="brand">SqAAC</span>
+            <span class="tab on">Edició</span>
+            <span class="tab">Vista</span>
+            <button class="notes-btn" id="notesBtn" type="button">Notes</button>
+          </div>
+
+          <div class="shead">
+            <button class="ibtn" id="prev" type="button" aria-label="Seqüència anterior">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <button class="sname" id="sname" type="button" aria-label="Canvia el nom">
+              <b id="nameText">Matí</b>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16v4z"/></svg>
+            </button>
+            <button class="count" id="count" type="button" aria-haspopup="menu" aria-expanded="false"><span id="countText">1 de 5</span> <span aria-hidden="true">▾</span></button>
+            <button class="ibtn" id="more" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Accions de la seqüència">
+              <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+            </button>
+            <button class="ibtn" id="next" type="button" aria-label="Seqüència següent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <div class="sstyle" id="sstyle"></div>
+
+          <div class="viewport" id="viewport">
+            <div class="track" id="track"></div>
+          </div>
+
+          <div class="bottom" id="bottom">
+            <div class="suggest" id="suggest" hidden role="listbox" aria-label="Suggeriments"></div>
+            <button class="plus" id="plus" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Afegeix">+</button>
+            <label class="search">
+              <input id="search" type="text" placeholder="Cerca un pictograma…" autocomplete="off" aria-label="Cerca un pictograma">
+              <button class="magic" type="button" aria-label="Cerca màgica">✨</button>
+            </label>
+            <button class="status-fab" type="button" aria-label="On es desa la feina">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/><path d="M4 20h16"/></svg>
+            </button>
+          </div>
+          <div class="keyboard" id="keyboard" aria-hidden="true"></div>
+
+          <div class="scrim" id="scrim" hidden></div>
+          <div class="menu" id="plusMenu" role="menu" hidden>
+            <button type="button" role="menuitem" data-act="addPict">＋ Afegeix un pictograma</button>
+            <button type="button" role="menuitem" data-act="addSeq">＋ Afegeix una seqüència</button>
+          </div>
+          <div class="menu" id="moreMenu" role="menu" hidden></div>
+          <div class="menu" id="listMenu" role="menu" hidden></div>
+          <div class="toast" id="toast" role="status" hidden></div>
+        </div>
+      </div>
+      <div class="chips" role="group" aria-label="Mida de la pantalla">
+        <button class="chip" type="button" data-size="phone" aria-pressed="true">Mòbil</button>
+        <button class="chip" type="button" data-size="desk" aria-pressed="false">Escriptori (D23, opció a)</button>
+        <button class="chip" type="button" id="kbdChip" aria-pressed="false">Teclat obert</button>
+      </div>
+    </div>
+
+    <div class="notes" id="notes">
+      <button class="chip notes-close" id="notesClose" type="button">← Torna a l'esbós</button>
+
+      <section class="card">
+        <h2>Què cal provar</h2>
+        <ol>
+          <li><b>Llisca</b> la graella cap a l'esquerra o la dreta: canvia de seqüència, i el nom i «1 de 5» canvien amb ella. Les fletxes ‹ › fan el mateix (D19).</li>
+          <li><b>«1 de 5»</b> obre la llista de seqüències: s'hi salta directament a qualsevol.</li>
+          <li>El <b>«⋯»</b> porta l'estil (obre la galeria), canviar el nom, restablir els pictogrames i treure la seqüència oberta (D21). És el mateix menú que ja hi ha avui (pas 5).</li>
+          <li>El <b>«+»</b> s'obre cap amunt: afegir un pictograma o una seqüència (D20).</li>
+          <li>Toca la <b>cerca</b>: la barra puja amb el teclat i els suggeriments s'obren cap amunt (D22). La graella s'encongeix, però la capçalera no es mou.</li>
+          <li>Prova <b>Escriptori</b>: és l'opció (a) de D23, la mateixa pantalla a tota l'amplada, per comparar-la amb la captura d'avui.</li>
+        </ol>
+      </section>
+
+      <section class="card">
+        <h2>Com és avui (captures del 22 de novembre)</h2>
+        <p class="status">Amb la capçalera de la seqüència del pas 5. La cerca màgica i el comptador de pictogrames són a dalt, i la graella queda sota la tira de pestanyes.</p>
+        <div class="shots">
+          <figure><img src="img/edicio-mobil/avui-mobil-inici.png" alt="L'edició avui al mòbil: el comptador de pictogrames, la cerca màgica, les pestanyes 1, 2 i 3 i la graella de la primera seqüència" loading="lazy"><figcaption>Mòbil: l'edició d'avui</figcaption></figure>
+          <figure><img src="img/edicio-mobil/avui-mobil-menu.png" alt="El menú «⋯» de la seqüència oberta al mòbil" loading="lazy"><figcaption>El «⋯» de la seqüència</figcaption></figure>
+          <figure><img src="img/edicio-mobil/avui-mobil-galeria.png" alt="La Galeria d'estils al mòbil" loading="lazy"><figcaption>La Galeria d'estils</figcaption></figure>
+        </div>
+        <div class="shots wide">
+          <figure><img src="img/edicio-mobil/avui-escriptori.png" alt="L'edició avui a l'escriptori, amb les pestanyes verticals a l'esquerra" loading="lazy"><figcaption>Escriptori: les pestanyes verticals de sempre</figcaption></figure>
+          <figure><img src="img/edicio-mobil/avui-escriptori-menu.png" alt="El menú «⋯» de la seqüència a l'escriptori" loading="lazy"><figcaption>Escriptori: el «⋯» de la seqüència</figcaption></figure>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Ja decidit (§10.1)</h2>
+        <ul>
+          <li><b>D19</b>: es passa de seqüència lliscant, amb «2 de 5» al costat del nom, que obre la llista. Fletxes ‹ › com a alternativa.</li>
+          <li><b>D20</b>: el «+» és un menú curt que s'obre cap amunt, no un panell de baix.</li>
+          <li><b>D21</b>: el «⋯» al costat del nom, amb l'estil, el nom, restablir i treure l'oberta.</li>
+          <li><b>D22</b>: la barra de baix puja amb el teclat; els suggeriments, cap amunt.</li>
+          <li>Les accions de <code>PictogramAmount</code> (afegir i treure l'últim) se'n van: afegir és al «+», i treure un pictograma és a la graella.</li>
+        </ul>
+      </section>
+
+      <section class="card" id="decisions">
+        <h2>Per decidir abans del pas 8</h2>
+        <div class="decision">
+          <p class="q"><span class="id">E1</span>La línia «Estil: …» sota la capçalera, o només dins del «⋯»?</p>
+          <p class="status">A 390 px hi cap, però es menja 30 px de graella. Dins del «⋯» ja hi és sempre.</p>
+          <div class="opts">
+            <label><input type="radio" name="e1" value="linia" checked> Es queda a la línia de sota, com a l'esbós</label>
+            <label><input type="radio" name="e1" value="menu"> Només al «⋯» (amaga la línia a l'esbós)</label>
+          </div>
+        </div>
+        <div class="decision">
+          <p class="q"><span class="id">E2</span>D23: l'escriptori</p>
+          <div class="opts">
+            <label><input type="radio" name="e2" value="a"> (a) La pantalla nova a totes les mides</label>
+            <label><input type="radio" name="e2" value="b"> (b) La nova com a vista alternativa durant un temps</label>
+            <label><input type="radio" name="e2" value="c"> (c) Un pla a part; l'escriptori es queda amb les pestanyes</label>
+          </div>
+        </div>
+        <div class="decision">
+          <p class="q"><span class="id">E3</span>La cerca màgica, dins del camp (✨) o com a botó a part?</p>
+          <div class="opts">
+            <label><input type="radio" name="e3" value="dins" checked> Dins del camp, com a l'esbós</label>
+            <label><input type="radio" name="e3" value="apart"> Un botó a part a la barra</label>
+          </div>
+        </div>
+        <div class="decision">
+          <p class="q"><span class="id">E4</span>Al mòbil girat, l'edició</p>
+          <div class="opts">
+            <label><input type="radio" name="e4" value="lliure" checked> Funciona girada (més columnes a la graella)</label>
+            <label><input type="radio" name="e4" value="capa"> Demana posar el mòbil dret, com la vista</label>
+          </div>
+        </div>
+        <div class="copyrow">
+          <button class="btn" id="copy" type="button">Copia les respostes</button>
+          <span class="status" id="copyStatus" role="status"></span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Què no és aquest esbós</h2>
+        <ul>
+          <li>No és el disseny final: els colors, les mides i les icones els posa el tema de l'app.</li>
+          <li>Els pictogrames són quadres de colors; la cerca no cerca res.</li>
+          <li>La marca negra de la cantonada és «Personalitzat», la de sempre.</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Dades de prova: cinc seqüències, una amb un pictograma retocat
+  const sequences = [
+    { name: "Matí", style: "Contorn gruixut", picts: ["llevar-se", "rentar-se", "vestir-se", "esmorzar", "dents"], retouched: [2] },
+    { name: "Escola", style: "L'estil del document", picts: ["motxilla", "autobús", "classe", "pati"], retouched: [] },
+    { name: "Tarda", style: "L'estil del document", picts: ["dinar", "parc", "berenar"], retouched: [] },
+    { name: "Sopar", style: "Sense vores", picts: ["rentar mans", "sopar", "plats"], retouched: [] },
+    { name: "Nit", style: "Agenda gran", picts: ["dutxa", "pijama", "conte", "dormir"], retouched: [0] },
+  ];
+  const colors = ["--p1", "--p2", "--p3", "--p4", "--p5", "--p6"];
+  let current = 0;
+
+  const $ = (id) => document.getElementById(id);
+  const sim = $("sim"), track = $("track"), viewport = $("viewport");
+
+  const render = () => {
+    track.innerHTML = sequences.map((seq, s) =>
+      `<div class="pane" aria-hidden="${s !== current}"><div class="grid">` +
+      (seq.picts.length ? seq.picts.map((word, i) =>
+        `<div class="pcard"><span class="num">${i + 1}</span>` +
+        `<span class="img" style="background: var(${colors[(i + s) % colors.length]})"></span>` +
+        `<span class="lbl">${word}</span>` +
+        (seq.retouched.includes(i) ? `<span class="dot" title="Personalitzat" aria-label="personalitzat">≡</span>` : "") +
+        `</div>`).join("") : "") +
+      `</div>${seq.picts.length ? "" : `<p class="empty">Encara no hi ha cap pictograma. Cerca'n un a baix.</p>`}</div>`
+    ).join("");
+    update();
+  };
+
+  const showStyleLine = () => document.querySelector('input[name="e1"]:checked').value === "linia";
+
+  const update = () => {
+    const seq = sequences[current];
+    track.style.transform = `translateX(${-current * 100}%)`;
+    [...track.children].forEach((pane, i) => pane.setAttribute("aria-hidden", String(i !== current)));
+    $("nameText").textContent = seq.name;
+    $("countText").textContent = `${current + 1} de ${sequences.length}`;
+    $("prev").disabled = current === 0;
+    $("next").disabled = current === sequences.length - 1;
+    const custom = seq.retouched.length > 0;
+    $("sstyle").hidden = !showStyleLine();
+    $("sstyle").innerHTML = `Estil: <b>${custom ? "Personalitzat" : seq.style}</b>` +
+      (custom ? ` <span class="dot" aria-hidden="true">≡</span><button class="help" type="button" aria-label="L'estil de base és «${seq.style}». ${seq.retouched.length} pictograma té retocs propis." title="L'estil de base és «${seq.style}». ${seq.retouched.length} pictograma té retocs propis.">?</button>` : "");
+  };
+
+  const go = (index) => { current = Math.max(0, Math.min(sequences.length - 1, index)); update(); };
+  $("prev").onclick = () => go(current - 1);
+  $("next").onclick = () => go(current + 1);
+
+  // Lliscar sobre la graella (en vertical, la graella es desplaça com sempre)
+  let start = null;
+  viewport.addEventListener("pointerdown", (e) => { start = { x: e.clientX, y: e.clientY, id: e.pointerId, moved: false }; });
+  viewport.addEventListener("pointermove", (e) => {
+    if (!start || e.pointerId !== start.id) return;
+    const dx = e.clientX - start.x, dy = e.clientY - start.y;
+    if (!start.moved && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) { start.moved = true; track.classList.add("dragging"); viewport.setPointerCapture(e.pointerId); }
+    if (start.moved) track.style.transform = `translateX(calc(${-current * 100}% + ${dx}px))`;
+  });
+  const end = (e) => {
+    if (!start) return;
+    const dx = e.clientX - start.x;
+    track.classList.remove("dragging");
+    if (start.moved && Math.abs(dx) > viewport.clientWidth * 0.2) go(current + (dx < 0 ? 1 : -1)); else update();
+    start = null;
+  };
+  viewport.addEventListener("pointerup", end);
+  viewport.addEventListener("pointercancel", end);
+
+  // Menús
+  const menus = ["plusMenu", "moreMenu", "listMenu"];
+  const openers = { plusMenu: "plus", moreMenu: "more", listMenu: "count" };
+  const closeMenus = () => {
+    menus.forEach((m) => { $(m).hidden = true; $(openers[m]).setAttribute("aria-expanded", "false"); });
+    $("scrim").hidden = true;
+  };
+  const openMenu = (id) => {
+    closeMenus();
+    $(id).hidden = false; $(openers[id]).setAttribute("aria-expanded", "true"); $("scrim").hidden = false;
+    $(id).querySelector("button")?.focus();
+  };
+  $("scrim").onclick = closeMenus;
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenus(); });
+
+  let toastTimer;
+  const toast = (text) => {
+    $("toast").textContent = text; $("toast").hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { $("toast").hidden = true; }, 2600);
+  };
+
+  $("plus").onclick = () => openMenu("plusMenu");
+  $("plusMenu").onclick = (e) => {
+    const act = e.target.closest("button")?.dataset.act;
+    if (!act) return;
+    closeMenus();
+    if (act === "addSeq") {
+      sequences.push({ name: `Seqüència ${sequences.length + 1}`, style: "L'estil del document", picts: [], retouched: [] });
+      render(); go(sequences.length - 1); toast("S'ha afegit una seqüència.");
+    } else {
+      $("search").focus();
+    }
+  };
+
+  $("more").onclick = () => {
+    const seq = sequences[current];
+    const custom = seq.retouched.length > 0;
+    $("moreMenu").innerHTML =
+      `<button type="button" role="menuitem" data-act="style">🎨 Estil: ${custom ? "Personalitzat" : seq.style} — Canvia…</button>` +
+      `<button type="button" role="menuitem" data-act="rename">✎ Canvia el nom</button>` +
+      (custom ? `<button type="button" role="menuitem" data-act="reset">↺ Restableix els pictogrames</button>` : "") +
+      (sequences.length > 1 ? `<hr><button type="button" role="menuitem" class="danger" data-act="remove">⊖ Treu aquesta seqüència</button>` : "");
+    openMenu("moreMenu");
+  };
+  $("moreMenu").onclick = (e) => {
+    const act = e.target.closest("button")?.dataset.act;
+    if (!act) return;
+    closeMenus();
+    const seq = sequences[current];
+    if (act === "style") toast("Aquí s'obre la Galeria d'estils (la del pas 5).");
+    if (act === "rename") rename();
+    if (act === "reset") { seq.retouched = []; render(); toast("S'han restablert els pictogrames. Desfés"); }
+    if (act === "remove") { const name = seq.name; sequences.splice(current, 1); current = Math.min(current, sequences.length - 1); render(); toast(`S'ha tret «${name}».`); }
+  };
+  const rename = () => {
+    const name = window.prompt("Nom de la seqüència", sequences[current].name);
+    if (name === null) return;
+    sequences[current].name = name.trim() || `Seqüència ${current + 1}`;
+    update(); toast("S'ha canviat el nom de la seqüència.");
+  };
+  $("sname").onclick = rename;
+
+  $("count").onclick = () => {
+    $("listMenu").innerHTML = sequences.map((seq, i) =>
+      `<button type="button" role="menuitem" data-i="${i}" class="${i === current ? "cur" : ""}" ${i === current ? 'aria-current="true"' : ""}>${i + 1}. ${seq.name} <span class="sub">· ${seq.picts.length} pictogrames</span></button>`).join("") +
+      `<hr><button type="button" role="menuitem" data-i="new">＋ Afegeix una seqüència</button>`;
+    openMenu("listMenu");
+  };
+  $("listMenu").onclick = (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    closeMenus();
+    if (b.dataset.i === "new") { $("plusMenu").querySelector('[data-act="addSeq"]').click(); return; }
+    go(Number(b.dataset.i));
+  };
+
+  // El teclat simulat: la barra puja i els suggeriments s'obren cap amunt
+  const rows = ["qwertyuiop", "asdfghjklñ", "zxcvbnm"];
+  $("keyboard").innerHTML = rows.map((r) => `<div class="krow">${[...r].map((k) => `<span>${k}</span>`).join("")}</div>`).join("");
+  const setKeyboard = (on) => {
+    sim.classList.toggle("kbd", on);
+    $("kbdChip").setAttribute("aria-pressed", String(on));
+    $("suggest").hidden = !on;
+  };
+  const suggestions = ["esmorzar", "escola", "escriure", "esperar"];
+  $("suggest").innerHTML = suggestions.map((w) => `<button type="button" role="option">${w}</button>`).join("");
+  $("suggest").onclick = (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    sequences[current].picts.push(b.textContent);
+    $("search").value = ""; render(); setKeyboard(false); $("search").blur();
+    toast(`S'ha afegit «${b.textContent}».`);
+  };
+  $("search").addEventListener("focus", () => setKeyboard(true));
+  $("search").addEventListener("blur", () => setTimeout(() => { if (!$("suggest").matches(":hover")) setKeyboard(false); }, 150));
+  $("kbdChip").onclick = () => setKeyboard(!sim.classList.contains("kbd"));
+
+  // Mida de la pantalla: mòbil o escriptori (D23, opció a)
+  document.querySelectorAll("[data-size]").forEach((chip) => chip.onclick = () => {
+    document.querySelectorAll("[data-size]").forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+    $("phone").classList.toggle("desk", chip.dataset.size === "desk");
+  });
+
+  document.querySelectorAll('input[name="e1"]').forEach((r) => r.onchange = update);
+
+  // Al mòbil de debò, el simulador és la pantalla
+  const isDevice = matchMedia("(max-width: 700px) and (pointer: coarse)").matches;
+  document.body.classList.toggle("device", isDevice);
+  $("notesBtn").onclick = () => document.body.classList.add("notes-open");
+  $("notesClose").onclick = () => document.body.classList.remove("notes-open");
+
+  // Les respostes, per enganxar-les a la conversa
+  $("copy").onclick = async () => {
+    const picked = ["e1", "e2", "e3", "e4"].map((q) => {
+      const input = document.querySelector(`input[name="${q}"]:checked`);
+      return `${q.toUpperCase()}: ${input ? input.parentElement.textContent.trim() : "(sense resposta)"}`;
+    }).join("\n");
+    try { await navigator.clipboard.writeText(picked); $("copyStatus").textContent = "Copiat."; }
+    catch { $("copyStatus").textContent = picked; }
+  };
+
+  render();
+</script>
