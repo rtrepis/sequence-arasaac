@@ -242,7 +242,7 @@ tanca, s'actualitza l'índex en el mateix commit.**
 - `docs/estudis/ESTUDI-estils-de-targetes.md` recull les formes de targeta que es fan de debò (vores,
   text, lletra, número, color de Fitzgerald) i en treu la llista d'estils de l'app de la Galeria
   d'estils, amb «Sense vores» comprovat a la pantalla. **Consultar-lo abans d'afegir o canviar un estil
-  de l'app.** Revisat per l'usuari el 2026-11-22: cinc estils, tots amb Atkinson Hyperlegible (§6).
+  de l'app.** Revisat per l'usuari el 2026-11-22: quatre estils, tots amb Atkinson Hyperlegible (§6).
 - `docs/estudis/ESTUDI-seo-noticies.md` és el pla perquè les notícies es trobin als cercadors i es puguin
   compartir: què veu Google avui (una SPA buida sense JavaScript), les pàgines estàtiques, el
   sitemap i les etiquetes per compartir (fase 1), les **guies** pensades per a cerques reals

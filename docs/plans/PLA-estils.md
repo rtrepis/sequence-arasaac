@@ -805,9 +805,10 @@ Preses a partir de les preguntes de §8.1, §8.2, §8.3 i §8.5.
 | D27 | E3: la cerca màgica | **Dins del camp de cerca** (✨), a la barra de baix. Decidit el 2026-11-22. |
 | D28 | E4: el mòbil girat | L'edició **funciona girada**, amb més columnes a la graella: no porta la capa de «posa el mòbil dret» (`RotatePhoneOverlay`) que porta la vista. Decidit el 2026-11-22. |
 | D29 | El «+» de la barra de baix (D20) | ~~Sense «+»~~ **Revertida el mateix dia**: era un malentès (la proposta de treure un menú es referia al «⋯»), i finalment l'usuari va triar deixar-ho tot com era. **D20 continua valent**: el «+» hi és, amb «Afegeix un pictograma» i «Afegeix una seqüència», i el «⋯» de la seqüència es queda. 2026-11-22. |
-| D30 | Pas 3: quins estils de l'app van a la galeria (§6 de `docs/estudis/ESTUDI-estils-de-targetes.md`) | **Cinc**: Sense vores, Color de la categoria, Per retallar, Passos numerats i Lletra gran i clara. **Sense** «Lletra d'escola» (depèn de l'idioma). Decidit el 2026-11-22. |
+| D30 | Pas 3: quins estils de l'app van a la galeria (§6 de `docs/estudis/ESTUDI-estils-de-targetes.md`) | **Quatre**: Sense vores, Color de la categoria, Per retallar i Passos numerats. **Sense** «Lletra d'escola» (depèn de l'idioma) ni «Lletra gran i clara» (tret el mateix dia: amb Atkinson Hyperlegible a tots, s'assemblava massa a «Per retallar»). Decidit el 2026-11-22. |
 | D31 | Pas 3: què porta un estil de l'app | **Tot el que es pot configurar a El meu estil** (D7 confirmada): un estil de l'app és complet i fix. **Tots porten Atkinson Hyperlegible** (text i número). Decidit el 2026-11-22. |
-| D32 | Aplicar un estil a una seqüència (o un bloc) que té pictogrames retocats | **Es pregunta** si es volen perdre els retocs o conservar-los, abans d'aplicar-lo (`ConfirmDialog` amb les dues opcions). **Substitueix D3 i E18 en aquest cas**: el snackbar continua dient l'estil aplicat i porta Desfés, però ja no cal «Treu els retocs». Sense retocs, no es pregunta res. Decidit el 2026-11-22; es fa al pas 9. |
+| D32 | Aplicar un estil a una seqüència (o un bloc) que té pictogrames retocats | ~~Es pregunta abans~~ **Revisada el mateix dia: no es pregunta.** L'estil s'aplica i els pictogrames retocats conserven els seus retocs (solució A, com ja fa el pas 5); **D3 continua valent**: el snackbar diu quants en conserven, amb Desfés i «Treu els retocs». Per treure la personalització n'hi ha prou amb el que ja hi ha: «Treu els retocs» del snackbar, «Restableix els pictogrames» del «⋯» de la seqüència i «Restableix l'estil» de cada pictograma. 2026-11-22. |
+| D33 | Treure la personalització d'un pictograma | **Queda amb l'estil de la seva seqüència** (o del bloc, si en té un de reassignat), no amb el del document. És el que ja fa el codi (solució A i cascada del pas 4), comprovat amb la fixture 20 el 2026-11-22. Els textos que diuen «torna a l'estil del document» (la descripció de `components.mouseActionList.resetStyle` i l'ajuda d'El meu estil) es corregeixen al pas 12. |
 
 **Què queda superat**:
 
@@ -878,9 +879,9 @@ esborranys vells amb versió. Amb D1, el document nou porta l'estil copiat des q
 i E16), amb `style.name` = «El meu estil». Proves de §3.4.
 
 **Pas 3 — L'estudi** d'estils de targetes (§4.4), en paral·lel als passos 2–5. ✅ **Fet** (2026-11-22):
-`docs/estudis/ESTUDI-estils-de-targetes.md`. Revisat per l'usuari el mateix dia: cinc estils
-(Sense vores, Color de la categoria, Per retallar, Passos numerats, Lletra gran i clara), tots amb
-Atkinson Hyperlegible, i preguntar abans de perdre retocs (D30–D32). Troballes: B40 i B41. Inclou **«Sense
+`docs/estudis/ESTUDI-estils-de-targetes.md`. Revisat per l'usuari el mateix dia: quatre estils
+(Sense vores, Color de la categoria, Per retallar, Passos numerats), tots amb Atkinson Hyperlegible
+(D30–D33). Troballes: B40 i B41. Inclou **«Sense
 vores»** (decidit) i la comprovació del text i el número sense vora. Surt
 `docs/estudis/ESTUDI-estils-de-targetes.md` i s'afegeix a l'índex.
 
@@ -1359,11 +1360,11 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 >
 > **Fet** (2026-11-22): l'estudi és a `docs/estudis/ESTUDI-estils-de-targetes.md`, amb les captures a
 > `docs/estudis/img/estils-de-targetes/`. **Revisat per l'usuari el mateix dia** (§6 de l'estudi):
-> D30 (els cinc estils, sense «Lletra d'escola»), D31 (un estil de l'app és complet, com El meu estil,
-> i tots porten Atkinson Hyperlegible) i D32 (abans d'aplicar un estil a una seqüència o un bloc amb
-> retocs, es pregunta si es perden). Les majúscules, al backlog (B41).
+> D30 (quatre estils: Sense vores, Color de la categoria, Per retallar i Passos numerats), D31 (un
+> estil de l'app és complet, com El meu estil, i tots porten Atkinson Hyperlegible), D32 (aplicar un
+> estil no pregunta res: els pictogrames retocats conserven els retocs, i D3 continua valent) i D33
+> (treure la personalització deixa el pictograma amb l'estil de la seqüència). Les majúscules, al
+> backlog (B41).
 >
-> **El pas 9 ha de fer**: els cinc estils amb els valors de §3 de l'estudi; D32 (la pregunta, que
-> substitueix «Treu els retocs» del snackbar de D3 a la galeria de la seqüència i del bloc); la mostra
-> de la galeria en una caixa fixa amb marge (V7 de l'estudi); B40; i els colors dels estils a
-> `palette.ts`.
+> **El pas 9 ha de fer**: els quatre estils amb els valors de §3 de l'estudi; la mostra de la galeria
+> en una caixa fixa amb marge (V7 de l'estudi); B40; i els colors dels estils a `palette.ts`.

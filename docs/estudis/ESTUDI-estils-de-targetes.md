@@ -7,7 +7,7 @@
 > PictoSelector, PictogramAgenda, els manuals de CATEDU) i, fora, programes i guies de comunicació
 > augmentativa i alternativa (Boardmaker, Widgit, PECS, TEACCH, els codis de colors de Fitzgerald i
 > de Goossens, Crain i Elder, les guies per a la discapacitat visual cerebral).
-> **Data**: 2026-11-22. **Revisat per l'usuari el mateix dia**: les decisions són a §6 (D30–D32 del
+> **Data**: 2026-11-22. **Revisat per l'usuari el mateix dia**: les decisions són a §6 (D30–D33 del
 > pla). On el que proposava §3 no coincideix amb el que s'ha decidit, mana §6.
 
 ## Com s'ha fet, i què no diu
@@ -64,7 +64,7 @@ el que s'explica a «Com s'ha fet»: de més a menys fonts que la fan o la porte
 | F5 | **Lletra grossa i molt clara, contorn fosc** | Guies de baixa visió i de discapacitat visual cerebral: pocs colors, fons neutre, separació | Persones amb poca visió, gent gran, lectura de lluny (un horari a la paret) |
 | F6 | **Text en lletra d'escola, a dalt** | Primeres lectures: la paraula es llegeix abans de mirar el dibuix, en la lletra que s'aprèn a classe | Aprenentatge de la lectura amb suport del pictograma |
 
-## 3. La llista proposada: cinc estils, i un sisè per decidir
+## 3. La llista proposada (abans de revisar-la: vegeu §6)
 
 Cada estil porta **només estil** (D7): les vores, la posició del text, la lletra i la numeració.
 Mai la distribució (mida, espai) ni la pàgina. Els valors que no es diuen són els de l'app (Roboto
@@ -76,7 +76,7 @@ a 1, text negre, pell i cabell per defecte).
 | 2 | **Color de la categoria** | F2 | A baix | No | Cap | Fitzgerald, gruix 6, radi 12 | Atkinson Hyperlegible (D31) |
 | 3 | **Per retallar** | F3 | A baix | No | Tinta (negre), gruix 4, radi 4 | Cap | Atkinson Hyperlegible (D31) |
 | 4 | **Passos numerats** | F4 | A baix | Sí, a 1,4 | Gris, gruix 2, radi 12 | Cap | Atkinson Hyperlegible (D31) |
-| 5 | **Lletra gran i clara** | F5 | A baix | No | Tinta (negre), gruix 3, radi 8 | Cap | Atkinson Hyperlegible a 1,3 (també el número) |
+| ~~5~~ | ~~**Lletra gran i clara**~~ (tret, D30) | F5 | A baix | No | Tinta (negre), gruix 3, radi 8 | Cap | Atkinson Hyperlegible a 1,3 (també el número) |
 | 6 | *Lletra d'escola* (per decidir, §6) | F6 | A dalt | No | Gris, gruix 2, radi 20 | Fitzgerald, gruix 2 | Massallera a 1,6 |
 
 **Per què aquests i no d'altres**:
@@ -150,25 +150,28 @@ qui triï «Per retallar» i posi el text a dalt s'hi trobarà.
 
 ## 6. Decidit (2026-11-22)
 
-L'usuari ho va revisar amb les captures de §4. Les decisions passen al pla com a D30–D32.
+L'usuari ho va revisar amb les captures de §4, en dues tandes el mateix dia. Les decisions passen al
+pla com a D30–D33. On §3 no coincideix amb això, mana aquesta secció.
 
 | # | Pregunta | Decisió |
 |---|---|---|
-| 1 | La llista | **Els cinc estils de §3** (1–5): Sense vores, Color de la categoria, Per retallar, Passos numerats i Lletra gran i clara (D30) |
+| 1 | La llista | **Quatre estils**: Sense vores, Color de la categoria, Per retallar i Passos numerats (D30). «Lletra gran i clara» es treu: amb la mateixa lletra a tots, s'assemblava massa a «Per retallar» |
 | 2 | L'estil 6, «Lletra d'escola» | **No entra** (D30). Qui la vulgui la tria a El meu estil |
-| 3 | La lletra dels estils | **Un estil de l'app és tot el que es pot configurar a El meu estil**: complet i fix (D7, confirmada). I **tots porten Atkinson Hyperlegible**, al text i al número (D31). Això substitueix el que proposava §3 («la lletra del document» per als estils 1–4). La diferència és la mida: Lletra gran i clara la porta a 1,3; els altres, a 1 |
-| 4 | Aplicar un estil a una seqüència amb retocs | **Es pregunta** si es volen perdre els retocs dels pictogrames o conservar-los, abans d'aplicar-lo (D32). Substitueix el «Treu els retocs» del snackbar (D3 del pla) |
-| 5 | Les majúscules (N1) | **Al backlog** (B41), fora d'aquesta release |
-| 6 | Els noms | Provisionals; es fixen amb els textos (pas 12) |
+| 3 | La lletra dels estils | **Un estil de l'app és tot el que es pot configurar a El meu estil**: complet i fix (D7, confirmada). I **tots porten Atkinson Hyperlegible**, al text i al número (D31). Substitueix el que proposava §3 («la lletra del document») |
+| 4 | Aplicar un estil a una seqüència amb retocs | **No es pregunta res** (D32): l'estil s'aplica, i els pictogrames personalitzats conserven els seus retocs, com ja fa l'app. El snackbar ho diu i porta Desfés i «Treu els retocs» (D3 del pla) |
+| 5 | Una manera fàcil de treure la personalització | **Ja n'hi ha tres**, i no cal fer-ne cap de nova: «Treu els retocs» al snackbar de triar l'estil, «Restableix els pictogrames» al menú «⋯» de la seqüència, i «Restableix l'estil» de cada pictograma (al seu menú i a l'edició) |
+| 6 | Què queda quan es treu la personalització | **L'estil de la seqüència** (o el del bloc, si en té un de reassignat) (D33). Comprovat amb la fixture 20: un pictograma retocat de «Matí» («Sense vores»), un cop restablert, es pinta sense vores |
+| 7 | Les majúscules (N1) | **Al backlog** (B41), fora d'aquesta release |
+| 8 | Els noms | Provisionals; es fixen amb els textos (pas 12) |
 
 **Per al pas 9, a més**: la mostra de la galeria en una caixa fixa amb marge (V7), B40 (§4.3), i on
 viuen els colors dels estils. Avui els valors per defecte de la targeta són hexadecimals a
 `configs/defaultSettingsConfig.ts`; la regla és que cap color no surti de `style/palette.ts`, així que
 la tinta i el gris dels estils hi han d'anar com a colors de paper (com `printColors`).
 
-**A vigilar**: amb la mateixa lletra a tots, «Per retallar» i «Lletra gran i clara» només es
-diferencien en la mida del text (1 i 1,3) i el gruix del contorn (4 i 3). Si a la galeria es veuen
-massa iguals, es pot revisar quan es vegin les mostres al pas 9.
+**Per al pas 12**: la descripció de `components.mouseActionList.resetStyle` i l'ajuda d'El meu estil
+diuen que restablir «torna a l'estil del document» o a l'«estil general»; ara és el de la seqüència
+(D33).
 
 ## 7. Fonts
 
