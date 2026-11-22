@@ -96,8 +96,8 @@ const LevelHead = ({
  *
  * És l'única excepció a «una zona no es marca amb una caixa» de l'estàndard de
  * configuracions: els tres nivells han de llegir-se com tres coses diferents,
- * lligades per la línia de la cascada (`SettingsLevels`). A prova: si
- * funciona, passarà a l'estàndard.
+ * lligades per la línia de la cascada (`SettingsLevels`). És peça de
+ * l'estàndard (`docs/estandards/configuracions.md`, «Components compartits»).
  */
 const SettingsLevel = ({
   id,

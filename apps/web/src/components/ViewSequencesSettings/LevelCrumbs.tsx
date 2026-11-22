@@ -18,7 +18,8 @@ interface LevelCrumbsProps {
 /**
  * Les molles de dalt de la columna de la vista: «Document › Pàgina 2 ›
  * Rutina». Queden fixes mentre es baixa per la columna (al mòbil, a la
- * capçalera del panell de baix) i porten a cada nivell; l'últim és on s'és. A prova: si funcionen, passaran a l'estàndard.
+ * capçalera del panell de baix) i porten a cada nivell; l'últim és on s'és. Peça de l'estàndard
+ * (`docs/estandards/configuracions.md`, «Components compartits»).
  */
 const LevelCrumbs = ({
   crumbs,

@@ -935,7 +935,7 @@ temps). Queda per decidir (**Q4**): com es passa d'una vista a l'altra (un inter
 desat com a preferència d'interfície, que no entra al document?) i quan es retira la vista vella. ✅ **Fet** (2026-11-22, amb D34): vegeu §18.1.
 
 **Pas 11 — La columna a l'estàndard** (D24): `SettingsLevel`, `SettingsLevels`, `LevelCrumbs` i
-l'etiqueta de la disposició a `docs/estandards/configuracions.md`, «Components compartits».
+l'etiqueta de la disposició a `docs/estandards/configuracions.md`, «Components compartits». ✅ **Fet** (2026-11-22): vegeu §19.1.
 
 **Pas 12 — Textos i vocabulari**: com l'antic pas 8 de §7 (E10, E15, D5), més les claus noves
 («Personalitzat» per a seqüència i bloc, «reassignat», «Torna a l'estil de la seqüència»), provades
@@ -1446,3 +1446,18 @@ Menú del «+» (s'obre cap amunt):      Menú «⋯» de la seqüència:
 > resolta, Q2 al backlog si continua oberta, el pla a `plans/fets/` i la PR a `master`.
 >
 > Normes: les de §11.
+>
+> **✅ Fet** (2026-11-22): vegeu §19.1.
+
+### 19.1 Com s'ha fet (pas 11, 2026-11-22)
+
+- `docs/estandards/configuracions.md`, «Components compartits», porta ara **`SettingsLevel`**,
+  **`SettingsLevels`** (amb la línia de la cascada i com se'n calcula la posició), **`LevelCrumbs`** i
+  **l'etiqueta de la disposició** (el `Chip` d'`arrangementTag` de `PageHeader` i de
+  `ViewSettingsPreview`), tal com són al codi (D24), amb la regla i el perquè de cadascun.
+  `SettingsLevel` hi queda com l'**única excepció declarada** a «una zona no es marca amb una caixa».
+- A «Estat de migració», la columna de la vista ja no diu que són «a prova», i
+  `settingsAccordion` hi apunta directament. Els comentaris de `SettingsLevel.tsx` i
+  `LevelCrumbs.tsx` diuen el mateix.
+- Cap canvi de codi més enllà dels comentaris. L'etiqueta «Nou» de la fila «Disposició» no és del
+  pas (D24): va amb la notícia.
